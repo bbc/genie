@@ -1,8 +1,8 @@
 import "./lib/phaser";
-import { doubleNumber } from "./lib/examplemath";
-import Startup from "./startup";
+import { GenieCore } from "./lib/examples/core";
 
-console.log(doubleNumber(6));
+console.log(GenieCore.Maths.doubleNumber(3));
+
 const game = new Phaser.Game(1920, 1080, Phaser.AUTO, "local-game-holder");
-game.state.add("Startup", new Startup(), true);
+game.state.add("Startup", new GenieCore.States.Startup(), true);
 game.state.start("Startup");
