@@ -1,4 +1,7 @@
 export class Startup extends Phaser.State {
+    /**
+     * A Genie Startup class that extends Phaser.State
+     */
     constructor() {
         super();
     }
