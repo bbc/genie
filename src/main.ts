@@ -1,5 +1,5 @@
 import "./lib/phaser";
-import { doubleNumber } from "./lib/math";
+import { doubleNumber } from "./lib/examplemath";
 import Startup from "./startup";
 
 console.log(doubleNumber(6));

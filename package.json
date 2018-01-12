@@ -1,5 +1,5 @@
 {
-    "name": "Phaser TS Webpack Boilerplate",
+    "name": "phaser-ts-webpack",
     "version": "1.0.0",
     "description": "Boilerplate for Phaser in Typescript with Webpack",
     "repository": {
