@@ -10,6 +10,17 @@ export class Startup extends Phaser.State {
         console.log("started up");
     }
 
+    public create() {
+        const style = { font: "65px Arial", fill: "#ff0044", align: "center" };
+        const text = this.game.add.text(
+            this.game.world.centerX,
+            this.game.world.centerY,
+            "- phaser -\nwith a sprinkle of\npixi dust",
+            style
+        );
+        text.anchor.set(0.5);
+    }
+
     /**
      * Sends params to console.log().
      * @param param The string to log.
