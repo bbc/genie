@@ -19,6 +19,7 @@
     },
     "scripts": {
         "server": "http-server -c-1",
-        "build": "tsc && webpack"
+        "build": "tsc && webpack",
+        "watch": "webpack --watch"
     }
 }

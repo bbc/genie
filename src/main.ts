@@ -14,7 +14,6 @@ game.state.start("Startup");
 const gmi: Gmi = (window as any).getGMI({});
 console.log(gmi);
 
-
 // lodash test
 const array = [1, 2, 3];
 _.fill(array, 6);
