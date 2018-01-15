@@ -28,4 +28,12 @@ export class Startup extends Phaser.State {
     public consoleLog(param: string) {
         console.log("Startup: " + param);
     }
+
+    /**
+     * Returns the opposite boolean
+     * @param param The boolean to negate.
+     */
+     public negateBoolean(bool: boolean) {
+         return !bool;
+     }
 }

@@ -5,5 +5,8 @@
         "target": "es5",
         "noImplicitAny": true,
         "sourceMap": true
-    }
+    },
+  "exclude": [
+    "./test/**/*"
+  ]
 }
