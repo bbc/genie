@@ -1,3 +1,4 @@
 /src/**/*.js
 bundle.js
 node_modules
+*.js.map
