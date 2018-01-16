@@ -36,8 +36,8 @@
     },
     "scripts": {
         "start": "http-server -c-1",
-        "build": "webpack",
-        "watch": "webpack --watch",
-        "test": "karma start karma.unit.js"
+        "build": "webpack --config build-scripts/webpack.config.js",
+        "watch": "webpack --config build-scripts/webpack.config.js --watch",
+        "test": "karma start test/karma.conf.js"
     }
 }

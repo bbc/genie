@@ -6,7 +6,7 @@
 
 ## To view:
 
-`npm run start` then navigate to localhost:8080
+`npm start` then navigate to localhost:8080
 
 Alternatively load index.html as a file URL (requires
 --allow-file-access-from-files in Chrome.)
