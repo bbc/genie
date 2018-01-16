@@ -1,10 +1,13 @@
 {
-    "name": "phaser-ts-webpack",
-    "version": "1.0.0",
-    "description": "Boilerplate for Phaser in Typescript with Webpack",
+    "name": "genie",
+    "version": "0.0.1",
+    "description": "Genie Modular Game Engine",
+    "license": "UNLICENSED",
+    "private": true,
+    "author": "BBC",
     "repository": {
         "type": "git",
-        "url": "https://github.com/AdamXA/phaser-ts-webpack"
+        "url": "https://github.com/bbc/childrens-games-genie"
     },
     "dependencies": {
         "@types/lodash": "^4.14.92",
@@ -32,7 +35,7 @@
         "sinon": "^4.1.5"
     },
     "scripts": {
-        "server": "http-server -c-1",
+        "start": "http-server -c-1",
         "build": "webpack",
         "watch": "webpack --watch",
         "test": "karma start karma.unit.js"
