@@ -7,22 +7,25 @@ module.exports = function(config) {
         files: ["test/**/*.ts"],
         exclude: [],
         preprocessors: {
-            "test/**/*.ts": ["webpack"]
+            "test/**/*.ts": ["webpack"],
         },
         webpack: {
             module: webpackConfig.module,
-            resolve: webpackConfig.resolve
+            resolve: webpackConfig.resolve,
         },
-        reporters: ["progress", "verbose"],
+        webpackMiddleware: {
+            stats: "errors-only",
+        },
+        reporters: ["progress"],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: false,
         browsers: ["ChromeHeadless"],
         mime: {
-            "text/x-typescript": ["ts", "tsx"]
+            "text/x-typescript": ["ts", "tsx"],
         },
         singleRun: true,
-        concurrency: Infinity
+        concurrency: Infinity,
     });
 };
