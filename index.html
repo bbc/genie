@@ -71,7 +71,7 @@
 
 <body>
     <div id="local-game-holder"></div>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.1/require.min.js"></script>
+    <script src="./node_modules/requirejs/require.js"></script>
     <script>
     (function() {
     var GMI = function(options, embedVars, gameDir) {
@@ -265,10 +265,10 @@
         return match ? match[1] : null;
     }
 
-    configureGmi("", "themes/");
+    configureGmi("output/", "../themes/");
     requirejs.config({
         paths: {
-            Game: "bundle"
+            Game: "output/bundle"
         }
     });
     require(["Game"], function() {});

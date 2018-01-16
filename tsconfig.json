@@ -1,9 +1,8 @@
 {
-    "compileOnSave": true,
     "compilerOptions": {
         "module": "CommonJS",
         "target": "es5",
-        "noImplicitAny": true,
+        "strict": true,
         "sourceMap": true,
         "baseUrl": "."
     },

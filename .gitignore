@@ -1,7 +1,5 @@
-**.js
-!**.unit.js
-!**.config.js
-bundle.js
 node_modules
-package-lock.json
-*.js.map
+output
+npm-debug.log
+*.DS_Store
+
