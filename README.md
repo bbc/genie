@@ -1,8 +1,8 @@
 # GENIE
 
-## To build
+## To build:
 
-`npm run build` this runs `tsc` and `webpack`
+`npm run build` which runs `webpack --config build-scripts/webpack.config.js`
 
 ## To view:
 
