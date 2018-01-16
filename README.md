@@ -16,7 +16,7 @@ Alternatively load index.html as a file URL (requires
 `npm run watch` will run webpack in watch mode.
 
 Typescript files are compiled and bundled automatically on save, while the
-watcher is active.
+watcher is active. Karma tests are also automatically ran.
 
 ## To test:
 
