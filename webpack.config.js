@@ -1,5 +1,6 @@
-var path = require("path");
+const path = require("path");
 const webpack = require("webpack");
+const TsConfigPathsPlugin = require("awesome-typescript-loader").TsConfigPathsPlugin;
 
 var phaserModule = path.join(__dirname, "/node_modules/phaser-ce/");
 var phaser = path.join(phaserModule, "build/custom/phaser-split.js"),
@@ -11,26 +12,27 @@ module.exports = {
     entry: "./src/main.ts",
     output: {
         devtoolModuleFilenameTemplate: "[absolute-resource-path]",
-        filename: "bundle.js"
+        filename: "bundle.js",
     },
     module: {
         rules: [
             {
                 test: /(phaser-split|p2|pixi).js$/,
-                use: "script-loader"
+                use: "script-loader",
             },
             {
                 test: /\.tsx?$/,
-                use: "awesome-typescript-loader"
-            }
-        ]
+                use: "awesome-typescript-loader",
+            },
+        ],
     },
     resolve: {
         alias: {
             "phaser-ce": phaser,
             "pixi.js": pixi,
-            p2: p2
+            p2: p2,
         },
-        extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".jsx"]
-    }
+        extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".jsx"],
+        plugins: [new TsConfigPathsPlugin()],
+    },
 };
