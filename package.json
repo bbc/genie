@@ -31,6 +31,7 @@
         "karma-sinon": "^1.0.5",
         "karma-webpack": "^2.0.9",
         "mocha": "^4.1.0",
+        "puppeteer": "^1.0.0",
         "requirejs": "^2.3.5",
         "sinon": "^4.1.5"
     },
