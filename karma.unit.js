@@ -18,7 +18,10 @@ module.exports = function(config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: false,
-        browsers: ["PhantomJS"],
+        browsers: ["ChromeHeadless"],
+        mime: {
+            "text/x-typescript": ["ts", "tsx"]
+        },
         singleRun: true,
         concurrency: Infinity
     });
