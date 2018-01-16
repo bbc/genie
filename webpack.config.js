@@ -12,7 +12,7 @@ module.exports = {
     entry: "./src/main.ts",
     output: {
         devtoolModuleFilenameTemplate: "[absolute-resource-path]",
-        filename: "output/bundle.js",
+        filename: "output/main.js",
     },
     module: {
         rules: [
