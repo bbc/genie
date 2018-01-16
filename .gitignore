@@ -3,4 +3,5 @@
 !**.config.js
 bundle.js
 node_modules
+package-lock.json
 *.js.map
