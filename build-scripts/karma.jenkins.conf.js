@@ -6,6 +6,7 @@ module.exports = function(config) {
         browserStack: {
             username: process.env.BROWSERSTACK_USER,
             accessKey: process.env.BROWSERSTACK_ACCESSKEY,
+            forcelocal: true,
         },
         customLaunchers: {
             bs_chrome63_win: {
