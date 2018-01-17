@@ -8,7 +8,6 @@ module.exports = function(config) {
             accessKey: process.env.BROWSERSTACK_ACCESSKEY,
             startTunnel: false,
             tunnelIdentifier: process.env.BROWSERSTACK_LOCAL_IDENTIFIER,
-            binaryBasePath: process.env.BROWSERSTACK_LOCAL,
         },
         customLaunchers: {
             bs_chrome63_win: {
