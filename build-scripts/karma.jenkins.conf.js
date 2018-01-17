@@ -4,9 +4,8 @@ module.exports = function(config) {
     config.set({
         basePath: "",
         browserStack: {
-            username: "adambeswick1",
-            accessKey: "notmypassword",
-            binaryBasePath: ".",
+            username: process.env.BROWSERSTACK_USER,
+            accessKey: process.env.BROWSERSTACK_ACCESSKEY,
         },
         customLaunchers: {
             bs_chrome63_win: {
