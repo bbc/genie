@@ -1,0 +1,16 @@
+{
+    "title": [
+        {
+            "type": "image",
+            "key": "logo",
+            "url": "shared/logo.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "background",
+            "url": "shared/background.png",
+            "overwrite": false
+        }
+    ]
+}
