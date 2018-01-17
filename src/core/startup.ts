@@ -1,5 +1,6 @@
 import "../lib/phaser";
 import { drawSomething } from "src/core/drawsomething";
+import { Loadscreen } from "../components/loadscreen";
 
 export interface Config {
     stageHeightPx: number;
@@ -35,6 +36,9 @@ export function startup() {
 
         game.stage.backgroundColor = "#00f"; //config.backgroundColor || "#000";
         drawSomething(game);
+
+        game.state.add("Loader", new Loadscreen());
+        game.state.start("Loader");
     }
 }
 

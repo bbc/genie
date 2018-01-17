@@ -1,7 +1,7 @@
 import { AssetLoader, createAssetLoader } from "../core/asset-loader";
 
 export class Loadscreen extends Phaser.State {
-    private loader: AssetLoader = createAssetLoader(this.game.load);
+    private loader: AssetLoader;
     /**
      * Placeholder Loadscreen for development
      */
@@ -12,7 +12,7 @@ export class Loadscreen extends Phaser.State {
     public preload() {
         console.log("entered Loadscreen preload()");
 
-        this.loader.preloadLoadscreenAssets();
+        this.loader = createAssetLoader(this.game.load);
     }
 
     public create() {

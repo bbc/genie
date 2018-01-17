@@ -8,11 +8,11 @@ export interface AssetLoader {
 }
 
 export function createAssetLoader(load: Phaser.Loader): AssetLoader {
+    preloadLoadscreenAssets();
     const self = {
         preloadLoadscreenAssets,
         loadGameAssets,
     };
-
     return self;
 
     function preloadLoadscreenAssets() {
