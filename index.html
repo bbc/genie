@@ -174,7 +174,6 @@
         }
         GMI.prototype.getAllSettings = function() {
             var settings = JSON.parse(JSON.stringify(globalSettings)); //Prevents reference assignment
-            settings.muted = !settings.audio;
             if (areCookiesAllowed()) {
                 settings.gameData = gameSettings;
             }
