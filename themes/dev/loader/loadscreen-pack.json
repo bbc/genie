@@ -1,9 +1,9 @@
 {
-    "title": [
+    "loadscreen": [
         {
             "type": "image",
-            "key": "cbbc_logo",
-            "url": "shared/cbbc_logo.png",
+            "key": "logo",
+            "url": "loader/logo.png",
             "overwrite": false
         }
     ]
