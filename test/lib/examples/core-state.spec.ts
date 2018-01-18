@@ -1,5 +1,5 @@
 import "src/lib/phaser";
-import { Startup } from "src/lib/examples/core-state";
+import { Startup } from "/src/lib/examples/core-state";
 import { expect } from "chai";
 
 describe("Boolean function", () => {
