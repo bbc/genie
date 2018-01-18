@@ -1,7 +1,16 @@
-import { AssetLoader, createAssetLoader } from "../core/asset-loader";
+import { createAssetLoader, PackList } from "../core/asset-loader";
+
+const LOADSCREEN_PACK_KEY: string = "LoadscreenAssetPack";
+const MASTER_PACK_KEY: string = "MasterAssetPack";
+const GEL_PACK_KEY: string = "GelAssetPack";
+
+const packsToLoad: PackList = {
+    [LOADSCREEN_PACK_KEY]: { url: "loadscreen-pack.json" },
+    [MASTER_PACK_KEY]: { url: "asset-master-pack.json" },
+    [GEL_PACK_KEY]: { url: "gel/gel-pack.json" },
+};
 
 export class Loadscreen extends Phaser.State {
-    private loader: AssetLoader;
     /**
      * Placeholder Loadscreen for development
      */
@@ -12,12 +21,10 @@ export class Loadscreen extends Phaser.State {
     public preload() {
         console.log("entered Loadscreen preload()");
 
-        this.loader = createAssetLoader(this.game.load);
+        createAssetLoader(this.game, packsToLoad, this.create);
     }
 
     public create() {
         console.log("entered Loadscreen create()");
-
-        this.loader.loadGameAssets();
     }
 }
