@@ -13,8 +13,18 @@ interface AssetPack {
     [key: string]: Array<{ [key: string]: any }>;
 }
 
-export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadscreenPack: Pack) {
+export interface ScreenMap {
+    [screen: string]: { [key: string]: string };
+}
+
+export function createAssetLoader(
+    game: Phaser.Game,
+    gamePacks: PackList,
+    loadscreenPack: Pack,
+    updateCallback: (progress: number, keyLookups?: ScreenMap) => void,
+) {
     let gameAssetPack: AssetPack = {};
+    let keyLookups: ScreenMap = {};
     let nextQueue: number = 1;
     game.load.pack(loadscreenPack.key, loadscreenPack.url);
     game.load.onLoadComplete.add(startNextLoadQueue);
@@ -26,8 +36,9 @@ export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadsc
                 loadAssetPackJSON(gamePacks);
                 break;
             case 2:
-                gameAssetPack = processAssetPackJSON(gamePacks);
+                [keyLookups, gameAssetPack] = processAssetPackJSON(gamePacks);
                 loadAssetPack(gameAssetPack);
+                game.load.onFileComplete.add(updateLoadProgress);
                 break;
             default:
                 nextQueueIsDefined = false;
@@ -36,8 +47,9 @@ export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadsc
         if (nextQueueIsDefined) {
             game.time.events.add(0, game.load.start, game.load);
         } else {
-            console.log(gameAssetPack);
+            updateCallback(100, keyLookups);
             game.load.onLoadComplete.removeAll();
+            game.load.onFileComplete.removeAll();
         }
     }
 
@@ -60,13 +72,14 @@ export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadsc
      * which to get fetch from the cache.
      * @return       An asset pack which contains data from all the given asset packs.
      */
-    function processAssetPackJSON(packs: PackList): AssetPack {
+    function processAssetPackJSON(packs: PackList): [ScreenMap, AssetPack] {
         for (const key in packs) {
             if (packs.hasOwnProperty(key)) {
                 packs[key].data = game.cache.getJSON(key);
             }
         }
-        return convertPackListToAssetPack(packs);
+        const assetPack = convertPackListToAssetPack(packs);
+        return namespaceAssetsByURL(assetPack);
     }
 
     /**
@@ -79,6 +92,10 @@ export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadsc
                 game.load.pack(screen, undefined, pack);
             }
         }
+    }
+
+    function updateLoadProgress(progress: number) {
+        updateCallback(progress);
     }
 }
 
@@ -97,4 +114,26 @@ function convertPackListToAssetPack(packs: PackList): AssetPack {
         }
     }
     return assetPack;
+}
+
+function namespaceAssetsByURL(pack: AssetPack): [ScreenMap, AssetPack] {
+    const keyLookups: ScreenMap = {};
+    for (const screen in pack) {
+        if (pack.hasOwnProperty(screen)) {
+            keyLookups[screen] = {};
+            for (const asset of pack[screen]) {
+                let newKey = "<pending>";
+                if (asset.url) {
+                    newKey = asset.url;
+                } else if (asset.urls) {
+                    newKey = asset.urls[0].replace(/\.[^.]*$/, "");
+                } else {
+                    throw Error("expected url or urls field for asset key " + asset.key);
+                }
+                keyLookups[screen][asset.key] = newKey;
+                asset.key = newKey;
+            }
+        }
+    }
+    return [keyLookups, pack];
 }
