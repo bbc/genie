@@ -1,6 +1,6 @@
-import "../lib/phaser";
+import { Loadscreen } from "src/components/loadscreen";
 import { drawSomething } from "src/core/drawsomething";
-import { Loadscreen } from "../components/loadscreen";
+import "../lib/phaser";
 
 export interface Config {
     stageHeightPx: number;

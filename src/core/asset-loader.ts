@@ -10,7 +10,7 @@ export interface PackList {
 }
 
 interface AssetPack {
-    [key: string]: Array<{ [Key: string]: any }>;
+    [key: string]: Array<{ [key: string]: any }>;
 }
 
 export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadscreenPack: Pack) {
@@ -46,7 +46,7 @@ export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadsc
      * @param  packs The list of AssetPacks to load.
      */
     function loadAssetPackJSON(packs: PackList) {
-        for (let key in packs) {
+        for (const key in packs) {
             if (packs.hasOwnProperty(key)) {
                 game.load.json(key, packs[key].url);
             }
@@ -61,7 +61,7 @@ export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadsc
      * @return       An asset pack which contains data from all the given asset packs.
      */
     function processAssetPackJSON(packs: PackList): AssetPack {
-        for (let key in packs) {
+        for (const key in packs) {
             if (packs.hasOwnProperty(key)) {
                 packs[key].data = game.cache.getJSON(key);
             }
@@ -74,7 +74,7 @@ export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadsc
      * @param packs The AssetPack to load.
      */
     function loadAssetPack(pack: AssetPack) {
-        for (let screen in pack) {
+        for (const screen in pack) {
             if (pack.hasOwnProperty(screen)) {
                 game.load.pack(screen, undefined, pack);
             }
@@ -91,7 +91,7 @@ export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadsc
  */
 function convertPackListToAssetPack(packs: PackList): AssetPack {
     const assetPack: AssetPack = {};
-    for (let pack in packs) {
+    for (const pack in packs) {
         if (packs.hasOwnProperty(pack)) {
             _.assign(assetPack, packs[pack].data);
         }
