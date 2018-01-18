@@ -43,7 +43,7 @@ export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadsc
 
     /**
      * Loads each AssetPack in the PackList as JSON using the Phaser.Loader
-     * @param packs The list of AssetPacks to load.
+     * @param  packs The list of AssetPacks to load.
      */
     function loadAssetPackJSON(packs: PackList) {
         for (let key in packs) {
@@ -56,9 +56,9 @@ export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadsc
     /**
      * Gets each asset pack as a JSON object from the Phaser.Cache
      * and merges it into one asset pack.
-     * @param packs The list of asset packs which have already been loaded,
+     * @param  packs The list of asset packs which have already been loaded,
      * which to get fetch from the cache.
-     * @returns An asset pack which contains data from all the given asset packs.
+     * @return       An asset pack which contains data from all the given asset packs.
      */
     function processAssetPackJSON(packs: PackList): AssetPack {
         for (let key in packs) {
@@ -85,9 +85,9 @@ export function createAssetLoader(game: Phaser.Game, gamePacks: PackList, loadsc
 /**
  * A helper function for processAssetPackJSON which converts a PackList
  * that contains data, into a AssetPack.
- * @param packs The list of asset packs which already have data fetched
+ * @param  packs The list of asset packs which already have data fetched
  * from the cache.
- * @returns An asset pack which contains all the data from the given PackList.
+ * @return       An asset pack which contains all the data from the given PackList.
  */
 function convertPackListToAssetPack(packs: PackList): AssetPack {
     const assetPack: AssetPack = {};
