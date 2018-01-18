@@ -17,6 +17,14 @@ export interface ScreenMap {
     [screen: string]: { [key: string]: string };
 }
 
+/**
+ * Creates an Asset Loader, which can handle the loading of load screen assets,
+ * as well as the assets for the rest of the game.
+ * @param  game           The Phaser.Game to load assets to.
+ * @param  gamePacks      The AssetPacks that should be loaded for states after the loading screen.
+ * @param  loadscreenPack The AssetPack to load the loading screen assets.
+ * @param  updateCallback A callback to return the load progress and keyLookups.
+ */
 export function createAssetLoader(
     game: Phaser.Game,
     gamePacks: PackList,
@@ -29,6 +37,10 @@ export function createAssetLoader(
     game.load.pack(loadscreenPack.key, loadscreenPack.url);
     game.load.onLoadComplete.add(startNextLoadQueue);
 
+    /**
+     * Starts the next batch of loads to do. Each batch is defined under the
+     * switch statement.
+     */
     function startNextLoadQueue() {
         let nextQueueIsDefined: boolean = true;
         switch (nextQueue) {
@@ -79,7 +91,7 @@ export function createAssetLoader(
             }
         }
         const assetPack = convertPackListToAssetPack(packs);
-        return namespaceAssetsByURL(assetPack);
+        return namespaceAssetsByScreen(assetPack);
     }
 
     /**
@@ -93,7 +105,11 @@ export function createAssetLoader(
             }
         }
     }
-
+    /**
+     * Updates the current load progress and sends it to the updateCallback.
+     * Progress is provided by a Phaser.Loader callback.
+     * @param  progress The progress of the Phaser.Loader
+     */
     function updateLoadProgress(progress: number) {
         updateCallback(progress);
     }
@@ -116,7 +132,13 @@ function convertPackListToAssetPack(packs: PackList): AssetPack {
     return assetPack;
 }
 
-function namespaceAssetsByURL(pack: AssetPack): [ScreenMap, AssetPack] {
+/**
+ * Changes the AssetPack, so that the Phaser.Cache key for the asset is actually it's
+ * URL, which is accessible by its screen and key in the keyLookups dictionary.
+ * @param  pack The AssetPack to namespace by screen.
+ * @return      The keyLookups dictionary and the modified AssetPack.
+ */
+function namespaceAssetsByScreen(pack: AssetPack): [ScreenMap, AssetPack] {
     const keyLookups: ScreenMap = {};
     for (const screen in pack) {
         if (pack.hasOwnProperty(screen)) {
