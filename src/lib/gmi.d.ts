@@ -37,10 +37,11 @@ declare class Gmi {
 
     public getAllSettings(): GlobalSettings;
     public setGameData(key: string, value: string): void;
-    public setMuted(state: boolean): void;
+    public setAudio(state: boolean): void;
     public setSubtitles(state: boolean): void;
     public setMotion(state: boolean): void;
-
+    public showPrompt(resumeGame: () => void): void;
+    public showSettings(): void;
     public sendStatsEvent(actionName: ActionName, actionType: string, additionalLabels?: any): void;
     public exit(): void;
     public debug(message: string): void;
