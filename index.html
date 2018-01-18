@@ -193,10 +193,6 @@
                 } catch (e) {}
             }
         };
-        GMI.prototype.setMuted = function(state) {
-            globalSettings.audio = !state;
-            saveGlobalSettings();
-        };
         GMI.prototype.setAudio = function(state) {
             globalSettings.audio = !!state;
             saveGlobalSettings();
