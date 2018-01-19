@@ -11,6 +11,12 @@ Code checked into source control should be run though prettier first to prevent 
 
 Check the **/.prettierrc** and **/tslint.json** files for rule specifics.
 
+### Interfaces
+Interfaces that need to be shared between modules should go in a separate file in the 'types' sub folder.
+Interfaces should not be prefixed as per TS guidelines:
+
+>In general, you shouldn’t prefix interfaces with I (e.g. IColor). Because the concept of an interface in TypeScript is much more broad than in C# or Java, the IFoo naming convention is not broadly useful.
+
 ### Doc Comments
 Doc comments should be added where they will be helpful to explain the API.
 Docs are generated using Typedoc and placed in the docs/api folder
