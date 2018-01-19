@@ -6,7 +6,4 @@
         "sourceMap": true,
         "baseUrl": "."
     },
-  "exclude": [
-    "./test/**/*"
-  ]
 }
