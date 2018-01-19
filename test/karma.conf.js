@@ -5,8 +5,8 @@ module.exports = function(config) {
         basePath: "",
         frameworks: ["mocha", "chai", "sinon"],
         files: [
-            { pattern: "**/*.ts", watched: true, served: true, included: true },
-            { pattern: "../src/**/*.ts", watched: true, served: false, included: false },
+            { pattern: "../test/**/*.ts", watched: false, served: true, included: true },
+            { pattern: "../src/**/*.ts", watched: false, served: false, included: false },
         ],
         exclude: [],
         preprocessors: {
