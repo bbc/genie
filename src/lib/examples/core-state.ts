@@ -16,7 +16,7 @@ export class Startup extends Phaser.State {
             this.game.world.centerX,
             this.game.world.centerY,
             "- phaser -\nwith a sprinkle of\npixi dust",
-            style
+            style,
         );
         text.anchor.set(0.5);
     }
@@ -33,7 +33,7 @@ export class Startup extends Phaser.State {
      * Returns the opposite boolean
      * @param param The boolean to negate.
      */
-     public negateBoolean(bool: boolean) {
-         return !bool;
-     }
+    public negateBoolean(bool: boolean) {
+        return !bool;
+    }
 }
