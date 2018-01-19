@@ -4,7 +4,10 @@ module.exports = function(config) {
     config.set({
         basePath: "",
         frameworks: ["mocha", "chai", "sinon"],
-        files: ["**/*.ts"],
+        files: [
+            { pattern: "**/*.ts", watched: true, served: true, included: true },
+            { pattern: "../src/**/*.ts", watched: true, served: false, included: false },
+        ],
         exclude: [],
         preprocessors: {
             "**/*.ts": ["webpack"],
