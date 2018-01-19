@@ -25,6 +25,8 @@ export function startup() {
         parent: getContainerDiv(gmi),
         state: new Startup(gmi, onStarted),
     };
+    // Keep the console tidy:
+    (window as any).PhaserGlobal = { hideBanner: true };
 
     const game = new Phaser.Game(phaserConfig);
 
@@ -58,7 +60,7 @@ class Startup extends Phaser.State {
         const [configDir, configFile] = theme.split(/([^/]+$)/, 2);
         this.game.load.path = configDir;
 
-        //this.load.json(CONFIG_KEY, configFile);
+        //this.load.json(CONFIG_KEY, configFile); xxx
     }
 
     public create() {
