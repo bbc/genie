@@ -1,27 +1,40 @@
-// // import "src/lib/phaser";
-// // import { Startup } from "src/lib/examples/core-state";
+/// <reference path="../../src/lib/gmi.d.ts" />
 
-// import { expect } from "chai";
+import { expect } from "chai";
 
-// import { startup } from "src/core/startup";
+import { startup } from "src/core/startup";
 
-// describe("Startup", () => {
-//     beforeEach(() => {
-//         document.body.appendChild(document.createElement("div")).id = "test-div";
-//         (window as any).getGMI = () => {
-//             return {
-//                 gameContainerId: "test-div",
-//             } as Gmi;
-//         };
-//     });
+const TEST_DIV_ID = "test-div";
 
-//     afterEach(() => {
-//         document.body.removeChild(document.getElementById("test-div"));
-//     });
+describe("Startup", () => {
+    beforeEach(() => {
+        document.body.appendChild(document.createElement("div")).id = TEST_DIV_ID;
+        (window as any).getGMI = () => {
+            return {
+                gameContainerId: TEST_DIV_ID,
+                embedVars: { configPath: "" },
+            } as Gmi;
+        };
+    });
 
-//     it("should create a canvas element", () => {
-//         startup();
+    afterEach(() => {
+        document.body.removeChild(getElementOrThrow(TEST_DIV_ID));
+    });
 
-//         expect(document.getElementById("test-div").children.length).to.equal(1);
-//     });
-// });
+    it("should create a canvas element", done => {
+        startup();
+        setTimeout(() => {
+            expect(getElementOrThrow(TEST_DIV_ID).children.length).to.equal(1);
+            done();
+        }, 1000);
+    });
+
+    function getElementOrThrow(id: string): HTMLElement {
+        const e = document.getElementById(id);
+        if (e) {
+            return e;
+        } else {
+            throw Error("Didn't find " + id);
+        }
+    }
+});
