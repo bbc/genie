@@ -14,7 +14,8 @@
         "no-consecutive-blank-lines": false,
         "no-console": false,
         "comment-format": false,
-        "no-empty": false
+        "no-empty": false,
+        "no-reference": false
     },
     "rulesDirectory": []
 }
