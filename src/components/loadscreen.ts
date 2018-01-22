@@ -23,7 +23,9 @@ export class Loadscreen extends Phaser.State {
 
     public preload() {
         console.log("entered Loadscreen preload()");
-        createAssetLoader(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress);
+        createAssetLoader(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress).then(keyLookups => {
+            console.log(keyLookups);
+        });
     }
 
     public create() {
@@ -31,7 +33,7 @@ export class Loadscreen extends Phaser.State {
         this.game.add.image(0, 0, "logo");
     }
 
-    private updateLoadProgress(progress: number, keyLookups?: ScreenMap) {
-        console.log(progress, keyLookups);
+    private updateLoadProgress(progress: number) {
+        console.log(progress);
     }
 }

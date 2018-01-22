@@ -29,13 +29,17 @@ export function createAssetLoader(
     game: Phaser.Game,
     gamePacks: PackList,
     loadscreenPack: Pack,
-    updateCallback: (progress: number, keyLookups?: ScreenMap) => void,
-) {
+    updateCallback: (progress: number) => void,
+): Promise<ScreenMap> {
     let gameAssetPack: AssetPack = {};
     let keyLookups: ScreenMap = {};
     let nextQueue: number = 1;
     game.load.pack(loadscreenPack.key, loadscreenPack.url);
     game.load.onLoadComplete.add(startNextLoadQueue);
+    let doResolve: (value: ScreenMap) => void;
+    return new Promise(resolve => {
+        doResolve = resolve;
+    });
 
     /**
      * Starts the next batch of loads to do. Each batch is defined under the
@@ -59,9 +63,10 @@ export function createAssetLoader(
         if (nextQueueIsDefined) {
             game.time.events.add(0, game.load.start, game.load);
         } else {
-            updateCallback(100, keyLookups);
+            //updateCallback(100);
             game.load.onLoadComplete.removeAll();
             game.load.onFileComplete.removeAll();
+            doResolve(keyLookups);
         }
     }
 
