@@ -1,9 +1,18 @@
 {
     "compilerOptions": {
         "module": "CommonJS",
-        "target": "es5",
+        "target": "es6",
         "strict": true,
         "sourceMap": true,
         "baseUrl": "."
     },
+    "awesomeTypescriptLoaderOptions": {
+        "useBabel": true,
+        "babelOptions": {
+            "babelrc": false,
+            "presets": [["env", {"targets": {"ie": 11}}]],
+            "plugins": "babel-polyfill"
+        },
+        "babelCore": "babel-core"
+    }
 }
