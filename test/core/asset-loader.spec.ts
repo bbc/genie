@@ -7,7 +7,7 @@ import "src/lib/phaser";
 import { assetPacks } from "test/helpers/asset-packs";
 import { installMockGetGmi, uninstallMockGetGmi } from "test/helpers/mock";
 
-describe("Asset Loader - Update Callback", () => {
+describe("Asset Loader - Update Callback and Promise", () => {
     beforeEach(installMockGetGmi);
     afterEach(uninstallMockGetGmi);
 
