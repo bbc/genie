@@ -9,7 +9,7 @@ const oneScreenOneAssetPack = objectToJsonDataUrl({
     screen: [createImageAsset("image", "one", assets.imgUrlOnePixel, false)],
 });
 
-const twoScreensFourAssetsPack = objectToJsonDataUrl({
+const twoScreensThreeAssetsPack = objectToJsonDataUrl({
     screen1: [createImageAsset("image", "darkGreySquare100", assets.darkGreySquare100, false)],
     screen2: [
         createImageAsset("image", "ship", assets.ship, false),
@@ -21,7 +21,7 @@ export const assetPacks = {
     emptyAssetPack,
     loadscreenPack,
     oneScreenOneAssetPack,
-    twoScreensFourAssetsPack,
+    twoScreensThreeAssetsPack,
 };
 
 function createImageAsset(type: string, key: string, url: string, overwrite?: boolean) {

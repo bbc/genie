@@ -35,7 +35,7 @@ describe("Asset Loader", () => {
     it("Should be called 4 times (at 25% intervals) when 4 files are to be loaded in gamePacks.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
-            MASTER_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
+            MASTER_PACK_KEY: { url: assetPacks.twoScreensThreeAssetsPack },
             GEL_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
         };
         const loadscreenPack: Pack = {
@@ -60,7 +60,7 @@ describe("Asset Loader", () => {
     it("Should resolve the returned Promise with keyLookups for each gamePack screen.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
-            MASTER_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
+            MASTER_PACK_KEY: { url: assetPacks.twoScreensThreeAssetsPack },
             GEL_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
         };
         const loadscreenPack: Pack = {
@@ -75,6 +75,7 @@ describe("Asset Loader", () => {
                 expect(value).to.haveOwnProperty("screen1");
                 expect(value).to.haveOwnProperty("screen2");
                 expect(value).to.haveOwnProperty("screen");
+                expect(value).to.not.haveOwnProperty("loadscreen");
             });
     });
 
