@@ -1,4 +1,4 @@
-import { createAssetLoader, Pack, PackList, ScreenMap } from "../core/asset-loader";
+import { loadAssets, Pack, PackList, ScreenMap } from "../core/asset-loader";
 import "../lib/phaser";
 
 const MASTER_PACK_KEY: string = "MasterAssetPack";
@@ -23,7 +23,7 @@ export class Loadscreen extends Phaser.State {
 
     public preload() {
         console.log("entered Loadscreen preload()");
-        createAssetLoader(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress).then(keyLookups => {
+        loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress).then(keyLookups => {
             console.log(keyLookups);
         });
     }

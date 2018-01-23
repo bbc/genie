@@ -25,7 +25,7 @@ export interface ScreenMap {
  * @param  loadscreenPack The AssetPack to load the loading screen assets.
  * @param  updateCallback A callback to return the load progress and keyLookups.
  */
-export function createAssetLoader(
+export function loadAssets(
     game: Phaser.Game,
     gamePacks: PackList,
     loadscreenPack: Pack,

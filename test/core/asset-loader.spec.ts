@@ -1,7 +1,7 @@
 import "babel-polyfill";
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { createAssetLoader, Pack, PackList, ScreenMap } from "src/core/asset-loader";
+import { loadAssets, Pack, PackList, ScreenMap } from "src/core/asset-loader";
 import { startup } from "src/core/startup";
 import "src/lib/phaser";
 import { assetPackUrl } from "test/helpers/asset-packs";
@@ -22,7 +22,7 @@ describe("empty", () => {
                     key: "loadscreen",
                     url: assetPackUrl,
                 };
-                return createAssetLoader(game, gamePacks, loadscreenPack, updateCallback);
+                return loadAssets(game, gamePacks, loadscreenPack, updateCallback);
             })
             .then((value: ScreenMap) => {
                 sinon.assert.calledOnce(updateCallback);
