@@ -32,7 +32,7 @@ describe("Asset Loader", () => {
             });
     });
 
-    it("Should be called 5 times (at 20% intervals) when 5 files are to be loaded in gamePacks.", () => {
+    it("Should be called 4 times (at 25% intervals) when 4 files are to be loaded in gamePacks.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
