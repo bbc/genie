@@ -98,6 +98,31 @@ describe("Asset Loader", () => {
                 expect(theGame.cache.checkImageKey(value.screen.one)).to.equal(true);
             });
     });
+
+    it("Should attempt to load assetPack JSON files that are missing from the packs provided", () => {
+        const updateCallback = sinon.spy();
+        (window as any).console.warn = sinon.stub();
+        const gamePacks: PackList = {
+            MASTER_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
+        };
+        const loadscreenPack: Pack = {
+            key: "loadscreen",
+            url: assetPacks.loadscreenPack,
+        };
+        let theGame: Phaser.Game;
+        return startup()
+            .then(game => {
+                theGame = game;
+                game.state.add("notfound404", new Phaser.State());
+                return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
+            })
+            .then((value: ScreenMap) => {
+                sinon.assert.calledWithExactly(
+                    (window as any).console.warn,
+                    "Phaser.Loader - json[notfound404]: error loading asset from URL undefinednotfound404.json (404)",
+                );
+            });
+    });
 });
 
 function runInPreload<T>(game: Phaser.Game, action: () => Promise<T>): Promise<T> {
