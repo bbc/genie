@@ -35,7 +35,6 @@ describe("Asset Loader - Update Callback and Promise", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
-            GEL_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
         };
         const loadscreenPack: Pack = {
             key: "screen1",
@@ -60,7 +59,6 @@ describe("Asset Loader - Update Callback and Promise", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
-            GEL_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
         };
         const loadscreenPack: Pack = {
             key: "screen1",
