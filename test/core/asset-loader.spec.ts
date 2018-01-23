@@ -5,9 +5,10 @@ import { loadAssets, Pack, PackList, ScreenMap } from "src/core/asset-loader";
 import { startup } from "src/core/startup";
 import "src/lib/phaser";
 import { assetPacks } from "test/helpers/asset-packs";
+import { assets } from "test/helpers/assets";
 import { installMockGetGmi, uninstallMockGetGmi } from "test/helpers/mock";
 
-describe("Asset Loader - Update Callback and Promise", () => {
+describe("Asset Loader", () => {
     beforeEach(installMockGetGmi);
     afterEach(uninstallMockGetGmi);
 
@@ -74,6 +75,27 @@ describe("Asset Loader - Update Callback and Promise", () => {
                 expect(value).to.haveOwnProperty("screen1");
                 expect(value).to.haveOwnProperty("screen2");
                 expect(value).to.haveOwnProperty("screen");
+            });
+    });
+
+    it("Should correctly namespace assets by their URL and return it in keyLookups.", () => {
+        const updateCallback = sinon.spy();
+        const gamePacks: PackList = {
+            MASTER_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
+        };
+        const loadscreenPack: Pack = {
+            key: "loadscreen",
+            url: assetPacks.loadscreenPack,
+        };
+        let theGame: Phaser.Game;
+        return startup()
+            .then(game => {
+                theGame = game;
+                return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
+            })
+            .then((value: ScreenMap) => {
+                expect(value.screen.one).to.equal(assets.imgUrlOnePixel);
+                expect(theGame.cache.checkImageKey(value.screen.one)).to.equal(true);
             });
     });
 });
