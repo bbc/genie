@@ -36,6 +36,7 @@ export function createAssetLoader(
     let nextQueue: number = 1;
     game.load.pack(loadscreenPack.key, loadscreenPack.url);
     game.load.onLoadComplete.add(startNextLoadQueue);
+
     let doResolve: (value: ScreenMap) => void;
     return new Promise(resolve => {
         doResolve = resolve;
@@ -63,7 +64,7 @@ export function createAssetLoader(
         if (nextQueueIsDefined) {
             game.time.events.add(0, game.load.start, game.load);
         } else {
-            //updateCallback(100);
+            updateCallback(100);
             game.load.onLoadComplete.removeAll();
             game.load.onFileComplete.removeAll();
             doResolve(keyLookups);

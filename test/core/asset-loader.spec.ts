@@ -4,6 +4,7 @@ import * as sinon from "sinon";
 import { createAssetLoader, Pack, PackList, ScreenMap } from "src/core/asset-loader";
 import { startup } from "src/core/startup";
 import "src/lib/phaser";
+import { assetPackUrl } from "test/helpers/asset-packs";
 import { installMockGetGmi, uninstallMockGetGmi } from "test/helpers/mock";
 
 describe("empty", () => {
@@ -14,12 +15,12 @@ describe("empty", () => {
         return startup()
             .then(game => {
                 const gamePacks: PackList = {
-                    MASTER_PACK_KEY: { url: "asset-master-pack.json" },
-                    GEL_PACK_KEY: { url: "gel/gel-pack.json" },
+                    MASTER_PACK_KEY: { url: assetPackUrl },
+                    GEL_PACK_KEY: { url: assetPackUrl },
                 };
                 const loadscreenPack: Pack = {
                     key: "loadscreen",
-                    url: "loader/loadscreen-pack.json",
+                    url: assetPackUrl,
                 };
                 return createAssetLoader(game, gamePacks, loadscreenPack, updateCallback);
             })
