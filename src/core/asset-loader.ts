@@ -41,10 +41,6 @@ export function loadAssets(
         doResolve = resolve;
     });
 
-    /**
-     * Starts the next batch of loads to do. Each batch is defined under the
-     * switch statement.
-     */
     function startNextLoadQueue() {
         let nextQueueIsDefined: boolean = true;
         switch (nextQueue) {
@@ -79,10 +75,6 @@ export function loadAssets(
         }
     }
 
-    /**
-     * Loads each AssetPack in the PackList as JSON using the Phaser.Loader
-     * @param  packs The list of AssetPacks to load.
-     */
     function loadAssetPackJSON(packs: PackList) {
         for (const key in packs) {
             if (packs.hasOwnProperty(key)) {
@@ -91,13 +83,6 @@ export function loadAssets(
         }
     }
 
-    /**
-     * Gets each asset pack as a JSON object from the Phaser.Cache
-     * and merges it into one asset pack.
-     * @param  packs The list of asset packs which have already been loaded,
-     * which to get fetch from the cache.
-     * @return       An asset pack which contains data from all the given asset packs.
-     */
     function processAssetPackJSON(packs: PackList): [ScreenMap, AssetPack] {
         for (const key in packs) {
             if (packs.hasOwnProperty(key)) {
@@ -108,10 +93,6 @@ export function loadAssets(
         return namespaceAssetsByScreen(assetPack);
     }
 
-    /**
-     * Loads all of the entries in an AssetPack into the game.
-     * @param packs The AssetPack to load.
-     */
     function loadAssetPack(pack: AssetPack) {
         for (const screen in pack) {
             if (pack.hasOwnProperty(screen)) {
@@ -119,11 +100,7 @@ export function loadAssets(
             }
         }
     }
-    /**
-     * Updates the current load progress and sends it to the updateCallback.
-     * Progress is provided by a Phaser.Loader callback.
-     * @param  progress The progress of the Phaser.Loader
-     */
+
     function updateLoadProgress(progress: number) {
         updateCallback(progress);
     }
@@ -140,13 +117,6 @@ export function loadAssets(
     }
 }
 
-/**
- * A helper function for processAssetPackJSON which converts a PackList
- * that contains data, into a AssetPack.
- * @param  packs The list of asset packs which already have data fetched
- * from the cache.
- * @return       An asset pack which contains all the data from the given PackList.
- */
 function convertPackListToAssetPack(packs: PackList): AssetPack {
     const assetPack: AssetPack = {};
     for (const pack in packs) {
@@ -157,12 +127,6 @@ function convertPackListToAssetPack(packs: PackList): AssetPack {
     return assetPack;
 }
 
-/**
- * Changes the AssetPack, so that the Phaser.Cache key for the asset is actually it's
- * URL, which is accessible by its screen and key in the keyLookups dictionary.
- * @param  pack The AssetPack to namespace by screen.
- * @return      The keyLookups dictionary and the modified AssetPack.
- */
 function namespaceAssetsByScreen(pack: AssetPack): [ScreenMap, AssetPack] {
     const keyLookups: ScreenMap = {};
     for (const screen in pack) {
