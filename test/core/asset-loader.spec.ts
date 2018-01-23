@@ -31,13 +31,14 @@ describe("Asset Loader - Update Callback and Promise", () => {
             });
     });
 
-    it("Should be called 4 times when 4 files are to be loaded in gamePacks.", () => {
+    it("Should be called 5 times when 5 files are to be loaded in gamePacks.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
+            GEL_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
         };
         const loadscreenPack: Pack = {
-            key: "screen1",
+            key: "loadscreen",
             url: assetPacks.oneScreenOneAssetPack,
         };
         return startup()
@@ -46,12 +47,13 @@ describe("Asset Loader - Update Callback and Promise", () => {
             })
             .then((value: ScreenMap) => {
                 sinon.assert.callOrder(
-                    updateCallback.withArgs(25),
-                    updateCallback.withArgs(50),
-                    updateCallback.withArgs(75),
+                    updateCallback.withArgs(20),
+                    updateCallback.withArgs(40),
+                    updateCallback.withArgs(60),
+                    updateCallback.withArgs(80),
                     updateCallback.withArgs(100),
                 );
-                sinon.assert.callCount(updateCallback, 4);
+                sinon.assert.callCount(updateCallback, 5);
             });
     });
 
@@ -59,10 +61,11 @@ describe("Asset Loader - Update Callback and Promise", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
+            GEL_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
         };
         const loadscreenPack: Pack = {
-            key: "screen1",
-            url: assetPacks.oneScreenOneAssetPack,
+            key: "loadscreen",
+            url: assetPacks.emptyAssetPack,
         };
         return startup()
             .then(game => {
@@ -71,6 +74,7 @@ describe("Asset Loader - Update Callback and Promise", () => {
             .then((value: ScreenMap) => {
                 expect(value).to.haveOwnProperty("screen1");
                 expect(value).to.haveOwnProperty("screen2");
+                expect(value).to.haveOwnProperty("screen");
             });
     });
 });
