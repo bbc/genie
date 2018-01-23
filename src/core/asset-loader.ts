@@ -34,8 +34,8 @@ export function loadAssets(
     let gameAssetPack: AssetPack = {};
     let keyLookups: ScreenMap = {};
     let nextQueue: number = 1;
-    game.load.pack(loadscreenPack.key, loadscreenPack.url);
     game.load.onLoadComplete.add(startNextLoadQueue);
+    game.load.pack(loadscreenPack.key, loadscreenPack.url);
 
     let doResolve: (value: ScreenMap) => void;
     return new Promise(resolve => {
