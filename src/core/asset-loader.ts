@@ -36,7 +36,6 @@ export function loadAssets(
     let nextQueue: number = 1;
     game.load.onLoadComplete.add(startNextLoadQueue);
     game.load.pack(loadscreenPack.key, loadscreenPack.url);
-
     let doResolve: (value: ScreenMap) => void;
     return new Promise(resolve => {
         doResolve = resolve;
@@ -153,17 +152,21 @@ function namespaceAssetsByScreen(pack: AssetPack): [ScreenMap, AssetPack] {
     for (const screen in pack) {
         if (pack.hasOwnProperty(screen)) {
             keyLookups[screen] = {};
-            for (const asset of pack[screen]) {
-                let newKey = "<pending>";
-                if (asset.url) {
-                    newKey = asset.url;
-                } else if (asset.urls) {
-                    newKey = asset.urls[0].replace(/\.[^.]*$/, "");
-                } else {
-                    throw Error("expected url or urls field for asset key " + asset.key);
+            if (Object.keys(pack[screen]).length !== 0 && pack[screen].constructor !== Object) {
+                for (const asset of pack[screen]) {
+                    let newKey = "<pending>";
+                    if (asset.url) {
+                        newKey = asset.url;
+                    } else if (asset.urls) {
+                        newKey = asset.urls[0].replace(/\.[^.]*$/, "");
+                    } else {
+                        throw Error("expected url or urls field for asset key " + asset.key);
+                    }
+                    keyLookups[screen][asset.key] = newKey;
+                    asset.key = newKey;
                 }
-                keyLookups[screen][asset.key] = newKey;
-                asset.key = newKey;
+            } else {
+                return [keyLookups, {}];
             }
         }
     }

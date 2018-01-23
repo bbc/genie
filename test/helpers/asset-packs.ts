@@ -1,6 +1,6 @@
 import { assets, objectToJsonDataUrl } from "test/helpers/assets";
 
-const emptyAssetPack = objectToJsonDataUrl({});
+const emptyAssetPack = objectToJsonDataUrl({ empty: {} });
 
 const oneScreenOneAssetPack = objectToJsonDataUrl({
     screen: [createImageAsset("image", "one", assets.imgUrlOnePixel, false)],

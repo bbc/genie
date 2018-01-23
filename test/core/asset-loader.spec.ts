@@ -18,7 +18,7 @@ describe("Asset Loader - Update Callback and Promise", () => {
             GEL_PACK_KEY: { url: assetPacks.emptyAssetPack },
         };
         const loadscreenPack: Pack = {
-            key: "screen1",
+            key: "screen",
             url: assetPacks.oneScreenOneAssetPack,
         };
         return startup()
@@ -38,7 +38,7 @@ describe("Asset Loader - Update Callback and Promise", () => {
             GEL_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
         };
         const loadscreenPack: Pack = {
-            key: "loadscreen",
+            key: "screen",
             url: assetPacks.oneScreenOneAssetPack,
         };
         return startup()
@@ -64,7 +64,7 @@ describe("Asset Loader - Update Callback and Promise", () => {
             GEL_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
         };
         const loadscreenPack: Pack = {
-            key: "loadscreen",
+            key: "empty",
             url: assetPacks.emptyAssetPack,
         };
         return startup()
