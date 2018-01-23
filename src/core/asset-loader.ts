@@ -55,6 +55,11 @@ export function loadAssets(
             case 2:
                 [keyLookups, gameAssetPack] = processAssetPackJSON(gamePacks);
                 loadAssetPack(gameAssetPack);
+                if (game.load.totalQueuedPacks() === 0) {
+                    nextQueueIsDefined = false;
+                    updateCallback(100);
+                    doResolve(keyLookups);
+                }
                 game.load.onFileComplete.add(updateLoadProgress);
                 break;
             default:
@@ -64,7 +69,6 @@ export function loadAssets(
         if (nextQueueIsDefined) {
             game.time.events.add(0, game.load.start, game.load);
         } else {
-            updateCallback(100);
             game.load.onLoadComplete.removeAll();
             game.load.onFileComplete.removeAll();
             doResolve(keyLookups);

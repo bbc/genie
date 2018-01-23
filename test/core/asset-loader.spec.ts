@@ -4,35 +4,76 @@ import * as sinon from "sinon";
 import { loadAssets, Pack, PackList, ScreenMap } from "src/core/asset-loader";
 import { startup } from "src/core/startup";
 import "src/lib/phaser";
-import { assetPackUrl } from "test/helpers/asset-packs";
+import { assetPacks } from "test/helpers/asset-packs";
 import { installMockGetGmi, uninstallMockGetGmi } from "test/helpers/mock";
 
-describe("empty", () => {
+describe("Asset Loader - Update Callback", () => {
     beforeEach(installMockGetGmi);
     afterEach(uninstallMockGetGmi);
-    xit("callback", () => {
+
+    it("Should call 100% when 0 files are to be loaded in gamePacks.", () => {
         const updateCallback = sinon.spy();
+        const gamePacks: PackList = {
+            MASTER_PACK_KEY: { url: assetPacks.emptyAssetPack },
+            GEL_PACK_KEY: { url: assetPacks.emptyAssetPack },
+        };
+        const loadscreenPack: Pack = {
+            key: "screen1",
+            url: assetPacks.oneScreenOneAssetPack,
+        };
         return startup()
             .then(game => {
-                const gamePacks: PackList = {
-                    MASTER_PACK_KEY: { url: assetPackUrl },
-                    GEL_PACK_KEY: { url: assetPackUrl },
-                };
-                const loadscreenPack: Pack = {
-                    key: "loadscreen",
-                    url: assetPackUrl,
-                };
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
             .then((value: ScreenMap) => {
-                sinon.assert.called(updateCallback);
+                sinon.assert.calledOnce(updateCallback);
+                sinon.assert.alwaysCalledWithExactly(updateCallback, 100);
             });
     });
 
-    it("Works with promises", () => {
-        return Promise.resolve(true).then(value => {
-            expect(value).to.equal(true);
-        });
+    it("Should be called 4 times when 4 files are to be loaded in gamePacks.", () => {
+        const updateCallback = sinon.spy();
+        const gamePacks: PackList = {
+            MASTER_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
+            GEL_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
+        };
+        const loadscreenPack: Pack = {
+            key: "screen1",
+            url: assetPacks.oneScreenOneAssetPack,
+        };
+        return startup()
+            .then(game => {
+                return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
+            })
+            .then((value: ScreenMap) => {
+                sinon.assert.callOrder(
+                    updateCallback.withArgs(25),
+                    updateCallback.withArgs(50),
+                    updateCallback.withArgs(75),
+                    updateCallback.withArgs(100),
+                );
+                sinon.assert.callCount(updateCallback, 4);
+            });
+    });
+
+    it("Should resolve the returned Promise with keyLookups for each gamePack screen.", () => {
+        const updateCallback = sinon.spy();
+        const gamePacks: PackList = {
+            MASTER_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
+            GEL_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
+        };
+        const loadscreenPack: Pack = {
+            key: "screen1",
+            url: assetPacks.oneScreenOneAssetPack,
+        };
+        return startup()
+            .then(game => {
+                return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
+            })
+            .then((value: ScreenMap) => {
+                expect(value).to.haveOwnProperty("screen1");
+                expect(value).to.haveOwnProperty("screen2");
+            });
     });
 });
 

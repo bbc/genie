@@ -1,6 +1,19 @@
 import { assets, objectToJsonDataUrl } from "test/helpers/assets";
 
-export const assetPackUrl = objectToJsonDataUrl({
+const emptyAssetPack = objectToJsonDataUrl({});
+
+const oneScreenOneAssetPack = objectToJsonDataUrl({
+    screen1: [
+        {
+            type: "image",
+            key: "one",
+            url: assets.imgUrlOnePixel,
+            overwrite: false,
+        },
+    ],
+});
+
+const twoScreensFourAssetsPack = objectToJsonDataUrl({
     screen1: [
         {
             type: "image",
@@ -30,3 +43,9 @@ export const assetPackUrl = objectToJsonDataUrl({
         },
     ],
 });
+
+export const assetPacks = {
+    emptyAssetPack,
+    oneScreenOneAssetPack,
+    twoScreensFourAssetsPack,
+};
