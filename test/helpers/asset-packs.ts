@@ -2,6 +2,9 @@ import { assets, objectToJsonDataUrl } from "test/helpers/assets";
 
 const emptyAssetPack = objectToJsonDataUrl({ empty: {} });
 
+const loadscreenPack = objectToJsonDataUrl({
+    loadscreen: [createImageAsset("image", "greenCircle40", assets.greenCircle40, false)],
+});
 const oneScreenOneAssetPack = objectToJsonDataUrl({
     screen: [createImageAsset("image", "one", assets.imgUrlOnePixel, false)],
 });
@@ -10,13 +13,13 @@ const twoScreensFourAssetsPack = objectToJsonDataUrl({
     screen1: [createImageAsset("image", "darkGreySquare100", assets.darkGreySquare100, false)],
     screen2: [
         createImageAsset("image", "ship", assets.ship, false),
-        createImageAsset("image", "greenCircle40", assets.greenCircle40, false),
         createImageAsset("image", "lightGreySquare100", assets.lightGreySquare100, false),
     ],
 });
 
 export const assetPacks = {
     emptyAssetPack,
+    loadscreenPack,
     oneScreenOneAssetPack,
     twoScreensFourAssetsPack,
 };

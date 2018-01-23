@@ -53,6 +53,11 @@ export function loadAssets(
                 break;
             case 2:
                 [keyLookups, gameAssetPack] = processAssetPackJSON(gamePacks);
+                const missingScreenPack = getMissingScreens();
+                loadAssetPackJSON(missingScreenPack);
+                Object.assign([keyLookups, gameAssetPack], processAssetPackJSON(missingScreenPack));
+                break;
+            case 3:
                 loadAssetPack(gameAssetPack);
                 if (game.load.totalQueuedPacks() === 0) {
                     nextQueueIsDefined = false;
@@ -121,6 +126,17 @@ export function loadAssets(
      */
     function updateLoadProgress(progress: number) {
         updateCallback(progress);
+    }
+
+    function getMissingScreens(): PackList {
+        const missingScreenList: PackList = {};
+        const missingScreens: string[] = Object.keys(game.state.states).slice(1);
+        missingScreens.forEach((key: string) => {
+            if (!gameAssetPack.hasOwnProperty(key) && loadscreenPack.key !== key) {
+                missingScreenList[key] = { url: key + ".json" };
+            }
+        });
+        return missingScreenList;
     }
 }
 

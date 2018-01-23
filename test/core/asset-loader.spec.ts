@@ -11,15 +11,15 @@ describe("Asset Loader - Update Callback and Promise", () => {
     beforeEach(installMockGetGmi);
     afterEach(uninstallMockGetGmi);
 
-    it("Should call 100% when 0 files are to be loaded in gamePacks.", () => {
+    it("Should callback with 100% progress when 0 files are to be loaded in gamePacks.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.emptyAssetPack },
             GEL_PACK_KEY: { url: assetPacks.emptyAssetPack },
         };
         const loadscreenPack: Pack = {
-            key: "screen",
-            url: assetPacks.oneScreenOneAssetPack,
+            key: "loadscreen",
+            url: assetPacks.loadscreenPack,
         };
         return startup()
             .then(game => {
@@ -31,15 +31,15 @@ describe("Asset Loader - Update Callback and Promise", () => {
             });
     });
 
-    it("Should be called 5 times when 5 files are to be loaded in gamePacks.", () => {
+    it("Should be called 5 times (at 20% intervals) when 5 files are to be loaded in gamePacks.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.twoScreensFourAssetsPack },
             GEL_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
         };
         const loadscreenPack: Pack = {
-            key: "screen",
-            url: assetPacks.oneScreenOneAssetPack,
+            key: "loadscreen",
+            url: assetPacks.loadscreenPack,
         };
         return startup()
             .then(game => {
@@ -47,13 +47,12 @@ describe("Asset Loader - Update Callback and Promise", () => {
             })
             .then((value: ScreenMap) => {
                 sinon.assert.callOrder(
-                    updateCallback.withArgs(20),
-                    updateCallback.withArgs(40),
-                    updateCallback.withArgs(60),
-                    updateCallback.withArgs(80),
+                    updateCallback.withArgs(25),
+                    updateCallback.withArgs(50),
+                    updateCallback.withArgs(75),
                     updateCallback.withArgs(100),
                 );
-                sinon.assert.callCount(updateCallback, 5);
+                sinon.assert.callCount(updateCallback, 4);
             });
     });
 
@@ -64,8 +63,8 @@ describe("Asset Loader - Update Callback and Promise", () => {
             GEL_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
         };
         const loadscreenPack: Pack = {
-            key: "empty",
-            url: assetPacks.emptyAssetPack,
+            key: "loadscreen",
+            url: assetPacks.loadscreenPack,
         };
         return startup()
             .then(game => {
@@ -82,7 +81,7 @@ describe("Asset Loader - Update Callback and Promise", () => {
 function runInPreload<T>(game: Phaser.Game, action: () => Promise<T>): Promise<T> {
     let doResolve: (value: Promise<T>) => void;
     game.state.add(
-        "load",
+        "loadscreen",
         class State extends Phaser.State {
             constructor() {
                 super();
@@ -92,7 +91,7 @@ function runInPreload<T>(game: Phaser.Game, action: () => Promise<T>): Promise<T
             }
         },
     );
-    game.state.start("load");
+    game.state.start("loadscreen");
     return new Promise<T>(resolve => {
         doResolve = resolve;
     });
