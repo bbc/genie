@@ -100,7 +100,7 @@ describe("Asset Loader", () => {
             });
     });
 
-    it("Should attempt to load assetPack JSON files that are missing", () => {
+    it("Should attempt to load assetPack JSON files that are missing and include them in keyLookups", () => {
         const updateCallback = sinon.spy();
         const loadSpy = sinon.spy();
         const getJSONStub = sinon.stub(Phaser.Cache, "JSON").callsFake((key: string, clone?: boolean | undefined) => {

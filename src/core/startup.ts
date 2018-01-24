@@ -1,4 +1,3 @@
-import { Loadscreen } from "src/components/loadscreen";
 import { drawSomething } from "src/core/drawsomething";
 import "../lib/phaser";
 
