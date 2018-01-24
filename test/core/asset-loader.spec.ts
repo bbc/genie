@@ -102,7 +102,7 @@ describe("Asset Loader", () => {
 
     it("Should attempt to load assetPack JSON files that are missing from the packs provided", () => {
         const updateCallback = sinon.spy();
-        (window as any).console.warn = sinon.stub();
+        const loadSpy = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
         };
@@ -110,18 +110,14 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        let theGame: Phaser.Game;
         return startup()
             .then(game => {
-                theGame = game;
-                game.state.add("notfound404", new Phaser.State());
+                game.load.json = loadSpy;
+                game.state.add("test-screen", new Phaser.State());
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
             .then((value: ScreenMap) => {
-                sinon.assert.calledWithExactly(
-                    (window as any).console.warn,
-                    "Phaser.Loader - json[notfound404]: error loading asset from URL undefinednotfound404.json (404)",
-                );
+                sinon.assert.calledWithExactly(loadSpy, "test-screen", "test-screen.json");
             });
     });
 });
