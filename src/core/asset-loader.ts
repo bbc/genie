@@ -1,5 +1,3 @@
-import * as _ from "lodash";
-
 export interface Pack {
     key: string;
     url: string;
@@ -121,7 +119,7 @@ function convertPackListToAssetPack(packs: PackList): AssetPack {
     const assetPack: AssetPack = {};
     for (const pack in packs) {
         if (packs.hasOwnProperty(pack)) {
-            _.assign(assetPack, packs[pack].data);
+            Object.assign(assetPack, packs[pack].data);
         }
     }
     return assetPack;
