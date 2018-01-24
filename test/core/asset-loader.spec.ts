@@ -100,9 +100,16 @@ describe("Asset Loader", () => {
             });
     });
 
-    it("Should attempt to load assetPack JSON files that are missing from the packs provided", () => {
+    it("Should attempt to load assetPack JSON files that are missing", () => {
         const updateCallback = sinon.spy();
         const loadSpy = sinon.spy();
+        const getJSONStub = sinon.stub(Phaser.Cache, "JSON").callsFake((key: string, clone?: boolean | undefined) => {
+            if (key === "test-screen") {
+                return {
+                    "test-screen": [{ type: "image", key: "test", url: assets.ship, overwrite: false }],
+                };
+            }
+        });
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
         };
@@ -113,11 +120,13 @@ describe("Asset Loader", () => {
         return startup()
             .then(game => {
                 game.load.json = loadSpy;
+                game.cache.getJSON = getJSONStub;
                 game.state.add("test-screen", new Phaser.State());
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
             .then((value: ScreenMap) => {
                 sinon.assert.calledWithExactly(loadSpy, "test-screen", "test-screen.json");
+                expect(value["test-screen"].test).to.equal(assets.ship);
             });
     });
 });

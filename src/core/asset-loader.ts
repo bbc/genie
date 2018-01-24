@@ -30,6 +30,7 @@ export function loadAssets(
     updateCallback: (progress: number) => void,
 ): Promise<ScreenMap> {
     let gameAssetPack: AssetPack = {};
+    let missingScreenPack: PackList = {};
     let keyLookups: ScreenMap = {};
     let nextQueue: number = 1;
     game.load.onLoadComplete.add(startNextLoadQueue);
@@ -47,11 +48,13 @@ export function loadAssets(
                 break;
             case 2:
                 [keyLookups, gameAssetPack] = processAssetPackJSON(gamePacks);
-                const missingScreenPack = getMissingScreens();
+                missingScreenPack = getMissingScreens();
                 loadAssetPackJSON(missingScreenPack);
-                Object.assign([keyLookups, gameAssetPack], processAssetPackJSON(missingScreenPack));
                 break;
             case 3:
+                const [missingKeyLookups, missingScreenAssetPack] = processAssetPackJSON(missingScreenPack);
+                Object.assign(keyLookups, missingKeyLookups);
+                Object.assign(gameAssetPack, missingScreenAssetPack);
                 loadAssetPack(gameAssetPack);
                 if (game.load.totalQueuedPacks() === 0) {
                     nextQueueIsDefined = false;

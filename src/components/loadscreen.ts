@@ -16,24 +16,23 @@ const loadscreenPack: Pack = {
 export class Loadscreen extends Phaser.State {
     /**
      * Placeholder Loadscreen for development
+     * Example Usage
      */
     constructor() {
         super();
     }
 
     public preload() {
-        console.log("entered Loadscreen preload()");
         loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress).then(keyLookups => {
-            console.log(keyLookups);
+            // do something with keyLookups
         });
     }
 
     public create() {
-        console.log("entered Loadscreen create()");
-        this.game.add.image(0, 0, "logo");
+        this.game.add.image(50, 50, "logo");
     }
 
     private updateLoadProgress(progress: number) {
-        console.log(progress);
+        // use progress to update loading bar
     }
 }
