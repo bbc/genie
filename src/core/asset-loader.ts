@@ -1,3 +1,5 @@
+import { PromiseTrigger } from "./promise-utils";
+
 export interface Pack {
     key: string;
     url: string;
@@ -33,12 +35,12 @@ export function loadAssets(
     let missingScreenPack: PackList = {};
     let keyLookups: ScreenMap = {};
     let nextQueue: number = 1;
+    let promisedScreenMap = new PromiseTrigger<ScreenMap>();
+
     game.load.onLoadComplete.add(startNextLoadQueue);
     game.load.pack(loadscreenPack.key, loadscreenPack.url);
-    let doResolve: (value: ScreenMap) => void;
-    return new Promise(resolve => {
-        doResolve = resolve;
-    });
+
+    return promisedScreenMap;
 
     function startNextLoadQueue() {
         let nextQueueIsDefined: boolean = true;
@@ -59,7 +61,7 @@ export function loadAssets(
                 if (game.load.totalQueuedPacks() === 0) {
                     nextQueueIsDefined = false;
                     updateCallback(100);
-                    doResolve(keyLookups);
+                    promisedScreenMap.resolve(keyLookups);
                 }
                 game.load.onFileComplete.add(updateLoadProgress);
                 break;
@@ -72,7 +74,7 @@ export function loadAssets(
         } else {
             game.load.onLoadComplete.removeAll();
             game.load.onFileComplete.removeAll();
-            doResolve(keyLookups);
+            promisedScreenMap.resolve(keyLookups);
         }
     }
 

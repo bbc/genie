@@ -7,6 +7,7 @@ import "src/lib/phaser";
 import { assetPacks } from "test/helpers/asset-packs";
 import { assets } from "test/helpers/assets";
 import { installMockGetGmi, uninstallMockGetGmi } from "test/helpers/mock";
+import { PromiseTrigger } from "src/core/promise-utils";
 
 describe("Asset Loader", () => {
     beforeEach(installMockGetGmi);
@@ -132,7 +133,7 @@ describe("Asset Loader", () => {
 });
 
 function runInPreload<T>(game: Phaser.Game, action: () => Promise<T>): Promise<T> {
-    let doResolve: (value: Promise<T>) => void;
+    let promiseTrigger = new PromiseTrigger<T>();
     game.state.add(
         "loadscreen",
         class State extends Phaser.State {
@@ -140,12 +141,10 @@ function runInPreload<T>(game: Phaser.Game, action: () => Promise<T>): Promise<T
                 super();
             }
             public preload() {
-                doResolve(action());
+                promiseTrigger.resolve(action());
             }
         },
     );
     game.state.start("loadscreen");
-    return new Promise<T>(resolve => {
-        doResolve = resolve;
-    });
+    return promiseTrigger;
 }
