@@ -1,4 +1,5 @@
 import { drawSomething } from "src/core/drawsomething";
+import { PromiseTrigger } from "src/core/promise-utils";
 import "../lib/phaser";
 
 export interface Config {
@@ -28,10 +29,8 @@ export function startup(): Promise<Phaser.Game> {
     (window as any).PhaserGlobal = { hideBanner: true };
 
     const game = new Phaser.Game(phaserConfig);
-    let doResolve: (value: Phaser.Game) => void;
-    return new Promise(resolve => {
-        doResolve = resolve;
-    });
+    const promisedGame = new PromiseTrigger<Phaser.Game>();
+    return promisedGame;
 
     function onStarted(config: Config) {
         // Phaser is now set up and we can use all game properties.
@@ -41,7 +40,7 @@ export function startup(): Promise<Phaser.Game> {
 
         game.stage.backgroundColor = "#00f"; //config.backgroundColor || "#000";
         drawSomething(game);
-        doResolve(game);
+        promisedGame.resolve(game);
     }
 }
 
