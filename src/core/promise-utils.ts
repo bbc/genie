@@ -1,5 +1,3 @@
-import { resolve } from "url";
-
 export class PromiseTrigger<T> implements Promise<T> {
     public [Symbol.toStringTag]: "Promise";
     public resolve: (value?: T | PromiseLike<T> | undefined) => void;
