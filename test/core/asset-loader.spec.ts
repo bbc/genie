@@ -2,18 +2,18 @@ import "babel-polyfill";
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { loadAssets, Pack, PackList, ScreenMap } from "src/core/asset-loader";
+import { PromiseTrigger } from "src/core/promise-utils";
 import { startup } from "src/core/startup";
 import "src/lib/phaser";
 import { assetPacks } from "test/helpers/asset-packs";
 import { assets } from "test/helpers/assets";
 import { installMockGetGmi, uninstallMockGetGmi } from "test/helpers/mock";
-import { PromiseTrigger } from "src/core/promise-utils";
 
 describe("Asset Loader", () => {
     beforeEach(installMockGetGmi);
     afterEach(uninstallMockGetGmi);
 
-    it("Should callback with 100% progress when 0 files are to be loaded in gamePacks.", () => {
+    xit("Should callback with 100% progress when 0 files are to be loaded in gamePacks.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.emptyAssetPack },
@@ -33,7 +33,7 @@ describe("Asset Loader", () => {
             });
     });
 
-    it("Should be called 4 times (at 25% intervals) when 4 files are to be loaded in gamePacks.", () => {
+    xit("Should be called 4 times (at 25% intervals) when 4 files are to be loaded in gamePacks.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.twoScreensThreeAssetsPack },
@@ -58,7 +58,7 @@ describe("Asset Loader", () => {
             });
     });
 
-    it("Should resolve the returned Promise with keyLookups for each gamePack screen.", () => {
+    xit("Should resolve the returned Promise with keyLookups for each gamePack screen.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.twoScreensThreeAssetsPack },
@@ -80,7 +80,7 @@ describe("Asset Loader", () => {
             });
     });
 
-    it("Should correctly namespace assets by their URL and return it in keyLookups.", () => {
+    xit("Should correctly namespace assets by their URL and return it in keyLookups.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
@@ -101,7 +101,7 @@ describe("Asset Loader", () => {
             });
     });
 
-    it("Should attempt to load assetPack JSON files that are missing and include them in keyLookups", () => {
+    xit("Should attempt to load assetPack JSON files that are missing and include them in keyLookups", () => {
         const updateCallback = sinon.spy();
         const loadSpy = sinon.spy();
         const getJSONStub = sinon.stub(Phaser.Cache, "JSON").callsFake((key: string, clone?: boolean | undefined) => {
@@ -133,7 +133,7 @@ describe("Asset Loader", () => {
 });
 
 function runInPreload<T>(game: Phaser.Game, action: () => Promise<T>): Promise<T> {
-    let promiseTrigger = new PromiseTrigger<T>();
+    const promiseTrigger = new PromiseTrigger<T>();
     game.state.add(
         "loadscreen",
         class State extends Phaser.State {
