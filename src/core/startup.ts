@@ -1,5 +1,7 @@
 import "../lib/phaser";
 import { drawSomething } from "src/core/drawsomething";
+import * as Scaler from "src/core/scaler";
+import * as GelLayers from "src/core/gelLayers";
 
 export interface Config {
     stageHeightPx: number;
@@ -9,6 +11,8 @@ export interface Config {
 
 export interface Context {
     gmi: Gmi;
+    scaler: Scaler.Scaler;
+    gelLayers: GelLayers.GelLayers;
 }
 
 export function startup() {
@@ -31,12 +35,16 @@ export function startup() {
 
     function onStarted(config: Config) {
         // Phaser is now set up and we can use all game properties.
+        const scaler = Scaler.create(600, game);
+        const gelLayers = GelLayers.create(game, scaler);
         const context: Context = {
             gmi,
+            scaler,
+            gelLayers,
         };
 
-        game.stage.backgroundColor = "#00f"; //config.backgroundColor || "#000";
-        drawSomething(game);
+        game.stage.backgroundColor = "#000"; //config.backgroundColor || "#000";
+        drawSomething(game, context);
     }
 }
 
