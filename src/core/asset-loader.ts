@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import { PromiseTrigger } from "./promise-utils";
 
 export interface Pack {
@@ -34,42 +35,41 @@ export function loadAssets(
     let gameAssetPack: AssetPack = {};
     let missingScreenPack: PackList = {};
     let keyLookups: ScreenMap = {};
-    let nextQueue: number = 1;
     const promisedScreenMap = new PromiseTrigger<ScreenMap>();
+    const loadQueue: Array<() => void> = [
+        () => {
+            loadAssetPackJSON(gamePacks);
+        },
+        () => {
+            [keyLookups, gameAssetPack] = processAssetPackJSON(gamePacks);
+            missingScreenPack = getMissingScreens();
+            loadAssetPackJSON(missingScreenPack);
+        },
+        () => {
+            const [missingKeyLookups, missingScreenAssetPack] = processAssetPackJSON(missingScreenPack);
+            Object.assign(keyLookups, missingKeyLookups);
+            Object.assign(gameAssetPack, missingScreenAssetPack);
+            loadAssetPack(gameAssetPack);
+            if (game.load.totalQueuedPacks() === 0) {
+                updateCallback(100);
+                promisedScreenMap.resolve(keyLookups);
+            }
+            game.load.onFileComplete.add(updateLoadProgress);
+        },
+    ];
+    loadQueue.push(() => {});
 
-    game.load.onLoadComplete.add(startNextLoadQueue);
+    game.load.onLoadComplete.add(startNextLoadInQueue);
     game.load.pack(loadscreenPack.key, loadscreenPack.url);
 
     return promisedScreenMap;
 
-    function startNextLoadQueue() {
-        let nextQueueIsDefined: boolean = true;
-        switch (nextQueue) {
-            case 1:
-                loadAssetPackJSON(gamePacks);
-                break;
-            case 2:
-                [keyLookups, gameAssetPack] = processAssetPackJSON(gamePacks);
-                missingScreenPack = getMissingScreens();
-                loadAssetPackJSON(missingScreenPack);
-                break;
-            case 3:
-                const [missingKeyLookups, missingScreenAssetPack] = processAssetPackJSON(missingScreenPack);
-                Object.assign(keyLookups, missingKeyLookups);
-                Object.assign(gameAssetPack, missingScreenAssetPack);
-                loadAssetPack(gameAssetPack);
-                if (game.load.totalQueuedPacks() === 0) {
-                    nextQueueIsDefined = false;
-                    updateCallback(100);
-                    promisedScreenMap.resolve(keyLookups);
-                }
-                game.load.onFileComplete.add(updateLoadProgress);
-                break;
-            default:
-                nextQueueIsDefined = false;
+    function startNextLoadInQueue() {
+        const loadFunction = loadQueue.shift();
+        if (loadFunction) {
+            loadFunction();
         }
-        nextQueue += 1;
-        if (nextQueueIsDefined) {
+        if (!_.isEmpty(loadQueue)) {
             game.time.events.add(0, game.load.start, game.load);
         } else {
             game.load.onLoadComplete.removeAll();

@@ -27,7 +27,7 @@ describe("Asset Loader", () => {
             .then(game => {
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
-            .then((value: ScreenMap) => {
+            .then((screenMap: ScreenMap) => {
                 sinon.assert.calledOnce(updateCallback);
                 sinon.assert.alwaysCalledWithExactly(updateCallback, 100);
             });
@@ -47,7 +47,7 @@ describe("Asset Loader", () => {
             .then(game => {
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
-            .then((value: ScreenMap) => {
+            .then((screenMap: ScreenMap) => {
                 sinon.assert.callOrder(
                     updateCallback.withArgs(25),
                     updateCallback.withArgs(50),
@@ -72,11 +72,11 @@ describe("Asset Loader", () => {
             .then(game => {
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
-            .then((value: ScreenMap) => {
-                expect(value).to.haveOwnProperty("screen1");
-                expect(value).to.haveOwnProperty("screen2");
-                expect(value).to.haveOwnProperty("screen");
-                expect(value).to.not.haveOwnProperty("loadscreen");
+            .then((screenMap: ScreenMap) => {
+                expect(screenMap).to.haveOwnProperty("screen1");
+                expect(screenMap).to.haveOwnProperty("screen2");
+                expect(screenMap).to.haveOwnProperty("screen");
+                expect(screenMap).to.not.haveOwnProperty("loadscreen");
             });
     });
 
@@ -95,9 +95,9 @@ describe("Asset Loader", () => {
                 theGame = game;
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
-            .then((value: ScreenMap) => {
-                expect(value.screen.one).to.equal(assets.imgUrlOnePixel);
-                expect(theGame.cache.checkImageKey(value.screen.one)).to.equal(true);
+            .then((screenMap: ScreenMap) => {
+                expect(screenMap.screen.one).to.equal(assets.imgUrlOnePixel);
+                expect(theGame.cache.checkImageKey(screenMap.screen.one)).to.equal(true);
             });
     });
 
@@ -125,9 +125,9 @@ describe("Asset Loader", () => {
                 game.state.add("test-screen", new Phaser.State());
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
-            .then((value: ScreenMap) => {
+            .then((screenMap: ScreenMap) => {
                 sinon.assert.calledWithExactly(loadSpy, "test-screen", "test-screen.json");
-                expect(value["test-screen"].test).to.equal(assets.ship);
+                expect(screenMap["test-screen"].test).to.equal(assets.ship);
             });
     });
 });
