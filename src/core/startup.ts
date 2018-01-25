@@ -1,6 +1,6 @@
 import { drawSomething } from "src/core/drawsomething";
-import "../lib/phaser";
 import { PromiseTrigger } from "src/core/promise-utils";
+import "../lib/phaser";
 
 export interface Config {
     stageHeightPx: number;
@@ -29,7 +29,7 @@ export function startup(): Promise<Phaser.Game> {
     (window as any).PhaserGlobal = { hideBanner: true };
 
     const game = new Phaser.Game(phaserConfig);
-    let promisedGame = new PromiseTrigger<Phaser.Game>();
+    const promisedGame = new PromiseTrigger<Phaser.Game>();
     return promisedGame;
 
     function onStarted(config: Config) {

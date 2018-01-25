@@ -35,7 +35,7 @@ export function loadAssets(
     let missingScreenPack: PackList = {};
     let keyLookups: ScreenMap = {};
     let nextQueue: number = 1;
-    let promisedScreenMap = new PromiseTrigger<ScreenMap>();
+    const promisedScreenMap = new PromiseTrigger<ScreenMap>();
 
     game.load.onLoadComplete.add(startNextLoadQueue);
     game.load.pack(loadscreenPack.key, loadscreenPack.url);

@@ -1,5 +1,4 @@
 /// <reference path="../../src/lib/gmi.d.ts" />
-
 const TEST_DIV_ID = "test-div";
 
 export function installMockGetGmi() {

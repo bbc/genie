@@ -1,8 +1,7 @@
 import { expect } from "chai";
+import { PromiseTrigger } from "src/core/promise-utils";
 import { startup } from "src/core/startup";
 import { installMockGetGmi, uninstallMockGetGmi } from "test/helpers/mock";
-
-import { PromiseTrigger } from "src/core/promise-utils";
 
 const TEST_DIV_ID = "test-div";
 
@@ -11,7 +10,6 @@ describe("Startup", () => {
     afterEach(uninstallMockGetGmi);
 
     it("should create a canvas element", done => {
-        new PromiseTrigger();
         startup();
         setTimeout(() => {
             expect(getElementOrThrow(TEST_DIV_ID).children.length).to.equal(1);
