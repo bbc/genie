@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import { expect } from "chai";
 import { startup } from "src/core/startup";
 import { installMockGetGmi, uninstallMockGetGmi } from "test/helpers/mock";
