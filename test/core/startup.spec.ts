@@ -11,7 +11,6 @@ describe("Startup", () => {
     afterEach(uninstallMockGetGmi);
 
     it("should create a canvas element", done => {
-        new PromiseTrigger();
         startup();
         setTimeout(() => {
             expect(getElementOrThrow(TEST_DIV_ID).children.length).to.equal(1);
