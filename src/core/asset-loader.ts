@@ -132,24 +132,30 @@ function namespaceAssetsByScreen(pack: AssetPack): [ScreenMap, AssetPack] {
     const keyLookups: ScreenMap = {};
     for (const screen in pack) {
         if (pack.hasOwnProperty(screen)) {
-            keyLookups[screen] = {};
             if (Object.keys(pack[screen]).length !== 0 && pack[screen].constructor !== Object) {
-                for (const asset of pack[screen]) {
-                    let newKey = "<pending>";
-                    if (asset.url) {
-                        newKey = asset.url;
-                    } else if (asset.urls) {
-                        newKey = asset.urls[0].replace(/\.[^.]*$/, "");
-                    } else {
-                        throw Error("expected url or urls field for asset key " + asset.key);
-                    }
-                    keyLookups[screen][asset.key] = newKey;
-                    asset.key = newKey;
-                }
+                Object.assign(keyLookups, namespaceScreen(pack, screen));
             } else {
                 return [keyLookups, {}];
             }
         }
     }
     return [keyLookups, pack];
+}
+
+function namespaceScreen(pack: AssetPack, screenName: string): ScreenMap {
+    const keyLookup: ScreenMap = {};
+    keyLookup[screenName] = {};
+    for (const asset of pack[screenName]) {
+        let newKey = "<pending>";
+        if (asset.url) {
+            newKey = asset.url;
+        } else if (asset.urls) {
+            newKey = asset.urls[0].replace(/\.[^.]*$/, "");
+        } else {
+            throw Error("expected url or urls field for asset key " + asset.key);
+        }
+        keyLookup[screenName][asset.key] = newKey;
+        asset.key = newKey;
+    }
+    return keyLookup;
 }
