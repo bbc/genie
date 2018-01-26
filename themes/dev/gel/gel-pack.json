@@ -1,0 +1,14 @@
+{
+    "gel": [
+        {
+            "type": "spritesheet",
+            "key": "play",
+            "url": "gel/play.png",
+            "frameWidth": 181,
+            "frameHeight": 181,
+            "frameMax": 3,
+            "margin": 0,
+            "spacing": 2
+        }
+    ]
+}
