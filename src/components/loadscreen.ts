@@ -23,14 +23,12 @@ export class Loadscreen extends Phaser.State {
     }
 
     public preload() {
-        loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress).then(keyLookups => {
-            // do something with keyLookups
+        loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress.bind(this)).then(keyLookups => {
+            this.game.state.start("title", undefined, undefined, keyLookups);
         });
     }
 
-    public create() {
-        this.game.add.image(50, 50, "logo");
-    }
+    public create() {}
 
     private updateLoadProgress(progress: number) {
         // use progress to update loading bar
