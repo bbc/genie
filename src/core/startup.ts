@@ -1,5 +1,8 @@
 import "../lib/phaser";
 import { drawSomething } from "src/core/drawsomething";
+import { LayoutEngine } from "src/core/layout/engine"
+
+//import { Context } from "src/types/context";
 
 export interface Config {
     stageHeightPx: number;
@@ -7,9 +10,6 @@ export interface Config {
     theme: any;
 }
 
-export interface Context {
-    gmi: Gmi;
-}
 
 export function startup() {
     const gmi: Gmi = (window as any).getGMI({});
@@ -30,13 +30,17 @@ export function startup() {
     const game = new Phaser.Game(phaserConfig);
 
     function onStarted(config: Config) {
-        // Phaser is now set up and we can use all game properties.
-        const context: Context = {
-            gmi,
-        };
 
-        game.stage.backgroundColor = "#00f"; //config.backgroundColor || "#000";
-        drawSomething(game);
+         const layoutEngine = LayoutEngine(game);
+
+        // Phaser is now set up and we can use all game properties.
+        // const context: Context = {
+        //     gmi,
+        //     //layout
+        // };
+
+        game.stage.backgroundColor = "#333"; //config.backgroundColor || "#000";
+        drawSomething(game, layoutEngine);
     }
 }
 
