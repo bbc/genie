@@ -1,5 +1,3 @@
-import { Loadscreen } from "src/components/loadscreen";
-import { Title } from "src/components/title";
 import { drawSomething } from "src/core/drawsomething";
 import { PromiseTrigger } from "src/core/promise-utils";
 import "../lib/phaser";
@@ -42,10 +40,7 @@ export function startup(): Promise<Phaser.Game> {
 
         game.stage.backgroundColor = "#00f"; //config.backgroundColor || "#000";
         drawSomething(game);
-        game.state.add("loadscreen", new Loadscreen());
-        game.state.add("title", new Title());
         promisedGame.resolve(game);
-        game.state.start("loadscreen");
     }
 }
 
