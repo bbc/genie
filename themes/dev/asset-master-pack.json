@@ -2,8 +2,8 @@
     "title": [
         {
             "type": "image",
-            "key": "cbbc_logo",
-            "url": "shared/cbbc_logo.png",
+            "key": "title",
+            "url": "shared/title.png",
             "overwrite": false
         },
         {

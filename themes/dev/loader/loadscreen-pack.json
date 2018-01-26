@@ -3,7 +3,7 @@
         {
             "type": "image",
             "key": "logo",
-            "url": "loader/logo.png",
+            "url": "loader/cbbc_logo.png",
             "overwrite": false
         }
     ],

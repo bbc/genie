@@ -1,5 +1,4 @@
 import { loadAssets, Pack, PackList, ScreenMap } from "../core/asset-loader";
-import "../lib/phaser";
 
 const MASTER_PACK_KEY: string = "MasterAssetPack";
 const GEL_PACK_KEY: string = "GelAssetPack";
