@@ -9,8 +9,8 @@ interface StringMap {
 
 export interface GelLayers {
     keyLookup: StringMap;
-    addToBackground(object: Phaser.Image | Phaser.Sprite): void;
-    addToGel(object: Phaser.Image | Phaser.Sprite): void;
+    addToBackground(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText): void;
+    addToGel(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText): void;
     addLookup(keyLookup: StringMap, context: GelLayers): GelLayers;
 }
 
@@ -42,14 +42,14 @@ export function create(game: Phaser.Game, scaler: Scaler): GelLayers {
         keyLookup: {},
     };
 
-    function addToBackground(object: Phaser.Image | Phaser.Sprite) {
+    function addToBackground(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText) {
         if (object.anchor) {
             object.anchor.setTo(0.5, 0.5);
         }
         background.addChild(object);
     }
 
-    function addToGel(object: Phaser.Image | Phaser.Sprite) {
+    function addToGel(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText) {
         if (object.anchor) {
             object.anchor.setTo(0.5, 0.5);
         }
