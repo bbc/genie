@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import { Home } from "src/components/home";
 import { Loadscreen } from "src/components/loadscreen";
 import "src/lib/phaser";
