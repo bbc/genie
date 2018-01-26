@@ -10,6 +10,6 @@ export class Title extends Phaser.State {
     }
 
     public create() {
-        this.game.add.image(0, 0, this.keyLookups.cbbc_logo);
+        this.game.add.image(0, 0, this.keyLookups.background);
     }
 }

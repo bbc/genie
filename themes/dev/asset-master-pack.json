@@ -5,6 +5,12 @@
             "key": "cbbc_logo",
             "url": "shared/cbbc_logo.png",
             "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "background",
+            "url": "shared/background.png",
+            "overwrite": false
         }
     ]
 }

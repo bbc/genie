@@ -17,7 +17,7 @@ export function startup(): Promise<Phaser.Game> {
     hookErrors(gmi.gameContainerId);
 
     const phaserConfig: Phaser.IGameConfig = {
-        width: 800,
+        width: 1400,
         height: 600,
         renderer: Phaser.AUTO,
         antialias: true,
