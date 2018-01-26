@@ -1,6 +1,7 @@
 import { drawSomething } from "src/core/drawsomething";
 import * as Scaler from "src/core/scaler";
 import * as GelLayers from "src/core/gelLayers";
+import { PromiseTrigger } from "src/core/promise-utils";
 import "../lib/phaser";
 
 export interface Config {
@@ -32,10 +33,8 @@ export function startup(): Promise<Phaser.Game> {
     (window as any).PhaserGlobal = { hideBanner: true };
 
     const game = new Phaser.Game(phaserConfig);
-    let doResolve: (value: Phaser.Game) => void;
-    return new Promise(resolve => {
-        doResolve = resolve;
-    });
+    const promisedGame = new PromiseTrigger<Phaser.Game>();
+    return promisedGame;
 
     function onStarted(config: Config) {
         // Phaser is now set up and we can use all game properties.
@@ -47,9 +46,9 @@ export function startup(): Promise<Phaser.Game> {
             gelLayers,
         };
 
-        game.stage.backgroundColor = "#000"; //config.backgroundColor || "#000";
+        game.stage.backgroundColor = "#000";
         drawSomething(game, context);
-        doResolve(game);
+        promisedGame.resolve(game);
     }
 }
 

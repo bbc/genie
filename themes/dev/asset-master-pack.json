@@ -1,0 +1,10 @@
+{
+    "title": [
+        {
+            "type": "image",
+            "key": "cbbc_logo",
+            "url": "shared/cbbc_logo.png",
+            "overwrite": false
+        }
+    ]
+}
