@@ -9,20 +9,20 @@ interface StringMap {
 
 export interface GelLayers {
     keyLookup: StringMap;
-    addToBackground(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText): void;
-    addToGel(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText): void;
+    addToBackground(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText): PIXI.DisplayObject;
+    addToGel(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText): PIXI.DisplayObject;
     addLookup(keyLookup: StringMap, context: GelLayers): GelLayers;
 }
 
 /**
- * Create gel layers for the foreground and background, with foreground elements scaling at a breakpoint. 
+ * Create gel layers for the foreground and background, with foreground elements scaling at a breakpoint.
  * Adding something to the background layer will cause it to be scaled dynamically according to the size of the screen.
  * Called in the Genie startup function but will be called by the layout manager when it is ready.
  *
  * @example
  * const gelLayers = GelLayers.create(game, scaler);
- * 
- * @param game - The phaser game to manage 
+ *
+ * @param game - The phaser game to manage
  * @param scaler - A previously instantiated scaler
  */
 
@@ -42,14 +42,14 @@ export function create(game: Phaser.Game, scaler: Scaler): GelLayers {
         keyLookup: {},
     };
 
-    function addToBackground(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText) {
+    function addToBackground(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText): PIXI.DisplayObject {
         if (object.anchor) {
             object.anchor.setTo(0.5, 0.5);
         }
         return background.addChild(object);
     }
 
-    function addToGel(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText) {
+    function addToGel(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText): PIXI.DisplayObject {
         if (object.anchor) {
             object.anchor.setTo(0.5, 0.5);
         }

@@ -1,7 +1,7 @@
 import { drawSomething } from "src/core/drawsomething";
-import * as Scaler from "src/core/scaler";
 import * as GelLayers from "src/core/gelLayers";
 import { PromiseTrigger } from "src/core/promise-utils";
+import * as Scaler from "src/core/scaler";
 import "../lib/phaser";
 
 export interface Config {
@@ -45,9 +45,7 @@ export function startup(): Promise<Phaser.Game> {
             scaler,
             gelLayers,
         };
-
         game.stage.backgroundColor = "#000";
-        drawSomething(game, context);
         promisedGame.resolve(game);
     }
 }
