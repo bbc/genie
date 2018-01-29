@@ -15,7 +15,7 @@ export function uninstallMockGetGmi() {
     document.body.removeChild(getElementOrThrow(TEST_DIV_ID));
 }
 
-function getElementOrThrow(id: string): HTMLElement {
+export function getElementOrThrow(id: string): HTMLElement {
     const e = document.getElementById(id);
     if (e) {
         return e;

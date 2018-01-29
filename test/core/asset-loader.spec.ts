@@ -23,7 +23,7 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup()
+        return startup([])
             .then(game => {
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
@@ -43,7 +43,7 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup()
+        return startup([])
             .then(game => {
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
@@ -68,7 +68,7 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup()
+        return startup([])
             .then(game => {
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
@@ -90,7 +90,7 @@ describe("Asset Loader", () => {
             url: assetPacks.loadscreenPack,
         };
         let theGame: Phaser.Game;
-        return startup()
+        return startup([])
             .then(game => {
                 theGame = game;
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
@@ -118,7 +118,7 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup()
+        return startup([])
             .then(game => {
                 game.load.json = loadSpy;
                 game.cache.getJSON = getJSONStub;

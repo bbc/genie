@@ -1,6 +1,7 @@
-import { drawSomething } from "src/core/drawsomething";
-import { PromiseTrigger } from "src/core/promise-utils";
 import "../lib/phaser";
+
+import * as Sequencer from "src/core/sequencer";
+import { PromiseTrigger } from "src/core/promise-utils";
 
 export interface Config {
     stageHeightPx: number;
@@ -12,7 +13,7 @@ export interface Context {
     gmi: Gmi;
 }
 
-export function startup(): Promise<Phaser.Game> {
+export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game> {
     const gmi: Gmi = (window as any).getGMI({});
     hookErrors(gmi.gameContainerId);
 
@@ -37,9 +38,10 @@ export function startup(): Promise<Phaser.Game> {
         const context: Context = {
             gmi,
         };
+        const sequencer = Sequencer.create(game, context, transitions);
 
         game.stage.backgroundColor = "#00f"; //config.backgroundColor || "#000";
-        drawSomething(game);
+
         promisedGame.resolve(game);
     }
 }
