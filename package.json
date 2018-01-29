@@ -11,6 +11,7 @@
     },
     "dependencies": {
         "@types/lodash": "^4.14.92",
+        "babel-polyfill": "^6.26.0",
         "lodash": "^4.17.4",
         "phaser-ce": "^2.9.4",
         "script-loader": "^0.7.2"
@@ -19,10 +20,14 @@
         "@types/chai": "^4.1.0",
         "@types/mocha": "^2.2.46",
         "@types/sinon": "^4.1.3",
+        "awesome-typescript-loader": "^3.4.1",
+        "babel-core": "^6.26.0",
+        "babel-preset-env": "^1.6.1",
         "chai": "^4.1.2",
         "http-server": "^0.11.1",
         "karma": "^2.0.0",
         "karma-chai": "^0.1.0",
+        "karma-chrome-launcher": "^2.2.0",
         "karma-mocha": "^1.3.0",
         "karma-phantomjs-launcher": "^1.0.4",
         "karma-sinon": "^1.0.5",
@@ -32,7 +37,6 @@
         "sinon": "^4.1.5",
         "tslint-eslint-rules": "^4.1.1",
         "typedoc": "^0.9.0",
-        "awesome-typescript-loader": "^3.4.1",
         "typescript": "^2.6.2",
         "webpack": "^3.10.0"
     },

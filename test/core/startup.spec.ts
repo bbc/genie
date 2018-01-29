@@ -1,25 +1,13 @@
-/// <reference path="../../src/lib/gmi.d.ts" />
-
 import { expect } from "chai";
-
+import { PromiseTrigger } from "src/core/promise-utils";
 import { startup } from "src/core/startup";
+import { installMockGetGmi, uninstallMockGetGmi } from "test/helpers/mock";
 
 const TEST_DIV_ID = "test-div";
 
 describe("Startup", () => {
-    beforeEach(() => {
-        document.body.appendChild(document.createElement("div")).id = TEST_DIV_ID;
-        (window as any).getGMI = () => {
-            return {
-                gameContainerId: TEST_DIV_ID,
-                embedVars: { configPath: "" },
-            } as Gmi;
-        };
-    });
-
-    afterEach(() => {
-        document.body.removeChild(getElementOrThrow(TEST_DIV_ID));
-    });
+    beforeEach(installMockGetGmi);
+    afterEach(uninstallMockGetGmi);
 
     it("should create a canvas element", done => {
         startup();

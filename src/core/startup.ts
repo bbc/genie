@@ -1,8 +1,8 @@
 import "../lib/phaser";
 import { drawSomething } from "src/core/drawsomething";
 import { LayoutEngine } from "src/core/layout/engine"
-
-//import { Context } from "src/types/context";
+import { PromiseTrigger } from "src/core/promise-utils";
+import "../lib/phaser";
 
 export interface Config {
     stageHeightPx: number;
@@ -28,6 +28,8 @@ export function startup() {
     (window as any).PhaserGlobal = { hideBanner: true };
 
     const game = new Phaser.Game(phaserConfig);
+    const promisedGame = new PromiseTrigger<Phaser.Game>();
+    return promisedGame;
 
     function onStarted(config: Config) {
 
@@ -41,6 +43,7 @@ export function startup() {
 
         game.stage.backgroundColor = "#333"; //config.backgroundColor || "#000";
         drawSomething(game, layoutEngine);
+        promisedGame.resolve(game);
     }
 }
 
