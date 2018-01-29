@@ -46,14 +46,14 @@ export function create(game: Phaser.Game, scaler: Scaler): GelLayers {
         if (object.anchor) {
             object.anchor.setTo(0.5, 0.5);
         }
-        background.addChild(object);
+        return background.addChild(object);
     }
 
     function addToGel(object: Phaser.Image | Phaser.Sprite | Phaser.BitmapText) {
         if (object.anchor) {
             object.anchor.setTo(0.5, 0.5);
         }
-        foreground.addChild(object);
+        return foreground.addChild(object);
     }
 
     function scaleBackground(width: number, height: number, scale: number) {
