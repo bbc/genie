@@ -6,7 +6,7 @@ import * as Sequencer from "src/core/sequencer";
 
 describe("Sequencer", () => {
     let sequencer: { getTransitions: any };
-    let mockGame;
+    let mockGame: Phaser.Game | { state: { add: sinon.SinonSpy; start: sinon.SinonSpy } };
     let mockContext;
     let mockTransitions: { name: string }[];
 
