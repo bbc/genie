@@ -1,5 +1,16 @@
 declare interface AccessibilityManager {
-    createButton(title: string, ariaLabel: string, anchorPoints: AnchorPoints, tabIndex: number, cullAccessible: boolean, x: number, y: number, key: string, callback?: Function, callbackContext?: Phaser.State): any;
+    createButton(
+        title: string,
+        ariaLabel: string,
+        anchorPoints: AnchorPoints,
+        tabIndex: number,
+        cullAccessible: boolean,
+        x: number,
+        y: number,
+        key: string,
+        callback?: Function,
+        callbackContext?: Phaser.State,
+    ): any;
     teardown(): void;
     update(): void;
 }

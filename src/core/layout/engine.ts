@@ -43,13 +43,7 @@ export function LayoutEngine(game: Phaser.Game): LayoutEngine {
      * @returns {Layout}
      */
     function create(buttons: string[]): Layout {
-        const layout = new Layout(
-            game,
-            scaler,
-            accessibilityManager,
-            keyLookup,
-            buttons,
-        );
+        const layout = new Layout(game, scaler, accessibilityManager, keyLookup, buttons);
 
         addToBackground(layout.root);
 

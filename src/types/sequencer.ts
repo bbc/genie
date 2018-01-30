@@ -22,4 +22,3 @@ declare interface Sequencer {
     next(outState: GameStateUpdate): void;
     getTransitions(): ScreenDef[];
 }
-

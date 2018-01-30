@@ -18,14 +18,14 @@ export function create(stageHeightPx: number, game: Phaser.Game): Scaler {
 
     const getBounds = () => game.scale.getParentBounds();
 
-    const getScale = ({ width, height }: {[s: string]: number;}) => {
+    const getScale = ({ width, height }: { [s: string]: number }) => {
         const scale = scaleMethods[width / height >= GEL_SAFE_FRAME_RATIO ? "wide" : "narrow"](width, height);
         return { width, height, scale, stageHeightPx };
     };
 
     const getSize = fp.flow(getBounds, fp.pick(["width", "height"]), getScale);
 
-    const setSize = ({ width, height, scale, stageHeightPx }: {[s: string]: number;}) => {
+    const setSize = ({ width, height, scale, stageHeightPx }: { [s: string]: number }) => {
         game.scale.setGameSize(width, height);
         onScaleChange.dispatch(width, height, scale, stageHeightPx);
     };
