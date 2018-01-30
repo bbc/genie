@@ -1,16 +1,17 @@
 import * as sinon from "sinon";
 import * as mock from "test/helpers/mock";
+import { expect } from "chai";
 
-import { Sequencer, ScreenDef } from "src/core/sequencer";
-import { Context } from "./startup";
+import * as Sequencer from "src/core/sequencer";
 
 describe("Sequencer", () => {
-    let sequencer: Sequencer;
-    let mockGame: Phaser.Game;
-    let mockContext: Context;
-    let mockTransitions: ScreenDef[];
+    let sequencer: { getTransitions: any };
+    let mockGame;
+    let mockContext;
+    let mockTransitions: { name: string }[];
 
     beforeEach(() => {
+        mock.installMockGetGmi();
         mockGame = {
             state: {
                 add: sinon.spy(),
@@ -26,9 +27,11 @@ describe("Sequencer", () => {
         sequencer = Sequencer.create(mockGame, mockContext, mockTransitions);
     });
 
+    afterEach(mock.uninstallMockGetGmi);
+
     describe("getTransitions Method", () => {
-        it("returns transitions", done => {
-            expect(sequencer.getTransitions).to.equal(mockTransitions);
+        it("returns transitions", () => {
+            expect(sequencer.getTransitions()).to.equal(mockTransitions);
         });
     });
     // function getElementOrThrow(id: string): HTMLElement {
