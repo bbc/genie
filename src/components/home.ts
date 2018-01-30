@@ -1,7 +1,7 @@
 import { ScreenMap } from "src/core/asset-loader";
 import * as GelLayers from "src/core/gelLayers";
 import * as Scaler from "src/core/scaler";
-import "../lib/phaser";
+
 export class Home extends Phaser.State {
     private keyLookups: { [key: string]: string };
     private gel: { [key: string]: string };
