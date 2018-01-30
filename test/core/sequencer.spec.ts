@@ -1,6 +1,6 @@
 import * as sinon from "sinon";
 import * as mock from "test/helpers/mock";
-import { expect } from "chai";
+import * as chai from "chai";
 
 import * as Sequencer from "src/core/sequencer";
 
@@ -21,7 +21,12 @@ describe("Sequencer", () => {
         mockContext = {};
         mockTransitions = [
             {
-                name: "testscreen",
+                name: "titlescreen",
+                state: "titlestate",
+            },
+            {
+                name: "gamescreen",
+                state: "gameState",
             },
         ];
         sequencer = Sequencer.create(mockGame, mockContext, mockTransitions);
@@ -29,17 +34,21 @@ describe("Sequencer", () => {
 
     afterEach(mock.uninstallMockGetGmi);
 
+    it("adds each transition to game state", () => {
+        expect(mockGame.state.add.callCount).to.equal(2);
+        expect(mockGame.state.add.getCall(0).args).to.eql([mockTransitions[0].name, mockTransitions[0].state]);
+        expect(mockGame.state.add.getCall(1).args).to.eql([mockTransitions[1].name, mockTransitions[1].state]);
+    });
+
     describe("getTransitions Method", () => {
         it("returns transitions", () => {
             expect(sequencer.getTransitions()).to.equal(mockTransitions);
         });
     });
-    // function getElementOrThrow(id: string): HTMLElement {
-    //     const e = document.getElementById(id);
-    //     if (e) {
-    //         return e;
-    //     } else {
-    //         throw Error("Didn't find " + id);
-    //     }
-    // }
+
+    // describe("next Method", () => {
+    //     it("gets the next screen to transition to", () => {
+    //         expect(sequencer.getTransitions()).to.equal(mockTransitions);
+    //     });
+    // });
 });
