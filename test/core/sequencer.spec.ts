@@ -1,6 +1,6 @@
 import * as sinon from "sinon";
 import * as mock from "test/helpers/mock";
-import * as chai from "chai";
+import { expect } from "chai";
 
 import * as Sequencer from "src/core/sequencer";
 
