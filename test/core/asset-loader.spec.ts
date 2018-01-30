@@ -1,10 +1,11 @@
 import "babel-polyfill";
+import "src/lib/phaser";
+
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { loadAssets, Pack, PackList, ScreenMap } from "src/core/asset-loader";
 import { PromiseTrigger } from "src/core/promise-utils";
 import { startup } from "src/core/startup";
-import "src/lib/phaser";
 import { assetPacks } from "test/helpers/asset-packs";
 import { assets } from "test/helpers/assets";
 import { installMockGetGmi, uninstallMockGetGmi } from "test/helpers/mock";
