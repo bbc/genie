@@ -2,17 +2,17 @@
 import * as _ from "lodash/fp";
 import "phaser-ce";
 
-import Layout from "./layout";
+import { Layout } from "./layout";
 import { Screen } from "../stubs/screen";
 import * as AccessibilityManager from "../stubs/accessibility-manager";
 import * as Scaler from "../stubs/scaler";
+
+type PhaserElement = Phaser.Sprite | Phaser.Image | Phaser.BitmapText | Phaser.Group;
 
 export function LayoutEngine(game: Phaser.Game): LayoutEngine {
     const root = game.add.group(undefined, "gelGroup", true);
     const background = game.add.group(undefined, "gelBackground");
     const keyLookup: StringMap = {};
-
-    (window as any).bg= background;
 
     const gmi: Gmi = (window as any).getGMI({});
 
@@ -32,39 +32,32 @@ export function LayoutEngine(game: Phaser.Game): LayoutEngine {
         keyLookup,
     };
 
-
-    //TODO merge below from layout?
-
     /**
      * Create a new GEL layout manager for a given Genie {@link Screen}
      * Called in the create method of a given screen
      *
      * @example
-     * this.layout = this.context.gel.createLayout(this, ["home", "restart", "continue", "pause"], sfx);
+     * layout.createLayout(["home", "restart", "continue", "pause"]);
      *
-     * @param screen - The Genie Screen that will be managed by this instance
-     * @param buttons - array of standard button names to include. See {@link ./config.ts} for available names
-     * @param sfx - Map of all the audio sprites
-     * @param soundButton - enable or disable the audio buttons @todo could be parts of the buttons array
+     * @param buttons - array of standard button names to include. See {@link ./gel-defaults.ts} for available names
+     * @returns {Layout}
      */
-
-    //TODO screen is marked as any until we get screens in, should be> screen: Screen
-    //TODO sfx is marked as any until we get sfx in, should be> Phaser.AudioSprite
-    function create(screen: any, buttons: string[], sfx: any, soundButton?: boolean): Layout {
-        return new Layout(
+    function create(buttons: string[]): Layout {
+        const layout = new Layout(
             game,
-            screen,
             scaler,
-            addToBackground,
             accessibilityManager,
             keyLookup,
             buttons,
-            sfx,
-            soundButton,
         );
+
+        addToBackground(layout.root);
+
+        return layout;
     }
 
-    function addToBackground(object: PIXI.DisplayObject): PIXI.DisplayObject {
+    //TODO these types seem wrong - 'object' shouldn't need casting
+    function addToBackground(object: PhaserElement): PIXI.DisplayObject {
         if ((object as any).anchor) {
             (object as any).anchor.setTo(0.5, 0.5);
         }

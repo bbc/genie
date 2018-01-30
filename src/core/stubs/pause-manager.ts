@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import "phaser-ce";
 
-import Layout from "../layout/layout";
+import { Layout } from "../layout/layout";
 
 export interface PauseManager {
     update(gameMuted: boolean): void;

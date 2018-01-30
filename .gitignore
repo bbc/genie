@@ -5,3 +5,4 @@ npm-debug.log
 .idea/
 childrens-games-genie.iml
 docs/api/
+.awcache/

@@ -2,7 +2,10 @@ declare interface ViewportMetrics {
     width: number;
     height: number;
     scale: number;
-    pad?: number;
+    borderPad: number;
+    buttonMin: number;
+    buttonPad: number;
+    hitMin?: number;
     isMobile?: boolean;
     horizontals?: {
         left: number;
@@ -14,7 +17,7 @@ declare interface ViewportMetrics {
         center: number;
         right: number;
     };
-    verticals?: {
+    verticals: {
         top: number;
         middle: number;
         bottom: number;

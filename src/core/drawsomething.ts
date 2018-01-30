@@ -12,7 +12,7 @@ export function drawSomething(game: Phaser.Game, layout: any) {
         },
     };
 
-    const tempLayout = layout.create({}, ["exit", "howToPlay", "play", "settings"], sfx, false);
+    const tempLayout = layout.create(["exit", "howToPlay", "play", "settings"]);
 
     const style = { font: "65px Arial", fill: "#FFCC66", align: "center" };
     const text = game.add.text(550, 200, "- Phaser -\nloading in the GMI", style);

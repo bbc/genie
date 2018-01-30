@@ -1,7 +1,7 @@
 /**
  * Phaser button with text overlay
  *
- * @example game.add.existing(new DebugButton( ...parameters))
+ * @example game.add.existing(new DebugButton( ...parameters).sprite)
  */
 import "phaser-ce";
 
@@ -11,13 +11,6 @@ const gelStyle: Phaser.PhaserTextStyle = {
     fill: "#FFFFFF",
     fontWeight: "bold",
 };
-
-interface GelSpec {
-    width: number;
-    height: number;
-    text: string;
-    click: Function;
-}
 
 export class DebugButton {
     public sprite: Phaser.Image;

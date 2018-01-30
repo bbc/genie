@@ -1,15 +1,13 @@
 import "phaser-ce";
 
-import { AccessibleButton } from "../stubs/accessible-button";
-import { DebugButton } from "./debug-button"
-
-const BUTTON_PAD = 24;
+//import { AccessibleButton } from "../stubs/accessible-button";
+import { DebugButton } from "./debug-button";
 
 class Group extends Phaser.Group {
     private vPos: string;
     private hPos: string;
     private buttons: DebugButton[] = [];
-    private metrics: any;
+    private metrics: ViewportMetrics;
     private vertical: boolean;
     private accessibilityManager: AccessibilityManager;
 
@@ -55,16 +53,16 @@ class Group extends Phaser.Group {
         //     keyLookup[config.key],
         // );
 
-        const testButton = {
-        width: 200,
-        height: 50,
-        text: config.title,
-        click: () => {
-            console.log("test button");
-        },
-    };
+        const testButton: GelSpec = {
+            width: 200,
+            height: this.metrics.buttonMin,
+            text: config.title,
+            click: () => {
+                console.log("test button");
+            },
+        };
 
-        const newButton = new DebugButton(this.game, testButton)
+        const newButton = new DebugButton(this.game, testButton);
 
         this.addAt(newButton.sprite, position);
         this.buttons.push(newButton);
@@ -79,13 +77,14 @@ class Group extends Phaser.Group {
     public addToGroup(item: any, position = 0) {
         item.anchor.setTo(0.5, 0.5);
         this.addAt(item, position);
-
         this.alignChildren();
         this.setGroupPosition();
     }
 
     public reset(metrics: ViewportMetrics) {
         this.metrics = metrics;
+        const invScale = 1 / metrics.scale;
+        this.scale.setTo(invScale, invScale);
         this.setGroupPosition();
     }
 
@@ -99,41 +98,30 @@ class Group extends Phaser.Group {
 
             if (this.vertical) {
                 child.x = groupWidth / 2;
-                pos.y += child.height + BUTTON_PAD;
+                pos.y += child.height + this.metrics.buttonPad;
             } else {
                 child.x = pos.x + child.width / 2;
-                pos.x += child.width + BUTTON_PAD;
+                pos.x += child.width + this.metrics.buttonPad;
             }
         }, this);
     }
 
+    private hDispatch: any = {
+        left: (pos: number) => pos + this.metrics.borderPad,
+        right: (pos: number) => pos - this.width - this.metrics.borderPad,
+        center: (pos: number) => pos - this.width / 2 - this.metrics.buttonPad,
+    };
+
+    private vDispatch: any = {
+        top: (pos: number) => pos + this.metrics.borderPad,
+        middle: (pos: number) => pos - this.height / 2,
+        bottom: (pos: number) => pos - (this.height + this.metrics.borderPad),
+    };
+
     private setGroupPosition() {
-        const groupWidth = this.width;
-        const horizontals = this.metrics[this.vPos === "middle" ? "safeHorizontals" : "horizontals"];
-
-        switch (this.hPos) {
-            case "left":
-                this.x = horizontals[this.hPos] + this.metrics.pad;
-                break;
-            case "right":
-                this.x = horizontals[this.hPos] - this.width - this.metrics.pad;
-                break;
-            case "center":
-                this.x = horizontals[this.hPos] - groupWidth / 2 - BUTTON_PAD;
-                break;
-        }
-
-        switch (this.vPos) {
-            case "top":
-                this.y = this.metrics.verticals[this.vPos] + this.metrics.pad;
-                break;
-            case "middle":
-                this.y = this.metrics.verticals[this.vPos] - this.height / 2;
-                break;
-            case "bottom":
-                this.y = this.metrics.verticals[this.vPos] - (this.height + this.metrics.pad);
-                break;
-        }
+        const horizontals: any = this.metrics[this.vPos === "middle" ? "safeHorizontals" : "horizontals"];
+        this.x = this.hDispatch[this.hPos](horizontals[this.hPos]);
+        this.y = this.vDispatch[this.vPos]((this.metrics.verticals as any)[this.vPos]);
     }
 }
 
