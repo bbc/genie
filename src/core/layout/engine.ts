@@ -5,7 +5,7 @@ import "phaser-ce";
 import { Layout } from "./layout";
 import { Screen } from "../stubs/screen";
 import * as AccessibilityManager from "../stubs/accessibility-manager";
-import * as Scaler from "../stubs/scaler";
+import * as Scaler from "../scaler";
 
 type PhaserElement = Phaser.Sprite | Phaser.Image | Phaser.BitmapText | Phaser.Group;
 
