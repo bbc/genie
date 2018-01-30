@@ -1,18 +1,11 @@
 import { drawSomething } from "src/core/drawsomething";
-import * as GelLayers from "src/core/gelLayers";
+import { LayoutEngine } from "src/core/layout/engine"
 import { PromiseTrigger } from "src/core/promise-utils";
-import * as Scaler from "src/core/scaler";
 
 export interface Config {
     stageHeightPx: number;
     backgroundColor?: string;
     theme: any;
-}
-
-export interface Context {
-    gmi: Gmi;
-    scaler: Scaler.Scaler;
-    gelLayers: GelLayers.GelLayers;
 }
 
 export function startup(): Promise<Phaser.Game> {
@@ -36,17 +29,17 @@ export function startup(): Promise<Phaser.Game> {
     return promisedGame;
 
     function onStarted(config: Config) {
-        // Phaser is now set up and we can use all game properties.
-        const scaler = Scaler.create(600, game);
-        const gelLayers = GelLayers.create(game, scaler);
-        const context: Context = {
-            gmi,
-            scaler,
-            gelLayers,
-        };
 
-        game.stage.backgroundColor = "#000";
-        drawSomething(game, context);
+         const layoutEngine = LayoutEngine(game);
+
+        // Phaser is now set up and we can use all game properties.
+        // const context: Context = {
+        //     gmi,
+        //     //layout
+        // };
+
+        game.stage.backgroundColor = "#333"; //config.backgroundColor || "#000";
+        drawSomething(game, layoutEngine);
         promisedGame.resolve(game);
     }
 }
