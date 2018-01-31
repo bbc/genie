@@ -7,7 +7,9 @@ import * as Sequencer from "src/core/sequencer";
 describe("Sequencer", () => {
     let sequencer: any;
     let mockGame: any;
-    let mockContext: any = { mockContext: "mockContext" };
+    let mockContext: any = {
+        inState: "inState",
+    };
     let mockTransitions: any = [
         {
             name: "title",
@@ -66,6 +68,12 @@ describe("Sequencer", () => {
             expect(mockGame.state.start.callCount).to.equal(2);
             expect(mockGame.state.start.getCall(1).args).to.eql([expectedNextScreen, true, false, mockContext]);
         });
+
+        // it("passes the state of the screen to the next screen", () => {
+        //     const expectedNextScreen = mockTransitions[0].nextScreenName();
+        //     sequencer.next({ score: 200 });
+        //     expect(mockGame.state.start.getCall(1).args[3]).to.equal({});
+        // });
 
         it("starts the screen after next when called twice", () => {
             const expectedNextScreen = mockTransitions[1].nextScreenName();

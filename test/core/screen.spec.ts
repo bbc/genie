@@ -1,17 +1,43 @@
+import * as sinon from "sinon";
+import { expect } from "chai";
+import "src/lib/gmi.d";
+
 import { Screen } from "src/core/screen";
 
 describe("Screen", () => {
-    let screen: Screen;
+    let screen: any;
+    let mockContext: any = {
+        inState: "inState",
+    };
+    let mockNext: any;
 
     beforeEach(() => {
+        mockNext = sinon.spy();
         screen = new Screen();
+        screen.init(mockContext, mockNext);
     });
 
-    it("should assign the next screen", () => {
-        //screen.init();
+    it("sets the next function on the screen", () => {
+        expect(screen.next).to.eql(mockNext);
+    });
 
-        // return screen([]).then(() => {
-        //     expect(getElementOrThrow(TEST_DIV_ID).children.length).to.equal(1);
-        // });
+    it("sets the context on the screen", () => {
+        expect(screen._context).to.eql(mockContext);
+    });
+
+    describe("exit method", () => {
+        it("calls the next function and passes the changed state", () => {
+            const changedState = { state: "change" };
+            screen.exit(changedState);
+            expect(mockNext.getCall(0).args).to.eql([changedState]);
+        });
+    });
+
+    describe("shutdown method", () => {
+        it("calls cleanUp method", () => {
+            const cleanUpSpy = sinon.spy(screen, "cleanUp");
+            screen.shutdown();
+            expect(cleanUpSpy.callCount).to.equal(1);
+        });
     });
 });
