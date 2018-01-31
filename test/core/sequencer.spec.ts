@@ -2,14 +2,28 @@ import * as sinon from "sinon";
 import { expect } from "chai";
 import "src/lib/gmi.d";
 
-import * as StartUp from "src/core/startup";
 import * as Sequencer from "src/core/sequencer";
 
 describe("Sequencer", () => {
     let sequencer: any;
     let mockGame: any;
-    let mockContext: any;
-    let mockTransitions: any;
+    let mockContext: any = { mockContext: "mockContext" };
+    let mockTransitions: any = [
+        {
+            name: "title",
+            state: "titlestate",
+            nextScreenName: () => "game",
+        },
+        {
+            name: "game",
+            state: "gamestate",
+            nextScreenName: () => "results",
+        },
+        {
+            name: "results",
+            state: "resultsstate",
+        },
+    ];
 
     beforeEach(() => {
         mockGame = {
@@ -18,46 +32,47 @@ describe("Sequencer", () => {
                 start: sinon.spy(),
             },
         };
-        mockContext = {
-            mockContext: "mockContext",
-        };
-        mockTransitions = [
-            {
-                name: "titlescreen",
-                state: "titlestate",
-            },
-            {
-                name: "gamescreen",
-                state: "gameState",
-            },
-        ];
         sequencer = Sequencer.create(mockGame, mockContext, mockTransitions);
     });
 
     it("adds each transition to game state", () => {
-        expect(mockGame.state.add.callCount).to.equal(2);
+        expect(mockGame.state.add.callCount).to.equal(3);
         expect(mockGame.state.add.getCall(0).args).to.eql([mockTransitions[0].name, mockTransitions[0].state]);
         expect(mockGame.state.add.getCall(1).args).to.eql([mockTransitions[1].name, mockTransitions[1].state]);
+        expect(mockGame.state.add.getCall(2).args).to.eql([mockTransitions[2].name, mockTransitions[2].state]);
     });
 
     it("starts the current screen", () => {
         expect(mockGame.state.start.callCount).to.equal(1);
-        expect(mockGame.state.start.getCall(0).args[0]).to.equal(mockTransitions[0].name);
-        expect(mockGame.state.start.getCall(0).args[1]).to.equal(true);
-        expect(mockGame.state.start.getCall(0).args[2]).to.equal(false);
-        expect(mockGame.state.start.getCall(0).args[3]).to.eql(mockContext);
-        expect(mockGame.state.start.getCall(0).args[4]).to.eql(sequencer.next);
+        expect(mockGame.state.start.getCall(0).args).to.eql([
+            mockTransitions[0].name,
+            true,
+            false,
+            mockContext,
+            sequencer.next,
+        ]);
     });
 
     describe("getTransitions Method", () => {
         it("returns transitions", () => {
-            expect(sequencer.getTransitions()).to.equal(mockTransitions);
+            expect(sequencer.getTransitions()).to.eql(mockTransitions);
         });
     });
 
-    // describe("next Method", () => {
-    //     it("gets the next screen to transition to", () => {
-    //         expect(sequencer.getTransitions()).to.equal(mockTransitions);
-    //     });
-    // });
+    describe("next Method", () => {
+        it("starts the next screen", () => {
+            const expectedNextScreen = mockTransitions[0].nextScreenName();
+            sequencer.next();
+            expect(mockGame.state.start.callCount).to.equal(2);
+            expect(mockGame.state.start.getCall(1).args).to.eql([expectedNextScreen, true, false, mockContext]);
+        });
+
+        it("starts the screen after next when called twice", () => {
+            const expectedNextScreen = mockTransitions[1].nextScreenName();
+            sequencer.next();
+            sequencer.next();
+            expect(mockGame.state.start.callCount).to.equal(3);
+            expect(mockGame.state.start.getCall(2).args).to.eql([expectedNextScreen, true, false, mockContext]);
+        });
+    });
 });
