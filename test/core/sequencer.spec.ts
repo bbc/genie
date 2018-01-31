@@ -5,7 +5,7 @@ import { expect } from "chai";
 import * as Sequencer from "src/core/sequencer";
 
 describe("Sequencer", () => {
-    let sequencer: { getTransitions: any };
+    let sequencer: any;
     let mockGame: any;
     let mockContext: any;
     let mockTransitions: any;
