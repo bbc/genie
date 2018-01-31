@@ -6,9 +6,9 @@ import * as Sequencer from "src/core/sequencer";
 
 describe("Sequencer", () => {
     let sequencer: { getTransitions: any };
-    let mockGame: Phaser.Game | { state: { add: sinon.SinonSpy; start: sinon.SinonSpy } };
-    let mockContext;
-    let mockTransitions: { name: string }[];
+    let mockGame: any;
+    let mockContext: any;
+    let mockTransitions: any;
 
     beforeEach(() => {
         mock.installMockGetGmi();
@@ -18,7 +18,9 @@ describe("Sequencer", () => {
                 start: sinon.spy(),
             },
         };
-        mockContext = {};
+        mockContext = {
+            mockContext: "mockContext",
+        };
         mockTransitions = [
             {
                 name: "titlescreen",
@@ -38,6 +40,15 @@ describe("Sequencer", () => {
         expect(mockGame.state.add.callCount).to.equal(2);
         expect(mockGame.state.add.getCall(0).args).to.eql([mockTransitions[0].name, mockTransitions[0].state]);
         expect(mockGame.state.add.getCall(1).args).to.eql([mockTransitions[1].name, mockTransitions[1].state]);
+    });
+
+    it("starts the current screen", () => {
+        expect(mockGame.state.start.callCount).to.equal(1);
+        expect(mockGame.state.start.getCall(0).args[0]).to.equal(mockTransitions[0].name);
+        expect(mockGame.state.start.getCall(0).args[1]).to.equal(true);
+        expect(mockGame.state.start.getCall(0).args[2]).to.equal(false);
+        expect(mockGame.state.start.getCall(0).args[3]).to.eql(mockContext);
+        expect(mockGame.state.start.getCall(0).args[4]).to.eql(sequencer.next);
     });
 
     describe("getTransitions Method", () => {
