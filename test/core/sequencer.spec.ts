@@ -1,7 +1,8 @@
 import * as sinon from "sinon";
-import * as mock from "test/helpers/mock";
 import { expect } from "chai";
+import "src/lib/gmi.d";
 
+import * as StartUp from "src/core/startup";
 import * as Sequencer from "src/core/sequencer";
 
 describe("Sequencer", () => {
@@ -11,7 +12,6 @@ describe("Sequencer", () => {
     let mockTransitions: any;
 
     beforeEach(() => {
-        mock.installMockGetGmi();
         mockGame = {
             state: {
                 add: sinon.spy(),
@@ -33,8 +33,6 @@ describe("Sequencer", () => {
         ];
         sequencer = Sequencer.create(mockGame, mockContext, mockTransitions);
     });
-
-    afterEach(mock.uninstallMockGetGmi);
 
     it("adds each transition to game state", () => {
         expect(mockGame.state.add.callCount).to.equal(2);
