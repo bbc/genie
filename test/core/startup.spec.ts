@@ -12,7 +12,7 @@ describe("Startup", () => {
     it("should create a canvas element", done => {
         startup();
         setTimeout(() => {
-            expect(getElementOrThrow(TEST_DIV_ID).children.length).to.equal(1);
+            expect(getElementOrThrow(TEST_DIV_ID).children[0].tagName).to.equal("CANVAS");
             done();
         }, 1000);
     });
