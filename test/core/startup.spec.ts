@@ -16,7 +16,6 @@ describe("Startup", () => {
 
     it("should create a canvas element within the designated parent", () => {
         return startup([mock.screenDef()]).then(() => {
-            expect(mock.getGameHolderDiv().children.length).to.equal(1);
             expect(mock.getGameHolderDiv().children[0].tagName).to.equal("CANVAS");
         });
     });
@@ -38,6 +37,5 @@ describe("Startup", () => {
     xit("should display error messages in the browser", () => {
         // Manual test: Any generation of exceptions or even ErrorEvents causes
         // the test to fail anyway :-(
-        const dummyMessage = "This message should be rendered in the game div";
     });
 });
