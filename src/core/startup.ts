@@ -1,5 +1,6 @@
 import { drawSomething } from "src/core/drawsomething";
 import { PromiseTrigger } from "src/core/promise-utils";
+import { testHarnessDisplay, StubbedGlobalContextState } from "src/components/test-harness/layout";
 import "../lib/phaser";
 
 export interface Config {
@@ -41,6 +42,11 @@ export function startup(): Promise<Phaser.Game> {
         game.stage.backgroundColor = "#00f"; //config.backgroundColor || "#000";
         drawSomething(game);
         promisedGame.resolve(game);
+
+        // *********************
+        const globalConfig = new StubbedGlobalContext().state;
+        testHarnessDisplay(game, globalConfig).create();
+        // *********************
     }
 }
 
@@ -95,5 +101,20 @@ function getContainerDiv(gmi: Gmi): HTMLElement {
         throw Error(`Container element "#${gmi.gameContainerId}" not found`);
     } else {
         return containerDiv;
+    }
+}
+
+/// To be deleted once sequencer and _real_ global context/settings is in place.
+// Once deleted, replace below calls to this with the real version.
+class StubbedGlobalContext {
+    public state: StubbedGlobalContextState;
+
+    constructor() {
+        this.state = {
+            qaMode: {
+                active: true,
+                testHarnessLayoutDisplayed: false,
+            },
+        };
     }
 }
