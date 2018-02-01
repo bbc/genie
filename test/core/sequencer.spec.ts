@@ -7,6 +7,7 @@ import * as Sequencer from "src/core/sequencer";
 describe("Sequencer", () => {
     let sequencer: any;
     let mockGame: any;
+    let next: Sequencer.NextScreenFunction;
     let mockContext: any = {
         inState: "inState",
     };
@@ -35,6 +36,7 @@ describe("Sequencer", () => {
             },
         };
         sequencer = Sequencer.create(mockGame, mockContext, mockTransitions);
+        next = mockGame.state.start.getCall(0).args[4];
     });
 
     it("adds each transition to game state", () => {
@@ -46,13 +48,7 @@ describe("Sequencer", () => {
 
     it("starts the current screen", () => {
         expect(mockGame.state.start.callCount).to.equal(1);
-        expect(mockGame.state.start.getCall(0).args).to.eql([
-            mockTransitions[0].name,
-            true,
-            false,
-            mockContext,
-            sequencer.next,
-        ]);
+        expect(mockGame.state.start.getCall(0).args).to.eql([mockTransitions[0].name, true, false, mockContext, next]);
     });
 
     describe("getTransitions Method", () => {
@@ -61,10 +57,10 @@ describe("Sequencer", () => {
         });
     });
 
-    describe("next Method", () => {
+    describe("next function", () => {
         it("starts the next screen", () => {
             const expectedNextScreen = mockTransitions[0].nextScreenName();
-            sequencer.next();
+            next({});
             expect(mockGame.state.start.callCount).to.equal(2);
             expect(mockGame.state.start.getCall(1).args).to.eql([expectedNextScreen, true, false, mockContext]);
         });
@@ -77,8 +73,8 @@ describe("Sequencer", () => {
 
         it("starts the screen after next when called twice", () => {
             const expectedNextScreen = mockTransitions[1].nextScreenName();
-            sequencer.next();
-            sequencer.next();
+            next({});
+            next({});
             expect(mockGame.state.start.callCount).to.equal(3);
             expect(mockGame.state.start.getCall(2).args).to.eql([expectedNextScreen, true, false, mockContext]);
         });

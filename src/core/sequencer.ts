@@ -17,7 +17,6 @@ export interface PersistentState {
 export type GameStateUpdate = GameState | TransientState | PersistentState | {};
 
 export interface Sequencer {
-    next(outState: GameStateUpdate): void;
     getTransitions(): ScreenDef[];
 }
 
@@ -32,7 +31,6 @@ export interface ScreenDef {
 export function create(game: Phaser.Game, context: Context, transitions: ScreenDef[]): Sequencer {
     let currentScreen: ScreenDef = transitions[0];
     const self = {
-        next,
         getTransitions,
     };
 
