@@ -1,8 +1,7 @@
 import { drawSomething } from "src/core/drawsomething";
-import * as Scaler from "src/core/scaler";
 import * as GelLayers from "src/core/gelLayers";
 import { PromiseTrigger } from "src/core/promise-utils";
-import "../lib/phaser";
+import * as Scaler from "src/core/scaler";
 
 export interface Config {
     stageHeightPx: number;

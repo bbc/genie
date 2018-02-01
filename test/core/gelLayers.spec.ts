@@ -5,7 +5,7 @@ import * as sinon from "sinon";
 import * as GelLayers from "src/core/gelLayers";
 import "src/lib/phaser";
 
-describe("Startup", () => {
+describe("GelLayers", () => {
 
     let mockGame: any;
     let mockScaler: any;

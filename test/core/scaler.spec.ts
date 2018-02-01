@@ -1,12 +1,9 @@
-/// <reference path="../../src/lib/gmi.d.ts" />
-
 import { expect } from "chai";
 import * as sinon from "sinon";
 import * as Scaler from "src/core/scaler";
 import "src/lib/phaser";
 
-describe("Startup", () => {
-
+describe("Scaler", () => {
     let mockGame: any;
 
     beforeEach(() => {
