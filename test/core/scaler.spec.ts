@@ -13,8 +13,6 @@ describe("Scaler", () => {
                 scaleMode: sinon.spy(),
                 onSizeChange: { add: sinon.spy()},
                 getParentBounds: sinon.spy(function(){return {width: 800, height: 600}; }),
-                width: 1,
-                height: 1,
             },
         };
 
@@ -27,7 +25,6 @@ describe("Scaler", () => {
     
     it("Should call the games onSizeChange add function once", () => {
         Scaler.create(600, mockGame);
-        window.dispatchEvent(new Event("resize"));
         expect(mockGame.scale.onSizeChange.add.callCount).to.eql(1);
     });
 
