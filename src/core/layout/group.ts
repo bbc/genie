@@ -3,6 +3,18 @@ import "phaser-ce";
 //import { AccessibleButton } from "../stubs/accessible-button";
 import { DebugButton } from "./debug-button";
 
+const horizontal: any = {
+    left: (pos: number, width: number, pad: number) => pos + pad,
+    right: (pos: number, width: number, pad: number) => pos - width - pad,
+    center: (pos: number, width: number, pad: number) => pos - width / 2,
+};
+
+const vertical: any = {
+    top: (pos: number, height: number, pad: number) => pos + pad,
+    middle: (pos: number, height: number, pad: number) => pos - height / 2,
+    bottom: (pos: number, height: number, pad: number) => pos - (height + pad),
+};
+
 class Group extends Phaser.Group {
     private vPos: string;
     private hPos: string;
@@ -106,23 +118,12 @@ class Group extends Phaser.Group {
         }, this);
     }
 
-    private hDispatch: any = {
-        left: (pos: number, pad: number) => pos + pad,
-        right: (pos: number, pad: number) => pos - this.width - pad,
-        center: (pos: number, pad: number) => pos - this.width / 2,
-    };
-
-    private vDispatch: any = {
-        top: (pos: number, pad: number) => pos + pad,
-        middle: (pos: number, pad: number) => pos - this.height / 2,
-        bottom: (pos: number, pad: number) => pos - (this.height + pad),
-    };
-
     private setGroupPosition() {
         const horizontals: any = this.metrics[this.vPos === "middle" ? "safeHorizontals" : "horizontals"];
-        this.x = this.hDispatch[this.hPos](horizontals[this.hPos], this.metrics.borderPad * this.scale.x);
-        this.y = this.vDispatch[this.vPos](
+        this.x = horizontal[this.hPos](horizontals[this.hPos], this.width, this.metrics.borderPad * this.scale.x);
+        this.y = vertical[this.vPos](
             (this.metrics.verticals as any)[this.vPos],
+            this.height,
             this.metrics.borderPad * this.scale.y,
         );
     }

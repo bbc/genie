@@ -18,8 +18,9 @@ module.exports = function(config) {
         },
         webpackMiddleware: {
             stats: "errors-only",
+            noInfo: true,
         },
-        reporters: ["progress"],
+        reporters: ["mocha"],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
