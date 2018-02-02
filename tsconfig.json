@@ -9,6 +9,7 @@
     },
     "awesomeTypescriptLoaderOptions": {
         "useBabel": true,
+        "useCache": true,
         "babelOptions": {
             "babelrc": false,
             "presets": [["env", {"targets": {"ie": 11}}]],

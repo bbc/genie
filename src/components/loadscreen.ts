@@ -30,7 +30,8 @@ export class Loadscreen extends Screen {
     }
 
     public create() {
-        this.game.add.image(50, 50, "logo");
+        this.game.add.image(400, 50, "logo");
+        const tempLayout = this.context.layout.create(["exit", "howToPlay", "play", "soundOff", "settings"]);
     }
 
     private updateLoadProgress(progress: number) {

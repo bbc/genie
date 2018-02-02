@@ -1,7 +1,6 @@
 import * as _ from "lodash";
 import "phaser-ce";
 
-import { Context } from "./startup";
 import { Screen } from "./screen";
 
 export type GameState = TransientState & PersistentState;

@@ -1,20 +1,13 @@
 import "../lib/phaser";
-
-import * as GelLayers from "src/core/gelLayers";
+import { LayoutEngine } from "src/core/layout/engine"
 import { PromiseTrigger } from "src/core/promise-utils";
-import * as Scaler from "src/core/scaler";
 import * as Sequencer from "src/core/sequencer";
+
 
 export interface Config {
     stageHeightPx: number;
     backgroundColor?: string;
     theme: any;
-}
-
-export interface Context {
-    gmi: Gmi;
-    scaler: Scaler.Scaler;
-    gelLayers: GelLayers.GelLayers;
 }
 
 export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game> {
@@ -38,17 +31,19 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
     return promisedGame;
 
     function onStarted(config: Config) {
+
+         const layout = LayoutEngine(game);
+
         // Phaser is now set up and we can use all game properties.
-        const scaler = Scaler.create(600, game);
-        const gelLayers = GelLayers.create(game, scaler);
         const context: Context = {
             gmi,
-            scaler,
-            gelLayers,
+            layout,
+            popupScreens: [],
+            gameMuted: true
         };
         const sequencer = Sequencer.create(game, context, transitions);
 
-        game.stage.backgroundColor = "#00f";
+        game.stage.backgroundColor = "#333";
 
         promisedGame.resolve(game);
     }
