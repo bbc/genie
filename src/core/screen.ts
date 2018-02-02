@@ -1,6 +1,4 @@
 import "phaser-ce";
-
-import { Context } from "./startup";
 import { NextScreenFunction, GameStateUpdate } from "src/core/sequencer";
 
 export class Screen extends Phaser.State {

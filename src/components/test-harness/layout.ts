@@ -1,10 +1,4 @@
-import { Context } from "../../core/startup";
-import { GEL_MIN_RATIO, GEL_MIN_RATIO_RHS, GEL_MIN_RATIO_LHS } from "../../core/scaler";
-
-export interface QAMode {
-    active: boolean;
-    testHarnessLayoutDisplayed: boolean;
-}
+import { GEL_SAFE_FRAME_RATIO, GEL_MIN_RATIO_RHS, GEL_MIN_RATIO_LHS } from "../../core/scaler";
 
 export function testHarnessDisplay(game: Phaser.Game, context: Context) {
     let graphicsGroup: Phaser.Group;
@@ -38,7 +32,7 @@ export function testHarnessDisplay(game: Phaser.Game, context: Context) {
         graphics.drawRect(0, 0, gameAreaWidth, gameAreaHeight);
         graphicsGroup.add(graphics);
         center(graphicsGroup);
-        context.gelLayers.addToBackground(graphicsGroup);
+        context.layout.addToBackground(graphicsGroup);
         context.qaMode.testHarnessLayoutDisplayed = true;
     }
 
@@ -57,9 +51,9 @@ export function testHarnessDisplay(game: Phaser.Game, context: Context) {
     function gameAreaDimensions() {
         let areaWidth;
         let areaHeight;
-        const size = context.scaler.getSize();
+        const size = context.layout.getSize();
 
-        if (game.width / game.height >= GEL_MIN_RATIO) {
+        if (game.width / game.height >= GEL_SAFE_FRAME_RATIO) {
             areaHeight = game.height / size.scale;
             areaWidth = areaHeight / GEL_MIN_RATIO_RHS * GEL_MIN_RATIO_LHS;
         } else {

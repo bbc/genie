@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { testHarnessDisplay, QAMode } from "src/components/test-harness/layout";
+import { testHarnessDisplay } from "src/components/test-harness/layout";
 import "src/lib/phaser";
 
 describe("test harness layout", () => {
