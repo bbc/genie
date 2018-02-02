@@ -32,11 +32,11 @@ describe("Screen", () => {
         });
     });
 
-    describe("shutdown method", () => {
-        it("calls cleanUp method", () => {
-            const cleanUpSpy = sinon.spy(screen, "cleanUp");
-            screen.shutdown();
-            expect(cleanUpSpy.callCount).to.equal(1);
-        });
-    });
+    // describe("shutdown method", () => {
+    //     it("calls cleanUp method", () => {
+    //         const cleanUpSpy = sinon.spy(screen, "cleanUp");
+    //         screen.shutdown();
+    //         expect(cleanUpSpy.callCount).to.equal(1);
+    //     });
+    // });
 });

@@ -22,9 +22,9 @@ export class Screen extends Phaser.State {
         this.next(changedState);
     }
 
-    public shutdown() {
-        this.cleanUp();
-    }
+    // public shutdown() {
+    //     this.cleanUp();
+    // }
 
-    private cleanUp() {}
+    // private cleanUp() {}
 }
