@@ -3,7 +3,7 @@ import * as _ from "lodash/fp";
 import "phaser-ce";
 
 import { Layout } from "./layout";
-import { Screen } from "../stubs/screen";
+import { Screen } from "../screen";
 import * as AccessibilityManager from "../stubs/accessibility-manager";
 import * as Scaler from "../scaler";
 
