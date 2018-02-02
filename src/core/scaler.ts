@@ -1,8 +1,9 @@
+export const GEL_MIN_RATIO_LHS = 4;
+export const GEL_MIN_RATIO_RHS = 3;
+export const GEL_SAFE_FRAME_RATIO = GEL_MIN_RATIO_LHS / GEL_MIN_RATIO_RHS;
 import "phaser-ce";
 // @ts-ignore
 import * as fp from "lodash/fp";
-
-const GEL_SAFE_FRAME_RATIO = 4 / 3;
 
 const getScale = fp.curry((scaleMethods: any, stageHeightPx: number, { width, height }: { [s: string]: number }) => {
     const scale = scaleMethods[width / height >= GEL_SAFE_FRAME_RATIO ? "wide" : "narrow"](width, height);

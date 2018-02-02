@@ -1,8 +1,8 @@
 import "../lib/phaser";
 import { LayoutEngine } from "src/core/layout/engine"
 import { PromiseTrigger } from "src/core/promise-utils";
+import { parseUrlParams } from "src/lib/parseUrlParams";
 import * as Sequencer from "src/core/sequencer";
-
 
 export interface Config {
     stageHeightPx: number;
@@ -12,6 +12,11 @@ export interface Config {
 
 export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game> {
     const gmi: Gmi = (window as any).getGMI({});
+    const urlParams = parseUrlParams(window.location.search);
+    const qaMode: QAMode = {
+        active: urlParams.qaMode ? urlParams.qaMode : false,
+        testHarnessLayoutDisplayed: false,
+    };
     hookErrors(gmi.gameContainerId);
 
     const phaserConfig: Phaser.IGameConfig = {
@@ -39,7 +44,8 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
             gmi,
             layout,
             popupScreens: [],
-            gameMuted: true
+            gameMuted: true,
+            qaMode,
         };
         const sequencer = Sequencer.create(game, context, transitions);
 

@@ -4,6 +4,5 @@ declare interface LayoutEngine {
     addToBackground(object: PIXI.DisplayObject): PIXI.DisplayObject;
     removeAll(): void;
     addLookup(keyLookup: StringMap): void;
+    getSize: any;
 }
-
-//import { Layout } from "../core/layout/layout";
