@@ -107,21 +107,24 @@ class Group extends Phaser.Group {
     }
 
     private hDispatch: any = {
-        left: (pos: number) => pos + this.metrics.borderPad,
-        right: (pos: number) => pos - this.width - this.metrics.borderPad,
-        center: (pos: number) => pos - this.width / 2 - this.metrics.buttonPad,
+        left: (pos: number, pad: number) => pos + pad,
+        right: (pos: number, pad: number) => pos - this.width - pad,
+        center: (pos: number, pad: number) => pos - this.width / 2,
     };
 
     private vDispatch: any = {
-        top: (pos: number) => pos + this.metrics.borderPad,
-        middle: (pos: number) => pos - this.height / 2,
-        bottom: (pos: number) => pos - (this.height + this.metrics.borderPad),
+        top: (pos: number, pad: number) => pos + pad,
+        middle: (pos: number, pad: number) => pos - this.height / 2,
+        bottom: (pos: number, pad: number) => pos - (this.height + pad),
     };
 
     private setGroupPosition() {
         const horizontals: any = this.metrics[this.vPos === "middle" ? "safeHorizontals" : "horizontals"];
-        this.x = this.hDispatch[this.hPos](horizontals[this.hPos]);
-        this.y = this.vDispatch[this.vPos]((this.metrics.verticals as any)[this.vPos]);
+        this.x = this.hDispatch[this.hPos](horizontals[this.hPos], this.metrics.borderPad * this.scale.x);
+        this.y = this.vDispatch[this.vPos](
+            (this.metrics.verticals as any)[this.vPos],
+            this.metrics.borderPad * this.scale.y,
+        );
     }
 }
 
