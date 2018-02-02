@@ -27,7 +27,7 @@ export function create(stageHeightPx: number, game: Phaser.Game): Scaler {
 
     return {
         onScaleChange,
-        getSize
+        getSize,
     };
 
     function onSizeChange() {

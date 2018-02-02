@@ -32,7 +32,7 @@ export class Loadscreen extends Screen {
 
     public create() {
         this.game.add.image(50, 50, "logo");
-        testHarnessDisplay(this.game, this.context, this.context.scaler).create();
+        testHarnessDisplay(this.game, this.context).create();
     }
 
     private updateLoadProgress(progress: number) {

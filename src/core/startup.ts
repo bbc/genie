@@ -2,9 +2,8 @@ import "../lib/phaser";
 
 import * as GelLayers from "src/core/gelLayers";
 import { PromiseTrigger } from "src/core/promise-utils";
-import "../lib/phaser";
 import * as Scaler from "src/core/scaler";
-import { testHarnessDisplay, QAMode } from "src/components/test-harness/layout";
+import { QAMode } from "src/components/test-harness/layout";
 import { parseUrlParams } from "src/lib/parseUrlParams";
 import * as Sequencer from "src/core/sequencer";
 
