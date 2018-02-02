@@ -1,20 +1,21 @@
-export interface StubbedGlobalContextState {
-    qaMode: {
-        active: boolean,
-        testHarnessLayoutDisplayed: boolean
-    }
+import { Context } from "../../core/startup";
+import { Scaler, GEL_MIN_RATIO, GEL_MIN_RATIO_RHS, GEL_MIN_RATIO_LHS } from "../../core/scaler";
+
+export interface QAMode {
+    active: boolean;
+    testHarnessLayoutDisplayed: boolean;
 }
 
-export function testHarnessDisplay(game: Phaser.Game, globalContext: StubbedGlobalContextState) {
+export function testHarnessDisplay(game: Phaser.Game, context: Context, scaler: Scaler) {
     let graphicsGroup: Phaser.Group;
     let graphics: Phaser.Graphics;
 
     return {
-        create
+        create,
     };
 
     function create() {
-        if (globalContext.qaMode) {
+        if (context.qaMode.active) {
             graphicsGroup = game.add.group();
             const qaKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
             qaKey.onUp.add(toggle, game);
@@ -22,7 +23,7 @@ export function testHarnessDisplay(game: Phaser.Game, globalContext: StubbedGlob
     }
 
     function toggle() {
-        if (globalContext.qaMode.testHarnessLayoutDisplayed) {
+        if (context.qaMode.testHarnessLayoutDisplayed) {
             hide();
         } else {
             show();
@@ -30,15 +31,42 @@ export function testHarnessDisplay(game: Phaser.Game, globalContext: StubbedGlob
     }
 
     function show() {
+        const [gameAreaWidth, gameAreaHeight] = gameAreaDimensions();
+
         graphics = game.add.graphics();
-        graphics.lineStyle(2, 0xFFFFFF, 1);
-        graphics.drawRect(200, 200, 250, 250);
+        graphics.beginFill(0x32cd32, 0.5);
+        graphics.drawRect(0, 0, gameAreaWidth, gameAreaHeight);
         graphicsGroup.add(graphics);
-        globalContext.qaMode.testHarnessLayoutDisplayed = true;
+        center(graphicsGroup);
+        context.gelLayers.addToBackground(graphicsGroup);
+        context.qaMode.testHarnessLayoutDisplayed = true;
     }
 
     function hide() {
         graphicsGroup.destroy(true, true);
-        globalContext.qaMode.testHarnessLayoutDisplayed = false;
+        context.qaMode.testHarnessLayoutDisplayed = false;
+    }
+
+    function center(group: Phaser.Group) {
+        group.forEach((graphic: Phaser.Graphics) => {
+            graphic.x = graphic.x - graphic.width * 0.5;
+            graphic.y = graphic.y - graphic.height * 0.5;
+        }, game);
+    }
+
+    function gameAreaDimensions() {
+        let areaWidth;
+        let areaHeight;
+        const size = scaler.getSize();
+
+        if (game.width / game.height >= GEL_MIN_RATIO) {
+            areaHeight = game.height / size.scale;
+            areaWidth = areaHeight / GEL_MIN_RATIO_RHS * GEL_MIN_RATIO_LHS;
+        } else {
+            areaWidth = game.width / size.scale;
+            areaHeight = areaWidth / GEL_MIN_RATIO_LHS * GEL_MIN_RATIO_RHS;
+        }
+
+        return [areaWidth, areaHeight];
     }
 }

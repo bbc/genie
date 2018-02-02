@@ -1,7 +1,10 @@
 import { drawSomething } from "src/core/drawsomething";
+import * as GelLayers from "src/core/gelLayers";
 import { PromiseTrigger } from "src/core/promise-utils";
-import { testHarnessDisplay, StubbedGlobalContextState } from "src/components/test-harness/layout";
 import "../lib/phaser";
+import * as Scaler from "src/core/scaler";
+import { testHarnessDisplay, QAMode } from "src/components/test-harness/layout";
+import { parseUrlParams } from "src/lib/parseUrlParams";
 
 export interface Config {
     stageHeightPx: number;
@@ -11,10 +14,18 @@ export interface Config {
 
 export interface Context {
     gmi: Gmi;
+    scaler: Scaler.Scaler;
+    gelLayers: GelLayers.GelLayers;
+    qaMode: QAMode;
 }
 
 export function startup(): Promise<Phaser.Game> {
     const gmi: Gmi = (window as any).getGMI({});
+    const urlParams = parseUrlParams(window.location.search);
+    const qaMode: QAMode = {
+        active: urlParams.qaMode ? urlParams.qaMode : false,
+        testHarnessLayoutDisplayed: false,
+    };
     hookErrors(gmi.gameContainerId);
 
     const phaserConfig: Phaser.IGameConfig = {
@@ -35,18 +46,19 @@ export function startup(): Promise<Phaser.Game> {
 
     function onStarted(config: Config) {
         // Phaser is now set up and we can use all game properties.
+        const scaler = Scaler.create(600, game);
+        const gelLayers = GelLayers.create(game, scaler);
         const context: Context = {
             gmi,
+            scaler,
+            gelLayers,
+            qaMode,
         };
 
-        game.stage.backgroundColor = "#00f"; //config.backgroundColor || "#000";
-        drawSomething(game);
+        game.stage.backgroundColor = "#000";
+        drawSomething(game, context);
         promisedGame.resolve(game);
-
-        // *********************
-        const globalConfig = new StubbedGlobalContext().state;
-        testHarnessDisplay(game, globalConfig).create();
-        // *********************
+        testHarnessDisplay(game, context, scaler).create();
     }
 }
 
@@ -101,20 +113,5 @@ function getContainerDiv(gmi: Gmi): HTMLElement {
         throw Error(`Container element "#${gmi.gameContainerId}" not found`);
     } else {
         return containerDiv;
-    }
-}
-
-/// To be deleted once sequencer and _real_ global context/settings is in place.
-// Once deleted, replace below calls to this with the real version.
-class StubbedGlobalContext {
-    public state: StubbedGlobalContextState;
-
-    constructor() {
-        this.state = {
-            qaMode: {
-                active: true,
-                testHarnessLayoutDisplayed: false,
-            },
-        };
     }
 }
