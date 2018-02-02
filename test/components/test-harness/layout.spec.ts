@@ -9,7 +9,6 @@ describe("test harness layout", () => {
     let testHarness: { create: () => void };
     let mockGame: any;
     let mockContext: any;
-    let mockScaler: any;
     let sandbox: sinon.SinonSandbox;
     let QKeyCode: number;
     let onKeyUpSpy: any;
@@ -18,16 +17,6 @@ describe("test harness layout", () => {
     before(() => {
         QKeyCode = 81;
         sandbox = sinon.sandbox.create();
-        mockScaler = {
-            getSize: () => {
-                return {
-                    width: 800,
-                    height: 600,
-                    scale: 1,
-                    stageHeightPx: 600,
-                };
-            },
-        };
     });
 
     beforeEach(() => {
@@ -48,7 +37,7 @@ describe("test harness layout", () => {
                 },
             },
         };
-        testHarness = testHarnessDisplay(mockGame, mockContext, mockScaler);
+        testHarness = testHarnessDisplay(mockGame, mockContext);
         testHarness.create();
     });
 
@@ -61,6 +50,16 @@ describe("test harness layout", () => {
             mockContext = {
                 qaMode: {
                     active: true,
+                },
+                scaler: {
+                    getSize: () => {
+                        return {
+                            width: 800,
+                            height: 600,
+                            scale: 1,
+                            stageHeightPx: 600,
+                        };
+                    },
                 },
             };
         });

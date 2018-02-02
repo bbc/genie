@@ -1,12 +1,12 @@
 import { Context } from "../../core/startup";
-import { Scaler, GEL_MIN_RATIO, GEL_MIN_RATIO_RHS, GEL_MIN_RATIO_LHS } from "../../core/scaler";
+import { GEL_MIN_RATIO, GEL_MIN_RATIO_RHS, GEL_MIN_RATIO_LHS } from "../../core/scaler";
 
 export interface QAMode {
     active: boolean;
     testHarnessLayoutDisplayed: boolean;
 }
 
-export function testHarnessDisplay(game: Phaser.Game, context: Context, scaler: Scaler) {
+export function testHarnessDisplay(game: Phaser.Game, context: Context) {
     let graphicsGroup: Phaser.Group;
     let graphics: Phaser.Graphics;
 
@@ -57,7 +57,7 @@ export function testHarnessDisplay(game: Phaser.Game, context: Context, scaler: 
     function gameAreaDimensions() {
         let areaWidth;
         let areaHeight;
-        const size = scaler.getSize();
+        const size = context.scaler.getSize();
 
         if (game.width / game.height >= GEL_MIN_RATIO) {
             areaHeight = game.height / size.scale;

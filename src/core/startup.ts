@@ -61,7 +61,6 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
         game.stage.backgroundColor = "#00f";
 
         promisedGame.resolve(game);
-        testHarnessDisplay(game, context, scaler).create();
     }
 }
 

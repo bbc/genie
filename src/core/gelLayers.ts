@@ -29,10 +29,8 @@ export interface GelLayers {
 export function create(game: Phaser.Game, scaler: Scaler): GelLayers {
     const root = game.add.group(undefined, "gelGroup", true);
     const background = game.add.group(undefined, "gelBackground");
-    const testHarnessLayer = game.add.group(undefined, "testHarnessLayer");
     const foreground = game.add.group(undefined, "gelForeground");
     root.addChild(background);
-    root.addChild(testHarnessLayer);
     root.addChild(foreground);
 
     scaler.onScaleChange.add(scaleBackground);
