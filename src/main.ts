@@ -2,5 +2,14 @@ import "babel-polyfill";
 import "src/lib/phaser";
 
 import { startup } from "./core/startup";
+import { Loadscreen } from "src/components/loadscreen";
 
-startup();
+const transitions = [
+    {
+        name: "load",
+        state: new Loadscreen(),
+        nextScreenName: () => "",
+    },
+];
+
+startup(transitions);
