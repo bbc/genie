@@ -43,7 +43,7 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
         };
         const sequencer = Sequencer.create(game, context, transitions);
 
-        game.stage.backgroundColor = "#00f";
+        game.stage.backgroundColor = "#333";
 
         promisedGame.resolve(game);
     }
