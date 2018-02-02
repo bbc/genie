@@ -1,10 +1,12 @@
-import { drawSomething } from "src/core/drawsomething";
+import "../lib/phaser";
+
 import * as GelLayers from "src/core/gelLayers";
 import { PromiseTrigger } from "src/core/promise-utils";
 import "../lib/phaser";
 import * as Scaler from "src/core/scaler";
 import { testHarnessDisplay, QAMode } from "src/components/test-harness/layout";
 import { parseUrlParams } from "src/lib/parseUrlParams";
+import * as Sequencer from "src/core/sequencer";
 
 export interface Config {
     stageHeightPx: number;
@@ -19,7 +21,7 @@ export interface Context {
     qaMode: QAMode;
 }
 
-export function startup(): Promise<Phaser.Game> {
+export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game> {
     const gmi: Gmi = (window as any).getGMI({});
     const urlParams = parseUrlParams(window.location.search);
     const qaMode: QAMode = {
@@ -54,9 +56,10 @@ export function startup(): Promise<Phaser.Game> {
             gelLayers,
             qaMode,
         };
+        const sequencer = Sequencer.create(game, context, transitions);
 
-        game.stage.backgroundColor = "#000";
-        drawSomething(game, context);
+        game.stage.backgroundColor = "#00f";
+
         promisedGame.resolve(game);
         testHarnessDisplay(game, context, scaler).create();
     }
