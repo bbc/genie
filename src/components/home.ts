@@ -1,26 +1,23 @@
 import { ScreenMap } from "src/core/asset-loader";
-import * as GelLayers from "src/core/gelLayers";
 import * as Scaler from "src/core/scaler";
+import { Screen } from "src/core/screen";
 
-export class Home extends Phaser.State {
-    private keyLookups: { [key: string]: string };
+export class Home extends Screen {
+    private keyLookup: { [key: string]: string };
     private gel: { [key: string]: string };
 
     constructor() {
         super();
     }
-    public init(keyLookups: ScreenMap) {
-        this.keyLookups = keyLookups.title;
-        this.gel = keyLookups.gel;
+
+    public preload() {
+        this.keyLookup = this.context.layout.keyLookups.home;
+        this.gel = this.context.layout.keyLookups.gel;
     }
 
     public create() {
-        const scaler = Scaler.create(600, this.game);
-        const gelLayers = GelLayers.create(this.game, scaler);
-        gelLayers.addToBackground(this.game.add.image(0, 0, this.keyLookups.background));
-        const title = gelLayers.addToBackground(this.game.add.image(0, -130, this.keyLookups.title)) as Phaser.Image;
-        title.anchor.set(0.5, 0.5);
-        const play = gelLayers.addToBackground(this.game.add.button(0, 130, this.gel.play)) as Phaser.Button;
-        play.anchor.set(0.5, 0.5);
+        this.context.layout.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
+        this.context.layout.addToBackground(this.game.add.image(0, -130, this.keyLookup.title));
+        this.context.layout.addToBackground(this.game.add.button(0, 130, this.gel.play));
     }
 }
