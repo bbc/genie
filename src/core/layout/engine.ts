@@ -25,11 +25,12 @@ export function LayoutEngine(game: Phaser.Game): LayoutEngine {
     scaler.onScaleChange.add(scaleBackground);
 
     return {
+        keyLookup,
         addToBackground,
         create,
         removeAll,
         addLookup,
-        keyLookup,
+        getSize: scaler.getSize,
     };
 
     /**

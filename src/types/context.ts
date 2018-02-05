@@ -7,4 +7,5 @@ declare interface Context {
     popupScreens: string[];
    // globalMusic?: Phaser.Sound;
     gameMuted: boolean;
+    qaMode: QAMode;
 }
