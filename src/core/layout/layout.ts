@@ -2,16 +2,16 @@ import * as _ from "lodash";
 import "phaser-ce";
 
 import { AccessibleButton } from "../stubs/accessible-button";
-import gel from "./gel-defaults";
-import { groupLayouts } from "./group-layouts";
-import Group from "./group";
 import { calculateMetrics } from "./calculate-metrics";
+import gel from "./gel-defaults";
+import Group from "./group";
+import { groupLayouts } from "./group-layouts";
 
 export class Layout {
     public buttons: { [s: string]: AccessibleButton };
+    public root: Phaser.Group;
     private groups: { [s: string]: Group };
     private metrics: ViewportMetrics;
-    public root: Phaser.Group;
     private accessibilityManager: AccessibilityManager;
 
     /**

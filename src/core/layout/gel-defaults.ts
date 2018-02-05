@@ -1,9 +1,9 @@
 //TODO can we remove "key" and just use the object's key?
-interface gelDefaults {
+interface GelDefaults {
     [key: string]: { group: string; title: string; key: string; ariaLabel: string };
 }
 
-const config: gelDefaults = {
+const config: GelDefaults = {
     exit: {
         group: "topLeft",
         title: "Exit",
