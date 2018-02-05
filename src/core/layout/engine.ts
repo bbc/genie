@@ -28,7 +28,7 @@ export function LayoutEngine(game: Phaser.Game): LayoutEngine {
         addToBackground,
         create,
         removeAll,
-        addLookup,
+        addLookups,
         keyLookups,
     };
 
@@ -68,7 +68,7 @@ export function LayoutEngine(game: Phaser.Game): LayoutEngine {
         // buttons.removeAll();
     }
 
-    function addLookup(moreLookup: ScreenMap) {
-        Object.assign(keyLookups, moreLookup);
+    function addLookups(moreLookups: ScreenMap) {
+        Object.assign(keyLookups, moreLookups);
     }
 }
