@@ -14,7 +14,7 @@ export function LayoutEngine(game: Phaser.Game): LayoutEngine {
     const background = game.add.group(undefined, "gelBackground");
     const keyLookups: ScreenMap = {};
 
-    const gmi: any = { gameContainerId: "local-game-holder" };
+    const gmi: Gmi = (window as any).getGMI({}); //TODO can't call getGMI twice
 
     //TODO stageHeight should come from config
     const scaler = Scaler.create(600, game);
