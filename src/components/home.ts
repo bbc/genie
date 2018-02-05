@@ -1,3 +1,4 @@
+import { testHarnessDisplay } from "src/components/test-harness/layout";
 import { ScreenMap } from "src/core/asset-loader";
 import * as Scaler from "src/core/scaler";
 import { Screen } from "src/core/screen";
@@ -20,5 +21,6 @@ export class Home extends Screen {
         this.context.layout.addToBackground(this.game.add.image(0, -130, this.keyLookup.title));
         this.context.layout.addToBackground(this.game.add.button(0, 130, this.gel.play));
         this.context.layout.create(["exit", "howToPlay", "play", "settings"], this.gel);
+        testHarnessDisplay(this.game, this.context).create();
     }
 }

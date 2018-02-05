@@ -14,7 +14,7 @@ export function LayoutEngine(game: Phaser.Game): LayoutEngine {
     const background = game.add.group(undefined, "gelBackground");
     const keyLookups: ScreenMap = {};
 
-    const gmi: Gmi = (window as any).getGMI({});
+    const gmi: any = { gameContainerId: "local-game-holder" };
 
     //TODO stageHeight should come from config
     const scaler = Scaler.create(600, game);
@@ -25,11 +25,12 @@ export function LayoutEngine(game: Phaser.Game): LayoutEngine {
     scaler.onScaleChange.add(scaleBackground);
 
     return {
+        keyLookups,
         addToBackground,
         create,
         removeAll,
         addLookups,
-        keyLookups,
+        getSize: scaler.getSize,
     };
 
     /**
