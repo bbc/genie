@@ -19,5 +19,6 @@ export class Home extends Screen {
         this.context.layout.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
         this.context.layout.addToBackground(this.game.add.image(0, -130, this.keyLookup.title));
         this.context.layout.addToBackground(this.game.add.button(0, 130, this.gel.play));
+        this.context.layout.create(["exit", "howToPlay", "play", "settings"], this.gel);
     }
 }
