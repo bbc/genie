@@ -12,7 +12,7 @@ export class Home extends Screen {
     }
 
     public preload() {
-        this.keyLookup = this.context.layout.keyLookups.home;
+        this.keyLookup = this.context.layout.keyLookups[this.game.state.current];
         this.gel = this.context.layout.keyLookups.gel;
     }
 
