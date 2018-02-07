@@ -6,9 +6,9 @@ import { Loadscreen } from "src/components/loadscreen";
 
 const transitions = [
     {
-        name: "load",
+        name: "loadscreen",
         state: new Loadscreen(),
-        nextScreenName: () => "",
+        nextScreenName: () => "next",
     },
 ];
 

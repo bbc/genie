@@ -9,12 +9,10 @@ import * as Scaler from "../scaler";
 
 type PhaserElement = Phaser.Sprite | Phaser.Image | Phaser.BitmapText | Phaser.Group;
 
-export function LayoutEngine(game: Phaser.Game): LayoutEngine {
+export function LayoutEngine(game: Phaser.Game, gmi: Gmi): LayoutEngine {
     const root = game.add.group(undefined, "gelGroup", true);
     const background = game.add.group(undefined, "gelBackground");
     const keyLookup: StringMap = {};
-
-    const gmi: Gmi = (window as any).getGMI({});
 
     //TODO stageHeight should come from config
     const scaler = Scaler.create(600, game);
