@@ -1,7 +1,8 @@
+import "src/lib/phaser";
+
 import { expect } from "chai";
 import * as sinon from "sinon";
 import { testHarnessDisplay } from "src/components/test-harness/layout";
-import "src/lib/phaser";
 
 describe("test harness layout", () => {
     let qaModeActive: boolean;
