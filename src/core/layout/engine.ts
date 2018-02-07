@@ -2,10 +2,10 @@
 import * as _ from "lodash/fp";
 import "phaser-ce";
 
-import { Layout } from "./layout";
+import * as Scaler from "../scaler";
 import { Screen } from "../screen";
 import * as AccessibilityManager from "../stubs/accessibility-manager";
-import * as Scaler from "../scaler";
+import { Layout } from "./layout";
 
 type PhaserElement = Phaser.Sprite | Phaser.Image | Phaser.BitmapText | Phaser.Group;
 

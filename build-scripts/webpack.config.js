@@ -9,7 +9,7 @@ var phaser = path.join(phaserModule, "build/custom/phaser-split.js"),
     p2 = path.join(phaserModule, "build/custom/p2.js");
 
 module.exports = {
-    devtool: "source-map",
+    devtool: "cheap-source-map",
     entry: "./src/main.ts",
     output: {
         devtoolModuleFilenameTemplate: "[absolute-resource-path]",

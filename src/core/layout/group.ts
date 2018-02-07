@@ -1,6 +1,6 @@
 import "phaser-ce";
-
-//import { AccessibleButton } from "../stubs/accessible-button";
+// @ts-ignore
+import * as fp from "lodash/fp";
 import { DebugButton } from "./debug-button";
 
 const horizontal: any = {
@@ -14,6 +14,19 @@ const vertical: any = {
     middle: (pos: number, height: number, pad: number) => pos - height / 2,
     bottom: (pos: number, height: number, pad: number) => pos - (height + pad),
 };
+
+const getGroupPosition = ({ metrics, pos, width, height, scale }: any) => ({
+    x: getGroupX({ metrics, pos, width, scale }),
+    y: getGroupY({ metrics, pos, height, scale }),
+});
+
+const getGroupX = ({ metrics, pos, width, scale }: any) => {
+    const horizontals: any = metrics[pos.v === "middle" ? "safeHorizontals" : "horizontals"];
+    return horizontal[pos.h](horizontals[pos.h], width, metrics.borderPad * scale);
+};
+
+const getGroupY = ({ metrics, pos, height, scale }: any) =>
+    vertical[pos.v]((metrics.verticals as any)[pos.v], height, metrics.borderPad * scale);
 
 class Group extends Phaser.Group {
     private vPos: string;
@@ -54,17 +67,6 @@ class Group extends Phaser.Group {
             position = this.buttons.length;
         }
 
-        // const newButton = this.accessibilityManager.createButton(
-        //     config.title,
-        //     config.ariaLabel,
-        //     { x: 0.5, y: 0.5 },
-        //     1,
-        //     true,
-        //     0,
-        //     0,
-        //     keyLookup[config.key],
-        // );
-
         const testButton: GelSpec = {
             width: 200,
             height: this.metrics.buttonMin,
@@ -79,7 +81,6 @@ class Group extends Phaser.Group {
         this.addAt(newButton.sprite, position);
         this.buttons.push(newButton);
 
-        //TODO below are failing when getting group width
         this.alignChildren();
         this.setGroupPosition();
 
@@ -100,7 +101,7 @@ class Group extends Phaser.Group {
         this.setGroupPosition();
     }
 
-    private alignChildren() {
+    private alignChildren = () => {
         const pos = { x: 0, y: 0 };
 
         const groupWidth = this.width; //Save here as size changes when you move children below
@@ -116,17 +117,22 @@ class Group extends Phaser.Group {
                 pos.x += child.width + this.metrics.buttonPad;
             }
         }, this);
-    }
+    };
 
-    private setGroupPosition() {
-        const horizontals: any = this.metrics[this.vPos === "middle" ? "safeHorizontals" : "horizontals"];
-        this.x = horizontal[this.hPos](horizontals[this.hPos], this.width, this.metrics.borderPad * this.scale.x);
-        this.y = vertical[this.vPos](
-            (this.metrics.verticals as any)[this.vPos],
-            this.height,
-            this.metrics.borderPad * this.scale.y,
-        );
-    }
+    private getSizes = () => ({
+        metrics: this.metrics,
+        pos: { h: this.hPos, v: this.vPos },
+        width: this.width,
+        height: this.height,
+        scale: this.scale.x,
+    });
+
+    private setPos = ({ x, y }: any) => {
+        this.x = x;
+        this.y = y;
+    };
+
+    private setGroupPosition = fp.flow(this.getSizes, getGroupPosition, this.setPos);
 }
 
 export default Group;

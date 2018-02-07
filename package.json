@@ -36,6 +36,7 @@
         "mocha": "^4.1.0",
         "requirejs": "^2.3.5",
         "sinon": "^4.1.5",
+        "tslint": "^5.9.1",
         "tslint-eslint-rules": "^4.1.1",
         "typedoc": "^0.9.0",
         "typescript": "2.7.1",
