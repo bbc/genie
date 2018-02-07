@@ -1,3 +1,5 @@
+import * as _ from "lodash";
+
 import { loadAssets, Pack, PackList, ScreenMap } from "../core/asset-loader";
 import { Screen } from "../core/screen";
 import { testHarnessDisplay } from "src/components/test-harness/layout";
@@ -24,8 +26,11 @@ export class Loadscreen extends Screen {
     }
 
     public preload() {
-        loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress).then(keyLookups => {
+        loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress.bind(this)).then(keyLookups => {
             // do something with keyLookups
+            if (this.context.qaMode) {
+                dumpToConsole(keyLookups);
+            }
             this.exit({});
         });
     }
@@ -38,5 +43,19 @@ export class Loadscreen extends Screen {
 
     private updateLoadProgress(progress: number) {
         // use progress to update loading bar
+        if (this.context.qaMode.active) {
+            console.log(progress);
+        }
     }
+}
+
+function dumpToConsole(keyLookups: ScreenMap) {
+    const lines: any = _.flatten([
+        "Loaded assets:",
+        _.flatMap(keyLookups, (keyMap, screenId) => [
+            `    ${screenId}:`,
+            _.map(keyMap, (path, key) => `        ${key}: ${path}`),
+        ]),
+    ]);
+    console.log(_.join(lines, "\n"));
 }
