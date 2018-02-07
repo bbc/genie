@@ -5,12 +5,12 @@ import * as sinon from "sinon";
 
 const TEST_DIV_ID = "test-div";
 
-export function screenDef(name: string = "my name"): ScreenDef {
+export function screenDef(name: string = "__screen_id__"): ScreenDef {
     return {
         name,
         state: screen(),
-        nextScreenName: _.constant(name)
-    }
+        nextScreenName: _.constant(name),
+    };
 }
 
 export function screen(): Screen {
@@ -32,9 +32,7 @@ export function installMockGetGmi(propertiesToMerge: any = {}) {
 export function uninstallMockGetGmi() {
     try {
         document.body.removeChild(getGameHolderDiv());
-    }
-    catch (e) {
-    }
+    } catch (e) {}
 }
 
 export function getGameHolderDiv() {

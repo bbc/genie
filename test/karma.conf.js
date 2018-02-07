@@ -25,7 +25,19 @@ module.exports = function(config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: false,
-        browsers: ["PhantomJS"],
+        browsers: ["PhantomJSNoSecurity"],
+        customLaunchers: {
+            PhantomJSNoSecurity: {
+                base: "PhantomJS",
+                options: {
+                    settings: {
+                        // Enables loading JSON data urls:
+                        webSecurityEnabled: false,
+                    },
+                }
+            },
+        },
+
         mime: {
             "text/x-typescript": ["ts", "tsx"],
         },

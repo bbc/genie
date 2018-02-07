@@ -110,7 +110,11 @@ export function loadAssets(
 
     function getMissingScreens(): PackList {
         const missingScreenList: PackList = {};
-        const missingScreens: string[] = Object.keys(game.state.states).slice(1);
+        // For loading based on screen ids we'll ignore the "default" state and anything starting with "__".
+        const missingScreens: string[] = _.filter(
+            _.keys(game.state.states),
+            k => k != "default" && !_.startsWith(k, "__"),
+        );
         missingScreens.forEach((key: string) => {
             if (!gameAssetPack.hasOwnProperty(key) && loadscreenPack.key !== key) {
                 missingScreenList[key] = { url: key + ".json" };

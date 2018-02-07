@@ -1,8 +1,7 @@
 import "../lib/phaser";
-import { LayoutEngine } from "src/core/layout/engine"
+import { LayoutEngine } from "src/core/layout/engine";
 import { PromiseTrigger } from "src/core/promise-utils";
 import * as Sequencer from "src/core/sequencer";
-
 
 export interface Config {
     stageHeightPx: number;
@@ -31,15 +30,14 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
     return promisedGame;
 
     function onStarted(config: Config) {
-
-         const layout = LayoutEngine(game);
+        const layout = LayoutEngine(game);
 
         // Phaser is now set up and we can use all game properties.
         const context: Context = {
             gmi,
             layout,
             popupScreens: [],
-            gameMuted: true
+            gameMuted: true,
         };
         const sequencer = Sequencer.create(game, context, transitions);
 
@@ -69,7 +67,7 @@ class Startup extends Phaser.State {
     }
 
     public create() {
-        this.onStarted(this.game.cache.getJSON(CONFIG_KEY));
+        this.onStarted({} as Config /*this.game.cache.getJSON(CONFIG_KEY)*/);
     }
 }
 
