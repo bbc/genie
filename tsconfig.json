@@ -4,10 +4,12 @@
         "target": "es6",
         "strict": true,
         "sourceMap": true,
-        "baseUrl": "."
+        "baseUrl": ".",
+        "strictPropertyInitialization": false
     },
     "awesomeTypescriptLoaderOptions": {
         "useBabel": true,
+        "useCache": true,
         "babelOptions": {
             "babelrc": false,
             "presets": [["env", {"targets": {"ie": 11}}]],

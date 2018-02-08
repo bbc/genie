@@ -1,5 +1,5 @@
 import { loadAssets, Pack, PackList, ScreenMap } from "../core/asset-loader";
-import "../lib/phaser";
+import { Screen } from "../core/screen";
 
 const MASTER_PACK_KEY: string = "MasterAssetPack";
 const GEL_PACK_KEY: string = "GelAssetPack";
@@ -13,7 +13,7 @@ const loadscreenPack: Pack = {
     url: "loader/loadscreen-pack.json",
 };
 
-export class Loadscreen extends Phaser.State {
+export class Loadscreen extends Screen {
     /**
      * Placeholder Loadscreen for development
      * Example Usage
@@ -23,14 +23,13 @@ export class Loadscreen extends Phaser.State {
     }
 
     public preload() {
-        loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress).then(keyLookups => {
-            // do something with keyLookups
+        loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress.bind(this)).then(keyLookups => {
+            this.context.layout.addLookups(keyLookups);
+            this.exit({});
         });
     }
 
-    public create() {
-        this.game.add.image(50, 50, "logo");
-    }
+    public create() {}
 
     private updateLoadProgress(progress: number) {
         // use progress to update loading bar
