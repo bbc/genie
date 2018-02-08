@@ -2,7 +2,7 @@
     "title": [
         {
             "type": "image",
-            "key": "cbbc_logo",
+            "key": "logo",
             "url": "shared/cbbc_logo.png",
             "overwrite": false
         }

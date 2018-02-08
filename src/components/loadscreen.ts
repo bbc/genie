@@ -50,7 +50,7 @@ export class Loadscreen extends Screen {
 }
 
 function dumpToConsole(keyLookups: ScreenMap) {
-    const lines = _.flatten([
+    const lines = _.flattenDeep([
         "Loaded assets:",
         _.flatMap(keyLookups, (keyMap, screenId) => [
             `    ${screenId}:`,

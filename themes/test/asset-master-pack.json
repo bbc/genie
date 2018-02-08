@@ -1,0 +1,16 @@
+{
+    "title": [
+        {
+            "type": "image",
+            "key": "logo",
+            "url": "shared/cbeebies_logo.png",
+            "overwrite": false
+        },
+        {
+            "type": "audio",
+            "key": "vo_gamestart",
+            "urls": ["shared/vo_asr_gamestart.ogg", "shared/vo_asr_gamestart.m4a"],
+            "autoDecode": true
+        }
+    ]
+}
