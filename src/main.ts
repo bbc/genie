@@ -7,7 +7,7 @@ import { startup } from "./core/startup";
 
 const transitions = [
     {
-        name: "load",
+        name: "loadscreen",
         state: new Loadscreen(),
         nextScreenName: () => "home",
     },
