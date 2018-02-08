@@ -74,7 +74,7 @@ class Startup extends Phaser.State {
     }
 
     public create() {
-        this.onStarted(this.game.cache.getJSON(CONFIG_KEY));
+        this.onStarted({} as Config /* this.game.cache.getJSON(CONFIG_KEY) */);
     }
 }
 
