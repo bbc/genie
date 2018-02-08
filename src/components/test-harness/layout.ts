@@ -1,4 +1,4 @@
-import { GEL_SAFE_FRAME_RATIO, GEL_MIN_RATIO_RHS, GEL_MIN_RATIO_LHS } from "../../core/scaler";
+import { GEL_MIN_RATIO_LHS, GEL_MIN_RATIO_RHS, GEL_SAFE_FRAME_RATIO } from "../../core/scaler";
 
 export function testHarnessDisplay(game: Phaser.Game, context: Context) {
     let graphicsGroup: Phaser.Group;

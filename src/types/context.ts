@@ -3,9 +3,9 @@ declare interface Context {
     //accessibilityManager: AccessibilityManager;
     //inState: GameState; // Todo: make readonly?
     //sequencer: Sequencer;
-    layout: LayoutEngine,
+    layout: LayoutEngine;
     popupScreens: string[];
-   // globalMusic?: Phaser.Sound;
+    // globalMusic?: Phaser.Sound;
     gameMuted: boolean;
     qaMode: QAMode;
 }

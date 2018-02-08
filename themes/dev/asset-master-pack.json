@@ -1,9 +1,15 @@
 {
-    "title": [
+    "home": [
         {
             "type": "image",
-            "key": "logo",
-            "url": "shared/cbbc_logo.png",
+            "key": "title",
+            "url": "shared/title.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "background",
+            "url": "shared/background.png",
             "overwrite": false
         }
     ]

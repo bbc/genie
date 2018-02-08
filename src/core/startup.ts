@@ -1,8 +1,8 @@
 import "../lib/phaser";
 import { LayoutEngine } from "src/core/layout/engine";
 import { PromiseTrigger } from "src/core/promise-utils";
-import { parseUrlParams } from "src/lib/parseUrlParams";
 import * as Sequencer from "src/core/sequencer";
+import { parseUrlParams } from "src/lib/parseUrlParams";
 
 export interface Config {
     stageHeightPx: number;
@@ -20,7 +20,7 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
     hookErrors(gmi.gameContainerId);
 
     const phaserConfig: Phaser.IGameConfig = {
-        width: 800,
+        width: 1400,
         height: 600,
         renderer: Phaser.AUTO,
         antialias: true,
@@ -47,9 +47,7 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
             qaMode,
         };
         const sequencer = Sequencer.create(game, context, transitions);
-
         game.stage.backgroundColor = "#333";
-
         promisedGame.resolve(game);
     }
 }

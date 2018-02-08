@@ -2,17 +2,17 @@
 import * as _ from "lodash/fp";
 import "phaser-ce";
 
-import { Layout } from "./layout";
+import * as Scaler from "../scaler";
 import { Screen } from "../screen";
 import * as AccessibilityManager from "../stubs/accessibility-manager";
-import * as Scaler from "../scaler";
+import { Layout } from "./layout";
 
 type PhaserElement = Phaser.Sprite | Phaser.Image | Phaser.BitmapText | Phaser.Group;
 
 export function LayoutEngine(game: Phaser.Game, gmi: Gmi): LayoutEngine {
     const root = game.add.group(undefined, "gelGroup", true);
     const background = game.add.group(undefined, "gelBackground");
-    const keyLookup: StringMap = {};
+    const keyLookups: ScreenMap = {};
 
     //TODO stageHeight should come from config
     const scaler = Scaler.create(600, game);
@@ -23,11 +23,11 @@ export function LayoutEngine(game: Phaser.Game, gmi: Gmi): LayoutEngine {
     scaler.onScaleChange.add(scaleBackground);
 
     return {
-        keyLookup,
+        keyLookups,
         addToBackground,
         create,
         removeAll,
-        addLookup,
+        addLookups,
         getSize: scaler.getSize,
     };
 
@@ -41,7 +41,7 @@ export function LayoutEngine(game: Phaser.Game, gmi: Gmi): LayoutEngine {
      * @param buttons - array of standard button names to include. See {@link ./gel-defaults.ts} for available names
      * @returns {Layout}
      */
-    function create(buttons: string[]): Layout {
+    function create(buttons: string[], keyLookup: { [s: string]: string }): Layout {
         const layout = new Layout(game, scaler, accessibilityManager, keyLookup, buttons);
 
         addToBackground(layout.root);
@@ -67,7 +67,7 @@ export function LayoutEngine(game: Phaser.Game, gmi: Gmi): LayoutEngine {
         // buttons.removeAll();
     }
 
-    function addLookup(moreLookup: StringMap) {
-        _.assign(keyLookup, moreLookup);
+    function addLookups(moreLookups: ScreenMap) {
+        Object.assign(keyLookups, moreLookups);
     }
 }
