@@ -1,9 +1,15 @@
 {
-    "title": [
+    "home": [
         {
             "type": "image",
-            "key": "logo",
+            "key": "title",
             "url": "shared/cbeebies_logo.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "background",
+            "url": "shared/background.png",
             "overwrite": false
         },
         {
