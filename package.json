@@ -13,7 +13,7 @@
         "@types/lodash": "^4.14.92",
         "babel-polyfill": "^6.26.0",
         "lodash": "^4.17.4",
-        "phaser-ce": "^2.9.4",
+        "phaser-ce": "^2.10",
         "script-loader": "^0.7.2"
     },
     "devDependencies": {

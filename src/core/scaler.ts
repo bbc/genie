@@ -2,6 +2,7 @@ export const GEL_MIN_RATIO_LHS = 4;
 export const GEL_MIN_RATIO_RHS = 3;
 export const GEL_SAFE_FRAME_RATIO = GEL_MIN_RATIO_LHS / GEL_MIN_RATIO_RHS;
 import "phaser-ce";
+
 // @ts-ignore
 import * as fp from "lodash/fp";
 
