@@ -44,13 +44,13 @@ export class Loadscreen extends Screen {
     private updateLoadProgress(progress: number) {
         // use progress to update loading bar
         if (this.context.qaMode.active) {
-            console.log(progress);
+            console.log("Loader progress:", progress);
         }
     }
 }
 
 function dumpToConsole(keyLookups: ScreenMap) {
-    const lines: any = _.flatten([
+    const lines = _.flatten([
         "Loaded assets:",
         _.flatMap(keyLookups, (keyMap, screenId) => [
             `    ${screenId}:`,
