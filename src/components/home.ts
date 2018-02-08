@@ -20,7 +20,7 @@ export class Home extends Screen {
         this.context.layout.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
         this.context.layout.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
         this.context.layout.addToBackground(this.game.add.button(0, 0, this.gel.play)); // remove when layout handles this
-        this.context.layout.create(["exit", "howToPlay", "play", "settings", "soundOff"], this.gel);
+        this.context.layout.create(["exit", "howToPlay", "play", "soundOff", "settings"], this.gel);
         testHarnessDisplay(this.game, this.context).create();
     }
 }
