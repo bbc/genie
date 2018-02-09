@@ -59,7 +59,7 @@ export class Layout {
         scaler.onScaleChange.add(this.resize, this);
     }
 
-    public setAction = (button: string, callback: Function) => this.buttons[button].onInputUp.add(callback, this);
+    public setAction = (button: string, callback: () => any) => this.buttons[button].onInputUp.add(callback, this);
 
     public addToGroup = (groupName: string, item: any, position?: number) =>
         this.groups[groupName].addToGroup(item, position);

@@ -1,7 +1,7 @@
 import { LayoutFactory } from "src/core/layout/factory";
 import { PromiseTrigger } from "src/core/promise-utils";
 import * as Sequencer from "src/core/sequencer";
-import "../lib/phaser";
+import { parseUrlParams } from "src/lib/parseUrlParams";
 
 export interface Config {
     stageHeightPx: number;
@@ -11,10 +11,15 @@ export interface Config {
 
 export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game> {
     const gmi: Gmi = (window as any).getGMI({});
+    const urlParams = parseUrlParams(window.location.search);
+    const qaMode: QAMode = {
+        active: urlParams.qaMode ? urlParams.qaMode : false,
+        testHarnessLayoutDisplayed: false,
+    };
     hookErrors(gmi.gameContainerId);
 
     const phaserConfig: Phaser.IGameConfig = {
-        width: 800,
+        width: 1400,
         height: 600,
         renderer: Phaser.AUTO,
         antialias: true,
@@ -35,14 +40,13 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
         // Phaser is now set up and we can use all game properties.
         const context: Context = {
             gmi,
-            layout: layoutFactory,
+            layoutFactory,
             popupScreens: [],
             gameMuted: true,
+            qaMode,
         };
         const sequencer = Sequencer.create(game, context, transitions);
-
         game.stage.backgroundColor = "#333";
-
         promisedGame.resolve(game);
     }
 }

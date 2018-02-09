@@ -23,16 +23,13 @@ export class Loadscreen extends Screen {
     }
 
     public preload() {
-        loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress).then(keyLookups => {
-            // do something with keyLookups
+        loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress.bind(this)).then(keyLookups => {
+            this.context.layoutFactory.addLookups(keyLookups);
             this.exit({});
         });
     }
 
-    public create() {
-        this.game.add.image(400, 50, "logo");
-        const tempLayout = this.context.layoutFactory.create(["achievements", "exit", "howToPlay", "play", "soundOff", "settings"]);
-    }
+    public create() {}
 
     private updateLoadProgress(progress: number) {
         // use progress to update loading bar

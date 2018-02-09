@@ -5,6 +5,7 @@ declare interface Context {
     //sequencer: Sequencer;
     layoutFactory: LayoutFactory;
     popupScreens: string[];
-   // globalMusic?: Phaser.Sound;
+    // globalMusic?: Phaser.Sound;
     gameMuted: boolean;
+    qaMode: QAMode;
 }
