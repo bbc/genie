@@ -1,4 +1,4 @@
-declare interface LayoutEngine {
+declare interface LayoutFactory {
     keyLookup: StringMap;
     create(buttons: string[]): any; //TODO - end should be Layout but the below import breaks the declaration.
     addToBackground(object: PIXI.DisplayObject): PIXI.DisplayObject;

@@ -31,7 +31,7 @@ export class Loadscreen extends Screen {
 
     public create() {
         this.game.add.image(400, 50, "logo");
-        const tempLayout = this.context.layout.create(["achievements", "exit", "howToPlay", "play", "soundOff", "settings"]);
+        const tempLayout = this.context.layoutFactory.create(["achievements", "exit", "howToPlay", "play", "soundOff", "settings"]);
     }
 
     private updateLoadProgress(progress: number) {
