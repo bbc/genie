@@ -3,28 +3,29 @@
 ## To build:
 
 `npm run build` which runs `webpack --config build-scripts/webpack.config.js`
-`npm run build-watch` runs the compiler and creates a bundle. This means you can view index.html in a browser without having to run a webserver.
-
 
 ## To view:
 
-`npm start` then navigate to localhost:8080
+`npm start` then navigate to http://localhost:8080/
 
 Alternatively load index.html as a file URL (requires
 --allow-file-access-from-files in Chrome.)
 
+To view in QA mode, add the query string "qaMode=true", then press the "q" key to see the overlay. (e.g. http://localhost:8080/?qaMode=true).
+
+
 ## Watcher:
 
-`npm run watch` will run webpack in watch mode.
-
-Typescript files are compiled and bundled automatically on save, while the
-watcher is active. Karma tests are also automatically ran.
+`npm run build-watch` will automatically compile the Typescript and run a webpack build when the code is changed. Running this means you can view index.html in a browser without having to run a webserver.
 
 ## To test:
 
 `npm test` will run tests using karma.
 
+`npm run test-watch` will automatically re-run the tests when either the production code or the tests are modified.
+
 ### Potential Issues
+
 If you have an error running tests similar to: 
 ```
  Error during loading "D:\Work\childrens-games-genie\node_modules/karma-phantomjs-launcher" plugin:
