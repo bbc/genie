@@ -6,7 +6,8 @@ import "phaser-ce";
 
 import { Layout } from "src/core/layout/layout";
 
-describe.only("Layout", () => {
+describe("Layout", () => {
+    const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame: any;
     let mockScaler: any;
     let mockAccessibilityManager: any;
@@ -15,56 +16,108 @@ describe.only("Layout", () => {
     beforeEach(() => {
         mock.installMockGetGmi();
 
-        // mockGame = {
-        //     // add: sinon.spy(),
-        //     start: sinon.spy(),
-        //     add: { group: sinon.spy(() => ({ addChild: sinon.spy() })) },
-        //     renderer: { resolution: 800 },
-        //     scale: {
-        //         setGameSize: sinon.spy(),
-        //         scaleMode: sinon.spy(),
-        //         onSizeChange: { add: sinon.spy() },
-        //         getParentBounds: sinon.spy(),
-        //     },
-        // };
+        class MockGame extends Phaser.Game {}
 
-        mockGame = sinon.stub(Phaser);
+        mockGame = new MockGame();
+        mockGame.world = {
+            addChild: sinon.spy(),
+            children: [],
+        };
+        mockGame.add = {
+            sprite: sinon.spy(() => new Phaser.Sprite(mockGame, 0, 0)),
+            group: sinon.spy(),
+        };
+        mockGame.renderer = { resolution: 1 };
+        mockGame.input = { interactiveItems: { add: sinon.spy() } };
 
-        mockGame.scale = { setGameSize: sinon.spy() };
-
-        mockGame.add = { group: sinon.spy(() => ({ addChild: sinon.spy() })) },
-
-        // mockGame = {
-        //     // add: sinon.spy(),
-        //     start: sinon.spy(),
-        //     add: { group: sinon.spy(() => ({ addChild: sinon.spy() })) },
-        //     renderer: { resolution: 800 },
-        //     scale: {
-        //         setGameSize: sinon.spy(),
-        //         scaleMode: sinon.spy(),
-        //         onSizeChange: { add: sinon.spy() },
-        //         getParentBounds: sinon.spy(),
-        //     },
-        // };
-
-        mockScaler = { getSize: sinon.spy(() => ({ width: 200, height: 200 })) };
+        mockScaler = {
+            getSize: sinon.spy(() => ({ width: 200, height: 200 })),
+            onScaleChange: { add: sinon.spy() },
+        };
         mockAccessibilityManager = {};
         mockKeyLookup = sinon.spy();
-
-        //layout = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, ["exit"]);
     });
 
     afterEach(mock.uninstallMockGetGmi);
 
-    it("should create 9 GEL groups", done => {
-        //layout.create("exit");
+    it("should add the correct number of GEL buttons for a given config", done => {
+        const layout1 = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, ["achievements"]);
+        expect(Object.keys(layout1.buttons).length).to.eql(1);
 
-        //layout.removeAll();
-        //expect(mockGame.scale.setGameSize.calledWith(undefined, "gelBackground")).to.eql(true);
+        const layout2 = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, [
+            "play",
+            "soundOff",
+            "settings",
+        ]);
+        expect(Object.keys(layout2.buttons).length).to.eql(3);
 
-        //console.log("GROUPS: " + mockGame.scale.setGameSize.callCount);
+        const layout3 = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, [
+            "achievements",
+            "exit",
+            "howToPlay",
+            "play",
+            "soundOff",
+            "settings",
+        ]);
+        expect(Object.keys(layout3.buttons).length).to.eql(6);
 
-        //expect(mockGame.scale.setGameSize.callCount).to.eql(1);
+        done();
+    });
+
+    it("Should create 9 Gel Groups", done => {
+        const layout = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, []);
+        expect(layout.root.children.length).to.eql(9);
+        done();
+    });
+
+    it("Should add items to the correct group", done => {
+        const layout = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, []);
+        const testElement = new Phaser.Sprite(mockGame, 0, 0) as any;
+
+        layout.addToGroup("middleRight", testElement);
+
+        const groupsWithChildren: any = layout.root.children.filter((element: any) => element.length);
+
+        expect(groupsWithChildren.length).to.eql(1);
+        expect(groupsWithChildren[0].name).to.eql("middleRight");
+
+        done();
+    });
+
+    it("Should correctly insert an item using the index position property", done => {
+        const layout = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, []);
+        const testElement = new Phaser.Sprite(mockGame, 0, 0) as any;
+        testElement.randomKey = randomKey;
+
+        layout.addToGroup("topLeft", new Phaser.Sprite(mockGame, 0, 0));
+        layout.addToGroup("topLeft", new Phaser.Sprite(mockGame, 0, 0));
+        layout.addToGroup("topLeft", new Phaser.Sprite(mockGame, 0, 0));
+
+        layout.addToGroup("topLeft", testElement, 2);
+
+        const leftTopGroup: any = layout.root.children.find((element: any) => element.name === "topLeft");
+        expect(leftTopGroup.children[2].randomKey).to.eql(randomKey);
+
+        done();
+    });
+
+    it("Should set button callbacks using the 'setAction' method", done => {
+        const layout = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, [
+            "achievements",
+            "exit",
+            "settings",
+        ]);
+
+        const testAction = sinon.spy();
+
+        layout.setAction("exit", testAction);
+
+        layout.buttons.exit.events.onInputUp.dispatch();
+        layout.buttons.exit.events.onInputUp.dispatch();
+        layout.buttons.exit.events.onInputUp.dispatch();
+
+        expect(testAction.callCount).to.eql(3);
+
         done();
     });
 });

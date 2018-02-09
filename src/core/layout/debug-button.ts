@@ -13,7 +13,33 @@ const gelStyle: Phaser.PhaserTextStyle = {
 };
 
 export class DebugButton {
-    public sprite: Phaser.Image;
+    public sprite: Phaser.Sprite;
+
+    /**
+     * remaps event add calls to the debug sprite
+     */
+    get onInputUp() {
+        const context = this;
+        return {
+            add(callback: any, thisVal: any) {
+                context.sprite.events.onInputUp.add(callback, thisVal);
+            },
+        };
+    }
+
+    /**
+     * remaps event calls to the debug sprite
+     */
+    get events() {
+        const context = this;
+        return {
+            onInputUp: {
+                dispatch() {
+                    context.sprite.events.onInputUp.dispatch();
+                },
+            },
+        };
+    }
 
     constructor(game: Phaser.Game, spec: GelSpec) {
         const backdrop = new Phaser.Graphics(game)
@@ -28,7 +54,7 @@ export class DebugButton {
             .endFill()
             .generateTexture();
 
-        this.sprite = game.add.image(0, 0, backdrop);
+        this.sprite = game.add.sprite(0, 0, backdrop);
         this.sprite.anchor.setTo(0.5, 0.5);
 
         this.sprite.inputEnabled = true;

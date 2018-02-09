@@ -45,7 +45,7 @@ class Group extends Phaser.Group {
         accessibilityManager: AccessibilityManager,
         vertical?: boolean,
     ) {
-        super(game, parent);
+        super(game, parent, fp.camelCase([vPos, hPos, vertical ? "v" : ""].join(" ")));
 
         this.game = game;
 
