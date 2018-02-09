@@ -9,7 +9,7 @@ export interface Config {
     theme: any;
 }
 
-export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game> {
+export function startup(transitions: ScreenDef[]): Promise<Phaser.Game> {
     const gmi: Gmi = (window as any).getGMI({});
     const urlParams = parseUrlParams(window.location.search);
     const qaMode: QAMode = {

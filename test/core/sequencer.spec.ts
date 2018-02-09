@@ -7,7 +7,7 @@ import * as Sequencer from "src/core/sequencer";
 describe("Sequencer", () => {
     let sequencer: any;
     let mockGame: any;
-    let next: Sequencer.NextScreenFunction;
+    let next: NextScreenFunction;
     let mockContext: any = {
         inState: "inState",
     };

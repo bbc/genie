@@ -1,5 +1,4 @@
 import * as _ from "lodash";
-import { ScreenDef } from "src/core/sequencer";
 import { Screen } from "src/core/screen";
 import * as sinon from "sinon";
 
@@ -9,8 +8,8 @@ export function screenDef(name: string = "my name"): ScreenDef {
     return {
         name,
         state: screen(),
-        nextScreenName: _.constant(name)
-    }
+        nextScreenName: () => name,
+    };
 }
 
 export function screen(): Screen {
@@ -32,9 +31,7 @@ export function installMockGetGmi(propertiesToMerge: any = {}) {
 export function uninstallMockGetGmi() {
     try {
         document.body.removeChild(getGameHolderDiv());
-    }
-    catch (e) {
-    }
+    } catch (e) {}
 }
 
 export function getGameHolderDiv() {

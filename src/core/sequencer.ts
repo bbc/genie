@@ -3,30 +3,6 @@ import "phaser-ce";
 
 import { Screen } from "./screen";
 
-export type GameState = TransientState & PersistentState;
-
-export interface TransientState {
-    transient: any;
-}
-
-export interface PersistentState {
-    persistent: any;
-}
-
-export type GameStateUpdate = GameState | TransientState | PersistentState | {};
-
-export interface Sequencer {
-    getTransitions(): ScreenDef[];
-}
-
-export type NextScreenFunction = (state: GameStateUpdate) => string;
-
-export interface ScreenDef {
-    name: string;
-    state: Screen;
-    nextScreenName: NextScreenFunction;
-}
-
 export function create(game: Phaser.Game, context: Context, transitions: ScreenDef[]): Sequencer {
     let currentScreen: ScreenDef = transitions[0];
     const self = {
