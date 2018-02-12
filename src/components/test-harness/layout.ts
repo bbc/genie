@@ -1,4 +1,4 @@
-import { GEL_MIN_RATIO_LHS, GEL_MIN_RATIO_RHS, GEL_SAFE_FRAME_RATIO } from "../../core/scaler";
+import { GEL_MIN_RATIO_WIDTH, GEL_MIN_RATIO_HEIGHT, GEL_SAFE_FRAME_RATIO } from "../../core/scaler";
 
 export function testHarnessDisplay(game: Phaser.Game, context: Context) {
     let graphicsGroup: Phaser.Group;
@@ -18,14 +18,17 @@ export function testHarnessDisplay(game: Phaser.Game, context: Context) {
     function toggle() {
         if (context.qaMode.testHarnessLayoutDisplayed) {
             hide();
+            console.log("Layout Test Harness Hidden");
         } else {
             show();
+            console.log("Layout Test Harness Displayed");
         }
     }
 
     function show() {
         drawGameArea();
         drawOuterPadding();
+        context.layout.addToBackground(graphicsGroup);
         context.qaMode.testHarnessLayoutDisplayed = true;
     }
 
@@ -36,7 +39,6 @@ export function testHarnessDisplay(game: Phaser.Game, context: Context) {
         graphics.beginFill(0x32cd32, 0.5);
         graphics.drawRect(-gameAreaWidth * 0.5, -gameAreaHeight * 0.5, gameAreaWidth, gameAreaHeight);
         graphicsGroup.add(graphics);
-        context.layout.addToBackground(graphicsGroup);
     }
 
     function drawOuterPadding() {
@@ -47,6 +49,10 @@ export function testHarnessDisplay(game: Phaser.Game, context: Context) {
         const gameTopEdge = -size.height * 0.5 / size.scale + paddingWidth * 0.5;
         const gameRightEdge = size.width * 0.5 / size.scale - paddingWidth * 0.5;
         const gameBottomEdge = size.height * 0.5 / size.scale - paddingWidth * 0.5;
+
+        console.log("paddingWidth: ", paddingWidth);
+        console.log("screenWidth: ", window.innerWidth);
+        console.log("screenHeight: ", window.innerHeight);
 
         graphics.lineStyle(paddingWidth, 0xffff00, 0.5);
         graphics.moveTo(gameLeftEdge, gameTopEdge);
@@ -65,7 +71,7 @@ export function testHarnessDisplay(game: Phaser.Game, context: Context) {
 
     function gameAreaDimensions() {
         const size = context.layout.getSize();
-        const areaWidth = size.stageHeightPx / GEL_MIN_RATIO_RHS * GEL_MIN_RATIO_LHS;
+        const areaWidth = size.stageHeightPx / GEL_MIN_RATIO_HEIGHT * GEL_MIN_RATIO_WIDTH;
         const areaHeight = size.stageHeightPx;
 
         return [areaWidth, areaHeight];
@@ -73,16 +79,8 @@ export function testHarnessDisplay(game: Phaser.Game, context: Context) {
 
     function getPaddingWidth() {
         const size = context.layout.getSize();
-        const landscape = size.width > size.height;
         const gelPaddingWidthPercentage = 0.02;
-        let paddingWidth: number;
 
-        if (landscape) {
-            paddingWidth = size.width * gelPaddingWidthPercentage;
-        } else {
-            paddingWidth = size.height * gelPaddingWidthPercentage;
-        }
-
-        return paddingWidth;
+        return Math.max(size.width, size.height) * gelPaddingWidthPercentage;
     }
 }
