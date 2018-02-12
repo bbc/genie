@@ -8,7 +8,7 @@ declare interface AccessibilityManager {
         x: number,
         y: number,
         key: string,
-        callback?: Function,
+        callback?: () => any,
         callbackContext?: Phaser.State,
     ): any;
     teardown(): void;
