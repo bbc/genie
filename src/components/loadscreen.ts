@@ -1,3 +1,5 @@
+import * as _ from "lodash";
+
 import { loadAssets, Pack, PackList, ScreenMap } from "../core/asset-loader";
 import { Screen } from "../core/screen";
 
@@ -25,6 +27,9 @@ export class Loadscreen extends Screen {
     public preload() {
         loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress.bind(this)).then(keyLookups => {
             this.context.layout.addLookups(keyLookups);
+            if (this.context.qaMode.active) {
+                dumpToConsole(keyLookups);
+            }
             this.exit({});
         });
     }
@@ -33,5 +38,19 @@ export class Loadscreen extends Screen {
 
     private updateLoadProgress(progress: number) {
         // use progress to update loading bar
+        if (this.context.qaMode.active) {
+            console.log("Loader progress:", progress);
+        }
     }
+}
+
+function dumpToConsole(keyLookups: ScreenMap) {
+    const lines = _.flattenDeep([
+        "Loaded assets:",
+        _.flatMap(keyLookups, (keyMap, screenId) => [
+            `    ${screenId}:`,
+            _.map(keyMap, (path, key) => `        ${key}: ${path}`),
+        ]),
+    ]);
+    console.log(_.join(lines, "\n"));
 }
