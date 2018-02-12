@@ -32,7 +32,7 @@ export function testHarnessDisplay(game: Phaser.Game, context: Context) {
         graphics.drawRect(0, 0, gameAreaWidth, gameAreaHeight);
         graphicsGroup.add(graphics);
         center(graphicsGroup);
-        context.layout.addToBackground(graphicsGroup);
+        context.layoutFactory.addToBackground(graphicsGroup);
         context.qaMode.testHarnessLayoutDisplayed = true;
     }
 
@@ -51,7 +51,7 @@ export function testHarnessDisplay(game: Phaser.Game, context: Context) {
     function gameAreaDimensions() {
         let areaWidth;
         let areaHeight;
-        const size = context.layout.getSize();
+        const size = context.layoutFactory.getSize();
 
         if (game.width / game.height >= GEL_SAFE_FRAME_RATIO) {
             areaHeight = game.height / size.scale;

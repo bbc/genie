@@ -9,7 +9,7 @@ import { Layout } from "./layout";
 
 type PhaserElement = Phaser.Sprite | Phaser.Image | Phaser.BitmapText | Phaser.Group;
 
-export function LayoutFactory(game: Phaser.Game): LayoutEngine {
+export function LayoutFactory(game: Phaser.Game): LayoutFactory {
     const root = game.add.group(undefined, "gelGroup", true);
     const background = game.add.group(undefined, "gelBackground");
     const keyLookups: ScreenMap = {};
