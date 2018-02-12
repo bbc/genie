@@ -1,4 +1,4 @@
-import { GEL_MIN_RATIO_WIDTH, GEL_MIN_RATIO_HEIGHT, GEL_SAFE_FRAME_RATIO } from "../../core/scaler";
+import { GEL_MIN_RATIO_HEIGHT, GEL_MIN_RATIO_WIDTH } from "../../core/scaler";
 
 export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
     let graphicsGroup: Phaser.Group;

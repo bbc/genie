@@ -1,4 +1,4 @@
-import { loadAssets, Pack, PackList, ScreenMap } from "../core/asset-loader";
+import { loadAssets, Pack, PackList } from "../core/asset-loader";
 import { Screen } from "../core/screen";
 
 const MASTER_PACK_KEY: string = "MasterAssetPack";

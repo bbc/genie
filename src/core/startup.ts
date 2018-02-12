@@ -45,7 +45,7 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
             gameMuted: true,
             qaMode,
         };
-        const sequencer = Sequencer.create(game, context, transitions);
+        Sequencer.create(game, context, transitions);
         game.stage.backgroundColor = "#333";
         promisedGame.resolve(game);
     }
@@ -64,7 +64,7 @@ class Startup extends Phaser.State {
 
         // All asset paths are relative to the location of the config.json:
         const theme = gmi.embedVars.configPath;
-        const [configDir, configFile] = theme.split(/([^/]+$)/, 2);
+        const configDir = theme.split(/([^/]+$)/, 2)[0];
         this.game.load.path = configDir;
 
         //this.load.json(CONFIG_KEY, configFile); xxx

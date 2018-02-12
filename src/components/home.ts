@@ -1,6 +1,4 @@
 import { createTestHarnessDisplay } from "src/components/test-harness/layout";
-import { ScreenMap } from "src/core/asset-loader";
-import * as Scaler from "src/core/scaler";
 import { Screen } from "src/core/screen";
 
 export class Home extends Screen {

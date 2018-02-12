@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import { PromiseTrigger } from "src/core/promise-utils";
 import { startup } from "src/core/startup";
 import * as mock from "test/helpers/mock";
 

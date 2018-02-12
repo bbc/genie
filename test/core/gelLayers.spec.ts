@@ -7,7 +7,6 @@ import "src/lib/phaser";
 describe("GelLayers", () => {
 
     let mockGame: any;
-    let mockScaler: any;
 
     beforeEach(() => {
         
@@ -16,15 +15,9 @@ describe("GelLayers", () => {
           renderer: {resolution: 800},
         };
 
-        mockScaler = {
-          onSizeChange: { add: sinon.spy()},
-          onScaleChange: { add: sinon.spy()},
-        };
-
     });
 
     xit("Should add three gel layer groups to the phaser game", () => {
-        //GelLayers.create(mockGame, mockScaler);
         sinon.assert.calledWith(mockGame.add.group, undefined, "gelGroup", true);
         sinon.assert.calledWith(mockGame.add.group, undefined, "gelBackground");
         sinon.assert.calledWith(mockGame.add.group, undefined, "gelForeground");

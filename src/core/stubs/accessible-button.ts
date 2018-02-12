@@ -41,8 +41,6 @@ export class AccessibleButton extends Phaser.Button {
     private createDomElement() {
         this.domElement = document.createElement("div");
 
-        const elementInfo = this.getElementInfo();
-
         this.domElement.setAttribute("id", this.domId());
         this.domElement.setAttribute("role", "button");
         this.domElement.setAttribute("tabindex", this.tabIndex.toString());
