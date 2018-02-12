@@ -1,18 +1,12 @@
 import { GEL_MIN_RATIO_WIDTH, GEL_MIN_RATIO_HEIGHT, GEL_SAFE_FRAME_RATIO } from "../../core/scaler";
 
-export function testHarnessDisplay(game: Phaser.Game, context: Context) {
+export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
     let graphicsGroup: Phaser.Group;
 
-    return {
-        create,
-    };
-
-    function create() {
-        if (context.qaMode.active) {
-            graphicsGroup = game.add.group();
-            const qaKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
-            qaKey.onUp.add(toggle, game);
-        }
+    if (context.qaMode.active) {
+        graphicsGroup = game.add.group();
+        const qaKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+        qaKey.onUp.add(toggle, game);
     }
 
     function toggle() {

@@ -2,12 +2,12 @@ import "src/lib/phaser";
 
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { testHarnessDisplay } from "src/components/test-harness/layout";
+import { createTestHarnessDisplay } from "src/components/test-harness/layout";
 
 describe("test harness layout", () => {
     let qaModeActive: boolean;
     let testHarnessLayoutDisplayed: boolean;
-    let testHarness: { create: () => void };
+    let testHarness: void;
     let mockGame: any;
     let mockContext: any;
     let sandbox: sinon.SinonSandbox;
@@ -38,8 +38,7 @@ describe("test harness layout", () => {
                 },
             },
         };
-        testHarness = testHarnessDisplay(mockGame, mockContext);
-        testHarness.create();
+        testHarness = createTestHarnessDisplay(mockGame, mockContext);
     });
 
     afterEach(() => {
