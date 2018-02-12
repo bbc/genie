@@ -13,7 +13,6 @@ describe("Layout Factory", () => {
 
     beforeEach(() => {
         mockGame = {
-            // add: sinon.spy(),
             start: sinon.spy(),
             add: { group: sinon.spy(() => ({ addChild: sinon.spy() })) },
             renderer: { resolution: 800 },
