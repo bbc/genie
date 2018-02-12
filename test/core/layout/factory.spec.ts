@@ -5,13 +5,18 @@ import * as mock from "test/helpers/mock";
 import { LayoutFactory } from "src/core/layout/factory";
 
 describe("Layout Factory", () => {
-    beforeEach(mock.installMockGetGmi);
     afterEach(mock.uninstallMockGetGmi);
 
     let layout: any;
     let mockGame: any;
+    let mockGMI: any;
 
     beforeEach(() => {
+
+        mock.installMockGetGmi();
+
+        mockGMI = (window as any).getGMI()
+
         mockGame = {
             start: sinon.spy(),
             add: { group: sinon.spy(() => ({ addChild: sinon.spy() })) },
@@ -23,7 +28,7 @@ describe("Layout Factory", () => {
                 getParentBounds: sinon.spy(),
             },
         };
-        layout = LayoutFactory(mockGame);
+        layout = LayoutFactory(mockGame, mockGMI);
     });
 
     it("Should add 'gelBackground' and 'gelGroup' layers to the phaser game", () => {
