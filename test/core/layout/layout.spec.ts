@@ -40,7 +40,7 @@ describe("Layout", () => {
 
     afterEach(mock.uninstallMockGetGmi);
 
-    it("should add the correct number of GEL buttons for a given config", done => {
+    it("should add the correct number of GEL buttons for a given config", () => {
         const layout1 = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, ["achievements"]);
         expect(Object.keys(layout1.buttons).length).to.eql(1);
 
@@ -60,17 +60,14 @@ describe("Layout", () => {
             "settings",
         ]);
         expect(Object.keys(layout3.buttons).length).to.eql(6);
-
-        done();
     });
 
-    it("Should create 9 Gel Groups", done => {
+    it("Should create 9 Gel Groups", () => {
         const layout = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, []);
         expect(layout.root.children.length).to.eql(9);
-        done();
     });
 
-    it("Should add items to the correct group", done => {
+    it("Should add items to the correct group", () => {
         const layout = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, []);
         const testElement = new Phaser.Sprite(mockGame, 0, 0) as any;
 
@@ -80,11 +77,9 @@ describe("Layout", () => {
 
         expect(groupsWithChildren.length).to.eql(1);
         expect(groupsWithChildren[0].name).to.eql("middleRight");
-
-        done();
     });
 
-    it("Should correctly insert an item using the index position property", done => {
+    it("Should correctly insert an item using the index position property", () => {
         const layout = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, []);
         const testElement = new Phaser.Sprite(mockGame, 0, 0) as any;
         testElement.randomKey = randomKey;
@@ -97,11 +92,9 @@ describe("Layout", () => {
 
         const leftTopGroup: any = layout.root.children.find((element: any) => element.name === "topLeft");
         expect(leftTopGroup.children[2].randomKey).to.eql(randomKey);
-
-        done();
     });
 
-    it("Should set button callbacks using the 'setAction' method", done => {
+    it("Should set button callbacks using the 'setAction' method", () => {
         const layout = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, [
             "achievements",
             "exit",
@@ -117,7 +110,5 @@ describe("Layout", () => {
         layout.buttons.exit.events.onInputUp.dispatch();
 
         expect(testAction.callCount).to.eql(3);
-
-        done();
     });
 });
