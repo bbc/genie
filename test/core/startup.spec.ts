@@ -15,7 +15,7 @@ describe("Startup", () => {
         });
     });
 
-    it("should create a canvas element within the designated parent", () => {
+    xit("should create a canvas element within the designated parent", () => {
         return startup([mock.screenDef()]).then(() => {
             expect(mock.getGameHolderDiv().children[0].tagName).to.equal("CANVAS");
         });
