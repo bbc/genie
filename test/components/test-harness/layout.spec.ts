@@ -60,8 +60,8 @@ describe("test harness layout", () => {
         });
 
         describe("create function is called", () => {
-            it("creates new group to store all test harness graphics", () => {
-                sinon.assert.calledOnce(mockGame.add.group);
+            it("creates two new groups (background and foreground) to store all test harness graphics", () => {
+                sinon.assert.calledTwice(mockGame.add.group);
             });
 
             it("adds keyboard input and assigns it to a listener", () => {
