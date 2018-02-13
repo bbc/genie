@@ -8,7 +8,7 @@ import { Layout } from "./layout";
 
 type PhaserElement = Phaser.Sprite | Phaser.Image | Phaser.BitmapText | Phaser.Group;
 
-export function LayoutEngine(game: Phaser.Game, gmi: Gmi): LayoutEngine {
+export function LayoutFactory(game: Phaser.Game, gmi: Gmi): LayoutFactory {
     const root = game.add.group(undefined, "gelGroup", true);
     const background = game.add.group(undefined, "gelBackground");
     const foreground = game.add.group(undefined, "foreground");
@@ -38,7 +38,7 @@ export function LayoutEngine(game: Phaser.Game, gmi: Gmi): LayoutEngine {
      * Called in the create method of a given screen
      *
      * @example
-     * layout.createLayout(["home", "restart", "continue", "pause"]);
+     * layoutFactory.create(["home", "restart", "continue", "pause"]);
      *
      * @param buttons - array of standard button names to include. See {@link ./gel-defaults.ts} for available names
      * @returns {Layout}

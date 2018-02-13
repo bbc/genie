@@ -1,4 +1,4 @@
-declare interface LayoutEngine {
+declare interface LayoutFactory {
     getSize: any;
     keyLookups: ScreenMap;
     create(buttons: string[], keyLookup: { [s: string]: string }): any; //TODO - end should be Layout but the below import breaks the declaration.
