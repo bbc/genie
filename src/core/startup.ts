@@ -52,8 +52,6 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
     }
 }
 
-const CONFIG_KEY = "config";
-
 class Startup extends Phaser.State {
     constructor(private gmi: Gmi, private onStarted: (config: Config) => void) {
         super();
