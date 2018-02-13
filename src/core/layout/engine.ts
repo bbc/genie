@@ -8,13 +8,11 @@ import { Layout } from "./layout";
 
 type PhaserElement = Phaser.Sprite | Phaser.Image | Phaser.BitmapText | Phaser.Group;
 
-export function LayoutEngine(game: Phaser.Game): LayoutEngine {
+export function LayoutEngine(game: Phaser.Game, gmi: Gmi): LayoutEngine {
     const root = game.add.group(undefined, "gelGroup", true);
     const background = game.add.group(undefined, "gelBackground");
     const foreground = game.add.group(undefined, "foreground");
     const keyLookups: ScreenMap = {};
-
-    const gmi: Gmi = (window as any).getGMI({}); //TODO can't call getGMI twice
 
     //TODO stageHeight should come from config
     const scaler = Scaler.create(600, game);

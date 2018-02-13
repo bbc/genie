@@ -1,0 +1,17 @@
+{
+    "loadscreen": [
+        {
+            "type": "image",
+            "key": "logo",
+            "url": "loader/logo.png",
+            "overwrite": false
+        }
+    ],
+    "meta": {
+        "generated": "1401380327373",
+        "version": "1.0",
+        "app": "Example Meta Data",
+        "url": "http://bbc.co.uk/",
+        "copyright": "UNLICENSED"
+    }
+}
