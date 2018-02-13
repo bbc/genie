@@ -1,10 +1,12 @@
 import { GEL_MIN_RATIO_HEIGHT, GEL_MIN_RATIO_WIDTH } from "../../core/scaler";
 
 export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
-    let graphicsGroup: Phaser.Group;
+    let graphicsBackgroundGroup: Phaser.Group;
+    let graphicsForegroundGroup: Phaser.Group;
 
     if (context.qaMode.active) {
-        graphicsGroup = game.add.group();
+        graphicsBackgroundGroup = game.add.group();
+        graphicsForegroundGroup = game.add.group();
         const qaKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
         qaKey.onUp.add(toggle, game);
     }
@@ -22,7 +24,8 @@ export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
     function show() {
         drawGameArea();
         drawOuterPadding();
-        context.layout.addToBackground(graphicsGroup);
+        context.layout.addToBackground(graphicsBackgroundGroup);
+        context.layout.addToForeground(graphicsForegroundGroup);
         context.qaMode.testHarnessLayoutDisplayed = true;
     }
 
@@ -32,17 +35,17 @@ export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
         const graphics: Phaser.Graphics = game.add.graphics();
         graphics.beginFill(0x32cd32, 0.5);
         graphics.drawRect(-gameAreaWidth * 0.5, -gameAreaHeight * 0.5, gameAreaWidth, gameAreaHeight);
-        graphicsGroup.add(graphics);
+        graphicsBackgroundGroup.add(graphics);
     }
 
     function drawOuterPadding() {
         const size = context.layout.getSize();
         const graphics: Phaser.Graphics = game.add.graphics();
         const paddingWidth = getPaddingWidth();
-        const gameLeftEdge = -size.width * 0.5 / size.scale + paddingWidth * 0.5;
-        const gameTopEdge = -size.height * 0.5 / size.scale + paddingWidth * 0.5;
-        const gameRightEdge = size.width * 0.5 / size.scale - paddingWidth * 0.5;
-        const gameBottomEdge = size.height * 0.5 / size.scale - paddingWidth * 0.5;
+        const gameLeftEdge = 0 + paddingWidth * 0.5;
+        const gameTopEdge = 0 + paddingWidth * 0.5;
+        const gameRightEdge = size.width - paddingWidth * 0.5;
+        const gameBottomEdge = size.height - paddingWidth * 0.5;
 
         console.log("paddingWidth: ", paddingWidth);
         console.log("screenWidth: ", window.innerWidth);
@@ -55,11 +58,12 @@ export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
         graphics.lineTo(gameLeftEdge, gameBottomEdge);
         graphics.lineTo(gameLeftEdge, gameTopEdge);
 
-        graphicsGroup.add(graphics);
+        graphicsForegroundGroup.add(graphics);
     }
 
     function hide() {
-        graphicsGroup.destroy(true, true);
+        graphicsBackgroundGroup.destroy(true, true);
+        graphicsForegroundGroup.destroy(true, true);
         context.qaMode.testHarnessLayoutDisplayed = false;
     }
 
