@@ -5,8 +5,6 @@ import { expect } from "chai";
 import * as sinon from "sinon";
 import { loadAssets, Pack, PackList, ScreenMap } from "src/core/asset-loader";
 import { PromiseTrigger } from "src/core/promise-utils";
-import { Screen } from "src/core/screen";
-import { ScreenDef } from "src/core/sequencer";
 import { startup } from "src/core/startup";
 import { assetPacks } from "test/helpers/asset-packs";
 import { assets } from "test/helpers/assets";
