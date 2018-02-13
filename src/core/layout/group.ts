@@ -34,7 +34,6 @@ class Group extends Phaser.Group {
     private buttons: DebugButton[] = [];
     private metrics: ViewportMetrics;
     private vertical: boolean;
-    private accessibilityManager: AccessibilityManager;
 
     constructor(
         game: Phaser.Game,
@@ -49,7 +48,6 @@ class Group extends Phaser.Group {
 
         this.game = game;
 
-        this.accessibilityManager = accessibilityManager;
 
         this.vertical = !!vertical;
 

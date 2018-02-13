@@ -1,6 +1,4 @@
-import { testHarnessDisplay } from "src/components/test-harness/layout";
-import { ScreenMap } from "src/core/asset-loader";
-import * as Scaler from "src/core/scaler";
+import { createTestHarnessDisplay } from "src/components/test-harness/layout";
 import { Screen } from "src/core/screen";
 
 export class Home extends Screen {
@@ -21,6 +19,5 @@ export class Home extends Screen {
         this.context.layoutFactory.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
         this.context.layoutFactory.addToBackground(this.game.add.button(0, 0, this.gel.play)); // remove when layout handles this
         this.context.layoutFactory.create(["exit", "howToPlay", "play", "soundOff", "settings"], this.gel);
-        testHarnessDisplay(this.game, this.context).create();
+        createTestHarnessDisplay(this.game, this.context);    }
     }
-}

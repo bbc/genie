@@ -1,66 +1,84 @@
-import { GEL_MIN_RATIO_LHS, GEL_MIN_RATIO_RHS, GEL_SAFE_FRAME_RATIO } from "../../core/scaler";
+import { GEL_MIN_RATIO_HEIGHT, GEL_MIN_RATIO_WIDTH } from "../../core/scaler";
 
-export function testHarnessDisplay(game: Phaser.Game, context: Context) {
-    let graphicsGroup: Phaser.Group;
-    let graphics: Phaser.Graphics;
+export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
+    let graphicsBackgroundGroup: Phaser.Group;
+    let graphicsForegroundGroup: Phaser.Group;
 
-    return {
-        create,
-    };
-
-    function create() {
-        if (context.qaMode.active) {
-            graphicsGroup = game.add.group();
-            const qaKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
-            qaKey.onUp.add(toggle, game);
-        }
+    if (context.qaMode.active) {
+        graphicsBackgroundGroup = game.add.group();
+        graphicsForegroundGroup = game.add.group();
+        const qaKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
+        qaKey.onUp.add(toggle, game);
     }
 
     function toggle() {
         if (context.qaMode.testHarnessLayoutDisplayed) {
             hide();
+            console.log("Layout Test Harness Hidden");
         } else {
             show();
+            console.log("Layout Test Harness Displayed");
         }
     }
 
     function show() {
-        const [gameAreaWidth, gameAreaHeight] = gameAreaDimensions();
-
-        graphics = game.add.graphics();
-        graphics.beginFill(0x32cd32, 0.5);
-        graphics.drawRect(0, 0, gameAreaWidth, gameAreaHeight);
-        graphicsGroup.add(graphics);
-        center(graphicsGroup);
-        context.layoutFactory.addToBackground(graphicsGroup);
+        drawGameArea();
+        drawOuterPadding();
+        context.layout.addToBackground(graphicsBackgroundGroup);
+        context.layout.addToForeground(graphicsForegroundGroup);
         context.qaMode.testHarnessLayoutDisplayed = true;
     }
 
+    function drawGameArea() {
+        const [gameAreaWidth, gameAreaHeight] = gameAreaDimensions();
+
+        const graphics: Phaser.Graphics = game.add.graphics();
+        graphics.beginFill(0x32cd32, 0.5);
+        graphics.drawRect(-gameAreaWidth * 0.5, -gameAreaHeight * 0.5, gameAreaWidth, gameAreaHeight);
+        graphicsBackgroundGroup.add(graphics);
+    }
+
+    function drawOuterPadding() {
+        const size = context.layout.getSize();
+        const graphics: Phaser.Graphics = game.add.graphics();
+        const paddingWidth = getPaddingWidth();
+        const gameLeftEdge = 0 + paddingWidth * 0.5;
+        const gameTopEdge = 0 + paddingWidth * 0.5;
+        const gameRightEdge = size.width - paddingWidth * 0.5;
+        const gameBottomEdge = size.height - paddingWidth * 0.5;
+
+        console.log("paddingWidth: ", paddingWidth);
+        console.log("screenWidth: ", window.innerWidth);
+        console.log("screenHeight: ", window.innerHeight);
+
+        graphics.lineStyle(paddingWidth, 0xffff00, 0.5);
+        graphics.moveTo(gameLeftEdge, gameTopEdge);
+        graphics.lineTo(gameRightEdge, gameTopEdge);
+        graphics.lineTo(gameRightEdge, gameBottomEdge);
+        graphics.lineTo(gameLeftEdge, gameBottomEdge);
+        graphics.lineTo(gameLeftEdge, gameTopEdge);
+
+        graphicsForegroundGroup.add(graphics);
+    }
+
     function hide() {
-        graphicsGroup.destroy(true, true);
+        graphicsBackgroundGroup.destroy(true, true);
+        graphicsForegroundGroup.destroy(true, true);
         context.qaMode.testHarnessLayoutDisplayed = false;
     }
 
-    function center(group: Phaser.Group) {
-        group.forEach((graphic: Phaser.Graphics) => {
-            graphic.x = graphic.x - graphic.width * 0.5;
-            graphic.y = graphic.y - graphic.height * 0.5;
-        }, game);
-    }
-
     function gameAreaDimensions() {
-        let areaWidth;
-        let areaHeight;
-        const size = context.layoutFactory.getSize();
-
-        if (game.width / game.height >= GEL_SAFE_FRAME_RATIO) {
-            areaHeight = game.height / size.scale;
-            areaWidth = areaHeight / GEL_MIN_RATIO_RHS * GEL_MIN_RATIO_LHS;
-        } else {
-            areaWidth = game.width / size.scale;
-            areaHeight = areaWidth / GEL_MIN_RATIO_LHS * GEL_MIN_RATIO_RHS;
-        }
+        const size = context.layout.getSize();
+        const areaWidth = size.stageHeightPx / GEL_MIN_RATIO_HEIGHT * GEL_MIN_RATIO_WIDTH;
+        const areaHeight = size.stageHeightPx;
 
         return [areaWidth, areaHeight];
+    }
+
+    function getPaddingWidth() {
+        const size = context.layout.getSize();
+        const gelPaddingWidthPercentage = 0.02;
+
+        return Math.max(size.width, size.height) * gelPaddingWidthPercentage;
     }
 }
