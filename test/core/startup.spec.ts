@@ -7,21 +7,20 @@ describe("Startup", () => {
     beforeEach(mock.installMockGetGmi);
     afterEach(mock.uninstallMockGetGmi);
 
-    //TODO Re-enable these once chrome-headless is available. Currently fails on Phantom due to Promise shim race condition
-    xit("should resolve a promise when Phaser is fully initialised", () => {
+    it("should resolve a promise when Phaser is fully initialised", () => {
         return startup([mock.screenDef()]).then(game => {
             expect(game.isBooted).to.equal(true);
             expect(game.stage).to.be.ok;
         });
     });
 
-    xit("should create a canvas element within the designated parent", () => {
+    it("should create a canvas element within the designated parent", () => {
         return startup([mock.screenDef()]).then(() => {
             expect(mock.getGameHolderDiv().children[0].tagName).to.equal("CANVAS");
         });
     });
 
-    xit("should configure the Phaser base url to be the GMI gameDir", () => {
+    it("should configure the Phaser base url to be the GMI gameDir", () => {
         mock.installMockGetGmi({ gameDir: "my/game/dir/" });
         return startup([mock.screenDef()]).then(game => {
             expect(game.load.baseURL).to.equal("my/game/dir/");
