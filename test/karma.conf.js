@@ -12,6 +12,11 @@ module.exports = function(config) {
         preprocessors: {
             "../**/*.ts": ["webpack"],
         },
+        client: {
+            mocha: {
+                timeout: 20000, // 20 seconds - upped from 2 seconds
+            },
+        },
         webpack: {
             module: webpackConfig.module,
             resolve: webpackConfig.resolve,
@@ -25,7 +30,23 @@ module.exports = function(config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: false,
-        browsers: ["PhantomJS"],
+        browsers: ["ChromeHeadless"],
+        customLaunchers: {
+            ChromeHeadlessNoWebGL: {
+                base: "ChromeHeadless",
+                flags: ["--disable-webgl"],
+            },
+            PhantomJSNoSecurity: {
+                // requires karma-phantomjs-launcher
+                base: "PhantomJS",
+                options: {
+                    settings: {
+                        // Enables loading JSON data urls:
+                        webSecurityEnabled: false,
+                    },
+                },
+            },
+        },
         mime: {
             "text/x-typescript": ["ts", "tsx"],
         },
