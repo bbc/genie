@@ -5,8 +5,7 @@
         "strict": true,
         "sourceMap": true,
         "baseUrl": ".",
-        "strictPropertyInitialization": false,
-        "noUnusedLocals": true
+        "strictPropertyInitialization": false
     },
     "awesomeTypescriptLoaderOptions": {
         "useBabel": true,

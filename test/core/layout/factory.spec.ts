@@ -31,10 +31,11 @@ describe("Layout Factory", () => {
         layout = LayoutFactory(mockGame, mockGMI);
     });
 
-    it("Should add 'gelBackground' and 'gelGroup' layers to the phaser game", () => {
+    it("Should add 'gelBackground', 'gelGroup' and 'foreground' layers to the phaser game", () => {
         expect(mockGame.add.group.calledWith(undefined, "gelBackground")).to.eql(true);
         expect(mockGame.add.group.calledWith(undefined, "gelGroup")).to.eql(true);
-        expect(mockGame.add.group.callCount).to.eql(2);
+        expect(mockGame.add.group.calledWith(undefined, "foreground")).to.eql(true);
+        expect(mockGame.add.group.callCount).to.eql(3);
     });
 
     it("Should add a callback to the scaler.onSizechange method", () => {
