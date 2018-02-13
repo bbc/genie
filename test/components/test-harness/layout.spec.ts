@@ -1,29 +1,24 @@
 import "src/lib/phaser";
 
-import { expect } from "chai";
 import * as sinon from "sinon";
-import { testHarnessDisplay } from "src/components/test-harness/layout";
+import { createTestHarnessDisplay } from "src/components/test-harness/layout";
 
 describe("test harness layout", () => {
-    let qaModeActive: boolean;
-    let testHarnessLayoutDisplayed: boolean;
-    let testHarness: { create: () => void };
     let mockGame: any;
     let mockContext: any;
     let sandbox: sinon.SinonSandbox;
-    let QKeyCode: number;
+    const qKeyCode: number = 81;
     let onKeyUpSpy: any;
     let addKeyStub: any;
 
     before(() => {
-        QKeyCode = 81;
         sandbox = sinon.sandbox.create();
     });
 
     beforeEach(() => {
         onKeyUpSpy = sandbox.spy();
         addKeyStub = sandbox.stub();
-        addKeyStub.withArgs(QKeyCode).returns({
+        addKeyStub.withArgs(qKeyCode).returns({
             onUp: {
                 add: onKeyUpSpy,
             },
@@ -38,8 +33,7 @@ describe("test harness layout", () => {
                 },
             },
         };
-        testHarness = testHarnessDisplay(mockGame, mockContext);
-        testHarness.create();
+        createTestHarnessDisplay(mockGame, mockContext);
     });
 
     afterEach(() => {
@@ -66,8 +60,8 @@ describe("test harness layout", () => {
         });
 
         describe("create function is called", () => {
-            it("creates new group to store all test harness graphics", () => {
-                sinon.assert.calledOnce(mockGame.add.group);
+            it("creates two new groups (background and foreground) to store all test harness graphics", () => {
+                sinon.assert.calledTwice(mockGame.add.group);
             });
 
             it("adds keyboard input and assigns it to a listener", () => {
