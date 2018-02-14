@@ -1,10 +1,10 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import * as mock from "test/helpers/mock";
 
 import { Layout } from "src/core/layout/layout";
+import { PromiseTrigger } from "src/core/promise-utils";
 
-xdescribe("Layout", () => {
+describe("Layout", () => {
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame: any;
     let mockScaler: any;
@@ -12,31 +12,34 @@ xdescribe("Layout", () => {
     let mockKeyLookup: any;
 
     beforeEach(() => {
-        mock.installMockGetGmi();
+        return initialiseGame().then(game => {
+            mockGame = game;
+            mockGame.world = {
+                addChild: sinon.spy(),
+                children: [],
+                shutdown: () => {},
+            };
+            mockGame.add = {
+                sprite: sinon.spy(() => new Phaser.Sprite(mockGame, 0, 0)),
+                group: sinon.spy(),
+            };
+            mockGame.renderer = { resolution: 1, destroy: () => {} };
+            mockGame.input = {
+                interactiveItems: { add: sinon.spy() },
+                reset: () => {},
+                destroy: () => {},
+            };
 
-        class MockGame extends Phaser.Game {}
-
-        mockGame = new MockGame();
-        mockGame.world = {
-            addChild: sinon.spy(),
-            children: [],
-        };
-        mockGame.add = {
-            sprite: sinon.spy(() => new Phaser.Sprite(mockGame, 0, 0)),
-            group: sinon.spy(),
-        };
-        mockGame.renderer = { resolution: 1 };
-        mockGame.input = { interactiveItems: { add: sinon.spy() } };
-
-        mockScaler = {
-            getSize: sinon.spy(() => ({ width: 200, height: 200 })),
-            onScaleChange: { add: sinon.spy() },
-        };
-        mockAccessibilityManager = {};
-        mockKeyLookup = sinon.spy();
+            mockScaler = {
+                getSize: sinon.spy(() => ({ width: 200, height: 200 })),
+                onScaleChange: { add: sinon.spy() },
+            };
+            mockAccessibilityManager = {};
+            mockKeyLookup = sinon.spy();
+        });
     });
 
-    afterEach(mock.uninstallMockGetGmi);
+    afterEach(() => mockGame.destroy());
 
     it("should add the correct number of GEL buttons for a given config", () => {
         const layout1 = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, ["achievements"]);
@@ -110,3 +113,16 @@ xdescribe("Layout", () => {
         expect(testAction.callCount).to.eql(3);
     });
 });
+
+function initialiseGame(): Promise<Phaser.Game> {
+    const promisedGame = new PromiseTrigger<Phaser.Game>();
+    // tslint:disable-next-line:no-unused-expression
+    new Phaser.Game({
+        state: new class extends Phaser.State {
+            public create() {
+                promisedGame.resolve(this.game);
+            }
+        }(),
+    });
+    return promisedGame;
+}

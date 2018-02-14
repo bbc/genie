@@ -46,7 +46,7 @@ export class Layout {
                         layout.hPos,
                         this.metrics,
                         this.accessibilityManager,
-                        layout.arrangeV,
+                        !!layout.arrangeV,
                     ),
             ),
         );

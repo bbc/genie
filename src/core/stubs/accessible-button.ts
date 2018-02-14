@@ -1,5 +1,4 @@
 import * as _ from "lodash";
-import "phaser-ce";
 
 export class AccessibleButton extends Phaser.Button {
     public domElement: HTMLElement;
@@ -9,7 +8,19 @@ export class AccessibleButton extends Phaser.Button {
     private tabIndex: number;
     private title: string;
 
-    constructor(game: Phaser.Game, title: string, ariaLabel: string, anchorPoints: AnchorPoints, tabIndex: number, cullAccessible: boolean, x: number, y: number, key: string, callback?: Function, callbackContext?: Phaser.State) {
+    constructor(
+        game: Phaser.Game,
+        title: string,
+        ariaLabel: string,
+        anchorPoints: AnchorPoints,
+        tabIndex: number,
+        cullAccessible: boolean,
+        x: number,
+        y: number,
+        key: string,
+        callback?: Function,
+        callbackContext?: Phaser.State,
+    ) {
         super(game, x, y, key, callback, callbackContext, 2, 0, 1);
 
         this.title = title;

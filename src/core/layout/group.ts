@@ -1,4 +1,3 @@
-import "phaser-ce";
 // @ts-ignore
 import * as fp from "lodash/fp";
 import { DebugButton } from "./debug-button";
@@ -29,31 +28,17 @@ const getGroupY = ({ metrics, pos, height, scale }: any) =>
     vertical[pos.v]((metrics.verticals as any)[pos.v], height, metrics.borderPad * scale);
 
 class Group extends Phaser.Group {
-    private vPos: string;
-    private hPos: string;
     private buttons: DebugButton[] = [];
-    private metrics: ViewportMetrics;
-    private vertical: boolean;
-
     constructor(
         game: Phaser.Game,
         parent: Phaser.Group,
-        vPos: string,
-        hPos: string,
-        metrics: ViewportMetrics,
+        private vPos: string,
+        private hPos: string,
+        private metrics: ViewportMetrics,
         accessibilityManager: AccessibilityManager,
-        vertical?: boolean,
+        private vertical: boolean,
     ) {
         super(game, parent, fp.camelCase([vPos, hPos, vertical ? "v" : ""].join(" ")));
-
-        this.game = game;
-
-
-        this.vertical = !!vertical;
-
-        this.vPos = vPos;
-        this.hPos = hPos;
-        this.metrics = metrics;
         this.setGroupPosition();
     }
 

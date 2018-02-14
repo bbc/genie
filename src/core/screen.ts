@@ -1,4 +1,3 @@
-import "phaser-ce";
 import { GameStateUpdate, NextScreenFunction } from "src/core/sequencer";
 
 export class Screen extends Phaser.State {

@@ -1,10 +1,8 @@
-import "phaser-ce";
-import { AccessibleButton } from "./accessible-button";
-
 import * as _ from "lodash";
 
-export function create(game: Phaser.Game, gmi: Gmi) {
-    const gameWrapper = document.getElementById(gmi.gameContainerId);
+import { AccessibleButton } from "./accessible-button";
+
+export function create(game: Phaser.Game, gameWrapper: HTMLElement) {
     let accessibilityOverlay: HTMLElement;
     let accessibilityActive = false;
     let accessibleButtons: AccessibleButton[] = [];
@@ -18,19 +16,14 @@ export function create(game: Phaser.Game, gmi: Gmi) {
     };
 
     function constructor() {
-        if (gameWrapper) {
-            createAccessibilityOverlay(gameWrapper);
-        } else {
-            throw "Element with id: " + gmi.gameContainerId + " does not exist.";
-        }
-
+        createAccessibilityOverlay();
         activate();
 
         window.addEventListener("keydown", handleKeyDown);
         window.addEventListener("mousemove", handleMousemove);
     }
 
-    function createAccessibilityOverlay(gameWrapper: HTMLElement) {
+    function createAccessibilityOverlay() {
         accessibilityOverlay = document.createElement("div");
 
         accessibilityOverlay.classList.add("game-wrapper__accessibility-overlay");
@@ -38,7 +31,7 @@ export function create(game: Phaser.Game, gmi: Gmi) {
         accessibilityOverlay.style.top = "0";
         accessibilityOverlay.style.left = "0";
 
-        resize(gameWrapper);
+        resize();
 
         gameWrapper.appendChild(accessibilityOverlay);
     }
@@ -60,15 +53,38 @@ export function create(game: Phaser.Game, gmi: Gmi) {
         accessibleButtons = [];
     }
 
-    function resize(gameWrapper: HTMLElement) {
+    function resize() {
         const gameWrapperBounds = gameWrapper.getBoundingClientRect();
 
         accessibilityOverlay.style.width = gameWrapperBounds.width.toString() + "px";
         accessibilityOverlay.style.height = gameWrapperBounds.height.toString() + "px";
     }
 
-    function createButton(title: string, ariaLabel: string, anchorPoints: AnchorPoints, tabIndex: number, cullAccessible: boolean, x: number, y: number, key: string, callback?: Function, callbackContext?: Phaser.State) {
-        const button = new AccessibleButton(game, title, ariaLabel, anchorPoints, tabIndex, cullAccessible, x, y, key, callback, callbackContext);
+    function createButton(
+        title: string,
+        ariaLabel: string,
+        anchorPoints: AnchorPoints,
+        tabIndex: number,
+        cullAccessible: boolean,
+        x: number,
+        y: number,
+        key: string,
+        callback?: Function,
+        callbackContext?: Phaser.State,
+    ) {
+        const button = new AccessibleButton(
+            game,
+            title,
+            ariaLabel,
+            anchorPoints,
+            tabIndex,
+            cullAccessible,
+            x,
+            y,
+            key,
+            callback,
+            callbackContext,
+        );
         accessibleButtons.push(button);
         accessibilityOverlay.appendChild(button.domElement);
 

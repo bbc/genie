@@ -1,5 +1,4 @@
 import * as _ from "lodash";
-import "phaser-ce";
 
 import { Screen } from "./screen";
 

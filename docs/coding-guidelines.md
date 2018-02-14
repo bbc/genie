@@ -51,6 +51,11 @@ function createLayout(screen: Screen, buttons: string[], sfx: Phaser.AudioSprite
 }
 ```
 
+### Tests
+
+* Avoid using beforeEach / afterEach unless they actually reduce duplication and simplify the code.
+ (In general they make the code more complicated and less cohesive.)
+
 ## Branching Strategy
 All code should be created in feature branches.
 *Is this enough or are we likely to need a work branch between feature and master?*

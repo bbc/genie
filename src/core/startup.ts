@@ -1,4 +1,5 @@
 import "../lib/phaser";
+
 import { LayoutFactory } from "src/core/layout/factory";
 import { PromiseTrigger } from "src/core/promise-utils";
 import * as Sequencer from "src/core/sequencer";
@@ -36,7 +37,7 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
     return promisedGame;
 
     function onStarted(config: Config) {
-        const layoutFactory = LayoutFactory(game, gmi);
+        const layoutFactory = LayoutFactory(game, getContainerDiv(gmi));
 
         // Phaser is now set up and we can use all game properties.
         const context: Context = {

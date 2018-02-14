@@ -1,16 +1,17 @@
 import * as _ from "lodash";
-import { ScreenDef } from "src/core/sequencer";
-import { Screen } from "src/core/screen";
 import * as sinon from "sinon";
+
+import { Screen } from "src/core/screen";
+import { ScreenDef } from "src/core/sequencer";
 
 const TEST_DIV_ID = "test-div";
 
-export function screenDef(name: string = "my name"): ScreenDef {
+export function screenDef(name: string = "__screen_id__"): ScreenDef {
     return {
         name,
         state: screen(),
-        nextScreenName: _.constant(name)
-    }
+        nextScreenName: _.constant(name),
+    };
 }
 
 export function screen(): Screen {
@@ -20,21 +21,21 @@ export function screen(): Screen {
 export function installMockGetGmi(propertiesToMerge: any = {}) {
     uninstallMockGetGmi();
     document.body.appendChild(document.createElement("div")).id = TEST_DIV_ID;
-    (window as any).getGMI = () => {
-        const defaultGmi = {
-            gameContainerId: TEST_DIV_ID,
-            embedVars: { configPath: "" },
-        };
-        return _.merge(defaultGmi, propertiesToMerge) as Gmi;
+    (window as any).getGMI = () => gmi(propertiesToMerge);
+}
+
+export function gmi(propertiesToMerge: any = {}): Gmi {
+    const defaultGmi = {
+        gameContainerId: TEST_DIV_ID,
+        embedVars: { configPath: "" },
     };
+    return _.merge(defaultGmi, propertiesToMerge) as Gmi;
 }
 
 export function uninstallMockGetGmi() {
     try {
         document.body.removeChild(getGameHolderDiv());
-    }
-    catch (e) {
-    }
+    } catch (e) {}
 }
 
 export function getGameHolderDiv() {
