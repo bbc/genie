@@ -1,4 +1,5 @@
-import { LayoutEngine } from "src/core/layout/engine";
+import "../lib/phaser";
+import { LayoutFactory } from "src/core/layout/factory";
 import { PromiseTrigger } from "src/core/promise-utils";
 import * as Sequencer from "src/core/sequencer";
 import { parseUrlParams } from "src/lib/parseUrlParams";
@@ -35,23 +36,21 @@ export function startup(transitions: ScreenDef[]): Promise<Phaser.Game> {
     return promisedGame;
 
     function onStarted(config: Config) {
-        const layout = LayoutEngine(game);
+        const layoutFactory = LayoutFactory(game, gmi);
 
         // Phaser is now set up and we can use all game properties.
         const context: Context = {
             gmi,
-            layout,
+            layoutFactory,
             popupScreens: [],
             gameMuted: true,
             qaMode,
         };
-        const sequencer = Sequencer.create(game, context, transitions);
+        Sequencer.create(game, context, transitions);
         game.stage.backgroundColor = "#333";
         promisedGame.resolve(game);
     }
 }
-
-const CONFIG_KEY = "config";
 
 class Startup extends Phaser.State {
     constructor(private gmi: Gmi, private onStarted: (config: Config) => void) {
@@ -64,14 +63,14 @@ class Startup extends Phaser.State {
 
         // All asset paths are relative to the location of the config.json:
         const theme = gmi.embedVars.configPath;
-        const [configDir, configFile] = theme.split(/([^/]+$)/, 2);
+        const configDir = theme.split(/([^/]+$)/, 2)[0];
         this.game.load.path = configDir;
 
         //this.load.json(CONFIG_KEY, configFile); xxx
     }
 
     public create() {
-        this.onStarted(this.game.cache.getJSON(CONFIG_KEY));
+        this.onStarted({} as Config /* this.game.cache.getJSON(CONFIG_KEY) */);
     }
 }
 

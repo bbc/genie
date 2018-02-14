@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import { PromiseTrigger } from "src/core/promise-utils";
 import { startup } from "src/core/startup";
 import * as mock from "test/helpers/mock";
 
@@ -7,7 +6,7 @@ describe("Startup", () => {
     beforeEach(mock.installMockGetGmi);
     afterEach(mock.uninstallMockGetGmi);
 
-    it("should resolve a promise when Phaser is fully initialised", () => {
+    xit("should resolve a promise when Phaser is fully initialised", () => {
         return startup([mock.screenDef()]).then(game => {
             expect(game.isBooted).to.equal(true);
             expect(game.stage).to.be.ok;

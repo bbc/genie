@@ -1,8 +1,6 @@
 import * as _ from "lodash";
 import "phaser-ce";
 
-import { Layout } from "../layout/layout";
-
 export interface PauseManager {
     update(gameMuted: boolean): void;
     getButtons(popupScreenContext?: string, name?: string): PauseifiedButton[];
@@ -75,7 +73,6 @@ export function create(game: Phaser.Game, context: Context): PauseManager {
         const self = { name: marker, popupScreenContext, update, destroy };
 
         let hoverState = false;
-        const baseImage = button.key;
         button.input.priorityID = PRIORITY_ID + context.popupScreens.length;
         buttons.push(self);
         return self;

@@ -8,13 +8,13 @@ import { PromiseTrigger } from "src/core/promise-utils";
 import { startup } from "src/core/startup";
 import { assetPacks } from "test/helpers/asset-packs";
 import { assets } from "test/helpers/assets";
-import { installMockGetGmi, uninstallMockGetGmi } from "test/helpers/mock";
+import * as mock from "test/helpers/mock";
 
 describe("Asset Loader", () => {
-    beforeEach(installMockGetGmi);
-    afterEach(uninstallMockGetGmi);
+    beforeEach(mock.installMockGetGmi);
+    afterEach(mock.uninstallMockGetGmi);
 
-    xit("Should callback with 100% progress when 0 files are to be loaded in gamePacks.", () => {
+    it("Should callback with 100% progress when 0 files are to be loaded in gamePacks.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.emptyAssetPack },
@@ -24,7 +24,7 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup([])
+        return startup([mock.screenDef()])
             .then(game => {
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
@@ -34,7 +34,7 @@ describe("Asset Loader", () => {
             });
     });
 
-    xit("Should be called 4 times (at 25% intervals) when 4 files are to be loaded in gamePacks.", () => {
+    it("Should be called 4 times (at 25% intervals) when 4 files are to be loaded in gamePacks.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.twoScreensThreeAssetsPack },
@@ -44,7 +44,7 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup([])
+        return startup([mock.screenDef()])
             .then(game => {
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
@@ -59,7 +59,7 @@ describe("Asset Loader", () => {
             });
     });
 
-    xit("Should resolve the returned Promise with keyLookups for each gamePack screen.", () => {
+    it("Should resolve the returned Promise with keyLookups for each gamePack screen.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.twoScreensThreeAssetsPack },
@@ -69,7 +69,7 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup([])
+        return startup([mock.screenDef()])
             .then(game => {
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
             })
@@ -81,7 +81,7 @@ describe("Asset Loader", () => {
             });
     });
 
-    xit("Should correctly namespace assets by their URL and return it in keyLookups.", () => {
+    it("Should correctly namespace assets by their URL and return it in keyLookups.", () => {
         const updateCallback = sinon.spy();
         const gamePacks: PackList = {
             MASTER_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
@@ -91,7 +91,7 @@ describe("Asset Loader", () => {
             url: assetPacks.loadscreenPack,
         };
         let theGame: Phaser.Game;
-        return startup([])
+        return startup([mock.screenDef()])
             .then(game => {
                 theGame = game;
                 return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
@@ -102,7 +102,7 @@ describe("Asset Loader", () => {
             });
     });
 
-    xit("Should attempt to load assetPack JSON files that are missing and include them in keyLookups", () => {
+    it("Should attempt to load assetPack JSON files that are missing and include them in keyLookups", () => {
         const updateCallback = sinon.spy();
         const loadSpy = sinon.spy();
         const getJSONStub = sinon.stub(Phaser.Cache, "JSON").callsFake((key: string, clone?: boolean | undefined) => {
@@ -119,7 +119,7 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup([])
+        return startup([mock.screenDef()])
             .then(game => {
                 game.load.json = loadSpy;
                 game.cache.getJSON = getJSONStub;
@@ -137,14 +137,11 @@ function runInPreload<T>(game: Phaser.Game, action: () => Promise<T>): Promise<T
     const promiseTrigger = new PromiseTrigger<T>();
     game.state.add(
         "loadscreen",
-        class State extends Phaser.State {
-            constructor() {
-                super();
-            }
+        new class extends Phaser.State {
             public preload() {
                 promiseTrigger.resolve(action());
             }
-        },
+        }(),
     );
     game.state.start("loadscreen");
     return promiseTrigger;

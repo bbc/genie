@@ -59,6 +59,12 @@ export class Layout {
         scaler.onScaleChange.add(this.resize, this);
     }
 
+    /**
+     * Attach a callback to the onInputUp event of a given Gel button
+     *
+     * @param button- gel button identifier
+     * @param callback - callback function to attach
+     */
     public setAction = (button: string, callback: () => any) => this.buttons[button].onInputUp.add(callback, this);
 
     public addToGroup = (groupName: string, item: any, position?: number) =>
