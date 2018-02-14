@@ -2,11 +2,9 @@ import { expect } from "chai";
 import * as sinon from "sinon";
 import * as mock from "test/helpers/mock";
 
-import "phaser-ce";
-
 import { Layout } from "src/core/layout/layout";
 
-describe("Layout", () => {
+xdescribe("Layout", () => {
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame: any;
     let mockScaler: any;

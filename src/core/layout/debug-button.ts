@@ -3,8 +3,6 @@
  *
  * @example game.add.existing(new DebugButton( ...parameters).sprite)
  */
-import "phaser-ce";
-
 const gelStyle: Phaser.PhaserTextStyle = {
     font: "ReithSans",
     fontSize: 20, //40,

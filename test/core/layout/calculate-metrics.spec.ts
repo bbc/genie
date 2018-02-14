@@ -5,14 +5,12 @@ const getMetricsByWidth = (width: number) => calculateMetrics(width, 200, 1, 200
 
 
 describe("CalculateMetrics", () => {
-    it("Should report as mobile device if stage width is less than 770 Pixels", done => {
+    it("Should report as mobile device if stage width is less than 770 Pixels", () => {
         expect(getMetricsByWidth(769).isMobile).to.equal(true);
-        done();
     });
 
-    it("Should report as tablet/desktop device if stage width is greater than or equal to 770 Pixels", done => {
+    it("Should report as tablet/desktop device if stage width is greater than or equal to 770 Pixels", () => {
         expect(getMetricsByWidth(771).isMobile).to.equal(false);
-        done();
     });
 
     it("Should set button padding to 22 if mobile device", () => {
