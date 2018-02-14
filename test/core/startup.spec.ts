@@ -6,7 +6,7 @@ describe("Startup", () => {
     beforeEach(mock.installMockGetGmi);
     afterEach(mock.uninstallMockGetGmi);
 
-    xit("should resolve a promise when Phaser is fully initialised", () => {
+    it("should resolve a promise when Phaser is fully initialised", () => {
         return startup([mock.screenDef()]).then(game => {
             expect(game.isBooted).to.equal(true);
             expect(game.stage).to.be.ok;

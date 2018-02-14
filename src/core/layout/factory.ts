@@ -1,6 +1,5 @@
 // @ts-ignore
 import * as _ from "lodash/fp";
-import "phaser-ce";
 
 import * as Scaler from "../scaler";
 import * as AccessibilityManager from "../stubs/accessibility-manager";

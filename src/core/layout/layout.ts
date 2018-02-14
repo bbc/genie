@@ -1,5 +1,4 @@
 import * as _ from "lodash";
-import "phaser-ce";
 
 import { AccessibleButton } from "../stubs/accessible-button";
 import { calculateMetrics } from "./calculate-metrics";
