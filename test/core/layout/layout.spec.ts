@@ -2,6 +2,7 @@ import { expect } from "chai";
 import * as sinon from "sinon";
 
 import { Layout } from "src/core/layout/layout";
+import { PromiseTrigger } from "src/core/promise-utils";
 
 describe("Layout", () => {
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
@@ -11,24 +12,31 @@ describe("Layout", () => {
     let mockKeyLookup: any;
 
     beforeEach(() => {
-        mockGame = new Phaser.Game();
-        mockGame.world = {
-            addChild: sinon.spy(),
-            children: [],
-        };
-        mockGame.add = {
-            sprite: sinon.spy(() => new Phaser.Sprite(mockGame, 0, 0)),
-            group: sinon.spy(),
-        };
-        mockGame.renderer = { resolution: 1, destroy: () => {} };
-        mockGame.input = { interactiveItems: { add: sinon.spy() }, destroy: () => {} };
+        return initialiseGame().then(game => {
+            mockGame = game;
+            mockGame.world = {
+                addChild: sinon.spy(),
+                children: [],
+                shutdown: () => {},
+            };
+            mockGame.add = {
+                sprite: sinon.spy(() => new Phaser.Sprite(mockGame, 0, 0)),
+                group: sinon.spy(),
+            };
+            mockGame.renderer = { resolution: 1, destroy: () => {} };
+            mockGame.input = {
+                interactiveItems: { add: sinon.spy() },
+                reset: () => {},
+                destroy: () => {},
+            };
 
-        mockScaler = {
-            getSize: sinon.spy(() => ({ width: 200, height: 200 })),
-            onScaleChange: { add: sinon.spy() },
-        };
-        mockAccessibilityManager = {};
-        mockKeyLookup = sinon.spy();
+            mockScaler = {
+                getSize: sinon.spy(() => ({ width: 200, height: 200 })),
+                onScaleChange: { add: sinon.spy() },
+            };
+            mockAccessibilityManager = {};
+            mockKeyLookup = sinon.spy();
+        });
     });
 
     afterEach(() => mockGame.destroy());
@@ -55,7 +63,7 @@ describe("Layout", () => {
         expect(Object.keys(layout3.buttons).length).to.eql(6);
     });
 
-    xit("Should create 9 Gel Groups", () => {
+    it("Should create 9 Gel Groups", () => {
         const layout = new Layout(mockGame, mockScaler, mockAccessibilityManager, mockKeyLookup, []);
         expect(layout.root.children.length).to.eql(9);
     });
@@ -105,3 +113,16 @@ describe("Layout", () => {
         expect(testAction.callCount).to.eql(3);
     });
 });
+
+function initialiseGame(): Promise<Phaser.Game> {
+    const promisedGame = new PromiseTrigger<Phaser.Game>();
+    // tslint:disable-next-line:no-unused-expression
+    new Phaser.Game({
+        state: new class extends Phaser.State {
+            public create() {
+                promisedGame.resolve(this.game);
+            }
+        }(),
+    });
+    return promisedGame;
+}
