@@ -1,8 +1,7 @@
 import { expect } from "chai";
 import { calculateMetrics } from "src/core/layout/calculate-metrics";
 
-const getMetricsByWidth = (width: number) => calculateMetrics(width, 200, 1, 200)
-
+const getMetricsByWidth = (width: number) => calculateMetrics(width, 200, 1, 200);
 
 describe("CalculateMetrics", () => {
     it("Should report as mobile device if stage width is less than 770 Pixels", () => {
