@@ -2,8 +2,7 @@ declare interface Context {
     gmi: Gmi;
     //accessibilityManager: AccessibilityManager;
     //inState: GameState; // Todo: make readonly?
-    //sequencer: Sequencer;
-    layoutFactory: LayoutFactory;
+    sequencer: any;
     popupScreens: string[];
     // globalMusic?: Phaser.Sound;
     gameMuted: boolean;

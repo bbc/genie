@@ -4,19 +4,18 @@
 
 `npm run build` which runs `webpack --config build-scripts/webpack.config.js`
 
+## Build watch:
+
+`npm run build-watch` will automatically compile the Typescript and run a webpack build when the code is changed. Running this means you can view index.html in a browser without having to run a webserver.
+
 ## To view:
 
 `npm start` then navigate to http://localhost:8080/
 
-Alternatively load index.html as a file URL (requires
---allow-file-access-from-files in Chrome.)
+Alternatively load index.html as a file URL (requires --allow-file-access-from-files in Chrome.)
 
-To view in QA mode, add the query string "qaMode=true", then press the "q" key to see the overlay. (e.g. http://localhost:8080/?qaMode=true).
+To view in QA mode, add the query string "qaMode=true", then press the "q" key to see the layout overlay. (e.g. http://localhost:8080/?qaMode=true). This will also output information to the console.
 
-
-## Watcher:
-
-`npm run build-watch` will automatically compile the Typescript and run a webpack build when the code is changed. Running this means you can view index.html in a browser without having to run a webserver.
 
 ## To test:
 

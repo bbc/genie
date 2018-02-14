@@ -3,14 +3,16 @@ import { expect } from "chai";
 import "src/lib/gmi.d";
 
 import * as Sequencer from "src/core/sequencer";
+import * as LayoutFactory from "src/core/layout/factory";
 
-describe("Sequencer", () => {
+describe.only("Sequencer", () => {
     let sequencer: any;
     let mockGame: any;
     let next: NextScreenFunction;
     let mockContext: any = {
         inState: "inState",
     };
+    let mockGmi: Gmi;
     let mockTransitions: any = [
         {
             name: "title",
@@ -29,18 +31,32 @@ describe("Sequencer", () => {
     ];
 
     beforeEach(() => {
+        sinon.spy(LayoutFactory, "create");
         mockGame = {
-            state: {
-                add: sinon.spy(),
-                start: sinon.spy(),
+            state: { add: sinon.spy(), start: sinon.spy() },
+            add: {
+                group: sinon.spy(() => ({
+                    addChild: sinon.spy(),
+                })),
+            },
+            scale: {
+                setGameSize: sinon.spy(),
+                scaleMode: sinon.spy(),
+                onSizeChange: { add: sinon.spy() },
+                getParentBounds: sinon.spy(),
             },
         };
-        sequencer = Sequencer.create(mockGame, mockContext, mockTransitions);
+        mockGmi = {} as Gmi;
+        sequencer = Sequencer.create(mockGame, mockContext, mockTransitions, mockGmi);
         next = mockGame.state.start.getCall(0).args[4];
     });
 
     it("adds each transition to game state", () => {
+        console.log("calls count", mockGame.state.add.callCount);
         expect(mockGame.state.add.callCount).to.equal(3);
+        console.log("0", mockGame.state.add.getCall(0).args);
+        console.log("1", mockGame.state.add.getCall(1).args);
+        console.log("2", mockGame.state.add.getCall(2).args);
         expect(mockGame.state.add.getCall(0).args).to.eql([mockTransitions[0].name, mockTransitions[0].state]);
         expect(mockGame.state.add.getCall(1).args).to.eql([mockTransitions[1].name, mockTransitions[1].state]);
         expect(mockGame.state.add.getCall(2).args).to.eql([mockTransitions[2].name, mockTransitions[2].state]);

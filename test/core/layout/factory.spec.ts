@@ -2,7 +2,7 @@ import { expect } from "chai";
 import * as sinon from "sinon";
 import * as mock from "test/helpers/mock";
 
-import { LayoutFactory } from "src/core/layout/factory";
+import * as LayoutFactory from "src/core/layout/factory";
 
 describe("Layout Factory", () => {
     afterEach(mock.uninstallMockGetGmi);
@@ -25,7 +25,7 @@ describe("Layout Factory", () => {
                 getParentBounds: sinon.spy(),
             },
         };
-        LayoutFactory(mockGame, mockGMI);
+        LayoutFactory.create(mockGame, mockGMI);
     });
 
     it("Should add 'gelBackground', 'gelGroup' and 'foreground' layers to the phaser game", () => {

@@ -30,8 +30,12 @@ module.exports = function(config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: false,
-        browsers: ["ChromeHeadless"],
+        browsers: ["ChromeHeadlessDebugging"],
         customLaunchers: {
+            ChromeHeadlessDebugging: {
+                base: "ChromeHeadless",
+                flags: ["--remote-debugging-port=9222"],
+            },
             ChromeHeadlessNoWebGL: {
                 base: "ChromeHeadless",
                 flags: ["--disable-webgl"],
