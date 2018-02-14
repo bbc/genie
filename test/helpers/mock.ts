@@ -6,7 +6,7 @@ import { ScreenDef } from "src/core/sequencer";
 
 const TEST_DIV_ID = "test-div";
 
-export function screenDef(name: string = "my name"): ScreenDef {
+export function screenDef(name: string = "__screen_id__"): ScreenDef {
     return {
         name,
         state: screen(),
