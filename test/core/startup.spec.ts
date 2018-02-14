@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { assert, expect } from "chai";
 import { startup } from "src/core/startup";
 import * as mock from "test/helpers/mock";
 
@@ -9,13 +9,15 @@ describe("Startup", () => {
     it("should resolve a promise when Phaser is fully initialised", () => {
         return startup([mock.screenDef()]).then(game => {
             expect(game.isBooted).to.equal(true);
-            expect(game.stage).to.be.ok;
+            assert.isOk(game.stage);
+            game.destroy();
         });
     });
 
     it("should create a canvas element within the designated parent", () => {
-        return startup([mock.screenDef()]).then(() => {
+        return startup([mock.screenDef()]).then(game => {
             expect(mock.getGameHolderDiv().children[0].tagName).to.equal("CANVAS");
+            game.destroy();
         });
     });
 
@@ -23,6 +25,7 @@ describe("Startup", () => {
         mock.installMockGetGmi({ gameDir: "my/game/dir/" });
         return startup([mock.screenDef()]).then(game => {
             expect(game.load.baseURL).to.equal("my/game/dir/");
+            game.destroy();
         });
     });
 
@@ -30,6 +33,7 @@ describe("Startup", () => {
         mock.installMockGetGmi({ embedVars: { configPath: "my/config/file.json" } });
         return startup([mock.screenDef()]).then(game => {
             expect(game.load.path).to.equal("my/config/");
+            game.destroy();
         });
     });
 
