@@ -24,7 +24,6 @@ export function create(game: Phaser.Game, context: Context, transitions: ScreenD
         const newState = {}; //_.merge({}, context.inState, changedState);
         const nextScreenName = currentScreen.nextScreenName(newState);
         // context.inState = newState;
-        context;
 
         game.state.start(nextScreenName, true, false, context, next, layoutFactory);
 

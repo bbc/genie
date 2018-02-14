@@ -1,5 +1,3 @@
-import "phaser-ce";
-
 export class Screen extends Phaser.State {
     private _context: Context;
     private next: NextScreenFunction;
