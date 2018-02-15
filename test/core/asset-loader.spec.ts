@@ -3,8 +3,9 @@ import "src/lib/phaser";
 
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { loadAssets, Pack, PackList, ScreenMap } from "src/core/asset-loader";
+import { loadAssets, Pack, PackList } from "src/core/asset-loader";
 import { PromiseTrigger } from "src/core/promise-utils";
+import { Screen } from "src/core/screen";
 import { startup } from "src/core/startup";
 import { assetPacks } from "test/helpers/asset-packs";
 import { assets } from "test/helpers/assets";
@@ -24,14 +25,12 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup([mock.screenDef()])
-            .then(game => {
-                return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
-            })
-            .then((screenMap: ScreenMap) => {
+        return runInPreload(game =>
+            loadAssets(game, gamePacks, loadscreenPack, updateCallback).then(screenMap => {
                 sinon.assert.calledOnce(updateCallback);
                 sinon.assert.alwaysCalledWithExactly(updateCallback, 100);
-            });
+            }),
+        );
     });
 
     it("Should be called 4 times (at 25% intervals) when 4 files are to be loaded in gamePacks.", () => {
@@ -44,11 +43,8 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup([mock.screenDef()])
-            .then(game => {
-                return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
-            })
-            .then((screenMap: ScreenMap) => {
+        return runInPreload(game =>
+            loadAssets(game, gamePacks, loadscreenPack, updateCallback).then(screenMap => {
                 sinon.assert.callOrder(
                     updateCallback.withArgs(25),
                     updateCallback.withArgs(50),
@@ -56,7 +52,8 @@ describe("Asset Loader", () => {
                     updateCallback.withArgs(100),
                 );
                 sinon.assert.callCount(updateCallback, 4);
-            });
+            }),
+        );
     });
 
     it("Should resolve the returned Promise with keyLookups for each gamePack screen.", () => {
@@ -69,16 +66,14 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup([mock.screenDef()])
-            .then(game => {
-                return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
-            })
-            .then((screenMap: ScreenMap) => {
+        return runInPreload(game =>
+            loadAssets(game, gamePacks, loadscreenPack, updateCallback).then(screenMap => {
                 expect(screenMap).to.haveOwnProperty("screen1");
                 expect(screenMap).to.haveOwnProperty("screen2");
                 expect(screenMap).to.haveOwnProperty("screen");
                 expect(screenMap).to.not.haveOwnProperty("loadscreen");
-            });
+            }),
+        );
     });
 
     it("Should correctly namespace assets by their URL and return it in keyLookups.", () => {
@@ -90,16 +85,12 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        let theGame: Phaser.Game;
-        return startup([mock.screenDef()])
-            .then(game => {
-                theGame = game;
-                return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
-            })
-            .then((screenMap: ScreenMap) => {
+        return runInPreload(game => {
+            return loadAssets(game, gamePacks, loadscreenPack, updateCallback).then(screenMap => {
                 expect(screenMap.screen.one).to.equal(assets.imgUrlOnePixel);
-                expect(theGame.cache.checkImageKey(screenMap.screen.one)).to.equal(true);
+                expect(game.cache.checkImageKey(screenMap.screen.one)).to.equal(true);
             });
+        });
     });
 
     it("Should attempt to load assetPack JSON files that are missing and include them in keyLookups", () => {
@@ -119,30 +110,38 @@ describe("Asset Loader", () => {
             key: "loadscreen",
             url: assetPacks.loadscreenPack,
         };
-        return startup([mock.screenDef()])
-            .then(game => {
-                game.load.json = loadSpy;
-                game.cache.getJSON = getJSONStub;
-                game.state.add("test-screen", new Phaser.State());
-                return runInPreload(game, () => loadAssets(game, gamePacks, loadscreenPack, updateCallback));
-            })
-            .then((screenMap: ScreenMap) => {
+        return runInPreload(game => {
+            game.load.json = loadSpy;
+            game.cache.getJSON = getJSONStub;
+            game.state.add("test-screen", new Phaser.State());
+            return loadAssets(game, gamePacks, loadscreenPack, updateCallback).then(screenMap => {
                 sinon.assert.calledWithExactly(loadSpy, "test-screen", "test-screen.json");
                 expect(screenMap["test-screen"].test).to.equal(assets.ship);
             });
+        });
     });
 });
 
-function runInPreload<T>(game: Phaser.Game, action: () => Promise<T>): Promise<T> {
-    const promiseTrigger = new PromiseTrigger<T>();
-    game.state.add(
-        "loadscreen",
-        new class extends Phaser.State {
-            public preload() {
-                promiseTrigger.resolve(action());
-            }
-        }(),
-    );
-    game.state.start("loadscreen");
-    return promiseTrigger;
+/**
+ * Wraps a test in asynchronous Phaser setup and shutdown code, and runs it in the preload phase of the first state.
+ * @param action Function to run the tests, returning a promise.
+ */
+function runInPreload(action: (g: Phaser.Game) => Promise<void>): Promise<void> {
+    const promiseTrigger = new PromiseTrigger<Phaser.Game>();
+    const testState = new class extends Screen {
+        public preload() {
+            const g = this.game;
+            promiseTrigger.resolve(action(g).then(() => g));
+        }
+    }();
+    const transitions = [
+        {
+            name: "loadscreen",
+            state: testState,
+            nextScreenName: () => "loadscreen",
+        },
+    ];
+    return startup(transitions)
+        .then(game => promiseTrigger)
+        .then(game => game.destroy());
 }
