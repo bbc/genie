@@ -1,34 +1,33 @@
-var webpackConfig = require("../build-scripts/webpack.config");
+var webpackConfig = require("./test.webpack.config");
 
 module.exports = function(config) {
     config.set({
         basePath: "",
         frameworks: ["mocha", "chai", "sinon"],
-        files: [
-            { pattern: "../test/**/*.ts", watched: false, served: true, included: true },
-            { pattern: "../src/**/*.ts", watched: false, served: false, included: false },
-        ],
+        files: [{ pattern: "../test/**/*.ts", watched: false, served: true, included: true }],
         exclude: [],
         preprocessors: {
-            "../**/*.ts": ["webpack"],
+            "../test/**/*.ts": ["webpack", "sourcemap"],
+            "../src/**/*.ts": ["webpack", "sourcemap", "coverage"],
         },
         client: {
             mocha: {
                 timeout: 20000, // 20 seconds - upped from 2 seconds
             },
         },
-        webpack: {
-            module: webpackConfig.module,
-            resolve: webpackConfig.resolve,
+        webpack: webpackConfig,
+        coverageReporter: {
+            type: "in-memory",
         },
-        webpackMiddleware: {
-            stats: "errors-only",
-            noInfo: true,
+        remapCoverageReporter: {
+            "text-summary": null,
+            html: "./coverage/html",
+            cobertura: "./coverage/cobertura.xml",
         },
-        reporters: ["mocha"],
+        reporters: ["mocha", "coverage", "remap-coverage"],
         port: 9876,
         colors: true,
-        logLevel: config.LOG_INFO,
+        logLevel: config.LOG_DEBUG,
         autoWatch: false,
         browsers: ["ChromeHeadless"],
         customLaunchers: {
