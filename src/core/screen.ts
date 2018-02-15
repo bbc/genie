@@ -1,10 +1,8 @@
-import { GameStateUpdate, NextScreenFunction } from "src/core/sequencer";
-
 export class Screen extends Phaser.State {
+    protected layoutFactory: LayoutFactory;
+
     private _context: Context;
     private next: NextScreenFunction;
-
-    protected layoutFactory: LayoutFactory;
 
     get context(): Context {
         return this._context;

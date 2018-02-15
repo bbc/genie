@@ -33,7 +33,7 @@ export function create(game: Phaser.Game, gameWrapper: HTMLElement) {
 
         resize();
 
-        gameWrapper.appendChild(accessibilityOverlay);
+        //gameWrapper.appendChild(accessibilityOverlay);
     }
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -54,10 +54,10 @@ export function create(game: Phaser.Game, gameWrapper: HTMLElement) {
     }
 
     function resize() {
-        const gameWrapperBounds = gameWrapper.getBoundingClientRect();
-
-        accessibilityOverlay.style.width = gameWrapperBounds.width.toString() + "px";
-        accessibilityOverlay.style.height = gameWrapperBounds.height.toString() + "px";
+        // const gameWrapperBounds = gameWrapper.getBoundingClientRect();
+        //
+        // accessibilityOverlay.style.width = gameWrapperBounds.width.toString() + "px";
+        // accessibilityOverlay.style.height = gameWrapperBounds.height.toString() + "px";
     }
 
     function createButton(
