@@ -23,6 +23,7 @@ module.exports = function(config) {
             "text-summary": null,
             html: "./coverage/html",
             cobertura: "./coverage/cobertura.xml",
+            json: "./coverage/coverage.json",
         },
         reporters: ["mocha", "coverage", "remap-coverage"],
         port: 9876,
