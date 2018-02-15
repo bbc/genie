@@ -1,20 +1,11 @@
 /*jshint esversion: 6 */
 var webpackConfig = require("../build-scripts/webpack.config");
-const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
     devtool: "source-map",
     module: {
-        rules: [
-            {
-                test: /(phaser-split|p2|pixi).js$/,
-                use: "script-loader",
-            },
-            {
-                test: /\.tsx?$/,
-                use: "awesome-typescript-loader",
-            },
+        rules: webpackConfig.module.rules.concat([
             {
                 enforce: "post",
                 test: /\.tsx?$/,
@@ -22,13 +13,13 @@ module.exports = {
                 exclude: /(node_modules|resources\/js\/vendor)/,
                 loader: "istanbul-instrumenter-loader",
             },
-        ],
+        ]),
     },
     resolve: webpackConfig.resolve,
-    plugins: [
+    plugins: webpackConfig.plugins.concat([
         new webpack.SourceMapDevToolPlugin({
             filename: null, // if no value is provided the sourcemap is inlined
             test: /\.(ts|js)x?$/i, // process .js, .tsx and .ts files only
         }),
-    ],
+    ]),
 };
