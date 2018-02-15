@@ -17,5 +17,5 @@
             "plugins": "babel-polyfill"
         },
         "babelCore": "babel-core"
-    },
+    }
 }
