@@ -26,7 +26,7 @@ export function create(game: Phaser.Game, gameWrapper: HTMLElement): LayoutFacto
         keyLookups,
         addToBackground,
         addToForeground,
-        create,
+        addLayout,
         removeAll,
         addLookups,
         getSize: scaler.getSize,
@@ -42,8 +42,7 @@ export function create(game: Phaser.Game, gameWrapper: HTMLElement): LayoutFacto
      * @param buttons - array of standard button names to include. See {@link ./gel-defaults.ts} for available names
      * @returns {Layout}
      */
-    //TODO needs renaming >
-    function create(buttons: string[], keyLookup: { [s: string]: string }): Layout {
+    function addLayout(buttons: string[], keyLookup: { [s: string]: string }): Layout {
         const layout = new Layout(game, scaler, accessibilityManager, keyLookup, buttons);
 
         addToBackground(layout.root);

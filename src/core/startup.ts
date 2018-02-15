@@ -45,7 +45,7 @@ export function startup(transitions: ScreenDef[]): Promise<Phaser.Game> {
             qaMode,
             sequencer: { next: _.noop(), getTransitions: _.noop() },
         };
-        context.sequencer = Sequencer.create(game, context, transitions, gmi);
+        context.sequencer = Sequencer.create(game, context, transitions, getContainerDiv(gmi));
         game.stage.backgroundColor = "#333";
         promisedGame.resolve(game);
     }

@@ -1,19 +1,17 @@
-import * as sinon from "sinon";
 import { expect } from "chai";
+import * as sinon from "sinon";
 import "src/lib/gmi.d";
 
 import * as Sequencer from "src/core/sequencer";
-import * as LayoutFactory from "src/core/layout/factory";
 
 describe.only("Sequencer", () => {
     let sequencer: any;
     let mockGame: any;
     let next: NextScreenFunction;
-    let mockContext: any = {
+    const mockContext: any = {
         inState: "inState",
     };
-    let mockGmi: Gmi;
-    let mockTransitions: any = [
+    const mockTransitions: any = [
         {
             name: "title",
             state: "titlestate",
@@ -31,7 +29,7 @@ describe.only("Sequencer", () => {
     ];
 
     beforeEach(() => {
-        sinon.spy(LayoutFactory, "create");
+        //sinon.spy(LayoutFactory, "create");
         mockGame = {
             state: { add: sinon.spy(), start: sinon.spy() },
             add: {
@@ -46,8 +44,7 @@ describe.only("Sequencer", () => {
                 getParentBounds: sinon.spy(),
             },
         };
-        mockGmi = {} as Gmi;
-        sequencer = Sequencer.create(mockGame, mockContext, mockTransitions, mockGmi);
+        sequencer = Sequencer.create(mockGame, mockContext, mockTransitions, document.createElement("div"));
         next = mockGame.state.start.getCall(0).args[4];
     });
 

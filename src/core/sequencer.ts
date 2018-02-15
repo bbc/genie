@@ -1,14 +1,14 @@
 import * as _ from "lodash";
 import * as LayoutFactory from "./layout/factory";
 
-export function create(game: Phaser.Game, context: Context, transitions: ScreenDef[], gmi: Gmi): Sequencer {
+export function create(game: Phaser.Game, context: Context, transitions: ScreenDef[], gameWrapper: HTMLElement): Sequencer {
     let currentScreen: ScreenDef = transitions[0];
     const self = {
         next,
         getTransitions,
     };
 
-    const layoutFactory = LayoutFactory.create(game, gmi);
+    const layoutFactory = LayoutFactory.create(game, gameWrapper);
 
     transitions.forEach(transition => game.state.add(transition.name, transition.state));
 
