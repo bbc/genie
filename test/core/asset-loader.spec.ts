@@ -127,11 +127,10 @@ describe("Asset Loader", () => {
  * @param action Function to run the tests, returning a promise.
  */
 function runInPreload(action: (g: Phaser.Game) => Promise<void>): Promise<void> {
-    const promiseTrigger = new PromiseTrigger<Phaser.Game>();
+    const promisedTest = new PromiseTrigger<void>();
     const testState = new class extends Screen {
         public preload() {
-            const g = this.game;
-            promiseTrigger.resolve(action(g).then(() => g));
+            promisedTest.resolve(action(this.game));
         }
     }();
     const transitions = [
@@ -142,6 +141,6 @@ function runInPreload(action: (g: Phaser.Game) => Promise<void>): Promise<void> 
         },
     ];
     return startup(transitions)
-        .then(game => promiseTrigger)
+        .then(game => promisedTest.then(() => game))
         .then(game => game.destroy());
 }
