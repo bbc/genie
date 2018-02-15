@@ -7,7 +7,7 @@ import { Layout } from "./layout";
 
 type PhaserElement = Phaser.Sprite | Phaser.Image | Phaser.BitmapText | Phaser.Group;
 
-export function create(game: Phaser.Game, gmi: Gmi): LayoutFactory {
+export function create(game: Phaser.Game, gameWrapper: HTMLElement): LayoutFactory {
     const root = game.add.group(undefined, "gelGroup", true);
     const background = game.add.group(undefined, "gelBackground");
     const foreground = game.add.group(undefined, "foreground");
@@ -15,7 +15,7 @@ export function create(game: Phaser.Game, gmi: Gmi): LayoutFactory {
 
     //TODO stageHeight should come from config
     const scaler = Scaler.create(600, game);
-    const accessibilityManager = AccessibilityManager.create(game, gmi);
+    const accessibilityManager = AccessibilityManager.create(game, gameWrapper);
 
     root.addChild(background);
     root.addChild(foreground);
@@ -42,6 +42,7 @@ export function create(game: Phaser.Game, gmi: Gmi): LayoutFactory {
      * @param buttons - array of standard button names to include. See {@link ./gel-defaults.ts} for available names
      * @returns {Layout}
      */
+    //TODO needs renaming >
     function create(buttons: string[], keyLookup: { [s: string]: string }): Layout {
         const layout = new Layout(game, scaler, accessibilityManager, keyLookup, buttons);
 

@@ -1,14 +1,15 @@
 import * as _ from "lodash";
-import { Screen } from "src/core/screen";
 import * as sinon from "sinon";
+
+import { Screen } from "src/core/screen";
 
 const TEST_DIV_ID = "test-div";
 
-export function screenDef(name: string = "my name"): ScreenDef {
+export function screenDef(name: string = "__screen_id__"): ScreenDef {
     return {
         name,
         state: screen(),
-        nextScreenName: () => name,
+        nextScreenName: _.constant(name),
     };
 }
 
@@ -19,13 +20,15 @@ export function screen(): Screen {
 export function installMockGetGmi(propertiesToMerge: any = {}) {
     uninstallMockGetGmi();
     document.body.appendChild(document.createElement("div")).id = TEST_DIV_ID;
-    (window as any).getGMI = () => {
-        const defaultGmi = {
-            gameContainerId: TEST_DIV_ID,
-            embedVars: { configPath: "" },
-        };
-        return _.merge(defaultGmi, propertiesToMerge) as Gmi;
+    (window as any).getGMI = () => gmi(propertiesToMerge);
+}
+
+export function gmi(propertiesToMerge: any = {}): Gmi {
+    const defaultGmi = {
+        gameContainerId: TEST_DIV_ID,
+        embedVars: { configPath: "" },
     };
+    return _.merge(defaultGmi, propertiesToMerge) as Gmi;
 }
 
 export function uninstallMockGetGmi() {
