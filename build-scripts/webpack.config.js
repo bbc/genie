@@ -58,6 +58,9 @@ module.exports = {
                 },
             ],
         }),
-        new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+        new ForkTsCheckerWebpackPlugin({
+            checkSyntacticErrors: true,
+            workers: ForkTsCheckerWebpackPlugin.TWO_CPUS_FREE,
+        }),
     ],
 };
