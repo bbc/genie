@@ -24,6 +24,7 @@ module.exports = function(config) {
             html: "./coverage/html",
             cobertura: "./coverage/cobertura.xml",
             json: "./coverage/coverage.json",
+            lcovonly: "./coverage/lcov.info",
         },
         reporters: ["mocha", "coverage", "remap-coverage"],
         port: 9876,
