@@ -1,5 +1,6 @@
 import * as sinon from "sinon";
 import { expect } from "chai";
+import "src/lib/gmi.d";
 
 import * as Sequencer from "src/core/sequencer";
 
