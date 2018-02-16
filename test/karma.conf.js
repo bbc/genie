@@ -4,11 +4,14 @@ module.exports = function(config) {
     config.set({
         basePath: "",
         frameworks: ["mocha", "chai", "sinon"],
-        files: [{ pattern: "../test/**/*.ts", watched: false, served: true, included: true }],
+        files: [
+            { pattern: "../test/**/*.ts", watched: false, served: true, included: true },
+            { pattern: "../src/**/*.ts", watched: false, served: false, included: false },
+        ],
         exclude: [],
         preprocessors: {
             "../test/**/*.ts": ["webpack", "sourcemap"],
-            "../src/**/*.ts": ["webpack", "sourcemap", "coverage"],
+            "../src/**/*.ts": ["webpack", "coverage"],
         },
         client: {
             mocha: {
@@ -16,6 +19,10 @@ module.exports = function(config) {
             },
         },
         webpack: webpackConfig,
+        webpackMiddleware: {
+            stats: "errors-only",
+            noInfo: true,
+        },
         coverageReporter: {
             type: "in-memory",
         },
@@ -29,7 +36,7 @@ module.exports = function(config) {
         reporters: ["mocha", "coverage", "remap-coverage"],
         port: 9876,
         colors: true,
-        logLevel: config.LOG_DEBUG,
+        logLevel: config.LOG_INFO,
         autoWatch: false,
         browsers: ["ChromeHeadless"],
         customLaunchers: {
@@ -51,7 +58,7 @@ module.exports = function(config) {
         mime: {
             "text/x-typescript": ["ts", "tsx"],
         },
-        singleRun: true,
+        singleRun: false,
         concurrency: Infinity,
     });
 };
