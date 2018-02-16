@@ -2,11 +2,11 @@ import "src/lib/phaser";
 
 export function accessibilify(button: Phaser.Button | Phaser.Sprite, context: Context) {
     // TODO replace gameContainer string with GMI variable.
-    const gameContainer = "local-game-holder";
+    const gameContainer: string = "local-game-holder";
     const overlay = document.getElementById(gameContainer) as HTMLDivElement;
-    const div = document.createElement("div");
+    const div: HTMLDivElement = document.createElement("div");
+    const buttonProps: { width: string, height: string, x: string, y: string } = buttonProperties();
 
-    const buttonProps = buttonProperties();
     div.style.position = "absolute";
     div.style.left = buttonProps.x + "px";
     div.style.top = buttonProps.y + "px";
@@ -15,20 +15,20 @@ export function accessibilify(button: Phaser.Button | Phaser.Sprite, context: Co
     overlay.appendChild(div);
 
     function buttonProperties() {
-        const gameSize = context.layoutFactory.getSize();
-        const scale = gameSize.scale;
-        const width = button.width * scale;
-        const height = button.height * scale;
-        const halfButtonWidth = button.width * 0.5 * scale;
-        const halfButtonHeight = button.height * 0.5 * scale;
-        const x = gameSize.width * 0.5 + button.x * scale - halfButtonWidth;
-        const y = gameSize.height * 0.5 + button.y * scale - halfButtonHeight;
+        const gameSize: { width: number, height: number, scale: number, stageHeightPx: number } = context.layoutFactory.getSize();
+        const scale: number = gameSize.scale;
+        const halfButtonWidth: number = button.width * 0.5 * scale;
+        const halfButtonHeight: number = button.height * 0.5 * scale;
+        const halfGameWidth: number = gameSize.width * 0.5;
+        const halfGameHeight: number = gameSize.height * 0.5;
+        const buttonX = button.x * scale - halfButtonWidth;
+        const buttonY = button.y * scale - halfButtonHeight;
 
         return {
-            width: width.toString(),
-            height: height.toString(),
-            x: x.toString(),
-            y: y.toString(),
+            width: (button.width * scale).toString(),
+            height: (button.height * scale).toString(),
+            x: (halfGameWidth + buttonX).toString(),
+            y: (halfGameHeight + buttonY).toString(),
         };
     }
 }
