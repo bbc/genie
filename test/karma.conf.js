@@ -58,7 +58,7 @@ module.exports = function(config) {
         mime: {
             "text/x-typescript": ["ts", "tsx"],
         },
-        singleRun: false,
+        singleRun: true,
         concurrency: Infinity,
     });
 };
