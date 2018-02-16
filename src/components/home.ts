@@ -22,9 +22,13 @@ export class Home extends Screen {
         this.context.layoutFactory.create(["exit", "howToPlay", "play", "soundOff", "settings"], this.gel);
         createTestHarnessDisplay(this.game, this.context);
         // ===
-        const button = new Phaser.Button(this.game, -200, -100, this.gel.play);
+        const button = new Phaser.Button(this.game, -200, -100, this.gel.play, this.thing, this);
         this.context.layoutFactory.addToBackground(button);
-        accessibilify(button, this.context);
+        accessibilify(button, this.context, this.thing);
         // ===
+    }
+
+    private thing() {
+        console.log("clicked");
     }
 }
