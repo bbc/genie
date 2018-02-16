@@ -28,6 +28,11 @@ module.exports = {
                 test: /\.tsx?$/,
                 use: "happypack/loader?id=ts",
             },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "happypack/loader?id=js",
+            },
         ],
     },
     resolve: {
@@ -45,6 +50,10 @@ module.exports = {
             threads: 2,
             loaders: [
                 {
+                    path: "babel-loader",
+                    query: { presets: [["env", { targets: { ie: 11 } }]] },
+                },
+                {
                     path: "ts-loader",
                     query: { happyPackMode: true },
                 },
@@ -57,6 +66,19 @@ module.exports = {
                     path: "script-loader",
                 },
             ],
+        }),
+        new HappyPack({
+            id: "js",
+            loaders: [
+                {
+                    path: "babel-core",
+                    query: {
+                        presets: [["env", { targets: { ie: 11 } }]],
+                        cacheDirectory: true,
+                    },
+                },
+            ],
+            threads: 2,
         }),
         new ForkTsCheckerWebpackPlugin({
             checkSyntacticErrors: true,
