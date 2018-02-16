@@ -13,19 +13,18 @@
 Alternatively load index.html as a file URL (requires
 --allow-file-access-from-files in Chrome.)
 
-## Watcher:
-
-`npm run watch` will run webpack in watch mode.
-
-Typescript files are compiled and bundled automatically on save, while the
-watcher is active. Karma tests are also automatically ran.
-
 ## To test:
 
-`npm test` will run tests using karma.
+`npm test` will run tests using karma.  
+`npm run test-watch` will run tests using karma in watch mode.
+
+## To get test coverage:
+
+`npm run coverage` will run tests and get test coverage using karma.  
+`npm run coverage-watch` will do this in watch mode.
 
 ### Potential Issues
-If you have an error running tests similar to: 
+If you have an error running tests similar to:
 ```
  Error during loading "D:\Work\childrens-games-genie\node_modules/karma-phantomjs-launcher" plugin:
   Path must be a string. Received null

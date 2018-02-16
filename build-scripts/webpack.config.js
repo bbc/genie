@@ -2,7 +2,6 @@
 const path = require("path");
 const webpack = require("webpack");
 const TsConfigPathsPlugin = require("awesome-typescript-loader").TsConfigPathsPlugin;
-const { CheckerPlugin } = require("awesome-typescript-loader");
 
 var phaserModule = path.join(__dirname, "../node_modules/phaser-ce/");
 var phaser = path.join(phaserModule, "build/custom/phaser-split.js"),
@@ -37,5 +36,5 @@ module.exports = {
         extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".jsx"],
         plugins: [new TsConfigPathsPlugin()],
     },
-    plugins: [new CheckerPlugin()],
+    plugins: [],
 };
