@@ -16,7 +16,7 @@ export interface PauseManager {
 export interface PauseifiedButton {
     name: string;
     popupScreenContext?: string;
-    update(gameMuted: boolean): void;
+    buttonUpdate(gameMuted: boolean): void;
     destroy(): void;
 }
 
@@ -34,7 +34,7 @@ export function create(game: Phaser.Game, context: Context): PauseManager {
 
     function update(gameMuted: boolean) {
         buttons.forEach((button: PauseifiedButton) => {
-            button.update(context.gameMuted);
+            button.buttonUpdate(context.gameMuted);
         });
 
         if (gameMuted) {
@@ -69,14 +69,14 @@ export function create(game: Phaser.Game, context: Context): PauseManager {
         marker: string,
         popupScreenContext?: string,
     ): PauseifiedButton {
-        const self = { name: marker, popupScreenContext, update, destroy };
+        const self = { name: marker, popupScreenContext, buttonUpdate, destroy };
 
         let hoverState = false;
         button.input.priorityID = PRIORITY_ID + context.popupScreens.length;
         buttons.push(self);
         return self;
 
-        function update(gameMuted: boolean) {
+        function buttonUpdate(gameMuted: boolean) {
             const bounds = button.getBounds();
             const hovering = bounds.contains(game.input.activePointer.x, game.input.activePointer.y);
             const screenIsAboveAllOthers = _.last(context.popupScreens) === popupScreenContext;
