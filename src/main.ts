@@ -1,5 +1,4 @@
 import "babel-polyfill";
-import "src/lib/phaser";
 
 import { Home } from "src/components/home";
 import { GameTest } from "src/components/test-harness/test-screens/game";
