@@ -2,8 +2,8 @@
 
 ## To build:
 
-`npm run build` which runs `webpack --config build-scripts/webpack.config.js`
-`npm run build-watch` runs the compiler and creates a bundle. This means you can view index.html in a browser without having to run a webserver.
+`npm run build` which runs `webpack --config build-scripts/webpack.config.js`  
+`npm run build-watch` runs the compiler and creates a bundle.  
 
 
 ## To view:
@@ -15,14 +15,10 @@ Alternatively load index.html as a file URL (requires
 
 ## To test:
 
-`npm test` will run tests using karma.  
-`npm run test-watch` will run tests using karma in watch mode.
-
-## To get test coverage:
-
-`npm run coverage` will run tests and get test coverage using karma.  
-`npm run coverage-watch` will do this in watch mode.
-
+`npm test` will run tests using karma (also does test coverage).  
+`npm run test-watch` will run tests using karma in watch mode.  
+Navigate to `localhost:9876` to connect to karma while it's in watch mode (useful for debugging tests).  
+  
 ### Potential Issues
 If you have an error running tests similar to:
 ```
