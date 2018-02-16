@@ -1,7 +1,7 @@
 import * as sinon from "sinon";
 import { expect } from "chai";
 
-import { Screen } from "src/core/screen";
+import { Screen } from "../../src/core/screen";
 
 describe("Screen", () => {
     let screen: any;

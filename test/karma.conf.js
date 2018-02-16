@@ -10,8 +10,8 @@ module.exports = function(config) {
         ],
         exclude: ["../node_modules"],
         preprocessors: {
-            "../test/**/*.ts": ["webpack"],
-            "../src/**/*.ts": ["webpack"],
+            "../test/**/*.ts": ["webpack", "sourcemap"],
+            "../src/**/*.ts": ["webpack", "coverage"],
         },
         client: {
             mocha: {
@@ -23,7 +23,17 @@ module.exports = function(config) {
             stats: "errors-only",
             noInfo: true,
         },
-        reporters: ["mocha"],
+        coverageReporter: {
+            type: "in-memory",
+        },
+        remapCoverageReporter: {
+            "text-summary": null,
+            html: "./coverage/html",
+            cobertura: "./coverage/cobertura.xml",
+            json: "./coverage/coverage.json",
+            lcovonly: "./coverage/lcov.info",
+        },
+        reporters: ["mocha", "coverage", "remap-coverage"],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,

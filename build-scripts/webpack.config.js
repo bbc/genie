@@ -1,7 +1,9 @@
 /*jshint esversion: 6 */
 const path = require("path");
 const webpack = require("webpack");
-const TsConfigPathsPlugin = require("awesome-typescript-loader").TsConfigPathsPlugin;
+const HappyPack = require("happypack");
+const { TsConfigPathsPlugin } = require("awesome-typescript-loader");
+var ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 var phaserModule = path.join(__dirname, "../node_modules/phaser-ce/");
 var phaser = path.join(phaserModule, "build/custom/phaser-split.js"),
@@ -9,6 +11,7 @@ var phaser = path.join(phaserModule, "build/custom/phaser-split.js"),
     p2 = path.join(phaserModule, "build/custom/p2.js");
 
 module.exports = {
+    context: path.join(__dirname, ".."),
     devtool: "source-map",
     entry: "./src/main.ts",
     output: {
@@ -19,11 +22,11 @@ module.exports = {
         rules: [
             {
                 test: /(phaser-split|p2|pixi).js$/,
-                use: "script-loader",
+                use: "happypack/loader?id=script",
             },
             {
                 test: /\.tsx?$/,
-                loader: "awesome-typescript-loader",
+                use: "happypack/loader?id=ts",
             },
         ],
     },
@@ -34,7 +37,27 @@ module.exports = {
             p2: p2,
         },
         extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js", ".jsx"],
-        plugins: [new TsConfigPathsPlugin()],
+        plugins: [],
     },
-    plugins: [],
+    plugins: [
+        new HappyPack({
+            id: "ts",
+            threads: 2,
+            loaders: [
+                {
+                    path: "ts-loader",
+                    query: { happyPackMode: true },
+                },
+            ],
+        }),
+        new HappyPack({
+            id: "script",
+            loaders: [
+                {
+                    path: "script-loader",
+                },
+            ],
+        }),
+        new ForkTsCheckerWebpackPlugin({ checkSyntacticErrors: true }),
+    ],
 };

@@ -4,18 +4,7 @@
         "target": "es6",
         "strict": true,
         "sourceMap": true,
-        "baseUrl": ".",
         "strictPropertyInitialization": false,
         "noUnusedLocals": true
-    },
-    "awesomeTypescriptLoaderOptions": {
-        "useBabel": true,
-        "useCache": true,
-        "babelOptions": {
-            "babelrc": false,
-            "presets": [["env", {"targets": {"ie": 11}}]],
-            "plugins": "babel-polyfill"
-        },
-        "babelCore": "babel-core"
     }
 }

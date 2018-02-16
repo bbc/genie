@@ -1,7 +1,7 @@
-import "src/lib/phaser";
+import "../../../src/lib/phaser";
 
 import * as sinon from "sinon";
-import { createTestHarnessDisplay } from "src/components/test-harness/layout";
+import { createTestHarnessDisplay } from "../../../src/components/test-harness/layout";
 
 describe("test harness layout", () => {
     let mockGame: any;
