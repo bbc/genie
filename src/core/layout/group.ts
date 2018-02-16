@@ -35,7 +35,6 @@ class Group extends Phaser.Group {
         private vPos: string,
         private hPos: string,
         private metrics: ViewportMetrics,
-        accessibilityManager: AccessibilityManager,
         private vertical: boolean,
     ) {
         super(game, parent, fp.camelCase([vPos, hPos, vertical ? "v" : ""].join(" ")));
