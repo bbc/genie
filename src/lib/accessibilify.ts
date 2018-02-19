@@ -1,44 +1,50 @@
 import "src/lib/phaser";
 
-export function accessibilify(button: Phaser.Button | Phaser.Sprite, context: Context, action: () => void) {
+export function accessibilify(button: Phaser.Button | Phaser.Sprite, context: Context, _ariaLabel?: string) {
     const gameSize = context.layoutFactory.getSize();
-    const scale = gameSize.scale;
     const overlay = document.getElementById(context.gmi.gameContainerId) as HTMLDivElement;
 
     overlay.appendChild(element());
 
     function element(): HTMLDivElement {
         const div = document.createElement("div");
+        div.id = button.name;
         div.setAttribute("tabindex", "0");
-        div.setAttribute("aria-label", button.name);
+        div.setAttribute("aria-label", ariaLabel());
         div.style.position = "absolute";
         div.style.left = cssLeft();
         div.style.top = cssTop();
         div.style.width = cssWidth();
         div.style.height = cssHeight();
         div.addEventListener("keyup", keyUp);
+        div.addEventListener("click", callButtonAction);
 
         return div;
     }
 
     function keyUp(event: KeyboardEvent): void {
-        const enterKey = (event.keyCode === 13);
+        const enterKey = (event.key === "Enter");
+        const spaceKey = (event.key === " ");
 
-        if (enterKey) {
-            enterKeyPressed();
+        if (enterKey || spaceKey) {
+            callButtonAction();
         }
     }
 
-    function enterKeyPressed(): void {
-        action();
+    function callButtonAction(): void {
+        button.events.onInputUp.dispatch(button, button.game.input.activePointer, false);
+    }
+
+    function ariaLabel() {
+        return _ariaLabel ? _ariaLabel : button.name;
     }
 
     function cssWidth(): string {
-        return (button.width * scale).toString() + "px";
+        return (button.width * gameSize.scale).toString() + "px";
     }
 
     function cssHeight(): string {
-        return (button.height * scale).toString() + "px";
+        return (button.height * gameSize.scale).toString() + "px";
     }
 
     function cssLeft(): string {
@@ -50,19 +56,19 @@ export function accessibilify(button: Phaser.Button | Phaser.Sprite, context: Co
     }
 
     function buttonX(): number {
-        return button.x * scale - halfButtonWidth();
+        return button.x * gameSize.scale - halfButtonWidth();
     }
 
     function buttonY(): number {
-        return button.y * scale - halfButtonHeight();
+        return button.y * gameSize.scale - halfButtonHeight();
     }
 
     function halfButtonWidth(): number {
-        return button.width * 0.5 * scale;
+        return button.width * 0.5 * gameSize.scale;
     }
 
     function halfButtonHeight(): number {
-        return button.height * 0.5 * scale;
+        return button.height * 0.5 * gameSize.scale;
     }
 
     function halfGameWidth(): number {
