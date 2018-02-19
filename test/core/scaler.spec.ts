@@ -12,7 +12,7 @@ describe("Scaler", () => {
                 setGameSize: sinon.spy(),
                 scaleMode: sinon.spy(),
                 onSizeChange: { add: sinon.spy() },
-                getParentBounds: sinon.spy(function() {
+                getParentBounds: sinon.spy(() => {
                     return { width: 800, height: 600 };
                 }),
             },

@@ -1,5 +1,6 @@
 // Phaser and its dependencies don't conform to the module conventions that
 // Webpack requires. This file makes them behave properly.
+// Import order matters.
 
 import "pixi.js";
 
