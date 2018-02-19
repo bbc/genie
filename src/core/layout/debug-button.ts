@@ -3,7 +3,6 @@
  *
  * @example game.add.existing(new DebugButton( ...parameters).sprite)
  */
-
 const gelStyle: Phaser.PhaserTextStyle = {
     font: "ReithSans",
     fontSize: 20, //40,
@@ -68,7 +67,6 @@ export class DebugButton {
         this.sprite.events.onInputOut.add(() => {
             this.sprite.setTexture(backdrop);
         });
-        this.sprite.name = spec.text;
 
         const text = new Phaser.Text(game, 0, 0, spec.text, gelStyle);
         text.anchor.setTo(0.5, 0.5);
