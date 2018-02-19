@@ -17,11 +17,6 @@ module.exports = {
     },
     resolve: webpackConfig.resolve,
     plugins: webpackConfig.plugins.concat([
-        new webpack.SourceMapDevToolPlugin({
-            filename: null, // if no value is provided the sourcemap is inlined
-            test: /\.(ts|js)x?$/i, // process .js, .tsx and .ts files only
-            moduleFilenameTemplate: "[absolute-resource-path]",
-        }),
         new HappyPack({
             id: "istanbul-instrumenter",
             threads: 1,

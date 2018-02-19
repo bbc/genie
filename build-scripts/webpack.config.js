@@ -11,7 +11,7 @@ var phaser = path.join(phaserModule, "build/custom/phaser-split.js"),
 
 module.exports = {
     context: path.join(__dirname, ".."),
-    devtool: "source-map",
+    devtool: "cheap-module-eval-source-map",
     entry: "./src/main.ts",
     output: {
         devtoolModuleFilenameTemplate: "[absolute-resource-path]",
@@ -86,6 +86,11 @@ module.exports = {
         new ForkTsCheckerWebpackPlugin({
             checkSyntacticErrors: true,
             workers: ForkTsCheckerWebpackPlugin.ONE_CPU,
+        }),
+        new webpack.SourceMapDevToolPlugin({
+            filename: null, // if no value is provided the sourcemap is inlined
+            test: /\.(ts|js)x?$/i, // process .js, .tsx and .ts files only
+            moduleFilenameTemplate: "[absolute-resource-path]",
         }),
     ],
 };

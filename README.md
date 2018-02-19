@@ -18,7 +18,6 @@ Alternatively load index.html as a file URL (requires
 `npm test` will run tests using karma.  
 `npm run test-watch` will run tests using karma in watch mode.  
 
-`npm test:source` and `npm run test-watch:source` will also generate source
-maps (useful when debugging tests) and also allows test coverage to be calculated.  
-This will run **slower** than
-running the tests normally.
+`npm test:coverage` and `npm run test-watch:coverage` will also calculate test
+coverage.  
+This will run **slower** than running the tests normally.
