@@ -24,6 +24,7 @@ module.exports = {
         }),
         new HappyPack({
             id: "istanbul-instrumenter",
+            threads: 1,
             loaders: [
                 {
                     path: "istanbul-instrumenter-loader",
