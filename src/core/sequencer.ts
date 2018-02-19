@@ -1,7 +1,12 @@
 import * as _ from "lodash";
 import * as LayoutFactory from "./layout/factory";
 
-export function create(game: Phaser.Game, context: Context, transitions: ScreenDef[], gameWrapper: HTMLElement): Sequencer {
+export function create(
+    game: Phaser.Game,
+    context: Context,
+    transitions: ScreenDef[],
+    gameWrapper: HTMLElement,
+): Sequencer {
     let currentScreen: ScreenDef = transitions[0];
     const self = {
         next,
@@ -14,9 +19,6 @@ export function create(game: Phaser.Game, context: Context, transitions: ScreenD
 
     const screenLookup = _.fromPairs(_.map(transitions, (c: any) => [c.name, c]));
     game.state.start(currentScreen.name, true, false, context, next, layoutFactory);
-    // game.state.onShutDownCallback = () => {
-    //     console.log("Has shutdown");
-    // };
 
     return self;
 
@@ -25,7 +27,7 @@ export function create(game: Phaser.Game, context: Context, transitions: ScreenD
         const nextScreenName = currentScreen.nextScreenName(newState);
         // context.inState = newState;
         //context;
-
+        layoutFactory.removeAll();
         game.state.start(nextScreenName, true, false, context, next, layoutFactory);
 
         // console.log(`${currentScreen.name} --> ${nextScreenName}`);

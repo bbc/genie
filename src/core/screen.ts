@@ -1,3 +1,5 @@
+import "../lib/phaser";
+
 export class Screen extends Phaser.State {
     protected layoutFactory: LayoutFactory;
 
@@ -13,8 +15,6 @@ export class Screen extends Phaser.State {
         this._context = context; //TODO make protected?
         this.next = next;
     }
-
-    public update() {}
 
     public exit(changedState: GameStateUpdate) {
         this.next(changedState);
