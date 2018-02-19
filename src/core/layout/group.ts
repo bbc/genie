@@ -2,42 +2,54 @@
 import * as fp from "lodash/fp";
 import { DebugButton } from "./debug-button";
 
-const horizontal: any = {
+const horizontal: HorizontalPositions<(pos: number, width: number, pad: number) => number> = {
     left: (pos: number, width: number, pad: number) => pos + pad,
     right: (pos: number, width: number, pad: number) => pos - width - pad,
     center: (pos: number, width: number, pad: number) => pos - width / 2,
 };
 
-const vertical: any = {
+const vertical: VerticalPositions = {
     top: (pos: number, height: number, pad: number) => pos + pad,
     middle: (pos: number, height: number, pad: number) => pos - height / 2,
     bottom: (pos: number, height: number, pad: number) => pos - (height + pad),
 };
 
-const getGroupPosition = ({ metrics, pos, width, height, scale }: any) => ({
-    x: getGroupX({ metrics, pos, width, scale }),
-    y: getGroupY({ metrics, pos, height, scale }),
+const getGroupPosition = (sizes: GroupSizes) => ({
+    x: getGroupX(sizes),
+    y: getGroupY(sizes),
 });
 
-const getGroupX = ({ metrics, pos, width, scale }: any) => {
-    const horizontals: any = metrics[pos.v === "middle" ? "safeHorizontals" : "horizontals"];
-    return horizontal[pos.h](horizontals[pos.h], width, metrics.borderPad * scale);
+const getGroupX = (sizes: GroupSizes) => {
+    const horizontals: HorizontalPositions<number> = sizes.metrics[
+        sizes.pos.v === "middle" ? "safeHorizontals" : "horizontals"
+    ] as HorizontalPositions<number>;
+    return horizontal[sizes.pos.h](
+        horizontals[sizes.pos.h] as number,
+        sizes.width,
+        sizes.metrics.borderPad * sizes.scale,
+    );
 };
 
-const getGroupY = ({ metrics, pos, height, scale }: any) =>
-    vertical[pos.v]((metrics.verticals as any)[pos.v], height, metrics.borderPad * scale);
+const getGroupY = (sizes: GroupSizes) =>
+    vertical[sizes.pos.v](
+        (sizes.metrics.verticals as any)[sizes.pos.v],
+        sizes.height,
+        sizes.metrics.borderPad * sizes.scale,
+    );
 
 class Group extends Phaser.Group {
     private buttons: DebugButton[] = [];
+    private setGroupPosition: () => void;
     constructor(
         game: Phaser.Game,
         parent: Phaser.Group,
         private vPos: string,
         private hPos: string,
         private metrics: ViewportMetrics,
-        private vertical: boolean,
+        private isVertical: boolean,
     ) {
-        super(game, parent, fp.camelCase([vPos, hPos, vertical ? "v" : ""].join(" ")));
+        super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
+        this.setGroupPosition = fp.flow(this.getSizes, getGroupPosition, this.setPos);
         this.setGroupPosition();
     }
 
@@ -91,7 +103,7 @@ class Group extends Phaser.Group {
             const child = childDisplayObject as PIXI.DisplayObjectContainer;
             child.y = pos.y + child.height / 2;
 
-            if (this.vertical) {
+            if (this.isVertical) {
                 child.x = groupWidth / 2;
                 pos.y += child.height + this.metrics.buttonPad;
             } else {
@@ -101,7 +113,7 @@ class Group extends Phaser.Group {
         }, this);
     };
 
-    private getSizes = () => ({
+    private getSizes: () => GroupSizes = () => ({
         metrics: this.metrics,
         pos: { h: this.hPos, v: this.vPos },
         width: this.width,
@@ -109,12 +121,32 @@ class Group extends Phaser.Group {
         scale: this.scale.x,
     });
 
-    private setPos = ({ x, y }: any) => {
-        this.x = x;
-        this.y = y;
+    private setPos = (coords: { x: number; y: number }) => {
+        this.x = coords.x;
+        this.y = coords.y;
     };
-
-    private setGroupPosition = fp.flow(this.getSizes, getGroupPosition, this.setPos);
 }
 
 export default Group;
+
+interface GroupSizes {
+    metrics: ViewportMetrics;
+    pos: { h: string; v: string };
+    width: number;
+    height: number;
+    scale: number;
+}
+
+interface HorizontalPositions<T> {
+    left: T;
+    right: T;
+    center: T;
+    [key: string]: T;
+}
+
+interface VerticalPositions {
+    top: (pos: number, width: number, pad: number) => number;
+    middle: (pos: number, width: number, pad: number) => number;
+    bottom: (pos: number, width: number, pad: number) => number;
+    [key: string]: (pos: number, width: number, pad: number) => number;
+}

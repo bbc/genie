@@ -1,11 +1,11 @@
-import * as sinon from "sinon";
 import { expect } from "chai";
+import * as sinon from "sinon";
 
 import { Screen } from "src/core/screen";
 
 describe("Screen", () => {
     let screen: any;
-    let mockContext: any = {
+    const mockContext: any = {
         inState: "inState",
     };
     let mockNext: any;
