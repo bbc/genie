@@ -1,4 +1,4 @@
-var checkSourceFlag = process.argv.toString().includes(",source");
+var checkSourceFlag = process.argv.toString().includes("source-maps");
 var webpackConfig = checkSourceFlag ? require("./test.webpack.config") : require("../build-scripts/webpack.config.js");
 
 module.exports = function(config) {
