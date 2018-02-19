@@ -1,4 +1,5 @@
-var webpackConfig = require("./test.webpack.config");
+var webpackConfig =
+    process.argv[4] == "source" ? require("./test.webpack.config") : require("../build-scripts/webpack.config.js");
 
 module.exports = function(config) {
     config.set({
@@ -10,8 +11,8 @@ module.exports = function(config) {
         ],
         exclude: ["../node_modules"],
         preprocessors: {
-            "../test/**/*.ts": ["webpack", "sourcemap"],
-            "../src/**/*.ts": ["webpack", "coverage"],
+            "../test/**/*.ts": process.argv[4] == "source" ? ["webpack", "sourcemap"] : ["webpack"],
+            "../src/**/*.ts": process.argv[4] == "source" ? ["webpack", "coverage"] : ["webpack"],
         },
         client: {
             mocha: {
@@ -33,7 +34,7 @@ module.exports = function(config) {
             json: "./coverage/coverage.json",
             lcovonly: "./coverage/lcov.info",
         },
-        reporters: ["mocha", "coverage", "remap-coverage"],
+        reporters: process.argv[4] == "source" ? ["mocha", "coverage", "remap-coverage"] : ["mocha"],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
@@ -43,16 +44,6 @@ module.exports = function(config) {
             ChromeHeadlessNoWebGL: {
                 base: "ChromeHeadless",
                 flags: ["--disable-webgl"],
-            },
-            PhantomJSNoSecurity: {
-                // requires karma-phantomjs-launcher
-                base: "PhantomJS",
-                options: {
-                    settings: {
-                        // Enables loading JSON data urls:
-                        webSecurityEnabled: false,
-                    },
-                },
             },
         },
         mime: {

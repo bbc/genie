@@ -4,7 +4,6 @@ const webpack = require("webpack");
 const HappyPack = require("happypack");
 
 module.exports = {
-    devtool: "source-map",
     module: {
         rules: webpackConfig.module.rules.concat([
             {
@@ -12,7 +11,7 @@ module.exports = {
                 test: /\.tsx?$/,
                 include: /(src)/,
                 exclude: /(node_modules|resources\/js\/vendor)/,
-                loader: "happypack/loader?id=istanbul",
+                loader: "happypack/loader?id=istanbul-instrumenter",
             },
         ]),
     },
@@ -21,9 +20,10 @@ module.exports = {
         new webpack.SourceMapDevToolPlugin({
             filename: null, // if no value is provided the sourcemap is inlined
             test: /\.(ts|js)x?$/i, // process .js, .tsx and .ts files only
+            moduleFilenameTemplate: "[absolute-resource-path]",
         }),
         new HappyPack({
-            id: "istanbul",
+            id: "istanbul-instrumenter",
             loaders: [
                 {
                     path: "istanbul-instrumenter-loader",

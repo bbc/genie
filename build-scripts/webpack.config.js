@@ -2,7 +2,6 @@
 const path = require("path");
 const webpack = require("webpack");
 const HappyPack = require("happypack");
-const { TsConfigPathsPlugin } = require("awesome-typescript-loader");
 var ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 var phaserModule = path.join(__dirname, "../node_modules/phaser-ce/");
@@ -22,7 +21,7 @@ module.exports = {
         rules: [
             {
                 test: /(phaser-split|p2|pixi).js$/,
-                use: "happypack/loader?id=script",
+                use: "happypack/loader?id=script-loader",
             },
             {
                 test: /\.tsx?$/,
@@ -31,7 +30,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: "happypack/loader?id=js",
+                loader: "happypack/loader?id=babel",
             },
         ],
     },
@@ -47,7 +46,6 @@ module.exports = {
     plugins: [
         new HappyPack({
             id: "ts",
-            threads: 2,
             loaders: [
                 {
                     path: "babel-loader",
@@ -60,7 +58,7 @@ module.exports = {
             ],
         }),
         new HappyPack({
-            id: "script",
+            id: "script-loader",
             loaders: [
                 {
                     path: "script-loader",
@@ -68,7 +66,7 @@ module.exports = {
             ],
         }),
         new HappyPack({
-            id: "js",
+            id: "babel",
             loaders: [
                 {
                     path: "babel-core",
@@ -78,7 +76,6 @@ module.exports = {
                     },
                 },
             ],
-            threads: 2,
         }),
         new ForkTsCheckerWebpackPlugin({
             checkSyntacticErrors: true,
