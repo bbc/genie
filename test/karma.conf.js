@@ -1,5 +1,5 @@
-var webpackConfig =
-    process.argv[4] == "source" ? require("./test.webpack.config") : require("../build-scripts/webpack.config.js");
+var checkSourceFlag = process.argv.toString().includes(",source");
+var webpackConfig = checkSourceFlag ? require("./test.webpack.config") : require("../build-scripts/webpack.config.js");
 
 module.exports = function(config) {
     config.set({
@@ -11,8 +11,8 @@ module.exports = function(config) {
         ],
         exclude: ["../node_modules"],
         preprocessors: {
-            "../test/**/*.ts": process.argv[4] == "source" ? ["webpack", "sourcemap"] : ["webpack"],
-            "../src/**/*.ts": process.argv[4] == "source" ? ["webpack", "coverage"] : ["webpack"],
+            "../test/**/*.ts": checkSourceFlag ? ["webpack", "sourcemap"] : ["webpack"],
+            "../src/**/*.ts": checkSourceFlag ? ["webpack", "coverage"] : ["webpack"],
         },
         client: {
             mocha: {
@@ -34,7 +34,7 @@ module.exports = function(config) {
             json: "./coverage/coverage.json",
             lcovonly: "./coverage/lcov.info",
         },
-        reporters: process.argv[4] == "source" ? ["mocha", "coverage", "remap-coverage"] : ["mocha"],
+        reporters: checkSourceFlag ? ["mocha", "coverage", "remap-coverage"] : ["mocha"],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
