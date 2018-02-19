@@ -11,18 +11,19 @@ describe("Scaler", () => {
             scale: {
                 setGameSize: sinon.spy(),
                 scaleMode: sinon.spy(),
-                onSizeChange: { add: sinon.spy()},
-                getParentBounds: sinon.spy(function(){return {width: 800, height: 600}; }),
+                onSizeChange: { add: sinon.spy() },
+                getParentBounds: sinon.spy(() => {
+                    return { width: 800, height: 600 };
+                }),
             },
         };
-
     });
 
     it("Should set the scalemode be an exact fit on create", () => {
         Scaler.create(600, mockGame);
         expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.EXACT_FIT);
     });
-    
+
     it("Should call the games onSizeChange add function once", () => {
         Scaler.create(600, mockGame);
         expect(mockGame.scale.onSizeChange.add.callCount).to.eql(1);

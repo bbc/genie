@@ -8,6 +8,7 @@ describe.only("Sequencer", () => {
     let sequencer: any;
     let mockGame: any;
     let next: NextScreenFunction;
+
     const mockContext: any = {
         inState: "inState",
     };

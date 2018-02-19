@@ -3,14 +3,14 @@ export function parseUrlParams(paramsString: string): any {
         return {};
     }
 
-    let keyValues = paramsString.slice(paramsString.indexOf("?") + 1).split("&");
+    const keyValues = paramsString.slice(paramsString.indexOf("?") + 1).split("&");
     return keyValues.reduce((params, hash) => {
         const [key, val] = hash.split("=");
         return Object.assign(params, { [key]: parseBooleans(val) });
     }, {});
 
     function parseBooleans(val: string) {
-        let decodedComponent = decodeURIComponent(val);
+        const decodedComponent = decodeURIComponent(val);
 
         if (decodedComponent === "true") {
             return true;

@@ -18,7 +18,7 @@ export class AccessibleButton extends Phaser.Button {
         x: number,
         y: number,
         key: string,
-        callback?: Function,
+        callback?: () => any,
         callbackContext?: Phaser.State,
     ) {
         super(game, x, y, key, callback, callbackContext, 2, 0, 1);

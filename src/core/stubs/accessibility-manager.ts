@@ -69,7 +69,7 @@ export function create(game: Phaser.Game, gameWrapper: HTMLElement) {
         x: number,
         y: number,
         key: string,
-        callback?: Function,
+        callback?: () => any,
         callbackContext?: Phaser.State,
     ) {
         const button = new AccessibleButton(
