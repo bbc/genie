@@ -1,6 +1,6 @@
 var checkCoverageFlag = process.argv.toString().includes("--coverage");
 var webpackConfig = checkCoverageFlag
-    ? require("./test.webpack.config")
+    ? require("./coverage.webpack.config")
     : require("../build-scripts/webpack.config.js");
 
 module.exports = function(config) {
