@@ -46,6 +46,7 @@ module.exports = {
     plugins: [
         new HappyPack({
             id: "ts",
+            threads: 1,
             loaders: [
                 {
                     path: "babel-loader",
@@ -59,6 +60,7 @@ module.exports = {
         }),
         new HappyPack({
             id: "script-loader",
+            threads: 1,
             loaders: [
                 {
                     path: "script-loader",
@@ -67,6 +69,7 @@ module.exports = {
         }),
         new HappyPack({
             id: "babel",
+            threads: 1,
             loaders: [
                 {
                     path: "babel-core",
@@ -79,7 +82,7 @@ module.exports = {
         }),
         new ForkTsCheckerWebpackPlugin({
             checkSyntacticErrors: true,
-            workers: ForkTsCheckerWebpackPlugin.TWO_CPUS_FREE,
+            workers: ForkTsCheckerWebpackPlugin.ONE_CPU,
         }),
     ],
 };
