@@ -2,7 +2,6 @@
 import * as _ from "lodash/fp";
 
 import * as Scaler from "../scaler";
-import * as AccessibilityManager from "../stubs/accessibility-manager";
 import { Layout } from "./layout";
 
 type PhaserElement = Phaser.Sprite | Phaser.Image | Phaser.BitmapText | Phaser.Group;
@@ -15,7 +14,6 @@ export function create(game: Phaser.Game, gameWrapper: HTMLElement): LayoutFacto
 
     //TODO stageHeight should come from config
     const scaler = Scaler.create(600, game);
-    const accessibilityManager = AccessibilityManager.create(game, gameWrapper);
 
     root.addChild(background);
     root.addChild(foreground);
@@ -43,7 +41,7 @@ export function create(game: Phaser.Game, gameWrapper: HTMLElement): LayoutFacto
      * @returns {Layout}
      */
     function addLayout(buttons: string[], keyLookup: { [s: string]: string }): Layout {
-        const layout = new Layout(game, scaler, accessibilityManager, keyLookup, buttons);
+        const layout = new Layout(game, scaler, keyLookup, buttons);
 
         addToBackground(layout.root);
 

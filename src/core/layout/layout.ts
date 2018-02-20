@@ -1,36 +1,31 @@
 import * as _ from "lodash";
 
-import { AccessibleButton } from "../stubs/accessible-button";
 import { calculateMetrics } from "./calculate-metrics";
 import gel from "./gel-defaults";
 import Group from "./group";
 import { groupLayouts } from "./group-layouts";
 
 export class Layout {
-    public buttons: { [s: string]: AccessibleButton };
+    public buttons: { [s: string]: Phaser.Button };
     public root: Phaser.Group;
     private groups: { [s: string]: Group };
     private metrics: ViewportMetrics;
-    private accessibilityManager: AccessibilityManager;
 
     /**
      * Creates a new layout. Called by engine.create for each screen component
      *
      * @param game - Phaser Game Instance
      * @param {Scaler} scaler
-     * @param accessibilityManager
      * @param keyLookup
      * @param buttons
      */
     constructor(
         game: Phaser.Game,
         scaler: Scaler,
-        accessibilityManager: AccessibilityManager,
         keyLookup: { [s: string]: string },
         buttons: any,
     ) {
         this.root = new Phaser.Group(game, game.world, undefined);
-        this.accessibilityManager = accessibilityManager;
 
         const size = scaler.getSize();
         this.resize(size.width, size.height, size.scale, size.stageHeightPx);
@@ -45,7 +40,6 @@ export class Layout {
                         layout.vPos,
                         layout.hPos,
                         this.metrics,
-                        this.accessibilityManager,
                         !!layout.arrangeV,
                     ),
             ),
