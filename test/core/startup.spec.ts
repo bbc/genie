@@ -1,6 +1,6 @@
 import { assert, expect } from "chai";
-import { startup } from "src/core/startup";
-import * as mock from "test/helpers/mock";
+import { startup } from "../../src/core/startup";
+import * as mock from "../helpers/mock";
 
 describe("Startup", () => {
     beforeEach(mock.installMockGetGmi);

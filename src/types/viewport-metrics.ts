@@ -21,5 +21,6 @@ declare interface ViewportMetrics {
         top: number;
         middle: number;
         bottom: number;
+        [key: string]: number;
     };
 }

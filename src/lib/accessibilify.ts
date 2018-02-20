@@ -1,5 +1,3 @@
-import "src/lib/phaser";
-
 export function accessibilify(button: Phaser.Button | Phaser.Sprite, context: Context, _ariaLabel?: string) {
     const gameSize = context.layoutFactory.getSize();
     const overlay = document.getElementById(context.gmi.gameContainerId) as HTMLDivElement;

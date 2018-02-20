@@ -1,4 +1,7 @@
-var webpackConfig = require("../build-scripts/webpack.config");
+var checkCoverageFlag = process.argv.toString().includes("--coverage");
+var webpackConfig = checkCoverageFlag
+    ? require("./coverage.webpack.config")
+    : require("../build-scripts/webpack.config.js");
 
 module.exports = function(config) {
     config.set({
@@ -8,24 +11,32 @@ module.exports = function(config) {
             { pattern: "../test/**/*.ts", watched: false, served: true, included: true },
             { pattern: "../src/**/*.ts", watched: false, served: false, included: false },
         ],
-        exclude: [],
+        exclude: ["../node_modules"],
         preprocessors: {
-            "../**/*.ts": ["webpack"],
+            "../test/**/*.ts": checkCoverageFlag ? ["webpack", "sourcemap"] : ["webpack"],
+            "../src/**/*.ts": checkCoverageFlag ? ["webpack", "coverage"] : ["webpack"],
         },
         client: {
             mocha: {
                 timeout: 20000, // 20 seconds - upped from 2 seconds
             },
         },
-        webpack: {
-            module: webpackConfig.module,
-            resolve: webpackConfig.resolve,
-        },
+        webpack: webpackConfig,
         webpackMiddleware: {
             stats: "errors-only",
             noInfo: true,
         },
-        reporters: ["mocha"],
+        coverageReporter: {
+            type: "in-memory",
+        },
+        remapCoverageReporter: {
+            "text-summary": null,
+            html: "./coverage/html",
+            cobertura: "./coverage/cobertura.xml",
+            json: "./coverage/coverage.json",
+            lcovonly: "./coverage/lcov.info",
+        },
+        reporters: checkCoverageFlag ? ["mocha", "coverage", "remap-coverage"] : ["mocha"],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
@@ -35,16 +46,6 @@ module.exports = function(config) {
             ChromeHeadlessNoWebGL: {
                 base: "ChromeHeadless",
                 flags: ["--disable-webgl"],
-            },
-            PhantomJSNoSecurity: {
-                // requires karma-phantomjs-launcher
-                base: "PhantomJS",
-                options: {
-                    settings: {
-                        // Enables loading JSON data urls:
-                        webSecurityEnabled: false,
-                    },
-                },
             },
         },
         mime: {

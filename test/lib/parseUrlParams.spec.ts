@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { parseUrlParams } from "src/lib/parseUrlParams";
+import { parseUrlParams } from "../../src/lib/parseUrlParams";
 
 describe("parseUrlParams", () => {
     it("converts params into object", () => {

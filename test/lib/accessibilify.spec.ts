@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { accessibilify } from "src/lib/accessibilify";
+import { accessibilify } from "../../src/lib/accessibilify";
 
 describe("#accessibilify", () => {
     let mockButton: any;

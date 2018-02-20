@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
 
-import { LayoutFactory } from "src/core/layout/factory";
+import { LayoutFactory } from "../../../src/core/layout/factory";
 
 describe("Layout Factory", () => {
     let mockGame: any;

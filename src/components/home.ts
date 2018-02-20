@@ -1,6 +1,6 @@
-import { createTestHarnessDisplay } from "src/components/test-harness/layout";
-import { Screen } from "src/core/screen";
+import { Screen } from "../core/screen";
 import { accessibilify } from "../lib/accessibilify";
+import { createTestHarnessDisplay } from "./test-harness/layout";
 
 export class Home extends Screen {
     private keyLookup: { [key: string]: string };

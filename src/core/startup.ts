@@ -1,9 +1,9 @@
 import "../lib/phaser";
 
-import { LayoutFactory } from "src/core/layout/factory";
-import { PromiseTrigger } from "src/core/promise-utils";
-import * as Sequencer from "src/core/sequencer";
-import { parseUrlParams } from "src/lib/parseUrlParams";
+import { LayoutFactory } from "../core/layout/factory";
+import { PromiseTrigger } from "../core/promise-utils";
+import * as Sequencer from "../core/sequencer";
+import { parseUrlParams } from "../lib/parseUrlParams";
 
 export interface Config {
     stageHeightPx: number;

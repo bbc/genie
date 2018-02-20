@@ -1,15 +1,15 @@
 import "babel-polyfill";
-import "src/lib/phaser";
+import "../../src/lib/phaser";
 
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { loadAssets, Pack, PackList } from "src/core/asset-loader";
-import { PromiseTrigger } from "src/core/promise-utils";
-import { Screen } from "src/core/screen";
-import { startup } from "src/core/startup";
-import { assetPacks } from "test/helpers/asset-packs";
-import { assets } from "test/helpers/assets";
-import * as mock from "test/helpers/mock";
+import { loadAssets, Pack, PackList } from "../../src/core/asset-loader";
+import { PromiseTrigger } from "../../src/core/promise-utils";
+import { Screen } from "../../src/core/screen";
+import { startup } from "../../src/core/startup";
+import { assetPacks } from "../helpers/asset-packs";
+import { assets } from "../helpers/assets";
+import * as mock from "../helpers/mock";
 
 describe("Asset Loader", () => {
     beforeEach(mock.installMockGetGmi);
