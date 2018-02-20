@@ -40,7 +40,7 @@ describe("Layout", () => {
     afterEach(() => mockGame.destroy());
 
     //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
-    xit("should add the correct number of GEL buttons for a given config", () => {
+    it("should add the correct number of GEL buttons for a given config", () => {
         const layout1 = new Layout(mockGame, mockScaler, mockKeyLookup, ["achievements"]);
         expect(Object.keys(layout1.buttons).length).to.eql(1);
 
@@ -91,16 +91,16 @@ describe("Layout", () => {
     });
 
     //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
-    xit("Should set button callbacks using the 'setAction' method", () => {
+    it("Should set button callbacks using the 'setAction' method", () => {
         const layout = new Layout(mockGame, mockScaler, mockKeyLookup, ["achievements", "exit", "settings"]);
 
         const testAction = sinon.spy();
 
         layout.setAction("exit", testAction);
 
-        layout.buttons.exit.events.onInputUp.dispatch();
-        layout.buttons.exit.events.onInputUp.dispatch();
-        layout.buttons.exit.events.onInputUp.dispatch();
+        layout.buttons.exit.events.onInputUp.dispatch({}, {});
+        layout.buttons.exit.events.onInputUp.dispatch({}, {});
+        layout.buttons.exit.events.onInputUp.dispatch({}, {});
 
         expect(testAction.callCount).to.eql(3);
     });
