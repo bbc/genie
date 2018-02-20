@@ -30,6 +30,6 @@ export class Home extends Screen {
         });
         btn.name = "accessible-button-example";
         this.layoutFactory.addToBackground(btn);
-        accessibilify(btn, this.context, "Test Accessible Button");
+        accessibilify(btn, this.layoutFactory, "Test Accessible Button");
     }
 }

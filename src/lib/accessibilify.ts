@@ -1,6 +1,6 @@
-export function accessibilify(button: Phaser.Button | Phaser.Sprite, context: Context, _ariaLabel?: string) {
-    const gameSize = context.layoutFactory.getSize();
-    const overlay = document.getElementById(context.gmi.gameContainerId) as HTMLDivElement;
+export function accessibilify(button: Phaser.Button | Phaser.Sprite, layoutFactory: LayoutFactory, _ariaLabel?: string) {
+    const gameSize = layoutFactory.getSize();
+    const overlay = document.getElementById("local-game-holder") as HTMLDivElement;
 
     overlay.appendChild(element());
 
