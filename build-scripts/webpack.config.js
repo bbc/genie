@@ -21,7 +21,7 @@ module.exports = {
         rules: [
             {
                 test: /(phaser-split|p2|pixi).js$/,
-                include: /(node_modules\/phaser-ce)/,
+                include: /(node_modules[\\\/]phaser-ce)/,
                 use: "happypack/loader?id=script-loader",
             },
             {
