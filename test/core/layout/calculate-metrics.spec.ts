@@ -1,5 +1,5 @@
 import { expect } from "chai";
-import { calculateMetrics } from "src/core/layout/calculate-metrics";
+import { calculateMetrics } from "../../../src/core/layout/calculate-metrics";
 
 const getMetricsByWidth = (width: number) => calculateMetrics(width, 200, 1, 200);
 

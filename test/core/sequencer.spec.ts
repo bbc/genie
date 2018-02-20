@@ -1,9 +1,8 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import "src/lib/gmi.d";
 
-import * as LayoutFactory from "src/core/layout/factory";
-import * as Sequencer from "src/core/sequencer";
+import * as LayoutFactory from "../../src/core/layout/factory";
+import * as Sequencer from "../../src/core/sequencer";
 
 describe("Sequencer", () => {
     let sequencer: any;

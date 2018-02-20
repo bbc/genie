@@ -1,4 +1,4 @@
-import { Screen } from "src/core/screen";
+import { Screen } from "../../../core/screen";
 
 export class GameTest extends Screen {
     private gel: { [key: string]: string };

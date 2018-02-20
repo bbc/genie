@@ -26,7 +26,7 @@ export function create(stageHeightPx: number, game: Phaser.Game): Scaler {
 
     const getSize = fp.flow(getBounds(game), fp.pick(["width", "height"]), getScale(scaleMethods, stageHeightPx));
 
-    const setSize = ({ width, height, scale, stageHeight }: { [s: string]: number }) => {
+    const setSize = ({ width, height, scale, stageHeightPx: stageHeight }: { [s: string]: number }) => {
         game.scale.setGameSize(width, height);
         onScaleChange.dispatch(width, height, scale, stageHeight);
     };

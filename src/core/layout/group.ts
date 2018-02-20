@@ -32,7 +32,7 @@ const getGroupX = (sizes: GroupSizes) => {
 
 const getGroupY = (sizes: GroupSizes) =>
     vertical[sizes.pos.v](
-        (sizes.metrics.verticals as any)[sizes.pos.v],
+        sizes.metrics.verticals[sizes.pos.v] as number,
         sizes.height,
         sizes.metrics.borderPad * sizes.scale,
     );

@@ -1,8 +1,7 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import "src/lib/gmi.d";
 
-import { Home } from "src/components/home";
+import { Home } from "../../src/components/home";
 
 describe("Home Screen", () => {
     let homeScreen: any;

@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as sinon from "sinon";
 
-import { Screen } from "src/core/screen";
+import { Screen } from "../../src/core/screen";
 
 const TEST_DIV_ID = "test-div";
 

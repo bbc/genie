@@ -1,4 +1,4 @@
-import { assets, objectToJsonDataUrl } from "test/helpers/assets";
+import { assets, objectToJsonDataUrl } from "./assets";
 
 const emptyAssetPack = objectToJsonDataUrl({ empty: {} });
 
