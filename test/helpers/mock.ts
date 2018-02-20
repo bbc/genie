@@ -1,8 +1,8 @@
 import * as _ from "lodash";
 import * as sinon from "sinon";
 
-import { Screen } from "src/core/screen";
-import { ScreenDef } from "src/core/sequencer";
+import { Screen } from "../../src/core/screen";
+import { ScreenDef } from "../../src/core/sequencer";
 
 const TEST_DIV_ID = "test-div";
 

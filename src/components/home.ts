@@ -1,5 +1,5 @@
-import { createTestHarnessDisplay } from "src/components/test-harness/layout";
-import { Screen } from "src/core/screen";
+import { Screen } from "../core/screen";
+import { createTestHarnessDisplay } from "./test-harness/layout";
 
 export class Home extends Screen {
     private keyLookup: { [key: string]: string };
@@ -19,5 +19,6 @@ export class Home extends Screen {
         this.context.layoutFactory.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
         this.context.layoutFactory.addToBackground(this.game.add.button(0, 0, this.gel.play)); // remove when layout handles this
         this.context.layoutFactory.create(["exit", "howToPlay", "play", "soundOff", "settings"], this.gel);
-        createTestHarnessDisplay(this.game, this.context);    }
+        createTestHarnessDisplay(this.game, this.context);
     }
+}
