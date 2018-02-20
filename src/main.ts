@@ -1,9 +1,9 @@
 import "babel-polyfill";
 
 import { Home } from "./components/home";
+import { Loadscreen } from "./components/loadscreen";
 import { GameTest } from "./components/test-harness/test-screens/game";
 import { ResultsTest } from "./components/test-harness/test-screens/results";
-import { Loadscreen } from "./components/loadscreen";
 import { startup } from "./core/startup";
 
 const transitions = [
