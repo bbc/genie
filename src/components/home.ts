@@ -1,4 +1,5 @@
 import { Screen } from "../core/screen";
+import { accessibilify } from "../lib/accessibilify";
 import { createTestHarnessDisplay } from "./test-harness/layout";
 
 export class Home extends Screen {
@@ -20,5 +21,13 @@ export class Home extends Screen {
         this.context.layoutFactory.addToBackground(this.game.add.button(0, 0, this.gel.play)); // remove when layout handles this
         this.context.layoutFactory.create(["exit", "howToPlay", "play", "soundOff", "settings"], this.gel);
         createTestHarnessDisplay(this.game, this.context);
+
+        // Example on how to accessibilify a standard button:
+        const btn = this.game.add.button(-200, 0, this.gel.play, () => {
+            console.log("clicked accessible button");
+        });
+        btn.name = "accessible-button-example";
+        this.context.layoutFactory.addToBackground(btn);
+        accessibilify(btn, this.context, "Test Accessible Button");
     }
 }
