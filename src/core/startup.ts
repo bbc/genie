@@ -1,6 +1,6 @@
+import * as _ from "lodash";
 import "../lib/phaser";
 
-import { LayoutFactory } from "../core/layout/factory";
 import { PromiseTrigger } from "../core/promise-utils";
 import * as Sequencer from "../core/sequencer";
 import { parseUrlParams } from "../lib/parseUrlParams";
@@ -11,7 +11,7 @@ export interface Config {
     theme: any;
 }
 
-export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game> {
+export function startup(transitions: ScreenDef[]): Promise<Phaser.Game> {
     const gmi: Gmi = (window as any).getGMI({});
     const urlParams = parseUrlParams(window.location.search);
     const qaMode: QAMode = {
@@ -37,17 +37,15 @@ export function startup(transitions: Sequencer.ScreenDef[]): Promise<Phaser.Game
     return promisedGame;
 
     function onStarted(config: Config) {
-        const layoutFactory = LayoutFactory(game, getContainerDiv(gmi));
-
         // Phaser is now set up and we can use all game properties.
         const context: Context = {
             gmi,
-            layoutFactory,
             popupScreens: [],
             gameMuted: true,
             qaMode,
+            sequencer: { next: _.noop(), getTransitions: _.noop() },
         };
-        Sequencer.create(game, context, transitions);
+        context.sequencer = Sequencer.create(game, context, transitions, getContainerDiv(gmi));
         game.stage.backgroundColor = "#333";
         promisedGame.resolve(game);
     }

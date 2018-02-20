@@ -1,6 +1,6 @@
 import { GEL_MIN_RATIO_HEIGHT, GEL_MIN_RATIO_WIDTH } from "../../core/scaler";
 
-export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
+export function createTestHarnessDisplay(game: Phaser.Game, context: Context, layoutFactory: LayoutFactory) {
     let graphicsBackgroundGroup: Phaser.Group;
     let graphicsForegroundGroup: Phaser.Group;
 
@@ -24,8 +24,8 @@ export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
     function show() {
         drawGameArea();
         drawOuterPadding();
-        context.layoutFactory.addToBackground(graphicsBackgroundGroup);
-        context.layoutFactory.addToForeground(graphicsForegroundGroup);
+        layoutFactory.addToBackground(graphicsBackgroundGroup);
+        layoutFactory.addToForeground(graphicsForegroundGroup);
         context.qaMode.testHarnessLayoutDisplayed = true;
     }
 
@@ -39,7 +39,7 @@ export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
     }
 
     function drawOuterPadding() {
-        const size = context.layoutFactory.getSize();
+        const size = layoutFactory.getSize();
         const graphics: Phaser.Graphics = game.add.graphics();
         const paddingWidth = getPaddingWidth();
         const gameLeftEdge = 0 + paddingWidth * 0.5;
@@ -68,7 +68,7 @@ export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
     }
 
     function gameAreaDimensions() {
-        const size = context.layoutFactory.getSize();
+        const size = layoutFactory.getSize();
         const areaWidth = size.stageHeightPx / GEL_MIN_RATIO_HEIGHT * GEL_MIN_RATIO_WIDTH;
         const areaHeight = size.stageHeightPx;
 
@@ -76,7 +76,7 @@ export function createTestHarnessDisplay(game: Phaser.Game, context: Context) {
     }
 
     function getPaddingWidth() {
-        const size = context.layoutFactory.getSize();
+        const size = layoutFactory.getSize();
         const gelPaddingWidthPercentage = 0.02;
 
         return Math.max(size.width, size.height) * gelPaddingWidthPercentage;

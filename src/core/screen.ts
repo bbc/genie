@@ -1,6 +1,8 @@
-import { GameStateUpdate, NextScreenFunction } from "../core/sequencer";
+import "../lib/phaser";
 
 export class Screen extends Phaser.State {
+    protected layoutFactory: LayoutFactory;
+
     private _context: Context;
     private next: NextScreenFunction;
 
@@ -8,20 +10,13 @@ export class Screen extends Phaser.State {
         return this._context;
     }
 
-    public init(context: Context, next: NextScreenFunction) {
-        this._context = context;
+    public init(context: Context, next: NextScreenFunction, layoutFactory: LayoutFactory) {
+        this.layoutFactory = layoutFactory;
+        this._context = context; //TODO make protected?
         this.next = next;
     }
-
-    public update() {}
 
     public exit(changedState: GameStateUpdate) {
         this.next(changedState);
     }
-
-    // public shutdown() {
-    //     this.cleanUp();
-    // }
-
-    // private cleanUp() {}
 }

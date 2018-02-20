@@ -1,11 +1,12 @@
 import "../../../src/lib/phaser";
 
 import * as sinon from "sinon";
-import { createTestHarnessDisplay } from "../../../src/components/test-harness/layout";
+import { createTestHarnessDisplay } from "../../../src/components/test-harness/layout-harness";
 
 describe("test harness layout", () => {
     let mockGame: any;
     let mockContext: any;
+    let mockLayoutFactory: any;
     let sandbox: sinon.SinonSandbox;
     const qKeyCode: number = 81;
     let onKeyUpSpy: any;
@@ -33,7 +34,15 @@ describe("test harness layout", () => {
                 },
             },
         };
-        createTestHarnessDisplay(mockGame, mockContext);
+        mockLayoutFactory = {
+            addToBackground: sandbox.spy(),
+            getSize: sandbox.stub().returns({
+                width: 300,
+                height: 300,
+                stageHeightPx: 400,
+            }),
+        };
+        createTestHarnessDisplay(mockGame, mockContext, mockLayoutFactory);
     });
 
     afterEach(() => {

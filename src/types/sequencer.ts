@@ -10,15 +10,7 @@ declare interface PersistentState {
 
 declare type GameStateUpdate = GameState | TransientState | PersistentState | {};
 
-declare type NextScreenFunc = (state: any) => string;
-
-declare interface ScreenDef {
-    name: string;
-    state: Screen;
-    nextScreenName: NextScreenFunc;
-}
-
 declare interface Sequencer {
-    next(outState: GameStateUpdate): void;
     getTransitions(): ScreenDef[];
+    next(outState: GameStateUpdate): void;
 }

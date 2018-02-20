@@ -26,7 +26,7 @@ export class Loadscreen extends Screen {
 
     public preload() {
         loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress.bind(this)).then(keyLookups => {
-            this.context.layoutFactory.addLookups(keyLookups);
+            this.layoutFactory.addLookups(keyLookups);
             if (this.context.qaMode.active) {
                 dumpToConsole(keyLookups);
             }

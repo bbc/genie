@@ -1,12 +1,16 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
 
+import * as LayoutFactory from "../../src/core/layout/factory";
 import * as Sequencer from "../../src/core/sequencer";
 
 describe("Sequencer", () => {
     let sequencer: any;
     let mockGame: any;
-    let next: Sequencer.NextScreenFunction;
+    let mockLayout: any;
+    let next: NextScreenFunction;
+
+    const sandbox = sinon.sandbox.create();
     const mockContext: any = {
         inState: "inState",
     };
@@ -28,14 +32,28 @@ describe("Sequencer", () => {
     ];
 
     beforeEach(() => {
+        mockLayout = { removeAll: sandbox.spy() };
+        sandbox.stub(LayoutFactory, "create").returns(mockLayout);
         mockGame = {
-            state: {
-                add: sinon.spy(),
-                start: sinon.spy(),
+            state: { add: sandbox.spy(), start: sandbox.spy() },
+            add: {
+                group: sandbox.spy(() => ({
+                    addChild: sandbox.spy(),
+                })),
+            },
+            scale: {
+                setGameSize: sandbox.spy(),
+                scaleMode: sandbox.spy(),
+                onSizeChange: { add: sandbox.spy() },
+                getParentBounds: sandbox.spy(),
             },
         };
-        sequencer = Sequencer.create(mockGame, mockContext, mockTransitions);
+        sequencer = Sequencer.create(mockGame, mockContext, mockTransitions, document.createElement("div"));
         next = mockGame.state.start.getCall(0).args[4];
+    });
+
+    afterEach(() => {
+        sandbox.restore();
     });
 
     it("adds each transition to game state", () => {
@@ -47,7 +65,14 @@ describe("Sequencer", () => {
 
     it("starts the current screen", () => {
         expect(mockGame.state.start.callCount).to.equal(1);
-        expect(mockGame.state.start.getCall(0).args).to.eql([mockTransitions[0].name, true, false, mockContext, next]);
+        expect(mockGame.state.start.getCall(0).args).to.eql([
+            mockTransitions[0].name,
+            true,
+            false,
+            mockContext,
+            next,
+            mockLayout,
+        ]);
     });
 
     describe("getTransitions Method", () => {
@@ -61,7 +86,19 @@ describe("Sequencer", () => {
             const expectedNextScreen = mockTransitions[0].nextScreenName();
             next({});
             expect(mockGame.state.start.callCount).to.equal(2);
-            expect(mockGame.state.start.getCall(1).args).to.eql([expectedNextScreen, true, false, mockContext]);
+            expect(mockGame.state.start.getCall(1).args).to.eql([
+                expectedNextScreen,
+                true,
+                false,
+                mockContext,
+                next,
+                mockLayout,
+            ]);
+        });
+
+        it("clears down items from the layout", () => {
+            next({});
+            expect(mockLayout.removeAll.calledOnce).to.equal(true);
         });
 
         // it("passes the state of the screen to the next screen", () => {
@@ -75,7 +112,14 @@ describe("Sequencer", () => {
             next({});
             next({});
             expect(mockGame.state.start.callCount).to.equal(3);
-            expect(mockGame.state.start.getCall(2).args).to.eql([expectedNextScreen, true, false, mockContext]);
+            expect(mockGame.state.start.getCall(2).args).to.eql([
+                expectedNextScreen,
+                true,
+                false,
+                mockContext,
+                next,
+                mockLayout,
+            ]);
         });
     });
 });
