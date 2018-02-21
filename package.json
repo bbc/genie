@@ -10,7 +10,7 @@
         "url": "https://github.com/bbc/childrens-games-genie"
     },
     "dependencies": {
-        "@types/lodash": "^4.14.92",
+        "@types/lodash": "^4.14.104",
         "babel-polyfill": "^6.26.0",
         "lodash": "^4.17.4",
         "phaser-ce": "^2.10",
