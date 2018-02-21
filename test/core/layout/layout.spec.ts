@@ -39,15 +39,12 @@ describe("Layout", () => {
 
     afterEach(() => mockGame.destroy());
 
+    //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
     it("should add the correct number of GEL buttons for a given config", () => {
         const layout1 = new Layout(mockGame, mockScaler, mockKeyLookup, ["achievements"]);
         expect(Object.keys(layout1.buttons).length).to.eql(1);
 
-        const layout2 = new Layout(mockGame, mockScaler, mockKeyLookup, [
-            "play",
-            "soundOff",
-            "settings",
-        ]);
+        const layout2 = new Layout(mockGame, mockScaler, mockKeyLookup, ["play", "soundOff", "settings"]);
         expect(Object.keys(layout2.buttons).length).to.eql(3);
 
         const layout3 = new Layout(mockGame, mockScaler, mockKeyLookup, [
@@ -93,20 +90,17 @@ describe("Layout", () => {
         expect(leftTopGroup.children[2].randomKey).to.eql(randomKey);
     });
 
+    //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
     it("Should set button callbacks using the 'setAction' method", () => {
-        const layout = new Layout(mockGame, mockScaler, mockKeyLookup, [
-            "achievements",
-            "exit",
-            "settings",
-        ]);
+        const layout = new Layout(mockGame, mockScaler, mockKeyLookup, ["achievements", "exit", "settings"]);
 
         const testAction = sinon.spy();
 
         layout.setAction("exit", testAction);
 
-        layout.buttons.exit.events.onInputUp.dispatch();
-        layout.buttons.exit.events.onInputUp.dispatch();
-        layout.buttons.exit.events.onInputUp.dispatch();
+        layout.buttons.exit.events.onInputUp.dispatch({}, {});
+        layout.buttons.exit.events.onInputUp.dispatch({}, {});
+        layout.buttons.exit.events.onInputUp.dispatch({}, {});
 
         expect(testAction.callCount).to.eql(3);
     });

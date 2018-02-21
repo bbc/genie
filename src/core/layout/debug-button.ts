@@ -1,7 +1,7 @@
 /**
  * Phaser button with text overlay
  *
- * @example game.add.existing(new DebugButton( ...parameters).sprite)
+ * @example game.add.existing(new DebugButton( ...parameters))
  */
 const gelStyle: Phaser.PhaserTextStyle = {
     font: "ReithSans",
@@ -10,75 +10,42 @@ const gelStyle: Phaser.PhaserTextStyle = {
     fontWeight: "bold",
 };
 
-export class DebugButton {
-    public sprite: Phaser.Sprite;
+const makeRect = (game: Phaser.Game, color1: number, width: number, height: number) =>
+    new Phaser.Graphics(game)
+        .beginFill(color1)
+        .drawRect(0, 0, width, height)
+        .endFill()
+        .generateTexture();
 
-    /**
-     * remaps event add calls to the debug sprite
-     */
-    get onInputUp() {
-        const context = this;
-        return {
-            add(callback: any, thisVal: any) {
-                context.sprite.events.onInputUp.add(callback, thisVal);
-            },
-        };
-    }
-
-    /**
-     * remaps event calls to the debug sprite
-     */
-    get events() {
-        const context = this;
-        return {
-            onInputUp: {
-                dispatch() {
-                    context.sprite.events.onInputUp.dispatch();
-                },
-            },
-        };
-    }
-
+export class DebugButton extends Phaser.Button {
     constructor(game: Phaser.Game, spec: GelSpec) {
-        const backdrop = new Phaser.Graphics(game)
-            .beginFill(0xf6931e)
-            .drawRect(0, 0, spec.width, spec.height)
-            .endFill()
-            .generateTexture();
+        super(game);
 
-        const backdropHover = new Phaser.Graphics(game)
-            .beginFill(0xffaa46, 1)
-            .drawRect(0, 0, spec.width, spec.height)
-            .endFill()
-            .generateTexture();
+        const backdrop = makeRect(game, 0xf6931e, spec.width, spec.height);
+        const backdropHover = makeRect(game, 0xffaa46, spec.width, spec.height);
+        this.texture = backdrop;
 
-        this.sprite = game.add.sprite(0, 0, backdrop);
-        this.sprite.anchor.setTo(0.5, 0.5);
+        this.animations.sprite.anchor.setTo(0.5, 0.5);
+        this.onInputUp.add(spec.click, this);
 
-        this.sprite.inputEnabled = true;
-        this.sprite.input.useHandCursor = true;
-
-        this.sprite.events.onInputDown.add(spec.click);
-
-        this.sprite.events.onInputOver.add(() => {
-            this.sprite.setTexture(backdropHover);
+        this.animations.sprite.events.onInputOver.add(() => {
+            this.texture = backdropHover;
         });
 
-        this.sprite.events.onInputOut.add(() => {
-            this.sprite.setTexture(backdrop);
+        this.animations.sprite.events.onInputOut.add(() => {
+            this.texture = backdrop;
         });
 
         const text = new Phaser.Text(game, 0, 0, spec.text, gelStyle);
         text.anchor.setTo(0.5, 0.5);
-
-        this.sprite.addChild(text);
+        this.animations.sprite.addChild(text);
     }
 
     /**
      * Disables input and makes button semi-transparent
      */
     public setEnabled(bool: boolean = true) {
-        this.sprite.inputEnabled = bool;
-        this.sprite.alpha = bool ? 1 : 0.5;
+        this.animations.sprite.inputEnabled = bool;
+        this.animations.sprite.alpha = bool ? 1 : 0.5;
     }
 }

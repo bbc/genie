@@ -4,7 +4,6 @@
         "target": "es6",
         "strict": true,
         "sourceMap": true,
-        "strictPropertyInitialization": false,
-        "noUnusedLocals": true
+        "strictPropertyInitialization": false
     }
 }

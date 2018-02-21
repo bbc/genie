@@ -72,7 +72,7 @@ class Group extends Phaser.Group {
 
         const newButton = new DebugButton(this.game, testButton);
 
-        this.addAt(newButton.sprite, position);
+        this.addAt(newButton, position);
         this.buttons.push(newButton);
 
         this.alignChildren();
