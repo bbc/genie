@@ -3,5 +3,5 @@ set -e
 
 npm install
 npm run tslint
-npm run test
+npm run test:coverage
 npm run build
