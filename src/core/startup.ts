@@ -38,6 +38,7 @@ export function startup(transitions: ScreenDef[]): Promise<Phaser.Game> {
 
     function onStarted(config: Config) {
         // Phaser is now set up and we can use all game properties.
+        game.canvas.setAttribute("aria-hidden", "true");
         const context: Context = {
             gmi,
             popupScreens: [],
