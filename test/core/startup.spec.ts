@@ -21,6 +21,13 @@ describe("Startup", () => {
         });
     });
 
+    it("should add the aria-hidden flag to the canvas element", () => {
+        return startup([mock.screenDef()]).then(game => {
+            expect(mock.getGameHolderDiv().children[0].getAttribute("aria-hidden")).to.equal("true");
+            game.destroy();
+        });
+    });
+
     it("should configure the Phaser base url to be the GMI gameDir", () => {
         mock.installMockGetGmi({ gameDir: "my/game/dir/" });
         return startup([mock.screenDef()]).then(game => {
