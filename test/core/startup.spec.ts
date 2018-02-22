@@ -23,7 +23,8 @@ describe("Startup", () => {
 
     it("should add the aria-hidden flag to the canvas element", () => {
         return startup([mock.screenDef()]).then(game => {
-            expect(mock.getGameHolderDiv().children[0].getAttribute("aria-hidden")).to.equal("true");
+            const canvas = mock.getGameHolderDiv().getElementsByTagName("canvas")[0];
+            expect(canvas.getAttribute("aria-hidden")).to.equal("true");
             game.destroy();
         });
     });
