@@ -50,15 +50,14 @@
         "webpack": "^3.11.0"
     },
     "scripts": {
-        "postinstall": "cross-env NODE_OPTIONS=--max_old_space_size=4096",
         "start": "http-server -c-1",
         "build": "webpack --config build-scripts/webpack.config.js",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
         "tslint": "tslint --project .",
-        "test": "cross-env karma start test/karma.conf.js",
-        "test:coverage": "cross-env karma start test/karma.conf.js --coverage",
-        "test-watch": "cross-env karma start test/karma.conf.js --no-single-run --auto-watch",
-        "test-watch:coverage": "cross-env karma start test/karma.conf.js --no-single-run --auto-watch --coverage",
+        "test": "karma start test/karma.conf.js",
+        "test:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage",
+        "test-watch": "karma start test/karma.conf.js --no-single-run --auto-watch",
+        "test-watch:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --no-single-run --auto-watch --coverage",
         "docgen": "node ./node_modules/typedoc/bin/typedoc --name \"BBC Children's Genie API\" --out docs/api ./src"
     }
 }
