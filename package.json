@@ -51,7 +51,7 @@
         "webpack": "^3.11.0"
     },
     "scripts": {
-        "postinstall": "cross-env LIMIT=2048 increase-memory-limit | cd",
+        "postinstall": "cross-env LIMIT=2048 increase-memory-limit",
         "start": "http-server -c-1",
         "build": "webpack --config build-scripts/webpack.config.js",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
