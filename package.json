@@ -55,10 +55,10 @@
         "build": "webpack --config build-scripts/webpack.config.js",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
         "tslint": "tslint --project .",
-        "test": "karma start test/karma.conf.js",
-        "test:coverage": "karma start test/karma.conf.js --coverage",
-        "test-watch": "karma start test/karma.conf.js --no-single-run --auto-watch",
-        "test-watch:coverage": "karma start test/karma.conf.js --no-single-run --auto-watch --coverage",
+        "test": "cross-env karma start test/karma.conf.js",
+        "test:coverage": "cross-env karma start test/karma.conf.js --coverage",
+        "test-watch": "cross-env karma start test/karma.conf.js --no-single-run --auto-watch",
+        "test-watch:coverage": "cross-env karma start test/karma.conf.js --no-single-run --auto-watch --coverage",
         "docgen": "node ./node_modules/typedoc/bin/typedoc --name \"BBC Children's Genie API\" --out docs/api ./src"
     }
 }
