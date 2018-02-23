@@ -27,6 +27,7 @@ export class Home extends Screen {
         // Example on how to accessibilify a standard button:
         const btn = this.game.add.button(-200, 0, this.gel.play, () => {
             console.log("clicked accessible button");
+            btn.x = -1000;
         });
         btn.name = "accessible-button-example";
         this.layoutFactory.addToBackground(btn);

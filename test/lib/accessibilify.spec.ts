@@ -53,6 +53,8 @@ describe("#accessibilify", () => {
                 canvas: {
                     parentElement: overlay,
                 },
+                height: gameHeight,
+                width: gameWidth,
                 scale: {
                     onSizeChange: {
                         add: (debouncedCallback: () => void) => {
@@ -95,6 +97,7 @@ describe("#accessibilify", () => {
         accessibilify(mockButton, mockLayoutFactory);
         expect(accessibleElement.getAttribute("tabindex")).to.equal("0");
     });
+    
 
     it("sets position on accessibleElement to absolute", () => {
         accessibilify(mockButton, mockLayoutFactory);
@@ -129,6 +132,41 @@ describe("#accessibilify", () => {
 
                 expect(accessibleElement.style.left).to.equal("100px");
             });
+        });
+    });
+
+    describe("disabling buttons that go out of bounds", () => {
+        it("sets the tab index to minus one when button moves out of bounds", () => {
+            accessibilify(mockButton, mockLayoutFactory);
+            expect(accessibleElement.getAttribute("tabindex")).to.equal("0");
+            buttonBoundsX = 1000;
+            mockButton.update();
+            expect(accessibleElement.getAttribute("tabindex")).to.equal("-1");
+        });
+
+        it("sets the tab index to zero when button moves back into bounds", () => {
+            accessibilify(mockButton, mockLayoutFactory);
+            buttonBoundsX = 1000;
+            mockButton.update();
+            buttonBoundsX = 100;
+            mockButton.update();
+            expect(accessibleElement.getAttribute("tabindex")).to.equal("0");
+        });
+
+        it("sets the visibility to 'hidden' when button moves out of bounds", () => {
+            accessibilify(mockButton, mockLayoutFactory);
+            buttonBoundsX = 1000;
+            mockButton.update();
+            expect(accessibleElement.style.visibility).to.equal("hidden");
+        });
+
+        it("sets the visibility to 'visible' when button moves back into bounds", () => {
+            accessibilify(mockButton, mockLayoutFactory);
+            buttonBoundsX = 1000;
+            mockButton.update();
+            buttonBoundsX = 100;
+            mockButton.update();
+            expect(accessibleElement.style.visibility).to.equal("visible");
         });
     });
 

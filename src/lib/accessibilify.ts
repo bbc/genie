@@ -1,6 +1,7 @@
 import { debounce } from "lodash";
 
-export function accessibilify(button: Phaser.Button | Phaser.Sprite, layoutFactory: LayoutFactory, _ariaLabel?: string) {
+export function accessibilify(button: Phaser.Button, layoutFactory: LayoutFactory, _ariaLabel?: string) {
+    let enabled = true;
     const overlay = button.game.canvas.parentElement as HTMLDivElement;
     const div = document.createElement("div");
     overlay.appendChild(element());
@@ -17,8 +18,42 @@ export function accessibilify(button: Phaser.Button | Phaser.Sprite, layoutFacto
         div.addEventListener("keyup", keyUp);
         div.addEventListener("click", callButtonAction);
         button.game.scale.onSizeChange.add(debounce(reposition, 200));
-
+        button.update = update;
         return div;
+    }
+
+    function disableButton(): void {
+        div.setAttribute("tabindex", "-1");
+        enabled = false;
+        div.style.visibility = "hidden";
+    }
+
+    function enableButton(): void {
+        div.setAttribute("tabindex", "0");
+        enabled = true;
+        div.style.visibility = "visible";
+    }
+
+    function checkBounds(): void {
+        const pixiBounds = button.getBounds();
+        const buttonBounds = new Phaser.Rectangle(pixiBounds.x, pixiBounds.y, pixiBounds.width, pixiBounds.height);
+
+        const isOutsideScreen = buttonBounds.top > button.game.height ||
+        buttonBounds.bottom < 0 ||
+        buttonBounds.left > button.game.width ||
+        buttonBounds.right < 0;
+
+        if (isOutsideScreen && enabled) {
+            disableButton();
+        }
+        else if (!isOutsideScreen && !enabled) {
+            enableButton();
+        }
+            
+    }
+
+    function update(): void {
+        checkBounds();
     }
 
     function keyUp(event: KeyboardEvent): void {
