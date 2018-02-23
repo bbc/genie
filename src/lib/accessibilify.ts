@@ -49,7 +49,6 @@ export function accessibilify(button: Phaser.Button | Phaser.Sprite, layoutFacto
         else if (!isOutsideScreen && !enabled) {
             enableButton();
         }
-            
     }
 
     function update(): void {
