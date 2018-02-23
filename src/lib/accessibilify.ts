@@ -1,6 +1,6 @@
 import { debounce } from "lodash";
 
-export function accessibilify(button: Phaser.Button, layoutFactory: LayoutFactory, _ariaLabel?: string) {
+export function accessibilify(button: Phaser.Button | Phaser.Sprite, layoutFactory: LayoutFactory, _ariaLabel?: string) {
     let enabled = true;
     const overlay = button.game.canvas.parentElement as HTMLDivElement;
     const div = document.createElement("div");
