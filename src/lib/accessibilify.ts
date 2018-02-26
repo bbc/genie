@@ -1,6 +1,7 @@
 import { debounce } from "lodash";
 
 export function accessibilify(button: Phaser.Button | Phaser.Sprite, layoutFactory: LayoutFactory, _ariaLabel?: string) {
+    let enabled = true;
     const overlay = button.game.canvas.parentElement as HTMLDivElement;
     const div = document.createElement("div");
     overlay.appendChild(element());
@@ -17,8 +18,39 @@ export function accessibilify(button: Phaser.Button | Phaser.Sprite, layoutFacto
         div.addEventListener("keyup", keyUp);
         div.addEventListener("click", callButtonAction);
         button.game.scale.onSizeChange.add(debounce(reposition, 200));
-
+        button.update = checkBounds;
         return div;
+    }
+
+    function disableButton(): void {
+        div.setAttribute("tabindex", "-1");
+        enabled = false;
+        div.style.visibility = "hidden";
+    }
+
+    function enableButton(): void {
+        div.setAttribute("tabindex", "0");
+        enabled = true;
+        div.style.visibility = "visible";
+    }
+
+    function checkBounds(): void {
+        const pixiBounds = button.getBounds();
+        const buttonBounds = new Phaser.Rectangle(pixiBounds.x, pixiBounds.y, pixiBounds.width, pixiBounds.height);
+
+        if (isOutsideScreen(buttonBounds) && enabled) {
+            disableButton();
+        }
+        else if (!isOutsideScreen(buttonBounds) && !enabled) {
+            enableButton();
+        }
+    }
+
+    function isOutsideScreen(buttonBounds: Phaser.Rectangle): boolean {
+        return buttonBounds.top > button.game.height ||
+        buttonBounds.bottom < 0 ||
+        buttonBounds.left > button.game.width ||
+        buttonBounds.right < 0;
     }
 
     function keyUp(event: KeyboardEvent): void {
