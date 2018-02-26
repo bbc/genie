@@ -11,13 +11,10 @@ export interface Config {
     theme: any;
 }
 
-export function startup(transitions: ScreenDef[]): Promise<Phaser.Game> {
+export function startup(transitions: ScreenDef[], initialAdditionalState?: GameStateUpdate): Promise<Phaser.Game> {
     const gmi: Gmi = (window as any).getGMI({});
     const urlParams = parseUrlParams(window.location.search);
-    const qaMode: QAMode = {
-        active: urlParams.qaMode ? urlParams.qaMode : false,
-        testHarnessLayoutDisplayed: false,
-    };
+    const qaMode: QAMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
     hookErrors(gmi.gameContainerId);
 
     const phaserConfig: Phaser.IGameConfig = {
@@ -34,16 +31,18 @@ export function startup(transitions: ScreenDef[]): Promise<Phaser.Game> {
 
     const game = new Phaser.Game(phaserConfig);
     const promisedGame = new PromiseTrigger<Phaser.Game>();
+
     return promisedGame;
 
     function onStarted(config: Config) {
         // Phaser is now set up and we can use all game properties.
         const context: Context = {
             gmi,
+            inState: _.merge({ transient: {}, persistent: {} }, initialAdditionalState),
             popupScreens: [],
             gameMuted: true,
             qaMode,
-            sequencer: { next: _.noop(), getTransitions: _.noop() },
+            sequencer: { getTransitions: () => [] },
         };
         context.sequencer = Sequencer.create(game, context, transitions, getContainerDiv(gmi));
         game.stage.backgroundColor = "#333";

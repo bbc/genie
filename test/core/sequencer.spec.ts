@@ -11,9 +11,7 @@ describe("Sequencer", () => {
     let next: NextScreenFunction;
 
     const sandbox = sinon.sandbox.create();
-    const mockContext: any = {
-        inState: "inState",
-    };
+    const mockContext: any = { inState: { transient: {}, persistent: {} } };
     const mockTransitions: any = [
         {
             name: "title",
@@ -84,7 +82,7 @@ describe("Sequencer", () => {
     describe("next function", () => {
         it("starts the next screen", () => {
             const expectedNextScreen = mockTransitions[0].nextScreenName();
-            next({});
+            next();
             expect(mockGame.state.start.callCount).to.equal(2);
             expect(mockGame.state.start.getCall(1).args).to.eql([
                 expectedNextScreen,
@@ -97,20 +95,20 @@ describe("Sequencer", () => {
         });
 
         it("clears down items from the layout", () => {
-            next({});
+            next();
             expect(mockLayout.removeAll.calledOnce).to.equal(true);
         });
 
-        // it("passes the state of the screen to the next screen", () => {
-        //     const expectedNextScreen = mockTransitions[0].nextScreenName();
-        //     sequencer.next({ score: 200 });
-        //     expect(mockGame.state.start.getCall(1).args[3]).to.equal({});
-        // });
+        it("passes the state of the screen to the next screen", () => {
+            const stateObject = { transient: { score: 200 }, persistent: {} };
+            next(stateObject);
+            expect(mockGame.state.start.getCall(1).args[3].inState).to.eql(stateObject);
+        });
 
         it("starts the screen after next when called twice", () => {
             const expectedNextScreen = mockTransitions[1].nextScreenName();
-            next({});
-            next({});
+            next();
+            next();
             expect(mockGame.state.start.callCount).to.equal(3);
             expect(mockGame.state.start.getCall(2).args).to.eql([
                 expectedNextScreen,
@@ -120,6 +118,15 @@ describe("Sequencer", () => {
                 next,
                 mockLayout,
             ]);
+        });
+
+        it("passes the state to the screen after next", () => {
+            const firstStateObject = { transient: { character: "The Great Big Hoo" } };
+            const secondStateObject = { transient: { score: 200 } };
+            const expectedStateObject = { transient: { character: "The Great Big Hoo", score: 200 }, persistent: {} };
+            next(firstStateObject);
+            next(secondStateObject);
+            expect(mockGame.state.start.getCall(1).args[3].inState).to.eql(expectedStateObject);
         });
     });
 });

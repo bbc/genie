@@ -66,7 +66,7 @@ export function create(game: Phaser.Game, gameWrapper: HTMLElement): LayoutFacto
     }
 
     function removeAll() {
-        background.removeAll();
+        background.removeAll(true);
         // buttons.removeAll();
     }
 
