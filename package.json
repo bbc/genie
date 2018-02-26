@@ -10,7 +10,7 @@
         "url": "https://github.com/bbc/childrens-games-genie"
     },
     "dependencies": {
-        "@types/lodash": "^4.14.92",
+        "@types/lodash": "^4.14.104",
         "babel-polyfill": "^6.26.0",
         "lodash": "^4.17.4",
         "phaser-ce": "^2.10",
@@ -24,6 +24,7 @@
         "babel-loader": "^7.1.2",
         "babel-preset-env": "^1.6.1",
         "chai": "^4.1.2",
+        "cross-env": "^5.1.3",
         "fork-ts-checker-webpack-plugin": "^0.3.0",
         "happypack": "^4.0.1",
         "http-server": "^0.11.1",
@@ -54,9 +55,9 @@
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
         "tslint": "tslint --project .",
         "test": "karma start test/karma.conf.js",
-        "test:coverage": "karma start test/karma.conf.js --coverage",
+        "test:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage",
         "test-watch": "karma start test/karma.conf.js --no-single-run --auto-watch",
-        "test-watch:coverage": "karma start test/karma.conf.js --no-single-run --auto-watch --coverage",
+        "test-watch:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --no-single-run --auto-watch --coverage",
         "docgen": "node ./node_modules/typedoc/bin/typedoc --name \"BBC Children's Genie API\" --out docs/api ./src"
     }
 }
