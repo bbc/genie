@@ -26,41 +26,15 @@ export class GameTest extends Screen {
             wordWrapWidth: 223,
         };
 
-        const button1Text = new Phaser.Text(this.game, 0, 5, "Button 1", buttonTextStyle);
-        const button1 = this.game.add.button(
-            0,
-            -70,
-            buttonKey,
-            () => this.next({ transient: { buttonPressed: 1 } }),
-            this,
-        );
-        button1.addChild(button1Text);
-        button1Text.anchor.set(0.5, 0.5);
-
-        const button2Text = new Phaser.Text(this.game, 0, 5, "Button 2", buttonTextStyle);
-        const button2 = this.game.add.button(
-            0,
-            20,
-            buttonKey,
-            () => this.next({ transient: { buttonPressed: 2 } }),
-            this,
-        );
-        button2.addChild(button2Text);
-        button2Text.anchor.set(0.5, 0.5);
-
-        const button3Text = new Phaser.Text(this.game, 0, 5, "Button 3", buttonTextStyle);
-        const button3 = this.game.add.button(
-            0,
-            110,
-            buttonKey,
-            () => this.next({ transient: { buttonPressed: 3 } }),
-            this,
-        );
-        button3.addChild(button3Text);
-        button3Text.anchor.set(0.5, 0.5);
-
-        this.layoutFactory.addToBackground(button1);
-        this.layoutFactory.addToBackground(button2);
-        this.layoutFactory.addToBackground(button3);
+        [-70, 20, 110].forEach((buttonYPosition, index) => {
+            const buttonNumber = index + 1;
+            const buttonText = new Phaser.Text(this.game, 0, 5, "Button " + buttonNumber, buttonTextStyle);
+            const buttonState = { transient: { buttonPressed: buttonNumber } };
+            const button = this.game.add.button(0, buttonYPosition, buttonKey, () => this.next(buttonState), this);
+            button.anchor.set(0.5, 0.5);
+            button.addChild(buttonText);
+            buttonText.anchor.set(0.5, 0.5);
+            this.layoutFactory.addToBackground(button);
+        }, this);
     }
 }
