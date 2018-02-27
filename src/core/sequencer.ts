@@ -8,11 +8,8 @@ export function create(
     gameWrapper: HTMLElement,
 ): Sequencer {
     let currentScreen: ScreenDef = transitions[0];
-    const self = {
-        next,
-        getTransitions,
-    };
 
+    const self = { getTransitions };
     const layoutFactory = LayoutFactory.create(game, gameWrapper);
 
     transitions.forEach(transition => game.state.add(transition.name, transition.state));
@@ -23,14 +20,12 @@ export function create(
     return self;
 
     function next(changedState: GameStateUpdate): void {
-        const newState = {}; //_.merge({}, context.inState, changedState);
+        //TODO: Use GMI to save persistent state to local storage, if it has been updated
+        const newState = _.merge({}, context.inState, changedState);
         const nextScreenName = currentScreen.nextScreenName(newState);
-        // context.inState = newState;
-        //context;
+        context.inState = newState;
         layoutFactory.removeAll();
         game.state.start(nextScreenName, true, false, context, next, layoutFactory);
-
-        // console.log(`${currentScreen.name} --> ${nextScreenName}`);
 
         currentScreen = screenLookup[nextScreenName];
     }

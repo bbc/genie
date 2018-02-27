@@ -1,4 +1,4 @@
-declare type NextScreenFunction = (state: any) => any;
+declare type NextScreenFunction = (state?: GameStateUpdate) => any;
 
 declare interface ScreenDef {
     name: string;

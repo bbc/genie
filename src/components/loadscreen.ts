@@ -30,7 +30,7 @@ export class Loadscreen extends Screen {
             if (this.context.qaMode.active) {
                 dumpToConsole(keyLookups);
             }
-            this.exit({});
+            this.next();
         });
     }
 

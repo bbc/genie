@@ -11,6 +11,12 @@
             "key": "background",
             "url": "shared/background.png",
             "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "basicButton",
+            "url": "shared/basic-button.png",
+            "overwrite": false
         }
     ]
 }

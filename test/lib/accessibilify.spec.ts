@@ -11,6 +11,11 @@ describe("#accessibilify", () => {
     let gameWidth: number;
     let gameHeight: number;
     let gameScale: number;
+    let screenResized: () => void;
+    let buttonBoundsX: number;
+    let buttonBoundsY: number;
+    let buttonBoundsWidth: number;
+    let buttonBoundsHeight: number;
     let sandbox: sinon.SinonSandbox;
 
     before(() => {
@@ -30,12 +35,12 @@ describe("#accessibilify", () => {
         overlay = document.createElement("div");
         overlay.id = "local-game-holder";
         buttonAction = sandbox.spy();
+        buttonBoundsX = 50;
+        buttonBoundsY = 50;
+        buttonBoundsWidth = 200;
+        buttonBoundsHeight = 100;
         mockButton = {
             name: "play",
-            x: 0,
-            y: 0,
-            width: 200,
-            height: 100,
             events: {
                 onInputUp: {
                     dispatch: buttonAction,
@@ -45,12 +50,28 @@ describe("#accessibilify", () => {
                 input: {
                     activePointer: {},
                 },
+                canvas: {
+                    parentElement: overlay,
+                },
+                height: gameHeight,
+                width: gameWidth,
+                scale: {
+                    onSizeChange: {
+                        add: (debouncedCallback: () => void) => {
+                            screenResized = debouncedCallback;
+                        },
+                    },
+                },
+            },
+            getBounds: () => {
+                return {
+                    x: buttonBoundsX,
+                    y: buttonBoundsY,
+                    width: buttonBoundsWidth,
+                    height: buttonBoundsHeight,
+                };
             },
         };
-        sandbox
-            .stub(document, "getElementById")
-            .withArgs("local-game-holder")
-            .returns(overlay);
         sandbox.stub(overlay, "appendChild").returns(sandbox.spy());
         sandbox
             .stub(document, "createElement")
@@ -76,6 +97,7 @@ describe("#accessibilify", () => {
         accessibilify(mockButton, mockLayoutFactory);
         expect(accessibleElement.getAttribute("tabindex")).to.equal("0");
     });
+    
 
     it("sets position on accessibleElement to absolute", () => {
         accessibilify(mockButton, mockLayoutFactory);
@@ -95,106 +117,113 @@ describe("#accessibilify", () => {
     });
 
     describe("css left property", () => {
-        it("is correct when game scale is 1", () => {
-            gameWidth = 800;
-            gameHeight = 600;
-            gameScale = 1;
+        it("is the same as the button bounds x location", () => {
             accessibilify(mockButton, mockLayoutFactory);
-            expect(accessibleElement.style.left).to.equal("300px");
+            expect(accessibleElement.style.left).to.equal("50px");
         });
 
-        it("is correct when game scale is 1.5", () => {
-            gameWidth = 1200;
-            gameHeight = 900;
-            gameScale = 1.5;
+        describe("when position changes due to screen resize", () => {
+            it("changes value accordingly", () => {
+                const clock = sandbox.useFakeTimers();
+                accessibilify(mockButton, mockLayoutFactory);
+                buttonBoundsX = 100;
+                screenResized();
+                clock.tick(200);
+
+                expect(accessibleElement.style.left).to.equal("100px");
+            });
+        });
+    });
+
+    describe("disabling buttons that go out of bounds", () => {
+        it("sets the tab index to minus one when button moves out of bounds", () => {
             accessibilify(mockButton, mockLayoutFactory);
-            expect(accessibleElement.style.left).to.equal("450px");
+            expect(accessibleElement.getAttribute("tabindex")).to.equal("0");
+            buttonBoundsX = 1000;
+            mockButton.update();
+            expect(accessibleElement.getAttribute("tabindex")).to.equal("-1");
         });
 
-        it("is correct when game scale is 0.5", () => {
-            gameWidth = 400;
-            gameHeight = 300;
-            gameScale = 0.5;
+        it("sets the tab index to zero when button moves back into bounds", () => {
             accessibilify(mockButton, mockLayoutFactory);
-            expect(accessibleElement.style.left).to.equal("150px");
+            buttonBoundsX = 1000;
+            mockButton.update();
+            buttonBoundsX = 100;
+            mockButton.update();
+            expect(accessibleElement.getAttribute("tabindex")).to.equal("0");
+        });
+
+        it("sets the visibility to 'hidden' when button moves out of bounds", () => {
+            accessibilify(mockButton, mockLayoutFactory);
+            buttonBoundsX = 1000;
+            mockButton.update();
+            expect(accessibleElement.style.visibility).to.equal("hidden");
+        });
+
+        it("sets the visibility to 'visible' when button moves back into bounds", () => {
+            accessibilify(mockButton, mockLayoutFactory);
+            buttonBoundsX = 1000;
+            mockButton.update();
+            buttonBoundsX = 100;
+            mockButton.update();
+            expect(accessibleElement.style.visibility).to.equal("visible");
         });
     });
 
     describe("css top property", () => {
-        it("is correct when game scale is 1", () => {
-            gameWidth = 800;
-            gameHeight = 600;
-            gameScale = 1;
+        it("is the same as the button bounds y location", () => {
             accessibilify(mockButton, mockLayoutFactory);
-            expect(accessibleElement.style.top).to.equal("250px");
+            expect(accessibleElement.style.top).to.equal("50px");
         });
 
-        it("is correct when game scale is 1.5", () => {
-            gameWidth = 1200;
-            gameHeight = 900;
-            gameScale = 1.5;
-            accessibilify(mockButton, mockLayoutFactory);
-            expect(accessibleElement.style.top).to.equal("375px");
-        });
+        describe("when position changes due to screen resize", () => {
+            it("changes value accordingly", () => {
+                const clock = sandbox.useFakeTimers();
+                accessibilify(mockButton, mockLayoutFactory);
+                buttonBoundsY = 100;
+                screenResized();
+                clock.tick(200);
 
-        it("is correct when game scale is 0.5", () => {
-            gameWidth = 400;
-            gameHeight = 300;
-            gameScale = 0.5;
-            accessibilify(mockButton, mockLayoutFactory);
-            expect(accessibleElement.style.top).to.equal("125px");
+                expect(accessibleElement.style.top).to.equal("100px");
+            });
         });
     });
 
     describe("css width property", () => {
-        it("is correct when game scale is 1", () => {
-            gameWidth = 800;
-            gameHeight = 600;
-            gameScale = 1;
+        it("is the same as the button bounds width value", () => {
             accessibilify(mockButton, mockLayoutFactory);
             expect(accessibleElement.style.width).to.equal("200px");
         });
 
-        it("is correct when game scale is 1.5", () => {
-            gameWidth = 1200;
-            gameHeight = 900;
-            gameScale = 1.5;
-            accessibilify(mockButton, mockLayoutFactory);
-            expect(accessibleElement.style.width).to.equal("300px");
-        });
+        describe("when position changes due to screen resize", () => {
+            it("changes value accordingly", () => {
+                const clock = sandbox.useFakeTimers();
+                accessibilify(mockButton, mockLayoutFactory);
+                buttonBoundsWidth = 500;
+                screenResized();
+                clock.tick(200);
 
-        it("is correct when game scale is 0.5", () => {
-            gameWidth = 400;
-            gameHeight = 300;
-            gameScale = 0.5;
-            accessibilify(mockButton, mockLayoutFactory);
-            expect(accessibleElement.style.width).to.equal("100px");
+                expect(accessibleElement.style.width).to.equal("500px");
+            });
         });
     });
 
     describe("css height property", () => {
-        it("is correct when game scale is 1", () => {
-            gameWidth = 800;
-            gameHeight = 600;
-            gameScale = 1;
+        it("is the same as the button bounds height value", () => {
             accessibilify(mockButton, mockLayoutFactory);
             expect(accessibleElement.style.height).to.equal("100px");
         });
 
-        it("is correct when game scale is 1.5", () => {
-            gameWidth = 1200;
-            gameHeight = 900;
-            gameScale = 1.5;
-            accessibilify(mockButton, mockLayoutFactory);
-            expect(accessibleElement.style.height).to.equal("150px");
-        });
+        describe("when position changes due to screen resize", () => {
+            it("changes value accordingly", () => {
+                const clock = sandbox.useFakeTimers();
+                accessibilify(mockButton, mockLayoutFactory);
+                buttonBoundsHeight = 300;
+                screenResized();
+                clock.tick(200);
 
-        it("is correct when game scale is 0.5", () => {
-            gameWidth = 400;
-            gameHeight = 300;
-            gameScale = 0.5;
-            accessibilify(mockButton, mockLayoutFactory);
-            expect(accessibleElement.style.height).to.equal("50px");
+                expect(accessibleElement.style.height).to.equal("300px");
+            });
         });
     });
 
