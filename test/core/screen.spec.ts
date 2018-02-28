@@ -29,6 +29,21 @@ describe("Screen", () => {
         expect(screen._context).to.eql(mockContext);
     });
 
+    describe("context", () => {
+        it("has a getter", () => {
+            expect(screen.context).to.eql(mockContext);
+        });
+
+        it("has a setter", () => {
+            const expectedContext = {
+                inState: "inState",
+                qaMode: { active: true },
+            };
+            screen.context.qaMode = { active: true };
+            expect(screen.context).to.eql(expectedContext);
+        });
+    });
+
     describe("next method", () => {
         it("calls the passed-in next function with the changed state param", () => {
             const changedState = { state: "change" };
