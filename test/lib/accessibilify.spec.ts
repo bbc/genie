@@ -135,6 +135,13 @@ describe("#accessibilify", () => {
         });
     });
 
+    describe("cursor property", () => {
+        it("should have the pointer style for the cursor", () => {
+            accessibilify(mockButton, mockLayoutFactory);
+            expect(accessibleElement.style.cursor).to.equal("pointer");
+        });
+    });
+
     describe("disabling buttons that go out of bounds", () => {
         it("sets the tab index to minus one when button moves out of bounds", () => {
             accessibilify(mockButton, mockLayoutFactory);
