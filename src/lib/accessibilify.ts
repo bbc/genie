@@ -11,6 +11,7 @@ export function accessibilify(button: Phaser.Button | Phaser.Sprite, layoutFacto
         div.setAttribute("tabindex", "0");
         div.setAttribute("aria-label", ariaLabel());
         div.style.position = "absolute";
+        div.style.cursor = "pointer";
         div.style.left = cssLeft();
         div.style.top = cssTop();
         div.style.width = cssWidth();
