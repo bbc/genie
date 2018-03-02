@@ -1,10 +1,12 @@
 # Core Documentation
 
-- [Startup](#startup)
-- [Context](#context)
-- [Screen](#screen)
-- [Sequencer](#sequencer)
-- [Design Patterns Used](#design-patterns-used)
+* [Startup](#startup)
+* [Context](#context)
+* [Screen](#screen)
+* [Sequencer](#sequencer)
+* [Asset Loader][1]
+* [Design Patterns Used](#design-patterns-used)
+* [Typescript Build Process][2]
 
 ## Startup
 
@@ -26,7 +28,7 @@ State can also be passed from screen to screen. The state object has transient o
 
 #### Phaser Buttons and Sequence
 
-When adding `this.next()` as a callback on a Phaser Button, `context.inState` can be polluted with the `Phaser.Game` due to the way that Phaser binds `this` to a button. This can be easily avoided by wrapping the call in a function, e.g: 
+When adding `this.next()` as a callback on a Phaser Button, `context.inState` can be polluted with the `Phaser.Game` due to the way that Phaser binds `this` to a button. This can be easily avoided by wrapping the call in a function, e.g:
 
 `this.game.add.button(0, 0, this.gel.play, () => this.next(), this))`
 
@@ -36,6 +38,7 @@ instead of:
 
 ## Design Patterns Used
 
-Modules are created using a variant of the static factory pattern. They are first called using the `create()` method, which will return a singleton with its methods. It is similar to the  [revealing module pattern](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#revealingmodulepatternjavascript).
+Modules are created using a variant of the static factory pattern. They are first called using the `create()` method, which will return a singleton with its methods. It is similar to the [revealing module pattern](https://addyosmani.com/resources/essentialjsdesignpatterns/book/#revealingmodulepatternjavascript).
 
-
+[1]: asset-loader.md
+[2]: ts-build.md
