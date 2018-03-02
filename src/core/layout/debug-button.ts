@@ -18,22 +18,37 @@ const makeRect = (game: Phaser.Game, color1: number, width: number, height: numb
         .generateTexture();
 
 export class DebugButton extends Phaser.Button {
-    constructor(game: Phaser.Game, spec: GelSpec) {
+    private buttonSize: string = "desktop";
+    private backdrops: any;
+
+    constructor(game: Phaser.Game, spec: GelSpec, isMobile = false) {
         super(game);
 
-        const backdrop = makeRect(game, 0xf6931e, spec.width, spec.height);
-        const backdropHover = makeRect(game, 0xffaa46, spec.width, spec.height);
-        this.texture = backdrop;
+        //TODO heights are hard coded. Probably not an issue with final image based buttons.
+        this.backdrops = {
+            mobile: {
+                up: makeRect(game, 0xf6931e, spec.width, 42),
+                over: makeRect(game, 0xffaa46, spec.width, 42),
+            },
+            desktop: {
+                up: makeRect(game, 0xf6931e, spec.width, 64),
+                over: makeRect(game, 0xffaa46, spec.width, 64),
+            },
+        };
+
+        this.buttonSize = isMobile ? "mobile" : "desktop";
+
+        this.texture = this.backdrops[this.buttonSize].up;
 
         this.animations.sprite.anchor.setTo(0.5, 0.5);
         this.onInputUp.add(spec.click, this);
 
         this.animations.sprite.events.onInputOver.add(() => {
-            this.texture = backdropHover;
+            this.texture = this.backdrops[this.buttonSize].over;
         });
 
         this.animations.sprite.events.onInputOut.add(() => {
-            this.texture = backdrop;
+            this.texture = this.backdrops[this.buttonSize].up;
         });
 
         const text = new Phaser.Text(game, 0, 0, spec.text, gelStyle);
@@ -41,10 +56,15 @@ export class DebugButton extends Phaser.Button {
         this.animations.sprite.addChild(text);
     }
 
+    public resize(metrics: ViewportMetrics) {
+        this.buttonSize = metrics.isMobile ? "mobile" : "desktop";
+        this.texture = this.backdrops[this.buttonSize].up;
+    }
+
     /**
      * Disables input and makes button semi-transparent
      */
-    public setEnabled(bool: boolean = true) {
+    public setEnabled(bool = true) {
         this.animations.sprite.inputEnabled = bool;
         this.animations.sprite.alpha = bool ? 1 : 0.5;
     }

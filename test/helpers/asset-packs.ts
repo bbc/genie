@@ -17,11 +17,19 @@ const twoScreensThreeAssetsPack = objectToJsonDataUrl({
     ],
 });
 
+const gelButtonAssetPack = objectToJsonDataUrl({
+    gel: [
+        createImageAsset("image", "gel/desktop/play.png", assets.darkGreySquare100, false),
+        createImageAsset("image", "gel/mobile/play.png", assets.darkGreySquare100, false),
+    ],
+});
+
 export const assetPacks = {
     emptyAssetPack,
     loadscreenPack,
     oneScreenOneAssetPack,
     twoScreensThreeAssetsPack,
+    gelButtonAssetPack,
 };
 
 function createImageAsset(type: string, key: string, url: string, overwrite?: boolean) {

@@ -40,8 +40,8 @@ export function create(game: Phaser.Game, gameWrapper: HTMLElement): LayoutFacto
      * @param buttons - array of standard button names to include. See {@link ./gel-defaults.ts} for available names
      * @returns {Layout}
      */
-    function addLayout(buttons: string[], keyLookup: { [s: string]: string }): Layout {
-        const layout = new Layout(game, scaler, keyLookup, buttons);
+    function addLayout(buttons: string[]): Layout {
+        const layout = new Layout(game, scaler, buttons);
 
         addToBackground(layout.root);
 

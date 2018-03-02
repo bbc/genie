@@ -25,7 +25,7 @@ const config: GelDefaults = {
     howToPlay: {
         group: "bottomRight",
         title: "How To Play",
-        key: "howToPlay",
+        key: "how-to-play",
         ariaLabel: "Game Instructions",
     },
     play: {
@@ -40,16 +40,16 @@ const config: GelDefaults = {
         key: "settings",
         ariaLabel: "Game Settings",
     },
-    soundOff: {
+    audioOff: {
         group: "topRight",
         title: "Sound Off",
-        key: "soundOff",
+        key: "audio-off",
         ariaLabel: "Disable Sound",
     },
-    soundOn: {
+    audioOn: {
         group: "topRight",
         title: "Sound On",
-        key: "soundOn",
+        key: "audioOn",
         ariaLabel: "Enable Sound",
     },
     previous: {

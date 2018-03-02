@@ -1,14 +1,126 @@
 {
-    "gel": [
+    "gelDesktop": [
+        {
+            "type": "achievements",
+            "key": "play",
+            "url": "gel/desktop/achievements.png",
+            "frameWidth": 248,
+            "frameHeight": 64,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
+        },
         {
             "type": "spritesheet",
             "key": "play",
-            "url": "gel/play.png",
-            "frameWidth": 181,
-            "frameHeight": 181,
-            "frameMax": 3,
+            "url": "gel/desktop/play.png",
+            "frameWidth": 180,
+            "frameHeight": 180,
+            "frameMax": 1,
             "margin": 0,
-            "spacing": 2
+            "spacing": 0
+        },
+        {
+            "type": "spritesheet",
+            "key": "exit",
+            "url": "gel/desktop/exit.png",
+            "frameWidth": 64,
+            "frameHeight": 64,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
+        },
+        {
+            "type": "spritesheet",
+            "key": "how-to-play",
+            "url": "gel/desktop/how-to-play.png",
+            "frameWidth": 248,
+            "frameHeight": 64,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
+        },
+        {
+            "type": "spritesheet",
+            "key": "audio-off",
+            "url": "gel/desktop/audio-off.png",
+            "frameWidth": 64,
+            "frameHeight": 64,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
+        },
+        {
+            "type": "spritesheet",
+            "key": "settings",
+            "url": "gel/desktop/settings.png",
+            "frameWidth": 64,
+            "frameHeight": 64,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
+        }
+    ],
+    "gelMobile": [
+        {
+            "type": "achievements",
+            "key": "play",
+            "url": "gel/desktop/achievements.png",
+            "frameWidth": 172,
+            "frameHeight": 42,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
+        },
+        {
+            "type": "spritesheet",
+            "key": "play",
+            "url": "gel/mobile/play.png",
+            "frameWidth": 90,
+            "frameHeight": 90,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
+        },
+        {
+            "type": "spritesheet",
+            "key": "exit",
+            "url": "gel/mobile/exit.png",
+            "frameWidth": 43,
+            "frameHeight": 43,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
+        },
+        {
+            "type": "spritesheet",
+            "key": "how-to-play",
+            "url": "gel/mobile/how-to-play.png",
+            "frameWidth": 172,
+            "frameHeight": 42,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
+        },
+        {
+            "type": "spritesheet",
+            "key": "audio-off",
+            "url": "gel/mobile/audio-off.png",
+            "frameWidth": 43,
+            "frameHeight": 43,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
+        },
+        {
+            "type": "spritesheet",
+            "key": "settings",
+            "url": "gel/mobile/settings.png",
+            "frameWidth": 43,
+            "frameHeight": 43,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
         }
     ]
 }

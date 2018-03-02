@@ -1,5 +1,7 @@
 // @ts-ignore
 import * as fp from "lodash/fp";
+
+import * as ButtonFactory from "./button-factory";
 import { DebugButton } from "./debug-button";
 
 const horizontal: HorizontalPositions<(pos: number, width: number, pad: number) => number> = {
@@ -23,6 +25,7 @@ const getGroupX = (sizes: GroupSizes) => {
     const horizontals: HorizontalPositions<number> = sizes.metrics[
         sizes.pos.v === "middle" ? "safeHorizontals" : "horizontals"
     ] as HorizontalPositions<number>;
+
     return horizontal[sizes.pos.h](
         horizontals[sizes.pos.h] as number,
         sizes.width,
@@ -39,7 +42,9 @@ const getGroupY = (sizes: GroupSizes) =>
 
 class Group extends Phaser.Group {
     private buttons: DebugButton[] = [];
+    private buttonFactory: any; // TODO use ReturnType<ButtonFactory.create> with TS2.8
     private setGroupPosition: () => void;
+
     constructor(
         game: Phaser.Game,
         parent: Phaser.Group,
@@ -49,6 +54,8 @@ class Group extends Phaser.Group {
         private isVertical: boolean,
     ) {
         super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
+
+        this.buttonFactory = ButtonFactory.create(game);
         this.setGroupPosition = fp.flow(this.getSizes, getGroupPosition, this.setPos);
         this.setGroupPosition();
     }
@@ -56,21 +63,12 @@ class Group extends Phaser.Group {
     /**
      * TODO add interface for config
      */
-    public addButton(config: any, keyLookup: any, position?: number) {
+    public addButton(config: any, position?: number) {
         if (position === undefined) {
             position = this.buttons.length;
         }
 
-        const testButton: GelSpec = {
-            width: 200,
-            height: this.metrics.buttonMin,
-            text: config.title,
-            click: () => {
-                console.log("test button");
-            },
-        };
-
-        const newButton = new DebugButton(this.game, testButton);
+        const newButton = this.buttonFactory.createButton(this.metrics.isMobile, config.key);
 
         this.addAt(newButton, position);
         this.buttons.push(newButton);
@@ -89,6 +87,11 @@ class Group extends Phaser.Group {
     }
 
     public reset(metrics: ViewportMetrics) {
+        if (this.metrics.isMobile !== metrics.isMobile) {
+            this.resetButtons(metrics);
+            this.alignChildren();
+        }
+
         this.metrics = metrics;
         const invScale = 1 / metrics.scale;
         this.scale.setTo(invScale, invScale);
@@ -112,6 +115,11 @@ class Group extends Phaser.Group {
             }
         }, this);
     };
+
+    //TODO this is currently observer pattern but will eventually use pub/sub Phaser.Signals
+    private resetButtons(metrics: ViewportMetrics) {
+        this.buttons.forEach(button => button.resize(metrics));
+    }
 
     private getSizes: () => GroupSizes = () => ({
         metrics: this.metrics,

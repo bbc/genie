@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { assert, expect } from "chai";
 import * as sinon from "sinon";
 
 import { Home } from "../../src/components/home";
@@ -35,7 +35,7 @@ describe("Home Screen", () => {
             addToBackground: addToBackgroundSpy,
             keyLookups: {
                 currentState: "gameState",
-                gel: "thisIsGel",
+                gelDesktop: "thisIsGel",
                 background: "backgroundImage",
                 title: "titleImage",
             },
@@ -54,8 +54,8 @@ describe("Home Screen", () => {
             expect(homeScreen.keyLookup).to.equal("gameState");
         });
 
-        it("adds gel to the screen", () => {
-            expect(homeScreen.gel).to.equal("thisIsGel");
+        it("adds a key lookup to the current screen", () => {
+            assert.exists(homeScreen.keyLookup);
         });
     });
 });
