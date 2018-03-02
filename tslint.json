@@ -3,6 +3,11 @@
     "extends": ["tslint:recommended", "tslint-eslint-rules"],
     "jsRules": {},
     "rules": {
+        "ban": [
+            true,
+            {"name": ["it", "only"], "message": "Test has 'it.only' restriction"},
+            {"name": ["describe", "only"], "message": "Test has 'describe.only' restriction"}
+        ],
         "no-trailing-whitespace": false,
         "object-literal-sort-keys": false,
         "one-line": false,
