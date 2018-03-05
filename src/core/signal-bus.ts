@@ -13,7 +13,7 @@ export const create = () => {
 
     const remove = name => {
         _bus[name].dispose();
-        delete bus[name];
+        delete _bus[name];
     };
 
     const addSubscription = message => _bus[message.name].add(message.callback);
