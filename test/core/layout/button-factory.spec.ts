@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { assert, expect } from "chai";
 import * as sinon from "sinon";
 
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
@@ -7,29 +7,13 @@ import * as GelButton from "../../../src/core/layout/gel-button";
 describe("Layout - Button Factory", () => {
     let buttonFactory: any;
     let gelButtonStub: any;
-    let buttonCreateSpy: any;
     let mockGame: any;
 
     const sandbox = sinon.sandbox.create();
 
     beforeEach(() => {
-        buttonCreateSpy = sandbox.spy();
-        gelButtonStub = sandbox.stub(GelButton, "GelButton").callsFake(() => "buttonspy");
-
-        mockGame = {
-            state: { add: sandbox.spy(), start: sandbox.spy() },
-            add: {
-                group: sandbox.spy(() => ({
-                    addChild: sandbox.spy(),
-                })),
-            },
-            scale: {
-                setGameSize: sandbox.spy(),
-                scaleMode: sandbox.spy(),
-                onSizeChange: { add: sandbox.spy() },
-                getParentBounds: sandbox.spy(),
-            },
-        };
+        gelButtonStub = sandbox.stub(GelButton, "GelButton");
+        mockGame = { mockGame: "game" };
         buttonFactory = ButtonFactory.create(mockGame);
     });
 
@@ -39,7 +23,7 @@ describe("Layout - Button Factory", () => {
 
     describe("create method", () => {
         it("returns correct methods", () => {
-            expect(typeof buttonFactory.createButton).to.equal("function");
+            assert.exists(buttonFactory.createButton);
         });
     });
 
