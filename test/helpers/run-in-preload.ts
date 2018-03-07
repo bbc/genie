@@ -1,6 +1,6 @@
 import { PromiseTrigger } from "../../src/core/promise-utils";
-import { startup } from "../../src/core/startup";
 import { Screen } from "../../src/core/screen";
+import { startup } from "../../src/core/startup";
 
 /**
  * Wraps a test in asynchronous Phaser setup and shutdown code, and runs it in the preload phase of the first state.
