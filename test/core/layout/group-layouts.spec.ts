@@ -5,9 +5,7 @@ import { groupLayouts } from "../../../src/core/layout/group-layouts";
 describe("Group Layouts", () => {
 
     it("has only unique layout positions", () => {
-        expect(groupLayouts.filter(
-            (v, k, a) => a.indexOf(v) === k),
-        )
+        expect(fp.uniqWith(fp.isEqual, groupLayouts))
         .to.have.members(groupLayouts);
     });
 
