@@ -6,7 +6,7 @@ import { groupLayouts } from "../../../src/core/layout/group-layouts";
 describe("Group Layouts", () => {
 
     it("has only unique layout positions", () => {
-        assert.includeMembers(
+        assert.sameMembers(
             fp.uniqWith(fp.isEqual, groupLayouts),
             groupLayouts,
         );
