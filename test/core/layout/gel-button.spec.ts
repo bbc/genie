@@ -3,9 +3,9 @@ import * as fp from "lodash/fp";
 
 import { assert } from "chai";
 import { loadAssets, Pack, PackList } from "../../../src/core/asset-loader";
-import runInPreload from "../../helpers/run-in-preload"
 import { assetPacks } from "../../helpers/asset-packs";
 import * as mock from "../../helpers/mock";
+import runInPreload from "../../helpers/run-in-preload";
 
 import { GelButton } from "../../../src/core/layout/gel-button";
 
