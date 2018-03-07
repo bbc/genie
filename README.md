@@ -18,7 +18,7 @@ Alternatively load http://localhost:8080/index.html as a file URL (requires `--a
 
 `npm run test-watch` will run tests using karma in watch mode.  
 
-`npm test:coverage` and `npm run test-watch:coverage` will calculate test coverage. This runs more **slowly** than running the tests normally.
+`npm run test:coverage` and `npm run test-watch:coverage` will calculate test coverage. This runs more **slowly** than running the tests normally.
 
 ## QA Mode:
 

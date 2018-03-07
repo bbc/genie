@@ -2,6 +2,7 @@ import { assert, expect } from "chai";
 import * as sinon from "sinon";
 
 import * as LayoutFactory from "../../../src/core/layout/factory";
+import * as Layout from "../../../src/core/layout/layout";
 import * as Scaler from "../../../src/core/scaler";
 
 describe("Layout - Factory", () => {
@@ -9,35 +10,27 @@ describe("Layout - Factory", () => {
     let layoutFactory: any;
     let mockGame: any;
     let scalerSpy: any;
-    let scalerGetSizeSpy: any;
-    let scalerScaleChangeSpy: any;
-    let removeAllSpy: any;
+    let scalerMethods: any;
+    let groupMethods: any;
 
     before(() => {
         sandbox = sinon.sandbox.create();
     });
 
     beforeEach(() => {
-        scalerGetSizeSpy = sandbox.spy();
-        scalerScaleChangeSpy = sandbox.spy();
-        scalerSpy = sandbox.stub(Scaler, "create").returns({
-            getSize: scalerGetSizeSpy,
-            onScaleChange: {
-                add: scalerScaleChangeSpy,
-            },
-        });
-        removeAllSpy = sandbox.spy();
+        scalerMethods = { getSize: sandbox.spy(), onScaleChange: { add: sandbox.spy() } };
+        scalerSpy = sandbox.stub(Scaler, "create").returns(scalerMethods);
+        groupMethods = {
+            addChild: sandbox.spy(),
+            removeAll: sandbox.spy(),
+            scale: { set: sandbox.spy() },
+            position: { set: sandbox.spy() },
+        };
         mockGame = {
             start: sandbox.spy(),
             add: {
-                group: sandbox.spy(() => ({
-                    addChild: sandbox.spy(),
-                    removeAll: removeAllSpy,
-                    scale: { set: sandbox.spy() },
-                    position: { set: sandbox.spy() },
-                })),
+                group: sandbox.spy(() => groupMethods),
             },
-            renderer: { resolution: 800 },
             scale: {
                 setGameSize: sandbox.spy(),
                 setGamePosition: sandbox.spy(),
@@ -74,15 +67,83 @@ describe("Layout - Factory", () => {
         expect(scalerSpy.calledWith(600, mockGame)).to.equal(true);
     });
 
-    // it.only("scales the background", () => {
-    //     expect(mockGame.add.group.scale.set.called).to.equal(true);
-    //     // expect(mockGame.position.setGamePosition.callCount).to.equal(1);
-    // });
+    it("scales the background", () => {
+        const onScaleChangeCallback = scalerMethods.onScaleChange.add.getCall(0).args[0];
+        const expectedScale = 1;
+        onScaleChangeCallback(800, 600, expectedScale);
+        expect(groupMethods.scale.set.getCall(0).args).to.eql([expectedScale, expectedScale]);
+        expect(groupMethods.position.set.getCall(0).args).to.eql([400, 300]);
+    });
+
+    describe("addToBackground method", () => {
+        it("adds an Phaser element to the background", () => {
+            const mockPhaserElement = { phaser: "element" };
+            layoutFactory.addToBackground(mockPhaserElement);
+            expect(groupMethods.addChild.calledWith(mockPhaserElement)).to.equal(true);
+        });
+
+        it("sets anchor if Phaser element has one", () => {
+            const setToSpy = sandbox.spy();
+            const mockPhaserElement = { anchor: { setTo: setToSpy } };
+            layoutFactory.addToBackground(mockPhaserElement);
+            expect(setToSpy.calledWith(0.5, 0.5)).to.equal(true);
+        });
+    });
+
+    describe("addToForeground method", () => {
+        it("adds an Phaser element to the foreground", () => {
+            const mockPhaserElement = { someElement: "phaser-element" };
+            layoutFactory.addToForeground(mockPhaserElement);
+            expect(groupMethods.addChild.calledWith(mockPhaserElement)).to.equal(true);
+        });
+    });
+
+    describe("addLayout method", () => {
+        const mockButtons = "buttons";
+        const mockRoot = { root: { phaserElement: "phaserElement" } };
+        let layoutStub: any;
+
+        beforeEach(() => {
+            layoutStub = sandbox.stub(Layout, "Layout").returns(mockRoot);
+        });
+
+        it("creates a new layout with correct params", () => {
+            layoutFactory.addLayout(mockButtons);
+            expect(layoutStub.getCall(0).args.length).to.equal(3);
+            expect(layoutStub.getCall(0).args[0]).to.eql(mockGame);
+            expect(layoutStub.getCall(0).args[1]).to.eql(scalerMethods);
+            expect(layoutStub.getCall(0).args[2]).to.eql(mockButtons);
+        });
+
+        it("adds the layout root to the background", () => {
+            layoutFactory.addLayout(mockButtons);
+            expect(groupMethods.addChild.calledWith(mockRoot.root)).to.equal(true);
+        });
+
+        it("returns the layout", () => {
+            expect(layoutFactory.addLayout(mockButtons)).to.eql(mockRoot);
+        });
+    });
 
     describe("removeAll method", () => {
         it("removes everything from the background", () => {
             layoutFactory.removeAll();
-            expect(removeAllSpy.calledWith(true)).to.equal(true);
+            expect(groupMethods.removeAll.calledWith(true)).to.equal(true);
+        });
+    });
+
+    describe("addLookups method", () => {
+        it("adds more keylookups", () => {
+            const moreLookups = { more: "lookups" };
+            layoutFactory.addLookups(moreLookups);
+            expect(layoutFactory.keyLookups).to.eql(moreLookups);
+        });
+    });
+
+    describe("getSize method", () => {
+        it("returns the scaler getSize method", () => {
+            layoutFactory.getSize();
+            expect(scalerMethods.getSize.called).to.equal(true);
         });
     });
 });
