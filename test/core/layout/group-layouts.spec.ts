@@ -10,7 +10,7 @@ describe("Group Layouts", () => {
         .to.have.members(groupLayouts);
     });
 
-    it.only("has vertical positions of either top, middle or bottom", () => {
+    it("has vertical positions of either top, middle or bottom", () => {
         expect(fp.filter(
             fp.negate(fp.includes(fp, ["top", "middle", "bottom"])),
             groupLayouts,
