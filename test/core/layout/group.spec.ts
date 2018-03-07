@@ -7,6 +7,7 @@ import runInPreload from "../../helpers/run-in-preload";
 
 import { calculateMetrics } from "../../../src/core/layout/calculate-metrics";
 import Group from "../../../src/core/layout/group";
+//import { GelButton } from "../../../src/core/layout/gel-button";
 
 describe("Group", () => {
 
@@ -29,13 +30,14 @@ describe("Group", () => {
         sandbox.restore();
     });
 
-    it("addButton() returns a GelButton", () => {
+    it("addButton() creates a GelButton, adds it to the group and then returns it", () => {
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
                 // when
                 const mockViewportMetrics = calculateMetrics(200, 200, 1, 600);
                 const parentGroup = new Phaser.Group(game, game.world, undefined);
                 const group = new Group(game, parentGroup, "top", "left", mockViewportMetrics, false);
+                const addAtStub = sandbox.stub(group, "addAt");
 
                 // given
                 const mockConfig = {
@@ -47,21 +49,23 @@ describe("Group", () => {
                     },
                 };
                 const btn = group.addButton(mockConfig);
+                const fakeObject = { };
 
                 // then
+                sinon.assert.calledWith(addAtStub, btn, 0);
                 assert(btn.constructor.name === "GelButton");
             }),
         );
     });
 
-    it("addToGroup() set the anchor of the item that is passed in", () => {
+    it("addToGroup() sets the anchor of the item that is passed in and adds the item to the group", () => {
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
                 // when
                 const mockViewportMetrics = calculateMetrics(200, 200, 1, 600);
                 const parentGroup = new Phaser.Group(game, game.world, undefined);
                 const group = new Group(game, parentGroup, "top", "left", mockViewportMetrics, false);
-                sandbox.stub(group, "addAt");
+                const addAtStub = sandbox.stub(group, "addAt");
 
                 // given
                 const mockItem = { 
@@ -69,10 +73,34 @@ describe("Group", () => {
                         setTo: sinon.stub(),
                     },
                 };
-                group.addToGroup(mockItem, 0);
+                group.addToGroup(mockItem);
 
                 // then
                 sinon.assert.calledWith(mockItem.anchor.setTo, 0.5, 0.5);
+                sinon.assert.calledWith(addAtStub, mockItem, 0);
+            }),
+        );
+    });
+
+    it("addToGroup() adds a button to the group at the given position when the argument is provided", () => {
+        return runInPreload(game =>
+            loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
+                // when
+                const mockViewportMetrics = calculateMetrics(200, 200, 1, 600);
+                const parentGroup = new Phaser.Group(game, game.world, undefined);
+                const group = new Group(game, parentGroup, "top", "left", mockViewportMetrics, false);
+                const addAtStub = sandbox.stub(group, "addAt");
+
+                // given
+                const mockItem = { 
+                    anchor: {
+                        setTo: sinon.stub(),
+                    },
+                };
+                group.addToGroup(mockItem, 300);
+
+                // then
+                sinon.assert.calledWith(addAtStub, mockItem, 300);
             }),
         );
     });
