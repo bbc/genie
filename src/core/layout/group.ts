@@ -27,7 +27,7 @@ const getGroupX = (sizes: GroupSizes) => {
     ] as HorizontalPositions<number>;
 
     return horizontal[sizes.pos.h](
-        horizontals[sizes.pos.h] as number,
+        horizontals[sizes.pos.h] as number, // <-- Error here
         sizes.width,
         sizes.metrics.borderPad * sizes.scale,
     );
@@ -56,6 +56,7 @@ class Group extends Phaser.Group {
         super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
 
         this.buttonFactory = ButtonFactory.create(game);
+        console.log('Horizontal left: ', horizontal.left);
         this.setGroupPosition = fp.flow(this.getSizes, getGroupPosition, this.setPos);
         this.setGroupPosition();
     }
