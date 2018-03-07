@@ -3,11 +3,13 @@ import * as fp from "lodash/fp";
 import { isBoolean, isUndefined } from "util";
 import { groupLayouts } from "../../../src/core/layout/group-layouts";
 
-describe.only("Group Layouts", () => {
+describe("Group Layouts", () => {
 
     it("has only unique layout positions", () => {
-        expect(fp.uniqWith(fp.isEqual, groupLayouts))
-        .to.have.members(groupLayouts);
+        assert.includeMembers(
+            fp.uniqWith(fp.isEqual, groupLayouts),
+            groupLayouts,
+        );
     });
 
     it("has vertical positions of either top, middle or bottom", () => {
