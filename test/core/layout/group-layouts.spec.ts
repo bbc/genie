@@ -10,17 +10,19 @@ describe("Group Layouts", () => {
         .to.have.members(groupLayouts);
     });
 
-    it("has vertical positions of either top, middle or bottom", () => {
-        expect(groupLayouts.filter(
-            (v, k, a) => ["top", "middle", "bottom"].indexOf(v.vPos) >= 0),
-        )
+    it.only("has vertical positions of either top, middle or bottom", () => {
+        expect(fp.filter(
+            fp.negate(fp.includes(fp, ["top", "middle", "bottom"])),
+            groupLayouts,
+        ))
         .to.have.members(groupLayouts);
     });
 
     it("has horizontal positions of either left, center or right", () => {
-        expect(groupLayouts.filter(
-            (v, k, a) => ["left", "center", "right"].indexOf(v.hPos) >= 0),
-        )
+        expect(fp.filter(
+            fp.negate(fp.includes(fp, ["left", "center", "right"])),
+            groupLayouts,
+        ))
         .to.have.members(groupLayouts);
     });
 
