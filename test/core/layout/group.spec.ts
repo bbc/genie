@@ -10,28 +10,40 @@ import Group from "../../../src/core/layout/group";
 
 describe("Group", () => {
 
+    const updateCallback = sinon.spy();
+    const gamePacks: PackList = {
+        MASTER_PACK_KEY: { url: assetPacks.emptyAssetPack },
+        GEL_PACK_KEY: { url: assetPacks.emptyAssetPack },
+    };
+    const gelPack: Pack = {
+        key: "gel",
+        url: assetPacks.gelButtonAssetPack,
+    };
     beforeEach(mock.installMockGetGmi);
     afterEach(mock.uninstallMockGetGmi);
 
-    it("can have a button added to it", () => {
-        const updateCallback = sinon.spy();
-        const gamePacks: PackList = {
-            MASTER_PACK_KEY: { url: assetPacks.emptyAssetPack },
-            GEL_PACK_KEY: { url: assetPacks.emptyAssetPack },
-        };
-        const gelPack: Pack = {
-            key: "gel",
-            url: assetPacks.gelButtonAssetPack,
-        };
-
+    it("addButton() returns a GelButton", () => {
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
-                // write test here
+                // when
                 const mockViewportMetrics = calculateMetrics(200, 200, 1, 600);
                 const parentGroup = new Phaser.Group(game, game.world, undefined);
                 const group = new Group(game, parentGroup, "top", "left", mockViewportMetrics, false);
+
+                // given
+                let mockConfig = {
+                    exit: {
+                        group: "topLeft",
+                        title: "Exit",
+                        key: "exit",
+                        ariaLabel: "Exit Game",
+                    },
+                };
+                let btn = group.addButton(mockConfig);
+
+                // then
+                assert(btn.constructor.name === "GelButton");
             }),
         );
-        //let group = new Group(mockGame, mockParentGroup, "0", "0", mockMetrics, false);
     });
 });
