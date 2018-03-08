@@ -1,6 +1,5 @@
 import { Screen } from "../core/screen";
 import * as signal from "../core/signal-bus";
-import { accessibilify } from "../lib/accessibilify";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness";
 
 export class Home extends Screen {
@@ -28,13 +27,5 @@ export class Home extends Screen {
                 console.log("Play was pressed");
             },
         });
-
-        // Example on how to accessibilify a standard button:
-        // const btn = this.game.add.button(-200, 0, this.gel.play, () => {
-        //     console.log("clicked accessible button");
-        // });
-        // btn.name = "accessible-button-example";
-        // this.layoutFactory.addToBackground(btn);
-        // accessibilify(btn, this.layoutFactory, "Test Accessible Button");
     }
 }

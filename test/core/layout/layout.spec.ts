@@ -43,18 +43,17 @@ describe("Layout", () => {
         const layout1 = new Layout(mockGame, mockScaler, ["achievements"]);
         expect(Object.keys(layout1.buttons).length).to.eql(1);
 
-        const layout2 = new Layout(
-            mockGame,
-            mockScaler,
-            ["play", "audioOff", "settings"],
-        );
+        const layout2 = new Layout(mockGame, mockScaler, ["play", "audioOff", "settings"]);
         expect(Object.keys(layout2.buttons).length).to.eql(3);
 
-        const layout3 = new Layout(
-            mockGame,
-            mockScaler,
-            ["achievements", "exit", "howToPlay", "play", "audioOff", "settings"],
-        );
+        const layout3 = new Layout(mockGame, mockScaler, [
+            "achievements",
+            "exit",
+            "howToPlay",
+            "play",
+            "audioOff",
+            "settings",
+        ]);
         expect(Object.keys(layout3.buttons).length).to.eql(6);
     });
 
@@ -92,11 +91,7 @@ describe("Layout", () => {
 
     //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
     it("Should set button callbacks using the 'setAction' method", () => {
-        const layout = new Layout(
-            mockGame,
-            mockScaler,
-            ["achievements", "exit", "settings"],
-        );
+        const layout = new Layout(mockGame, mockScaler, ["achievements", "exit", "settings"]);
 
         const testAction = sinon.spy();
 
