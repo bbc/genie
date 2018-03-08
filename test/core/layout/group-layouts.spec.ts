@@ -3,7 +3,7 @@ import * as fp from "lodash/fp";
 import { isBoolean, isUndefined } from "util";
 import { groupLayouts } from "../../../src/core/layout/group-layouts";
 
-describe.only("Group Layouts", () => {
+describe("Group Layouts", () => {
 
     it("matches the test constant", () => {
         const expectedGroupLayouts = [
