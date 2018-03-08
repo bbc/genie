@@ -7,7 +7,6 @@ import runInPreload from "../../helpers/run-in-preload";
 
 import { calculateMetrics } from "../../../src/core/layout/calculate-metrics";
 import Group from "../../../src/core/layout/group";
-//import { GelButton } from "../../../src/core/layout/gel-button";
 
 describe("Group", () => {
 
@@ -34,9 +33,9 @@ describe("Group", () => {
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
                 // when
-                const mockViewportMetrics = calculateMetrics(200, 200, 1, 600);
+                const mockViewportMetrics = calculateMetrics(200, 200, 1, 200);
                 const parentGroup = new Phaser.Group(game, game.world, undefined);
-                const group = new Group(game, parentGroup, "top", "left", mockViewportMetrics, false);
+                const group = new Group(game, parentGroup, "bottom", "left", mockViewportMetrics, false);
                 const addAtStub = sandbox.stub(group, "addAt");
 
                 // given
@@ -58,11 +57,39 @@ describe("Group", () => {
         );
     });
 
+    it("addButton() adds the created button to the group at a given position when the argument is provided", () => {
+        return runInPreload(game =>
+            loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
+                // when
+                const mockViewportMetrics = calculateMetrics(400, 400, 2, 400);
+                const parentGroup = new Phaser.Group(game, game.world, undefined);
+                const group = new Group(game, parentGroup, "top", "right", mockViewportMetrics, false);
+                const addAtStub = sandbox.stub(group, "addAt");
+
+                // given
+                const mockConfig = {
+                    exit: {
+                        group: "topLeft",
+                        title: "Exit",
+                        key: "exit",
+                        ariaLabel: "Exit Game",
+                    },
+                };
+                const btn = group.addButton(mockConfig, 2);
+                const fakeObject = { };
+
+                // then
+                sinon.assert.calledWith(addAtStub, btn, 2);
+                assert(btn.constructor.name === "GelButton");
+            }),
+        );
+    });
+
     it("addToGroup() sets the anchor of the item that is passed in and adds the item to the group", () => {
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
                 // when
-                const mockViewportMetrics = calculateMetrics(200, 200, 1, 600);
+                const mockViewportMetrics = calculateMetrics(600, 600, 1, 450);
                 const parentGroup = new Phaser.Group(game, game.world, undefined);
                 const group = new Group(game, parentGroup, "top", "left", mockViewportMetrics, false);
                 const addAtStub = sandbox.stub(group, "addAt");
@@ -86,7 +113,7 @@ describe("Group", () => {
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
                 // when
-                const mockViewportMetrics = calculateMetrics(200, 200, 1, 600);
+                const mockViewportMetrics = calculateMetrics(500, 350, 0.5, 350);
                 const parentGroup = new Phaser.Group(game, game.world, undefined);
                 const group = new Group(game, parentGroup, "top", "left", mockViewportMetrics, false);
                 const addAtStub = sandbox.stub(group, "addAt");
@@ -111,7 +138,7 @@ describe("Group", () => {
                 // when
                 const scale = 2;
                 const invScale = 1 / scale;
-                const mockViewportMetrics = calculateMetrics(200, 200, scale, 600);
+                const mockViewportMetrics = calculateMetrics(750, 500, scale, 600);
                 const parentGroup = new Phaser.Group(game, game.world, undefined);
                 const group = new Group(game, parentGroup, "top", "left", mockViewportMetrics, false);
                 const scaleSetToStub = sandbox.stub(group.scale, "setTo");
