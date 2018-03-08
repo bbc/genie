@@ -6,7 +6,9 @@
         "ban": [
             true,
             {"name": ["it", "only"], "message": "Test has 'it.only' restriction"},
-            {"name": ["describe", "only"], "message": "Test has 'describe.only' restriction"}
+            {"name": ["describe", "only"], "message": "Test has 'describe.only' restriction"},
+            {"name": ["it", "skip"], "message": "Test has been skipped"},
+            {"name": ["describe", "skip"], "message": "Describe block has been skipped"}
         ],
         "no-trailing-whitespace": false,
         "object-literal-sort-keys": false,
