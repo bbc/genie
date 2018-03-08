@@ -1,7 +1,6 @@
 import * as _ from "lodash";
 import "../lib/phaser";
 
-import { PromiseTrigger } from "../core/promise-utils";
 import * as Sequencer from "../core/sequencer";
 import { parseUrlParams } from "../lib/parseUrlParams";
 
