@@ -41,13 +41,13 @@ const getGroupY = (sizes: GroupSizes) =>
     );
 
 class Group extends Phaser.Group {
-    private buttons: DebugButton[] = [];
+    private buttons: any = [];
     private buttonFactory: any; // TODO use ReturnType<ButtonFactory.create> with TS2.8
     private setGroupPosition: () => void;
 
     constructor(
-        game: Phaser.Game,
-        parent: Phaser.Group,
+        game: any,
+        parent: any,
         private vPos: string,
         private hPos: string,
         private metrics: ViewportMetrics,
@@ -63,11 +63,7 @@ class Group extends Phaser.Group {
     /**
      * TODO add interface for config
      */
-    public addButton(config: any, position?: number) {
-        if (position === undefined) {
-            position = this.buttons.length;
-        }
-
+    public addButton(config: any, position = this.buttons.length) {
         const newButton = this.buttonFactory.createButton(this.metrics.isMobile, config.key);
 
         this.addAt(newButton, position);

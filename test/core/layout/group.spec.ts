@@ -17,8 +17,11 @@ describe("Group", () => {
     let hPos;
 
     beforeEach(() => {
-        game = new Phaser.Game();
-        parentGroup = new Phaser.Group(game);
+        game = sandbox.stub();
+        parentGroup = {
+            addChild: () => {},
+            children: [],
+        };
         config = {};
         metrics = calculateMetrics(1920, 1080, 1, 1920);
         buttonResizeStub = sandbox.stub();
@@ -121,53 +124,41 @@ describe("Group", () => {
 
     describe("#reset", () => {
         it("sets group position when resizing from desktop to desktop", () => {
-            // post-resize expected group position
             const expectedGroupXPosition = 0;
             const expectedGroupYPosition = -333;
-
-            // create button on desktop
             const desktopMetrics = calculateMetrics(1920, 1080, 1, 1920);
+            const moreDesktopMetrics = calculateMetrics(1366, 720, 1, 720);
+
             group = new Group(game, parentGroup, "top", "center", desktopMetrics, false);
             group.addButton(config);
-
-            // when resizing desktop to desktop
-            const moreDesktopMetrics = calculateMetrics(1366, 720, 1, 720);
             group.reset(moreDesktopMetrics);
 
-            // then
             assert(group.x === expectedGroupXPosition);
             assert(group.y === expectedGroupYPosition);
         });
 
         it("resizes buttons after resizing the group and the width drops below the mobile breakpoint", () => {
-            // create button on desktop
             const desktopMetrics = calculateMetrics(1920, 1080, 1, 1920);
+            const mobileMetrics = calculateMetrics(400, 600, 1, 600);
+
             group = new Group(game, parentGroup, "bottom", "right", desktopMetrics, false);
             group.addButton(config);
-
-            // when resizing to mobile
-            const mobileMetrics = calculateMetrics(400, 600, 1, 600); 
             group.reset(mobileMetrics);
 
-            // then
-            console.log(group.metrics.isMobile);
             assert(group.metrics.isMobile === true);
-            sinon.assert.calledOnce(buttonResizeStub);
+            sandbox.assert.calledOnce(buttonResizeStub);
         });
 
         it("does not resize buttons after resizing the group and the width remains above the mobile breakpoint", () => {
-             // create button on desktop
             const desktopMetrics = calculateMetrics(1920, 1080, 1, 1920);
+            const moreDesktopMetrics = calculateMetrics(1366, 720, 1, 720);
+
             group = new Group(game, parentGroup, "top", "left", desktopMetrics, false);
             group.addButton(config);
-
-            // when resizing desktop to desktop
-            const moreDesktopMetrics = calculateMetrics(1366, 720, 1, 720);
             group.reset(moreDesktopMetrics);
 
-            // then
             assert(group.metrics.isMobile === false);
-            sinon.assert.notCalled(buttonResizeStub);
+            sandbox.assert.notCalled(buttonResizeStub);
         });
     });
 });
