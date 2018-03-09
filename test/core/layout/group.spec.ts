@@ -1,11 +1,6 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-//import { loadAssets, Pack, PackList } from "../../../src/core/asset-loader";
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
-//import { assetPacks } from "../../helpers/asset-packs";
-//import * as mock from "../../helpers/mock";
-//import runInPreload from "../../helpers/run-in-preload";
-
 import { calculateMetrics } from "../../../src/core/layout/calculate-metrics";
 import Group from "../../../src/core/layout/group";
 
@@ -15,6 +10,7 @@ describe("Group", () => {
     let game;
     let parentGroup;
     let metrics;
+    let buttonResizeStub;
     let group;
     let config;
     let vPos;
@@ -25,6 +21,7 @@ describe("Group", () => {
         parentGroup = new Phaser.Group(game);
         config = {};
         metrics = calculateMetrics(1920, 1080, 1, 1920);
+        buttonResizeStub = sandbox.stub();
         buttonFactory = {
             createButton: () => {
                 return {
@@ -33,6 +30,7 @@ describe("Group", () => {
                     width: 200,
                     height: 100,
                     updateTransform: () => {},
+                    resize: buttonResizeStub,
                 };
             },
         };
@@ -121,70 +119,55 @@ describe("Group", () => {
         });
     });
 
-    //it("addToGroup() sets the anchor of the item that is passed in and adds the item to the group", () => {
-    //    return runInPreload(game =>
-    //        loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
-    //            // when
-    //            const mockViewportMetrics = calculateMetrics(600, 600, 1, 450);
-    //            const parentGroup = new Phaser.Group(game, game.world, undefined);
-    //            const group = new Group(game, parentGroup, "top", "left", mockViewportMetrics, false);
-    //            const addAtStub = sandbox.stub(group, "addAt");
+    describe("#reset", () => {
+        it("sets group position when resizing from desktop to desktop", () => {
+            // post-resize expected group position
+            const expectedGroupXPosition = 0;
+            const expectedGroupYPosition = -333;
 
-    //            // given
-    //            const mockItem = { 
-    //                anchor: {
-    //                    setTo: sinon.stub(),
-    //                },
-    //            };
-    //            group.addToGroup(mockItem);
+            // create button on desktop
+            const desktopMetrics = calculateMetrics(1920, 1080, 1, 1920);
+            group = new Group(game, parentGroup, "top", "center", desktopMetrics, false);
+            group.addButton(config);
 
-    //            // then
-    //            sinon.assert.calledWith(mockItem.anchor.setTo, 0.5, 0.5);
-    //            sinon.assert.calledWith(addAtStub, mockItem, 0);
-    //        }),
-    //    );
-    //});
+            // when resizing desktop to desktop
+            const moreDesktopMetrics = calculateMetrics(1366, 720, 1, 720);
+            group.reset(moreDesktopMetrics);
 
-    //it("addToGroup() adds a button to the group at the given position when the argument is provided", () => {
-    //    return runInPreload(game =>
-    //        loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
-    //            // when
-    //            const mockViewportMetrics = calculateMetrics(500, 350, 0.5, 350);
-    //            const parentGroup = new Phaser.Group(game, game.world, undefined);
-    //            const group = new Group(game, parentGroup, "top", "left", mockViewportMetrics, false);
-    //            const addAtStub = sandbox.stub(group, "addAt");
+            // then
+            assert(group.x === expectedGroupXPosition);
+            assert(group.y === expectedGroupYPosition);
+        });
 
-    //            // given
-    //            const mockItem = { 
-    //                anchor: {
-    //                    setTo: sinon.stub(),
-    //                },
-    //            };
-    //            group.addToGroup(mockItem, 300);
+        it("resizes buttons after resizing the group and the width drops below the mobile breakpoint", () => {
+            // create button on desktop
+            const desktopMetrics = calculateMetrics(1920, 1080, 1, 1920);
+            group = new Group(game, parentGroup, "bottom", "right", desktopMetrics, false);
+            group.addButton(config);
 
-    //            // then
-    //            sinon.assert.calledWith(addAtStub, mockItem, 300);
-    //        }),
-    //    );
-    //});
+            // when resizing to mobile
+            const mobileMetrics = calculateMetrics(400, 600, 1, 600); 
+            group.reset(mobileMetrics);
 
-    //it("reset() sets the scale of the group to the inverse scale", () => {
-    //    return runInPreload(game =>
-    //        loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
-    //            // when
-    //            const scale = 2;
-    //            const invScale = 1 / scale;
-    //            const mockViewportMetrics = calculateMetrics(750, 500, scale, 600);
-    //            const parentGroup = new Phaser.Group(game, game.world, undefined);
-    //            const group = new Group(game, parentGroup, "top", "left", mockViewportMetrics, false);
-    //            const scaleSetToStub = sandbox.stub(group.scale, "setTo");
+            // then
+            console.log(group.metrics.isMobile);
+            assert(group.metrics.isMobile === true);
+            sinon.assert.calledOnce(buttonResizeStub);
+        });
 
-    //            // given
-    //            group.reset(mockViewportMetrics);
+        it("does not resize buttons after resizing the group and the width remains above the mobile breakpoint", () => {
+             // create button on desktop
+            const desktopMetrics = calculateMetrics(1920, 1080, 1, 1920);
+            group = new Group(game, parentGroup, "top", "left", desktopMetrics, false);
+            group.addButton(config);
 
-    //            // then
-    //            sinon.assert.calledWith(scaleSetToStub, invScale, invScale);
-    //        }),
-    //    );
-    //});
+            // when resizing desktop to desktop
+            const moreDesktopMetrics = calculateMetrics(1366, 720, 1, 720);
+            group.reset(moreDesktopMetrics);
+
+            // then
+            assert(group.metrics.isMobile === false);
+            sinon.assert.notCalled(buttonResizeStub);
+        });
+    });
 });
