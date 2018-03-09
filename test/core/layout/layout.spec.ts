@@ -3,7 +3,6 @@ import * as sinon from "sinon";
 
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import { Layout } from "../../../src/core/layout/layout";
-import { PromiseTrigger } from "../../../src/core/promise-utils";
 
 describe("Layout", () => {
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
@@ -106,14 +105,14 @@ describe("Layout", () => {
 });
 
 function initialiseGame(): Promise<Phaser.Game> {
-    const promisedGame = new PromiseTrigger<Phaser.Game>();
-    // tslint:disable-next-line:no-unused-expression
-    new Phaser.Game({
-        state: new class extends Phaser.State {
-            public create() {
-                promisedGame.resolve(this.game);
-            }
-        }(),
+    return new Promise(resolve => {
+        // tslint:disable-next-line:no-unused-expression
+        new Phaser.Game({
+            state: new class extends Phaser.State {
+                public create() {
+                    resolve(this.game);
+                }
+            }(),
+        });
     });
-    return promisedGame;
 }
