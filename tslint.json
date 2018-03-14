@@ -12,6 +12,7 @@
         ],
         "no-trailing-whitespace": false,
         "object-literal-sort-keys": false,
+        "member-access": false,
         "one-line": false,
         "brace-style": false,
         "arrow-parens": false,

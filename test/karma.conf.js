@@ -5,16 +5,15 @@ var webpackConfig = checkCoverageFlag
 
 module.exports = function(config) {
     config.set({
-        basePath: "",
+        // basePath: "",
         frameworks: ["mocha", "chai", "sinon"],
         files: [
-            { pattern: "../test/**/*.ts", watched: false, served: true, included: true },
-            { pattern: "../src/**/*.ts", watched: false, served: false, included: false },
+            "../src/lib/phaser.js",
+            "../test/**/*.spec.js",
         ],
-        exclude: ["../node_modules"],
         preprocessors: {
-            "../test/**/*.ts": checkCoverageFlag ? ["webpack", "sourcemap"] : ["webpack"],
-            "../src/**/*.ts": checkCoverageFlag ? ["webpack", "coverage"] : ["webpack"],
+            "../src/lib/phaser.js": ["webpack"],
+            "../test/**/*.spec.js": ["webpack"],
         },
         client: {
             mocha: {

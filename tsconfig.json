@@ -2,8 +2,10 @@
     "compilerOptions": {
         "module": "CommonJS",
         "target": "es6",
-        "strict": true,
+        "strict": false,
+        "strictNullChecks": false,
         "sourceMap": true,
+        "suppressExcessPropertyErrors": true,
         "strictPropertyInitialization": false,
         "noImplicitAny": false
     }

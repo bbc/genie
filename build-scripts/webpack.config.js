@@ -2,7 +2,6 @@
 const path = require("path");
 const webpack = require("webpack");
 const HappyPack = require("happypack");
-var ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 var phaserModule = path.join(__dirname, "../node_modules/phaser-ce/");
 var phaser = path.join(phaserModule, "build/custom/phaser-split.js"),
@@ -12,7 +11,7 @@ var phaser = path.join(phaserModule, "build/custom/phaser-split.js"),
 module.exports = {
     context: path.join(__dirname, ".."),
     devtool: "cheap-module-eval-source-map",
-    entry: "./src/main.ts",
+    entry: "./src/main.js",
     output: {
         devtoolModuleFilenameTemplate: "[absolute-resource-path]",
         filename: "output/main.js",
@@ -23,17 +22,6 @@ module.exports = {
                 test: /(phaser-split|p2|pixi).js$/,
                 include: /(node_modules[\\\/]phaser-ce)/,
                 use: "happypack/loader?id=script-loader",
-            },
-            {
-                test: /\.tsx?$/,
-                include: /(src|test)/,
-                use: "happypack/loader?id=ts",
-            },
-            {
-                test: /\.js$/,
-                include: /(src|test)/,
-                exclude: /node_modules/,
-                loader: "happypack/loader?id=babel",
             },
         ],
     },
@@ -48,20 +36,6 @@ module.exports = {
     },
     plugins: [
         new HappyPack({
-            id: "ts",
-            threads: 1,
-            loaders: [
-                {
-                    path: "babel-loader",
-                    query: { presets: [["env", { targets: { ie: 11 } }]] },
-                },
-                {
-                    path: "ts-loader",
-                    query: { happyPackMode: true },
-                },
-            ],
-        }),
-        new HappyPack({
             id: "script-loader",
             threads: 1,
             loaders: [
@@ -69,23 +43,6 @@ module.exports = {
                     path: "script-loader",
                 },
             ],
-        }),
-        new HappyPack({
-            id: "babel",
-            threads: 1,
-            loaders: [
-                {
-                    path: "babel-core",
-                    query: {
-                        presets: [["env", { targets: { ie: 11 } }]],
-                        cacheDirectory: true,
-                    },
-                },
-            ],
-        }),
-        new ForkTsCheckerWebpackPlugin({
-            checkSyntacticErrors: true,
-            workers: ForkTsCheckerWebpackPlugin.ONE_CPU,
         }),
         new webpack.SourceMapDevToolPlugin({
             filename: null, // if no value is provided the sourcemap is inlined
