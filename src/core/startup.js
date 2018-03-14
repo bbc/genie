@@ -29,7 +29,7 @@ export function startup(transitions, initialAdditionalState) {
         resolvedPromise = resolve;
     });
 
-    function onStarted(config) {
+    function onStarted() {
         // Phaser is now set up and we can use all game properties.
         game.canvas.setAttribute("aria-hidden", "true");
         const context = {
