@@ -1,7 +1,6 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
 
-import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import { Layout } from "../../../src/core/layout/layout";
 
 describe("Layout", () => {
@@ -67,7 +66,7 @@ describe("Layout", () => {
 
         layout.addToGroup("middleRight", testElement);
 
-        const groupsWithChildren = layout.root.children.filter((element) => element.length);
+        const groupsWithChildren = layout.root.children.filter(element => element.length);
 
         expect(groupsWithChildren.length).to.eql(1);
         expect(groupsWithChildren[0].name).to.eql("middleRight");
@@ -84,7 +83,7 @@ describe("Layout", () => {
 
         layout.addToGroup("topLeft", testElement, 2);
 
-        const leftTopGroup = layout.root.children.find((element) => element.name === "topLeft");
+        const leftTopGroup = layout.root.children.find(element => element.name === "topLeft");
         expect(leftTopGroup.children[2].randomKey).to.eql(randomKey);
     });
 
@@ -101,6 +100,46 @@ describe("Layout", () => {
         layout.buttons.exit.events.onInputUp.dispatch({}, {});
 
         expect(testAction.callCount).to.eql(3);
+    });
+
+    //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
+    it("Should add buttons using the correct tab order", () => {
+        const rndOrder = [
+            "exit",
+            "home",
+            "achievements",
+            "howToPlay",
+            "play",
+            "settings",
+            "audioOff",
+            "audioOn",
+            "previous",
+            "next",
+            "continue",
+            "restart",
+            "back",
+            "pause",
+        ];
+        const tabOrder = [
+            "exit",
+            "home",
+            "back",
+            "settings",
+            "audioOff",
+            "audioOn",
+            "pause",
+            "previous",
+            "play",
+            "next",
+            "achievements",
+            "continue",
+            "restart",
+            "howToPlay",
+        ];
+
+        const layout = new Layout(mockGame, mockScaler, rndOrder);
+
+        expect(Object.keys(layout.buttons)).to.eql(tabOrder);
     });
 });
 
