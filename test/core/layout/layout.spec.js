@@ -3,8 +3,11 @@ import * as sinon from "sinon";
 
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import { Layout } from "../../../src/core/layout/layout";
+import { GelButton } from "../../../src/core/layout/gel-button";
+import { Group } from "../../../src/core/layout/group";
 
 describe("Layout", () => {
+    const sandbox = sinon.sandbox.create();
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame;
     let mockScaler;
@@ -13,29 +16,32 @@ describe("Layout", () => {
         return initialiseGame().then(game => {
             mockGame = game;
             mockGame.world = {
-                addChild: sinon.spy(),
+                addChild: sandbox.spy(),
                 children: [],
                 shutdown: () => {},
             };
             mockGame.add = {
-                sprite: sinon.spy(() => new Phaser.Sprite(mockGame, 0, 0)),
-                group: sinon.spy(),
+                sprite: sandbox.spy(() => new Phaser.Sprite(mockGame, 0, 0)),
+                group: sandbox.spy(),
             };
             mockGame.renderer = { resolution: 1, destroy: () => {} };
             mockGame.input = {
-                interactiveItems: { add: sinon.spy() },
+                interactiveItems: { add: sandbox.spy() },
                 reset: () => {},
                 destroy: () => {},
             };
 
             mockScaler = {
-                getSize: sinon.spy(() => ({ width: 200, height: 200 })),
-                onScaleChange: { add: sinon.spy() },
+                getSize: sandbox.spy(() => ({ width: 200, height: 200 })),
+                onScaleChange: { add: sandbox.spy() },
             };
         });
     });
 
-    afterEach(() => mockGame.destroy());
+    afterEach(() => { 
+        sandbox.restore();
+        mockGame.destroy()
+    });
 
     //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
     it("should add the correct number of GEL buttons for a given config", () => {
@@ -92,7 +98,7 @@ describe("Layout", () => {
     it("Should set button callbacks using the 'setAction' method", () => {
         const layout = new Layout(mockGame, mockScaler, ["achievements", "exit", "settings"]);
 
-        const testAction = sinon.spy();
+        const testAction = sandbox.spy();
 
         layout.setAction("exit", testAction);
 
@@ -102,6 +108,16 @@ describe("Layout", () => {
 
         expect(testAction.callCount).to.eql(3);
     });
+
+    it("Should reset the groups after they have been added to the layout", () => {
+        const resetGroupsFunc = sandbox.spy(Layout.prototype, "resetGroups");
+        const groupReset = sandbox.stub(Group.prototype, "reset");
+        
+        const layout = new Layout(mockGame, mockScaler, []);
+
+        assert(resetGroupsFunc.calledOnce);
+        assert(groupReset.callCount === 9)
+    }); 
 });
 
 function initialiseGame() {
