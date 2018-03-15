@@ -109,13 +109,13 @@ describe("Layout", () => {
     });
 
     it("Should reset the groups after they have been added to the layout", () => {
-        const resetGroupsFunc = sandbox.spy(Layout.prototype, "resetGroups");
-        const groupReset = sandbox.stub(Group.prototype, "reset");
+        const resizeFuncSpy = sandbox.spy(Layout.prototype, "resize");
+        const groupResetStub = sandbox.stub(Group.prototype, "reset");
         
         const layout = new Layout(mockGame, mockScaler, []);
 
-        assert(resetGroupsFunc.calledOnce);
-        assert(groupReset.callCount === 9)
+        assert(resizeFuncSpy.calledOnce);
+        assert(groupResetStub.callCount === 9)
     }); 
 });
 

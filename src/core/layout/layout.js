@@ -23,7 +23,7 @@ export class Layout {
         this.root = new Phaser.Group(game, game.world, undefined);
 
         const size = scaler.getSize();
-        this.resize(size.width, size.height, size.scale, size.stageHeightPx);
+        this._metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeight);
 
         this._groups = _.zipObject(
             groupLayouts.map(layout => _.camelCase([layout.vPos, layout.hPos, layout.arrangeV ? "v" : ""].join(" "))),
@@ -45,9 +45,7 @@ export class Layout {
         );
 
         scaler.onScaleChange.add(this.resize, this);
-
-        // CGPROD-486 - Hacky Quick Fix - Just call resize again after adding the groups
-        this.resetGroups();
+        this.resize();
     }
 
     /**
@@ -70,11 +68,7 @@ export class Layout {
         this._metrics = calculateMetrics(width, height, scale, stageHeight);
 
         if (this._groups) {
-            this.resetGroups();
+            _.forOwn(this._groups, (group) => group.reset(this._metrics));
         }
-    }
-
-    resetGroups() {
-        _.forOwn(this._groups, (group) => group.reset(this._metrics));
     }
 }
