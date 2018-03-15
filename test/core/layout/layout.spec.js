@@ -2,6 +2,7 @@ import { assert } from "chai";
 import * as sinon from "sinon";
 
 import { Layout } from "../../../src/core/layout/layout";
+import { Group } from "../../../src/core/layout/group";
 
 describe("Layout", () => {
     const sandbox = sinon.sandbox.create();
@@ -143,7 +144,7 @@ describe("Layout", () => {
 
         const layout = new Layout(mockGame, mockScaler, rndOrder);
 
-        assert(Object.keys(layout.buttons) === tabOrder);
+        assert.deepEqual(Object.keys(layout.buttons), tabOrder);
     });
 
     it("Should reset the groups after they have been added to the layout", () => {
