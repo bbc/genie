@@ -25,10 +25,10 @@ describe("Asset Loader", () => {
             url: assetPacks.loadscreenPack,
         };
         return runInPreload(game =>
-            loadAssets(game, gamePacks, loadscreenPack, updateCallback).then(screenMap => {
+            loadAssets(game, gamePacks, loadscreenPack, updateCallback).then(() => {
                 sinon.assert.calledOnce(updateCallback);
                 sinon.assert.alwaysCalledWithExactly(updateCallback, 100);
-            }),
+            })
         );
     });
 
@@ -43,15 +43,15 @@ describe("Asset Loader", () => {
             url: assetPacks.loadscreenPack,
         };
         return runInPreload(game =>
-            loadAssets(game, gamePacks, loadscreenPack, updateCallback).then(screenMap => {
+            loadAssets(game, gamePacks, loadscreenPack, updateCallback).then(() => {
                 sinon.assert.callOrder(
                     updateCallback.withArgs(25),
                     updateCallback.withArgs(50),
                     updateCallback.withArgs(75),
-                    updateCallback.withArgs(100),
+                    updateCallback.withArgs(100)
                 );
                 sinon.assert.callCount(updateCallback, 4);
-            }),
+            })
         );
     });
 
@@ -71,7 +71,7 @@ describe("Asset Loader", () => {
                 expect(screenMap).to.haveOwnProperty("screen2");
                 expect(screenMap).to.haveOwnProperty("screen");
                 expect(screenMap).to.not.haveOwnProperty("loadscreen");
-            }),
+            })
         );
     });
 
@@ -97,7 +97,7 @@ describe("Asset Loader", () => {
     it("Should attempt to load assetPack JSON files that are missing and include them in keyLookups", () => {
         const updateCallback = sinon.spy();
         const loadSpy = sinon.spy();
-        const getJSONStub = sinon.stub(Phaser.Cache, "JSON").callsFake((key, clone) => {
+        const getJSONStub = sinon.stub(Phaser.Cache, "JSON").callsFake((key) => {
             if (key === "test-screen") {
                 return {
                     "test-screen": [{ type: "image", key: "test", url: assets.ship, overwrite: false }],
@@ -130,7 +130,7 @@ describe("Asset Loader", () => {
 function runInPreload(action) {
     let testState;
 
-    const promisedTest = new Promise((resolve, reject) => {
+    const promisedTest = new Promise((resolve) => {
         testState = new class extends Screen {
             preload() {
                 resolve(action(this.game));
