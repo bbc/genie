@@ -1,4 +1,3 @@
-import { expect } from "chai";
 import * as sinon from "sinon";
 
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
@@ -46,10 +45,10 @@ describe("Layout", () => {
     //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
     it("should add the correct number of GEL buttons for a given config", () => {
         const layout1 = new Layout(mockGame, mockScaler, ["achievements"]);
-        expect(Object.keys(layout1.buttons).length).to.eql(1);
+        assert(Object.keys(layout1.buttons).length === 1);
 
         const layout2 = new Layout(mockGame, mockScaler, ["play", "audioOff", "settings"]);
-        expect(Object.keys(layout2.buttons).length).to.eql(3);
+        assert(Object.keys(layout2.buttons).length === 3);
 
         const layout3 = new Layout(mockGame, mockScaler, [
             "achievements",
@@ -59,12 +58,12 @@ describe("Layout", () => {
             "audioOff",
             "settings",
         ]);
-        expect(Object.keys(layout3.buttons).length).to.eql(6);
+        assert(Object.keys(layout3.buttons).length === 6);
     });
 
     it("Should create 9 Gel Groups", () => {
         const layout = new Layout(mockGame, mockScaler, []);
-        expect(layout.root.children.length).to.eql(9);
+        assert(layout.root.children.length === 9);
     });
 
     it("Should add items to the correct group", () => {
@@ -75,8 +74,8 @@ describe("Layout", () => {
 
         const groupsWithChildren = layout.root.children.filter((element) => element.length);
 
-        expect(groupsWithChildren.length).to.eql(1);
-        expect(groupsWithChildren[0].name).to.eql("middleRight");
+        assert(groupsWithChildren.length === 1);
+        assert(groupsWithChildren[0].name === "middleRight");
     });
 
     it("Should correctly insert an item using the index position property", () => {
@@ -91,7 +90,7 @@ describe("Layout", () => {
         layout.addToGroup("topLeft", testElement, 2);
 
         const leftTopGroup = layout.root.children.find((element) => element.name === "topLeft");
-        expect(leftTopGroup.children[2].randomKey).to.eql(randomKey);
+        assert(leftTopGroup.children[2].randomKey === randomKey);
     });
 
     //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
@@ -106,7 +105,7 @@ describe("Layout", () => {
         layout.buttons.exit.events.onInputUp.dispatch({}, {});
         layout.buttons.exit.events.onInputUp.dispatch({}, {});
 
-        expect(testAction.callCount).to.eql(3);
+        assert(testAction.callCount === 3);
     });
 
     it("Should reset the groups after they have been added to the layout", () => {
