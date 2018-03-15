@@ -1,9 +1,7 @@
+import { assert } from "chai";
 import * as sinon from "sinon";
 
-import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import { Layout } from "../../../src/core/layout/layout";
-import { GelButton } from "../../../src/core/layout/gel-button";
-import { Group } from "../../../src/core/layout/group";
 
 describe("Layout", () => {
     const sandbox = sinon.sandbox.create();
@@ -37,7 +35,7 @@ describe("Layout", () => {
         });
     });
 
-    afterEach(() => { 
+    afterEach(() => {
         sandbox.restore();
         mockGame.destroy()
     });
@@ -72,7 +70,7 @@ describe("Layout", () => {
 
         layout.addToGroup("middleRight", testElement);
 
-        const groupsWithChildren = layout.root.children.filter((element) => element.length);
+        const groupsWithChildren = layout.root.children.filter(element => element.length);
 
         assert(groupsWithChildren.length === 1);
         assert(groupsWithChildren[0].name === "middleRight");
@@ -108,15 +106,55 @@ describe("Layout", () => {
         assert(testAction.callCount === 3);
     });
 
+    //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
+    it("Should add buttons using the correct tab order", () => {
+        const rndOrder = [
+            "exit",
+            "home",
+            "achievements",
+            "howToPlay",
+            "play",
+            "settings",
+            "audioOff",
+            "audioOn",
+            "previous",
+            "next",
+            "continue",
+            "restart",
+            "back",
+            "pause",
+        ];
+        const tabOrder = [
+            "exit",
+            "home",
+            "back",
+            "settings",
+            "audioOff",
+            "audioOn",
+            "pause",
+            "previous",
+            "play",
+            "next",
+            "achievements",
+            "continue",
+            "restart",
+            "howToPlay",
+        ];
+
+        const layout = new Layout(mockGame, mockScaler, rndOrder);
+
+        expect(Object.keys(layout.buttons)).to.eql(tabOrder);
+    });
+
     it("Should reset the groups after they have been added to the layout", () => {
         const resizeFuncSpy = sandbox.spy(Layout.prototype, "resize");
         const groupResetStub = sandbox.stub(Group.prototype, "reset");
-        
+
         const layout = new Layout(mockGame, mockScaler, []);
 
         assert(resizeFuncSpy.calledOnce);
         assert(groupResetStub.callCount === 9)
-    }); 
+    });
 });
 
 function initialiseGame() {
