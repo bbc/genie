@@ -45,6 +45,9 @@ export class Layout {
         );
 
         scaler.onScaleChange.add(this.resize, this);
+
+        // CGPROD-486 - Hacky Quick Fix - Just call resize again after adding the groups
+        this.resetGroups();
     }
 
     /**
@@ -67,7 +70,11 @@ export class Layout {
         this._metrics = calculateMetrics(width, height, scale, stageHeight);
 
         if (this._groups) {
-            _.forOwn(this._groups, (group) => group.reset(this._metrics));
+            this.resetGroups();
         }
+    }
+
+    resetGroups() {
+        _.forOwn(this._groups, (group) => group.reset(this._metrics));
     }
 }
