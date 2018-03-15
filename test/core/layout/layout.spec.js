@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 
 import { Layout } from "../../../src/core/layout/layout";
 
-describe("Layout", () => {
+describe.only("Layout", () => {
     const sandbox = sinon.sandbox.create();
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame;
@@ -143,7 +143,7 @@ describe("Layout", () => {
 
         const layout = new Layout(mockGame, mockScaler, rndOrder);
 
-        expect(Object.keys(layout.buttons)).to.eql(tabOrder);
+        assert(Object.keys(layout.buttons) === tabOrder);
     });
 
     it("Should reset the groups after they have been added to the layout", () => {
