@@ -20,7 +20,7 @@ export class Layout {
         this.root = new Phaser.Group(game, game.world, undefined);
 
         const size = scaler.getSize();
-        this.resize(size.width, size.height, size.scale, size.stageHeightPx);
+        this._metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
 
         this._groups = fp.zipObject(
             groupLayouts.map(layout => fp.camelCase([layout.vPos, layout.hPos, layout.arrangeV ? "v" : ""].join(" "))),
@@ -35,6 +35,7 @@ export class Layout {
         );
 
         scaler.onScaleChange.add(this.resize, this);
+        this.resize();
     }
 
     /**
