@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 
 import { Layout } from "../../../src/core/layout/layout";
 
-describe.only("Layout", () => {
+describe("Layout", () => {
     const sandbox = sinon.sandbox.create();
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame;
