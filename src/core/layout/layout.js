@@ -35,7 +35,7 @@ export class Layout {
         );
 
         scaler.onScaleChange.add(this.resize, this);
-        this.resize();
+        this.resize(size.width, size.height, size.scale, size.stageHeightPx);
     }
 
     /**
