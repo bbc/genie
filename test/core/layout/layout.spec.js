@@ -129,21 +129,20 @@ describe("Layout", () => {
             "exit",
             "home",
             "back",
-            "settings",
             "audioOff",
             "audioOn",
+            "settings",
             "pause",
             "previous",
             "play",
             "next",
             "achievements",
-            "continue",
             "restart",
+            "continue",
             "howToPlay",
         ];
 
         const layout = new Layout(mockGame, mockScaler, rndOrder);
-
         assert.deepEqual(Object.keys(layout.buttons), tabOrder);
     });
 
