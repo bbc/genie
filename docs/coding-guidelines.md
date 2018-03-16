@@ -4,18 +4,13 @@
 
 ### Basics (line lengths, spaces vs tabs, semi-colons etc)
 
-These are enforced via [prettier](https://github.com/prettier/prettier) and [tslint](https://palantir.github.io/tslint/).
+These are enforced via [prettier](https://github.com/prettier/prettier) and [eslint](https://eslint.org/).
 
-Prettier and TSLint plugins are available for most IDEs or can be run from the commandline.
+Prettier and EsLint plugins are available for most IDEs or can be run from the commandline.
 Code checked into source control should be run though prettier first to prevent extraneous diff lines.
 
-Check the **/.prettierrc** and **/tslint.json** files for rule specifics.
+Check the **/.prettierrc** and **/eslintrc.json** files for rule specifics.
 
-### Interfaces
-Interfaces that need to be shared between modules should go in a separate file in the 'types' sub folder.
-Interfaces should not be prefixed as per TS guidelines:
-
->In general, you shouldn’t prefix interfaces with I (e.g. IColor). Because the concept of an interface in TypeScript is much more broad than in C# or Java, the IFoo naming convention is not broadly useful.
 
 ### Doc Comments
 Doc comments should be added where they will be helpful to explain the API.

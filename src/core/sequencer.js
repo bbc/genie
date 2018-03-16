@@ -5,7 +5,7 @@ export function create(
     game,
     context,
     transitions,
-    gameWrapper,
+    gameWrapper
 )  {
     let currentScreen = transitions[0];
 

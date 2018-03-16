@@ -39,7 +39,7 @@ export class Loadscreen extends Screen {
     updateLoadProgress(progress) {
         // use progress to update loading bar
         if (this.context.qaMode.active) {
-            console.log("Loader progress:", progress);
+            console.log("Loader progress:", progress); // eslint-disable-line no-console
         }
     }
 }
@@ -52,5 +52,5 @@ function dumpToConsole(keyLookups) {
             _.map(keyMap, (path, key) => `        ${key}: ${path}`),
         ]),
     ]);
-    console.log(_.join(lines, "\n"));
+    console.log(_.join(lines, "\n")); // eslint-disable-line no-console
 }

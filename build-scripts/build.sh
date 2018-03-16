@@ -2,6 +2,6 @@
 set -e
 
 npm install
-# npm run tslint TODO - ESlint here
+npm run eslint
 npm run test:coverage
 npm run build
