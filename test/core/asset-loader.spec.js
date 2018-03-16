@@ -1,5 +1,4 @@
 import "babel-polyfill";
-import "../../src/lib/phaser.js";
 
 import { expect } from "chai";
 import * as sinon from "sinon";
