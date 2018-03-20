@@ -9,7 +9,7 @@ const getScale = fp.curry((scaleMethods, stageHeightPx, { width, height }) => {
     return { width, height, scale, stageHeightPx };
 });
 
-const getBounds = (game) => () => game.scale.getParentBounds();
+const getBounds = game => () => game.scale.getParentBounds();
 
 export function create(stageHeightPx, game) {
     // Will be immediately resized:
@@ -20,7 +20,7 @@ export function create(stageHeightPx, game) {
 
     const scaleMethods = {
         wide: (width, height) => height / stageHeightPx,
-        narrow: (width) => width / stageHeightPx / GEL_SAFE_FRAME_RATIO,
+        narrow: width => width / stageHeightPx / GEL_SAFE_FRAME_RATIO,
     };
 
     const getSize = fp.flow(getBounds(game), fp.pick(["width", "height"]), getScale(scaleMethods, stageHeightPx));

@@ -1,7 +1,6 @@
 import { Screen } from "../../../core/screen.js";
 
 export class GameTest extends Screen {
-
     constructor() {
         super();
     }

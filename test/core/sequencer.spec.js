@@ -46,7 +46,7 @@ describe("Sequencer", () => {
                 getParentBounds: sandbox.spy(),
             },
         };
-        sequencer = Sequencer.create(mockGame, mockContext, mockTransitions, document.createElement("div"));
+        sequencer = Sequencer.create(mockGame, mockContext, mockTransitions);
         next = mockGame.state.start.getCall(0).args[4];
     });
 

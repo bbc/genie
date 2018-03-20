@@ -27,7 +27,7 @@ describe("Layout - Gel Button", () => {
         };
 
         return runInPreload(game =>
-            loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
+            loadAssets(game, gamePacks, gelPack, updateCallback).then(() => {
                 const btn = new GelButton(game, 0, 0, true, "play");
 
                 assert(btn.key === "gel/mobile/play.png");
@@ -53,7 +53,7 @@ describe("Layout - Gel Button", () => {
         };
 
         return runInPreload(game =>
-            loadAssets(game, gamePacks, gelPack, updateCallback).then(screenMap => {
+            loadAssets(game, gamePacks, gelPack, updateCallback).then(() => {
                 const btn = new GelButton(game, 0, 0, true, "play");
                 assert(fp.isEqual(btn.anchor, new Phaser.Point(0.5, 0.5)));
             }),

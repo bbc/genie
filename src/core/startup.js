@@ -42,7 +42,7 @@ export function startup(transitions, initialAdditionalState) {
             qaMode,
             sequencer: { getTransitions: () => [] },
         };
-        context.sequencer = Sequencer.create(game, context, transitions, getContainerDiv(gmi));
+        context.sequencer = Sequencer.create(game, context, transitions);
         game.stage.backgroundColor = "#333";
         resolvedPromise(game);
     }

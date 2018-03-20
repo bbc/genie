@@ -7,4 +7,4 @@ const createButton = fp.curry((game, x, y, isMobile, key) => {
     return accessibilify(btn, "Test Accessible Button");
 });
 
-export const create = (game) => ({ createButton: createButton(game, 0, 0) });
+export const create = game => ({ createButton: createButton(game, 0, 0) });
