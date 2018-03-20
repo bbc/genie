@@ -71,12 +71,12 @@ describe("#accessibilify", () => {
             },
             events: {
                 onInputOver: {
-                    dispatch: onInputOver
+                    dispatch: onInputOver,
                 },
                 onInputOut: {
-                    dispatch: onInputOut
-                }
-            }
+                    dispatch: onInputOut,
+                },
+            },
         };
         accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({
             position: () => {},
