@@ -14,10 +14,10 @@ export function createTestHarnessDisplay(game, context, layoutFactory) {
     function toggle() {
         if (context.qaMode.testHarnessLayoutDisplayed) {
             hide();
-            console.log("Layout Test Harness Hidden");
+            console.log("Layout Test Harness Hidden"); // eslint-disable-line no-console
         } else {
             show();
-            console.log("Layout Test Harness Displayed");
+            console.log("Layout Test Harness Displayed"); // eslint-disable-line no-console
         }
     }
 
@@ -47,9 +47,9 @@ export function createTestHarnessDisplay(game, context, layoutFactory) {
         const gameRightEdge = size.width - paddingWidth * 0.5;
         const gameBottomEdge = size.height - paddingWidth * 0.5;
 
-        console.log("paddingWidth: ", paddingWidth);
-        console.log("screenWidth: ", window.innerWidth);
-        console.log("screenHeight: ", window.innerHeight);
+        console.log("paddingWidth: ", paddingWidth); // eslint-disable-line no-console
+        console.log("screenWidth: ", window.innerWidth); // eslint-disable-line no-console
+        console.log("screenHeight: ", window.innerHeight); // eslint-disable-line no-console
 
         graphics.lineStyle(paddingWidth, 0xffff00, 0.5);
         graphics.moveTo(gameLeftEdge, gameTopEdge);

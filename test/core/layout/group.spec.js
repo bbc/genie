@@ -112,7 +112,9 @@ describe("Group", () => {
         it("adds item to this group", () => {
             const mockButton = {
                 anchor: {
-                    setTo: (x, y) => {},
+                    setTo: (x, y) => {
+                        x, y;
+                    },
                 },
                 updateTransform: () => {},
             };

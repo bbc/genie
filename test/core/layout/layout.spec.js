@@ -38,7 +38,7 @@ describe("Layout", () => {
 
     afterEach(() => {
         sandbox.restore();
-        mockGame.destroy()
+        mockGame.destroy();
     });
 
     //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
@@ -88,7 +88,7 @@ describe("Layout", () => {
 
         layout.addToGroup("topLeft", testElement, 2);
 
-        const leftTopGroup = layout.root.children.find((element) => element.name === "topLeft");
+        const leftTopGroup = layout.root.children.find(element => element.name === "topLeft");
         assert(leftTopGroup.children[2].randomKey === randomKey);
     });
 
@@ -150,10 +150,10 @@ describe("Layout", () => {
         const resizeFuncSpy = sandbox.spy(Layout.prototype, "resize");
         const groupResetStub = sandbox.stub(Group.prototype, "reset");
 
-        const layout = new Layout(mockGame, mockScaler, []);
+        new Layout(mockGame, mockScaler, []);
 
-        assert(resizeFuncSpy.calledOnce);
-        assert(groupResetStub.callCount === 9)
+        sinon.assert.calledOnce(resizeFuncSpy);
+        assert(groupResetStub.callCount === 9);
     });
 });
 

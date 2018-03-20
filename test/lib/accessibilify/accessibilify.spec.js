@@ -51,12 +51,12 @@ describe("#accessibilify", () => {
                 width: gameWidth,
                 scale: {
                     onSizeChange: {
-                        add: debouncedCallback => {},
+                        add: () => {},
                     },
                 },
                 state: {
                     onStateChange: {
-                        addOnce: teardown => {},
+                        addOnce: () => {},
                     },
                 },
                 update: {},
