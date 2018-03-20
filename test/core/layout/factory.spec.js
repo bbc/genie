@@ -39,7 +39,7 @@ describe("Layout - Factory", () => {
                 getParentBounds: sandbox.spy(),
             },
         };
-        layoutFactory = LayoutFactory.create(mockGame, document.createElement("div"));
+        layoutFactory = LayoutFactory.create(mockGame);
     });
 
     afterEach(() => {

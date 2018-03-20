@@ -1,6 +1,5 @@
 import { assert } from "chai";
 import * as fp from "lodash/fp";
-import { isBoolean, isUndefined } from "util";
 import { groupLayouts } from "../../../src/core/layout/group-layouts";
 
 describe("Group Layouts", () => {

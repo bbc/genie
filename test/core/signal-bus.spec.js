@@ -9,11 +9,11 @@ describe("Signal Bus", () => {
 
         const callback = sinon.spy();
 
-        bus.subscribe({callback, name: "testSignal1"});
+        bus.subscribe({ callback, name: "testSignal1" });
 
-        bus.publish({name: "testSignal1"});
-        bus.publish({name: "testSignal1", data: 12345});
-        bus.publish({name: "testSignal1", data: { exampleData: "abcdef" }});
+        bus.publish({ name: "testSignal1" });
+        bus.publish({ name: "testSignal1", data: 12345 });
+        bus.publish({ name: "testSignal1", data: { exampleData: "abcdef" } });
 
         assert(callback.callCount === 3);
     });
@@ -27,14 +27,14 @@ describe("Signal Bus", () => {
         let received;
         let data;
 
-        bus.subscribe({callback: newData => (received = newData), name: "testSignal"});
+        bus.subscribe({ callback: newData => (received = newData), name: "testSignal" });
 
         data = { a: 1, b: 2, c: 3 };
-        bus.publish({name: "testSignal", data});
+        bus.publish({ name: "testSignal", data });
         assert(data === received);
 
         data = { BBC: [1, 2, 3, 4, 5] };
-        bus.publish({name: "testSignal", data});
+        bus.publish({ name: "testSignal", data });
         assert(data === received);
     });
 });
