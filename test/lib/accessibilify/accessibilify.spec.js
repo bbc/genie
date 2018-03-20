@@ -78,12 +78,7 @@ describe("#accessibilify", () => {
                 },
             },
         };
-        accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({
-            position: () => {},
-            visible: () => accessibleDomElementVisible,
-            hide: accessibleDomElementHide,
-            show: accessibleDomElementShow,
-        });
+        accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement");
     });
 
     afterEach(() => {
@@ -158,6 +153,10 @@ describe("#accessibilify", () => {
     describe("Button Update", () => {
         describe("when button is outside of screen and element is visible", () => {
             it("hides element", () => {
+                accessibleDomElement.returns({
+                    visible: () => accessibleDomElementVisible,
+                    hide: accessibleDomElementHide,
+                });
                 buttonBoundsX = -1000;
                 accessibilify(mockButton);
                 mockButton.update();
@@ -167,6 +166,10 @@ describe("#accessibilify", () => {
 
         describe("when button is within the bounds of the screen and element is not visible", () => {
             it("shows element", () => {
+                accessibleDomElement.returns({
+                    visible: () => accessibleDomElementVisible,
+                    show: accessibleDomElementShow,
+                });
                 accessibleDomElementVisible = false;
                 accessibilify(mockButton);
                 mockButton.update();
@@ -178,10 +181,9 @@ describe("#accessibilify", () => {
     describe("Hover State", () => {
         describe("When mouse over event is fired", () => {
             it("dispatches button onInputOver event", () => {
-                sandbox.restore();
-                const spyAccessibleDomElement = sandbox.spy(helperModule, "accessibleDomElement");
                 accessibilify(mockButton);
-                const options = spyAccessibleDomElement.args[0][0];
+
+                const options = accessibleDomElement.args[0][0];
                 options.onMouseOver();
                 sinon.assert.calledOnce(onInputOver.withArgs(mockButton, activePointer, false));
             });
@@ -189,12 +191,9 @@ describe("#accessibilify", () => {
 
         describe("When mouse out event is fired", () => {
             it("dispatches button onInputOut event", () => {
-                sandbox.restore();
-
-                const spyAccessibleDomElement = sandbox.spy(helperModule, "accessibleDomElement");
                 accessibilify(mockButton);
 
-                const options = spyAccessibleDomElement.args[0][0];
+                const options = accessibleDomElement.args[0][0];
                 options.onMouseOut();
                 sinon.assert.calledOnce(onInputOut.withArgs(mockButton, activePointer, false));
             });
