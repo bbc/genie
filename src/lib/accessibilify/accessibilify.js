@@ -17,6 +17,8 @@ export function accessibilify(button, ariaLabel) {
             ariaLabel: ariaLabel ? ariaLabel : button.name,
             parent: game.canvas.parentElement,
             onClick: buttonAction,
+            onMouseOver: mouseOver,
+            onMouseOut: mouseOut,
         });
     }
 
@@ -57,5 +59,13 @@ export function accessibilify(button, ariaLabel) {
 
     function buttonAction() {
         button.events.onInputUp.dispatch(button, game.input.activePointer, false);
+    }
+
+    function mouseOver() {
+        button.events.onInputOver.dispatch(button, game.input.activePointer, false);
+    }
+
+    function mouseOut() {
+        button.events.onInputOut.dispatch(button, game.input.activePointer, false);
     }
 }
