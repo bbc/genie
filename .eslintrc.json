@@ -1,0 +1,19 @@
+{
+    "env": { "es6": true },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 6
+    },
+    "plugins": [
+        "no-only-tests"
+    ],
+    "rules": {
+        "indent": ["error", 4],
+        "quotes": ["error", "double"],
+        "semi": ["error", "always"],
+        "no-undef": [0],
+        "no-console": ["warn"],
+        "no-only-tests/no-only-tests": [2]
+    }
+}

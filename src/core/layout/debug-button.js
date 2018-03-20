@@ -3,7 +3,7 @@
  *
  * @example game.add.existing(new DebugButton( ...parameters))
  */
-const gelStyle: Phaser.PhaserTextStyle = {
+const gelStyle = {
     font: "ReithSans",
     fontSize: 20, //40,
     fill: "#FFFFFF",
@@ -18,9 +18,6 @@ const makeRect = (game, color1, width, height) =>
         .generateTexture();
 
 export class DebugButton extends Phaser.Button {
-    private buttonSize = "desktop";
-    private backdrops: any;
-
     constructor(game, spec, isMobile = false) {
         super(game);
 
@@ -56,7 +53,7 @@ export class DebugButton extends Phaser.Button {
         this.animations.sprite.addChild(text);
     }
 
-    public resize(metrics) {
+    resize(metrics) {
         this.buttonSize = metrics.isMobile ? "mobile" : "desktop";
         this.texture = this.backdrops[this.buttonSize].up;
     }
@@ -64,7 +61,7 @@ export class DebugButton extends Phaser.Button {
     /**
      * Disables input and makes button semi-transparent
      */
-    public setEnabled(bool = true) {
+    setEnabled(bool = true) {
         this.animations.sprite.inputEnabled = bool;
         this.animations.sprite.alpha = bool ? 1 : 0.5;
     }
