@@ -1,5 +1,4 @@
 var path = require("path");
-var BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 // Phaser webpack config
 var phaserModule = path.join(__dirname, "../node_modules/phaser-ce/");
@@ -41,11 +40,4 @@ module.exports = {
         },
     },
     target: "web",
-    stats: {
-        colors: true,
-        modules: true,
-        reasons: true,
-        errorDetails: true,
-    },
-    plugins: [new BundleAnalyzerPlugin()],
 };
