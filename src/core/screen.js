@@ -1,4 +1,4 @@
-import * as _ from "../lib/lodash/lodash.js";
+import _merge from "lodash/merge";
 
 export class Screen extends Phaser.State {
     get context() {
@@ -6,7 +6,7 @@ export class Screen extends Phaser.State {
     }
 
     set context(newContext) {
-        this._context = _.merge({}, this._context, newContext);
+        this._context = _merge({}, this._context, newContext);
     }
 
     init(context, next, layoutFactory) {

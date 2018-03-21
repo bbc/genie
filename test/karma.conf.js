@@ -6,10 +6,15 @@ var webpackConfig = require("../build-scripts/webpack.config.js");
 module.exports = function(config) {
     config.set({
         basePath: "..",
-        frameworks: ["mocha", "chai", "sinon"],
-        files: ["node_modules/phaser-ce/build/phaser.min.js", { pattern: "test/**/*.spec.js", watched: false }],
+        frameworks: ["mocha"],
+        files: [
+            "node_modules/phaser-ce/build/phaser.min.js",
+            "test/test-context.js",
+            { pattern: "src/**/*.js", included: false, served: false, watched: true },
+            { pattern: "test/**/*.spec.js", included: false, served: false, watched: true },
+        ],
         preprocessors: {
-            "test/**/*.spec.js": ["webpack"],
+            "test/test-context.js": ["webpack"],
         },
         client: {
             mocha: {
@@ -17,9 +22,11 @@ module.exports = function(config) {
             },
         },
         webpack: {
-            module: checkCoverageFlag
-                ? {
-                      rules: webpackConfig.module.rules.concat([
+            mode: "development",
+            devtool: checkCoverageFlag ? "inline-source-map" : webpackConfig.devtool,
+            module: {
+                rules: checkCoverageFlag
+                    ? webpackConfig.module.rules.concat([
                           {
                               enforce: "post",
                               test: /\.jsx?$/,
@@ -27,15 +34,13 @@ module.exports = function(config) {
                               exclude: path.resolve("src/lib/lodash"),
                               loader: "istanbul-instrumenter-loader",
                           },
-                      ]),
-                  }
-                : webpackConfig.module,
-            resolve: webpackConfig.resolve,
-            devtool: "inline-source-map",
+                      ])
+                    : webpackConfig.module.rules,
+            },
         },
         webpackMiddleware: {
-            stats: "errors-only",
-            noInfo: true,
+            // stats: "errors-only",
+            // noInfo: true,
         },
         coverageReporter: {
             type: "in-memory",

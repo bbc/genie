@@ -1,4 +1,7 @@
-import * as _ from "../lib/lodash/lodash.js";
+import _flattenDeep from "lodash/flattenDeep";
+import _flatMap from "lodash/flatMap";
+import _map from "lodash/map";
+import _join from "lodash/join";
 
 import { loadAssets } from "../core/asset-loader.js";
 import { Screen } from "../core/screen.js";
@@ -45,12 +48,12 @@ export class Loadscreen extends Screen {
 }
 
 function dumpToConsole(keyLookups) {
-    const lines = _.flattenDeep([
+    const lines = _flattenDeep([
         "Loaded assets:",
-        _.flatMap(keyLookups, (keyMap, screenId) => [
+        _flatMap(keyLookups, (keyMap, screenId) => [
             `    ${screenId}:`,
-            _.map(keyMap, (path, key) => `        ${key}: ${path}`),
+            _map(keyMap, (path, key) => `        ${key}: ${path}`),
         ]),
     ]);
-    console.log(_.join(lines, "\n")); // eslint-disable-line no-console
+    console.log(_join(lines, "\n")); // eslint-disable-line no-console
 }

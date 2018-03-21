@@ -1,4 +1,5 @@
-import fp from "../../lib/lodash/fp/fp.js";
+import fpcamelCase from "lodash/fp/camelCase";
+import fpflow from "lodash/fp/flow";
 
 import * as ButtonFactory from "./button-factory.js";
 
@@ -30,7 +31,7 @@ const getGroupY = sizes =>
 
 export class Group extends Phaser.Group {
     constructor(game, parent, vPos, hPos, metrics, isVertical) {
-        super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
+        super(game, parent, fpcamelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
 
         this._vPos = vPos;
         this._hPos = hPos;
@@ -39,7 +40,7 @@ export class Group extends Phaser.Group {
         this._buttons = [];
 
         this._buttonFactory = ButtonFactory.create(game);
-        this._setGroupPosition = fp.flow(this.getSizes, getGroupPosition, this.setPos);
+        this._setGroupPosition = fpflow(this.getSizes, getGroupPosition, this.setPos);
         this._setGroupPosition();
     }
 

@@ -1,4 +1,6 @@
-import * as _ from "../lib/lodash/lodash.js";
+import _fromPairs from "lodash/fromPairs";
+import _map from "lodash/map";
+import _merge from "lodash/merge";
 import * as LayoutFactory from "./layout/factory.js";
 
 export function create(game, context, transitions) {
@@ -9,14 +11,14 @@ export function create(game, context, transitions) {
 
     transitions.forEach(transition => game.state.add(transition.name, transition.state));
 
-    const screenLookup = _.fromPairs(_.map(transitions, c => [c.name, c]));
+    const screenLookup = _fromPairs(_map(transitions, c => [c.name, c]));
     game.state.start(currentScreen.name, true, false, context, next, layoutFactory);
 
     return self;
 
     function next(changedState) {
         //TODO: Use GMI to save persistent state to local storage, if it has been updated
-        const newState = _.merge({}, context.inState, changedState);
+        const newState = _merge({}, context.inState, changedState);
         const nextScreenName = currentScreen.nextScreenName(newState);
         context.inState = newState;
         layoutFactory.removeAll();

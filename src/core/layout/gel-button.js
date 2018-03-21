@@ -1,4 +1,4 @@
-import fp from "../../lib/lodash/fp/fp.js";
+import fpcond from "lodash/fp/cond";
 import * as signal from "../signal-bus.js";
 
 export class GelButton extends Phaser.Button {
@@ -19,5 +19,5 @@ const paths = [
 ];
 
 const signalId = key => "GEL-" + key;
-const assetPath = fp.cond(paths);
+const assetPath = fpcond(paths);
 const publish = key => () => signal.bus.publish({ name: signalId(key) });

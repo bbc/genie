@@ -1,12 +1,16 @@
-import fp from "../../lib/lodash/fp/fp.js";
+import fpcurry from "lodash/fp/curry";
+import fpsortBy from "lodash/fp/sortBy";
+import fpzipObject from "lodash/fp/zipObject";
+import fpcamelCase from "lodash/fp/camelCase";
+import fpforOwn from "lodash/fp/forOwn";
 
 import { calculateMetrics } from "./calculate-metrics.js";
 import gel from "./gel-defaults.js";
 import { Group } from "./group.js";
 import { groupLayouts } from "./group-layouts.js";
 
-const getOrder = fp.curry((object, name) => object[name].order);
-const tabSort = fp.sortBy(getOrder(gel));
+const getOrder = fpcurry((object, name) => object[name].order);
+const tabSort = fpsortBy(getOrder(gel));
 
 export class Layout {
     /**
@@ -22,14 +26,14 @@ export class Layout {
         const size = scaler.getSize();
         this._metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
 
-        this._groups = fp.zipObject(
-            groupLayouts.map(layout => fp.camelCase([layout.vPos, layout.hPos, layout.arrangeV ? "v" : ""].join(" "))),
+        this._groups = fpzipObject(
+            groupLayouts.map(layout => fpcamelCase([layout.vPos, layout.hPos, layout.arrangeV ? "v" : ""].join(" "))),
             groupLayouts.map(
                 layout => new Group(game, this.root, layout.vPos, layout.hPos, this._metrics, !!layout.arrangeV),
             ),
         );
 
-        this.buttons = fp.zipObject(
+        this.buttons = fpzipObject(
             tabSort(buttons),
             tabSort(buttons).map(name => this._groups[gel[name].group].addButton(gel[name])),
         );
@@ -60,7 +64,7 @@ export class Layout {
         this._metrics = calculateMetrics(width, height, scale, stageHeight);
 
         if (this._groups) {
-            fp.forOwn(group => group.reset(this._metrics), this._groups);
+            fpforOwn(group => group.reset(this._metrics), this._groups);
         }
     }
 }
