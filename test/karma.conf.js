@@ -23,6 +23,7 @@ module.exports = function(config) {
         },
         webpack: {
             mode: "development",
+            plugins: webpackConfig.plugins,
             devtool: checkCoverageFlag ? "inline-source-map" : webpackConfig.devtool,
             module: {
                 rules: checkCoverageFlag
@@ -39,8 +40,8 @@ module.exports = function(config) {
             },
         },
         webpackMiddleware: {
-            // stats: "errors-only",
-            // noInfo: true,
+            stats: "errors-only",
+            noInfo: true,
         },
         coverageReporter: {
             type: "in-memory",
