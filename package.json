@@ -46,13 +46,16 @@
         "prettier": "^1.11.1",
         "requirejs": "^2.3.5",
         "sinon": "^4.1.5",
-        "webpack": "^3.11.0"
+        "webpack": "^4.2.0",
+        "webpack-cli": "2.0.12",
+        "webpack-visualizer-plugin": "0.1.11"
     },
     "scripts": {
         "start": "live-server --no-browser --entry-file=./index.dev.html --watch=./src",
         "start:qa": "npm run build && live-server --no-browser --entry-file=./index.qa.html --watch=./output/main.js -V",
-        "build": "webpack --config build-scripts/webpack.config.js",
-        "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
+        "build": "webpack --mode development --config build-scripts/webpack.config.js",
+        "build-prod": "webpack --mode production --config build-scripts/webpack.config.js",
+        "build-watch": "webpack --config --mode development build-scripts/webpack.config.js --watch",
         "eslint": "eslint . --ignore-pattern lodash",
         "test": "karma start test/karma.conf.js; npm run eslint",
         "test:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage; npm run eslint",

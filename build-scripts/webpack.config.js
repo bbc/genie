@@ -1,4 +1,5 @@
 var path = require("path");
+var BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 // Phaser webpack config
 var phaserModule = path.join(__dirname, "../node_modules/phaser-ce/");
@@ -8,7 +9,10 @@ var p2 = path.join(phaserModule, "build/custom/p2.js");
 
 module.exports = {
     context: path.join(__dirname, ".."),
-    entry: ["babel-polyfill", "pixi", "p2", "phaser", path.resolve("src/main.js")],
+    entry: "./src/main.js",
+    entry: {
+        app: ["babel-polyfill", "pixi", "p2", "phaser", path.resolve("src/main.js")],
+    },
     devtool: "source-map",
     output: {
         pathinfo: true,
@@ -37,4 +41,12 @@ module.exports = {
             p2: p2,
         },
     },
+    target: "web",
+    stats: {
+        colors: true,
+        modules: true,
+        reasons: true,
+        errorDetails: true,
+    },
+    plugins: [new BundleAnalyzerPlugin()],
 };
