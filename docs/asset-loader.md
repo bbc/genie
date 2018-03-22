@@ -123,4 +123,4 @@ If the Sequencer has 3 screens in it called 'home', 'game' and 'results'. The as
 * LoadscreenPacks are not name-spaced and therefore the assets loaded in these packs are not included in keyLookups. They currently need to be accessed from the Phaser.Cache by calling their key property in the Asset Pack.
 * The current Loading screen has hardcoded references to Asset Packs.
 
-[1]: core.md
+[1]: notes-on-genie-core.md

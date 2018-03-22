@@ -4,69 +4,56 @@
 
 ### Basics (line lengths, spaces vs tabs, semi-colons etc)
 
-These are enforced via [prettier](https://github.com/prettier/prettier) and [eslint](https://eslint.org/).
+These are enforced via [Prettier](https://github.com/prettier/prettier) and [ESLint](https://eslint.org/).
 
-Prettier and EsLint plugins are available for most IDEs or can be run from the commandline.
-Code checked into source control should be run though prettier first to prevent extraneous diff lines.
+Prettier and ESLint plugins are available for most IDEs, or can be run from the command line.
+Code checked into source control should be run though Prettier first to prevent extraneous diff lines.
 
 Check the **/.prettierrc** and **/eslintrc.json** files for rule specifics.
 
+For code autocompletion, [TernJS](http://ternjs.net/) may be used.
 
 ### Doc Comments
-Doc comments should be added where they will be helpful to explain the API.
-Docs are generated using Typedoc and placed in the docs/api folder
 
-#### Typedoc Example
+Doc comments should be added where they will be helpful to explain the API. Docs are generated using [JSDoc](https://usejsdoc.org/) and will appear in the `docs/api` folder.
+
+#### JSDoc Example
 
 ```JAVASCRIPT
 /**
- * Create a new GEL layout manager for a given Genie {@link Screen}
- * Called in the create method of a given screen
- *
- * @example
- * this.layout = this.context.gel.createLayout(this, ["home", "restart", "continue", "pause"], sfx);
- *
- * @param screen - The Genie Screen that will be managed by this instance
- * @param buttons - array of standard button names to include. See {@link ./config.ts} for available names
- * @param sfx - Map of all the audio sprites
- * @param soundButton - enable or disable the audio buttons @todo could be parts of the buttons array
+ * this is MyClass.
  */
-function createLayout(screen: Screen, buttons: string[], sfx: Phaser.AudioSprite, soundButton?: boolean): Layout {
-    return new Layout(
-        game,
-        screen,
-        scaler,
-        addToBackground,
-        accessibilityManager,
-        keyLookup,
-        buttons,
-        sfx,
-        soundButton,
-    );
+export default class MyClass {
+  /**
+   * @param {number} a - this is a value.
+   * @param {number} b - this is a value.
+   * @return {number} result of the sum value.
+   */
+  sum(a, b){
+    return a + b;
+  }
 }
 ```
 
-### Tests
-
-* Avoid using beforeEach / afterEach unless they actually reduce duplication and simplify the code.
- (In general they make the code more complicated and less cohesive.)
-
 ## Branching Strategy
+
 All code should be created in feature branches.
 *Is this enough or are we likely to need a work branch between feature and master?*
 
 ### Exceptions:
+
 *Documentation? Could possibly just be checked into master assuming it sits in the docs folder?*
 
 ### How to merge
-* Merge the Main branch into your feature branch (to make sure there will be no conflicts in a pull request)
-* Push your feature branch to github.
-* Create a Pull Request
-* Inform your team there is a PR ready to review
-* Implement any requested changes from the review. 
-* Once the PR has been approved it will need to go through the Post-Amigo process. Inform a BA and QA team member to start this process.
-* QA will merge the branch if everything is ok and let you know.
+
+* Merge the main branch into your feature branch (to ensure there are no conflicts).
+* Push your feature branch to Github.
+* Create a pull request.
+* Inform your team there is a pull request (PR) ready for review.
+* Implement/discuss any requested changes from the review. 
+* Once the PR has been approved, it will need to go through the post-amigo process. Inform a BA and QA team member to start this process.
+* A dev can then merge the branch into master when the QA process has passed.
 
 ## Deployment Strategy
 
-*stub*
+When a commit to master is made, the [Jenkins job](https://ci-games.tools.bbc.co.uk/job/childrens-games-genie/) will automatically build to [CAGE](https://www.bbc.co.uk/cbeebies/embed/game/childrens-games-genie?versionOverride=latest&viewNonPublished=true).

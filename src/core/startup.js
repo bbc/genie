@@ -1,8 +1,19 @@
+/**
+ * Startup extends `Phaser.State` and creates a new `Phaser.Game`, as well as a new `Sequencer`.
+ * It also instantiates the `Context` object.
+ *
+ * @module core/startup
+ */
 import * as _ from "../lib/lodash/lodash.js";
 
 import * as Sequencer from "../core/sequencer.js";
 import { parseUrlParams } from "../lib/parseUrlParams.js";
 
+/**
+ * @param  {Array} transitions - The transitions JSON object given in main.js.
+ * @param  {Object=} initialAdditionalState - Additional state that is added to the inState context.
+ * @return {Promise} A Promise, which is resolved with the game in onStarted.
+ */
 export function startup(transitions, initialAdditionalState) {
     const gmi = window.getGMI({});
     const urlParams = parseUrlParams(window.location.search);

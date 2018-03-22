@@ -31,6 +31,7 @@
         "eslint-plugin-promise": "^3.7.0",
         "eslint-plugin-standard": "^3.0.1",
         "istanbul-instrumenter-loader": "^3.0.0",
+        "jsdoc": "^3.5.5",
         "karma": "^2.0.0",
         "karma-chai": "^0.1.0",
         "karma-chrome-launcher": "^2.2.0",
@@ -53,11 +54,12 @@
         "start:qa": "npm run build && live-server --no-browser --entry-file=./index.qa.html --watch=./output/main.js -V",
         "build": "webpack --config build-scripts/webpack.config.js",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
-        "eslint": "eslint . --ignore-pattern lodash",
+        "eslint": "eslint . --ignore-pattern lodash --ignore-path .gitignore",
         "test": "karma start test/karma.conf.js && npm run eslint",
         "test:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage && npm run eslint",
         "test-watch": "karma start test/karma.conf.js --no-single-run --auto-watch",
         "test-watch:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --no-single-run --auto-watch --coverage",
-        "docgen": "node ./node_modules/typedoc/bin/typedoc --name \"BBC Children's Genie API\" --out docs/api ./src"
+        "docs": "open ./docs/api/index.html",
+        "gendocs": "jsdoc -c ./build-scripts/docs/.jsdoc.js"
     }
 }

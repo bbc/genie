@@ -1,12 +1,25 @@
-import * as _ from "../lib/lodash/lodash.js";
-
 /**
  * Creates an Asset Loader, which can handle the loading of load screen assets,
  * as well as the assets for the rest of the game.
- * @param  game           The Phaser.Game to load assets to.
- * @param  gamePacks      The AssetPacks that should be loaded for states after the loading screen.
- * @param  loadscreenPack The AssetPack to load the loading screen assets.
- * @param  updateCallback A callback to return the load progress and keyLookups.
+ *
+ * @module core/asset-loader
+ */
+import * as _ from "../lib/lodash/lodash.js";
+
+/**
+ * This callback is displayed as a global member.
+ *
+ * @callback updateCallback
+ * @param {number} responseCode
+ * @param {string} responseMessage
+ */
+
+/**
+ * @param {Phaser.Game} game - The Game to load assets to.
+ * @param {Object} gamePacks - The AssetPacks that should be loaded for states after the loading screen.
+ * @param {Object} loadscreenPack - The AssetPack to load the loading screen assets.
+ * @param {updateCallback} updateCallback - A callback to return the load progress and keyLookups.
+ * @returns {Promise} A Promise which resolves on load complete
  */
 export function loadAssets(game, gamePacks, loadscreenPack, updateCallback) {
     let gameAssetPack;
