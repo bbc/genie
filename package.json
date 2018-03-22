@@ -14,7 +14,7 @@
         "expose-loader": "^0.7.5",
         "lodash": "^4.17.4",
         "npm": "^5.7.1",
-        "phaser-ce": "^2.10"
+        "phaser-ce": "~2.10"
     },
     "devDependencies": {
         "babel-core": "^6.26.0",
@@ -54,8 +54,8 @@
         "build": "webpack --config build-scripts/webpack.config.js",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
         "eslint": "eslint . --ignore-pattern lodash",
-        "test": "karma start test/karma.conf.js; npm run eslint",
-        "test:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage; npm run eslint",
+        "test": "karma start test/karma.conf.js && npm run eslint",
+        "test:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage && npm run eslint",
         "test-watch": "karma start test/karma.conf.js --no-single-run --auto-watch",
         "test-watch:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --no-single-run --auto-watch --coverage",
         "docgen": "node ./node_modules/typedoc/bin/typedoc --name \"BBC Children's Genie API\" --out docs/api ./src"
