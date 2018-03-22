@@ -2,9 +2,7 @@
 
 ## To build:
 
-`npm run build` runs webpack in dev mode.
-
-`npm run build-prod` runs webpack in production mode.
+npm run build` runs `webpack --config build-scripts/webpack.config.js`
 
 `npm run build-watch` runs the compiler and creates a bundle. This means you can view index.html in a browser without having to run a webserver.
 
@@ -16,9 +14,9 @@ Alternatively load http://localhost:8080/index.html as a file URL (requires `--a
 
 ## To test:
 
-`npm test` will run tests using karma. 
+`npm test` will run tests using karma.
 
-`npm run test-watch` will run tests using karma in watch mode.  
+`npm run test-watch` will run tests using karma in watch mode.
 
 `npm run test:coverage` and `npm run test-watch:coverage` will calculate test coverage. This runs more **slowly** than running the tests normally.
 

@@ -33,5 +33,4 @@ module.exports = {
             p2: p2,
         },
     },
-    target: "web",
 };
