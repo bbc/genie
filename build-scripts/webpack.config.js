@@ -1,5 +1,6 @@
 var path = require("path");
 var HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+var Visualizer = require("webpack-visualizer-plugin");
 
 // Phaser webpack config
 var phaserModule = path.join(__dirname, "../node_modules/phaser-ce/");
@@ -9,7 +10,7 @@ var p2 = path.join(phaserModule, "build/custom/p2.js");
 
 module.exports = {
     mode: "production",
-    plugins: [new HardSourceWebpackPlugin()],
+    plugins: [new HardSourceWebpackPlugin(), new Visualizer()],
     entry: ["babel-polyfill", "pixi", "p2", "phaser", path.resolve("src/main.js")],
     output: {
         pathinfo: true,
