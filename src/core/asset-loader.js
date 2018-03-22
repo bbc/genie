@@ -1,7 +1,4 @@
-import _isEmpty from "lodash/isEmpty";
-import _filter from "lodash/filter";
-import _keys from "lodash/keys";
-import _startsWith from "lodash/startsWith";
+import _ from "lodash";
 
 /**
  * Creates an Asset Loader, which can handle the loading of load screen assets,
@@ -48,7 +45,7 @@ export function loadAssets(game, gamePacks, loadscreenPack, updateCallback) {
             if (loadFunction) {
                 loadFunction();
             }
-            if (!_isEmpty(loadQueue)) {
+            if (!_.isEmpty(loadQueue)) {
                 game.time.events.add(0, game.load.start, game.load);
             } else {
                 game.load.onLoadComplete.removeAll();
@@ -91,7 +88,7 @@ export function loadAssets(game, gamePacks, loadscreenPack, updateCallback) {
     function getMissingScreens() {
         const missingScreenList = {};
         // For loading based on screen ids we'll ignore the "default" state and anything starting with "__".
-        const missingScreens = _filter(_keys(game.state.states), k => k !== "default" && !_startsWith(k, "__"));
+        const missingScreens = _.filter(_.keys(game.state.states), k => k !== "default" && !_.startsWith(k, "__"));
         missingScreens.forEach(key => {
             if (!gameAssetPack.hasOwnProperty(key) && loadscreenPack.key !== key) {
                 missingScreenList[key] = { url: key + ".json" };

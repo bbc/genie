@@ -1,10 +1,10 @@
-import debounce from "../../lib/lodash/debounce.js";
+import _ from "lodash";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 
 export function accessibilify(button, ariaLabel) {
     const game = button.game;
     const accessibleElement = newAccessibleElement();
-    const repositionElement = debounce(setElementPosition, 200);
+    const repositionElement = _.debounce(setElementPosition, 200);
 
     assignEvents();
     repositionElement();

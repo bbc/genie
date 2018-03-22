@@ -1,4 +1,4 @@
-import fp from "../../../src/lib/lodash/fp/fp.js";
+import fp from "lodash/fp";
 
 import { assert } from "chai";
 import { loadAssets } from "../../../src/core/asset-loader";

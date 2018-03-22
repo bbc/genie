@@ -1,4 +1,4 @@
-import fpflow from "lodash/fp/flow";
+import fp from "lodash/fp";
 
 export const create = () => {
     const _bus = {};
@@ -18,8 +18,8 @@ export const create = () => {
     const addSubscription = message => _bus[message.name].add(message.callback);
     const publishMessage = message => _bus[message.name].dispatch(message.data);
 
-    const subscribe = fpflow(addSignal, addSubscription);
-    const publish = fpflow(addSignal, publishMessage);
+    const subscribe = fp.flow(addSignal, addSubscription);
+    const publish = fp.flow(addSignal, publishMessage);
 
     return { remove, subscribe, publish };
 };

@@ -1,4 +1,4 @@
-import _merge from "lodash/merge";
+import _ from "lodash";
 
 import * as Sequencer from "../core/sequencer.js";
 import { parseUrlParams } from "../lib/parseUrlParams.js";
@@ -34,7 +34,7 @@ export function startup(transitions, initialAdditionalState) {
         game.canvas.setAttribute("aria-hidden", "true");
         const context = {
             gmi,
-            inState: _merge({ transient: {}, persistent: {} }, initialAdditionalState),
+            inState: _.merge({ transient: {}, persistent: {} }, initialAdditionalState),
             popupScreens: [],
             gameMuted: true,
             qaMode,

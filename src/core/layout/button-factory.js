@@ -1,8 +1,8 @@
-import fpcurry from "lodash/fp/curry";
+import fp from "lodash/fp";
 import { accessibilify } from "../../lib/accessibilify/accessibilify.js";
 import { GelButton } from "./gel-button.js";
 
-const createButton = fpcurry((game, x, y, isMobile, key) => {
+const createButton = fp.curry((game, x, y, isMobile, key) => {
     const btn = new GelButton(game, 0, 0, isMobile, key); //Instantiate then return or TSC loses non-curried args
     return accessibilify(btn, "Test Accessible Button");
 });

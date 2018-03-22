@@ -2,11 +2,9 @@ export const GEL_MIN_RATIO_WIDTH = 4;
 export const GEL_MIN_RATIO_HEIGHT = 3;
 export const GEL_SAFE_FRAME_RATIO = GEL_MIN_RATIO_WIDTH / GEL_MIN_RATIO_HEIGHT;
 
-import fpcurry from "lodash/fp/curry";
-import fpflow from "lodash/fp/flow";
-import fppick from "lodash/fp/pick";
+import fp from "lodash/fp";
 
-const getScale = fpcurry((scaleMethods, stageHeightPx, { width, height }) => {
+const getScale = fp.curry((scaleMethods, stageHeightPx, { width, height }) => {
     const scale = scaleMethods[width / height >= GEL_SAFE_FRAME_RATIO ? "wide" : "narrow"](width, height);
     return { width, height, scale, stageHeightPx };
 });
@@ -25,14 +23,14 @@ export function create(stageHeightPx, game) {
         narrow: width => width / stageHeightPx / GEL_SAFE_FRAME_RATIO,
     };
 
-    const getSize = fpflow(getBounds(game), fppick(["width", "height"]), getScale(scaleMethods, stageHeightPx));
+    const getSize = fp.flow(getBounds(game), fp.pick(["width", "height"]), getScale(scaleMethods, stageHeightPx));
 
     const setSize = ({ width, height, scale, stageHeightPx: stageHeight }) => {
         game.scale.setGameSize(width, height);
         onScaleChange.dispatch(width, height, scale, stageHeight);
     };
 
-    const onSizeChange = fpflow(getSize, setSize);
+    const onSizeChange = fp.flow(getSize, setSize);
 
     game.scale.onSizeChange.add(onSizeChange);
 
