@@ -20,7 +20,9 @@ export class Home extends Screen {
         //Example Subscription to signal bus
         signal.bus.subscribe({
             name: "GEL-play",
-            callback: () => {},
+            callback: () => {
+                console.log("Play was pressed.");
+            },
         });
     }
 }

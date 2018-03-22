@@ -14,7 +14,7 @@ module.exports = {
     output: {
         pathinfo: true,
         path: path.resolve("output"),
-        publicPath: "./output/",
+        publicPath: "output",
         filename: "main.js",
     },
     module: {
