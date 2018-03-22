@@ -17,7 +17,6 @@ export function startup(transitions, initialAdditionalState) {
         multiTexture: false,
         parent: getContainerDiv(gmi),
         state: new Startup(gmi, onStarted),
-        legacy: true, // Allows correct rendering on older hardware
         transparent: true, // Fixes silk browser flickering
     };
     // Keep the console tidy:
