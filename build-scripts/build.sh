@@ -4,5 +4,4 @@ set -e
 npm install
 npm run test:coverage
 npm run build
-cd ..
 cp -r themes output/themes
