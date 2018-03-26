@@ -1,7 +1,7 @@
 import fp from "../../lib/lodash/fp/fp.js";
 import * as signal from "../signal-bus.js";
 
-const minButtonSize = 100;
+const minButtonSize = 64;
 
 export class GelButton extends Phaser.Button {
     constructor(game, x, y, isMobile, key) {
