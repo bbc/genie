@@ -47,14 +47,11 @@ export function accessibilify(button, ariaLabel) {
     }
 
     function isOutsideScreen() {
-        const pixiBounds = button.hitArea;
-        const buttonBounds = new Phaser.Rectangle(pixiBounds.x, pixiBounds.y, pixiBounds.width, pixiBounds.height);
+        const btnBounds = button.getBounds();
+        const hitBounds = button.hitArea.clone().centerOn(btnBounds.centerX, btnBounds.centerY);
 
         return (
-            buttonBounds.top > game.height ||
-            buttonBounds.bottom < 0 ||
-            buttonBounds.left > game.width ||
-            buttonBounds.right < 0
+            hitBounds.top > game.height || hitBounds.bottom < 0 || hitBounds.left > game.width || hitBounds.right < 0
         );
     }
 

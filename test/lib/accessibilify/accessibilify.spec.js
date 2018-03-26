@@ -69,6 +69,25 @@ describe("#accessibilify", () => {
                     height: buttonBoundsHeight,
                 };
             },
+            hitArea: {
+                clone: () => mockButton.hitArea,
+                centerOn: (x, y) => {
+                    return {
+                        x: buttonBoundsX,
+                        y: buttonBoundsY,
+                        width: buttonBoundsWidth,
+                        height: buttonBoundsHeight,
+                        top: buttonBoundsY,
+                        bottom: buttonBoundsY + buttonBoundsHeight,
+                        left: buttonBoundsX,
+                        right: buttonBoundsX + buttonBoundsWidth,
+                    };
+                },
+                x: 0,
+                y: 0,
+                width: buttonBoundsWidth,
+                height: buttonBoundsHeight,
+            },
             events: {
                 onInputOver: {
                     dispatch: onInputOver,
@@ -146,7 +165,8 @@ describe("#accessibilify", () => {
 
             accessibilify(mockButton);
             clock.tick(200);
-            sinon.assert.called(position.withArgs(mockButton.getBounds()));
+            const bounds = mockButton.getBounds();
+            sinon.assert.called(position.withArgs(mockButton.hitArea.clone().centerOn(bounds.centerX, bounds.centerY)));
         });
     });
 
