@@ -23,7 +23,8 @@ export function accessibilify(button, ariaLabel) {
     }
 
     function setElementPosition() {
-        accessibleElement.position(button.getBounds());
+        const bounds = button.getBounds();
+        accessibleElement.position(button.hitArea.clone().centerOn(bounds.centerX, bounds.centerY));
     }
 
     function assignEvents() {
@@ -46,7 +47,7 @@ export function accessibilify(button, ariaLabel) {
     }
 
     function isOutsideScreen() {
-        const pixiBounds = button.getBounds();
+        const pixiBounds = button.hitArea;
         const buttonBounds = new Phaser.Rectangle(pixiBounds.x, pixiBounds.y, pixiBounds.width, pixiBounds.height);
 
         return (
