@@ -31,7 +31,8 @@ export function startup(transitions, initialAdditionalState) {
         transparent: true, // Fixes silk browser flickering
     };
     // Keep the console tidy:
-    window.PhaserGlobal = { hideBanner: true };
+    window.PhaserGlobal = window.PhaserGlobal || {};
+    window.PhaserGlobal.hideBanner = true;
 
     const game = new Phaser.Game(phaserConfig);
 
