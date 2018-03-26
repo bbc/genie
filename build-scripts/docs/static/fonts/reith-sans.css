@@ -1,0 +1,15 @@
+@font-face {
+    font-family: "ReithSans";
+    src: url(./ReithSans/BBCReithSans_W_Rg.woff2) format("woff2"), url(./ReithSans/BBCReithSans_W_Rg.woff) format("woff");
+    font-weight: 400;
+}
+@font-face {
+    font-family: "ReithSans";
+    src: url(./ReithSans/BBCReithSans_W_Bd.woff2) format("woff2"), url(./ReithSans/BBCReithSans_W_Bd.woff) format("woff");
+    font-weight: 700;
+}
+@font-face {
+    font-family: "ReithSans";
+    src: url(./ReithSans/BBCReithSans_W_It.woff2) format("woff2"), url(./ReithSans/BBCReithSans_W_It.woff) format("woff");
+    font-style: italic;
+}

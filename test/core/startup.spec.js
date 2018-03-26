@@ -61,4 +61,14 @@ describe("Startup", () => {
             });
         });
     });
+
+    describe("Renderer", () => {
+        it("should set transparent to true", () => {
+            mock.installMockGetGmi({ embedVars: { configPath: "my/config/file.json" } });
+            return startup([mock.screenDef()]).then(game => {
+                expect(game.renderer.transparent).to.equal(true);
+                game.destroy();
+            });
+        });
+    });
 });
