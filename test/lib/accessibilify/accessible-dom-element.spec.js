@@ -23,8 +23,10 @@ describe("#accessibleDomElement", () => {
         options = {
             id: "play-button",
             ariaLabel: "Play Button",
-            onClick: () => {},
             parent: parentElement,
+            onClick: () => {},
+            onMouseOver: () => {},
+            onMouseOut: () => {},
         };
         createElement = sandbox.stub(document, "createElement").returns(element);
     });
@@ -69,6 +71,30 @@ describe("#accessibleDomElement", () => {
             const eventListener = sandbox.stub(element, "addEventListener");
             accessibleDomElement(options);
             sinon.assert.calledOnce(eventListener.withArgs("click", sinon.match.func));
+        });
+
+        it("adds an event listener for mouseover", () => {
+            const eventListener = sandbox.stub(element, "addEventListener");
+            accessibleDomElement(options);
+            sinon.assert.calledOnce(eventListener.withArgs("mouseover", sinon.match.func));
+        });
+
+        it("adds an event listener for mouseleave", () => {
+            const eventListener = sandbox.stub(element, "addEventListener");
+            accessibleDomElement(options);
+            sinon.assert.calledOnce(eventListener.withArgs("mouseleave", sinon.match.func));
+        });
+
+        it("adds an event listener for focus", () => {
+            const eventListener = sandbox.stub(element, "addEventListener");
+            accessibleDomElement(options);
+            sinon.assert.calledOnce(eventListener.withArgs("focus", sinon.match.func));
+        });
+
+        it("adds an event listener for blur", () => {
+            const eventListener = sandbox.stub(element, "addEventListener");
+            accessibleDomElement(options);
+            sinon.assert.calledOnce(eventListener.withArgs("blur", sinon.match.func));
         });
 
         it("appends element to parent element", () => {

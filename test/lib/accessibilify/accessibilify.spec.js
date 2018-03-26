@@ -17,6 +17,9 @@ describe("#accessibilify", () => {
     let accessibleDomElementVisible;
     let accessibleDomElementHide;
     let accessibleDomElementShow;
+    let onInputOver;
+    let onInputOut;
+    let activePointer;
     let sandbox;
 
     before(() => {
@@ -32,11 +35,14 @@ describe("#accessibilify", () => {
         accessibleDomElementVisible = true;
         accessibleDomElementHide = sandbox.spy();
         accessibleDomElementShow = sandbox.spy();
+        onInputOver = sandbox.spy();
+        onInputOut = sandbox.spy();
+        activePointer = sandbox.spy();
         mockButton = {
             name: "play",
             game: {
                 input: {
-                    activePointer: {},
+                    activePointer: activePointer,
                 },
                 canvas: {
                     parentElement,
@@ -63,13 +69,16 @@ describe("#accessibilify", () => {
                     height: buttonBoundsHeight,
                 };
             },
+            events: {
+                onInputOver: {
+                    dispatch: onInputOver,
+                },
+                onInputOut: {
+                    dispatch: onInputOut,
+                },
+            },
         };
-        accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({
-            position: () => {},
-            visible: () => accessibleDomElementVisible,
-            hide: accessibleDomElementHide,
-            show: accessibleDomElementShow,
-        });
+        accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement");
     });
 
     afterEach(() => {
@@ -86,6 +95,8 @@ describe("#accessibilify", () => {
                     ariaLabel: mockButton.name,
                     parent: mockButton.game.canvas.parentElement,
                     onClick: sinon.match.func,
+                    onMouseOver: sinon.match.func,
+                    onMouseOut: sinon.match.func,
                 }),
             );
         });
@@ -100,6 +111,8 @@ describe("#accessibilify", () => {
                         ariaLabel: "Play Button",
                         parent: mockButton.game.canvas.parentElement,
                         onClick: sinon.match.func,
+                        onMouseOver: sinon.match.func,
+                        onMouseOut: sinon.match.func,
                     }),
                 );
             });
@@ -140,6 +153,10 @@ describe("#accessibilify", () => {
     describe("Button Update", () => {
         describe("when button is outside of screen and element is visible", () => {
             it("hides element", () => {
+                accessibleDomElement.returns({
+                    visible: () => accessibleDomElementVisible,
+                    hide: accessibleDomElementHide,
+                });
                 buttonBoundsX = -1000;
                 accessibilify(mockButton);
                 mockButton.update();
@@ -149,10 +166,36 @@ describe("#accessibilify", () => {
 
         describe("when button is within the bounds of the screen and element is not visible", () => {
             it("shows element", () => {
+                accessibleDomElement.returns({
+                    visible: () => accessibleDomElementVisible,
+                    show: accessibleDomElementShow,
+                });
                 accessibleDomElementVisible = false;
                 accessibilify(mockButton);
                 mockButton.update();
                 sinon.assert.called(accessibleDomElementShow);
+            });
+        });
+    });
+
+    describe("Hover State", () => {
+        describe("When mouse over event is fired", () => {
+            it("dispatches button onInputOver event", () => {
+                accessibilify(mockButton);
+
+                const options = accessibleDomElement.args[0][0];
+                options.onMouseOver();
+                sinon.assert.calledOnce(onInputOver.withArgs(mockButton, activePointer, false));
+            });
+        });
+
+        describe("When mouse out event is fired", () => {
+            it("dispatches button onInputOut event", () => {
+                accessibilify(mockButton);
+
+                const options = accessibleDomElement.args[0][0];
+                options.onMouseOut();
+                sinon.assert.calledOnce(onInputOut.withArgs(mockButton, activePointer, false));
             });
         });
     });

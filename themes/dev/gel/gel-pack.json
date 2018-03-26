@@ -16,7 +16,7 @@
             "url": "gel/desktop/play.png",
             "frameWidth": 180,
             "frameHeight": 180,
-            "frameMax": 1,
+            "frameMax": 2,
             "margin": 0,
             "spacing": 0
         },
@@ -168,7 +168,7 @@
             "url": "gel/mobile/play.png",
             "frameWidth": 90,
             "frameHeight": 90,
-            "frameMax": 1,
+            "frameMax": 2,
             "margin": 0,
             "spacing": 0
         },
