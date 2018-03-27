@@ -47,7 +47,7 @@ export class Group extends Phaser.Group {
      * TODO add interface for config
      */
     addButton(config, position = this._buttons.length) {
-        const newButton = this._buttonFactory.createButton(this._metrics.isMobile, config.key);
+        const newButton = this._buttonFactory.createButton(this._metrics, config.key);
 
         this.addAt(newButton, position);
         this._buttons.push(newButton);
