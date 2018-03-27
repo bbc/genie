@@ -28,7 +28,7 @@ describe("Layout - Gel Button", () => {
 
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(() => {
-                const btn = new GelButton(game, 0, 0, true, "play");
+                const btn = new GelButton(game, 0, 0, { isMobile: true }, "play");
 
                 assert(btn.key === "gel/mobile/play.png");
 
@@ -54,8 +54,28 @@ describe("Layout - Gel Button", () => {
 
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(() => {
-                const btn = new GelButton(game, 0, 0, true, "play");
+                const btn = new GelButton(game, 0, 0, {}, "play");
                 assert(fp.isEqual(btn.anchor, new Phaser.Point(0.5, 0.5)));
+            }),
+        );
+    });
+
+    it("Should have a minimum hit area defined by metrics.", () => {
+        const updateCallback = sinon.spy();
+        const gamePacks = {
+            MASTER_PACK_KEY: { url: assetPacks.emptyAssetPack },
+            GEL_PACK_KEY: { url: assetPacks.emptyAssetPack },
+        };
+        const gelPack = {
+            key: "gel",
+            url: assetPacks.gelButtonAssetPack,
+        };
+
+        return runInPreload(game =>
+            loadAssets(game, gamePacks, gelPack, updateCallback).then(() => {
+                const btn = new GelButton(game, 0, 0, { hitMin: 70 }, "howToPlay");
+                assert(fp.isEqual(btn.hitArea.width, 70));
+                assert(fp.isEqual(btn.hitArea.height, 70));
             }),
         );
     });
