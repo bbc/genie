@@ -20,7 +20,7 @@ const getGroupPosition = sizes => ({
 });
 
 const getGroupX = sizes => {
-    const horizontals = sizes.metrics[sizes.pos.v === "middle" ? "safeHorizontals" : "horizontals"];
+    const horizontals = sizes.metrics["horizontals"];
 
     return horizontal[sizes.pos.h](sizes.width, sizes.metrics.borderPad * sizes.scale, horizontals[sizes.pos.h]);
 };

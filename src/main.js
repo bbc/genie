@@ -1,7 +1,6 @@
-//import "babel-polyfill";
-
-import { Home } from "./components/home.js";
 import { Loadscreen } from "./components/loadscreen.js";
+import { Home } from "./components/home.js";
+import { Select } from "./components/select.js";
 import { GameTest } from "./components/test-harness/test-screens/game.js";
 import { ResultsTest } from "./components/test-harness/test-screens/results.js";
 import { startup } from "./core/startup.js";
@@ -15,7 +14,18 @@ const transitions = [
     {
         name: "home",
         state: new Home(),
-        nextScreenName: () => "game",
+        nextScreenName: () => "characterSelect",
+    },
+    {
+        name: "characterSelect",
+        state: new Select(),
+        nextScreenName: state => {
+            if (state.transient.home) {
+                state.transient.home = false;
+                return "home";
+            }
+            return "game";
+        },
     },
     {
         name: "game",

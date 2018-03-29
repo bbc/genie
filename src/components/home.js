@@ -17,10 +17,11 @@ export class Home extends Screen {
         this.layoutFactory.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
         createTestHarnessDisplay(this.game, this.context, this.layoutFactory);
 
-        //Example Subscription to signal bus
         signal.bus.subscribe({
             name: "GEL-play",
-            callback: () => {},
+            callback: () => {
+                this.next();
+            },
         });
     }
 }
