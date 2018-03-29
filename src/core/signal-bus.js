@@ -48,7 +48,7 @@ export const create = () => {
      * @function
      * @memberof module:core/signal-bus
      */
-    const clearSignals = () => {
+    const clearAll = () => {
         const channels = Object.keys(_bus);
         channels.forEach(channel => {
             remove(channel);
@@ -79,7 +79,7 @@ export const create = () => {
      */
     const publish = fp.flow(addSignal, publishMessage);
 
-    return { clearSignals, remove, subscribe, publish };
+    return { clearAll, remove, subscribe, publish };
 };
 
 //Single instance
