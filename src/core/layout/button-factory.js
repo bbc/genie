@@ -14,11 +14,11 @@ import { GelButton } from "./gel-button.js";
  * @function
  * @memberOf module:layout/button-factory
  * @param {Boolean} isMobile - Whether to use mobile or desktop sized assets
- * @param {String} key - Button asset lookup key
+ * @param {Object} config - Gel configuration for this button
  */
-const createButton = fp.curry((game, isMobile, key, x = 0, y = 0) => {
-    const btn = new GelButton(game, x, y, isMobile, key); //Instantiate then return or TSC loses non-curried args
-    return accessibilify(btn, "Test Accessible Button");
+const createButton = fp.curry((game, isMobile, config, x = 0, y = 0) => {
+    const btn = new GelButton(game, x, y, isMobile, config.key); //Instantiate then return or TSC loses non-curried args
+    return accessibilify(btn, config);
 });
 
 export const create = game => ({ createButton: createButton(game) });

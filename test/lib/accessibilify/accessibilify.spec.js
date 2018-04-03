@@ -103,7 +103,11 @@ describe("#accessibilify", () => {
 
         describe("with ariaLabel argument", () => {
             it("calls accessibleDomElement once passing in ariaLabel string", () => {
-                accessibilify(mockButton, "Play Button");
+                const config = {
+                    ariaLabel: "Play Button",
+                };
+
+                accessibilify(mockButton, config);
 
                 sinon.assert.calledOnce(
                     accessibleDomElement.withArgs({

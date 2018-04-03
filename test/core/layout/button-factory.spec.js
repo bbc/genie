@@ -34,9 +34,14 @@ describe("Layout - Button Factory", () => {
     describe("createButton method", () => {
         const expectedIsMobile = false;
         const expectedKey = "buttonKey";
+        const config = {
+            id: "expectedId",
+            ariaLabel: "expectedAriaLabel",
+            key: expectedKey,
+        };
 
         beforeEach(() => {
-            buttonFactory.createButton(expectedIsMobile, expectedKey);
+            buttonFactory.createButton(expectedIsMobile, config);
         });
 
         it("creates a GEL button", () => {

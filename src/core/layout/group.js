@@ -49,7 +49,7 @@ export class Group extends Phaser.Group {
     addButton(config, position = this._buttons.length) {
         const newButton = this._buttonFactory.createButton(
             this._metrics.isMobile,
-            config.key,
+            config,
             this.getLocalBounds().halfWidth,
             this.getLocalBounds().halfHeight,
         );

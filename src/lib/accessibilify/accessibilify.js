@@ -1,7 +1,15 @@
 import debounce from "../../lib/lodash/debounce.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 
-export function accessibilify(button, ariaLabel) {
+export function accessibilify(button, config) {
+    config = Object.assign(
+        {
+            id: button.name,
+            ariaLabel: button.name,
+        },
+        config,
+    );
+
     const game = button.game;
     const accessibleElement = newAccessibleElement();
     const repositionElement = debounce(setElementPosition, 200);
@@ -13,8 +21,8 @@ export function accessibilify(button, ariaLabel) {
 
     function newAccessibleElement() {
         return accessibleDomElement({
-            id: button.name,
-            ariaLabel: ariaLabel ? ariaLabel : button.name,
+            id: config.id,
+            ariaLabel: config.ariaLabel,
             parent: game.canvas.parentElement,
             onClick: buttonAction,
             onMouseOver: mouseOver,
