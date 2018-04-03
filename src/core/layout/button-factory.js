@@ -16,9 +16,9 @@ import { GelButton } from "./gel-button.js";
  * @param {Boolean} isMobile - Whether to use mobile or desktop sized assets
  * @param {String} key - Button asset lookup key
  */
-const createButton = fp.curry((game, x, y, isMobile, key) => {
-    const btn = new GelButton(game, 0, 0, isMobile, key); //Instantiate then return or TSC loses non-curried args
+const createButton = fp.curry((game, isMobile, key, x = 0, y = 0) => {
+    const btn = new GelButton(game, x, y, isMobile, key); //Instantiate then return or TSC loses non-curried args
     return accessibilify(btn, "Test Accessible Button");
 });
 
-export const create = game => ({ createButton: createButton(game, 0, 0) });
+export const create = game => ({ createButton: createButton(game) });

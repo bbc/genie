@@ -55,7 +55,6 @@ const config = {
         ariaLabel: "Previous Item",
         order: 7,
     },
-
     play: {
         group: "middleCenterV",
         title: "Play",
