@@ -21,6 +21,7 @@ import { Layout } from "./layout.js";
  * @returns {{keyLookups: {}, addToBackground(), addToForeground(), addLayout(), removeAll(), addLookups(), getSize()}} - {{@link module:layout/factory.addLayout addLayout}}
  */
 export function create(game) {
+    let layouts = [];
     const root = game.add.group(undefined, "gelGroup", true);
     const background = game.add.group(undefined, "gelBackground");
     const foreground = game.add.group(undefined, "foreground");
@@ -42,6 +43,7 @@ export function create(game) {
         removeAll,
         addLookups,
         getSize: scaler.getSize,
+        getLayouts,
     };
 
     /**
@@ -60,6 +62,7 @@ export function create(game) {
 
         addToBackground(layout.root);
 
+        layouts.push(layout);
         return layout;
     }
 
@@ -81,10 +84,17 @@ export function create(game) {
 
     function removeAll() {
         background.removeAll(true);
-        // buttons.removeAll();
+        layouts.forEach(layout => {
+            layout.removeSignals();
+        });
+        layouts = [];
     }
 
     function addLookups(moreLookups) {
         Object.assign(keyLookups, moreLookups);
+    }
+
+    function getLayouts() {
+        return layouts;
     }
 }

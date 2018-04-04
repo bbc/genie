@@ -17,9 +17,10 @@ export class Layout {
      * @param buttons
      */
     constructor(game, scaler, buttons) {
+        this.scaler = scaler;
         this.root = new Phaser.Group(game, game.world, undefined);
 
-        const size = scaler.getSize();
+        const size = this.scaler.getSize();
         this._metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
 
         this._groups = fp.zipObject(
@@ -34,7 +35,7 @@ export class Layout {
             tabSort(buttons).map(name => this._groups[gel[name].group].addButton(gel[name])),
         );
 
-        scaler.onScaleChange.add(this.resize, this);
+        this.scaler.onScaleChange.add((this._resize = this.resize), this);
         this.resize(size.width, size.height, size.scale, size.stageHeightPx);
     }
 
@@ -52,15 +53,15 @@ export class Layout {
         this._groups[groupName].addToGroup(item, position);
     }
 
-    destroy() {
-        this.root.destroy();
-    }
-
     resize(width, height, scale, stageHeight) {
         this._metrics = calculateMetrics(width, height, scale, stageHeight);
 
         if (this._groups) {
             fp.forOwn(group => group.reset(this._metrics), this._groups);
         }
+    }
+
+    removeSignals() {
+        this.scaler.onScaleChange.remove(this._resize, this);
     }
 }

@@ -130,6 +130,34 @@ describe("Layout - Factory", () => {
             layoutFactory.removeAll();
             expect(groupMethods.removeAll.calledWith(true)).to.equal(true);
         });
+
+        it("calls removeSignals from all layouts added", () => {
+            const spyRemoveSignals = sandbox.spy();
+            const mockLayout = {
+                root: sandbox.stub(),
+                removeSignals: spyRemoveSignals,
+            };
+            const layout = sandbox.stub(Layout, "Layout").returns(mockLayout);
+
+            layoutFactory.addLayout(["play", "settings"]);
+            layoutFactory.addLayout(["pause", "next"]);
+            layoutFactory.removeAll();
+
+            sinon.assert.calledTwice(spyRemoveSignals);
+        });
+
+        it("resets layouts array", () => {
+            const spyRemoveSignals = sandbox.spy();
+            const mockLayout = {
+                root: sandbox.stub(),
+                removeSignals: spyRemoveSignals,
+            };
+            const layout = sandbox.stub(Layout, "Layout").returns(mockLayout);
+            layoutFactory.addLayout(["play", "settings"]);
+            layoutFactory.removeAll();
+
+            assert.deepEqual(layoutFactory.getLayouts(), []);
+        });
     });
 
     describe("addLookups method", () => {
@@ -144,6 +172,23 @@ describe("Layout - Factory", () => {
         it("returns the scaler getSize method", () => {
             layoutFactory.getSize();
             expect(scalerMethods.getSize.called).to.equal(true);
+        });
+    });
+
+    describe("getLayouts method", () => {
+        it("returns array of all layouts added to background", () => {
+            const mockLayout = { root: sandbox.stub() };
+            const layout = sandbox.stub(Layout, "Layout").returns(mockLayout);
+
+            layoutFactory.addLayout(["play", "settings"]);
+            layoutFactory.addLayout(["pause", "next"]);
+            assert.deepEqual(layoutFactory.getLayouts(), [mockLayout, mockLayout]);
+        });
+
+        describe("when no layouts have been added", () => {
+            it("returns empty array", () => {
+                assert.deepEqual(layoutFactory.getLayouts(), []);
+            });
         });
     });
 });
