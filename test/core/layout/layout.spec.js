@@ -153,15 +153,13 @@ describe("Layout", () => {
         assert(groupResetStub.callCount === 9);
     });
 
-    describe("#removeSignals", () => {
-        it("removes all signals on this Layout instance", () => {
-            mockScaler.onScaleChange = new Phaser.Signal();
-            const layout = new Layout(mockGame, mockScaler, ["play"]);
+    it("removeSignals method removes all signals on this Layout instance", () => {
+        mockScaler.onScaleChange = new Phaser.Signal();
+        const layout = new Layout(mockGame, mockScaler, ["play"]);
 
-            assert(layout.scaler.onScaleChange._bindings.length === 1, "has one signal");
-            layout.removeSignals();
-            assert(layout.scaler.onScaleChange._bindings.length === 0, "has no signals");
-        });
+        assert(layout.scaler.onScaleChange._bindings.length === 1, "has one signal");
+        layout.removeSignals();
+        assert(layout.scaler.onScaleChange._bindings.length === 0, "has no signals");
     });
 });
 
