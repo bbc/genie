@@ -41,6 +41,11 @@ describe("#accessibleDomElement", () => {
             sinon.assert.calledOnce(createElement.withArgs("div"));
         });
 
+        it("sets the id to 'play-button", () => {
+            accessibleDomElement(options);
+            expect(element.getAttribute("id")).to.equal("play-button");
+        });
+
         it("sets tabindex to 0", () => {
             accessibleDomElement(options);
             expect(element.getAttribute("tabindex")).to.equal("0");
