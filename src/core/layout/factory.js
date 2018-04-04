@@ -43,7 +43,6 @@ export function create(game) {
         removeAll,
         addLookups,
         getSize: scaler.getSize,
-        getLayouts,
     };
 
     /**
@@ -90,9 +89,5 @@ export function create(game) {
 
     function addLookups(moreLookups) {
         Object.assign(keyLookups, moreLookups);
-    }
-
-    function getLayouts() {
-        return layouts;
     }
 }
