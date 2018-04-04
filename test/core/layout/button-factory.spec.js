@@ -4,6 +4,7 @@ import * as sinon from "sinon";
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import * as GelButton from "../../../src/core/layout/gel-button";
 import * as accessibilify from "../../../src/lib/accessibilify/accessibilify";
+import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Layout - Button Factory", () => {
     let accessibilifyStub;
@@ -33,7 +34,7 @@ describe("Layout - Button Factory", () => {
 
     describe("createButton method", () => {
         const expectedIsMobile = false;
-        const expectedKey = "buttonKey";
+        const expectedKey = "play";
         const config = {
             id: "expectedId",
             ariaLabel: "expectedAriaLabel",
@@ -54,8 +55,26 @@ describe("Layout - Button Factory", () => {
             expect(actualParams[4]).to.equal(expectedKey);
         });
 
-        it("makes the button accessibile", () => {
+        it("makes the button accessible", () => {
             expect(accessibilifyStub.called).to.equal(true);
+        });
+
+        it("adds defaults actions to the signal bus", () => {
+            const defaultAction = sinon.spy();
+            const config = {
+                key: "play",
+                action: defaultAction,
+            };
+            signal.bus.clearAll();
+
+            buttonFactory.createButton(expectedIsMobile, config);
+
+            signal.bus.publish({ name: "GEL-play" });
+            signal.bus.publish({ name: "GEL-play" });
+
+            expect(defaultAction.callCount).to.equal(2);
+
+            signal.bus.clearAll();
         });
     });
 });

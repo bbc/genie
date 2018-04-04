@@ -6,6 +6,21 @@
 import fp from "../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../../lib/accessibilify/accessibilify.js";
 import { GelButton } from "./gel-button.js";
+import * as signal from "../../core/signal-bus.js";
+
+/**
+ * Checks for a default action and if present adds its callback to the signal bus
+ *
+ * @param {Object} config - Gel configuration for this button
+ */
+const defaultAction = config => {
+    if (config.action) {
+        signal.bus.subscribe({
+            name: "GEL-" + config.key,
+            callback: config.action,
+        });
+    }
+};
 
 /**
  * Creates a new Gel button.
@@ -18,6 +33,9 @@ import { GelButton } from "./gel-button.js";
  */
 const createButton = fp.curry((game, isMobile, config, x = 0, y = 0) => {
     const btn = new GelButton(game, x, y, isMobile, config.key); //Instantiate then return or TSC loses non-curried args
+
+    defaultAction(config);
+
     return accessibilify(btn, config);
 });
 
