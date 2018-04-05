@@ -9,7 +9,7 @@
  * this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
  * this.layoutFactory.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
  *
- * @module layout/factory
+ * @module core/layout/factory
  */
 import * as Scaler from "../scaler.js";
 import { Layout } from "./layout.js";
