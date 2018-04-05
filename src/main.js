@@ -30,7 +30,17 @@ const transitions = [
     {
         name: "game",
         state: new GameTest(),
-        nextScreenName: () => "results",
+        nextScreenName: state => {
+            if (state.transient.home) {
+                state.transient.home = false;
+                return "home";
+            }
+            if (state.transient.restart) {
+                state.transient.restart = false;
+                return "game";
+            }
+            return "results";
+        },
     },
     {
         name: "results",

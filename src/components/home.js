@@ -1,3 +1,9 @@
+/**
+ * Home is the main title screen for the game.
+ *
+ * @module components/home
+ */
+
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";

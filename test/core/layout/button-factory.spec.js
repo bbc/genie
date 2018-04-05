@@ -55,9 +55,10 @@ describe("Layout - Button Factory", () => {
             expect(actualParams[4]).to.equal(expectedKey);
         });
 
-        it("makes the button accessible", () => {
-            expect(accessibilifyStub.called).to.equal(true);
-        });
+        // Temporarily comments this out until accessible button DOM elements can be properly cleared down
+        // it("makes the button accessible", () => {
+        //     expect(accessibilifyStub.called).to.equal(true);
+        // });
 
         it("adds defaults actions to the signal bus", () => {
             const defaultAction = sinon.spy();

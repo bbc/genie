@@ -1,7 +1,7 @@
 /**
  * A Gel Button Factory exists on each layout group. It has one method {@link module:layout/button-factory.createButton createButton}
  *
- * @module layout/button-factory
+ * @module core/layout/button-factory
  */
 import fp from "../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../../lib/accessibilify/accessibilify.js";
@@ -35,8 +35,9 @@ const createButton = fp.curry((game, isMobile, config, x = 0, y = 0) => {
     const btn = new GelButton(game, x, y, isMobile, config.key); //Instantiate then return or TSC loses non-curried args
 
     defaultAction(config);
-
-    return accessibilify(btn, config);
+    // Temporarily comments this out until accessible button DOM elements can be properly cleared down
+    // return accessibilify(btn, config);
+    return btn;
 });
 
 export const create = game => ({ createButton: createButton(game) });

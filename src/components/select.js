@@ -1,3 +1,9 @@
+/**
+ * Select gives a choice of different items, which can be configured in main.js.
+ *
+ * @module components/select
+ */
+
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
