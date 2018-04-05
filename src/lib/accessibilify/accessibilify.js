@@ -1,4 +1,3 @@
-import debounce from "../../lib/lodash/debounce.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 
 export function accessibilify(button, config) {
@@ -12,10 +11,9 @@ export function accessibilify(button, config) {
 
     const game = button.game;
     const accessibleElement = newAccessibleElement();
-    const repositionElement = debounce(setElementPosition, 200);
 
     assignEvents();
-    repositionElement();
+    setElementPosition();
 
     return button;
 
@@ -35,14 +33,14 @@ export function accessibilify(button, config) {
     }
 
     function assignEvents() {
-        game.scale.onSizeChange.add(repositionElement);
+        game.scale.onSizeChange.add(setElementPosition);
         game.state.onStateChange.addOnce(teardown);
         button.update = checkBounds;
     }
 
     function teardown() {
         accessibleElement.remove();
-        game.scale.onSizeChange.remove(repositionElement);
+        game.scale.onSizeChange.remove(setElementPosition);
     }
 
     function checkBounds() {

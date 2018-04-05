@@ -17,6 +17,7 @@ describe("#accessibilify", () => {
     let accessibleDomElementVisible;
     let accessibleDomElementHide;
     let accessibleDomElementShow;
+    let accessibleDomElementPosition;
     let onInputOver;
     let onInputOut;
     let activePointer;
@@ -79,6 +80,10 @@ describe("#accessibilify", () => {
             },
         };
         accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement");
+        accessibleDomElementPosition = sandbox.spy();
+        accessibleDomElement.returns({
+            position: accessibleDomElementPosition,
+        });
     });
 
     afterEach(() => {
@@ -160,6 +165,7 @@ describe("#accessibilify", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
                     hide: accessibleDomElementHide,
+                    position: () => {},
                 });
                 buttonBoundsX = -1000;
                 accessibilify(mockButton);
@@ -173,6 +179,7 @@ describe("#accessibilify", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
                     show: accessibleDomElementShow,
+                    position: () => {},
                 });
                 accessibleDomElementVisible = false;
                 accessibilify(mockButton);
