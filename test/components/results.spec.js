@@ -2,6 +2,7 @@ import { assert } from "chai";
 import * as sinon from "sinon";
 
 import { Results } from "../../src/components/results";
+import * as Pause from "../../src/components/pause";
 import * as signal from "../../src/core/signal-bus.js";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 
@@ -146,11 +147,13 @@ describe("Results Screen", () => {
 
     describe("signals", () => {
         let signalSubscribeSpy;
+        let pauseCreateStub;
 
         beforeEach(() => {
             signalSubscribeSpy = sandbox.spy(signal.bus, "subscribe");
             resultsScreen.create();
             resultsScreen.next = sandbox.spy();
+            pauseCreateStub = sandbox.stub(Pause, "create");
         });
 
         it("adds a signal subscription to the continue button", () => {
@@ -170,6 +173,16 @@ describe("Results Screen", () => {
             signalSubscribeSpy.getCall(1).args[0].callback();
             assert(resultsScreen.next.callCount === 1, "next function should have been called once");
             sinon.assert.calledWith(resultsScreen.next, { transient: { game: true } });
+        });
+
+        it("adds a signal subscription to the pause button", () => {
+            assert.deepEqual(signalSubscribeSpy.getCall(2).args[0].name, "GEL-pause");
+        });
+
+        it("adds a callback for the pause button", () => {
+            signalSubscribeSpy.getCall(2).args[0].callback();
+            assert(pauseCreateStub.callCount === 1, "next function should have been called once");
+            sinon.assert.calledWith(pauseCreateStub, mockGame, resultsScreen);
         });
     });
 });
