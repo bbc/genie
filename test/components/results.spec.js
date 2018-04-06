@@ -115,7 +115,8 @@ describe("Results Screen", () => {
 
         it("loads the game results", () => {
             const actualTextCall = gameTextStub.getCall(1);
-            const expectedTextCall = [0, -50, 22, { font: "36px Arial" }];
+            const expectedResultsData = 22;
+            const expectedTextCall = [0, -50, expectedResultsData, { font: "36px Arial" }];
             assert.deepEqual(
                 actualTextCall.args,
                 expectedTextCall,
