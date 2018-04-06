@@ -39,24 +39,16 @@ describe("Results Screen", () => {
             },
         };
 
-        const mockTitleTextStyles = {
-            font: "bold 42px Arial",
-        };
-
-        const mockResultTextStyles = {
-            font: "36px Arial",
-        };
-
         mockContext = {
             config: {
                 theme: {
                     resultsScreen: {
                         titleText: {
                             content: "Results",
-                            style: mockTitleTextStyles,
+                            style: { font: "bold 42px Arial" },
                         },
                         resultText: {
-                            style: mockResultTextStyles,
+                            style: { font: "36px Arial" },
                         },
                     },
                 },
@@ -147,13 +139,11 @@ describe("Results Screen", () => {
 
     describe("signals", () => {
         let signalSubscribeSpy;
-        let pauseCreateStub;
 
         beforeEach(() => {
             signalSubscribeSpy = sandbox.spy(signal.bus, "subscribe");
             resultsScreen.create();
             resultsScreen.next = sandbox.spy();
-            pauseCreateStub = sandbox.stub(Pause, "create");
         });
 
         it("adds a signal subscription to the continue button", () => {
@@ -180,8 +170,9 @@ describe("Results Screen", () => {
         });
 
         it("adds a callback for the pause button", () => {
+            const pauseCreateStub = sandbox.stub(Pause, "create");
             signalSubscribeSpy.getCall(2).args[0].callback();
-            assert(pauseCreateStub.callCount === 1, "next function should have been called once");
+            assert(pauseCreateStub.callCount === 1, "Pause.create function should have been called once");
             sinon.assert.calledWith(pauseCreateStub, mockGame, resultsScreen);
         });
     });
