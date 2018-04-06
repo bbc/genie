@@ -39,14 +39,16 @@ export class GameTest extends Screen {
         }, this);
 
         signal.bus.subscribe({
-            name: "GEL-home",
+            channel: "gel-buttons",
+            name: "home",
             callback: () => {
                 this.next({ transient: { home: true } });
             },
         });
 
         signal.bus.subscribe({
-            name: "GEL-pause",
+            channel: "gel-buttons",
+            name: "pause",
             callback: () => {
                 Pause.create(this.game, this);
             },

@@ -116,9 +116,12 @@ describe("Pause Overlay", () => {
 
         it("adds signal subscriptions to all the GEL buttons", () => {
             assert.equal(signalSpy.callCount, 3);
-            assert.equal(signalSpy.getCall(0).args[0].name, "GEL-play");
-            assert.equal(signalSpy.getCall(1).args[0].name, "GEL-restart");
-            assert.equal(signalSpy.getCall(2).args[0].name, "GEL-home");
+            assert.equal(signalSpy.getCall(0).args[0].channel, "gel-buttons");
+            assert.equal(signalSpy.getCall(0).args[0].name, "play");
+            assert.equal(signalSpy.getCall(1).args[0].channel, "gel-buttons");
+            assert.equal(signalSpy.getCall(1).args[0].name, "restart");
+            assert.equal(signalSpy.getCall(2).args[0].channel, "gel-buttons");
+            assert.equal(signalSpy.getCall(2).args[0].name, "home");
         });
 
         it("destroys the pause screen when the play button is clicked", () => {

@@ -6,26 +6,29 @@ import { Screen } from "../../../src/core/screen";
 import { startup } from "../../../src/core/startup";
 import { assetPacks } from "../../helpers/asset-packs";
 import * as mock from "../../helpers/mock";
+import * as signal from "../../../src/core/signal-bus.js";
 
 import { GelButton } from "../../../src/core/layout/gel-button";
 
 import * as sinon from "sinon";
 
 describe("Layout - Gel Button", () => {
+    const sandbox = sinon.sandbox.create();
+
+    const gamePacks = {
+        MASTER_PACK_KEY: { url: assetPacks.emptyAssetPack },
+        GEL_PACK_KEY: { url: assetPacks.emptyAssetPack },
+    };
+    const gelPack = {
+        key: "gel",
+        url: assetPacks.gelButtonAssetPack,
+    };
+
     beforeEach(mock.installMockGetGmi);
     afterEach(mock.uninstallMockGetGmi);
 
     it("Should swap mobile and desktop assets when resized.", () => {
-        const updateCallback = sinon.spy();
-        const gamePacks = {
-            MASTER_PACK_KEY: { url: assetPacks.emptyAssetPack },
-            GEL_PACK_KEY: { url: assetPacks.emptyAssetPack },
-        };
-        const gelPack = {
-            key: "gel",
-            url: assetPacks.gelButtonAssetPack,
-        };
-
+        const updateCallback = sandbox.spy();
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(() => {
                 const btn = new GelButton(game, 0, 0, true, "play");
@@ -42,22 +45,33 @@ describe("Layout - Gel Button", () => {
     });
 
     it("Should be centered.", () => {
-        const updateCallback = sinon.spy();
-        const gamePacks = {
-            MASTER_PACK_KEY: { url: assetPacks.emptyAssetPack },
-            GEL_PACK_KEY: { url: assetPacks.emptyAssetPack },
-        };
-        const gelPack = {
-            key: "gel",
-            url: assetPacks.gelButtonAssetPack,
-        };
-
+        const updateCallback = sandbox.spy();
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(() => {
                 const btn = new GelButton(game, 0, 0, true, "play");
                 assert(fp.isEqual(btn.anchor, new Phaser.Point(0.5, 0.5)));
             }),
         );
+    });
+
+    describe("signals", () => {
+        let signalSpy;
+        let nextSpy;
+
+        beforeEach(() => {
+            signalSpy = sandbox.spy(signal.bus, "publish");
+        });
+
+        it("adds a signal subscription to the play button", () => {
+            return runInPreload(game =>
+                loadAssets(game, gamePacks, gelPack, () => {}).then(() => {
+                    const button = new GelButton(game, 0, 0, true, "play");
+                    const expectedArgs = { channel: "gel-buttons", name: "play" };
+                    button.events.onInputUp.dispatch(button, game.input.activePointer, false);
+                    assert.deepEqual(signalSpy.getCall(0).args[0], expectedArgs);
+                }),
+            );
+        });
     });
 });
 

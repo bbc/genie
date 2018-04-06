@@ -16,7 +16,8 @@ import * as signal from "../../core/signal-bus.js";
 const defaultAction = config => {
     if (config.action) {
         signal.bus.subscribe({
-            name: "GEL-" + config.key,
+            channel: "gel-buttons",
+            name: config.key,
             callback: config.action,
         });
     }
