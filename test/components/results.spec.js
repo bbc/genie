@@ -103,7 +103,7 @@ describe("Results Screen", () => {
             assert.deepEqual(addToBackgroundCall.args, ["background"]);
         });
 
-        it("creates a title", () => { // eslint-disable-line
+        it("creates a title", () => {
             const actualTextCall = gameTextStub.getCall(0);
             const expectedTextCall = [0, -150, "Results", { font: "bold 42px Arial" }];
             assert.deepEqual(
@@ -113,7 +113,7 @@ describe("Results Screen", () => {
             );
         });
 
-        it("loads the game results", () => { // eslint-disable-line
+        it("loads the game results", () => {
             const actualTextCall = gameTextStub.getCall(1);
             const expectedTextCall = [0, -50, 22, { font: "36px Arial" }];
             assert.deepEqual(
