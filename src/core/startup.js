@@ -42,12 +42,13 @@ export function startup(transitions, initialAdditionalState) {
         resolvedPromise = resolve;
     });
 
-    function onStarted() {
+    function onStarted(config) {
         // Phaser is now set up and we can use all game properties.
         game.canvas.setAttribute("aria-hidden", "true");
         const context = {
             gmi,
             inState: _.merge({ transient: {}, persistent: {} }, initialAdditionalState),
+            config: config,
             popupScreens: [],
             gameMuted: true,
             qaMode,
@@ -58,6 +59,8 @@ export function startup(transitions, initialAdditionalState) {
         resolvedPromise(game);
     }
 }
+
+const CONFIG_KEY = "config";
 
 class Startup extends Phaser.State {
     constructor(gmi, onStarted) {
@@ -74,12 +77,11 @@ class Startup extends Phaser.State {
         const theme = gmi.embedVars.configPath;
         const configDir = theme.split(/([^/]+$)/, 2)[0];
         this.game.load.path = configDir;
-
-        //this.load.json(CONFIG_KEY, configFile); xxx
+        this.game.load.json(CONFIG_KEY, "config.json");
     }
 
     create() {
-        this._onStarted({} /* this.game.cache.getJSON(CONFIG_KEY) */);
+        this._onStarted(this.game.cache.getJSON(CONFIG_KEY));
     }
 }
 

@@ -42,6 +42,19 @@ export const create = () => {
         delete _bus[name];
     };
 
+    /**
+     * Removes all signal identifiers from the bus.
+     *
+     * @function
+     * @memberof module:core/signal-bus
+     */
+    const clearAll = () => {
+        const channels = Object.keys(_bus);
+        channels.forEach(channel => {
+            remove(channel);
+        });
+    };
+
     const addSubscription = message => _bus[message.name].add(message.callback);
     const publishMessage = message => _bus[message.name].dispatch(message.data);
 
@@ -66,7 +79,7 @@ export const create = () => {
      */
     const publish = fp.flow(addSignal, publishMessage);
 
-    return { remove, subscribe, publish };
+    return { clearAll, remove, subscribe, publish };
 };
 
 //Single instance

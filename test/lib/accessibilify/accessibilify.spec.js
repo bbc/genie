@@ -17,6 +17,7 @@ describe("#accessibilify", () => {
     let accessibleDomElementVisible;
     let accessibleDomElementHide;
     let accessibleDomElementShow;
+    let accessibleDomElementPosition;
     let onInputOver;
     let onInputOut;
     let activePointer;
@@ -98,6 +99,10 @@ describe("#accessibilify", () => {
             },
         };
         accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement");
+        accessibleDomElementPosition = sandbox.spy();
+        accessibleDomElement.returns({
+            position: accessibleDomElementPosition,
+        });
     });
 
     afterEach(() => {
@@ -122,7 +127,11 @@ describe("#accessibilify", () => {
 
         describe("with ariaLabel argument", () => {
             it("calls accessibleDomElement once passing in ariaLabel string", () => {
-                accessibilify(mockButton, "Play Button");
+                const config = {
+                    ariaLabel: "Play Button",
+                };
+
+                accessibilify(mockButton, config);
 
                 sinon.assert.calledOnce(
                     accessibleDomElement.withArgs({
@@ -176,6 +185,7 @@ describe("#accessibilify", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
                     hide: accessibleDomElementHide,
+                    position: () => {},
                 });
                 buttonBoundsX = -1000;
                 accessibilify(mockButton);
@@ -189,6 +199,7 @@ describe("#accessibilify", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
                     show: accessibleDomElementShow,
+                    position: () => {},
                 });
                 accessibleDomElementVisible = false;
                 accessibilify(mockButton);

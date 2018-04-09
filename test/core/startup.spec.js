@@ -1,8 +1,16 @@
 import { assert, expect } from "chai";
+import * as sinon from "sinon";
 import { startup } from "../../src/core/startup";
+import * as Sequencer from "../../src/core/sequencer";
 import * as mock from "../helpers/mock";
 
 describe("Startup", () => {
+    let sandbox;
+
+    before(() => {
+        sandbox = sinon.sandbox.create();
+    });
+
     beforeEach(mock.installMockGetGmi);
     afterEach(mock.uninstallMockGetGmi);
 
@@ -67,6 +75,26 @@ describe("Startup", () => {
             mock.installMockGetGmi({ embedVars: { configPath: "my/config/file.json" } });
             return startup([mock.screenDef()]).then(game => {
                 expect(game.renderer.transparent).to.equal(true);
+                game.destroy();
+            });
+        });
+    });
+
+    describe("#onStarted", () => {
+        it("adds a config key to context", () => {
+            mock.installMockGetGmi({
+                embedVars: {
+                    configPath: "my/config/file.json",
+                },
+            });
+
+            const sequencerCreate = sandbox.stub(Sequencer, "create");
+
+            return startup([mock.screenDef()]).then(game => {
+                const context = sequencerCreate.args[0][1];
+
+                assert(context.config !== undefined, "config exists on context object");
+
                 game.destroy();
             });
         });

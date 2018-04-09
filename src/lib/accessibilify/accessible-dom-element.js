@@ -13,6 +13,7 @@ export function accessibleDomElement(options) {
     };
 
     function init() {
+        el.id = options.id;
         el.setAttribute("tabindex", "0");
         el.setAttribute("aria-label", options.ariaLabel);
         el.setAttribute("role", "button");

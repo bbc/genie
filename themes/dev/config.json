@@ -1,0 +1,36 @@
+{
+    "theme": {
+        "characterSelect": {
+            "choices": [
+                {
+                    "main": "dangermouse",
+                    "name": "dangermouseName"
+                },
+                {
+                    "main": "barney",
+                    "name": "barneyName"
+                },
+                {
+                    "main": "jamillah",
+                    "name": "jamillahName"
+                }
+            ],
+            "leftButton": {
+                "content": "Left",
+                "style": {
+                    "font": "20px Arial",
+                    "fontWeight": "bold",
+                    "fill": "white"
+                }
+            },
+            "rightButton": {
+                "content": "Right",
+                "style": {
+                    "font": "20px Arial",
+                    "fontWeight": "bold",
+                    "fill": "white"
+                }
+            }
+        }
+    }
+}

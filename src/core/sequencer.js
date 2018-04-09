@@ -14,6 +14,7 @@
 
 import * as _ from "../lib/lodash/lodash.js";
 import * as LayoutFactory from "./layout/factory.js";
+import * as signal from "./signal-bus.js";
 
 /**
  * @param  game The instance of Phaser.Game.
@@ -31,6 +32,7 @@ export function create(game, context, transitions) {
     game.state.start(currentScreen.name, true, false, context, next, layoutFactory);
 
     function next(changedState) {
+        signal.bus.clearAll();
         //TODO: Use GMI to save persistent state to local storage, if it has been updated
         const newState = _.merge({}, context.inState, changedState);
         const nextScreenName = currentScreen.nextScreenName(newState);

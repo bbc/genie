@@ -1,3 +1,5 @@
+import * as signal from "../../../core/signal-bus.js";
+import * as Pause from "../../../components/pause.js";
 import { Screen } from "../../../core/screen.js";
 
 export class GameTest extends Screen {
@@ -6,7 +8,7 @@ export class GameTest extends Screen {
     }
 
     preload() {
-        this.gel = this.layoutFactory.keyLookups.gel;
+        this.keyLookup = this.layoutFactory.keyLookups[this.game.state.current];
     }
 
     create() {
@@ -14,6 +16,7 @@ export class GameTest extends Screen {
         const titleText = this.game.add.text(0, -190, "Game goes here", titleStyle);
         titleText.anchor.set(0.5, 0.5);
         this.layoutFactory.addToBackground(titleText);
+        this.layoutFactory.addLayout(["home", "pause", "audioOff", "settings"]);
 
         const buttonKey = this.layoutFactory.keyLookups.home.basicButton;
         const buttonTextStyle = {
@@ -34,5 +37,19 @@ export class GameTest extends Screen {
             buttonText.anchor.set(0.5, 0.5);
             this.layoutFactory.addToBackground(button);
         }, this);
+
+        signal.bus.subscribe({
+            name: "GEL-home",
+            callback: () => {
+                this.next({ transient: { home: true } });
+            },
+        });
+
+        signal.bus.subscribe({
+            name: "GEL-pause",
+            callback: () => {
+                Pause.create(this.game, this);
+            },
+        });
     }
 }
