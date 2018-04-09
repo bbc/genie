@@ -29,8 +29,9 @@ export function accessibilify(button, config) {
     }
 
     function setElementPosition() {
-        const bounds = button.getBounds();
-        accessibleElement.position(button.hitArea.clone().centerOn(bounds.centerX, bounds.centerY));
+        const bounds = button.hitArea.clone();
+        bounds.topLeft = button.toGlobal(bounds.topLeft);
+        accessibleElement.position(bounds);
     }
 
     function assignEvents() {
