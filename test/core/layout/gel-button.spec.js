@@ -79,6 +79,26 @@ describe("Layout - Gel Button", () => {
             }),
         );
     });
+
+    it("Should have a centred hit area.", () => {
+        const updateCallback = sinon.spy();
+        const gamePacks = {
+            MASTER_PACK_KEY: { url: assetPacks.emptyAssetPack },
+            GEL_PACK_KEY: { url: assetPacks.emptyAssetPack },
+        };
+        const gelPack = {
+            key: "gel",
+            url: assetPacks.gelButtonAssetPack,
+        };
+
+        return runInPreload(game =>
+            loadAssets(game, gamePacks, gelPack, updateCallback).then(() => {
+                const btn = new GelButton(game, 0, 0, { hitMin: 70 }, "howToPlay");
+                assert.equal(btn.hitArea.centerX, 0);
+                assert.equal(btn.hitArea.centerY, 0);
+            }),
+        );
+    });
 });
 
 /**
