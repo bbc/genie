@@ -41,6 +41,7 @@ describe("#accessibilify", () => {
         activePointer = sandbox.spy();
         mockButton = {
             name: "play",
+            toGlobal: () => {},
             game: {
                 input: {
                     activePointer: activePointer,
@@ -174,8 +175,7 @@ describe("#accessibilify", () => {
 
             accessibilify(mockButton);
             clock.tick(200);
-            const bounds = mockButton.getBounds();
-            sinon.assert.called(position.withArgs(mockButton.hitArea.clone().centerOn(bounds.centerX, bounds.centerY)));
+            sinon.assert.called(position.withArgs(mockButton.hitArea.clone()));
         });
     });
 
