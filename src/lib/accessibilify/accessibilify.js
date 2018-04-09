@@ -54,12 +54,10 @@ export function accessibilify(button, config) {
     }
 
     function isOutsideScreen() {
-        const btnBounds = button.getBounds();
-        const hitBounds = button.hitArea.clone().centerOn(btnBounds.centerX, btnBounds.centerY);
+        const bounds = button.hitArea.clone();
+        bounds.topLeft = button.toGlobal(bounds.topLeft);
 
-        return (
-            hitBounds.top > game.height || hitBounds.bottom < 0 || hitBounds.left > game.width || hitBounds.right < 0
-        );
+        return bounds.top > game.height || bounds.bottom < 0 || bounds.left > game.width || bounds.right < 0;
     }
 
     function buttonAction() {
