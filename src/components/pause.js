@@ -17,6 +17,7 @@ export function create({ game }) {
 
     const background = addBackground();
     const gelButtons = addGelButtons();
+    const channel = "pause-gel-buttons";
 
     addSignals();
 
@@ -41,26 +42,27 @@ export function create({ game }) {
 
     function addGelButtons() {
         const gelLayout = screen.layoutFactory.addLayout([
-            "home",
+            "pauseHome",
             "audioOff",
             "settings",
             "play",
             "restart",
             "howToPlay",
-        ]);
+        ], channel);
         moveButtonsToTop(gelLayout);
         return gelLayout;
     }
 
     function addSignals() {
-        signal.bus.subscribe({ channel: "gel-buttons", name: "play", callback: destroy });
-        signal.bus.subscribe({ channel: "gel-buttons", name: "restart", callback: restartGame });
-        signal.bus.subscribe({ channel: "gel-buttons", name: "home", callback: goHome });
+        signal.bus.subscribe({ channel, name: "play", callback: destroy });
+        signal.bus.subscribe({ channel, name: "restart", callback: restartGame });
+        signal.bus.subscribe({ channel, name: "home", callback: goHome });
     }
 
     function destroy() {
         game.paused = false;
-        gelButtons.destroy();
+        signal.bus.removeChannel(channel);
+        //gelButtons.destroy();
         background.destroy();
         game.sound.resumeAll();
         screen.context.popupScreens = fp.pull("pause", screen.context.popupScreens);
@@ -72,6 +74,7 @@ export function create({ game }) {
     }
 
     function goHome() {
+        console.log("going home!!");
         destroy();
         screen.next({ transient: { home: true } });
     }
