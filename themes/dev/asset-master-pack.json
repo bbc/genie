@@ -59,7 +59,14 @@
         {
             "type": "image",
             "key": "jamillahName",
-            "url": "options/jamillah_sel_name.png",
+            "url": "options/jamillah_sel_name.png"
+        }
+    ],
+    "results": [
+        {
+            "type": "image",
+            "key": "background",
+            "url": "shared/background.png",
             "overwrite": false
         }
     ],
