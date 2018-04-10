@@ -20,6 +20,10 @@ const config = {
         ariaLabel: "Home",
         order: 1,
         id: "gel-home",
+        action: ({ game }) => {
+            const screen = game.state.states[game.state.current];
+            screen.next({ transient: { home: true } });
+        },
     },
     back: {
         group: "topLeft",
