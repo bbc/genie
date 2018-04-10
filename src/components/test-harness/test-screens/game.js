@@ -38,15 +38,17 @@ export class GameTest extends Screen {
             this.layoutFactory.addToBackground(button);
         }, this);
 
-        //signal.bus.subscribe({
-        //    name: "GEL-home",
-        //    callback: () => {
-        //        this.next({ transient: { home: true } });
-        //    },
-        //});
+        signal.bus.subscribe({
+            channel: "gel-buttons",
+            name: "home",
+            callback: () => {
+                this.next({ transient: { home: true } });
+            },
+        });
 
         signal.bus.subscribe({
-            name: "GEL-pause",
+            channel: "gel-buttons",
+            name: "pause",
             callback: () => {
                 Pause.create(this.game, this);
             },

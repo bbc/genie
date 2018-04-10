@@ -66,16 +66,16 @@ describe("Layout - Button Factory", () => {
                 key: "play",
                 action: defaultAction,
             };
-            signal.bus.clearAll();
+            signal.bus.removeChannel("gel-buttons");
 
             buttonFactory.createButton(expectedIsMobile, config);
 
-            signal.bus.publish({ name: "GEL-play" });
-            signal.bus.publish({ name: "GEL-play" });
+            signal.bus.publish({ channel: "gel-buttons", name: "play" });
+            signal.bus.publish({ channel: "gel-buttons", name: "play" });
 
             expect(defaultAction.callCount).to.equal(2);
 
-            signal.bus.clearAll();
+            signal.bus.removeChannel("gel-buttons");
         });
     });
 });
