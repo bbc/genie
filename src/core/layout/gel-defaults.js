@@ -22,6 +22,10 @@ const config = {
         order: 1,
         id: "gel-home",
         channel: "gel-buttons",
+        action: ({ game }) => {
+            const screen = game.state.states[game.state.current];
+            screen.next({ transient: { home: true } });
+        },
     },
     pauseHome: {
         group: "topLeft",
@@ -30,7 +34,7 @@ const config = {
         ariaLabel: "Home",
         order: 1,
         id: "gel-home",
-        channel: "pause-gel-buttons"
+        channel: "pause-gel-buttons",
     },
     back: {
         group: "topLeft",
@@ -96,6 +100,15 @@ const config = {
         id: "gel-play",
         channel: "gel-buttons",
     },
+    pausePlay: {
+        group: "middleCenterV",
+        title: "Play",
+        key: "play",
+        ariaLabel: "Play Game",
+        order: 8,
+        id: "gel-play",
+        channel: "pause-gel-buttons",
+    },
     next: {
         group: "middleRight",
         title: "Next",
@@ -122,6 +135,15 @@ const config = {
         order: 11,
         id: "gel-restart",
         channel: "gel-buttons",
+    },
+    pauseRestart: {
+        group: "bottomCenter",
+        title: "Restart",
+        key: "restart",
+        ariaLabel: "Restart Game",
+        order: 11,
+        id: "gel-restart",
+        channel: "pause-gel-buttons",
     },
     continue: {
         group: "bottomCenter",

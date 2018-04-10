@@ -13,11 +13,11 @@ import * as signal from "../core/signal-bus.js";
  */
 export function create({ game }) {
     const screen = game.state.states[game.state.current];
+    const channel = "pause-gel-buttons";
     pauseGame();
 
     const background = addBackground();
     const gelButtons = addGelButtons();
-    const channel = "pause-gel-buttons";
 
     addSignals();
 
@@ -45,8 +45,8 @@ export function create({ game }) {
             "pauseHome",
             "audioOff",
             "settings",
-            "play",
-            "restart",
+            "pausePlay",
+            "pauseRestart",
             "howToPlay",
         ], channel);
         moveButtonsToTop(gelLayout);
@@ -60,9 +60,10 @@ export function create({ game }) {
     }
 
     function destroy() {
+        console.log("resuming game");
         game.paused = false;
         signal.bus.removeChannel(channel);
-        //gelButtons.destroy();
+        gelButtons.destroy();
         background.destroy();
         game.sound.resumeAll();
         screen.context.popupScreens = fp.pull("pause", screen.context.popupScreens);
