@@ -57,13 +57,14 @@ export function create(game, screen) {
     function addSignals() {
         signal.bus.subscribe({ name: "GEL-play", callback: destroy });
         signal.bus.subscribe({ name: "GEL-restart", callback: restartGame });
+        // SEAN TODO - The problem is here. We are adding a second callback to GEL-home. There is already a callback on GEL-home from the screen below. The first one is being called and this one is not getting a chance to fire because the transition happens.
         signal.bus.subscribe({ name: "GEL-home", callback: goHome });
     }
 
     function destroy() {
+        game.paused = false;
         gelButtons.destroy();
         background.destroy();
-        game.paused = false;
         game.sound.resumeAll();
         screen.context.popupScreens = fp.pull("pause", screen.context.popupScreens);
     }
