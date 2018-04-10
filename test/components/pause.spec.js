@@ -6,7 +6,6 @@ import * as Pause from "../../src/components/pause";
 import * as signal from "../../src/core/signal-bus.js";
 
 describe("Pause Overlay", () => {
-    let pauseScreen;
     let mockGame;
     let mockScreen;
     let mockGelButtons;
@@ -29,14 +28,6 @@ describe("Pause Overlay", () => {
 
         mockLayoutDestroy = { destroy: sandbox.spy() };
 
-        mockGame = {
-            add: { image: sandbox.stub() },
-            state: { current: "pauseScreen" },
-            sound: { pauseAll: sandbox.spy(), resumeAll: sandbox.spy() },
-            paused: false,
-        };
-        mockGame.add.image.onCall(0).returns("backgroundImage");
-
         mockScreen = {
             layoutFactory: {
                 keyLookups: { pause: { pauseBackground: "pauseBackgroundImage" } },
@@ -46,6 +37,14 @@ describe("Pause Overlay", () => {
             context: { popupScreens: [] },
             next: sandbox.spy(),
         };
+
+        mockGame = {
+            add: { image: sandbox.stub() },
+            state: { current: "pauseScreen", states: { pauseScreen: mockScreen } },
+            sound: { pauseAll: sandbox.spy(), resumeAll: sandbox.spy() },
+            paused: false,
+        };
+        mockGame.add.image.onCall(0).returns("backgroundImage");
     });
 
     afterEach(() => {
@@ -54,7 +53,7 @@ describe("Pause Overlay", () => {
 
     describe("pause functionality", () => {
         beforeEach(() => {
-            Pause.create(mockGame, mockScreen);
+            Pause.create({ game: mockGame });
         });
 
         it("pauses the sound", () => {
@@ -73,7 +72,7 @@ describe("Pause Overlay", () => {
 
     describe("assets", () => {
         it("adds a background image", () => {
-            Pause.create(mockGame, mockScreen);
+            Pause.create({ game: mockGame });
 
             const actualImageCall = mockGame.add.image.getCall(0);
             const expectedImageCall = [0, 0, "pauseBackgroundImage"];
@@ -84,14 +83,14 @@ describe("Pause Overlay", () => {
         });
 
         it("adds GEL buttons", () => {
-            Pause.create(mockGame, mockScreen);
+            Pause.create({ game: mockGame });
             const actualAddLayoutCall = mockScreen.layoutFactory.addLayout.getCall(0);
             const expectedAddLayoutCall = ["home", "audioOff", "settings", "play", "restart", "howToPlay"];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
         });
 
         it("adds a priority ID to each GEL button", () => {
-            Pause.create(mockGame, mockScreen);
+            Pause.create({ game: mockGame });
             fp.forOwn(gelButton => {
                 assert.equal(gelButton.input.priorityID, 1000);
             }, mockGelButtons.buttons);
@@ -99,7 +98,7 @@ describe("Pause Overlay", () => {
 
         it("ups the priority ID on each GEL button if there are more popup screens", () => {
             mockScreen.context.popupScreens.push("howToPlay");
-            Pause.create(mockGame, mockScreen);
+            Pause.create({ game: mockGame });
             fp.forOwn(gelButton => {
                 assert.equal(gelButton.input.priorityID, 1001);
             }, mockGelButtons.buttons);
@@ -111,7 +110,7 @@ describe("Pause Overlay", () => {
 
         beforeEach(() => {
             signalSpy = sandbox.spy(signal.bus, "subscribe");
-            Pause.create(mockGame, mockScreen);
+            Pause.create({ game: mockGame });
         });
 
         it("adds signal subscriptions to all the GEL buttons", () => {
