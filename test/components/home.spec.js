@@ -117,8 +117,8 @@ describe("Home Screen", () => {
         });
 
         it("adds a signal subscription to the play button", () => {
-            assert.deepEqual(signalSpy.getCall(0).args[0].channel, "gel-buttons");
-            assert.deepEqual(signalSpy.getCall(0).args[0].name, "play");
+            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].channel, "gel-buttons");
+            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].name, "play");
         });
 
         it("adds a callback for the play button", () => {
