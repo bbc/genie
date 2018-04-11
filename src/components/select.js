@@ -19,12 +19,12 @@ export class Select extends Screen {
 
     create() {
         this.layoutFactory.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
-        this.layoutFactory.addLayout(["exit", "audioOff", "pause", "previous", "next", "continue"]);
+        this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
+        this.layoutFactory.addLayout(["home", "audioOff", "pause", "previous", "next", "continue"]);
         createTestHarnessDisplay(this.game, this.context, this.layoutFactory);
 
         const theme = this.context.config.theme[this.game.state.current];
-        const CHAR_Y_POSITION = -30;
-        const CHAR_TEXT_Y_POSITION = 170;
+        const CHAR_Y_POSITION = 0;
 
         this.choice = [];
         this.currentIndex = 1;
@@ -32,19 +32,20 @@ export class Select extends Screen {
 
         theme.choices.forEach((item, index) => {
             const main = this.game.add.sprite(0, CHAR_Y_POSITION, this.keyLookup[theme.choices[index].main]);
-            const name = this.game.add.sprite(0, CHAR_TEXT_Y_POSITION, this.keyLookup[theme.choices[index].name]);
             if (index !== 0) {
                 main.visible = false;
-                name.visible = false;
             }
             this.layoutFactory.addToBackground(main);
-            this.layoutFactory.addToBackground(name);
-            this.choice = this.choice.concat([{ main: main, name: name }]);
+            this.choice = this.choice.concat({ main: main });
         });
 
         signal.bus.subscribe({
+<<<<<<< HEAD
             channel: "gel-buttons",
             name: "exit",
+=======
+            name: "GEL-home",
+>>>>>>> [CGPROD-553] Update select screen with a title, remove character names and replace the exit button with the home button
             callback: () => {
                 this.next({ transient: { home: true } });
             },
@@ -88,10 +89,8 @@ export class Select extends Screen {
     showChoice() {
         this.choice.forEach(item => {
             item.main.visible = false;
-            item.name.visible = false;
         });
         this.choice[this.currentIndex - 1].main.visible = true;
-        this.choice[this.currentIndex - 1].name.visible = true;
     }
 
     startGame() {
