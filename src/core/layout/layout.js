@@ -49,18 +49,7 @@ export class Layout {
         this.buttons[button].onInputUp.add(callback, this);
     }
 
-    /**
-     * Remove all callbacks to the onInputUp event of all Gel buttons on this layout
-     *
-     */
-    removeAllButtonActions() {
-        fp.forOwn(button => {
-            button.onInputUp.removeAll(this);
-        }, this.buttons);
-    }
-
     destroy() {
-        this.removeAllButtonActions();
         this.root.destroy();
     }
 

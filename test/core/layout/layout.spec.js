@@ -105,27 +105,6 @@ describe("Layout", () => {
         assert(testAction.callCount === 3);
     });
 
-    it("Should remove all onInputUp callbacks for all buttons on this layout using the 'removeAllButtonActions' method", () => {
-        const layout = new Layout(mockGame, mockScaler, ["play", "pause", "exit"]);
-        const playAction = sandbox.spy();
-        const pauseAction = sandbox.spy();
-        const exitAction = sandbox.spy();
-
-        layout.setAction("play", playAction);
-        layout.setAction("pause", pauseAction);
-        layout.setAction("exit", exitAction);
-
-        layout.removeAllButtonActions();
-
-        layout.buttons.play.events.onInputUp.dispatch({}, {});
-        layout.buttons.pause.events.onInputUp.dispatch({}, {});
-        layout.buttons.exit.events.onInputUp.dispatch({}, {});
-
-        assert(playAction.callCount === 0);
-        assert(pauseAction.callCount === 0);
-        assert(exitAction.callCount === 0);
-    });
-
     it("Should add buttons using the correct tab order", () => {
         const rndOrder = [
             "exit",

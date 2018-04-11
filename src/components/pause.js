@@ -48,7 +48,7 @@ export function create({ game }) {
             "pausePlay",
             "pauseRestart",
             "howToPlay",
-        ], channel);
+        ]);
         moveButtonsToTop(gelLayout);
         return gelLayout;
     }
