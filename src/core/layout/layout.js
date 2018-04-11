@@ -49,10 +49,6 @@ export class Layout {
         this.buttons[button].onInputUp.add(callback, this);
     }
 
-    destroy() {
-        this.root.destroy();
-    }
-
     addToGroup(groupName, item, position) {
         this._groups[groupName].addToGroup(item, position);
     }

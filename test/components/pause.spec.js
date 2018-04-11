@@ -85,7 +85,14 @@ describe("Pause Overlay", () => {
         it("adds GEL buttons", () => {
             Pause.create({ game: mockGame });
             const actualAddLayoutCall = mockScreen.layoutFactory.addLayout.getCall(0);
-            const expectedAddLayoutCall = ["home", "audioOff", "settings", "play", "restart", "howToPlay"];
+            const expectedAddLayoutCall = [
+                "pauseHome",
+                "audioOff",
+                "settings",
+                "pausePlay",
+                "pauseRestart",
+                "howToPlay",
+            ];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
         });
 
@@ -115,11 +122,11 @@ describe("Pause Overlay", () => {
 
         it("adds signal subscriptions to all the GEL buttons", () => {
             assert.equal(signalSpy.callCount, 3);
-            assert.equal(signalSpy.getCall(0).args[0].channel, "gel-buttons");
+            assert.equal(signalSpy.getCall(0).args[0].channel, "pause-gel-buttons");
             assert.equal(signalSpy.getCall(0).args[0].name, "play");
-            assert.equal(signalSpy.getCall(1).args[0].channel, "gel-buttons");
+            assert.equal(signalSpy.getCall(1).args[0].channel, "pause-gel-buttons");
             assert.equal(signalSpy.getCall(1).args[0].name, "restart");
-            assert.equal(signalSpy.getCall(2).args[0].channel, "gel-buttons");
+            assert.equal(signalSpy.getCall(2).args[0].channel, "pause-gel-buttons");
             assert.equal(signalSpy.getCall(2).args[0].name, "home");
         });
 
@@ -130,6 +137,13 @@ describe("Pause Overlay", () => {
             assert.isFalse(mockGame.paused);
             assert.isTrue(mockGame.sound.resumeAll.called);
             assert.deepEqual(mockScreen.context.popupScreens, []);
+        });
+
+        it("removes subscribed-to channel for this overlay", () => {
+            const signalBusRemoveChannel = sandbox.spy(signal.bus, "removeChannel");
+            const destroy = signalSpy.getCall(0).args[0].callback;
+            destroy();
+            sinon.assert.calledOnce(signalBusRemoveChannel.withArgs("pause-gel-buttons"));
         });
 
         it("destroys the pause screen when the restart button is clicked", () => {

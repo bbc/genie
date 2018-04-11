@@ -52,7 +52,7 @@ describe("Layout - Button Factory", () => {
             expect(actualParams[1]).to.equal(0);
             expect(actualParams[2]).to.equal(0);
             expect(actualParams[3]).to.equal(expectedIsMobile);
-            expect(actualParams[4]).to.equal(expectedKey);
+            expect(actualParams[4]).to.equal(config);
         });
 
         // Temporarily comments this out until accessible button DOM elements can be properly cleared down

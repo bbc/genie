@@ -23,23 +23,27 @@ describe("Layout - Gel Button", () => {
         key: "gel",
         url: assetPacks.gelButtonAssetPack,
     };
+    const config = {
+        key: "play",
+        channel: "gel-buttons",
+    };
 
     beforeEach(mock.installMockGetGmi);
     afterEach(mock.uninstallMockGetGmi);
 
-    it("Should swap mobile and desktop assets when resized.", () => {
+    it("swaps mobile and desktop assets when resized.", () => {
         const updateCallback = sandbox.spy();
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(() => {
-                const btn = new GelButton(game, 0, 0, true, "play");
+                const btn = new GelButton(game, 0, 0, true, config);
 
-                assert(btn.key === "gel/mobile/play.png");
+                assert(btn.key === "gel/mobile/play.png", "is mobile asset");
 
                 btn.resize({ isMobile: false });
-                assert(btn.key === "gel/desktop/play.png");
+                assert(btn.key === "gel/desktop/play.png", "is desktop asset");
 
                 btn.resize({ isMobile: true });
-                assert(btn.key === "gel/mobile/play.png");
+                assert(btn.key === "gel/mobile/play.png", "is mobile asset");
             }),
         );
     });
@@ -65,9 +69,14 @@ describe("Layout - Gel Button", () => {
         it("adds a signal subscription to the play button", () => {
             return runInPreload(game =>
                 loadAssets(game, gamePacks, gelPack, () => {}).then(() => {
-                    const button = new GelButton(game, 0, 0, true, "play");
-                    const expectedArgs = { channel: "gel-buttons", name: "play" };
+                    const button = new GelButton(game, 0, 0, true, config);
+                    const expectedArgs = {
+                        channel: "gel-buttons",
+                        name: "play",
+                        data: { game },
+                    };
                     button.events.onInputUp.dispatch(button, game.input.activePointer, false);
+
                     assert.deepEqual(signalSpy.getCall(0).args[0], expectedArgs);
                 }),
             );

@@ -60,7 +60,6 @@ export function create({ game }) {
     }
 
     function destroy() {
-        console.log("resuming game");
         game.paused = false;
         signal.bus.removeChannel(channel);
         gelButtons.destroy();
@@ -75,7 +74,6 @@ export function create({ game }) {
     }
 
     function goHome() {
-        console.log("going home!!");
         destroy();
         screen.next({ transient: { home: true } });
     }

@@ -26,4 +26,4 @@ const publish = (config, data) => () => {
         name: config.key,
         data,
     });
-}
+};
