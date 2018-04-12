@@ -4,62 +4,70 @@ import * as sinon from "sinon";
 import * as SignalBus from "../../src/core/signal-bus";
 
 describe("Signal Bus", () => {
-    it("Should fire the correct callbacks when a signal is published", () => {
+    let sandbox;
+
+    before(() => {
+        sandbox = sinon.sandbox.create();
+    });
+
+    afterEach(() => {
+        sandbox.restore();
+    });
+
+    it("fires the correct callbacks when a signal on a channel is published", () => {
         const bus = SignalBus.create();
+        const callback = sandbox.spy();
 
-        const callback = sinon.spy();
+        bus.subscribe({ callback, channel: "testChannel", name: "testSignal1" });
 
-        bus.subscribe({ callback, name: "testSignal1" });
-
-        bus.publish({ name: "testSignal1" });
-        bus.publish({ name: "testSignal1", data: 12345 });
-        bus.publish({ name: "testSignal1", data: { exampleData: "abcdef" } });
+        bus.publish({ channel: "testChannel", name: "testSignal1" });
+        bus.publish({ channel: "testChannel", name: "testSignal1", data: 12345 });
+        bus.publish({ channel: "testChannel", name: "testSignal1", data: { exampleData: "abcdef" } });
 
         assert(callback.callCount === 3);
     });
 
-    it("Should remove signals correctly", () => {
+    it("removes signals from a channel correctly", () => {
         const bus = SignalBus.create();
-        const callback = sinon.spy();
+        const callback = sandbox.spy();
 
-        bus.subscribe({ callback, name: "testSignal1" });
-        bus.remove("testSignal1");
-        bus.publish({ name: "testSignal1" });
-        assert(callback.callCount === 0, "signal should be removed");
+        bus.subscribe({ callback, channel: "testChannel2", name: "testSignal1" });
+        bus.removeChannel("testChannel2");
+        bus.publish({ channel: "testChannel2", name: "testSignal1" });
+        assert(callback.callCount === 0, "channel should be removed");
     });
 
-    it("Should pass data from publisher to subscribers", () => {
+    it("passes data from publisher to subscribers", () => {
         const bus = SignalBus.create();
-        let received;
-        let data;
+        const expectedData1 = { a: 1, b: 2, c: 3 };
+        const expectedData2 = { BBC: [1, 2, 3, 4, 5] };
+        const callbackSpy = sandbox.spy();
 
-        bus.subscribe({ callback: newData => (received = newData), name: "testSignal" });
+        bus.subscribe({ callback: callbackSpy, channel: "someChannel", name: "someSignal" });
 
-        data = { a: 1, b: 2, c: 3 };
-        bus.publish({ name: "testSignal", data });
-        assert(data === received);
+        bus.publish({ channel: "someChannel", name: "someSignal", data: expectedData1 });
+        assert.deepEqual(callbackSpy.getCall(0).args[0], expectedData1);
 
-        data = { BBC: [1, 2, 3, 4, 5] };
-        bus.publish({ name: "testSignal", data });
-        assert(data === received);
+        bus.publish({ channel: "someChannel", name: "someSignal", data: expectedData2 });
+        assert.deepEqual(callbackSpy.getCall(1).args[0], expectedData2);
     });
 
-    describe("#clearAll", () => {
-        it("clears all signals active on the bus", () => {
-            const bus = SignalBus.create();
-            const callback = sinon.spy();
+    it("removes all signals only on a given channel", () => {
+        const bus = SignalBus.create();
+        const channelCallback = sandbox.spy();
+        const otherChannelCallback = sandbox.spy();
 
-            bus.subscribe({ callback, name: "testSignal1" });
-            bus.subscribe({ callback, name: "testSignal2" });
-            bus.subscribe({ callback, name: "testSignal3" });
+        bus.subscribe({ callback: channelCallback, channel: "channelName", name: "testSignal1" });
+        bus.subscribe({ callback: otherChannelCallback, channel: "otherChannelName", name: "testSignal2" });
+        bus.subscribe({ callback: channelCallback, channel: "channelName", name: "testSignal3" });
 
-            bus.clearAll();
+        bus.removeChannel("channelName");
 
-            bus.publish({ name: "testSignal1" });
-            bus.publish({ name: "testSignal2" });
-            bus.publish({ name: "testSignal3" });
+        bus.publish({ channel: "channelName", name: "testSignal1" });
+        bus.publish({ channel: "otherChannelName", name: "testSignal2" });
+        bus.publish({ channel: "channelName", name: "testSignal3" });
 
-            assert(callback.callCount === 0, "all signals should be removed");
-        });
+        assert(channelCallback.callCount === 0, "all signals should be removed from channel");
+        assert(otherChannelCallback.callCount === 1, "no signals should be removed from other channel");
     });
 });

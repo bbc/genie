@@ -16,7 +16,8 @@ import * as signal from "../../core/signal-bus.js";
 const defaultAction = config => {
     if (config.action) {
         signal.bus.subscribe({
-            name: "GEL-" + config.key,
+            channel: "gel-buttons",
+            name: config.key,
             callback: config.action,
         });
     }
@@ -32,7 +33,7 @@ const defaultAction = config => {
  * @param {Object} config - Gel configuration for this button
  */
 const createButton = fp.curry((game, isMobile, config, x = 0, y = 0) => {
-    const btn = new GelButton(game, x, y, isMobile, config.key); //Instantiate then return or TSC loses non-curried args
+    const btn = new GelButton(game, x, y, isMobile, config); //Instantiate then return or TSC loses non-curried args
 
     defaultAction(config);
     // Temporarily comments this out until accessible button DOM elements can be properly cleared down
