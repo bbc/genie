@@ -30,23 +30,18 @@ export class Results extends Screen {
         createTestHarnessDisplay(this.game, this.context, this.layoutFactory);
 
         signal.bus.subscribe({
-            name: "GEL-continue",
+            name: "continue",
+            channel: "gel-buttons",
             callback: () => {
                 this.next();
             },
         });
 
         signal.bus.subscribe({
-            name: "GEL-restart",
+            name: "restart",
+            channel: "gel-buttons",
             callback: () => {
                 this.next({ transient: { game: true } });
-            },
-        });
-
-        signal.bus.subscribe({
-            name: "GEL-pause",
-            callback: () => {
-                Pause.create(this.game, this);
             },
         });
     }

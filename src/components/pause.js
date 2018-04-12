@@ -13,6 +13,9 @@ import * as signal from "../core/signal-bus.js";
  */
 export function create({ game }) {
     const screen = game.state.states[game.state.current];
+    const backgroundPriorityID = 999;
+    const priorityID = backgroundPriorityID + screen.context.popupScreens.length;
+    const channel = "pause-gel-buttons";
     pauseGame();
 
     const background = addBackground();
@@ -29,23 +32,24 @@ export function create({ game }) {
     function addBackground() {
         const keyLookup = screen.layoutFactory.keyLookups.pause;
         const backgroundImage = game.add.image(0, 0, keyLookup.pauseBackground);
+        backgroundImage.inputEnabled = true;
+        backgroundImage.input.priorityID = priorityID - 1;
         return screen.layoutFactory.addToBackground(backgroundImage);
     }
 
     function moveButtonsToTop(gelLayout) {
-        const priorityID = 999;
         fp.forOwn(button => {
-            button.input.priorityID = priorityID + screen.context.popupScreens.length;
+            button.input.priorityID = priorityID;
         }, gelLayout.buttons);
     }
 
     function addGelButtons() {
         const gelLayout = screen.layoutFactory.addLayout([
-            "home",
+            "pauseHome",
             "audioOff",
             "settings",
-            "play",
-            "restart",
+            "pausePlay",
+            "pauseRestart",
             "howToPlay",
         ]);
         moveButtonsToTop(gelLayout);
@@ -53,15 +57,16 @@ export function create({ game }) {
     }
 
     function addSignals() {
-        signal.bus.subscribe({ name: "GEL-play", callback: destroy });
-        signal.bus.subscribe({ name: "GEL-restart", callback: restartGame });
-        signal.bus.subscribe({ name: "GEL-home", callback: goHome });
+        signal.bus.subscribe({ channel, name: "play", callback: destroy });
+        signal.bus.subscribe({ channel, name: "restart", callback: restartGame });
+        signal.bus.subscribe({ channel, name: "home", callback: goHome });
     }
 
     function destroy() {
+        game.paused = false;
+        signal.bus.removeChannel(channel);
         gelButtons.destroy();
         background.destroy();
-        game.paused = false;
         game.sound.resumeAll();
         screen.context.popupScreens = fp.pull("pause", screen.context.popupScreens);
     }

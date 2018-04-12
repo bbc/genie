@@ -52,7 +52,7 @@ describe("Layout - Button Factory", () => {
             expect(actualParams[1]).to.equal(0);
             expect(actualParams[2]).to.equal(0);
             expect(actualParams[3]).to.equal(expectedIsMobile);
-            expect(actualParams[4]).to.equal(expectedKey);
+            expect(actualParams[4]).to.equal(config);
         });
 
         // Temporarily comments this out until accessible button DOM elements can be properly cleared down
@@ -66,16 +66,16 @@ describe("Layout - Button Factory", () => {
                 key: "play",
                 action: defaultAction,
             };
-            signal.bus.clearAll();
+            signal.bus.removeChannel("gel-buttons");
 
             buttonFactory.createButton(expectedIsMobile, config);
 
-            signal.bus.publish({ name: "GEL-play" });
-            signal.bus.publish({ name: "GEL-play" });
+            signal.bus.publish({ channel: "gel-buttons", name: "play" });
+            signal.bus.publish({ channel: "gel-buttons", name: "play" });
 
             expect(defaultAction.callCount).to.equal(2);
 
-            signal.bus.clearAll();
+            signal.bus.removeChannel("gel-buttons");
         });
     });
 });

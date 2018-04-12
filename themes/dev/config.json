@@ -38,7 +38,7 @@
                 "style": {
                     "font": "bold 40px 'Arial'",
                     "align": "center",
-                    "fill": "#FFF",
+                    "fill": "#6A6A6A",
                     "boundsAlignH": "center",
                     "fontWeight": "bold"
                 }
@@ -47,7 +47,7 @@
                 "style": {
                     "font": "bold 40px 'Arial'",
                     "align": "center",
-                    "fill": "#FFF",
+                    "fill": "#6A6A6A",
                     "boundsAlignH": "center",
                     "fontWeight": "bold"
                 }
