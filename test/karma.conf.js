@@ -7,12 +7,7 @@ module.exports = function(config) {
     config.set({
         basePath: "..",
         frameworks: ["mocha"],
-        files: [
-            "node_modules/phaser-ce/build/phaser.min.js",
-            "test/test-context.js",
-            { pattern: "src/**/*.js", included: false, served: false, watched: true },
-            { pattern: "test/**/*.spec.js", included: false, served: false, watched: false },
-        ],
+        files: ["node_modules/phaser-ce/build/phaser.min.js", "test/test-context.js"],
         preprocessors: {
             "test/test-context.js": ["webpack"],
         },
