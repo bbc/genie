@@ -21,7 +21,7 @@ describe("Select Screen", () => {
     const barneySprite = { visible: "" };
     const jamillahSprite = { visible: "" };
     const CENTER_X = 0;
-    const CHAR_Y_POSITION = 0; // <- this leads to confusing errors - maybe some tests are too tightly knitted to the implementation
+    const CHAR_Y_POSITION = 0;
     const CHAR_TEXT_Y_POSITION = 170;
 
     beforeEach(() => {
@@ -102,8 +102,6 @@ describe("Select Screen", () => {
             sinon.assert.calledWith(layoutHarnessSpy, mockGame, mockContext, selectScreen.layoutFactory);
         });
 
-        // TODO: Change this to be like the next test or leave it be? Depends on whether we would ever add a
-        // sprite that we do not mention in keyLookups.
         it("creates sprites for each choice", () => {
             assert(gameSpriteStub.callCount === 3, "game sprites should be added 3 times");
             assert.deepEqual(gameSpriteStub.getCall(0).args, [0, 0, "dangermouse"]);
@@ -123,8 +121,6 @@ describe("Select Screen", () => {
         });
     });
 
-    // TODO: Carry on refactoring from here!
-
     describe("signals", () => {
         let signalSubscribeSpy;
 
@@ -136,7 +132,6 @@ describe("Select Screen", () => {
 
         it("adds signal subscriptions to all the buttons", () => {
             assert(signalSubscribeSpy.callCount === 4, "signals should be subscribed 4 times");
-<<<<<<< HEAD
             assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].channel, "gel-buttons");
             assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].name, "exit");
             assert.deepEqual(signalSubscribeSpy.getCall(1).args[0].channel, "gel-buttons");
@@ -145,12 +140,6 @@ describe("Select Screen", () => {
             assert.deepEqual(signalSubscribeSpy.getCall(2).args[0].name, "next");
             assert.deepEqual(signalSubscribeSpy.getCall(3).args[0].channel, "gel-buttons");
             assert.deepEqual(signalSubscribeSpy.getCall(3).args[0].name, "continue");
-=======
-            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].name, "GEL-home");
-            assert.deepEqual(signalSubscribeSpy.getCall(1).args[0].name, "GEL-previous");
-            assert.deepEqual(signalSubscribeSpy.getCall(2).args[0].name, "GEL-next");
-            assert.deepEqual(signalSubscribeSpy.getCall(3).args[0].name, "GEL-continue");
->>>>>>> [CGPROD-553] Update tests and refactor a them a bit
         });
 
         it("adds a callback for the exit button", () => {
