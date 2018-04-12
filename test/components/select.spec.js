@@ -17,9 +17,9 @@ describe("Select Screen", () => {
     let addLayoutSpy;
 
     const sandbox = sinon.sandbox.create();
-    const dangerMouseSprite = { visible: "" };
-    const barneySprite = { visible: "" };
-    const jamillahSprite = { visible: "" };
+    const characterOneSprite = { visible: "" };
+    const characterTwoSprite = { visible: "" };
+    const characterThreeSprite = { visible: "" };
     const CENTER_X = 0;
     const CHAR_Y_POSITION = 0;
     const CHAR_TEXT_Y_POSITION = 170;
@@ -32,9 +32,9 @@ describe("Select Screen", () => {
         gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
         gameSpriteStub = sandbox.stub();
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "dangermouse").returns(dangerMouseSprite);
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "barney").returns(barneySprite);
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "jamillah").returns(jamillahSprite);
+        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "character1").returns(characterOneSprite);
+        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "character2").returns(characterTwoSprite);
+        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "character3").returns(characterThreeSprite);
         addLayoutSpy = sandbox.spy();
 
         mockGame = {
@@ -50,7 +50,7 @@ describe("Select Screen", () => {
             config: {
                 theme: {
                     characterSelect: {
-                        choices: [{ main: "dangermouse" }, { main: "barney" }, { main: "jamillah" }],
+                        choices: [{ main: "character1" }, { main: "character2" }, { main: "character3" }],
                     },
                 },
             },
@@ -65,9 +65,9 @@ describe("Select Screen", () => {
                 characterSelect: {
                     title: "titleImage",
                     background: "backgroundImage",
-                    dangermouse: "dangermouse",
-                    barney: "barney",
-                    jamillah: "jamillah",
+                    character1: "character1",
+                    character2: "character2",
+                    character3: "character3",
                 },
             },
         };
@@ -111,19 +111,23 @@ describe("Select Screen", () => {
 
         it("creates sprites for each choice", () => {
             assert(gameSpriteStub.callCount === 3, "game sprites should be added 3 times");
-            assert.deepEqual(gameSpriteStub.getCall(0).args, [0, 0, "dangermouse"]);
-            assert.deepEqual(gameSpriteStub.getCall(1).args, [0, 0, "barney"]);
-            assert.deepEqual(gameSpriteStub.getCall(2).args, [0, 0, "jamillah"]);
+            assert.deepEqual(gameSpriteStub.getCall(0).args, [0, 0, "character1"]);
+            assert.deepEqual(gameSpriteStub.getCall(1).args, [0, 0, "character2"]);
+            assert.deepEqual(gameSpriteStub.getCall(2).args, [0, 0, "character3"]);
         });
 
         it("adds each sprite to the background", () => {
-            sinon.assert.calledWith(addToBackgroundSpy, dangerMouseSprite);
-            sinon.assert.calledWith(addToBackgroundSpy, barneySprite);
-            sinon.assert.calledWith(addToBackgroundSpy, jamillahSprite);
+            sinon.assert.calledWith(addToBackgroundSpy, characterOneSprite);
+            sinon.assert.calledWith(addToBackgroundSpy, characterTwoSprite);
+            sinon.assert.calledWith(addToBackgroundSpy, characterThreeSprite);
         });
 
         it("adds the choices", () => {
-            const expectedChoices = [{ main: dangerMouseSprite }, { main: barneySprite }, { main: jamillahSprite }];
+            const expectedChoices = [
+                { main: characterOneSprite },
+                { main: characterTwoSprite },
+                { main: characterThreeSprite },
+            ];
             assert.deepEqual(selectScreen.choice, expectedChoices);
         });
     });

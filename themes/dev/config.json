@@ -3,13 +3,13 @@
         "characterSelect": {
             "choices": [
                 {
-                    "main": "dangermouse"
+                    "main": "carousel1"
                 },
                 {
-                    "main": "barney"
+                    "main": "carousel2"
                 },
                 {
-                    "main": "jamillah"
+                    "main": "carousel3"
                 }
             ],
             "leftButton": {
