@@ -49,7 +49,7 @@ export class Loadscreen extends Screen {
     }
 
     startMusic() {
-        const music = this.layoutFactory.keyLookups[this.state.current].backgroundMusic;
+        const music = this.layoutFactory.keyLookups[this.game.state.current].backgroundMusic;
         const backgroundMusic = this.game.add.audio(music);
         backgroundMusic.play();
     }

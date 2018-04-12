@@ -6,6 +6,8 @@ import * as AssetLoader from "../../src/core/asset-loader";
 
 describe("Load Screen", () => {
     let loadScreen;
+    let addAudioStub;
+    let musicPlayStub;
     let mockGame;
     let mockNext;
     let addLookupsSpy;
@@ -18,14 +20,27 @@ describe("Load Screen", () => {
         addLookupsSpy = sandbox.spy();
         assetLoaderCallbackSpy = sandbox.spy();
         assetLoaderSpy = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
-        mockGame = { add: {}, state: { current: "currentState" } };
+        musicPlayStub = sandbox.stub();
+        addAudioStub = sandbox.stub().returns({
+            play: musicPlayStub,
+        });
+        mockGame = {
+            add: {
+                audio: addAudioStub,
+            },
+            state: {
+                current: "currentState",
+            },
+        };
         mockNext = sandbox.spy();
 
         loadScreen = new Loadscreen();
         loadScreen.layoutFactory = {
             addLookups: addLookupsSpy,
             keyLookups: {
-                currentState: "gameState",
+                currentState: {
+                    backgroundMusic: "backgroundMusic",
+                },
                 gel: "thisIsGel",
                 background: "backgroundImage",
                 title: "titleImage",
@@ -89,6 +104,7 @@ describe("Load Screen", () => {
         beforeEach(() => {
             consoleSpy = sandbox.spy(console, "log");
         });
+
         it("logs the progress to the console when qaMode is true", () => {
             loadScreen.context = { qaMode: { active: true } };
             loadScreen.updateLoadProgress("50%");
@@ -105,6 +121,14 @@ describe("Load Screen", () => {
 
             assetLoaderCallbackSpy.args[0][0](expectedKeyLookups);
             expect(consoleSpy.args[0][0]).to.equal(expectedOutput);
+        });
+    });
+
+    describe("Music", () => {
+        it("starts playing the music", () => {
+            loadScreen.startMusic();
+            sinon.assert.calledWith(addAudioStub, "backgroundMusic");
+            sinon.assert.calledOnce(musicPlayStub);
         });
     });
 });
