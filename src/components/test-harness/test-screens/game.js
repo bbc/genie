@@ -1,5 +1,3 @@
-import * as signal from "../../../core/signal-bus.js";
-import * as Pause from "../../../components/pause.js";
 import { Screen } from "../../../core/screen.js";
 
 export class GameTest extends Screen {
@@ -30,26 +28,12 @@ export class GameTest extends Screen {
         [-70, 20, 110].forEach((buttonYPosition, index) => {
             const buttonNumber = index + 1;
             const buttonText = new Phaser.Text(this.game, 0, 5, "Button " + buttonNumber, buttonTextStyle);
-            const buttonState = { transient: { buttonPressed: buttonNumber } };
-            const button = this.game.add.button(0, buttonYPosition, buttonKey, () => this.next(buttonState), this);
+            const resultsData = { transient: { resultsData: buttonNumber } };
+            const button = this.game.add.button(0, buttonYPosition, buttonKey, () => this.next(resultsData), this);
             button.anchor.set(0.5, 0.5);
             button.addChild(buttonText);
             buttonText.anchor.set(0.5, 0.5);
             this.layoutFactory.addToBackground(button);
         }, this);
-
-        signal.bus.subscribe({
-            name: "GEL-home",
-            callback: () => {
-                this.next({ transient: { home: true } });
-            },
-        });
-
-        signal.bus.subscribe({
-            name: "GEL-pause",
-            callback: () => {
-                Pause.create(this.game, this);
-            },
-        });
     }
 }

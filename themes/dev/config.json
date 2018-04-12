@@ -31,6 +31,27 @@
                     "fill": "white"
                 }
             }
+        },
+        "results": {
+            "titleText": {
+                "content": "Results",
+                "style": {
+                    "font": "bold 40px 'Arial'",
+                    "align": "center",
+                    "fill": "#FFF",
+                    "boundsAlignH": "center",
+                    "fontWeight": "bold"
+                }
+            },
+            "resultText": {
+                "style": {
+                    "font": "bold 40px 'Arial'",
+                    "align": "center",
+                    "fill": "#FFF",
+                    "boundsAlignH": "center",
+                    "fontWeight": "bold"
+                }
+            }
         }
     }
 }

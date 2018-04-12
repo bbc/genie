@@ -51,8 +51,8 @@ export function create(game) {
      *
      * @example
      * layoutFactory.create(["home", "restart", "continue", "pause"]);
-     *
      * @param {Array} buttons - Array of standard button names to include. See {@link ./gel-defaults.js} for available names
+     *
      * @memberof module:layout/factory
      * @returns {Layout}
      */

@@ -1,6 +1,5 @@
-const pauseClicked = () => {
-    console.log("pause clicked");
-};
+import * as pause from "../../components/pause.js";
+
 const howToPlayClicked = () => {
     console.log("how to play clicked");
 };
@@ -21,6 +20,10 @@ const config = {
         ariaLabel: "Home",
         order: 1,
         id: "gel-home",
+        action: ({ game }) => {
+            const screen = game.state.states[game.state.current];
+            screen.next({ transient: { home: true } });
+        },
     },
     back: {
         group: "topLeft",
@@ -61,7 +64,7 @@ const config = {
         ariaLabel: "Pause Game",
         order: 6,
         id: "gel-pause",
-        action: pauseClicked,
+        action: pause.create,
     },
     previous: {
         group: "middleLeft",

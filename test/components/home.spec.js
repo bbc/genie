@@ -12,7 +12,7 @@ describe("Home Screen", () => {
     let mockContext;
     let addToBackgroundSpy;
     let addLayoutSpy;
-    let gameImageSpy;
+    let gameImageStub;
     let gameButtonSpy;
 
     const sandbox = sinon.sandbox.create();
@@ -21,14 +21,14 @@ describe("Home Screen", () => {
         layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");
         addToBackgroundSpy = sandbox.spy();
         addLayoutSpy = sandbox.spy();
-        gameImageSpy = sandbox.stub();
-        gameImageSpy.onCall(0).returns("background");
-        gameImageSpy.onCall(1).returns("title");
+        gameImageStub = sandbox.stub();
+        gameImageStub.onCall(0).returns("background");
+        gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
 
         mockGame = {
             add: {
-                image: gameImageSpy,
+                image: gameImageStub,
                 button: gameButtonSpy,
             },
             state: {
@@ -76,7 +76,7 @@ describe("Home Screen", () => {
         beforeEach(() => homeScreen.create());
 
         it("adds a background image", () => {
-            const actualImageCall = gameImageSpy.getCall(0);
+            const actualImageCall = gameImageStub.getCall(0);
             const expectedImageCall = [0, 0, "backgroundImage"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
 
@@ -85,7 +85,7 @@ describe("Home Screen", () => {
         });
 
         it("adds a title image", () => {
-            const actualImageCall = gameImageSpy.getCall(1);
+            const actualImageCall = gameImageStub.getCall(1);
             const expectedImageCall = [0, -150, "titleImage"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
 
@@ -108,21 +108,20 @@ describe("Home Screen", () => {
     });
 
     describe("signals", () => {
-        let signalSpy;
-        let nextSpy;
+        let signalSubscribeSpy;
 
         beforeEach(() => {
-            signalSpy = sandbox.spy(signal.bus, "subscribe");
+            signalSubscribeSpy = sandbox.spy(signal.bus, "subscribe");
             homeScreen.create();
             homeScreen.next = sandbox.spy();
         });
 
         it("adds a signal subscription to the play button", () => {
-            assert.deepEqual(signalSpy.getCall(0).args[0].name, "GEL-play");
+            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].name, "GEL-play");
         });
 
         it("adds a callback for the play button", () => {
-            signalSpy.getCall(0).args[0].callback();
+            signalSubscribeSpy.getCall(0).args[0].callback();
             assert(homeScreen.next.callCount === 1, "next function should have been called once");
         });
     });

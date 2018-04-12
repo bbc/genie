@@ -2,8 +2,8 @@ import fp from "../../lib/lodash/fp/fp.js";
 import * as signal from "../signal-bus.js";
 
 export class GelButton extends Phaser.Button {
-    constructor(game, x, y, metrics, key) {
-        super(game, x, y, assetPath({ key, isMobile: metrics.isMobile }), publish(key), undefined, 1, 0);
+    constructor(game, x, y, isMobile, key) {
+        super(game, x, y, assetPath({ key, isMobile: metrics.isMobile }), publish(key, { game }), undefined, 1, 0);
         this._id = key;
         this.animations.sprite.anchor.setTo(0.5, 0.5);
         this.setHitArea(metrics);
@@ -29,4 +29,9 @@ const paths = [
 
 const signalId = key => "GEL-" + key;
 const assetPath = fp.cond(paths);
-const publish = key => () => signal.bus.publish({ name: signalId(key) });
+
+const publish = (key, data) => () =>
+    signal.bus.publish({
+        name: signalId(key),
+        data,
+    });
