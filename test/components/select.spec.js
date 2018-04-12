@@ -29,6 +29,7 @@ describe("Select Screen", () => {
         addToBackgroundSpy = sandbox.spy();
         gameImageStub = sandbox.stub().returns("sprite");
         gameImageStub.onCall(0).returns("background");
+        gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
         gameSpriteStub = sandbox.stub();
         gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "dangermouse").returns(dangerMouseSprite);
@@ -62,6 +63,7 @@ describe("Select Screen", () => {
             addLayout: addLayoutSpy,
             keyLookups: {
                 characterSelect: {
+                    title: "titleImage",
                     background: "backgroundImage",
                     dangermouse: "dangermouse",
                     barney: "barney",
@@ -91,6 +93,11 @@ describe("Select Screen", () => {
         it("adds a background image", () => {
             sinon.assert.calledWith(gameImageStub, 0, 0, "backgroundImage");
             sinon.assert.calledWith(addToBackgroundSpy, "background");
+        });
+
+        it("adds a title image", () => {
+            sinon.assert.calledWith(gameImageStub, 0, -150, "titleImage");
+            sinon.assert.calledWith(addToBackgroundSpy, "title");
         });
 
         it("adds GEL buttons to layout", () => {
