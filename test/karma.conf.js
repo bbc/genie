@@ -11,7 +11,7 @@ module.exports = function(config) {
             "node_modules/phaser-ce/build/phaser.min.js",
             "test/test-context.js",
             { pattern: "src/**/*.js", included: false, served: false, watched: true },
-            { pattern: "test/**/*.spec.js", included: false, served: false, watched: true },
+            { pattern: "test/**/*.spec.js", included: false, served: false, watched: false },
         ],
         preprocessors: {
             "test/test-context.js": ["webpack"],
