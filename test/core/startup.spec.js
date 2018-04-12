@@ -80,6 +80,8 @@ describe("Startup", () => {
         });
     });
 
+    // Potential leaky spec:
+    // (sometimes fails on Jenkins)
     describe("#onStarted", () => {
         it("adds a config key to context", () => {
             mock.installMockGetGmi({
