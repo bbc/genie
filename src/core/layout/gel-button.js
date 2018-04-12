@@ -2,7 +2,7 @@ import fp from "../../lib/lodash/fp/fp.js";
 import * as signal from "../signal-bus.js";
 
 export class GelButton extends Phaser.Button {
-    constructor(game, x, y, isMobile, key) {
+    constructor(game, x, y, metrics, key) {
         super(game, x, y, assetPath({ key, isMobile: metrics.isMobile }), publish(key, { game }), undefined, 1, 0);
         this._id = key;
         this.animations.sprite.anchor.setTo(0.5, 0.5);
