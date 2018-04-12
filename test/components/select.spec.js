@@ -143,14 +143,26 @@ describe("Select Screen", () => {
 
         it("adds signal subscriptions to all the buttons", () => {
             assert(signalSubscribeSpy.callCount === 4, "signals should be subscribed 4 times");
-            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].channel, "gel-buttons");
-            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].name, "exit");
-            assert.deepEqual(signalSubscribeSpy.getCall(1).args[0].channel, "gel-buttons");
-            assert.deepEqual(signalSubscribeSpy.getCall(1).args[0].name, "previous");
-            assert.deepEqual(signalSubscribeSpy.getCall(2).args[0].channel, "gel-buttons");
-            assert.deepEqual(signalSubscribeSpy.getCall(2).args[0].name, "next");
-            assert.deepEqual(signalSubscribeSpy.getCall(3).args[0].channel, "gel-buttons");
-            assert.deepEqual(signalSubscribeSpy.getCall(3).args[0].name, "continue");
+            sinon.assert.calledWith(signalSubscribeSpy, {
+                channel: "gel-buttons",
+                name: "exit",
+                callback: sinon.match.func,
+            });
+            sinon.assert.calledWith(signalSubscribeSpy, {
+                channel: "gel-buttons",
+                name: "previous",
+                callback: sinon.match.func,
+            });
+            sinon.assert.calledWith(signalSubscribeSpy, {
+                channel: "gel-buttons",
+                name: "next",
+                callback: sinon.match.func,
+            });
+            sinon.assert.calledWith(signalSubscribeSpy, {
+                channel: "gel-buttons",
+                name: "continue",
+                callback: sinon.match.func,
+            });
         });
 
         it("adds a callback for the exit button", () => {
