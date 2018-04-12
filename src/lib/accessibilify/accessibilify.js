@@ -36,7 +36,6 @@ export function accessibilify(button, config) {
     }
 
     function assignEvents() {
-        signal.bus.subscribe({ name: "moved-GEL-" + button._id, callback: setElementPosition });
         game.state.onStateChange.addOnce(teardown);
         button.update = checkBounds;
     }
@@ -47,7 +46,7 @@ export function accessibilify(button, config) {
     }
 
     function checkBounds() {
-        signal.bus.publish({ name: "moved-GEL-" + this._id });
+        setElementPosition();
         if (isOutsideScreen() && accessibleElement.visible()) {
             accessibleElement.hide();
         } else if (!isOutsideScreen() && !accessibleElement.visible()) {
