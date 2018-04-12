@@ -10,6 +10,9 @@ describe("Pause Overlay", () => {
     let mockScreen;
     let mockGelButtons;
     let mockLayoutDestroy;
+    let backgroundImage;
+    let backgroundImageInputEnabled;
+    let backgroundImagePriorityID;
 
     const sandbox = sinon.sandbox.create();
 
@@ -44,7 +47,15 @@ describe("Pause Overlay", () => {
             sound: { pauseAll: sandbox.spy(), resumeAll: sandbox.spy() },
             paused: false,
         };
-        mockGame.add.image.onCall(0).returns("backgroundImage");
+        backgroundImageInputEnabled = sandbox.spy();
+        backgroundImagePriorityID = sandbox.spy();
+        backgroundImage = {
+            inputEnabled: backgroundImageInputEnabled,
+            input: {
+                priorityID: backgroundImagePriorityID,
+            },
+        };
+        mockGame.add.image.onCall(0).returns(backgroundImage);
     });
 
     afterEach(() => {
@@ -79,7 +90,7 @@ describe("Pause Overlay", () => {
             assert.deepEqual(actualImageCall.args, expectedImageCall);
 
             const addToBackgroundCall = mockScreen.layoutFactory.addToBackground.getCall(0);
-            assert.deepEqual(addToBackgroundCall.args, ["backgroundImage"]);
+            assert.deepEqual(addToBackgroundCall.args, [backgroundImage]);
         });
 
         it("adds GEL buttons", () => {
@@ -99,7 +110,7 @@ describe("Pause Overlay", () => {
         it("adds a priority ID to each GEL button", () => {
             Pause.create({ game: mockGame });
             fp.forOwn(gelButton => {
-                assert.equal(gelButton.input.priorityID, 1000);
+                assert.equal(gelButton.input.priorityID, 999);
             }, mockGelButtons.buttons);
         });
 
@@ -107,7 +118,7 @@ describe("Pause Overlay", () => {
             mockScreen.context.popupScreens.push("howToPlay");
             Pause.create({ game: mockGame });
             fp.forOwn(gelButton => {
-                assert.equal(gelButton.input.priorityID, 1001);
+                assert.equal(gelButton.input.priorityID, 1000);
             }, mockGelButtons.buttons);
         });
     });

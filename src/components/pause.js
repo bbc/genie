@@ -13,6 +13,8 @@ import * as signal from "../core/signal-bus.js";
  */
 export function create({ game }) {
     const screen = game.state.states[game.state.current];
+    const backgroundPriorityID = 999;
+    const priorityID = backgroundPriorityID + screen.context.popupScreens.length;
     const channel = "pause-gel-buttons";
     pauseGame();
 
@@ -30,13 +32,14 @@ export function create({ game }) {
     function addBackground() {
         const keyLookup = screen.layoutFactory.keyLookups.pause;
         const backgroundImage = game.add.image(0, 0, keyLookup.pauseBackground);
+        backgroundImage.inputEnabled = true;
+        backgroundImage.input.priorityID = priorityID - 1;
         return screen.layoutFactory.addToBackground(backgroundImage);
     }
 
     function moveButtonsToTop(gelLayout) {
-        const priorityID = 999;
         fp.forOwn(button => {
-            button.input.priorityID = priorityID + screen.context.popupScreens.length;
+            button.input.priorityID = priorityID;
         }, gelLayout.buttons);
     }
 
