@@ -13,14 +13,24 @@ export function accessibleDomElement(options) {
     };
 
     function init() {
+        el.id = options.id;
         el.setAttribute("tabindex", "0");
         el.setAttribute("aria-label", options.ariaLabel);
         el.setAttribute("role", "button");
         el.style.position = "absolute";
         el.style.cursor = "pointer";
+        options.parent.appendChild(el);
+
+        assignEvents();
+    }
+
+    function assignEvents() {
         el.addEventListener("keyup", keyUp);
         el.addEventListener("click", options.onClick);
-        options.parent.appendChild(el);
+        el.addEventListener("mouseover", options.onMouseOver);
+        el.addEventListener("mouseleave", options.onMouseOut);
+        el.addEventListener("focus", options.onMouseOver);
+        el.addEventListener("blur", options.onMouseOut);
     }
 
     function hide() {

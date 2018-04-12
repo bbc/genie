@@ -41,7 +41,6 @@ describe("Layout", () => {
         mockGame.destroy();
     });
 
-    //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
     it("should add the correct number of GEL buttons for a given config", () => {
         const layout1 = new Layout(mockGame, mockScaler, ["achievements"]);
         assert(Object.keys(layout1.buttons).length === 1);
@@ -92,7 +91,6 @@ describe("Layout", () => {
         assert(leftTopGroup.children[2].randomKey === randomKey);
     });
 
-    //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
     it("Should set button callbacks using the 'setAction' method", () => {
         const layout = new Layout(mockGame, mockScaler, ["achievements", "exit", "settings"]);
 
@@ -107,7 +105,6 @@ describe("Layout", () => {
         assert(testAction.callCount === 3);
     });
 
-    //Currently suffers from a "game instanceof Phaser.Game" typecheck issue
     it("Should add buttons using the correct tab order", () => {
         const rndOrder = [
             "exit",
@@ -155,11 +152,19 @@ describe("Layout", () => {
         sinon.assert.calledOnce(resizeFuncSpy);
         assert(groupResetStub.callCount === 9);
     });
+
+    it("removeSignals method removes all signals on this Layout instance", () => {
+        mockScaler.onScaleChange = new Phaser.Signal();
+        const layout = new Layout(mockGame, mockScaler, ["play"]);
+
+        assert(layout.scaler.onScaleChange._bindings.length === 1, "has one signal");
+        layout.removeSignals();
+        assert(layout.scaler.onScaleChange._bindings.length === 0, "has no signals");
+    });
 });
 
 function initialiseGame() {
     return new Promise(resolve => {
-        // tslint:disable-next-line:no-unused-expression
         new Phaser.Game({
             state: new class extends Phaser.State {
                 create() {

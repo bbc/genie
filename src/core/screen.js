@@ -1,5 +1,9 @@
 import _ from "lodash";
 
+/**
+ * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
+ * All the game screens will extend from this class.
+ */
 export class Screen extends Phaser.State {
     get context() {
         return this._context;

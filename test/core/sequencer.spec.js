@@ -3,6 +3,7 @@ import * as sinon from "sinon";
 
 import * as LayoutFactory from "../../src/core/layout/factory";
 import * as Sequencer from "../../src/core/sequencer";
+import * as signal from "../../src/core/signal-bus.js";
 
 describe("Sequencer", () => {
     let sequencer;
@@ -80,6 +81,12 @@ describe("Sequencer", () => {
     });
 
     describe("next function", () => {
+        it("clears down all button signals", () => {
+            const clearAllSignals = sandbox.spy(signal.bus, "clearAll");
+            next();
+            sinon.assert.calledOnce(clearAllSignals);
+        });
+
         it("starts the next screen", () => {
             const expectedNextScreen = mockTransitions[0].nextScreenName();
             next();

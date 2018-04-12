@@ -130,6 +130,21 @@ describe("Layout - Factory", () => {
             layoutFactory.removeAll();
             expect(groupMethods.removeAll.calledWith(true)).to.equal(true);
         });
+
+        it("calls removeSignals from all layouts added", () => {
+            const spyRemoveSignals = sandbox.spy();
+            const mockLayout = {
+                root: sandbox.stub(),
+                removeSignals: spyRemoveSignals,
+            };
+            const layout = sandbox.stub(Layout, "Layout").returns(mockLayout);
+
+            layoutFactory.addLayout(["play", "settings"]);
+            layoutFactory.addLayout(["pause", "next"]);
+            layoutFactory.removeAll();
+
+            sinon.assert.calledTwice(spyRemoveSignals);
+        });
     });
 
     describe("addLookups method", () => {

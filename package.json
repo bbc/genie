@@ -1,6 +1,6 @@
 {
     "name": "genie",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "description": "Genie Modular Game Engine",
     "license": "UNLICENSED",
     "private": true,
@@ -14,7 +14,7 @@
         "expose-loader": "^0.7.5",
         "lodash": "^4.17.4",
         "npm": "^5.7.1",
-        "phaser-ce": "^2.10"
+        "phaser-ce": "2.10.3"
     },
     "devDependencies": {
         "babel-core": "^6.26.0",
@@ -33,6 +33,7 @@
         "eslint-plugin-standard": "^3.0.1",
         "hard-source-webpack-plugin": "^0.6.4",
         "istanbul-instrumenter-loader": "^3.0.0",
+        "jsdoc": "^3.5.5",
         "karma": "^2.0.0",
         "karma-chai": "^0.1.0",
         "karma-chrome-launcher": "^2.2.0",
@@ -57,11 +58,12 @@
         "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js --useLocalIp --host 0.0.0.0",
         "build": "webpack --config build-scripts/webpack.config.js",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
-        "eslint": "eslint . --ignore-pattern lodash",
-        "test": "karma start test/karma.conf.js; npm run eslint",
-        "test:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage; npm run eslint",
+        "eslint": "eslint . --ignore-pattern lodash --ignore-path .gitignore",
+        "test": "karma start test/karma.conf.js && npm run eslint",
+        "test:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage && npm run eslint",
         "test-watch": "karma start test/karma.conf.js --no-single-run --auto-watch",
         "test-watch:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --no-single-run --auto-watch --coverage",
-        "docgen": "node ./node_modules/typedoc/bin/typedoc --name \"BBC Children's Genie API\" --out docs/api ./src"
+        "docs": "open ./docs/api/index.html",
+        "gendocs": "jsdoc -c ./build-scripts/docs/.jsdoc.js"
     }
 }

@@ -1,8 +1,19 @@
+/**
+ * Startup extends `Phaser.State` and creates a new `Phaser.Game`, as well as a new `Sequencer`.
+ * It also instantiates the `Context` object.
+ *
+ * @module core/startup
+ */
 import _ from "lodash";
 
 import * as Sequencer from "../core/sequencer.js";
 import { parseUrlParams } from "../lib/parseUrlParams.js";
 
+/**
+ * @param  {Array} transitions - The transitions JSON object given in main.js.
+ * @param  {Object=} initialAdditionalState - Additional state that is added to the inState context.
+ * @return {Promise} A Promise, which is resolved with the game in onStarted.
+ */
 export function startup(transitions, initialAdditionalState) {
     const gmi = window.getGMI({});
     const urlParams = parseUrlParams(window.location.search);
@@ -17,9 +28,11 @@ export function startup(transitions, initialAdditionalState) {
         multiTexture: false,
         parent: getContainerDiv(gmi),
         state: new Startup(gmi, onStarted),
+        transparent: true, // Fixes silk browser flickering
     };
     // Keep the console tidy:
-    window.PhaserGlobal = { hideBanner: true };
+    window.PhaserGlobal = window.PhaserGlobal || {};
+    window.PhaserGlobal.hideBanner = true;
 
     const game = new Phaser.Game(phaserConfig);
 
@@ -29,12 +42,13 @@ export function startup(transitions, initialAdditionalState) {
         resolvedPromise = resolve;
     });
 
-    function onStarted() {
+    function onStarted(config) {
         // Phaser is now set up and we can use all game properties.
         game.canvas.setAttribute("aria-hidden", "true");
         const context = {
             gmi,
             inState: _.merge({ transient: {}, persistent: {} }, initialAdditionalState),
+            config: config,
             popupScreens: [],
             gameMuted: true,
             qaMode,
@@ -45,6 +59,8 @@ export function startup(transitions, initialAdditionalState) {
         resolvedPromise(game);
     }
 }
+
+const CONFIG_KEY = "config";
 
 class Startup extends Phaser.State {
     constructor(gmi, onStarted) {
@@ -61,12 +77,11 @@ class Startup extends Phaser.State {
         const theme = gmi.embedVars.configPath;
         const configDir = theme.split(/([^/]+$)/, 2)[0];
         this.game.load.path = configDir;
-
-        //this.load.json(CONFIG_KEY, configFile); xxx
+        this.game.load.json(CONFIG_KEY, "config.json");
     }
 
     create() {
-        this._onStarted({} /* this.game.cache.getJSON(CONFIG_KEY) */);
+        this._onStarted(this.game.cache.getJSON(CONFIG_KEY));
     }
 }
 

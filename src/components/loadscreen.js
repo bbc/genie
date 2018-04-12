@@ -1,3 +1,9 @@
+/**
+ * Loadscreen loads in the game's assets.
+ *
+ * @module components/loadscreen
+ */
+
 import _ from "lodash";
 
 import { loadAssets } from "../core/asset-loader.js";

@@ -6,7 +6,7 @@ export class GameTest extends Screen {
     }
 
     preload() {
-        this.gel = this.layoutFactory.keyLookups.gel;
+        this.keyLookup = this.layoutFactory.keyLookups[this.game.state.current];
     }
 
     create() {
@@ -14,6 +14,7 @@ export class GameTest extends Screen {
         const titleText = this.game.add.text(0, -190, "Game goes here", titleStyle);
         titleText.anchor.set(0.5, 0.5);
         this.layoutFactory.addToBackground(titleText);
+        this.layoutFactory.addLayout(["home", "pause", "audioOff", "settings"]);
 
         const buttonKey = this.layoutFactory.keyLookups.home.basicButton;
         const buttonTextStyle = {
@@ -27,8 +28,8 @@ export class GameTest extends Screen {
         [-70, 20, 110].forEach((buttonYPosition, index) => {
             const buttonNumber = index + 1;
             const buttonText = new Phaser.Text(this.game, 0, 5, "Button " + buttonNumber, buttonTextStyle);
-            const buttonState = { transient: { buttonPressed: buttonNumber } };
-            const button = this.game.add.button(0, buttonYPosition, buttonKey, () => this.next(buttonState), this);
+            const resultsData = { transient: { resultsData: buttonNumber } };
+            const button = this.game.add.button(0, buttonYPosition, buttonKey, () => this.next(resultsData), this);
             button.anchor.set(0.5, 0.5);
             button.addChild(buttonText);
             buttonText.anchor.set(0.5, 0.5);
