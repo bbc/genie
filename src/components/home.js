@@ -24,7 +24,8 @@ export class Home extends Screen {
         createTestHarnessDisplay(this.game, this.context, this.layoutFactory);
 
         signal.bus.subscribe({
-            name: "GEL-play",
+            channel: "gel-buttons",
+            name: "play",
             callback: () => {
                 this.next();
             },

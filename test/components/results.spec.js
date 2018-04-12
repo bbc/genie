@@ -148,7 +148,7 @@ describe("Results Screen", () => {
         });
 
         it("adds a signal subscription to the continue button", () => {
-            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].name, "GEL-continue");
+            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].name, "continue");
         });
 
         it("adds a callback for the continue button", () => {
@@ -157,24 +157,13 @@ describe("Results Screen", () => {
         });
 
         it("adds a signal subscription to the restart button", () => {
-            assert.deepEqual(signalSubscribeSpy.getCall(1).args[0].name, "GEL-restart");
+            assert.deepEqual(signalSubscribeSpy.getCall(1).args[0].name, "restart");
         });
 
         it("adds a callback for the restart button", () => {
             signalSubscribeSpy.getCall(1).args[0].callback();
             assert(resultsScreen.next.callCount === 1, "next function should have been called once");
             sinon.assert.calledWith(resultsScreen.next, { transient: { game: true } });
-        });
-
-        it("adds a signal subscription to the pause button", () => {
-            assert.deepEqual(signalSubscribeSpy.getCall(2).args[0].name, "GEL-pause");
-        });
-
-        it("adds a callback for the pause button", () => {
-            const pauseCreateStub = sandbox.stub(Pause, "create");
-            signalSubscribeSpy.getCall(2).args[0].callback();
-            assert(pauseCreateStub.callCount === 1, "Pause.create function should have been called once");
-            sinon.assert.calledWith(pauseCreateStub, mockGame, resultsScreen);
         });
     });
 });

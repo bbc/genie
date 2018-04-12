@@ -46,9 +46,13 @@ const transitions = [
         name: "results",
         state: new Results(),
         nextScreenName: state => {
-            if (state.transient.game) {
+            if (state.transient.game || state.transient.restart) {
                 state.transient.game = false;
+                state.transient.restart = false;
                 return "game";
+            }
+            if (state.transient.home) {
+                state.transient.home = false;
             }
             return "home";
         },
