@@ -36,17 +36,22 @@ export class Loadscreen extends Screen {
             if (this.context.qaMode.active) {
                 dumpToConsole(keyLookups);
             }
+            this.startMusic();
             this.next();
         });
     }
-
-    create() {}
 
     updateLoadProgress(progress) {
         // use progress to update loading bar
         if (this.context.qaMode.active) {
             console.log("Loader progress:", progress); // eslint-disable-line no-console
         }
+    }
+
+    startMusic() {
+        const music = this.layoutFactory.keyLookups[this.state.current].backgroundMusic;
+        const backgroundMusic = this.game.add.audio(music);
+        backgroundMusic.play();
     }
 }
 

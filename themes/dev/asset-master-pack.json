@@ -1,4 +1,12 @@
 {
+    "loadscreen": [
+        {
+            "type": "audio",
+            "key": "backgroundMusic",
+            "urls": ["shared/background-music.mp3", "shared/background-music.ogg"],
+            "autoDecode": true
+        }
+    ],
     "home": [
         {
             "type": "image",
