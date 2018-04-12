@@ -40,12 +40,8 @@ export class Select extends Screen {
         });
 
         signal.bus.subscribe({
-<<<<<<< HEAD
             channel: "gel-buttons",
             name: "exit",
-=======
-            name: "GEL-home",
->>>>>>> [CGPROD-553] Update select screen with a title, remove character names and replace the exit button with the home button
             callback: () => {
                 this.next({ transient: { home: true } });
             },
