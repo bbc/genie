@@ -67,7 +67,7 @@ export function create(game, scaler, buttonIds) {
 
     const destroy = () => {
         root.destroy();
-    }
+    };
 
     return {
         addToGroup,
