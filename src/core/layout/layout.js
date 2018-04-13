@@ -54,6 +54,7 @@ export class Layout {
     }
 
     destroy() {
+        this.removeSignals();
         this.root.destroy();
     }
 
