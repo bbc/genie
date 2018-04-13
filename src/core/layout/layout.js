@@ -1,3 +1,8 @@
+/**
+ * A container for gel buttons with built in resizing and button break points
+ *
+ * @module layout/layout
+ */
 import fp from "../../lib/lodash/fp/fp.js";
 
 import { calculateMetrics } from "./calculate-metrics.js";
@@ -8,36 +13,28 @@ import { groupLayouts } from "./group-layouts.js";
 const getOrder = fp.curry((object, name) => object[name].order);
 const tabSort = fp.sortBy(getOrder(gel));
 
-export class Layout {
-    /**
-     * Creates a new layout. Called by engine.create for each screen component
-     *
-     * @param game - Phaser Game Instance
-     * @param scaler
-     * @param buttons
-     */
-    constructor(game, scaler, buttons) {
-        this.scaler = scaler;
-        this.root = new Phaser.Group(game, game.world, undefined);
+/**
+ * Creates a new layout. Called by layout.factory.addLayout for each screen component
+ *
+ * @param {Phaser.Game} game - Phaser Game Instance
+ * @param {module:scaler} scaler
+ * @param {[string]} buttonIds
+ */
+export function create(game, scaler, buttonIds) {
+    const root = new Phaser.Group(game, game.world, undefined);
 
-        const size = this.scaler.getSize();
-        this._metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
+    const size = scaler.getSize();
+    let metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
 
-        this._groups = fp.zipObject(
-            groupLayouts.map(layout => fp.camelCase([layout.vPos, layout.hPos, layout.arrangeV ? "v" : ""].join(" "))),
-            groupLayouts.map(
-                layout => new Group(game, this.root, layout.vPos, layout.hPos, this._metrics, !!layout.arrangeV),
-            ),
-        );
+    const groups = fp.zipObject(
+        groupLayouts.map(layout => fp.camelCase([layout.vPos, layout.hPos, layout.arrangeV ? "v" : ""].join(" "))),
+        groupLayouts.map(layout => new Group(game, root, layout.vPos, layout.hPos, metrics, !!layout.arrangeV)),
+    );
 
-        this.buttons = fp.zipObject(
-            tabSort(buttons),
-            tabSort(buttons).map(name => this._groups[gel[name].group].addButton(gel[name])),
-        );
-
-        this.scaler.onScaleChange.add((this._resize = this.resize), this);
-        this.resize(size.width, size.height, size.scale, size.stageHeightPx);
-    }
+    const buttons = fp.zipObject(
+        tabSort(buttonIds),
+        tabSort(buttonIds).map(name => groups[gel[name].group].addButton(gel[name])),
+    );
 
     /**
      * Attach a callback to the onInputUp event of a given Gel button
@@ -45,27 +42,37 @@ export class Layout {
      * @param button - gel button identifier
      * @param callback - callback function to attach
      */
-    setAction(button, callback) {
-        this.buttons[button].onInputUp.add(callback, this);
-    }
+    const setAction = (button, callback) => {
+        buttons[button].onInputUp.add(callback, this);
+    };
 
-    addToGroup(groupName, item, position) {
-        this._groups[groupName].addToGroup(item, position);
-    }
+    const addToGroup = (groupName, item, position) => {
+        groups[groupName].addToGroup(item, position);
+    };
 
-    destroy() {
-        this.root.destroy();
-    }
+    const resize = (width, height, scale, stageHeight) => {
+        metrics = calculateMetrics(width, height, scale, stageHeight);
 
-    resize(width, height, scale, stageHeight) {
-        this._metrics = calculateMetrics(width, height, scale, stageHeight);
-
-        if (this._groups) {
-            fp.forOwn(group => group.reset(this._metrics), this._groups);
+        if (groups) {
+            fp.forOwn(group => group.reset(metrics), groups);
         }
-    }
+    };
 
-    removeSignals() {
-        this.scaler.onScaleChange.remove(this._resize, this);
-    }
+    const removeSignals = () => {
+        scaler.onScaleChange.remove(resize);
+    };
+
+    scaler.onScaleChange.add(resize);
+    resize(size.width, size.height, size.scale, size.stageHeightPx);
+
+    return {
+        addToGroup,
+        buttons,
+        destroy: root.destroy,
+        resize,
+        root,
+        removeSignals,
+        setAction,
+        scaler,
+    };
 }
