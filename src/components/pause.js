@@ -45,7 +45,7 @@ export function create({ game }) {
             "audioOff",
             "settings",
             "play",
-            "restart",
+            "replay",
             "howToPlay",
         ]);
         moveButtonsToTop(gelLayout);
@@ -54,7 +54,7 @@ export function create({ game }) {
 
     function addSignals() {
         signal.bus.subscribe({ name: "GEL-play", callback: destroy });
-        signal.bus.subscribe({ name: "GEL-restart", callback: restartGame });
+        signal.bus.subscribe({ name: "GEL-replay", callback: restartGame });
         signal.bus.subscribe({ name: "GEL-home", callback: goHome });
     }
 

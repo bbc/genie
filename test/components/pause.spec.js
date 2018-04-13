@@ -85,7 +85,7 @@ describe("Pause Overlay", () => {
         it("adds GEL buttons", () => {
             Pause.create({ game: mockGame });
             const actualAddLayoutCall = mockScreen.layoutFactory.addLayout.getCall(0);
-            const expectedAddLayoutCall = ["home", "audioOff", "settings", "play", "restart", "howToPlay"];
+            const expectedAddLayoutCall = ["home", "audioOff", "settings", "play", "replay", "howToPlay"];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
         });
 
@@ -116,7 +116,7 @@ describe("Pause Overlay", () => {
         it("adds signal subscriptions to all the GEL buttons", () => {
             assert.equal(signalSpy.callCount, 3);
             assert.equal(signalSpy.getCall(0).args[0].name, "GEL-play");
-            assert.equal(signalSpy.getCall(1).args[0].name, "GEL-restart");
+            assert.equal(signalSpy.getCall(1).args[0].name, "GEL-replay");
             assert.equal(signalSpy.getCall(2).args[0].name, "GEL-home");
         });
 

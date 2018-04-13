@@ -301,6 +301,16 @@
             "frameMax": 1,
             "margin": 0,
             "spacing": 0
+        },
+        {
+            "type": "spritesheet",
+            "key": "replay",
+            "url": "gel/desktop/replay.png",
+            "frameWidth": 128,
+            "frameHeight": 128,
+            "frameMax": 1,
+            "margin": 0,
+            "spacing": 0
         }
     ]
 }

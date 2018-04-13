@@ -74,12 +74,20 @@ const config = {
         order: 7,
         id: "gel-previous",
     },
+    replay: {
+        group: "middleCenter",
+        title: "Replay",
+        key: "replay",
+        ariaLabel: "Replay Game",
+        order: 8,
+        id: "gel-replay",
+    },
     play: {
-        group: "middleCenterV",
+        group: "middleCenter",
         title: "Play",
         key: "play",
         ariaLabel: "Play Game",
-        order: 8,
+        order: 9,
         id: "gel-play",
     },
     next: {
@@ -87,7 +95,7 @@ const config = {
         title: "Next",
         key: "next",
         ariaLabel: "Next Item",
-        order: 9,
+        order: 10,
         id: "gel-next",
     },
     achievements: {
@@ -95,7 +103,7 @@ const config = {
         title: "Achievements",
         key: "achievements",
         ariaLabel: "Your Achievements",
-        order: 10,
+        order: 11,
         id: "gel-achievements",
     },
     restart: {
@@ -103,7 +111,7 @@ const config = {
         title: "Restart",
         key: "restart",
         ariaLabel: "Restart Game",
-        order: 11,
+        order: 12,
         id: "gel-restart",
     },
     continue: {
@@ -111,7 +119,7 @@ const config = {
         title: "Continue",
         key: "continue",
         ariaLabel: "Continue Game",
-        order: 12,
+        order: 13,
         id: "gel-continue",
     },
     howToPlay: {
@@ -119,7 +127,7 @@ const config = {
         title: "How To Play",
         key: "how-to-play",
         ariaLabel: "Game Instructions",
-        order: 13,
+        order: 14,
         id: "gel-how-to-play",
         action: howToPlayClicked,
     },
