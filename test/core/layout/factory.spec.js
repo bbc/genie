@@ -131,11 +131,11 @@ describe("Layout - Factory", () => {
             expect(groupMethods.removeAll.calledWith(true)).to.equal(true);
         });
 
-        it("calls removeSignals from all layouts added", () => {
-            const spyRemoveSignals = sandbox.spy();
+        it("calls destroy from all layouts added", () => {
+            const spyDestroy = sandbox.spy();
             const mockLayout = {
                 root: sandbox.stub(),
-                removeSignals: spyRemoveSignals,
+                destroy: spyDestroy,
             };
             const layout = sandbox.stub(Layout, "Layout").returns(mockLayout);
 
@@ -143,7 +143,7 @@ describe("Layout - Factory", () => {
             layoutFactory.addLayout(["pause", "next"]);
             layoutFactory.removeAll();
 
-            sinon.assert.calledTwice(spyRemoveSignals);
+            sinon.assert.calledTwice(spyDestroy);
         });
     });
 
