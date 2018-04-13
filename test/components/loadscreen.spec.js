@@ -7,7 +7,7 @@ import * as AssetLoader from "../../src/core/asset-loader";
 describe("Load Screen", () => {
     let loadScreen;
     let addAudioStub;
-    let musicPlayStub;
+    let musicLoopStub;
     let mockGame;
     let mockNext;
     let addLookupsSpy;
@@ -20,9 +20,9 @@ describe("Load Screen", () => {
         addLookupsSpy = sandbox.spy();
         assetLoaderCallbackSpy = sandbox.spy();
         assetLoaderSpy = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
-        musicPlayStub = sandbox.stub();
+        musicLoopStub = sandbox.stub();
         addAudioStub = sandbox.stub().returns({
-            play: musicPlayStub,
+            loopFull: musicLoopStub,
         });
         mockGame = {
             add: {
@@ -128,7 +128,7 @@ describe("Load Screen", () => {
         it("starts playing the music", () => {
             loadScreen.startMusic();
             sinon.assert.calledWith(addAudioStub, "backgroundMusic");
-            sinon.assert.calledOnce(musicPlayStub);
+            sinon.assert.calledOnce(musicLoopStub);
         });
     });
 });
