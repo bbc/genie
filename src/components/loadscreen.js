@@ -8,6 +8,7 @@ import * as _ from "../lib/lodash/lodash.js";
 
 import { loadAssets } from "../core/asset-loader.js";
 import { Screen } from "../core/screen.js";
+import { initGameAssets } from "../core/game-assets.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
@@ -36,6 +37,7 @@ export class Loadscreen extends Screen {
             if (this.context.qaMode.active) {
                 dumpToConsole(keyLookups);
             }
+            initGameAssets(this.game);
             this.startMusic();
             this.next();
         });

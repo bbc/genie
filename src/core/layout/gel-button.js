@@ -1,5 +1,6 @@
 import fp from "../../lib/lodash/fp/fp.js";
 import * as signal from "../signal-bus.js";
+import { GameAssets } from "../game-assets.js";
 
 export class GelButton extends Phaser.Button {
     constructor(game, x, y, isMobile, config) {
@@ -21,6 +22,7 @@ const paths = [
 const assetPath = fp.cond(paths);
 
 const publish = (config, data) => () => {
+    GameAssets.sounds.buttonClick.play();
     signal.bus.publish({
         channel: config.channel,
         name: config.key,
