@@ -92,15 +92,15 @@ describe("Layout", () => {
     });
 
     it("Should set button callbacks using the 'setAction' method", () => {
-        const layout = Layout.create(mockGame, mockScaler, ["achievements", "exit", "settings"]);
+        const layout = Layout.create(mockGame, mockScaler, ["achievements", "previous", "settings"]);
 
         const testAction = sandbox.spy();
 
-        layout.setAction("exit", testAction);
+        layout.setAction("previous", testAction);
 
-        layout.buttons.exit.events.onInputUp.dispatch({}, {});
-        layout.buttons.exit.events.onInputUp.dispatch({}, {});
-        layout.buttons.exit.events.onInputUp.dispatch({}, {});
+        layout.buttons.previous.events.onInputUp.dispatch({}, {});
+        layout.buttons.previous.events.onInputUp.dispatch({}, {});
+        layout.buttons.previous.events.onInputUp.dispatch({}, {});
 
         assert(testAction.callCount === 3);
     });

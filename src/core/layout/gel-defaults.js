@@ -1,7 +1,20 @@
 import * as pause from "../../components/pause.js";
 
+let gmi;
+export const initGel = newGmi => {
+    gmi = newGmi;
+};
+
 const howToPlayClicked = () => {
     console.log("how to play clicked");
+};
+
+const callGmi = method => () => {
+    if (gmi) {
+        gmi[method]();
+    } else {
+        throw "gmi has not been initialised in gel-defaults";
+    }
 };
 
 const config = {
@@ -13,6 +26,7 @@ const config = {
         order: 0,
         id: "gel-exit",
         channel: "gel-buttons",
+        action: callGmi("exit"),
     },
     home: {
         group: "topLeft",
@@ -71,6 +85,7 @@ const config = {
         order: 5,
         id: "gel-settings",
         channel: "gel-buttons",
+        action: callGmi("showSettings"),
     },
     pause: {
         group: "topRight",
