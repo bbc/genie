@@ -12,7 +12,7 @@
  * @module core/layout/factory
  */
 import * as Scaler from "../scaler.js";
-import { Layout } from "./layout.js";
+import * as Layout from "./layout.js";
 
 /**
  * Create a new Layout Factory
@@ -54,10 +54,10 @@ export function create(game) {
      * @param {Array} buttons - Array of standard button names to include. See {@link ./gel-defaults.js} for available names
      *
      * @memberof module:layout/factory
-     * @returns {Layout}
+     * @returns {Object}
      */
     function addLayout(buttons) {
-        const layout = new Layout(game, scaler, buttons);
+        const layout = Layout.create(game, scaler, buttons);
 
         addToBackground(layout.root);
 
