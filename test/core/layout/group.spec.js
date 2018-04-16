@@ -75,7 +75,6 @@ describe("Group", () => {
             assert(group.children[1].x === expectedChildTwoXPosition);
         });
 
-
         it("aligns center buttons accordingly", () => {
             vPos = "middle";
             hPos = "center";
@@ -85,7 +84,6 @@ describe("Group", () => {
             assert(group.children[0].y === 0);
             assert(group.children[1].y === 0);
         });
-
 
         describe("when vPos is middle and hPos is center", () => {
             it("sets group position correctly", () => {

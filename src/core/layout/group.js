@@ -36,7 +36,6 @@ const getGroupY = sizes =>
 const getGroupYCenter = sizes =>
     vertical[sizes.pos.v](0, sizes.metrics.borderPad * sizes.scale, sizes.metrics.verticals[sizes.pos.v]);
 
-
 export class Group extends Phaser.Group {
     constructor(game, parent, vPos, hPos, metrics, isVertical) {
         super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
@@ -49,8 +48,7 @@ export class Group extends Phaser.Group {
         this._buttonFactory = ButtonFactory.create(game);
         if (this._hPos == "center" && this._vPos == "middle") {
             this._setGroupPosition = fp.flow(this.getSizes, getGroupPositionCenter, this.setPos);
-        } 
-        else {
+        } else {
             this._setGroupPosition = fp.flow(this.getSizes, getGroupPosition, this.setPos);
         }
         this._setGroupPosition();
@@ -106,13 +104,11 @@ export class Group extends Phaser.Group {
             if (this._isVertical) {
                 child.x = halfWidth;
                 pos.y += child.height + this._metrics.buttonPad;
-            }
-            else if (this._hPos == "center" && this._vPos == "middle") {
+            } else if (this._hPos == "center" && this._vPos == "middle") {
                 child.y = 0;
                 child.x = pos.x + child.width / 2;
                 pos.x += child.width + this._metrics.buttonPad;
-            } 
-            else {
+            } else {
                 child.x = pos.x + child.width / 2;
                 pos.x += child.width + this._metrics.buttonPad;
             }
