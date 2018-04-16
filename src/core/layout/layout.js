@@ -66,6 +66,7 @@ export function create(game, scaler, buttonIds) {
     resize(size.width, size.height, size.scale, size.stageHeightPx);
 
     const destroy = () => {
+        removeSignals();
         root.destroy();
     };
 
