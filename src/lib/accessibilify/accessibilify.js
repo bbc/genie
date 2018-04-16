@@ -29,9 +29,14 @@ export function accessibilify(button, config) {
         });
     }
 
-    function setElementPosition() {
+    function getHitAreaBounds() {
         const bounds = button.hitArea.clone();
         bounds.topLeft = button.toGlobal(bounds.topLeft);
+        return bounds;
+    }
+
+    function setElementPosition() {
+        const bounds = getHitAreaBounds();
         accessibleElement.position(bounds);
     }
 
@@ -55,9 +60,7 @@ export function accessibilify(button, config) {
     }
 
     function isOutsideScreen() {
-        const bounds = button.hitArea.clone();
-        bounds.topLeft = button.toGlobal(bounds.topLeft);
-
+        const bounds = getHitAreaBounds();
         return bounds.top > game.height || bounds.bottom < 0 || bounds.left > game.width || bounds.right < 0;
     }
 
