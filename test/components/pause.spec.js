@@ -67,17 +67,18 @@ describe("Pause Overlay", () => {
             Pause.create({ game: mockGame });
         });
 
-        it("pauses the sound", () => {
-            const pauseSpy = mockGame.sound.pauseAll;
-            assert.isTrue(pauseSpy.called);
+        it("adds pause to the popup screens", done => {
+            setTimeout(() => {
+                assert.deepEqual(mockScreen.context.popupScreens, ["pause"]);
+                done();
+            }, 1000);
         });
 
-        it("adds pause to the popup screens", () => {
-            assert.deepEqual(mockScreen.context.popupScreens, ["pause"]);
-        });
-
-        it("pauses the game", () => {
-            assert.isTrue(mockGame.paused);
+        it("pauses the game", done => {
+            setTimeout(() => {
+                assert.isTrue(mockGame.paused);
+                done();
+            }, 1000);
         });
     });
 

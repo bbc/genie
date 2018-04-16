@@ -24,9 +24,14 @@ export function create({ game }) {
     addSignals();
 
     function pauseGame() {
-        game.sound.pauseAll();
-        screen.context.popupScreens.push("pause");
-        game.paused = true;
+        // pause after a tiny delay so the button click sound can play
+        setTimeout(() => {
+            game.paused = true;
+            screen.context.popupScreens.push("pause");
+        }, 100);
+
+        //screen.context.popupScreens.push("pause");
+        //game.paused = true;
     }
 
     function addBackground() {
