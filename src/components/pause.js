@@ -29,9 +29,6 @@ export function create({ game }) {
             game.paused = true;
             screen.context.popupScreens.push("pause");
         }, 100);
-
-        //screen.context.popupScreens.push("pause");
-        //game.paused = true;
     }
 
     function addBackground() {
