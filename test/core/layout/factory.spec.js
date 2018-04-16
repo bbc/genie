@@ -104,7 +104,7 @@ describe("Layout - Factory", () => {
         let layoutStub;
 
         beforeEach(() => {
-            layoutStub = sandbox.stub(Layout, "Layout").returns(mockRoot);
+            layoutStub = sandbox.stub(Layout, "create").returns(mockRoot);
         });
 
         it("creates a new layout with correct params", () => {
@@ -137,7 +137,7 @@ describe("Layout - Factory", () => {
                 root: sandbox.stub(),
                 removeSignals: spyRemoveSignals,
             };
-            const layout = sandbox.stub(Layout, "Layout").returns(mockLayout);
+            sandbox.stub(Layout, "create").returns(mockLayout);
 
             layoutFactory.addLayout(["play", "settings"]);
             layoutFactory.addLayout(["pause", "next"]);
