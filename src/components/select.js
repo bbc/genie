@@ -43,24 +43,28 @@ export class Select extends Screen {
         });
 
         signal.bus.subscribe({
-            name: "GEL-exit",
+            channel: "gel-buttons",
+            name: "exit",
             callback: () => {
                 this.next({ transient: { home: true } });
             },
         });
 
         signal.bus.subscribe({
-            name: "GEL-previous",
+            channel: "gel-buttons",
+            name: "previous",
             callback: this.leftButton.bind(this),
         });
 
         signal.bus.subscribe({
-            name: "GEL-next",
+            channel: "gel-buttons",
+            name: "next",
             callback: this.rightButton.bind(this),
         });
 
         signal.bus.subscribe({
-            name: "GEL-continue",
+            channel: "gel-buttons",
+            name: "continue",
             callback: this.startGame.bind(this),
         });
     }

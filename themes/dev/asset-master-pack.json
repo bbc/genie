@@ -29,7 +29,7 @@
         {
             "type": "image",
             "key": "dangermouse",
-            "url": "options/dangermouse_sel.png",
+            "url": "options/carousel_1.png",
             "overwrite": false
         },
         {
@@ -41,7 +41,7 @@
         {
             "type": "image",
             "key": "barney",
-            "url": "options/barney_sel.png",
+            "url": "options/carousel_2.png",
             "overwrite": false
         },
         {
@@ -53,7 +53,7 @@
         {
             "type": "image",
             "key": "jamillah",
-            "url": "options/jamillah_sel.png",
+            "url": "options/carousel_3.png",
             "overwrite": false
         },
         {

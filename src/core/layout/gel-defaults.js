@@ -12,6 +12,7 @@ const config = {
         ariaLabel: "Exit Game",
         order: 0,
         id: "gel-exit",
+        channel: "gel-buttons",
     },
     home: {
         group: "topLeft",
@@ -20,10 +21,20 @@ const config = {
         ariaLabel: "Home",
         order: 1,
         id: "gel-home",
+        channel: "gel-buttons",
         action: ({ game }) => {
             const screen = game.state.states[game.state.current];
             screen.next({ transient: { home: true } });
         },
+    },
+    pauseHome: {
+        group: "topLeft",
+        title: "Home",
+        key: "home",
+        ariaLabel: "Home",
+        order: 1,
+        id: "gel-home",
+        channel: "pause-gel-buttons",
     },
     back: {
         group: "topLeft",
@@ -32,6 +43,7 @@ const config = {
         ariaLabel: "Back",
         order: 2,
         id: "gel-back",
+        channel: "gel-buttons",
     },
     audioOff: {
         group: "topRight",
@@ -40,6 +52,7 @@ const config = {
         ariaLabel: "Disable Sound",
         order: 3,
         id: "gel-audio-off",
+        channel: "gel-buttons",
     },
     audioOn: {
         group: "topRight",
@@ -48,6 +61,7 @@ const config = {
         ariaLabel: "Enable Sound",
         order: 4,
         id: "gel-audio-on",
+        channel: "gel-buttons",
     },
     settings: {
         group: "topRight",
@@ -56,6 +70,7 @@ const config = {
         ariaLabel: "Game Settings",
         order: 5,
         id: "gel-settings",
+        channel: "gel-buttons",
     },
     pause: {
         group: "topRight",
@@ -65,6 +80,7 @@ const config = {
         order: 6,
         id: "gel-pause",
         action: pause.create,
+        channel: "gel-buttons",
     },
     previous: {
         group: "middleLeft",
@@ -73,6 +89,7 @@ const config = {
         ariaLabel: "Previous Item",
         order: 7,
         id: "gel-previous",
+        channel: "gel-buttons",
     },
     replay: {
         group: "middleCenter",
@@ -82,6 +99,15 @@ const config = {
         order: 8,
         id: "gel-replay",
     },
+    pauseRestart: {
+        group: "middleCenter",
+        title: "Replay",
+        key: "replay",
+        ariaLabel: "Replay Game",
+        order: 8,
+        id: "gel-replay",
+        channel: "pause-gel-buttons",
+    },
     play: {
         group: "middleCenter",
         title: "Play",
@@ -89,6 +115,16 @@ const config = {
         ariaLabel: "Play Game",
         order: 9,
         id: "gel-play",
+        channel: "gel-buttons",
+    },
+    pausePlay: {
+        group: "middleCenter",
+        title: "Play",
+        key: "play",
+        ariaLabel: "Play Game",
+        order: 8,
+        id: "gel-play",
+        channel: "pause-gel-buttons",
     },
     next: {
         group: "middleRight",
@@ -97,6 +133,7 @@ const config = {
         ariaLabel: "Next Item",
         order: 10,
         id: "gel-next",
+        channel: "gel-buttons",
     },
     achievements: {
         group: "bottomLeft",
@@ -105,6 +142,7 @@ const config = {
         ariaLabel: "Your Achievements",
         order: 11,
         id: "gel-achievements",
+        channel: "gel-buttons",
     },
     restart: {
         group: "bottomCenter",
@@ -113,6 +151,7 @@ const config = {
         ariaLabel: "Restart Game",
         order: 12,
         id: "gel-restart",
+        channel: "gel-buttons",
     },
     continue: {
         group: "bottomCenter",
@@ -121,6 +160,7 @@ const config = {
         ariaLabel: "Continue Game",
         order: 13,
         id: "gel-continue",
+        channel: "gel-buttons",
     },
     howToPlay: {
         group: "bottomRight",
@@ -130,6 +170,7 @@ const config = {
         order: 14,
         id: "gel-how-to-play",
         action: howToPlayClicked,
+        channel: "gel-buttons",
     },
 };
 

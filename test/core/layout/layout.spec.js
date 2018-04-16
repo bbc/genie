@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 
-import { Layout } from "../../../src/core/layout/layout";
+import * as Layout from "../../../src/core/layout/layout";
 import { Group } from "../../../src/core/layout/group";
 
 describe("Layout", () => {
@@ -42,13 +42,13 @@ describe("Layout", () => {
     });
 
     it("should add the correct number of GEL buttons for a given config", () => {
-        const layout1 = new Layout(mockGame, mockScaler, ["achievements"]);
+        const layout1 = Layout.create(mockGame, mockScaler, ["achievements"]);
         assert(Object.keys(layout1.buttons).length === 1);
 
-        const layout2 = new Layout(mockGame, mockScaler, ["play", "audioOff", "settings"]);
+        const layout2 = Layout.create(mockGame, mockScaler, ["play", "audioOff", "settings"]);
         assert(Object.keys(layout2.buttons).length === 3);
 
-        const layout3 = new Layout(mockGame, mockScaler, [
+        const layout3 = Layout.create(mockGame, mockScaler, [
             "achievements",
             "exit",
             "howToPlay",
@@ -60,12 +60,12 @@ describe("Layout", () => {
     });
 
     it("Should create 9 Gel Groups", () => {
-        const layout = new Layout(mockGame, mockScaler, []);
+        const layout = Layout.create(mockGame, mockScaler, []);
         assert(layout.root.children.length === 9);
     });
 
     it("Should add items to the correct group", () => {
-        const layout = new Layout(mockGame, mockScaler, []);
+        const layout = Layout.create(mockGame, mockScaler, []);
         const testElement = new Phaser.Sprite(mockGame, 0, 0);
 
         layout.addToGroup("middleRight", testElement);
@@ -77,7 +77,7 @@ describe("Layout", () => {
     });
 
     it("Should correctly insert an item using the index position property", () => {
-        const layout = new Layout(mockGame, mockScaler, []);
+        const layout = Layout.create(mockGame, mockScaler, []);
         const testElement = new Phaser.Sprite(mockGame, 0, 0);
         testElement.randomKey = randomKey;
 
@@ -92,7 +92,7 @@ describe("Layout", () => {
     });
 
     it("Should set button callbacks using the 'setAction' method", () => {
-        const layout = new Layout(mockGame, mockScaler, ["achievements", "exit", "settings"]);
+        const layout = Layout.create(mockGame, mockScaler, ["achievements", "exit", "settings"]);
 
         const testAction = sandbox.spy();
 
@@ -139,23 +139,20 @@ describe("Layout", () => {
             "howToPlay",
         ];
 
-        const layout = new Layout(mockGame, mockScaler, rndOrder);
+        const layout = Layout.create(mockGame, mockScaler, rndOrder);
         assert.deepEqual(Object.keys(layout.buttons), tabOrder);
     });
 
     it("Should reset the groups after they have been added to the layout", () => {
-        const resizeFuncSpy = sandbox.spy(Layout.prototype, "resize");
         const groupResetStub = sandbox.stub(Group.prototype, "reset");
 
-        new Layout(mockGame, mockScaler, []);
-
-        sinon.assert.calledOnce(resizeFuncSpy);
+        Layout.create(mockGame, mockScaler, []);
         assert(groupResetStub.callCount === 9);
     });
 
     it("removeSignals method removes all signals on this Layout instance", () => {
         mockScaler.onScaleChange = new Phaser.Signal();
-        const layout = new Layout(mockGame, mockScaler, ["play"]);
+        const layout = Layout.create(mockGame, mockScaler, ["play"]);
 
         assert(layout.scaler.onScaleChange._bindings.length === 1, "has one signal");
         layout.removeSignals();

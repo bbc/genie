@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { assert } from "chai";
 import * as sinon from "sinon";
 
 import * as LayoutFactory from "../../src/core/layout/factory";
@@ -56,15 +56,15 @@ describe("Sequencer", () => {
     });
 
     it("adds each transition to game state", () => {
-        expect(mockGame.state.add.callCount).to.equal(3);
-        expect(mockGame.state.add.getCall(0).args).to.eql([mockTransitions[0].name, mockTransitions[0].state]);
-        expect(mockGame.state.add.getCall(1).args).to.eql([mockTransitions[1].name, mockTransitions[1].state]);
-        expect(mockGame.state.add.getCall(2).args).to.eql([mockTransitions[2].name, mockTransitions[2].state]);
+        assert.equal(mockGame.state.add.callCount, 3);
+        assert.deepEqual(mockGame.state.add.getCall(0).args, [mockTransitions[0].name, mockTransitions[0].state]);
+        assert.deepEqual(mockGame.state.add.getCall(1).args, [mockTransitions[1].name, mockTransitions[1].state]);
+        assert.deepEqual(mockGame.state.add.getCall(2).args, [mockTransitions[2].name, mockTransitions[2].state]);
     });
 
     it("starts the current screen", () => {
-        expect(mockGame.state.start.callCount).to.equal(1);
-        expect(mockGame.state.start.getCall(0).args).to.eql([
+        assert.equal(mockGame.state.start.callCount, 1);
+        assert.deepEqual(mockGame.state.start.getCall(0).args, [
             mockTransitions[0].name,
             true,
             false,
@@ -76,22 +76,22 @@ describe("Sequencer", () => {
 
     describe("getTransitions Method", () => {
         it("returns transitions", () => {
-            expect(sequencer.getTransitions()).to.eql(mockTransitions);
+            assert.deepEqual(sequencer.getTransitions(), mockTransitions);
         });
     });
 
     describe("next function", () => {
-        it("clears down all button signals", () => {
-            const clearAllSignals = sandbox.spy(signal.bus, "clearAll");
+        it("clears down all gel button signals", () => {
+            const removeChannelSpy = sandbox.spy(signal.bus, "removeChannel");
             next();
-            sinon.assert.calledOnce(clearAllSignals);
+            assert.isTrue(removeChannelSpy.withArgs("gel-buttons").calledOnce);
         });
 
         it("starts the next screen", () => {
             const expectedNextScreen = mockTransitions[0].nextScreenName();
             next();
-            expect(mockGame.state.start.callCount).to.equal(2);
-            expect(mockGame.state.start.getCall(1).args).to.eql([
+            assert.equal(mockGame.state.start.callCount, 2);
+            assert.deepEqual(mockGame.state.start.getCall(1).args, [
                 expectedNextScreen,
                 true,
                 false,
@@ -103,21 +103,21 @@ describe("Sequencer", () => {
 
         it("clears down items from the layout", () => {
             next();
-            expect(mockLayout.removeAll.calledOnce).to.equal(true);
+            assert.isTrue(mockLayout.removeAll.calledOnce);
         });
 
         it("passes the state of the screen to the next screen", () => {
             const stateObject = { transient: { score: 200 }, persistent: {} };
             next(stateObject);
-            expect(mockGame.state.start.getCall(1).args[3].inState).to.eql(stateObject);
+            assert.deepEqual(mockGame.state.start.getCall(1).args[3].inState, stateObject);
         });
 
         it("starts the screen after next when called twice", () => {
             const expectedNextScreen = mockTransitions[1].nextScreenName();
             next();
             next();
-            expect(mockGame.state.start.callCount).to.equal(3);
-            expect(mockGame.state.start.getCall(2).args).to.eql([
+            assert.equal(mockGame.state.start.callCount, 3);
+            assert.deepEqual(mockGame.state.start.getCall(2).args, [
                 expectedNextScreen,
                 true,
                 false,
@@ -133,7 +133,7 @@ describe("Sequencer", () => {
             const expectedStateObject = { transient: { character: "The Great Big Hoo", score: 200 }, persistent: {} };
             next(firstStateObject);
             next(secondStateObject);
-            expect(mockGame.state.start.getCall(1).args[3].inState).to.eql(expectedStateObject);
+            assert.deepEqual(mockGame.state.start.getCall(1).args[3].inState, expectedStateObject);
         });
     });
 });

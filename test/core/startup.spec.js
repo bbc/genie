@@ -80,23 +80,21 @@ describe("Startup", () => {
         });
     });
 
-    describe("#onStarted", () => {
-        it("adds a config key to context", () => {
-            mock.installMockGetGmi({
-                embedVars: {
-                    configPath: "my/config/file.json",
-                },
-            });
+    it("adds a config key to context", () => {
+        mock.installMockGetGmi({
+            embedVars: {
+                configPath: "my/config/file.json",
+            },
+        });
 
-            const sequencerCreate = sandbox.stub(Sequencer, "create");
+        const sequencerCreate = sandbox.stub(Sequencer, "create");
 
-            return startup([mock.screenDef()]).then(game => {
-                const context = sequencerCreate.args[0][1];
+        return startup([mock.screenDef()]).then(game => {
+            const context = sequencerCreate.args[0][1];
 
-                assert(context.config !== undefined, "config exists on context object");
+            assert(context.config !== undefined, "config exists on context object");
 
-                game.destroy();
-            });
+            game.destroy();
         });
     });
 });
