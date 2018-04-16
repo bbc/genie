@@ -17,14 +17,11 @@ describe("Select Screen", () => {
     let addLayoutSpy;
 
     const sandbox = sinon.sandbox.create();
-    const dangerMouseSprite = { visible: "" };
-    const dangerMouseNameSprite = { visible: "" };
-    const barneySprite = { visible: "" };
-    const barneyNameSprite = { visible: "" };
-    const jamillahSprite = { visible: "" };
-    const jamillahNameSprite = { visible: "" };
+    const characterOneSprite = { visible: "" };
+    const characterTwoSprite = { visible: "" };
+    const characterThreeSprite = { visible: "" };
     const CENTER_X = 0;
-    const CHAR_Y_POSITION = -30;
+    const CHAR_Y_POSITION = 0;
     const CHAR_TEXT_Y_POSITION = 170;
 
     beforeEach(() => {
@@ -32,14 +29,12 @@ describe("Select Screen", () => {
         addToBackgroundSpy = sandbox.spy();
         gameImageStub = sandbox.stub().returns("sprite");
         gameImageStub.onCall(0).returns("background");
+        gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
         gameSpriteStub = sandbox.stub();
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "dangermouse").returns(dangerMouseSprite);
-        gameSpriteStub.withArgs(CENTER_X, CHAR_TEXT_Y_POSITION, "dangermouseName").returns(dangerMouseNameSprite);
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "barney").returns(barneySprite);
-        gameSpriteStub.withArgs(CENTER_X, CHAR_TEXT_Y_POSITION, "barneyName").returns(barneyNameSprite);
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "jamillah").returns(jamillahSprite);
-        gameSpriteStub.withArgs(CENTER_X, CHAR_TEXT_Y_POSITION, "jamillahName").returns(jamillahNameSprite);
+        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "character1").returns(characterOneSprite);
+        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "character2").returns(characterTwoSprite);
+        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "character3").returns(characterThreeSprite);
         addLayoutSpy = sandbox.spy();
 
         mockGame = {
@@ -55,11 +50,7 @@ describe("Select Screen", () => {
             config: {
                 theme: {
                     characterSelect: {
-                        choices: [
-                            { main: "dangermouse", name: "dangermouseName" },
-                            { main: "barney", name: "barneyName" },
-                            { main: "jamillah", name: "jamillahName" },
-                        ],
+                        choices: [{ main: "character1" }, { main: "character2" }, { main: "character3" }],
                     },
                 },
             },
@@ -72,13 +63,11 @@ describe("Select Screen", () => {
             addLayout: addLayoutSpy,
             keyLookups: {
                 characterSelect: {
+                    title: "titleImage",
                     background: "backgroundImage",
-                    dangermouse: "dangermouse",
-                    dangermouseName: "dangermouseName",
-                    barney: "barney",
-                    barneyName: "barneyName",
-                    jamillah: "jamillah",
-                    jamillahName: "jamillahName",
+                    character1: "character1",
+                    character2: "character2",
+                    character3: "character3",
                 },
             },
         };
@@ -102,51 +91,42 @@ describe("Select Screen", () => {
         beforeEach(() => selectScreen.create());
 
         it("adds a background image", () => {
-            const actualImageCall = gameImageStub.getCall(0);
-            const expectedImageCall = [0, 0, "backgroundImage"];
-            assert.deepEqual(actualImageCall.args, expectedImageCall);
+            sinon.assert.calledWith(gameImageStub, 0, 0, "backgroundImage");
+            sinon.assert.calledWith(addToBackgroundSpy, "background");
+        });
 
-            const addToBackgroundCall = addToBackgroundSpy.getCall(0);
-            assert.deepEqual(addToBackgroundCall.args, ["background"]);
+        it("adds a title image", () => {
+            sinon.assert.calledWith(gameImageStub, 0, -150, "titleImage");
+            sinon.assert.calledWith(addToBackgroundSpy, "title");
         });
 
         it("adds GEL buttons to layout", () => {
-            const actualButtons = addLayoutSpy.getCall(0).args[0];
-            const expectedButtons = ["exit", "audioOff", "pause", "previous", "next", "continue"];
-            assert.deepEqual(actualButtons, expectedButtons);
+            sinon.assert.calledWith(addLayoutSpy, ["home", "audioOff", "pause", "previous", "next", "continue"]);
         });
 
         it("creates a layout harness with correct params", () => {
-            const actualParams = layoutHarnessSpy.getCall(0).args;
-            const expectedParams = [mockGame, mockContext, selectScreen.layoutFactory];
             assert(layoutHarnessSpy.callCount === 1, "layout harness should be called once");
-            assert.deepEqual(actualParams, expectedParams);
+            sinon.assert.calledWith(layoutHarnessSpy, mockGame, mockContext, selectScreen.layoutFactory);
         });
 
         it("creates sprites for each choice", () => {
-            assert(gameSpriteStub.callCount === 6, "game sprites should be added 6 times");
-            assert.deepEqual(gameSpriteStub.getCall(0).args, [0, -30, "dangermouse"]);
-            assert.deepEqual(gameSpriteStub.getCall(1).args, [0, 170, "dangermouseName"]);
-            assert.deepEqual(gameSpriteStub.getCall(2).args, [0, -30, "barney"]);
-            assert.deepEqual(gameSpriteStub.getCall(3).args, [0, 170, "barneyName"]);
-            assert.deepEqual(gameSpriteStub.getCall(4).args, [0, -30, "jamillah"]);
-            assert.deepEqual(gameSpriteStub.getCall(5).args, [0, 170, "jamillahName"]);
+            assert(gameSpriteStub.callCount === 3, "game sprites should be added 3 times");
+            assert.deepEqual(gameSpriteStub.getCall(0).args, [0, 0, "character1"]);
+            assert.deepEqual(gameSpriteStub.getCall(1).args, [0, 0, "character2"]);
+            assert.deepEqual(gameSpriteStub.getCall(2).args, [0, 0, "character3"]);
         });
 
         it("adds each sprite to the background", () => {
-            assert.deepEqual(addToBackgroundSpy.getCall(1).args, [dangerMouseSprite]);
-            assert.deepEqual(addToBackgroundSpy.getCall(2).args, [dangerMouseNameSprite]);
-            assert.deepEqual(addToBackgroundSpy.getCall(3).args, [barneySprite]);
-            assert.deepEqual(addToBackgroundSpy.getCall(4).args, [barneyNameSprite]);
-            assert.deepEqual(addToBackgroundSpy.getCall(5).args, [jamillahSprite]);
-            assert.deepEqual(addToBackgroundSpy.getCall(6).args, [jamillahNameSprite]);
+            sinon.assert.calledWith(addToBackgroundSpy, characterOneSprite);
+            sinon.assert.calledWith(addToBackgroundSpy, characterTwoSprite);
+            sinon.assert.calledWith(addToBackgroundSpy, characterThreeSprite);
         });
 
         it("adds the choices", () => {
             const expectedChoices = [
-                { main: dangerMouseSprite, name: dangerMouseNameSprite },
-                { main: barneySprite, name: barneyNameSprite },
-                { main: jamillahSprite, name: jamillahNameSprite },
+                { main: characterOneSprite },
+                { main: characterTwoSprite },
+                { main: characterThreeSprite },
             ];
             assert.deepEqual(selectScreen.choice, expectedChoices);
         });
@@ -163,14 +143,26 @@ describe("Select Screen", () => {
 
         it("adds signal subscriptions to all the buttons", () => {
             assert(signalSubscribeSpy.callCount === 4, "signals should be subscribed 4 times");
-            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].channel, "gel-buttons");
-            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].name, "exit");
-            assert.deepEqual(signalSubscribeSpy.getCall(1).args[0].channel, "gel-buttons");
-            assert.deepEqual(signalSubscribeSpy.getCall(1).args[0].name, "previous");
-            assert.deepEqual(signalSubscribeSpy.getCall(2).args[0].channel, "gel-buttons");
-            assert.deepEqual(signalSubscribeSpy.getCall(2).args[0].name, "next");
-            assert.deepEqual(signalSubscribeSpy.getCall(3).args[0].channel, "gel-buttons");
-            assert.deepEqual(signalSubscribeSpy.getCall(3).args[0].name, "continue");
+            sinon.assert.calledWith(signalSubscribeSpy, {
+                channel: "gel-buttons",
+                name: "exit",
+                callback: sinon.match.func,
+            });
+            sinon.assert.calledWith(signalSubscribeSpy, {
+                channel: "gel-buttons",
+                name: "previous",
+                callback: sinon.match.func,
+            });
+            sinon.assert.calledWith(signalSubscribeSpy, {
+                channel: "gel-buttons",
+                name: "next",
+                callback: sinon.match.func,
+            });
+            sinon.assert.calledWith(signalSubscribeSpy, {
+                channel: "gel-buttons",
+                name: "continue",
+                callback: sinon.match.func,
+            });
         });
 
         it("adds a callback for the exit button", () => {
@@ -204,11 +196,8 @@ describe("Select Screen", () => {
                 signalSubscribeSpy.getCall(1).args[0].callback();
 
                 assert(selectScreen.choice[0].main.visible === false, "choice should be hidden");
-                assert(selectScreen.choice[0].name.visible === false, "choice should be hidden");
                 assert(selectScreen.choice[1].main.visible === true, "choice should be showing");
-                assert(selectScreen.choice[1].name.visible === true, "choice should be showing");
                 assert(selectScreen.choice[2].main.visible === false, "choice should be hidden");
-                assert(selectScreen.choice[2].name.visible === false, "choice should be hidden");
             });
         });
 
@@ -229,11 +218,8 @@ describe("Select Screen", () => {
                 selectScreen.currentIndex = 1;
                 signalSubscribeSpy.getCall(2).args[0].callback();
                 assert(selectScreen.choice[0].main.visible === false, "choice should be hidden");
-                assert(selectScreen.choice[0].name.visible === false, "choice should be hidden");
                 assert(selectScreen.choice[1].main.visible === true, "choice should be showing");
-                assert(selectScreen.choice[1].name.visible === true, "choice should be showing");
                 assert(selectScreen.choice[2].main.visible === false, "choice should be hidden");
-                assert(selectScreen.choice[2].name.visible === false, "choice should be hidden");
             });
         });
     });
