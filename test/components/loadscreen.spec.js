@@ -3,10 +3,10 @@ import * as sinon from "sinon";
 
 import { Loadscreen } from "../../src/components/loadscreen";
 import * as AssetLoader from "../../src/core/asset-loader";
+import { GameAssets } from "../../src/core/game-assets.js";
 
 describe("Load Screen", () => {
     let loadScreen;
-    let addAudioStub;
     let musicLoopStub;
     let mockGame;
     let mockNext;
@@ -21,12 +21,14 @@ describe("Load Screen", () => {
         assetLoaderCallbackSpy = sandbox.spy();
         assetLoaderSpy = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
         musicLoopStub = sandbox.stub();
-        addAudioStub = sandbox.stub().returns({
-            loopFull: musicLoopStub,
+        musicLoopStub.withArgs("shared/background-music").returns({
+            loopFull: sandbox.spy(),
         });
+        musicLoopStub.returns({});
+
         mockGame = {
             add: {
-                audio: addAudioStub,
+                audio: musicLoopStub,
             },
             state: {
                 current: "currentState",
@@ -126,9 +128,7 @@ describe("Load Screen", () => {
 
     describe("Music", () => {
         it("starts playing the music", () => {
-            loadScreen.startMusic();
-            sinon.assert.calledWith(addAudioStub, "backgroundMusic");
-            sinon.assert.calledOnce(musicLoopStub);
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.loopFull);
         });
     });
 });

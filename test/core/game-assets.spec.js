@@ -31,4 +31,10 @@ describe("Game Assets", () => {
             );
         });
     });
+
+    describe("#GameAssets", () => {
+        it("returns object containing sounds", () => {
+            assert.isObject(GameAssets.sounds);
+        });
+    });
 });

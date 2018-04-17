@@ -8,7 +8,7 @@ import * as _ from "../lib/lodash/lodash.js";
 
 import { loadAssets } from "../core/asset-loader.js";
 import { Screen } from "../core/screen.js";
-import { initGameAssets } from "../core/game-assets.js";
+import { initGameAssets, GameAssets } from "../core/game-assets.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
@@ -51,9 +51,7 @@ export class Loadscreen extends Screen {
     }
 
     startMusic() {
-        const music = this.layoutFactory.keyLookups[this.game.state.current].backgroundMusic;
-        const backgroundMusic = this.game.add.audio(music);
-        backgroundMusic.loopFull();
+        GameAssets.sounds.backgroundMusic.loopFull();
     }
 }
 
