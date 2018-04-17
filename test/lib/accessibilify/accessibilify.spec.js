@@ -41,6 +41,9 @@ describe("#accessibilify", () => {
         activePointer = sandbox.spy();
         mockButton = {
             name: "play",
+            toGlobal: x => {
+                return x;
+            },
             game: {
                 input: {
                     activePointer: activePointer,
@@ -69,6 +72,32 @@ describe("#accessibilify", () => {
                     width: buttonBoundsWidth,
                     height: buttonBoundsHeight,
                 };
+            },
+            hitArea: {
+                clone: () => mockButton.hitArea,
+                get topLeft() {
+                    return { x: mockButton.hitArea.x, y: mockButton.hitArea.y };
+                },
+                set topLeft(p) {
+                    mockButton.hitArea.x = p.x;
+                    mockButton.hitArea.y = p.y;
+                },
+                x: buttonBoundsX,
+                y: buttonBoundsY,
+                width: buttonBoundsWidth,
+                height: buttonBoundsHeight,
+                get top() {
+                    return mockButton.hitArea.y;
+                },
+                get bottom() {
+                    return mockButton.hitArea.y + mockButton.hitArea.height;
+                },
+                get left() {
+                    return mockButton.hitArea.x;
+                },
+                get right() {
+                    return mockButton.hitArea.x + mockButton.hitArea.width;
+                },
             },
             events: {
                 onInputOver: {
@@ -127,13 +156,6 @@ describe("#accessibilify", () => {
             });
         });
 
-        it("assigns an onSizeChange event", () => {
-            const onSizeChange = sandbox.stub(mockButton.game.scale.onSizeChange, "add");
-
-            accessibilify(mockButton);
-            sinon.assert.called(onSizeChange);
-        });
-
         it("assigns an onStateChange event", () => {
             const onStateChange = sandbox.stub(mockButton.game.state.onStateChange, "addOnce");
 
@@ -155,7 +177,7 @@ describe("#accessibilify", () => {
 
             accessibilify(mockButton);
             clock.tick(200);
-            sinon.assert.called(position.withArgs(mockButton.getBounds()));
+            sinon.assert.called(position.withArgs(mockButton.hitArea.clone()));
         });
     });
 
@@ -167,7 +189,7 @@ describe("#accessibilify", () => {
                     hide: accessibleDomElementHide,
                     position: () => {},
                 });
-                buttonBoundsX = -1000;
+                mockButton.hitArea.x = -1000;
                 accessibilify(mockButton);
                 mockButton.update();
                 sinon.assert.called(accessibleDomElementHide);
