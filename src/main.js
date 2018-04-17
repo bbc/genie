@@ -4,6 +4,28 @@ import { Select } from "./components/select.js";
 import { GameTest } from "./components/test-harness/test-screens/game.js";
 import { Results } from "./components/results.js";
 import { startup } from "./core/startup.js";
+import * as settings from "./core/settings.js";
+
+
+settings.setCloseCallback(() => {
+    //Called when settings screen has been closed
+})
+
+const settingsConfig = {
+    pages: [
+        {
+            title: "Global Settings",
+            settings: [
+                {
+                    key: "audio",
+                    type: "toggle",
+                    title: "Audio",
+                    description: "Turn off/on sound and music",
+                },
+            ],
+        },
+    ],
+};
 
 const transitions = [
     {
@@ -59,4 +81,4 @@ const transitions = [
     },
 ];
 
-startup(transitions);
+startup(transitions, {}, settingsConfig);

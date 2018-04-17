@@ -1,7 +1,9 @@
 import * as pause from "../../components/pause.js";
+import * as settings from "../settings.js";
 
 let gmi;
-export const initGel = newGmi => {
+
+export const initGmi= newGmi => {
     gmi = newGmi;
 };
 
@@ -17,7 +19,7 @@ const callGmi = method => () => {
     }
 };
 
-const config = {
+export const config = {
     exit: {
         group: "topLeft",
         title: "Exit",
@@ -85,7 +87,7 @@ const config = {
         order: 5,
         id: "gel-settings",
         channel: "gel-buttons",
-        action: callGmi("showSettings"),
+        action: settings.show,
     },
     pause: {
         group: "topRight",
@@ -180,5 +182,3 @@ const config = {
         channel: "gel-buttons",
     },
 };
-
-export default config;
