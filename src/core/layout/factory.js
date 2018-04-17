@@ -83,7 +83,7 @@ export function create(game) {
 
     function removeAll() {
         background.removeAll(true);
-        layouts.forEach(layout => layout.removeSignals());
+        layouts.forEach(layout => layout.destroy());
         layouts = [];
     }
 
