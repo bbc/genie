@@ -3,7 +3,7 @@ import * as settings from "../settings.js";
 
 let gmi;
 
-export const initGmi= newGmi => {
+export const initGmi = newGmi => {
     gmi = newGmi;
 };
 

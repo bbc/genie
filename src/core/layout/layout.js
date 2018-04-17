@@ -65,10 +65,14 @@ export function create(game, scaler, buttonIds) {
     scaler.onScaleChange.add(resize);
     resize(size.width, size.height, size.scale, size.stageHeightPx);
 
+    const destroy = () => {
+        root.destroy();
+    };
+
     return {
         addToGroup,
         buttons,
-        destroy: root.destroy,
+        destroy,
         resize,
         root,
         removeSignals,

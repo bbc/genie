@@ -6,10 +6,9 @@ import { Results } from "./components/results.js";
 import { startup } from "./core/startup.js";
 import * as settings from "./core/settings.js";
 
-
 settings.setCloseCallback(() => {
     //Called when settings screen has been closed
-})
+});
 
 const settingsConfig = {
     pages: [
