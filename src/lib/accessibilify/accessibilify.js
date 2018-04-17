@@ -47,7 +47,6 @@ export function accessibilify(button, config) {
 
     function teardown() {
         accessibleElement.remove();
-        game.scale.onSizeChange.remove(setElementPosition);
     }
 
     function update() {
