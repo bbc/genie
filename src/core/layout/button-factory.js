@@ -37,7 +37,7 @@ const createButton = fp.curry((game, metrics, config, x = 0, y = 0) => {
 
     defaultAction(config);
     // Temporarily comments this out until accessible button DOM elements can be properly cleared down
-    // return accessibilify(btn, config);
+    return accessibilify(btn, config);
     return btn;
 });
 
