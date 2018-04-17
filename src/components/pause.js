@@ -44,6 +44,7 @@ export function create({ game }) {
             if (button.input.enabled) {
                 button.input.enabled = false;
                 disabledButtons.push(button);
+                button.update();
             }
         }, screen.layout.buttons);
         return disabledButtons;
