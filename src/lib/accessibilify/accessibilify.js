@@ -41,6 +41,12 @@ export function accessibilify(button, config) {
     }
 
     function assignEvents() {
+        const _destroy = button.destroy;
+        button.destroy = () => {
+            teardown();
+            return _destroy.apply(button, arguments);
+        };
+
         game.state.onStateChange.addOnce(teardown);
         button.update = update;
     }
