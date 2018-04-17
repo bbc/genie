@@ -18,7 +18,7 @@ import * as settings from "../core/settings.js";
  * @return {Promise} A Promise, which is resolved with the game in onStarted.
  */
 export function startup(transitions, initialAdditionalState, settingsConfig = {}) {
-    const gmi = window.getGMI(settingsConfig);
+    const gmi = window.getGMI({ settingsConfig });
     const urlParams = parseUrlParams(window.location.search);
     const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
     hookErrors(gmi.gameContainerId);
