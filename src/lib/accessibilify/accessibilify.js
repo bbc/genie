@@ -1,4 +1,5 @@
 import { accessibleDomElement } from "./accessible-dom-element.js";
+import * as signal from "../../core/signal-bus.js";
 
 export function accessibilify(button, config) {
     config = Object.assign(
@@ -28,12 +29,18 @@ export function accessibilify(button, config) {
         });
     }
 
+    function getHitAreaBounds() {
+        const bounds = button.hitArea.clone();
+        bounds.topLeft = button.toGlobal(bounds.topLeft);
+        return bounds;
+    }
+
     function setElementPosition() {
-        accessibleElement.position(button.getBounds());
+        const bounds = getHitAreaBounds();
+        accessibleElement.position(bounds);
     }
 
     function assignEvents() {
-        game.scale.onSizeChange.add(setElementPosition);
         game.state.onStateChange.addOnce(teardown);
         button.update = checkBounds;
     }
@@ -44,6 +51,7 @@ export function accessibilify(button, config) {
     }
 
     function checkBounds() {
+        setElementPosition();
         if (isOutsideScreen() && accessibleElement.visible()) {
             accessibleElement.hide();
         } else if (!isOutsideScreen() && !accessibleElement.visible()) {
@@ -52,15 +60,8 @@ export function accessibilify(button, config) {
     }
 
     function isOutsideScreen() {
-        const pixiBounds = button.getBounds();
-        const buttonBounds = new Phaser.Rectangle(pixiBounds.x, pixiBounds.y, pixiBounds.width, pixiBounds.height);
-
-        return (
-            buttonBounds.top > game.height ||
-            buttonBounds.bottom < 0 ||
-            buttonBounds.left > game.width ||
-            buttonBounds.right < 0
-        );
+        const bounds = getHitAreaBounds();
+        return bounds.top > game.height || bounds.bottom < 0 || bounds.left > game.width || bounds.right < 0;
     }
 
     function buttonAction() {
