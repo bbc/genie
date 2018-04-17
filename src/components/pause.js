@@ -59,6 +59,9 @@ export function create({ game }) {
     function moveButtonsToTop(gelLayout) {
         fp.forOwn(button => {
             button.input.priorityID = priorityID;
+            button.parent.updateTransform();
+            button.parent.parent.updateTransform();
+            button.update();
         }, gelLayout.buttons);
     }
 
