@@ -99,6 +99,7 @@ describe("#accessibilify", () => {
                     return mockButton.hitArea.x + mockButton.hitArea.width;
                 },
             },
+            input: { enabled: true },
             events: {
                 onInputOver: {
                     dispatch: onInputOver,

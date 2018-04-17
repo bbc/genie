@@ -42,7 +42,7 @@ export function accessibilify(button, config) {
 
     function assignEvents() {
         game.state.onStateChange.addOnce(teardown);
-        button.update = checkBounds;
+        button.update = update;
     }
 
     function teardown() {
@@ -50,13 +50,24 @@ export function accessibilify(button, config) {
         game.scale.onSizeChange.remove(setElementPosition);
     }
 
-    function checkBounds() {
-        setElementPosition();
-        if (isOutsideScreen() && accessibleElement.visible()) {
-            accessibleElement.hide();
-        } else if (!isOutsideScreen() && !accessibleElement.visible()) {
+    function update() {
+        if (!button.input.enabled) {
+            if (accessibleElement.visible()) {
+                accessibleElement.hide();
+            }
+            return;
+        }
+
+        if (isOutsideScreen()) {
+            if (accessibleElement.visible()) {
+                return accessibleElement.hide();
+            }
+        }
+
+        if (!accessibleElement.visible()) {
             accessibleElement.show();
         }
+        setElementPosition();
     }
 
     function isOutsideScreen() {
