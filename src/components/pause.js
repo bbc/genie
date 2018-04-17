@@ -19,6 +19,7 @@ export function create({ game }) {
     pauseGame();
 
     const background = addBackground();
+    const disabledButtons = disableExistingButtons();
     const gelButtons = addGelButtons();
 
     addSignals();
@@ -35,6 +36,23 @@ export function create({ game }) {
         backgroundImage.inputEnabled = true;
         backgroundImage.input.priorityID = priorityID - 1;
         return screen.layoutFactory.addToBackground(backgroundImage);
+    }
+
+    function disableExistingButtons() {
+        let disabledButtons = [];
+        fp.forOwn(button => {
+            if (button.input.enabled) {
+                button.input.enabled = false;
+                disabledButtons.push(button);
+            }
+        }, screen.layout.buttons);
+        return disabledButtons;
+    }
+
+    function restoreDisabledButtons() {
+        fp.forOwn(button => {
+            button.input.enabled = true;
+        }, disabledButtons);
     }
 
     function moveButtonsToTop(gelLayout) {
@@ -66,6 +84,7 @@ export function create({ game }) {
         game.paused = false;
         signal.bus.removeChannel(channel);
         gelButtons.destroy();
+        restoreDisabledButtons();
         background.destroy();
         game.sound.resumeAll();
         screen.context.popupScreens = fp.pull("pause", screen.context.popupScreens);
