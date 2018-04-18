@@ -19,7 +19,7 @@ module.exports = function(config) {
         webpack: {
             mode: "development",
             plugins: webpackConfig.plugins,
-            devtool: checkCoverageFlag ? "inline-source-map" : webpackConfig.devtool,
+            devtool: "inline-source-map",
             module: {
                 rules: checkCoverageFlag
                     ? webpackConfig.module.rules.concat([
