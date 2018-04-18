@@ -21,7 +21,7 @@ describe("Layout - Gel Defaults", () => {
 
     it("stores the gmi variable for use in actions", () => {
         const gmiSpy = sinon.spy();
-        gel.initGmi({ exit: gmiSpy });
+        gel.setGmi({ exit: gmiSpy });
 
         gel.config.exit.action();
 
