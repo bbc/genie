@@ -183,6 +183,47 @@ describe("#accessibilify", () => {
     });
 
     describe("Button Update", () => {
+        describe("sets element position on update", () => {
+            it("when button is on screen and input is enabled", () => {
+                const position = sandbox.spy();
+                accessibleDomElement.returns({
+                    visible: () => accessibleDomElementVisible,
+                    position: position,
+                });
+                accessibilify(mockButton);
+                sinon.assert.calledOnce(position);
+                mockButton.update();
+                sinon.assert.calledTwice(position);
+            });
+        });
+        describe("does not set element position on update", () => {
+            it("when button is off screen", () => {
+                const position = sandbox.spy();
+                accessibleDomElement.returns({
+                    visible: () => accessibleDomElementVisible,
+                    hide: accessibleDomElementHide,
+                    position: position,
+                });
+                mockButton.hitArea.x = -1000;
+                accessibilify(mockButton);
+                sinon.assert.calledOnce(position);
+                mockButton.update();
+                sinon.assert.calledOnce(position);
+            });
+            it("when button input is disabled", () => {
+                const position = sandbox.spy();
+                accessibleDomElement.returns({
+                    visible: () => accessibleDomElementVisible,
+                    hide: accessibleDomElementHide,
+                    position: position,
+                });
+                mockButton.input.enabled = false;
+                accessibilify(mockButton);
+                sinon.assert.calledOnce(position);
+                mockButton.update();
+                sinon.assert.calledOnce(position);
+            });
+        });
         describe("hides element", () => {
             it("when button is outside of screen and element is visible", () => {
                 accessibleDomElement.returns({
