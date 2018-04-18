@@ -183,8 +183,8 @@ describe("#accessibilify", () => {
     });
 
     describe("Button Update", () => {
-        it("hides element", () => {
-            describe("when button is outside of screen and element is visible", () => {
+        describe("hides element", () => {
+            it("when button is outside of screen and element is visible", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
                     hide: accessibleDomElementHide,
@@ -203,8 +203,8 @@ describe("#accessibilify", () => {
             });
         });
 
-        it("shows element", () => {
-            describe("when button is within the bounds of the screen and element is not visible", () => {
+        describe("shows element", () => {
+            it("when button is within the bounds of the screen and element is not visible", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
                     show: accessibleDomElementShow,
