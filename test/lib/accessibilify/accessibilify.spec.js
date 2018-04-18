@@ -183,8 +183,8 @@ describe("#accessibilify", () => {
     });
 
     describe("Button Update", () => {
-        describe("when button is outside of screen and element is visible", () => {
-            it("hides element", () => {
+        it("hides element", () => {
+            describe("when button is outside of screen and element is visible", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
                     hide: accessibleDomElementHide,
@@ -195,15 +195,27 @@ describe("#accessibilify", () => {
                 mockButton.update();
                 sinon.assert.called(accessibleDomElementHide);
             });
+            describe("when button input is disabled", () => {
+                mockButton.input.enabled = false;
+                accessibilify(mockButton);
+                mockButton.update();
+                sinon.assert.called(accessibleDomElementHide);
+            });
         });
 
-        describe("when button is within the bounds of the screen and element is not visible", () => {
-            it("shows element", () => {
+        it("shows element", () => {
+            describe("when button is within the bounds of the screen and element is not visible", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
                     show: accessibleDomElementShow,
                     position: () => {},
                 });
+                accessibleDomElementVisible = false;
+                accessibilify(mockButton);
+                mockButton.update();
+                sinon.assert.called(accessibleDomElementShow);
+            });
+            describe("when button input is enabled", () => {
                 accessibleDomElementVisible = false;
                 accessibilify(mockButton);
                 mockButton.update();
