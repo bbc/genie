@@ -4,7 +4,7 @@
  *
  * @module core/asset-loader
  */
-import _ from "lodash";
+import _ from "../lib/lodash/lodash.js";
 
 /**
  * This callback is displayed as a global member.

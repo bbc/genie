@@ -12,7 +12,7 @@
  *
  * @module core/signal-bus
  */
-import fp from "lodash/fp";
+import fp from "../lib/lodash/fp/fp.js";
 
 /**
  * Creates a new signal bus.

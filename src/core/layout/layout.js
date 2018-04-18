@@ -3,7 +3,7 @@
  *
  * @module layout/layout
  */
-import fp from "lodash/fp";
+import fp from "../../lib/lodash/fp/fp.js";
 import { calculateMetrics } from "./calculate-metrics.js";
 import gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";

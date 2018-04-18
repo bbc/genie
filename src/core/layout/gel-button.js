@@ -1,4 +1,4 @@
-import fp from "lodash/fp";
+import fp from "../../lib/lodash/fp/fp.js";
 import * as signal from "../signal-bus.js";
 
 export class GelButton extends Phaser.Button {
