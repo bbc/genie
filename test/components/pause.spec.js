@@ -17,14 +17,26 @@ describe("Pause Overlay", () => {
     const sandbox = sinon.sandbox.create();
 
     beforeEach(() => {
+        const newMockButton = () => {
+            return {
+                input: { priorityID: 0 },
+                update: fp.noop,
+                parent: {
+                    updateTransform: fp.noop,
+                    parent: {
+                        updateTransform: fp.noop,
+                    },
+                },
+            };
+        };
         mockGelButtons = {
             buttons: {
-                home: { input: { priorityID: 0 } },
-                audioOff: { input: { priorityID: 0 } },
-                settings: { input: { priorityID: 0 } },
-                play: { input: { priorityID: 0 } },
-                restart: { input: { priorityID: 0 } },
-                howToPlay: { input: { priorityID: 0 } },
+                home: newMockButton(),
+                audioOff: newMockButton(),
+                settings: newMockButton(),
+                play: newMockButton(),
+                restart: newMockButton(),
+                howToPlay: newMockButton(),
             },
             destroy: sandbox.spy(),
         };
@@ -36,6 +48,7 @@ describe("Pause Overlay", () => {
                 keyLookups: { pause: { pauseBackground: "pauseBackgroundImage" } },
                 addToBackground: sandbox.stub().returns(mockLayoutDestroy),
                 addLayout: sandbox.stub().returns(mockGelButtons),
+                getLayouts: fp.noop,
             },
             context: { popupScreens: [] },
             next: sandbox.spy(),
