@@ -195,7 +195,7 @@ describe("#accessibilify", () => {
                 mockButton.update();
                 sinon.assert.called(accessibleDomElementHide);
             });
-            describe("when button input is disabled", () => {
+            it("when button input is disabled", () => {
                 mockButton.input.enabled = false;
                 accessibilify(mockButton);
                 mockButton.update();
@@ -215,7 +215,7 @@ describe("#accessibilify", () => {
                 mockButton.update();
                 sinon.assert.called(accessibleDomElementShow);
             });
-            describe("when button input is enabled", () => {
+            it("when button input is enabled", () => {
                 accessibleDomElementVisible = false;
                 accessibilify(mockButton);
                 mockButton.update();
