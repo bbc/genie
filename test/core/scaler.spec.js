@@ -18,9 +18,9 @@ describe("Scaler", () => {
         };
     });
 
-    it("Should set the scalemode be an exact fit on create", () => {
+    it("Should set the scalemode be resize on create", () => {
         Scaler.create(600, mockGame);
-        expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.EXACT_FIT);
+        expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.RESIZE);
     });
 
     it("Should call the games onSizeChange add function once", () => {
