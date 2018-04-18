@@ -48,7 +48,7 @@ export function create({ game }) {
             "pauseHome",
             "audioOff",
             "settings",
-            "pauseRestart",
+            "pauseReplay",
             "pausePlay",
             "howToPlay",
         ]);

@@ -100,7 +100,7 @@ describe("Pause Overlay", () => {
                 "pauseHome",
                 "audioOff",
                 "settings",
-                "pauseRestart",
+                "pauseReplay",
                 "pausePlay",
                 "howToPlay",
             ];

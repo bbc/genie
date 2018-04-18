@@ -99,7 +99,7 @@ const config = {
         order: 8,
         id: "gel-replay",
     },
-    pauseRestart: {
+    pauseReplay: {
         group: "middleCenter",
         title: "Replay",
         key: "replay",
