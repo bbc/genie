@@ -19,7 +19,13 @@ export const create = () => {
 
         keyMap[key](value);
     };
-    const onSettingChanged = fp.flow(fp.toPairs, fp.map(dispatchSetting));
+
+    const log = x => {
+        console.log(x);
+        return x;
+    };
+
+    const onSettingChanged = fp.flow(log, fp.toPairs, fp.map(dispatchSetting));
 
     const checkCloseCallback = () => {
         if (!closeCallback) {
