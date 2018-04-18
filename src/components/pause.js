@@ -47,7 +47,7 @@ export function create({ game }) {
                     disabledButtons.push(button);
                     button.update();
                 }
-            }, screen.layout.buttons);
+            }, layout.buttons);
         }, screen.layoutFactory.getLayouts());
         return disabledButtons;
     }
