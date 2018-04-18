@@ -40,13 +40,15 @@ export function create({ game }) {
 
     function disableExistingButtons() {
         let disabledButtons = [];
-        fp.forOwn(button => {
-            if (button.input.enabled) {
-                button.input.enabled = false;
-                disabledButtons.push(button);
-                button.update();
-            }
-        }, screen.layout.buttons);
+        fp.forOwn(layout => {
+            fp.forOwn(button => {
+                if (button.input.enabled) {
+                    button.input.enabled = false;
+                    disabledButtons.push(button);
+                    button.update();
+                }
+            }, screen.layout.buttons);
+        }, screen.layoutFactory.getLayouts());
         return disabledButtons;
     }
 
