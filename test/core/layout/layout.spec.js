@@ -11,6 +11,7 @@ describe("Layout", () => {
     let mockScaler;
 
     beforeEach(() => {
+        sandbox.stub(Group.prototype, "addButton").returns({ onInputUp: { add: sandbox.spy() } });
         return initialiseGame().then(game => {
             mockGame = game;
             mockGame.world = {
@@ -94,15 +95,8 @@ describe("Layout", () => {
     it("Should set button callbacks using the 'setAction' method", () => {
         const layout = Layout.create(mockGame, mockScaler, ["achievements", "exit", "settings"]);
 
-        const testAction = sandbox.spy();
-
-        layout.setAction("exit", testAction);
-
-        layout.buttons.exit.events.onInputUp.dispatch({}, {});
-        layout.buttons.exit.events.onInputUp.dispatch({}, {});
-        layout.buttons.exit.events.onInputUp.dispatch({}, {});
-
-        assert(testAction.callCount === 3);
+        layout.setAction("exit", "testAction");
+        assert(layout.buttons.exit.onInputUp.add.calledWith("testAction"));
     });
 
     it("Should add buttons using the correct tab order", () => {
