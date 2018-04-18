@@ -65,8 +65,9 @@ export function accessibilify(button, config) {
 
         if (isOutsideScreen()) {
             if (accessibleElement.visible()) {
-                return accessibleElement.hide();
+                accessibleElement.hide();
             }
+            return;
         }
 
         if (!accessibleElement.visible()) {
