@@ -83,7 +83,7 @@ export function create(game) {
     }
 
     function getLayouts() {
-        return this._layouts;
+        return _layouts;
     }
 
     function removeAll() {
