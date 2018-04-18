@@ -1,9 +1,9 @@
 import * as pause from "../../components/pause.js";
-import * as settings from "../settings.js";
+import { settings } from "../settings.js";
 
 let gmi;
 
-export const initGmi = newGmi => {
+export const setGmi = newGmi => {
     gmi = newGmi;
 };
 
