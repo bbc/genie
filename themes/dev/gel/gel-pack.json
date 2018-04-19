@@ -222,7 +222,7 @@
             "margin": 0,
             "spacing": 4
         },
-            {
+        {
             "type": "spritesheet",
             "key": "home",
             "url": "gel/mobile/home.png",
@@ -311,6 +311,16 @@
             "frameMax": 2,
             "margin": 0,
             "spacing": 0
+        },
+        {
+            "type": "spritesheet",
+            "key": "replay",
+            "url": "gel/mobile/replay.png",
+            "frameWidth": 55,
+            "frameHeight": 55,
+            "frameMax": 2,
+            "margin": 0,
+            "spacing": 4
         }
     ]
 }
