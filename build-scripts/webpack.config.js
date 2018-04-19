@@ -10,6 +10,7 @@ var p2 = path.join(phaserModule, "build/custom/p2.js");
 
 module.exports = {
     mode: "production",
+    performance: { hints: false },
     plugins: [new HardSourceWebpackPlugin(), new Visualizer()],
     entry: ["babel-polyfill", "pixi", "p2", "phaser", path.resolve("src/main.js")],
     output: {
