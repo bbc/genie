@@ -2,5 +2,5 @@
 
 | Version | Description |
 |---------|-------------|
-| 0.0.5 (unreleased) |  |
+| 0.0.5 (unreleased) | Cage settings added |
 | 0.0.4 | Select screen update, adds signals, fix for pause screen. |
