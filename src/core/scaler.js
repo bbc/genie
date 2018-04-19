@@ -14,7 +14,7 @@ const getBounds = game => () => game.scale.getParentBounds();
 export function create(stageHeightPx, game) {
     // Will be immediately resized:
     game.scale.setGameSize(2, 2);
-    game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT;
+    game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
 
     const onScaleChange = new Phaser.Signal();
 
@@ -26,7 +26,6 @@ export function create(stageHeightPx, game) {
     const getSize = fp.flow(getBounds(game), fp.pick(["width", "height"]), getScale(scaleMethods, stageHeightPx));
 
     const setSize = ({ width, height, scale, stageHeightPx: stageHeight }) => {
-        game.scale.setGameSize(width, height);
         onScaleChange.dispatch(width, height, scale, stageHeight);
     };
 
