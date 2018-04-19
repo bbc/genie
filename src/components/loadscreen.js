@@ -8,6 +8,7 @@ import * as _ from "../lib/lodash/lodash.js";
 
 import { loadAssets } from "../core/asset-loader.js";
 import { Screen } from "../core/screen.js";
+import { initGameAssets, GameAssets } from "../core/game-assets.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
@@ -36,17 +37,21 @@ export class Loadscreen extends Screen {
             if (this.context.qaMode.active) {
                 dumpToConsole(keyLookups);
             }
+            initGameAssets(this.game);
+            this.startMusic();
             this.next();
         });
     }
-
-    create() {}
 
     updateLoadProgress(progress) {
         // use progress to update loading bar
         if (this.context.qaMode.active) {
             console.log("Loader progress:", progress); // eslint-disable-line no-console
         }
+    }
+
+    startMusic() {
+        GameAssets.sounds.backgroundMusic.loopFull();
     }
 }
 

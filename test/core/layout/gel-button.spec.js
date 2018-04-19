@@ -5,6 +5,7 @@ import { loadAssets } from "../../../src/core/asset-loader";
 import { Screen } from "../../../src/core/screen";
 import { startup } from "../../../src/core/startup";
 import { assetPacks } from "../../helpers/asset-packs";
+import { GameAssets } from "../../../src/core/game-assets";
 import * as mock from "../../helpers/mock";
 import * as signal from "../../../src/core/signal-bus.js";
 
@@ -29,7 +30,10 @@ describe("Layout - Gel Button", () => {
     };
 
     beforeEach(mock.installMockGetGmi);
-    afterEach(mock.uninstallMockGetGmi);
+    afterEach(() => {
+        mock.uninstallMockGetGmi();
+        sandbox.restore();
+    });
 
     it("swaps mobile and desktop assets when resized.", () => {
         const updateCallback = sandbox.spy();
@@ -100,10 +104,18 @@ describe("Layout - Gel Button", () => {
 
     describe("signals", () => {
         let signalSpy;
-        let nextSpy;
 
         beforeEach(() => {
             signalSpy = sandbox.spy(signal.bus, "publish");
+            GameAssets.sounds = {
+                buttonClick: {
+                    play: () => {},
+                },
+            };
+        });
+
+        afterEach(() => {
+            GameAssets.sounds = {};
         });
 
         it("adds a signal subscription to the play button", () => {
@@ -118,6 +130,35 @@ describe("Layout - Gel Button", () => {
                     button.events.onInputUp.dispatch(button, game.input.activePointer, false);
 
                     assert.deepEqual(signalSpy.getCall(0).args[0], expectedArgs);
+                }),
+            );
+        });
+    });
+
+    describe("sound", () => {
+        let signalSpy;
+        let soundPlayStub;
+
+        beforeEach(() => {
+            signalSpy = sandbox.spy(signal.bus, "publish");
+            soundPlayStub = sandbox.stub();
+            GameAssets.sounds = {
+                buttonClick: {
+                    play: soundPlayStub,
+                },
+            };
+        });
+
+        afterEach(() => {
+            GameAssets.sounds = {};
+        });
+
+        it("plays the button click sound when clicked", () => {
+            return runInPreload(game =>
+                loadAssets(game, gamePacks, gelPack, () => {}).then(() => {
+                    const button = new GelButton(game, 0, 0, true, config);
+                    button.events.onInputUp.dispatch(button, game.input.activePointer, false);
+                    sinon.assert.calledOnce(soundPlayStub);
                 }),
             );
         });
