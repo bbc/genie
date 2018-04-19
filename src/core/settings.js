@@ -12,20 +12,7 @@ export const create = () => {
 
     let keyMap = Object.assign({}, defaults);
 
-    const dispatchSetting = ([key, value]) => {
-        console.log("------------------");
-        console.log(keyMap.toString());
-        console.log(key);
-
-        keyMap[key](value);
-    };
-
-    const log = x => {
-        console.log(x);
-        return x;
-    };
-
-    const onSettingChanged = fp.flow(log, fp.toPairs, fp.map(dispatchSetting));
+    const onSettingChanged = (key, value) => keyMap[key](value);
 
     const checkCloseCallback = () => {
         if (!closeCallback) {
