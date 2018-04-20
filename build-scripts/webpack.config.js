@@ -14,7 +14,6 @@ module.exports = {
     plugins: [new HardSourceWebpackPlugin(), new Visualizer()],
     entry: ["babel-polyfill", "pixi", "p2", "phaser", path.resolve("src/main.js")],
     output: {
-        pathinfo: true,
         path: path.resolve("output"),
         publicPath: "output",
         filename: "main.js",
