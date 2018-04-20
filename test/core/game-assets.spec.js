@@ -1,3 +1,4 @@
+import { assert } from "chai";
 import * as sinon from "sinon";
 import { GameAssets, initGameAssets } from "../../src/core/game-assets";
 
@@ -25,8 +26,9 @@ describe("Game Assets", () => {
         it("Adds the game assets to the Phaser game and Game Assets object", () => {
             initGameAssets(mockGame);
             sinon.assert.calledWith(addAudioStub, "shared/button-click");
-            assert(
-                GameAssets.sounds.buttonClick === "Click Sound",
+            assert.equal(
+                GameAssets.sounds.buttonClick,
+                "Click Sound",
                 "Expected button click asset to be added to GameAssets",
             );
         });

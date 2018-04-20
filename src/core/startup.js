@@ -4,7 +4,7 @@
  *
  * @module core/startup
  */
-import * as _ from "../lib/lodash/lodash.js";
+import _ from "../lib/lodash/lodash.js";
 
 import * as Sequencer from "../core/sequencer.js";
 import { parseUrlParams } from "../lib/parseUrlParams.js";
