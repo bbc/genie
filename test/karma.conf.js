@@ -6,7 +6,7 @@ var webpackConfig = require("../build-scripts/webpack.config.js");
 module.exports = function(config) {
     config.set({
         basePath: "..",
-        frameworks: ["mocha", "chai"],
+        frameworks: ["mocha"],
         files: ["node_modules/phaser-ce/build/phaser.min.js", "test/test-context.js"],
         preprocessors: {
             "test/test-context.js": ["webpack"],
