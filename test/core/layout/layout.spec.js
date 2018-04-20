@@ -3,6 +3,7 @@ import * as sinon from "sinon";
 
 import * as Layout from "../../../src/core/layout/layout";
 import { Group } from "../../../src/core/layout/group";
+import { GameAssets } from "../../../src/core/game-assets";
 
 describe("Layout", () => {
     const sandbox = sinon.sandbox.create();
@@ -34,12 +35,19 @@ describe("Layout", () => {
                 getSize: sandbox.spy(() => ({ width: 200, height: 200 })),
                 onScaleChange: { add: sandbox.spy() },
             };
+
+            GameAssets.sounds = {
+                buttonClick: {
+                    play: () => {},
+                },
+            };
         });
     });
 
     afterEach(() => {
         sandbox.restore();
         mockGame.destroy();
+        GameAssets.sounds = {};
     });
 
     it("should add the correct number of GEL buttons for a given config", () => {

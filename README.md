@@ -4,7 +4,7 @@ A modular framework to simplify the construction of children's games.
 
 ## To build:
 
-`npm run build` runs `webpack --config build-scripts/webpack.config.js`
+npm run build` runs `webpack --config build-scripts/webpack.config.js`
 
 `npm run build-watch` runs the compiler and creates a bundle. This means you can view index.html in a browser without having to run a webserver.
 

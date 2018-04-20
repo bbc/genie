@@ -7,6 +7,7 @@
 import fp from "../lib/lodash/fp/fp.js";
 
 import * as signal from "../core/signal-bus.js";
+import { GameAssets } from "../core/game-assets.js";
 
 /**
  * @param {Phaser.Game} game - The Phaser Game instance
@@ -25,9 +26,10 @@ export function create({ game }) {
     addSignals();
 
     function pauseGame() {
-        game.sound.pauseAll();
-        screen.context.popupScreens.push("pause");
         game.paused = true;
+        game.sound.unsetMute();
+        GameAssets.sounds.backgroundMusic.mute = true;
+        screen.context.popupScreens.push("pause");
     }
 
     function addBackground() {
@@ -92,7 +94,7 @@ export function create({ game }) {
         gelButtons.destroy();
         restoreDisabledButtons();
         background.destroy();
-        game.sound.resumeAll();
+        GameAssets.sounds.backgroundMusic.mute = false;
         screen.context.popupScreens = fp.pull("pause", screen.context.popupScreens);
     }
 
