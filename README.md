@@ -4,9 +4,15 @@ A modular framework to simplify the construction of children's games.
 
 ## To build:
 
-npm run build` runs `webpack --config build-scripts/webpack.config.js`
+`npm run build` runs `webpack --config build-scripts/webpack.config.js` and creates a bundle in the `output` directory.
 
-`npm run build-watch` runs the compiler and creates a bundle. This means you can view index.html in a browser without having to run a webserver.
+`npm run build-watch` runs the above but in watch mode, which picks up changes to the code and rebuilds automatically.
+
+### Visualizer
+
+`npm run build` will also generate a webpage in the output folder with a visual representation of the modules which make up the bundle. This allows us to investigate bundle size issues that may occur in the future.
+
+To see this simply open `output/stats.html` in a browser.
 
 ## To view:
 
