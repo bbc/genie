@@ -51,6 +51,7 @@ describe("Layout - Factory", () => {
         assert.exists(layoutFactory.addToBackground);
         assert.exists(layoutFactory.addToForeground);
         assert.exists(layoutFactory.addLayout);
+        assert.exists(layoutFactory.getLayouts);
         assert.exists(layoutFactory.removeAll);
         assert.exists(layoutFactory.addLookups);
         assert.exists(layoutFactory.getSize);
@@ -122,6 +123,23 @@ describe("Layout - Factory", () => {
 
         it("returns the layout", () => {
             expect(layoutFactory.addLayout(mockButtons)).to.eql(mockRoot);
+        });
+    });
+
+    describe("getLayouts method", () => {
+        it("should return the internal array of layouts", () => {
+            const spyDestroy = sandbox.spy();
+            const mockLayout = {
+                root: sandbox.stub(),
+                destroy: spyDestroy,
+            };
+            sandbox.stub(Layout, "create").returns(mockLayout);
+
+            assert.lengthOf(layoutFactory.getLayouts(), 0);
+            layoutFactory.addLayout(["play", "settings"]);
+            assert.lengthOf(layoutFactory.getLayouts(), 1);
+            layoutFactory.addLayout(["pause", "next"]);
+            assert.lengthOf(layoutFactory.getLayouts(), 2);
         });
     });
 

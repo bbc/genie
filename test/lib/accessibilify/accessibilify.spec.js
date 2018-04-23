@@ -99,6 +99,7 @@ describe("#accessibilify", () => {
                     return mockButton.hitArea.x + mockButton.hitArea.width;
                 },
             },
+            input: { enabled: true },
             events: {
                 onInputOver: {
                     dispatch: onInputOver,
@@ -182,8 +183,47 @@ describe("#accessibilify", () => {
     });
 
     describe("Button Update", () => {
-        describe("when button is outside of screen and element is visible", () => {
-            it("hides element", () => {
+        describe("setElementPosition", () => {
+            it("when button is on screen and input is enabled the position is updated", () => {
+                const position = sandbox.spy();
+                accessibleDomElement.returns({
+                    visible: () => accessibleDomElementVisible,
+                    position: position,
+                });
+                accessibilify(mockButton);
+                sinon.assert.calledOnce(position);
+                mockButton.update();
+                sinon.assert.calledTwice(position);
+            });
+            it("when button is off screen the position update is skipped", () => {
+                const position = sandbox.spy();
+                accessibleDomElement.returns({
+                    visible: () => accessibleDomElementVisible,
+                    hide: accessibleDomElementHide,
+                    position: position,
+                });
+                mockButton.hitArea.x = -1000;
+                accessibilify(mockButton);
+                sinon.assert.calledOnce(position);
+                mockButton.update();
+                sinon.assert.calledOnce(position);
+            });
+            it("when button input is disabled the position update is skipped", () => {
+                const position = sandbox.spy();
+                accessibleDomElement.returns({
+                    visible: () => accessibleDomElementVisible,
+                    hide: accessibleDomElementHide,
+                    position: position,
+                });
+                mockButton.input.enabled = false;
+                accessibilify(mockButton);
+                sinon.assert.calledOnce(position);
+                mockButton.update();
+                sinon.assert.calledOnce(position);
+            });
+        });
+        describe("element visibility", () => {
+            it("when button is outside of screen and element is visible it should be hidden", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
                     hide: accessibleDomElementHide,
@@ -194,10 +234,18 @@ describe("#accessibilify", () => {
                 mockButton.update();
                 sinon.assert.called(accessibleDomElementHide);
             });
-        });
-
-        describe("when button is within the bounds of the screen and element is not visible", () => {
-            it("shows element", () => {
+            it("when button input is disabled and the element is visible it should be hidden", () => {
+                accessibleDomElement.returns({
+                    visible: () => accessibleDomElementVisible,
+                    hide: accessibleDomElementHide,
+                    position: () => {},
+                });
+                mockButton.input.enabled = false;
+                accessibilify(mockButton);
+                mockButton.update();
+                sinon.assert.called(accessibleDomElementHide);
+            });
+            it("when button has enabled input and is within the bounds of the screen and element is not visible it should be shown", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
                     show: accessibleDomElementShow,

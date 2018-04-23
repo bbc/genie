@@ -1,4 +1,18 @@
 {
+    "loadscreen": [
+        {
+            "type": "audio",
+            "key": "backgroundMusic",
+            "urls": ["shared/background-music.mp3", "shared/background-music.ogg"],
+            "autoDecode": true
+        },
+        {
+            "type": "audio",
+            "key": "buttonClick",
+            "urls": ["shared/button-click.mp3", "shared/button-click.ogg"],
+            "autoDecode": true
+        }
+    ],
     "home": [
         {
             "type": "image",
