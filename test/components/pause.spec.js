@@ -136,8 +136,8 @@ describe("Pause Overlay", () => {
                 "pauseHome",
                 "audioOff",
                 "settings",
+                "pauseReplay",
                 "pausePlay",
-                "pauseRestart",
                 "howToPlay",
             ];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
@@ -172,7 +172,7 @@ describe("Pause Overlay", () => {
             assert.equal(signalSpy.getCall(0).args[0].channel, "pause-gel-buttons");
             assert.equal(signalSpy.getCall(0).args[0].name, "play");
             assert.equal(signalSpy.getCall(1).args[0].channel, "pause-gel-buttons");
-            assert.equal(signalSpy.getCall(1).args[0].name, "restart");
+            assert.equal(signalSpy.getCall(1).args[0].name, "replay");
             assert.equal(signalSpy.getCall(2).args[0].channel, "pause-gel-buttons");
             assert.equal(signalSpy.getCall(2).args[0].name, "home");
         });

@@ -74,8 +74,8 @@ export function create({ game }) {
             "pauseHome",
             "audioOff",
             "settings",
+            "pauseReplay",
             "pausePlay",
-            "pauseRestart",
             "howToPlay",
         ]);
         moveButtonsToTop(gelLayout);
@@ -84,7 +84,7 @@ export function create({ game }) {
 
     function addSignals() {
         signal.bus.subscribe({ channel, name: "play", callback: destroy });
-        signal.bus.subscribe({ channel, name: "restart", callback: restartGame });
+        signal.bus.subscribe({ channel, name: "replay", callback: restartGame });
         signal.bus.subscribe({ channel, name: "home", callback: goHome });
     }
 
