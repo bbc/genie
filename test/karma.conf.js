@@ -9,7 +9,7 @@ module.exports = function(config) {
         frameworks: ["mocha"],
         files: ["node_modules/phaser-ce/build/phaser.min.js", "test/test-context.js"],
         preprocessors: {
-            "test/test-context.js": ["webpack"],
+            "test/test-context.js": ["webpack", "sourcemap"],
         },
         client: {
             mocha: {
