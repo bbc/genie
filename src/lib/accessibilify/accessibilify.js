@@ -55,11 +55,12 @@ export function accessibilify(button, config) {
             teardown();
             return _destroy.apply(button, arguments);
         };
-
+        game.scale.onSizeChange.add(resizeAndRepositionElement);
         game.state.onStateChange.addOnce(teardown);
     }
 
     function teardown() {
+        game.scale.onSizeChange.remove(resizeAndRepositionElement);
         accessibleElement.remove();
     }
 
