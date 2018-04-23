@@ -5,7 +5,10 @@ export const create = () => {
     let closeCallback;
 
     const defaults = {
-        audio: value => gmi.setAudio(value),
+        audio: value => {
+            console.log("audio set to " + value); // TODO: delete this console log
+            gmi.setAudio(value);
+        },
         motion: value => gmi.setMotion(value),
         subtitles: value => gmi.setSubtitles(value),
     };
