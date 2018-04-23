@@ -6,8 +6,8 @@ describe("Layout - Gel Defaults", () => {
         assert(config.exit.title === "Exit");
     });
 
-    it("has a play button with group 'middleCenterV'", () => {
-        assert(config.play.group === "middleCenterV");
+    it("has a play button with group 'middleCenter'", () => {
+        assert(config.play.group === "middleCenter");
     });
 
     it("has a settings button with aria label 'Game Settings'", () => {
