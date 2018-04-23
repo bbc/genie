@@ -28,7 +28,7 @@ export class GameTest extends Screen {
         [-70, 20, 110].forEach((buttonYPosition, index) => {
             const buttonNumber = index + 1;
             const buttonText = new Phaser.Text(this.game, 0, 5, "Button " + buttonNumber, buttonTextStyle);
-            const resultsData = { transient: { resultsData: buttonNumber } };
+            const resultsData = { transient: { resultsData: "You pressed button " + buttonNumber } };
             const button = this.game.add.button(0, buttonYPosition, buttonKey, () => this.next(resultsData), this);
             button.anchor.set(0.5, 0.5);
             button.addChild(buttonText);
