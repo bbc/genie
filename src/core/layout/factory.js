@@ -11,6 +11,7 @@
  *
  * @module core/layout/factory
  */
+import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "../scaler.js";
 import * as Layout from "./layout.js";
 
@@ -80,6 +81,15 @@ export function create(game) {
     function scaleBackground(width, height, scale) {
         background.scale.set(scale, scale);
         background.position.set(width / 2, height / 2);
+        resetButtonDomElementPositions();
+    }
+
+    function resetButtonDomElementPositions() {
+        getLayouts().forEach(layout => {
+            fp.forOwn(button => {
+                button.setElPosition();
+            }, layout.buttons);
+        });
     }
 
     function getLayouts() {

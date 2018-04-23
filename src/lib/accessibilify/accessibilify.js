@@ -1,5 +1,6 @@
 import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as signal from "../../core/signal-bus.js";
+import fp from "../../lib/lodash/fp/fp.js";
 
 export function accessibilify(button, config) {
     config = Object.assign(
@@ -12,9 +13,10 @@ export function accessibilify(button, config) {
 
     const game = button.game;
     const accessibleElement = newAccessibleElement();
+    const setElPosition = fp.debounce(200, setElementPosition);
 
     assignEvents();
-    setElementPosition();
+    setElPosition();
 
     return button;
 
@@ -36,8 +38,10 @@ export function accessibilify(button, config) {
     }
 
     function setElementPosition() {
-        const bounds = getHitAreaBounds();
-        accessibleElement.position(bounds);
+        if (button.alive) {
+            const bounds = getHitAreaBounds();
+            accessibleElement.position(bounds);
+        }
     }
 
     function assignEvents() {
@@ -49,6 +53,7 @@ export function accessibilify(button, config) {
 
         game.state.onStateChange.addOnce(teardown);
         button.update = update;
+        button.setElPosition = setElPosition;
     }
 
     function teardown() {
@@ -73,7 +78,6 @@ export function accessibilify(button, config) {
         if (!accessibleElement.visible()) {
             accessibleElement.show();
         }
-        setElementPosition();
     }
 
     function isOutsideScreen() {

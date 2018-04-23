@@ -76,6 +76,18 @@ describe("Layout - Factory", () => {
         expect(groupMethods.position.set.getCall(0).args).to.eql([400, 300]);
     });
 
+    it("resets button DOM element positions when scaling background", () => {
+        const mockButtons = [{ setElPosition: sandbox.spy() }, { setElPosition: sandbox.spy() }];
+        const mockLayout = { root: { phaserElement: "phaserElement" }, buttons: mockButtons };
+        const layoutStub = sandbox.stub(Layout, "create").returns(mockLayout);
+        const onScaleChangeCallback = scalerMethods.onScaleChange.add.getCall(0).args[0];
+
+        layoutFactory.addLayout(["play"]);
+        onScaleChangeCallback(800, 600, 1);
+        sinon.assert.calledOnce(mockButtons[0].setElPosition);
+        sinon.assert.calledOnce(mockButtons[1].setElPosition);
+    });
+
     describe("addToBackground method", () => {
         it("adds an Phaser element to the background", () => {
             const mockPhaserElement = { phaser: "element" };

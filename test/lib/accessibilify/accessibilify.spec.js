@@ -40,6 +40,7 @@ describe("#accessibilify", () => {
         onInputOut = sandbox.spy();
         activePointer = sandbox.spy();
         mockButton = {
+            alive: true,
             name: "play",
             toGlobal: x => {
                 return x;
@@ -170,7 +171,7 @@ describe("#accessibilify", () => {
             expect(typeof mockButton.update).to.equal("function");
         });
 
-        it("repositions accessibleElement", () => {
+        it("repositions accessibleElement if button exists", () => {
             sandbox.restore();
             const clock = sandbox.useFakeTimers();
             const position = sandbox.spy();
@@ -180,48 +181,22 @@ describe("#accessibilify", () => {
             clock.tick(200);
             sinon.assert.called(position.withArgs(mockButton.hitArea.clone()));
         });
+
+        it("does NOT reposition accessibleElement if button does not exist", () => {
+            sandbox.restore();
+            let deadMockButton = mockButton;
+            deadMockButton.alive = false;
+            const clock = sandbox.useFakeTimers();
+            const position = sandbox.spy();
+            accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({ position });
+
+            accessibilify(deadMockButton);
+            clock.tick(200);
+            sinon.assert.notCalled(position);
+        });
     });
 
     describe("Button Update", () => {
-        describe("setElementPosition", () => {
-            it("when button is on screen and input is enabled the position is updated", () => {
-                const position = sandbox.spy();
-                accessibleDomElement.returns({
-                    visible: () => accessibleDomElementVisible,
-                    position: position,
-                });
-                accessibilify(mockButton);
-                sinon.assert.calledOnce(position);
-                mockButton.update();
-                sinon.assert.calledTwice(position);
-            });
-            it("when button is off screen the position update is skipped", () => {
-                const position = sandbox.spy();
-                accessibleDomElement.returns({
-                    visible: () => accessibleDomElementVisible,
-                    hide: accessibleDomElementHide,
-                    position: position,
-                });
-                mockButton.hitArea.x = -1000;
-                accessibilify(mockButton);
-                sinon.assert.calledOnce(position);
-                mockButton.update();
-                sinon.assert.calledOnce(position);
-            });
-            it("when button input is disabled the position update is skipped", () => {
-                const position = sandbox.spy();
-                accessibleDomElement.returns({
-                    visible: () => accessibleDomElementVisible,
-                    hide: accessibleDomElementHide,
-                    position: position,
-                });
-                mockButton.input.enabled = false;
-                accessibilify(mockButton);
-                sinon.assert.calledOnce(position);
-                mockButton.update();
-                sinon.assert.calledOnce(position);
-            });
-        });
         describe("element visibility", () => {
             it("when button is outside of screen and element is visible it should be hidden", () => {
                 accessibleDomElement.returns({
