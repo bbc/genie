@@ -4,11 +4,10 @@
  * @module layout/layout
  */
 import fp from "../../lib/lodash/fp/fp.js";
-
 import { calculateMetrics } from "./calculate-metrics.js";
 import * as gel from "./gel-defaults.js";
-import { Group } from "./group.js";
 import { groupLayouts } from "./group-layouts.js";
+import { Group } from "./group.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
 const tabSort = fp.sortBy(getOrder(gel.config));

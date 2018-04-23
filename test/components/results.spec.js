@@ -25,6 +25,7 @@ describe("Results Screen", () => {
         addLayoutSpy = sandbox.spy();
         gameImageStub = sandbox.stub();
         gameImageStub.onCall(0).returns("background");
+        gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
         gameTextStub = sandbox.stub();
 
@@ -43,10 +44,6 @@ describe("Results Screen", () => {
             config: {
                 theme: {
                     resultsScreen: {
-                        titleText: {
-                            content: "Results",
-                            style: { font: "bold 42px Arial" },
-                        },
                         resultText: {
                             style: { font: "36px Arial" },
                         },
@@ -68,6 +65,7 @@ describe("Results Screen", () => {
             keyLookups: {
                 resultsScreen: {
                     background: "backgroundImage",
+                    title: "titleImage",
                 },
             },
         };
@@ -103,20 +101,19 @@ describe("Results Screen", () => {
             assert.deepEqual(addToBackgroundCall.args, ["background"]);
         });
 
-        it("creates a title", () => {
-            const actualTextCall = gameTextStub.getCall(0);
-            const expectedTextCall = [0, -150, "Results", { font: "bold 42px Arial" }];
-            assert.deepEqual(
-                actualTextCall.args,
-                expectedTextCall,
-                "game.add.text should have been called with arguments " + expectedTextCall,
-            );
+        it("adds a title image", () => {
+            const actualImageCall = gameImageStub.getCall(1);
+            const expectedImageCall = [0, -150, "titleImage"];
+            assert.deepEqual(actualImageCall.args, expectedImageCall);
+
+            const addToBackgroundCall = addToBackgroundSpy.getCall(1);
+            assert.deepEqual(addToBackgroundCall.args, ["title"]);
         });
 
         it("loads the game results", () => {
-            const actualTextCall = gameTextStub.getCall(1);
+            const actualTextCall = gameTextStub.getCall(0);
             const expectedResultsData = 22;
-            const expectedTextCall = [0, -50, expectedResultsData, { font: "36px Arial" }];
+            const expectedTextCall = [0, 50, expectedResultsData, { font: "36px Arial" }];
             assert.deepEqual(
                 actualTextCall.args,
                 expectedTextCall,

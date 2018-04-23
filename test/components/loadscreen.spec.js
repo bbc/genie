@@ -3,9 +3,11 @@ import * as sinon from "sinon";
 
 import { Loadscreen } from "../../src/components/loadscreen";
 import * as AssetLoader from "../../src/core/asset-loader";
+import { GameAssets } from "../../src/core/game-assets.js";
 
 describe("Load Screen", () => {
     let loadScreen;
+    let musicLoopStub;
     let mockGame;
     let mockNext;
     let addLookupsSpy;
@@ -18,14 +20,29 @@ describe("Load Screen", () => {
         addLookupsSpy = sandbox.spy();
         assetLoaderCallbackSpy = sandbox.spy();
         assetLoaderSpy = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
-        mockGame = { add: {}, state: { current: "currentState" } };
+        musicLoopStub = sandbox.stub();
+        musicLoopStub.withArgs("shared/background-music").returns({
+            loopFull: sandbox.spy(),
+        });
+        musicLoopStub.returns({});
+
+        mockGame = {
+            add: {
+                audio: musicLoopStub,
+            },
+            state: {
+                current: "currentState",
+            },
+        };
         mockNext = sandbox.spy();
 
         loadScreen = new Loadscreen();
         loadScreen.layoutFactory = {
             addLookups: addLookupsSpy,
             keyLookups: {
-                currentState: "gameState",
+                currentState: {
+                    backgroundMusic: "backgroundMusic",
+                },
                 gel: "thisIsGel",
                 background: "backgroundImage",
                 title: "titleImage",
@@ -89,6 +106,7 @@ describe("Load Screen", () => {
         beforeEach(() => {
             consoleSpy = sandbox.spy(console, "log");
         });
+
         it("logs the progress to the console when qaMode is true", () => {
             loadScreen.context = { qaMode: { active: true } };
             loadScreen.updateLoadProgress("50%");
@@ -105,6 +123,12 @@ describe("Load Screen", () => {
 
             assetLoaderCallbackSpy.args[0][0](expectedKeyLookups);
             expect(consoleSpy.args[0][0]).to.equal(expectedOutput);
+        });
+    });
+
+    describe("Music", () => {
+        it("starts playing the music", () => {
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.loopFull);
         });
     });
 });
