@@ -24,6 +24,10 @@ const transitions = [
                 state.transient.home = false;
                 return "home";
             }
+            if (state.transient.restart) {
+                state.transient.restart = false;
+                return "home";
+            }
             return "game";
         },
     },
