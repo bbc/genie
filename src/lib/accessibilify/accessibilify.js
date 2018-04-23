@@ -41,22 +41,39 @@ export function accessibilify(button, config) {
     }
 
     function assignEvents() {
+        const _destroy = button.destroy;
+        button.destroy = () => {
+            teardown();
+            return _destroy.apply(button, arguments);
+        };
+
         game.state.onStateChange.addOnce(teardown);
-        button.update = checkBounds;
+        button.update = update;
     }
 
     function teardown() {
         accessibleElement.remove();
-        game.scale.onSizeChange.remove(setElementPosition);
     }
 
-    function checkBounds() {
-        setElementPosition();
-        if (isOutsideScreen() && accessibleElement.visible()) {
-            accessibleElement.hide();
-        } else if (!isOutsideScreen() && !accessibleElement.visible()) {
+    function update() {
+        if (!button.input.enabled) {
+            if (accessibleElement.visible()) {
+                accessibleElement.hide();
+            }
+            return;
+        }
+
+        if (isOutsideScreen()) {
+            if (accessibleElement.visible()) {
+                accessibleElement.hide();
+            }
+            return;
+        }
+
+        if (!accessibleElement.visible()) {
             accessibleElement.show();
         }
+        setElementPosition();
     }
 
     function isOutsideScreen() {

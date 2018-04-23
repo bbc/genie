@@ -19,11 +19,11 @@ export class Results extends Screen {
         const backgroundImage = this.game.add.image(0, 0, this.keyLookup.background);
         this.layoutFactory.addToBackground(backgroundImage);
 
-        const titleText = this.game.add.text(0, -150, theme.titleText.content, theme.titleText.style);
-        this.layoutFactory.addToBackground(titleText);
+        const titleImage = this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
+        this.layoutFactory.addToBackground(titleImage);
 
         const resultsData = this.context.inState.transient.resultsData;
-        const resultsText = this.game.add.text(0, -50, resultsData, theme.resultText.style);
+        const resultsText = this.game.add.text(0, 50, resultsData, theme.resultText.style);
         this.layoutFactory.addToBackground(resultsText);
 
         this.layoutFactory.addLayout(["pause", "restart", "continue"]);
