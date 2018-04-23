@@ -3,6 +3,7 @@ import * as sinon from "sinon";
 
 import * as Layout from "../../../src/core/layout/layout";
 import { Group } from "../../../src/core/layout/group";
+import { GameAssets } from "../../../src/core/game-assets";
 
 describe("Layout", () => {
     const sandbox = sinon.sandbox.create();
@@ -11,6 +12,7 @@ describe("Layout", () => {
     let mockScaler;
 
     beforeEach(() => {
+        sandbox.stub(Group.prototype, "addButton").returns({ onInputUp: { add: sandbox.spy() } });
         return initialiseGame().then(game => {
             mockGame = game;
             mockGame.world = {
@@ -33,12 +35,19 @@ describe("Layout", () => {
                 getSize: sandbox.spy(() => ({ width: 200, height: 200 })),
                 onScaleChange: { add: sandbox.spy() },
             };
+
+            GameAssets.sounds = {
+                buttonClick: {
+                    play: () => {},
+                },
+            };
         });
     });
 
     afterEach(() => {
         sandbox.restore();
         mockGame.destroy();
+        GameAssets.sounds = {};
     });
 
     it("should add the correct number of GEL buttons for a given config", () => {
@@ -93,7 +102,6 @@ describe("Layout", () => {
 
     it("Should set button callbacks using the 'setAction' method", () => {
         const layout = Layout.create(mockGame, mockScaler, ["achievements", "previous", "settings"]);
-
         const testAction = sandbox.spy();
 
         layout.setAction("previous", testAction);

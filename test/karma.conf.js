@@ -6,10 +6,10 @@ var webpackConfig = require("../build-scripts/webpack.config.js");
 module.exports = function(config) {
     config.set({
         basePath: "..",
-        frameworks: ["mocha", "chai", "sinon"],
-        files: ["node_modules/phaser-ce/build/phaser.min.js", { pattern: "test/**/*.spec.js", watched: false }],
+        frameworks: ["mocha"],
+        files: ["node_modules/phaser-ce/build/phaser.min.js", "test/test-context.js"],
         preprocessors: {
-            "test/**/*.spec.js": ["webpack"],
+            "test/test-context.js": ["webpack", "sourcemap"],
         },
         client: {
             mocha: {
@@ -17,9 +17,12 @@ module.exports = function(config) {
             },
         },
         webpack: {
-            module: checkCoverageFlag
-                ? {
-                      rules: webpackConfig.module.rules.concat([
+            mode: "development",
+            plugins: webpackConfig.plugins,
+            devtool: "inline-source-map",
+            module: {
+                rules: checkCoverageFlag
+                    ? webpackConfig.module.rules.concat([
                           {
                               enforce: "post",
                               test: /\.jsx?$/,
@@ -27,11 +30,9 @@ module.exports = function(config) {
                               exclude: path.resolve("src/lib/lodash"),
                               loader: "istanbul-instrumenter-loader",
                           },
-                      ]),
-                  }
-                : webpackConfig.module,
-            resolve: webpackConfig.resolve,
-            devtool: "inline-source-map",
+                      ])
+                    : webpackConfig.module.rules,
+            },
         },
         webpackMiddleware: {
             stats: "errors-only",
