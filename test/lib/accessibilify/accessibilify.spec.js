@@ -164,7 +164,6 @@ describe("#accessibilify", () => {
         it("hooks into the button's destroy event", () => {
             accessibilify(mockButton);
             mockButton.destroy();
-            console.log(mockButton);
             sinon.assert.called(accessibleDomElementRemove);
         });
 
