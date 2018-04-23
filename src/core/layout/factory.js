@@ -87,7 +87,7 @@ export function create(game) {
     function resetButtonDomElementPositions() {
         getLayouts().forEach(layout => {
             fp.forOwn(button => {
-                button.setElPosition();
+                button.accessibleElement.resizeAndReposition();
             }, layout.buttons);
         });
     }

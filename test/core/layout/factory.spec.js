@@ -77,15 +77,26 @@ describe("Layout - Factory", () => {
     });
 
     it("resets button DOM element positions when scaling background", () => {
-        const mockButtons = [{ setElPosition: sandbox.spy() }, { setElPosition: sandbox.spy() }];
+        const mockButtons = [
+            {
+                accessibleElement: {
+                    resizeAndReposition: sandbox.spy(),
+                },
+            },
+            {
+                accessibleElement: {
+                    resizeAndReposition: sandbox.spy(),
+                },
+            },
+        ];
         const mockLayout = { root: { phaserElement: "phaserElement" }, buttons: mockButtons };
         const layoutStub = sandbox.stub(Layout, "create").returns(mockLayout);
         const onScaleChangeCallback = scalerMethods.onScaleChange.add.getCall(0).args[0];
 
         layoutFactory.addLayout(["play"]);
         onScaleChangeCallback(800, 600, 1);
-        sinon.assert.calledOnce(mockButtons[0].setElPosition);
-        sinon.assert.calledOnce(mockButtons[1].setElPosition);
+        sinon.assert.calledOnce(mockButtons[0].accessibleElement.resizeAndReposition);
+        sinon.assert.calledOnce(mockButtons[1].accessibleElement.resizeAndReposition);
     });
 
     describe("addToBackground method", () => {

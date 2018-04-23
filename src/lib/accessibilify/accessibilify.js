@@ -13,10 +13,15 @@ export function accessibilify(button, config) {
 
     const game = button.game;
     const accessibleElement = newAccessibleElement();
-    const setElPosition = fp.debounce(200, setElementPosition);
+    const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
 
     assignEvents();
-    setElPosition();
+    resizeAndRepositionElement();
+
+    button.update = update;
+    button.accessibleElement = {
+        resizeAndReposition: resizeAndRepositionElement,
+    };
 
     return button;
 
@@ -37,7 +42,7 @@ export function accessibilify(button, config) {
         return bounds;
     }
 
-    function setElementPosition() {
+    function setElementSizeAndPosition() {
         if (button.alive) {
             const bounds = getHitAreaBounds();
             accessibleElement.position(bounds);
@@ -52,8 +57,6 @@ export function accessibilify(button, config) {
         };
 
         game.state.onStateChange.addOnce(teardown);
-        button.update = update;
-        button.setElPosition = setElPosition;
     }
 
     function teardown() {
