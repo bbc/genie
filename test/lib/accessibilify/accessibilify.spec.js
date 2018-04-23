@@ -18,6 +18,7 @@ describe("#accessibilify", () => {
     let accessibleDomElementHide;
     let accessibleDomElementShow;
     let accessibleDomElementPosition;
+    let accessibleDomElementRemove;
     let onInputOver;
     let onInputOut;
     let activePointer;
@@ -65,6 +66,7 @@ describe("#accessibilify", () => {
                 },
                 update: {},
             },
+            destroy: () => {},
             getBounds: () => {
                 return {
                     x: buttonBoundsX,
@@ -111,8 +113,10 @@ describe("#accessibilify", () => {
         };
         accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement");
         accessibleDomElementPosition = sandbox.spy();
+        accessibleDomElementRemove = sandbox.spy();
         accessibleDomElement.returns({
             position: accessibleDomElementPosition,
+            remove: accessibleDomElementRemove,
         });
     });
 
@@ -157,11 +161,11 @@ describe("#accessibilify", () => {
             });
         });
 
-        it("assigns an onStateChange event", () => {
-            const onStateChange = sandbox.stub(mockButton.game.state.onStateChange, "addOnce");
-
+        it("hooks into the button's destroy event", () => {
             accessibilify(mockButton);
-            sinon.assert.called(onStateChange);
+            mockButton.destroy();
+            console.log(mockButton);
+            sinon.assert.called(accessibleDomElementRemove);
         });
 
         it("reassigns button's update event", () => {
