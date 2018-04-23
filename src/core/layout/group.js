@@ -107,7 +107,7 @@ export class Group extends Phaser.Group {
             } else if (this._hPos == "center" && this._vPos == "middle") {
                 child.y = 0;
                 child.x = pos.x + child.width / 2;
-                pos.x += child.width + this._metrics.buttonPad;
+                pos.x += child.width + (this._metrics.buttonPad * 3);
             } else {
                 child.x = pos.x + child.width / 2;
                 pos.x += child.width + this._metrics.buttonPad;
