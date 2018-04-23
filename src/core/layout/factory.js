@@ -11,7 +11,6 @@
  *
  * @module core/layout/factory
  */
-import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "../scaler.js";
 import * as Layout from "./layout.js";
 
