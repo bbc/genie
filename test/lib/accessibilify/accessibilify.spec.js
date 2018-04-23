@@ -13,6 +13,7 @@ describe("#accessibilify", () => {
     let buttonBoundsY;
     let buttonBoundsWidth;
     let buttonBoundsHeight;
+    let buttonDestroy;
     let accessibleDomElement;
     let accessibleDomElementVisible;
     let accessibleDomElementHide;
@@ -34,6 +35,7 @@ describe("#accessibilify", () => {
         buttonBoundsY = 50;
         buttonBoundsWidth = 200;
         buttonBoundsHeight = 100;
+        buttonDestroy = sandbox.spy();
         accessibleDomElementVisible = true;
         accessibleDomElementHide = sandbox.spy();
         accessibleDomElementShow = sandbox.spy();
@@ -66,7 +68,7 @@ describe("#accessibilify", () => {
                 },
                 update: {},
             },
-            destroy: () => {},
+            destroy: buttonDestroy,
             getBounds: () => {
                 return {
                     x: buttonBoundsX,
@@ -165,6 +167,8 @@ describe("#accessibilify", () => {
             accessibilify(mockButton);
             mockButton.destroy();
             sinon.assert.called(accessibleDomElementRemove);
+            // Assert original functionality is not completely overridden.
+            sinon.assert.called(buttonDestroy);
         });
 
         it("reassigns button's update event", () => {
