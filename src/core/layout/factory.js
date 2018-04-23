@@ -81,15 +81,6 @@ export function create(game) {
     function scaleBackground(width, height, scale) {
         background.scale.set(scale, scale);
         background.position.set(width / 2, height / 2);
-        resetButtonDomElementPositions();
-    }
-
-    function resetButtonDomElementPositions() {
-        getLayouts().forEach(layout => {
-            fp.forOwn(button => {
-                button.accessibleElement.resizeAndReposition();
-            }, layout.buttons);
-        });
     }
 
     function getLayouts() {

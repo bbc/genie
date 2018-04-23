@@ -158,6 +158,13 @@ describe("#accessibilify", () => {
             });
         });
 
+        it("assigns an onSizeChange event", () => {
+            const onSizeChange = sandbox.stub(mockButton.game.scale.onSizeChange, "add");
+
+            accessibilify(mockButton);
+            sinon.assert.called(onSizeChange);
+        });
+
         it("assigns an onStateChange event", () => {
             const onStateChange = sandbox.stub(mockButton.game.state.onStateChange, "addOnce");
 
