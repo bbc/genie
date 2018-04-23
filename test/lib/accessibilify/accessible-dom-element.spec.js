@@ -176,7 +176,7 @@ describe("#accessibleDomElement", () => {
             const remove = sandbox.stub(element, "remove");
             const newAccessibleElement = accessibleDomElement(options);
             newAccessibleElement.remove();
-            sinon.assert.calledOnce(parentAppendChild.withArgs(element));
+            sinon.assert.calledOnce(parentRemoveChild.withArgs(element));
         });
     });
 });
