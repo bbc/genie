@@ -66,10 +66,12 @@ describe("Group", () => {
         });
 
         it("aligns button accordingly", () => {
+            vPos = "bottom";
+            hPos = "left";
             group.addButton(config);
             group.addButton(config);
             const expectedChildOneXPosition = 100;
-            const expectedChildTwoXPosition = 324;
+            const expectedChildTwoXPosition = 372;
 
             assert(group.children[0].x === expectedChildOneXPosition);
             assert(group.children[1].x === expectedChildTwoXPosition);
