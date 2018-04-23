@@ -30,16 +30,6 @@
             }
         },
         "results": {
-            "titleText": {
-                "content": "Results",
-                "style": {
-                    "font": "bold 40px 'Arial'",
-                    "align": "center",
-                    "fill": "#6A6A6A",
-                    "boundsAlignH": "center",
-                    "fontWeight": "bold"
-                }
-            },
             "resultText": {
                 "style": {
                     "font": "bold 40px 'Arial'",
