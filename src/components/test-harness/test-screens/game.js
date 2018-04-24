@@ -16,7 +16,7 @@ export class GameTest extends Screen {
         this.layoutFactory.addToBackground(titleText);
         this.layoutFactory.addLayout(["home", "pause", "audioOff", "settings"]);
 
-        const buttonKey = this.layoutFactory.keyLookups.home.basicButton;
+        const buttonKey = this.keyLookup.basicButton;
         const buttonTextStyle = {
             font: "40px Arial",
             fill: "#fff",

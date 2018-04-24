@@ -1,0 +1,10 @@
+{
+    "game": [
+        {
+            "type": "image",
+            "key": "basicButton",
+            "url": "game/basic-button.png",
+            "overwrite": false
+        }
+    ]
+}
