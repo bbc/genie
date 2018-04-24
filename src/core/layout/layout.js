@@ -5,12 +5,12 @@
  */
 import fp from "../../lib/lodash/fp/fp.js";
 import { calculateMetrics } from "./calculate-metrics.js";
-import gel from "./gel-defaults.js";
+import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { Group } from "./group.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
-const tabSort = fp.sortBy(getOrder(gel));
+const tabSort = fp.sortBy(getOrder(gel.config));
 
 /**
  * Creates a new layout. Called by layout.factory.addLayout for each screen component
@@ -32,7 +32,7 @@ export function create(game, scaler, buttonIds) {
 
     const buttons = fp.zipObject(
         tabSort(buttonIds),
-        tabSort(buttonIds).map(name => groups[gel[name].group].addButton(gel[name])),
+        tabSort(buttonIds).map(name => groups[gel.config[name].group].addButton(gel.config[name])),
     );
 
     /**
