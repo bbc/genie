@@ -13,11 +13,13 @@ describe("#accessibilify", () => {
     let buttonBoundsY;
     let buttonBoundsWidth;
     let buttonBoundsHeight;
+    let buttonDestroy;
     let accessibleDomElement;
     let accessibleDomElementVisible;
     let accessibleDomElementHide;
     let accessibleDomElementShow;
     let accessibleDomElementPosition;
+    let accessibleDomElementRemove;
     let onInputOver;
     let onInputOut;
     let activePointer;
@@ -33,6 +35,7 @@ describe("#accessibilify", () => {
         buttonBoundsY = 50;
         buttonBoundsWidth = 200;
         buttonBoundsHeight = 100;
+        buttonDestroy = sandbox.spy();
         accessibleDomElementVisible = true;
         accessibleDomElementHide = sandbox.spy();
         accessibleDomElementShow = sandbox.spy();
@@ -57,15 +60,12 @@ describe("#accessibilify", () => {
                 scale: {
                     onSizeChange: {
                         add: () => {},
-                    },
-                },
-                state: {
-                    onStateChange: {
-                        addOnce: () => {},
+                        remove: () => {},
                     },
                 },
                 update: {},
             },
+            destroy: buttonDestroy,
             getBounds: () => {
                 return {
                     x: buttonBoundsX,
@@ -112,8 +112,10 @@ describe("#accessibilify", () => {
         };
         accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement");
         accessibleDomElementPosition = sandbox.spy();
+        accessibleDomElementRemove = sandbox.spy();
         accessibleDomElement.returns({
             position: accessibleDomElementPosition,
+            remove: accessibleDomElementRemove,
         });
     });
 
@@ -165,11 +167,12 @@ describe("#accessibilify", () => {
             sinon.assert.called(onSizeChange);
         });
 
-        it("assigns an onStateChange event", () => {
-            const onStateChange = sandbox.stub(mockButton.game.state.onStateChange, "addOnce");
-
+        it("hooks into the button's destroy event", () => {
             accessibilify(mockButton);
-            sinon.assert.called(onStateChange);
+            mockButton.destroy();
+            sinon.assert.called(accessibleDomElementRemove);
+            // Assert original functionality is not completely overridden.
+            sinon.assert.called(buttonDestroy);
         });
 
         it("reassigns button's update event", () => {

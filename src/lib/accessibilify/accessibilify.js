@@ -19,9 +19,6 @@ export function accessibilify(button, config) {
     resizeAndRepositionElement();
 
     button.update = update;
-    button.accessibleElement = {
-        resizeAndReposition: resizeAndRepositionElement,
-    };
 
     return button;
 
@@ -56,7 +53,6 @@ export function accessibilify(button, config) {
             return _destroy.apply(button, arguments);
         };
         game.scale.onSizeChange.add(resizeAndRepositionElement);
-        game.state.onStateChange.addOnce(teardown);
     }
 
     function teardown() {
