@@ -64,6 +64,7 @@ export function accessibleDomElement(options) {
     }
 
     function remove() {
-        el.remove();
+        // IE11 doesn't support el.remove()
+        options.parent.removeChild(el);
     }
 }

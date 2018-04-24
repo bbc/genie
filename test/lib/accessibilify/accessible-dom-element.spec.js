@@ -9,6 +9,7 @@ describe("#accessibleDomElement", () => {
     let element;
     let parentElement;
     let parentAppendChild;
+    let parentRemoveChild;
 
     before(() => {
         sandbox = sinon.sandbox.create();
@@ -17,8 +18,10 @@ describe("#accessibleDomElement", () => {
     beforeEach(() => {
         element = document.createElement("div");
         parentAppendChild = sandbox.spy();
+        parentRemoveChild = sandbox.spy();
         parentElement = {
             appendChild: parentAppendChild,
+            removeChild: parentRemoveChild,
         };
         options = {
             id: "play-button",
@@ -173,7 +176,7 @@ describe("#accessibleDomElement", () => {
             const remove = sandbox.stub(element, "remove");
             const newAccessibleElement = accessibleDomElement(options);
             newAccessibleElement.remove();
-            sinon.assert.calledOnce(remove);
+            sinon.assert.calledOnce(parentRemoveChild.withArgs(element));
         });
     });
 });
