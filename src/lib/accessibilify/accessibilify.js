@@ -47,7 +47,6 @@ export function accessibilify(button, config) {
             return _destroy.apply(button, arguments);
         };
 
-        game.state.onStateChange.addOnce(teardown);
         button.update = update;
     }
 
