@@ -47,10 +47,10 @@ const transitions = [
     {
         name: "home",
         state: new Home(),
-        nextScreenName: () => "characterSelect",
+        nextScreenName: () => "character-select",
     },
     {
-        name: "characterSelect",
+        name: "character-select",
         state: new Select(),
         nextScreenName: state => {
             if (state.transient.home) {
