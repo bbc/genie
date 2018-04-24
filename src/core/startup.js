@@ -8,17 +8,22 @@ import _ from "../lib/lodash/lodash.js";
 
 import * as Sequencer from "../core/sequencer.js";
 import { parseUrlParams } from "../lib/parseUrlParams.js";
+import * as gel from "../core/layout/gel-defaults.js";
+import { settings } from "../core/settings.js";
 
 /**
- * @param  {Array} transitions - The transitions JSON object given in main.js.
- * @param  {Object=} initialAdditionalState - Additional state that is added to the inState context.
+ * @param {Array} transitions - The transitions JSON object given in main.js.
+ * @param {Object=} initialAdditionalState - Additional state that is added to the inState context.
+ * @param {Object=} settingsConfig -
  * @return {Promise} A Promise, which is resolved with the game in onStarted.
  */
-export function startup(transitions, initialAdditionalState) {
-    const gmi = window.getGMI({});
+export function startup(transitions, initialAdditionalState, settingsConfig = {}) {
+    const gmi = window.getGMI({ settingsConfig });
     const urlParams = parseUrlParams(window.location.search);
     const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
     hookErrors(gmi.gameContainerId);
+    gel.setGmi(gmi);
+    settings.setGmi(gmi);
 
     const phaserConfig = {
         width: 1400,

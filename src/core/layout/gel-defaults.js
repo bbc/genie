@@ -1,10 +1,25 @@
 import * as pause from "../../components/pause.js";
+import { settings } from "../settings.js";
+
+let gmi;
+
+export const setGmi = newGmi => {
+    gmi = newGmi;
+};
 
 const howToPlayClicked = () => {
     console.log("how to play clicked");
 };
 
-const config = {
+const callGmi = method => () => {
+    if (gmi) {
+        gmi[method]();
+    } else {
+        throw "gmi has not been initialised in gel-defaults";
+    }
+};
+
+export const config = {
     exit: {
         group: "topLeft",
         title: "Exit",
@@ -13,6 +28,7 @@ const config = {
         order: 0,
         id: "gel-exit",
         channel: "gel-buttons",
+        action: callGmi("exit"),
     },
     home: {
         group: "topLeft",
@@ -71,6 +87,7 @@ const config = {
         order: 5,
         id: "gel-settings",
         channel: "gel-buttons",
+        action: settings.show,
     },
     pause: {
         group: "topRight",
@@ -173,5 +190,3 @@ const config = {
         channel: "gel-buttons",
     },
 };
-
-export default config;
