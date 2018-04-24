@@ -1,5 +1,6 @@
 import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as signal from "../../core/signal-bus.js";
+import fp from "../../lib/lodash/fp/fp.js";
 
 export function accessibilify(button, config) {
     config = Object.assign(
@@ -12,9 +13,12 @@ export function accessibilify(button, config) {
 
     const game = button.game;
     const accessibleElement = newAccessibleElement();
+    const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
 
     assignEvents();
-    setElementPosition();
+    resizeAndRepositionElement();
+
+    button.update = update;
 
     return button;
 
@@ -35,9 +39,11 @@ export function accessibilify(button, config) {
         return bounds;
     }
 
-    function setElementPosition() {
-        const bounds = getHitAreaBounds();
-        accessibleElement.position(bounds);
+    function setElementSizeAndPosition() {
+        if (button.alive) {
+            const bounds = getHitAreaBounds();
+            accessibleElement.position(bounds);
+        }
     }
 
     function assignEvents() {
@@ -46,12 +52,11 @@ export function accessibilify(button, config) {
             teardown();
             return _destroy.apply(button, arguments);
         };
-
-        game.state.onStateChange.addOnce(teardown);
-        button.update = update;
+        game.scale.onSizeChange.add(resizeAndRepositionElement);
     }
 
     function teardown() {
+        game.scale.onSizeChange.remove(resizeAndRepositionElement);
         accessibleElement.remove();
     }
 
@@ -73,7 +78,6 @@ export function accessibilify(button, config) {
         if (!accessibleElement.visible()) {
             accessibleElement.show();
         }
-        setElementPosition();
     }
 
     function isOutsideScreen() {
