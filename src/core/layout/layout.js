@@ -17,7 +17,7 @@ const tabSort = fp.sortBy(getOrder(gel.config));
  *
  * @param {Phaser.Game} game - Phaser Game Instance
  * @param {module:scaler} scaler
- * @param {[string]} buttonIds
+ * @param {Array.<string>} buttonIds
  */
 export function create(game, scaler, buttonIds) {
     const root = new Phaser.Group(game, game.world, undefined);
