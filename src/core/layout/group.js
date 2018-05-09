@@ -30,8 +30,11 @@ const getGroupX = sizes => {
     return horizontal[sizes.pos.h](sizes.width, sizes.metrics.borderPad * sizes.scale, horizontals[sizes.pos.h]);
 };
 
-const getGroupY = sizes =>
-    vertical[sizes.pos.v](sizes.height, sizes.metrics.borderPad * sizes.scale, sizes.metrics.verticals[sizes.pos.v]);
+const getGroupY = sizes => {
+    const verticals = sizes.metrics["verticals"];
+
+    return vertical[sizes.pos.v](sizes.height, sizes.metrics.borderPad * sizes.scale, verticals[sizes.pos.v]);
+};
 
 const getGroupYCenter = sizes =>
     vertical[sizes.pos.v](0, sizes.metrics.borderPad * sizes.scale, sizes.metrics.verticals[sizes.pos.v]);
