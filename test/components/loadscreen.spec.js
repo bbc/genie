@@ -2,12 +2,14 @@ import { expect } from "chai";
 import * as sinon from "sinon";
 
 import { Loadscreen } from "../../src/components/loadscreen";
+import * as LoadBar from "../../src/components/loadbar";
 import * as AssetLoader from "../../src/core/asset-loader";
 import { GameAssets } from "../../src/core/game-assets.js";
 
 describe("Load Screen", () => {
     let loadScreen;
     let musicLoopStub;
+    let addImageStub;
     let mockGame;
     let mockNext;
     let addLookupsSpy;
@@ -24,10 +26,12 @@ describe("Load Screen", () => {
         musicLoopStub.withArgs("shared/background-music").returns({
             loopFull: sandbox.spy(),
         });
+        addImageStub = sandbox.stub();
         musicLoopStub.returns({});
 
         mockGame = {
             add: {
+                image: addImageStub,
                 audio: musicLoopStub,
             },
             state: {
@@ -98,6 +102,46 @@ describe("Load Screen", () => {
             assetLoaderCallbackSpy.args[0][0]();
             expect(mockNext.called).to.equal(true);
         });
+    });
+
+    describe("create method", () => {
+        let progressBarStub;
+        let setFillPercentStub;
+
+        beforeEach(() => {
+            setFillPercentStub = sandbox.stub();
+            progressBarStub = sandbox.stub(LoadBar, "createLoadBar").returns({
+                position: {
+                    set: () => {},
+                },
+                setFillPercent: setFillPercentStub,
+            });
+            loadScreen.layoutFactory.getSize = sandbox.stub().returns({
+                width: 100,
+                height: 100,
+                scale: 1,
+                stageHeightPx: 60,
+            });
+            loadScreen.layoutFactory.addToBackground = sandbox.stub().returns({
+                anchor: {
+                    set: () => {},
+                },
+                position: {
+                    set: () => {},
+                },
+            });
+            loadScreen.create();
+        });
+
+        it("creates one loading bar", () => {
+            sinon.assert.calledOnce(progressBarStub);
+            sinon.assert.calledWith(progressBarStub, mockGame, "loadbarBackground", "loadbarFill");
+        });
+    });
+
+    describe("updateLoadProgress", () => {
+        // TODO: test that loadingBar.setFillPercent is called when the loading bar exists and test
+        // that it is not called when loadingBar does not exist
     });
 
     describe("qaMode", () => {

@@ -8,6 +8,7 @@ import _ from "../lib/lodash/lodash.js";
 
 import { loadAssets } from "../core/asset-loader.js";
 import { Screen } from "../core/screen.js";
+import { createLoadBar } from "./loadbar.js";
 import { initGameAssets, GameAssets } from "../core/game-assets.js";
 import { calculateMetrics } from "../core/layout/calculate-metrics.js";
 
@@ -40,9 +41,7 @@ export class Loadscreen extends Screen {
             }
             initGameAssets(this.game);
             this.startMusic();
-            setTimeout(() => {
-                this.next();
-            }, 7000);
+            this.next();
         });
     }
 
@@ -50,7 +49,7 @@ export class Loadscreen extends Screen {
         this.layoutFactory.addToBackground(this.game.add.image(0, 0, "loadscreenBackground"));
         this.layoutFactory.addToBackground(this.game.add.image(0, -150, "loadscreenTitle"));
 
-        this.loadingBar = new PreloadBar(this.game, "loadbarBackground", "loadbarFill");
+        this.loadingBar = createLoadBar(this.game, "loadbarBackground", "loadbarFill");
         this.loadingBar.position.set(0, 110);
         this.layoutFactory.addToBackground(this.loadingBar);
 
@@ -89,36 +88,4 @@ function dumpToConsole(keyLookups) {
         ]),
     ]);
     console.log(_.join(lines, "\n")); // eslint-disable-line no-console
-}
-
-/** Prototype code below */
-
-class PreloadBar extends Phaser.Group {
-    constructor(game, barBgKey, barFillKey) {
-        super(game);
-        this._createBarBackground(barBgKey);
-        this._createProgressBar(barFillKey);
-    }
-
-    setFillPercent(percent) {
-        const cropRect = new Phaser.Rectangle(0, 0, this.barWidth * percent / 100, this.barFill.height);
-        this.barFill.crop(cropRect);
-    }
-
-    _createBarBackground(barBgKey) {
-        const barBg = this.game.add.image(0, 0, barBgKey);
-        barBg.anchor.add(0.5, 0.5);
-        this.addChild(barBg);
-    }
-
-    _createProgressBar(barFillKey) {
-        this.barFill = this.game.add.image(0, 0, barFillKey);
-        this.barWidth = this.barFill.width;
-        this.barFill.x = -this.barFill.width / 2;
-        this.barFill.anchor.add(0, 0.5);
-        const cropRect = new Phaser.Rectangle(0, 0, this.barWidth, this.barFill.height);
-        this.barFill.crop(cropRect, false);
-        this.setFillPercent(0);
-        this.addChild(this.barFill);
-    }
 }
