@@ -1,12 +1,13 @@
-// import fp from "../../src/lib/lodash/fp/fp.js";
+// import fp from "../../../src/lib/lodash/fp/fp.js";
 // import { assert } from "chai";
 // import * as sinon from "sinon";
 //
-// import * as Pause from "../../src/components/pause";
-// import * as signal from "../../src/core/signal-bus.js";
-// import { GameAssets } from "../../src/core/game-assets.js";
+// import * as Pause from "../../../src/components/overlays/pause";
+// import * as signal from "../../../src/core/signal-bus.js";
+// import { GameAssets } from "../../../src/core/game-assets.js";
+// import * as OverlayLayout from "../../../src/lib/overlay-layout.js";
 //
-// describe("Pause Overlay", () => {
+// describe.only("Pause Overlay", () => {
 //     let mockGame;
 //     let mockScreen;
 //     let mockGelButtons;
@@ -30,6 +31,13 @@
 //                 },
 //             };
 //         };
+//         const mockOverlayLayout = {
+//             addBackground: sandbox.spy(),
+//             disableExistingButtons: sandbox.spy(),
+//             restoreDisabledButtons: sandbox.spy(),
+//             moveGelButtonsToTop: sandbox.spy(),
+//         };
+//         sandbox.stub(OverlayLayout, "create").returns(mockOverlayLayout);
 //         mockGelButtons = {
 //             buttons: {
 //                 home: newMockButton(true),
@@ -104,15 +112,22 @@
 //     });
 //
 //     describe("assets", () => {
+//         it("creates a new overlay layout manager", () => {
+//             Pause.create({ game: mockGame });
+//             assert.deepEqual(mockOverlayLayout.create.args, mockGame.state.states.pauseScreen);
+//         });
+//
 //         it("adds a background image", () => {
 //             Pause.create({ game: mockGame });
-//
 //             const actualImageCall = mockGame.add.image.getCall(0);
 //             const expectedImageCall = [0, 0, "pauseBackgroundImage"];
 //             assert.deepEqual(actualImageCall.args, expectedImageCall);
+//         });
 //
-//             const addToBackgroundCall = mockScreen.layoutFactory.addToBackground.getCall(0);
-//             assert.deepEqual(addToBackgroundCall.args, [backgroundImage]);
+//         it("passes the background image to the overlay layout manager", () => {
+//             Pause.create({ game: mockGame });
+//             const expectedImageCall = [0, 0, "pauseBackgroundImage"];
+//             assert.deepEqual(mockOverlayLayout.addBackground.args, expectedImageCall);
 //         });
 //
 //         it("disables existing buttons", () => {
@@ -141,21 +156,6 @@
 //                 "howToPlay",
 //             ];
 //             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
-//         });
-//
-//         it("adds a priority ID to each GEL button", () => {
-//             Pause.create({ game: mockGame });
-//             fp.forOwn(gelButton => {
-//                 assert.equal(gelButton.input.priorityID, 999);
-//             }, mockGelButtons.buttons);
-//         });
-//
-//         it("ups the priority ID on each GEL button if there are more popup screens", () => {
-//             mockScreen.context.popupScreens.push("howToPlay");
-//             Pause.create({ game: mockGame });
-//             fp.forOwn(gelButton => {
-//                 assert.equal(gelButton.input.priorityID, 1000);
-//             }, mockGelButtons.buttons);
 //         });
 //     });
 //
