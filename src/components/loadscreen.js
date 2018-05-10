@@ -58,10 +58,8 @@ export class Loadscreen extends Screen {
         const size = this.layoutFactory.getSize();
         const metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
         const padding = metrics.borderPad * size.scale;
-        const horizontal = metrics.horizontals["right"];
-        const vertical = metrics.verticals["bottom"];
-        const x = horizontal - this.game.width - padding;
-        const y = vertical - (this.game.height + padding);
+        const x = metrics.horizontals["right"] - this.game.width - padding;
+        const y = metrics.verticals["bottom"] - (this.game.height + padding);
 
         this.brandLogo = this.layoutFactory.addToBackground(this.game.add.image(0, 0, "brandLogo"));
         this.brandLogo.anchor.set(1, 1);

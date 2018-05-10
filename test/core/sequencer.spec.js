@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 
-import * as LayoutFactory from "../../src/core/layout/factory";
+import * as LayoutFactory from "../../src/core/layout/layout-factory";
 import * as Sequencer from "../../src/core/sequencer";
 import * as signal from "../../src/core/signal-bus.js";
 
