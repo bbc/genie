@@ -47,12 +47,14 @@
         "prettier": "^1.11.1",
         "requirejs": "^2.3.5",
         "sinon": "^4.1.5",
+        "static-http2-server": "^1.7.1",
         "webpack": "^4.2.0",
         "webpack-cli": "^2.0.12",
         "webpack-visualizer-plugin": "^0.1.11"
     },
     "scripts": {
-        "start": "live-server --no-browser --entry-file=./index.dev.html --watch=./src",
+        "start": "http2-server -S",
+        "watch": "live-server --no-browser --entry-file=./index.html --watch=./src",
         "start:qa": "npm run build && live-server --no-browser --entry-file=./index.main.html --watch=./output/main.js -V",
         "build": "webpack --config build-scripts/webpack.config.js",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
