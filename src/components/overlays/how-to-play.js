@@ -1,13 +1,13 @@
 /**
  * How To Play Screen.
- * @module components/how-to-play
+ * @module components/overlays/how-to-play
  */
 
 import fp from "../../lib/lodash/fp/fp.js";
 
 import * as signal from "../../core/signal-bus.js";
 import { GameAssets } from "../../core/game-assets.js";
-import * as OverlayLayout from "../../lib/overlay-layout.js";
+import * as OverlayLayout from "./overlay-layout.js";
 
 /**
  * @param {Phaser.Game} game - The Phaser Game instance
