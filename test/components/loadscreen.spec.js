@@ -105,17 +105,19 @@ describe("Load Screen", () => {
     });
 
     describe("create method", () => {
-        let progressBarStub;
+        let createProgressBarStub;
         let setFillPercentStub;
+        let mockProgressBar;
 
         beforeEach(() => {
             setFillPercentStub = sandbox.stub();
-            progressBarStub = sandbox.stub(LoadBar, "createLoadBar").returns({
+            mockProgressBar = {
                 position: {
                     set: () => {},
                 },
                 setFillPercent: setFillPercentStub,
-            });
+            };
+            createProgressBarStub = sandbox.stub(LoadBar, "createLoadBar").returns(mockProgressBar);
             loadScreen.layoutFactory.getSize = sandbox.stub().returns({
                 width: 100,
                 height: 100,
@@ -134,14 +136,53 @@ describe("Load Screen", () => {
         });
 
         it("creates one loading bar", () => {
-            sinon.assert.calledOnce(progressBarStub);
-            sinon.assert.calledWith(progressBarStub, mockGame, "loadbarBackground", "loadbarFill");
+            sinon.assert.calledOnce(createProgressBarStub);
+            sinon.assert.calledWith(createProgressBarStub, mockGame, "loadbarBackground", "loadbarFill");
+        });
+
+        it("adds the loading bar to the layout", () => {
+            sinon.assert.calledWith(loadScreen.layoutFactory.addToBackground, mockProgressBar);
+        });
+
+        it("adds a brand logo to the layout", () => {
+            // TODO: write a test for this
         });
     });
 
     describe("updateLoadProgress", () => {
-        // TODO: test that loadingBar.setFillPercent is called when the loading bar exists and test
-        // that it is not called when loadingBar does not exist
+        let setFillPercentStub;
+        let loadBarStub;
+
+        beforeEach(() => {
+            loadScreen.context = { qaMode: { active: false } };
+            setFillPercentStub = sandbox.stub();
+            loadScreen.loadingBar = {
+                setFillPercent: setFillPercentStub,
+            };
+        });
+
+        it("updates the loading bar fill percentage when called", () => {
+            // given
+            const progress = 42;
+
+            // when
+            loadScreen.updateLoadProgress(progress);
+
+            // then
+            sinon.assert.calledWith(setFillPercentStub, progress);
+        });
+
+        it("will not try to update the loading bar fill if the loading bar does not exist", () => {
+            // given
+            const progress = 42;
+            delete loadScreen.loadingBar;
+
+            // when
+            loadScreen.updateLoadProgress(progress);
+
+            // then
+            sinon.assert.notCalled(setFillPercentStub);
+        });
     });
 
     describe("qaMode", () => {
