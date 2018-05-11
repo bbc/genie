@@ -45,14 +45,21 @@ export class Loadscreen extends Screen {
         });
     }
 
-    create() {
+    createBackground() {
         this.layoutFactory.addToBackground(this.game.add.image(0, 0, "loadscreenBackground"));
-        this.layoutFactory.addToBackground(this.game.add.image(0, -150, "loadscreenTitle"));
+    }
 
+    createTitle() {
+        this.layoutFactory.addToBackground(this.game.add.image(0, -150, "loadscreenTitle"));
+    }
+
+    createLoadingBar() {
         this.loadingBar = createLoadBar(this.game, "loadbarBackground", "loadbarFill");
         this.loadingBar.position.set(0, 110);
         this.layoutFactory.addToBackground(this.loadingBar);
+    }
 
+    createBrandLogo() {
         // TODO: Find a way to make the brand logo play nice with the scaler and position it correctly
         const size = this.layoutFactory.getSize();
         const metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
@@ -63,6 +70,13 @@ export class Loadscreen extends Screen {
         this.brandLogo = this.layoutFactory.addToBackground(this.game.add.image(0, 0, "brandLogo"));
         this.brandLogo.anchor.set(1, 1);
         this.brandLogo.position.set(x, y);
+    }
+
+    create() {
+        this.createBackground();
+        this.createTitle();
+        this.createLoadingBar();
+        this.createBrandLogo();
     }
 
     updateLoadProgress(progress) {
