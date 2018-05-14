@@ -60,16 +60,15 @@ export class Loadscreen extends Screen {
     }
 
     createBrandLogo() {
-        // TODO: Find a way to make the brand logo play nice with the scaler and position it correctly
         const size = this.layoutFactory.getSize();
         const metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
         const padding = metrics.borderPad * size.scale;
-        const x = metrics.horizontals["right"] - this.game.width - padding;
-        const y = metrics.verticals["bottom"] - (this.game.height + padding);
+        const x = metrics.horizontals["right"] - metrics.borderPad;
+        const y = metrics.verticals["bottom"] - metrics.borderPad;
 
         this.brandLogo = this.layoutFactory.addToBackground(this.game.add.image(0, 0, "brandLogo"));
-        this.brandLogo.anchor.set(1, 1);
-        this.brandLogo.position.set(x, y);
+        this.brandLogo.right = x;
+        this.brandLogo.bottom = y;
     }
 
     create() {
