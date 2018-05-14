@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { accessibilify } from "../../../src/lib/accessibilify/accessibilify";
-import * as helperModule from "../../../src/lib/accessibilify/accessible-dom-element";
+import { accessibilify } from "../../../src/core/accessibilify/accessibilify";
+import * as helperModule from "../../../src/core/accessibilify/accessible-dom-element";
 
 describe("#accessibilify", () => {
     const gameWidth = 800;
