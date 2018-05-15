@@ -79,9 +79,7 @@ export class Loadscreen extends Screen {
     }
 
     updateLoadProgress(progress) {
-        if (this.hasOwnProperty("loadingBar")) this.loadingBar.setFillPercent(progress);
-
-        // use progress to update loading bar
+        if (this.hasOwnProperty("loadingBar")) this.loadingBar.fillPercent = progress;
         if (this.context.qaMode.active) {
             console.log("Loader progress:", progress); // eslint-disable-line no-console
         }

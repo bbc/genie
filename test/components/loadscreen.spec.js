@@ -1,4 +1,4 @@
-import { expect } from "chai";
+import { expect, assert } from "chai";
 import * as sinon from "sinon";
 
 import { Loadscreen } from "../../src/components/loadscreen";
@@ -156,9 +156,7 @@ describe("Load Screen", () => {
         beforeEach(() => {
             loadScreen.context = { qaMode: { active: false } };
             setFillPercentStub = sandbox.stub();
-            loadScreen.loadingBar = {
-                setFillPercent: setFillPercentStub,
-            };
+            loadScreen.loadingBar = { fillPercent: 0 };
         });
 
         it("updates the loading bar fill percentage when called", () => {
@@ -169,7 +167,7 @@ describe("Load Screen", () => {
             loadScreen.updateLoadProgress(progress);
 
             // then
-            sinon.assert.calledWith(setFillPercentStub, progress);
+            assert.equal(loadScreen.loadingBar.fillPercent, progress);
         });
 
         it("will not try to update the loading bar fill if the loading bar does not exist", () => {
