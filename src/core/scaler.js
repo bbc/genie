@@ -2,7 +2,7 @@ export const GEL_MIN_RATIO_WIDTH = 4;
 export const GEL_MIN_RATIO_HEIGHT = 3;
 export const GEL_SAFE_FRAME_RATIO = GEL_MIN_RATIO_WIDTH / GEL_MIN_RATIO_HEIGHT;
 
-import fp from "../lib/lodash/fp/fp.js";
+import fp from "../../lib/lodash/fp/fp.js";
 
 const getScale = fp.curry((scaleMethods, stageHeightPx, { width, height }) => {
     const scale = scaleMethods[width / height >= GEL_SAFE_FRAME_RATIO ? "wide" : "narrow"](width, height);

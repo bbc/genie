@@ -4,7 +4,7 @@
  * @module components/loadscreen
  */
 
-import _ from "../lib/lodash/lodash.js";
+import _ from "../../lib/lodash/lodash.js";
 
 import { loadAssets } from "../core/asset-loader.js";
 import { Screen } from "../core/screen.js";
