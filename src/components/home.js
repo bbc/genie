@@ -10,10 +10,12 @@ import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 
 export class Home extends Screen {
     constructor() {
+        console.log("home.js - constructor");
         super();
     }
 
     preload() {
+        console.log("home.js - preload");
         this.keyLookup = this.layoutFactory.keyLookups[this.game.state.current];
     }
 

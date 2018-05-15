@@ -22,28 +22,58 @@ import * as signal from "./signal-bus.js";
  * @param  transitions A JSON object with transitions, from the main.js file.
  * @returns {{getTransitions: function}}
  */
+
+
 export function create(game, context, transitions) {
-    let currentScreen = transitions[0];
+    console.log("sequencer.js - create");
+    let currentScreen = Object.values(transitions)[0];
+    console.log("sequencer.js - currentScreen initialized", currentScreen);
     const layoutFactory = LayoutFactory.create(game);
 
-    transitions.forEach(transition => game.state.add(transition.name, transition.state));
+    //transitions.forEach(transition => game.state.add(transition.name, transition.state));
+
+    console.log("sequencer.js - create - before addStates");
+    addStates(game, context, transitions, layoutFactory);
+    console.log("sequencer.js - create - after  addStates");
 
     const screenLookup = _.fromPairs(_.map(transitions, c => [c.name, c]));
-    game.state.start(currentScreen.name, true, false, context, next, layoutFactory);
+    console.log("sequencer.js - create - about to run game.state.start - ");
+    game.state.start(currentScreen.next({ game, context, screens: transitions, layoutFactory}).name, true, false, context, transitions, layoutFactory);
+    console.log("sequencer.js - create - successfully ran game.state.start");
 
-    function next(changedState) {
-        signal.bus.removeChannel("gel-buttons");
-        //TODO: Use GMI to save persistent state to local storage, if it has been updated
-        const newState = _.merge({}, context.inState, changedState);
-        const nextScreenName = currentScreen.nextScreenName(newState);
-        context.inState = newState;
-        layoutFactory.removeAll();
-        game.state.start(nextScreenName, true, false, context, next, layoutFactory);
+    //function next(changedState) {
+    //    signal.bus.removeChannel("gel-buttons");
+    //    const newState = _.merge({}, context.inState, changedState);
+    //    const nextScreenName = currentScreen.nextScreenName(newState);
+    //    context.inState = newState;
+    //    layoutFactory.removeAll();
+    //    game.state.start(nextScreenName, true, false, context, next, layoutFactory);
 
-        currentScreen = screenLookup[nextScreenName];
-    }
+    //    currentScreen = screenLookup[nextScreenName];
+    //}
 
     const getTransitions = () => transitions;
 
     return { getTransitions };
 }
+
+// Adds all states from transitions object
+// to Phaser so they are ready to use.
+function addStates(game, context, screens, layoutFactory) {
+    console.log("sequencer.js - addStates --------");
+    let names = [];
+    _.forOwn(screens, screen => {
+        console.log("sequencer.js - addStates - screen = ", screen);
+        _.forOwn(screen, button => {
+            const state = button({ game, context, screens, layoutFactory });
+            const alreadyAdded = names.indexOf(state.name) > -1;
+
+            if (!alreadyAdded) {
+                console.log("sequencer.js - addStates - button state = ", state.name);
+                game.state.add(state.name, state.state);
+                names.push(state.name);
+            }
+        });
+    });
+    console.log("sequencer.js - addStates end --------");
+};
