@@ -41,7 +41,7 @@ describe("How To Play Overlay", () => {
                         "how-to-play-1": "how-to-play-1",
                         "how-to-play-2": "how-to-play-2",
                         "how-to-play-3": "how-to-play-3",
-                    }
+                    },
                 },
                 addLayout: sandbox.stub().returns(mockGelButtons),
                 addToBackground: sandbox.spy(),
