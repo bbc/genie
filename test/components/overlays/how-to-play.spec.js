@@ -6,7 +6,7 @@ import * as signal from "../../../src/core/signal-bus.js";
 import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
 import * as HowToPlay from "../../../src/components/overlays/how-to-play";
 
-describe.only("How To Play Overlay", () => {
+describe("How To Play Overlay", () => {
     let howToPlayScreen;
     let mockGame;
     let mockScreen;
@@ -92,10 +92,6 @@ describe.only("How To Play Overlay", () => {
 
         it("passes the background image to the overlay layout manager", () => {
             assert.deepEqual(mockOverlayLayout.addBackground.args[0], ["backgroundImage"]);
-        });
-
-        it("disables existing buttons", () => {
-            assert.isTrue(mockOverlayLayout.disableExistingButtons.calledOnce);
         });
 
         it("adds GEL buttons", () => {

@@ -13,15 +13,14 @@ import fp from "../../lib/lodash/fp/fp.js";
  * - Moving GEL buttons to the top
  */
 
-export function create(screen) {
+export function create(screen, backgroundImage) {
     const backgroundPriorityID = 999;
     const priorityID = backgroundPriorityID + screen.context.popupScreens.length;
     const previousLayouts = screen.layoutFactory.getLayouts();
-    let disabledButtons = [];
+    const disabledButtons = disableExistingButtons();
 
     return {
         addBackground,
-        disableExistingButtons,
         restoreDisabledButtons,
         moveGelButtonsToTop,
     };
@@ -33,6 +32,7 @@ export function create(screen) {
     }
 
     function disableExistingButtons() {
+        const disabledButtons = [];
         fp.forOwn(layout => {
             fp.forOwn(button => {
                 if (button.input.enabled) {

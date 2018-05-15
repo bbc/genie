@@ -41,6 +41,12 @@ describe("Overlay Layout", () => {
         sandbox.restore();
     });
 
+    it("disables currently enabled buttons", () => {
+        const overlayLayout = OverlayLayout.create(mockScreen);
+        assert.isFalse(mockLayouts[0].buttons.audioOff.input.enabled);
+        assert.isTrue(mockLayouts[0].buttons.audioOff.update.calledOnce);
+    });
+
     describe("addBackground method", () => {
         it("adds a background image and positions it in the correct order", () => {
             const overlayLayout = OverlayLayout.create(mockScreen);
@@ -53,21 +59,9 @@ describe("Overlay Layout", () => {
         });
     });
 
-    describe("disableExistingButtons method", () => {
-        it("disables existing enabled buttons", () => {
-            const overlayLayout = OverlayLayout.create(mockScreen);
-            const disabledButtons = overlayLayout.disableExistingButtons();
-            assert.equal(disabledButtons.length, 1);
-            assert.equal(disabledButtons[0].name, "audioOff");
-            assert.isFalse(disabledButtons[0].input.enabled);
-            assert.isTrue(mockLayouts[0].buttons.audioOff.update.calledOnce);
-        });
-    });
-
     describe("restoreDisabledButtons method", () => {
         it("restores disabled buttons", () => {
             const overlayLayout = OverlayLayout.create(mockScreen);
-            overlayLayout.disableExistingButtons();
             overlayLayout.restoreDisabledButtons();
             assert.isTrue(mockLayouts[0].buttons.audioOff.input.enabled);
             assert.isTrue(mockLayouts[0].buttons.audioOff.update.calledTwice);

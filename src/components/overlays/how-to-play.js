@@ -26,7 +26,6 @@ export function create({ game }) {
     const overlayManager = OverlayLayout.create(screen);
     const backgroundImage = game.add.image(0, 0, keyLookup.background);
     const background = overlayManager.addBackground(backgroundImage);
-    const disabledButtons = overlayManager.disableExistingButtons();
     const gelButtons = addGelButtons();
     addPanels();
     addSignals();

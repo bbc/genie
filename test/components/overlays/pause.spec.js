@@ -91,10 +91,6 @@ describe("Pause Overlay", () => {
             assert.deepEqual(mockOverlayLayout.addBackground.args[0], ["backgroundImage"]);
         });
 
-        it("disables existing buttons", () => {
-            assert.isTrue(mockOverlayLayout.disableExistingButtons.calledOnce);
-        });
-
         it("adds GEL buttons", () => {
             const actualAddLayoutCall = mockScreen.layoutFactory.addLayout.getCall(0);
             const expectedAddLayoutCall = [
