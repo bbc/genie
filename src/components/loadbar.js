@@ -7,20 +7,25 @@ export const createLoadBar = (game, barBgKey, barFillKey) => {
     loadBar.addChild(barBg);
 
     // create progress bar
-    loadBar.barFill = game.add.image(0, 0, barFillKey);
-    loadBar.barWidth = loadBar.barFill.width;
-    loadBar.barFill.x = -loadBar.barFill.width / 2;
-    loadBar.barFill.anchor.add(0, 0.5);
-    const cropRect = new Phaser.Rectangle(0, 0, loadBar.barWidth, loadBar.barFill.height);
-    loadBar.barFill.crop(cropRect, false);
-    loadBar.addChild(loadBar.barFill);
+    const barFill = game.add.image(0, 0, barFillKey);
+    const barWidth = barFill.width;
+    barFill.x = -barFill.width / 2;
+    barFill.anchor.add(0, 0.5);
+    const cropRect = new Phaser.Rectangle(0, 0, 0, barFill.height);
+    barFill.crop(cropRect, false);
+    loadBar.addChild(barFill);
 
-    // create setter function and return the phaser object
-    loadBar.setFillPercent = percent => {
-        const cropRect = new Phaser.Rectangle(0, 0, loadBar.barWidth * percent / 100, loadBar.barFill.height);
-        loadBar.barFill.crop(cropRect);
-    };
-    loadBar.setFillPercent(0);
+    let _fillPercent = 0;
+    Object.defineProperty(loadBar, "fillPercent", {
+        get: () => {
+            return _fillPercent;
+        },
+        set: percent => {
+            cropRect.width = barWidth * percent / 100;
+            barFill.crop(cropRect);
+            _fillPercent = percent;
+        },
+    });
 
     return loadBar;
 };

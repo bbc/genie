@@ -1,15 +1,36 @@
-import { expect } from "chai";
+import { assert } from "chai";
 import * as sinon from "sinon";
-
 import * as LoadBar from "../../src/components/loadbar";
-import * as AssetLoader from "../../src/core/asset-loader";
-import { GameAssets } from "../../src/core/game-assets.js";
 
-// TODO: Unit test this
-describe.skip("Load Bar", () => {
+describe("Load Bar", () => {
+    const sandbox = sinon.sandbox.create();
+
+    const mockGame = {
+        add: { image: () => mockBarFill },
+    };
+    const barBackgroundKey = "";
+    const barFillKey = "";
+
+    const mockBarFill = {
+        width: 100,
+        anchor: { add: () => {} },
+    };
+
+    beforeEach(() => {
+        mockBarFill.crop = sinon.spy();
+    });
+    afterEach(() => {
+        sandbox.restore();
+    });
+
     describe("createLoadBar", () => {
-        it("creates and returns a load bar", () => {
-            LoadBar.createLoadBar();
+        it("sets crop size when fillPercent is updated", () => {
+            const progress = 50;
+            const loadBar = LoadBar.createLoadBar(mockGame, barBackgroundKey, barFillKey);
+
+            loadBar.fillPercent = progress;
+            const cropRect = mockBarFill.crop.getCall(0).args[0];
+            assert.equal(cropRect.width, progress);
         });
     });
 });
