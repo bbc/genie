@@ -42,7 +42,7 @@ describe("Home Screen", () => {
         };
 
         homeScreen = new Home();
-        homeScreen.layoutFactory = {
+        homeScreen.scene = {
             addToBackground: addToBackgroundSpy,
             addLayout: addLayoutSpy,
             keyLookups: {
@@ -63,7 +63,7 @@ describe("Home Screen", () => {
 
     describe("preload method", () => {
         it("adds current game state to the layout key lookups", () => {
-            const expectedKeylookups = homeScreen.layoutFactory.keyLookups.homeScreen;
+            const expectedKeylookups = homeScreen.scene.keyLookups.homeScreen;
             assert.deepEqual(homeScreen.keyLookup, expectedKeylookups);
         });
 
@@ -101,7 +101,7 @@ describe("Home Screen", () => {
 
         it("creates a layout harness with correct params", () => {
             const actualParams = layoutHarnessSpy.getCall(0).args;
-            const expectedParams = [mockGame, mockContext, homeScreen.layoutFactory];
+            const expectedParams = [mockGame, mockContext, homeScreen.scene];
             assert(layoutHarnessSpy.callCount === 1, "layout harness should be called once");
             assert.deepEqual(actualParams, expectedParams);
         });

@@ -59,7 +59,7 @@ describe("Results Screen", () => {
         };
 
         resultsScreen = new Results();
-        resultsScreen.layoutFactory = {
+        resultsScreen.scene = {
             addToBackground: addToBackgroundSpy,
             addLayout: addLayoutSpy,
             keyLookups: {
@@ -80,7 +80,7 @@ describe("Results Screen", () => {
 
     describe("preload method", () => {
         it("adds current game state to the layout key lookups", () => {
-            const expectedKeylookups = resultsScreen.layoutFactory.keyLookups.resultsScreen;
+            const expectedKeylookups = resultsScreen.scene.keyLookups.resultsScreen;
             assert.deepEqual(resultsScreen.keyLookup, expectedKeylookups);
         });
 
@@ -129,7 +129,7 @@ describe("Results Screen", () => {
 
         it("creates a layout harness with correct params", () => {
             const actualParams = layoutHarnessSpy.getCall(0).args;
-            const expectedParams = [mockGame, mockContext, resultsScreen.layoutFactory];
+            const expectedParams = [mockGame, mockContext, resultsScreen.scene];
             assert(layoutHarnessSpy.callCount === 1, "layout harness should be called once");
             assert.deepEqual(actualParams, expectedParams);
         });

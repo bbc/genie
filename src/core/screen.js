@@ -13,8 +13,8 @@ export class Screen extends Phaser.State {
         this._context = _.merge({}, this._context, newContext);
     }
 
-    init(context, next, layoutFactory) {
-        this.layoutFactory = layoutFactory;
+    init(context, next, scene) {
+        this.scene = scene;
         this._context = context;
         this._next = next;
     }

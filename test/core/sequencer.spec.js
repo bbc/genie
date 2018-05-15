@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 
-import * as LayoutFactory from "../../src/core/layout/factory";
+import * as Scene from "../../src/core/scene";
 import * as Sequencer from "../../src/core/sequencer";
 import * as signal from "../../src/core/signal-bus.js";
 
@@ -32,7 +32,7 @@ describe("Sequencer", () => {
 
     beforeEach(() => {
         mockLayout = { removeAll: sandbox.spy() };
-        sandbox.stub(LayoutFactory, "create").returns(mockLayout);
+        sandbox.stub(Scene, "create").returns(mockLayout);
         mockGame = {
             state: { add: sandbox.spy(), start: sandbox.spy() },
             add: {

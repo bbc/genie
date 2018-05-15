@@ -6,19 +6,19 @@ import { Screen } from "../../src/core/screen";
 describe("Screen", () => {
     let screen;
     let mockNext;
-    let mockLayoutFactory;
+    let mockScene;
 
     const mockContext = { inState: "inState" };
 
     beforeEach(() => {
         mockNext = sinon.spy();
-        mockLayoutFactory = sinon.spy();
+        mockScene = sinon.spy();
         screen = new Screen();
-        screen.init(mockContext, mockNext, mockLayoutFactory);
+        screen.init(mockContext, mockNext, mockScene);
     });
 
-    it("sets layoutFactory on the screen", () => {
-        expect(screen.layoutFactory).to.eql(mockLayoutFactory);
+    it("sets scene on the screen", () => {
+        expect(screen.scene).to.eql(mockScene);
     });
 
     it("sets the next function on the screen", () => {

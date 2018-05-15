@@ -13,7 +13,7 @@
  */
 
 import _ from "../lib/lodash/lodash.js";
-import * as LayoutFactory from "./layout/factory.js";
+import * as Scene from "./scene.js";
 import * as signal from "./signal-bus.js";
 
 /**
@@ -24,12 +24,12 @@ import * as signal from "./signal-bus.js";
  */
 export function create(game, context, transitions) {
     let currentScreen = transitions[0];
-    const layoutFactory = LayoutFactory.create(game);
+    const scene = Scene.create(game);
 
     transitions.forEach(transition => game.state.add(transition.name, transition.state));
 
     const screenLookup = _.fromPairs(_.map(transitions, c => [c.name, c]));
-    game.state.start(currentScreen.name, true, false, context, next, layoutFactory);
+    game.state.start(currentScreen.name, true, false, context, next, scene);
 
     function next(changedState) {
         signal.bus.removeChannel("gel-buttons");
@@ -37,8 +37,8 @@ export function create(game, context, transitions) {
         const newState = _.merge({}, context.inState, changedState);
         const nextScreenName = currentScreen.nextScreenName(newState);
         context.inState = newState;
-        layoutFactory.removeAll();
-        game.state.start(nextScreenName, true, false, context, next, layoutFactory);
+        scene.removeAll();
+        game.state.start(nextScreenName, true, false, context, next, scene);
 
         currentScreen = screenLookup[nextScreenName];
     }

@@ -45,7 +45,7 @@ describe("Pause Overlay", () => {
         mockLayoutDestroy = { destroy: sandbox.spy() };
 
         mockScreen = {
-            layoutFactory: {
+            scene: {
                 keyLookups: { pause: { pauseBackground: "pauseBackgroundImage" } },
                 addToBackground: sandbox.stub().returns(mockLayoutDestroy),
                 addLayout: sandbox.stub().returns(mockGelButtons),
@@ -111,7 +111,7 @@ describe("Pause Overlay", () => {
             const expectedImageCall = [0, 0, "pauseBackgroundImage"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
 
-            const addToBackgroundCall = mockScreen.layoutFactory.addToBackground.getCall(0);
+            const addToBackgroundCall = mockScreen.scene.addToBackground.getCall(0);
             assert.deepEqual(addToBackgroundCall.args, [backgroundImage]);
         });
 
@@ -131,7 +131,7 @@ describe("Pause Overlay", () => {
 
         it("adds GEL buttons", () => {
             Pause.create({ game: mockGame });
-            const actualAddLayoutCall = mockScreen.layoutFactory.addLayout.getCall(0);
+            const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
             const expectedAddLayoutCall = [
                 "pauseHome",
                 "audioOff",

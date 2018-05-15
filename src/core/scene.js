@@ -1,21 +1,22 @@
 /**
- * The Layout Factory is instantiated once in {@link module:core/sequencer}
+ * A Genie scene is instantiated once in {@link module:core/sequencer}
  *
  * It instantiates {@link module:core/scaler} and provides methods for adding display objects to foreground and
- * background. It also provides a factory function for making [ gel layouts]{@link module:layout/layout}
+ * background groups. It also provides a factory function for making [ gel layouts]{@link module:layout/layout}
+ * and sets the phaser debug sprite to be at the top of the display list
  *
  * @example
- * this.layoutFactory.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
- * this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
- * this.layoutFactory.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
+ * this.scene.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
+ * this.scene.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
+ * this.scene.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
  *
  * @module core/layout/factory
  */
-import * as Scaler from "../scaler.js";
-import * as Layout from "./layout.js";
+import * as Scaler from "./scaler.js";
+import * as Layout from "./layout/layout.js";
 
 /**
- * Create a new Layout Factory
+ * Create a new Scene
  *
  * @param {Phaser.Game} game
  * @returns {{keyLookups: {}, addToBackground(), addToForeground(), addLayout(), removeAll(), addLookups(), getSize()}} - {{@link module:layout/factory.addLayout addLayout}}
@@ -32,6 +33,7 @@ export function create(game) {
 
     root.addChild(background);
     root.addChild(foreground);
+    root.addChild(game.debug.sprite)
 
     scaler.onScaleChange.add(scaleBackground);
 
@@ -51,7 +53,7 @@ export function create(game) {
      * Called in the create method of a given screen
      *
      * @example
-     * layoutFactory.create(["home", "restart", "continue", "pause"]);
+     * scene.addLayout(["home", "restart", "continue", "pause"]);
      * @param {Array} buttons - Array of standard button names to include. See {@link ./gel-defaults.js} for available names
      *
      * @memberof module:layout/factory
