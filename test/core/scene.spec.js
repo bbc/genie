@@ -38,6 +38,9 @@ describe("Scene", () => {
                 onSizeChange: { add: sandbox.spy() },
                 getParentBounds: sandbox.spy(),
             },
+            debug: {
+                sprite: {},
+            },
         };
         scene = Scene.create(mockGame);
     });
