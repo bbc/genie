@@ -32,9 +32,7 @@ export class Loadscreen extends Screen {
     }
 
     preload() {
-        console.log("loadscreen.js - preload");
         loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress.bind(this)).then(keyLookups => {
-            console.log("loadscreen.js - preload - promise returned");
             this.layoutFactory.addLookups(keyLookups);
             if (this.context.qaMode.active) {
                 dumpToConsole(keyLookups);
@@ -42,9 +40,12 @@ export class Loadscreen extends Screen {
             initGameAssets(this.game);
             this.startMusic();
 
-            console.log("loadscreen.js - preload - load homescreen");
-            console.log("loadscreen.js - preload - load homescreen - screens: ", this.screens);
-            this.screens.loadscreen.next({ game: this.game, context: this.context, screens: this.screens, layoutFactory: this.layoutFactory }).go();
+            const data = {
+                game: this.game,
+                context: this.context,
+                layoutFactory: this.layoutFactory
+            };
+            this.navigation.next();
         });
     }
 

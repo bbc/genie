@@ -14,7 +14,7 @@
 
 import _ from "../lib/lodash/lodash.js";
 import * as LayoutFactory from "./layout/factory.js";
-import * as signal from "./signal-bus.js";
+import * as Screens from "./screens.js";
 
 /**
  * @param  game The instance of Phaser.Game.
@@ -24,22 +24,17 @@ import * as signal from "./signal-bus.js";
  */
 
 
-export function create(game, context, transitions) {
-    console.log("sequencer.js - create");
-    let currentScreen = Object.values(transitions)[0];
-    console.log("sequencer.js - currentScreen initialized", currentScreen);
+export function create(game, context) {
     const layoutFactory = LayoutFactory.create(game);
+    const screens = Screens.create({ game, context, layoutFactory }).screens;
 
     //transitions.forEach(transition => game.state.add(transition.name, transition.state));
 
-    console.log("sequencer.js - create - before addStates");
-    addStates(game, context, transitions, layoutFactory);
-    console.log("sequencer.js - create - after  addStates");
+    //addStates(game, context, transitions, layoutFactory);
 
-    const screenLookup = _.fromPairs(_.map(transitions, c => [c.name, c]));
-    console.log("sequencer.js - create - about to run game.state.start - ");
-    game.state.start(currentScreen.next({ game, context, screens: transitions, layoutFactory}).name, true, false, context, transitions, layoutFactory);
-    console.log("sequencer.js - create - successfully ran game.state.start");
+    //const screenLookup = _.fromPairs(_.map(transitions, c => [c.name, c]));
+    //currentScreen.next({ game, context, layoutFactory }).go();
+    screens.init.next();
 
     //function next(changedState) {
     //    signal.bus.removeChannel("gel-buttons");
@@ -57,23 +52,4 @@ export function create(game, context, transitions) {
     return { getTransitions };
 }
 
-// Adds all states from transitions object
-// to Phaser so they are ready to use.
-function addStates(game, context, screens, layoutFactory) {
-    console.log("sequencer.js - addStates --------");
-    let names = [];
-    _.forOwn(screens, screen => {
-        console.log("sequencer.js - addStates - screen = ", screen);
-        _.forOwn(screen, button => {
-            const state = button({ game, context, screens, layoutFactory });
-            const alreadyAdded = names.indexOf(state.name) > -1;
 
-            if (!alreadyAdded) {
-                console.log("sequencer.js - addStates - button state = ", state.name);
-                game.state.add(state.name, state.state);
-                names.push(state.name);
-            }
-        });
-    });
-    console.log("sequencer.js - addStates end --------");
-};

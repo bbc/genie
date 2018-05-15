@@ -17,8 +17,7 @@ import { settings } from "../core/settings.js";
  * @param {Object=} settingsConfig -
  * @return {Promise} A Promise, which is resolved with the game in onStarted.
  */
-export function startup(transitions, initialAdditionalState, settingsConfig = {}) {
-    console.log("startup.js - startup");
+export function startup(initialAdditionalState, settingsConfig = {}) {
     const gmi = window.getGMI({ settingsConfig });
     const urlParams = parseUrlParams(window.location.search);
     const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
@@ -49,7 +48,6 @@ export function startup(transitions, initialAdditionalState, settingsConfig = {}
     });
 
     function onStarted(config) {
-        console.log("startup.js - onStarted");
         // Phaser is now set up and we can use all game properties.
         game.canvas.setAttribute("aria-hidden", "true");
         const context = {
@@ -61,13 +59,9 @@ export function startup(transitions, initialAdditionalState, settingsConfig = {}
             qaMode,
             sequencer: { getTransitions: () => [] },
         };
-        console.log("startup.js - onStarted - about to call Sequencer.create");
-        context.sequencer = Sequencer.create(game, context, transitions);
-        console.log("startup.js - onStarted - successfully called Sequencer.create");
+        context.sequencer = Sequencer.create(game, context);
         game.stage.backgroundColor = "#333";
-        console.log("startup.js - onStarted - about to return resolvedPromise");
         resolvedPromise(game);
-        console.log("startup.js - onStarted - end");
     }
 }
 
@@ -75,14 +69,12 @@ const CONFIG_KEY = "config";
 
 class Startup extends Phaser.State {
     constructor(gmi, onStarted) {
-        console.log("startup.js - Startup class - constructor");
         super();
         this._gmi = gmi;
         this._onStarted = onStarted;
     }
 
     preload() {
-        console.log("startup.js - Startup class - preload");
         const gmi = this._gmi;
         this.game.load.baseURL = this._gmi.gameDir;
 
@@ -94,7 +86,6 @@ class Startup extends Phaser.State {
     }
 
     create() {
-        console.log("startup.js - Startup class - create");
         this._onStarted(this.game.cache.getJSON(CONFIG_KEY));
     }
 }
