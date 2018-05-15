@@ -87,7 +87,7 @@ export function create({ game }) {
         let pipsGroup = game.add.group();
         const spacing = 15;
         const pipWidth = 16;
-        const pipsLength = (pipWidth * panels.length) + (spacing * (panels.length-1));
+        const pipsLength = pipWidth * numberOfPanels + spacing * (numberOfPanels - 1);
         let currentPosition = -Math.abs(pipsLength / 2);
 
         panels.forEach(panel => {

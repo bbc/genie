@@ -64,7 +64,7 @@ describe("How To Play Overlay", () => {
         };
         mockScreen.layoutFactory.addToBackground.withArgs("titleImage").returns(mockTitle);
 
-        mockPipsGroup = { add: sandbox.spy(), callAll:sandbox.spy() };
+        mockPipsGroup = { add: sandbox.spy(), callAll: sandbox.spy() };
         mockGame = {
             add: {
                 image: sandbox.stub(),
