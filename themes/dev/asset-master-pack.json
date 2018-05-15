@@ -48,5 +48,31 @@
             "url": "pause/pause-background.png",
             "overwrite": false
         }
+    ],
+    "howToPlay": [
+        {
+            "type": "image",
+            "key": "background",
+            "url": "how-to-play/background.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "how-to-play-1",
+            "url": "how-to-play/how_to_play_1.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "how-to-play-2",
+            "url": "how-to-play/how_to_play_2.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "how-to-play-3",
+            "url": "how-to-play/how_to_play_3.png",
+            "overwrite": false
+        }
     ]
 }
