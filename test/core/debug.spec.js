@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 
 import * as debug from "../../src/core/debug.js";
 
-describe.only("debug", () => {
+describe("debug", () => {
     it("returns the correct methods", () => {
         assert.exists(debug.add);
         assert.exists(debug.render);
