@@ -23,8 +23,8 @@ import * as Layout from "./layout/layout.js";
  */
 export function create(game) {
     let _layouts = [];
-    const root = game.add.group(undefined, "gelGroup", true);
-    const background = game.add.group(undefined, "gelBackground");
+    const root = game.add.group(undefined, "root", true);
+    const background = game.add.group(undefined, "background");
     const foreground = game.add.group(undefined, "foreground");
     const keyLookups = {};
 
@@ -33,7 +33,7 @@ export function create(game) {
 
     root.addChild(background);
     root.addChild(foreground);
-    root.addChild(game.debug.sprite)
+    root.addChild(game.debug.sprite);
 
     scaler.onScaleChange.add(scaleBackground);
 

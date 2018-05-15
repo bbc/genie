@@ -57,9 +57,9 @@ describe("Scene", () => {
         assert.exists(scene.getSize);
     });
 
-    it("Should add 'gelBackground', 'gelGroup' and 'foreground' layers to the phaser game", () => {
-        expect(mockGame.add.group.calledWith(undefined, "gelGroup", true)).to.equal(true);
-        expect(mockGame.add.group.calledWith(undefined, "gelBackground")).to.equal(true);
+    it("Should add 'background', 'root' and 'foreground' layers to the phaser game", () => {
+        expect(mockGame.add.group.calledWith(undefined, "root", true)).to.equal(true);
+        expect(mockGame.add.group.calledWith(undefined, "background")).to.equal(true);
         expect(mockGame.add.group.calledWith(undefined, "foreground")).to.equal(true);
         expect(mockGame.add.group.callCount).to.equal(3);
     });
