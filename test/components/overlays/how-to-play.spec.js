@@ -38,6 +38,7 @@ describe("How To Play Overlay", () => {
                 keyLookups: {
                     howToPlay: {
                         background: "backgroundImage",
+                        title: "titleImage",
                         "how-to-play-1": "how-to-play-1",
                         "how-to-play-2": "how-to-play-2",
                         "how-to-play-3": "how-to-play-3",
@@ -64,10 +65,11 @@ describe("How To Play Overlay", () => {
             },
             state: { current: "howToPlay", states: { howToPlay: mockScreen } },
         };
-        mockGame.add.image.onCall(0).returns("backgroundImage");
-        mockGame.add.sprite.withArgs(0, 0, "how-to-play-1").returns(panel1Sprite);
-        mockGame.add.sprite.withArgs(0, 0, "how-to-play-2").returns(panel2Sprite);
-        mockGame.add.sprite.withArgs(0, 0, "how-to-play-3").returns(panel3Sprite);
+        mockGame.add.image.withArgs(0, 0, "backgroundImage").returns("backgroundImage");
+        mockGame.add.image.withArgs(0, -230, "titleImage").returns("titleImage");
+        mockGame.add.sprite.withArgs(0, 30, "how-to-play-1").returns(panel1Sprite);
+        mockGame.add.sprite.withArgs(0, 30, "how-to-play-2").returns(panel2Sprite);
+        mockGame.add.sprite.withArgs(0, 30, "how-to-play-3").returns(panel3Sprite);
         howToPlayScreen = HowToPlay.create({ game: mockGame });
     });
 
@@ -94,6 +96,13 @@ describe("How To Play Overlay", () => {
             assert.deepEqual(mockOverlayLayout.addBackground.args[0], ["backgroundImage"]);
         });
 
+        it("adds a title and adds it to the background", () => {
+            const actualSpriteCall = mockGame.add.image.getCall(1);
+            const expectedSpriteCall = [0, -230, "titleImage"];
+            assert.deepEqual(actualSpriteCall.args, expectedSpriteCall);
+            sinon.assert.calledWith(mockScreen.layoutFactory.addToBackground, "titleImage");
+        });
+
         it("adds GEL buttons", () => {
             const actualAddLayoutCall = mockScreen.layoutFactory.addLayout.getCall(0);
             const expectedAddLayoutCall = [
@@ -108,9 +117,9 @@ describe("How To Play Overlay", () => {
 
         it("creates sprites for each panel", () => {
             assert.equal(mockGame.add.sprite.callCount, 3);
-            assert.deepEqual(mockGame.add.sprite.getCall(0).args, [0, 0, "how-to-play-1"]);
-            assert.deepEqual(mockGame.add.sprite.getCall(1).args, [0, 0, "how-to-play-2"]);
-            assert.deepEqual(mockGame.add.sprite.getCall(2).args, [0, 0, "how-to-play-3"]);
+            assert.deepEqual(mockGame.add.sprite.getCall(0).args, [0, 30, "how-to-play-1"]);
+            assert.deepEqual(mockGame.add.sprite.getCall(1).args, [0, 30, "how-to-play-2"]);
+            assert.deepEqual(mockGame.add.sprite.getCall(2).args, [0, 30, "how-to-play-3"]);
         });
 
         it("adds each panel sprite to the background", () => {

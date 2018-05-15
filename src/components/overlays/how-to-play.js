@@ -27,6 +27,7 @@ export function create({ game }) {
     const backgroundImage = game.add.image(0, 0, keyLookup.background);
     const background = overlayManager.addBackground(backgroundImage);
     const gelButtons = addGelButtons();
+    addTitle();
     addPanels();
     addSignals();
 
@@ -42,9 +43,13 @@ export function create({ game }) {
         return gelLayout;
     }
 
+    function addTitle() {
+        screen.layoutFactory.addToBackground(game.add.image(0, -230, keyLookup.title));
+    }
+
     function addPanels() {
         theme.panels.forEach((item, index) => {
-            const panel = game.add.sprite(0, 0, keyLookup[theme.panels[index]]);
+            const panel = game.add.sprite(0, 30, keyLookup[theme.panels[index]]);
             panel.visible = index === 0;
             screen.layoutFactory.addToBackground(panel);
             panels = panels.concat(panel);

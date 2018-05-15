@@ -58,6 +58,12 @@
         },
         {
             "type": "image",
+            "key": "title",
+            "url": "how-to-play/title.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
             "key": "how-to-play-1",
             "url": "how-to-play/how_to_play_1.png",
             "overwrite": false
