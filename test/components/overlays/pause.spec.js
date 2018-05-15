@@ -5,7 +5,7 @@ import * as sinon from "sinon";
 import * as Pause from "../../../src/components/overlays/pause";
 import * as signal from "../../../src/core/signal-bus.js";
 import { GameAssets } from "../../../src/core/game-assets.js";
-import * as OverlayLayout from "../../../src/lib/overlay-layout.js";
+import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
 
 describe("Pause Overlay", () => {
     let mockGame;
