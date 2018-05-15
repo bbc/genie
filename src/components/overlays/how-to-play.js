@@ -28,6 +28,7 @@ export function create({ game }) {
     const title = screen.layoutFactory.addToBackground(game.add.image(0, -230, keyLookup.title));
     const gelButtons = addGelButtons();
     addPanels();
+    let pips = addPips();
     addSignals();
 
     function addGelButtons() {
@@ -57,6 +58,7 @@ export function create({ game }) {
             currentIndex = numberOfPanels - 1;
         }
         showPanel();
+        updatePips();
     }
 
     function nextButtonClick() {
@@ -65,6 +67,7 @@ export function create({ game }) {
             currentIndex = 0;
         }
         showPanel();
+        updatePips();
     }
 
     function showPanel() {
@@ -80,6 +83,29 @@ export function create({ game }) {
         });
     }
 
+    function addPips() {
+        let pipsGroup = game.add.group();
+        const spacing = 15;
+        const pipWidth = 16;
+        const pipsLength = (pipWidth * panels.length) + (spacing * (panels.length-1));
+        let currentPosition = -Math.abs(pipsLength / 2);
+
+        panels.forEach(panel => {
+            const pipImage = panel.visible ? keyLookup.pipOn : keyLookup.pipOff;
+            const pip = game.add.sprite(currentPosition, 240, pipImage);
+            pipsGroup.add(pip);
+            currentPosition += pipWidth + spacing;
+        });
+        screen.layoutFactory.addToBackground(pipsGroup);
+        return pipsGroup;
+    }
+
+    function updatePips() {
+        pips.callAll("kill");
+        pips.callAll("destroy");
+        pips = addPips();
+    }
+
     function addSignals() {
         signal.bus.subscribe({ channel, name: "back", callback: destroy });
         signal.bus.subscribe({ channel, name: "previous", callback: previousButtonClick });
@@ -91,6 +117,8 @@ export function create({ game }) {
         gelButtons.destroy();
         overlayManager.restoreDisabledButtons();
         destroyPanels();
+        pips.callAll("kill");
+        pips.callAll("destroy");
         title.destroy();
         background.destroy();
         screen.context.popupScreens = fp.pull("how-to-play", screen.context.popupScreens);

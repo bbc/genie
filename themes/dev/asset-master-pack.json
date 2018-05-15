@@ -64,20 +64,32 @@
         },
         {
             "type": "image",
-            "key": "how-to-play-1",
+            "key": "panel1",
             "url": "how-to-play/how_to_play_1.png",
             "overwrite": false
         },
         {
             "type": "image",
-            "key": "how-to-play-2",
+            "key": "panel2",
             "url": "how-to-play/how_to_play_2.png",
             "overwrite": false
         },
         {
             "type": "image",
-            "key": "how-to-play-3",
+            "key": "panel3",
             "url": "how-to-play/how_to_play_3.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "pipOn",
+            "url": "how-to-play/pip_on.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "pipOff",
+            "url": "how-to-play/pip_off.png",
             "overwrite": false
         }
     ]

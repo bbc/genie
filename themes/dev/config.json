@@ -41,7 +41,7 @@
             }
         },
         "how-to-play": {
-            "panels": ["how-to-play-1", "how-to-play-2", "how-to-play-3"]
+            "panels": ["panel1", "panel2", "panel3"]
         }
     }
 }
