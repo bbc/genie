@@ -24,10 +24,9 @@ export function create({ game }) {
     screen.context.popupScreens.push("how-to-play");
 
     const overlayManager = OverlayLayout.create(screen);
-    const backgroundImage = game.add.image(0, 0, keyLookup.background);
-    const background = overlayManager.addBackground(backgroundImage);
+    const background = overlayManager.addBackground(game.add.image(0, 0, keyLookup.background));
+    const title = screen.layoutFactory.addToBackground(game.add.image(0, -230, keyLookup.title));
     const gelButtons = addGelButtons();
-    addTitle();
     addPanels();
     addSignals();
 
@@ -41,10 +40,6 @@ export function create({ game }) {
         ]);
         overlayManager.moveGelButtonsToTop(gelLayout);
         return gelLayout;
-    }
-
-    function addTitle() {
-        screen.layoutFactory.addToBackground(game.add.image(0, -230, keyLookup.title));
     }
 
     function addPanels() {
@@ -96,6 +91,7 @@ export function create({ game }) {
         gelButtons.destroy();
         overlayManager.restoreDisabledButtons();
         destroyPanels();
+        title.destroy();
         background.destroy();
         screen.context.popupScreens = fp.pull("how-to-play", screen.context.popupScreens);
     }

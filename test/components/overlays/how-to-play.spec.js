@@ -11,6 +11,7 @@ describe("How To Play Overlay", () => {
     let mockGame;
     let mockScreen;
     let signalSpy;
+    let mockTitle;
     let mockGelButtons;
     let mockBackground;
     let mockOverlayLayout;
@@ -32,7 +33,7 @@ describe("How To Play Overlay", () => {
         sandbox.stub(OverlayLayout, "create").returns(mockOverlayLayout);
 
         mockGelButtons = { destroy: sandbox.spy() };
-
+        mockTitle = { destroy: sandbox.spy() };
         mockScreen = {
             layoutFactory: {
                 keyLookups: {
@@ -45,7 +46,7 @@ describe("How To Play Overlay", () => {
                     },
                 },
                 addLayout: sandbox.stub().returns(mockGelButtons),
-                addToBackground: sandbox.spy(),
+                addToBackground: sandbox.stub(),
             },
             context: {
                 popupScreens: [],
@@ -58,6 +59,8 @@ describe("How To Play Overlay", () => {
                 },
             },
         };
+        mockScreen.layoutFactory.addToBackground.withArgs("titleImage").returns(mockTitle);
+
         mockGame = {
             add: {
                 image: sandbox.stub(),
@@ -70,6 +73,7 @@ describe("How To Play Overlay", () => {
         mockGame.add.sprite.withArgs(0, 30, "how-to-play-1").returns(panel1Sprite);
         mockGame.add.sprite.withArgs(0, 30, "how-to-play-2").returns(panel2Sprite);
         mockGame.add.sprite.withArgs(0, 30, "how-to-play-3").returns(panel3Sprite);
+
         howToPlayScreen = HowToPlay.create({ game: mockGame });
     });
 
@@ -86,20 +90,13 @@ describe("How To Play Overlay", () => {
             assert.isTrue(OverlayLayout.create.calledOnce);
         });
 
-        it("adds a background image", () => {
-            const actualImageCall = mockGame.add.image.getCall(0);
-            const expectedImageCall = [0, 0, "backgroundImage"];
-            assert.deepEqual(actualImageCall.args, expectedImageCall);
+        it("adds a background image and passes it to the overlay manager", () => {
+            sinon.assert.calledWith(mockGame.add.image, 0, 0, "backgroundImage");
+            sinon.assert.calledWith(mockOverlayLayout.addBackground, "backgroundImage");
         });
 
-        it("passes the background image to the overlay layout manager", () => {
-            assert.deepEqual(mockOverlayLayout.addBackground.args[0], ["backgroundImage"]);
-        });
-
-        it("adds a title and adds it to the background", () => {
-            const actualSpriteCall = mockGame.add.image.getCall(1);
-            const expectedSpriteCall = [0, -230, "titleImage"];
-            assert.deepEqual(actualSpriteCall.args, expectedSpriteCall);
+        it("creates a title and adds it to the background", () => {
+            sinon.assert.calledWith(mockGame.add.image, 0, -230, "titleImage");
             sinon.assert.calledWith(mockScreen.layoutFactory.addToBackground, "titleImage");
         });
 
@@ -116,10 +113,9 @@ describe("How To Play Overlay", () => {
         });
 
         it("creates sprites for each panel", () => {
-            assert.equal(mockGame.add.sprite.callCount, 3);
-            assert.deepEqual(mockGame.add.sprite.getCall(0).args, [0, 30, "how-to-play-1"]);
-            assert.deepEqual(mockGame.add.sprite.getCall(1).args, [0, 30, "how-to-play-2"]);
-            assert.deepEqual(mockGame.add.sprite.getCall(2).args, [0, 30, "how-to-play-3"]);
+            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "how-to-play-1");
+            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "how-to-play-2");
+            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "how-to-play-3");
         });
 
         it("adds each panel sprite to the background", () => {
@@ -138,6 +134,8 @@ describe("How To Play Overlay", () => {
     describe("signals", () => {
         it("adds signal subscriptions to the GEL buttons", () => {
             assert.equal(signalSpy.callCount, 3);
+
+            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "how-to-play-1");
             assert.equal(signalSpy.getCall(0).args[0].channel, "how-to-play-gel-buttons");
             assert.equal(signalSpy.getCall(0).args[0].name, "back");
             assert.equal(signalSpy.getCall(1).args[0].channel, "how-to-play-gel-buttons");
@@ -154,6 +152,7 @@ describe("How To Play Overlay", () => {
                 assert.isTrue(mockGelButtons.destroy.calledOnce);
                 assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
                 assert.isTrue(mockBackground.destroy.calledOnce);
+                assert.isTrue(mockTitle.destroy.calledOnce);
                 assert.deepEqual(mockScreen.context.popupScreens, []);
             });
 
