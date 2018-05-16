@@ -14,6 +14,16 @@
  */
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
+import fp from "../lib/lodash/fp/fp.js";
+
+const centerAnchor = object => {
+    if (object.anchor) {
+        object.anchor.setTo(0.5, 0.5);
+    }
+    return object;
+};
+
+const addToGroup = fp.curry((group, object) => group.addChild(object));
 
 /**
  * Create a new Scene
@@ -24,29 +34,26 @@ import * as Layout from "./layout/layout.js";
 export function create(game) {
     let _layouts = [];
     const root = game.add.group(undefined, "root", true);
+    const unscaled = game.add.group(undefined, "unscaled", true);
     const background = game.add.group(undefined, "background");
     const foreground = game.add.group(undefined, "foreground");
+    const gel = game.add.group(undefined, "gel");
     const keyLookups = {};
+
+    const resize = (width, height, scale) => {
+        root.scale.set(scale, scale);
+        root.position.set(width / 2, height / 2);
+    };
 
     //TODO stageHeight should come from config
     const scaler = Scaler.create(600, game);
 
     root.addChild(background);
     root.addChild(foreground);
+    root.addChild(gel);
     root.addChild(game.debug.sprite);
 
-    scaler.onScaleChange.add(scaleBackground);
-
-    return {
-        keyLookups,
-        addToBackground,
-        addToForeground,
-        addLayout,
-        getLayouts,
-        removeAll,
-        addLookups,
-        getSize: scaler.getSize,
-    };
+    scaler.onScaleChange.add(resize);
 
     /**
      * Create a new GEL layout for a given set of Gel Buttons
@@ -59,42 +66,38 @@ export function create(game) {
      * @memberof module:layout/factory
      * @returns {Object}
      */
-    function addLayout(buttons) {
+    const addLayout = buttons => {
         const layout = Layout.create(game, scaler, buttons);
-
-        addToBackground(layout.root);
-
+        addToGroup(gel, layout.root);
         _layouts.push(layout);
         return layout;
-    }
+    };
 
-    function addToBackground(object) {
-        if (object.anchor) {
-            object.anchor.setTo(0.5, 0.5);
-        }
-        return background.addChild(object);
-    }
+    const addToBackground = fp.flow(centerAnchor, addToGroup(background));
+    const addToForeground = fp.flow(centerAnchor, addToGroup(foreground));
+    const addToUnscaled = fp.flow(centerAnchor, addToGroup(unscaled));
 
-    function addToForeground(object) {
-        return foreground.addChild(object);
-    }
+    const getLayouts = () => _layouts;
 
-    function scaleBackground(width, height, scale) {
-        background.scale.set(scale, scale);
-        background.position.set(width / 2, height / 2);
-    }
-
-    function getLayouts() {
-        return _layouts;
-    }
-
-    function removeAll() {
+    const removeAll = () => {
         background.removeAll(true);
         _layouts.forEach(layout => layout.destroy());
         _layouts = [];
-    }
+    };
 
-    function addLookups(moreLookups) {
+    const addLookups = moreLookups => {
         Object.assign(keyLookups, moreLookups);
-    }
+    };
+
+    return {
+        keyLookups,
+        addToBackground,
+        addToForeground,
+        addToUnscaled,
+        addLayout,
+        getLayouts,
+        removeAll,
+        addLookups,
+        getSize: scaler.getSize,
+    };
 }
