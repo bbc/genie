@@ -1,7 +1,7 @@
 import { assert, expect } from "chai";
 import * as sinon from "sinon";
 
-import * as LayoutFactory from "../../../src/core/layout/layout-factory";
+import * as LayoutFactory from "../../../src/core/layout/factory";
 import * as Layout from "../../../src/core/layout/layout";
 import * as Scaler from "../../../src/core/scaler";
 

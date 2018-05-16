@@ -13,7 +13,7 @@
  */
 
 import _ from "../lib/lodash/lodash.js";
-import * as LayoutFactory from "./layout/layout-factory.js";
+import * as LayoutFactory from "./layout/factory.js";
 import * as signal from "./signal-bus.js";
 
 /**
