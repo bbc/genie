@@ -1,5 +1,5 @@
 import { loadGenieScreens } from "./load-genie-screens.js";
-import { gotoScreenWithData } from "./goto-screen.js";
+import { gotoScreenWithData } from "./goto-screen-with-data.js";
 import { loadNavigation } from "../navigation.js";
 
 export const create = (gameState, context, layoutFactory) => {
