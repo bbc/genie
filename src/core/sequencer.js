@@ -27,26 +27,7 @@ import * as Screens from "./screens.js";
 export function create(game, context) {
     const layoutFactory = LayoutFactory.create(game);
     const screens = Screens.create({ game, context, layoutFactory }).screens;
-
-    //transitions.forEach(transition => game.state.add(transition.name, transition.state));
-
-    //addStates(game, context, transitions, layoutFactory);
-
-    //const screenLookup = _.fromPairs(_.map(transitions, c => [c.name, c]));
-    //currentScreen.next({ game, context, layoutFactory }).go();
     screens.init.next();
-
-    //function next(changedState) {
-    //    signal.bus.removeChannel("gel-buttons");
-    //    const newState = _.merge({}, context.inState, changedState);
-    //    const nextScreenName = currentScreen.nextScreenName(newState);
-    //    context.inState = newState;
-    //    layoutFactory.removeAll();
-    //    game.state.start(nextScreenName, true, false, context, next, layoutFactory);
-
-    //    currentScreen = screenLookup[nextScreenName];
-    //}
-
     const getTransitions = () => transitions;
 
     return { getTransitions };

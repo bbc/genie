@@ -22,8 +22,7 @@ export class Results extends Screen {
         const titleImage = this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
         this.layoutFactory.addToBackground(titleImage);
 
-        const resultsData = this.context.inState.transient.resultsData;
-        const resultsText = this.game.add.text(0, 50, resultsData, theme.resultText.style);
+        const resultsText = this.game.add.text(0, 50, this.transientData.results, theme.resultText.style);
         this.layoutFactory.addToBackground(resultsText);
 
         this.layoutFactory.addLayout(["pause", "restart", "continue"]);
@@ -33,7 +32,7 @@ export class Results extends Screen {
             name: "continue",
             channel: "gel-buttons",
             callback: () => {
-                this.next();
+                this.navigation.next();
             },
         });
 
@@ -41,7 +40,7 @@ export class Results extends Screen {
             name: "restart",
             channel: "gel-buttons",
             callback: () => {
-                this.next({ transient: { game: true } });
+                this.navigation.game({ characterSelected: this.transientData.characterSelected });
             },
         });
     }

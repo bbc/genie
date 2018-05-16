@@ -5,14 +5,14 @@ import { GameTest } from "../components/test-harness/test-screens/game.js";
 import { Results } from "../components/results.js";
 import * as signal from "./signal-bus.js";
 
-export const create = data => {
-    const loadscreen = () => gotoScreen("loadscreen");
-    const home = () => gotoScreen("home");
-    const select = () => gotoScreen("character-select");
-    const game = () => gotoScreen("game");
-    const results = () => gotoScreen("results");
+export const create = initialScreensData => {
+    const loadscreen = transientData => gotoScreen("loadscreen", transientData);
+    const home       = transientData => gotoScreen("home", transientData);
+    const select     = transientData => gotoScreen("character-select", transientData);
+    const game       = transientData => gotoScreen("game", transientData);
+    const results    = transientData => gotoScreen("results", transientData);
 
-    data.screens = {
+    initialScreensData.screens = {
         "init": {
             next: loadscreen,
         },
@@ -49,19 +49,19 @@ export const create = data => {
     };
 
     // only add screens that are in screens object
-    Object.keys(data.screens).forEach(screen => {
+    Object.keys(initialScreensData.screens).forEach(screen => {
         if (screen === "init") {
             return false;
         }
 
-        data.game.state.add(screen, states[screen]);
+        initialScreensData.game.state.add(screen, states[screen]);
     });
 
-    const gotoScreen = (name) => {
+    const gotoScreen = (name, transientData) => {
         signal.bus.removeChannel("gel-buttons");
-        data.layoutFactory.removeAll();
-        data.game.state.start(name, true, false, data);
+        initialScreensData.layoutFactory.removeAll();
+        initialScreensData.game.state.start(name, true, false, initialScreensData, transientData);
     };
 
-    return { screens: data.screens };
+    return { screens: initialScreensData.screens };
 };
