@@ -100,7 +100,13 @@ export function create({ game }) {
 
     function restartGame() {
         destroy();
-        screen.navigation.restart({ characterSelected: screen.transientData.characterSelected });
+
+        const transientData = screen.transientData;
+        if (transientData) {
+            screen.navigation.restart({ characterSelected: transientData.characterSelected });
+        } else {
+            screen.navigation.restart();
+        }
     }
 
     function goHome() {

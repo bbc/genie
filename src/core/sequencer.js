@@ -14,23 +14,18 @@
 
 import _ from "../lib/lodash/lodash.js";
 import * as LayoutFactory from "./layout/factory.js";
-import * as Screens from "./screens.js";
+import * as Navigation from "./navigation.js";
 
 /**
  * @param  game The instance of Phaser.Game.
  * @param  context The context object.
- * @param  transitions A JSON object with transitions, from the main.js file.
- * @returns {{getTransitions: function}}
  */
 
 
 export function create(game, context) {
     const layoutFactory = LayoutFactory.create(game);
-    const screens = Screens.create({ game, context, layoutFactory }).screens;
-    screens.init.next();
-    const getTransitions = () => transitions;
-
-    return { getTransitions };
+    const navigation = Navigation.create(game.state, context, layoutFactory);
+    navigation.init.next();
 }
 
 

@@ -13,11 +13,10 @@ export class Screen extends Phaser.State {
         this._context = _.merge({}, this._context, newContext);
     }
 
-    init(screensData, transientData) {
-        this.layoutFactory = screensData.layoutFactory;
-        this._context = screensData.context;
-        this.screens = screensData.screens;
-        this.navigation = screensData.screens[this.game.state.current];
+    init(transientData, layoutFactory, context, navigation) {
+        this.layoutFactory = layoutFactory;
+        this._context = context;
+        this.navigation = navigation[this.game.state.current];
         this.transientData = transientData;
     }
 }

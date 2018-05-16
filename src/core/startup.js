@@ -10,6 +10,8 @@ import * as Sequencer from "../core/sequencer.js";
 import { parseUrlParams } from "../lib/parseUrlParams.js";
 import * as gel from "../core/layout/gel-defaults.js";
 import { settings } from "../core/settings.js";
+import * as LayoutFactory from "./layout/factory.js";
+import * as Navigation from "./navigation/create.js";
 
 /**
  * @param {Array} transitions - The transitions JSON object given in main.js.
@@ -59,7 +61,8 @@ export function startup(initialAdditionalState, settingsConfig = {}) {
             qaMode,
             sequencer: { getTransitions: () => [] },
         };
-        context.sequencer = Sequencer.create(game, context);
+        //context.sequencer = Sequencer.create(game, context);
+        Navigation.create(game.state, context, LayoutFactory.create(game));
         game.stage.backgroundColor = "#333";
         resolvedPromise(game);
     }
