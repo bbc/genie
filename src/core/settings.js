@@ -13,12 +13,6 @@ export const create = () => {
         });
     };
 
-    const checkCloseCallback = () => {
-        if (!closeCallback) {
-            throw "settings closed callback has not been set via 'setCloseCallback' in settings.js";
-        }
-    };
-
     const checkGmi = () => {
         if (!gmi) {
             throw "gmi has not been initialised in settings.js";
