@@ -4,10 +4,9 @@
  *
  * @module components/pause
  */
-import fp from "../lib/lodash/fp/fp.js";
-
-import * as signal from "../core/signal-bus.js";
 import { GameAssets } from "../core/game-assets.js";
+import * as signal from "../core/signal-bus.js";
+import fp from "../lib/lodash/fp/fp.js";
 
 /**
  * @param {Phaser.Game} game - The Phaser Game instance
