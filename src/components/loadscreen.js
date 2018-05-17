@@ -9,6 +9,7 @@ import _ from "../lib/lodash/lodash.js";
 import { loadAssets } from "../core/asset-loader.js";
 import { Screen } from "../core/screen.js";
 import { initGameAssets, GameAssets } from "../core/game-assets.js";
+import * as signal from "../signal-bus.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
@@ -40,6 +41,13 @@ export class Loadscreen extends Screen {
             initGameAssets(this.game);
             this.startMusic();
             this.next();
+            signal.bus.subscribe({
+                channel: "settings",
+                name: "audio",
+                callback: value => {
+                    console.log("Audio setting changed to " + value);
+                },
+            });
         });
     }
 
