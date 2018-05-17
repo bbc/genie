@@ -5,7 +5,7 @@ import { loadNavigation } from "../../src/core/navigation.js";
 describe("Navigation - #loadNavigation", () => {
     const sandbox = sinon.sandbox.create();
 
-    let home, select, game, results
+    let home, select, game, results;
 
     beforeEach(() => {
         home = sandbox.stub();
@@ -21,10 +21,10 @@ describe("Navigation - #loadNavigation", () => {
     it("returns navigation object", () => {
         const navigation = loadNavigation(home, select, game, results);
         const expectedNavigationObject = {
-            "loadscreen": {
+            loadscreen: {
                 next: home,
             },
-            "home": {
+            home: {
                 next: select,
             },
             "character-select": {
@@ -32,12 +32,12 @@ describe("Navigation - #loadNavigation", () => {
                 home: home,
                 restart: home,
             },
-            "game": {
+            game: {
                 next: results,
                 home: home,
                 restart: game,
             },
-            "results": {
+            results: {
                 next: home,
                 game: game,
                 restart: game,

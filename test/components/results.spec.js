@@ -55,11 +55,6 @@ describe("Results Screen", () => {
                 },
             },
             qaMode: { active: false },
-            inState: {
-                transient: {
-                    resultsData: 22,
-                },
-            },
         };
 
         resultsScreen = new Results();
@@ -82,7 +77,7 @@ describe("Results Screen", () => {
         resultsScreen.preload();
         resultsScreen.navigation = {
             next: navigationNext,
-            game: navigationGame
+            game: navigationGame,
         };
     });
 

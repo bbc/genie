@@ -1,9 +1,9 @@
 export const loadNavigation = (home, select, game, results) => {
     return {
-        "loadscreen": {
+        loadscreen: {
             next: home,
         },
-        "home": {
+        home: {
             next: select,
         },
         "character-select": {
@@ -11,12 +11,12 @@ export const loadNavigation = (home, select, game, results) => {
             home: home,
             restart: home,
         },
-        "game": {
+        game: {
             next: results,
             home: home,
             restart: game,
         },
-        "results": {
+        results: {
             next: home,
             game: game,
             restart: game,

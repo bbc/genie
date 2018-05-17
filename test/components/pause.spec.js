@@ -59,8 +59,8 @@ describe("Pause Overlay", () => {
             next: sandbox.spy(),
             navigation: {
                 restart: navigationRestart,
-                home: navigationHome
-            }
+                home: navigationHome,
+            },
         };
 
         mockGame = {
@@ -214,7 +214,7 @@ describe("Pause Overlay", () => {
 
         it("calls the navigation.restart method with params when the restart button is clicked", () => {
             mockScreen.transientData = {
-                characterSelected: 1
+                characterSelected: 1,
             };
             signalSpy.getCall(1).args[0].callback();
             const actualRestartArgs = mockScreen.navigation.restart.getCall(0).args[0];

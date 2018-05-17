@@ -180,8 +180,7 @@ describe("Select Screen", () => {
         it("adds a callback for the continue button", () => {
             selectScreen.currentIndex = 1;
             signalSubscribeSpy.getCall(3).args[0].callback();
-            sinon.assert.calledOnce(selectScreen.navigation.next
-                .withArgs({ characterSelected: 1 }));
+            sinon.assert.calledOnce(selectScreen.navigation.next.withArgs({ characterSelected: 1 }));
         });
 
         describe("previous button", () => {

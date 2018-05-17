@@ -14,11 +14,11 @@ describe("Navigation - #loadGenieScreens", () => {
 
     beforeEach(() => {
         navigation = {
-            "loadscreen": {},
-            "home": {},
+            loadscreen: {},
+            home: {},
             "character-select": {},
-            "game": {},
-            "results": {},
+            game: {},
+            results: {},
         };
         addGameState = sandbox.stub();
         gameState = { add: addGameState };
@@ -41,9 +41,9 @@ describe("Navigation - #loadGenieScreens", () => {
 
     it("only adds number of screens configured in navigation object", () => {
         navigation = {
-            "loadscreen": {},
-            "home": {},
-            "game": {},
+            loadscreen: {},
+            home: {},
+            game: {},
         };
 
         loadGenieScreens(navigation, gameState);

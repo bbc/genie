@@ -1,5 +1,5 @@
 /**
- * The Layout Factory is instantiated once in {@link module:core/sequencer}
+ * The Layout Factory is instantiated once in {@link module:core/startup}
  *
  * It instantiates {@link module:core/scaler} and provides methods for adding display objects to foreground and
  * background. It also provides a factory function for making [ gel layouts]{@link module:layout/layout}

@@ -55,7 +55,7 @@ describe("Home Screen", () => {
             },
         };
         homeScreen.navigation = {
-            next: navigationNext
+            next: navigationNext,
         };
         homeScreen.game = mockGame;
         homeScreen.context = mockContext;

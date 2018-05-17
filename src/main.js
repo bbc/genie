@@ -33,4 +33,4 @@ settings.add("custom1", value => {
     console.log("custom 1 setting changed to: " + value);
 });
 
-startup({}, settingsConfig);
+startup(settingsConfig);

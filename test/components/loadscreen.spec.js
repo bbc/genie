@@ -49,7 +49,7 @@ describe("Load Screen", () => {
             },
         };
         loadScreen.navigation = {
-            next: navigationNext
+            next: navigationNext,
         };
         loadScreen.game = mockGame;
     });

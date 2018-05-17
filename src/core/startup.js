@@ -13,12 +13,10 @@ import * as LayoutFactory from "./layout/factory.js";
 import * as Navigation from "./navigation/create.js";
 
 /**
- * @param {Array} transitions - The transitions JSON object given in main.js.
  * @param {Object=} initialAdditionalState - Additional state that is added to the inState context.
  * @param {Object=} settingsConfig -
- * @return {Promise} A Promise, which is resolved with the game in onStarted.
  */
-export function startup(initialAdditionalState, settingsConfig = {}) {
+export function startup(settingsConfig = {}) {
     const gmi = window.getGMI({ settingsConfig });
     const urlParams = parseUrlParams(window.location.search);
     const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
@@ -42,27 +40,19 @@ export function startup(initialAdditionalState, settingsConfig = {}) {
 
     const game = new Phaser.Game(phaserConfig);
 
-    let resolvedPromise;
-
-    return new Promise(resolve => {
-        resolvedPromise = resolve;
-    });
-
     function onStarted(config) {
         // Phaser is now set up and we can use all game properties.
         game.canvas.setAttribute("aria-hidden", "true");
+        const layoutFactory = LayoutFactory.create(game);
         const context = {
             gmi,
-            inState: _.merge({ transient: {}, persistent: {} }, initialAdditionalState),
             config: config,
             popupScreens: [],
             gameMuted: true,
             qaMode,
-            sequencer: { getTransitions: () => [] },
         };
-        Navigation.create(game.state, context, LayoutFactory.create(game));
         game.stage.backgroundColor = "#333";
-        resolvedPromise(game);
+        Navigation.create(game.state, context, layoutFactory);
     }
 }
 

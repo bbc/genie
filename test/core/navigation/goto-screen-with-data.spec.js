@@ -6,8 +6,14 @@ import { gotoScreenWithData } from "../../../src/core/navigation/goto-screen-wit
 describe("Navigation - #gotoScreenWithData", () => {
     const sandbox = sinon.sandbox.create();
 
-    let transientData, gameState, startGameState, layoutFactory,
-        removeAllLayout, context, navigation, removeSignalChannel
+    let transientData,
+        gameState,
+        startGameState,
+        layoutFactory,
+        removeAllLayout,
+        context,
+        navigation,
+        removeSignalChannel;
 
     beforeEach(() => {
         transientData = sandbox.stub();
@@ -34,7 +40,7 @@ describe("Navigation - #gotoScreenWithData", () => {
         gotoScreenWithData("home", transientData, gameState, layoutFactory, context, navigation);
 
         sinon.assert.calledOnce(
-            startGameState.withArgs("home", true, false, transientData, layoutFactory, context, navigation)
+            startGameState.withArgs("home", true, false, transientData, layoutFactory, context, navigation),
         );
     });
 });

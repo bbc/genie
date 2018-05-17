@@ -6,8 +6,7 @@ import * as LoadNavigation from "../../../src/core/navigation.js";
 import * as Navigation from "../../../src/core/navigation/create.js";
 
 describe("Navigation - #create", () => {
-    let navigation, loadGenieScreens, gameState, context,
-        layoutFactory, gotoScreen, loadNavigation;
+    let navigation, loadGenieScreens, gameState, context, layoutFactory, gotoScreen, loadNavigation;
 
     const sandbox = sinon.sandbox.create();
 

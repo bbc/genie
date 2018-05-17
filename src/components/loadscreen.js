@@ -43,7 +43,7 @@ export class Loadscreen extends Screen {
             const data = {
                 game: this.game,
                 context: this.context,
-                layoutFactory: this.layoutFactory
+                layoutFactory: this.layoutFactory,
             };
             this.navigation.next();
         });
