@@ -6,7 +6,6 @@ export const create = () => {
     let gmi;
 
     const onSettingChanged = (key, value) => {
-        console.log(key + " setting changed to " + value);
         signal.bus.publish({
             channel: "genie-settings",
             name: key,
