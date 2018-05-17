@@ -27,7 +27,7 @@ describe("Settings", () => {
 
     it("Focuses on the settings button after closing settings", () => {
         const spy = sinon.spy();
-        sandbox.stub(document, "getElementsById").returns({
+        sandbox.stub(document, "getElementById").returns({
             focus: spy,
         });
         const settings = createSettings();
