@@ -2,7 +2,10 @@
  * A Genie scene is instantiated once in {@link module:core/sequencer}
  *
  * It instantiates {@link module:core/scaler} and provides methods for adding display objects to foreground and
- * background groups. It also provides a factory function for making [ gel layouts]{@link module:layout/layout}
+ * background groups (It is expected that most of a game would be added to the background group and any overlays /
+ * HUD would go in the foreground group).
+ *
+ * It also provides a factory function for making [ gel layouts]{@link module:layout/layout}
  * and sets the phaser debug sprite to be at the top of the display list
  *
  * @example
@@ -10,7 +13,7 @@
  * this.scene.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
  * this.scene.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
  *
- * @module core/layout/factory
+ * @module core/scene
  */
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
