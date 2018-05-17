@@ -1,7 +1,6 @@
 import { assert, expect } from "chai";
 import * as sinon from "sinon";
 import { startup } from "../../src/core/startup";
-import * as Sequencer from "../../src/core/sequencer";
 import * as mock from "../helpers/mock";
 
 describe("Startup", () => {

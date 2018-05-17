@@ -1,12 +1,11 @@
 /**
- * Startup extends `Phaser.State` and creates a new `Phaser.Game`, as well as a new `Sequencer`.
+ * Startup extends `Phaser.State` and creates a new `Phaser.Game`, as well as a new `Navigation` object.
  * It also instantiates the `Context` object.
  *
  * @module core/startup
  */
 import _ from "../lib/lodash/lodash.js";
 
-import * as Sequencer from "../core/sequencer.js";
 import { parseUrlParams } from "../lib/parseUrlParams.js";
 import * as gel from "../core/layout/gel-defaults.js";
 import { settings } from "../core/settings.js";
@@ -61,7 +60,6 @@ export function startup(initialAdditionalState, settingsConfig = {}) {
             qaMode,
             sequencer: { getTransitions: () => [] },
         };
-        //context.sequencer = Sequencer.create(game, context);
         Navigation.create(game.state, context, LayoutFactory.create(game));
         game.stage.backgroundColor = "#333";
         resolvedPromise(game);

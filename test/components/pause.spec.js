@@ -14,6 +14,8 @@ describe("Pause Overlay", () => {
     let backgroundImage;
     let backgroundImageInputEnabled;
     let backgroundImagePriorityID;
+    let navigationRestart;
+    let navigationHome;
 
     const sandbox = sinon.sandbox.create();
 
@@ -43,6 +45,8 @@ describe("Pause Overlay", () => {
         };
 
         mockLayoutDestroy = { destroy: sandbox.spy() };
+        navigationRestart = sandbox.stub();
+        navigationHome = sandbox.stub();
 
         mockScreen = {
             layoutFactory: {
@@ -53,6 +57,10 @@ describe("Pause Overlay", () => {
             },
             context: { popupScreens: [] },
             next: sandbox.spy(),
+            navigation: {
+                restart: navigationRestart,
+                home: navigationHome
+            }
         };
 
         mockGame = {
@@ -204,11 +212,14 @@ describe("Pause Overlay", () => {
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
-        it("calls the next method with params when the restart button is clicked", () => {
+        it("calls the navigation.restart method with params when the restart button is clicked", () => {
+            mockScreen.transientData = {
+                characterSelected: 1
+            };
             signalSpy.getCall(1).args[0].callback();
-            const actualNextArgs = mockScreen.next.getCall(0).args[0];
-            const expectedNextArgs = { transient: { restart: true } };
-            assert.deepEqual(actualNextArgs, expectedNextArgs);
+            const actualRestartArgs = mockScreen.navigation.restart.getCall(0).args[0];
+            const expectedRestartArgs = { characterSelected: 1 };
+            assert.deepEqual(actualRestartArgs, expectedRestartArgs);
         });
 
         it("destroys the pause screen when the home button is clicked", () => {
@@ -220,11 +231,9 @@ describe("Pause Overlay", () => {
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
-        it("calls the next method with params when the home button is clicked", () => {
+        it("calls the navigation.home method when home button is clicked", () => {
             signalSpy.getCall(2).args[0].callback();
-            const actualNextArgs = mockScreen.next.getCall(0).args[0];
-            const expectedNextArgs = { transient: { home: true } };
-            assert.deepEqual(actualNextArgs, expectedNextArgs);
+            sinon.assert.calledOnce(navigationHome);
         });
     });
 });

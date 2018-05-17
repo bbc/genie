@@ -16,6 +16,8 @@ describe("Results Screen", () => {
     let gameImageStub;
     let gameButtonSpy;
     let gameTextStub;
+    let navigationNext;
+    let navigationGame;
 
     const sandbox = sinon.sandbox.create();
 
@@ -28,6 +30,8 @@ describe("Results Screen", () => {
         gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
         gameTextStub = sandbox.stub();
+        navigationNext = sandbox.stub();
+        navigationGame = sandbox.stub();
 
         mockGame = {
             add: {
@@ -71,7 +75,15 @@ describe("Results Screen", () => {
         };
         resultsScreen.game = mockGame;
         resultsScreen.context = mockContext;
+        resultsScreen.transientData = {
+            results: 22,
+            characterSelected: 1,
+        };
         resultsScreen.preload();
+        resultsScreen.navigation = {
+            next: navigationNext,
+            game: navigationGame
+        };
     });
 
     afterEach(() => {
@@ -141,7 +153,6 @@ describe("Results Screen", () => {
         beforeEach(() => {
             signalSubscribeSpy = sandbox.spy(signal.bus, "subscribe");
             resultsScreen.create();
-            resultsScreen.next = sandbox.spy();
         });
 
         it("adds a signal subscription to the continue button", () => {
@@ -150,7 +161,7 @@ describe("Results Screen", () => {
 
         it("adds a callback for the continue button", () => {
             signalSubscribeSpy.getCall(0).args[0].callback();
-            assert(resultsScreen.next.callCount === 1, "next function should have been called once");
+            assert(resultsScreen.navigation.next.callCount === 1, "next function should have been called once");
         });
 
         it("adds a signal subscription to the restart button", () => {
@@ -159,8 +170,8 @@ describe("Results Screen", () => {
 
         it("adds a callback for the restart button", () => {
             signalSubscribeSpy.getCall(1).args[0].callback();
-            assert(resultsScreen.next.callCount === 1, "next function should have been called once");
-            sinon.assert.calledWith(resultsScreen.next, { transient: { game: true } });
+            assert(resultsScreen.navigation.game.callCount === 1, "next function should have been called once");
+            sinon.assert.calledWith(resultsScreen.navigation.game, { characterSelected: 1 });
         });
     });
 });
