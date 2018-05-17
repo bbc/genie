@@ -33,11 +33,6 @@ const settingsConfig = {
     ],
 };
 
-settings.add("custom1", value => {
-    //Example of custom setting callback
-    console.log("custom 1 setting changed to: " + value);
-});
-
 const transitions = [
     {
         name: "loadscreen",

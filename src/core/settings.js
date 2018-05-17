@@ -1,18 +1,17 @@
 import fp from "../lib/lodash/fp/fp.js";
+import * as signal from "../signal-bus.js";
+import * as gel from "./gel-defaults.js";
 
 export const create = () => {
     let gmi;
-    let closeCallback;
 
-    const defaults = {
-        audio: value => gmi.setAudio(value),
-        motion: value => gmi.setMotion(value),
-        subtitles: value => gmi.setSubtitles(value),
+    const onSettingChanged = (key, value) => {
+        signal.bus.publish({
+            channel: "genie-settings",
+            name: key,
+            data: value,
+        });
     };
-
-    let keyMap = Object.assign({}, defaults);
-
-    const onSettingChanged = (key, value) => keyMap[key](value);
 
     const checkCloseCallback = () => {
         if (!closeCallback) {
@@ -26,27 +25,15 @@ export const create = () => {
         }
     };
 
-    const onSettingsClosed = fp.flow(checkCloseCallback, () => {
-        closeCallback();
-    });
-
-    const add = (key, callback) => {
-        if (keyMap[key]) {
-            throw `settings callback for "${key}" has already been set`;
-        } else {
-            keyMap[key] = callback;
-        }
-    };
+    const onSettingsClosed = document.getElementsByClassName(gel.config.settings.id)[0].focus();
 
     const setGmi = newGmi => (gmi = newGmi);
-    const setCloseCallback = callback => (closeCallback = callback);
 
     const callGmi = () => gmi.showSettings(onSettingChanged, onSettingsClosed);
 
     const show = fp.flow(checkGmi, callGmi);
 
     return {
-        add,
         setGmi,
         setCloseCallback,
         show,
