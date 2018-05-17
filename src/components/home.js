@@ -17,10 +17,6 @@ export class Home extends Screen {
         this.keyLookup = this.layoutFactory.keyLookups[this.game.state.current];
     }
 
-    update() {
-        console.log("update called");
-    }
-
     create() {
         this.layoutFactory.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
         this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
