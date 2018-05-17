@@ -42,9 +42,9 @@ export class Loadscreen extends Screen {
             this.next();
             signal.bus.subscribe({
                 channel: "gel-settings",
-                name: "audio",
+                name: "custom1",
                 callback: value => {
-                    console.log("Audio setting changed to " + value);
+                    console.log("custom1 setting changed to " + value);
                 },
             });
         });
