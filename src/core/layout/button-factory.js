@@ -3,10 +3,11 @@
  *
  * @module core/layout/button-factory
  */
-import fp from "../../lib/lodash/fp/fp.js";
-import { accessibilify } from "../../lib/accessibilify/accessibilify.js";
-import { GelButton } from "./gel-button.js";
 import * as signal from "../../core/signal-bus.js";
+import { accessibilify } from "../../lib/accessibilify/accessibilify.js";
+import fp from "../../lib/lodash/fp/fp.js";
+import { buttonsChannel } from "./gel-defaults.js";
+import { GelButton } from "./gel-button.js";
 
 /**
  * Checks for a default action and if present adds its callback to the signal bus
@@ -16,7 +17,7 @@ import * as signal from "../../core/signal-bus.js";
 const defaultAction = config => {
     if (config.action) {
         signal.bus.subscribe({
-            channel: "gel-buttons",
+            channel: buttonsChannel,
             name: config.key,
             callback: config.action,
         });

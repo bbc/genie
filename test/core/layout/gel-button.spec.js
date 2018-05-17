@@ -1,17 +1,15 @@
-import fp from "lodash/fp";
-
 import { assert } from "chai";
+import fp from "lodash/fp";
+import * as sinon from "sinon";
 import { loadAssets } from "../../../src/core/asset-loader";
+import { GameAssets } from "../../../src/core/game-assets";
+import { GelButton } from "../../../src/core/layout/gel-button";
+import { buttonsChannel } from "../../../src/core/layout/gel-defaults.js";
 import { Screen } from "../../../src/core/screen";
+import * as signal from "../../../src/core/signal-bus.js";
 import { startup } from "../../../src/core/startup";
 import { assetPacks } from "../../helpers/asset-packs";
-import { GameAssets } from "../../../src/core/game-assets";
 import * as mock from "../../helpers/mock";
-import * as signal from "../../../src/core/signal-bus.js";
-
-import { GelButton } from "../../../src/core/layout/gel-button";
-
-import * as sinon from "sinon";
 
 describe("Layout - Gel Button", () => {
     const sandbox = sinon.sandbox.create();
@@ -26,7 +24,7 @@ describe("Layout - Gel Button", () => {
     };
     const config = {
         key: "play",
-        channel: "gel-buttons",
+        channel: buttonsChannel,
     };
 
     beforeEach(mock.installMockGetGmi);
@@ -123,7 +121,7 @@ describe("Layout - Gel Button", () => {
                 loadAssets(game, gamePacks, gelPack, () => {}).then(() => {
                     const button = new GelButton(game, 0, 0, true, config);
                     const expectedArgs = {
-                        channel: "gel-buttons",
+                        channel: buttonsChannel,
                         name: "play",
                         data: { game },
                     };

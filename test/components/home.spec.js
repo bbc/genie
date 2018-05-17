@@ -1,9 +1,9 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-
 import { Home } from "../../src/components/home";
-import * as signal from "../../src/core/signal-bus.js";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
+import * as signal from "../../src/core/signal-bus.js";
+import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
 describe("Home Screen", () => {
     let homeScreen;
@@ -117,7 +117,7 @@ describe("Home Screen", () => {
         });
 
         it("adds a signal subscription to the play button", () => {
-            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].channel, "gel-buttons");
+            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].channel, buttonsChannel);
             assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].name, "play");
         });
 

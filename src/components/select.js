@@ -4,6 +4,7 @@
  * @module components/select
  */
 
+import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
@@ -40,7 +41,7 @@ export class Select extends Screen {
         });
 
         signal.bus.subscribe({
-            channel: "gel-buttons",
+            channel: buttonsChannel,
             name: "exit",
             callback: () => {
                 this.next({ transient: { home: true } });
@@ -48,19 +49,19 @@ export class Select extends Screen {
         });
 
         signal.bus.subscribe({
-            channel: "gel-buttons",
+            channel: buttonsChannel,
             name: "previous",
             callback: this.leftButton.bind(this),
         });
 
         signal.bus.subscribe({
-            channel: "gel-buttons",
+            channel: buttonsChannel,
             name: "next",
             callback: this.rightButton.bind(this),
         });
 
         signal.bus.subscribe({
-            channel: "gel-buttons",
+            channel: buttonsChannel,
             name: "continue",
             callback: this.startGame.bind(this),
         });

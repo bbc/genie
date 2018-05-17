@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-
+import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 import * as LayoutFactory from "../../src/core/layout/factory";
 import * as Sequencer from "../../src/core/sequencer";
 import * as signal from "../../src/core/signal-bus.js";
@@ -84,7 +84,7 @@ describe("Sequencer", () => {
         it("clears down all gel button signals", () => {
             const removeChannelSpy = sandbox.spy(signal.bus, "removeChannel");
             next();
-            assert.isTrue(removeChannelSpy.withArgs("gel-buttons").calledOnce);
+            assert.isTrue(removeChannelSpy.withArgs(buttonsChannel).calledOnce);
         });
 
         it("starts the next screen", () => {

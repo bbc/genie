@@ -5,6 +5,7 @@ import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import * as GelButton from "../../../src/core/layout/gel-button";
 import * as accessibilify from "../../../src/lib/accessibilify/accessibilify";
 import * as signal from "../../../src/core/signal-bus.js";
+import { buttonsChannel } from "../../../src/core/layout/gel-defaults.js";
 
 describe("Layout - Button Factory", () => {
     let accessibilifyStub;
@@ -65,16 +66,16 @@ describe("Layout - Button Factory", () => {
                 key: "play",
                 action: defaultAction,
             };
-            signal.bus.removeChannel("gel-buttons");
+            signal.bus.removeChannel(buttonsChannel);
 
             buttonFactory.createButton(expectedIsMobile, config);
 
-            signal.bus.publish({ channel: "gel-buttons", name: "play" });
-            signal.bus.publish({ channel: "gel-buttons", name: "play" });
+            signal.bus.publish({ channel: buttonsChannel, name: "play" });
+            signal.bus.publish({ channel: buttonsChannel, name: "play" });
 
             expect(defaultAction.callCount).to.equal(2);
 
-            signal.bus.removeChannel("gel-buttons");
+            signal.bus.removeChannel(buttonsChannel);
         });
     });
 });

@@ -32,8 +32,8 @@ export const create = () => {
     const show = fp.flow(checkGmi, callGmi);
 
     return {
-        setGmi,
         show,
+        setGmi,
     };
 };
 
