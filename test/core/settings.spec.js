@@ -47,7 +47,7 @@ describe("Settings", () => {
     });
 
     it("Dispatches a signal bus message when a setting changes", () => {
-        const spy = sinon.spy();
+        const spy = sinon.spy(signal.bus, "publish");
         const settingName = "test";
 
         const settings = createSettings();
@@ -58,15 +58,10 @@ describe("Settings", () => {
             },
         };
 
-        signal.bus.subscribe({
-            channel: "genie-settings",
-            name: settingName,
-            callback: spy,
-        });
         settings.setGmi(mockGmi);
         settings.show();
 
         sinon.assert.calledOnce(spy);
-        sinon.assert.calledWith(spy, true);
+        sinon.assert.calledWith(spy, { channel: "genie-settings", name: settingName, data: true });
     });
 });
