@@ -40,7 +40,7 @@ export class Loadscreen extends Screen {
             initGameAssets(this.game);
             this.startMusic();
             signal.bus.subscribe({
-                channel: "gel-settings",
+                channel: "genie-settings",
                 name: "audio",
                 callback: value => {
                     console.log("Audio setting changed to " + value);
