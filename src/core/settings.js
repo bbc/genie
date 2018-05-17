@@ -20,7 +20,7 @@ export const create = () => {
     };
 
     const onSettingsClosed = () => {
-        document.getElementsByClassName(gel.config.settings.id)[0].focus();
+        document.getElementById(gel.config.settings.id).focus();
     };
 
     const setGmi = newGmi => (gmi = newGmi);
