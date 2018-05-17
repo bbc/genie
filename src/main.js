@@ -1,9 +1,9 @@
+import { startup } from "./core/startup.js";
 import { Home } from "./components/home.js";
 import { Loadscreen } from "./components/loadscreen.js";
 import { Results } from "./components/results.js";
 import { Select } from "./components/select.js";
 import { GameTest } from "./components/test-harness/test-screens/game.js";
-import { startup } from "./core/startup.js";
 
 const settingsConfig = {
     pages: [
