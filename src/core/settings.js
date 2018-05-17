@@ -2,12 +2,14 @@ import * as signal from "../core/signal-bus.js";
 import fp from "../lib/lodash/fp/fp.js";
 import * as gel from "./layout/gel-defaults.js";
 
+export const settingsChannel = "genie-settings";
+
 export const create = () => {
     let gmi;
 
     const onSettingChanged = (key, value) => {
         signal.bus.publish({
-            channel: "genie-settings",
+            channel: settingsChannel,
             name: key,
             data: value,
         });

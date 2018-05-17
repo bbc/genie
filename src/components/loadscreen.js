@@ -7,6 +7,7 @@
 import { loadAssets } from "../core/asset-loader.js";
 import { GameAssets, initGameAssets } from "../core/game-assets.js";
 import { Screen } from "../core/screen.js";
+import { settingsChannel } from "../core/settings.js";
 import * as signal from "../core/signal-bus.js";
 import _ from "../lib/lodash/lodash.js";
 
@@ -40,7 +41,7 @@ export class Loadscreen extends Screen {
             initGameAssets(this.game);
             this.startMusic();
             signal.bus.subscribe({
-                channel: "genie-settings",
+                channel: settingsChannel,
                 name: "audio",
                 callback: value => {
                     console.log("Audio setting changed to " + value);
