@@ -25,7 +25,7 @@ export const create = () => {
         }
     };
 
-    const onSettingsClosed = document.getElementsByClassName(gel.config.settings.id)[0].focus();
+    const onSettingsClosed = document.getElementsByClassName(gel.config.settings.id)[0].focus;
 
     const setGmi = newGmi => (gmi = newGmi);
 
