@@ -46,6 +46,11 @@ export class Loadscreen extends Screen {
                     console.log("Audio setting changed to " + value);
                 },
             });
+            signal.bus.publish({
+                channel: "gel-settings",
+                name: "audio",
+                data: true,
+            });
             this.next();
         });
     }
