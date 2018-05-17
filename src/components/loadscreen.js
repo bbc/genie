@@ -39,7 +39,6 @@ export class Loadscreen extends Screen {
             }
             initGameAssets(this.game);
             this.startMusic();
-            this.next();
             signal.bus.subscribe({
                 channel: "gel-settings",
                 name: "audio",
@@ -47,6 +46,7 @@ export class Loadscreen extends Screen {
                     console.log("Audio setting changed to " + value);
                 },
             });
+            this.next();
         });
     }
 
