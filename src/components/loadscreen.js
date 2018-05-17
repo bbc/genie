@@ -6,12 +6,8 @@
 
 import { loadAssets } from "../core/asset-loader.js";
 import { GameAssets, initGameAssets } from "../core/game-assets.js";
-import * as gel from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
-import { settings, settingsChannel } from "../core/settings.js";
-import * as signal from "../core/signal-bus.js";
 import _ from "../lib/lodash/lodash.js";
-import * as pause from "./pause.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
@@ -42,20 +38,7 @@ export class Loadscreen extends Screen {
             }
             initGameAssets(this.game);
             this.startMusic();
-            this.addSignalSubsciptions();
             this.next();
-        });
-    }
-
-    addSignalSubsciptions() {
-        signal.bus.subscribe({ channel: gel.buttonsChannel, name: "pause", callback: pause.create });
-        signal.bus.subscribe({ channel: gel.buttonsChannel, name: "settings", callback: settings.show });
-        signal.bus.subscribe({
-            channel: settingsChannel,
-            name: "audio",
-            callback: value => {
-                console.log("Audio setting changed to " + value);
-            },
         });
     }
 

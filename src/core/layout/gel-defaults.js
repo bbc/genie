@@ -1,13 +1,5 @@
 export const buttonsChannel = "gel-buttons";
 
-const callGmi = method => () => {
-    if (gmi) {
-        gmi[method]();
-    } else {
-        throw "gmi has not been initialised in gel-defaults";
-    }
-};
-
 export const config = {
     exit: {
         group: "topLeft",
@@ -17,7 +9,6 @@ export const config = {
         order: 0,
         id: "gel-exit",
         channel: buttonsChannel,
-        action: callGmi("exit"),
     },
     home: {
         group: "topLeft",

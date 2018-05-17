@@ -5,7 +5,8 @@
  * @module core/startup
  */
 import * as Sequencer from "../core/sequencer.js";
-import { settings } from "../core/settings.js";
+import { settings, settingsChannel } from "../core/settings.js";
+import * as signal from "../core/signal-bus.js";
 import _ from "../lib/lodash/lodash.js";
 import { parseUrlParams } from "../lib/parseUrlParams.js";
 
@@ -78,8 +79,19 @@ class Startup extends Phaser.State {
         // All asset paths are relative to the location of the config.json:
         const theme = gmi.embedVars.configPath;
         const configDir = theme.split(/([^/]+$)/, 2)[0];
+        this.addSettingSubsciptions();
         this.game.load.path = configDir;
         this.game.load.json(CONFIG_KEY, "config.json");
+    }
+
+    addSettingSubsciptions() {
+        signal.bus.subscribe({
+            channel: settingsChannel,
+            name: "audio",
+            callback: value => {
+                console.log("Audio setting changed to " + value);
+            },
+        });
     }
 
     create() {
