@@ -4,12 +4,10 @@
  *
  * @module core/startup
  */
-import _ from "../lib/lodash/lodash.js";
-
 import * as Sequencer from "../core/sequencer.js";
-import { parseUrlParams } from "../lib/parseUrlParams.js";
-import * as gel from "../core/layout/gel-defaults.js";
 import { settings } from "../core/settings.js";
+import _ from "../lib/lodash/lodash.js";
+import { parseUrlParams } from "../lib/parseUrlParams.js";
 
 /**
  * @param {Array} transitions - The transitions JSON object given in main.js.
@@ -22,7 +20,6 @@ export function startup(transitions, initialAdditionalState, settingsConfig = {}
     const urlParams = parseUrlParams(window.location.search);
     const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
     hookErrors(gmi.gameContainerId);
-    gel.setGmi(gmi);
     settings.setGmi(gmi);
 
     const phaserConfig = {

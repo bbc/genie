@@ -4,12 +4,11 @@
  * @module components/loadscreen
  */
 
-import _ from "../lib/lodash/lodash.js";
-
 import { loadAssets } from "../core/asset-loader.js";
+import { GameAssets, initGameAssets } from "../core/game-assets.js";
 import { Screen } from "../core/screen.js";
-import { initGameAssets, GameAssets } from "../core/game-assets.js";
-import * as signal from "../signal-bus.js";
+import * as signal from "../core/signal-bus.js";
+import _ from "../lib/lodash/lodash.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";

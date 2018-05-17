@@ -1,6 +1,6 @@
+import * as signal from "../core/signal-bus.js";
 import fp from "../lib/lodash/fp/fp.js";
-import * as signal from "../signal-bus.js";
-import * as gel from "./gel-defaults.js";
+import * as gel from "./layout/gel-defaults.js";
 
 export const create = () => {
     let gmi;
@@ -19,7 +19,9 @@ export const create = () => {
         }
     };
 
-    const onSettingsClosed = document.getElementsByClassName(gel.config.settings.id)[0].focus;
+    const onSettingsClosed = () => {
+        document.getElementsByClassName(gel.config.settings.id)[0].focus();
+    };
 
     const setGmi = newGmi => (gmi = newGmi);
 
@@ -29,7 +31,6 @@ export const create = () => {
 
     return {
         setGmi,
-        setCloseCallback,
         show,
     };
 };

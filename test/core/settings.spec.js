@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-
 import { create as createSettings } from "../../src/core/settings.js";
+import * as signal from "../../src/core/signal-bus.js";
 
 describe("Settings", () => {
     let sandbox;
@@ -25,8 +25,13 @@ describe("Settings", () => {
         assert(spy.calledOnce);
     });
 
-    it("Calls settings closed on complete", () => {
+    it("Focuses on the settings button after closing settings", () => {
         const spy = sinon.spy();
+        sandbox.stub(document, "getElementsByClassName").returns([
+            {
+                focus: spy,
+            },
+        ]);
         const settings = createSettings();
 
         const mockGmi = {
@@ -36,23 +41,28 @@ describe("Settings", () => {
         };
 
         settings.setGmi(mockGmi);
-        settings.setCloseCallback(spy);
         settings.show();
 
         sinon.assert.calledOnce(spy);
     });
 
-    it("Adds a new setting and dispatches its callback on settings changed", () => {
+    it("Dispatches a signal bus message when a setting changes", () => {
         const spy = sinon.spy();
+        const settingName = "test";
+
         const settings = createSettings();
 
         const mockGmi = {
             showSettings: (onSettingsChanged, onSettingsClosed) => {
-                onSettingsChanged("test", true);
+                onSettingsChanged(settingName, true);
             },
         };
 
-        settings.add("test", spy);
+        signal.bus.subscribe({
+            channel: "genie-settings",
+            name: settingName,
+            callback: spy,
+        });
         settings.setGmi(mockGmi);
         settings.show();
 

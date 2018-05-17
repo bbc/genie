@@ -1,12 +1,6 @@
 import * as pause from "../../components/pause.js";
 import { settings } from "../settings.js";
 
-let gmi;
-
-export const setGmi = newGmi => {
-    gmi = newGmi;
-};
-
 const howToPlayClicked = () => {
     console.log("how to play clicked");
 };
