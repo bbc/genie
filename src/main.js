@@ -1,15 +1,9 @@
-import { Loadscreen } from "./components/loadscreen.js";
 import { Home } from "./components/home.js";
+import { Loadscreen } from "./components/loadscreen.js";
+import { Results } from "./components/results.js";
 import { Select } from "./components/select.js";
 import { GameTest } from "./components/test-harness/test-screens/game.js";
-import { Results } from "./components/results.js";
 import { startup } from "./core/startup.js";
-import { settings } from "./core/settings.js";
-
-settings.setCloseCallback(() => {
-    //Called when settings screen has been closed
-    console.log("Settings Closed");
-});
 
 const settingsConfig = {
     pages: [
