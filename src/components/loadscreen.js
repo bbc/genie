@@ -41,7 +41,7 @@ export class Loadscreen extends Screen {
             this.startMusic();
             this.next();
             signal.bus.subscribe({
-                channel: "settings",
+                channel: "gel-settings",
                 name: "audio",
                 callback: value => {
                     console.log("Audio setting changed to " + value);
