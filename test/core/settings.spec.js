@@ -27,11 +27,9 @@ describe("Settings", () => {
 
     it("Focuses on the settings button after closing settings", () => {
         const spy = sinon.spy();
-        sandbox.stub(document, "getElementsByClassName").returns([
-            {
-                focus: spy,
-            },
-        ]);
+        sandbox.stub(document, "getElementsById").returns({
+            focus: spy,
+        });
         const settings = createSettings();
 
         const mockGmi = {
