@@ -14,10 +14,6 @@ const allPossibleStates = {
 
 export const loadGenieScreens = (navigation, gameState) => {
     Object.keys(navigation).forEach(screen => {
-        if (screen === "init") {
-            return false;
-        }
-
         gameState.add(screen, allPossibleStates[screen]);
     });
 }
