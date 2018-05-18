@@ -10,13 +10,13 @@ import { parseUrlParams } from "../lib/parseUrlParams.js";
 import * as gel from "../core/layout/gel-defaults.js";
 import { settings } from "../core/settings.js";
 import * as LayoutFactory from "./layout/factory.js";
-import * as Navigation from "./navigation/create.js";
+import * as Navigation from "./navigation.js";
 
 /**
  * @param {Object=} initialAdditionalState - Additional state that is added to the inState context.
  * @param {Object=} settingsConfig -
  */
-export function startup(settingsConfig = {}) {
+export function startup(settingsConfig = {}, navigation) {
     const gmi = window.getGMI({ settingsConfig });
     const urlParams = parseUrlParams(window.location.search);
     const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
@@ -52,7 +52,7 @@ export function startup(settingsConfig = {}) {
             qaMode,
         };
         game.stage.backgroundColor = "#333";
-        Navigation.create(game.state, context, layoutFactory);
+        Navigation.create(game.state, context, layoutFactory, navigation);
     }
 }
 

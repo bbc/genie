@@ -1,64 +1,77 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-import { loadNavigation } from "../../src/core/navigation.js";
+import * as Navigation from "../../src/core/navigation.js";
+import * as signal from "../../src/core/signal-bus.js";
+import { Loadscreen } from "../../src/components/loadscreen.js";
+import { Home } from "../../src/components/home.js";
 
-describe("Navigation - #loadNavigation", () => {
+describe("Navigation", () => {
+    let gameState,
+        context,
+        layoutFactory,
+        navigationConfig,
+        loadGenieScreens,
+        transientData,
+        navigation,
+        signalBusRemoveChannel;
+
     const sandbox = sinon.sandbox.create();
 
-    let home, select, game, results;
-
     beforeEach(() => {
-        home = sandbox.stub();
-        select = sandbox.stub();
-        game = sandbox.stub();
-        results = sandbox.stub();
+        gameState = {
+            add: sandbox.stub(),
+            start: sandbox.stub(),
+        };
+        context = sandbox.stub();
+        layoutFactory = { removeAll: sandbox.stub() };
+        transientData = undefined;
+        navigation = {
+            loadscreen: {
+                state: Loadscreen,
+                routes: {
+                    next: sandbox.stub(),
+                },
+            },
+            home: {
+                state: Home,
+                routes: {
+                    next: sandbox.stub(),
+                },
+            },
+        };
+        navigationConfig = () => navigation;
+        signalBusRemoveChannel = sandbox.spy(signal.bus, "removeChannel");
     });
 
     afterEach(() => {
         sandbox.restore();
     });
 
-    it("returns navigation object", () => {
-        const navigation = loadNavigation(home, select, game, results);
-        const expectedNavigationObject = {
-            loadscreen: {
-                next: home,
-            },
-            home: {
-                next: select,
-            },
-            "character-select": {
-                next: game,
-                home: home,
-                restart: home,
-            },
-            game: {
-                next: results,
-                home: home,
-                restart: game,
-            },
-            results: {
-                next: home,
-                game: game,
-                restart: game,
-                home: home,
-            },
-        };
+    it("loads correct genie screens", () => {
+        Navigation.create(gameState, context, layoutFactory, navigationConfig);
 
-        assert.deepEqual(navigation, expectedNavigationObject);
+        sinon.assert.calledTwice(gameState.add);
+        sinon.assert.calledOnce(gameState.add.withArgs("loadscreen", Loadscreen));
+        sinon.assert.calledOnce(gameState.add.withArgs("home", Home));
     });
 
-    it("calls 'game' function when calling restart on game", () => {
-        const navigation = loadNavigation(home, select, game, results);
-        navigation.game.restart();
+    it("goes to loadscreen", () => {
+        Navigation.create(gameState, context, layoutFactory, navigationConfig);
 
-        sinon.assert.calledOnce(game);
+        sinon.assert.calledOnce(
+            gameState.start.withArgs("loadscreen", true, false, transientData, layoutFactory, context, navigation),
+        );
     });
 
-    it("calls 'home' function when calling restart on character-select", () => {
-        const navigation = loadNavigation(home, select, game, results);
-        navigation["character-select"].restart();
+    it("removes signal bus gel-buttons channel before going to screen", () => {
+        Navigation.create(gameState, context, layoutFactory, navigationConfig);
 
-        sinon.assert.calledOnce(home);
+        sinon.assert.calledOnce(signal.bus.removeChannel.withArgs("gel-buttons"));
+    });
+
+    it("clears down layout before going to screen", () => {
+        Navigation.create(gameState, context, layoutFactory, navigationConfig);
+
+        sinon.assert.calledOnce(layoutFactory.removeAll);
     });
 });

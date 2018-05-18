@@ -16,7 +16,7 @@ export class Screen extends Phaser.State {
     init(transientData, layoutFactory, context, navigation) {
         this.layoutFactory = layoutFactory;
         this._context = context;
-        this.navigation = navigation[this.game.state.current];
+        this.navigation = navigation[this.game.state.current].routes;
         this.transientData = transientData;
     }
 }

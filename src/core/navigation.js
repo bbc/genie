@@ -1,26 +1,21 @@
-export const loadNavigation = (home, select, game, results) => {
-    return {
-        loadscreen: {
-            next: home,
-        },
-        home: {
-            next: select,
-        },
-        "character-select": {
-            next: game,
-            home: home,
-            restart: home,
-        },
-        game: {
-            next: results,
-            home: home,
-            restart: game,
-        },
-        results: {
-            next: home,
-            game: game,
-            restart: game,
-            home: home,
-        },
+import * as signal from "./signal-bus.js";
+
+export const create = (gameState, context, layoutFactory, navigationConfig) => {
+    const goToScreen = (name, transientData) => {
+        signal.bus.removeChannel("gel-buttons");
+        layoutFactory.removeAll();
+        gameState.start(name, true, false, transientData, layoutFactory, context, navigation);
     };
+
+    const navigation = navigationConfig(goToScreen);
+
+    loadGenieScreens(navigation, gameState);
+
+    goToScreen("loadscreen");
+};
+
+const loadGenieScreens = (navigationConfig, gameState) => {
+    Object.keys(navigationConfig).forEach(screen => {
+        gameState.add(screen, navigationConfig[screen].state);
+    });
 };
