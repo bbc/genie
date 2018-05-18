@@ -89,7 +89,7 @@ class Startup extends Phaser.State {
             channel: settingsChannel,
             name: "audio",
             callback: value => {
-                console.log("Audio setting changed to " + value);
+                this.game.sound.mute = value;
             },
         });
     }
