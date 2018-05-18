@@ -79,12 +79,14 @@ class Startup extends Phaser.State {
         // All asset paths are relative to the location of the config.json:
         const theme = gmi.embedVars.configPath;
         const configDir = theme.split(/([^/]+$)/, 2)[0];
-        this.addSettingSubsciptions();
+        const settings = gmi.getAllSettings();
+        this.configureAudioSetting(settings);
         this.game.load.path = configDir;
         this.game.load.json(CONFIG_KEY, "config.json");
     }
 
-    addSettingSubsciptions() {
+    configureAudioSetting(settings) {
+        this.game.sound.mute = settings.audio;
         signal.bus.subscribe({
             channel: settingsChannel,
             name: "audio",
