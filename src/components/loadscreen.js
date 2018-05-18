@@ -40,11 +40,6 @@ export class Loadscreen extends Screen {
             initGameAssets(this.game);
             this.startMusic();
 
-            const data = {
-                game: this.game,
-                context: this.context,
-                layoutFactory: this.layoutFactory,
-            };
             this.navigation.next();
         });
     }
