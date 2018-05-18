@@ -42,16 +42,6 @@
         },
         {
             "type": "spritesheet",
-            "key": "audio-off",
-            "url": "gel/desktop/audio-off.png",
-            "frameWidth": 64,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
             "key": "settings",
             "url": "gel/desktop/settings.png",
             "frameWidth": 64,
@@ -197,16 +187,6 @@
             "key": "how-to-play",
             "url": "gel/mobile/how-to-play.png",
             "frameWidth": 172,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "audio-off",
-            "url": "gel/mobile/audio-off.png",
-            "frameWidth": 42,
             "frameHeight": 42,
             "frameMax": 2,
             "margin": 0,
