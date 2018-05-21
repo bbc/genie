@@ -85,9 +85,6 @@ describe("Pause Overlay", () => {
             const actualImageCall = mockGame.add.image.getCall(0);
             const expectedImageCall = [0, 0, "pauseBackgroundImage"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
-
-            const addToBackgroundCall = mockScreen.scene.addToBackground.getCall(0);
-            assert.deepEqual(addToBackgroundCall.args, [backgroundImage]);
         });
 
         it("passes the background image to the overlay layout manager", () => {
