@@ -101,12 +101,7 @@ export function create({ game }) {
     function restartGame() {
         destroy();
 
-        const transientData = screen.transientData;
-        if (transientData) {
-            screen.navigation.restart({ characterSelected: transientData.characterSelected });
-        } else {
-            screen.navigation.restart();
-        }
+        screen.navigation.restart(screen.transientData);
     }
 
     function goHome() {

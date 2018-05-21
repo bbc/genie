@@ -166,7 +166,7 @@ describe("Results Screen", () => {
         it("adds a callback for the restart button", () => {
             signalSubscribeSpy.getCall(1).args[0].callback();
             assert(resultsScreen.navigation.game.callCount === 1, "next function should have been called once");
-            sinon.assert.calledWith(resultsScreen.navigation.game, { characterSelected: 1 });
+            sinon.assert.calledWith(resultsScreen.navigation.game, { characterSelected: 1, results: 22 });
         });
     });
 });

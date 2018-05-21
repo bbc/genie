@@ -40,7 +40,7 @@ export class Results extends Screen {
             name: "restart",
             channel: "gel-buttons",
             callback: () => {
-                this.navigation.game({ characterSelected: this.transientData.characterSelected });
+                this.navigation.game(this.transientData);
             },
         });
     }
