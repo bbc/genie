@@ -5,7 +5,7 @@ import { Screen } from "../../src/core/screen";
 
 describe("Screen", () => {
     let screen;
-    let mockLayoutFactory;
+    let mockScene;
     let transientData;
     let navigation;
 
@@ -13,7 +13,7 @@ describe("Screen", () => {
     const sandbox = sinon.sandbox.create();
 
     beforeEach(() => {
-        mockLayoutFactory = sandbox.spy();
+        mockScene = sandbox.spy();
         transientData = sandbox.stub();
         navigation = {
             loadscreen: sandbox.stub(),
@@ -25,15 +25,15 @@ describe("Screen", () => {
                 current: "loadscreen",
             },
         };
-        screen.init(transientData, mockLayoutFactory, mockContext, navigation);
+        screen.init(transientData, mockScene, mockContext, navigation);
     });
 
     afterEach(() => {
         sandbox.restore();
     });
 
-    it("sets layoutFactory on the screen", () => {
-        expect(screen.layoutFactory).to.eql(mockLayoutFactory);
+    it("sets scene on the screen", () => {
+        expect(screen.scene).to.eql(mockScene);
     });
 
     it("sets the context on the screen", () => {

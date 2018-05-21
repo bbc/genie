@@ -37,7 +37,7 @@ describe("Load Screen", () => {
         };
 
         loadScreen = new Loadscreen();
-        loadScreen.layoutFactory = {
+        loadScreen.scene = {
             addLookups: addLookupsSpy,
             keyLookups: {
                 currentState: {

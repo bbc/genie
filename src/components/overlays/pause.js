@@ -15,7 +15,7 @@ import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
  */
 export function create({ game }) {
     const screen = game.state.states[game.state.current];
-    const keyLookup = screen.layoutFactory.keyLookups.pause;
+    const keyLookup = screen.scene.keyLookups.pause;
     const channel = "pause-gel-buttons";
 
     pauseGame();
@@ -35,7 +35,7 @@ export function create({ game }) {
     }
 
     function addGelButtons() {
-        const gelLayout = screen.layoutFactory.addLayout([
+        const gelLayout = screen.scene.addLayout([
             "pauseHome",
             "audioOff",
             "settings",

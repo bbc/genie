@@ -14,7 +14,7 @@ import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
 export function create({ game }) {
     const screen = game.state.states[game.state.current];
     const theme = screen.context.config.theme["how-to-play"];
-    const keyLookup = screen.layoutFactory.keyLookups.howToPlay;
+    const keyLookup = screen.scene.keyLookups.howToPlay;
     const channel = "how-to-play-gel-buttons";
 
     let panels = [];
@@ -25,14 +25,14 @@ export function create({ game }) {
 
     const overlayLayout = OverlayLayout.create(screen);
     const background = overlayLayout.addBackground(game.add.image(0, 0, keyLookup.background));
-    const title = screen.layoutFactory.addToBackground(game.add.image(0, -230, keyLookup.title));
+    const title = screen.scene.addToBackground(game.add.image(0, -230, keyLookup.title));
     const gelButtons = addGelButtons();
     addPanels();
     let pips = addPips();
     addSignals();
 
     function addGelButtons() {
-        const gelLayout = screen.layoutFactory.addLayout([
+        const gelLayout = screen.scene.addLayout([
             "howToPlayBack",
             "audioOff",
             "settings",
@@ -47,7 +47,7 @@ export function create({ game }) {
         theme.panels.forEach((item, index) => {
             const panel = game.add.sprite(0, 30, keyLookup[theme.panels[index]]);
             panel.visible = index === 0;
-            screen.layoutFactory.addToBackground(panel);
+            screen.scene.addToBackground(panel);
             panels = panels.concat(panel);
         });
     }
@@ -96,7 +96,7 @@ export function create({ game }) {
             pipsGroup.add(pip);
             currentPosition += pipWidth + spacing;
         });
-        screen.layoutFactory.addToBackground(pipsGroup);
+        screen.scene.addToBackground(pipsGroup);
         return pipsGroup;
     }
 

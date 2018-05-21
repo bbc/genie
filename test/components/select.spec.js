@@ -62,7 +62,7 @@ describe("Select Screen", () => {
         };
 
         selectScreen = new Select();
-        selectScreen.layoutFactory = {
+        selectScreen.scene = {
             addToBackground: addToBackgroundSpy,
             addLayout: addLayoutSpy,
             keyLookups: {
@@ -90,7 +90,7 @@ describe("Select Screen", () => {
 
     describe("preload method", () => {
         it("adds current game state to the layout key lookups", () => {
-            const expectedLookups = selectScreen.layoutFactory.keyLookups.characterSelect;
+            const expectedLookups = selectScreen.scene.keyLookups.characterSelect;
             assert.deepEqual(selectScreen.keyLookup, expectedLookups);
         });
     });
@@ -114,7 +114,7 @@ describe("Select Screen", () => {
 
         it("creates a layout harness with correct params", () => {
             assert(layoutHarnessSpy.callCount === 1, "layout harness should be called once");
-            sinon.assert.calledWith(layoutHarnessSpy, mockGame, mockContext, selectScreen.layoutFactory);
+            sinon.assert.calledWith(layoutHarnessSpy, mockGame, mockContext, selectScreen.scene);
         });
 
         it("creates sprites for each choice", () => {
