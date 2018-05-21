@@ -192,6 +192,21 @@ describe("#accessibilify", () => {
             sinon.assert.called(position.withArgs(mockButton.hitArea.clone()));
         });
 
+        it("repositions accessibleElement if button exists but does not have a hit area", () => {
+            sandbox.restore();
+            const clock = sandbox.useFakeTimers();
+            const position = sandbox.spy();
+            accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({ position });
+
+            mockButton.hitArea = null;
+            mockButton.getBounds = sandbox.stub().returns("bounds");
+
+            accessibilify(mockButton);
+            clock.tick(200);
+            sinon.assert.called(mockButton.getBounds);
+            sinon.assert.called(position.withArgs("bounds"));
+        });
+
         it("does NOT reposition accessibleElement if button does not exist", () => {
             sandbox.restore();
             let deadMockButton = mockButton;
