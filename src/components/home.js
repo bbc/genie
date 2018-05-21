@@ -14,8 +14,14 @@ export class Home extends Screen {
     }
 
     create() {
+        this.layoutFactory.addToBackground(this.game.add.image(0, 0, "home.background"));
         this.layoutFactory.addToBackground(this.game.add.image(0, 0, this.assets.background));
-        this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.assets.title));
+        this.layoutFactory.addToBackground(this.game.add.image(0, 0, this.getAsset("background")));
+        this.layoutFactory.addToBackground(this.game.add.image(0, 0, assets.home.background));
+
+
+        this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.getAsset("title")));
+
         this.layoutFactory.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
         createTestHarnessDisplay(this.game, this.context, this.layoutFactory);
 

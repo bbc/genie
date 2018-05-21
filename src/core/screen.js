@@ -21,7 +21,9 @@ export class Screen extends Phaser.State {
         this.assets = getScreenAssets(this);
     }
 
-    getAsset = name => game.state.current + "." + name;
+    getAsset(name) {
+        return this.game.state.current + "." + name;
+    }
 
     next(changedState) {
         this._next(changedState);
