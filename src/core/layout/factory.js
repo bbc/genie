@@ -5,8 +5,8 @@
  * background. It also provides a factory function for making [ gel layouts]{@link module:layout/layout}
  *
  * @example
- * this.layoutFactory.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
- * this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
+ * this.layoutFactory.addToBackground(this.game.add.image(0, 0, this.assets.background));
+ * this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.assets.title));
  * this.layoutFactory.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
  *
  * @module core/layout/factory
@@ -18,14 +18,13 @@ import * as Layout from "./layout.js";
  * Create a new Layout Factory
  *
  * @param {Phaser.Game} game
- * @returns {{keyLookups: {}, addToBackground(), addToForeground(), addLayout(), removeAll(), addLookups(), getSize()}} - {{@link module:layout/factory.addLayout addLayout}}
+ * @returns {{addToBackground(), addToForeground(), addLayout(), removeAll(), getSize()}} - {{@link module:layout/factory.addLayout addLayout}}
  */
 export function create(game) {
     let _layouts = [];
     const root = game.add.group(undefined, "gelGroup", true);
     const background = game.add.group(undefined, "gelBackground");
     const foreground = game.add.group(undefined, "foreground");
-    const keyLookups = {};
 
     //TODO stageHeight should come from config
     const scaler = Scaler.create(600, game);
@@ -36,13 +35,11 @@ export function create(game) {
     scaler.onScaleChange.add(scaleBackground);
 
     return {
-        keyLookups,
         addToBackground,
         addToForeground,
         addLayout,
         getLayouts,
         removeAll,
-        addLookups,
         getSize: scaler.getSize,
     };
 
@@ -90,9 +87,5 @@ export function create(game) {
         background.removeAll(true);
         _layouts.forEach(layout => layout.destroy());
         _layouts = [];
-    }
-
-    function addLookups(moreLookups) {
-        Object.assign(keyLookups, moreLookups);
     }
 }
