@@ -6,13 +6,7 @@ import { Loadscreen } from "../../src/components/loadscreen.js";
 import { Home } from "../../src/components/home.js";
 
 describe("Navigation", () => {
-    let gameState,
-        context,
-        scene,
-        navigationConfig,
-        transientData,
-        navigation,
-        signalBusRemoveChannel;
+    let gameState, context, scene, navigationConfig, transientData, navigation, signalBusRemoveChannel;
 
     const sandbox = sinon.sandbox.create();
 
