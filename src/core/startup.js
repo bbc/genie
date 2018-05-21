@@ -16,7 +16,7 @@ import * as Navigation from "./navigation.js";
  * @param {Object=} initialAdditionalState - Additional state that is added to the inState context.
  * @param {Object=} settingsConfig -
  */
-export function startup(settingsConfig = {}, navigation) {
+export function startup(settingsConfig = {}, navigationConfig) {
     const gmi = window.getGMI({ settingsConfig });
     const urlParams = parseUrlParams(window.location.search);
     const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
@@ -52,7 +52,7 @@ export function startup(settingsConfig = {}, navigation) {
             qaMode,
         };
         game.stage.backgroundColor = "#333";
-        Navigation.create(game.state, context, layoutFactory, navigation);
+        Navigation.create(game.state, context, layoutFactory, navigationConfig);
     }
 }
 
