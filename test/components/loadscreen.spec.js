@@ -150,36 +150,22 @@ describe("Load Screen", () => {
     });
 
     describe("updateLoadProgress", () => {
-        let setFillPercentStub;
-        let loadBarStub;
-
         beforeEach(() => {
             loadScreen.context = { qaMode: { active: false } };
-            setFillPercentStub = sandbox.stub();
             loadScreen.loadingBar = { fillPercent: 0 };
         });
 
         it("updates the loading bar fill percentage when called", () => {
-            // given
             const progress = 42;
 
-            // when
             loadScreen.updateLoadProgress(progress);
 
-            // then
             assert.equal(loadScreen.loadingBar.fillPercent, progress);
         });
 
-        it("will not try to update the loading bar fill if the loading bar does not exist", () => {
-            // given
-            const progress = 42;
+        it("does not throw an error if there is no loading bar", () => {
             delete loadScreen.loadingBar;
-
-            // when
-            loadScreen.updateLoadProgress(progress);
-
-            // then
-            sinon.assert.notCalled(setFillPercentStub);
+            loadScreen.updateLoadProgress(75);
         });
     });
 
