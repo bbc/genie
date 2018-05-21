@@ -4,7 +4,7 @@
  *
  * @module components/overlays/pause
  */
-import fp from "../../lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 import * as signal from "../../core/signal-bus.js";
 import { GameAssets } from "../../core/game-assets.js";

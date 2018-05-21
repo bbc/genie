@@ -1,6 +1,6 @@
 import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as signal from "../../core/signal-bus.js";
-import fp from "../../lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 export function accessibilify(button, config) {
     config = Object.assign(

@@ -4,9 +4,10 @@
  *
  * @module core/startup
  */
-import _ from "../lib/lodash/lodash.js";
+import _ from "../../lib/lodash/lodash.js";
 
-import { parseUrlParams } from "../lib/parseUrlParams.js";
+import * as Sequencer from "../core/sequencer.js";
+import { parseUrlParams } from "../core/parseUrlParams.js";
 import * as gel from "../core/layout/gel-defaults.js";
 import { settings } from "../core/settings.js";
 import * as LayoutFactory from "./layout/factory.js";

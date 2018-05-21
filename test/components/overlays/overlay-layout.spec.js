@@ -1,4 +1,4 @@
-import fp from "../../../src/lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 import { assert } from "chai";
 import * as sinon from "sinon";
 

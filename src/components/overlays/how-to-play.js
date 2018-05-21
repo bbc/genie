@@ -3,7 +3,7 @@
  * @module components/overlays/how-to-play
  */
 
-import fp from "../../lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 import * as signal from "../../core/signal-bus.js";
 import * as OverlayLayout from "../../components/overlays/overlay-layout.js";

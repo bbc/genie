@@ -3,7 +3,7 @@
  * @module components/overlays/overlay-layout
  */
 
-import fp from "../../lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 /**
  * Provides some shared behaviour common to all overlay screens such as:
