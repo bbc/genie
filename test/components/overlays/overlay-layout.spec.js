@@ -30,7 +30,7 @@ describe("Overlay Layout", () => {
 
         mockScreen = {
             context: { popupScreens: ["pause", "how-to-play"] },
-            layoutFactory: {
+            scene: {
                 getLayouts: sandbox.stub().returns(mockLayouts),
                 addToBackground: sandbox.spy(),
             },
@@ -55,7 +55,7 @@ describe("Overlay Layout", () => {
 
             assert.isTrue(mockBackgroundImage.inputEnabled);
             assert.equal(mockBackgroundImage.input.priorityID, 1000);
-            assert.deepEqual(mockScreen.layoutFactory.addToBackground.getCall(0).args[0], mockBackgroundImage);
+            assert.deepEqual(mockScreen.scene.addToBackground.getCall(0).args[0], mockBackgroundImage);
         });
     });
 

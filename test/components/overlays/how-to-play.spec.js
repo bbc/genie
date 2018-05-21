@@ -36,7 +36,7 @@ describe("How To Play Overlay", () => {
         mockGelButtons = { destroy: sandbox.spy() };
         mockTitle = { destroy: sandbox.spy() };
         mockScreen = {
-            layoutFactory: {
+            scene: {
                 keyLookups: {
                     howToPlay: {
                         background: "backgroundImage",
@@ -62,7 +62,7 @@ describe("How To Play Overlay", () => {
                 },
             },
         };
-        mockScreen.layoutFactory.addToBackground.withArgs("titleImage").returns(mockTitle);
+        mockScreen.scene.addToBackground.withArgs("titleImage").returns(mockTitle);
 
         mockPipsGroup = { add: sandbox.spy(), callAll: sandbox.spy() };
         mockGame = {
@@ -102,11 +102,11 @@ describe("How To Play Overlay", () => {
 
         it("creates a title and adds it to the background", () => {
             sinon.assert.calledWith(mockGame.add.image, 0, -230, "titleImage");
-            sinon.assert.calledWith(mockScreen.layoutFactory.addToBackground, "titleImage");
+            sinon.assert.calledWith(mockScreen.scene.addToBackground, "titleImage");
         });
 
         it("adds GEL buttons", () => {
-            const actualAddLayoutCall = mockScreen.layoutFactory.addLayout.getCall(0);
+            const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
             const expectedAddLayoutCall = [
                 "howToPlayBack",
                 "audioOff",
@@ -124,9 +124,9 @@ describe("How To Play Overlay", () => {
         });
 
         it("adds each panel sprite to the background", () => {
-            sinon.assert.calledWith(mockScreen.layoutFactory.addToBackground, panel1Sprite);
-            sinon.assert.calledWith(mockScreen.layoutFactory.addToBackground, panel2Sprite);
-            sinon.assert.calledWith(mockScreen.layoutFactory.addToBackground, panel3Sprite);
+            sinon.assert.calledWith(mockScreen.scene.addToBackground, panel1Sprite);
+            sinon.assert.calledWith(mockScreen.scene.addToBackground, panel2Sprite);
+            sinon.assert.calledWith(mockScreen.scene.addToBackground, panel3Sprite);
         });
 
         it("hides all the panel sprites except the first one", () => {
@@ -142,7 +142,7 @@ describe("How To Play Overlay", () => {
         });
 
         it("adds the pips group to the background", () => {
-            assert.isTrue(mockScreen.layoutFactory.addToBackground.withArgs(mockPipsGroup).calledOnce);
+            assert.isTrue(mockScreen.scene.addToBackground.withArgs(mockPipsGroup).calledOnce);
         });
     });
 
@@ -238,7 +238,7 @@ describe("How To Play Overlay", () => {
             it("creates a new pips group", () => {
                 const previousButtonClick = signalSpy.getCall(1).args[0].callback;
                 previousButtonClick();
-                assert.isTrue(mockScreen.layoutFactory.addToBackground.withArgs(mockPipsGroup).calledTwice);
+                assert.isTrue(mockScreen.scene.addToBackground.withArgs(mockPipsGroup).calledTwice);
             });
         });
 
@@ -288,7 +288,7 @@ describe("How To Play Overlay", () => {
             it("creates a new pips group", () => {
                 const nextButtonClick = signalSpy.getCall(2).args[0].callback;
                 nextButtonClick();
-                assert.isTrue(mockScreen.layoutFactory.addToBackground.withArgs(mockPipsGroup).calledTwice);
+                assert.isTrue(mockScreen.scene.addToBackground.withArgs(mockPipsGroup).calledTwice);
             });
         });
     });
