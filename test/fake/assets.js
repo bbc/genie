@@ -1,0 +1,3 @@
+const Stub = [];
+
+export { Stub };
