@@ -108,6 +108,7 @@ describe("Load Screen", () => {
         let createProgressBarStub;
         let setFillPercentStub;
         let mockProgressBar;
+        let mockBrandLogo;
 
         beforeEach(() => {
             setFillPercentStub = sandbox.stub();
@@ -132,6 +133,10 @@ describe("Load Screen", () => {
                     set: () => {},
                 },
             });
+
+            mockBrandLogo = {};
+            addImageStub.withArgs(0, 0, "brandLogo").returns(mockBrandLogo);
+
             loadScreen.create();
         });
 
@@ -145,7 +150,8 @@ describe("Load Screen", () => {
         });
 
         it("adds a brand logo to the layout", () => {
-            // TODO: write a test for this
+            sinon.assert.calledWith(addImageStub, 0, 0, "brandLogo");
+            sinon.assert.calledWith(loadScreen.layoutFactory.addToBackground, mockBrandLogo);
         });
     });
 
