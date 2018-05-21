@@ -20,9 +20,9 @@ export function create({ game }) {
 
     pauseGame();
 
-    const overlayManager = OverlayLayout.create(screen);
+    const overlayLayout = OverlayLayout.create(screen);
     const backgroundImage = game.add.image(0, 0, keyLookup.pauseBackground);
-    const background = overlayManager.addBackground(backgroundImage);
+    const background = overlayLayout.addBackground(backgroundImage);
     const gelButtons = addGelButtons();
 
     addSignals();
@@ -43,7 +43,7 @@ export function create({ game }) {
             "pausePlay",
             "howToPlay",
         ]);
-        overlayManager.moveGelButtonsToTop(gelLayout);
+        overlayLayout.moveGelButtonsToTop(gelLayout);
         return gelLayout;
     }
 
@@ -57,7 +57,7 @@ export function create({ game }) {
         game.paused = false;
         signal.bus.removeChannel(channel);
         gelButtons.destroy();
-        overlayManager.restoreDisabledButtons();
+        overlayLayout.restoreDisabledButtons();
         background.destroy();
         GameAssets.sounds.backgroundMusic.mute = false;
         screen.context.popupScreens = fp.pull("pause", screen.context.popupScreens);

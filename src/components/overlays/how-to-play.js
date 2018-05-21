@@ -23,8 +23,8 @@ export function create({ game }) {
 
     screen.context.popupScreens.push("how-to-play");
 
-    const overlayManager = OverlayLayout.create(screen);
-    const background = overlayManager.addBackground(game.add.image(0, 0, keyLookup.background));
+    const overlayLayout = OverlayLayout.create(screen);
+    const background = overlayLayout.addBackground(game.add.image(0, 0, keyLookup.background));
     const title = screen.layoutFactory.addToBackground(game.add.image(0, -230, keyLookup.title));
     const gelButtons = addGelButtons();
     addPanels();
@@ -39,7 +39,7 @@ export function create({ game }) {
             "howToPlayPrevious",
             "howToPlayNext",
         ]);
-        overlayManager.moveGelButtonsToTop(gelLayout);
+        overlayLayout.moveGelButtonsToTop(gelLayout);
         return gelLayout;
     }
 
@@ -115,7 +115,7 @@ export function create({ game }) {
     function destroy() {
         signal.bus.removeChannel(channel);
         gelButtons.destroy();
-        overlayManager.restoreDisabledButtons();
+        overlayLayout.restoreDisabledButtons();
         destroyPanels();
         pips.callAll("kill");
         pips.callAll("destroy");
