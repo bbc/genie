@@ -2,7 +2,7 @@ import { assert } from "chai";
 import * as sinon from "sinon";
 
 import { Results } from "../../src/components/results";
-import * as Pause from "../../src/components/pause";
+import * as Pause from "../../src/components/overlays/pause";
 import * as signal from "../../src/core/signal-bus.js";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 
