@@ -1,4 +1,5 @@
-import * as pause from "../components/pause.js";
+import * as pause from "../components/overlays/pause.js";
+import * as howToPlay from "../components/overlays/how-to-play.js";
 import * as gel from "../core/layout/gel-defaults.js";
 import { settings } from "../core/settings.js";
 import * as signal from "../core/signal-bus.js";
@@ -36,6 +37,11 @@ export class Screen extends Phaser.State {
             channel: gel.buttonsChannel,
             name: "pause",
             callback: pause.create,
+        });
+        signal.bus.subscribe({
+            channel: gel.buttonsChannel,
+            name: "how-to-play",
+            callback: howToPlay.create,
         });
         signal.bus.subscribe({ channel: gel.buttonsChannel, name: "settings", callback: settings.show });
     }

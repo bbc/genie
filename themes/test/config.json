@@ -49,6 +49,9 @@
                     "fontWeight": "bold"
                 }
             }
+        },
+        "how-to-play": {
+            "panels": ["panel1", "panel2", "panel3"]
         }
     }
 }
