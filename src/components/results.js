@@ -1,6 +1,6 @@
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
-import * as Pause from "./pause.js";
+import * as Pause from "./overlays/pause.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 
 export class Results extends Screen {
