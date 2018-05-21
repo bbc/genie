@@ -8,9 +8,8 @@ import { Home } from "../../src/components/home.js";
 describe("Navigation", () => {
     let gameState,
         context,
-        layoutFactory,
+        scene,
         navigationConfig,
-        loadGenieScreens,
         transientData,
         navigation,
         signalBusRemoveChannel;
@@ -23,7 +22,7 @@ describe("Navigation", () => {
             start: sandbox.stub(),
         };
         context = sandbox.stub();
-        layoutFactory = { removeAll: sandbox.stub() };
+        scene = { removeAll: sandbox.stub() };
         transientData = undefined;
         navigation = {
             loadscreen: {
@@ -48,7 +47,7 @@ describe("Navigation", () => {
     });
 
     it("loads correct genie screens", () => {
-        Navigation.create(gameState, context, layoutFactory, navigationConfig);
+        Navigation.create(gameState, context, scene, navigationConfig);
 
         sinon.assert.calledTwice(gameState.add);
         sinon.assert.calledOnce(gameState.add.withArgs("loadscreen", Loadscreen));
@@ -56,22 +55,22 @@ describe("Navigation", () => {
     });
 
     it("goes to loadscreen", () => {
-        Navigation.create(gameState, context, layoutFactory, navigationConfig);
+        Navigation.create(gameState, context, scene, navigationConfig);
 
         sinon.assert.calledOnce(
-            gameState.start.withArgs("loadscreen", true, false, transientData, layoutFactory, context, navigation),
+            gameState.start.withArgs("loadscreen", true, false, transientData, scene, context, navigation),
         );
     });
 
     it("removes signal bus gel-buttons channel before going to screen", () => {
-        Navigation.create(gameState, context, layoutFactory, navigationConfig);
+        Navigation.create(gameState, context, scene, navigationConfig);
 
         sinon.assert.calledOnce(signal.bus.removeChannel.withArgs("gel-buttons"));
     });
 
     it("clears down layout before going to screen", () => {
-        Navigation.create(gameState, context, layoutFactory, navigationConfig);
+        Navigation.create(gameState, context, scene, navigationConfig);
 
-        sinon.assert.calledOnce(layoutFactory.removeAll);
+        sinon.assert.calledOnce(scene.removeAll);
     });
 });

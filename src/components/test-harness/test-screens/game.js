@@ -51,6 +51,6 @@ export class GameTest extends Screen {
             "Character Selected: " + this.transientData.characterSelected,
             { font: "32px Arial", fill: "#f6931e", align: "center" },
         );
-        this.layoutFactory.addToBackground(characterSelectedText);
+        this.scene.addToBackground(characterSelectedText);
     }
 }

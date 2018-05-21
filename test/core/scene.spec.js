@@ -60,7 +60,7 @@ describe("Scene", () => {
         assert.exists(scene.getSize);
     });
 
-    it("Should add background, root, foreground, gel, unscaled, layers to the phaser game", () => {
+    it("Should add background, root, foreground, unscaled, layers to the phaser game", () => {
         expect(mockGame.add.group.calledWith(undefined, "root", true)).to.equal(true);
         expect(mockGame.add.group.calledWith(undefined, "unscaled", true)).to.equal(true);
         expect(mockGame.add.group.calledWith(undefined, "background")).to.equal(true);

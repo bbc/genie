@@ -1,5 +1,5 @@
 /**
- * A Genie scene is instantiated once in {@link module:core/sequencer}
+ * A Genie scene is instantiated once in {@link module:core/navigation}
  *
  * It instantiates {@link module:core/scaler} and provides methods for adding display objects to foreground and
  * background groups (It is expected that most of a game would be added to the background group and any overlays /
@@ -17,7 +17,7 @@
  */
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
-import fp from "../lib/lodash/fp/fp.js";
+import fp from "../../lib/lodash/fp/fp.js";
 
 const centerAnchor = object => {
     if (object.anchor) {
@@ -40,7 +40,6 @@ export function create(game) {
     const unscaled = game.add.group(undefined, "unscaled", true);
     const background = game.add.group(undefined, "background");
     const foreground = game.add.group(undefined, "foreground");
-    const gel = game.add.group(undefined, "gel");
     const keyLookups = {};
 
     const resize = (width, height, scale) => {
@@ -53,7 +52,6 @@ export function create(game) {
 
     root.addChild(background);
     root.addChild(foreground);
-    root.addChild(gel);
     root.addChild(game.debug.sprite);
 
     scaler.onScaleChange.add(resize);

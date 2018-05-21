@@ -33,11 +33,11 @@ export function create({ game }) {
     }
 
     function addBackground() {
-        const keyLookup = screen.layoutFactory.keyLookups.pause;
+        const keyLookup = screen.scene.keyLookups.pause;
         const backgroundImage = game.add.image(0, 0, keyLookup.pauseBackground);
         backgroundImage.inputEnabled = true;
         backgroundImage.input.priorityID = priorityID - 1;
-        return screen.layoutFactory.addToBackground(backgroundImage);
+        return screen.scene.addToBackground(backgroundImage);
     }
 
     function disableExistingButtons() {
@@ -50,7 +50,7 @@ export function create({ game }) {
                     button.update();
                 }
             }, layout.buttons);
-        }, screen.layoutFactory.getLayouts());
+        }, screen.scene.getLayouts());
         return disabledButtons;
     }
 
@@ -70,7 +70,7 @@ export function create({ game }) {
     }
 
     function addGelButtons() {
-        const gelLayout = screen.layoutFactory.addLayout([
+        const gelLayout = screen.scene.addLayout([
             "pauseHome",
             "audioOff",
             "settings",
