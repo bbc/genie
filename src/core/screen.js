@@ -1,5 +1,4 @@
 import _ from "../lib/lodash/lodash.js";
-import { getScreenAssets } from "./assets.js";
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
@@ -18,7 +17,6 @@ export class Screen extends Phaser.State {
         this.layoutFactory = layoutFactory;
         this._context = context;
         this._next = next;
-        this.assets = getScreenAssets(this);
     }
 
     getAsset(name) {

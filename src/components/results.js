@@ -1,7 +1,6 @@
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
-import { getScreenAssets } from "../core/assets.js";
 
 export class Results extends Screen {
     constructor() {
@@ -9,13 +8,12 @@ export class Results extends Screen {
     }
 
     create() {
-        const assets = getScreenAssets(this);
         const theme = this.context.config.theme[this.game.state.current];
 
-        const backgroundImage = this.game.add.image(0, 0, assets.background);
+        const backgroundImage = this.game.add.image(0, 0, "results.background");
         this.layoutFactory.addToBackground(backgroundImage);
 
-        const titleImage = this.layoutFactory.addToBackground(this.game.add.image(0, -150, assets.title));
+        const titleImage = this.layoutFactory.addToBackground(this.game.add.image(0, -150, "results.title"));
         this.layoutFactory.addToBackground(titleImage);
 
         const resultsData = this.context.inState.transient.resultsData;

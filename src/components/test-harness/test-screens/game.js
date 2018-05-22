@@ -1,5 +1,4 @@
 import { Screen } from "../../../core/screen.js";
-import { getScreenAssets } from "../../../core/assets.js";
 
 export class GameTest extends Screen {
     constructor() {
@@ -7,14 +6,13 @@ export class GameTest extends Screen {
     }
 
     create() {
-        const assets = getScreenAssets(this);
         const titleStyle = { font: "65px Arial", fill: "#f6931e", align: "center" };
         const titleText = this.game.add.text(0, -190, "Game goes here", titleStyle);
         titleText.anchor.set(0.5, 0.5);
         this.layoutFactory.addToBackground(titleText);
         this.layoutFactory.addLayout(["home", "pause", "audioOff", "settings"]);
 
-        const buttonKey = assets.basicButton;
+        const buttonKey = this.getAsset("basicButton");
         const buttonTextStyle = {
             font: "40px Arial",
             fill: "#fff",

@@ -8,7 +8,6 @@ import fp from "../lib/lodash/fp/fp.js";
 
 import * as signal from "../core/signal-bus.js";
 import { GameAssets } from "../core/game-assets.js";
-import { assets } from "../core/assets.js";
 
 /**
  * @param {Phaser.Game} game - The Phaser Game instance
@@ -34,7 +33,7 @@ export function create({ game }) {
     }
 
     function addBackground() {
-        const backgroundImage = game.add.image(0, 0, assets.pause.pauseBackground);
+        const backgroundImage = game.add.image(0, 0, "pause.pauseBackground");
         backgroundImage.inputEnabled = true;
         backgroundImage.input.priorityID = priorityID - 1;
         return screen.layoutFactory.addToBackground(backgroundImage);
