@@ -72,6 +72,7 @@ describe("#accessibilify", () => {
                     y: buttonBoundsY,
                     width: buttonBoundsWidth,
                     height: buttonBoundsHeight,
+                    clone: () => mockButton.getBounds,
                 };
             },
             hitArea: {
@@ -199,7 +200,7 @@ describe("#accessibilify", () => {
             accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({ position });
 
             mockButton.hitArea = null;
-            mockButton.getBounds = sandbox.stub().returns("bounds");
+            mockButton.getBounds = sandbox.stub().returns({ clone: () => "bounds" });
 
             accessibilify(mockButton);
             clock.tick(200);

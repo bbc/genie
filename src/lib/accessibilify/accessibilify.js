@@ -34,7 +34,7 @@ export function accessibilify(button, config) {
     }
 
     function getHitAreaBounds() {
-        let bounds = button.getBounds();
+        let bounds = button.getBounds().clone();
         if (button.hitArea) {
             bounds = button.hitArea.clone();
             bounds.topLeft = button.toGlobal(bounds.topLeft);
