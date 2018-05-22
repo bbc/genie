@@ -52,7 +52,9 @@ export function create(game) {
 
     root.addChild(background);
     root.addChild(foreground);
-    root.addChild(game.debug.sprite);
+    if (game.debug.sprite) {
+        root.addChild();
+    }
 
     scaler.onScaleChange.add(resize);
 
