@@ -47,13 +47,11 @@ describe("Layout - Factory", () => {
     });
 
     it("returns the correct methods", () => {
-        expect(layoutFactory.keyLookups).to.eql({});
         assert.exists(layoutFactory.addToBackground);
         assert.exists(layoutFactory.addToForeground);
         assert.exists(layoutFactory.addLayout);
         assert.exists(layoutFactory.getLayouts);
         assert.exists(layoutFactory.removeAll);
-        assert.exists(layoutFactory.addLookups);
         assert.exists(layoutFactory.getSize);
     });
 
@@ -162,14 +160,6 @@ describe("Layout - Factory", () => {
             layoutFactory.removeAll();
 
             sinon.assert.calledTwice(spyDestroy);
-        });
-    });
-
-    describe("addLookups method", () => {
-        it("adds more keylookups", () => {
-            const moreLookups = { more: "lookups" };
-            layoutFactory.addLookups(moreLookups);
-            expect(layoutFactory.keyLookups).to.eql(moreLookups);
         });
     });
 

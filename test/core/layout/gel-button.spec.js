@@ -40,7 +40,6 @@ describe("Layout - Gel Button", () => {
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(() => {
                 const btn = new GelButton(game, 0, 0, { isMobile: true }, config);
-
                 assert(btn.key === "gel/mobile/play.png", "is mobile asset");
 
                 btn.resize({ isMobile: false });

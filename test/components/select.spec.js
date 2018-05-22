@@ -22,7 +22,6 @@ describe("Select Screen", () => {
     const characterThreeSprite = { visible: "" };
     const CENTER_X = 0;
     const CHAR_Y_POSITION = 0;
-    const CHAR_TEXT_Y_POSITION = 170;
 
     beforeEach(() => {
         layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");
@@ -61,15 +60,6 @@ describe("Select Screen", () => {
         selectScreen.layoutFactory = {
             addToBackground: addToBackgroundSpy,
             addLayout: addLayoutSpy,
-            keyLookups: {
-                characterSelect: {
-                    title: "titleImage",
-                    background: "backgroundImage",
-                    character1: "character1",
-                    character2: "character2",
-                    character3: "character3",
-                },
-            },
         };
         selectScreen.game = mockGame;
         selectScreen.context = mockContext;
@@ -78,13 +68,6 @@ describe("Select Screen", () => {
 
     afterEach(() => {
         sandbox.restore();
-    });
-
-    describe("preload method", () => {
-        it("adds current game state to the layout key lookups", () => {
-            const expectedLookups = selectScreen.layoutFactory.keyLookups.characterSelect;
-            assert.deepEqual(selectScreen.keyLookup, expectedLookups);
-        });
     });
 
     describe("create method", () => {

@@ -45,12 +45,6 @@ describe("Home Screen", () => {
         homeScreen.layoutFactory = {
             addToBackground: addToBackgroundSpy,
             addLayout: addLayoutSpy,
-            keyLookups: {
-                homeScreen: {
-                    background: "backgroundImage",
-                    title: "titleImage",
-                },
-            },
         };
         homeScreen.game = mockGame;
         homeScreen.context = mockContext;
@@ -61,23 +55,13 @@ describe("Home Screen", () => {
         sandbox.restore();
     });
 
-    describe("preload method", () => {
-        it("adds current game state to the layout key lookups", () => {
-            const expectedKeylookups = homeScreen.layoutFactory.keyLookups.homeScreen;
-            assert.deepEqual(homeScreen.keyLookup, expectedKeylookups);
-        });
-
-        it("adds a key lookup to the current screen", () => {
-            assert.exists(homeScreen.keyLookup);
-        });
-    });
 
     describe("create method", () => {
         beforeEach(() => homeScreen.create());
 
         it("adds a background image", () => {
             const actualImageCall = gameImageStub.getCall(0);
-            const expectedImageCall = [0, 0, "backgroundImage"];
+            const expectedImageCall = [0, 0, "home.background"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
 
             const addToBackgroundCall = addToBackgroundSpy.getCall(0);
@@ -86,7 +70,7 @@ describe("Home Screen", () => {
 
         it("adds a title image", () => {
             const actualImageCall = gameImageStub.getCall(1);
-            const expectedImageCall = [0, -150, "titleImage"];
+            const expectedImageCall = [0, -150, "homeScreen.title"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
 
             const addToBackgroundCall = addToBackgroundSpy.getCall(1);
