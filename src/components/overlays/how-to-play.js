@@ -101,6 +101,7 @@ export function create({ game }) {
         panels.forEach((panel, index) => {
             const pipImage = panel.visible ? keyLookup.pipOn : keyLookup.pipOff;
             const pip = game.add.button(currentPosition, 240, pipImage, () => goToPanel(index, panel.visible), this);
+            overlayLayout.moveButtonToTop(pip);
             pipsGroup.add(pip);
             currentPosition += pipWidth + spacing;
         });
