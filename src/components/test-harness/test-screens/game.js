@@ -6,15 +6,15 @@ export class GameTest extends Screen {
     }
 
     preload() {
-        this.keyLookup = this.layoutFactory.keyLookups[this.game.state.current];
+        this.keyLookup = this.scene.keyLookups[this.game.state.current];
     }
 
     create() {
         const titleStyle = { font: "65px Arial", fill: "#f6931e", align: "center" };
         const titleText = this.game.add.text(0, -190, "Game goes here", titleStyle);
         titleText.anchor.set(0.5, 0.5);
-        this.layoutFactory.addToBackground(titleText);
-        this.layoutFactory.addLayout(["home", "pause", "audioOff", "settings"]);
+        this.scene.addToBackground(titleText);
+        this.scene.addLayout(["home", "pause", "audioOff", "settings"]);
 
         const buttonKey = this.keyLookup.basicButton;
         const buttonTextStyle = {
@@ -28,12 +28,29 @@ export class GameTest extends Screen {
         [-70, 20, 110].forEach((buttonYPosition, index) => {
             const buttonNumber = index + 1;
             const buttonText = new Phaser.Text(this.game, 0, 5, "Button " + buttonNumber, buttonTextStyle);
-            const resultsData = { transient: { resultsData: "You pressed button " + buttonNumber } };
-            const button = this.game.add.button(0, buttonYPosition, buttonKey, () => this.next(resultsData), this);
+            const results = {
+                results: "You pressed button " + buttonNumber,
+                characterSelected: this.transientData.characterSelected,
+            };
+            const button = this.game.add.button(
+                0,
+                buttonYPosition,
+                buttonKey,
+                () => this.navigation.next(results),
+                this,
+            );
             button.anchor.set(0.5, 0.5);
             button.addChild(buttonText);
             buttonText.anchor.set(0.5, 0.5);
-            this.layoutFactory.addToBackground(button);
+            this.scene.addToBackground(button);
         }, this);
+
+        const characterSelectedText = this.game.add.text(
+            0,
+            200,
+            "Character Selected: " + this.transientData.characterSelected,
+            { font: "32px Arial", fill: "#f6931e", align: "center" },
+        );
+        this.scene.addToBackground(characterSelectedText);
     }
 }

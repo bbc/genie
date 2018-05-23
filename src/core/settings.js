@@ -1,4 +1,4 @@
-import fp from "../lib/lodash/fp/fp.js";
+import fp from "../../lib/lodash/fp/fp.js";
 
 export const create = () => {
     let gmi;

@@ -1,6 +1,6 @@
 import { GEL_MIN_RATIO_HEIGHT, GEL_MIN_RATIO_WIDTH } from "../../core/scaler.js";
 
-export function createTestHarnessDisplay(game, context, layoutFactory) {
+export function createTestHarnessDisplay(game, context, scene) {
     let graphicsBackgroundGroup;
     let graphicsForegroundGroup;
 
@@ -24,8 +24,8 @@ export function createTestHarnessDisplay(game, context, layoutFactory) {
     function show() {
         drawGameArea();
         drawOuterPadding();
-        layoutFactory.addToBackground(graphicsBackgroundGroup);
-        layoutFactory.addToForeground(graphicsForegroundGroup);
+        scene.addToBackground(graphicsBackgroundGroup);
+        scene.addToForeground(graphicsForegroundGroup);
         context.qaMode.testHarnessLayoutDisplayed = true;
     }
 
@@ -39,7 +39,7 @@ export function createTestHarnessDisplay(game, context, layoutFactory) {
     }
 
     function drawOuterPadding() {
-        const size = layoutFactory.getSize();
+        const size = scene.getSize();
         const graphics = game.add.graphics();
         const paddingWidth = getPaddingWidth();
         const gameLeftEdge = 0 + paddingWidth * 0.5;
@@ -68,7 +68,7 @@ export function createTestHarnessDisplay(game, context, layoutFactory) {
     }
 
     function gameAreaDimensions() {
-        const size = layoutFactory.getSize();
+        const size = scene.getSize();
         const areaWidth = size.stageHeightPx / GEL_MIN_RATIO_HEIGHT * GEL_MIN_RATIO_WIDTH;
         const areaHeight = size.stageHeightPx;
 
@@ -76,7 +76,7 @@ export function createTestHarnessDisplay(game, context, layoutFactory) {
     }
 
     function getPaddingWidth() {
-        const size = layoutFactory.getSize();
+        const size = scene.getSize();
         const gelPaddingWidthPercentage = 0.02;
 
         return Math.max(size.width, size.height) * gelPaddingWidthPercentage;

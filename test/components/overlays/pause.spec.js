@@ -1,4 +1,4 @@
-import fp from "../../../src/lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 import { assert } from "chai";
 import * as sinon from "sinon";
 
@@ -12,6 +12,10 @@ describe("Pause Overlay", () => {
     let mockScreen;
     let signalSpy;
     let mockGelButtons;
+    let mockLayoutDestroy;
+    let backgroundImage;
+    let backgroundImageInputEnabled;
+    let backgroundImagePriorityID;
     let mockBackground;
     let mockOverlayLayout;
 
@@ -26,16 +30,21 @@ describe("Pause Overlay", () => {
             restoreDisabledButtons: sandbox.spy(),
             moveGelButtonsToTop: sandbox.spy(),
         };
+        mockLayoutDestroy = { destroy: sandbox.spy() };
         sandbox.stub(OverlayLayout, "create").returns(mockOverlayLayout);
 
         mockGelButtons = { destroy: sandbox.spy() };
         mockScreen = {
-            layoutFactory: {
+            scene: {
                 keyLookups: { pause: { pauseBackground: "pauseBackgroundImage" } },
                 addLayout: sandbox.stub().returns(mockGelButtons),
             },
             context: { popupScreens: [] },
             next: sandbox.spy(),
+            navigation: {
+                restart: sandbox.stub(),
+                home: sandbox.stub(),
+            },
         };
 
         mockGame = {
@@ -92,7 +101,7 @@ describe("Pause Overlay", () => {
         });
 
         it("adds GEL buttons", () => {
-            const actualAddLayoutCall = mockScreen.layoutFactory.addLayout.getCall(0);
+            const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
             const expectedAddLayoutCall = [
                 "pauseHome",
                 "audioOff",
@@ -145,11 +154,14 @@ describe("Pause Overlay", () => {
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
-        it("calls the next method with params when the restart button is clicked", () => {
+        it("calls the navigation.restart method with params when the restart button is clicked", () => {
+            mockScreen.transientData = {
+                characterSelected: 1,
+            };
             signalSpy.getCall(1).args[0].callback();
-            const actualNextArgs = mockScreen.next.getCall(0).args[0];
-            const expectedNextArgs = { transient: { restart: true } };
-            assert.deepEqual(actualNextArgs, expectedNextArgs);
+            const actualRestartArgs = mockScreen.navigation.restart.getCall(0).args[0];
+            const expectedRestartArgs = { characterSelected: 1 };
+            assert.deepEqual(actualRestartArgs, expectedRestartArgs);
         });
 
         it("destroys the pause screen when the home button is clicked", () => {
@@ -162,11 +174,9 @@ describe("Pause Overlay", () => {
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
-        it("calls the next method with params when the home button is clicked", () => {
+        it("calls the navigation.home method when home button is clicked", () => {
             signalSpy.getCall(2).args[0].callback();
-            const actualNextArgs = mockScreen.next.getCall(0).args[0];
-            const expectedNextArgs = { transient: { home: true } };
-            assert.deepEqual(actualNextArgs, expectedNextArgs);
+            sinon.assert.calledOnce(mockScreen.navigation.home);
         });
     });
 });
