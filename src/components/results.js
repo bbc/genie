@@ -11,23 +11,22 @@ export class Results extends Screen {
         const theme = this.context.config.theme[this.game.state.current];
 
         const backgroundImage = this.game.add.image(0, 0, "results.background");
-        this.layoutFactory.addToBackground(backgroundImage);
+        this.scene.addToBackground(backgroundImage);
 
-        const titleImage = this.layoutFactory.addToBackground(this.game.add.image(0, -150, "results.title"));
-        this.layoutFactory.addToBackground(titleImage);
+        const titleImage = this.scene.addToBackground(this.game.add.image(0, -150, "results.title"));
+        this.scene.addToBackground(titleImage);
 
-        const resultsData = this.context.inState.transient.resultsData;
-        const resultsText = this.game.add.text(0, 50, resultsData, theme.resultText.style);
-        this.layoutFactory.addToBackground(resultsText);
+        const resultsText = this.game.add.text(0, 50, this.transientData.results, theme.resultText.style);
+        this.scene.addToBackground(resultsText);
 
-        this.layoutFactory.addLayout(["pause", "restart", "continue"]);
-        createTestHarnessDisplay(this.game, this.context, this.layoutFactory);
+        this.scene.addLayout(["pause", "restart", "continue"]);
+        createTestHarnessDisplay(this.game, this.context, this.scene);
 
         signal.bus.subscribe({
             name: "continue",
             channel: "gel-buttons",
             callback: () => {
-                this.next();
+                this.navigation.next();
             },
         });
 
@@ -35,7 +34,7 @@ export class Results extends Screen {
             name: "restart",
             channel: "gel-buttons",
             callback: () => {
-                this.next({ transient: { game: true } });
+                this.navigation.game(this.transientData);
             },
         });
     }

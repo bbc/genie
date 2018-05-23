@@ -1,13 +1,13 @@
 import { assert, expect } from "chai";
 import * as sinon from "sinon";
 
-import * as LayoutFactory from "../../../src/core/layout/factory";
-import * as Layout from "../../../src/core/layout/layout";
-import * as Scaler from "../../../src/core/scaler";
+import * as Scene from "../../src/core/scene";
+import * as Layout from "../../src/core/layout/layout";
+import * as Scaler from "../../src/core/scaler";
 
-describe("Layout - Factory", () => {
+describe("Scene", () => {
     let sandbox;
-    let layoutFactory;
+    let scene;
     let mockGame;
     let scalerSpy;
     let scalerMethods;
@@ -38,8 +38,11 @@ describe("Layout - Factory", () => {
                 onSizeChange: { add: sandbox.spy() },
                 getParentBounds: sandbox.spy(),
             },
+            debug: {
+                sprite: {},
+            },
         };
-        layoutFactory = LayoutFactory.create(mockGame);
+        scene = Scene.create(mockGame);
     });
 
     afterEach(() => {
@@ -47,19 +50,20 @@ describe("Layout - Factory", () => {
     });
 
     it("returns the correct methods", () => {
-        assert.exists(layoutFactory.addToBackground);
-        assert.exists(layoutFactory.addToForeground);
-        assert.exists(layoutFactory.addLayout);
-        assert.exists(layoutFactory.getLayouts);
-        assert.exists(layoutFactory.removeAll);
-        assert.exists(layoutFactory.getSize);
+        assert.exists(scene.addToBackground);
+        assert.exists(scene.addToForeground);
+        assert.exists(scene.addLayout);
+        assert.exists(scene.getLayouts);
+        assert.exists(scene.removeAll);
+        assert.exists(scene.getSize);
     });
 
-    it("Should add 'gelBackground', 'gelGroup' and 'foreground' layers to the phaser game", () => {
-        expect(mockGame.add.group.calledWith(undefined, "gelGroup", true)).to.equal(true);
-        expect(mockGame.add.group.calledWith(undefined, "gelBackground")).to.equal(true);
+    it("Should add background, root, foreground, unscaled, layers to the phaser game", () => {
+        expect(mockGame.add.group.calledWith(undefined, "root", true)).to.equal(true);
+        expect(mockGame.add.group.calledWith(undefined, "unscaled", true)).to.equal(true);
+        expect(mockGame.add.group.calledWith(undefined, "background")).to.equal(true);
         expect(mockGame.add.group.calledWith(undefined, "foreground")).to.equal(true);
-        expect(mockGame.add.group.callCount).to.equal(3);
+        expect(mockGame.add.group.callCount).to.equal(4);
     });
 
     it("creates a scaler with correct params", () => {
@@ -77,14 +81,14 @@ describe("Layout - Factory", () => {
     describe("addToBackground method", () => {
         it("adds an Phaser element to the background", () => {
             const mockPhaserElement = { phaser: "element" };
-            layoutFactory.addToBackground(mockPhaserElement);
+            scene.addToBackground(mockPhaserElement);
             expect(groupMethods.addChild.calledWith(mockPhaserElement)).to.equal(true);
         });
 
         it("sets anchor if Phaser element has one", () => {
             const setToSpy = sandbox.spy();
             const mockPhaserElement = { anchor: { setTo: setToSpy } };
-            layoutFactory.addToBackground(mockPhaserElement);
+            scene.addToBackground(mockPhaserElement);
             expect(setToSpy.calledWith(0.5, 0.5)).to.equal(true);
         });
     });
@@ -92,7 +96,7 @@ describe("Layout - Factory", () => {
     describe("addToForeground method", () => {
         it("adds an Phaser element to the foreground", () => {
             const mockPhaserElement = { someElement: "phaser-element" };
-            layoutFactory.addToForeground(mockPhaserElement);
+            scene.addToForeground(mockPhaserElement);
             expect(groupMethods.addChild.calledWith(mockPhaserElement)).to.equal(true);
         });
     });
@@ -107,7 +111,7 @@ describe("Layout - Factory", () => {
         });
 
         it("creates a new layout with correct params", () => {
-            layoutFactory.addLayout(mockButtons);
+            scene.addLayout(mockButtons);
             expect(layoutStub.getCall(0).args.length).to.equal(3);
             expect(layoutStub.getCall(0).args[0]).to.eql(mockGame);
             expect(layoutStub.getCall(0).args[1]).to.eql(scalerMethods);
@@ -115,12 +119,12 @@ describe("Layout - Factory", () => {
         });
 
         it("adds the layout root to the background", () => {
-            layoutFactory.addLayout(mockButtons);
+            scene.addLayout(mockButtons);
             expect(groupMethods.addChild.calledWith(mockRoot.root)).to.equal(true);
         });
 
         it("returns the layout", () => {
-            expect(layoutFactory.addLayout(mockButtons)).to.eql(mockRoot);
+            expect(scene.addLayout(mockButtons)).to.eql(mockRoot);
         });
     });
 
@@ -133,17 +137,17 @@ describe("Layout - Factory", () => {
             };
             sandbox.stub(Layout, "create").returns(mockLayout);
 
-            assert.lengthOf(layoutFactory.getLayouts(), 0);
-            layoutFactory.addLayout(["play", "settings"]);
-            assert.lengthOf(layoutFactory.getLayouts(), 1);
-            layoutFactory.addLayout(["pause", "next"]);
-            assert.lengthOf(layoutFactory.getLayouts(), 2);
+            assert.lengthOf(scene.getLayouts(), 0);
+            scene.addLayout(["play", "settings"]);
+            assert.lengthOf(scene.getLayouts(), 1);
+            scene.addLayout(["pause", "next"]);
+            assert.lengthOf(scene.getLayouts(), 2);
         });
     });
 
     describe("removeAll method", () => {
         it("removes everything from the background", () => {
-            layoutFactory.removeAll();
+            scene.removeAll();
             expect(groupMethods.removeAll.calledWith(true)).to.equal(true);
         });
 
@@ -155,9 +159,9 @@ describe("Layout - Factory", () => {
             };
             sandbox.stub(Layout, "create").returns(mockLayout);
 
-            layoutFactory.addLayout(["play", "settings"]);
-            layoutFactory.addLayout(["pause", "next"]);
-            layoutFactory.removeAll();
+            scene.addLayout(["play", "settings"]);
+            scene.addLayout(["pause", "next"]);
+            scene.removeAll();
 
             sinon.assert.calledTwice(spyDestroy);
         });
@@ -165,7 +169,7 @@ describe("Layout - Factory", () => {
 
     describe("getSize method", () => {
         it("returns the scaler getSize method", () => {
-            layoutFactory.getSize();
+            scene.getSize();
             expect(scalerMethods.getSize.called).to.equal(true);
         });
     });

@@ -15,6 +15,8 @@ describe("Select Screen", () => {
     let gameButtonSpy;
     let gameSpriteStub;
     let addLayoutSpy;
+    let navigationNext;
+    let navigationHome;
 
     const sandbox = sinon.sandbox.create();
     const characterOneSprite = { visible: "" };
@@ -35,6 +37,8 @@ describe("Select Screen", () => {
         gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "characterSelect.character2").returns(characterTwoSprite);
         gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "characterSelect.character3").returns(characterThreeSprite);
         addLayoutSpy = sandbox.spy();
+        navigationNext = sandbox.spy();
+        navigationHome = sandbox.spy();
 
         mockGame = {
             add: {
@@ -57,13 +61,17 @@ describe("Select Screen", () => {
         };
 
         selectScreen = new Select();
-        selectScreen.layoutFactory = {
+        selectScreen.scene = {
             addToBackground: addToBackgroundSpy,
             addLayout: addLayoutSpy,
         };
         selectScreen.game = mockGame;
         selectScreen.context = mockContext;
         selectScreen.preload();
+        selectScreen.navigation = {
+            next: navigationNext,
+            home: navigationHome,
+        };
     });
 
     afterEach(() => {
@@ -89,7 +97,7 @@ describe("Select Screen", () => {
 
         it("creates a layout harness with correct params", () => {
             assert(layoutHarnessSpy.callCount === 1, "layout harness should be called once");
-            sinon.assert.calledWith(layoutHarnessSpy, mockGame, mockContext, selectScreen.layoutFactory);
+            sinon.assert.calledWith(layoutHarnessSpy, mockGame, mockContext, selectScreen.scene);
         });
 
         it("creates sprites for each choice", () => {
@@ -121,7 +129,6 @@ describe("Select Screen", () => {
         beforeEach(() => {
             signalSubscribeSpy = sandbox.spy(signal.bus, "subscribe");
             selectScreen.create();
-            selectScreen.next = sandbox.spy();
         });
 
         it("adds signal subscriptions to all the buttons", () => {
@@ -150,15 +157,13 @@ describe("Select Screen", () => {
 
         it("adds a callback for the exit button", () => {
             signalSubscribeSpy.getCall(0).args[0].callback();
-            assert.deepEqual(selectScreen.next.getCall(0).args[0], { transient: { home: true } });
+            sinon.assert.calledOnce(selectScreen.navigation.home);
         });
 
         it("adds a callback for the continue button", () => {
-            const expectedCurrentIndex = 1;
-            const expectedNextObjext = { transient: { characterSelect: expectedCurrentIndex } };
-            selectScreen.currentIndex = expectedCurrentIndex;
+            selectScreen.currentIndex = 1;
             signalSubscribeSpy.getCall(3).args[0].callback();
-            assert.deepEqual(selectScreen.next.getCall(0).args[0], expectedNextObjext);
+            sinon.assert.calledOnce(selectScreen.navigation.next.withArgs({ characterSelected: 1 }));
         });
 
         describe("previous button", () => {

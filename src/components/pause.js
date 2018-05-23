@@ -4,7 +4,7 @@
  *
  * @module components/pause
  */
-import fp from "../lib/lodash/fp/fp.js";
+import fp from "../../lib/lodash/fp/fp.js";
 
 import * as signal from "../core/signal-bus.js";
 import { GameAssets } from "../core/game-assets.js";
@@ -36,7 +36,7 @@ export function create({ game }) {
         const backgroundImage = game.add.image(0, 0, "pause.pauseBackground");
         backgroundImage.inputEnabled = true;
         backgroundImage.input.priorityID = priorityID - 1;
-        return screen.layoutFactory.addToBackground(backgroundImage);
+        return screen.scene.addToBackground(backgroundImage);
     }
 
     function disableExistingButtons() {
@@ -49,7 +49,7 @@ export function create({ game }) {
                     button.update();
                 }
             }, layout.buttons);
-        }, screen.layoutFactory.getLayouts());
+        }, screen.scene.getLayouts());
         return disabledButtons;
     }
 
@@ -69,7 +69,7 @@ export function create({ game }) {
     }
 
     function addGelButtons() {
-        const gelLayout = screen.layoutFactory.addLayout([
+        const gelLayout = screen.scene.addLayout([
             "pauseHome",
             "audioOff",
             "settings",

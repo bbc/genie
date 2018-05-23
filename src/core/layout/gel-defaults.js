@@ -1,14 +1,11 @@
-import * as pause from "../../components/pause.js";
+import * as pause from "../../components/overlays/pause.js";
+import * as howToPlay from "../../components/overlays/how-to-play.js";
 import { settings } from "../settings.js";
 
 let gmi;
 
 export const setGmi = newGmi => {
     gmi = newGmi;
-};
-
-const howToPlayClicked = () => {
-    console.log("how to play clicked");
 };
 
 const callGmi = method => () => {
@@ -40,7 +37,7 @@ export const config = {
         channel: "gel-buttons",
         action: ({ game }) => {
             const screen = game.state.states[game.state.current];
-            screen.next({ transient: { home: true } });
+            screen.navigation.home();
         },
     },
     pauseHome: {
@@ -60,6 +57,15 @@ export const config = {
         order: 2,
         id: "gel-back",
         channel: "gel-buttons",
+    },
+    howToPlayBack: {
+        group: "topLeft",
+        title: "Back",
+        key: "back",
+        ariaLabel: "Back",
+        order: 2,
+        id: "gel-back",
+        channel: "how-to-play-gel-buttons",
     },
     audioOff: {
         group: "topRight",
@@ -108,6 +114,15 @@ export const config = {
         id: "gel-previous",
         channel: "gel-buttons",
     },
+    howToPlayPrevious: {
+        group: "middleLeft",
+        title: "Previous",
+        key: "previous",
+        ariaLabel: "Previous Item",
+        order: 7,
+        id: "gel-previous",
+        channel: "how-to-play-gel-buttons",
+    },
     replay: {
         group: "middleCenter",
         title: "Replay",
@@ -152,6 +167,15 @@ export const config = {
         id: "gel-next",
         channel: "gel-buttons",
     },
+    howToPlayNext: {
+        group: "middleRight",
+        title: "Next",
+        key: "next",
+        ariaLabel: "Next Item",
+        order: 10,
+        id: "gel-next",
+        channel: "how-to-play-gel-buttons",
+    },
     achievements: {
         group: "bottomLeft",
         title: "Achievements",
@@ -185,8 +209,7 @@ export const config = {
         key: "how-to-play",
         ariaLabel: "Game Instructions",
         order: 14,
-        id: "gel-how-to-play",
-        action: howToPlayClicked,
+        action: howToPlay.create,
         channel: "gel-buttons",
     },
 };

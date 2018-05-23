@@ -13,19 +13,16 @@ export class Home extends Screen {
     }
 
     create() {
-        this.layoutFactory.addToBackground(this.game.add.image(0, 0, "home.background"));
-        //this.layoutFactory.addToBackground(this.game.add.image(0, 0, this.getAsset("background")));
-
-        this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.getAsset("title")));
-
-        this.layoutFactory.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
+        this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
+        this.scene.addToBackground(this.game.add.image(0, -150, this.getAsset("title")));
+        this.scene.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
         createTestHarnessDisplay(this.game, this.context, this.layoutFactory);
 
         signal.bus.subscribe({
             channel: "gel-buttons",
             name: "play",
             callback: () => {
-                this.next();
+                this.navigation.next();
             },
         });
     }

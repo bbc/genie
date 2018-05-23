@@ -4,11 +4,13 @@
  * @module components/loadscreen
  */
 
-import _ from "../lib/lodash/lodash.js";
+import _ from "../../lib/lodash/lodash.js";
 
 import { loadAssets } from "../core/asset-loader.js";
 import { Screen } from "../core/screen.js";
+import { createLoadBar } from "./loadbar.js";
 import { initGameAssets, GameAssets } from "../core/game-assets.js";
+import { calculateMetrics } from "../core/layout/calculate-metrics.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
@@ -38,12 +40,45 @@ export class Loadscreen extends Screen {
             }
             initGameAssets(this.game);
             this.startMusic();
-            this.next();
+
+            this.navigation.next();
         });
     }
 
+    createBackground() {
+        this.scene.addToBackground(this.game.add.image(0, 0, "loadscreenBackground"));
+    }
+
+    createTitle() {
+        this.scene.addToBackground(this.game.add.image(0, -150, "loadscreenTitle"));
+    }
+
+    createLoadingBar() {
+        this.loadingBar = createLoadBar(this.game, "loadbarBackground", "loadbarFill");
+        this.loadingBar.position.set(0, 110);
+        this.scene.addToBackground(this.loadingBar);
+    }
+
+    createBrandLogo() {
+        const size = this.scene.getSize();
+        const metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
+
+        const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
+        const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
+        this.brandLogo = this.scene.addToBackground(this.game.add.image(0, 0, "brandLogo"));
+        this.brandLogo.right = x;
+        this.brandLogo.bottom = y;
+    }
+
+    create() {
+        this.createBackground();
+        this.createTitle();
+        this.createLoadingBar();
+        this.createBrandLogo();
+    }
+
     updateLoadProgress(progress) {
-        // use progress to update loading bar
+        if (this.hasOwnProperty("loadingBar")) this.loadingBar.fillPercent = progress;
         if (this.context.qaMode.active) {
             console.log("Loader progress:", progress); // eslint-disable-line no-console
         }
