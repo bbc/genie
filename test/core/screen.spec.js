@@ -5,24 +5,35 @@ import { Screen } from "../../src/core/screen";
 
 describe("Screen", () => {
     let screen;
-    let mockNext;
-    let mockLayoutFactory;
+    let mockScene;
+    let transientData;
+    let navigation;
 
-    const mockContext = { inState: "inState" };
+    const mockContext = {};
+    const sandbox = sinon.sandbox.create();
 
     beforeEach(() => {
-        mockNext = sinon.spy();
-        mockLayoutFactory = sinon.spy();
+        mockScene = sandbox.spy();
+        transientData = sandbox.stub();
+        navigation = {
+            loadscreen: sandbox.stub(),
+        };
+
         screen = new Screen();
-        screen.init(mockContext, mockNext, mockLayoutFactory);
+        screen.game = {
+            state: {
+                current: "loadscreen",
+            },
+        };
+        screen.init(transientData, mockScene, mockContext, navigation);
     });
 
-    it("sets layoutFactory on the screen", () => {
-        expect(screen.layoutFactory).to.eql(mockLayoutFactory);
+    afterEach(() => {
+        sandbox.restore();
     });
 
-    it("sets the next function on the screen", () => {
-        expect(screen._next).to.eql(mockNext);
+    it("sets scene on the screen", () => {
+        expect(screen.scene).to.eql(mockScene);
     });
 
     it("sets the context on the screen", () => {
@@ -36,19 +47,10 @@ describe("Screen", () => {
 
         it("has a setter", () => {
             const expectedContext = {
-                inState: "inState",
                 qaMode: { active: true },
             };
             screen.context.qaMode = { active: true };
             expect(screen.context).to.eql(expectedContext);
-        });
-    });
-
-    describe("next method", () => {
-        it("calls the passed-in next function with the changed state param", () => {
-            const changedState = { state: "change" };
-            screen.next(changedState);
-            expect(mockNext.getCall(0).args).to.eql([changedState]);
         });
     });
 });

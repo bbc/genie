@@ -1,23 +1,20 @@
 /**
- * Startup extends `Phaser.State` and creates a new `Phaser.Game`, as well as a new `Sequencer`.
+ * Startup extends `Phaser.State` and creates a new `Phaser.Game`, as well as a new `Navigation` object.
  * It also instantiates the `Context` object.
  *
  * @module core/startup
  */
-import _ from "../lib/lodash/lodash.js";
-
-import * as Sequencer from "../core/sequencer.js";
-import { parseUrlParams } from "../lib/parseUrlParams.js";
+import { parseUrlParams } from "../core/parseUrlParams.js";
 import * as gel from "../core/layout/gel-defaults.js";
 import { settings } from "../core/settings.js";
+import * as Scene from "./scene.js";
+import * as Navigation from "./navigation.js";
 
 /**
- * @param {Array} transitions - The transitions JSON object given in main.js.
- * @param {Object=} initialAdditionalState - Additional state that is added to the inState context.
- * @param {Object=} settingsConfig -
- * @return {Promise} A Promise, which is resolved with the game in onStarted.
+ * @param {Object=} settingsConfig - Additional state that is added to the inState context.
+ * @param {Object=} navigationConfig -
  */
-export function startup(transitions, initialAdditionalState, settingsConfig = {}) {
+export function startup(settingsConfig = {}, navigationConfig) {
     const gmi = window.getGMI({ settingsConfig });
     const urlParams = parseUrlParams(window.location.search);
     const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
@@ -41,27 +38,19 @@ export function startup(transitions, initialAdditionalState, settingsConfig = {}
 
     const game = new Phaser.Game(phaserConfig);
 
-    let resolvedPromise;
-
-    return new Promise(resolve => {
-        resolvedPromise = resolve;
-    });
-
     function onStarted(config) {
         // Phaser is now set up and we can use all game properties.
         game.canvas.setAttribute("aria-hidden", "true");
+        const scene = Scene.create(game);
         const context = {
             gmi,
-            inState: _.merge({ transient: {}, persistent: {} }, initialAdditionalState),
             config: config,
             popupScreens: [],
             gameMuted: true,
             qaMode,
-            sequencer: { getTransitions: () => [] },
         };
-        context.sequencer = Sequencer.create(game, context, transitions);
         game.stage.backgroundColor = "#333";
-        resolvedPromise(game);
+        Navigation.create(game.state, context, scene, navigationConfig);
     }
 }
 
@@ -80,8 +69,7 @@ class Startup extends Phaser.State {
 
         // All asset paths are relative to the location of the config.json:
         const theme = gmi.embedVars.configPath;
-        const configDir = theme.split(/([^/]+$)/, 2)[0];
-        this.game.load.path = configDir;
+        this.game.load.path = theme.split(/([^/]+$)/, 2)[0]; //config dir
         this.game.load.json(CONFIG_KEY, "config.json");
     }
 

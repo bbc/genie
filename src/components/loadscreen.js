@@ -4,7 +4,7 @@
  * @module components/loadscreen
  */
 
-import _ from "../lib/lodash/lodash.js";
+import _ from "../../lib/lodash/lodash.js";
 
 import { loadAssets } from "../core/asset-loader.js";
 import { Screen } from "../core/screen.js";
@@ -33,13 +33,14 @@ export class Loadscreen extends Screen {
 
     preload() {
         loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress.bind(this)).then(keyLookups => {
-            this.layoutFactory.addLookups(keyLookups);
+            this.scene.addLookups(keyLookups);
             if (this.context.qaMode.active) {
                 dumpToConsole(keyLookups);
             }
             initGameAssets(this.game);
             this.startMusic();
-            this.next();
+
+            this.navigation.next();
         });
     }
 

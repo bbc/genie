@@ -9,10 +9,10 @@ describe("Load Screen", () => {
     let loadScreen;
     let musicLoopStub;
     let mockGame;
-    let mockNext;
     let addLookupsSpy;
     let assetLoaderSpy;
     let assetLoaderCallbackSpy;
+    let navigationNext;
 
     const sandbox = sinon.sandbox.create();
 
@@ -25,6 +25,7 @@ describe("Load Screen", () => {
             loopFull: sandbox.spy(),
         });
         musicLoopStub.returns({});
+        navigationNext = sandbox.stub();
 
         mockGame = {
             add: {
@@ -34,10 +35,9 @@ describe("Load Screen", () => {
                 current: "currentState",
             },
         };
-        mockNext = sandbox.spy();
 
         loadScreen = new Loadscreen();
-        loadScreen.layoutFactory = {
+        loadScreen.scene = {
             addLookups: addLookupsSpy,
             keyLookups: {
                 currentState: {
@@ -48,8 +48,10 @@ describe("Load Screen", () => {
                 title: "titleImage",
             },
         };
+        loadScreen.navigation = {
+            next: navigationNext,
+        };
         loadScreen.game = mockGame;
-        loadScreen.next = mockNext;
     });
 
     afterEach(() => {
@@ -96,7 +98,7 @@ describe("Load Screen", () => {
             loadScreen.preload();
 
             assetLoaderCallbackSpy.args[0][0]();
-            expect(mockNext.called).to.equal(true);
+            expect(navigationNext.called).to.equal(true);
         });
     });
 
