@@ -14,6 +14,7 @@ describe("Home Screen", () => {
     let addLayoutSpy;
     let gameImageStub;
     let gameButtonSpy;
+    let navigationNext;
 
     const sandbox = sinon.sandbox.create();
 
@@ -25,6 +26,7 @@ describe("Home Screen", () => {
         gameImageStub.onCall(0).returns("background");
         gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
+        navigationNext = sandbox.stub();
 
         mockGame = {
             add: {
@@ -42,7 +44,7 @@ describe("Home Screen", () => {
         };
 
         homeScreen = new Home();
-        homeScreen.layoutFactory = {
+        homeScreen.scene = {
             addToBackground: addToBackgroundSpy,
             addLayout: addLayoutSpy,
             keyLookups: {
@@ -51,6 +53,9 @@ describe("Home Screen", () => {
                     title: "titleImage",
                 },
             },
+        };
+        homeScreen.navigation = {
+            next: navigationNext,
         };
         homeScreen.game = mockGame;
         homeScreen.context = mockContext;
@@ -63,7 +68,7 @@ describe("Home Screen", () => {
 
     describe("preload method", () => {
         it("adds current game state to the layout key lookups", () => {
-            const expectedKeylookups = homeScreen.layoutFactory.keyLookups.homeScreen;
+            const expectedKeylookups = homeScreen.scene.keyLookups.homeScreen;
             assert.deepEqual(homeScreen.keyLookup, expectedKeylookups);
         });
 
@@ -101,7 +106,7 @@ describe("Home Screen", () => {
 
         it("creates a layout harness with correct params", () => {
             const actualParams = layoutHarnessSpy.getCall(0).args;
-            const expectedParams = [mockGame, mockContext, homeScreen.layoutFactory];
+            const expectedParams = [mockGame, mockContext, homeScreen.scene];
             assert(layoutHarnessSpy.callCount === 1, "layout harness should be called once");
             assert.deepEqual(actualParams, expectedParams);
         });
@@ -113,7 +118,6 @@ describe("Home Screen", () => {
         beforeEach(() => {
             signalSubscribeSpy = sandbox.spy(signal.bus, "subscribe");
             homeScreen.create();
-            homeScreen.next = sandbox.spy();
         });
 
         it("adds a signal subscription to the play button", () => {
@@ -123,7 +127,7 @@ describe("Home Screen", () => {
 
         it("adds a callback for the play button", () => {
             signalSubscribeSpy.getCall(0).args[0].callback();
-            assert(homeScreen.next.callCount === 1, "next function should have been called once");
+            assert(homeScreen.navigation.next.callCount === 1, "next function should have been called once");
         });
     });
 });

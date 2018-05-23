@@ -3,11 +3,11 @@
  *
  * @module core/layout/button-factory
  */
+import fp from "../../../lib/lodash/fp/fp.js";
 import * as signal from "../../core/signal-bus.js";
-import { accessibilify } from "../../lib/accessibilify/accessibilify.js";
-import fp from "../../lib/lodash/fp/fp.js";
-import { buttonsChannel } from "./gel-defaults.js";
+import { accessibilify } from "../accessibilify/accessibilify.js";
 import { GelButton } from "./gel-button.js";
+import { buttonsChannel } from "./gel-defaults.js";
 
 /**
  * Checks for a default action and if present adds its callback to the signal bus

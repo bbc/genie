@@ -1,5 +1,5 @@
+import fp from "../../lib/lodash/fp/fp.js";
 import * as signal from "../core/signal-bus.js";
-import fp from "../lib/lodash/fp/fp.js";
 import * as gel from "./layout/gel-defaults.js";
 
 export const settingsChannel = "genie-settings";

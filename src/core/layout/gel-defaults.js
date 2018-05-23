@@ -20,7 +20,7 @@ export const config = {
         channel: buttonsChannel,
         action: ({ game }) => {
             const screen = game.state.states[game.state.current];
-            screen.next({ transient: { home: true } });
+            screen.navigation.home();
         },
     },
     pauseHome: {

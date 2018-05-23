@@ -15,14 +15,14 @@ export class Select extends Screen {
     }
 
     preload() {
-        this.keyLookup = this.layoutFactory.keyLookups[this.game.state.current];
+        this.keyLookup = this.scene.keyLookups[this.game.state.current];
     }
 
     create() {
-        this.layoutFactory.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
-        this.layoutFactory.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
-        this.layoutFactory.addLayout(["home", "audioOff", "pause", "previous", "next", "continue"]);
-        createTestHarnessDisplay(this.game, this.context, this.layoutFactory);
+        this.scene.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
+        this.scene.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
+        this.scene.addLayout(["home", "audioOff", "pause", "previous", "next", "continue"]);
+        createTestHarnessDisplay(this.game, this.context, this.scene);
 
         const theme = this.context.config.theme[this.game.state.current];
         const CHAR_Y_POSITION = 0;
@@ -36,7 +36,7 @@ export class Select extends Screen {
             if (index !== 0) {
                 main.visible = false;
             }
-            this.layoutFactory.addToBackground(main);
+            this.scene.addToBackground(main);
             this.choice = this.choice.concat({ main: main });
         });
 
@@ -44,7 +44,7 @@ export class Select extends Screen {
             channel: buttonsChannel,
             name: "exit",
             callback: () => {
-                this.next({ transient: { home: true } });
+                this.navigation.home();
             },
         });
 
@@ -91,6 +91,6 @@ export class Select extends Screen {
     }
 
     startGame() {
-        this.next({ transient: { [this.game.state.current]: this.currentIndex } });
+        this.navigation.next({ characterSelected: this.currentIndex });
     }
 }
