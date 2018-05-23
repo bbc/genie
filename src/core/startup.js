@@ -6,7 +6,7 @@
  */
 import { settings, settingsChannel } from "../core/settings.js";
 import * as signal from "../core/signal-bus.js";
-import { parseUrlParams } from "../lib/parseUrlParams.js";
+import { parseUrlParams } from "./parseUrlParams.js";
 import * as Navigation from "./navigation.js";
 import * as Scene from "./scene.js";
 
