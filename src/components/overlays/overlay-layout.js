@@ -13,7 +13,7 @@ import fp from "../../../lib/lodash/fp/fp.js";
  * - Moving GEL buttons to the top
  */
 
-export function create(screen, backgroundImage) {
+export function create(screen) {
     const backgroundPriorityID = 999;
     const priorityID = backgroundPriorityID + screen.context.popupScreens.length;
     const previousLayouts = screen.scene.getLayouts();

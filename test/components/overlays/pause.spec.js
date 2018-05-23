@@ -1,21 +1,15 @@
-import fp from "../../../lib/lodash/fp/fp.js";
 import { assert } from "chai";
 import * as sinon from "sinon";
-
-import * as Pause from "../../../src/components/overlays/pause";
-import * as signal from "../../../src/core/signal-bus.js";
-import { GameAssets } from "../../../src/core/game-assets.js";
 import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
+import * as Pause from "../../../src/components/overlays/pause";
+import { GameAssets } from "../../../src/core/game-assets.js";
+import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Pause Overlay", () => {
     let mockGame;
     let mockScreen;
     let signalSpy;
     let mockGelButtons;
-    let mockLayoutDestroy;
-    let backgroundImage;
-    let backgroundImageInputEnabled;
-    let backgroundImagePriorityID;
     let mockBackground;
     let mockOverlayLayout;
 
@@ -30,7 +24,6 @@ describe("Pause Overlay", () => {
             restoreDisabledButtons: sandbox.spy(),
             moveGelButtonsToTop: sandbox.spy(),
         };
-        mockLayoutDestroy = { destroy: sandbox.spy() };
         sandbox.stub(OverlayLayout, "create").returns(mockOverlayLayout);
 
         mockGelButtons = { destroy: sandbox.spy() };

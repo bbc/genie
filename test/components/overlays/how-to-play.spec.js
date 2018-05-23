@@ -1,13 +1,10 @@
-import fp from "../../../lib/lodash/fp/fp.js";
 import { assert } from "chai";
 import * as sinon from "sinon";
-
-import * as signal from "../../../src/core/signal-bus.js";
-import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
 import * as HowToPlay from "../../../src/components/overlays/how-to-play";
+import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
+import * as signal from "../../../src/core/signal-bus.js";
 
 describe("How To Play Overlay", () => {
-    let howToPlayScreen;
     let mockGame;
     let mockScreen;
     let signalSpy;
@@ -79,7 +76,7 @@ describe("How To Play Overlay", () => {
         mockGame.add.sprite.withArgs(0, 30, "panel2").returns(panel2Sprite);
         mockGame.add.sprite.withArgs(0, 30, "panel3").returns(panel3Sprite);
 
-        howToPlayScreen = HowToPlay.create({ game: mockGame });
+        HowToPlay.create({ game: mockGame });
     });
 
     afterEach(() => {

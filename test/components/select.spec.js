@@ -24,7 +24,6 @@ describe("Select Screen", () => {
     const characterThreeSprite = { visible: "" };
     const CENTER_X = 0;
     const CHAR_Y_POSITION = 0;
-    const CHAR_TEXT_Y_POSITION = 170;
 
     beforeEach(() => {
         layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");

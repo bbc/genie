@@ -51,7 +51,7 @@ describe("Settings", () => {
         const settings = createSettings();
 
         const mockGmi = {
-            showSettings: (onSettingsChanged, onSettingsClosed) => {
+            showSettings: onSettingsChanged => {
                 onSettingsChanged(settingName, true);
             },
         };
