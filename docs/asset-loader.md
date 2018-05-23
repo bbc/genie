@@ -47,7 +47,7 @@ const gamePacksToLoad: PackList = {
 
 The loadscreenPack is the asset pack which loads the assets that are required for the Loading screen itself.
 
-* It requires a unique key, this **should be the name of the Loading screen** in the sequencer.
+* It requires a unique key, this **should be the name of the Loading screen** in the navigation config in `main.js` (this will be 'loadscreen' by default).
 * The assets to be loaded here, are loaded before the loadscreen shows up on the screen. They are not included in calculating the loadscreen's progress.
 * Once the loadscreenPack has been loaded, the Loading screen will call its **Phaser create function**.
 
@@ -116,7 +116,7 @@ The asset loader will load the JSON files for any screens that are missing in th
 Examples of Phaser Asset Packs can be found [here](https://github.com/photonstorm/phaser-examples/blob/master/examples/assets/asset-pack2.json).
 
 **Example**  
-If the Sequencer has 3 screens in it called 'home', 'game' and 'results'. The asset master pack contains data for the `home` and `results` screens. The asset loader will then attempt to load screen data from an asset pack called `game.json`.
+If the Navigation Config (located in `main.js`) has 3 screens in it called 'home', 'game' and 'results'. The asset master pack contains data for the `home` and `results` screens. The asset loader will then attempt to load screen data from an asset pack called `game.json`.
 
 ## Known Issues
 
