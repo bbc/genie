@@ -47,26 +47,26 @@ export class Loadscreen extends Screen {
     }
 
     createBackground() {
-        this.layoutFactory.addToBackground(this.game.add.image(0, 0, "loadscreenBackground"));
+        this.scene.addToBackground(this.game.add.image(0, 0, "loadscreenBackground"));
     }
 
     createTitle() {
-        this.layoutFactory.addToBackground(this.game.add.image(0, -150, "loadscreenTitle"));
+        this.scene.addToBackground(this.game.add.image(0, -150, "loadscreenTitle"));
     }
 
     createLoadingBar() {
         this.loadingBar = createLoadBar(this.game, "loadbarBackground", "loadbarFill");
         this.loadingBar.position.set(0, 110);
-        this.layoutFactory.addToBackground(this.loadingBar);
+        this.scene.addToBackground(this.loadingBar);
     }
 
     createBrandLogo() {
-        const size = this.layoutFactory.getSize();
+        const size = this.scene.getSize();
         const metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
 
         const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
         const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
-        this.brandLogo = this.layoutFactory.addToBackground(this.game.add.image(0, 0, "brandLogo"));
+        this.brandLogo = this.scene.addToBackground(this.game.add.image(0, 0, "brandLogo"));
         this.brandLogo.right = x;
         this.brandLogo.bottom = y;
     }

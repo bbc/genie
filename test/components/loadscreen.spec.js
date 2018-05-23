@@ -121,13 +121,13 @@ describe("Load Screen", () => {
                 setFillPercent: setFillPercentStub,
             };
             createProgressBarStub = sandbox.stub(LoadBar, "createLoadBar").returns(mockProgressBar);
-            loadScreen.layoutFactory.getSize = sandbox.stub().returns({
+            loadScreen.scene.getSize = sandbox.stub().returns({
                 width: 100,
                 height: 100,
                 scale: 1,
                 stageHeightPx: 60,
             });
-            loadScreen.layoutFactory.addToBackground = sandbox.stub().returns({
+            loadScreen.scene.addToBackground = sandbox.stub().returns({
                 anchor: {
                     set: () => {},
                 },
@@ -148,12 +148,12 @@ describe("Load Screen", () => {
         });
 
         it("adds the loading bar to the layout", () => {
-            sinon.assert.calledWith(loadScreen.layoutFactory.addToBackground, mockProgressBar);
+            sinon.assert.calledWith(loadScreen.scene.addToBackground, mockProgressBar);
         });
 
         it("adds a brand logo to the layout", () => {
             sinon.assert.calledWith(addImageStub, 0, 0, "brandLogo");
-            sinon.assert.calledWith(loadScreen.layoutFactory.addToBackground, mockBrandLogo);
+            sinon.assert.calledWith(loadScreen.scene.addToBackground, mockBrandLogo);
         });
     });
 
