@@ -1,3 +1,5 @@
+import { settingsChannel } from "../core/settings.js";
+import * as signal from "../core/signal-bus.js";
 import { Home } from "./components/home.js";
 import { Loadscreen } from "./components/loadscreen.js";
 import { Results } from "./components/results.js";
@@ -26,6 +28,14 @@ const settingsConfig = {
         },
     ],
 };
+
+signal.bus.subscribe({
+    channel: settingsChannel,
+    name: "custom1",
+    callback: value => {
+        this.console.log("Custom 1 setting changed to " + value);
+    },
+});
 
 const navigationConfig = goToScreen => {
     const home = data => goToScreen("home", data);
