@@ -33,8 +33,11 @@ export function accessibilify(button, config) {
     }
 
     function getHitAreaBounds() {
-        const bounds = button.hitArea.clone();
-        bounds.topLeft = button.toGlobal(bounds.topLeft);
+        let bounds = button.getBounds().clone();
+        if (button.hitArea) {
+            bounds = button.hitArea.clone();
+            bounds.topLeft = button.toGlobal(bounds.topLeft);
+        }
         return bounds;
     }
 

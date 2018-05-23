@@ -87,4 +87,17 @@ describe("Overlay Layout", () => {
             assert.equal(mockGelLayout.buttons.audioOff.update.calledOnce, true);
         });
     });
+
+    describe("moveButtonToTop method", () => {
+        it("moves a button to the top layer", () => {
+            const overlayLayout = OverlayLayout.create(mockScreen);
+            const mockButton = {
+                inputEnabled: false,
+                input: { priorityID: 0 },
+            };
+            overlayLayout.moveButtonToTop(mockButton);
+            assert.isTrue(mockButton.inputEnabled);
+            assert.equal(mockButton.input.priorityID, 1001);
+        });
+    });
 });
