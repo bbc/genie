@@ -6,7 +6,7 @@ import * as signal from "../../../src/core/signal-bus.js";
 import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
 import * as HowToPlay from "../../../src/components/overlays/how-to-play";
 
-describe.only("How To Play Overlay", () => {
+describe("How To Play Overlay", () => {
     let howToPlayScreen;
     let mockGame;
     let mockScreen;
