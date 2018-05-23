@@ -1,10 +1,10 @@
+import { startup } from "./core/startup.js";
+import { settings } from "./core/settings.js";
 import { Loadscreen } from "./components/loadscreen.js";
 import { Home } from "./components/home.js";
 import { Select } from "./components/select.js";
 import { GameTest } from "./components/test-harness/test-screens/game.js";
 import { Results } from "./components/results.js";
-import { startup } from "./core/startup.js";
-import { settings } from "./core/settings.js";
 
 settings.setCloseCallback(() => {
     //Called when settings screen has been closed
@@ -38,62 +38,51 @@ settings.add("custom1", value => {
     console.log("custom 1 setting changed to: " + value);
 });
 
-const transitions = [
-    {
-        name: "loadscreen",
-        state: new Loadscreen(),
-        nextScreenName: () => "home",
-    },
-    {
-        name: "home",
-        state: new Home(),
-        nextScreenName: () => "character-select",
-    },
-    {
-        name: "character-select",
-        state: new Select(),
-        nextScreenName: state => {
-            if (state.transient.home) {
-                state.transient.home = false;
-                return "home";
-            }
-            if (state.transient.restart) {
-                state.transient.restart = false;
-                return "home";
-            }
-            return "game";
-        },
-    },
-    {
-        name: "game",
-        state: new GameTest(),
-        nextScreenName: state => {
-            if (state.transient.home) {
-                state.transient.home = false;
-                return "home";
-            }
-            if (state.transient.restart) {
-                state.transient.restart = false;
-                return "game";
-            }
-            return "results";
-        },
-    },
-    {
-        name: "results",
-        state: new Results(),
-        nextScreenName: state => {
-            if (state.transient.game || state.transient.restart) {
-                state.transient.game = false;
-                state.transient.restart = false;
-                return "game";
-            }
-            if (state.transient.home) {
-                state.transient.home = false;
-            }
-            return "home";
-        },
-    },
-];
+const navigationConfig = goToScreen => {
+    const home = data => goToScreen("home", data);
+    const characterSelect = data => goToScreen("character-select", data);
+    const game = data => goToScreen("game", data);
+    const results = data => goToScreen("results", data);
 
-startup(transitions, {}, settingsConfig);
+    return {
+        loadscreen: {
+            state: Loadscreen,
+            routes: {
+                next: home,
+            },
+        },
+        home: {
+            state: Home,
+            routes: {
+                next: characterSelect,
+            },
+        },
+        "character-select": {
+            state: Select,
+            routes: {
+                next: game,
+                home: home,
+                restart: home,
+            },
+        },
+        game: {
+            state: GameTest,
+            routes: {
+                next: results,
+                home: home,
+                restart: game,
+            },
+        },
+        results: {
+            state: Results,
+            routes: {
+                next: home,
+                game: game,
+                restart: game,
+                home: home,
+            },
+        },
+    };
+};
+
+startup(settingsConfig, navigationConfig);

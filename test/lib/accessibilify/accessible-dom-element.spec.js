@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { accessibleDomElement } from "../../../src/lib/accessibilify/accessible-dom-element";
+import { accessibleDomElement } from "../../../src/core/accessibilify/accessible-dom-element";
 
 describe("#accessibleDomElement", () => {
     let sandbox;

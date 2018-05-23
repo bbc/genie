@@ -8,7 +8,7 @@ export class Home extends Screen {
     preload() {}
 
     create() {
-        this.layoutFactory.addLayout([
+        this.scene.addLayout([
             "exit",
             "home",
             "achievements",

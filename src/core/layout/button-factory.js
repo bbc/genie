@@ -3,8 +3,8 @@
  *
  * @module core/layout/button-factory
  */
-import fp from "../../lib/lodash/fp/fp.js";
-import { accessibilify } from "../../lib/accessibilify/accessibilify.js";
+import fp from "../../../lib/lodash/fp/fp.js";
+import { accessibilify } from "../accessibilify/accessibilify.js";
 import { GelButton } from "./gel-button.js";
 import * as signal from "../../core/signal-bus.js";
 

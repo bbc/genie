@@ -1,4 +1,4 @@
-import fp from "../../lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 import * as signal from "../signal-bus.js";
 import { GameAssets } from "../game-assets.js";
 
