@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| UNRELEASED | Adds Loadscreen with loading bar. Adds How To Play screen.
 | UNRELEASED | Adds How To Play screen. |
 | UNRELEASED | Move libs out of source. |
 | UNRELEASED | sequencer replaced with new game flow based around navigation module. |
