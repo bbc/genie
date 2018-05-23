@@ -1,4 +1,4 @@
-import _ from "../lib/lodash/lodash.js";
+import _ from "../../lib/lodash/lodash.js";
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
@@ -13,8 +13,8 @@ export class Screen extends Phaser.State {
         this._context = _.merge({}, this._context, newContext);
     }
 
-    init(transientData, layoutFactory, context, navigation) {
-        this.layoutFactory = layoutFactory;
+    init(transientData, scene, context, navigation) {
+        this.scene = scene;
         this._context = context;
         this.navigation = navigation[this.game.state.current].routes;
         this.transientData = transientData;

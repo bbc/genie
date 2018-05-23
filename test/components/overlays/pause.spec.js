@@ -1,4 +1,4 @@
-import fp from "../../../src/lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 import { assert } from "chai";
 import * as sinon from "sinon";
 
@@ -35,7 +35,7 @@ describe("Pause Overlay", () => {
 
         mockGelButtons = { destroy: sandbox.spy() };
         mockScreen = {
-            layoutFactory: {
+            scene: {
                 keyLookups: { pause: { pauseBackground: "pauseBackgroundImage" } },
                 addLayout: sandbox.stub().returns(mockGelButtons),
             },
@@ -101,7 +101,7 @@ describe("Pause Overlay", () => {
         });
 
         it("adds GEL buttons", () => {
-            const actualAddLayoutCall = mockScreen.layoutFactory.addLayout.getCall(0);
+            const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
             const expectedAddLayoutCall = [
                 "pauseHome",
                 "audioOff",

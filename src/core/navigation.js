@@ -1,10 +1,14 @@
+/**
+ *
+ * @module core/navigation
+ */
 import * as signal from "./signal-bus.js";
 
-export const create = (gameState, context, layoutFactory, navigationConfig) => {
+export const create = (gameState, context, scene, navigationConfig) => {
     const goToScreen = (name, transientData) => {
         signal.bus.removeChannel("gel-buttons");
-        layoutFactory.removeAll();
-        gameState.start(name, true, false, transientData, layoutFactory, context, navigation);
+        scene.removeAll();
+        gameState.start(name, true, false, transientData, scene, context, navigation);
     };
 
     const navigation = navigationConfig(goToScreen);

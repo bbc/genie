@@ -1,4 +1,4 @@
-import fp from "../../lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 import * as ButtonFactory from "./button-factory.js";
 

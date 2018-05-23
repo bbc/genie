@@ -2,8 +2,32 @@
     "loadscreen": [
         {
             "type": "image",
-            "key": "logo",
-            "url": "loader/cbbc_logo.png",
+            "key": "loadscreenTitle",
+            "url": "loader/title.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "loadscreenBackground",
+            "url": "loader/background.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "brandLogo",
+            "url": "loader/brand-logo.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "loadbarBackground",
+            "url": "loader/load-bar-bg.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "loadbarFill",
+            "url": "loader/load-bar-fill.png",
             "overwrite": false
         }
     ],
