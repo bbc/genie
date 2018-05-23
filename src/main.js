@@ -33,7 +33,7 @@ signal.bus.subscribe({
     channel: settingsChannel,
     name: "custom1",
     callback: value => {
-        this.console.log("Custom 1 setting changed to " + value);
+        console.log("Custom 1 setting changed to " + value);
     },
 });
 
