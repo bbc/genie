@@ -40,13 +40,13 @@ describe("Layout - Gel Button", () => {
         return runInPreload(game =>
             loadAssets(game, gamePacks, gelPack, updateCallback).then(() => {
                 const btn = new GelButton(game, 0, 0, { isMobile: true }, config);
-                assert(btn.key === "gel/mobile/play.png", "is mobile asset");
+                assert(btn.key === "gelMobile.play", "is mobile asset");
 
                 btn.resize({ isMobile: false });
-                assert(btn.key === "gel/desktop/play.png", "is desktop asset");
+                assert(btn.key === "gelDesktop.play", "is desktop asset");
 
                 btn.resize({ isMobile: true });
-                assert(btn.key === "gel/mobile/play.png", "is mobile asset");
+                assert(btn.key === "gelMobile.play", "is mobile asset");
             }),
         );
     });

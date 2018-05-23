@@ -74,25 +74,6 @@ describe("Asset Loader", () => {
         );
     });
 
-    it("Should correctly namespace assets by their URL and return it in keyLookups.", () => {
-        const updateCallback = sinon.spy();
-        const gamePacks = {
-            MASTER_PACK_KEY: { url: assetPacks.oneScreenOneAssetPack },
-        };
-        const loadscreenPack = {
-            key: "loadscreen",
-            url: assetPacks.loadscreenPack,
-        };
-        return runInPreload(game => {
-            return loadAssets(game, gamePacks, loadscreenPack, updateCallback).then(screenMap => {
-                // @ts-ignore - skip error due to type inference. TODO - remove this line after conversion to js
-                expect(screenMap.screen.one).to.equal(assets.imgUrlOnePixel);
-                // @ts-ignore - skip error due to type inference. TODO - remove this line after conversion to js
-                expect(game.cache.checkImageKey(screenMap.screen.one)).to.equal(true);
-            });
-        });
-    });
-
     it("Should attempt to load assetPack JSON files that are missing and include them in keyLookups", () => {
         const updateCallback = sinon.spy();
         const loadSpy = sinon.spy();
@@ -116,7 +97,6 @@ describe("Asset Loader", () => {
             game.state.add("test-screen", new Phaser.State());
             return loadAssets(game, gamePacks, loadscreenPack, updateCallback).then(screenMap => {
                 sinon.assert.calledWithExactly(loadSpy, "test-screen", "test-screen.json");
-                expect(screenMap["test-screen"].test).to.equal(assets.ship);
             });
         });
     });

@@ -31,9 +31,9 @@ describe("Select Screen", () => {
         gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
         gameSpriteStub = sandbox.stub();
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "character1").returns(characterOneSprite);
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "character2").returns(characterTwoSprite);
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "character3").returns(characterThreeSprite);
+        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "characterSelect.character1").returns(characterOneSprite);
+        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "characterSelect.character2").returns(characterTwoSprite);
+        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "characterSelect.character3").returns(characterThreeSprite);
         addLayoutSpy = sandbox.spy();
 
         mockGame = {
@@ -74,12 +74,12 @@ describe("Select Screen", () => {
         beforeEach(() => selectScreen.create());
 
         it("adds a background image", () => {
-            sinon.assert.calledWith(gameImageStub, 0, 0, "backgroundImage");
+            sinon.assert.calledWith(gameImageStub, 0, 0, "characterSelect.background");
             sinon.assert.calledWith(addToBackgroundSpy, "background");
         });
 
         it("adds a title image", () => {
-            sinon.assert.calledWith(gameImageStub, 0, -150, "titleImage");
+            sinon.assert.calledWith(gameImageStub, 0, -150, "characterSelect.title");
             sinon.assert.calledWith(addToBackgroundSpy, "title");
         });
 
@@ -94,9 +94,9 @@ describe("Select Screen", () => {
 
         it("creates sprites for each choice", () => {
             assert(gameSpriteStub.callCount === 3, "game sprites should be added 3 times");
-            assert.deepEqual(gameSpriteStub.getCall(0).args, [0, 0, "character1"]);
-            assert.deepEqual(gameSpriteStub.getCall(1).args, [0, 0, "character2"]);
-            assert.deepEqual(gameSpriteStub.getCall(2).args, [0, 0, "character3"]);
+            assert.deepEqual(gameSpriteStub.getCall(0).args, [0, 0, "characterSelect.character1"]);
+            assert.deepEqual(gameSpriteStub.getCall(1).args, [0, 0, "characterSelect.character2"]);
+            assert.deepEqual(gameSpriteStub.getCall(2).args, [0, 0, "characterSelect.character3"]);
         });
 
         it("adds each sprite to the background", () => {
