@@ -4,6 +4,9 @@ import { Loadscreen } from "./components/loadscreen.js";
 import { Home } from "./components/home.js";
 import { Select } from "./components/select.js";
 import { GameTest } from "./components/test-harness/test-screens/game.js";
+import { RotationTest } from "./components/test-harness/test-screens/rotation.js";
+import { CollisionTest } from "./components/test-harness/test-screens/collision.js";
+import { FpsTest } from "./components/test-harness/test-screens/fps.js";
 import { Results } from "./components/results.js";
 
 settings.setCloseCallback(() => {

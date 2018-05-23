@@ -5,6 +5,12 @@
             "key": "basicButton",
             "url": "game/basic-button.png",
             "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "basicSprite",
+            "url": "game/basic-sprite.png",
+            "overwrite": false
         }
     ]
 }
