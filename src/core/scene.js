@@ -40,6 +40,8 @@ export function create(game) {
     const unscaled = game.add.group(undefined, "unscaled", true);
     const background = game.add.group(undefined, "background");
     const foreground = game.add.group(undefined, "foreground");
+
+    const debug = game.add.group(undefined, "debug", true);
     const keyLookups = {};
 
     const resize = (width, height, scale) => {
@@ -52,9 +54,9 @@ export function create(game) {
 
     root.addChild(background);
     root.addChild(foreground);
-    //if (game.debug.sprite) {
-        root.addChild(game.debug.sprite);
-    //}
+    if (game.debug.sprite) {
+        debug.addChild(game.debug.sprite);
+    }
 
     scaler.onScaleChange.add(resize);
 
