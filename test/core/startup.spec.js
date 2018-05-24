@@ -1,12 +1,11 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-import * as LayoutFactory from "../../src/core/layout/factory.js";
 import { startup } from "../../src/core/startup.js";
 
 describe("#startup", () => {
     const sandbox = sinon.sandbox.create();
 
-    let PhaserGame, getGMI, gmi, containerDiv, createLayoutFactory;
+    let PhaserGame, getGMI, gmi, containerDiv;
 
     beforeEach(() => {
         gmi = {
@@ -19,7 +18,6 @@ describe("#startup", () => {
             .returns(containerDiv);
         window.getGMI = sandbox.stub().returns(gmi);
         PhaserGame = sandbox.stub(Phaser, "Game");
-        createLayoutFactory = sandbox.stub(LayoutFactory, "create");
     });
 
     afterEach(() => {
