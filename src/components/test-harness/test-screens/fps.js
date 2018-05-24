@@ -1,4 +1,6 @@
 import { Screen } from "../../../core/screen.js";
+import * as debug from "../../../core/debug.js";
+import * as signal from "../../../core/signal-bus.js";
 
 export class FpsTest extends Screen {
     constructor() {
@@ -6,12 +8,12 @@ export class FpsTest extends Screen {
     }
 
     preload() {
-        this.keyLookup = this.scene.keyLookups["game"];
+        this.keyLookup = this.scene.keyLookups["fps"];
         this.game.time.advancedTiming = true;
     }
 
     create() {
-        this.scene.addLayout(["home", "pause", "audioOff", "settings"]);
+        this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
         this.sprites = [];
 
         for (let xPos = -200; xPos <= 200; xPos += 100) {
@@ -22,6 +24,12 @@ export class FpsTest extends Screen {
 
         this.fpsDebug = this.game.add.text(0, -250, "", { font: "36px Arial", fill: "#ffffff" });
         this.scene.addToBackground(this.fpsDebug);
+
+        signal.bus.subscribe({
+            channel: "gel-buttons",
+            name: "continue",
+            callback: this.navigation.next,
+        });
     }
 
     update() {

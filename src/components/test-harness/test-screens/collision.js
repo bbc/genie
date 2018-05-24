@@ -1,4 +1,6 @@
 import { Screen } from "../../../core/screen.js";
+import * as debug from "../../../core/debug.js";
+import * as signal from "../../../core/signal-bus.js";
 
 let hasCollided = false;
 
@@ -8,11 +10,11 @@ export class CollisionTest extends Screen {
     }
 
     preload() {
-        this.keyLookup = this.scene.keyLookups["game"];
+        this.keyLookup = this.scene.keyLookups["collision"];
     }
 
     create() {
-        this.scene.addLayout(["home", "pause", "audioOff", "settings"]);
+        this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.spriteOne = this.game.add.sprite(0, 0, this.keyLookup.basicSprite);
@@ -26,6 +28,12 @@ export class CollisionTest extends Screen {
         this.game.physics.arcade.enable(this.spriteTwo);
         this.spriteTwo.body.enable = true;
         this.spriteTwo.x = 200;
+
+        signal.bus.subscribe({
+            channel: "gel-buttons",
+            name: "continue",
+            callback: this.navigation.next,
+        });
     }
 
     update() {

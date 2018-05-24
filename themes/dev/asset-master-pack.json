@@ -92,5 +92,29 @@
             "url": "how-to-play/pip_off.png",
             "overwrite": false
         }
+    ],
+    "rotation": [
+        {
+            "type": "image",
+            "key": "basicSprite",
+            "url": "game/basic-sprite.png",
+            "overwrite": false
+        }
+    ],
+    "collision": [
+        {
+            "type": "image",
+            "key": "basicSprite",
+            "url": "game/basic-sprite.png",
+            "overwrite": false
+        }
+    ],
+    "fps": [
+        {
+            "type": "image",
+            "key": "basicSprite",
+            "url": "game/basic-sprite.png",
+            "overwrite": false
+        }
     ]
 }
