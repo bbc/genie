@@ -22,7 +22,7 @@ export class RotationTest extends Screen {
         this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
         this.sprite = this.game.add.sprite(200, -100, this.keyLookup.basicSprite);
         this.game.physics.arcade.enable(this.sprite);
-        debug.add(this.sprite, "rgba(255,0,0,1)", true);
+        debug.add(this.sprite, "rgba(255,0,0,0.4)", true);
 
         this.scene.addToBackground(this.sprite);
         signal.bus.subscribe({
@@ -33,16 +33,15 @@ export class RotationTest extends Screen {
     }
 
     update() {
-        // if (this.sprite.x > -200 || this.sprite.y < 100) {
-        //     this.sprite.x -= 0.8;
-        //     this.sprite.y += 0.4;
-        // }
+        if (this.sprite.x > -200 || this.sprite.y < 100) {
+            this.sprite.x -= 0.8;
+            this.sprite.y += 0.4;
+        }
 
-        // this.sprite.rotation += 0.1;
+        this.sprite.rotation += 0.1;
     }
 
     render() {
         debug.render(this.game);
-        //this.game.debug.body(this.sprite);
     }
 }
