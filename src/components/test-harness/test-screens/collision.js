@@ -11,6 +11,10 @@ export class CollisionTest extends Screen {
 
     preload() {
         this.keyLookup = this.scene.keyLookups["collision"];
+        const debugKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
+        debugKey.onUp.add(() => {
+            debug.toggle(this.game);
+        });
     }
 
     create() {
@@ -20,13 +24,13 @@ export class CollisionTest extends Screen {
         this.spriteOne = this.game.add.sprite(0, 0, this.keyLookup.basicSprite);
         this.scene.addToBackground(this.spriteOne);
         this.game.physics.arcade.enable(this.spriteOne);
-        this.spriteOne.body.enable = true;
+        debug.add(this.spriteOne, "rgba(255,0,0,0.4)", true);
         this.spriteOne.x = -200;
 
         this.spriteTwo = this.game.add.sprite(0, 0, this.keyLookup.basicSprite);
         this.scene.addToBackground(this.spriteTwo);
         this.game.physics.arcade.enable(this.spriteTwo);
-        this.spriteTwo.body.enable = true;
+        debug.add(this.spriteTwo, "rgba(255,0,0,0.4)", true);
         this.spriteTwo.x = 200;
 
         signal.bus.subscribe({
@@ -49,5 +53,9 @@ export class CollisionTest extends Screen {
             console.log("Collision!");
             hasCollided = true;
         });
+    }
+
+    render() {
+        debug.render(this.game);
     }
 }

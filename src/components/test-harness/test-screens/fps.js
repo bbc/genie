@@ -1,5 +1,4 @@
 import { Screen } from "../../../core/screen.js";
-import * as debug from "../../../core/debug.js";
 import * as signal from "../../../core/signal-bus.js";
 
 export class FpsTest extends Screen {
@@ -14,11 +13,13 @@ export class FpsTest extends Screen {
 
     create() {
         this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.sprites = [];
 
         for (let xPos = -200; xPos <= 200; xPos += 100) {
             const sprite = this.game.add.sprite(xPos, 0, this.keyLookup.basicSprite);
             this.scene.addToBackground(sprite);
+            this.game.physics.arcade.enable(sprite);
             this.sprites.push(sprite);
         }
 
