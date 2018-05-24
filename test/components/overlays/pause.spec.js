@@ -43,7 +43,7 @@ describe("Pause Overlay", () => {
         mockGame = {
             add: { image: sandbox.stub() },
             state: { current: "pauseScreen", states: { pauseScreen: mockScreen } },
-            sound: { pauseAll: sandbox.spy(), unsetMute: sandbox.spy() },
+            sound: { pauseAll: sandbox.spy() },
             paused: false,
         };
         mockGame.add.image.onCall(0).returns("backgroundImage");
@@ -67,10 +67,6 @@ describe("Pause Overlay", () => {
 
         it("pauses the game", () => {
             assert.isTrue(mockGame.paused);
-        });
-
-        it("keeps all audio playing", () => {
-            sinon.assert.calledOnce(mockGame.sound.unsetMute);
         });
 
         it("mutes background music", () => {
