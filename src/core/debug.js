@@ -53,7 +53,6 @@ export const clear = () => (bodies = []);
  * @param {Phaser.game} game
  */
 export const render = game => {
-    console.log("Debug is " + enabled);
     if (enabled) {
         bodies.forEach(body => {
             game.debug.body(...body);

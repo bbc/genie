@@ -21,17 +21,15 @@ export class CollisionTest extends Screen {
         this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        this.spriteOne = this.game.add.sprite(0, 0, this.keyLookup.basicSprite);
+        this.spriteOne = this.game.add.sprite(-200, 0, this.keyLookup.basicSprite);
         this.scene.addToBackground(this.spriteOne);
         this.game.physics.arcade.enable(this.spriteOne);
         debug.add(this.spriteOne, "rgba(255,0,0,0.4)", true);
-        this.spriteOne.x = -200;
 
-        this.spriteTwo = this.game.add.sprite(0, 0, this.keyLookup.basicSprite);
+        this.spriteTwo = this.game.add.sprite(200, 0, this.keyLookup.basicSprite);
         this.scene.addToBackground(this.spriteTwo);
         this.game.physics.arcade.enable(this.spriteTwo);
         debug.add(this.spriteTwo, "rgba(255,0,0,0.4)", true);
-        this.spriteTwo.x = 200;
 
         signal.bus.subscribe({
             channel: "gel-buttons",

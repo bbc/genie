@@ -116,5 +116,13 @@
             "url": "game/basic-sprite.png",
             "overwrite": false
         }
+    ],
+    "tweening": [
+        {
+            "type": "image",
+            "key": "basicSprite",
+            "url": "game/basic-sprite.png",
+            "overwrite": false
+        }
     ]
 }
