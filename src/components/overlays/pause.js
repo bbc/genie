@@ -29,7 +29,6 @@ export function create({ game }) {
 
     function pauseGame() {
         game.paused = true;
-        game.sound.unsetMute();
         GameAssets.sounds.backgroundMusic.mute = true;
         screen.context.popupScreens.push("pause");
     }
