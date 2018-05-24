@@ -16,7 +16,7 @@ export class Home extends Screen {
         this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
         this.scene.addToBackground(this.game.add.image(0, -150, this.getAsset("title")));
         this.scene.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
-        createTestHarnessDisplay(this.game, this.context, this.layoutFactory);
+        createTestHarnessDisplay(this.game, this.context, this.scene);
 
         signal.bus.subscribe({
             channel: "gel-buttons",

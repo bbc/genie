@@ -39,6 +39,7 @@ describe("Load Screen", () => {
         };
 
         loadScreen = new Loadscreen();
+        loadScreen.scene = {};
         loadScreen.navigation = {
             next: navigationNext,
         };

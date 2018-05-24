@@ -1,4 +1,3 @@
-import fp from "../../../lib/lodash/fp/fp.js";
 import { assert } from "chai";
 import * as sinon from "sinon";
 
@@ -13,9 +12,6 @@ describe("Pause Overlay", () => {
     let signalSpy;
     let mockGelButtons;
     let mockLayoutDestroy;
-    let backgroundImage;
-    let backgroundImageInputEnabled;
-    let backgroundImagePriorityID;
     let mockBackground;
     let mockOverlayLayout;
 
@@ -35,7 +31,7 @@ describe("Pause Overlay", () => {
 
         mockGelButtons = { destroy: sandbox.spy() };
         mockScreen = {
-            layoutFactory: {
+            scene: {
                 addToBackground: sandbox.stub().returns(mockLayoutDestroy),
                 addLayout: sandbox.stub().returns(mockGelButtons),
             },
