@@ -60,7 +60,7 @@ This will output game loading progress and asset keylookups to the console. Pres
 
 "Sanity Check" mode is a series of screens that make use of Phaser features such as collisions, rotations, tweens etc. It is to ensure that these features are working as intended.
 
-To access "Sanity Check" mode, add the following to the URL: `sanityCheck=true`.
+To access "Sanity Check" mode, add the `sanityCheck=true` query string to the URL: http://localhost:8080/?sanityCheck=true.
 
 While in this mode, press `D` on your keyboard to view the Phaser Arcade Physics hitbox over each sprite.
 
