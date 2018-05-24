@@ -60,7 +60,6 @@ describe("Home Screen", () => {
         sandbox.restore();
     });
 
-
     describe("create method", () => {
         beforeEach(() => homeScreen.create());
 

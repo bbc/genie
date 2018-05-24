@@ -13,7 +13,6 @@ export class Select extends Screen {
         super();
     }
 
-
     create() {
         this.scene.addToBackground(this.game.add.image(0, 0, this.getAsset("background")));
         this.scene.addToBackground(this.game.add.image(0, -150, this.getAsset("title")));

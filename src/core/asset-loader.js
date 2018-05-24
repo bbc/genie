@@ -63,7 +63,7 @@ export function loadAssets(game, gamePacks, loadscreenPack, updateCallback) {
             } else {
                 game.load.onLoadComplete.removeAll();
                 game.load.onFileComplete.removeAll();
-                resolve(keyLookups);    //NT TODO: keyLookups are now unused
+                resolve(keyLookups); //NT TODO: keyLookups are now unused
             }
         }
     });
@@ -135,7 +135,7 @@ function namespaceAssetsByScreen(pack) {
     return [keyLookups, pack];
 }
 
-const makeAssetKey = (screenName, asset) => [screenName, asset.key].join(".")
+const makeAssetKey = (screenName, asset) => [screenName, asset.key].join(".");
 
 function namespaceScreen(pack, screenName) {
     const keyLookup = {};
