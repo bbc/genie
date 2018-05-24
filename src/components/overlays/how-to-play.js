@@ -56,7 +56,7 @@ export function create({ game }) {
         if (currentIndex === -1) {
             currentIndex = numberOfPanels - 1;
         }
-        showPanel();
+        showCurrentPanel();
         updatePips();
     }
 
@@ -65,11 +65,11 @@ export function create({ game }) {
         if (currentIndex === numberOfPanels) {
             currentIndex = 0;
         }
-        showPanel();
+        showCurrentPanel();
         updatePips();
     }
 
-    function showPanel() {
+    function showCurrentPanel() {
         panels.forEach(panel => {
             panel.visible = false;
         });
@@ -82,6 +82,14 @@ export function create({ game }) {
         });
     }
 
+    function goToPanel(index, pipIsOn) {
+        if (!pipIsOn) {
+            currentIndex = index;
+            showCurrentPanel();
+            updatePips();
+        }
+    }
+
     function addPips() {
         let pipsGroup = game.add.group();
         const spacing = 15;
@@ -89,9 +97,10 @@ export function create({ game }) {
         const pipsLength = pipWidth * numberOfPanels + spacing * (numberOfPanels - 1);
         let currentPosition = -Math.abs(pipsLength / 2);
 
-        panels.forEach(panel => {
+        panels.forEach((panel, index) => {
             const pipImage = panel.visible ? "howToPlay.pipOn" : "howToPlay.pipOff";
-            const pip = game.add.sprite(currentPosition, 240, pipImage);
+            const pip = game.add.button(currentPosition, 240, pipImage, () => goToPanel(index, panel.visible), this);
+            overlayLayout.moveButtonToTop(pip);
             pipsGroup.add(pip);
             currentPosition += pipWidth + spacing;
         });
@@ -99,9 +108,13 @@ export function create({ game }) {
         return pipsGroup;
     }
 
-    function updatePips() {
+    function destroyPips() {
         pips.callAll("kill");
         pips.callAll("destroy");
+    }
+
+    function updatePips() {
+        destroyPips();
         pips = addPips();
     }
 
@@ -116,8 +129,7 @@ export function create({ game }) {
         gelButtons.destroy();
         overlayLayout.restoreDisabledButtons();
         destroyPanels();
-        pips.callAll("kill");
-        pips.callAll("destroy");
+        destroyPips();
         title.destroy();
         background.destroy();
         screen.context.popupScreens = fp.pull("how-to-play", screen.context.popupScreens);
