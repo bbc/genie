@@ -17,12 +17,38 @@ export class TiledTest extends Screen {
 
     create() {
         this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
-        //this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.map = this.game.add.tilemap(this.keyLookup.basicMap, 32, 32);
-        this.map.addTilesetImage(this.keyLookup.grassTile);
-        this.layer = this.map.createLayer(0);
-        this.layer.resizeWorld();
-        this.scene.addToBackground(this.layer);
+        this.game.physics.startSystem(Phaser.Physics.ARCADE); // TODO: Enable physics and drop and item onto the platform
+
+        const data = `
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1,  0,  0,  0,  0,  0,  0,  0,  0, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+            -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
+        `;
+
+        this.game.cache.addTilemap("testTileMap", null, data, Phaser.Tilemap.CSV);
+
+        const map = this.game.add.tilemap("testTileMap", 32, 32);
+        map.addTilesetImage(this.keyLookup.grassTile, this.keyLookup.grassTile, 32, 32);
+        const layer = map.createLayer(0);
+        layer.resizeWorld();
+
+        this.scene.addToBackground(layer);
+
+        // TODO: Center the tilemap - this functionality may need fixing in GENIE Core
+        // TODO: Add debug view support for the tilemap
 
         signal.bus.subscribe({
             channel: "gel-buttons",
@@ -31,9 +57,7 @@ export class TiledTest extends Screen {
         });
     }
 
-    update() {
-        // do an update
-    }
+    update() {}
 
     render() {
         debug.render(this.game);
