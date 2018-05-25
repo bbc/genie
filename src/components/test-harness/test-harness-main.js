@@ -4,6 +4,7 @@ import { RotationTest } from "./test-screens/rotation.js";
 import { CollisionTest } from "./test-screens/collision.js";
 import { TweeningTest } from "./test-screens/tweening.js";
 import { FpsTest } from "./test-screens/fps.js";
+import { TiledTest } from "./test-screens/tiled.js";
 
 export const phaserTestHarnessConfig = goToScreen => {
     const goToHome = data => goToScreen("home", data);
@@ -11,6 +12,7 @@ export const phaserTestHarnessConfig = goToScreen => {
     const goToCollision = data => goToScreen("collision", data);
     const goToTweening = data => goToScreen("tweening", data);
     const goToFpsTest = data => goToScreen("fps", data);
+    const goToTiledTest = data => goToScreen("tiled", data);
 
     return {
         loadscreen: {
@@ -51,6 +53,14 @@ export const phaserTestHarnessConfig = goToScreen => {
         },
         fps: {
             state: FpsTest,
+            routes: {
+                next: goToTiledTest,
+                home: goToHome,
+                restart: goToHome,
+            },
+        },
+        tiled: {
+            state: TiledTest,
             routes: {
                 next: goToHome,
                 home: goToHome,

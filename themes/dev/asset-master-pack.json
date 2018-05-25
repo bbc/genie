@@ -124,5 +124,20 @@
             "url": "game/basic-sprite.png",
             "overwrite": false
         }
+    ],
+    "tiled": [
+        {
+            "type": "image",
+            "key": "grassTile",
+            "url": "game/grass-tile.png",
+            "overwrite": false
+        },
+        {
+            "type": "tilemap",
+            "key": "basicMap",
+            "url": "game/tiles.json",
+            "format": "TILED_JSON"
+        }
+
     ]
 }
