@@ -3,7 +3,7 @@ import * as Sprite from "./sprite.js";
 const Stub = {
     add: {
         sprite: () => {
-            return Sprite.Stub;
+            return Sprite.Stub();
         },
     },
 };

@@ -1,5 +1,7 @@
-const Stub = {
-    visible: true,
+const Stub = () => {
+    return {
+        visible: true,
+    };
 };
 
 export { Stub };

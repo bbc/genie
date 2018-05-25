@@ -4,110 +4,99 @@ import * as LayoutFactory from "../../fake/layout-factory.js";
 import * as Assets from "../../fake/assets";
 import * as OverlayLayout from "../../fake/overlay-layout.js";
 import * as Button from "../../fake/button.js";
-import * as Fp from "lodash/fp";
+import * as Actor from "../../../src/core/actor.js";
+import * as Page from "../../../src/core/page.js";
+import * as Buttons from "../../../src/core/button.js";
+import * as Book from "../../../src/core/book.js";
 import * as Chai from "chai";
 Chai.should();
 
-const writePanel = (addSprite, assets, layoutFactory) => {
-    return panel => {
-        const sprite = addSprite(0, 30, assets[panel]);
-        layoutFactory.addToBackground(sprite);
-        return sprite;
-    };
-};
-
-const goToPage = (pageNumber, pages) => {
-    let page = pages[pageNumber - 1];
-
-    if (page !== null) {
-        page.visible = true;
-    }
-};
-
-const writePages = (panels, writePanel) => {
-    return Fp.map(writePanel)(panels);
-};
-
-const writeButtons = (layoutFactory, overlayLayout) => {
-    const gelLayout = layoutFactory.addLayout([
-        "howToPlayBack",
-        "audioOff",
-        "settings",
-        "howToPlayPrevious",
-        "howToPlayNext",
-    ]);
-    overlayLayout.moveGelButtonsToTop(gelLayout);
-    return gelLayout;
-};
-
-const writeBook = (theme, writePanel, layoutFactory, overlayLayout) => {
-    let pages = writePages(theme.panels, writePanel);
-    let buttonLayout = writeButtons(layoutFactory, overlayLayout);
-
-    let nextPageOption = buttonLayout.buttons["howToPlayNext"];
-    let previousPageOption = buttonLayout.buttons["howToPlayPrevious"];
-
-    if (pages.length === 1) {
-        previousPageOption.visible = false;
-        nextPageOption.visible = false;
-    }
-
-    goToPage(1, pages);
-
-    return {
-        pages: pages,
-        nextPageOption: nextPageOption,
-        previousPageOption: previousPageOption,
-    };
-};
-
 describe.only("Showing pages of a book", () => {
-    describe("Showing a book with 1 page", () => {
-        var book;
+    var book;
+
+    describe("A book with 1 page", () => {
         let onePanel = [{}];
 
         beforeEach(() => {
-            book = writeBook(
+            book = Book.Draw(
                 Theme.WithPanels(onePanel),
-                writePanel(Game.Stub.add.sprite, Assets.Stub, LayoutFactory.Stub),
-                LayoutFactory.WithButtons({ howToPlayNext: Button.Stub, howToPlayPrevious: Button.Stub }),
-                OverlayLayout.Stub,
+                Page.Draw(Assets.Stub, Actor.Draw(Game.Stub.add.sprite, LayoutFactory.Stub.addToBackground)),
+                Buttons.Draw(
+                    LayoutFactory.WithButtons({ Next: Button.Stub(), Previous: Button.Stub() }),
+                    OverlayLayout.Stub,
+                ),
             );
         });
 
         it("Should show page 1", () => {
-            let page1 = book.pages[0];
-            page1.should.have.property("visible", true);
+            book.firstPage.should.have.property("visible", true);
         });
 
         it("Should disable the 'Previous page' option", () => {
             book.previousPageOption.should.have.property("visible", false);
         });
 
-        it("Should disable the 'Next' option");
+        it("Should disable the 'Next page' option", () => {
+            book.nextPageOption.should.have.property("visible", false);
+        });
     });
 
-    describe("Showing 2 pages", () => {
-        it("Should write each panel as a page", () => {
-            let twoPanels = [{}, {}];
+    describe("A book with 2 pages", () => {
+        var book;
+        let twoPanels = [{}, {}];
 
-            let pages = writePages(twoPanels, writePanel(Game.Stub.add.sprite, Assets.Stub, LayoutFactory.Stub));
+        beforeEach(() => {
+            book = Book.Draw(
+                Theme.WithPanels(twoPanels),
+                Page.Draw(Assets.Stub, Actor.Draw(Game.Stub.add.sprite, LayoutFactory.Stub.addToBackground)),
+                Buttons.Draw(
+                    LayoutFactory.WithButtons({ Next: Button.Stub(), Previous: Button.Stub() }),
+                    OverlayLayout.Stub,
+                ),
+            );
+        });
 
-            pages.should.have.length(2);
+        it("Should write all the pages", () => {
+            book.numberOfPages.should.equal(2);
         });
 
         describe("Front to back", () => {
-            it("Should show page 1");
-            it("Should enable the 'Next' option");
-            it("Should disable the 'Previous' option");
-            it("Should show page 2 when the 'Next' option is chosen");
+            it("Should show page 1", () => {
+                book.firstPage.should.have.property("visible", true);
+            });
+
+            it("Should disable the 'Previous page' option", () => {
+                book.previousPageOption.should.have.property("visible", false);
+            });
+
+            it("Should enable the 'Next page' option", () => {
+                book.nextPageOption.should.have.property("visible", true);
+            });
+
+            it("Should show page 2 and hide page 1 when the 'Next page' option is chosen", () => {
+                book = Book.NextPage(book);
+                book.page(2).should.have.property("visible", true);
+                book.page(1).should.have.property("visible", false);
+            });
         });
 
         describe("Back to front", () => {
-            it("Should show page 2");
-            it("Should enable the 'Previous' option");
-            it("Should disable the 'Next' option");
-            it("Should show page 1 when the 'Previous' option is chosen");
+            it("Should enable the 'Previous page' option", () => {
+                book = Book.NextPage(book);
+                book.previousPageOption.should.have.property("visible", true);
+            });
+
+            it("Should disable the 'Next page' option", () => {
+                book = Book.NextPage(book);
+                book.nextPageOption.should.have.property("visible", false);
+            });
+
+            it("Should show page 1 and hide page 2 when the 'Previous page' option is chosen", () => {
+                book = Book.NextPage(book);
+                book = Book.PreviousPage(book);
+                book.page(1).should.have.property("visible", true);
+                book.page(2).should.have.property("visible", false);
+            });
         });
     });
 });
