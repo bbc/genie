@@ -7,18 +7,13 @@ export class Results extends Screen {
         super();
     }
 
-    preload() {
-        this.gel = this.scene.keyLookups.gel;
-        this.keyLookup = this.scene.keyLookups[this.game.state.current];
-    }
-
     create() {
         const theme = this.context.config.theme[this.game.state.current];
 
-        const backgroundImage = this.game.add.image(0, 0, this.keyLookup.background);
+        const backgroundImage = this.game.add.image(0, 0, "results.background");
         this.scene.addToBackground(backgroundImage);
 
-        const titleImage = this.scene.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
+        const titleImage = this.scene.addToBackground(this.game.add.image(0, -150, "results.title"));
         this.scene.addToBackground(titleImage);
 
         const resultsText = this.game.add.text(0, 50, this.transientData.results, theme.resultText.style);

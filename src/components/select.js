@@ -13,13 +13,9 @@ export class Select extends Screen {
         super();
     }
 
-    preload() {
-        this.keyLookup = this.scene.keyLookups[this.game.state.current];
-    }
-
     create() {
-        this.scene.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
-        this.scene.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
+        this.scene.addToBackground(this.game.add.image(0, 0, this.getAsset("background")));
+        this.scene.addToBackground(this.game.add.image(0, -150, this.getAsset("title")));
         this.scene.addLayout(["home", "audioOff", "pause", "previous", "next", "continue"]);
         createTestHarnessDisplay(this.game, this.context, this.scene);
 
@@ -31,7 +27,7 @@ export class Select extends Screen {
         this.numberOfChoices = Object.keys(theme.choices).length;
 
         theme.choices.forEach((item, index) => {
-            const main = this.game.add.sprite(0, CHAR_Y_POSITION, this.keyLookup[theme.choices[index].main]);
+            const main = this.game.add.sprite(0, CHAR_Y_POSITION, this.getAsset(theme.choices[index].main));
             if (index !== 0) {
                 main.visible = false;
             }

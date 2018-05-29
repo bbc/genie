@@ -15,13 +15,12 @@ import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
  */
 export function create({ game }) {
     const screen = game.state.states[game.state.current];
-    const keyLookup = screen.scene.keyLookups.pause;
     const channel = "pause-gel-buttons";
 
     pauseGame();
 
     const overlayLayout = OverlayLayout.create(screen);
-    const backgroundImage = game.add.image(0, 0, keyLookup.pauseBackground);
+    const backgroundImage = game.add.image(0, 0, "pause.pauseBackground");
     const background = overlayLayout.addBackground(backgroundImage);
     const gelButtons = addGelButtons();
 
