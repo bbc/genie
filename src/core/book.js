@@ -8,6 +8,7 @@ const GoToPage = (pageNumber, book) => {
         return book;
     }
 
+    book.hidePage(book.currentPageNumber);
     book.showPage(pageNumber);
     book.currentPageNumber = pageNumber;
 
