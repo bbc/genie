@@ -87,10 +87,7 @@ export class Loadscreen extends Screen {
     startMusic() {
         GameAssets.sounds.backgroundMusic.loopFull();
         GameAssets.sounds.backgroundMusic.onMute.add(() => {
-            console.log("music muted");
-        });
-        GameAssets.sounds.backgroundMusic.onUnMute.add(() => {
-            console.log("music unmuted");
+            console.log("music mute toggled: " + GameAssets.sounds.backgroundMusic.mute);
         });
     }
 }
