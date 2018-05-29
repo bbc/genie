@@ -1,6 +1,6 @@
 import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as signal from "../../core/signal-bus.js";
-import fp from "../../lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 export function accessibilify(button, config) {
     config = Object.assign(
@@ -34,8 +34,11 @@ export function accessibilify(button, config) {
     }
 
     function getHitAreaBounds() {
-        const bounds = button.hitArea.clone();
-        bounds.topLeft = button.toGlobal(bounds.topLeft);
+        let bounds = button.getBounds().clone();
+        if (button.hitArea) {
+            bounds = button.hitArea.clone();
+            bounds.topLeft = button.toGlobal(bounds.topLeft);
+        }
         return bounds;
     }
 
@@ -86,7 +89,8 @@ export function accessibilify(button, config) {
     }
 
     function buttonAction() {
-        if (game.sound.context.state === "suspended") {
+        // IE11 doesn't support webaudio api
+        if (game.sound.context && game.sound.context.state === "suspended") {
             game.sound._resumeWebAudioOnClick();
         }
         if (game.sound.touchLocked) {

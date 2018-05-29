@@ -6,7 +6,7 @@ describe("test harness layout", () => {
 
     let mockGame;
     let mockContext;
-    let mockLayoutFactory;
+    let mockScene;
     let sandbox;
     let onKeyUpSpy;
     let addKeyStub;
@@ -33,7 +33,7 @@ describe("test harness layout", () => {
                 },
             },
         };
-        mockLayoutFactory = {
+        mockScene = {
             addToBackground: sandbox.spy(),
             getSize: sandbox.stub().returns({
                 width: 300,
@@ -41,7 +41,7 @@ describe("test harness layout", () => {
                 stageHeightPx: 400,
             }),
         };
-        createTestHarnessDisplay(mockGame, mockContext, mockLayoutFactory);
+        createTestHarnessDisplay(mockGame, mockContext, mockScene);
     });
 
     afterEach(() => {

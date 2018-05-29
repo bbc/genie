@@ -3,7 +3,7 @@
  * @module components/overlays/overlay-layout
  */
 
-import fp from "../../lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 /**
  * Provides some shared behaviour common to all overlay screens such as:
@@ -16,19 +16,20 @@ import fp from "../../lib/lodash/fp/fp.js";
 export function create(screen, backgroundImage) {
     const backgroundPriorityID = 999;
     const priorityID = backgroundPriorityID + screen.context.popupScreens.length;
-    const previousLayouts = screen.layoutFactory.getLayouts();
+    const previousLayouts = screen.scene.getLayouts();
     const disabledButtons = disableExistingButtons();
 
     return {
         addBackground,
         restoreDisabledButtons,
         moveGelButtonsToTop,
+        moveButtonToTop,
     };
 
     function addBackground(backgroundImage) {
         backgroundImage.inputEnabled = true;
         backgroundImage.input.priorityID = priorityID - 1;
-        return screen.layoutFactory.addToBackground(backgroundImage);
+        return screen.scene.addToBackground(backgroundImage);
     }
 
     function disableExistingButtons() {
@@ -60,5 +61,10 @@ export function create(screen, backgroundImage) {
             button.parent.parent.updateTransform();
             button.update();
         }, gelLayout.buttons);
+    }
+
+    function moveButtonToTop(button) {
+        button.inputEnabled = true;
+        button.input.priorityID = priorityID;
     }
 }

@@ -1,4 +1,4 @@
-import fp from "../../../src/lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 import { assert } from "chai";
 import * as sinon from "sinon";
 
@@ -30,7 +30,7 @@ describe("Overlay Layout", () => {
 
         mockScreen = {
             context: { popupScreens: ["pause", "how-to-play"] },
-            layoutFactory: {
+            scene: {
                 getLayouts: sandbox.stub().returns(mockLayouts),
                 addToBackground: sandbox.spy(),
             },
@@ -55,7 +55,7 @@ describe("Overlay Layout", () => {
 
             assert.isTrue(mockBackgroundImage.inputEnabled);
             assert.equal(mockBackgroundImage.input.priorityID, 1000);
-            assert.deepEqual(mockScreen.layoutFactory.addToBackground.getCall(0).args[0], mockBackgroundImage);
+            assert.deepEqual(mockScreen.scene.addToBackground.getCall(0).args[0], mockBackgroundImage);
         });
     });
 
@@ -88,6 +88,19 @@ describe("Overlay Layout", () => {
             assert.equal(mockGelLayout.buttons.audioOff.parent.updateTransform.calledOnce, true);
             assert.equal(mockGelLayout.buttons.audioOff.parent.parent.updateTransform.calledOnce, true);
             assert.equal(mockGelLayout.buttons.audioOff.update.calledOnce, true);
+        });
+    });
+
+    describe("moveButtonToTop method", () => {
+        it("moves a button to the top layer", () => {
+            const overlayLayout = OverlayLayout.create(mockScreen);
+            const mockButton = {
+                inputEnabled: false,
+                input: { priorityID: 0 },
+            };
+            overlayLayout.moveButtonToTop(mockButton);
+            assert.isTrue(mockButton.inputEnabled);
+            assert.equal(mockButton.input.priorityID, 1001);
         });
     });
 });

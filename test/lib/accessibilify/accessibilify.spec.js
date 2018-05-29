@@ -1,7 +1,7 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import { accessibilify } from "../../../src/lib/accessibilify/accessibilify";
-import * as helperModule from "../../../src/lib/accessibilify/accessible-dom-element";
+import { accessibilify } from "../../../src/core/accessibilify/accessibilify";
+import * as helperModule from "../../../src/core/accessibilify/accessible-dom-element";
 
 describe("#accessibilify", () => {
     const gameWidth = 800;
@@ -72,6 +72,7 @@ describe("#accessibilify", () => {
                     y: buttonBoundsY,
                     width: buttonBoundsWidth,
                     height: buttonBoundsHeight,
+                    clone: () => mockButton.getBounds,
                 };
             },
             hitArea: {
@@ -190,6 +191,21 @@ describe("#accessibilify", () => {
             accessibilify(mockButton);
             clock.tick(200);
             sinon.assert.called(position.withArgs(mockButton.hitArea.clone()));
+        });
+
+        it("repositions accessibleElement if button exists but does not have a hit area", () => {
+            sandbox.restore();
+            const clock = sandbox.useFakeTimers();
+            const position = sandbox.spy();
+            accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({ position });
+
+            mockButton.hitArea = null;
+            mockButton.getBounds = sandbox.stub().returns({ clone: () => "bounds" });
+
+            accessibilify(mockButton);
+            clock.tick(200);
+            sinon.assert.called(mockButton.getBounds);
+            sinon.assert.called(position.withArgs("bounds"));
         });
 
         it("does NOT reposition accessibleElement if button does not exist", () => {

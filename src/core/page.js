@@ -1,7 +1,10 @@
-import * as Actor from "./actor";
+import * as Scenery from "./scenery.js";
 
-const Draw = (assets, drawActor) => {
-    return panel => drawActor(Actor.Create(0, 30, assets[panel]));
+const Draw = (assets, drawScenery) => {
+    return panel => {
+        const scenery = Scenery.Create(0, 30, assets[panel]);
+        return drawScenery(scenery);
+    };
 };
 
 export { Draw };

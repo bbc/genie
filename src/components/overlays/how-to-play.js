@@ -3,7 +3,7 @@
  * @module components/overlays/how-to-play
  */
 
-import fp from "../../lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 import * as signal from "../../core/signal-bus.js";
 import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
@@ -14,7 +14,7 @@ import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
 export function create({ game }) {
     const screen = game.state.states[game.state.current];
     const theme = screen.context.config.theme["how-to-play"];
-    const keyLookup = screen.layoutFactory.keyLookups.howToPlay;
+    const keyLookup = screen.scene.keyLookups.howToPlay;
     const channel = "how-to-play-gel-buttons";
 
     let panels = [];
@@ -25,14 +25,15 @@ export function create({ game }) {
 
     const overlayLayout = OverlayLayout.create(screen);
     const background = overlayLayout.addBackground(game.add.image(0, 0, keyLookup.background));
-    const title = screen.layoutFactory.addToBackground(game.add.image(0, -230, keyLookup.title));
+    const title = screen.scene.addToBackground(game.add.image(0, -230, keyLookup.title));
     const gelButtons = addGelButtons();
     addPanels();
     let pips = addPips();
     addSignals();
+    showCurrentPanel();
 
     function addGelButtons() {
-        const gelLayout = screen.layoutFactory.addLayout([
+        const gelLayout = screen.scene.addLayout([
             "howToPlayBack",
             "audioOff",
             "settings",
@@ -47,40 +48,50 @@ export function create({ game }) {
         theme.panels.forEach((item, index) => {
             const panel = game.add.sprite(0, 30, keyLookup[theme.panels[index]]);
             panel.visible = index === 0;
-            screen.layoutFactory.addToBackground(panel);
+            screen.scene.addToBackground(panel);
             panels = panels.concat(panel);
         });
     }
 
     function previousButtonClick() {
-        currentIndex -= 1;
-        if (currentIndex === -1) {
-            currentIndex = numberOfPanels - 1;
+        if (currentIndex === 0) {
+            return;
         }
-        showPanel();
+        currentIndex -= 1;
+        showCurrentPanel();
         updatePips();
     }
 
     function nextButtonClick() {
-        currentIndex += 1;
-        if (currentIndex === numberOfPanels) {
-            currentIndex = 0;
+        if (currentIndex === numberOfPanels - 1) {
+            return;
         }
-        showPanel();
+        currentIndex += 1;
+        showCurrentPanel();
         updatePips();
     }
 
-    function showPanel() {
+    function showCurrentPanel() {
         panels.forEach(panel => {
             panel.visible = false;
         });
         panels[currentIndex].visible = true;
+        gelButtons.buttons["howToPlayNext"].visible = currentIndex < numberOfPanels - 1;
+        gelButtons.buttons["howToPlayPrevious"].visible = currentIndex > 0;
     }
 
     function destroyPanels() {
         panels.forEach(panel => {
             panel.destroy();
         });
+    }
+
+    function goToPanel(index, pipIsOn) {
+        if (!pipIsOn) {
+            currentIndex = index;
+            showCurrentPanel();
+            updatePips();
+        }
     }
 
     function addPips() {
@@ -90,19 +101,24 @@ export function create({ game }) {
         const pipsLength = pipWidth * numberOfPanels + spacing * (numberOfPanels - 1);
         let currentPosition = -Math.abs(pipsLength / 2);
 
-        panels.forEach(panel => {
+        panels.forEach((panel, index) => {
             const pipImage = panel.visible ? keyLookup.pipOn : keyLookup.pipOff;
-            const pip = game.add.sprite(currentPosition, 240, pipImage);
+            const pip = game.add.button(currentPosition, 240, pipImage, () => goToPanel(index, panel.visible), this);
+            overlayLayout.moveButtonToTop(pip);
             pipsGroup.add(pip);
             currentPosition += pipWidth + spacing;
         });
-        screen.layoutFactory.addToBackground(pipsGroup);
+        screen.scene.addToBackground(pipsGroup);
         return pipsGroup;
     }
 
-    function updatePips() {
+    function destroyPips() {
         pips.callAll("kill");
         pips.callAll("destroy");
+    }
+
+    function updatePips() {
+        destroyPips();
         pips = addPips();
     }
 
@@ -117,8 +133,7 @@ export function create({ game }) {
         gelButtons.destroy();
         overlayLayout.restoreDisabledButtons();
         destroyPanels();
-        pips.callAll("kill");
-        pips.callAll("destroy");
+        destroyPips();
         title.destroy();
         background.destroy();
         screen.context.popupScreens = fp.pull("how-to-play", screen.context.popupScreens);

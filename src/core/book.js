@@ -1,4 +1,4 @@
-import * as _ from "lodash/fp";
+import fp from "../../lib/lodash/fp/fp.js";
 
 const GoToPage = (pageNumber, book) => {
     if (pageNumber > book.numberOfPages) {
@@ -17,31 +17,57 @@ const GoToPage = (pageNumber, book) => {
 };
 
 const NextPage = book => {
+    if (book.currentPageNumber === book.numberOfPages) {
+        return book;
+    }
+
     book.hidePage(book.currentPageNumber);
     return GoToPage(book.currentPageNumber + 1, book);
 };
 
 const PreviousPage = book => {
+    if (book.currentPageNumber === 1) {
+        return book;
+    }
+
     book.hidePage(book.currentPageNumber);
     return GoToPage(book.currentPageNumber - 1, book);
 };
 
 const DrawPages = (panels, drawPage) => {
-    return _.map(drawPage)(panels);
+    return fp.map(drawPage)(panels);
 };
 
 const Draw = (theme, drawPage, drawButtons) => {
     var pages = DrawPages(theme.panels, drawPage);
-    var buttonLayout = drawButtons(["Previous", "Next"]);
+    var buttonLayout = drawButtons(["howToPlayBack", "audioOff", "settings", "howToPlayPrevious", "howToPlayNext"]);
+
+    const pageIsInBook = pageNumber => {
+        return pageNumber <= pages.length && pageNumber >= 1;
+    };
 
     let book = {
+        destroy: () => {
+            fp.map(page => {
+                page.destroy();
+            })(pages);
+            buttonLayout.destroy();
+        },
         page: pageNumber => pages[pageNumber - 1],
         numberOfPages: pages.length,
         firstPage: pages[0],
-        previousPageOption: buttonLayout.buttons["Previous"],
-        nextPageOption: buttonLayout.buttons["Next"],
-        showPage: pageNumber => (pages[pageNumber - 1].visible = true),
-        hidePage: pageNumber => (pages[pageNumber - 1].visible = false),
+        previousPageOption: buttonLayout.buttons["howToPlayPrevious"],
+        nextPageOption: buttonLayout.buttons["howToPlayNext"],
+        showPage: pageNumber => {
+            if (pageIsInBook(pageNumber)) {
+                pages[pageNumber - 1].visible = true;
+            }
+        },
+        hidePage: pageNumber => {
+            if (pageIsInBook(pageNumber)) {
+                pages[pageNumber - 1].visible = false;
+            }
+        },
     };
 
     return GoToPage(1, book);

@@ -1,18 +1,20 @@
-import { expect } from "chai";
+import { expect, assert } from "chai";
 import * as sinon from "sinon";
 
 import { Loadscreen } from "../../src/components/loadscreen";
+import * as LoadBar from "../../src/components/loadbar";
 import * as AssetLoader from "../../src/core/asset-loader";
 import { GameAssets } from "../../src/core/game-assets.js";
 
 describe("Load Screen", () => {
     let loadScreen;
     let musicLoopStub;
+    let addImageStub;
     let mockGame;
-    let mockNext;
     let addLookupsSpy;
     let assetLoaderSpy;
     let assetLoaderCallbackSpy;
+    let navigationNext;
 
     const sandbox = sinon.sandbox.create();
 
@@ -24,20 +26,22 @@ describe("Load Screen", () => {
         musicLoopStub.withArgs("shared/background-music").returns({
             loopFull: sandbox.spy(),
         });
+        addImageStub = sandbox.stub();
         musicLoopStub.returns({});
+        navigationNext = sandbox.stub();
 
         mockGame = {
             add: {
+                image: addImageStub,
                 audio: musicLoopStub,
             },
             state: {
                 current: "currentState",
             },
         };
-        mockNext = sandbox.spy();
 
         loadScreen = new Loadscreen();
-        loadScreen.layoutFactory = {
+        loadScreen.scene = {
             addLookups: addLookupsSpy,
             keyLookups: {
                 currentState: {
@@ -48,8 +52,10 @@ describe("Load Screen", () => {
                 title: "titleImage",
             },
         };
+        loadScreen.navigation = {
+            next: navigationNext,
+        };
         loadScreen.game = mockGame;
-        loadScreen.next = mockNext;
     });
 
     afterEach(() => {
@@ -96,7 +102,78 @@ describe("Load Screen", () => {
             loadScreen.preload();
 
             assetLoaderCallbackSpy.args[0][0]();
-            expect(mockNext.called).to.equal(true);
+            expect(navigationNext.called).to.equal(true);
+        });
+    });
+
+    describe("create method", () => {
+        let createProgressBarStub;
+        let setFillPercentStub;
+        let mockProgressBar;
+        let mockBrandLogo;
+
+        beforeEach(() => {
+            setFillPercentStub = sandbox.stub();
+            mockProgressBar = {
+                position: {
+                    set: () => {},
+                },
+                setFillPercent: setFillPercentStub,
+            };
+            createProgressBarStub = sandbox.stub(LoadBar, "createLoadBar").returns(mockProgressBar);
+            loadScreen.scene.getSize = sandbox.stub().returns({
+                width: 100,
+                height: 100,
+                scale: 1,
+                stageHeightPx: 60,
+            });
+            loadScreen.scene.addToBackground = sandbox.stub().returns({
+                anchor: {
+                    set: () => {},
+                },
+                position: {
+                    set: () => {},
+                },
+            });
+
+            mockBrandLogo = {};
+            addImageStub.withArgs(0, 0, "brandLogo").returns(mockBrandLogo);
+
+            loadScreen.create();
+        });
+
+        it("creates one loading bar", () => {
+            sinon.assert.calledOnce(createProgressBarStub);
+            sinon.assert.calledWith(createProgressBarStub, mockGame, "loadbarBackground", "loadbarFill");
+        });
+
+        it("adds the loading bar to the layout", () => {
+            sinon.assert.calledWith(loadScreen.scene.addToBackground, mockProgressBar);
+        });
+
+        it("adds a brand logo to the layout", () => {
+            sinon.assert.calledWith(addImageStub, 0, 0, "brandLogo");
+            sinon.assert.calledWith(loadScreen.scene.addToBackground, mockBrandLogo);
+        });
+    });
+
+    describe("updateLoadProgress", () => {
+        beforeEach(() => {
+            loadScreen.context = { qaMode: { active: false } };
+            loadScreen.loadingBar = { fillPercent: 0 };
+        });
+
+        it("updates the loading bar fill percentage when called", () => {
+            const progress = 42;
+
+            loadScreen.updateLoadProgress(progress);
+
+            assert.equal(loadScreen.loadingBar.fillPercent, progress);
+        });
+
+        it("does not throw an error if there is no loading bar", () => {
+            delete loadScreen.loadingBar;
+            loadScreen.updateLoadProgress(75);
         });
     });
 
