@@ -1,9 +1,5 @@
 const Create = (x, y, asset) => {
-    return Object.freeze({
-        x: x,
-        y: y,
-        asset: asset,
-    });
+    return Object.freeze({ x, y, asset });
 };
 
 const Draw = (game, addToBackground) => {
