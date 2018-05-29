@@ -7,7 +7,6 @@ export class FpsTest extends Screen {
     }
 
     preload() {
-        this.keyLookup = this.scene.keyLookups["fps"];
         this.game.time.advancedTiming = true;
     }
 
@@ -17,7 +16,7 @@ export class FpsTest extends Screen {
         this.sprites = [];
 
         for (let xPos = -200; xPos <= 200; xPos += 100) {
-            const sprite = this.game.add.sprite(xPos, 0, this.keyLookup.basicSprite);
+            const sprite = this.game.add.sprite(xPos, 0, "fps.basicSprite");
             this.scene.addToBackground(sprite);
             this.game.physics.arcade.enable(sprite);
             this.sprites.push(sprite);

@@ -8,7 +8,6 @@ export class TiledTest extends Screen {
     }
 
     preload() {
-        this.keyLookup = this.scene.keyLookups["tiled"];
         const debugKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
         debugKey.onUp.add(() => {
             debug.toggle(this.game);
@@ -41,7 +40,7 @@ export class TiledTest extends Screen {
         this.game.cache.addTilemap("testTileMap", null, data, Phaser.Tilemap.CSV);
 
         const map = this.game.add.tilemap("testTileMap", 32, 32);
-        map.addTilesetImage(this.keyLookup.grassTile, this.keyLookup.grassTile, 32, 32);
+        map.addTilesetImage("tiled.grassTile", "tiled.grassTile", 32, 32);
         map.setCollision(0);
         this.layer = map.createLayer(0);
         this.layer.resizeWorld();
@@ -50,7 +49,7 @@ export class TiledTest extends Screen {
         // TODO: Center the tilemap - this functionality may need fixing in GENIE Core
         this.scene.addToBackground(this.layer);
 
-        this.sprite = this.game.add.sprite(0, -300, this.keyLookup.basicSprite);
+        this.sprite = this.game.add.sprite(0, -300, "tiled.basicSprite");
         this.game.physics.arcade.enable(this.sprite);
         debug.add(this.sprite, "rgba(255,0,0,0.4)", true);
         this.scene.addToBackground(this.sprite);

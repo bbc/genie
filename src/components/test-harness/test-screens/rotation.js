@@ -8,7 +8,6 @@ export class RotationTest extends Screen {
     }
 
     preload() {
-        this.keyLookup = this.scene.keyLookups["rotation"];
         const debugKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
         debugKey.onUp.add(() => {
             debug.toggle(this.game);
@@ -19,7 +18,7 @@ export class RotationTest extends Screen {
         this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        this.sprite = this.game.add.sprite(200, -100, this.keyLookup.basicSprite);
+        this.sprite = this.game.add.sprite(200, -100, "rotation.basicSprite");
         this.game.physics.arcade.enable(this.sprite);
         debug.add(this.sprite, "rgba(255,0,0,0.4)", true);
 
