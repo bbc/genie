@@ -53,6 +53,7 @@ const Draw = (theme, drawPage, drawButtons) => {
             })(pages);
             buttonLayout.destroy();
         },
+        pages: pages,
         page: pageNumber => pages[pageNumber - 1],
         numberOfPages: pages.length,
         firstPage: pages[0],

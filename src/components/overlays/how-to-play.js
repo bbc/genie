@@ -7,6 +7,10 @@ import fp from "../../../lib/lodash/fp/fp.js";
 
 import * as signal from "../../core/signal-bus.js";
 import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
+import * as Book from "../../core/book.js";
+import * as Page from "../../core/page.js";
+import * as Scenery from "../../core/scenery.js";
+import * as Button from "../../core/button.js";
 
 /**
  * @param {Phaser.Game} game - The Phaser Game instance
@@ -26,71 +30,28 @@ export function create({ game }) {
     const overlayLayout = OverlayLayout.create(screen);
     const background = overlayLayout.addBackground(game.add.image(0, 0, keyLookup.background));
     const title = screen.scene.addToBackground(game.add.image(0, -230, keyLookup.title));
-    const gelButtons = addGelButtons();
-    addPanels();
+    let book = Book.Draw(
+        theme,
+        Page.Draw(keyLookup, Scenery.Draw(game, screen.scene.addToBackground)),
+        Button.Draw(screen.scene, overlayLayout),
+    );
     let pips = addPips();
     addSignals();
-    showCurrentPanel();
-
-    function addGelButtons() {
-        const gelLayout = screen.scene.addLayout([
-            "howToPlayBack",
-            "audioOff",
-            "settings",
-            "howToPlayPrevious",
-            "howToPlayNext",
-        ]);
-        overlayLayout.moveGelButtonsToTop(gelLayout);
-        return gelLayout;
-    }
-
-    function addPanels() {
-        theme.panels.forEach((item, index) => {
-            const panel = game.add.sprite(0, 30, keyLookup[theme.panels[index]]);
-            panel.visible = index === 0;
-            screen.scene.addToBackground(panel);
-            panels = panels.concat(panel);
-        });
-    }
 
     function previousButtonClick() {
-        if (currentIndex === 0) {
-            return;
-        }
-        currentIndex -= 1;
-        showCurrentPanel();
-        updatePips();
+        book = Book.PreviousPage(book);
+        updatePips(book);
     }
 
     function nextButtonClick() {
-        if (currentIndex === numberOfPanels - 1) {
-            return;
-        }
-        currentIndex += 1;
-        showCurrentPanel();
-        updatePips();
-    }
-
-    function showCurrentPanel() {
-        panels.forEach(panel => {
-            panel.visible = false;
-        });
-        panels[currentIndex].visible = true;
-        gelButtons.buttons["howToPlayNext"].visible = currentIndex < numberOfPanels - 1;
-        gelButtons.buttons["howToPlayPrevious"].visible = currentIndex > 0;
-    }
-
-    function destroyPanels() {
-        panels.forEach(panel => {
-            panel.destroy();
-        });
+        book = Book.NextPage(book);
+        updatePips(book);
     }
 
     function goToPanel(index, pipIsOn) {
         if (!pipIsOn) {
-            currentIndex = index;
-            showCurrentPanel();
-            updatePips();
+            book = Book.GoToPage(index, book);
+            updatePips(book);
         }
     }
 
@@ -101,9 +62,9 @@ export function create({ game }) {
         const pipsLength = pipWidth * numberOfPanels + spacing * (numberOfPanels - 1);
         let currentPosition = -Math.abs(pipsLength / 2);
 
-        panels.forEach((panel, index) => {
-            const pipImage = panel.visible ? keyLookup.pipOn : keyLookup.pipOff;
-            const pip = game.add.button(currentPosition, 240, pipImage, () => goToPanel(index, panel.visible), this);
+        book.pages.forEach((page, index) => {
+            const pipImage = page.visible ? keyLookup.pipOn : keyLookup.pipOff;
+            const pip = game.add.button(currentPosition, 240, pipImage, () => goToPanel(index, page.visible), this);
             overlayLayout.moveButtonToTop(pip);
             pipsGroup.add(pip);
             currentPosition += pipWidth + spacing;
@@ -117,9 +78,9 @@ export function create({ game }) {
         pips.callAll("destroy");
     }
 
-    function updatePips() {
+    function updatePips(book) {
         destroyPips();
-        pips = addPips();
+        pips = addPips(book);
     }
 
     function addSignals() {
@@ -130,9 +91,8 @@ export function create({ game }) {
 
     function destroy() {
         signal.bus.removeChannel(channel);
-        gelButtons.destroy();
         overlayLayout.restoreDisabledButtons();
-        destroyPanels();
+        book.destroy();
         destroyPips();
         title.destroy();
         background.destroy();

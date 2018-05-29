@@ -180,24 +180,6 @@ describe("How To Play Overlay", () => {
             assert.isFalse(panel3Sprite.visible);
         });
 
-        it("shows the second panel when the second pip is clicked", () => {
-            HowToPlay.create({ game: mockGame });
-            const pip2Callback = mockGame.add.button.getCall(1).args[3];
-            pip2Callback();
-            assert.isFalse(panel1Sprite.visible);
-            assert.isTrue(panel2Sprite.visible);
-            assert.isFalse(panel3Sprite.visible);
-        });
-
-        it("shows the third panel when the third pip is clicked", () => {
-            HowToPlay.create({ game: mockGame });
-            const pip3Callback = mockGame.add.button.getCall(2).args[3];
-            pip3Callback();
-            assert.isFalse(panel1Sprite.visible);
-            assert.isFalse(panel2Sprite.visible);
-            assert.isTrue(panel3Sprite.visible);
-        });
-
         it("does not redraw the pips when the selected pip is clicked", () => {
             HowToPlay.create({ game: mockGame });
             const pip1Callback = mockGame.add.button.getCall(0).args[3];
@@ -206,28 +188,6 @@ describe("How To Play Overlay", () => {
             assert.isTrue(mockGame.add.button.withArgs(-39, 240, "pipOnImage").calledOnce);
             assert.isTrue(mockGame.add.button.withArgs(-8, 240, "pipOffImage").calledOnce);
             assert.isTrue(mockGame.add.button.withArgs(23, 240, "pipOffImage").calledOnce);
-        });
-
-        it("highlights the second pip when the second pip is clicked", () => {
-            HowToPlay.create({ game: mockGame });
-            const pip2Callback = mockGame.add.button.getCall(1).args[3];
-            pip2Callback();
-            sinon.assert.calledWith(mockPipsGroup.callAll, "kill");
-            sinon.assert.calledWith(mockPipsGroup.callAll, "destroy");
-            sinon.assert.calledOnce(mockGame.add.button.withArgs(-39, 240, "pipOffImage"));
-            sinon.assert.calledOnce(mockGame.add.button.withArgs(-8, 240, "pipOnImage"));
-            sinon.assert.calledTwice(mockGame.add.button.withArgs(23, 240, "pipOffImage"));
-        });
-
-        it("highlights the third pip when the third pip is clicked", () => {
-            HowToPlay.create({ game: mockGame });
-            const pip3Callback = mockGame.add.button.getCall(2).args[3];
-            pip3Callback();
-            sinon.assert.calledWith(mockPipsGroup.callAll, "kill");
-            sinon.assert.calledWith(mockPipsGroup.callAll, "destroy");
-            assert.isTrue(mockGame.add.button.withArgs(-39, 240, "pipOffImage").calledOnce);
-            assert.isTrue(mockGame.add.button.withArgs(-8, 240, "pipOffImage").calledTwice);
-            assert.isTrue(mockGame.add.button.withArgs(23, 240, "pipOnImage").calledOnce);
         });
     });
 
