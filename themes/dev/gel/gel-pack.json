@@ -310,7 +310,7 @@
             "frameHeight": 42,
             "frameMax": 2,
             "margin": 0,
-            "spacing": 0
+            "spacing": 4
         },
         {
             "type": "spritesheet",
