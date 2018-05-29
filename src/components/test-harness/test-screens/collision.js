@@ -2,7 +2,7 @@ import { Screen } from "../../../core/screen.js";
 import * as debug from "../../../core/debug.js";
 import * as signal from "../../../core/signal-bus.js";
 
-let hasCollided = false;
+let hasCollided;
 
 export class CollisionTest extends Screen {
     constructor() {
@@ -18,6 +18,8 @@ export class CollisionTest extends Screen {
     }
 
     create() {
+        hasCollided = false;
+
         this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 

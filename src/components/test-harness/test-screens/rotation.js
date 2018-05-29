@@ -18,7 +18,6 @@ export class RotationTest extends Screen {
     create() {
         this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.game.physics.arcade.OVERLAP_BIAS = 10;
 
         this.sprite = this.game.add.sprite(200, -100, this.keyLookup.basicSprite);
         this.game.physics.arcade.enable(this.sprite);
