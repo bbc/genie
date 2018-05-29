@@ -50,13 +50,11 @@ describe("Scene", () => {
     });
 
     it("returns the correct methods", () => {
-        expect(scene.keyLookups).to.eql({});
         assert.exists(scene.addToBackground);
         assert.exists(scene.addToForeground);
         assert.exists(scene.addLayout);
         assert.exists(scene.getLayouts);
         assert.exists(scene.removeAll);
-        assert.exists(scene.addLookups);
         assert.exists(scene.getSize);
     });
 
@@ -167,14 +165,6 @@ describe("Scene", () => {
             scene.removeAll();
 
             sinon.assert.calledTwice(spyDestroy);
-        });
-    });
-
-    describe("addLookups method", () => {
-        it("adds more keylookups", () => {
-            const moreLookups = { more: "lookups" };
-            scene.addLookups(moreLookups);
-            expect(scene.keyLookups).to.eql(moreLookups);
         });
     });
 

@@ -9,8 +9,8 @@
  * and sets the phaser debug sprite to be at the top of the display list
  *
  * @example
- * this.scene.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
- * this.scene.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
+ * this.scene.addToBackground(this.game.add.image(0, 0, "sceneName.background"));
+ * this.scene.addToBackground(this.game.add.image(0, -150, "sceneName.title"));
  * this.scene.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
  *
  * @module core/scene
@@ -32,7 +32,7 @@ const addToGroup = fp.curry((group, object) => group.addChild(object));
  * Create a new Scene
  *
  * @param {Phaser.Game} game
- * @returns {{keyLookups: {}, addToBackground(), addToForeground(), addLayout(), removeAll(), addLookups(), getSize()}} - {{@link module:layout/factory.addLayout addLayout}}
+ * @returns {{addToBackground(), addToForeground(), addLayout(), removeAll(), getSize()}} - {{@link module:layout/factory.addLayout addLayout}}
  */
 export function create(game) {
     let _layouts = [];
@@ -40,9 +40,7 @@ export function create(game) {
     const unscaled = game.add.group(undefined, "unscaled", true);
     const background = game.add.group(undefined, "background");
     const foreground = game.add.group(undefined, "foreground");
-
     const debug = game.add.group(undefined, "debug", true);
-    const keyLookups = {};
 
     const resize = (width, height, scale) => {
         root.scale.set(scale, scale);
@@ -90,19 +88,13 @@ export function create(game) {
         _layouts = [];
     };
 
-    const addLookups = moreLookups => {
-        Object.assign(keyLookups, moreLookups);
-    };
-
     return {
-        keyLookups,
         addToBackground,
         addToForeground,
         addToUnscaled,
         addLayout,
         getLayouts,
         removeAll,
-        addLookups,
         getSize: scaler.getSize,
     };
 }
