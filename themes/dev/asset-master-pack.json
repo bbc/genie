@@ -138,5 +138,13 @@
             "url": "game/grass-tile.png",
             "overwrite": false
         }
+    ],
+    "spriteGroup": [
+        {
+            "type": "image",
+            "key": "basicSprite",
+            "url": "game/basic-sprite.png",
+            "overwrite": false
+        }
     ]
 }
