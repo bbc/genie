@@ -25,7 +25,6 @@ describe("Load Screen", () => {
         musicLoopStub = sandbox.stub();
         musicLoopStub.withArgs("shared/background-music").returns({
             loopFull: sandbox.spy(),
-            onMute: { add: () => {} },
         });
         addImageStub = sandbox.stub();
         musicLoopStub.returns({});
