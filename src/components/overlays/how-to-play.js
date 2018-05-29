@@ -34,7 +34,8 @@ export function create({ game }) {
         Page.Draw("howToPlay", Scenery.Draw(game, screen.scene.addToBackground)),
         Button.Draw(screen.scene, overlayLayout),
     );
-    let pips = addPips();
+    book = Book.GoToPage(1, book);
+    let pips = addPips(book);
     addSignals();
 
     function previousButtonClick() {
@@ -47,14 +48,14 @@ export function create({ game }) {
         updatePips(book);
     }
 
-    function goToPanel(index, pipIsOn) {
+    function goToPanel(index, pipIsOn, book) {
         if (!pipIsOn) {
-            book = Book.GoToPage(index, book);
+            book = Book.GoToPage(index + 1, book);
             updatePips(book);
         }
     }
 
-    function addPips() {
+    function addPips(book) {
         let pipsGroup = game.add.group();
         const spacing = 15;
         const pipWidth = 16;
@@ -63,7 +64,13 @@ export function create({ game }) {
 
         book.pages.forEach((page, index) => {
             const pipImage = page.visible ? "howToPlay.pipOn" : "howToPlay.pipOff";
-            const pip = game.add.button(currentPosition, 240, pipImage, () => goToPanel(index, page.visible), this);
+            const pip = game.add.button(
+                currentPosition,
+                240,
+                pipImage,
+                () => goToPanel(index, page.visible, book),
+                this,
+            );
             overlayLayout.moveButtonToTop(pip);
             pipsGroup.add(pip);
             currentPosition += pipWidth + spacing;
