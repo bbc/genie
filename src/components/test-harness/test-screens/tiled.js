@@ -17,7 +17,7 @@ export class TiledTest extends Screen {
 
     create() {
         this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
-        this.game.physics.startSystem(Phaser.Physics.ARCADE); // TODO: Enable physics and drop and item onto the platform
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         const data = `
             -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1
@@ -42,13 +42,22 @@ export class TiledTest extends Screen {
 
         const map = this.game.add.tilemap("testTileMap", 32, 32);
         map.addTilesetImage(this.keyLookup.grassTile, this.keyLookup.grassTile, 32, 32);
-        const layer = map.createLayer(0);
-        layer.resizeWorld();
-
-        this.scene.addToBackground(layer);
-
+        map.setCollision(0);
+        this.layer = map.createLayer(0);
+        this.layer.resizeWorld();
+        this.layer.debug = true;
+        this.game.debug.body(this.layer, "rgba(255, 0, 0, 0.4)");
         // TODO: Center the tilemap - this functionality may need fixing in GENIE Core
-        // TODO: Add debug view support for the tilemap
+        this.scene.addToBackground(this.layer);
+
+        this.sprite = this.game.add.sprite(0, -300, this.keyLookup.basicSprite);
+        this.game.physics.arcade.enable(this.sprite);
+        debug.add(this.sprite, "rgba(255,0,0,0.4)", true);
+        this.scene.addToBackground(this.sprite);
+
+        this.sprite.body.bounce.y = 0.2;
+        this.sprite.body.linearDamping = 1;
+        this.sprite.body.gravity.y = 100;
 
         signal.bus.subscribe({
             channel: "gel-buttons",
@@ -57,7 +66,9 @@ export class TiledTest extends Screen {
         });
     }
 
-    update() {}
+    update() {
+        this.game.physics.arcade.collide(this.sprite, this.layer);
+    }
 
     render() {
         debug.render(this.game);
