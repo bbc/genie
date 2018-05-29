@@ -76,13 +76,9 @@ class Startup extends Phaser.State {
     configureAudioSetting() {
         this.game.sound.mute = settings.getAllSettings().muted;
         this.game.onPause.add(() => {
-            const muted = settings.getAllSettings().muted;
-            console.log(muted);
             this.game.sound.mute = settings.getAllSettings().muted;
         });
         this.game.onResume.add(() => {
-            const muted = settings.getAllSettings().muted;
-            console.log(muted);
             this.game.sound.mute = settings.getAllSettings().muted;
         });
         signal.bus.subscribe({
