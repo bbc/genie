@@ -82,14 +82,6 @@ export function create({ game }) {
         });
     }
 
-    function goToPanel(index, pipIsOn) {
-        if (!pipIsOn) {
-            currentIndex = index;
-            showCurrentPanel();
-            updatePips();
-        }
-    }
-
     function addPips() {
         let pipsGroup = game.add.group();
         const spacing = 15;
@@ -99,8 +91,8 @@ export function create({ game }) {
 
         panels.forEach((panel, index) => {
             const pipImage = panel.visible ? "howToPlay.pipOn" : "howToPlay.pipOff";
-            const pip = game.add.button(currentPosition, 240, pipImage, () => goToPanel(index, panel.visible), this);
-            overlayLayout.moveButtonToTop(pip);
+            const pip = game.add.sprite(currentPosition, 240, pipImage);
+            overlayLayout.moveToTop(pip);
             pipsGroup.add(pip);
             currentPosition += pipWidth + spacing;
         });
