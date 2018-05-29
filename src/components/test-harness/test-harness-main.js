@@ -34,7 +34,7 @@ export const phaserTestHarnessConfig = goToScreen => {
             routes: {
                 next: goToCollision,
                 home: goToHome,
-                restart: goToHome,
+                restart: goToRotation,
             },
         },
         collision: {
@@ -42,7 +42,7 @@ export const phaserTestHarnessConfig = goToScreen => {
             routes: {
                 next: goToTweening,
                 home: goToHome,
-                restart: goToHome,
+                restart: goToCollision,
             },
         },
         tweening: {
@@ -50,7 +50,7 @@ export const phaserTestHarnessConfig = goToScreen => {
             routes: {
                 next: goToSpriteGroup,
                 home: goToHome,
-                restart: goToHome,
+                restart: goToTweening,
             },
         },
         spriteGroup: {
@@ -58,7 +58,7 @@ export const phaserTestHarnessConfig = goToScreen => {
             routes: {
                 next: goToFps,
                 home: goToHome,
-                restart: goToHome,
+                restart: goToSpriteGroup,
             },
         },
         fps: {
@@ -66,7 +66,7 @@ export const phaserTestHarnessConfig = goToScreen => {
             routes: {
                 next: goToTiled,
                 home: goToHome,
-                restart: goToHome,
+                restart: goToFps,
             },
         },
         tiled: {
@@ -74,7 +74,7 @@ export const phaserTestHarnessConfig = goToScreen => {
             routes: {
                 next: goToHome,
                 home: goToHome,
-                restart: goToHome,
+                restart: goToTiled,
             },
         },
     };
