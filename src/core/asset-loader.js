@@ -63,7 +63,7 @@ export function loadAssets(game, gamePacks, loadscreenPack, updateCallback) {
             } else {
                 game.load.onLoadComplete.removeAll();
                 game.load.onFileComplete.removeAll();
-                resolve(keyLookups);
+                resolve(keyLookups); //NT TODO: keyLookups are now unused
             }
         }
     });
@@ -135,19 +135,21 @@ function namespaceAssetsByScreen(pack) {
     return [keyLookups, pack];
 }
 
+const makeAssetKey = (screenName, asset) => [screenName, asset.key].join(".");
+
 function namespaceScreen(pack, screenName) {
     const keyLookup = {};
     keyLookup[screenName] = {};
     for (const asset of pack[screenName]) {
         let newKey = "<pending>";
         if (asset.url) {
-            newKey = asset.url;
+            newKey = makeAssetKey(screenName, asset);
         } else if (asset.urls) {
             newKey = asset.urls[0].replace(/\.[^.]*$/, "");
         } else {
             throw Error("expected url or urls field for asset key " + asset.key);
         }
-        keyLookup[screenName][asset.key] = newKey;
+        keyLookup[screenName][asset.key] = makeAssetKey(screenName, asset);
         asset.key = newKey;
     }
     return keyLookup;

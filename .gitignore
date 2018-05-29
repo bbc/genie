@@ -9,4 +9,5 @@ npm-debug.log
 childrens-games-genie.iml
 .vscode
 .awcache/
+*.iml
 

@@ -5,10 +5,6 @@ export class GameTest extends Screen {
         super();
     }
 
-    preload() {
-        this.keyLookup = this.scene.keyLookups[this.game.state.current];
-    }
-
     create() {
         const titleStyle = { font: "65px Arial", fill: "#f6931e", align: "center" };
         const titleText = this.game.add.text(0, -190, "Game goes here", titleStyle);
@@ -16,7 +12,7 @@ export class GameTest extends Screen {
         this.scene.addToBackground(titleText);
         this.scene.addLayout(["home", "pause", "audioOff", "settings"]);
 
-        const buttonKey = this.keyLookup.basicButton;
+        const buttonKey = this.getAsset("basicButton");
         const buttonTextStyle = {
             font: "40px Arial",
             fill: "#fff",
