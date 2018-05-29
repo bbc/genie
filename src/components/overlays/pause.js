@@ -29,7 +29,7 @@ export function create({ game }) {
 
     function pauseGame() {
         game.paused = true;
-        GameAssets.sounds.backgroundMusic.pause = true;
+        GameAssets.sounds.backgroundMusic.pause();
         screen.context.popupScreens.push("pause");
     }
 
@@ -58,7 +58,7 @@ export function create({ game }) {
         gelButtons.destroy();
         overlayLayout.restoreDisabledButtons();
         background.destroy();
-        GameAssets.sounds.backgroundMusic.pause = false;
+        GameAssets.sounds.backgroundMusic.resume();
         screen.context.popupScreens = fp.pull("pause", screen.context.popupScreens);
     }
 
