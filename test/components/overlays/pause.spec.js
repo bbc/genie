@@ -50,7 +50,8 @@ describe("Pause Overlay", () => {
 
         GameAssets.sounds = {
             backgroundMusic: {
-                mute: false,
+                pause: sandbox.spy(),
+                resume: sandbox.spy(),
             },
         };
         Pause.create({ game: mockGame });
@@ -69,8 +70,8 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGame.paused);
         });
 
-        it("mutes background music", () => {
-            assert.isTrue(GameAssets.sounds.backgroundMusic.mute);
+        it("pauses background music", () => {
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.pause);
         });
     });
 
@@ -122,7 +123,7 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            assert.isFalse(GameAssets.sounds.backgroundMusic.mute);
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
@@ -139,7 +140,7 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            assert.isFalse(GameAssets.sounds.backgroundMusic.mute);
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
@@ -159,7 +160,7 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            assert.isFalse(GameAssets.sounds.backgroundMusic.mute);
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
