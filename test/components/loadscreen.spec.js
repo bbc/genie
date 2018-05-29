@@ -39,6 +39,7 @@ describe("Load Screen", () => {
             state: {
                 current: "currentState",
             },
+            sound: { mute: false },
         };
 
         loadScreen = new Loadscreen();
