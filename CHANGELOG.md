@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| UNRELEASED | Removed keylookups in favour of namespaced key in phaser game cache.
+| UNRELEASED | Add getAsset method to screen as a shortcut to getting the namespaced asset.
 | UNRELEASED | Adds Loadscreen with loading bar. Adds How To Play screen.
 | UNRELEASED | Adds How To Play screen (with clickable pips).  |
 | UNRELEASED | Move libs out of source. |

@@ -47,12 +47,6 @@ describe("Home Screen", () => {
         homeScreen.scene = {
             addToBackground: addToBackgroundSpy,
             addLayout: addLayoutSpy,
-            keyLookups: {
-                homeScreen: {
-                    background: "backgroundImage",
-                    title: "titleImage",
-                },
-            },
         };
         homeScreen.navigation = {
             next: navigationNext,
@@ -64,17 +58,6 @@ describe("Home Screen", () => {
 
     afterEach(() => {
         sandbox.restore();
-    });
-
-    describe("preload method", () => {
-        it("adds current game state to the layout key lookups", () => {
-            const expectedKeylookups = homeScreen.scene.keyLookups.homeScreen;
-            assert.deepEqual(homeScreen.keyLookup, expectedKeylookups);
-        });
-
-        it("adds a key lookup to the current screen", () => {
-            assert.exists(homeScreen.keyLookup);
-        });
     });
 
     describe("create method", () => {
@@ -91,7 +74,7 @@ describe("Home Screen", () => {
 
         it("adds a title image", () => {
             const actualImageCall = gameImageStub.getCall(1);
-            const expectedImageCall = [0, -150, "this.title"];
+            const expectedImageCall = [0, -150, "homeScreen.title"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
 
             const addToBackgroundCall = addToBackgroundSpy.getCall(1);

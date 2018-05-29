@@ -18,7 +18,6 @@ import * as Button from "../../core/button.js";
 export function create({ game }) {
     const screen = game.state.states[game.state.current];
     const theme = screen.context.config.theme["how-to-play"];
-    const keyLookup = screen.scene.keyLookups.howToPlay;
     const channel = "how-to-play-gel-buttons";
 
     let panels = [];
@@ -28,11 +27,11 @@ export function create({ game }) {
     screen.context.popupScreens.push("how-to-play");
 
     const overlayLayout = OverlayLayout.create(screen);
-    const background = overlayLayout.addBackground(game.add.image(0, 0, keyLookup.background));
-    const title = screen.scene.addToBackground(game.add.image(0, -230, keyLookup.title));
+    const background = overlayLayout.addBackground(game.add.image(0, 0, "howToPlay.background"));
+    const title = screen.scene.addToBackground(game.add.image(0, -230, "howToPlay.title"));
     let book = Book.Draw(
         theme,
-        Page.Draw(keyLookup, Scenery.Draw(game, screen.scene.addToBackground)),
+        Page.Draw("howToPlay", Scenery.Draw(game, screen.scene.addToBackground)),
         Button.Draw(screen.scene, overlayLayout),
     );
     let pips = addPips();
@@ -63,7 +62,7 @@ export function create({ game }) {
         let currentPosition = -Math.abs(pipsLength / 2);
 
         book.pages.forEach((page, index) => {
-            const pipImage = page.visible ? keyLookup.pipOn : keyLookup.pipOff;
+            const pipImage = page.visible ? "howToPlay.pipOn" : "howToPlay.pipOff";
             const pip = game.add.button(currentPosition, 240, pipImage, () => goToPanel(index, page.visible), this);
             overlayLayout.moveButtonToTop(pip);
             pipsGroup.add(pip);
