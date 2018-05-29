@@ -1,3 +1,6 @@
+import * as Page from "./page.js";
+import * as Scenery from "./scenery.js";
+import * as Button from "./button.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
 const GoToPage = (pageNumber, book) => {
@@ -74,4 +77,12 @@ const Draw = (theme, drawPage, drawButtons) => {
     return GoToPage(1, book);
 };
 
-export { Draw, GoToPage, NextPage, PreviousPage };
+const Start = (screenName, theme, game, screen, overlayLayout) => {
+    return Draw(
+        theme,
+        Page.Draw(screenName, Scenery.Draw(game, screen.scene.addToBackground)),
+        Button.Draw(screen.scene, overlayLayout),
+    );
+};
+
+export { Start, Draw, GoToPage, NextPage, PreviousPage };

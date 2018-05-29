@@ -8,9 +8,6 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import * as signal from "../../core/signal-bus.js";
 import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
 import * as Book from "../../core/book.js";
-import * as Page from "../../core/page.js";
-import * as Scenery from "../../core/scenery.js";
-import * as Button from "../../core/button.js";
 
 /**
  * @param {Phaser.Game} game - The Phaser Game instance
@@ -29,12 +26,9 @@ export function create({ game }) {
     const overlayLayout = OverlayLayout.create(screen);
     const background = overlayLayout.addBackground(game.add.image(0, 0, "howToPlay.background"));
     const title = screen.scene.addToBackground(game.add.image(0, -230, "howToPlay.title"));
-    let book = Book.Draw(
-        theme,
-        Page.Draw("howToPlay", Scenery.Draw(game, screen.scene.addToBackground)),
-        Button.Draw(screen.scene, overlayLayout),
-    );
-    book = Book.GoToPage(1, book);
+
+    let book = Book.Start("howToPlay", theme, game, screen, overlayLayout);
+
     let pips = addPips(book);
     addSignals();
 
