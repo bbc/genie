@@ -14,13 +14,9 @@ export class Home extends Screen {
         super();
     }
 
-    preload() {
-        this.keyLookup = this.scene.keyLookups[this.game.state.current];
-    }
-
     create() {
-        this.scene.addToBackground(this.game.add.image(0, 0, this.keyLookup.background));
-        this.scene.addToBackground(this.game.add.image(0, -150, this.keyLookup.title));
+        this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
+        this.scene.addToBackground(this.game.add.image(0, -150, this.getAsset("title")));
         this.scene.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
         createTestHarnessDisplay(this.game, this.context, this.scene);
 

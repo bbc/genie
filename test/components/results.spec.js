@@ -59,12 +59,6 @@ describe("Results Screen", () => {
         resultsScreen.scene = {
             addToBackground: addToBackgroundSpy,
             addLayout: addLayoutSpy,
-            keyLookups: {
-                resultsScreen: {
-                    background: "backgroundImage",
-                    title: "titleImage",
-                },
-            },
         };
         resultsScreen.game = mockGame;
         resultsScreen.context = mockContext;
@@ -83,23 +77,12 @@ describe("Results Screen", () => {
         sandbox.restore();
     });
 
-    describe("preload method", () => {
-        it("adds current game state to the layout key lookups", () => {
-            const expectedKeylookups = resultsScreen.scene.keyLookups.resultsScreen;
-            assert.deepEqual(resultsScreen.keyLookup, expectedKeylookups);
-        });
-
-        it("adds a key lookup to the current screen", () => {
-            assert.exists(resultsScreen.keyLookup);
-        });
-    });
-
     describe("create method", () => {
         beforeEach(() => resultsScreen.create());
 
         it("adds a background image", () => {
             const actualImageCall = gameImageStub.getCall(0);
-            const expectedImageCall = [0, 0, "backgroundImage"];
+            const expectedImageCall = [0, 0, "results.background"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
 
             const addToBackgroundCall = addToBackgroundSpy.getCall(0);
@@ -108,7 +91,7 @@ describe("Results Screen", () => {
 
         it("adds a title image", () => {
             const actualImageCall = gameImageStub.getCall(1);
-            const expectedImageCall = [0, -150, "titleImage"];
+            const expectedImageCall = [0, -150, "results.title"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
 
             const addToBackgroundCall = addToBackgroundSpy.getCall(1);

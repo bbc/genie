@@ -10,6 +10,7 @@ describe("Pause Overlay", () => {
     let mockScreen;
     let signalSpy;
     let mockGelButtons;
+    let mockLayoutDestroy;
     let mockBackground;
     let mockOverlayLayout;
 
@@ -29,7 +30,7 @@ describe("Pause Overlay", () => {
         mockGelButtons = { destroy: sandbox.spy() };
         mockScreen = {
             scene: {
-                keyLookups: { pause: { pauseBackground: "pauseBackgroundImage" } },
+                addToBackground: sandbox.stub().returns(mockLayoutDestroy),
                 addLayout: sandbox.stub().returns(mockGelButtons),
             },
             context: { popupScreens: [] },
@@ -82,7 +83,7 @@ describe("Pause Overlay", () => {
 
         it("adds a background image", () => {
             const actualImageCall = mockGame.add.image.getCall(0);
-            const expectedImageCall = [0, 0, "pauseBackgroundImage"];
+            const expectedImageCall = [0, 0, "pause.pauseBackground"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
         });
 
