@@ -44,8 +44,8 @@ export class TiledTest extends Screen {
         map.setCollision(0);
         this.layer = map.createLayer(0);
         this.layer.resizeWorld();
-        this.layer.debug = true;
-        this.game.debug.body(this.layer, "rgba(255, 0, 0, 0.4)");
+        //this.layer.debug = true;
+        //this.game.debug.body(this.layer, "rgba(255,0,0,0.4)");
         // TODO: Center the tilemap - this functionality may need fixing in GENIE Core
         this.scene.addToBackground(this.layer);
 
