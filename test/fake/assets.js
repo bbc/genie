@@ -1,3 +1,0 @@
-const Stub = [];
-
-export { Stub };
