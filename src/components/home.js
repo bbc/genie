@@ -14,7 +14,7 @@ export class Home extends Screen {
 
     create() {
         this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
-        this.scene.addToBackground(this.game.add.image(0, -150, this.getAsset("title")));
+        this.scene.addToBackground(this.game.add.image(0, -150, "home.title"));
         this.scene.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
         createTestHarnessDisplay(this.game, this.context, this.scene);
 
