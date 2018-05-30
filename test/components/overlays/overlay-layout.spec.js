@@ -88,16 +88,16 @@ describe("Overlay Layout", () => {
         });
     });
 
-    describe("moveButtonToTop method", () => {
-        it("moves a button to the top layer", () => {
+    describe("moveToTop method", () => {
+        it("moves an item to the top layer", () => {
             const overlayLayout = OverlayLayout.create(mockScreen);
-            const mockButton = {
+            const mockItem = {
                 inputEnabled: false,
                 input: { priorityID: 0 },
             };
-            overlayLayout.moveButtonToTop(mockButton);
-            assert.isTrue(mockButton.inputEnabled);
-            assert.equal(mockButton.input.priorityID, 1001);
+            overlayLayout.moveToTop(mockItem);
+            assert.isTrue(mockItem.inputEnabled);
+            assert.equal(mockItem.input.priorityID, 1001);
         });
     });
 });
