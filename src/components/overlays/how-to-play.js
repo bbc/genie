@@ -89,7 +89,7 @@ export function create({ game }) {
         const pipsLength = pipWidth * numberOfPanels + spacing * (numberOfPanels - 1);
         let currentPosition = -Math.abs(pipsLength / 2);
 
-        panels.forEach((panel, index) => {
+        panels.forEach(panel => {
             const pipImage = panel.visible ? "howToPlay.pipOn" : "howToPlay.pipOff";
             const pip = game.add.sprite(currentPosition, 240, pipImage);
             overlayLayout.moveToTop(pip);
