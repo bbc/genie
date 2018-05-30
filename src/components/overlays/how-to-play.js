@@ -65,7 +65,7 @@ export function create({ game }) {
                 () => goToPanel(index, page.visible, book),
                 this,
             );
-            overlayLayout.moveButtonToTop(pip);
+            overlayLayout.moveToTop(pip);
             pipsGroup.add(pip);
             currentPosition += pipWidth + spacing;
         });
