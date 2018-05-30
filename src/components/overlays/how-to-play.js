@@ -14,7 +14,6 @@ import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
 export function create({ game }) {
     const screen = game.state.states[game.state.current];
     const theme = screen.context.config.theme["how-to-play"];
-    const keyLookup = screen.scene.keyLookups.howToPlay;
     const channel = "how-to-play-gel-buttons";
 
     let panels = [];
@@ -24,8 +23,8 @@ export function create({ game }) {
     screen.context.popupScreens.push("how-to-play");
 
     const overlayLayout = OverlayLayout.create(screen);
-    const background = overlayLayout.addBackground(game.add.image(0, 0, keyLookup.background));
-    const title = screen.scene.addToBackground(game.add.image(0, -230, keyLookup.title));
+    const background = overlayLayout.addBackground(game.add.image(0, 0, "howToPlay.background"));
+    const title = screen.scene.addToBackground(game.add.image(0, -230, "howToPlay.title"));
     const gelButtons = addGelButtons();
     addPanels();
     let pips = addPips();
@@ -45,7 +44,7 @@ export function create({ game }) {
 
     function addPanels() {
         theme.panels.forEach((item, index) => {
-            const panel = game.add.sprite(0, 30, keyLookup[theme.panels[index]]);
+            const panel = game.add.sprite(0, 30, "howToPlay." + theme.panels[index]);
             panel.visible = index === 0;
             screen.scene.addToBackground(panel);
             panels = panels.concat(panel);
@@ -83,14 +82,6 @@ export function create({ game }) {
         });
     }
 
-    function goToPanel(index, pipIsOn) {
-        if (!pipIsOn) {
-            currentIndex = index;
-            showCurrentPanel();
-            updatePips();
-        }
-    }
-
     function addPips() {
         let pipsGroup = game.add.group();
         const spacing = 15;
@@ -99,9 +90,9 @@ export function create({ game }) {
         let currentPosition = -Math.abs(pipsLength / 2);
 
         panels.forEach((panel, index) => {
-            const pipImage = panel.visible ? keyLookup.pipOn : keyLookup.pipOff;
-            const pip = game.add.button(currentPosition, 240, pipImage, () => goToPanel(index, panel.visible), this);
-            overlayLayout.moveButtonToTop(pip);
+            const pipImage = panel.visible ? "howToPlay.pipOn" : "howToPlay.pipOff";
+            const pip = game.add.sprite(currentPosition, 240, pipImage);
+            overlayLayout.moveToTop(pip);
             pipsGroup.add(pip);
             currentPosition += pipWidth + spacing;
         });

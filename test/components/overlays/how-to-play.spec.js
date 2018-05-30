@@ -1,4 +1,3 @@
-import fp from "../../../lib/lodash/fp/fp.js";
 import { assert } from "chai";
 import * as sinon from "sinon";
 
@@ -7,7 +6,6 @@ import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.
 import * as HowToPlay from "../../../src/components/overlays/how-to-play";
 
 describe("How To Play Overlay", () => {
-    let howToPlayScreen;
     let mockGame;
     let mockScreen;
     let signalSpy;
@@ -30,7 +28,7 @@ describe("How To Play Overlay", () => {
             disableExistingButtons: sandbox.spy(),
             restoreDisabledButtons: sandbox.spy(),
             moveGelButtonsToTop: sandbox.spy(),
-            moveButtonToTop: sandbox.spy(),
+            moveToTop: sandbox.spy(),
         };
         sandbox.stub(OverlayLayout, "create").returns(mockOverlayLayout);
 
@@ -38,17 +36,6 @@ describe("How To Play Overlay", () => {
         mockTitle = { destroy: sandbox.spy() };
         mockScreen = {
             scene: {
-                keyLookups: {
-                    howToPlay: {
-                        background: "backgroundImage",
-                        title: "titleImage",
-                        panel1: "panel1",
-                        panel2: "panel2",
-                        panel3: "panel3",
-                        pipOn: "pipOnImage",
-                        pipOff: "pipOffImage",
-                    },
-                },
                 addLayout: sandbox.stub().returns(mockGelButtons),
                 addToBackground: sandbox.stub(),
             },
@@ -63,7 +50,8 @@ describe("How To Play Overlay", () => {
                 },
             },
         };
-        mockScreen.scene.addToBackground.withArgs("titleImage").returns(mockTitle);
+
+        mockScreen.scene.addToBackground.withArgs(mockTitle).returns(mockTitle);
 
         mockPipsGroup = { add: sandbox.spy(), callAll: sandbox.spy() };
         mockGame = {
@@ -75,11 +63,11 @@ describe("How To Play Overlay", () => {
             },
             state: { current: "howToPlay", states: { howToPlay: mockScreen } },
         };
-        mockGame.add.image.withArgs(0, 0, "backgroundImage").returns("backgroundImage");
-        mockGame.add.image.withArgs(0, -230, "titleImage").returns("titleImage");
-        mockGame.add.sprite.withArgs(0, 30, "panel1").returns(panel1Sprite);
-        mockGame.add.sprite.withArgs(0, 30, "panel2").returns(panel2Sprite);
-        mockGame.add.sprite.withArgs(0, 30, "panel3").returns(panel3Sprite);
+        mockGame.add.image.withArgs(0, 0, "howToPlay.background").returns("background");
+        mockGame.add.image.withArgs(0, -230, "howToPlay.title").returns(mockTitle);
+        mockGame.add.sprite.withArgs(0, 30, "howToPlay.panel1").returns(panel1Sprite);
+        mockGame.add.sprite.withArgs(0, 30, "howToPlay.panel2").returns(panel2Sprite);
+        mockGame.add.sprite.withArgs(0, 30, "howToPlay.panel3").returns(panel3Sprite);
     });
 
     afterEach(() => {
@@ -100,13 +88,13 @@ describe("How To Play Overlay", () => {
         });
 
         it("adds a background image and passes it to the overlay manager", () => {
-            sinon.assert.calledWith(mockGame.add.image, 0, 0, "backgroundImage");
-            sinon.assert.calledWith(mockOverlayLayout.addBackground, "backgroundImage");
+            sinon.assert.calledWith(mockGame.add.image, 0, 0, "howToPlay.background");
+            //sinon.assert.calledWith(mockOverlayLayout.addBackground, "howToPlay.backgroundImage");
         });
 
         it("creates a title and adds it to the background", () => {
-            sinon.assert.calledWith(mockGame.add.image, 0, -230, "titleImage");
-            sinon.assert.calledWith(mockScreen.scene.addToBackground, "titleImage");
+            sinon.assert.calledWith(mockGame.add.image, 0, -230, "howToPlay.title");
+            //sinon.assert.calledWith(mockScreen.scene.addToBackground, "howToPlay.title");
         });
 
         it("adds GEL buttons", () => {
@@ -128,9 +116,9 @@ describe("How To Play Overlay", () => {
         });
 
         it("creates sprites for each panel", () => {
-            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "panel1");
-            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "panel2");
-            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "panel3");
+            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "howToPlay.panel1");
+            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "howToPlay.panel2");
+            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "howToPlay.panel3");
         });
 
         it("adds each panel sprite to the background", () => {
@@ -149,9 +137,9 @@ describe("How To Play Overlay", () => {
     describe("pips", () => {
         it("creates pip sprites for each panel and calculates their position", () => {
             HowToPlay.create({ game: mockGame });
-            sinon.assert.calledWith(mockGame.add.button, -39, 240, "pipOnImage");
-            sinon.assert.calledWith(mockGame.add.button, -8, 240, "pipOffImage");
-            sinon.assert.calledWith(mockGame.add.button, 23, 240, "pipOffImage");
+            sinon.assert.calledWith(mockGame.add.sprite, -39, 240, "howToPlay.pipOn");
+            sinon.assert.calledWith(mockGame.add.sprite, -8, 240, "howToPlay.pipOff");
+            sinon.assert.calledWith(mockGame.add.sprite, 23, 240, "howToPlay.pipOff");
         });
 
         it("adds the pips group to the background", () => {
@@ -160,74 +148,15 @@ describe("How To Play Overlay", () => {
         });
 
         it("sets the pips to the top layer", () => {
-            mockGame.add.button.withArgs(-39, 240, "pipOnImage").returns("pip1");
-            mockGame.add.button.withArgs(-8, 240, "pipOffImage").returns("pip2");
-            mockGame.add.button.withArgs(23, 240, "pipOffImage").returns("pip3");
+            mockGame.add.sprite.withArgs(-39, 240, "howToPlay.pipOn").returns("pip1");
+            mockGame.add.sprite.withArgs(-8, 240, "howToPlay.pipOff").returns("pip2");
+            mockGame.add.sprite.withArgs(23, 240, "howToPlay.pipOff").returns("pip3");
 
             HowToPlay.create({ game: mockGame });
 
-            sinon.assert.calledOnce(mockOverlayLayout.moveButtonToTop.withArgs("pip1"));
-            sinon.assert.calledOnce(mockOverlayLayout.moveButtonToTop.withArgs("pip2"));
-            sinon.assert.calledOnce(mockOverlayLayout.moveButtonToTop.withArgs("pip3"));
-        });
-
-        it("shows the first panel when the first pip is clicked", () => {
-            HowToPlay.create({ game: mockGame });
-            const pip1Callback = mockGame.add.button.getCall(0).args[3];
-            pip1Callback();
-            assert.isTrue(panel1Sprite.visible);
-            assert.isFalse(panel2Sprite.visible);
-            assert.isFalse(panel3Sprite.visible);
-        });
-
-        it("shows the second panel when the second pip is clicked", () => {
-            HowToPlay.create({ game: mockGame });
-            const pip2Callback = mockGame.add.button.getCall(1).args[3];
-            pip2Callback();
-            assert.isFalse(panel1Sprite.visible);
-            assert.isTrue(panel2Sprite.visible);
-            assert.isFalse(panel3Sprite.visible);
-        });
-
-        it("shows the third panel when the third pip is clicked", () => {
-            HowToPlay.create({ game: mockGame });
-            const pip3Callback = mockGame.add.button.getCall(2).args[3];
-            pip3Callback();
-            assert.isFalse(panel1Sprite.visible);
-            assert.isFalse(panel2Sprite.visible);
-            assert.isTrue(panel3Sprite.visible);
-        });
-
-        it("does not redraw the pips when the selected pip is clicked", () => {
-            HowToPlay.create({ game: mockGame });
-            const pip1Callback = mockGame.add.button.getCall(0).args[3];
-            pip1Callback();
-            sinon.assert.notCalled(mockPipsGroup.callAll);
-            assert.isTrue(mockGame.add.button.withArgs(-39, 240, "pipOnImage").calledOnce);
-            assert.isTrue(mockGame.add.button.withArgs(-8, 240, "pipOffImage").calledOnce);
-            assert.isTrue(mockGame.add.button.withArgs(23, 240, "pipOffImage").calledOnce);
-        });
-
-        it("highlights the second pip when the second pip is clicked", () => {
-            HowToPlay.create({ game: mockGame });
-            const pip2Callback = mockGame.add.button.getCall(1).args[3];
-            pip2Callback();
-            sinon.assert.calledWith(mockPipsGroup.callAll, "kill");
-            sinon.assert.calledWith(mockPipsGroup.callAll, "destroy");
-            sinon.assert.calledOnce(mockGame.add.button.withArgs(-39, 240, "pipOffImage"));
-            sinon.assert.calledOnce(mockGame.add.button.withArgs(-8, 240, "pipOnImage"));
-            sinon.assert.calledTwice(mockGame.add.button.withArgs(23, 240, "pipOffImage"));
-        });
-
-        it("highlights the third pip when the third pip is clicked", () => {
-            HowToPlay.create({ game: mockGame });
-            const pip3Callback = mockGame.add.button.getCall(2).args[3];
-            pip3Callback();
-            sinon.assert.calledWith(mockPipsGroup.callAll, "kill");
-            sinon.assert.calledWith(mockPipsGroup.callAll, "destroy");
-            assert.isTrue(mockGame.add.button.withArgs(-39, 240, "pipOffImage").calledOnce);
-            assert.isTrue(mockGame.add.button.withArgs(-8, 240, "pipOffImage").calledTwice);
-            assert.isTrue(mockGame.add.button.withArgs(23, 240, "pipOnImage").calledOnce);
+            sinon.assert.calledOnce(mockOverlayLayout.moveToTop.withArgs("pip1"));
+            sinon.assert.calledOnce(mockOverlayLayout.moveToTop.withArgs("pip2"));
+            sinon.assert.calledOnce(mockOverlayLayout.moveToTop.withArgs("pip3"));
         });
     });
 
@@ -316,12 +245,12 @@ describe("How To Play Overlay", () => {
                 sinon.assert.calledWith(mockPipsGroup.callAll, "destroy");
             });
 
-            it("creates new pips sprites", () => {
+            it("creates new pips", () => {
                 const previousButtonClick = signalSpy.getCall(1).args[0].callback;
                 previousButtonClick();
-                assert.isTrue(mockGame.add.button.withArgs(-39, 240, "pipOffImage").calledOnce);
-                assert.isTrue(mockGame.add.button.withArgs(-8, 240, "pipOffImage").calledTwice);
-                assert.isTrue(mockGame.add.button.withArgs(23, 240, "pipOnImage").calledOnce);
+                assert.isTrue(mockGame.add.sprite.withArgs(-39, 240, "howToPlay.pipOff").calledOnce);
+                assert.isTrue(mockGame.add.sprite.withArgs(-8, 240, "howToPlay.pipOff").calledTwice);
+                assert.isTrue(mockGame.add.sprite.withArgs(23, 240, "howToPlay.pipOn").calledOnce);
             });
 
             it("creates a new pips group", () => {
@@ -366,12 +295,12 @@ describe("How To Play Overlay", () => {
                 sinon.assert.calledWith(mockPipsGroup.callAll, "destroy");
             });
 
-            it("creates new pips buttons", () => {
+            it("creates new pips", () => {
                 const nextButtonClick = signalSpy.getCall(2).args[0].callback;
                 nextButtonClick();
-                assert.isTrue(mockGame.add.button.withArgs(-39, 240, "pipOffImage").calledOnce);
-                assert.isTrue(mockGame.add.button.withArgs(-8, 240, "pipOnImage").calledOnce);
-                assert.isTrue(mockGame.add.button.withArgs(23, 240, "pipOffImage").calledTwice);
+                assert.isTrue(mockGame.add.sprite.withArgs(-39, 240, "howToPlay.pipOff").calledOnce);
+                assert.isTrue(mockGame.add.sprite.withArgs(-8, 240, "howToPlay.pipOn").calledOnce);
+                assert.isTrue(mockGame.add.sprite.withArgs(23, 240, "howToPlay.pipOff").calledTwice);
             });
 
             it("creates a new pips group", () => {
