@@ -1,12 +1,9 @@
 import * as Theme from "../../fake/theme.js";
 import * as Game from "../../fake/game.js";
-import * as LayoutFactory from "../../fake/layout-factory.js";
-import * as Assets from "../../fake/assets";
 import * as OverlayLayout from "../../fake/overlay-layout.js";
 import * as Button from "../../fake/button.js";
+import * as Scene from "../../fake/scene.js";
 import * as Scenery from "../../../src/core/scenery.js";
-import * as Page from "../../../src/core/page.js";
-import * as Buttons from "../../../src/core/button.js";
 import * as Book from "../../../src/core/book.js";
 import * as Chai from "chai";
 Chai.should();
@@ -18,13 +15,12 @@ describe("Showing pages of a book", () => {
         let onePanel = [{}];
 
         beforeEach(() => {
-            book = Book.Draw(
+            book = Book.Start(
+                "myScreen",
                 Theme.WithPanels(onePanel),
-                Page.Draw(Assets.Stub, Scenery.Draw(Game.Stub, LayoutFactory.Stub.addToBackground)),
-                Buttons.Draw(
-                    LayoutFactory.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
-                    OverlayLayout.Stub,
-                ),
+                Game.Stub,
+                Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
+                OverlayLayout.Stub,
             );
         });
 
@@ -46,13 +42,12 @@ describe("Showing pages of a book", () => {
         let twoPanels = [{}, {}];
 
         beforeEach(() => {
-            book = Book.Draw(
+            book = Book.Start(
+                "myScreen",
                 Theme.WithPanels(twoPanels),
-                Page.Draw(Assets.Stub, Scenery.Draw(Game.Stub, LayoutFactory.Stub.addToBackground)),
-                Buttons.Draw(
-                    LayoutFactory.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
-                    OverlayLayout.Stub,
-                ),
+                Game.Stub,
+                Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
+                OverlayLayout.Stub,
             );
         });
 

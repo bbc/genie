@@ -1,6 +1,6 @@
-const Draw = (layoutFactory, overlayLayout) => {
+const Draw = (scene, overlayLayout) => {
     return buttonKeys => {
-        const gelButtonLayout = layoutFactory.addLayout(buttonKeys);
+        const gelButtonLayout = scene.addLayout(buttonKeys);
         overlayLayout.moveGelButtonsToTop(gelButtonLayout);
         return gelButtonLayout;
     };

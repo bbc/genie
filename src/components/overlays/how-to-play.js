@@ -27,7 +27,7 @@ export function create({ game }) {
     const background = overlayLayout.addBackground(game.add.image(0, 0, "howToPlay.background"));
     const title = screen.scene.addToBackground(game.add.image(0, -230, "howToPlay.title"));
 
-    let book = Book.Start("howToPlay", theme, game, screen, overlayLayout);
+    let book = Book.Start("howToPlay", theme, game, screen.scene, overlayLayout);
 
     let pips = addPips(book);
     addSignals();
