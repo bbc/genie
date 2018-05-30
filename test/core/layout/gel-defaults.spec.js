@@ -54,7 +54,7 @@ describe("Layout - Gel Defaults", () => {
         it("shows the settings", () => {
             settings.show = sandbox.spy();
             gel.config.settings.action({ game: mockGame });
-            sandbox.assert.calledOnce(settings.show);
+            sandbox.assert.calledOnce(settings.show.withArgs({ game: mockGame }));
         });
     });
 
@@ -62,7 +62,7 @@ describe("Layout - Gel Defaults", () => {
         it("creates a pause screen", () => {
             sandbox.stub(pause, "create");
             gel.config.pause.action({ game: mockGame });
-            sandbox.assert.calledOnce(pause.create);
+            sandbox.assert.calledOnce(pause.create.withArgs({ game: mockGame }));
         });
     });
 
@@ -78,7 +78,7 @@ describe("Layout - Gel Defaults", () => {
         it("creates a how to play screen", () => {
             sandbox.stub(howToPlay, "create");
             gel.config.howToPlay.action({ game: mockGame });
-            sandbox.assert.calledOnce(howToPlay.create);
+            sandbox.assert.calledOnce(howToPlay.create.withArgs({ game: mockGame }));
         });
     });
 });
