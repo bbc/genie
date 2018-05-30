@@ -32,10 +32,6 @@ export class TweeningTest extends Screen {
         });
     }
 
-    update() {
-        // do stuff
-    }
-
     render() {
         debug.render(this.game);
     }

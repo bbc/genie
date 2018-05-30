@@ -40,12 +40,12 @@ export class CollisionTest extends Screen {
     }
 
     update() {
-        if (!hasCollided) {
-            this.spriteOne.x += 1;
-            this.spriteTwo.x -= 1;
-        } else {
+        if (hasCollided) {
             this.spriteOne.x -= 1;
             this.spriteTwo.x += 1;
+        } else {
+            this.spriteOne.x += 1;
+            this.spriteTwo.x -= 1;
         }
 
         this.game.physics.arcade.collide(this.spriteOne, this.spriteTwo, () => {
