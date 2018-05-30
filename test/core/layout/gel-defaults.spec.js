@@ -1,7 +1,9 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 
+import * as settings from "../../../src/core/settings.js";
 import * as pause from "../../../src/components/overlays/pause.js";
+import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
 import * as gel from "../../../src/core/layout/gel-defaults";
 
 describe("Layout - Gel Defaults", () => {
@@ -9,7 +11,6 @@ describe("Layout - Gel Defaults", () => {
     let mockGame;
 
     beforeEach(() => {
-        sandbox.stub(pause, "create");
         mockGame = {
             state: {
                 current: "current-screen",
@@ -49,10 +50,35 @@ describe("Layout - Gel Defaults", () => {
         });
     });
 
+    describe("Settings Button Callback", () => {
+        it("shows the settings", () => {
+            settings.show = sandbox.spy();
+            gel.config.settings.action({ game: mockGame });
+            sandbox.assert.calledOnce(settings.show);
+        });
+    });
+
+    describe("Pause Button Callback", () => {
+        it("creates a pause screen", () => {
+            sandbox.stub(pause, "create");
+            gel.config.pause.action({ game: mockGame });
+            sandbox.assert.calledOnce(pause.create);
+        });
+    });
+
     describe("PauseNoReplay Button Callback", () => {
         it("creates a pause screen", () => {
+            sandbox.stub(pause, "create");
             gel.config.pauseNoReplay.action({ game: mockGame });
             sandbox.assert.calledOnce(pause.create.withArgs({ game: mockGame }, true));
+        });
+    });
+
+    describe("HowToPlay Button Callback", () => {
+        it("creates a how to play screen", () => {
+            sandbox.stub(howToPlay, "create");
+            gel.config.howToPlay.action({ game: mockGame });
+            sandbox.assert.calledOnce(howToPlay.create);
         });
     });
 });

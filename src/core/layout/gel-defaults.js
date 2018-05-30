@@ -1,6 +1,6 @@
-import * as pause from "../../../src/components/overlays/pause.js";
-import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
-import { settings } from "../settings.js";
+import * as settings from "../../core/settings.js";
+import * as pause from "../../components/overlays/pause.js";
+import * as howToPlay from "../../components/overlays/how-to-play.js";
 
 let gmi;
 
@@ -93,7 +93,7 @@ export const config = {
         order: 5,
         id: "gel-settings",
         channel: "gel-buttons",
-        action: settings.show,
+        action: ({ game }) => settings.show({ game }),
     },
     pause: {
         group: "topRight",
@@ -102,7 +102,7 @@ export const config = {
         ariaLabel: "Pause Game",
         order: 6,
         id: "gel-pause",
-        action: pause.create,
+        action: ({ game }) => pause.create({ game }),
         channel: "gel-buttons",
     },
     pauseNoReplay: {
@@ -113,9 +113,7 @@ export const config = {
         order: 6,
         id: "gel-pause",
         channel: "gel-buttons",
-        action: ({ game }) => {
-            pause.create({ game }, true);
-        },
+        action: ({ game }) => pause.create({ game }, true),
     },
     previous: {
         group: "middleLeft",
@@ -221,7 +219,7 @@ export const config = {
         key: "how-to-play",
         ariaLabel: "Game Instructions",
         order: 14,
-        action: howToPlay.create,
+        action: ({ game }) => howToPlay.create({ game }),
         channel: "gel-buttons",
     },
 };
