@@ -13,7 +13,7 @@ import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
 /**
  * @param {Phaser.Game} game - The Phaser Game instance
  */
-export function create({ game }) {
+export function create({ game }, hideReplayButton) {
     const screen = game.state.states[game.state.current];
     const channel = "pause-gel-buttons";
 
@@ -34,22 +34,22 @@ export function create({ game }) {
     }
 
     function addGelButtons() {
-        const gelLayout = screen.scene.addLayout([
-            "pauseHome",
-            "audioOff",
-            "settings",
-            "pauseReplay",
-            "pausePlay",
-            "howToPlay",
-        ]);
+        const gelButtonList = ["pauseHome", "audioOff", "settings", "pausePlay", "howToPlay"];
+        if (!hideReplayButton) {
+            gelButtonList.unshift("pauseReplay");
+        }
+
+        const gelLayout = screen.scene.addLayout(gelButtonList);
         overlayLayout.moveGelButtonsToTop(gelLayout);
         return gelLayout;
     }
 
     function addSignals() {
         signal.bus.subscribe({ channel, name: "play", callback: destroy });
-        signal.bus.subscribe({ channel, name: "replay", callback: restartGame });
         signal.bus.subscribe({ channel, name: "home", callback: goHome });
+        if (!hideReplayButton) {
+            signal.bus.subscribe({ channel, name: "replay", callback: restartGame });
+        }
     }
 
     function destroy() {

@@ -92,7 +92,14 @@ describe("Select Screen", () => {
         });
 
         it("adds GEL buttons to layout", () => {
-            sinon.assert.calledWith(addLayoutSpy, ["home", "audioOff", "pause", "previous", "next", "continue"]);
+            sinon.assert.calledWith(addLayoutSpy, [
+                "home",
+                "audioOff",
+                "pauseNoReplay",
+                "previous",
+                "next",
+                "continue",
+            ]);
         });
 
         it("creates a layout harness with correct params", () => {
