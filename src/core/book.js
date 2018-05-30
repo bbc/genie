@@ -3,6 +3,13 @@ import * as Scenery from "./scenery.js";
 import * as Button from "./button.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
+const configureButtonsForPage = (pageNumber, book) => {
+    if (pageNumber >= 1 && book.numberOfPages >= pageNumber) {
+        book.nextPageOption.visible = book.numberOfPages > pageNumber;
+        book.previousPageOption.visible = pageNumber > 1;
+    }
+};
+
 const GoToPage = (pageNumber, book) => {
     if (pageNumber > book.numberOfPages) {
         return book;
@@ -11,11 +18,7 @@ const GoToPage = (pageNumber, book) => {
     book.hidePage(book.currentPageNumber);
     book.showPage(pageNumber);
     book.currentPageNumber = pageNumber;
-
-    if (pageNumber >= 1 && book.numberOfPages >= pageNumber) {
-        book.nextPageOption.visible = book.numberOfPages > pageNumber;
-        book.previousPageOption.visible = pageNumber > 1;
-    }
+    configureButtonsForPage(pageNumber, book);
 
     return book;
 };
@@ -25,7 +28,6 @@ const NextPage = book => {
         return book;
     }
 
-    book.hidePage(book.currentPageNumber);
     return GoToPage(book.currentPageNumber + 1, book);
 };
 
@@ -34,7 +36,6 @@ const PreviousPage = book => {
         return book;
     }
 
-    book.hidePage(book.currentPageNumber);
     return GoToPage(book.currentPageNumber - 1, book);
 };
 
