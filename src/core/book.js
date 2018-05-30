@@ -8,6 +8,22 @@ const configureButtonsForPage = (pageNumber, book) => {
         book.nextPageOption.visible = book.numberOfPages > pageNumber;
         book.previousPageOption.visible = pageNumber > 1;
     }
+
+    if (pageNumber === 1) {
+        book.previousPageOption.input.enabled = false;
+        book.previousPageOption.update();
+    } else {
+        book.previousPageOption.input.enabled = true;
+        book.previousPageOption.update();
+    }
+
+    if (pageNumber === book.numberOfPages) {
+        book.nextPageOption.input.enabled = false;
+        book.nextPageOption.update();
+    } else {
+        book.nextPageOption.input.enabled = true;
+        book.nextPageOption.update();
+    }
 };
 
 const GoToPage = (pageNumber, book) => {
