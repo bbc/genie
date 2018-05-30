@@ -32,6 +32,7 @@ describe("How To Play Overlay", () => {
         sandbox.stub(OverlayLayout, "create").returns(mockOverlayLayout);
 
         mockGelButtons = { destroy: sandbox.spy() };
+        sandbox.stub(document, "getElementById").returns({ focus: () => {} });
         mockTitle = { destroy: sandbox.spy() };
         mockScreen = {
             scene: {

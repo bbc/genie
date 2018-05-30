@@ -28,6 +28,7 @@ describe("Pause Overlay", () => {
         sandbox.stub(OverlayLayout, "create").returns(mockOverlayLayout);
 
         mockGelButtons = { destroy: sandbox.spy() };
+        sandbox.stub(document, "getElementById").returns({ focus: () => {} });
         mockScreen = {
             scene: {
                 addToBackground: sandbox.stub().returns(mockLayoutDestroy),
