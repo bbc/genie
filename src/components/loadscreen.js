@@ -85,7 +85,9 @@ export class Loadscreen extends Screen {
 
     startMusic() {
         GameAssets.sounds.backgroundMusic.loopFull();
-        GameAssets.sounds.backgroundMusic.mute = this.game.sound.mute;
+        if (GameAssets.sounds.backgroundMusic.usingAudioTag) {
+            GameAssets.sounds.backgroundMusic.mute = this.game.sound.mute;
+        }
     }
 }
 
