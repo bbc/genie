@@ -7,6 +7,7 @@ import fp from "../../../lib/lodash/fp/fp.js";
 
 import * as signal from "../../core/signal-bus.js";
 import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
+import * as gel from "../../core/layout/gel-defaults.js";
 
 /**
  * @param {Phaser.Game} game - The Phaser Game instance
@@ -120,6 +121,7 @@ export function create({ game }) {
         signal.bus.removeChannel(channel);
         gelButtons.destroy();
         overlayLayout.restoreDisabledButtons();
+        document.getElementById(gel.config.howToPlay.id).focus();
         destroyPanels();
         destroyPips();
         title.destroy();
