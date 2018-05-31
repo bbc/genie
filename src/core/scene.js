@@ -35,12 +35,17 @@ const addToGroup = fp.curry((group, object) => group.addChild(object));
  * @returns {{keyLookups: {}, addToBackground(), addToForeground(), addLayout(), removeAll(), addLookups(), getSize()}} - {{@link module:layout/factory.addLayout addLayout}}
  */
 export function create(game) {
+
     let _layouts = [];
     const root = game.add.group(undefined, "root", true);
     const unscaled = game.add.group(undefined, "unscaled", true);
     const background = game.add.group(undefined, "background");
     const foreground = game.add.group(undefined, "foreground");
     const keyLookups = {};
+    if (!game.accessibleButtons) {
+        game.accessibleButtons = [];
+    }
+    const customAccessibleButtons = game.accessibleButtons;
 
     const resize = (width, height, scale) => {
         root.scale.set(scale, scale);
@@ -82,6 +87,10 @@ export function create(game) {
 
     const getLayouts = () => _layouts;
 
+    const getButtons = () => {
+        return customAccessibleButtons;
+    }
+
     const removeAll = () => {
         background.removeAll(true);
         _layouts.forEach(layout => layout.destroy());
@@ -99,6 +108,7 @@ export function create(game) {
         addToUnscaled,
         addLayout,
         getLayouts,
+        getButtons,
         removeAll,
         addLookups,
         getSize: scaler.getSize,

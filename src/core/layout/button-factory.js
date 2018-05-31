@@ -36,7 +36,7 @@ const createButton = fp.curry((game, metrics, config, x = 0, y = 0) => {
     const btn = new GelButton(game, x, y, metrics, config); //Instantiate then return or TSC loses non-curried args
 
     defaultAction(config);
-    const accessibleButton = accessibilify(btn, config);
+    const accessibleButton = accessibilify(btn, config, false);
     return accessibleButton;
 });
 

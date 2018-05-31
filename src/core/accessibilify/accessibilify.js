@@ -2,7 +2,7 @@ import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as signal from "../../core/signal-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
-export function accessibilify(button, config) {
+export function accessibilify(button, config, gameButton = true) {
     config = Object.assign(
         {
             id: button.name,
@@ -14,6 +14,11 @@ export function accessibilify(button, config) {
     const game = button.game;
     const accessibleElement = newAccessibleElement();
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
+
+    if (gameButton == true) {
+        game.accessibleButtons.push(button);
+        console.log("accessible array", game.accessibleButtons);
+    }
 
     assignEvents();
     resizeAndRepositionElement();

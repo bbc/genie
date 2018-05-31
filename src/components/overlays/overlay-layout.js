@@ -17,6 +17,7 @@ export function create(screen, backgroundImage) {
     const backgroundPriorityID = 999;
     const priorityID = backgroundPriorityID + screen.context.popupScreens.length;
     const previousLayouts = screen.scene.getLayouts();
+    const gameAccessibleButtons = screen.scene.getButtons();
     const disabledButtons = disableExistingButtons();
 
     return {
@@ -43,6 +44,16 @@ export function create(screen, backgroundImage) {
                 }
             }, layout.buttons);
         }, previousLayouts);
+
+        fp.forOwn(button => {
+            if (button.input.enabled) {
+                console.log("Disabling game accessible button");
+                button.input.enabled = false;
+                disabledButtons.push(button);
+                button.update();
+            }
+        }, gameAccessibleButtons);
+        
 
         return disabledButtons;
     }
