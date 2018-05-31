@@ -46,6 +46,7 @@ export function create(game) {
         game.scale.setUserScale(scale, scale)
 
         root.position.set(width * 0.5 / scale, height * 0.5 / scale);
+        game.debug.sprite.position.set(-width * 0.5 / scale, -height * 0.5 / scale);
     };
 
     //TODO stageHeight should come from config
