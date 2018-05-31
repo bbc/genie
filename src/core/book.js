@@ -13,6 +13,10 @@ const configureButtonsForPage = (pageNumber, book) => {
     book.previousPageOption.visible = pagesBefore;
     book.previousPageOption.input.enabled = pagesBefore;
     book.previousPageOption.update();
+
+    // TODO: Add tests for auto-focussing accessible elements
+    if (!pagesAhead) book.previousPageOption.accessibleElement.focus();
+    if (!pagesBefore) book.nextPageOption.accessibleElement.focus();
 };
 
 const GoToPage = (pageNumber, book) => {

@@ -19,6 +19,7 @@ export function accessibilify(button, config) {
     resizeAndRepositionElement();
 
     button.update = update;
+    button.accessibleElement = accessibleElement.el;
 
     return button;
 

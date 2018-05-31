@@ -1,10 +1,13 @@
 const Stub = () => {
     return {
-        visible: true,
+        accessibleElement: {
+            focus: () => {},
+        },
         input: {
             enabled: true,
         },
         update: () => {},
+        visible: true,
     };
 };
 
