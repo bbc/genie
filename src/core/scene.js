@@ -28,6 +28,23 @@ const centerAnchor = object => {
 
 const addToGroup = fp.curry((group, object) => group.addChild(object));
 
+const SEANS_FUNCTION = (game, width, height) => {
+    const aspectRatio = width / height;
+
+    if (aspectRatio > 7 / 3) {
+        game.scale.setGameSize(1400, 600);
+    } else if (aspectRatio < 4 / 3) {
+        game.scale.setGameSize(800, 600);
+    } else {
+        // between 4/3 and 7/3
+        game.scale.setGameSize(aspectRatio * 600, 600);
+    }
+};
+
+export const GEL_MIN_RATIO_WIDTH = 4;
+export const GEL_MIN_RATIO_HEIGHT = 3;
+export const GEL_SAFE_FRAME_RATIO = GEL_MIN_RATIO_WIDTH / GEL_MIN_RATIO_HEIGHT;
+
 /**
  * Create a new Scene
  *
@@ -42,9 +59,34 @@ export function create(game) {
     const foreground = game.add.group(undefined, "foreground");
     const debug = game.add.group(undefined, "debug", true);
 
-    const resize = (width, height, scale) => {
-        root.scale.set(scale, scale);
-        root.position.set(width / 2, height / 2);
+    const resize = (width, height, scale, stageHeight) => {
+        //root.scale.set(scale, scale);
+
+        //game.scale.setGameSize(300, 300, 0, 0);
+
+        //
+
+        //game.scale.setupScale(width, height)
+
+        //width and height (passed in above but here's what they are currently:
+        //width = game.scale.getParentBounds().width;
+        //height = game.scale.getParentBounds().height;
+
+        //if (true) {// (width / height >= GEL_SAFE_FRAME_RATIO) {
+        //    scale = height / stageHeight
+        //}
+        //else {
+        //    scale = width / stageHeight / GEL_SAFE_FRAME_RATIO
+        //}
+
+        //game.scale.setUserScale(scale, scale)
+
+        //game.scale.setGameSize(width/scale, height/scale);
+
+        //SEANS_FUNCTION(game, width, height)
+        game.scale.setUserScale(scale, scale)
+
+        root.position.set(width * 0.5 / scale, height * 0.5 / scale);
     };
 
     //TODO stageHeight should come from config
@@ -55,6 +97,8 @@ export function create(game) {
     if (game.debug.sprite) {
         debug.addChild(game.debug.sprite);
     }
+
+    //root.position.set(700, 300);
 
     scaler.onScaleChange.add(resize);
 

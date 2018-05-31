@@ -17,9 +17,7 @@ const getScale = fp.curry((scaleMethods, stageHeightPx, { width, height }) => {
 const getBounds = game => () => game.scale.getParentBounds();
 
 export function create(stageHeightPx, game) {
-    // Will be immediately resized:
-    game.scale.setGameSize(2, 2);
-    game.scale.scaleMode = Phaser.ScaleManager.RESIZE;
+    game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
 
     const onScaleChange = new Phaser.Signal();
 
@@ -35,8 +33,7 @@ export function create(stageHeightPx, game) {
     };
 
     const onSizeChange = fp.flow(getSize, setSize);
-
-    game.scale.onSizeChange.add(onSizeChange);
+    game.scale.setResizeCallback(onSizeChange);
 
     return {
         onScaleChange,
