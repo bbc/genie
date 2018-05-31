@@ -4,26 +4,13 @@ import * as Button from "./button.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
 const configureButtonsForPage = (pageNumber, book) => {
-    if (pageNumber >= 1 && book.numberOfPages >= pageNumber) {
-        book.nextPageOption.visible = book.numberOfPages > pageNumber;
-        book.previousPageOption.visible = pageNumber > 1;
-    }
+    book.nextPageOption.visible = pageNumber < book.numberOfPages;
+    book.nextPageOption.input.enabled = pageNumber < book.numberOfPages;
+    book.nextPageOption.update();
 
-    if (pageNumber === 1) {
-        book.previousPageOption.input.enabled = false;
-        book.previousPageOption.update();
-    } else {
-        book.previousPageOption.input.enabled = true;
-        book.previousPageOption.update();
-    }
-
-    if (pageNumber === book.numberOfPages) {
-        book.nextPageOption.input.enabled = false;
-        book.nextPageOption.update();
-    } else {
-        book.nextPageOption.input.enabled = true;
-        book.nextPageOption.update();
-    }
+    book.previousPageOption.visible = pageNumber > 1;
+    book.previousPageOption.input.enabled = pageNumber > 1;
+    book.previousPageOption.update();
 };
 
 const GoToPage = (pageNumber, book) => {
