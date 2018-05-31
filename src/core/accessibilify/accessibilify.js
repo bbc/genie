@@ -1,5 +1,4 @@
 import { accessibleDomElement } from "./accessible-dom-element.js";
-import * as signal from "../../core/signal-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 export function accessibilify(button, config) {
@@ -37,7 +36,9 @@ export function accessibilify(button, config) {
         let bounds = button.getBounds().clone();
         if (button.hitArea) {
             bounds = button.hitArea.clone();
-            bounds.topLeft = button.toGlobal(bounds.topLeft);
+            bounds.topLeft = button
+                .toGlobal(bounds.topLeft)
+                .multiply(game.scale.scaleFactorInversed.x, game.scale.scaleFactorInversed.y);
         }
         return bounds;
     }
@@ -45,6 +46,7 @@ export function accessibilify(button, config) {
     function setElementSizeAndPosition() {
         if (button.alive) {
             const bounds = getHitAreaBounds();
+
             accessibleElement.position(bounds);
         }
     }
