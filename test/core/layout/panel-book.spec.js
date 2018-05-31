@@ -5,6 +5,8 @@ import * as Button from "../../fake/button.js";
 import * as Scene from "../../fake/scene.js";
 import * as Scenery from "../../../src/core/scenery.js";
 import * as Book from "../../../src/core/book.js";
+import * as sinon from "sinon";
+const assert = sinon.assert;
 import * as Chai from "chai";
 Chai.should();
 
@@ -49,6 +51,8 @@ describe("Showing pages of a book", () => {
                 Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
                 OverlayLayout.Stub,
             );
+            book.nextPageOption.update = sinon.spy();
+            book.previousPageOption.update = sinon.spy();
         });
 
         it("Should write all the pages", () => {
@@ -62,10 +66,12 @@ describe("Showing pages of a book", () => {
 
             it("Should disable the 'Previous page' option", () => {
                 book.previousPageOption.should.have.property("visible", false);
+                book.previousPageOption.input.should.have.property("enabled", false);
             });
 
             it("Should enable the 'Next page' option", () => {
                 book.nextPageOption.should.have.property("visible", true);
+                book.nextPageOption.input.should.have.property("enabled", true);
             });
 
             it("Should show page 2 and hide page 1 when the 'Next page' option is chosen", () => {
@@ -79,11 +85,15 @@ describe("Showing pages of a book", () => {
             it("Should enable the 'Previous page' option", () => {
                 book = Book.NextPage(book);
                 book.previousPageOption.should.have.property("visible", true);
+                book.previousPageOption.input.should.have.property("enabled", true);
+                assert.calledOnce(book.previousPageOption.update);
             });
 
             it("Should disable the 'Next page' option", () => {
                 book = Book.NextPage(book);
                 book.nextPageOption.should.have.property("visible", false);
+                book.nextPageOption.input.should.have.property("enabled", false);
+                assert.calledOnce(book.nextPageOption.update);
             });
 
             it("Should show page 1 and hide page 2 when the 'Previous page' option is chosen", () => {
