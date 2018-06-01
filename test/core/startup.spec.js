@@ -5,7 +5,7 @@ import { startup } from "../../src/core/startup.js";
 describe("#startup", () => {
     const sandbox = sinon.sandbox.create();
 
-    let PhaserGame, getGMI, gmi, containerDiv;
+    let PhaserGame, gmi, containerDiv;
 
     beforeEach(() => {
         gmi = {

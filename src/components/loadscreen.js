@@ -5,12 +5,11 @@
  */
 
 import _ from "../../lib/lodash/lodash.js";
-
 import { loadAssets } from "../core/asset-loader.js";
+import { GameAssets, initGameAssets } from "../core/game-assets.js";
+import { calculateMetrics } from "../core/layout/calculate-metrics.js";
 import { Screen } from "../core/screen.js";
 import { createLoadBar } from "./loadbar.js";
-import { initGameAssets, GameAssets } from "../core/game-assets.js";
-import { calculateMetrics } from "../core/layout/calculate-metrics.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
@@ -86,6 +85,9 @@ export class Loadscreen extends Screen {
 
     startMusic() {
         GameAssets.sounds.backgroundMusic.loopFull();
+        if (GameAssets.sounds.backgroundMusic.usingAudioTag) {
+            GameAssets.sounds.backgroundMusic.mute = this.game.sound.mute;
+        }
     }
 }
 

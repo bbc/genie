@@ -15,6 +15,7 @@
         "semi": ["error", "always"],
         "no-undef": [0],
         "no-console": ["warn"],
-        "no-only-tests/no-only-tests": [2]
+        "no-only-tests/no-only-tests": [2],
+        "no-unused-vars": "error"
     }
 }

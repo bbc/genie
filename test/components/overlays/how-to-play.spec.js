@@ -1,10 +1,9 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-
-import * as signal from "../../../src/core/signal-bus.js";
-import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
 import * as HowToPlay from "../../../src/components/overlays/how-to-play";
 import * as Button from "../../fake/button.js";
+import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
+import * as signal from "../../../src/core/signal-bus.js";
 
 describe("How To Play Overlay", () => {
     let mockGame;
@@ -37,6 +36,9 @@ describe("How To Play Overlay", () => {
             buttons: { howToPlayPrevious: Button.Stub(), howToPlayNext: Button.Stub() },
             destroy: sandbox.spy(),
         };
+
+        sandbox.stub(document, "getElementById").returns({ focus: () => {} });
+
         mockTitle = { destroy: sandbox.spy() };
         mockScreen = {
             scene: {
