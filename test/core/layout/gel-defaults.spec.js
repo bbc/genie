@@ -1,6 +1,5 @@
 import { assert } from "chai";
 import * as gel from "../../../src/core/layout/gel-defaults";
-import * as sinon from "sinon";
 
 describe("Layout - Gel Defaults", () => {
     it("has an exit button with title 'Exit'", () => {
@@ -17,14 +16,5 @@ describe("Layout - Gel Defaults", () => {
 
     it("has a home button with key 'home'", () => {
         assert(gel.config.home.key === "home");
-    });
-
-    it("stores the gmi variable for use in actions", () => {
-        const gmiSpy = sinon.spy();
-        gel.setGmi({ exit: gmiSpy });
-
-        gel.config.exit.action();
-
-        sinon.assert.calledOnce(gmiSpy);
     });
 });

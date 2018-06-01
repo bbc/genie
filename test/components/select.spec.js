@@ -1,9 +1,9 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-
 import { Select } from "../../src/components/select";
-import * as signal from "../../src/core/signal-bus.js";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
+import * as signal from "../../src/core/signal-bus.js";
+import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
 describe("Select Screen", () => {
     let selectScreen;
@@ -134,22 +134,22 @@ describe("Select Screen", () => {
         it("adds signal subscriptions to all the buttons", () => {
             assert(signalSubscribeSpy.callCount === 4, "signals should be subscribed 4 times");
             sinon.assert.calledWith(signalSubscribeSpy, {
-                channel: "gel-buttons",
+                channel: buttonsChannel,
                 name: "exit",
                 callback: sinon.match.func,
             });
             sinon.assert.calledWith(signalSubscribeSpy, {
-                channel: "gel-buttons",
+                channel: buttonsChannel,
                 name: "previous",
                 callback: sinon.match.func,
             });
             sinon.assert.calledWith(signalSubscribeSpy, {
-                channel: "gel-buttons",
+                channel: buttonsChannel,
                 name: "next",
                 callback: sinon.match.func,
             });
             sinon.assert.calledWith(signalSubscribeSpy, {
-                channel: "gel-buttons",
+                channel: buttonsChannel,
                 name: "continue",
                 callback: sinon.match.func,
             });

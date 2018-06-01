@@ -163,6 +163,8 @@ describe("Layout", () => {
 });
 
 function initialiseGame() {
+    window.PhaserGlobal = window.PhaserGlobal || {};
+    window.PhaserGlobal.hideBanner = true;
     return new Promise(resolve => {
         new Phaser.Game({
             state: new class extends Phaser.State {

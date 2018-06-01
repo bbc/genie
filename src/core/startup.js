@@ -4,11 +4,11 @@
  *
  * @module core/startup
  */
-import { parseUrlParams } from "../core/parseUrlParams.js";
-import * as gel from "../core/layout/gel-defaults.js";
-import { settings } from "../core/settings.js";
-import * as Scene from "./scene.js";
+import { settings, settingsChannel } from "../core/settings.js";
+import * as signal from "../core/signal-bus.js";
+import { parseUrlParams } from "./parseUrlParams.js";
 import * as Navigation from "./navigation.js";
+import * as Scene from "./scene.js";
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
@@ -19,7 +19,6 @@ export function startup(settingsConfig = {}, navigationConfig) {
     const urlParams = parseUrlParams(window.location.search);
     const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
     hookErrors(gmi.gameContainerId);
-    gel.setGmi(gmi);
     settings.setGmi(gmi);
 
     const phaserConfig = {
@@ -71,6 +70,24 @@ class Startup extends Phaser.State {
         const theme = gmi.embedVars.configPath;
         this.game.load.path = theme.split(/([^/]+$)/, 2)[0]; //config dir
         this.game.load.json(CONFIG_KEY, "config.json");
+        this.configureAudioSetting();
+    }
+
+    configureAudioSetting() {
+        this.game.sound.mute = settings.getAllSettings().muted;
+        this.game.onPause.add(() => {
+            this.game.sound.mute = settings.getAllSettings().muted;
+        });
+        this.game.onResume.add(() => {
+            this.game.sound.mute = settings.getAllSettings().muted;
+        });
+        signal.bus.subscribe({
+            channel: settingsChannel,
+            name: "audio",
+            callback: value => {
+                this.game.sound.mute = !value;
+            },
+        });
     }
 
     create() {

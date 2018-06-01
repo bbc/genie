@@ -1,17 +1,13 @@
-import { startup } from "./core/startup.js";
-import { settings } from "./core/settings.js";
-import { Loadscreen } from "./components/loadscreen.js";
 import { Home } from "./components/home.js";
-import { Select } from "./components/select.js";
-import { GameTest } from "./components/test-harness/test-screens/game.js";
+import { Loadscreen } from "./components/loadscreen.js";
 import { Results } from "./components/results.js";
-import { parseUrlParams } from "./core/parseUrlParams.js";
+import { Select } from "./components/select.js";
 import { phaserTestHarnessConfig } from "./components/test-harness/test-harness-main.js";
-
-settings.setCloseCallback(() => {
-    //Called when settings screen has been closed
-    console.log("Settings Closed");
-});
+import { GameTest } from "./components/test-harness/test-screens/game.js";
+import { parseUrlParams } from "./core/parseUrlParams.js";
+import { settingsChannel } from "./core/settings.js";
+import * as signal from "./core/signal-bus.js";
+import { startup } from "./core/startup.js";
 
 const settingsConfig = {
     pages: [
@@ -35,9 +31,12 @@ const settingsConfig = {
     ],
 };
 
-settings.add("custom1", value => {
-    //Example of custom setting callback
-    console.log("custom 1 setting changed to: " + value);
+signal.bus.subscribe({
+    channel: settingsChannel,
+    name: "custom1",
+    callback: value => {
+        console.log("Custom 1 setting changed to " + value);
+    },
 });
 
 const navigationConfig = goToScreen => {

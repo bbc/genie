@@ -27,6 +27,9 @@ export function gmi(propertiesToMerge = {}) {
     const defaultGmi = {
         gameContainerId: TEST_DIV_ID,
         embedVars: { configPath: "" },
+        getAllSettings: () => ({
+            muted: false,
+        }),
     };
     return _.merge(defaultGmi, propertiesToMerge);
 }
