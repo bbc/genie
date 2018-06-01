@@ -12,7 +12,6 @@ describe("Scene", () => {
     let scalerSpy;
     let scalerMethods;
     let groupMethods;
-    let root;
 
     before(() => {
         sandbox = sinon.sandbox.create();
@@ -21,7 +20,6 @@ describe("Scene", () => {
     beforeEach(() => {
         scalerMethods = { getSize: sandbox.spy(), onScaleChange: { add: sandbox.spy() } };
         scalerSpy = sandbox.stub(Scaler, "create").returns(scalerMethods);
-        root = sandbox.stub();
         groupMethods = {
             addChild: sandbox.spy(),
             removeAll: sandbox.spy(),

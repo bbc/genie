@@ -2,11 +2,12 @@
  *
  * @module core/navigation
  */
+import { buttonsChannel } from "./layout/gel-defaults.js";
 import * as signal from "./signal-bus.js";
 
 export const create = (gameState, context, scene, navigationConfig) => {
     const goToScreen = (name, transientData) => {
-        signal.bus.removeChannel("gel-buttons");
+        signal.bus.removeChannel(buttonsChannel);
         scene.removeAll();
         gameState.start(name, true, false, transientData, scene, context, navigation);
     };

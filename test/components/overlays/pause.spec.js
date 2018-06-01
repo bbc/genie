@@ -1,10 +1,9 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-
-import * as Pause from "../../../src/components/overlays/pause";
-import * as signal from "../../../src/core/signal-bus.js";
-import { GameAssets } from "../../../src/core/game-assets.js";
 import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
+import * as Pause from "../../../src/components/overlays/pause";
+import { GameAssets } from "../../../src/core/game-assets.js";
+import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Pause Overlay", () => {
     let mockGame;
@@ -26,10 +25,10 @@ describe("Pause Overlay", () => {
             restoreDisabledButtons: sandbox.spy(),
             moveGelButtonsToTop: sandbox.spy(),
         };
-        mockLayoutDestroy = { destroy: sandbox.spy() };
         sandbox.stub(OverlayLayout, "create").returns(mockOverlayLayout);
 
         mockGelButtons = { destroy: sandbox.spy() };
+        sandbox.stub(document, "getElementById").returns({ focus: () => {} });
         mockScreen = {
             scene: {
                 addToBackground: sandbox.stub().returns(mockLayoutDestroy),
@@ -46,17 +45,17 @@ describe("Pause Overlay", () => {
         mockGame = {
             add: { image: sandbox.stub() },
             state: { current: "pauseScreen", states: { pauseScreen: mockScreen } },
-            sound: { pauseAll: sandbox.spy(), unsetMute: sandbox.spy() },
+            sound: { pauseAll: sandbox.spy() },
             paused: false,
         };
         mockGame.add.image.onCall(0).returns("backgroundImage");
 
         GameAssets.sounds = {
             backgroundMusic: {
-                mute: false,
+                pause: sandbox.spy(),
+                resume: sandbox.spy(),
             },
         };
-        Pause.create({ game: mockGame });
     });
 
     afterEach(() => {
@@ -64,6 +63,10 @@ describe("Pause Overlay", () => {
     });
 
     describe("pause functionality", () => {
+        beforeEach(() => {
+            Pause.create({ game: mockGame });
+        });
+
         it("adds pause to the popup screens", () => {
             assert.deepEqual(mockScreen.context.popupScreens, ["pause"]);
         });
@@ -72,56 +75,76 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGame.paused);
         });
 
-        it("keeps all audio playing", () => {
-            sinon.assert.calledOnce(mockGame.sound.unsetMute);
-        });
-
-        it("mutes background music", () => {
-            assert.isTrue(GameAssets.sounds.backgroundMusic.mute);
+        it("pauses background music", () => {
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.pause);
         });
     });
 
     describe("assets", () => {
         it("creates a new overlay layout manager", () => {
+            Pause.create({ game: mockGame });
             assert.isTrue(OverlayLayout.create.calledOnce);
         });
 
         it("adds a background image", () => {
+            Pause.create({ game: mockGame });
             const actualImageCall = mockGame.add.image.getCall(0);
             const expectedImageCall = [0, 0, "pause.pauseBackground"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
         });
 
         it("passes the background image to the overlay layout manager", () => {
+            Pause.create({ game: mockGame });
             assert.deepEqual(mockOverlayLayout.addBackground.args[0], ["backgroundImage"]);
         });
 
         it("adds GEL buttons", () => {
+            Pause.create({ game: mockGame });
             const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
             const expectedAddLayoutCall = [
+                "pauseReplay",
                 "pauseHome",
                 "audioOff",
                 "settings",
-                "pauseReplay",
                 "pausePlay",
                 "howToPlay",
             ];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
         });
+
+        it("adds GEL buttons without a replay button if requested", () => {
+            const hideReplayButton = true;
+            Pause.create({ game: mockGame }, hideReplayButton);
+            const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
+            const expectedAddLayoutCall = ["pauseHome", "audioOff", "settings", "pausePlay", "howToPlay"];
+            assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
+        });
     });
 
     describe("signals", () => {
-        it("adds signal subscriptions to all the GEL buttons", () => {
+        it("adds custom signal subscriptions to certain GEL buttons", () => {
+            Pause.create({ game: mockGame });
             assert.equal(signalSpy.callCount, 3);
             assert.equal(signalSpy.getCall(0).args[0].channel, "pause-gel-buttons");
             assert.equal(signalSpy.getCall(0).args[0].name, "play");
             assert.equal(signalSpy.getCall(1).args[0].channel, "pause-gel-buttons");
-            assert.equal(signalSpy.getCall(1).args[0].name, "replay");
+            assert.equal(signalSpy.getCall(1).args[0].name, "home");
             assert.equal(signalSpy.getCall(2).args[0].channel, "pause-gel-buttons");
-            assert.equal(signalSpy.getCall(2).args[0].name, "home");
+            assert.equal(signalSpy.getCall(2).args[0].name, "replay");
+        });
+
+        it("adds custom signal subscriptions to certain GEL buttons, when the replay button is not present", () => {
+            const hideReplayButton = true;
+            Pause.create({ game: mockGame }, hideReplayButton);
+            assert.equal(signalSpy.callCount, 2);
+            assert.equal(signalSpy.getCall(0).args[0].channel, "pause-gel-buttons");
+            assert.equal(signalSpy.getCall(0).args[0].name, "play");
+            assert.equal(signalSpy.getCall(1).args[0].channel, "pause-gel-buttons");
+            assert.equal(signalSpy.getCall(1).args[0].name, "home");
         });
 
         it("destroys the pause screen when the play button is clicked", () => {
+            Pause.create({ game: mockGame });
             const clickPlayButton = signalSpy.getCall(0).args[0].callback;
             clickPlayButton();
 
@@ -129,49 +152,58 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            assert.isFalse(GameAssets.sounds.backgroundMusic.mute);
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
         it("removes subscribed-to channel for this overlay on destroy", () => {
             const signalBusRemoveChannel = sandbox.spy(signal.bus, "removeChannel");
+            Pause.create({ game: mockGame });
             const destroy = signalSpy.getCall(0).args[0].callback;
             destroy();
             sinon.assert.calledOnce(signalBusRemoveChannel.withArgs("pause-gel-buttons"));
         });
 
-        it("destroys the pause screen when the restart button is clicked", () => {
-            signalSpy.getCall(1).args[0].callback();
+        it("destroys the pause screen when the replay button is clicked", () => {
+            Pause.create({ game: mockGame });
+            const cickReplayButton = signalSpy.getCall(2).args[0].callback;
+            cickReplayButton();
             assert.isFalse(mockGame.paused);
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            assert.isFalse(GameAssets.sounds.backgroundMusic.mute);
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
-        it("calls the navigation.restart method with params when the restart button is clicked", () => {
+        it("restarts the game when the replay button is clicked", () => {
             mockScreen.transientData = {
                 characterSelected: 1,
             };
-            signalSpy.getCall(1).args[0].callback();
+            Pause.create({ game: mockGame });
+            const cickReplayButton = signalSpy.getCall(2).args[0].callback;
+            cickReplayButton();
             const actualRestartArgs = mockScreen.navigation.restart.getCall(0).args[0];
             const expectedRestartArgs = { characterSelected: 1 };
             assert.deepEqual(actualRestartArgs, expectedRestartArgs);
         });
 
         it("destroys the pause screen when the home button is clicked", () => {
-            signalSpy.getCall(2).args[0].callback();
+            Pause.create({ game: mockGame });
+            const clickHomeButton = signalSpy.getCall(1).args[0].callback;
+            clickHomeButton();
             assert.isFalse(mockGame.paused);
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            assert.isFalse(GameAssets.sounds.backgroundMusic.mute);
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
-        it("calls the navigation.home method when home button is clicked", () => {
-            signalSpy.getCall(2).args[0].callback();
+        it("naviagtes home when the home button is clicked", () => {
+            Pause.create({ game: mockGame });
+            const clickHomeButton = signalSpy.getCall(1).args[0].callback;
+            clickHomeButton();
             sinon.assert.calledOnce(mockScreen.navigation.home);
         });
     });

@@ -4,10 +4,10 @@
  */
 
 import fp from "../../../lib/lodash/fp/fp.js";
-
-import * as signal from "../../core/signal-bus.js";
 import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
 import * as Book from "../../core/book.js";
+import * as gel from "../../core/layout/gel-defaults.js";
+import * as signal from "../../core/signal-bus.js";
 
 /**
  * @param {Phaser.Game} game - The Phaser Game instance
@@ -17,8 +17,6 @@ export function create({ game }) {
     const theme = screen.context.config.theme["how-to-play"];
     const channel = "how-to-play-gel-buttons";
 
-    let panels = [];
-    let currentIndex = 0;
     let numberOfPanels = Object.keys(theme.panels).length;
 
     screen.context.popupScreens.push("how-to-play");
@@ -92,6 +90,7 @@ export function create({ game }) {
     function destroy() {
         signal.bus.removeChannel(channel);
         overlayLayout.restoreDisabledButtons();
+        document.getElementById(gel.config.howToPlay.id).focus();
         book.destroy();
         destroyPips();
         title.destroy();

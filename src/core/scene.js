@@ -42,7 +42,7 @@ export function create(game) {
     const foreground = game.add.group(undefined, "foreground");
     const debug = game.add.group(undefined, "debug", true);
 
-    const resize = (width, height, scale, stageHeight) => {
+    const resize = (width, height, scale) => {
         game.scale.setGameSize(width / scale, height / scale);
 
         root.position.set(width * 0.5 / scale, height * 0.5 / scale);
