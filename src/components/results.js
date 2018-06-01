@@ -1,3 +1,4 @@
+import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
@@ -24,7 +25,7 @@ export class Results extends Screen {
 
         signal.bus.subscribe({
             name: "continue",
-            channel: "gel-buttons",
+            channel: buttonsChannel,
             callback: () => {
                 this.navigation.next();
             },
@@ -32,7 +33,7 @@ export class Results extends Screen {
 
         signal.bus.subscribe({
             name: "restart",
-            channel: "gel-buttons",
+            channel: buttonsChannel,
             callback: () => {
                 this.navigation.game(this.transientData);
             },

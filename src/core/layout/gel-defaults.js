@@ -1,20 +1,4 @@
-import { settings } from "../settings.js";
-import * as pause from "../../components/overlays/pause.js";
-import * as howToPlay from "../../components/overlays/how-to-play.js";
-
-let gmi;
-
-export const setGmi = newGmi => {
-    gmi = newGmi;
-};
-
-const callGmi = method => () => {
-    if (gmi) {
-        gmi[method]();
-    } else {
-        throw "gmi has not been initialised in gel-defaults";
-    }
-};
+export const buttonsChannel = "gel-buttons";
 
 export const config = {
     exit: {
@@ -24,8 +8,7 @@ export const config = {
         ariaLabel: "Exit Game",
         order: 0,
         id: "gel-exit",
-        channel: "gel-buttons",
-        action: callGmi("exit"),
+        channel: buttonsChannel,
     },
     home: {
         group: "topLeft",
@@ -34,7 +17,7 @@ export const config = {
         ariaLabel: "Home",
         order: 1,
         id: "gel-home",
-        channel: "gel-buttons",
+        channel: buttonsChannel,
         action: ({ game }) => {
             const screen = game.state.states[game.state.current];
             screen.navigation.home();
@@ -56,7 +39,7 @@ export const config = {
         ariaLabel: "Back",
         order: 2,
         id: "gel-back",
-        channel: "gel-buttons",
+        channel: buttonsChannel,
     },
     howToPlayBack: {
         group: "topLeft",
@@ -74,7 +57,7 @@ export const config = {
         ariaLabel: "Disable Sound",
         order: 3,
         id: "gel-audio-off",
-        channel: "gel-buttons",
+        channel: buttonsChannel,
     },
     audioOn: {
         group: "topRight",
@@ -83,7 +66,7 @@ export const config = {
         ariaLabel: "Enable Sound",
         order: 4,
         id: "gel-audio-on",
-        channel: "gel-buttons",
+        channel: buttonsChannel,
     },
     settings: {
         group: "topRight",
@@ -92,8 +75,7 @@ export const config = {
         ariaLabel: "Game Settings",
         order: 5,
         id: "gel-settings",
-        channel: "gel-buttons",
-        action: ({ game }) => settings.show({ game }),
+        channel: buttonsChannel,
     },
     pause: {
         group: "topRight",
@@ -102,8 +84,7 @@ export const config = {
         ariaLabel: "Pause Game",
         order: 6,
         id: "gel-pause",
-        action: ({ game }) => pause.create({ game }),
-        channel: "gel-buttons",
+        channel: buttonsChannel,
     },
     pauseNoReplay: {
         group: "topRight",
@@ -112,8 +93,7 @@ export const config = {
         ariaLabel: "Pause Game",
         order: 6,
         id: "gel-pause",
-        channel: "gel-buttons",
-        action: ({ game }) => pause.create({ game }, true),
+        channel: buttonsChannel,
     },
     previous: {
         group: "middleLeft",
@@ -122,7 +102,7 @@ export const config = {
         ariaLabel: "Previous Item",
         order: 7,
         id: "gel-previous",
-        channel: "gel-buttons",
+        channel: buttonsChannel,
     },
     howToPlayPrevious: {
         group: "middleLeft",
@@ -157,7 +137,7 @@ export const config = {
         ariaLabel: "Play Game",
         order: 9,
         id: "gel-play",
-        channel: "gel-buttons",
+        channel: buttonsChannel,
     },
     pausePlay: {
         group: "middleCenter",
@@ -175,7 +155,7 @@ export const config = {
         ariaLabel: "Next Item",
         order: 10,
         id: "gel-next",
-        channel: "gel-buttons",
+        channel: buttonsChannel,
     },
     howToPlayNext: {
         group: "middleRight",
@@ -193,7 +173,7 @@ export const config = {
         ariaLabel: "Your Achievements",
         order: 11,
         id: "gel-achievements",
-        channel: "gel-buttons",
+        channel: buttonsChannel,
     },
     restart: {
         group: "bottomCenter",
@@ -202,7 +182,7 @@ export const config = {
         ariaLabel: "Restart Game",
         order: 12,
         id: "gel-restart",
-        channel: "gel-buttons",
+        channel: buttonsChannel,
     },
     continue: {
         group: "bottomCenter",
@@ -211,7 +191,7 @@ export const config = {
         ariaLabel: "Continue Game",
         order: 13,
         id: "gel-continue",
-        channel: "gel-buttons",
+        channel: buttonsChannel,
     },
     howToPlay: {
         group: "bottomRight",
@@ -219,7 +199,7 @@ export const config = {
         key: "how-to-play",
         ariaLabel: "Game Instructions",
         order: 14,
-        action: ({ game }) => howToPlay.create({ game }),
-        channel: "gel-buttons",
+        id: "gel-how-to-play",
+        channel: buttonsChannel,
     },
 };

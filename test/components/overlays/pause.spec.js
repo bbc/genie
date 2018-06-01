@@ -1,10 +1,9 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-
-import * as Pause from "../../../src/components/overlays/pause";
-import * as signal from "../../../src/core/signal-bus.js";
-import { GameAssets } from "../../../src/core/game-assets.js";
 import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
+import * as Pause from "../../../src/components/overlays/pause";
+import { GameAssets } from "../../../src/core/game-assets.js";
+import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Pause Overlay", () => {
     let mockGame;
@@ -26,10 +25,10 @@ describe("Pause Overlay", () => {
             restoreDisabledButtons: sandbox.spy(),
             moveGelButtonsToTop: sandbox.spy(),
         };
-        mockLayoutDestroy = { destroy: sandbox.spy() };
         sandbox.stub(OverlayLayout, "create").returns(mockOverlayLayout);
 
         mockGelButtons = { destroy: sandbox.spy() };
+        sandbox.stub(document, "getElementById").returns({ focus: () => {} });
         mockScreen = {
             scene: {
                 addToBackground: sandbox.stub().returns(mockLayoutDestroy),
@@ -46,14 +45,15 @@ describe("Pause Overlay", () => {
         mockGame = {
             add: { image: sandbox.stub() },
             state: { current: "pauseScreen", states: { pauseScreen: mockScreen } },
-            sound: { pauseAll: sandbox.spy(), unsetMute: sandbox.spy() },
+            sound: { pauseAll: sandbox.spy() },
             paused: false,
         };
         mockGame.add.image.onCall(0).returns("backgroundImage");
 
         GameAssets.sounds = {
             backgroundMusic: {
-                mute: false,
+                pause: sandbox.spy(),
+                resume: sandbox.spy(),
             },
         };
     });
@@ -75,12 +75,8 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGame.paused);
         });
 
-        it("keeps all audio playing", () => {
-            sinon.assert.calledOnce(mockGame.sound.unsetMute);
-        });
-
-        it("mutes background music", () => {
-            assert.isTrue(GameAssets.sounds.backgroundMusic.mute);
+        it("pauses background music", () => {
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.pause);
         });
     });
 
@@ -156,7 +152,7 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            assert.isFalse(GameAssets.sounds.backgroundMusic.mute);
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
@@ -176,7 +172,7 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            assert.isFalse(GameAssets.sounds.backgroundMusic.mute);
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
@@ -200,7 +196,7 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            assert.isFalse(GameAssets.sounds.backgroundMusic.mute);
+            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 

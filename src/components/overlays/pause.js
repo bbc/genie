@@ -9,6 +9,7 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import * as signal from "../../core/signal-bus.js";
 import { GameAssets } from "../../core/game-assets.js";
 import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
+import * as gel from "../../core/layout/gel-defaults.js";
 
 /**
  * @param {Phaser.Game} game - The Phaser Game instance
@@ -28,8 +29,7 @@ export function create({ game }, hideReplayButton) {
 
     function pauseGame() {
         game.paused = true;
-        game.sound.unsetMute();
-        GameAssets.sounds.backgroundMusic.mute = true;
+        GameAssets.sounds.backgroundMusic.pause();
         screen.context.popupScreens.push("pause");
     }
 
@@ -57,8 +57,9 @@ export function create({ game }, hideReplayButton) {
         signal.bus.removeChannel(channel);
         gelButtons.destroy();
         overlayLayout.restoreDisabledButtons();
+        document.getElementById(gel.config.pause.id).focus();
         background.destroy();
-        GameAssets.sounds.backgroundMusic.mute = false;
+        GameAssets.sounds.backgroundMusic.resume();
         screen.context.popupScreens = fp.pull("pause", screen.context.popupScreens);
     }
 
