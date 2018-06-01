@@ -12,6 +12,7 @@ describe("Scene", () => {
     let scalerSpy;
     let scalerMethods;
     let groupMethods;
+    let root;
 
     before(() => {
         sandbox = sinon.sandbox.create();
@@ -20,6 +21,7 @@ describe("Scene", () => {
     beforeEach(() => {
         scalerMethods = { getSize: sandbox.spy(), onScaleChange: { add: sandbox.spy() } };
         scalerSpy = sandbox.stub(Scaler, "create").returns(scalerMethods);
+        root = sandbox.stub();
         groupMethods = {
             addChild: sandbox.spy(),
             removeAll: sandbox.spy(),
@@ -39,7 +41,11 @@ describe("Scene", () => {
                 getParentBounds: sandbox.spy(),
             },
             debug: {
-                sprite: {},
+                sprite: {
+                    position: {
+                        set: sandbox.spy(),
+                    },
+                },
             },
         };
         scene = Scene.create(mockGame);
@@ -71,12 +77,11 @@ describe("Scene", () => {
         expect(scalerSpy.calledWith(600, mockGame)).to.equal(true);
     });
 
-    //TODO
     it("centers the background", () => {
-        const onSizeChange = mockGame.scale.setResizeCallback.getCall(0).args[0];
         const expectedScale = 1;
-        onSizeChange(800, 600, expectedScale);
-        expect(groupMethods.position.set.getCall(0).args).to.eql([400, 300]);
+        const resize = scalerMethods.onScaleChange.add.getCall(0).args[0];
+        resize(800, 600, expectedScale);
+        sandbox.assert.calledOnce(groupMethods.position.set.withArgs(400, 300));
     });
 
     describe("addToBackground method", () => {

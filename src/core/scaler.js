@@ -17,7 +17,7 @@ const getScale = fp.curry((scaleMethods, stageHeightPx, { width, height }) => {
 const getBounds = game => () => game.scale.getParentBounds();
 
 export function create(stageHeightPx, game) {
-    game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     const onScaleChange = new Phaser.Signal();
 

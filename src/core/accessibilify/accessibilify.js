@@ -73,21 +73,9 @@ export function accessibilify(button, config) {
             return;
         }
 
-        if (isOutsideScreen()) {
-            if (accessibleElement.visible()) {
-                accessibleElement.hide();
-            }
-            return;
-        }
-
         if (!accessibleElement.visible()) {
             accessibleElement.show();
         }
-    }
-
-    function isOutsideScreen() {
-        const bounds = getHitAreaBounds();
-        return bounds.top > game.height || bounds.bottom < 0 || bounds.left > game.width || bounds.right < 0;
     }
 
     function buttonAction() {

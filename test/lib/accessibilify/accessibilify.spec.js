@@ -44,11 +44,12 @@ describe("#accessibilify", () => {
         activePointer = sandbox.spy();
         mockButton = {
             alive: true,
+            inWorld: true,
             name: "play",
             toGlobal: x => {
                 x.multiply = y => {
                     return y;
-                }
+                };
                 return x;
             },
             game: {
@@ -227,23 +228,7 @@ describe("#accessibilify", () => {
     });
 
     describe("Button Update", () => {
-
-        /*
-            TODO Looks like the "isOutsideScreen" method of accessibilify.js is not working correctly.
-            Bounds may need to be multipled like on line 41 of accessibilify.js
-         */
         describe("element visibility", () => {
-            it("when button is outside of screen and element is visible it should be hidden", () => {
-                accessibleDomElement.returns({
-                    visible: () => accessibleDomElementVisible,
-                    hide: accessibleDomElementHide,
-                    position: () => {},
-                });
-                mockButton.hitArea.x = -1000;
-                accessibilify(mockButton);
-                mockButton.update();
-                sinon.assert.called(accessibleDomElementHide);
-            });
             it("when button input is disabled and the element is visible it should be hidden", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
@@ -255,6 +240,7 @@ describe("#accessibilify", () => {
                 mockButton.update();
                 sinon.assert.called(accessibleDomElementHide);
             });
+
             it("when button has enabled input and is within the bounds of the screen and element is not visible it should be shown", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
