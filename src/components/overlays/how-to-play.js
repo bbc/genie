@@ -17,8 +17,6 @@ export function create({ game }) {
     const theme = screen.context.config.theme["how-to-play"];
     const channel = "how-to-play-gel-buttons";
 
-    let panels = [];
-    let currentIndex = 0;
     let numberOfPanels = Object.keys(theme.panels).length;
 
     screen.context.popupScreens.push("how-to-play");

@@ -3,7 +3,6 @@ import * as Game from "../../fake/game.js";
 import * as OverlayLayout from "../../fake/overlay-layout.js";
 import * as Button from "../../fake/button.js";
 import * as Scene from "../../fake/scene.js";
-import * as Scenery from "../../../src/core/scenery.js";
 import * as Book from "../../../src/core/book.js";
 import * as Chai from "chai";
 Chai.should();
