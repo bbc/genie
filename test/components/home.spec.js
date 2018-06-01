@@ -74,7 +74,7 @@ describe("Home Screen", () => {
 
         it("adds a title image", () => {
             const actualImageCall = gameImageStub.getCall(1);
-            const expectedImageCall = [0, -150, "homeScreen.title"];
+            const expectedImageCall = [0, -150, "home.title"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
 
             const addToBackgroundCall = addToBackgroundSpy.getCall(1);
