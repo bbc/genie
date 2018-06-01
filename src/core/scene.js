@@ -41,7 +41,6 @@ export function create(game) {
     const background = game.add.group(undefined, "background");
     const foreground = game.add.group(undefined, "foreground");
 
-    const keyLookups = {};
     if (!game.accessibleButtons) {
         game.accessibleButtons = [];
     }
