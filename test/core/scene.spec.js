@@ -35,7 +35,7 @@ describe("Scene", () => {
                 setGameSize: sandbox.spy(),
                 setGamePosition: sandbox.spy(),
                 scaleMode: sandbox.spy(),
-                onSizeChange: { add: sandbox.spy() },
+                setResizeCallback: sandbox.spy(),
                 getParentBounds: sandbox.spy(),
             },
             debug: {
@@ -71,11 +71,19 @@ describe("Scene", () => {
         expect(scalerSpy.calledWith(600, mockGame)).to.equal(true);
     });
 
-    it("scales the background", () => {
-        const onScaleChangeCallback = scalerMethods.onScaleChange.add.getCall(0).args[0];
+    xit("scales the background", () => {
+        const setResizeCallback = scalerMethods.setResizeCallback.getCall(0).args[0];
         const expectedScale = 1;
-        onScaleChangeCallback(800, 600, expectedScale);
+        setResizeCallback(800, 600, expectedScale);
         expect(groupMethods.scale.set.getCall(0).args).to.eql([expectedScale, expectedScale]);
+        expect(groupMethods.position.set.getCall(0).args).to.eql([400, 300]);
+    });
+
+    it("centers the background", () => {
+        const onSizeChange = mockGame.scale.setResizeCallback.getCall(0).args[0];
+        const expectedScale = 1;
+        onSizeChange(800, 600, expectedScale);
+        //expect(groupMethods.scale.set.getCall(0).args).to.eql([expectedScale, expectedScale]);
         expect(groupMethods.position.set.getCall(0).args).to.eql([400, 300]);
     });
 

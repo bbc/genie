@@ -46,6 +46,9 @@ describe("#accessibilify", () => {
             alive: true,
             name: "play",
             toGlobal: x => {
+                x.multiply = y => {
+                    return y;
+                }
                 return x;
             },
             game: {
@@ -62,6 +65,7 @@ describe("#accessibilify", () => {
                         add: () => {},
                         remove: () => {},
                     },
+                    scaleFactorInversed: { x: 1, y: 1 },
                 },
                 update: {},
             },
