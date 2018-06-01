@@ -54,7 +54,6 @@ describe("Overlay Layout", () => {
     it("disables currently enabled buttons", () => {
         const overlayLayout = OverlayLayout.create(mockScreen);
         assert.isFalse(mockLayouts[0].buttons.audioOff.input.enabled);
-        assert.isFalse(mockLayouts[0].buttons.audioOff.input.enabled);
         assert.isFalse(mockGameButtons[0].input.enabled);
         assert.isTrue(mockLayouts[0].buttons.audioOff.update.calledOnce);
         assert.isTrue(mockGameButtons[0].update.calledOnce);

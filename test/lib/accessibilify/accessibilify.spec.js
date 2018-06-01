@@ -162,7 +162,7 @@ describe("#accessibilify", () => {
             });
         });
 
-        describe("with game argument", () => {
+        describe("with gameButton argument", () => {
             it("adds the button to an array in the game for the overlay-layout to use", () => {
                 const config = {
                     ariaLabel: "Play Button",

@@ -15,7 +15,7 @@ export function accessibilify(button, config, gameButton = true) {
     const accessibleElement = newAccessibleElement();
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
 
-    if (gameButton == true) {
+    if (gameButton) {
         game.accessibleButtons.push(button);
     }
 
