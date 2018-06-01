@@ -11,7 +11,6 @@ describe("Load Screen", () => {
     let musicLoopStub;
     let addImageStub;
     let mockGame;
-    let addLookupsSpy;
     let assetLoaderSpy;
     let assetLoaderCallbackSpy;
     let navigationNext;
@@ -19,7 +18,6 @@ describe("Load Screen", () => {
     const sandbox = sinon.sandbox.create();
 
     beforeEach(() => {
-        addLookupsSpy = sandbox.spy();
         assetLoaderCallbackSpy = sandbox.spy();
         assetLoaderSpy = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
         musicLoopStub = sandbox.stub();
@@ -41,17 +39,7 @@ describe("Load Screen", () => {
         };
 
         loadScreen = new Loadscreen();
-        loadScreen.scene = {
-            addLookups: addLookupsSpy,
-            keyLookups: {
-                currentState: {
-                    backgroundMusic: "backgroundMusic",
-                },
-                gel: "thisIsGel",
-                background: "backgroundImage",
-                title: "titleImage",
-            },
-        };
+        loadScreen.scene = {};
         loadScreen.navigation = {
             next: navigationNext,
         };
@@ -85,16 +73,6 @@ describe("Load Screen", () => {
         it("handles the returned promise", () => {
             loadScreen.preload();
             expect(assetLoaderCallbackSpy.called).to.equal(true);
-        });
-
-        it("adds keylookups to the layout when the promise is resolved", () => {
-            const expectedKeyLookups = { gel: { play: "gel/play.png" } };
-
-            loadScreen.context = { qaMode: { active: false } };
-            loadScreen.preload();
-
-            assetLoaderCallbackSpy.args[0][0](expectedKeyLookups);
-            expect(addLookupsSpy.args[0][0]).to.eql(expectedKeyLookups);
         });
 
         it("moves to the next screen when the promise is resolved", () => {

@@ -24,7 +24,7 @@ export function create(screen, backgroundImage) {
         addBackground,
         restoreDisabledButtons,
         moveGelButtonsToTop,
-        moveButtonToTop,
+        moveToTop,
     };
 
     function addBackground(backgroundImage) {
@@ -78,8 +78,8 @@ export function create(screen, backgroundImage) {
         }, gelLayout.buttons);
     }
 
-    function moveButtonToTop(button) {
-        button.inputEnabled = true;
-        button.input.priorityID = priorityID;
+    function moveToTop(item) {
+        item.inputEnabled = true;
+        item.input.priorityID = priorityID;
     }
 }

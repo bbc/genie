@@ -32,10 +32,7 @@ export class GelButton extends Phaser.Button {
     }
 }
 
-const paths = [
-    [x => x.isMobile, x => "gel/mobile/" + x.key + ".png"],
-    [x => !x.isMobile, x => "gel/desktop/" + x.key + ".png"],
-];
+const paths = [[x => x.isMobile, x => "gelMobile." + x.key], [x => !x.isMobile, x => "gelDesktop." + x.key]];
 
 const assetPath = fp.cond(paths);
 

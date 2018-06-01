@@ -5,6 +5,8 @@ import { Home } from "./components/home.js";
 import { Select } from "./components/select.js";
 import { GameTest } from "./components/test-harness/test-screens/game.js";
 import { Results } from "./components/results.js";
+import { parseUrlParams } from "./core/parseUrlParams.js";
+import { phaserTestHarnessConfig } from "./components/test-harness/test-harness-main.js";
 
 settings.setCloseCallback(() => {
     //Called when settings screen has been closed
@@ -39,6 +41,10 @@ settings.add("custom1", value => {
 });
 
 const navigationConfig = goToScreen => {
+    if (parseUrlParams(window.location.search).sanityCheck === true) {
+        return phaserTestHarnessConfig(goToScreen);
+    }
+
     const home = data => goToScreen("home", data);
     const characterSelect = data => goToScreen("character-select", data);
     const game = data => goToScreen("game", data);
