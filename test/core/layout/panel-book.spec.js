@@ -52,8 +52,6 @@ describe("Showing pages of a book", () => {
                 OverlayLayout.Stub,
             );
 
-            // FIXME: These spys are being added after the book has been created so we are currently missing
-            // the first call of book.nextPageOption.update and book.nextPageOption.accessibleElement.focus
             book.nextPageOption.update = sinon.spy();
             book.nextPageOption.accessibleElement.focus = sinon.spy();
             book.previousPageOption.update = sinon.spy();
