@@ -38,12 +38,12 @@ export class GameTest extends Screen {
                 buttonYPosition,
                 buttonKey,
                 () => this.navigation.next(results),
-                this, 
+                this,
             );
             const config = {
                 id: buttonNumber,
-                ariaLabel: buttonText
-            }
+                ariaLabel: buttonText,
+            };
             accessibilify(button, config);
             button.anchor.set(0.5, 0.5);
             button.addChild(buttonText);

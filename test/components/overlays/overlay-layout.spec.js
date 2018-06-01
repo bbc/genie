@@ -32,6 +32,7 @@ describe("Overlay Layout", () => {
             context: { popupScreens: ["pause", "how-to-play"] },
             scene: {
                 getLayouts: sandbox.stub().returns(mockLayouts),
+                getAccessibleGameButtons: sandbox.stub().returns([]),
                 addToBackground: sandbox.spy(),
             },
         };

@@ -57,6 +57,7 @@ describe("#accessibilify", () => {
                 },
                 height: gameHeight,
                 width: gameWidth,
+                accessibleButtons: [],
                 scale: {
                     onSizeChange: {
                         add: () => {},

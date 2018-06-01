@@ -147,6 +147,19 @@ describe("Scene", () => {
         });
     });
 
+    describe("getAccessibleGameButtons method", () => {
+        it("should return the correct buttons", () => {
+            const spyDestroy = sandbox.spy();
+            const mockLayout = {
+                root: sandbox.stub(),
+                destroy: spyDestroy,
+            };
+            sandbox.stub(Layout, "create").returns(mockLayout);
+
+            assert.lengthOf(scene.getAccessibleGameButtons(), 0);
+        });
+    });
+
     describe("removeAll method", () => {
         it("removes everything from the background", () => {
             scene.removeAll();

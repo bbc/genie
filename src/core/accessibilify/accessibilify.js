@@ -17,7 +17,6 @@ export function accessibilify(button, config, gameButton = true) {
 
     if (gameButton == true) {
         game.accessibleButtons.push(button);
-        console.log("accessible array", game.accessibleButtons);
     }
 
     assignEvents();
