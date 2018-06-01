@@ -71,19 +71,11 @@ describe("Scene", () => {
         expect(scalerSpy.calledWith(600, mockGame)).to.equal(true);
     });
 
-    xit("scales the background", () => {
-        const setResizeCallback = scalerMethods.setResizeCallback.getCall(0).args[0];
-        const expectedScale = 1;
-        setResizeCallback(800, 600, expectedScale);
-        expect(groupMethods.scale.set.getCall(0).args).to.eql([expectedScale, expectedScale]);
-        expect(groupMethods.position.set.getCall(0).args).to.eql([400, 300]);
-    });
-
+    //TODO
     it("centers the background", () => {
         const onSizeChange = mockGame.scale.setResizeCallback.getCall(0).args[0];
         const expectedScale = 1;
         onSizeChange(800, 600, expectedScale);
-        //expect(groupMethods.scale.set.getCall(0).args).to.eql([expectedScale, expectedScale]);
         expect(groupMethods.position.set.getCall(0).args).to.eql([400, 300]);
     });
 

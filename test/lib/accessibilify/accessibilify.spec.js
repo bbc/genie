@@ -227,6 +227,11 @@ describe("#accessibilify", () => {
     });
 
     describe("Button Update", () => {
+
+        /*
+            TODO Looks like the "isOutsideScreen" method of accessibilify.js is not working correctly.
+            Bounds may need to be multipled like on line 41 of accessibilify.js
+         */
         describe("element visibility", () => {
             it("when button is outside of screen and element is visible it should be hidden", () => {
                 accessibleDomElement.returns({
