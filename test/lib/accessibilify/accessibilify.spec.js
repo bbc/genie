@@ -44,7 +44,6 @@ describe("#accessibilify", () => {
         activePointer = sandbox.spy();
         mockButton = {
             alive: true,
-            inWorld: true,
             name: "play",
             toGlobal: x => {
                 x.multiply = y => {
@@ -240,7 +239,6 @@ describe("#accessibilify", () => {
                 mockButton.update();
                 sinon.assert.called(accessibleDomElementHide);
             });
-
             it("when button has enabled input and is within the bounds of the screen and element is not visible it should be shown", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
