@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 
-import * as settings from "../../../src/core/settings.js";
+import { settings } from "../../../src/core/settings.js";
 import * as pause from "../../../src/components/overlays/pause.js";
 import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
 import * as gel from "../../../src/core/layout/gel-defaults";

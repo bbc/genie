@@ -1,4 +1,4 @@
-import * as settings from "../settings.js";
+import { settings } from "../settings.js";
 import * as pause from "../../components/overlays/pause.js";
 import * as howToPlay from "../../components/overlays/how-to-play.js";
 
