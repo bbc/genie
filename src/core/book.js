@@ -3,7 +3,7 @@ import * as Scenery from "./scenery.js";
 import * as Button from "./button.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
-const configureButtonsForPage = (pageNumber, book) => {
+const configureButtonsForPage = (pageNumber, book, initialising) => {
     const pagesAhead = pageNumber < book.numberOfPages;
     book.nextPageOption.visible = pagesAhead;
     book.nextPageOption.input.enabled = pagesAhead;
@@ -14,12 +14,13 @@ const configureButtonsForPage = (pageNumber, book) => {
     book.previousPageOption.input.enabled = pagesBefore;
     book.previousPageOption.update();
 
-    // TODO: Add tests for auto-focussing accessible elements
-    if (!pagesAhead) book.previousPageOption.accessibleElement.focus();
-    if (!pagesBefore) book.nextPageOption.accessibleElement.focus();
+    if (!initialising) {
+        if (!pagesAhead) book.previousPageOption.accessibleElement.focus();
+        if (!pagesBefore) book.nextPageOption.accessibleElement.focus();
+    }
 };
 
-const GoToPage = (pageNumber, book) => {
+const GoToPage = (pageNumber, book, initialising = false) => {
     if (pageNumber > book.numberOfPages) {
         return book;
     }
@@ -27,7 +28,7 @@ const GoToPage = (pageNumber, book) => {
     book.hidePage(book.currentPageNumber);
     book.showPage(pageNumber);
     book.currentPageNumber = pageNumber;
-    configureButtonsForPage(pageNumber, book);
+    configureButtonsForPage(pageNumber, book, initialising);
 
     return book;
 };
@@ -85,7 +86,7 @@ const Draw = (theme, drawPage, drawButtons) => {
         },
     };
 
-    return GoToPage(1, book);
+    return GoToPage(1, book, true);
 };
 
 const Start = (screenName, theme, game, scene, overlayLayout) => {
