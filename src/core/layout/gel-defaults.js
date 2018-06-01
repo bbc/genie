@@ -86,6 +86,15 @@ export const config = {
         id: "gel-pause",
         channel: buttonsChannel,
     },
+    pauseNoReplay: {
+        group: "topRight",
+        title: "Pause",
+        key: "pause",
+        ariaLabel: "Pause Game",
+        order: 6,
+        id: "gel-pause",
+        channel: buttonsChannel,
+    },
     previous: {
         group: "middleLeft",
         title: "Previous",
