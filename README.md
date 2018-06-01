@@ -56,6 +56,14 @@ To access QA mode, add the `qaMode=true` query string to the URL: http://localho
 
 This will output game loading progress and asset keylookups to the console. Pressing "q" will show the layout overlay, to show the game bounds.
 
+## Sanity Check Mode:
+
+"Sanity Check" mode is a series of screens that make use of Phaser features such as collisions, rotations, tweens etc. It is to ensure that these features are working as intended.
+
+To access "Sanity Check" mode, add the `sanityCheck=true` query string to the URL: http://localhost:8080/?sanityCheck=true.
+
+While in this mode, press `D` on your keyboard to view the Phaser Arcade Physics hitbox over each sprite.
+
 ## Documentation:
 
 *   [Notes on Genie Core](https://github.com/bbc/childrens-games-genie/blob/master/docs/notes-on-genie-core.md)

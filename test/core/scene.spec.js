@@ -63,7 +63,8 @@ describe("Scene", () => {
         expect(mockGame.add.group.calledWith(undefined, "unscaled", true)).to.equal(true);
         expect(mockGame.add.group.calledWith(undefined, "background")).to.equal(true);
         expect(mockGame.add.group.calledWith(undefined, "foreground")).to.equal(true);
-        expect(mockGame.add.group.callCount).to.equal(4);
+        expect(mockGame.add.group.calledWith(undefined, "debug", true)).to.equal(true);
+        expect(mockGame.add.group.callCount).to.equal(5);
     });
 
     it("creates a scaler with correct params", () => {
