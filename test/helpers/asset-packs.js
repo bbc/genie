@@ -19,8 +19,8 @@ const twoScreensThreeAssetsPack = objectToJsonDataUrl({
 
 const gelButtonAssetPack = objectToJsonDataUrl({
     gel: [
-        createImageAsset("image", "gel/desktop/play.png", assets.darkGreySquare100, false),
-        createImageAsset("image", "gel/mobile/play.png", assets.darkGreySquare100, false),
+        createImageAsset("image", "gelDesktop.play", assets.darkGreySquare100, false),
+        createImageAsset("image", "gelMobile.play", assets.darkGreySquare100, false),
     ],
 });
 

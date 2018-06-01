@@ -33,8 +33,7 @@ export function create({ game }) {
     }
 
     function addBackground() {
-        const keyLookup = screen.scene.keyLookups.pause;
-        const backgroundImage = game.add.image(0, 0, keyLookup.pauseBackground);
+        const backgroundImage = game.add.image(0, 0, "pause.pauseBackground");
         backgroundImage.inputEnabled = true;
         backgroundImage.input.priorityID = priorityID - 1;
         return screen.scene.addToBackground(backgroundImage);

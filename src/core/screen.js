@@ -13,6 +13,10 @@ export class Screen extends Phaser.State {
         this._context = _.merge({}, this._context, newContext);
     }
 
+    getAsset(name) {
+        return this.game.state.current + "." + name;
+    }
+
     init(transientData, scene, context, navigation) {
         this.scene = scene;
         this._context = context;
