@@ -96,7 +96,7 @@ export const config = {
         channel: buttonsChannel,
     },
     previous: {
-        group: "middleLeft",
+        group: "middleLeftSafe",
         title: "Previous",
         key: "previous",
         ariaLabel: "Previous Item",
@@ -105,7 +105,7 @@ export const config = {
         channel: buttonsChannel,
     },
     howToPlayPrevious: {
-        group: "middleLeft",
+        group: "middleLeftSafe",
         title: "Previous",
         key: "previous",
         ariaLabel: "Previous Item",
@@ -149,7 +149,7 @@ export const config = {
         channel: "pause-gel-buttons",
     },
     next: {
-        group: "middleRight",
+        group: "middleRightSafe",
         title: "Next",
         key: "next",
         ariaLabel: "Next Item",
@@ -158,7 +158,7 @@ export const config = {
         channel: buttonsChannel,
     },
     howToPlayNext: {
-        group: "middleRight",
+        group: "middleRightSafe",
         title: "Next",
         key: "next",
         ariaLabel: "Next Item",

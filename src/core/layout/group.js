@@ -14,19 +14,21 @@ const vertical = {
     bottom: (height, pad, pos) => pos - (height + pad),
 };
 
-const getGroupPosition = sizes => ({
-    x: getGroupX(sizes),
+const getGroupPosition = fp.curry((safe, sizes) => ({
+    x: getGroupX(safe, sizes),
     y: getGroupY(sizes),
-});
+}));
 
 const getGroupPositionCenter = sizes => ({
-    x: getGroupX(sizes),
+    x: getGroupX(false, sizes),
     y: getGroupYCenter(sizes),
 });
 
-const getGroupX = sizes => {
-    const horizontals = sizes.metrics["horizontals"];
-
+const getGroupX = (safe, sizes) => {
+    let horizontals = sizes.metrics["horizontals"];
+    if (safe) {
+        horizontals = sizes.metrics["safeHorizontals"];
+    }
     return horizontal[sizes.pos.h](sizes.width, sizes.metrics.borderPad * sizes.scale, horizontals[sizes.pos.h]);
 };
 
@@ -37,19 +39,20 @@ const getGroupYCenter = sizes =>
     vertical[sizes.pos.v](0, sizes.metrics.borderPad * sizes.scale, sizes.metrics.verticals[sizes.pos.v]);
 
 export class Group extends Phaser.Group {
-    constructor(game, parent, vPos, hPos, metrics, isVertical) {
+    constructor(game, parent, vPos, hPos, metrics, isSafe, isVertical) {
         super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
 
         this._vPos = vPos;
         this._hPos = hPos;
         this._metrics = metrics;
+        this._isSafe = isSafe;
         this._isVertical = isVertical;
         this._buttons = [];
         this._buttonFactory = ButtonFactory.create(game);
         if (this._hPos == "center" && this._vPos == "middle") {
             this._setGroupPosition = fp.flow(this.getSizes, getGroupPositionCenter, this.setPos);
         } else {
-            this._setGroupPosition = fp.flow(this.getSizes, getGroupPosition, this.setPos);
+            this._setGroupPosition = fp.flow(this.getSizes, getGroupPosition(isSafe), this.setPos);
         }
         this._setGroupPosition();
     }

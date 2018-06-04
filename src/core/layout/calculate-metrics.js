@@ -4,7 +4,7 @@ const SAFE_ASPECT_RATIO = 4 / 3;
 
 export const calculateMetrics = (width, height, scale, stageHeight) => {
     const isMobile = width < BREAK_WIDTH;
-    const safeWidth = height * SAFE_ASPECT_RATIO;
+    const safeWidth = stageHeight * SAFE_ASPECT_RATIO;
 
     const metrics = {
         width,
