@@ -17,7 +17,7 @@ const getScale = fp.curry((scaleMethods, stageHeightPx, { width, height }) => {
 const getBounds = game => () => game.scale.getParentBounds();
 
 export function create(stageHeightPx, game) {
-    game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     const onScaleChange = new Phaser.Signal();
 
@@ -32,11 +32,11 @@ export function create(stageHeightPx, game) {
         onScaleChange.dispatch(width, height, scale, stageHeight);
     };
 
-    const onSizeChange = fp.flow(x => {console.log('xxx'); return x;}, getSize, setSize);
+    const onSizeChange = fp.flow(getSize, setSize);
 
     //TODO investigate why using using game.scale.setResizeCallback(onSizeChange); gets called repeatedly.
-    //game.scale.onSizeChange.add(onSizeChange);
-    game.scale.setResizeCallback(onSizeChange);
+    game.scale.onSizeChange.add(onSizeChange);
+    //game.scale.setResizeCallback(onSizeChange);
 
     return {
         onScaleChange,

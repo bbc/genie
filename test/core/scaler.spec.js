@@ -11,6 +11,7 @@ describe("Scaler", () => {
                 setGameSize: sinon.spy(),
                 scaleMode: sinon.spy(),
                 setResizeCallback: sinon.spy(),
+                onSizeChange: { add: sinon.spy() },
                 getParentBounds: sinon.spy(() => {
                     return { width: 800, height: 600 };
                 }),
@@ -18,14 +19,14 @@ describe("Scaler", () => {
         };
     });
 
-    it("Should set the scalemode to USER_SCALE on create", () => {
+    it("Should set the scalemode to SHOW_ALL on create", () => {
         Scaler.create(600, mockGame);
-        expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.USER_SCALE);
+        expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.SHOW_ALL);
     });
 
-    it("Should call the games setResizeCallback function once", () => {
+    it("Should call the games onSizeChange add function once", () => {
         Scaler.create(600, mockGame);
-        expect(mockGame.scale.setResizeCallback.callCount).to.eql(1);
+        expect(mockGame.scale.onSizeChange.add.callCount).to.eql(1);
     });
 
     it("Should return the correct height, width, scale and stageHeight when getSize is called", () => {
