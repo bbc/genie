@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| UNRELEASED | "Replay" button removed on pause screen when pausing before the game has started. |
 | UNRELEASED | "Next" carousel button aligned for mobile. |
 | UNRELEASED | Removed keylookups in favour of namespaced key in phaser game cache.
 | UNRELEASED | Add getAsset method to screen as a shortcut to getting the namespaced asset.

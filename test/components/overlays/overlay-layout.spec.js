@@ -1,12 +1,9 @@
-import fp from "../../../lib/lodash/fp/fp.js";
 import { assert } from "chai";
 import * as sinon from "sinon";
-
 import * as OverlayLayout from "../../../src/components/overlays/overlay-layout";
 
 describe("Overlay Layout", () => {
     const sandbox = sinon.sandbox.create();
-    let overlayLayout;
     let mockLayouts;
     let mockScreen;
     let mockGameButtons;
@@ -52,7 +49,7 @@ describe("Overlay Layout", () => {
     });
 
     it("disables currently enabled buttons", () => {
-        const overlayLayout = OverlayLayout.create(mockScreen);
+        OverlayLayout.create(mockScreen);
         assert.isFalse(mockLayouts[0].buttons.audioOff.input.enabled);
         assert.isFalse(mockGameButtons[0].input.enabled);
         assert.isTrue(mockLayouts[0].buttons.audioOff.update.calledOnce);

@@ -1,12 +1,11 @@
-import { assert } from "chai";
 import * as sinon from "sinon";
+import { Home } from "../../src/components/home.js";
+import { Loadscreen } from "../../src/components/loadscreen.js";
 import * as Navigation from "../../src/core/navigation.js";
 import * as signal from "../../src/core/signal-bus.js";
-import { Loadscreen } from "../../src/components/loadscreen.js";
-import { Home } from "../../src/components/home.js";
 
 describe("Navigation", () => {
-    let gameState, context, scene, navigationConfig, transientData, navigation, signalBusRemoveChannel;
+    let gameState, context, scene, navigationConfig, transientData, navigation;
 
     const sandbox = sinon.sandbox.create();
 
@@ -33,7 +32,7 @@ describe("Navigation", () => {
             },
         };
         navigationConfig = () => navigation;
-        signalBusRemoveChannel = sandbox.spy(signal.bus, "removeChannel");
+        sandbox.stub(signal.bus, "removeChannel");
     });
 
     afterEach(() => {

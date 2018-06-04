@@ -1,6 +1,5 @@
-import { accessibleDomElement } from "./accessible-dom-element.js";
-import * as signal from "../../core/signal-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
+import { accessibleDomElement } from "./accessible-dom-element.js";
 
 export function accessibilify(button, config, gameButton = true) {
     config = Object.assign(
@@ -23,6 +22,7 @@ export function accessibilify(button, config, gameButton = true) {
     resizeAndRepositionElement();
 
     button.update = update;
+    button.accessibleElement = accessibleElement.el;
 
     return button;
 
@@ -93,10 +93,6 @@ export function accessibilify(button, config, gameButton = true) {
     }
 
     function buttonAction() {
-        // IE11 doesn't support webaudio api
-        if (game.sound.context && game.sound.context.state === "suspended") {
-            game.sound._resumeWebAudioOnClick();
-        }
         if (game.sound.touchLocked) {
             game.sound.unlock();
         }
