@@ -44,6 +44,7 @@ export function create(game) {
 
     const resize = (width, height, scale) => {
         game.scale.setGameSize(width / scale, height / scale);
+        game.scale.setUserScale(scale, scale);
 
         root.position.set(width * 0.5 / scale, height * 0.5 / scale);
         game.debug.sprite.position.set(-width * 0.5 / scale, -height * 0.5 / scale);

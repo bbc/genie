@@ -75,13 +75,6 @@ describe("Scene", () => {
         expect(scalerSpy.calledWith(600, mockGame)).to.equal(true);
     });
 
-    it("centers the background", () => {
-        const expectedScale = 1;
-        const resize = scalerMethods.onScaleChange.add.getCall(0).args[0];
-        resize(800, 600, expectedScale);
-        sandbox.assert.calledOnce(groupMethods.position.set.withArgs(400, 300));
-    });
-
     describe("addToBackground method", () => {
         it("adds an Phaser element to the background", () => {
             const mockPhaserElement = { phaser: "element" };
