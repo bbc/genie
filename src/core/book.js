@@ -3,14 +3,24 @@ import * as Scenery from "./scenery.js";
 import * as Button from "./button.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
-const configureButtonsForPage = (pageNumber, book) => {
-    if (pageNumber >= 1 && book.numberOfPages >= pageNumber) {
-        book.nextPageOption.visible = book.numberOfPages > pageNumber;
-        book.previousPageOption.visible = pageNumber > 1;
+const configureButtonsForPage = (pageNumber, book, initialising) => {
+    const pagesAhead = pageNumber < book.numberOfPages;
+    book.nextPageOption.visible = pagesAhead;
+    book.nextPageOption.input.enabled = pagesAhead;
+    book.nextPageOption.update();
+
+    const pagesBefore = pageNumber > 1;
+    book.previousPageOption.visible = pagesBefore;
+    book.previousPageOption.input.enabled = pagesBefore;
+    book.previousPageOption.update();
+
+    if (!initialising) {
+        if (!pagesAhead) book.previousPageOption.accessibleElement.focus();
+        if (!pagesBefore) book.nextPageOption.accessibleElement.focus();
     }
 };
 
-const GoToPage = (pageNumber, book) => {
+const GoToPage = (pageNumber, book, initialising = false) => {
     if (pageNumber > book.numberOfPages) {
         return book;
     }
@@ -18,7 +28,7 @@ const GoToPage = (pageNumber, book) => {
     book.hidePage(book.currentPageNumber);
     book.showPage(pageNumber);
     book.currentPageNumber = pageNumber;
-    configureButtonsForPage(pageNumber, book);
+    configureButtonsForPage(pageNumber, book, initialising);
 
     return book;
 };
@@ -76,7 +86,7 @@ const Draw = (theme, drawPage, drawButtons) => {
         },
     };
 
-    return GoToPage(1, book);
+    return GoToPage(1, book, true);
 };
 
 const Start = (screenName, theme, game, scene, overlayLayout) => {
