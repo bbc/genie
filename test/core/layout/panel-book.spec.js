@@ -30,11 +30,11 @@ describe("Showing pages of a book", () => {
         });
 
         it("Should disable the 'Previous page' option", () => {
-            book.previousPageOption.should.have.property("visible", false);
+            book.previousPageOption.should.have.property("alpha", 0);
         });
 
         it("Should disable the 'Next page' option", () => {
-            book.nextPageOption.should.have.property("visible", false);
+            book.nextPageOption.should.have.property("alpha", 0);
         });
     });
 
@@ -67,12 +67,12 @@ describe("Showing pages of a book", () => {
             });
 
             it("Should disable the 'Previous page' option", () => {
-                book.previousPageOption.should.have.property("visible", false);
+                book.previousPageOption.should.have.property("alpha", 0);
                 book.previousPageOption.input.should.have.property("enabled", false);
             });
 
             it("Should enable the 'Next page' option", () => {
-                book.nextPageOption.should.have.property("visible", true);
+                book.nextPageOption.should.have.property("alpha", 1);
                 book.nextPageOption.input.should.have.property("enabled", true);
             });
 
@@ -96,14 +96,14 @@ describe("Showing pages of a book", () => {
         describe("Back to front", () => {
             it("Should enable the 'Previous page' option", () => {
                 book = Book.NextPage(book);
-                book.previousPageOption.should.have.property("visible", true);
+                book.previousPageOption.should.have.property("alpha", 1);
                 book.previousPageOption.input.should.have.property("enabled", true);
                 assert.calledOnce(book.previousPageOption.update);
             });
 
             it("Should disable the 'Next page' option", () => {
                 book = Book.NextPage(book);
-                book.nextPageOption.should.have.property("visible", false);
+                book.nextPageOption.should.have.property("alpha", 0);
                 book.nextPageOption.input.should.have.property("enabled", false);
                 assert.calledOnce(book.nextPageOption.update);
             });

@@ -7,7 +7,7 @@ const Stub = () => {
             enabled: true,
         },
         update: () => {},
-        visible: true,
+        alpha: 1,
     };
 };
 
