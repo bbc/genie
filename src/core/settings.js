@@ -1,6 +1,5 @@
 import fp from "../../lib/lodash/fp/fp.js";
 import * as signal from "../core/signal-bus.js";
-import * as gel from "./layout/gel-defaults.js";
 
 export const settingsChannel = "genie-settings";
 
@@ -22,7 +21,10 @@ export const create = () => {
     };
 
     const onSettingsClosed = () => {
-        document.getElementById(gel.config.settings.id).focus();
+        signal.bus.publish({
+            channel: settingsChannel,
+            name: "settingsClosed",
+        });
     };
 
     const setGmi = newGmi => (gmi = newGmi);

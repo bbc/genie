@@ -47,6 +47,7 @@ describe("Pause Overlay", () => {
             state: { current: "pauseScreen", states: { pauseScreen: mockScreen } },
             sound: { pauseAll: sandbox.spy() },
             paused: false,
+            canvas: { focus: sandbox.spy() },
         };
         mockGame.add.image.onCall(0).returns("backgroundImage");
 
@@ -164,6 +165,13 @@ describe("Pause Overlay", () => {
             sinon.assert.calledOnce(signalBusRemoveChannel.withArgs("pause-gel-buttons"));
         });
 
+        it("resets the tab position on destroy", () => {
+            Pause.create({ game: mockGame });
+            const destroy = signalSpy.getCall(0).args[0].callback;
+            destroy();
+            sinon.assert.calledOnce(mockGame.canvas.focus);
+        });
+
         it("destroys the pause screen when the replay button is clicked", () => {
             Pause.create({ game: mockGame });
             const cickReplayButton = signalSpy.getCall(2).args[0].callback;
@@ -200,7 +208,7 @@ describe("Pause Overlay", () => {
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
-        it("naviagtes home when the home button is clicked", () => {
+        it("navigates home when the home button is clicked", () => {
             Pause.create({ game: mockGame });
             const clickHomeButton = signalSpy.getCall(1).args[0].callback;
             clickHomeButton();

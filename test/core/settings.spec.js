@@ -25,25 +25,6 @@ describe("Settings", () => {
         assert(spy.calledOnce);
     });
 
-    it("Focuses on the settings button after closing settings", () => {
-        const spy = sinon.spy();
-        sandbox.stub(document, "getElementById").returns({
-            focus: spy,
-        });
-        const settings = createSettings();
-
-        const mockGmi = {
-            showSettings: (onSettingsChanged, onSettingsClosed) => {
-                onSettingsClosed();
-            },
-        };
-
-        settings.setGmi(mockGmi);
-        settings.show();
-
-        sinon.assert.calledOnce(spy);
-    });
-
     it("Dispatches a signal bus message when a setting changes", () => {
         const spy = sinon.spy(signal.bus, "publish");
         const settingName = "test";
