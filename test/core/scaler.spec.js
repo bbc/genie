@@ -18,9 +18,9 @@ describe("Scaler", () => {
         };
     });
 
-    it("Should set the scalemode to SHOW_ALL on create", () => {
+    it("Should set the scalemode to USER_SCALE on create", () => {
         Scaler.create(600, mockGame);
-        expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.SHOW_ALL);
+        expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.USER_SCALE);
     });
 
     it("Should call the games setResizeCallback function once", () => {
