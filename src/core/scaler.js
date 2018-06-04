@@ -33,7 +33,9 @@ export function create(stageHeightPx, game) {
     };
 
     const onSizeChange = fp.flow(getSize, setSize);
-    game.scale.setResizeCallback(onSizeChange);
+
+    //TODO investigate using game.scale.setResizeCallback(onSizeChange); - currently this is repeatedly called.
+    game.scale.onSizeChange.add(onSizeChange);
 
     return {
         onScaleChange,
