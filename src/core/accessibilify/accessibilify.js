@@ -1,7 +1,7 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 
-export function accessibilify(button, config) {
+export function accessibilify(button, config, gameButton = true) {
     config = Object.assign(
         {
             id: button.name,
@@ -13,6 +13,10 @@ export function accessibilify(button, config) {
     const game = button.game;
     const accessibleElement = newAccessibleElement();
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
+
+    if (gameButton) {
+        game.accessibleButtons.push(button);
+    }
 
     assignEvents();
     resizeAndRepositionElement();

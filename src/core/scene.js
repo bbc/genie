@@ -40,6 +40,12 @@ export function create(game) {
     const unscaled = game.add.group(undefined, "unscaled", true);
     const background = game.add.group(undefined, "background");
     const foreground = game.add.group(undefined, "foreground");
+
+    if (!game.accessibleButtons) {
+        game.accessibleButtons = [];
+    }
+    const customAccessibleButtons = game.accessibleButtons;
+
     const debug = game.add.group(undefined, "debug", true);
 
     const resize = (width, height, scale) => {
@@ -83,6 +89,10 @@ export function create(game) {
 
     const getLayouts = () => _layouts;
 
+    const getAccessibleGameButtons = () => {
+        return customAccessibleButtons;
+    };
+
     const removeAll = () => {
         background.removeAll(true);
         _layouts.forEach(layout => layout.destroy());
@@ -95,6 +105,7 @@ export function create(game) {
         addToUnscaled,
         addLayout,
         getLayouts,
+        getAccessibleGameButtons,
         removeAll,
         getSize: scaler.getSize,
     };
