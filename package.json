@@ -54,7 +54,7 @@
     },
     "scripts": {
         "start": "http2-server -i index.dev.html -S",
-        "watch": "live-server --no-browser --entry-file=./index.html --watch=./src",
+        "watch": "live-server --no-browser --entry-file=./index.dev.html --watch=./src",
         "start:qa": "npm run build && live-server --no-browser --entry-file=./index.main.html --watch=./output/main.js -V",
         "build": "webpack --config build-scripts/webpack.config.js",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
