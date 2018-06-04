@@ -15,7 +15,7 @@
             "leftButton": {
                 "content": "Left",
                 "style": {
-                    "font": "20px Arial",
+                    "font": "20px ReithSans",
                     "fontWeight": "bold",
                     "fill": "white"
                 }
@@ -23,26 +23,16 @@
             "rightButton": {
                 "content": "Right",
                 "style": {
-                    "font": "20px Arial",
+                    "font": "20px ReithSans",
                     "fontWeight": "bold",
                     "fill": "white"
                 }
             }
         },
         "results": {
-            "titleText": {
-                "content": "Results",
-                "style": {
-                    "font": "bold 40px 'Arial'",
-                    "align": "center",
-                    "fill": "#6A6A6A",
-                    "boundsAlignH": "center",
-                    "fontWeight": "bold"
-                }
-            },
             "resultText": {
                 "style": {
-                    "font": "bold 40px 'Arial'",
+                    "font": "bold 40px ReithSans",
                     "align": "center",
                     "fill": "#6A6A6A",
                     "boundsAlignH": "center",
