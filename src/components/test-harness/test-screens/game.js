@@ -1,4 +1,5 @@
 import { Screen } from "../../../core/screen.js";
+import { accessibilify } from "../../../core/accessibilify/accessibilify.js";
 
 export class GameTest extends Screen {
     constructor() {
@@ -35,6 +36,11 @@ export class GameTest extends Screen {
                 () => this.navigation.next(results),
                 this,
             );
+            const config = {
+                id: buttonNumber,
+                ariaLabel: buttonText,
+            };
+            accessibilify(button, config);
             button.anchor.set(0.5, 0.5);
             button.addChild(buttonText);
             buttonText.anchor.set(0.5, 0.5);

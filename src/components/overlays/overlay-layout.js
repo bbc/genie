@@ -17,7 +17,8 @@ export function create(screen) {
     const backgroundPriorityID = 999;
     const priorityID = backgroundPriorityID + screen.context.popupScreens.length;
     const previousLayouts = screen.scene.getLayouts();
-    const disabledButtons = disableExistingButtons();
+    const accessibleGameButtons = screen.scene.getAccessibleGameButtons();
+    const disabledButtons = disableAllButtons();
 
     return {
         addBackground,
@@ -32,17 +33,31 @@ export function create(screen) {
         return screen.scene.addToBackground(backgroundImage);
     }
 
-    function disableExistingButtons() {
-        const disabledButtons = [];
+    function addButtonToDisabledButtons(button, disabledButtons) {
+        button.input.enabled = false;
+        disabledButtons.push(button);
+        button.update();
+        return disabledButtons;
+    }
+
+    function disableButtons(buttons, disabledButtons) {
+        fp.forOwn(button => {
+            if (button.input.enabled) {
+                disabledButtons = addButtonToDisabledButtons(button, disabledButtons);
+            }
+        }, buttons);
+
+        return disabledButtons;
+    }
+
+    function disableAllButtons() {
+        let disabledButtons = [];
+
         fp.forOwn(layout => {
-            fp.forOwn(button => {
-                if (button.input.enabled) {
-                    button.input.enabled = false;
-                    disabledButtons.push(button);
-                    button.update();
-                }
-            }, layout.buttons);
+            disabledButtons = disableButtons(layout.buttons, disabledButtons);
         }, previousLayouts);
+
+        disabledButtons = disableButtons(accessibleGameButtons, disabledButtons);
 
         return disabledButtons;
     }

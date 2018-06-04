@@ -57,6 +57,7 @@ describe("#accessibilify", () => {
                 },
                 height: gameHeight,
                 width: gameWidth,
+                accessibleButtons: [],
                 scale: {
                     onSizeChange: {
                         add: () => {},
@@ -158,6 +159,26 @@ describe("#accessibilify", () => {
                         onMouseOut: sinon.match.func,
                     }),
                 );
+            });
+        });
+
+        describe("with gameButton argument", () => {
+            it("adds the button to an array in the game for the overlay-layout to use", () => {
+                const config = {
+                    ariaLabel: "Play Button",
+                };
+
+                accessibilify(mockButton, config, true);
+                expect(mockButton.game.accessibleButtons[0]).to.equal(mockButton);
+            });
+
+            it("doesn't add the button to an array in the game for the overlay-layout to use when argument is false", () => {
+                const config = {
+                    ariaLabel: "Play Button",
+                };
+
+                accessibilify(mockButton, config, false);
+                expect(mockButton.game.accessibleButtons).to.deep.equal([]);
             });
         });
 
