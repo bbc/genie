@@ -8,14 +8,20 @@
         "ecmaVersion": 2017
     },
     "plugins": [
-        "no-only-tests"
+        "mocha"
     ],
     "rules": {
         "quotes": ["error", "double"],
         "semi": ["error", "always"],
         "no-undef": [0],
         "no-console": ["warn"],
-        "no-only-tests/no-only-tests": [2],
-        "no-unused-vars": "error"
+        "no-unused-vars": ["error"],
+        "mocha/no-skipped-tests": ["error"],
+        "mocha/no-exclusive-tests": "error"
+    },
+    "settings": {
+       "mocha/additionalTestFunctions": [
+           "describeModule"
+       ]
     }
 }
