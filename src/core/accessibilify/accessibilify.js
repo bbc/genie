@@ -1,7 +1,7 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 
-export function accessibilify(button, config) {
+export function accessibilify(button, config, gameButton = true) {
     config = Object.assign(
         {
             id: button.name,
@@ -13,6 +13,10 @@ export function accessibilify(button, config) {
     const game = button.game;
     const accessibleElement = newAccessibleElement();
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
+
+    if (gameButton) {
+        game.accessibleButtons.push(button);
+    }
 
     assignEvents();
     resizeAndRepositionElement();
@@ -37,7 +41,9 @@ export function accessibilify(button, config) {
         let bounds = button.getBounds().clone();
         if (button.hitArea) {
             bounds = button.hitArea.clone();
-            bounds.topLeft = button.toGlobal(bounds.topLeft);
+            bounds.topLeft = button
+                .toGlobal(bounds.topLeft)
+                .multiply(game.scale.scaleFactorInversed.x, game.scale.scaleFactorInversed.y);
         }
         return bounds;
     }
@@ -45,6 +51,7 @@ export function accessibilify(button, config) {
     function setElementSizeAndPosition() {
         if (button.alive) {
             const bounds = getHitAreaBounds();
+
             accessibleElement.position(bounds);
         }
     }
@@ -71,21 +78,9 @@ export function accessibilify(button, config) {
             return;
         }
 
-        if (isOutsideScreen()) {
-            if (accessibleElement.visible()) {
-                accessibleElement.hide();
-            }
-            return;
-        }
-
         if (!accessibleElement.visible()) {
             accessibleElement.show();
         }
-    }
-
-    function isOutsideScreen() {
-        const bounds = getHitAreaBounds();
-        return bounds.top > game.height || bounds.bottom < 0 || bounds.left > game.width || bounds.right < 0;
     }
 
     function buttonAction() {

@@ -6,6 +6,7 @@ describe("Overlay Layout", () => {
     const sandbox = sinon.sandbox.create();
     let mockLayouts;
     let mockScreen;
+    let mockGameButtons;
 
     beforeEach(() => {
         mockLayouts = [
@@ -25,10 +26,19 @@ describe("Overlay Layout", () => {
             },
         ];
 
+        mockGameButtons = [
+            {
+                input: { enabled: true },
+                update: sandbox.spy(),
+                name: "button1",
+            },
+        ];
+
         mockScreen = {
             context: { popupScreens: ["pause", "how-to-play"] },
             scene: {
                 getLayouts: sandbox.stub().returns(mockLayouts),
+                getAccessibleGameButtons: sandbox.stub().returns(mockGameButtons),
                 addToBackground: sandbox.spy(),
             },
         };
@@ -41,7 +51,9 @@ describe("Overlay Layout", () => {
     it("disables currently enabled buttons", () => {
         OverlayLayout.create(mockScreen);
         assert.isFalse(mockLayouts[0].buttons.audioOff.input.enabled);
+        assert.isFalse(mockGameButtons[0].input.enabled);
         assert.isTrue(mockLayouts[0].buttons.audioOff.update.calledOnce);
+        assert.isTrue(mockGameButtons[0].update.calledOnce);
     });
 
     describe("addBackground method", () => {
@@ -62,6 +74,7 @@ describe("Overlay Layout", () => {
             overlayLayout.restoreDisabledButtons();
             assert.isTrue(mockLayouts[0].buttons.audioOff.input.enabled);
             assert.isTrue(mockLayouts[0].buttons.audioOff.update.calledTwice);
+            assert.isTrue(mockGameButtons[0].input.enabled);
         });
     });
 

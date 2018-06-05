@@ -46,6 +46,9 @@ describe("#accessibilify", () => {
             alive: true,
             name: "play",
             toGlobal: x => {
+                x.multiply = y => {
+                    return y;
+                };
                 return x;
             },
             game: {
@@ -57,11 +60,13 @@ describe("#accessibilify", () => {
                 },
                 height: gameHeight,
                 width: gameWidth,
+                accessibleButtons: [],
                 scale: {
                     onSizeChange: {
                         add: () => {},
                         remove: () => {},
                     },
+                    scaleFactorInversed: { x: 1, y: 1 },
                 },
                 update: {},
             },
@@ -161,6 +166,26 @@ describe("#accessibilify", () => {
             });
         });
 
+        describe("with gameButton argument", () => {
+            it("adds the button to an array in the game for the overlay-layout to use", () => {
+                const config = {
+                    ariaLabel: "Play Button",
+                };
+
+                accessibilify(mockButton, config, true);
+                expect(mockButton.game.accessibleButtons[0]).to.equal(mockButton);
+            });
+
+            it("doesn't add the button to an array in the game for the overlay-layout to use when argument is false", () => {
+                const config = {
+                    ariaLabel: "Play Button",
+                };
+
+                accessibilify(mockButton, config, false);
+                expect(mockButton.game.accessibleButtons).to.deep.equal([]);
+            });
+        });
+
         it("assigns an onSizeChange event", () => {
             const onSizeChange = sandbox.stub(mockButton.game.scale.onSizeChange, "add");
 
@@ -224,17 +249,6 @@ describe("#accessibilify", () => {
 
     describe("Button Update", () => {
         describe("element visibility", () => {
-            it("when button is outside of screen and element is visible it should be hidden", () => {
-                accessibleDomElement.returns({
-                    visible: () => accessibleDomElementVisible,
-                    hide: accessibleDomElementHide,
-                    position: () => {},
-                });
-                mockButton.hitArea.x = -1000;
-                accessibilify(mockButton);
-                mockButton.update();
-                sinon.assert.called(accessibleDomElementHide);
-            });
             it("when button input is disabled and the element is visible it should be hidden", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,

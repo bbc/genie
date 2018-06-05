@@ -35,11 +35,15 @@ describe("Scene", () => {
                 setGameSize: sandbox.spy(),
                 setGamePosition: sandbox.spy(),
                 scaleMode: sandbox.spy(),
-                onSizeChange: { add: sandbox.spy() },
+                setResizeCallback: sandbox.spy(),
                 getParentBounds: sandbox.spy(),
             },
             debug: {
-                sprite: {},
+                sprite: {
+                    position: {
+                        set: sandbox.spy(),
+                    },
+                },
             },
         };
         scene = Scene.create(mockGame);
@@ -69,14 +73,6 @@ describe("Scene", () => {
 
     it("creates a scaler with correct params", () => {
         expect(scalerSpy.calledWith(600, mockGame)).to.equal(true);
-    });
-
-    it("scales the background", () => {
-        const onScaleChangeCallback = scalerMethods.onScaleChange.add.getCall(0).args[0];
-        const expectedScale = 1;
-        onScaleChangeCallback(800, 600, expectedScale);
-        expect(groupMethods.scale.set.getCall(0).args).to.eql([expectedScale, expectedScale]);
-        expect(groupMethods.position.set.getCall(0).args).to.eql([400, 300]);
     });
 
     describe("addToBackground method", () => {
@@ -143,6 +139,19 @@ describe("Scene", () => {
             assert.lengthOf(scene.getLayouts(), 1);
             scene.addLayout(["pause", "next"]);
             assert.lengthOf(scene.getLayouts(), 2);
+        });
+    });
+
+    describe("getAccessibleGameButtons method", () => {
+        it("should return the correct buttons", () => {
+            const spyDestroy = sandbox.spy();
+            const mockLayout = {
+                root: sandbox.stub(),
+                destroy: spyDestroy,
+            };
+            sandbox.stub(Layout, "create").returns(mockLayout);
+
+            assert.lengthOf(scene.getAccessibleGameButtons(), 0);
         });
     });
 

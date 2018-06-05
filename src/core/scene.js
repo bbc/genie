@@ -40,14 +40,21 @@ export function create(game) {
     const unscaled = game.add.group(undefined, "unscaled", true);
     const background = game.add.group(undefined, "background");
     const foreground = game.add.group(undefined, "foreground");
+
+    if (!game.accessibleButtons) {
+        game.accessibleButtons = [];
+    }
+    const customAccessibleButtons = game.accessibleButtons;
+
     const debug = game.add.group(undefined, "debug", true);
 
     const resize = (width, height, scale) => {
-        root.scale.set(scale, scale);
-        root.position.set(width / 2, height / 2);
+        game.scale.setGameSize(width / scale, height / scale);
+
+        root.position.set(width * 0.5 / scale, height * 0.5 / scale);
+        //game.debug.sprite.position.set(-width * 0.5 / scale, -height * 0.5 / scale);
     };
 
-    //TODO stageHeight should come from config
     const scaler = Scaler.create(600, game);
 
     root.addChild(background);
@@ -82,6 +89,10 @@ export function create(game) {
 
     const getLayouts = () => _layouts;
 
+    const getAccessibleGameButtons = () => {
+        return customAccessibleButtons;
+    };
+
     const removeAll = () => {
         background.removeAll(true);
         _layouts.forEach(layout => layout.destroy());
@@ -94,6 +105,7 @@ export function create(game) {
         addToUnscaled,
         addLayout,
         getLayouts,
+        getAccessibleGameButtons,
         removeAll,
         getSize: scaler.getSize,
     };
