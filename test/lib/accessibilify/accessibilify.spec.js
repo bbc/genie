@@ -46,6 +46,9 @@ describe("#accessibilify", () => {
             alive: true,
             name: "play",
             toGlobal: x => {
+                x.multiply = y => {
+                    return y;
+                };
                 return x;
             },
             game: {
@@ -63,6 +66,7 @@ describe("#accessibilify", () => {
                         add: () => {},
                         remove: () => {},
                     },
+                    scaleFactorInversed: { x: 1, y: 1 },
                 },
                 update: {},
             },
@@ -245,17 +249,6 @@ describe("#accessibilify", () => {
 
     describe("Button Update", () => {
         describe("element visibility", () => {
-            it("when button is outside of screen and element is visible it should be hidden", () => {
-                accessibleDomElement.returns({
-                    visible: () => accessibleDomElementVisible,
-                    hide: accessibleDomElementHide,
-                    position: () => {},
-                });
-                mockButton.hitArea.x = -1000;
-                accessibilify(mockButton);
-                mockButton.update();
-                sinon.assert.called(accessibleDomElementHide);
-            });
             it("when button input is disabled and the element is visible it should be hidden", () => {
                 accessibleDomElement.returns({
                     visible: () => accessibleDomElementVisible,
