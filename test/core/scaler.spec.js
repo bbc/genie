@@ -10,6 +10,7 @@ describe("Scaler", () => {
             scale: {
                 setGameSize: sinon.spy(),
                 scaleMode: sinon.spy(),
+                setResizeCallback: sinon.spy(),
                 onSizeChange: { add: sinon.spy() },
                 getParentBounds: sinon.spy(() => {
                     return { width: 800, height: 600 };
@@ -18,9 +19,9 @@ describe("Scaler", () => {
         };
     });
 
-    it("Should set the scalemode be resize on create", () => {
+    it("Should set the scalemode to SHOW_ALL on create", () => {
         Scaler.create(600, mockGame);
-        expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.RESIZE);
+        expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.SHOW_ALL);
     });
 
     it("Should call the games onSizeChange add function once", () => {

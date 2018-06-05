@@ -41,7 +41,9 @@ export function accessibilify(button, config, gameButton = true) {
         let bounds = button.getBounds().clone();
         if (button.hitArea) {
             bounds = button.hitArea.clone();
-            bounds.topLeft = button.toGlobal(bounds.topLeft);
+            bounds.topLeft = button
+                .toGlobal(bounds.topLeft)
+                .multiply(game.scale.scaleFactorInversed.x, game.scale.scaleFactorInversed.y);
         }
         return bounds;
     }
@@ -49,6 +51,7 @@ export function accessibilify(button, config, gameButton = true) {
     function setElementSizeAndPosition() {
         if (button.alive) {
             const bounds = getHitAreaBounds();
+
             accessibleElement.position(bounds);
         }
     }
@@ -75,21 +78,9 @@ export function accessibilify(button, config, gameButton = true) {
             return;
         }
 
-        if (isOutsideScreen()) {
-            if (accessibleElement.visible()) {
-                accessibleElement.hide();
-            }
-            return;
-        }
-
         if (!accessibleElement.visible()) {
             accessibleElement.show();
         }
-    }
-
-    function isOutsideScreen() {
-        const bounds = getHitAreaBounds();
-        return bounds.top > game.height || bounds.bottom < 0 || bounds.left > game.width || bounds.right < 0;
     }
 
     function buttonAction() {

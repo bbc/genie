@@ -5,12 +5,12 @@ import fp from "../../lib/lodash/fp/fp.js";
 
 const configureButtonsForPage = (pageNumber, book, initialising) => {
     const pagesAhead = pageNumber < book.numberOfPages;
-    book.nextPageOption.visible = pagesAhead;
+    book.nextPageOption.alpha = pagesAhead ? 1 : 0;
     book.nextPageOption.input.enabled = pagesAhead;
     book.nextPageOption.update();
 
     const pagesBefore = pageNumber > 1;
-    book.previousPageOption.visible = pagesBefore;
+    book.previousPageOption.alpha = pagesBefore ? 1 : 0;
     book.previousPageOption.input.enabled = pagesBefore;
     book.previousPageOption.update();
 
