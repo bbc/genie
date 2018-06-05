@@ -2,9 +2,10 @@ import { assert } from "chai";
 import * as sinon from "sinon";
 import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
 import * as gel from "../../../src/core/layout/gel-defaults";
+import * as pause from "../../../src/components/overlays/pause.js";
 import { settings } from "../../../src/core/settings.js";
 
-describe.only("Layout - Gel Defaults", () => {
+describe("Layout - Gel Defaults", () => {
     const sandbox = sinon.sandbox.create();
     let mockGame;
 
@@ -49,13 +50,17 @@ describe.only("Layout - Gel Defaults", () => {
 
     describe("Pause Button Callback", () => {
         it("creates a pause screen", () => {
-            assert.strictEqual(gel.config.settings.action, pause.create(false));
+            pause.create = sandbox.spy();
+            gel.config.pause.action();
+            sandbox.assert.calledWith(pause.create, false);
         });
     });
 
     describe("PauseNoReplay Button Callback", () => {
         it("creates a pause screen with replay button hidden", () => {
-            assert.strictEqual(gel.config.settings.action, pause.create(true));
+            pause.create = sandbox.spy();
+            gel.config.pauseNoReplay.action();
+            sandbox.assert.calledWith(pause.create, true);
         });
     });
 
