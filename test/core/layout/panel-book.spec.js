@@ -120,5 +120,15 @@ describe("Showing pages of a book", () => {
                 book.page(2).should.have.property("visible", false);
             });
         });
+
+        describe("[CGPROD-713] Regression - mis-aligned navigation buttons", () => {
+            it("Should not modify the visibility of the 'Next page' and 'Previous page' buttons so they still scale", () => {
+                book.nextPageOption.should.have.property("visible", true);
+                book.previousPageOption.should.have.property("visible", true);
+                book = Book.NextPage(book);
+                book.nextPageOption.should.have.property("visible", true);
+                book.previousPageOption.should.have.property("visible", true);
+            });
+        });
     });
 });

@@ -3,11 +3,12 @@ const Stub = () => {
         accessibleElement: {
             focus: () => {},
         },
+        alpha: 1,
         input: {
             enabled: true,
         },
         update: () => {},
-        alpha: 1,
+        visible: true,
     };
 };
 
