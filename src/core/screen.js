@@ -1,9 +1,4 @@
 import _ from "../../lib/lodash/lodash.js";
-import * as howToPlay from "../components/overlays/how-to-play.js";
-import * as pause from "../components/overlays/pause.js";
-import * as gel from "../core/layout/gel-defaults.js";
-import { settings } from "../core/settings.js";
-import * as signal from "../core/signal-bus.js";
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
