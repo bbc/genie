@@ -16,6 +16,7 @@ export const create = () => {
     };
 
     const checkGmi = () => {
+        console.log("checkgmi");
         if (!gmi) {
             throw "gmi has not been initialised in settings.js";
         }
@@ -29,11 +30,11 @@ export const create = () => {
 
     const getAllSettings = fp.flow(checkGmi, () => gmi.getAllSettings());
 
-    const callGmi = () => gmi.showSettings(onSettingChanged, onSettingsClosed);
-
-    const show = fp.flow(checkGmi, callGmi);
+    const show = fp.flow(checkGmi, () => gmi.showSettings(onSettingChanged, onSettingsClosed));
+    const exit = fp.flow(checkGmi, () => gmi.exit());
 
     return {
+        exit,
         show,
         getAllSettings,
         setGmi,
