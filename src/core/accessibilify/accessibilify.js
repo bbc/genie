@@ -38,13 +38,13 @@ export function accessibilify(button, config, gameButton = true) {
     }
 
     function getHitAreaBounds() {
-        let bounds = button.getBounds().clone();
+        let bounds = button.getLocalBounds();
         if (button.hitArea) {
             bounds = button.hitArea.clone();
-            bounds.topLeft = button
-                .toGlobal(bounds.topLeft)
-                .multiply(game.scale.scaleFactorInversed.x, game.scale.scaleFactorInversed.y);
         }
+        bounds.topLeft = button
+            .toGlobal(bounds.topLeft)
+            .multiply(game.scale.scaleFactorInversed.x, game.scale.scaleFactorInversed.y);
         return bounds;
     }
 
