@@ -25,29 +25,7 @@ export class Screen extends Phaser.State {
     init(transientData, scene, context, navigation) {
         this.scene = scene;
         this._context = context;
-        this.addGelSubscriptions();
         this.navigation = navigation[this.game.state.current].routes;
         this.transientData = transientData;
-    }
-
-    addGelSubscriptions() {
-        signal.bus.subscribe({
-            channel: gel.buttonsChannel,
-            name: "exit",
-            callback: () => {
-                this.context.gmi.exit();
-            },
-        });
-        signal.bus.subscribe({
-            channel: gel.buttonsChannel,
-            name: "pause",
-            callback: pause.create,
-        });
-        signal.bus.subscribe({
-            channel: gel.buttonsChannel,
-            name: "how-to-play",
-            callback: howToPlay.create,
-        });
-        signal.bus.subscribe({ channel: gel.buttonsChannel, name: "settings", callback: settings.show });
     }
 }
