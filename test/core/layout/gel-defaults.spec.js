@@ -52,7 +52,7 @@ describe("Layout - Gel Defaults", () => {
         it("creates a pause screen", () => {
             pause.create = sandbox.spy();
             gel.config.pause.action({ game: mockGame });
-            sandbox.assert.calledOnce(pause.create.withArgs(false, mockGame));
+            sandbox.assert.calledOnce(pause.create.withArgs(false, { game: mockGame }));
         });
     });
 
@@ -60,7 +60,7 @@ describe("Layout - Gel Defaults", () => {
         it("creates a pause screen with replay button hidden", () => {
             pause.create = sandbox.spy();
             gel.config.pauseNoReplay.action({ game: mockGame });
-            sandbox.assert.calledOnce(pause.create.withArgs(true, mockGame));
+            sandbox.assert.calledOnce(pause.create.withArgs(true, { game: mockGame }));
         });
     });
 
