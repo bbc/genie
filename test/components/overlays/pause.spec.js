@@ -15,6 +15,7 @@ describe("Pause Overlay", () => {
     let mockOverlayLayout;
 
     const sandbox = sinon.sandbox.create();
+    const pauseCreate = Pause.create(false);
 
     beforeEach(() => {
         signalSpy = sandbox.spy(signal.bus, "subscribe");
@@ -64,7 +65,7 @@ describe("Pause Overlay", () => {
 
     describe("pause functionality", () => {
         beforeEach(() => {
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
         });
 
         it("adds pause to the popup screens", () => {
@@ -82,24 +83,24 @@ describe("Pause Overlay", () => {
 
     describe("assets", () => {
         it("creates a new overlay layout manager", () => {
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
             assert.isTrue(OverlayLayout.create.calledOnce);
         });
 
         it("adds a background image", () => {
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
             const actualImageCall = mockGame.add.image.getCall(0);
             const expectedImageCall = [0, 0, "pause.pauseBackground"];
             assert.deepEqual(actualImageCall.args, expectedImageCall);
         });
 
         it("passes the background image to the overlay layout manager", () => {
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
             assert.deepEqual(mockOverlayLayout.addBackground.args[0], ["backgroundImage"]);
         });
 
         it("adds GEL buttons", () => {
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
             const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
             const expectedAddLayoutCall = [
                 "pauseReplay",
@@ -113,8 +114,7 @@ describe("Pause Overlay", () => {
         });
 
         it("adds GEL buttons without a replay button if requested", () => {
-            const hideReplayButton = true;
-            Pause.create({ game: mockGame }, hideReplayButton);
+            Pause.create(true, { game: mockGame });
             const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
             const expectedAddLayoutCall = ["pauseHome", "audioOff", "settings", "pausePlay", "howToPlay"];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
@@ -123,7 +123,7 @@ describe("Pause Overlay", () => {
 
     describe("signals", () => {
         it("adds custom signal subscriptions to certain GEL buttons", () => {
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
             assert.equal(signalSpy.callCount, 3);
             assert.equal(signalSpy.getCall(0).args[0].channel, "pause-gel-buttons");
             assert.equal(signalSpy.getCall(0).args[0].name, "play");
@@ -134,8 +134,7 @@ describe("Pause Overlay", () => {
         });
 
         it("adds custom signal subscriptions to certain GEL buttons, when the replay button is not present", () => {
-            const hideReplayButton = true;
-            Pause.create({ game: mockGame }, hideReplayButton);
+            Pause.create(true, { game: mockGame });
             assert.equal(signalSpy.callCount, 2);
             assert.equal(signalSpy.getCall(0).args[0].channel, "pause-gel-buttons");
             assert.equal(signalSpy.getCall(0).args[0].name, "play");
@@ -144,7 +143,7 @@ describe("Pause Overlay", () => {
         });
 
         it("destroys the pause screen when the play button is clicked", () => {
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
             const clickPlayButton = signalSpy.getCall(0).args[0].callback;
             clickPlayButton();
 
@@ -158,14 +157,14 @@ describe("Pause Overlay", () => {
 
         it("removes subscribed-to channel for this overlay on destroy", () => {
             const signalBusRemoveChannel = sandbox.spy(signal.bus, "removeChannel");
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
             const destroy = signalSpy.getCall(0).args[0].callback;
             destroy();
             sinon.assert.calledOnce(signalBusRemoveChannel.withArgs("pause-gel-buttons"));
         });
 
         it("destroys the pause screen when the replay button is clicked", () => {
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
             const cickReplayButton = signalSpy.getCall(2).args[0].callback;
             cickReplayButton();
             assert.isFalse(mockGame.paused);
@@ -180,7 +179,7 @@ describe("Pause Overlay", () => {
             mockScreen.transientData = {
                 characterSelected: 1,
             };
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
             const cickReplayButton = signalSpy.getCall(2).args[0].callback;
             cickReplayButton();
             const actualRestartArgs = mockScreen.navigation.restart.getCall(0).args[0];
@@ -189,7 +188,7 @@ describe("Pause Overlay", () => {
         });
 
         it("destroys the pause screen when the home button is clicked", () => {
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
             const clickHomeButton = signalSpy.getCall(1).args[0].callback;
             clickHomeButton();
             assert.isFalse(mockGame.paused);
@@ -201,7 +200,7 @@ describe("Pause Overlay", () => {
         });
 
         it("naviagtes home when the home button is clicked", () => {
-            Pause.create({ game: mockGame });
+            pauseCreate({ game: mockGame });
             const clickHomeButton = signalSpy.getCall(1).args[0].callback;
             clickHomeButton();
             sinon.assert.calledOnce(mockScreen.navigation.home);
