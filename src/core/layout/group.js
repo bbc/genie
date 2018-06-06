@@ -58,12 +58,7 @@ export class Group extends Phaser.Group {
      * TODO add interface for config
      */
     addButton(config, position = this._buttons.length) {
-        const newButton = this._buttonFactory.createButton(
-            this._metrics,
-            config,
-            this.getLocalBounds().halfWidth,
-            this.getLocalBounds().halfHeight,
-        );
+        const newButton = this._buttonFactory.createButton(this._metrics, config, this.width / 2, this.height / 2);
 
         this.addAt(newButton, position);
         this._buttons.push(newButton);
@@ -96,7 +91,7 @@ export class Group extends Phaser.Group {
     alignChildren() {
         const pos = { x: 0, y: 0 };
 
-        const halfWidth = this.getLocalBounds().halfWidth; //Save here as size changes when you move children below
+        const halfWidth = this.width / 2; //Save here as size changes when you move children below
         this.children.forEach(childDisplayObject => {
             const child = childDisplayObject;
             child.y = pos.y + child.height / 2;
