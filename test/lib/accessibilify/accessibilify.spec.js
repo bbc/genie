@@ -7,6 +7,7 @@ describe("#accessibilify", () => {
     const gameWidth = 800;
     const gameHeight = 600;
 
+    let mockButtonBounds;
     let mockButton;
     let parentElement;
     let buttonBoundsWidth;
@@ -38,12 +39,10 @@ describe("#accessibilify", () => {
         onInputOver = sandbox.spy();
         onInputOut = sandbox.spy();
         activePointer = sandbox.spy();
+        mockButtonBounds = { topLeft: { x: "x", y: "y", multiply: p => p }, scale: () => mockButtonBounds };
         mockButton = {
             alive: true,
             name: "play",
-            toGlobal: x => ({
-                multiply: () => x,
-            }),
             game: {
                 input: {
                     activePointer: activePointer,
@@ -63,12 +62,17 @@ describe("#accessibilify", () => {
                 },
                 update: {},
             },
+            toGlobal: p => p,
             destroy: buttonDestroy,
-            getLocalBounds: sandbox.stub().returns({ topLeft: "bounds" }),
+            getBounds: sandbox.stub().returns(mockButtonBounds),
             hitArea: {
                 clone: () => mockButton.hitArea,
                 get topLeft() {
-                    return { x: mockButton.hitArea.x, y: mockButton.hitArea.y };
+                    return {
+                        x: mockButton.hitArea.x,
+                        y: mockButton.hitArea.y,
+                        multiply: p => p,
+                    };
                 },
                 set topLeft(p) {
                     mockButton.hitArea.x = p.x;
@@ -78,6 +82,7 @@ describe("#accessibilify", () => {
                 y: -buttonBoundsHeight / 2,
                 width: buttonBoundsWidth,
                 height: buttonBoundsHeight,
+                scale: () => mockButton.hitArea,
             },
             input: { enabled: true },
             events: {
@@ -88,6 +93,7 @@ describe("#accessibilify", () => {
                     dispatch: onInputOut,
                 },
             },
+            worldScale: { x: 1, y: 1 },
         };
         accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement");
         accessibleDomElementPosition = sandbox.spy();
@@ -201,8 +207,8 @@ describe("#accessibilify", () => {
 
             accessibilify(mockButton);
             clock.tick(200);
-            sinon.assert.called(mockButton.getLocalBounds);
-            sinon.assert.calledWith(position, { topLeft: "bounds" });
+            sinon.assert.called(mockButton.getBounds);
+            sinon.assert.calledWith(position, mockButtonBounds);
         });
 
         it("does NOT reposition accessibleElement if button does not exist", () => {
