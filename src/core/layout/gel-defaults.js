@@ -91,7 +91,7 @@ export const config = {
         order: 6,
         id: "gel-pause",
         channel: buttonsChannel,
-        action: () => pause.create(false),
+        action: ({ game }) => pause.create(false)({ game }),
     },
     pauseNoReplay: {
         group: "topRight",
@@ -101,7 +101,7 @@ export const config = {
         order: 6,
         id: "gel-pause",
         channel: buttonsChannel,
-        action: () => pause.create(true),
+        action: ({ game }) => pause.create(true)({ game }),
     },
     previous: {
         group: "middleLeft",
