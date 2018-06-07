@@ -38,13 +38,16 @@ export function accessibilify(button, config, gameButton = true) {
     }
 
     function getHitAreaBounds() {
-        let bounds = button.getBounds().clone();
+        const positionScale = game.scale.scaleFactorInversed;
+        const sizeScale = Phaser.Point.multiply(button.worldScale, game.scale.scaleFactorInversed);
+
+        let bounds = button.getBounds();
         if (button.hitArea) {
             bounds = button.hitArea.clone();
-            bounds.topLeft = button
-                .toGlobal(bounds.topLeft)
-                .multiply(game.scale.scaleFactorInversed.x, game.scale.scaleFactorInversed.y);
+            bounds.topLeft = button.toGlobal(bounds.topLeft);
         }
+        bounds.topLeft = bounds.topLeft.multiply(positionScale.x, positionScale.y);
+        bounds.scale(sizeScale.x, sizeScale.y);
         return bounds;
     }
 

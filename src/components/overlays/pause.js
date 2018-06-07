@@ -13,7 +13,7 @@ import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
 /**
  * @param {Phaser.Game} game - The Phaser Game instance
  */
-export function create({ game }, hideReplayButton) {
+export const create = fp.curry((hideReplayButton, { game }) => {
     const screen = game.state.states[game.state.current];
     const channel = "pause-gel-buttons";
 
@@ -71,4 +71,4 @@ export function create({ game }, hideReplayButton) {
         destroy();
         screen.navigation.home();
     }
-}
+});
