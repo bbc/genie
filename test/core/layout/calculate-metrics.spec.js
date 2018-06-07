@@ -12,7 +12,12 @@ const defaultValues = {
 
 const getMetrics = newValues => {
     const values = _.merge({}, defaultValues, newValues);
-    return calculateMetrics(values.width, values.height, values.scale, values.stageHeight);
+    return calculateMetrics({
+        width: values.width,
+        height: values.height,
+        scale: values.scale,
+        stageHeight: values.stageHeight,
+    });
 };
 
 describe("Layout - Calculate Metrics", () => {
