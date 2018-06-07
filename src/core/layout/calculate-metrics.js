@@ -1,16 +1,17 @@
-const BORDER_PAD = 0.02;
-const BREAK_WIDTH = 770;
-const SAFE_ASPECT_RATIO = 4 / 3;
+const BORDER_PAD_RATIO = 0.02;
+const MOBILE_BREAK_WIDTH = 770;
+export const GEL_MIN_ASPECT_RATIO = 4 / 3;
+export const GEL_MAX_ASPECT_RATIO = 7 / 3;
 
-export const calculateMetrics = (width, height, scale, stageHeight) => {
-    const isMobile = width < BREAK_WIDTH;
-    const safeWidth = height * SAFE_ASPECT_RATIO;
+export const calculateMetrics = ({ width, height, scale, stageHeight }) => {
+    const isMobile = width < MOBILE_BREAK_WIDTH;
+    const safeWidth = height * GEL_MIN_ASPECT_RATIO;
 
     const metrics = {
         width,
         height: stageHeight,
         scale,
-        borderPad: Math.floor(Math.max(width, stageHeight) * BORDER_PAD),
+        borderPad: Math.floor(Math.max(width, stageHeight) * BORDER_PAD_RATIO),
         isMobile,
         buttonPad: isMobile ? 22 : 24,
         buttonMin: isMobile ? 42 : 64,
