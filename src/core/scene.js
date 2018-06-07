@@ -107,6 +107,6 @@ export function create(game) {
         getLayouts,
         getAccessibleGameButtons,
         removeAll,
-        getSize: scaler.getSize,
+        calculateMetrics: scaler.calculateMetrics,
     };
 }

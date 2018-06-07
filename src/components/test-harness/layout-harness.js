@@ -1,4 +1,4 @@
-import { GEL_MIN_RATIO_HEIGHT, GEL_MIN_RATIO_WIDTH } from "../../core/scaler.js";
+import { GEL_MIN_ASPECT_RATIO } from "../../core/layout/calculate-metrics.js";
 
 export function createTestHarnessDisplay(game, context, scene) {
     let graphicsBackgroundGroup;
@@ -39,13 +39,13 @@ export function createTestHarnessDisplay(game, context, scene) {
     }
 
     function drawOuterPadding() {
-        const size = scene.getSize();
+        const metrics = scene.calculateMetrics();
         const graphics = game.add.graphics();
         const paddingWidth = getPaddingWidth();
         const gameLeftEdge = 0 + paddingWidth * 0.5;
         const gameTopEdge = 0 + paddingWidth * 0.5;
-        const gameRightEdge = size.width - paddingWidth * 0.5;
-        const gameBottomEdge = size.height - paddingWidth * 0.5;
+        const gameRightEdge = metrics.width - paddingWidth * 0.5;
+        const gameBottomEdge = metrics.height - paddingWidth * 0.5;
 
         console.log("paddingWidth: ", paddingWidth); // eslint-disable-line no-console
         console.log("screenWidth: ", window.innerWidth); // eslint-disable-line no-console
@@ -68,17 +68,17 @@ export function createTestHarnessDisplay(game, context, scene) {
     }
 
     function gameAreaDimensions() {
-        const size = scene.getSize();
-        const areaWidth = size.stageHeight / GEL_MIN_RATIO_HEIGHT * GEL_MIN_RATIO_WIDTH;
-        const areaHeight = size.stageHeight;
+        const metrics = scene.calculateMetrics();
+        const areaWidth = GEL_MIN_ASPECT_RATIO * metrics.stageHeight;
+        const areaHeight = metrics.stageHeight;
 
         return [areaWidth, areaHeight];
     }
 
     function getPaddingWidth() {
-        const size = scene.getSize();
+        const metrics = scene.calculateMetrics();
         const gelPaddingWidthPercentage = 0.02;
 
-        return Math.max(size.width, size.height) * gelPaddingWidthPercentage;
+        return Math.max(metrics.width, metrics.height) * gelPaddingWidthPercentage;
     }
 }

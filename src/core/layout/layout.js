@@ -4,7 +4,6 @@
  * @module layout/layout
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import { calculateMetrics } from "./calculate-metrics.js";
 import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { Group } from "./group.js";
@@ -22,8 +21,7 @@ const tabSort = fp.sortBy(getOrder(gel.config));
 export function create(game, scaler, buttonIds) {
     const root = new Phaser.Group(game, game.world, undefined);
 
-    const size = scaler.getSize();
-    let metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeight);
+    let metrics = scaler.calculateMetrics();
 
     const groups = fp.zipObject(
         groupLayouts.map(layout => fp.camelCase([layout.vPos, layout.hPos, layout.arrangeV ? "v" : ""].join(" "))),
@@ -49,8 +47,8 @@ export function create(game, scaler, buttonIds) {
         groups[groupName].addToGroup(item, position);
     };
 
-    const resize = (width, height, scale, stageHeight) => {
-        metrics = calculateMetrics(width, height, scale, stageHeight);
+    const resize = () => {
+        metrics = scaler.calculateMetrics();
 
         if (groups) {
             fp.forOwn(group => group.reset(metrics), groups);
@@ -62,7 +60,7 @@ export function create(game, scaler, buttonIds) {
     };
 
     scaler.onScaleChange.add(resize);
-    resize(size.width, size.height, size.scale, size.stageHeight);
+    resize();
 
     const destroy = () => {
         removeSignals();

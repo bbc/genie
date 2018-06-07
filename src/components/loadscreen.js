@@ -7,7 +7,6 @@
 import _ from "../../lib/lodash/lodash.js";
 import { loadAssets } from "../core/asset-loader.js";
 import { GameAssets, initGameAssets } from "../core/game-assets.js";
-import { calculateMetrics } from "../core/layout/calculate-metrics.js";
 import { Screen } from "../core/screen.js";
 import { createLoadBar } from "./loadbar.js";
 
@@ -59,8 +58,7 @@ export class Loadscreen extends Screen {
     }
 
     createBrandLogo() {
-        const size = this.scene.getSize();
-        const metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeight);
+        const metrics = this.scene.calculateMetrics();
 
         const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
         const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
