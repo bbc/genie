@@ -69,8 +69,8 @@ export function createTestHarnessDisplay(game, context, scene) {
 
     function gameAreaDimensions() {
         const size = scene.getSize();
-        const areaWidth = size.stageHeightPx / GEL_MIN_RATIO_HEIGHT * GEL_MIN_RATIO_WIDTH;
-        const areaHeight = size.stageHeightPx;
+        const areaWidth = size.stageHeight / GEL_MIN_RATIO_HEIGHT * GEL_MIN_RATIO_WIDTH;
+        const areaHeight = size.stageHeight;
 
         return [areaWidth, areaHeight];
     }

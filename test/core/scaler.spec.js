@@ -35,6 +35,6 @@ describe("Scaler", () => {
         expect(size.width).to.eql(800);
         expect(size.height).to.eql(600);
         expect(size.scale).to.eql(1);
-        expect(size.stageHeightPx).to.eql(600);
+        expect(size.stageHeight).to.eql(600);
     });
 });

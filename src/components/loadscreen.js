@@ -60,7 +60,7 @@ export class Loadscreen extends Screen {
 
     createBrandLogo() {
         const size = this.scene.getSize();
-        const metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
+        const metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeight);
 
         const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
         const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
