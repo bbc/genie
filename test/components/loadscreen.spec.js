@@ -100,11 +100,9 @@ describe("Load Screen", () => {
                 setFillPercent: setFillPercentStub,
             };
             createProgressBarStub = sandbox.stub(LoadBar, "createLoadBar").returns(mockProgressBar);
-            loadScreen.scene.getSize = sandbox.stub().returns({
-                width: 100,
-                height: 100,
-                scale: 1,
-                stageHeightPx: 60,
+            loadScreen.scene.calculateMetrics = sandbox.stub().returns({
+                horizontals: {},
+                verticals: {},
             });
             loadScreen.scene.addToBackground = sandbox.stub().returns({
                 anchor: {
