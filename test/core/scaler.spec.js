@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 import * as Scaler from "../../src/core/scaler";
 import * as calculateMetrics from "../../src/core/layout/calculate-metrics.js";
 
-describe("Scaler", () => {
+describe.only("Scaler", () => {
     const sandbox = sinon.sandbox.create();
     let mockGame;
 
@@ -28,9 +28,10 @@ describe("Scaler", () => {
         expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.SHOW_ALL);
     });
 
-    it("Should call the games onSizeChange add function once", () => {
+    it("Should assign a callback to window.onresize", () => {
+        const callback = window.onresize;
         Scaler.create(600, mockGame);
-        expect(mockGame.scale.onSizeChange.add.callCount).to.eql(1);
+        assert.notEqual(window.onresize, callback);
     });
 
     it("Should return correct metrics when calculateMetrics is called", () => {
