@@ -24,14 +24,14 @@ describe("Layout - Calculate Metrics", () => {
 
     describe("borderPad metric", () => {
         it("sets a border padding of 2% of the longest edge", () => {
-            expect(getMetrics({ width: 600, height: 600 }).borderPad).to.equal(12);
+            expect(getMetrics({ width: 600, height: 600 }).borderPad).to.equal(16);
             expect(getMetrics({ width: 800, height: 600 }).borderPad).to.equal(16);
             expect(getMetrics({ width: 1000, height: 600 }).borderPad).to.equal(20);
             expect(getMetrics({ width: 1500, height: 600 }).borderPad).to.equal(28);
 
-            expect(getMetrics({ width: 200, height: 600 }).borderPad).to.equal(4);
-            expect(getMetrics({ width: 200, height: 800 }).borderPad).to.equal(4);
-            expect(getMetrics({ width: 200, height: 1000 }).borderPad).to.equal(4);
+            expect(getMetrics({ width: 200, height: 600 }).borderPad).to.equal(16);
+            expect(getMetrics({ width: 200, height: 800 }).borderPad).to.equal(16);
+            expect(getMetrics({ width: 200, height: 1000 }).borderPad).to.equal(16);
         });
     });
 
