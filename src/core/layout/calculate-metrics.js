@@ -27,7 +27,7 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
         scale,
         stageWidth,
         stageHeight,
-        borderPad: fp.floor(fp.max([stageWidth, stageHeight]) * BORDER_PAD_RATIO),
+        borderPad: fp.floor(fp.max([scale * stageWidth, scale * stageHeight]) * BORDER_PAD_RATIO),
         isMobile,
         buttonPad: isMobile ? 22 : 24,
         buttonMin: isMobile ? 42 : 64,
