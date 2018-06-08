@@ -24,9 +24,10 @@ describe("Group", () => {
         };
         config = {};
         metrics = {
-            borderPad: 500,
+            borderPad: 100,
             buttonPad: 50,
             horizontals: { left: -1000, center: 0, right: 1000 },
+            safeHorizontals: { left: -300, center: 0, right: 300 },
             verticals: { top: -1500, middle: 0, bottom: 1500 },
         };
         buttonResizeStub = sandbox.stub();
@@ -85,6 +86,7 @@ describe("Group", () => {
         it("aligns center buttons accordingly", () => {
             group.addButton(config);
             group.addButton(config);
+            group.reset(metrics);
 
             assert.strictEqual(group.children[0].y, 0);
             assert.strictEqual(group.children[1].y, 0);
@@ -93,6 +95,7 @@ describe("Group", () => {
         describe("when vPos is middle and hPos is center", () => {
             it("sets group position correctly", () => {
                 group.addButton(config);
+                group.reset(metrics);
                 assert.strictEqual(group.x, 0);
                 assert.strictEqual(group.y, 0);
             });
@@ -105,8 +108,9 @@ describe("Group", () => {
                 group = new Group(game, parentGroup, vPos, hPos, metrics, false);
 
                 group.addButton(config);
-                assert.strictEqual(group.x, 500);
-                assert.strictEqual(group.y, -1000);
+                group.reset(metrics);
+                assert.strictEqual(group.x, 900);
+                assert.strictEqual(group.y, -1400);
             });
         });
 
@@ -117,8 +121,22 @@ describe("Group", () => {
                 group = new Group(game, parentGroup, vPos, hPos, metrics, false);
 
                 group.addButton(config);
-                assert.strictEqual(group.x, -500);
-                assert.strictEqual(group.y, 1000);
+                group.reset(metrics);
+                assert.strictEqual(group.x, -900);
+                assert.strictEqual(group.y, 1400);
+            });
+        });
+
+        describe("when vPos is bottom and hPos is left and group is safe", () => {
+            it("sets group position correctly", () => {
+                vPos = "bottom";
+                hPos = "left";
+                group = new Group(game, parentGroup, vPos, hPos, metrics, true);
+
+                group.addButton(config);
+                group.reset(metrics);
+                assert.strictEqual(group.x, -200);
+                assert.strictEqual(group.y, 1400);
             });
         });
     });
@@ -162,19 +180,19 @@ describe("Group", () => {
             group.addButton(config);
             group.reset(mobileMetrics);
 
-            assert.strictEqual(group.getSizes().metrics.isMobile, true);
+            assert.strictEqual(group._metrics.isMobile, true);
             sandbox.assert.calledOnce(buttonResizeStub);
         });
 
         it("does not resize buttons after resizing the group and the width remains above the mobile breakpoint", () => {
-            const desktopMetrics = calculateMetrics(1920, 1080, 1, 1920);
-            const moreDesktopMetrics = calculateMetrics(1366, 720, 1, 720);
+            const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
+            const moreDesktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
 
             group = new Group(game, parentGroup, "top", "left", desktopMetrics, false);
             group.addButton(config);
             group.reset(moreDesktopMetrics);
 
-            assert(group.getSizes().metrics.isMobile === false);
+            assert(group._metrics.isMobile === false);
             sandbox.assert.notCalled(buttonResizeStub);
         });
     });
