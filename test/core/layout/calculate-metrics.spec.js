@@ -87,13 +87,13 @@ describe("Layout - Calculate Metrics", () => {
     });
 
     describe("safeHorizontals metric", () => {
-        it("returns safe horizontals in relation to the aspect ratio", () => {
+        it("returns safe horizontals in relation to the stage height", () => {
             const expectedFor600 = { left: -400, center: 0, right: 400 };
             const expectedFor768 = { left: -512, center: 0, right: 512 };
             const expectedFor1080 = { left: -720, center: 0, right: 720 };
-            expect(getMetrics({ height: 600 }).safeHorizontals).to.eql(expectedFor600);
-            expect(getMetrics({ height: 768 }).safeHorizontals).to.eql(expectedFor768);
-            expect(getMetrics({ height: 1080 }).safeHorizontals).to.eql(expectedFor1080);
+            expect(getMetrics({ stageHeight: 600 }).safeHorizontals).to.eql(expectedFor600);
+            expect(getMetrics({ stageHeight: 768 }).safeHorizontals).to.eql(expectedFor768);
+            expect(getMetrics({ stageHeight: 1080 }).safeHorizontals).to.eql(expectedFor1080);
         });
     });
 

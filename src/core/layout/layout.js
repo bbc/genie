@@ -25,8 +25,12 @@ export function create(game, scaler, buttonIds) {
     let metrics = scaler.calculateMetrics();
 
     const groups = fp.zipObject(
-        groupLayouts.map(layout => fp.camelCase([layout.vPos, layout.hPos, layout.arrangeV ? "v" : ""].join(" "))),
-        groupLayouts.map(layout => new Group(game, root, layout.vPos, layout.hPos, metrics, !!layout.arrangeV)),
+        groupLayouts.map(layout =>
+            fp.camelCase([layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" ")),
+        ),
+        groupLayouts.map(
+            layout => new Group(game, root, layout.vPos, layout.hPos, metrics, !!layout.safe, !!layout.arrangeV),
+        ),
     );
 
     const buttons = fp.zipObject(

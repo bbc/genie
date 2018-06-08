@@ -18,7 +18,7 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
     const aspectRatio = fp.max([GEL_MIN_ASPECT_RATIO, width / height]);
     const stageWidth = aspectRatio * stageHeight;
     const isMobile = width < MOBILE_BREAK_WIDTH;
-    const safeWidth = height * GEL_MIN_ASPECT_RATIO;
+    const safeWidth = stageHeight * GEL_MIN_ASPECT_RATIO;
 
     const metrics = {
         width,
