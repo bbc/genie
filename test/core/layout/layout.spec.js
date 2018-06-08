@@ -68,9 +68,9 @@ describe("Layout", () => {
         assert(Object.keys(layout3.buttons).length === 6);
     });
 
-    it("Should create 9 Gel Groups", () => {
+    it("Should create 11 Gel Groups", () => {
         const layout = Layout.create(mockGame, mockScaler, []);
-        assert(layout.root.children.length === 9);
+        assert(layout.root.children.length === 11);
     });
 
     it("Should add items to the correct group", () => {
@@ -149,7 +149,7 @@ describe("Layout", () => {
         const groupResetStub = sandbox.stub(Group.prototype, "reset");
 
         Layout.create(mockGame, mockScaler, []);
-        assert(groupResetStub.callCount === 9);
+        assert(groupResetStub.callCount === 11);
     });
 
     it("removeSignals method removes all signals on this Layout instance", () => {

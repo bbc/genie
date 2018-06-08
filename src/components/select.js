@@ -17,7 +17,6 @@ export class Select extends Screen {
     create() {
         this.scene.addToBackground(this.game.add.image(0, 0, this.getAsset("background")));
         this.scene.addToBackground(this.game.add.image(0, -150, this.getAsset("title")));
-        this.scene.addLayout(["home", "audioOff", "pauseNoReplay", "previous", "next", "continue"]);
         createTestHarnessDisplay(this.game, this.context, this.scene);
 
         const theme = this.context.config.theme[this.game.state.current];
@@ -35,6 +34,8 @@ export class Select extends Screen {
             this.scene.addToBackground(main);
             this.choice = this.choice.concat({ main: main });
         });
+
+        this.scene.addLayout(["home", "audioOff", "pauseNoReplay", "previous", "next", "continue"]);
 
         signal.bus.subscribe({
             channel: buttonsChannel,
