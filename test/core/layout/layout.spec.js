@@ -37,6 +37,7 @@ describe("Layout", () => {
             mockScaler = {
                 calculateMetrics: sandbox.stub().returns({
                     horizontals: {},
+                    safeHorizontals: {},
                     verticals: {},
                 }),
                 getSize: sandbox.spy(() => ({ width: 200, height: 200 })),
