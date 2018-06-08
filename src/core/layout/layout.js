@@ -57,6 +57,7 @@ export function create(game, scaler, buttonIds) {
             fp.forOwn(group => group.reset(metrics), groups);
         }
     };
+    resize(metrics);
 
     const signal = onScaleChange.add(resize);
     const removeSignals = () => {

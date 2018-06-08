@@ -156,6 +156,12 @@ describe("Layout", () => {
         assert.deepEqual(Object.keys(layout.buttons), tabOrder);
     });
 
+    it("Should reset the groups after they have been added to the layout", () => {
+        const groupResetStub = sandbox.stub(Group.prototype, "reset");
+        Layout.create(mockGame, mockScaler, []);
+        sinon.assert.callCount(groupResetStub, 11);
+    });
+
     it("subscribes to the scaler sizeChange signal", () => {
         Layout.create(mockGame, mockScaler, ["play"]);
         sinon.assert.calledOnce(mockSubscribe);
