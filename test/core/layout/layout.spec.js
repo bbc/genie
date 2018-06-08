@@ -156,7 +156,7 @@ describe("Layout", () => {
     });
 
     it("subscribes to the scaler sizeChange signal", () => {
-        const layout = Layout.create(mockGame, mockScaler, ["play"]);
+        Layout.create(mockGame, mockScaler, ["play"]);
         sinon.assert.calledOnce(mockSubscribe);
     });
 
