@@ -49,10 +49,7 @@ export function create(game) {
     const debug = game.add.group(undefined, "debug", true);
 
     const resize = (width, height, scale) => {
-        game.scale.setGameSize(width / scale, height / scale);
-
         root.position.set(width * 0.5 / scale, height * 0.5 / scale);
-        //game.debug.sprite.position.set(-width * 0.5 / scale, -height * 0.5 / scale);
     };
 
     const scaler = Scaler.create(600, game);

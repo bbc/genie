@@ -19,6 +19,7 @@ export function create(stageHeight, game) {
 
     const setSize = () => {
         metrics = _calculateMetrics();
+        game.scale.setGameSize(metrics.width / metrics.scale, metrics.height / metrics.scale);
         onScaleChange.dispatch(metrics.width, metrics.height, metrics.scale, metrics.stageHeight);
     };
 
