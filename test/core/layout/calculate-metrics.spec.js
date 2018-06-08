@@ -14,7 +14,7 @@ const getMetrics = newValues => {
     return calculateMetrics(values.stageHeight, { width: values.width, height: values.height });
 };
 
-describe.only("Layout - Calculate Metrics", () => {
+describe("Layout - Calculate Metrics", () => {
     it("returns basic metrics", () => {
         const metrics = getMetrics({});
         expect(metrics.width).to.equal(defaultValues.width);
