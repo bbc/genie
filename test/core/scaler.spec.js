@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 import * as Scaler from "../../src/core/scaler";
 import * as calculateMetrics from "../../src/core/layout/calculate-metrics.js";
 
-describe.only("Scaler", () => {
+describe("Scaler", () => {
     const sandbox = sinon.sandbox.create();
     let mockGame;
 
