@@ -48,10 +48,11 @@ export function create(game) {
 
     const debug = game.add.group(undefined, "debug", true);
 
-    const resize = (width, height, scale) => {
+    const resize = ({ width, height, scale }) => {
         root.position.set(width * 0.5 / scale, height * 0.5 / scale);
     };
 
+    Scaler.onScaleChange.add(resize);
     const scaler = Scaler.create(600, game);
 
     root.addChild(background);
@@ -59,8 +60,6 @@ export function create(game) {
     if (game.debug.sprite) {
         debug.addChild(game.debug.sprite);
     }
-
-    scaler.onScaleChange.add(resize);
 
     /**
      * Create a new GEL layout for a given set of Gel Buttons
