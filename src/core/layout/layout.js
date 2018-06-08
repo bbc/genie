@@ -56,7 +56,7 @@ export function create(game, scaler, buttonIds) {
 
     const signal = onScaleChange.add(resize);
     const removeSignals = () => {
-        signal.remove();
+        signal.unsubscribe();
     };
 
     const destroy = () => {
