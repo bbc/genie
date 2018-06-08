@@ -3,6 +3,7 @@
  *
  * @module layout/layout
  */
+import { onScaleChange } from "../scaler.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
@@ -47,20 +48,16 @@ export function create(game, scaler, buttonIds) {
         groups[groupName].addToGroup(item, position);
     };
 
-    const resize = () => {
-        metrics = scaler.calculateMetrics();
-
+    const resize = metrics => {
         if (groups) {
             fp.forOwn(group => group.reset(metrics), groups);
         }
     };
 
+    const signal = onScaleChange.add(resize);
     const removeSignals = () => {
-        scaler.onScaleChange.remove(resize);
+        signal.remove();
     };
-
-    scaler.onScaleChange.add(resize);
-    resize();
 
     const destroy = () => {
         removeSignals();
