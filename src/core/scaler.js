@@ -6,11 +6,6 @@ import { GEL_MIN_ASPECT_RATIO, calculateMetrics } from "./layout/calculate-metri
 
 import fp from "../../lib/lodash/fp/fp.js";
 
-const getScale = fp.curry((scaleMethods, stageHeight, { width, height }) => {
-    const scale = scaleMethods[width / height >= GEL_MIN_ASPECT_RATIO ? "wide" : "narrow"](width, height);
-    return { width, height, scale, stageHeight };
-});
-
 const getBounds = game => () => game.scale.getParentBounds();
 
 export function create(stageHeight, game) {
@@ -18,18 +13,13 @@ export function create(stageHeight, game) {
 
     const onScaleChange = new Phaser.Signal();
 
-    const scaleMethods = {
-        wide: (width, height) => height / stageHeight,
-        narrow: width => width / stageHeight / GEL_MIN_ASPECT_RATIO,
-    };
-
-    const getSize = fp.flow(getBounds(game), fp.pick(["width", "height"]), getScale(scaleMethods, stageHeight));
-    const _calculateMetrics = fp.flow(getSize, calculateMetrics);
+    const getSize = fp.flow(getBounds(game), fp.pick(["width", "height"]));
+    const _calculateMetrics = fp.flow(getSize, calculateMetrics(stageHeight));
     let metrics = _calculateMetrics();
 
-    const setSize = ({ width, height, scale, stageHeight }) => {
+    const setSize = () => {
         metrics = _calculateMetrics();
-        onScaleChange.dispatch(width, height, scale, stageHeight);
+        onScaleChange.dispatch(metrics.width, metrics.height, metrics.scale, metrics.stageHeight);
     };
 
     const onSizeChange = fp.flow(getSize, setSize);
