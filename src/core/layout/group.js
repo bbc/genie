@@ -4,25 +4,37 @@ import * as ButtonFactory from "./button-factory.js";
 
 const horizontal = {
     left: (metrics, group) => {
-        group.left = metrics.horizontals.left + metrics.buttonPad;
+        group.left = metrics.horizontals.left + metrics.borderPad;
     },
     center: (metrics, group) => {
         group.centerX = metrics.horizontals.center;
     },
     right: (metrics, group) => {
-        group.right = metrics.horizontals.right - metrics.buttonPad;
+        group.right = metrics.horizontals.right - metrics.borderPad;
+    },
+};
+
+const safeHorizontal = {
+    left: (metrics, group) => {
+        group.left = metrics.safeHorizontals.left + metrics.borderPad;
+    },
+    center: (metrics, group) => {
+        group.centerX = metrics.safeHorizontals.center;
+    },
+    right: (metrics, group) => {
+        group.right = metrics.safeHorizontals.right - metrics.borderPad;
     },
 };
 
 const vertical = {
     top: (metrics, group) => {
-        group.top = metrics.verticals.top + metrics.buttonPad;
+        group.top = metrics.verticals.top + metrics.borderPad;
     },
     middle: (metrics, group) => {
         group.centerY = metrics.verticals.middle;
     },
     bottom: (metrics, group) => {
-        group.bottom = metrics.verticals.bottom - metrics.buttonPad;
+        group.bottom = metrics.verticals.bottom - metrics.borderPad;
     },
 };
 
@@ -38,7 +50,11 @@ export class Group extends Phaser.Group {
         this._buttons = [];
         this._buttonFactory = ButtonFactory.create(game);
         this._setGroupPosition = metrics => {
-            horizontal[hPos](metrics, this);
+            if (isSafe) {
+                safeHorizontal[hPos](metrics, this);
+            } else {
+                horizontal[hPos](metrics, this);
+            }
             vertical[vPos](metrics, this);
         };
     }
