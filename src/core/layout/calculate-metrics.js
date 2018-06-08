@@ -48,7 +48,6 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
             bottom: stageHeight / 2,
         },
     };
-    console.log(metrics.borderPad);
 
     return metrics;
 });
