@@ -27,7 +27,7 @@ describe("Layout - Calculate Metrics", () => {
             expect(getMetrics({ width: 600, height: 600 }).borderPad).to.equal(16);
             expect(getMetrics({ width: 800, height: 600 }).borderPad).to.equal(16);
             expect(getMetrics({ width: 1000, height: 600 }).borderPad).to.equal(20);
-            expect(getMetrics({ width: 1500, height: 600 }).borderPad).to.equal(28);
+            expect(getMetrics({ width: 1500, height: 600 }).borderPad).to.equal(30);
 
             expect(getMetrics({ width: 200, height: 600 }).borderPad).to.equal(16);
             expect(getMetrics({ width: 200, height: 800 }).borderPad).to.equal(16);
