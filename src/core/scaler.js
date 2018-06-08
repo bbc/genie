@@ -2,7 +2,7 @@
  *
  *  @module core/scaler
  */
-import { GEL_MIN_ASPECT_RATIO, calculateMetrics } from "./layout/calculate-metrics.js";
+import { calculateMetrics } from "./layout/calculate-metrics.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
 
