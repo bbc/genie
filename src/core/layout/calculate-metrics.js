@@ -3,7 +3,6 @@ import fp from "../../../lib/lodash/fp/fp.js";
 const BORDER_PAD_RATIO = 0.02;
 const MOBILE_BREAK_WIDTH = 770;
 export const GEL_MIN_ASPECT_RATIO = 4 / 3;
-export const GEL_MAX_ASPECT_RATIO = 7 / 3;
 
 const getScale = fp.curry((scaleMethods, { width, height }) => {
     return scaleMethods[width / height >= GEL_MIN_ASPECT_RATIO ? "wide" : "narrow"](width, height);
@@ -16,7 +15,7 @@ const scaleMethods = stageHeight => ({
 
 export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
     const scale = getScale(scaleMethods(stageHeight), { width, height });
-    const aspectRatio = fp.clamp(GEL_MIN_ASPECT_RATIO, GEL_MAX_ASPECT_RATIO, width / height);
+    const aspectRatio = fp.max([GEL_MIN_ASPECT_RATIO, width / height]);
     const stageWidth = aspectRatio * stageHeight;
     const isMobile = width < MOBILE_BREAK_WIDTH;
     const safeWidth = height * GEL_MIN_ASPECT_RATIO;
