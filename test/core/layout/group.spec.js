@@ -1,7 +1,6 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
-import { calculateMetrics } from "../../../src/core/layout/calculate-metrics";
 import { Group } from "../../../src/core/layout/group";
 
 describe("Group", () => {
