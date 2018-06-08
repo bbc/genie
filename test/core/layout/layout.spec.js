@@ -5,7 +5,7 @@ import * as Layout from "../../../src/core/layout/layout";
 import { Group } from "../../../src/core/layout/group";
 import { GameAssets } from "../../../src/core/game-assets";
 
-describe("Layout", () => {
+describe.only("Layout", () => {
     const sandbox = sinon.sandbox.create();
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame;
@@ -147,13 +147,6 @@ describe("Layout", () => {
 
         const layout = Layout.create(mockGame, mockScaler, rndOrder);
         assert.deepEqual(Object.keys(layout.buttons), tabOrder);
-    });
-
-    it("Should reset the groups after they have been added to the layout", () => {
-        const groupResetStub = sandbox.stub(Group.prototype, "reset");
-
-        Layout.create(mockGame, mockScaler, []);
-        assert(groupResetStub.callCount === 9);
     });
 
     it("removeSignals method removes all signals on this Layout instance", () => {
