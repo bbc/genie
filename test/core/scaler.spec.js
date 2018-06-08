@@ -34,7 +34,7 @@ describe("Scaler", () => {
     });
 
     it("Should return correct metrics when calculateMetrics is called", () => {
-        sandbox.stub(calculateMetrics, "calculateMetrics").returns("metrics");
+        sandbox.stub(calculateMetrics, "calculateMetrics").returns(sandbox.stub().returns("metrics"));
         const scaler = Scaler.create(600, mockGame);
         const metrics = scaler.calculateMetrics();
         assert.strictEqual(metrics, "metrics");
