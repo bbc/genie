@@ -2,14 +2,17 @@ import { assert } from "chai";
 import * as sinon from "sinon";
 
 import * as Layout from "../../../src/core/layout/layout";
+import * as Scaler from "../../../src/core/scaler.js";
 import { Group } from "../../../src/core/layout/group";
 import { GameAssets } from "../../../src/core/game-assets";
 
-describe.only("Layout", () => {
+describe("Layout", () => {
     const sandbox = sinon.sandbox.create();
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame;
     let mockScaler;
+    let mockSubscribe;
+    let mockUnsubscribe;
 
     beforeEach(() => {
         sandbox.stub(Group.prototype, "addButton").returns({ onInputUp: { add: sandbox.spy() } });
@@ -39,6 +42,9 @@ describe.only("Layout", () => {
                 getSize: sandbox.spy(() => ({ width: 200, height: 200 })),
                 onScaleChange: { add: sandbox.spy() },
             };
+
+            mockUnsubscribe = sandbox.spy();
+            mockSubscribe = sandbox.stub(Scaler.onScaleChange, "add").returns({ unsubscribe: mockUnsubscribe });
 
             GameAssets.sounds = {
                 buttonClick: {
@@ -149,13 +155,15 @@ describe.only("Layout", () => {
         assert.deepEqual(Object.keys(layout.buttons), tabOrder);
     });
 
-    it("removeSignals method removes all signals on this Layout instance", () => {
-        mockScaler.onScaleChange = new Phaser.Signal();
+    it("subscribes to the scaler sizeChange signal", () => {
         const layout = Layout.create(mockGame, mockScaler, ["play"]);
+        sinon.assert.calledOnce(mockSubscribe);
+    });
 
-        assert(layout.scaler.onScaleChange._bindings.length === 1, "has one signal");
+    it("removeSignals method removes all signals on this Layout instance", () => {
+        const layout = Layout.create(mockGame, mockScaler, ["play"]);
         layout.removeSignals();
-        assert(layout.scaler.onScaleChange._bindings.length === 0, "has no signals");
+        sinon.assert.calledOnce(mockUnsubscribe);
     });
 });
 
