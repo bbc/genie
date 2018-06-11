@@ -39,13 +39,12 @@ export function createTestHarnessDisplay(game, context, scene) {
     }
 
     function drawOuterPadding() {
-        const metrics = scene.calculateMetrics();
         const graphics = game.add.graphics();
         const paddingWidth = getPaddingWidth();
-        const gameLeftEdge = 0 + paddingWidth * 0.5;
-        const gameTopEdge = 0 + paddingWidth * 0.5;
-        const gameRightEdge = metrics.width - paddingWidth * 0.5;
-        const gameBottomEdge = metrics.height - paddingWidth * 0.5;
+        const gameLeftEdge = (paddingWidth - game.width) * 0.5;
+        const gameTopEdge = (paddingWidth - game.height) * 0.5;
+        const gameRightEdge = (paddingWidth - game.width) * -0.5;
+        const gameBottomEdge = (paddingWidth - game.height) * -0.5;
 
         console.log("paddingWidth: ", paddingWidth); // eslint-disable-line no-console
         console.log("screenWidth: ", window.innerWidth); // eslint-disable-line no-console
@@ -68,17 +67,15 @@ export function createTestHarnessDisplay(game, context, scene) {
     }
 
     function gameAreaDimensions() {
-        const metrics = scene.calculateMetrics();
-        const areaWidth = GEL_MIN_ASPECT_RATIO * metrics.stageHeight;
-        const areaHeight = metrics.stageHeight;
+        const areaWidth = GEL_MIN_ASPECT_RATIO * game.height;
+        const areaHeight = game.height;
 
         return [areaWidth, areaHeight];
     }
 
     function getPaddingWidth() {
-        const metrics = scene.calculateMetrics();
         const gelPaddingWidthPercentage = 0.02;
 
-        return Math.max(metrics.width, metrics.height) * gelPaddingWidthPercentage;
+        return Math.max(game.width, game.height) * gelPaddingWidthPercentage;
     }
 }
