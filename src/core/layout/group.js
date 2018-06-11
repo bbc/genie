@@ -3,26 +3,14 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import * as ButtonFactory from "./button-factory.js";
 
 const horizontal = {
-    left: (metrics, group) => {
-        group.left = metrics.horizontals.left + metrics.borderPad;
+    left: (metrics, group, horizontalsType) => {
+        group.left = metrics[horizontalsType].left + metrics.borderPad;
     },
-    center: (metrics, group) => {
-        group.centerX = metrics.horizontals.center;
+    center: (metrics, group, horizontalsType) => {
+        group.centerX = metrics[horizontalsType].center;
     },
-    right: (metrics, group) => {
-        group.right = metrics.horizontals.right - metrics.borderPad;
-    },
-};
-
-const safeHorizontal = {
-    left: (metrics, group) => {
-        group.left = metrics.safeHorizontals.left + metrics.borderPad;
-    },
-    center: (metrics, group) => {
-        group.centerX = metrics.safeHorizontals.center;
-    },
-    right: (metrics, group) => {
-        group.right = metrics.safeHorizontals.right - metrics.borderPad;
+    right: (metrics, group, horizontalsType) => {
+        group.right = metrics[horizontalsType].right - metrics.borderPad;
     },
 };
 
@@ -50,11 +38,7 @@ export class Group extends Phaser.Group {
         this._buttons = [];
         this._buttonFactory = ButtonFactory.create(game);
         this._setGroupPosition = metrics => {
-            if (isSafe) {
-                safeHorizontal[hPos](metrics, this);
-            } else {
-                horizontal[hPos](metrics, this);
-            }
+            horizontal[hPos](metrics, this, isSafe ? "safeHorizontals" : "horizontals");
             vertical[vPos](metrics, this);
         };
     }
