@@ -7,7 +7,7 @@ export const GEL_MIN_ASPECT_RATIO = 4 / 3;
 const getScale = fp.curry((stageHeight, width, height) =>
     fp.cond([
         [() => width / height >= GEL_MIN_ASPECT_RATIO, () => height / stageHeight],
-        [() => width / height < GEL_MIN_ASPECT_RATIO, () => width / (stageHeight / GEL_MIN_ASPECT_RATIO)],
+        [() => width / height < GEL_MIN_ASPECT_RATIO, () => width / (stageHeight * GEL_MIN_ASPECT_RATIO)],
     ])(),
 );
 
