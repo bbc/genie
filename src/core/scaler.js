@@ -16,24 +16,20 @@ const _onSizeChangeSignalCreate = (channel, name) => ({
 const _onSizeChange = _onSizeChangeSignalCreate("scaler", "sizeChange");
 export const onScaleChange = { add: _onSizeChange.add };
 
-export function create(stageHeight, game) {
-    let metrics;
+export let getMetrics;
 
+export function create(stageHeight, game) {
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-    const getSize = fp.flow(getBounds(game), fp.pick(["width", "height"]));
-    const _calculateMetrics = fp.flow(getSize, calculateMetrics(stageHeight));
+    getMetrics = fp.flow(getBounds(game), fp.pick(["width", "height"]), calculateMetrics(stageHeight));
 
-    const setSize = () => {
-        metrics = _calculateMetrics();
+    const setSize = metrics => {
         game.scale.setGameSize(metrics.width / metrics.scale, metrics.height / metrics.scale);
         _onSizeChange.dispatch(metrics);
     };
-    setSize();
 
-    window.onresize = fp.debounce(200, setSize);
+    const resize = fp.flow(getMetrics, setSize);
 
-    return {
-        calculateMetrics: () => metrics,
-    };
+    resize();
+    window.onresize = fp.debounce(200, resize);
 }

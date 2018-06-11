@@ -73,7 +73,7 @@ export function create(game) {
      * @returns {Object}
      */
     const addLayout = buttons => {
-        const layout = Layout.create(game, scaler, buttons);
+        const layout = Layout.create(game, buttons);
         addToGroup(background, layout.root);
         _layouts.push(layout);
         return layout;
@@ -102,7 +102,6 @@ export function create(game) {
         addLayout,
         getLayouts,
         getAccessibleGameButtons,
-        removeAll,
-        calculateMetrics: scaler.calculateMetrics,
+        removeAll
     };
 }
