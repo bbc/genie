@@ -48,7 +48,9 @@ export function accessibilify(button, config, gameButton = true) {
             bounds = button.hitArea.clone();
             bounds.topLeft = button.toGlobal(bounds.topLeft);
         }
-        bounds.topLeft = bounds.topLeft.multiply(positionScale.x, positionScale.y);
+        bounds.topLeft = bounds.topLeft
+            .multiply(positionScale.x, positionScale.y)
+            .add(game.scale.margin.left, game.scale.margin.top);
         bounds.scale(sizeScale.x, sizeScale.y);
         return bounds;
     }

@@ -20,13 +20,15 @@ export function create(stageHeight, game) {
     let metrics;
 
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    game.scale.pageAlignHorizontally = true;
+    game.scale.pageAlignVertically = true;
 
     const getSize = fp.flow(getBounds(game), fp.pick(["width", "height"]));
     const _calculateMetrics = fp.flow(getSize, calculateMetrics(stageHeight));
 
     const setSize = () => {
         metrics = _calculateMetrics();
-        game.scale.setGameSize(metrics.width / metrics.scale, metrics.height / metrics.scale);
+        game.scale.setGameSize(metrics.stageWidth, metrics.stageHeight);
         _onSizeChange.dispatch(metrics);
     };
     setSize();
