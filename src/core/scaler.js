@@ -2,44 +2,38 @@
  *
  *  @module core/scaler
  */
-
-export const GEL_MIN_RATIO_WIDTH = 4;
-export const GEL_MIN_RATIO_HEIGHT = 3;
-export const GEL_SAFE_FRAME_RATIO = GEL_MIN_RATIO_WIDTH / GEL_MIN_RATIO_HEIGHT;
+import { calculateMetrics } from "./layout/calculate-metrics.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
-
-const getScale = fp.curry((scaleMethods, stageHeightPx, { width, height }) => {
-    const scale = scaleMethods[width / height >= GEL_SAFE_FRAME_RATIO ? "wide" : "narrow"](width, height);
-    return { width, height, scale, stageHeightPx };
-});
+import * as signal from "./signal-bus.js";
 
 const getBounds = game => () => game.scale.getParentBounds();
 
-export function create(stageHeightPx, game) {
+const _onSizeChangeSignalCreate = (channel, name) => ({
+    dispatch: data => signal.bus.publish({ channel, name, data }),
+    add: callback => signal.bus.subscribe({ channel, name, callback }),
+});
+const _onSizeChange = _onSizeChangeSignalCreate("scaler", "sizeChange");
+export const onScaleChange = { add: _onSizeChange.add };
+
+export function create(stageHeight, game) {
+    let metrics;
+
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-    const onScaleChange = new Phaser.Signal();
+    const getSize = fp.flow(getBounds(game), fp.pick(["width", "height"]));
+    const _calculateMetrics = fp.flow(getSize, calculateMetrics(stageHeight));
 
-    const scaleMethods = {
-        wide: (width, height) => height / stageHeightPx,
-        narrow: width => width / stageHeightPx / GEL_SAFE_FRAME_RATIO,
+    const setSize = () => {
+        metrics = _calculateMetrics();
+        game.scale.setGameSize(metrics.width / metrics.scale, metrics.height / metrics.scale);
+        _onSizeChange.dispatch(metrics);
     };
+    setSize();
 
-    const getSize = fp.flow(getBounds(game), fp.pick(["width", "height"]), getScale(scaleMethods, stageHeightPx));
-
-    const setSize = ({ width, height, scale, stageHeightPx: stageHeight }) => {
-        onScaleChange.dispatch(width, height, scale, stageHeight);
-    };
-
-    const onSizeChange = fp.flow(getSize, setSize);
-
-    //TODO investigate why using using game.scale.setResizeCallback(onSizeChange); gets called repeatedly.
-    game.scale.onSizeChange.add(onSizeChange);
-    //game.scale.setResizeCallback(onSizeChange);
+    window.onresize = fp.debounce(200, setSize);
 
     return {
-        onScaleChange,
-        getSize,
+        calculateMetrics: () => metrics,
     };
 }

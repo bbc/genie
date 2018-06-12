@@ -1,36 +1,50 @@
-const BORDER_PAD = 0.02;
-const BREAK_WIDTH = 770;
-const SAFE_ASPECT_RATIO = 4 / 3;
+import fp from "../../../lib/lodash/fp/fp.js";
 
-export const calculateMetrics = (width, height, scale, stageHeight) => {
-    const isMobile = width < BREAK_WIDTH;
-    const safeWidth = stageHeight * SAFE_ASPECT_RATIO;
+const BORDER_PAD_RATIO = 0.02;
+const MOBILE_BREAK_WIDTH = 770;
+export const GEL_MIN_ASPECT_RATIO = 4 / 3;
+
+const getScale = fp.curry((stageHeight, width, height) =>
+    fp.cond([
+        [() => width / height >= GEL_MIN_ASPECT_RATIO, () => height / stageHeight],
+        [() => width / height < GEL_MIN_ASPECT_RATIO, () => width / (stageHeight * GEL_MIN_ASPECT_RATIO)],
+    ])(),
+);
+
+export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
+    const scale = getScale(stageHeight, width, height);
+    const aspectRatio = fp.max([GEL_MIN_ASPECT_RATIO, width / height]);
+    const stageWidth = aspectRatio * stageHeight;
+    const isMobile = width < MOBILE_BREAK_WIDTH;
+    const safeWidth = stageHeight * GEL_MIN_ASPECT_RATIO;
 
     const metrics = {
         width,
-        height: stageHeight,
+        height,
         scale,
-        borderPad: Math.floor(Math.max(width, stageHeight) * BORDER_PAD),
+        stageWidth,
+        stageHeight,
+        borderPad: fp.floor(fp.max([stageWidth, stageHeight]) * BORDER_PAD_RATIO),
         isMobile,
         buttonPad: isMobile ? 22 : 24,
         buttonMin: isMobile ? 42 : 64,
         hitMin: isMobile ? 64 : 70,
         horizontals: {
-            left: width / scale * -0.5,
+            left: -stageWidth / 2,
             center: 0,
-            right: width / scale * 0.5,
+            right: stageWidth / 2,
         },
         safeHorizontals: {
-            left: safeWidth * -0.5,
+            left: -safeWidth / 2,
             center: 0,
-            right: safeWidth * 0.5,
+            right: safeWidth / 2,
         },
         verticals: {
-            top: stageHeight * -0.5,
+            top: -stageHeight / 2,
             middle: 0,
-            bottom: stageHeight * 0.5,
+            bottom: stageHeight / 2,
         },
     };
 
     return metrics;
-};
+});

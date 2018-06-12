@@ -6,13 +6,12 @@ import { calculateMetrics } from "../../../src/core/layout/calculate-metrics";
 const defaultValues = {
     width: 800,
     height: 600,
-    scale: 1,
     stageHeight: 600,
 };
 
 const getMetrics = newValues => {
     const values = _.merge({}, defaultValues, newValues);
-    return calculateMetrics(values.width, values.height, values.scale, values.stageHeight);
+    return calculateMetrics(values.stageHeight, { width: values.width, height: values.height });
 };
 
 describe("Layout - Calculate Metrics", () => {
@@ -20,18 +19,19 @@ describe("Layout - Calculate Metrics", () => {
         const metrics = getMetrics({});
         expect(metrics.width).to.equal(defaultValues.width);
         expect(metrics.height).to.equal(defaultValues.height);
-        expect(metrics.scale).to.equal(defaultValues.scale);
+        expect(metrics.scale).to.equal(1);
     });
 
     describe("borderPad metric", () => {
         it("sets a border padding of 2% of the longest edge", () => {
-            expect(getMetrics({ width: 600 }).borderPad).to.equal(12);
-            expect(getMetrics({ width: 800 }).borderPad).to.equal(16);
-            expect(getMetrics({ width: 1000 }).borderPad).to.equal(20);
+            expect(getMetrics({ width: 600, height: 600 }).borderPad).to.equal(16);
+            expect(getMetrics({ width: 800, height: 600 }).borderPad).to.equal(16);
+            expect(getMetrics({ width: 1000, height: 600 }).borderPad).to.equal(20);
+            expect(getMetrics({ width: 1500, height: 600 }).borderPad).to.equal(30);
 
-            expect(getMetrics({ width: 200, stageHeight: 600 }).borderPad).to.equal(12);
-            expect(getMetrics({ width: 200, stageHeight: 800 }).borderPad).to.equal(16);
-            expect(getMetrics({ width: 200, stageHeight: 1000 }).borderPad).to.equal(20);
+            expect(getMetrics({ width: 200, height: 600 }).borderPad).to.equal(16);
+            expect(getMetrics({ width: 200, height: 800 }).borderPad).to.equal(16);
+            expect(getMetrics({ width: 200, height: 1000 }).borderPad).to.equal(16);
         });
     });
 
@@ -77,12 +77,12 @@ describe("Layout - Calculate Metrics", () => {
 
     describe("horizontals metric", () => {
         it("returns horizontals in relation to the width and scale", () => {
-            const expectedFor600 = { left: -300, center: 0, right: 300 };
+            const expectedFor600 = { left: -400, center: 0, right: 400 };
             const expectedFor800 = { left: -400, center: 0, right: 400 };
             const expectedFor1000 = { left: -250, center: 0, right: 250 };
             expect(getMetrics({ width: 600 }).horizontals).to.eql(expectedFor600);
             expect(getMetrics({ width: 800 }).horizontals).to.eql(expectedFor800);
-            expect(getMetrics({ width: 1000, scale: 2 }).horizontals).to.eql(expectedFor1000);
+            expect(getMetrics({ width: 1000, stageHeight: 300 }).horizontals).to.eql(expectedFor1000);
         });
     });
 

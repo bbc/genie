@@ -1,8 +1,10 @@
-import { expect } from "chai";
+import { assert, expect } from "chai";
 import * as sinon from "sinon";
 import * as Scaler from "../../src/core/scaler";
+import * as calculateMetrics from "../../src/core/layout/calculate-metrics.js";
 
 describe("Scaler", () => {
+    const sandbox = sinon.sandbox.create();
     let mockGame;
 
     beforeEach(() => {
@@ -19,22 +21,23 @@ describe("Scaler", () => {
         };
     });
 
+    afterEach(() => sandbox.restore());
+
     it("Should set the scalemode to SHOW_ALL on create", () => {
         Scaler.create(600, mockGame);
         expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.SHOW_ALL);
     });
 
-    it("Should call the games onSizeChange add function once", () => {
+    it("Should assign a callback to window.onresize", () => {
+        const callback = window.onresize;
         Scaler.create(600, mockGame);
-        expect(mockGame.scale.onSizeChange.add.callCount).to.eql(1);
+        assert.notEqual(window.onresize, callback);
     });
 
-    it("Should return the correct height, width, scale and stageHeight when getSize is called", () => {
+    it("Should return correct metrics when calculateMetrics is called", () => {
+        sandbox.stub(calculateMetrics, "calculateMetrics").returns(sandbox.stub().returns("metrics"));
         const scaler = Scaler.create(600, mockGame);
-        const size = scaler.getSize();
-        expect(size.width).to.eql(800);
-        expect(size.height).to.eql(600);
-        expect(size.scale).to.eql(1);
-        expect(size.stageHeightPx).to.eql(600);
+        const metrics = scaler.calculateMetrics();
+        assert.strictEqual(metrics, "metrics");
     });
 });

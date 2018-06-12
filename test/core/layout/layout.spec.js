@@ -2,6 +2,7 @@ import { assert } from "chai";
 import * as sinon from "sinon";
 
 import * as Layout from "../../../src/core/layout/layout";
+import * as Scaler from "../../../src/core/scaler.js";
 import { Group } from "../../../src/core/layout/group";
 import { GameAssets } from "../../../src/core/game-assets";
 
@@ -10,6 +11,8 @@ describe("Layout", () => {
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame;
     let mockScaler;
+    let mockSubscribe;
+    let mockUnsubscribe;
 
     beforeEach(() => {
         sandbox.stub(Group.prototype, "addButton").returns({ onInputUp: { add: sandbox.spy() } });
@@ -32,9 +35,17 @@ describe("Layout", () => {
             };
 
             mockScaler = {
+                calculateMetrics: sandbox.stub().returns({
+                    horizontals: {},
+                    safeHorizontals: {},
+                    verticals: {},
+                }),
                 getSize: sandbox.spy(() => ({ width: 200, height: 200 })),
                 onScaleChange: { add: sandbox.spy() },
             };
+
+            mockUnsubscribe = sandbox.spy();
+            mockSubscribe = sandbox.stub(Scaler.onScaleChange, "add").returns({ unsubscribe: mockUnsubscribe });
 
             GameAssets.sounds = {
                 buttonClick: {
@@ -147,18 +158,19 @@ describe("Layout", () => {
 
     it("Should reset the groups after they have been added to the layout", () => {
         const groupResetStub = sandbox.stub(Group.prototype, "reset");
-
         Layout.create(mockGame, mockScaler, []);
-        assert(groupResetStub.callCount === 11);
+        sinon.assert.callCount(groupResetStub, 11);
+    });
+
+    it("subscribes to the scaler sizeChange signal", () => {
+        Layout.create(mockGame, mockScaler, ["play"]);
+        sinon.assert.calledOnce(mockSubscribe);
     });
 
     it("removeSignals method removes all signals on this Layout instance", () => {
-        mockScaler.onScaleChange = new Phaser.Signal();
         const layout = Layout.create(mockGame, mockScaler, ["play"]);
-
-        assert(layout.scaler.onScaleChange._bindings.length === 1, "has one signal");
         layout.removeSignals();
-        assert(layout.scaler.onScaleChange._bindings.length === 0, "has no signals");
+        sinon.assert.calledOnce(mockUnsubscribe);
     });
 });
 

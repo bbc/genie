@@ -47,7 +47,11 @@ export const create = () => {
         delete _bus[channel];
     };
 
-    const addSubscription = message => _bus[message.channel][message.name].add(message.callback);
+    const addSubscription = message => {
+        _bus[message.channel][message.name].add(message.callback);
+        return fp.assign(message, { unsubscribe: () => removeSubscription(message) });
+    };
+    const removeSubscription = message => _bus[message.channel][message.name].remove(message.callback);
     const publishMessage = message => _bus[message.channel][message.name].dispatch(message.data);
 
     /**

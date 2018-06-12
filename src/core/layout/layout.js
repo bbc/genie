@@ -3,8 +3,8 @@
  *
  * @module layout/layout
  */
+import { onScaleChange } from "../scaler.js";
 import fp from "../../../lib/lodash/fp/fp.js";
-import { calculateMetrics } from "./calculate-metrics.js";
 import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { Group } from "./group.js";
@@ -22,8 +22,7 @@ const tabSort = fp.sortBy(getOrder(gel.config));
 export function create(game, scaler, buttonIds) {
     const root = new Phaser.Group(game, game.world, undefined);
 
-    const size = scaler.getSize();
-    let metrics = calculateMetrics(size.width, size.height, size.scale, size.stageHeightPx);
+    let metrics = scaler.calculateMetrics();
 
     const groups = fp.zipObject(
         groupLayouts.map(layout =>
@@ -53,20 +52,17 @@ export function create(game, scaler, buttonIds) {
         groups[groupName].addToGroup(item, position);
     };
 
-    const resize = (width, height, scale, stageHeight) => {
-        metrics = calculateMetrics(width, height, scale, stageHeight);
-
+    const resize = metrics => {
         if (groups) {
             fp.forOwn(group => group.reset(metrics), groups);
         }
     };
+    resize(metrics);
 
+    const signal = onScaleChange.add(resize);
     const removeSignals = () => {
-        scaler.onScaleChange.remove(resize);
+        signal.unsubscribe();
     };
-
-    scaler.onScaleChange.add(resize);
-    resize(size.width, size.height, size.scale, size.stageHeightPx);
 
     const destroy = () => {
         removeSignals();
