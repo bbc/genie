@@ -6,7 +6,6 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
 import * as Book from "../../core/book.js";
-import * as gel from "../../core/layout/gel-defaults.js";
 import * as signal from "../../core/signal-bus.js";
 
 /**
@@ -90,11 +89,11 @@ export function create({ game }) {
     function destroy() {
         signal.bus.removeChannel(channel);
         overlayLayout.restoreDisabledButtons();
-        document.getElementById(gel.config.howToPlay.id).focus();
         book.destroy();
         destroyPips();
         title.destroy();
         background.destroy();
+        game.canvas.focus();
         screen.context.popupScreens = fp.pull("how-to-play", screen.context.popupScreens);
     }
 }

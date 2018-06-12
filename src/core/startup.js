@@ -39,6 +39,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
 
     function onStarted(config) {
         // Phaser is now set up and we can use all game properties.
+        game.canvas.setAttribute("tabindex", "-1");
         game.canvas.setAttribute("aria-hidden", "true");
         const scene = Scene.create(game);
         const context = {
@@ -70,6 +71,13 @@ class Startup extends Phaser.State {
         const theme = gmi.embedVars.configPath;
         this.game.load.path = theme.split(/([^/]+$)/, 2)[0]; //config dir
         this.game.load.json(CONFIG_KEY, "config.json");
+        signal.bus.subscribe({
+            channel: settingsChannel,
+            name: "settingsClosed",
+            callback: () => {
+                this.game.canvas.focus();
+            },
+        });
         this.configureAudioSetting();
     }
 
