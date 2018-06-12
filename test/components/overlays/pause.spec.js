@@ -48,6 +48,7 @@ describe("Pause Overlay", () => {
             state: { current: "pauseScreen", states: { pauseScreen: mockScreen } },
             sound: { pauseAll: sandbox.spy() },
             paused: false,
+            canvas: { focus: sandbox.spy() },
         };
         mockGame.add.image.onCall(0).returns("backgroundImage");
 
@@ -161,6 +162,13 @@ describe("Pause Overlay", () => {
             const destroy = signalSpy.getCall(0).args[0].callback;
             destroy();
             sinon.assert.calledOnce(signalBusRemoveChannel.withArgs("pause-gel-buttons"));
+        });
+
+        it("resets the tab position on destroy", () => {
+            pauseCreate({ game: mockGame });
+            const destroy = signalSpy.getCall(0).args[0].callback;
+            destroy();
+            sinon.assert.calledOnce(mockGame.canvas.focus);
         });
 
         it("destroys the pause screen when the replay button is clicked", () => {
