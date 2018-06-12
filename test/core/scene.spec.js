@@ -18,7 +18,7 @@ describe("Scene", () => {
     });
 
     beforeEach(() => {
-        scalerMethods = { getSize: sandbox.spy(), onScaleChange: { add: sandbox.spy() } };
+        scalerMethods = { calculateMetrics: sandbox.spy(), onScaleChange: { add: sandbox.spy() } };
         scalerSpy = sandbox.stub(Scaler, "create").returns(scalerMethods);
         groupMethods = {
             addChild: sandbox.spy(),
@@ -59,7 +59,7 @@ describe("Scene", () => {
         assert.exists(scene.addLayout);
         assert.exists(scene.getLayouts);
         assert.exists(scene.removeAll);
-        assert.exists(scene.getSize);
+        assert.exists(scene.calculateMetrics);
     });
 
     it("Should add background, root, foreground, unscaled, layers to the phaser game", () => {
@@ -177,10 +177,10 @@ describe("Scene", () => {
         });
     });
 
-    describe("getSize method", () => {
-        it("returns the scaler getSize method", () => {
-            scene.getSize();
-            expect(scalerMethods.getSize.called).to.equal(true);
+    describe("calculateMetrics method", () => {
+        it("returns the scaler calculateMetrics method", () => {
+            scene.calculateMetrics();
+            expect(scalerMethods.calculateMetrics.called).to.equal(true);
         });
     });
 });

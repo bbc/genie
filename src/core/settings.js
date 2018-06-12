@@ -16,7 +16,6 @@ export const create = () => {
     };
 
     const checkGmi = () => {
-        console.log("checkgmi");
         if (!gmi) {
             throw "gmi has not been initialised in settings.js";
         }
