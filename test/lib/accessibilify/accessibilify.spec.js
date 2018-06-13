@@ -44,7 +44,10 @@ describe("#accessibilify", () => {
         onInputOver = sandbox.spy();
         onInputOut = sandbox.spy();
         activePointer = sandbox.spy();
-        mockButtonBounds = { topLeft: { x: "x", y: "y", multiply: p => p }, scale: () => mockButtonBounds };
+        mockButtonBounds = {
+            topLeft: { x: "x", y: "y", multiply: () => mockButtonBounds.topLeft, add: () => mockButtonBounds.topLeft },
+            scale: () => mockButtonBounds,
+        };
         mockButton = {
             alive: true,
             name: "play",
@@ -59,6 +62,7 @@ describe("#accessibilify", () => {
                 width: gameWidth,
                 accessibleButtons: [],
                 scale: {
+                    margin: {},
                     onSizeChange: {
                         add: () => {},
                         remove: () => {},
@@ -76,7 +80,8 @@ describe("#accessibilify", () => {
                     return {
                         x: mockButton.hitArea.x,
                         y: mockButton.hitArea.y,
-                        multiply: p => p,
+                        multiply: () => mockButton.hitArea.topLeft,
+                        add: () => mockButton.hitArea.topLeft,
                     };
                 },
                 set topLeft(p) {

@@ -40,16 +40,16 @@ export function accessibilify(button, config, gameButton = true) {
     }
 
     function getHitAreaBounds() {
-        const positionScale = game.scale.scaleFactorInversed;
-        const sizeScale = Phaser.Point.multiply(button.worldScale, game.scale.scaleFactorInversed);
-
         let bounds = button.getBounds();
         if (button.hitArea) {
             bounds = button.hitArea.clone();
             bounds.topLeft = button.toGlobal(bounds.topLeft);
+            bounds.scale(button.worldScale.x, button.worldScale.y);
         }
-        bounds.topLeft = bounds.topLeft.multiply(positionScale.x, positionScale.y);
-        bounds.scale(sizeScale.x, sizeScale.y);
+        bounds.topLeft = bounds.topLeft
+            .multiply(game.scale.scaleFactorInversed.x, game.scale.scaleFactorInversed.y)
+            .add(game.scale.margin.left, game.scale.margin.top);
+        bounds.scale(game.scale.scaleFactorInversed.x, game.scale.scaleFactorInversed.y);
         return bounds;
     }
 
