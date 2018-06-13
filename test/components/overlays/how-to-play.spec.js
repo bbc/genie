@@ -68,6 +68,7 @@ describe("How To Play Overlay", () => {
                 group: sandbox.stub().returns(mockPipsGroup),
             },
             state: { current: "howToPlay", states: { howToPlay: mockScreen } },
+            canvas: { focus: sandbox.spy() },
         };
         mockGame.add.image.withArgs(0, 0, "howToPlay.background").returns("background");
         mockGame.add.image.withArgs(0, -230, "howToPlay.title").returns(mockTitle);
@@ -218,6 +219,12 @@ describe("How To Play Overlay", () => {
                 destroy();
                 sinon.assert.calledWith(mockPipsGroup.callAll, "kill");
                 sinon.assert.calledWith(mockPipsGroup.callAll, "destroy");
+            });
+
+            it("resets the tab position on destroy", () => {
+                const destroy = signalSpy.getCall(0).args[0].callback;
+                destroy();
+                sinon.assert.calledOnce(mockGame.canvas.focus);
             });
         });
 
