@@ -18,7 +18,7 @@ export const onScaleChange = { add: _onSizeChange.add };
 
 export let getMetrics;
 
-export function create(stageHeight, game) {
+export function init(stageHeight, game) {
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 
     getMetrics = fp.flow(getBounds(game), fp.pick(["width", "height"]), calculateMetrics(stageHeight));

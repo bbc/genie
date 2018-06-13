@@ -10,9 +10,13 @@ describe("Layout", () => {
     const sandbox = sinon.sandbox.create();
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame;
-    let mockScaler;
     let mockSubscribe;
     let mockUnsubscribe;
+    const mockMetrics = {
+        horizontals: {},
+        safeHorizontals: {},
+        verticals: {},
+    };
 
     beforeEach(() => {
         sandbox.stub(Group.prototype, "addButton").returns({ onInputUp: { add: sandbox.spy() } });
@@ -34,16 +38,6 @@ describe("Layout", () => {
                 destroy: () => {},
             };
 
-            mockScaler = {
-                calculateMetrics: sandbox.stub().returns({
-                    horizontals: {},
-                    safeHorizontals: {},
-                    verticals: {},
-                }),
-                getSize: sandbox.spy(() => ({ width: 200, height: 200 })),
-                onScaleChange: { add: sandbox.spy() },
-            };
-
             mockUnsubscribe = sandbox.spy();
             mockSubscribe = sandbox.stub(Scaler.onScaleChange, "add").returns({ unsubscribe: mockUnsubscribe });
 
@@ -62,13 +56,13 @@ describe("Layout", () => {
     });
 
     it("should add the correct number of GEL buttons for a given config", () => {
-        const layout1 = Layout.create(mockGame, mockScaler, ["achievements"]);
+        const layout1 = Layout.create(mockGame, mockMetrics, ["achievements"]);
         assert(Object.keys(layout1.buttons).length === 1);
 
-        const layout2 = Layout.create(mockGame, mockScaler, ["play", "audioOff", "settings"]);
+        const layout2 = Layout.create(mockGame, mockMetrics, ["play", "audioOff", "settings"]);
         assert(Object.keys(layout2.buttons).length === 3);
 
-        const layout3 = Layout.create(mockGame, mockScaler, [
+        const layout3 = Layout.create(mockGame, mockMetrics, [
             "achievements",
             "exit",
             "howToPlay",
@@ -80,12 +74,12 @@ describe("Layout", () => {
     });
 
     it("Should create 11 Gel Groups", () => {
-        const layout = Layout.create(mockGame, mockScaler, []);
+        const layout = Layout.create(mockGame, mockMetrics, []);
         assert(layout.root.children.length === 11);
     });
 
     it("Should add items to the correct group", () => {
-        const layout = Layout.create(mockGame, mockScaler, []);
+        const layout = Layout.create(mockGame, mockMetrics, []);
         const testElement = new Phaser.Sprite(mockGame, 0, 0);
 
         layout.addToGroup("middleRight", testElement);
@@ -97,7 +91,7 @@ describe("Layout", () => {
     });
 
     it("Should correctly insert an item using the index position property", () => {
-        const layout = Layout.create(mockGame, mockScaler, []);
+        const layout = Layout.create(mockGame, mockMetrics, []);
         const testElement = new Phaser.Sprite(mockGame, 0, 0);
         testElement.randomKey = randomKey;
 
@@ -112,7 +106,7 @@ describe("Layout", () => {
     });
 
     it("Should set button callbacks using the 'setAction' method", () => {
-        const layout = Layout.create(mockGame, mockScaler, ["achievements", "exit", "settings"]);
+        const layout = Layout.create(mockGame, mockMetrics, ["achievements", "exit", "settings"]);
 
         layout.setAction("exit", "testAction");
         assert(layout.buttons.exit.onInputUp.add.calledWith("testAction"));
@@ -152,23 +146,23 @@ describe("Layout", () => {
             "howToPlay",
         ];
 
-        const layout = Layout.create(mockGame, mockScaler, rndOrder);
+        const layout = Layout.create(mockGame, mockMetrics, rndOrder);
         assert.deepEqual(Object.keys(layout.buttons), tabOrder);
     });
 
     it("Should reset the groups after they have been added to the layout", () => {
         const groupResetStub = sandbox.stub(Group.prototype, "reset");
-        Layout.create(mockGame, mockScaler, []);
+        Layout.create(mockGame, mockMetrics, []);
         sinon.assert.callCount(groupResetStub, 11);
     });
 
     it("subscribes to the scaler sizeChange signal", () => {
-        Layout.create(mockGame, mockScaler, ["play"]);
+        Layout.create(mockGame, mockMetrics, ["play"]);
         sinon.assert.calledOnce(mockSubscribe);
     });
 
     it("removeSignals method removes all signals on this Layout instance", () => {
-        const layout = Layout.create(mockGame, mockScaler, ["play"]);
+        const layout = Layout.create(mockGame, mockMetrics, ["play"]);
         layout.removeSignals();
         sinon.assert.calledOnce(mockUnsubscribe);
     });

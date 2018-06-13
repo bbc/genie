@@ -8,7 +8,6 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { Group } from "./group.js";
-import { getMetrics } from '../scaler.js';
 
 const getOrder = fp.curry((object, name) => object[name].order);
 const tabSort = fp.sortBy(getOrder(gel.config));
@@ -17,13 +16,11 @@ const tabSort = fp.sortBy(getOrder(gel.config));
  * Creates a new layout. Called by layout.factory.addLayout for each screen component
  *
  * @param {Phaser.Game} game - Phaser Game Instance
+ * @param {Object} metrics - viewport metrics
  * @param {Array.<string>} buttonIds
  */
-export function create(game, buttonIds) {
+export function create(game, metrics, buttonIds) {
     const root = new Phaser.Group(game, game.world, undefined);
-
-    let metrics = getMetrics();
-
     const groups = fp.zipObject(
         groupLayouts.map(layout =>
             fp.camelCase([layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" ")),
@@ -76,6 +73,6 @@ export function create(game, buttonIds) {
         resize,
         root,
         removeSignals,
-        setAction
+        setAction,
     };
 }
