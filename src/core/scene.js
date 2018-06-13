@@ -48,8 +48,8 @@ export function create(game) {
 
     const debug = game.add.group(undefined, "debug", true);
 
-    const resize = ({ width, height, scale }) => {
-        root.position.set(width * 0.5 / scale, height * 0.5 / scale);
+    const resize = ({ stageWidth, stageHeight }) => {
+        root.position.set(stageWidth * 0.5, stageHeight * 0.5);
     };
 
     Scaler.onScaleChange.add(resize);
