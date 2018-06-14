@@ -23,21 +23,21 @@ describe("Scaler", () => {
 
     afterEach(() => sandbox.restore());
 
-    it("Should set the scalemode to SHOW_ALL on create", () => {
-        Scaler.create(600, mockGame);
+    it("Should set the scalemode to SHOW_ALL on init", () => {
+        Scaler.init(600, mockGame);
         expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.SHOW_ALL);
     });
 
     it("Should assign a callback to window.onresize", () => {
         const callback = window.onresize;
-        Scaler.create(600, mockGame);
+        Scaler.init(600, mockGame);
         assert.notEqual(window.onresize, callback);
     });
 
     it("Should return correct metrics when calculateMetrics is called", () => {
         sandbox.stub(calculateMetrics, "calculateMetrics").returns(sandbox.stub().returns("metrics"));
-        const scaler = Scaler.create(600, mockGame);
-        const metrics = scaler.calculateMetrics();
+        Scaler.init(600, mockGame);
+        const metrics = Scaler.getMetrics();
         assert.strictEqual(metrics, "metrics");
     });
 });

@@ -3,14 +3,12 @@ import * as sinon from "sinon";
 
 import * as Scene from "../../src/core/scene";
 import * as Layout from "../../src/core/layout/layout";
-import * as Scaler from "../../src/core/scaler";
+import * as Scaler from "../../src/core/scaler.js";
 
 describe("Scene", () => {
     let sandbox;
     let scene;
     let mockGame;
-    let scalerSpy;
-    let scalerMethods;
     let groupMethods;
 
     before(() => {
@@ -18,8 +16,10 @@ describe("Scene", () => {
     });
 
     beforeEach(() => {
-        scalerMethods = { calculateMetrics: sandbox.spy(), onScaleChange: { add: sandbox.spy() } };
-        scalerSpy = sandbox.stub(Scaler, "create").returns(scalerMethods);
+        sandbox.stub(Scaler, "getMetrics").returns("fakeMetrics");
+
+        Scaler.getMetrics = sandbox.stub().returns("fakeMetrics");
+
         groupMethods = {
             addChild: sandbox.spy(),
             removeAll: sandbox.spy(),
@@ -46,20 +46,12 @@ describe("Scene", () => {
                 },
             },
         };
+        Scaler.getMetrics = sandbox.spy();
         scene = Scene.create(mockGame);
     });
 
     afterEach(() => {
         sandbox.restore();
-    });
-
-    it("returns the correct methods", () => {
-        assert.exists(scene.addToBackground);
-        assert.exists(scene.addToForeground);
-        assert.exists(scene.addLayout);
-        assert.exists(scene.getLayouts);
-        assert.exists(scene.removeAll);
-        assert.exists(scene.calculateMetrics);
     });
 
     it("Should add background, root, foreground, unscaled, layers to the phaser game", () => {
@@ -69,10 +61,6 @@ describe("Scene", () => {
         expect(mockGame.add.group.calledWith(undefined, "foreground")).to.equal(true);
         expect(mockGame.add.group.calledWith(undefined, "debug", true)).to.equal(true);
         expect(mockGame.add.group.callCount).to.equal(5);
-    });
-
-    it("creates a scaler with correct params", () => {
-        expect(scalerSpy.calledWith(600, mockGame)).to.equal(true);
     });
 
     describe("addToBackground method", () => {
@@ -111,7 +99,6 @@ describe("Scene", () => {
             scene.addLayout(mockButtons);
             expect(layoutStub.getCall(0).args.length).to.equal(3);
             expect(layoutStub.getCall(0).args[0]).to.eql(mockGame);
-            expect(layoutStub.getCall(0).args[1]).to.eql(scalerMethods);
             expect(layoutStub.getCall(0).args[2]).to.eql(mockButtons);
         });
 
@@ -174,13 +161,6 @@ describe("Scene", () => {
             scene.removeAll();
 
             sinon.assert.calledTwice(spyDestroy);
-        });
-    });
-
-    describe("calculateMetrics method", () => {
-        it("returns the scaler calculateMetrics method", () => {
-            scene.calculateMetrics();
-            expect(scalerMethods.calculateMetrics.called).to.equal(true);
         });
     });
 });

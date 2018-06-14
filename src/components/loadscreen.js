@@ -9,6 +9,7 @@ import { loadAssets } from "../core/asset-loader.js";
 import { GameAssets, initGameAssets } from "../core/game-assets.js";
 import { Screen } from "../core/screen.js";
 import { createLoadBar } from "./loadbar.js";
+import * as Scaler from "../core/scaler.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
@@ -58,7 +59,7 @@ export class Loadscreen extends Screen {
     }
 
     createBrandLogo() {
-        const metrics = this.scene.calculateMetrics();
+        const metrics = Scaler.getMetrics();
 
         const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
         const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;

@@ -53,7 +53,7 @@ export function create(game) {
     };
 
     Scaler.onScaleChange.add(resize);
-    const scaler = Scaler.create(600, game);
+    Scaler.init(600, game);
 
     root.addChild(background);
     root.addChild(foreground);
@@ -73,7 +73,7 @@ export function create(game) {
      * @returns {Object}
      */
     const addLayout = buttons => {
-        const layout = Layout.create(game, scaler, buttons);
+        const layout = Layout.create(game, Scaler.getMetrics(), buttons);
         addToGroup(background, layout.root);
         _layouts.push(layout);
         return layout;
@@ -103,6 +103,5 @@ export function create(game) {
         getLayouts,
         getAccessibleGameButtons,
         removeAll,
-        calculateMetrics: scaler.calculateMetrics,
     };
 }

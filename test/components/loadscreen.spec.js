@@ -5,6 +5,7 @@ import { Loadscreen } from "../../src/components/loadscreen";
 import * as LoadBar from "../../src/components/loadbar";
 import * as AssetLoader from "../../src/core/asset-loader";
 import { GameAssets } from "../../src/core/game-assets.js";
+import * as Scaler from "../../src/core/scaler.js";
 
 describe("Load Screen", () => {
     let loadScreen;
@@ -37,6 +38,7 @@ describe("Load Screen", () => {
                 current: "currentState",
             },
             sound: { mute: false },
+            scale: { getParentBounds: sinon.stub(), setGameSize: sinon.stub() },
         };
 
         loadScreen = new Loadscreen();
@@ -45,6 +47,8 @@ describe("Load Screen", () => {
             next: navigationNext,
         };
         loadScreen.game = mockGame;
+
+        Scaler.init(600, mockGame);
     });
 
     afterEach(() => {

@@ -16,14 +16,11 @@ const tabSort = fp.sortBy(getOrder(gel.config));
  * Creates a new layout. Called by layout.factory.addLayout for each screen component
  *
  * @param {Phaser.Game} game - Phaser Game Instance
- * @param {module:scaler} scaler
+ * @param {Object} metrics - viewport metrics
  * @param {Array.<string>} buttonIds
  */
-export function create(game, scaler, buttonIds) {
+export function create(game, metrics, buttonIds) {
     const root = new Phaser.Group(game, game.world, undefined);
-
-    let metrics = scaler.calculateMetrics();
-
     const groups = fp.zipObject(
         groupLayouts.map(layout =>
             fp.camelCase([layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" ")),
@@ -77,6 +74,5 @@ export function create(game, scaler, buttonIds) {
         root,
         removeSignals,
         setAction,
-        scaler,
     };
 }
