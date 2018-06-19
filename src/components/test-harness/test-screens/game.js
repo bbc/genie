@@ -11,7 +11,7 @@ export class GameTest extends Screen {
         const titleText = this.game.add.text(0, -190, "Game goes here", titleStyle);
         titleText.anchor.set(0.5, 0.5);
         this.scene.addToBackground(titleText);
-        this.scene.addLayout(["home", "pause", "audioOff", "settings"]);
+        this.scene.addLayout(["pause"]);
 
         const buttonKey = this.getAsset("basicButton");
         const buttonTextStyle = {
