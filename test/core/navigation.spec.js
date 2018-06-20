@@ -13,6 +13,7 @@ describe("Navigation", () => {
         gameState = {
             add: sandbox.stub(),
             start: sandbox.stub(),
+            game: { canvas: { focus: sinon.stub() } },
         };
         context = sandbox.stub();
         scene = { removeAll: sandbox.stub() };
