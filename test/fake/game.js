@@ -6,6 +6,9 @@ const Stub = {
             return Sprite.Stub();
         },
     },
+    state: {
+        current: {},
+    },
 };
 
 export { Stub };
