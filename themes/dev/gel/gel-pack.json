@@ -149,6 +149,16 @@
             "frameMax": 2,
             "margin": 0,
             "spacing": 5
+        },
+        {
+            "type": "image",
+            "key": "audio-off-icon",
+            "url": "gel/desktop/audio-off-icon.png"
+        },
+        {
+            "type": "image",
+            "key": "fx-off-icon",
+            "url": "gel/desktop/fx-off-icon.png"
         }
     ],
     "gelMobile": [
@@ -301,6 +311,16 @@
             "frameMax": 2,
             "margin": 0,
             "spacing": 4
+        },
+        {
+            "type": "image",
+            "key": "audio-off-icon",
+            "url": "gel/mobile/audio-off-icon.png"
+        },
+        {
+            "type": "image",
+            "key": "fx-off-icon",
+            "url": "gel/mobile/fx-off-icon.png"
         }
     ]
 }
