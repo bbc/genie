@@ -210,14 +210,5 @@ export const config = {
         id: "gel-how-to-play",
         channel: buttonsChannel,
         action: howToPlay.create,
-    },
-    fxOff: {
-        group: "topRight",
-        title: "FxOff",
-        key: "fx-off",
-        ariaLabel: "FX off",
-        order: 14,
-        id: "gel-how-to-play",
-        channel: buttonsChannel
-    },
+    }
 };

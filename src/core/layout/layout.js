@@ -5,6 +5,7 @@
  */
 import { onScaleChange } from "../scaler.js";
 import fp from "../../../lib/lodash/fp/fp.js";
+import * as settingsIcons from "./settings-icons.js";
 import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { Group } from "./group.js";
@@ -34,6 +35,8 @@ export function create(game, metrics, buttonIds) {
         tabSort(buttonIds),
         tabSort(buttonIds).map(name => groups[gel.config[name].group].addButton(gel.config[name])),
     );
+
+    settingsIcons.create(groups.topRight, buttonIds);
 
     /**
      * Attach a callback to the onInputUp event of a given Gel button

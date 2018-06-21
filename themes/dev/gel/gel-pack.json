@@ -320,7 +320,9 @@
         {
             "type": "image",
             "key": "fx-off-icon",
-            "url": "gel/mobile/fx-off-icon.png"
+            "url": "gel/mobile/fx-off-icon.png",
+            "margin": 24,
+            "spacing": 24
         }
     ]
 }

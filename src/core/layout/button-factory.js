@@ -15,13 +15,11 @@ import { buttonsChannel } from "./gel-defaults.js";
  * @param {Object} config - Gel configuration for this button
  */
 const defaultAction = config => {
-    if (config.action) {
-        signal.bus.subscribe({
-            channel: buttonsChannel,
-            name: config.key,
-            callback: config.action,
-        });
-    }
+    signal.bus.subscribe({
+        channel: buttonsChannel,
+        name: config.key,
+        callback: config.action,
+    });
 };
 
 /**
@@ -36,9 +34,14 @@ const defaultAction = config => {
 const createButton = fp.curry((game, metrics, config, x = 0, y = 0) => {
     const btn = new GelButton(game, x, y, metrics, config); //Instantiate then return or TSC loses non-curried args
 
-    defaultAction(config);
-    const accessibleButton = accessibilify(btn, config, false);
-    return accessibleButton;
+    if (config.action) {
+        defaultAction(config);
+        const accessibleButton = accessibilify(btn, config, false);
+        return accessibleButton;
+    } else {
+        btn.inputEnabled = false;
+        return btn
+    }
 });
 
 export const create = game => ({ createButton: createButton(game) });
