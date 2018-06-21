@@ -24,7 +24,10 @@ describe("#accessibilify", () => {
     let accessibleDomElementRemove;
     let onInputOver;
     let onInputOut;
+    let onInputUp;
     let activePointer;
+    let touchUnlockSpy;
+    let resumeWebAudioSpy;
     let sandbox;
 
     before(() => {
@@ -43,7 +46,10 @@ describe("#accessibilify", () => {
         accessibleDomElementShow = sandbox.spy();
         onInputOver = sandbox.spy();
         onInputOut = sandbox.spy();
+        onInputUp = sandbox.spy();
         activePointer = sandbox.spy();
+        touchUnlockSpy = sandbox.spy();
+        resumeWebAudioSpy = sandbox.spy();
         mockButtonBounds = {
             topLeft: { x: "x", y: "y", multiply: () => mockButtonBounds.topLeft, add: () => mockButtonBounds.topLeft },
             scale: () => mockButtonBounds,
@@ -70,6 +76,11 @@ describe("#accessibilify", () => {
                     scaleFactorInversed: { x: 1, y: 1 },
                 },
                 update: {},
+                sound: {
+                    unlock: touchUnlockSpy,
+                    resumeWebAudio: resumeWebAudioSpy,
+                    context: {},
+                },
             },
             toGlobal: p => p,
             destroy: buttonDestroy,
@@ -101,6 +112,9 @@ describe("#accessibilify", () => {
                 },
                 onInputOut: {
                     dispatch: onInputOut,
+                },
+                onInputUp: {
+                    dispatch: onInputUp,
                 },
             },
             worldScale: { x: 1, y: 1 },
@@ -258,6 +272,34 @@ describe("#accessibilify", () => {
                 mockButton.update();
                 sinon.assert.called(accessibleDomElementShow);
             });
+        });
+    });
+
+    describe("Button Action", () => {
+        it("Should dispatch the button's onInputUp event", () => {
+            accessibilify(mockButton);
+
+            const options = accessibleDomElement.args[0][0];
+            options.onClick();
+            sinon.assert.calledOnce(onInputUp);
+            sinon.assert.calledWithExactly(onInputUp, mockButton, activePointer, false);
+        });
+
+        it("Should unlock the audioContext", () => {
+            accessibilify(mockButton);
+
+            const options = accessibleDomElement.args[0][0];
+            options.onClick();
+            sinon.assert.calledOnce(touchUnlockSpy);
+        });
+
+        it("Should call resumeWebAudio if it is suspended", () => {
+            mockButton.game.sound.context.state = "suspended";
+            accessibilify(mockButton);
+
+            const options = accessibleDomElement.args[0][0];
+            options.onClick();
+            sinon.assert.calledOnce(resumeWebAudioSpy);
         });
     });
 
