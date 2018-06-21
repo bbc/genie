@@ -1,10 +1,39 @@
 import { expect } from "chai";
-// import * as sinon from "sinon";
 import { Screen } from "../../src/core/screen";
 import * as Game from "../fake/game.js";
 import * as Scene from "../fake/scene.js";
 
 describe("Screen", () => {
+    let screen;
+
+    describe("with context", () => {
+        let mockContext;
+
+        beforeEach(() => {
+            screen = new Screen();
+            mockContext = { popupScreens: ["pause"] };
+            const mockNavigation = { loadscreen: {} };
+            screen.game = Game.Stub;
+            screen.game.state.current = "loadscreen";
+            screen.init({}, Scene.Stub, mockContext, mockNavigation);
+        });
+
+        it("has a getter", () => {
+            expect(screen.context).to.eql(mockContext);
+        });
+
+        it("has a setter that merges new value with current value", () => {
+            screen.context = { qaMode: { active: true } };
+
+            const expectedContext = {
+                popupScreens: ["pause"],
+                qaMode: { active: true },
+            };
+
+            expect(screen.context).to.eql(expectedContext);
+        });
+    });
+
     describe("with no overlays", () => {
         beforeEach(() => {
             screen = new Screen();
@@ -50,56 +79,3 @@ describe("Screen", () => {
         });
     });
 });
-
-//     let screen;
-//     let mockScene;
-//     let transientData;
-//     let navigation;
-
-//     const mockContext = {
-//         popUpScreens:
-//     };
-//     const sandbox = sinon.sandbox.create();
-
-//     beforeEach(() => {
-//         mockScene = sandbox.spy();
-//         transientData = sandbox.stub();
-//         navigation = {
-//             loadscreen: sandbox.stub(),
-//         };
-
-//         screen = new Screen();
-//         screen.game = {
-//             state: {
-//                 current: "loadscreen",
-//             },
-//         };
-//         screen.init(transientData, mockScene, mockContext, navigation);
-//     });
-
-//     afterEach(() => {
-//         sandbox.restore();
-//     });
-
-//     it("sets scene on the screen", () => {
-//         expect(screen.scene).to.eql(mockScene);
-//     });
-
-//     it("sets the context on the screen", () => {
-//         expect(screen._context).to.eql(mockContext);
-//     });
-
-//     describe("context", () => {
-//         it("has a getter", () => {
-//             expect(screen.context).to.eql(mockContext);
-//         });
-
-//         it("has a setter", () => {
-//             const expectedContext = {
-//                 qaMode: { active: true },
-//             };
-//             screen.context.qaMode = { active: true };
-//             expect(screen.context).to.eql(expectedContext);
-//         });
-//     });
-// });
