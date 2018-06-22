@@ -1,6 +1,6 @@
 import "../../node_modules/webfontloader/webfontloader.js";
 
-export const loadFonts = (addText, done) => {
+export const loadFonts = (game, done) => {
     WebFont.load({
         active: () => {
             // --- Hack start ---
@@ -10,10 +10,10 @@ export const loadFonts = (addText, done) => {
              *  variants of ReithSans to load before the first screen.
              */
             const boldReithSans = { font: "bold 1px ReithSans" };
-            addText(10000, 10000, ".", boldReithSans);
+            game.add.text(10000, 10000, ".", boldReithSans);
 
             const italicReithSans = { font: "italic 1px ReithSans" };
-            addText(-10000, -10000, ".", italicReithSans);
+            game.add.text(-10000, -10000, ".", italicReithSans);
             // --- Hack end ---
 
             done();
