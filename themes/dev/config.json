@@ -35,8 +35,7 @@
                     "font": "bold 40px ReithSans",
                     "align": "center",
                     "fill": "#6A6A6A",
-                    "boundsAlignH": "center",
-                    "fontWeight": "bold"
+                    "boundsAlignH": "center"
                 }
             }
         },

@@ -9,6 +9,7 @@ import * as signal from "../core/signal-bus.js";
 import { parseUrlParams } from "./parseUrlParams.js";
 import * as Navigation from "./navigation.js";
 import * as Scene from "./scene.js";
+import "../../node_modules/webfontloader/webfontloader.js";
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
@@ -50,7 +51,21 @@ export function startup(settingsConfig = {}, navigationConfig) {
             qaMode,
         };
         game.stage.backgroundColor = "#333";
-        Navigation.create(game.state, context, scene, navigationConfig);
+        WebFont.load({
+            active: () => {
+                const boldReithSans = { font: "bold 1px ReithSans" };
+                game.add.text(10000, 10000, ".", boldReithSans);
+
+                const italicReithSans = { font: "italic 1px ReithSans" };
+                game.add.text(-10000, -10000, ".", italicReithSans);
+
+                Navigation.create(game.state, context, scene, navigationConfig);
+            },
+            custom: {
+                families: ["ReithSans"],
+                urls: ["../../fonts/fonts.css"],
+            },
+        });
     }
 }
 
