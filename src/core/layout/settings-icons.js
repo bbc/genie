@@ -14,12 +14,14 @@ export function create(group, buttonIds) {
         id: "audio-off",
     };
 
-    const game = group.game;
-    console.log(buttonIds);
-    const fxOffButton = group.addButton(fxButtonConfig, 0);
+    //console.log(buttonIds);
+    //const fxOffButton =
+    group.addButton(fxButtonConfig, 0);
+
+    let audioOffButton;
 
     if (!buttonIds.includes("audioOff")) {
-        const AudioOffButton = group.addButton(audioButtonConfig, 0);
+        audioOffButton = group.addButton(audioButtonConfig, 0);
     }
 
     //signal.bus.subscribe
@@ -28,7 +30,7 @@ export function create(group, buttonIds) {
         name: "audio",
         callback: bool => {
             if (bool) {
-                const AudioOffButton = group.addButton(audioButtonConfig, 0);
+                audioOffButton = group.addButton(audioButtonConfig, 0);
             } else {
                 audioOffButton && audioOffButton.destroy();
             }

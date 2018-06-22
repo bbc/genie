@@ -40,7 +40,7 @@ describe("Layout - Button Factory", () => {
             id: "expectedId",
             ariaLabel: "expectedAriaLabel",
             key: expectedKey,
-            action: () => {}
+            action: () => {},
         };
 
         beforeEach(() => {
