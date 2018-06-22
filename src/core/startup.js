@@ -51,21 +51,9 @@ export function startup(settingsConfig = {}, navigationConfig) {
             qaMode,
         };
         game.stage.backgroundColor = "#333";
-        WebFont.load({
-            active: () => {
-                const boldReithSans = { font: "bold 1px ReithSans" };
-                game.add.text(10000, 10000, ".", boldReithSans);
 
-                const italicReithSans = { font: "italic 1px ReithSans" };
-                game.add.text(-10000, -10000, ".", italicReithSans);
-
-                Navigation.create(game.state, context, scene, navigationConfig);
-            },
-            custom: {
-                families: ["ReithSans"],
-                urls: ["../../fonts/fonts.css"],
-            },
-        });
+        const onComplete = () => Navigation.create(game.state, context, scene, navigationConfig); 
+        loadFonts(game.add.text, onComplete);
     }
 }
 
