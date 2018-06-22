@@ -210,5 +210,5 @@ export const config = {
         id: "gel-how-to-play",
         channel: buttonsChannel,
         action: howToPlay.create,
-    }
+    },
 };

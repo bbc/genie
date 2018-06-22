@@ -40,7 +40,7 @@ const createButton = fp.curry((game, metrics, config, x = 0, y = 0) => {
         return accessibleButton;
     } else {
         btn.inputEnabled = false;
-        return btn
+        return btn;
     }
 });
 

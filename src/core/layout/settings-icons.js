@@ -2,7 +2,6 @@ import * as signal from "../signal-bus.js";
 import { settingsChannel } from "../settings.js";
 
 export function create(group, buttonIds) {
-
     const fxButtonConfig = {
         title: "FX Off",
         key: "fx-off-icon",
@@ -28,12 +27,11 @@ export function create(group, buttonIds) {
         channel: settingsChannel,
         name: "audio",
         callback: bool => {
-             if (bool){
-                 const AudioOffButton = group.addButton(audioButtonConfig, 0);
-             } else {
+            if (bool) {
+                const AudioOffButton = group.addButton(audioButtonConfig, 0);
+            } else {
                 audioOffButton && audioOffButton.destroy();
-        }
-
+            }
         },
     });
 }
