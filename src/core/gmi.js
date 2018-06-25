@@ -1,8 +1,9 @@
 export let gmi;
 
-export const setGmi = newGmi => {
+export const setGmi = settingsConfig => {
     if (gmi) {
         throw "Gmi has already been set once";
     }
-    gmi = newGmi;
+
+    gmi = window.getGMI({ settingsConfig });
 };
