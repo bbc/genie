@@ -57,6 +57,11 @@ export class Group extends Phaser.Group {
         return newButton;
     }
 
+    removeButton(buttonToRemove) {
+        this._buttons = fp.remove(n => n === buttonToRemove, this._buttons)
+        buttonToRemove.destroy()
+    }
+
     addToGroup(item, position = 0) {
         item.anchor.setTo(0.5, 0.5);
         this.addAt(item, position);
