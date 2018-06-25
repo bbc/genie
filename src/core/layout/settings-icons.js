@@ -35,7 +35,8 @@ const createIcon = (group, config) => {
     });
 };
 
-export const create = (group, buttonIds) => {
+export const create = group => {
+    //, buttonIds) => {
     //console.log(buttonIds);
     //const fxOffButton = group.addButton(fxButtonConfig, 0);
 
