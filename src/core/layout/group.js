@@ -58,8 +58,8 @@ export class Group extends Phaser.Group {
     }
 
     removeButton(buttonToRemove) {
-        this._buttons = fp.remove(n => n === buttonToRemove, this._buttons)
-        buttonToRemove.destroy()
+        this._buttons = fp.remove(n => n === buttonToRemove, this._buttons);
+        buttonToRemove.destroy();
     }
 
     addToGroup(item, position = 0) {
