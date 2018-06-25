@@ -21,10 +21,10 @@ const settingsConfig = {
                     description: "Turn off/on sound and music",
                 },
                 {
-                    key: "custom1",
+                    key: "fx",
                     type: "toggle",
-                    title: "Custom 1",
-                    description: "Switch custom message",
+                    title: "Motion FX",
+                    description: "Turn off/on motion effects",
                 },
             ],
         },

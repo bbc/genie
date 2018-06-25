@@ -2,37 +2,35 @@ import * as signal from "../signal-bus.js";
 import { settingsChannel } from "../settings.js";
 //import fp from "../../../lib/lodash/fp/fp.js";
 
-//const fxButtonConfig = {
-//    title: "FX Off",
-//    key: "fx-off-icon",
-//    id: "fx-off",
-//};
+const fxConfig = {
+    title: "FX Off",
+    key: "fx-off-icon",
+    id: "fx-off",
+    signalName: "fx",
+};
 
-const audioButtonConfig = {
+const audioConfig = {
     title: "Audio Off",
     key: "audio-off-icon",
     id: "audio-off",
+    signalName: "audio",
 };
 
-const createAudioIcon = (group, buttonIds) => {
-    if (buttonIds.includes("audioOff")) {
-        return;
-    }
-
-    let button;
+const createIcon = (group, config) => {
+    let icon;
 
     const callback = bool => {
         if (!bool) {
-            button = group.addButton(audioButtonConfig, 0);
-        } else if (button) {
-            group.removeButton(button);
+            icon = group.addButton(config, 0);
+        } else if (icon) {
+            group.removeButton(icon);
         }
     };
 
     //signal.bus.subscribe
     signal.bus.subscribe({
         channel: settingsChannel,
-        name: "audio",
+        name: config.signalName,
         callback,
     });
 };
@@ -43,9 +41,14 @@ export const create = (group, buttonIds) => {
 
     window.s = signal;
 
-    createAudioIcon(group, buttonIds);
+    //    if (!buttonIds.includes("audioOff")) {
+    createIcon(group, audioConfig);
+    //    }
+
+    createIcon(group, fxConfig);
 };
 
 // Pops when addButton is called. Does addButton resize the group?
-// Crashes after destroy when breakpoints are hit. Probably need to also remove from group internal button array
-// Why does the callback get called 4 times? - because it's called on each of the screens that have been set up.
+// Note it gets called once for each screen
+// Fire signals when state is started (check gmi )
+// Add fx setting
