@@ -14,6 +14,9 @@ export const loadFonts = (game, done) => {
 
             const italicReithSans = { font: "italic 1px ReithSans" };
             game.add.text(-10000, -10000, ".", italicReithSans);
+
+            const italicBoldReithSans = { font: "italic bold 1px ReithSans" };
+            game.add.text(-10000, -10000, ".", italicBoldReithSans);
             // --- Hack end ---
 
             done();

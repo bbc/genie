@@ -12,3 +12,10 @@
     src: url(./ReithSans/BBCReithSans_W_It.woff2) format("woff2"), url(./ReithSans/BBCReithSans_W_It.woff) format("woff");
     font-style: italic;
 }
+@font-face {
+    font-family: "ReithSans";
+    src: url(./ReithSans/BBCReithSans_W_BdIt.woff2) format("woff2"), url(./ReithSans/BBCReithSans_W_BdIt.woff) format("woff");
+    font-weight: bold;
+    font-style: italic;
+}
+
