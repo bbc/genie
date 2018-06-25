@@ -1,12 +1,13 @@
 import * as signal from "../signal-bus.js";
 import { settingsChannel } from "../settings.js";
-//import fp from "../../../lib/lodash/fp/fp.js";
+import { gmi } from "../gmi.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 const fxConfig = {
     title: "FX Off",
     key: "fx-off-icon",
     id: "fx-off",
-    signalName: "fx",
+    signalName: "motion",
 };
 
 const audioConfig = {
@@ -16,7 +17,7 @@ const audioConfig = {
     signalName: "audio",
 };
 
-const createIcon = (group, config) => {
+const createSignals = (group, config) => {
     let icon;
 
     const callback = bool => {
@@ -35,21 +36,32 @@ const createIcon = (group, config) => {
     });
 };
 
-export const create = group => {
-    //, buttonIds) => {
-    //console.log(buttonIds);
-    //const fxOffButton = group.addButton(fxButtonConfig, 0);
+const publish = fp.curry((settings, key) => {
+    signal.bus.publish({
+        channel: settingsChannel,
+        name: key,
+        data: settings[key],
+    });
+});
 
+export const create = (group, buttonIds) => {
     window.s = signal;
 
-    //    if (!buttonIds.includes("audioOff")) {
-    createIcon(group, audioConfig);
-    //    }
+    if (!buttonIds.includes("audioOff")) {
+        createSignals(group, audioConfig);
+    }
 
-    createIcon(group, fxConfig);
+    createSignals(group, fxConfig);
+
+    const settings = gmi.getAllSettings();
+
+    ["audio", "motion"].forEach(publish(settings));
+
+    console.log("create settings icon called");
 };
 
 // Pops when addButton is called. Does addButton resize the group?
-// Note it gets called once for each screen
+// Note it gets called once for each screen - Tear down these on screen exit
 // Fire signals when state is started (check gmi )
 // Add fx setting
+// Add ticket for cage settings simulator in dev html
