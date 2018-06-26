@@ -91,7 +91,7 @@ export function accessibilify(button, config, gameButton = true) {
 
     function buttonAction() {
         game.sound.unlock();
-        if (game.sound.context.state === "suspended") {
+        if (game.sound.context && game.sound.context.state === "suspended") {
             game.sound.resumeWebAudio();
         }
         button.events.onInputUp.dispatch(button, game.input.activePointer, false);
