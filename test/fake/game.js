@@ -5,6 +5,13 @@ const Stub = {
         sprite: () => {
             return Sprite.Stub();
         },
+        group: () => {},
+    },
+    canvas: {
+        setAttribute: () => {},
+    },
+    stage: {
+        backgroundColor: "",
     },
     state: {
         current: {},

@@ -9,6 +9,7 @@ import * as signal from "../core/signal-bus.js";
 import { parseUrlParams } from "./parseUrlParams.js";
 import * as Navigation from "./navigation.js";
 import * as Scene from "./scene.js";
+import { loadFonts } from "./font-loader.js";
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
@@ -50,7 +51,9 @@ export function startup(settingsConfig = {}, navigationConfig) {
             qaMode,
         };
         game.stage.backgroundColor = "#333";
-        Navigation.create(game.state, context, scene, navigationConfig);
+
+        const onComplete = () => Navigation.create(game.state, context, scene, navigationConfig);
+        loadFonts(game, onComplete);
     }
 }
 
