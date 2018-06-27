@@ -7,7 +7,7 @@ export class GameTest extends Screen {
     }
 
     create() {
-        const titleStyle = { font: "65px Arial", fill: "#f6931e", align: "center" };
+        const titleStyle = { font: "65px ReithSans", fill: "#f6931e", align: "center" };
         const titleText = this.game.add.text(0, -190, "Game goes here", titleStyle);
         titleText.anchor.set(0.5, 0.5);
         this.scene.addToBackground(titleText);
@@ -15,7 +15,7 @@ export class GameTest extends Screen {
 
         const buttonKey = this.getAsset("basicButton");
         const buttonTextStyle = {
-            font: "40px Arial",
+            font: "40px ReithSans",
             fill: "#fff",
             align: "center",
             wordWrap: true,
@@ -51,7 +51,7 @@ export class GameTest extends Screen {
             0,
             200,
             "Character Selected: " + this.transientData.characterSelected,
-            { font: "32px Arial", fill: "#f6931e", align: "center" },
+            { font: "italic 32px ReithSans", fill: "#f6931e", align: "center" },
         );
         this.scene.addToBackground(characterSelectedText);
     }
