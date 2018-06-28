@@ -1,4 +1,4 @@
-export const loadFonts = (game, done) => {
+export const loadFonts = game => {
     // --- Hack start ---
     /** Phaser has an issue when attempting to use additional fonts. The first time these fonts are loaded
      *  they will not be rendered and Phaser will then fall back on the default browser font. We can circumvent
@@ -17,6 +17,4 @@ export const loadFonts = (game, done) => {
     const italicBoldReithSans = { font: "italic bold 1px ReithSans" };
     game.add.text(-10000, -10000, ".", italicBoldReithSans);
     // --- Hack end ---
-
-    done();
 };

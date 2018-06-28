@@ -60,11 +60,12 @@ describe("#startup", () => {
     describe("onStarted()", () => {
         let sceneCreate;
         let loadFonts;
+        let navigationCreate;
 
         beforeEach(() => {
-            sceneCreate = sceneCreate = sandbox.stub(Scene, "create").returns("Scene");
+            sceneCreate = sandbox.stub(Scene, "create").returns("Scene");
             loadFonts = sandbox.stub(LoadFonts, "loadFonts");
-            startup();
+            navigationCreate = sandbox.stub(Navigation, "create");
         });
 
         afterEach(() => {
@@ -72,24 +73,25 @@ describe("#startup", () => {
         });
 
         it("creates the scene", () => {
+            startup();
             const config = PhaserGame.getCall(0).args[0];
             config.state._onStarted();
             sinon.assert.calledWith(sceneCreate, PhaserGame());
         });
 
-        it("calls loadFonts with the Phaser game and a callback function", () => {
+        it("loads the fonts", () => {
+            startup();
             const config = PhaserGame.getCall(0).args[0];
             config.state._onStarted();
-            sinon.assert.calledOnce(loadFonts.withArgs(PhaserGame(), sinon.match.func));
+            sinon.assert.calledWith(loadFonts, PhaserGame());
         });
 
-        it("passes Navigation.create() as a callback to the laodFonts function", () => {
-            const navigationCreate = sandbox.stub(Navigation, "create");
+        it("creates the game navigation", () => {
+            const navigationConfig = "NavConfig";
+            startup({}, navigationConfig);
             const config = PhaserGame.getCall(0).args[0];
             config.state._onStarted();
-            const onComplete = loadFonts.getCall(0).args[1];
-            onComplete();
-            sinon.assert.calledOnce(navigationCreate);
+            sinon.assert.calledWith(navigationCreate, sinon.match.object, sinon.match.object, "Scene", "NavConfig");
         });
     });
 });
