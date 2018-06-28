@@ -15,7 +15,7 @@ describe("How To Play Overlay", () => {
     let mockOverlayLayout;
     let mockPipsGroup;
 
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     const panel1Sprite = { visible: "", destroy: sandbox.spy() };
     const panel2Sprite = { visible: "", destroy: sandbox.spy() };
     const panel3Sprite = { visible: "", destroy: sandbox.spy() };

@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 import { GameAssets, initGameAssets } from "../../src/core/game-assets";
 
 describe("Game Assets", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
     let addAudioStub;
     let mockGame;

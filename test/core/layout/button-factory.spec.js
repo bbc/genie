@@ -13,7 +13,7 @@ describe("Layout - Button Factory", () => {
     let gelButtonStub;
     let mockGame;
 
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
         accessibilifyStub = sandbox.stub(accessibilify, "accessibilify");

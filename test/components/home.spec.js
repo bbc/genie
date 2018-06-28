@@ -16,7 +16,7 @@ describe("Home Screen", () => {
     let gameButtonSpy;
     let navigationNext;
 
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
         layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");

@@ -10,7 +10,7 @@ describe("Screen", () => {
     let navigation;
 
     const mockContext = {};
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
         mockScene = sandbox.spy();

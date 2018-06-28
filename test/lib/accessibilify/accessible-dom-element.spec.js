@@ -12,7 +12,7 @@ describe("#accessibleDomElement", () => {
     let parentRemoveChild;
 
     before(() => {
-        sandbox = sinon.sandbox.create();
+        sandbox = sinon.createSandbox();
     });
 
     beforeEach(() => {
