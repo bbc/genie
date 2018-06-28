@@ -21,7 +21,7 @@ const settingsConfig = {
                     description: "Turn off/on sound and music",
                 },
                 {
-                    key: "fx",
+                    key: "motion",
                     type: "toggle",
                     title: "Motion FX",
                     description: "Turn off/on motion effects",

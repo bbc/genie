@@ -56,12 +56,12 @@ export const create = (group, buttonIds) => {
     const settings = gmi.getAllSettings();
 
     ["audio", "motion"].forEach(publish(settings));
-
-    console.log("create settings icon called");
 };
 
 // Pops when addButton is called. Does addButton resize the group?
 // Note it gets called once for each screen - Tear down these on screen exit
+// Add ticket for cage settings simulator in dev html
+
+//Done?
 // Fire signals when state is started (check gmi )
 // Add fx setting
-// Add ticket for cage settings simulator in dev html

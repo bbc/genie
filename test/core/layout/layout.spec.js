@@ -1,15 +1,20 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 
-import * as Layout from "../../../src/core/layout/layout";
+import * as Layout from "../../../src/core/layout/layout.js";
 import * as Scaler from "../../../src/core/scaler.js";
-import { Group } from "../../../src/core/layout/group";
-import { GameAssets } from "../../../src/core/game-assets";
+import { Group } from "../../../src/core/layout/group.js";
+import { GameAssets } from "../../../src/core/game-assets.js";
+import * as gmi from "../../../src/core/gmi.js";
 
 describe("Layout", () => {
     const sandbox = sinon.sandbox.create();
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
+    let originalGmi;
     let mockGame;
+    let mockGmi = {
+        getAllSettings: sandbox.stub().returns({audio: true, motion: true})}
+    ;
     let mockSubscribe;
     let mockUnsubscribe;
     const mockMetrics = {
@@ -19,6 +24,10 @@ describe("Layout", () => {
     };
 
     beforeEach(() => {
+        
+        originalGmi = gmi.gmi;
+        gmi.gmi = mockGmi;
+        gmi.setGmi = sandbox.spy();
         sandbox.stub(Group.prototype, "addButton").returns({ onInputUp: { add: sandbox.spy() } });
         return initialiseGame().then(game => {
             mockGame = game;
@@ -53,6 +62,7 @@ describe("Layout", () => {
         sandbox.restore();
         mockGame.destroy();
         GameAssets.sounds = {};
+        gmi.gmi = originalGmi;
     });
 
     it("should add the correct number of GEL buttons for a given config", () => {
