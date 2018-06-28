@@ -3,13 +3,16 @@
         "character-select": {
             "choices": [
                 {
-                    "main": "carousel1"
+                    "asset": "carousel1",
+                    "accessibilityText": "Character 1"
                 },
                 {
-                    "main": "carousel2"
+                    "asset": "carousel2",
+                    "accessibilityText": "Character 2"
                 },
                 {
-                    "main": "carousel3"
+                    "asset": "carousel3",
+                    "accessibilityText": "Character 3"
                 }
             ],
             "leftButton": {
