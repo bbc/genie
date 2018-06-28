@@ -13,8 +13,8 @@ describe("Layout", () => {
     let originalGmi;
     let mockGame;
     let mockGmi = {
-        getAllSettings: sandbox.stub().returns({audio: true, motion: true})}
-    ;
+        getAllSettings: sandbox.stub().returns({audio: true, motion: true})
+    };
     let mockSubscribe;
     let mockUnsubscribe;
     const mockMetrics = {
