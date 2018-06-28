@@ -3,20 +3,22 @@ import * as sinon from "sinon";
 import { startup } from "../../src/core/startup.js";
 
 describe("#startup", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
-    let PhaserGame, gmi, containerDiv;
+    let PhaserGame, containerDiv;
 
     beforeEach(() => {
-        gmi = {
+        const mockGmi = {
             gameContainerId: "some-id",
         };
         containerDiv = sandbox.stub();
+
         sandbox
             .stub(document, "getElementById")
-            .withArgs(gmi.gameContainerId)
+            .withArgs(mockGmi.gameContainerId)
             .returns(containerDiv);
-        window.getGMI = sandbox.stub().returns(gmi);
+
+        window.getGMI = sandbox.stub().returns(mockGmi);
         PhaserGame = sandbox.stub(Phaser, "Game");
     });
 
