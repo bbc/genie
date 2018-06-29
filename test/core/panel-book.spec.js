@@ -1,9 +1,11 @@
-import * as Theme from "../../fake/theme.js";
-import * as Game from "../../fake/game.js";
-import * as OverlayLayout from "../../fake/overlay-layout.js";
-import * as Button from "../../fake/button.js";
-import * as Scene from "../../fake/scene.js";
-import * as Book from "../../../src/core/book.js";
+import * as Theme from "../fake/theme.js";
+import * as Game from "../fake/game.js";
+import * as OverlayLayout from "../fake/overlay-layout.js";
+import * as Button from "../fake/button.js";
+import * as Scene from "../fake/scene.js";
+import * as Book from "../../src/core/book.js";
+import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
+
 import * as sinon from "sinon";
 const assert = sinon.assert;
 import * as Chai from "chai";
@@ -13,9 +15,10 @@ describe("Showing pages of a book", () => {
     var book;
 
     describe("A book with 1 page", () => {
-        let onePanel = [{}];
+        let onePanel = [{ onDestroy: () => {} }];
 
         beforeEach(() => {
+            sinon.spy(accessibleCarouselElements, "create");
             book = Book.Start(
                 "myScreen",
                 Theme.WithPanels(onePanel),
@@ -35,6 +38,10 @@ describe("Showing pages of a book", () => {
 
         it("Should disable the 'Next page' option", () => {
             book.nextPageOption.should.have.property("alpha", 0);
+        });
+
+        it("creates an accessible dom element for the page", () => {
+            sinon.assert.calledOnce(accessibleCarouselElements.create.withArgs("book", [], game.canvas.parentElement));
         });
     });
 
