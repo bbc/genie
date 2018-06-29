@@ -2,8 +2,6 @@ import { settingsChannel } from "../settings.js";
 import { gmi } from "../gmi.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
-let signal;
-
 const fxConfig = {
     title: "FX Off",
     key: "fx-off-icon",
@@ -30,7 +28,7 @@ const createSignals = (group, config, signal) => {
     };
 
     //signal.bus.subscribe
-    signal.bus.subscribe({
+    return signal.bus.subscribe({
         channel: settingsChannel,
         name: config.signalName,
         callback,
@@ -48,21 +46,29 @@ const publish = fp.curry((settings, signal, key) => {
 export const create = (group, buttonIds, signals) => {
     window.s = signals;
 
+    let iconSignals = [];
+
     if (!buttonIds.includes("audioOff")) {
-        createSignals(group, audioConfig, signals);
+        iconSignals.push(createSignals(group, audioConfig, signals));
     }
 
-    createSignals(group, fxConfig, signals);
+    iconSignals.push(createSignals(group, fxConfig, signals));
 
     const settings = gmi.getAllSettings();
 
     ["audio", "motion"].forEach(publish(settings, signals));
+
+
+    return {
+        destroy: () => {
+            iconSignals.forEach(signal => signal.unsubscribe())
+        }
+    }
+
+
+    //return the signals made above OR a function to kill them
 };
 
 // Pops when addButton is called. Does addButton resize the group?
-// Note it gets called once for each screen - Tear down these on screen exit
+// Go to settings and come back and you'll have two fx icons. Overlays are the problem.
 // Add ticket for cage settings simulator in dev html
-
-//Done?
-// Fire signals when state is started (check gmi )
-// Add fx setting

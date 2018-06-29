@@ -37,7 +37,7 @@ export function create(game, metrics, buttonIds) {
         tabSort(buttonIds).map(name => groups[gel.config[name].group].addButton(gel.config[name])),
     );
 
-    settingsIcons.create(groups.topRight, buttonIds, signals);
+    const icons = settingsIcons.create(groups.topRight, buttonIds, signals);
 
     /**
      * Attach a callback to the onInputUp event of a given Gel button
@@ -67,6 +67,7 @@ export function create(game, metrics, buttonIds) {
 
     const destroy = () => {
         removeSignals();
+        icons.destroy()
         root.destroy();
     };
 
