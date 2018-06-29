@@ -1,7 +1,8 @@
-import * as signal from "../signal-bus.js";
 import { settingsChannel } from "../settings.js";
 import { gmi } from "../gmi.js";
 import fp from "../../../lib/lodash/fp/fp.js";
+
+let signal;
 
 const fxConfig = {
     title: "FX Off",
@@ -17,7 +18,7 @@ const audioConfig = {
     signalName: "audio",
 };
 
-const createSignals = (group, config) => {
+const createSignals = (group, config, signal) => {
     let icon;
 
     const callback = bool => {
@@ -36,7 +37,7 @@ const createSignals = (group, config) => {
     });
 };
 
-const publish = fp.curry((settings, key) => {
+const publish = fp.curry((settings, signal, key) => {
     signal.bus.publish({
         channel: settingsChannel,
         name: key,
@@ -44,18 +45,18 @@ const publish = fp.curry((settings, key) => {
     });
 });
 
-export const create = (group, buttonIds) => {
-    window.s = signal;
+export const create = (group, buttonIds, signals) => {
+    window.s = signals;
 
     if (!buttonIds.includes("audioOff")) {
-        createSignals(group, audioConfig);
+        createSignals(group, audioConfig, signals);
     }
 
-    createSignals(group, fxConfig);
+    createSignals(group, fxConfig, signals);
 
     const settings = gmi.getAllSettings();
 
-    ["audio", "motion"].forEach(publish(settings));
+    ["audio", "motion"].forEach(publish(settings, signals));
 };
 
 // Pops when addButton is called. Does addButton resize the group?
