@@ -1,5 +1,7 @@
 import "../../node_modules/webfontloader/webfontloader.js";
 
+const REITH_FONT_CSS = "https://gel.files.bbci.co.uk/r2.302/bbc-reith.css";
+
 export const loadFonts = (game, done) => {
     WebFont.load({
         active: () => {
@@ -12,7 +14,7 @@ export const loadFonts = (game, done) => {
         },
         custom: {
             families: ["ReithSans"],
-            urls: ["https://nav.files.bbci.co.uk/orbit/2.0.0-245.36c8c84/css/orb-ltr.min.css"]
+            urls: [REITH_FONT_CSS]
         }
     });
 };
