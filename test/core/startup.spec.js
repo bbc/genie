@@ -83,7 +83,7 @@ describe("#startup", () => {
             startup();
             const config = PhaserGame.getCall(0).args[0];
             config.state._onStarted();
-            sinon.assert.calledWith(loadFonts, PhaserGame());
+            sinon.assert.calledWith(loadFonts, PhaserGame(), sinon.match.func);
         });
 
         it("creates the game navigation", () => {
@@ -91,7 +91,15 @@ describe("#startup", () => {
             startup({}, navigationConfig);
             const config = PhaserGame.getCall(0).args[0];
             config.state._onStarted();
-            sinon.assert.calledWith(navigationCreate, sinon.match.object, sinon.match.object, "Scene", "NavConfig");
+            const onComplete = loadFonts.getCall(0).args[1];
+            onComplete();
+            sinon.assert.calledWith(
+                navigationCreate,
+                sinon.match.object,
+                sinon.match.object,
+                "Scene",
+                navigationConfig,
+            );
         });
     });
 });
