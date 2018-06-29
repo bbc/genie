@@ -51,8 +51,9 @@ export function startup(settingsConfig = {}, navigationConfig) {
             qaMode,
         };
         game.stage.backgroundColor = "#333";
-        loadFonts(game);
-        Navigation.create(game.state, context, scene, navigationConfig);
+
+        const onFontsLoaded = () => Navigation.create(game.state, context, scene, navigationConfig);
+        loadFonts(game, onFontsLoaded);
     }
 }
 
