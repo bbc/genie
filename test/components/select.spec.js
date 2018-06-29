@@ -4,6 +4,7 @@ import { Select } from "../../src/components/select";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
+import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
 
 describe("Select Screen", () => {
     let selectScreen;
@@ -22,10 +23,11 @@ describe("Select Screen", () => {
     const characterOneSprite = { visible: "" };
     const characterTwoSprite = { visible: "" };
     const characterThreeSprite = { visible: "" };
-    const CENTER_X = 0;
-    const CHAR_Y_POSITION = 0;
 
     beforeEach(() => {
+        sandbox
+            .stub(accessibleCarouselElements, "create")
+            .returns([document.createElement("div"), document.createElement("div"), document.createElement("div")]);
         layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");
         addToBackgroundSpy = sandbox.spy();
         gameImageStub = sandbox.stub().returns("sprite");
@@ -33,9 +35,9 @@ describe("Select Screen", () => {
         gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
         gameSpriteStub = sandbox.stub();
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "characterSelect.character1").returns(characterOneSprite);
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "characterSelect.character2").returns(characterTwoSprite);
-        gameSpriteStub.withArgs(CENTER_X, CHAR_Y_POSITION, "characterSelect.character3").returns(characterThreeSprite);
+        gameSpriteStub.withArgs(0, 0, "characterSelect.character1").returns(characterOneSprite);
+        gameSpriteStub.withArgs(0, 0, "characterSelect.character2").returns(characterTwoSprite);
+        gameSpriteStub.withArgs(0, 0, "characterSelect.character3").returns(characterThreeSprite);
         addLayoutSpy = sandbox.spy();
         navigationNext = sandbox.spy();
         navigationHome = sandbox.spy();
@@ -47,13 +49,14 @@ describe("Select Screen", () => {
                 sprite: gameSpriteStub,
             },
             state: { current: "characterSelect" },
+            canvas: { parentElement: {} },
         };
 
         mockContext = {
             config: {
                 theme: {
                     characterSelect: {
-                        choices: [{ main: "character1" }, { main: "character2" }, { main: "character3" }],
+                        choices: [{ asset: "character1" }, { asset: "character2" }, { asset: "character3" }],
                     },
                 },
             },
@@ -121,12 +124,19 @@ describe("Select Screen", () => {
         });
 
         it("adds the choices", () => {
-            const expectedChoices = [
-                { main: characterOneSprite },
-                { main: characterTwoSprite },
-                { main: characterThreeSprite },
-            ];
-            assert.deepEqual(selectScreen.choice, expectedChoices);
+            const expectedChoices = [characterOneSprite, characterTwoSprite, characterThreeSprite];
+            assert.deepEqual(selectScreen.choiceSprites, expectedChoices);
+        });
+
+        it("creates an accessible carousel for the choices", () => {
+            const actualParams = accessibleCarouselElements.create.getCall(0).args;
+            sinon.assert.calledOnce(accessibleCarouselElements.create);
+            assert.deepEqual(actualParams, [
+                "select",
+                selectScreen.choiceSprites,
+                mockGame.canvas.parentElement,
+                mockContext.config.theme.characterSelect.choices,
+            ]);
         });
     });
 
@@ -139,7 +149,7 @@ describe("Select Screen", () => {
         });
 
         it("adds signal subscriptions to all the buttons", () => {
-            assert(signalSubscribeSpy.callCount === 4, "signals should be subscribed 4 times");
+            assert(signalSubscribeSpy.callCount === 6, "signals should be subscribed 4 times");
             sinon.assert.calledWith(signalSubscribeSpy, {
                 channel: buttonsChannel,
                 name: "exit",
@@ -160,17 +170,47 @@ describe("Select Screen", () => {
                 name: "continue",
                 callback: sinon.match.func,
             });
+            sinon.assert.calledWith(signalSubscribeSpy, {
+                channel: buttonsChannel,
+                name: "pause",
+                callback: sinon.match.func,
+            });
+            sinon.assert.calledWith(signalSubscribeSpy, {
+                channel: buttonsChannel,
+                name: "play",
+                callback: sinon.match.func,
+            });
         });
 
-        it("adds a callback for the exit button", () => {
+        it("exits the game when the exit button is pressed", () => {
             signalSubscribeSpy.getCall(0).args[0].callback();
             sinon.assert.calledOnce(selectScreen.navigation.home);
         });
 
-        it("adds a callback for the continue button", () => {
+        it("moves to the next game screen when the continue button is pressed", () => {
             selectScreen.currentIndex = 1;
             signalSubscribeSpy.getCall(3).args[0].callback();
             sinon.assert.calledOnce(selectScreen.navigation.next.withArgs({ characterSelected: 1 }));
+        });
+
+        it("hides all the accessible elements when the pause button is pressed", () => {
+            selectScreen.currentIndex = 1;
+            signalSubscribeSpy.getCall(4).args[0].callback();
+
+            assert.equal(selectScreen.accessibleElements.length, 3);
+            assert.equal(selectScreen.accessibleElements[0].getAttribute("aria-hidden"), "true");
+            assert.equal(selectScreen.accessibleElements[1].getAttribute("aria-hidden"), "true");
+            assert.equal(selectScreen.accessibleElements[2].getAttribute("aria-hidden"), "true");
+        });
+
+        it("shows the current accessible element when the game is unpaused (by pressing play)", () => {
+            selectScreen.currentIndex = 3;
+            signalSubscribeSpy.getCall(4).args[0].callback(); //pauses
+            signalSubscribeSpy.getCall(5).args[0].callback(); //unpauses
+
+            assert.equal(selectScreen.accessibleElements[0].getAttribute("aria-hidden"), "true");
+            assert.equal(selectScreen.accessibleElements[1].getAttribute("aria-hidden"), "true");
+            assert.equal(selectScreen.accessibleElements[2].getAttribute("aria-hidden"), "false");
         });
 
         describe("previous button", () => {
@@ -190,9 +230,9 @@ describe("Select Screen", () => {
                 selectScreen.currentIndex = 3;
                 signalSubscribeSpy.getCall(1).args[0].callback();
 
-                assert(selectScreen.choice[0].main.visible === false, "choice should be hidden");
-                assert(selectScreen.choice[1].main.visible === true, "choice should be showing");
-                assert(selectScreen.choice[2].main.visible === false, "choice should be hidden");
+                assert(selectScreen.choiceSprites[0].visible === false, "choice should be hidden");
+                assert(selectScreen.choiceSprites[1].visible === true, "choice should be showing");
+                assert(selectScreen.choiceSprites[2].visible === false, "choice should be hidden");
             });
         });
 
@@ -212,9 +252,9 @@ describe("Select Screen", () => {
             it("hides all the choices except the current one", () => {
                 selectScreen.currentIndex = 1;
                 signalSubscribeSpy.getCall(2).args[0].callback();
-                assert(selectScreen.choice[0].main.visible === false, "choice should be hidden");
-                assert(selectScreen.choice[1].main.visible === true, "choice should be showing");
-                assert(selectScreen.choice[2].main.visible === false, "choice should be hidden");
+                assert(selectScreen.choiceSprites[0].visible === false, "choice should be hidden");
+                assert(selectScreen.choiceSprites[1].visible === true, "choice should be showing");
+                assert(selectScreen.choiceSprites[2].visible === false, "choice should be hidden");
             });
         });
     });
