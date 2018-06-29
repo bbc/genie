@@ -21,7 +21,9 @@ const createSignals = (group, config, signal) => {
 
     const callback = bool => {
         if (!bool) {
-            icon = group.addButton(config, 0);
+            if (!icon) {
+                icon = group.addButton(config, 0);
+            }
         } else if (icon) {
             group.removeButton(icon);
         }
@@ -58,17 +60,14 @@ export const create = (group, buttonIds, signals) => {
 
     ["audio", "motion"].forEach(publish(settings, signals));
 
-
     return {
         destroy: () => {
-            iconSignals.forEach(signal => signal.unsubscribe())
-        }
-    }
-
+            iconSignals.forEach(signal => signal.unsubscribe());
+        },
+    };
 
     //return the signals made above OR a function to kill them
 };
 
 // Pops when addButton is called. Does addButton resize the group?
-// Go to settings and come back and you'll have two fx icons. Overlays are the problem.
 // Add ticket for cage settings simulator in dev html
