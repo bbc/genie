@@ -23,4 +23,14 @@ export class Screen extends Phaser.State {
         this.navigation = navigation[this.game.state.current].routes;
         this.transientData = transientData;
     }
+
+    get visibleLayer() {
+        const popupScreens = this.context.popupScreens;
+
+        if (popupScreens.length > 0) {
+            return popupScreens[popupScreens.length - 1];
+        } else {
+            return this.game.state.current;
+        }
+    }
 }
