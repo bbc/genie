@@ -14,9 +14,7 @@ export const loadFonts = (game, done) => {
         },
         custom: {
             families: ["ReithSans"],
-            urls: [REITH_FONT_CSS]
-        }
+            urls: [REITH_FONT_CSS],
+        },
     });
 };
-
-
