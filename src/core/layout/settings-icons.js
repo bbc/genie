@@ -8,6 +8,7 @@ const fxConfig = {
     key: "fx-off-icon",
     id: "fx-off",
     signalName: "motion",
+    icon: true,
 };
 
 const audioConfig = {
@@ -15,6 +16,7 @@ const audioConfig = {
     key: "audio-off-icon",
     id: "audio-off",
     signalName: "audio",
+    icon: true,
 };
 
 const createSignals = (group, config) => {
