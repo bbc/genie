@@ -52,10 +52,10 @@ const DrawPages = (panels, drawPage) => {
     return fp.map(drawPage)(panels);
 };
 
-const Draw = (theme, drawPage, drawButtons, game) => {
+const Draw = (theme, drawPage, drawButtons, game, accessibilityTexts) => {
     const pages = DrawPages(theme.panels, drawPage);
     const buttonLayout = drawButtons(["howToPlayBack", "audioOff", "settings", "howToPlayPrevious", "howToPlayNext"]);
-    const accessibleElements = accessibleCarouselElements.create("book", pages, game.canvas.parentElement);
+    const accessibleElements = accessibleCarouselElements.create("book", pages, game.canvas.parentElement, accessibilityTexts);
     const pageIsInBook = pageNumber => pageNumber <= pages.length && pageNumber >= 1;
 
     let book = {
@@ -88,8 +88,14 @@ const Draw = (theme, drawPage, drawButtons, game) => {
     return GoToPage(1, book, true);
 };
 
-const Start = (screenName, theme, game, scene, overlayLayout) => {
-    return Draw(theme, Page.Draw(screenName, Scenery.Draw(game, scene)), Button.Draw(scene, overlayLayout), game);
+const Start = (screenName, theme, game, scene, overlayLayout, accessibilityTexts) => {
+    return Draw(
+        theme,
+        Page.Draw(screenName, Scenery.Draw(game, scene)),
+        Button.Draw(scene, overlayLayout),
+        game,
+        accessibilityTexts,
+    );
 };
 
 export { Start, Draw, GoToPage, NextPage, PreviousPage };

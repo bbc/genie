@@ -20,7 +20,8 @@ describe("Showing pages of a book", () => {
     });
 
     describe("A book with 1 page", () => {
-        let onePanel = [{ onDestroy: () => {} }];
+        const onePanel = [{ onDestroy: () => {} }];
+        const accessibilityTexts = [{ accessibilityText: "Text goes here" }];
 
         beforeEach(() => {
             sandbox.stub(accessibleCarouselElements, "create").returns([document.createElement("div")]);
@@ -30,6 +31,7 @@ describe("Showing pages of a book", () => {
                 Game.Stub,
                 Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
                 OverlayLayout.Stub,
+                accessibilityTexts,
             );
         });
 
@@ -39,7 +41,12 @@ describe("Showing pages of a book", () => {
 
         it("creates an accessible carousel dom element", () => {
             sandbox.assert.calledOnce(
-                accessibleCarouselElements.create.withArgs("book", [{ visible: true }], Game.Stub.canvas.parentElement),
+                accessibleCarouselElements.create.withArgs(
+                    "book",
+                    [{ visible: true }],
+                    Game.Stub.canvas.parentElement,
+                    accessibilityTexts,
+                ),
             );
         });
 
@@ -56,6 +63,7 @@ describe("Showing pages of a book", () => {
         var book;
         let twoPanels = [{}, {}];
         let domElements = [document.createElement("div"), document.createElement("div")];
+        const accessibilityTexts = [{ accessibilityText: "Text goes here" }, { accessibilityText: "Also goes here" }];
 
         beforeEach(() => {
             sandbox.stub(accessibleCarouselElements, "create").returns(domElements);
@@ -65,6 +73,7 @@ describe("Showing pages of a book", () => {
                 Game.Stub,
                 Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
                 OverlayLayout.Stub,
+                accessibilityTexts
             );
 
             book.nextPageOption.update = sinon.spy();
@@ -83,6 +92,7 @@ describe("Showing pages of a book", () => {
                     "book",
                     [{ visible: true }, { visible: false }],
                     Game.Stub.canvas.parentElement,
+                    accessibilityTexts,
                 ),
             );
         });
