@@ -28,7 +28,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
         renderer: Phaser.AUTO,
         antialias: true,
         multiTexture: false,
-        parent: getContainerDiv(gmi),
+        parent: getContainerDiv(),
         state: new Startup(onStarted),
         transparent: true, // Fixes silk browser flickering
     };
@@ -125,7 +125,7 @@ function hookErrors(gameDivId) {
     });
 }
 
-function getContainerDiv(gmi) {
+function getContainerDiv() {
     const containerDiv = document.getElementById(gmi.gameContainerId);
     if (!containerDiv) {
         throw Error(`Container element "#${gmi.gameContainerId}" not found`);
