@@ -22,7 +22,7 @@ export class FpsTest extends Screen {
             this.sprites.push(sprite);
         }
 
-        this.fpsDebug = this.game.add.text(0, -250, "", { font: "36px Arial", fill: "#ffffff" });
+        this.fpsDebug = this.game.add.text(0, -250, "", { font: "36px ReithSans", fill: "#ffffff" });
         this.scene.addToBackground(this.fpsDebug);
 
         signal.bus.subscribe({

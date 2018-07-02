@@ -47,7 +47,7 @@ describe("Results Screen", () => {
                 theme: {
                     resultsScreen: {
                         resultText: {
-                            style: { font: "36px Arial" },
+                            style: { font: "36px ReithSans" },
                         },
                     },
                 },
@@ -101,7 +101,7 @@ describe("Results Screen", () => {
         it("loads the game results", () => {
             const actualTextCall = gameTextStub.getCall(0);
             const expectedResultsData = 22;
-            const expectedTextCall = [0, 50, expectedResultsData, { font: "36px Arial" }];
+            const expectedTextCall = [0, 50, expectedResultsData, { font: "36px ReithSans" }];
             assert.deepEqual(
                 actualTextCall.args,
                 expectedTextCall,
