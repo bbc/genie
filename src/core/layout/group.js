@@ -53,6 +53,7 @@ export class Group extends Phaser.Group {
         this._buttons.push(newButton);
 
         this.alignChildren();
+        this._setGroupPosition(this._metrics);
 
         return newButton;
     }
@@ -91,7 +92,7 @@ export class Group extends Phaser.Group {
             if (this._isVertical) {
                 child.x = halfWidth;
                 pos.y += child.height + this._metrics.buttonPad;
-            } else if (this._hPos == "center" && this._vPos == "middle") {
+            } else if (this._hPos === "center" && this._vPos === "middle") {
                 child.y = 0;
                 child.x = pos.x + child.width / 2;
                 pos.x += child.width + this._metrics.buttonPad * 3;
