@@ -1,6 +1,6 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
-import * as accessibleDomElement from "../../../src/core/accessibility/accessible-dom-element.js";
+import { accessibleDomElement } from "../../../src/core/accessibility/accessible-dom-element";
 
 describe("#accessibleDomElement", () => {
     let sandbox;
@@ -25,7 +25,6 @@ describe("#accessibleDomElement", () => {
         };
         options = {
             id: "play-button",
-            ariaLabel: "Play Button",
             parent: parentElement,
             onClick: () => {},
             onMouseOver: () => {},
@@ -54,9 +53,26 @@ describe("#accessibleDomElement", () => {
             expect(element.getAttribute("tabindex")).to.equal("0");
         });
 
-        it("sets aria-label to correct value", () => {
+        it("sets aria-hidden to false by default", () => {
             accessibleDomElement(options);
-            expect(element.getAttribute("aria-label")).to.equal("Play Button");
+            expect(element.getAttribute("aria-hidden")).to.equal("false");
+        });
+
+        it("sets aria-hidden to the given value", () => {
+            options.ariaHidden = true;
+            accessibleDomElement(options);
+            expect(element.getAttribute("aria-hidden")).to.equal("true");
+        });
+
+        it("does not have an aria-label by default", () => {
+            accessibleDomElement(options);
+            expect(element.getAttribute("aria-label")).to.equal(null);
+        });
+
+        it("sets an aria-label if given", () => {
+            options.ariaLabel = "Play button";
+            accessibleDomElement(options);
+            expect(element.getAttribute("aria-label")).to.equal(options.ariaLabel);
         });
 
         it("sets role to correct value", () => {
@@ -67,6 +83,22 @@ describe("#accessibleDomElement", () => {
         it("sets style position to absolute", () => {
             accessibleDomElement(options);
             expect(element.style.position).to.equal("absolute");
+        });
+
+        it("sets cursor to  the correct value", () => {
+            accessibleDomElement(options);
+            expect(element.style.cursor).to.equal("pointer");
+        });
+
+        it("sets inner text to be empty by default", () => {
+            accessibleDomElement(options);
+            expect(element.innerHTML).to.equal("");
+        });
+
+        it("sets inner text if given", () => {
+            options.text = "Text goes here";
+            accessibleDomElement(options);
+            expect(element.innerHTML).to.equal(options.text);
         });
 
         it("adds an event listener for keyup", () => {
