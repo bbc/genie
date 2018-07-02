@@ -16,7 +16,7 @@ describe("How To Play Overlay", () => {
     let mockPipsGroup;
 
     const sandbox = sinon.sandbox.create();
-    const panel1Sprite = { visible: "", destroy: sandbox.spy() };
+    const panel1Sprite = { visible: "", destroy: sandbox.spy(), events: { onDestroy: { add: () => {} } } };
     const panel2Sprite = { visible: "", destroy: sandbox.spy() };
     const panel3Sprite = { visible: "", destroy: sandbox.spy() };
 
@@ -68,7 +68,11 @@ describe("How To Play Overlay", () => {
                 group: sandbox.stub().returns(mockPipsGroup),
             },
             state: { current: "howToPlay", states: { howToPlay: mockScreen } },
-            canvas: { focus: sandbox.spy() },
+            canvas: {
+                focus: sandbox.spy(),
+                parentElement: { appendChild: () => {} },
+                setAttribute: () => {},
+            }
         };
         mockGame.add.image.withArgs(0, 0, "howToPlay.background").returns("background");
         mockGame.add.image.withArgs(0, -230, "howToPlay.title").returns(mockTitle);
