@@ -60,13 +60,14 @@ export function create(game, metrics, buttonIds) {
     resize(metrics);
 
     const signal = onScaleChange.add(resize);
+
     const removeSignals = () => {
         signal.unsubscribe();
+        iconSignals.unsubscribe();
     };
 
     const destroy = () => {
         removeSignals();
-        iconSignals.unsubscribe();
         root.destroy();
     };
 

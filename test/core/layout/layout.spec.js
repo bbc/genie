@@ -159,7 +159,7 @@ describe("Layout", () => {
     it("Should reset the groups after they have been added to the layout", () => {
         const groupResetStub = sandbox.stub(Group.prototype, "reset");
         Layout.create(mockGame, mockMetrics, []);
-        sinon.assert.callCount(groupResetStub, 11);
+        sinon.assert.callCount(groupResetStub, 26);
     });
 
     it("subscribes to the scaler sizeChange signal", () => {

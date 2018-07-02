@@ -53,7 +53,6 @@ export class Group extends Phaser.Group {
         this._buttons.push(newButton);
 
         this.alignChildren();
-        //this._setGroupPosition(this._metrics);
 
         return newButton;
     }
@@ -70,6 +69,7 @@ export class Group extends Phaser.Group {
     }
 
     reset(metrics) {
+        metrics = metrics || this._metrics;
         if (this._metrics.isMobile !== metrics.isMobile) {
             this.resetButtons(metrics);
         }

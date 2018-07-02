@@ -27,6 +27,8 @@ const createSignals = (group, config) => {
             group.removeButton(icon);
             icon = undefined;
         }
+
+        group.reset();
     };
 
     return signal.bus.subscribe({
@@ -49,7 +51,7 @@ const publish = fp.curry((settings, key) => {
  *
  * @param {String} group - group name e.g: "top-right"
  * @param {Array.<string>} buttonIds - Array of gel button identifiers
- * @returns {{unsubscribe: unsubscribe}}
+ * @returns {{unsubscribe: Function}}
  */
 export const create = (group, buttonIds) => {
     let iconSignals = [];
