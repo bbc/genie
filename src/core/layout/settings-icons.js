@@ -69,6 +69,3 @@ export const create = (group, buttonIds) => {
         },
     };
 };
-
-// Pops when addButton is called. Does addButton resize the group?
-// Add ticket for cage settings simulator in dev html
