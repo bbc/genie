@@ -25,6 +25,7 @@ describe("#startup", () => {
 
         sandbox.replace(gmiModule, "gmi", mockGmi);
         PhaserGame = sandbox.stub(Phaser, "Game").returns(Game.Stub);
+        window.getGMI = sandbox.stub().returns(mockGmi);
     });
 
     afterEach(() => {
