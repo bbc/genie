@@ -56,7 +56,7 @@ describe("#accessibilify", () => {
         };
         mockButton = {
             alive: true,
-            name: "play",
+            name: "__play",
             game: {
                 input: {
                     activePointer: activePointer,
@@ -74,6 +74,10 @@ describe("#accessibilify", () => {
                         remove: () => {},
                     },
                     scaleFactorInversed: { x: 1, y: 1 },
+                },
+                state: {
+                    states: { home: { visibleLayer: "home" } },
+                    current: "home",
                 },
                 update: {},
                 sound: {
@@ -138,7 +142,7 @@ describe("#accessibilify", () => {
 
             sinon.assert.calledOnce(
                 accessibleDomElement.withArgs({
-                    id: mockButton.name,
+                    id: "home__play",
                     ariaLabel: mockButton.name,
                     parent: mockButton.game.canvas.parentElement,
                     onClick: sinon.match.func,
@@ -158,7 +162,7 @@ describe("#accessibilify", () => {
 
                 sinon.assert.calledOnce(
                     accessibleDomElement.withArgs({
-                        id: mockButton.name,
+                        id: "home__play",
                         ariaLabel: "Play Button",
                         parent: mockButton.game.canvas.parentElement,
                         onClick: sinon.match.func,
