@@ -53,7 +53,7 @@ export class Group extends Phaser.Group {
         this._buttons.push(newButton);
 
         this.alignChildren();
-        this._setGroupPosition(this._metrics);
+        //this._setGroupPosition(this._metrics);
 
         return newButton;
     }
