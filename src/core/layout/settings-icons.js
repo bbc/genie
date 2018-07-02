@@ -25,6 +25,7 @@ const createSignals = (group, config) => {
             icon = group.addButton(config, 0);
         } else if (bool && icon) {
             group.removeButton(icon);
+            icon = undefined;
         }
     };
 
