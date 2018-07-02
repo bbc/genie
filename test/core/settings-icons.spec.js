@@ -5,7 +5,7 @@ import * as signal from "../../src/core/signal-bus.js";
 
 import * as SettingsIcons from "../../src/core/layout/settings-icons.js";
 
-describe.only("Settings Icons", () => {
+describe("Settings Icons", () => {
     const sandbox = sinon.createSandbox();
     let mockSignalBus;
     let mockGmi;
