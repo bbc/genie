@@ -73,7 +73,7 @@ describe("Showing pages of a book", () => {
                 Game.Stub,
                 Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
                 OverlayLayout.Stub,
-                accessibilityTexts
+                accessibilityTexts,
             );
 
             book.nextPageOption.update = sinon.spy();

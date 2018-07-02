@@ -55,7 +55,12 @@ const DrawPages = (panels, drawPage) => {
 const Draw = (theme, drawPage, drawButtons, game, accessibilityTexts) => {
     const pages = DrawPages(theme.panels, drawPage);
     const buttonLayout = drawButtons(["howToPlayBack", "audioOff", "settings", "howToPlayPrevious", "howToPlayNext"]);
-    const accessibleElements = accessibleCarouselElements.create("book", pages, game.canvas.parentElement, accessibilityTexts);
+    const accessibleElements = accessibleCarouselElements.create(
+        "book",
+        pages,
+        game.canvas.parentElement,
+        accessibilityTexts,
+    );
     const pageIsInBook = pageNumber => pageNumber <= pages.length && pageNumber >= 1;
 
     let book = {
