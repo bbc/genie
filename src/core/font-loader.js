@@ -11,7 +11,9 @@ export const loadFonts = (game, done) => {
             game.add.text(-10000, -10000, ".", { font: "italic bold 1px ReithSans" });
             done();
         },
-        inactive: () => { done(); },
+        inactive: () => {
+            done();
+        },
         custom: {
             families: ["ReithSans"],
             urls: [REITH_FONT_CSS],
