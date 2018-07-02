@@ -1,29 +1,22 @@
 import "../../node_modules/webfontloader/webfontloader.js";
 
+const REITH_FONT_CSS = "https://gel.files.bbci.co.uk/r2.302/bbc-reith.css";
+
 export const loadFonts = (game, done) => {
     WebFont.load({
         active: () => {
-            // --- Hack start ---
-            /** Phaser has an issue when attempting to use bold and italic fonts. The first time these fonts are loaded
-             *  they will not be rendered and Phaser will then fall back on the default browser font. We can circumvent
-             *  this issue by adding some some small non-visible text to the game at startup to force our bold and italic
-             *  variants of ReithSans to load before the first screen.
-             */
-            const boldReithSans = { font: "bold 1px ReithSans" };
-            game.add.text(-10000, -10000, ".", boldReithSans);
-
-            const italicReithSans = { font: "italic 1px ReithSans" };
-            game.add.text(-10000, -10000, ".", italicReithSans);
-
-            const italicBoldReithSans = { font: "italic bold 1px ReithSans" };
-            game.add.text(-10000, -10000, ".", italicBoldReithSans);
-            // --- Hack end ---
-
+            game.add.text(-10000, -10000, ".", { font: "1px ReithSans" });
+            game.add.text(-10000, -10000, ".", { font: "bold 1px ReithSans" });
+            game.add.text(-10000, -10000, ".", { font: "italic 1px ReithSans" });
+            game.add.text(-10000, -10000, ".", { font: "italic bold 1px ReithSans" });
+            done();
+        },
+        inactive: () => {
             done();
         },
         custom: {
             families: ["ReithSans"],
-            urls: ["../../fonts/fonts.css"],
+            urls: [REITH_FONT_CSS],
         },
     });
 };
