@@ -72,7 +72,7 @@ describe("How To Play Overlay", () => {
                 focus: sandbox.spy(),
                 parentElement: { appendChild: () => {} },
                 setAttribute: () => {},
-            }
+            },
         };
         mockGame.add.image.withArgs(0, 0, "howToPlay.background").returns("background");
         mockGame.add.image.withArgs(0, -230, "howToPlay.title").returns(mockTitle);

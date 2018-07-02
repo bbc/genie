@@ -123,7 +123,6 @@ describe("Showing pages of a book", () => {
                 assert.equal(domElements[0].getAttribute("aria-hidden"), "true");
                 assert.equal(domElements[1].getAttribute("aria-hidden"), "false");
             });
-
         });
 
         describe("Back to front", () => {
