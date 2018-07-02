@@ -5,14 +5,14 @@ import * as Layout from "../../../src/core/layout/layout.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import { Group } from "../../../src/core/layout/group.js";
 import { GameAssets } from "../../../src/core/game-assets.js";
-import * as gmiModule from '../../../src/core/gmi.js'
+import * as gmiModule from "../../../src/core/gmi.js";
 
 describe("Layout", () => {
     const sandbox = sinon.createSandbox();
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame;
     let mockGmi = {
-        getAllSettings: sandbox.stub().returns({audio: true, motion: true})
+        getAllSettings: sandbox.stub().returns({ audio: true, motion: true }),
     };
     let mockSubscribe;
     let mockUnsubscribe;

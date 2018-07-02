@@ -66,7 +66,7 @@ export function create(game, metrics, buttonIds) {
 
     const destroy = () => {
         removeSignals();
-        iconSignals.unsubscribe()
+        iconSignals.unsubscribe();
         root.destroy();
     };
 
