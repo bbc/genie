@@ -49,7 +49,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
             gameMuted: true,
             qaMode,
         };
-        game.stage.backgroundColor = "#FFF";
+        game.stage.backgroundColor = "#333";
         Navigation.create(game.state, context, scene, navigationConfig);
     }
 }
