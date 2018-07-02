@@ -1,6 +1,7 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 import { startup } from "../../src/core/startup.js";
+import * as gmiModule from "../../src/core/gmi.js";
 
 describe("#startup", () => {
     const sandbox = sinon.createSandbox();
@@ -18,7 +19,7 @@ describe("#startup", () => {
             .withArgs(mockGmi.gameContainerId)
             .returns(containerDiv);
 
-        window.getGMI = sandbox.stub().returns(mockGmi);
+        sandbox.replace(gmiModule, "gmi", mockGmi);
         PhaserGame = sandbox.stub(Phaser, "Game");
     });
 

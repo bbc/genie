@@ -13,7 +13,6 @@ describe("Settings", () => {
 
     afterEach(() => {
         sandbox.restore();
-        gmiModule.reset();
     });
 
     it("Dispatches a signal bus message when a setting changes", () => {
@@ -29,8 +28,6 @@ describe("Settings", () => {
             },
         };
 
-        window.getGMI = sandbox.stub().returns(mockGmi);
-        gmiModule.setGmi({ arbitraryObject: 1 });
         sandbox.replace(gmiModule, "gmi", mockGmi);
 
         settings.show();

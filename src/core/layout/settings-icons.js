@@ -1,6 +1,7 @@
 import { settingsChannel } from "../settings.js";
 import { gmi } from "../gmi.js";
 import fp from "../../../lib/lodash/fp/fp.js";
+import * as signal from "../signal-bus.js";
 
 const fxConfig = {
     title: "FX Off",
@@ -16,20 +17,17 @@ const audioConfig = {
     signalName: "audio",
 };
 
-const createSignals = (group, config, signal) => {
+const createSignals = (group, config) => {
     let icon;
 
     const callback = bool => {
-        if (!bool) {
-            if (!icon) {
-                icon = group.addButton(config, 0);
-            }
-        } else if (icon) {
+        if (!bool && !icon) {
+            icon = group.addButton(config, 0);
+        } else if (bool && icon) {
             group.removeButton(icon);
         }
     };
 
-    //signal.bus.subscribe
     return signal.bus.subscribe({
         channel: settingsChannel,
         name: config.signalName,
@@ -37,7 +35,7 @@ const createSignals = (group, config, signal) => {
     });
 };
 
-const publish = fp.curry((settings, signal, key) => {
+const publish = fp.curry((settings, key) => {
     signal.bus.publish({
         channel: settingsChannel,
         name: key,
@@ -45,28 +43,31 @@ const publish = fp.curry((settings, signal, key) => {
     });
 });
 
-export const create = (group, buttonIds, signals) => {
-    window.s = signals;
-
+/**
+ * Subscribes two callbacks to the settings signals which show / hide the fx and audio icons
+ *
+ * @param {String} group - group name e.g: "top-right"
+ * @param {Array.<string>} buttonIds - Array of gel button identifiers
+ * @returns {{unsubscribe: unsubscribe}}
+ */
+export const create = (group, buttonIds) => {
     let iconSignals = [];
 
     if (!buttonIds.includes("audioOff")) {
-        iconSignals.push(createSignals(group, audioConfig, signals));
+        iconSignals.push(createSignals(group, audioConfig));
     }
 
-    iconSignals.push(createSignals(group, fxConfig, signals));
+    iconSignals.push(createSignals(group, fxConfig));
 
     const settings = gmi.getAllSettings();
 
-    ["audio", "motion"].forEach(publish(settings, signals));
+    ["audio", "motion"].forEach(publish(settings));
 
     return {
-        destroy: () => {
-            iconSignals.forEach(signal => signal.unsubscribe());
+        unsubscribe: () => {
+            iconSignals.forEach(iconsSignal => iconsSignal.unsubscribe());
         },
     };
-
-    //return the signals made above OR a function to kill them
 };
 
 // Pops when addButton is called. Does addButton resize the group?

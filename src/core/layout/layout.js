@@ -28,7 +28,7 @@ export function create(game, metrics, buttonIds) {
             fp.camelCase([layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" ")),
         ),
         groupLayouts.map(
-            layout => new Group(game, root, layout.vPos, layout.hPos, metrics, !!layout.safe, !!layout.arrangeV),
+            layout => new Group(game, root, layout.vPos, layout.hPos, metrics, layout.safe, layout.arrangeV),
         ),
     );
 
@@ -37,7 +37,7 @@ export function create(game, metrics, buttonIds) {
         tabSort(buttonIds).map(name => groups[gel.config[name].group].addButton(gel.config[name])),
     );
 
-    const icons = settingsIcons.create(groups.topRight, buttonIds, signals);
+    const iconSignals = settingsIcons.create(groups.topRight, buttonIds, signals);
 
     /**
      * Attach a callback to the onInputUp event of a given Gel button
@@ -67,7 +67,7 @@ export function create(game, metrics, buttonIds) {
 
     const destroy = () => {
         removeSignals();
-        icons.destroy()
+        iconSignals.unsubscribe()
         root.destroy();
     };
 

@@ -23,8 +23,6 @@ describe("Layout", () => {
     };
 
     beforeEach(() => {
-        window.getGMI = sandbox.stub().returns(mockGmi);
-        gmiModule.setGmi({ arbitraryObject: 1 });
         sandbox.replace(gmiModule, "gmi", mockGmi);
 
         sandbox.stub(Group.prototype, "addButton").returns({ onInputUp: { add: sandbox.spy() } });
@@ -61,7 +59,6 @@ describe("Layout", () => {
         sandbox.restore();
         mockGame.destroy();
         GameAssets.sounds = {};
-        gmiModule.reset();
     });
 
     it("should add the correct number of GEL buttons for a given config", () => {

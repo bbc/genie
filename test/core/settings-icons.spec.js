@@ -1,34 +1,41 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 import * as gmiModule from "../../src/core/gmi.js";
+import * as signal from "../../src/core/signal-bus.js";
 
-import * as SettingsIcons from "../../src/core/layout/settings-icons";
+import * as SettingsIcons from "../../src/core/layout/settings-icons.js";
 
-describe("Settings Icons", () => {
+describe.only("Settings Icons", () => {
     const sandbox = sinon.createSandbox();
-    let mockSignal = {
-        bus: {
-            subscribe: function() {},
-            publish: function() {},
-        },
-    };
-    let mockGmi = {
-        getAllSettings: sandbox.stub().returns({ audio: true, motion: true }),
-    };
+    let mockSignalBus;
+    let mockGmi;
 
-    before(() => {
-        window.getGMI = sandbox.stub().returns(mockGmi);
-        gmiModule.setGmi({ arbitraryObject: 1 });
+    beforeEach(() => {
+        mockSignalBus = {
+            subscribe: sandbox.spy(),
+            publish: sandbox.spy(),
+        };
+
+        mockGmi = {
+            getAllSettings: sandbox.stub().returns({ audio: true, motion: true }),
+        };
+
         sandbox.replace(gmiModule, "gmi", mockGmi);
+        sandbox.replace(signal, "bus", mockSignalBus);
     });
 
-    afterEach(() => {
-        sandbox.restore();
+    afterEach(() => sandbox.restore());
+
+    it("Creates a subscription only for the fx icon on screens that have an audio button", () => {
+        SettingsIcons.create("top-right", ["audioOff"]);
+        assert(mockSignalBus.subscribe.calledOnce);
+        assert(mockSignalBus.subscribe.firstCall.args[0].name === "motion");
     });
 
-    it("fires the correct callbacks when a signal on a channel is published", () => {
-        const icons = SettingsIcons.create("top-right", ["audioOff"], mockSignal);
-        console.log(window.s.bus);
-        assert(false);
+    it("Creates subscriptions for the audio and fx icons on screens that do not have an audio button", () => {
+        SettingsIcons.create("top-right", []);
+        assert(mockSignalBus.subscribe.calledTwice);
+        assert.equal("audio", mockSignalBus.subscribe.firstCall.args[0].name);
+        assert.equal("motion", mockSignalBus.subscribe.secondCall.args[0].name);
     });
 });
