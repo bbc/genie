@@ -7,7 +7,7 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 
 import * as signal from "../../core/signal-bus.js";
-import { GameAssets } from "../../core/game-assets.js";
+import * as GameSound from "../../core/game-sound.js";
 import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
 
 /**
@@ -28,7 +28,7 @@ export const create = fp.curry((hideReplayButton, { game }) => {
 
     function pauseGame() {
         game.paused = true;
-        GameAssets.sounds.backgroundMusic.pause();
+        GameSound.Assets.backgroundMusic.pause();
         screen.context.popupScreens.push("pause");
     }
 
@@ -58,7 +58,7 @@ export const create = fp.curry((hideReplayButton, { game }) => {
         overlayLayout.restoreDisabledButtons();
         background.destroy();
         game.canvas.focus();
-        GameAssets.sounds.backgroundMusic.resume();
+        GameSound.Assets.backgroundMusic.resume();
         screen.context.popupScreens = fp.pull("pause", screen.context.popupScreens);
     }
 

@@ -1,4 +1,5 @@
 import _ from "../../lib/lodash/lodash.js";
+import * as GameSound from "../core/game-sound.js";
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
@@ -21,6 +22,7 @@ export class Screen extends Phaser.State {
         this.scene = scene;
         this._context = context;
         this.navigation = navigation[this.game.state.current].routes;
+        this.music = GameSound.setBackgroundMusic(this.game, navigation[this.game.state.current].music); // does this actually need binding to the screen?
         this.transientData = transientData;
     }
 

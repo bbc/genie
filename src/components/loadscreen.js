@@ -6,7 +6,7 @@
 
 import _ from "../../lib/lodash/lodash.js";
 import { loadAssets } from "../core/asset-loader.js";
-import { GameAssets, initGameAssets } from "../core/game-assets.js";
+import * as GameSound from "../core/game-sound.js";
 import { Screen } from "../core/screen.js";
 import { createLoadBar } from "./loadbar.js";
 import * as Scaler from "../core/scaler.js";
@@ -37,9 +37,7 @@ export class Loadscreen extends Screen {
             if (this.context.qaMode.active) {
                 dumpToConsole(keyLookups);
             }
-            initGameAssets(this.game);
-            this.startMusic();
-
+            GameSound.setButtonClick(this.game, "shared/button-click");
             this.navigation.next();
         });
     }
@@ -79,13 +77,6 @@ export class Loadscreen extends Screen {
         if (this.hasOwnProperty("loadingBar")) this.loadingBar.fillPercent = progress;
         if (this.context.qaMode.active) {
             console.log("Loader progress:", progress); // eslint-disable-line no-console
-        }
-    }
-
-    startMusic() {
-        GameAssets.sounds.backgroundMusic.loopFull();
-        if (GameAssets.sounds.backgroundMusic.usingAudioTag) {
-            GameAssets.sounds.backgroundMusic.mute = this.game.sound.mute;
         }
     }
 }
