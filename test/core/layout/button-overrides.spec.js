@@ -2,7 +2,7 @@ import { assert } from "chai";
 import { applyButtonOverrides } from "../../../src/core/layout/button-overrides.js";
 
 describe("button overrides", () => {
-    describe("when button is passed in", () => {
+    describe("when buttons are passed in", () => {
         const config = {
             theme: {
                 "button-overrides": {
@@ -32,7 +32,7 @@ describe("button overrides", () => {
             y: 0,
         };
 
-        it("applies config values to button1 but not button2", () => {
+        it("applies config values to buttons with positionOverride", () => {
             applyButtonOverrides([button1, button2]);
             assert.equal(button1.y, 100);
             assert.equal(button2.y, 0);
