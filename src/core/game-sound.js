@@ -10,10 +10,7 @@ const setButtonClick = (game, audioKey) => {
 const setBackgroundMusic = (game, audioKey) => {
     if (Assets.backgroundMusic) {
         Assets.backgroundMusic.stop();
-    }
-
-    if (audioKey === undefined) {
-        return;
+        Assets.backgroundMusic.stop();
     }
 
     Assets.backgroundMusic = game.add.audio(audioKey);

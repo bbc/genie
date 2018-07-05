@@ -4,7 +4,7 @@ import * as sinon from "sinon";
 import { Loadscreen } from "../../src/components/loadscreen";
 import * as LoadBar from "../../src/components/loadbar";
 import * as AssetLoader from "../../src/core/asset-loader";
-import { GameAssets } from "../../src/core/game-assets.js";
+// import * as GameSound from "../../src/core/game-sound.js";
 import * as Scaler from "../../src/core/scaler.js";
 
 describe("Load Screen", () => {
@@ -181,12 +181,6 @@ describe("Load Screen", () => {
 
             assetLoaderCallbackSpy.args[0][0](expectedKeyLookups);
             expect(consoleSpy.args[0][0]).to.equal(expectedOutput);
-        });
-    });
-
-    describe("Music", () => {
-        it("starts playing the music", () => {
-            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.loopFull);
         });
     });
 });
