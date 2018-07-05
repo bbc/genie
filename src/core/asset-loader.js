@@ -142,10 +142,8 @@ function namespaceScreen(pack, screenName) {
     keyLookup[screenName] = {};
     for (const asset of pack[screenName]) {
         let newKey = "<pending>";
-        if (asset.url) {
+        if (asset.url || asset.urls) {
             newKey = makeAssetKey(screenName, asset);
-        } else if (asset.urls) {
-            newKey = asset.urls[0].replace(/\.[^.]*$/, "");
         } else {
             throw Error("expected url or urls field for asset key " + asset.key);
         }
