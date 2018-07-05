@@ -1,17 +1,33 @@
 import { expect } from "chai";
 import { Screen } from "../../src/core/screen";
+import * as GameSound from "../../src/core/game-sound";
 import * as Game from "../fake/game.js";
 import * as Scene from "../fake/scene.js";
+import * as sinon from "sinon";
 
 describe("Screen", () => {
     let screen;
+    const sandbox = sinon.sandbox.create();
+
+    beforeEach(() => {
+        sandbox.stub(GameSound, "setBackgroundMusic");
+    });
 
     describe("with context", () => {
         let mockContext;
 
         beforeEach(() => {
             screen = new Screen();
-            mockContext = { popupScreens: ["pause"] };
+            mockContext = {
+                popupScreens: ["pause"],
+                config: {
+                    theme: {
+                        loadscreen: {
+                            music: "test/music",
+                        },
+                    },
+                },
+            };
             const mockNavigation = { loadscreen: {} };
             screen.game = Game.Stub;
             screen.game.state.current = "loadscreen";
@@ -28,6 +44,13 @@ describe("Screen", () => {
             const expectedContext = {
                 popupScreens: ["pause"],
                 qaMode: { active: true },
+                config: {
+                    theme: {
+                        loadscreen: {
+                            music: "test/music",
+                        },
+                    },
+                },
             };
 
             expect(screen.context).to.eql(expectedContext);
@@ -37,7 +60,16 @@ describe("Screen", () => {
     describe("with no overlays", () => {
         beforeEach(() => {
             screen = new Screen();
-            const mockContext = { popupScreens: [] };
+            const mockContext = {
+                popupScreens: [],
+                config: {
+                    theme: {
+                        loadscreen: {
+                            music: "test/music",
+                        },
+                    },
+                },
+            };
             const mockNavigation = { loadscreen: {} };
             screen.game = Game.Stub;
             screen.game.state.current = "loadscreen";
@@ -52,7 +84,16 @@ describe("Screen", () => {
     describe("with one overlay", () => {
         beforeEach(() => {
             screen = new Screen();
-            const mockContext = { popupScreens: ["pause"] };
+            const mockContext = {
+                popupScreens: ["pause"],
+                config: {
+                    theme: {
+                        game: {
+                            music: "test/music",
+                        },
+                    },
+                },
+            };
             const mockNavigation = { game: {} };
             screen.game = Game.Stub;
             screen.game.state.current = "game";
@@ -67,7 +108,16 @@ describe("Screen", () => {
     describe("with two overlays", () => {
         beforeEach(() => {
             screen = new Screen();
-            const mockContext = { popupScreens: ["pause", "howToPlay"] };
+            const mockContext = {
+                popupScreens: ["pause", "howToPlay"],
+                config: {
+                    theme: {
+                        game: {
+                            music: "test/music",
+                        },
+                    },
+                },
+            };
             const mockNavigation = { game: {} };
             screen.game = Game.Stub;
             screen.game.state.current = "game";
@@ -77,5 +127,9 @@ describe("Screen", () => {
         it("returns the top overlay name (last in the array) as the visible layer", () => {
             expect(screen.visibleLayer).to.eql("howToPlay");
         });
+    });
+
+    afterEach(() => {
+        sandbox.restore();
     });
 });
