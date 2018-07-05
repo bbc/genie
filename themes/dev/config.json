@@ -41,6 +41,10 @@
         },
         "how-to-play": {
             "panels": ["panel1", "panel2", "panel3"]
+        },
+        "button-overrides": {
+            "gelDesktop.play": { "y": 100 },
+            "gelMobile.play": { "y": 0 }
         }
     }
 }

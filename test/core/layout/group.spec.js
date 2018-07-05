@@ -39,6 +39,7 @@ describe("Group", () => {
                     height: 100,
                     updateTransform: () => {},
                     resize: buttonResizeStub,
+                    applyCustomPositioning: () => {},
                 };
             },
         };
