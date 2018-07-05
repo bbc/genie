@@ -9,6 +9,9 @@ describe("button overrides", () => {
                     "gelDesktop.play": {
                         y: 100,
                     },
+                    "gelDesktop.how-to-play": {
+                        y: 100,
+                    },
                 },
             },
         };
@@ -35,6 +38,10 @@ describe("button overrides", () => {
         it("applies config values to buttons with positionOverride", () => {
             applyButtonOverrides([button1, button2]);
             assert.equal(button1.y, 100);
+        });
+
+        it("DOES NOT apply config values to buttons without positionOverride", () => {
+            applyButtonOverrides([button1, button2]);
             assert.equal(button2.y, 0);
         });
     });
