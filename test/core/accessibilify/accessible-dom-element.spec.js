@@ -59,6 +59,11 @@ describe("#accessibleDomElement", () => {
             expect(element.getAttribute("aria-label")).to.equal("Play Button");
         });
 
+        it("sets aria-hidden to correct value", () => {
+            accessibleDomElement(options);
+            expect(element.getAttribute("aria-hidden")).to.equal("false");
+        });
+
         it("sets role to correct value", () => {
             accessibleDomElement(options);
             expect(element.getAttribute("role")).to.equal("button");
@@ -122,6 +127,7 @@ describe("#accessibleDomElement", () => {
         it("hides element when calling hide function on the module", () => {
             const newAccessibleElement = accessibleDomElement(options);
             newAccessibleElement.hide();
+            expect(element.getAttribute("aria-hidden")).to.equal("true");
             expect(element.getAttribute("tabindex")).to.equal("-1");
             expect(element.style.visibility).to.equal("hidden");
         });
@@ -129,12 +135,14 @@ describe("#accessibleDomElement", () => {
 
     describe("showing the element", () => {
         it("shows element when calling show function on the module", () => {
+            element.setAttribute("aria-hidden", "true");
             element.setAttribute("tabindex", "-1");
             element.style.visibility = "hidden";
 
             const newAccessibleElement = accessibleDomElement(options);
             newAccessibleElement.show();
 
+            expect(element.getAttribute("aria-hidden")).to.equal("false");
             expect(element.getAttribute("tabindex")).to.equal("0");
             expect(element.style.visibility).to.equal("visible");
         });
