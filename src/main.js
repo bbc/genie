@@ -61,7 +61,6 @@ const navigationConfig = goToScreen => {
             routes: {
                 next: characterSelect,
             },
-            music: "shared/background-music",
         },
         "character-select": {
             state: Select,
@@ -70,7 +69,6 @@ const navigationConfig = goToScreen => {
                 home: home,
                 restart: home,
             },
-            music: "shared/background-music",
         },
         game: {
             state: GameTest,

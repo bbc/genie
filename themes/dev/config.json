@@ -1,6 +1,10 @@
 {
     "theme": {
+        "home": {
+            "music": "shared/background-music"
+        },
         "character-select": {
+            "music": "shared/background-music",
             "choices": [
                 {
                     "main": "carousel1"
@@ -29,7 +33,11 @@
                 }
             }
         },
+        "game": {
+            "music": "shared/background-music"
+        },
         "results": {
+            "music": "shared/background-music",
             "resultText": {
                 "style": {
                     "font": "bold 40px ReithSans",
