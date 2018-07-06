@@ -16,9 +16,8 @@ const setBackgroundMusic = (game, audioKey) => {
 
     Assets.backgroundMusic.loopFull();
 
-    // TODO: Test the below condition
     if (Assets.backgroundMusic.usingAudioTag) {
-        Assets.backgroundMusic.mute = this.game.sound.mute;
+        Assets.backgroundMusic.mute = game.sound.mute;
     }
 };
 

@@ -1,4 +1,5 @@
 import * as sinon from "sinon";
+import { expect } from "chai";
 import * as GameSound from "../../src/core/game-sound";
 import * as Game from "../fake/game.js";
 
@@ -87,6 +88,56 @@ describe("Game Sound", () => {
 
         it("stops the current music and then sets the new music before it starts playing in a loop", () => {
             sinon.assert.callOrder(existingAudioStopSpy, addAudioSpy, newAudioLoopSpy);
+        });
+    });
+
+    describe("when the SoundManager and device are both using the Audio tag instead of Web Audio", () => {
+        let game;
+
+        beforeEach(() => {
+            game = Game.Stub;
+            game.sound.mute = true;
+            GameSound.Assets.backgroundMusic = {
+                loopFull: () => {},
+                stop: () => {},
+            };
+            game.add.audio = () => {
+                return {
+                    loopFull: () => {},
+                    mute: true,
+                    usingAudioTag: true,
+                };
+            };
+            GameSound.setBackgroundMusic(game, "test/music");
+        });
+
+        it("sets the mute value of the background music to match the mute value of the game sound", () => {
+            expect(GameSound.Assets.backgroundMusic.mute).to.equal(true);
+        });
+    });
+
+    describe("when the SoundManager and device are both using Web Audio", () => {
+        let game;
+
+        beforeEach(() => {
+            game = Game.Stub;
+            game.sound.mute = true;
+            GameSound.Assets.backgroundMusic = {
+                loopFull: () => {},
+                stop: () => {},
+            };
+            game.add.audio = () => {
+                return {
+                    loopFull: () => {},
+                    mute: false,
+                    usingAudioTag: false,
+                };
+            };
+            GameSound.setBackgroundMusic(game, "test/music");
+        });
+
+        it("sets the mute value of the background music to match the mute value of the game sound", () => {
+            expect(GameSound.Assets.backgroundMusic.mute).to.equal(false);
         });
     });
 });

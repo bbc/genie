@@ -9,10 +9,6 @@ describe("Screen", () => {
     let screen;
     const sandbox = sinon.sandbox.create();
 
-    beforeEach(() => {
-        sandbox.stub(GameSound, "setBackgroundMusic");
-    });
-
     afterEach(() => {
         sandbox.restore();
     });
@@ -21,15 +17,12 @@ describe("Screen", () => {
         let mockContext;
 
         beforeEach(() => {
+            sandbox.stub(GameSound, "setBackgroundMusic");
             screen = new Screen();
             mockContext = {
                 popupScreens: ["pause"],
                 config: {
-                    theme: {
-                        loadscreen: {
-                            music: "test/music",
-                        },
-                    },
+                    theme: {},
                 },
             };
             const mockNavigation = { loadscreen: {} };
@@ -49,11 +42,7 @@ describe("Screen", () => {
                 popupScreens: ["pause"],
                 qaMode: { active: true },
                 config: {
-                    theme: {
-                        loadscreen: {
-                            music: "test/music",
-                        },
-                    },
+                    theme: {},
                 },
             };
 
@@ -63,15 +52,12 @@ describe("Screen", () => {
 
     describe("with no overlays", () => {
         beforeEach(() => {
+            sandbox.stub(GameSound, "setBackgroundMusic");
             screen = new Screen();
             const mockContext = {
                 popupScreens: [],
                 config: {
-                    theme: {
-                        loadscreen: {
-                            music: "test/music",
-                        },
-                    },
+                    theme: {},
                 },
             };
             const mockNavigation = { loadscreen: {} };
@@ -87,15 +73,12 @@ describe("Screen", () => {
 
     describe("with one overlay", () => {
         beforeEach(() => {
+            sandbox.stub(GameSound, "setBackgroundMusic");
             screen = new Screen();
             const mockContext = {
                 popupScreens: ["pause"],
                 config: {
-                    theme: {
-                        game: {
-                            music: "test/music",
-                        },
-                    },
+                    theme: {},
                 },
             };
             const mockNavigation = { game: {} };
@@ -111,9 +94,32 @@ describe("Screen", () => {
 
     describe("with two overlays", () => {
         beforeEach(() => {
+            sandbox.stub(GameSound, "setBackgroundMusic");
             screen = new Screen();
             const mockContext = {
                 popupScreens: ["pause", "howToPlay"],
+                config: {
+                    theme: {},
+                },
+            };
+            const mockNavigation = { game: {} };
+            screen.game = Game.Stub;
+            screen.game.state.current = "game";
+            screen.init({}, Scene.Stub, mockContext, mockNavigation);
+        });
+
+        it("returns the top overlay name (last in the array) as the visible layer", () => {
+            expect(screen.visibleLayer).to.eql("howToPlay");
+        });
+    });
+
+    describe("with music", () => {
+        let setBackgroundMusicStub;
+
+        beforeEach(() => {
+            setBackgroundMusicStub = sandbox.stub(GameSound, "setBackgroundMusic");
+            screen = new Screen();
+            const mockContext = {
                 config: {
                     theme: {
                         game: {
@@ -128,8 +134,33 @@ describe("Screen", () => {
             screen.init({}, Scene.Stub, mockContext, mockNavigation);
         });
 
-        it("returns the top overlay name (last in the array) as the visible layer", () => {
-            expect(screen.visibleLayer).to.eql("howToPlay");
+        it("sets the background music to what has been defined in the theme config", () => {
+            sinon.assert.calledOnce(setBackgroundMusicStub);
+            sinon.assert.calledWith(setBackgroundMusicStub, screen.game, "test/music");
+        });
+    });
+
+    describe("with no music", () => {
+        let setBackgroundMusicStub;
+
+        beforeEach(() => {
+            setBackgroundMusicStub = sandbox.stub(GameSound, "setBackgroundMusic");
+            screen = new Screen();
+            const mockContext = {
+                config: {
+                    theme: {
+                        game: {},
+                    },
+                },
+            };
+            const mockNavigation = { game: {} };
+            screen.game = Game.Stub;
+            screen.game.state.current = "game";
+            screen.init({}, Scene.Stub, mockContext, mockNavigation);
+        });
+
+        it("does not try to set the background music", () => {
+            sinon.assert.notCalled(setBackgroundMusicStub);
         });
     });
 });
