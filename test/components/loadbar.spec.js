@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 import * as LoadBar from "../../src/components/loadbar";
 
 describe("Load Bar", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
     const mockGame = {
         add: { image: () => mockBarFill },

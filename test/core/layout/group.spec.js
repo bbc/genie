@@ -4,7 +4,7 @@ import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import { Group } from "../../../src/core/layout/group";
 
 describe("Group", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     let buttonFactory;
     let game;
     let parentGroup;

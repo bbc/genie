@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 import * as OverlayLayout from "../../../src/components/overlays/overlay-layout";
 
 describe("Overlay Layout", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     let mockLayouts;
     let mockScreen;
     let mockGameButtons;

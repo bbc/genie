@@ -5,6 +5,7 @@
  */
 import { onScaleChange } from "../scaler.js";
 import fp from "../../../lib/lodash/fp/fp.js";
+import * as settingsIcons from "./settings-icons.js";
 import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { Group } from "./group.js";
@@ -26,7 +27,7 @@ export function create(game, metrics, buttonIds) {
             fp.camelCase([layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" ")),
         ),
         groupLayouts.map(
-            layout => new Group(game, root, layout.vPos, layout.hPos, metrics, !!layout.safe, !!layout.arrangeV),
+            layout => new Group(game, root, layout.vPos, layout.hPos, metrics, layout.safe, layout.arrangeV),
         ),
     );
 
@@ -34,6 +35,8 @@ export function create(game, metrics, buttonIds) {
         tabSort(buttonIds),
         tabSort(buttonIds).map(name => groups[gel.config[name].group].addButton(gel.config[name])),
     );
+
+    const iconSignals = settingsIcons.create(groups.topRight, buttonIds);
 
     /**
      * Attach a callback to the onInputUp event of a given Gel button
@@ -57,8 +60,10 @@ export function create(game, metrics, buttonIds) {
     resize(metrics);
 
     const signal = onScaleChange.add(resize);
+
     const removeSignals = () => {
         signal.unsubscribe();
+        iconSignals.unsubscribe();
     };
 
     const destroy = () => {

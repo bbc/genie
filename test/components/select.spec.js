@@ -19,7 +19,7 @@ describe("Select Screen", () => {
     let navigationNext;
     let navigationHome;
 
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     const characterOneSprite = { visible: "" };
     const characterTwoSprite = { visible: "" };
     const characterThreeSprite = { visible: "" };
