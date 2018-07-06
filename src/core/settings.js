@@ -1,4 +1,3 @@
-import fp from "../../lib/lodash/fp/fp.js";
 import * as signal from "../core/signal-bus.js";
 import { gmi } from "./gmi.js";
 
@@ -13,12 +12,6 @@ export const create = () => {
         });
     };
 
-    const checkGmi = () => {
-        if (!gmi) {
-            throw "gmi has not been initialised in settings.js";
-        }
-    };
-
     const onSettingsClosed = () => {
         signal.bus.publish({
             channel: settingsChannel,
@@ -26,15 +19,10 @@ export const create = () => {
         });
     };
 
-    const getAllSettings = fp.flow(checkGmi, () => gmi.getAllSettings());
-
-    const show = fp.flow(checkGmi, () => gmi.showSettings(onSettingChanged, onSettingsClosed));
-    const exit = fp.flow(checkGmi, () => gmi.exit());
-
     return {
-        exit,
-        show,
-        getAllSettings,
+        exit: () => gmi.exit(),
+        show: () => gmi.showSettings(onSettingChanged, onSettingsClosed),
+        getAllSettings: () => gmi.getAllSettings(),
     };
 };
 
