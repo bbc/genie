@@ -117,9 +117,6 @@ describe("GMI", () => {
 
     it("returns the GMI instance", () => {
         gmiModule.setGmi(defaultSettings, fakeWindow);
-
-        console.log("gmiModule.gmi", gmiModule.gmi);
-
         assert.deepEqual(gmiModule.gmi, fakeGmiObject);
     });
 });
