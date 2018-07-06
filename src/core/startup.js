@@ -44,7 +44,6 @@ export function startup(settingsConfig = {}, navigationConfig) {
         game.canvas.setAttribute("aria-hidden", "true");
         const scene = Scene.create(game);
         const context = {
-            gmi,
             config: config,
             popupScreens: [],
             gameMuted: true,
