@@ -8,12 +8,13 @@ import * as LoadFonts from "../../src/core/font-loader.js";
 import * as Navigation from "../../src/core/navigation.js";
 
 describe("Startup", () => {
+    let mockGmi;
     const sandbox = sinon.createSandbox();
 
     let PhaserGame, containerDiv;
 
     beforeEach(() => {
-        const mockGmi = {
+        mockGmi = {
             gameContainerId: "some-id",
         };
         containerDiv = sandbox.stub();
@@ -68,6 +69,11 @@ describe("Startup", () => {
         assert.equal(actualConfig.transparent, expectedConfig.transparent);
     });
 
+    it("throws an error if the game container element cannot be found", () => {
+        mockGmi.gameContainerId = "not-existing";
+        assert.throws(startup, 'Container element "#not-existing" not found'); // eslint-disable-line quotes
+    });
+
     describe("onStarted()", () => {
         let sceneCreate;
         let loadFonts;
@@ -85,15 +91,15 @@ describe("Startup", () => {
 
         it("creates the scene", () => {
             startup();
-            const config = PhaserGame.getCall(0).args[0];
-            config.state._onStarted();
+            const game = PhaserGame.getCall(0).args[0];
+            game.state._onStarted();
             sinon.assert.calledWith(sceneCreate, PhaserGame());
         });
 
         it("loads the fonts", () => {
             startup();
-            const config = PhaserGame.getCall(0).args[0];
-            config.state._onStarted();
+            const game = PhaserGame.getCall(0).args[0];
+            game.state._onStarted();
             sinon.assert.calledWith(loadFonts, PhaserGame(), sinon.match.func);
         });
 
