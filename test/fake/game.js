@@ -1,6 +1,9 @@
 import * as Sprite from "./sprite.js";
 
 const Stub = {
+    load: {
+        json: () => {},
+    },
     add: {
         sprite: () => {
             return Sprite.Stub();
