@@ -15,12 +15,16 @@ export function accessibleDomElement(options) {
     function init() {
         el.id = options.id;
         el.setAttribute("tabindex", "0");
-        el.setAttribute("aria-label", options.ariaLabel);
+        el.setAttribute("aria-hidden", options.ariaHidden || false);
         el.setAttribute("role", "button");
         el.style.position = "absolute";
         el.style.cursor = "pointer";
-        options.parent.appendChild(el);
+        el.innerHTML = options.text || "";
+        if (options.ariaLabel) {
+            el.setAttribute("aria-label", options.ariaLabel);
+        }
 
+        options.parent.appendChild(el);
         assignEvents();
     }
 
@@ -34,11 +38,13 @@ export function accessibleDomElement(options) {
     }
 
     function hide() {
+        el.setAttribute("aria-hidden", true);
         el.setAttribute("tabindex", "-1");
         el.style.visibility = "hidden";
     }
 
     function show() {
+        el.setAttribute("aria-hidden", false);
         el.setAttribute("tabindex", "0");
         el.style.visibility = "visible";
     }
