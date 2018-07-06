@@ -6,7 +6,6 @@
 
 import _ from "../../lib/lodash/lodash.js";
 import { loadAssets } from "../core/asset-loader.js";
-import * as GameSound from "../core/game-sound.js";
 import { Screen } from "../core/screen.js";
 import { createLoadBar } from "./loadbar.js";
 import * as Scaler from "../core/scaler.js";
@@ -37,7 +36,6 @@ export class Loadscreen extends Screen {
             if (this.context.qaMode.active) {
                 dumpToConsole(keyLookups);
             }
-            GameSound.setButtonClick(this.game, "shared/button-click");
             this.navigation.next();
         });
     }

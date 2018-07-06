@@ -37,7 +37,6 @@
             "music": "shared/background-music"
         },
         "results": {
-            "music": "shared/background-music",
             "resultText": {
                 "style": {
                     "font": "bold 40px ReithSans",

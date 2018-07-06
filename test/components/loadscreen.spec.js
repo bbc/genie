@@ -8,10 +8,9 @@ import * as Scaler from "../../src/core/scaler.js";
 
 describe("Load Screen", () => {
     let loadScreen;
-    let musicLoopStub;
     let addImageStub;
     let mockGame;
-    let assetLoaderSpy;
+    let assetLoaderStub;
     let assetLoaderCallbackSpy;
     let navigationNext;
 
@@ -19,19 +18,13 @@ describe("Load Screen", () => {
 
     beforeEach(() => {
         assetLoaderCallbackSpy = sandbox.spy();
-        assetLoaderSpy = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
-        musicLoopStub = sandbox.stub();
-        musicLoopStub.withArgs("shared/background-music").returns({
-            loopFull: sandbox.spy(),
-        });
+        assetLoaderStub = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
         addImageStub = sandbox.stub();
-        musicLoopStub.returns({});
         navigationNext = sandbox.stub();
 
         mockGame = {
             add: {
                 image: addImageStub,
-                audio: musicLoopStub,
             },
             state: {
                 current: "currentState",
@@ -66,11 +59,11 @@ describe("Load Screen", () => {
             loadScreen.updateLoadProgress = expectedUpdateLoadProgress;
             loadScreen.preload();
 
-            expect(assetLoaderSpy.args[0][0]).to.eql(mockGame);
-            expect(assetLoaderSpy.args[0][1]).to.eql(expectedGamePacks);
-            expect(assetLoaderSpy.args[0][2]).to.eql(expectedLoadscreenPack);
+            expect(assetLoaderStub.args[0][0]).to.eql(mockGame);
+            expect(assetLoaderStub.args[0][1]).to.eql(expectedGamePacks);
+            expect(assetLoaderStub.args[0][2]).to.eql(expectedLoadscreenPack);
 
-            assetLoaderSpy.args[0][3]();
+            assetLoaderStub.args[0][3]();
             expect(expectedUpdateLoadProgress.called).to.equal(true);
         });
 

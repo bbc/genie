@@ -4,12 +4,14 @@ import { Home } from "../../src/components/home";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
+import * as GameSound from "../../src/core/game-sound.js";
 
 describe("Home Screen", () => {
     let homeScreen;
     let layoutHarnessSpy;
     let mockGame;
     let mockContext;
+    let setButtonClickSoundStub;
     let addToBackgroundSpy;
     let addLayoutSpy;
     let gameImageStub;
@@ -27,6 +29,7 @@ describe("Home Screen", () => {
         gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
         navigationNext = sandbox.stub();
+        setButtonClickSoundStub = sandbox.stub(GameSound, "setButtonClick");
 
         mockGame = {
             add: {
@@ -58,6 +61,10 @@ describe("Home Screen", () => {
 
     afterEach(() => {
         sandbox.restore();
+    });
+
+    it("should set the button click sound up during preload", () => {
+        sinon.assert.calledOnce(setButtonClickSoundStub);
     });
 
     describe("create method", () => {
