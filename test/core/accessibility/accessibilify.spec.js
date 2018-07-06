@@ -1,8 +1,8 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
 import * as Scaler from "../../../src/core/scaler.js";
-import { accessibilify } from "../../../src/core/accessibilify/accessibilify";
-import * as helperModule from "../../../src/core/accessibilify/accessible-dom-element";
+import { accessibilify } from "../../../src/core/accessibility/accessibilify";
+import * as helperModule from "../../../src/core/accessibility/accessible-dom-element";
 
 describe("#accessibilify", () => {
     const gameWidth = 800;

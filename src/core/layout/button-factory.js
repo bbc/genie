@@ -5,7 +5,7 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as signal from "../../core/signal-bus.js";
-import { accessibilify } from "../accessibilify/accessibilify.js";
+import { accessibilify } from "../accessibility/accessibilify.js";
 import { GelButton } from "./gel-button.js";
 import { buttonsChannel } from "./gel-defaults.js";
 

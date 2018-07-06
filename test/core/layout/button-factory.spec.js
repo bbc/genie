@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import * as GelButton from "../../../src/core/layout/gel-button";
-import * as accessibilify from "../../../src/core/accessibilify/accessibilify";
+import * as accessibilify from "../../../src/core/accessibility/accessibilify";
 import * as signal from "../../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../../src/core/layout/gel-defaults.js";
 
