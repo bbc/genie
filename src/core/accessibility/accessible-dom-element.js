@@ -15,7 +15,6 @@ export function accessibleDomElement(options) {
     function init() {
         el.id = options.id;
         el.setAttribute("tabindex", "0");
-        el.setAttribute("aria-label", options.ariaLabel);
         el.setAttribute("aria-hidden", options.ariaHidden || false);
         el.setAttribute("role", "button");
         el.style.position = "absolute";
