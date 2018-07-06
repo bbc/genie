@@ -13,6 +13,10 @@ describe("Screen", () => {
         sandbox.stub(GameSound, "setBackgroundMusic");
     });
 
+    afterEach(() => {
+        sandbox.restore();
+    });
+
     describe("with context", () => {
         let mockContext;
 
@@ -127,9 +131,5 @@ describe("Screen", () => {
         it("returns the top overlay name (last in the array) as the visible layer", () => {
             expect(screen.visibleLayer).to.eql("howToPlay");
         });
-    });
-
-    afterEach(() => {
-        sandbox.restore();
     });
 });

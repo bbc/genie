@@ -52,11 +52,9 @@ describe("Pause Overlay", () => {
         };
         mockGame.add.image.onCall(0).returns("backgroundImage");
 
-        GameSound.Assets = {
-            backgroundMusic: {
-                pause: sandbox.spy(),
-                resume: sandbox.spy(),
-            },
+        GameSound.Assets.backgroundMusic = {
+            pause: sandbox.spy(),
+            resume: sandbox.spy(),
         };
     });
 

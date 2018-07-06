@@ -1,6 +1,7 @@
 const Stub = () => {
     return {
         loopFull: () => {},
+        stop: () => {},
     };
 };
 

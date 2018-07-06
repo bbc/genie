@@ -9,15 +9,18 @@ const setButtonClick = (game, audioKey) => {
 
 const setBackgroundMusic = (game, audioKey) => {
     if (Assets.backgroundMusic) {
+        console.log(Assets.backgroundMusic);
         Assets.backgroundMusic.stop();
     }
 
     Assets.backgroundMusic = game.add.audio(audioKey);
+
     Assets.backgroundMusic.loopFull();
+
+    // TODO: Test the below condition
     if (Assets.backgroundMusic.usingAudioTag) {
         Assets.backgroundMusic.mute = this.game.sound.mute;
     }
-    return Assets.backgroundMusic;
 };
 
 export { Assets, setBackgroundMusic, setButtonClick };

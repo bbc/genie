@@ -41,10 +41,8 @@ describe("Layout", () => {
             mockUnsubscribe = sandbox.spy();
             mockSubscribe = sandbox.stub(Scaler.onScaleChange, "add").returns({ unsubscribe: mockUnsubscribe });
 
-            GameSound.assets = {
-                buttonClick: {
-                    play: () => {},
-                },
+            GameSound.Assets.buttonClick = {
+                play: () => {},
             };
         });
     });
@@ -52,10 +50,8 @@ describe("Layout", () => {
     afterEach(() => {
         sandbox.restore();
         mockGame.destroy();
-        GameSound.assets = {
-            backgroundMusic: undefined,
-            buttonClick: undefined,
-        };
+        GameSound.Assets.backgroundMusic = undefined;
+        GameSound.Assets.buttonClick = undefined;
     });
 
     it("should add the correct number of GEL buttons for a given config", () => {
