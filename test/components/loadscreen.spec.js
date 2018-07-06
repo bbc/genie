@@ -22,7 +22,7 @@ describe("Load Screen", () => {
         assetLoaderCallbackSpy = sandbox.spy();
         assetLoaderSpy = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
         musicLoopStub = sandbox.stub();
-        musicLoopStub.withArgs("shared/background-music").returns({
+        musicLoopStub.withArgs("loadscreen.backgroundMusic").returns({
             loopFull: sandbox.spy(),
         });
         addImageStub = sandbox.stub();
