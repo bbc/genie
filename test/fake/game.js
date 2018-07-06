@@ -10,9 +10,6 @@ const Stub = {
         },
         group: () => {},
     },
-    canvas: {
-        setAttribute: () => {},
-    },
     stage: {
         backgroundColor: "",
     },

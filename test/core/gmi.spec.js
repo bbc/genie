@@ -35,8 +35,7 @@ describe("GMI", () => {
                 },
             ],
         };
-
-        fakeGmiObject = { "gmi object": "gmi object"};
+        fakeGmiObject = { "gmi object": "gmi object" };
         fakeWindow = { getGMI: sandbox.stub().returns(fakeGmiObject) };
         sandbox.replace(gmiModule, "gmi", fakeGmiObject);
     });
