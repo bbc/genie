@@ -7,7 +7,7 @@ import * as signal from "../../src/core/signal-bus.js";
 describe("Navigation", () => {
     let gameState, context, scene, navigationConfig, transientData, navigation;
 
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
         gameState = {

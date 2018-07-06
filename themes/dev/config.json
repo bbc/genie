@@ -7,13 +7,16 @@
             "music": "shared/background-music",
             "choices": [
                 {
-                    "main": "carousel1"
+                    "asset": "carousel1",
+                    "accessibilityText": "Character 1"
                 },
                 {
-                    "main": "carousel2"
+                    "asset": "carousel2",
+                    "accessibilityText": "Character 2"
                 },
                 {
-                    "main": "carousel3"
+                    "asset": "carousel3",
+                    "accessibilityText": "Character 3"
                 }
             ],
             "leftButton": {
@@ -47,7 +50,12 @@
             }
         },
         "how-to-play": {
-            "panels": ["panel1", "panel2", "panel3"]
+            "panels": ["panel1", "panel2", "panel3"],
+            "panelText": [
+                { "accessibilityText": "Intructions on playing the game"},
+                { "accessibilityText": "More on how to play"},
+                { "accessibilityText": "Final instructions on playing"}
+            ]
         }
     }
 }

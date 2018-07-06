@@ -12,7 +12,7 @@ describe("test harness layout", () => {
     let addKeyStub;
 
     before(() => {
-        sandbox = sinon.sandbox.create();
+        sandbox = sinon.createSandbox();
     });
 
     beforeEach(() => {

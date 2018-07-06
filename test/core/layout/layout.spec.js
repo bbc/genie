@@ -1,15 +1,19 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 
-import * as Layout from "../../../src/core/layout/layout";
+import * as Layout from "../../../src/core/layout/layout.js";
 import * as Scaler from "../../../src/core/scaler.js";
-import { Group } from "../../../src/core/layout/group";
-import * as GameSound from "../../../src/core/game-sound";
+import { Group } from "../../../src/core/layout/group.js";
+import * as GameSound from "../../../src/core/game-sound.js";
+import * as gmiModule from "../../../src/core/gmi.js";
 
 describe("Layout", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame;
+    let mockGmi = {
+        getAllSettings: sandbox.stub().returns({ audio: true, motion: true }),
+    };
     let mockSubscribe;
     let mockUnsubscribe;
     const mockMetrics = {
@@ -19,6 +23,8 @@ describe("Layout", () => {
     };
 
     beforeEach(() => {
+        sandbox.replace(gmiModule, "gmi", mockGmi);
+
         sandbox.stub(Group.prototype, "addButton").returns({ onInputUp: { add: sandbox.spy() } });
         return initialiseGame().then(game => {
             mockGame = game;
@@ -150,7 +156,7 @@ describe("Layout", () => {
     });
 
     it("Should reset the groups after they have been added to the layout", () => {
-        const groupResetStub = sandbox.stub(Group.prototype, "reset");
+        const groupResetStub = sandbox.stub(Group.prototype, "reset").withArgs(mockMetrics);
         Layout.create(mockGame, mockMetrics, []);
         sinon.assert.callCount(groupResetStub, 11);
     });

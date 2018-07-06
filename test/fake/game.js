@@ -21,6 +21,12 @@ const Stub = {
     state: {
         current: {},
     },
+    canvas: {
+        parentElement: {
+            appendChild: () => {},
+        },
+        setAttribute: () => {},
+    },
 };
 
 export { Stub };

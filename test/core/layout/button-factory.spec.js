@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import * as GelButton from "../../../src/core/layout/gel-button";
-import * as accessibilify from "../../../src/core/accessibilify/accessibilify";
+import * as accessibilify from "../../../src/core/accessibility/accessibilify";
 import * as signal from "../../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../../src/core/layout/gel-defaults.js";
 
@@ -13,7 +13,7 @@ describe("Layout - Button Factory", () => {
     let gelButtonStub;
     let mockGame;
 
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
         accessibilifyStub = sandbox.stub(accessibilify, "accessibilify");
@@ -40,6 +40,7 @@ describe("Layout - Button Factory", () => {
             id: "expectedId",
             ariaLabel: "expectedAriaLabel",
             key: expectedKey,
+            action: () => {},
         };
 
         beforeEach(() => {

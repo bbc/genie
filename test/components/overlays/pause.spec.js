@@ -14,7 +14,7 @@ describe("Pause Overlay", () => {
     let mockBackground;
     let mockOverlayLayout;
 
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     const pauseCreate = Pause.create(false);
 
     beforeEach(() => {
