@@ -2,12 +2,9 @@
 
 | Version | Description |
 |---------|-------------|
-| UNRELEASED | Fix for Chrome 66 resuming of webAudioContext. |
-| | Fix for kindle voice over reading elements which were supposed to be hidden. |
+| UNRELEASED | Fix for kindle voice over reading elements which were supposed to be hidden. |
 | | Fix for Chrome 66 resuming of webAudioContext. |
 | | Makes carousels screenreader accessible. |
-| | Added Motion Fx and Audio Icon support |
-| | Fix for Chrome 66 resuming of webAudioContext. |
 | | Added Motion Fx and Audio Icon support |
 | | Removes GMI from `context`, moves default settings into GMI module. |
 | 0.3.0 | Layout aspect ratio capped to 7:3 |
