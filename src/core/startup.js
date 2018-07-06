@@ -17,7 +17,7 @@ import { gmi, setGmi } from "./gmi.js";
  * @param {Object=} navigationConfig -
  */
 export function startup(settingsConfig = {}, navigationConfig) {
-    setGmi(settingsConfig);
+    setGmi(settingsConfig, window);
     const urlParams = parseUrlParams(window.location.search);
     const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
     hookErrors(gmi.gameContainerId);

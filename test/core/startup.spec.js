@@ -7,7 +7,7 @@ import * as Scene from "../../src/core/scene.js";
 import * as LoadFonts from "../../src/core/font-loader.js";
 import * as Navigation from "../../src/core/navigation.js";
 
-describe("#startup", () => {
+describe("Startup", () => {
     const sandbox = sinon.createSandbox();
 
     let PhaserGame, containerDiv;
@@ -23,6 +23,7 @@ describe("#startup", () => {
             .withArgs(mockGmi.gameContainerId)
             .returns(containerDiv);
 
+        sandbox.stub(gmiModule, "setGmi");
         sandbox.replace(gmiModule, "gmi", mockGmi);
         PhaserGame = sandbox.stub(Phaser, "Game").returns(Game.Stub);
         window.getGMI = sandbox.stub().returns(mockGmi);
@@ -30,6 +31,12 @@ describe("#startup", () => {
 
     afterEach(() => {
         sandbox.restore();
+    });
+
+    it("instantiates the GMI with correct params", () => {
+        const fakeSettings = { settings: "some settings" };
+        startup(fakeSettings);
+        sinon.assert.calledOnce(gmiModule.setGmi.withArgs(fakeSettings, window));
     });
 
     it("creates a new Phaser game", () => {
