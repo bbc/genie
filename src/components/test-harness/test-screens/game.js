@@ -1,5 +1,5 @@
 import { Screen } from "../../../core/screen.js";
-import { accessibilify } from "../../../core/accessibilify/accessibilify.js";
+import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 
 export class GameTest extends Screen {
     constructor() {
