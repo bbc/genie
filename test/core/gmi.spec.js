@@ -1,12 +1,13 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 
-import { gmi, setGmi } from "../../src/core/gmi.js";
+import * as gmiModule from "../../src/core/gmi.js";
 
 describe("GMI", () => {
     let sandbox;
     let defaultSettings;
     let fakeWindow;
+    let fakeGmiObject;
 
     before(() => {
         sandbox = sinon.createSandbox();
@@ -34,7 +35,10 @@ describe("GMI", () => {
                 },
             ],
         };
-        fakeWindow = { getGMI: sandbox.stub().returns("gmi object") };
+
+        fakeGmiObject = { "gmi object": "gmi object"};
+        fakeWindow = { getGMI: sandbox.stub().returns(fakeGmiObject) };
+        sandbox.replace(gmiModule, "gmi", fakeGmiObject);
     });
 
     afterEach(() => {
@@ -42,7 +46,7 @@ describe("GMI", () => {
     });
 
     it("instantiates GMI with the default settings", () => {
-        setGmi({}, fakeWindow);
+        gmiModule.setGmi({}, fakeWindow);
         const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
 
         assert.deepEqual(actualSettings, { settingsConfig: defaultSettings });
@@ -65,7 +69,7 @@ describe("GMI", () => {
             ],
         };
 
-        setGmi(customSettings, fakeWindow);
+        gmiModule.setGmi(customSettings, fakeWindow);
         const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
         defaultSettings.pages.push(customSettings.pages[0]);
         assert.deepEqual(actualSettings, { settingsConfig: defaultSettings });
@@ -105,7 +109,7 @@ describe("GMI", () => {
             ],
         };
 
-        setGmi(customSettings, fakeWindow);
+        gmiModule.setGmi(customSettings, fakeWindow);
         const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
         defaultSettings.pages[0].settings.push(customSettings.pages[0].settings[1]);
         defaultSettings.pages.push(customSettings.pages[1]);
@@ -113,7 +117,10 @@ describe("GMI", () => {
     });
 
     it("returns the GMI instance", () => {
-        setGmi(defaultSettings, fakeWindow);
-        assert.equal(gmi, "gmi object");
+        gmiModule.setGmi(defaultSettings, fakeWindow);
+
+        console.log("gmiModule.gmi", gmiModule.gmi);
+
+        assert.deepEqual(gmiModule.gmi, fakeGmiObject);
     });
 });
