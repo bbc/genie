@@ -8,6 +8,7 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
+import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
 
 export class Select extends Screen {
     constructor() {
@@ -20,23 +21,64 @@ export class Select extends Screen {
         createTestHarnessDisplay(this.game, this.context, this.scene);
 
         const theme = this.context.config.theme[this.game.state.current];
-        const CHAR_Y_POSITION = 0;
-
-        this.choice = [];
-        this.currentIndex = 1;
-        this.numberOfChoices = Object.keys(theme.choices).length;
-
-        theme.choices.forEach((item, index) => {
-            const main = this.game.add.sprite(0, CHAR_Y_POSITION, this.getAsset(theme.choices[index].main));
-            if (index !== 0) {
-                main.visible = false;
-            }
-            this.scene.addToBackground(main);
-            this.choice = this.choice.concat({ main: main });
-        });
 
         this.scene.addLayout(["home", "audioOff", "pauseNoReplay", "previous", "next", "continue"]);
 
+        this.currentIndex = 1;
+        this.choiceSprites = this.createChoiceSprites(theme.choices);
+        this.accessibleElements = accessibleCarouselElements.create(
+            "select",
+            this.choiceSprites,
+            this.game.canvas.parentElement,
+            theme.choices,
+        );
+
+        this.addSignalSubscriptions();
+    }
+
+    createChoiceSprites(choices) {
+        const choiceSprites = [];
+        choices.forEach((item, index) => {
+            const choiceAsset = this.getAsset(choices[index].asset);
+            const choiceSprite = this.game.add.sprite(0, 0, choiceAsset);
+
+            choiceSprite.visible = index === 0;
+            this.scene.addToBackground(choiceSprite);
+            choiceSprites.push(choiceSprite);
+        });
+        return choiceSprites;
+    }
+
+    leftButton() {
+        this.currentIndex--;
+        if (this.currentIndex < 1) {
+            this.currentIndex = this.choiceSprites.length;
+        }
+        this.showChoice();
+    }
+
+    rightButton() {
+        this.currentIndex++;
+        if (this.currentIndex > this.choiceSprites.length) {
+            this.currentIndex = 1;
+        }
+        this.showChoice();
+    }
+
+    showChoice() {
+        this.choiceSprites.forEach((item, index) => {
+            item.visible = index === this.currentIndex - 1;
+        });
+        this.accessibleElements.forEach((element, index) => {
+            element.setAttribute("aria-hidden", index !== this.currentIndex - 1);
+        });
+    }
+
+    startGame() {
+        this.navigation.next({ characterSelected: this.currentIndex });
+    }
+
+    addSignalSubscriptions() {
         signal.bus.subscribe({
             channel: buttonsChannel,
             name: "exit",
@@ -62,32 +104,25 @@ export class Select extends Screen {
             name: "continue",
             callback: this.startGame.bind(this),
         });
-    }
 
-    leftButton() {
-        this.currentIndex--;
-        if (this.currentIndex < 1) {
-            this.currentIndex = this.numberOfChoices;
-        }
-        this.showChoice();
-    }
-
-    rightButton() {
-        this.currentIndex++;
-        if (this.currentIndex > this.numberOfChoices) {
-            this.currentIndex = 1;
-        }
-        this.showChoice();
-    }
-
-    showChoice() {
-        this.choice.forEach(item => {
-            item.main.visible = false;
+        signal.bus.subscribe({
+            channel: buttonsChannel,
+            name: "pause",
+            callback: () => {
+                //stops screenreader from announcing the options when the pause overlay is covering them
+                this.accessibleElements.forEach(element => {
+                    element.setAttribute("aria-hidden", true);
+                });
+            },
         });
-        this.choice[this.currentIndex - 1].main.visible = true;
-    }
 
-    startGame() {
-        this.navigation.next({ characterSelected: this.currentIndex });
+        signal.bus.subscribe({
+            channel: buttonsChannel,
+            name: "play",
+            callback: () => {
+                // makes the screenreader announce the selected option
+                this.accessibleElements[this.currentIndex - 1].setAttribute("aria-hidden", false);
+            },
+        });
     }
 }
