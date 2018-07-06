@@ -4,6 +4,7 @@
 |---------|-------------|
 | UNRELEASED | Fix for Chrome 66 resuming of webAudioContext. |
 | | Added Motion Fx and Audio Icon support |
+| | Removes GMI from `context`, moves default settings into GMI module. |
 | 0.3.0 | Layout aspect ratio capped to 7:3 |
 | | Carousel next/previous buttons are now locked to the 4:3 game area. |
 | | Mobile performance optimisation. |
