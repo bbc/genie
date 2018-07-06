@@ -1,4 +1,3 @@
-//import { assert } from "chai";
 import * as sinon from "sinon";
 import * as GameSound from "../../src/core/game-sound";
 import * as Game from "../fake/game.js";

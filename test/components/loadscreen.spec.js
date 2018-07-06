@@ -4,7 +4,6 @@ import * as sinon from "sinon";
 import { Loadscreen } from "../../src/components/loadscreen";
 import * as LoadBar from "../../src/components/loadbar";
 import * as AssetLoader from "../../src/core/asset-loader";
-// import * as GameSound from "../../src/core/game-sound.js";
 import * as Scaler from "../../src/core/scaler.js";
 
 describe("Load Screen", () => {
