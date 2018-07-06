@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| UNRELEASED | Added theme configuration to allow the use of different background tracks on different game screens |
 | UNRELEASED | Fix for Chrome 66 resuming of webAudioContext. |
 | 0.3.0 | Layout aspect ratio capped to 7:3 |
 | | Carousel next/previous buttons are now locked to the 4:3 game area. |
