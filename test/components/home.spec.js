@@ -63,12 +63,13 @@ describe("Home Screen", () => {
         sandbox.restore();
     });
 
-    it("should set the button click sound up during preload", () => {
-        sinon.assert.calledOnce(setButtonClickSoundStub);
-    });
-
     describe("create method", () => {
         beforeEach(() => homeScreen.create());
+
+        it("should set the button click sound up", () => {
+            sinon.assert.calledOnce(setButtonClickSoundStub);
+            sinon.assert.calledWith(setButtonClickSoundStub, homeScreen.game, "shared/button-click");
+        });
 
         it("adds a background image", () => {
             const actualImageCall = gameImageStub.getCall(0);

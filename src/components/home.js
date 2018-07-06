@@ -13,10 +13,10 @@ import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 export class Home extends Screen {
     constructor() {
         super();
-        GameSound.setButtonClick(this.game, "shared/button-click");
     }
 
     create() {
+        GameSound.setButtonClick(this.game, "shared/button-click");
         this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
         this.scene.addToBackground(this.game.add.image(0, -150, "home.title"));
         this.scene.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
