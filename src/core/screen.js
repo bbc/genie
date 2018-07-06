@@ -22,10 +22,8 @@ export class Screen extends Phaser.State {
         this.scene = scene;
         this._context = context;
         this.navigation = navigation[this.game.state.current].routes;
-        const theme = this.context.config.theme[this.game.state.current];
-        if (theme && theme.hasOwnProperty("music")) {
-            GameSound.setBackgroundMusic(this.game, theme.music);
-        }
+        const themeScreenConfig = this.context.config.theme[this.game.state.current];
+        GameSound.setupScreenMusic(this.game, themeScreenConfig);
         this.transientData = transientData;
     }
 

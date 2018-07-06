@@ -3,6 +3,8 @@ import { expect } from "chai";
 import * as GameSound from "../../src/core/game-sound";
 import * as Game from "../fake/game.js";
 
+// TODO: See if this can be squashed down a bit (mainly in regards to stubs)
+
 describe("Game Sound", () => {
     const sandbox = sinon.sandbox.create();
 
@@ -15,7 +17,7 @@ describe("Game Sound", () => {
     it("sets the button click sound", () => {
         const game = Game.Stub;
         const addAudioSpy = sandbox.spy(game.add, "audio");
-        GameSound.setButtonClick(game, "test/button-click");
+        GameSound.setButtonClickSound(game, "test/button-click");
         sinon.assert.calledWith(addAudioSpy, "test/button-click");
     });
 
@@ -33,7 +35,8 @@ describe("Game Sound", () => {
                 };
             };
             addAudioSpy = sandbox.spy(game.add, "audio");
-            GameSound.setBackgroundMusic(game, "test/music");
+            const screenConfig = { music: "test/music" };
+            GameSound.setupScreenMusic(game, screenConfig);
         });
 
         it("sets the background music to the asset that matches the provided key", () => {
@@ -70,7 +73,8 @@ describe("Game Sound", () => {
                 };
             };
             addAudioSpy = sandbox.spy(game.add, "audio");
-            GameSound.setBackgroundMusic(game, "test/music");
+            const screenConfig = { music: "test/music" };
+            GameSound.setupScreenMusic(game, screenConfig);
         });
 
         it("stops the current background music", () => {
@@ -108,7 +112,8 @@ describe("Game Sound", () => {
                     usingAudioTag: true,
                 };
             };
-            GameSound.setBackgroundMusic(game, "test/music");
+            const screenConfig = { music: "test/music" };
+            GameSound.setupScreenMusic(game, screenConfig);
         });
 
         it("sets the mute value of the background music to match the mute value of the game sound", () => {
@@ -133,11 +138,43 @@ describe("Game Sound", () => {
                     usingAudioTag: false,
                 };
             };
-            GameSound.setBackgroundMusic(game, "test/music");
+            const screenConfig = { music: "test/music" };
+            GameSound.setupScreenMusic(game, screenConfig);
         });
 
         it("sets the mute value of the background music to match the mute value of the game sound", () => {
             expect(GameSound.Assets.backgroundMusic.mute).to.equal(false);
+        });
+    });
+
+    describe("if there is no music config for the screen", () => {
+        let game;
+        let addAudioSpy;
+
+        beforeEach(() => {
+            game = Game.Stub;
+            addAudioSpy = sandbox.spy(game.add, "audio");
+            const screenConfig = {};
+            GameSound.setupScreenMusic(game, screenConfig);
+        });
+
+        it("it will not try to set the background music", () => {
+            sinon.assert.notCalled(addAudioSpy);
+        });
+    });
+
+    describe("if there is no config of any kind for the screen", () => {
+        let game;
+        let addAudioSpy;
+
+        beforeEach(() => {
+            game = Game.Stub;
+            addAudioSpy = sandbox.spy(game.add, "audio");
+            GameSound.setupScreenMusic(game, undefined);
+        });
+
+        it("it will not try to set the background music", () => {
+            sinon.assert.notCalled(addAudioSpy);
         });
     });
 });

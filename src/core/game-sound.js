@@ -3,15 +3,20 @@ const Assets = {
     buttonClick: undefined,
 };
 
-const setButtonClick = (game, audioKey) => {
+const setButtonClickSound = (game, audioKey) => {
     Assets.buttonClick = game.add.audio(audioKey);
 };
 
-const setBackgroundMusic = (game, audioKey) => {
+const setupScreenMusic = (game, themeScreenConfig) => {
     if (Assets.backgroundMusic) {
         Assets.backgroundMusic.stop();
     }
 
+    if (!themeScreenConfig || !themeScreenConfig.hasOwnProperty("music")) {
+        return;
+    }
+
+    const audioKey = themeScreenConfig.music;
     Assets.backgroundMusic = game.add.audio(audioKey);
 
     Assets.backgroundMusic.loopFull();
@@ -21,4 +26,4 @@ const setBackgroundMusic = (game, audioKey) => {
     }
 };
 
-export { Assets, setBackgroundMusic, setButtonClick };
+export { Assets, setButtonClickSound, setupScreenMusic };

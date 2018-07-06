@@ -29,7 +29,7 @@ describe("Home Screen", () => {
         gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
         navigationNext = sandbox.stub();
-        setButtonClickSoundStub = sandbox.stub(GameSound, "setButtonClick");
+        setButtonClickSoundStub = sandbox.stub(GameSound, "setButtonClickSound");
 
         mockGame = {
             add: {
