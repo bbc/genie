@@ -3,27 +3,42 @@ const Assets = {
     buttonClick: undefined,
 };
 
+const SOUND_FADE_PERIOD = 2000;
+
 const setButtonClickSound = (game, audioKey) => {
     Assets.buttonClick = game.add.audio(audioKey);
 };
 
 const setupScreenMusic = (game, themeScreenConfig) => {
-    if (Assets.backgroundMusic) {
-        Assets.backgroundMusic.stop();
-    }
+    stopCurrentMusic();
 
     if (!themeScreenConfig || !themeScreenConfig.hasOwnProperty("music")) {
+        Assets.backgroundMusic = undefined;
         return;
     }
 
     const audioKey = themeScreenConfig.music;
-    Assets.backgroundMusic = game.add.audio(audioKey);
-
-    Assets.backgroundMusic.loopFull();
+    setBackgroundMusic(game, audioKey);
 
     if (Assets.backgroundMusic.usingAudioTag) {
         Assets.backgroundMusic.mute = game.sound.mute;
     }
 };
 
-export { Assets, setButtonClickSound, setupScreenMusic };
+const setBackgroundMusic = (game, audioKey) => {
+    if (Assets.backgroundMusic) {
+        Assets.backgroundMusic = game.add.audio(audioKey);
+        Assets.backgroundMusic.fadeIn(SOUND_FADE_PERIOD, true);
+    } else {
+        Assets.backgroundMusic = game.add.audio(audioKey);
+        Assets.backgroundMusic.loopFull();
+    }
+};
+
+const stopCurrentMusic = () => {
+    if (Assets.backgroundMusic) {
+        Assets.backgroundMusic.fadeOut(SOUND_FADE_PERIOD / 2);
+    }
+};
+
+export { Assets, setButtonClickSound, setupScreenMusic, SOUND_FADE_PERIOD };

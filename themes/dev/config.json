@@ -37,7 +37,7 @@
             }
         },
         "game": {
-            "music": "shared/background-music"
+            "music": "shared/background-music-2"
         },
         "results": {
             "resultText": {
