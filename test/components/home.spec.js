@@ -68,7 +68,7 @@ describe("Home Screen", () => {
 
         it("should set the button click sound up", () => {
             sinon.assert.calledOnce(setButtonClickSoundStub);
-            sinon.assert.calledWith(setButtonClickSoundStub, homeScreen.game, "shared/button-click");
+            sinon.assert.calledWith(setButtonClickSoundStub, homeScreen.game, "loadscreen.buttonClick");
         });
 
         it("adds a background image", () => {

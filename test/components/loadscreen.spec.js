@@ -12,6 +12,7 @@ describe("Load Screen", () => {
     let mockGame;
     let assetLoaderStub;
     let assetLoaderCallbackSpy;
+    let musicLoopStub;
     let navigationNext;
 
     const sandbox = sinon.createSandbox();
@@ -19,6 +20,10 @@ describe("Load Screen", () => {
     beforeEach(() => {
         assetLoaderCallbackSpy = sandbox.spy();
         assetLoaderStub = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
+        musicLoopStub = sandbox.stub();
+        musicLoopStub.withArgs("loadscreen.backgroundMusic").returns({
+            loopFull: sandbox.spy(),
+        });
         addImageStub = sandbox.stub();
         navigationNext = sandbox.stub();
 
