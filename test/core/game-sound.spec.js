@@ -46,7 +46,7 @@ describe("Game Sound", () => {
             sinon.assert.calledOnce(newAudioLoopSpy);
         });
 
-        it("sets the new music before it starts playing in a loop", () => {
+        it("sets the new background music -> starts the new music", () => {
             sinon.assert.callOrder(addAudioSpy, newAudioLoopSpy);
         });
     });
@@ -92,7 +92,7 @@ describe("Game Sound", () => {
             sinon.assert.calledWith(newAudioFadeInSpy, GameSound.SOUND_FADE_PERIOD, true);
         });
 
-        it("stops the current music and then sets the new music before it starts playing in a loop", () => {
+        it("fades out the current music -> sets the new background music -> fades the new music in", () => {
             sinon.assert.callOrder(existingAudioFadeOutSpy, addAudioSpy, newAudioFadeInSpy);
         });
     });
@@ -136,7 +136,7 @@ describe("Game Sound", () => {
             GameSound.setupScreenMusic(game, screenConfig);
         });
 
-        it("sets the mute value of the background music to match the mute value of the game sound", () => {
+        it("does not change the mute value of the background music", () => {
             expect(GameSound.Assets.backgroundMusic.mute).to.equal(false);
         });
     });
