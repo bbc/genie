@@ -1,27 +1,31 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 import { startup } from "../../src/core/startup.js";
+import * as gmiModule from "../../src/core/gmi.js";
 import * as Game from "../fake/game.js";
 import * as Scene from "../../src/core/scene.js";
 import * as LoadFonts from "../../src/core/font-loader.js";
 import * as Navigation from "../../src/core/navigation.js";
 
 describe("#startup", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
-    let PhaserGame, gmi, containerDiv;
+    let PhaserGame, containerDiv;
 
     beforeEach(() => {
-        gmi = {
+        const mockGmi = {
             gameContainerId: "some-id",
         };
         containerDiv = sandbox.stub();
+
         sandbox
             .stub(document, "getElementById")
-            .withArgs(gmi.gameContainerId)
+            .withArgs(mockGmi.gameContainerId)
             .returns(containerDiv);
-        window.getGMI = sandbox.stub().returns(gmi);
+
+        sandbox.replace(gmiModule, "gmi", mockGmi);
         PhaserGame = sandbox.stub(Phaser, "Game").returns(Game.Stub);
+        window.getGMI = sandbox.stub().returns(mockGmi);
     });
 
     afterEach(() => {

@@ -4,7 +4,7 @@ import * as Scaler from "../../src/core/scaler";
 import * as calculateMetrics from "../../src/core/layout/calculate-metrics.js";
 
 describe("Scaler", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     let mockGame;
 
     beforeEach(() => {

@@ -5,7 +5,7 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as signal from "../../core/signal-bus.js";
-import { accessibilify } from "../accessibilify/accessibilify.js";
+import { accessibilify } from "../accessibility/accessibilify.js";
 import { GelButton } from "./gel-button.js";
 import { buttonsChannel } from "./gel-defaults.js";
 
@@ -36,9 +36,13 @@ const defaultAction = config => {
 const createButton = fp.curry((game, metrics, config, x = 0, y = 0) => {
     const btn = new GelButton(game, x, y, metrics, config); //Instantiate then return or TSC loses non-curried args
 
-    defaultAction(config);
-    const accessibleButton = accessibilify(btn, config, false);
-    return accessibleButton;
+    if (config.icon) {
+        btn.inputEnabled = false;
+        return btn;
+    } else {
+        defaultAction(config);
+        return accessibilify(btn, config, false);
+    }
 });
 
 export const create = game => ({ createButton: createButton(game) });

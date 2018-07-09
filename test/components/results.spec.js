@@ -17,7 +17,7 @@ describe("Results Screen", () => {
     let navigationNext;
     let navigationGame;
 
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
         layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");

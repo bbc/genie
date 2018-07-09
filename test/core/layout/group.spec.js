@@ -2,9 +2,10 @@ import { assert } from "chai";
 import * as sinon from "sinon";
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import { Group } from "../../../src/core/layout/group";
+import * as buttonOverrides from "../../../src/core/layout/button-overrides.js";
 
 describe("Group", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     let buttonFactory;
     let game;
     let parentGroup;
@@ -193,6 +194,13 @@ describe("Group", () => {
 
             assert(group._metrics.isMobile === false);
             sandbox.assert.notCalled(buttonResizeStub);
+        });
+
+        it("calls applyButtonOverrides function with correct args", () => {
+            const applyButtonOverrides = sandbox.spy(buttonOverrides, "applyButtonOverrides");
+            group.addButton(config);
+            group.reset(metrics);
+            sandbox.assert.calledOnce(applyButtonOverrides.withArgs(metrics.scale, group._buttons));
         });
     });
 });

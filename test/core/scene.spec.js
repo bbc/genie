@@ -12,7 +12,7 @@ describe("Scene", () => {
     let groupMethods;
 
     before(() => {
-        sandbox = sinon.sandbox.create();
+        sandbox = sinon.createSandbox();
     });
 
     beforeEach(() => {

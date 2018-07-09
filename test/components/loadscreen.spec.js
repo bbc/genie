@@ -16,7 +16,7 @@ describe("Load Screen", () => {
     let assetLoaderCallbackSpy;
     let navigationNext;
 
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
         assetLoaderCallbackSpy = sandbox.spy();
