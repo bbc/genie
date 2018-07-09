@@ -2,6 +2,7 @@ import * as sinon from "sinon";
 import { expect } from "chai";
 import * as GameSound from "../../src/core/game-sound.js";
 import * as Game from "../fake/game.js";
+import * as PhaserSignal from "../fake/phaser-signal.js";
 
 describe("Game Sound", () => {
     const sandbox = sinon.sandbox.create();
@@ -10,6 +11,7 @@ describe("Game Sound", () => {
         sandbox.restore();
         GameSound.Assets.backgroundMusic = undefined;
         GameSound.Assets.buttonClick = undefined;
+        GameSound.Assets.previousMusic = undefined;
     });
 
     it("sets the button click sound", () => {
@@ -53,18 +55,19 @@ describe("Game Sound", () => {
 
     describe("when background music already exists", () => {
         let game;
-        let existingAudioStopSpy;
+        let existingAudioFadeOutSpy;
         let newAudioLoopSpy;
         let newAudioFadeInSpy;
         let addAudioSpy;
 
         beforeEach(() => {
             game = Game.Stub;
-            existingAudioStopSpy = sandbox.spy();
+            existingAudioFadeOutSpy = sandbox.spy();
             newAudioFadeInSpy = sandbox.spy();
             GameSound.Assets.backgroundMusic = {
                 loopFull: () => {},
-                stop: existingAudioStopSpy,
+                fadeOut: existingAudioFadeOutSpy,
+                onFadeComplete: PhaserSignal.Stub,
             };
             newAudioLoopSpy = sandbox.spy();
             game.add.audio = () => {
@@ -78,8 +81,8 @@ describe("Game Sound", () => {
             GameSound.setupScreenMusic(game, screenConfig);
         });
 
-        it("stops the current background music", () => {
-            sinon.assert.calledOnce(existingAudioStopSpy);
+        it("fades the current background music out", () => {
+            sinon.assert.calledOnce(existingAudioFadeOutSpy);
         });
 
         it("sets the background music to the asset that matches the provided key", () => {
@@ -93,7 +96,7 @@ describe("Game Sound", () => {
         });
 
         it("stops the current music -> sets the new background music -> fades the new music in", () => {
-            sinon.assert.callOrder(existingAudioStopSpy, addAudioSpy, newAudioFadeInSpy);
+            sinon.assert.callOrder(existingAudioFadeOutSpy, addAudioSpy, newAudioFadeInSpy);
         });
     });
 
@@ -144,22 +147,23 @@ describe("Game Sound", () => {
     describe("if there is no music config for the screen", () => {
         let game;
         let addAudioSpy;
-        let existingAudioStopSpy;
+        let existingAudioFadeOutSpy;
 
         beforeEach(() => {
             game = Game.Stub;
-            existingAudioStopSpy = sandbox.spy();
+            existingAudioFadeOutSpy = sandbox.spy();
             GameSound.Assets.backgroundMusic = {
                 loopFull: () => {},
-                stop: existingAudioStopSpy,
+                fadeOut: existingAudioFadeOutSpy,
+                onFadeComplete: PhaserSignal.Stub,
             };
             addAudioSpy = sandbox.spy(game.add, "audio");
             const screenConfig = {};
             GameSound.setupScreenMusic(game, screenConfig);
         });
 
-        it("will stop the current music", () => {
-            sinon.assert.calledOnce(existingAudioStopSpy);
+        it("will fade out the current music", () => {
+            sinon.assert.calledOnce(existingAudioFadeOutSpy);
         });
 
         it("will not try to set new background music", () => {
@@ -170,25 +174,60 @@ describe("Game Sound", () => {
     describe("if there is no config of any kind for the screen", () => {
         let game;
         let addAudioSpy;
-        let existingAudioStopSpy;
+        let existingAudioFadeOutSpy;
 
         beforeEach(() => {
             game = Game.Stub;
-            existingAudioStopSpy = sandbox.spy();
+            existingAudioFadeOutSpy = sandbox.spy();
             GameSound.Assets.backgroundMusic = {
                 loopFull: () => {},
-                stop: existingAudioStopSpy,
+                fadeOut: existingAudioFadeOutSpy,
+                onFadeComplete: PhaserSignal.Stub,
             };
             addAudioSpy = sandbox.spy(game.add, "audio");
             GameSound.setupScreenMusic(game, undefined);
         });
 
-        it("will stop the current music", () => {
-            sinon.assert.calledOnce(existingAudioStopSpy);
+        it("will fade out the current music", () => {
+            sinon.assert.calledOnce(existingAudioFadeOutSpy);
         });
 
         it("will not try to set the background music", () => {
             sinon.assert.notCalled(addAudioSpy);
+        });
+    });
+
+    describe("if some previous music is still fading out", () => {
+        let game;
+        let existingAudioFadeOutSpy;
+        let previousAudioStopSpy;
+        let previousOnFadeCompleteAddOnceSpy;
+
+        beforeEach(() => {
+            game = Game.Stub;
+            existingAudioFadeOutSpy = sandbox.spy();
+            GameSound.Assets.backgroundMusic = {
+                loopFull: () => {},
+                fadeOut: existingAudioFadeOutSpy,
+                onFadeComplete: PhaserSignal.Stub,
+            };
+            previousAudioStopSpy = sandbox.spy();
+            previousOnFadeCompleteAddOnceSpy = sandbox.spy();
+            GameSound.Assets.previousMusic = {
+                stop: previousAudioStopSpy,
+                onFadeComplete: {
+                    addOnce: previousOnFadeCompleteAddOnceSpy,
+                },
+            };
+            GameSound.setupScreenMusic(game, undefined);
+        });
+
+        it("will stop the previous music", () => {
+            sinon.assert.calledOnce(previousAudioStopSpy);
+        });
+
+        it("will fade out the current music", () => {
+            sinon.assert.calledOnce(existingAudioFadeOutSpy);
         });
     });
 });

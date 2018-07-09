@@ -14,7 +14,9 @@ const Stub = {
     canvas: {
         setAttribute: () => {},
     },
-    sound: {},
+    sound: {
+        remove: () => {},
+    },
     stage: {
         backgroundColor: "",
     },
