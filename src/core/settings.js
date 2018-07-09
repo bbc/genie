@@ -20,7 +20,6 @@ export const create = () => {
     };
 
     return {
-        exit: () => gmi.exit(),
         show: () => gmi.showSettings(onSettingChanged, onSettingsClosed),
         getAllSettings: () => gmi.getAllSettings(),
     };

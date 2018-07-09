@@ -27,13 +27,6 @@ describe("Settings", () => {
         sandbox.restore();
     });
 
-    describe("exit method", () => {
-        it("calls GMI exit", () => {
-            settings.exit();
-            sandbox.assert.calledOnce(mockGmi.exit);
-        });
-    });
-
     describe("show method", () => {
         beforeEach(() => settings.show());
 
