@@ -146,6 +146,7 @@ export const config = {
         order: 9,
         id: "__play",
         channel: buttonsChannel,
+        positionOverride: true,
     },
     pausePlay: {
         group: "middleCenter",

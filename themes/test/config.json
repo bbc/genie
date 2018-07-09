@@ -49,6 +49,10 @@
                 { "accessibilityText": "More on how to play"},
                 { "accessibilityText": "Final instructions on playing"}
             ]
+        },
+        "button-overrides": {
+            "gelDesktop.play": { "y": 100 },
+            "gelMobile.play": { "y": 0 }
         }
     }
 }

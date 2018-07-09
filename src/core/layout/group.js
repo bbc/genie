@@ -1,6 +1,7 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 
 import * as ButtonFactory from "./button-factory.js";
+import { applyButtonOverrides } from "./button-overrides.js";
 
 const horizontal = {
     left: (metrics, group, horizontalsType) => {
@@ -79,6 +80,7 @@ export class Group extends Phaser.Group {
         const invScale = 1 / metrics.scale;
         this.scale.setTo(invScale, invScale);
         this._setGroupPosition(metrics);
+        applyButtonOverrides(metrics.scale, this._buttons);
     }
 
     alignChildren() {
