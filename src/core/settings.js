@@ -1,11 +1,10 @@
 import fp from "../../lib/lodash/fp/fp.js";
 import * as signal from "../core/signal-bus.js";
+import { gmi } from "./gmi.js";
 
 export const settingsChannel = "genie-settings";
 
 export const create = () => {
-    let gmi;
-
     const onSettingChanged = (key, value) => {
         signal.bus.publish({
             channel: settingsChannel,
@@ -27,8 +26,6 @@ export const create = () => {
         });
     };
 
-    const setGmi = newGmi => (gmi = newGmi);
-
     const getAllSettings = fp.flow(checkGmi, () => gmi.getAllSettings());
 
     const show = fp.flow(checkGmi, () => gmi.showSettings(onSettingChanged, onSettingsClosed));
@@ -38,7 +35,6 @@ export const create = () => {
         exit,
         show,
         getAllSettings,
-        setGmi,
     };
 };
 

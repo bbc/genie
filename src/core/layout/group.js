@@ -58,6 +58,11 @@ export class Group extends Phaser.Group {
         return newButton;
     }
 
+    removeButton(buttonToRemove) {
+        this._buttons = fp.remove(n => n === buttonToRemove, this._buttons);
+        buttonToRemove.destroy();
+    }
+
     addToGroup(item, position = 0) {
         item.anchor.setTo(0.5, 0.5);
         this.addAt(item, position);
@@ -65,6 +70,7 @@ export class Group extends Phaser.Group {
     }
 
     reset(metrics) {
+        metrics = metrics || this._metrics;
         if (this._metrics.isMobile !== metrics.isMobile) {
             this.resetButtons(metrics);
         }
@@ -88,7 +94,7 @@ export class Group extends Phaser.Group {
             if (this._isVertical) {
                 child.x = halfWidth;
                 pos.y += child.height + this._metrics.buttonPad;
-            } else if (this._hPos == "center" && this._vPos == "middle") {
+            } else if (this._hPos === "center" && this._vPos === "middle") {
                 child.y = 0;
                 child.x = pos.x + child.width / 2;
                 pos.x += child.width + this._metrics.buttonPad * 3;

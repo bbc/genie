@@ -5,7 +5,7 @@ import { Group } from "../../../src/core/layout/group";
 import * as buttonOverrides from "../../../src/core/layout/button-overrides.js";
 
 describe("Group", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     let buttonFactory;
     let game;
     let parentGroup;

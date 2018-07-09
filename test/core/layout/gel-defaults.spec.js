@@ -6,7 +6,7 @@ import * as pause from "../../../src/components/overlays/pause.js";
 import { settings } from "../../../src/core/settings.js";
 
 describe("Layout - Gel Defaults", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     let mockGame;
 
     beforeEach(() => {

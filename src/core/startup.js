@@ -10,17 +10,17 @@ import { parseUrlParams } from "./parseUrlParams.js";
 import * as Navigation from "./navigation.js";
 import * as Scene from "./scene.js";
 import { loadFonts } from "./font-loader.js";
+import { gmi, setGmi } from "./gmi.js";
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
  * @param {Object=} navigationConfig -
  */
 export function startup(settingsConfig = {}, navigationConfig) {
-    const gmi = window.getGMI({ settingsConfig });
+    setGmi(settingsConfig);
     const urlParams = parseUrlParams(window.location.search);
     const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
     hookErrors(gmi.gameContainerId);
-    settings.setGmi(gmi);
 
     const phaserConfig = {
         width: 1400,
@@ -28,8 +28,8 @@ export function startup(settingsConfig = {}, navigationConfig) {
         renderer: Phaser.AUTO,
         antialias: true,
         multiTexture: false,
-        parent: getContainerDiv(gmi),
-        state: new Startup(gmi, onStarted),
+        parent: getContainerDiv(),
+        state: new Startup(onStarted),
         transparent: true, // Fixes silk browser flickering
     };
     // Keep the console tidy:
@@ -60,15 +60,13 @@ export function startup(settingsConfig = {}, navigationConfig) {
 const CONFIG_KEY = "config";
 
 class Startup extends Phaser.State {
-    constructor(gmi, onStarted) {
+    constructor(onStarted) {
         super();
-        this._gmi = gmi;
         this._onStarted = onStarted;
     }
 
     preload() {
-        const gmi = this._gmi;
-        this.game.load.baseURL = this._gmi.gameDir;
+        this.game.load.baseURL = gmi.gameDir;
 
         // All asset paths are relative to the location of the config.json:
         const theme = gmi.embedVars.configPath;
@@ -127,7 +125,7 @@ function hookErrors(gameDivId) {
     });
 }
 
-function getContainerDiv(gmi) {
+function getContainerDiv() {
     const containerDiv = document.getElementById(gmi.gameContainerId);
     if (!containerDiv) {
         throw Error(`Container element "#${gmi.gameContainerId}" not found`);

@@ -1,5 +1,5 @@
 import { Screen } from "../../../core/screen.js";
-import { accessibilify } from "../../../core/accessibilify/accessibilify.js";
+import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 
 export class GameTest extends Screen {
     constructor() {
@@ -7,6 +7,8 @@ export class GameTest extends Screen {
     }
 
     create() {
+        this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
+
         const titleStyle = { font: "65px ReithSans", fill: "#f6931e", align: "center" };
         const titleText = this.game.add.text(0, -190, "Game goes here", titleStyle);
         titleText.anchor.set(0.5, 0.5);
