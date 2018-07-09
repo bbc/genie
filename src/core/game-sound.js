@@ -3,7 +3,7 @@ const Assets = {
     buttonClick: undefined,
 };
 
-const SOUND_FADE_PERIOD = 2000;
+const SOUND_FADE_PERIOD = 1000;
 
 const setButtonClickSound = (game, audioKey) => {
     Assets.buttonClick = game.add.audio(audioKey);
