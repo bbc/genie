@@ -3,8 +3,6 @@ import { expect } from "chai";
 import * as GameSound from "../../src/core/game-sound.js";
 import * as Game from "../fake/game.js";
 
-// TODO: See if this can be squashed down a bit (mainly in regards to stubs)
-
 describe("Game Sound", () => {
     const sandbox = sinon.sandbox.create();
 
@@ -150,15 +148,25 @@ describe("Game Sound", () => {
     describe("if there is no music config for the screen", () => {
         let game;
         let addAudioSpy;
+        let existingAudioStopSpy;
 
         beforeEach(() => {
             game = Game.Stub;
+            existingAudioStopSpy = sandbox.spy();
+            GameSound.Assets.backgroundMusic = {
+                loopFull: () => {},
+                stop: existingAudioStopSpy,
+            };
             addAudioSpy = sandbox.spy(game.add, "audio");
             const screenConfig = {};
             GameSound.setupScreenMusic(game, screenConfig);
         });
 
-        it("it will not try to set the background music", () => {
+        it("will stop the current music", () => {
+            sinon.assert.calledOnce(existingAudioStopSpy);
+        });
+
+        it("will not try to set new background music", () => {
             sinon.assert.notCalled(addAudioSpy);
         });
     });
@@ -166,14 +174,24 @@ describe("Game Sound", () => {
     describe("if there is no config of any kind for the screen", () => {
         let game;
         let addAudioSpy;
+        let existingAudioStopSpy;
 
         beforeEach(() => {
             game = Game.Stub;
+            existingAudioStopSpy = sandbox.spy();
+            GameSound.Assets.backgroundMusic = {
+                loopFull: () => {},
+                stop: existingAudioStopSpy,
+            };
             addAudioSpy = sandbox.spy(game.add, "audio");
             GameSound.setupScreenMusic(game, undefined);
         });
 
-        it("it will not try to set the background music", () => {
+        it("will stop the current music", () => {
+            sinon.assert.calledOnce(existingAudioStopSpy);
+        });
+
+        it("will not try to set the background music", () => {
             sinon.assert.notCalled(addAudioSpy);
         });
     });
