@@ -200,7 +200,7 @@ describe("Group", () => {
             const applyButtonOverrides = sandbox.spy(buttonOverrides, "applyButtonOverrides");
             group.addButton(config);
             group.reset(metrics);
-            sandbox.assert.calledOnce(applyButtonOverrides.withArgs(group._buttons));
+            sandbox.assert.calledOnce(applyButtonOverrides.withArgs(metrics.scale, group._buttons));
         });
     });
 });

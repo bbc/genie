@@ -36,12 +36,17 @@ describe("button overrides", () => {
         };
 
         it("applies config values to buttons with positionOverride", () => {
-            applyButtonOverrides([button1, button2]);
+            applyButtonOverrides(1, [button1, button2]);
             assert.equal(button1.y, 100);
         });
 
+        it("takes the scale into account with positionOverride", () => {
+            applyButtonOverrides(0.5, [button1, button2]);
+            assert.equal(button1.y, 50);
+        });
+
         it("DOES NOT apply config values to buttons without positionOverride", () => {
-            applyButtonOverrides([button1, button2]);
+            applyButtonOverrides(1, [button1, button2]);
             assert.equal(button2.y, 0);
         });
     });

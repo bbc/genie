@@ -74,7 +74,7 @@ export class Group extends Phaser.Group {
         const invScale = 1 / metrics.scale;
         this.scale.setTo(invScale, invScale);
         this._setGroupPosition(metrics);
-        applyButtonOverrides(this._buttons);
+        applyButtonOverrides(metrics.scale, this._buttons);
     }
 
     alignChildren() {

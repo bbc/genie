@@ -1,16 +1,16 @@
-const assignCustomValues = button => {
+const assignCustomValues = (scale, button) => {
     const config = button.game.cache.getJSON("config");
     const overrides = config.theme["button-overrides"][button.key];
 
     Object.keys(overrides).forEach(key => {
-        button[key] = overrides[key];
+        button[key] = scale * overrides[key];
     });
 };
 
-export const applyButtonOverrides = buttons => {
+export const applyButtonOverrides = (scale, buttons) => {
     buttons.forEach(button => {
         if (button.positionOverride) {
-            assignCustomValues(button);
+            assignCustomValues(scale, button);
         }
     });
 };
