@@ -2,8 +2,9 @@
 
 | Version | Description |
 |---------|-------------|
-| UNRELEASED | Fix for kindle voice over reading elements which were supposed to be hidden. |
-| | Fix for Chrome 66 resuming of webAudioContext. |
+| UNRELEASED | Fix for Chrome 66 resuming of webAudioContext. |
+| | Fix for kindle voice over reading elements which were supposed to be hidden. |
+| | Fix for audio still playing on loss of focus. |
 | | Makes carousels screenreader accessible. |
 | | Added Motion Fx and Audio Icon support |
 | 0.3.0 | Layout aspect ratio capped to 7:3 |
