@@ -37,7 +37,7 @@ const setBackgroundMusic = (game, audioKey) => {
 
 const stopCurrentMusic = () => {
     if (Assets.backgroundMusic) {
-        Assets.backgroundMusic.fadeOut(SOUND_FADE_PERIOD / 2);
+        Assets.backgroundMusic.stop();
     }
 };
 
