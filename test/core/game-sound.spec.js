@@ -1,6 +1,6 @@
 import * as sinon from "sinon";
 import { expect } from "chai";
-import * as GameSound from "../../src/core/game-sound";
+import * as GameSound from "../../src/core/game-sound.js";
 import * as Game from "../fake/game.js";
 
 // TODO: See if this can be squashed down a bit (mainly in regards to stubs)
