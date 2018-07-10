@@ -4,6 +4,8 @@
 |---------|-------------|
 | UNRELEASED | |
 | | Removes GMI from `context`, moves default settings into GMI module. |
+| 0.4.1 | |
+| | Fix for loading the webfontloader module in the starter pack |
 | 0.4.0 | |
 | | Fix for Chrome 66 resuming of webAudioContext. |
 | | Changed DOM elements to follow "bem" like naming system. |
