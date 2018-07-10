@@ -86,6 +86,7 @@ describe("Game Sound", () => {
 
             it("fades the current background music out", () => {
                 sinon.assert.calledOnce(existingAudioFadeOutSpy);
+                sinon.assert.calledWith(existingAudioFadeOutSpy, GameSound.SOUND_FADE_PERIOD / 2);
             });
 
             it("sets the background music to the asset that matches the provided key", () => {
@@ -167,6 +168,7 @@ describe("Game Sound", () => {
 
             it("will fade out the current music", () => {
                 sinon.assert.calledOnce(existingAudioFadeOutSpy);
+                sinon.assert.calledWith(existingAudioFadeOutSpy, GameSound.SOUND_FADE_PERIOD / 2);
             });
 
             it("will not try to set new background music", () => {
@@ -193,6 +195,7 @@ describe("Game Sound", () => {
 
             it("will fade out the current music", () => {
                 sinon.assert.calledOnce(existingAudioFadeOutSpy);
+                sinon.assert.calledWith(existingAudioFadeOutSpy, GameSound.SOUND_FADE_PERIOD / 2);
             });
 
             it("will not try to set the background music", () => {
@@ -231,6 +234,7 @@ describe("Game Sound", () => {
 
             it("will fade out the current music", () => {
                 sinon.assert.calledOnce(existingAudioFadeOutSpy);
+                sinon.assert.calledWith(existingAudioFadeOutSpy, GameSound.SOUND_FADE_PERIOD / 2);
             });
         });
     });
