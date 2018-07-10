@@ -4,9 +4,7 @@
 |---------|-------------|
 | Unreleased | |
 | | Added theme configuration to allow the use of different background tracks on different game screens |
-| 0.4.0 | |
-| | Fix for loading the webfontloader module in the starter pack |
-| 0.4.0 | |
+| 0.4.1 | |
 | | Fix for loading the webfontloader module in the starter pack |
 | 0.4.0 | |
 | | Fix for Chrome 66 resuming of webAudioContext. |
