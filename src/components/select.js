@@ -71,6 +71,7 @@ export class Select extends Screen {
         });
         this.accessibleElements.forEach((element, index) => {
             element.setAttribute("aria-hidden", index !== this.currentIndex - 1);
+            element.style.display = index !== this.currentIndex - 1 ? 'none' : 'block'; //Needed for Firefox
         });
     }
 
