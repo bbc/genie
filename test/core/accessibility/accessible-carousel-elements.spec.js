@@ -83,11 +83,11 @@ describe("Accessible Carousel Elements", () => {
         });
     });
 
-    it("hides all the accessible DOM elements to they cannot be tabbed to", () => {
+    it("Hides all but the first element to support Firefox with NVDA screen reader", () => {
         accessibleCarouselElements.create("select-screen", mockSprites, mountPoint);
 
         mockSprites.forEach((mockSprite, index) => {
-            assert.equal(domElementStubs[index].el.style.display, "none");
+            assert.equal(domElementStubs[index].el.style.display, index? "none" : "block");
         });
     });
 
