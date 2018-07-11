@@ -87,7 +87,7 @@ describe("Accessible Carousel Elements", () => {
         accessibleCarouselElements.create("select-screen", mockSprites, mountPoint);
 
         mockSprites.forEach((mockSprite, index) => {
-            assert.equal(domElementStubs[index].el.style.display, index? "none" : "block");
+            assert.equal(domElementStubs[index].el.style.display, index ? "none" : "block");
         });
     });
 
