@@ -1,5 +1,3 @@
-import "../../node_modules/webfontloader/webfontloader.js";
-
 const REITH_FONT_CSS = "https://gel.files.bbci.co.uk/r2.302/bbc-reith.css";
 
 export const loadFonts = (game, done) => {

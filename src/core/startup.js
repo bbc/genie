@@ -59,6 +59,8 @@ export function startup(settingsConfig = {}, navigationConfig) {
 
 const CONFIG_KEY = "config";
 
+const triggeredByGame = arg => arg instanceof Phaser.Game;
+
 class Startup extends Phaser.State {
     constructor(onStarted) {
         super();
@@ -84,8 +86,10 @@ class Startup extends Phaser.State {
 
     configureAudioSetting() {
         this.game.sound.mute = settings.getAllSettings().muted;
-        this.game.onPause.add(() => {
-            this.game.sound.mute = settings.getAllSettings().muted;
+        this.game.onPause.add(arg => {
+            //Re enable sound if triggered by the game (from the pause menu)
+            //otherwise this will be a window focus event and should be muted
+            this.game.sound.mute = triggeredByGame(arg) ? settings.getAllSettings().muted : true;
         });
         this.game.onResume.add(() => {
             this.game.sound.mute = settings.getAllSettings().muted;

@@ -12,7 +12,7 @@ module.exports = {
     mode: "production",
     performance: { hints: false },
     plugins: [new HardSourceWebpackPlugin(), new Visualizer()],
-    entry: ["babel-polyfill", "pixi", "p2", "phaser", path.resolve("src/main.js")],
+    entry: ["babel-polyfill", "pixi", "p2", "phaser", "webfontloader", path.resolve("src/main.js")],
     output: {
         path: path.resolve("output"),
         publicPath: "output",

@@ -25,7 +25,7 @@ describe("Game Assets", () => {
     describe("initGameAssets()", () => {
         it("Adds the game assets to the Phaser game and Game Assets object", () => {
             initGameAssets(mockGame);
-            sinon.assert.calledWith(addAudioStub, "shared/button-click");
+            sinon.assert.calledWith(addAudioStub, "loadscreen.buttonClick");
             assert.equal(
                 GameAssets.sounds.buttonClick,
                 "Click Sound",
