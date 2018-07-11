@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Fixes unannounced selections in carousel on Ios and IE11/Firefox with NVDA. |
 | 0.4.1 | |
 | | Fix for loading the webfontloader module in the starter pack |
 | 0.4.0 | |
