@@ -4,6 +4,12 @@ function createCarouselElement(parentElement, pageName) {
     const carouselElement = document.createElement("div");
     carouselElement.id = "carousel-" + pageName;
     carouselElement.setAttribute("aria-live", "polite");
+
+    carouselElement.style.position = "absolute";
+    carouselElement.style.overflow = "hidden";
+    carouselElement.style.width = "0";
+    carouselElement.style.height = "0";
+
     parentElement.appendChild(carouselElement);
     return carouselElement;
 }
@@ -26,6 +32,7 @@ export function create(pageName, carouselSprites, parentElement, choices) {
         }).el;
 
         accessibleElement.style.display = index ? "none" : "block";
+        accessibleElement.setAttribute("tabIndex", -1);
 
         accessibleElements.push(accessibleElement);
 

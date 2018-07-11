@@ -40,7 +40,7 @@ describe("Accessible Carousel Elements", () => {
         sandbox.restore();
     });
 
-    it("creates an carousel DOM element", () => {
+    it("creates a carousel DOM element", () => {
         accessibleCarouselElements.create("select-screen", mockSprites, mountPoint);
 
         const carouselDomElement = mountPoint.firstChild;
