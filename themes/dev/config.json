@@ -37,7 +37,7 @@
                 "style": {
                     "font": "bold 40px ReithSans",
                     "align": "center",
-                    "fill": "#6A6A6A",
+                    "fill": "#f6931e",
                     "boundsAlignH": "center"
                 }
             }
