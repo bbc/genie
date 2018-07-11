@@ -234,6 +234,24 @@ describe("Select Screen", () => {
                 assert(selectScreen.choiceSprites[1].visible === true, "choice should be showing");
                 assert(selectScreen.choiceSprites[2].visible === false, "choice should be hidden");
             });
+
+            it("set 'aria-hidden' = true on all the choices except the current one", () => {
+                selectScreen.currentIndex = 3;
+                signalSubscribeSpy.getCall(1).args[0].callback();
+
+                assert.equal(selectScreen.accessibleElements[0].getAttribute("aria-hidden"), "true");
+                assert.equal(selectScreen.accessibleElements[1].getAttribute("aria-hidden"), "false");
+                assert.equal(selectScreen.accessibleElements[2].getAttribute("aria-hidden"), "true");
+            });
+
+            it("set display: none on all the choices except the current one", () => {
+                selectScreen.currentIndex = 3;
+                signalSubscribeSpy.getCall(1).args[0].callback();
+
+                assert.equal(selectScreen.accessibleElements[0].style.display, "none");
+                assert.equal(selectScreen.accessibleElements[1].style.display, "block");
+                assert.equal(selectScreen.accessibleElements[2].style.display, "none");
+            });
         });
 
         describe("next button", () => {
@@ -255,6 +273,24 @@ describe("Select Screen", () => {
                 assert(selectScreen.choiceSprites[0].visible === false, "choice should be hidden");
                 assert(selectScreen.choiceSprites[1].visible === true, "choice should be showing");
                 assert(selectScreen.choiceSprites[2].visible === false, "choice should be hidden");
+            });
+
+            it("set 'aria-hidden' = true on all the choices except the current one", () => {
+                selectScreen.currentIndex = 1;
+                signalSubscribeSpy.getCall(2).args[0].callback();
+
+                assert.equal(selectScreen.accessibleElements[0].getAttribute("aria-hidden"), "true");
+                assert.equal(selectScreen.accessibleElements[1].getAttribute("aria-hidden"), "false");
+                assert.equal(selectScreen.accessibleElements[2].getAttribute("aria-hidden"), "true");
+            });
+
+            it("set display: none on all the choices except the current one", () => {
+                selectScreen.currentIndex = 1;
+                signalSubscribeSpy.getCall(2).args[0].callback();
+
+                assert.equal(selectScreen.accessibleElements[0].style.display, "none");
+                assert.equal(selectScreen.accessibleElements[1].style.display, "block");
+                assert.equal(selectScreen.accessibleElements[2].style.display, "none");
             });
         });
     });
