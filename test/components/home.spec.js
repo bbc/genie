@@ -4,14 +4,12 @@ import { Home } from "../../src/components/home";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
-import * as GameSound from "../../src/core/game-sound.js";
 
 describe("Home Screen", () => {
     let homeScreen;
     let layoutHarnessSpy;
     let mockGame;
     let mockContext;
-    let setButtonClickSoundStub;
     let addToBackgroundSpy;
     let addLayoutSpy;
     let gameImageStub;
@@ -29,7 +27,6 @@ describe("Home Screen", () => {
         gameImageStub.onCall(1).returns("title");
         gameButtonSpy = sandbox.spy();
         navigationNext = sandbox.stub();
-        setButtonClickSoundStub = sandbox.stub(GameSound, "setButtonClickSound");
 
         mockGame = {
             add: {
@@ -65,11 +62,6 @@ describe("Home Screen", () => {
 
     describe("create method", () => {
         beforeEach(() => homeScreen.create());
-
-        it("should set the button click sound up", () => {
-            sinon.assert.calledOnce(setButtonClickSoundStub);
-            sinon.assert.calledWith(setButtonClickSoundStub, homeScreen.game, "loadscreen.buttonClick");
-        });
 
         it("adds a background image", () => {
             const actualImageCall = gameImageStub.getCall(0);

@@ -5,6 +5,7 @@ import { Loadscreen } from "../../src/components/loadscreen";
 import * as LoadBar from "../../src/components/loadbar";
 import * as AssetLoader from "../../src/core/asset-loader";
 import * as Scaler from "../../src/core/scaler.js";
+import * as GameSound from "../../src/core/game-sound";
 
 describe("Load Screen", () => {
     let loadScreen;
@@ -12,7 +13,7 @@ describe("Load Screen", () => {
     let mockGame;
     let assetLoaderStub;
     let assetLoaderCallbackSpy;
-    let musicLoopStub;
+    let setButtonClickSoundStub;
     let navigationNext;
 
     const sandbox = sinon.createSandbox();
@@ -20,11 +21,8 @@ describe("Load Screen", () => {
     beforeEach(() => {
         assetLoaderCallbackSpy = sandbox.spy();
         assetLoaderStub = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
-        musicLoopStub = sandbox.stub();
-        musicLoopStub.withArgs("loadscreen.backgroundMusic").returns({
-            loopFull: sandbox.spy(),
-        });
         addImageStub = sandbox.stub();
+        setButtonClickSoundStub = sandbox.stub(GameSound, "setButtonClickSound");
         navigationNext = sandbox.stub();
 
         mockGame = {
@@ -75,6 +73,15 @@ describe("Load Screen", () => {
         it("handles the returned promise", () => {
             loadScreen.preload();
             expect(assetLoaderCallbackSpy.called).to.equal(true);
+        });
+
+        it("sets the button click sound to be used in the game", () => {
+            loadScreen.context = { qaMode: { active: false } };
+            loadScreen.preload();
+
+            assetLoaderCallbackSpy.args[0][0]();
+            sinon.assert.calledOnce(setButtonClickSoundStub);
+            sinon.assert.calledWith(setButtonClickSoundStub, mockGame, sinon.match.typeOf("string"));
         });
 
         it("moves to the next screen when the promise is resolved", () => {
