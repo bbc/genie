@@ -1,10 +1,10 @@
 const Assets = {
     backgroundMusic: undefined,
-    previousMusic: undefined,
     buttonClick: undefined,
 };
 
 const SOUND_FADE_PERIOD = 1000;
+let fadingMusic;
 
 const setButtonClickSound = (game, audioKey) => {
     Assets.buttonClick = game.add.audio(audioKey);
@@ -28,36 +28,40 @@ const setupScreenMusic = (game, themeScreenConfig) => {
         return;
     }
 
-    setBackgroundMusic(game, audioKey);
+    Assets.backgroundMusic = startMusic(game, audioKey);
 
     if (Assets.backgroundMusic.usingAudioTag) {
         Assets.backgroundMusic.mute = game.sound.mute;
     }
 };
 
-const setBackgroundMusic = (game, audioKey) => {
-    if (Assets.backgroundMusic) {
-        Assets.backgroundMusic = game.add.audio(audioKey);
+const startMusic = (game, audioKey) => {
+    const music = game.add.audio(audioKey);
+
+    if (fadingMusic) {
         Assets.backgroundMusic.fadeIn(SOUND_FADE_PERIOD, true);
     } else {
-        Assets.backgroundMusic = game.add.audio(audioKey);
         Assets.backgroundMusic.loopFull();
     }
+    return music;
 };
 
 const stopCurrentMusic = game => {
-    if (Assets.previousMusic) {
-        Assets.previousMusic.stop();
-        game.sound.remove(Assets.previousMusic);
-    }
-
     if (!Assets.backgroundMusic) return;
 
-    Assets.previousMusic = Assets.backgroundMusic;
-    Assets.previousMusic.onFadeComplete.addOnce(() => {
-        game.sound.remove(Assets.previousMusic);
+    if (fadingMusic) {
+        fadingMusic.stop();
+        game.sound.remove(fadingMusic);
+    }
+
+    fadingMusic = Assets.backgroundMusic;
+    fadingMusic.onFadeComplete.addOnce(() => {
+        game.sound.remove(fadingMusic);
     });
-    Assets.previousMusic.fadeOut(SOUND_FADE_PERIOD / 2);
+    fadingMusic.fadeOut(SOUND_FADE_PERIOD / 2);
+    fadingMusic.fadeTween._onUpdateCallback = () => {
+        console.log(fadingMusic.fadeTween.isRunning);
+    };
 };
 
 export { Assets, setButtonClickSound, setupScreenMusic, SOUND_FADE_PERIOD };
