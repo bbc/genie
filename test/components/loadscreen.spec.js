@@ -4,35 +4,30 @@ import * as sinon from "sinon";
 import { Loadscreen } from "../../src/components/loadscreen";
 import * as LoadBar from "../../src/components/loadbar";
 import * as AssetLoader from "../../src/core/asset-loader";
-import { GameAssets } from "../../src/core/game-assets.js";
 import * as Scaler from "../../src/core/scaler.js";
+import * as GameSound from "../../src/core/game-sound";
 
 describe("Load Screen", () => {
     let loadScreen;
-    let musicLoopStub;
     let addImageStub;
     let mockGame;
-    let assetLoaderSpy;
+    let assetLoaderStub;
     let assetLoaderCallbackSpy;
+    let setButtonClickSoundStub;
     let navigationNext;
 
     const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
         assetLoaderCallbackSpy = sandbox.spy();
-        assetLoaderSpy = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
-        musicLoopStub = sandbox.stub();
-        musicLoopStub.withArgs("loadscreen.backgroundMusic").returns({
-            loopFull: sandbox.spy(),
-        });
+        assetLoaderStub = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
         addImageStub = sandbox.stub();
-        musicLoopStub.returns({});
+        setButtonClickSoundStub = sandbox.stub(GameSound, "setButtonClickSound");
         navigationNext = sandbox.stub();
 
         mockGame = {
             add: {
                 image: addImageStub,
-                audio: musicLoopStub,
             },
             state: {
                 current: "currentState",
@@ -67,17 +62,26 @@ describe("Load Screen", () => {
             loadScreen.updateLoadProgress = expectedUpdateLoadProgress;
             loadScreen.preload();
 
-            expect(assetLoaderSpy.args[0][0]).to.eql(mockGame);
-            expect(assetLoaderSpy.args[0][1]).to.eql(expectedGamePacks);
-            expect(assetLoaderSpy.args[0][2]).to.eql(expectedLoadscreenPack);
+            expect(assetLoaderStub.args[0][0]).to.eql(mockGame);
+            expect(assetLoaderStub.args[0][1]).to.eql(expectedGamePacks);
+            expect(assetLoaderStub.args[0][2]).to.eql(expectedLoadscreenPack);
 
-            assetLoaderSpy.args[0][3]();
+            assetLoaderStub.args[0][3]();
             expect(expectedUpdateLoadProgress.called).to.equal(true);
         });
 
         it("handles the returned promise", () => {
             loadScreen.preload();
             expect(assetLoaderCallbackSpy.called).to.equal(true);
+        });
+
+        it("sets the button click sound to be used in the game", () => {
+            loadScreen.context = { qaMode: { active: false } };
+            loadScreen.preload();
+
+            assetLoaderCallbackSpy.args[0][0]();
+            sinon.assert.calledOnce(setButtonClickSoundStub);
+            sinon.assert.calledWith(setButtonClickSoundStub, mockGame, sinon.match.typeOf("string"));
         });
 
         it("moves to the next screen when the promise is resolved", () => {
@@ -181,12 +185,6 @@ describe("Load Screen", () => {
 
             assetLoaderCallbackSpy.args[0][0](expectedKeyLookups);
             expect(consoleSpy.args[0][0]).to.equal(expectedOutput);
-        });
-    });
-
-    describe("Music", () => {
-        it("starts playing the music", () => {
-            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.loopFull);
         });
     });
 });
