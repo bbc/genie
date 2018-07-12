@@ -1,14 +1,19 @@
 import { accessibleDomElement } from "./accessible-dom-element.js";
 
+//Should be in a stylesheet however we have no support for this (v0.4)
+const setCSS = element => {
+    element.style.position = "absolute";
+    element.style.overflow = "hidden";
+    element.style.width = "0";
+    element.style.height = "0";
+};
+
 function createCarouselElement(parentElement, pageName) {
     const carouselElement = document.createElement("div");
     carouselElement.id = "carousel-" + pageName;
     carouselElement.setAttribute("aria-live", "polite");
 
-    carouselElement.style.position = "absolute";
-    carouselElement.style.overflow = "hidden";
-    carouselElement.style.width = "0";
-    carouselElement.style.height = "0";
+    setCSS(carouselElement);
 
     parentElement.appendChild(carouselElement);
     return carouselElement;
