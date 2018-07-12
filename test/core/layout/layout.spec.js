@@ -4,7 +4,7 @@ import * as sinon from "sinon";
 import * as Layout from "../../../src/core/layout/layout.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import { Group } from "../../../src/core/layout/group.js";
-import { GameAssets } from "../../../src/core/game-assets.js";
+import * as GameSound from "../../../src/core/game-sound.js";
 import * as gmiModule from "../../../src/core/gmi.js";
 
 describe("Layout", () => {
@@ -47,10 +47,8 @@ describe("Layout", () => {
             mockUnsubscribe = sandbox.spy();
             mockSubscribe = sandbox.stub(Scaler.onScaleChange, "add").returns({ unsubscribe: mockUnsubscribe });
 
-            GameAssets.sounds = {
-                buttonClick: {
-                    play: () => {},
-                },
+            GameSound.Assets.buttonClick = {
+                play: () => {},
             };
         });
     });
@@ -58,7 +56,8 @@ describe("Layout", () => {
     afterEach(() => {
         sandbox.restore();
         mockGame.destroy();
-        GameAssets.sounds = {};
+        GameSound.Assets.backgroundMusic = undefined;
+        GameSound.Assets.buttonClick = undefined;
     });
 
     it("should add the correct number of GEL buttons for a given config", () => {
