@@ -11,14 +11,23 @@ const setButtonClickSound = (game, audioKey) => {
 };
 
 const setupScreenMusic = (game, themeScreenConfig) => {
+    let audioKey;
+
+    if (themeScreenConfig) {
+        audioKey = themeScreenConfig.music;
+    }
+
+    if (Assets.backgroundMusic && audioKey && audioKey === Assets.backgroundMusic.name) {
+        return;
+    }
+
     stopCurrentMusic(game);
 
-    if (!themeScreenConfig || !themeScreenConfig.hasOwnProperty("music")) {
+    if (!audioKey) {
         Assets.backgroundMusic = undefined;
         return;
     }
 
-    const audioKey = themeScreenConfig.music;
     setBackgroundMusic(game, audioKey);
 
     if (Assets.backgroundMusic.usingAudioTag) {
@@ -37,14 +46,13 @@ const setBackgroundMusic = (game, audioKey) => {
 };
 
 const stopCurrentMusic = game => {
-    if (!Assets.backgroundMusic) {
-        return;
-    }
-
     if (Assets.previousMusic) {
         Assets.previousMusic.stop();
         game.sound.remove(Assets.previousMusic);
     }
+
+    if (!Assets.backgroundMusic) return;
+
     Assets.previousMusic = Assets.backgroundMusic;
     Assets.previousMusic.onFadeComplete.addOnce(() => {
         game.sound.remove(Assets.previousMusic);
