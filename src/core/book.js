@@ -80,18 +80,21 @@ const Draw = (theme, drawPage, drawButtons, game, accessibilityTexts) => {
             if (pageIsInBook(pageNumber)) {
                 pages[pageNumber - 1].visible = true;
                 accessibleElements[pageNumber - 1].setAttribute("aria-hidden", false);
+                accessibleElements[pageNumber - 1].style.display = "block"; //Needed for Firefox
             }
         },
         hidePage: pageNumber => {
             if (pageIsInBook(pageNumber)) {
                 pages[pageNumber - 1].visible = false;
                 accessibleElements[pageNumber - 1].setAttribute("aria-hidden", true);
+                accessibleElements[pageNumber - 1].style.display = "none"; //Needed for Firefox
             }
         },
     };
 
     return GoToPage(1, book, true);
 };
+
 
 const Start = (screenName, theme, game, scene, overlayLayout, accessibilityTexts) => {
     return Draw(
