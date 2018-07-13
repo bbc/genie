@@ -39,15 +39,21 @@ const startMusic = (game, audioKey) => {
     const music = game.add.audio(audioKey);
 
     if (fadingMusic) {
-        Assets.backgroundMusic.fadeIn(SOUND_FADE_PERIOD, true);
+        music.fadeIn(SOUND_FADE_PERIOD, true);
     } else {
-        Assets.backgroundMusic.loopFull();
+        music.loopFull();
     }
     return music;
 };
 
 const stopCurrentMusic = game => {
-    if (!Assets.backgroundMusic) return;
+    if (!Assets.backgroundMusic) {
+        if (fadingMusic) {
+            fadingMusic.fadeTween.pendingDelete = false;
+            fadingMusic.fadeTween.start();
+        }
+        return;
+    }
 
     if (fadingMusic) {
         fadingMusic.stop();
@@ -59,9 +65,6 @@ const stopCurrentMusic = game => {
         game.sound.remove(fadingMusic);
     });
     fadingMusic.fadeOut(SOUND_FADE_PERIOD / 2);
-    fadingMusic.fadeTween._onUpdateCallback = () => {
-        console.log(fadingMusic.fadeTween.isRunning);
-    };
 };
 
 export { Assets, setButtonClickSound, setupScreenMusic, SOUND_FADE_PERIOD };
