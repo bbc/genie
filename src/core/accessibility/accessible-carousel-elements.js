@@ -45,8 +45,8 @@ const ariaFieldset = name => {
 export function create(pageName, carouselSprites, parentElement, choices) {
     const accessibleElements = [];
     const carousel = createCarouselElement(parentElement, pageName);
-
-    parentElement.appendChild(ariaFieldset(pageName));
+    const fieldset = ariaFieldset(pageName);
+    parentElement.appendChild(fieldset);
 
     carouselSprites.forEach((sprite, index) => {
         const accessibleElement = accessibleDomElement({
@@ -65,6 +65,7 @@ export function create(pageName, carouselSprites, parentElement, choices) {
         if (index === 0) {
             sprite.events.onDestroy.add(() => {
                 parentElement.removeChild(carousel);
+                parentElement.removeChild(fieldset);
             });
         }
     });
