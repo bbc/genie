@@ -63,6 +63,7 @@ const stopCurrentMusic = game => {
     fadingMusic = Assets.backgroundMusic;
     fadingMusic.onFadeComplete.addOnce(() => {
         game.sound.remove(fadingMusic);
+        fadingMusic = undefined;
     });
     fadingMusic.fadeOut(SOUND_FADE_PERIOD / 2);
 };
