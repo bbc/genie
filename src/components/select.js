@@ -27,7 +27,7 @@ export class Select extends Screen {
         this.currentIndex = 1;
         this.choiceSprites = this.createChoiceSprites(theme.choices);
         this.accessibleElements = accessibleCarouselElements.create(
-            "select",
+            this.visibleLayer,
             this.choiceSprites,
             this.game.canvas.parentElement,
             theme.choices,

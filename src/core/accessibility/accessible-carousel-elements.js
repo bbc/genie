@@ -23,9 +23,30 @@ function getAccessibilityText(choices, index) {
     return choices ? choices[index].accessibilityText : "Page " + (index + 1);
 }
 
+/**
+ * NOTE: strong candidate for being handled in a future 'accessibility manager' module
+ *
+ * @returns {HTMLFieldSetElement}
+ */
+const ariaFieldset = name => {
+    const fieldset = document.createElement("fieldset");
+
+    fieldset.setAttribute("aria-controls", "carousel");
+
+    const next = document.getElementById(name + "__next");
+    const previous = document.getElementById(name + "__previous");
+
+    fieldset.appendChild(previous);
+    fieldset.appendChild(next);
+
+    return fieldset;
+};
+
 export function create(pageName, carouselSprites, parentElement, choices) {
     const accessibleElements = [];
     const carousel = createCarouselElement(parentElement, pageName);
+
+    parentElement.appendChild(ariaFieldset(pageName));
 
     carouselSprites.forEach((sprite, index) => {
         const accessibleElement = accessibleDomElement({

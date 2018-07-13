@@ -3,7 +3,7 @@ import * as Game from "../fake/game.js";
 import * as OverlayLayout from "../fake/overlay-layout.js";
 import * as Button from "../fake/button.js";
 import * as Scene from "../fake/scene.js";
-import * as Book from "../../src/core/book.js";
+import * as Book from "../../src/core/book/book.js";
 import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
 
 import * as sinon from "sinon";
@@ -60,7 +60,7 @@ describe("Showing pages of a book", () => {
     });
 
     describe("A book with 2 pages", () => {
-        var book;
+        let book;
         let twoPanels = [{}, {}];
         let domElements = [document.createElement("div"), document.createElement("div")];
         const accessibilityTexts = [{ accessibilityText: "Text goes here" }, { accessibilityText: "Also goes here" }];
