@@ -12,7 +12,7 @@ import { assert } from "chai";
 Chai.should();
 
 describe("Showing pages of a book", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     let book;
 
     afterEach(() => {

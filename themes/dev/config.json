@@ -1,6 +1,10 @@
 {
     "theme": {
+        "home": {
+            "music": "loadscreen.backgroundMusic"
+        },
         "character-select": {
+            "music": "loadscreen.backgroundMusic",
             "choices": [
                 {
                     "asset": "carousel1",
@@ -32,12 +36,15 @@
                 }
             }
         },
+        "game": {
+            "music": "loadscreen.backgroundMusicTwo"
+        },
         "results": {
             "resultText": {
                 "style": {
-                    "font": "bold 40px ReithSans",
+                    "font": "40px ReithSans",
                     "align": "center",
-                    "fill": "#f6931e",
+                    "fill": "#fff",
                     "boundsAlignH": "center"
                 }
             }

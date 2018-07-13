@@ -2,7 +2,9 @@
 
 | Version | Description |
 |---------|-------------|
-| | Fixes unannounced selections in carousel on Ios and IE11/Firefox with NVDA. |
+| | Fixes unannounced selections in carousel on IOS and IE11/Firefox with NVDA. |
+| | Removes GMI from `context`, moves default settings into GMI module. |
+| | Added theme configuration to allow the use of different background tracks on different game screens |
 | 0.4.1 | |
 | | Fix for loading the webfontloader module in the starter pack |
 | 0.4.0 | |
