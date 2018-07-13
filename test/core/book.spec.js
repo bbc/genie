@@ -24,12 +24,17 @@ describe("Showing pages of a book", () => {
         const accessibilityTexts = [{ accessibilityText: "Text goes here" }];
 
         beforeEach(() => {
+            const mockScreen = {
+                scene: Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
+                visibleLayer: "book-test",
+            };
+
             sandbox.stub(accessibleCarouselElements, "create").returns([document.createElement("div")]);
             book = Book.Start(
                 "myScreen",
                 Theme.WithPanels(onePanel),
                 Game.Stub,
-                Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
+                mockScreen,
                 OverlayLayout.Stub,
                 accessibilityTexts,
             );
@@ -42,7 +47,7 @@ describe("Showing pages of a book", () => {
         it("creates an accessible carousel dom element", () => {
             sandbox.assert.calledOnce(
                 accessibleCarouselElements.create.withArgs(
-                    "book",
+                    "book-test",
                     [{ visible: true }],
                     Game.Stub.canvas.parentElement,
                     accessibilityTexts,
@@ -66,14 +71,21 @@ describe("Showing pages of a book", () => {
         const accessibilityTexts = [{ accessibilityText: "Text goes here" }, { accessibilityText: "Also goes here" }];
 
         beforeEach(() => {
+
+            const mockScreen = {
+                scene: Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
+                visibleLayer: "book-test",
+            };
+
             sandbox.stub(accessibleCarouselElements, "create").returns(domElements);
             book = Book.Start(
                 "myScreen",
                 Theme.WithPanels(twoPanels),
                 Game.Stub,
-                Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
+                mockScreen,
                 OverlayLayout.Stub,
                 accessibilityTexts,
+                mockScreen
             );
 
             book.nextPageOption.update = sinon.spy();
@@ -89,7 +101,7 @@ describe("Showing pages of a book", () => {
         it("creates an accessible carousel dom element", () => {
             sandbox.assert.calledOnce(
                 accessibleCarouselElements.create.withArgs(
-                    "book",
+                    "book-test",
                     [{ visible: true }, { visible: false }],
                     Game.Stub.canvas.parentElement,
                     accessibilityTexts,

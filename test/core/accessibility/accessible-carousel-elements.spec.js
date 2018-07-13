@@ -20,6 +20,14 @@ describe("Accessible Carousel Elements", () => {
         mountPoint = document.createElement("div");
         document.body.appendChild(mountPoint);
 
+        let nextEl = document.createElement("div");
+        nextEl.id = "select-screen__next";
+        let prevEl = document.createElement("div");
+        prevEl.id = "select-screen__previous";
+
+        mountPoint.appendChild(nextEl);
+        mountPoint.appendChild(prevEl);
+
         domElementStubs = [
             { el: document.createElement("div") },
             { el: document.createElement("div") },
@@ -38,6 +46,7 @@ describe("Accessible Carousel Elements", () => {
 
     afterEach(() => {
         sandbox.restore();
+        mountPoint.remove();
     });
 
     it("creates a carousel DOM element", () => {

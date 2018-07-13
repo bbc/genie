@@ -61,6 +61,7 @@ describe("Select Screen", () => {
                 },
             },
             qaMode: { active: false },
+            popupScreens: [],
         };
 
         selectScreen = new Select();
@@ -68,6 +69,7 @@ describe("Select Screen", () => {
             addToBackground: addToBackgroundSpy,
             addLayout: addLayoutSpy,
         };
+
         selectScreen.game = mockGame;
         selectScreen.context = mockContext;
         selectScreen.preload();
@@ -131,8 +133,9 @@ describe("Select Screen", () => {
         it("creates an accessible carousel for the choices", () => {
             const actualParams = accessibleCarouselElements.create.getCall(0).args;
             sinon.assert.calledOnce(accessibleCarouselElements.create);
+
             assert.deepEqual(actualParams, [
-                "select",
+                "characterSelect",
                 selectScreen.choiceSprites,
                 mockGame.canvas.parentElement,
                 mockContext.config.theme.characterSelect.choices,
