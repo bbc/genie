@@ -1,17 +1,19 @@
 import * as sinon from "sinon";
 import { expect } from "chai";
-import * as GameSound from "../../src/core/game-sound.js";
 import * as Game from "../fake/game.js";
 import * as PhaserSignal from "../fake/phaser-signal.js";
 
 describe("Game Sound", () => {
     const sandbox = sinon.sandbox.create();
+    let GameSound;
+
+    beforeEach(() => {
+        GameSound = require("../../src/core/game-sound");
+    });
 
     afterEach(() => {
         sandbox.restore();
-        GameSound.Assets.backgroundMusic = undefined;
-        GameSound.Assets.buttonClick = undefined;
-        GameSound.Assets.previousMusic = undefined;
+        delete require.cache["./src/core/game-sound.js"];
     });
 
     describe("#setButtonClickSound", () => {
@@ -32,12 +34,9 @@ describe("Game Sound", () => {
             beforeEach(() => {
                 game = Game.Stub;
                 newAudioLoopSpy = sandbox.spy();
-                game.add.audio = () => {
-                    return {
-                        loopFull: newAudioLoopSpy,
-                    };
-                };
-                addAudioSpy = sandbox.spy(game.add, "audio");
+                addAudioSpy = sandbox.stub(game.add, "audio").returns({
+                    loopFull: newAudioLoopSpy,
+                });
                 const screenConfig = { music: "test/music" };
                 GameSound.setupScreenMusic(game, screenConfig);
             });
@@ -73,13 +72,10 @@ describe("Game Sound", () => {
                     onFadeComplete: PhaserSignal.Stub,
                 };
                 newAudioLoopSpy = sandbox.spy();
-                game.add.audio = () => {
-                    return {
-                        loopFull: newAudioLoopSpy,
-                        fadeIn: newAudioFadeInSpy,
-                    };
-                };
-                addAudioSpy = sandbox.spy(game.add, "audio");
+                addAudioSpy = sandbox.stub(game.add, "audio").returns({
+                    loopFull: newAudioLoopSpy,
+                    fadeIn: newAudioFadeInSpy,
+                });
                 const screenConfig = { music: "test/music" };
                 GameSound.setupScreenMusic(game, screenConfig);
             });
@@ -207,25 +203,23 @@ describe("Game Sound", () => {
             let game;
             let existingAudioFadeOutSpy;
             let previousAudioStopSpy;
-            let previousOnFadeCompleteAddOnceSpy;
 
             beforeEach(() => {
                 game = Game.Stub;
                 existingAudioFadeOutSpy = sandbox.spy();
-                GameSound.Assets.backgroundMusic = {
-                    loopFull: () => {},
-                    fadeOut: existingAudioFadeOutSpy,
-                    onFadeComplete: PhaserSignal.Stub,
-                };
                 previousAudioStopSpy = sandbox.spy();
-                previousOnFadeCompleteAddOnceSpy = sandbox.spy();
-                GameSound.Assets.previousMusic = {
+                GameSound.Assets.backgroundMusic = {
                     stop: previousAudioStopSpy,
-                    onFadeComplete: {
-                        addOnce: previousOnFadeCompleteAddOnceSpy,
-                    },
+                    onFadeComplete: { addOnce: () => {} },
+                    fadeOut: () => {},
                 };
-                GameSound.setupScreenMusic(game, undefined);
+                sandbox.stub(game.add, "audio").returns({
+                    fadeIn: () => {},
+                    fadeOut: existingAudioFadeOutSpy,
+                    onFadeComplete: { addOnce: () => {} },
+                });
+                GameSound.setupScreenMusic(game, { music: "test/music" });
+                GameSound.setupScreenMusic(game, { music: "test/music" });
             });
 
             it("will stop the previous music", () => {
