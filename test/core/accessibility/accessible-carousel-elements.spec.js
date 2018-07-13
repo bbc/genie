@@ -13,7 +13,7 @@ describe("Accessible Carousel Elements", () => {
     let sandbox;
 
     before(() => {
-        sandbox = sinon.sandbox.create();
+        sandbox = sinon.createSandbox();
     });
 
     beforeEach(() => {

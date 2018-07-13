@@ -4,10 +4,12 @@ import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
 import * as gel from "../../../src/core/layout/gel-defaults";
 import * as pause from "../../../src/components/overlays/pause.js";
 import { settings } from "../../../src/core/settings.js";
+import * as gmiModule from "../../../src/core/gmi.js";
 
 describe("Layout - Gel Defaults", () => {
     const sandbox = sinon.createSandbox();
     let mockGame;
+    let mockGmi;
 
     beforeEach(() => {
         mockGame = {
@@ -22,6 +24,10 @@ describe("Layout - Gel Defaults", () => {
                 },
             },
         };
+
+        mockGmi = { exit: sandbox.stub() };
+        sandbox.stub(gmiModule, "setGmi").returns(mockGmi);
+        sandbox.replace(gmiModule, "gmi", mockGmi);
     });
 
     afterEach(() => {
@@ -30,7 +36,7 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Exit Button Callback", () => {
         it("exits the game using the GMI", () => {
-            assert.strictEqual(gel.config.exit.action, settings.exit);
+            assert.strictEqual(gel.config.exit.action, gmiModule.exit);
         });
     });
 

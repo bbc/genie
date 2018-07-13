@@ -12,19 +12,13 @@ import { startup } from "./core/startup.js";
 const settingsConfig = {
     pages: [
         {
-            title: "Global Settings",
+            title: "Custom Settings",
             settings: [
                 {
-                    key: "audio",
+                    key: "custom1",
                     type: "toggle",
-                    title: "Audio",
-                    description: "Turn off/on sound and music",
-                },
-                {
-                    key: "motion",
-                    type: "toggle",
-                    title: "Motion FX",
-                    description: "Turn off/on motion effects",
+                    title: "Custom setting",
+                    description: "Description of custom setting",
                 },
             ],
         },

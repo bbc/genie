@@ -1,9 +1,9 @@
 import * as howToPlay from "../../components/overlays/how-to-play.js";
 import * as pause from "../../components/overlays/pause.js";
 import { settings } from "../../core/settings.js";
+import { gmi } from "../../core/gmi.js";
 
 export const buttonsChannel = "gel-buttons";
-
 export const config = {
     exit: {
         group: "topLeft",
@@ -13,7 +13,7 @@ export const config = {
         order: 0,
         id: "__exit",
         channel: buttonsChannel,
-        action: settings.exit,
+        action: gmi.exit,
     },
     home: {
         group: "topLeft",
