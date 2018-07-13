@@ -95,7 +95,6 @@ const Draw = (theme, drawPage, drawButtons, game, accessibilityTexts, screen) =>
     return GoToPage(1, book, true);
 };
 
-
 const Start = (screenName, theme, game, screen, overlayLayout, accessibilityTexts) => {
     return Draw(
         theme,

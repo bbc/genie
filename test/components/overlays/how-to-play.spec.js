@@ -22,7 +22,6 @@ describe("How To Play Overlay", () => {
     const panel3Sprite = { visible: "", destroy: sandbox.spy() };
 
     beforeEach(() => {
-
         mountPoint = document.createElement("div");
         document.body.appendChild(mountPoint);
 
@@ -33,7 +32,6 @@ describe("How To Play Overlay", () => {
 
         mountPoint.appendChild(nextEl);
         mountPoint.appendChild(prevEl);
-
 
         signalSpy = sandbox.spy(signal.bus, "subscribe");
         mockBackground = { destroy: sandbox.spy() };

@@ -71,7 +71,6 @@ describe("Showing pages of a book", () => {
         const accessibilityTexts = [{ accessibilityText: "Text goes here" }, { accessibilityText: "Also goes here" }];
 
         beforeEach(() => {
-
             const mockScreen = {
                 scene: Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
                 visibleLayer: "book-test",
@@ -85,7 +84,7 @@ describe("Showing pages of a book", () => {
                 mockScreen,
                 OverlayLayout.Stub,
                 accessibilityTexts,
-                mockScreen
+                mockScreen,
             );
 
             book.nextPageOption.update = sinon.spy();
