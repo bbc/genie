@@ -1,6 +1,10 @@
 {
     "theme": {
+        "home": {
+            "music": "loadscreen.backgroundMusic"
+        },
         "character-select": {
+            "music": "loadscreen.backgroundMusic",
             "choices": [
                 {
                     "asset": "carousel1",
@@ -31,6 +35,9 @@
                     "fill": "white"
                 }
             }
+        },
+        "game": {
+            "music": "loadscreen.backgroundMusicTwo"
         },
         "results": {
             "resultText": {

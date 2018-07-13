@@ -2,7 +2,7 @@ import { assert } from "chai";
 import * as sinon from "sinon";
 import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
 import * as Pause from "../../../src/components/overlays/pause";
-import { GameAssets } from "../../../src/core/game-assets.js";
+import * as GameSound from "../../../src/core/game-sound";
 import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Pause Overlay", () => {
@@ -52,11 +52,9 @@ describe("Pause Overlay", () => {
         };
         mockGame.add.image.onCall(0).returns("backgroundImage");
 
-        GameAssets.sounds = {
-            backgroundMusic: {
-                pause: sandbox.spy(),
-                resume: sandbox.spy(),
-            },
+        GameSound.Assets.backgroundMusic = {
+            pause: sandbox.spy(),
+            resume: sandbox.spy(),
         };
     });
 
@@ -78,7 +76,7 @@ describe("Pause Overlay", () => {
         });
 
         it("pauses background music", () => {
-            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.pause);
+            sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.pause);
         });
     });
 
@@ -152,7 +150,7 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
+            sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
@@ -179,7 +177,7 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
+            sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
@@ -203,7 +201,7 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockGelButtons.destroy.calledOnce);
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
-            sinon.assert.calledOnce(GameAssets.sounds.backgroundMusic.resume);
+            sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.resume);
             assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
