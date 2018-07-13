@@ -1,5 +1,5 @@
 import * as sinon from "sinon";
-import { expect } from "chai";
+import { assert, expect } from "chai";
 import * as Game from "../fake/game.js";
 import * as PhaserSignal from "../fake/phaser-signal.js";
 
@@ -227,7 +227,7 @@ describe("Game Sound", () => {
             });
         });
 
-        describe("if some previous music is still fading out", () => {
+        describe("if some previous music is still fading out and we need to fade out current music", () => {
             let game;
             let existingAudioFadeOutSpy;
             let previousAudioStopSpy;
@@ -257,6 +257,42 @@ describe("Game Sound", () => {
             it("will fade out the current music", () => {
                 sinon.assert.calledOnce(existingAudioFadeOutSpy);
                 sinon.assert.calledWith(existingAudioFadeOutSpy, GameSound.SOUND_FADE_PERIOD / 2);
+            });
+        });
+
+        describe("if some previous music is still fading out and we have no music to fade out", () => {
+            let game;
+            let previousAudioStopSpy;
+            let tweenStartSpy;
+            let fadeTweenSpy;
+
+            beforeEach(() => {
+                game = Game.Stub;
+                previousAudioStopSpy = sandbox.spy();
+                tweenStartSpy = sandbox.spy();
+                fadeTweenSpy = {
+                    pendingDelete: false,
+                    start: tweenStartSpy,
+                };
+                GameSound.Assets.backgroundMusic = {
+                    stop: previousAudioStopSpy,
+                    onFadeComplete: { addOnce: () => {} },
+                    fadeOut: () => {},
+                    fadeTween: fadeTweenSpy,
+                };
+                GameSound.setupScreenMusic(game, undefined);
+                // Simulate phaser stopping all tweens between states
+                fadeTweenSpy.pendingDelete = true;
+                GameSound.setupScreenMusic(game, undefined);
+            });
+
+            it("will not stop the fading music", () => {
+                sinon.assert.notCalled(previousAudioStopSpy);
+            });
+
+            it("will restart the fading music's tween", () => {
+                assert.strictEqual(fadeTweenSpy.pendingDelete, false);
+                sinon.assert.calledOnce(tweenStartSpy);
             });
         });
     });
