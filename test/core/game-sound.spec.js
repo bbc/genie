@@ -55,7 +55,35 @@ describe("Game Sound", () => {
             });
         });
 
-        describe("when background music already exists", () => {
+        describe("when the new music is the same as the currently playing music", () => {
+            let game;
+            let existingAudioFadeOutSpy;
+            let addAudioSpy;
+
+            beforeEach(() => {
+                game = Game.Stub;
+                existingAudioFadeOutSpy = sandbox.spy();
+                GameSound.Assets.backgroundMusic = {
+                    loopFull: () => {},
+                    fadeOut: existingAudioFadeOutSpy,
+                    onFadeComplete: PhaserSignal.Stub,
+                    name: "current-music",
+                };
+                addAudioSpy = sandbox.stub(game.add, "audio");
+                const screenConfig = { music: "current-music" };
+                GameSound.setupScreenMusic(game, screenConfig);
+            });
+
+            it("does not reload the same music asset", () => {
+                sinon.assert.notCalled(addAudioSpy);
+            });
+
+            it("does not fade the current background music out", () => {
+                sinon.assert.notCalled(existingAudioFadeOutSpy);
+            });
+        });
+
+        describe("when the new music differs from the currently playing music", () => {
             let game;
             let existingAudioFadeOutSpy;
             let newAudioLoopSpy;
