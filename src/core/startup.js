@@ -104,7 +104,7 @@ class Startup extends Phaser.State {
             channel: settingsChannel,
             name: "setting-changed-audio",
             callback: value => {
-                if (!game.paused) this.game.sound.mute = !value;
+                if (!this.game.paused) this.game.sound.mute = !value;
             },
         });
     }
