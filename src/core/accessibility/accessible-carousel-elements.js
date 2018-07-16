@@ -46,8 +46,10 @@ export function create(pageName, carouselSprites, parentElement, choices) {
     const accessibleElements = [];
     const carousel = createCarouselElement(parentElement, pageName);
     const fieldset = ariaFieldset(pageName);
-    parentElement.appendChild(fieldset);
 
+    //NOTE: Hack to force tab accessibility order
+    // needs a refactor once we have an accessibility layer
+    parentElement.insertBefore(fieldset, pageName === "how-to-play" ? carousel : carousel.previousSibling);
     carouselSprites.forEach((sprite, index) => {
         const accessibleElement = accessibleDomElement({
             id: "carousel-" + pageName + "__" + (index + 1),
