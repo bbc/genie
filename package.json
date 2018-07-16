@@ -57,7 +57,7 @@
     "scripts": {
         "start": "http2-server -i index.dev.html -S",
         "watch": "live-server --no-browser --entry-file=./index.dev.html --watch=./src",
-        "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js --mode development --useLocalIp --host 0.0.0.0",
+        "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js --useLocalIp --host 0.0.0.0",
         "build": "webpack --config build-scripts/webpack.config.js",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
         "eslint": "eslint . --ignore-pattern lodash --ignore-path .gitignore",
