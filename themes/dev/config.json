@@ -42,9 +42,9 @@
         "results": {
             "resultText": {
                 "style": {
-                    "font": "bold 40px ReithSans",
+                    "font": "40px ReithSans",
                     "align": "center",
-                    "fill": "#f6931e",
+                    "fill": "#fff",
                     "boundsAlignH": "center"
                 }
             }

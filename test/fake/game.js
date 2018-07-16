@@ -11,9 +11,6 @@ const Stub = {
         },
         group: () => {},
     },
-    canvas: {
-        setAttribute: () => {},
-    },
     sound: {
         remove: () => {},
     },

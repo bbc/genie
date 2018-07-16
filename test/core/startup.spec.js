@@ -7,13 +7,14 @@ import * as Scene from "../../src/core/scene.js";
 import * as LoadFonts from "../../src/core/font-loader.js";
 import * as Navigation from "../../src/core/navigation.js";
 
-describe("#startup", () => {
+describe("Startup", () => {
+    let mockGmi;
     const sandbox = sinon.createSandbox();
 
     let PhaserGame, containerDiv;
 
     beforeEach(() => {
-        const mockGmi = {
+        mockGmi = {
             gameContainerId: "some-id",
         };
         containerDiv = sandbox.stub();
@@ -23,6 +24,7 @@ describe("#startup", () => {
             .withArgs(mockGmi.gameContainerId)
             .returns(containerDiv);
 
+        sandbox.stub(gmiModule, "setGmi");
         sandbox.replace(gmiModule, "gmi", mockGmi);
         PhaserGame = sandbox.stub(Phaser, "Game").returns(Game.Stub);
         window.getGMI = sandbox.stub().returns(mockGmi);
@@ -30,6 +32,12 @@ describe("#startup", () => {
 
     afterEach(() => {
         sandbox.restore();
+    });
+
+    it("instantiates the GMI with correct params", () => {
+        const fakeSettings = { settings: "some settings" };
+        startup(fakeSettings);
+        sinon.assert.calledOnce(gmiModule.setGmi.withArgs(fakeSettings, window));
     });
 
     it("creates a new Phaser game", () => {
@@ -61,6 +69,11 @@ describe("#startup", () => {
         assert.equal(actualConfig.transparent, expectedConfig.transparent);
     });
 
+    it("throws an error if the game container element cannot be found", () => {
+        mockGmi.gameContainerId = "not-existing";
+        assert.throws(startup, 'Container element "#not-existing" not found'); // eslint-disable-line quotes
+    });
+
     describe("onStarted()", () => {
         let sceneCreate;
         let loadFonts;
@@ -78,15 +91,15 @@ describe("#startup", () => {
 
         it("creates the scene", () => {
             startup();
-            const config = PhaserGame.getCall(0).args[0];
-            config.state._onStarted();
+            const game = PhaserGame.getCall(0).args[0];
+            game.state._onStarted();
             sinon.assert.calledWith(sceneCreate, PhaserGame());
         });
 
         it("loads the fonts", () => {
             startup();
-            const config = PhaserGame.getCall(0).args[0];
-            config.state._onStarted();
+            const game = PhaserGame.getCall(0).args[0];
+            game.state._onStarted();
             sinon.assert.calledWith(loadFonts, PhaserGame(), sinon.match.func);
         });
 
