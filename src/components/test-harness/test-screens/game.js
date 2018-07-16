@@ -1,3 +1,4 @@
+import { gmi } from "../../../core/gmi.js";
 import { Screen } from "../../../core/screen.js";
 import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 
@@ -15,6 +16,9 @@ export class GameTest extends Screen {
         this.scene.addToBackground(titleText);
         this.scene.addLayout(["pause"]);
 
+        gmi.setGameData("characterSelected", this.transientData.characterSelected);
+        console.log("Data saved to GMI:", gmi.getAllSettings().gameData); // eslint-disable-line no-console
+
         const buttonKey = this.getAsset("basicButton");
         const buttonTextStyle = {
             font: "40px ReithSans",
@@ -27,15 +31,11 @@ export class GameTest extends Screen {
         [-70, 20, 110].forEach((buttonYPosition, index) => {
             const buttonNumber = index + 1;
             const buttonText = new Phaser.Text(this.game, 0, 5, "Button " + buttonNumber, buttonTextStyle);
-            const results = {
-                results: "You pressed button " + buttonNumber,
-                characterSelected: this.transientData.characterSelected,
-            };
             const button = this.game.add.button(
                 0,
                 buttonYPosition,
                 buttonKey,
-                () => this.navigation.next(results),
+                () => onGameComplete(buttonNumber),
                 this,
             );
             const config = {
@@ -48,6 +48,15 @@ export class GameTest extends Screen {
             buttonText.anchor.set(0.5, 0.5);
             this.scene.addToBackground(button);
         }, this);
+
+        const onGameComplete = buttonNumber => {
+            const results = {
+                results: "You pressed button " + buttonNumber,
+                characterSelected: this.transientData.characterSelected,
+            };
+            gmi.setGameData("buttonPressed", buttonNumber);
+            this.navigation.next(results);
+        };
 
         const characterSelectedText = this.game.add.text(
             0,

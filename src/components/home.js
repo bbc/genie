@@ -8,6 +8,7 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
+import { gmi } from "../core/gmi.js";
 
 export class Home extends Screen {
     constructor() {
@@ -19,6 +20,8 @@ export class Home extends Screen {
         this.scene.addToBackground(this.game.add.image(0, -150, "home.title"));
         this.scene.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
         createTestHarnessDisplay(this.game, this.context, this.scene);
+
+        gmi.gameLoaded();
 
         signal.bus.subscribe({
             channel: buttonsChannel,
