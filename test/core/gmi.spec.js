@@ -133,17 +133,46 @@ describe("GMI", () => {
         });
 
         it("sends a stats event to the GMI", () => {
-            gmiModule.sendStats("click");
+            gmiModule.sendStats("some_event");
             sandbox.assert.calledOnce(fakeGmiObject.sendStatsEvent);
         });
 
         it("passes default params to the GMI", () => {
-            gmiModule.sendStats("some_random_event");
+            gmiModule.sendStats("some_other_event");
             const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
-            assert.equal(params[0], "some_random_event");
+            assert.equal(params[0], "some_other_event");
             assert.equal(params[1], undefined);
             assert.deepEqual(params[2], {
-                action_name: "some_random_event",
+                action_name: "some_other_event",
+                game_template: "genie",
+                game_screen: "home",
+                game_level_name: null,
+            });
+        });
+
+        it("passes the game first click stat to the GMI", () => {
+            gmiModule.sendStats("click");
+            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
+            assert.equal(params[0], "game_first_click");
+            assert.equal(params[1], "home");
+            assert.deepEqual(params[2], {
+                action_name: "game_first_click",
+                action_type: "home",
+                game_template: "genie",
+                game_screen: "home",
+                game_level_name: null,
+            });
+        });
+
+        it("passes the game click stat to the GMI when this click isn't the first", () => {
+            gmiModule.sendStats("click");
+            gmiModule.sendStats("click");
+            const params = fakeGmiObject.sendStatsEvent.getCall(1).args;
+            assert.equal(params[0], "game_click");
+            assert.equal(params[1], "home");
+            assert.deepEqual(params[2], {
+                action_name: "game_click",
+                action_type: "home",
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
@@ -192,7 +221,7 @@ describe("GMI", () => {
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
-                heartbeat_period: 15,
+                heartbeat: 15,
             });
         });
     });

@@ -4,6 +4,7 @@ import * as VisibleLayer from "../../src/core/visible-layer.js";
 export let gmi = {};
 let gameInstance;
 let gameContext;
+let gameFirstClick = true;
 
 const dedupeGlobalSettings = customSettings => {
     return customSettings.filter(customSettings => {
@@ -41,21 +42,34 @@ const getDefaultGlobals = () => {
 };
 
 const getStatsParams = actionKey => {
+    const currentScreen = VisibleLayer.get(gameInstance, gameContext);
     const defaultParams = {
         action_name: actionKey,
         game_template: "genie",
-        game_screen: VisibleLayer.get(gameInstance, gameContext),
+        game_screen: currentScreen,
         game_level_name: null,
     };
     let customParams = {};
 
-    if (actionKey === "heartbeat") {
+    if (actionKey === "click") {
+        let actionName = "game_click";
+        if (gameFirstClick) {
+            actionName = "game_first_click";
+            gameFirstClick = false;
+        }
+        customParams = {
+            action_name: actionName,
+            action_type: currentScreen,
+        };
+    } else if (actionKey === "heartbeat") {
         customParams = {
             action_name: "timer",
             action_type: "heartbeat",
         };
     } else if (actionKey === "game_loaded") {
-        customParams = { action_type: true };
+        customParams = {
+            action_type: true,
+        };
     }
     return fp.merge(defaultParams, customParams);
 };
@@ -73,7 +87,7 @@ export const startHeartbeat = (game, context) => {
     const intervalPeriodMilliSec = beatPeriodSec * 1000;
 
     setInterval(function beatingHeart() {
-        sendStats("heartbeat", { heartbeat_period: beatPeriodSec });
+        sendStats("heartbeat", { heartbeat: beatPeriodSec });
     }, intervalPeriodMilliSec);
 };
 
