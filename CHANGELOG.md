@@ -4,6 +4,7 @@
 |---------|-------------|
 | Unreleased | |
 | | Added theme configuration to allow the use of different background tracks on different game screens |
+| | Adds basic stats using the GMI. |
 | 0.4.1 | |
 | | Fix for loading the webfontloader module in the starter pack |
 | 0.4.0 | |

@@ -23,6 +23,7 @@ describe("#startup", () => {
             .withArgs(mockGmi.gameContainerId)
             .returns(containerDiv);
 
+        sandbox.stub(gmiModule, "setGmi");
         sandbox.replace(gmiModule, "gmi", mockGmi);
         PhaserGame = sandbox.stub(Phaser, "Game").returns(Game.Stub);
         window.getGMI = sandbox.stub().returns(mockGmi);
@@ -30,6 +31,12 @@ describe("#startup", () => {
 
     afterEach(() => {
         sandbox.restore();
+    });
+
+    it("instantiates the GMI with correct params", () => {
+        const fakeSettings = { settings: "some settings" };
+        startup(fakeSettings);
+        sinon.assert.calledOnce(gmiModule.setGmi.withArgs(fakeSettings, window));
     });
 
     it("creates a new Phaser game", () => {
@@ -78,23 +85,23 @@ describe("#startup", () => {
 
         it("creates the scene", () => {
             startup();
-            const config = PhaserGame.getCall(0).args[0];
-            config.state._onStarted();
+            const game = PhaserGame.getCall(0).args[0];
+            game.state._onStarted();
             sinon.assert.calledWith(sceneCreate, PhaserGame());
         });
 
         it("loads the fonts", () => {
             startup();
-            const config = PhaserGame.getCall(0).args[0];
-            config.state._onStarted();
+            const game = PhaserGame.getCall(0).args[0];
+            game.state._onStarted();
             sinon.assert.calledWith(loadFonts, PhaserGame(), sinon.match.func);
         });
 
         it("creates the game navigation", () => {
             const navigationConfig = "NavConfig";
             startup({}, navigationConfig);
-            const config = PhaserGame.getCall(0).args[0];
-            config.state._onStarted();
+            const game = PhaserGame.getCall(0).args[0];
+            game.state._onStarted();
             const onComplete = loadFonts.getCall(0).args[1];
             onComplete();
             sinon.assert.calledWith(

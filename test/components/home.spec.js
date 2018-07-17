@@ -3,6 +3,7 @@ import * as sinon from "sinon";
 import { Home } from "../../src/components/home";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
+import * as gmiModule from "../../src/core/gmi.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
 describe("Home Screen", () => {
@@ -19,6 +20,9 @@ describe("Home Screen", () => {
     const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
+        sandbox.stub(gmiModule, "sendStats");
+        sandbox.stub(gmiModule, "startHeartbeat");
+
         layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");
         addToBackgroundSpy = sandbox.spy();
         addLayoutSpy = sandbox.spy();
@@ -92,6 +96,14 @@ describe("Home Screen", () => {
             const expectedParams = [mockGame, mockContext, homeScreen.scene];
             assert(layoutHarnessSpy.callCount === 1, "layout harness should be called once");
             assert.deepEqual(actualParams, expectedParams);
+        });
+
+        it("starts the stats heartbeat through the GMI", () => {
+            sandbox.assert.calledOnce(gmiModule.startHeartbeat.withArgs(mockGame, mockContext));
+        });
+
+        it("fires the game loaded stat to the GMI", () => {
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("game_loaded"));
         });
     });
 
