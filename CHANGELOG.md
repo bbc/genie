@@ -2,8 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
-| UNRELEASED | |
 | | Removes GMI from `context`, moves default settings into GMI module. |
+| | Update to Phaser 2.11.0 and fix spritesheet spacing to match new Phaser requirements. |
 | | Added theme configuration to allow the use of different background tracks on different game screens |
 | 0.4.1 | |
 | | Fix for loading the webfontloader module in the starter pack |
