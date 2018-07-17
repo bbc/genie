@@ -44,7 +44,6 @@ export function startup(settingsConfig = {}, navigationConfig) {
         game.canvas.setAttribute("aria-hidden", "true");
         const scene = Scene.create(game);
         const context = {
-            gmi,
             config: config,
             popupScreens: [],
             gameMuted: true,
@@ -96,7 +95,7 @@ class Startup extends Phaser.State {
         });
         signal.bus.subscribe({
             channel: settingsChannel,
-            name: "audio",
+            name: "setting-changed-audio",
             callback: value => {
                 this.game.sound.mute = !value;
             },

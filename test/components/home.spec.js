@@ -9,6 +9,7 @@ import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 describe("Home Screen", () => {
     let homeScreen;
     let layoutHarnessSpy;
+    let mockGmi;
     let mockGame;
     let mockContext;
     let addToBackgroundSpy;
@@ -20,8 +21,11 @@ describe("Home Screen", () => {
     const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
+        mockGmi = { gameLoaded: sandbox.stub() };
+        sandbox.stub(gmiModule, "setGmi").returns(mockGmi);
         sandbox.stub(gmiModule, "sendStats");
         sandbox.stub(gmiModule, "startHeartbeat");
+        sandbox.replace(gmiModule, "gmi", mockGmi);
 
         layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");
         addToBackgroundSpy = sandbox.spy();
@@ -102,8 +106,12 @@ describe("Home Screen", () => {
             sandbox.assert.calledOnce(gmiModule.startHeartbeat.withArgs(mockGame, mockContext));
         });
 
-        it("fires the game loaded stat to the GMI", () => {
+        it("fires the game loaded stat through the GMI", () => {
             sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("game_loaded"));
+        });
+
+        it("tells the GMI the game has loaded", () => {
+            sandbox.assert.called(mockGmi.gameLoaded);
         });
     });
 

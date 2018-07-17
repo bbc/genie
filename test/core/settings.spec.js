@@ -4,34 +4,62 @@ import * as signal from "../../src/core/signal-bus.js";
 import * as gmiModule from "../../src/core/gmi.js";
 
 describe("Settings", () => {
-    let sandbox;
+    let sandbox = sinon.createSandbox();
+    let mockGmi;
+    let settings;
 
-    before(() => {
-        sandbox = sinon.createSandbox();
+    beforeEach(() => {
+        mockGmi = {
+            gameContainerId: "some-id",
+            showSettings: sandbox.stub(),
+            getAllSettings: sandbox.stub(),
+            exit: sandbox.stub(),
+        };
+
+        sandbox.stub(signal.bus, "publish");
+        sandbox.stub(gmiModule, "setGmi").returns(mockGmi);
+        sandbox.replace(gmiModule, "gmi", mockGmi);
+
+        settings = createSettings();
     });
 
     afterEach(() => {
         sandbox.restore();
     });
 
-    it("Dispatches a signal bus message when a setting changes", () => {
-        const spy = sinon.spy(signal.bus, "publish");
-        const settingName = "test";
+    describe("show method", () => {
+        beforeEach(() => settings.show());
 
-        const settings = createSettings();
+        it("calls GMI show settings", () => {
+            sandbox.assert.calledOnce(mockGmi.showSettings);
+        });
 
-        const mockGmi = {
-            gameContainerId: "some-id",
-            showSettings: onSettingsChanged => {
-                onSettingsChanged(settingName, true);
-            },
-        };
+        it("publishes a signal when a setting has been changed", () => {
+            const expectedSignal = {
+                channel: "genie-settings",
+                name: "setting-changed-audio",
+                data: false,
+            };
+            const onSettingChangedCallback = mockGmi.showSettings.getCall(0).args[0];
+            onSettingChangedCallback("audio", false);
+            sandbox.assert.calledOnce(signal.bus.publish.withArgs(expectedSignal));
+        });
 
-        sandbox.replace(gmiModule, "gmi", mockGmi);
+        it("publishes a signal when settings has been closed", () => {
+            const expectedSignal = {
+                channel: "genie-settings",
+                name: "settings-closed",
+            };
+            const onSettingsClosedCallback = mockGmi.showSettings.getCall(0).args[1];
+            onSettingsClosedCallback();
+            sandbox.assert.calledOnce(signal.bus.publish.withArgs(expectedSignal));
+        });
+    });
 
-        settings.show();
-
-        sinon.assert.calledOnce(spy);
-        sinon.assert.calledWith(spy, { channel: "genie-settings", name: settingName, data: true });
+    describe("getAllSettings method", () => {
+        it("calls GMI get all settings", () => {
+            settings.getAllSettings();
+            sandbox.assert.calledOnce(mockGmi.getAllSettings);
+        });
     });
 });

@@ -7,7 +7,7 @@ import * as Scene from "../fake/scene.js";
 import * as GameSound from "../../src/core/game-sound";
 import * as VisibleLayer from "../../src/core/visible-layer.js";
 
-describe.only("Screen", () => {
+describe("Screen", () => {
     const sandbox = sinon.sandbox.create();
 
     let screen;

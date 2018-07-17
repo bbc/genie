@@ -35,9 +35,9 @@
         "results": {
             "resultText": {
                 "style": {
-                    "font": "bold 40px ReithSans",
+                    "font": "40px ReithSans",
                     "align": "center",
-                    "fill": "#6A6A6A",
+                    "fill": "#fff",
                     "boundsAlignH": "center"
                 }
             }
