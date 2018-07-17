@@ -81,7 +81,7 @@ describe("How To Play Overlay", () => {
             state: { current: "howToPlay", states: { howToPlay: mockScreen } },
             canvas: {
                 focus: sandbox.spy(),
-                parentElement: { appendChild: () => {} },
+                parentElement: { appendChild: () => {}, insertBefore: () => {} },
                 setAttribute: () => {},
             },
         };
