@@ -8,7 +8,7 @@ import * as GameSound from "../../src/core/game-sound";
 import * as VisibleLayer from "../../src/core/visible-layer.js";
 
 describe("Screen", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
     let screen;
     let mockContext;

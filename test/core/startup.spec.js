@@ -25,6 +25,7 @@ describe("Startup", () => {
             .returns(containerDiv);
 
         sandbox.stub(gmiModule, "setGmi");
+        sandbox.stub(gmiModule, "startHeartbeat");
         sandbox.replace(gmiModule, "gmi", mockGmi);
         PhaserGame = sandbox.stub(Phaser, "Game").returns(Game.Stub);
         window.getGMI = sandbox.stub().returns(mockGmi);
@@ -37,12 +38,12 @@ describe("Startup", () => {
     it("instantiates the GMI with correct params", () => {
         const fakeSettings = { settings: "some settings" };
         startup(fakeSettings);
-        sinon.assert.calledOnce(gmiModule.setGmi.withArgs(fakeSettings, window));
+        sandbox.assert.calledOnce(gmiModule.setGmi.withArgs(fakeSettings, window));
     });
 
     it("creates a new Phaser game", () => {
         startup();
-        sinon.assert.calledWithNew(PhaserGame);
+        sandbox.assert.calledWithNew(PhaserGame);
     });
 
     it("creates a new Phaser game with correct config", () => {
@@ -83,6 +84,10 @@ describe("Startup", () => {
             sceneCreate = sandbox.stub(Scene, "create").returns("Scene");
             loadFonts = sandbox.stub(LoadFonts, "loadFonts");
             navigationCreate = sandbox.stub(Navigation, "create");
+
+            startup({}, "NavConfig");
+            const game = PhaserGame.getCall(0).args[0];
+            game.state._onStarted();
         });
 
         afterEach(() => {
@@ -90,33 +95,28 @@ describe("Startup", () => {
         });
 
         it("creates the scene", () => {
-            startup();
-            const game = PhaserGame.getCall(0).args[0];
-            game.state._onStarted();
-            sinon.assert.calledWith(sceneCreate, PhaserGame());
+            sandbox.assert.calledWith(sceneCreate, PhaserGame());
         });
 
         it("loads the fonts", () => {
-            startup();
-            const game = PhaserGame.getCall(0).args[0];
-            game.state._onStarted();
-            sinon.assert.calledWith(loadFonts, PhaserGame(), sinon.match.func);
+            sandbox.assert.calledWith(loadFonts, PhaserGame(), sandbox.match.func);
         });
 
         it("creates the game navigation", () => {
-            const navigationConfig = "NavConfig";
-            startup({}, navigationConfig);
-            const game = PhaserGame.getCall(0).args[0];
-            game.state._onStarted();
             const onComplete = loadFonts.getCall(0).args[1];
             onComplete();
-            sinon.assert.calledWith(
-                navigationCreate,
-                sinon.match.object,
-                sinon.match.object,
-                "Scene",
-                navigationConfig,
-            );
+            sandbox.assert.calledWith(navigationCreate, Game.Stub.state, sandbox.match.object, "Scene", "NavConfig");
+        });
+
+        it("starts the stats heartbeat through the GMI", () => {
+            const expectedContext = {
+                popupScreens: [],
+                gameMuted: true,
+                qaMode: { active: false, testHarnessLayoutDisplayed: false },
+            };
+            const heartbeatParams = gmiModule.startHeartbeat.getCall(0).args;
+            assert.deepEqual(heartbeatParams[0], Game.Stub);
+            assert.deepEqual(JSON.stringify(heartbeatParams[1]), JSON.stringify(expectedContext));
         });
     });
 });
