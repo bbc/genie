@@ -5,7 +5,7 @@
 
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
-import * as Book from "../../core/book.js";
+import * as Book from "../../core/book/book.js";
 import * as signal from "../../core/signal-bus.js";
 
 /**
@@ -24,7 +24,7 @@ export function create({ game }) {
     const background = overlayLayout.addBackground(game.add.image(0, 0, "howToPlay.background"));
     const title = screen.scene.addToBackground(game.add.image(0, -230, "howToPlay.title"));
 
-    let book = Book.Start("howToPlay", theme, game, screen.scene, overlayLayout, theme.panelText);
+    let book = Book.Start("howToPlay", theme, game, screen, overlayLayout, theme.panelText);
 
     let pips = addPips(book);
     addSignals();

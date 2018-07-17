@@ -14,6 +14,7 @@ describe("How To Play Overlay", () => {
     let mockBackground;
     let mockOverlayLayout;
     let mockPipsGroup;
+    let mountPoint;
 
     const sandbox = sinon.createSandbox();
     const panel1Sprite = { visible: "", destroy: sandbox.spy(), events: { onDestroy: { add: () => {} } } };
@@ -21,6 +22,17 @@ describe("How To Play Overlay", () => {
     const panel3Sprite = { visible: "", destroy: sandbox.spy() };
 
     beforeEach(() => {
+        mountPoint = document.createElement("div");
+        document.body.appendChild(mountPoint);
+
+        let nextEl = document.createElement("div");
+        nextEl.id = "how-to-play__next";
+        let prevEl = document.createElement("div");
+        prevEl.id = "how-to-play__previous";
+
+        mountPoint.appendChild(nextEl);
+        mountPoint.appendChild(prevEl);
+
         signalSpy = sandbox.spy(signal.bus, "subscribe");
         mockBackground = { destroy: sandbox.spy() };
         mockOverlayLayout = {
@@ -37,10 +49,9 @@ describe("How To Play Overlay", () => {
             destroy: sandbox.spy(),
         };
 
-        sandbox.stub(document, "getElementById").returns({ focus: () => {} });
-
         mockTitle = { destroy: sandbox.spy() };
         mockScreen = {
+            visibleLayer: "how-to-play",
             scene: {
                 addLayout: sandbox.stub().returns(mockGelButtons),
                 addToBackground: sandbox.stub(),
@@ -70,7 +81,7 @@ describe("How To Play Overlay", () => {
             state: { current: "howToPlay", states: { howToPlay: mockScreen } },
             canvas: {
                 focus: sandbox.spy(),
-                parentElement: { appendChild: () => {} },
+                parentElement: { appendChild: () => {}, insertBefore: () => {} },
                 setAttribute: () => {},
             },
         };
@@ -83,6 +94,7 @@ describe("How To Play Overlay", () => {
 
     afterEach(() => {
         sandbox.restore();
+        mountPoint.remove();
     });
 
     describe("assets", () => {

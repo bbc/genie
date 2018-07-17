@@ -20,6 +20,14 @@ describe("Accessible Carousel Elements", () => {
         mountPoint = document.createElement("div");
         document.body.appendChild(mountPoint);
 
+        let nextEl = document.createElement("div");
+        nextEl.id = "select-screen__next";
+        let prevEl = document.createElement("div");
+        prevEl.id = "select-screen__previous";
+
+        mountPoint.appendChild(nextEl);
+        mountPoint.appendChild(prevEl);
+
         domElementStubs = [
             { el: document.createElement("div") },
             { el: document.createElement("div") },
@@ -38,9 +46,10 @@ describe("Accessible Carousel Elements", () => {
 
     afterEach(() => {
         sandbox.restore();
+        mountPoint.remove();
     });
 
-    it("creates an carousel DOM element", () => {
+    it("creates a carousel DOM element", () => {
         accessibleCarouselElements.create("select-screen", mockSprites, mountPoint);
 
         const carouselDomElement = mountPoint.firstChild;
@@ -83,11 +92,11 @@ describe("Accessible Carousel Elements", () => {
         });
     });
 
-    it("hides all the accessible DOM elements to they cannot be tabbed to", () => {
+    it("Hides all but the first element to support Firefox with NVDA screen reader", () => {
         accessibleCarouselElements.create("select-screen", mockSprites, mountPoint);
 
         mockSprites.forEach((mockSprite, index) => {
-            assert.equal(domElementStubs[index].el.style.display, "none");
+            assert.equal(domElementStubs[index].el.style.display, index ? "none" : "block");
         });
     });
 

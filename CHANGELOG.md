@@ -2,7 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
-| UNRELEASED | |
+| | Fixes unannounced selections in carousel on IOS and IE11/Firefox with NVDA. |
 | | Removes GMI from `context`, moves default settings into GMI module. |
 | | Added theme configuration to allow the use of different background tracks on different game screens |
 | | Adds basic stats using the GMI. |
