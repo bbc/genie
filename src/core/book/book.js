@@ -1,8 +1,8 @@
 import * as Page from "./page.js";
 import * as Scenery from "./scenery.js";
 import * as Button from "./button.js";
-import fp from "../../lib/lodash/fp/fp.js";
-import * as accessibleCarouselElements from "./accessibility/accessible-carousel-elements.js";
+import fp from "../../../lib/lodash/fp/fp.js";
+import * as accessibleCarouselElements from "../accessibility/accessible-carousel-elements.js";
 
 const configureButtonsForPage = (pageNumber, book, initialising) => {
     const pagesAhead = pageNumber < book.numberOfPages;
@@ -52,11 +52,11 @@ const DrawPages = (panels, drawPage) => {
     return fp.map(drawPage)(panels);
 };
 
-const Draw = (theme, drawPage, drawButtons, game, accessibilityTexts) => {
+const Draw = (theme, drawPage, drawButtons, game, accessibilityTexts, screen) => {
     const pages = DrawPages(theme.panels, drawPage);
     const buttonLayout = drawButtons(["howToPlayBack", "audioOff", "settings", "howToPlayPrevious", "howToPlayNext"]);
     const accessibleElements = accessibleCarouselElements.create(
-        "book",
+        screen.visibleLayer,
         pages,
         game.canvas.parentElement,
         accessibilityTexts,
@@ -80,12 +80,14 @@ const Draw = (theme, drawPage, drawButtons, game, accessibilityTexts) => {
             if (pageIsInBook(pageNumber)) {
                 pages[pageNumber - 1].visible = true;
                 accessibleElements[pageNumber - 1].setAttribute("aria-hidden", false);
+                accessibleElements[pageNumber - 1].style.display = "block"; //Needed for Firefox
             }
         },
         hidePage: pageNumber => {
             if (pageIsInBook(pageNumber)) {
                 pages[pageNumber - 1].visible = false;
                 accessibleElements[pageNumber - 1].setAttribute("aria-hidden", true);
+                accessibleElements[pageNumber - 1].style.display = "none"; //Needed for Firefox
             }
         },
     };
@@ -93,13 +95,14 @@ const Draw = (theme, drawPage, drawButtons, game, accessibilityTexts) => {
     return GoToPage(1, book, true);
 };
 
-const Start = (screenName, theme, game, scene, overlayLayout, accessibilityTexts) => {
+const Start = (screenName, theme, game, screen, overlayLayout, accessibilityTexts) => {
     return Draw(
         theme,
-        Page.Draw(screenName, Scenery.Draw(game, scene)),
-        Button.Draw(scene, overlayLayout),
+        Page.Draw(screenName, Scenery.Draw(game, screen.scene)),
+        Button.Draw(screen.scene, overlayLayout),
         game,
         accessibilityTexts,
+        screen,
     );
 };
 
