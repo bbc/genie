@@ -221,7 +221,7 @@ describe("GMI", () => {
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
-                heartbeat: 15,
+                heartbeat_period: 15,
             });
         });
     });

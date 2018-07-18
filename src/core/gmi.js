@@ -87,7 +87,7 @@ export const startHeartbeat = (game, context) => {
     const intervalPeriodMilliSec = beatPeriodSec * 1000;
 
     setInterval(function beatingHeart() {
-        sendStats("heartbeat", { heartbeat: beatPeriodSec });
+        sendStats("heartbeat", { heartbeat_period: beatPeriodSec });
     }, intervalPeriodMilliSec);
 };
 
