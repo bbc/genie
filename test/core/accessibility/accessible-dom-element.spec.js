@@ -17,12 +17,14 @@ describe("#accessibleDomElement", () => {
 
     beforeEach(() => {
         element = document.createElement("div");
+        parentElement = document.createElement("div");
+        parentElement.appendChild(element);
+
         parentAppendChild = sandbox.spy();
         parentRemoveChild = sandbox.spy();
-        parentElement = {
-            appendChild: parentAppendChild,
-            removeChild: parentRemoveChild,
-        };
+        parentElement.appendChild = parentAppendChild;
+        parentElement.removeChild = parentRemoveChild;
+
         options = {
             id: "play-button",
             parent: parentElement,
@@ -214,6 +216,7 @@ describe("#accessibleDomElement", () => {
     describe("removing element", () => {
         it("is removed from DOM when calling remove function", () => {
             const newAccessibleElement = accessibleDomElement(options);
+
             newAccessibleElement.remove();
             sinon.assert.calledOnce(parentRemoveChild.withArgs(element));
         });
