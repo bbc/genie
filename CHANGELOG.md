@@ -6,6 +6,7 @@
 | | Removes GMI from `context`, moves default settings into GMI module. |
 | | Added theme configuration to allow the use of different background tracks on different game screens |
 | | Adds basic stats using the GMI. |
+| | Adds console.log message to show when game data is saved |
 | 0.4.1 | |
 | | Fix for loading the webfontloader module in the starter pack |
 | 0.4.0 | |
