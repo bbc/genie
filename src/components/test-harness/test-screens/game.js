@@ -55,6 +55,7 @@ export class GameTest extends Screen {
                 characterSelected: this.transientData.characterSelected,
             };
             gmi.setGameData("buttonPressed", buttonNumber);
+            console.log("Data saved to GMI:", gmi.getAllSettings().gameData); // eslint-disable-line no-console
             this.navigation.next(results);
         };
 
