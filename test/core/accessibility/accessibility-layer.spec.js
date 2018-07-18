@@ -21,9 +21,9 @@ describe("managing accessible buttons", () => {
         it("creates and appends the parent DOM element", () => {
             const gameParentElement = { appendChild: sandbox.stub() };
             const el = { id: "" };
-            const createElement = sandbox.stub().returns(el);
+            const createElement = sandbox.stub(document, "createElement").returns(el);
 
-            a11y.setup(gameParentElement, createElement);
+            a11y.setup(gameParentElement);
 
             sandbox.assert.calledOnce(createElement.withArgs("div"));
             sandbox.assert.calledOnce(gameParentElement.appendChild.withArgs(el));

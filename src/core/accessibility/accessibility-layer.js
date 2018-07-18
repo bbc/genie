@@ -6,8 +6,8 @@ const hasAccessibleElement = button => {
 
 export const PARENT_ELEMENT_ID = "accessibility";
 
-export const setup = (gameParentElement, createElement) => {
-    const el = createElement("div");
+export const setup = gameParentElement => {
+    const el = document.createElement("div");
     el.id = PARENT_ELEMENT_ID;
     gameParentElement.appendChild(el);
 
