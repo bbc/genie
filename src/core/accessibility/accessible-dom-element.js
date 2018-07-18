@@ -24,7 +24,7 @@ export function accessibleDomElement(options) {
             el.setAttribute("aria-label", options.ariaLabel);
         }
 
-        options.parent.appendChild(el);
+        //options.parent.appendChild(el);
         assignEvents();
     }
 
@@ -71,6 +71,8 @@ export function accessibleDomElement(options) {
 
     function remove() {
         // IE11 doesn't support el.remove()
-        options.parent.removeChild(el);
+        if (options.parent.contains(el)) {
+            options.parent.removeChild(el);
+        }
     }
 }

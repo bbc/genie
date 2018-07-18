@@ -7,9 +7,10 @@ describe("#accessibleDomElement", () => {
     let options;
     let createElement;
     let element;
+    let otherElement;
     let parentElement;
-    let parentAppendChild;
     let parentRemoveChild;
+    let parentElementContains;
 
     before(() => {
         sandbox = sinon.createSandbox();
@@ -17,11 +18,14 @@ describe("#accessibleDomElement", () => {
 
     beforeEach(() => {
         element = document.createElement("div");
-        parentAppendChild = sandbox.spy();
+        otherElement = document.createElement("div");
         parentRemoveChild = sandbox.spy();
+        parentElementContains = sandbox.stub();
+        parentElementContains.withArgs(element).returns(true);
+        parentElementContains.withArgs(otherElement).returns(false);
         parentElement = {
-            appendChild: parentAppendChild,
             removeChild: parentRemoveChild,
+            contains: parentElementContains,
         };
         options = {
             id: "play-button",
@@ -141,11 +145,6 @@ describe("#accessibleDomElement", () => {
             accessibleDomElement(options);
             sinon.assert.calledOnce(eventListener.withArgs("blur", sinon.match.func));
         });
-
-        it("appends element to parent element", () => {
-            accessibleDomElement(options);
-            sinon.assert.calledOnce(parentAppendChild.withArgs(element));
-        });
     });
 
     describe("Accessing the created element", () => {
@@ -212,10 +211,20 @@ describe("#accessibleDomElement", () => {
     });
 
     describe("removing element", () => {
-        it("is removed from DOM when calling remove function", () => {
-            const newAccessibleElement = accessibleDomElement(options);
-            newAccessibleElement.remove();
-            sinon.assert.calledOnce(parentRemoveChild.withArgs(element));
+        describe("when element exists in DOM", () => {
+            it("is removed from DOM when calling remove function", () => {
+                const newAccessibleElement = accessibleDomElement(options);
+                newAccessibleElement.remove();
+                sinon.assert.calledOnce(parentRemoveChild.withArgs(element));
+            });
+        });
+
+        describe("when element does not exist in DOM", () => {
+            it("does not attempt to remove the element", () => {
+                const newAccessibleElement = accessibleDomElement(options);
+                newAccessibleElement.remove();
+                sinon.assert.notCalled(parentRemoveChild.withArgs(otherElement));
+            });
         });
     });
 });

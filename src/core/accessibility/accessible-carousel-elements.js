@@ -30,7 +30,9 @@ export function create(pageName, carouselSprites, parentElement, choices) {
 
         if (index === 0) {
             sprite.events.onDestroy.add(() => {
-                parentElement.removeChild(carousel);
+                if (parentElement.contains(carousel)) {
+                    parentElement.removeChild(carousel);
+                }
             });
         }
     });
