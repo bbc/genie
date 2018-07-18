@@ -148,7 +148,7 @@
             "frameHeight": 120,
             "frameMax": 2,
             "margin": 0,
-            "spacing": 5
+            "spacing": 4
         },
         {
             "type": "image",
