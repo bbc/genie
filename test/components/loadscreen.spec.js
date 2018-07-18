@@ -21,11 +21,11 @@ describe("Load Screen", () => {
     const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
-        assetLoaderCallbackSpy = sandbox.stub();
+        assetLoaderCallbackSpy = sandbox.spy();
         assetLoaderStub = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
         addImageStub = sandbox.stub();
         setButtonClickSoundStub = sandbox.stub(GameSound, "setButtonClickSound");
-        navigationNext = sandbox.stub();
+        navigationNext = sandbox.spy();
 
         mockGmi = { gameLoaded: sandbox.stub() };
         sandbox.stub(gmiModule, "setGmi").returns(mockGmi);
