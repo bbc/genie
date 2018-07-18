@@ -15,7 +15,7 @@ export const config = {
         channel: buttonsChannel,
         action: () => {
             gmi.exit();
-            sendStats("click");
+            sendStats("click", { action_type: "exit" });
         },
     },
     home: {
@@ -29,7 +29,7 @@ export const config = {
         action: ({ game }) => {
             const screen = game.state.states[game.state.current];
             screen.navigation.home();
-            sendStats("click");
+            sendStats("click", { action_type: "home" });
         },
     },
     pauseHome: {
@@ -41,7 +41,7 @@ export const config = {
         id: "__home",
         channel: "pause-gel-buttons",
         action: () => {
-            sendStats("click");
+            sendStats("click", { action_type: "pause" });
         },
     },
     back: {
@@ -53,7 +53,7 @@ export const config = {
         id: "__back",
         channel: buttonsChannel,
         action: () => {
-            sendStats("click");
+            sendStats("click", { action_type: "back" });
         },
     },
     howToPlayBack: {
@@ -65,7 +65,7 @@ export const config = {
         id: "__back",
         channel: "how-to-play-gel-buttons",
         action: () => {
-            sendStats("click");
+            sendStats("click", { action_type: "how-to-play" });
         },
     },
     audioOff: {
@@ -77,7 +77,7 @@ export const config = {
         id: "__audio--off",
         channel: buttonsChannel,
         action: () => {
-            sendStats("click");
+            sendStats("click", { action_type: "audio" });
         },
     },
     audioOn: {
@@ -89,7 +89,7 @@ export const config = {
         id: "__audio--on",
         channel: buttonsChannel,
         action: () => {
-            sendStats("click");
+            sendStats("click", { action_type: "audio" });
         },
     },
     settings: {
@@ -102,7 +102,7 @@ export const config = {
         channel: buttonsChannel,
         action: () => {
             settings.show();
-            sendStats("click");
+            sendStats("click", { action_type: "settings" });
         },
     },
     pause: {
@@ -115,7 +115,7 @@ export const config = {
         channel: buttonsChannel,
         action: ({ game }) => {
             pause.create(false, { game });
-            sendStats("click");
+            sendStats("click", { action_type: "pause" });
         },
     },
     pauseNoReplay: {
@@ -128,7 +128,7 @@ export const config = {
         channel: buttonsChannel,
         action: ({ game }) => {
             pause.create(true, { game });
-            sendStats("click");
+            sendStats("click", { action_type: "pause" });
         },
     },
     previous: {
@@ -139,9 +139,6 @@ export const config = {
         order: 7,
         id: "__previous",
         channel: buttonsChannel,
-        action: () => {
-            sendStats("click");
-        },
     },
     howToPlayPrevious: {
         group: "middleLeftSafe",
@@ -151,9 +148,6 @@ export const config = {
         order: 7,
         id: "__previous",
         channel: "how-to-play-gel-buttons",
-        action: () => {
-            sendStats("click");
-        },
     },
     replay: {
         group: "middleCenter",
@@ -163,7 +157,7 @@ export const config = {
         order: 8,
         id: "__replay",
         action: () => {
-            sendStats("click");
+            sendStats("click", { action_type: "playagain" });
         },
     },
     pauseReplay: {
@@ -175,7 +169,7 @@ export const config = {
         id: "__replay",
         channel: "pause-gel-buttons",
         action: () => {
-            sendStats("click");
+            sendStats("click", { action_type: "playagain" });
         },
     },
     play: {
@@ -188,7 +182,7 @@ export const config = {
         channel: buttonsChannel,
         positionOverride: true,
         action: () => {
-            sendStats("click");
+            sendStats("click", { action_type: "play" });
         },
     },
     pausePlay: {
@@ -200,7 +194,7 @@ export const config = {
         id: "__play",
         channel: "pause-gel-buttons",
         action: () => {
-            sendStats("click");
+            sendStats("click", { action_type: "play" });
         },
     },
     next: {
@@ -211,9 +205,6 @@ export const config = {
         order: 10,
         id: "__next",
         channel: buttonsChannel,
-        action: () => {
-            sendStats("click");
-        },
     },
     howToPlayNext: {
         group: "middleRightSafe",
@@ -223,9 +214,6 @@ export const config = {
         order: 10,
         id: "__next",
         channel: "how-to-play-gel-buttons",
-        action: () => {
-            sendStats("click");
-        },
     },
     achievements: {
         group: "bottomLeft",
@@ -236,7 +224,7 @@ export const config = {
         id: "__achievements",
         channel: buttonsChannel,
         action: () => {
-            sendStats("click");
+            sendStats("click", { action_type: "achievements" });
         },
     },
     restart: {
@@ -248,7 +236,7 @@ export const config = {
         id: "__restart",
         channel: buttonsChannel,
         action: () => {
-            sendStats("click");
+            sendStats("click", { action_type: "restart" });
         },
     },
     continue: {
@@ -259,9 +247,6 @@ export const config = {
         order: 13,
         id: "__continue",
         channel: buttonsChannel,
-        action: () => {
-            sendStats("click");
-        },
     },
     howToPlay: {
         group: "bottomRight",
@@ -273,7 +258,7 @@ export const config = {
         channel: buttonsChannel,
         action: ({ game }) => {
             howToPlay.create({ game });
-            sendStats("click");
+            sendStats("click", { action_type: "how-to-play" });
         },
     },
 };

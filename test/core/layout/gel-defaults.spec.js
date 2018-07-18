@@ -48,7 +48,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "exit" }));
         });
     });
 
@@ -63,7 +63,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "home" }));
         });
     });
 
@@ -73,7 +73,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "pause" }));
         });
     });
 
@@ -83,7 +83,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "back" }));
         });
     });
 
@@ -93,7 +93,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "how-to-play" }));
         });
     });
 
@@ -103,7 +103,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "audio" }));
         });
     });
 
@@ -113,7 +113,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "audio" }));
         });
     });
 
@@ -127,7 +127,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "settings" }));
         });
     });
 
@@ -141,7 +141,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "pause" }));
         });
     });
 
@@ -155,27 +155,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
-        });
-    });
-
-    describe("Previous Button Callback", () => {
-        beforeEach(() => {
-            gel.config.previous.action();
-        });
-
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
-        });
-    });
-
-    describe("How To Play Previous Button Callback", () => {
-        beforeEach(() => {
-            gel.config.howToPlayPrevious.action();
-        });
-
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "pause" }));
         });
     });
 
@@ -185,7 +165,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "playagain" }));
         });
     });
 
@@ -195,7 +175,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "playagain" }));
         });
     });
 
@@ -205,7 +185,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "play" }));
         });
     });
 
@@ -215,27 +195,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
-        });
-    });
-
-    describe("Next Button Callback", () => {
-        beforeEach(() => {
-            gel.config.next.action();
-        });
-
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
-        });
-    });
-
-    describe("How To Play Next Button Callback", () => {
-        beforeEach(() => {
-            gel.config.howToPlayNext.action();
-        });
-
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "play" }));
         });
     });
 
@@ -245,7 +205,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "achievements" }));
         });
     });
 
@@ -255,17 +215,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
-        });
-    });
-
-    describe("Continue Button Callback", () => {
-        beforeEach(() => {
-            gel.config.continue.action();
-        });
-
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "restart" }));
         });
     });
 
@@ -279,7 +229,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click"));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "how-to-play" }));
         });
     });
 });

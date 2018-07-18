@@ -154,10 +154,9 @@ describe("GMI", () => {
             gmiModule.sendStats("click");
             const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
             assert.equal(params[0], "game_first_click");
-            assert.equal(params[1], "home");
+            assert.equal(params[1], undefined); // this will be passed in as an addition param in production
             assert.deepEqual(params[2], {
                 action_name: "game_first_click",
-                action_type: "home",
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
@@ -169,10 +168,23 @@ describe("GMI", () => {
             gmiModule.sendStats("click");
             const params = fakeGmiObject.sendStatsEvent.getCall(1).args;
             assert.equal(params[0], "game_click");
-            assert.equal(params[1], "home");
+            assert.equal(params[1], undefined); // this will be passed in as an addition param in production
             assert.deepEqual(params[2], {
                 action_name: "game_click",
-                action_type: "home",
+                game_template: "genie",
+                game_screen: "home",
+                game_level_name: null,
+            });
+        });
+
+        it("overrides params with additional ones sent to the GMI if provided", () => {
+            gmiModule.sendStats("click", { action_type: "type_override" });
+            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
+            assert.equal(params[0], "game_click");
+            assert.equal(params[1], "type_override");
+            assert.deepEqual(params[2], {
+                action_name: "game_click",
+                action_type: "type_override",
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,

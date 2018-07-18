@@ -59,7 +59,6 @@ const getStatsParams = actionKey => {
         }
         customParams = {
             action_name: actionName,
-            action_type: currentScreen,
         };
     } else if (actionKey === "heartbeat") {
         customParams = {
