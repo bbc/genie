@@ -14,50 +14,62 @@ export const setup = gameParentElement => {
     return el;
 };
 
-export const getAccessibleButtons = screen => {
-    if (screen) {
-        return _accessibleButtons[screen];
+export const getAccessibleButtons = visibleLayer => {
+    if (visibleLayer) {
+        return _accessibleButtons[visibleLayer];
     } else {
         return _accessibleButtons;
     }
 };
 
-export const addToAccessibleButtons = (screen, button) => {
-    if (_accessibleButtons[screen]) {
-        _accessibleButtons[screen].push(button);
+export const addToAccessibleButtons = (visibleLayer, button) => {
+    if (_accessibleButtons[visibleLayer]) {
+        _accessibleButtons[visibleLayer].push(button);
     } else {
-        _accessibleButtons[screen] = [button];
+        _accessibleButtons[visibleLayer] = [button];
     }
 
     return _accessibleButtons;
 };
 
-export const clearAccessibleButtons = () => {
-    _accessibleButtons = {};
+export const clearAccessibleButtons = visibleLayer => {
+    if (visibleLayer) {
+        _accessibleButtons[visibleLayer] = [];
+    } else {
+        _accessibleButtons = {};
+    }
 
     return _accessibleButtons;
 };
 
-export const clearElementsFromDom = parentElement => {
+export const clearElementsFromDom = () => {
+    const parentElement = document.getElementById(PARENT_ELEMENT_ID);
     parentElement.innerHTML = "";
 
     return parentElement;
 };
 
-export const appendElementsToDom = (buttons, parentElement) => {
-    buttons.forEach(button => {
+export const appendElementsToDom = (screen, buttons) => {
+    const btns = buttons || getAccessibleButtons(screen.visibleLayer);
+    const parentElement = document.getElementById(PARENT_ELEMENT_ID);
+
+    btns.forEach(button => {
         if (hasAccessibleElement(button)) {
             parentElement.appendChild(button.accessibleElement);
         }
     });
 };
 
-export const resetElementsInDom = (screen, parentElement) => {
-    const buttons = getAccessibleButtons(screen);
+export const resetElementsInDom = screen => {
+    const visibleLayer = screen.visibleLayer;
+    const buttons = getAccessibleButtons(visibleLayer);
+    const parentElement = document.getElementById(PARENT_ELEMENT_ID);
+
+    clearAccessibleButtons(visibleLayer);
     clearElementsFromDom(parentElement);
 
     if (buttons) {
-        appendElementsToDom(buttons, parentElement);
+        appendElementsToDom(visibleLayer, buttons);
     }
 
     return parentElement;

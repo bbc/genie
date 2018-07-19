@@ -69,10 +69,11 @@ export function accessibleDomElement(options) {
         }
     }
 
+    // TODO remove where this is called from when no longer needed
     function remove() {
         // IE11 doesn't support el.remove()
-        if (options.parent.contains(el)) {
-            options.parent.removeChild(el);
-        }
+        //if (options.parent.contains(el)) {
+        //    options.parent.removeChild(el);
+        //}
     }
 }

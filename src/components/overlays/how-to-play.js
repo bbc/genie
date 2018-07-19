@@ -29,6 +29,8 @@ export function create({ game }) {
     let pips = addPips(book);
     addSignals();
 
+    screen.onOverlayOpen.dispatch();
+
     function previousButtonClick() {
         book = Book.PreviousPage(book);
         updatePips(book);
@@ -93,7 +95,6 @@ export function create({ game }) {
         destroyPips();
         title.destroy();
         background.destroy();
-        game.canvas.focus();
-        screen.context.popupScreens = fp.pull("how-to-play", screen.context.popupScreens);
+        screen.onOverlayClosed.dispatch();
     }
 }
