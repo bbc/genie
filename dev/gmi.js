@@ -1,3 +1,4 @@
+/* eslint-disable */
 (function() {
     var GMI = function(options, embedVars, gameDir) {
         var appName = embedVars.statsAppName;
