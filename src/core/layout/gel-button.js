@@ -26,6 +26,12 @@ export class GelButton extends Phaser.Button {
         this.hitArea = new Phaser.Rectangle(-width / 2, -height / 2, width, height);
     }
 
+    setImage(key, metrics) {
+        this._id = key;
+        this.resize(metrics)
+    }
+
+
     resize(metrics) {
         this.animations.sprite.loadTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);

@@ -98,6 +98,10 @@ class Startup extends Phaser.State {
             name: "setting-changed-audio",
             callback: value => {
                 this.game.sound.mute = !value;
+
+
+                //TODO get the audio button and change its key.
+                //
             },
         });
     }

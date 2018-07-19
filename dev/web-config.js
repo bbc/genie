@@ -1,5 +1,5 @@
 module.exports = {
-    indexPath: "index.dev.html",
+    staticIndex: "index.dev.html",
     port: 8080,
     mime: {
         "application/wasm": ["wasm"],
