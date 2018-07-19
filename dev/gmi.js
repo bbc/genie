@@ -145,7 +145,7 @@ var GMI = function(options, embedVars, gameDir) {
 
 function configureGmi(gameDir, themesDir) {
     var gmi_instance;
-    var theme = getParam("theme") || "dev";
+    var theme = getParam("theme") || "default";
     var embedVars = {
         statsCounterName: "testCounterName",
         statsAppName: "TestAppName",
