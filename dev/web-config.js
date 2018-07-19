@@ -1,6 +1,6 @@
 module.exports = {
     port: 8080,
-	mime: {
-		"application/wasm": ["wasm"]
-	}
+    mime: {
+        "application/wasm": ["wasm"],
+    },
 };
