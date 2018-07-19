@@ -55,9 +55,9 @@
         "webpack-visualizer-plugin": "^0.1.11"
     },
     "scripts": {
-        "start": "http2-server -i index.dev.html -S",
+        "start": "http2-server -i dev/index.dev.html -S",
         "watch": "live-server --no-browser --entry-file=dev/index.dev.html --watch=./src",
-        "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js",
+        "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js --env.genieCore",
         "build": "webpack --config build-scripts/webpack.config.js",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
         "eslint": "eslint . --ignore-pattern lodash --ignore-path .gitignore",
