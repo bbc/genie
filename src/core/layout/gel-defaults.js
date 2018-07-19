@@ -64,9 +64,9 @@ export const config = {
         id: "__audio--off",
         channel: buttonsChannel,
         action: () => {
-            console.log('audio off')
+            console.log("audio off");
             gmi.setMuted(false);
-        }
+        },
     },
     audioOn: {
         group: "topRight",
@@ -77,9 +77,9 @@ export const config = {
         id: "__audio--on",
         channel: buttonsChannel,
         action: () => {
-            console.log('audio on')
+            console.log("audio on");
             gmi.setMuted(true);
-        }
+        },
     },
     settings: {
         group: "topRight",
