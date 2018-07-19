@@ -1,6 +1,4 @@
 var path = require("path");
-var HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
-var Visualizer = require("webpack-visualizer-plugin");
 
 // Phaser webpack config
 var phaserModule = path.join(__dirname, "../node_modules/phaser-ce/");
@@ -12,7 +10,6 @@ module.exports = env => {
     var webPackConfig = {
         mode: "production",
         performance: { hints: false },
-        plugins: [new HardSourceWebpackPlugin(), new Visualizer()],
         entry: ["babel-polyfill", "pixi", "p2", "phaser", "webfontloader", path.resolve("src/main.js")],
         output: {
             path: path.resolve("output"),
@@ -46,6 +43,10 @@ module.exports = env => {
     };
 
     if (env && env.genieCore) {
+        var HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
+        var Visualizer = require("webpack-visualizer-plugin");
+        webPackConfig.plugins = [new HardSourceWebpackPlugin(), new Visualizer()];
+
         webPackConfig.devServer.historyApiFallback.index = "dev/index.main.html";
         webPackConfig.devServer.historyApiFallback.rewrites = [
             {
