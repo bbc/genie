@@ -47,6 +47,11 @@
                 return false;
             },
         });
+
+        Object.defineProperty(GMI.prototype, "setAudio", {
+            get: () => false,
+        });
+
         var GMI_LOCAL_STORAGE_KEY = "bbc_childrens_gmi_data";
         var GMI_GAME_STORAGE_KEY = GMI_LOCAL_STORAGE_KEY + "_" + gameId;
         var globalSettings = {
