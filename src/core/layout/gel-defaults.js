@@ -63,6 +63,10 @@ export const config = {
         order: 3,
         id: "__audio--off",
         channel: buttonsChannel,
+        action: () => {
+            console.log('audio off')
+            gmi.setMuted(false);
+        }
     },
     audioOn: {
         group: "topRight",
@@ -72,6 +76,10 @@ export const config = {
         order: 4,
         id: "__audio--on",
         channel: buttonsChannel,
+        action: () => {
+            console.log('audio on')
+            gmi.setMuted(true);
+        }
     },
     settings: {
         group: "topRight",
