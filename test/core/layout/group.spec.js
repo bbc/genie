@@ -29,6 +29,7 @@ describe("Group", () => {
             horizontals: { left: -1000, center: 0, right: 1000 },
             safeHorizontals: { left: -300, center: 0, right: 300 },
             verticals: { top: -1500, middle: 0, bottom: 1500 },
+            scale: 1,
         };
         buttonResizeStub = sandbox.stub();
         buttonFactory = {
@@ -137,6 +138,102 @@ describe("Group", () => {
                 group.reset(metrics);
                 assert.strictEqual(group.x, -200);
                 assert.strictEqual(group.y, 1400);
+            });
+        });
+
+        describe("when vPos is top and hPos is left", () => {
+            it("correctly takes hitArea into account", () => {
+                const leftSpy = sandbox.spy(Group.prototype, "left", ["set"]);
+                const topSpy = sandbox.spy(Group.prototype, "top", ["set"]);
+                const createButtonStub = sandbox.stub(buttonFactory, "createButton");
+
+                vPos = "top";
+                hPos = "left";
+                group = new Group(game, parentGroup, vPos, hPos, metrics);
+
+                createButtonStub.returns({
+                    x: 50,
+                    y: 50,
+                    width: 50,
+                    height: 50,
+                    hitArea: {
+                        left: 0,
+                        top: 0,
+                    },
+                    updateTransform: () => {},
+                    resize: buttonResizeStub,
+                });
+                group.addButton(config);
+
+                createButtonStub.returns({
+                    x: 50,
+                    y: 50,
+                    width: 50,
+                    height: 50,
+                    hitArea: {
+                        left: -1000,
+                        top: -1000,
+                    },
+                    updateTransform: () => {},
+                    resize: buttonResizeStub,
+                });
+                group.addButton(config);
+
+                group.reset(metrics);
+
+                sinon.assert.calledOnce(leftSpy.set);
+                sinon.assert.calledOnce(topSpy.set);
+
+                sinon.assert.calledWithExactly(leftSpy.set, -25);
+                sinon.assert.calledWithExactly(topSpy.set, -425);
+            });
+        });
+
+        describe("when vPos is bottom and hPos is right", () => {
+            it("correctly takes hitArea into account", () => {
+                const rightSpy = sandbox.spy(Group.prototype, "right", ["set"]);
+                const bottomSpy = sandbox.spy(Group.prototype, "bottom", ["set"]);
+                const createButtonStub = sandbox.stub(buttonFactory, "createButton");
+
+                vPos = "bottom";
+                hPos = "right";
+                group = new Group(game, parentGroup, vPos, hPos, metrics);
+
+                createButtonStub.returns({
+                    x: 50,
+                    y: 50,
+                    width: 50,
+                    height: 50,
+                    hitArea: {
+                        right: 1000,
+                        bottom: 1000,
+                    },
+                    updateTransform: () => {},
+                    resize: buttonResizeStub,
+                });
+                group.addButton(config);
+
+                createButtonStub.returns({
+                    x: 50,
+                    y: 50,
+                    width: 50,
+                    height: 50,
+                    hitArea: {
+                        right: 0,
+                        bottom: 0,
+                    },
+                    updateTransform: () => {},
+                    resize: buttonResizeStub,
+                });
+                group.addButton(config);
+
+                group.reset(metrics);
+
+                sinon.assert.calledOnce(rightSpy.set);
+                sinon.assert.calledOnce(bottomSpy.set);
+
+                sinon.assert.calledWithExactly(rightSpy.set, -125);
+                sinon.assert.calledWithExactly(bottomSpy.set, 375);
             });
         });
     });

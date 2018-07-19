@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| 0.5.0 | |
 | | Fixes unannounced selections in carousel on IOS and IE11/Firefox with NVDA. |
 | | Removes GMI from `context`, moves default settings into GMI module. |
 | | Update to Phaser 2.11.0 and fix spritesheet spacing to match new Phaser requirements. |

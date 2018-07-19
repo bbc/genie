@@ -5,25 +5,45 @@ import { applyButtonOverrides } from "./button-overrides.js";
 
 const horizontal = {
     left: (metrics, group, horizontalsType) => {
-        group.left = metrics[horizontalsType].left + metrics.borderPad;
+        let hitAreaOffset = 0;
+        fp.forEach(child => {
+            if (!child.hitArea) return;
+            hitAreaOffset = fp.max([hitAreaOffset, -(child.x + child.hitArea.left) / metrics.scale]);
+        }, group.children);
+        group.left = metrics[horizontalsType].left + metrics.borderPad + hitAreaOffset;
     },
     center: (metrics, group, horizontalsType) => {
         group.centerX = metrics[horizontalsType].center;
     },
     right: (metrics, group, horizontalsType) => {
-        group.right = metrics[horizontalsType].right - metrics.borderPad;
+        let hitAreaOffset = 0;
+        fp.forEach(child => {
+            if (!child.hitArea) return;
+            hitAreaOffset = fp.max([hitAreaOffset, (child.x + child.hitArea.right) / metrics.scale - group.width]);
+        }, group.children);
+        group.right = metrics[horizontalsType].right - metrics.borderPad - hitAreaOffset;
     },
 };
 
 const vertical = {
     top: (metrics, group) => {
-        group.top = metrics.verticals.top + metrics.borderPad;
+        let hitAreaOffset = 0;
+        fp.forEach(child => {
+            if (!child.hitArea) return;
+            hitAreaOffset = fp.max([hitAreaOffset, -(child.y + child.hitArea.top) / metrics.scale]);
+        }, group.children);
+        group.top = metrics.verticals.top + metrics.borderPad + hitAreaOffset;
     },
     middle: (metrics, group) => {
         group.centerY = metrics.verticals.middle;
     },
     bottom: (metrics, group) => {
-        group.bottom = metrics.verticals.bottom - metrics.borderPad;
+        let hitAreaOffset = 0;
+        fp.forEach(child => {
+            if (!child.hitArea) return;
+            hitAreaOffset = fp.max([hitAreaOffset, (child.y + child.hitArea.bottom) / metrics.scale - group.height]);
+        }, group.children);
+        group.bottom = metrics.verticals.bottom - metrics.borderPad - hitAreaOffset;
     },
 };
 
