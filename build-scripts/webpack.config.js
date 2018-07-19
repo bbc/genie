@@ -34,6 +34,7 @@ module.exports = env => {
             },
         },
         devServer: {
+            contentBase: path.join(__dirname, ".."),
             useLocalIp: true,
             host: "0.0.0.0",
             historyApiFallback: {
