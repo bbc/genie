@@ -177,7 +177,7 @@ describe("GMI", () => {
             });
         });
 
-        it("overrides params with additional ones sent to the GMI if provided", () => {
+        it("overrides params sent to the GMI with additional ones if provided", () => {
             gmiModule.sendStats("click", { action_type: "type_override" });
             const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
             assert.equal(params[0], "game_click");
@@ -199,6 +199,48 @@ describe("GMI", () => {
             assert.deepEqual(params[2], {
                 action_name: "game_loaded",
                 action_type: true,
+                game_template: "genie",
+                game_screen: "home",
+                game_level_name: null,
+            });
+        });
+
+        it("passes the game complete stat to the GMI", () => {
+            gmiModule.sendStats("game_complete");
+            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
+            assert.equal(params[0], "game_level");
+            assert.equal(params[1], "complete");
+            assert.deepEqual(params[2], {
+                action_name: "game_level",
+                action_type: "complete",
+                game_template: "genie",
+                game_screen: "home",
+                game_level_name: null,
+            });
+        });
+
+        it("passes the replay stat to the GMI", () => {
+            gmiModule.sendStats("replay");
+            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
+            assert.equal(params[0], "game_level");
+            assert.equal(params[1], "playagain");
+            assert.deepEqual(params[2], {
+                action_name: "game_level",
+                action_type: "playagain",
+                game_template: "genie",
+                game_screen: "home",
+                game_level_name: null,
+            });
+        });
+
+        it("passes the continue stat to the GMI", () => {
+            gmiModule.sendStats("continue");
+            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
+            assert.equal(params[0], "game_level");
+            assert.equal(params[1], "continue");
+            assert.deepEqual(params[2], {
+                action_name: "game_level",
+                action_type: "continue",
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,

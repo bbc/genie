@@ -67,9 +67,26 @@ const getStatsParams = actionKey => {
         };
     } else if (actionKey === "game_loaded") {
         customParams = {
+            action_name: "game_loaded",
             action_type: true,
         };
+    } else if (actionKey === "replay") {
+        customParams = {
+            action_name: "game_level",
+            action_type: "playagain",
+        };
+    } else if (actionKey === "continue") {
+        customParams = {
+            action_name: "game_level",
+            action_type: "continue",
+        };
+    } else if (actionKey === "game_complete") {
+        customParams = {
+            action_name: "game_level",
+            action_type: "complete",
+        };
     }
+
     return fp.merge(defaultParams, customParams);
 };
 

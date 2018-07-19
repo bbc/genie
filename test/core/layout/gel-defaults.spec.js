@@ -215,7 +215,25 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "restart" }));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "playagain" }));
+        });
+
+        it("sends a replay stat to the GMI", () => {
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("replay"));
+        });
+    });
+
+    describe("Continue Game Button Callback", () => {
+        beforeEach(() => {
+            gel.config.continueGame.action();
+        });
+
+        it("sends a click stat to the GMI", () => {
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "continue" }));
+        });
+
+        it("sends a game_level continue stat to the GMI", () => {
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("continue"));
         });
     });
 
