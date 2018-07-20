@@ -1,4 +1,5 @@
 var path = require("path");
+var dynamicallyExposeGlobals = require("../lib/dynamicExpose.js");
 
 // Phaser webpack config
 var phaserModule = path.resolve("node_modules/phaser-ce/");
@@ -10,7 +11,7 @@ module.exports = env => {
     var webPackConfig = {
         mode: "production",
         performance: { hints: false },
-        entry: ["babel-polyfill", "pixi", "p2", "phaser", "webfontloader", path.resolve("src/main.js")],
+        entry: ["babel-polyfill", "pixi", "p2", "phaser", "webfontloader"],
         output: {
             path: path.resolve("output"),
             publicPath: "output",
@@ -41,6 +42,16 @@ module.exports = env => {
             },
         },
     };
+
+    try {
+        var dynamicConfig = dynamicallyExposeGlobals(path.resolve("globals.json"));
+        webPackConfig.entry = webPackConfig.entry.concat(dynamicConfig.entry);
+        webPackConfig.module.rules = webPackConfig.module.rules.concat(dynamicConfig.rules);
+    } catch (err) {
+        if (err.code !== "ENOENT") throw err;
+    }
+
+    webPackConfig.entry.push(path.resolve("src/main.js"));
 
     if (env && env.genieCore) {
         var HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
