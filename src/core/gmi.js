@@ -41,6 +41,14 @@ const getDefaultGlobals = () => {
     };
 };
 
+const getSettingsString = settings => {
+    return Object.keys(settings)
+        .map(key => {
+            return key === "gameData" ? getSettingsString(settings[key]) : key + "-" + settings[key];
+        })
+        .join("-");
+};
+
 const getStatsParams = actionKey => {
     const currentScreen = VisibleLayer.get(gameInstance, gameContext);
     const defaultParams = {
@@ -48,6 +56,7 @@ const getStatsParams = actionKey => {
         game_template: "genie",
         game_screen: currentScreen,
         game_level_name: null,
+        settings_status: getSettingsString(gmi.getAllSettings()),
     };
     let customParams = {};
 

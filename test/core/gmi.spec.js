@@ -38,7 +38,15 @@ describe("GMI", () => {
                 },
             ],
         };
-        fakeGmiObject = { sendStatsEvent: sandbox.stub() };
+        fakeGmiObject = {
+            sendStatsEvent: sandbox.stub(),
+            getAllSettings: sandbox.stub().returns({
+                audio: true,
+                subtitles: false,
+                motion: true,
+                gameData: { characterSelected: 1, buttonPressed: 3 },
+            }),
+        };
         fakeWindow = { getGMI: sandbox.stub().returns(fakeGmiObject) };
         sandbox.replace(gmiModule, "gmi", fakeGmiObject);
     });
@@ -147,6 +155,7 @@ describe("GMI", () => {
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
+                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             });
         });
 
@@ -160,6 +169,7 @@ describe("GMI", () => {
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
+                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             });
         });
 
@@ -174,6 +184,7 @@ describe("GMI", () => {
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
+                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             });
         });
 
@@ -188,6 +199,7 @@ describe("GMI", () => {
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
+                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             });
         });
 
@@ -202,6 +214,7 @@ describe("GMI", () => {
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
+                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             });
         });
 
@@ -216,6 +229,7 @@ describe("GMI", () => {
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
+                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             });
         });
 
@@ -230,6 +244,7 @@ describe("GMI", () => {
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
+                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             });
         });
 
@@ -244,6 +259,7 @@ describe("GMI", () => {
                 game_template: "genie",
                 game_screen: "home",
                 game_level_name: null,
+                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             });
         });
     });
@@ -276,6 +292,7 @@ describe("GMI", () => {
                 game_screen: "home",
                 game_level_name: null,
                 heartbeat_period: 15,
+                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             });
         });
     });
