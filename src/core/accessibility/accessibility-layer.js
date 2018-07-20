@@ -6,9 +6,7 @@ const hasAccessibleElement = button => {
 
 const PARENT_ELEMENT_ID = "accessibility";
 
-const getAccessibleButtons = visibleLayer => {
-    return _accessibleButtons[visibleLayer];
-};
+const getAccessibleButtons = visibleLayer => _accessibleButtons[visibleLayer];
 
 export const setup = gameParentElement => {
     const el = document.createElement("div");

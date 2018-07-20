@@ -16,6 +16,7 @@ function createCarouselElement(parentElement, pageName) {
     setCSS(carouselElement);
 
     parentElement.appendChild(carouselElement);
+
     return carouselElement;
 }
 
@@ -23,33 +24,12 @@ function getAccessibilityText(choices, index) {
     return choices ? choices[index].accessibilityText : "Page " + (index + 1);
 }
 
-/**
- * NOTE: strong candidate for being handled in a future 'accessibility manager' module
- *
- * @returns {HTMLFieldSetElement}
- */
-const ariaFieldset = name => {
-    const fieldset = document.createElement("fieldset");
-
-    fieldset.setAttribute("aria-controls", "carousel");
-
-    const next = document.getElementById(name + "__next");
-    const previous = document.getElementById(name + "__previous");
-
-    fieldset.appendChild(previous);
-    fieldset.appendChild(next);
-
-    return fieldset;
-};
-
 export function create(pageName, carouselSprites, parentElement, choices) {
     const accessibleElements = [];
     const carousel = createCarouselElement(parentElement, pageName);
-    const fieldset = ariaFieldset(pageName);
 
     //NOTE: Hack to force tab accessibility order
     // needs a refactor once we have an accessibility layer
-    parentElement.insertBefore(fieldset, pageName === "how-to-play" ? carousel : carousel.previousSibling);
     carouselSprites.forEach((sprite, index) => {
         const accessibleElement = accessibleDomElement({
             id: "carousel-" + pageName + "__" + (index + 1),
@@ -58,6 +38,7 @@ export function create(pageName, carouselSprites, parentElement, choices) {
             text: getAccessibilityText(choices, index),
             notClickable: true,
         }).el;
+        carousel.appendChild(accessibleElement);
 
         accessibleElement.style.display = index ? "none" : "block";
         accessibleElement.setAttribute("tabIndex", -1);
@@ -68,7 +49,6 @@ export function create(pageName, carouselSprites, parentElement, choices) {
             sprite.events.onDestroy.add(() => {
                 if (parentElement.contains(carousel)) {
                     parentElement.removeChild(carousel);
-                    parentElement.removeChild(fieldset);
                 }
             });
         }
