@@ -1,7 +1,7 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 import { startup } from "../../src/core/startup.js";
-import * as gmiModule from "../../src/core/gmi.js";
+import * as gmiModule from "../../src/core/gmi/gmi.js";
 import * as Game from "../fake/game.js";
 import * as Scene from "../../src/core/scene.js";
 import * as LoadFonts from "../../src/core/font-loader.js";

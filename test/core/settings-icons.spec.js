@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-import * as gmiModule from "../../src/core/gmi.js";
+import * as gmiModule from "../../src/core/gmi/gmi.js";
 import * as signal from "../../src/core/signal-bus.js";
 
 import * as SettingsIcons from "../../src/core/layout/settings-icons.js";

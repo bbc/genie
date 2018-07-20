@@ -3,7 +3,7 @@ import * as sinon from "sinon";
 import { Results } from "../../src/components/results";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
-import * as gmiModule from "../../src/core/gmi.js";
+import * as gmiModule from "../../src/core/gmi/gmi.js";
 
 describe("Results Screen", () => {
     let resultsScreen;

@@ -1,8 +1,8 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
 
-import * as gmiModule from "../../src/core/gmi.js";
-import * as VisibleLayer from "../../src/core/visible-layer.js";
+import * as gmiModule from "../../../src/core/gmi/gmi.js";
+import * as VisibleLayer from "../../../src/core/visible-layer.js";
 
 describe("GMI", () => {
     let sandbox;

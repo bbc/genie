@@ -1,4 +1,4 @@
-import { gmi } from "../../../core/gmi.js";
+import { gmi } from "../../../core/gmi/gmi.js";
 import { Screen } from "../../../core/screen.js";
 import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 

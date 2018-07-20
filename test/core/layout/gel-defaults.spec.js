@@ -3,7 +3,7 @@ import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
 import * as gel from "../../../src/core/layout/gel-defaults";
 import * as pause from "../../../src/components/overlays/pause.js";
 import { settings } from "../../../src/core/settings.js";
-import * as gmiModule from "../../../src/core/gmi.js";
+import * as gmiModule from "../../../src/core/gmi/gmi.js";
 
 describe("Layout - Gel Defaults", () => {
     const sandbox = sinon.createSandbox();

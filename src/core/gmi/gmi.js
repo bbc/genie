@@ -1,5 +1,5 @@
-import fp from "../../lib/lodash/fp/fp.js";
-import * as VisibleLayer from "../../src/core/visible-layer.js";
+import fp from "../../../lib/lodash/fp/fp.js";
+import * as VisibleLayer from "../../../src/core/visible-layer.js";
 
 export let gmi = {};
 let gameInstance;
