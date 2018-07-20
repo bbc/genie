@@ -11,7 +11,7 @@ module.exports = env => {
     var webPackConfig = {
         mode: "production",
         performance: { hints: false },
-        entry: ["babel-polyfill", "pixi", "p2", "phaser", "webfontloader"],
+        entry: ["babel-polyfill", pixi, p2, phaser, "webfontloader"],
         output: {
             path: path.resolve("output"),
             publicPath: "output",
@@ -26,13 +26,6 @@ module.exports = env => {
                 { test: /p2\.js/, use: ["expose-loader?p2"] },
                 { test: /webfontloader\.js/, use: ["expose-loader?WebFont"] },
             ],
-        },
-        resolve: {
-            alias: {
-                phaser: phaser,
-                pixi: pixi,
-                p2: p2,
-            },
         },
         devServer: {
             useLocalIp: true,
