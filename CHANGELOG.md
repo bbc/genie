@@ -2,11 +2,14 @@
 
 | Version | Description |
 |---------|-------------|
+| 0.5.0 | |
 | | Fixes unannounced selections in carousel on IOS and IE11/Firefox with NVDA. |
 | | Removes GMI from `context`, moves default settings into GMI module. |
+| | Update to Phaser 2.11.0 and fix spritesheet spacing to match new Phaser requirements. |
 | | Added theme configuration to allow the use of different background tracks on different game screens |
 | | Adds basic stats using the GMI. |
-| | Adds Mandatory stats using the GMI. |
+| | Adds mandatory stats using the GMI. |
+| | Adds console.log message to show when game data is saved |
 | 0.4.1 | |
 | | Fix for loading the webfontloader module in the starter pack |
 | 0.4.0 | |
