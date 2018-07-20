@@ -57,7 +57,7 @@
         "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js --env.genieCore",
         "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch --env.genieCore",
-        "eslint": "eslint . --ignore-pattern lodash --ignore-path .gitignore",
+        "eslint": "eslint . --ignore-pattern dev/loadGlobals.js --ignore-pattern lodash --ignore-path .gitignore",
         "test": "karma start test/karma.conf.js && npm run eslint",
         "test:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage && npm run eslint",
         "test-watch": "karma start test/karma.conf.js --no-single-run --auto-watch",
