@@ -3,19 +3,18 @@ import * as sinon from "sinon";
 
 import * as gmiModule from "../../../src/core/gmi/gmi.js";
 import * as VisibleLayer from "../../../src/core/visible-layer.js";
+import * as StatsValues from "../../../src/core/gmi/stats-values.js";
 
 describe("GMI", () => {
-    let sandbox;
+    const sandbox = sinon.createSandbox();
     let defaultSettings;
     let fakeWindow;
     let fakeGmiObject;
     let clock;
 
-    before(() => {
-        sandbox = sinon.createSandbox();
-    });
-
     beforeEach(() => {
+        sandbox.stub(StatsValues, "getValues");
+        sandbox.stub(VisibleLayer, "get");
         clock = sinon.useFakeTimers();
         defaultSettings = {
             pages: [
@@ -40,12 +39,7 @@ describe("GMI", () => {
         };
         fakeGmiObject = {
             sendStatsEvent: sandbox.stub(),
-            getAllSettings: sandbox.stub().returns({
-                audio: true,
-                subtitles: false,
-                motion: true,
-                gameData: { characterSelected: 1, buttonPressed: 3 },
-            }),
+            getAllSettings: sandbox.stub().returns("settings"),
         };
         fakeWindow = { getGMI: sandbox.stub().returns(fakeGmiObject) };
         sandbox.replace(gmiModule, "gmi", fakeGmiObject);
@@ -136,139 +130,43 @@ describe("GMI", () => {
 
     describe("sendStats method", () => {
         beforeEach(() => {
-            sandbox.stub(VisibleLayer, "get").returns("home");
+            VisibleLayer.get.returns("visible-layer");
+            StatsValues.getValues.returns({ action_name: "name", action_type: "type" });
             gmiModule.setGmi(defaultSettings, fakeWindow);
+        });
+
+        it("gets the visible layer (after the stats tracking has been started)", () => {
+            const fakeGame = "game";
+            const fakeContext = "context";
+
+            gmiModule.startStatsTracking(fakeGame, fakeContext);
+            gmiModule.sendStats("some_event");
+            sandbox.assert.calledOnce(VisibleLayer.get.withArgs(fakeGame, fakeContext));
+        });
+
+        it("gets the stats values", () => {
+            gmiModule.sendStats("some_event");
+            const actualParams = ["some_event", "settings", "visible-layer"];
+            const expectedParams = StatsValues.getValues.getCall(0).args;
+            assert.deepEqual(actualParams, expectedParams);
         });
 
         it("sends a stats event to the GMI", () => {
             gmiModule.sendStats("some_event");
-            sandbox.assert.calledOnce(fakeGmiObject.sendStatsEvent);
+            sandbox.assert.calledOnce(fakeGmiObject.sendStatsEvent.withArgs("name", "type"));
         });
 
-        it("passes default params to the GMI", () => {
-            gmiModule.sendStats("some_other_event");
-            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
-            assert.equal(params[0], "some_other_event");
-            assert.equal(params[1], undefined);
-            assert.deepEqual(params[2], {
-                action_name: "some_other_event",
-                game_template: "genie",
-                game_screen: "home",
-                game_level_name: null,
-                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
-            });
-        });
-
-        it("passes the game first click stat to the GMI", () => {
-            gmiModule.sendStats("click");
-            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
-            assert.equal(params[0], "game_first_click");
-            assert.equal(params[1], undefined); // this will be passed in as an addition param in production
-            assert.deepEqual(params[2], {
-                action_name: "game_first_click",
-                game_template: "genie",
-                game_screen: "home",
-                game_level_name: null,
-                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
-            });
-        });
-
-        it("passes the game click stat to the GMI when this click isn't the first", () => {
-            gmiModule.sendStats("click");
-            gmiModule.sendStats("click");
-            const params = fakeGmiObject.sendStatsEvent.getCall(1).args;
-            assert.equal(params[0], "game_click");
-            assert.equal(params[1], undefined); // this will be passed in as an addition param in production
-            assert.deepEqual(params[2], {
-                action_name: "game_click",
-                game_template: "genie",
-                game_screen: "home",
-                game_level_name: null,
-                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
-            });
-        });
-
-        it("overrides params sent to the GMI with additional ones if provided", () => {
-            gmiModule.sendStats("click", { action_type: "type_override" });
-            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
-            assert.equal(params[0], "game_click");
-            assert.equal(params[1], "type_override");
-            assert.deepEqual(params[2], {
-                action_name: "game_click",
-                action_type: "type_override",
-                game_template: "genie",
-                game_screen: "home",
-                game_level_name: null,
-                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
-            });
-        });
-
-        it("passes the game loaded stat to the GMI", () => {
-            gmiModule.sendStats("game_loaded");
-            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
-            assert.equal(params[0], "game_loaded");
-            assert.equal(params[1], true);
-            assert.deepEqual(params[2], {
-                action_name: "game_loaded",
-                action_type: true,
-                game_template: "genie",
-                game_screen: "home",
-                game_level_name: null,
-                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
-            });
-        });
-
-        it("passes the game complete stat to the GMI", () => {
-            gmiModule.sendStats("game_complete");
-            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
-            assert.equal(params[0], "game_level");
-            assert.equal(params[1], "complete");
-            assert.deepEqual(params[2], {
-                action_name: "game_level",
-                action_type: "complete",
-                game_template: "genie",
-                game_screen: "home",
-                game_level_name: null,
-                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
-            });
-        });
-
-        it("passes the replay stat to the GMI", () => {
-            gmiModule.sendStats("replay");
-            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
-            assert.equal(params[0], "game_level");
-            assert.equal(params[1], "playagain");
-            assert.deepEqual(params[2], {
-                action_name: "game_level",
-                action_type: "playagain",
-                game_template: "genie",
-                game_screen: "home",
-                game_level_name: null,
-                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
-            });
-        });
-
-        it("passes the continue stat to the GMI", () => {
-            gmiModule.sendStats("continue");
-            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
-            assert.equal(params[0], "game_level");
-            assert.equal(params[1], "continue");
-            assert.deepEqual(params[2], {
-                action_name: "game_level",
-                action_type: "continue",
-                game_template: "genie",
-                game_screen: "home",
-                game_level_name: null,
-                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
-            });
+        it("overrides params sent to the GMI if additional ones are provided", () => {
+            gmiModule.sendStats("some_event", { action_type: "override" });
+            sandbox.assert.calledOnce(fakeGmiObject.sendStatsEvent.withArgs("name", "override"));
         });
     });
 
-    describe("startHeartbeat method", () => {
+    describe("startStatsTracking method", () => {
         beforeEach(() => {
-            sandbox.stub(VisibleLayer, "get").returns("home");
             gmiModule.setGmi(defaultSettings, fakeWindow);
-            gmiModule.startHeartbeat();
+            StatsValues.getValues.returns({ action_name: "timer", action_type: "heartbeat" });
+            gmiModule.startStatsTracking();
         });
 
         it("fires the stats heartbeat every 15 seconds", () => {
@@ -281,19 +179,9 @@ describe("GMI", () => {
         });
 
         it("passes the correct params to the stats heartbeat", () => {
+            const expectedAdditonalParams = { action_name: "timer", action_type: "heartbeat", heartbeat_period: 15 };
             clock.tick(15 * 1000);
-            const params = fakeGmiObject.sendStatsEvent.getCall(0).args;
-            assert.equal(params[0], "timer");
-            assert.equal(params[1], "heartbeat");
-            assert.deepEqual(params[2], {
-                action_name: "timer",
-                action_type: "heartbeat",
-                game_template: "genie",
-                game_screen: "home",
-                game_level_name: null,
-                heartbeat_period: 15,
-                settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
-            });
+            sandbox.assert.calledWith(fakeGmiObject.sendStatsEvent, "timer", "heartbeat", expectedAdditonalParams);
         });
     });
 });

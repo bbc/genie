@@ -25,7 +25,7 @@ describe("Startup", () => {
             .returns(containerDiv);
 
         sandbox.stub(gmiModule, "setGmi");
-        sandbox.stub(gmiModule, "startHeartbeat");
+        sandbox.stub(gmiModule, "startStatsTracking");
         sandbox.replace(gmiModule, "gmi", mockGmi);
         PhaserGame = sandbox.stub(Phaser, "Game").returns(Game.Stub);
         window.getGMI = sandbox.stub().returns(mockGmi);
@@ -108,15 +108,15 @@ describe("Startup", () => {
             sandbox.assert.calledWith(navigationCreate, Game.Stub.state, sandbox.match.object, "Scene", "NavConfig");
         });
 
-        it("starts the stats heartbeat through the GMI", () => {
+        it("starts the stats tracking through the GMI", () => {
             const expectedContext = {
                 popupScreens: [],
                 gameMuted: true,
                 qaMode: { active: false, testHarnessLayoutDisplayed: false },
             };
-            const heartbeatParams = gmiModule.startHeartbeat.getCall(0).args;
-            assert.deepEqual(heartbeatParams[0], Game.Stub);
-            assert.deepEqual(JSON.stringify(heartbeatParams[1]), JSON.stringify(expectedContext));
+            const statsParams = gmiModule.startStatsTracking.getCall(0).args;
+            assert.deepEqual(statsParams[0], Game.Stub);
+            assert.deepEqual(JSON.stringify(statsParams[1]), JSON.stringify(expectedContext));
         });
     });
 });
