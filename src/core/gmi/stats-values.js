@@ -39,9 +39,9 @@ const getSettingsString = settings => {
 export const getValues = (actionKey, settings, visibleLayer) => {
     if (actionKey === "click") {
         actionKey = firstClick ? "game_first_click" : "game_click";
-    }
-    if (firstClick) {
-        firstClick = false;
+        if (firstClick) {
+            firstClick = false;
+        }
     }
 
     const defaultValues = {
