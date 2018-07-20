@@ -7,10 +7,9 @@ describe("#accessibleDomElement", () => {
     let options;
     let createElement;
     let element;
-    let otherElement;
     let parentElement;
+    let parentAppendChild;
     let parentRemoveChild;
-    let parentElementContains;
 
     before(() => {
         sandbox = sinon.createSandbox();
@@ -18,15 +17,18 @@ describe("#accessibleDomElement", () => {
 
     beforeEach(() => {
         element = document.createElement("div");
-        otherElement = document.createElement("div");
+        parentElement = document.createElement("div");
+        parentElement.appendChild(element);
+
+        parentAppendChild = sandbox.spy();
         parentRemoveChild = sandbox.spy();
-        parentElementContains = sandbox.stub();
-        parentElementContains.withArgs(element).returns(true);
-        parentElementContains.withArgs(otherElement).returns(false);
+
         parentElement = {
             removeChild: parentRemoveChild,
-            contains: parentElementContains,
         };
+
+        parentElement.appendChild = parentAppendChild;
+
         options = {
             id: "play-button",
             parent: parentElement,

@@ -28,7 +28,7 @@ export class Select extends Screen {
         this.currentIndex = 1;
         this.choiceSprites = this.createChoiceSprites(theme.choices);
         this.accessibleElements = accessibleCarouselElements.create(
-            "select",
+            this.visibleLayer,
             this.choiceSprites,
             this.game.canvas.parentElement,
             theme.choices,
@@ -73,6 +73,7 @@ export class Select extends Screen {
         });
         this.accessibleElements.forEach((element, index) => {
             element.setAttribute("aria-hidden", index !== this.currentIndex - 1);
+            element.style.display = index !== this.currentIndex - 1 ? "none" : "block"; //Needed for Firefox
         });
     }
 
