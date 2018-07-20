@@ -28,7 +28,7 @@ export function accessibilify(button, config, gameButton = true) {
     button.update = update;
     button.accessibleElement = accessibleElement.el;
 
-    a11y.addToAccessibleButtons(screen.visibleLayer, button);
+    a11y.addToAccessibleButtons(screen, button);
 
     return button;
 
@@ -76,7 +76,6 @@ export function accessibilify(button, config, gameButton = true) {
 
     function teardown() {
         signal.unsubscribe();
-        accessibleElement.remove();
     }
 
     function update() {

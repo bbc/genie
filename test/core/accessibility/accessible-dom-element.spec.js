@@ -209,22 +209,4 @@ describe("#accessibleDomElement", () => {
             expect(element.style.height).to.equal("100px");
         });
     });
-
-    describe("removing element", () => {
-        describe("when element exists in DOM", () => {
-            it("is removed from DOM when calling remove function", () => {
-                const newAccessibleElement = accessibleDomElement(options);
-                newAccessibleElement.remove();
-                sinon.assert.calledOnce(parentRemoveChild.withArgs(element));
-            });
-        });
-
-        describe("when element does not exist in DOM", () => {
-            it("does not attempt to remove the element", () => {
-                const newAccessibleElement = accessibleDomElement(options);
-                newAccessibleElement.remove();
-                sinon.assert.notCalled(parentRemoveChild.withArgs(otherElement));
-            });
-        });
-    });
 });

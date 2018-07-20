@@ -3,6 +3,7 @@ import * as sinon from "sinon";
 import { Results } from "../../src/components/results";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
+import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 
 describe("Results Screen", () => {
     let resultsScreen;
@@ -20,6 +21,7 @@ describe("Results Screen", () => {
     const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
+        sandbox.stub(a11y, "resetElementsInDom");
         layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");
         addToBackgroundSpy = sandbox.spy();
         addLayoutSpy = sandbox.spy();
@@ -120,6 +122,10 @@ describe("Results Screen", () => {
             const expectedParams = [mockGame, mockContext, resultsScreen.scene];
             assert(layoutHarnessSpy.callCount === 1, "layout harness should be called once");
             assert.deepEqual(actualParams, expectedParams);
+        });
+
+        it("resets accessibility elements in DOM", () => {
+            sandbox.assert.calledOnce(a11y.resetElementsInDom.withArgs(resultsScreen));
         });
     });
 

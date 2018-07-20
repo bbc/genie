@@ -35,8 +35,7 @@ export class Select extends Screen {
         );
 
         this.addSignalSubscriptions();
-        a11y.clearElementsFromDom();
-        a11y.appendElementsToDom(this);
+        a11y.resetElementsInDom(this);
     }
 
     createChoiceSprites(choices) {

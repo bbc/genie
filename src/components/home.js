@@ -32,7 +32,6 @@ export class Home extends Screen {
             },
         });
 
-        a11y.clearElementsFromDom();
-        a11y.appendElementsToDom(this);
+        a11y.resetElementsInDom(this);
     }
 }
