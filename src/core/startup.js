@@ -51,9 +51,10 @@ export function startup(settingsConfig = {}, navigationConfig) {
         };
         game.stage.backgroundColor = "#333";
 
+        startStatsTracking(game, context);
+
         const onFontsLoaded = () => Navigation.create(game.state, context, scene, navigationConfig);
         loadFonts(game, onFontsLoaded);
-        startStatsTracking(game, context);
     }
 }
 
