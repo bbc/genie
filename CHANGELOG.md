@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| UNRELEASED | |
+| | Fixes regression bug where the settings icons were not updating correctly. |
 | 0.5.0 | |
 | | Fixes unannounced selections in carousel on IOS and IE11/Firefox with NVDA. |
 | | Removes GMI from `context`, moves default settings into GMI module. |
