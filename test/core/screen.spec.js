@@ -1,144 +1,91 @@
-import { expect } from "chai";
-import { Screen } from "../../src/core/screen";
-import * as GameSound from "../../src/core/game-sound";
-import * as Game from "../fake/game.js";
-import * as Scene from "../fake/scene.js";
+import { assert } from "chai";
 import * as sinon from "sinon";
 
-describe("Screen", () => {
-    let screen;
-    const sandbox = sinon.sandbox.create();
+import { Screen } from "../../src/core/screen";
+import * as Game from "../fake/game.js";
+import * as Scene from "../fake/scene.js";
+import * as GameSound from "../../src/core/game-sound";
+import * as VisibleLayer from "../../src/core/visible-layer.js";
 
-    afterEach(() => {
-        sandbox.restore();
+describe("Screen", () => {
+    const sandbox = sinon.createSandbox();
+
+    let screen;
+    let mockContext;
+    let mockTransientData;
+
+    afterEach(() => sandbox.restore());
+
+    beforeEach(() => {
+        sandbox.stub(GameSound, "setupScreenMusic");
+        sandbox.stub(VisibleLayer, "get").returns("current-layer");
+        screen = new Screen();
+        mockContext = {
+            popupScreens: ["pause"],
+            config: {
+                theme: {
+                    loadscreen: { music: "test/music" },
+                },
+            },
+        };
+        mockTransientData = { transient: "data" };
+        const mockNavigation = {
+            loadscreen: { routes: "routes" },
+        };
+        screen.game = Game.Stub;
+        screen.game.state.current = "loadscreen";
+        screen.init(mockTransientData, Scene.Stub, mockContext, mockNavigation);
     });
 
-    describe("with context", () => {
-        let mockContext;
+    it("sets the scene", () => {
+        assert.deepEqual(screen.scene, Scene.Stub);
+    });
 
-        beforeEach(() => {
-            sandbox.stub(GameSound, "setupScreenMusic");
-            screen = new Screen();
-            mockContext = {
-                popupScreens: ["pause"],
-                config: {
-                    theme: {},
-                },
-            };
-            const mockNavigation = { loadscreen: {} };
-            screen.game = Game.Stub;
-            screen.game.state.current = "loadscreen";
-            screen.init({}, Scene.Stub, mockContext, mockNavigation);
+    it("sets the context", () => {
+        assert.deepEqual(screen._context, mockContext);
+    });
+
+    it("sets the navigation", () => {
+        assert.equal(screen.navigation, "routes");
+    });
+
+    it("sets transient data", () => {
+        assert.equal(screen.transientData, mockTransientData);
+    });
+
+    it("sets the background music using the theme config", () => {
+        const expectedThemeConfig = mockContext.config.theme.loadscreen;
+        sandbox.assert.calledOnce(GameSound.setupScreenMusic);
+        sandbox.assert.calledWith(GameSound.setupScreenMusic, Game.Stub, expectedThemeConfig);
+    });
+
+    describe("context getter/setter", () => {
+        it("gets context", () => {
+            assert.deepEqual(screen.context, mockContext);
         });
 
-        it("has a getter", () => {
-            expect(screen.context).to.eql(mockContext);
-        });
-
-        it("has a setter that merges new value with current value", () => {
+        it("sets context by merging new value with current value", () => {
             screen.context = { qaMode: { active: true } };
-
             const expectedContext = {
                 popupScreens: ["pause"],
+                config: { theme: { loadscreen: { music: "test/music" } } },
                 qaMode: { active: true },
-                config: {
-                    theme: {},
-                },
             };
-
-            expect(screen.context).to.eql(expectedContext);
+            assert.deepEqual(screen.context, expectedContext);
         });
     });
 
-    describe("with no overlays", () => {
-        beforeEach(() => {
-            sandbox.stub(GameSound, "setupScreenMusic");
-            screen = new Screen();
-            const mockContext = {
-                popupScreens: [],
-                config: {
-                    theme: {},
-                },
-            };
-            const mockNavigation = { loadscreen: {} };
-            screen.game = Game.Stub;
-            screen.game.state.current = "loadscreen";
-            screen.init({}, Scene.Stub, mockContext, mockNavigation);
-        });
-
-        it("returns the screen name as the visible layer", () => {
-            expect(screen.visibleLayer).to.eql("loadscreen");
+    describe("getAsset method", () => {
+        it("gets asset by name", () => {
+            const expectedName = "some-name";
+            assert.equal(screen.getAsset(expectedName), "loadscreen.some-name");
         });
     });
 
-    describe("with one overlay", () => {
-        beforeEach(() => {
-            sandbox.stub(GameSound, "setupScreenMusic");
-            screen = new Screen();
-            const mockContext = {
-                popupScreens: ["pause"],
-                config: {
-                    theme: {},
-                },
-            };
-            const mockNavigation = { game: {} };
-            screen.game = Game.Stub;
-            screen.game.state.current = "game";
-            screen.init({}, Scene.Stub, mockContext, mockNavigation);
-        });
-
-        it("returns the overlay name as the visible layer", () => {
-            expect(screen.visibleLayer).to.eql("pause");
-        });
-    });
-
-    describe("with two overlays", () => {
-        beforeEach(() => {
-            sandbox.stub(GameSound, "setupScreenMusic");
-            screen = new Screen();
-            const mockContext = {
-                popupScreens: ["pause", "howToPlay"],
-                config: {
-                    theme: {},
-                },
-            };
-            const mockNavigation = { game: {} };
-            screen.game = Game.Stub;
-            screen.game.state.current = "game";
-            screen.init({}, Scene.Stub, mockContext, mockNavigation);
-        });
-
-        it("returns the top overlay name (last in the array) as the visible layer", () => {
-            expect(screen.visibleLayer).to.eql("howToPlay");
-        });
-    });
-
-    describe("with music", () => {
-        let setupScreenMusicStub;
-        let themeScreenConfigMock;
-
-        beforeEach(() => {
-            setupScreenMusicStub = sandbox.stub(GameSound, "setupScreenMusic");
-            screen = new Screen();
-            themeScreenConfigMock = {
-                music: "test/music",
-            };
-            const mockContext = {
-                config: {
-                    theme: {
-                        game: themeScreenConfigMock,
-                    },
-                },
-            };
-            const mockNavigation = { game: {} };
-            screen.game = Game.Stub;
-            screen.game.state.current = "game";
-            screen.init({}, Scene.Stub, mockContext, mockNavigation);
-        });
-
-        it("sets the background music using the theme config", () => {
-            sinon.assert.calledOnce(setupScreenMusicStub);
-            sinon.assert.calledWith(setupScreenMusicStub, screen.game, themeScreenConfigMock);
+    describe("visibleLayer getter/setter", () => {
+        it("calls visible layer with correct params", () => {
+            assert.equal(screen.visibleLayer, "current-layer");
+            sandbox.assert.calledOnce(VisibleLayer.get.withArgs(Game.Stub, mockContext));
         });
     });
 });

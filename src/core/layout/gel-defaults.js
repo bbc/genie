@@ -1,8 +1,7 @@
 import * as howToPlay from "../../components/overlays/how-to-play.js";
 import * as pause from "../../components/overlays/pause.js";
-import { settings } from "../../core/settings.js";
-import { gmi } from "../../core/gmi.js";
-import { settingsChannel } from "../settings.js";
+import { settings, settingsChannel } from "../../core/settings.js";
+import { gmi, sendStats } from "../../core/gmi.js";
 import * as signal from "../signal-bus.js";
 
 export const buttonsChannel = "gel-buttons";
@@ -15,7 +14,10 @@ export const config = {
         order: 0,
         id: "__exit",
         channel: buttonsChannel,
-        action: gmi.exit,
+        action: () => {
+            gmi.exit();
+            sendStats("click", { action_type: "exit" });
+        },
     },
     home: {
         group: "topLeft",
@@ -28,6 +30,7 @@ export const config = {
         action: ({ game }) => {
             const screen = game.state.states[game.state.current];
             screen.navigation.home();
+            sendStats("click", { action_type: "home" });
         },
     },
     pauseHome: {
@@ -38,6 +41,9 @@ export const config = {
         order: 1,
         id: "__home",
         channel: "pause-gel-buttons",
+        action: () => {
+            sendStats("click", { action_type: "pause" });
+        },
     },
     back: {
         group: "topLeft",
@@ -47,6 +53,9 @@ export const config = {
         order: 2,
         id: "__back",
         channel: buttonsChannel,
+        action: () => {
+            sendStats("click", { action_type: "back" });
+        },
     },
     howToPlayBack: {
         group: "topLeft",
@@ -56,6 +65,9 @@ export const config = {
         order: 2,
         id: "__back",
         channel: "how-to-play-gel-buttons",
+        action: () => {
+            sendStats("click", { action_type: "how-to-play" });
+        },
     },
     audio: {
         group: "topRight",
@@ -75,6 +87,8 @@ export const config = {
                 name: "setting-changed-audio",
                 data: enabled,
             });
+
+            sendStats("click", { action_type: "audio" });
         },
     },
     settings: {
@@ -85,7 +99,10 @@ export const config = {
         order: 5,
         id: "__settings",
         channel: buttonsChannel,
-        action: settings.show,
+        action: () => {
+            settings.show();
+            sendStats("click", { action_type: "settings" });
+        },
     },
     pause: {
         group: "topRight",
@@ -95,7 +112,10 @@ export const config = {
         order: 6,
         id: "__pause",
         channel: buttonsChannel,
-        action: ({ game }) => pause.create(false, { game }),
+        action: ({ game }) => {
+            pause.create(false, { game });
+            sendStats("click", { action_type: "pause" });
+        },
     },
     pauseNoReplay: {
         group: "topRight",
@@ -105,7 +125,10 @@ export const config = {
         order: 6,
         id: "__pause",
         channel: buttonsChannel,
-        action: ({ game }) => pause.create(true, { game }),
+        action: ({ game }) => {
+            pause.create(true, { game });
+            sendStats("click", { action_type: "pause" });
+        },
     },
     previous: {
         group: "middleLeftSafe",
@@ -132,6 +155,9 @@ export const config = {
         ariaLabel: "Replay Game",
         order: 8,
         id: "__replay",
+        action: () => {
+            sendStats("click", { action_type: "playagain" });
+        },
     },
     pauseReplay: {
         group: "middleCenter",
@@ -141,6 +167,9 @@ export const config = {
         order: 8,
         id: "__replay",
         channel: "pause-gel-buttons",
+        action: () => {
+            sendStats("click", { action_type: "playagain" });
+        },
     },
     play: {
         group: "middleCenter",
@@ -151,6 +180,9 @@ export const config = {
         id: "__play",
         channel: buttonsChannel,
         positionOverride: true,
+        action: () => {
+            sendStats("click", { action_type: "play" });
+        },
     },
     pausePlay: {
         group: "middleCenter",
@@ -160,6 +192,9 @@ export const config = {
         order: 8,
         id: "__play",
         channel: "pause-gel-buttons",
+        action: () => {
+            sendStats("click", { action_type: "play" });
+        },
     },
     next: {
         group: "middleRightSafe",
@@ -187,6 +222,9 @@ export const config = {
         order: 11,
         id: "__achievements",
         channel: buttonsChannel,
+        action: () => {
+            sendStats("click", { action_type: "achievements" });
+        },
     },
     restart: {
         group: "bottomCenter",
@@ -196,6 +234,9 @@ export const config = {
         order: 12,
         id: "__restart",
         channel: buttonsChannel,
+        action: () => {
+            sendStats("click", { action_type: "restart" });
+        },
     },
     continue: {
         group: "bottomCenter",
@@ -214,6 +255,9 @@ export const config = {
         order: 14,
         id: "__how-to-play",
         channel: buttonsChannel,
-        action: howToPlay.create,
+        action: ({ game }) => {
+            howToPlay.create({ game });
+            sendStats("click", { action_type: "how-to-play" });
+        },
     },
 };
