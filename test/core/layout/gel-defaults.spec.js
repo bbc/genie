@@ -1,9 +1,11 @@
 import * as sinon from "sinon";
+import { assert } from "chai";
 import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
 import * as gel from "../../../src/core/layout/gel-defaults";
 import * as pause from "../../../src/components/overlays/pause.js";
-import { settings } from "../../../src/core/settings.js";
+import { settings, settingsChannel } from "../../../src/core/settings.js";
 import * as gmiModule from "../../../src/core/gmi.js";
+import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Layout - Gel Defaults", () => {
     const sandbox = sinon.createSandbox();
@@ -13,7 +15,7 @@ describe("Layout - Gel Defaults", () => {
     beforeEach(() => {
         mockGame = {
             sound: {
-                mute: () => {},
+                mute: false,
             },
             state: {
                 current: "current-screen",
@@ -101,12 +103,38 @@ describe("Layout - Gel Defaults", () => {
     });
 
     describe("Audio Callback", () => {
+        let publishSpy;
+
         beforeEach(() => {
+            publishSpy = sandbox.spy(signal.bus, "publish");
             gel.config.audio.action({ game: mockGame });
         });
 
         it("sends a click stat to the GMI", () => {
             sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "audio" }));
+        });
+
+        it("mutes the game audio", () => {
+            sinon.assert.calledOnce(
+                publishSpy.withArgs({
+                    channel: settingsChannel,
+                    name: "setting-changed-audio",
+                    data: false,
+                }),
+            );
+        });
+
+        it("unmutes the game audio", () => {
+            mockGame.sound.mute = true;
+            gel.config.audio.action({ game: mockGame });
+
+            sinon.assert.calledOnce(
+                publishSpy.withArgs({
+                    channel: settingsChannel,
+                    name: "setting-changed-audio",
+                    data: true,
+                }),
+            );
         });
     });
 
