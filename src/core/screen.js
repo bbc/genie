@@ -1,5 +1,6 @@
 import _ from "../../lib/lodash/lodash.js";
 import * as GameSound from "../core/game-sound.js";
+import * as VisibleLayer from "../core/visible-layer.js";
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
@@ -28,12 +29,6 @@ export class Screen extends Phaser.State {
     }
 
     get visibleLayer() {
-        const popupScreens = this.context.popupScreens;
-
-        if (popupScreens.length > 0) {
-            return popupScreens[popupScreens.length - 1];
-        } else {
-            return this.game.state.current;
-        }
+        return VisibleLayer.get(this.game, this.context);
     }
 }
