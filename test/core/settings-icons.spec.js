@@ -5,8 +5,7 @@ import * as signal from "../../src/core/signal-bus.js";
 
 import * as SettingsIcons from "../../src/core/layout/settings-icons.js";
 
-// eslint-disable-next-line mocha/no-skipped-tests
-describe.skip("Settings Icons", () => {
+describe("Settings Icons", () => {
     const sandbox = sinon.createSandbox();
     let mockSignalBus;
     let mockGmi;
