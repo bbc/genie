@@ -99,7 +99,7 @@ describe("Select Screen", () => {
         it("adds GEL buttons to layout", () => {
             sinon.assert.calledWith(addLayoutSpy, [
                 "home",
-                "audioOff",
+                "audio",
                 "pauseNoReplay",
                 "previous",
                 "next",

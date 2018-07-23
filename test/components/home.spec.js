@@ -89,7 +89,7 @@ describe("Home Screen", () => {
 
         it("adds GEL buttons to layout", () => {
             const actualButtons = addLayoutSpy.getCall(0).args[0];
-            const expectedButtons = ["exit", "howToPlay", "play", "audioOff", "settings"];
+            const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings"];
             assert.deepEqual(actualButtons, expectedButtons);
         });
 

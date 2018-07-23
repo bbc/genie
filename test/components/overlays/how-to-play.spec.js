@@ -122,7 +122,7 @@ describe("How To Play Overlay", () => {
             const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
             const expectedAddLayoutCall = [
                 "howToPlayBack",
-                "audioOff",
+                "audio",
                 "settings",
                 "howToPlayPrevious",
                 "howToPlayNext",

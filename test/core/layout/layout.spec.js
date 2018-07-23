@@ -64,7 +64,7 @@ describe("Layout", () => {
         const layout1 = Layout.create(mockGame, mockMetrics, ["achievements"]);
         assert(Object.keys(layout1.buttons).length === 1);
 
-        const layout2 = Layout.create(mockGame, mockMetrics, ["play", "audioOff", "settings"]);
+        const layout2 = Layout.create(mockGame, mockMetrics, ["play", "audio", "settings"]);
         assert(Object.keys(layout2.buttons).length === 3);
 
         const layout3 = Layout.create(mockGame, mockMetrics, [
@@ -72,7 +72,7 @@ describe("Layout", () => {
             "exit",
             "howToPlay",
             "play",
-            "audioOff",
+            "audio",
             "settings",
         ]);
         assert(Object.keys(layout3.buttons).length === 6);
@@ -125,8 +125,7 @@ describe("Layout", () => {
             "howToPlay",
             "play",
             "settings",
-            "audioOff",
-            "audioOn",
+            "audio",
             "previous",
             "next",
             "continue",
@@ -138,8 +137,7 @@ describe("Layout", () => {
             "exit",
             "home",
             "back",
-            "audioOff",
-            "audioOn",
+            "audio",
             "settings",
             "pause",
             "previous",

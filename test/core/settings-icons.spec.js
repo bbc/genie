@@ -27,7 +27,7 @@ describe("Settings Icons", () => {
     afterEach(() => sandbox.restore());
 
     it("Creates a subscription only for the fx icon on screens that have an audio button", () => {
-        SettingsIcons.create("top-right", ["audioOff"]);
+        SettingsIcons.create("top-right", ["audio"]);
         assert(mockSignalBus.subscribe.calledOnce);
         assert(mockSignalBus.subscribe.firstCall.args[0].name === "motion");
     });

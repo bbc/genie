@@ -104,7 +104,7 @@ describe("Pause Overlay", () => {
             const expectedAddLayoutCall = [
                 "pauseReplay",
                 "pauseHome",
-                "audioOff",
+                "audio",
                 "settings",
                 "pausePlay",
                 "howToPlay",
@@ -115,7 +115,7 @@ describe("Pause Overlay", () => {
         it("adds GEL buttons without a replay button if requested", () => {
             Pause.create(true, { game: mockGame });
             const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
-            const expectedAddLayoutCall = ["pauseHome", "audioOff", "settings", "pausePlay", "howToPlay"];
+            const expectedAddLayoutCall = ["pauseHome", "audio", "settings", "pausePlay", "howToPlay"];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
         });
     });
