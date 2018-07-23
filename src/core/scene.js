@@ -11,7 +11,7 @@
  * @example
  * this.scene.addToBackground(this.game.add.image(0, 0, "sceneName.background"));
  * this.scene.addToBackground(this.game.add.image(0, -150, "sceneName.title"));
- * this.scene.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
+ * this.scene.addLayout(["exit", "howToPlay", "play", "audio", "settings"]);
  *
  * @module core/scene
  */

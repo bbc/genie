@@ -22,7 +22,7 @@ export class Select extends Screen {
 
         const theme = this.context.config.theme[this.game.state.current];
 
-        this.scene.addLayout(["home", "audioOff", "pauseNoReplay", "previous", "next", "continue"]);
+        this.scene.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
 
         this.currentIndex = 1;
         this.choiceSprites = this.createChoiceSprites(theme.choices);

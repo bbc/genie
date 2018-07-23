@@ -57,40 +57,23 @@ export const config = {
         id: "__back",
         channel: "how-to-play-gel-buttons",
     },
-    audioOff: {
+    audio: {
         group: "topRight",
         title: "Sound Off",
-        key: "audio-off",
-        ariaLabel: "Disable Sound",
-        order: 3,
-        id: "__audio--off",
-        channel: buttonsChannel,
-        action: () => {
-            console.log("audio off");
-            gmi.setAudio(false);
-
-            signal.bus.publish({
-                channel: settingsChannel,
-                name: "setting-changed-audio",
-                data: false,
-            });
-        },
-    },
-    audioOn: {
-        group: "topRight",
-        title: "Sound On",
         key: "audio-on",
-        ariaLabel: "Enable Sound",
-        order: 4,
-        id: "__audio--on",
+        ariaLabel: "Toggle Sound",
+        order: 3,
+        id: "__audio",
         channel: buttonsChannel,
-        action: () => {
-            gmi.setAudio(true);
+        action: ({ game }) => {
+            const enabled = game.sound.mute;
+
+            gmi.setAudio(enabled);
 
             signal.bus.publish({
                 channel: settingsChannel,
                 name: "setting-changed-audio",
-                data: true,
+                data: enabled,
             });
         },
     },

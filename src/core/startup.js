@@ -98,10 +98,10 @@ class Startup extends Phaser.State {
             name: "setting-changed-audio",
             callback: value => {
                 this.game.sound.mute = !value;
-
-
-                //TODO get the audio button and change its key.
-                //
+                const audioButton = this.game.state.states[this.game.state.current].scene.getLayouts()[0].buttons[
+                    "audio"
+                ];
+                audioButton && audioButton.setImage(value ? "audio-on" : "audio-off");
             },
         });
     }

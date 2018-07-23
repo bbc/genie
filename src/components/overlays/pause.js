@@ -35,7 +35,7 @@ export const create = fp.curry((hideReplayButton, { game }) => {
     }
 
     function addGelButtons() {
-        const gelButtonList = ["pauseHome", "audioOff", "settings", "pausePlay", "howToPlay"];
+        const gelButtonList = ["pauseHome", "audio", "settings", "pausePlay", "howToPlay"];
         if (!hideReplayButton) {
             gelButtonList.unshift("pauseReplay");
         }

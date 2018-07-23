@@ -11,7 +11,7 @@ export class FpsTest extends Screen {
     }
 
     create() {
-        this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
+        this.scene.addLayout(["home", "pause", "audio", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.sprites = [];
 

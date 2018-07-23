@@ -58,7 +58,7 @@ const publish = fp.curry((settings, key) => {
 export const create = (group, buttonIds) => {
     let iconSignals = [];
 
-    if (!buttonIds.includes("audioOff")) {
+    if (!buttonIds.includes("audio")) {
         iconSignals.push(createSignals(group, audioConfig));
     }
 
