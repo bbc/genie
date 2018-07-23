@@ -4,7 +4,7 @@ import * as Game from "../fake/game.js";
 import * as PhaserSignal from "../fake/phaser-signal.js";
 
 describe("Game Sound", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
     let GameSound;
 
     beforeEach(() => {
