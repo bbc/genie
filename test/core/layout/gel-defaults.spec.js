@@ -12,6 +12,9 @@ describe("Layout - Gel Defaults", () => {
 
     beforeEach(() => {
         mockGame = {
+            sound: {
+                mute: () => {},
+            },
             state: {
                 current: "current-screen",
                 states: {
@@ -24,7 +27,7 @@ describe("Layout - Gel Defaults", () => {
             },
         };
 
-        mockGmi = { exit: sandbox.stub() };
+        mockGmi = { exit: sandbox.stub(), setAudio: () => {} };
         sandbox.stub(gmiModule, "setGmi").returns(mockGmi);
         sandbox.stub(gmiModule, "sendStats");
         sandbox.replace(gmiModule, "gmi", mockGmi);
@@ -97,19 +100,9 @@ describe("Layout - Gel Defaults", () => {
         });
     });
 
-    describe("Audio Off Callback", () => {
+    describe("Audio Callback", () => {
         beforeEach(() => {
-            gel.config.audioOff.action();
-        });
-
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "audio" }));
-        });
-    });
-
-    describe("Audio On Callback", () => {
-        beforeEach(() => {
-            gel.config.audioOn.action();
+            gel.config.audio.action({ game: mockGame });
         });
 
         it("sends a click stat to the GMI", () => {
