@@ -7,7 +7,7 @@ export const create = () => {
     const onSettingChanged = (key, value) => {
         signal.bus.publish({
             channel: settingsChannel,
-            name: key,
+            name: "setting-changed-" + key,
             data: value,
         });
     };

@@ -7,7 +7,7 @@ const fxConfig = {
     title: "FX Off",
     key: "fx-off-icon",
     id: "fx-off",
-    signalName: "motion",
+    signalName: "setting-changed-motion",
     icon: true,
 };
 
@@ -15,7 +15,7 @@ const audioConfig = {
     title: "Audio Off",
     key: "audio-off-icon",
     id: "audio-off",
-    signalName: "audio",
+    signalName: "setting-changed-audio",
     icon: true,
 };
 
@@ -66,7 +66,7 @@ export const create = (group, buttonIds) => {
 
     const settings = gmi.getAllSettings();
 
-    ["audio", "motion"].forEach(publish(settings));
+    ["setting-changed-audio", "setting-changed-motion"].forEach(publish(settings));
 
     return {
         unsubscribe: () => {
