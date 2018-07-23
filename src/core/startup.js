@@ -95,7 +95,7 @@ class Startup extends Phaser.State {
         });
         signal.bus.subscribe({
             channel: settingsChannel,
-            name: "setting-changed-audio",
+            name: "audio",
             callback: value => {
                 this.game.sound.mute = !value;
             },
