@@ -83,18 +83,12 @@ describe("GMI", () => {
             assert.deepEqual(actualSettings, expectedSettings);
         });
 
-        it("instantiates GMI with extra global settings if given (without overriding the existing ones)", () => {
+        it("instantiates GMI with extra global settings if given", () => {
             const customSettings = {
                 pages: [
                     {
                         title: "Global Settings",
                         settings: [
-                            {
-                                key: "audio",
-                                type: "toggle",
-                                title: "Audio",
-                                description: "Turn off/on sound and music override (bad)",
-                            },
                             {
                                 key: "subtitles",
                                 type: "toggle",
@@ -103,14 +97,33 @@ describe("GMI", () => {
                             },
                         ],
                     },
+                ],
+            };
+
+            gmiModule.setGmi(customSettings, fakeWindow);
+            const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
+            defaultSettings.pages[0].settings.push(customSettings.pages[0].settings[0]);
+            const expectedSettings = { settingsConfig: defaultSettings };
+            assert.deepEqual(actualSettings, expectedSettings);
+        });
+
+        it("does not overwrite the default audio and motion global settings when custom globals are provided", () => {
+            const customSettings = {
+                pages: [
                     {
-                        title: "Custom Settings",
+                        title: "Global Settings",
                         settings: [
                             {
-                                key: "colourblind",
-                                type: "toggle",
-                                title: "Colourblind mode",
-                                description: "Turn off/on colour palette with increased contrast",
+                                key: "audio",
+                                type: "unique-input",
+                                title: "Different title",
+                                description: "Some custom override for audio (bad)",
+                            },
+                            {
+                                key: "motion",
+                                type: "unique-input",
+                                title: "Different title",
+                                description: "Some custom override for motion (bad)",
                             },
                         ],
                     },
@@ -119,8 +132,6 @@ describe("GMI", () => {
 
             gmiModule.setGmi(customSettings, fakeWindow);
             const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
-            defaultSettings.pages[0].settings.push(customSettings.pages[0].settings[1]);
-            defaultSettings.pages.push(customSettings.pages[1]);
             const expectedSettings = { settingsConfig: defaultSettings };
             assert.deepEqual(actualSettings, expectedSettings);
         });
