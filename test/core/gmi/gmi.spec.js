@@ -54,8 +54,8 @@ describe("GMI", () => {
         it("instantiates GMI with the default settings", () => {
             gmiModule.setGmi(defaultSettings, fakeWindow);
             const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
-
-            assert.deepEqual(actualSettings, { settingsConfig: defaultSettings });
+            const expectedSettings = { settingsConfig: defaultSettings };
+            assert.deepEqual(actualSettings, expectedSettings);
         });
 
         it("instantiates GMI with custom settings if given", () => {
@@ -77,8 +77,10 @@ describe("GMI", () => {
 
             gmiModule.setGmi(customSettings, fakeWindow);
             const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
-            defaultSettings.pages.push(customSettings.pages[0]);
-            assert.deepEqual(actualSettings, { settingsConfig: defaultSettings });
+            const expectedSettings = {
+                settingsConfig: { pages: defaultSettings.pages.concat(customSettings.pages[0]) },
+            };
+            assert.deepEqual(actualSettings, expectedSettings);
         });
 
         it("instantiates GMI with extra global settings if given (without overriding the existing ones)", () => {
@@ -119,7 +121,8 @@ describe("GMI", () => {
             const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
             defaultSettings.pages[0].settings.push(customSettings.pages[0].settings[1]);
             defaultSettings.pages.push(customSettings.pages[1]);
-            assert.deepEqual(actualSettings, { settingsConfig: defaultSettings });
+            const expectedSettings = { settingsConfig: defaultSettings };
+            assert.deepEqual(actualSettings, expectedSettings);
         });
 
         it("returns the GMI instance", () => {
