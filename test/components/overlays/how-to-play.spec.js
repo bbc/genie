@@ -120,13 +120,7 @@ describe("How To Play Overlay", () => {
 
         it("adds GEL buttons", () => {
             const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
-            const expectedAddLayoutCall = [
-                "howToPlayBack",
-                "audio",
-                "settings",
-                "howToPlayPrevious",
-                "howToPlayNext",
-            ];
+            const expectedAddLayoutCall = ["howToPlayBack", "audio", "settings", "howToPlayPrevious", "howToPlayNext"];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
         });
     });

@@ -101,14 +101,7 @@ describe("Pause Overlay", () => {
         it("adds GEL buttons", () => {
             pauseCreate({ game: mockGame });
             const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
-            const expectedAddLayoutCall = [
-                "pauseReplay",
-                "pauseHome",
-                "audio",
-                "settings",
-                "pausePlay",
-                "howToPlay",
-            ];
+            const expectedAddLayoutCall = ["pauseReplay", "pauseHome", "audio", "settings", "pausePlay", "howToPlay"];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
         });
 
