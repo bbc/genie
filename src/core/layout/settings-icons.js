@@ -66,7 +66,7 @@ export const create = (group, buttonIds) => {
 
     const settings = gmi.getAllSettings();
 
-    ["setting-changed-audio", "setting-changed-motion"].forEach(publish(settings));
+    ["audio", "motion"].forEach(publish(settings));
 
     return {
         unsubscribe: () => {
