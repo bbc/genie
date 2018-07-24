@@ -37,7 +37,7 @@ describe("Settings", () => {
         it("publishes a signal when a setting has been changed", () => {
             const expectedSignal = {
                 channel: "genie-settings",
-                name: "setting-changed-audio",
+                name: "audio",
                 data: false,
             };
             const onSettingChangedCallback = mockGmi.showSettings.getCall(0).args[0];
