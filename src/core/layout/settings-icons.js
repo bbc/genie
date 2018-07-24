@@ -7,7 +7,7 @@ const fxConfig = {
     title: "FX Off",
     key: "fx-off-icon",
     id: "fx-off",
-    signalName: "setting-changed-motion",
+    signalName: "motion",
     icon: true,
 };
 
@@ -15,7 +15,7 @@ const audioConfig = {
     title: "Audio Off",
     key: "audio-off-icon",
     id: "audio-off",
-    signalName: "setting-changed-audio",
+    signalName: "audio",
     icon: true,
 };
 
