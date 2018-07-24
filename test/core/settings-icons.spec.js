@@ -29,13 +29,13 @@ describe("Settings Icons", () => {
     it("Creates a subscription only for the fx icon on screens that have an audio button", () => {
         SettingsIcons.create("top-right", ["audioOff"]);
         assert(mockSignalBus.subscribe.calledOnce);
-        assert.equal(mockSignalBus.subscribe.firstCall.args[0].name, "setting-changed-motion");
+        assert.equal(mockSignalBus.subscribe.firstCall.args[0].name, "motion");
     });
 
     it("Creates subscriptions for the audio and fx icons on screens that do not have an audio button", () => {
         SettingsIcons.create("top-right", []);
         assert(mockSignalBus.subscribe.calledTwice);
-        assert.equal("setting-changed-audio", mockSignalBus.subscribe.firstCall.args[0].name);
-        assert.equal("setting-changed-motion", mockSignalBus.subscribe.secondCall.args[0].name);
+        assert.equal("audio", mockSignalBus.subscribe.firstCall.args[0].name);
+        assert.equal("motion", mockSignalBus.subscribe.secondCall.args[0].name);
     });
 });
