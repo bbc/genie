@@ -1,5 +1,5 @@
 var path = require("path");
-var dynamicallyExposeGlobals = require("../lib/dynamicExpose.js");
+var dynamicallyExposeGlobals = require("../dev/scripts/dynamicExpose.js");
 
 // Phaser webpack config
 var phaserModule = path.resolve("node_modules/phaser-ce/");
