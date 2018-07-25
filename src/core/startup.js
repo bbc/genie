@@ -10,6 +10,7 @@ import { parseUrlParams } from "./parseUrlParams.js";
 import * as Navigation from "./navigation.js";
 import * as Scene from "./scene.js";
 import { loadFonts } from "./font-loader.js";
+import * as a11y from "./accessibility/accessibility-layer.js";
 import { gmi, setGmi, startHeartbeat } from "./gmi.js";
 
 /**
@@ -53,6 +54,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
 
         const onFontsLoaded = () => Navigation.create(game.state, context, scene, navigationConfig);
         loadFonts(game, onFontsLoaded);
+        a11y.setup(game.canvas.parentElement);
         startHeartbeat(game, context);
     }
 }

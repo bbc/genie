@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | UNRELEASED | |
+| | Adds an `accessibility-layer` that manages accessible DOM elements from screen-to-screen |
 | | Fix default actions not applying to overlay buttons. |
 | | Fixes regression bug where the settings icons were not updating correctly. |
 | | Fix prev/next buttons appearing under character sprite on select screen. |

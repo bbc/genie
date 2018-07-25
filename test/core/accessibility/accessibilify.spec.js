@@ -21,7 +21,6 @@ describe("#accessibilify", () => {
     let accessibleDomElementHide;
     let accessibleDomElementShow;
     let accessibleDomElementPosition;
-    let accessibleDomElementRemove;
     let onInputOver;
     let onInputOut;
     let onInputUp;
@@ -125,10 +124,8 @@ describe("#accessibilify", () => {
         };
         accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement");
         accessibleDomElementPosition = sandbox.spy();
-        accessibleDomElementRemove = sandbox.spy();
         accessibleDomElement.returns({
             position: accessibleDomElementPosition,
-            remove: accessibleDomElementRemove,
         });
     });
 
@@ -201,7 +198,6 @@ describe("#accessibilify", () => {
         it("hooks into the button's destroy event", () => {
             accessibilify(mockButton);
             mockButton.destroy();
-            sinon.assert.called(accessibleDomElementRemove);
             sinon.assert.called(onScaleChangeUnsubscribe);
             // Assert original functionality is not completely overridden.
             sinon.assert.called(buttonDestroy);
