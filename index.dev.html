@@ -213,12 +213,7 @@
         };
         GMI.prototype.sendStatsEvent = function(name, type, params) {
             console.log(
-                "Stat fired - type:" +
-                    type +
-                    ", name:" +
-                    name +
-                    ", params:" +
-                    JSON.stringify(params)
+                "Stat fired - name: " + name + ", type: " + type + ", params: " + JSON.stringify(params)
             );
         };
         GMI.prototype.exit = function() {

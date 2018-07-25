@@ -6,7 +6,7 @@ import * as LoadBar from "../../src/components/loadbar";
 import * as AssetLoader from "../../src/core/asset-loader";
 import * as Scaler from "../../src/core/scaler.js";
 import * as GameSound from "../../src/core/game-sound";
-import * as gmiModule from "../../src/core/gmi.js";
+import * as gmiModule from "../../src/core/gmi/gmi.js";
 
 describe("Load Screen", () => {
     let loadScreen;
