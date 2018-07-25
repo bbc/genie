@@ -117,7 +117,7 @@ describe("Layout - Gel Defaults", () => {
             sinon.assert.calledOnce(
                 publishSpy.withArgs({
                     channel: settingsChannel,
-                    name: "setting-changed-audio",
+                    name: "audio",
                     data: false,
                 }),
             );
@@ -130,7 +130,7 @@ describe("Layout - Gel Defaults", () => {
             sinon.assert.calledOnce(
                 publishSpy.withArgs({
                     channel: settingsChannel,
-                    name: "setting-changed-audio",
+                    name: "audio",
                     data: true,
                 }),
             );
