@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| UNRELEASED | |
+| | Adds mandatory stats using the GMI. |
 | | Enable audio toggle button |
 | | Adds an `accessibility-layer` that manages accessible DOM elements from screen-to-screen |
 | | Fix default actions not applying to overlay buttons. |
