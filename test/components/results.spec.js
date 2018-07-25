@@ -138,7 +138,7 @@ describe("Results Screen", () => {
         it("fires a game complete stat to the GMI without a score if not provided", () => {
             resultsScreen.transientData.results = null;
             sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("game_complete"));
-        }):
+        });
 
         it("resets accessibility elements in DOM", () => {
             sandbox.assert.calledOnce(a11y.resetElementsInDom.withArgs(resultsScreen));
