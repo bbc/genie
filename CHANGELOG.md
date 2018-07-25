@@ -3,6 +3,10 @@
 | Version | Description |
 |---------|-------------|
 | | Enable audio toggle button |
+| | Adds an `accessibility-layer` that manages accessible DOM elements from screen-to-screen |
+| | Fix default actions not applying to overlay buttons. |
+| | Fixes regression bug where the settings icons were not updating correctly. |
+| | Fix prev/next buttons appearing under character sprite on select screen. |
 | 0.5.0 | |
 | | Fixes unannounced selections in carousel on IOS and IE11/Firefox with NVDA. |
 | | Removes GMI from `context`, moves default settings into GMI module. |

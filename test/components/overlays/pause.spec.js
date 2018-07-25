@@ -42,6 +42,12 @@ describe("Pause Overlay", () => {
                 restart: sandbox.stub(),
                 home: sandbox.stub(),
             },
+            overlayOpen: {
+                dispatch: sandbox.stub(),
+            },
+            overlayClosed: {
+                dispatch: sandbox.stub(),
+            },
         };
 
         mockGame = {
@@ -78,6 +84,10 @@ describe("Pause Overlay", () => {
 
         it("pauses background music", () => {
             sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.pause);
+        });
+
+        it("dispatches overlayOpen signal on screen", () => {
+            sandbox.assert.calledOnce(mockScreen.overlayOpen.dispatch);
         });
     });
 
@@ -145,7 +155,6 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
             sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.resume);
-            assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
         it("removes subscribed-to channel for this overlay on destroy", () => {
@@ -172,7 +181,6 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
             sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.resume);
-            assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
         it("restarts the game when the replay button is clicked", () => {
@@ -196,7 +204,6 @@ describe("Pause Overlay", () => {
             assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
             sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.resume);
-            assert.deepEqual(mockScreen.context.popupScreens, []);
         });
 
         it("naviagtes home when the home button is clicked", () => {
@@ -204,6 +211,13 @@ describe("Pause Overlay", () => {
             const clickHomeButton = signalSpy.getCall(1).args[0].callback;
             clickHomeButton();
             sinon.assert.calledOnce(mockScreen.navigation.home);
+        });
+
+        it("dispatches overlayClosed signal on screen when destroyed", () => {
+            pauseCreate({ game: mockGame });
+            const destroy = signalSpy.getCall(0).args[0].callback;
+            destroy();
+            sandbox.assert.calledOnce(mockScreen.overlayClosed.dispatch);
         });
     });
 });

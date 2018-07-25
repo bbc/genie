@@ -9,7 +9,6 @@ export function accessibleDomElement(options) {
         show,
         visible,
         position,
-        remove,
     };
 
     function init() {
@@ -24,7 +23,6 @@ export function accessibleDomElement(options) {
             el.setAttribute("aria-label", options.ariaLabel);
         }
 
-        options.parent.appendChild(el);
         assignEvents();
     }
 
@@ -67,10 +65,5 @@ export function accessibleDomElement(options) {
         if (enterKey || spaceKey) {
             options.onClick();
         }
-    }
-
-    function remove() {
-        // IE11 doesn't support el.remove()
-        el.parentElement.removeChild(el);
     }
 }

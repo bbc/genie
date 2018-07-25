@@ -1,5 +1,6 @@
 import _ from "../../lib/lodash/lodash.js";
 import * as GameSound from "../core/game-sound.js";
+import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as VisibleLayer from "../core/visible-layer.js";
 
 /**
@@ -26,6 +27,27 @@ export class Screen extends Phaser.State {
         const themeScreenConfig = this.context.config.theme[this.game.state.current];
         GameSound.setupScreenMusic(this.game, themeScreenConfig);
         this.transientData = transientData;
+        a11y.clearAccessibleButtons();
+        this.overlaySetup();
+    }
+
+    overlaySetup() {
+        this.overlayOpen = new Phaser.Signal();
+        this.overlayOpen.add(this.onOverlayOpen, this);
+        this.overlayClosed = new Phaser.Signal();
+        this.overlayClosed.add(this.onOverlayClosed, this);
+    }
+
+    onOverlayOpen() {
+        a11y.resetElementsInDom(this);
+    }
+
+    onOverlayClosed() {
+        this.game.canvas.focus();
+        a11y.clearElementsFromDom();
+        a11y.clearAccessibleButtons(this);
+        this.context.popupScreens.pop();
+        a11y.appendElementsToDom(this);
     }
 
     get visibleLayer() {

@@ -1,6 +1,7 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 import { onScaleChange } from "../scaler.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
+import * as a11y from "./accessibility-layer.js";
 
 export function accessibilify(button, config, gameButton = true) {
     config = Object.assign(
@@ -26,6 +27,8 @@ export function accessibilify(button, config, gameButton = true) {
 
     button.update = update;
     button.accessibleElement = accessibleElement.el;
+
+    a11y.addToAccessibleButtons(screen, button);
 
     return button;
 
@@ -73,7 +76,6 @@ export function accessibilify(button, config, gameButton = true) {
 
     function teardown() {
         signal.unsubscribe();
-        accessibleElement.remove();
     }
 
     function update() {

@@ -66,6 +66,12 @@ describe("How To Play Overlay", () => {
                     },
                 },
             },
+            overlayOpen: {
+                dispatch: sandbox.stub(),
+            },
+            overlayClosed: {
+                dispatch: sandbox.stub(),
+            },
         };
 
         mockScreen.scene.addToBackground.withArgs(mockTitle).returns(mockTitle);
@@ -122,6 +128,10 @@ describe("How To Play Overlay", () => {
             const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
             const expectedAddLayoutCall = ["howToPlayBack", "audio", "settings", "howToPlayPrevious", "howToPlayNext"];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
+        });
+
+        it("dispatches overlayOpen signal on screen", () => {
+            sandbox.assert.calledOnce(mockScreen.overlayOpen.dispatch);
         });
     });
 
@@ -206,7 +216,6 @@ describe("How To Play Overlay", () => {
                 assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
                 assert.isTrue(mockBackground.destroy.calledOnce);
                 assert.isTrue(mockTitle.destroy.calledOnce);
-                assert.deepEqual(mockScreen.context.popupScreens, []);
             });
 
             it("removes all the panels on destroy", () => {
@@ -231,10 +240,10 @@ describe("How To Play Overlay", () => {
                 sinon.assert.calledWith(mockPipsGroup.callAll, "destroy");
             });
 
-            it("resets the tab position on destroy", () => {
+            it("dispatches overlayClosed signal on screen", () => {
                 const destroy = signalSpy.getCall(0).args[0].callback;
                 destroy();
-                sinon.assert.calledOnce(mockGame.canvas.focus);
+                sandbox.assert.calledOnce(mockScreen.overlayClosed.dispatch);
             });
         });
 
