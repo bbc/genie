@@ -11,6 +11,7 @@ import * as Navigation from "./navigation.js";
 import * as Scene from "./scene.js";
 import { loadFonts } from "./font-loader.js";
 import { gmi, setGmi, startHeartbeat } from "./gmi.js";
+import fp from "../../lib/lodash/fp/fp.js";
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
@@ -85,24 +86,28 @@ class Startup extends Phaser.State {
     }
 
     configureAudioSetting() {
-        this.game.sound.mute = settings.getAllSettings().muted;
+        this.game.sound.mute = !settings.getAllSettings().audio;
         this.game.onPause.add(arg => {
             //Re enable sound if triggered by the game (from the pause menu)
             //otherwise this will be a window focus event and should be muted
-            this.game.sound.mute = triggeredByGame(arg) ? settings.getAllSettings().muted : true;
+            this.game.sound.mute = triggeredByGame(arg) ? !settings.getAllSettings().audio : true;
         });
+
         this.game.onResume.add(() => {
-            this.game.sound.mute = settings.getAllSettings().muted;
+            this.game.sound.mute = !settings.getAllSettings().audio;
         });
+
         signal.bus.subscribe({
             channel: settingsChannel,
             name: "setting-changed-audio",
             callback: value => {
                 this.game.sound.mute = !value;
-                const audioButton = this.game.state.states[this.game.state.current].scene.getLayouts()[0].buttons[
-                    "audio"
-                ];
-                audioButton && audioButton.setImage(value ? "audio-on" : "audio-off");
+                const state = this.game.state;
+
+                const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
+                const getCurrentLayouts = () => state.states[state.current].scene.getLayouts();
+
+                fp.map(fp.flow(fp.get("buttons.audio"), setImage), getCurrentLayouts());
             },
         });
     }

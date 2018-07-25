@@ -76,6 +76,7 @@ export function create(game) {
         const layout = Layout.create(game, Scaler.getMetrics(), buttons);
         addToGroup(background, layout.root);
         _layouts.push(layout);
+
         return layout;
     };
 
@@ -85,14 +86,17 @@ export function create(game) {
 
     const getLayouts = () => _layouts;
 
-    const getAccessibleGameButtons = () => {
-        return customAccessibleButtons;
-    };
+    const getAccessibleGameButtons = () => customAccessibleButtons;
 
     const removeAll = () => {
         background.removeAll(true);
         _layouts.forEach(layout => layout.destroy());
         _layouts = [];
+    };
+
+    const removeLast = () => {
+        _layouts[_layouts.length - 1].destroy();
+        _layouts.pop();
     };
 
     return {
@@ -103,5 +107,6 @@ export function create(game) {
         getLayouts,
         getAccessibleGameButtons,
         removeAll,
+        removeLast,
     };
 }

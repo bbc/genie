@@ -23,9 +23,7 @@ export class Home extends Screen {
         signal.bus.subscribe({
             channel: buttonsChannel,
             name: "play",
-            callback: () => {
-                this.navigation.next();
-            },
+            callback: this.navigation.next,
         });
     }
 }

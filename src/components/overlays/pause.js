@@ -64,6 +64,7 @@ export const create = fp.curry((hideReplayButton, { game }) => {
             GameSound.Assets.backgroundMusic.resume();
         }
         screen.context.popupScreens = fp.pull("pause", screen.context.popupScreens);
+        screen.scene.removeLast();
     }
 
     function restartGame() {
