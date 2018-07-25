@@ -34,6 +34,7 @@ describe("Pause Overlay", () => {
             scene: {
                 addToBackground: sandbox.stub().returns(mockLayoutDestroy),
                 addLayout: sandbox.stub().returns(mockGelButtons),
+                removeLast: sandbox.stub(),
             },
             context: { popupScreens: [] },
             next: sandbox.spy(),
