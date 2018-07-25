@@ -21,10 +21,9 @@ describe("Results Screen", () => {
     const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
-
         sandbox.stub(gmiModule, "sendStats");
         sandbox.stub(a11y, "resetElementsInDom");
-        layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");
+        sandbox.spy(layoutHarness, "createTestHarnessDisplay");
         addToBackgroundSpy = sandbox.spy();
         addLayoutSpy = sandbox.spy();
         gameImageStub = sandbox.stub();
