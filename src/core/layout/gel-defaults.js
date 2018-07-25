@@ -84,7 +84,7 @@ export const config = {
 
             signal.bus.publish({
                 channel: settingsChannel,
-                name: "setting-changed-audio",
+                name: "audio",
                 data: enabled,
             });
 
