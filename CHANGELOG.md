@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | UNRELEASED | |
+| | Fix default actions not applying to overlay buttons. |
 | | Fixes regression bug where the settings icons were not updating correctly. |
 | | Fix prev/next buttons appearing under character sprite on select screen. |
 | 0.5.0 | |

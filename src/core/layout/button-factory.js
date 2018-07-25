@@ -7,7 +7,6 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import * as signal from "../../core/signal-bus.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
 import { GelButton } from "./gel-button.js";
-import { buttonsChannel } from "./gel-defaults.js";
 
 /**
  * Checks for a default action and if present adds its callback to the signal bus
@@ -17,7 +16,7 @@ import { buttonsChannel } from "./gel-defaults.js";
 const defaultAction = config => {
     if (config.action) {
         signal.bus.subscribe({
-            channel: buttonsChannel,
+            channel: config.channel,
             name: config.key,
             callback: config.action,
         });
