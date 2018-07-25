@@ -1,6 +1,7 @@
 import { gmi } from "../../../core/gmi/gmi.js";
 import { Screen } from "../../../core/screen.js";
 import { accessibilify } from "../../../core/accessibility/accessibilify.js";
+import * as a11y from "../../../core/accessibility/accessibility-layer.js";
 
 export class GameTest extends Screen {
     constructor() {
@@ -66,5 +67,7 @@ export class GameTest extends Screen {
             { font: "italic 32px ReithSans", fill: "#f6931e", align: "center" },
         );
         this.scene.addToBackground(characterSelectedText);
+
+        a11y.resetElementsInDom(this);
     }
 }

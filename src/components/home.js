@@ -8,6 +8,7 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
+import * as a11y from "../core/accessibility/accessibility-layer.js";
 
 export class Home extends Screen {
     constructor() {
@@ -27,5 +28,7 @@ export class Home extends Screen {
                 this.navigation.next();
             },
         });
+
+        a11y.resetElementsInDom(this);
     }
 }
