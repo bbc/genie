@@ -73,7 +73,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "pause" }));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "home" }));
         });
     });
 
