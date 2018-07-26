@@ -1,7 +1,7 @@
 import * as howToPlay from "../../components/overlays/how-to-play.js";
 import * as pause from "../../components/overlays/pause.js";
 import { settings } from "../../core/settings.js";
-import { gmi, sendStats } from "../../core/gmi.js";
+import { gmi, sendStats } from "../../core/gmi/gmi.js";
 
 export const buttonsChannel = "gel-buttons";
 export const config = {
@@ -236,10 +236,20 @@ export const config = {
         id: "__restart",
         channel: buttonsChannel,
         action: () => {
-            sendStats("click", { action_type: "restart" });
+            sendStats("click", { action_type: "playagain" });
+            sendStats("replay");
         },
     },
     continue: {
+        group: "bottomCenter",
+        title: "Continue",
+        key: "continue",
+        ariaLabel: "Continue",
+        order: 13,
+        id: "__continue",
+        channel: buttonsChannel,
+    },
+    continueGame: {
         group: "bottomCenter",
         title: "Continue",
         key: "continue",
@@ -247,6 +257,10 @@ export const config = {
         order: 13,
         id: "__continue",
         channel: buttonsChannel,
+        action: () => {
+            sendStats("click", { action_type: "continue" });
+            sendStats("continue");
+        },
     },
     howToPlay: {
         group: "bottomRight",

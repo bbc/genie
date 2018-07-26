@@ -1,10 +1,11 @@
-import fp from "../../lib/lodash/fp/fp.js";
-import * as VisibleLayer from "../../src/core/visible-layer.js";
+import fp from "../../../lib/lodash/fp/fp.js";
+import * as StatsValues from "./stats-values.js";
+import * as VisibleLayer from "../visible-layer.js";
 
 export let gmi = {};
+let settings;
 let gameInstance;
 let gameContext;
-let gameFirstClick = true;
 
 const dedupeGlobalSettings = customSettings => {
     return customSettings.filter(customSettings => {
@@ -41,53 +42,27 @@ const getDefaultGlobals = () => {
     };
 };
 
-const getStatsParams = actionKey => {
-    const currentScreen = VisibleLayer.get(gameInstance, gameContext);
-    const defaultParams = {
-        action_name: actionKey,
-        game_template: "genie",
-        game_screen: currentScreen,
-        game_level_name: null,
-    };
-    let customParams = {};
-
-    if (actionKey === "click") {
-        let actionName = "game_click";
-        if (gameFirstClick) {
-            actionName = "game_first_click";
-            gameFirstClick = false;
-        }
-        customParams = {
-            action_name: actionName,
-        };
-    } else if (actionKey === "heartbeat") {
-        customParams = {
-            action_name: "timer",
-            action_type: "heartbeat",
-        };
-    } else if (actionKey === "game_loaded") {
-        customParams = {
-            action_type: true,
-        };
-    }
-    return fp.merge(defaultParams, customParams);
-};
-
-export const sendStats = (actionKey, additionalParams) => {
-    const params = fp.merge(getStatsParams(actionKey), additionalParams);
-    gmi.sendStatsEvent(params.action_name, params.action_type, params);
-};
-
-export const startHeartbeat = (game, context) => {
-    gameInstance = game;
-    gameContext = context;
-
+const startHeartbeat = () => {
     const beatPeriodSec = 15;
     const intervalPeriodMilliSec = beatPeriodSec * 1000;
 
     setInterval(function beatingHeart() {
         sendStats("heartbeat", { heartbeat_period: beatPeriodSec });
     }, intervalPeriodMilliSec);
+};
+
+export const sendStats = (actionKey, additionalParams) => {
+    const visibleLayer = VisibleLayer.get(gameInstance, gameContext);
+    const statsValues = StatsValues.getValues(actionKey, settings, visibleLayer);
+    const params = fp.merge(statsValues, additionalParams);
+    gmi.sendStatsEvent(params.action_name, params.action_type, params);
+};
+
+export const startStatsTracking = (game, context) => {
+    settings = gmi.getAllSettings();
+    gameInstance = game;
+    gameContext = context;
+    startHeartbeat();
 };
 
 export const setGmi = (customSettings, windowObj) => {

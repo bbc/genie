@@ -10,8 +10,8 @@ import { parseUrlParams } from "./parseUrlParams.js";
 import * as Navigation from "./navigation.js";
 import * as Scene from "./scene.js";
 import { loadFonts } from "./font-loader.js";
+import { gmi, setGmi, startStatsTracking } from "./gmi/gmi.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
-import { gmi, setGmi, startHeartbeat } from "./gmi.js";
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
@@ -52,10 +52,11 @@ export function startup(settingsConfig = {}, navigationConfig) {
         };
         game.stage.backgroundColor = "#333";
 
+        startStatsTracking(game, context);
+
         const onFontsLoaded = () => Navigation.create(game.state, context, scene, navigationConfig);
         loadFonts(game, onFontsLoaded);
         a11y.setup(game.canvas.parentElement);
-        startHeartbeat(game, context);
     }
 }
 

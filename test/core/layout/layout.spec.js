@@ -5,7 +5,7 @@ import * as Layout from "../../../src/core/layout/layout.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import { Group } from "../../../src/core/layout/group.js";
 import * as GameSound from "../../../src/core/game-sound.js";
-import * as gmiModule from "../../../src/core/gmi.js";
+import * as gmiModule from "../../../src/core/gmi/gmi.js";
 
 describe("Layout", () => {
     const sandbox = sinon.createSandbox();

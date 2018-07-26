@@ -3,7 +3,7 @@ import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
 import * as gel from "../../../src/core/layout/gel-defaults";
 import * as pause from "../../../src/components/overlays/pause.js";
 import { settings } from "../../../src/core/settings.js";
-import * as gmiModule from "../../../src/core/gmi.js";
+import * as gmiModule from "../../../src/core/gmi/gmi.js";
 
 describe("Layout - Gel Defaults", () => {
     const sandbox = sinon.createSandbox();
@@ -215,7 +215,25 @@ describe("Layout - Gel Defaults", () => {
         });
 
         it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "restart" }));
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "playagain" }));
+        });
+
+        it("sends a replay stat to the GMI", () => {
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("replay"));
+        });
+    });
+
+    describe("Continue Game Button Callback", () => {
+        beforeEach(() => {
+            gel.config.continueGame.action();
+        });
+
+        it("sends a click stat to the GMI", () => {
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "continue" }));
+        });
+
+        it("sends a game_level continue stat to the GMI", () => {
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("continue"));
         });
     });
 
