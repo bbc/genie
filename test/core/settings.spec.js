@@ -1,7 +1,7 @@
 import * as sinon from "sinon";
 import { create as createSettings } from "../../src/core/settings.js";
 import * as signal from "../../src/core/signal-bus.js";
-import * as gmiModule from "../../src/core/gmi.js";
+import * as gmiModule from "../../src/core/gmi/gmi.js";
 
 describe("Settings", () => {
     let sandbox = sinon.createSandbox();
@@ -37,7 +37,7 @@ describe("Settings", () => {
         it("publishes a signal when a setting has been changed", () => {
             const expectedSignal = {
                 channel: "genie-settings",
-                name: "setting-changed-audio",
+                name: "audio",
                 data: false,
             };
             const onSettingChangedCallback = mockGmi.showSettings.getCall(0).args[0];

@@ -3,10 +3,11 @@ import * as sinon from "sinon";
 import { Results } from "../../src/components/results";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
+import * as gmiModule from "../../src/core/gmi/gmi.js";
+import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 
 describe("Results Screen", () => {
     let resultsScreen;
-    let layoutHarnessSpy;
     let mockGame;
     let mockContext;
     let addToBackgroundSpy;
@@ -20,7 +21,9 @@ describe("Results Screen", () => {
     const sandbox = sinon.createSandbox();
 
     beforeEach(() => {
-        layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");
+        sandbox.stub(gmiModule, "sendStats");
+        sandbox.stub(a11y, "resetElementsInDom");
+        sandbox.spy(layoutHarness, "createTestHarnessDisplay");
         addToBackgroundSpy = sandbox.spy();
         addLayoutSpy = sandbox.spy();
         gameImageStub = sandbox.stub();
@@ -111,15 +114,33 @@ describe("Results Screen", () => {
 
         it("adds GEL buttons to layout", () => {
             const actualButtons = addLayoutSpy.getCall(0).args[0];
-            const expectedButtons = ["pause", "restart", "continue"];
+            const expectedButtons = ["pause", "restart", "continueGame"];
             assert.deepEqual(actualButtons, expectedButtons);
         });
 
         it("creates a layout harness with correct params", () => {
-            const actualParams = layoutHarnessSpy.getCall(0).args;
+            const actualParams = layoutHarness.createTestHarnessDisplay.getCall(0).args;
             const expectedParams = [mockGame, mockContext, resultsScreen.scene];
-            assert(layoutHarnessSpy.callCount === 1, "layout harness should be called once");
+            sandbox.assert.calledOnce(layoutHarness.createTestHarnessDisplay);
             assert.deepEqual(actualParams, expectedParams);
+        });
+
+        it("fires a game complete stat to the GMI with score if given", () => {
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("game_complete", { game_score: 22 }));
+        });
+
+        it("fires a game complete stat to the GMI with score in string format if given", () => {
+            resultsScreen.transientData.results = "450";
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("game_complete", { game_score: 22 }));
+        });
+
+        it("fires a game complete stat to the GMI without a score if not provided", () => {
+            resultsScreen.transientData.results = null;
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("game_complete"));
+        });
+
+        it("resets accessibility elements in DOM", () => {
+            sandbox.assert.calledOnce(a11y.resetElementsInDom.withArgs(resultsScreen));
         });
     });
 
@@ -131,23 +152,27 @@ describe("Results Screen", () => {
             resultsScreen.create();
         });
 
-        it("adds a signal subscription to the continue button", () => {
-            assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].name, "continue");
+        describe("the continue button", () => {
+            it("adds a signal subscription", () => {
+                assert.deepEqual(signalSubscribeSpy.getCall(0).args[0].name, "continue");
+            });
+
+            it("navigates to the next screen", () => {
+                signalSubscribeSpy.getCall(0).args[0].callback();
+                assert(resultsScreen.navigation.next.callCount === 1, "next function should have been called once");
+            });
         });
 
-        it("adds a callback for the continue button", () => {
-            signalSubscribeSpy.getCall(0).args[0].callback();
-            assert(resultsScreen.navigation.next.callCount === 1, "next function should have been called once");
-        });
+        describe("the restart button", () => {
+            it("adds a signal subscription", () => {
+                assert.deepEqual(signalSubscribeSpy.getCall(1).args[0].name, "restart");
+            });
 
-        it("adds a signal subscription to the restart button", () => {
-            assert.deepEqual(signalSubscribeSpy.getCall(1).args[0].name, "restart");
-        });
-
-        it("adds a callback for the restart button", () => {
-            signalSubscribeSpy.getCall(1).args[0].callback();
-            assert(resultsScreen.navigation.game.callCount === 1, "next function should have been called once");
-            sinon.assert.calledWith(resultsScreen.navigation.game, { characterSelected: 1, results: 22 });
+            it("restarts the game and passes saved data through", () => {
+                signalSubscribeSpy.getCall(1).args[0].callback();
+                assert(resultsScreen.navigation.game.callCount === 1, "next function should have been called once");
+                sinon.assert.calledWith(resultsScreen.navigation.game, { characterSelected: 1, results: 22 });
+            });
         });
     });
 });

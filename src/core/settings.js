@@ -1,5 +1,5 @@
 import * as signal from "../core/signal-bus.js";
-import { gmi } from "./gmi.js";
+import { gmi } from "./gmi/gmi.js";
 
 export const settingsChannel = "genie-settings";
 
@@ -7,7 +7,7 @@ export const create = () => {
     const onSettingChanged = (key, value) => {
         signal.bus.publish({
             channel: settingsChannel,
-            name: "setting-changed-" + key,
+            name: key,
             data: value,
         });
     };

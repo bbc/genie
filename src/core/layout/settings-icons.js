@@ -1,5 +1,5 @@
 import { settingsChannel } from "../settings.js";
-import { gmi } from "../gmi.js";
+import { gmi } from "../gmi/gmi.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as signal from "../signal-bus.js";
 

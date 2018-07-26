@@ -1,6 +1,6 @@
 import { assert } from "chai";
 import * as sinon from "sinon";
-import * as gmiModule from "../../src/core/gmi.js";
+import * as gmiModule from "../../src/core/gmi/gmi.js";
 import * as signal from "../../src/core/signal-bus.js";
 
 import * as SettingsIcons from "../../src/core/layout/settings-icons.js";
@@ -29,7 +29,7 @@ describe("Settings Icons", () => {
     it("Creates a subscription only for the fx icon on screens that have an audio button", () => {
         SettingsIcons.create("top-right", ["audioOff"]);
         assert(mockSignalBus.subscribe.calledOnce);
-        assert(mockSignalBus.subscribe.firstCall.args[0].name === "motion");
+        assert.equal(mockSignalBus.subscribe.firstCall.args[0].name, "motion");
     });
 
     it("Creates subscriptions for the audio and fx icons on screens that do not have an audio button", () => {

@@ -130,7 +130,7 @@ var GMI = function(options, embedVars, gameDir) {
         return true;
     };
     GMI.prototype.sendStatsEvent = function(name, type, params) {
-        console.log("Stat fired - type:" + type + ", name:" + name + ", params:" + JSON.stringify(params));
+        console.log("Stat fired - name: " + name + ", type: " + type + ", params: " + JSON.stringify(params));
     };
     GMI.prototype.exit = function() {
         window.open("http://www.bbc.co.uk", "_top");

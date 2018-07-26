@@ -22,8 +22,12 @@ describe("#accessibleDomElement", () => {
 
         parentAppendChild = sandbox.spy();
         parentRemoveChild = sandbox.spy();
+
+        parentElement = {
+            removeChild: parentRemoveChild,
+        };
+
         parentElement.appendChild = parentAppendChild;
-        parentElement.removeChild = parentRemoveChild;
 
         options = {
             id: "play-button",
@@ -143,11 +147,6 @@ describe("#accessibleDomElement", () => {
             accessibleDomElement(options);
             sinon.assert.calledOnce(eventListener.withArgs("blur", sinon.match.func));
         });
-
-        it("appends element to parent element", () => {
-            accessibleDomElement(options);
-            sinon.assert.calledOnce(parentAppendChild.withArgs(element));
-        });
     });
 
     describe("Accessing the created element", () => {
@@ -210,15 +209,6 @@ describe("#accessibleDomElement", () => {
             expect(element.style.top).to.equal("50px");
             expect(element.style.width).to.equal("200px");
             expect(element.style.height).to.equal("100px");
-        });
-    });
-
-    describe("removing element", () => {
-        it("is removed from DOM when calling remove function", () => {
-            const newAccessibleElement = accessibleDomElement(options);
-
-            newAccessibleElement.remove();
-            sinon.assert.calledOnce(parentRemoveChild.withArgs(element));
         });
     });
 });

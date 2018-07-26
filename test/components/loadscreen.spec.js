@@ -6,11 +6,13 @@ import * as LoadBar from "../../src/components/loadbar";
 import * as AssetLoader from "../../src/core/asset-loader";
 import * as Scaler from "../../src/core/scaler.js";
 import * as GameSound from "../../src/core/game-sound";
+import * as gmiModule from "../../src/core/gmi/gmi.js";
 
 describe("Load Screen", () => {
     let loadScreen;
     let addImageStub;
     let mockGame;
+    let mockGmi;
     let assetLoaderStub;
     let assetLoaderCallbackSpy;
     let setButtonClickSoundStub;
@@ -23,7 +25,12 @@ describe("Load Screen", () => {
         assetLoaderStub = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
         addImageStub = sandbox.stub();
         setButtonClickSoundStub = sandbox.stub(GameSound, "setButtonClickSound");
-        navigationNext = sandbox.stub();
+        navigationNext = sandbox.spy();
+
+        mockGmi = { gameLoaded: sandbox.stub() };
+        sandbox.stub(gmiModule, "setGmi").returns(mockGmi);
+        sandbox.stub(gmiModule, "sendStats");
+        sandbox.replace(gmiModule, "gmi", mockGmi);
 
         mockGame = {
             add: {
@@ -33,7 +40,7 @@ describe("Load Screen", () => {
                 current: "currentState",
             },
             sound: { mute: false },
-            scale: { getParentBounds: sinon.stub(), setGameSize: sinon.stub() },
+            scale: { getParentBounds: sandbox.stub(), setGameSize: sandbox.stub() },
         };
 
         loadScreen = new Loadscreen();
@@ -80,8 +87,22 @@ describe("Load Screen", () => {
             loadScreen.preload();
 
             assetLoaderCallbackSpy.args[0][0]();
-            sinon.assert.calledOnce(setButtonClickSoundStub);
-            sinon.assert.calledWith(setButtonClickSoundStub, mockGame, sinon.match.typeOf("string"));
+            sandbox.assert.calledOnce(setButtonClickSoundStub);
+            sandbox.assert.calledWith(setButtonClickSoundStub, mockGame, sandbox.match.typeOf("string"));
+        });
+
+        it("fires the game loaded stat through the GMI", () => {
+            loadScreen.context = { qaMode: { active: false } };
+            loadScreen.preload();
+            assetLoaderCallbackSpy.args[0][0]();
+            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("game_loaded"));
+        });
+
+        it("tells the GMI the game has loaded", () => {
+            loadScreen.context = { qaMode: { active: false } };
+            loadScreen.preload();
+            assetLoaderCallbackSpy.args[0][0]();
+            sandbox.assert.called(mockGmi.gameLoaded);
         });
 
         it("moves to the next screen when the promise is resolved", () => {
@@ -128,17 +149,17 @@ describe("Load Screen", () => {
         });
 
         it("creates one loading bar", () => {
-            sinon.assert.calledOnce(createProgressBarStub);
-            sinon.assert.calledWith(createProgressBarStub, mockGame, "loadbarBackground", "loadbarFill");
+            sandbox.assert.calledOnce(createProgressBarStub);
+            sandbox.assert.calledWith(createProgressBarStub, mockGame, "loadbarBackground", "loadbarFill");
         });
 
         it("adds the loading bar to the layout", () => {
-            sinon.assert.calledWith(loadScreen.scene.addToBackground, mockProgressBar);
+            sandbox.assert.calledWith(loadScreen.scene.addToBackground, mockProgressBar);
         });
 
         it("adds a brand logo to the layout", () => {
-            sinon.assert.calledWith(addImageStub, 0, 0, "brandLogo");
-            sinon.assert.calledWith(loadScreen.scene.addToBackground, mockBrandLogo);
+            sandbox.assert.calledWith(addImageStub, 0, 0, "brandLogo");
+            sandbox.assert.calledWith(loadScreen.scene.addToBackground, mockBrandLogo);
         });
     });
 

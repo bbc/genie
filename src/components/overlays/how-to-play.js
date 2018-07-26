@@ -3,7 +3,6 @@
  * @module components/overlays/how-to-play
  */
 
-import fp from "../../../lib/lodash/fp/fp.js";
 import * as OverlayLayout from "../../components/overlays/overlay-layout.js";
 import * as Book from "../../core/book/book.js";
 import * as signal from "../../core/signal-bus.js";
@@ -28,6 +27,8 @@ export function create({ game }) {
 
     let pips = addPips(book);
     addSignals();
+
+    screen.overlayOpen.dispatch();
 
     function previousButtonClick() {
         book = Book.PreviousPage(book);
@@ -93,7 +94,6 @@ export function create({ game }) {
         destroyPips();
         title.destroy();
         background.destroy();
-        game.canvas.focus();
-        screen.context.popupScreens = fp.pull("how-to-play", screen.context.popupScreens);
+        screen.overlayClosed.dispatch();
     }
 }
