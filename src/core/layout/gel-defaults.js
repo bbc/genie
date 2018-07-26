@@ -65,7 +65,7 @@ export const config = {
         id: "__back",
         channel: "how-to-play-gel-buttons",
         action: () => {
-            sendStats("click", { action_type: "how-to-play" });
+            sendStats("click", { action_type: "back" });
         },
     },
     audioOff: {
