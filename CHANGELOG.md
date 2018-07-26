@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | UNRELEASED | |
+| | Fixes an issue on iPhone X where voice-over tabbing would begin at the end of the how-to-play and select screens |
 | | Adds mandatory stats using the GMI. |
 | | Adds an `accessibility-layer` that manages accessible DOM elements from screen-to-screen |
 | | Fix default actions not applying to overlay buttons. |
