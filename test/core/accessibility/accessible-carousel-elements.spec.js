@@ -50,7 +50,7 @@ describe("Accessible Carousel Elements", () => {
         assert.equal(carouselDomElement.getAttribute("aria-live"), "polite");
     });
 
-    it("[CGPROD-832] Regression - prepends the carousel DOM element to the mount point", () => {
+    it("prepends the carousel DOM element to the mount point to give the correct on-screen tabbing start position for iPhoneX", () => {
         mountPoint.appendChild(document.createElement("canvas"));
         accessibleCarouselElements.create("select-screen", mockSprites, mountPoint);
 
