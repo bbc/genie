@@ -15,7 +15,6 @@ function createCarouselElement(parentElement, pageName) {
 
     setCSS(carouselElement);
 
-    parentElement.appendChild(carouselElement);
     parentElement.insertBefore(carouselElement, parentElement.firstChild); // Node.prepend() not supported in Edge
 
     return carouselElement;
