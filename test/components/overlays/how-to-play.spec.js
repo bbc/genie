@@ -55,6 +55,7 @@ describe("How To Play Overlay", () => {
             scene: {
                 addLayout: sandbox.stub().returns(mockGelButtons),
                 addToBackground: sandbox.stub(),
+                removeLast: sandbox.stub(),
             },
             context: {
                 popupScreens: [],
