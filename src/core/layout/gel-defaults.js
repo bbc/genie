@@ -41,7 +41,7 @@ export const config = {
         id: "__home",
         channel: "pause-gel-buttons",
         action: () => {
-            sendStats("click", { action_type: "pause" });
+            sendStats("click", { action_type: "home" });
         },
     },
     back: {
