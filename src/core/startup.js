@@ -65,6 +65,10 @@ const CONFIG_KEY = "config";
 
 const triggeredByGame = arg => arg instanceof Phaser.Game;
 
+const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
+const getButtons = fp.map(fp.get("buttons.audio"));
+const filterUndefined = fp.filter(x => !!x);
+
 class Startup extends Phaser.State {
     constructor(onStarted) {
         super();
@@ -106,11 +110,9 @@ class Startup extends Phaser.State {
             callback: value => {
                 this.game.sound.mute = !value;
                 const state = this.game.state;
+                const layouts = state.states[state.current].scene.getLayouts();
 
-                const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
-                const getCurrentLayouts = () => state.states[state.current].scene.getLayouts();
-
-                fp.map(fp.flow(fp.get("buttons.audio"), setImage), getCurrentLayouts());
+                fp.map(setImage, filterUndefined(getButtons(layouts)));
             },
         });
     }
