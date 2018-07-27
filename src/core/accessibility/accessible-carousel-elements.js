@@ -15,7 +15,7 @@ function createCarouselElement(parentElement, pageName) {
 
     setCSS(carouselElement);
 
-    parentElement.appendChild(carouselElement);
+    parentElement.insertBefore(carouselElement, parentElement.firstChild); // Node.prepend() not supported in Edge
 
     return carouselElement;
 }
@@ -28,7 +28,7 @@ export function create(pageName, carouselSprites, parentElement, choices) {
     const accessibleElements = [];
     const carousel = createCarouselElement(parentElement, pageName);
 
-    //NOTE: Hack to force tab accessibility order
+    // NOTE: Hack to force tab accessibility order
     // needs a refactor once we have an accessibility layer
     carouselSprites.forEach((sprite, index) => {
         const accessibleElement = accessibleDomElement({
