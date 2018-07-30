@@ -123,14 +123,14 @@ describe("Showing pages of a book", () => {
                 book.nextPageOption.input.should.have.property("enabled", true);
             });
 
-            it("Should auto-focus the next page button after navigating to first page", () => {
-                book = Book.GoToPage(1, book);
+            it("Should auto-focus the next page button when initially opening the first page", () => {
+                book = Book.GoToPage(1, book, true);
                 sinon.assert.calledOnce(book.nextPageOption.accessibleElement.focus);
             });
 
-            it("Should not auto-focus the next page button when initially opening the first page", () => {
-                book = Book.GoToPage(1, book, true);
-                sinon.assert.notCalled(book.nextPageOption.accessibleElement.focus);
+            it("Should auto-focus the next page button after navigating to first page", () => {
+                book = Book.GoToPage(1, book);
+                sinon.assert.calledOnce(book.nextPageOption.accessibleElement.focus);
             });
 
             it("Should show page 2 and hide page 1 when the 'Next page' option is chosen", () => {

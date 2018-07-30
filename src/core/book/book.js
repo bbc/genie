@@ -15,7 +15,9 @@ const configureButtonsForPage = (pageNumber, book, initialising) => {
     book.previousPageOption.input.enabled = pagesBefore;
     book.previousPageOption.update();
 
-    if (!initialising) {
+    if (initialising) {
+        book.nextPageOption.accessibleElement.focus();
+    } else {
         if (!pagesAhead) book.previousPageOption.accessibleElement.focus();
         if (!pagesBefore) book.nextPageOption.accessibleElement.focus();
     }
