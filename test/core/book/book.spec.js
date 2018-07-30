@@ -123,7 +123,7 @@ describe("Showing pages of a book", () => {
                 book.nextPageOption.input.should.have.property("enabled", true);
             });
 
-            it("Should auto-focus the next page initially, and again when the 'Next page' option is chosen", () => {
+            it("Should auto-focus the next button initially, and again when the 'Next page' option is chosen", () => {
                 book = Book.GoToPage(1, book);
                 sinon.assert.calledTwice(book.nextPageOption.accessibleElement.focus);
             });
