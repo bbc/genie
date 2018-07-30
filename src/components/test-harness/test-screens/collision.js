@@ -19,7 +19,7 @@ export class CollisionTest extends Screen {
     create() {
         hasCollided = false;
 
-        this.scene.addLayout(["home", "pause", "audioOff", "settings", "continue"]);
+        this.scene.addLayout(["home", "pause", "audio", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.spriteOne = this.game.add.sprite(-200, 0, "collision.basicSprite");

@@ -26,7 +26,7 @@ export class Select extends Screen {
         this.currentIndex = 1;
         this.choiceSprites = this.createChoiceSprites(theme.choices);
 
-        this.scene.addLayout(["home", "audioOff", "pauseNoReplay", "previous", "next", "continue"]);
+        this.scene.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
         this.accessibleElements = accessibleCarouselElements.create(
             this.visibleLayer,
             this.choiceSprites,
