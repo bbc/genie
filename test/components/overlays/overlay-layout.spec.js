@@ -12,15 +12,15 @@ describe("Overlay Layout", () => {
         mockLayouts = [
             {
                 buttons: {
-                    audioOff: {
+                    audio: {
                         input: { enabled: true },
                         update: sandbox.spy(),
-                        name: "audioOff",
+                        name: "audio",
                     },
                     settings: {
                         input: { enabled: false },
                         update: sandbox.spy(),
-                        name: "audioOff",
+                        name: "audio",
                     },
                 },
             },
@@ -50,9 +50,9 @@ describe("Overlay Layout", () => {
 
     it("disables currently enabled buttons", () => {
         OverlayLayout.create(mockScreen);
-        assert.isFalse(mockLayouts[0].buttons.audioOff.input.enabled);
+        assert.isFalse(mockLayouts[0].buttons.audio.input.enabled);
         assert.isFalse(mockGameButtons[0].input.enabled);
-        assert.isTrue(mockLayouts[0].buttons.audioOff.update.calledOnce);
+        assert.isTrue(mockLayouts[0].buttons.audio.update.calledOnce);
         assert.isTrue(mockGameButtons[0].update.calledOnce);
     });
 
@@ -72,8 +72,8 @@ describe("Overlay Layout", () => {
         it("restores disabled buttons", () => {
             const overlayLayout = OverlayLayout.create(mockScreen);
             overlayLayout.restoreDisabledButtons();
-            assert.isTrue(mockLayouts[0].buttons.audioOff.input.enabled);
-            assert.isTrue(mockLayouts[0].buttons.audioOff.update.calledTwice);
+            assert.isTrue(mockLayouts[0].buttons.audio.input.enabled);
+            assert.isTrue(mockLayouts[0].buttons.audio.update.calledTwice);
             assert.isTrue(mockGameButtons[0].input.enabled);
         });
     });
@@ -83,7 +83,7 @@ describe("Overlay Layout", () => {
             const overlayLayout = OverlayLayout.create(mockScreen);
             const mockGelLayout = {
                 buttons: {
-                    audioOff: {
+                    audio: {
                         update: sandbox.spy(),
                         input: { priorityID: 0 },
                         parent: {
@@ -94,10 +94,10 @@ describe("Overlay Layout", () => {
                 },
             };
             overlayLayout.moveGelButtonsToTop(mockGelLayout);
-            assert.equal(mockGelLayout.buttons.audioOff.input.priorityID, 1001);
-            assert.equal(mockGelLayout.buttons.audioOff.parent.updateTransform.calledOnce, true);
-            assert.equal(mockGelLayout.buttons.audioOff.parent.parent.updateTransform.calledOnce, true);
-            assert.equal(mockGelLayout.buttons.audioOff.update.calledOnce, true);
+            assert.equal(mockGelLayout.buttons.audio.input.priorityID, 1001);
+            assert.equal(mockGelLayout.buttons.audio.parent.updateTransform.calledOnce, true);
+            assert.equal(mockGelLayout.buttons.audio.parent.parent.updateTransform.calledOnce, true);
+            assert.equal(mockGelLayout.buttons.audio.update.calledOnce, true);
         });
     });
 

@@ -18,15 +18,13 @@ export class Home extends Screen {
     create() {
         this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
         this.scene.addToBackground(this.game.add.image(0, -150, "home.title"));
-        this.scene.addLayout(["exit", "howToPlay", "play", "audioOff", "settings"]);
+        this.scene.addLayout(["exit", "howToPlay", "play", "audio", "settings"]);
         createTestHarnessDisplay(this.game, this.context, this.scene);
 
         signal.bus.subscribe({
             channel: buttonsChannel,
             name: "play",
-            callback: () => {
-                this.navigation.next();
-            },
+            callback: this.navigation.next,
         });
 
         a11y.resetElementsInDom(this);
