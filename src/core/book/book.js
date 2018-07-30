@@ -17,7 +17,6 @@ const configureButtonsForPage = (pageNumber, book) => {
 
     if (!pagesAhead) book.previousPageOption.accessibleElement.focus();
     if (!pagesBefore) {
-        console.log(!pagesBefore, book.nextPageOption.accessibleElement.focus());
         book.nextPageOption.accessibleElement.focus();
     }
 };
