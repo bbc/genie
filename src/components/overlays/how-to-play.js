@@ -95,5 +95,6 @@ export function create({ game }) {
         title.destroy();
         background.destroy();
         screen.overlayClosed.dispatch();
+        screen.scene.removeLast();
     }
 }
