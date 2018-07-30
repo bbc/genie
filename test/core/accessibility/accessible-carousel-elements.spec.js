@@ -50,6 +50,19 @@ describe("Accessible Carousel Elements", () => {
         assert.equal(carouselDomElement.getAttribute("aria-live"), "polite");
     });
 
+    it("prepends the carousel DOM element to the mount point to give the correct on-screen tabbing start position for iPhoneX", () => {
+        mountPoint.appendChild(document.createElement("canvas"));
+        accessibleCarouselElements.create("select-screen", mockSprites, mountPoint);
+
+        const carouselDomElement = mountPoint.firstChild;
+        const canvasElement = mountPoint.childNodes[1];
+
+        assert.equal(carouselDomElement.getAttribute("id"), "carousel-select-screen");
+        assert.equal(carouselDomElement.getAttribute("aria-live"), "polite");
+
+        assert.equal(canvasElement.nodeName, "CANVAS");
+    });
+
     it("creates an accessible DOM element for each carousel item", () => {
         accessibleCarouselElements.create("select-screen", mockSprites, mountPoint);
 
