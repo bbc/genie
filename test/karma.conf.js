@@ -1,7 +1,7 @@
 var path = require("path");
 
 var checkCoverageFlag = process.argv.toString().includes("--coverage");
-var webpackConfig = require("../build-scripts/webpack.config.js");
+var webpackConfig = require("../build-scripts/webpack.config.js")();
 
 module.exports = function(config) {
     config.set({

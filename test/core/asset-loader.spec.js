@@ -4,7 +4,7 @@ import * as sinon from "sinon";
 import * as AssetLoader from "../../src/core/asset-loader.js";
 
 describe("Asset Loader", () => {
-    const sandbox = sinon.sandbox.create();
+    const sandbox = sinon.createSandbox();
 
     let assetsLoaded;
     let fakeGame;
