@@ -24,7 +24,8 @@ const createSignals = (group, config) => {
 
     const callback = bool => {
         if (!bool && !icon) {
-            icon = group.addButton(config, 0);
+            const position = config.signalName === "audio" ? group.length - 1 : 0;
+            icon = group.addButton(config, position);
         } else if (bool && icon) {
             group.removeButton(icon);
             icon = undefined;
