@@ -17,7 +17,7 @@ describe("Layout", () => {
     };
     let mockSubscribe;
     let mockUnsubscribe;
-    let unsubscribeSpy;
+    let settingsIconsUnsubscribeSpy;
     const mockMetrics = {
         horizontals: {},
         safeHorizontals: {},
@@ -25,9 +25,9 @@ describe("Layout", () => {
     };
 
     beforeEach(() => {
-        unsubscribeSpy = sandbox.spy();
+        settingsIconsUnsubscribeSpy = sandbox.spy();
         sandbox.replace(gmiModule, "gmi", mockGmi);
-        sandbox.stub(settingsIcons, "create").returns({ unsubscribe: unsubscribeSpy });
+        sandbox.stub(settingsIcons, "create").returns({ unsubscribe: settingsIconsUnsubscribeSpy });
         sandbox.stub(Group.prototype, "addButton").returns({ onInputUp: { add: sandbox.spy() } });
         return initialiseGame().then(game => {
             mockGame = game;
@@ -171,6 +171,7 @@ describe("Layout", () => {
         const layout = Layout.create(mockGame, mockMetrics, ["play"]);
         layout.removeSignals();
         sinon.assert.calledOnce(mockUnsubscribe);
+        sinon.assert.calledOnce(settingsIconsUnsubscribeSpy);
     });
 
     it("creates the settings icons", () => {
