@@ -32,9 +32,16 @@ export const clearAccessibleButtons = screen => {
     }
 };
 
-export const clearElementsFromDom = () => {
+export const clearElementsFromDom = screen => {
     const parentElement = document.getElementById(PARENT_ELEMENT_ID);
-    parentElement.innerHTML = "";
+    const buttons = getAccessibleButtons(screen.visibleLayer);
+    const childNodes = Array.from(parentElement.childNodes);
+    childNodes.forEach(el => {
+        if (document.activeElement !== el) {
+            el.remove();
+        }
+    });
+    //parentElement.innerHTML = "";
 
     return parentElement;
 };
@@ -51,6 +58,6 @@ export const appendElementsToDom = screen => {
 };
 
 export const resetElementsInDom = screen => {
-    clearElementsFromDom();
+    clearElementsFromDom(screen);
     appendElementsToDom(screen);
 };

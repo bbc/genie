@@ -60,7 +60,7 @@ export const create = fp.curry((hideReplayButton, { game }) => {
         gelButtons.destroy();
         overlayLayout.restoreDisabledButtons();
         background.destroy();
-        game.canvas.focus();
+        //game.canvas.focus();
         if (GameSound.Assets.backgroundMusic) {
             GameSound.Assets.backgroundMusic.resume();
         }
