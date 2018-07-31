@@ -10,17 +10,15 @@
         "url": "https://github.com/bbc/childrens-games-genie"
     },
     "dependencies": {
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.4",
+        "babel-preset-env": "^1.6.1",
         "babel-polyfill": "^6.26.0",
         "expose-loader": "^0.7.5",
-        "lodash": "^4.17.10",
-        "npm": "^6.2.0",
         "phaser-ce": "2.11.0",
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {
-        "babel-core": "^6.26.3",
-        "babel-loader": "^7.1.4",
-        "babel-preset-env": "^1.7.0",
         "chai": "^4.1.2",
         "eslint": "^4.18.2",
         "eslint-config-prettier": "^2.9.0",
@@ -47,7 +45,6 @@
         "local-web-server": "^2.5.6",
         "mocha": "^4.1.0",
         "prettier": "^1.11.1",
-        "requirejs": "^2.3.5",
         "sinon": "^6.0.1",
         "webpack": "^4.2.0",
         "webpack-cli": "^2.0.12",
@@ -55,11 +52,11 @@
         "webpack-visualizer-plugin": "^0.1.11"
     },
     "scripts": {
-        "start": "ws --config-file dev/web-config.js",
-        "watch": "live-server --no-browser --entry-file=./index.dev.html --watch=./src",
-        "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js --useLocalIp --host 0.0.0.0",
-        "build": "webpack --config build-scripts/webpack.config.js",
-        "build-watch": "webpack --config build-scripts/webpack.config.js --watch",
+        "start": "ws --static.index dev/index.dev.html --rewrite '/node_modules/genie/* -> /$1'",
+        "watch": "live-server --no-browser --entry-file=dev/index.dev.html --watch=./src --middleware=$PWD/dev/rewrite.js",
+        "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js --env.genieCore",
+        "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
+        "build-watch": "webpack --config build-scripts/webpack.config.js --watch --env.genieCore",
         "eslint": "eslint . --ignore-pattern lodash --ignore-path .gitignore",
         "test": "karma start test/karma.conf.js && npm run eslint",
         "test:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage && npm run eslint",
