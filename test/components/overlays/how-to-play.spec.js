@@ -55,6 +55,7 @@ describe("How To Play Overlay", () => {
             scene: {
                 addLayout: sandbox.stub().returns(mockGelButtons),
                 addToBackground: sandbox.stub(),
+                removeLast: sandbox.stub(),
             },
             context: {
                 popupScreens: [],
@@ -126,13 +127,7 @@ describe("How To Play Overlay", () => {
 
         it("adds GEL buttons", () => {
             const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
-            const expectedAddLayoutCall = [
-                "howToPlayBack",
-                "audioOff",
-                "settings",
-                "howToPlayPrevious",
-                "howToPlayNext",
-            ];
+            const expectedAddLayoutCall = ["howToPlayBack", "audio", "settings", "howToPlayPrevious", "howToPlayNext"];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
         });
 

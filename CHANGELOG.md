@@ -5,6 +5,7 @@
 | UNRELEASED | |
 | | Fixes an issue on iPhone X where voice-over tabbing would begin at the end of the how-to-play and select screens |
 | | Adds mandatory stats using the GMI. |
+| | Enable audio toggle button |
 | | Adds an `accessibility-layer` that manages accessible DOM elements from screen-to-screen |
 | | Fix default actions not applying to overlay buttons. |
 | | Fixes regression bug where the settings icons were not updating correctly. |
