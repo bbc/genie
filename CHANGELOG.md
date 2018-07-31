@@ -12,6 +12,7 @@
 | | Fix prev/next buttons appearing under character sprite on select screen. |
 | | Prevent iOS voiceover from jumping the screen up and down. |
 | | Fixes incorrect stats label. |
+| | Stops screenreader on book from reading out the hidden carousel arrows at either end on How To Play. |
 | 0.5.0 | |
 | | Fixes unannounced selections in carousel on IOS and IE11/Firefox with NVDA. |
 | | Removes GMI from `context`, moves default settings into GMI module. |
