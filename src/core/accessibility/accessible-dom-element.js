@@ -38,12 +38,14 @@ export function accessibleDomElement(options) {
     function hide() {
         el.setAttribute("aria-hidden", true);
         el.setAttribute("tabindex", "-1");
+        el.style.display = "none";
         el.style.visibility = "hidden";
     }
 
     function show() {
         el.setAttribute("aria-hidden", false);
         el.setAttribute("tabindex", "0");
+        el.style.display = "block";
         el.style.visibility = "visible";
     }
 
