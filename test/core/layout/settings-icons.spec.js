@@ -34,18 +34,18 @@ describe("Layout - Settings Icons", () => {
     describe("Signal Publishing", () => {
         beforeEach(() => settingsIcons.create(fakeGroup, []));
 
-        it("publishes signals for audio", () => {
-            const audioParams = signal.bus.publish.getCall(0).args;
-            assert.equal(audioParams[0].channel, "genie-settings");
-            assert.equal(audioParams[0].name, "audio");
-            assert.equal(audioParams[0].data, "audio-data");
-        });
-
         it("publishes signals for motion", () => {
-            const motionParams = signal.bus.publish.getCall(1).args;
+            const motionParams = signal.bus.publish.getCall(0).args;
             assert.equal(motionParams[0].channel, "genie-settings");
             assert.equal(motionParams[0].name, "motion");
             assert.equal(motionParams[0].data, "motion-data");
+        });
+
+        it("publishes signals for audio", () => {
+            const audioParams = signal.bus.publish.getCall(1).args;
+            assert.equal(audioParams[0].channel, "genie-settings");
+            assert.equal(audioParams[0].name, "audio");
+            assert.equal(audioParams[0].data, "audio-data");
         });
     });
 
@@ -60,7 +60,7 @@ describe("Layout - Settings Icons", () => {
         });
     });
 
-    describe("Motion FX Button", () => {
+    describe("Motion FX Button Subscription", () => {
         beforeEach(() => settingsIcons.create(fakeGroup, ["audio"]));
 
         it("has a signal subscription with correct name and channel", () => {
@@ -140,7 +140,7 @@ describe("Layout - Settings Icons", () => {
         });
     });
 
-    describe("Audio Button", () => {
+    describe("Audio Button Subscription", () => {
         beforeEach(() => settingsIcons.create(fakeGroup, []));
 
         it("gets a signal subscription when not already included in the buttons list", () => {
@@ -148,7 +148,7 @@ describe("Layout - Settings Icons", () => {
         });
 
         it("has a signal subscription with correct name and channel", () => {
-            const actualParams = signal.bus.subscribe.getCall(0).args;
+            const actualParams = signal.bus.subscribe.getCall(1).args;
             assert.equal(actualParams[0].channel, "genie-settings");
             assert.equal(actualParams[0].name, "audio");
         });
@@ -156,7 +156,7 @@ describe("Layout - Settings Icons", () => {
         describe("Audio callback creates button icon", () => {
             beforeEach(() => {
                 const iconExists = false;
-                const callback = signal.bus.subscribe.getCall(0).args[0].callback;
+                const callback = signal.bus.subscribe.getCall(1).args[0].callback;
                 callback(iconExists);
             });
 
@@ -182,7 +182,7 @@ describe("Layout - Settings Icons", () => {
             beforeEach(() => {
                 const iconExists = true;
                 fakeGroup.addButton.returns("audio-icon");
-                const callback = signal.bus.subscribe.getCall(0).args[0].callback;
+                const callback = signal.bus.subscribe.getCall(1).args[0].callback;
                 callback(false); // creates button icon
                 callback(iconExists);
             });
@@ -203,7 +203,7 @@ describe("Layout - Settings Icons", () => {
 
             beforeEach(() => {
                 fakeGroup.addButton.returns("audio-icon");
-                callback = signal.bus.subscribe.getCall(0).args[0].callback;
+                callback = signal.bus.subscribe.getCall(1).args[0].callback;
             });
 
             it("does not add/remove button icon when callback is passed true but icon does not exist", () => {

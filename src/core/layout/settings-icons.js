@@ -56,17 +56,15 @@ const publish = fp.curry((settings, key) => {
  * @returns {{unsubscribe: Function}}
  */
 export const create = (group, buttonIds) => {
-    let iconSignals = [];
+    let iconSignals = [createSignals(group, fxConfig)];
 
     if (!buttonIds.includes("audio")) {
         iconSignals.push(createSignals(group, audioConfig));
     }
 
-    iconSignals.push(createSignals(group, fxConfig));
-
     const settings = gmi.getAllSettings();
 
-    ["audio", "motion"].forEach(publish(settings));
+    ["motion", "audio"].forEach(publish(settings));
 
     return {
         unsubscribe: () => {
