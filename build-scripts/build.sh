@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-npm install --latest-npm
+npm install --force
 python build-scripts/licensechecker/licensechecker.py
 npm run test:coverage
 npm run build
