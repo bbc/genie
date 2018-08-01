@@ -54,7 +54,7 @@ body {
 #local-game-holder {
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
 }
 
 .hide-focus-ring:focus {

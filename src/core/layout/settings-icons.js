@@ -24,7 +24,8 @@ const createSignals = (group, config) => {
 
     const callback = bool => {
         if (!bool && !icon) {
-            icon = group.addButton(config, 0);
+            const position = config.signalName === "audio" ? group.length - 1 : 0;
+            icon = group.addButton(config, position);
         } else if (bool && icon) {
             group.removeButton(icon);
             icon = undefined;
@@ -56,17 +57,15 @@ const publish = fp.curry((settings, key) => {
  * @returns {{unsubscribe: Function}}
  */
 export const create = (group, buttonIds) => {
-    let iconSignals = [];
+    let iconSignals = [createSignals(group, fxConfig)];
 
     if (!buttonIds.includes("audio")) {
         iconSignals.push(createSignals(group, audioConfig));
     }
 
-    iconSignals.push(createSignals(group, fxConfig));
-
     const settings = gmi.getAllSettings();
 
-    ["audio", "motion"].forEach(publish(settings));
+    ["motion", "audio"].forEach(publish(settings));
 
     return {
         unsubscribe: () => {
