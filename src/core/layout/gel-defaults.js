@@ -1,7 +1,8 @@
 import * as howToPlay from "../../components/overlays/how-to-play.js";
 import * as pause from "../../components/overlays/pause.js";
-import { settings } from "../../core/settings.js";
+import { settings, settingsChannel } from "../../core/settings.js";
 import { gmi, sendStats } from "../../core/gmi/gmi.js";
+import * as signal from "../signal-bus.js";
 
 export const buttonsChannel = "gel-buttons";
 export const config = {
@@ -68,27 +69,25 @@ export const config = {
             sendStats("click", { action_type: "back" });
         },
     },
-    audioOff: {
+    audio: {
         group: "topRight",
         title: "Sound Off",
-        key: "audio-off",
-        ariaLabel: "Disable Sound",
-        order: 3,
-        id: "__audio--off",
-        channel: buttonsChannel,
-        action: () => {
-            sendStats("click", { action_type: "audio" });
-        },
-    },
-    audioOn: {
-        group: "topRight",
-        title: "Sound On",
         key: "audio-on",
-        ariaLabel: "Enable Sound",
-        order: 4,
-        id: "__audio--on",
+        ariaLabel: "Toggle Sound",
+        order: 3,
+        id: "__audio",
         channel: buttonsChannel,
-        action: () => {
+        action: ({ game }) => {
+            const enabled = game.sound.mute;
+
+            gmi.setAudio(enabled);
+
+            signal.bus.publish({
+                channel: settingsChannel,
+                name: "audio",
+                data: enabled,
+            });
+
             sendStats("click", { action_type: "audio" });
         },
     },

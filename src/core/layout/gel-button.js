@@ -15,6 +15,7 @@ export class GelButton extends Phaser.Button {
             0,
         );
         this._id = config.key;
+        this._isMobile = metrics.isMobile;
         this.positionOverride = config.positionOverride;
         this.animations.sprite.anchor.setTo(0.5, 0.5);
         this.setHitArea(metrics);
@@ -26,7 +27,13 @@ export class GelButton extends Phaser.Button {
         this.hitArea = new Phaser.Rectangle(-width / 2, -height / 2, width, height);
     }
 
+    setImage(key) {
+        this._id = key;
+        this.animations.sprite.loadTexture(assetPath({ key: this._id, isMobile: this._isMobile }));
+    }
+
     resize(metrics) {
+        this._isMobile = metrics.isMobile;
         this.animations.sprite.loadTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);
     }

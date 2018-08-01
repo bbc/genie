@@ -1,9 +1,10 @@
 import * as sinon from "sinon";
 import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
-import * as gel from "../../../src/core/layout/gel-defaults";
+import * as gel from "../../../src/core/layout/gel-defaults.js";
 import * as pause from "../../../src/components/overlays/pause.js";
-import { settings } from "../../../src/core/settings.js";
+import { settings, settingsChannel } from "../../../src/core/settings.js";
 import * as gmiModule from "../../../src/core/gmi/gmi.js";
+import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Layout - Gel Defaults", () => {
     const sandbox = sinon.createSandbox();
@@ -12,6 +13,9 @@ describe("Layout - Gel Defaults", () => {
 
     beforeEach(() => {
         mockGame = {
+            sound: {
+                mute: false,
+            },
             state: {
                 current: "current-screen",
                 states: {
@@ -24,7 +28,7 @@ describe("Layout - Gel Defaults", () => {
             },
         };
 
-        mockGmi = { exit: sandbox.stub() };
+        mockGmi = { exit: sandbox.stub(), setAudio: sandbox.spy() };
         sandbox.stub(gmiModule, "setGmi").returns(mockGmi);
         sandbox.stub(gmiModule, "sendStats");
         sandbox.replace(gmiModule, "gmi", mockGmi);
@@ -97,23 +101,43 @@ describe("Layout - Gel Defaults", () => {
         });
     });
 
-    describe("Audio Off Callback", () => {
+    describe("Audio Callback", () => {
+        let publishSpy;
+
         beforeEach(() => {
-            gel.config.audioOff.action();
+            publishSpy = sandbox.spy(signal.bus, "publish");
+            gel.config.audio.action({ game: mockGame });
         });
 
         it("sends a click stat to the GMI", () => {
             sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "audio" }));
         });
-    });
 
-    describe("Audio On Callback", () => {
-        beforeEach(() => {
-            gel.config.audioOn.action();
+        it("sets audio on the GMI", () => {
+            sandbox.assert.calledOnce(mockGmi.setAudio.withArgs(false));
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "audio" }));
+        it("mutes the game audio", () => {
+            sandbox.assert.calledOnce(
+                publishSpy.withArgs({
+                    channel: settingsChannel,
+                    name: "audio",
+                    data: false,
+                }),
+            );
+        });
+
+        it("unmutes the game audio", () => {
+            mockGame.sound.mute = true;
+            gel.config.audio.action({ game: mockGame });
+
+            sandbox.assert.calledOnce(
+                publishSpy.withArgs({
+                    channel: settingsChannel,
+                    name: "audio",
+                    data: true,
+                }),
+            );
         });
     });
 

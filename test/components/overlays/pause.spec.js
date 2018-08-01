@@ -34,6 +34,7 @@ describe("Pause Overlay", () => {
             scene: {
                 addToBackground: sandbox.stub().returns(mockLayoutDestroy),
                 addLayout: sandbox.stub().returns(mockGelButtons),
+                removeLast: sandbox.stub(),
             },
             context: { popupScreens: [] },
             next: sandbox.spy(),
@@ -111,21 +112,14 @@ describe("Pause Overlay", () => {
         it("adds GEL buttons", () => {
             pauseCreate({ game: mockGame });
             const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
-            const expectedAddLayoutCall = [
-                "pauseReplay",
-                "pauseHome",
-                "audioOff",
-                "settings",
-                "pausePlay",
-                "howToPlay",
-            ];
+            const expectedAddLayoutCall = ["pauseReplay", "pauseHome", "audio", "settings", "pausePlay", "howToPlay"];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
         });
 
         it("adds GEL buttons without a replay button if requested", () => {
             Pause.create(true, { game: mockGame });
             const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
-            const expectedAddLayoutCall = ["pauseHome", "audioOff", "settings", "pausePlay", "howToPlay"];
+            const expectedAddLayoutCall = ["pauseHome", "audio", "settings", "pausePlay", "howToPlay"];
             assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
         });
     });

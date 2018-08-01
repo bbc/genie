@@ -163,6 +163,7 @@ describe("#accessibleDomElement", () => {
             expect(element.getAttribute("aria-hidden")).to.equal("true");
             expect(element.getAttribute("tabindex")).to.equal("-1");
             expect(element.style.visibility).to.equal("hidden");
+            expect(element.style.display).to.equal("none");
         });
     });
 
@@ -178,6 +179,7 @@ describe("#accessibleDomElement", () => {
             expect(element.getAttribute("aria-hidden")).to.equal("false");
             expect(element.getAttribute("tabindex")).to.equal("0");
             expect(element.style.visibility).to.equal("visible");
+            expect(element.style.display).to.equal("block");
         });
     });
 

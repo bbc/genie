@@ -1,79 +1,5 @@
-<!DOCTYPE html>
-<html>
-
-<head lang="en">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Genie Test Page</title>
-
-    <!--Styles copied from Cage:-->
-    <style>
-        html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big,
-        cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul,
-        li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article,
-        aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio,
-        video {
-            margin: 0;
-            padding: 0;
-            border: 0;
-            font-size: 100%;
-            font: inherit;
-            vertical-align: baseline;
-        }
-        article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
-            display: block;
-        }
-        body {
-            line-height: 1;
-        }
-        ol,
-        ul {
-            list-style: none;
-        }
-        blockquote,
-        q {
-            quotes: none;
-        }
-        blockquote:before,
-        blockquote:after,
-        q:before,
-        q:after {
-            content: '';
-            content: none;
-        }
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-        }
-        html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
-        body {
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 14px;
-            line-height: 1.42857143;
-            width: 100%;
-            height: 100%;
-            background: #000 no-repeat scroll center center;
-        }
-    </style>
-    <style>
-        #local-game-holder {
-            width: 100%;
-            height: 100%;
-            position: fixed;
-        }
-    </style>
-</head>
-
-<body>
-    <div id="local-game-holder"></div>
-    <script src="./node_modules/requirejs/require.js"></script>
-    <script>
-    (function() {
+/* eslint-disable */
+(function() {
     var GMI = function(options, embedVars, gameDir) {
         var appName = embedVars.statsAppName;
         var counterName = embedVars.statsCounterName;
@@ -84,49 +10,50 @@
         Object.defineProperty(GMI.prototype, "embedVars", {
             get: function() {
                 return embedVars;
-            }
+            },
         });
         Object.defineProperty(GMI.prototype, "gameContainerId", {
             get: function() {
                 return containerId;
-            }
+            },
         });
         Object.defineProperty(GMI.prototype, "gameUrl", {
             get: function() {
                 return url;
-            }
+            },
         });
         Object.defineProperty(GMI.prototype, "gameDir", {
             get: function() {
                 return gameDir;
-            }
+            },
         });
         Object.defineProperty(GMI.prototype, "environment", {
             get: function() {
                 return env;
-            }
+            },
         });
         Object.defineProperty(GMI.prototype, "shouldShowExitButton", {
             get: function() {
                 return window.self === window.top;
-            }
+            },
         });
         Object.defineProperty(GMI.prototype, "shouldDisplayMuteButton", {
             get: function() {
                 return true;
-            }
+            },
         });
         Object.defineProperty(GMI.prototype, "shouldLongPressForSettings", {
             get: function() {
                 return false;
-            }
+            },
         });
+
         var GMI_LOCAL_STORAGE_KEY = "bbc_childrens_gmi_data";
         var GMI_GAME_STORAGE_KEY = GMI_LOCAL_STORAGE_KEY + "_" + gameId;
         var globalSettings = {
             audio: true,
             subtitles: false,
-            motion: true
+            motion: true,
         };
         var gameSettings = {};
         function areCookiesAllowed() {
@@ -153,9 +80,7 @@
                 globalSettings.motion = !globalSettings.hasOwnProperty("motion") || globalSettings.motion;
             }
             if (areCookiesAllowed()) {
-                globalSettings =
-                    parseLocalStorage(GMI_LOCAL_STORAGE_KEY) ||
-                    getDefaultSettings();
+                globalSettings = parseLocalStorage(GMI_LOCAL_STORAGE_KEY) || getDefaultSettings();
                 ensureGlobalSettingsAreBools();
                 gameSettings = parseLocalStorage(GMI_GAME_STORAGE_KEY) || {};
             } else {
@@ -165,10 +90,7 @@
         function saveGlobalSettings() {
             if (areCookiesAllowed()) {
                 try {
-                    window.localStorage.setItem(
-                        GMI_LOCAL_STORAGE_KEY,
-                        JSON.stringify(globalSettings)
-                    );
+                    window.localStorage.setItem(GMI_LOCAL_STORAGE_KEY, JSON.stringify(globalSettings));
                 } catch (e) {}
             }
         }
@@ -185,10 +107,7 @@
                 // In Safari Private browsing mode on OSX and iOS localStorage in read only, and will throw
                 // QuotaExceededError if an attempt to call setItem is made
                 try {
-                    window.localStorage.setItem(
-                        GMI_GAME_STORAGE_KEY,
-                        JSON.stringify(gameSettings)
-                    );
+                    window.localStorage.setItem(GMI_GAME_STORAGE_KEY, JSON.stringify(gameSettings));
                 } catch (e) {}
             }
         };
@@ -214,7 +133,7 @@
         GMI.prototype.sendStatsEvent = function(name, type, params) {
             console.log(
                 "Stat fired - name: " + name + ", type: " + type + ", params: " + JSON.stringify(params)
-            );
+             );
         };
         GMI.prototype.exit = function() {
             window.open("http://www.bbc.co.uk", "_top");
@@ -233,13 +152,13 @@
         var embedVars = {
             statsCounterName: "testCounterName",
             statsAppName: "TestAppName",
-            configPath: themesDir + theme + "/config.json"
+            configPath: themesDir + theme + "/config.json",
         };
 
         window.getGMI = function(options) {
             if (gmi_instance) {
                 console.warn(
-                    "Attempted to create multiple copies of the GMI. Only a single instance should be created"
+                    "Attempted to create multiple copies of the GMI. Only a single instance should be created",
                 );
             }
             gmi_instance = new GMI(options, embedVars, gameDir);
@@ -254,17 +173,4 @@
     }
 
     configureGmi("", "themes/");
-    requirejs.config({
-        paths: {
-            Game: "output/main"
-        }
-    });
-    require(["Game"], function() {});
 })();
-</script>
-<!-- <script src="node_modules/phaser-ce/build/phaser.min.js"></script> -->
-<!-- <script src="node_modules/webfontloader/webfontloader.js"></script> -->
-<!-- <script type="module" src="src/main.js"></script> -->
-</body>
-
-</html>
