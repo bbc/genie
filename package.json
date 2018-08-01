@@ -52,7 +52,7 @@
         "webpack-visualizer-plugin": "^0.1.11"
     },
     "scripts": {
-        "start": "ws --static.index dev/index.dev.html --rewrite '/node_modules/genie/* -> /$1'",
+        "start": "ws --static.index dev/index.dev.html --rewrite \"/node_modules/genie/* -> /$1\"",
         "watch": "live-server --no-browser --entry-file=dev/index.dev.html --watch=./src --middleware=$PWD/dev/rewrite.js",
         "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js --env.genieCore",
         "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
