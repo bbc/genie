@@ -6,6 +6,7 @@ import * as Scaler from "../../../src/core/scaler.js";
 import { Group } from "../../../src/core/layout/group.js";
 import * as GameSound from "../../../src/core/game-sound.js";
 import * as gmiModule from "../../../src/core/gmi/gmi.js";
+import * as settingsIcons from "../../../src/core/layout/settings-icons.js";
 
 describe("Layout", () => {
     const sandbox = sinon.createSandbox();
@@ -16,6 +17,7 @@ describe("Layout", () => {
     };
     let mockSubscribe;
     let mockUnsubscribe;
+    let settingsIconsUnsubscribeSpy;
     const mockMetrics = {
         horizontals: {},
         safeHorizontals: {},
@@ -23,8 +25,9 @@ describe("Layout", () => {
     };
 
     beforeEach(() => {
+        settingsIconsUnsubscribeSpy = sandbox.spy();
         sandbox.replace(gmiModule, "gmi", mockGmi);
-
+        sandbox.stub(settingsIcons, "create").returns({ unsubscribe: settingsIconsUnsubscribeSpy });
         sandbox.stub(Group.prototype, "addButton").returns({ onInputUp: { add: sandbox.spy() } });
         return initialiseGame().then(game => {
             mockGame = game;
@@ -168,6 +171,14 @@ describe("Layout", () => {
         const layout = Layout.create(mockGame, mockMetrics, ["play"]);
         layout.removeSignals();
         sinon.assert.calledOnce(mockUnsubscribe);
+        sinon.assert.calledOnce(settingsIconsUnsubscribeSpy);
+    });
+
+    it("creates the settings icons", () => {
+        Layout.create(mockGame, mockMetrics, ["play"]);
+        sinon.assert.calledOnce(settingsIcons.create);
+        assert.equal(typeof settingsIcons.create.getCall(0).args[0], "object");
+        assert.deepEqual(settingsIcons.create.getCall(0).args[1], ["play"]);
     });
 });
 
