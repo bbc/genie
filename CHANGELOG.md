@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| Unreleased | |
+| | Fixes an issue with NVDA and Firefox where accessible buttons would not properly gain focus when tabbing. |
 | 0.6.0 | |
 | | Fixes an issue on iPhone X where voice-over tabbing would begin at the end of the how-to-play and select screens |
 | | Adds mandatory stats using the GMI. |
