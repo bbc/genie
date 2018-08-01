@@ -22,7 +22,7 @@ describe("Managing accessible buttons", () => {
         let gameParentElement;
         let el;
 
-        beforeEach(() => {
+        before(() => {
             gameParentElement = { appendChild: sandbox.spy() };
             el = { id: "", role: "", setAttribute: sandbox.spy() };
             createElement = sandbox.stub(document, "createElement").returns(el);
