@@ -12,9 +12,19 @@ export function accessibilify(button, config, gameButton = true) {
         config,
     );
 
+    const buttonAction = () => {
+        console.log("clicked", button.elementId, button.elementOnClick);
+        game.sound.unlock();
+        if (game.sound.context && game.sound.context.state === "suspended") {
+            game.sound.resumeWebAudio();
+        }
+        button.events.onInputUp.dispatch(button, game.input.activePointer, false);
+    }
+
     let signal;
     const game = button.game;
     const screen = game.state.states[game.state.current];
+    const elementId = screen.visibleLayer + config.id;
     const accessibleElement = newAccessibleElement();
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
 
@@ -27,6 +37,8 @@ export function accessibilify(button, config, gameButton = true) {
 
     button.update = update;
     button.accessibleElement = accessibleElement.el;
+    button.elementEvents = accessibleElement.events;
+    button.elementId = elementId;
 
     a11y.addToAccessibleButtons(screen, button);
 
@@ -34,7 +46,7 @@ export function accessibilify(button, config, gameButton = true) {
 
     function newAccessibleElement() {
         return accessibleDomElement({
-            id: screen.visibleLayer + config.id,
+            id: elementId,
             ariaLabel: config.ariaLabel,
             parent: game.canvas.parentElement,
             onClick: buttonAction,
@@ -89,14 +101,6 @@ export function accessibilify(button, config, gameButton = true) {
         if (!accessibleElement.visible()) {
             accessibleElement.show();
         }
-    }
-
-    function buttonAction() {
-        game.sound.unlock();
-        if (game.sound.context && game.sound.context.state === "suspended") {
-            game.sound.resumeWebAudio();
-        }
-        button.events.onInputUp.dispatch(button, game.input.activePointer, false);
     }
 
     function mouseOver() {

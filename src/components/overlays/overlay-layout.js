@@ -53,11 +53,11 @@ export function create(screen) {
     function disableAllButtons() {
         let disabledButtons = [];
 
-        fp.forOwn(layout => {
-            disabledButtons = disableButtons(layout.buttons, disabledButtons);
-        }, previousLayouts);
+        //fp.forOwn(layout => {
+        //    disabledButtons = disableButtons(layout.buttons, disabledButtons);
+        //}, previousLayouts);
 
-        disabledButtons = disableButtons(accessibleGameButtons, disabledButtons);
+        //disabledButtons = disableButtons(accessibleGameButtons, disabledButtons);
 
         return disabledButtons;
     }

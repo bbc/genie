@@ -56,3 +56,7 @@ body {
     height: 100%;
     position: absolute;
 }
+
+.hide-focus-ring:focus {
+    outline: none;
+}
