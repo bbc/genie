@@ -126,6 +126,7 @@ describe("#accessibilify", () => {
         accessibleDomElementPosition = sandbox.spy();
         accessibleDomElement.returns({
             position: accessibleDomElementPosition,
+            events: { click: "someClickEvent", keyup: "someKeyupEvent" },
         });
     });
 
@@ -245,6 +246,19 @@ describe("#accessibilify", () => {
             accessibilify(deadMockButton);
             clock.tick(200);
             sinon.assert.notCalled(position);
+        });
+
+        it("assigns DOM element ID to the Phaser button object", () => {
+            accessibilify(mockButton);
+
+            expect(mockButton.elementId).to.eq("home__play");
+        });
+
+        it("assigns element events to the Phaser button object", () => {
+            accessibilify(mockButton);
+
+            expect(mockButton.elementEvents.click).to.eq("someClickEvent");
+            expect(mockButton.elementEvents.keyup).to.eq("someKeyupEvent");
         });
     });
 

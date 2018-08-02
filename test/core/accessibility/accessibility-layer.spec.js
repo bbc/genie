@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
+import * as elementManipulator from "../../../src/core/accessibility/element-manipulator.js";
 
 describe("Managing accessible buttons", () => {
     let sandbox;
@@ -74,20 +75,40 @@ describe("Managing accessible buttons", () => {
     });
 
     describe("#clearElementsFromDom", () => {
-        let parentElement;
+        let parentElement, el1, el2, el3;
 
         before(() => {
-            parentElement = { innerHTML: "<div id='home__play'></div>" };
+            el1 = {};
+            el2 = {};
+            el3 = {};
+            parentElement = {
+                childNodes: [el1, el2, el3],
+                removeChild: sandbox.stub(),
+            };
+            el1.parentElement = parentElement;
+            el2.parentElement = parentElement;
+            el3.parentElement = parentElement;
             sandbox
                 .stub(document, "getElementById")
                 .withArgs("accessibility")
                 .returns(parentElement);
+            Object.defineProperty(document, "activeElement", { get: () => el1 });
+            sandbox.stub(elementManipulator, "hideAndDisableElement");
+            sandbox
+                .stub(Array, "from")
+                .withArgs(parentElement.childNodes)
+                .returns(parentElement.childNodes);
 
             a11y.clearElementsFromDom();
         });
 
-        it("clears all accessible elements from the DOM", () => {
-            expect(parentElement.innerHTML).to.eq("");
+        it("clears all accessible elements from the DOM except the currently focused one", () => {
+            sandbox.assert.calledOnce(elementManipulator.hideAndDisableElement.withArgs(el1));
+            sandbox.assert.calledTwice(parentElement.removeChild);
+
+            sandbox.assert.calledWith(elementManipulator.hideAndDisableElement, el1);
+            sandbox.assert.calledWith(parentElement.removeChild, el2);
+            sandbox.assert.calledWith(parentElement.removeChild, el3);
         });
     });
 });

@@ -14,9 +14,6 @@ import fp from "../../../lib/lodash/fp/fp.js";
 export function create(screen) {
     const backgroundPriorityID = 999;
     const priorityID = backgroundPriorityID + screen.context.popupScreens.length;
-    const previousLayouts = screen.scene.getLayouts();
-    const accessibleGameButtons = screen.scene.getAccessibleGameButtons();
-
     return {
         addBackground,
         moveGelButtonsToTop,
