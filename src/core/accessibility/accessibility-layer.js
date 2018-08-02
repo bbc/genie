@@ -1,4 +1,5 @@
-import { Buttons, findButtonByElementId } from "./buttons.js";
+import { Buttons } from "./accessible-buttons.js";
+import { hideAndDisableElement } from "./element-manipulator.js";
 
 let _accessibleButtons = {};
 
@@ -35,27 +36,14 @@ export const clearAccessibleButtons = screen => {
     }
 };
 
-let oldActiveElement;
-
 export const clearElementsFromDom = () => {
     const parentElement = document.getElementById(PARENT_ELEMENT_ID);
     const childNodes = Array.from(parentElement.childNodes);
     childNodes.forEach(el => {
-        if (document.activeElement.id === el.id) {
-            const button = findButtonByElementId(el.id);
-            const onBlur = () => {
-                el.remove();
-                el.removeEventListener("blur", onBlur);
-                el.classList.remove("hide-focus-ring");
-                el.addEventListener("click", button.elementEvents.click);
-                el.addEventListener("keyup", button.elementEvents.keyup);
-            };
-            el.addEventListener("blur", onBlur);
-            el.classList.add("hide-focus-ring");
-            el.removeEventListener("click", button.elementEvents.click);
-            el.removeEventListener("keyup", button.elementEvents.keyup);
+        if (document.activeElement === el) {
+            hideAndDisableElement(el);
         } else {
-            el.remove();
+            el.parentElement.removeChild(el);
         }
     });
 
