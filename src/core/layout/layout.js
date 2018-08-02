@@ -9,9 +9,16 @@ import * as settingsIcons from "./settings-icons.js";
 import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { Group } from "./group.js";
+import { gmi } from "../gmi/gmi.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
 const tabSort = fp.sortBy(getOrder(gel.config));
+
+const checkGMIFlags = fp.cond([
+    [name => name === "audio", () => gmi.shouldDisplayMuteButton],
+    [name => name === "exit", () => gmi.shouldShowExitButton],
+    [fp.stubTrue, fp.stubTrue],
+]);
 
 /**
  * Creates a new layout. Called by layout.factory.addLayout for each screen component
@@ -21,6 +28,8 @@ const tabSort = fp.sortBy(getOrder(gel.config));
  * @param {Array.<string>} buttonIds
  */
 export function create(game, metrics, buttonIds) {
+    buttonIds = buttonIds.filter(checkGMIFlags);
+
     const root = new Phaser.Group(game, game.world, undefined);
     const groups = fp.zipObject(
         groupLayouts.map(layout =>

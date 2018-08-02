@@ -14,6 +14,8 @@ describe("Layout", () => {
     let mockGame;
     let mockGmi = {
         getAllSettings: sandbox.stub().returns({ audio: true, motion: true }),
+        shouldDisplayMuteButton: true,
+        shouldShowExitButton: true,
     };
     let mockSubscribe;
     let mockUnsubscribe;
@@ -79,6 +81,36 @@ describe("Layout", () => {
             "settings",
         ]);
         assert(Object.keys(layout3.buttons).length === 6);
+    });
+
+    it.only("should skip the creation of the mute button when gmi.shouldDisplayMuteButton is false", () => {
+        mockGmi.shouldDisplayMuteButton = false;
+
+        const layout = Layout.create(mockGame, mockMetrics, [
+            "achievements",
+            "exit",
+            "howToPlay",
+            "play",
+            "audio",
+            "settings",
+        ]);
+
+        assert.notExists(layout.buttons.audio);
+    });
+
+    it.only("should skip the creation of the exit button when gmi.shouldShowExitButton is false", () => {
+        mockGmi.shouldShowExitButton = false;
+
+        const layout = Layout.create(mockGame, mockMetrics, [
+            "achievements",
+            "exit",
+            "howToPlay",
+            "play",
+            "audio",
+            "settings",
+        ]);
+
+        assert.notExists(layout.buttons.exit);
     });
 
     it("Should create 11 Gel Groups", () => {
