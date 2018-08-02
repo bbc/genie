@@ -54,7 +54,6 @@ def get_license_from_file(path):
                 continue
             license_descriptor = parse_license_file(os.path.join(path, filename))
             if license_descriptor:
-                print os.path.join(path, filename)
                 return license_descriptor
 
     return "License could not be determined".format()
