@@ -123,8 +123,10 @@ if __name__ == "__main__":
         license_valid, license_descriptor = check_license(license_whitelist, split_line[1], split_line[0])
         if license_valid:
             continue
-        if split_line[1] not in package_whitelist:
-            invalid_packages[split_line[1]] = license_descriptor, split_line[0]
+        if split_line[1] in package_whitelist:
+            package_whitelist.remove(split_line[1])
+            continue
+        invalid_packages[split_line[1]] = license_descriptor, split_line[0]
 
     if invalid_packages:
         print "\nThe following packages did not pass the licensing whitelist:\n"
@@ -133,3 +135,7 @@ if __name__ == "__main__":
         exit(1)
 
     print "All dependencies have whitelisted licenses or are individually whitelisted."
+    if package_whitelist:
+        print "WARN - The following whitelisted packages were not present in your dependencies:"
+        for package in package_whitelist:
+            print "    {}".format(package)
