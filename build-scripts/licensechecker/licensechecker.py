@@ -47,9 +47,9 @@ def parse_license_file(path):
 
 def get_license_from_file(path):
     license_file_patterns = [r"^LICENSE$", r"^LICENSE[-.]\w+$", r"^LICENCE$", r"^LICENCE[-.]\w+$", r"^COPYING$", r"^README$"]
-    for filename in os.listdir(path):
-        basename = os.path.splitext(filename)[0]
-        for pattern in license_file_patterns:
+    for pattern in license_file_patterns:
+        for filename in os.listdir(path):
+            basename = os.path.splitext(filename)[0]
             if not re.search(pattern, basename, re.IGNORECASE):
                 continue
             license_descriptor = parse_license_file(os.path.join(path, filename))
