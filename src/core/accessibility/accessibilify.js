@@ -12,14 +12,6 @@ export function accessibilify(button, config, gameButton = true) {
         config,
     );
 
-    const buttonAction = () => {
-        game.sound.unlock();
-        if (game.sound.context && game.sound.context.state === "suspended") {
-            game.sound.resumeWebAudio();
-        }
-        button.events.onInputUp.dispatch(button, game.input.activePointer, false);
-    }
-
     let signal;
     const game = button.game;
     const screen = game.state.states[game.state.current];
@@ -36,8 +28,8 @@ export function accessibilify(button, config, gameButton = true) {
 
     button.update = update;
     button.accessibleElement = accessibleElement.el;
-    button.elementEvents = accessibleElement.events;
     button.elementId = elementId;
+    button.elementEvents = accessibleElement.events;
 
     a11y.addToAccessibleButtons(screen, button);
 
@@ -100,6 +92,14 @@ export function accessibilify(button, config, gameButton = true) {
         if (!accessibleElement.visible()) {
             accessibleElement.show();
         }
+    }
+
+    function buttonAction() {
+        game.sound.unlock();
+        if (game.sound.context && game.sound.context.state === "suspended") {
+            game.sound.resumeWebAudio();
+        }
+        button.events.onInputUp.dispatch(button, game.input.activePointer, false);
     }
 
     function mouseOver() {
