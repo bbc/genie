@@ -4,6 +4,16 @@ import json
 import re
 
 
+LICENSE_FILE_PATTERNS = [
+    r"^LICENSE$",
+    r"^LICENSE[-.]\w+$",
+    r"^LICENCE$",
+    r"^LICENCE[-.]\w+$",
+    r"^COPYING$",
+    r"^README$"
+]
+
+
 LICENSE_PATTERNS = [
     ("ISC*", re.compile(r"The ISC License")),
     ("MIT*", re.compile(r"ermission\s+is\s+hereby\s+granted,\s+free\s+of\s+charge,\s+to\s+any")),
@@ -42,6 +52,8 @@ def get_license_from_package(path):
             licenses_field = [license_data.get("type") for license_data in licenses_field]
         return " AND ".join(licenses_field)
 
+    return None
+
 
 def parse_license_file(path):
     with open(path) as file_handle:
@@ -49,12 +61,14 @@ def parse_license_file(path):
     for pattern in LICENSE_PATTERNS:
         match = pattern[1].search(text)
         if match:
-            return pattern[0].format(match.groups())
+            license_descriptor = pattern[0].format(match.groups())
+            return license_descriptor
+
+    return None
 
 
 def get_license_from_file(path):
-    license_file_patterns = [r"^LICENSE$", r"^LICENSE[-.]\w+$", r"^LICENCE$", r"^LICENCE[-.]\w+$", r"^COPYING$", r"^README$"]
-    for pattern in license_file_patterns:
+    for pattern in LICENSE_FILE_PATTERNS:
         for filename in os.listdir(path):
             basename = os.path.splitext(filename)[0]
             if not re.search(pattern, basename, re.IGNORECASE):
@@ -66,7 +80,7 @@ def get_license_from_file(path):
     return "License could not be determined".format()
 
 
-def get_license(package, path):
+def get_license(path):
     json_path = os.path.join(path, "package.json")
     license_descriptor = get_license_from_package(json_path)
     if license_descriptor:
@@ -80,8 +94,8 @@ def get_license_whitelist():
         return json.load(file_handle)
 
 
-def check_license(license_whitelist, package, path):
-    license_descriptor = get_license(package, path)
+def check_license(license_whitelist, path):
+    license_descriptor = get_license(path)
 
     if isinstance(license_descriptor, basestring):
         if license_descriptor in license_whitelist:
@@ -110,9 +124,13 @@ def get_package_whitelist():
     return [whitelisted["package"] for whitelisted in whitelist]
 
 
-if __name__ == "__main__":
+def check_licenses():
     with open(os.devnull, "w") as devnull:
-        process = subprocess.Popen("npm ls --long --parseable".split(), stdout=subprocess.PIPE, stderr=devnull)
+        process = subprocess.Popen(
+            "npm ls --long --parseable".split(),
+            stdout=subprocess.PIPE,
+            stderr=devnull
+        )
 
     invalid_packages = {}
     license_whitelist = get_license_whitelist()
@@ -122,7 +140,7 @@ if __name__ == "__main__":
         split_line = line.decode("utf-8").rstrip().split(":")
         package_name = split_line[1]
         package_path = split_line[0]
-        license_valid, license_descriptor = check_license(license_whitelist, package_name, package_path)
+        license_valid, license_descriptor = check_license(license_whitelist, package_path)
         if license_valid:
             continue
         if package_name in package_whitelist:
@@ -132,8 +150,8 @@ if __name__ == "__main__":
 
     if invalid_packages:
         print "\nThe following packages did not pass the licensing whitelist:\n"
-        for k,v in invalid_packages.iteritems():
-            print "{0}:\n    {1[0]}\n    {1[1]}\n".format(k, v)
+        for key, value in invalid_packages.iteritems():
+            print "{0}:\n    {1[0]}\n    {1[1]}\n".format(key, value)
         exit(1)
 
     print "All dependencies have whitelisted licenses or are individually whitelisted."
@@ -141,3 +159,7 @@ if __name__ == "__main__":
         print "WARN - The following whitelisted packages were not present in your dependencies:"
         for package in package_whitelist:
             print "    {}".format(package)
+
+
+if __name__ == "__main__":
+    check_licenses()
