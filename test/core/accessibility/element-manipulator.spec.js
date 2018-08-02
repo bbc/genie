@@ -4,7 +4,7 @@ import * as accessibleButtons from "../../../src/core/accessibility/accessible-b
 import * as elementManipulator from "../../../src/core/accessibility/element-manipulator.js";
 
 describe("#hideAndDisableElement", () => {
-    let sandbox, element, findButton, button;
+    let sandbox, element, button;
 
     const getNewElement = id => {
         return {
