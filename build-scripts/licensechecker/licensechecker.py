@@ -33,7 +33,14 @@ def get_license_from_package(path):
 
     if isinstance(license_field, dict):
         return license_field.get("type")
-    return license_field
+    if license_field:
+        return license_field
+
+    licenses_field = package.get("licenses")
+    if licenses_field:
+        if isinstance(licenses_field[0], dict):
+            licenses_field = [license_data.get("type") for license_data in licenses_field]
+        return " AND ".join(licenses_field)
 
 
 def parse_license_file(path):
