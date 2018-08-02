@@ -37,12 +37,16 @@ def get_license_from_package(path):
 
 
 def parse_license_file(path):
+    texts = []
     with open(path) as file_handle:
         text = file_handle.read()
+        texts.append(text)
     for pattern in LICENSE_PATTERNS:
         match = pattern[1].search(text)
         if match:
             return pattern[0].format(match.groups())
+    for text in texts:
+        print text
 
 
 def get_license_from_file(path):
