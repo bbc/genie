@@ -24,7 +24,6 @@ export function accessibleDomElement(options) {
         if (options.ariaLabel) {
             el.setAttribute("aria-label", options.ariaLabel);
         }
-        options.keyUp = keyUp;
 
         events = assignEvents();
     }

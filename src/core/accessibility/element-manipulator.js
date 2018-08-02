@@ -1,9 +1,9 @@
 import { findButtonByElementId } from "./accessible-buttons.js";
 
 export const hideAndDisableElement = el => {
-    if (!_elementHiddenAndDisabled[el.id]) {
+    if (!elementHiddenAndDisabled(el)) {
         const button = findButtonByElementId(el.id);
-        const resetElement = () => resetElementToDefault(el, button, resetElement);
+        const resetElement = () => resetElementToDefault(el, resetElement);
         el.addEventListener("blur", resetElement);
         el.classList.add("hide-focus-ring");
         el.style.cursor = "default";
@@ -13,7 +13,8 @@ export const hideAndDisableElement = el => {
     }
 };
 
-const resetElementToDefault = (el, button, self) => {
+const resetElementToDefault = (el, self) => {
+    const button = findButtonByElementId(el.id);
     el.parentElement.removeChild(el);
     el.removeEventListener("blur", self);
     el.classList.remove("hide-focus-ring");
@@ -21,6 +22,10 @@ const resetElementToDefault = (el, button, self) => {
     el.addEventListener("click", button.elementEvents.click);
     el.addEventListener("keyup", button.elementEvents.keyup);
     unsetElementAsHiddenAndDisabled(el);
+};
+
+const elementHiddenAndDisabled = element => {
+    return _elementHiddenAndDisabled[element.id];
 };
 
 const setElementAsHiddenAndDisabled = element => {

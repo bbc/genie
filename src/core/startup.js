@@ -86,7 +86,7 @@ class Startup extends Phaser.State {
             channel: settingsChannel,
             name: "settingsClosed",
             callback: () => {
-                //this.game.canvas.focus();
+                this.game.canvas.focus();
             },
         });
         this.configureAudioSetting();
