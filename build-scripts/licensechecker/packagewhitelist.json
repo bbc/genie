@@ -1,6 +1,6 @@
 [
-    "bitsyntax@0.0.4",
-    "pause-stream@0.0.11",
-    "taffydb@2.6.2",
-    "common-log-format@0.1.3"
+    {"package": "bitsyntax@0.0.4", "license": "MIT"},
+    {"package": "pause-stream@0.0.11", "license": "MIT AND Apache-2.0"},
+    {"package": "taffydb@2.6.2", "license": "BSD-2-Clause OR MIT"},
+    {"package": "common-log-format@0.1.3", "license": "MIT"}
 ]

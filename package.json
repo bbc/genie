@@ -2,7 +2,7 @@
     "name": "genie",
     "version": "0.6.0",
     "description": "Genie Modular Game Engine",
-    "license": "UNLICENSED",
+    "license": "Apache-2.0",
     "private": true,
     "author": "BBC",
     "repository": {

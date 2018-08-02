@@ -20,7 +20,7 @@ LICENSE_PATTERNS = [
     ("CC0-1.0*", re.compile(r"The\s+person\s+who\s+associated\s+a\s+work\s+with\s+this\s+deed\s+has\s+dedicated\s+the\s+work\s+to\s+the\s+public\s+domain\s+by\s+waiving\s+all\s+of\s+his\s+or\s+her\s+rights\s+to\s+the\s+work\s+worldwide\s+under\s+copyright\s+law,\s+including\s+all\s+related\s+and\s+neighboring\s+rights,\s+to\s+the\s+extent\s+allowed\s+by\s+law.\s+You\s+can\s+copy,\s+modify,\s+distribute\s+and\s+perform\s+the\s+work,\s+even\s+for\s+commercial\s+purposes,\s+all\s+without\s+asking\s+permission.", re.IGNORECASE)),
     ("GPL-{[0]}*", re.compile(r"\bGNU GENERAL PUBLIC LICENSE\s*Version ([^,]*)", re.IGNORECASE)),
     ("LGPL-{[0]}*", re.compile(r"(?:LESSER|LIBRARY) GENERAL PUBLIC LICENSE\s*Version ([^,]*)", re.IGNORECASE)),
-    ("Public Domain*", re.compile(r"[Pp]ublic [Dd]omain")),
+    ("Public Domain*", re.compile(r"Public Domain", re.IGNORECASE)),
     ("Custom: {[0]}", re.compile(r"(https?:\/\/[-a-zA-Z0-9\/.]*)")),
     ("Custom: {[0]}", re.compile(r"SEE LICENSE IN (.*)", re.IGNORECASE)),
 ]
@@ -99,7 +99,8 @@ def check_license(license_whitelist, package, path):
 
 def get_package_whitelist():
     with open(os.path.join(os.path.dirname(__file__), "packagewhitelist.json")) as file_handle:
-        return json.load(file_handle)
+        whitelist = json.load(file_handle)
+    return [whitelisted["package"] for whitelisted in whitelist]
 
 
 if __name__ == "__main__":
@@ -123,3 +124,5 @@ if __name__ == "__main__":
         for k,v in invalid_packages.iteritems():
             print "{0}:\n    {1[0]}\n    {1[1]}\n".format(k, v)
         exit(1)
+
+    print "All dependencies have whitelisted licenses or are individually whitelisted."
