@@ -50,8 +50,6 @@ def get_license_from_file(path):
     for filename in os.listdir(path):
         basename = os.path.splitext(filename)[0]
         for pattern in license_file_patterns:
-            if path == "/var/lib/jenkins/workspace/genie-pull-request/node_modules/loggly/node_modules/node-uuid":
-                print pattern
             if not re.search(pattern, basename, re.IGNORECASE):
                 continue
             license_descriptor = parse_license_file(os.path.join(path, filename))
