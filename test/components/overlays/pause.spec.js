@@ -165,13 +165,6 @@ describe("Pause Overlay", () => {
             sinon.assert.calledOnce(signalBusRemoveChannel.withArgs("pause-gel-buttons"));
         });
 
-        it("resets the tab position on destroy", () => {
-            pauseCreate({ game: mockGame });
-            const destroy = signalSpy.getCall(0).args[0].callback;
-            destroy();
-            sinon.assert.calledOnce(mockGame.canvas.focus);
-        });
-
         it("destroys the pause screen when the replay button is clicked", () => {
             pauseCreate({ game: mockGame });
             const cickReplayButton = signalSpy.getCall(2).args[0].callback;
@@ -206,7 +199,7 @@ describe("Pause Overlay", () => {
             sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.resume);
         });
 
-        it("naviagtes home when the home button is clicked", () => {
+        it("navigates home when the home button is clicked", () => {
             pauseCreate({ game: mockGame });
             const clickHomeButton = signalSpy.getCall(1).args[0].callback;
             clickHomeButton();

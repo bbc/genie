@@ -14,6 +14,7 @@ const getAccessibleButtons = visibleLayer => _accessibleButtons[visibleLayer];
 export const setup = gameParentElement => {
     const el = document.createElement("div");
     el.id = PARENT_ELEMENT_ID;
+    el.setAttribute("role", "application");
     gameParentElement.appendChild(el);
 };
 
