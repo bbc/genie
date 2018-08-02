@@ -12,11 +12,7 @@ describe("Layout", () => {
     const sandbox = sinon.createSandbox();
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     let mockGame;
-    let mockGmi = {
-        getAllSettings: sandbox.stub().returns({ audio: true, motion: true }),
-        shouldDisplayMuteButton: true,
-        shouldShowExitButton: true,
-    };
+    let mockGmi;
     let mockSubscribe;
     let mockUnsubscribe;
     let settingsIconsUnsubscribeSpy;
@@ -27,6 +23,12 @@ describe("Layout", () => {
     };
 
     beforeEach(() => {
+        mockGmi = {
+            getAllSettings: sandbox.stub().returns({ audio: true, motion: true }),
+            shouldDisplayMuteButton: true,
+            shouldShowExitButton: true,
+        };
+
         settingsIconsUnsubscribeSpy = sandbox.spy();
         sandbox.replace(gmiModule, "gmi", mockGmi);
         sandbox.stub(settingsIcons, "create").returns({ unsubscribe: settingsIconsUnsubscribeSpy });
@@ -83,7 +85,7 @@ describe("Layout", () => {
         assert(Object.keys(layout3.buttons).length === 6);
     });
 
-    it.only("should skip the creation of the mute button when gmi.shouldDisplayMuteButton is false", () => {
+    it("should skip the creation of the mute button when gmi.shouldDisplayMuteButton is false", () => {
         mockGmi.shouldDisplayMuteButton = false;
 
         const layout = Layout.create(mockGame, mockMetrics, [
@@ -98,7 +100,7 @@ describe("Layout", () => {
         assert.notExists(layout.buttons.audio);
     });
 
-    it.only("should skip the creation of the exit button when gmi.shouldShowExitButton is false", () => {
+    it("should skip the creation of the exit button when gmi.shouldShowExitButton is false", () => {
         mockGmi.shouldShowExitButton = false;
 
         const layout = Layout.create(mockGame, mockMetrics, [
