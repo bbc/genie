@@ -6,7 +6,7 @@ import re
 
 LICENSE_PATTERNS = [
     ("ISC*", re.compile(r"The ISC License")),
-    ("MIT*", re.compile(r"ermission is hereby granted, free of charge, to any")),
+    ("MIT*", re.compile(r"ermission\s+is\s+hereby\s+granted,\s+free\s+of\s+charge,\s+to\s+any")),
     ("BSD*", re.compile(r"edistribution and use in source and binary forms, with or withou")),
     # https://spdx.org/licenses/BSD-Source-Code.html
     ("BSD-Source-Code*", re.compile(r"edistribution and use of this software in source and binary forms, with or withou")),
@@ -50,10 +50,11 @@ def get_license_from_file(path):
     for filename in os.listdir(path):
         basename = os.path.splitext(filename)[0]
         for pattern in license_file_patterns:
-            if re.search(pattern, basename, re.IGNORECASE):
-                license_descriptor = parse_license_file(os.path.join(path, filename))
-                if license_descriptor:
-                    return license_descriptor
+            if not re.search(pattern, basename, re.IGNORECASE):
+                continue
+            license_descriptor = parse_license_file(os.path.join(path, filename))
+            if license_descriptor:
+                return license_descriptor
 
     return "License could not be determined".format()
 
@@ -72,9 +73,8 @@ def get_license_whitelist():
         return json.load(file_handle)
 
 
-def check_license(package, path):
+def check_license(license_whitelist, package, path):
     license_descriptor = get_license(package, path)
-    license_whitelist = get_license_whitelist()
 
     if isinstance(license_descriptor, basestring):
         if license_descriptor in license_whitelist:
@@ -97,15 +97,25 @@ def check_license(package, path):
     return (False, license_descriptor)
 
 
+def get_package_whitelist():
+    with open(os.path.join(os.path.dirname(__file__), "packagewhitelist.json")) as file_handle:
+        return json.load(file_handle)
+
+
 if __name__ == "__main__":
     with open(os.devnull, "w") as devnull:
         process = subprocess.Popen("npm ls --long --parseable".split(), stdout=subprocess.PIPE, stderr=devnull)
 
     invalid_packages = {}
+    license_whitelist = get_license_whitelist()
+    package_whitelist = get_package_whitelist()
+
     for line in iter(process.stdout.readline, b""):
         split_line = line.decode("utf-8").rstrip().split(":")
-        license_valid, license_descriptor = check_license(split_line[1], split_line[0])
-        if not license_valid:
+        license_valid, license_descriptor = check_license(license_whitelist, split_line[1], split_line[0])
+        if license_valid:
+            continue
+        if split_line[1] not in package_whitelist:
             invalid_packages[split_line[1]] = license_descriptor, split_line[0]
 
     if invalid_packages:

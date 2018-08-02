@@ -1,1 +1,6 @@
-[]
+[
+    "bitsyntax@0.0.4",
+    "pause-stream@0.0.11",
+    "taffydb@2.6.2",
+    "common-log-format@0.1.3"
+]
