@@ -12,11 +12,11 @@ describe("#findButtonByElementId", () => {
 
     before(() => {
         button1 = { name: "play" };
-        Buttons["home__play"] = button1;
+        Buttons["home__something"] = button1;
     });
 
     it("takes an id and returns a Phaser button", () => {
-        const btn = findButtonByElementId("home__play");
+        const btn = findButtonByElementId("home__something");
         expect(btn).to.eql(button1);
     });
 });
