@@ -12,6 +12,7 @@ import * as Scene from "./scene.js";
 import { loadFonts } from "./font-loader.js";
 import { gmi, setGmi, startStatsTracking } from "./gmi/gmi.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
+import { addCustomStyles } from "./custom-styles.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
 /**
@@ -37,6 +38,8 @@ export function startup(settingsConfig = {}, navigationConfig) {
     // Keep the console tidy:
     window.PhaserGlobal = window.PhaserGlobal || {};
     window.PhaserGlobal.hideBanner = true;
+
+    addCustomStyles(getContainerDiv());
 
     const game = new Phaser.Game(phaserConfig);
 
