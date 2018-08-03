@@ -33,12 +33,12 @@ var GMI = function(options, embedVars, gameDir) {
     });
     Object.defineProperty(GMI.prototype, "shouldShowExitButton", {
         get: function() {
-            return window.self === window.top;
+            return getParam("hideExit") ?  false : window.self === window.top;
         },
     });
     Object.defineProperty(GMI.prototype, "shouldDisplayMuteButton", {
         get: function() {
-            return true;
+            return getParam("hideMute") ?  false : true;
         },
     });
     Object.defineProperty(GMI.prototype, "shouldLongPressForSettings", {
