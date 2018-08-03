@@ -2,7 +2,7 @@ import { expect } from "chai";
 import * as sinon from "sinon";
 import { addCustomStyles } from "../../src/core/custom-styles.js";
 
-describe.only("custom styles", () => {
+describe("custom styles", () => {
     const sandbox = sinon.createSandbox();
     let parentElement, styleElement;
 

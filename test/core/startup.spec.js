@@ -6,6 +6,7 @@ import * as Game from "../fake/game.js";
 import * as Scene from "../../src/core/scene.js";
 import * as LoadFonts from "../../src/core/font-loader.js";
 import * as Navigation from "../../src/core/navigation.js";
+import * as styles from "../../src/core/custom-styles.js";
 
 describe("Startup", () => {
     let mockGmi;
@@ -26,6 +27,7 @@ describe("Startup", () => {
 
         sandbox.stub(gmiModule, "setGmi");
         sandbox.stub(gmiModule, "startStatsTracking");
+        sandbox.stub(styles, "addCustomStyles");
         sandbox.replace(gmiModule, "gmi", mockGmi);
         PhaserGame = sandbox.stub(Phaser, "Game").returns(Game.Stub);
         window.getGMI = sandbox.stub().returns(mockGmi);
@@ -39,6 +41,11 @@ describe("Startup", () => {
         const fakeSettings = { settings: "some settings" };
         startup(fakeSettings);
         sandbox.assert.calledOnce(gmiModule.setGmi.withArgs(fakeSettings, window));
+    });
+
+    it("injects custom styles to the game container element", () => {
+        startup();
+        sandbox.assert.calledOnce(styles.addCustomStyles.withArgs(containerDiv));
     });
 
     it("creates a new Phaser game", () => {
