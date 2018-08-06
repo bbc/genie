@@ -18,6 +18,8 @@ export const create = (gameState, context, scene, navigationConfig) => {
     loadGenieScreens(navigation, gameState);
 
     goToScreen("loadscreen");
+
+    return goToScreen;
 };
 
 const loadGenieScreens = (navigationConfig, gameState) => {

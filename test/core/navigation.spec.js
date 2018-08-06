@@ -3,6 +3,7 @@ import { Home } from "../../src/components/home.js";
 import { Loadscreen } from "../../src/components/loadscreen.js";
 import * as Navigation from "../../src/core/navigation.js";
 import * as signal from "../../src/core/signal-bus.js";
+import { assert } from "chai";
 
 describe("Navigation", () => {
     let gameState, context, scene, navigationConfig, transientData, navigation;
@@ -66,5 +67,9 @@ describe("Navigation", () => {
         Navigation.create(gameState, context, scene, navigationConfig);
 
         sinon.assert.calledOnce(scene.removeAll);
+    });
+
+    it("It returns a function", () => {
+        assert.isFunction(Navigation.create(gameState, context, scene, navigationConfig));
     });
 });
