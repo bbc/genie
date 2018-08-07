@@ -18,6 +18,7 @@ describe("Screen", () => {
         beforeEach(() => {
             sandbox.stub(GameSound, "setupScreenMusic");
             sandbox.stub(VisibleLayer, "get").returns("current-layer");
+            sandbox.stub(a11y, "clearElementsFromDom");
             sandbox.stub(a11y, "clearAccessibleButtons");
             signalInstance = { add: sandbox.stub() };
             sandbox.stub(Phaser, "Signal").returns(signalInstance);
@@ -55,8 +56,12 @@ describe("Screen", () => {
             assert.equal(screen.navigation, "routes");
         });
 
-        it("clears accessible buttons", () => {
+        it("clears the currently stored accessible buttons", () => {
             sandbox.assert.calledOnce(a11y.clearAccessibleButtons);
+        });
+
+        it("resets the accessiblity layer DOM", () => {
+            sandbox.assert.calledOnce(a11y.clearElementsFromDom);
         });
 
         it("creates overlay open and close signals", () => {
@@ -108,18 +113,6 @@ describe("Screen", () => {
             sandbox.stub(VisibleLayer, "get").returns("current-layer");
             assert.equal(screen.visibleLayer, "current-layer");
             sandbox.assert.calledOnce(VisibleLayer.get.withArgs(screen.game, screen.context));
-        });
-    });
-
-    describe("when overlayOpen signal is triggered", () => {
-        beforeEach(() => {
-            sandbox.stub(a11y, "resetElementsInDom");
-            screen = new Screen();
-            screen.onOverlayOpen();
-        });
-
-        it("resets accessible elements in DOM", () => {
-            sandbox.assert.calledOnce(a11y.resetElementsInDom.withArgs(screen));
         });
     });
 
