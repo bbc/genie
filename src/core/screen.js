@@ -28,6 +28,7 @@ export class Screen extends Phaser.State {
         GameSound.setupScreenMusic(this.game, themeScreenConfig);
         this.transientData = transientData;
         a11y.clearAccessibleButtons();
+        a11y.clearElementsFromDom();
         this.overlaySetup();
     }
 
@@ -39,7 +40,7 @@ export class Screen extends Phaser.State {
     }
 
     onOverlayOpen() {
-        a11y.resetElementsInDom(this);
+        // nothing to do here right now but still need to catch the signal
     }
 
     onOverlayClosed() {

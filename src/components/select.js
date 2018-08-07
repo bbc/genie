@@ -9,7 +9,6 @@ import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
-import * as a11y from "../core/accessibility/accessibility-layer.js";
 
 export class Select extends Screen {
     constructor() {
@@ -35,7 +34,6 @@ export class Select extends Screen {
         );
 
         this.addSignalSubscriptions();
-        a11y.resetElementsInDom(this);
     }
 
     createChoiceSprites(choices) {
