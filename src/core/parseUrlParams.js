@@ -1,5 +1,5 @@
 export function parseUrlParams(paramsString) {
-    if (!valid()) {
+    if (!valid(paramsString)) {
         return {};
     }
 
@@ -8,23 +8,23 @@ export function parseUrlParams(paramsString) {
         const [key, val] = hash.split("=");
         return Object.assign(params, { [key]: parseBooleans(val) });
     }, {});
-
-    function parseBooleans(val) {
-        const decodedComponent = decodeURIComponent(val);
-
-        if (decodedComponent === "true") {
-            return true;
-        } else if (decodedComponent === "false") {
-            return false;
-        } else {
-            return decodedComponent;
-        }
-    }
-
-    function valid() {
-        const hasQuestionMark = paramsString.indexOf("?") >= 0;
-        const hasEqualsSymbol = paramsString.indexOf("=") >= 0;
-
-        return hasQuestionMark && hasEqualsSymbol;
-    }
 }
+
+const parseBooleans = val => {
+    const decodedComponent = decodeURIComponent(val);
+
+    if (decodedComponent === "true") {
+        return true;
+    } else if (decodedComponent === "false") {
+        return false;
+    } else {
+        return decodedComponent;
+    }
+};
+
+const valid = paramsString => {
+    const hasQuestionMark = paramsString.indexOf("?") >= 0;
+    const hasEqualsSymbol = paramsString.indexOf("=") >= 0;
+
+    return hasQuestionMark && hasEqualsSymbol;
+};

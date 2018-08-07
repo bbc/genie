@@ -55,6 +55,7 @@ describe("Load Screen", () => {
 
     afterEach(() => {
         sandbox.restore();
+        delete window.__qaMode;
     });
 
     describe("preload method", () => {
@@ -83,7 +84,7 @@ describe("Load Screen", () => {
         });
 
         it("sets the button click sound to be used in the game", () => {
-            loadScreen.context = { qaMode: { active: false } };
+            window.__qaMode = {};
             loadScreen.preload();
 
             assetLoaderCallbackSpy.args[0][0]();
@@ -92,21 +93,18 @@ describe("Load Screen", () => {
         });
 
         it("fires the game loaded stat through the GMI", () => {
-            loadScreen.context = { qaMode: { active: false } };
             loadScreen.preload();
             assetLoaderCallbackSpy.args[0][0]();
             sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("game_loaded"));
         });
 
         it("tells the GMI the game has loaded", () => {
-            loadScreen.context = { qaMode: { active: false } };
             loadScreen.preload();
             assetLoaderCallbackSpy.args[0][0]();
             sandbox.assert.called(mockGmi.gameLoaded);
         });
 
         it("moves to the next screen when the promise is resolved", () => {
-            loadScreen.context = { qaMode: { active: false } };
             loadScreen.preload();
 
             assetLoaderCallbackSpy.args[0][0]();
@@ -165,7 +163,6 @@ describe("Load Screen", () => {
 
     describe("updateLoadProgress", () => {
         beforeEach(() => {
-            loadScreen.context = { qaMode: { active: false } };
             loadScreen.loadingBar = { fillPercent: 0 };
         });
 
@@ -190,8 +187,12 @@ describe("Load Screen", () => {
             consoleSpy = sandbox.spy(console, "log");
         });
 
+        after(() => {
+            delete window.__qaMode;
+        });
+
         it("logs the progress to the console when qaMode is true", () => {
-            loadScreen.context = { qaMode: { active: true } };
+            window.__qaMode = {};
             loadScreen.updateLoadProgress("50%");
             expect(consoleSpy.args[0]).to.eql(["Loader progress:", "50%"]);
         });
@@ -201,7 +202,7 @@ describe("Load Screen", () => {
             const expectedOutput =
                 "Loaded assets:\n    gel:\n        play: gel/play.png\n    home:\n        title: shared/title.png";
 
-            loadScreen.context = { qaMode: { active: true } };
+            window.__qaMode = {};
             loadScreen.preload();
 
             assetLoaderCallbackSpy.args[0][0](expectedKeyLookups);

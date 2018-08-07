@@ -7,11 +7,12 @@ import * as Scene from "../../src/core/scene.js";
 import * as LoadFonts from "../../src/core/font-loader.js";
 import * as Navigation from "../../src/core/navigation.js";
 import * as styles from "../../src/core/custom-styles.js";
+import * as qaMode from "../../src/core/qa/qa-mode.js";
+import * as parseUrlParams from "../../src/core/parseUrlParams.js";
 
 describe("Startup", () => {
     let mockGmi;
     const sandbox = sinon.createSandbox();
-
     let PhaserGame, containerDiv;
 
     beforeEach(() => {
@@ -88,9 +89,12 @@ describe("Startup", () => {
         let navigationCreate;
 
         beforeEach(() => {
+            sandbox.stub(parseUrlParams, "parseUrlParams").returns({ qaMode: true });
+
             sceneCreate = sandbox.stub(Scene, "create").returns("Scene");
             loadFonts = sandbox.stub(LoadFonts, "loadFonts");
             navigationCreate = sandbox.stub(Navigation, "create");
+            sandbox.stub(qaMode, "create");
 
             startup({}, "NavConfig");
             const game = PhaserGame.getCall(0).args[0];
@@ -99,6 +103,7 @@ describe("Startup", () => {
 
         afterEach(() => {
             sandbox.restore();
+            delete window.__qaMode;
         });
 
         it("creates the scene", () => {
@@ -115,11 +120,17 @@ describe("Startup", () => {
             sandbox.assert.calledWith(navigationCreate, Game.Stub.state, sandbox.match.object, "Scene", "NavConfig");
         });
 
+        it("creates qaMode if the qaMode url parameter is set to true", () => {
+            const onComplete = loadFonts.getCall(0).args[1];
+            onComplete();
+
+            sandbox.assert.calledOnce(qaMode.create);
+        });
+
         it("starts the stats tracking through the GMI", () => {
             const expectedContext = {
                 popupScreens: [],
                 gameMuted: true,
-                qaMode: { active: false, testHarnessLayoutDisplayed: false },
             };
             const statsParams = gmiModule.startStatsTracking.getCall(0).args;
             assert.deepEqual(statsParams[0], Game.Stub);

@@ -35,7 +35,7 @@ export class Loadscreen extends Screen {
 
     preload() {
         loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress.bind(this)).then(keyLookups => {
-            if (this.context.qaMode.active) {
+            if (window.__qaMode) {
                 dumpToConsole(keyLookups);
             }
             GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
@@ -78,7 +78,7 @@ export class Loadscreen extends Screen {
 
     updateLoadProgress(progress) {
         if (this.hasOwnProperty("loadingBar")) this.loadingBar.fillPercent = progress;
-        if (this.context.qaMode.active) {
+        if (window.__qaMode) {
             console.log("Loader progress:", progress); // eslint-disable-line no-console
         }
     }

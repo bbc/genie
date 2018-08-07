@@ -39,6 +39,8 @@ describe("Screen", () => {
             screen.game = Game.Stub;
             screen.game.state.current = "loadscreen";
             screen.init(mockTransientData, Scene.Stub, mockContext, mockNavigation);
+
+            delete window.__qaMode;
         });
 
         it("sets the scene", () => {
@@ -90,11 +92,9 @@ describe("Screen", () => {
         });
 
         it("sets context by merging new value with current value", () => {
-            screen.context = { qaMode: { active: true } };
             const expectedContext = {
                 popupScreens: ["pause"],
                 config: { theme: { loadscreen: { music: "test/music" } } },
-                qaMode: { active: true },
             };
             assert.deepEqual(screen.context, expectedContext);
         });

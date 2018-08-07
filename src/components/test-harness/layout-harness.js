@@ -4,7 +4,7 @@ export function createTestHarnessDisplay(game, context, scene) {
     let graphicsBackgroundGroup;
     let graphicsForegroundGroup;
 
-    if (context.qaMode.active) {
+    if (window.__qaMode) {
         graphicsBackgroundGroup = game.add.group();
         graphicsForegroundGroup = game.add.group();
         const qaKey = game.input.keyboard.addKey(Phaser.Keyboard.Q);
@@ -12,7 +12,7 @@ export function createTestHarnessDisplay(game, context, scene) {
     }
 
     function toggle() {
-        if (context.qaMode.testHarnessLayoutDisplayed) {
+        if (window.__qaMode.testHarnessLayoutDisplayed) {
             hide();
             console.log("Layout Test Harness Hidden"); // eslint-disable-line no-console
         } else {
@@ -26,7 +26,7 @@ export function createTestHarnessDisplay(game, context, scene) {
         drawOuterPadding();
         scene.addToBackground(graphicsBackgroundGroup);
         scene.addToForeground(graphicsForegroundGroup);
-        context.qaMode.testHarnessLayoutDisplayed = true;
+        window.__qaMode.testHarnessLayoutDisplayed = true;
     }
 
     function drawGameArea() {
@@ -63,7 +63,7 @@ export function createTestHarnessDisplay(game, context, scene) {
     function hide() {
         graphicsBackgroundGroup.destroy(true, true);
         graphicsForegroundGroup.destroy(true, true);
-        context.qaMode.testHarnessLayoutDisplayed = false;
+        window.__qaMode.testHarnessLayoutDisplayed = false;
     }
 
     function gameAreaDimensions() {
