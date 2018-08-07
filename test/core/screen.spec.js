@@ -55,10 +55,6 @@ describe("Screen", () => {
             assert.equal(screen.navigation, "routes");
         });
 
-        it("sets context", () => {
-            expect(screen.context).to.eql(mockContext);
-        });
-
         it("clears accessible buttons", () => {
             sandbox.assert.calledOnce(a11y.clearAccessibleButtons);
         });
