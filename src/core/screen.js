@@ -33,14 +33,8 @@ export class Screen extends Phaser.State {
     }
 
     overlaySetup() {
-        this.overlayOpen = new Phaser.Signal();
-        this.overlayOpen.add(this.onOverlayOpen, this);
         this.overlayClosed = new Phaser.Signal();
         this.overlayClosed.add(this.onOverlayClosed, this);
-    }
-
-    onOverlayOpen() {
-        // nothing to do here right now but still need to catch the signal
     }
 
     onOverlayClosed() {

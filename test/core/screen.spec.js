@@ -23,7 +23,6 @@ describe("Screen", () => {
             signalInstance = { add: sandbox.stub() };
             sandbox.stub(Phaser, "Signal").returns(signalInstance);
             screen = new Screen();
-            sandbox.stub(screen, "onOverlayOpen");
             sandbox.stub(screen, "onOverlayClosed");
             mockContext = {
                 popupScreens: ["pause"],
@@ -64,12 +63,8 @@ describe("Screen", () => {
             sandbox.assert.calledOnce(a11y.clearElementsFromDom);
         });
 
-        it("creates overlay open and close signals", () => {
-            sandbox.assert.calledTwice(Phaser.Signal);
-        });
-
-        it("adds a listener to overlayOpen signal", () => {
-            sandbox.assert.calledOnce(signalInstance.add.withArgs(screen.onOverlayOpen, screen));
+        it("creates the overlay closed signal", () => {
+            assert.equal(screen.overlayClosed, signalInstance);
         });
 
         it("adds a listener to overlayClosed signal", () => {
