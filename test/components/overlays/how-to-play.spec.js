@@ -38,7 +38,6 @@ describe("How To Play Overlay", () => {
         mockOverlayLayout = {
             addBackground: sandbox.stub().returns(mockBackground),
             disableExistingButtons: sandbox.spy(),
-            restoreDisabledButtons: sandbox.spy(),
             moveGelButtonsToTop: sandbox.spy(),
             moveToTop: sandbox.spy(),
         };
@@ -214,7 +213,6 @@ describe("How To Play Overlay", () => {
                 clickBackButton();
 
                 assert.isTrue(mockGelButtons.destroy.calledOnce);
-                assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
                 assert.isTrue(mockBackground.destroy.calledOnce);
                 assert.isTrue(mockTitle.destroy.calledOnce);
             });

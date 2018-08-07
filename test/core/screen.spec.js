@@ -134,13 +134,8 @@ describe("Screen", () => {
             sandbox.stub(a11y, "appendElementsToDom");
             screen = new Screen();
             screen.game = Game.Stub;
-            screen.game.canvas.focus = sandbox.stub();
             screen.context = { popupScreens: ["how-to-play"] };
             screen.onOverlayClosed();
-        });
-
-        it("focuses on game canvas", () => {
-            sandbox.assert.calledOnce(screen.game.canvas.focus);
         });
 
         it("clears accessible elements from DOM", () => {

@@ -1,3 +1,6 @@
+import { Buttons } from "./accessible-buttons.js";
+import { hideAndDisableElement } from "./element-manipulator.js";
+
 let _accessibleButtons = {};
 
 const hasAccessibleElement = button => {
@@ -17,6 +20,7 @@ export const setup = gameParentElement => {
 
 export const addToAccessibleButtons = (screen, button) => {
     const visibleLayer = screen.visibleLayer;
+    Buttons[button.elementId] = button;
 
     if (_accessibleButtons[visibleLayer]) {
         _accessibleButtons[visibleLayer].push(button);
@@ -35,7 +39,14 @@ export const clearAccessibleButtons = screen => {
 
 export const clearElementsFromDom = () => {
     const parentElement = document.getElementById(PARENT_ELEMENT_ID);
-    parentElement.innerHTML = "";
+    const childNodes = Array.from(parentElement.childNodes);
+    childNodes.forEach(el => {
+        if (document.activeElement === el) {
+            hideAndDisableElement(el);
+        } else {
+            el.parentElement.removeChild(el);
+        }
+    });
 
     return parentElement;
 };

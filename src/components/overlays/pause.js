@@ -58,7 +58,6 @@ export const create = fp.curry((hideReplayButton, { game }) => {
         game.paused = false;
         signal.bus.removeChannel(channel);
         gelButtons.destroy();
-        overlayLayout.restoreDisabledButtons();
         background.destroy();
         if (GameSound.Assets.backgroundMusic) {
             GameSound.Assets.backgroundMusic.resume();

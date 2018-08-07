@@ -89,7 +89,6 @@ export function create({ game }) {
 
     function destroy() {
         signal.bus.removeChannel(channel);
-        overlayLayout.restoreDisabledButtons();
         book.destroy();
         destroyPips();
         title.destroy();

@@ -15,6 +15,7 @@ export function accessibilify(button, config, gameButton = true) {
     let signal;
     const game = button.game;
     const screen = game.state.states[game.state.current];
+    const elementId = screen.visibleLayer + config.id;
     const accessibleElement = newAccessibleElement();
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
 
@@ -27,6 +28,8 @@ export function accessibilify(button, config, gameButton = true) {
 
     button.update = update;
     button.accessibleElement = accessibleElement.el;
+    button.elementId = elementId;
+    button.elementEvents = accessibleElement.events;
 
     a11y.addToAccessibleButtons(screen, button);
 
@@ -34,7 +37,7 @@ export function accessibilify(button, config, gameButton = true) {
 
     function newAccessibleElement() {
         return accessibleDomElement({
-            id: screen.visibleLayer + config.id,
+            id: elementId,
             ariaLabel: config.ariaLabel,
             parent: game.canvas.parentElement,
             onClick: buttonAction,
