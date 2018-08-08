@@ -69,10 +69,14 @@ describe("Showing pages of a book", () => {
         let twoPanels = [{}, {}];
         let domElements = [document.createElement("div"), document.createElement("div")];
         const accessibilityTexts = [{ accessibilityText: "Text goes here" }, { accessibilityText: "Also goes here" }];
+        let nextButtonStub = Button.Stub();
+        let previousButtonStub = Button.Stub();
 
         beforeEach(() => {
+            nextButtonStub.accessibleElement.focus = sinon.spy();
+            previousButtonStub.accessibleElement.focus = sinon.spy();
             const mockScreen = {
-                scene: Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
+                scene: Scene.WithButtons({ howToPlayNext: nextButtonStub, howToPlayPrevious: previousButtonStub }),
                 visibleLayer: "book-test",
             };
 
@@ -87,9 +91,7 @@ describe("Showing pages of a book", () => {
                 mockScreen,
             );
 
-            book.nextPageOption.accessibleElement.focus = sinon.spy();
             book.nextPageOption.update = sinon.spy();
-            book.previousPageOption.accessibleElement.focus = sinon.spy();
             book.previousPageOption.update = sinon.spy();
         });
 
@@ -122,6 +124,11 @@ describe("Showing pages of a book", () => {
                 book.nextPageOption.should.have.property("alpha", 1);
                 book.nextPageOption.input.should.have.property("enabled", true);
             });
+
+            it("Regression Test - should not auto-focus either the next or previous page button", () => {
+                sinon.assert.notCalled(nextButtonStub.accessibleElement.focus);
+                sinon.assert.notCalled(previousButtonStub.accessibleElement.focus);
+            });
         });
 
         describe("Front to Back (Next Page)", () => {
@@ -152,15 +159,22 @@ describe("Showing pages of a book", () => {
             });
 
             it("Should auto-focus the previous page button after navigating to the last page", () => {
-                sinon.assert.calledOnce(book.previousPageOption.accessibleElement.focus);
+                sinon.assert.calledOnce(previousButtonStub.accessibleElement.focus);
             });
         });
 
         describe("Back to front (Previous Page)", () => {
             beforeEach(() => {
                 book = Book.GoToPage(2, book);
+
+                // reset call counts
+                nextButtonStub.accessibleElement.focus.resetHistory();
+                previousButtonStub.accessibleElement.focus.resetHistory();
                 book.previousPageOption.update.resetHistory();
                 book.nextPageOption.update.resetHistory();
+                // we should be able to use sandbox.resetHistory() unfortunately it is not working at this time
+                // see https://github.com/sinonjs/sinon/issues/1758
+
                 book = Book.PreviousPage(book);
             });
 
@@ -187,7 +201,7 @@ describe("Showing pages of a book", () => {
             });
 
             it("Should auto-focus the previous page button after navigating to the last page", () => {
-                sinon.assert.calledOnce(book.previousPageOption.accessibleElement.focus);
+                sinon.assert.calledOnce(nextButtonStub.accessibleElement.focus);
             });
         });
 
