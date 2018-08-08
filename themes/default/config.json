@@ -52,7 +52,7 @@
         "how-to-play": {
             "panels": ["panel1", "panel2", "panel3"],
             "panelText": [
-                { "accessibilityText": "Intructions on playing the game"},
+                { "accessibilityText": "Instructions on playing the game"},
                 { "accessibilityText": "More on how to play"},
                 { "accessibilityText": "Final instructions on playing"}
             ]
