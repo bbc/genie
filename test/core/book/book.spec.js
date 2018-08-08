@@ -166,15 +166,10 @@ describe("Showing pages of a book", () => {
         describe("Back to front (Previous Page)", () => {
             beforeEach(() => {
                 book = Book.GoToPage(2, book);
-
-                // reset call counts
                 nextButtonStub.accessibleElement.focus.resetHistory();
                 previousButtonStub.accessibleElement.focus.resetHistory();
                 book.previousPageOption.update.resetHistory();
                 book.nextPageOption.update.resetHistory();
-                // we should be able to use sandbox.resetHistory() unfortunately it is not working at this time
-                // see https://github.com/sinonjs/sinon/issues/1758
-
                 book = Book.PreviousPage(book);
             });
 
