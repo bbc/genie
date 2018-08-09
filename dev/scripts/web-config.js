@@ -1,4 +1,5 @@
 module.exports = {
+    compress: true,
     staticIndex: "dev/index.dev.html",
     mime: {
         "application/wasm": ["wasm"],

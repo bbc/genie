@@ -43,7 +43,6 @@ export class Screen extends Phaser.State {
     }
 
     onOverlayClosed() {
-        this.game.canvas.focus();
         a11y.clearElementsFromDom();
         a11y.clearAccessibleButtons(this);
         this.context.popupScreens.pop();

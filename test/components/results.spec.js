@@ -55,7 +55,6 @@ describe("Results Screen", () => {
                     },
                 },
             },
-            qaMode: { active: false },
         };
 
         resultsScreen = new Results();

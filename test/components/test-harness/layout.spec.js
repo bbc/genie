@@ -50,6 +50,7 @@ describe("test harness layout", () => {
 
     describe("QA mode is active and layout is not currently displayed", () => {
         before(() => {
+            window.__qaMode = {};
             mockContext = {
                 qaMode: {
                     active: true,
@@ -65,6 +66,10 @@ describe("test harness layout", () => {
                     },
                 },
             };
+        });
+
+        after(() => {
+            delete window.__qaMode;
         });
 
         describe("create function is called", () => {

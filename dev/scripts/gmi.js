@@ -6,6 +6,8 @@ var GMI = function(options, embedVars, gameDir) {
     var containerId = "local-game-holder";
     var url = "";
     var env = "test";
+    const qaMode = getParam("qaMode") || false;
+
     Object.defineProperty(GMI.prototype, "embedVars", {
         get: function() {
             return embedVars;
@@ -33,12 +35,12 @@ var GMI = function(options, embedVars, gameDir) {
     });
     Object.defineProperty(GMI.prototype, "shouldShowExitButton", {
         get: function() {
-            return window.self === window.top;
+            return getParam("hideExit") ?  false : window.self === window.top;
         },
     });
     Object.defineProperty(GMI.prototype, "shouldDisplayMuteButton", {
         get: function() {
-            return true;
+            return getParam("hideMute") ?  false : true;
         },
     });
     Object.defineProperty(GMI.prototype, "shouldLongPressForSettings", {
@@ -130,7 +132,9 @@ var GMI = function(options, embedVars, gameDir) {
         return true;
     };
     GMI.prototype.sendStatsEvent = function(name, type, params) {
-        console.log("Stat fired - name: " + name + ", type: " + type + ", params: " + JSON.stringify(params));
+        if(qaMode) {
+            console.log("Stat fired - name: " + name + ", type: " + type + ", params: " + JSON.stringify(params));
+        }
     };
     GMI.prototype.exit = function() {
         window.open("http://www.bbc.co.uk", "_top");

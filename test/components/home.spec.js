@@ -42,7 +42,6 @@ describe("Home Screen", () => {
 
         mockContext = {
             config: { theme: { home: {} } },
-            qaMode: { active: false },
         };
 
         homeScreen = new Home();

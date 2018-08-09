@@ -12,7 +12,9 @@ import * as Scene from "./scene.js";
 import { loadFonts } from "./font-loader.js";
 import { gmi, setGmi, startStatsTracking } from "./gmi/gmi.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
+import { addCustomStyles } from "./custom-styles.js";
 import fp from "../../lib/lodash/fp/fp.js";
+import * as qaMode from "./qa/qa-mode.js";
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
@@ -21,7 +23,6 @@ import fp from "../../lib/lodash/fp/fp.js";
 export function startup(settingsConfig = {}, navigationConfig) {
     setGmi(settingsConfig, window);
     const urlParams = parseUrlParams(window.location.search);
-    const qaMode = { active: urlParams.qaMode ? urlParams.qaMode : false, testHarnessLayoutDisplayed: false };
     hookErrors(gmi.gameContainerId);
 
     const phaserConfig = {
@@ -38,6 +39,8 @@ export function startup(settingsConfig = {}, navigationConfig) {
     window.PhaserGlobal = window.PhaserGlobal || {};
     window.PhaserGlobal.hideBanner = true;
 
+    addCustomStyles(getContainerDiv());
+
     const game = new Phaser.Game(phaserConfig);
 
     function onStarted(config) {
@@ -49,13 +52,18 @@ export function startup(settingsConfig = {}, navigationConfig) {
             config: config,
             popupScreens: [],
             gameMuted: true,
-            qaMode,
         };
         game.stage.backgroundColor = "#333";
 
         startStatsTracking(game, context);
 
-        const onFontsLoaded = () => Navigation.create(game.state, context, scene, navigationConfig);
+        const onFontsLoaded = () => {
+            const goToScreen = Navigation.create(game.state, context, scene, navigationConfig);
+
+            if (urlParams.qaMode) {
+                window.__qaMode = qaMode.create(game, goToScreen);
+            }
+        };
         loadFonts(game, onFontsLoaded);
         a11y.setup(game.canvas.parentElement);
     }

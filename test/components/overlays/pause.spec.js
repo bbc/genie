@@ -23,7 +23,6 @@ describe("Pause Overlay", () => {
         mockOverlayLayout = {
             addBackground: sandbox.stub().returns(mockBackground),
             disableExistingButtons: sandbox.spy(),
-            restoreDisabledButtons: sandbox.spy(),
             moveGelButtonsToTop: sandbox.spy(),
         };
         sandbox.stub(OverlayLayout, "create").returns(mockOverlayLayout);
@@ -152,7 +151,6 @@ describe("Pause Overlay", () => {
 
             assert.isFalse(mockGame.paused);
             assert.isTrue(mockGelButtons.destroy.calledOnce);
-            assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
             sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.resume);
         });
@@ -171,7 +169,6 @@ describe("Pause Overlay", () => {
             cickReplayButton();
             assert.isFalse(mockGame.paused);
             assert.isTrue(mockGelButtons.destroy.calledOnce);
-            assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
             sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.resume);
         });
@@ -194,7 +191,6 @@ describe("Pause Overlay", () => {
             clickHomeButton();
             assert.isFalse(mockGame.paused);
             assert.isTrue(mockGelButtons.destroy.calledOnce);
-            assert.isTrue(mockOverlayLayout.restoreDisabledButtons.calledOnce);
             assert.isTrue(mockBackground.destroy.calledOnce);
             sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.resume);
         });

@@ -3,6 +3,10 @@
 | Version | Description |
 |---------|-------------|
 | Unreleased | |
+| | Fixes numerous issues around tabbing order when changing screens. Mainly for iOS voiceover. |
+| | Adds ability to skip screens for automation. |
+| | Moved qa mode tools to separate module. |
+| | Disable audio / home buttons based on GMI flags. |
 | | Fixes an issue with NVDA and Firefox where accessible buttons would not properly gain focus when tabbing. |
 | 0.6.0 | |
 | | Fixes an issue on iPhone X where voice-over tabbing would begin at the end of the how-to-play and select screens. |

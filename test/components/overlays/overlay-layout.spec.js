@@ -6,7 +6,6 @@ describe("Overlay Layout", () => {
     const sandbox = sinon.createSandbox();
     let mockLayouts;
     let mockScreen;
-    let mockGameButtons;
 
     beforeEach(() => {
         mockLayouts = [
@@ -26,19 +25,10 @@ describe("Overlay Layout", () => {
             },
         ];
 
-        mockGameButtons = [
-            {
-                input: { enabled: true },
-                update: sandbox.spy(),
-                name: "button1",
-            },
-        ];
-
         mockScreen = {
             context: { popupScreens: ["pause", "how-to-play"] },
             scene: {
                 getLayouts: sandbox.stub().returns(mockLayouts),
-                getAccessibleGameButtons: sandbox.stub().returns(mockGameButtons),
                 addToBackground: sandbox.spy(),
             },
         };
@@ -46,14 +36,6 @@ describe("Overlay Layout", () => {
 
     afterEach(() => {
         sandbox.restore();
-    });
-
-    it("disables currently enabled buttons", () => {
-        OverlayLayout.create(mockScreen);
-        assert.isFalse(mockLayouts[0].buttons.audio.input.enabled);
-        assert.isFalse(mockGameButtons[0].input.enabled);
-        assert.isTrue(mockLayouts[0].buttons.audio.update.calledOnce);
-        assert.isTrue(mockGameButtons[0].update.calledOnce);
     });
 
     describe("addBackground method", () => {
@@ -68,18 +50,8 @@ describe("Overlay Layout", () => {
         });
     });
 
-    describe("restoreDisabledButtons method", () => {
-        it("restores disabled buttons", () => {
-            const overlayLayout = OverlayLayout.create(mockScreen);
-            overlayLayout.restoreDisabledButtons();
-            assert.isTrue(mockLayouts[0].buttons.audio.input.enabled);
-            assert.isTrue(mockLayouts[0].buttons.audio.update.calledTwice);
-            assert.isTrue(mockGameButtons[0].input.enabled);
-        });
-    });
-
     describe("moveGelButtonsToTop method", () => {
-        it("restores disabled buttons", () => {
+        it("moves buttons to the top layer", () => {
             const overlayLayout = OverlayLayout.create(mockScreen);
             const mockGelLayout = {
                 buttons: {

@@ -32,7 +32,7 @@ describe("#accessibleDomElement", () => {
         options = {
             id: "play-button",
             parent: parentElement,
-            onClick: () => {},
+            onClick: sandbox.stub(),
             onMouseOver: () => {},
             onMouseOut: () => {},
         };
@@ -146,6 +146,12 @@ describe("#accessibleDomElement", () => {
             const eventListener = sandbox.stub(element, "addEventListener");
             accessibleDomElement(options);
             sinon.assert.calledOnce(eventListener.withArgs("blur", sinon.match.func));
+        });
+
+        it("returns an object of element events for this element", () => {
+            const element = accessibleDomElement(options);
+            expect(element.events.click).to.be.a("function");
+            expect(element.events.keyup).to.be.a("function");
         });
     });
 
