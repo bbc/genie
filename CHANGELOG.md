@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | Unreleased | |
+| | Centralised the resetting of accessible elements in the DOM so it no longer has to be called on each screen. |
 | | Fixes numerous issues around tabbing order when changing screens. Mainly for iOS voiceover. |
 | | Adds ability to skip screens for automation. |
 | | Moved qa mode tools to separate module. |

@@ -1,8 +1,9 @@
 import { expect } from "chai";
 import * as sinon from "sinon";
 import * as Scaler from "../../../src/core/scaler.js";
-import { accessibilify } from "../../../src/core/accessibility/accessibilify";
-import * as helperModule from "../../../src/core/accessibility/accessible-dom-element";
+import { accessibilify } from "../../../src/core/accessibility/accessibilify.js";
+import * as helperModule from "../../../src/core/accessibility/accessible-dom-element.js";
+import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 
 describe("#accessibilify", () => {
     const gameWidth = 800;
@@ -34,6 +35,7 @@ describe("#accessibilify", () => {
     });
 
     beforeEach(() => {
+        sandbox.stub(a11y, "resetElementsInDom");
         onScaleChangeUnsubscribe = sandbox.spy();
         onScaleChangeAdd = sandbox.stub(Scaler.onScaleChange, "add").returns({ unsubscribe: onScaleChangeUnsubscribe });
         parentElement = document.createElement("div");
@@ -150,6 +152,11 @@ describe("#accessibilify", () => {
             );
         });
 
+        it("resets the accessible elements in the DOM", () => {
+            accessibilify(mockButton);
+            sinon.assert.calledOnce(a11y.resetElementsInDom);
+        });
+
         describe("with ariaLabel argument", () => {
             it("calls accessibleDomElement once passing in ariaLabel string", () => {
                 const config = {
@@ -211,9 +218,9 @@ describe("#accessibilify", () => {
         });
 
         it("repositions accessibleElement if button exists", () => {
-            sandbox.restore();
             const clock = sandbox.useFakeTimers();
             const position = sandbox.spy();
+            accessibleDomElement.restore();
             accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({ position });
 
             accessibilify(mockButton);
@@ -222,9 +229,9 @@ describe("#accessibilify", () => {
         });
 
         it("repositions accessibleElement if button exists but does not have a hit area", () => {
-            sandbox.restore();
             const clock = sandbox.useFakeTimers();
             const position = sandbox.spy();
+            accessibleDomElement.restore();
             accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({ position });
 
             mockButton.hitArea = null;
@@ -236,11 +243,11 @@ describe("#accessibilify", () => {
         });
 
         it("does NOT reposition accessibleElement if button does not exist", () => {
-            sandbox.restore();
             let deadMockButton = mockButton;
             deadMockButton.alive = false;
             const clock = sandbox.useFakeTimers();
             const position = sandbox.spy();
+            accessibleDomElement.restore();
             accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({ position });
 
             accessibilify(deadMockButton);

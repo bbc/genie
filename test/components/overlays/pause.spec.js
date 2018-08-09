@@ -41,9 +41,6 @@ describe("Pause Overlay", () => {
                 restart: sandbox.stub(),
                 home: sandbox.stub(),
             },
-            overlayOpen: {
-                dispatch: sandbox.stub(),
-            },
             overlayClosed: {
                 dispatch: sandbox.stub(),
             },
@@ -83,10 +80,6 @@ describe("Pause Overlay", () => {
 
         it("pauses background music", () => {
             sinon.assert.calledOnce(GameSound.Assets.backgroundMusic.pause);
-        });
-
-        it("dispatches overlayOpen signal on screen", () => {
-            sandbox.assert.calledOnce(mockScreen.overlayOpen.dispatch);
         });
     });
 

@@ -25,7 +25,6 @@ export const create = fp.curry((hideReplayButton, { game }) => {
     const gelButtons = addGelButtons();
 
     addSignals();
-    screen.overlayOpen.dispatch();
 
     function pauseGame() {
         game.paused = true;
