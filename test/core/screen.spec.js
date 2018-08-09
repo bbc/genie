@@ -18,11 +18,11 @@ describe("Screen", () => {
         beforeEach(() => {
             sandbox.stub(GameSound, "setupScreenMusic");
             sandbox.stub(VisibleLayer, "get").returns("current-layer");
+            sandbox.stub(a11y, "clearElementsFromDom");
             sandbox.stub(a11y, "clearAccessibleButtons");
             signalInstance = { add: sandbox.stub() };
             sandbox.stub(Phaser, "Signal").returns(signalInstance);
             screen = new Screen();
-            sandbox.stub(screen, "onOverlayOpen");
             sandbox.stub(screen, "onOverlayClosed");
             mockContext = {
                 popupScreens: ["pause"],
@@ -55,20 +55,16 @@ describe("Screen", () => {
             assert.equal(screen.navigation, "routes");
         });
 
-        it("sets context", () => {
-            expect(screen.context).to.eql(mockContext);
-        });
-
-        it("clears accessible buttons", () => {
+        it("clears the currently stored accessible buttons", () => {
             sandbox.assert.calledOnce(a11y.clearAccessibleButtons);
         });
 
-        it("creates overlay open and close signals", () => {
-            sandbox.assert.calledTwice(Phaser.Signal);
+        it("resets the accessiblity layer DOM", () => {
+            sandbox.assert.calledOnce(a11y.clearElementsFromDom);
         });
 
-        it("adds a listener to overlayOpen signal", () => {
-            sandbox.assert.calledOnce(signalInstance.add.withArgs(screen.onOverlayOpen, screen));
+        it("creates the overlay closed signal", () => {
+            assert.equal(screen.overlayClosed, signalInstance);
         });
 
         it("adds a listener to overlayClosed signal", () => {
@@ -112,18 +108,6 @@ describe("Screen", () => {
             sandbox.stub(VisibleLayer, "get").returns("current-layer");
             assert.equal(screen.visibleLayer, "current-layer");
             sandbox.assert.calledOnce(VisibleLayer.get.withArgs(screen.game, screen.context));
-        });
-    });
-
-    describe("when overlayOpen signal is triggered", () => {
-        beforeEach(() => {
-            sandbox.stub(a11y, "resetElementsInDom");
-            screen = new Screen();
-            screen.onOverlayOpen();
-        });
-
-        it("resets accessible elements in DOM", () => {
-            sandbox.assert.calledOnce(a11y.resetElementsInDom.withArgs(screen));
         });
     });
 

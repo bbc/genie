@@ -5,7 +5,6 @@ import * as layoutHarness from "../../src/components/test-harness/layout-harness
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
-import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 
 describe("Select Screen", () => {
     let selectScreen;
@@ -29,7 +28,6 @@ describe("Select Screen", () => {
         sandbox
             .stub(accessibleCarouselElements, "create")
             .returns([document.createElement("div"), document.createElement("div"), document.createElement("div")]);
-        sandbox.stub(a11y, "resetElementsInDom");
         layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");
         addToBackgroundSpy = sandbox.spy();
         gameImageStub = sandbox.stub().returns("sprite");
@@ -135,10 +133,6 @@ describe("Select Screen", () => {
                 mockGame.canvas.parentElement,
                 mockContext.config.theme.characterSelect.choices,
             ]);
-        });
-
-        it("resets accessibility elements in DOM", () => {
-            sandbox.assert.calledOnce(a11y.resetElementsInDom.withArgs(selectScreen));
         });
     });
 

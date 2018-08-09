@@ -4,7 +4,7 @@ import * as Button from "./button.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as accessibleCarouselElements from "../accessibility/accessible-carousel-elements.js";
 
-const configureButtonsForPage = (pageNumber, book) => {
+const configureButtonsForPage = (pageNumber, book, initialising) => {
     const pagesAhead = pageNumber < book.numberOfPages;
     book.nextPageOption.alpha = pagesAhead ? 1 : 0;
     book.nextPageOption.input.enabled = pagesAhead;
@@ -15,11 +15,13 @@ const configureButtonsForPage = (pageNumber, book) => {
     book.previousPageOption.input.enabled = pagesBefore;
     book.previousPageOption.update();
 
-    if (!pagesAhead) book.previousPageOption.accessibleElement.focus();
-    if (!pagesBefore) book.nextPageOption.accessibleElement.focus();
+    if (!initialising) {
+        if (!pagesAhead) book.previousPageOption.accessibleElement.focus();
+        if (!pagesBefore) book.nextPageOption.accessibleElement.focus();
+    }
 };
 
-const GoToPage = (pageNumber, book) => {
+const GoToPage = (pageNumber, book, initialising = false) => {
     if (pageNumber > book.numberOfPages) {
         return book;
     }
@@ -27,7 +29,7 @@ const GoToPage = (pageNumber, book) => {
     book.hidePage(book.currentPageNumber);
     book.showPage(pageNumber);
     book.currentPageNumber = pageNumber;
-    configureButtonsForPage(pageNumber, book);
+    configureButtonsForPage(pageNumber, book, initialising);
 
     return book;
 };
@@ -90,7 +92,7 @@ const Draw = (theme, drawPage, drawButtons, game, accessibilityTexts, screen) =>
         },
     };
 
-    return GoToPage(1, book);
+    return GoToPage(1, book, true);
 };
 
 const Start = (screenName, theme, game, screen, overlayLayout, accessibilityTexts) => {
