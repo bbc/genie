@@ -3,7 +3,6 @@ import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 import { sendStats } from "../core/gmi/gmi.js";
-import * as a11y from "../core/accessibility/accessibility-layer.js";
 
 export class Results extends Screen {
     constructor() {
@@ -48,7 +47,5 @@ export class Results extends Screen {
                 this.navigation.game(this.transientData);
             },
         });
-
-        a11y.resetElementsInDom(this);
     }
 }

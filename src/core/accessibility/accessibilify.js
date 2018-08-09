@@ -32,6 +32,7 @@ export function accessibilify(button, config, gameButton = true) {
     button.elementEvents = accessibleElement.events;
 
     a11y.addToAccessibleButtons(screen, button);
+    a11y.resetElementsInDom(screen);
 
     return button;
 

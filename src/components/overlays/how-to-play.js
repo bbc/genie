@@ -28,8 +28,6 @@ export function create({ game }) {
     let pips = addPips(book);
     addSignals();
 
-    screen.overlayOpen.dispatch();
-
     function previousButtonClick() {
         book = Book.PreviousPage(book);
         updatePips(book);
