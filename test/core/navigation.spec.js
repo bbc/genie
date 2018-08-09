@@ -14,7 +14,7 @@ describe("Navigation", () => {
         gameState = {
             add: sandbox.stub(),
             start: sandbox.stub(),
-            game: { canvas: { focus: sinon.stub() } },
+            game: { paused: true },
         };
         context = sandbox.stub();
         scene = { removeAll: sandbox.stub() };
@@ -55,6 +55,12 @@ describe("Navigation", () => {
         sinon.assert.calledOnce(
             gameState.start.withArgs("loadscreen", true, false, transientData, scene, context, navigation),
         );
+    });
+
+    it("ensures the game is unpaused", () => {
+        Navigation.create(gameState, context, scene, navigationConfig);
+
+        assert.isFalse(gameState.game.paused);
     });
 
     it("removes signal bus gel-buttons channel before going to screen", () => {
