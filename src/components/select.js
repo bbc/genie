@@ -82,14 +82,6 @@ export class Select extends Screen {
     addSignalSubscriptions() {
         signal.bus.subscribe({
             channel: buttonsChannel,
-            name: "exit",
-            callback: () => {
-                this.navigation.home();
-            },
-        });
-
-        signal.bus.subscribe({
-            channel: buttonsChannel,
             name: "previous",
             callback: this.leftButton.bind(this),
         });
