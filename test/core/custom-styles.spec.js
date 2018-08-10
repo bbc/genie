@@ -3,9 +3,7 @@ import { assert } from "chai";
 import { addCustomStyles } from "../../src/core/custom-styles.js";
 
 describe("custom styles", () => {
-    beforeEach(() => {
-        addCustomStyles();
-    });
+    beforeEach(() => addCustomStyles());
 
     describe("#addCustomStyles", () => {
         it("creates a new style element in the head", () => {
