@@ -26,7 +26,9 @@ describe("custom styles", () => {
         });
 
         it("fills this element with all custom styles", () => {
-            expect(styleElement.innerHTML).to.eq(".hide-focus-ring:focus{outline:none;}");
+            expect(styleElement.innerHTML).to.eq(
+                ".hide-focus-ring:focus{outline:none;} .gel-button{ -webkit-user-select: none; }",
+            );
         });
 
         it("appends this style element to the parent element", () => {

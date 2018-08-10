@@ -54,6 +54,17 @@ describe("#accessibleDomElement", () => {
             expect(element.getAttribute("id")).to.equal("play-button");
         });
 
+        it("sets the html class if provided", () => {
+            options.htmlClass = "gel-button";
+            accessibleDomElement(options);
+            expect(element.getAttribute("class")).to.equal("gel-button");
+        });
+
+        it("does not set a html class if none is given", () => {
+            accessibleDomElement(options);
+            expect(element.getAttribute("class")).to.be.null;
+        });
+
         it("sets tabindex to 0", () => {
             accessibleDomElement(options);
             expect(element.getAttribute("tabindex")).to.equal("0");
