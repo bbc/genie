@@ -8,7 +8,8 @@
         "ecmaVersion": 2017
     },
     "plugins": [
-        "mocha"
+        "mocha",
+        "local-rules"
     ],
     "rules": {
         "quotes": ["error", "double"],
@@ -17,7 +18,8 @@
         "no-console": ["warn"],
         "no-unused-vars": ["error"],
         "mocha/no-skipped-tests": ["error"],
-        "mocha/no-exclusive-tests": "error"
+        "mocha/no-exclusive-tests": "error",
+        "local-rules/disallow-timers": 2
     },
     "settings": {
        "mocha/additionalTestFunctions": [
