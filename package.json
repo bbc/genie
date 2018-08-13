@@ -54,6 +54,7 @@
     },
     "scripts": {
         "start": "ws --config-file dev/scripts/web-config.js",
+        "watch": "live-server --no-browser --entry-file=dev/index.dev.html --watch=./src --middleware=$PWD/dev/rewrite.js",
         "watch": "live-server --no-browser --entry-file=dev/index.dev.html --watch=./src --middleware=$PWD/dev/scripts/rewrite.js",
         "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js --env.genieCore",
         "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
