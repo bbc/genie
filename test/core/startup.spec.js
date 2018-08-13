@@ -46,7 +46,7 @@ describe("Startup", () => {
 
     it("injects custom styles to the game container element", () => {
         startup();
-        sandbox.assert.calledOnce(styles.addCustomStyles.withArgs(containerDiv));
+        sandbox.assert.calledOnce(styles.addCustomStyles);
     });
 
     it("creates a new Phaser game", () => {

@@ -143,6 +143,7 @@ describe("#accessibilify", () => {
             sinon.assert.calledOnce(
                 accessibleDomElement.withArgs({
                     id: "home__play",
+                    htmlClass: "gel-button",
                     ariaLabel: mockButton.name,
                     parent: mockButton.game.canvas.parentElement,
                     onClick: sinon.match.func,
@@ -168,6 +169,7 @@ describe("#accessibilify", () => {
                 sinon.assert.calledOnce(
                     accessibleDomElement.withArgs({
                         id: "home__play",
+                        htmlClass: "gel-button",
                         ariaLabel: "Play Button",
                         parent: mockButton.game.canvas.parentElement,
                         onClick: sinon.match.func,

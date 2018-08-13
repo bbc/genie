@@ -1,36 +1,22 @@
-import { expect } from "chai";
-import * as sinon from "sinon";
+import { assert } from "chai";
+
 import { addCustomStyles } from "../../src/core/custom-styles.js";
 
 describe("custom styles", () => {
-    const sandbox = sinon.createSandbox();
-    let parentElement, styleElement;
-
-    beforeEach(() => {
-        styleElement = { innerHTML: "" };
-        sandbox
-            .stub(document, "createElement")
-            .withArgs("style")
-            .returns(styleElement);
-        parentElement = { appendChild: sandbox.stub() };
-        addCustomStyles(parentElement);
-    });
-
-    afterEach(() => {
-        sandbox.restore();
-    });
+    beforeEach(() => addCustomStyles());
 
     describe("#addCustomStyles", () => {
-        it("creates a new style element", () => {
-            sandbox.assert.calledOnce(document.createElement.withArgs("style"));
+        it("creates a new style element in the head", () => {
+            const headElement = document.getElementsByTagName("head")[0];
+            assert.exists(headElement.querySelector("style"));
         });
 
         it("fills this element with all custom styles", () => {
-            expect(styleElement.innerHTML).to.eq(".hide-focus-ring:focus{outline:none;}");
-        });
-
-        it("appends this style element to the parent element", () => {
-            sandbox.assert.calledOnce(parentElement.appendChild.withArgs(styleElement));
+            const styleElement = document.getElementsByTagName("style")[0];
+            assert.equal(
+                styleElement.innerHTML,
+                ".hide-focus-ring:focus { outline:none; } .gel-button { -webkit-user-select: none; }",
+            );
         });
     });
 });

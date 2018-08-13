@@ -39,6 +39,7 @@ export function accessibilify(button, config, gameButton = true) {
     function newAccessibleElement() {
         return accessibleDomElement({
             id: elementId,
+            htmlClass: "gel-button",
             ariaLabel: config.ariaLabel,
             parent: game.canvas.parentElement,
             onClick: buttonAction,

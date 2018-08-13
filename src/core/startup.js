@@ -39,7 +39,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
     window.PhaserGlobal = window.PhaserGlobal || {};
     window.PhaserGlobal.hideBanner = true;
 
-    addCustomStyles(getContainerDiv());
+    addCustomStyles();
 
     const game = new Phaser.Game(phaserConfig);
 

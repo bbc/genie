@@ -1,15 +1,6 @@
-export const addCustomStyles = parentElement => {
-    let styles = "";
-    const element = document.createElement("style");
-    Object.keys(customStyles()).forEach(style => {
-        styles = styles + style + customStyles()[style];
-    });
-    element.innerHTML = styles;
-    parentElement.appendChild(element);
-};
-
-const customStyles = () => {
-    return {
-        ".hide-focus-ring:focus": "{outline:none;}",
-    };
+export const addCustomStyles = () => {
+    const customStyles = [".hide-focus-ring:focus { outline:none; }", ".gel-button { -webkit-user-select: none; }"];
+    const styleElement = document.createElement("style");
+    styleElement.innerHTML = customStyles.join(" ");
+    document.head.appendChild(styleElement);
 };
