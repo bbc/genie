@@ -45,7 +45,7 @@ describe("Overlay Layout", () => {
             overlayLayout.addBackground(mockBackgroundImage);
 
             assert.isTrue(mockBackgroundImage.inputEnabled);
-            assert.equal(mockBackgroundImage.input.priorityID, 1000);
+            assert.equal(mockBackgroundImage.input.priorityID, 1002);
             assert.deepEqual(mockScreen.scene.addToBackground.getCall(0).args[0], mockBackgroundImage);
         });
     });
@@ -66,7 +66,7 @@ describe("Overlay Layout", () => {
                 },
             };
             overlayLayout.moveGelButtonsToTop(mockGelLayout);
-            assert.equal(mockGelLayout.buttons.audio.input.priorityID, 1001);
+            assert.equal(mockGelLayout.buttons.audio.input.priorityID, 1003);
             assert.equal(mockGelLayout.buttons.audio.parent.updateTransform.calledOnce, true);
             assert.equal(mockGelLayout.buttons.audio.parent.parent.updateTransform.calledOnce, true);
             assert.equal(mockGelLayout.buttons.audio.update.calledOnce, true);
@@ -82,7 +82,7 @@ describe("Overlay Layout", () => {
             };
             overlayLayout.moveToTop(mockItem);
             assert.isTrue(mockItem.inputEnabled);
-            assert.equal(mockItem.input.priorityID, 1001);
+            assert.equal(mockItem.input.priorityID, 1003);
         });
     });
 });

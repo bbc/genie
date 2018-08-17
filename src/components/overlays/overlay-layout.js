@@ -10,10 +10,8 @@ import fp from "../../../lib/lodash/fp/fp.js";
  * - Adding a background
  * - Moving GEL buttons to the top
  */
-
 export function create(screen) {
-    const backgroundPriorityID = 999;
-    const priorityID = backgroundPriorityID + screen.context.popupScreens.length;
+    const priorityID = 999 + 2 * screen.context.popupScreens.length; //* 2 to provide space between layers for background
     return {
         addBackground,
         moveGelButtonsToTop,
