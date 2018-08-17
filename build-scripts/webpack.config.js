@@ -6,14 +6,10 @@ var phaserModule = path.resolve("node_modules/phaser-ce/");
 var phaser = path.join(phaserModule, "build/custom/phaser-split.js");
 var pixi = path.join(phaserModule, "build/custom/pixi.js");
 var p2 = path.join(phaserModule, "build/custom/p2.js");
-const webpack = require('webpack');
 
 module.exports = env => {
     var webPackConfig = {
-        mode: "development",
-        plugins: [
-            new webpack.optimize.ModuleConcatenationPlugin(),
-        ],
+        mode: "production",
         performance: { hints: false },
         entry: ["babel-polyfill", pixi, p2, phaser, "webfontloader"],
         output: {
