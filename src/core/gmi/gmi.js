@@ -61,6 +61,10 @@ export const sendStats = (actionKey, additionalParams) => {
 
 export const startStatsTracking = (game, context) => {
     settings = gmi.getAllSettings();
+
+    window.xSettings = settings;
+    window.xGmi = gmi;
+
     gameInstance = game;
     gameContext = context;
     startHeartbeat();
