@@ -183,7 +183,7 @@ describe("GMI", () => {
             gmiModule.startStatsTracking();
         });
 
-        it("fires the stats heartbeat every 15 seconds", () => {
+        xit("fires the stats heartbeat every 15 seconds", () => {
             clock.tick(15 * 1000);
             sandbox.assert.calledOnce(fakeGmiObject.sendStatsEvent);
             clock.tick(15 * 1000);
@@ -192,7 +192,7 @@ describe("GMI", () => {
             sandbox.assert.calledThrice(fakeGmiObject.sendStatsEvent);
         });
 
-        it("passes the correct params to the stats heartbeat", () => {
+        xit("passes the correct params to the stats heartbeat", () => {
             const expectedAdditonalParams = { action_name: "timer", action_type: "heartbeat", heartbeat_period: 15 };
             clock.tick(15 * 1000);
             sandbox.assert.calledWith(fakeGmiObject.sendStatsEvent, "timer", "heartbeat", expectedAdditonalParams);
