@@ -10,12 +10,12 @@ describe("GMI", () => {
     let defaultSettings;
     let fakeWindow;
     let fakeGmiObject;
-    let clock;
+    //let clock;
 
     beforeEach(() => {
         sandbox.stub(StatsValues, "getValues");
         sandbox.stub(VisibleLayer, "get");
-        clock = sinon.useFakeTimers();
+       //clock = sinon.useFakeTimers();
         defaultSettings = {
             pages: [
                 {
@@ -46,7 +46,7 @@ describe("GMI", () => {
     });
 
     afterEach(() => {
-        clock = sinon.restore();
+        //clock = sinon.restore();
         sandbox.restore();
     });
 
