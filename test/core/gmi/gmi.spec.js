@@ -10,12 +10,12 @@ describe("GMI", () => {
     let defaultSettings;
     let fakeWindow;
     let fakeGmiObject;
-    //let clock;
+    let clock;
 
     beforeEach(() => {
         sandbox.stub(StatsValues, "getValues");
         sandbox.stub(VisibleLayer, "get");
-        //clock = sinon.useFakeTimers();
+        clock = sinon.useFakeTimers();
         defaultSettings = {
             pages: [
                 {
@@ -46,7 +46,7 @@ describe("GMI", () => {
     });
 
     afterEach(() => {
-        //clock = sinon.restore();
+        clock = sinon.restore();
         sandbox.restore();
     });
 
@@ -181,6 +181,21 @@ describe("GMI", () => {
             gmiModule.setGmi(defaultSettings, fakeWindow);
             StatsValues.getValues.returns({ action_name: "timer", action_type: "heartbeat" });
             gmiModule.startStatsTracking();
+        });
+
+        it("fires the stats heartbeat every 15 seconds", () => {
+            clock.tick(15 * 1000);
+            sandbox.assert.calledOnce(fakeGmiObject.sendStatsEvent);
+            clock.tick(15 * 1000);
+            sandbox.assert.calledTwice(fakeGmiObject.sendStatsEvent);
+            clock.tick(15 * 1000);
+            sandbox.assert.calledThrice(fakeGmiObject.sendStatsEvent);
+        });
+
+        it("passes the correct params to the stats heartbeat", () => {
+            const expectedAdditonalParams = { action_name: "timer", action_type: "heartbeat", heartbeat_period: 15 };
+            clock.tick(15 * 1000);
+            sandbox.assert.calledWith(fakeGmiObject.sendStatsEvent, "timer", "heartbeat", expectedAdditonalParams);
         });
     });
 });
