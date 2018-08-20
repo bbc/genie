@@ -2,7 +2,9 @@
 
 | Version | Description |
 |---------|-------------|
-| Unreleased | |
+| UNRELEASED | |
+| | |
+| 1.0.0| |
 | | Prevents long press on gel buttons for iOS.  |
 | | Add local eslint rule loader and Genie specific rules file with lockdown for Phaser Timer requirements  |
 | | Fixed IE11 and Edge bug where tabbing out of game then back again pauses game and does not unpause
