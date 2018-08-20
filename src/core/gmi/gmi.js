@@ -41,15 +41,15 @@ const getDefaultGlobals = () => {
     };
 };
 
-//const startHeartbeat = () => {
-//    const beatPeriodSec = 15;
-//    const intervalPeriodMilliSec = beatPeriodSec * 1000;
-//
-//    // eslint-disable-next-line local-rules/disallow-timers
-//    setInterval(function beatingHeart() {
-//        sendStats("heartbeat", { heartbeat_period: beatPeriodSec });
-//    }, intervalPeriodMilliSec);
-//};
+const startHeartbeat = () => {
+    const beatPeriodSec = 15;
+    const intervalPeriodMilliSec = beatPeriodSec * 1000;
+
+    // eslint-disable-next-line local-rules/disallow-timers
+    setInterval(function beatingHeart() {
+        sendStats("heartbeat", { heartbeat_period: beatPeriodSec });
+    }, intervalPeriodMilliSec);
+};
 
 export const sendStats = (actionKey, additionalParams) => {
     const visibleLayer = VisibleLayer.get(gameInstance, gameContext);
@@ -61,7 +61,7 @@ export const sendStats = (actionKey, additionalParams) => {
 export const startStatsTracking = (game, context) => {
     gameInstance = game;
     gameContext = context;
-    //startHeartbeat();
+    startHeartbeat();
 };
 
 export const setGmi = (customSettings, windowObj) => {
