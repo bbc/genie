@@ -15,7 +15,7 @@ describe("GMI", () => {
     beforeEach(() => {
         sandbox.stub(StatsValues, "getValues");
         sandbox.stub(VisibleLayer, "get");
-       //clock = sinon.useFakeTimers();
+        //clock = sinon.useFakeTimers();
         defaultSettings = {
             pages: [
                 {
