@@ -46,9 +46,9 @@ const startHeartbeat = () => {
     const intervalPeriodMilliSec = beatPeriodSec * 1000;
 
     // eslint-disable-next-line local-rules/disallow-timers
-    setInterval(function beatingHeart() {
-        sendStats("heartbeat", { heartbeat_period: beatPeriodSec });
-    }, intervalPeriodMilliSec);
+    //setInterval(function beatingHeart() {
+    //    sendStats("heartbeat", { heartbeat_period: beatPeriodSec });
+    //}, intervalPeriodMilliSec);
 };
 
 export const sendStats = (actionKey, additionalParams) => {
