@@ -3,7 +3,6 @@ import * as StatsValues from "./stats-values.js";
 import * as VisibleLayer from "../visible-layer.js";
 
 export let gmi = {};
-let settings;
 let gameInstance;
 let gameContext;
 
@@ -54,13 +53,12 @@ const startHeartbeat = () => {
 
 export const sendStats = (actionKey, additionalParams) => {
     const visibleLayer = VisibleLayer.get(gameInstance, gameContext);
-    const statsValues = StatsValues.getValues(actionKey, settings, visibleLayer);
+    const statsValues = StatsValues.getValues(actionKey, gmi.getAllSettings(), visibleLayer);
     const params = fp.merge(statsValues, additionalParams);
     gmi.sendStatsEvent(params.action_name, params.action_type, params);
 };
 
 export const startStatsTracking = (game, context) => {
-    settings = gmi.getAllSettings();
     gameInstance = game;
     gameContext = context;
     startHeartbeat();
