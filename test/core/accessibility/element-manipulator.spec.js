@@ -76,6 +76,10 @@ describe("element manipulator", () => {
                 expect(element.style.cursor).to.eq("default");
             });
 
+            it("moves the element to the bottom", () => {
+                expect(element.style["z-index"]).to.eq(-1);
+            });
+
             it("removes click event from element", () => {
                 sandbox.assert.called(element.removeEventListener);
                 sandbox.assert.calledWith(element.removeEventListener, "click", button.elementEvents.click);

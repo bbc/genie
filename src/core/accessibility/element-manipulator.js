@@ -7,6 +7,7 @@ export const hideAndDisableElement = el => {
         el.addEventListener("blur", resetElement);
         el.classList.add("hide-focus-ring");
         el.style.cursor = "default";
+        el.style["z-index"] = -1;
         el.removeEventListener("click", button.elementEvents.click);
         el.removeEventListener("keyup", button.elementEvents.keyup);
         setElementAsHiddenAndDisabled(el);

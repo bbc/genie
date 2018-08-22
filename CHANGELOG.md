@@ -4,6 +4,7 @@
 |---------|-------------|
 | UNRELEASED | |
 | | Prevent double tap zoom in developer pages. |
+| | Accessibility cleardown fix (moves lingering buttons to the back). |
 | 1.0.0| |
 | | Prevents long press on gel buttons for iOS.  |
 | | Add local eslint rule loader and Genie specific rules file with lockdown for Phaser Timer requirements.  |
