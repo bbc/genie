@@ -10,8 +10,8 @@
         "url": "https://github.com/bbc/childrens-games-genie"
     },
     "dependencies": {
-        "babel-core": "^6.26.0",
-        "babel-loader": "^7.1.4",
+        "babel-core": "^6.26.3",
+        "babel-loader": "^7.1.5",
         "babel-preset-env": "^1.6.1",
         "babel-polyfill": "^6.26.0",
         "expose-loader": "^0.7.5",
@@ -20,7 +20,7 @@
     },
     "devDependencies": {
         "chai": "^4.1.2",
-        "eslint": "^4.18.2",
+        "eslint": "^5.4.0",
         "eslint-config-prettier": "^2.9.0",
         "eslint-config-standard": "^11.0.0",
         "eslint-plugin-import": "^2.9.0",
@@ -43,18 +43,17 @@
         "karma-sourcemap-loader": "^0.3.7",
         "karma-webpack": "^3.0.0",
         "live-server": "^1.2.0",
-        "local-web-server": "^2.5.6",
+        "local-web-server": "^2.6.0",
         "mocha": "^4.1.0",
         "prettier": "^1.11.1",
         "sinon": "^6.0.1",
-        "webpack": "^4.2.0",
-        "webpack-cli": "^2.0.12",
-        "webpack-dev-server": "^3.1.4",
+        "webpack": "^4.16.5",
+        "webpack-cli": "^3.1.0",
+        "webpack-dev-server": "^3.1.5",
         "webpack-visualizer-plugin": "^0.1.11"
     },
     "scripts": {
         "start": "ws --config-file dev/scripts/web-config.js",
-        "watch": "live-server --no-browser --entry-file=dev/index.dev.html --watch=./src --middleware=$PWD/dev/rewrite.js",
         "watch": "live-server --no-browser --entry-file=dev/index.dev.html --watch=./src --middleware=$PWD/dev/scripts/rewrite.js",
         "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js --env.genieCore",
         "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
