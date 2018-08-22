@@ -17,6 +17,9 @@ module.exports = env => {
             publicPath: "output",
             filename: "main.js",
         },
+        resolve: {
+            symlinks: false,
+        },
         module: {
             rules: [
                 { test: /\.js$/, use: ["babel-loader"], include: path.resolve("src") },
