@@ -61,11 +61,16 @@ const stopCurrentMusic = game => {
     }
 
     fadingMusic = Assets.backgroundMusic;
-    fadingMusic.onFadeComplete.addOnce(() => {
+    if (fadingMusic.isDecoding) {
+        fadingMusic.stop();
         game.sound.remove(fadingMusic);
-        fadingMusic = undefined;
-    });
-    fadingMusic.fadeOut(SOUND_FADE_PERIOD / 2);
+    } else {
+        fadingMusic.onFadeComplete.addOnce(() => {
+            game.sound.remove(fadingMusic);
+            fadingMusic = undefined;
+        });
+        fadingMusic.fadeOut(SOUND_FADE_PERIOD / 2);
+    }
 };
 
 export { Assets, setButtonClickSound, setupScreenMusic, SOUND_FADE_PERIOD };

@@ -295,5 +295,41 @@ describe("Game Sound", () => {
                 sinon.assert.calledOnce(tweenStartSpy);
             });
         });
+
+        describe("if user navigates to another screen before music has finished decoding", () => {
+            let game;
+            let existingAudioFadeOutSpy;
+            let previousAudioStopSpy;
+
+            beforeEach(() => {
+                game = Game.Stub;
+                sandbox.stub(game.sound, "remove");
+                existingAudioFadeOutSpy = sandbox.spy();
+                previousAudioStopSpy = sandbox.spy();
+                GameSound.Assets.backgroundMusic = {
+                    isDecoding: true,
+                    stop: previousAudioStopSpy,
+                    onFadeComplete: { addOnce: () => {} },
+                    fadeOut: () => {},
+                };
+                sandbox.stub(game.add, "audio").returns({
+                    fadeIn: sandbox.stub(),
+                    fadeOut: existingAudioFadeOutSpy,
+                });
+                GameSound.setupScreenMusic(game, { music: "test/music" });
+            });
+
+            it("stops current music immediately", () => {
+                sandbox.assert.calledOnce(previousAudioStopSpy);
+            });
+
+            it("does not fade out current music", () => {
+                sandbox.assert.notCalled(existingAudioFadeOutSpy);
+            });
+
+            it("removes fadingMusic", () => {
+                sandbox.assert.calledOnce(game.sound.remove);
+            });
+        });
     });
 });
