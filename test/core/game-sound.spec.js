@@ -296,7 +296,7 @@ describe("Game Sound", () => {
             });
         });
 
-        describe("if user navigates to another screen before music has finished decoding", () => {
+        describe("if user navigates to another screen and music has NOT finished decoding", () => {
             let game;
             let existingAudioFadeOutSpy;
             let previousAudioStopSpy;
