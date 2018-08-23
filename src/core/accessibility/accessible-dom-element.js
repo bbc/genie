@@ -22,6 +22,7 @@ export function accessibleDomElement(options) {
         el.setAttribute("role", "button");
         el.style.position = "absolute";
         el.style.cursor = "pointer";
+        //el.style.touchAction = "manipulation";
 
         el.innerHTML = options.text || "";
         if (options.ariaLabel) {

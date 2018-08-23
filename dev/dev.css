@@ -49,7 +49,6 @@ body {
     width: 100%;
     height: 100%;
     background: #000 no-repeat scroll center center;
-    overflow:hidden;
 }
 
 #local-game-holder {
