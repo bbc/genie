@@ -28,13 +28,11 @@ const isAlreadyPlaying = audioKey => {
 };
 
 const startMusic = (game, audioKey) => {
-    let music;
-
-    if (audioKey) {
-        music = game.add.audio(audioKey);
-    } else {
+    if (!audioKey) {
         return;
     }
+
+    let music = game.add.audio(audioKey);
 
     if (fadingMusic) {
         fadeIn(music);
