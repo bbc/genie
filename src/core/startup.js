@@ -68,7 +68,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
         loadFonts(game, onFontsLoaded);
         a11y.setup(game.canvas.parentElement);
 
-        fullscreen.listenForTap(true, game.canvas.parentElement, game)
+        fullscreen.listenForTap(true, game.canvas.parentElement, game);
     }
 }
 
