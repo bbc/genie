@@ -11,9 +11,7 @@ const setButtonClickSound = (game, audioKey) => {
 };
 
 const setupScreenMusic = (game, themeScreenConfig = {}) => {
-    if (isAlreadyPlaying(themeScreenConfig.music)) {
-        return;
-    }
+    if (isAlreadyPlaying(themeScreenConfig.music)) return;
 
     stopCurrentMusic(game);
     Assets.backgroundMusic = startMusic(game, themeScreenConfig.music);
@@ -28,9 +26,7 @@ const isAlreadyPlaying = audioKey => {
 };
 
 const startMusic = (game, audioKey) => {
-    if (!audioKey) {
-        return;
-    }
+    if (!audioKey) return;
 
     let music = game.add.audio(audioKey);
 

@@ -109,9 +109,6 @@ describe("Game Sound", () => {
                 addAudioSpy = sandbox.stub(game.add, "audio").returns({
                     loopFull: newAudioLoopSpy,
                     fadeIn: newAudioFadeInSpy,
-                    //onDecoded: {
-                    //    add: sandbox.stub(),
-                    //},
                     isDecoded: true,
                 });
                 const screenConfig = { music: "test/music" };
