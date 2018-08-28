@@ -23,6 +23,7 @@ const Stub = {
     canvas: {
         parentElement: {
             appendChild: () => {},
+            addEventListener: () => {},
         },
         setAttribute: () => {},
     },
