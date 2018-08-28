@@ -69,7 +69,7 @@ const stopCurrentMusic = game => {
 
     fadingMusic = Assets.backgroundMusic;
 
-    if (fadingMusic.isDecoding) { // is false
+    if (fadingMusic.isDecoding) {
         fadingMusic.stop();
         game.sound.remove(fadingMusic);
 

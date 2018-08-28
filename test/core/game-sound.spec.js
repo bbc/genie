@@ -68,6 +68,9 @@ describe("Game Sound", () => {
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
                     name: "current-music",
+                    onDecoded: {
+                        add: sandbox.stub(),
+                    },
                 };
                 addAudioSpy = sandbox.stub(game.add, "audio");
                 const screenConfig = { music: "current-music" };
@@ -98,11 +101,18 @@ describe("Game Sound", () => {
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
+                    onDecoded: {
+                        add: sandbox.stub(),
+                    },
                 };
                 newAudioLoopSpy = sandbox.spy();
                 addAudioSpy = sandbox.stub(game.add, "audio").returns({
                     loopFull: newAudioLoopSpy,
                     fadeIn: newAudioFadeInSpy,
+                    //onDecoded: {
+                    //    add: sandbox.stub(),
+                    //},
+                    isDecoded: true,
                 });
                 const screenConfig = { music: "test/music" };
                 GameSound.setupScreenMusic(game, screenConfig);
@@ -245,6 +255,9 @@ describe("Game Sound", () => {
                     fadeIn: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: { addOnce: () => {} },
+                    onDecoded: {
+                        add: sandbox.stub(),
+                    },
                 });
                 GameSound.setupScreenMusic(game, { music: "test/music" });
                 GameSound.setupScreenMusic(game, { music: "test/music" });
@@ -279,6 +292,9 @@ describe("Game Sound", () => {
                     onFadeComplete: { addOnce: () => {} },
                     fadeOut: () => {},
                     fadeTween: fadeTweenSpy,
+                    onDecoded: {
+                        add: sandbox.stub(),
+                    },
                 };
                 GameSound.setupScreenMusic(game, undefined);
                 // Simulate phaser stopping all tweens between states
@@ -315,6 +331,9 @@ describe("Game Sound", () => {
                 sandbox.stub(game.add, "audio").returns({
                     fadeIn: sandbox.stub(),
                     fadeOut: existingAudioFadeOutSpy,
+                    onDecoded: {
+                        add: sandbox.stub(),
+                    },
                 });
                 GameSound.setupScreenMusic(game, { music: "test/music" });
             });
