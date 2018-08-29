@@ -19,14 +19,14 @@ describe("fullscreen", () => {
         const mockRoot = document.createElement("div");
         const mockGame = {
             scale: {
-                startFullScreen: sandbox.spy()
-            }
+                startFullScreen: sandbox.spy(),
+            },
         };
 
         fullscreen.listenForTap(mockRoot, mockGame);
 
         mockRoot.dispatchEvent(new Event("touchend"));
-        mockRoot.dispatchEvent(new Event("touchend"));  //second event should be ignored
+        mockRoot.dispatchEvent(new Event("touchend")); //second event should be ignored
 
         sinon.assert.calledOnce(mockGame.scale.startFullScreen);
     });
