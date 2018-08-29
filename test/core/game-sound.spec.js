@@ -64,6 +64,7 @@ describe("Game Sound", () => {
                 game = Game.Stub;
                 existingAudioFadeOutSpy = sandbox.spy();
                 GameSound.Assets.backgroundMusic = {
+                    isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
@@ -98,6 +99,7 @@ describe("Game Sound", () => {
                 existingAudioFadeOutSpy = sandbox.spy();
                 newAudioFadeInSpy = sandbox.spy();
                 GameSound.Assets.backgroundMusic = {
+                    isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
@@ -188,6 +190,7 @@ describe("Game Sound", () => {
                 game = Game.Stub;
                 existingAudioFadeOutSpy = sandbox.spy();
                 GameSound.Assets.backgroundMusic = {
+                    isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
@@ -216,6 +219,7 @@ describe("Game Sound", () => {
                 game = Game.Stub;
                 existingAudioFadeOutSpy = sandbox.spy();
                 GameSound.Assets.backgroundMusic = {
+                    isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
@@ -244,11 +248,13 @@ describe("Game Sound", () => {
                 existingAudioFadeOutSpy = sandbox.spy();
                 previousAudioStopSpy = sandbox.spy();
                 GameSound.Assets.backgroundMusic = {
+                    isPlaying: true,
                     stop: previousAudioStopSpy,
                     onFadeComplete: { addOnce: () => {} },
                     fadeOut: () => {},
                 };
                 sandbox.stub(game.add, "audio").returns({
+                    isPlaying: true,
                     fadeIn: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: { addOnce: () => {} },
@@ -285,6 +291,7 @@ describe("Game Sound", () => {
                     start: tweenStartSpy,
                 };
                 GameSound.Assets.backgroundMusic = {
+                    isPlaying: true,
                     stop: previousAudioStopSpy,
                     onFadeComplete: { addOnce: () => {} },
                     fadeOut: () => {},
@@ -309,23 +316,26 @@ describe("Game Sound", () => {
             });
         });
 
-        describe("if user navigates to another screen and music has NOT finished decoding", () => {
+        describe("if user navigates to another screen and music has NOT started playing", () => {
             let game;
             let existingAudioFadeOutSpy;
             let previousAudioStopSpy;
+            let newAudioFadeInSpy;
 
             beforeEach(() => {
                 game = Game.Stub;
                 sandbox.stub(game.sound, "remove");
                 existingAudioFadeOutSpy = sandbox.spy();
                 previousAudioStopSpy = sandbox.spy();
+                newAudioFadeInSpy = sandbox.spy();
                 GameSound.Assets.backgroundMusic = {
-                    isDecoding: true,
+                    isPlaying: false,
                     stop: previousAudioStopSpy,
                     onFadeComplete: { addOnce: () => {} },
                     fadeOut: () => {},
                 };
                 sandbox.stub(game.add, "audio").returns({
+                    loopFull: newAudioFadeInSpy,
                     fadeIn: sandbox.stub(),
                     fadeOut: existingAudioFadeOutSpy,
                     onDecoded: {
@@ -341,6 +351,10 @@ describe("Game Sound", () => {
 
             it("does not fade out current music", () => {
                 sandbox.assert.notCalled(existingAudioFadeOutSpy);
+            });
+
+            it("starts the new music playing immediately", () => {
+                sandbox.assert.calledOnce(newAudioFadeInSpy);
             });
 
             it("removes fadingMusic", () => {
