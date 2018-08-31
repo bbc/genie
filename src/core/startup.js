@@ -15,6 +15,7 @@ import * as a11y from "./accessibility/accessibility-layer.js";
 import { addCustomStyles } from "./custom-styles.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as qaMode from "./qa/qa-mode.js";
+import * as fullscreen from "./fullscreen.js";
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
@@ -66,6 +67,8 @@ export function startup(settingsConfig = {}, navigationConfig) {
         };
         loadFonts(game, onFontsLoaded);
         a11y.setup(game.canvas.parentElement);
+
+        fullscreen.listenForTap(game.canvas.parentElement, game);
     }
 }
 

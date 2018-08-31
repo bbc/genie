@@ -4,6 +4,8 @@
 |---------|-------------|
 | 1.0.1 | |
 | | Accessibility cleardown fix (moves lingering buttons to the back). |
+| | Use fullscreen api on android. |
+| 1.0.0| |
 | | Fixed module resolution when using `npm link`. |
 | | Fixed a bug where multiple audio tracks would play at the same time. |
 | 1.0.0 | |
