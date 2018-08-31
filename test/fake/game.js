@@ -27,6 +27,13 @@ const Stub = {
         },
         setAttribute: () => {},
     },
+    time: {
+        events: {
+            add: (ms, callback) => {
+                callback();
+            },
+        },
+    },
 };
 
 export { Stub };
