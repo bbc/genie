@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| UNRELEASED | |
+| | Fixed issue where button focus outline was hidden on the results screen. |
 | 1.0.1 | |
 | | Accessibility cleardown fix (moves lingering buttons to the back). |
 | | Use fullscreen api on android. |

@@ -20,6 +20,7 @@ const resetElementToDefault = (el, self) => {
     el.removeEventListener("blur", self);
     el.classList.remove("hide-focus-ring");
     el.style.cursor = "pointer";
+    el.style["z-index"] = null;
     el.addEventListener("click", button.elementEvents.click);
     el.addEventListener("keyup", button.elementEvents.keyup);
     unsetElementAsHiddenAndDisabled(el);
