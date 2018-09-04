@@ -25,25 +25,37 @@ const isAlreadyPlaying = audioKey => {
     return audioKey && Assets.backgroundMusic && audioKey === Assets.backgroundMusic.name;
 };
 
+// Phaser music loop crashes on iOS 9.
+// Use this function to loop sounds instead of the Phaser standard way.
+const loopMusicStart = (music, fade) => {
+    if (fade) {
+        fadeIn(music);
+    } else {
+        music.play();
+    }
+    music.onStop.addOnce(() => loopMusicStart(music));
+};
+
+const loopMusicStop = music => {
+    music.onStop.removeAll();
+    music.stop();
+};
+
 const startMusic = (game, audioKey) => {
     if (!audioKey) return;
 
     let music = game.add.audio(audioKey);
 
-    if (fadingMusic) {
-        fadeIn(music);
-    } else {
-        music.loopFull();
-    }
+    loopMusicStart(music, !!fadingMusic);
 
     return music;
 };
 
 const fadeIn = music => {
     if (music.isDecoded) {
-        music.fadeIn(SOUND_FADE_PERIOD, true);
+        music.fadeIn(SOUND_FADE_PERIOD);
     } else {
-        music.onDecoded.add(() => music.loopFull());
+        music.onDecoded.add(() => loopMusicStart(music));
     }
 };
 
@@ -57,14 +69,14 @@ const stopCurrentMusic = game => {
     }
 
     if (fadingMusic) {
-        fadingMusic.stop();
+        loopMusicStop(fadingMusic);
         game.sound.remove(fadingMusic);
     }
 
     fadingMusic = Assets.backgroundMusic;
 
     if (!fadingMusic.isPlaying) {
-        fadingMusic.stop();
+        loopMusicStop(fadingMusic);
         game.sound.remove(fadingMusic);
         fadingMusic = undefined;
         return;
