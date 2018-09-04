@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import * as Theme from "../../fake/theme.js";
 import * as Game from "../../fake/game.js";
 import * as OverlayLayout from "../../fake/overlay-layout.js";

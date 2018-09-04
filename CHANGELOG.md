@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Added bbc header doc tags to file headers | |
 | 1.0.1 | |
 | | Accessibility cleardown fix (moves lingering buttons to the back). |
 | | Use fullscreen api on android. |
