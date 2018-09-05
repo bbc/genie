@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import { Screen } from "../../../core/screen.js";
 import * as signal from "../../../core/signal-bus.js";
 

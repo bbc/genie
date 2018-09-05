@@ -1,6 +1,8 @@
 /**
- *
- *  @module core/scaler
+ * @module core/scaler
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
  */
 import { calculateMetrics } from "./layout/calculate-metrics.js";
 

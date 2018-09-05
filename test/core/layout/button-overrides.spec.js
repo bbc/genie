@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import { assert } from "chai";
 import { applyButtonOverrides } from "../../../src/core/layout/button-overrides.js";
 

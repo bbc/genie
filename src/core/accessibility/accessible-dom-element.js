@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 export function accessibleDomElement(options) {
     const el = document.createElement("div");
     let events;

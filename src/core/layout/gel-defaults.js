@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import * as howToPlay from "../../components/overlays/how-to-play.js";
 import * as pause from "../../components/overlays/pause.js";
 import { settings, settingsChannel } from "../../core/settings.js";
