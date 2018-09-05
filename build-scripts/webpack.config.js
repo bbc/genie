@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 var path = require("path");
 var dynamicallyExposeGlobals = require("../dev/scripts/dynamicExpose.js");
 
@@ -17,9 +22,12 @@ module.exports = env => {
             publicPath: "output",
             filename: "main.js",
         },
+        resolve: {
+            symlinks: false,
+        },
         module: {
             rules: [
-                { test: /\.js$/, use: ["babel-loader"], include: path.resolve("src") },
+                { test: /\.js$/, use: ["babel-loader"], include: [path.resolve("src"), path.resolve("lib")] },
                 { test: /\.js$/, use: ["babel-loader"], include: path.resolve("node_modules/genie/src") },
                 { test: /pixi\.js/, use: ["expose-loader?PIXI"] },
                 { test: /phaser-split\.js$/, use: ["expose-loader?Phaser"] },

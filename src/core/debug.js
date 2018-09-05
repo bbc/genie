@@ -17,8 +17,10 @@
  *
  * debug.add(this.player, "rgba(255,0,0,1)", false);
  *
- * @author Nick Tipping <nick.tipping@bbc.co.uk>
  * @module core/debug
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
  */
 let enabled = false;
 let bodies = [];

@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import * as Sprite from "./sprite.js";
 import * as Audio from "./audio.js";
 
@@ -23,8 +28,16 @@ const Stub = {
     canvas: {
         parentElement: {
             appendChild: () => {},
+            addEventListener: () => {},
         },
         setAttribute: () => {},
+    },
+    time: {
+        events: {
+            add: (ms, callback) => {
+                callback();
+            },
+        },
     },
 };
 

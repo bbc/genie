@@ -1,6 +1,8 @@
 /**
- *
- *  @module core/scaler
+ * @module core/scaler
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
  */
 import { calculateMetrics } from "./layout/calculate-metrics.js";
 
@@ -20,6 +22,7 @@ export let getMetrics;
 
 export function init(stageHeight, game) {
     game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
 

@@ -4,11 +4,21 @@
 |---------|-------------|
 | UNRELEASED | |
 | | Prevent double tap zoom in developer pages. |
+| | Fixed bug where game crashes on startup on iOS 9 safari. |
+| | Fixed issue where button focus outline was hidden on the results screen. |
+| | Added bbc header doc tags to file headers | |
+| 1.0.1 | |
 | | Accessibility cleardown fix (moves lingering buttons to the back). |
+| | Use fullscreen api on android. |
 | 1.0.0| |
+| | Fixed module resolution when using `npm link`. |
+| | Fixed a bug where multiple audio tracks would play at the same time. |
+| 1.0.0 | |
 | | Prevents long press on gel buttons for iOS.  |
 | | Add local eslint rule loader and Genie specific rules file with lockdown for Phaser Timer requirements.  |
 | | Fixed IE11 and Edge bug where tabbing out of game then back again pauses game and does not unpause.
+| | Add local eslint rule loader and Genie specific rules file with lockdown for Phaser Timer requirements. |
+| | Fixed IE11 and Edge bug where tabbing out of game then back again pauses game and does not unpause. |
 | | Centralised the resetting of accessible elements in the DOM so it no longer has to be called on each screen. |
 | | Fixes numerous issues around tabbing order when changing screens. Mainly for iOS voiceover. |
 | | Adds ability to skip screens for automation. |

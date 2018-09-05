@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import { findButtonByElementId } from "./accessible-buttons.js";
 
 export const hideAndDisableElement = el => {
@@ -20,6 +25,7 @@ const resetElementToDefault = (el, self) => {
     el.removeEventListener("blur", self);
     el.classList.remove("hide-focus-ring");
     el.style.cursor = "pointer";
+    el.style["z-index"] = null;
     el.addEventListener("click", button.elementEvents.click);
     el.addEventListener("keyup", button.elementEvents.keyup);
     unsetElementAsHiddenAndDisabled(el);

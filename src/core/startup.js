@@ -3,6 +3,9 @@
  * It also instantiates the `Context` object.
  *
  * @module core/startup
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0 Apache-2.0
  */
 import { settings, settingsChannel } from "../core/settings.js";
 import * as signal from "../core/signal-bus.js";
@@ -15,6 +18,7 @@ import * as a11y from "./accessibility/accessibility-layer.js";
 import { addCustomStyles } from "./custom-styles.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as qaMode from "./qa/qa-mode.js";
+import * as fullscreen from "./fullscreen.js";
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
@@ -66,6 +70,8 @@ export function startup(settingsConfig = {}, navigationConfig) {
         };
         loadFonts(game, onFontsLoaded);
         a11y.setup(game.canvas.parentElement);
+
+        fullscreen.listenForTap(game.canvas.parentElement, game);
     }
 }
 

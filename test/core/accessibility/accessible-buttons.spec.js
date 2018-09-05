@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import { expect } from "chai";
 import { Buttons, findButtonByElementId } from "../../../src/core/accessibility/accessible-buttons.js";
 

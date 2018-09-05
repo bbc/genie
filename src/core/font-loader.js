@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 const REITH_FONT_CSS = "https://gel.files.bbci.co.uk/r2.302/bbc-reith.css";
 
 export const loadFonts = (game, done) => {

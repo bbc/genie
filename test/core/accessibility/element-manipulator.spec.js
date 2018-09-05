@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import { expect } from "chai";
 import * as sinon from "sinon";
 import * as accessibleButtons from "../../../src/core/accessibility/accessible-buttons.js";
@@ -114,6 +119,10 @@ describe("element manipulator", () => {
 
         it("sets the cursor style to pointer", () => {
             expect(element.style.cursor).to.eq("pointer");
+        });
+
+        it("resets the z-index", () => {
+            expect(element.style["z-index"]).to.eq(null);
         });
 
         it("re-adds click event listener", () => {

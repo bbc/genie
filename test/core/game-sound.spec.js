@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import * as sinon from "sinon";
 import { assert, expect } from "chai";
 import * as Game from "../fake/game.js";
@@ -28,30 +33,33 @@ describe("Game Sound", () => {
     describe("#setupScreenMusic", () => {
         describe("when no music is playing", () => {
             let game;
-            let newAudioLoopSpy;
-            let addAudioSpy;
+            let music;
 
             beforeEach(() => {
                 game = Game.Stub;
-                newAudioLoopSpy = sandbox.spy();
-                addAudioSpy = sandbox.stub(game.add, "audio").returns({
-                    loopFull: newAudioLoopSpy,
-                });
+                music = {
+                    play: sandbox.stub(),
+                    onStop: {
+                        addOnce: sandbox.stub(),
+                    },
+                };
+                sandbox.stub(game.add, "audio").returns(music);
                 const screenConfig = { music: "test/music" };
                 GameSound.setupScreenMusic(game, screenConfig);
             });
 
             it("sets the background music to the asset that matches the provided key", () => {
-                sinon.assert.calledOnce(addAudioSpy);
-                sinon.assert.calledWith(addAudioSpy, "test/music");
+                sinon.assert.calledOnce(game.add.audio);
+                sinon.assert.calledWith(game.add.audio, "test/music");
             });
 
             it("starts the background music playing in a loop", () => {
-                sinon.assert.calledOnce(newAudioLoopSpy);
+                sinon.assert.calledOnce(music.play);
+                sinon.assert.calledOnce(music.onStop.addOnce.withArgs(sandbox.match.func));
             });
 
             it("sets the new background music -> starts the new music", () => {
-                sinon.assert.callOrder(addAudioSpy, newAudioLoopSpy);
+                sinon.assert.callOrder(game.add.audio, music.play);
             });
         });
 
@@ -64,10 +72,14 @@ describe("Game Sound", () => {
                 game = Game.Stub;
                 existingAudioFadeOutSpy = sandbox.spy();
                 GameSound.Assets.backgroundMusic = {
+                    isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
                     name: "current-music",
+                    onDecoded: {
+                        add: sandbox.stub(),
+                    },
                 };
                 addAudioSpy = sandbox.stub(game.add, "audio");
                 const screenConfig = { music: "current-music" };
@@ -85,64 +97,69 @@ describe("Game Sound", () => {
 
         describe("when the new music differs from the currently playing music", () => {
             let game;
-            let existingAudioFadeOutSpy;
-            let newAudioLoopSpy;
-            let newAudioFadeInSpy;
-            let addAudioSpy;
+            let music;
+            let musicFadeOut;
 
             beforeEach(() => {
                 game = Game.Stub;
-                existingAudioFadeOutSpy = sandbox.spy();
-                newAudioFadeInSpy = sandbox.spy();
+                musicFadeOut = sandbox.stub();
                 GameSound.Assets.backgroundMusic = {
-                    loopFull: () => {},
-                    fadeOut: existingAudioFadeOutSpy,
+                    isPlaying: true,
+                    fadeOut: musicFadeOut,
                     onFadeComplete: PhaserSignal.Stub,
+                    onDecoded: {
+                        add: sandbox.stub(),
+                    },
                 };
-                newAudioLoopSpy = sandbox.spy();
-                addAudioSpy = sandbox.stub(game.add, "audio").returns({
-                    loopFull: newAudioLoopSpy,
-                    fadeIn: newAudioFadeInSpy,
-                });
-                const screenConfig = { music: "test/music" };
-                GameSound.setupScreenMusic(game, screenConfig);
+                music = {
+                    play: sandbox.stub(),
+                    fadeIn: sandbox.stub(),
+                    isDecoded: true,
+                    onStop: {
+                        addOnce: sandbox.stub(),
+                    },
+                };
+                sandbox.stub(game.add, "audio").returns(music);
+                GameSound.setupScreenMusic(game, { music: "test/music" });
             });
 
             it("fades the current background music out", () => {
-                sinon.assert.calledOnce(existingAudioFadeOutSpy);
-                sinon.assert.calledWith(existingAudioFadeOutSpy, GameSound.SOUND_FADE_PERIOD / 2);
+                sinon.assert.calledOnce(musicFadeOut);
+                sinon.assert.calledWith(musicFadeOut, GameSound.SOUND_FADE_PERIOD / 2);
             });
 
             it("sets the background music to the asset that matches the provided key", () => {
-                sinon.assert.calledOnce(addAudioSpy);
-                sinon.assert.calledWith(addAudioSpy, "test/music");
+                sinon.assert.calledOnce(game.add.audio);
+                sinon.assert.calledWith(game.add.audio, "test/music");
             });
 
             it("fades in the new background music and starts it playing in a loop", () => {
-                sinon.assert.calledOnce(newAudioFadeInSpy);
-                sinon.assert.calledWith(newAudioFadeInSpy, GameSound.SOUND_FADE_PERIOD, true);
+                sinon.assert.calledOnce(music.fadeIn);
+                sinon.assert.calledWith(music.fadeIn, GameSound.SOUND_FADE_PERIOD);
             });
 
             it("stops the current music -> sets the new background music -> fades the new music in", () => {
-                sinon.assert.callOrder(existingAudioFadeOutSpy, addAudioSpy, newAudioFadeInSpy);
+                sinon.assert.callOrder(musicFadeOut, game.add.audio, music.fadeIn);
             });
         });
 
         describe("when the SoundManager and device are both using the Audio tag instead of Web Audio", () => {
             let game;
+            let music;
 
             beforeEach(() => {
                 game = Game.Stub;
                 game.sound.mute = true;
-                game.add.audio = () => {
-                    return {
-                        loopFull: () => {},
-                        mute: true,
-                        usingAudioTag: true,
-                    };
+                music = {
+                    play: sandbox.stub(),
+                    onStop: {
+                        addOnce: sandbox.stub(),
+                    },
+                    mute: true,
+                    usingAudioTag: true,
                 };
-                const screenConfig = { music: "test/music" };
-                GameSound.setupScreenMusic(game, screenConfig);
+                sandbox.stub(game.add, "audio").returns(music);
+                GameSound.setupScreenMusic(game, { music: "test/music" });
             });
 
             it("sets the mute value of the background music to match the mute value of the game sound", () => {
@@ -152,19 +169,21 @@ describe("Game Sound", () => {
 
         describe("when the SoundManager and device are both using Web Audio", () => {
             let game;
+            let music;
 
             beforeEach(() => {
                 game = Game.Stub;
                 game.sound.mute = true;
-                game.add.audio = () => {
-                    return {
-                        loopFull: () => {},
-                        mute: false,
-                        usingAudioTag: false,
-                    };
+                music = {
+                    play: sandbox.stub(),
+                    onStop: {
+                        addOnce: sandbox.stub(),
+                    },
+                    mute: false,
+                    usingAudioTag: false,
                 };
-                const screenConfig = { music: "test/music" };
-                GameSound.setupScreenMusic(game, screenConfig);
+                sandbox.stub(game.add, "audio").returns(music);
+                GameSound.setupScreenMusic(game, { music: "test/music" });
             });
 
             it("does not change the mute value of the background music", () => {
@@ -181,6 +200,7 @@ describe("Game Sound", () => {
                 game = Game.Stub;
                 existingAudioFadeOutSpy = sandbox.spy();
                 GameSound.Assets.backgroundMusic = {
+                    isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
@@ -209,6 +229,7 @@ describe("Game Sound", () => {
                 game = Game.Stub;
                 existingAudioFadeOutSpy = sandbox.spy();
                 GameSound.Assets.backgroundMusic = {
+                    isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
@@ -229,28 +250,44 @@ describe("Game Sound", () => {
 
         describe("if some previous music is still fading out and we need to fade out current music", () => {
             let game;
+            let music;
             let existingAudioFadeOutSpy;
             let previousAudioStopSpy;
+            let musicRemoveAll;
 
             beforeEach(() => {
                 game = Game.Stub;
                 existingAudioFadeOutSpy = sandbox.spy();
                 previousAudioStopSpy = sandbox.spy();
+                musicRemoveAll = sandbox.stub();
                 GameSound.Assets.backgroundMusic = {
+                    isPlaying: true,
                     stop: previousAudioStopSpy,
                     onFadeComplete: { addOnce: () => {} },
                     fadeOut: () => {},
+                    onStop: {
+                        removeAll: musicRemoveAll,
+                    },
                 };
-                sandbox.stub(game.add, "audio").returns({
+                music = {
+                    isPlaying: true,
                     fadeIn: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: { addOnce: () => {} },
-                });
+                    onDecoded: {
+                        add: sandbox.stub(),
+                    },
+                    onStop: {
+                        addOnce: sandbox.stub(),
+                    },
+                };
+                sandbox.stub(game.add, "audio").returns(music);
                 GameSound.setupScreenMusic(game, { music: "test/music" });
                 GameSound.setupScreenMusic(game, { music: "test/music" });
             });
 
             it("will stop the previous music", () => {
+                sinon.assert.calledOnce(musicRemoveAll);
                 sinon.assert.calledOnce(previousAudioStopSpy);
             });
 
@@ -275,10 +312,14 @@ describe("Game Sound", () => {
                     start: tweenStartSpy,
                 };
                 GameSound.Assets.backgroundMusic = {
+                    isPlaying: true,
                     stop: previousAudioStopSpy,
                     onFadeComplete: { addOnce: () => {} },
                     fadeOut: () => {},
                     fadeTween: fadeTweenSpy,
+                    onDecoded: {
+                        add: sandbox.stub(),
+                    },
                 };
                 GameSound.setupScreenMusic(game, undefined);
                 // Simulate phaser stopping all tweens between states
@@ -293,6 +334,61 @@ describe("Game Sound", () => {
             it("will restart the fading music's tween", () => {
                 assert.strictEqual(fadeTweenSpy.pendingDelete, false);
                 sinon.assert.calledOnce(tweenStartSpy);
+            });
+        });
+
+        describe("if user navigates to another screen and music has NOT started playing", () => {
+            let game;
+            let music;
+            let existingAudioFadeOutSpy;
+            let previousAudioStopSpy;
+            let musicRemoveAll;
+
+            beforeEach(() => {
+                game = Game.Stub;
+                sandbox.stub(game.sound, "remove");
+                existingAudioFadeOutSpy = sandbox.spy();
+                previousAudioStopSpy = sandbox.spy();
+                musicRemoveAll = sandbox.stub();
+                GameSound.Assets.backgroundMusic = {
+                    isPlaying: false,
+                    stop: previousAudioStopSpy,
+                    onFadeComplete: { addOnce: () => {} },
+                    fadeOut: () => {},
+                    onStop: {
+                        removeAll: musicRemoveAll,
+                    },
+                };
+                music = {
+                    fadeIn: sandbox.stub(),
+                    fadeOut: existingAudioFadeOutSpy,
+                    onDecoded: {
+                        add: sandbox.stub(),
+                    },
+                    play: sandbox.stub(),
+                    onStop: {
+                        addOnce: sandbox.stub(),
+                    },
+                };
+                sandbox.stub(game.add, "audio").returns(music);
+                GameSound.setupScreenMusic(game, { music: "test/music" });
+            });
+
+            it("stops current music immediately", () => {
+                sandbox.assert.calledOnce(musicRemoveAll);
+                sandbox.assert.calledOnce(previousAudioStopSpy);
+            });
+
+            it("does not fade out current music", () => {
+                sandbox.assert.notCalled(existingAudioFadeOutSpy);
+            });
+
+            it("starts the new music playing immediately", () => {
+                sandbox.assert.calledOnce(music.play);
+            });
+
+            it("removes fadingMusic", () => {
+                sandbox.assert.calledOnce(game.sound.remove);
             });
         });
     });

@@ -1,6 +1,9 @@
 /**
  * Overlay Layout
  * @module components/overlays/overlay-layout
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
  */
 
 import fp from "../../../lib/lodash/fp/fp.js";
