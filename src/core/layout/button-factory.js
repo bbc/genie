@@ -2,6 +2,9 @@
  * A Gel Button Factory exists on each layout group. It has one method {@link module:layout/button-factory.createButton createButton}
  *
  * @module core/layout/button-factory
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as signal from "../../core/signal-bus.js";

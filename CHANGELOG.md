@@ -4,6 +4,7 @@
 |---------|-------------|
 | UNRELEASED | |
 | | Enables dynamic scripts to work in IE11 for local dev. |
+| | Added bbc header doc tags to file headers | |
 | 1.0.1 | |
 | | Accessibility cleardown fix (moves lingering buttons to the back). |
 | | Use fullscreen api on android. |

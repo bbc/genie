@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as StatsValues from "./stats-values.js";
 import * as VisibleLayer from "../visible-layer.js";

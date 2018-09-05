@@ -2,6 +2,9 @@
  * Loadscreen loads in the game's assets.
  *
  * @module components/loadscreen
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
  */
 
 import _ from "../../lib/lodash/lodash.js";

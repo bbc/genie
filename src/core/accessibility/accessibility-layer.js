@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import { Buttons } from "./accessible-buttons.js";
 import { hideAndDisableElement } from "./element-manipulator.js";
 

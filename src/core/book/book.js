@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import * as Page from "./page.js";
 import * as Scenery from "./scenery.js";
 import * as Button from "./button.js";
