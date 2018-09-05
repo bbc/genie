@@ -14,6 +14,9 @@
  * this.scene.addLayout(["exit", "howToPlay", "play", "audio", "settings"]);
  *
  * @module core/scene
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
  */
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
