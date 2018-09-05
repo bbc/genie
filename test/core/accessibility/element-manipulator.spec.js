@@ -121,6 +121,10 @@ describe("element manipulator", () => {
             expect(element.style.cursor).to.eq("pointer");
         });
 
+        it("resets the z-index", () => {
+            expect(element.style["z-index"]).to.eq(null);
+        });
+
         it("re-adds click event listener", () => {
             sandbox.assert.calledOnce(element.addEventListener.withArgs("click", button.elementEvents.click));
         });
