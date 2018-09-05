@@ -18,7 +18,6 @@ request.onload = function() {
     let global;
     for (global in globals) {
         if (globals.hasOwnProperty(global)) {
-            // console.log("Add script:", globals[global]);
             dynamicallyLoadScript(globals[global]);
         }
     }
