@@ -117,7 +117,7 @@ describe("#accessibleDomElement", () => {
             expect(element.style.cursor).to.equal("pointer");
         });
 
-        it("sets touch action to the correct value", () => {
+        it("sets touch action to prevent iOS tap zoom", () => {
             accessibleDomElement(options);
             expect(element.style["touch-action"]).to.equal("manipulation");
         });
