@@ -3,9 +3,10 @@
 | Version | Description |
 |---------|-------------|
 | UNRELEASED | |
+| | Enables dynamic scripts to work in IE11 for local dev. |
 | | Fixed bug where game crashes on startup on iOS 9 safari. |
 | | Fixed issue where button focus outline was hidden on the results screen. |
-| | Added bbc header doc tags to file headers | |
+| | Added bbc header doc tags to file headers. | |
 | 1.0.1 | |
 | | Accessibility cleardown fix (moves lingering buttons to the back). |
 | | Use fullscreen api on android. |
