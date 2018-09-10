@@ -117,6 +117,11 @@ describe("#accessibleDomElement", () => {
             expect(element.style.cursor).to.equal("pointer");
         });
 
+        it("sets touch action to prevent iOS tap zoom", () => {
+            accessibleDomElement(options);
+            expect(element.style["touch-action"]).to.equal("manipulation");
+        });
+
         it("sets inner text to be empty by default", () => {
             accessibleDomElement(options);
             expect(element.innerHTML).to.equal("");
@@ -137,31 +142,43 @@ describe("#accessibleDomElement", () => {
         it("adds an event listener for click", () => {
             const eventListener = sandbox.stub(element, "addEventListener");
             accessibleDomElement(options);
-            sinon.assert.calledOnce(eventListener.withArgs("click", sinon.match.func));
+            sinon.assert.calledOnce(eventListener.withArgs("click", options.onClick));
         });
 
         it("adds an event listener for mouseover", () => {
             const eventListener = sandbox.stub(element, "addEventListener");
             accessibleDomElement(options);
-            sinon.assert.calledOnce(eventListener.withArgs("mouseover", sinon.match.func));
+            sinon.assert.calledOnce(eventListener.withArgs("mouseover", options.onMouseOver));
         });
 
         it("adds an event listener for mouseleave", () => {
             const eventListener = sandbox.stub(element, "addEventListener");
             accessibleDomElement(options);
-            sinon.assert.calledOnce(eventListener.withArgs("mouseleave", sinon.match.func));
+            sinon.assert.calledOnce(eventListener.withArgs("mouseleave", options.onMouseOut));
         });
 
         it("adds an event listener for focus", () => {
             const eventListener = sandbox.stub(element, "addEventListener");
             accessibleDomElement(options);
-            sinon.assert.calledOnce(eventListener.withArgs("focus", sinon.match.func));
+            sinon.assert.calledOnce(eventListener.withArgs("focus", options.onMouseOver));
         });
 
         it("adds an event listener for blur", () => {
             const eventListener = sandbox.stub(element, "addEventListener");
             accessibleDomElement(options);
-            sinon.assert.calledOnce(eventListener.withArgs("blur", sinon.match.func));
+            sinon.assert.calledOnce(eventListener.withArgs("blur", options.onMouseOut));
+        });
+
+        it("adds an event listener for touchmove to disable pinch zoom", () => {
+            const eventListener = sandbox.stub(element, "addEventListener");
+            accessibleDomElement(options);
+
+            const touchMoveCallback = eventListener.getCall(6).args[1];
+            const mockEvent = { preventDefault: sandbox.spy() };
+            touchMoveCallback(mockEvent);
+
+            sinon.assert.calledOnce(eventListener.withArgs("touchmove"));
+            sinon.assert.calledOnce(mockEvent.preventDefault);
         });
 
         it("returns an object of element events for this element", () => {

@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| UNRELEASED | |
+| | Prevent double tap zoom in developer pages. |
 | 1.0.2 | |
 | | Enables dynamic scripts to work in IE11 for local dev. |
 | | Fixed bug where game crashes on startup on iOS 9 safari. |

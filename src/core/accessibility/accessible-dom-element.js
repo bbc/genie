@@ -25,6 +25,8 @@ export function accessibleDomElement(options) {
         el.setAttribute("role", "button");
         el.style.position = "absolute";
         el.style.cursor = "pointer";
+        el.style.touchAction = "manipulation";
+
         el.innerHTML = options.text || "";
         if (options.ariaLabel) {
             el.setAttribute("aria-label", options.ariaLabel);
@@ -43,6 +45,8 @@ export function accessibleDomElement(options) {
         el.addEventListener("mouseleave", options.onMouseOut);
         el.addEventListener("focus", options.onMouseOver);
         el.addEventListener("blur", options.onMouseOut);
+
+        el.addEventListener("touchmove", e => e.preventDefault());
 
         return { keyup: keyUp, click: options.onClick };
     }
