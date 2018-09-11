@@ -27,8 +27,10 @@ export class GelButton extends Phaser.Button {
     }
 
     setHitArea(metrics) {
-        const width = fp.max([this.width, metrics.hitMin]);
-        const height = fp.max([this.height, metrics.hitMin]);
+        const hitPadding = fp.max([metrics.hitMin - this.width, metrics.hitMin - this.height, 0]);
+
+        const width = this.width + hitPadding;
+        const height = this.height + hitPadding;
         this.hitArea = new Phaser.Rectangle(-width / 2, -height / 2, width, height);
     }
 

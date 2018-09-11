@@ -24,6 +24,7 @@
  */
 let enabled = false;
 let bodies = [];
+let groups = [];
 
 /**
  * Swap between enabled and disabled debug modes.
@@ -39,15 +40,22 @@ export const enable = (game, bool = true) => {
 
 /**
  *
- * @param {Object} body - the sprite whose physics body
+ * @param {Object} item - Phaser.Sprite (whose physics body we want to show) or Phaser.Group
  * @param {String} color - colour of the debug overlay
  * @param {Boolean} filled - draw an outline or a solid block
  */
-export const add = (body, color = "rgba(0,255,0,0.4)", filled = true) => {
-    bodies.push([body, color, filled]);
+export const add = (item, color = "rgba(0,255,0,0.4)", filled = true) => {
+    if (item instanceof Phaser.Group) {
+        groups.push({ item, color, filled });
+    } else if (item instanceof Phaser.Sprite) {
+        bodies.push([item, color, filled]);
+    }
 };
 
-export const clear = () => (bodies = []);
+export const clear = () => {
+    bodies = [];
+    groups = [];
+};
 
 /**
  * Render the debug items.
@@ -56,8 +64,7 @@ export const clear = () => (bodies = []);
  */
 export const render = game => {
     if (enabled) {
-        bodies.forEach(body => {
-            game.debug.body(...body);
-        });
+        bodies.forEach(body => game.debug.body(...body));
+        groups.forEach(group => game.debug.geom(group.item.getBounds(), group.color, group.filled));
     }
 };

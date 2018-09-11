@@ -16,7 +16,7 @@ describe("debug", () => {
         assert.exists(debug.clear);
     });
 
-    it("debugs the correct number of items on render", () => {
+    it("debugs the correct number of Phaser.Sprite objects on render", () => {
         const spy = sinon.spy();
 
         const mockGame = {
@@ -25,9 +25,30 @@ describe("debug", () => {
             },
         };
 
+        const testSprite = new Phaser.Sprite(new Phaser.Game(), 0, 0, "", 0);
+
         debug.clear();
         debug.enable();
-        debug.add({});
+        debug.add(testSprite);
+        debug.render(mockGame);
+
+        assert(spy.calledOnce);
+    });
+
+    it("debugs the correct number of Phaser.Group objects on render", () => {
+        const spy = sinon.spy();
+
+        const mockGame = {
+            debug: {
+                geom: spy,
+            },
+        };
+
+        const testGroup = new Phaser.Group(new Phaser.Game());
+
+        debug.clear();
+        debug.enable();
+        debug.add(testGroup);
         debug.render(mockGame);
 
         assert(spy.calledOnce);
@@ -43,11 +64,13 @@ describe("debug", () => {
             },
         };
 
+        const testSprite = new Phaser.Sprite(new Phaser.Game(), 0, 0, "", 0);
+
         //toggle enabled
         debug.clear();
         debug.enable(mockGame, false);
         debug.toggle(mockGame);
-        debug.add({});
+        debug.add(testSprite);
         debug.render(mockGame);
         assert(spy.calledOnce);
     });
