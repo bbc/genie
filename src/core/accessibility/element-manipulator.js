@@ -8,6 +8,7 @@ import { findButtonByElementId } from "./accessible-buttons.js";
 
 export const hideAndDisableElement = el => {
     if (!elementHiddenAndDisabled(el)) {
+        el.setAttribute("aria-label", "");
         const button = findButtonByElementId(el.id);
         const resetElement = () => resetElementToDefault(el, resetElement);
         el.addEventListener("blur", resetElement);
