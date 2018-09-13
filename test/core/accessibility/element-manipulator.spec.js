@@ -86,6 +86,10 @@ describe("element manipulator", () => {
                 expect(element.style["z-index"]).to.eq(-1);
             });
 
+            it("clears the aria label", () => {
+                sandbox.assert.calledWith(element.setAttribute, "aria-label", "");
+            });
+
             it("removes click event from element", () => {
                 sandbox.assert.called(element.removeEventListener);
                 sandbox.assert.calledWith(element.removeEventListener, "click", button.elementEvents.click);

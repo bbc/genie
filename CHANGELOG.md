@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | UNRELEASED | |
+| | Fix ios voiceover reading out zombie element . |
 | | Prevent double tap zoom in developer pages. |
 | 1.0.2 | |
 | | Enables dynamic scripts to work in IE11 for local dev. |
