@@ -26,8 +26,7 @@ describe("element manipulator", () => {
             },
             style: {
                 cursor: "pointer",
-            },
-            setAttribute: sandbox.stub(),
+            }
         };
     };
 
