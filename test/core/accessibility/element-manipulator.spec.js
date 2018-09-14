@@ -26,7 +26,8 @@ describe("element manipulator", () => {
             },
             style: {
                 cursor: "pointer",
-            }
+            },
+            setAttribute: sandbox.stub(),
         };
     };
 
@@ -83,6 +84,10 @@ describe("element manipulator", () => {
 
             it("moves the element to the bottom", () => {
                 expect(element.style["z-index"]).to.eq(-1);
+            });
+
+            it("clears the aria label", () => {
+                sandbox.assert.calledWith(element.setAttribute, "aria-label", "");
             });
 
             it("removes click event from element", () => {
