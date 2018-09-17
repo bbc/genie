@@ -90,3 +90,4 @@ const navigationConfig = goToScreen => {
 };
 
 startup(settingsConfig, navigationConfig);
+//testing
