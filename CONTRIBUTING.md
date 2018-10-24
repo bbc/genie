@@ -1,15 +1,28 @@
 ## Contributing to this project
 
-Ideally, issues should include:
+*The BBC is not currently inviting contributions to this project, if you wish to raise issues or pull requests there is no guarantee this will be looked at.*
+
+### Raising Issues
+
+Issues should include:
 1. What you expected to see
 2. What you actually saw
 3. What you did to reproduce the issue
+4. Device/Browser details
 
-If you can fix the problem, then please create a pull request with the fix, we aim to review new issues and pull requests on a weekly basis, however, we do not guarantee this.
+Ideally screenshots would also be helpful. 
 
-Any pull request that contains a version number change will be rejected; release creation is a separate process.
+### Pull Requests
 
-To ensure that changes are reviewed, no one person should merge their own pull requests.
+We do not accept direct commits to the code base. 
+
+Any code contributions must:
+
+1. Be submitted via Pull Requests.
+2. Include unit tests for any code amended.
+3. Include summary of what was changed and why in the Pull Request. 
+4. Pass the Pull Request Build.
+5. NOT include version number changes
 
 ## Legal
 
