@@ -2,7 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
-| UNRELEASED | |
+| 1.0.3 | |
+| | Load global scripts synchronously in dev build |
 | | Fix ios voiceover reading out zombie element . |
 | | Prevent double tap zoom in developer pages. |
 | 1.0.2 | |
