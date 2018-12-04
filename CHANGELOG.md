@@ -2,8 +2,10 @@
 
 | Version | Description |
 |---------|-------------|
-| 1.0.3 | |
+| 1.0.4 | |
 | | Load global scripts synchronously in dev build |
+| 1.0.3 | |
+| | Lock to canvas only pending assessment of best practice for webgl performance. |
 | | Fix ios voiceover reading out zombie element . |
 | | Prevent double tap zoom in developer pages. |
 | 1.0.2 | |

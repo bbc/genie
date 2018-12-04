@@ -65,7 +65,7 @@ describe("Startup", () => {
         const expectedConfig = {
             width: 1400,
             height: 600,
-            renderer: 0,
+            renderer: 1,
             antialias: true,
             multiTexture: false,
             parent: containerDiv,

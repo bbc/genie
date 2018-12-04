@@ -32,7 +32,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
     const phaserConfig = {
         width: 1400,
         height: 600,
-        renderer: Phaser.AUTO,
+        renderer: Phaser.CANVAS,
         antialias: true,
         multiTexture: false,
         parent: getContainerDiv(),
