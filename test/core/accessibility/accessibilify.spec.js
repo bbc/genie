@@ -3,59 +3,46 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { expect } from "chai";
-import * as sinon from "sinon";
-import * as Scaler from "../../../src/core/scaler.js";
+import fp from "../../../lib/lodash/fp/fp.js";
+
+import { domElement } from "../../fake/dom-element";
+import { onScaleChange } from "../../../src/core/scaler.js";
 import { accessibilify } from "../../../src/core/accessibility/accessibilify.js";
-import * as helperModule from "../../../src/core/accessibility/accessible-dom-element.js";
+import { accessibleDomElement } from "../../../src/core/accessibility/accessible-dom-element.js";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 
-describe("#accessibilify", () => {
-    const gameWidth = 800;
-    const gameHeight = 600;
+jest.mock("../../../src/core/accessibility/accessible-dom-element.js");
 
-    let onScaleChangeAdd;
-    let onScaleChangeUnsubscribe;
-    let mockButtonBounds;
+describe("Accessibilify", () => {
+    let mockGame;
     let mockButton;
-    let parentElement;
-    let buttonBoundsWidth;
-    let buttonBoundsHeight;
-    let buttonDestroy;
-    let accessibleDomElement;
-    let accessibleDomElementVisible;
-    let accessibleDomElementHide;
-    let accessibleDomElementShow;
-    let accessibleDomElementPosition;
-    let onInputOver;
-    let onInputOut;
-    let onInputUp;
-    let activePointer;
-    let touchUnlockSpy;
-    let resumeWebAudioSpy;
-    let sandbox;
-
-    before(() => {
-        sandbox = sinon.createSandbox();
-    });
+    let mockButtonBounds;
+    let mockAccessibleDomElement;
 
     beforeEach(() => {
-        sandbox.stub(a11y, "resetElementsInDom");
-        onScaleChangeUnsubscribe = sandbox.spy();
-        onScaleChangeAdd = sandbox.stub(Scaler.onScaleChange, "add").returns({ unsubscribe: onScaleChangeUnsubscribe });
-        parentElement = document.createElement("div");
-        buttonBoundsWidth = 200;
-        buttonBoundsHeight = 100;
-        buttonDestroy = sandbox.spy();
-        accessibleDomElementVisible = true;
-        accessibleDomElementHide = sandbox.spy();
-        accessibleDomElementShow = sandbox.spy();
-        onInputOver = sandbox.spy();
-        onInputOut = sandbox.spy();
-        onInputUp = sandbox.spy();
-        activePointer = sandbox.spy();
-        touchUnlockSpy = sandbox.spy();
-        resumeWebAudioSpy = sandbox.spy();
+        jest.spyOn(a11y, "resetElementsInDom").mockImplementation(() => {});
+        mockGame = {
+            input: { activePointer: jest.fn() },
+            canvas: { parentElement: domElement() },
+            height: 600,
+            width: 800,
+            accessibleButtons: [],
+            scale: {
+                margin: {},
+                onSizeChange: { add: jest.fn(), remove: jest.fn() },
+                scaleFactorInversed: { x: 1, y: 1 },
+            },
+            state: {
+                states: { home: { visibleLayer: "home" } },
+                current: "home",
+            },
+            update: {},
+            sound: {
+                unlock: jest.fn(),
+                resumeWebAudio: jest.fn(),
+                context: {},
+            },
+        };
         mockButtonBounds = {
             topLeft: { x: "x", y: "y", multiply: () => mockButtonBounds.topLeft, add: () => mockButtonBounds.topLeft },
             scale: () => mockButtonBounds,
@@ -63,38 +50,10 @@ describe("#accessibilify", () => {
         mockButton = {
             alive: true,
             name: "__play",
-            game: {
-                input: {
-                    activePointer: activePointer,
-                },
-                canvas: {
-                    parentElement,
-                },
-                height: gameHeight,
-                width: gameWidth,
-                accessibleButtons: [],
-                scale: {
-                    margin: {},
-                    onSizeChange: {
-                        add: () => {},
-                        remove: () => {},
-                    },
-                    scaleFactorInversed: { x: 1, y: 1 },
-                },
-                state: {
-                    states: { home: { visibleLayer: "home" } },
-                    current: "home",
-                },
-                update: {},
-                sound: {
-                    unlock: touchUnlockSpy,
-                    resumeWebAudio: resumeWebAudioSpy,
-                    context: {},
-                },
-            },
+            game: mockGame,
             toGlobal: p => p,
-            destroy: buttonDestroy,
-            getBounds: sandbox.stub().returns(mockButtonBounds),
+            destroy: jest.fn(),
+            getBounds: jest.fn(() => mockButtonBounds),
             hitArea: {
                 clone: () => mockButton.hitArea,
                 get topLeft() {
@@ -109,246 +68,249 @@ describe("#accessibilify", () => {
                     mockButton.hitArea.x = p.x;
                     mockButton.hitArea.y = p.y;
                 },
-                x: -buttonBoundsWidth / 2,
-                y: -buttonBoundsHeight / 2,
-                width: buttonBoundsWidth,
-                height: buttonBoundsHeight,
+                width: 200,
+                height: 100,
+                x: 200 / 2,
+                y: 100 / 2,
                 scale: () => mockButton.hitArea,
             },
             input: { enabled: true },
             events: {
-                onInputOver: {
-                    dispatch: onInputOver,
-                },
-                onInputOut: {
-                    dispatch: onInputOut,
-                },
-                onInputUp: {
-                    dispatch: onInputUp,
-                },
+                onInputOver: { dispatch: jest.fn() },
+                onInputOut: { dispatch: jest.fn() },
+                onInputUp: { dispatch: jest.fn() },
             },
             worldScale: { x: 1, y: 1 },
         };
-        accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement");
-        accessibleDomElementPosition = sandbox.spy();
-        accessibleDomElement.returns({
-            position: accessibleDomElementPosition,
+        mockAccessibleDomElement = {
+            position: jest.fn(),
             events: { click: "someClickEvent", keyup: "someKeyupEvent" },
-        });
+        };
+        accessibleDomElement.mockImplementation(() => mockAccessibleDomElement);
     });
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     describe("Initialization", () => {
-        it("calls accessibleDomElement once with args", () => {
+        test("creates an accessibleDomElement with correct params", () => {
             accessibilify(mockButton);
-
-            sinon.assert.calledOnce(
-                accessibleDomElement.withArgs({
-                    id: "home__play",
-                    htmlClass: "gel-button",
-                    ariaLabel: mockButton.name,
-                    parent: mockButton.game.canvas.parentElement,
-                    onClick: sinon.match.func,
-                    onMouseOver: sinon.match.func,
-                    onMouseOut: sinon.match.func,
-                }),
-            );
+            const accessibleDomElementCall = accessibleDomElement.mock.calls[0][0];
+            expect(accessibleDomElementCall.id).toBe("home__play");
+            expect(accessibleDomElementCall.htmlClass).toBe("gel-button");
+            expect(accessibleDomElementCall.ariaLabel).toBe(mockButton.name);
+            expect(accessibleDomElementCall.parent).toEqual(mockGame.canvas.parentElement);
         });
 
-        it("resets the accessible elements in the DOM", () => {
-            accessibilify(mockButton);
-            sinon.assert.calledOnce(a11y.resetElementsInDom);
+        test("calls accessibleDomElement with an aria label when provided in the config", () => {
+            const config = { ariaLabel: "aria-label" };
+            accessibilify(mockButton, config);
+            const accessibleDomElementCall = accessibleDomElement.mock.calls[0][0];
+            expect(accessibleDomElementCall.ariaLabel).toBe(config.ariaLabel);
         });
 
-        describe("with ariaLabel argument", () => {
-            it("calls accessibleDomElement once passing in ariaLabel string", () => {
-                const config = {
-                    ariaLabel: "Play Button",
-                };
-
-                accessibilify(mockButton, config);
-
-                sinon.assert.calledOnce(
-                    accessibleDomElement.withArgs({
-                        id: "home__play",
-                        htmlClass: "gel-button",
-                        ariaLabel: "Play Button",
-                        parent: mockButton.game.canvas.parentElement,
-                        onClick: sinon.match.func,
-                        onMouseOver: sinon.match.func,
-                        onMouseOut: sinon.match.func,
-                    }),
-                );
-            });
+        test("resets the accessible elements in the DOM for this screen", () => {
+            const screenToReset = mockGame.state.states[mockGame.state.current];
+            accessibilify(mockButton);
+            expect(a11y.resetElementsInDom).toHaveBeenCalledWith(screenToReset);
         });
 
         describe("with gameButton argument", () => {
-            it("adds the button to an array in the game for the overlay-layout to use", () => {
-                const config = {
-                    ariaLabel: "Play Button",
-                };
-
-                accessibilify(mockButton, config, true);
-                expect(mockButton.game.accessibleButtons[0]).to.equal(mockButton);
+            test("adds the button to an array in the game for the overlay-layout to use", () => {
+                const gameButton = true;
+                const config = { ariaLabel: "aria-label" };
+                accessibilify(mockButton, config, gameButton);
+                expect(mockButton.game.accessibleButtons[0]).toEqual(mockButton);
             });
 
-            it("doesn't add the button to an array in the game for the overlay-layout to use when argument is false", () => {
-                const config = {
-                    ariaLabel: "Play Button",
-                };
-
-                accessibilify(mockButton, config, false);
-                expect(mockButton.game.accessibleButtons).to.deep.equal([]);
+            test("doesn't add the button to an array in the game for the overlay-layout to use when argument is false", () => {
+                const gameButton = false;
+                const config = { ariaLabel: "aria-label" };
+                accessibilify(mockButton, config, gameButton);
+                expect(mockButton.game.accessibleButtons).toEqual([]);
             });
         });
 
-        it("assigns an onSizeChange event", () => {
-            accessibilify(mockButton);
-            sinon.assert.called(onScaleChangeAdd);
+        describe("Scaling and positioning", () => {
+            beforeEach(() => {
+                jest.spyOn(onScaleChange, "add").mockImplementation(() => {});
+                jest.spyOn(fp, "debounce").mockImplementation((value, callback) => callback);
+            });
+
+            test("initially debounces the element", () => {
+                accessibilify(mockButton);
+                expect(fp.debounce).toHaveBeenCalledTimes(1);
+                expect(fp.debounce.mock.calls[0][0]).toBe(200);
+            });
+
+            test("sets the initial size and position if the button is alive", () => {
+                const expectedButtonBounds = {
+                    x: mockButton.hitArea.x,
+                    y: mockButton.hitArea.y,
+                    width: mockButton.hitArea.width,
+                    height: mockButton.hitArea.height,
+                    topLeft: mockButton.hitArea.topLeft,
+                };
+                mockButton.alive = true;
+                accessibilify(mockButton);
+                expect(mockAccessibleDomElement.position.mock.calls[0][0].x).toBe(expectedButtonBounds.x);
+                expect(mockAccessibleDomElement.position.mock.calls[0][0].y).toBe(expectedButtonBounds.y);
+                expect(mockAccessibleDomElement.position.mock.calls[0][0].width).toBe(expectedButtonBounds.width);
+                expect(mockAccessibleDomElement.position.mock.calls[0][0].height).toBe(expectedButtonBounds.height);
+            });
+
+            test("does not set the initial size and position if the button is not alive", () => {
+                mockButton.alive = false;
+                accessibilify(mockButton);
+                expect(mockAccessibleDomElement.position).not.toHaveBeenCalled();
+            });
+
+            test("changes the size and position when the scale changes if the button is alive", () => {
+                const expectedButtonBounds = {
+                    x: mockButton.hitArea.x,
+                    y: mockButton.hitArea.y,
+                    width: mockButton.hitArea.width,
+                    height: mockButton.hitArea.height,
+                    topLeft: mockButton.hitArea.topLeft,
+                };
+                mockButton.alive = true;
+                accessibilify(mockButton);
+                onScaleChange.add.mock.calls[0][0]();
+                expect(mockAccessibleDomElement.position.mock.calls[1][0].x).toBe(expectedButtonBounds.x);
+                expect(mockAccessibleDomElement.position.mock.calls[1][0].y).toBe(expectedButtonBounds.y);
+                expect(mockAccessibleDomElement.position.mock.calls[1][0].width).toBe(expectedButtonBounds.width);
+                expect(mockAccessibleDomElement.position.mock.calls[1][0].height).toBe(expectedButtonBounds.height);
+            });
+
+            test("changes the size and position when the scale changes if the button is alive but does not have a hit area", () => {
+                mockButton.alive = true;
+                mockButton.hitArea = null;
+                accessibilify(mockButton);
+                onScaleChange.add.mock.calls[0][0]();
+                expect(mockAccessibleDomElement.position.mock.calls[1][0]).toEqual(mockButtonBounds);
+            });
+
+            test("does not change the size and position when the scale changes if the button is not alive", () => {
+                mockButton.alive = false;
+                accessibilify(mockButton);
+                onScaleChange.add.mock.calls[0][0]();
+                expect(mockAccessibleDomElement.position).not.toHaveBeenCalled();
+            });
+
+            test("tears down the scale change signal when the button is destroyed", () => {
+                const signal = { unsubscribe: jest.fn() };
+                onScaleChange.add.mockImplementation(() => signal);
+                accessibilify(mockButton);
+                mockButton.destroy();
+                expect(signal.unsubscribe).toHaveBeenCalled();
+            });
         });
 
-        it("hooks into the button's destroy event", () => {
+        test("assigns DOM element ID to the Phaser button object", () => {
             accessibilify(mockButton);
-            mockButton.destroy();
-            sinon.assert.called(onScaleChangeUnsubscribe);
-            // Assert original functionality is not completely overridden.
-            sinon.assert.called(buttonDestroy);
+            expect(mockButton.elementId).toBe("home__play");
         });
 
-        it("reassigns button's update event", () => {
-            expect(typeof mockButton.update).to.equal("undefined");
+        test("assigns element events to the Phaser button object", () => {
             accessibilify(mockButton);
-            expect(typeof mockButton.update).to.equal("function");
-        });
-
-        it("repositions accessibleElement if button exists", () => {
-            const clock = sandbox.useFakeTimers();
-            const position = sandbox.spy();
-            accessibleDomElement.restore();
-            accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({ position });
-
-            accessibilify(mockButton);
-            clock.tick(200);
-            sinon.assert.called(position.withArgs(mockButton.hitArea.clone()));
-        });
-
-        it("repositions accessibleElement if button exists but does not have a hit area", () => {
-            const clock = sandbox.useFakeTimers();
-            const position = sandbox.spy();
-            accessibleDomElement.restore();
-            accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({ position });
-
-            mockButton.hitArea = null;
-
-            accessibilify(mockButton);
-            clock.tick(200);
-            sinon.assert.called(mockButton.getBounds);
-            sinon.assert.calledWith(position, mockButtonBounds);
-        });
-
-        it("does NOT reposition accessibleElement if button does not exist", () => {
-            let deadMockButton = mockButton;
-            deadMockButton.alive = false;
-            const clock = sandbox.useFakeTimers();
-            const position = sandbox.spy();
-            accessibleDomElement.restore();
-            accessibleDomElement = sandbox.stub(helperModule, "accessibleDomElement").returns({ position });
-
-            accessibilify(deadMockButton);
-            clock.tick(200);
-            sinon.assert.notCalled(position);
-        });
-
-        it("assigns DOM element ID to the Phaser button object", () => {
-            accessibilify(mockButton);
-
-            expect(mockButton.elementId).to.eq("home__play");
-        });
-
-        it("assigns element events to the Phaser button object", () => {
-            accessibilify(mockButton);
-
-            expect(mockButton.elementEvents.click).to.eq("someClickEvent");
-            expect(mockButton.elementEvents.keyup).to.eq("someKeyupEvent");
+            expect(mockButton.elementEvents.click).toBe("someClickEvent");
+            expect(mockButton.elementEvents.keyup).toBe("someKeyupEvent");
         });
     });
 
     describe("Button Update", () => {
         describe("element visibility", () => {
-            it("when button input is disabled and the element is visible it should be hidden", () => {
-                accessibleDomElement.returns({
-                    visible: () => accessibleDomElementVisible,
-                    hide: accessibleDomElementHide,
-                    position: () => {},
-                });
+            test("hides when button input is disabled and the element is visible", () => {
+                mockAccessibleDomElement.visible = jest.fn(() => true);
+                mockAccessibleDomElement.hide = jest.fn();
                 mockButton.input.enabled = false;
                 accessibilify(mockButton);
                 mockButton.update();
-                sinon.assert.called(accessibleDomElementHide);
+                expect(mockAccessibleDomElement.hide).toHaveBeenCalled();
             });
-            it("when button has enabled input and is within the bounds of the screen and element is not visible it should be shown", () => {
-                accessibleDomElement.returns({
-                    visible: () => accessibleDomElementVisible,
-                    show: accessibleDomElementShow,
-                    position: () => {},
-                });
-                accessibleDomElementVisible = false;
+
+            test("does not hide when button input is disabled and the element is not visible", () => {
+                mockAccessibleDomElement.visible = jest.fn(() => false);
+                mockAccessibleDomElement.hide = jest.fn();
+                mockButton.input.enabled = false;
                 accessibilify(mockButton);
                 mockButton.update();
-                sinon.assert.called(accessibleDomElementShow);
+                expect(mockAccessibleDomElement.hide).not.toHaveBeenCalled();
+            });
+
+            test("shows when button input is enabled, the element is not visible, and is within the bounds of the screen ", () => {
+                mockAccessibleDomElement.visible = jest.fn(() => false);
+                mockAccessibleDomElement.show = jest.fn();
+                mockButton.input.enabled = true;
+                accessibilify(mockButton);
+                mockButton.update();
+                expect(mockAccessibleDomElement.show).toHaveBeenCalled();
+            });
+
+            test("does not show when button input is enabled and the element is visible", () => {
+                mockAccessibleDomElement.visible = jest.fn(() => true);
+                mockAccessibleDomElement.show = jest.fn();
+                mockButton.input.enabled = true;
+                accessibilify(mockButton);
+                mockButton.update();
+                expect(mockAccessibleDomElement.show).not.toHaveBeenCalled();
             });
         });
     });
 
-    describe("Button Action", () => {
-        it("Should dispatch the button's onInputUp event", () => {
+    describe("Click Action", () => {
+        test("dispatches the button's onInputUp event", () => {
             accessibilify(mockButton);
-
-            const options = accessibleDomElement.args[0][0];
-            options.onClick();
-            sinon.assert.calledOnce(onInputUp);
-            sinon.assert.calledWithExactly(onInputUp, mockButton, activePointer, false);
+            accessibleDomElement.mock.calls[0][0].onClick();
+            expect(mockButton.events.onInputUp.dispatch).toHaveBeenCalledWith(
+                mockButton,
+                mockGame.input.activePointer,
+                false,
+            );
         });
 
-        it("Should unlock the audioContext", () => {
+        test("unlocks the audioContext", () => {
             accessibilify(mockButton);
-
-            const options = accessibleDomElement.args[0][0];
-            options.onClick();
-            sinon.assert.calledOnce(touchUnlockSpy);
+            accessibleDomElement.mock.calls[0][0].onClick();
+            expect(mockGame.sound.unlock).toHaveBeenCalled();
         });
 
-        it("Should call resumeWebAudio if it is suspended", () => {
+        test("calls resumeWebAudio if it is suspended", () => {
             mockButton.game.sound.context.state = "suspended";
             accessibilify(mockButton);
+            accessibleDomElement.mock.calls[0][0].onClick();
+            expect(mockGame.sound.resumeWebAudio).toHaveBeenCalled();
+        });
 
-            const options = accessibleDomElement.args[0][0];
-            options.onClick();
-            sinon.assert.calledOnce(resumeWebAudioSpy);
+        test("does not call resumeWebAudio if it is not suspended", () => {
+            mockButton.game.sound.context = undefined;
+            accessibilify(mockButton);
+            accessibleDomElement.mock.calls[0][0].onClick();
+            expect(mockGame.sound.resumeWebAudio).not.toHaveBeenCalled();
         });
     });
 
     describe("Hover State", () => {
-        describe("When mouse over event is fired", () => {
-            it("dispatches button onInputOver event", () => {
+        describe("When mouseover event is fired", () => {
+            test("dispatches button onInputOver event", () => {
                 accessibilify(mockButton);
-
-                const options = accessibleDomElement.args[0][0];
-                options.onMouseOver();
-                sinon.assert.calledOnce(onInputOver.withArgs(mockButton, activePointer, false));
+                accessibleDomElement.mock.calls[0][0].onMouseOver();
+                expect(mockButton.events.onInputOver.dispatch).toHaveBeenCalledWith(
+                    mockButton,
+                    mockGame.input.activePointer,
+                    false,
+                );
             });
         });
 
-        describe("When mouse out event is fired", () => {
-            it("dispatches button onInputOut event", () => {
+        describe("When mouseout event is fired", () => {
+            test("dispatches button onInputOut event", () => {
                 accessibilify(mockButton);
-
-                const options = accessibleDomElement.args[0][0];
-                options.onMouseOut();
-                sinon.assert.calledOnce(onInputOut.withArgs(mockButton, activePointer, false));
+                accessibleDomElement.mock.calls[0][0].onMouseOut();
+                expect(mockButton.events.onInputOut.dispatch).toHaveBeenCalledWith(
+                    mockButton,
+                    mockGame.input.activePointer,
+                    false,
+                );
             });
         });
     });
