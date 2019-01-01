@@ -53,14 +53,14 @@ describe("GMI", () => {
     });
 
     describe("setGmi method", () => {
-        it("instantiates GMI with the default settings", () => {
+        test("instantiates GMI with the default settings", () => {
             gmiModule.setGmi(defaultSettings, fakeWindow);
             const actualSettings = fakeWindow.getGMI.mock.calls[0][0];
             const expectedSettings = { settingsConfig: defaultSettings };
             expect(actualSettings).toEqual(expectedSettings);
         });
 
-        it("instantiates GMI with custom settings if given", () => {
+        test("instantiates GMI with custom settings if given", () => {
             const customSettings = {
                 pages: [
                     {
@@ -85,7 +85,7 @@ describe("GMI", () => {
             expect(actualSettings).toEqual(expectedSettings);
         });
 
-        it("instantiates GMI with extra global settings if given", () => {
+        test("instantiates GMI with extra global settings if given", () => {
             const customSettings = {
                 pages: [
                     {
@@ -109,7 +109,7 @@ describe("GMI", () => {
             expect(actualSettings).toEqual(expectedSettings);
         });
 
-        it("does not overwrite the default audio and motion global settings when custom globals are provided", () => {
+        test("does not overwrite the default audio and motion global settings when custom globals are provided", () => {
             const customSettings = {
                 pages: [
                     {
@@ -138,7 +138,7 @@ describe("GMI", () => {
             expect(actualSettings).toEqual(expectedSettings);
         });
 
-        it("returns the GMI instance", () => {
+        test("returns the GMI instance", () => {
             gmiModule.setGmi(defaultSettings, fakeWindow);
             expect(gmiModule.gmi).toEqual(fakeGmiObject);
         });
@@ -151,7 +151,7 @@ describe("GMI", () => {
             gmiModule.setGmi(defaultSettings, fakeWindow);
         });
 
-        it("gets the visible layer (after the stats tracking has been started)", () => {
+        test("gets the visible layer (after the stats tracking has been started)", () => {
             const fakeGame = "game";
             const fakeContext = "context";
 
@@ -160,12 +160,12 @@ describe("GMI", () => {
             expect(VisibleLayer.get).toHaveBeenCalledWith(fakeGame, fakeContext);
         });
 
-        it("gets the stats values", () => {
+        test("gets the stats values", () => {
             gmiModule.sendStats("some_event");
             expect(StatsValues.getValues).toHaveBeenCalledWith("some_event", "settings", "visible-layer");
         });
 
-        it("sends a stats event to the GMI", () => {
+        test("sends a stats event to the GMI", () => {
             gmiModule.sendStats("some_event");
             expect(fakeGmiObject.sendStatsEvent).toHaveBeenCalledWith("name", "type", {
                 action_name: "name",
@@ -173,7 +173,7 @@ describe("GMI", () => {
             });
         });
 
-        it("overrides params sent to the GMI if additional ones are provided", () => {
+        test("overrides params sent to the GMI if additional ones are provided", () => {
             gmiModule.sendStats("some_event", { action_type: "override" });
             expect(fakeGmiObject.sendStatsEvent).toHaveBeenCalledWith("name", "override", {
                 action_name: "name",
@@ -189,7 +189,7 @@ describe("GMI", () => {
             gmiModule.startStatsTracking();
         });
 
-        it("fires the stats heartbeat every 15 seconds", () => {
+        test("fires the stats heartbeat every 15 seconds", () => {
             jest.advanceTimersByTime(15 * 1000);
             expect(fakeGmiObject.sendStatsEvent).toHaveBeenCalledTimes(1);
             jest.advanceTimersByTime(15 * 1000);
@@ -198,7 +198,7 @@ describe("GMI", () => {
             expect(fakeGmiObject.sendStatsEvent).toHaveBeenCalledTimes(3);
         });
 
-        it("passes the correct params to the stats heartbeat", () => {
+        test("passes the correct params to the stats heartbeat", () => {
             const expectedAdditonalParams = { action_name: "timer", action_type: "heartbeat", heartbeat_period: 15 };
             jest.advanceTimersByTime(15 * 1000);
             expect(fakeGmiObject.sendStatsEvent).toHaveBeenCalledWith("timer", "heartbeat", expectedAdditonalParams);

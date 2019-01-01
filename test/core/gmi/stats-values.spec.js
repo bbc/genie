@@ -22,7 +22,7 @@ describe("GMI - Stats Values", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("getValues method", () => {
-        it("returns values for first click", () => {
+        test("returns values for first click", () => {
             const actualValues = StatsValues.getValues("click", fakeSettings, fakeVisibleLayer);
             const expectedValues = {
                 action_name: "game_first_click",
@@ -34,7 +34,7 @@ describe("GMI - Stats Values", () => {
             expect(JSON.stringify(actualValues)).toEqual(JSON.stringify(expectedValues));
         });
 
-        it("returns values when this click isn't the first", () => {
+        test("returns values when this click isn't the first", () => {
             StatsValues.getValues("click", fakeSettings, fakeVisibleLayer);
             const actualValues = StatsValues.getValues("click", fakeSettings, fakeVisibleLayer);
             const expectedValues = {
@@ -47,7 +47,7 @@ describe("GMI - Stats Values", () => {
             expect(actualValues).toEqual(expectedValues);
         });
 
-        it("returns values for the continue stat", () => {
+        test("returns values for the continue stat", () => {
             const actualValues = StatsValues.getValues("continue", fakeSettings, fakeVisibleLayer);
             const expectedValues = {
                 action_name: "game_level",
@@ -60,7 +60,7 @@ describe("GMI - Stats Values", () => {
             expect(actualValues).toEqual(expectedValues);
         });
 
-        it("returns values for the heartbeat stat", () => {
+        test("returns values for the heartbeat stat", () => {
             const actualValues = StatsValues.getValues("heartbeat", fakeSettings, fakeVisibleLayer);
             const expectedValues = {
                 action_name: "timer",
@@ -73,7 +73,7 @@ describe("GMI - Stats Values", () => {
             expect(actualValues).toEqual(expectedValues);
         });
 
-        it("returns values for the game loaded stat", () => {
+        test("returns values for the game loaded stat", () => {
             const actualValues = StatsValues.getValues("game_loaded", fakeSettings, fakeVisibleLayer);
             const expectedValues = {
                 action_name: "game_loaded",
@@ -86,7 +86,7 @@ describe("GMI - Stats Values", () => {
             expect(actualValues).toEqual(expectedValues);
         });
 
-        it("returns values for the game complete stat", () => {
+        test("returns values for the game complete stat", () => {
             const actualValues = StatsValues.getValues("game_complete", fakeSettings, fakeVisibleLayer);
             const expectedValues = {
                 action_name: "game_level",
@@ -99,7 +99,7 @@ describe("GMI - Stats Values", () => {
             expect(actualValues).toEqual(expectedValues);
         });
 
-        it("returns values for the replay stat", () => {
+        test("returns values for the replay stat", () => {
             const actualValues = StatsValues.getValues("replay", fakeSettings, fakeVisibleLayer);
             const expectedValues = {
                 action_name: "game_level",
