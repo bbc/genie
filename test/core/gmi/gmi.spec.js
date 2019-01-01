@@ -3,24 +3,21 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert } from "chai";
-import * as sinon from "sinon";
-
 import * as gmiModule from "../../../src/core/gmi/gmi.js";
 import * as VisibleLayer from "../../../src/core/visible-layer.js";
 import * as StatsValues from "../../../src/core/gmi/stats-values.js";
 
+// jest.mock("../../../src/core/gmi/gmi.js");
+
 describe("GMI", () => {
-    const sandbox = sinon.createSandbox();
     let defaultSettings;
     let fakeWindow;
     let fakeGmiObject;
-    let clock;
 
     beforeEach(() => {
-        sandbox.stub(StatsValues, "getValues");
-        sandbox.stub(VisibleLayer, "get");
-        clock = sinon.useFakeTimers();
+        jest.spyOn(StatsValues, "getValues");
+        jest.spyOn(VisibleLayer, "get");
+        jest.useFakeTimers();
         defaultSettings = {
             pages: [
                 {
@@ -43,24 +40,24 @@ describe("GMI", () => {
             ],
         };
         fakeGmiObject = {
-            sendStatsEvent: sandbox.stub(),
-            getAllSettings: sandbox.stub().returns("settings"),
+            sendStatsEvent: jest.fn(),
+            getAllSettings: jest.fn().mockImplementation(() => "settings"),
         };
-        fakeWindow = { getGMI: sandbox.stub().returns(fakeGmiObject) };
-        sandbox.replace(gmiModule, "gmi", fakeGmiObject);
+        fakeWindow = { getGMI: jest.fn().mockImplementation(() => fakeGmiObject) };
+        Object.defineProperty(gmiModule, "gmi", fakeGmiObject);
     });
 
     afterEach(() => {
-        clock = sinon.restore();
-        sandbox.restore();
+        jest.clearAllMocks();
+        jest.clearAllTimers();
     });
 
     describe("setGmi method", () => {
         it("instantiates GMI with the default settings", () => {
             gmiModule.setGmi(defaultSettings, fakeWindow);
-            const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
+            const actualSettings = fakeWindow.getGMI.mock.calls[0][0];
             const expectedSettings = { settingsConfig: defaultSettings };
-            assert.deepEqual(actualSettings, expectedSettings);
+            expect(actualSettings).toEqual(expectedSettings);
         });
 
         it("instantiates GMI with custom settings if given", () => {
@@ -81,11 +78,11 @@ describe("GMI", () => {
             };
 
             gmiModule.setGmi(customSettings, fakeWindow);
-            const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
+            const actualSettings = fakeWindow.getGMI.mock.calls[0][0];
             const expectedSettings = {
                 settingsConfig: { pages: defaultSettings.pages.concat(customSettings.pages[0]) },
             };
-            assert.deepEqual(actualSettings, expectedSettings);
+            expect(actualSettings).toEqual(expectedSettings);
         });
 
         it("instantiates GMI with extra global settings if given", () => {
@@ -106,10 +103,10 @@ describe("GMI", () => {
             };
 
             gmiModule.setGmi(customSettings, fakeWindow);
-            const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
+            const actualSettings = fakeWindow.getGMI.mock.calls[0][0];
             defaultSettings.pages[0].settings.push(customSettings.pages[0].settings[0]);
             const expectedSettings = { settingsConfig: defaultSettings };
-            assert.deepEqual(actualSettings, expectedSettings);
+            expect(actualSettings).toEqual(expectedSettings);
         });
 
         it("does not overwrite the default audio and motion global settings when custom globals are provided", () => {
@@ -136,21 +133,21 @@ describe("GMI", () => {
             };
 
             gmiModule.setGmi(customSettings, fakeWindow);
-            const actualSettings = fakeWindow.getGMI.getCall(0).args[0];
+            const actualSettings = fakeWindow.getGMI.mock.calls[0][0];
             const expectedSettings = { settingsConfig: defaultSettings };
-            assert.deepEqual(actualSettings, expectedSettings);
+            expect(actualSettings).toEqual(expectedSettings);
         });
 
         it("returns the GMI instance", () => {
             gmiModule.setGmi(defaultSettings, fakeWindow);
-            assert.deepEqual(gmiModule.gmi, fakeGmiObject);
+            expect(gmiModule.gmi).toEqual(fakeGmiObject);
         });
     });
 
     describe("sendStats method", () => {
         beforeEach(() => {
-            VisibleLayer.get.returns("visible-layer");
-            StatsValues.getValues.returns({ action_name: "name", action_type: "type" });
+            VisibleLayer.get.mockImplementation(() => "visible-layer");
+            StatsValues.getValues.mockImplementation(() => ({ action_name: "name", action_type: "type" }));
             gmiModule.setGmi(defaultSettings, fakeWindow);
         });
 
@@ -160,47 +157,51 @@ describe("GMI", () => {
 
             gmiModule.startStatsTracking(fakeGame, fakeContext);
             gmiModule.sendStats("some_event");
-            sandbox.assert.calledOnce(VisibleLayer.get.withArgs(fakeGame, fakeContext));
+            expect(VisibleLayer.get).toHaveBeenCalledWith(fakeGame, fakeContext);
         });
 
         it("gets the stats values", () => {
             gmiModule.sendStats("some_event");
-            const actualParams = ["some_event", "settings", "visible-layer"];
-            const expectedParams = StatsValues.getValues.getCall(0).args;
-            assert.deepEqual(actualParams, expectedParams);
+            expect(StatsValues.getValues).toHaveBeenCalledWith("some_event", "settings", "visible-layer");
         });
 
         it("sends a stats event to the GMI", () => {
             gmiModule.sendStats("some_event");
-            sandbox.assert.calledOnce(fakeGmiObject.sendStatsEvent.withArgs("name", "type"));
+            expect(fakeGmiObject.sendStatsEvent).toHaveBeenCalledWith("name", "type", {
+                action_name: "name",
+                action_type: "type",
+            });
         });
 
         it("overrides params sent to the GMI if additional ones are provided", () => {
             gmiModule.sendStats("some_event", { action_type: "override" });
-            sandbox.assert.calledOnce(fakeGmiObject.sendStatsEvent.withArgs("name", "override"));
+            expect(fakeGmiObject.sendStatsEvent).toHaveBeenCalledWith("name", "override", {
+                action_name: "name",
+                action_type: "override",
+            });
         });
     });
 
     describe("startStatsTracking method", () => {
         beforeEach(() => {
             gmiModule.setGmi(defaultSettings, fakeWindow);
-            StatsValues.getValues.returns({ action_name: "timer", action_type: "heartbeat" });
+            StatsValues.getValues.mockImplementation(() => ({ action_name: "timer", action_type: "heartbeat" }));
             gmiModule.startStatsTracking();
         });
 
         it("fires the stats heartbeat every 15 seconds", () => {
-            clock.tick(15 * 1000);
-            sandbox.assert.calledOnce(fakeGmiObject.sendStatsEvent);
-            clock.tick(15 * 1000);
-            sandbox.assert.calledTwice(fakeGmiObject.sendStatsEvent);
-            clock.tick(15 * 1000);
-            sandbox.assert.calledThrice(fakeGmiObject.sendStatsEvent);
+            jest.advanceTimersByTime(15 * 1000);
+            expect(fakeGmiObject.sendStatsEvent).toHaveBeenCalledTimes(1);
+            jest.advanceTimersByTime(15 * 1000);
+            expect(fakeGmiObject.sendStatsEvent).toHaveBeenCalledTimes(2);
+            jest.advanceTimersByTime(15 * 1000);
+            expect(fakeGmiObject.sendStatsEvent).toHaveBeenCalledTimes(3);
         });
 
         it("passes the correct params to the stats heartbeat", () => {
             const expectedAdditonalParams = { action_name: "timer", action_type: "heartbeat", heartbeat_period: 15 };
-            clock.tick(15 * 1000);
-            sandbox.assert.calledWith(fakeGmiObject.sendStatsEvent, "timer", "heartbeat", expectedAdditonalParams);
+            jest.advanceTimersByTime(15 * 1000);
+            expect(fakeGmiObject.sendStatsEvent).toHaveBeenCalledWith("timer", "heartbeat", expectedAdditonalParams);
         });
     });
 });
