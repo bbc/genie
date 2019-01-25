@@ -206,5 +206,17 @@ describe("Pause Overlay", () => {
             destroy();
             sandbox.assert.calledOnce(mockScreen.overlayClosed.dispatch);
         });
+
+        it("sets background music pause position to zero if it has overrun the duration (See CGPROD-1167)", () => {
+            pauseCreate({ game: mockGame });
+            const destroy = signalSpy.getCall(0).args[0].callback;
+
+            GameSound.Assets.backgroundMusic.duration = 5;
+            GameSound.Assets.backgroundMusic.pausedPosition = 10000;
+
+            destroy();
+
+            assert.equal(GameSound.Assets.backgroundMusic.pausedPosition, 0);
+        });
     });
 });

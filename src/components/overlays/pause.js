@@ -61,7 +61,14 @@ export const create = fp.curry((hideReplayButton, { game }) => {
         signal.bus.removeChannel(channel);
         gelButtons.destroy();
         background.destroy();
-        if (GameSound.Assets.backgroundMusic) {
+        const backgroundMusic = GameSound.Assets.backgroundMusic;
+
+        if (backgroundMusic) {
+            // Phaser bug workaround. See CGPROD-1167
+            if (backgroundMusic.duration - backgroundMusic.pausedPosition / 1000 < 0) {
+                GameSound.Assets.backgroundMusic.pausedPosition = 0;
+            }
+
             GameSound.Assets.backgroundMusic.resume();
         }
         screen.overlayClosed.dispatch();

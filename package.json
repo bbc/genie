@@ -15,7 +15,7 @@
         "babel-preset-env": "^1.6.1",
         "babel-polyfill": "^6.26.0",
         "expose-loader": "^0.7.5",
-        "phaser-ce": "2.11.0",
+        "phaser-ce": "2.11.1",
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {
@@ -42,14 +42,14 @@
         "karma-sinon": "^1.0.5",
         "karma-sourcemap-loader": "^0.3.7",
         "karma-webpack": "^3.0.0",
-        "live-server": "^1.2.0",
+        "live-server": "^1.2.1",
         "local-web-server": "^2.6.0",
         "mocha": "^4.1.0",
         "prettier": "^1.11.1",
         "sinon": "^6.0.1",
         "webpack": "^4.16.5",
         "webpack-cli": "^3.1.0",
-        "webpack-dev-server": "^3.1.5",
+        "webpack-dev-server": "^3.1.14",
         "webpack-visualizer-plugin": "^0.1.11"
     },
     "scripts": {
