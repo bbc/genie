@@ -112,8 +112,7 @@ export class Group extends Phaser.Group {
         const pos = { x: 0, y: 0 };
 
         const halfWidth = this.width / 2; //Save here as size changes when you move children below
-        this.children.forEach(childDisplayObject => {
-            const child = childDisplayObject;
+        this.children.forEach(child => {
             child.y = pos.y + child.height / 2;
 
             if (this._isVertical) {

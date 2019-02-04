@@ -41,10 +41,11 @@ const createButton = fp.curry((game, metrics, config, x = 0, y = 0) => {
         config.key = settings.getAllSettings().audio ? "audio-on" : "audio-off";
     }
 
-    const btn = new GelButton(game, x, y, metrics, config); //Instantiate then return or TSC loses non-curried args
+    const btn = new GelButton(game, x, y, metrics, config);
 
     if (config.icon) {
         btn.inputEnabled = false;
+        btn.hitArea = null;
         return btn;
     } else {
         defaultAction(config);

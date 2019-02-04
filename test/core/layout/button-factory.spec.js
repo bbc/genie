@@ -84,5 +84,17 @@ describe("Layout - Button Factory", () => {
 
             signal.bus.removeChannel(buttonsChannel);
         });
+
+        it("disables hitArea and input for icons", () => {
+            const config = {
+                title: "FX Off",
+                icon: true,
+            };
+
+            const btn = buttonFactory.createButton(false, config);
+
+            expect(btn.hitArea).to.equal(null);
+            expect(btn.inputEnabled).to.equal(false);
+        });
     });
 });
