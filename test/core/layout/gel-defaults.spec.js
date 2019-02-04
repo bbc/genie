@@ -27,6 +27,7 @@ describe("Layout - Gel Defaults", () => {
                     "current-screen": {
                         navigation: {
                             home: sandbox.spy(),
+                            achievements: sandbox.spy(),
                         },
                     },
                 },
@@ -230,7 +231,7 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Achievements Button Callback", () => {
         beforeEach(() => {
-            gel.config.achievements.action();
+            gel.config.achievements.action({ game: mockGame });
         });
 
         it("sends a click stat to the GMI", () => {

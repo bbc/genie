@@ -227,7 +227,9 @@ export const config = {
         order: 11,
         id: "__achievements",
         channel: buttonsChannel,
-        action: () => {
+        action: ({ game }) => {
+            const screen = game.state.states[game.state.current];
+            screen.navigation.achievements();
             sendStats("click", { action_type: "achievements" });
         },
     },

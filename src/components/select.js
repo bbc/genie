@@ -28,7 +28,12 @@ export class Select extends Screen {
         this.currentIndex = 1;
         this.choiceSprites = this.createChoiceSprites(theme.choices);
 
-        this.scene.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
+        // TODO the following line should be added back once the overlap issue is resolved NT:04:02:19
+        const showAchievements = false; //!!this.context.config.theme.game.achievements;
+        const defaultButtons = ["home", "audio", "pauseNoReplay", "previous", "next", "continue"];
+        const buttons = showAchievements ? defaultButtons.concat("achievements") : defaultButtons;
+
+        this.scene.addLayout(buttons);
         this.accessibleElements = accessibleCarouselElements.create(
             this.visibleLayer,
             this.choiceSprites,

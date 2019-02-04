@@ -20,7 +20,13 @@ export class Home extends Screen {
     create() {
         this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
         this.scene.addToBackground(this.game.add.image(0, -150, "home.title"));
-        this.scene.addLayout(["exit", "howToPlay", "play", "audio", "settings"]);
+
+        const showAchievements = !!this.context.config.theme.game.achievements;
+        const defaultButtons = ["exit", "howToPlay", "play", "audio", "settings"];
+        const buttons = showAchievements ? defaultButtons.concat("achievements") : defaultButtons;
+
+        this.scene.addLayout(buttons);
+
         createTestHarnessDisplay(this.game, this.context, this.scene);
 
         signal.bus.subscribe({

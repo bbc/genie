@@ -56,6 +56,7 @@ describe("Results Screen", () => {
                             style: { font: "36px ReithSans" },
                         },
                     },
+                    game: {},
                 },
             },
         };
@@ -141,6 +142,20 @@ describe("Results Screen", () => {
             sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("game_complete"));
         });
     });
+
+    /*
+    // TODO the following line should be added back once the overlap issue is resolved NT:04:02:19
+    describe("achievements button", () => {
+        it("adds the achievement button when theme flag is set", () => {
+            resultsScreen.context.config.theme.game.achievements = true;
+            resultsScreen.create();
+
+            const actualButtons = addLayoutSpy.getCall(0).args[0];
+            const expectedButtons = ["pause", "restart", "continueGame", "achievements"];
+            assert.deepEqual(actualButtons, expectedButtons);
+        });
+    });
+    */
 
     describe("signals", () => {
         let signalSubscribeSpy;

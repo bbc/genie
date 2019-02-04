@@ -37,7 +37,8 @@
             }
         },
         "game": {
-            "music": "loadscreen.backgroundMusicTwo"
+            "music": "loadscreen.backgroundMusicTwo",
+            "achievements": true
         },
         "results": {
             "resultText": {

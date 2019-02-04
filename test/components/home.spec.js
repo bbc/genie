@@ -44,7 +44,7 @@ describe("Home Screen", () => {
         };
 
         mockContext = {
-            config: { theme: { home: {} } },
+            config: { theme: { home: {}, game: {} } },
         };
 
         homeScreen = new Home();
@@ -96,6 +96,17 @@ describe("Home Screen", () => {
             const expectedParams = [mockGame, mockContext, homeScreen.scene];
             assert(layoutHarnessSpy.callCount === 1, "layout harness should be called once");
             assert.deepEqual(actualParams, expectedParams);
+        });
+    });
+
+    describe("achievements button", () => {
+        it("adds the achievement button when theme flag is set", () => {
+            homeScreen.context.config.theme.game.achievements = true;
+            homeScreen.create();
+
+            const actualButtons = addLayoutSpy.getCall(0).args[0];
+            const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "achievements"];
+            assert.deepEqual(actualButtons, expectedButtons);
         });
     });
 
