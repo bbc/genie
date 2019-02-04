@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Remove const and let from lodash wrapper for IOS 9 support. |
 | | Adds theme configurability for achievement button. |
 | | Set hitArea to null for fx and audio icons |
 | | Workaround for audio issue when tabbing away and pausing after music has finished. |

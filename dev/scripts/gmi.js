@@ -12,7 +12,7 @@ var GMI = function(options, embedVars, gameDir) {
     var containerId = "local-game-holder";
     var url = "";
     var env = "test";
-    const qaMode = getParam("qaMode") || false;
+    var qaMode = getParam("qaMode") || false;
 
     Object.defineProperty(GMI.prototype, "embedVars", {
         get: function() {
