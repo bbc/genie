@@ -1,6 +1,6 @@
 {
     "name": "genie",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "description": "Genie - A Modular Game Engine",
     "license": "Apache-2.0",
     "private": true,
