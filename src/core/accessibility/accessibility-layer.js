@@ -14,7 +14,7 @@ const hasAccessibleElement = button => {
 
 const PARENT_ELEMENT_ID = "accessibility";
 
-const getAccessibleButtons = visibleLayer => _accessibleButtons[visibleLayer];
+export const getAccessibleButtons = visibleLayer => _accessibleButtons[visibleLayer];
 
 export const setup = gameParentElement => {
     const el = document.createElement("div");
@@ -31,6 +31,16 @@ export const addToAccessibleButtons = (screen, button) => {
         _accessibleButtons[visibleLayer].push(button);
     } else {
         _accessibleButtons[visibleLayer] = [button];
+    }
+};
+
+export const removeFromAccessibleButtons = (screen, button) => {
+    const visibleLayer = screen.visibleLayer;
+
+    const idx = _accessibleButtons[visibleLayer].indexOf(button);
+
+    if (idx !== -1) {
+        _accessibleButtons[visibleLayer].splice(idx, 1);
     }
 };
 

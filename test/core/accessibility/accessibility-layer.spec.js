@@ -116,4 +116,46 @@ describe("Managing accessible buttons", () => {
             sandbox.assert.calledWith(parentElement.removeChild, el3);
         });
     });
+
+    describe("#removeFromAccessibleButtons", () => {
+        let button1, button2, button3, screen1;
+
+        it("appends correct elements to the DOM", () => {
+            screen1 = { visibleLayer: "home" };
+            button1 = { accessibleElement: { id: "home" } };
+            button2 = { accessibleElement: { id: "pause" } };
+            button3 = { accessibleElement: { id: "back" } };
+            a11y.addToAccessibleButtons(screen1, button1);
+            a11y.addToAccessibleButtons(screen1, button2);
+            a11y.addToAccessibleButtons(screen1, button3);
+            a11y.removeFromAccessibleButtons(screen1, button2);
+
+            const buttons = a11y.getAccessibleButtons("home");
+
+            expect(buttons.length).to.equal(2);
+            expect(buttons[0].accessibleElement.id).to.equal("home");
+            expect(buttons[1].accessibleElement.id).to.equal("back");
+        });
+    });
+
+    describe("#getAccessibleButtons", () => {
+        let button1, button2, button3, screen1;
+
+        it("returns the correct elements to the DOM", () => {
+            screen1 = { visibleLayer: "home" };
+            button1 = { accessibleElement: { id: "home" } };
+            button2 = { accessibleElement: { id: "pause" } };
+            button3 = { accessibleElement: { id: "back" } };
+            a11y.addToAccessibleButtons(screen1, button1);
+            a11y.addToAccessibleButtons(screen1, button2);
+            a11y.addToAccessibleButtons(screen1, button3);
+
+            const buttons = a11y.getAccessibleButtons("home");
+
+            expect(buttons.length).to.equal(3);
+            expect(buttons[0].accessibleElement.id).to.equal("home");
+            expect(buttons[1].accessibleElement.id).to.equal("pause");
+            expect(buttons[2].accessibleElement.id).to.equal("back");
+        });
+    });
 });
