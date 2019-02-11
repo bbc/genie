@@ -13,7 +13,6 @@ import * as LoadFonts from "../../src/core/font-loader.js";
 import * as Navigation from "../../src/core/navigation.js";
 import * as styles from "../../src/core/custom-styles.js";
 import * as qaMode from "../../src/core/qa/qa-mode.js";
-import * as parseUrlParams from "../../src/core/parseUrlParams.js";
 
 describe("Startup", () => {
     let mockGmi;
@@ -94,8 +93,6 @@ describe("Startup", () => {
         let navigationCreate;
 
         beforeEach(() => {
-            sandbox.stub(parseUrlParams, "parseUrlParams").returns({ qaMode: true });
-
             sceneCreate = sandbox.stub(Scene, "create").returns("Scene");
             loadFonts = sandbox.stub(LoadFonts, "loadFonts");
             navigationCreate = sandbox.stub(Navigation, "create");
@@ -131,7 +128,6 @@ describe("Startup", () => {
 
             sandbox.assert.calledOnce(qaMode.create);
         });
-
         it("starts the stats tracking through the GMI", () => {
             const expectedContext = {
                 popupScreens: [],
