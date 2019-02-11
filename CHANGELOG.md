@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | | QAMode now occurs when on a test URL. |
+| 1.0.6 | |
 | | Add removeFromAccessibleButtons and getAccessibleButtons to accessible layer. |
 | 1.0.5 | |
 | | Remove const and let from lodash wrapper for IOS 9 support. |
