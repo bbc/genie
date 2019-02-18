@@ -14,6 +14,8 @@ import * as Navigation from "../../src/core/navigation.js";
 import * as styles from "../../src/core/custom-styles.js";
 import * as qaMode from "../../src/core/qa/qa-mode.js";
 
+import { rewire$getBrowser, restore } from "../../src/core/browser.js";
+
 describe("Startup", () => {
     let mockGmi;
     const sandbox = sinon.createSandbox();
@@ -64,11 +66,12 @@ describe("Startup", () => {
         const expectedConfig = {
             width: 1400,
             height: 600,
-            renderer: 1,
+            renderer: 0,
             antialias: true,
             multiTexture: false,
             parent: containerDiv,
-            transparent: true,
+            transparent: false,
+            clearBeforeRender: false,
         };
 
         const actualConfig = PhaserGame.getCall(0).args[0];
@@ -80,6 +83,19 @@ describe("Startup", () => {
         assert.equal(actualConfig.multiTexture, expectedConfig.multiTexture);
         assert.equal(actualConfig.parent, expectedConfig.parent);
         assert.equal(actualConfig.transparent, expectedConfig.transparent);
+        assert.equal(actualConfig.clearBeforeRender, expectedConfig.clearBeforeRender);
+    });
+
+    it("sets transparent config flag to false when Amazon Silk Browser", () => {
+        const mockSilkBrowser = { name: "Amazon Silk", isSilk: true, version: "1.1.1" };
+
+        rewire$getBrowser(() => mockSilkBrowser);
+
+        startup();
+        const actualConfig = PhaserGame.getCall(0).args[0];
+        assert.equal(actualConfig.transparent, true);
+
+        restore();
     });
 
     it("throws an error if the game container element cannot be found", () => {

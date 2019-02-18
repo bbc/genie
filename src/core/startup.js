@@ -18,6 +18,7 @@ import { addCustomStyles } from "./custom-styles.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as qaMode from "./qa/qa-mode.js";
 import * as fullscreen from "./fullscreen.js";
+import { getBrowser } from "./browser.js";
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
@@ -27,15 +28,18 @@ export function startup(settingsConfig = {}, navigationConfig) {
     setGmi(settingsConfig, window);
     hookErrors(gmi.gameContainerId);
 
+    const browser = getBrowser();
+
     const phaserConfig = {
         width: 1400,
         height: 600,
-        renderer: Phaser.CANVAS,
+        renderer: Phaser.AUTO,
         antialias: true,
         multiTexture: false,
         parent: getContainerDiv(),
         state: new Startup(onStarted),
-        transparent: true, // Fixes silk browser flickering
+        transparent: browser.isSilk, // Fixes silk browser flickering
+        clearBeforeRender: false,
     };
     // Keep the console tidy:
     window.PhaserGlobal = window.PhaserGlobal || {};

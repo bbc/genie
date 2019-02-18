@@ -10,16 +10,17 @@
         "url": "https://github.com/bbc/childrens-games-genie"
     },
     "dependencies": {
-        "babel-core": "^6.26.3",
-        "babel-loader": "^7.1.5",
-        "babel-preset-env": "^1.6.1",
-        "babel-polyfill": "^6.26.0",
-        "expose-loader": "^0.7.5",
         "phaser-ce": "2.11.1",
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {
+        "babel-core": "^6.26.3",
+        "babel-loader": "^7.1.5",
+        "babel-plugin-rewire-exports": "^1.0.1",
+        "babel-polyfill": "^6.26.0",
+        "babel-preset-env": "^1.6.1",
         "chai": "^4.1.2",
+        "cross-env": "^5.2.0",
         "eslint": "^5.4.0",
         "eslint-config-prettier": "^2.9.0",
         "eslint-config-standard": "^11.0.0",
@@ -30,6 +31,7 @@
         "eslint-plugin-prettier": "^2.6.0",
         "eslint-plugin-promise": "^3.7.0",
         "eslint-plugin-standard": "^3.0.1",
+        "expose-loader": "^0.7.5",
         "hard-source-webpack-plugin": "^0.6.4",
         "istanbul-instrumenter-loader": "^3.0.0",
         "jsdoc": "^3.5.5",
@@ -58,11 +60,11 @@
         "start:qa": "webpack-dev-server --config build-scripts/webpack.config.js --env.genieCore",
         "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch --env.genieCore",
-        "eslint": "eslint . --ignore-pattern lodash --ignore-path .gitignore",
-        "test": "karma start test/karma.conf.js && npm run eslint",
-        "test:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage && npm run eslint",
+        "eslint": "eslint . --ignore-pattern lib/ --ignore-path .gitignore",
+        "test": "cross-env BABEL_ENV=test karma start test/karma.conf.js && npm run eslint",
+        "test:coverage": "cross-env BABEL_ENV=test NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --coverage && npm run eslint",
         "test-watch": "karma start test/karma.conf.js --no-single-run --auto-watch",
-        "test-watch:coverage": "NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --no-single-run --auto-watch --coverage",
+        "test-watch:coverage": "cross-env BABEL_ENV=test NODE_OPTIONS=--max_old_space_size=4096 karma start test/karma.conf.js --no-single-run --auto-watch --coverage",
         "docs": "open ./docs/api/index.html",
         "gendocs": "jsdoc -c ./build-scripts/docs/.jsdoc.js"
     }

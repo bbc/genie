@@ -9,5 +9,11 @@
         }
       }
     ]
-  ]
+  ],
+
+  "env": {
+    "test": {
+      "plugins": [["rewire-exports", {"unsafeConst": true}]]
+    }
+  }
 }
