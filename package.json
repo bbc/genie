@@ -10,15 +10,16 @@
         "url": "https://github.com/bbc/childrens-games-genie"
     },
     "dependencies": {
-        "phaser-ce": "2.11.1",
-        "webfontloader": "^1.6.28"
-    },
-    "devDependencies": {
         "babel-core": "^6.26.3",
         "babel-loader": "^7.1.5",
         "babel-plugin-rewire-exports": "^1.0.1",
         "babel-polyfill": "^6.26.0",
         "babel-preset-env": "^1.6.1",
+        "expose-loader": "^0.7.5",
+        "phaser-ce": "2.12.0",
+        "webfontloader": "^1.6.28"
+    },
+    "devDependencies": {
         "chai": "^4.1.2",
         "cross-env": "^5.2.0",
         "eslint": "^5.4.0",
@@ -31,7 +32,6 @@
         "eslint-plugin-prettier": "^2.6.0",
         "eslint-plugin-promise": "^3.7.0",
         "eslint-plugin-standard": "^3.0.1",
-        "expose-loader": "^0.7.5",
         "hard-source-webpack-plugin": "^0.6.4",
         "istanbul-instrumenter-loader": "^3.0.0",
         "jsdoc": "^3.5.5",
@@ -47,7 +47,7 @@
         "live-server": "^1.2.1",
         "local-web-server": "^2.6.0",
         "mocha": "^4.1.0",
-        "prettier": "^1.11.1",
+        "prettier": "1.11.1",
         "sinon": "^6.0.1",
         "webpack": "^4.16.5",
         "webpack-cli": "^3.1.0",
