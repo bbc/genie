@@ -3,7 +3,7 @@
  *
  * Exposes the browser name and any browser sniffing shortcuts used in Genie.
  *
- * @module core/scene
+ * @module core/browser
  * @copyright BBC 2018
  * @author BBC Children's D+E
  * @license Apache-2.0
@@ -16,10 +16,15 @@ export const getBrowser = () => {
 
     const name = browserInfo.getBrowserName();
     const version = browserInfo.getBrowserVersion();
+    const isSilk = name === "Amazon Silk";
+
+    //Ipad 2 faster in Canvas. Force bool as Bowser returns undefined if browser doesn't match
+    const forceCanvas = Boolean(browserInfo.satisfies({ safari: "<10" }));
 
     return {
         name,
         version,
-        isSilk: name === "Amazon Silk",
+        forceCanvas,
+        isSilk,
     };
 };

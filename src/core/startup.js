@@ -33,9 +33,9 @@ export function startup(settingsConfig = {}, navigationConfig) {
     const phaserConfig = {
         width: 1400,
         height: 600,
-        renderer: Phaser.AUTO,
+        renderer: browser.forceCanvas ? Phaser.CANVAS : Phaser.AUTO,
         antialias: true,
-        multiTexture: false,
+        multiTexture: true,
         parent: getContainerDiv(),
         state: new Startup(onStarted),
         transparent: browser.isSilk, // Fixes silk browser flickering

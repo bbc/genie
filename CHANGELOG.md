@@ -2,8 +2,13 @@
 
 | Version | Description |
 |---------|-------------|
-| | Set clearBeforeRender to false since all games fill the canvas |
-| | Set transparent canvas (Kindle flicker fix) only if Amazon Silk browser |
+| | Add lib folder to babel load in webpack config. |
+| | Lock Prettier to version in package.json. |
+| | Npm Audit fixes. |
+| | Add checks to force canvas rendering on ipad 2. |
+| | Enable multi-texture support. |
+| | Set clearBeforeRender to false since all games fill the canvas. |
+| | Set transparent canvas (Kindle flicker fix) only if Amazon Silk browser. |
 | | QAMode now occurs when on a test URL. |
 | 1.0.6 | |
 | | Add removeFromAccessibleButtons and getAccessibleButtons to accessible layer. |

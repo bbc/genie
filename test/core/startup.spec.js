@@ -68,7 +68,7 @@ describe("Startup", () => {
             height: 600,
             renderer: 0,
             antialias: true,
-            multiTexture: false,
+            multiTexture: true,
             parent: containerDiv,
             transparent: false,
             clearBeforeRender: false,
@@ -94,6 +94,18 @@ describe("Startup", () => {
         startup();
         const actualConfig = PhaserGame.getCall(0).args[0];
         assert.equal(actualConfig.transparent, true);
+
+        restore();
+    });
+
+    it("sets renderer to canvas when browser returns forceCanvas", () => {
+        const mockSafari9 = { name: "Safari", forceCanvas: true };
+
+        rewire$getBrowser(() => mockSafari9);
+
+        startup();
+        const actualConfig = PhaserGame.getCall(0).args[0];
+        assert.equal(actualConfig.renderer, 1);
 
         restore();
     });
