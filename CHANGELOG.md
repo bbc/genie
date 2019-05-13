@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| | Changes fullscreen target for Phaser to ensure the settings screen and Brim appear above the fullscreen game, adds mock GMI for local testing. |
+| 1.0.7 | |
 | | Add lib folder to babel load in webpack config. |
 | | Lock Prettier to version in package.json. |
 | | Npm Audit fixes. |

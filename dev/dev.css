@@ -56,3 +56,5 @@ body {
     height: 100%;
     position: fixed;
 }
+
+.settings { position:absolute; top:25%; left:0; right:0; margin:auto; width:40%; padding:5%; z-index:1; text-align:center; background-color:#fff; color:#000; font-size:100%; }

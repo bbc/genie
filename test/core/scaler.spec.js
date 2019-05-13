@@ -28,18 +28,36 @@ describe("Scaler", () => {
 
     afterEach(() => sandbox.restore());
 
-    it("Should set the scalemode to SHOW_ALL on init", () => {
-        Scaler.init(600, mockGame);
-        expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.SHOW_ALL);
+    describe("Initial configuration", () => {
+        it("sets the scalemode", () => {
+            Scaler.init(600, mockGame);
+            expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.SHOW_ALL);
+        });
+
+        it("sets the fullScreenScaleMode", () => {
+            Scaler.init(600, mockGame);
+            expect(mockGame.scale.fullScreenScaleMode).to.eql(Phaser.ScaleManager.SHOW_ALL);
+        });
+
+        it("sets the page alignment", () => {
+            Scaler.init(600, mockGame);
+            expect(mockGame.scale.pageAlignHorizontally).to.eql(true);
+            expect(mockGame.scale.pageAlignVertically).to.eql(true);
+        });
+
+        it("sets the fullScreenTarget", () => {
+            Scaler.init(600, mockGame);
+            expect(mockGame.scale.fullScreenTarget).to.eql(document.body);
+        });
     });
 
-    it("Should assign a callback to window.onresize", () => {
+    it("assigns a callback to window.onresize", () => {
         const callback = window.onresize;
         Scaler.init(600, mockGame);
         assert.notEqual(window.onresize, callback);
     });
 
-    it("Should return correct metrics when calculateMetrics is called", () => {
+    it("returns correct metrics when calculateMetrics is called", () => {
         sandbox.stub(calculateMetrics, "calculateMetrics").returns(sandbox.stub().returns("metrics"));
         Scaler.init(600, mockGame);
         const metrics = Scaler.getMetrics();

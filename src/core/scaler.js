@@ -25,6 +25,7 @@ export function init(stageHeight, game) {
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
+    game.scale.fullScreenTarget = document.body;
 
     getMetrics = fp.flow(
         getBounds(game),

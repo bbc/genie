@@ -13,6 +13,8 @@ import * as LoadFonts from "../../src/core/font-loader.js";
 import * as Navigation from "../../src/core/navigation.js";
 import * as styles from "../../src/core/custom-styles.js";
 import * as qaMode from "../../src/core/qa/qa-mode.js";
+import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
+import * as fullscreen from "../../src/core/fullscreen.js";
 
 import { rewire$getBrowser, restore } from "../../src/core/browser.js";
 
@@ -125,6 +127,8 @@ describe("Startup", () => {
             loadFonts = sandbox.stub(LoadFonts, "loadFonts");
             navigationCreate = sandbox.stub(Navigation, "create");
             sandbox.stub(qaMode, "create");
+            sandbox.stub(a11y, "setup");
+            sandbox.stub(fullscreen, "listenForTap");
 
             startup({}, "NavConfig");
             const game = PhaserGame.getCall(0).args[0];
@@ -153,9 +157,9 @@ describe("Startup", () => {
         it("creates qaMode if the qaMode url parameter is set to true", () => {
             const onComplete = loadFonts.getCall(0).args[1];
             onComplete();
-
             sandbox.assert.calledOnce(qaMode.create);
         });
+
         it("starts the stats tracking through the GMI", () => {
             const expectedContext = {
                 popupScreens: [],
@@ -164,6 +168,18 @@ describe("Startup", () => {
             const statsParams = gmiModule.startStatsTracking.getCall(0).args;
             assert.deepEqual(statsParams[0], Game.Stub);
             assert.deepEqual(JSON.stringify(statsParams[1]), JSON.stringify(expectedContext));
+        });
+
+        it("sets up the accessibility manager", () => {
+            const onComplete = loadFonts.getCall(0).args[1];
+            onComplete();
+            sandbox.assert.calledWith(a11y.setup, Game.Stub.canvas.parentElement);
+        });
+
+        it("sets up the fullscreen API", () => {
+            const onComplete = loadFonts.getCall(0).args[1];
+            onComplete();
+            sandbox.assert.calledWith(fullscreen.listenForTap, Game.Stub.canvas.parentElement);
         });
     });
 });

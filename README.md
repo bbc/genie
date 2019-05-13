@@ -16,7 +16,7 @@ To see this simply open `output/stats.html` in a browser.
 
 ## To view:
 
-`npm start` then navigate to http://localhost:8080/
+`npm start` then navigate to the URL listed in the terminal output.
 
 Alternatively load http://localhost:8080/index.html as a file URL (requires `--allow-file-access-from-files` in Chrome.)
 
