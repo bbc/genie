@@ -3,63 +3,50 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert } from "chai";
-import * as sinon from "sinon";
 import * as HowToPlay from "../../../src/components/overlays/how-to-play";
-import * as Button from "../../fake/button.js";
+import * as Book from "../../../src/core/book/book.js";
 import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
 import * as signal from "../../../src/core/signal-bus.js";
 
 describe("How To Play Overlay", () => {
     let mockGame;
     let mockScreen;
-    let signalSpy;
     let mockTitle;
-    let mockGelButtons;
     let mockBackground;
     let mockOverlayLayout;
     let mockPipsGroup;
-    let mountPoint;
-
-    const sandbox = sinon.createSandbox();
-    const panel1Sprite = { visible: "", destroy: sandbox.spy(), events: { onDestroy: { add: () => {} } } };
-    const panel2Sprite = { visible: "", destroy: sandbox.spy() };
-    const panel3Sprite = { visible: "", destroy: sandbox.spy() };
+    let panel1Sprite;
+    let panel2Sprite;
+    let panel3Sprite;
+    let mockBook;
 
     beforeEach(() => {
-        mountPoint = document.createElement("div");
-        document.body.appendChild(mountPoint);
+        mockBook = {
+            pages: [{ visible: true }, { visible: false }, { visible: false }],
+            destroy: jest.fn(),
+        };
 
-        let nextEl = document.createElement("div");
-        nextEl.id = "how-to-play__next";
-        let prevEl = document.createElement("div");
-        prevEl.id = "how-to-play__previous";
+        jest.spyOn(signal.bus, "subscribe");
+        jest.spyOn(Book, "Start").mockImplementation(() => mockBook);
+        jest.spyOn(Book, "PreviousPage").mockImplementation(() => mockBook);
+        jest.spyOn(Book, "NextPage").mockImplementation(() => mockBook);
+        jest.spyOn(Book, "GoToPage").mockImplementation(() => mockBook);
 
-        mountPoint.appendChild(nextEl);
-        mountPoint.appendChild(prevEl);
-
-        signalSpy = sandbox.spy(signal.bus, "subscribe");
-        mockBackground = { destroy: sandbox.spy() };
+        mockBackground = { destroy: jest.fn() };
         mockOverlayLayout = {
-            addBackground: sandbox.stub().returns(mockBackground),
-            disableExistingButtons: sandbox.spy(),
-            moveGelButtonsToTop: sandbox.spy(),
-            moveToTop: sandbox.spy(),
+            addBackground: jest.fn().mockImplementation(() => mockBackground),
+            disableExistingButtons: jest.fn(),
+            moveGelButtonsToTop: jest.fn(),
+            moveToTop: jest.fn(),
         };
-        sandbox.stub(OverlayLayout, "create").returns(mockOverlayLayout);
+        jest.spyOn(OverlayLayout, "create").mockImplementation(() => mockOverlayLayout);
 
-        mockGelButtons = {
-            buttons: { howToPlayPrevious: Button.Stub(), howToPlayNext: Button.Stub() },
-            destroy: sandbox.spy(),
-        };
-
-        mockTitle = { destroy: sandbox.spy() };
+        mockTitle = { destroy: jest.fn() };
         mockScreen = {
             visibleLayer: "how-to-play",
             scene: {
-                addLayout: sandbox.stub().returns(mockGelButtons),
-                addToBackground: sandbox.stub(),
-                removeLast: sandbox.stub(),
+                addToBackground: jest.fn().mockImplementation(item => item),
+                removeLast: jest.fn(),
             },
             context: {
                 popupScreens: [],
@@ -72,121 +59,122 @@ describe("How To Play Overlay", () => {
                 },
             },
             overlayClosed: {
-                dispatch: sandbox.stub(),
+                dispatch: jest.fn(),
             },
         };
 
-        mockScreen.scene.addToBackground.withArgs(mockTitle).returns(mockTitle);
+        mockPipsGroup = { add: jest.fn(), callAll: jest.fn() };
 
-        mockPipsGroup = { add: sandbox.spy(), callAll: sandbox.spy() };
+        panel1Sprite = { visible: "", destroy: jest.fn(), events: { onDestroy: { add: () => {} } } };
+        panel2Sprite = { visible: "", destroy: jest.fn() };
+        panel3Sprite = { visible: "", destroy: jest.fn() };
+
         mockGame = {
             add: {
-                image: sandbox.stub(),
-                sprite: sandbox.stub(),
-                button: sandbox.stub(),
-                group: sandbox.stub().returns(mockPipsGroup),
+                image: jest.fn().mockImplementation((x, y, imageName) => {
+                    if (imageName === "howToPlay.title") {
+                        return mockTitle;
+                    }
+                    if (imageName === "howToPlay.panel1") {
+                        return panel1Sprite;
+                    }
+                    if (imageName === "howToPlay.panel2") {
+                        return panel2Sprite;
+                    }
+                    if (imageName === "howToPlay.panel3") {
+                        return panel3Sprite;
+                    }
+                    return "background";
+                }),
+                button: jest.fn(),
+                group: jest.fn().mockImplementation(() => mockPipsGroup),
             },
             state: { current: "howToPlay", states: { howToPlay: mockScreen } },
             canvas: {
-                focus: sandbox.spy(),
-                parentElement: { appendChild: () => {}, insertBefore: () => {} },
+                focus: jest.fn(),
+                parentElement: { appendChild: jest.fn(), insertBefore: jest.fn() },
                 setAttribute: () => {},
             },
         };
-        mockGame.add.image.withArgs(0, 0, "howToPlay.background").returns("background");
-        mockGame.add.image.withArgs(0, -230, "howToPlay.title").returns(mockTitle);
-        mockGame.add.sprite.withArgs(0, 30, "howToPlay.panel1").returns(panel1Sprite);
-        mockGame.add.sprite.withArgs(0, 30, "howToPlay.panel2").returns(panel2Sprite);
-        mockGame.add.sprite.withArgs(0, 30, "howToPlay.panel3").returns(panel3Sprite);
     });
 
-    afterEach(() => {
-        sandbox.restore();
-        mountPoint.remove();
-    });
+    afterEach(() => jest.clearAllMocks());
 
-    describe("assets", () => {
+    describe("Create method", () => {
         beforeEach(() => {
             HowToPlay.create({ game: mockGame });
         });
 
-        it("adds 'how-to-play' to the popup screens", () => {
-            assert.deepEqual(mockScreen.context.popupScreens, ["how-to-play"]);
+        test("adds the screen to the current screens", () => {
+            expect(mockGame.state.states[mockGame.state.current]).toEqual(mockScreen);
         });
 
-        it("creates a new overlay layout manager", () => {
-            assert.isTrue(OverlayLayout.create.calledOnce);
+        test("adds 'how-to-play' to the popup screens", () => {
+            expect(mockScreen.context.popupScreens).toEqual(["how-to-play"]);
         });
 
-        it("adds a background image and passes it to the overlay manager", () => {
-            sinon.assert.calledWith(mockGame.add.image, 0, 0, "howToPlay.background");
+        test("creates a new overlay layout manager", () => {
+            expect(OverlayLayout.create).toHaveBeenCalledTimes(1);
         });
 
-        it("creates a title and adds it to the background", () => {
-            sinon.assert.calledWith(mockGame.add.image, 0, -230, "howToPlay.title");
+        test("adds a background image and passes it to the overlay manager", () => {
+            expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "howToPlay.background");
         });
 
-        it("adds GEL buttons", () => {
-            const actualAddLayoutCall = mockScreen.scene.addLayout.getCall(0);
-            const expectedAddLayoutCall = ["howToPlayBack", "audio", "settings", "howToPlayPrevious", "howToPlayNext"];
-            assert.deepEqual(actualAddLayoutCall.args[0], expectedAddLayoutCall);
-        });
-    });
-
-    describe("panels", () => {
-        beforeEach(() => {
-            HowToPlay.create({ game: mockGame });
+        test("creates a title and adds it to the background", () => {
+            expect(mockGame.add.image).toHaveBeenCalledWith(0, -230, "howToPlay.title");
         });
 
-        it("creates sprites for each panel", () => {
-            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "howToPlay.panel1");
-            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "howToPlay.panel2");
-            sinon.assert.calledWith(mockGame.add.sprite, 0, 30, "howToPlay.panel3");
-        });
-
-        it("adds each panel sprite to the background", () => {
-            sinon.assert.calledWith(mockScreen.scene.addToBackground, panel1Sprite);
-            sinon.assert.calledWith(mockScreen.scene.addToBackground, panel2Sprite);
-            sinon.assert.calledWith(mockScreen.scene.addToBackground, panel3Sprite);
-        });
-
-        it("hides all the panel sprites except the first one", () => {
-            assert.isTrue(panel1Sprite.visible);
-            assert.isFalse(panel2Sprite.visible);
-            assert.isFalse(panel3Sprite.visible);
+        test("creates a book with correct params", () => {
+            const expectedTheme = mockScreen.context.config.theme["how-to-play"];
+            expect(Book.Start).toHaveBeenCalledWith(
+                "howToPlay",
+                expectedTheme,
+                mockGame,
+                mockScreen,
+                mockOverlayLayout,
+                expectedTheme.panelText,
+            );
         });
     });
 
     describe("pips", () => {
-        it("creates pip sprites for each panel and calculates their position", () => {
+        test("creates pip sprites for each panel and calculates their position", () => {
             HowToPlay.create({ game: mockGame });
-            sinon.assert.calledWith(mockGame.add.button, -39, 240, "howToPlay.pipOn");
-            sinon.assert.calledWith(mockGame.add.button, -8, 240, "howToPlay.pipOff");
-            sinon.assert.calledWith(mockGame.add.button, 23, 240, "howToPlay.pipOff");
+            const pip1 = mockGame.add.button.mock.calls[0];
+            const pip2 = mockGame.add.button.mock.calls[1];
+            const pip3 = mockGame.add.button.mock.calls[1];
+
+            expect(pip1[0]).toBe(-39);
+            expect(pip1[1]).toBe(240);
+            expect(pip1[2]).toBe("howToPlay.pipOn");
+
+            expect(pip2[0]).toBe(-8);
+            expect(pip2[1]).toBe(240);
+            expect(pip2[2]).toBe("howToPlay.pipOff");
+
+            expect(pip3[0]).toBe(-8);
+            expect(pip3[1]).toBe(240);
+            expect(pip3[2]).toBe("howToPlay.pipOff");
         });
 
-        it("adds the pips group to the background", () => {
+        test("adds the pips group to the background", () => {
             HowToPlay.create({ game: mockGame });
-            sinon.assert.calledOnce(mockScreen.scene.addToBackground.withArgs(mockPipsGroup));
+            expect(mockScreen.scene.addToBackground).toHaveBeenCalledWith(mockPipsGroup);
         });
 
-        it("shows the first panel when the first pip is clicked", () => {
+        test("goes to the correct page in the book when a pip is clicked", () => {
             HowToPlay.create({ game: mockGame });
-            const pip1Callback = mockGame.add.button.getCall(0).args[3];
+            const pip2Callback = mockGame.add.button.mock.calls[1][3];
+            pip2Callback();
+            expect(Book.GoToPage).toHaveBeenCalledWith(2, mockBook);
+        });
+
+        test("does not move to another page in the book if the clicked pip is on", () => {
+            HowToPlay.create({ game: mockGame });
+            const pip1Callback = mockGame.add.button.mock.calls[0][3];
             pip1Callback();
-            assert.isTrue(panel1Sprite.visible);
-            assert.isFalse(panel2Sprite.visible);
-            assert.isFalse(panel3Sprite.visible);
-        });
-
-        it("does not redraw the pips when the selected pip is clicked", () => {
-            HowToPlay.create({ game: mockGame });
-            const pip1Callback = mockGame.add.button.getCall(0).args[3];
-            pip1Callback();
-            sinon.assert.notCalled(mockPipsGroup.callAll);
-            assert.isTrue(mockGame.add.button.withArgs(-39, 240, "howToPlay.pipOn").calledOnce);
-            assert.isTrue(mockGame.add.button.withArgs(-8, 240, "howToPlay.pipOff").calledOnce);
-            assert.isTrue(mockGame.add.button.withArgs(23, 240, "howToPlay.pipOff").calledOnce);
+            expect(Book.GoToPage).not.toHaveBeenCalled();
         });
     });
 
@@ -195,109 +183,87 @@ describe("How To Play Overlay", () => {
             HowToPlay.create({ game: mockGame });
         });
 
-        it("adds signal subscriptions to the GEL buttons", () => {
-            assert.equal(signalSpy.callCount, 3);
-            assert.equal(signalSpy.getCall(0).args[0].channel, "how-to-play-gel-buttons");
-            assert.equal(signalSpy.getCall(0).args[0].name, "back");
-            assert.equal(signalSpy.getCall(1).args[0].channel, "how-to-play-gel-buttons");
-            assert.equal(signalSpy.getCall(1).args[0].name, "previous");
-            assert.equal(signalSpy.getCall(2).args[0].channel, "how-to-play-gel-buttons");
-            assert.equal(signalSpy.getCall(2).args[0].name, "next");
+        test("adds signal subscriptions to the GEL buttons", () => {
+            expect(signal.bus.subscribe).toHaveBeenCalledTimes(3);
+            expect(signal.bus.subscribe.mock.calls[0][0].channel).toBe("how-to-play-gel-buttons");
+            expect(signal.bus.subscribe.mock.calls[0][0].name).toBe("back");
+            expect(signal.bus.subscribe.mock.calls[1][0].channel).toBe("how-to-play-gel-buttons");
+            expect(signal.bus.subscribe.mock.calls[1][0].name).toBe("previous");
+            expect(signal.bus.subscribe.mock.calls[2][0].channel).toBe("how-to-play-gel-buttons");
+            expect(signal.bus.subscribe.mock.calls[2][0].name).toBe("next");
         });
 
-        describe("back button", () => {
-            it("destroys the how to play screen", () => {
-                const clickBackButton = signalSpy.getCall(0).args[0].callback;
+        describe("back button click", () => {
+            beforeEach(() => {
+                jest.spyOn(signal.bus, "removeChannel");
+                const clickBackButton = signal.bus.subscribe.mock.calls[0][0].callback;
                 clickBackButton();
-
-                assert.isTrue(mockGelButtons.destroy.calledOnce);
-                assert.isTrue(mockBackground.destroy.calledOnce);
-                assert.isTrue(mockTitle.destroy.calledOnce);
             });
 
-            it("removes all the panels on destroy", () => {
-                const destroy = signalSpy.getCall(0).args[0].callback;
-                destroy();
-                assert.isTrue(panel1Sprite.destroy.called);
-                assert.isTrue(panel2Sprite.destroy.called);
-                assert.isTrue(panel3Sprite.destroy.called);
+            test("removes subscribed-to channel for this overlay when the back button is clicked", () => {
+                expect(signal.bus.removeChannel).toHaveBeenCalledWith("how-to-play-gel-buttons");
             });
 
-            it("removes subscribed-to channel for this overlay on destroy", () => {
-                const signalBusRemoveChannel = sandbox.spy(signal.bus, "removeChannel");
-                const destroy = signalSpy.getCall(0).args[0].callback;
-                destroy();
-                sinon.assert.calledOnce(signalBusRemoveChannel.withArgs("how-to-play-gel-buttons"));
+            test("destroys the book", () => {
+                expect(mockBook.destroy).toHaveBeenCalled();
             });
 
-            it("destroys the pips group", () => {
-                const destroy = signalSpy.getCall(0).args[0].callback;
-                destroy();
-                sinon.assert.calledWith(mockPipsGroup.callAll, "kill");
-                sinon.assert.calledWith(mockPipsGroup.callAll, "destroy");
+            test("destroys the pips group", () => {
+                expect(mockPipsGroup.callAll).toHaveBeenCalledWith("kill");
+                expect(mockPipsGroup.callAll).toHaveBeenCalledWith("destroy");
             });
 
-            it("dispatches overlayClosed signal on screen", () => {
-                const destroy = signalSpy.getCall(0).args[0].callback;
-                destroy();
-                sandbox.assert.calledOnce(mockScreen.overlayClosed.dispatch);
+            test("destroys the title and background", () => {
+                expect(mockBackground.destroy).toHaveBeenCalledTimes(1);
+                expect(mockTitle.destroy).toHaveBeenCalledTimes(1);
+            });
+
+            test("dispatches overlayClosed signal on screen", () => {
+                expect(mockScreen.overlayClosed.dispatch).toHaveBeenCalled();
+            });
+
+            test("removes the scene", () => {
+                expect(mockScreen.scene.removeLast).toHaveBeenCalled();
             });
         });
 
-        describe("previous button", () => {
-            it("switches to the first item when the second item is showing", () => {
-                const previousButtonClick = signalSpy.getCall(1).args[0].callback;
-                previousButtonClick();
-                previousButtonClick();
-                previousButtonClick();
-                assert.isTrue(panel1Sprite.visible);
-                assert.isFalse(panel2Sprite.visible);
-                assert.isFalse(panel3Sprite.visible);
+        describe("previous button click", () => {
+            beforeEach(() => {
+                const clickPreviousButton = signal.bus.subscribe.mock.calls[1][0].callback;
+                clickPreviousButton();
             });
 
-            it("destroys the existing pips", () => {
-                const previousButtonClick = signalSpy.getCall(1).args[0].callback;
-                previousButtonClick();
-                sinon.assert.calledWith(mockPipsGroup.callAll, "kill");
-                sinon.assert.calledWith(mockPipsGroup.callAll, "destroy");
+            test("switches to the previous page in the book", () => {
+                expect(Book.PreviousPage).toHaveBeenCalledWith(mockBook);
             });
 
-            it("creates a new pips group", () => {
-                const previousButtonClick = signalSpy.getCall(1).args[0].callback;
-                previousButtonClick();
-                assert.isTrue(mockScreen.scene.addToBackground.withArgs(mockPipsGroup).calledTwice);
+            test("destroys the pips group", () => {
+                expect(mockPipsGroup.callAll).toHaveBeenCalledWith("kill");
+                expect(mockPipsGroup.callAll).toHaveBeenCalledWith("destroy");
+            });
+
+            test("creates a new pips group", () => {
+                expect(mockScreen.scene.addToBackground).toHaveBeenCalledTimes(3);
             });
         });
 
-        describe("next button", () => {
-            it("switches to the second item when the first item is showing", () => {
-                const nextButtonClick = signalSpy.getCall(2).args[0].callback;
-                nextButtonClick();
-                assert.isFalse(panel1Sprite.visible);
-                assert.isTrue(panel2Sprite.visible);
-                assert.isFalse(panel3Sprite.visible);
+        describe("next button click", () => {
+            beforeEach(() => {
+                const clickNextButton = signal.bus.subscribe.mock.calls[2][0].callback;
+                clickNextButton();
             });
 
-            it("switches to the third item when the second item is showing", () => {
-                const nextButtonClick = signalSpy.getCall(2).args[0].callback;
-                nextButtonClick();
-                nextButtonClick();
-                assert.isFalse(panel1Sprite.visible);
-                assert.isFalse(panel2Sprite.visible);
-                assert.isTrue(panel3Sprite.visible);
+            test("switches to the previous page in the book", () => {
+                expect(Book.NextPage).toHaveBeenCalledWith(mockBook);
             });
 
-            it("destroys the existing pips", () => {
-                const nextButtonClick = signalSpy.getCall(2).args[0].callback;
-                nextButtonClick();
-                sinon.assert.calledWith(mockPipsGroup.callAll, "kill");
-                sinon.assert.calledWith(mockPipsGroup.callAll, "destroy");
+            test("destroys the pips group", () => {
+                expect(mockPipsGroup.callAll).toHaveBeenCalledWith("kill");
+                expect(mockPipsGroup.callAll).toHaveBeenCalledWith("destroy");
             });
 
-            it("creates a new pips group", () => {
-                const nextButtonClick = signalSpy.getCall(2).args[0].callback;
-                nextButtonClick();
-                assert.isTrue(mockScreen.scene.addToBackground.withArgs(mockPipsGroup).calledTwice);
+            test("creates a new pips group", () => {
+                expect(mockScreen.scene.addToBackground).toHaveBeenCalledTimes(3);
             });
         });
     });
