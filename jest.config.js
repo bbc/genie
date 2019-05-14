@@ -17,6 +17,6 @@ module.exports = {
     testEnvironment: "jsdom",
     modulePathIgnorePatterns: ["/.node_modules.+/"],
     testPathIgnorePatterns: ["/node_modules/", "/.node_modules.+/", ".node_modules_production"],
-    setupTestFrameworkScriptFile: "./test/helpers/setup-jest.js",
+    setupTestFrameworkScriptFile: "./test/set-up/set-up-jest.js",
     transform: { "^.+\\.js$": "babel-jest" },
 };
