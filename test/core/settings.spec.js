@@ -22,7 +22,6 @@ describe("Settings", () => {
             get: jest.fn(() => mockGmi),
             set: jest.fn(),
         });
-        jest.spyOn(gmiModule, "sendStats");
     };
 
     beforeEach(() => {
