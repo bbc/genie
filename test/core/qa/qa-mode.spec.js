@@ -5,13 +5,16 @@
  */
 import * as qaMode from "../../../src/core/qa/qa-mode.js";
 import * as parseUrlParams from "../../../src/core/parseUrlParams.js";
-import * as sinon from "sinon";
-import { assert } from "chai";
 
 describe("QAMode", () => {
-    const sandbox = sinon.createSandbox();
     const game = {};
     const goToScreen = {};
+    const qaModeWindow = {
+        testHarnessLayoutDisplayed: false,
+        goToScreen: {},
+        game: {},
+    };
+
     let testWindow = {
         __qaMode: {},
         location: {
@@ -19,13 +22,9 @@ describe("QAMode", () => {
             hostname: "",
         },
     };
-    const qaModeWindow = {
-        testHarnessLayoutDisplayed: false,
-        goToScreen: {},
-        game: {},
-    };
+
     afterEach(() => {
-        sandbox.restore();
+        jest.clearAllMocks();
         testWindow = {
             __qaMode: {},
             location: {
@@ -36,12 +35,13 @@ describe("QAMode", () => {
     });
 
     it("is QAMode when parseUrlParams returns true", () => {
-        sandbox.stub(parseUrlParams, "parseUrlParams").returns({ qaMode: true });
+        jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ qaMode: true }));
         qaMode.create(testWindow, game, goToScreen);
-        assert.deepEqual(testWindow.__qaMode, qaModeWindow);
+        expect(testWindow.__qaMode).toEqual(qaModeWindow);
     });
+
     it("is QAMode when URL includes www.test.bbc.", () => {
-        sandbox.stub(parseUrlParams, "parseUrlParams").returns({ qaMode: false });
+        jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ qaMode: false }));
         testWindow = {
             location: {
                 search: "",
@@ -50,11 +50,12 @@ describe("QAMode", () => {
             __qaMode: {},
         };
         qaMode.create(testWindow, game, goToScreen);
-        assert.deepEqual(testWindow.__qaMode, qaModeWindow);
+        expect(testWindow.__qaMode).toEqual(qaModeWindow);
     });
+
     it("isn't QAMode when not correct params or URL", () => {
-        sandbox.stub(parseUrlParams, "parseUrlParams").returns({ qaMode: false });
+        jest.fn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ qaMode: false }));
         qaMode.create(testWindow, game, goToScreen);
-        assert.deepEqual(testWindow.__qaMode, {});
+        expect(testWindow.__qaMode).toEqual({});
     });
 });
