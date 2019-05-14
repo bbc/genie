@@ -63,41 +63,38 @@ describe("Home Screen", () => {
             expect(homeScreen.scene.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-    //     it("creates a layout harness with correct params", () => {
-    //         const actualParams = layoutHarnessSpy.getCall(0).args;
-    //         const expectedParams = [mockGame, mockContext, homeScreen.scene];
-    //         expect(layoutHarnessSpy.callCount === 1).toBeTruthy();
-    //         expect(actualParams).toEqual(expectedParams);
-    //     });
-    // });
-    //
-    // describe("achievements button", () => {
-    //     it("adds the achievement button when theme flag is set", () => {
-    //         homeScreen.context.config.theme.game.achievements = true;
-    //         homeScreen.create();
-    //
-    //         const actualButtons = addLayoutSpy.getCall(0).args[0];
-    //         const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "achievements"];
-    //         expect(actualButtons).toEqual(expectedButtons);
-    //     });
-    // });
-    //
-    // describe("signals", () => {
-    //     let signalSubscribeSpy;
-    //
-    //     beforeEach(() => {
-    //         signalSubscribeSpy = sandbox.spy(signal.bus, "subscribe");
-    //         homeScreen.create();
-    //     });
-    //
-    //     it("adds a signal subscription to the play button", () => {
-    //         expect(signalSubscribeSpy.getCall(0).args[0].channel).toEqual(buttonsChannel);
-    //         expect(signalSubscribeSpy.getCall(0).args[0].name).toEqual("play");
-    //     });
-    //
-    //     it("adds a callback for the play button", () => {
-    //         signalSubscribeSpy.getCall(0).args[0].callback();
-    //         expect(homeScreen.navigation.next.callCount === 1).toBeTruthy();
-    //     });
+        it("creates a layout harness with correct params", () => {
+            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
+                mockGame,
+                mockContext,
+                homeScreen.scene,
+            );
+        });
+    });
+
+    describe("achievements button", () => {
+        it("adds the achievement button when theme flag is set", () => {
+            homeScreen.context.config.theme.game.achievements = true;
+            homeScreen.create();
+            const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "achievements"];
+            expect(homeScreen.scene.addLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+    });
+
+    describe("signals", () => {
+        beforeEach(() => {
+            jest.spyOn(signal.bus, "subscribe");
+            homeScreen.create();
+        });
+
+        it("adds a signal subscription to the play button", () => {
+            expect(signal.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel);
+            expect(signal.bus.subscribe.mock.calls[0][0].name).toBe("play");
+        });
+
+        it("adds a callback for the play button", () => {
+            signal.bus.subscribe.mock.calls[0][0].callback();
+            expect(homeScreen.navigation.next).toHaveBeenCalledTimes(1);
+        });
     });
 });
