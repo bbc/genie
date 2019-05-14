@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as sinon from "sinon";
 import { createTestHarnessDisplay } from "../../../src/components/test-harness/layout-harness";
 
 describe("test harness layout", () => {
@@ -12,26 +11,18 @@ describe("test harness layout", () => {
     let mockGame;
     let mockContext;
     let mockScene;
-    let sandbox;
     let onKeyUpSpy;
     let addKeyStub;
 
-    before(() => {
-        sandbox = sinon.createSandbox();
-    });
-
     beforeEach(() => {
-        onKeyUpSpy = sandbox.spy();
-        addKeyStub = sandbox.stub();
-        addKeyStub.withArgs(qKeyCode).returns({
-            onUp: {
-                add: onKeyUpSpy,
-            },
+        onKeyUpSpy = jest.fn();
+        addKeyStub = jest.fn().mockImplementation(argument => {
+            if (argument === qKeyCode) {
+                return { onUp: { add: onKeyUpSpy } };
+            }
         });
         mockGame = {
-            add: {
-                group: sandbox.spy(),
-            },
+            add: { group: jest.fn() },
             input: {
                 keyboard: {
                     addKey: addKeyStub,
@@ -39,67 +30,59 @@ describe("test harness layout", () => {
             },
         };
         mockScene = {
-            addToBackground: sandbox.spy(),
-            getSize: sandbox.stub().returns({
+            addToBackground: jest.fn(),
+            getSize: jest.fn(() => ({
                 width: 300,
                 height: 300,
                 stageHeightPx: 400,
-            }),
+            })),
         };
-        createTestHarnessDisplay(mockGame, mockContext, mockScene);
     });
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     describe("QA mode is active and layout is not currently displayed", () => {
-        before(() => {
-            window.__qaMode = {};
+        beforeEach(() => {
+            global.window.__qaMode = {};
             mockContext = {
-                qaMode: {
-                    active: true,
-                },
+                qaMode: { active: true },
                 scaler: {
-                    getSize: () => {
-                        return {
-                            width: 800,
-                            height: 600,
-                            scale: 1,
-                            stageHeightPx: 600,
-                        };
-                    },
+                    getSize: () => ({
+                        width: 800,
+                        height: 600,
+                        scale: 1,
+                        stageHeightPx: 600,
+                    }),
                 },
             };
-        });
-
-        after(() => {
-            delete window.__qaMode;
+            createTestHarnessDisplay(mockGame, mockContext, mockScene);
         });
 
         describe("create function is called", () => {
             it("creates two new groups (background and foreground) to store all test harness graphics", () => {
-                sinon.assert.calledTwice(mockGame.add.group);
+                expect(mockGame.add.group).toHaveBeenCalledTimes(2);
             });
 
             it("adds keyboard input and assigns it to a listener", () => {
-                sinon.assert.calledOnce(onKeyUpSpy);
+                expect(onKeyUpSpy).toHaveBeenCalledTimes(1);
             });
         });
     });
 
     describe("QA mode is NOT active", () => {
-        before(() => {
+        beforeEach(() => {
+            global.window.__qaMode = undefined;
             mockContext = {
                 qaMode: {
                     active: false,
                 },
             };
+            createTestHarnessDisplay(mockGame, mockContext, mockScene);
         });
 
         it("does nothing", () => {
-            sinon.assert.notCalled(mockGame.add.group);
-            sinon.assert.notCalled(onKeyUpSpy);
+            expect(mockGame.add.group).not.toHaveBeenCalled();
+            expect(onKeyUpSpy).not.toHaveBeenCalled();
         });
     });
 });
