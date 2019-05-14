@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Configure webpack-dev-server to store server output on disk. |
 | | Changes fullscreen target for Phaser to ensure the settings screen and Brim appear above the fullscreen game, adds mock GMI for local testing. |
 | 1.0.7 | |
 | | Add lib folder to babel load in webpack config. |
