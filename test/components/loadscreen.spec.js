@@ -3,8 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { expect, assert } from "chai";
-import * as sinon from "sinon";
 
 import { Loadscreen } from "../../src/components/loadscreen";
 import * as LoadBar from "../../src/components/loadbar";
@@ -13,107 +11,98 @@ import * as Scaler from "../../src/core/scaler.js";
 import * as GameSound from "../../src/core/game-sound";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 
+jest.mock("../../src/core/gmi/gmi.js");
+
 describe("Load Screen", () => {
     let loadScreen;
-    let addImageStub;
     let mockGame;
     let mockGmi;
-    let assetLoaderStub;
     let assetLoaderCallbackSpy;
-    let setButtonClickSoundStub;
-    let navigationNext;
 
-    const sandbox = sinon.createSandbox();
+    const createMockGmi = () => {
+        mockGmi = { gameLoaded: jest.fn() };
+        Object.defineProperty(gmiModule, "gmi", {
+            get: jest.fn(() => mockGmi),
+            set: jest.fn(),
+        });
+        jest.spyOn(gmiModule, "sendStats");
+    };
 
     beforeEach(() => {
-        assetLoaderCallbackSpy = sandbox.spy();
-        assetLoaderStub = sandbox.stub(AssetLoader, "loadAssets").returns({ then: assetLoaderCallbackSpy });
-        addImageStub = sandbox.stub();
-        setButtonClickSoundStub = sandbox.stub(GameSound, "setButtonClickSound");
-        navigationNext = sandbox.spy();
+        global.window.__qaMode = undefined;
+        assetLoaderCallbackSpy = jest.fn();
+        jest.spyOn(AssetLoader, "loadAssets").mockImplementation(() => ({ then: assetLoaderCallbackSpy }));
+        jest.spyOn(GameSound, "setButtonClickSound");
 
-        mockGmi = { gameLoaded: sandbox.stub() };
-        sandbox.stub(gmiModule, "setGmi").returns(mockGmi);
-        sandbox.stub(gmiModule, "sendStats");
-        sandbox.replace(gmiModule, "gmi", mockGmi);
+        createMockGmi();
 
         mockGame = {
-            add: {
-                image: addImageStub,
-            },
-            state: {
-                current: "currentState",
-            },
+            add: { image: jest.fn().mockImplementation((x, y, imageName) => imageName), audio: jest.fn() },
+            state: { current: "currentState" },
             sound: { mute: false },
-            scale: { getParentBounds: sandbox.stub(), setGameSize: sandbox.stub() },
+            scale: { getParentBounds: jest.fn(), setGameSize: jest.fn() },
         };
 
         loadScreen = new Loadscreen();
-        loadScreen.scene = {};
-        loadScreen.navigation = {
-            next: navigationNext,
-        };
+        loadScreen.scene = { addToBackground: jest.fn() };
+        loadScreen.navigation = { next: jest.fn() };
         loadScreen.game = mockGame;
 
         Scaler.init(600, mockGame);
     });
 
-    afterEach(() => {
-        sandbox.restore();
-        delete window.__qaMode;
-    });
+    afterEach(() => jest.clearAllMocks());
 
     describe("preload method", () => {
-        it("calls the asset loader with correct params", () => {
+        test("calls the asset loader with correct params", () => {
             const expectedGamePacks = {
                 ["MasterAssetPack"]: { url: "asset-master-pack.json" },
                 ["GelAssetPack"]: { url: "gel/gel-pack.json" },
             };
             const expectedLoadscreenPack = { key: "loadscreen", url: "loader/loadscreen-pack.json" };
 
-            const expectedUpdateLoadProgress = sandbox.spy();
+            const expectedUpdateLoadProgress = jest.fn();
             loadScreen.updateLoadProgress = expectedUpdateLoadProgress;
             loadScreen.preload();
 
-            expect(assetLoaderStub.args[0][0]).to.eql(mockGame);
-            expect(assetLoaderStub.args[0][1]).to.eql(expectedGamePacks);
-            expect(assetLoaderStub.args[0][2]).to.eql(expectedLoadscreenPack);
+            expect(AssetLoader.loadAssets.mock.calls[0][0]).toEqual(mockGame);
+            expect(AssetLoader.loadAssets.mock.calls[0][1]).toEqual(expectedGamePacks);
+            expect(AssetLoader.loadAssets.mock.calls[0][2]).toEqual(expectedLoadscreenPack);
 
-            assetLoaderStub.args[0][3]();
-            expect(expectedUpdateLoadProgress.called).to.equal(true);
+            AssetLoader.loadAssets.mock.calls[0][3]();
+            expect(expectedUpdateLoadProgress).toHaveBeenCalled();
         });
 
-        it("handles the returned promise", () => {
+        test("handles the returned promise", () => {
             loadScreen.preload();
-            expect(assetLoaderCallbackSpy.called).to.equal(true);
+            expect(assetLoaderCallbackSpy).toHaveBeenCalled();
         });
 
-        it("sets the button click sound to be used in the game", () => {
-            window.__qaMode = {};
+        test("sets the button click sound to be used in the game", () => {
+            global.window.__qaMode = {};
             loadScreen.preload();
 
-            assetLoaderCallbackSpy.args[0][0]();
-            sandbox.assert.calledOnce(setButtonClickSoundStub);
-            sandbox.assert.calledWith(setButtonClickSoundStub, mockGame, sandbox.match.typeOf("string"));
+            assetLoaderCallbackSpy.mock.calls[0][0]();
+            expect(GameSound.setButtonClickSound).toHaveBeenCalledWith(mockGame, "loadscreen.buttonClick");
         });
 
-        it("fires the game loaded stat through the GMI", () => {
+        test("fires the game loaded stat through the GMI", () => {
             loadScreen.preload();
-            assetLoaderCallbackSpy.args[0][0]();
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("game_loaded"));
+            assetLoaderCallbackSpy.mock.calls[0][0]();
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("game_loaded");
         });
 
-        it("tells the GMI the game has loaded", () => {
+        test("tells the GMI the game has loaded", () => {
             loadScreen.preload();
-            assetLoaderCallbackSpy.args[0][0]();
-            sandbox.assert.called(mockGmi.gameLoaded);
+            assetLoaderCallbackSpy.mock.calls[0][0]();
+            expect(mockGmi.gameLoaded).toHaveBeenCalled();
         });
 
-        it("moves to the next screen when the promise is resolved", () => {
+        test("moves to the next screen when the promise is resolved", () => {
             loadScreen.preload();
 
-            assetLoaderCallbackSpy.args[0][0]();
-            expect(navigationNext.called).to.equal(true);
+            assetLoaderCallbackSpy.mock.calls[0][0]();
+            expect(loadScreen.navigation.next).toHaveBeenCalled();
         });
     });
 
@@ -124,45 +113,46 @@ describe("Load Screen", () => {
         let mockBrandLogo;
 
         beforeEach(() => {
-            setFillPercentStub = sandbox.stub();
+            setFillPercentStub = jest.fn();
             mockProgressBar = {
                 position: {
                     set: () => {},
                 },
                 setFillPercent: setFillPercentStub,
             };
-            createProgressBarStub = sandbox.stub(LoadBar, "createLoadBar").returns(mockProgressBar);
-            loadScreen.scene.calculateMetrics = sandbox.stub().returns({
+            createProgressBarStub = jest.spyOn(LoadBar, "createLoadBar").mockImplementation(() => mockProgressBar);
+            loadScreen.scene.calculateMetrics = jest.fn().mockImplementation(() => ({
                 horizontals: {},
                 verticals: {},
-            });
-            loadScreen.scene.addToBackground = sandbox.stub().returns({
+            }));
+            mockBrandLogo = {
                 anchor: {
                     set: () => {},
                 },
                 position: {
                     set: () => {},
                 },
+            };
+            loadScreen.scene.addToBackground = jest.fn().mockImplementation(image => {
+                if (image === "brandLogo") {
+                    return mockBrandLogo;
+                }
             });
-
-            mockBrandLogo = {};
-            addImageStub.withArgs(0, 0, "brandLogo").returns(mockBrandLogo);
-
             loadScreen.create();
         });
 
-        it("creates one loading bar", () => {
-            sandbox.assert.calledOnce(createProgressBarStub);
-            sandbox.assert.calledWith(createProgressBarStub, mockGame, "loadbarBackground", "loadbarFill");
+        test("creates one loading bar", () => {
+            expect(createProgressBarStub).toHaveBeenCalled();
+            expect(createProgressBarStub).toHaveBeenCalledWith(mockGame, "loadbarBackground", "loadbarFill");
         });
 
-        it("adds the loading bar to the layout", () => {
-            sandbox.assert.calledWith(loadScreen.scene.addToBackground, mockProgressBar);
+        test("adds the loading bar to the layout", () => {
+            expect(loadScreen.scene.addToBackground).toHaveBeenCalledWith(mockProgressBar);
         });
 
-        it("adds a brand logo to the layout", () => {
-            sandbox.assert.calledWith(addImageStub, 0, 0, "brandLogo");
-            sandbox.assert.calledWith(loadScreen.scene.addToBackground, mockBrandLogo);
+        test("adds a brand logo to the layout", () => {
+            expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "brandLogo");
+            expect(loadScreen.scene.addToBackground).toHaveBeenCalledWith("brandLogo");
         });
     });
 
@@ -171,47 +161,41 @@ describe("Load Screen", () => {
             loadScreen.loadingBar = { fillPercent: 0 };
         });
 
-        it("updates the loading bar fill percentage when called", () => {
+        test("updates the loading bar fill percentage when called", () => {
             const progress = 42;
 
             loadScreen.updateLoadProgress(progress);
 
-            assert.equal(loadScreen.loadingBar.fillPercent, progress);
+            expect(loadScreen.loadingBar.fillPercent).toEqual(progress);
         });
 
-        it("does not throw an error if there is no loading bar", () => {
+        test("does not throw an error if there is no loading bar", () => {
             delete loadScreen.loadingBar;
             loadScreen.updateLoadProgress(75);
         });
     });
 
     describe("qaMode", () => {
-        let consoleSpy;
-
         beforeEach(() => {
-            consoleSpy = sandbox.spy(console, "log");
+            jest.spyOn(console, "log").mockImplementation(() => {});
         });
 
-        after(() => {
-            delete window.__qaMode;
-        });
-
-        it("logs the progress to the console when qaMode is true", () => {
-            window.__qaMode = {};
+        test("logs the progress to the console when qaMode is true", () => {
+            global.window.__qaMode = {};
             loadScreen.updateLoadProgress("50%");
-            expect(consoleSpy.args[0]).to.eql(["Loader progress:", "50%"]);
+            expect(console.log.mock.calls[0]).toEqual(["Loader progress:", "50%"]); // eslint-disable-line no-console
         });
 
-        it("logs the loaded assets to the console when qaMode is true", () => {
+        test("logs the loaded assets to the console when qaMode is true", () => {
             const expectedKeyLookups = { gel: { play: "gel/play.png" }, home: { title: "shared/title.png" } };
             const expectedOutput =
                 "Loaded assets:\n    gel:\n        play: gel/play.png\n    home:\n        title: shared/title.png";
 
-            window.__qaMode = {};
+            global.window.__qaMode = {};
             loadScreen.preload();
 
-            assetLoaderCallbackSpy.args[0][0](expectedKeyLookups);
-            expect(consoleSpy.args[0][0]).to.equal(expectedOutput);
+            assetLoaderCallbackSpy.mock.calls[0][0](expectedKeyLookups);
+            expect(console.log.mock.calls[0][0]).toEqual(expectedOutput); // eslint-disable-line no-console
         });
     });
 });
