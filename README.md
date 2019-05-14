@@ -22,11 +22,8 @@ Alternatively load http://localhost:8080/index.html as a file URL (requires `--a
 
 ## To test:
 
-`npm test` will run tests using karma.
+`npm test` will run tests using [Jest](https://jestjs.io/).
 
-`npm run test-watch` will run tests using karma in watch mode.
-
-`npm run test:coverage` and `npm run test-watch:coverage` will calculate test coverage. This runs more **slowly** than running the tests normally.
 
 ## Creating a new version for release:
 
