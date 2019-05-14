@@ -3,46 +3,43 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert, expect } from "chai";
-import * as sinon from "sinon";
 import * as Scaler from "../../src/core/scaler";
 import * as calculateMetrics from "../../src/core/layout/calculate-metrics.js";
 
 describe("Scaler", () => {
-    const sandbox = sinon.createSandbox();
     let mockGame;
 
     beforeEach(() => {
         mockGame = {
             scale: {
-                setGameSize: sinon.spy(),
-                scaleMode: sinon.spy(),
-                setResizeCallback: sinon.spy(),
-                onSizeChange: { add: sinon.spy() },
-                getParentBounds: sinon.spy(() => {
+                setGameSize: jest.fn(),
+                scaleMode: jest.fn(),
+                setResizeCallback: jest.fn(),
+                onSizeChange: { add: jest.fn() },
+                getParentBounds: jest.fn(() => {
                     return { width: 800, height: 600 };
                 }),
             },
         };
     });
 
-    afterEach(() => sandbox.restore());
+    afterEach(() => jest.clearAllMocks());
 
     it("Should set the scalemode to SHOW_ALL on init", () => {
         Scaler.init(600, mockGame);
-        expect(mockGame.scale.scaleMode).to.eql(Phaser.ScaleManager.SHOW_ALL);
+        expect(mockGame.scale.scaleMode).toEqual(Phaser.ScaleManager.SHOW_ALL);
     });
 
     it("Should assign a callback to window.onresize", () => {
         const callback = window.onresize;
         Scaler.init(600, mockGame);
-        assert.notEqual(window.onresize, callback);
+        expect(window.onresize).not.toEqual(callback);
     });
 
     it("Should return correct metrics when calculateMetrics is called", () => {
-        sandbox.stub(calculateMetrics, "calculateMetrics").returns(sandbox.stub().returns("metrics"));
+        jest.spyOn(calculateMetrics, "calculateMetrics").mockImplementation(() => jest.fn(() => "metrics"));
         Scaler.init(600, mockGame);
         const metrics = Scaler.getMetrics();
-        assert.strictEqual(metrics, "metrics");
+        expect(metrics).toBe("metrics");
     });
 });
