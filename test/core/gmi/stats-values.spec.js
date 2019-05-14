@@ -3,13 +3,9 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert } from "chai";
-import * as sinon from "sinon";
-
 import * as StatsValues from "../../../src/core/gmi/stats-values.js";
 
 describe("GMI - Stats Values", () => {
-    const sandbox = sinon.createSandbox();
     let fakeSettings;
     let fakeVisibleLayer;
 
@@ -23,9 +19,7 @@ describe("GMI - Stats Values", () => {
         fakeVisibleLayer = "visible-layer";
     });
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     describe("getValues method", () => {
         it("returns values for first click", () => {
@@ -37,7 +31,7 @@ describe("GMI - Stats Values", () => {
                 game_level_name: null,
                 settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             };
-            assert.deepEqual(JSON.stringify(actualValues), JSON.stringify(expectedValues));
+            expect(JSON.stringify(actualValues)).toEqual(JSON.stringify(expectedValues));
         });
 
         it("returns values when this click isn't the first", () => {
@@ -50,7 +44,7 @@ describe("GMI - Stats Values", () => {
                 game_level_name: null,
                 settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             };
-            assert.deepEqual(actualValues, expectedValues);
+            expect(actualValues).toEqual(expectedValues);
         });
 
         it("returns values for the continue stat", () => {
@@ -63,7 +57,7 @@ describe("GMI - Stats Values", () => {
                 game_level_name: null,
                 settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             };
-            assert.deepEqual(actualValues, expectedValues);
+            expect(actualValues).toEqual(expectedValues);
         });
 
         it("returns values for the heartbeat stat", () => {
@@ -76,7 +70,7 @@ describe("GMI - Stats Values", () => {
                 game_level_name: null,
                 settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             };
-            assert.deepEqual(actualValues, expectedValues);
+            expect(actualValues).toEqual(expectedValues);
         });
 
         it("returns values for the game loaded stat", () => {
@@ -89,7 +83,7 @@ describe("GMI - Stats Values", () => {
                 game_level_name: null,
                 settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             };
-            assert.deepEqual(actualValues, expectedValues);
+            expect(actualValues).toEqual(expectedValues);
         });
 
         it("returns values for the game complete stat", () => {
@@ -102,7 +96,7 @@ describe("GMI - Stats Values", () => {
                 game_level_name: null,
                 settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             };
-            assert.deepEqual(actualValues, expectedValues);
+            expect(actualValues).toEqual(expectedValues);
         });
 
         it("returns values for the replay stat", () => {
@@ -115,7 +109,7 @@ describe("GMI - Stats Values", () => {
                 game_level_name: null,
                 settings_status: "audio-true-subtitles-false-motion-true-characterSelected-1-buttonPressed-3",
             };
-            assert.deepEqual(actualValues, expectedValues);
+            expect(actualValues).toEqual(expectedValues);
         });
     });
 });
