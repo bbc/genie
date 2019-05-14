@@ -3,55 +3,64 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert } from "chai";
-import * as sinon from "sinon";
+
 import { Select } from "../../src/components/select";
+import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
-import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
 
 describe("Select Screen", () => {
-    let selectScreen;
-    let layoutHarnessSpy;
+    let characterSprites;
+    let mockAccessibleElements;
     let mockGame;
     let mockContext;
-    let addToBackgroundSpy;
-    let gameImageStub;
-    let gameButtonSpy;
-    let gameSpriteStub;
-    let addLayoutSpy;
-    let navigationNext;
-    let navigationHome;
-
-    const sandbox = sinon.createSandbox();
-    const characterOneSprite = { visible: "" };
-    const characterTwoSprite = { visible: "" };
-    const characterThreeSprite = { visible: "" };
+    let selectScreen;
 
     beforeEach(() => {
-        sandbox
-            .stub(accessibleCarouselElements, "create")
-            .returns([document.createElement("div"), document.createElement("div"), document.createElement("div")]);
-        layoutHarnessSpy = sandbox.spy(layoutHarness, "createTestHarnessDisplay");
-        addToBackgroundSpy = sandbox.spy();
-        gameImageStub = sandbox.stub().returns("sprite");
-        gameImageStub.onCall(0).returns("background");
-        gameImageStub.onCall(1).returns("title");
-        gameButtonSpy = sandbox.spy();
-        gameSpriteStub = sandbox.stub();
-        gameSpriteStub.withArgs(0, 0, "characterSelect.character1").returns(characterOneSprite);
-        gameSpriteStub.withArgs(0, 0, "characterSelect.character2").returns(characterTwoSprite);
-        gameSpriteStub.withArgs(0, 0, "characterSelect.character3").returns(characterThreeSprite);
-        addLayoutSpy = sandbox.spy();
-        navigationNext = sandbox.spy();
-        navigationHome = sandbox.spy();
+        characterSprites = [{ visible: "" }, { visible: "" }, { visible: "" }];
+        mockAccessibleElements = [
+            {
+                setAttribute: jest.fn().mockImplementation((attribute, value) => {
+                    mockAccessibleElements[0].attributes[attribute] = value;
+                }),
+                style: {},
+                attributes: {},
+            },
+            {
+                setAttribute: jest.fn().mockImplementation((attribute, value) => {
+                    mockAccessibleElements[1].attributes[attribute] = value;
+                }),
+                style: {},
+                attributes: {},
+            },
+            {
+                setAttribute: jest.fn().mockImplementation((attribute, value) => {
+                    mockAccessibleElements[2].attributes[attribute] = value;
+                }),
+                style: {},
+                attributes: {},
+            },
+        ];
+
+        jest.spyOn(accessibleCarouselElements, "create").mockImplementation(() => mockAccessibleElements);
+        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
 
         mockGame = {
             add: {
-                image: gameImageStub,
-                button: gameButtonSpy,
-                sprite: gameSpriteStub,
+                image: jest.fn().mockImplementation((x, y, imageName) => imageName),
+                button: jest.fn(),
+                sprite: jest.fn().mockImplementation((x, y, assetName) => {
+                    if (assetName === "characterSelect.character1") {
+                        return characterSprites[0];
+                    }
+                    if (assetName === "characterSelect.character2") {
+                        return characterSprites[1];
+                    }
+                    if (assetName === "characterSelect.character3") {
+                        return characterSprites[2];
+                    }
+                }),
             },
             state: { current: "characterSelect" },
             canvas: { parentElement: {} },
@@ -72,231 +81,194 @@ describe("Select Screen", () => {
 
         selectScreen = new Select();
         selectScreen.scene = {
-            addToBackground: addToBackgroundSpy,
-            addLayout: addLayoutSpy,
+            addToBackground: jest.fn(),
+            addLayout: jest.fn(),
         };
 
         selectScreen.game = mockGame;
         selectScreen.context = mockContext;
-        selectScreen.preload();
-        selectScreen.navigation = {
-            next: navigationNext,
-            home: navigationHome,
-        };
+        selectScreen.navigation = { next: jest.fn() };
     });
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     describe("create method", () => {
         beforeEach(() => selectScreen.create());
 
-        it("adds a background image", () => {
-            sinon.assert.calledWith(gameImageStub, 0, 0, "characterSelect.background");
-            sinon.assert.calledWith(addToBackgroundSpy, "background");
+        test("adds a background image", () => {
+            expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "characterSelect.background");
+            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith("characterSelect.background");
         });
 
-        it("adds a title image", () => {
-            sinon.assert.calledWith(gameImageStub, 0, -150, "characterSelect.title");
-            sinon.assert.calledWith(addToBackgroundSpy, "title");
+        test("adds a title image", () => {
+            expect(mockGame.add.image).toHaveBeenCalledWith(0, -150, "characterSelect.title");
+            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith("characterSelect.title");
         });
 
-        it("adds GEL buttons to layout", () => {
-            sinon.assert.calledWith(addLayoutSpy, ["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
+        test("adds GEL buttons to layout", () => {
+            const expectedButtons = ["home", "audio", "pauseNoReplay", "previous", "next", "continue"];
+            expect(selectScreen.scene.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        it("creates a layout harness with correct params", () => {
-            assert(layoutHarnessSpy.callCount === 1, "layout harness should be called once");
-            sinon.assert.calledWith(layoutHarnessSpy, mockGame, mockContext, selectScreen.scene);
+        test("creates a layout harness with correct params", () => {
+            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
+                mockGame,
+                mockContext,
+                selectScreen.scene,
+            );
         });
 
-        it("creates sprites for each choice", () => {
-            assert(gameSpriteStub.callCount === 3, "game sprites should be added 3 times");
-            assert.deepEqual(gameSpriteStub.getCall(0).args, [0, 0, "characterSelect.character1"]);
-            assert.deepEqual(gameSpriteStub.getCall(1).args, [0, 0, "characterSelect.character2"]);
-            assert.deepEqual(gameSpriteStub.getCall(2).args, [0, 0, "characterSelect.character3"]);
+        test("creates sprites for each choice", () => {
+            expect(mockGame.add.sprite).toHaveBeenCalledTimes(3);
+            expect(mockGame.add.sprite.mock.calls[0]).toEqual([0, 0, "characterSelect.character1"]);
+            expect(mockGame.add.sprite.mock.calls[1]).toEqual([0, 0, "characterSelect.character2"]);
+            expect(mockGame.add.sprite.mock.calls[2]).toEqual([0, 0, "characterSelect.character3"]);
         });
 
-        it("adds each sprite to the background", () => {
-            sinon.assert.calledWith(addToBackgroundSpy, characterOneSprite);
-            sinon.assert.calledWith(addToBackgroundSpy, characterTwoSprite);
-            sinon.assert.calledWith(addToBackgroundSpy, characterThreeSprite);
+        test("adds each sprite to the background", () => {
+            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith(characterSprites[0]);
+            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith(characterSprites[1]);
+            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith(characterSprites[2]);
         });
 
-        it("adds the choices", () => {
-            const expectedChoices = [characterOneSprite, characterTwoSprite, characterThreeSprite];
-            assert.deepEqual(selectScreen.choiceSprites, expectedChoices);
+        test("adds the choices", () => {
+            expect(selectScreen.choiceSprites).toEqual(characterSprites);
         });
 
-        it("creates an accessible carousel for the choices", () => {
-            const actualParams = accessibleCarouselElements.create.getCall(0).args;
-            sinon.assert.calledOnce(accessibleCarouselElements.create);
-
-            assert.deepEqual(actualParams, [
+        test("creates an accessible carousel for the choices", () => {
+            expect(accessibleCarouselElements.create).toHaveBeenCalledWith(
                 "characterSelect",
                 selectScreen.choiceSprites,
                 mockGame.canvas.parentElement,
                 mockContext.config.theme.characterSelect.choices,
-            ]);
+            );
         });
     });
-
-    /*
-    // TODO the following line should be added back once the overlap issue is resolved NT:04:02:19
-    describe("achievements button", () => {
-        it("adds the achievement button when theme flag is set", () => {
-            selectScreen.context.config.theme.game.achievements = true;
-            selectScreen.create();
-
-            const actualButtons = addLayoutSpy.getCall(0).args[0];
-            const expectedButtons = ["home", "audio", "pauseNoReplay", "previous", "next", "continue", "achievements"];
-            assert.deepEqual(actualButtons, expectedButtons);
-        });
-    });
-    */
 
     describe("signals", () => {
-        let signalSubscribeSpy;
-
         beforeEach(() => {
-            signalSubscribeSpy = sandbox.spy(signal.bus, "subscribe");
+            jest.spyOn(signal.bus, "subscribe");
             selectScreen.create();
         });
 
-        it("adds signal subscriptions to all the buttons", () => {
-            assert(signalSubscribeSpy.callCount === 5, "signals should be subscribed 5 times");
-            sinon.assert.calledWith(signalSubscribeSpy, {
-                channel: buttonsChannel,
-                name: "previous",
-                callback: sinon.match.func,
-            });
-            sinon.assert.calledWith(signalSubscribeSpy, {
-                channel: buttonsChannel,
-                name: "next",
-                callback: sinon.match.func,
-            });
-            sinon.assert.calledWith(signalSubscribeSpy, {
-                channel: buttonsChannel,
-                name: "continue",
-                callback: sinon.match.func,
-            });
-            sinon.assert.calledWith(signalSubscribeSpy, {
-                channel: buttonsChannel,
-                name: "pause",
-                callback: sinon.match.func,
-            });
-            sinon.assert.calledWith(signalSubscribeSpy, {
-                channel: buttonsChannel,
-                name: "play",
-                callback: sinon.match.func,
-            });
+        test("adds signal subscriptions to all the buttons", () => {
+            expect(signal.bus.subscribe).toHaveBeenCalledTimes(5);
+            expect(signal.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel);
+            expect(signal.bus.subscribe.mock.calls[0][0].name).toBe("previous");
+            expect(signal.bus.subscribe.mock.calls[1][0].channel).toBe(buttonsChannel);
+            expect(signal.bus.subscribe.mock.calls[1][0].name).toBe("next");
+            expect(signal.bus.subscribe.mock.calls[2][0].channel).toBe(buttonsChannel);
+            expect(signal.bus.subscribe.mock.calls[2][0].name).toBe("continue");
+            expect(signal.bus.subscribe.mock.calls[3][0].channel).toBe(buttonsChannel);
+            expect(signal.bus.subscribe.mock.calls[3][0].name).toBe("pause");
+            expect(signal.bus.subscribe.mock.calls[4][0].channel).toBe(buttonsChannel);
+            expect(signal.bus.subscribe.mock.calls[4][0].name).toBe("play");
         });
 
-        it("moves to the next game screen when the continue button is pressed", () => {
+        test("moves to the next game screen when the continue button is pressed", () => {
             selectScreen.currentIndex = 1;
-            signalSubscribeSpy.getCall(2).args[0].callback();
-            sinon.assert.calledOnce(selectScreen.navigation.next.withArgs({ characterSelected: 1 }));
+            signal.bus.subscribe.mock.calls[2][0].callback();
+            expect(selectScreen.navigation.next).toHaveBeenCalledWith({ characterSelected: 1 });
         });
 
-        it("hides all the accessible elements when the pause button is pressed", () => {
+        test("hides all the accessible elements when the pause button is pressed", () => {
             selectScreen.currentIndex = 1;
-            signalSubscribeSpy.getCall(3).args[0].callback();
+            signal.bus.subscribe.mock.calls[3][0].callback();
 
-            assert.equal(selectScreen.accessibleElements.length, 3);
-            assert.equal(selectScreen.accessibleElements[0].getAttribute("aria-hidden"), "true");
-            assert.equal(selectScreen.accessibleElements[1].getAttribute("aria-hidden"), "true");
-            assert.equal(selectScreen.accessibleElements[2].getAttribute("aria-hidden"), "true");
+            expect(selectScreen.accessibleElements.length).toEqual(3);
+            expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
+            expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(true);
+            expect(mockAccessibleElements[2].attributes["aria-hidden"]).toBe(true);
         });
 
-        it("shows the current accessible element when the game is unpaused (by pressing play)", () => {
+        test("shows the current accessible element when the game is unpaused (by pressing play)", () => {
             selectScreen.currentIndex = 3;
-            signalSubscribeSpy.getCall(3).args[0].callback(); //pauses
-            signalSubscribeSpy.getCall(4).args[0].callback(); //unpauses
+            signal.bus.subscribe.mock.calls[3][0].callback(); //pauses
+            signal.bus.subscribe.mock.calls[4][0].callback(); //unpauses
 
-            assert.equal(selectScreen.accessibleElements[0].getAttribute("aria-hidden"), "true");
-            assert.equal(selectScreen.accessibleElements[1].getAttribute("aria-hidden"), "true");
-            assert.equal(selectScreen.accessibleElements[2].getAttribute("aria-hidden"), "false");
+            expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
+            expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(true);
+            expect(mockAccessibleElements[2].attributes["aria-hidden"]).toBe(false);
         });
 
         describe("previous button", () => {
-            it("switches to the last item when the first item is showing", () => {
+            test("switches to the last item when the first item is showing", () => {
                 selectScreen.currentIndex = 1;
-                signalSubscribeSpy.getCall(0).args[0].callback();
-                assert(selectScreen.currentIndex === 3, "previous button should move to the last item");
+                signal.bus.subscribe.mock.calls[0][0].callback();
+                expect(selectScreen.currentIndex === 3).toBeTruthy();
             });
 
-            it("switches to the previous item when any other choice is showing", () => {
+            test("switches to the previous item when any other choice is showing", () => {
                 selectScreen.currentIndex = 2;
-                signalSubscribeSpy.getCall(0).args[0].callback();
-                assert(selectScreen.currentIndex === 1, "previous button should move to the previous item");
+                signal.bus.subscribe.mock.calls[0][0].callback();
+                expect(selectScreen.currentIndex === 1).toBeTruthy();
             });
 
-            it("hides all the choices except the current one", () => {
+            test("hides all the choices except the current one", () => {
                 selectScreen.currentIndex = 3;
-                signalSubscribeSpy.getCall(0).args[0].callback();
+                signal.bus.subscribe.mock.calls[0][0].callback();
 
-                assert(selectScreen.choiceSprites[0].visible === false, "choice should be hidden");
-                assert(selectScreen.choiceSprites[1].visible === true, "choice should be showing");
-                assert(selectScreen.choiceSprites[2].visible === false, "choice should be hidden");
+                expect(selectScreen.choiceSprites[0].visible).toBe(false);
+                expect(selectScreen.choiceSprites[1].visible).toBe(true);
+                expect(selectScreen.choiceSprites[2].visible).toBe(false);
             });
 
-            it("set 'aria-hidden' = true on all the choices except the current one", () => {
+            test("set 'aria-hidden' = true on all the choices except the current one", () => {
                 selectScreen.currentIndex = 3;
-                signalSubscribeSpy.getCall(0).args[0].callback();
+                signal.bus.subscribe.mock.calls[0][0].callback();
 
-                assert.equal(selectScreen.accessibleElements[0].getAttribute("aria-hidden"), "true");
-                assert.equal(selectScreen.accessibleElements[1].getAttribute("aria-hidden"), "false");
-                assert.equal(selectScreen.accessibleElements[2].getAttribute("aria-hidden"), "true");
+                expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
+                expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(false);
+                expect(mockAccessibleElements[2].attributes["aria-hidden"]).toBe(true);
             });
 
-            it("set display: none on all the choices except the current one", () => {
+            test("set display: none on all the choices except the current one", () => {
                 selectScreen.currentIndex = 3;
-                signalSubscribeSpy.getCall(0).args[0].callback();
+                signal.bus.subscribe.mock.calls[0][0].callback();
 
-                assert.equal(selectScreen.accessibleElements[0].style.display, "none");
-                assert.equal(selectScreen.accessibleElements[1].style.display, "block");
-                assert.equal(selectScreen.accessibleElements[2].style.display, "none");
+                expect(selectScreen.accessibleElements[0].style.display).toEqual("none");
+                expect(selectScreen.accessibleElements[1].style.display).toEqual("block");
+                expect(selectScreen.accessibleElements[2].style.display).toEqual("none");
             });
         });
 
         describe("next button", () => {
-            it("switches to the first item when the last item is showing", () => {
+            test("switches to the first item when the last item is showing", () => {
                 selectScreen.currentIndex = 3;
-                signalSubscribeSpy.getCall(1).args[0].callback();
-                assert(selectScreen.currentIndex === 1, "next button should move to the first item");
+                signal.bus.subscribe.mock.calls[1][0].callback();
+                expect(selectScreen.currentIndex === 1).toBeTruthy();
             });
 
-            it("switches to the next item when any other choice is showing", () => {
+            test("switches to the next item when any other choice is showing", () => {
                 selectScreen.currentIndex = 2;
-                signalSubscribeSpy.getCall(1).args[0].callback();
-                assert(selectScreen.currentIndex === 3, "next button should move to the next item");
+                signal.bus.subscribe.mock.calls[1][0].callback();
+                expect(selectScreen.currentIndex === 3).toBeTruthy();
             });
 
-            it("hides all the choices except the current one", () => {
+            test("hides all the choices except the current one", () => {
                 selectScreen.currentIndex = 1;
-                signalSubscribeSpy.getCall(1).args[0].callback();
-                assert(selectScreen.choiceSprites[0].visible === false, "choice should be hidden");
-                assert(selectScreen.choiceSprites[1].visible === true, "choice should be showing");
-                assert(selectScreen.choiceSprites[2].visible === false, "choice should be hidden");
+                signal.bus.subscribe.mock.calls[1][0].callback();
+                expect(selectScreen.choiceSprites[0].visible).toBe(false);
+                expect(selectScreen.choiceSprites[1].visible).toBe(true);
+                expect(selectScreen.choiceSprites[2].visible).toBe(false);
             });
 
-            it("set 'aria-hidden' = true on all the choices except the current one", () => {
+            test("set 'aria-hidden' = true on all the choices except the current one", () => {
                 selectScreen.currentIndex = 1;
-                signalSubscribeSpy.getCall(1).args[0].callback();
+                signal.bus.subscribe.mock.calls[1][0].callback();
 
-                assert.equal(selectScreen.accessibleElements[0].getAttribute("aria-hidden"), "true");
-                assert.equal(selectScreen.accessibleElements[1].getAttribute("aria-hidden"), "false");
-                assert.equal(selectScreen.accessibleElements[2].getAttribute("aria-hidden"), "true");
+                expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
+                expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(false);
+                expect(mockAccessibleElements[2].attributes["aria-hidden"]).toBe(true);
             });
 
-            it("set display: none on all the choices except the current one", () => {
+            test("set display: none on all the choices except the current one", () => {
                 selectScreen.currentIndex = 1;
-                signalSubscribeSpy.getCall(1).args[0].callback();
+                signal.bus.subscribe.mock.calls[1][0].callback();
 
-                assert.equal(selectScreen.accessibleElements[0].style.display, "none");
-                assert.equal(selectScreen.accessibleElements[1].style.display, "block");
-                assert.equal(selectScreen.accessibleElements[2].style.display, "none");
+                expect(selectScreen.accessibleElements[0].style.display).toBe("none");
+                expect(selectScreen.accessibleElements[1].style.display).toBe("block");
+                expect(selectScreen.accessibleElements[2].style.display).toBe("none");
             });
         });
     });
