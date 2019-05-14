@@ -11,18 +11,10 @@ import * as Scene from "../../fake/scene.js";
 import * as Book from "../../../src/core/book/book.js";
 import * as accessibleCarouselElements from "../../../src/core/accessibility/accessible-carousel-elements.js";
 
-import * as sinon from "sinon";
-import * as Chai from "chai";
-import { assert } from "chai";
-Chai.should();
-
 describe("Showing pages of a book", () => {
-    const sandbox = sinon.createSandbox();
     let book;
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     describe("A book with 1 page", () => {
         const onePanel = [{ onDestroy: () => {} }];
@@ -34,7 +26,7 @@ describe("Showing pages of a book", () => {
                 visibleLayer: "book-test",
             };
 
-            sandbox.stub(accessibleCarouselElements, "create").returns([document.createElement("div")]);
+            jest.spyOn(accessibleCarouselElements, "create").mockImplementation(() => [document.createElement("div")]);
             book = Book.Start(
                 "myScreen",
                 Theme.WithPanels(onePanel),
@@ -45,27 +37,25 @@ describe("Showing pages of a book", () => {
             );
         });
 
-        it("Should show page 1", () => {
-            book.firstPage.should.have.property("visible", true);
+        test("Shows page 1", () => {
+            expect(book.firstPage).toHaveProperty("visible", true);
         });
 
-        it("creates an accessible carousel dom element", () => {
-            sandbox.assert.calledOnce(
-                accessibleCarouselElements.create.withArgs(
-                    "book-test",
-                    [{ visible: true }],
-                    Game.Stub.canvas.parentElement,
-                    accessibilityTexts,
-                ),
+        test("creates an accessible carousel dom element", () => {
+            expect(accessibleCarouselElements.create).toHaveBeenCalledWith(
+                "book-test",
+                [{ visible: true }],
+                Game.Stub.canvas.parentElement,
+                accessibilityTexts,
             );
         });
 
-        it("Should disable the 'Previous page' option", () => {
-            book.previousPageOption.should.have.property("alpha", 0);
+        test("disables the 'Previous page' option", () => {
+            expect(book.previousPageOption).toHaveProperty("alpha", 0);
         });
 
-        it("Should disable the 'Next page' option", () => {
-            book.nextPageOption.should.have.property("alpha", 0);
+        test("disables the 'Next page' option", () => {
+            expect(book.nextPageOption).toHaveProperty("alpha", 0);
         });
     });
 
@@ -78,14 +68,14 @@ describe("Showing pages of a book", () => {
         let previousButtonStub = Button.Stub();
 
         beforeEach(() => {
-            nextButtonStub.accessibleElement.focus = sinon.spy();
-            previousButtonStub.accessibleElement.focus = sinon.spy();
+            nextButtonStub.accessibleElement.focus = jest.fn();
+            previousButtonStub.accessibleElement.focus = jest.fn();
             const mockScreen = {
                 scene: Scene.WithButtons({ howToPlayNext: nextButtonStub, howToPlayPrevious: previousButtonStub }),
                 visibleLayer: "book-test",
             };
 
-            sandbox.stub(accessibleCarouselElements, "create").returns(domElements);
+            jest.spyOn(accessibleCarouselElements, "create").mockImplementation(() => domElements);
             book = Book.Start(
                 "myScreen",
                 Theme.WithPanels(twoPanels),
@@ -96,43 +86,41 @@ describe("Showing pages of a book", () => {
                 mockScreen,
             );
 
-            book.nextPageOption.update = sinon.spy();
-            book.previousPageOption.update = sinon.spy();
+            book.nextPageOption.update = jest.fn();
+            book.previousPageOption.update = jest.fn();
         });
 
         describe("Initialisation", () => {
-            it("Should write all the pages", () => {
-                book.numberOfPages.should.equal(2);
+            test("write all the pages", () => {
+                expect(book.numberOfPages).toBe(2);
             });
 
-            it("creates an accessible carousel dom element", () => {
-                sandbox.assert.calledOnce(
-                    accessibleCarouselElements.create.withArgs(
-                        "book-test",
-                        [{ visible: true }, { visible: false }],
-                        Game.Stub.canvas.parentElement,
-                        accessibilityTexts,
-                    ),
+            test("creates an accessible carousel dom element", () => {
+                expect(accessibleCarouselElements.create).toHaveBeenCalledWith(
+                    "book-test",
+                    [{ visible: true }, { visible: false }],
+                    Game.Stub.canvas.parentElement,
+                    accessibilityTexts,
                 );
             });
 
-            it("Should show page 1", () => {
-                book.firstPage.should.have.property("visible", true);
+            test("Shows page 1", () => {
+                expect(book.firstPage).toHaveProperty("visible", true);
             });
 
-            it("Should disable the 'Previous page' option", () => {
-                book.previousPageOption.should.have.property("alpha", 0);
-                book.previousPageOption.input.should.have.property("enabled", false);
+            test("Disables the 'Previous page' option", () => {
+                expect(book.previousPageOption).toHaveProperty("alpha", 0);
+                expect(book.previousPageOption.input).toHaveProperty("enabled", false);
             });
 
-            it("Should enable the 'Next page' option", () => {
-                book.nextPageOption.should.have.property("alpha", 1);
-                book.nextPageOption.input.should.have.property("enabled", true);
+            test("Enables the 'Next page' option", () => {
+                expect(book.nextPageOption).toHaveProperty("alpha", 1);
+                expect(book.nextPageOption.input).toHaveProperty("enabled", true);
             });
 
-            it("Regression Test - should not auto-focus either the next or previous page button", () => {
-                sinon.assert.notCalled(nextButtonStub.accessibleElement.focus);
-                sinon.assert.notCalled(previousButtonStub.accessibleElement.focus);
+            test("Regression Test - should not auto-focus either the next or previous page button", () => {
+                expect(nextButtonStub.accessibleElement.focus).not.toHaveBeenCalled();
+                expect(previousButtonStub.accessibleElement.focus).not.toHaveBeenCalled();
             });
         });
 
@@ -141,77 +129,73 @@ describe("Showing pages of a book", () => {
                 book = Book.NextPage(book);
             });
 
-            it("Should show page 2 and hide page 1 when the 'Next page' option is chosen", () => {
-                book.page(2).should.have.property("visible", true);
-                book.page(1).should.have.property("visible", false);
+            test("show page 2 and hide page 1 when the 'Next page' option is chosen", () => {
+                expect(book.page(2)).toHaveProperty("visible", true);
+                expect(book.page(1)).toHaveProperty("visible", false);
             });
 
-            it("shows the dom element for page 2 and hides the dom element for page 1 when the 'Next page' option is chosen", () => {
-                assert.equal(domElements[0].getAttribute("aria-hidden"), "true");
-                assert.equal(domElements[1].getAttribute("aria-hidden"), "false");
+            test("shows the dom element for page 2 and hides the dom element for page 1 when the 'Next page' option is chosen", () => {
+                expect(domElements[0].getAttribute("aria-hidden")).toEqual("true");
+                expect(domElements[1].getAttribute("aria-hidden")).toEqual("false");
             });
 
-            it("Should enable the 'Previous page' option", () => {
-                book.previousPageOption.should.have.property("alpha", 1);
-                book.previousPageOption.input.should.have.property("enabled", true);
-                sinon.assert.calledOnce(book.previousPageOption.update);
+            test("enables the 'Previous page' option", () => {
+                expect(book.previousPageOption).toHaveProperty("alpha", 1);
+                expect(book.previousPageOption.input).toHaveProperty("enabled", true);
+                expect(book.previousPageOption.update).toHaveBeenCalledTimes(1);
             });
 
-            it("Should disable the 'Next page' option", () => {
-                book.nextPageOption.should.have.property("alpha", 0);
-                book.nextPageOption.input.should.have.property("enabled", false);
-                sinon.assert.calledOnce(book.nextPageOption.update);
+            test("disables the 'Next page' option", () => {
+                expect(book.nextPageOption).toHaveProperty("alpha", 0);
+                expect(book.nextPageOption.input).toHaveProperty("enabled", false);
+                expect(book.nextPageOption.update).toHaveBeenCalledTimes(1);
             });
 
-            it("Should auto-focus the previous page button after navigating to the last page", () => {
-                sinon.assert.calledOnce(previousButtonStub.accessibleElement.focus);
+            test("auto-focus the previous page button after navigating to the last page", () => {
+                expect(previousButtonStub.accessibleElement.focus).toHaveBeenCalledTimes(1);
             });
         });
 
         describe("Back to front (Previous Page)", () => {
             beforeEach(() => {
                 book = Book.GoToPage(2, book);
-                nextButtonStub.accessibleElement.focus.resetHistory();
-                previousButtonStub.accessibleElement.focus.resetHistory();
-                book.previousPageOption.update.resetHistory();
-                book.nextPageOption.update.resetHistory();
                 book = Book.PreviousPage(book);
             });
 
-            it("Should show page 1 and hide page 2 when the 'Previous page' option is chosen", () => {
-                book.page(1).should.have.property("visible", true);
-                book.page(2).should.have.property("visible", false);
+            test("shows page 1 and hides page 2 when the 'Previous page' option is chosen", () => {
+                expect(book.page(1)).toHaveProperty("visible", true);
+                expect(book.page(2)).toHaveProperty("visible", false);
             });
 
-            it("shows the dom element for page 1 and hides the dom element for page 2 when the 'Previous page' option is chosen", () => {
-                assert.equal(domElements[0].getAttribute("aria-hidden"), "false");
-                assert.equal(domElements[1].getAttribute("aria-hidden"), "true");
+            test("shows the dom element for page 1 and hides the dom element for page 2 when the 'Previous page' option is chosen", () => {
+                expect(domElements[0].getAttribute("aria-hidden")).toBe("false");
+                expect(domElements[1].getAttribute("aria-hidden")).toBe("true");
             });
 
-            it("Should disable the 'Previous page' option", () => {
-                book.previousPageOption.should.have.property("alpha", 0);
-                book.previousPageOption.input.should.have.property("enabled", false);
-                sinon.assert.calledOnce(book.previousPageOption.update);
+            test("Disables the 'Previous page' option", () => {
+                expect(book.previousPageOption).toHaveProperty("alpha", 0);
+                expect(book.previousPageOption.input).toHaveProperty("enabled", false);
+                expect(book.previousPageOption.update).toHaveBeenCalledTimes(2);
             });
 
-            it("Should enable the 'Next page' option", () => {
-                book.nextPageOption.should.have.property("alpha", 1);
-                book.nextPageOption.input.should.have.property("enabled", true);
-                sinon.assert.calledOnce(book.nextPageOption.update);
+            test("Enables the 'Next page' option", () => {
+                expect(book.nextPageOption).toHaveProperty("alpha", 1);
+                expect(book.nextPageOption.input).toHaveProperty("enabled", true);
+                expect(book.nextPageOption.update).toHaveBeenCalledTimes(2);
             });
 
-            it("Should auto-focus the previous page button after navigating to the last page", () => {
-                sinon.assert.calledOnce(nextButtonStub.accessibleElement.focus);
+            test("Auto-focuses the previous page button after navigating to the last page", () => {
+                expect(nextButtonStub.accessibleElement.focus).toHaveBeenCalledTimes(1);
             });
         });
 
         describe("Regression Test - mis-aligned navigation buttons", () => {
-            it("Should not modify the visibile property of the 'Next page' and 'Previous page' buttons so they still scale", () => {
-                book.nextPageOption.should.have.property("visible", true);
-                book.previousPageOption.should.have.property("visible", true);
+            test("does not modify the visible property of the 'Next page' and 'Previous page' buttons so they still scale", () => {
+                expect(book.nextPageOption).toHaveProperty("visible", true);
+                expect(book.previousPageOption).toHaveProperty("visible", true);
                 book = Book.NextPage(book);
-                book.nextPageOption.should.have.property("visible", true);
-                book.previousPageOption.should.have.property("visible", true);
+                expect(book.nextPageOption).toHaveProperty("visible", true);
+                expect(book.previousPageOption).toHaveProperty("visible", true);
             });
         });
     });
