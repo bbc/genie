@@ -79,9 +79,7 @@ describe("Load Screen", () => {
         });
 
         test("sets the button click sound to be used in the game", () => {
-            global.window.__qaMode = {};
             loadScreen.preload();
-
             assetLoaderCallbackSpy.mock.calls[0][0]();
             expect(GameSound.setButtonClickSound).toHaveBeenCalledWith(mockGame, "loadscreen.buttonClick");
         });
