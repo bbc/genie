@@ -3,139 +3,134 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { expect } from "chai";
-import * as sinon from "sinon";
 import * as accessibleButtons from "../../../src/core/accessibility/accessible-buttons.js";
 import * as elementManipulator from "../../../src/core/accessibility/element-manipulator.js";
 
 describe("element manipulator", () => {
-    let sandbox, element, button;
+    let element;
+    let button;
     let sequentialCounter = 0;
 
     const getNewElement = id => {
         return {
             id: id,
             parentElement: {
-                removeChild: sandbox.stub(),
+                removeChild: jest.fn(),
             },
-            addEventListener: sandbox.stub(),
-            removeEventListener: sandbox.stub(),
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
             classList: {
-                add: sandbox.stub(),
-                remove: sandbox.stub(),
+                add: jest.fn(),
+                remove: jest.fn(),
             },
             style: {
                 cursor: "pointer",
             },
-            setAttribute: sandbox.stub(),
+            setAttribute: jest.fn(),
         };
     };
 
     beforeEach(() => {
         sequentialCounter++;
-        sandbox = sinon.createSandbox();
         button = {
             elementEvents: {
-                click: sandbox.stub(),
-                keyup: sandbox.stub(),
+                click: jest.fn(),
+                keyup: jest.fn(),
             },
         };
-        sandbox.stub(accessibleButtons, "findButtonByElementId").returns(button);
+        jest.spyOn(accessibleButtons, "findButtonByElementId").mockImplementation(() => button);
         element = getNewElement("home__" + sequentialCounter);
         elementManipulator.hideAndDisableElement(element);
     });
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.restoreAllMocks());
 
-    describe("#hideAndDisableElement", () => {
+    describe("hideAndDisableElement Method", () => {
         describe("when element has already been hidden and disabled", () => {
-            it("only runs once and no more for that element", () => {
+            test("only runs once and no more for that element", () => {
                 elementManipulator.hideAndDisableElement(element);
                 elementManipulator.hideAndDisableElement(element);
                 elementManipulator.hideAndDisableElement(element);
 
-                sandbox.assert.calledOnce(accessibleButtons.findButtonByElementId);
+                expect(accessibleButtons.findButtonByElementId).toHaveBeenCalledTimes(1);
             });
         });
 
         describe("when element has NOT already been hidden and disabled", () => {
-            it("finds the button by element ID", () => {
-                sandbox.assert.calledOnce(accessibleButtons.findButtonByElementId);
-                sandbox.assert.calledWith(accessibleButtons.findButtonByElementId, element.id);
+            test("finds the button by element ID", () => {
+                expect(accessibleButtons.findButtonByElementId).toHaveBeenCalledTimes(1);
+                expect(accessibleButtons.findButtonByElementId).toHaveBeenCalledWith(element.id);
             });
 
-            it("adds a 'blur' event listener", () => {
-                sandbox.assert.calledOnce(element.addEventListener);
+            test("adds a 'blur' event listener", () => {
+                expect(element.addEventListener).toHaveBeenCalledTimes(1);
             });
 
-            it("adds the hide-focus-ring class to element", () => {
-                sandbox.assert.calledOnce(element.classList.add);
+            test("adds the hide-focus-ring class to element", () => {
+                expect(element.classList.add).toHaveBeenCalledTimes(1);
             });
 
-            it("adds the hide-focus-ring class to element", () => {
-                sandbox.assert.calledOnce(element.classList.add);
+            test("adds the hide-focus-ring class to element", () => {
+                expect(element.classList.add).toHaveBeenCalledTimes(1);
             });
 
-            it("sets the cursor style to be default", () => {
-                expect(element.style.cursor).to.eq("default");
+            test("sets the cursor style to be default", () => {
+                expect(element.style.cursor).toBe("default");
             });
 
-            it("moves the element to the bottom", () => {
-                expect(element.style["z-index"]).to.eq(-1);
+            test("moves the element to the bottom", () => {
+                expect(element.style["z-index"]).toBe(-1);
             });
 
-            it("clears the aria label", () => {
-                sandbox.assert.calledWith(element.setAttribute, "aria-label", "");
+            test("clears the aria label", () => {
+                expect(element.setAttribute).toHaveBeenCalledWith("aria-label", "");
             });
 
-            it("removes click event from element", () => {
-                sandbox.assert.called(element.removeEventListener);
-                sandbox.assert.calledWith(element.removeEventListener, "click", button.elementEvents.click);
+            test("removes click event from element", () => {
+                expect(element.removeEventListener).toHaveBeenCalledWith("click", button.elementEvents.click);
             });
 
-            it("removes keyup event from element", () => {
-                sandbox.assert.called(element.removeEventListener);
-                sandbox.assert.calledWith(element.removeEventListener, "keyup", button.elementEvents.keyup);
+            test("removes keyup event from element", () => {
+                expect(element.removeEventListener).toHaveBeenCalledWith("keyup", button.elementEvents.keyup);
             });
         });
     });
 
-    describe("#resetElementToDefault", () => {
+    describe("resetElementToDefault Method", () => {
         let resetElement;
 
         beforeEach(() => {
-            resetElement = element.addEventListener.lastCall.args[1];
+            resetElement = element.addEventListener.mock.calls[element.addEventListener.mock.calls.length - 1][1];
             resetElement();
         });
 
-        it("removes the element", () => {
-            sandbox.assert.calledOnce(element.parentElement.removeChild.withArgs(element));
+        test("removes the element", () => {
+            expect(element.parentElement.removeChild).toHaveBeenCalledWith(element);
         });
 
-        it("removes the blur event listener", () => {
-            sandbox.assert.calledOnce(element.removeEventListener.withArgs("blur"));
+        test("removes the blur event listener", () => {
+            const eventListerCall = element.removeEventListener.mock.calls[2][0];
+            expect(eventListerCall).toBe("blur");
         });
 
-        it("removes the class 'hide-focus-ring'", () => {
-            sandbox.assert.calledOnce(element.classList.remove.withArgs("hide-focus-ring"));
+        test("removes the class 'hide-focus-ring'", () => {
+            expect(element.classList.remove).toHaveBeenCalledWith("hide-focus-ring");
         });
 
-        it("sets the cursor style to pointer", () => {
-            expect(element.style.cursor).to.eq("pointer");
+        test("sets the cursor style to pointer", () => {
+            expect(element.style.cursor).toBe("pointer");
         });
 
-        it("resets the z-index", () => {
-            expect(element.style["z-index"]).to.eq(null);
+        test("resets the z-index", () => {
+            expect(element.style["z-index"]).toBe(null);
         });
 
-        it("re-adds click event listener", () => {
-            sandbox.assert.calledOnce(element.addEventListener.withArgs("click", button.elementEvents.click));
+        test("re-adds click event listener", () => {
+            expect(element.addEventListener).toHaveBeenCalledWith("click", button.elementEvents.click);
         });
 
-        it("re-adds keyup event listener", () => {
-            sandbox.assert.calledOnce(element.addEventListener.withArgs("keyup", button.elementEvents.keyup));
+        test("re-adds keyup event listener", () => {
+            expect(element.addEventListener).toHaveBeenCalledWith("keyup", button.elementEvents.keyup);
         });
     });
 });
