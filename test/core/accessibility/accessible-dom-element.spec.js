@@ -3,240 +3,230 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { expect } from "chai";
-import * as sinon from "sinon";
+import { domElement } from "../../fake/dom-element.js";
+
 import { accessibleDomElement } from "../../../src/core/accessibility/accessible-dom-element";
 
-describe("#accessibleDomElement", () => {
-    let sandbox;
+describe("Accessible DOM Element", () => {
+    let events;
+    let mockElement;
     let options;
-    let createElement;
-    let element;
-    let parentElement;
-    let parentAppendChild;
-    let parentRemoveChild;
-
-    before(() => {
-        sandbox = sinon.createSandbox();
-    });
 
     beforeEach(() => {
-        element = document.createElement("div");
-        parentElement = document.createElement("div");
-        parentElement.appendChild(element);
-
-        parentAppendChild = sandbox.spy();
-        parentRemoveChild = sandbox.spy();
-
-        parentElement = {
-            removeChild: parentRemoveChild,
-        };
-
-        parentElement.appendChild = parentAppendChild;
-
+        events = {};
+        mockElement = domElement();
+        mockElement.addEventListener.mockImplementation((eventName, event) => {
+            events[eventName] = event;
+        });
         options = {
-            id: "play-button",
-            parent: parentElement,
-            onClick: sandbox.stub(),
-            onMouseOver: () => {},
-            onMouseOut: () => {},
+            onClick: jest.fn(),
+            onMouseOver: jest.fn(),
+            onMouseOut: jest.fn(),
         };
-        createElement = sandbox.stub(document, "createElement").returns(element);
+        global.document.createElement = jest.fn().mockImplementation(() => mockElement);
     });
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     describe("Initialize", () => {
-        it("creates new div element", () => {
+        it("creates new div mockElement", () => {
             accessibleDomElement(options);
-            sinon.assert.calledOnce(createElement.withArgs("div"));
+            expect(global.document.createElement).toHaveBeenCalledWith("div");
         });
 
         it("sets the id to 'play-button", () => {
+            options.id = "play-button";
             accessibleDomElement(options);
-            expect(element.getAttribute("id")).to.equal("play-button");
+            expect(mockElement.id).toBe(options.id);
         });
 
         it("sets the html class if provided", () => {
             options.htmlClass = "gel-button";
             accessibleDomElement(options);
-            expect(element.getAttribute("class")).to.equal("gel-button");
+            expect(mockElement.getAttribute("class")).toBe("gel-button");
         });
 
         it("does not set a html class if none is given", () => {
             accessibleDomElement(options);
-            expect(element.getAttribute("class")).to.be.null;
+            expect(mockElement.getAttribute("class")).not.toBeDefined();
         });
 
         it("sets tabindex to 0", () => {
             accessibleDomElement(options);
-            expect(element.getAttribute("tabindex")).to.equal("0");
+            expect(mockElement.getAttribute("tabindex")).toBe("0");
         });
 
         it("sets aria-hidden to false by default", () => {
             accessibleDomElement(options);
-            expect(element.getAttribute("aria-hidden")).to.equal("false");
+            expect(mockElement.getAttribute("aria-hidden")).toBe(false);
         });
 
         it("sets aria-hidden to the given value", () => {
             options.ariaHidden = true;
             accessibleDomElement(options);
-            expect(element.getAttribute("aria-hidden")).to.equal("true");
+            expect(mockElement.getAttribute("aria-hidden")).toBe(true);
         });
 
         it("does not have an aria-label by default", () => {
             accessibleDomElement(options);
-            expect(element.getAttribute("aria-label")).to.equal(null);
+            expect(mockElement.getAttribute("aria-label")).not.toBeDefined();
         });
 
         it("sets an aria-label if given", () => {
             options.ariaLabel = "Play button";
             accessibleDomElement(options);
-            expect(element.getAttribute("aria-label")).to.equal(options.ariaLabel);
+            expect(mockElement.getAttribute("aria-label")).toBe(options.ariaLabel);
         });
 
         it("sets aria-hidden to correct value", () => {
             accessibleDomElement(options);
-            expect(element.getAttribute("aria-hidden")).to.equal("false");
+            expect(mockElement.getAttribute("aria-hidden")).toBe(false);
         });
 
         it("sets role to correct value", () => {
             accessibleDomElement(options);
-            expect(element.getAttribute("role")).to.equal("button");
+            expect(mockElement.getAttribute("role")).toBe("button");
         });
 
         it("sets style position to absolute", () => {
             accessibleDomElement(options);
-            expect(element.style.position).to.equal("absolute");
+            expect(mockElement.style.position).toBe("absolute");
         });
 
         it("sets cursor to  the correct value", () => {
             accessibleDomElement(options);
-            expect(element.style.cursor).to.equal("pointer");
+            expect(mockElement.style.cursor).toBe("pointer");
         });
 
         it("sets touch action to prevent iOS tap zoom", () => {
             accessibleDomElement(options);
-            expect(element.style["touch-action"]).to.equal("manipulation");
+            expect(mockElement.style.touchAction).toBe("manipulation");
         });
 
         it("sets inner text to be empty by default", () => {
             accessibleDomElement(options);
-            expect(element.innerHTML).to.equal("");
+            expect(mockElement.innerHTML).toBe("");
         });
 
         it("sets inner text if given", () => {
             options.text = "Text goes here";
             accessibleDomElement(options);
-            expect(element.innerHTML).to.equal(options.text);
+            expect(mockElement.innerHTML).toBe(options.text);
         });
 
-        it("adds an event listener for keyup", () => {
-            const eventListener = sandbox.stub(element, "addEventListener");
+        it("pressing enter fires the onclick event", () => {
+            const keyUpEvent = { key: "Enter" };
             accessibleDomElement(options);
-            sinon.assert.calledOnce(eventListener.withArgs("keyup", sinon.match.func));
+            events.keyup(keyUpEvent);
+            expect(options.onClick).toHaveBeenCalled();
         });
 
-        it("adds an event listener for click", () => {
-            const eventListener = sandbox.stub(element, "addEventListener");
+        it("pressing space fires the onclick event", () => {
+            const keyUpEvent = { key: " " };
             accessibleDomElement(options);
-            sinon.assert.calledOnce(eventListener.withArgs("click", options.onClick));
+            events.keyup(keyUpEvent);
+            expect(options.onClick).toHaveBeenCalled();
         });
 
-        it("adds an event listener for mouseover", () => {
-            const eventListener = sandbox.stub(element, "addEventListener");
+        it("click events are handled", () => {
             accessibleDomElement(options);
-            sinon.assert.calledOnce(eventListener.withArgs("mouseover", options.onMouseOver));
+            events.click();
+            expect(options.onClick).toHaveBeenCalled();
         });
 
-        it("adds an event listener for mouseleave", () => {
-            const eventListener = sandbox.stub(element, "addEventListener");
+        it("mouseover events are handled", () => {
             accessibleDomElement(options);
-            sinon.assert.calledOnce(eventListener.withArgs("mouseleave", options.onMouseOut));
+            events.mouseover();
+            expect(options.onMouseOver).toHaveBeenCalled();
         });
 
-        it("adds an event listener for focus", () => {
-            const eventListener = sandbox.stub(element, "addEventListener");
+        it("mouseleave events are handled", () => {
             accessibleDomElement(options);
-            sinon.assert.calledOnce(eventListener.withArgs("focus", options.onMouseOver));
+            events.mouseleave();
+            expect(options.onMouseOut).toHaveBeenCalled();
         });
 
-        it("adds an event listener for blur", () => {
-            const eventListener = sandbox.stub(element, "addEventListener");
+        it("focus events are handled", () => {
             accessibleDomElement(options);
-            sinon.assert.calledOnce(eventListener.withArgs("blur", options.onMouseOut));
+            events.focus();
+            expect(options.onMouseOver).toHaveBeenCalled();
         });
 
-        it("adds an event listener for touchmove to disable pinch zoom", () => {
-            const eventListener = sandbox.stub(element, "addEventListener");
+        it("blur events are handled", () => {
             accessibleDomElement(options);
-
-            const touchMoveCallback = eventListener.getCall(6).args[1];
-            const mockEvent = { preventDefault: sandbox.spy() };
-            touchMoveCallback(mockEvent);
-
-            sinon.assert.calledOnce(eventListener.withArgs("touchmove"));
-            sinon.assert.calledOnce(mockEvent.preventDefault);
+            events.blur();
+            expect(options.onMouseOut).toHaveBeenCalled();
         });
 
-        it("returns an object of element events for this element", () => {
-            const element = accessibleDomElement(options);
-            expect(element.events.click).to.be.a("function");
-            expect(element.events.keyup).to.be.a("function");
+        it("touchmove event disables pinch zoom", () => {
+            accessibleDomElement(options);
+            const touchMoveEvent = { preventDefault: jest.fn() };
+            events.touchmove(touchMoveEvent);
+            expect(touchMoveEvent.preventDefault).toHaveBeenCalled();
+        });
+
+        it("returns a keyup function", () => {
+            const mockElement = accessibleDomElement(options);
+            const keyUpEvent = { key: "Enter" };
+            mockElement.events.keyup(keyUpEvent);
+            expect(options.onClick).toHaveBeenCalled();
+        });
+
+        it("returns a click function", () => {
+            const mockElement = accessibleDomElement(options);
+            mockElement.events.click();
+            expect(options.onClick).toHaveBeenCalled();
         });
     });
 
-    describe("Accessing the created element", () => {
-        it("returns element when calling el function on the module", () => {
-            const newAccessibleElement = accessibleDomElement(options);
-            expect(newAccessibleElement.el).to.equal(element);
+    describe("el property", () => {
+        it("returns the new accessible DOM element", () => {
+            expect(accessibleDomElement(options).el).toBe(mockElement);
         });
     });
 
-    describe("hiding the element", () => {
-        it("hides element when calling hide function on the module", () => {
+    describe("hiding the mockElement", () => {
+        it("hides mockElement when calling hide function on the module", () => {
             const newAccessibleElement = accessibleDomElement(options);
             newAccessibleElement.hide();
-            expect(element.getAttribute("aria-hidden")).to.equal("true");
-            expect(element.getAttribute("tabindex")).to.equal("-1");
-            expect(element.style.visibility).to.equal("hidden");
-            expect(element.style.display).to.equal("none");
+            expect(mockElement.getAttribute("aria-hidden")).toBe(true);
+            expect(mockElement.getAttribute("tabindex")).toBe("-1");
+            expect(mockElement.style.visibility).toBe("hidden");
+            expect(mockElement.style.display).toBe("none");
         });
     });
 
-    describe("showing the element", () => {
-        it("shows element when calling show function on the module", () => {
-            element.setAttribute("aria-hidden", "true");
-            element.setAttribute("tabindex", "-1");
-            element.style.visibility = "hidden";
+    describe("showing the mockElement", () => {
+        it("shows mockElement when calling show function on the module", () => {
+            mockElement.setAttribute("aria-hidden", "true");
+            mockElement.setAttribute("tabindex", "-1");
+            mockElement.style.visibility = "hidden";
 
             const newAccessibleElement = accessibleDomElement(options);
             newAccessibleElement.show();
 
-            expect(element.getAttribute("aria-hidden")).to.equal("false");
-            expect(element.getAttribute("tabindex")).to.equal("0");
-            expect(element.style.visibility).to.equal("visible");
-            expect(element.style.display).to.equal("block");
+            expect(mockElement.getAttribute("aria-hidden")).toBe(false);
+            expect(mockElement.getAttribute("tabindex")).toBe("0");
+            expect(mockElement.style.visibility).toBe("visible");
+            expect(mockElement.style.display).toBe("block");
         });
     });
 
-    describe("checking visibility of element", () => {
-        it("calling visible function returns true when element is visible", () => {
+    describe("checking visibility of mockElement", () => {
+        it("calling visible function returns true when mockElement is visible", () => {
             const newAccessibleElement = accessibleDomElement(options);
             newAccessibleElement.show();
-            expect(newAccessibleElement.visible()).to.equal(true);
+            expect(newAccessibleElement.visible()).toBe(true);
         });
 
-        it("calling visible function returns false when element is not visible", () => {
+        it("calling visible function returns false when mockElement is not visible", () => {
             const newAccessibleElement = accessibleDomElement(options);
             newAccessibleElement.hide();
-            expect(newAccessibleElement.visible()).to.equal(false);
+            expect(newAccessibleElement.visible()).toBe(false);
         });
     });
 
-    describe("setting position of element via position function", () => {
+    describe("setting position of mockElement via position function", () => {
         it("sets css values correctly", () => {
             const newAccessibleElement = accessibleDomElement(options);
             const positionOptions = {
@@ -246,10 +236,10 @@ describe("#accessibleDomElement", () => {
                 height: 100,
             };
             newAccessibleElement.position(positionOptions);
-            expect(element.style.left).to.equal("50px");
-            expect(element.style.top).to.equal("50px");
-            expect(element.style.width).to.equal("200px");
-            expect(element.style.height).to.equal("100px");
+            expect(mockElement.style.left).toBe("50px");
+            expect(mockElement.style.top).toBe("50px");
+            expect(mockElement.style.width).toBe("200px");
+            expect(mockElement.style.height).toBe("100px");
         });
     });
 });
