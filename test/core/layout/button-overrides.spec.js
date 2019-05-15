@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert } from "chai";
 import { applyButtonOverrides } from "../../../src/core/layout/button-overrides.js";
 
 describe("button overrides", () => {
@@ -40,19 +39,19 @@ describe("button overrides", () => {
             y: 0,
         };
 
-        it("applies config values to buttons with positionOverride", () => {
+        test("applies config values to buttons with positionOverride", () => {
             applyButtonOverrides(1, [button1, button2]);
-            assert.equal(button1.y, 100);
+            expect(button1.y).toBe(100);
         });
 
-        it("takes the scale into account with positionOverride", () => {
+        test("takes the scale into account with positionOverride", () => {
             applyButtonOverrides(0.5, [button1, button2]);
-            assert.equal(button1.y, 50);
+            expect(button1.y).toBe(50);
         });
 
-        it("DOES NOT apply config values to buttons without positionOverride", () => {
+        test("DOES NOT apply config values to buttons without positionOverride", () => {
             applyButtonOverrides(1, [button1, button2]);
-            assert.equal(button2.y, 0);
+            expect(button2.y).toBe(0);
         });
     });
 });
