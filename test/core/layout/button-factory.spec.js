@@ -3,8 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert, expect } from "chai";
-import * as sinon from "sinon";
 
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import * as GelButton from "../../../src/core/layout/gel-button";
@@ -12,28 +10,22 @@ import * as accessibilify from "../../../src/core/accessibility/accessibilify";
 import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Layout - Button Factory", () => {
-    let accessibilifyStub;
     let buttonFactory;
-    let gelButtonStub;
     let mockGame;
 
-    const sandbox = sinon.createSandbox();
-
     beforeEach(() => {
-        accessibilifyStub = sandbox.stub(accessibilify, "accessibilify");
-        gelButtonStub = sandbox.stub(GelButton, "GelButton");
+        jest.spyOn(accessibilify, "accessibilify").mockImplementation(() => {});
+        jest.spyOn(GelButton, "GelButton").mockImplementation(() => {});
 
         mockGame = { canvas: () => {}, mockGame: "game" };
         buttonFactory = ButtonFactory.create(mockGame);
     });
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     describe("create method", () => {
-        it("returns correct methods", () => {
-            assert.exists(buttonFactory.createButton);
+        test("returns correct methods", () => {
+            expect(buttonFactory.createButton).toBeDefined();
         });
     });
 
@@ -51,26 +43,25 @@ describe("Layout - Button Factory", () => {
             buttonFactory.createButton(expectedIsMobile, config);
         });
 
-        it("creates a GEL button", () => {
-            const actualParams = gelButtonStub.getCall(0).args;
-            expect(actualParams.length).to.equal(5);
-            expect(actualParams[0]).to.eql(mockGame);
-            expect(actualParams[1]).to.equal(0);
-            expect(actualParams[2]).to.equal(0);
-            expect(actualParams[3]).to.equal(expectedIsMobile);
-            expect(actualParams[4]).to.equal(config);
+        test("creates a GEL button", () => {
+            const actualParams = GelButton.GelButton.mock.calls[0];
+            expect(actualParams.length).toEqual(5);
+            expect(actualParams[0]).toEqual(mockGame);
+            expect(actualParams[1]).toBe(0);
+            expect(actualParams[2]).toBe(0);
+            expect(actualParams[3]).toEqual(expectedIsMobile);
+            expect(actualParams[4]).toEqual(config);
         });
 
-        it("makes the button accessible", () => {
-            expect(accessibilifyStub.called).to.equal(true);
+        test("makes the button accessible", () => {
+            expect(accessibilify.accessibilify).toHaveBeenCalled();
         });
 
-        it("adds defaults actions to the signal bus", () => {
-            const defaultAction = sinon.spy();
+        test("adds defaults actions to the signal bus", () => {
             const buttonsChannel = "buttonsChannel";
             const config = {
                 key: "play",
-                action: defaultAction,
+                action: jest.fn(),
                 channel: buttonsChannel,
             };
             signal.bus.removeChannel(buttonsChannel);
@@ -80,12 +71,12 @@ describe("Layout - Button Factory", () => {
             signal.bus.publish({ channel: buttonsChannel, name: "play" });
             signal.bus.publish({ channel: buttonsChannel, name: "play" });
 
-            expect(defaultAction.callCount).to.equal(2);
+            expect(config.action).toHaveBeenCalledTimes(2);
 
             signal.bus.removeChannel(buttonsChannel);
         });
 
-        it("disables hitArea and input for icons", () => {
+        test("disables hitArea and input for icons", () => {
             const config = {
                 title: "FX Off",
                 icon: true,
@@ -93,8 +84,8 @@ describe("Layout - Button Factory", () => {
 
             const btn = buttonFactory.createButton(false, config);
 
-            expect(btn.hitArea).to.equal(null);
-            expect(btn.inputEnabled).to.equal(false);
+            expect(btn.hitArea).toBe(null);
+            expect(btn.inputEnabled).toBe(false);
         });
     });
 });
