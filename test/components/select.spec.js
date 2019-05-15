@@ -3,6 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import { domElement } from "../fake/dom-element";
 
 import { Select } from "../../src/components/select";
 import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
@@ -19,29 +20,7 @@ describe("Select Screen", () => {
 
     beforeEach(() => {
         characterSprites = [{ visible: "" }, { visible: "" }, { visible: "" }];
-        mockAccessibleElements = [
-            {
-                setAttribute: jest.fn().mockImplementation((attribute, value) => {
-                    mockAccessibleElements[0].attributes[attribute] = value;
-                }),
-                style: {},
-                attributes: {},
-            },
-            {
-                setAttribute: jest.fn().mockImplementation((attribute, value) => {
-                    mockAccessibleElements[1].attributes[attribute] = value;
-                }),
-                style: {},
-                attributes: {},
-            },
-            {
-                setAttribute: jest.fn().mockImplementation((attribute, value) => {
-                    mockAccessibleElements[2].attributes[attribute] = value;
-                }),
-                style: {},
-                attributes: {},
-            },
-        ];
+        mockAccessibleElements = [domElement(), domElement(), domElement()];
 
         jest.spyOn(accessibleCarouselElements, "create").mockImplementation(() => mockAccessibleElements);
         jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});

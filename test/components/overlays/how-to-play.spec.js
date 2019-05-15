@@ -2,7 +2,10 @@
  * @copyright BBC 2018
  * @author BBC Children's D+E
  * @license Apache-2.0
+
  */
+import { domElement } from "../../fake/dom-element";
+
 import * as HowToPlay from "../../../src/components/overlays/how-to-play";
 import * as Book from "../../../src/core/book/book.js";
 import * as OverlayLayout from "../../../src/components/overlays/overlay-layout.js";
@@ -90,11 +93,7 @@ describe("How To Play Overlay", () => {
                 group: jest.fn().mockImplementation(() => mockPipsGroup),
             },
             state: { current: "howToPlay", states: { howToPlay: mockScreen } },
-            canvas: {
-                focus: jest.fn(),
-                parentElement: { appendChild: jest.fn(), insertBefore: jest.fn() },
-                setAttribute: () => {},
-            },
+            canvas: domElement(),
         };
     });
 

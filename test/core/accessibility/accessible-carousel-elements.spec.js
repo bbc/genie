@@ -3,6 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import { domElement } from "../../fake/dom-element";
 
 import * as accessibleDomElement from "../../../src/core/accessibility/accessible-dom-element.js";
 import * as accessibleCarouselElements from "../../../src/core/accessibility/accessible-carousel-elements.js";
@@ -16,44 +17,10 @@ describe("Accessible Carousel Elements", () => {
     let mockAccessibleElements;
 
     beforeEach(() => {
-        mockParentElement = {
-            insertBefore: jest.fn(),
-            contains: jest.fn(),
-            removeChild: jest.fn(),
-        };
-        mockCarouselDomElement = {
-            setAttribute: jest.fn().mockImplementation((attribute, value) => {
-                mockCarouselDomElement.attributes[attribute] = value;
-            }),
-            style: {},
-            attributes: {},
-            appendChild: jest.fn(),
-        };
+        mockParentElement = domElement();
+        mockCarouselDomElement = domElement();
         global.document.createElement = jest.fn().mockImplementation(() => mockCarouselDomElement);
-        mockAccessibleElements = [
-            {
-                setAttribute: jest.fn().mockImplementation((attribute, value) => {
-                    mockAccessibleElements[0].attributes[attribute] = value;
-                }),
-                style: {},
-                attributes: {},
-            },
-            {
-                setAttribute: jest.fn().mockImplementation((attribute, value) => {
-                    mockAccessibleElements[1].attributes[attribute] = value;
-                }),
-                style: {},
-                attributes: {},
-            },
-            {
-                setAttribute: jest.fn().mockImplementation((attribute, value) => {
-                    mockAccessibleElements[2].attributes[attribute] = value;
-                }),
-                style: {},
-                attributes: {},
-            },
-        ];
-
+        mockAccessibleElements = [domElement(), domElement(), domElement()];
         jest
             .spyOn(accessibleDomElement, "accessibleDomElement")
             .mockReturnValueOnce({ el: mockAccessibleElements[0] })
