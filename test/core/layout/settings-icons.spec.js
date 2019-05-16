@@ -3,136 +3,130 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert } from "chai";
-import * as sinon from "sinon";
+import { createMockGmi } from "../../fake/gmi";
 
 import * as settingsIcons from "../../../src/core/layout/settings-icons.js";
 import * as signal from "../../../src/core/signal-bus.js";
-import * as gmiModule from "../../../src/core/gmi/gmi.js";
 
 describe("Layout - Settings Icons", () => {
-    const sandbox = sinon.createSandbox();
-    let fakeGroup;
-    let fakeGmi;
+    let mockGmi;
+    let mockGroup;
     let unsubscribeSpy;
 
     beforeEach(() => {
-        unsubscribeSpy = sandbox.spy();
-        fakeGmi = {
-            getAllSettings: sandbox.stub().returns({ motion: "motion-data", audio: "audio-data" }),
+        mockGmi = {
+            getAllSettings: jest.fn(() => ({ motion: "motion-data", audio: "audio-data" })),
         };
-        fakeGroup = {
-            addButton: sandbox.stub(),
-            removeButton: sandbox.spy(),
-            reset: sandbox.spy(),
+        createMockGmi(mockGmi);
+        mockGroup = {
+            addButton: jest.fn(),
+            removeButton: jest.fn(),
+            reset: jest.fn(),
             length: 1,
         };
-        sandbox.stub(signal.bus, "publish");
-        sandbox.stub(signal.bus, "subscribe").returns({ unsubscribe: unsubscribeSpy });
-        sandbox.replace(gmiModule, "gmi", fakeGmi);
-        window.getGMI = sandbox.stub().returns(fakeGmi);
+        unsubscribeSpy = jest.fn();
+        jest.spyOn(signal.bus, "publish").mockImplementation(() => {});
+        jest.spyOn(signal.bus, "subscribe").mockImplementation(() => ({ unsubscribe: unsubscribeSpy }));
     });
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     describe("Signal Publishing", () => {
-        beforeEach(() => settingsIcons.create(fakeGroup, []));
+        beforeEach(() => settingsIcons.create(mockGroup, []));
 
-        it("publishes signals for motion", () => {
-            const motionParams = signal.bus.publish.getCall(0).args;
-            assert.equal(motionParams[0].channel, "genie-settings");
-            assert.equal(motionParams[0].name, "motion");
-            assert.equal(motionParams[0].data, "motion-data");
+        test("publishes signals for motion", () => {
+            const motionParams = signal.bus.publish.mock.calls[0][0];
+            expect(motionParams.channel).toBe("genie-settings");
+            expect(motionParams.name).toBe("motion");
+            expect(motionParams.data).toBe("motion-data");
         });
 
-        it("publishes signals for audio", () => {
-            const audioParams = signal.bus.publish.getCall(1).args;
-            assert.equal(audioParams[0].channel, "genie-settings");
-            assert.equal(audioParams[0].name, "audio");
-            assert.equal(audioParams[0].data, "audio-data");
+        test("publishes signals for audio", () => {
+            const audioParams = signal.bus.publish.mock.calls[1][0];
+            expect(audioParams.channel).toBe("genie-settings");
+            expect(audioParams.name).toBe("audio");
+            expect(audioParams.data).toBe("audio-data");
         });
     });
 
     describe("Signal Unsubscribing", () => {
         beforeEach(() => {
-            const createdSettingsIcons = settingsIcons.create(fakeGroup, []);
+            const createdSettingsIcons = settingsIcons.create(mockGroup, []);
             createdSettingsIcons.unsubscribe();
         });
 
-        it("unsubscribes from each button signal", () => {
-            sandbox.assert.calledTwice(unsubscribeSpy);
+        test("unsubscribes from each button signal", () => {
+            expect(unsubscribeSpy).toHaveBeenCalledTimes(2);
         });
     });
 
     describe("Motion FX Button Subscription", () => {
-        it("has a signal subscription with correct name and channel", () => {
-            settingsIcons.create(fakeGroup, ["audio"]);
-            sandbox.assert.calledOnce(signal.bus.subscribe);
-            const actualParams = signal.bus.subscribe.getCall(0).args;
-            assert.equal(actualParams[0].channel, "genie-settings");
-            assert.equal(actualParams[0].name, "motion");
+        test("has a signal subscription with correct name and channel", () => {
+            settingsIcons.create(mockGroup, ["audio"]);
+            expect(signal.bus.subscribe).toHaveBeenCalledTimes(1);
+            const actualParams = signal.bus.subscribe.mock.calls[0][0];
+            expect(actualParams.channel).toBe("genie-settings");
+            expect(actualParams.name).toBe("motion");
         });
 
         describe("Motion FX callback creates button icon", () => {
-            it("adds the button icon to the group when the signal callback is fired", () => {
-                settingsIcons.create(fakeGroup, ["audio"]);
+            test("adds the button icon to the group when the signal callback is fired", () => {
+                settingsIcons.create(mockGroup, ["audio"]);
                 const iconExists = false;
-                const callback = signal.bus.subscribe.getCall(0).args[0].callback;
+                const callback = signal.bus.subscribe.mock.calls[0][0].callback;
                 callback(iconExists);
 
-                sandbox.assert.calledOnce(fakeGroup.addButton);
-                const actualParams = fakeGroup.addButton.getCall(0).args;
-                assert.deepEqual(actualParams[0], {
+                expect(mockGroup.addButton).toHaveBeenCalledTimes(1);
+                const actualParams = mockGroup.addButton.mock.calls[0];
+                expect(actualParams[0]).toEqual({
                     title: "FX Off",
                     key: "fx-off-icon",
                     id: "fx-off",
                     signalName: "motion",
                     icon: true,
                 });
-                assert.equal(actualParams[1], 0);
+                expect(actualParams[1]).toEqual(0);
             });
 
-            it("does not add the button icon to the very end of the group when there are are other buttons", () => {
-                fakeGroup.length = 4;
-                settingsIcons.create(fakeGroup, ["audio"]);
+            test("does not add the button icon to the very end of the group when there are are other buttons", () => {
+                mockGroup.length = 4;
+                settingsIcons.create(mockGroup, ["audio"]);
                 const iconExists = false;
-                const callback = signal.bus.subscribe.getCall(0).args[0].callback;
+                const callback = signal.bus.subscribe.mock.calls[0][0].callback;
                 callback(iconExists);
 
                 const expectedPosition = 0;
-                assert.equal(fakeGroup.addButton.getCall(0).args[1], expectedPosition);
+                expect(mockGroup.addButton.mock.calls[0][1]).toEqual(expectedPosition);
             });
 
-            it("resets the group when the signal callback is fired", () => {
-                settingsIcons.create(fakeGroup, ["audio"]);
+            test("resets the group when the signal callback is fired", () => {
+                settingsIcons.create(mockGroup, ["audio"]);
                 const iconExists = false;
-                const callback = signal.bus.subscribe.getCall(0).args[0].callback;
+                const callback = signal.bus.subscribe.mock.calls[0][0].callback;
                 callback(iconExists);
 
-                sandbox.assert.calledOnce(fakeGroup.reset);
+                expect(mockGroup.reset).toHaveBeenCalledTimes(1);
             });
         });
 
         describe("Motion FX callback removes button icon", () => {
             beforeEach(() => {
-                settingsIcons.create(fakeGroup, ["audio"]);
+                settingsIcons.create(mockGroup, ["audio"]);
                 const iconExists = true;
-                fakeGroup.addButton.returns("motion-fx-icon");
-                const callback = signal.bus.subscribe.getCall(0).args[0].callback;
+                mockGroup.addButton.mockImplementation(() => "motion-fx-icon");
+                const callback = signal.bus.subscribe.mock.calls[0][0].callback;
                 callback(false); // creates button icon
                 callback(iconExists);
             });
 
-            it("removes the button icon from the group when the signal callback is fired", () => {
-                sandbox.assert.calledOnce(fakeGroup.removeButton);
-                const actualParams = fakeGroup.removeButton.getCall(0).args;
-                assert.deepEqual(actualParams[0], "motion-fx-icon");
+            test("removes the button icon from the group when the signal callback is fired", () => {
+                expect(mockGroup.removeButton).toHaveBeenCalledTimes(1);
+                const actualParams = mockGroup.removeButton.mock.calls[0][0];
+                expect(actualParams).toBe("motion-fx-icon");
             });
 
-            it("resets the group when the signal callback is fired again", () => {
-                sandbox.assert.calledTwice(fakeGroup.reset);
+            test("resets the group when the signal callback is fired again", () => {
+                expect(mockGroup.reset).toHaveBeenCalledTimes(2);
             });
         });
 
@@ -140,99 +134,99 @@ describe("Layout - Settings Icons", () => {
             let callback;
 
             beforeEach(() => {
-                settingsIcons.create(fakeGroup, ["audio"]);
-                fakeGroup.addButton.returns("motion-fx-icon");
-                callback = signal.bus.subscribe.getCall(0).args[0].callback;
+                settingsIcons.create(mockGroup, ["audio"]);
+                mockGroup.addButton.mockImplementation(() => "motion-fx-icon");
+                callback = signal.bus.subscribe.mock.calls[0][0].callback;
             });
 
-            it("does not add/remove button icon when callback is passed true but icon does not exist", () => {
+            test("does not add/remove button icon when callback is passed true but icon does not exist", () => {
                 callback(true);
-                sandbox.assert.notCalled(fakeGroup.addButton);
-                sandbox.assert.notCalled(fakeGroup.removeButton);
-                sandbox.assert.calledOnce(fakeGroup.reset);
+                expect(mockGroup.addButton).not.toHaveBeenCalled();
+                expect(mockGroup.removeButton).not.toHaveBeenCalled();
+                expect(mockGroup.reset).toHaveBeenCalledTimes(1);
             });
 
-            it("does not add/remove button icon when icon exists but calback is passed false", () => {
+            test("does not add/remove button icon when icon exists but calback is passed false", () => {
                 callback(false); // creates icon
                 callback(false);
-                sandbox.assert.calledOnce(fakeGroup.addButton);
-                sandbox.assert.notCalled(fakeGroup.removeButton);
-                sandbox.assert.calledTwice(fakeGroup.reset);
+                expect(mockGroup.addButton).toHaveBeenCalledTimes(1);
+                expect(mockGroup.removeButton).not.toHaveBeenCalled();
+                expect(mockGroup.reset).toHaveBeenCalledTimes(2);
             });
         });
     });
 
     describe("Audio Button Subscription", () => {
-        it("gets a signal subscription when not already included in the buttons list", () => {
-            settingsIcons.create(fakeGroup, []);
-            sandbox.assert.calledTwice(signal.bus.subscribe);
+        test("gets a signal subscription when not already included in the buttons list", () => {
+            settingsIcons.create(mockGroup, []);
+            expect(signal.bus.subscribe).toHaveBeenCalledTimes(2);
         });
 
-        it("has a signal subscription with correct name and channel", () => {
-            settingsIcons.create(fakeGroup, []);
-            const actualParams = signal.bus.subscribe.getCall(1).args;
-            assert.equal(actualParams[0].channel, "genie-settings");
-            assert.equal(actualParams[0].name, "audio");
+        test("has a signal subscription with correct name and channel", () => {
+            settingsIcons.create(mockGroup, []);
+            const actualParams = signal.bus.subscribe.mock.calls[1];
+            expect(actualParams[0].channel).toEqual("genie-settings");
+            expect(actualParams[0].name).toEqual("audio");
         });
 
         describe("Audio callback creates button icon", () => {
-            it("adds the button icon to the group when the signal callback is fired", () => {
-                settingsIcons.create(fakeGroup, []);
+            test("adds the button icon to the group when the signal callback is fired", () => {
+                settingsIcons.create(mockGroup, []);
                 const iconExists = false;
-                const callback = signal.bus.subscribe.getCall(1).args[0].callback;
+                const callback = signal.bus.subscribe.mock.calls[1][0].callback;
                 callback(iconExists);
 
-                sandbox.assert.calledOnce(fakeGroup.addButton);
-                const actualParams = fakeGroup.addButton.getCall(0).args;
-                assert.deepEqual(actualParams[0], {
+                expect(mockGroup.addButton).toHaveBeenCalledTimes(1);
+                const actualParams = mockGroup.addButton.mock.calls[0];
+                expect(actualParams[0]).toEqual({
                     title: "Audio Off",
                     key: "audio-off-icon",
                     id: "audio-off",
                     signalName: "audio",
                     icon: true,
                 });
-                assert.equal(actualParams[1], 0);
+                expect(actualParams[1]).toEqual(0);
             });
 
-            it("adds the button icon to the very end of the group when there are are other buttons", () => {
-                fakeGroup.length = 4;
-                settingsIcons.create(fakeGroup, []);
+            test("adds the button icon to the very end of the group when there are are other buttons", () => {
+                mockGroup.length = 4;
+                settingsIcons.create(mockGroup, []);
                 const iconExists = false;
-                const callback = signal.bus.subscribe.getCall(1).args[0].callback;
+                const callback = signal.bus.subscribe.mock.calls[1][0].callback;
                 callback(iconExists);
 
                 const expectedPosition = 3;
-                assert.equal(fakeGroup.addButton.getCall(0).args[1], expectedPosition);
+                expect(mockGroup.addButton.mock.calls[0][1]).toEqual(expectedPosition);
             });
 
-            it("resets the group when the signal callback is fired", () => {
-                settingsIcons.create(fakeGroup, []);
+            test("resets the group when the signal callback is fired", () => {
+                settingsIcons.create(mockGroup, []);
                 const iconExists = false;
-                const callback = signal.bus.subscribe.getCall(1).args[0].callback;
+                const callback = signal.bus.subscribe.mock.calls[0][0].callback;
                 callback(iconExists);
 
-                sandbox.assert.calledOnce(fakeGroup.reset);
+                expect(mockGroup.reset).toHaveBeenCalledTimes(1);
             });
         });
 
         describe("Audio callback removes button icon", () => {
             beforeEach(() => {
-                settingsIcons.create(fakeGroup, []);
+                settingsIcons.create(mockGroup, []);
                 const iconExists = true;
-                fakeGroup.addButton.returns("audio-icon");
-                const callback = signal.bus.subscribe.getCall(1).args[0].callback;
+                mockGroup.addButton.mockImplementation(() => "audio-icon");
+                const callback = signal.bus.subscribe.mock.calls[0][0].callback;
                 callback(false); // creates button icon
                 callback(iconExists);
             });
 
-            it("removes the button icon from the group when the signal callback is fired", () => {
-                sandbox.assert.calledOnce(fakeGroup.removeButton);
-                const actualParams = fakeGroup.removeButton.getCall(0).args;
-                assert.deepEqual(actualParams[0], "audio-icon");
+            test("removes the button icon from the group when the signal callback is fired", () => {
+                expect(mockGroup.removeButton).toHaveBeenCalledTimes(1);
+                const actualParams = mockGroup.removeButton.mock.calls[0];
+                expect(actualParams[0]).toEqual("audio-icon");
             });
 
-            it("resets the group when the signal callback is fired again", () => {
-                sandbox.assert.calledTwice(fakeGroup.reset);
+            test("resets the group when the signal callback is fired again", () => {
+                expect(mockGroup.reset).toHaveBeenCalledTimes(2);
             });
         });
 
@@ -240,24 +234,24 @@ describe("Layout - Settings Icons", () => {
             let callback;
 
             beforeEach(() => {
-                settingsIcons.create(fakeGroup, []);
-                fakeGroup.addButton.returns("audio-icon");
-                callback = signal.bus.subscribe.getCall(1).args[0].callback;
+                settingsIcons.create(mockGroup, []);
+                mockGroup.addButton.mockImplementation(() => "audio-icon");
+                callback = signal.bus.subscribe.mock.calls[1][0].callback;
             });
 
-            it("does not add/remove button icon when callback is passed true but icon does not exist", () => {
+            test("does not add/remove button icon when callback is passed true but icon does not exist", () => {
                 callback(true);
-                sandbox.assert.notCalled(fakeGroup.addButton);
-                sandbox.assert.notCalled(fakeGroup.removeButton);
-                sandbox.assert.calledOnce(fakeGroup.reset);
+                expect(mockGroup.addButton).not.toHaveBeenCalled();
+                expect(mockGroup.removeButton).not.toHaveBeenCalled();
+                expect(mockGroup.reset).toHaveBeenCalledTimes(1);
             });
 
-            it("does not add/remove button icon when icon exists but calback is passed false", () => {
+            test("does not add/remove button icon when icon exists but calback is passed false", () => {
                 callback(false); // creates icon
                 callback(false);
-                sandbox.assert.calledOnce(fakeGroup.addButton);
-                sandbox.assert.notCalled(fakeGroup.removeButton);
-                sandbox.assert.calledTwice(fakeGroup.reset);
+                expect(mockGroup.addButton).toHaveBeenCalledTimes(1);
+                expect(mockGroup.removeButton).not.toHaveBeenCalled();
+                expect(mockGroup.reset).toHaveBeenCalledTimes(2);
             });
         });
     });
