@@ -5,6 +5,7 @@
  */
 import * as signal from "../core/signal-bus.js";
 import { gmi } from "./gmi/gmi.js";
+import fp from "../../lib/lodash/fp/fp.js";
 
 export const settingsChannel = "genie-settings";
 
@@ -25,7 +26,17 @@ export const create = () => {
     };
 
     return {
-        show: () => gmi.showSettings(onSettingChanged, onSettingsClosed),
+        show: game => {
+            // get current buttons
+            const screen = game.state.states[game.state.current];
+            const buttons = screen.scene.getLayouts()[0].buttons;
+
+            fp.map(button => {
+                button.inputEnabled = false;
+            }, buttons);
+
+            return gmi.showSettings(onSettingChanged, onSettingsClosed);
+        },
         getAllSettings: () => gmi.getAllSettings(),
     };
 };

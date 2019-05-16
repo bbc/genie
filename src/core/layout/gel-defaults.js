@@ -104,8 +104,8 @@ export const config = {
         order: 5,
         id: "__settings",
         channel: buttonsChannel,
-        action: () => {
-            settings.show();
+        action: ({ game }) => {
+            settings.show(game);
             sendStats("click", { action_type: "settings" });
         },
     },
