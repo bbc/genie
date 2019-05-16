@@ -3,7 +3,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as sinon from "sinon";
+import { createMockGmi } from "../../fake/gmi";
+
 import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
 import * as pause from "../../../src/components/overlays/pause.js";
@@ -12,53 +13,45 @@ import * as gmiModule from "../../../src/core/gmi/gmi.js";
 import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Layout - Gel Defaults", () => {
-    const sandbox = sinon.createSandbox();
+    let mockCurrentScreen;
     let mockGame;
     let mockGmi;
 
     beforeEach(() => {
-        mockGame = {
-            sound: {
-                mute: false,
+        mockCurrentScreen = {
+            navigation: {
+                home: jest.fn(),
+                achievements: jest.fn(),
             },
+        };
+        mockGame = {
+            sound: { mute: false },
             state: {
                 current: "current-screen",
-                states: {
-                    "current-screen": {
-                        navigation: {
-                            home: sandbox.spy(),
-                            achievements: sandbox.spy(),
-                        },
-                    },
-                },
+                states: { "current-screen": mockCurrentScreen },
             },
         };
 
-        mockGmi = { exit: sandbox.stub(), setAudio: sandbox.spy() };
-        sandbox.stub(gmiModule, "setGmi").returns(mockGmi);
-        sandbox.stub(gmiModule, "sendStats");
-        sandbox.replace(gmiModule, "gmi", mockGmi);
+        mockGmi = { exit: jest.fn(), setAudio: jest.fn() };
+        createMockGmi(mockGmi);
+        jest.spyOn(gmiModule, "sendStats");
 
-        sandbox.stub(pause, "create");
-        sandbox.stub(settings, "show");
-        sandbox.stub(howToPlay, "create");
+        jest.spyOn(pause, "create").mockImplementation(() => {});
+        jest.spyOn(settings, "show").mockImplementation(() => {});
+        jest.spyOn(howToPlay, "create").mockImplementation(() => {});
     });
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     describe("Exit Button Callback", () => {
-        beforeEach(() => {
-            gel.config.exit.action();
+        beforeEach(() => gel.config.exit.action());
+
+        test("exits the game using the GMI", () => {
+            expect(mockGmi.exit).toHaveBeenCalled();
         });
 
-        it("exits the game using the GMI", () => {
-            sandbox.assert.calledOnce(mockGmi.exit);
-        });
-
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "exit" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "exit" });
         });
     });
 
@@ -67,13 +60,13 @@ describe("Layout - Gel Defaults", () => {
             gel.config.home.action({ game: mockGame });
         });
 
-        it("navigates to the home screen", () => {
+        test("navigates to the home screen", () => {
             const homeNavigationSpy = mockGame.state.states["current-screen"].navigation.home;
-            sandbox.assert.calledOnce(homeNavigationSpy);
+            expect(homeNavigationSpy);
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "home" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "home" });
         });
     });
 
@@ -82,8 +75,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.pauseHome.action();
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "home" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "home" });
         });
     });
 
@@ -92,8 +85,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.back.action();
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "back" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "back" });
         });
     });
 
@@ -102,48 +95,42 @@ describe("Layout - Gel Defaults", () => {
             gel.config.howToPlayBack.action();
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "back" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "back" });
         });
     });
 
     describe("Audio Callback", () => {
-        let publishSpy;
-
         beforeEach(() => {
-            publishSpy = sandbox.spy(signal.bus, "publish");
+            jest.spyOn(signal.bus, "publish");
             gel.config.audio.action({ game: mockGame });
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "audio" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "audio" });
         });
 
-        it("sets audio on the GMI", () => {
-            sandbox.assert.calledOnce(mockGmi.setAudio.withArgs(false));
+        test("sets audio on the GMI", () => {
+            expect(mockGmi.setAudio).toHaveBeenCalledWith(false);
         });
 
-        it("mutes the game audio", () => {
-            sandbox.assert.calledOnce(
-                publishSpy.withArgs({
-                    channel: settingsChannel,
-                    name: "audio",
-                    data: false,
-                }),
-            );
+        test("mutes the game audio", () => {
+            expect(signal.bus.publish).toHaveBeenCalledWith({
+                channel: settingsChannel,
+                name: "audio",
+                data: false,
+            });
         });
 
-        it("unmutes the game audio", () => {
+        test("unmutes the game audio", () => {
             mockGame.sound.mute = true;
             gel.config.audio.action({ game: mockGame });
 
-            sandbox.assert.calledOnce(
-                publishSpy.withArgs({
-                    channel: settingsChannel,
-                    name: "audio",
-                    data: true,
-                }),
-            );
+            expect(signal.bus.publish).toHaveBeenCalledWith({
+                channel: settingsChannel,
+                name: "audio",
+                data: true,
+            });
         });
     });
 
@@ -152,12 +139,12 @@ describe("Layout - Gel Defaults", () => {
             gel.config.settings.action();
         });
 
-        it("shows the settings", () => {
-            sandbox.assert.calledOnce(settings.show);
+        test("shows the settings", () => {
+            expect(settings.show).toHaveBeenCalled();
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "settings" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "settings" });
         });
     });
 
@@ -166,12 +153,12 @@ describe("Layout - Gel Defaults", () => {
             gel.config.pause.action({ game: mockGame });
         });
 
-        it("creates a pause screen", () => {
-            sandbox.assert.calledOnce(pause.create.withArgs(false, { game: mockGame }));
+        test("creates a pause screen", () => {
+            expect(pause.create).toHaveBeenCalledWith(false, { game: mockGame });
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "pause" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "pause" });
         });
     });
 
@@ -180,12 +167,12 @@ describe("Layout - Gel Defaults", () => {
             gel.config.pauseNoReplay.action({ game: mockGame });
         });
 
-        it("creates a pause screen with replay button hidden", () => {
-            sandbox.assert.calledOnce(pause.create.withArgs(true, { game: mockGame }));
+        test("creates a pause screen with replay button hidden", () => {
+            expect(pause.create).toHaveBeenCalledWith(true, { game: mockGame });
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "pause" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "pause" });
         });
     });
 
@@ -194,8 +181,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.replay.action();
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "playagain" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "playagain" });
         });
     });
 
@@ -204,8 +191,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.pauseReplay.action();
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "playagain" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "playagain" });
         });
     });
 
@@ -214,8 +201,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.play.action();
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "play" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "play" });
         });
     });
 
@@ -224,8 +211,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.pausePlay.action();
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "play" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "play" });
         });
     });
 
@@ -234,8 +221,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.achievements.action({ game: mockGame });
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "achievements" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "achievements" });
         });
     });
 
@@ -244,12 +231,12 @@ describe("Layout - Gel Defaults", () => {
             gel.config.restart.action();
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "playagain" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "playagain" });
         });
 
-        it("sends a replay stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("replay"));
+        test("sends a replay stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("replay");
         });
     });
 
@@ -258,12 +245,12 @@ describe("Layout - Gel Defaults", () => {
             gel.config.continueGame.action();
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "continue" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "continue" });
         });
 
-        it("sends a game_level continue stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("continue"));
+        test("sends a game_level continue stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("continue");
         });
     });
 
@@ -272,12 +259,12 @@ describe("Layout - Gel Defaults", () => {
             gel.config.howToPlay.action({ game: mockGame });
         });
 
-        it("creates a how to play screen", () => {
-            sandbox.assert.calledOnce(howToPlay.create.withArgs({ game: mockGame }));
+        test("creates a how to play screen", () => {
+            expect(howToPlay.create).toHaveBeenCalledWith({ game: mockGame });
         });
 
-        it("sends a click stat to the GMI", () => {
-            sandbox.assert.calledOnce(gmiModule.sendStats.withArgs("click", { action_type: "how-to-play" }));
+        test("sends a click stat to the GMI", () => {
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "how-to-play" });
         });
     });
 });
