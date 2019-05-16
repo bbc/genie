@@ -3,29 +3,18 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import { createMockGmi } from "../fake/gmi";
+
 import { create as createSettings } from "../../src/core/settings.js";
 import * as signal from "../../src/core/signal-bus.js";
-import * as gmiModule from "../../src/core/gmi/gmi.js";
-
-jest.mock("../../src/core/gmi/gmi.js");
 
 describe("Settings", () => {
     let mockGmi;
     let settings;
 
-    const createMockGmi = () => {
-        mockGmi = {
-            showSettings: jest.fn(),
-            getAllSettings: jest.fn(),
-        };
-        Object.defineProperty(gmiModule, "gmi", {
-            get: jest.fn(() => mockGmi),
-            set: jest.fn(),
-        });
-    };
-
     beforeEach(() => {
-        createMockGmi();
+        mockGmi = { showSettings: jest.fn(), getAllSettings: jest.fn() };
+        createMockGmi(mockGmi);
         jest.spyOn(signal.bus, "publish");
         settings = createSettings();
     });
