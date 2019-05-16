@@ -4,6 +4,8 @@
  * @license Apache-2.0
  */
 
+import { createMockGmi } from "../fake/gmi";
+
 import { Loadscreen } from "../../src/components/loadscreen";
 import * as LoadBar from "../../src/components/loadbar";
 import * as AssetLoader from "../../src/core/asset-loader";
@@ -11,22 +13,11 @@ import * as Scaler from "../../src/core/scaler.js";
 import * as GameSound from "../../src/core/game-sound";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 
-jest.mock("../../src/core/gmi/gmi.js");
-
 describe("Load Screen", () => {
     let loadScreen;
     let mockGame;
     let mockGmi;
     let assetLoaderCallbackSpy;
-
-    const createMockGmi = () => {
-        mockGmi = { gameLoaded: jest.fn() };
-        Object.defineProperty(gmiModule, "gmi", {
-            get: jest.fn(() => mockGmi),
-            set: jest.fn(),
-        });
-        jest.spyOn(gmiModule, "sendStats");
-    };
 
     beforeEach(() => {
         global.window.__qaMode = undefined;
@@ -34,7 +25,9 @@ describe("Load Screen", () => {
         jest.spyOn(AssetLoader, "loadAssets").mockImplementation(() => ({ then: assetLoaderCallbackSpy }));
         jest.spyOn(GameSound, "setButtonClickSound");
 
-        createMockGmi();
+        mockGmi = { gameLoaded: jest.fn() };
+        createMockGmi(mockGmi);
+        jest.spyOn(gmiModule, "sendStats").mockImplementation(() => {});
 
         mockGame = {
             add: { image: jest.fn().mockImplementation((x, y, imageName) => imageName), audio: jest.fn() },
