@@ -3,67 +3,56 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert } from "chai";
-import * as sinon from "sinon";
-
 import * as debug from "../../src/core/debug.js";
 
 describe("debug", () => {
     it("returns the correct methods", () => {
-        assert.exists(debug.add);
-        assert.exists(debug.render);
-        assert.exists(debug.toggle);
-        assert.exists(debug.clear);
+        expect(debug.add).toBeDefined();
+        expect(debug.render).toBeDefined();
+        expect(debug.toggle).toBeDefined();
+        expect(debug.clear).toBeDefined();
     });
 
     it("debugs the correct number of Phaser.Sprite objects on render", () => {
-        const spy = sinon.spy();
-
         const mockGame = {
             debug: {
-                body: spy,
+                body: jest.fn(),
             },
         };
-
-        const testSprite = new Phaser.Sprite(new Phaser.Game(), 0, 0, "", 0);
+        const testSprite = new global.Phaser.Sprite(new global.Phaser.Game(), 0, 0, "", 0);
 
         debug.clear();
         debug.enable();
         debug.add(testSprite);
         debug.render(mockGame);
 
-        assert(spy.calledOnce);
+        expect(mockGame.debug.body).toHaveBeenCalled();
     });
 
     it("debugs the correct number of Phaser.Group objects on render", () => {
-        const spy = sinon.spy();
-
         const mockGame = {
             debug: {
-                geom: spy,
+                geom: jest.fn(),
             },
         };
 
-        const testGroup = new Phaser.Group(new Phaser.Game());
+        const testGroup = new global.Phaser.Group(new global.Phaser.Game());
 
         debug.clear();
         debug.enable();
         debug.add(testGroup);
         debug.render(mockGame);
 
-        assert(spy.calledOnce);
+        expect(mockGame.debug.geom).toHaveBeenCalled();
     });
 
     it("toggles enabled state to true", () => {
-        let spy = sinon.spy();
-
         const mockGame = {
             debug: {
-                body: spy,
+                body: jest.fn(),
                 reset: () => {},
             },
         };
-
         const testSprite = new Phaser.Sprite(new Phaser.Game(), 0, 0, "", 0);
 
         //toggle enabled
@@ -72,45 +61,37 @@ describe("debug", () => {
         debug.toggle(mockGame);
         debug.add(testSprite);
         debug.render(mockGame);
-        assert(spy.calledOnce);
+        expect(mockGame.debug.body).toHaveBeenCalled();
     });
 
     it("toggles enabled state to false and resets debug sprite", () => {
-        let spy = sinon.spy();
-        let resetSpy = sinon.spy();
-
         const mockGame = {
             debug: {
-                body: spy,
-                reset: resetSpy,
+                body: jest.fn(),
+                reset: jest.fn(),
             },
         };
-
-        spy = sinon.spy();
         debug.clear();
         debug.enable();
         debug.toggle(mockGame);
         debug.add({});
         debug.render(mockGame);
 
-        assert(spy.notCalled);
-        assert(resetSpy.calledOnce);
+        expect(mockGame.debug.body).not.toHaveBeenCalled();
+        expect(mockGame.debug.reset).toHaveBeenCalled();
     });
 
     it("clears the debug list", () => {
-        const spy = sinon.spy();
-
         const mockGame = {
             debug: {
-                body: spy,
+                body: jest.fn(),
             },
         };
-
         debug.enable();
         debug.add({});
         debug.clear();
         debug.render(mockGame);
 
-        assert(spy.notCalled);
+        expect(mockGame.debug.body).not.toHaveBeenCalled();
     });
 });
