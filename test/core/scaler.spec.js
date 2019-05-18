@@ -25,18 +25,18 @@ describe("Scaler", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    it("Should set the scalemode to SHOW_ALL on init", () => {
+    test("sets the scalemode to SHOW_ALL on init", () => {
         Scaler.init(600, mockGame);
         expect(mockGame.scale.scaleMode).toEqual(Phaser.ScaleManager.SHOW_ALL);
     });
 
-    it("Should assign a callback to window.onresize", () => {
+    test("assigns a callback to window.onresize", () => {
         const callback = window.onresize;
         Scaler.init(600, mockGame);
         expect(window.onresize).not.toEqual(callback);
     });
 
-    it("Should return correct metrics when calculateMetrics is called", () => {
+    test("returns correct metrics when calculateMetrics is called", () => {
         jest.spyOn(calculateMetrics, "calculateMetrics").mockImplementation(() => jest.fn(() => "metrics"));
         Scaler.init(600, mockGame);
         const metrics = Scaler.getMetrics();

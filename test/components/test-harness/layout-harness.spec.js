@@ -59,11 +59,11 @@ describe("test harness layout", () => {
         });
 
         describe("create function is called", () => {
-            it("creates two new groups (background and foreground) to store all test harness graphics", () => {
+            test("creates two new groups (background and foreground) to store all test harness graphics", () => {
                 expect(mockGame.add.group).toHaveBeenCalledTimes(2);
             });
 
-            it("adds keyboard input and assigns it to a listener", () => {
+            test("adds keyboard input and assigns it to a listener", () => {
                 expect(onKeyUpSpy).toHaveBeenCalledTimes(1);
             });
         });
@@ -80,7 +80,7 @@ describe("test harness layout", () => {
             createTestHarnessDisplay(mockGame, mockContext, mockScene);
         });
 
-        it("does nothing", () => {
+        test("does nothing", () => {
             expect(mockGame.add.group).not.toHaveBeenCalled();
             expect(onKeyUpSpy).not.toHaveBeenCalled();
         });

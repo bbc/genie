@@ -24,11 +24,11 @@ describe("Settings", () => {
     describe("show method", () => {
         beforeEach(() => settings.show());
 
-        it("calls GMI show settings", () => {
+        test("calls GMI show settings", () => {
             expect(mockGmi.showSettings).toHaveBeenCalledTimes(1);
         });
 
-        it("publishes a signal when a setting has been changed", () => {
+        test("publishes a signal when a setting has been changed", () => {
             const expectedSignal = {
                 channel: "genie-settings",
                 name: "audio",
@@ -40,7 +40,7 @@ describe("Settings", () => {
             expect(signal.bus.publish).toHaveBeenCalledWith(expectedSignal);
         });
 
-        it("publishes a signal when settings has been closed", () => {
+        test("publishes a signal when settings has been closed", () => {
             const expectedSignal = {
                 channel: "genie-settings",
                 name: "settings-closed",
@@ -53,7 +53,7 @@ describe("Settings", () => {
     });
 
     describe("getAllSettings method", () => {
-        it("calls GMI get all settings", () => {
+        test("calls GMI get all settings", () => {
             settings.getAllSettings();
             expect(mockGmi.getAllSettings).toHaveBeenCalledTimes(1);
         });

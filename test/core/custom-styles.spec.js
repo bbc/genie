@@ -16,17 +16,17 @@ describe("Custom styles", () => {
     });
 
     describe("addCustomStyles method", () => {
-        it("creates a new style element", () => {
+        test("creates a new style element", () => {
             expect(global.document.createElement).toHaveBeenCalledWith("style");
         });
 
-        it("adds custom styles to the style element", () => {
+        test("adds custom styles to the style element", () => {
             const expectedStyles =
                 ".hide-focus-ring:focus { outline:none; } .gel-button { -webkit-user-select: none; }";
             expect(mockStyleElement.innerHTML).toBe(expectedStyles);
         });
 
-        it("adds the custom styles to the head", () => {
+        test("adds the custom styles to the head", () => {
             const head = global.document.head.appendChild;
             expect(head).toHaveBeenCalledWith(mockStyleElement);
         });

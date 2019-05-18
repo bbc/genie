@@ -40,7 +40,7 @@ describe("Navigation", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    it("loads correct genie screens", () => {
+    test("loads correct genie screens", () => {
         Navigation.create(gameState, context, scene, navigationConfig);
 
         expect(gameState.add).toHaveBeenCalledTimes(2);
@@ -48,7 +48,7 @@ describe("Navigation", () => {
         expect(gameState.add).toHaveBeenCalledWith("home", Home);
     });
 
-    it("goes to loadscreen", () => {
+    test("goes to loadscreen", () => {
         Navigation.create(gameState, context, scene, navigationConfig);
 
         expect(gameState.start).toHaveBeenCalledTimes(1);
@@ -63,26 +63,26 @@ describe("Navigation", () => {
         );
     });
 
-    it("ensures the game is unpaused", () => {
+    test("ensures the game is unpaused", () => {
         Navigation.create(gameState, context, scene, navigationConfig);
 
         expect(gameState.game.paused).toBe(false);
     });
 
-    it("removes signal bus gel-buttons channel before going to screen", () => {
+    test("removes signal bus gel-buttons channel before going to screen", () => {
         Navigation.create(gameState, context, scene, navigationConfig);
 
         expect(signal.bus.removeChannel).toHaveBeenCalledTimes(1);
         expect(signal.bus.removeChannel).toHaveBeenCalledWith("gel-buttons");
     });
 
-    it("clears down layout before going to screen", () => {
+    test("clears down layout before going to screen", () => {
         Navigation.create(gameState, context, scene, navigationConfig);
 
         expect(scene.removeAll).toHaveBeenCalledTimes(1);
     });
 
-    it("It returns a function", () => {
+    test("It returns a function", () => {
         expect(typeof Navigation.create(gameState, context, scene, navigationConfig)).toBe("function");
     });
 });

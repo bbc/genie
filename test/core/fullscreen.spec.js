@@ -6,13 +6,13 @@
 import * as fullscreen from "../../src/core/fullscreen.js";
 
 describe("Fullscreen", () => {
-    it("adds a touchend listener", () => {
+    test("adds a touchend listener", () => {
         const mockRoot = { addEventListener: jest.fn() };
         fullscreen.listenForTap(mockRoot, { scale: { startFullScreen: () => {} } });
         expect(mockRoot.addEventListener.mock.calls[0][0]).toBe("touchend");
     });
 
-    it("Removes the event listener on first touch and starts fullscreen", () => {
+    test("Removes the event listener on first touch and starts fullscreen", () => {
         const mockRoot = document.createElement("div");
         const mockGame = {
             scale: {

@@ -45,51 +45,51 @@ describe("Screen", () => {
             delete window.__qaMode;
         });
 
-        it("sets the scene", () => {
+        test("sets the scene", () => {
             expect(screen.scene).toEqual(Scene.Stub);
         });
 
-        it("sets the context", () => {
+        test("sets the context", () => {
             expect(screen._context).toEqual(mockContext);
         });
 
-        it("sets the navigation", () => {
+        test("sets the navigation", () => {
             expect(screen.navigation).toBe("routes");
         });
 
-        it("clears the currently stored accessible buttons", () => {
+        test("clears the currently stored accessible buttons", () => {
             expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
         });
 
-        it("resets the accessiblity layer DOM", () => {
+        test("resets the accessiblity layer DOM", () => {
             expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
         });
 
-        it("creates the overlay closed signal", () => {
+        test("creates the overlay closed signal", () => {
             expect(screen.overlayClosed).toEqual(signalInstance);
         });
 
-        it("adds a listener to overlayClosed signal", () => {
+        test("adds a listener to overlayClosed signal", () => {
             expect(signalInstance.add).toHaveBeenCalledTimes(1);
             expect(signalInstance.add).toHaveBeenCalledWith(screen.onOverlayClosed, screen);
         });
 
-        it("sets transient data", () => {
+        test("sets transient data", () => {
             expect(screen.transientData).toEqual(mockTransientData);
         });
 
-        it("sets the background music using the theme config", () => {
+        test("sets the background music using the theme config", () => {
             const expectedThemeConfig = mockContext.config.theme.loadscreen;
             expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(Game.Stub, expectedThemeConfig);
         });
     });
 
     describe("context getter/setter", () => {
-        it("gets context", () => {
+        test("gets context", () => {
             expect(screen.context).toEqual(mockContext);
         });
 
-        it("sets context by merging new value with current value", () => {
+        test("sets context by merging new value with current value", () => {
             const expectedContext = {
                 popupScreens: ["pause"],
                 config: { theme: { loadscreen: { music: "test/music" } } },
@@ -99,14 +99,14 @@ describe("Screen", () => {
     });
 
     describe("getAsset method", () => {
-        it("gets asset by name", () => {
+        test("gets asset by name", () => {
             const expectedName = "some-name";
             expect(screen.getAsset(expectedName)).toBe("loadscreen.some-name");
         });
     });
 
     describe("visibleLayer getter/setter", () => {
-        it("calls visible layer with correct params", () => {
+        test("calls visible layer with correct params", () => {
             jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
             expect(screen.visibleLayer).toEqual("current-layer");
             expect(VisibleLayer.get).toHaveBeenCalledWith(screen.game, screen.context);
@@ -121,20 +121,20 @@ describe("Screen", () => {
             screen.onOverlayClosed();
         });
 
-        it("clears accessible elements from DOM", () => {
+        test("clears accessible elements from DOM", () => {
             expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
         });
 
-        it("clears accessible buttons object", () => {
+        test("clears accessible buttons object", () => {
             expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
             expect(a11y.clearAccessibleButtons).toHaveBeenCalledWith(screen);
         });
 
-        it("removes latest popup screen from popupScreens array", () => {
+        test("removes latest popup screen from popupScreens array", () => {
             expect(screen.context.popupScreens).toEqual([]);
         });
 
-        it("appends accessible elements to DOM", () => {
+        test("appends accessible elements to DOM", () => {
             expect(a11y.appendElementsToDom).toHaveBeenCalledTimes(1);
             expect(a11y.appendElementsToDom).toHaveBeenCalledWith(screen);
         });

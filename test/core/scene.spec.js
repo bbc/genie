@@ -50,7 +50,7 @@ describe("Scene", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    it("Should add background, root, foreground, unscaled, layers to the phaser game", () => {
+    test("Should add background, root, foreground, unscaled, layers to the phaser game", () => {
         expect(mockGame.add.group).toHaveBeenCalledWith(undefined, "root", true);
         expect(mockGame.add.group).toHaveBeenCalledWith(undefined, "unscaled", true);
         expect(mockGame.add.group).toHaveBeenCalledWith(undefined, "background");
@@ -60,13 +60,13 @@ describe("Scene", () => {
     });
 
     describe("addToBackground method", () => {
-        it("adds an Phaser element to the background", () => {
+        test("adds an Phaser element to the background", () => {
             const mockPhaserElement = { phaser: "element" };
             scene.addToBackground(mockPhaserElement);
             expect(groupMethods.addChild).toHaveBeenCalledWith(mockPhaserElement);
         });
 
-        it("sets anchor if Phaser element has one", () => {
+        test("sets anchor if Phaser element has one", () => {
             const mockPhaserElement = { anchor: { setTo: jest.fn() } };
             scene.addToBackground(mockPhaserElement);
             expect(mockPhaserElement.anchor.setTo).toHaveBeenCalledWith(0.5, 0.5);
@@ -74,7 +74,7 @@ describe("Scene", () => {
     });
 
     describe("addToForeground method", () => {
-        it("adds an Phaser element to the foreground", () => {
+        test("adds an Phaser element to the foreground", () => {
             const mockPhaserElement = { someElement: "phaser-element" };
             scene.addToForeground(mockPhaserElement);
             expect(groupMethods.addChild).toHaveBeenCalledWith(mockPhaserElement);
@@ -90,25 +90,25 @@ describe("Scene", () => {
             layoutStub = jest.spyOn(Layout, "create").mockImplementation(() => mockRoot);
         });
 
-        it("creates a new layout with correct params", () => {
+        test("creates a new layout with correct params", () => {
             scene.addLayout(mockButtons);
             expect(layoutStub.mock.calls[0].length).toEqual(3);
             expect(layoutStub.mock.calls[0][0]).toEqual(mockGame);
             expect(layoutStub.mock.calls[0][2]).toEqual(mockButtons);
         });
 
-        it("adds the layout root to the background", () => {
+        test("adds the layout root to the background", () => {
             scene.addLayout(mockButtons);
             expect(groupMethods.addChild).toHaveBeenCalledWith(mockRoot.root);
         });
 
-        it("returns the layout", () => {
+        test("returns the layout", () => {
             expect(scene.addLayout(mockButtons)).toEqual(mockRoot);
         });
     });
 
     describe("getLayouts method", () => {
-        it("should return the internal array of layouts", () => {
+        test("returns the internal array of layouts", () => {
             const mockLayout = {
                 root: jest.fn(),
                 destroy: jest.fn(),
@@ -124,7 +124,7 @@ describe("Scene", () => {
     });
 
     describe("getAccessibleGameButtons method", () => {
-        it("should return the correct buttons", () => {
+        test("returns the correct buttons", () => {
             const mockLayout = {
                 root: jest.fn(),
                 destroy: jest.fn(),
@@ -136,12 +136,12 @@ describe("Scene", () => {
     });
 
     describe("removeAll method", () => {
-        it("removes everything from the background", () => {
+        test("removes everything from the background", () => {
             scene.removeAll();
             expect(groupMethods.removeAll).toHaveBeenCalledWith(true);
         });
 
-        it("calls destroy from all layouts added", () => {
+        test("calls destroy from all layouts added", () => {
             const mockLayout = {
                 root: jest.fn(),
                 destroy: jest.fn(),

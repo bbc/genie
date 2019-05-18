@@ -62,31 +62,31 @@ describe("Results Screen", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("create method", () => {
-        it("adds a background image", () => {
+        test("adds a background image", () => {
             resultsScreen.create();
             expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "results.background");
-            expect(resultsScreen.scene.addToBackground).toHaveBeenCalledWith("results.background");
+            expect(resultsScreen.scene.addToBackground).toHaveBeenCalledWihest("results.background");
         });
 
-        it("adds a title image", () => {
+        test("adds a title image", () => {
             resultsScreen.create();
             expect(mockGame.add.image).toHaveBeenCalledWith(0, -150, "results.title");
-            expect(resultsScreen.scene.addToBackground).toHaveBeenCalledWith("results.title");
+            expect(resultsScreen.scene.addToBackground).toHaveBeenCalledWihest("results.title");
         });
 
-        it("loads the game results text", () => {
+        test("loads the game results text", () => {
             resultsScreen.create();
             const expectedResultsData = 22;
             expect(mockGame.add.text).toHaveBeenCalledWith(0, 50, expectedResultsData, { font: "36px ReithSans" });
         });
 
-        it("adds GEL buttons to layout", () => {
+        test("adds GEL buttons to layout", () => {
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame"];
             expect(resultsScreen.scene.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        it("creates a layout harness with correct params", () => {
+        test("creates a layout harness with correct params", () => {
             resultsScreen.create();
             expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
                 mockGame,
@@ -95,21 +95,21 @@ describe("Results Screen", () => {
             );
         });
 
-        it("fires a game complete stat to the GMI with score if given", () => {
+        test("fires a game complete stat to the GMI with score if given", () => {
             resultsScreen.create();
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("game_complete", { game_score: 22 });
+            expect(gmiModule.sendStats).toHaveBeenCalledWihest("game_complete", { game_score: 22 });
         });
 
-        it("fires a game complete stat to the GMI with score in string format if given", () => {
+        test("fires a game complete stat to the GMI with score in string format if given", () => {
             resultsScreen.transientData.results = 450;
             resultsScreen.create();
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("game_complete", { game_score: 450 });
+            expect(gmiModule.sendStats).toHaveBeenCalledWihest("game_complete", { game_score: 450 });
         });
 
-        it("fires a game complete stat to the GMI without a score if not provided", () => {
+        test("fires a game complete stat to the GMI without a score if not provided", () => {
             resultsScreen.transientData.results = undefined;
             resultsScreen.create();
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("game_complete", undefined);
+            expect(gmiModule.sendStats).toHaveBeenCalledWihest("game_complete", undefined);
         });
     });
 
@@ -120,22 +120,22 @@ describe("Results Screen", () => {
         });
 
         describe("the continue button", () => {
-            it("adds a signal subscription", () => {
-                expect(signal.bus.subscribe.mock.calls[0][0].name).toBe("continue");
+            test("adds a signal subscription", () => {
+                expect(signal.bus.subscribe.mock.calls[0][0].name).toeest("continue");
             });
 
-            it("navigates to the next screen when clicked", () => {
+            test("navigates to the next screen when clicked", () => {
                 signal.bus.subscribe.mock.calls[0][0].callback();
                 expect(resultsScreen.navigation.next).toHaveBeenCalled();
             });
         });
 
         describe("the restart button", () => {
-            it("adds a signal subscription", () => {
-                expect(signal.bus.subscribe.mock.calls[1][0].name).toEqual("restart");
+            test("adds a signal subscription", () => {
+                expect(signal.bus.subscribe.mock.calls[1][0].name).toEqulest("restart");
             });
 
-            it("restarts the game and passes saved data through", () => {
+            test("restarts the game and passes saved data through", () => {
                 signal.bus.subscribe.mock.calls[1][0].callback();
                 expect(resultsScreen.navigation.game).toHaveBeenCalledWith({ characterSelected: 1, results: 22 });
             });

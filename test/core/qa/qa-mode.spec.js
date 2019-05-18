@@ -34,13 +34,13 @@ describe("QAMode", () => {
         };
     });
 
-    it("is QAMode when parseUrlParams returns true", () => {
+    test("is QAMode when parseUrlParams returns true", () => {
         jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ qaMode: true }));
         qaMode.create(testWindow, game, goToScreen);
         expect(testWindow.__qaMode).toEqual(qaModeWindow);
     });
 
-    it("is QAMode when URL includes www.test.bbc.", () => {
+    test("is QAMode when URL includes www.test.bbc.", () => {
         jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ qaMode: false }));
         testWindow = {
             location: {
@@ -53,7 +53,7 @@ describe("QAMode", () => {
         expect(testWindow.__qaMode).toEqual(qaModeWindow);
     });
 
-    it("isn't QAMode when not correct params or URL", () => {
+    test("isn't QAMode when not correct params or URL", () => {
         jest.fn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ qaMode: false }));
         qaMode.create(testWindow, game, goToScreen);
         expect(testWindow.__qaMode).toEqual({});

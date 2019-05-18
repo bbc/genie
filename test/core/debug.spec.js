@@ -6,14 +6,14 @@
 import * as debug from "../../src/core/debug.js";
 
 describe("debug", () => {
-    it("returns the correct methods", () => {
+    test("returns the correct methods", () => {
         expect(debug.add).toBeDefined();
         expect(debug.render).toBeDefined();
         expect(debug.toggle).toBeDefined();
         expect(debug.clear).toBeDefined();
     });
 
-    it("debugs the correct number of Phaser.Sprite objects on render", () => {
+    test("debugs the correct number of Phaser.Sprite objects on render", () => {
         const mockGame = {
             debug: {
                 body: jest.fn(),
@@ -29,7 +29,7 @@ describe("debug", () => {
         expect(mockGame.debug.body).toHaveBeenCalled();
     });
 
-    it("debugs the correct number of Phaser.Group objects on render", () => {
+    test("debugs the correct number of Phaser.Group objects on render", () => {
         const mockGame = {
             debug: {
                 geom: jest.fn(),
@@ -46,7 +46,7 @@ describe("debug", () => {
         expect(mockGame.debug.geom).toHaveBeenCalled();
     });
 
-    it("toggles enabled state to true", () => {
+    test("toggles enabled state to true", () => {
         const mockGame = {
             debug: {
                 body: jest.fn(),
@@ -64,7 +64,7 @@ describe("debug", () => {
         expect(mockGame.debug.body).toHaveBeenCalled();
     });
 
-    it("toggles enabled state to false and resets debug sprite", () => {
+    test("toggles enabled state to false and resets debug sprite", () => {
         const mockGame = {
             debug: {
                 body: jest.fn(),
@@ -81,7 +81,7 @@ describe("debug", () => {
         expect(mockGame.debug.reset).toHaveBeenCalled();
     });
 
-    it("clears the debug list", () => {
+    test("clears the debug list", () => {
         const mockGame = {
             debug: {
                 body: jest.fn(),

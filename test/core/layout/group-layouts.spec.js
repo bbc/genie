@@ -7,7 +7,7 @@ import * as fp from "lodash/fp";
 import { groupLayouts } from "../../../src/core/layout/group-layouts";
 
 describe("Group Layouts", () => {
-    it("matches the test constant", () => {
+    test("matches the test constant", () => {
         const expectedGroupLayouts = [
             { vPos: "top", hPos: "left" },
             { vPos: "top", hPos: "right" },

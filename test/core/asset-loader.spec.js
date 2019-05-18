@@ -69,27 +69,27 @@ describe("Asset Loader", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    it("loads all the game json files", () => {
+    test("loads all the game json files", () => {
         return assetsLoaded.then(() => {
             expect(fakeGame.load.json).toHaveBeenCalledWith("MasterAssetPack", "asset-master-pack.json");
             expect(fakeGame.load.json).toHaveBeenCalledWith("GelAssetPack", "gel/gel-pack.json");
         });
     });
 
-    it("loads json files for missing screens", () => {
+    test("loads json files for missing screens", () => {
         return assetsLoaded.then(() => {
             expect(fakeGame.load.json).toHaveBeenCalledWith("character-select", "character-select.json");
         });
     });
 
-    it("does not loads json files for __proto and default screens", () => {
+    test("does not loads json files for __proto and default screens", () => {
         return assetsLoaded.then(() => {
             expect(fakeGame.load.json).not.toHaveBeenCalledWith("__proto");
             expect(fakeGame.load.json).not.toHaveBeenCalledWith("default");
         });
     });
 
-    it("saves the json files to the game cache", () => {
+    test("saves the json files to the game cache", () => {
         return assetsLoaded.then(() => {
             expect(fakeGame.cache.getJSON).toHaveBeenCalledWith("MasterAssetPack");
             expect(fakeGame.cache.getJSON).toHaveBeenCalledWith("GelAssetPack");
@@ -97,26 +97,26 @@ describe("Asset Loader", () => {
         });
     });
 
-    it("loads the loadscreen json", () => {
+    test("loads the loadscreen json", () => {
         return assetsLoaded.then(() => {
             expect(fakeGame.load.pack).toHaveBeenCalledWith("loadscreen", "loader/loadscreen-pack.json");
         });
     });
 
-    it("adds a game time event for each load iteration", () => {
+    test("adds a game time event for each load iteration", () => {
         return assetsLoaded.then(() => {
             expect(fakeGame.time.events.add).toHaveBeenCalledTimes(3);
             expect(fakeGame.time.events.add).toHaveBeenCalledWith(0, fakeGame.load.start, fakeGame.load);
         });
     });
 
-    it("updates the callback with the load progress so far", () => {
+    test("updates the callback with the load progress so far", () => {
         return assetsLoaded.then(() => {
             expect(fakeCallback).toHaveBeenCalledWith(100);
         });
     });
 
-    it("returns the keyLookUps with correct screen prefixes when loading is complete", () => {
+    test("returns the keyLookUps with correct screen prefixes when loading is complete", () => {
         const expectedLookUps = {
             howToPlay: {
                 background: "howToPlay.background",
@@ -138,7 +138,7 @@ describe("Asset Loader", () => {
         });
     });
 
-    it("clears all the files when loading is complete", () => {
+    test("clears all the files when loading is complete", () => {
         nextLoadInQueue();
         return assetsLoaded.then(() => {
             expect(fakeGame.load.onLoadComplete.removeAll).toHaveBeenCalled();

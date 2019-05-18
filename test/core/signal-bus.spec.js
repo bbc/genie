@@ -8,7 +8,7 @@ import * as SignalBus from "../../src/core/signal-bus";
 describe("Signal Bus", () => {
     afterEach(() => jest.clearAllMocks());
 
-    it("fires the correct callbacks when a signal on a channel is published", () => {
+    test("fires the correct callbacks when a signal on a channel is published", () => {
         const bus = SignalBus.create();
         const callback = jest.fn();
 
@@ -21,7 +21,7 @@ describe("Signal Bus", () => {
         expect(callback).toHaveBeenCalledTimes(3);
     });
 
-    it("removes signals from a channel correctly", () => {
+    test("removes signals from a channel correctly", () => {
         const bus = SignalBus.create();
         const callback = jest.fn();
 
@@ -31,7 +31,7 @@ describe("Signal Bus", () => {
         expect(callback).not.toHaveBeenCalled();
     });
 
-    it("passes data from publisher to subscribers", () => {
+    test("passes data from publisher to subscribers", () => {
         const bus = SignalBus.create();
         const expectedData1 = { a: 1, b: 2, c: 3 };
         const expectedData2 = { BBC: [1, 2, 3, 4, 5] };
@@ -46,7 +46,7 @@ describe("Signal Bus", () => {
         expect(callbackSpy.mock.calls[1][0]).toEqual(expectedData2);
     });
 
-    it("removes all signals only on a given channel", () => {
+    test("removes all signals only on a given channel", () => {
         const bus = SignalBus.create();
         const channelCallback = jest.fn();
         const otherChannelCallback = jest.fn();
