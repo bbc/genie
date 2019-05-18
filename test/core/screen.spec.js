@@ -3,9 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert, expect } from "chai";
-import * as sinon from "sinon";
-
 import { Screen } from "../../src/core/screen";
 import * as Game from "../fake/game.js";
 import * as Scene from "../fake/scene.js";
@@ -15,20 +12,20 @@ import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 
 describe("Screen", () => {
     let screen, mockContext, signalInstance, mockTransientData;
-    const sandbox = sinon.createSandbox();
 
-    afterEach(() => sandbox.restore());
+    afterEach(() => jest.clearAllMocks());
 
     describe("with context", () => {
         beforeEach(() => {
-            sandbox.stub(GameSound, "setupScreenMusic");
-            sandbox.stub(VisibleLayer, "get").returns("current-layer");
-            sandbox.stub(a11y, "clearElementsFromDom");
-            sandbox.stub(a11y, "clearAccessibleButtons");
-            signalInstance = { add: sandbox.stub() };
-            sandbox.stub(Phaser, "Signal").returns(signalInstance);
+            jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
+            jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
+            jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
+            jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
+            jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
+            signalInstance = { add: jest.fn() };
+            jest.spyOn(Phaser, "Signal").mockImplementation(() => signalInstance);
             screen = new Screen();
-            sandbox.stub(screen, "onOverlayClosed");
+            jest.spyOn(screen, "onOverlayClosed");
             mockContext = {
                 popupScreens: ["pause"],
                 config: {
@@ -49,47 +46,47 @@ describe("Screen", () => {
         });
 
         it("sets the scene", () => {
-            assert.deepEqual(screen.scene, Scene.Stub);
+            expect(screen.scene).toEqual(Scene.Stub);
         });
 
         it("sets the context", () => {
-            assert.deepEqual(screen._context, mockContext);
+            expect(screen._context).toEqual(mockContext);
         });
 
         it("sets the navigation", () => {
-            assert.equal(screen.navigation, "routes");
+            expect(screen.navigation).toBe("routes");
         });
 
         it("clears the currently stored accessible buttons", () => {
-            sandbox.assert.calledOnce(a11y.clearAccessibleButtons);
+            expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
         });
 
         it("resets the accessiblity layer DOM", () => {
-            sandbox.assert.calledOnce(a11y.clearElementsFromDom);
+            expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
         });
 
         it("creates the overlay closed signal", () => {
-            assert.equal(screen.overlayClosed, signalInstance);
+            expect(screen.overlayClosed).toEqual(signalInstance);
         });
 
         it("adds a listener to overlayClosed signal", () => {
-            sandbox.assert.calledOnce(signalInstance.add.withArgs(screen.onOverlayClosed, screen));
+            expect(signalInstance.add).toHaveBeenCalledTimes(1);
+            expect(signalInstance.add).toHaveBeenCalledWith(screen.onOverlayClosed, screen);
         });
 
         it("sets transient data", () => {
-            assert.equal(screen.transientData, mockTransientData);
+            expect(screen.transientData).toEqual(mockTransientData);
         });
 
         it("sets the background music using the theme config", () => {
             const expectedThemeConfig = mockContext.config.theme.loadscreen;
-            sandbox.assert.calledOnce(GameSound.setupScreenMusic);
-            sandbox.assert.calledWith(GameSound.setupScreenMusic, Game.Stub, expectedThemeConfig);
+            expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(Game.Stub, expectedThemeConfig);
         });
     });
 
     describe("context getter/setter", () => {
         it("gets context", () => {
-            assert.deepEqual(screen.context, mockContext);
+            expect(screen.context).toEqual(mockContext);
         });
 
         it("sets context by merging new value with current value", () => {
@@ -97,30 +94,27 @@ describe("Screen", () => {
                 popupScreens: ["pause"],
                 config: { theme: { loadscreen: { music: "test/music" } } },
             };
-            assert.deepEqual(screen.context, expectedContext);
+            expect(screen.context).toEqual(expectedContext);
         });
     });
 
     describe("getAsset method", () => {
         it("gets asset by name", () => {
             const expectedName = "some-name";
-            assert.equal(screen.getAsset(expectedName), "loadscreen.some-name");
+            expect(screen.getAsset(expectedName)).toBe("loadscreen.some-name");
         });
     });
 
     describe("visibleLayer getter/setter", () => {
         it("calls visible layer with correct params", () => {
-            sandbox.stub(VisibleLayer, "get").returns("current-layer");
-            assert.equal(screen.visibleLayer, "current-layer");
-            sandbox.assert.calledOnce(VisibleLayer.get.withArgs(screen.game, screen.context));
+            jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
+            expect(screen.visibleLayer).toEqual("current-layer");
+            expect(VisibleLayer.get).toHaveBeenCalledWith(screen.game, screen.context);
         });
     });
 
     describe("when overlayClosed signal is triggered", () => {
         beforeEach(() => {
-            sandbox.stub(a11y, "clearElementsFromDom");
-            sandbox.stub(a11y, "clearAccessibleButtons");
-            sandbox.stub(a11y, "appendElementsToDom");
             screen = new Screen();
             screen.game = Game.Stub;
             screen.context = { popupScreens: ["how-to-play"] };
@@ -128,19 +122,21 @@ describe("Screen", () => {
         });
 
         it("clears accessible elements from DOM", () => {
-            sandbox.assert.calledOnce(a11y.clearElementsFromDom);
+            expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
         });
 
         it("clears accessible buttons object", () => {
-            sandbox.assert.calledOnce(a11y.clearAccessibleButtons.withArgs(screen));
+            expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
+            expect(a11y.clearAccessibleButtons).toHaveBeenCalledWith(screen);
         });
 
         it("removes latest popup screen from popupScreens array", () => {
-            expect(screen.context.popupScreens).to.eql([]);
+            expect(screen.context.popupScreens).toEqual([]);
         });
 
         it("appends accessible elements to DOM", () => {
-            sandbox.assert.calledOnce(a11y.appendElementsToDom.withArgs(screen));
+            expect(a11y.appendElementsToDom).toHaveBeenCalledTimes(1);
+            expect(a11y.appendElementsToDom).toHaveBeenCalledWith(screen);
         });
     });
 });
