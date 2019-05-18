@@ -65,13 +65,13 @@ describe("Results Screen", () => {
         test("adds a background image", () => {
             resultsScreen.create();
             expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "results.background");
-            expect(resultsScreen.scene.addToBackground).toHaveBeenCalledWihest("results.background");
+            expect(resultsScreen.scene.addToBackground).toHaveBeenCalledWith("results.background");
         });
 
         test("adds a title image", () => {
             resultsScreen.create();
             expect(mockGame.add.image).toHaveBeenCalledWith(0, -150, "results.title");
-            expect(resultsScreen.scene.addToBackground).toHaveBeenCalledWihest("results.title");
+            expect(resultsScreen.scene.addToBackground).toHaveBeenCalledWith("results.title");
         });
 
         test("loads the game results text", () => {
@@ -97,19 +97,19 @@ describe("Results Screen", () => {
 
         test("fires a game complete stat to the GMI with score if given", () => {
             resultsScreen.create();
-            expect(gmiModule.sendStats).toHaveBeenCalledWihest("game_complete", { game_score: 22 });
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("game_complete", { game_score: 22 });
         });
 
         test("fires a game complete stat to the GMI with score in string format if given", () => {
             resultsScreen.transientData.results = 450;
             resultsScreen.create();
-            expect(gmiModule.sendStats).toHaveBeenCalledWihest("game_complete", { game_score: 450 });
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("game_complete", { game_score: 450 });
         });
 
         test("fires a game complete stat to the GMI without a score if not provided", () => {
             resultsScreen.transientData.results = undefined;
             resultsScreen.create();
-            expect(gmiModule.sendStats).toHaveBeenCalledWihest("game_complete", undefined);
+            expect(gmiModule.sendStats).toHaveBeenCalledWith("game_complete", undefined);
         });
     });
 
@@ -121,7 +121,7 @@ describe("Results Screen", () => {
 
         describe("the continue button", () => {
             test("adds a signal subscription", () => {
-                expect(signal.bus.subscribe.mock.calls[0][0].name).toeest("continue");
+                expect(signal.bus.subscribe.mock.calls[0][0].name).toBe("continue");
             });
 
             test("navigates to the next screen when clicked", () => {
@@ -132,7 +132,7 @@ describe("Results Screen", () => {
 
         describe("the restart button", () => {
             test("adds a signal subscription", () => {
-                expect(signal.bus.subscribe.mock.calls[1][0].name).toEqulest("restart");
+                expect(signal.bus.subscribe.mock.calls[1][0].name).toBe("restart");
             });
 
             test("restarts the game and passes saved data through", () => {
