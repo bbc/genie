@@ -3,234 +3,222 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert } from "chai";
-import * as sinon from "sinon";
+// import * as phaserSplit from "../../../node_modules/phaser-ce/build/custom/phaser-split.js";
+import { createMockGmi } from "../../fake/gmi";
 
-import * as Layout from "../../../src/core/layout/layout.js";
-import * as Scaler from "../../../src/core/scaler.js";
+import { groupLayouts } from "../../../src/core/layout/group-layouts.js";
+import { onScaleChange } from "../../../src/core/scaler.js";
 import { Group } from "../../../src/core/layout/group.js";
-import * as GameSound from "../../../src/core/game-sound.js";
-import * as gmiModule from "../../../src/core/gmi/gmi.js";
+import * as Layout from "../../../src/core/layout/layout.js";
 import * as settingsIcons from "../../../src/core/layout/settings-icons.js";
 
+jest.mock("../../../src/core/layout/group.js");
+
 describe("Layout", () => {
-    const sandbox = sinon.createSandbox();
     const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
-    let mockGame;
+    const sixGelButtons = ["achievements", "exit", "howToPlay", "play", "audio", "settings"];
+
     let mockGmi;
-    let mockSubscribe;
-    let mockUnsubscribe;
+    let mockGame;
+    let mockMetrics;
+    let mockInputUpAdd;
+    let mockGroup;
+    let mockPhaserGroup;
+    let mockSignalUnsubscribe;
     let settingsIconsUnsubscribeSpy;
-    const mockMetrics = {
-        horizontals: {},
-        safeHorizontals: {},
-        verticals: {},
-    };
 
     beforeEach(() => {
         mockGmi = {
-            getAllSettings: sandbox.stub().returns({ audio: true, motion: true }),
+            getAllSettings: jest.fn(() => ({ audio: true, motion: true })),
             shouldDisplayMuteButton: true,
             shouldShowExitButton: true,
         };
+        createMockGmi(mockGmi);
 
-        settingsIconsUnsubscribeSpy = sandbox.spy();
-        sandbox.replace(gmiModule, "gmi", mockGmi);
-        sandbox.stub(settingsIcons, "create").returns({ unsubscribe: settingsIconsUnsubscribeSpy });
-        sandbox.stub(Group.prototype, "addButton").returns({ onInputUp: { add: sandbox.spy() } });
-        return initialiseGame().then(game => {
-            mockGame = game;
-            mockGame.world = {
-                addChild: sandbox.spy(),
-                children: [],
-                shutdown: () => {},
-            };
-            mockGame.add = {
-                sprite: sandbox.spy(() => new Phaser.Sprite(mockGame, 0, 0)),
-                group: sandbox.spy(),
-            };
-            mockGame.renderer = { resolution: 1, destroy: () => {} };
-            mockGame.input = {
-                interactiveItems: { add: sandbox.spy() },
-                reset: () => {},
-                destroy: () => {},
-            };
+        mockGame = { mock: "game" };
+        mockMetrics = {
+            horizontals: jest.fn(),
+            safeHorizontals: jest.fn(),
+            verticals: jest.fn(),
+        };
 
-            mockUnsubscribe = sandbox.spy();
-            mockSubscribe = sandbox.stub(Scaler.onScaleChange, "add").returns({ unsubscribe: mockUnsubscribe });
+        mockInputUpAdd = jest.fn();
+        mockGroup = {
+            addButton: jest.fn(name => ({ buttonName: name, onInputUp: { add: mockInputUpAdd } })),
+            reset: jest.fn(),
+            addToGroup: jest.fn(),
+            destroy: jest.fn(),
+        };
+        Group.mockImplementation(() => mockGroup);
+        mockPhaserGroup = { destroy: jest.fn() };
+        global.Phaser.Group = jest.fn().mockImplementation(() => mockPhaserGroup);
 
-            GameSound.Assets.buttonClick = {
-                play: () => {},
-            };
+        settingsIconsUnsubscribeSpy = jest.fn();
+        jest.spyOn(settingsIcons, "create").mockImplementation(() => ({ unsubscribe: settingsIconsUnsubscribeSpy }));
+
+        mockSignalUnsubscribe = jest.fn();
+        jest.spyOn(onScaleChange, "add").mockImplementation(() => ({ unsubscribe: mockSignalUnsubscribe }));
+    });
+
+    afterEach(() => jest.clearAllMocks());
+
+    describe("Creation", () => {
+        test("adds the correct number of GEL buttons for a given config", () => {
+            const layout1 = Layout.create(mockGame, mockMetrics, ["achievements"]);
+            expect(Object.keys(layout1.buttons).length).toBe(1);
+
+            const layout2 = Layout.create(mockGame, mockMetrics, ["play", "audio", "settings"]);
+            expect(Object.keys(layout2.buttons).length).toBe(3);
+
+            const layout3 = Layout.create(mockGame, mockMetrics, sixGelButtons);
+            expect(Object.keys(layout3.buttons).length).toBe(6);
+        });
+
+        test("skips the creation of the mute button when gmi.shouldDisplayMuteButton is false", () => {
+            mockGmi.shouldDisplayMuteButton = false;
+            const layout = Layout.create(mockGame, mockMetrics, sixGelButtons);
+            expect(layout.buttons.audio).not.toBeDefined();
+        });
+
+        test("skips the creation of the exit button when gmi.shouldShowExitButton is false", () => {
+            mockGmi.shouldShowExitButton = false;
+            const layout = Layout.create(mockGame, mockMetrics, sixGelButtons);
+            expect(layout.buttons.exit).not.toBeDefined();
+        });
+
+        test("creates a new Phaser group for the GEL buttons", () => {
+            Layout.create(mockGame, mockMetrics, sixGelButtons);
+            expect(global.Phaser.Group).toHaveBeenCalledWith(mockGame, mockGame.world, undefined);
+        });
+
+        test("makes a new group for each group layout", () => {
+            const getExpectedParams = callNumber => [
+                mockGame,
+                mockPhaserGroup,
+                groupLayouts[callNumber].vPos,
+                groupLayouts[callNumber].hPos,
+                mockMetrics,
+                groupLayouts[callNumber].safe,
+                groupLayouts[callNumber].arrangeV,
+            ];
+            Layout.create(mockGame, mockMetrics, sixGelButtons);
+            expect(Group).toHaveBeenCalledTimes(groupLayouts.length);
+            Group.mock.calls.forEach((call, index) => {
+                expect(Group.mock.calls[index]).toEqual(getExpectedParams(index));
+            });
+        });
+
+        test("adds buttons using the correct tab order", () => {
+            const rndOrder = [
+                "exit",
+                "home",
+                "achievements",
+                "howToPlay",
+                "play",
+                "settings",
+                "audio",
+                "previous",
+                "next",
+                "continue",
+                "restart",
+                "back",
+                "pause",
+            ];
+            const tabOrder = [
+                "exit",
+                "home",
+                "back",
+                "audio",
+                "settings",
+                "pause",
+                "previous",
+                "play",
+                "next",
+                "achievements",
+                "restart",
+                "continue",
+                "howToPlay",
+            ];
+
+            const layout = Layout.create(mockGame, mockMetrics, rndOrder);
+            expect(Object.keys(layout.buttons)).toEqual(tabOrder);
+        });
+
+        test("resets the groups after they have been added to the layout", () => {
+            Layout.create(mockGame, mockMetrics, []);
+            expect(mockGroup.reset).toHaveBeenCalledTimes(11);
+            expect(mockGroup.reset).toHaveBeenCalledWith(mockMetrics);
+        });
+
+        test("subscribes to the scaler sizeChange signal", () => {
+            const layout = Layout.create(mockGame, mockMetrics, ["play"]);
+            expect(onScaleChange.add).toHaveBeenCalledWith(layout.resize);
+        });
+
+        test("creates the settings icons", () => {
+            Layout.create(mockGame, mockMetrics, ["play"]);
+            expect(settingsIcons.create).toHaveBeenCalledWith(mockGroup, ["play"]);
         });
     });
 
-    afterEach(() => {
-        sandbox.restore();
-        mockGame.destroy();
-        GameSound.Assets.backgroundMusic = undefined;
-        GameSound.Assets.buttonClick = undefined;
+    describe("addToGroup Method", () => {
+        test("adds items to the correct group", () => {
+            const layout = Layout.create(mockGame, mockMetrics, []);
+            const testElement = { mock: "element" };
+
+            layout.addToGroup("middleRight", testElement, 1);
+            expect(mockGroup.addToGroup).toHaveBeenCalledWith(testElement, 1);
+        });
     });
 
-    it("should add the correct number of GEL buttons for a given config", () => {
-        const layout1 = Layout.create(mockGame, mockMetrics, ["achievements"]);
-        assert(Object.keys(layout1.buttons).length === 1);
-
-        const layout2 = Layout.create(mockGame, mockMetrics, ["play", "audio", "settings"]);
-        assert(Object.keys(layout2.buttons).length === 3);
-
-        const layout3 = Layout.create(mockGame, mockMetrics, [
-            "achievements",
-            "exit",
-            "howToPlay",
-            "play",
-            "audio",
-            "settings",
-        ]);
-        assert(Object.keys(layout3.buttons).length === 6);
+    describe("buttons property", () => {
+        test("returns the buttons", () => {
+            const layout = Layout.create(mockGame, mockMetrics, ["achievements", "exit", "settings"]);
+            expect(layout.buttons.achievements).toBeDefined();
+            expect(layout.buttons.exit).toBeDefined();
+            expect(layout.buttons.settings).toBeDefined();
+        });
     });
 
-    it("should skip the creation of the mute button when gmi.shouldDisplayMuteButton is false", () => {
-        mockGmi.shouldDisplayMuteButton = false;
+    describe("destroy method", () => {
+        beforeEach(() => {
+            const layout = Layout.create(mockGame, mockMetrics, ["achievements", "exit", "settings"]);
+            layout.destroy();
+        });
 
-        const layout = Layout.create(mockGame, mockMetrics, [
-            "achievements",
-            "exit",
-            "howToPlay",
-            "play",
-            "audio",
-            "settings",
-        ]);
+        test("removes all signals on this Layout instance", () => {
+            expect(mockSignalUnsubscribe).toHaveBeenCalled();
+            expect(settingsIconsUnsubscribeSpy).toHaveBeenCalled();
+        });
 
-        assert.notExists(layout.buttons.audio);
+        test("destroys the group", () => {
+            expect(mockPhaserGroup.destroy).toHaveBeenCalled();
+        });
     });
 
-    it("should skip the creation of the exit button when gmi.shouldShowExitButton is false", () => {
-        mockGmi.shouldShowExitButton = false;
-
-        const layout = Layout.create(mockGame, mockMetrics, [
-            "achievements",
-            "exit",
-            "howToPlay",
-            "play",
-            "audio",
-            "settings",
-        ]);
-
-        assert.notExists(layout.buttons.exit);
+    describe("root property", () => {
+        test("returns the group", () => {
+            const layout = Layout.create(mockGame, mockMetrics, ["achievements", "exit", "settings"]);
+            expect(layout.root).toBe(mockPhaserGroup);
+        });
     });
 
-    it("Should create 11 Gel Groups", () => {
-        const layout = Layout.create(mockGame, mockMetrics, []);
-        assert(layout.root.children.length === 11);
+    describe("removeSignals method", () => {
+        test("removes all signals on this Layout instance", () => {
+            const layout = Layout.create(mockGame, mockMetrics, ["play"]);
+            layout.removeSignals();
+            expect(mockSignalUnsubscribe).toHaveBeenCalled();
+            expect(settingsIconsUnsubscribeSpy).toHaveBeenCalled();
+        });
     });
 
-    it("Should add items to the correct group", () => {
-        const layout = Layout.create(mockGame, mockMetrics, []);
-        const testElement = new Phaser.Sprite(mockGame, 0, 0);
-
-        layout.addToGroup("middleRight", testElement);
-
-        const groupsWithChildren = layout.root.children.filter(element => element.length);
-
-        assert(groupsWithChildren.length === 1);
-        assert(groupsWithChildren[0].name === "middleRight");
-    });
-
-    it("Should correctly insert an item using the index position property", () => {
-        const layout = Layout.create(mockGame, mockMetrics, []);
-        const testElement = new Phaser.Sprite(mockGame, 0, 0);
-        testElement.randomKey = randomKey;
-
-        layout.addToGroup("topLeft", new Phaser.Sprite(mockGame, 0, 0));
-        layout.addToGroup("topLeft", new Phaser.Sprite(mockGame, 0, 0));
-        layout.addToGroup("topLeft", new Phaser.Sprite(mockGame, 0, 0));
-
-        layout.addToGroup("topLeft", testElement, 2);
-
-        const leftTopGroup = layout.root.children.find(element => element.name === "topLeft");
-        assert(leftTopGroup.children[2].randomKey === randomKey);
-    });
-
-    it("Should set button callbacks using the 'setAction' method", () => {
-        const layout = Layout.create(mockGame, mockMetrics, ["achievements", "exit", "settings"]);
-
-        layout.setAction("exit", "testAction");
-        assert(layout.buttons.exit.onInputUp.add.calledWith("testAction"));
-    });
-
-    it("Should add buttons using the correct tab order", () => {
-        const rndOrder = [
-            "exit",
-            "home",
-            "achievements",
-            "howToPlay",
-            "play",
-            "settings",
-            "audio",
-            "previous",
-            "next",
-            "continue",
-            "restart",
-            "back",
-            "pause",
-        ];
-        const tabOrder = [
-            "exit",
-            "home",
-            "back",
-            "audio",
-            "settings",
-            "pause",
-            "previous",
-            "play",
-            "next",
-            "achievements",
-            "restart",
-            "continue",
-            "howToPlay",
-        ];
-
-        const layout = Layout.create(mockGame, mockMetrics, rndOrder);
-        assert.deepEqual(Object.keys(layout.buttons), tabOrder);
-    });
-
-    it("Should reset the groups after they have been added to the layout", () => {
-        const groupResetStub = sandbox.stub(Group.prototype, "reset").withArgs(mockMetrics);
-        Layout.create(mockGame, mockMetrics, []);
-        sinon.assert.callCount(groupResetStub, 11);
-    });
-
-    it("subscribes to the scaler sizeChange signal", () => {
-        Layout.create(mockGame, mockMetrics, ["play"]);
-        sinon.assert.calledOnce(mockSubscribe);
-    });
-
-    it("removeSignals method removes all signals on this Layout instance", () => {
-        const layout = Layout.create(mockGame, mockMetrics, ["play"]);
-        layout.removeSignals();
-        sinon.assert.calledOnce(mockUnsubscribe);
-        sinon.assert.calledOnce(settingsIconsUnsubscribeSpy);
-    });
-
-    it("creates the settings icons", () => {
-        Layout.create(mockGame, mockMetrics, ["play"]);
-        sinon.assert.calledOnce(settingsIcons.create);
-        assert.equal(typeof settingsIcons.create.getCall(0).args[0], "object");
-        assert.deepEqual(settingsIcons.create.getCall(0).args[1], ["play"]);
+    describe("setAction Method", () => {
+        test("sets button callback", () => {
+            const layout = Layout.create(mockGame, mockMetrics, ["achievements", "exit", "settings"]);
+            const buttonCallBack = "testAction";
+            layout.setAction("exit", buttonCallBack);
+            expect(mockInputUpAdd.mock.calls[0][0]).toBe(buttonCallBack);
+            expect(mockInputUpAdd.mock.calls[0][1].create).toBeDefined();
+        });
     });
 });
-
-function initialiseGame() {
-    window.PhaserGlobal = window.PhaserGlobal || {};
-    window.PhaserGlobal.hideBanner = true;
-    return new Promise(resolve => {
-        new Phaser.Game({
-            state: new class extends Phaser.State {
-                create() {
-                    resolve(this.game);
-                }
-            }(),
-        });
-    });
-}
