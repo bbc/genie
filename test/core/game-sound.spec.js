@@ -3,74 +3,77 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as sinon from "sinon";
-import { assert, expect } from "chai";
 import * as Game from "../fake/game.js";
 import * as PhaserSignal from "../fake/phaser-signal.js";
 
 describe("Game Sound", () => {
-    const sandbox = sinon.createSandbox();
     let GameSound;
+    let mockGame;
+    let mockMusic;
 
     beforeEach(() => {
         GameSound = require("../../src/core/game-sound");
+        mockGame = {
+            add: { audio: jest.fn(() => mockMusic) },
+            sound: { remove: jest.fn() },
+        };
+        mockMusic = {
+            play: jest.fn(),
+            stop: jest.fn(),
+            fadeIn: jest.fn(),
+            fadeOut: jest.fn(),
+            isDecoded: true,
+            onStop: {
+                addOnce: jest.fn(),
+                removeAll: jest.fn(),
+            },
+        };
     });
 
     afterEach(() => {
-        sandbox.restore();
+        jest.clearAllMocks();
         delete require.cache["./src/core/game-sound.js"];
     });
 
-    describe("#setButtonClickSound", () => {
-        it("sets the button click sound", () => {
-            const game = Game.Stub;
-            const addAudioSpy = sandbox.spy(game.add, "audio");
-            GameSound.setButtonClickSound(game, "test/button-click");
-            sinon.assert.calledWith(addAudioSpy, "test/button-click");
+    describe("setButtonClickSound method", () => {
+        test("sets the button click sound", () => {
+            GameSound.setButtonClickSound(mockGame, "test/button-click");
+            expect(mockGame.add.audio).toHaveBeenCalledWith("test/button-click");
         });
     });
 
-    describe("#setupScreenMusic", () => {
+    describe("setupScreenMusic method", () => {
         describe("when no music is playing", () => {
-            let game;
-            let music;
-
-            beforeEach(() => {
-                game = Game.Stub;
-                music = {
-                    play: sandbox.stub(),
-                    onStop: {
-                        addOnce: sandbox.stub(),
-                    },
-                };
-                sandbox.stub(game.add, "audio").returns(music);
-                const screenConfig = { music: "test/music" };
-                GameSound.setupScreenMusic(game, screenConfig);
+            test("sets the background music to the asset that matches the provided key", () => {
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                expect(mockGame.add.audio).toHaveBeenCalledWith("test/music");
             });
 
-            it("sets the background music to the asset that matches the provided key", () => {
-                sinon.assert.calledOnce(game.add.audio);
-                sinon.assert.calledWith(game.add.audio, "test/music");
+            test("starts the background music playing in a loop", () => {
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                expect(mockMusic.play).toHaveBeenCalled();
+                expect(mockMusic.onStop.addOnce).toHaveBeenCalledTimes(1);
             });
 
-            it("starts the background music playing in a loop", () => {
-                sinon.assert.calledOnce(music.play);
-                sinon.assert.calledOnce(music.onStop.addOnce.withArgs(sandbox.match.func));
-            });
-
-            it("sets the new background music -> starts the new music", () => {
-                sinon.assert.callOrder(game.add.audio, music.play);
+            test("sets the new background music and then starts the new music", () => {
+                const callOrder = [];
+                mockGame.add.audio.mockImplementation(() => {
+                    callOrder.push("add-audio");
+                    return mockMusic;
+                });
+                mockMusic.play.mockImplementation(() => {
+                    callOrder.push("music-play");
+                });
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                expect(callOrder).toEqual(["add-audio", "music-play"]);
             });
         });
 
         describe("when the new music is the same as the currently playing music", () => {
-            let game;
             let existingAudioFadeOutSpy;
-            let addAudioSpy;
 
             beforeEach(() => {
-                game = Game.Stub;
-                existingAudioFadeOutSpy = sandbox.spy();
+                existingAudioFadeOutSpy = jest.fn();
                 GameSound.Assets.backgroundMusic = {
                     isPlaying: true,
                     loopFull: () => {},
@@ -78,235 +81,190 @@ describe("Game Sound", () => {
                     onFadeComplete: PhaserSignal.Stub,
                     name: "current-music",
                     onDecoded: {
-                        add: sandbox.stub(),
+                        add: jest.fn(),
                     },
                 };
-                addAudioSpy = sandbox.stub(game.add, "audio");
                 const screenConfig = { music: "current-music" };
-                GameSound.setupScreenMusic(game, screenConfig);
+                GameSound.setupScreenMusic(mockGame, screenConfig);
             });
 
-            it("does not reload the same music asset", () => {
-                sinon.assert.notCalled(addAudioSpy);
+            test("does not reload the same music asset", () => {
+                expect(mockGame.add.audio).not.toHaveBeenCalled();
             });
 
-            it("does not fade the current background music out", () => {
-                sinon.assert.notCalled(existingAudioFadeOutSpy);
+            test("does not fade the current background music out", () => {
+                expect(existingAudioFadeOutSpy).not.toHaveBeenCalled();
             });
         });
 
         describe("when the new music differs from the currently playing music", () => {
-            let game;
-            let music;
-            let musicFadeOut;
+            let musicFadeOutSpy;
 
             beforeEach(() => {
-                game = Game.Stub;
-                musicFadeOut = sandbox.stub();
+                musicFadeOutSpy = jest.fn();
                 GameSound.Assets.backgroundMusic = {
                     isPlaying: true,
-                    fadeOut: musicFadeOut,
+                    fadeOut: musicFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
-                    onDecoded: {
-                        add: sandbox.stub(),
-                    },
+                    onDecoded: { add: jest.fn() },
+                    stop: jest.fn(),
+                    onStop: { removeAll: jest.fn() },
                 };
-                music = {
-                    play: sandbox.stub(),
-                    fadeIn: sandbox.stub(),
-                    isDecoded: true,
-                    onStop: {
-                        addOnce: sandbox.stub(),
-                    },
-                };
-                sandbox.stub(game.add, "audio").returns(music);
-                GameSound.setupScreenMusic(game, { music: "test/music" });
             });
 
-            it("fades the current background music out", () => {
-                sinon.assert.calledOnce(musicFadeOut);
-                sinon.assert.calledWith(musicFadeOut, GameSound.SOUND_FADE_PERIOD / 2);
+            test("fades the current background music out", () => {
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                expect(musicFadeOutSpy).toHaveBeenCalled();
+                expect(musicFadeOutSpy).toHaveBeenCalledWith(GameSound.SOUND_FADE_PERIOD / 2);
             });
 
-            it("sets the background music to the asset that matches the provided key", () => {
-                sinon.assert.calledOnce(game.add.audio);
-                sinon.assert.calledWith(game.add.audio, "test/music");
+            test("sets the background music to the asset that matches the provided key", () => {
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                expect(mockGame.add.audio).toHaveBeenCalled();
+                expect(mockGame.add.audio).toHaveBeenCalledWith("test/music");
             });
 
-            it("fades in the new background music and starts it playing in a loop", () => {
-                sinon.assert.calledOnce(music.fadeIn);
-                sinon.assert.calledWith(music.fadeIn, GameSound.SOUND_FADE_PERIOD);
+            test("fades in the new background music and starts it playing in a loop", () => {
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                expect(mockMusic.fadeIn).toHaveBeenCalled();
+                expect(mockMusic.fadeIn).toHaveBeenCalledWith(GameSound.SOUND_FADE_PERIOD);
             });
 
-            it("stops the current music -> sets the new background music -> fades the new music in", () => {
-                sinon.assert.callOrder(musicFadeOut, game.add.audio, music.fadeIn);
+            test("stops the current music -> sets the new background music -> fades the new music in", () => {
+                const callOrder = [];
+                musicFadeOutSpy.mockImplementation(() => {
+                    callOrder.push("stop-current-music");
+                });
+                mockGame.add.audio.mockImplementation(() => {
+                    callOrder.push("add-new-music");
+                    return mockMusic;
+                });
+                mockMusic.fadeIn.mockImplementation(() => {
+                    callOrder.push("fade-in");
+                });
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                expect(callOrder).toEqual(["stop-current-music", "add-new-music", "fade-in"]);
             });
         });
 
         describe("when the SoundManager and device are both using the Audio tag instead of Web Audio", () => {
-            let game;
-            let music;
-
             beforeEach(() => {
-                game = Game.Stub;
-                game.sound.mute = true;
-                music = {
-                    play: sandbox.stub(),
-                    onStop: {
-                        addOnce: sandbox.stub(),
-                    },
-                    mute: true,
-                    usingAudioTag: true,
-                };
-                sandbox.stub(game.add, "audio").returns(music);
-                GameSound.setupScreenMusic(game, { music: "test/music" });
+                mockGame.sound.mute = true;
+                mockMusic.mute = true;
+                mockMusic.usingAudioTag = true;
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
             });
 
-            it("sets the mute value of the background music to match the mute value of the game sound", () => {
-                expect(GameSound.Assets.backgroundMusic.mute).to.equal(true);
+            test("sets the mute value of the background music to match the mute value of the game sound", () => {
+                expect(GameSound.Assets.backgroundMusic.mute).toBe(true);
             });
         });
 
         describe("when the SoundManager and device are both using Web Audio", () => {
-            let game;
-            let music;
-
             beforeEach(() => {
-                game = Game.Stub;
-                game.sound.mute = true;
-                music = {
-                    play: sandbox.stub(),
-                    onStop: {
-                        addOnce: sandbox.stub(),
-                    },
-                    mute: false,
-                    usingAudioTag: false,
-                };
-                sandbox.stub(game.add, "audio").returns(music);
-                GameSound.setupScreenMusic(game, { music: "test/music" });
+                mockGame.sound.mute = true;
+                mockMusic.mute = false;
+                mockMusic.usingAudioTag = false;
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
             });
 
-            it("does not change the mute value of the background music", () => {
-                expect(GameSound.Assets.backgroundMusic.mute).to.equal(false);
+            test("does not change the mute value of the background music", () => {
+                expect(GameSound.Assets.backgroundMusic.mute).toBe(false);
             });
         });
 
         describe("if there is no music config for the screen", () => {
-            let game;
-            let addAudioSpy;
             let existingAudioFadeOutSpy;
 
             beforeEach(() => {
-                game = Game.Stub;
-                existingAudioFadeOutSpy = sandbox.spy();
+                existingAudioFadeOutSpy = jest.fn();
                 GameSound.Assets.backgroundMusic = {
                     isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
+                    onStop: { removeAll: jest.fn() },
+                    stop: jest.fn(),
                 };
-                addAudioSpy = sandbox.spy(game.add, "audio");
                 const screenConfig = {};
-                GameSound.setupScreenMusic(game, screenConfig);
+                GameSound.setupScreenMusic(mockGame, screenConfig);
             });
 
-            it("will fade out the current music", () => {
-                sinon.assert.calledOnce(existingAudioFadeOutSpy);
-                sinon.assert.calledWith(existingAudioFadeOutSpy, GameSound.SOUND_FADE_PERIOD / 2);
+            test("will fade out the current music", () => {
+                expect(existingAudioFadeOutSpy).toHaveBeenCalled();
+                expect(existingAudioFadeOutSpy).toHaveBeenCalledWith(GameSound.SOUND_FADE_PERIOD / 2);
             });
 
-            it("will not try to set new background music", () => {
-                sinon.assert.notCalled(addAudioSpy);
+            test("will not try to set new background music", () => {
+                expect(mockGame.add.audio).not.toHaveBeenCalled();
             });
         });
 
         describe("if there is no config of any kind for the screen", () => {
-            let game;
-            let addAudioSpy;
             let existingAudioFadeOutSpy;
 
             beforeEach(() => {
-                game = Game.Stub;
-                existingAudioFadeOutSpy = sandbox.spy();
+                existingAudioFadeOutSpy = jest.fn();
                 GameSound.Assets.backgroundMusic = {
                     isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
                     onFadeComplete: PhaserSignal.Stub,
+                    onStop: { removeAll: jest.fn() },
+                    stop: jest.fn(),
                 };
-                addAudioSpy = sandbox.spy(game.add, "audio");
-                GameSound.setupScreenMusic(game, undefined);
+                GameSound.setupScreenMusic(mockGame, undefined);
             });
 
-            it("will fade out the current music", () => {
-                sinon.assert.calledOnce(existingAudioFadeOutSpy);
-                sinon.assert.calledWith(existingAudioFadeOutSpy, GameSound.SOUND_FADE_PERIOD / 2);
+            test("will fade out the current music", () => {
+                expect(existingAudioFadeOutSpy).toHaveBeenCalledWith(GameSound.SOUND_FADE_PERIOD / 2);
             });
 
-            it("will not try to set the background music", () => {
-                sinon.assert.notCalled(addAudioSpy);
+            test("will not try to set the background music", () => {
+                expect(mockGame.add.audio).not.toHaveBeenCalled();
             });
         });
 
         describe("if some previous music is still fading out and we need to fade out current music", () => {
-            let game;
-            let music;
-            let existingAudioFadeOutSpy;
             let previousAudioStopSpy;
-            let musicRemoveAll;
+            let mockMusicRemoveAll;
+            let fadeOutSpy;
 
             beforeEach(() => {
-                game = Game.Stub;
-                existingAudioFadeOutSpy = sandbox.spy();
-                previousAudioStopSpy = sandbox.spy();
-                musicRemoveAll = sandbox.stub();
+                previousAudioStopSpy = jest.fn();
+                mockMusicRemoveAll = jest.fn();
+                fadeOutSpy = jest.fn();
                 GameSound.Assets.backgroundMusic = {
                     isPlaying: true,
                     stop: previousAudioStopSpy,
                     onFadeComplete: { addOnce: () => {} },
-                    fadeOut: () => {},
+                    fadeOut: fadeOutSpy,
                     onStop: {
-                        removeAll: musicRemoveAll,
+                        removeAll: mockMusicRemoveAll,
                     },
                 };
-                music = {
-                    isPlaying: true,
-                    fadeIn: () => {},
-                    fadeOut: existingAudioFadeOutSpy,
-                    onFadeComplete: { addOnce: () => {} },
-                    onDecoded: {
-                        add: sandbox.stub(),
-                    },
-                    onStop: {
-                        addOnce: sandbox.stub(),
-                    },
-                };
-                sandbox.stub(game.add, "audio").returns(music);
-                GameSound.setupScreenMusic(game, { music: "test/music" });
-                GameSound.setupScreenMusic(game, { music: "test/music" });
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
             });
 
-            it("will stop the previous music", () => {
-                sinon.assert.calledOnce(musicRemoveAll);
-                sinon.assert.calledOnce(previousAudioStopSpy);
+            test("will stop the previous music", () => {
+                expect(mockMusicRemoveAll).toHaveBeenCalled();
+                expect(previousAudioStopSpy).toHaveBeenCalled();
             });
 
-            it("will fade out the current music", () => {
-                sinon.assert.calledOnce(existingAudioFadeOutSpy);
-                sinon.assert.calledWith(existingAudioFadeOutSpy, GameSound.SOUND_FADE_PERIOD / 2);
+            test("will fade out the current music", () => {
+                expect(fadeOutSpy).toHaveBeenCalledWith(GameSound.SOUND_FADE_PERIOD / 2);
             });
         });
 
         describe("if some previous music is still fading out and we have no music to fade out", () => {
-            let game;
             let previousAudioStopSpy;
             let tweenStartSpy;
             let fadeTweenSpy;
 
             beforeEach(() => {
-                game = Game.Stub;
-                previousAudioStopSpy = sandbox.spy();
-                tweenStartSpy = sandbox.spy();
+                previousAudioStopSpy = jest.fn();
+                tweenStartSpy = jest.fn();
                 fadeTweenSpy = {
                     pendingDelete: false,
                     start: tweenStartSpy,
@@ -318,77 +276,63 @@ describe("Game Sound", () => {
                     fadeOut: () => {},
                     fadeTween: fadeTweenSpy,
                     onDecoded: {
-                        add: sandbox.stub(),
+                        add: jest.fn(),
                     },
+                    onStop: { removeAll: jest.fn() },
                 };
-                GameSound.setupScreenMusic(game, undefined);
+                GameSound.setupScreenMusic(mockGame, undefined);
                 // Simulate phaser stopping all tweens between states
                 fadeTweenSpy.pendingDelete = true;
-                GameSound.setupScreenMusic(game, undefined);
+                GameSound.setupScreenMusic(mockGame, undefined);
             });
 
-            it("will not stop the fading music", () => {
-                sinon.assert.notCalled(previousAudioStopSpy);
+            test("will not stop the fading music", () => {
+                expect(previousAudioStopSpy).not.toHaveBeenCalled();
             });
 
-            it("will restart the fading music's tween", () => {
-                assert.strictEqual(fadeTweenSpy.pendingDelete, false);
-                sinon.assert.calledOnce(tweenStartSpy);
+            test("will restart the fading music's tween", () => {
+                expect(fadeTweenSpy.pendingDelete).toBe(false);
+                expect(tweenStartSpy).toHaveBeenCalled();
             });
         });
 
         describe("if user navigates to another screen and music has NOT started playing", () => {
-            let game;
-            let music;
             let existingAudioFadeOutSpy;
             let previousAudioStopSpy;
-            let musicRemoveAll;
+            let mockMusicRemoveAll;
 
             beforeEach(() => {
-                game = Game.Stub;
-                sandbox.stub(game.sound, "remove");
-                existingAudioFadeOutSpy = sandbox.spy();
-                previousAudioStopSpy = sandbox.spy();
-                musicRemoveAll = sandbox.stub();
+                existingAudioFadeOutSpy = jest.fn();
+                previousAudioStopSpy = jest.fn();
+                mockMusicRemoveAll = jest.fn();
                 GameSound.Assets.backgroundMusic = {
                     isPlaying: false,
                     stop: previousAudioStopSpy,
                     onFadeComplete: { addOnce: () => {} },
                     fadeOut: () => {},
                     onStop: {
-                        removeAll: musicRemoveAll,
+                        removeAll: mockMusicRemoveAll,
                     },
                 };
-                music = {
-                    fadeIn: sandbox.stub(),
-                    fadeOut: existingAudioFadeOutSpy,
-                    onDecoded: {
-                        add: sandbox.stub(),
-                    },
-                    play: sandbox.stub(),
-                    onStop: {
-                        addOnce: sandbox.stub(),
-                    },
-                };
-                sandbox.stub(game.add, "audio").returns(music);
-                GameSound.setupScreenMusic(game, { music: "test/music" });
+                mockMusic.fadeOut = existingAudioFadeOutSpy;
+                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
             });
 
-            it("stops current music immediately", () => {
-                sandbox.assert.calledOnce(musicRemoveAll);
-                sandbox.assert.calledOnce(previousAudioStopSpy);
+            test("stops current mockMusic immediately", () => {
+                expect(mockMusicRemoveAll).toHaveBeenCalled();
+                expect(previousAudioStopSpy).toHaveBeenCalled();
             });
 
-            it("does not fade out current music", () => {
-                sandbox.assert.notCalled(existingAudioFadeOutSpy);
+            test("does not fade out current mockMusic", () => {
+                expect(existingAudioFadeOutSpy).not.toHaveBeenCalled();
             });
 
-            it("starts the new music playing immediately", () => {
-                sandbox.assert.calledOnce(music.play);
+            test("starts the new mockMusic playing immediately", () => {
+                expect(mockMusic.play).toHaveBeenCalled();
             });
 
-            it("removes fadingMusic", () => {
-                sandbox.assert.calledOnce(game.sound.remove);
+            test("removes fadingMusic", () => {
+                expect(mockGame.sound.remove).toHaveBeenCalled();
             });
         });
     });
