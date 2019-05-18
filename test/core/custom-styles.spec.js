@@ -3,25 +3,32 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert } from "chai";
-
 import { addCustomStyles } from "../../src/core/custom-styles.js";
 
-describe("custom styles", () => {
-    beforeEach(() => addCustomStyles());
+describe("Custom styles", () => {
+    let mockStyleElement;
 
-    describe("#addCustomStyles", () => {
-        it("creates a new style element in the head", () => {
-            const headElement = document.getElementsByTagName("head")[0];
-            assert.exists(headElement.querySelector("style"));
+    beforeEach(() => {
+        mockStyleElement = { innerHTML: [] };
+        global.document.createElement = jest.fn().mockImplementation(() => mockStyleElement);
+        global.document.head.appendChild = jest.fn();
+        addCustomStyles();
+    });
+
+    describe("addCustomStyles method", () => {
+        it("creates a new style element", () => {
+            expect(global.document.createElement).toHaveBeenCalledWith("style");
         });
 
-        it("fills this element with all custom styles", () => {
-            const styleElement = document.getElementsByTagName("style")[0];
-            assert.equal(
-                styleElement.innerHTML,
-                ".hide-focus-ring:focus { outline:none; } .gel-button { -webkit-user-select: none; }",
-            );
+        it("adds custom styles to the style element", () => {
+            const expectedStyles =
+                ".hide-focus-ring:focus { outline:none; } .gel-button { -webkit-user-select: none; }";
+            expect(mockStyleElement.innerHTML).toBe(expectedStyles);
+        });
+
+        it("adds the custom styles to the head", () => {
+            const head = global.document.head.appendChild;
+            expect(head).toHaveBeenCalledWith(mockStyleElement);
         });
     });
 });
