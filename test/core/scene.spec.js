@@ -3,83 +3,73 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert, expect } from "chai";
-import * as sinon from "sinon";
-
 import * as Scene from "../../src/core/scene";
 import * as Layout from "../../src/core/layout/layout";
 import * as Scaler from "../../src/core/scaler.js";
 
+jest.mock("../../src/core/scaler.js");
+
 describe("Scene", () => {
-    let sandbox;
     let scene;
     let mockGame;
     let groupMethods;
 
-    before(() => {
-        sandbox = sinon.createSandbox();
-    });
-
     beforeEach(() => {
-        sandbox.stub(Scaler, "getMetrics").returns("fakeMetrics");
-
-        Scaler.getMetrics = sandbox.stub().returns("fakeMetrics");
-
+        Scaler.getMetrics = "fakeMetrics";
+        Scaler.onScaleChange.add = jest.fn();
+        Scaler.init = jest.fn();
         groupMethods = {
-            addChild: sandbox.spy(),
-            removeAll: sandbox.spy(),
-            scale: { set: sandbox.spy() },
-            position: { set: sandbox.spy() },
+            addChild: jest.fn(),
+            removeAll: jest.fn(),
+            scale: { set: jest.fn() },
+            position: { set: jest.fn() },
         };
         mockGame = {
-            start: sandbox.spy(),
+            start: jest.fn(),
             add: {
-                group: sandbox.spy(() => groupMethods),
+                group: jest.fn(() => groupMethods),
             },
             scale: {
-                setGameSize: sandbox.spy(),
-                setGamePosition: sandbox.spy(),
-                scaleMode: sandbox.spy(),
-                setResizeCallback: sandbox.spy(),
-                getParentBounds: sandbox.spy(),
+                setGameSize: jest.fn(),
+                setGamePosition: jest.fn(),
+                scaleMode: jest.fn(),
+                setResizeCallback: jest.fn(),
+                getParentBounds: jest.fn(),
             },
             debug: {
                 sprite: {
                     position: {
-                        set: sandbox.spy(),
+                        set: jest.fn(),
                     },
                 },
             },
         };
-        Scaler.getMetrics = sandbox.spy();
+        Scaler.getMetrics = jest.fn();
         scene = Scene.create(mockGame);
     });
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     it("Should add background, root, foreground, unscaled, layers to the phaser game", () => {
-        expect(mockGame.add.group.calledWith(undefined, "root", true)).to.equal(true);
-        expect(mockGame.add.group.calledWith(undefined, "unscaled", true)).to.equal(true);
-        expect(mockGame.add.group.calledWith(undefined, "background")).to.equal(true);
-        expect(mockGame.add.group.calledWith(undefined, "foreground")).to.equal(true);
-        expect(mockGame.add.group.calledWith(undefined, "debug", true)).to.equal(true);
-        expect(mockGame.add.group.callCount).to.equal(5);
+        expect(mockGame.add.group).toHaveBeenCalledWith(undefined, "root", true);
+        expect(mockGame.add.group).toHaveBeenCalledWith(undefined, "unscaled", true);
+        expect(mockGame.add.group).toHaveBeenCalledWith(undefined, "background");
+        expect(mockGame.add.group).toHaveBeenCalledWith(undefined, "foreground");
+        expect(mockGame.add.group).toHaveBeenCalledWith(undefined, "debug", true);
+        expect(mockGame.add.group).toHaveBeenCalledTimes(5);
     });
 
     describe("addToBackground method", () => {
         it("adds an Phaser element to the background", () => {
             const mockPhaserElement = { phaser: "element" };
             scene.addToBackground(mockPhaserElement);
-            expect(groupMethods.addChild.calledWith(mockPhaserElement)).to.equal(true);
+            expect(groupMethods.addChild).toHaveBeenCalledWith(mockPhaserElement);
         });
 
         it("sets anchor if Phaser element has one", () => {
-            const setToSpy = sandbox.spy();
-            const mockPhaserElement = { anchor: { setTo: setToSpy } };
+            const mockPhaserElement = { anchor: { setTo: jest.fn() } };
             scene.addToBackground(mockPhaserElement);
-            expect(setToSpy.calledWith(0.5, 0.5)).to.equal(true);
+            expect(mockPhaserElement.anchor.setTo).toHaveBeenCalledWith(0.5, 0.5);
         });
     });
 
@@ -87,7 +77,7 @@ describe("Scene", () => {
         it("adds an Phaser element to the foreground", () => {
             const mockPhaserElement = { someElement: "phaser-element" };
             scene.addToForeground(mockPhaserElement);
-            expect(groupMethods.addChild.calledWith(mockPhaserElement)).to.equal(true);
+            expect(groupMethods.addChild).toHaveBeenCalledWith(mockPhaserElement);
         });
     });
 
@@ -97,75 +87,72 @@ describe("Scene", () => {
         let layoutStub;
 
         beforeEach(() => {
-            layoutStub = sandbox.stub(Layout, "create").returns(mockRoot);
+            layoutStub = jest.spyOn(Layout, "create").mockImplementation(() => mockRoot);
         });
 
         it("creates a new layout with correct params", () => {
             scene.addLayout(mockButtons);
-            expect(layoutStub.getCall(0).args.length).to.equal(3);
-            expect(layoutStub.getCall(0).args[0]).to.eql(mockGame);
-            expect(layoutStub.getCall(0).args[2]).to.eql(mockButtons);
+            expect(layoutStub.mock.calls[0].length).toEqual(3);
+            expect(layoutStub.mock.calls[0][0]).toEqual(mockGame);
+            expect(layoutStub.mock.calls[0][2]).toEqual(mockButtons);
         });
 
         it("adds the layout root to the background", () => {
             scene.addLayout(mockButtons);
-            expect(groupMethods.addChild.calledWith(mockRoot.root)).to.equal(true);
+            expect(groupMethods.addChild).toHaveBeenCalledWith(mockRoot.root);
         });
 
         it("returns the layout", () => {
-            expect(scene.addLayout(mockButtons)).to.eql(mockRoot);
+            expect(scene.addLayout(mockButtons)).toEqual(mockRoot);
         });
     });
 
     describe("getLayouts method", () => {
         it("should return the internal array of layouts", () => {
-            const spyDestroy = sandbox.spy();
             const mockLayout = {
-                root: sandbox.stub(),
-                destroy: spyDestroy,
+                root: jest.fn(),
+                destroy: jest.fn(),
             };
-            sandbox.stub(Layout, "create").returns(mockLayout);
+            jest.spyOn(Layout, "create").mockImplementation(() => mockLayout);
 
-            assert.lengthOf(scene.getLayouts(), 0);
+            expect(scene.getLayouts().length).toBe(0);
             scene.addLayout(["play", "settings"]);
-            assert.lengthOf(scene.getLayouts(), 1);
+            expect(scene.getLayouts().length).toBe(1);
             scene.addLayout(["pause", "next"]);
-            assert.lengthOf(scene.getLayouts(), 2);
+            expect(scene.getLayouts().length).toBe(2);
         });
     });
 
     describe("getAccessibleGameButtons method", () => {
         it("should return the correct buttons", () => {
-            const spyDestroy = sandbox.spy();
             const mockLayout = {
-                root: sandbox.stub(),
-                destroy: spyDestroy,
+                root: jest.fn(),
+                destroy: jest.fn(),
             };
-            sandbox.stub(Layout, "create").returns(mockLayout);
+            jest.spyOn(Layout, "create").mockImplementation(() => mockLayout);
 
-            assert.lengthOf(scene.getAccessibleGameButtons(), 0);
+            expect(scene.getAccessibleGameButtons().length).toBe(0);
         });
     });
 
     describe("removeAll method", () => {
         it("removes everything from the background", () => {
             scene.removeAll();
-            expect(groupMethods.removeAll.calledWith(true)).to.equal(true);
+            expect(groupMethods.removeAll).toHaveBeenCalledWith(true);
         });
 
         it("calls destroy from all layouts added", () => {
-            const spyDestroy = sandbox.spy();
             const mockLayout = {
-                root: sandbox.stub(),
-                destroy: spyDestroy,
+                root: jest.fn(),
+                destroy: jest.fn(),
             };
-            sandbox.stub(Layout, "create").returns(mockLayout);
+            jest.spyOn(Layout, "create").mockImplementation(() => mockLayout);
 
             scene.addLayout(["play", "settings"]);
             scene.addLayout(["pause", "next"]);
             scene.removeAll();
 
-            sinon.assert.calledTwice(spyDestroy);
+            expect(mockLayout.destroy).toHaveBeenCalledTimes(2);
         });
     });
 });
