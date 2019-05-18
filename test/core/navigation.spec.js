@@ -3,84 +3,86 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as sinon from "sinon";
 import { Home } from "../../src/components/home.js";
 import { Loadscreen } from "../../src/components/loadscreen.js";
 import * as Navigation from "../../src/core/navigation.js";
 import * as signal from "../../src/core/signal-bus.js";
-import { assert } from "chai";
 
 describe("Navigation", () => {
     let gameState, context, scene, navigationConfig, transientData, navigation;
 
-    const sandbox = sinon.createSandbox();
-
     beforeEach(() => {
         gameState = {
-            add: sandbox.stub(),
-            start: sandbox.stub(),
+            add: jest.fn(),
+            start: jest.fn(),
             game: { paused: true },
         };
-        context = sandbox.stub();
-        scene = { removeAll: sandbox.stub() };
+        context = jest.fn();
+        scene = { removeAll: jest.fn() };
         transientData = undefined;
         navigation = {
             loadscreen: {
                 state: Loadscreen,
                 routes: {
-                    next: sandbox.stub(),
+                    next: jest.fn(),
                 },
             },
             home: {
                 state: Home,
                 routes: {
-                    next: sandbox.stub(),
+                    next: jest.fn(),
                 },
             },
         };
         navigationConfig = () => navigation;
-        sandbox.stub(signal.bus, "removeChannel");
+        jest.spyOn(signal.bus, "removeChannel");
     });
 
-    afterEach(() => {
-        sandbox.restore();
-    });
+    afterEach(() => jest.clearAllMocks());
 
     it("loads correct genie screens", () => {
         Navigation.create(gameState, context, scene, navigationConfig);
 
-        sinon.assert.calledTwice(gameState.add);
-        sinon.assert.calledOnce(gameState.add.withArgs("loadscreen", Loadscreen));
-        sinon.assert.calledOnce(gameState.add.withArgs("home", Home));
+        expect(gameState.add).toHaveBeenCalledTimes(2);
+        expect(gameState.add).toHaveBeenCalledWith("loadscreen", Loadscreen);
+        expect(gameState.add).toHaveBeenCalledWith("home", Home);
     });
 
     it("goes to loadscreen", () => {
         Navigation.create(gameState, context, scene, navigationConfig);
 
-        sinon.assert.calledOnce(
-            gameState.start.withArgs("loadscreen", true, false, transientData, scene, context, navigation),
+        expect(gameState.start).toHaveBeenCalledTimes(1);
+        expect(gameState.start).toHaveBeenCalledWith(
+            "loadscreen",
+            true,
+            false,
+            transientData,
+            scene,
+            context,
+            navigation,
         );
     });
 
     it("ensures the game is unpaused", () => {
         Navigation.create(gameState, context, scene, navigationConfig);
 
-        assert.isFalse(gameState.game.paused);
+        expect(gameState.game.paused).toBe(false);
     });
 
     it("removes signal bus gel-buttons channel before going to screen", () => {
         Navigation.create(gameState, context, scene, navigationConfig);
 
-        sinon.assert.calledOnce(signal.bus.removeChannel.withArgs("gel-buttons"));
+        expect(signal.bus.removeChannel).toHaveBeenCalledTimes(1);
+        expect(signal.bus.removeChannel).toHaveBeenCalledWith("gel-buttons");
     });
 
     it("clears down layout before going to screen", () => {
         Navigation.create(gameState, context, scene, navigationConfig);
 
-        sinon.assert.calledOnce(scene.removeAll);
+        expect(scene.removeAll).toHaveBeenCalledTimes(1);
     });
 
     it("It returns a function", () => {
-        assert.isFunction(Navigation.create(gameState, context, scene, navigationConfig));
+        expect(typeof Navigation.create(gameState, context, scene, navigationConfig)).toBe("function");
     });
 });
