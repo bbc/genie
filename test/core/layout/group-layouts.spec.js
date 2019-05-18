@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assert } from "chai";
 import * as fp from "lodash/fp";
 import { groupLayouts } from "../../../src/core/layout/group-layouts";
 
@@ -22,6 +21,6 @@ describe("Group Layouts", () => {
             { vPos: "middle", hPos: "center" },
             { vPos: "middle", hPos: "center", arrangeV: true },
         ];
-        assert.isTrue(fp.isEqual(expectedGroupLayouts, groupLayouts));
+        expect(fp.isEqual(expectedGroupLayouts, groupLayouts)).toBe(true);
     });
 });
