@@ -1,0 +1,5 @@
+Once our PR has been merged this can be moved to package.json and imported as:
+
+import Bowser from "../../node_modules/bowser/src/bowser.js";
+
+in startup.js

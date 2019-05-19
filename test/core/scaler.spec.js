@@ -25,9 +25,27 @@ describe("Scaler", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    test("sets the scalemode to SHOW_ALL on init", () => {
-        Scaler.init(600, mockGame);
-        expect(mockGame.scale.scaleMode).toEqual(Phaser.ScaleManager.SHOW_ALL);
+    describe("Initial configuration", () => {
+        it("sets the scalemode", () => {
+            Scaler.init(600, mockGame);
+            expect(mockGame.scale.scaleMode).toEqual(Phaser.ScaleManager.SHOW_ALL);
+        });
+
+        it("sets the fullScreenScaleMode", () => {
+            Scaler.init(600, mockGame);
+            expect(mockGame.scale.fullScreenScaleMode).toEqual(Phaser.ScaleManager.SHOW_ALL);
+        });
+
+        it("sets the page alignment", () => {
+            Scaler.init(600, mockGame);
+            expect(mockGame.scale.pageAlignHorizontally).toEqual(true);
+            expect(mockGame.scale.pageAlignVertically).toEqual(true);
+        });
+
+        it("sets the fullScreenTarget", () => {
+            Scaler.init(600, mockGame);
+            expect(mockGame.scale.fullScreenTarget).toEqual(global.document.body);
+        });
     });
 
     test("assigns a callback to window.onresize", () => {

@@ -28,7 +28,11 @@ module.exports = env => {
         module: {
             rules: [
                 { test: /\.js$/, use: ["babel-loader"], include: [path.resolve("src"), path.resolve("lib")] },
-                { test: /\.js$/, use: ["babel-loader"], include: path.resolve("node_modules/genie/src") },
+                {
+                    test: /\.js$/,
+                    use: ["babel-loader"],
+                    include: [path.resolve("node_modules/genie/src"), path.resolve("node_modules/genie/lib")],
+                },
                 { test: /pixi\.js/, use: ["expose-loader?PIXI"] },
                 { test: /phaser-split\.js$/, use: ["expose-loader?Phaser"] },
                 { test: /p2\.js/, use: ["expose-loader?p2"] },
@@ -36,6 +40,7 @@ module.exports = env => {
             ],
         },
         devServer: {
+            writeToDisk: true,
             useLocalIp: true,
             host: "0.0.0.0",
             historyApiFallback: {

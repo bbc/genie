@@ -25,15 +25,23 @@ export function init(stageHeight, game) {
     game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
     game.scale.pageAlignHorizontally = true;
     game.scale.pageAlignVertically = true;
+    game.scale.fullScreenTarget = document.body;
 
-    getMetrics = fp.flow(getBounds(game), fp.pick(["width", "height"]), calculateMetrics(stageHeight));
+    getMetrics = fp.flow(
+        getBounds(game),
+        fp.pick(["width", "height"]),
+        calculateMetrics(stageHeight),
+    );
 
     const setSize = metrics => {
         game.scale.setGameSize(metrics.stageWidth, metrics.stageHeight);
         _onSizeChange.dispatch(metrics);
     };
 
-    const resize = fp.flow(getMetrics, setSize);
+    const resize = fp.flow(
+        getMetrics,
+        setSize,
+    );
 
     resize();
     window.onresize = fp.debounce(200, resize);
