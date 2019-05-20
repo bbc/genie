@@ -5,11 +5,10 @@
  */
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import { Group } from "../../../src/core/layout/group";
-import * as buttonOverrides from "../../../src/core/layout/button-overrides";
+// import * as buttonOverrides from "../../../src/core/layout/button-overrides";
 
 // jest.mock("../../../node_modules/phaser-ce/build/custom/pixi", () => jest.fn());
 // jest.mock("../../../node_modules/phaser-ce/build/custom/phaser-split", () => jest.fn());
-
 
 describe("Group", () => {
     let buttonFactory;
@@ -21,7 +20,7 @@ describe("Group", () => {
     let config;
     let vPos;
     let hPos;
-    let mockPhaserGroup;
+    // let mockPhaserGroup;
 
     beforeEach(() => {
         mockPhaserGroup = {
@@ -171,172 +170,172 @@ describe("Group", () => {
             });
         });
 
-        // describe("when vPos is top and hPos is left", () => {
-        //     test("correctly takes hitArea into account", () => {
-        //         jest
-        //             .spyOn(buttonFactory, "createButton")
-        //             .mockReturnValueOnce(() => ({
+        //     describe("when vPos is top and hPos is left", () => {
+        //         test("correctly takes hitArea into account", () => {
+        //             jest
+        //                 .spyOn(buttonFactory, "createButton")
+        //                 .mockReturnValueOnce(() => ({
+        //                     x: 50,
+        //                     y: 50,
+        //                     width: 50,
+        //                     height: 50,
+        //                     hitArea: {
+        //                         left: 0,
+        //                         top: 0,
+        //                     },
+        //                     updateTransform: () => {},
+        //                     resize: buttonResizeStub,
+        //                 }))
+        //                 .mockReturnValueOnce(() => ({
+        //                     x: 50,
+        //                     y: 50,
+        //                     width: 50,
+        //                     height: 50,
+        //                     hitArea: {
+        //                         left: -1000,
+        //                         top: -1000,
+        //                     },
+        //                     updateTransform: () => {},
+        //                     resize: buttonResizeStub,
+        //                 }));
+        //
+        //             vPos = "top";
+        //             hPos = "left";
+        //
+        //
+        //             // global.window.getGMI = jest.fn(() => mockGmi);
+        //             // jest.spyOn(global.Phaser, "prototype").mockImplementation(() => ({
+        //             //     Group: jest.fn(() => ({ width: jest.fn(() => 50) })),
+        //             // }));
+        //             // Object.defineProperty(global.Phaser.Group, "prototype", {
+        //             //     left: jest.fn(() => ["set"]),
+        //             //     top: jest.fn(() => ["set"]),
+        //             //     width: jest.fn(() => 50),
+        //             // });
+        //
+        //             group = new Group(game, parentGroup, vPos, hPos, metrics);
+        //
+        //             group.addButton(config);
+        //             // group.addButton(config);
+        //             // group.reset(metrics);
+        //             //
+        //             // expect(group.left.set).toHaveBeenCalledTimes(1);
+        //             // expect(group.top).toHaveBeenCalledTimes(1);
+        //             //
+        //             // expect(group.left).toHaveBeenCalledWith(-25);
+        //             // expect(group.top).toHaveBeenCalledWith(-425);
+        //         });
+        //     });
+        //
+        //     describe("when vPos is bottom and hPos is right", () => {
+        //         test("correctly takes hitArea into account", () => {
+        //             const rightSpy = jest.spyOn(Group.prototype, "right", ["set"]);
+        //             const bottomSpy = jest.spyOn(Group.prototype, "bottom", ["set"]);
+        //             const createButtonStub = jest.spyOn(buttonFactory, "createButton");
+        //
+        //             vPos = "bottom";
+        //             hPos = "right";
+        //             group = new Group(game, parentGroup, vPos, hPos, metrics);
+        //
+        //             createButtonStub.returns({
         //                 x: 50,
         //                 y: 50,
         //                 width: 50,
         //                 height: 50,
         //                 hitArea: {
-        //                     left: 0,
-        //                     top: 0,
+        //                     right: 1000,
+        //                     bottom: 1000,
         //                 },
         //                 updateTransform: () => {},
         //                 resize: buttonResizeStub,
-        //             }))
-        //             .mockReturnValueOnce(() => ({
+        //             });
+        //             group.addButton(config);
+        //
+        //             createButtonStub.returns({
         //                 x: 50,
         //                 y: 50,
         //                 width: 50,
         //                 height: 50,
         //                 hitArea: {
-        //                     left: -1000,
-        //                     top: -1000,
+        //                     right: 0,
+        //                     bottom: 0,
         //                 },
         //                 updateTransform: () => {},
         //                 resize: buttonResizeStub,
-        //             }));
+        //             });
+        //             group.addButton(config);
         //
-        //         vPos = "top";
-        //         hPos = "left";
+        //             group.reset(metrics);
         //
+        //             expect(rightSpy.set).toHaveBeenCalledTimes(1);
+        //             expect(bottomSpy.set).toHaveBeenCalledTimes(1);
         //
-        //         // global.window.getGMI = jest.fn(() => mockGmi);
-        //         // jest.spyOn(global.Phaser, "prototype").mockImplementation(() => ({
-        //         //     Group: jest.fn(() => ({ width: jest.fn(() => 50) })),
-        //         // }));
-        //         // Object.defineProperty(global.Phaser.Group, "prototype", {
-        //         //     left: jest.fn(() => ["set"]),
-        //         //     top: jest.fn(() => ["set"]),
-        //         //     width: jest.fn(() => 50),
-        //         // });
-        //
-        //         group = new Group(game, parentGroup, vPos, hPos, metrics);
-        //
-        //         group.addButton(config);
-        //         // group.addButton(config);
-        //         // group.reset(metrics);
-        //         //
-        //         // expect(group.left.set).toHaveBeenCalledTimes(1);
-        //         // expect(group.top).toHaveBeenCalledTimes(1);
-        //         //
-        //         // expect(group.left).toHaveBeenCalledWith(-25);
-        //         // expect(group.top).toHaveBeenCalledWith(-425);
+        //             expect(rightSpy.set).toHaveBeenCalledWith(-125);
+        //             expect(bottomSpy.set).toHaveBeenCalledWith(375);
+        //         });
         //     });
         // });
-
-    //     describe("when vPos is bottom and hPos is right", () => {
-    //         test("correctly takes hitArea into account", () => {
-    //             const rightSpy = jest.spyOn(Group.prototype, "right", ["set"]);
-    //             const bottomSpy = jest.spyOn(Group.prototype, "bottom", ["set"]);
-    //             const createButtonStub = jest.spyOn(buttonFactory, "createButton");
-    //
-    //             vPos = "bottom";
-    //             hPos = "right";
-    //             group = new Group(game, parentGroup, vPos, hPos, metrics);
-    //
-    //             createButtonStub.returns({
-    //                 x: 50,
-    //                 y: 50,
-    //                 width: 50,
-    //                 height: 50,
-    //                 hitArea: {
-    //                     right: 1000,
-    //                     bottom: 1000,
-    //                 },
-    //                 updateTransform: () => {},
-    //                 resize: buttonResizeStub,
-    //             });
-    //             group.addButton(config);
-    //
-    //             createButtonStub.returns({
-    //                 x: 50,
-    //                 y: 50,
-    //                 width: 50,
-    //                 height: 50,
-    //                 hitArea: {
-    //                     right: 0,
-    //                     bottom: 0,
-    //                 },
-    //                 updateTransform: () => {},
-    //                 resize: buttonResizeStub,
-    //             });
-    //             group.addButton(config);
-    //
-    //             group.reset(metrics);
-    //
-    //             expect(rightSpy.set).toHaveBeenCalledTimes(1);
-    //             expect(bottomSpy.set).toHaveBeenCalledTimes(1);
-    //
-    //             expect(rightSpy.set).toHaveBeenCalledWith(-125);
-    //             expect(bottomSpy.set).toHaveBeenCalledWith(375);
-    //         });
-    //     });
+        //
+        // describe("addToGroup method", () => {
+        //     test("adds item to this group", () => {
+        //         const mockButton = {
+        //             anchor: {
+        //                 setTo: (x, y) => {
+        //                     x, y;
+        //                 },
+        //             },
+        //             updateTransform: () => {},
+        //         };
+        //         group.addToGroup(mockButton);
+        //         expect(group.children.length === 1).toBeTruthy();
+        //         expect(group.children[0] === mockButton).toBeTruthy();
+        //     });
+        // });
+        //
+        // describe("reset method", () => {
+        //     test("sets group position when resizing from desktop to desktop", () => {
+        //         const expectedGroupXPosition = 0;
+        //         const expectedGroupYPosition = -333;
+        //         const desktopMetrics = { horizontals: {}, verticals: {} };
+        //         const moreDesktopMetrics = { borderPad: 0, horizontals: { center: 0 }, verticals: { top: -333 } };
+        //
+        //         group = new Group(game, parentGroup, "top", "center", desktopMetrics, false);
+        //         group.addButton(config);
+        //         group.reset(moreDesktopMetrics);
+        //
+        //         expect(group.x).toBe(expectedGroupXPosition);
+        //         expect(group.y).toBe(expectedGroupYPosition);
+        //     });
+        //
+        //     test("resizes buttons after resizing the group and the width drops below the mobile breakpoint", () => {
+        //         const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
+        //         const mobileMetrics = { isMobile: true, horizontals: {}, verticals: {} };
+        //
+        //         group = new Group(game, parentGroup, "bottom", "right", desktopMetrics, false);
+        //         group.addButton(config);
+        //         group.reset(mobileMetrics);
+        //
+        //         expect(group._metrics.isMobile).toBe(true);
+        //         expect(buttonResizeStub).toHaveBeenCalledTimes(1);
+        //     });
+        //
+        //     test("does not resize buttons after resizing the group and the width remains above the mobile breakpoint", () => {
+        //         const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
+        //         const moreDesktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
+        //
+        //         group = new Group(game, parentGroup, "top", "left", desktopMetrics, false);
+        //         group.addButton(config);
+        //         group.reset(moreDesktopMetrics);
+        //
+        //         expect(group._metrics.isMobile).toBe(false);
+        //         expect(buttonResizeStub).not.toHaveBeenCalled();
+        //     });
+        //
+        //     test("calls applyButtonOverrides function with correct args", () => {
+        //         const applyButtonOverrides = jest.spyOn(buttonOverrides, "applyButtonOverrides");
+        //         group.addButton(config);
+        //         group.reset(metrics);
+        //         expect(applyButtonOverrides).toHaveBeenCalledWith(metrics.scale, group._buttons);
+        //     });
     });
-    //
-    // describe("addToGroup method", () => {
-    //     test("adds item to this group", () => {
-    //         const mockButton = {
-    //             anchor: {
-    //                 setTo: (x, y) => {
-    //                     x, y;
-    //                 },
-    //             },
-    //             updateTransform: () => {},
-    //         };
-    //         group.addToGroup(mockButton);
-    //         expect(group.children.length === 1).toBeTruthy();
-    //         expect(group.children[0] === mockButton).toBeTruthy();
-    //     });
-    // });
-    //
-    // describe("reset method", () => {
-    //     test("sets group position when resizing from desktop to desktop", () => {
-    //         const expectedGroupXPosition = 0;
-    //         const expectedGroupYPosition = -333;
-    //         const desktopMetrics = { horizontals: {}, verticals: {} };
-    //         const moreDesktopMetrics = { borderPad: 0, horizontals: { center: 0 }, verticals: { top: -333 } };
-    //
-    //         group = new Group(game, parentGroup, "top", "center", desktopMetrics, false);
-    //         group.addButton(config);
-    //         group.reset(moreDesktopMetrics);
-    //
-    //         expect(group.x).toBe(expectedGroupXPosition);
-    //         expect(group.y).toBe(expectedGroupYPosition);
-    //     });
-    //
-    //     test("resizes buttons after resizing the group and the width drops below the mobile breakpoint", () => {
-    //         const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
-    //         const mobileMetrics = { isMobile: true, horizontals: {}, verticals: {} };
-    //
-    //         group = new Group(game, parentGroup, "bottom", "right", desktopMetrics, false);
-    //         group.addButton(config);
-    //         group.reset(mobileMetrics);
-    //
-    //         expect(group._metrics.isMobile).toBe(true);
-    //         expect(buttonResizeStub).toHaveBeenCalledTimes(1);
-    //     });
-    //
-    //     test("does not resize buttons after resizing the group and the width remains above the mobile breakpoint", () => {
-    //         const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
-    //         const moreDesktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
-    //
-    //         group = new Group(game, parentGroup, "top", "left", desktopMetrics, false);
-    //         group.addButton(config);
-    //         group.reset(moreDesktopMetrics);
-    //
-    //         expect(group._metrics.isMobile).toBe(false);
-    //         expect(buttonResizeStub).not.toHaveBeenCalled();
-    //     });
-    //
-    //     test("calls applyButtonOverrides function with correct args", () => {
-    //         const applyButtonOverrides = jest.spyOn(buttonOverrides, "applyButtonOverrides");
-    //         group.addButton(config);
-    //         group.reset(metrics);
-    //         expect(applyButtonOverrides).toHaveBeenCalledWith(metrics.scale, group._buttons);
-    //     });
-    // });
 });

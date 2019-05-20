@@ -21,8 +21,7 @@ describe("Accessible Carousel Elements", () => {
         mockCarouselDomElement = domElement();
         global.document.createElement = jest.fn().mockImplementation(() => mockCarouselDomElement);
         mockAccessibleElements = [domElement(), domElement(), domElement()];
-        jest
-            .spyOn(accessibleDomElement, "accessibleDomElement")
+        jest.spyOn(accessibleDomElement, "accessibleDomElement")
             .mockReturnValueOnce({ el: mockAccessibleElements[0] })
             .mockReturnValueOnce({ el: mockAccessibleElements[1] })
             .mockReturnValueOnce({ el: mockAccessibleElements[2] });

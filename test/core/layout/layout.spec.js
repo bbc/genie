@@ -15,7 +15,6 @@ import * as settingsIcons from "../../../src/core/layout/settings-icons.js";
 jest.mock("../../../src/core/layout/group.js");
 
 describe("Layout", () => {
-    const randomKey = "1d67c228681df6ad7f0b05f069cd087c442934ab5e4e86337d70c832e110c61b";
     const sixGelButtons = ["achievements", "exit", "howToPlay", "play", "audio", "settings"];
 
     let mockGmi;

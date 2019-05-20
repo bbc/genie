@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
- import "jest-canvas-mock";
+import "jest-canvas-mock";
 
 // global.Phaser = {
 //     Sprite: function() {},

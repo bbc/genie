@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as Game from "../fake/game.js";
 import * as PhaserSignal from "../fake/phaser-signal.js";
 
 describe("Game Sound", () => {
