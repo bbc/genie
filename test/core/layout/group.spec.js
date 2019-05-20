@@ -20,32 +20,32 @@ describe("Group", () => {
     let config;
     let vPos;
     let hPos;
-    let mockPhaserGroup;
+    // let mockPhaserGroup;
 
     beforeEach(() => {
-        mockPhaserGroup = {
-            left: {
-                get: jest.fn(),
-                set: jest.fn(),
-            },
-            right: {
-                get: jest.fn(),
-                set: jest.fn(),
-            },
-            top: {
-                get: jest.fn(),
-                set: jest.fn(),
-            },
-            width: {
-                get: jest.fn(),
-                set: jest.fn(),
-            },
-            height: {
-                get: jest.fn(),
-                set: jest.fn(),
-            },
-            children: [{ updateTransform: jest.fn() }],
-        };
+        // mockPhaserGroup = {
+        //     left: {
+        //         get: jest.fn(),
+        //         set: jest.fn(),
+        //     },
+        //     right: {
+        //         get: jest.fn(),
+        //         set: jest.fn(),
+        //     },
+        //     top: {
+        //         get: jest.fn(),
+        //         set: jest.fn(),
+        //     },
+        //     width: {
+        //         get: jest.fn(),
+        //         set: jest.fn(),
+        //     },
+        //     height: {
+        //         get: jest.fn(),
+        //         set: jest.fn(),
+        //     },
+        //     children: [{ updateTransform: jest.fn() }],
+        // };
 
         game = jest.fn();
         parentGroup = {
