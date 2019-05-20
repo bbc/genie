@@ -53,7 +53,7 @@
         "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch --env.genieCore",
         "eslint": "eslint . --ignore-pattern lib/ --ignore-path .gitignore",
-        "jest": "npm run clean && jest --coverage --runInBand",
+        "jest": "jest --coverage --runInBand",
         "jest:no-coverage": "npm run clean && jest",
         "test": "npm run jest && npm run eslint",
         "docs": "open ./docs/api/index.html",
