@@ -20,7 +20,7 @@ describe("Group", () => {
     let config;
     let vPos;
     let hPos;
-    // let mockPhaserGroup;
+    let mockPhaserGroup;
 
     beforeEach(() => {
         mockPhaserGroup = {
