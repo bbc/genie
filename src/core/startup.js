@@ -7,7 +7,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { settings, settingsChannel } from "../core/settings.js";
+import { settings, settingsChannel, setGame } from "../core/settings.js";
 import * as signal from "../core/signal-bus.js";
 import * as Navigation from "./navigation.js";
 import * as Scene from "./scene.js";
@@ -48,6 +48,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
     addCustomStyles();
 
     const game = new Phaser.Game(phaserConfig);
+    setGame(game);
 
     function onStarted(config) {
         // Phaser is now set up and we can use all game properties.
@@ -95,9 +96,10 @@ class Startup extends Phaser.State {
         const theme = gmi.embedVars.configPath;
         this.game.load.path = theme.split(/([^/]+$)/, 2)[0]; //config dir
         this.game.load.json(CONFIG_KEY, "config.json");
+
         signal.bus.subscribe({
             channel: settingsChannel,
-            name: "settingsClosed",
+            name: "settings-closed",
             callback: () => {
                 this.game.canvas.focus();
             },
