@@ -26,7 +26,7 @@ export const createLoadBar = (game, barBgKey, barFillKey) => {
             return _fillPercent;
         },
         set: percent => {
-            cropRect.width = barWidth * percent / 100;
+            cropRect.width = (barWidth * percent) / 100;
             barFill.crop(cropRect);
             _fillPercent = percent;
         },

@@ -83,9 +83,18 @@ export function create(game) {
         return layout;
     };
 
-    const addToBackground = fp.flow(centerAnchor, addToGroup(background));
-    const addToForeground = fp.flow(centerAnchor, addToGroup(foreground));
-    const addToUnscaled = fp.flow(centerAnchor, addToGroup(unscaled));
+    const addToBackground = fp.flow(
+        centerAnchor,
+        addToGroup(background),
+    );
+    const addToForeground = fp.flow(
+        centerAnchor,
+        addToGroup(foreground),
+    );
+    const addToUnscaled = fp.flow(
+        centerAnchor,
+        addToGroup(unscaled),
+    );
 
     const getLayouts = () => _layouts;
 

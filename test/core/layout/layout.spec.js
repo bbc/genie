@@ -226,11 +226,11 @@ function initialiseGame() {
     window.PhaserGlobal.hideBanner = true;
     return new Promise(resolve => {
         new Phaser.Game({
-            state: new class extends Phaser.State {
+            state: new (class extends Phaser.State {
                 create() {
                     resolve(this.game);
                 }
-            }(),
+            })(),
         });
     });
 }
