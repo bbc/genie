@@ -19,14 +19,14 @@ export const create = () => {
         fp.map(button => {
             button.inputEnabled = setting;
         }, buttons);
-    }
+    };
 
     signal.bus.subscribe({
         channel: settingsChannel,
         name: "settings-closed",
-        callback: (args) => {
-            setButtonInteractivity(args.game, true);
-        }
+        callback: data => {
+            setButtonInteractivity(data.game, true);
+        },
     });
 
     const onSettingChanged = (key, value) => {
@@ -41,7 +41,7 @@ export const create = () => {
         signal.bus.publish({
             channel: settingsChannel,
             name: "settings-closed",
-            data: { game }
+            data: { game },
         });
     };
 
@@ -56,7 +56,7 @@ export const create = () => {
     };
 };
 
-export const setGame = newGame => game = newGame;
+export const settingsInit = newGame => (game = newGame);
 
 // Singleton used by games
 export const settings = create();

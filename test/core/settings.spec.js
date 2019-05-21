@@ -4,12 +4,13 @@
  * @license Apache-2.0
  */
 import * as sinon from "sinon";
-import { create as createSettings } from "../../src/core/settings.js";
+import { create as createSettings, settingsInit } from "../../src/core/settings.js";
 import * as signal from "../../src/core/signal-bus.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 
 describe("Settings", () => {
     let sandbox = sinon.createSandbox();
+    let mockGame;
     let mockGmi;
     let settings;
 
@@ -21,11 +22,37 @@ describe("Settings", () => {
             exit: sandbox.stub(),
         };
 
+        var layout = [
+            {
+                buttons: {
+                    pause: {},
+                },
+            },
+        ];
+
+        mockGame = {
+            state: {
+                current: "current-screen",
+                states: {
+                    "current-screen": {
+                        navigation: {
+                            home: sandbox.spy(),
+                            achievements: sandbox.spy(),
+                        },
+                        scene: {
+                            getLayouts: sandbox.stub().returns(layout),
+                        },
+                    },
+                },
+            },
+        };
+
         sandbox.stub(signal.bus, "publish");
         sandbox.stub(gmiModule, "setGmi").returns(mockGmi);
         sandbox.replace(gmiModule, "gmi", mockGmi);
 
         settings = createSettings();
+        settingsInit(mockGame);
     });
 
     afterEach(() => {
@@ -33,7 +60,9 @@ describe("Settings", () => {
     });
 
     describe("show method", () => {
-        beforeEach(() => settings.show());
+        beforeEach(() => {
+            settings.show(mockGame);
+        });
 
         it("calls GMI show settings", () => {
             sandbox.assert.calledOnce(mockGmi.showSettings);
@@ -54,10 +83,17 @@ describe("Settings", () => {
             const expectedSignal = {
                 channel: "genie-settings",
                 name: "settings-closed",
+                data: { mockGame },
             };
             const onSettingsClosedCallback = mockGmi.showSettings.getCall(0).args[1];
             onSettingsClosedCallback();
-            sandbox.assert.calledOnce(signal.bus.publish.withArgs(expectedSignal));
+            sandbox.assert.calledOnce(
+                signal.bus.publish.withArgs({
+                    channel: expectedSignal.channel,
+                    name: expectedSignal.name,
+                    data: sinon.match.any,
+                }),
+            );
         });
     });
 

@@ -67,10 +67,7 @@ export const create = () => {
      * @param {Function} message.callback - Signal identifier
      * @memberof module:core/signal-bus
      */
-    const subscribe = fp.flow(
-        addSignal,
-        addSubscription,
-    );
+    const subscribe = fp.flow(addSignal, addSubscription);
 
     /**
      * Publish to a given signal identifier. Create Signal if it doesn't exist.
@@ -82,10 +79,7 @@ export const create = () => {
      * @param {Object=} message.data - Arbitrary data payload sent to all listeners
      * @memberof module:core/signal-bus
      */
-    const publish = fp.flow(
-        addSignal,
-        publishMessage,
-    );
+    const publish = fp.flow(addSignal, publishMessage);
 
     return { subscribe, publish, removeChannel };
 };

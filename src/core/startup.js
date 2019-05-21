@@ -7,7 +7,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { settings, settingsChannel, setGame } from "../core/settings.js";
+import { settings, settingsChannel, settingsInit } from "../core/settings.js";
 import * as signal from "../core/signal-bus.js";
 import * as Navigation from "./navigation.js";
 import * as Scene from "./scene.js";
@@ -48,7 +48,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
     addCustomStyles();
 
     const game = new Phaser.Game(phaserConfig);
-    setGame(game);
+    settingsInit(game);
 
     function onStarted(config) {
         // Phaser is now set up and we can use all game properties.
