@@ -134,13 +134,40 @@ var GMI = function(options, embedVars, gameDir) {
         resumeGame();
         return false;
     };
-    GMI.prototype.showSettings = function() {
+    GMI.prototype.showSettings = function(onSettingsChanged, onSettingsClosed) {
         var settingsDiv = document.getElementsByClassName("settings");
         if (!(settingsDiv && settingsDiv[0])) {
             var settings = document.createElement('div');
             settings.className = "settings"
-            settings.innerHTML += "The settings screen will appear here when the game is hosted on the BBC servers (click here to close)";
-            settings.addEventListener("click", function() { document.body.removeChild(settings); });
+            settings.innerHTML += "The settings screen will appear here when the game is hosted on the BBC servers <br />";
+
+            var settingsCheckbox = document.createElement("input");
+            settingsCheckbox.type = "checkbox";
+            settingsCheckbox.name = "settings-changed";
+
+            var settingsLabel = document.createElement("label");
+            settingsLabel.innerText = "Trigger settings change event";
+            settingsLabel.htmlFor = "settings-changed";
+
+            var settingsCloseButton = document.createElement("input");
+            settingsCloseButton.type = "button";
+            settingsCloseButton.value = "Click here to close settings.";
+
+            var settingsForm = document.createElement("form");
+            settingsForm.appendChild(settingsCheckbox);
+            settingsForm.appendChild(settingsLabel);
+            settingsForm.appendChild(settingsCloseButton);
+
+            settings.append(settingsForm);
+
+            settingsCheckbox.addEventListener("change", function(){
+                onSettingsChanged("settings-changed", settingsCheckbox.value);
+            });
+
+            settingsCloseButton.addEventListener("click", function() { 
+               onSettingsClosed();
+               document.body.removeChild(settings); 
+            });
             document.body.appendChild(settings);
         }
         return true;
