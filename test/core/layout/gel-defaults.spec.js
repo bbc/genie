@@ -136,7 +136,7 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Settings Button Callback", () => {
         beforeEach(() => {
-            gel.config.settings.action();
+            gel.config.settings.action({ game: mockGame });
         });
 
         test("shows the settings", () => {
