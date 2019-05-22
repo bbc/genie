@@ -6,30 +6,44 @@
 
 import { findButtonByElementId } from "./accessible-buttons.js";
 
+export const showElement = (el) => {
+    const button = findButtonByElementId(el.id);
+    el.setAttribute("aria-label", releaseAccessibilityLabel(el));
+    el.classList.remove("hide-focus-ring");
+    el.style.cursor = "pointer";
+    el.style["z-index"] = 0;
+    el.setAttribute("tabindex", "0");
+    el.addEventListener("click", button.elementEvents.click);
+    el.addEventListener("keyup", button.elementEvents.keyup);
+    button.input.enabled = true;
+}
+
+export const hideElement = (el) => {
+    preserveAccessibilityLabel(el);
+
+    const button = findButtonByElementId(el.id);
+    el.setAttribute("aria-label", "");
+    el.classList.add("hide-focus-ring");
+    el.style.cursor = "default";
+    el.style["z-index"] = -1;
+    el.setAttribute("tabindex", "-1");
+    el.removeEventListener("click", button.elementEvents.click);
+    el.removeEventListener("keyup", button.elementEvents.keyup);
+    button.input.enabled = false;
+}
+
 export const hideAndDisableElement = el => {
     if (!elementHiddenAndDisabled(el)) {
-        el.setAttribute("aria-label", "");
-        const button = findButtonByElementId(el.id);
+        hideElement(el);
         const resetElement = () => resetElementToDefault(el, resetElement);
         el.addEventListener("blur", resetElement);
-        el.classList.add("hide-focus-ring");
-        el.style.cursor = "default";
-        el.style["z-index"] = -1;
-        el.removeEventListener("click", button.elementEvents.click);
-        el.removeEventListener("keyup", button.elementEvents.keyup);
         setElementAsHiddenAndDisabled(el);
     }
 };
 
 const resetElementToDefault = (el, self) => {
-    const button = findButtonByElementId(el.id);
-    el.parentElement.removeChild(el);
+    hideElement(el);
     el.removeEventListener("blur", self);
-    el.classList.remove("hide-focus-ring");
-    el.style.cursor = "pointer";
-    el.style["z-index"] = null;
-    el.addEventListener("click", button.elementEvents.click);
-    el.addEventListener("keyup", button.elementEvents.keyup);
     unsetElementAsHiddenAndDisabled(el);
 };
 
@@ -45,4 +59,16 @@ const unsetElementAsHiddenAndDisabled = element => {
     _elementHiddenAndDisabled[element.id] = false;
 };
 
+const preserveAccessibilityLabel = element => {
+    _elementAriaLabel[element.id] = element.getAttribute("aria-label");
+}
+
+const releaseAccessibilityLabel = element => {
+    var label = _elementAriaLabel[element.id];
+    _elementAriaLabel[element.id] = undefined;
+    return label;
+}
+
 const _elementHiddenAndDisabled = {};
+
+const _elementAriaLabel = {};

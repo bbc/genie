@@ -31,8 +31,7 @@ export const create = () => {
     const onSettingsClosed = () => {
         signal.bus.publish({
             channel: settingsChannel,
-            name: "settings-closed",
-            data: { game },
+            name: "settings-closed"
         });
     };
 
