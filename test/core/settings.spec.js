@@ -7,6 +7,7 @@ import * as sinon from "sinon";
 import { create as createSettings } from "../../src/core/settings.js";
 import * as signal from "../../src/core/signal-bus.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
+import * as accessibility from "../../src/core/accessibility/accessibility-layer.js"
 
 describe("Settings", () => {
     let sandbox = sinon.createSandbox();
@@ -50,6 +51,7 @@ describe("Settings", () => {
         sandbox.stub(signal.bus, "publish");
         sandbox.stub(gmiModule, "setGmi").returns(mockGmi);
         sandbox.replace(gmiModule, "gmi", mockGmi);
+        sandbox.stub(accessibility, "setAccessibleLayer");
 
         settings = createSettings();
     });
