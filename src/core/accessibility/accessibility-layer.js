@@ -66,12 +66,12 @@ export const clearElementsFromDom = () => {
     return parentElement;
 };
 
-export const setAccessibleLayer = (inputEnabled) => {
+export const setAccessibleLayer = inputEnabled => {
     const parentElement = document.getElementById(PARENT_ELEMENT_ID);
     const childNodes = Array.from(parentElement.childNodes);
     childNodes.forEach(el => {
         const button = findButtonByElementId(el.id);
-        if(inputEnabled === true) {
+        if (inputEnabled === true) {
             el.classList.remove("hide-focus-ring");
             el.style.cursor = "pointer";
             el.style["z-index"] = 0;
@@ -90,7 +90,7 @@ export const setAccessibleLayer = (inputEnabled) => {
             button.input.enabled = false;
         }
     });
-}
+};
 
 export const appendElementsToDom = screen => {
     const buttons = getAccessibleButtons(screen.visibleLayer);

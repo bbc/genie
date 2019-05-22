@@ -4,9 +4,8 @@
  * @license Apache-2.0
  */
 import * as signal from "../core/signal-bus.js";
-import { clearElementsFromDom, setAccessibleLayer } from "../core/accessibility/accessibility-layer.js"
+import { setAccessibleLayer } from "../core/accessibility/accessibility-layer.js";
 import { gmi } from "./gmi/gmi.js";
-import fp from "../../lib/lodash/fp/fp.js";
 
 export const settingsChannel = "genie-settings";
 
@@ -38,7 +37,7 @@ export const create = () => {
     };
 
     return {
-        show: game => {
+        show: () => {
             // get current buttons
             setAccessibleLayer(false);
 
