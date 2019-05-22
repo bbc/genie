@@ -45,7 +45,7 @@ describe("Screen", () => {
             delete window.__qaMode;
         });
 
-        test.only("sets the scene", () => {
+        test("sets the scene", () => {
             expect(screen.scene).toEqual(mockScene);
         });
 

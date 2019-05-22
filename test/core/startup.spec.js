@@ -140,12 +140,7 @@ describe("Startup", () => {
         test("creates the game navigation", () => {
             const onComplete = LoadFonts.loadFonts.mock.calls[0][1];
             onComplete();
-            expect(Navigation.create.mock.calls[0]).toEqual([
-                mockGame.state,
-                expect.any(Object),
-                "Scene",
-                "NavConfig",
-            ]);
+            expect(Navigation.create.mock.calls[0]).toEqual([mockGame.state, expect.any(Object), "Scene", "NavConfig"]);
         });
 
         test("creates qaMode if the qaMode url parameter is set to true", () => {
