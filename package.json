@@ -21,7 +21,7 @@
         "babel-polyfill": "^6.26.0",
         "babel-preset-env": "^1.6.1",
         "cross-env": "^5.2.0",
-        "eslint": "^5.4.0",
+        "eslint": "^5.16.0",
         "eslint-config-prettier": "^2.9.0",
         "eslint-config-standard": "^11.0.0",
         "eslint-plugin-import": "^2.9.0",
@@ -54,7 +54,7 @@
         "build-watch": "webpack --config build-scripts/webpack.config.js --watch --env.genieCore",
         "eslint": "eslint . --ignore-pattern lib/ --ignore-path .gitignore",
         "jest": "jest --coverage --runInBand",
-        "jest:no-coverage": "npm run clean && jest",
+        "jest:no-coverage": "jest --runInBand",
         "test": "npm run jest && npm run eslint",
         "docs": "open ./docs/api/index.html",
         "gendocs": "jsdoc -c ./build-scripts/docs/.jsdoc.js"
