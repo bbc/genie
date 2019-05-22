@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { createMockGmi } from "../fake/gmi";
+import { createMockGmi } from "../mock/gmi";
 
 import { Loadscreen } from "../../src/components/loadscreen";
 import * as LoadBar from "../../src/components/loadbar";

@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createMockGmi } from "../../fake/gmi";
+import { createMockGmi } from "../../mock/gmi";
 
 import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
 import * as gel from "../../../src/core/layout/gel-defaults.js";

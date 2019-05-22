@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createMockGmi } from "../../fake/gmi";
+import { createMockGmi } from "../../mock/gmi";
 
 import * as settingsIcons from "../../../src/core/layout/settings-icons.js";
 import * as signal from "../../../src/core/signal-bus.js";

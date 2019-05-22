@@ -3,13 +3,13 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createMockGmi } from "../fake/gmi";
-import { domElement } from "../fake/dom-element";
+import { createMockGmi } from "../mock/gmi";
+import { domElement } from "../mock/dom-element";
+import { createMockGame } from "../mock/game.js";
 
 import { startup } from "../../src/core/startup.js";
 import { getBrowser } from "../../src/core/browser.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
-import * as Game from "../fake/game.js";
 import * as Scene from "../../src/core/scene.js";
 import * as LoadFonts from "../../src/core/font-loader.js";
 import * as Navigation from "../../src/core/navigation.js";
@@ -22,6 +22,7 @@ jest.mock("../../src/core/browser.js");
 
 describe("Startup", () => {
     let mockGmi;
+    let mockGame;
     let containerDiv;
 
     beforeEach(() => {
@@ -33,6 +34,7 @@ describe("Startup", () => {
         };
         createMockGmi(mockGmi);
 
+        mockGame = createMockGame();
         containerDiv = domElement();
 
         jest.spyOn(global.document, "getElementById").mockImplementation(argument => {
@@ -42,7 +44,7 @@ describe("Startup", () => {
         });
         getBrowser.mockImplementation(() => ({ forceCanvas: false, isSilk: false }));
         jest.spyOn(styles, "addCustomStyles");
-        jest.spyOn(Phaser, "Game").mockImplementation(() => Game.Stub);
+        jest.spyOn(Phaser, "Game").mockImplementation(() => mockGame);
         global.window.getGMI = jest.fn().mockImplementation(() => mockGmi);
     });
 
@@ -128,18 +130,18 @@ describe("Startup", () => {
         });
 
         test("creates the scene", () => {
-            expect(Scene.create).toHaveBeenCalledWith(Game.Stub);
+            expect(Scene.create).toHaveBeenCalledWith(mockGame);
         });
 
         test("loads the fonts", () => {
-            expect(LoadFonts.loadFonts).toHaveBeenCalledWith(Game.Stub, expect.any(Function));
+            expect(LoadFonts.loadFonts).toHaveBeenCalledWith(mockGame, expect.any(Function));
         });
 
         test("creates the game navigation", () => {
             const onComplete = LoadFonts.loadFonts.mock.calls[0][1];
             onComplete();
             expect(Navigation.create.mock.calls[0]).toEqual([
-                Game.Stub.state,
+                mockGame.state,
                 expect.any(Object),
                 "Scene",
                 "NavConfig",
@@ -157,20 +159,20 @@ describe("Startup", () => {
                 gameMuted: true,
             };
             const statsParams = gmiModule.startStatsTracking.mock.calls[0];
-            expect(statsParams[0]).toEqual(Game.Stub);
+            expect(statsParams[0]).toEqual(mockGame);
             expect(JSON.stringify(statsParams[1])).toEqual(JSON.stringify(expectedContext));
         });
 
         it("sets up the accessibility manager", () => {
             const onComplete = LoadFonts.loadFonts.mock.calls[0][1];
             onComplete();
-            expect(a11y.setup).toHaveBeenCalledWith(Game.Stub.canvas.parentElement);
+            expect(a11y.setup).toHaveBeenCalledWith(mockGame.canvas.parentElement);
         });
 
         it("sets up the fullscreen API", () => {
             const onComplete = LoadFonts.loadFonts.mock.calls[0][1];
             onComplete();
-            expect(fullscreen.listenForTap.mock.calls[0]).toEqual([Game.Stub.canvas.parentElement, Game.Stub]);
+            expect(fullscreen.listenForTap.mock.calls[0]).toEqual([mockGame.canvas.parentElement, mockGame]);
         });
     });
 });

@@ -3,16 +3,18 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as Theme from "../../fake/theme.js";
-import * as Game from "../../fake/game.js";
-import * as OverlayLayout from "../../fake/overlay-layout.js";
-import * as Button from "../../fake/button.js";
-import * as Scene from "../../fake/scene.js";
+import { createMockGame } from "../../mock/game.js";
+import { createMockButton } from "../../mock/button.js";
 import * as Book from "../../../src/core/book/book.js";
 import * as accessibleCarouselElements from "../../../src/core/accessibility/accessible-carousel-elements.js";
 
 describe("Showing pages of a book", () => {
+    let mockGame;
     let book;
+
+    beforeEach(() => {
+        mockGame = createMockGame();
+    });
 
     afterEach(() => jest.clearAllMocks());
 
@@ -22,19 +24,19 @@ describe("Showing pages of a book", () => {
 
         beforeEach(() => {
             const mockScreen = {
-                scene: Scene.WithButtons({ howToPlayNext: Button.Stub(), howToPlayPrevious: Button.Stub() }),
+                scene: {
+                    addToBackground: jest.fn(),
+                    addLayout: jest.fn(() => ({
+                        buttons: { howToPlayNext: createMockButton(), howToPlayPrevious: createMockButton() },
+                    })),
+                },
                 visibleLayer: "book-test",
             };
+            const mockOverlayLayout = { moveGelButtonsToTop: () => {} };
+            const mockTheme = { panels: onePanel };
 
             jest.spyOn(accessibleCarouselElements, "create").mockImplementation(() => [document.createElement("div")]);
-            book = Book.Start(
-                "myScreen",
-                Theme.WithPanels(onePanel),
-                Game.Stub,
-                mockScreen,
-                OverlayLayout.Stub,
-                accessibilityTexts,
-            );
+            book = Book.Start("myScreen", mockTheme, mockGame, mockScreen, mockOverlayLayout, accessibilityTexts);
         });
 
         test("Shows page 1", () => {
@@ -45,7 +47,7 @@ describe("Showing pages of a book", () => {
             expect(accessibleCarouselElements.create).toHaveBeenCalledWith(
                 "book-test",
                 [{ visible: true }],
-                Game.Stub.canvas.parentElement,
+                mockGame.canvas.parentElement,
                 accessibilityTexts,
             );
         });
@@ -64,24 +66,29 @@ describe("Showing pages of a book", () => {
         let twoPanels = [{}, {}];
         let domElements = [document.createElement("div"), document.createElement("div")];
         const accessibilityTexts = [{ accessibilityText: "Text goes here" }, { accessibilityText: "Also goes here" }];
-        let nextButtonStub = Button.Stub();
-        let previousButtonStub = Button.Stub();
+        let nextButtonStub = createMockButton();
+        let previousButtonStub = createMockButton();
 
         beforeEach(() => {
-            nextButtonStub.accessibleElement.focus = jest.fn();
-            previousButtonStub.accessibleElement.focus = jest.fn();
             const mockScreen = {
-                scene: Scene.WithButtons({ howToPlayNext: nextButtonStub, howToPlayPrevious: previousButtonStub }),
+                scene: {
+                    addToBackground: jest.fn(),
+                    addLayout: jest.fn(() => ({
+                        buttons: { howToPlayNext: nextButtonStub, howToPlayPrevious: previousButtonStub },
+                    })),
+                },
                 visibleLayer: "book-test",
             };
+            const mockOverlayLayout = { moveGelButtonsToTop: () => {} };
+            const mockTheme = { panels: twoPanels };
 
             jest.spyOn(accessibleCarouselElements, "create").mockImplementation(() => domElements);
             book = Book.Start(
                 "myScreen",
-                Theme.WithPanels(twoPanels),
-                Game.Stub,
+                mockTheme,
+                mockGame,
                 mockScreen,
-                OverlayLayout.Stub,
+                mockOverlayLayout,
                 accessibilityTexts,
                 mockScreen,
             );
@@ -99,7 +106,7 @@ describe("Showing pages of a book", () => {
                 expect(accessibleCarouselElements.create).toHaveBeenCalledWith(
                     "book-test",
                     [{ visible: true }, { visible: false }],
-                    Game.Stub.canvas.parentElement,
+                    mockGame.canvas.parentElement,
                     accessibilityTexts,
                 );
             });

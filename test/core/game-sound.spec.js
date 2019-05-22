@@ -3,8 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as PhaserSignal from "../fake/phaser-signal.js";
-
 describe("Game Sound", () => {
     let GameSound;
     let mockGame;
@@ -77,7 +75,7 @@ describe("Game Sound", () => {
                     isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
-                    onFadeComplete: PhaserSignal.Stub,
+                    onFadeComplete: { add: () => {}, addOnce: () => {} },
                     name: "current-music",
                     onDecoded: {
                         add: jest.fn(),
@@ -104,7 +102,7 @@ describe("Game Sound", () => {
                 GameSound.Assets.backgroundMusic = {
                     isPlaying: true,
                     fadeOut: musicFadeOutSpy,
-                    onFadeComplete: PhaserSignal.Stub,
+                    onFadeComplete: { add: () => {}, addOnce: () => {} },
                     onDecoded: { add: jest.fn() },
                     stop: jest.fn(),
                     onStop: { removeAll: jest.fn() },
@@ -181,7 +179,7 @@ describe("Game Sound", () => {
                     isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
-                    onFadeComplete: PhaserSignal.Stub,
+                    onFadeComplete: { add: () => {}, addOnce: () => {} },
                     onStop: { removeAll: jest.fn() },
                     stop: jest.fn(),
                 };
@@ -208,7 +206,7 @@ describe("Game Sound", () => {
                     isPlaying: true,
                     loopFull: () => {},
                     fadeOut: existingAudioFadeOutSpy,
-                    onFadeComplete: PhaserSignal.Stub,
+                    onFadeComplete: { add: () => {}, addOnce: () => {} },
                     onStop: { removeAll: jest.fn() },
                     stop: jest.fn(),
                 };

@@ -3,18 +3,18 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-const Stub = () => {
+const createMockButton = () => {
     return {
         accessibleElement: {
-            focus: () => {},
+            focus: jest.fn(),
         },
         alpha: 1,
         input: {
             enabled: true,
         },
-        update: () => {},
+        update: jest.fn(),
         visible: true,
     };
 };
 
-export { Stub };
+export { createMockButton };

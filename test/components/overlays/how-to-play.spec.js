@@ -4,7 +4,7 @@
  * @license Apache-2.0
 
  */
-import { domElement } from "../../fake/dom-element";
+import { domElement } from "../../mock/dom-element";
 
 import * as HowToPlay from "../../../src/components/overlays/how-to-play";
 import * as Book from "../../../src/core/book/book.js";

@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { domElement } from "../../fake/dom-element";
+import { domElement } from "../../mock/dom-element";
 
 import * as accessibleDomElement from "../../../src/core/accessibility/accessible-dom-element.js";
 import * as accessibleCarouselElements from "../../../src/core/accessibility/accessible-carousel-elements.js";

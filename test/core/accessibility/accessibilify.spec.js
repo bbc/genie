@@ -5,7 +5,7 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 
-import { domElement } from "../../fake/dom-element";
+import { domElement } from "../../mock/dom-element";
 import { onScaleChange } from "../../../src/core/scaler.js";
 import { accessibilify } from "../../../src/core/accessibility/accessibilify.js";
 import { accessibleDomElement } from "../../../src/core/accessibility/accessible-dom-element.js";

@@ -4,19 +4,19 @@
  * @license Apache-2.0
  */
 import { Screen } from "../../src/core/screen";
-import * as Game from "../fake/game.js";
-import * as Scene from "../fake/scene.js";
+import { createMockGame } from "../mock/game.js";
 import * as GameSound from "../../src/core/game-sound";
 import * as VisibleLayer from "../../src/core/visible-layer.js";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 
 describe("Screen", () => {
-    let screen, mockContext, signalInstance, mockTransientData;
+    let screen, mockContext, mockScene, signalInstance, mockTransientData;
 
     afterEach(() => jest.clearAllMocks());
 
     describe("with context", () => {
         beforeEach(() => {
+            mockScene = { addToBackground: jest.fn() };
             jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
             jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
             jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
@@ -38,15 +38,15 @@ describe("Screen", () => {
             const mockNavigation = {
                 loadscreen: { routes: "routes" },
             };
-            screen.game = Game.Stub;
+            screen.game = createMockGame();
             screen.game.state.current = "loadscreen";
-            screen.init(mockTransientData, Scene.Stub, mockContext, mockNavigation);
+            screen.init(mockTransientData, mockScene, mockContext, mockNavigation);
 
             delete window.__qaMode;
         });
 
-        test("sets the scene", () => {
-            expect(screen.scene).toEqual(Scene.Stub);
+        test.only("sets the scene", () => {
+            expect(screen.scene).toEqual(mockScene);
         });
 
         test("sets the context", () => {
@@ -80,7 +80,7 @@ describe("Screen", () => {
 
         test("sets the background music using the theme config", () => {
             const expectedThemeConfig = mockContext.config.theme.loadscreen;
-            expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(Game.Stub, expectedThemeConfig);
+            expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.game, expectedThemeConfig);
         });
     });
 
@@ -116,7 +116,7 @@ describe("Screen", () => {
     describe("when overlayClosed signal is triggered", () => {
         beforeEach(() => {
             screen = new Screen();
-            screen.game = Game.Stub;
+            screen.game = createMockGame();
             screen.context = { popupScreens: ["how-to-play"] };
             screen.onOverlayClosed();
         });

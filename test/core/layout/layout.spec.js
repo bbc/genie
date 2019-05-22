@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 // import * as phaserSplit from "../../../node_modules/phaser-ce/build/custom/phaser-split.js";
-import { createMockGmi } from "../../fake/gmi";
+import { createMockGmi } from "../../mock/gmi";
 
 import { groupLayouts } from "../../../src/core/layout/group-layouts.js";
 import { onScaleChange } from "../../../src/core/scaler.js";
