@@ -62,7 +62,7 @@ describe("Layout - Gel Defaults", () => {
 
         test("navigates to the home screen", () => {
             const homeNavigationSpy = mockGame.state.states["current-screen"].navigation.home;
-            expect(homeNavigationSpy);
+            expect(homeNavigationSpy).toHaveBeenCalled();
         });
 
         test("sends a click stat to the GMI", () => {

@@ -70,7 +70,7 @@ describe("element manipulator", () => {
                 expect(element.classList.add).toHaveBeenCalledTimes(1);
             });
 
-            test("adds the hide-focus-ring class to element", () => {
+            test("adds the hide-focus-ring class to the element", () => {
                 expect(element.classList.add).toHaveBeenCalledTimes(1);
             });
 
