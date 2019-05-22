@@ -66,6 +66,21 @@ export const clearElementsFromDom = () => {
     return parentElement;
 };
 
+export const setAccessibleLayer = (inputEnabled) => {
+    const parentElement = document.getElementById(PARENT_ELEMENT_ID);
+    const childNodes = Array.from(parentElement.childNodes);
+    childNodes.forEach(el => {
+        console.log(el);
+        if(inputEnabled === true) {
+            el.setAttribute("tabindex", "0")
+            el.setAttribute("aria-hidden", "false")
+        } else {
+            el.setAttribute("tabindex", "-1")
+            el.setAttribute("aria-hidden", "false")
+        }
+    });
+}
+
 export const appendElementsToDom = screen => {
     const buttons = getAccessibleButtons(screen.visibleLayer);
     const parentElement = document.getElementById(PARENT_ELEMENT_ID);

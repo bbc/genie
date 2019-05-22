@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 import * as signal from "../core/signal-bus.js";
+import { clearElementsFromDom, setAccessibleLayer } from "../core/accessibility/accessibility-layer.js"
 import { gmi } from "./gmi/gmi.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
@@ -14,11 +15,15 @@ let game;
 export const create = () => {
     const setButtonInteractivity = (game, setting) => {
         const screen = game.state.states[game.state.current];
-        const buttons = screen.scene.getLayouts()[0].buttons;
 
-        fp.map(button => {
-            button.inputEnabled = setting;
-        }, buttons);
+        screen.scene.getLayouts().forEach(function(layout) {
+            console.log(layout);
+            var buttons = layout.buttons;
+            fp.map(button => {
+                //console.log(button);
+            }, buttons);
+            
+          });
     };
 
     signal.bus.subscribe({
