@@ -3,14 +3,11 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createMockSprite } from "./sprite.js";
-import { createMockAudio } from "./audio.js";
-
 const createMockGame = () => ({
     add: {
         audio: jest.fn(),
-        sprite: jest.fn(() => createMockSprite()),
-        group: jest.fn(() => createMockAudio()),
+        sprite: jest.fn(),
+        group: jest.fn(),
     },
     sound: {
         remove: jest.fn(),

@@ -14,6 +14,13 @@ describe("Showing pages of a book", () => {
 
     beforeEach(() => {
         mockGame = createMockGame();
+        mockGame.add.sprite.mockImplementation(() => ({ visible: false }));
+        mockGame.add.audio.mockImplementation(() => ({
+            fadeIn: jest.fn(),
+            fadeOut: jest.fn(),
+            loopFull: jest.fn(),
+            stop: jest.fn(),
+        }));
     });
 
     afterEach(() => jest.clearAllMocks());
