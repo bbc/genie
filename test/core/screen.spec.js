@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { Screen } from "../../src/core/screen";
-import { createMockGame } from "../mock/game.js";
+import { createMockGame } from "../mock/phaser-game.js";
 import * as GameSound from "../../src/core/game-sound";
 import * as VisibleLayer from "../../src/core/visible-layer.js";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";

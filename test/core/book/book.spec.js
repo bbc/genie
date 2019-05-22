@@ -3,12 +3,18 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createMockGame } from "../../mock/game.js";
-import { createMockButton } from "../../mock/button.js";
+import { createMockGame } from "../../mock/phaser-game.js";
 import * as Book from "../../../src/core/book/book.js";
 import * as accessibleCarouselElements from "../../../src/core/accessibility/accessible-carousel-elements.js";
 
 describe("Showing pages of a book", () => {
+    const createMockButton = () => ({
+        accessibleElement: { focus: jest.fn() },
+        alpha: 1,
+        input: { enabled: true },
+        update: jest.fn(),
+        visible: true,
+    });
     let mockGame;
     let book;
 

@@ -5,7 +5,7 @@
  */
 import { createMockGmi } from "../mock/gmi";
 import { domElement } from "../mock/dom-element";
-import { createMockGame } from "../mock/game.js";
+import { createMockGame } from "../mock/phaser-game.js";
 
 import { startup } from "../../src/core/startup.js";
 import { getBrowser } from "../../src/core/browser.js";
