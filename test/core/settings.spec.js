@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import * as sinon from "sinon";
-import { create as createSettings, settingsInit } from "../../src/core/settings.js";
+import { create as createSettings } from "../../src/core/settings.js";
 import * as signal from "../../src/core/signal-bus.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 
@@ -52,7 +52,6 @@ describe("Settings", () => {
         sandbox.replace(gmiModule, "gmi", mockGmi);
 
         settings = createSettings();
-        settingsInit(mockGame);
     });
 
     afterEach(() => {

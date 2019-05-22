@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Buttons } from "./accessible-buttons.js";
+import { Buttons, findButtonByElementId } from "./accessible-buttons.js";
 import { hideAndDisableElement } from "./element-manipulator.js";
 
 let _accessibleButtons = {};
@@ -70,13 +70,24 @@ export const setAccessibleLayer = (inputEnabled) => {
     const parentElement = document.getElementById(PARENT_ELEMENT_ID);
     const childNodes = Array.from(parentElement.childNodes);
     childNodes.forEach(el => {
-        console.log(el);
+        const button = findButtonByElementId(el.id);
         if(inputEnabled === true) {
-            el.setAttribute("tabindex", "0")
-            el.setAttribute("aria-hidden", "false")
+            el.classList.remove("hide-focus-ring");
+            el.style.cursor = "pointer";
+            el.style["z-index"] = 0;
+            el.setAttribute("tabindex", "0");
+            el.addEventListener("click", button.elementEvents.click);
+            el.addEventListener("keyup", button.elementEvents.keyup);
+            button.input.enabled = true;
         } else {
-            el.setAttribute("tabindex", "-1")
-            el.setAttribute("aria-hidden", "false")
+            el.setAttribute("aria-label", "");
+            el.classList.add("hide-focus-ring");
+            el.style.cursor = "default";
+            el.style["z-index"] = -1;
+            el.setAttribute("tabindex", "-1");
+            el.removeEventListener("click", button.elementEvents.click);
+            el.removeEventListener("keyup", button.elementEvents.keyup);
+            button.input.enabled = false;
         }
     });
 }

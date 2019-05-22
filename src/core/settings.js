@@ -13,24 +13,11 @@ export const settingsChannel = "genie-settings";
 let game;
 
 export const create = () => {
-    const setButtonInteractivity = (game, setting) => {
-        const screen = game.state.states[game.state.current];
-
-        screen.scene.getLayouts().forEach(function(layout) {
-            console.log(layout);
-            var buttons = layout.buttons;
-            fp.map(button => {
-                //console.log(button);
-            }, buttons);
-            
-          });
-    };
-
     signal.bus.subscribe({
         channel: settingsChannel,
         name: "settings-closed",
-        callback: data => {
-            setButtonInteractivity(data.game, true);
+        callback: () => {
+            setAccessibleLayer(true);
         },
     });
 
@@ -53,15 +40,13 @@ export const create = () => {
     return {
         show: game => {
             // get current buttons
-            setButtonInteractivity(game, false);
+            setAccessibleLayer(false);
 
             return gmi.showSettings(onSettingChanged, onSettingsClosed);
         },
         getAllSettings: () => gmi.getAllSettings(),
     };
 };
-
-export const settingsInit = newGame => (game = newGame);
 
 // Singleton used by games
 export const settings = create();
