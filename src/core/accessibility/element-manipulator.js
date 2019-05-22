@@ -6,7 +6,7 @@
 
 import { findButtonByElementId } from "./accessible-buttons.js";
 
-export const showElement = (el) => {
+export const showElement = el => {
     const button = findButtonByElementId(el.id);
     el.setAttribute("aria-label", releaseAccessibilityLabel(el));
     el.classList.remove("hide-focus-ring");
@@ -16,9 +16,9 @@ export const showElement = (el) => {
     el.addEventListener("click", button.elementEvents.click);
     el.addEventListener("keyup", button.elementEvents.keyup);
     button.input.enabled = true;
-}
+};
 
-export const hideElement = (el) => {
+export const hideElement = el => {
     preserveAccessibilityLabel(el);
 
     const button = findButtonByElementId(el.id);
@@ -30,7 +30,7 @@ export const hideElement = (el) => {
     el.removeEventListener("click", button.elementEvents.click);
     el.removeEventListener("keyup", button.elementEvents.keyup);
     button.input.enabled = false;
-}
+};
 
 export const hideAndDisableElement = el => {
     if (!elementHiddenAndDisabled(el)) {
@@ -61,13 +61,13 @@ const unsetElementAsHiddenAndDisabled = element => {
 
 const preserveAccessibilityLabel = element => {
     _elementAriaLabel[element.id] = element.getAttribute("aria-label");
-}
+};
 
 const releaseAccessibilityLabel = element => {
     var label = _elementAriaLabel[element.id];
     _elementAriaLabel[element.id] = undefined;
     return label;
-}
+};
 
 const _elementHiddenAndDisabled = {};
 

@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Buttons, findButtonByElementId } from "./accessible-buttons.js";
+import { Buttons } from "./accessible-buttons.js";
 import { hideAndDisableElement, showElement, hideElement } from "./element-manipulator.js";
 
 let _accessibleButtons = {};

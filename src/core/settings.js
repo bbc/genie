@@ -9,8 +9,6 @@ import { gmi } from "./gmi/gmi.js";
 
 export const settingsChannel = "genie-settings";
 
-let game;
-
 export const create = () => {
     signal.bus.subscribe({
         channel: settingsChannel,
@@ -31,7 +29,7 @@ export const create = () => {
     const onSettingsClosed = () => {
         signal.bus.publish({
             channel: settingsChannel,
-            name: "settings-closed"
+            name: "settings-closed",
         });
     };
 
