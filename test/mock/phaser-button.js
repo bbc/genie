@@ -14,6 +14,10 @@ const createMockButton = () => {
         },
         update: jest.fn(),
         visible: true,
+        elementEvents: {
+            click: jest.fn(),
+            keyup: jest.fn(),
+        },
     };
 };
 

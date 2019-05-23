@@ -4,28 +4,17 @@
  * @license Apache-2.0
  */
 import * as signal from "../core/signal-bus.js";
+import { setAccessibleLayer } from "../core/accessibility/accessibility-layer.js";
 import { gmi } from "./gmi/gmi.js";
-import fp from "../../lib/lodash/fp/fp.js";
 
 export const settingsChannel = "genie-settings";
 
-let game;
-
 export const create = () => {
-    const setButtonInteractivity = (game, setting) => {
-        const screen = game.state.states[game.state.current];
-        const buttons = screen.scene.getLayouts()[0].buttons;
-
-        fp.map(button => {
-            button.inputEnabled = setting;
-        }, buttons);
-    };
-
     signal.bus.subscribe({
         channel: settingsChannel,
         name: "settings-closed",
-        callback: data => {
-            setButtonInteractivity(data.game, true);
+        callback: () => {
+            setAccessibleLayer(true);
         },
     });
 
@@ -41,22 +30,19 @@ export const create = () => {
         signal.bus.publish({
             channel: settingsChannel,
             name: "settings-closed",
-            data: { game },
         });
     };
 
     return {
-        show: game => {
+        show: () => {
             // get current buttons
-            setButtonInteractivity(game, false);
+            setAccessibleLayer(false);
 
             return gmi.showSettings(onSettingChanged, onSettingsClosed);
         },
         getAllSettings: () => gmi.getAllSettings(),
     };
 };
-
-export const settingsInit = newGame => (game = newGame);
 
 // Singleton used by games
 export const settings = create();

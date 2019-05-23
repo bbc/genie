@@ -5,18 +5,27 @@
  */
 import { createMockGmi } from "../mock/gmi";
 
-import { create as createSettings, settingsInit } from "../../src/core/settings.js";
+import { setAccessibleLayer } from "../../src/core/accessibility/accessibility-layer.js";
+import { create as createSettings } from "../../src/core/settings.js";
 import * as signal from "../../src/core/signal-bus.js";
+
+jest.mock("../../src/core/accessibility/accessibility-layer.js");
 
 describe("Settings", () => {
     let mockGame;
     let mockGmi;
     let settings;
 
-    beforeEach(() => {
-        mockGmi = { showSettings: jest.fn(), getAllSettings: jest.fn() };
+    const createGmi = () => {
+        mockGmi = { showSettings: jest.fn(() => "show settings"), getAllSettings: jest.fn() };
         createMockGmi(mockGmi);
-        jest.spyOn(signal.bus, "publish");
+    };
+
+    beforeEach(() => {
+        setAccessibleLayer.mockImplementation(() => {});
+        createGmi();
+        jest.spyOn(signal.bus, "subscribe").mockImplementation(() => {});
+        jest.spyOn(signal.bus, "publish").mockImplementation(() => {});
 
         const layout = [{ buttons: { pause: {} } }];
 
@@ -38,17 +47,31 @@ describe("Settings", () => {
         };
 
         settings = createSettings();
-        settingsInit(mockGame);
     });
 
     afterEach(() => jest.clearAllMocks());
 
+    test("subscribes to the settingas-closed signal on create", () => {
+        const subscribeCall = signal.bus.subscribe.mock.calls[0][0];
+        expect(subscribeCall.channel).toBe("genie-settings");
+        expect(subscribeCall.name).toBe("settings-closed");
+    });
+
+    test("sets the accessible layer to true when the settingas-closed signal is fired", () => {
+        const subscribeCallback = signal.bus.subscribe.mock.calls[0][0].callback;
+        subscribeCallback();
+        expect(setAccessibleLayer).toHaveBeenCalledWith(true);
+    });
+
     describe("show method", () => {
-        beforeEach(() => {
+        test("sets the accessible layer to false", () => {
             settings.show(mockGame);
+            expect(setAccessibleLayer).toHaveBeenCalledWith(false);
         });
 
-        test("calls GMI show settings", () => {
+        test("returns GMI show settings", () => {
+            const settingsShow = settings.show(mockGame);
+            expect(settingsShow).toBe("show settings");
             expect(mockGmi.showSettings).toHaveBeenCalledTimes(1);
         });
 
@@ -58,6 +81,7 @@ describe("Settings", () => {
                 name: "audio",
                 data: false,
             };
+            settings.show(mockGame);
             const onSettingChangedCallback = mockGmi.showSettings.mock.calls[0][0];
             onSettingChangedCallback("audio", false);
             expect(signal.bus.publish).toHaveBeenCalledTimes(1);
@@ -68,15 +92,14 @@ describe("Settings", () => {
             const expectedSignal = {
                 channel: "genie-settings",
                 name: "settings-closed",
-                data: { game: mockGame },
             };
+            settings.show(mockGame);
             const onSettingsClosedCallback = mockGmi.showSettings.mock.calls[0][1];
             onSettingsClosedCallback();
             const publishConfig = signal.bus.publish.mock.calls[0][0];
             expect(signal.bus.publish).toHaveBeenCalledTimes(1);
             expect(publishConfig.channel).toBe(expectedSignal.channel);
             expect(publishConfig.name).toBe(expectedSignal.name);
-            expect(publishConfig.data).toEqual(expectedSignal.data);
         });
     });
 

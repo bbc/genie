@@ -12,15 +12,23 @@ const domElement = () => {
         }),
         getAttribute: attribute => element.attributes[attribute],
         style: {},
-        classList: { add: jest.fn() },
+        classList: {
+            add: jest.fn(),
+            remove: jest.fn(),
+        },
         focus: jest.fn(),
         insertBefore: jest.fn(),
         contains: jest.fn(),
         removeChild: jest.fn(),
         appendChild: jest.fn(),
-        parentElement: { appendChild: jest.fn(), insertBefore: jest.fn() },
+        parentElement: {
+            appendChild: jest.fn(),
+            insertBefore: jest.fn(),
+            removeChild: jest.fn(),
+        },
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
+        childNodes: [],
     };
     return element;
 };

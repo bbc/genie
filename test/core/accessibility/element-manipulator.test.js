@@ -11,6 +11,10 @@ describe("element manipulator", () => {
     let button;
     let sequentialCounter = 0;
 
+    const attributeMap = {
+        "aria-label": "test element",
+    };
+
     const getNewElement = id => {
         return {
             id: id,
@@ -19,6 +23,10 @@ describe("element manipulator", () => {
             },
             addEventListener: jest.fn(),
             removeEventListener: jest.fn(),
+            setAttribute: jest.fn(),
+            getAttribute: jest.fn().mockImplementation(attribute => {
+                return attributeMap[attribute];
+            }),
             classList: {
                 add: jest.fn(),
                 remove: jest.fn(),
@@ -26,7 +34,6 @@ describe("element manipulator", () => {
             style: {
                 cursor: "pointer",
             },
-            setAttribute: jest.fn(),
         };
     };
 
@@ -36,6 +43,9 @@ describe("element manipulator", () => {
             elementEvents: {
                 click: jest.fn(),
                 keyup: jest.fn(),
+            },
+            input: {
+                enabled: true,
             },
         };
         jest.spyOn(accessibleButtons, "findButtonByElementId").mockImplementation(() => button);
@@ -122,7 +132,7 @@ describe("element manipulator", () => {
         });
 
         test("resets the z-index", () => {
-            expect(element.style["z-index"]).toBe(null);
+            expect(element.style["z-index"]).toBe(0);
         });
 
         test("re-adds click event listener", () => {
@@ -131,6 +141,10 @@ describe("element manipulator", () => {
 
         test("re-adds keyup event listener", () => {
             expect(element.addEventListener).toHaveBeenCalledWith("keyup", button.elementEvents.keyup);
+        });
+
+        test("re-adds the aria label", () => {
+            expect(element.setAttribute).toHaveBeenCalledWith("aria-label", attributeMap["aria-label"]);
         });
     });
 });
