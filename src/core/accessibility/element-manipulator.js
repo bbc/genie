@@ -42,8 +42,9 @@ export const hideAndDisableElement = el => {
 };
 
 const resetElementToDefault = (el, self) => {
-    hideElement(el);
     el.removeEventListener("blur", self);
+    el.parentElement.removeChild(el);
+    showElement(el);
     unsetElementAsHiddenAndDisabled(el);
 };
 

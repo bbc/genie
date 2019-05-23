@@ -19,6 +19,8 @@ describe("element manipulator", () => {
             },
             addEventListener: jest.fn(),
             removeEventListener: jest.fn(),
+            setAttribute: jest.fn(),
+            getAttribute: jest.fn(),
             classList: {
                 add: jest.fn(),
                 remove: jest.fn(),
@@ -26,7 +28,6 @@ describe("element manipulator", () => {
             style: {
                 cursor: "pointer",
             },
-            setAttribute: jest.fn(),
         };
     };
 
@@ -37,6 +38,9 @@ describe("element manipulator", () => {
                 click: jest.fn(),
                 keyup: jest.fn(),
             },
+            input: {
+                enabled: true,
+            }
         };
         jest.spyOn(accessibleButtons, "findButtonByElementId").mockImplementation(() => button);
         element = getNewElement("home__" + sequentialCounter);
@@ -122,7 +126,7 @@ describe("element manipulator", () => {
         });
 
         test("resets the z-index", () => {
-            expect(element.style["z-index"]).toBe(null);
+            expect(element.style["z-index"]).toBe(0);
         });
 
         test("re-adds click event listener", () => {
