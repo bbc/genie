@@ -11,6 +11,10 @@ describe("element manipulator", () => {
     let button;
     let sequentialCounter = 0;
 
+    const attributeMap = {
+        "aria-label": "test element",
+    };
+
     const getNewElement = id => {
         return {
             id: id,
@@ -20,7 +24,9 @@ describe("element manipulator", () => {
             addEventListener: jest.fn(),
             removeEventListener: jest.fn(),
             setAttribute: jest.fn(),
-            getAttribute: jest.fn(),
+            getAttribute: jest.fn().mockImplementation(attribute => {
+                return attributeMap[attribute];
+            }),
             classList: {
                 add: jest.fn(),
                 remove: jest.fn(),
@@ -40,7 +46,7 @@ describe("element manipulator", () => {
             },
             input: {
                 enabled: true,
-            }
+            },
         };
         jest.spyOn(accessibleButtons, "findButtonByElementId").mockImplementation(() => button);
         element = getNewElement("home__" + sequentialCounter);
@@ -135,6 +141,10 @@ describe("element manipulator", () => {
 
         test("re-adds keyup event listener", () => {
             expect(element.addEventListener).toHaveBeenCalledWith("keyup", button.elementEvents.keyup);
+        });
+
+        test("re-adds the aria label", () => {
+            expect(element.setAttribute).toHaveBeenCalledWith("aria-label", attributeMap["aria-label"]);
         });
     });
 });
