@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Move babel dev dependencies back to dependencies so they are installed when Genie is pulled into games. |
 | | Migrates unit tests from Mocha/Chai/Sinon/Rewire to Jest. |
 | 1.0.7 | |
 | | Configure webpack-dev-server to store server output on disk. |

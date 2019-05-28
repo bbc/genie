@@ -12,14 +12,14 @@
     "dependencies": {
         "expose-loader": "^0.7.5",
         "phaser-ce": "2.12.0",
-        "webfontloader": "^1.6.28"
-    },
-    "devDependencies": {
+        "webfontloader": "^1.6.28",
         "babel-core": "^6.26.3",
         "babel-jest": "23.6.0",
         "babel-loader": "^7.1.5",
         "babel-polyfill": "^6.26.0",
-        "babel-preset-env": "^1.6.1",
+        "babel-preset-env": "^1.6.1"
+    },
+    "devDependencies": {
         "cross-env": "^5.2.0",
         "eslint": "^5.16.0",
         "eslint-config-prettier": "^2.9.0",
