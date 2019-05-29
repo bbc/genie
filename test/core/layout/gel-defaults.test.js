@@ -9,7 +9,6 @@ import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
 import * as pause from "../../../src/components/overlays/pause.js";
 import { settings, settingsChannel } from "../../../src/core/settings.js";
-import * as gmiModule from "../../../src/core/gmi/gmi.js";
 import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Layout - Gel Defaults", () => {
@@ -32,9 +31,8 @@ describe("Layout - Gel Defaults", () => {
             },
         };
 
-        mockGmi = { exit: jest.fn(), setAudio: jest.fn() };
+        mockGmi = { exit: jest.fn(), setAudio: jest.fn(), sendStatsEvent: jest.fn() };
         createMockGmi(mockGmi);
-        jest.spyOn(gmiModule, "sendStats");
 
         jest.spyOn(pause, "create").mockImplementation(() => {});
         jest.spyOn(settings, "show").mockImplementation(() => {});
@@ -50,8 +48,8 @@ describe("Layout - Gel Defaults", () => {
             expect(mockGmi.exit).toHaveBeenCalled();
         });
 
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "exit" });
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("exit", "click");
         });
     });
 
@@ -64,50 +62,12 @@ describe("Layout - Gel Defaults", () => {
             const homeNavigationSpy = mockGame.state.states["current-screen"].navigation.home;
             expect(homeNavigationSpy).toHaveBeenCalled();
         });
-
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "home" });
-        });
-    });
-
-    describe("Pause Home Callback", () => {
-        beforeEach(() => {
-            gel.config.pauseHome.action();
-        });
-
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "home" });
-        });
-    });
-
-    describe("Back Callback", () => {
-        beforeEach(() => {
-            gel.config.back.action();
-        });
-
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "back" });
-        });
-    });
-
-    describe("How To Play Back Callback", () => {
-        beforeEach(() => {
-            gel.config.howToPlayBack.action();
-        });
-
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "back" });
-        });
     });
 
     describe("Audio Callback", () => {
         beforeEach(() => {
             jest.spyOn(signal.bus, "publish");
             gel.config.audio.action({ game: mockGame });
-        });
-
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "audio" });
         });
 
         test("sets audio on the GMI", () => {
@@ -132,6 +92,16 @@ describe("Layout - Gel Defaults", () => {
                 data: true,
             });
         });
+
+        test("sends a stat to the GMI when audio is off", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("audio", "off");
+        });
+
+        test("sends a stat to the GMI when audio is on", () => {
+            mockGame.sound.mute = true;
+            gel.config.audio.action({ game: mockGame });
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("audio", "on");
+        });
     });
 
     describe("Settings Button Callback", () => {
@@ -143,8 +113,8 @@ describe("Layout - Gel Defaults", () => {
             expect(settings.show).toHaveBeenCalled();
         });
 
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "settings" });
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("settings", "open");
         });
     });
 
@@ -156,10 +126,6 @@ describe("Layout - Gel Defaults", () => {
         test("creates a pause screen", () => {
             expect(pause.create).toHaveBeenCalledWith(false, { game: mockGame });
         });
-
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "pause" });
-        });
     });
 
     describe("Pause No Replay Button Callback", () => {
@@ -170,10 +136,6 @@ describe("Layout - Gel Defaults", () => {
         test("creates a pause screen with replay button hidden", () => {
             expect(pause.create).toHaveBeenCalledWith(true, { game: mockGame });
         });
-
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "pause" });
-        });
     });
 
     describe("Replay Button Callback", () => {
@@ -181,8 +143,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.replay.action();
         });
 
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "playagain" });
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain");
         });
     });
 
@@ -191,8 +153,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.pauseReplay.action();
         });
 
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "playagain" });
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain");
         });
     });
 
@@ -201,8 +163,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.play.action();
         });
 
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "play" });
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("play", "click");
         });
     });
 
@@ -211,8 +173,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.pausePlay.action();
         });
 
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "play" });
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("play", "click");
         });
     });
 
@@ -221,8 +183,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.achievements.action({ game: mockGame });
         });
 
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "achievements" });
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("achievements", "click");
         });
     });
 
@@ -231,12 +193,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.restart.action();
         });
 
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "playagain" });
-        });
-
-        test("sends a replay stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("replay");
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain");
         });
     });
 
@@ -245,12 +203,8 @@ describe("Layout - Gel Defaults", () => {
             gel.config.continueGame.action();
         });
 
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "continue" });
-        });
-
-        test("sends a game_level continue stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("continue");
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "continue");
         });
     });
 
@@ -263,8 +217,8 @@ describe("Layout - Gel Defaults", () => {
             expect(howToPlay.create).toHaveBeenCalledWith({ game: mockGame });
         });
 
-        test("sends a click stat to the GMI", () => {
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("click", { action_type: "how-to-play" });
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("howtoplay", "click");
         });
     });
 });

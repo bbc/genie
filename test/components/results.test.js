@@ -3,19 +3,19 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import { createMockGmi } from "../mock/gmi";
 
 import { Results } from "../../src/components/results";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
-import * as gmiModule from "../../src/core/gmi/gmi.js";
 
 describe("Results Screen", () => {
     let resultsScreen;
     let mockGame;
     let mockContext;
+    let mockGmi;
 
     beforeEach(() => {
-        jest.spyOn(gmiModule, "sendStats").mockImplementation(() => {});
         jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
         mockGame = {
             add: {
@@ -40,6 +40,9 @@ describe("Results Screen", () => {
                 },
             },
         };
+
+        mockGmi = { sendStatsEvent: jest.fn() };
+        createMockGmi(mockGmi);
 
         resultsScreen = new Results();
         resultsScreen.scene = {
@@ -95,21 +98,15 @@ describe("Results Screen", () => {
             );
         });
 
-        test("fires a game complete stat to the GMI with score if given", () => {
+        test("fires a score stat to the GMI with score if given", () => {
             resultsScreen.create();
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("game_complete", { game_score: 22 });
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", "SCO=[22]");
         });
 
-        test("fires a game complete stat to the GMI with score in string format if given", () => {
-            resultsScreen.transientData.results = 450;
-            resultsScreen.create();
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("game_complete", { game_score: 450 });
-        });
-
-        test("fires a game complete stat to the GMI without a score if not provided", () => {
+        test("fires a score stat to the GMI without a score if not provided", () => {
             resultsScreen.transientData.results = undefined;
             resultsScreen.create();
-            expect(gmiModule.sendStats).toHaveBeenCalledWith("game_complete", undefined);
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
         });
     });
 

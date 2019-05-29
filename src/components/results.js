@@ -7,7 +7,7 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
-import { sendStats } from "../core/gmi/gmi.js";
+import { gmi } from "../core/gmi/gmi.js";
 
 export class Results extends Screen {
     constructor() {
@@ -16,8 +16,8 @@ export class Results extends Screen {
 
     fireGameCompleteStat(result) {
         const score = parseInt(result);
-        const scoreObject = score ? { game_score: score } : undefined;
-        sendStats("game_complete", scoreObject);
+        const scoreMetaData = score ? `SCO=[${score}]` : undefined;
+        gmi.sendStatsEvent("score", "display", scoreMetaData);
     }
 
     create() {

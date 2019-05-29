@@ -12,7 +12,7 @@ import * as signal from "../core/signal-bus.js";
 import * as Navigation from "./navigation.js";
 import * as Scene from "./scene.js";
 import { loadFonts } from "./font-loader.js";
-import { gmi, setGmi, startStatsTracking } from "./gmi/gmi.js";
+import { gmi, setGmi } from "./gmi/gmi.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addCustomStyles } from "./custom-styles.js";
 import fp from "../../lib/lodash/fp/fp.js";
@@ -60,8 +60,6 @@ export function startup(settingsConfig = {}, navigationConfig) {
             gameMuted: true,
         };
         game.stage.backgroundColor = "#333";
-
-        startStatsTracking(game, context);
 
         const onFontsLoaded = () => {
             const goToScreen = Navigation.create(game.state, context, scene, navigationConfig);

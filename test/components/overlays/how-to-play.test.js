@@ -113,7 +113,7 @@ describe("How To Play Overlay", () => {
         });
 
         test("creates a new overlay layout manager", () => {
-            expect(OverlayLayout.create).toHaveBeenCalledTimes(1);
+            expect(OverlayLayout.create).toHaveBeenCalledWith(mockGame.state.states.howToPlay);
         });
 
         test("adds a background image and passes it to the overlay manager", () => {

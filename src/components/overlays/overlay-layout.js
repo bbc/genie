@@ -8,13 +8,21 @@
 
 import fp from "../../../lib/lodash/fp/fp.js";
 
+import { gmi } from "../../core/gmi/gmi.js";
+
 /**
  * Provides some shared behaviour common to all overlay screens such as:
  * - Adding a background
  * - Moving GEL buttons to the top
+ * - Settings the stats screen when an overlay opens
  */
 export function create(screen) {
     const priorityID = 999 + 2 * screen.context.popupScreens.length; //* 2 to provide space between layers for background
+
+    if (screen.visibleLayer !== "pause") {
+        gmi.setStatsScreen(screen.visibleLayer);
+    }
+
     return {
         addBackground,
         moveGelButtonsToTop,

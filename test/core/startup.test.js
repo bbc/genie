@@ -19,6 +19,7 @@ import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import * as fullscreen from "../../src/core/fullscreen.js";
 
 jest.mock("../../src/core/browser.js");
+jest.mock("../../src/core/custom-styles.js");
 
 describe("Startup", () => {
     let mockGmi;
@@ -46,6 +47,8 @@ describe("Startup", () => {
         jest.spyOn(styles, "addCustomStyles");
         jest.spyOn(Phaser, "Game").mockImplementation(() => mockGame);
         global.window.getGMI = jest.fn().mockImplementation(() => mockGmi);
+        global.window.addEventListener = jest.fn();
+        global.document = { head: { appendChild: jest.fn() } };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -88,7 +91,7 @@ describe("Startup", () => {
         expect(actualConfig.clearBeforeRender).toBe(expectedConfig.clearBeforeRender);
     });
 
-    it("sets transparent config flag to false when Amazon Silk Browser", () => {
+    test("sets transparent config flag to false when Amazon Silk Browser", () => {
         const mockSilkBrowser = { name: "Amazon Silk", isSilk: true, version: "1.1.1" };
         getBrowser.mockImplementation(() => mockSilkBrowser);
 
@@ -97,7 +100,7 @@ describe("Startup", () => {
         expect(actualConfig.transparent).toBe(true);
     });
 
-    it("sets renderer to canvas when browser returns forceCanvas", () => {
+    test("sets renderer to canvas when browser returns forceCanvas", () => {
         const mockSafari9 = { name: "Safari", forceCanvas: true };
         getBrowser.mockImplementation(() => mockSafari9);
         startup();
@@ -110,7 +113,63 @@ describe("Startup", () => {
         expect(startup).toThrow(); // eslint-disable-line quotes
     });
 
-    describe("onStarted()", () => {
+    describe("Hook errors", () => {
+        test("adds an event listener to listen for errors", () => {
+            startup();
+            expect(global.window.addEventListener.mock.calls[0][0]).toBe("error");
+        });
+
+        test("finds the container div to display errors", () => {
+            startup();
+            expect(global.document.getElementById).toHaveBeenCalledWith("some-id");
+        });
+
+        describe("Throwing an error", () => {
+            let mockContainer;
+            let mockPreTag;
+
+            beforeEach(() => {
+                mockContainer = domElement();
+                mockPreTag = domElement();
+                mockContainer.appendChild.mockImplementation(() => mockPreTag);
+                global.document.getElementById.mockImplementation(() => mockContainer);
+                global.document.createElement = jest.fn(tagName => {
+                    const domEle = domElement();
+                    domEle.name = tagName;
+                    return domEle;
+                });
+                startup();
+                const errorEvent = { error: { message: "There has been an error" } };
+                const errorThrown = global.window.addEventListener.mock.calls[0][1];
+                errorThrown(errorEvent);
+            });
+
+            test("appends an error message to the container when an error event is thrown", () => {
+                expect(mockContainer.appendChild.mock.calls[0][0].name).toBe("pre");
+            });
+
+            test("sets the correct styling on the error message", () => {
+                const expectStyles = {
+                    position: "absolute",
+                    top: "0",
+                    left: "0",
+                    backgroundColor: "black",
+                    color: "white",
+                    padding: "2em",
+                    width: "calc(100% - 2 * 2em)",
+                    height: "calc(100% - 2 * 2em)",
+                };
+                expect(mockPreTag.style).toEqual(expectStyles);
+            });
+
+            test("sets the correct error message text", () => {
+                const expectedError = "Something isn't working:\n\nThere has been an error\n\n";
+                expect(mockPreTag.innerText).toBe(expectedError);
+            });
+        });
+    });
+
+    describe("onStarted Method", () => {
         beforeEach(() => {
             jest.spyOn(Scene, "create").mockImplementation(() => "Scene");
             jest.spyOn(LoadFonts, "loadFonts").mockImplementation(() => {});
@@ -148,23 +207,14 @@ describe("Startup", () => {
             onComplete();
             expect(qaMode.create).toHaveBeenCalled();
         });
-        test("starts the stats tracking through the GMI", () => {
-            const expectedContext = {
-                popupScreens: [],
-                gameMuted: true,
-            };
-            const statsParams = gmiModule.startStatsTracking.mock.calls[0];
-            expect(statsParams[0]).toEqual(mockGame);
-            expect(JSON.stringify(statsParams[1])).toEqual(JSON.stringify(expectedContext));
-        });
 
-        it("sets up the accessibility manager", () => {
+        test("sets up the accessibility manager", () => {
             const onComplete = LoadFonts.loadFonts.mock.calls[0][1];
             onComplete();
             expect(a11y.setup).toHaveBeenCalledWith(mockGame.canvas.parentElement);
         });
 
-        it("sets up the fullscreen API", () => {
+        test("sets up the fullscreen API", () => {
             const onComplete = LoadFonts.loadFonts.mock.calls[0][1];
             onComplete();
             expect(fullscreen.listenForTap.mock.calls[0]).toEqual([mockGame.canvas.parentElement, mockGame]);

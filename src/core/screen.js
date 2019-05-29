@@ -4,6 +4,8 @@
  * @license Apache-2.0
  */
 import _ from "../../lib/lodash/lodash.js";
+
+import { gmi } from "../core/gmi/gmi.js";
 import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as VisibleLayer from "../core/visible-layer.js";
@@ -35,6 +37,7 @@ export class Screen extends Phaser.State {
         a11y.clearAccessibleButtons();
         a11y.clearElementsFromDom();
         this.overlaySetup();
+        gmi.setStatsScreen(this.game.state.current);
     }
 
     overlaySetup() {
@@ -47,6 +50,7 @@ export class Screen extends Phaser.State {
         a11y.clearAccessibleButtons(this);
         this.context.popupScreens.pop();
         a11y.appendElementsToDom(this);
+        gmi.setStatsScreen(this.game.state.current);
     }
 
     get visibleLayer() {

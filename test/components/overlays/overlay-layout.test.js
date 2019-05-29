@@ -3,11 +3,14 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import { createMockGmi } from "../../mock/gmi";
+
 import * as OverlayLayout from "../../../src/components/overlays/overlay-layout";
 
 describe("Overlay Layout", () => {
     let mockLayouts;
     let mockScreen;
+    let mockGmi;
 
     beforeEach(() => {
         mockLayouts = [
@@ -33,10 +36,27 @@ describe("Overlay Layout", () => {
                 getLayouts: jest.fn().mockImplementation(() => mockLayouts),
                 addToBackground: jest.fn(),
             },
+            visibleLayer: "how-to-play",
         };
+
+        mockGmi = { setStatsScreen: jest.fn() };
+        createMockGmi(mockGmi);
     });
 
     afterEach(() => jest.clearAllMocks());
+
+    describe("Creation", () => {
+        test("sets the stats screen if the current screen is not the pause screen", () => {
+            OverlayLayout.create(mockScreen);
+            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith(mockScreen.visibleLayer);
+        });
+
+        test("does not set the stats screen if the current screen is the pause screen", () => {
+            mockScreen.visibleLayer = "pause";
+            OverlayLayout.create(mockScreen);
+            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
+        });
+    });
 
     describe("addBackground method", () => {
         test("adds a background image and positions it in the correct order", () => {

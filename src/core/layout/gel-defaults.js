@@ -6,7 +6,7 @@
 import * as howToPlay from "../../components/overlays/how-to-play.js";
 import * as pause from "../../components/overlays/pause.js";
 import { settings, settingsChannel } from "../../core/settings.js";
-import { gmi, sendStats } from "../../core/gmi/gmi.js";
+import { gmi } from "../../core/gmi/gmi.js";
 import * as signal from "../signal-bus.js";
 
 export const buttonsChannel = "gel-buttons";
@@ -21,7 +21,7 @@ export const config = {
         channel: buttonsChannel,
         action: () => {
             gmi.exit();
-            sendStats("click", { action_type: "exit" });
+            gmi.sendStatsEvent("exit", "click");
         },
     },
     home: {
@@ -35,7 +35,6 @@ export const config = {
         action: ({ game }) => {
             const screen = game.state.states[game.state.current];
             screen.navigation.home();
-            sendStats("click", { action_type: "home" });
         },
     },
     pauseHome: {
@@ -46,9 +45,6 @@ export const config = {
         order: 1,
         id: "__home",
         channel: "pause-gel-buttons",
-        action: () => {
-            sendStats("click", { action_type: "home" });
-        },
     },
     back: {
         group: "topLeft",
@@ -58,9 +54,6 @@ export const config = {
         order: 2,
         id: "__back",
         channel: buttonsChannel,
-        action: () => {
-            sendStats("click", { action_type: "back" });
-        },
     },
     howToPlayBack: {
         group: "topLeft",
@@ -70,9 +63,6 @@ export const config = {
         order: 2,
         id: "__back",
         channel: "how-to-play-gel-buttons",
-        action: () => {
-            sendStats("click", { action_type: "back" });
-        },
     },
     audio: {
         group: "topRight",
@@ -93,7 +83,8 @@ export const config = {
                 data: enabled,
             });
 
-            sendStats("click", { action_type: "audio" });
+            const audioOnOrOff = enabled ? "on" : "off";
+            gmi.sendStatsEvent("audio", audioOnOrOff);
         },
     },
     settings: {
@@ -106,7 +97,7 @@ export const config = {
         channel: buttonsChannel,
         action: ({ game }) => {
             settings.show(game);
-            sendStats("click", { action_type: "settings" });
+            gmi.sendStatsEvent("settings", "open");
         },
     },
     pause: {
@@ -119,7 +110,6 @@ export const config = {
         channel: buttonsChannel,
         action: ({ game }) => {
             pause.create(false, { game });
-            sendStats("click", { action_type: "pause" });
         },
     },
     pauseNoReplay: {
@@ -132,7 +122,6 @@ export const config = {
         channel: buttonsChannel,
         action: ({ game }) => {
             pause.create(true, { game });
-            sendStats("click", { action_type: "pause" });
         },
     },
     previous: {
@@ -161,7 +150,7 @@ export const config = {
         order: 8,
         id: "__replay",
         action: () => {
-            sendStats("click", { action_type: "playagain" });
+            gmi.sendStatsEvent("level", "playagain");
         },
     },
     pauseReplay: {
@@ -173,7 +162,7 @@ export const config = {
         id: "__replay",
         channel: "pause-gel-buttons",
         action: () => {
-            sendStats("click", { action_type: "playagain" });
+            gmi.sendStatsEvent("level", "playagain");
         },
     },
     play: {
@@ -186,7 +175,7 @@ export const config = {
         channel: buttonsChannel,
         positionOverride: true,
         action: () => {
-            sendStats("click", { action_type: "play" });
+            gmi.sendStatsEvent("play", "click");
         },
     },
     pausePlay: {
@@ -198,7 +187,7 @@ export const config = {
         id: "__play",
         channel: "pause-gel-buttons",
         action: () => {
-            sendStats("click", { action_type: "play" });
+            gmi.sendStatsEvent("play", "click");
         },
     },
     next: {
@@ -230,7 +219,7 @@ export const config = {
         action: ({ game }) => {
             const screen = game.state.states[game.state.current];
             screen.navigation.achievements();
-            sendStats("click", { action_type: "achievements" });
+            gmi.sendStatsEvent("achievements", "click");
         },
     },
     restart: {
@@ -242,8 +231,7 @@ export const config = {
         id: "__restart",
         channel: buttonsChannel,
         action: () => {
-            sendStats("click", { action_type: "playagain" });
-            sendStats("replay");
+            gmi.sendStatsEvent("level", "playagain");
         },
     },
     continue: {
@@ -264,8 +252,7 @@ export const config = {
         id: "__continue",
         channel: buttonsChannel,
         action: () => {
-            sendStats("click", { action_type: "continue" });
-            sendStats("continue");
+            gmi.sendStatsEvent("level", "continue");
         },
     },
     howToPlay: {
@@ -278,7 +265,7 @@ export const config = {
         channel: buttonsChannel,
         action: ({ game }) => {
             howToPlay.create({ game });
-            sendStats("click", { action_type: "how-to-play" });
+            gmi.sendStatsEvent("howtoplay", "click");
         },
     },
 };

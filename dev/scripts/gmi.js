@@ -164,13 +164,17 @@ var GMI = function(options, embedVars, gameDir) {
                 onSettingsChanged("settings-changed", settingsCheckbox.value);
             });
 
-            settingsCloseButton.addEventListener("click", function() { 
+            settingsCloseButton.addEventListener("click", function() {
                onSettingsClosed();
-               document.body.removeChild(settings); 
+               document.body.removeChild(settings);
             });
             document.body.appendChild(settings);
         }
         return true;
+    };
+    GMI.prototype.setStatsScreen = (screenName, params) => {
+        var paramsString = params ? `with params: ` + JSON.stringify(params) : "";
+        console.log(`Stats screen set to ${screenName} ${paramsString}`); // eslint-disable-line no-console
     };
     GMI.prototype.sendStatsEvent = function(name, type, params) {
         if(qaMode) {

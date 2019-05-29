@@ -13,7 +13,7 @@ import { Screen } from "../core/screen.js";
 import { createLoadBar } from "./loadbar.js";
 import * as Scaler from "../core/scaler.js";
 import * as GameSound from "../core/game-sound.js";
-import { gmi, sendStats } from "../core/gmi/gmi.js";
+import { gmi } from "../core/gmi/gmi.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
@@ -43,7 +43,7 @@ export class Loadscreen extends Screen {
             }
             GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
             gmi.gameLoaded();
-            sendStats("game_loaded");
+            gmi.sendStatsEvent("gameloaded", "true");
             this.navigation.next();
         });
     }

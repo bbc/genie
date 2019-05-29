@@ -14,13 +14,14 @@ import * as signal from "../../core/signal-bus.js";
  * @param {Phaser.Game} game - The Phaser Game instance
  */
 export function create({ game }) {
+    const screenName = "how-to-play";
     const screen = game.state.states[game.state.current];
-    const theme = screen.context.config.theme["how-to-play"];
+    const theme = screen.context.config.theme[screenName];
     const channel = "how-to-play-gel-buttons";
 
     let numberOfPanels = Object.keys(theme.panels).length;
 
-    screen.context.popupScreens.push("how-to-play");
+    screen.context.popupScreens.push(screenName);
 
     const overlayLayout = OverlayLayout.create(screen);
     const background = overlayLayout.addBackground(game.add.image(0, 0, "howToPlay.background"));
