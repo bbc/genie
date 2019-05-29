@@ -10,13 +10,13 @@ module.exports = {
         global: {
             statements: 90.01,
             branches: 80.84,
-            functions: 86.9,
+            functions: 86.3,
             lines: 91.17,
         },
     },
     testEnvironment: "jsdom",
     modulePathIgnorePatterns: ["/.node_modules.+/"],
     testPathIgnorePatterns: ["/node_modules/", "/.node_modules.+/", ".node_modules_production"],
-    setupTestFrameworkScriptFile: "./test/set-up-jest.js",
+    setupFilesAfterEnv: ["./test/set-up-jest.js"],
     transform: { "^.+\\.js$": "babel-jest" },
 };

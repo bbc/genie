@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 1.0.8 | |
+| | Upgrade to Babel 7. |
 | | Updates stats calls for ATI. |
 | | Move babel dev dependencies back to dependencies so they are installed when Genie is pulled into games. |
 | | Migrates unit tests from Mocha/Chai/Sinon/Rewire to Jest. |

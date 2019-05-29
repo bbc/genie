@@ -22,7 +22,7 @@ The different types of source maps that can be generated are listed [here](https
 
 ### Watch Mode
 
-Watch mode can be started with `npm run build-watch`.
+Watch mode can be started with `npm run build:watch`.
 
 In watch mode, webpack is simply ran with the same config file, but with the `--watch` flag.
 

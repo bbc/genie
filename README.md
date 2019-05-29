@@ -6,7 +6,7 @@ A modular framework to simplify the construction of children's games.
 
 `npm run build` runs `webpack --config build-scripts/webpack.config.js` and creates a bundle in the `output` directory.
 
-`npm run build-watch` runs the above but in watch mode, which picks up changes to the code and rebuilds automatically.
+`npm run build:watch` runs the above but in watch mode, which picks up changes to the code and rebuilds automatically.
 
 ### Visualizer
 
