@@ -16,7 +16,7 @@ module.exports = env => {
     var webPackConfig = {
         mode: "production",
         performance: { hints: false },
-        entry: ["babel-polyfill", pixi, p2, phaser, "webfontloader"],
+        entry: ["@babel/polyfill", pixi, p2, phaser, "webfontloader"],
         output: {
             path: path.resolve("output"),
             publicPath: "output",

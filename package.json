@@ -11,13 +11,13 @@
     },
     "dependencies": {
         "@babel/core": "^7.4.5",
+        "@babel/polyfill": "^7.4.4",
         "@babel/preset-env": "^7.4.5",
         "babel-jest": "^24.8.0",
         "babel-loader": "^8.0.6",
-        "babel-polyfill": "^6.26.0",
-        "expose-loader": "^0.7.5",
         "phaser-ce": "2.12.0",
-        "webfontloader": "^1.6.28"
+        "webfontloader": "^1.6.28",
+        "expose-loader": "^0.7.5"
     },
     "devDependencies": {
         "cross-env": "^5.2.0",
@@ -31,7 +31,7 @@
         "eslint-plugin-prettier": "^2.6.0",
         "eslint-plugin-promise": "^3.7.0",
         "eslint-plugin-standard": "^3.0.1",
-        "hard-source-webpack-plugin": "^0.6.4",
+        "hard-source-webpack-plugin": "^0.6.12",
         "jest": "^24.8.0",
         "jest-canvas-mock": "^2.0.0",
         "jest-webpack": "^0.5.1",
@@ -41,7 +41,7 @@
         "local-web-server": "^2.6.0",
         "prettier": "1.17.0",
         "webpack": "^4.16.5",
-        "webpack-cli": "^3.1.0",
+        "webpack-cli": "^3.3.2",
         "webpack-dev-server": "^3.4.1",
         "webpack-visualizer-plugin": "^0.1.11"
     },
