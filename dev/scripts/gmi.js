@@ -173,8 +173,8 @@ var GMI = function(options, embedVars, gameDir) {
         return true;
     };
     GMI.prototype.setStatsScreen = function(screenName, params) {
-        var paramsString = params ? `with params: ` + JSON.stringify(params) : "";
-        console.log(`Stats screen set to ${screenName} ${paramsString}`); // eslint-disable-line no-console
+        var paramsString = params ? "with params: " + JSON.stringify(params) : "";
+        console.log("Stats screen set to " + screenName + " " + paramsString); // eslint-disable-line no-console
     };
     GMI.prototype.sendStatsEvent = function(name, type, params) {
         if(qaMode) {
