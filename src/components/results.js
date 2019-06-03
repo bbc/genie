@@ -14,10 +14,19 @@ export class Results extends Screen {
         super();
     }
 
+    getScoreMetaData(result) {
+        if (typeof result === "number") {
+            return { metadata: `SCO=[${result}]` };
+        }
+        if (typeof result === "string") {
+            const digitsRegex = /\d+/;
+            const score = result.match(digitsRegex);
+            return score ? { metadata: `SCO=[${score}]` } : undefined;
+        }
+    }
+
     fireGameCompleteStat(result) {
-        const score = parseInt(result);
-        const scoreMetaData = score ? `SCO=[${score}]` : undefined;
-        gmi.sendStatsEvent("score", "display", scoreMetaData);
+        gmi.sendStatsEvent("score", "display", this.getScoreMetaData(result));
     }
 
     create() {

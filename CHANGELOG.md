@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| UNRELEASED | |
+| | Improves stats logging for results/score screen. |
 | 1.0.10 | |
 | | Upgrade to Babel 7. |
 | | Updates stats calls for ATI. |

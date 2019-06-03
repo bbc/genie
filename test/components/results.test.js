@@ -64,7 +64,7 @@ describe("Results Screen", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    describe("create method", () => {
+    describe("Create Method", () => {
         test("adds a background image", () => {
             resultsScreen.create();
             expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "results.background");
@@ -98,15 +98,36 @@ describe("Results Screen", () => {
             );
         });
 
-        test("fires a score stat to the GMI with score if given", () => {
-            resultsScreen.create();
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", "SCO=[22]");
-        });
+        describe("Stats", () => {
+            test("fires a score stat with results if given as a number", () => {
+                resultsScreen.transientData.results = 45;
+                resultsScreen.create();
+                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", { metadata: "SCO=[45]" });
+            });
 
-        test("fires a score stat to the GMI without a score if not provided", () => {
-            resultsScreen.transientData.results = undefined;
-            resultsScreen.create();
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
+            test("fires a score stat with results if given as a string with numbers in", () => {
+                resultsScreen.transientData.results = "Your score is 593";
+                resultsScreen.create();
+                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", { metadata: "SCO=[593]" });
+            });
+
+            test("fires a score stat without results if a string with no numbers is given", () => {
+                resultsScreen.transientData.results = "You completed the game!";
+                resultsScreen.create();
+                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
+            });
+
+            test("fires a score stat to the GMI without results if neither a string nor a number is given", () => {
+                resultsScreen.transientData.results = [];
+                resultsScreen.create();
+                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
+            });
+
+            test("fires a score stat to the GMI without results if not provided", () => {
+                resultsScreen.transientData.results = undefined;
+                resultsScreen.create();
+                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
+            });
         });
     });
 
