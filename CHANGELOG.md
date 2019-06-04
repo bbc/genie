@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | UNRELEASED | |
+| | Adds pause click stat. |
 | | Ensures click and page stats are firing in the correct order. |
 | | Improves stats logging for results/score screen. |
 | 1.0.10 | |

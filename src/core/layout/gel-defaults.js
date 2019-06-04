@@ -109,6 +109,7 @@ export const config = {
         id: "__pause",
         channel: buttonsChannel,
         action: ({ game }) => {
+            gmi.sendStatsEvent("pause", "click");
             pause.create(false, { game });
         },
     },
@@ -121,6 +122,7 @@ export const config = {
         id: "__pause",
         channel: buttonsChannel,
         action: ({ game }) => {
+            gmi.sendStatsEvent("pause", "click");
             pause.create(true, { game });
         },
     },
