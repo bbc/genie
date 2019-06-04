@@ -19,6 +19,27 @@ describe("Screen", () => {
     let signalInstance;
     let mockTransientData;
 
+    const createScreen = () => {
+        screen = new Screen();
+        jest.spyOn(screen, "onOverlayClosed");
+        mockTransientData = { transient: "data" };
+        screen.game = createMockGame();
+        screen.game.state.current = "loadscreen";
+    };
+
+    const initScreen = () => {
+        const mockNavigation = {
+            loadscreen: { routes: "loadscreen-routes" },
+            select: { routes: "select-routes" },
+        };
+        screen.init(mockTransientData, mockScene, mockContext, mockNavigation);
+    };
+
+    const createAndInitScreen = () => {
+        createScreen();
+        initScreen();
+    };
+
     afterEach(() => jest.clearAllMocks());
 
     describe("with context", () => {
@@ -33,9 +54,6 @@ describe("Screen", () => {
             jest.spyOn(Phaser, "Signal").mockImplementation(() => signalInstance);
             mockGmi = { setStatsScreen: jest.fn() };
             createMockGmi(mockGmi);
-
-            screen = new Screen();
-            jest.spyOn(screen, "onOverlayClosed");
             mockContext = {
                 popupScreens: ["pause"],
                 config: {
@@ -44,55 +62,66 @@ describe("Screen", () => {
                     },
                 },
             };
-            mockTransientData = { transient: "data" };
-            const mockNavigation = {
-                loadscreen: { routes: "routes" },
-            };
-            screen.game = createMockGame();
-            screen.game.state.current = "loadscreen";
-            screen.init(mockTransientData, mockScene, mockContext, mockNavigation);
-
             delete window.__qaMode;
         });
 
         test("sets the scene", () => {
+            createAndInitScreen();
             expect(screen.scene).toEqual(mockScene);
         });
 
         test("sets the context", () => {
+            createAndInitScreen();
             expect(screen._context).toEqual(mockContext);
         });
 
         test("sets the navigation", () => {
-            expect(screen.navigation).toBe("routes");
+            createAndInitScreen();
+            expect(screen.navigation).toBe("loadscreen-routes");
         });
 
         test("sets the background music using the theme config", () => {
+            createAndInitScreen();
             const expectedThemeConfig = mockContext.config.theme.loadscreen;
             expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.game, expectedThemeConfig);
         });
 
         test("sets transient data", () => {
+            createAndInitScreen();
             expect(screen.transientData).toEqual(mockTransientData);
         });
 
         test("clears the currently stored accessible buttons", () => {
+            createAndInitScreen();
             expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
         });
 
         test("resets the accessiblity layer DOM", () => {
+            createAndInitScreen();
             expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
         });
 
-        test("sets the stats screen to the current screen", () => {
+        test("sets the stats screen to the current screen, if not on the loadscreen", () => {
+            createScreen();
+            screen.game.state.current = "select";
+            initScreen();
             expect(mockGmi.setStatsScreen).toHaveBeenCalledWith(screen.game.state.current);
         });
 
+        test("does not set the stats screen to the current screen, if on the loadscreen", () => {
+            createScreen();
+            screen.game.state.current = "loadscreen";
+            initScreen();
+            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
+        });
+
         test("creates the overlay closed signal", () => {
+            createAndInitScreen();
             expect(screen.overlayClosed).toEqual(signalInstance);
         });
 
         test("adds a listener to overlayClosed signal", () => {
+            createAndInitScreen();
             expect(signalInstance.add).toHaveBeenCalledTimes(1);
             expect(signalInstance.add).toHaveBeenCalledWith(screen.onOverlayClosed, screen);
         });
@@ -100,6 +129,7 @@ describe("Screen", () => {
 
     describe("context getter/setter", () => {
         test("gets context", () => {
+            createAndInitScreen();
             expect(screen.context).toEqual(mockContext);
         });
 
@@ -108,12 +138,14 @@ describe("Screen", () => {
                 popupScreens: ["pause"],
                 config: { theme: { loadscreen: { music: "test/music" } } },
             };
+            createAndInitScreen();
             expect(screen.context).toEqual(expectedContext);
         });
     });
 
     describe("getAsset method", () => {
         test("gets asset by name", () => {
+            createAndInitScreen();
             const expectedName = "some-name";
             expect(screen.getAsset(expectedName)).toBe("loadscreen.some-name");
         });
@@ -122,6 +154,7 @@ describe("Screen", () => {
     describe("visibleLayer getter/setter", () => {
         test("calls visible layer with correct params", () => {
             jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
+            createAndInitScreen();
             expect(screen.visibleLayer).toEqual("current-layer");
             expect(VisibleLayer.get).toHaveBeenCalledWith(screen.game, screen.context);
         });

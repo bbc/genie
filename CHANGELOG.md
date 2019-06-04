@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | UNRELEASED | |
+| | Ensures click and page stats are firing in the correct order. |
 | | Improves stats logging for results/score screen. |
 | 1.0.10 | |
 | | Upgrade to Babel 7. |
