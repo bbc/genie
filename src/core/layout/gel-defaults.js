@@ -97,6 +97,7 @@ export const config = {
         channel: buttonsChannel,
         action: ({ game }) => {
             settings.show(game);
+            gmi.sendStatsEvent("settings", "open");
         },
     },
     pause: {

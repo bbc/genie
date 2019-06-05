@@ -2,7 +2,6 @@
 
 | Version | Description |
 |---------|-------------|
-| | Set statsScreen to settings when closed, to report correct previous page. |
 | UNRELEASED | |
 | | Adds pause click stat. |
 | | Ensures click and page stats are firing in the correct order. |
