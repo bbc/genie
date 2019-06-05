@@ -5,6 +5,7 @@
  */
 import { domElement } from "../mock/dom-element";
 
+import { createMockGmi } from "../mock/gmi";
 import { Select } from "../../src/components/select";
 import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
 import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
@@ -17,6 +18,7 @@ describe("Select Screen", () => {
     let mockGame;
     let mockContext;
     let selectScreen;
+    let mockGmi;
 
     beforeEach(() => {
         characterSprites = [{ visible: "" }, { visible: "" }, { visible: "" }];
@@ -57,6 +59,9 @@ describe("Select Screen", () => {
             qaMode: { active: false },
             popupScreens: [],
         };
+
+        mockGmi = { sendStatsEvent: jest.fn() };
+        createMockGmi(mockGmi);
 
         selectScreen = new Select();
         selectScreen.scene = {
@@ -148,6 +153,12 @@ describe("Select Screen", () => {
             selectScreen.currentIndex = 1;
             signal.bus.subscribe.mock.calls[2][0].callback();
             expect(selectScreen.navigation.next).toHaveBeenCalledWith({ characterSelected: 1 });
+        });
+
+        test("fires a score stat to the GMI with when you select an item ", () => {
+            selectScreen.currentIndex = 1;
+            signal.bus.subscribe.mock.calls[2][0].callback();
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("characterSelect", "select", "ELE=[character2]");
         });
 
         test("hides all the accessible elements when the pause button is pressed", () => {
