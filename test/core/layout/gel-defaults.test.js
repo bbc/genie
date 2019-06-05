@@ -112,10 +112,6 @@ describe("Layout - Gel Defaults", () => {
         test("shows the settings", () => {
             expect(settings.show).toHaveBeenCalled();
         });
-
-        test("sends a stat to the GMI", () => {
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("settings", "open");
-        });
     });
 
     describe("Pause Button Callback", () => {
