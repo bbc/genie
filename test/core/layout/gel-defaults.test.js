@@ -112,15 +112,15 @@ describe("Layout - Gel Defaults", () => {
         test("shows the settings", () => {
             expect(settings.show).toHaveBeenCalled();
         });
-
-        test("sends a stat to the GMI", () => {
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("settings", "open");
-        });
     });
 
     describe("Pause Button Callback", () => {
         beforeEach(() => {
             gel.config.pause.action({ game: mockGame });
+        });
+
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("pause", "click");
         });
 
         test("creates a pause screen", () => {
@@ -131,6 +131,10 @@ describe("Layout - Gel Defaults", () => {
     describe("Pause No Replay Button Callback", () => {
         beforeEach(() => {
             gel.config.pauseNoReplay.action({ game: mockGame });
+        });
+
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("pause", "click");
         });
 
         test("creates a pause screen with replay button hidden", () => {
