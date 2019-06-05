@@ -1,0 +1,34 @@
+{
+    "level-select": [
+        {
+            "type": "image",
+            "key": "title",
+            "url": "shared/title.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "background",
+            "url": "shared/background.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "carousel1",
+            "url": "options/carousel_1.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "carousel2",
+            "url": "options/carousel_2.png",
+            "overwrite": false
+        },
+        {
+            "type": "image",
+            "key": "carousel3",
+            "url": "options/carousel_3.png",
+            "overwrite": false
+        }
+    ]
+}

@@ -12,6 +12,7 @@ import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
+import { gmi } from "../core/gmi/gmi.js";
 
 export class Select extends Screen {
     constructor() {
@@ -24,7 +25,6 @@ export class Select extends Screen {
         createTestHarnessDisplay(this.game, this.context, this.scene);
 
         const theme = this.context.config.theme[this.game.state.current];
-
         this.currentIndex = 1;
         this.choiceSprites = this.createChoiceSprites(theme.choices);
 
@@ -84,6 +84,10 @@ export class Select extends Screen {
     }
 
     startGame() {
+        const theme = this.context.config.theme[this.game.state.current];
+        const metaData = `ELE=[${theme.choices[this.currentIndex].asset}]`;
+        const screenType = this.game.state.current.split("-")[0];
+        gmi.sendStatsEvent(screenType, "select", metaData);
         this.navigation.next({ characterSelected: this.currentIndex });
     }
 
