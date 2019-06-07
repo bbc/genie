@@ -54,6 +54,9 @@ export const config = {
         order: 2,
         id: "__back",
         channel: buttonsChannel,
+        action: () => {
+            gmi.sendStatsEvent("home", "click");
+        },
     },
     howToPlayBack: {
         group: "topLeft",
@@ -63,6 +66,9 @@ export const config = {
         order: 2,
         id: "__back",
         channel: "how-to-play-gel-buttons",
+        action: () => {
+            gmi.sendStatsEvent("home", "click");
+        },
     },
     audio: {
         group: "topRight",

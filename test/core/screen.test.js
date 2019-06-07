@@ -10,18 +10,17 @@ import { createMockGame } from "../mock/phaser-game.js";
 import * as GameSound from "../../src/core/game-sound";
 import * as VisibleLayer from "../../src/core/visible-layer.js";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
+import * as signal from "../../src/core/signal-bus.js";
 
 describe("Screen", () => {
     let screen;
     let mockGmi;
     let mockScene;
     let mockContext;
-    let signalInstance;
     let mockTransientData;
 
     const createScreen = () => {
         screen = new Screen();
-        jest.spyOn(screen, "onOverlayClosed");
         mockTransientData = { transient: "data" };
         screen.game = createMockGame();
         screen.game.state.current = "loadscreen";
@@ -40,31 +39,29 @@ describe("Screen", () => {
         initScreen();
     };
 
+    beforeEach(() => {
+        jest.spyOn(signal.bus, "subscribe");
+        jest.spyOn(signal.bus, "removeChannel");
+        jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
+        jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
+        jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
+        jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
+        jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
+
+        mockScene = { addToBackground: jest.fn() };
+        mockGmi = { setStatsScreen: jest.fn() };
+        createMockGmi(mockGmi);
+
+        mockContext = {
+            popupScreens: ["pause"],
+            config: { theme: { loadscreen: { music: "test/music" } } },
+        };
+        delete window.__qaMode;
+    });
+
     afterEach(() => jest.clearAllMocks());
 
-    describe("with context", () => {
-        beforeEach(() => {
-            mockScene = { addToBackground: jest.fn() };
-            jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
-            jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
-            jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
-            jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
-            jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
-            signalInstance = { add: jest.fn() };
-            jest.spyOn(Phaser, "Signal").mockImplementation(() => signalInstance);
-            mockGmi = { setStatsScreen: jest.fn() };
-            createMockGmi(mockGmi);
-            mockContext = {
-                popupScreens: ["pause"],
-                config: {
-                    theme: {
-                        loadscreen: { music: "test/music" },
-                    },
-                },
-            };
-            delete window.__qaMode;
-        });
-
+    describe("Initialisation", () => {
         test("sets the scene", () => {
             createAndInitScreen();
             expect(screen.scene).toEqual(mockScene);
@@ -117,13 +114,11 @@ describe("Screen", () => {
 
         test("creates the overlay closed signal", () => {
             createAndInitScreen();
-            expect(screen.overlayClosed).toEqual(signalInstance);
-        });
-
-        test("adds a listener to overlayClosed signal", () => {
-            createAndInitScreen();
-            expect(signalInstance.add).toHaveBeenCalledTimes(1);
-            expect(signalInstance.add).toHaveBeenCalledWith(screen.onOverlayClosed, screen);
+            expect(signal.bus.subscribe).toHaveBeenCalledWith({
+                channel: "overlays",
+                name: "overlay-closed",
+                callback: expect.any(Function),
+            });
         });
     });
 
@@ -136,9 +131,13 @@ describe("Screen", () => {
         test("sets context by merging new value with current value", () => {
             const expectedContext = {
                 popupScreens: ["pause"],
-                config: { theme: { loadscreen: { music: "test/music" } } },
+                config: {
+                    theme: { loadscreen: { music: "test/music" }, pause: { data: "some-data" } },
+                },
             };
             createAndInitScreen();
+            screen.context = { config: { theme: { pause: { data: "some-data" } } } };
+
             expect(screen.context).toEqual(expectedContext);
         });
     });
@@ -160,34 +159,47 @@ describe("Screen", () => {
         });
     });
 
-    describe("when overlayClosed signal is triggered", () => {
+    describe("When overlay-closed signal is fired", () => {
         beforeEach(() => {
-            screen = new Screen();
-            screen.game = createMockGame();
-            screen.context = { popupScreens: ["how-to-play"] };
-            screen.onOverlayClosed();
+            mockContext.popupScreens = ["how-to-play"];
+            createAndInitScreen();
         });
 
         test("clears accessible elements from DOM", () => {
-            expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
+            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
+            expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(2);
         });
 
         test("clears accessible buttons object", () => {
-            expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
+            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
+            expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(2);
             expect(a11y.clearAccessibleButtons).toHaveBeenCalledWith(screen);
         });
 
         test("removes latest popup screen from popupScreens array", () => {
+            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
             expect(screen.context.popupScreens).toEqual([]);
         });
 
         test("appends accessible elements to DOM", () => {
+            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
             expect(a11y.appendElementsToDom).toHaveBeenCalledTimes(1);
             expect(a11y.appendElementsToDom).toHaveBeenCalledWith(screen);
         });
 
-        test("sets the stats screen to the current screen", () => {
+        test("fires a page stat with the current screen when firePageStat is true", () => {
+            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: true } });
             expect(mockGmi.setStatsScreen).toHaveBeenCalledWith(screen.game.state.current);
+        });
+
+        test("does not fire a page stat when firePageStat is false", () => {
+            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
+            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
+        });
+
+        test("removes the overlays channel", () => {
+            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
+            expect(signal.bus.removeChannel).toHaveBeenCalledTimes(1);
         });
     });
 });

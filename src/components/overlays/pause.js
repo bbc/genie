@@ -71,7 +71,7 @@ export const create = fp.curry((hideReplayButton, { game }) => {
 
             GameSound.Assets.backgroundMusic.resume();
         }
-        screen.overlayClosed.dispatch();
+        signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
         screen.scene.removeLast();
     }
 

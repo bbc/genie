@@ -6,6 +6,7 @@
 import _ from "../../lib/lodash/lodash.js";
 
 import { gmi } from "../core/gmi/gmi.js";
+import * as signal from "../core/signal-bus.js";
 import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as VisibleLayer from "../core/visible-layer.js";
@@ -43,16 +44,22 @@ export class Screen extends Phaser.State {
     }
 
     overlaySetup() {
-        this.overlayClosed = new Phaser.Signal();
-        this.overlayClosed.add(this.onOverlayClosed, this);
+        signal.bus.subscribe({
+            channel: "overlays",
+            name: "overlay-closed",
+            callback: this.onOverlayClosed.bind(this),
+        });
     }
 
-    onOverlayClosed() {
+    onOverlayClosed(data) {
         a11y.clearElementsFromDom();
         a11y.clearAccessibleButtons(this);
         this.context.popupScreens.pop();
         a11y.appendElementsToDom(this);
-        gmi.setStatsScreen(this.game.state.current);
+        if (data.firePageStat) {
+            gmi.setStatsScreen(this.game.state.current);
+        }
+        signal.bus.removeChannel("overlays");
     }
 
     get visibleLayer() {

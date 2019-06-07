@@ -95,7 +95,7 @@ export function create({ game }) {
         destroyPips();
         title.destroy();
         background.destroy();
-        screen.overlayClosed.dispatch();
+        signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: true } });
         screen.scene.removeLast();
     }
 }

@@ -30,6 +30,7 @@ describe("How To Play Overlay", () => {
         };
 
         jest.spyOn(signal.bus, "subscribe");
+        jest.spyOn(signal.bus, "publish");
         jest.spyOn(Book, "Start").mockImplementation(() => mockBook);
         jest.spyOn(Book, "PreviousPage").mockImplementation(() => mockBook);
         jest.spyOn(Book, "NextPage").mockImplementation(() => mockBook);
@@ -60,9 +61,6 @@ describe("How To Play Overlay", () => {
                         },
                     },
                 },
-            },
-            overlayClosed: {
-                dispatch: jest.fn(),
             },
         };
 
@@ -217,8 +215,12 @@ describe("How To Play Overlay", () => {
                 expect(mockTitle.destroy).toHaveBeenCalledTimes(1);
             });
 
-            test("dispatches overlayClosed signal on screen", () => {
-                expect(mockScreen.overlayClosed.dispatch).toHaveBeenCalled();
+            test("dispatches a signal to close the overlay and fire a page stat", () => {
+                expect(signal.bus.publish).toHaveBeenCalledWith({
+                    channel: "overlays",
+                    name: "overlay-closed",
+                    data: { firePageStat: true },
+                });
             });
 
             test("removes the scene", () => {

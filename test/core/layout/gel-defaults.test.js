@@ -64,6 +64,26 @@ describe("Layout - Gel Defaults", () => {
         });
     });
 
+    describe("Back Button Callback", () => {
+        beforeEach(() => {
+            gel.config.back.action();
+        });
+
+        test("fires a click stat", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("home", "click");
+        });
+    });
+
+    describe("How To Play Back Button Callback", () => {
+        beforeEach(() => {
+            gel.config.howToPlayBack.action();
+        });
+
+        test("fires a click stat", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("home", "click");
+        });
+    });
+
     describe("Audio Callback", () => {
         beforeEach(() => {
             jest.spyOn(signal.bus, "publish");

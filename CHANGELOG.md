@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | UNRELEASED | |
+| | Fixes some stats bugs. |
 | | Adds select screen stat. |
 | | Removes settings open stat. |
 | | Adds pause click stat. |

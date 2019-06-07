@@ -21,6 +21,7 @@ describe("Pause Overlay", () => {
 
     beforeEach(() => {
         jest.spyOn(signal.bus, "subscribe");
+        jest.spyOn(signal.bus, "publish");
         mockBackground = { destroy: jest.fn() };
         mockOverlayLayout = {
             addBackground: jest.fn().mockImplementation(() => mockBackground),
@@ -64,21 +65,25 @@ describe("Pause Overlay", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    describe("pause functionality", () => {
-        beforeEach(() => {
-            pauseCreate({ game: mockGame });
-        });
-
+    describe("Pause Functionality", () => {
         test("adds pause to the popup screens", () => {
+            pauseCreate({ game: mockGame });
             expect(mockScreen.context.popupScreens).toEqual(["pause"]);
         });
 
         test("pauses the game", () => {
+            pauseCreate({ game: mockGame });
             expect(mockGame.paused).toBe(true);
         });
 
-        test("pauses background music", () => {
+        test("pauses the background music if there is music to pause", () => {
+            pauseCreate({ game: mockGame });
             expect(GameSound.Assets.backgroundMusic.pause).toHaveBeenCalledTimes(1);
+        });
+
+        test("does not pause the background music if there is no music to pause", () => {
+            GameSound.Assets.backgroundMusic = undefined;
+            expect(() => pauseCreate({ game: mockGame })).not.toThrow();
         });
     });
 
@@ -191,14 +196,18 @@ describe("Pause Overlay", () => {
             expect(mockScreen.navigation.home).toHaveBeenCalledTimes(1);
         });
 
-        test("dispatches overlayClosed signal on screen when destroyed", () => {
+        test("dispatches a signal to close the overlay without firing a page stat on destroy", () => {
             pauseCreate({ game: mockGame });
             const destroy = signal.bus.subscribe.mock.calls[0][0].callback;
             destroy();
-            expect(mockScreen.overlayClosed.dispatch).toHaveBeenCalledTimes(1);
+            expect(signal.bus.publish).toHaveBeenCalledWith({
+                channel: "overlays",
+                name: "overlay-closed",
+                data: { firePageStat: false },
+            });
         });
 
-        test("sets background music pause position to zero if it has overrun the duration (See CGPROD-1167)", () => {
+        test("sets background music pause position to zero if it exists and has overrun the duration (See CGPROD-1167)", () => {
             pauseCreate({ game: mockGame });
             const destroy = signal.bus.subscribe.mock.calls[0][0].callback;
 
@@ -208,6 +217,13 @@ describe("Pause Overlay", () => {
             destroy();
 
             expect(GameSound.Assets.backgroundMusic.pausedPosition).toEqual(0);
+        });
+
+        test("does not sets background music pause position if it does not exist", () => {
+            GameSound.Assets.backgroundMusic = undefined;
+            pauseCreate({ game: mockGame });
+            const destroy = signal.bus.subscribe.mock.calls[0][0].callback;
+            expect(() => destroy()).not.toThrow();
         });
     });
 });
