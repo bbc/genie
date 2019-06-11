@@ -159,7 +159,7 @@ describe("Select Screen", () => {
             selectScreen.currentIndex = 1;
             signal.bus.subscribe.mock.calls[2][0].callback();
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("characterSelect", "select", {
-                metadata: "ELE=[character2]",
+                metadata: "ELE=[character1]",
             });
         });
 
