@@ -158,7 +158,7 @@ describe("Select Screen", () => {
         test("fires a score stat to the GMI with when you select an item ", () => {
             selectScreen.currentIndex = 1;
             signal.bus.subscribe.mock.calls[2][0].callback();
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("characterSelect", "select", "ELE=[character2]");
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("characterSelect", "select", {"metadata": "ELE=[character2]"});
         });
 
         test("hides all the accessible elements when the pause button is pressed", () => {
