@@ -60,6 +60,7 @@ export class Screen extends Phaser.State {
             gmi.setStatsScreen(this.game.state.current);
         }
         signal.bus.removeChannel("overlays");
+        this.overlaySetup();
     }
 
     get visibleLayer() {
