@@ -175,11 +175,6 @@ describe("Screen", () => {
             expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(2);
         });
 
-        test("removes latest popup screen from popupScreens array", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(screen.context.popupScreens).toEqual(["how-to-play"]);
-        });
-
         test("appends accessible elements to DOM", () => {
             signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
             expect(a11y.appendElementsToDom).toHaveBeenCalledTimes(1);
