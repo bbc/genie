@@ -2,13 +2,14 @@
 
 | Version | Description |
 |---------|-------------|
-| UNRELEASED | |
+| 1.0.11 | |
 | | Fixes some stats bugs. |
 | | Adds select screen stat. |
 | | Removes settings open stat. |
 | | Adds pause click stat. |
 | | Ensures click and page stats are firing in the correct order. |
 | | Improves stats logging for results/score screen. |
+| | Fix bug with overlays. |
 | 1.0.10 | |
 | | Upgrade to Babel 7. |
 | | Updates stats calls for ATI. |
