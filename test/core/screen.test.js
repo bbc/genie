@@ -173,18 +173,11 @@ describe("Screen", () => {
         test("clears accessible buttons object", () => {
             signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
             expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(2);
-            expect(a11y.clearAccessibleButtons).toHaveBeenCalledWith(screen);
-        });
-
-        test("removes latest popup screen from popupScreens array", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(screen.context.popupScreens).toEqual([]);
         });
 
         test("appends accessible elements to DOM", () => {
             signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
             expect(a11y.appendElementsToDom).toHaveBeenCalledTimes(1);
-            expect(a11y.appendElementsToDom).toHaveBeenCalledWith(screen);
         });
 
         test("fires a page stat with the current screen when firePageStat is true", () => {
