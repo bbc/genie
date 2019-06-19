@@ -13,8 +13,10 @@ var pixi = path.join(phaserModule, "build/custom/pixi.js");
 var p2 = path.join(phaserModule, "build/custom/p2.js");
 
 module.exports = env => {
+    var development = env && env.development;
     var webPackConfig = {
-        mode: "production",
+        mode: development ? "development" : "production",
+        devtool: development ? "cheap-module-eval-source-map" : false,
         performance: { hints: false },
         entry: ["@babel/polyfill", pixi, p2, phaser, "webfontloader"],
         output: {
@@ -43,6 +45,7 @@ module.exports = env => {
             writeToDisk: true,
             useLocalIp: true,
             host: "0.0.0.0",
+            port: 9000,
             historyApiFallback: {
                 index: "node_modules/genie/dev/index.main.html",
             },
@@ -60,9 +63,8 @@ module.exports = env => {
     webPackConfig.entry.push(path.resolve("src/main.js"));
 
     if (env && env.genieCore) {
-        var HardSourceWebpackPlugin = require("hard-source-webpack-plugin");
         var Visualizer = require("webpack-visualizer-plugin");
-        webPackConfig.plugins = [new HardSourceWebpackPlugin(), new Visualizer()];
+        webPackConfig.plugins = [new Visualizer()];
 
         webPackConfig.devServer.historyApiFallback.index = "dev/index.main.html";
         webPackConfig.devServer.historyApiFallback.rewrites = [

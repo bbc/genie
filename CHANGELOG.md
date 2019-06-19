@@ -3,6 +3,8 @@
 | Version | Description |
 |---------|-------------|
 | 1.0.12 | |
+| | Prune scripts list |
+| | Update webpack config so we can provide sourcemaps when needed |
 | | Adds stats to the mock GMI for use in the starterpack. |
 | 1.0.11 | |
 | | Fixes some stats bugs. |
