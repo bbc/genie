@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 1.0.12 | |
+| | Adds stats to the mock GMI for use in the starterpack. |
 | 1.0.11 | |
 | | Fixes some stats bugs. |
 | | Adds select screen stat. |

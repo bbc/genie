@@ -111,7 +111,7 @@ var GMI = function(options, embedVars, gameDir) {
     GMI.prototype.setGameData = function(key, value) {
         if (areCookiesAllowed()) {
             gameSettings[key] = value;
-            // In Safari Private browsing mode on OSX and iOS localStorage in read only, and will throw
+            // In Safari Private browsing mode on OSX and iOS localStorage is read only, and will throw
             // QuotaExceededError if an attempt to call setItem is made
             try {
                 window.localStorage.setItem(GMI_GAME_STORAGE_KEY, JSON.stringify(gameSettings));
@@ -137,6 +137,7 @@ var GMI = function(options, embedVars, gameDir) {
     GMI.prototype.showSettings = function(onSettingsChanged, onSettingsClosed) {
         var settingsDiv = document.getElementsByClassName("settings");
         if (!(settingsDiv && settingsDiv[0])) {
+            this.sendStatsEvent("settings", "open", {});
             var settings = document.createElement('div');
             settings.className = "settings"
             settings.innerHTML += "The settings screen will appear here when the game is hosted on the BBC servers <br />";
