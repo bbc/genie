@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Add Genie version to build output |
 | 1.0.12 | |
 | | Prune scripts list |
 | | Update webpack config so we can provide sourcemaps when needed |

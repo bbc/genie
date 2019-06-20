@@ -11,6 +11,7 @@ var phaserModule = path.resolve("node_modules/phaser-ce/");
 var phaser = path.join(phaserModule, "build/custom/phaser-split.js");
 var pixi = path.join(phaserModule, "build/custom/pixi.js");
 var p2 = path.join(phaserModule, "build/custom/p2.js");
+const webpack = require("webpack");
 
 module.exports = env => {
     var development = env && env.development;
@@ -50,6 +51,7 @@ module.exports = env => {
                 index: "node_modules/genie/dev/index.main.html",
             },
         },
+        plugins: [],
     };
 
     try {
@@ -62,9 +64,12 @@ module.exports = env => {
 
     webPackConfig.entry.push(path.resolve("src/main.js"));
 
+    const genieVersion = require("../package.json").version;
+    webPackConfig.plugins.push(new webpack.BannerPlugin(`\nBBC GAMES GENIE: ${genieVersion}\n`));
+
     if (env && env.genieCore) {
-        var Visualizer = require("webpack-visualizer-plugin");
-        webPackConfig.plugins = [new Visualizer()];
+        const Visualizer = require("webpack-visualizer-plugin");
+        webPackConfig.plugins.push(new Visualizer());
 
         webPackConfig.devServer.historyApiFallback.index = "dev/index.main.html";
         webPackConfig.devServer.historyApiFallback.rewrites = [
