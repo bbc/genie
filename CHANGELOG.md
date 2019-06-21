@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Embedvars configPath is now just the path, not path + filename |
 | | Add Genie version to build output |
 | 1.0.12 | |
 | | Prune scripts list |

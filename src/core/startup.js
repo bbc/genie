@@ -90,8 +90,7 @@ class Startup extends Phaser.State {
         this.game.load.baseURL = gmi.gameDir;
 
         // All asset paths are relative to the location of the config.json:
-        const theme = gmi.embedVars.configPath;
-        this.game.load.path = theme.split(/([^/]+$)/, 2)[0]; //config dir
+        this.game.load.path = gmi.embedVars.configPath; //config dir
         this.game.load.json(CONFIG_KEY, "config.json");
 
         signal.bus.subscribe({
