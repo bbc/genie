@@ -2,11 +2,13 @@
 
 | Version | Description |
 |---------|-------------|
+| | Use npm bowser dependency now 2.4 contains our PR to enable ES6 direct loading. |
+| | Add Genie version to build output. |
 | | Embedvars configPath is now just the path, not path + filename |
 | | Add Genie version to build output |
 | 1.0.12 | |
 | | Prune scripts list |
-| | Update webpack config so we can provide sourcemaps when needed |
+| | Update webpack config so we can provide sourcemaps when needed. |
 | | Adds stats to the mock GMI for use in the starterpack. |
 | 1.0.11 | |
 | | Fixes some stats bugs. |
