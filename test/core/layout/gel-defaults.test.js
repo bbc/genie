@@ -70,7 +70,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         test("fires a click stat", () => {
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("home", "click");
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("back", "click");
         });
     });
 
@@ -80,7 +80,7 @@ describe("Layout - Gel Defaults", () => {
         });
 
         test("fires a click stat", () => {
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("home", "click");
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("back", "click");
         });
     });
 
