@@ -201,7 +201,7 @@ function configureGmi(gameDir, themesDir) {
     var embedVars = {
         statsCounterName: "testCounterName",
         statsAppName: "TestAppName",
-        configPath: themesDir + theme + "/config.json",
+        configPath: themesDir + theme + "/",
     };
 
     window.getGMI = function(options) {
