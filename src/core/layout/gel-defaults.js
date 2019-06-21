@@ -67,7 +67,7 @@ export const config = {
         id: "__back",
         channel: "how-to-play-gel-buttons",
         action: () => {
-            gmi.sendStatsEvent("home", "click");
+            gmi.sendStatsEvent("back", "click");
         },
     },
     audio: {
