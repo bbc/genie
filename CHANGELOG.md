@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Conditionally load achievement json. |
 | | Use npm bowser dependency now 2.4 contains our PR to enable ES6 direct loading. |
 | | Add Genie version to build output. |
 | | Embedvars configPath is now just the path, not path + filename |
