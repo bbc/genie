@@ -8,8 +8,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-//TODO Move this import to package.json dependency once our PR is merged into Bowser.
-import Bowser from "../../lib/bowser/bowser.js";
+import Bowser from "../../node_modules/bowser/src/bowser.js";
 
 export const getBrowser = () => {
     const browserInfo = Bowser.getParser(window.navigator.userAgent);

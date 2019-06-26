@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import Bowser from "../../lib/bowser/bowser.js";
+import Bowser from "../../node_modules/bowser/src/bowser.js";
 import { getBrowser } from "../../src/core/browser.js";
 
 describe("Browser", () => {
