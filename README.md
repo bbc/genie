@@ -1,4 +1,4 @@
-# Children's BBC - Genie
+# BBC Games - Genie
 
 A modular framework to simplify the construction of children's games.
 
