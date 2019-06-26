@@ -24,7 +24,7 @@ import _ from "../../lib/lodash/lodash.js";
  * @param {updateCallback} updateCallback - A callback to return the load progress and keyLookups.
  * @returns {Promise} A Promise which resolves on load complete
  */
-export function loadAssets(game, gamePacks, loadscreenPack, updateCallback) {
+export function loadAssets(game, gamePacks, loadscreenPack, updateCallback, theme) {
     let gameAssetPack;
     let missingScreenPack;
     let keyLookups;
@@ -55,6 +55,9 @@ export function loadAssets(game, gamePacks, loadscreenPack, updateCallback) {
 
         game.load.onLoadComplete.add(startNextLoadInQueue);
         game.load.pack(loadscreenPack.key, loadscreenPack.url);
+        if (theme.game.achievements === true) {
+            game.load.json("achievementsData", "achievements/config.json");
+        }
 
         function startNextLoadInQueue() {
             const loadFunction = loadQueue.shift();

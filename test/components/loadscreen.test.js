@@ -15,6 +15,7 @@ import * as GameSound from "../../src/core/game-sound";
 describe("Load Screen", () => {
     let loadScreen;
     let mockGame;
+    let mockContext;
     let mockGmi;
     let assetLoaderCallbackSpy;
 
@@ -34,10 +35,15 @@ describe("Load Screen", () => {
             scale: { getParentBounds: jest.fn(), setGameSize: jest.fn() },
         };
 
+        mockContext = {
+            config: { theme: { home: {}, game: {} } },
+        };
+
         loadScreen = new Loadscreen();
         loadScreen.scene = { addToBackground: jest.fn() };
         loadScreen.navigation = { next: jest.fn() };
         loadScreen.game = mockGame;
+        loadScreen.context = mockContext;
 
         Scaler.init(600, mockGame);
     });

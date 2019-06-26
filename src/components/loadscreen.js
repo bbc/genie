@@ -37,11 +37,20 @@ export class Loadscreen extends Screen {
     }
 
     preload() {
-        loadAssets(this.game, gamePacksToLoad, loadscreenPack, this.updateLoadProgress.bind(this)).then(keyLookups => {
+        loadAssets(
+            this.game,
+            gamePacksToLoad,
+            loadscreenPack,
+            this.updateLoadProgress.bind(this),
+            this.context.config.theme,
+        ).then(keyLookups => {
             if (window.__qaMode) {
                 dumpToConsole(keyLookups);
             }
             GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
+            if (this.context.config.theme.game.achievements === true) {
+                gmi.achievements.init(this.game.cache.getJSON("achievementsData"));
+            }
             gmi.sendStatsEvent("gameloaded", "true");
             gmi.gameLoaded();
             this.navigation.next();

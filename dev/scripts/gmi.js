@@ -190,6 +190,10 @@ var GMI = function(options, embedVars, gameDir) {
     GMI.prototype.debug = function(message) {
         console.log(message);
     };
+    GMI.prototype.achievements = {};
+    GMI.prototype.achievements.init = function(init) {
+        console.log("Init achievements.");
+    };
     GMI.prototype.gameLoaded = function() {};
     loadLocalData();
     GMI.prototype = Object.create(GMI.prototype);

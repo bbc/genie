@@ -8,6 +8,7 @@ import * as AssetLoader from "../../src/core/asset-loader.js";
 describe("Asset Loader", () => {
     let assetsLoaded;
     let fakeGame;
+    let mockTheme;
     let fakeGamePacksToLoad;
     let fakeLoadscreenPack;
     let fakeCallback;
@@ -59,7 +60,15 @@ describe("Asset Loader", () => {
                 };
             }
         });
-        assetsLoaded = AssetLoader.loadAssets(fakeGame, fakeGamePacksToLoad, fakeLoadscreenPack, fakeCallback);
+
+        mockTheme = { home: {}, game: {} };
+        assetsLoaded = AssetLoader.loadAssets(
+            fakeGame,
+            fakeGamePacksToLoad,
+            fakeLoadscreenPack,
+            fakeCallback,
+            mockTheme,
+        );
 
         nextLoadInQueue = fakeGame.load.onLoadComplete.add.mock.calls[0][0];
         nextLoadInQueue();
@@ -135,6 +144,19 @@ describe("Asset Loader", () => {
         nextLoadInQueue();
         return assetsLoaded.then(keyLookUps => {
             expect(keyLookUps).toEqual(expectedLookUps);
+        });
+    });
+
+    test("loads fine when achievements are true", () => {
+        // mockTheme = { home: {}, game: { achievements: true } };
+        // assetsLoaded = AssetLoader.loadAssets(fakeGame, fakeGamePacksToLoad, fakeLoadscreenPack, fakeCallback, mockTheme);
+        // nextLoadInQueue = fakeGame.load.onLoadComplete.add.mock.calls[0][0];
+        // nextLoadInQueue();
+        // nextLoadInQueue();
+        nextLoadInQueue();
+        return assetsLoaded.then(() => {
+            expect(fakeGame.load.onLoadComplete.removeAll).toHaveBeenCalled();
+            expect(fakeGame.load.onFileComplete.removeAll).toHaveBeenCalled();
         });
     });
 

@@ -48,7 +48,7 @@
         "start": "ws --config-file dev/scripts/web-config.js",
         "start:pack": "webpack-dev-server --config build-scripts/webpack.config.js --env.genieCore",
         "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
-        "eslint": "eslint . --ignore-pattern lib/ --ignore-path .gitignore",
+        "eslint": "eslint . --ignore-pattern lib/ --ignore-path .gitignore --fix",
         "jest": "jest --coverage",
         "jest:no-coverage": "jest",
         "test": "npm run jest && npm run eslint",

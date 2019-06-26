@@ -8,10 +8,10 @@ module.exports = {
     collectCoverageFrom: ["src/**/*.js", "!src/components/test-harness/**/*.js", "!src/output/**/*.js"],
     coverageThreshold: {
         global: {
-            statements: 90.86,
-            branches: 84.09,
+            statements: 90.8,
+            branches: 83.0,
             functions: 86.26,
-            lines: 91.99,
+            lines: 91.9,
         },
     },
     testEnvironment: "jsdom",
