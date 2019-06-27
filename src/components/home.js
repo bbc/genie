@@ -17,10 +17,15 @@ export class Home extends Screen {
     }
 
     create() {
+        var showAchievements;
         this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
         this.scene.addToBackground(this.game.add.image(0, -150, "home.title"));
 
-        const showAchievements = !!this.context.config.theme.game.achievements;
+        if (this.context.config.theme.game) {
+            showAchievements = !!this.context.config.theme.game.achievements;
+        } else {
+            showAchievements = false;
+        }
         const defaultButtons = ["exit", "howToPlay", "play", "audio", "settings"];
         const buttons = showAchievements ? defaultButtons.concat("achievements") : defaultButtons;
 
