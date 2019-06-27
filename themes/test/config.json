@@ -71,7 +71,7 @@
         },
         "game": {
             "music": "loadscreen.backgroundMusicTwo",
-            "achievements": true
+            "achievements": false
         },
         "results": {
             "resultText": {
