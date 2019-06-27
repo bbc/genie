@@ -55,7 +55,7 @@ export function loadAssets(game, gamePacks, loadscreenPack, updateCallback, them
 
         game.load.onLoadComplete.add(startNextLoadInQueue);
         game.load.pack(loadscreenPack.key, loadscreenPack.url);
-        if (theme.game.achievements === true) {
+        if (theme.game && theme.game.achievements === true) {
             game.load.json("achievementsData", "achievements/config.json");
         }
 
