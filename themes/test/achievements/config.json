@@ -1,0 +1,67 @@
+[
+    {
+        "key": "achievement_1",
+        "name": "Test Achievement 1",
+        "description": "Test achievement 1",
+        "points": 100
+    },
+    {
+        "key": "achievement_2",
+        "name": "Test Achievement 2",
+        "description": "Test achievement 2",
+        "points": 100
+    },
+    {
+        "key": "achievement_3",
+        "name": "Test Achievement 3",
+        "description": "Test achievement 3",
+        "points": 100
+    },
+    {
+        "key": "achievement_4",
+        "name": "Test Achievement 4",
+        "description": "Test achievement 4",
+        "points": 100
+    },
+    {
+        "key": "achievement_5",
+        "name": "Test Achievement 5",
+        "description": "Test achievement 5",
+        "points": 100
+    },
+    {
+        "key": "achievement_6",
+        "name": "Test Achievement 6",
+        "description": "Test achievement 6 has a maxProgress of 5",
+        "points": 100,
+        "maxProgress": 5
+    },
+    {
+        "key": "achievement_7",
+        "name": "Test Achievement 7",
+        "description": "Test achievement 7 has a maxProgress of 25",
+        "points": 100,
+        "maxProgress": 25
+    },
+    {
+        "key": "achievement_8",
+        "name": "Test Achievement 8",
+        "description": "Test achievement 8 has a maxProgress of 50",
+        "points": 100,
+        "maxProgress": 50
+    },
+    {
+        "key": "achievement_9",
+        "name": "Test Achievement 9",
+        "description": "Test achievement 9 has a maxProgress of 75",
+        "points": 100,
+        "maxProgress": 75
+    },
+    {
+        "key": "achievement_10",
+        "name": "Test Achievement 10",
+        "description": "Test achievement 10 has a maxProgress of 100",
+        "points": 100,
+        "maxProgress": 100
+    }
+]
