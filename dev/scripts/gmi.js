@@ -61,8 +61,10 @@ var GMI = function(options, embedVars, gameDir) {
         audio: true,
         subtitles: false,
         motion: true,
+        achievements: [],
     };
     var gameSettings = {};
+    var staticAchievementList = [];
     function areCookiesAllowed() {
         return true;
     }
@@ -191,8 +193,91 @@ var GMI = function(options, embedVars, gameDir) {
         console.log(message);
     };
     GMI.prototype.achievements = {};
+
+    const isAchieved = (config, stored) => {
+        const hasProgress = Boolean(config && config.maxProgress);
+        const fullProgress = Boolean(stored && config && stored.progress >= config.maxProgress);
+    
+        return (stored && !hasProgress) || (hasProgress && fullProgress);
+    };
+
+    const save = (stored, update) => {
+        if (!stored) {
+            globalSettings.achievements.push(update);
+        } else {
+            Object.assign(stored, update);
+        }
+        GMI.prototype.setGameData("achievements", globalSettings.achievements);
+    };
+
+    GMI.prototype.achievements.show = function() {
+        var achievementsDiv = document.getElementsByClassName("settings");
+        if (!(achievementsDiv && achievementsDiv[0])) {
+            GMI.prototype.sendStatsEvent("achievements", "open", {});
+            var achievementsDiv = document.createElement('div');
+            achievementsDiv.className = "settings"
+            achievementsDiv.innerHTML += "The achievements screen will appear here when the game is hosted on the BBC servers <br />";
+
+            var achievements = GMI.prototype.achievements.get();
+
+            for(var i = 0; i < achievements.length; i++) {
+                var achievementBox = document.createElement("details");
+                var achievementName = document.createElement("summary");
+                var achievementDesc = document.createElement("p");
+                var achievementStatus = document.createElement("p");
+
+                achievementName.innerHTML = achievements[i].name;
+                achievementDesc.innerHTML = achievements[i].description;
+                achievementStatus.innerHTML = "Achieved: " + (achievements[i].achieved ? "&#9989;" : "&#10062;");
+
+                achievementBox.appendChild(achievementName);
+                achievementBox.appendChild(achievementStatus);
+                achievementBox.appendChild(achievementDesc);
+                achievementsDiv.appendChild(achievementBox);
+            }
+
+            var achievementsCloseButton = document.createElement("input");
+            achievementsCloseButton.type = "button";
+            achievementsCloseButton.value = "Click here to close.";
+
+            achievementsDiv.appendChild(achievementsCloseButton);
+
+            achievementsCloseButton.addEventListener("click", function() {
+               document.body.removeChild(achievementsDiv);
+            });
+            document.body.appendChild(achievementsDiv);
+        }
+        return true;
+    }
     GMI.prototype.achievements.init = function(init) {
-        console.log("Init achievements.");
+        console.log("Init achievements: ", init);
+        staticAchievementList = init;
+    };
+    GMI.prototype.achievements.get = function() {
+        if(globalSettings.achievements === undefined) {
+            globalSettings.achievements = []
+
+            saveGlobalSettings();
+        }
+        return staticAchievementList.map(config => {
+            const stored = globalSettings.achievements.find(unlocked => unlocked.key === config.key);
+            return Object.assign(config, stored, { achieved: isAchieved(config, stored) });
+        });
+    };
+    GMI.prototype.achievements.set = function(update) {
+        const config = staticAchievementList.find(achievement => update.key === achievement.key);
+        const stored = globalSettings.achievements.find(unlocked => unlocked.key === update.key);
+        const alreadyAchieved = isAchieved(config, stored);
+        const achievedOnUpdate = isAchieved(config, update);
+
+        if (!config || alreadyAchieved) {
+            return false;
+        }
+
+        save(stored, update);
+
+        console.log("NOTIFY: ", achievedOnUpdate, update.key);
+        return achievedOnUpdate;
     };
     GMI.prototype.gameLoaded = function() {};
     loadLocalData();
