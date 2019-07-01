@@ -48,10 +48,6 @@ const navigationConfig = goToScreen => {
     const levelSelect = data => goToScreen("level-select", data);
     const game = data => goToScreen("game", data);
     const results = data => goToScreen("results", data);
-    const achievements = data => { //eslint-disable-line
-        //TODO re-enable line below / remove eslint disable on line above once achievements screen is available
-        //goToScreen("achievements", data);
-    };
 
     return {
         loadscreen: {
@@ -64,7 +60,6 @@ const navigationConfig = goToScreen => {
             state: Home,
             routes: {
                 next: characterSelect,
-                achievements: achievements,
             },
         },
         "character-select": {
@@ -73,7 +68,6 @@ const navigationConfig = goToScreen => {
                 next: levelSelect,
                 home: home,
                 restart: home,
-                achievements: achievements,
             },
         },
         "level-select": {
@@ -82,7 +76,6 @@ const navigationConfig = goToScreen => {
                 next: game,
                 home: home,
                 restart: home,
-                achievements: achievements,
             },
         },
         game: {
@@ -100,7 +93,6 @@ const navigationConfig = goToScreen => {
                 game: game,
                 restart: game,
                 home: home,
-                achievements: achievements,
             },
         },
     };
