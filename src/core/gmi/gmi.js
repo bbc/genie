@@ -55,5 +55,4 @@ export const setGmi = (customSettings, windowObj) => {
     }
 
     gmi = windowObj.getGMI({ settingsConfig });
-    windowObj.FREEGMI = gmi;
 };
