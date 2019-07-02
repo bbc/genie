@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 1.0.13 | |
+| | Update version of Phaser-CE to 2.13.2. |
 | | Add achievements show/get/set/init functionality to local GMI. |
 | | Add dummy achievement files. |
 | | Conditionally load achievement json. |
