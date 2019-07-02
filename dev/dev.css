@@ -58,3 +58,10 @@ body {
 }
 
 .settings { position:absolute; top:25%; left:0; right:0; margin:auto; width:40%; padding:5%; z-index:1; text-align:center; background-color:#fff; color:#000; font-size:100%; }
+.achievements { position:absolute; top:25%; left:0; right:0; margin:auto; width:40%; height: 40%; padding:5%; z-index:1; text-align:center; background-color:#fff; color:#000; font-size:100%; }
+.achievements .achievements-container { height: 70%; overflow: auto; text-align: justify; }
+
+.achievements-container details:nth-child(odd) summary { background-color: aliceblue; }
+.achievements-container details:nth-child(even) summary { background-color: papayawhip; }
+
+details[open] > summary { font-weight: bold; }
