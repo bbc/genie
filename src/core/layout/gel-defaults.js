@@ -225,7 +225,11 @@ export const config = {
         channel: buttonsChannel,
         action: ({ game }) => {
             const screen = game.state.states[game.state.current];
-            screen.navigation.achievements();
+            if (screen.navigation.achievements) {
+                screen.navigation.achievements();
+            } else {
+                gmi.achievements.show();
+            }
             gmi.sendStatsEvent("achievements", "click");
         },
     },
