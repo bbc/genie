@@ -194,14 +194,14 @@ var GMI = function(options, embedVars, gameDir) {
     };
     GMI.prototype.achievements = {};
 
-    var isAchieved = (config, stored) => {
+    var isAchieved = function(config, stored) {
         var hasProgress = Boolean(config && config.maxProgress);
         var fullProgress = Boolean(stored && config && stored.progress >= config.maxProgress);
     
         return (stored && !hasProgress) || (hasProgress && fullProgress);
     };
 
-    var save = (stored, update) => {
+    var save = function(stored, update) {
         if (!stored) {
             globalSettings.achievements.push(update);
             console.log("CREATE LOCAL DATA:", update);
@@ -267,16 +267,16 @@ var GMI = function(options, embedVars, gameDir) {
 
             saveGlobalSettings();
         }
-        var output = staticAchievementList.map(config => {
-            var stored = globalSettings.achievements.find(unlocked => unlocked.key === config.key);
+        var output = staticAchievementList.map(function(config) {
+            var stored = globalSettings.achievements.find(function(unlocked) { return unlocked.key === config.key });
             return Object.assign(config, stored, { achieved: isAchieved(config, stored) });
         });
         console.log(output);
         return output;
     };
     GMI.prototype.achievements.set = function(update) {
-        var config = staticAchievementList.find(achievement => update.key === achievement.key);
-        var stored = globalSettings.achievements.find(unlocked => unlocked.key === update.key);
+        var config = staticAchievementList.find(function(achievement) { return update.key === achievement.key });
+        var stored = globalSettings.achievements.find(function(unlocked) { return unlocked.key === update.key });
         var alreadyAchieved = isAchieved(config, stored);
         var achievedOnUpdate = isAchieved(config, update);
 
