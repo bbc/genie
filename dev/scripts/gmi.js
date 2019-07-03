@@ -275,6 +275,11 @@ var GMI = function(options, embedVars, gameDir) {
         return output;
     };
     GMI.prototype.achievements.set = function(update) {
+        if(globalSettings.achievements === undefined) {
+            globalSettings.achievements = []
+
+            saveGlobalSettings();
+        }
         var config = staticAchievementList.find(function(achievement) { return update.key === achievement.key });
         var stored = globalSettings.achievements.find(function(unlocked) { return unlocked.key === update.key });
         var alreadyAchieved = isAchieved(config, stored);
