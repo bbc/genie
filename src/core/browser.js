@@ -8,7 +8,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import Bowser from "../../node_modules/bowser/src/bowser.js";
+import Bowser from "/node_modules/bowser/src/bowser.js";
 
 export const getBrowser = () => {
     const browserInfo = Bowser.getParser(window.navigator.userAgent);
