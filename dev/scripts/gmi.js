@@ -209,13 +209,13 @@ var GMI = function(options, embedVars, gameDir) {
             Object.assign(stored, update);
             console.log("UPDATE LOCAL DATA: ", stored, " -- TO: ", update);
         }
-        GMI.prototype.setGameData("achievements", globalSettings.achievements);
+        this.setGameData("achievements", globalSettings.achievements);
     };
 
     GMI.prototype.achievements.show = function() {
         var achievementsDiv = document.getElementsByClassName("achievements");
         if (!(achievementsDiv && achievementsDiv[0])) {
-            GMI.prototype.sendStatsEvent("achievements", "open", {});
+            this.sendStatsEvent("achievements", "open", {});
             var achievementsDiv = document.createElement('div');
             achievementsDiv.className = "achievements"
             achievementsDiv.innerHTML += "The achievements screen will appear here when the game is hosted on the BBC servers <br />";
@@ -257,9 +257,14 @@ var GMI = function(options, embedVars, gameDir) {
         }
         return false;
     }
-    GMI.prototype.achievements.init = function(init) {
-        console.log("Init achievements: ", init);
+    GMI.prototype.achievements.init = function(init, callback) {
+        if(qaMode) {
+            console.log("Init achievements: ", init, " callback: ", callback);
+        }
         staticAchievementList = init;
+        if(callback !== undefined) {
+            callback();
+        }
     };
     GMI.prototype.achievements.get = function() {
         if(globalSettings.achievements === undefined) {
@@ -275,6 +280,11 @@ var GMI = function(options, embedVars, gameDir) {
         return output;
     };
     GMI.prototype.achievements.set = function(update) {
+        if(globalSettings.achievements === undefined) {
+            globalSettings.achievements = []
+
+            saveGlobalSettings();
+        }
         var config = staticAchievementList.find(function(achievement) { return update.key === achievement.key });
         var stored = globalSettings.achievements.find(function(unlocked) { return unlocked.key === update.key });
         var alreadyAchieved = isAchieved(config, stored);
