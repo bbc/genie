@@ -48,8 +48,11 @@ export class Loadscreen extends Screen {
                 dumpToConsole(keyLookups);
             }
             GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
+
             if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
-                gmi.achievements.init(this.game.cache.getJSON("achievementsData"));
+                const achievementSound = this.game.add.audio("loadscreen.buttonClick");
+                const playAchievementSound = achievementSound.play.bind(achievementSound);
+                gmi.achievements.init(this.game.cache.getJSON("achievementsData"), playAchievementSound);
             }
             gmi.sendStatsEvent("gameloaded", "true");
             gmi.gameLoaded();

@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Initialise achievement notification sound. |
 | | Force babel config to be loaded from Genie core. |
 | | Fix relative path to Bowser with babel module-resolver plugin. |
 | 1.0.13 | |

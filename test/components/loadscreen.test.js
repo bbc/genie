@@ -23,16 +23,26 @@ describe("Load Screen", () => {
         global.window.__qaMode = undefined;
         assetLoaderCallbackSpy = jest.fn();
         jest.spyOn(AssetLoader, "loadAssets").mockImplementation(() => ({ then: assetLoaderCallbackSpy }));
-        jest.spyOn(GameSound, "setButtonClickSound");
+        jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {
+            play: jest.fn();
+        });
 
-        mockGmi = { gameLoaded: jest.fn(), sendStatsEvent: jest.fn() };
+        mockGmi = { gameLoaded: jest.fn(), sendStatsEvent: jest.fn(), achievements: { init: jest.fn() } };
         createMockGmi(mockGmi);
 
+        const playSpy = jest.fn();
+
         mockGame = {
-            add: { image: jest.fn().mockImplementation((x, y, imageName) => imageName), audio: jest.fn() },
+            add: {
+                image: jest.fn().mockImplementation((x, y, imageName) => imageName),
+                audio: jest.fn().mockReturnValue({ play: playSpy }),
+            },
             state: { current: "currentState" },
             sound: { mute: false },
             scale: { getParentBounds: jest.fn(), setGameSize: jest.fn() },
+            cache: {
+                getJSON: jest.fn(),
+            },
         };
 
         mockContext = {
@@ -191,6 +201,25 @@ describe("Load Screen", () => {
 
             assetLoaderCallbackSpy.mock.calls[0][0](expectedKeyLookups);
             expect(console.log.mock.calls[0][0]).toEqual(expectedOutput); // eslint-disable-line no-console
+        });
+    });
+
+    describe("achievements", () => {
+        test("calls achievements init when achievements config flag is set to true", () => {
+            mockContext.config.theme.game.achievements = true;
+            loadScreen.context = mockContext;
+            loadScreen.preload();
+            assetLoaderCallbackSpy.mock.calls[0][0]();
+
+            expect(mockGmi.achievements.init).toHaveBeenCalled();
+        });
+
+        test("does not call achievements init when achievements config flag is falsy", () => {
+            loadScreen.context = mockContext;
+            loadScreen.preload();
+            assetLoaderCallbackSpy.mock.calls[0][0]();
+
+            expect(mockGmi.achievements.init).not.toHaveBeenCalled();
         });
     });
 });
