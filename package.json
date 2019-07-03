@@ -15,6 +15,7 @@
         "@babel/preset-env": "^7.4.5",
         "babel-jest": "^24.8.0",
         "babel-loader": "^8.0.6",
+        "babel-plugin-module-resolver": "^3.2.0",
         "bowser": "2.4.0",
         "expose-loader": "^0.7.5",
         "phaser-ce": "2.13.2",
@@ -39,7 +40,7 @@
         "jsdom": "^13.2.0",
         "local-web-server": "^2.6.0",
         "prettier": "1.17.0",
-        "webpack": "^4.16.5",
+        "webpack": "^4.35.2",
         "webpack-cli": "^3.3.2",
         "webpack-dev-server": "^3.4.1",
         "webpack-visualizer-plugin": "^0.1.11"

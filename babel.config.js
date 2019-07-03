@@ -19,7 +19,18 @@ module.exports = function(api) {
         ],
     ];
 
-    const plugins = [];
+    // Fixes absolute paths so npm modules can be used in dev and webpack e.g: import x from "/node_modules/x/x.js"
+    const plugins = [
+        [
+            "module-resolver",
+            {
+                root: ["./"],
+                alias: {
+                    "/node_modules": ([, path]) => `./node_modules${path}`,
+                },
+            },
+        ],
+    ];
 
     return {
         presets,
