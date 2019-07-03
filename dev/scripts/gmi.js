@@ -258,7 +258,9 @@ var GMI = function(options, embedVars, gameDir) {
         return false;
     }
     GMI.prototype.achievements.init = function(init) {
-        console.log("Init achievements: ", init);
+        if(qaMode) {
+            console.log("Init achievements: ", init);
+        }
         staticAchievementList = init;
     };
     GMI.prototype.achievements.get = function() {
