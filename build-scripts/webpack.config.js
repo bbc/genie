@@ -44,6 +44,7 @@ module.exports = env => {
                         path.resolve("lib"),
                         path.resolve("node_modules/genie/src"),
                         path.resolve("node_modules/genie/lib"),
+                        path.resolve("node_modules/bowser/src"),
                     ],
                 },
                 { test: /pixi\.js/, use: ["expose-loader?PIXI"] },
