@@ -12,6 +12,18 @@ module.exports = {
             functions: 86.26,
             lines: 91.85,
         },
+        "src/core/layout/gel-button.js": {
+            statements: 0,
+            branches: 0,
+            lines: 0,
+            functions: 0,
+        },
+        "src/core/layout/debug-button.js": {
+            statements: 0,
+            branches: 0,
+            lines: 0,
+            functions: 0,
+        },
     },
     testEnvironment: "jsdom",
     modulePathIgnorePatterns: ["/.node_modules.+/"],

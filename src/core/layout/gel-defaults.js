@@ -231,6 +231,8 @@ export const config = {
                 gmi.achievements.show();
             }
             gmi.sendStatsEvent("achievements", "click");
+
+            screen.scene.getLayouts()[0].buttons.achievements.setIndicator();
         },
     },
     restart: {

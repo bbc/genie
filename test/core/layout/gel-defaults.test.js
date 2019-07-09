@@ -15,12 +15,19 @@ describe("Layout - Gel Defaults", () => {
     let mockCurrentScreen;
     let mockGame;
     let mockGmi;
+    let clearIndicatorSpy;
 
     beforeEach(() => {
+        clearIndicatorSpy = jest.fn();
         mockCurrentScreen = {
             navigation: {
                 home: jest.fn(),
                 achievements: jest.fn(),
+            },
+            scene: {
+                getLayouts: jest
+                    .fn()
+                    .mockReturnValue([{ buttons: { achievements: { setIndicator: clearIndicatorSpy } } }]),
             },
         };
         mockGame = {
@@ -31,7 +38,12 @@ describe("Layout - Gel Defaults", () => {
             },
         };
 
-        mockGmi = { exit: jest.fn(), setAudio: jest.fn(), sendStatsEvent: jest.fn() };
+        mockGmi = {
+            exit: jest.fn(),
+            setAudio: jest.fn(),
+            sendStatsEvent: jest.fn(),
+            achievements: { show: jest.fn() },
+        };
         createMockGmi(mockGmi);
 
         jest.spyOn(pause, "create").mockImplementation(() => {});
@@ -209,6 +221,16 @@ describe("Layout - Gel Defaults", () => {
 
         test("sends a stat to the GMI", () => {
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("achievements", "click");
+        });
+
+        test("clears indicator", () => {
+            expect(clearIndicatorSpy).toHaveBeenCalled();
+        });
+
+        test("calls gmi.achievements.show if screen.navigation.achievements is blank", () => {
+            delete mockCurrentScreen.navigation.achievements;
+            gel.config.achievements.action({ game: mockGame });
+            expect(mockGmi.achievements.show).toHaveBeenCalled();
         });
     });
 

@@ -17,19 +17,13 @@ export class Home extends Screen {
     }
 
     create() {
-        var showAchievements;
+        const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
         this.scene.addToBackground(this.game.add.image(0, -150, "home.title"));
 
-        if (this.context.config.theme.game) {
-            showAchievements = !!this.context.config.theme.game.achievements;
-        } else {
-            showAchievements = false;
-        }
-        const defaultButtons = ["exit", "howToPlay", "play", "audio", "settings"];
-        const buttons = showAchievements ? defaultButtons.concat("achievements") : defaultButtons;
+        const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
 
-        this.scene.addLayout(buttons);
+        this.scene.addLayout(buttons.concat(achievements));
 
         createTestHarnessDisplay(this.game, this.context, this.scene);
 

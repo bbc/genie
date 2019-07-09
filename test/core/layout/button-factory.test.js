@@ -8,6 +8,9 @@ import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import * as GelButton from "../../../src/core/layout/gel-button";
 import * as accessibilify from "../../../src/core/accessibility/accessibilify";
 import * as signal from "../../../src/core/signal-bus.js";
+import * as settingsModule from "../../../src/core/settings.js";
+
+jest.mock("../../../src/core/settings.js");
 
 describe("Layout - Button Factory", () => {
     let buttonFactory;
@@ -86,6 +89,29 @@ describe("Layout - Button Factory", () => {
 
             expect(btn.hitArea).toBe(null);
             expect(btn.inputEnabled).toBe(false);
+        });
+    });
+
+    describe("audio button", () => {
+        test("sets audio button config key to audio-on if gmi audio setting is true", () => {
+            const mockSettings = { getAllSettings: () => ({ audio: true }) };
+            Object.defineProperty(settingsModule, "settings", {
+                get: jest.fn(() => mockSettings),
+            });
+
+            buttonFactory.createButton(false, { id: "__audio" });
+            expect(GelButton.GelButton.mock.calls[0][4].key).toBe("audio-on");
+        });
+
+        test("sets audio button config key to audio-off if gmi audio setting is true", () => {
+            const mockSettings = { getAllSettings: () => ({ audio: false }) };
+            Object.defineProperty(settingsModule, "settings", {
+                get: jest.fn(() => mockSettings),
+            });
+
+            buttonFactory.createButton(false, { id: "__audio" });
+
+            expect(GelButton.GelButton.mock.calls[0][4].key).toBe("audio-off");
         });
     });
 });

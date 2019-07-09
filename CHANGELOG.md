@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Add achievement notification to achievement button. |
 | 1.0.14 | |
 | | Initialise achievement notification sound. |
 | | Force babel config to be loaded from Genie core. |
