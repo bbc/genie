@@ -50,7 +50,7 @@ export class Loadscreen extends Screen {
             GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
 
             if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
-                const achievementSound = this.game.add.audio("loadscreen.buttonClick");
+                const achievementSound = this.game.add.audio("gelDesktop.notificationSound");
                 const playAchievementSound = achievementSound.play.bind(achievementSound);
                 gmi.achievements.init(this.game.cache.getJSON("achievementsData"), playAchievementSound);
             }
