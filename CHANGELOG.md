@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| | Add achievement button config for results screen. . |
+| | Add per screen button overrides. |
 | | Update webpack config so bowser package is run through babel. |
 | | Add achievement notification to achievement button. |
 | 1.0.14 | |

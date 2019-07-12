@@ -50,6 +50,8 @@ export class GelButton extends Phaser.Button {
         this.setHitArea(metrics);
         this.indicator = noIndicator;
         this.setIndicator();
+        this.shiftX = config.shiftX || 0;
+        this.shiftY = config.shiftY || 0;
     }
 
     setHitArea(metrics) {

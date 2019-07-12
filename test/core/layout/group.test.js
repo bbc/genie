@@ -5,7 +5,6 @@
  */
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import { Group } from "../../../src/core/layout/group";
-import * as buttonOverrides from "../../../src/core/layout/button-overrides";
 
 describe("Group", () => {
     let buttonFactory;
@@ -35,16 +34,16 @@ describe("Group", () => {
         };
         buttonResizeStub = jest.fn();
         buttonFactory = {
-            createButton: () => {
-                return {
-                    x: 50,
-                    y: 50,
-                    width: 200,
-                    height: 100,
-                    updateTransform: () => {},
-                    resize: buttonResizeStub,
-                };
-            },
+            createButton: () => ({
+                x: 50,
+                y: 50,
+                width: 200,
+                height: 100,
+                updateTransform: () => {},
+                resize: buttonResizeStub,
+                shiftX: 0,
+                shiftY: 0,
+            }),
         };
         vPos = "middle";
         hPos = "center";
@@ -290,12 +289,40 @@ describe("Group", () => {
             expect(group._metrics.isMobile).toBe(false);
             expect(buttonResizeStub).not.toHaveBeenCalled();
         });
+    });
 
-        test("calls applyButtonOverrides function with correct args", () => {
-            const applyButtonOverrides = jest.spyOn(buttonOverrides, "applyButtonOverrides");
-            group.addButton(config);
-            group.reset(metrics);
-            expect(applyButtonOverrides).toHaveBeenCalledWith(metrics.scale, group._buttons);
+    describe("removeButton method", () => {
+        test("calls destroy on passed in button", () => {
+            const metrics = { horizontals: {}, verticals: {} };
+
+            group = new Group(game, parentGroup, "top", "center", metrics, false);
+
+            const destroySpy = jest.fn();
+            group.removeButton({ destroy: destroySpy });
+
+            expect(destroySpy).toHaveBeenCalled();
+        });
+
+        test("removes the button from _buttons", () => {
+            const metrics = { horizontals: {}, verticals: {} };
+
+            group = new Group(game, parentGroup, "top", "center", metrics, false);
+
+            group.addButton({ key: "test_1" });
+            group.addButton({ key: "test_2" });
+            group.addButton({ key: "test_3" });
+
+            group._buttons[1].destroy = jest.fn();
+
+            const button_0 = group._buttons[0];
+            const button_1 = group._buttons[1];
+            const button_2 = group._buttons[2];
+
+            group.removeButton(button_1);
+
+            expect(group._buttons.length).toBe(2);
+            expect(group._buttons[0]).toBe(button_0);
+            expect(group._buttons[1]).toBe(button_2);
         });
     });
 });

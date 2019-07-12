@@ -34,7 +34,11 @@ describe("Layout", () => {
         };
         createMockGmi(mockGmi);
 
-        mockGame = { mock: "game" };
+        mockGame = {
+            mock: "game",
+            cache: { getJSON: jest.fn().mockReturnValue({ theme: { test: {} } }) },
+            state: { current: "test" },
+        };
         mockMetrics = {
             horizontals: jest.fn(),
             safeHorizontals: jest.fn(),
@@ -218,6 +222,23 @@ describe("Layout", () => {
             layout.setAction("exit", buttonCallBack);
             expect(mockInputUpAdd.mock.calls[0][0]).toBe(buttonCallBack);
             expect(mockInputUpAdd.mock.calls[0][1].create).toBeDefined();
+        });
+    });
+
+    describe("button overrides", () => {
+        test("merges overrides to button config", () => {
+            const mockConfig = {
+                theme: {
+                    test: { "button-overrides": { play: { shiftX: 99, shiftY: 88, group: "topRight" } } },
+                },
+            };
+            mockGame.cache.getJSON = jest.fn().mockReturnValue(mockConfig);
+
+            const layout = Layout.create(mockGame, mockMetrics, ["play"]);
+
+            expect(layout.buttons.play.buttonName.shiftX).toBe(99);
+            expect(layout.buttons.play.buttonName.shiftY).toBe(88);
+            expect(layout.buttons.play.buttonName.group).toBe("topRight");
         });
     });
 });

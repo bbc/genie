@@ -180,7 +180,6 @@ export const config = {
         order: 9,
         id: "__play",
         channel: buttonsChannel,
-        positionOverride: true,
         action: () => {
             gmi.sendStatsEvent("play", "click");
         },
