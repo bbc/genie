@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Adds validation tool for achievement config files. |
 | 2.0.0 | |
 | | Achievements stats amendments. |
 | | Add achievement button config for results screen. |
