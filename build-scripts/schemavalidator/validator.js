@@ -69,7 +69,7 @@ const validateSchema = (filepath) => {
         const jsonData = JSON.parse(data);
         const valid = validate(jsonData);
 
-        console.log(`======== ${filepath}`)
+        console.log(`======== ${filepath}`);
         if (!valid) {
             console.log(`✖ Invalid JSON`);
             validate.errors.forEach((item) => {
