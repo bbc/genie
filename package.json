@@ -56,6 +56,6 @@
         "jest:no-coverage": "jest",
         "test": "npm run jest && npm run eslint",
         "docs": "jsdoc -c ./build-scripts/docs/.jsdoc.js",
-        "validate": "node build-scripts/schemavalidator/validator.js"
+        "validate": "node --no-warnings build-scripts/schemavalidator/validator.js"
     }
 }
