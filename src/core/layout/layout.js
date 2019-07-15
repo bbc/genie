@@ -23,6 +23,15 @@ const checkGMIFlags = fp.cond([
     [fp.stubTrue, fp.stubTrue],
 ]);
 
+const copyFirstChildren = fp.mapValues(key => Object.assign({}, key));
+const assignProperties = (object, overrides) => {
+    fp.mapKeys(key => Object.assign(object[key], overrides[key]), overrides);
+    return object;
+};
+
+// Copy gel config with only objects / functions as a reference.
+const shallowMergeOverrides = (config, overrides) => assignProperties(copyFirstChildren(config), overrides);
+
 /**
  * Creates a new layout. Called by layout.factory.addLayout for each screen component
  *
@@ -32,6 +41,10 @@ const checkGMIFlags = fp.cond([
  */
 export function create(game, metrics, buttonIds) {
     buttonIds = buttonIds.filter(checkGMIFlags);
+
+    const overrides = game.cache.getJSON("config").theme[game.state.current]["button-overrides"];
+
+    const config = shallowMergeOverrides(gel.config, overrides);
 
     const root = new Phaser.Group(game, game.world, undefined);
     const groups = fp.zipObject(
@@ -45,7 +58,7 @@ export function create(game, metrics, buttonIds) {
 
     const buttons = fp.zipObject(
         tabSort(buttonIds),
-        tabSort(buttonIds).map(name => groups[gel.config[name].group].addButton(gel.config[name])),
+        tabSort(buttonIds).map(name => groups[config[name].group].addButton(config[name])),
     );
 
     const iconSignals = settingsIcons.create(groups.topRight, buttonIds);
@@ -65,9 +78,7 @@ export function create(game, metrics, buttonIds) {
     };
 
     const resize = metrics => {
-        if (groups) {
-            fp.forOwn(group => group.reset(metrics), groups);
-        }
+        fp.forOwn(group => group.reset(metrics), groups);
     };
     resize(metrics);
 

@@ -7,10 +7,10 @@ module.exports = {
     collectCoverageFrom: ["src/**/*.js", "!src/components/test-harness/**/*.js", "!src/output/**/*.js"],
     coverageThreshold: {
         global: {
-            statements: 90.74,
-            branches: 83.0,
-            functions: 86.26,
-            lines: 91.85,
+            statements: 94.34,
+            branches: 87.74,
+            lines: 95.25,
+            functions: 90.8,
         },
         "src/core/layout/gel-button.js": {
             statements: 0,

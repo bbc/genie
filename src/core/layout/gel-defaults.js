@@ -180,7 +180,6 @@ export const config = {
         order: 9,
         id: "__play",
         channel: buttonsChannel,
-        positionOverride: true,
         action: () => {
             gmi.sendStatsEvent("play", "click");
         },
@@ -228,10 +227,9 @@ export const config = {
             if (screen.navigation.achievements) {
                 screen.navigation.achievements();
             } else {
-                gmi.achievements.show();
+                const achievementsClosedCallback = () => gmi.setStatsScreen(screen.key);
+                gmi.achievements.show(achievementsClosedCallback);
             }
-            gmi.sendStatsEvent("achievements", "click");
-
             screen.scene.getLayouts()[0].buttons.achievements.setIndicator();
         },
     },

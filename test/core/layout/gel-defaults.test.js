@@ -20,14 +20,13 @@ describe("Layout - Gel Defaults", () => {
     beforeEach(() => {
         clearIndicatorSpy = jest.fn();
         mockCurrentScreen = {
+            key: "current-screen",
             navigation: {
                 home: jest.fn(),
                 achievements: jest.fn(),
             },
             scene: {
-                getLayouts: jest
-                    .fn()
-                    .mockReturnValue([{ buttons: { achievements: { setIndicator: clearIndicatorSpy } } }]),
+                getLayouts: jest.fn(() => [{ buttons: { achievements: { setIndicator: clearIndicatorSpy } } }]),
             },
         };
         mockGame = {
@@ -41,6 +40,7 @@ describe("Layout - Gel Defaults", () => {
         mockGmi = {
             exit: jest.fn(),
             setAudio: jest.fn(),
+            setStatsScreen: jest.fn(),
             sendStatsEvent: jest.fn(),
             achievements: { show: jest.fn() },
         };
@@ -215,22 +215,28 @@ describe("Layout - Gel Defaults", () => {
     });
 
     describe("Achievements Button Callback", () => {
-        beforeEach(() => {
+        test("navigates to the achievements screen if it exists locally", () => {
             gel.config.achievements.action({ game: mockGame });
+            expect(mockCurrentScreen.navigation.achievements).toHaveBeenCalled();
         });
 
-        test("sends a stat to the GMI", () => {
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("achievements", "click");
-        });
-
-        test("clears indicator", () => {
-            expect(clearIndicatorSpy).toHaveBeenCalled();
-        });
-
-        test("calls gmi.achievements.show if screen.navigation.achievements is blank", () => {
+        test("opens the CAGE achievements screen if there is no local navigation", () => {
             delete mockCurrentScreen.navigation.achievements;
             gel.config.achievements.action({ game: mockGame });
             expect(mockGmi.achievements.show).toHaveBeenCalled();
+        });
+
+        test("sets the GMI stats screen when the CAGE achievements screen is closed", () => {
+            delete mockCurrentScreen.navigation.achievements;
+            gel.config.achievements.action({ game: mockGame });
+            const closeAchievementsScreen = mockGmi.achievements.show.mock.calls[0][0];
+            closeAchievementsScreen();
+            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith("current-screen");
+        });
+
+        test("clears the indicator", () => {
+            gel.config.achievements.action({ game: mockGame });
+            expect(clearIndicatorSpy).toHaveBeenCalled();
         });
     });
 

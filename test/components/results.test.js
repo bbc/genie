@@ -98,6 +98,13 @@ describe("Results Screen", () => {
             );
         });
 
+        test("adds the achievement button when theme flag is set", () => {
+            resultsScreen.context.config.theme.game.achievements = true;
+            resultsScreen.create();
+            const expectedButtons = ["pause", "restart", "continueGame", "achievements"];
+            expect(resultsScreen.scene.addLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+
         describe("Stats", () => {
             test("fires a score stat with results if given as a number", () => {
                 resultsScreen.transientData.results = 45;
