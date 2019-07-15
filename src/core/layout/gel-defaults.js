@@ -227,8 +227,7 @@ export const config = {
             if (screen.navigation.achievements) {
                 screen.navigation.achievements();
             } else {
-                const achievementsClosedCallback = () => gmi.setStatsScreen(screen.key);
-                gmi.achievements.show(achievementsClosedCallback);
+                gmi.achievements.show();
             }
             screen.scene.getLayouts()[0].buttons.achievements.setIndicator();
         },

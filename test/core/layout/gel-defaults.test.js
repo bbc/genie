@@ -226,14 +226,6 @@ describe("Layout - Gel Defaults", () => {
             expect(mockGmi.achievements.show).toHaveBeenCalled();
         });
 
-        test("sets the GMI stats screen when the CAGE achievements screen is closed", () => {
-            delete mockCurrentScreen.navigation.achievements;
-            gel.config.achievements.action({ game: mockGame });
-            const closeAchievementsScreen = mockGmi.achievements.show.mock.calls[0][0];
-            closeAchievementsScreen();
-            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith("current-screen");
-        });
-
         test("clears the indicator", () => {
             gel.config.achievements.action({ game: mockGame });
             expect(clearIndicatorSpy).toHaveBeenCalled();
