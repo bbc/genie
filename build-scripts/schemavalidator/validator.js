@@ -65,7 +65,7 @@ const validateSchema = (filepath) => {
             console.log(err);
             return;
         }
-        
+
         const jsonData = JSON.parse(data);
         const valid = validate(jsonData);
 
@@ -75,12 +75,12 @@ const validateSchema = (filepath) => {
             validate.errors.forEach((item) => {
                 console.log(`\tJSON SCHEMA:\t${item.schemaPath}`);
                 console.log(`\tDATAPATH:\t${item.dataPath}`);
-                console.log(`\tMESSAGE:\t${item.message}\n\n`);
+                console.log(`\tMESSAGE:\t${item.message}\n`);
             });
             hasBeenInvalid = true;
             return;
         }
-        console.log(`✓ Valid JSON\n\n`);
+        console.log(`✓ Valid JSON\n`);
     }
 }
 
