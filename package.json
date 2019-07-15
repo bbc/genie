@@ -40,9 +40,9 @@
         "jsdom": "^13.2.0",
         "local-web-server": "^2.6.0",
         "prettier": "1.17.0",
-        "webpack": "^4.35.2",
-        "webpack-cli": "^3.3.2",
-        "webpack-dev-server": "^3.4.1",
+        "webpack": "^4.35.3",
+        "webpack-cli": "^3.3.5",
+        "webpack-dev-server": "^3.7.2",
         "webpack-visualizer-plugin": "^0.1.11"
     },
     "scripts": {

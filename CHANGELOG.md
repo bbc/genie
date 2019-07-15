@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Remove achievment close callback. |
 | 2.0.0 | |
 | | Achievements stats amendments. |
 | | Add achievement button config for results screen. |
