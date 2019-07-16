@@ -56,7 +56,7 @@
         "jest:no-coverage": "jest",
         "test": "npm run jest && npm run eslint",
         "docs": "jsdoc -c ./build-scripts/docs/.jsdoc.js",
-        "validate": "node --no-warnings build-scripts/schemavalidator/validator.js",
-        "validate:themes": "node --no-warnings build-scripts/schemavalidator/validator.js build-scripts/schemavalidator/schemas/achievement.json"
+        "validate": "node build-scripts/schemavalidator/validator.js default",
+        "validate:theme": "node build-scripts/schemavalidator/validator.js theme achievement"
     }
 }
