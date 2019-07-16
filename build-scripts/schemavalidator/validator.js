@@ -11,11 +11,11 @@ const fsp = require("fs").promises;
 const ajv = new Ajv();
 
 const pathSwitch = {
-    "theme": (names) => {
-        return names.map(name => "themes/"+name+"/achievements/config.json");
+    theme: names => {
+        return names.map(name => "themes/" + name + "/achievements/config.json");
     },
-    "default": names => names
-}
+    default: names => names,
+};
 
 const args = process.argv;
 const option = args[2];
@@ -52,8 +52,7 @@ const checkAgainstSchema = async (validate, filepath, data) => {
 
 const schemaValidation = async (schemaPath, filePaths) => {
     schemaPath = "build-scripts/schemavalidator/schemas/" + schemaPath + ".json";
-    const schema = await fsp.readFile(schemaPath, "utf8").
-    catch(error => {
+    const schema = await fsp.readFile(schemaPath, "utf8").catch(error => {
         console.log(error);
     });
 
@@ -62,11 +61,10 @@ const schemaValidation = async (schemaPath, filePaths) => {
     const validate = ajv.compile(JSON.parse(schema));
 
     for (const path of filePaths) {
-        const file = await fsp.readFile(path).
-        catch((error) => {
+        const file = await fsp.readFile(path).catch(error => {
             console.log(`======== ${path}`);
-            if(error.code === "ENOENT") {
-               console.log(`✖\tTheme doesn't exist under ./themes/${path}, are you sure this is correct?`);
+            if (error.code === "ENOENT") {
+                console.log(`✖\tTheme doesn't exist under ./themes/${path}, are you sure this is correct?`);
             } else {
                 console.log(error);
             }
@@ -75,15 +73,13 @@ const schemaValidation = async (schemaPath, filePaths) => {
     }
 };
 
-if(args.length < 4 || targets.length === 0) {
+if (args.length < 4 || targets.length === 0) {
     console.log("Expected usage:");
     console.log("npm run validate -- <schema> <json path(s)>");
     console.log("npm run validate:themes -- <theme(s)>\n");
     console.log("Example:");
     console.log("With :theme shortcut\t|\tnpm run validate:themes -- default test");
     console.log("Without shortcut\t|\tnpm run validate -- achievement ./themes/default/achievements/config.json\n");
-    return;
+} else {
+    schemaValidation(schema, targets);
 }
-
-schemaValidation(schema, targets);
-
