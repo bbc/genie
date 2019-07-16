@@ -53,7 +53,12 @@ const checkAgainstSchema = async (validate, filepath, data) => {
 const schemaValidation = async (schemaPath, filePaths) => {
     schemaPath = "build-scripts/schemavalidator/schemas/" + schemaPath + ".json";
     const schema = await fsp.readFile(schemaPath, "utf8").catch(error => {
-        console.log(error);
+        if(error.code === "ENOENT") {
+            console.log(`\n✖\tSchema doesn't exist under ${schemaPath}, are you sure this is correct?`);
+        } else {
+            console.log(error);
+        }
+        process.exit(1);
     });
 
     console.log(`======== SCHEMA\t${schemaPath}\n\n`);
