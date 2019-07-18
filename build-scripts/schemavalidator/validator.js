@@ -7,20 +7,9 @@
 /*eslint no-console: 0 */
 
 const Ajv = require("ajv");
+const path = require("path");
 const fsp = require("fs").promises;
 const ajv = new Ajv();
-
-const pathSwitch = {
-    theme: names => {
-        return names.map(name => "themes/" + name + "/achievements/config.json");
-    },
-    default: names => names,
-};
-
-const args = process.argv;
-const option = args[2];
-const schema = args[3];
-const targets = pathSwitch[option](args.slice(4));
 
 var hasBeenInvalid = false;
 
@@ -31,6 +20,21 @@ const exitHandle = () => {
 };
 
 process.on("exit", exitHandle.bind(null));
+
+const loadThemeConfigs = async () => {
+    await fsp.readdir("themes", { withFileTypes: true })
+    .catch((err) => {
+        console.log(err);
+        return;
+    })
+    .then((themes) => {
+        themes = themes
+        .filter(theme => theme.isDirectory)
+        .map(theme => path.join("themes", theme.name, "achievements", "config.json"));
+
+        loadFiles(schema, themes);
+    })
+}
 
 const checkAgainstSchema = async (validate, filepath, data) => {
     const jsonData = JSON.parse(data);
@@ -50,7 +54,7 @@ const checkAgainstSchema = async (validate, filepath, data) => {
     console.log("✓\tValid JSON\n");
 };
 
-const schemaValidation = async (schemaPath, filePaths) => {
+const loadFiles = async (schemaPath, filePaths) => {
     schemaPath = "build-scripts/schemavalidator/schemas/" + schemaPath + ".json";
     const schema = await fsp.readFile(schemaPath, "utf8").catch(error => {
         if(error.code === "ENOENT") {
@@ -61,7 +65,7 @@ const schemaValidation = async (schemaPath, filePaths) => {
         process.exit(1);
     });
 
-    console.log(`======== SCHEMA\t${schemaPath}\n\n`);
+    console.log(`USING SCHEMA\t${schemaPath}\n\n`);
 
     const validate = ajv.compile(JSON.parse(schema));
 
@@ -78,13 +82,7 @@ const schemaValidation = async (schemaPath, filePaths) => {
     }
 };
 
-if (args.length < 4 || targets.length === 0) {
-    console.log("Expected usage:");
-    console.log("npm run validate -- <schema> <json path(s)>");
-    console.log("npm run validate:themes -- <theme(s)>\n");
-    console.log("Example:");
-    console.log("With :theme shortcut\t|\tnpm run validate:themes -- default test");
-    console.log("Without shortcut\t|\tnpm run validate -- achievement ./themes/default/achievements/config.json\n");
-} else {
-    schemaValidation(schema, targets);
-}
+const args = process.argv;
+const schema = args[3];
+
+loadThemeConfigs(args.slice(4));
