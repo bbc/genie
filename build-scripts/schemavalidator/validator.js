@@ -84,6 +84,6 @@ const loadFiles = async (schemaPath, filePaths) => {
 };
 
 const args = process.argv;
-const schema = args[3];
+const schema = args[2];
 
-loadThemeConfigs(args.slice(4));
+loadThemeConfigs(args.slice(3));
