@@ -22,19 +22,20 @@ const exitHandle = () => {
 process.on("exit", exitHandle.bind(null));
 
 const loadThemeConfigs = async () => {
-    await fsp.readdir("themes", { withFileTypes: true })
-    .catch((err) => {
-        console.log(err);
-        return;
-    })
-    .then((themes) => {
-        themes = themes
-        .filter(theme => theme.isDirectory)
-        .map(theme => path.join("themes", theme.name, "achievements", "config.json"));
+    await fsp
+        .readdir("themes", { withFileTypes: true })
+        .catch(err => {
+            console.log(err);
+            return;
+        })
+        .then(themes => {
+            themes = themes
+                .filter(theme => theme.isDirectory)
+                .map(theme => path.join("themes", theme.name, "achievements", "config.json"));
 
-        loadFiles(schema, themes);
-    })
-}
+            loadFiles(schema, themes);
+        });
+};
 
 const checkAgainstSchema = async (validate, filepath, data) => {
     const jsonData = JSON.parse(data);
@@ -57,7 +58,7 @@ const checkAgainstSchema = async (validate, filepath, data) => {
 const loadFiles = async (schemaPath, filePaths) => {
     schemaPath = "build-scripts/schemavalidator/schemas/" + schemaPath + ".json";
     const schema = await fsp.readFile(schemaPath, "utf8").catch(error => {
-        if(error.code === "ENOENT") {
+        if (error.code === "ENOENT") {
             console.log(`\n✖\tSchema doesn't exist under ${schemaPath}, are you sure this is correct?`);
         } else {
             console.log(error);
