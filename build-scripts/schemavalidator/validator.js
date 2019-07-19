@@ -38,7 +38,16 @@ const loadThemeConfigs = async () => {
 };
 
 const checkAgainstSchema = async (validate, filepath, data) => {
-    const jsonData = JSON.parse(data);
+    let jsonData;
+    try {
+        jsonData = JSON.parse(data);
+    } catch (error) {
+        console.log(`======== ${filepath}`);
+        console.log(`\tERROR READING JSON AT ${filepath}`);
+        //.split("position").split(" ")[1]
+        console.log("\t", error.toString(), "\n");
+        return;
+    }
     const valid = validate(jsonData);
 
     console.log(`======== ${filepath}`);
