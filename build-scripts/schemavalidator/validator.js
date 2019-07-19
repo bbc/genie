@@ -43,25 +43,25 @@ const checkAgainstSchema = async (validate, filepath, data) => {
         jsonData = JSON.parse(data);
     } catch (error) {
         console.log(`======== ${filepath}`);
-        console.log(`\tERROR READING JSON AT ${filepath}`);
+        console.log(`✖\tUnparsable JSON!`);
         //.split("position").split(" ")[1]
-        console.log("\t", error.toString(), "\n");
+        console.log(`✖\t${error.toString()}\n`);
         return;
     }
     const valid = validate(jsonData);
 
     console.log(`======== ${filepath}`);
     if (!valid) {
-        console.log("✖\tInvalid JSON");
+        console.log("✖\tJSON not valid to schema");
         validate.errors.forEach(item => {
-            console.log(`\tJSON SCHEMA:\t${item.schemaPath}`);
-            console.log(`\tDATAPATH:\t${item.dataPath}`);
-            console.log(`\tMESSAGE:\t${item.message}\n`);
+            console.log(`\tJSON schema:\t${item.schemaPath}`);
+            console.log(`\tData path:\t${item.dataPath}`);
+            console.log(`\tMessage:\t${item.message}\n`);
         });
         hasBeenInvalid = true;
         return;
     }
-    console.log("✓\tValid JSON\n");
+    console.log("✓\tJSON valid to schema\n");
 };
 
 const loadFiles = async (schemaPath, filePaths) => {
@@ -77,7 +77,16 @@ const loadFiles = async (schemaPath, filePaths) => {
 
     console.log(`USING SCHEMA\t${schemaPath}\n\n`);
 
-    const validate = ajv.compile(JSON.parse(schema));
+    let jsonSchema;
+
+    try {
+        jsonSchema = JSON.parse(schema);
+    } catch (error) {
+        console.log(`Incapable of loading schema at ${schema}. Bailing out.`);
+        process.exit(1);
+    }
+
+    const validate = ajv.compile(jsonSchema);
 
     for (const path of filePaths) {
         const file = await fsp.readFile(path).catch(error => {

@@ -1,6 +1,6 @@
 [
     {
-        + "key": "achievement_1",
+        "key": "achievement_1",
         "name": "Default Achievement 1",
         "description": "Default achievement 1",
         "points": 100
