@@ -25,8 +25,12 @@ const loadThemeConfigs = async () => {
     await fsp
         .readdir("themes", { withFileTypes: true })
         .catch(err => {
-            console.log(err);
-            return;
+            if(err.code === "ENOENT") {
+                console.log("✖\tThemes folder doesn't exist\n");
+            } else {
+                console.log(err);
+            }
+            process.exit(1);
         })
         .then(themes => {
             themes = themes
@@ -44,7 +48,6 @@ const checkAgainstSchema = async (validate, filepath, data) => {
     } catch (error) {
         console.log(`======== ${filepath}`);
         console.log(`✖\tUnparsable JSON!`);
-        //.split("position").split(" ")[1]
         console.log(`✖\t${error.toString()}\n`);
         return;
     }
