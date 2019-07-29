@@ -46,15 +46,18 @@
             "choices": [
                 {
                     "asset": "carousel1",
-                    "accessibilityText": "Level 1"
+                    "accessibilityText": "Level 1",
+                    "title": "Test Level 1"
                 },
                 {
                     "asset": "carousel2",
-                    "accessibilityText": "Level 2"
+                    "accessibilityText": "Level 2",
+                    "title": "Test Level 2"
                 },
                 {
                     "asset": "carousel3",
-                    "accessibilityText": "Level 3"
+                    "accessibilityText": "Level 3",
+                    "title": "Test Level 3"
                 }
             ],
             "leftButton": {

@@ -18,6 +18,7 @@ describe("Screen", () => {
     let mockScene;
     let mockContext;
     let mockTransientData;
+    let mockNavigation;
 
     const createScreen = () => {
         screen = new Screen();
@@ -27,8 +28,8 @@ describe("Screen", () => {
     };
 
     const initScreen = () => {
-        const mockNavigation = {
-            loadscreen: { routes: "loadscreen-routes" },
+        mockNavigation = {
+            loadscreen: { routes: { testRoute: jest.fn().mockReturnValue("loadscreen-test-route") } },
             select: { routes: "select-routes" },
         };
         screen.init(mockTransientData, mockScene, mockContext, mockNavigation);
@@ -74,7 +75,20 @@ describe("Screen", () => {
 
         test("sets the navigation", () => {
             createAndInitScreen();
-            expect(screen.navigation).toBe("loadscreen-routes");
+            expect(screen.navigation.testRoute()).toBe("loadscreen-test-route");
+        });
+
+        test("passes transientData to next screen on navigation", () => {
+            createAndInitScreen();
+            screen.navigation.testRoute();
+            expect(mockNavigation.loadscreen.routes.testRoute).toHaveBeenCalledWith(mockTransientData);
+        });
+
+        test("defaults transientData to empty Object", () => {
+            createAndInitScreen();
+            delete screen.transientData;
+            screen.navigation.testRoute();
+            expect(mockNavigation.loadscreen.routes.testRoute).toHaveBeenCalledWith({});
         });
 
         test("sets the background music using the theme config", () => {

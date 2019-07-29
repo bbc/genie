@@ -37,7 +37,7 @@
         "jest": "^24.8.0",
         "jest-canvas-mock": "^2.0.0",
         "jest-webpack": "^0.5.1",
-        "jsdoc": "^3.6.2",
+        "jsdoc": "^3.6.3",
         "jsdom": "^13.2.0",
         "local-web-server": "^2.6.0",
         "prettier": "1.17.0",

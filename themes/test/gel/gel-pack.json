@@ -11,6 +11,12 @@
             "spacing": 4
         },
         {
+            "type": "image",
+            "key": "notification",
+            "url": "gel/desktop/notification.png",
+            "overwrite": false
+        },
+        {
             "type": "spritesheet",
             "key": "play",
             "url": "gel/desktop/play.png",
@@ -159,6 +165,12 @@
             "type": "image",
             "key": "fx-off-icon",
             "url": "gel/desktop/fx-off-icon.png"
+        },
+        {
+            "type": "audio",
+            "key": "notificationSound",
+            "urls": ["gel/desktop/notification.mp3"],
+            "autoDecode": true
         }
     ],
     "gelMobile": [
@@ -171,6 +183,12 @@
             "frameMax": 2,
             "margin": 0,
             "spacing": 4
+        },
+        {
+            "type": "image",
+            "key": "notification",
+            "url": "gel/mobile/notification.png",
+            "overwrite": false
         },
         {
             "type": "spritesheet",

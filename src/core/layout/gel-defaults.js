@@ -8,9 +8,10 @@ import * as pause from "../../components/overlays/pause.js";
 import { settings, settingsChannel } from "../../core/settings.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import * as signal from "../signal-bus.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 const pushLevelId = (game, params) => {
-    const levelId = game.state.states[game.state.current].transientData.levelId;
+    const levelId = fp.get("transientData.level-select.choice.title", game.state.states[game.state.current]);
     return levelId ? [...params, { source: levelId }] : params;
 };
 

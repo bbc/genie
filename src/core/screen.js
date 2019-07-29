@@ -10,6 +10,7 @@ import * as signal from "../core/signal-bus.js";
 import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as VisibleLayer from "../core/visible-layer.js";
+import fp from "../../lib/lodash/fp/fp.js";
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
@@ -41,6 +42,9 @@ export class Screen extends Phaser.State {
         a11y.clearAccessibleButtons();
         a11y.clearElementsFromDom();
         this.overlaySetup();
+
+        const routes = navigation[this.game.state.current].routes;
+        this.navigation = fp.mapValues(value => () => value(this.transientData || {}), routes);
     }
 
     overlaySetup() {

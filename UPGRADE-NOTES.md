@@ -1,5 +1,14 @@
 # Upgrade Notes
 
+## Genie 2.0.2
+Screens now automatically pass their transientData to the next screen.
+Previously data needed to be passed as a parameter to the navigation routes e.g:
+
+```javascript
+this.navigation.next(data)
+```
+Instead now the data should be mutated in place by changing `this.transientData`
+
 ## Genie 2.0.1
 `"genie": "git+ssh://git@github.com/bbc/childrens-games-genie.git#v2.0.1"`
 

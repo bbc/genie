@@ -32,25 +32,25 @@ describe("Select Screen", () => {
                 image: jest.fn().mockImplementation((x, y, imageName) => imageName),
                 button: jest.fn(),
                 sprite: jest.fn().mockImplementation((x, y, assetName) => {
-                    if (assetName === "characterSelect.character1") {
+                    if (assetName === "test-select.character1") {
                         return characterSprites[0];
                     }
-                    if (assetName === "characterSelect.character2") {
+                    if (assetName === "test-select.character2") {
                         return characterSprites[1];
                     }
-                    if (assetName === "characterSelect.character3") {
+                    if (assetName === "test-select.character3") {
                         return characterSprites[2];
                     }
                 }),
             },
-            state: { current: "characterSelect" },
+            state: { current: "test-select" },
             canvas: { parentElement: {} },
         };
 
         mockContext = {
             config: {
                 theme: {
-                    characterSelect: {
+                    "test-select": {
                         choices: [{ asset: "character1" }, { asset: "character2" }, { asset: "character3" }],
                     },
                     game: {},
@@ -70,6 +70,8 @@ describe("Select Screen", () => {
         };
 
         selectScreen.game = mockGame;
+        selectScreen.transientData = {};
+        selectScreen.key = "test-select";
         selectScreen.context = mockContext;
         selectScreen.navigation = { next: jest.fn() };
     });
@@ -80,13 +82,13 @@ describe("Select Screen", () => {
         beforeEach(() => selectScreen.create());
 
         test("adds a background image", () => {
-            expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "characterSelect.background");
-            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith("characterSelect.background");
+            expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "test-select.background");
+            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith("test-select.background");
         });
 
         test("adds a title image", () => {
-            expect(mockGame.add.image).toHaveBeenCalledWith(0, -150, "characterSelect.title");
-            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith("characterSelect.title");
+            expect(mockGame.add.image).toHaveBeenCalledWith(0, -170, "test-select.title");
+            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith("test-select.title");
         });
 
         test("adds GEL buttons to layout", () => {
@@ -104,9 +106,9 @@ describe("Select Screen", () => {
 
         test("creates sprites for each choice", () => {
             expect(mockGame.add.sprite).toHaveBeenCalledTimes(3);
-            expect(mockGame.add.sprite.mock.calls[0]).toEqual([0, 0, "characterSelect.character1"]);
-            expect(mockGame.add.sprite.mock.calls[1]).toEqual([0, 0, "characterSelect.character2"]);
-            expect(mockGame.add.sprite.mock.calls[2]).toEqual([0, 0, "characterSelect.character3"]);
+            expect(mockGame.add.sprite.mock.calls[0]).toEqual([0, 0, "test-select.character1"]);
+            expect(mockGame.add.sprite.mock.calls[1]).toEqual([0, 0, "test-select.character2"]);
+            expect(mockGame.add.sprite.mock.calls[2]).toEqual([0, 0, "test-select.character3"]);
         });
 
         test("adds each sprite to the background", () => {
@@ -121,10 +123,10 @@ describe("Select Screen", () => {
 
         test("creates an accessible carousel for the choices", () => {
             expect(accessibleCarouselElements.create).toHaveBeenCalledWith(
-                "characterSelect",
+                "test-select",
                 selectScreen.choiceSprites,
                 mockGame.canvas.parentElement,
-                mockContext.config.theme.characterSelect.choices,
+                mockContext.config.theme["test-select"].choices,
             );
         });
     });
@@ -150,15 +152,14 @@ describe("Select Screen", () => {
         });
 
         test("moves to the next game screen when the continue button is pressed", () => {
-            selectScreen.currentIndex = 1;
             signal.bus.subscribe.mock.calls[2][0].callback();
-            expect(selectScreen.navigation.next).toHaveBeenCalledWith({ characterSelected: 1 });
+            expect(selectScreen.navigation.next).toHaveBeenCalled();
         });
 
         test("fires a score stat to the GMI with when you select an item ", () => {
             selectScreen.currentIndex = 1;
             signal.bus.subscribe.mock.calls[2][0].callback();
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("characterSelect", "select", {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("test", "select", {
                 metadata: "ELE=[character1]",
             });
         });

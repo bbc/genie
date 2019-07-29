@@ -183,7 +183,7 @@ describe("Layout - Gel Defaults", () => {
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
-            mockGame.state.states["current-screen"].transientData.levelId = testLevelId;
+            mockGame.state.states["current-screen"].transientData["level-select"] = { choice: { title: testLevelId } };
             gel.config.replay.action({ game: mockGame });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
         });
@@ -197,7 +197,7 @@ describe("Layout - Gel Defaults", () => {
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
-            mockGame.state.states["current-screen"].transientData.levelId = testLevelId;
+            mockGame.state.states["current-screen"].transientData["level-select"] = { choice: { title: testLevelId } };
             gel.config.pauseReplay.action({ game: mockGame });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
         });
@@ -249,7 +249,7 @@ describe("Layout - Gel Defaults", () => {
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
-            mockGame.state.states["current-screen"].transientData.levelId = testLevelId;
+            mockGame.state.states["current-screen"].transientData["level-select"] = { choice: { title: testLevelId } };
             gel.config.restart.action({ game: mockGame });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
         });
@@ -263,7 +263,7 @@ describe("Layout - Gel Defaults", () => {
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
-            mockGame.state.states["current-screen"].transientData.levelId = testLevelId;
+            mockGame.state.states["current-screen"].transientData["level-select"] = { choice: { title: testLevelId } };
             gel.config.continueGame.action({ game: mockGame });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "continue", { source: testLevelId });
         });

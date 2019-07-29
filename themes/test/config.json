@@ -1,7 +1,12 @@
 {
     "theme": {
         "home": {
-            "music": "loadscreen.backgroundMusic"
+            "music": "loadscreen.backgroundMusic",
+            "button-overrides": {
+                "play": {
+                    "shiftY": 80
+                }
+            }
         },
         "character-select": {
             "music": "loadscreen.backgroundMusic",
@@ -41,15 +46,18 @@
             "choices": [
                 {
                     "asset": "carousel1",
-                    "accessibilityText": "Level 1"
+                    "accessibilityText": "Level 1",
+                    "title": "Test Level 1"
                 },
                 {
                     "asset": "carousel2",
-                    "accessibilityText": "Level 2"
+                    "accessibilityText": "Level 2",
+                    "title": "Test Level 2"
                 },
                 {
                     "asset": "carousel3",
-                    "accessibilityText": "Level 3"
+                    "accessibilityText": "Level 3",
+                    "title": "Test Level 3"
                 }
             ],
             "leftButton": {
@@ -81,19 +89,21 @@
                     "fill": "#fff",
                     "boundsAlignH": "center"
                 }
+            },
+            "button-overrides": {
+                "achievements": {
+                    "group": "middleCenter",
+                    "shiftY": 120
+                }
             }
         },
         "how-to-play": {
             "panels": ["panel1", "panel2", "panel3"],
             "panelText": [
-                { "accessibilityText": "Instructions on playing the game"},
-                { "accessibilityText": "More on how to play"},
-                { "accessibilityText": "Final instructions on playing"}
+                { "accessibilityText": "Instructions on playing the game" },
+                { "accessibilityText": "More on how to play" },
+                { "accessibilityText": "Final instructions on playing" }
             ]
-        },
-        "button-overrides": {
-            "gelDesktop.play": { "y": 100 },
-            "gelMobile.play": { "y": 0 }
         }
     }
 }

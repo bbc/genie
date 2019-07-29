@@ -21,19 +21,15 @@ export class Select extends Screen {
 
     create() {
         this.scene.addToBackground(this.game.add.image(0, 0, this.getAsset("background")));
-        this.scene.addToBackground(this.game.add.image(0, -150, this.getAsset("title")));
         createTestHarnessDisplay(this.game, this.context, this.scene);
 
         const theme = this.context.config.theme[this.game.state.current];
         this.currentIndex = 1;
         this.choiceSprites = this.createChoiceSprites(theme.choices);
+        this.scene.addToBackground(this.game.add.image(0, -170, this.getAsset("title")));
 
-        // TODO the following line should be added back once the overlap issue is resolved NT:04:02:19
-        const showAchievements = false; //!!this.context.config.theme.game.achievements;
-        const defaultButtons = ["home", "audio", "pauseNoReplay", "previous", "next", "continue"];
-        const buttons = showAchievements ? defaultButtons.concat("achievements") : defaultButtons;
+        this.scene.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
 
-        this.scene.addLayout(buttons);
         this.accessibleElements = accessibleCarouselElements.create(
             this.visibleLayer,
             this.choiceSprites,
@@ -88,7 +84,10 @@ export class Select extends Screen {
         const metaData = { metadata: `ELE=[${theme.choices[this.currentIndex - 1].asset}]` };
         const screenType = this.game.state.current.split("-")[0];
         gmi.sendStatsEvent(screenType, "select", metaData);
-        this.navigation.next({ characterSelected: this.currentIndex });
+
+        const choice = this.context.config.theme[this.key].choices[this.currentIndex];
+        this.transientData[this.key] = { index: this.currentIndex, choice };
+        this.navigation.next();
     }
 
     addSignalSubscriptions() {
