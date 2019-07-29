@@ -41,11 +41,16 @@ export const hideAndDisableElement = el => {
     }
 };
 
+//eslint-disable-next-line local-rules/disallow-timers
+const callOnNextTick = fn => setTimeout(fn, 0);
+
 const resetElementToDefault = (el, self) => {
     el.removeEventListener("blur", self);
-    el.parentElement.removeChild(el);
-    showElement(el);
-    unsetElementAsHiddenAndDisabled(el);
+    callOnNextTick(() => {
+        el.parentElement.removeChild(el);
+        showElement(el);
+        unsetElementAsHiddenAndDisabled(el);
+    });
 };
 
 const elementHiddenAndDisabled = element => {

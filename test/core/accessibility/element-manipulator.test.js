@@ -84,15 +84,20 @@ describe("element manipulator", () => {
         beforeEach(() => {
             elementManipulator.hideAndDisableElement(element);
             resetElement = element.addEventListener.mock.calls[element.addEventListener.mock.calls.length - 1][1];
-            resetElement();
         });
 
         test("removes the blur event listener", () => {
+            resetElement();
             const eventListerCall = element.removeEventListener.mock.calls[2][0];
             expect(eventListerCall).toBe("blur");
         });
 
-        test("removes the element", () => {
+        test("removes the element at the start of the next event loop preventing race condition in Chrome (which fires blur events on element removal)", () => {
+            jest.useFakeTimers();
+            resetElement();
+            jest.runAllTimers();
+
+            expect(setTimeout).toHaveBeenCalledTimes(1);
             expect(element.parentElement.removeChild).toHaveBeenCalledWith(element);
         });
     });
