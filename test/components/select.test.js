@@ -160,7 +160,7 @@ describe("Select Screen", () => {
             selectScreen.currentIndex = 1;
             signal.bus.subscribe.mock.calls[2][0].callback();
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("test", "select", {
-                metadata: "ELE=[character1]",
+                metadata: "ELE=[character2]",
             });
         });
 
@@ -175,7 +175,7 @@ describe("Select Screen", () => {
         });
 
         test("shows the current accessible element when the game is unpaused (by pressing play)", () => {
-            selectScreen.currentIndex = 3;
+            selectScreen.currentIndex = 2;
             signal.bus.subscribe.mock.calls[3][0].callback(); //pauses
             signal.bus.subscribe.mock.calls[4][0].callback(); //unpauses
 
@@ -186,9 +186,9 @@ describe("Select Screen", () => {
 
         describe("previous button", () => {
             test("switches to the last item when the first item is showing", () => {
-                selectScreen.currentIndex = 1;
+                selectScreen.currentIndex = 0;
                 signal.bus.subscribe.mock.calls[0][0].callback();
-                expect(selectScreen.currentIndex === 3).toBeTruthy();
+                expect(selectScreen.currentIndex === 2).toBeTruthy();
             });
 
             test("switches to the previous item when any other choice is showing", () => {
@@ -198,7 +198,7 @@ describe("Select Screen", () => {
             });
 
             test("hides all the choices except the current one", () => {
-                selectScreen.currentIndex = 3;
+                selectScreen.currentIndex = 2;
                 signal.bus.subscribe.mock.calls[0][0].callback();
 
                 expect(selectScreen.choiceSprites[0].visible).toBe(false);
@@ -207,7 +207,7 @@ describe("Select Screen", () => {
             });
 
             test("set 'aria-hidden' = true on all the choices except the current one", () => {
-                selectScreen.currentIndex = 3;
+                selectScreen.currentIndex = 2;
                 signal.bus.subscribe.mock.calls[0][0].callback();
 
                 expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
@@ -216,7 +216,7 @@ describe("Select Screen", () => {
             });
 
             test("set display: none on all the choices except the current one", () => {
-                selectScreen.currentIndex = 3;
+                selectScreen.currentIndex = 2;
                 signal.bus.subscribe.mock.calls[0][0].callback();
 
                 expect(selectScreen.accessibleElements[0].style.display).toEqual("none");
@@ -233,13 +233,13 @@ describe("Select Screen", () => {
             });
 
             test("switches to the next item when any other choice is showing", () => {
-                selectScreen.currentIndex = 2;
+                selectScreen.currentIndex = 1;
                 signal.bus.subscribe.mock.calls[1][0].callback();
-                expect(selectScreen.currentIndex === 3).toBeTruthy();
+                expect(selectScreen.currentIndex === 2).toBeTruthy();
             });
 
             test("hides all the choices except the current one", () => {
-                selectScreen.currentIndex = 1;
+                selectScreen.currentIndex = 0;
                 signal.bus.subscribe.mock.calls[1][0].callback();
                 expect(selectScreen.choiceSprites[0].visible).toBe(false);
                 expect(selectScreen.choiceSprites[1].visible).toBe(true);
@@ -247,7 +247,7 @@ describe("Select Screen", () => {
             });
 
             test("set 'aria-hidden' = true on all the choices except the current one", () => {
-                selectScreen.currentIndex = 1;
+                selectScreen.currentIndex = 0;
                 signal.bus.subscribe.mock.calls[1][0].callback();
 
                 expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
@@ -256,7 +256,7 @@ describe("Select Screen", () => {
             });
 
             test("set display: none on all the choices except the current one", () => {
-                selectScreen.currentIndex = 1;
+                selectScreen.currentIndex = 0;
                 signal.bus.subscribe.mock.calls[1][0].callback();
 
                 expect(selectScreen.accessibleElements[0].style.display).toBe("none");

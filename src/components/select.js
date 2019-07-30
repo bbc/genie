@@ -14,6 +14,8 @@ import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
 import { gmi } from "../core/gmi/gmi.js";
 
+const wrapRange = (value, max) => ((value % max) + max) % max;
+
 export class Select extends Screen {
     constructor() {
         super();
@@ -24,7 +26,7 @@ export class Select extends Screen {
         createTestHarnessDisplay(this.game, this.context, this.scene);
 
         const theme = this.context.config.theme[this.game.state.current];
-        this.currentIndex = 1;
+        this.currentIndex = 0;
         this.choiceSprites = this.createChoiceSprites(theme.choices);
         this.scene.addToBackground(this.game.add.image(0, -170, this.getAsset("title")));
 
@@ -54,34 +56,28 @@ export class Select extends Screen {
     }
 
     leftButton() {
-        this.currentIndex--;
-        if (this.currentIndex < 1) {
-            this.currentIndex = this.choiceSprites.length;
-        }
+        this.currentIndex = wrapRange(--this.currentIndex, this.choiceSprites.length);
         this.showChoice();
     }
 
     rightButton() {
-        this.currentIndex++;
-        if (this.currentIndex > this.choiceSprites.length) {
-            this.currentIndex = 1;
-        }
+        this.currentIndex = wrapRange(++this.currentIndex, this.choiceSprites.length);
         this.showChoice();
     }
 
     showChoice() {
         this.choiceSprites.forEach((item, index) => {
-            item.visible = index === this.currentIndex - 1;
+            item.visible = index === this.currentIndex;
         });
         this.accessibleElements.forEach((element, index) => {
-            element.setAttribute("aria-hidden", index !== this.currentIndex - 1);
-            element.style.display = index !== this.currentIndex - 1 ? "none" : "block"; //Needed for Firefox
+            element.setAttribute("aria-hidden", index !== this.currentIndex);
+            element.style.display = index !== this.currentIndex ? "none" : "block"; //Needed for Firefox
         });
     }
 
     startGame() {
         const theme = this.context.config.theme[this.game.state.current];
-        const metaData = { metadata: `ELE=[${theme.choices[this.currentIndex - 1].asset}]` };
+        const metaData = { metadata: `ELE=[${theme.choices[this.currentIndex].asset}]` };
         const screenType = this.game.state.current.split("-")[0];
         gmi.sendStatsEvent(screenType, "select", metaData);
 
@@ -125,7 +121,7 @@ export class Select extends Screen {
             name: "play",
             callback: () => {
                 // makes the screenreader announce the selected option
-                this.accessibleElements[this.currentIndex - 1].setAttribute("aria-hidden", false);
+                this.accessibleElements[this.currentIndex].setAttribute("aria-hidden", false);
             },
         });
     }
