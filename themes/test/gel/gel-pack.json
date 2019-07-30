@@ -165,12 +165,6 @@
             "type": "image",
             "key": "fx-off-icon",
             "url": "gel/desktop/fx-off-icon.png"
-        },
-        {
-            "type": "audio",
-            "key": "notificationSound",
-            "urls": ["gel/desktop/notification.mp3"],
-            "autoDecode": true
         }
     ],
     "gelMobile": [
