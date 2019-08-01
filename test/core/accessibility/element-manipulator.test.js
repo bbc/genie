@@ -100,6 +100,15 @@ describe("element manipulator", () => {
             expect(setTimeout).toHaveBeenCalledTimes(1);
             expect(element.parentElement.removeChild).toHaveBeenCalledWith(element);
         });
+
+        test("does not error if parentElement is null (caused by race condition)", () => {
+            jest.useFakeTimers();
+            delete element.parentElement;
+            resetElement();
+            jest.runAllTimers();
+
+            expect(setTimeout).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe("showElement Method", () => {

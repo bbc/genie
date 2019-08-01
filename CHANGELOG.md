@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 2.0.4 | |
+| | Button accessibility hot fix. (CGPROD-1577) |
 | 2.0.3 | |
 | | Select screen index zero based to match config array. |
 | | Remove achievement audio. |
