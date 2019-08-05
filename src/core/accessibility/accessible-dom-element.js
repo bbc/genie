@@ -66,7 +66,7 @@ export function accessibleDomElement(options) {
     }
 
     function visible() {
-        return el.style.visibility === "visible";
+        return el.style.visibility !== "hidden";
     }
 
     function position(positionOptions) {
