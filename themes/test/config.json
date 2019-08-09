@@ -13,15 +13,18 @@
             "choices": [
                 {
                     "asset": "carousel1",
-                    "accessibilityText": "Character 1"
+                    "accessibilityText": "Character 1",
+                    "title": "Clarice"
                 },
                 {
                     "asset": "carousel2",
-                    "accessibilityText": "Character 2"
+                    "accessibilityText": "Character 2",
+                    "title": "Ethel"
                 },
                 {
                     "asset": "carousel3",
-                    "accessibilityText": "Character 3"
+                    "accessibilityText": "Character 3",
+                    "title": "Gwendoline"
                 }
             ],
             "leftButton": {

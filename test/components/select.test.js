@@ -51,7 +51,11 @@ describe("Select Screen", () => {
             config: {
                 theme: {
                     "test-select": {
-                        choices: [{ asset: "character1" }, { asset: "character2" }, { asset: "character3" }],
+                        choices: [
+                            { asset: "character1" },
+                            { asset: "character2", title: "character_2" },
+                            { asset: "character3" },
+                        ],
                     },
                     game: {},
                 },
@@ -160,7 +164,7 @@ describe("Select Screen", () => {
             selectScreen.currentIndex = 1;
             signal.bus.subscribe.mock.calls[2][0].callback();
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("test", "select", {
-                metadata: "ELE=[character2]",
+                metadata: "ELE=[character_2]",
             });
         });
 
