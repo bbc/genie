@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| 2.0.6 | |
 | | Reports title from character-select assets rather than the asset key | |
 | 2.0.5 | |
 | | Calls to 'visible' on accessible dom elements now reliable after creation. (CGPROD-1585) |
