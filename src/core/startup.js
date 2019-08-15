@@ -17,7 +17,6 @@ import * as a11y from "./accessibility/accessibility-layer.js";
 import { addCustomStyles } from "./custom-styles.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as qaMode from "./qa/qa-mode.js";
-import * as fullscreen from "./fullscreen.js";
 import { getBrowser } from "./browser.js";
 
 /**
@@ -68,7 +67,6 @@ export function startup(settingsConfig = {}, navigationConfig) {
         loadFonts(game, onFontsLoaded);
 
         a11y.setup(game.canvas.parentElement);
-        fullscreen.listenForTap(game.canvas.parentElement, game);
     }
 }
 
