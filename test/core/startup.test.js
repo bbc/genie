@@ -176,7 +176,6 @@ describe("Startup", () => {
             jest.spyOn(Navigation, "create").mockImplementation(() => {});
             jest.spyOn(qaMode, "create").mockImplementation(() => {});
             jest.spyOn(a11y, "setup").mockImplementation(() => {});
-            jest.spyOn(fullscreen, "listenForTap").mockImplementation(() => {});
 
             startup({}, "NavConfig");
             const game = Phaser.Game.mock.calls[0][0];
@@ -212,12 +211,6 @@ describe("Startup", () => {
             const onComplete = LoadFonts.loadFonts.mock.calls[0][1];
             onComplete();
             expect(a11y.setup).toHaveBeenCalledWith(mockGame.canvas.parentElement);
-        });
-
-        test("sets up the fullscreen API", () => {
-            const onComplete = LoadFonts.loadFonts.mock.calls[0][1];
-            onComplete();
-            expect(fullscreen.listenForTap.mock.calls[0]).toEqual([mockGame.canvas.parentElement, mockGame]);
         });
     });
 });
