@@ -16,7 +16,6 @@ import * as Navigation from "../../src/core/navigation.js";
 import * as styles from "../../src/core/custom-styles.js";
 import * as qaMode from "../../src/core/qa/qa-mode.js";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
-import * as fullscreen from "../../src/core/fullscreen.js";
 
 jest.mock("../../src/core/browser.js");
 jest.mock("../../src/core/custom-styles.js");
