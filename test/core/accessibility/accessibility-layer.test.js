@@ -4,7 +4,6 @@
  * @license Apache-2.0
  */
 import { domElement } from "../../mock/dom-element.js";
-import { createMockButton } from "../../mock/phaser-button.js";
 
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import * as elementManipulator from "../../../src/core/accessibility/element-manipulator.js";
@@ -144,45 +143,6 @@ describe("Managing accessible buttons", () => {
             expect(buttons[0].accessibleElement.id).toEqual("home");
             expect(buttons[1].accessibleElement.id).toEqual("pause");
             expect(buttons[2].accessibleElement.id).toEqual("back");
-        });
-    });
-
-    describe("setAccessibilityLayer Method", () => {
-        let el1, button1, screen1, parentElement;
-
-        let hideElement, showElement;
-
-        beforeEach(() => {
-            screen1 = { visibleLayer: "home" };
-            el1 = domElement();
-            el1.id = "home__play";
-            el1.setAttribute("aria-label", "accessibility test");
-            button1 = createMockButton();
-            button1.accessibleElement = el1;
-            button1.elementId = el1.id;
-            a11y.addToAccessibleButtons(screen1, button1);
-            parentElement = domElement();
-            parentElement.childNodes.push(el1);
-            jest.spyOn(global.document, "getElementById").mockImplementation(argument => {
-                if (argument === "accessibility") {
-                    return parentElement;
-                }
-            });
-
-            a11y.appendElementsToDom(screen1);
-
-            hideElement = jest.spyOn(elementManipulator, "hideElement");
-            showElement = jest.spyOn(elementManipulator, "showElement");
-        });
-
-        test("hides visible elements", () => {
-            a11y.setAccessibleLayer(false);
-            expect(hideElement).toHaveBeenCalledWith(el1);
-        });
-
-        test("shows hidden elements", () => {
-            a11y.setAccessibleLayer(true);
-            expect(showElement).toHaveBeenCalledWith(el1);
         });
     });
 });

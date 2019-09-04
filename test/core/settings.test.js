@@ -4,8 +4,6 @@
  * @license Apache-2.0
  */
 import { createMockGmi } from "../mock/gmi";
-
-import { setAccessibleLayer } from "../../src/core/accessibility/accessibility-layer.js";
 import { create as createSettings } from "../../src/core/settings.js";
 import * as signal from "../../src/core/signal-bus.js";
 
@@ -22,7 +20,6 @@ describe("Settings", () => {
     };
 
     beforeEach(() => {
-        setAccessibleLayer.mockImplementation(() => {});
         createGmi();
         jest.spyOn(signal.bus, "subscribe").mockImplementation(() => {});
         jest.spyOn(signal.bus, "publish").mockImplementation(() => {});
@@ -51,24 +48,7 @@ describe("Settings", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    test("subscribes to the settingas-closed signal on create", () => {
-        const subscribeCall = signal.bus.subscribe.mock.calls[0][0];
-        expect(subscribeCall.channel).toBe("genie-settings");
-        expect(subscribeCall.name).toBe("settings-closed");
-    });
-
-    test("sets the accessible layer to true when the settingas-closed signal is fired", () => {
-        const subscribeCallback = signal.bus.subscribe.mock.calls[0][0].callback;
-        subscribeCallback();
-        expect(setAccessibleLayer).toHaveBeenCalledWith(true);
-    });
-
     describe("show method", () => {
-        test("sets the accessible layer to false", () => {
-            settings.show(mockGame);
-            expect(setAccessibleLayer).toHaveBeenCalledWith(false);
-        });
-
         test("returns GMI show settings", () => {
             const settingsShow = settings.show(mockGame);
             expect(settingsShow).toBe("show settings");

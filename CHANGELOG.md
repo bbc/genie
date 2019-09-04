@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Remove disable of background elements on modals as now handled automatically in cage. | |
 | 2.0.6 | |
 | | Reports title from character-select assets rather than the asset key | |
 | 2.0.5 | |

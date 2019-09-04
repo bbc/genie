@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { Buttons } from "./accessible-buttons.js";
-import { hideAndDisableElement, showElement, hideElement } from "./element-manipulator.js";
+import { hideAndDisableElement } from "./element-manipulator.js";
 
 let _accessibleButtons = {};
 
@@ -64,18 +64,6 @@ export const clearElementsFromDom = () => {
     });
 
     return parentElement;
-};
-
-export const setAccessibleLayer = inputEnabled => {
-    const parentElement = document.getElementById(PARENT_ELEMENT_ID);
-    const childNodes = Array.from(parentElement.childNodes);
-    childNodes.forEach(el => {
-        if (inputEnabled === true) {
-            showElement(el);
-        } else {
-            hideElement(el);
-        }
-    });
 };
 
 export const appendElementsToDom = screen => {
