@@ -19,6 +19,14 @@ import fp from "../../lib/lodash/fp/fp.js";
 import * as qaMode from "./qa/qa-mode.js";
 import { getBrowser } from "./browser.js";
 
+//TODO P3 this is just a quick shim to create the scenes array
+//Potentially "state" in main.js config should be renamed "scene"
+export const getScenes = conf => {
+    return Object.keys(conf).map(key => {
+        return new conf[key].state();
+    })
+}
+
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
  * @param {Object=} navigationConfig -
@@ -28,6 +36,9 @@ export function startup(settingsConfig = {}, navigationConfig) {
     hookErrors(gmi.gameContainerId);
 
     const browser = getBrowser();
+
+    const scenes = getScenes(navigationConfig());
+    scenes.unshift(new Startup(onStarted))
 
     const phaserConfig = {
         width: 1400,
@@ -39,6 +50,11 @@ export function startup(settingsConfig = {}, navigationConfig) {
         state: new Startup(onStarted),
         transparent: browser.isSilk, // Fixes silk browser flickering
         clearBeforeRender: false,
+        scale: {
+            mode: Phaser.Scale.HEIGHT_CONTROLS_WIDTH,   //TODO P3 look at ENVELOP / FIT or look here: https://codepen.io/samme/pen/paOjMO
+            autoCenter: Phaser.Scale.CENTER_BOTH
+        },
+        scene: scenes,
     };
     // Keep the console tidy:
     window.PhaserGlobal = window.PhaserGlobal || {};
@@ -58,11 +74,15 @@ export function startup(settingsConfig = {}, navigationConfig) {
             popupScreens: [],
             gameMuted: true,
         };
-        game.stage.backgroundColor = "#333";
+
+        //TODO P3 now part of camera and set per scene e.g: this.cameras.main.backgroundColor.setTo(255,255,255);﻿
+        //game.stage.backgroundColor = "#333";
 
         const onFontsLoaded = () => {
             const goToScreen = Navigation.create(game.state, context, layoutManager, navigationConfig);
             qaMode.create(window, game, goToScreen);
+
+            this.scene.start("loadscreen")
         };
         loadFonts(game, onFontsLoaded);
 
@@ -85,20 +105,21 @@ class Startup extends Phaser.Scene {
     }
 
     preload() {
-        this.game.load.baseURL = gmi.gameDir;
+        this.load.baseURL = gmi.gameDir;
 
         // All asset paths are relative to the location of the config.json:
-        this.game.load.path = gmi.embedVars.configPath; //config dir
-        this.game.load.json(CONFIG_KEY, "config.json");
+        this.load.path = gmi.embedVars.configPath; //config dir
+        this.load.json(CONFIG_KEY, "config.json");
 
-        signal.bus.subscribe({
-            channel: settingsChannel,
-            name: "settings-closed",
-            callback: () => {
-                this.game.canvas.focus();
-            },
-        });
-        this.configureAudioSetting();
+        //TODO P3 enable below once signal bus is ready
+        //signal.bus.subscribe({
+        //    channel: settingsChannel,
+        //    name: "settings-closed",
+        //    callback: () => {
+        //        this.game.canvas.focus();
+        //    },
+        //});
+        //this.configureAudioSetting();
     }
 
     configureAudioSetting() {
@@ -127,7 +148,7 @@ class Startup extends Phaser.Scene {
     }
 
     create() {
-        this._onStarted(this.game.cache.getJSON(CONFIG_KEY));
+        this._onStarted(this.cache.json.get(CONFIG_KEY), this);
     }
 }
 

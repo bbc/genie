@@ -29,22 +29,28 @@ export class Screen extends Phaser.Scene {
         return this.game.state.current + "." + name;
     }
 
-    init(transientData, layoutManager, context, navigation) {
-        this.layoutManager = layoutManager;
-        this._context = context;
-        this.navigation = navigation[this.game.state.current].routes;
-        const themeScreenConfig = this.context.config.theme[this.game.state.current];
-        if (this.game.state.current !== "loadscreen") {
-            gmi.setStatsScreen(this.game.state.current);
-        }
-        GameSound.setupScreenMusic(this.game, themeScreenConfig);
-        this.transientData = transientData;
-        a11y.clearAccessibleButtons();
-        a11y.clearElementsFromDom();
-        this.overlaySetup();
+    //TODO P3 only one argument is now passed to init
+    //init(transientData, layoutManager, context, navigation) {
+    init(config) {
+        this.layoutManager = config.layoutManager;
+        this._context = config.context;
 
-        const routes = navigation[this.game.state.current].routes;
-        this.navigation = fp.mapValues(value => () => value(this.transientData || {}), routes);
+
+        //TODO P3 commented out lines need re-enabling
+        //this.navigation = config.navigation[this.scene.key].routes;
+        //const themeScreenConfig = this.context.config.theme[this.game.state.current];
+        //if (this.game.state.current !== "loadscreen") {
+        //    gmi.setStatsScreen(this.game.state.current);
+        //}
+        //GameSound.setupScreenMusic(this.game, themeScreenConfig);
+        this.transientData = config.transientData;
+        a11y.clearAccessibleButtons();
+        //a11y.clearElementsFromDom();
+        //this.overlaySetup();
+
+        //TODO P3 these might not be needed anymore NT
+        //const routes = navigation[this.game.state.current].routes;
+        //this.navigation = fp.mapValues(value => () => value(this.transientData || {}), routes);
     }
 
     overlaySetup() {

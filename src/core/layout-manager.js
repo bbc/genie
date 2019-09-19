@@ -39,30 +39,35 @@ const addToGroup = fp.curry((group, object) => group.addChild(object));
  */
 export function create(game) {
     let _layouts = [];
-    const root = game.add.group(undefined, "root", true);
-    const unscaled = game.add.group(undefined, "unscaled", true);
-    const background = game.add.group(undefined, "background");
-    const foreground = game.add.group(undefined, "foreground");
+
+    //TODO P3 below might possible be removed now as game objects can be added directly to a scene. NT
+    //const root = game.add.group(undefined, "root", true);
+    //const unscaled = game.add.group(undefined, "unscaled", true);
+    //const background = game.add.group(undefined, "background");
+    //const foreground = game.add.group(undefined, "foreground");
 
     if (!game.accessibleButtons) {
         game.accessibleButtons = [];
     }
     const customAccessibleButtons = game.accessibleButtons;
 
-    const debug = game.add.group(undefined, "debug", true);
+    //TODO P3 next line part of debug draw
+    //const debug = game.add.group(undefined, "debug", true);
 
     const resize = ({ stageWidth, stageHeight }) => {
         root.position.set(stageWidth * 0.5, stageHeight * 0.5);
     };
 
-    Scaler.onScaleChange.add(resize);
-    Scaler.init(600, game);
+    //TODO P3 adds callback to default scaler onsize change. Will need to see how P3 does this. NT
+    //Scaler.onScaleChange.add(resize);
+    //Scaler.init(600, game);
 
-    root.addChild(background);
-    root.addChild(foreground);
-    if (game.debug.sprite) {
-        debug.addChild(game.debug.sprite);
-    }
+    //TODO P3 background / foreground can likely now be deleted. Debug sprite will rely on how P3 does debug draws
+    //root.addChild(background);
+    //root.addChild(foreground);
+    //if (game.debug.sprite) {
+    //    debug.addChild(game.debug.sprite);
+    //}
 
     /**
      * Create a new GEL layout for a given set of Gel Buttons
@@ -83,25 +88,31 @@ export function create(game) {
         return layout;
     };
 
-    const addToBackground = fp.flow(
-        centerAnchor,
-        addToGroup(background),
-    );
-    const addToForeground = fp.flow(
-        centerAnchor,
-        addToGroup(foreground),
-    );
-    const addToUnscaled = fp.flow(
-        centerAnchor,
-        addToGroup(unscaled),
-    );
+    //TODO P3 stubbed these out. They are likely now redundant. NT
+    const addToBackground = () => {};
+    const addToForeground = () => {};
+    const addToUnscaled = () => {};
+    //const addToBackground = fp.flow(
+    //    centerAnchor,
+    //    addToGroup(background),
+    //);
+    //const addToForeground = fp.flow(
+    //    centerAnchor,
+    //    addToGroup(foreground),
+    //);
+    //const addToUnscaled = fp.flow(
+    //    centerAnchor,
+    //    addToGroup(unscaled),
+    //);
 
     const getLayouts = () => _layouts;
 
     const getAccessibleGameButtons = () => customAccessibleButtons;
 
     const removeAll = () => {
-        background.removeAll(true);
+
+        //TODO P3 - is cleanup required still? NT
+        //background.removeAll(true);
         _layouts.forEach(layout => layout.destroy());
         _layouts = [];
     };
