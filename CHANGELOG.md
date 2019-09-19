@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Upgrade to Phaser 3 | |
 | 2.0.7 | |
 | | Remove fullscreen api usage | |
 | | Remove disable of background elements on modals as now handled automatically in cage. | |
