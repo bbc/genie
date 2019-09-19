@@ -68,7 +68,7 @@ describe("Select Screen", () => {
         createMockGmi(mockGmi);
 
         selectScreen = new Select();
-        selectScreen.scene = {
+        selectScreen.layoutManager = {
             addToBackground: jest.fn(),
             addLayout: jest.fn(),
         };
@@ -87,24 +87,24 @@ describe("Select Screen", () => {
 
         test("adds a background image", () => {
             expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "test-select.background");
-            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith("test-select.background");
+            expect(selectScreen.layoutManager.addToBackground).toHaveBeenCalledWith("test-select.background");
         });
 
         test("adds a title image", () => {
             expect(mockGame.add.image).toHaveBeenCalledWith(0, -170, "test-select.title");
-            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith("test-select.title");
+            expect(selectScreen.layoutManager.addToBackground).toHaveBeenCalledWith("test-select.title");
         });
 
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["home", "audio", "pauseNoReplay", "previous", "next", "continue"];
-            expect(selectScreen.scene.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(selectScreen.layoutManager.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
         test("creates a layout harness with correct params", () => {
             expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
                 mockGame,
                 mockContext,
-                selectScreen.scene,
+                selectScreen.layoutManager,
             );
         });
 
@@ -116,9 +116,9 @@ describe("Select Screen", () => {
         });
 
         test("adds each sprite to the background", () => {
-            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith(characterSprites[0]);
-            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith(characterSprites[1]);
-            expect(selectScreen.scene.addToBackground).toHaveBeenCalledWith(characterSprites[2]);
+            expect(selectScreen.layoutManager.addToBackground).toHaveBeenCalledWith(characterSprites[0]);
+            expect(selectScreen.layoutManager.addToBackground).toHaveBeenCalledWith(characterSprites[1]);
+            expect(selectScreen.layoutManager.addToBackground).toHaveBeenCalledWith(characterSprites[2]);
         });
 
         test("adds the choices", () => {

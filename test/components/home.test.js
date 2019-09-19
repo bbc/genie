@@ -30,7 +30,7 @@ describe("Home Screen", () => {
         };
 
         homeScreen = new Home();
-        homeScreen.scene = {
+        homeScreen.layoutManager = {
             addToBackground: jest.fn(),
             addLayout: jest.fn(),
         };
@@ -49,24 +49,24 @@ describe("Home Screen", () => {
 
         test("adds a background image", () => {
             expect(homeScreen.game.add.image).toHaveBeenCalledWith(0, 0, "home.background");
-            expect(homeScreen.scene.addToBackground).toHaveBeenCalledWith("home.background");
+            expect(homeScreen.layoutManager.addToBackground).toHaveBeenCalledWith("home.background");
         });
 
         test("adds a title image", () => {
             expect(homeScreen.game.add.image).toHaveBeenCalledWith(0, -150, "home.title");
-            expect(homeScreen.scene.addToBackground).toHaveBeenCalledWith("home.title");
+            expect(homeScreen.layoutManager.addToBackground).toHaveBeenCalledWith("home.title");
         });
 
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings"];
-            expect(homeScreen.scene.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(homeScreen.layoutManager.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
         test("creates a layout harness with correct params", () => {
             expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
                 mockGame,
                 mockContext,
-                homeScreen.scene,
+                homeScreen.layoutManager,
             );
         });
     });
@@ -76,7 +76,7 @@ describe("Home Screen", () => {
             homeScreen.context.config.theme.game.achievements = true;
             homeScreen.create();
             const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "achievements"];
-            expect(homeScreen.scene.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(homeScreen.layoutManager.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
     });
 

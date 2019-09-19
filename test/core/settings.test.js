@@ -35,7 +35,7 @@ describe("Settings", () => {
                             home: jest.fn(),
                             achievements: jest.fn(),
                         },
-                        scene: {
+                        layoutManager: {
                             getLayouts: jest.fn(() => layout),
                         },
                     },

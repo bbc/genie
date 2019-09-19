@@ -15,7 +15,7 @@ import * as signal from "../../src/core/signal-bus.js";
 describe("Screen", () => {
     let screen;
     let mockGmi;
-    let mockScene;
+    let mockLayoutManager;
     let mockContext;
     let mockTransientData;
     let mockNavigation;
@@ -32,7 +32,7 @@ describe("Screen", () => {
             loadscreen: { routes: { testRoute: jest.fn().mockReturnValue("loadscreen-test-route") } },
             select: { routes: "select-routes" },
         };
-        screen.init(mockTransientData, mockScene, mockContext, mockNavigation);
+        screen.init(mockTransientData, mockLayoutManager, mockContext, mockNavigation);
     };
 
     const createAndInitScreen = () => {
@@ -49,7 +49,7 @@ describe("Screen", () => {
         jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
         jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
 
-        mockScene = { addToBackground: jest.fn() };
+        mockLayoutManager = { addToBackground: jest.fn() };
         mockGmi = { setStatsScreen: jest.fn() };
         createMockGmi(mockGmi);
 
@@ -63,9 +63,9 @@ describe("Screen", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("Initialisation", () => {
-        test("sets the scene", () => {
+        test("sets the layoutManager", () => {
             createAndInitScreen();
-            expect(screen.scene).toEqual(mockScene);
+            expect(screen.layoutManager).toEqual(mockLayoutManager);
         });
 
         test("sets the context", () => {

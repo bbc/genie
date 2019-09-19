@@ -32,7 +32,7 @@ describe("Overlay Layout", () => {
 
         mockScreen = {
             context: { popupScreens: ["pause", "how-to-play"] },
-            scene: {
+            layoutManager: {
                 getLayouts: jest.fn().mockImplementation(() => mockLayouts),
                 addToBackground: jest.fn(),
             },
@@ -66,7 +66,7 @@ describe("Overlay Layout", () => {
 
             expect(mockBackgroundImage.inputEnabled).toBe(true);
             expect(mockBackgroundImage.input.priorityID).toBe(1002);
-            expect(mockScreen.scene.addToBackground.mock.calls[0][0]).toEqual(mockBackgroundImage);
+            expect(mockScreen.layoutManager.addToBackground.mock.calls[0][0]).toEqual(mockBackgroundImage);
         });
     });
 

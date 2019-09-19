@@ -45,7 +45,7 @@ describe("Results Screen", () => {
         createMockGmi(mockGmi);
 
         resultsScreen = new Results();
-        resultsScreen.scene = {
+        resultsScreen.layoutManager = {
             addToBackground: jest.fn(),
             addLayout: jest.fn(),
         };
@@ -68,13 +68,13 @@ describe("Results Screen", () => {
         test("adds a background image", () => {
             resultsScreen.create();
             expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "results.background");
-            expect(resultsScreen.scene.addToBackground).toHaveBeenCalledWith("results.background");
+            expect(resultsScreen.layoutManager.addToBackground).toHaveBeenCalledWith("results.background");
         });
 
         test("adds a title image", () => {
             resultsScreen.create();
             expect(mockGame.add.image).toHaveBeenCalledWith(0, -150, "results.title");
-            expect(resultsScreen.scene.addToBackground).toHaveBeenCalledWith("results.title");
+            expect(resultsScreen.layoutManager.addToBackground).toHaveBeenCalledWith("results.title");
         });
 
         test("loads the game results text", () => {
@@ -86,7 +86,7 @@ describe("Results Screen", () => {
         test("adds GEL buttons to layout", () => {
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame"];
-            expect(resultsScreen.scene.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(resultsScreen.layoutManager.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
         test("creates a layout harness with correct params", () => {
@@ -94,7 +94,7 @@ describe("Results Screen", () => {
             expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
                 mockGame,
                 mockContext,
-                resultsScreen.scene,
+                resultsScreen.layoutManager,
             );
         });
 
@@ -102,7 +102,7 @@ describe("Results Screen", () => {
             resultsScreen.context.config.theme.game.achievements = true;
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame", "achievements"];
-            expect(resultsScreen.scene.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(resultsScreen.layoutManager.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
         describe("Stats", () => {

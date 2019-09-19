@@ -25,7 +25,7 @@ describe("Layout - Gel Defaults", () => {
                 home: jest.fn(),
                 achievements: jest.fn(),
             },
-            scene: {
+            layoutManager: {
                 getLayouts: jest.fn(() => [{ buttons: { achievements: { setIndicator: clearIndicatorSpy } } }]),
             },
             transientData: {},
