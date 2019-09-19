@@ -16,7 +16,7 @@ import fp from "../../lib/lodash/fp/fp.js";
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
  * All the game screens will extend from this class.
  */
-export class Screen extends Phaser.State {
+export class Screen extends Phaser.Scene {
     get context() {
         return this._context;
     }

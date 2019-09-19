@@ -19,7 +19,7 @@
  * @license Apache-2.0
  */
 import * as Scaler from "./scaler.js";
-import * as Layout from "./layout/layout.js";
+//import * as Layout from "./layout/layout.js"; //TODO P3 re-enable layouts here
 import fp from "../../lib/lodash/fp/fp.js";
 
 const centerAnchor = object => {

@@ -78,7 +78,7 @@ const setImage = button => button.setImage(settings.getAllSettings().audio ? "au
 const getButtons = fp.map(fp.get("buttons.audio"));
 const filterUndefined = fp.filter(x => !!x);
 
-class Startup extends Phaser.State {
+class Startup extends Phaser.Scene {
     constructor(onStarted) {
         super();
         this._onStarted = onStarted;
