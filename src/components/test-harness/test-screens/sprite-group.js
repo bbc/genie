@@ -20,7 +20,7 @@ export class SpriteGroupTest extends Screen {
     }
 
     create() {
-        this.scene.addLayout(["home", "pause", "audio", "settings", "continue"]);
+        this.layoutManager.addLayout(["home", "pause", "audio", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.spriteGroup = this.game.add.group();
@@ -32,7 +32,7 @@ export class SpriteGroupTest extends Screen {
             this.spriteGroup.add(sprite);
         }
 
-        this.scene.addToBackground(this.spriteGroup);
+        this.layoutManager.addToBackground(this.spriteGroup);
 
         signal.bus.subscribe({
             channel: "gel-buttons",

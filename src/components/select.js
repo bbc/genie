@@ -22,15 +22,15 @@ export class Select extends Screen {
     }
 
     create() {
-        this.scene.addToBackground(this.game.add.image(0, 0, this.getAsset("background")));
-        createTestHarnessDisplay(this.game, this.context, this.scene);
+        this.layoutManager.addToBackground(this.game.add.image(0, 0, this.getAsset("background")));
+        createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
         const theme = this.context.config.theme[this.game.state.current];
         this.currentIndex = 0;
         this.choiceSprites = this.createChoiceSprites(theme.choices);
-        this.scene.addToBackground(this.game.add.image(0, -170, this.getAsset("title")));
+        this.layoutManager.addToBackground(this.game.add.image(0, -170, this.getAsset("title")));
 
-        this.scene.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
+        this.layoutManager.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
 
         this.accessibleElements = accessibleCarouselElements.create(
             this.visibleLayer,
@@ -49,7 +49,7 @@ export class Select extends Screen {
             const choiceSprite = this.game.add.sprite(0, 0, choiceAsset);
 
             choiceSprite.visible = index === 0;
-            this.scene.addToBackground(choiceSprite);
+            this.layoutManager.addToBackground(choiceSprite);
             choiceSprites.push(choiceSprite);
         });
         return choiceSprites;

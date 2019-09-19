@@ -29,8 +29,8 @@ export class Screen extends Phaser.State {
         return this.game.state.current + "." + name;
     }
 
-    init(transientData, scene, context, navigation) {
-        this.scene = scene;
+    init(transientData, layoutManager, context, navigation) {
+        this.layoutManager = layoutManager;
         this._context = context;
         this.navigation = navigation[this.game.state.current].routes;
         const themeScreenConfig = this.context.config.theme[this.game.state.current];

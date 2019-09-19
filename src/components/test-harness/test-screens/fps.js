@@ -16,19 +16,19 @@ export class FpsTest extends Screen {
     }
 
     create() {
-        this.scene.addLayout(["home", "pause", "audio", "settings", "continue"]);
+        this.layoutManager.addLayout(["home", "pause", "audio", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
         this.sprites = [];
 
         for (let xPos = -200; xPos <= 200; xPos += 100) {
             const sprite = this.game.add.sprite(xPos, 0, "fps.basicSprite");
-            this.scene.addToBackground(sprite);
+            this.layoutManager.addToBackground(sprite);
             this.game.physics.arcade.enable(sprite);
             this.sprites.push(sprite);
         }
 
         this.fpsDebug = this.game.add.text(0, -250, "", { font: "36px ReithSans", fill: "#ffffff" });
-        this.scene.addToBackground(this.fpsDebug);
+        this.layoutManager.addToBackground(this.fpsDebug);
 
         signal.bus.subscribe({
             channel: "gel-buttons",

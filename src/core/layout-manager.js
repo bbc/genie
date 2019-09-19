@@ -1,5 +1,5 @@
 /**
- * A Genie scene is instantiated once in {@link module:core/navigation}
+ * A Genie layoutManager is instantiated once in {@link module:core/navigation}
  *
  * It instantiates {@link module:core/scaler} and provides methods for adding display objects to foreground and
  * background groups (It is expected that most of a game would be added to the background group and any overlays /
@@ -9,11 +9,11 @@
  * and sets the phaser debug sprite to be at the top of the display list
  *
  * @example
- * this.scene.addToBackground(this.game.add.image(0, 0, "sceneName.background"));
- * this.scene.addToBackground(this.game.add.image(0, -150, "sceneName.title"));
- * this.scene.addLayout(["exit", "howToPlay", "play", "audio", "settings"]);
+ * this.layoutManager.addToBackground(this.game.add.image(0, 0, "sceneName.background"));
+ * this.layoutManager.addToBackground(this.game.add.image(0, -150, "sceneName.title"));
+ * this.layoutManager.addLayout(["exit", "howToPlay", "play", "audio", "settings"]);
  *
- * @module core/scene
+ * @module core/layoutManager
  * @copyright BBC 2018
  * @author BBC Children's D+E
  * @license Apache-2.0
@@ -32,7 +32,7 @@ const centerAnchor = object => {
 const addToGroup = fp.curry((group, object) => group.addChild(object));
 
 /**
- * Create a new Scene
+ * Create a new layoutManager
  *
  * @param {Phaser.Game} game
  * @returns {{addToBackground(), addToForeground(), addLayout(), removeAll(), getSize()}} - {{@link module:layout/factory.addLayout addLayout}}
@@ -69,7 +69,7 @@ export function create(game) {
      * Called in the create method of a given screen
      *
      * @example
-     * scene.addLayout(["home", "restart", "continue", "pause"]);
+     * layoutManager.addLayout(["home", "restart", "continue", "pause"]);
      * @param {Array} buttons - Array of standard button names to include. See {@link ./gel-defaults.js} for available names
      *
      * @memberof module:layout/factory

@@ -13,7 +13,7 @@ export class Home extends Screen {
     preload() {}
 
     create() {
-        this.scene.addLayout([
+        this.layoutManager.addLayout([
             "exit",
             "home",
             "achievements",

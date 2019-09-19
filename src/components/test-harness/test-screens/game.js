@@ -13,13 +13,13 @@ export class GameTest extends Screen {
     }
 
     create() {
-        this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
+        this.layoutManager.addToBackground(this.game.add.image(0, 0, "home.background"));
 
         const titleStyle = { font: "65px ReithSans", fill: "#f6931e", align: "center" };
         const titleText = this.game.add.text(0, -190, "Game goes here", titleStyle);
         titleText.anchor.set(0.5, 0.5);
-        this.scene.addToBackground(titleText);
-        this.scene.addLayout(["pause"]);
+        this.layoutManager.addToBackground(titleText);
+        this.layoutManager.addLayout(["pause"]);
 
         gmi.setGameData("characterSelected", this.transientData.characterSelected);
         console.log("Data saved to GMI:", gmi.getAllSettings().gameData); // eslint-disable-line no-console
@@ -51,7 +51,7 @@ export class GameTest extends Screen {
             button.anchor.set(0.5, 0.5);
             button.addChild(buttonText);
             buttonText.anchor.set(0.5, 0.5);
-            this.scene.addToBackground(button);
+            this.layoutManager.addToBackground(button);
         }, this);
 
         const onGameComplete = buttonNumber => {
@@ -71,6 +71,6 @@ export class GameTest extends Screen {
             { font: "italic 32px ReithSans", fill: "#f6931e", align: "center" },
         );
 
-        this.scene.addToBackground(characterSelectedText);
+        this.layoutManager.addToBackground(characterSelectedText);
     }
 }

@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as Scene from "../../src/core/scene";
+import * as Scene from "../../src/core/layout-manager.js";
 import * as Layout from "../../src/core/layout/layout";
 import * as Scaler from "../../src/core/scaler.js";
 

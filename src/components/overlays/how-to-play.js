@@ -25,7 +25,7 @@ export function create({ game }) {
 
     const overlayLayout = OverlayLayout.create(screen);
     const background = overlayLayout.addBackground(game.add.image(0, 0, "howToPlay.background"));
-    const title = screen.scene.addToBackground(game.add.image(0, -230, "howToPlay.title"));
+    const title = screen.layoutManager.addToBackground(game.add.image(0, -230, "howToPlay.title"));
 
     let book = Book.Start("howToPlay", theme, game, screen, overlayLayout, theme.panelText);
 
@@ -69,7 +69,7 @@ export function create({ game }) {
             pipsGroup.add(pip);
             currentPosition += pipWidth + spacing;
         });
-        screen.scene.addToBackground(pipsGroup);
+        screen.layoutManager.addToBackground(pipsGroup);
         return pipsGroup;
     }
 
@@ -96,6 +96,6 @@ export function create({ game }) {
         title.destroy();
         background.destroy();
         signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: true } });
-        screen.scene.removeLast();
+        screen.layoutManager.removeLast();
     }
 }

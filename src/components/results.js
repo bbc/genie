@@ -31,16 +31,16 @@ export class Results extends Screen {
 
     create() {
         const theme = this.context.config.theme[this.game.state.current];
-        this.scene.addToBackground(this.game.add.image(0, 0, "results.background"));
-        this.scene.addToBackground(this.scene.addToBackground(this.game.add.image(0, -150, "results.title")));
+        this.layoutManager.addToBackground(this.game.add.image(0, 0, "results.background"));
+        this.layoutManager.addToBackground(this.layoutManager.addToBackground(this.game.add.image(0, -150, "results.title")));
 
         const resultsText = this.game.add.text(0, 50, this.transientData.results, theme.resultText.style);
-        this.scene.addToBackground(resultsText);
+        this.layoutManager.addToBackground(resultsText);
 
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         const buttons = ["pause", "restart", "continueGame"];
-        this.scene.addLayout(buttons.concat(achievements));
-        createTestHarnessDisplay(this.game, this.context, this.scene);
+        this.layoutManager.addLayout(buttons.concat(achievements));
+        createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
         fireGameCompleteStat(this.transientData.results);
 

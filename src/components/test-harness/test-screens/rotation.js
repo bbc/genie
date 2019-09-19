@@ -20,14 +20,14 @@ export class RotationTest extends Screen {
     }
 
     create() {
-        this.scene.addLayout(["home", "pause", "audio", "settings", "continue"]);
+        this.layoutManager.addLayout(["home", "pause", "audio", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.sprite = this.game.add.sprite(200, -100, "rotation.basicSprite");
         this.game.physics.arcade.enable(this.sprite);
         debug.add(this.sprite, "rgba(255,0,0,0.4)", true);
 
-        this.scene.addToBackground(this.sprite);
+        this.layoutManager.addToBackground(this.sprite);
         signal.bus.subscribe({
             channel: "gel-buttons",
             name: "continue",

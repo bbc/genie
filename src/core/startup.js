@@ -10,7 +10,7 @@
 import { settings, settingsChannel } from "../core/settings.js";
 import * as signal from "../core/signal-bus.js";
 import * as Navigation from "./navigation.js";
-import * as Scene from "./scene.js";
+import * as LayoutManager from "./layout-manager.js";
 import { loadFonts } from "./font-loader.js";
 import { gmi, setGmi } from "./gmi/gmi.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
@@ -52,7 +52,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
         // Phaser is now set up and we can use all game properties.
         game.canvas.setAttribute("tabindex", "-1");
         game.canvas.setAttribute("aria-hidden", "true");
-        const scene = Scene.create(game);
+        const layoutManager = LayoutManager.create(game);
         const context = {
             config: config,
             popupScreens: [],
@@ -61,7 +61,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
         game.stage.backgroundColor = "#333";
 
         const onFontsLoaded = () => {
-            const goToScreen = Navigation.create(game.state, context, scene, navigationConfig);
+            const goToScreen = Navigation.create(game.state, context, layoutManager, navigationConfig);
             qaMode.create(window, game, goToScreen);
         };
         loadFonts(game, onFontsLoaded);
@@ -119,7 +119,7 @@ class Startup extends Phaser.State {
             callback: value => {
                 this.game.sound.mute = !value;
                 const state = this.game.state;
-                const layouts = state.states[state.current].scene.getLayouts();
+                const layouts = state.states[state.current].layoutManager.getLayouts();
 
                 fp.map(setImage, filterUndefined(getButtons(layouts)));
             },
