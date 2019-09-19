@@ -32,7 +32,9 @@ export class Results extends Screen {
     create() {
         const theme = this.context.config.theme[this.game.state.current];
         this.layoutManager.addToBackground(this.game.add.image(0, 0, "results.background"));
-        this.layoutManager.addToBackground(this.layoutManager.addToBackground(this.game.add.image(0, -150, "results.title")));
+        this.layoutManager.addToBackground(
+            this.layoutManager.addToBackground(this.game.add.image(0, -150, "results.title")),
+        );
 
         const resultsText = this.game.add.text(0, 50, this.transientData.results, theme.resultText.style);
         this.layoutManager.addToBackground(resultsText);
