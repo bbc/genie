@@ -8,11 +8,11 @@ import { createMockGmi } from "../../mock/gmi";
 
 import { groupLayouts } from "../../../src/core/layout/group-layouts.js";
 import { onScaleChange } from "../../../src/core/scaler.js";
-import { Group } from "../../../src/core/layout/group.js";
+import { GelGroup } from "../../../src/core/layout/gel-group.js";
 import * as Layout from "../../../src/core/layout/layout.js";
 import * as settingsIcons from "../../../src/core/layout/settings-icons.js";
 
-jest.mock("../../../src/core/layout/group.js");
+jest.mock("../../../src/core/layout/gel-group.js");
 
 describe("Layout", () => {
     const sixGelButtons = ["achievements", "exit", "howToPlay", "play", "audio", "settings"];
@@ -21,7 +21,7 @@ describe("Layout", () => {
     let mockGame;
     let mockMetrics;
     let mockInputUpAdd;
-    let mockGroup;
+    let mockGelGroup;
     let mockPhaserGroup;
     let mockSignalUnsubscribe;
     let settingsIconsUnsubscribeSpy;
@@ -46,13 +46,13 @@ describe("Layout", () => {
         };
 
         mockInputUpAdd = jest.fn();
-        mockGroup = {
+        mockGelGroup = {
             addButton: jest.fn(name => ({ buttonName: name, onInputUp: { add: mockInputUpAdd } })),
             reset: jest.fn(),
             addToGroup: jest.fn(),
             destroy: jest.fn(),
         };
-        Group.mockImplementation(() => mockGroup);
+        GelGroup.mockImplementation(() => mockGelGroup);
         mockPhaserGroup = { destroy: jest.fn() };
         global.Phaser.Group = jest.fn().mockImplementation(() => mockPhaserGroup);
 
@@ -105,9 +105,9 @@ describe("Layout", () => {
                 groupLayouts[callNumber].arrangeV,
             ];
             Layout.create(mockGame, mockMetrics, sixGelButtons);
-            expect(Group).toHaveBeenCalledTimes(groupLayouts.length);
-            Group.mock.calls.forEach((call, index) => {
-                expect(Group.mock.calls[index]).toEqual(getExpectedParams(index));
+            expect(GelGroup).toHaveBeenCalledTimes(groupLayouts.length);
+            GelGroup.mock.calls.forEach((call, index) => {
+                expect(GelGroup.mock.calls[index]).toEqual(getExpectedParams(index));
             });
         });
 
@@ -149,8 +149,8 @@ describe("Layout", () => {
 
         test("resets the groups after they have been added to the layout", () => {
             Layout.create(mockGame, mockMetrics, []);
-            expect(mockGroup.reset).toHaveBeenCalledTimes(11);
-            expect(mockGroup.reset).toHaveBeenCalledWith(mockMetrics);
+            expect(mockGelGroup.reset).toHaveBeenCalledTimes(11);
+            expect(mockGelGroup.reset).toHaveBeenCalledWith(mockMetrics);
         });
 
         test("subscribes to the scaler sizeChange signal", () => {
@@ -160,7 +160,7 @@ describe("Layout", () => {
 
         test("creates the settings icons", () => {
             Layout.create(mockGame, mockMetrics, ["play"]);
-            expect(settingsIcons.create).toHaveBeenCalledWith(mockGroup, ["play"]);
+            expect(settingsIcons.create).toHaveBeenCalledWith(mockGelGroup, ["play"]);
         });
     });
 
@@ -170,7 +170,7 @@ describe("Layout", () => {
             const testElement = { mock: "element" };
 
             layout.addToGroup("middleRight", testElement, 1);
-            expect(mockGroup.addToGroup).toHaveBeenCalledWith(testElement, 1);
+            expect(mockGelGroup.addToGroup).toHaveBeenCalledWith(testElement, 1);
         });
     });
 

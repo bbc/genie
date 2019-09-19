@@ -51,7 +51,7 @@ const vertical = {
     },
 };
 
-export class Group extends Phaser.Group {
+export class GelGroup extends Phaser.Group {
     constructor(game, parent, vPos, hPos, metrics, isSafe, isVertical) {
         super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
 

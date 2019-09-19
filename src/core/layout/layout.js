@@ -11,7 +11,7 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import * as settingsIcons from "./settings-icons.js";
 import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
-import { Group } from "./group.js";
+import { GelGroup } from "./gel-group.js";
 import { gmi } from "../gmi/gmi.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
@@ -52,7 +52,7 @@ export function create(game, metrics, buttonIds) {
             fp.camelCase([layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" ")),
         ),
         groupLayouts.map(
-            layout => new Group(game, root, layout.vPos, layout.hPos, metrics, layout.safe, layout.arrangeV),
+            layout => new GelGroup(game, root, layout.vPos, layout.hPos, metrics, layout.safe, layout.arrangeV),
         ),
     );
 
