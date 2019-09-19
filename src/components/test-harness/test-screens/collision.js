@@ -24,16 +24,16 @@ export class CollisionTest extends Screen {
     create() {
         hasCollided = false;
 
-        this.scene.addLayout(["home", "pause", "audio", "settings", "continue"]);
+        this.layoutManager.addLayout(["home", "pause", "audio", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         this.spriteOne = this.game.add.sprite(-200, 0, "collision.basicSprite");
-        this.scene.addToBackground(this.spriteOne);
+        this.layoutManager.addToBackground(this.spriteOne);
         this.game.physics.arcade.enable(this.spriteOne);
         debug.add(this.spriteOne, "rgba(255,0,0,0.4)", true);
 
         this.spriteTwo = this.game.add.sprite(200, 0, "collision.basicSprite");
-        this.scene.addToBackground(this.spriteTwo);
+        this.layoutManager.addToBackground(this.spriteTwo);
         this.game.physics.arcade.enable(this.spriteTwo);
         debug.add(this.spriteTwo, "rgba(255,0,0,0.4)", true);
 

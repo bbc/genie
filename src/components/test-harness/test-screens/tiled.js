@@ -20,7 +20,7 @@ export class TiledTest extends Screen {
     }
 
     create() {
-        this.scene.addLayout(["home", "pause", "audio", "settings", "continue"]);
+        this.layoutManager.addLayout(["home", "pause", "audio", "settings", "continue"]);
         this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         const data = `
@@ -50,12 +50,12 @@ export class TiledTest extends Screen {
         this.layer = map.createLayer(0);
         this.layer.resizeWorld();
         // TODO: Center the tilemap - this functionality may need fixing in GENIE Core
-        this.scene.addToBackground(this.layer);
+        this.layoutManager.addToBackground(this.layer);
 
         this.sprite = this.game.add.sprite(0, -300, "tiled.basicSprite");
         this.game.physics.arcade.enable(this.sprite);
         debug.add(this.sprite, "rgba(255,0,0,0.4)", true);
-        this.scene.addToBackground(this.sprite);
+        this.layoutManager.addToBackground(this.sprite);
 
         this.sprite.body.bounce.y = 0.2;
         this.sprite.body.linearDamping = 1;

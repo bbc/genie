@@ -8,12 +8,12 @@
 import { buttonsChannel } from "./layout/gel-defaults.js";
 import * as signal from "./signal-bus.js";
 
-export const create = (gameState, context, scene, navigationConfig) => {
+export const create = (gameState, context, layoutManager, navigationConfig) => {
     const goToScreen = (name, transientData) => {
         gameState.game.paused = false; // fixes IE11 and Edge "focus loss" bug when navigating screens
         signal.bus.removeChannel(buttonsChannel);
-        scene.removeAll();
-        gameState.start(name, true, false, transientData, scene, context, navigation);
+        layoutManager.removeAll();
+        gameState.start(name, true, false, transientData, layoutManager, context, navigation);
     };
 
     const navigation = navigationConfig(goToScreen);

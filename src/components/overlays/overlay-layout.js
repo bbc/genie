@@ -32,7 +32,7 @@ export function create(screen) {
     function addBackground(backgroundImage) {
         backgroundImage.inputEnabled = true;
         backgroundImage.input.priorityID = priorityID - 1;
-        return screen.scene.addToBackground(backgroundImage);
+        return screen.layoutManager.addToBackground(backgroundImage);
     }
 
     function moveGelButtonsToTop(gelLayout) {

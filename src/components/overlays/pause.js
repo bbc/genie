@@ -43,7 +43,7 @@ export const create = fp.curry((hideReplayButton, { game }) => {
             gelButtonList.unshift("pauseReplay");
         }
 
-        const gelLayout = screen.scene.addLayout(gelButtonList);
+        const gelLayout = screen.layoutManager.addLayout(gelButtonList);
         overlayLayout.moveGelButtonsToTop(gelLayout);
         return gelLayout;
     }
@@ -72,7 +72,7 @@ export const create = fp.curry((hideReplayButton, { game }) => {
             GameSound.Assets.backgroundMusic.resume();
         }
         signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-        screen.scene.removeLast();
+        screen.layoutManager.removeLast();
     }
 
     function restartGame() {

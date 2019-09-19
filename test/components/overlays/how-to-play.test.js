@@ -48,7 +48,7 @@ describe("How To Play Overlay", () => {
         mockTitle = { destroy: jest.fn() };
         mockScreen = {
             visibleLayer: "how-to-play",
-            scene: {
+            layoutManager: {
                 addToBackground: jest.fn().mockImplementation(item => item),
                 removeLast: jest.fn(),
             },
@@ -157,7 +157,7 @@ describe("How To Play Overlay", () => {
 
         test("adds the pips group to the background", () => {
             HowToPlay.create({ game: mockGame });
-            expect(mockScreen.scene.addToBackground).toHaveBeenCalledWith(mockPipsGroup);
+            expect(mockScreen.layoutManager.addToBackground).toHaveBeenCalledWith(mockPipsGroup);
         });
 
         test("goes to the correct page in the book when a pip is clicked", () => {
@@ -223,8 +223,8 @@ describe("How To Play Overlay", () => {
                 });
             });
 
-            test("removes the scene", () => {
-                expect(mockScreen.scene.removeLast).toHaveBeenCalled();
+            test("removes the layoutManager", () => {
+                expect(mockScreen.layoutManager.removeLast).toHaveBeenCalled();
             });
         });
 
@@ -244,7 +244,7 @@ describe("How To Play Overlay", () => {
             });
 
             test("creates a new pips group", () => {
-                expect(mockScreen.scene.addToBackground).toHaveBeenCalledTimes(3);
+                expect(mockScreen.layoutManager.addToBackground).toHaveBeenCalledTimes(3);
             });
         });
 
@@ -264,7 +264,7 @@ describe("How To Play Overlay", () => {
             });
 
             test("creates a new pips group", () => {
-                expect(mockScreen.scene.addToBackground).toHaveBeenCalledTimes(3);
+                expect(mockScreen.layoutManager.addToBackground).toHaveBeenCalledTimes(3);
             });
         });
     });

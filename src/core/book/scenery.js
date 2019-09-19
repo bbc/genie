@@ -7,11 +7,11 @@ const Create = (x, y, asset) => {
     return Object.freeze({ x, y, asset });
 };
 
-const Draw = (game, scene) => {
+const Draw = (game, layoutManager) => {
     return scenery => {
         const sprite = game.add.sprite(scenery.x, scenery.y, scenery.asset);
         sprite.visible = false;
-        scene.addToBackground(sprite);
+        layoutManager.addToBackground(sprite);
         return sprite;
     };
 };

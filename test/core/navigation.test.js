@@ -9,7 +9,7 @@ import * as Navigation from "../../src/core/navigation.js";
 import * as signal from "../../src/core/signal-bus.js";
 
 describe("Navigation", () => {
-    let gameState, context, scene, navigationConfig, transientData, navigation;
+    let gameState, context, layoutManager, navigationConfig, transientData, navigation;
 
     beforeEach(() => {
         gameState = {
@@ -18,7 +18,7 @@ describe("Navigation", () => {
             game: { paused: true },
         };
         context = jest.fn();
-        scene = { removeAll: jest.fn() };
+        layoutManager = { removeAll: jest.fn() };
         transientData = undefined;
         navigation = {
             loadscreen: {
@@ -41,7 +41,7 @@ describe("Navigation", () => {
     afterEach(() => jest.clearAllMocks());
 
     test("loads correct genie screens", () => {
-        Navigation.create(gameState, context, scene, navigationConfig);
+        Navigation.create(gameState, context, layoutManager, navigationConfig);
 
         expect(gameState.add).toHaveBeenCalledTimes(2);
         expect(gameState.add).toHaveBeenCalledWith("loadscreen", Loadscreen);
@@ -49,7 +49,7 @@ describe("Navigation", () => {
     });
 
     test("goes to loadscreen", () => {
-        Navigation.create(gameState, context, scene, navigationConfig);
+        Navigation.create(gameState, context, layoutManager, navigationConfig);
 
         expect(gameState.start).toHaveBeenCalledTimes(1);
         expect(gameState.start).toHaveBeenCalledWith(
@@ -57,32 +57,32 @@ describe("Navigation", () => {
             true,
             false,
             transientData,
-            scene,
+            layoutManager,
             context,
             navigation,
         );
     });
 
     test("ensures the game is unpaused", () => {
-        Navigation.create(gameState, context, scene, navigationConfig);
+        Navigation.create(gameState, context, layoutManager, navigationConfig);
 
         expect(gameState.game.paused).toBe(false);
     });
 
     test("removes signal bus gel-buttons channel before going to screen", () => {
-        Navigation.create(gameState, context, scene, navigationConfig);
+        Navigation.create(gameState, context, layoutManager, navigationConfig);
 
         expect(signal.bus.removeChannel).toHaveBeenCalledTimes(1);
         expect(signal.bus.removeChannel).toHaveBeenCalledWith("gel-buttons");
     });
 
     test("clears down layout before going to screen", () => {
-        Navigation.create(gameState, context, scene, navigationConfig);
+        Navigation.create(gameState, context, layoutManager, navigationConfig);
 
-        expect(scene.removeAll).toHaveBeenCalledTimes(1);
+        expect(layoutManager.removeAll).toHaveBeenCalledTimes(1);
     });
 
     test("It returns a function", () => {
-        expect(typeof Navigation.create(gameState, context, scene, navigationConfig)).toBe("function");
+        expect(typeof Navigation.create(gameState, context, layoutManager, navigationConfig)).toBe("function");
     });
 });

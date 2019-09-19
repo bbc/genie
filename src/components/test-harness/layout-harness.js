@@ -5,7 +5,7 @@
  */
 import { GEL_MIN_ASPECT_RATIO } from "../../core/layout/calculate-metrics.js";
 
-export function createTestHarnessDisplay(game, context, scene) {
+export function createTestHarnessDisplay(game, context, layoutManager) {
     let graphicsBackgroundGroup;
     let graphicsForegroundGroup;
 
@@ -29,8 +29,8 @@ export function createTestHarnessDisplay(game, context, scene) {
     function show() {
         drawGameArea();
         drawOuterPadding();
-        scene.addToBackground(graphicsBackgroundGroup);
-        scene.addToForeground(graphicsForegroundGroup);
+        layoutManager.addToBackground(graphicsBackgroundGroup);
+        layoutManager.addToForeground(graphicsForegroundGroup);
         window.__qaMode.testHarnessLayoutDisplayed = true;
     }
 

@@ -10,7 +10,7 @@ describe("test harness layout", () => {
 
     let mockGame;
     let mockContext;
-    let mockScene;
+    let mockLayoutManager;
     let onKeyUpSpy;
     let addKeyStub;
 
@@ -29,7 +29,7 @@ describe("test harness layout", () => {
                 },
             },
         };
-        mockScene = {
+        mockLayoutManager = {
             addToBackground: jest.fn(),
             getSize: jest.fn(() => ({
                 width: 300,
@@ -55,7 +55,7 @@ describe("test harness layout", () => {
                     }),
                 },
             };
-            createTestHarnessDisplay(mockGame, mockContext, mockScene);
+            createTestHarnessDisplay(mockGame, mockContext, mockLayoutManager);
         });
 
         describe("create function is called", () => {
@@ -77,7 +77,7 @@ describe("test harness layout", () => {
                     active: false,
                 },
             };
-            createTestHarnessDisplay(mockGame, mockContext, mockScene);
+            createTestHarnessDisplay(mockGame, mockContext, mockLayoutManager);
         });
 
         test("does nothing", () => {

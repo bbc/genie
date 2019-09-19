@@ -3,14 +3,14 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as Scene from "../../src/core/scene";
+import * as LayoutManager from "../../src/core/layout-manager.js";
 import * as Layout from "../../src/core/layout/layout";
 import * as Scaler from "../../src/core/scaler.js";
 
 jest.mock("../../src/core/scaler.js");
 
-describe("Scene", () => {
-    let scene;
+describe("LayoutManager", () => {
+    let layoutManager;
     let mockGame;
     let groupMethods;
 
@@ -45,7 +45,7 @@ describe("Scene", () => {
             },
         };
         Scaler.getMetrics = jest.fn();
-        scene = Scene.create(mockGame);
+        layoutManager = LayoutManager.create(mockGame);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -62,13 +62,13 @@ describe("Scene", () => {
     describe("addToBackground method", () => {
         test("adds an Phaser element to the background", () => {
             const mockPhaserElement = { phaser: "element" };
-            scene.addToBackground(mockPhaserElement);
+            layoutManager.addToBackground(mockPhaserElement);
             expect(groupMethods.addChild).toHaveBeenCalledWith(mockPhaserElement);
         });
 
         test("sets anchor if Phaser element has one", () => {
             const mockPhaserElement = { anchor: { setTo: jest.fn() } };
-            scene.addToBackground(mockPhaserElement);
+            layoutManager.addToBackground(mockPhaserElement);
             expect(mockPhaserElement.anchor.setTo).toHaveBeenCalledWith(0.5, 0.5);
         });
     });
@@ -76,7 +76,7 @@ describe("Scene", () => {
     describe("addToForeground method", () => {
         test("adds an Phaser element to the foreground", () => {
             const mockPhaserElement = { someElement: "phaser-element" };
-            scene.addToForeground(mockPhaserElement);
+            layoutManager.addToForeground(mockPhaserElement);
             expect(groupMethods.addChild).toHaveBeenCalledWith(mockPhaserElement);
         });
     });
@@ -91,19 +91,19 @@ describe("Scene", () => {
         });
 
         test("creates a new layout with correct params", () => {
-            scene.addLayout(mockButtons);
+            layoutManager.addLayout(mockButtons);
             expect(layoutStub.mock.calls[0].length).toEqual(3);
             expect(layoutStub.mock.calls[0][0]).toEqual(mockGame);
             expect(layoutStub.mock.calls[0][2]).toEqual(mockButtons);
         });
 
         test("adds the layout root to the background", () => {
-            scene.addLayout(mockButtons);
+            layoutManager.addLayout(mockButtons);
             expect(groupMethods.addChild).toHaveBeenCalledWith(mockRoot.root);
         });
 
         test("returns the layout", () => {
-            expect(scene.addLayout(mockButtons)).toEqual(mockRoot);
+            expect(layoutManager.addLayout(mockButtons)).toEqual(mockRoot);
         });
     });
 
@@ -115,11 +115,11 @@ describe("Scene", () => {
             };
             jest.spyOn(Layout, "create").mockImplementation(() => mockLayout);
 
-            expect(scene.getLayouts().length).toBe(0);
-            scene.addLayout(["play", "settings"]);
-            expect(scene.getLayouts().length).toBe(1);
-            scene.addLayout(["pause", "next"]);
-            expect(scene.getLayouts().length).toBe(2);
+            expect(layoutManager.getLayouts().length).toBe(0);
+            layoutManager.addLayout(["play", "settings"]);
+            expect(layoutManager.getLayouts().length).toBe(1);
+            layoutManager.addLayout(["pause", "next"]);
+            expect(layoutManager.getLayouts().length).toBe(2);
         });
     });
 
@@ -131,13 +131,13 @@ describe("Scene", () => {
             };
             jest.spyOn(Layout, "create").mockImplementation(() => mockLayout);
 
-            expect(scene.getAccessibleGameButtons().length).toBe(0);
+            expect(layoutManager.getAccessibleGameButtons().length).toBe(0);
         });
     });
 
     describe("removeAll method", () => {
         test("removes everything from the background", () => {
-            scene.removeAll();
+            layoutManager.removeAll();
             expect(groupMethods.removeAll).toHaveBeenCalledWith(true);
         });
 
@@ -148,9 +148,9 @@ describe("Scene", () => {
             };
             jest.spyOn(Layout, "create").mockImplementation(() => mockLayout);
 
-            scene.addLayout(["play", "settings"]);
-            scene.addLayout(["pause", "next"]);
-            scene.removeAll();
+            layoutManager.addLayout(["play", "settings"]);
+            layoutManager.addLayout(["pause", "next"]);
+            layoutManager.removeAll();
 
             expect(mockLayout.destroy).toHaveBeenCalledTimes(2);
         });

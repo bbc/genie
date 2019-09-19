@@ -18,14 +18,14 @@ export class Home extends Screen {
 
     create() {
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
-        this.scene.addToBackground(this.game.add.image(0, 0, "home.background"));
-        this.scene.addToBackground(this.game.add.image(0, -150, "home.title"));
+        this.layoutManager.addToBackground(this.game.add.image(0, 0, "home.background"));
+        this.layoutManager.addToBackground(this.game.add.image(0, -150, "home.title"));
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
 
-        this.scene.addLayout(buttons.concat(achievements));
+        this.layoutManager.addLayout(buttons.concat(achievements));
 
-        createTestHarnessDisplay(this.game, this.context, this.scene);
+        createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
         signal.bus.subscribe({
             channel: buttonsChannel,

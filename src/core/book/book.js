@@ -103,8 +103,8 @@ const Draw = (theme, drawPage, drawButtons, game, accessibilityTexts, screen) =>
 const Start = (screenName, theme, game, screen, overlayLayout, accessibilityTexts) => {
     return Draw(
         theme,
-        Page.Draw(screenName, Scenery.Draw(game, screen.scene)),
-        Button.Draw(screen.scene, overlayLayout),
+        Page.Draw(screenName, Scenery.Draw(game, screen.layoutManager)),
+        Button.Draw(screen.layoutManager, overlayLayout),
         game,
         accessibilityTexts,
         screen,

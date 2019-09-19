@@ -31,7 +31,7 @@ describe("Showing pages of a book", () => {
 
         beforeEach(() => {
             const mockScreen = {
-                scene: {
+                layoutManager: {
                     addToBackground: jest.fn(),
                     addLayout: jest.fn(() => ({
                         buttons: { howToPlayNext: createMockButton(), howToPlayPrevious: createMockButton() },
@@ -78,7 +78,7 @@ describe("Showing pages of a book", () => {
 
         beforeEach(() => {
             const mockScreen = {
-                scene: {
+                layoutManager: {
                     addToBackground: jest.fn(),
                     addLayout: jest.fn(() => ({
                         buttons: { howToPlayNext: nextButtonStub, howToPlayPrevious: previousButtonStub },

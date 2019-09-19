@@ -237,7 +237,7 @@ export const config = {
             } else {
                 gmi.achievements.show();
             }
-            screen.scene.getLayouts()[0].buttons.achievements.setIndicator();
+            screen.layoutManager.getLayouts()[0].buttons.achievements.setIndicator();
         },
     },
     restart: {

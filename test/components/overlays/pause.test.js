@@ -33,7 +33,7 @@ describe("Pause Overlay", () => {
         mockGelButtons = { destroy: jest.fn() };
         jest.spyOn(document, "getElementById").mockImplementation(() => ({ focus: () => {} }));
         mockScreen = {
-            scene: {
+            layoutManager: {
                 addToBackground: jest.fn().mockImplementation(() => mockLayoutDestroy),
                 addLayout: jest.fn().mockImplementation(() => mockGelButtons),
                 removeLast: jest.fn(),
@@ -107,13 +107,13 @@ describe("Pause Overlay", () => {
         test("adds GEL buttons", () => {
             pauseCreate({ game: mockGame });
             const expectedAddLayoutCall = ["pauseReplay", "pauseHome", "audio", "settings", "pausePlay", "howToPlay"];
-            expect(mockScreen.scene.addLayout).toHaveBeenCalledWith(expectedAddLayoutCall);
+            expect(mockScreen.layoutManager.addLayout).toHaveBeenCalledWith(expectedAddLayoutCall);
         });
 
         test("adds GEL buttons without a replay button if requested", () => {
             Pause.create(true, { game: mockGame });
             const expectedAddLayoutCall = ["pauseHome", "audio", "settings", "pausePlay", "howToPlay"];
-            expect(mockScreen.scene.addLayout).toHaveBeenCalledWith(expectedAddLayoutCall);
+            expect(mockScreen.layoutManager.addLayout).toHaveBeenCalledWith(expectedAddLayoutCall);
         });
     });
 

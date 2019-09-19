@@ -50,7 +50,7 @@ describe("Load Screen", () => {
         };
 
         loadScreen = new Loadscreen();
-        loadScreen.scene = { addToBackground: jest.fn() };
+        loadScreen.layoutManager = { addToBackground: jest.fn() };
         loadScreen.navigation = { next: jest.fn() };
         loadScreen.game = mockGame;
         loadScreen.context = mockContext;
@@ -126,7 +126,7 @@ describe("Load Screen", () => {
                 setFillPercent: setFillPercentStub,
             };
             createProgressBarStub = jest.spyOn(LoadBar, "createLoadBar").mockImplementation(() => mockProgressBar);
-            loadScreen.scene.calculateMetrics = jest.fn().mockImplementation(() => ({
+            loadScreen.layoutManager.calculateMetrics = jest.fn().mockImplementation(() => ({
                 horizontals: {},
                 verticals: {},
             }));
@@ -138,7 +138,7 @@ describe("Load Screen", () => {
                     set: () => {},
                 },
             };
-            loadScreen.scene.addToBackground = jest.fn().mockImplementation(image => {
+            loadScreen.layoutManager.addToBackground = jest.fn().mockImplementation(image => {
                 if (image === "brandLogo") {
                     return mockBrandLogo;
                 }
@@ -152,12 +152,12 @@ describe("Load Screen", () => {
         });
 
         test("adds the loading bar to the layout", () => {
-            expect(loadScreen.scene.addToBackground).toHaveBeenCalledWith(mockProgressBar);
+            expect(loadScreen.layoutManager.addToBackground).toHaveBeenCalledWith(mockProgressBar);
         });
 
         test("adds a brand logo to the layout", () => {
             expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "brandLogo");
-            expect(loadScreen.scene.addToBackground).toHaveBeenCalledWith("brandLogo");
+            expect(loadScreen.layoutManager.addToBackground).toHaveBeenCalledWith("brandLogo");
         });
     });
 
