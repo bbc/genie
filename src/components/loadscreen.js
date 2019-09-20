@@ -8,7 +8,7 @@
  */
 
 import _ from "../../lib/lodash/lodash.js";
-import { loadAssets } from "../core/asset-loader.js";
+import { loadAssets } from "../core/asset-loader.js";   //TODO P3 possibly can now delete this?
 import { Screen } from "../core/screen.js";
 import { createLoadBar } from "./loadbar.js";
 import * as Scaler from "../core/scaler.js";
@@ -18,10 +18,12 @@ import { gmi } from "../core/gmi/gmi.js";
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
 
-const gamePacksToLoad = {
-    [MASTER_PACK_KEY]: { url: "asset-master-pack.json" },
-    [GEL_PACK_KEY]: { url: "gel/gel-pack.json" },
-};
+
+//TODO P3 Might not need this anymore NT
+//const gamePacksToLoad = {
+//    [MASTER_PACK_KEY]: { url: "asset-master-pack.json" },
+//    [GEL_PACK_KEY]: { url: "gel/gel-pack.json" },
+//};
 
 //TODO P3 Put this in it's own module?
 const loadscreenPack = {
@@ -67,6 +69,10 @@ export class Loadscreen extends Screen {
      * Example Usage
      */
     constructor() {
+        //TODO P3 Is this now handled by how the theme in embed vars is just the path? Is there a tidier way to do it without the regex?
+        const theme = gmi.embedVars.configPath;
+        loadscreenPack.path = theme.split(/([^/]+$)/, 2)[0];
+
         super({ key: "loadscreen", autostart: false, pack: loadscreenPack });
     }
 

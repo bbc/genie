@@ -35,6 +35,13 @@ export class Screen extends Phaser.Scene {
         this.layoutManager = config.layoutManager;
         this._context = config.context;
 
+        //TODO P3 remove debug line - currently useful to know which screen has been started NT
+        console.log(`SCREEN INIT ${this.scene.key}:`, config);
+
+        //TODO P3 This centers the camera - we don't necessarily have to do this anymore. Most people are used to top left being origin NT
+        this.cameras.main.scrollX = -700;
+        this.cameras.main.scrollY = -300;
+
 
         //TODO P3 commented out lines need re-enabling
         //this.navigation = config.navigation[this.scene.key].routes;
