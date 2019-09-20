@@ -21,11 +21,7 @@ import { getBrowser } from "./browser.js";
 
 //TODO P3 this is just a quick shim to create the scenes array
 //Potentially "state" in main.js config should be renamed "scene"
-export const getScenes = conf => {
-    return Object.keys(conf).map(key => {
-        return new conf[key].state();
-    })
-}
+export const getScenes = conf => Object.keys(conf).map(key => new conf[key].state());
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
@@ -38,7 +34,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
     const browser = getBrowser();
 
     const scenes = getScenes(navigationConfig());
-    scenes.unshift(new Startup(onStarted))
+    scenes.unshift(new Startup(onStarted));
 
     const phaserConfig = {
         width: 1400,
@@ -51,8 +47,8 @@ export function startup(settingsConfig = {}, navigationConfig) {
         transparent: browser.isSilk, // Fixes silk browser flickering
         clearBeforeRender: false,
         scale: {
-            mode: Phaser.Scale.HEIGHT_CONTROLS_WIDTH,   //TODO P3 look at ENVELOP / FIT or look here: https://codepen.io/samme/pen/paOjMO
-            autoCenter: Phaser.Scale.CENTER_BOTH
+            mode: Phaser.Scale.HEIGHT_CONTROLS_WIDTH, //TODO P3 look at ENVELOP / FIT or look here: https://codepen.io/samme/pen/paOjMO
+            autoCenter: Phaser.Scale.CENTER_BOTH,
         },
         scene: scenes,
     };
@@ -75,14 +71,14 @@ export function startup(settingsConfig = {}, navigationConfig) {
             gameMuted: true,
         };
 
-        //TODO P3 now part of camera and set per scene e.g: this.cameras.main.backgroundColor.setTo(255,255,255);﻿
+        //TODO P3 now part of camera and set per scene e.g: this.cameras.main.backgroundColor.setTo(255,255,255);
         //game.stage.backgroundColor = "#333";
 
         const onFontsLoaded = () => {
             const goToScreen = Navigation.create(game.state, context, layoutManager, navigationConfig);
             qaMode.create(window, game, goToScreen);
 
-            this.scene.start("loadscreen")
+            this.scene.start("loadscreen");
         };
         loadFonts(game, onFontsLoaded);
 
@@ -110,6 +106,7 @@ class Startup extends Phaser.Scene {
         // All asset paths are relative to the location of the config.json:
         this.load.path = gmi.embedVars.configPath; //config dir
         this.load.json(CONFIG_KEY, "config.json");
+        this.load.json("asset-master-pack", "asset-master-pack.json"); //TODO P3 this is loaded now so we can check its keys for missing files. It is also loaded again later so perhaps could be done then? NT
 
         //TODO P3 enable below once signal bus is ready
         //signal.bus.subscribe({
