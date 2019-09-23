@@ -8,7 +8,7 @@
  */
 
 import _ from "../../lib/lodash/lodash.js";
-import { loadAssets } from "../core/asset-loader.js";
+import { loadAssets } from "../core/asset-loader.js"; //TODO P3 possibly can now delete this?
 import { Screen } from "../core/screen.js";
 import { createLoadBar } from "./loadbar.js";
 import * as Scaler from "../core/scaler.js";
@@ -18,13 +18,48 @@ import { gmi } from "../core/gmi/gmi.js";
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
 
-const gamePacksToLoad = {
-    [MASTER_PACK_KEY]: { url: "asset-master-pack.json" },
-    [GEL_PACK_KEY]: { url: "gel/gel-pack.json" },
-};
+//TODO P3 Might not need this anymore NT
+//const gamePacksToLoad = {
+//    [MASTER_PACK_KEY]: { url: "asset-master-pack.json" },
+//    [GEL_PACK_KEY]: { url: "gel/gel-pack.json" },
+//};
+
+//TODO P3 Put this in it's own module?
 const loadscreenPack = {
-    key: "loadscreen",
-    url: "loader/loadscreen-pack.json",
+    prefix: "loadscreen.",
+    baseUrl: gmi.gameDir,
+    files: [
+        {
+            type: "image",
+            key: "title",
+            url: "loader/title.png",
+            overwrite: false,
+        },
+        {
+            type: "image",
+            key: "background",
+            url: "loader/background.png",
+            overwrite: false,
+        },
+        {
+            type: "image",
+            key: "brandLogo",
+            url: "loader/brand-logo.png",
+            overwrite: false,
+        },
+        {
+            type: "image",
+            key: "loadbarBackground",
+            url: "loader/load-bar-bg.png",
+            overwrite: false,
+        },
+        {
+            type: "image",
+            key: "loadbar",
+            url: "loader/load-bar-fill.png",
+            overwrite: false,
+        },
+    ],
 };
 
 export class Loadscreen extends Screen {
@@ -33,29 +68,93 @@ export class Loadscreen extends Screen {
      * Example Usage
      */
     constructor() {
-        super();
+        //TODO P3 Is this now handled by how the theme in embed vars is just the path? Is there a tidier way to do it without the regex?
+        const theme = gmi.embedVars.configPath;
+        loadscreenPack.path = theme.split(/([^/]+$)/, 2)[0];
+
+        super({ key: "loadscreen", autostart: false, pack: loadscreenPack });
+    }
+
+    getMissingPacks() {
+        //TODO P3 To make this work the json has to be loaded in startup. It is also loaded as part of the asset load
+        //TODO P3 Potentially this could be moved so it is only loaded once NT
+        const masterPack = this.cache.json.get("asset-master-pack");
+
+        const missingKeys = Object.keys(this.scene.manager.keys)
+            .filter(key => key !== "default")
+            .filter(key => key !== "startup")
+            .filter(key => !masterPack.hasOwnProperty(key));
+
+        return missingKeys;
     }
 
     preload() {
-        loadAssets(
-            this.game,
-            gamePacksToLoad,
-            loadscreenPack,
-            this.updateLoadProgress.bind(this),
-            this.context.config.theme,
-        ).then(keyLookups => {
-            if (window.__qaMode) {
-                dumpToConsole(keyLookups);
-            }
-            GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
+        const theme = gmi.embedVars.configPath;
+        const path = theme.split(/([^/]+$)/, 2)[0];
+        this.load.setBaseURL(gmi.gameDir);
 
-            if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
-                gmi.achievements.init(this.game.cache.getJSON("achievementsData"));
-            }
-            gmi.sendStatsEvent("gameloaded", "true");
-            gmi.gameLoaded();
-            this.navigation.next();
-        });
+        this.load.setPath(path); //config dir
+
+        const masterPack = this.cache.json.get("asset-master-pack");
+        const gamePacksToLoad = ["gel/gel-pack"].concat(this.getMissingPacks());
+
+        //TODO P3 delete once complete NT
+        console.log("gamePacksToLoad", gamePacksToLoad);
+
+        this.load.addPack(masterPack);
+        gamePacksToLoad.forEach(pack => this.load.pack(pack));
+
+        this.add.image(0, 0, "loadscreen.background");
+        this.add.image(0, -150, "loadscreen.title");
+        this.createLoadBar();
+        this.createBrandLogo();
+        this.load.on("progress", this.update);
+
+        this.load.on(
+            "complete",
+            function() {
+                console.log("LOAD COMPLETE");
+
+                // P3 TODO is this needed anymore? KeyLookup are not a thing now...
+                //if (window.__qaMode) {
+                //   dumpToConsole(keyLookups);
+                //}
+                //GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
+
+                //this.scene.start("home", {})  // navigation.next?
+
+                //P3 TODO most of navigation can go - passing in "this" usually illustrates we can add this as a method
+                // We can probably trim navigation down to just the config and pass it around.
+                //this.navigation.next(this, this.scene.settings.data);
+
+                ////////TODO
+                //this.switchScene("next");
+
+                //gmi.gameLoaded();
+                //sendStats("game_loaded");
+            }.bind(this),
+        );
+
+        //TODO P3 this is the old preload. Here for ref until we are happy then can be deleted NT
+        //loadAssets(
+        //    this.game,
+        //    gamePacksToLoad,
+        //    loadscreenPack,
+        //    this.updateLoadProgress.bind(this),
+        //    this.context.config.theme,
+        //).then(keyLookups => {
+        //    if (window.__qaMode) {
+        //        dumpToConsole(keyLookups);
+        //    }
+        //    GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
+        //
+        //    if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
+        //        gmi.achievements.init(this.game.cache.getJSON("achievementsData"));
+        //    }
+        //    gmi.sendStatsEvent("gameloaded", "true");
+        //    gmi.gameLoaded();
+        //    this.navigation.next();
+        //});
     }
 
     createBackground() {
@@ -66,28 +165,41 @@ export class Loadscreen extends Screen {
         this.layoutManager.addToBackground(this.game.add.image(0, -150, "loadscreenTitle"));
     }
 
-    createLoadingBar() {
-        this.loadingBar = createLoadBar(this.game, "loadbarBackground", "loadbarFill");
-        this.loadingBar.position.set(0, 110);
-        this.layoutManager.addToBackground(this.loadingBar);
+    createLoadBar() {
+        // create bar background
+        this.add.image(0, 0, "loadscreen.loadbarBackground");
+        const loadbar = this.add.image(0, 0, "loadscreen.loadbar");
+        const loadbarWidth = loadbar.width;
+
+        //TODO P3 Should potentially be a class method?
+        this.update = function(progress) {
+            loadbar.frame.cutWidth = loadbarWidth * progress;
+            loadbar.frame.updateUVs();
+        }.bind(this);
+
+        this.update(0);
     }
 
     createBrandLogo() {
-        const metrics = Scaler.getMetrics();
-
-        const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
-        const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
-        this.brandLogo = this.layoutManager.addToBackground(this.game.add.image(0, 0, "brandLogo"));
-        this.brandLogo.right = x;
-        this.brandLogo.bottom = y;
+        //TODO P3 move logo to correct position NT
+        //const metrics = Scaler.getMetrics();
+        //
+        //const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
+        //const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
+        this.brandLogo = this.add.image(0, 0, "loadscreen.brandLogo");
+        //this.brandLogo.right = x;
+        //this.brandLogo.bottom = y;
     }
 
-    create() {
-        this.createBackground();
-        this.createTitle();
-        this.createLoadingBar();
-        this.createBrandLogo();
-    }
+    //TODO P3 stubbed this for now NT
+    create() {}
+
+    //create() {
+    //    this.createBackground();
+    //    this.createTitle();
+    //    this.createLoadingBar();
+    //    this.createBrandLogo();
+    //}
 
     updateLoadProgress(progress) {
         if (this.hasOwnProperty("loadingBar")) this.loadingBar.fillPercent = progress;

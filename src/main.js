@@ -30,13 +30,14 @@ const settingsConfig = {
     ],
 };
 
-signal.bus.subscribe({
-    channel: settingsChannel,
-    name: "custom1",
-    callback: value => {
-        console.log("Custom 1 setting changed to " + value); // eslint-disable-line no-console
-    },
-});
+//TODO P3 - re-enable below once signal bus work is complete NT
+//signal.bus.subscribe({
+//    channel: settingsChannel,
+//    name: "custom1",
+//    callback: value => {
+//        console.log("Custom 1 setting changed to " + value); // eslint-disable-line no-console
+//    },
+//});
 
 const navigationConfig = goToScreen => {
     if (parseUrlParams(window.location.search).sanityCheck === true) {
@@ -49,6 +50,7 @@ const navigationConfig = goToScreen => {
     const game = data => goToScreen("game", data);
     const results = data => goToScreen("results", data);
 
+    //TODO P3 re-enabling all these screens will also make the asset packs load. See spike for P3 formatted asset packs if needed
     return {
         loadscreen: {
             state: Loadscreen,
@@ -56,45 +58,45 @@ const navigationConfig = goToScreen => {
                 next: home,
             },
         },
-        home: {
-            state: Home,
-            routes: {
-                next: characterSelect,
-            },
-        },
-        "character-select": {
-            state: Select,
-            routes: {
-                next: levelSelect,
-                home: home,
-                restart: home,
-            },
-        },
-        "level-select": {
-            state: Select,
-            routes: {
-                next: game,
-                home: home,
-                restart: home,
-            },
-        },
-        game: {
-            state: GameTest,
-            routes: {
-                next: results,
-                home: home,
-                restart: game,
-            },
-        },
-        results: {
-            state: Results,
-            routes: {
-                next: home,
-                game: game,
-                restart: game,
-                home: home,
-            },
-        },
+        //home: {
+        //    state: Home,
+        //    routes: {
+        //        next: characterSelect,
+        //    },
+        //},
+        //"character-select": {
+        //    state: Select,
+        //    routes: {
+        //        next: levelSelect,
+        //        home: home,
+        //        restart: home,
+        //    },
+        //},
+        //"level-select": {
+        //    state: Select,
+        //    routes: {
+        //        next: game,
+        //        home: home,
+        //        restart: home,
+        //    },
+        //},
+        //game: {
+        //    state: GameTest,
+        //    routes: {
+        //        next: results,
+        //        home: home,
+        //        restart: game,
+        //    },
+        //},
+        //results: {
+        //    state: Results,
+        //    routes: {
+        //        next: home,
+        //        game: game,
+        //        restart: game,
+        //        home: home,
+        //    },
+        //},
     };
 };
 

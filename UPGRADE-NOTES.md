@@ -1,5 +1,10 @@
 # Upgrade Notes
 
+## Genie 3.0.0
+
+Upgrades from Phaser 2 to Phaser 3.
+
+
 ## Genie 2.0.2
 Screens now automatically pass their transientData to the next screen.
 Previously data needed to be passed as a parameter to the navigation routes e.g:
