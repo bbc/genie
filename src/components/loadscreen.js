@@ -14,6 +14,7 @@ import { createLoadBar } from "./loadbar.js";
 import * as Scaler from "../core/scaler.js";
 import * as GameSound from "../core/game-sound.js";
 import { gmi } from "../core/gmi/gmi.js";
+import { GelButton } from "../core/layout/gel-button.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
@@ -188,7 +189,9 @@ export class Loadscreen extends Screen {
     }
 
     //TODO P3 stubbed this for now NT
-    create() {}
+    create() {
+        this.add.existing(new GelButton(this, -400, -250, { isMobile: false }, { key: "exit" }));
+    }
 
     //create() {
     //    this.createBackground();
