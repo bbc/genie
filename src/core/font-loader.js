@@ -6,6 +6,8 @@
 const REITH_FONT_CSS = "https://gel.files.bbci.co.uk/r2.302/bbc-reith.css";
 
 export const loadFonts = (game, done) => {
+    done(); //TODO P3 update font loader for P3 NT
+    return;
     WebFont.load({
         active: () => {
             game.add.text(-10000, -10000, ".", { font: "1px ReithSans" });

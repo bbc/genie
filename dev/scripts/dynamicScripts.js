@@ -13,7 +13,7 @@ function dynamicallyLoadScript(url) {
     document.head.appendChild(script);
 }
 
-dynamicallyLoadScript("node_modules/phaser-ce/build/phaser.min.js");
+dynamicallyLoadScript("node_modules/phaser/dist/phaser.js");
 dynamicallyLoadScript("node_modules/webfontloader/webfontloader.js");
 
 /* Cannot use fetch because of IE11 */
