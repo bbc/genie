@@ -6,11 +6,6 @@
 const path = require("path");
 const dynamicallyExposeGlobals = require("../dev/scripts/dynamicExpose.js");
 
-// Phaser webpack config
-const phaserModule = path.resolve("node_modules/phaser-ce/");
-const phaser = path.join(phaserModule, "build/custom/phaser-split.js");
-const pixi = path.join(phaserModule, "build/custom/pixi.js");
-const p2 = path.join(phaserModule, "build/custom/p2.js");
 const webpack = require("webpack");
 
 module.exports = env => {
@@ -20,7 +15,7 @@ module.exports = env => {
         mode: development ? "development" : "production",
         devtool: development ? "cheap-module-eval-source-map" : false,
         performance: { hints: false },
-        entry: ["@babel/polyfill", pixi, p2, phaser, "webfontloader"],
+        entry: ["@babel/polyfill", "phaser", "webfontloader"],
         output: {
             path: path.resolve("output"),
             publicPath: "output",
@@ -47,9 +42,7 @@ module.exports = env => {
                         path.resolve("node_modules/bowser/src"),
                     ],
                 },
-                { test: /pixi\.js/, use: ["expose-loader?PIXI"] },
-                { test: /phaser-split\.js$/, use: ["expose-loader?Phaser"] },
-                { test: /p2\.js/, use: ["expose-loader?p2"] },
+                { test: development ? /phaser\.min\.js$/ : /phaser\.js$/, use: ["expose-loader?Phaser"] },
                 { test: /webfontloader\.js/, use: ["expose-loader?WebFont"] },
             ],
         },
