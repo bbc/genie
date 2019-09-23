@@ -86,8 +86,6 @@ export function startup(settingsConfig = {}, navigationConfig) {
     }
 }
 
-const CONFIG_KEY = "config";
-
 const triggeredByGame = arg => arg instanceof Phaser.Game;
 
 const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
@@ -105,7 +103,7 @@ class Startup extends Phaser.Scene {
 
         // All asset paths are relative to the location of the config.json:
         this.load.path = gmi.embedVars.configPath; //config dir
-        this.load.json(CONFIG_KEY, "config.json");
+        this.load.json("config", "config.json");
         this.load.json("asset-master-pack", "asset-master-pack.json"); //TODO P3 this is loaded now so we can check its keys for missing files. It is also loaded again later so perhaps could be done then? NT
 
         //TODO P3 enable below once signal bus is ready
@@ -145,7 +143,7 @@ class Startup extends Phaser.Scene {
     }
 
     create() {
-        this._onStarted(this.cache.json.get(CONFIG_KEY), this);
+        this._onStarted(this.cache.json.get("config"), this);
     }
 }
 

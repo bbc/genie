@@ -50,6 +50,7 @@ const navigationConfig = goToScreen => {
     const game = data => goToScreen("game", data);
     const results = data => goToScreen("results", data);
 
+    //TODO P3 re-enabling all these screens will also make the asset packs load. See spike for P3 formatted asset packs if needed
     return {
         loadscreen: {
             state: Loadscreen,
