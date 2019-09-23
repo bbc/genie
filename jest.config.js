@@ -18,6 +18,12 @@ module.exports = {
             lines: 25.99,
             functions: 22.16,
         },
+        "src/core/loader.js": {
+            statements: 0,
+            branches: 0,
+            lines: 0,
+            functions: 0,
+        },
         "src/core/layout/gel-button.js": {
             statements: 0,
             branches: 0,
