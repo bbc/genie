@@ -24,6 +24,8 @@ const GEL_PACK_KEY = "GelAssetPack";
 //    [GEL_PACK_KEY]: { url: "gel/gel-pack.json" },
 //};
 
+console.log(gmi);
+
 //TODO P3 Put this in it's own module?
 const loadscreenPack = {
     prefix: "loadscreen.",
