@@ -13,12 +13,6 @@ module.exports = {
         //     functions: 90.8,
         // },
         global: {
-            statements: 25.52,
-            branches: 30.14,
-            lines: 25.99,
-            functions: 22.16,
-        },
-        "src/core/loader.js": {
             statements: 0,
             branches: 0,
             lines: 0,
