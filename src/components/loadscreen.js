@@ -67,8 +67,6 @@ export class Loadscreen extends Screen {
      * Example Usage
      */
     constructor() {
-        //loadscreenPack.baseUrl = gmi.gameDir;
-        console.log(gmi.gameDir + gmi.embedVars.configPath);
         loadscreenPack.path = gmi.gameDir + gmi.embedVars.configPath;
         super({ key: "loadscreen", autostart: false, pack: loadscreenPack });
     }
