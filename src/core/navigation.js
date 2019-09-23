@@ -10,7 +10,6 @@ import * as signal from "./signal-bus.js";
 
 export const create = (gameState, context, layoutManager, navigationConfig) => {
     const goToScreen = (name, transientData) => {
-
         //P3 TODO is this line needed anymore? if so we need to pause in a new way
         //gameState.game.paused = false; // fixes IE11 and Edge "focus loss" bug when navigating screens
         signal.bus.removeChannel(buttonsChannel);

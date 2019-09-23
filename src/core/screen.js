@@ -42,7 +42,6 @@ export class Screen extends Phaser.Scene {
         this.cameras.main.scrollX = -700;
         this.cameras.main.scrollY = -300;
 
-
         //TODO P3 commented out lines need re-enabling
         //this.navigation = config.navigation[this.scene.key].routes;
         //const themeScreenConfig = this.context.config.theme[this.game.state.current];

@@ -8,7 +8,7 @@
  */
 
 import _ from "../../lib/lodash/lodash.js";
-import { loadAssets } from "../core/asset-loader.js";   //TODO P3 possibly can now delete this?
+import { loadAssets } from "../core/asset-loader.js"; //TODO P3 possibly can now delete this?
 import { Screen } from "../core/screen.js";
 import { createLoadBar } from "./loadbar.js";
 import * as Scaler from "../core/scaler.js";
@@ -17,7 +17,6 @@ import { gmi } from "../core/gmi/gmi.js";
 
 const MASTER_PACK_KEY = "MasterAssetPack";
 const GEL_PACK_KEY = "GelAssetPack";
-
 
 //TODO P3 Might not need this anymore NT
 //const gamePacksToLoad = {
@@ -96,14 +95,13 @@ export class Loadscreen extends Screen {
 
         this.load.setPath(path); //config dir
 
-
         const masterPack = this.cache.json.get("asset-master-pack");
-        const gamePacksToLoad = ["gel/gel-pack"].concat(this.getMissingPacks())
+        const gamePacksToLoad = ["gel/gel-pack"].concat(this.getMissingPacks());
 
         //TODO P3 delete once complete NT
         console.log("gamePacksToLoad", gamePacksToLoad);
 
-        this.load.addPack(masterPack)
+        this.load.addPack(masterPack);
         gamePacksToLoad.forEach(pack => this.load.pack(pack));
 
         this.add.image(0, 0, "loadscreen.background");
@@ -112,29 +110,30 @@ export class Loadscreen extends Screen {
         this.createBrandLogo();
         this.load.on("progress", this.update);
 
-        this.load.on("complete", function() {
+        this.load.on(
+            "complete",
+            function() {
+                console.log("LOAD COMPLETE");
 
-            console.log("LOAD COMPLETE")
+                // P3 TODO is this needed anymore? KeyLookup are not a thing now...
+                //if (window.__qaMode) {
+                //   dumpToConsole(keyLookups);
+                //}
+                //GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
 
-            // P3 TODO is this needed anymore? KeyLookup are not a thing now...
-            //if (window.__qaMode) {
-            //   dumpToConsole(keyLookups);
-            //}
-            //GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
+                //this.scene.start("home", {})  // navigation.next?
 
-            //this.scene.start("home", {})  // navigation.next?
+                //P3 TODO most of navigation can go - passing in "this" usually illustrates we can add this as a method
+                // We can probably trim navigation down to just the config and pass it around.
+                //this.navigation.next(this, this.scene.settings.data);
 
-            //P3 TODO most of navigation can go - passing in "this" usually illustrates we can add this as a method
-            // We can probably trim navigation down to just the config and pass it around.
-            //this.navigation.next(this, this.scene.settings.data);
+                ////////TODO
+                //this.switchScene("next");
 
-
-            ////////TODO
-            //this.switchScene("next");
-
-            //gmi.gameLoaded();
-            //sendStats("game_loaded");
-        }.bind(this));
+                //gmi.gameLoaded();
+                //sendStats("game_loaded");
+            }.bind(this),
+        );
 
         //TODO P3 this is the old preload. Here for ref until we are happy then can be deleted NT
         //loadAssets(

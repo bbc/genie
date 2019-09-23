@@ -110,7 +110,6 @@ export function create(game) {
     const getAccessibleGameButtons = () => customAccessibleButtons;
 
     const removeAll = () => {
-
         //TODO P3 - is cleanup required still? NT
         //background.removeAll(true);
         _layouts.forEach(layout => layout.destroy());
