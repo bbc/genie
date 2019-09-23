@@ -67,14 +67,9 @@ export class Loadscreen extends Screen {
      * Example Usage
      */
     constructor() {
-        //TODO P3 Is this now handled by how the theme in embed vars is just the path? Is there a tidier way to do it without the regex?
-        const theme = gmi.embedVars.configPath;
-        loadscreenPack.baseUrl = gmi.gameDir;
-        loadscreenPack.path = theme.split(/([^/]+$)/, 2)[0];
-
-        console.log(gmi.embedVars.configPath);
-        console.log(theme.split(/([^/]+$)/, 2)[0]);
-
+        //loadscreenPack.baseUrl = gmi.gameDir;
+        console.log(gmi.gameDir + gmi.embedVars.configPath);
+        loadscreenPack.path = gmi.gameDir + gmi.embedVars.configPath;
         super({ key: "loadscreen", autostart: false, pack: loadscreenPack });
     }
 
