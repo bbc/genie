@@ -42,7 +42,6 @@ module.exports = env => {
                         path.resolve("node_modules/bowser/src"),
                     ],
                 },
-                { test: development ? /phaser\.min\.js$/ : /phaser\.js$/, use: ["expose-loader?Phaser"] },
                 { test: /webfontloader\.js/, use: ["expose-loader?WebFont"] },
             ],
         },
