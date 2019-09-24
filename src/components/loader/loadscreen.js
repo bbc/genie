@@ -35,11 +35,7 @@ export class Loadscreen extends Screen {
         const config = this.cache.json.get("config");
 
         //sets the context as setter
-        this.context = {
-            config,
-            popupScreens: [],
-            gameMuted: true,
-        };
+        this.setConfig(config);
 
         const masterPack = this.cache.json.get("asset-master-pack");
         const gamePacksToLoad = ["gel/gel-pack"].concat(getMissingPacks(masterPack, this.scene.manager.keys));
@@ -66,7 +62,7 @@ export class Loadscreen extends Screen {
         //}
         //GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
 
-        this.switchScene("home");
+        this.navigate("next");
 
         gmi.gameLoaded();
         //sendStats("game_loaded");

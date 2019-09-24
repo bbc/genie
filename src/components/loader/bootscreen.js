@@ -13,11 +13,13 @@ const getButtons = fp.map(fp.get("buttons.audio"));
 const filterUndefined = fp.filter(x => !!x);
 
 export class Boot extends Screen {
-    #onStarted;
+    #navigation;
 
-    constructor(onStarted) {
+    constructor(navigationConfig) {
         super({ key: "boot" });
-        this.#onStarted = onStarted;
+        this.#navigation = navigationConfig;
+        this.#navigation.boot = { routes: { next: "loadscreen" } };
+        this.#navigation.loadscreen = { routes: { next: "home" } };
     }
 
     preload() {
@@ -26,6 +28,12 @@ export class Boot extends Screen {
         this.load.json("config", "config.json");
         //TODO P3 this is loaded now so we can check its keys for missing files. It is also loaded again later so perhaps could be done then? NT
         this.load.json("asset-master-pack", "asset-master-pack.json");
+
+        this.setData({
+            popupScreens: [],
+            gameMuted: true,
+            navigation: this.#navigation,
+        });
 
         //TODO P3 - if the above could be changed this could potentially be part of loadscreen.js and we could delete boot
 
@@ -66,7 +74,6 @@ export class Boot extends Screen {
     }
 
     create() {
-
         //TODO P3 these could be set using this.game on loadscreen?
         // Phaser is now set up and we can use all game properties.
         this.game.canvas.setAttribute("tabindex", "-1");
@@ -85,6 +92,6 @@ export class Boot extends Screen {
     }
 
     bootComplete = () => {
-        this.switchScene("loadscreen");
-    }
+        this.navigate("next");
+    };
 }

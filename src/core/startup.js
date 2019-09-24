@@ -21,14 +21,13 @@ export const getScenes = conf => Object.keys(conf).map(key => new conf[key].stat
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
  * @param {Object=} navigationConfig -
  */
-export function startup(settingsConfig = {}, navigationConfig) {
+export function startup(settingsConfig = {}, screenConfig) {
     setGmi(settingsConfig, window);
     hookErrors(gmi.gameContainerId);
 
     const browser = getBrowser();
-
-    const scenes = getScenes(navigationConfig());
-    scenes.unshift(new Boot());
+    const scenes = getScenes(screenConfig);
+    scenes.unshift(new Boot(screenConfig));
 
     const phaserConfig = {
         width: 1400,
