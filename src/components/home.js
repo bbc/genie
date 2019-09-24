@@ -19,7 +19,7 @@ export class Home extends Screen {
     create() {
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         this.add.image(0, 0, "home.background");
-        this.add.image(0, 0, "home.title");
+        this.add.image(0, -150, "home.title");
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
 

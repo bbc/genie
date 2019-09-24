@@ -13,19 +13,19 @@ const horizontal = {
         fp.forEach(child => {
             if (!child.hitArea) return;
             hitAreaOffset = fp.max([hitAreaOffset, -(child.x + child.hitArea.left) / metrics.scale]);
-        }, group.children);
-        group.left = metrics[horizontalsType].left + metrics.borderPad + hitAreaOffset;
+        }, group.list);
+        group.x = metrics[horizontalsType].left + metrics.borderPad + hitAreaOffset;
     },
     center: (metrics, group, horizontalsType) => {
-        group.centerX = metrics[horizontalsType].center;
+        group.x = metrics[horizontalsType].center - group.getBounds().width / 2;
     },
     right: (metrics, group, horizontalsType) => {
         let hitAreaOffset = 0;
         fp.forEach(child => {
             if (!child.hitArea) return;
             hitAreaOffset = fp.max([hitAreaOffset, (child.x + child.hitArea.right) / metrics.scale - group.width]);
-        }, group.children);
-        group.right = metrics[horizontalsType].right - metrics.borderPad - hitAreaOffset;
+        }, group.list);
+        group.x = metrics[horizontalsType].right - metrics.borderPad - hitAreaOffset - group.getBounds().width;
     },
 };
 
@@ -35,19 +35,19 @@ const vertical = {
         fp.forEach(child => {
             if (!child.hitArea) return;
             hitAreaOffset = fp.max([hitAreaOffset, -(child.y + child.hitArea.top) / metrics.scale]);
-        }, group.children);
-        group.top = metrics.verticals.top + metrics.borderPad + hitAreaOffset;
+        }, group.list);
+        group.y = metrics.verticals.top + metrics.borderPad + hitAreaOffset;
     },
     middle: (metrics, group) => {
-        group.centerY = metrics.verticals.middle;
+        group.y = metrics.verticals.middle;
     },
     bottom: (metrics, group) => {
         let hitAreaOffset = 0;
         fp.forEach(child => {
             if (!child.hitArea) return;
             hitAreaOffset = fp.max([hitAreaOffset, (child.y + child.hitArea.bottom) / metrics.scale - group.height]);
-        }, group.children);
-        group.bottom = metrics.verticals.bottom - metrics.borderPad - hitAreaOffset;
+        }, group.list);
+        group.y = metrics.verticals.bottom - metrics.borderPad - hitAreaOffset - group.getBounds().height;
     },
 };
 
