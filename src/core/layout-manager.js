@@ -88,10 +88,7 @@ export function create(game) {
     //    return layout;
     //};
 
-    //TODO P3 stubbed these out. They are likely now redundant. NT
-    const addToBackground = () => {};
-    const addToForeground = () => {};
-    const addToUnscaled = () => {};
+    //TODO P3 These are likely now redundant. [NT]
     //const addToBackground = fp.flow(
     //    centerAnchor,
     //    addToGroup(background),
@@ -122,9 +119,9 @@ export function create(game) {
     };
 
     return {
-        addToBackground,
-        addToForeground,
-        addToUnscaled,
+        //addToBackground,
+        //addToForeground,
+        //addToUnscaled,
         //addLayout,
         getLayouts,
         getAccessibleGameButtons,

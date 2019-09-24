@@ -19,7 +19,8 @@ import * as Layout from "./layout/layout.js";
  * All the game screens will extend from this class.
  */
 export class Screen extends Phaser.Scene {
-    #context = {};
+    #context;
+    #transientData = {};
     #layouts = [];
 
     get context() {
@@ -37,7 +38,6 @@ export class Screen extends Phaser.Scene {
     //TODO P3 only one argument is now passed to init
     //init(transientData, layoutManager, context, navigation) {
     init(config) {
-        console.log("INIT SCREEN CONFIG", config);
         this.layoutManager = config.layoutManager;
         this.#context = config.context;
 
@@ -55,7 +55,7 @@ export class Screen extends Phaser.Scene {
         //    gmi.setStatsScreen(this.game.state.current);
         //}
         //GameSound.setupScreenMusic(this.game, themeScreenConfig);
-        this.transientData = config.transientData;
+        this.#transientData = config.transientData;
         a11y.clearAccessibleButtons();
         //a11y.clearElementsFromDom();
         //this.overlaySetup();
@@ -87,8 +87,24 @@ export class Screen extends Phaser.Scene {
 
     switchScene(nextScene) {
         console.log("switchScene", nextScene);
-        //TODO P3 get this from navigation config.
-        this.scene.start(nextScene, this.#context);
+
+        //TODO P3 [NT]
+        // navigation does this - start(name, {transientData, scene, context, navigation});
+        // hopefully attaching to screen means we can dump scene as it's always 'this'
+        // can we also remove navigation if done here?
+        // we also need the navigation map passing somehow so next works.
+        // nav needs to change to just be a text map
+
+
+        //this is starting to get better but we need the nav routing
+        //also this data thing looks hacky. Why can we set it on this
+
+        const data = {
+            transientData: this.#transientData,
+            context: this.#context,
+        }
+
+        this.scene.start(nextScene, data);
     }
 
     /**

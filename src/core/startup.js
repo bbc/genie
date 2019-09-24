@@ -7,20 +7,18 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { settings, settingsChannel } from "../core/settings.js";
-import * as signal from "../core/signal-bus.js";
 import * as Navigation from "./navigation.js";
 import * as LayoutManager from "./layout-manager.js";
 import { loadFonts } from "./font-loader.js";
 import { gmi, setGmi } from "./gmi/gmi.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addCustomStyles } from "./custom-styles.js";
-import fp from "../../lib/lodash/fp/fp.js";
 import * as qaMode from "./qa/qa-mode.js";
 import { getBrowser } from "./browser.js";
+import { Boot } from "../components/loader/bootscreen.js";
+import { hookErrors} from '../components/loader/hook-errors.js';
 
 //TODO P3 this is just a quick shim to create the scenes array
-//Potentially "state" in main.js config should be renamed "scene"
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].state());
 
 /**
@@ -34,7 +32,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
     const browser = getBrowser();
 
     const scenes = getScenes(navigationConfig());
-    scenes.unshift(new Startup(onStarted));
+    scenes.unshift(new Boot(onStarted));
 
     const phaserConfig = {
         width: 1400,
@@ -43,7 +41,8 @@ export function startup(settingsConfig = {}, navigationConfig) {
         antialias: true,
         multiTexture: true,
         parent: getContainerDiv(),
-        state: new Startup(onStarted),
+        title: "Game Title Here",       //TODO P3 these could be useful [NT]
+        version: "Version Info here",   //TODO P3 these could be useful [NT]
         transparent: browser.isSilk, // Fixes silk browser flickering
         clearBeforeRender: false,
         scale: {
@@ -60,112 +59,26 @@ export function startup(settingsConfig = {}, navigationConfig) {
 
     const game = new Phaser.Game(phaserConfig);
 
-    function onStarted(config) {
+    //TODO P3 This is called at the end of boot - which mainly loads the config
+    // could this just be set in loadscreen?
+    function onStarted() {
+        //TODO P3 these could be set using this.game on loadscreen?
         // Phaser is now set up and we can use all game properties.
         game.canvas.setAttribute("tabindex", "-1");
         game.canvas.setAttribute("aria-hidden", "true");
         const layoutManager = LayoutManager.create(game);
-        const context = {
-            config: config,
-            popupScreens: [],
-            gameMuted: true,
-        };
 
         //TODO P3 now part of camera and set per scene e.g: this.cameras.main.backgroundColor.setTo(255,255,255);
         //game.stage.backgroundColor = "#333";
 
+        //TODO P3 goToScreen could be moved to screen method [NT]
         const onFontsLoaded = () => {
-            const goToScreen = Navigation.create(game.state, context, layoutManager, navigationConfig);
-            qaMode.create(window, game, goToScreen);
-
-            this.scene.start("loadscreen");
+            this.switchScene("loadscreen");
         };
         loadFonts(game, onFontsLoaded);
 
         a11y.setup(game.canvas.parentElement);
     }
-}
-
-const triggeredByGame = arg => arg instanceof Phaser.Game;
-
-const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
-const getButtons = fp.map(fp.get("buttons.audio"));
-const filterUndefined = fp.filter(x => !!x);
-
-class Startup extends Phaser.Scene {
-    constructor(onStarted) {
-        super();
-        this._onStarted = onStarted;
-    }
-
-    preload() {
-        this.load.baseURL = gmi.gameDir;
-
-        // All asset paths are relative to the location of the config.json:
-        this.load.path = gmi.embedVars.configPath; //config dir
-        this.load.json("config", "config.json");
-        this.load.json("asset-master-pack", "asset-master-pack.json"); //TODO P3 this is loaded now so we can check its keys for missing files. It is also loaded again later so perhaps could be done then? NT
-
-        //TODO P3 enable below once signal bus is ready
-        //signal.bus.subscribe({
-        //    channel: settingsChannel,
-        //    name: "settings-closed",
-        //    callback: () => {
-        //        this.game.canvas.focus();
-        //    },
-        //});
-        //this.configureAudioSetting();
-    }
-
-    configureAudioSetting() {
-        this.game.sound.mute = !settings.getAllSettings().audio;
-        this.game.onPause.add(arg => {
-            //Re enable sound if triggered by the game (from the pause menu)
-            //otherwise this will be a window focus event and should be muted
-            this.game.sound.mute = triggeredByGame(arg) ? !settings.getAllSettings().audio : true;
-        });
-
-        this.game.onResume.add(() => {
-            this.game.sound.mute = !settings.getAllSettings().audio;
-        });
-
-        signal.bus.subscribe({
-            channel: settingsChannel,
-            name: "audio",
-            callback: value => {
-                this.game.sound.mute = !value;
-                const state = this.game.state;
-                const layouts = state.states[state.current].layoutManager.getLayouts();
-
-                fp.map(setImage, filterUndefined(getButtons(layouts)));
-            },
-        });
-    }
-
-    create() {
-        this._onStarted(this.cache.json.get("config"), this);
-    }
-}
-
-function hookErrors(gameDivId) {
-    const containerDiv = document.getElementById(gameDivId) || document.body;
-    let messageElement;
-
-    window.addEventListener("error", event => {
-        if (!messageElement) {
-            messageElement = containerDiv.appendChild(document.createElement("pre"));
-            const padding = "2em";
-            const style = messageElement.style;
-            style.position = "absolute";
-            style.top = style.left = "0";
-            style.backgroundColor = "black";
-            style.color = "white";
-            style.padding = padding;
-            style.width = style.height = `calc(100% - 2 * ${padding})`;
-        }
-        messageElement.innerText = `Something isn't working:\n\n${event.error.message || event.error}\n\n${event.error
-            .stack || ""}`;
-    });
 }
 
 function getContainerDiv() {

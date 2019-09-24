@@ -17,9 +17,7 @@ export class Home extends Screen {
     }
 
     create() {
-        //TODO P3 fix config being passed through [NT].
-        //const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
-        const achievements = ["achievements"];
+        const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
 
         console.log("HOME CONTEXT", this.context);
 

@@ -16,10 +16,7 @@ import { gmi } from "../../core/gmi/gmi.js";
 import { loadscreenPack } from "./loadpack.js";
 
 export class Loadscreen extends Screen {
-    /**
-     * Placeholder Loadscreen for development
-     * Example Usage
-     */
+
     constructor() {
         loadscreenPack.path = gmi.gameDir + gmi.embedVars.configPath;
         super({ key: "loadscreen", autostart: false, pack: loadscreenPack });
@@ -32,23 +29,28 @@ export class Loadscreen extends Screen {
 
         const missingKeys = Object.keys(this.scene.manager.keys)
             .filter(key => key !== "default")
-            .filter(key => key !== "startup")
+            .filter(key => key !== "boot")
             .filter(key => !masterPack.hasOwnProperty(key));
 
         return missingKeys;
     }
 
     preload() {
-        const theme = gmi.embedVars.configPath;
-        const path = theme.split(/([^/]+$)/, 2)[0];
         this.load.setBaseURL(gmi.gameDir);
+        this.load.setPath(gmi.embedVars.configPath);
+        const config = this.cache.json.get("config");
 
-        this.load.setPath(path); //config dir
+        //sets the context
+        this.context = {
+            config,
+            popupScreens: [],
+            gameMuted: true,
+        };
 
         const masterPack = this.cache.json.get("asset-master-pack");
         const gamePacksToLoad = ["gel/gel-pack"].concat(this.getMissingPacks());
 
-        //TODO P3 delete once complete NT
+        //TODO P3 delete once complete [NT]
         console.log("gamePacksToLoad", gamePacksToLoad);
 
         this.load.addPack(masterPack);
