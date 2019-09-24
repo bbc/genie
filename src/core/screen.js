@@ -11,18 +11,23 @@ import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as VisibleLayer from "../core/visible-layer.js";
 import fp from "../../lib/lodash/fp/fp.js";
+import * as Scaler from "./scaler.js";
+import * as Layout from "./layout/layout.js";
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
  * All the game screens will extend from this class.
  */
 export class Screen extends Phaser.Scene {
+    #context = {};
+    #layouts = [];
+
     get context() {
-        return this._context;
+        return this.#context;
     }
 
     set context(newContext) {
-        this._context = _.merge({}, this._context, newContext);
+        this.#context = _.merge({}, this.#context, newContext);
     }
 
     getAsset(name) {
@@ -32,8 +37,9 @@ export class Screen extends Phaser.Scene {
     //TODO P3 only one argument is now passed to init
     //init(transientData, layoutManager, context, navigation) {
     init(config) {
+        console.log("INIT SCREEN CONFIG", config);
         this.layoutManager = config.layoutManager;
-        this._context = config.context;
+        this.#context = config.context;
 
         //TODO P3 remove debug line - currently useful to know which screen has been started NT
         console.log(`SCREEN INIT ${this.scene.key}:`, config);
@@ -77,6 +83,35 @@ export class Screen extends Phaser.Scene {
         }
         signal.bus.removeChannel("overlays");
         this.overlaySetup();
+    }
+
+    switchScene(nextScene) {
+        console.log("switchScene", nextScene);
+        //TODO P3 get this from navigation config.
+        this.scene.start(nextScene, this.#context);
+    }
+
+    /**
+     * Create a new GEL layout for a given set of Gel Buttons
+     * Called in the create method of a given screen
+     *
+     * @example
+     * this.addLayout(["home", "restart", "continue", "pause"]);
+     * @param {Array} buttons - Array of standard button names to include. See {@link layout/gel-defaults.js} for available names
+     *
+     * @memberof module:screen
+     * @returns {Object}
+     */
+    addLayout(buttons) {
+        //TODO P3 passing in the root here . Maybe it can be moved?
+        const layoutRoot = this.add.container(0, 0);
+
+        //P3 TODO passing in "this" smells
+        const layout = Layout.create(this, Scaler.getMetrics(), buttons, layoutRoot);
+        //TODO P3 I don't think this is needed anymore as they are added to the scene: addToGroup(background, layout.root);
+        this.#layouts.push(layout);
+
+        return layout;
     }
 
     get visibleLayer() {

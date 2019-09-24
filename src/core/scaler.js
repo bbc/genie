@@ -9,7 +9,7 @@ import { calculateMetrics } from "./layout/calculate-metrics.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as signal from "./signal-bus.js";
 
-const getBounds = game => () => game.scale.getParentBounds();
+const getBounds = game => () => game.scale.parentSize;
 
 const _onSizeChangeSignalCreate = (channel, name) => ({
     dispatch: data => signal.bus.publish({ channel, name, data }),
@@ -21,11 +21,12 @@ export const onScaleChange = { add: _onSizeChange.add };
 export let getMetrics;
 
 export function init(stageHeight, game) {
-    game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-    game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-    game.scale.pageAlignHorizontally = true;
-    game.scale.pageAlignVertically = true;
-    game.scale.fullScreenTarget = document.body;
+    //TODO P3 unsure if any of this is now relevant NT
+    //game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+    //game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+    //game.scale.pageAlignHorizontally = true;
+    //game.scale.pageAlignVertically = true;
+    //game.scale.fullScreenTarget = document.body;
 
     getMetrics = fp.flow(
         getBounds(game),
@@ -34,8 +35,9 @@ export function init(stageHeight, game) {
     );
 
     const setSize = metrics => {
-        game.scale.setGameSize(metrics.stageWidth, metrics.stageHeight);
-        _onSizeChange.dispatch(metrics);
+        //TODO P3 part of re-enabling the scaler may need this to work again [NT]
+        //game.scale.setGameSize(metrics.stageWidth, metrics.stageHeight);
+        //_onSizeChange.dispatch(metrics);
     };
 
     const resize = fp.flow(

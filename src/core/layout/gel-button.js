@@ -8,7 +8,7 @@ import * as signal from "../signal-bus.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 
-class Indicator extends Phaser.Sprite {
+class Indicator extends Phaser.GameObjects.Sprite {
     constructor(parent) {
         super(parent.game, 0, 0, assetPath({ key: "notification", isMobile: parent._isMobile }));
         this.parent = parent;
@@ -31,22 +31,12 @@ const noIndicator = {
     destroy: () => {},
 };
 
-export class GelButton extends Phaser.Button {
-    constructor(game, x, y, metrics, config) {
-        super(
-            game,
-            x,
-            y,
-            assetPath({ key: config.key, isMobile: metrics.isMobile }),
-            publish(config, { game }),
-            undefined,
-            1,
-            0,
-        );
+export class GelButton extends Phaser.GameObjects.Sprite {
+    constructor(scene, x, y, metrics, config) {
+        super(scene, x, y, assetPath({ key: config.key, isMobile: metrics.isMobile }));
         this._id = config.key;
         this._isMobile = metrics.isMobile;
         this.positionOverride = config.positionOverride;
-        this.animations.sprite.anchor.setTo(0.5, 0.5);
         this.setHitArea(metrics);
         this.indicator = noIndicator;
         this.setIndicator();
@@ -59,7 +49,8 @@ export class GelButton extends Phaser.Button {
 
         const width = this.width + hitPadding;
         const height = this.height + hitPadding;
-        this.hitArea = new Phaser.Rectangle(-width / 2, -height / 2, width, height);
+        //TODO P3 this needs fixing [NT]
+        //this.hitArea = new Phaser.Rectangle(-width / 2, -height / 2, width, height);
     }
 
     setImage(key) {
@@ -87,7 +78,8 @@ const paths = [[x => x.isMobile, x => "gelMobile." + x.key], [x => !x.isMobile, 
 const assetPath = fp.cond(paths);
 
 const publish = (config, data) => () => {
-    GameSound.Assets.buttonClick.play();
+    //TODO P3 re- enable sound [NT]
+    //GameSound.Assets.buttonClick.play();
     signal.bus.publish({
         channel: config.channel,
         name: config.key,

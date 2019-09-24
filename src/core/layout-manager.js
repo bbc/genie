@@ -60,7 +60,7 @@ export function create(game) {
 
     //TODO P3 adds callback to default scaler onsize change. Will need to see how P3 does this. NT
     //Scaler.onScaleChange.add(resize);
-    //Scaler.init(600, game);
+    Scaler.init(600, game);
 
     //TODO P3 background / foreground can likely now be deleted. Debug sprite will rely on how P3 does debug draws
     //root.addChild(background);
@@ -80,13 +80,13 @@ export function create(game) {
      * @memberof module:layout/factory
      * @returns {Object}
      */
-    const addLayout = buttons => {
-        const layout = Layout.create(game, Scaler.getMetrics(), buttons);
-        addToGroup(background, layout.root);
-        _layouts.push(layout);
-
-        return layout;
-    };
+    //const addLayout = buttons => {
+    //    const layout = Layout.create(game, Scaler.getMetrics(), buttons);
+    //    addToGroup(background, layout.root);
+    //    _layouts.push(layout);
+    //
+    //    return layout;
+    //};
 
     //TODO P3 stubbed these out. They are likely now redundant. NT
     const addToBackground = () => {};
@@ -125,7 +125,7 @@ export function create(game) {
         addToBackground,
         addToForeground,
         addToUnscaled,
-        addLayout,
+        //addLayout,
         getLayouts,
         getAccessibleGameButtons,
         removeAll,
