@@ -6,9 +6,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import _ from "../../../lib/lodash/lodash.js";
 import { Screen } from "../../core/screen.js";
-import { createLoadBar } from "./loadbar.js";
 import * as Scaler from "../../core/scaler.js";
 import * as GameSound from "../../core/game-sound.js";
 import { gmi } from "../../core/gmi/gmi.js";
@@ -31,16 +29,10 @@ export class Loadscreen extends Screen {
     preload() {
         this.load.setBaseURL(gmi.gameDir);
         this.load.setPath(gmi.embedVars.configPath);
-        const config = this.cache.json.get("config");
-
-        //sets the context as setter
-        this.setConfig(config);
+        this.setConfig(this.cache.json.get("config"));
 
         const masterPack = this.cache.json.get("asset-master-pack");
         const gamePacksToLoad = ["gel/gel-pack"].concat(getMissingPacks(masterPack, this.scene.manager.keys));
-
-        //TODO P3 delete once complete [NT]
-        console.log("gamePacksToLoad", gamePacksToLoad);
 
         this.load.addPack(masterPack);
         gamePacksToLoad.forEach(pack => this.load.pack(pack));
@@ -51,21 +43,7 @@ export class Loadscreen extends Screen {
         this.createBrandLogo();
 
         this.load.on("progress", this.updateLoadBar.bind(this));
-        this.load.on("complete", this.loadComplete);
     }
-
-    loadComplete = () => {
-        // P3 TODO is this needed anymore? KeyLookup are not a thing now...
-        //if (window.__qaMode) {
-        //   dumpToConsole(keyLookups);
-        //}
-        //GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
-
-        this.navigate("next");
-
-        gmi.gameLoaded();
-        //sendStats("game_loaded");
-    };
 
     createLoadBar() {
         this.add.image(0, 0, "loadscreen.loadbarBackground");
@@ -76,6 +54,10 @@ export class Loadscreen extends Screen {
     updateLoadBar = progress => {
         this.#loadbar.frame.cutWidth = this.#loadbar.width * progress;
         this.#loadbar.frame.updateUVs();
+
+        if (window.__qaMode) {
+            console.log("Loader progress:", progress); // eslint-disable-line no-console
+        }
     };
 
     createBrandLogo() {
@@ -90,30 +72,12 @@ export class Loadscreen extends Screen {
     }
 
     //TODO P3 stubbed this for now NT
-    create() {}
+    create() {
+        //GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
 
-    //create() {
-    //    this.createBackground();
-    //    this.createTitle();
-    //    this.createLoadingBar();
-    //    this.createBrandLogo();
-    //}
+        this.navigate("next");
 
-    updateLoadProgress(progress) {
-        if (this.hasOwnProperty("loadingBar")) this.loadingBar.fillPercent = progress;
-        if (window.__qaMode) {
-            console.log("Loader progress:", progress); // eslint-disable-line no-console
-        }
+        gmi.gameLoaded();
+        //sendStats("game_loaded");
     }
-}
-
-function dumpToConsole(keyLookups) {
-    const lines = _.flattenDeep([
-        "Loaded assets:",
-        _.flatMap(keyLookups, (keyMap, screenId) => [
-            `    ${screenId}:`,
-            _.map(keyMap, (path, key) => `        ${key}: ${path}`),
-        ]),
-    ]);
-    console.log(_.join(lines, "\n")); // eslint-disable-line no-console
 }
