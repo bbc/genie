@@ -63,5 +63,18 @@ describe("Gel Button", () => {
             expect(gelButton.shiftX).toBe(0);
             expect(gelButton.shiftY).toBe(0);
         });
+        test("makes the sprite interactive", () => {
+            GelButton.prototype.setInteractive = jest.fn();
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.setInteractive).toHaveBeenCalled();
+        });
+        test("sets up mouse events", () => {
+            GelButton.prototype.on = jest.fn();
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.on).toHaveBeenCalledWith("pointerdown", expect.any(Function));
+            expect(gelButton.on).toHaveBeenCalledWith("pointerup", expect.any(Function));
+            expect(gelButton.on).toHaveBeenCalledWith("pointerout", expect.any(Function));
+            expect(gelButton.on).toHaveBeenCalledWith("pointerover", expect.any(Function));
+        });
     });
 });
