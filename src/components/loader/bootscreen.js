@@ -3,6 +3,9 @@ import { gmi } from "../../core/gmi/gmi.js";
 import { settings, settingsChannel } from "../../core/settings.js";
 import * as signal from "../../core/signal-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
+import * as LayoutManager from "../../core/layout-manager.js";
+import { loadFonts } from "./font-loader.js";
+import * as a11y from "../../core/accessibility/accessibility-layer.js";
 
 const triggeredByGame = arg => arg instanceof Phaser.Game;
 const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
@@ -19,11 +22,10 @@ export class Boot extends Screen {
 
     preload() {
         this.load.baseURL = gmi.gameDir;
-
-        // All asset paths are relative to the location of the config.json:
         this.load.path = gmi.embedVars.configPath; //config dir
         this.load.json("config", "config.json");
-        this.load.json("asset-master-pack", "asset-master-pack.json"); //TODO P3 this is loaded now so we can check its keys for missing files. It is also loaded again later so perhaps could be done then? NT
+        //TODO P3 this is loaded now so we can check its keys for missing files. It is also loaded again later so perhaps could be done then? NT
+        this.load.json("asset-master-pack", "asset-master-pack.json");
 
         //TODO P3 - if the above could be changed this could potentially be part of loadscreen.js and we could delete boot
 
@@ -64,6 +66,25 @@ export class Boot extends Screen {
     }
 
     create() {
-        this.#onStarted();
+
+        //TODO P3 these could be set using this.game on loadscreen?
+        // Phaser is now set up and we can use all game properties.
+        this.game.canvas.setAttribute("tabindex", "-1");
+        this.game.canvas.setAttribute("aria-hidden", "true");
+
+        //TODO P3 where should this now live? [NT]
+        //TODO P3 mainly just initialises scaler now?
+        const layoutManager = LayoutManager.create(this.game);
+
+        //TODO P3 now part of camera and set per scene e.g: this.cameras.main.backgroundColor.setTo(255,255,255);
+        //this.game.stage.backgroundColor = "#333";
+
+        loadFonts(this.game, this.bootComplete);
+
+        a11y.setup(this.game.canvas.parentElement);
+    }
+
+    bootComplete = () => {
+        this.switchScene("loadscreen");
     }
 }

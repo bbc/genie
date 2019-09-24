@@ -18,9 +18,6 @@ export class Home extends Screen {
 
     create() {
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
-
-        console.log("HOME CONTEXT", this.context);
-
         this.add.image(0, 0, "home.background");
         this.add.image(0, 0, "home.title");
 

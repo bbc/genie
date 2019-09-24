@@ -7,11 +7,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import * as Navigation from "./navigation.js";
-import * as LayoutManager from "./layout-manager.js";
-import { loadFonts } from "./font-loader.js";
 import { gmi, setGmi } from "./gmi/gmi.js";
-import * as a11y from "./accessibility/accessibility-layer.js";
 import { addCustomStyles } from "./custom-styles.js";
 import * as qaMode from "./qa/qa-mode.js";
 import { getBrowser } from "./browser.js";
@@ -32,7 +28,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
     const browser = getBrowser();
 
     const scenes = getScenes(navigationConfig());
-    scenes.unshift(new Boot(onStarted));
+    scenes.unshift(new Boot());
 
     const phaserConfig = {
         width: 1400,
@@ -57,28 +53,7 @@ export function startup(settingsConfig = {}, navigationConfig) {
 
     addCustomStyles();
 
-    const game = new Phaser.Game(phaserConfig);
-
-    //TODO P3 This is called at the end of boot - which mainly loads the config
-    // could this just be set in loadscreen?
-    function onStarted() {
-        //TODO P3 these could be set using this.game on loadscreen?
-        // Phaser is now set up and we can use all game properties.
-        game.canvas.setAttribute("tabindex", "-1");
-        game.canvas.setAttribute("aria-hidden", "true");
-        const layoutManager = LayoutManager.create(game);
-
-        //TODO P3 now part of camera and set per scene e.g: this.cameras.main.backgroundColor.setTo(255,255,255);
-        //game.stage.backgroundColor = "#333";
-
-        //TODO P3 goToScreen could be moved to screen method [NT]
-        const onFontsLoaded = () => {
-            this.switchScene("loadscreen");
-        };
-        loadFonts(game, onFontsLoaded);
-
-        a11y.setup(game.canvas.parentElement);
-    }
+    new Phaser.Game(phaserConfig);
 }
 
 function getContainerDiv() {

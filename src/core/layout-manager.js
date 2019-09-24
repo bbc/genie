@@ -58,52 +58,17 @@ export function create(game) {
         root.position.set(stageWidth * 0.5, stageHeight * 0.5);
     };
 
-    //TODO P3 adds callback to default scaler onsize change. Will need to see how P3 does this. NT
+    //TODO P3 adds callback to default scaler onsize change. Will need to see how P3 does this. [NT]
+    //Scaler does not have to be initialised here if we don't need it to.
     //Scaler.onScaleChange.add(resize);
     Scaler.init(600, game);
 
-    //TODO P3 background / foreground can likely now be deleted. Debug sprite will rely on how P3 does debug draws
-    //root.addChild(background);
-    //root.addChild(foreground);
+    //TODO P3 Debug sprite will rely on how P3 does debug draws
     //if (game.debug.sprite) {
     //    debug.addChild(game.debug.sprite);
     //}
 
-    /**
-     * Create a new GEL layout for a given set of Gel Buttons
-     * Called in the create method of a given screen
-     *
-     * @example
-     * layoutManager.addLayout(["home", "restart", "continue", "pause"]);
-     * @param {Array} buttons - Array of standard button names to include. See {@link ./gel-defaults.js} for available names
-     *
-     * @memberof module:layout/factory
-     * @returns {Object}
-     */
-    //const addLayout = buttons => {
-    //    const layout = Layout.create(game, Scaler.getMetrics(), buttons);
-    //    addToGroup(background, layout.root);
-    //    _layouts.push(layout);
-    //
-    //    return layout;
-    //};
-
-    //TODO P3 These are likely now redundant. [NT]
-    //const addToBackground = fp.flow(
-    //    centerAnchor,
-    //    addToGroup(background),
-    //);
-    //const addToForeground = fp.flow(
-    //    centerAnchor,
-    //    addToGroup(foreground),
-    //);
-    //const addToUnscaled = fp.flow(
-    //    centerAnchor,
-    //    addToGroup(unscaled),
-    //);
-
     const getLayouts = () => _layouts;
-
     const getAccessibleGameButtons = () => customAccessibleButtons;
 
     const removeAll = () => {
@@ -119,10 +84,6 @@ export function create(game) {
     };
 
     return {
-        //addToBackground,
-        //addToForeground,
-        //addToUnscaled,
-        //addLayout,
         getLayouts,
         getAccessibleGameButtons,
         removeAll,

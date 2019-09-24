@@ -51,6 +51,7 @@ const navigationConfig = goToScreen => {
     const results = data => goToScreen("results", data);
 
     //TODO P3 re-enabling all these screens will also make the asset packs load. See spike for P3 formatted asset packs if needed
+    //TODO P3 state should be renamed to screen?
     return {
         loadscreen: {
             state: Loadscreen,
