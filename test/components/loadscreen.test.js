@@ -6,8 +6,8 @@
 
 import { createMockGmi } from "../mock/gmi";
 
-import { Loadscreen } from "../../src/components/loadscreen";
-import * as LoadBar from "../../src/components/loadbar";
+import { Loadscreen } from "../../src/components/loader/loadscreen.js";
+import * as LoadBar from "../../src/components/loader/loadbar.js";
 import * as AssetLoader from "../../src/core/asset-loader";
 import * as Scaler from "../../src/core/scaler.js";
 import * as GameSound from "../../src/core/game-sound";

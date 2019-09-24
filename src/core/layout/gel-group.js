@@ -51,9 +51,12 @@ const vertical = {
     },
 };
 
-export class GelGroup extends Phaser.Group {
-    constructor(game, parent, vPos, hPos, metrics, isSafe, isVertical) {
-        super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
+export class GelGroup extends Phaser.GameObjects.Container {
+    constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical) {
+        super(scene, 0, 0);
+        //TODO P3 we used to name the groups - useful for debugging. Might be usuaful as a propery? [NT]
+        //TODO P3 we can now use #private style class fields.
+        //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
 
         this._vPos = vPos;
         this._hPos = hPos;
@@ -61,7 +64,7 @@ export class GelGroup extends Phaser.Group {
         this._isSafe = isSafe;
         this._isVertical = isVertical;
         this._buttons = [];
-        this._buttonFactory = ButtonFactory.create(game);
+        this._buttonFactory = ButtonFactory.create(scene);
         this._setGroupPosition = metrics => {
             horizontal[hPos](metrics, this, isSafe ? "safeHorizontals" : "horizontals");
             vertical[vPos](metrics, this);
@@ -102,7 +105,9 @@ export class GelGroup extends Phaser.Group {
 
         this._metrics = metrics;
         const invScale = 1 / metrics.scale;
-        this.scale.setTo(invScale, invScale);
+
+        //TODO P3 fix this - groups may have no concept of scale? [NT]
+        this.setScale(invScale);
         this._setGroupPosition(metrics);
 
         this._buttons.forEach(button => {
@@ -115,7 +120,7 @@ export class GelGroup extends Phaser.Group {
         const pos = { x: 0, y: 0 };
 
         const halfWidth = this.width / 2; //Save here as size changes when you move children below
-        this.children.forEach(child => {
+        this.iterate(child => {
             child.y = pos.y + child.height / 2;
 
             if (this._isVertical) {

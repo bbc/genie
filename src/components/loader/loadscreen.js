@@ -7,59 +7,13 @@
  * @license Apache-2.0
  */
 
-import _ from "../../lib/lodash/lodash.js";
-import { loadAssets } from "../core/asset-loader.js"; //TODO P3 possibly can now delete this?
-import { Screen } from "../core/screen.js";
+import _ from "../../../lib/lodash/lodash.js";
+import { Screen } from "../../core/screen.js";
 import { createLoadBar } from "./loadbar.js";
-import * as Scaler from "../core/scaler.js";
-import * as GameSound from "../core/game-sound.js";
-import { gmi } from "../core/gmi/gmi.js";
-
-const MASTER_PACK_KEY = "MasterAssetPack";
-const GEL_PACK_KEY = "GelAssetPack";
-
-//TODO P3 Might not need this anymore NT
-//const gamePacksToLoad = {
-//    [MASTER_PACK_KEY]: { url: "asset-master-pack.json" },
-//    [GEL_PACK_KEY]: { url: "gel/gel-pack.json" },
-//};
-
-//TODO P3 Put this in it's own module?
-const loadscreenPack = {
-    prefix: "loadscreen.",
-    files: [
-        {
-            type: "image",
-            key: "title",
-            url: "loader/title.png",
-            overwrite: false,
-        },
-        {
-            type: "image",
-            key: "background",
-            url: "loader/background.png",
-            overwrite: false,
-        },
-        {
-            type: "image",
-            key: "brandLogo",
-            url: "loader/brand-logo.png",
-            overwrite: false,
-        },
-        {
-            type: "image",
-            key: "loadbarBackground",
-            url: "loader/load-bar-bg.png",
-            overwrite: false,
-        },
-        {
-            type: "image",
-            key: "loadbar",
-            url: "loader/load-bar-fill.png",
-            overwrite: false,
-        },
-    ],
-};
+import * as Scaler from "../../core/scaler.js";
+import * as GameSound from "../../core/game-sound.js";
+import { gmi } from "../../core/gmi/gmi.js";
+import { loadscreenPack } from "./loadpack.js";
 
 export class Loadscreen extends Screen {
     /**
@@ -118,6 +72,7 @@ export class Loadscreen extends Screen {
                 //GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
 
                 //this.scene.start("home", {})  // navigation.next?
+                //this.switchScene("home");
 
                 //P3 TODO most of navigation can go - passing in "this" usually illustrates we can add this as a method
                 // We can probably trim navigation down to just the config and pass it around.
@@ -125,6 +80,7 @@ export class Loadscreen extends Screen {
 
                 ////////TODO
                 //this.switchScene("next");
+                this.switchScene("home");
 
                 //gmi.gameLoaded();
                 //sendStats("game_loaded");

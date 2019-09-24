@@ -33,27 +33,30 @@ const assignProperties = (object, overrides) => {
 const shallowMergeOverrides = (config, overrides) => assignProperties(copyFirstChildren(config), overrides);
 
 /**
- * Creates a new layout. Called by layout.factory.addLayout for each screen component
+ * Creates a new layout. Called by screen.addLayout for each screen component
  *
- * @param {Phaser.Game} game - Phaser Game Instance
+ * @param {Phaser.Scene} game - Phaser Scene Instance
  * @param {Object} metrics - viewport metrics
  * @param {Array.<string>} buttonIds
  */
-export function create(game, metrics, buttonIds) {
+export function create(scene, metrics, buttonIds, root) {
     buttonIds = buttonIds.filter(checkGMIFlags);
 
-    const overrides = game.cache.getJSON("config").theme[game.state.current]["button-overrides"];
+    const overrides = scene.cache.json.get("config").theme[scene.scene.key]["button-overrides"];
 
     const config = shallowMergeOverrides(gel.config, overrides);
 
-    const root = new Phaser.Group(game, game.world, undefined);
+    //TODO P3 root passed to get this working [NT]
+    //const root = new Phaser.Group(game, game.world, undefined);
     const groups = fp.zipObject(
         groupLayouts.map(layout =>
             fp.camelCase([layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" ")),
         ),
-        groupLayouts.map(
-            layout => new GelGroup(game, root, layout.vPos, layout.hPos, metrics, layout.safe, layout.arrangeV),
-        ),
+        groupLayouts.map(layout => {
+            const group = new GelGroup(scene, root, layout.vPos, layout.hPos, metrics, layout.safe, layout.arrangeV);
+            root.add(group);
+            return group;
+        }),
     );
 
     const buttons = fp.zipObject(
@@ -61,7 +64,8 @@ export function create(game, metrics, buttonIds) {
         tabSort(buttonIds).map(name => groups[config[name].group].addButton(config[name])),
     );
 
-    const iconSignals = settingsIcons.create(groups.topRight, buttonIds);
+    //TODO P3 re enable once signal bus works [NT]
+    //const iconSignals = settingsIcons.create(groups.topRight, buttonIds);
 
     /**
      * Attach a callback to the onInputUp event of a given Gel button
@@ -82,7 +86,8 @@ export function create(game, metrics, buttonIds) {
     };
     resize(metrics);
 
-    const signal = onScaleChange.add(resize);
+    //TODO P3 re enabled once signal bus is working [NT]
+    //const signal = onScaleChange.add(resize);
 
     const removeSignals = () => {
         signal.unsubscribe();

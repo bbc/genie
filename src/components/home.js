@@ -13,24 +13,30 @@ import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 
 export class Home extends Screen {
     constructor() {
-        super();
+        super({key: 'home'});
     }
 
     create() {
-        const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
-        this.layoutManager.addToBackground(this.game.add.image(0, 0, "home.background"));
-        this.layoutManager.addToBackground(this.game.add.image(0, -150, "home.title"));
+        //TODO P3 fix config being passed through [NT].
+        //const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
+        const achievements = ["achievements"];
+
+        console.log("HOME CONTEXT", this.context)
+
+        this.add.image(0, 0, "home.background");
+        this.add.image(0, 0, "home.title");
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
 
-        this.layoutManager.addLayout(buttons.concat(achievements));
+        //TODO P3 fix layoutmanager being added, test harness and signal bus [NT]
+        this.addLayout(buttons.concat(achievements));
 
-        createTestHarnessDisplay(this.game, this.context, this.layoutManager);
+        //createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
-        signal.bus.subscribe({
-            channel: buttonsChannel,
-            name: "play",
-            callback: this.navigation.next,
-        });
+        //signal.bus.subscribe({
+        //    channel: buttonsChannel,
+        //    name: "play",
+        //    callback: this.navigation.next,
+        //});
     }
 }
