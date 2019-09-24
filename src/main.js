@@ -102,51 +102,51 @@ const navigationConfigX = goToScreen => {
 };
 
 const navigationConfig = {
-        loadscreen: {
-            state: Loadscreen,
-            routes: {
-                next: "home",
-            },
+    loadscreen: {
+        state: Loadscreen,
+        routes: {
+            next: "home",
         },
-        home: {
-            state: Home,
-            routes: {
-                next: "character-select",
-            },
+    },
+    home: {
+        state: Home,
+        routes: {
+            next: "character-select",
         },
-        //"character-select": {
-        //    state: Select,
-        //    routes: {
-        //        next: levelSelect,
-        //        home: home,
-        //        restart: home,
-        //    },
-        //},
-        //"level-select": {
-        //    state: Select,
-        //    routes: {
-        //        next: game,
-        //        home: home,
-        //        restart: home,
-        //    },
-        //},
-        //game: {
-        //    state: GameTest,
-        //    routes: {
-        //        next: results,
-        //        home: home,
-        //        restart: game,
-        //    },
-        //},
-        //results: {
-        //    state: Results,
-        //    routes: {
-        //        next: home,
-        //        game: game,
-        //        restart: game,
-        //        home: home,
-        //    },
-        //},
-    };
+    },
+    //"character-select": {
+    //    state: Select,
+    //    routes: {
+    //        next: levelSelect,
+    //        home: home,
+    //        restart: home,
+    //    },
+    //},
+    //"level-select": {
+    //    state: Select,
+    //    routes: {
+    //        next: game,
+    //        home: home,
+    //        restart: home,
+    //    },
+    //},
+    //game: {
+    //    state: GameTest,
+    //    routes: {
+    //        next: results,
+    //        home: home,
+    //        restart: game,
+    //    },
+    //},
+    //results: {
+    //    state: Results,
+    //    routes: {
+    //        next: home,
+    //        game: game,
+    //        restart: game,
+    //        home: home,
+    //    },
+    //},
+};
 
 startup(settingsConfig, navigationConfig);

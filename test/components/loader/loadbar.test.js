@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as LoadBar from "../../src/components/loader/loadbar.js";
+import * as LoadBar from "../../../src/components/loader/loadbar.js";
 
 describe("Load Bar", () => {
     let mockPhaserGroup;

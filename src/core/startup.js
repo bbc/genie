@@ -12,7 +12,7 @@ import { addCustomStyles } from "./custom-styles.js";
 import * as qaMode from "./qa/qa-mode.js";
 import { getBrowser } from "./browser.js";
 import { Boot } from "../components/loader/bootscreen.js";
-import { hookErrors} from '../components/loader/hook-errors.js';
+import { hookErrors } from "../components/loader/hook-errors.js";
 
 //TODO P3 this is just a quick shim to create the scenes array
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].state());
@@ -36,8 +36,8 @@ export function startup(settingsConfig = {}, screenConfig) {
         antialias: true,
         multiTexture: true,
         parent: getContainerDiv(),
-        title: "Game Title Here",       //TODO P3 these could be useful [NT]
-        version: "Version Info here",   //TODO P3 these could be useful [NT]
+        title: "Game Title Here", //TODO P3 these could be useful [NT]
+        version: "Version Info here", //TODO P3 these could be useful [NT]
         transparent: browser.isSilk, // Fixes silk browser flickering
         clearBeforeRender: false,
         scale: {

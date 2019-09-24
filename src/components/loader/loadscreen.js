@@ -2,11 +2,10 @@
  * Loadscreen loads in the game's assets.
  *
  * @module components/loadscreen
- * @copyright BBC 2018
+ * @copyright BBC 2019
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 import _ from "../../../lib/lodash/lodash.js";
 import { Screen } from "../../core/screen.js";
 import { createLoadBar } from "./loadbar.js";

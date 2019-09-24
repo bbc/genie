@@ -1,3 +1,11 @@
+/**
+ * Displays console errors on screen.
+ *
+ * @module components/loader/hookErrors
+ * @copyright BBC 2019
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 export const hookErrors = gameDivId => {
     const containerDiv = document.getElementById(gameDivId) || document.body;
     let messageElement;
@@ -17,4 +25,4 @@ export const hookErrors = gameDivId => {
         messageElement.innerText = `Something isn't working:\n\n${event.error.message || event.error}\n\n${event.error
             .stack || ""}`;
     });
-}
+};

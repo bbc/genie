@@ -20,8 +20,6 @@ import * as Layout from "./layout/layout.js";
  */
 export class Screen extends Phaser.Scene {
     #data;
-    #context;
-    #transientData = {};
     #layouts = [];
 
     get context() {
@@ -29,27 +27,29 @@ export class Screen extends Phaser.Scene {
             config: this.#data.config,
             gameMuted: this.#data.gameMuted,
             popupScreens: this.#data.popupScreens,
+            transientData: this.#data.transient,
         };
     }
 
     //TODO P3 the only context parts we want them to set is transient data
     //TODO P3 maybe it should be separate? [NT]
-    set context(newContext) {
-        this.#context = _.merge({}, this.#context, newContext);
+    set transientData(newData) {
+        this.#data.transient = _.merge({}, this.#data.transient, newData);
     }
 
+    get transientData() {
+        return this.#data.transient;
+    }
+
+    //TODO P3 needed? [NT]
     getAsset(name) {
         return this.game.state.current + "." + name;
     }
 
-    get config() {
-        return this.#data.config;
-    }
-
-    //TODO P3 only one argument is now passed to init
-    //init(transientData, layoutManager, context, navigation) {
     init(data) {
         this.#data = data;
+
+        //TODO P3 needed? [NT]
         //this.layoutManager = config.layoutManager;
 
         //TODO P3 remove debug line - currently useful to know which screen has been started NT
@@ -60,20 +60,14 @@ export class Screen extends Phaser.Scene {
         this.cameras.main.scrollY = -300;
 
         //TODO P3 commented out lines need re-enabling
-        //this.navigation = config.navigation[this.scene.key].routes;
         //const themeScreenConfig = this.context.config.theme[this.game.state.current];
         //if (this.game.state.current !== "loadscreen") {
         //    gmi.setStatsScreen(this.game.state.current);
         //}
         //GameSound.setupScreenMusic(this.game, themeScreenConfig);
-        this.#transientData = data.transientData;
         a11y.clearAccessibleButtons();
         //a11y.clearElementsFromDom();
         //this.overlaySetup();
-
-        //TODO P3 these might not be needed anymore NT
-        //const routes = navigation[this.game.state.current].routes;
-        //this.navigation = fp.mapValues(value => () => value(this.transientData || {}), routes);
     }
 
     setData(newData) {
@@ -105,7 +99,7 @@ export class Screen extends Phaser.Scene {
     }
 
     navigate(nextRoute) {
-        const next = this.#data.navigation[this.scene.key].routes[nextRoute]
+        const next = this.#data.navigation[this.scene.key].routes[nextRoute];
         //TODO P3 naviagtion 'gotoscreen' also did some cleanup we may need to re-enable [NT]
         this.scene.start(next, this.#data);
     }

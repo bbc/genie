@@ -1,3 +1,11 @@
+/**
+ * Pre-booter for assets needed by loadscreen and general early game setup
+ *
+ * @module components/loadscreen
+ * @copyright BBC 2019
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import { Screen } from "../../core/screen.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { settings, settingsChannel } from "../../core/settings.js";
