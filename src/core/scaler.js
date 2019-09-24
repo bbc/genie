@@ -21,7 +21,6 @@ export const onScaleChange = { add: _onSizeChange.add };
 export let getMetrics;
 
 export function init(stageHeight, game) {
-
     //TODO P3 unsure if any of this is now relevant NT
     //game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     //game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;

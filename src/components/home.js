@@ -13,7 +13,7 @@ import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 
 export class Home extends Screen {
     constructor() {
-        super({key: 'home'});
+        super({ key: "home" });
     }
 
     create() {
@@ -21,7 +21,7 @@ export class Home extends Screen {
         //const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         const achievements = ["achievements"];
 
-        console.log("HOME CONTEXT", this.context)
+        console.log("HOME CONTEXT", this.context);
 
         this.add.image(0, 0, "home.background");
         this.add.image(0, 0, "home.title");
