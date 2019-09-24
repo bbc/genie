@@ -12,7 +12,7 @@ import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as VisibleLayer from "../core/visible-layer.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
-import * as Layout from './layout/layout.js'
+import * as Layout from "./layout/layout.js";
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
