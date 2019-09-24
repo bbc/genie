@@ -42,6 +42,19 @@ export class GelButton extends Phaser.GameObjects.Sprite {
         this.setIndicator();
         this.shiftX = config.shiftX || 0;
         this.shiftY = config.shiftY || 0;
+        this.setInteractive();
+        this.setupMouseEvents();
+    }
+
+    setupMouseEvents() {
+        this.on("pointerdown", () => {
+            console.log("Button mouse down event");
+        });
+        this.on("pointerup", () => {
+            console.log("Button mouse up event");
+        });
+        this.on("pointerout", () => this.setFrame(0));
+        this.on("pointerover", () => this.setFrame(1));
     }
 
     setHitArea(metrics) {
