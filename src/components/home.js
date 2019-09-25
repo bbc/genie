@@ -23,7 +23,6 @@ export class Home extends Screen {
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
 
-
         this.addLayout(buttons.concat(achievements));
 
         //TODO P3 fix  test harness and signal bus [NT]
