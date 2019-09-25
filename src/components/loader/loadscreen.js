@@ -29,7 +29,7 @@ export class Loadscreen extends Screen {
     preload() {
         this.load.setBaseURL(gmi.gameDir);
         this.load.setPath(gmi.embedVars.configPath);
-        const config = this.cache.json.get("config")
+        const config = this.cache.json.get("config");
         this.setConfig(config);
 
         if (config.theme.game && config.theme.game.achievements === true) {
@@ -70,7 +70,7 @@ export class Loadscreen extends Screen {
         const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
         const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
         this.brandLogo = this.add.image(x, y, "loadscreen.brandLogo");
-        this.brandLogo.setOrigin(1,1)
+        this.brandLogo.setOrigin(1, 1);
     }
 
     create() {
