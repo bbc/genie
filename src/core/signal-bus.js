@@ -28,11 +28,16 @@ export const create = () => {
 
     const addSignal = message => {
         if (!_bus[message.channel]) {
-            _bus[message.channel] = {};
+            _bus[message.channel] = new Phaser.Events.EventEmitter();
         }
-        if (!_bus[message.channel][message.name]) {
-            _bus[message.channel][message.name] = new Phaser.Signal();
-        }
+
+        //_bus[message.channel].on(message.name)
+        //
+        //if (!_bus[message.channel][message.name]) {
+        //
+        //    //P3 TODO
+        //    _bus[message.channel][message.name] = new Phaser.Events.EventEmitter(); //new Phaser.Signal();
+        //}
         return message;
     };
 
@@ -45,17 +50,19 @@ export const create = () => {
      */
     const removeChannel = channel => {
         fp.forOwn(messageName => {
-            messageName.dispose();
+            //P3 TODO needs something like _bus[channel].removeEventListener(messageName, ###listener)
+            //messageName.dispose();
         }, _bus[channel]);
         delete _bus[channel];
     };
 
     const addSubscription = message => {
-        _bus[message.channel][message.name].add(message.callback);
+        _bus[message.channel].on(message.name, message.callback)
+        //_bus[message.channel][message.name].add(message.callback);
         return fp.assign(message, { unsubscribe: () => removeSubscription(message) });
     };
-    const removeSubscription = message => _bus[message.channel][message.name].remove(message.callback);
-    const publishMessage = message => _bus[message.channel][message.name].dispatch(message.data);
+    const removeSubscription = message => {}; //P3 TODO _bus[message.channel][message.name].remove(message.callback);
+    const publishMessage = message => _bus[message.channel].emit(message.name, message.data)    //_bus[message.channel][message.name].dispatch(message.data);
 
     /**
      * Subscribe to a given signal identifier. Create Signal if it doesn't exist.
