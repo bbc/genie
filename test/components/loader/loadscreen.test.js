@@ -16,9 +16,10 @@ describe("Load Screen", () => {
     let mockGmi;
     let mockImage;
     let mockConfig;
-    let mockMasterPack
+    let mockMasterPack;
 
     beforeEach(() => {
+        //TODO P3 need to add tests for audio once audio has been addressed [NT]
         //global.window.__qaMode = undefined;
         //jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {
         //    play: jest.fn();
@@ -90,6 +91,7 @@ describe("Load Screen", () => {
 
         loadScreen.scene = { key: "loadscreen", manager: { keys: [] } };
         loadScreen.cameras = { main: {} };
+        loadScreen.setConfig = jest.fn();
         loadScreen.init({});
 
         const mockGame = {
@@ -112,14 +114,25 @@ describe("Load Screen", () => {
         });
     });
 
-/*
+    describe("createBrandLogo method", () => {
+        test("adds logo image at correct position", () => {
+            const mockMetrics = {
+                borderPad: 10,
+                scale: 1,
+                horizontals: {
+                    right: 100,
+                },
+                verticals: {
+                    bottom: 100,
+                },
+            };
+            Scaler.getMetrics = jest.fn(() => mockMetrics);
+            loadScreen.createBrandLogo();
 
-    preload() {
-        const config = this.cache.json.get("config")
-        this.setConfig(config);
-        this.createBrandLogo();
-    }
- */
+            expect(loadScreen.add.image).toHaveBeenCalledWith(90, 90, "loadscreen.brandLogo");
+            expect(mockImage.setOrigin).toHaveBeenCalledWith(1, 1);
+        });
+    });
 
     describe("createLoadBar method", () => {
         test("adds loadbar images and sets progress to zero", () => {
@@ -133,6 +146,11 @@ describe("Load Screen", () => {
     });
 
     describe("preload method", () => {
+        test("Sets the config part of screen#data", () => {
+            loadScreen.preload();
+            expect(loadScreen.setConfig).toHaveBeenCalledWith(mockConfig);
+        });
+
         test("Sets up loader paths correctly", () => {
             loadScreen.preload();
 
