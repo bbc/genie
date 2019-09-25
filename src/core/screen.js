@@ -100,7 +100,7 @@ export class Screen extends Phaser.Scene {
 
     navigate(nextRoute) {
         const next = this.#data.navigation[this.scene.key].routes[nextRoute];
-        //TODO P3 naviagtion 'gotoscreen' also did some cleanup we may need to re-enable [NT]
+        //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable [NT]
         this.scene.start(next, this.#data);
     }
 
