@@ -39,7 +39,7 @@ const settingsConfig = {
 //    },
 //});
 
-const navigationConfig = goToScreen => {
+const navigationConfigX = goToScreen => {
     if (parseUrlParams(window.location.search).sanityCheck === true) {
         return phaserTestHarnessConfig(goToScreen);
     }
@@ -51,6 +51,7 @@ const navigationConfig = goToScreen => {
     const results = data => goToScreen("results", data);
 
     //TODO P3 re-enabling all these screens will also make the asset packs load. See spike for P3 formatted asset packs if needed
+    //TODO P3 state should be renamed to screen?
     return {
         loadscreen: {
             state: Loadscreen,
@@ -98,6 +99,54 @@ const navigationConfig = goToScreen => {
         //    },
         //},
     };
+};
+
+const navigationConfig = {
+    loadscreen: {
+        state: Loadscreen,
+        routes: {
+            next: "home",
+        },
+    },
+    home: {
+        state: Home,
+        routes: {
+            next: "character-select",
+        },
+    },
+    //"character-select": {
+    //    state: Select,
+    //    routes: {
+    //        next: levelSelect,
+    //        home: home,
+    //        restart: home,
+    //    },
+    //},
+    //"level-select": {
+    //    state: Select,
+    //    routes: {
+    //        next: game,
+    //        home: home,
+    //        restart: home,
+    //    },
+    //},
+    //game: {
+    //    state: GameTest,
+    //    routes: {
+    //        next: results,
+    //        home: home,
+    //        restart: game,
+    //    },
+    //},
+    //results: {
+    //    state: Results,
+    //    routes: {
+    //        next: home,
+    //        game: game,
+    //        restart: game,
+    //        home: home,
+    //    },
+    //},
 };
 
 startup(settingsConfig, navigationConfig);

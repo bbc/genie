@@ -4,13 +4,13 @@
  * @license Apache-2.0
  */
 
-import { createMockGmi } from "../mock/gmi";
+import { createMockGmi } from "../../mock/gmi.js";
 
-import { Loadscreen } from "../../src/components/loader/loadscreen.js";
-import * as LoadBar from "../../src/components/loader/loadbar.js";
+import { Loadscreen } from "../../../src/components/loader/loadscreen.js";
+import * as LoadBar from "../../../src/components/loader/loadbar.js";
 import * as AssetLoader from "../../src/core/asset-loader";
-import * as Scaler from "../../src/core/scaler.js";
-import * as GameSound from "../../src/core/game-sound";
+import * as Scaler from "../../../src/core/scaler.js";
+import * as GameSound from "../../../src/core/game-sound.js";
 
 describe("Load Screen", () => {
     let loadScreen;

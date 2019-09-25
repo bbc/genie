@@ -19,50 +19,63 @@ import * as Layout from "./layout/layout.js";
  * All the game screens will extend from this class.
  */
 export class Screen extends Phaser.Scene {
-    #context = {};
+    #data;
     #layouts = [];
 
     get context() {
-        return this.#context;
+        return {
+            config: this.#data.config,
+            gameMuted: this.#data.gameMuted,
+            popupScreens: this.#data.popupScreens,
+            transientData: this.#data.transient,
+        };
     }
 
-    set context(newContext) {
-        this.#context = _.merge({}, this.#context, newContext);
+    //TODO P3 the only context parts we want them to set is transient data
+    //TODO P3 maybe it should be separate? [NT]
+    set transientData(newData) {
+        this.#data.transient = _.merge({}, this.#data.transient, newData);
     }
 
+    get transientData() {
+        return this.#data.transient;
+    }
+
+    //TODO P3 needed? [NT]
     getAsset(name) {
         return this.game.state.current + "." + name;
     }
 
-    //TODO P3 only one argument is now passed to init
-    //init(transientData, layoutManager, context, navigation) {
-    init(config) {
-        console.log("INIT SCREEN CONFIG", config);
-        this.layoutManager = config.layoutManager;
-        this.#context = config.context;
+    init(data) {
+        this.#data = data;
+
+        //TODO P3 needed? [NT]
+        //this.layoutManager = config.layoutManager;
 
         //TODO P3 remove debug line - currently useful to know which screen has been started NT
-        console.log(`SCREEN INIT ${this.scene.key}:`, config);
+        console.log(`SCREEN INIT ${this.scene.key}:`, data);
 
         //TODO P3 This centers the camera - we don't necessarily have to do this anymore. Most people are used to top left being origin NT
         this.cameras.main.scrollX = -700;
         this.cameras.main.scrollY = -300;
 
         //TODO P3 commented out lines need re-enabling
-        //this.navigation = config.navigation[this.scene.key].routes;
         //const themeScreenConfig = this.context.config.theme[this.game.state.current];
         //if (this.game.state.current !== "loadscreen") {
         //    gmi.setStatsScreen(this.game.state.current);
         //}
         //GameSound.setupScreenMusic(this.game, themeScreenConfig);
-        this.transientData = config.transientData;
         a11y.clearAccessibleButtons();
         //a11y.clearElementsFromDom();
         //this.overlaySetup();
+    }
 
-        //TODO P3 these might not be needed anymore NT
-        //const routes = navigation[this.game.state.current].routes;
-        //this.navigation = fp.mapValues(value => () => value(this.transientData || {}), routes);
+    setData(newData) {
+        this.#data = newData;
+    }
+
+    setConfig(newConfig) {
+        this.#data.config = newConfig;
     }
 
     overlaySetup() {
@@ -85,10 +98,10 @@ export class Screen extends Phaser.Scene {
         this.overlaySetup();
     }
 
-    switchScene(nextScene) {
-        console.log("switchScene", nextScene);
-        //TODO P3 get this from navigation config.
-        this.scene.start(nextScene, this.#context);
+    navigate(nextRoute) {
+        const next = this.#data.navigation[this.scene.key].routes[nextRoute];
+        //TODO P3 naviagtion 'gotoscreen' also did some cleanup we may need to re-enable [NT]
+        this.scene.start(next, this.#data);
     }
 
     /**

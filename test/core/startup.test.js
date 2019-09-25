@@ -11,7 +11,7 @@ import { startup } from "../../src/core/startup.js";
 import { getBrowser } from "../../src/core/browser.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 import * as LayoutManager from "../../src/core/layout-manager.js";
-import * as LoadFonts from "../../src/core/font-loader.js";
+import * as LoadFonts from "../../src/components/loader/font-loader.js";
 import * as Navigation from "../../src/core/navigation.js";
 import * as styles from "../../src/core/custom-styles.js";
 import * as qaMode from "../../src/core/qa/qa-mode.js";
