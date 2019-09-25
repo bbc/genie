@@ -25,7 +25,6 @@ export class Screen extends Phaser.Scene {
     get context() {
         return {
             config: this.#data.config,
-            gameMuted: this.#data.gameMuted,
             popupScreens: this.#data.popupScreens,
             transientData: this.#data.transient,
         };
@@ -49,13 +48,10 @@ export class Screen extends Phaser.Scene {
     init(data) {
         this.#data = data;
 
-        //TODO P3 needed? [NT]
-        //this.layoutManager = config.layoutManager;
-
         //TODO P3 remove debug line - currently useful to know which screen has been started NT
         console.log(`SCREEN INIT ${this.scene.key}:`, data);
 
-        //TODO P3 This centers the camera - we don't necessarily have to do this anymore. Most people are used to top left being origin NT
+        //TODO P3 This centers the camera. Should this be hard-coded [NT]
         this.cameras.main.scrollX = -700;
         this.cameras.main.scrollY = -300;
 
@@ -100,7 +96,7 @@ export class Screen extends Phaser.Scene {
 
     navigate(nextRoute) {
         const next = this.#data.navigation[this.scene.key].routes[nextRoute];
-        //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable [NT]
+        //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable here [NT]
         this.scene.start(next, this.#data);
     }
 
@@ -119,9 +115,8 @@ export class Screen extends Phaser.Scene {
         //TODO P3 passing in the root here . Maybe it can be moved?
         const layoutRoot = this.add.container(0, 0);
 
-        //P3 TODO passing in "this" smells
+        //P3 TODO passing in "this" smells [NT]
         const layout = Layout.create(this, Scaler.getMetrics(), buttons, layoutRoot);
-        //TODO P3 I don't think this is needed anymore as they are added to the scene: addToGroup(background, layout.root);
         this.#layouts.push(layout);
 
         return layout;

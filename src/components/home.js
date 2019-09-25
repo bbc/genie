@@ -23,9 +23,10 @@ export class Home extends Screen {
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
 
-        //TODO P3 fix layoutmanager being added, test harness and signal bus [NT]
+
         this.addLayout(buttons.concat(achievements));
 
+        //TODO P3 fix  test harness and signal bus [NT]
         //createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
         //signal.bus.subscribe({
