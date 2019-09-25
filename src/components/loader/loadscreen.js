@@ -29,7 +29,12 @@ export class Loadscreen extends Screen {
     preload() {
         this.load.setBaseURL(gmi.gameDir);
         this.load.setPath(gmi.embedVars.configPath);
-        this.setConfig(this.cache.json.get("config"));
+        const config = this.cache.json.get("config")
+        this.setConfig(config);
+
+        if (config.theme.game && config.theme.game.achievements === true) {
+            this.load.json("achievements-data", "achievements/config.json");
+        }
 
         const masterPack = this.cache.json.get("asset-master-pack");
         const gamePacksToLoad = ["gel/gel-pack"].concat(getMissingPacks(masterPack, this.scene.manager.keys));
@@ -61,23 +66,21 @@ export class Loadscreen extends Screen {
     };
 
     createBrandLogo() {
-        //TODO P3 move logo to correct position NT
-        //const metrics = Scaler.getMetrics();
-        //
-        //const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
-        //const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
-        this.brandLogo = this.add.image(0, 0, "loadscreen.brandLogo");
-        //this.brandLogo.right = x;
-        //this.brandLogo.bottom = y;
+        const metrics = Scaler.getMetrics();
+        const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
+        const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
+        this.brandLogo = this.add.image(x, y, "loadscreen.brandLogo");
+        this.brandLogo.setOrigin(1,1)
     }
 
-    //TODO P3 stubbed this for now NT
     create() {
         //GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
+        if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
+            gmi.achievements.init(this.cache.json.get("achievements-data"));
+        }
 
         this.navigate("next");
-
+        gmi.sendStatsEvent("gameloaded", "true");
         gmi.gameLoaded();
-        //sendStats("game_loaded");
     }
 }
