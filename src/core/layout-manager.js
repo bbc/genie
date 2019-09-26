@@ -18,18 +18,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as Scaler from "./scaler.js";
-//import * as Layout from "./layout/layout.js"; //TODO P3 re-enable layouts here
-import fp from "../../lib/lodash/fp/fp.js";
-
-const centerAnchor = object => {
-    if (object.anchor) {
-        object.anchor.setTo(0.5, 0.5);
-    }
-    return object;
-};
-
-const addToGroup = fp.curry((group, object) => group.addChild(object));
 
 /**
  * Create a new layoutManager
@@ -38,13 +26,14 @@ const addToGroup = fp.curry((group, object) => group.addChild(object));
  * @returns {{addToBackground(), addToForeground(), addLayout(), removeAll(), getSize()}} - {{@link module:layout/factory.addLayout addLayout}}
  */
 export function create(game) {
-    let _layouts = [];
+    /*
+        TODO P3
 
-    //TODO P3 below might possible be removed now as game objects can be added directly to a scene. NT
-    //const root = game.add.group(undefined, "root", true);
-    //const unscaled = game.add.group(undefined, "unscaled", true);
-    //const background = game.add.group(undefined, "background");
-    //const foreground = game.add.group(undefined, "foreground");
+        Most of this functionality has moved into screen.js
+        We may need to move some of the remaning methods there
+
+        I have deleted from this file anything that has already been moved [NT]
+     */
 
     if (!game.accessibleButtons) {
         game.accessibleButtons = [];
@@ -53,15 +42,6 @@ export function create(game) {
 
     //TODO P3 next line part of debug draw
     //const debug = game.add.group(undefined, "debug", true);
-
-    const resize = ({ stageWidth, stageHeight }) => {
-        root.position.set(stageWidth * 0.5, stageHeight * 0.5);
-    };
-
-    //TODO P3 adds callback to default scaler onsize change. Will need to see how P3 does this. [NT]
-    //Scaler does not have to be initialised here if we don't need it to.
-    //Scaler.onScaleChange.add(resize);
-    Scaler.init(600, game);
 
     //TODO P3 Debug sprite will rely on how P3 does debug draws
     //if (game.debug.sprite) {
