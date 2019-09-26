@@ -4,7 +4,6 @@
  * @license Apache-2.0
  */
 import { Home } from "./components/home.js";
-import { Loader } from "./core/loader/loader.js";
 import { Results } from "./components/results.js";
 import { Select } from "./components/select.js";
 import { phaserTestHarnessConfig } from "./components/test-harness/test-harness-main.js";
