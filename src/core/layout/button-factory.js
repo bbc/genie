@@ -48,8 +48,7 @@ const createButton = fp.curry((game, metrics, config, x = 0, y = 0) => {
         btn.hitArea = null;
         return btn;
     } else {
-        //TODO P3 should work once signal bus is enabled [NT]
-        //defaultAction(config);
+        defaultAction(config);
         return btn; //TODO P3 - enable accessibilify: return accessibilify(btn, config, false); [NT]
     }
 });
