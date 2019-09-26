@@ -21,13 +21,13 @@ import * as Scaler from "../scaler.js";
 //const filterUndefined = fp.filter(x => !!x);
 
 export class Boot extends Screen {
-    #navigation;
+    #navigationConfig;
 
     constructor(navigationConfig) {
         super({ key: "boot" });
-        this.#navigation = navigationConfig;
-        this.#navigation.boot = { routes: { next: "loader" } };
-        this.#navigation.loadscreen = { routes: { next: "home" } };
+        this.#navigationConfig = navigationConfig;
+        this.#navigationConfig.boot = { routes: { next: "loader" } };
+        this.#navigationConfig.loadscreen = { routes: { next: "home" } };
     }
 
     preload() {
@@ -39,7 +39,7 @@ export class Boot extends Screen {
 
         this.setData({
             popupScreens: [],
-            navigation: this.#navigation,
+            navigation: this.#navigationConfig,
         });
 
         //TODO P3 - if the above could be changed this could potentially be part of loadscreen.js and we could delete boot
