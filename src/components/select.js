@@ -18,7 +18,7 @@ const wrapRange = (value, max) => ((value % max) + max) % max;
 
 export class Select extends Screen {
     constructor() {
-        super();
+        super({ key: "character-select" });
     }
 
     create() {

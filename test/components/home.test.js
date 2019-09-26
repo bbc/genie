@@ -38,7 +38,7 @@ describe("Home Screen", () => {
             next: jest.fn(),
         };
         homeScreen.game = mockGame;
-        homeScreen.context = mockContext;
+        Object.defineProperty(homeScreen, "context", { get: jest.fn(() => mockContext) });
         homeScreen.preload();
     });
 

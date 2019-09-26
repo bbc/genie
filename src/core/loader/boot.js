@@ -8,8 +8,8 @@
  */
 import { Screen } from "../screen.js";
 import { gmi } from "../gmi/gmi.js";
-//import { settings, settingsChannel } from "../../core/settings.js";
-//import * as signal from "../../core/signal-bus.js";
+import { settings, settingsChannel } from "../../core/settings.js";
+import * as signal from "../../core/signal-bus.js";
 //import fp from "../../../lib/lodash/fp/fp.js";
 import { loadFonts } from "./font-loader.js";
 import * as a11y from "../accessibility/accessibility-layer.js";
@@ -41,17 +41,15 @@ export class Boot extends Screen {
             popupScreens: [],
             navigation: this.#navigationConfig,
         });
-
         //TODO P3 - if the above could be changed this could potentially be part of loadscreen.js and we could delete boot
 
-        //TODO P3 enable below once signal bus is ready
-        //signal.bus.subscribe({
-        //    channel: settingsChannel,
-        //    name: "settings-closed",
-        //    callback: () => {
-        //        this.game.canvas.focus();
-        //    },
-        //});
+        signal.bus.subscribe({
+            channel: settingsChannel,
+            name: "settings-closed",
+            callback: () => {
+                this.game.canvas.focus();
+            },
+        });
         //this.configureAudioSetting();
     }
 

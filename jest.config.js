@@ -46,7 +46,6 @@ module.exports = {
         "./test/core/navigation",
         "./test/core/scaler",
         "./test/core/screen",
-        "./test/core/signal-bus",
         "./test/core/startup",
     ],
     setupFilesAfterEnv: ["./test/set-up-jest.js"],
