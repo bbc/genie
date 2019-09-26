@@ -25,10 +25,6 @@ const fireGameCompleteStat = result => {
 };
 
 export class Results extends Screen {
-    constructor() {
-        super();
-    }
-
     create() {
         const theme = this.context.config.theme[this.game.state.current];
         this.layoutManager.addToBackground(this.game.add.image(0, 0, "results.background"));

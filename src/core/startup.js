@@ -16,7 +16,7 @@ import { Boot } from "./loader/boot.js";
 import { hookErrors } from "./loader/hook-errors.js";
 
 //TODO P3 this is just a quick shim to create the scenes array
-export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene(key));
+export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key }));
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.

@@ -22,9 +22,9 @@ export class Screen extends Phaser.Scene {
     #data;
     #layouts = [];
 
-    //constructor(key) {
-    //    super({ key });
-    //}
+    constructor(sceneConfig) {
+        super(sceneConfig);
+    }
 
     get context() {
         return {
