@@ -25,7 +25,7 @@ export class Home extends Screen {
 
         this.addLayout(buttons.concat(achievements));
 
-        //TODO P3 fix  test harness and signal bus [NT]
+        //TODO P3 fix  test harness
         //createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
         signal.bus.subscribe({
