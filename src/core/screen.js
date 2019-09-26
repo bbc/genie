@@ -57,7 +57,7 @@ export class Screen extends Phaser.Scene {
 
         //TODO P3 commented out lines need re-enabling
         //const themeScreenConfig = this.context.config.theme[this.game.state.current];
-        //if (this.game.state.current !== "loadscreen") {
+        //if (this.game.state.current !== "loader") {
         //    gmi.setStatsScreen(this.game.state.current);
         //}
         //GameSound.setupScreenMusic(this.game, themeScreenConfig);
@@ -97,8 +97,7 @@ export class Screen extends Phaser.Scene {
     }
 
     #makeNavigation = () => {
-        const routes =
-            this.scene.key === "boot" ? { next: "loadscreen" } : this.#data.navigation[this.scene.key].routes;
+        const routes = this.scene.key === "boot" ? { next: "loader" } : this.#data.navigation[this.scene.key].routes;
         this.navigation = fp.mapValues(
             route => () => {
                 this.#navigate(route);

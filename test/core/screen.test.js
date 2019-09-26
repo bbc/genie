@@ -97,7 +97,7 @@ describe("Screen", () => {
             expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.game, expectedThemeConfig);
         });
 
-        test("sets transient data", () => {
+        test("sets transientData", () => {
             createAndInitScreen();
             expect(screen.transientData).toEqual(mockTransientData);
         });

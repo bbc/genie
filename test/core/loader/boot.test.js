@@ -6,12 +6,12 @@
 
 import { createMockGmi } from "../../mock/gmi.js";
 
-import { Boot } from "../../../src/core/loader/bootscreen.js";
+import { Boot } from "../../../src/core/loader/boot.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import * as LoadFonts from "../../../src/core/loader/font-loader.js";
 
-describe("Load Screen", () => {
+describe("Boot", () => {
     let bootScreen;
     let mockGmi;
     let mockGame;
@@ -76,7 +76,7 @@ describe("Load Screen", () => {
                 navigation: {
                     boot: {
                         routes: {
-                            next: "loadscreen",
+                            next: "loader",
                         },
                     },
                     loadscreen: {

@@ -6,12 +6,12 @@
 
 import { createMockGmi } from "../../mock/gmi.js";
 
-import { Loadscreen } from "../../../src/core/loader/loadscreen.js";
+import { Loader } from "../../../src/core/loader/loader.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as GameSound from "../../../src/core/game-sound.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
 
-describe("Load Screen", () => {
+describe("Loader", () => {
     let loadScreen;
     let mockGmi;
     let mockImage;
@@ -59,7 +59,7 @@ describe("Load Screen", () => {
         };
         const mockContext = { config: mockConfig };
 
-        loadScreen = new Loadscreen();
+        loadScreen = new Loader();
         Object.defineProperty(loadScreen, "context", {
             get: jest.fn(() => mockContext),
         });

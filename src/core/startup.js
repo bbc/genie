@@ -11,7 +11,7 @@ import { gmi, setGmi } from "./gmi/gmi.js";
 import { addCustomStyles } from "./custom-styles.js";
 import * as qaMode from "./qa/qa-mode.js";
 import { getBrowser } from "./browser.js";
-import { Boot } from "./loader/bootscreen.js";
+import { Boot } from "./loader/boot.js";
 import { hookErrors } from "./loader/hook-errors.js";
 
 //TODO P3 this is just a quick shim to create the scenes array

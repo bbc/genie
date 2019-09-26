@@ -10,7 +10,7 @@ import { Screen } from "../screen.js";
 import * as Scaler from "../scaler.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
-import { loadscreenPack } from "./loadpack.js";
+import { loadPack } from "./loadpack.js";
 
 const getMissingPacks = (masterPack, keys) =>
     Object.keys(keys)
@@ -18,12 +18,12 @@ const getMissingPacks = (masterPack, keys) =>
         .filter(key => key !== "boot")
         .filter(key => !masterPack.hasOwnProperty(key));
 
-export class Loadscreen extends Screen {
+export class Loader extends Screen {
     #loadbar;
 
     constructor() {
-        loadscreenPack.path = gmi.gameDir + gmi.embedVars.configPath;
-        super({ key: "loadscreen", autostart: false, pack: loadscreenPack });
+        loadPack.path = gmi.gameDir + gmi.embedVars.configPath;
+        super({ key: "loader", autostart: false, pack: loadPack });
     }
 
     preload() {
