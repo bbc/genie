@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Loadscreen } from "../loader/loadscreen.js";
+import { Loader } from "../../core/loader/loader.js";
 import { Home } from "../home.js";
 import { RotationTest } from "./test-screens/rotation.js";
 import { CollisionTest } from "./test-screens/collision.js";
@@ -23,7 +23,7 @@ export const phaserTestHarnessConfig = goToScreen => {
 
     return {
         loadscreen: {
-            state: Loadscreen,
+            state: Loader,
             routes: {
                 next: goToHome,
             },

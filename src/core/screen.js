@@ -25,7 +25,6 @@ export class Screen extends Phaser.Scene {
     get context() {
         return {
             config: this.#data.config,
-            gameMuted: this.#data.gameMuted,
             popupScreens: this.#data.popupScreens,
             transientData: this.#data.transient,
         };
@@ -49,25 +48,24 @@ export class Screen extends Phaser.Scene {
     init(data) {
         this.#data = data;
 
-        //TODO P3 needed? [NT]
-        //this.layoutManager = config.layoutManager;
-
         //TODO P3 remove debug line - currently useful to know which screen has been started NT
         console.log(`SCREEN INIT ${this.scene.key}:`, data);
 
-        //TODO P3 This centers the camera - we don't necessarily have to do this anymore. Most people are used to top left being origin NT
+        //TODO P3 This centers the camera. Should this be hard-coded [NT]
         this.cameras.main.scrollX = -700;
         this.cameras.main.scrollY = -300;
 
         //TODO P3 commented out lines need re-enabling
         //const themeScreenConfig = this.context.config.theme[this.game.state.current];
-        //if (this.game.state.current !== "loadscreen") {
+        //if (this.game.state.current !== "loader") {
         //    gmi.setStatsScreen(this.game.state.current);
         //}
         //GameSound.setupScreenMusic(this.game, themeScreenConfig);
         a11y.clearAccessibleButtons();
         //a11y.clearElementsFromDom();
         //this.overlaySetup();
+
+        this.#makeNavigation();
     }
 
     setData(newData) {
@@ -98,11 +96,20 @@ export class Screen extends Phaser.Scene {
         this.overlaySetup();
     }
 
-    navigate(nextRoute) {
-        const next = this.#data.navigation[this.scene.key].routes[nextRoute];
-        //TODO P3 naviagtion 'gotoscreen' also did some cleanup we may need to re-enable [NT]
-        this.scene.start(next, this.#data);
-    }
+    #makeNavigation = () => {
+        const routes = this.scene.key === "boot" ? { next: "loader" } : this.#data.navigation[this.scene.key].routes;
+        this.navigation = fp.mapValues(
+            route => () => {
+                this.#navigate(route);
+            },
+            routes,
+        );
+    };
+
+    #navigate = route => {
+        //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable here [NT]
+        this.scene.start(route, this.#data);
+    };
 
     /**
      * Create a new GEL layout for a given set of Gel Buttons
@@ -119,9 +126,8 @@ export class Screen extends Phaser.Scene {
         //TODO P3 passing in the root here . Maybe it can be moved?
         const layoutRoot = this.add.container(0, 0);
 
-        //P3 TODO passing in "this" smells
+        //P3 TODO passing in "this" smells [NT]
         const layout = Layout.create(this, Scaler.getMetrics(), buttons, layoutRoot);
-        //TODO P3 I don't think this is needed anymore as they are added to the scene: addToGroup(background, layout.root);
         this.#layouts.push(layout);
 
         return layout;

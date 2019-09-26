@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { Home } from "./components/home.js";
-import { Loadscreen } from "./components/loader/loadscreen.js";
+import { Loader } from "./core/loader/loader.js";
 import { Results } from "./components/results.js";
 import { Select } from "./components/select.js";
 import { phaserTestHarnessConfig } from "./components/test-harness/test-harness-main.js";
@@ -54,7 +54,7 @@ const navigationConfigX = goToScreen => {
     //TODO P3 state should be renamed to screen?
     return {
         loadscreen: {
-            state: Loadscreen,
+            state: Loader,
             routes: {
                 next: home,
             },
@@ -102,8 +102,8 @@ const navigationConfigX = goToScreen => {
 };
 
 const navigationConfig = {
-    loadscreen: {
-        state: Loadscreen,
+    loader: {
+        state: Loader,
         routes: {
             next: "home",
         },

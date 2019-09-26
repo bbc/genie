@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as FontLoader from "../../src/components/loader/font-loader.js";
+import * as FontLoader from "../../src/core/loader/font-loader.js";
 
 describe("Font Loader", () => {
     let mockGame;

@@ -6,11 +6,11 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Screen } from "../../core/screen.js";
-import * as Scaler from "../../core/scaler.js";
-import * as GameSound from "../../core/game-sound.js";
-import { gmi } from "../../core/gmi/gmi.js";
-import { loadscreenPack } from "./loadpack.js";
+import { Screen } from "../screen.js";
+import * as Scaler from "../scaler.js";
+import * as GameSound from "../game-sound.js";
+import { gmi } from "../gmi/gmi.js";
+import { loadPack } from "./loadpack.js";
 
 const getMissingPacks = (masterPack, keys) =>
     Object.keys(keys)
@@ -18,18 +18,23 @@ const getMissingPacks = (masterPack, keys) =>
         .filter(key => key !== "boot")
         .filter(key => !masterPack.hasOwnProperty(key));
 
-export class Loadscreen extends Screen {
+export class Loader extends Screen {
     #loadbar;
 
     constructor() {
-        loadscreenPack.path = gmi.gameDir + gmi.embedVars.configPath;
-        super({ key: "loadscreen", autostart: false, pack: loadscreenPack });
+        loadPack.path = gmi.gameDir + gmi.embedVars.configPath;
+        super({ key: "loader", autostart: false, pack: loadPack });
     }
 
     preload() {
         this.load.setBaseURL(gmi.gameDir);
         this.load.setPath(gmi.embedVars.configPath);
-        this.setConfig(this.cache.json.get("config"));
+        const config = this.cache.json.get("config");
+        this.setConfig(config);
+
+        if (config.theme.game && config.theme.game.achievements === true) {
+            this.load.json("achievements-data", "achievements/config.json");
+        }
 
         const masterPack = this.cache.json.get("asset-master-pack");
         const gamePacksToLoad = ["gel/gel-pack"].concat(getMissingPacks(masterPack, this.scene.manager.keys));
@@ -61,23 +66,21 @@ export class Loadscreen extends Screen {
     };
 
     createBrandLogo() {
-        //TODO P3 move logo to correct position NT
-        //const metrics = Scaler.getMetrics();
-        //
-        //const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
-        //const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
-        this.brandLogo = this.add.image(0, 0, "loadscreen.brandLogo");
-        //this.brandLogo.right = x;
-        //this.brandLogo.bottom = y;
+        const metrics = Scaler.getMetrics();
+        const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
+        const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
+        this.brandLogo = this.add.image(x, y, "loadscreen.brandLogo");
+        this.brandLogo.setOrigin(1, 1);
     }
 
-    //TODO P3 stubbed this for now NT
     create() {
         //GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
+        if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
+            gmi.achievements.init(this.cache.json.get("achievements-data"));
+        }
 
-        this.navigate("next");
-
+        this.navigation.next();
+        gmi.sendStatsEvent("gameloaded", "true");
         gmi.gameLoaded();
-        //sendStats("game_loaded");
     }
 }

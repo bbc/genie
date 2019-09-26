@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { Home } from "../../src/components/home.js";
-import { Loadscreen } from "../../src/components/loader/loadscreen.js";
+import { Loader } from "../../src/core/loader/loader.js";
 import * as Navigation from "../../src/core/navigation.js";
 import * as signal from "../../src/core/signal-bus.js";
 
@@ -22,7 +22,7 @@ describe("Navigation", () => {
         transientData = undefined;
         navigation = {
             loadscreen: {
-                state: Loadscreen,
+                state: Loader,
                 routes: {
                     next: jest.fn(),
                 },
@@ -44,7 +44,7 @@ describe("Navigation", () => {
         Navigation.create(gameState, context, layoutManager, navigationConfig);
 
         expect(gameState.add).toHaveBeenCalledTimes(2);
-        expect(gameState.add).toHaveBeenCalledWith("loadscreen", Loadscreen);
+        expect(gameState.add).toHaveBeenCalledWith("loadscreen", Loader);
         expect(gameState.add).toHaveBeenCalledWith("home", Home);
     });
 
