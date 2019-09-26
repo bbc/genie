@@ -66,7 +66,7 @@ describe("Gel Button", () => {
         test("makes the sprite interactive", () => {
             GelButton.prototype.setInteractive = jest.fn();
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.setInteractive).toHaveBeenCalled();
+            expect(gelButton.setInteractive).toHaveBeenCalledWith({ useHandCursor: true });
         });
         test("sets up mouse events", () => {
             GelButton.prototype.on = jest.fn();
