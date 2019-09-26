@@ -6,7 +6,40 @@
 import * as SignalBus from "../../src/core/signal-bus";
 
 describe("Signal Bus", () => {
-    afterEach(() => jest.clearAllMocks());
+    let mockEventEmitter;
+
+    const createMockEventEmitter = () => {
+        mockEventEmitter = {
+            on: jest.fn(),
+            off: jest.fn(),
+            emit: jest.fn(),
+            destroy: jest.fn(),
+        };
+        return jest.spyOn(Phaser.Events, "EventEmitter").mockImplementation(() => mockEventEmitter);
+    };
+
+    afterEach(() => {
+        mockEventEmitter = undefined;
+        jest.clearAllMocks();
+        jest.restoreAllMocks();
+    });
+
+    test("can subscribe to individual signals", () => {
+        createMockEventEmitter();
+        const callback = jest.fn();
+        const bus = SignalBus.create();
+        bus.subscribe({ callback, channel: "someChannel", name: "someSignal" });
+        expect(mockEventEmitter.on).toHaveBeenCalledWith("someSignal", callback);
+    });
+
+    test("can unsubscribe from individual signals", () => {
+        createMockEventEmitter();
+        const callback = jest.fn();
+        const bus = SignalBus.create();
+        const signal = bus.subscribe({ callback, channel: "someChannel", name: "someSignal" });
+        signal.unsubscribe();
+        expect(mockEventEmitter.off).toHaveBeenCalledWith("someSignal", callback);
+    });
 
     test("fires the correct callbacks when a signal on a channel is published", () => {
         const bus = SignalBus.create();
@@ -19,16 +52,6 @@ describe("Signal Bus", () => {
         bus.publish({ channel: "testChannel", name: "testSignal1", data: { exampleData: "abcdef" } });
 
         expect(callback).toHaveBeenCalledTimes(3);
-    });
-
-    test("removes signals from a channel correctly", () => {
-        const bus = SignalBus.create();
-        const callback = jest.fn();
-
-        bus.subscribe({ callback, channel: "testChannel2", name: "testSignal1" });
-        bus.removeChannel("testChannel2");
-        bus.publish({ channel: "testChannel2", name: "testSignal1" });
-        expect(callback).not.toHaveBeenCalled();
     });
 
     test("passes data from publisher to subscribers", () => {
@@ -46,22 +69,23 @@ describe("Signal Bus", () => {
         expect(callbackSpy.mock.calls[1][0]).toEqual(expectedData2);
     });
 
-    test("removes all signals only on a given channel", () => {
+    test("removes the channel when removeChannel is called", () => {
         const bus = SignalBus.create();
-        const channelCallback = jest.fn();
-        const otherChannelCallback = jest.fn();
+        const callback = jest.fn();
 
-        bus.subscribe({ callback: channelCallback, channel: "channelName", name: "testSignal1" });
-        bus.subscribe({ callback: otherChannelCallback, channel: "otherChannelName", name: "testSignal2" });
-        bus.subscribe({ callback: channelCallback, channel: "channelName", name: "testSignal3" });
+        bus.subscribe({ callback, channel: "testChannel2", name: "testSignal1" });
+        bus.removeChannel("testChannel2");
+        bus.publish({ channel: "testChannel2", name: "testSignal1" });
+        expect(callback).not.toHaveBeenCalled();
+    });
 
-        bus.removeChannel("channelName");
+    test("destroys the channel when removeChannel is called", () => {
+        createMockEventEmitter();
+        const bus = SignalBus.create();
+        const callback = jest.fn();
 
-        bus.publish({ channel: "channelName", name: "testSignal1" });
-        bus.publish({ channel: "otherChannelName", name: "testSignal2" });
-        bus.publish({ channel: "channelName", name: "testSignal3" });
-
-        expect(channelCallback).not.toHaveBeenCalled();
-        expect(otherChannelCallback).toHaveBeenCalledTimes(1);
+        bus.subscribe({ callback, channel: "testChannel2", name: "testSignal1" });
+        bus.removeChannel("testChannel2");
+        expect(mockEventEmitter.destroy).toHaveBeenCalled();
     });
 });

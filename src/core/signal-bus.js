@@ -30,14 +30,6 @@ export const create = () => {
         if (!_bus[message.channel]) {
             _bus[message.channel] = new Phaser.Events.EventEmitter();
         }
-
-        //_bus[message.channel].on(message.name)
-        //
-        //if (!_bus[message.channel][message.name]) {
-        //
-        //    //P3 TODO
-        //    _bus[message.channel][message.name] = new Phaser.Events.EventEmitter(); //new Phaser.Signal();
-        //}
         return message;
     };
 
@@ -49,20 +41,20 @@ export const create = () => {
      * @memberof module:core/signal-bus
      */
     const removeChannel = channel => {
-        fp.forOwn(messageName => {
-            //P3 TODO needs something like _bus[channel].removeEventListener(messageName, ###listener)
-            //messageName.dispose();
-        }, _bus[channel]);
+        _bus[channel].destroy();
         delete _bus[channel];
     };
 
     const addSubscription = message => {
-        _bus[message.channel].on(message.name, message.callback)
-        //_bus[message.channel][message.name].add(message.callback);
+        _bus[message.channel].on(message.name, message.callback);
         return fp.assign(message, { unsubscribe: () => removeSubscription(message) });
     };
-    const removeSubscription = message => {}; //P3 TODO _bus[message.channel][message.name].remove(message.callback);
-    const publishMessage = message => _bus[message.channel].emit(message.name, message.data)    //_bus[message.channel][message.name].dispatch(message.data);
+
+    const removeSubscription = message => {
+        _bus[message.channel].off(message.name, message.callback);
+    };
+
+    const publishMessage = message => _bus[message.channel].emit(message.name, message.data); //_bus[message.channel][message.name].dispatch(message.data);
 
     /**
      * Subscribe to a given signal identifier. Create Signal if it doesn't exist.
