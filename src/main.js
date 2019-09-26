@@ -45,12 +45,6 @@ const settingsConfig = {
 //}
 
 const navigationConfig = {
-    loader: {
-        scene: Loader,
-        routes: {
-            next: "home",
-        },
-    },
     home: {
         scene: Home,
         routes: {

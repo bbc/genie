@@ -22,6 +22,10 @@ export class Screen extends Phaser.Scene {
     #data;
     #layouts = [];
 
+    //constructor(key) {
+    //    super({ key });
+    //}
+
     get context() {
         return {
             config: this.#data.config,
