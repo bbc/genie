@@ -39,114 +39,57 @@ const settingsConfig = {
 //    },
 //});
 
-const navigationConfigX = goToScreen => {
-    if (parseUrlParams(window.location.search).sanityCheck === true) {
-        return phaserTestHarnessConfig(goToScreen);
-    }
-
-    const home = data => goToScreen("home", data);
-    const characterSelect = data => goToScreen("character-select", data);
-    const levelSelect = data => goToScreen("level-select", data);
-    const game = data => goToScreen("game", data);
-    const results = data => goToScreen("results", data);
-
-    //TODO P3 re-enabling all these screens will also make the asset packs load. See spike for P3 formatted asset packs if needed
-    //TODO P3 state should be renamed to screen?
-    return {
-        loadscreen: {
-            state: Loader,
-            routes: {
-                next: home,
-            },
-        },
-        home: {
-            state: Home,
-            routes: {
-                next: characterSelect,
-            },
-        },
-        //"character-select": {
-        //    state: Select,
-        //    routes: {
-        //        next: levelSelect,
-        //        home: home,
-        //        restart: home,
-        //    },
-        //},
-        //"level-select": {
-        //    state: Select,
-        //    routes: {
-        //        next: game,
-        //        home: home,
-        //        restart: home,
-        //    },
-        //},
-        //game: {
-        //    state: GameTest,
-        //    routes: {
-        //        next: results,
-        //        home: home,
-        //        restart: game,
-        //    },
-        //},
-        //results: {
-        //    state: Results,
-        //    routes: {
-        //        next: home,
-        //        game: game,
-        //        restart: game,
-        //        home: home,
-        //    },
-        //},
-    };
-};
+//TODO P3
+//if (parseUrlParams(window.location.search).sanityCheck === true) {
+//    return phaserTestHarnessConfig(goToScreen);
+//}
 
 const navigationConfig = {
     loader: {
-        state: Loader,
+        scene: Loader,
         routes: {
             next: "home",
         },
     },
     home: {
-        state: Home,
+        scene: Home,
         routes: {
             next: "character-select",
         },
     },
     "character-select": {
-        state: Select,
+        scene: Select,
         routes: {
             next: "level-select",
             home: "home",
             restart: "home",
         },
     },
-    //"level-select": {
-    //    state: Select,
-    //    routes: {
-    //        next: game,
-    //        home: home,
-    //        restart: home,
-    //    },
-    //},
-    //game: {
-    //    state: GameTest,
-    //    routes: {
-    //        next: results,
-    //        home: home,
-    //        restart: game,
-    //    },
-    //},
-    //results: {
-    //    state: Results,
-    //    routes: {
-    //        next: home,
-    //        game: game,
-    //        restart: game,
-    //        home: home,
-    //    },
-    //},
+    "level-select": {
+        scene: Select,
+        routes: {
+            next: "game",
+            home: "home",
+            restart: "home",
+        },
+    },
+    game: {
+        scene: GameTest,
+        routes: {
+            next: "results",
+            home: "home",
+            restart: "game",
+        },
+    },
+    results: {
+        scene: Results,
+        routes: {
+            next: "home",
+            game: "game",
+            restart: "game",
+            home: "home",
+        },
+    },
 };
 
 startup(settingsConfig, navigationConfig);
