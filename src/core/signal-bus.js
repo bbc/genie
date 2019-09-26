@@ -54,7 +54,7 @@ export const create = () => {
         _bus[message.channel].off(message.name, message.callback);
     };
 
-    const publishMessage = message => _bus[message.channel].emit(message.name, message.data); //_bus[message.channel][message.name].dispatch(message.data);
+    const publishMessage = message => _bus[message.channel].emit(message.name, message.data);
 
     /**
      * Subscribe to a given signal identifier. Create Signal if it doesn't exist.
