@@ -28,10 +28,10 @@ export class Home extends Screen {
         //TODO P3 fix  test harness and signal bus [NT]
         //createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
-        //signal.bus.subscribe({
-        //    channel: buttonsChannel,
-        //    name: "play",
-        //    callback: this.navigation.next,
-        //});
+        signal.bus.subscribe({
+            channel: buttonsChannel,
+            name: "play",
+            callback: this.navigation.next,
+        });
     }
 }
