@@ -42,7 +42,7 @@ export class GelButton extends Phaser.GameObjects.Sprite {
         this.setIndicator();
         this.shiftX = config.shiftX || 0;
         this.shiftY = config.shiftY || 0;
-        this.setInteractive();
+        this.setInteractive({ useHandCursor: true });
         this.setupMouseEvents(config, scene);
     }
 
