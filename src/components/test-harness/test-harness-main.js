@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Loadscreen } from "../loader/loadscreen.js";
+import { Loadscreen } from "../../core/loader/loadscreen.js";
 import { Home } from "../home.js";
 import { RotationTest } from "./test-screens/rotation.js";
 import { CollisionTest } from "./test-screens/collision.js";

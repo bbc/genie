@@ -6,10 +6,10 @@
 
 import { createMockGmi } from "../../mock/gmi.js";
 
-import { Boot } from "../../../src/components/loader/bootscreen.js";
+import { Boot } from "../../../src/core/loader/bootscreen.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
-import * as LoadFonts from "../../../src/components/loader/font-loader.js";
+import * as LoadFonts from "../../../src/core/loader/font-loader.js";
 
 describe("Load Screen", () => {
     let bootScreen;
@@ -44,7 +44,7 @@ describe("Load Screen", () => {
             json: jest.fn(),
         };
         bootScreen.scene = { key: "boot", start: jest.fn() };
-        bootScreen.navigate = jest.fn();
+        bootScreen.navigation = { next: jest.fn() };
 
         Scaler.init = jest.fn();
         a11y.setup = jest.fn();
@@ -106,15 +106,8 @@ describe("Load Screen", () => {
             bootScreen.create();
 
             expect(Scaler.init).toHaveBeenCalledWith(600, mockGame);
-            expect(LoadFonts.loadFonts).toHaveBeenCalledWith(mockGame, bootScreen.bootComplete);
+            expect(LoadFonts.loadFonts).toHaveBeenCalledWith(mockGame, bootScreen.navigation.next);
             expect(a11y.setup).toHaveBeenCalledWith(mockGame.canvas.parentElement);
-        });
-    });
-
-    describe("bootComplete method", () => {
-        test("calls navigate(`next`)", () => {
-            bootScreen.bootComplete();
-            expect(bootScreen.navigate).toHaveBeenCalledWith("next");
         });
     });
 });

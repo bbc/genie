@@ -64,6 +64,8 @@ export class Screen extends Phaser.Scene {
         a11y.clearAccessibleButtons();
         //a11y.clearElementsFromDom();
         //this.overlaySetup();
+
+        this.#makeNavigation();
     }
 
     setData(newData) {
@@ -94,11 +96,21 @@ export class Screen extends Phaser.Scene {
         this.overlaySetup();
     }
 
-    navigate(nextRoute) {
-        const next = this.#data.navigation[this.scene.key].routes[nextRoute];
+    #makeNavigation = () => {
+        const routes =
+            this.scene.key === "boot" ? { next: "loadscreen" } : this.#data.navigation[this.scene.key].routes;
+        this.navigation = fp.mapValues(
+            route => () => {
+                this.#navigate(route);
+            },
+            routes,
+        );
+    };
+
+    #navigate = route => {
         //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable here [NT]
-        this.scene.start(next, this.#data);
-    }
+        this.scene.start(route, this.#data);
+    };
 
     /**
      * Create a new GEL layout for a given set of Gel Buttons

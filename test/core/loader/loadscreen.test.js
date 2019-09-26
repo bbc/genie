@@ -6,7 +6,7 @@
 
 import { createMockGmi } from "../../mock/gmi.js";
 
-import { Loadscreen } from "../../../src/components/loader/loadscreen.js";
+import { Loadscreen } from "../../../src/core/loader/loadscreen.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as GameSound from "../../../src/core/game-sound.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
@@ -64,7 +64,6 @@ describe("Load Screen", () => {
             get: jest.fn(() => mockContext),
         });
 
-        loadScreen.navigate = jest.fn();
         loadScreen.load = {
             setBaseURL: jest.fn(),
             setPath: jest.fn(),
@@ -89,10 +88,12 @@ describe("Load Screen", () => {
             image: jest.fn(() => mockImage),
         };
 
-        loadScreen.scene = { key: "loadscreen", manager: { keys: [] } };
+        const mockData = { navigation: { loadscreen: { routes: { next: "test" } } } };
+
+        loadScreen.scene = { key: "loadscreen", manager: { keys: [] }, start: jest.fn() };
         loadScreen.cameras = { main: {} };
         loadScreen.setConfig = jest.fn();
-        loadScreen.init({});
+        loadScreen.init(mockData);
 
         const mockGame = {
             scale: {
@@ -181,9 +182,10 @@ describe("Load Screen", () => {
     });
 
     describe("create method", () => {
-        test("calls this.navigate('next')", () => {
+        test("calls this.navigation.next", () => {
+            loadScreen.navigation = { next: jest.fn() };
             loadScreen.create();
-            expect(loadScreen.navigate).toHaveBeenCalledWith("next");
+            expect(loadScreen.navigation.next).toHaveBeenCalled();
         });
 
         test("sends gmi game loaded stats", () => {

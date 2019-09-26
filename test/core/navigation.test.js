@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { Home } from "../../src/components/home.js";
-import { Loadscreen } from "../../src/components/loader/loadscreen.js";
+import { Loadscreen } from "../../src/core/loader/loadscreen.js";
 import * as Navigation from "../../src/core/navigation.js";
 import * as signal from "../../src/core/signal-bus.js";
 

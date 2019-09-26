@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { hookErrors } from "../../../src/components/loader/hook-errors.js";
+import { hookErrors } from "../../../src/core/loader/hook-errors.js";
 
 describe("Load Screen", () => {
     let mockContainerEl;

@@ -6,14 +6,14 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Screen } from "../../core/screen.js";
-import { gmi } from "../../core/gmi/gmi.js";
+import { Screen } from "../screen.js";
+import { gmi } from "../gmi/gmi.js";
 //import { settings, settingsChannel } from "../../core/settings.js";
 //import * as signal from "../../core/signal-bus.js";
 //import fp from "../../../lib/lodash/fp/fp.js";
 import { loadFonts } from "./font-loader.js";
-import * as a11y from "../../core/accessibility/accessibility-layer.js";
-import * as Scaler from "../../core/scaler.js";
+import * as a11y from "../accessibility/accessibility-layer.js";
+import * as Scaler from "../scaler.js";
 
 //const triggeredByGame = arg => arg instanceof Phaser.Game;
 //const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
@@ -88,11 +88,7 @@ export class Boot extends Screen {
         //TODO P3 where should this now live? [NT]
         //TODO P3 mainly just initialises scaler now?
         Scaler.init(600, this.game);
-        loadFonts(this.game, this.bootComplete);
+        loadFonts(this.game, this.navigation.next);
         a11y.setup(this.game.canvas.parentElement);
     }
-
-    bootComplete = () => {
-        this.navigate("next");
-    };
 }

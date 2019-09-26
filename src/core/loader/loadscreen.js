@@ -6,10 +6,10 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Screen } from "../../core/screen.js";
-import * as Scaler from "../../core/scaler.js";
-import * as GameSound from "../../core/game-sound.js";
-import { gmi } from "../../core/gmi/gmi.js";
+import { Screen } from "../screen.js";
+import * as Scaler from "../scaler.js";
+import * as GameSound from "../game-sound.js";
+import { gmi } from "../gmi/gmi.js";
 import { loadscreenPack } from "./loadpack.js";
 
 const getMissingPacks = (masterPack, keys) =>
@@ -79,7 +79,7 @@ export class Loadscreen extends Screen {
             gmi.achievements.init(this.cache.json.get("achievements-data"));
         }
 
-        this.navigate("next");
+        this.navigation.next();
         gmi.sendStatsEvent("gameloaded", "true");
         gmi.gameLoaded();
     }

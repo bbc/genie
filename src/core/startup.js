@@ -11,8 +11,8 @@ import { gmi, setGmi } from "./gmi/gmi.js";
 import { addCustomStyles } from "./custom-styles.js";
 import * as qaMode from "./qa/qa-mode.js";
 import { getBrowser } from "./browser.js";
-import { Boot } from "../components/loader/bootscreen.js";
-import { hookErrors } from "../components/loader/hook-errors.js";
+import { Boot } from "./loader/bootscreen.js";
+import { hookErrors } from "./loader/hook-errors.js";
 
 //TODO P3 this is just a quick shim to create the scenes array
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].state());
