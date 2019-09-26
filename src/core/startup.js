@@ -13,6 +13,7 @@ import * as qaMode from "./qa/qa-mode.js";
 import { getBrowser } from "./browser.js";
 import { Boot } from "./loader/boot.js";
 import { hookErrors } from "./loader/hook-errors.js";
+import FontLoaderPlugin from "../components/loader/font-loader/plugin.js";
 
 //TODO P3 this is just a quick shim to create the scenes array
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].state());
@@ -45,6 +46,15 @@ export function startup(settingsConfig = {}, screenConfig) {
             autoCenter: Phaser.Scale.CENTER_BOTH,
         },
         scene: scenes,
+        plugins: {
+            global: [
+                {
+                    key: "FontLoader",
+                    plugin: FontLoaderPlugin,
+                    start: true,
+                },
+            ],
+        },
     };
     // Keep the console tidy:
     window.PhaserGlobal = window.PhaserGlobal || {};
