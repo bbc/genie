@@ -8,8 +8,8 @@
  */
 import { Screen } from "../screen.js";
 import { gmi } from "../gmi/gmi.js";
-//import { settings, settingsChannel } from "../../core/settings.js";
-//import * as signal from "../../core/signal-bus.js";
+import { settings, settingsChannel } from "../../core/settings.js";
+import * as signal from "../../core/signal-bus.js";
 //import fp from "../../../lib/lodash/fp/fp.js";
 import { loadFonts } from "./font-loader.js";
 import * as a11y from "../accessibility/accessibility-layer.js";

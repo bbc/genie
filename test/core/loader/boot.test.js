@@ -10,6 +10,7 @@ import { Boot } from "../../../src/core/loader/boot.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import * as LoadFonts from "../../../src/core/loader/font-loader.js";
+import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Boot", () => {
     let bootScreen;
@@ -29,6 +30,7 @@ describe("Boot", () => {
             canvas: {
                 setAttribute: jest.fn(),
                 parentElement: { appendChild: jest.fn() },
+                focus: jest.fn(),
             },
             scale: {
                 parentSize: 600,
@@ -89,6 +91,12 @@ describe("Boot", () => {
             };
 
             expect(bootScreen.setData).toHaveBeenCalledWith(expectedData);
+        });
+
+        test("focuses the canvas when settings are closed", () => {
+            bootScreen.preload();
+            signal.bus.publish({ channel: "genie-settings", name: "settings-closed" });
+            expect(mockGame.canvas.focus).toHaveBeenCalled();
         });
     });
 
