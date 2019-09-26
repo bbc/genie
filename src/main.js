@@ -114,14 +114,14 @@ const navigationConfig = {
             next: "character-select",
         },
     },
-    //"character-select": {
-    //    state: Select,
-    //    routes: {
-    //        next: levelSelect,
-    //        home: home,
-    //        restart: home,
-    //    },
-    //},
+    "character-select": {
+        state: Select,
+        routes: {
+            next: "level-select",
+            home: "home",
+            restart: "home",
+        },
+    },
     //"level-select": {
     //    state: Select,
     //    routes: {
