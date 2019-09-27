@@ -9,7 +9,6 @@ import { createMockGmi } from "../../mock/gmi.js";
 import { Boot } from "../../../src/core/loader/boot.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
-import * as LoadFonts from "../../../src/core/loader/font-loader.js";
 import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Boot", () => {
@@ -50,7 +49,6 @@ describe("Boot", () => {
 
         Scaler.init = jest.fn();
         a11y.setup = jest.fn();
-        LoadFonts.loadFonts = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -114,7 +112,7 @@ describe("Boot", () => {
             bootScreen.create();
 
             expect(Scaler.init).toHaveBeenCalledWith(600, mockGame);
-            expect(LoadFonts.loadFonts).toHaveBeenCalledWith(mockGame, bootScreen.navigation.next);
+            expect(bootScreen.navigation.next).toHaveBeenCalled();
             expect(a11y.setup).toHaveBeenCalledWith(mockGame.canvas.parentElement);
         });
     });
