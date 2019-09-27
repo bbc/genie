@@ -14,8 +14,8 @@ import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 export class Home extends Screen {
     create() {
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
-        this.add.image(0, 0, "home.background");
-        this.add.image(0, -150, "home.title");
+        this.add.image(0, 0, this.scene.key + ".background");
+        this.add.image(0, -150, this.scene.key + ".title");
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
         this.addLayout(buttons.concat(achievements));
