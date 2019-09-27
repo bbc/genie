@@ -6,29 +6,18 @@
 import { createMockGmi } from "../mock/gmi";
 
 import { Results } from "../../src/components/results";
-import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
+// import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
 
 describe("Results Screen", () => {
     let resultsScreen;
-    let mockGame;
-    let mockContext;
+    let mockData;
     let mockGmi;
 
     beforeEach(() => {
-        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
-        mockGame = {
-            add: {
-                image: jest.fn().mockImplementation((x, y, imageName) => imageName),
-                button: jest.fn(),
-                text: jest.fn(),
-            },
-            state: {
-                current: "resultsScreen",
-            },
-        };
+        // jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
 
-        mockContext = {
+        mockData = {
             config: {
                 theme: {
                     resultsScreen: {
@@ -39,23 +28,26 @@ describe("Results Screen", () => {
                     game: {},
                 },
             },
+            transient: {
+                results: 22,
+                characterSelected: 1,
+            },
         };
 
         mockGmi = { sendStatsEvent: jest.fn() };
         createMockGmi(mockGmi);
 
         resultsScreen = new Results();
-        resultsScreen.layoutManager = {
-            addToBackground: jest.fn(),
-            addLayout: jest.fn(),
+        resultsScreen.addLayout = jest.fn();
+        resultsScreen.add = {
+            image: jest.fn().mockImplementation((x, y, imageName) => imageName),
+            button: jest.fn(),
+            text: jest.fn(),
         };
-        resultsScreen.game = mockGame;
-        resultsScreen.context = mockContext;
-        resultsScreen.transientData = {
-            results: 22,
-            characterSelected: 1,
+        resultsScreen.scene = {
+            key: "resultsScreen",
         };
-        resultsScreen.preload();
+        resultsScreen.setData(mockData);
         resultsScreen.navigation = {
             next: jest.fn(),
             game: jest.fn(),
@@ -67,42 +59,40 @@ describe("Results Screen", () => {
     describe("Create Method", () => {
         test("adds a background image", () => {
             resultsScreen.create();
-            expect(mockGame.add.image).toHaveBeenCalledWith(0, 0, "results.background");
-            expect(resultsScreen.layoutManager.addToBackground).toHaveBeenCalledWith("results.background");
+            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "results.background");
         });
 
         test("adds a title image", () => {
             resultsScreen.create();
-            expect(mockGame.add.image).toHaveBeenCalledWith(0, -150, "results.title");
-            expect(resultsScreen.layoutManager.addToBackground).toHaveBeenCalledWith("results.title");
+            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, -150, "results.title");
         });
 
         test("loads the game results text", () => {
             resultsScreen.create();
             const expectedResultsData = 22;
-            expect(mockGame.add.text).toHaveBeenCalledWith(0, 50, expectedResultsData, { font: "36px ReithSans" });
+            expect(resultsScreen.add.text).toHaveBeenCalledWith(0, 50, expectedResultsData, { font: "36px ReithSans" });
         });
 
         test("adds GEL buttons to layout", () => {
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame"];
-            expect(resultsScreen.layoutManager.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(resultsScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        test("creates a layout harness with correct params", () => {
-            resultsScreen.create();
-            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
-                mockGame,
-                mockContext,
-                resultsScreen.layoutManager,
-            );
-        });
+        // test("creates a layout harness with correct params", () => {
+        //     resultsScreen.create();
+        //     expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
+        //         mockGame,
+        //         mockContext,
+        //         resultsScreen.layoutManager,
+        //     );
+        // });
 
         test("adds the achievement button when theme flag is set", () => {
             resultsScreen.context.config.theme.game.achievements = true;
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame", "achievements"];
-            expect(resultsScreen.layoutManager.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(resultsScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
         describe("Stats", () => {
