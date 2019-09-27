@@ -80,7 +80,7 @@ export class Select extends Screen {
         gmi.sendStatsEvent(screenType, "select", metaData);
 
         const choice = this.context.config.theme[this.scene.key].choices[this.currentIndex];
-        this.transientData = { choice: choice, index: this.currentIndex };
+        this.transientData[this.scene.key] = { choice, index: this.currentIndex };
         this.navigation.next();
     }
 
