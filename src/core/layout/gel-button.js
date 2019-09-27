@@ -46,8 +46,8 @@ export class GelButton extends Phaser.GameObjects.Sprite {
         this.setupMouseEvents(config, scene);
     }
 
-    setupMouseEvents(config, scene) {
-        this.on("pointerdown", publish(config, { scene }));
+    setupMouseEvents(config, screen) {
+        this.on("pointerdown", publish(config, { screen }));
         this.on("pointerup", () => {
             console.log("Button mouse up event");
         });

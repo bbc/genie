@@ -38,8 +38,7 @@ export const config = {
         order: 1,
         id: "__home",
         channel: buttonsChannel,
-        action: ({ game }) => {
-            const screen = game.state.states[game.state.current];
+        action: ({ screen }) => {
             screen.navigation.home();
         },
     },
@@ -84,6 +83,7 @@ export const config = {
         order: 3,
         id: "__audio",
         channel: buttonsChannel,
+        // TODO P3 with AUDIO work.
         action: ({ game }) => {
             const enabled = game.sound.mute;
 
