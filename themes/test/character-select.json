@@ -1,5 +1,5 @@
 {
-    "character-select":
+    "character-select": {
         "prefix": "character-select.",
         "files": [
             {
