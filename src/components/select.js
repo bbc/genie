@@ -17,10 +17,6 @@ import { gmi } from "../core/gmi/gmi.js";
 const wrapRange = (value, max) => ((value % max) + max) % max;
 
 export class Select extends Screen {
-    constructor() {
-        super({ key: "character-select" });
-    }
-
     create() {
         this.layoutManager.addToBackground(this.game.add.image(0, 0, this.getAsset("background")));
         createTestHarnessDisplay(this.game, this.context, this.layoutManager);

@@ -12,17 +12,12 @@ import * as signal from "../core/signal-bus.js";
 import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 
 export class Home extends Screen {
-    constructor() {
-        super({ key: "home" });
-    }
-
     create() {
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         this.add.image(0, 0, "home.background");
         this.add.image(0, -150, "home.title");
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
-
         this.addLayout(buttons.concat(achievements));
 
         //TODO P3 fix  test harness

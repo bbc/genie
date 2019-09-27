@@ -27,7 +27,7 @@ export class Boot extends Screen {
         super({ key: "boot" });
         this.#navigationConfig = navigationConfig;
         this.#navigationConfig.boot = { routes: { next: "loader" } };
-        this.#navigationConfig.loadscreen = { routes: { next: "home" } };
+        this.#navigationConfig.loader = { routes: { next: "home" } };
     }
 
     preload() {
