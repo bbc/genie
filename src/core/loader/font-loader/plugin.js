@@ -7,13 +7,13 @@
  * @license Apache-2.0
  */
 class FontLoaderPlugin extends Phaser.Plugins.BasePlugin {
-    constructor(pluginManager: Phaser.Plugins.PluginManager) {
+    constructor(pluginManager) {
         super(pluginManager);
-        pluginManager.registerFileType("webfont", fontLoaderCallback);
+        pluginManager.registerFileType("webfont", this.fontLoaderCallback);
     }
 
     addToScene(scene) {
-        scene.sys.load["webfont"] = fontLoaderCallback;
+        scene.sys.load["webfont"] = this.fontLoaderCallback;
     }
 
     fontLoaderCallback() {}
