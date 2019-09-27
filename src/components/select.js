@@ -18,13 +18,13 @@ const wrapRange = (value, max) => ((value % max) + max) % max;
 
 export class Select extends Screen {
     create() {
-        this.layoutManager.addToBackground(this.game.add.image(0, 0, this.getAsset("background")));
+        this.layoutManager.addToBackground(this.game.add.image(0, 0, this.scene.key + ".background"));
         createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
         const theme = this.context.config.theme[this.game.state.current];
         this.currentIndex = 0;
         this.choiceSprites = this.createChoiceSprites(theme.choices);
-        this.layoutManager.addToBackground(this.game.add.image(0, -170, this.getAsset("title")));
+        this.layoutManager.addToBackground(this.game.add.image(0, -170, this.scene.key + ".title"));
 
         this.layoutManager.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
 
@@ -41,7 +41,7 @@ export class Select extends Screen {
     createChoiceSprites(choices) {
         const choiceSprites = [];
         choices.forEach((item, index) => {
-            const choiceAsset = this.getAsset(choices[index].asset);
+            const choiceAsset = this.scene.key + "." + choices[index].asset;
             const choiceSprite = this.game.add.sprite(0, 0, choiceAsset);
 
             choiceSprite.visible = index === 0;
