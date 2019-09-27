@@ -33,13 +33,16 @@ describe("FontFile", () => {
         };
         const fontFile = new FontFile(mockLoader, mockFileConfig);
         fontFile.load();
-        expect(global.WebFont.load).toHaveBeenCalledWith({
-            ...mockFileConfig.config,
-            active: expect.any(Function),
-            inactive: expect.any(Function),
-            fontactive: expect.any(Function),
-            fontinactive: expect.any(Function),
-        });
+        expect(global.WebFont.load).toHaveBeenCalledWith(
+            expect.objectContaining({
+                ...mockFileConfig.config,
+            }),
+        );
+        const args = global.WebFont.load.mock.calls[0][0];
+        expect(Object.create(fontFile.onLoad.prototype) instanceof args.active).toBeTruthy();
+        expect(Object.create(fontFile.onError.prototype) instanceof args.inactive).toBeTruthy();
+        expect(Object.create(fontFile.onFontActive.prototype) instanceof args.fontactive).toBeTruthy();
+        expect(Object.create(fontFile.onFontInactive.prototype) instanceof args.fontinactive).toBeTruthy();
     });
 
     test("onLoad calls the phaser loader with the correct arguments", () => {
