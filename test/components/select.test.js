@@ -39,7 +39,6 @@ describe("Select Screen", () => {
                     game: {},
                 },
             },
-            transientData: {},
             qaMode: { active: false },
             popupScreens: [],
         };
@@ -53,8 +52,9 @@ describe("Select Screen", () => {
             addLayout: jest.fn(),
         };
 
-        selectScreen.scene = { key: "test-select" };
         selectScreen.setData(mockData);
+        selectScreen.transientData = {};
+        selectScreen.scene = { key: "test-select" };
         selectScreen.addLayout = jest.fn();
         selectScreen.navigation = { next: jest.fn() };
         selectScreen.add = {
