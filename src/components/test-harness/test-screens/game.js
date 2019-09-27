@@ -13,7 +13,7 @@ export class GameTest extends Screen {
     }
 
     create() {
-        this.add.image(0, 0, "home.background");
+        this.add.image(0, 0, `${this.scene.key}.background`);
         const title = this.add.text(0, -190, "Game goes here", {
             font: "65px ReithSans",
             fill: "#f6931e",
@@ -25,7 +25,7 @@ export class GameTest extends Screen {
         gmi.setGameData("characterSelected", this.data.characterSelected);
         console.log("Data saved to GMI:", gmi.getAllSettings().gameData); // eslint-disable-line no-console
 
-        const buttonKey = this.scene.key + ".basicButton";
+        const buttonKey = `${this.scene.key}.basicButton`;
         const buttonTextStyle = {
             font: "40px ReithSans",
             fill: "#fff",
