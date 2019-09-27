@@ -11,7 +11,6 @@ import { startup } from "../../src/core/startup.js";
 import { getBrowser } from "../../src/core/browser.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 import * as LayoutManager from "../../src/core/layout-manager.js";
-import * as LoadFonts from "../../src/core/loader/font-loader.js";
 import * as Navigation from "../../src/core/navigation.js";
 import * as styles from "../../src/core/custom-styles.js";
 import * as qaMode from "../../src/core/qa/qa-mode.js";
@@ -171,7 +170,6 @@ describe("Startup", () => {
     describe("onStarted Method", () => {
         beforeEach(() => {
             jest.spyOn(LayoutManager, "create").mockImplementation(() => "LayoutManager");
-            jest.spyOn(LoadFonts, "loadFonts").mockImplementation(() => {});
             jest.spyOn(Navigation, "create").mockImplementation(() => {});
             jest.spyOn(qaMode, "create").mockImplementation(() => {});
             jest.spyOn(a11y, "setup").mockImplementation(() => {});
@@ -190,13 +188,7 @@ describe("Startup", () => {
             expect(LayoutManager.create).toHaveBeenCalledWith(mockGame);
         });
 
-        test("loads the fonts", () => {
-            expect(LoadFonts.loadFonts).toHaveBeenCalledWith(mockGame, expect.any(Function));
-        });
-
         test("creates the game navigation", () => {
-            const onComplete = LoadFonts.loadFonts.mock.calls[0][1];
-            onComplete();
             expect(Navigation.create.mock.calls[0]).toEqual([
                 mockGame.state,
                 expect.any(Object),
@@ -206,14 +198,10 @@ describe("Startup", () => {
         });
 
         test("creates qaMode if the qaMode url parameter is set to true", () => {
-            const onComplete = LoadFonts.loadFonts.mock.calls[0][1];
-            onComplete();
             expect(qaMode.create).toHaveBeenCalled();
         });
 
         test("sets up the accessibility manager", () => {
-            const onComplete = LoadFonts.loadFonts.mock.calls[0][1];
-            onComplete();
             expect(a11y.setup).toHaveBeenCalledWith(mockGame.canvas.parentElement);
         });
     });

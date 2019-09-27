@@ -29,7 +29,6 @@ module.exports = {
         "./test/components/overlays/pause",
         "./test/components/test-harness/layout-harness",
         "./test/components/home",
-        "./test/components/results",
         "./test/core/accessibility",
         "./test/core/asset-loader",
         "./test/core/debug",
