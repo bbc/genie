@@ -23,7 +23,7 @@ export class Loader extends Screen {
 
     constructor() {
         loadPack.path = gmi.gameDir + gmi.embedVars.configPath;
-        super({ key: "loader", autostart: false, pack: loadPack });
+        super({ key: "loader", pack: loadPack });
     }
 
     preload() {

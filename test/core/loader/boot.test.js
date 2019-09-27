@@ -79,7 +79,7 @@ describe("Boot", () => {
                             next: "loader",
                         },
                     },
-                    loadscreen: {
+                    loader: {
                         routes: {
                             next: "home",
                         },
