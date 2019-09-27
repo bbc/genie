@@ -8,7 +8,7 @@
  */
 class FontFile extends Phaser.Loader.File {
     constructor(loader, fileConfig) {
-        super(loader, fileConfig);
+        super(loader, Object.assign(fileConfig, { type: "webfont" }));
     }
 
     load() {
