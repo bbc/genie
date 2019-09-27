@@ -79,6 +79,7 @@ describe("Results Screen", () => {
             expect(resultsScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
+        //TODO layout harness
         // test("creates a layout harness with correct params", () => {
         //     resultsScreen.create();
         //     expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
