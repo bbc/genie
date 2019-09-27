@@ -18,22 +18,24 @@ const wrapRange = (value, max) => ((value % max) + max) % max;
 
 export class Select extends Screen {
     create() {
-        this.layoutManager.addToBackground(this.game.add.image(0, 0, this.scene.key + ".background"));
-        createTestHarnessDisplay(this.game, this.context, this.layoutManager);
+        this.add.image(0, 0, `${this.scene.key}.background`);
+        // P3 TODO Test Harness
+        // createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
-        const theme = this.context.config.theme[this.game.state.current];
+        const theme = this.context.config.theme[this.scene.key];
         this.currentIndex = 0;
         this.choiceSprites = this.createChoiceSprites(theme.choices);
-        this.layoutManager.addToBackground(this.game.add.image(0, -170, this.scene.key + ".title"));
+        this.add.image(0, -170, `${this.scene.key}.title`);
 
-        this.layoutManager.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
+        this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
 
-        this.accessibleElements = accessibleCarouselElements.create(
-            this.visibleLayer,
-            this.choiceSprites,
-            this.game.canvas.parentElement,
-            theme.choices,
-        );
+        // TODO P3 Accessibility
+        // this.accessibleElements = accessibleCarouselElements.create(
+        //     this.visibleLayer,
+        //     this.choiceSprites,
+        //     this.game.canvas.parentElement,
+        //     theme.choices,
+        // );
 
         this.addSignalSubscriptions();
     }
@@ -41,11 +43,10 @@ export class Select extends Screen {
     createChoiceSprites(choices) {
         const choiceSprites = [];
         choices.forEach((item, index) => {
-            const choiceAsset = this.scene.key + "." + choices[index].asset;
-            const choiceSprite = this.game.add.sprite(0, 0, choiceAsset);
+            const choiceAsset = `${this.scene.key}.${choices[index].asset}`;
+            const choiceSprite = this.add.sprite(0, 0, choiceAsset);
 
             choiceSprite.visible = index === 0;
-            this.layoutManager.addToBackground(choiceSprite);
             choiceSprites.push(choiceSprite);
         });
         return choiceSprites;
@@ -65,20 +66,21 @@ export class Select extends Screen {
         this.choiceSprites.forEach((item, index) => {
             item.visible = index === this.currentIndex;
         });
-        this.accessibleElements.forEach((element, index) => {
-            element.setAttribute("aria-hidden", index !== this.currentIndex);
-            element.style.display = index !== this.currentIndex ? "none" : "block"; //Needed for Firefox
-        });
+        // TODO P3 Accessibility
+        // this.accessibleElements.forEach((element, index) => {
+        //     element.setAttribute("aria-hidden", index !== this.currentIndex);
+        //     element.style.display = index !== this.currentIndex ? "none" : "block"; //Needed for Firefox
+        // });
     }
 
     startGame() {
-        const theme = this.context.config.theme[this.game.state.current];
+        const theme = this.context.config.theme[this.scene.key];
         const metaData = { metadata: `ELE=[${theme.choices[this.currentIndex].title}]` };
-        const screenType = this.game.state.current.split("-")[0];
+        const screenType = this.scene.key.split("-")[0];
         gmi.sendStatsEvent(screenType, "select", metaData);
 
-        const choice = this.context.config.theme[this.key].choices[this.currentIndex];
-        this.transientData[this.key] = { index: this.currentIndex, choice };
+        const choice = this.context.config.theme[this.scene.key].choices[this.currentIndex];
+        this.transientData[this.scene.key] = { choice, index: this.currentIndex };
         this.navigation.next();
     }
 
