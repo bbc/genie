@@ -1,11 +1,13 @@
 /**
  * FontLoaderPlugin loads web fonts using the Phaser.Loader
  *
- * @module components/loader/font-loader/plugin
+ * @module components/loader/font-loader/font-plugin
  * @copyright BBC 2019
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import FontFile from "./font-file.js";
+
 class FontLoaderPlugin extends Phaser.Plugins.BasePlugin {
     constructor(pluginManager) {
         super(pluginManager);
@@ -16,7 +18,9 @@ class FontLoaderPlugin extends Phaser.Plugins.BasePlugin {
         scene.sys.load["webfont"] = this.fontLoaderCallback;
     }
 
-    fontLoaderCallback() {}
+    fontLoaderCallback(fileConfig) {
+        this.addFile(new FontFile(this, fileConfig));
+    }
 }
 
 export default FontLoaderPlugin;
