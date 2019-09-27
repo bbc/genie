@@ -12,14 +12,13 @@ class FontFile extends Phaser.Loader.File {
     }
 
     load() {
-        WebFont.load(
-            Object.assign(this.config, {
-                active: this.onLoad.bind(this),
-                inactive: this.onError.bind(this),
-                fontactive: this.onFontActive.bind(this),
-                fontinactive: this.onFontInactive.bind(this),
-            }),
-        );
+        WebFont.load({
+            ...this.config,
+            active: this.onLoad.bind(this),
+            inactive: this.onError.bind(this),
+            fontactive: this.onFontActive.bind(this),
+            fontinactive: this.onFontInactive.bind(this),
+        });
     }
 
     onLoad() {
