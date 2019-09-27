@@ -43,8 +43,13 @@ export function startup(settingsConfig = {}, screenConfig) {
         transparent: browser.isSilk, // Fixes silk browser flickering
         clearBeforeRender: false,
         scale: {
-            mode: Phaser.Scale.HEIGHT_CONTROLS_WIDTH, //TODO P3 look at ENVELOP / FIT or look here: https://codepen.io/samme/pen/paOjMO
+            mode: Phaser.Scale.ENVELOP, //TODO P3 look at ENVELOP / FIT or look here: https://codepen.io/samme/pen/paOjMO
             autoCenter: Phaser.Scale.CENTER_BOTH,
+            //displaySize: {
+            //
+            //}
+            //width:600,
+            //height:600,
         },
         scene: scenes,
     };

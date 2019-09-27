@@ -28,22 +28,36 @@ export function init(stageHeight, game) {
     //game.scale.pageAlignVertically = true;
     //game.scale.fullScreenTarget = document.body;
 
+    const log = msg => {console.log(msg); return msg;}
+
     getMetrics = fp.flow(
         getBounds(game),
+        log,
         fp.pick(["width", "height"]),
+        log,
         calculateMetrics(stageHeight),
     );
+
+    const OLDsetSize = metrics => {
+        game.scale.setGameSize(metrics.stageWidth, metrics.stageHeight);
+        _onSizeChange.dispatch(metrics);
+    };
 
     const setSize = metrics => {
         //TODO P3 part of re-enabling the scaler may need this to work again [NT]
         //game.scale.setGameSize(metrics.stageWidth, metrics.stageHeight);
-        //_onSizeChange.dispatch(metrics);
+        //game.scale.resize(metrics.stageWidth, metrics.stageHeight);
+
+        game.scale.getParentBounds()
+        game.scale.gameSize.setSize(metrics.stageWidth, metrics.stageHeight);
+        _onSizeChange.dispatch(metrics);
     };
 
     const resize = fp.flow(
         getMetrics,
         setSize,
     );
+
 
     resize();
     window.onresize = fp.debounce(200, resize);
