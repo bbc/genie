@@ -30,16 +30,9 @@ export function init(stageHeight, game) {
     //game.scale.pageAlignVertically = true;
     //game.scale.fullScreenTarget = document.body;
 
-    const log = msg => {
-        console.log(msg);
-        return msg;
-    };
-
     getMetrics = fp.flow(
         getBounds(game),
-        log,
         fp.pick(["width", "height"]),
-        log,
         calculateMetrics(stageHeight),
     );
 
