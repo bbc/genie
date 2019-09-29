@@ -71,7 +71,9 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
     resize(metrics) {
         this._isMobile = metrics.isMobile;
-        this.animations.sprite.loadTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
+
+        //TODO P3 unsure how to swap texture in P3 world [NT]
+        //this.animations.sprite.loadTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);
 
         this.indicator.resize();
