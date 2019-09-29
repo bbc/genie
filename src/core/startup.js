@@ -14,6 +14,7 @@ import { getBrowser } from "./browser.js";
 import { Loader } from "./loader/loader.js";
 import { Boot } from "./loader/boot.js";
 import { hookErrors } from "./loader/hook-errors.js";
+import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
 
 //TODO P3 this is just a quick shim to create the scenes array
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key }));
@@ -46,6 +47,15 @@ export function startup(settingsConfig = {}, screenConfig) {
             mode: Phaser.Scale.NONE,
         },
         scene: scenes,
+        plugins: {
+            global: [
+                {
+                    key: "FontLoader",
+                    plugin: FontLoaderPlugin,
+                    start: true,
+                },
+            ],
+        },
     };
     // Keep the console tidy:
     window.PhaserGlobal = window.PhaserGlobal || {};

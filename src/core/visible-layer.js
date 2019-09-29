@@ -10,6 +10,6 @@ export const get = (gameInstance, gameContext) => {
     if (popupScreens.length > 0) {
         return popupScreens[popupScreens.length - 1];
     } else {
-        return gameInstance.state.current;
+        return gameInstance.scene.key;
     }
 };

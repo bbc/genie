@@ -26,28 +26,24 @@ const fireGameCompleteStat = result => {
 
 export class Results extends Screen {
     create() {
-        const theme = this.context.config.theme[this.game.state.current];
-        this.layoutManager.addToBackground(this.game.add.image(0, 0, "results.background"));
-        this.layoutManager.addToBackground(
-            this.layoutManager.addToBackground(this.game.add.image(0, -150, "results.title")),
-        );
-
-        const resultsText = this.game.add.text(0, 50, this.transientData.results, theme.resultText.style);
-        this.layoutManager.addToBackground(resultsText);
+        const theme = this.context.config.theme[this.scene.key];
+        this.add.image(0, 0, "results.background");
+        this.add.image(0, -150, "results.title");
+        this.add.text(0, 50, this.context.transientData.results, theme.resultText.style);
 
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         const buttons = ["pause", "restart", "continueGame"];
-        this.layoutManager.addLayout(buttons.concat(achievements));
-        createTestHarnessDisplay(this.game, this.context, this.layoutManager);
+        this.addLayout(buttons.concat(achievements));
+
+        //TODO P3 fix test harness
+        //createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
         fireGameCompleteStat(this.transientData.results);
 
         signal.bus.subscribe({
             name: "continue",
             channel: buttonsChannel,
-            callback: () => {
-                this.navigation.next();
-            },
+            callback: this.navigation.next,
         });
 
         signal.bus.subscribe({
