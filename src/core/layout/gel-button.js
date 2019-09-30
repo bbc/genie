@@ -37,12 +37,12 @@ export class GelButton extends Phaser.GameObjects.Sprite {
         this._id = config.key;
         this._isMobile = metrics.isMobile;
         this.positionOverride = config.positionOverride;
-        this.setHitArea(metrics);
         this.indicator = noIndicator;
         this.setIndicator();
         this.shiftX = config.shiftX || 0;
         this.shiftY = config.shiftY || 0;
         this.setInteractive({ useHandCursor: true });
+        this.setHitArea(metrics);
         this.setupMouseEvents(config, scene);
     }
 
@@ -60,8 +60,7 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
         const width = this.width + hitPadding;
         const height = this.height + hitPadding;
-        //TODO P3 this needs fixing [NT]
-        //this.hitArea = new Phaser.Rectangle(-width / 2, -height / 2, width, height);
+        this.input.hitArea = new Phaser.Geom.Rectangle(-width / 2, -height / 2, width, height);
     }
 
     setImage(key) {
@@ -72,7 +71,6 @@ export class GelButton extends Phaser.GameObjects.Sprite {
     resize(metrics) {
         this._isMobile = metrics.isMobile;
 
-        //TODO P3 unsure how to swap texture in P3 world [NT]
         this.setTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);
 

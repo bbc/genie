@@ -63,7 +63,7 @@ export function init(stageHeight, game) {
 
         game.canvas.style.marginLeft = px(marginLeft);
         game.canvas.style.marginTop = px(marginTop);
-
+        game.scale.refresh();
         _onSizeChange.dispatch(metrics);
     };
 
