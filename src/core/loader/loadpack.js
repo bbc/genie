@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 export const loadPack = {
-    prefix: "loadscreen.",
+    prefix: "loader.",
     files: [
         {
             type: "image",
