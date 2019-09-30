@@ -61,11 +61,9 @@ export function startup(settingsConfig = {}, screenConfig) {
 
     if (qaMode.debugMode) {
         phaserConfig.physics = {
-            physics: {
-                default: "arcade",
-                arcade: {
-                    debug: true,
-                },
+            default: "arcade",
+            arcade: {
+                debug: true,
             },
         };
     }
@@ -76,7 +74,9 @@ export function startup(settingsConfig = {}, screenConfig) {
 
     addCustomStyles();
 
-    new Phaser.Game(phaserConfig);
+    const game = new Phaser.Game(phaserConfig);
+
+    qaMode.create(window, game);
 }
 
 function getContainerDiv() {

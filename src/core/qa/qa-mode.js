@@ -9,15 +9,14 @@ const urlParams = window => parseUrlParams(window.location.search);
 
 const testURL = window => window.location.hostname.includes("www.test.bbc.");
 
-const qaMode = (game, goToScreen) => ({
+const qaMode = game => ({
     testHarnessLayoutDisplayed: false,
-    goToScreen,
     game,
 });
 
-const create = (window, game, goToScreen) => {
+const create = (window, game) => {
     if (urlParams(window).qaMode || testURL(window)) {
-        window.__qaMode = qaMode(game, goToScreen);
+        window.__qaMode = qaMode(game);
     }
 };
 
