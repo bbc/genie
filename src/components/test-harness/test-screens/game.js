@@ -13,7 +13,7 @@ export class GameTest extends Screen {
     }
 
     create() {
-        this.add.image(0, 0, `${this.scene.key}.background`);
+        this.add.image(0, 0, "home.background");
         const title = this.add.text(0, -190, "Game goes here", {
             font: "65px ReithSans",
             fill: "#f6931e",
@@ -21,9 +21,6 @@ export class GameTest extends Screen {
         });
         title.setOrigin(0.5);
         this.addLayout(["pause"]);
-
-        gmi.setGameData("characterSelected", this.data.characterSelected);
-        console.log("Data saved to GMI:", gmi.getAllSettings().gameData); // eslint-disable-line no-console
 
         const buttonKey = `${this.scene.key}.basicButton`;
         const buttonTextStyle = {
@@ -39,41 +36,34 @@ export class GameTest extends Screen {
             this.add
                 .image(0, buttonYPosition, buttonKey)
                 .setOrigin(0.5)
-                .setInteractive()
+                .setInteractive({ useHandCursor: true })
                 .on("pointerdown", () => onGameComplete(buttonNumber));
             this.add
                 .text(0, buttonYPosition, "Button " + buttonNumber, buttonTextStyle)
                 .setOrigin(0.5)
-                .setInteractive()
+                .setInteractive({ useHandCursor: true })
                 .on("pointerdown", () => onGameComplete(buttonNumber));
 
-            // const button = this.add.button(0, buttonYPosition, buttonKey, () => onGameComplete(buttonNumber), this);
-            // const config = {
-            //     id: buttonNumber,
-            //     ariaLabel: buttonText,
-            // };
-            // TODO P3
-            // accessibilify(button, config);
-            // button.addChild(buttonText);
-            // this.add(button);
+            // TODO P3 Accessibility
+            // accessibilify(button, { id: buttonNumber, ariaLabel: buttonText });
         }, this);
 
-        // const onGameComplete = buttonNumber => {
-        //     const results = {
-        //         results: "You pressed button " + buttonNumber,
-        //         characterSelected: this.transientData.characterSelected,
-        //     };
-        //     gmi.setGameData("buttonPressed", buttonNumber);
-        //     console.log("Data saved to GMI:", gmi.getAllSettings().gameData); // eslint-disable-line no-console
-        //     this.navigation.next(results);
-        // };
-        //
-        // this.add
-        //     .text(0, 200, "Character Selected: " + this.context.transientData.characterSelected, {
-        //         font: "italic 32px ReithSans",
-        //         fill: "#f6931e",
-        //         align: "center",
-        //     })
-        //     .setOrigin(0.5);
+        const onGameComplete = buttonNumber => {
+            const results = {
+                results: "You pressed button " + buttonNumber,
+                characterSelected: this.transientData["character-select"].choice.title,
+            };
+            gmi.setGameData("buttonPressed", buttonNumber);
+            console.log("Data saved to GMI:", gmi.getAllSettings().gameData); // eslint-disable-line no-console
+            this.navigation.next(results);
+        };
+
+        this.add
+            .text(0, 200, `Character Selected: ${this.transientData["character-select"].choice.title}`, {
+                font: "32px ReithSans",
+                fill: "#f6931e",
+                align: "center",
+            })
+            .setOrigin(0.5);
     }
 }

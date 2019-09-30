@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 module.exports = {
-    collectCoverageFrom: ["src/**/*.js", "!src/components/test-harness/**/*.js", "!src/output/**/*.js"],
+    collectCoverageFrom: ["src/**/*.js", "!src/output/**/*.js"],
     coverageThreshold: {
         // global: {
         //     statements: 94.34,
@@ -28,7 +28,13 @@ module.exports = {
         "./test/components/overlays/how-to-play",
         "./test/components/overlays/pause",
         "./test/components/test-harness/layout-harness",
-        "./test/components/home",
+        "./test/components/test-harness/test-screens/collision",
+        "./test/components/test-harness/test-screens/fps",
+        "./test/components/test-harness/test-screens/gel",
+        "./test/components/test-harness/test-screens/rotation",
+        "./test/components/test-harness/test-screens/sprite-group",
+        "./test/components/test-harness/test-screens/tiled",
+        "./test/components/test-harness/test-screens/tweening",
         "./test/core/accessibility",
         "./test/core/asset-loader",
         "./test/core/debug",
