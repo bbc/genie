@@ -96,8 +96,21 @@ describe("Loader", () => {
         loader.init(mockData);
 
         const mockGame = {
+            canvas: {
+                style: {
+                    height: 250,
+                },
+                getBoundingClientRect: () => {
+                    return { width: 225, height: 350 };
+                },
+            },
             scale: {
                 parentSize: 100,
+                parent: {
+                    offsetWidth: 300,
+                    offsetHeight: 200,
+                },
+                refresh: () => {},
             },
         };
         Scaler.init(600, mockGame);
