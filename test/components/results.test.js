@@ -41,7 +41,6 @@ describe("Results Screen", () => {
         resultsScreen.addLayout = jest.fn();
         resultsScreen.add = {
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
-            button: jest.fn(),
             text: jest.fn(),
         };
         resultsScreen.scene = {
