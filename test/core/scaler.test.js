@@ -12,13 +12,19 @@ describe("Scaler", () => {
     beforeEach(() => {
         mockGame = {
             scale: {
-                setGameSize: jest.fn(),
-                scaleMode: jest.fn(),
-                setResizeCallback: jest.fn(),
-                onSizeChange: { add: jest.fn() },
-                getParentBounds: jest.fn(() => {
-                    return { width: 800, height: 600 };
-                }),
+                parent: {
+                    offsetWidth: 1400,
+                    offsetHeight: 700,
+                },
+                refresh: jest.fn(),
+            },
+            canvas: {
+                style: {
+                    height: 600,
+                },
+                getBoundingClientRect: () => {
+                    return { width: 300, height: 200 };
+                },
             },
         };
     });
