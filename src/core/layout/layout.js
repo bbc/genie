@@ -85,7 +85,6 @@ export function create(scene, metrics, buttonIds, root) {
     };
     resize(metrics);
 
-    //TODO P3 re enabled once signal bus is working [NT]
     const signal = onScaleChange.add(resize);
 
     const removeSignals = () => {
