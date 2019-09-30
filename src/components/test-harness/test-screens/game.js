@@ -8,10 +8,6 @@ import { Screen } from "../../../core/screen.js";
 // import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 
 export class GameTest extends Screen {
-    constructor() {
-        super({ key: "game" });
-    }
-
     create() {
         this.add.image(0, 0, "home.background");
         const title = this.add.text(0, -190, "Game goes here", {
