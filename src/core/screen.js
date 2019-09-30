@@ -105,8 +105,14 @@ export class Screen extends Phaser.Scene {
         );
     };
 
+    #removeAll = () => {
+        this.#layouts.forEach(layout => layout.destroy());
+        this.#layouts = [];
+    };
+
     #navigate = route => {
         //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable here [NT]
+        this.#removeAll();
         this.scene.start(route, this.#data);
     };
 
