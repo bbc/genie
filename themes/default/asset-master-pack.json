@@ -1,6 +1,6 @@
 {
     "loader": {
-        "prefix": "loadscreen.",
+        "prefix": "loader.",
         "files": [
             {
                 "type": "audio",

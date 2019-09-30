@@ -1,96 +1,111 @@
 {
-    "loadscreen": [
-        {
-            "type": "audio",
-            "key": "backgroundMusic",
-            "urls": ["shared/background-music.mp3", "shared/background-music.ogg"],
-            "autoDecode": true
-        },
-        {
-            "type": "audio",
-            "key": "buttonClick",
-            "urls": ["shared/button-click.mp3", "shared/button-click.ogg"],
-            "autoDecode": true
-        }
-    ],
-    "home": [
-        {
-            "type": "image",
-            "key": "title",
-            "url": "shared/title.png",
-            "overwrite": false
-        },
-        {
-            "type": "image",
-            "key": "background",
-            "url": "shared/background.png",
-            "overwrite": false
-        }
-    ],
-    "results": [
-        {
-            "type": "image",
-            "key": "background",
-            "url": "shared/background.png",
-            "overwrite": false
-        },
-        {
-            "type": "image",
-            "key": "title",
-            "url": "shared/title.png",
-            "overwrite": false
-        }
-    ],
-    "pause": [
-        {
-            "type": "image",
-            "key": "pauseBackground",
-            "url": "pause/pause-background.png",
-            "overwrite": false
-        }
-    ],
-    "howToPlay": [
-        {
-            "type": "image",
-            "key": "background",
-            "url": "how-to-play/background.png",
-            "overwrite": false
-        },
-        {
-            "type": "image",
-            "key": "title",
-            "url": "how-to-play/title.png",
-            "overwrite": false
-        },
-        {
-            "type": "image",
-            "key": "panel1",
-            "url": "how-to-play/how_to_play_1.png",
-            "overwrite": false
-        },
-        {
-            "type": "image",
-            "key": "panel2",
-            "url": "how-to-play/how_to_play_2.png",
-            "overwrite": false
-        },
-        {
-            "type": "image",
-            "key": "panel3",
-            "url": "how-to-play/how_to_play_3.png",
-            "overwrite": false
-        },
-        {
-            "type": "image",
-            "key": "pipOn",
-            "url": "how-to-play/pip_on.png",
-            "overwrite": false
-        },
-        {
-            "type": "image",
-            "key": "pipOff",
-            "url": "how-to-play/pip_off.png",
-            "overwrite": false
-        }
-    ]
+    "loader": {
+        "prefix": "loader.",
+        "files": [
+            {
+                "type": "audio",
+                "key": "backgroundMusic",
+                "urls": ["shared/background-music.mp3", "shared/background-music.ogg"],
+                "autoDecode": true
+            },
+            {
+                "type": "audio",
+                "key": "buttonClick",
+                "urls": ["shared/button-click.mp3", "shared/button-click.ogg"],
+                "autoDecode": true
+            }
+        ],
+    },
+    "home": {
+        "prefix": "home.",
+        "files": [
+            {
+                "type": "image",
+                "key": "title",
+                "url": "shared/title.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "background",
+                "url": "shared/background.png",
+                "overwrite": false
+            }
+        ],
+    },
+    "results": {
+        "prefix": "results.",
+        "files": [
+            {
+                "type": "image",
+                "key": "background",
+                "url": "shared/background.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "title",
+                "url": "shared/title.png",
+                "overwrite": false
+            }
+        ],
+    },
+    "pause": {
+        "prefix": "pause.",
+        "files": [
+            {
+                "type": "image",
+                "key": "pauseBackground",
+                "url": "pause/pause-background.png",
+                "overwrite": false
+            }
+        ],
+    },
+    "howToPlay": {
+        "prefix": "howToPlay.",
+        "files": [
+            {
+                "type": "image",
+                "key": "background",
+                "url": "how-to-play/background.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "title",
+                "url": "how-to-play/title.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "panel1",
+                "url": "how-to-play/how_to_play_1.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "panel2",
+                "url": "how-to-play/how_to_play_2.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "panel3",
+                "url": "how-to-play/how_to_play_3.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "pipOn",
+                "url": "how-to-play/pip_on.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "pipOff",
+                "url": "how-to-play/pip_off.png",
+                "overwrite": false
+            }
+        ]
+    }
 }

@@ -44,11 +44,6 @@ export class Screen extends Phaser.Scene {
         return this.#data.transient;
     }
 
-    //TODO P3 needed? [NT]
-    getAsset(name) {
-        return this.game.state.current + "." + name;
-    }
-
     init(data) {
         this.#data = data;
 
