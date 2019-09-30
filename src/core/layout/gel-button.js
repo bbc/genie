@@ -60,7 +60,9 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
         const width = this.width + hitPadding;
         const height = this.height + hitPadding;
-        this.input.hitArea = new Phaser.Geom.Rectangle(0, 0, width, height);
+        if (this.input) {
+            this.input.hitArea = new Phaser.Geom.Rectangle(0, 0, width, height);
+        }
     }
 
     setImage(key) {
