@@ -22,7 +22,7 @@ class Indicator extends Phaser.GameObjects.Sprite {
     resize() {
         this.position.x = this.parent.width / 2;
         this.position.y = this.parent.height / -2;
-        this.animations.sprite.loadTexture(assetPath({ key: "notification", isMobile: this.parent._isMobile }));
+        this.setTexture(assetPath({ key: "notification", isMobile: this.parent._isMobile }));
     }
 }
 
@@ -66,14 +66,14 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
     setImage(key) {
         this._id = key;
-        this.animations.sprite.loadTexture(assetPath({ key: this._id, isMobile: this._isMobile }));
+        this.setTexture(assetPath({ key: this._id, isMobile: this._isMobile }));
     }
 
     resize(metrics) {
         this._isMobile = metrics.isMobile;
 
         //TODO P3 unsure how to swap texture in P3 world [NT]
-        //this.animations.sprite.loadTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
+        this.setTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);
 
         this.indicator.resize();

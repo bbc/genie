@@ -53,7 +53,7 @@ export function init(stageHeight, game) {
 
         const under4by3 = game.scale.parent.offsetWidth / game.scale.parent.offsetHeight < 4 / 3;
 
-        const viewHeight = under4by3? game.scale.parent.offsetWidth * (3 / 4) : game.scale.parent.offsetHeight;
+        const viewHeight = under4by3 ? game.scale.parent.offsetWidth * (3 / 4) : game.scale.parent.offsetHeight;
 
         game.canvas.style.height = px(viewHeight);
 
