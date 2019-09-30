@@ -48,7 +48,6 @@ module.exports = {
         "./test/core/layout/settings-icons",
         "./test/core/layout-manager",
         "./test/core/navigation",
-        "./test/core/scaler",
         "./test/core/screen",
         "./test/core/startup",
     ],
