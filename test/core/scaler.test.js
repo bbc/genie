@@ -75,7 +75,7 @@ describe("Scaler", () => {
         expect(metrics).toBe("metrics");
     });
 
-    test("on scale change subscribes to the signal bus", () => {
+    test("adding a callback to the onScaleChange event, subscribes it to the signal bus", () => {
         const mockCallback = jest.fn();
         const expectedParams = {
             channel: "scaler",
