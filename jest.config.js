@@ -38,7 +38,6 @@ module.exports = {
         "./test/core/accessibility",
         "./test/core/asset-loader",
         "./test/core/debug",
-        "./test/core/font-loader",
         "./test/core/layout/button-factory",
         "./test/core/layout/calculate-metrics",
         "./test/core/layout/gel-defaults",
