@@ -88,7 +88,7 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
 const paths = [[x => x.isMobile, x => "gelMobile." + x.key], [x => !x.isMobile, x => "gelDesktop." + x.key]];
 
-const assetPath = fp.cond(paths);
+export const assetPath = fp.cond(paths);
 
 const publish = (config, data) => () => {
     //TODO P3 re- enable sound [NT]
