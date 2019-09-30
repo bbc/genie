@@ -38,6 +38,7 @@ export class Boot extends Screen {
 
         this.setData({
             popupScreens: [],
+            transient: {},
             navigation: this.#navigationConfig,
         });
         //TODO P3 - if the above could be changed this could potentially be part of loadscreen.js and we could delete boot

@@ -12,7 +12,7 @@ import * as GameSound from "../../../src/core/game-sound.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
 
 describe("Loader", () => {
-    let loadScreen;
+    let loader;
     let mockGmi;
     let mockImage;
     let mockConfig;
@@ -59,12 +59,12 @@ describe("Loader", () => {
         };
         const mockContext = { config: mockConfig };
 
-        loadScreen = new Loader();
-        Object.defineProperty(loadScreen, "context", {
+        loader = new Loader();
+        Object.defineProperty(loader, "context", {
             get: jest.fn(() => mockContext),
         });
 
-        loadScreen.load = {
+        loader.load = {
             setBaseURL: jest.fn(),
             setPath: jest.fn(),
             addPack: jest.fn(),
@@ -72,7 +72,7 @@ describe("Loader", () => {
             on: jest.fn(),
             json: jest.fn(),
         };
-        loadScreen.cache = {
+        loader.cache = {
             json: {
                 get: jest.fn(packName => {
                     if (packName === "asset-master-pack") {
@@ -84,16 +84,16 @@ describe("Loader", () => {
             },
         };
 
-        loadScreen.add = {
+        loader.add = {
             image: jest.fn(() => mockImage),
         };
 
-        const mockData = { navigation: { loadscreen: { routes: { next: "test" } } } };
+        const mockData = { navigation: { loader: { routes: { next: "test" } } } };
 
-        loadScreen.scene = { key: "loadscreen", manager: { keys: [] }, start: jest.fn() };
-        loadScreen.cameras = { main: {} };
-        loadScreen.setConfig = jest.fn();
-        loadScreen.init(mockData);
+        loader.scene = { key: "loader", manager: { keys: [] }, start: jest.fn() };
+        loader.cameras = { main: {} };
+        loader.setConfig = jest.fn();
+        loader.init(mockData);
 
         const mockGame = {
             scale: {
@@ -109,8 +109,8 @@ describe("Loader", () => {
         test("updates the loading bar fill when called", () => {
             const progress = 42;
 
-            loadScreen.preload();
-            loadScreen.updateLoadBar(progress);
+            loader.preload();
+            loader.updateLoadBar(progress);
             expect(mockImage.frame.cutWidth).toEqual(progress);
         });
     });
@@ -128,68 +128,68 @@ describe("Loader", () => {
                 },
             };
             Scaler.getMetrics = jest.fn(() => mockMetrics);
-            loadScreen.createBrandLogo();
+            loader.createBrandLogo();
 
-            expect(loadScreen.add.image).toHaveBeenCalledWith(90, 90, "loadscreen.brandLogo");
+            expect(loader.add.image).toHaveBeenCalledWith(90, 90, "loader.brandLogo");
             expect(mockImage.setOrigin).toHaveBeenCalledWith(1, 1);
         });
     });
 
     describe("createLoadBar method", () => {
         test("adds loadbar images and sets progress to zero", () => {
-            loadScreen.updateLoadBar = jest.fn();
-            loadScreen.createLoadBar();
+            loader.updateLoadBar = jest.fn();
+            loader.createLoadBar();
 
-            expect(loadScreen.add.image).toHaveBeenCalledWith(0, 0, "loadscreen.loadbarBackground");
-            expect(loadScreen.add.image).toHaveBeenCalledWith(0, 0, "loadscreen.loadbar");
-            expect(loadScreen.updateLoadBar).toHaveBeenCalledWith(0);
+            expect(loader.add.image).toHaveBeenCalledWith(0, 0, "loader.loadbarBackground");
+            expect(loader.add.image).toHaveBeenCalledWith(0, 0, "loader.loadbar");
+            expect(loader.updateLoadBar).toHaveBeenCalledWith(0);
         });
     });
 
     describe("preload method", () => {
         test("Sets the config part of screen#data", () => {
-            loadScreen.preload();
-            expect(loadScreen.setConfig).toHaveBeenCalledWith(mockConfig);
+            loader.preload();
+            expect(loader.setConfig).toHaveBeenCalledWith(mockConfig);
         });
 
         test("Sets up loader paths correctly", () => {
-            loadScreen.preload();
+            loader.preload();
 
-            expect(loadScreen.load.setBaseURL).toHaveBeenCalledWith(mockGmi.gameDir);
-            expect(loadScreen.load.setPath).toHaveBeenCalledWith(mockGmi.embedVars.configPath);
+            expect(loader.load.setBaseURL).toHaveBeenCalledWith(mockGmi.gameDir);
+            expect(loader.load.setPath).toHaveBeenCalledWith(mockGmi.embedVars.configPath);
         });
 
         test("Adds the master asset pack to the load", () => {
-            loadScreen.preload();
+            loader.preload();
 
-            expect(loadScreen.load.addPack).toHaveBeenCalledWith(mockMasterPack);
+            expect(loader.load.addPack).toHaveBeenCalledWith(mockMasterPack);
         });
 
         test("calls load.pack with the gel pack and missing pack names", () => {
-            loadScreen.scene.manager.keys = { one: {}, two: {}, three: {} };
-            loadScreen.preload();
+            loader.scene.manager.keys = { one: {}, two: {}, three: {} };
+            loader.preload();
 
-            expect(loadScreen.load.pack).toHaveBeenCalledWith("gel/gel-pack");
-            expect(loadScreen.load.pack).toHaveBeenCalledWith("three");
+            expect(loader.load.pack).toHaveBeenCalledWith("gel/gel-pack");
+            expect(loader.load.pack).toHaveBeenCalledWith("three");
         });
 
         test("adds background and title images", () => {
-            loadScreen.preload();
+            loader.preload();
 
-            expect(loadScreen.add.image).toHaveBeenCalledWith(0, 0, "loadscreen.background");
-            expect(loadScreen.add.image).toHaveBeenCalledWith(0, -150, "loadscreen.title");
+            expect(loader.add.image).toHaveBeenCalledWith(0, 0, "loader.background");
+            expect(loader.add.image).toHaveBeenCalledWith(0, -150, "loader.title");
         });
     });
 
     describe("create method", () => {
         test("calls this.navigation.next", () => {
-            loadScreen.navigation = { next: jest.fn() };
-            loadScreen.create();
-            expect(loadScreen.navigation.next).toHaveBeenCalled();
+            loader.navigation = { next: jest.fn() };
+            loader.create();
+            expect(loader.navigation.next).toHaveBeenCalled();
         });
 
         test("sends gmi game loaded stats", () => {
-            loadScreen.create();
+            loader.create();
             expect(gmi.sendStatsEvent).toHaveBeenCalledWith("gameloaded", "true");
             expect(gmi.gameLoaded).toHaveBeenCalled();
         });
@@ -198,47 +198,47 @@ describe("Loader", () => {
     describe("qaMode", () => {
         beforeEach(() => {
             jest.spyOn(console, "log").mockImplementation(() => {});
-            loadScreen.preload();
+            loader.preload();
         });
 
         test("logs the progress to the console when qaMode is true", () => {
             global.window.__qaMode = true;
-            loadScreen.updateLoadBar("50");
+            loader.updateLoadBar("50");
             expect(console.log.mock.calls[0]).toEqual(["Loader progress:", "50"]); // eslint-disable-line no-console
         });
     });
 
     describe("achievements", () => {
         test("calls achievements init when achievements config flag is set to true", () => {
-            loadScreen.create();
+            loader.create();
             expect(mockGmi.achievements.init).toHaveBeenCalled();
         });
 
         test("does not call achievements init when achievements config flag is falsy", () => {
             mockConfig.theme.game.achievements = false;
 
-            loadScreen.create();
+            loader.create();
             expect(mockGmi.achievements.init).not.toHaveBeenCalled();
         });
 
         test("does not call achievements init when there is no theme.game entry", () => {
             delete mockConfig.theme.game;
 
-            loadScreen.preload();
-            loadScreen.create();
+            loader.preload();
+            loader.create();
             expect(mockGmi.achievements.init).not.toHaveBeenCalled();
         });
 
         test("loads the achievements config if enabled in config", () => {
-            loadScreen.preload();
-            expect(loadScreen.load.json).toHaveBeenCalledWith("achievements-data", "achievements/config.json");
+            loader.preload();
+            expect(loader.load.json).toHaveBeenCalledWith("achievements-data", "achievements/config.json");
         });
 
         test("does not load the achievements config if disabled in config", () => {
             delete mockConfig.theme.game.achievements;
 
-            loadScreen.preload();
-            expect(loadScreen.load.json).not.toHaveBeenCalledWith("achievements-data", "achievements/config.json");
+            loader.preload();
+            expect(loader.load.json).not.toHaveBeenCalledWith("achievements-data", "achievements/config.json");
         });
     });
 });

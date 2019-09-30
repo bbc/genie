@@ -1,6 +1,6 @@
 {
     "level-select": {
-        "prefix" : "level-select.",
+        "prefix": "level-select.",
         "files": [
             {
                 "type": "image",

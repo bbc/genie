@@ -29,14 +29,13 @@ const settingsConfig = {
     ],
 };
 
-//TODO P3 - re-enable below once signal bus work is complete NT
-//signal.bus.subscribe({
-//    channel: settingsChannel,
-//    name: "custom1",
-//    callback: value => {
-//        console.log("Custom 1 setting changed to " + value); // eslint-disable-line no-console
-//    },
-//});
+signal.bus.subscribe({
+    channel: settingsChannel,
+    name: "custom1",
+    callback: value => {
+        console.log("Custom 1 setting changed to " + value); // eslint-disable-line no-console
+    },
+});
 
 //TODO P3
 //if (parseUrlParams(window.location.search).sanityCheck === true) {
