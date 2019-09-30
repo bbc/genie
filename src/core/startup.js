@@ -58,6 +58,18 @@ export function startup(settingsConfig = {}, screenConfig) {
             ],
         },
     };
+
+    if (qaMode.debugMode) {
+        phaserConfig.physics = {
+            physics: {
+                default: "arcade",
+                arcade: {
+                    debug: true,
+                },
+            },
+        };
+    }
+
     // Keep the console tidy:
     window.PhaserGlobal = window.PhaserGlobal || {};
     window.PhaserGlobal.hideBanner = true;

@@ -15,8 +15,12 @@ const qaMode = (game, goToScreen) => ({
     game,
 });
 
-export const create = (window, game, goToScreen) => {
+const create = (window, game, goToScreen) => {
     if (urlParams(window).qaMode || testURL(window)) {
         window.__qaMode = qaMode(game, goToScreen);
     }
 };
+
+const debugMode = (() => !!urlParams(window).debugMode)();
+
+export { debugMode, create };
