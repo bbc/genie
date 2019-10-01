@@ -4,8 +4,8 @@
  * @license Apache-2.0
  */
 
-import { createMockGmi } from "../../../mock/gmi";
-import { GameTest } from "../../../../src/components/test-harness/test-screens/game";
+import { createMockGmi } from "../../mock/gmi";
+import { GameTest } from "../../../src/components/test-screens/game";
 
 describe("Test Harness - Test Screens - Game", () => {
     let mockGmi;

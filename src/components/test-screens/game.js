@@ -3,8 +3,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { gmi } from "../../../core/gmi/gmi.js";
-import { Screen } from "../../../core/screen.js";
+import { gmi } from "../../core/gmi/gmi.js";
+import { Screen } from "../../core/screen.js";
 // import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 
 export class GameTest extends Screen {
