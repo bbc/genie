@@ -164,14 +164,14 @@ describe("Startup", () => {
             test("additional debugging config is passed if url parameter is set", () => {
                 qaMode.debugMode = jest.fn().mockImplementation(() => true);
 
-                startup({}, { settings: "some settings" });
+                startup({});
                 const actualConfig = Phaser.Game.mock.calls[0][0];
                 expect(actualConfig).toEqual(expect.objectContaining(expectedDebugConfig));
             });
 
             test("additional debugging config is not passed if url parameter is not set", () => {
                 qaMode.debugMode = jest.fn().mockImplementation(() => false);
-                startup({}, { settings: "some settings" });
+                startup({});
                 const actualConfig = Phaser.Game.mock.calls[0][0];
                 expect(actualConfig).toEqual(expect.not.objectContaining(expectedDebugConfig));
             });
