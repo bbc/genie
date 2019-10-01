@@ -35,6 +35,10 @@ export class Screen extends Phaser.Scene {
         };
     }
 
+    get layouts() {
+        return this.#layouts;
+    }
+
     //TODO P3 the only context parts we want them to set is transient data
     //TODO P3 maybe it should be separate? [NT]
     set transientData(newData) {

@@ -25,9 +25,11 @@ describe("Layout - Gel Defaults", () => {
                 home: jest.fn(),
                 achievements: jest.fn(),
             },
-            layoutManager: {
-                getLayouts: jest.fn(() => [{ buttons: { achievements: { setIndicator: clearIndicatorSpy } } }]),
-            },
+            layouts: [
+                {
+                    buttons: { achievements: { setIndicator: clearIndicatorSpy } },
+                },
+            ],
             transientData: {},
         };
         mockGame = {
@@ -68,7 +70,7 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Home Button Callback", () => {
         beforeEach(() => {
-            gel.config.home.action({ game: mockGame });
+            gel.config.home.action({ screen: mockCurrentScreen });
         });
 
         test("navigates to the home screen", () => {
@@ -225,18 +227,18 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Achievements Button Callback", () => {
         test("navigates to the achievements screen if it exists locally", () => {
-            gel.config.achievements.action({ game: mockGame });
+            gel.config.achievements.action({ screen: mockCurrentScreen });
             expect(mockCurrentScreen.navigation.achievements).toHaveBeenCalled();
         });
 
         test("opens the CAGE achievements screen if there is no local navigation", () => {
             delete mockCurrentScreen.navigation.achievements;
-            gel.config.achievements.action({ game: mockGame });
+            gel.config.achievements.action({ screen: mockCurrentScreen });
             expect(mockGmi.achievements.show).toHaveBeenCalled();
         });
 
         test("clears the indicator", () => {
-            gel.config.achievements.action({ game: mockGame });
+            gel.config.achievements.action({ screen: mockCurrentScreen });
             expect(clearIndicatorSpy).toHaveBeenCalled();
         });
     });
