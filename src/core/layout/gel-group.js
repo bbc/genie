@@ -57,7 +57,6 @@ export class GelGroup extends Phaser.GameObjects.Container {
         //TODO P3 we used to name the groups - useful for debugging. Might be usuaful as a propery? [NT]
         //TODO P3 we can now use #private style class fields.
         //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
-
         this._vPos = vPos;
         this._hPos = hPos;
         this._metrics = metrics;
@@ -91,7 +90,6 @@ export class GelGroup extends Phaser.GameObjects.Container {
     }
 
     addToGroup(item, position = 0) {
-        item.anchor.setTo(0.5, 0.5);
         this.addAt(item, position);
         this.alignChildren();
     }
