@@ -39,7 +39,6 @@ module.exports = {
         "./test/components/overlays/pause",
         "./test/components/test-harness/layout-harness",
         "./test/core/accessibility",
-        "./test/core/debug",
         "./test/core/screen",
     ],
     setupFilesAfterEnv: ["./test/set-up-jest.js"],
