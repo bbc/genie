@@ -8,7 +8,7 @@ import { GelGroup } from "../../../src/core/layout/gel-group.js";
 
 describe("Group", () => {
     let buttonFactory;
-    let game;
+    let mockScene;
     let parentGroup;
     let metrics;
     let buttonResizeStub;
@@ -16,9 +16,14 @@ describe("Group", () => {
     let config;
     let vPos;
     let hPos;
+    let capturedIterateFunction;
 
     beforeEach(() => {
-        game = jest.fn();
+        mockScene = {
+            sys: {
+                queueDepthSort: () => {},
+            },
+        };
         parentGroup = {
             addChild: () => {},
             children: [],
@@ -48,7 +53,11 @@ describe("Group", () => {
         vPos = "middle";
         hPos = "center";
         jest.spyOn(ButtonFactory, "create").mockImplementation(() => buttonFactory);
-        group = new GelGroup(game, parentGroup, vPos, hPos, metrics, false);
+        GelGroup.prototype.addAt = jest.fn();
+        GelGroup.prototype.iterate = fn => {
+            capturedIterateFunction = fn;
+        };
+        group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -66,35 +75,38 @@ describe("Group", () => {
             jest.spyOn(buttonFactory, "createButton").mockImplementation(() => newButton);
 
             group.addButton(config);
-            expect(group.children.length).toBe(1);
-            expect(group.children[0]).toBe(newButton);
+            expect(group.addAt).toHaveBeenCalledWith(newButton, 0);
         });
 
         test("aligns button accordingly", () => {
             vPos = "bottom";
             hPos = "center";
-            group = new GelGroup(game, parentGroup, vPos, hPos, metrics, false);
+            group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false);
 
             group.addButton(config);
             group.addButton(config);
+            group._buttons.forEach(button => capturedIterateFunction(button));
 
-            expect(group.children[0].x).toBe(100);
-            expect(group.children[1].x).toBe(350);
+            expect(group._buttons[0].x).toBe(100);
+            expect(group._buttons[1].x).toBe(350);
         });
 
         test("aligns center buttons accordingly", () => {
             group.addButton(config);
             group.addButton(config);
             group.reset(metrics);
+            group._buttons.forEach(button => capturedIterateFunction(button));
 
-            expect(group.children[0].y).toBe(0);
-            expect(group.children[1].y).toBe(0);
+            expect(group._buttons[0].y).toBe(0);
+            expect(group._buttons[1].y).toBe(0);
         });
 
         describe("when vPos is middle and hPos is center", () => {
             test("sets group position correctly", () => {
                 group.addButton(config);
                 group.reset(metrics);
+                group._buttons.forEach(button => capturedIterateFunction(button));
+
                 expect(group.x).toBe(0);
                 expect(group.y).toBe(0);
             });
@@ -104,7 +116,7 @@ describe("Group", () => {
             test("sets group position correctly", () => {
                 vPos = "top";
                 hPos = "right";
-                group = new GelGroup(game, parentGroup, vPos, hPos, metrics, false);
+                group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false);
 
                 group.addButton(config);
                 group.reset(metrics);
@@ -117,7 +129,7 @@ describe("Group", () => {
             test("sets group position correctly", () => {
                 vPos = "bottom";
                 hPos = "left";
-                group = new GelGroup(game, parentGroup, vPos, hPos, metrics, false);
+                group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false);
 
                 group.addButton(config);
                 group.reset(metrics);
@@ -130,7 +142,7 @@ describe("Group", () => {
             test("sets group position correctly", () => {
                 vPos = "bottom";
                 hPos = "left";
-                group = new GelGroup(game, parentGroup, vPos, hPos, metrics, true);
+                group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, true);
 
                 group.addButton(config);
                 group.reset(metrics);
@@ -147,10 +159,10 @@ describe("Group", () => {
 
                 vPos = "top";
                 hPos = "left";
-                group = new GelGroup(game, parentGroup, vPos, hPos, metrics);
+                group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics);
 
-                Object.defineProperty(group, "left", { set: leftSpy });
-                Object.defineProperty(group, "top", { set: topSpy });
+                Object.defineProperty(group, "x", { set: leftSpy });
+                Object.defineProperty(group, "y", { set: topSpy });
 
                 createButtonStub.mockImplementation(() => ({
                     x: 50,
@@ -181,8 +193,8 @@ describe("Group", () => {
                 group.addButton(config);
                 group.reset(metrics);
 
-                expect(leftSpy).toHaveBeenCalledWith(-25);
-                expect(topSpy).toHaveBeenCalledWith(-425);
+                expect(leftSpy).toHaveBeenCalledWith(-900);
+                expect(topSpy).toHaveBeenCalledWith(-1400);
             });
         });
 
@@ -194,10 +206,10 @@ describe("Group", () => {
 
                 vPos = "bottom";
                 hPos = "right";
-                group = new GelGroup(game, parentGroup, vPos, hPos, metrics);
+                group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics);
 
-                Object.defineProperty(group, "right", { set: rightSpy });
-                Object.defineProperty(group, "bottom", { set: bottomSpy });
+                Object.defineProperty(group, "x", { set: rightSpy });
+                Object.defineProperty(group, "y", { set: bottomSpy });
 
                 createButtonStub.mockImplementation(() => ({
                     x: 50,
@@ -226,28 +238,20 @@ describe("Group", () => {
                     resize: buttonResizeStub,
                 }));
                 group.addButton(config);
-
                 group.reset(metrics);
 
-                expect(rightSpy).toHaveBeenCalledWith(-125);
-                expect(bottomSpy).toHaveBeenCalledWith(375);
+                expect(rightSpy).toHaveBeenCalledWith(900);
+                expect(bottomSpy).toHaveBeenCalledWith(1400);
             });
         });
     });
 
     describe("addToGroup method", () => {
         test("adds item to this group", () => {
-            const mockButton = {
-                anchor: {
-                    setTo: (x, y) => {
-                        x, y;
-                    },
-                },
-                updateTransform: () => {},
-            };
-            group.addToGroup(mockButton);
-            expect(group.children.length === 1).toBeTruthy();
-            expect(group.children[0] === mockButton).toBeTruthy();
+            const mockButton = { button: "mock" };
+            const mockPosition = 42;
+            group.addToGroup(mockButton, mockPosition);
+            expect(group.addAt).toHaveBeenCalledWith(mockButton, mockPosition);
         });
     });
 
@@ -258,7 +262,7 @@ describe("Group", () => {
             const desktopMetrics = { horizontals: {}, verticals: {} };
             const moreDesktopMetrics = { borderPad: 0, horizontals: { center: 0 }, verticals: { top: -333 } };
 
-            group = new GelGroup(game, parentGroup, "top", "center", desktopMetrics, false);
+            group = new GelGroup(mockScene, parentGroup, "top", "center", desktopMetrics, false);
             group.addButton(config);
             group.reset(moreDesktopMetrics);
 
@@ -270,7 +274,7 @@ describe("Group", () => {
             const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
             const mobileMetrics = { isMobile: true, horizontals: {}, verticals: {} };
 
-            group = new GelGroup(game, parentGroup, "bottom", "right", desktopMetrics, false);
+            group = new GelGroup(mockScene, parentGroup, "bottom", "right", desktopMetrics, false);
             group.addButton(config);
             group.reset(mobileMetrics);
 
@@ -282,7 +286,7 @@ describe("Group", () => {
             const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
             const moreDesktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
 
-            group = new GelGroup(game, parentGroup, "top", "left", desktopMetrics, false);
+            group = new GelGroup(mockScene, parentGroup, "top", "left", desktopMetrics, false);
             group.addButton(config);
             group.reset(moreDesktopMetrics);
 
@@ -295,7 +299,7 @@ describe("Group", () => {
         test("calls destroy on passed in button", () => {
             const metrics = { horizontals: {}, verticals: {} };
 
-            group = new GelGroup(game, parentGroup, "top", "center", metrics, false);
+            group = new GelGroup(mockScene, parentGroup, "top", "center", metrics, false);
 
             const destroySpy = jest.fn();
             group.removeButton({ destroy: destroySpy });
@@ -306,7 +310,7 @@ describe("Group", () => {
         test("removes the button from _buttons", () => {
             const metrics = { horizontals: {}, verticals: {} };
 
-            group = new GelGroup(game, parentGroup, "top", "center", metrics, false);
+            group = new GelGroup(mockScene, parentGroup, "top", "center", metrics, false);
 
             group.addButton({ key: "test_1" });
             group.addButton({ key: "test_2" });

@@ -8,7 +8,6 @@ import { domElement } from "../mock/dom-element";
 import { createMockGmi } from "../mock/gmi";
 import { Select } from "../../src/components/select";
 import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
-import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
@@ -22,10 +21,6 @@ describe("Select Screen", () => {
     beforeEach(() => {
         characterSprites = [{ visible: "" }, { visible: "" }, { visible: "" }];
         mockAccessibleElements = [domElement(), domElement(), domElement()];
-
-        // jest.spyOn(accessibleCarouselElements, "create").mockImplementation(() => mockAccessibleElements);
-        // jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
-
         mockData = {
             config: {
                 theme: {
@@ -91,15 +86,6 @@ describe("Select Screen", () => {
             const expectedButtons = ["home", "audio", "pauseNoReplay", "previous", "next", "continue"];
             expect(selectScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
-
-        // TODO P3 Test Harness
-        // test("creates a layout harness with correct params", () => {
-        //     expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
-        //         mockGame,
-        //         mockContext,
-        //         selectScreen.layoutManager,
-        //     );
-        // });
 
         test("creates sprites for each choice", () => {
             expect(selectScreen.add.sprite).toHaveBeenCalledTimes(3);

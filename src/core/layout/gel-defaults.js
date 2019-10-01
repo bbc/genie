@@ -230,14 +230,13 @@ export const config = {
         order: 11,
         id: "__achievements",
         channel: buttonsChannel,
-        action: ({ game }) => {
-            const screen = game.state.states[game.state.current];
+        action: ({ screen }) => {
             if (screen.navigation.achievements) {
                 screen.navigation.achievements();
             } else {
                 gmi.achievements.show();
             }
-            screen.layoutManager.getLayouts()[0].buttons.achievements.setIndicator();
+            screen.layouts[0].buttons.achievements.setIndicator();
         },
     },
     restart: {
