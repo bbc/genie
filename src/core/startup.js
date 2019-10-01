@@ -59,7 +59,7 @@ export function startup(settingsConfig = {}, screenConfig) {
         },
     };
 
-    if (qaMode.debugMode) {
+    if (qaMode.debugMode()) {
         phaserConfig.physics = {
             default: "arcade",
             arcade: {

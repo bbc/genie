@@ -187,7 +187,7 @@ describe("Startup", () => {
         });
 
         test("additional debugging config is passed if url parameter is set", () => {
-            qaMode.debugMode = true;
+            qaMode.debugMode = jest.fn().mockImplementation(() => true);
 
             startup({}, {});
             const actualConfig = Phaser.Game.mock.calls[0][0];
@@ -204,7 +204,7 @@ describe("Startup", () => {
         });
 
         test("additional debugging config is not passed if url parameter is not set", () => {
-            qaMode.debugMode = false;
+            qaMode.debugMode = jest.fn().mockImplementation(() => false);
             startup({}, {});
             const actualConfig = Phaser.Game.mock.calls[0][0];
             expect(actualConfig).toEqual(
