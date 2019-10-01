@@ -22,7 +22,7 @@ class Indicator extends Phaser.GameObjects.Sprite {
     resize() {
         this.position.x = this.parent.width / 2;
         this.position.y = this.parent.height / -2;
-        this.animations.sprite.loadTexture(assetPath({ key: "notification", isMobile: this.parent._isMobile }));
+        this.setTexture(assetPath({ key: "notification", isMobile: this.parent._isMobile }));
     }
 }
 
@@ -37,12 +37,12 @@ export class GelButton extends Phaser.GameObjects.Sprite {
         this._id = config.key;
         this._isMobile = metrics.isMobile;
         this.positionOverride = config.positionOverride;
-        this.setHitArea(metrics);
         this.indicator = noIndicator;
         this.setIndicator();
         this.shiftX = config.shiftX || 0;
         this.shiftY = config.shiftY || 0;
         this.setInteractive({ useHandCursor: true });
+        this.setHitArea(metrics);
         this.setupMouseEvents(config, scene);
     }
 
@@ -60,18 +60,20 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
         const width = this.width + hitPadding;
         const height = this.height + hitPadding;
-        //TODO P3 this needs fixing [NT]
-        //this.hitArea = new Phaser.Rectangle(-width / 2, -height / 2, width, height);
+        if (this.input) {
+            this.input.hitArea = new Phaser.Geom.Rectangle(0, 0, width, height);
+        }
     }
 
     setImage(key) {
         this._id = key;
-        this.animations.sprite.loadTexture(assetPath({ key: this._id, isMobile: this._isMobile }));
+        this.setTexture(assetPath({ key: this._id, isMobile: this._isMobile }));
     }
 
     resize(metrics) {
         this._isMobile = metrics.isMobile;
-        this.animations.sprite.loadTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
+
+        this.setTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);
 
         this.indicator.resize();
@@ -86,7 +88,7 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
 const paths = [[x => x.isMobile, x => "gelMobile." + x.key], [x => !x.isMobile, x => "gelDesktop." + x.key]];
 
-const assetPath = fp.cond(paths);
+export const assetPath = fp.cond(paths);
 
 const publish = (config, data) => () => {
     //TODO P3 re- enable sound [NT]

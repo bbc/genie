@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { GelButton } from "../../../src/core/layout/gel-button";
+import { GelButton, assetPath } from "../../../src/core/layout/gel-button";
 
 describe("Gel Button", () => {
     let mockScene;
@@ -75,6 +75,28 @@ describe("Gel Button", () => {
             expect(gelButton.on).toHaveBeenCalledWith("pointerup", expect.any(Function));
             expect(gelButton.on).toHaveBeenCalledWith("pointerout", expect.any(Function));
             expect(gelButton.on).toHaveBeenCalledWith("pointerover", expect.any(Function));
+        });
+        test("sets the button hit area", () => {
+            GelButton.prototype.setHitArea = jest.fn();
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.setHitArea).toHaveBeenCalledWith(mockMetrics);
+        });
+    });
+
+    describe("Resize function", () => {
+        test("sets correct texture", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.setTexture = jest.fn();
+            gelButton.resize(mockMetrics);
+            expect(gelButton.setTexture).toHaveBeenCalledWith(
+                assetPath({ key: gelButton._id, isMobile: gelButton._isMobile }),
+            );
+        });
+        test("sets the button hit area", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.setHitArea = jest.fn();
+            gelButton.resize(mockMetrics);
+            expect(gelButton.setHitArea).toHaveBeenCalledWith(mockMetrics);
         });
     });
 });
