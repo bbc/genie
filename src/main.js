@@ -35,7 +35,12 @@ signal.bus.subscribe({
     },
 });
 
-const navigationConfig = {
+//TODO P3
+//if (parseUrlParams(window.location.search).sanityCheck === true) {
+//    return phaserTestHarnessConfig(goToScreen);
+//}
+
+const screenConfig = {
     home: {
         scene: Home,
         routes: {
@@ -77,4 +82,4 @@ const navigationConfig = {
     },
 };
 
-startup(settingsConfig, navigationConfig);
+startup(settingsConfig, screenConfig);
