@@ -18,7 +18,9 @@ describe("Layout", () => {
     const sixGelButtons = ["achievements", "exit", "howToPlay", "play", "audio", "settings"];
 
     let mockGmi;
-    let mockGame;
+    let mockRoot;
+    let mockJson;
+    let mockScene;
     let mockMetrics;
     let mockInputUpAdd;
     let mockGelGroup;
@@ -34,11 +36,30 @@ describe("Layout", () => {
         };
         createMockGmi(mockGmi);
 
-        mockGame = {
-            mock: "game",
-            cache: { getJSON: jest.fn().mockReturnValue({ theme: { test: {} } }) },
-            state: { current: "test" },
+        mockRoot = {
+            add: jest.fn(),
+            destroy: jest.fn(),
         };
+
+        mockJson = {
+            theme: {
+                mockSceneKey: { "button-overrides": {} },
+            },
+        };
+
+        mockScene = {
+            cache: {
+                json: {
+                    get: () => {
+                        return mockJson;
+                    },
+                },
+            },
+            scene: {
+                key: "mockSceneKey",
+            },
+        };
+
         mockMetrics = {
             horizontals: jest.fn(),
             safeHorizontals: jest.fn(),
@@ -67,44 +88,39 @@ describe("Layout", () => {
 
     describe("Creation", () => {
         test("adds the correct number of GEL buttons for a given config", () => {
-            const layout1 = Layout.create(mockGame, mockMetrics, ["achievements"]);
+            const layout1 = Layout.create(mockScene, mockMetrics, ["achievements"], mockRoot);
             expect(Object.keys(layout1.buttons).length).toBe(1);
 
-            const layout2 = Layout.create(mockGame, mockMetrics, ["play", "audio", "settings"]);
+            const layout2 = Layout.create(mockScene, mockMetrics, ["play", "audio", "settings"], mockRoot);
             expect(Object.keys(layout2.buttons).length).toBe(3);
 
-            const layout3 = Layout.create(mockGame, mockMetrics, sixGelButtons);
+            const layout3 = Layout.create(mockScene, mockMetrics, sixGelButtons, mockRoot);
             expect(Object.keys(layout3.buttons).length).toBe(6);
         });
 
         test("skips the creation of the mute button when gmi.shouldDisplayMuteButton is false", () => {
             mockGmi.shouldDisplayMuteButton = false;
-            const layout = Layout.create(mockGame, mockMetrics, sixGelButtons);
+            const layout = Layout.create(mockScene, mockMetrics, sixGelButtons, mockRoot);
             expect(layout.buttons.audio).not.toBeDefined();
         });
 
         test("skips the creation of the exit button when gmi.shouldShowExitButton is false", () => {
             mockGmi.shouldShowExitButton = false;
-            const layout = Layout.create(mockGame, mockMetrics, sixGelButtons);
+            const layout = Layout.create(mockScene, mockMetrics, sixGelButtons, mockRoot);
             expect(layout.buttons.exit).not.toBeDefined();
-        });
-
-        test("creates a new Phaser group for the GEL buttons", () => {
-            Layout.create(mockGame, mockMetrics, sixGelButtons);
-            expect(global.Phaser.Group).toHaveBeenCalledWith(mockGame, mockGame.world, undefined);
         });
 
         test("makes a new group for each group layout", () => {
             const getExpectedParams = callNumber => [
-                mockGame,
-                mockPhaserGroup,
+                mockScene,
+                mockRoot,
                 groupLayouts[callNumber].vPos,
                 groupLayouts[callNumber].hPos,
                 mockMetrics,
                 groupLayouts[callNumber].safe,
                 groupLayouts[callNumber].arrangeV,
             ];
-            Layout.create(mockGame, mockMetrics, sixGelButtons);
+            Layout.create(mockScene, mockMetrics, sixGelButtons, mockRoot);
             expect(GelGroup).toHaveBeenCalledTimes(groupLayouts.length);
             GelGroup.mock.calls.forEach((call, index) => {
                 expect(GelGroup.mock.calls[index]).toEqual(getExpectedParams(index));
@@ -143,30 +159,30 @@ describe("Layout", () => {
                 "howToPlay",
             ];
 
-            const layout = Layout.create(mockGame, mockMetrics, rndOrder);
+            const layout = Layout.create(mockScene, mockMetrics, rndOrder, mockRoot);
             expect(Object.keys(layout.buttons)).toEqual(tabOrder);
         });
 
         test("resets the groups after they have been added to the layout", () => {
-            Layout.create(mockGame, mockMetrics, []);
+            Layout.create(mockScene, mockMetrics, [], mockRoot);
             expect(mockGelGroup.reset).toHaveBeenCalledTimes(11);
             expect(mockGelGroup.reset).toHaveBeenCalledWith(mockMetrics);
         });
 
         test("subscribes to the scaler sizeChange signal", () => {
-            const layout = Layout.create(mockGame, mockMetrics, ["play"]);
+            const layout = Layout.create(mockScene, mockMetrics, ["play"], mockRoot);
             expect(onScaleChange.add).toHaveBeenCalledWith(layout.resize);
         });
 
         test("creates the settings icons", () => {
-            Layout.create(mockGame, mockMetrics, ["play"]);
+            Layout.create(mockScene, mockMetrics, ["play"], mockRoot);
             expect(settingsIcons.create).toHaveBeenCalledWith(mockGelGroup, ["play"]);
         });
     });
 
     describe("addToGroup Method", () => {
         test("adds items to the correct group", () => {
-            const layout = Layout.create(mockGame, mockMetrics, []);
+            const layout = Layout.create(mockScene, mockMetrics, [], mockRoot);
             const testElement = { mock: "element" };
 
             layout.addToGroup("middleRight", testElement, 1);
@@ -176,7 +192,7 @@ describe("Layout", () => {
 
     describe("buttons property", () => {
         test("returns the buttons", () => {
-            const layout = Layout.create(mockGame, mockMetrics, ["achievements", "exit", "settings"]);
+            const layout = Layout.create(mockScene, mockMetrics, ["achievements", "exit", "settings"], mockRoot);
             expect(layout.buttons.achievements).toBeDefined();
             expect(layout.buttons.exit).toBeDefined();
             expect(layout.buttons.settings).toBeDefined();
@@ -185,7 +201,7 @@ describe("Layout", () => {
 
     describe("destroy method", () => {
         beforeEach(() => {
-            const layout = Layout.create(mockGame, mockMetrics, ["achievements", "exit", "settings"]);
+            const layout = Layout.create(mockScene, mockMetrics, ["achievements", "exit", "settings"], mockRoot);
             layout.destroy();
         });
 
@@ -194,21 +210,21 @@ describe("Layout", () => {
             expect(settingsIconsUnsubscribeSpy).toHaveBeenCalled();
         });
 
-        test("destroys the group", () => {
-            expect(mockPhaserGroup.destroy).toHaveBeenCalled();
+        test("calls destroy on the root", () => {
+            expect(mockRoot.destroy).toHaveBeenCalled();
         });
     });
 
     describe("root property", () => {
-        test("returns the group", () => {
-            const layout = Layout.create(mockGame, mockMetrics, ["achievements", "exit", "settings"]);
-            expect(layout.root).toBe(mockPhaserGroup);
+        test("returns the root", () => {
+            const layout = Layout.create(mockScene, mockMetrics, ["achievements", "exit", "settings"], mockRoot);
+            expect(layout.root).toBe(mockRoot);
         });
     });
 
     describe("removeSignals method", () => {
         test("removes all signals on this Layout instance", () => {
-            const layout = Layout.create(mockGame, mockMetrics, ["play"]);
+            const layout = Layout.create(mockScene, mockMetrics, ["play"], mockRoot);
             layout.removeSignals();
             expect(mockSignalUnsubscribe).toHaveBeenCalled();
             expect(settingsIconsUnsubscribeSpy).toHaveBeenCalled();
@@ -217,7 +233,7 @@ describe("Layout", () => {
 
     describe("setAction Method", () => {
         test("sets button callback", () => {
-            const layout = Layout.create(mockGame, mockMetrics, ["achievements", "exit", "settings"]);
+            const layout = Layout.create(mockScene, mockMetrics, ["achievements", "exit", "settings"], mockRoot);
             const buttonCallBack = "testAction";
             layout.setAction("exit", buttonCallBack);
             expect(mockInputUpAdd.mock.calls[0][0]).toBe(buttonCallBack);
@@ -227,14 +243,8 @@ describe("Layout", () => {
 
     describe("button overrides", () => {
         test("merges overrides to button config", () => {
-            const mockConfig = {
-                theme: {
-                    test: { "button-overrides": { play: { shiftX: 99, shiftY: 88, group: "topRight" } } },
-                },
-            };
-            mockGame.cache.getJSON = jest.fn().mockReturnValue(mockConfig);
-
-            const layout = Layout.create(mockGame, mockMetrics, ["play"]);
+            mockJson.theme.mockSceneKey["button-overrides"] = { play: { shiftX: 99, shiftY: 88, group: "topRight" } };
+            const layout = Layout.create(mockScene, mockMetrics, ["play"], mockRoot);
 
             expect(layout.buttons.play.buttonName.shiftX).toBe(99);
             expect(layout.buttons.play.buttonName.shiftY).toBe(88);

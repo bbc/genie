@@ -40,8 +40,6 @@ module.exports = {
         "./test/components/test-harness/layout-harness",
         "./test/core/accessibility",
         "./test/core/debug",
-        "./test/core/layout/layout",
-        "./test/core/layout-manager",
         "./test/core/screen",
         "./test/core/startup",
     ],
