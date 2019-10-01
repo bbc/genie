@@ -27,6 +27,7 @@ describe("Startup", () => {
     beforeEach(() => {
         mockGmi = {
             gmi: jest.fn(),
+            embedVars: jest.fn(),
             setGmi: jest.fn(),
             startStatsTracking: jest.fn(),
             gameContainerId: "some-id",
@@ -53,17 +54,17 @@ describe("Startup", () => {
 
     test("instantiates the GMI with correct params", () => {
         const fakeSettings = { settings: "some settings" };
-        startup(fakeSettings);
+        startup(fakeSettings, {});
         expect(gmiModule.setGmi).toHaveBeenCalledWith(fakeSettings, global.window);
     });
 
     test("injects custom styles to the game container element", () => {
-        startup();
+        startup({}, {});
         expect(styles.addCustomStyles).toHaveBeenCalled();
     });
 
     test("creates a new Phaser game with correct config", () => {
-        startup();
+        startup({}, {});
 
         const expectedConfig = {
             width: 1400,
@@ -93,7 +94,7 @@ describe("Startup", () => {
         const mockSilkBrowser = { name: "Amazon Silk", isSilk: true, version: "1.1.1" };
         getBrowser.mockImplementation(() => mockSilkBrowser);
 
-        startup();
+        startup({}, {});
         const actualConfig = Phaser.Game.mock.calls[0][0];
         expect(actualConfig.transparent).toBe(true);
     });
@@ -101,7 +102,7 @@ describe("Startup", () => {
     test("sets renderer to canvas when browser returns forceCanvas", () => {
         const mockSafari9 = { name: "Safari", forceCanvas: true };
         getBrowser.mockImplementation(() => mockSafari9);
-        startup();
+        startup({}, {});
         const actualConfig = Phaser.Game.mock.calls[0][0];
         expect(actualConfig.renderer).toBe(1);
     });
@@ -113,12 +114,12 @@ describe("Startup", () => {
 
     describe("Hook errors", () => {
         test("adds an event listener to listen for errors", () => {
-            startup();
+            startup({}, {});
             expect(global.window.addEventListener.mock.calls[0][0]).toBe("error");
         });
 
         test("finds the container div to display errors", () => {
-            startup();
+            startup({}, {});
             expect(global.document.getElementById).toHaveBeenCalledWith("some-id");
         });
 
@@ -136,7 +137,7 @@ describe("Startup", () => {
                     domEle.name = tagName;
                     return domEle;
                 });
-                startup();
+                startup({}, {});
                 const errorEvent = { error: { message: "There has been an error" } };
                 const errorThrown = global.window.addEventListener.mock.calls[0][1];
                 errorThrown(errorEvent);
@@ -173,10 +174,6 @@ describe("Startup", () => {
             jest.spyOn(Navigation, "create").mockImplementation(() => {});
             jest.spyOn(qaMode, "create").mockImplementation(() => {});
             jest.spyOn(a11y, "setup").mockImplementation(() => {});
-
-            startup({}, "NavConfig");
-            const game = Phaser.Game.mock.calls[0][0];
-            game.state._onStarted();
         });
 
         afterEach(() => {
@@ -184,25 +181,46 @@ describe("Startup", () => {
             delete global.window.__qaMode;
         });
 
-        test("creates the layoutManager", () => {
-            expect(LayoutManager.create).toHaveBeenCalledWith(mockGame);
-        });
-
-        test("creates the game navigation", () => {
-            expect(Navigation.create.mock.calls[0]).toEqual([
-                mockGame.state,
-                expect.any(Object),
-                "LayoutManager",
-                "NavConfig",
-            ]);
-        });
-
         test("creates qaMode if the qaMode url parameter is set to true", () => {
+            startup({}, {});
             expect(qaMode.create).toHaveBeenCalled();
         });
 
-        test("sets up the accessibility manager", () => {
-            expect(a11y.setup).toHaveBeenCalledWith(mockGame.canvas.parentElement);
+        test("additional debugging config is passed if url parameter is set", () => {
+            qaMode.debugMode = true;
+
+            startup({}, {});
+            const actualConfig = Phaser.Game.mock.calls[0][0];
+            expect(actualConfig).toEqual(
+                expect.objectContaining({
+                    physics: {
+                        default: "arcade",
+                        arcade: {
+                            debug: true,
+                        },
+                    },
+                }),
+            );
         });
+
+        test("additional debugging config is not passed if url parameter is not set", () => {
+            qaMode.debugMode = false;
+            startup({}, {});
+            const actualConfig = Phaser.Game.mock.calls[0][0];
+            expect(actualConfig).toEqual(
+                expect.not.objectContaining({
+                    physics: {
+                        default: "arcade",
+                        arcade: {
+                            debug: true,
+                        },
+                    },
+                }),
+            );
+        });
+        // P3 Accessibility
+        // test("sets up the accessibility manager", () => {
+        //     expect(a11y.setup).toHaveBeenCalledWith(mockGame.canvas.parentElement);
+        // });
     });
 });
