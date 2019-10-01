@@ -82,4 +82,4 @@ const screenConfig = {
     },
 };
 
-startup(settingsConfig, screenConfig);
+startup(screenConfig, settingsConfig);

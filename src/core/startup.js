@@ -20,9 +20,9 @@ export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scen
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
- * @param {Object=} navigationConfig -
+ * @param {Object=} screenConfig -
  */
-export function startup(settingsConfig = {}, screenConfig) {
+export function startup(screenConfig, settingsConfig = {}) {
     setGmi(settingsConfig, window);
     hookErrors(gmi.gameContainerId);
 
