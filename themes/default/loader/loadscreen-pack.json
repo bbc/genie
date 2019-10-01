@@ -1,5 +1,5 @@
 {
-    "loadscreen": [
+    "loader": [
         {
             "type": "image",
             "key": "loadscreenTitle",

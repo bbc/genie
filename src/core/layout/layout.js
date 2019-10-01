@@ -64,8 +64,7 @@ export function create(scene, metrics, buttonIds, root) {
         tabSort(buttonIds).map(name => groups[config[name].group].addButton(config[name])),
     );
 
-    //TODO P3 re enable once signal bus works [NT]
-    //const iconSignals = settingsIcons.create(groups.topRight, buttonIds);
+    const iconSignals = settingsIcons.create(groups.topRight, buttonIds);
 
     /**
      * Attach a callback to the onInputUp event of a given Gel button
@@ -86,8 +85,7 @@ export function create(scene, metrics, buttonIds, root) {
     };
     resize(metrics);
 
-    //TODO P3 re enabled once signal bus is working [NT]
-    //const signal = onScaleChange.add(resize);
+    const signal = onScaleChange.add(resize);
 
     const removeSignals = () => {
         signal.unsubscribe();

@@ -42,8 +42,8 @@ export class Loader extends Screen {
         this.load.addPack(masterPack);
         gamePacksToLoad.forEach(pack => this.load.pack(pack));
 
-        this.add.image(0, 0, "loadscreen.background");
-        this.add.image(0, -150, "loadscreen.title");
+        this.add.image(0, 0, "loader.background");
+        this.add.image(0, -150, "loader.title");
         this.createLoadBar();
         this.createBrandLogo();
 
@@ -51,8 +51,8 @@ export class Loader extends Screen {
     }
 
     createLoadBar() {
-        this.add.image(0, 0, "loadscreen.loadbarBackground");
-        this.#loadbar = this.add.image(0, 0, "loadscreen.loadbar");
+        this.add.image(0, 0, "loader.loadbarBackground");
+        this.#loadbar = this.add.image(0, 0, "loader.loadbar");
         this.updateLoadBar(0);
     }
 
@@ -69,12 +69,12 @@ export class Loader extends Screen {
         const metrics = Scaler.getMetrics();
         const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
         const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
-        this.brandLogo = this.add.image(x, y, "loadscreen.brandLogo");
+        this.brandLogo = this.add.image(x, y, "loader.brandLogo");
         this.brandLogo.setOrigin(1, 1);
     }
 
     create() {
-        //GameSound.setButtonClickSound(this.game, "loadscreen.buttonClick");
+        //GameSound.setButtonClickSound(this.game, "loader.buttonClick");
         if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
             gmi.achievements.init(this.cache.json.get("achievements-data"));
         }

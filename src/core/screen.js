@@ -6,6 +6,7 @@
 import _ from "../../lib/lodash/lodash.js";
 
 import { gmi } from "../core/gmi/gmi.js";
+import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import * as signal from "../core/signal-bus.js";
 import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
@@ -42,11 +43,6 @@ export class Screen extends Phaser.Scene {
 
     get transientData() {
         return this.#data.transient;
-    }
-
-    //TODO P3 needed? [NT]
-    getAsset(name) {
-        return this.game.state.current + "." + name;
     }
 
     init(data) {
@@ -110,8 +106,17 @@ export class Screen extends Phaser.Scene {
         );
     };
 
+    #removeAll = () => {
+        if (this.#layouts.length > 0) {
+            signal.bus.removeChannel(buttonsChannel);
+        }
+        this.#layouts.forEach(layout => layout.destroy());
+        this.#layouts = [];
+    };
+
     #navigate = route => {
         //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable here [NT]
+        this.#removeAll();
         this.scene.start(route, this.#data);
     };
 

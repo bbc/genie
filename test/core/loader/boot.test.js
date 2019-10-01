@@ -73,21 +73,13 @@ describe("Boot", () => {
             bootScreen.preload();
 
             const expectedData = {
-                navigation: {
-                    boot: {
-                        routes: {
-                            next: "loader",
-                        },
-                    },
-                    loader: {
-                        routes: {
-                            next: "home",
-                        },
-                    },
-                },
                 popupScreens: [],
+                transient: {},
+                navigation: {
+                    boot: { routes: { next: "loader" } },
+                    loader: { routes: { next: "home" } },
+                },
             };
-
             expect(bootScreen.setData).toHaveBeenCalledWith(expectedData);
         });
 

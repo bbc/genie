@@ -16,6 +16,8 @@ const _onSizeChangeSignalCreate = (channel, name) => ({
     add: callback => signal.bus.subscribe({ channel, name, callback }),
 });
 const _onSizeChange = _onSizeChangeSignalCreate("scaler", "sizeChange");
+const px = val => Math.floor(val) + "px";
+
 export const onScaleChange = { add: _onSizeChange.add };
 
 export let getMetrics;
@@ -35,9 +37,34 @@ export function init(stageHeight, game) {
     );
 
     const setSize = metrics => {
-        //TODO P3 part of re-enabling the scaler may need this to work again [NT]
-        //game.scale.setGameSize(metrics.stageWidth, metrics.stageHeight);
-        //_onSizeChange.dispatch(metrics);
+        /*
+            TODO P3 Scaler notes [NT]
+            Working version below sets the style of the canvas to maintain 4/3 section of game.
+            To do this we only need to set the canvas height (width will map 1:1 if left alone)
+            and the margins (to maintain center)
+            Possibly worth checking if this is optimal
+
+            * game.scale.resize - didn't end up using this.
+              It sets the canvas width and height attributes.
+              Probably not what we want?
+            * Docs sometimes say use the NO_SCALE method but they lie!!! the method "NONE" is what should be used.
+
+         */
+
+        const under4by3 = game.scale.parent.offsetWidth / game.scale.parent.offsetHeight < 4 / 3;
+
+        const viewHeight = under4by3 ? game.scale.parent.offsetWidth * (3 / 4) : game.scale.parent.offsetHeight;
+
+        game.canvas.style.height = px(viewHeight);
+
+        const bounds = game.canvas.getBoundingClientRect();
+        const marginLeft = (game.scale.parent.offsetWidth - bounds.width) / 2;
+        const marginTop = (game.scale.parent.offsetHeight - bounds.height) / 2;
+
+        game.canvas.style.marginLeft = px(marginLeft);
+        game.canvas.style.marginTop = px(marginTop);
+        game.scale.refresh();
+        _onSizeChange.dispatch(metrics);
     };
 
     const resize = fp.flow(

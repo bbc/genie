@@ -59,7 +59,6 @@ describe("Select Screen", () => {
         selectScreen.navigation = { next: jest.fn() };
         selectScreen.add = {
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
-            button: jest.fn(),
             sprite: jest.fn().mockImplementation((x, y, assetName) => {
                 if (assetName === "test-select.character1") {
                     return characterSprites[0];
