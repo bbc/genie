@@ -20,9 +20,9 @@ export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scen
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
- * @param {Object=} navigationConfig -
+ * @param {Object=} screenConfig -
  */
-export function startup(settingsConfig = {}, screenConfig) {
+export function startup(screenConfig, settingsConfig = {}) {
     setGmi(settingsConfig, window);
     hookErrors(gmi.gameContainerId);
 
@@ -56,13 +56,25 @@ export function startup(settingsConfig = {}, screenConfig) {
             ],
         },
     };
+
+    if (qaMode.debugMode()) {
+        phaserConfig.physics = {
+            default: "arcade",
+            arcade: {
+                debug: true,
+            },
+        };
+    }
+
     // Keep the console tidy:
     window.PhaserGlobal = window.PhaserGlobal || {};
     window.PhaserGlobal.hideBanner = true;
 
     addCustomStyles();
 
-    new Phaser.Game(phaserConfig);
+    const game = new Phaser.Game(phaserConfig);
+
+    qaMode.create(window, game);
 }
 
 function getContainerDiv() {
