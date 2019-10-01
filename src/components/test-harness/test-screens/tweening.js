@@ -7,6 +7,7 @@ import { Screen } from "../../../core/screen.js";
 import * as debug from "../../../core/debug.js";
 import * as signal from "../../../core/signal-bus.js";
 
+// TODO P3 Remove references to debug
 export class TweeningTest extends Screen {
     constructor() {
         super();

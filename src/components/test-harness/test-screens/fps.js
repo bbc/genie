@@ -6,6 +6,7 @@
 import { Screen } from "../../../core/screen.js";
 import * as signal from "../../../core/signal-bus.js";
 
+// TODO P3 Remove references to debug.
 export class FpsTest extends Screen {
     constructor() {
         super();

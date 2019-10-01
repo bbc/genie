@@ -40,14 +40,6 @@ export function create(game) {
     }
     const customAccessibleButtons = game.accessibleButtons;
 
-    //TODO P3 next line part of debug draw
-    //const debug = game.add.group(undefined, "debug", true);
-
-    //TODO P3 Debug sprite will rely on how P3 does debug draws
-    //if (game.debug.sprite) {
-    //    debug.addChild(game.debug.sprite);
-    //}
-
     const getLayouts = () => _layouts;
     const getAccessibleGameButtons = () => customAccessibleButtons;
 

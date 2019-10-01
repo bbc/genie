@@ -8,7 +8,7 @@ import * as debug from "../../../core/debug.js";
 import * as signal from "../../../core/signal-bus.js";
 
 let hasCollided;
-
+// TODO P3 remove reference to debug
 export class CollisionTest extends Screen {
     constructor() {
         super();
