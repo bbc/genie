@@ -11,7 +11,6 @@ describe("QAMode", () => {
     const goToScreen = {};
     const qaModeWindow = {
         testHarnessLayoutDisplayed: false,
-        goToScreen: {},
         game: {},
     };
 
