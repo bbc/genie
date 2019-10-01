@@ -10,8 +10,6 @@ import { createMockGame } from "../mock/phaser-game.js";
 import { startup } from "../../src/core/startup.js";
 import { getBrowser } from "../../src/core/browser.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
-import * as LayoutManager from "../../src/core/layout-manager.js";
-import * as Navigation from "../../src/core/navigation.js";
 import * as styles from "../../src/core/custom-styles.js";
 import * as qaMode from "../../src/core/qa/qa-mode.js";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
@@ -170,10 +168,9 @@ describe("Startup", () => {
 
     describe("onStarted Method", () => {
         beforeEach(() => {
-            jest.spyOn(LayoutManager, "create").mockImplementation(() => "LayoutManager");
-            jest.spyOn(Navigation, "create").mockImplementation(() => {});
             jest.spyOn(qaMode, "create").mockImplementation(() => {});
-            jest.spyOn(a11y, "setup").mockImplementation(() => {});
+            // P3 TODO Accessibility
+            // jest.spyOn(a11y, "setup").mockImplementation(() => {});
         });
 
         afterEach(() => {
@@ -218,7 +215,7 @@ describe("Startup", () => {
                 }),
             );
         });
-        // P3 Accessibility
+        // TODO P3 Accessibility
         // test("sets up the accessibility manager", () => {
         //     expect(a11y.setup).toHaveBeenCalledWith(mockGame.canvas.parentElement);
         // });
