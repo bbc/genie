@@ -61,7 +61,7 @@ describe("Startup", () => {
     });
 
     test("injects custom styles to the game container element", () => {
-        startup({}, { settings: "some settings" });
+        startup({});
         expect(styles.addCustomStyles).toHaveBeenCalled();
     });
 
@@ -102,7 +102,7 @@ describe("Startup", () => {
 
     describe("Phaser Game Config", () => {
         test("creates a new Phaser game with correct config", () => {
-            startup({}, { settings: "some settings" });
+            startup({});
 
             const expectedConfig = {
                 width: 1400,
@@ -134,7 +134,7 @@ describe("Startup", () => {
             const mockSilkBrowser = { name: "Amazon Silk", isSilk: true, version: "1.1.1" };
             getBrowser.mockImplementation(() => mockSilkBrowser);
 
-            startup({}, { settings: "some settings" });
+            startup({});
             const actualConfig = Phaser.Game.mock.calls[0][0];
             expect(actualConfig.transparent).toBe(true);
         });
@@ -142,14 +142,14 @@ describe("Startup", () => {
         test("sets renderer to canvas when browser returns forceCanvas", () => {
             const mockSafari9 = { name: "Safari", forceCanvas: true };
             getBrowser.mockImplementation(() => mockSafari9);
-            startup({}, { settings: "some settings" });
+            startup({});
             const actualConfig = Phaser.Game.mock.calls[0][0];
             expect(actualConfig.renderer).toBe(1);
         });
 
         test("throws an error if the game container element cannot be found", () => {
             document.getElementById.mockImplementation(() => false);
-            const startupNoContainer = () => startup({}, { settings: "some settings" });
+            const startupNoContainer = () => startup({});
             expect(startupNoContainer).toThrowError(`Container element "#some-id" not found`); // eslint-disable-line quotes
         });
 
@@ -180,12 +180,12 @@ describe("Startup", () => {
 
     describe("Hook errors", () => {
         test("adds an event listener to listen for errors", () => {
-            startup({}, { settings: "some settings" });
+            startup({});
             expect(global.window.addEventListener.mock.calls[0][0]).toBe("error");
         });
 
         test("finds the container div to display errors", () => {
-            startup({}, { settings: "some settings" });
+            startup({});
             expect(global.document.getElementById).toHaveBeenCalledWith("some-id");
         });
 
@@ -203,7 +203,7 @@ describe("Startup", () => {
                     domEle.name = tagName;
                     return domEle;
                 });
-                startup({}, { settings: "some settings" });
+                startup({});
                 const errorEvent = { error: { message: "There has been an error" } };
                 const errorThrown = global.window.addEventListener.mock.calls[0][1];
                 errorThrown(errorEvent);
