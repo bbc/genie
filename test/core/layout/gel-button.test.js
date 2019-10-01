@@ -71,7 +71,6 @@ describe("Gel Button", () => {
         test("sets up mouse events", () => {
             GelButton.prototype.on = jest.fn();
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.on).toHaveBeenCalledWith("pointerdown", expect.any(Function));
             expect(gelButton.on).toHaveBeenCalledWith("pointerup", expect.any(Function));
             expect(gelButton.on).toHaveBeenCalledWith("pointerout", expect.any(Function));
             expect(gelButton.on).toHaveBeenCalledWith("pointerover", expect.any(Function));
