@@ -42,7 +42,7 @@ signal.bus.subscribe({
 //    return phaserTestHarnessConfig(goToScreen);
 //}
 
-const navigationConfig = {
+const screenConfig = {
     home: {
         scene: Home,
         routes: {
@@ -84,4 +84,4 @@ const navigationConfig = {
     },
 };
 
-startup(settingsConfig, navigationConfig);
+startup(settingsConfig, screenConfig);
