@@ -152,6 +152,30 @@ describe("Startup", () => {
             const startupNoContainer = () => startup({ settings: "some settings" }, []);
             expect(startupNoContainer).toThrowError(`Container element "#some-id" not found`); // eslint-disable-line quotes
         });
+
+        describe("Debug Mode", () => {
+            const expectedDebugConfig = {
+                physics: {
+                    default: "arcade",
+                    arcade: { debug: true },
+                },
+            };
+
+            test("additional debugging config is passed if url parameter is set", () => {
+                qaMode.debugMode = jest.fn().mockImplementation(() => true);
+
+                startup({ settings: "some settings" }, []);
+                const actualConfig = Phaser.Game.mock.calls[0][0];
+                expect(actualConfig).toEqual(expect.objectContaining(expectedDebugConfig));
+            });
+
+            test("additional debugging config is not passed if url parameter is not set", () => {
+                qaMode.debugMode = jest.fn().mockImplementation(() => false);
+                startup({ settings: "some settings" }, []);
+                const actualConfig = Phaser.Game.mock.calls[0][0];
+                expect(actualConfig).toEqual(expect.not.objectContaining(expectedDebugConfig));
+            });
+        });
     });
 
     describe("Hook errors", () => {
@@ -207,32 +231,6 @@ describe("Startup", () => {
                 const expectedError = "Something isn't working:\n\nThere has been an error\n\n";
                 expect(mockPreTag.innerText).toBe(expectedError);
             });
-        });
-    });
-
-    describe("onStarted Method", () => {
-        const expectedDebugConfig = {
-            physics: {
-                default: "arcade",
-                arcade: {
-                    debug: true,
-                },
-            },
-        };
-
-        test("additional debugging config is passed if url parameter is set", () => {
-            qaMode.debugMode = jest.fn().mockImplementation(() => true);
-
-            startup({}, {});
-            const actualConfig = Phaser.Game.mock.calls[0][0];
-            expect(actualConfig).toEqual(expect.objectContaining(expectedDebugConfig));
-        });
-
-        test("additional debugging config is not passed if url parameter is not set", () => {
-            qaMode.debugMode = jest.fn().mockImplementation(() => false);
-            startup({}, {});
-            const actualConfig = Phaser.Game.mock.calls[0][0];
-            expect(actualConfig).toEqual(expect.not.objectContaining(expectedDebugConfig));
         });
     });
 });
