@@ -100,7 +100,7 @@
                 }
             }
         },
-        "how-to-play": {
+        "overlay-how-to-play": {
             "panels": ["panel1", "panel2", "panel3"],
             "panelText": [
                 { "accessibilityText": "Instructions on playing the game" },

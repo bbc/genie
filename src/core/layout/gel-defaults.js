@@ -282,8 +282,8 @@ export const config = {
         order: 14,
         id: "__how-to-play",
         channel: buttonsChannel,
-        action: ({ game }) => {
-            howToPlay.create({ game });
+        action: ({ screen }) => {
+            screen.addOverlay("overlay-how-to-play");
             gmi.sendStatsEvent("howtoplay", "click");
         },
     },

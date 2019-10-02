@@ -22,6 +22,7 @@ import * as Layout from "./layout/layout.js";
 export class Screen extends Phaser.Scene {
     #data;
     #layouts = [];
+    #overlayKey = undefined;
 
     constructor(sceneConfig) {
         super(sceneConfig);
@@ -30,6 +31,7 @@ export class Screen extends Phaser.Scene {
     get context() {
         return {
             config: this.#data.config,
+            parent: this.#data.parent,
             popupScreens: this.#data.popupScreens,
             transientData: this.#data.transient,
         };
@@ -80,26 +82,6 @@ export class Screen extends Phaser.Scene {
         this.#data.config = newConfig;
     }
 
-    overlaySetup() {
-        signal.bus.subscribe({
-            channel: "overlays",
-            name: "overlay-closed",
-            callback: this.onOverlayClosed.bind(this),
-        });
-    }
-
-    onOverlayClosed(data) {
-        a11y.clearElementsFromDom();
-        a11y.clearAccessibleButtons(this);
-        this.context.popupScreens.pop();
-        a11y.appendElementsToDom(this);
-        if (data.firePageStat) {
-            gmi.setStatsScreen(this.game.state.current);
-        }
-        signal.bus.removeChannel("overlays");
-        this.overlaySetup();
-    }
-
     #makeNavigation = () => {
         const routes = this.scene.key === "boot" ? { next: "loader" } : this.#data.navigation[this.scene.key].routes;
         this.navigation = fp.mapValues(
@@ -110,17 +92,45 @@ export class Screen extends Phaser.Scene {
         );
     };
 
-    #removeAll = () => {
-        if (this.#layouts.length > 0) {
-            signal.bus.removeChannel(buttonsChannel);
+    addOverlay(key) {
+        if (this.#overlayKey) {
+            console.warn(
+                `Tried to add an overlay on the ${this.scene.key} screen, when this screen already has a ${
+                    this.#overlayKey
+                } overlay.`,
+            );
         }
+        const data = { parent: this, ...this.#data };
+        this.#overlayKey = key;
+        this.scene.run(key, data);
+    }
+
+    removeAll = () => {
         this.#layouts.forEach(layout => layout.destroy());
         this.#layouts = [];
     };
 
+    #removeSelfFromParent = () => {
+        if (this.#data.parent) {
+            this.#data.parent.removeOverlay(this);
+            delete this.#data.parent;
+        }
+    };
+
+    removeOverlay = overlay => {
+        this.#overlayKey = undefined;
+        overlay.removeAll();
+        this.scene.stop(overlay.scene.key);
+        this.#removeSelfFromParent();
+    };
+
     #navigate = route => {
         //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable here [NT]
-        this.#removeAll();
+        if (this.#layouts.length > 0) {
+            signal.bus.removeChannel(buttonsChannel);
+        }
+        this.removeAll();
+        this.#removeSelfFromParent();
         this.scene.start(route, this.#data);
     };
 

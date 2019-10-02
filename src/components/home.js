@@ -17,7 +17,7 @@ export class Home extends Screen {
         this.add.image(0, 0, `${this.scene.key}.background`);
         this.add.image(0, -150, `${this.scene.key}.title`);
 
-        const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
+        const buttons = ["howToPlay", "play", "audio", "settings"];
         this.addLayout(buttons.concat(achievements));
 
         //TODO P3 fix  test harness
