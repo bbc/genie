@@ -112,16 +112,25 @@ export class Screen extends Phaser.Scene {
 
     #removeSelfFromParent = () => {
         if (this.#data.parent) {
-            this.#data.parent.removeOverlay(this);
+            this.#data.parent.#removeOverlay(this, true);
             delete this.#data.parent;
         }
     };
 
-    removeOverlay = overlay => {
+    #removeOverlay = (overlay, recursive = false) => {
         this.#overlayKey = undefined;
         overlay.removeAll();
-        this.scene.stop(overlay.scene.key);
-        this.#removeSelfFromParent();
+        overlay.scene.stop();
+        overlay.scene.setVisible(false);
+        if (recursive) {
+            this.#removeSelfFromParent();
+        }
+    };
+
+    removeOverlay = () => {
+        if (this.#data.parent) {
+            this.#data.parent.#removeOverlay(this);
+        }
     };
 
     #navigate = route => {

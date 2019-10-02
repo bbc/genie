@@ -27,7 +27,7 @@ export class Select extends Screen {
         this.choiceSprites = this.createChoiceSprites(theme.choices);
         this.add.image(0, -170, `${this.scene.key}.title`);
 
-        this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
+        this.addLayout(["audio", "pauseNoReplay", "previous", "next", "continue"]);
 
         // TODO P3 Accessibility
         // this.accessibleElements = accessibleCarouselElements.create(
@@ -108,9 +108,9 @@ export class Select extends Screen {
             name: "pause",
             callback: () => {
                 //stops screenreader from announcing the options when the pause overlay is covering them
-                this.accessibleElements.forEach(element => {
-                    element.setAttribute("aria-hidden", true);
-                });
+                // this.accessibleElements.forEach(element => {
+                //     element.setAttribute("aria-hidden", true);
+                // });
             },
         });
 

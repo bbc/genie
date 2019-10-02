@@ -119,9 +119,10 @@ export const config = {
         order: 6,
         id: "__pause",
         channel: buttonsChannel,
-        action: ({ game }) => {
+        action: ({ screen }) => {
+            //screen.scene.pause();
             gmi.sendStatsEvent("pause", "click");
-            pause.create(false, { game });
+            screen.addOverlay("overlay-pause");
         },
     },
     pauseNoReplay: {
@@ -132,9 +133,10 @@ export const config = {
         order: 6,
         id: "__pause",
         channel: buttonsChannel,
-        action: ({ game }) => {
+        action: ({ screen }) => {
+            //screen.scene.pause();
             gmi.sendStatsEvent("pause", "click");
-            pause.create(true, { game });
+            screen.addOverlay("overlay-pause");
         },
     },
     previous: {
@@ -200,8 +202,10 @@ export const config = {
         order: 8,
         id: "__play",
         channel: "pause-gel-buttons",
-        action: () => {
+        action: ({ screen }) => {
             gmi.sendStatsEvent("play", "click");
+            //screen.context.parent.scene.resume();
+            screen.removeOverlay();
         },
     },
     next: {

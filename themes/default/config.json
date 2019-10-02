@@ -107,6 +107,9 @@
                 { "accessibilityText": "More on how to play" },
                 { "accessibilityText": "Final instructions on playing" }
             ]
+        },
+        "overlay-pause": {
+            
         }
     }
 }
