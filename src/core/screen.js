@@ -24,7 +24,6 @@ const overlayChannel = "gel-overlays";
 export class Screen extends Phaser.Scene {
     #data;
     #layouts = [];
-    #overlayKey = undefined;
 
     constructor(sceneConfig) {
         super(sceneConfig);
@@ -33,7 +32,7 @@ export class Screen extends Phaser.Scene {
     get context() {
         return {
             config: this.#data.config,
-            popupScreens: this.#data.popupScreens,
+            parentScreens: this.#data.parentScreens,
             transientData: this.#data.transient,
         };
     }
@@ -94,65 +93,43 @@ export class Screen extends Phaser.Scene {
 
     #removeOverlay = data => {
         signal.bus.removeChannel(`${buttonsChannel}-${data.overlay.scene.key}`);
-        this.#overlayKey = undefined;
         data.overlay.removeAll();
         data.overlay.scene.stop();
-        if (this.data.removeAll) {
-            signal.bus.publish({
-                channel: overlayChannel,
-                name: this.scene.key,
-                data: { overlay: this, removeAll: true },
-            });
-        }
-        console.log(this.game.scene.getScenes());
-    };
-
-    removeAllOverlays = () => {
-        signal.bus.publish({ channel: overlayChannel, name: this.scene.key, data: { overlay: this, removeAll: true } });
-        signal.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
     };
 
     removeOverlay = () => {
         signal.bus.publish({
             channel: overlayChannel,
             name: this.scene.key,
-            data: { overlay: this, removeAll: false },
+            data: { overlay: this },
         });
         signal.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
     };
 
     addOverlay(key) {
-        if (this.#overlayKey) {
-            console.warn(
-                `Tried to add an overlay on the ${this.scene.key} screen, when this screen already has a ${
-                    this.#overlayKey
-                } overlay.`,
-            );
-            return;
-        }
         signal.bus.subscribe({
             channel: overlayChannel,
             name: key,
             callback: this.#removeOverlay,
         });
-        this.#overlayKey = key;
+        this.#data.parentScreens[this.scene.key] = this;
         this.scene.run(key, this.#data);
         this.scene.bringToTop(key);
-        console.log(this.game.scene.getScenes());
     }
 
     removeAll = () => {
+        signal.bus.removeChannel(`${buttonsChannel}-${this.scene.key}`);
         this.#layouts.forEach(layout => layout.destroy());
         this.#layouts = [];
     };
 
     #navigate = route => {
         this.scene.bringToTop(route);
-        this.removeAllOverlays();
-        signal.bus.removeChannel(`${buttonsChannel}-${this.scene.key}`);
+        Object.keys(this.#data.parentScreens).forEach(key => {
+            this.#data.parentScreens[key].removeAll();
+        });
         this.removeAll();
         this.scene.start(route, this.#data);
-        console.log(this.game.scene.getScenes());
     };
 
     /**
