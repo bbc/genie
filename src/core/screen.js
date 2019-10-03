@@ -15,6 +15,8 @@ import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
 
+const overlayChannel = "gel-overlays";
+
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
  * All the game screens will extend from this class.
@@ -92,7 +94,33 @@ export class Screen extends Phaser.Scene {
         );
     };
 
+    #removeOverlay = data => {
+        this.#overlayKey = undefined;
+        data.overlay.removeAll();
+        data.overlay.scene.stop();
+        if (this.data.removeAll) {
+            signal.bus.publish({
+                channel: overlayChannel,
+                name: this.scene.key,
+                data: { overlay: this, removeAll: true },
+            });
+        }
+    };
+
+    removeAllOverlays = () => {
+        signal.bus.publish({ channel: overlayChannel, name: this.scene.key, data: { overlay: this, removeAll: true } });
+    };
+
+    removeOverlay = () => {
+        signal.bus.publish({
+            channel: overlayChannel,
+            name: this.scene.key,
+            data: { overlay: this, removeAll: false },
+        });
+    };
+
     addOverlay(key) {
+        console.log(this.#overlayKey);
         if (this.#overlayKey) {
             console.warn(
                 `Tried to add an overlay on the ${this.scene.key} screen, when this screen already has a ${
@@ -100,6 +128,11 @@ export class Screen extends Phaser.Scene {
                 } overlay.`,
             );
         }
+        signal.bus.subscribe({
+            channel: overlayChannel,
+            name: key,
+            callback: this.#removeOverlay,
+        });
         const data = { parent: this, ...this.#data };
         this.#overlayKey = key;
         this.scene.run(key, data);
@@ -110,36 +143,13 @@ export class Screen extends Phaser.Scene {
         this.#layouts = [];
     };
 
-    #removeSelfFromParent = () => {
-        if (this.#data.parent) {
-            this.#data.parent.#removeOverlay(this, true);
-            delete this.#data.parent;
-        }
-    };
-
-    #removeOverlay = (overlay, recursive = false) => {
-        this.#overlayKey = undefined;
-        overlay.removeAll();
-        overlay.scene.stop();
-        overlay.scene.setVisible(false);
-        if (recursive) {
-            this.#removeSelfFromParent();
-        }
-    };
-
-    removeOverlay = () => {
-        if (this.#data.parent) {
-            this.#data.parent.#removeOverlay(this);
-        }
-    };
-
     #navigate = route => {
+        this.removeAllOverlays();
         //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable here [NT]
         if (this.#layouts.length > 0) {
             signal.bus.removeChannel(buttonsChannel);
         }
         this.removeAll();
-        this.#removeSelfFromParent();
         this.scene.start(route, this.#data);
     };
 
