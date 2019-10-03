@@ -119,7 +119,6 @@ export class Screen extends Phaser.Scene {
     };
 
     addOverlay(key) {
-        console.log(this.#overlayKey);
         if (this.#overlayKey) {
             console.warn(
                 `Tried to add an overlay on the ${this.scene.key} screen, when this screen already has a ${
@@ -134,6 +133,7 @@ export class Screen extends Phaser.Scene {
         });
         this.#overlayKey = key;
         this.scene.run(key, this.#data);
+        this.scene.bringToTop(key);
     }
 
     removeAll = () => {
@@ -142,6 +142,7 @@ export class Screen extends Phaser.Scene {
     };
 
     #navigate = route => {
+        this.scene.bringToTop(route);
         this.removeAllOverlays();
         //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable here [NT]
         if (this.#layouts.length > 0) {

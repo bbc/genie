@@ -39,7 +39,13 @@ export const config = {
         id: "__home",
         channel: buttonsChannel,
         action: ({ screen }) => {
-            screen.navigation.home();
+            console.log(screen.scene.key);
+            if (!screen.scene.isActive("home")) {
+                screen.navigation.home();
+            } 
+            else {
+                screen.removeOverlay();
+            }
         },
     },
     pauseHome: {

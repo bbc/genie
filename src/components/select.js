@@ -119,7 +119,7 @@ export class Select extends Screen {
             name: "play",
             callback: () => {
                 // makes the screenreader announce the selected option
-                this.accessibleElements[this.currentIndex].setAttribute("aria-hidden", false);
+                // this.accessibleElements[this.currentIndex].setAttribute("aria-hidden", false);
             },
         });
     }
