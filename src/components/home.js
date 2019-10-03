@@ -9,6 +9,7 @@
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
+import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 export class Home extends Screen {
     create() {
@@ -18,6 +19,8 @@ export class Home extends Screen {
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
         this.addLayout(buttons.concat(achievements));
+
+        createTestHarnessDisplay(this);
 
         signal.bus.subscribe({
             channel: buttonsChannel,
