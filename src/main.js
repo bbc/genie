@@ -7,7 +7,7 @@ import { Home } from "./components/home.js";
 import { Results } from "./components/results.js";
 import { Select } from "./components/select.js";
 import { GameTest } from "./components/test-harness/test-screens/game.js";
-import { Pause } from "./components/overlays/pause-test.js";
+import { Pause } from "./components/overlays/pause.js";
 import { settingsChannel } from "./core/settings.js";
 import * as signal from "./core/signal-bus.js";
 import { startup } from "./core/startup.js";

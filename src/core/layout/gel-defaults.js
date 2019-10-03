@@ -3,8 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
-import * as pause from "../../components/overlays/pause.js";
 import { settings, settingsChannel } from "../../core/settings.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import * as signal from "../signal-bus.js";
