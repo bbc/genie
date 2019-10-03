@@ -33,7 +33,6 @@ export class Screen extends Phaser.Scene {
     get context() {
         return {
             config: this.#data.config,
-            parent: this.#data.parent,
             popupScreens: this.#data.popupScreens,
             transientData: this.#data.transient,
         };
@@ -133,9 +132,8 @@ export class Screen extends Phaser.Scene {
             name: key,
             callback: this.#removeOverlay,
         });
-        const data = { parent: this, ...this.#data };
         this.#overlayKey = key;
-        this.scene.run(key, data);
+        this.scene.run(key, this.#data);
     }
 
     removeAll = () => {
