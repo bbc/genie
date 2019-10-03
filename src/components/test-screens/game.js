@@ -6,6 +6,7 @@
 import { gmi } from "../../core/gmi/gmi.js";
 import { Screen } from "../../core/screen.js";
 // import { accessibilify } from "../../../core/accessibility/accessibilify.js";
+import { createTestHarnessDisplay } from "../../core/qa/layout-harness.js";
 
 export class GameTest extends Screen {
     create() {
@@ -17,6 +18,7 @@ export class GameTest extends Screen {
         });
         title.setOrigin(0.5);
         this.addLayout(["pause"]);
+        createTestHarnessDisplay(this);
 
         const buttonKey = `${this.scene.key}.basicButton`;
         const buttonTextStyle = {
