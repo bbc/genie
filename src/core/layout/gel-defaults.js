@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as howToPlay from "../../components/overlays/how-to-play.js";
+
 import * as pause from "../../components/overlays/pause.js";
 import { settings, settingsChannel } from "../../core/settings.js";
 import { gmi } from "../../core/gmi/gmi.js";
@@ -59,8 +59,9 @@ export const config = {
         order: 2,
         id: "__back",
         channel: buttonsChannel,
-        action: () => {
+        action: ({ screen }) => {
             gmi.sendStatsEvent("back", "click");
+            screen.removeOverlay();
         },
     },
     howToPlayBack: {
@@ -70,9 +71,10 @@ export const config = {
         ariaLabel: "Back",
         order: 2,
         id: "__back",
-        channel: "how-to-play-gel-buttons",
+        channel: buttonsChannel,
         action: () => {
             gmi.sendStatsEvent("back", "click");
+            screen.removeOverlay();
         },
     },
     audio: {
@@ -122,7 +124,7 @@ export const config = {
         action: ({ screen }) => {
             //screen.scene.pause();
             gmi.sendStatsEvent("pause", "click");
-            screen.addOverlay("overlay-pause");
+            screen.addOverlay("pause");
         },
     },
     pauseNoReplay: {
@@ -136,7 +138,7 @@ export const config = {
         action: ({ screen }) => {
             //screen.scene.pause();
             gmi.sendStatsEvent("pause", "click");
-            screen.addOverlay("overlay-pause");
+            screen.addOverlay("pause");
         },
     },
     previous: {
@@ -287,7 +289,7 @@ export const config = {
         id: "__how-to-play",
         channel: buttonsChannel,
         action: ({ screen }) => {
-            screen.addOverlay("overlay-how-to-play");
+            screen.addOverlay("how-to-play");
             gmi.sendStatsEvent("howtoplay", "click");
         },
     },

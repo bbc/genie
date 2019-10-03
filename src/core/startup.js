@@ -17,10 +17,6 @@ import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key }));
-export const renameOverlayScenes = conf =>
-    Object.keys(conf).forEach(oldKey => {
-        delete Object.assign(conf, { [`overlay-${oldKey}`]: conf[oldKey] })[oldKey];
-    });
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
@@ -32,7 +28,6 @@ export function startup(screenConfig, overlayConfig, settingsConfig = {}) {
 
     const browser = getBrowser();
     const scenes = getScenes(screenConfig);
-    renameOverlayScenes(overlayConfig);
     const overlays = getScenes(overlayConfig);
     scenes.unshift(new Loader());
     scenes.unshift(new Boot(Object.assign(screenConfig, overlayConfig)));

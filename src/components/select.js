@@ -27,7 +27,11 @@ export class Select extends Screen {
         this.choiceSprites = this.createChoiceSprites(theme.choices);
         this.add.image(0, -170, `${this.scene.key}.title`);
 
-        this.addLayout(["audio", "pauseNoReplay", "previous", "next", "continue"]);
+        if (theme.overlay) {
+            this.addLayout(["back", "audio", "pauseNoReplay", "previous", "next"]);
+        } else {
+            this.addLayout(["audio", "pauseNoReplay", "previous", "next", "continue"]);
+        }
 
         // TODO P3 Accessibility
         // this.accessibleElements = accessibleCarouselElements.create(
