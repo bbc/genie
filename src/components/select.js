@@ -10,8 +10,9 @@
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
-import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
+// import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
 import { gmi } from "../core/gmi/gmi.js";
+import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 const wrapRange = (value, max) => ((value % max) + max) % max;
 
@@ -35,6 +36,7 @@ export class Select extends Screen {
         // );
 
         this.addSignalSubscriptions();
+        createTestHarnessDisplay(this);
     }
 
     createChoiceSprites(choices) {

@@ -6,10 +6,12 @@
 import { domElement } from "../mock/dom-element";
 
 import { createMockGmi } from "../mock/gmi";
-import { Select } from "../../src/components/select";
 import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
+import * as layoutHarness from "../../src/core/qa/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
+
+import { Select } from "../../src/components/select";
 
 describe("Select Screen", () => {
     let characterSprites;
@@ -19,6 +21,8 @@ describe("Select Screen", () => {
     let mockGmi;
 
     beforeEach(() => {
+        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
+
         characterSprites = [{ visible: "" }, { visible: "" }, { visible: "" }];
         mockAccessibleElements = [domElement(), domElement(), domElement()];
         mockData = {
@@ -96,6 +100,11 @@ describe("Select Screen", () => {
 
         test("adds the choices", () => {
             expect(selectScreen.choiceSprites).toEqual(characterSprites);
+        });
+
+        test("creates a layout harness with correct params", () => {
+            selectScreen.create();
+            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(selectScreen);
         });
 
         // TODO P3 Accessibility
