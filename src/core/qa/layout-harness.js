@@ -9,6 +9,8 @@ export function createTestHarnessDisplay(scene) {
     let gameAreaGraphics;
     let outerPaddingGraphics;
 
+    console.log("scene", scene)
+
     if (window.__qaMode) {
         const qaKey = scene.input.keyboard.addKey("q");
         qaKey.on("up", () => toggle(scene));
@@ -45,10 +47,10 @@ export function createTestHarnessDisplay(scene) {
     function drawOuterPadding(scene) {
         const canvas = scene.game.canvas;
         const paddingWidth = getPaddingWidth(canvas);
-        const gameLeftEdge = (paddingWidth * 2 - canvas.width) * 0.5;
-        const gameTopEdge = (paddingWidth - canvas.height) * 0.5;
-        const gameRightEdge = (paddingWidth * 2 - canvas.width) * -0.5;
-        const gameBottomEdge = (paddingWidth - canvas.height) * -0.5;
+        // const gameLeftEdge = (paddingWidth * 2 - canvas.width) * 0.5;
+        // const gameTopEdge = (paddingWidth - canvas.height) * 0.5;
+        // const gameRightEdge = (paddingWidth * 2 - canvas.width) * -0.5;
+        // const gameBottomEdge = (paddingWidth - canvas.height) * -0.5;
         outerPaddingGraphics = scene.add.graphics({
             fillStyle: { color: 0xffff00, alpha: 0.5 },
             lineStyle: {
@@ -59,29 +61,13 @@ export function createTestHarnessDisplay(scene) {
             add: true,
         });
         const rectangle = new Phaser.Geom.Rectangle(
-            -scene.game.canvas.width * 0.5,
             -scene.game.canvas.height * 0.5,
-            scene.game.canvas.width - paddingWidth * 2,
+            -scene.game.canvas.width * 0.5,
+            scene.game.canvas.width,
             scene.game.canvas.height,
         );
 
         outerPaddingGraphics.strokeRectShape(rectangle);
-
-        // outerPaddingGraphics = scene.add.graphics({ lineStyle: { width: paddingWidth, color: 0xffff00, alpha: 0.5 } });
-        // const line1 = new Phaser.Geom.Line(gameLeftEdge, gameTopEdge, gameRightEdge, gameTopEdge);
-        // const line2 = new Phaser.Geom.Line(gameRightEdge, gameTopEdge, gameRightEdge, gameBottomEdge);
-        // const line3 = new Phaser.Geom.Line(gameRightEdge, gameBottomEdge, gameLeftEdge, gameBottomEdge);
-        // const line4 = new Phaser.Geom.Line(gameLeftEdge, gameBottomEdge, gameLeftEdge, gameTopEdge);
-
-        // outerPaddingGraphics.lineTo(gameRightEdge, gameTopEdge);
-        // outerPaddingGraphics.lineTo(gameRightEdge, gameBottomEdge);
-        // outerPaddingGraphics.lineTo(gameLeftEdge, gameBottomEdge);
-        // outerPaddingGraphics.lineTo(gameLeftEdge, gameTopEdge);
-        //
-        // outerPaddingGraphics.strokeLineShape(line1);
-        // outerPaddingGraphics.strokeLineShape(line2);
-        // outerPaddingGraphics.strokeLineShape(line3);
-        // outerPaddingGraphics.strokeLineShape(line4);
     }
 
     function hide() {

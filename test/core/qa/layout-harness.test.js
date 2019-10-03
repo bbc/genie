@@ -74,21 +74,26 @@ describe("Layout Harness", () => {
             });
         });
 
-        test("draws a rectangle to represent the GEL borders when layout harness is on", () => {
-            // jest.spyOn(Phaser.Geom, "Rectangle");
-            // createTestHarnessDisplay(mockScene);
-            // expect(mockScene.add.graphics).toHaveBeenCalledWith({
-            //     fillStyle: { color: 0x32cd32, alpha: 0.5 },
-            //     add: true,
-            // });
-            // expect(Phaser.Geom.Rectangle).toHaveBeenCalledWith(-400, -300, 800, 600);
-            // expect(mockGraphicsObject.fillRectShape).toHaveBeenCalledWith({
-            //     height: 600,
-            //     type: 5,
-            //     width: 800,
-            //     x: -400,
-            //     y: -300,
-            // });
+        test("draws a rectangle to represent the outer GEL padding when layout harness is toggled on", () => {
+            jest.spyOn(Phaser.Geom, "Rectangle");
+            createTestHarnessDisplay(mockScene);
+            expect(mockScene.add.graphics).toHaveBeenCalledWith({
+                fillStyle: { color: 0xffff00, alpha: 0.5 },
+                lineStyle: {
+                    width: 16,
+                    color: 0xffff00,
+                    alpha: 0.5,
+                },
+                add: true,
+            });
+            expect(Phaser.Geom.Rectangle).toHaveBeenCalledWith(-300, -400, 800, 600);
+            expect(mockGraphicsObject.strokeRectShape).toHaveBeenCalledWith({
+                height: 600,
+                type: 5,
+                width: 800,
+                x: -300,
+                y: -400,
+            });
         });
     });
 
