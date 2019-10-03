@@ -57,7 +57,7 @@ describe("QA Mode", () => {
         expect(testWindow.__qaMode).toEqual({});
     });
 
-    test("Debug Mode", () => {
+    describe("Debug Mode", () => {
         test("is false when url does not includes parameter 'debugMode=true'", () => {
             jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debugMode: false }));
 
