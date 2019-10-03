@@ -47,10 +47,10 @@ export function createTestHarnessDisplay(scene) {
     function drawOuterPadding(scene) {
         const canvas = scene.game.canvas;
         const paddingWidth = getPaddingWidth(canvas);
-        // const gameLeftEdge = (paddingWidth * 2 - canvas.width) * 0.5;
-        // const gameTopEdge = (paddingWidth - canvas.height) * 0.5;
-        // const gameRightEdge = (paddingWidth * 2 - canvas.width) * -0.5;
-        // const gameBottomEdge = (paddingWidth - canvas.height) * -0.5;
+        const gameLeftEdge = (paddingWidth * 2 - canvas.width) * 0.5;
+        const gameTopEdge = (paddingWidth - canvas.height) * 0.5;
+        const gameRightEdge = (paddingWidth * 2 - canvas.width) * -0.5;
+        const gameBottomEdge = (paddingWidth - canvas.height) * -0.5;
         outerPaddingGraphics = scene.add.graphics({
             fillStyle: { color: 0xffff00, alpha: 0.5 },
             lineStyle: {
@@ -60,14 +60,17 @@ export function createTestHarnessDisplay(scene) {
             },
             add: true,
         });
-        const rectangle = new Phaser.Geom.Rectangle(
-            -scene.game.canvas.height * 0.5,
-            -scene.game.canvas.width * 0.5,
-            scene.game.canvas.width,
-            scene.game.canvas.height,
-        );
 
-        outerPaddingGraphics.strokeRectShape(rectangle);
+        outerPaddingGraphics.strokePoints(
+            [
+                { x: gameLeftEdge, y: gameTopEdge },
+                { x: gameRightEdge, y: gameTopEdge },
+                { x: gameRightEdge, y: gameBottomEdge },
+                { x: gameLeftEdge, y: gameBottomEdge },
+            ],
+            true,
+            true,
+        );
     }
 
     function hide() {

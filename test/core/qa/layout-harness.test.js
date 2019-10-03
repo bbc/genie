@@ -17,7 +17,7 @@ describe("Layout Harness", () => {
         mockOnUpEvent = jest.fn((name, callback) => callback());
         mockGraphicsObject = {
             fillRectShape: jest.fn(),
-            strokeRectShape: jest.fn(),
+            strokePoints: jest.fn(),
             destroy: jest.fn(),
         };
         mockScene = {
@@ -74,8 +74,7 @@ describe("Layout Harness", () => {
             });
         });
 
-        test("draws a rectangle to represent the outer GEL padding when layout harness is toggled on", () => {
-            jest.spyOn(Phaser.Geom, "Rectangle");
+        test("draws a box to represent the outer GEL padding when layout harness is toggled on", () => {
             createTestHarnessDisplay(mockScene);
             expect(mockScene.add.graphics).toHaveBeenCalledWith({
                 fillStyle: { color: 0xffff00, alpha: 0.5 },
@@ -86,14 +85,7 @@ describe("Layout Harness", () => {
                 },
                 add: true,
             });
-            expect(Phaser.Geom.Rectangle).toHaveBeenCalledWith(-300, -400, 800, 600);
-            expect(mockGraphicsObject.strokeRectShape).toHaveBeenCalledWith({
-                height: 600,
-                type: 5,
-                width: 800,
-                x: -300,
-                y: -400,
-            });
+            expect(mockGraphicsObject.strokePoints).toHaveBeenCalledWith({});
         });
     });
 
