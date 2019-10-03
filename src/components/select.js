@@ -32,7 +32,7 @@ export class Select extends Screen {
             this.layouts[0].buttons.previous.alpha = 0;
             this.layouts[0].buttons.previous.disableInteractive();
         } else {
-            this.addLayout(["audio", "pauseNoReplay", "previous", "next", "continue"]);
+            this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
         }
 
         // TODO P3 Accessibility
