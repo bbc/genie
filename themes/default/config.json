@@ -80,6 +80,26 @@
                 }
             }
         },
+        "game": {
+            "music": "loadscreen.backgroundMusicTwo",
+            "achievements": true
+        },
+        "results": {
+            "resultText": {
+                "style": {
+                    "font": "40px ReithSans",
+                    "align": "center",
+                    "fill": "#fff",
+                    "boundsAlignH": "center"
+                }
+            },
+            "button-overrides": {
+                "achievements": {
+                    "group": "middleCenter",
+                    "shiftY": 120
+                }
+            }
+        },
         "how-to-play": {
             "howToPlay": true,
             "choices": [
@@ -114,27 +134,12 @@
                     "fontWeight": "bold",
                     "fill": "white"
                 }
-            }
-        },
-        "game": {
-            "music": "loadscreen.backgroundMusicTwo",
-            "achievements": true
-        },
-        "results": {
-            "resultText": {
-                "style": {
-                    "font": "40px ReithSans",
-                    "align": "center",
-                    "fill": "#fff",
-                    "boundsAlignH": "center"
-                }
-            },
-            "button-overrides": {
-                "achievements": {
-                    "group": "middleCenter",
-                    "shiftY": 120
-                }
-            }
+            },	
+            "panelText": [		
+                { "accessibilityText": "Instructions on playing the game" },		
+                { "accessibilityText": "More on how to play" },		
+                { "accessibilityText": "Final instructions on playing" }		
+            ]
         },
         "pause": {
 
