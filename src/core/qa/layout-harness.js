@@ -10,8 +10,6 @@ export function createTestHarnessDisplay(scene) {
     let outerPaddingGraphics;
 
     if (window.__qaMode) {
-        // graphicsBackgroundGroup = scene.add.group();
-        // graphicsForegroundGroup = game.add.group();
         const qaKey = scene.input.keyboard.addKey("q");
         qaKey.on("up", () => toggle(scene));
     }
