@@ -9,7 +9,7 @@ import { gmi } from "../core/gmi/gmi.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import * as signal from "../core/signal-bus.js";
 import * as GameSound from "../core/game-sound.js";
-import * as a11y from "../core/accessibility/accessibility-layer.js";
+// import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as VisibleLayer from "../core/visible-layer.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
@@ -68,9 +68,8 @@ export class Screen extends Phaser.Scene {
         //    gmi.setStatsScreen(this.game.state.current);
         //}
         //GameSound.setupScreenMusic(this.game, themeScreenConfig);
-        a11y.clearAccessibleButtons();
+        // a11y.clearAccessibleButtons();
         //a11y.clearElementsFromDom();
-        //this.overlaySetup();
 
         this.#makeNavigation();
     }
@@ -94,6 +93,7 @@ export class Screen extends Phaser.Scene {
     };
 
     #removeOverlay = data => {
+        signal.bus.removeChannel(`${buttonsChannel}-${data.overlay.scene.key}`);
         this.#overlayKey = undefined;
         data.overlay.removeAll();
         data.overlay.scene.stop();
@@ -104,10 +104,12 @@ export class Screen extends Phaser.Scene {
                 data: { overlay: this, removeAll: true },
             });
         }
+        console.log(this.game.scene.getScenes());
     };
 
     removeAllOverlays = () => {
         signal.bus.publish({ channel: overlayChannel, name: this.scene.key, data: { overlay: this, removeAll: true } });
+        signal.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
     };
 
     removeOverlay = () => {
@@ -116,6 +118,7 @@ export class Screen extends Phaser.Scene {
             name: this.scene.key,
             data: { overlay: this, removeAll: false },
         });
+        signal.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
     };
 
     addOverlay(key) {
@@ -125,6 +128,7 @@ export class Screen extends Phaser.Scene {
                     this.#overlayKey
                 } overlay.`,
             );
+            return;
         }
         signal.bus.subscribe({
             channel: overlayChannel,
@@ -134,6 +138,7 @@ export class Screen extends Phaser.Scene {
         this.#overlayKey = key;
         this.scene.run(key, this.#data);
         this.scene.bringToTop(key);
+        console.log(this.game.scene.getScenes());
     }
 
     removeAll = () => {
@@ -144,12 +149,10 @@ export class Screen extends Phaser.Scene {
     #navigate = route => {
         this.scene.bringToTop(route);
         this.removeAllOverlays();
-        //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable here [NT]
-        if (this.#layouts.length > 0) {
-            signal.bus.removeChannel(buttonsChannel);
-        }
+        signal.bus.removeChannel(`${buttonsChannel}-${this.scene.key}`);
         this.removeAll();
         this.scene.start(route, this.#data);
+        console.log(this.game.scene.getScenes());
     };
 
     /**

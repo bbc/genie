@@ -86,25 +86,25 @@ export class Select extends Screen {
 
     addSignalSubscriptions() {
         signal.bus.subscribe({
-            channel: buttonsChannel,
+            channel: `${buttonsChannel}-${this.scene.key}`,
             name: "previous",
             callback: this.leftButton.bind(this),
         });
 
         signal.bus.subscribe({
-            channel: buttonsChannel,
+            channel: `${buttonsChannel}-${this.scene.key}`,
             name: "next",
             callback: this.rightButton.bind(this),
         });
 
         signal.bus.subscribe({
-            channel: buttonsChannel,
+            channel: `${buttonsChannel}-${this.scene.key}`,
             name: "continue",
             callback: this.startGame.bind(this),
         });
 
         signal.bus.subscribe({
-            channel: buttonsChannel,
+            channel: `${buttonsChannel}-${this.scene.key}`,
             name: "pause",
             callback: () => {
                 //stops screenreader from announcing the options when the pause overlay is covering them
@@ -115,7 +115,7 @@ export class Select extends Screen {
         });
 
         signal.bus.subscribe({
-            channel: buttonsChannel,
+            channel: `${buttonsChannel}-${this.scene.key}`,
             name: "play",
             callback: () => {
                 // makes the screenreader announce the selected option
