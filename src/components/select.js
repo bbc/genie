@@ -22,12 +22,12 @@ export class Select extends Screen {
         // P3 TODO Test Harness
         // createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
-        const theme = this.context.config.theme[this.scene.key];
+        this.theme = this.context.config.theme[this.scene.key];
         this.currentIndex = 0;
-        this.choiceSprites = this.createChoiceSprites(theme.choices);
+        this.choiceSprites = this.createChoiceSprites(this.theme.choices);
         this.add.image(0, -170, `${this.scene.key}.title`);
 
-        if (theme.overlay) {
+        if (this.theme.howToPlay) {
             this.addLayout(["back", "audio", "pauseNoReplay", "previous", "next"]);
         } else {
             this.addLayout(["audio", "pauseNoReplay", "previous", "next", "continue"]);
@@ -57,13 +57,25 @@ export class Select extends Screen {
     }
 
     leftButton() {
+        this.layouts[0].buttons.next.alpha = 1;
+        this.layouts[0].buttons.next.setInteractive();
         this.currentIndex = wrapRange(--this.currentIndex, this.choiceSprites.length);
         this.showChoice();
+        if (this.currentIndex == 0 && this.theme.howToPlay) {
+            this.layouts[0].buttons.previous.alpha = 0;
+            this.layouts[0].buttons.previous.disableInteractive();
+        }
     }
 
     rightButton() {
+        this.layouts[0].buttons.previous.alpha = 1;
+        this.layouts[0].buttons.previous.setInteractive();
         this.currentIndex = wrapRange(++this.currentIndex, this.choiceSprites.length);
         this.showChoice();
+        if (this.currentIndex + 1 == this.choiceSprites.length && this.theme.howToPlay) {
+            this.layouts[0].buttons.next.alpha = 0;
+            this.layouts[0].buttons.next.disableInteractive();
+        }
     }
 
     showChoice() {

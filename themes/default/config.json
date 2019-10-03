@@ -81,7 +81,7 @@
             }
         },
         "how-to-play": {
-            "overlay": true,
+            "howToPlay": true,
             "choices": [
                 {
                     "asset": "carousel1",
