@@ -29,6 +29,8 @@ export class Select extends Screen {
 
         if (this.theme.howToPlay) {
             this.addLayout(["back", "audio", "pauseNoReplay", "previous", "next"]);
+            this.layouts[0].buttons.previous.alpha = 0;
+            this.layouts[0].buttons.previous.disableInteractive();
         } else {
             this.addLayout(["audio", "pauseNoReplay", "previous", "next", "continue"]);
         }
