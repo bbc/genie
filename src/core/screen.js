@@ -127,6 +127,7 @@ export class Screen extends Phaser.Scene {
         this.scene.bringToTop(route);
         Object.keys(this.#data.parentScreens).forEach(key => {
             this.#data.parentScreens[key].removeAll();
+            delete this.#data.parentScreens[key];
         });
         this.removeAll();
         this.scene.start(route, this.#data);
