@@ -8,14 +8,14 @@ import _ from "../../lib/lodash/lodash.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import * as signal from "../core/signal-bus.js";
-import * as GameSound from "../core/game-sound.js";
+// import * as GameSound from "../core/game-sound.js";
 // import * as a11y from "../core/accessibility/accessibility-layer.js";
-import * as VisibleLayer from "../core/visible-layer.js";
+// import * as VisibleLayer from "../core/visible-layer.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
 
-const overlayChannel = "gel-overlays";
+export const overlayChannel = "gel-overlays";
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
@@ -92,11 +92,16 @@ export class Screen extends Phaser.Scene {
         );
     };
 
-    #removeOverlay = data => {
-        signal.bus.removeChannel(`${buttonsChannel}-${data.overlay.scene.key}`);
-        data.overlay.removeAll();
-        data.overlay.scene.stop();
-    };
+    addOverlay(key) {
+        signal.bus.subscribe({
+            channel: overlayChannel,
+            name: key,
+            callback: this._removeOverlay,
+        });
+        this.#data.parentScreens[this.scene.key] = this;
+        this.scene.run(key, this.#data);
+        this.scene.bringToTop(key);
+    }
 
     removeOverlay = () => {
         signal.bus.publish({
@@ -107,16 +112,11 @@ export class Screen extends Phaser.Scene {
         signal.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
     };
 
-    addOverlay(key) {
-        signal.bus.subscribe({
-            channel: overlayChannel,
-            name: key,
-            callback: this.#removeOverlay,
-        });
-        this.#data.parentScreens[this.scene.key] = this;
-        this.scene.run(key, this.#data);
-        this.scene.bringToTop(key);
-    }
+    _removeOverlay = data => {
+        signal.bus.removeChannel(`${buttonsChannel}-${data.overlay.scene.key}`);
+        data.overlay.removeAll();
+        data.overlay.scene.stop();
+    };
 
     removeAll = () => {
         signal.bus.removeChannel(`${buttonsChannel}-${this.scene.key}`);
@@ -156,7 +156,7 @@ export class Screen extends Phaser.Scene {
         return layout;
     }
 
-    get visibleLayer() {
-        return VisibleLayer.get(this.game, this.context);
-    }
+    // get visibleLayer() {
+    //     return VisibleLayer.get(this.game, this.context);
+    // }
 }
