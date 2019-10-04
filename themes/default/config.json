@@ -142,7 +142,10 @@
             ]
         },
         "pause": {
-
+            "showReplayButton": true
+        },
+        "pause-noreplay": {
+            "showReplayButton": false
         }
     }
 }

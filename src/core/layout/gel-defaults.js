@@ -59,10 +59,10 @@ export const config = {
         channel: buttonsChannel,
         action: ({ screen }) => {
             gmi.sendStatsEvent("back", "click");
-            screen.removeOverlay();
+            screen.navigation.back();
         },
     },
-    howToPlayBack: {
+    overlayBack: {
         group: "topLeft",
         title: "Back",
         key: "back",
@@ -70,7 +70,7 @@ export const config = {
         order: 2,
         id: "__back",
         channel: buttonsChannel,
-        action: () => {
+        action: ({ screen }) => {
             gmi.sendStatsEvent("back", "click");
             screen.removeOverlay();
         },
@@ -120,7 +120,7 @@ export const config = {
         id: "__pause",
         channel: buttonsChannel,
         action: ({ screen }) => {
-            //screen.scene.pause();
+            screen.scene.pause();
             gmi.sendStatsEvent("pause", "click");
             screen.addOverlay("pause");
         },
@@ -134,9 +134,9 @@ export const config = {
         id: "__pause",
         channel: buttonsChannel,
         action: ({ screen }) => {
-            //screen.scene.pause();
+            screen.scene.pause();
             gmi.sendStatsEvent("pause", "click");
-            screen.addOverlay("pause");
+            screen.addOverlay("pause-noreplay");
         },
     },
     previous: {
@@ -147,15 +147,6 @@ export const config = {
         order: 7,
         id: "__previous",
         channel: buttonsChannel,
-    },
-    howToPlayPrevious: {
-        group: "middleLeftSafe",
-        title: "Previous",
-        key: "previous",
-        ariaLabel: "Previous Item",
-        order: 7,
-        id: "__previous",
-        channel: "how-to-play-gel-buttons",
     },
     replay: {
         group: "middleCenter",
@@ -203,8 +194,9 @@ export const config = {
         id: "__play",
         channel: "pause-gel-buttons",
         action: ({ screen }) => {
+            const pausedScenes = screen.game.scene.getScenes(false, true).filter(scene => scene.scene.isPaused());
+            pausedScenes[0].scene.resume();
             gmi.sendStatsEvent("play", "click");
-            //screen.context.parent.scene.resume();
             screen.removeOverlay();
         },
     },
@@ -216,15 +208,6 @@ export const config = {
         order: 10,
         id: "__next",
         channel: buttonsChannel,
-    },
-    howToPlayNext: {
-        group: "middleRightSafe",
-        title: "Next",
-        key: "next",
-        ariaLabel: "Next Item",
-        order: 10,
-        id: "__next",
-        channel: "how-to-play-gel-buttons",
     },
     achievements: {
         group: "bottomLeft",

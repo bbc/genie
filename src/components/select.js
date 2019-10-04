@@ -25,7 +25,7 @@ export class Select extends Screen {
         this.add.image(0, -170, `${this.scene.key}.title`);
 
         if (this.theme.howToPlay) {
-            this.addLayout(["back", "audio", "settings", "previous", "next"]);
+            this.addLayout(["overlayBack", "audio", "settings", "previous", "next"]);
             this.layouts[0].buttons.previous.alpha = 0;
             this.layouts[0].buttons.previous.disableInteractive();
         } else {
