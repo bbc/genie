@@ -33,7 +33,7 @@ export class Screen extends Phaser.Scene {
         return {
             config: this.#data.config,
             parentScreens: this.#data.parentScreens,
-            transientData: this.#data.transient,
+            transientData: this.#data.transient || {},
         };
     }
 
@@ -61,11 +61,12 @@ export class Screen extends Phaser.Scene {
         this.cameras.main.scrollX = -700;
         this.cameras.main.scrollY = -300;
 
+        if (this.scene.key !== "loader" && this.scene.key !== "boot") {
+            gmi.setStatsScreen(this.scene.key);
+        }
+
         //TODO P3 commented out lines need re-enabling
         //const themeScreenConfig = this.context.config.theme[this.game.state.current];
-        //if (this.game.state.current !== "loader") {
-        //    gmi.setStatsScreen(this.game.state.current);
-        //}
         //GameSound.setupScreenMusic(this.game, themeScreenConfig);
         // a11y.clearAccessibleButtons();
         //a11y.clearElementsFromDom();

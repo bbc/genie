@@ -28,7 +28,6 @@ module.exports = {
         "./test/components/overlays/how-to-play",
         "./test/components/overlays/pause",
         "./test/core/accessibility",
-        "./test/core/screen",
     ],
     setupFilesAfterEnv: ["./test/set-up-jest.js"],
     transform: { "^.+\\.js$": "babel-jest" },

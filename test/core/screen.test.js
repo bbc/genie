@@ -6,33 +6,36 @@
 import { createMockGmi } from "../mock/gmi";
 
 import { Screen } from "../../src/core/screen";
-import { createMockGame } from "../mock/phaser-game.js";
-import * as GameSound from "../../src/core/game-sound";
-import * as VisibleLayer from "../../src/core/visible-layer.js";
-import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
+// import * as GameSound from "../../src/core/game-sound";
+// import * as VisibleLayer from "../../src/core/visible-layer.js";
+// import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import * as signal from "../../src/core/signal-bus.js";
 
 describe("Screen", () => {
     let screen;
+    let mockData;
     let mockGmi;
-    let mockLayoutManager;
-    let mockContext;
     let mockTransientData;
     let mockNavigation;
 
-    const createScreen = () => {
+    const createScreen = (key = "screenKey") => {
         screen = new Screen();
-        mockTransientData = { transient: "data" };
-        screen.game = createMockGame();
-        screen.game.state.current = "loadscreen";
+        screen.scene = { key, bringToTop: jest.fn(), start: jest.fn() };
+        screen.cameras = { main: { scrollX: 0, scrollY: 0 } };
+        mockTransientData = { key: "data" };
     };
 
     const initScreen = () => {
         mockNavigation = {
-            loadscreen: { routes: { testRoute: jest.fn().mockReturnValue("loadscreen-test-route") } },
-            select: { routes: "select-routes" },
+            screenKey: { routes: { next: "nextscreen" } },
         };
-        screen.init(mockTransientData, mockLayoutManager, mockContext, mockNavigation);
+        mockData = {
+            navigation: mockNavigation,
+            config: { theme: { loadscreen: { music: "test/music" } } },
+            parentScreens: { select: { removeAll: jest.fn() } },
+            transient: mockTransientData,
+        };
+        screen.init(mockData);
     };
 
     const createAndInitScreen = () => {
@@ -43,170 +46,88 @@ describe("Screen", () => {
     beforeEach(() => {
         jest.spyOn(signal.bus, "subscribe");
         jest.spyOn(signal.bus, "removeChannel");
-        jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
-        jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
-        jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
-        jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
-        jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
+        // jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
+        // jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
+        // jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
+        // jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
+        // jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
 
-        mockLayoutManager = { addToBackground: jest.fn() };
         mockGmi = { setStatsScreen: jest.fn() };
         createMockGmi(mockGmi);
 
-        mockContext = {
-            popupScreens: ["pause"],
-            config: { theme: { loadscreen: { music: "test/music" } } },
-        };
         delete window.__qaMode;
     });
 
     afterEach(() => jest.clearAllMocks());
 
     describe("Initialisation", () => {
-        test("sets the layoutManager", () => {
-            createAndInitScreen();
-            expect(screen.layoutManager).toEqual(mockLayoutManager);
-        });
-
         test("sets the context", () => {
             createAndInitScreen();
-            expect(screen._context).toEqual(mockContext);
+            expect(screen.context).toEqual({
+                config: mockData.config,
+                parentScreens: mockData.parentScreens,
+                transientData: mockTransientData,
+            });
         });
 
         test("sets the navigation", () => {
             createAndInitScreen();
-            expect(screen.navigation.testRoute()).toBe("loadscreen-test-route");
+            expect(screen.navigation).toEqual({ next: expect.any(Function) });
         });
 
         test("passes transientData to next screen on navigation", () => {
             createAndInitScreen();
-            screen.navigation.testRoute();
-            expect(mockNavigation.loadscreen.routes.testRoute).toHaveBeenCalledWith(mockTransientData);
+            screen.navigation.next();
+            expect(screen.scene.start).toHaveBeenCalledWith("nextscreen", mockData);
         });
 
         test("defaults transientData to empty Object", () => {
-            createAndInitScreen();
-            delete screen.transientData;
-            screen.navigation.testRoute();
-            expect(mockNavigation.loadscreen.routes.testRoute).toHaveBeenCalledWith({});
+            createScreen();
+            delete mockData.transient;
+            screen.init(mockData);
+            expect(screen.context.transientData).toEqual({});
         });
 
-        test("sets the background music using the theme config", () => {
-            createAndInitScreen();
-            const expectedThemeConfig = mockContext.config.theme.loadscreen;
-            expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.game, expectedThemeConfig);
-        });
+        // test("sets the background music using the theme config", () => {
+        //     createAndInitScreen();
+        //     const expectedThemeConfig = mockContext.config.theme.loadscreen;
+        //     expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.game, expectedThemeConfig);
+        // });
 
-        test("sets transientData", () => {
-            createAndInitScreen();
-            expect(screen.transientData).toEqual(mockTransientData);
-        });
+        // test("clears the currently stored accessible buttons", () => {
+        //     createAndInitScreen();
+        //     expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
+        // });
 
-        test("clears the currently stored accessible buttons", () => {
-            createAndInitScreen();
-            expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
-        });
-
-        test("resets the accessiblity layer DOM", () => {
-            createAndInitScreen();
-            expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
-        });
+        // test("resets the accessiblity layer DOM", () => {
+        //     createAndInitScreen();
+        //     expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
+        // });
 
         test("sets the stats screen to the current screen, if not on the loadscreen", () => {
-            createScreen();
-            screen.game.state.current = "select";
-            initScreen();
-            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith(screen.game.state.current);
+            createAndInitScreen();
+            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith(screen.scene.key);
         });
 
         test("does not set the stats screen to the current screen, if on the loadscreen", () => {
-            createScreen();
-            screen.game.state.current = "loadscreen";
-            initScreen();
+            createScreen("loader");
+            mockData.navigation = {
+                loader: { routes: { next: "nextscreen" } },
+            };
+            screen.init(mockData);
             expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
-        });
-
-        test("creates the overlay closed signal", () => {
-            createAndInitScreen();
-            expect(signal.bus.subscribe).toHaveBeenCalledWith({
-                channel: "overlays",
-                name: "overlay-closed",
-                callback: expect.any(Function),
-            });
         });
     });
 
-    describe("context getter/setter", () => {
-        test("gets context", () => {
-            createAndInitScreen();
-            expect(screen.context).toEqual(mockContext);
-        });
-
-        test("sets context by merging new value with current value", () => {
-            const expectedContext = {
-                popupScreens: ["pause"],
-                config: {
-                    theme: { loadscreen: { music: "test/music" }, pause: { data: "some-data" } },
-                },
+    describe("getter/setters", () => {
+        test("sets transient data by merging new value with current value", () => {
+            const expectedTransientData = {
+                key: "data",
+                more: "data",
             };
             createAndInitScreen();
-            screen.context = { config: { theme: { pause: { data: "some-data" } } } };
-
-            expect(screen.context).toEqual(expectedContext);
-        });
-    });
-
-    describe("getAsset method", () => {
-        test("gets asset by name", () => {
-            createAndInitScreen();
-            const expectedName = "some-name";
-            expect(screen.getAsset(expectedName)).toBe("loadscreen.some-name");
-        });
-    });
-
-    describe("visibleLayer getter/setter", () => {
-        test("calls visible layer with correct params", () => {
-            jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
-            createAndInitScreen();
-            expect(screen.visibleLayer).toEqual("current-layer");
-            expect(VisibleLayer.get).toHaveBeenCalledWith(screen.game, screen.context);
-        });
-    });
-
-    describe("When overlay-closed signal is fired", () => {
-        beforeEach(() => {
-            mockContext.popupScreens = ["how-to-play"];
-            createAndInitScreen();
-        });
-
-        test("clears accessible elements from DOM", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(2);
-        });
-
-        test("clears accessible buttons object", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(2);
-        });
-
-        test("appends accessible elements to DOM", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(a11y.appendElementsToDom).toHaveBeenCalledTimes(1);
-        });
-
-        test("fires a page stat with the current screen when firePageStat is true", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: true } });
-            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith(screen.game.state.current);
-        });
-
-        test("does not fire a page stat when firePageStat is false", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
-        });
-
-        test("removes the overlays channel", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(signal.bus.removeChannel).toHaveBeenCalledTimes(1);
+            screen.transientData = { more: "data" };
+            expect(screen.context.transientData).toEqual(expectedTransientData);
         });
     });
 });
