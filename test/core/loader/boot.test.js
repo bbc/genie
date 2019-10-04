@@ -73,7 +73,7 @@ describe("Boot", () => {
             bootScreen.preload();
 
             const expectedData = {
-                popupScreens: [],
+                parentScreens: [],
                 transient: {},
                 navigation: {
                     boot: { routes: { next: "loader" } },
