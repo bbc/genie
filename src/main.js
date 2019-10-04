@@ -94,6 +94,12 @@ const screenConfig = {
             home: "home",
         },
     },
+    "pause-noreplay": {
+        scene: Pause,
+        routes: {
+            home: "home",
+        },
+    },
 };
 
 startup(screenConfig, settingsConfig);

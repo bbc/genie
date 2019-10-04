@@ -4,14 +4,12 @@
  * @license Apache-2.0
  */
 import { createMockGmi } from "../../mock/gmi";
-
-import * as howToPlay from "../../../src/components/overlays/how-to-play.js";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
-import * as pause from "../../../src/components/overlays/pause.js";
 import { settings, settingsChannel } from "../../../src/core/settings.js";
 import * as signal from "../../../src/core/signal-bus.js";
 
 describe("Layout - Gel Defaults", () => {
+    let mockPausedScreen;
     let mockCurrentScreen;
     let mockGame;
     let mockGmi;
@@ -19,17 +17,29 @@ describe("Layout - Gel Defaults", () => {
 
     beforeEach(() => {
         clearIndicatorSpy = jest.fn();
+        mockPausedScreen = { scene: { resume: jest.fn(), isPaused: () => true } };
         mockCurrentScreen = {
             key: "current-screen",
+            game: {
+                scene: {
+                    getScenes: () => [mockPausedScreen],
+                },
+            },
+            scene: {
+                pause: jest.fn(),
+            },
             navigation: {
                 home: jest.fn(),
                 achievements: jest.fn(),
+                back: jest.fn(),
             },
             layouts: [
                 {
                     buttons: { achievements: { setIndicator: clearIndicatorSpy } },
                 },
             ],
+            addOverlay: jest.fn(),
+            removeOverlay: jest.fn(),
             transientData: {},
         };
         mockGame = {
@@ -49,9 +59,7 @@ describe("Layout - Gel Defaults", () => {
         };
         createMockGmi(mockGmi);
 
-        jest.spyOn(pause, "create").mockImplementation(() => {});
         jest.spyOn(settings, "show").mockImplementation(() => {});
-        jest.spyOn(howToPlay, "create").mockImplementation(() => {});
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -81,21 +89,29 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Back Button Callback", () => {
         beforeEach(() => {
-            gel.config.back.action();
+            gel.config.back.action({ screen: mockCurrentScreen });
         });
 
         test("fires a click stat", () => {
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("back", "click");
+        });
+
+        test("navigates back", () => {
+            expect(mockCurrentScreen.navigation.back).toHaveBeenCalled();
         });
     });
 
-    describe("How To Play Back Button Callback", () => {
+    describe("Overlay Back Button Callback", () => {
         beforeEach(() => {
-            gel.config.howToPlayBack.action();
+            gel.config.overlayBack.action({ screen: mockCurrentScreen });
         });
 
         test("fires a click stat", () => {
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("back", "click");
+        });
+
+        test("removes overlay screen", () => {
+            expect(mockCurrentScreen.removeOverlay).toHaveBeenCalled();
         });
     });
 
@@ -151,7 +167,7 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Pause Button Callback", () => {
         beforeEach(() => {
-            gel.config.pause.action({ game: mockGame });
+            gel.config.pause.action({ screen: mockCurrentScreen });
         });
 
         test("sends a stat to the GMI", () => {
@@ -159,13 +175,17 @@ describe("Layout - Gel Defaults", () => {
         });
 
         test("creates a pause screen", () => {
-            expect(pause.create).toHaveBeenCalledWith(false, { game: mockGame });
+            expect(mockCurrentScreen.addOverlay).toHaveBeenCalledWith("pause");
+        });
+
+        test("pauses the screen", () => {
+            expect(mockCurrentScreen.scene.pause).toHaveBeenCalled();
         });
     });
 
     describe("Pause No Replay Button Callback", () => {
         beforeEach(() => {
-            gel.config.pauseNoReplay.action({ game: mockGame });
+            gel.config.pauseNoReplay.action({ screen: mockCurrentScreen });
         });
 
         test("sends a stat to the GMI", () => {
@@ -173,7 +193,11 @@ describe("Layout - Gel Defaults", () => {
         });
 
         test("creates a pause screen with replay button hidden", () => {
-            expect(pause.create).toHaveBeenCalledWith(true, { game: mockGame });
+            expect(mockCurrentScreen.addOverlay).toHaveBeenCalledWith("pause-noreplay");
+        });
+
+        test("pauses the screen", () => {
+            expect(mockCurrentScreen.scene.pause).toHaveBeenCalled();
         });
     });
 
@@ -217,11 +241,15 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Pause Play Button Callback", () => {
         beforeEach(() => {
-            gel.config.pausePlay.action();
+            gel.config.pausePlay.action({ screen: mockCurrentScreen });
         });
 
         test("sends a stat to the GMI", () => {
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("play", "click");
+        });
+
+        test("resumes the screen", () => {
+            expect(mockPausedScreen.scene.resume).toHaveBeenCalled();
         });
     });
 
@@ -273,11 +301,11 @@ describe("Layout - Gel Defaults", () => {
 
     describe("How To Play Button Callback", () => {
         beforeEach(() => {
-            gel.config.howToPlay.action({ game: mockGame });
+            gel.config.howToPlay.action({ screen: mockCurrentScreen });
         });
 
         test("creates a how to play screen", () => {
-            expect(howToPlay.create).toHaveBeenCalledWith({ game: mockGame });
+            expect(mockCurrentScreen.addOverlay).toHaveBeenCalledWith("how-to-play");
         });
 
         test("sends a stat to the GMI", () => {
