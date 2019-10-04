@@ -10,7 +10,6 @@
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
-import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
 import { gmi } from "../core/gmi/gmi.js";
 
@@ -19,8 +18,6 @@ const wrapRange = (value, max) => ((value % max) + max) % max;
 export class Select extends Screen {
     create() {
         this.add.image(0, 0, `${this.scene.key}.background`);
-        // P3 TODO Test Harness
-        // createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
         this.theme = this.context.config.theme[this.scene.key];
         this.currentIndex = 0;

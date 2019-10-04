@@ -6,7 +6,6 @@
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
-import { createTestHarnessDisplay } from "./test-harness/layout-harness.js";
 import { gmi } from "../core/gmi/gmi.js";
 
 const getScoreMetaData = result => {
@@ -34,9 +33,6 @@ export class Results extends Screen {
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         const buttons = ["pause", "restart", "continueGame"];
         this.addLayout(buttons.concat(achievements));
-
-        //TODO P3 fix test harness
-        //createTestHarnessDisplay(this.game, this.context, this.layoutManager);
 
         fireGameCompleteStat(this.transientData.results);
 

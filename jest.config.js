@@ -4,17 +4,7 @@
  * @license Apache-2.0
  */
 module.exports = {
-    collectCoverageFrom: [
-        "src/**/*.js",
-        "!src/output/**/*.js",
-        "!src/components/test-harness/test-screens/collision.js",
-        "!src/components/test-harness/test-screens/fps.js",
-        "!src/components/test-harness/test-screens/gel.js",
-        "!src/components/test-harness/test-screens/rotation.js",
-        "!src/components/test-harness/test-screens/sprite-group.js",
-        "!src/components/test-harness/test-screens/tiled.js",
-        "!src/components/test-harness/test-screens/tweening.js",
-    ],
+    collectCoverageFrom: ["src/**/*.js", "!src/output/**/*.js"],
     coverageThreshold: {
         // global: {
         //     statements: 94.34,
@@ -37,7 +27,6 @@ module.exports = {
         ".node_modules_production",
         "./test/components/overlays/how-to-play",
         "./test/components/overlays/pause",
-        "./test/components/test-harness/layout-harness",
         "./test/core/accessibility",
         "./test/core/screen",
     ],
