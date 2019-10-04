@@ -22,15 +22,14 @@ export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scen
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
  * @param {Object=} screenConfig -
  */
-export function startup(screenConfig, overlayConfig, settingsConfig = {}) {
+export function startup(screenConfig, settingsConfig = {}) {
     setGmi(settingsConfig, window);
     hookErrors(gmi.gameContainerId);
 
     const browser = getBrowser();
     const scenes = getScenes(screenConfig);
-    const overlays = getScenes(overlayConfig);
     scenes.unshift(new Loader());
-    scenes.unshift(new Boot(Object.assign(screenConfig, overlayConfig)));
+    scenes.unshift(new Boot(screenConfig));
 
     const phaserConfig = {
         width: 1400,
@@ -46,7 +45,7 @@ export function startup(screenConfig, overlayConfig, settingsConfig = {}) {
         scale: {
             mode: Phaser.Scale.NONE,
         },
-        scene: scenes.concat(overlays),
+        scene: scenes,
         plugins: {
             global: [
                 {

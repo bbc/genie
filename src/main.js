@@ -81,9 +81,7 @@ const screenConfig = {
             home: "home",
         },
     },
-};
-
-const overlayConfig = {
+    // Overlays
     "how-to-play": {
         scene: Select,
         routes: {
@@ -98,4 +96,4 @@ const overlayConfig = {
     },
 };
 
-startup(screenConfig, overlayConfig, settingsConfig);
+startup(screenConfig, settingsConfig);
