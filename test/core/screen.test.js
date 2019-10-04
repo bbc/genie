@@ -184,6 +184,22 @@ describe("Screen", () => {
         });
     });
 
+    describe("Remove All", () => {
+        test("cleans up the layout and the signal bus", () => {
+            const mockLayout = buttons => {
+                return { buttons, destroy: jest.fn() };
+            };
+            Layout.create = jest.fn((screen, metrics, buttons) => mockLayout(buttons));
+            Scaler.getMetrics = () => {};
+            createAndInitScreen();
+            const layout = screen.addLayout(["somebutton", "another"]);
+            screen.removeAll();
+            expect(screen.layouts).toEqual([]);
+            expect(layout.destroy).toHaveBeenCalled();
+            expect(signal.bus.removeChannel).toHaveBeenCalledWith(`${buttonsChannel}-screenKey`);
+        });
+    });
+
     describe("Overlays", () => {
         test("adding an overlay, subscribes to signal bus correctly", () => {
             const expectedName = "overlay";
