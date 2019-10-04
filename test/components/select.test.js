@@ -15,6 +15,7 @@ describe("Select Screen", () => {
     let characterSprites;
     let mockAccessibleElements;
     let mockData;
+    let mockDataOverlay;
     let selectScreen;
     let mockGmi;
 
@@ -25,6 +26,23 @@ describe("Select Screen", () => {
             config: {
                 theme: {
                     "test-select": {
+                        choices: [
+                            { asset: "character1" },
+                            { asset: "character2", title: "character_2" },
+                            { asset: "character3" },
+                        ],
+                    },
+                    game: {},
+                },
+            },
+            qaMode: { active: false },
+            popupScreens: [],
+        };
+        mockDataOverlay = {
+            config: {
+                theme: {
+                    "test-select": {
+                        howToPlay: true,
                         choices: [
                             { asset: "character1" },
                             { asset: "character2", title: "character_2" },
@@ -69,8 +87,16 @@ describe("Select Screen", () => {
         };
         selectScreen.layouts[0] = {};
         selectScreen.layouts[0].buttons = {};
-        selectScreen.layouts[0].buttons.previous = { alpha: 1, setInteractive: jest.fn() };
-        selectScreen.layouts[0].buttons.next = { alpha: 1, setInteractive: jest.fn() };
+        selectScreen.layouts[0].buttons.previous = {
+            alpha: 1,
+            setInteractive: jest.fn(),
+            disableInteractive: jest.fn(),
+        };
+        selectScreen.layouts[0].buttons.next = {
+            alpha: 1,
+            setInteractive: jest.fn(),
+            disableInteractive: jest.fn(),
+        };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -88,6 +114,13 @@ describe("Select Screen", () => {
 
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["home", "audio", "pauseNoReplay", "previous", "next", "continue"];
+            expect(selectScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+
+        test("adds GEL buttons to layout when how to play", () => {
+            selectScreen.setData(mockDataOverlay);
+            selectScreen.create();
+            const expectedButtons = ["overlayBack", "audio", "settings", "previous", "next"];
             expect(selectScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
@@ -217,6 +250,14 @@ describe("Select Screen", () => {
             });
 
             test("switches to the next item when any other choice is showing", () => {
+                selectScreen.currentIndex = 1;
+                signal.bus.subscribe.mock.calls[1][0].callback();
+                expect(selectScreen.currentIndex === 2).toBeTruthy();
+            });
+
+            test("switches to the next item in howtoplay mode", () => {
+                selectScreen.setData(mockDataOverlay);
+                selectScreen.create();
                 selectScreen.currentIndex = 1;
                 signal.bus.subscribe.mock.calls[1][0].callback();
                 expect(selectScreen.currentIndex === 2).toBeTruthy();
