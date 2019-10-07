@@ -121,7 +121,7 @@ export class Screen extends Phaser.Scene {
     };
 
     removeAll = () => {
-        signal.bus.removeChannel(`${buttonsChannel}-${this.scene.key}`);
+        signal.bus.removeChannel(buttonsChannel(this));
         this.#layouts.forEach(layout => layout.destroy());
         this.#layouts = [];
     };

@@ -81,7 +81,7 @@ describe("Layout - Gel Defaults", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("Exit Button Callback", () => {
-        beforeEach(() => gel.config.exit.action());
+        beforeEach(() => gel.config(mockCurrentScreen).exit.action());
 
         test("exits the game using the GMI", () => {
             expect(mockGmi.exit).toHaveBeenCalled();
@@ -94,7 +94,7 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Home Button Callback", () => {
         beforeEach(() => {
-            gel.config.home.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).home.action({ screen: mockCurrentScreen });
         });
 
         test("navigates to the home screen", () => {
@@ -105,7 +105,7 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Back Button Callback", () => {
         beforeEach(() => {
-            gel.config.back.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).back.action({ screen: mockCurrentScreen });
         });
 
         test("fires a click stat", () => {
@@ -119,7 +119,7 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Overlay Back Button Callback", () => {
         beforeEach(() => {
-            gel.config.overlayBack.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).overlayBack.action({ screen: mockCurrentScreen });
         });
 
         test("fires a click stat", () => {
@@ -134,7 +134,7 @@ describe("Layout - Gel Defaults", () => {
     describe("Audio Callback", () => {
         beforeEach(() => {
             jest.spyOn(signal.bus, "publish");
-            gel.config.audio.action({ game: mockGame });
+            gel.config(mockCurrentScreen).audio.action({ game: mockGame });
         });
 
         test("sets audio on the GMI", () => {
@@ -151,7 +151,7 @@ describe("Layout - Gel Defaults", () => {
 
         test("unmutes the game audio", () => {
             mockGame.sound.mute = true;
-            gel.config.audio.action({ game: mockGame });
+            gel.config(mockCurrentScreen).audio.action({ game: mockGame });
 
             expect(signal.bus.publish).toHaveBeenCalledWith({
                 channel: settingsChannel,
@@ -166,14 +166,14 @@ describe("Layout - Gel Defaults", () => {
 
         test("sends a stat to the GMI when audio is on", () => {
             mockGame.sound.mute = true;
-            gel.config.audio.action({ game: mockGame });
+            gel.config(mockCurrentScreen).audio.action({ game: mockGame });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("audio", "on");
         });
     });
 
     describe("Settings Button Callback", () => {
         beforeEach(() => {
-            gel.config.settings.action({ game: mockGame });
+            gel.config(mockCurrentScreen).settings.action({ game: mockGame });
         });
 
         test("shows the settings", () => {
@@ -183,7 +183,7 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Pause Button Callback", () => {
         beforeEach(() => {
-            gel.config.pause.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).pause.action({ screen: mockCurrentScreen });
         });
 
         test("sends a stat to the GMI", () => {
@@ -201,7 +201,7 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Pause No Replay Button Callback", () => {
         beforeEach(() => {
-            gel.config.pauseNoReplay.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).pauseNoReplay.action({ screen: mockCurrentScreen });
         });
 
         test("sends a stat to the GMI", () => {
@@ -219,35 +219,35 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Replay Button Callback", () => {
         test("sends a stat to the GMI", () => {
-            gel.config.replay.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).replay.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain");
         });
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
             mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
-            gel.config.replay.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).replay.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
         });
     });
 
     describe("Pause Replay Button Callback", () => {
         test("sends a stat to the GMI", () => {
-            gel.config.pauseReplay.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).pauseReplay.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain");
         });
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
             mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
-            gel.config.pauseReplay.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).pauseReplay.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
         });
     });
 
     describe("Play Button Callback", () => {
         beforeEach(() => {
-            gel.config.play.action();
+            gel.config(mockCurrentScreen).play.action();
         });
 
         test("sends a stat to the GMI", () => {
@@ -257,7 +257,7 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Pause Play Button Callback", () => {
         beforeEach(() => {
-            gel.config.pausePlay.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).pausePlay.action({ screen: mockCurrentScreen });
         });
 
         test("sends a stat to the GMI", () => {
@@ -271,53 +271,53 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Achievements Button Callback", () => {
         test("navigates to the achievements screen if it exists locally", () => {
-            gel.config.achievements.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).achievements.action({ screen: mockCurrentScreen });
             expect(mockCurrentScreen.navigation.achievements).toHaveBeenCalled();
         });
 
         test("opens the CAGE achievements screen if there is no local navigation", () => {
             delete mockCurrentScreen.navigation.achievements;
-            gel.config.achievements.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).achievements.action({ screen: mockCurrentScreen });
             expect(mockGmi.achievements.show).toHaveBeenCalled();
         });
 
         test("clears the indicator", () => {
-            gel.config.achievements.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).achievements.action({ screen: mockCurrentScreen });
             expect(clearIndicatorSpy).toHaveBeenCalled();
         });
     });
 
     describe("Restart Button Callback", () => {
         test("sends a stat to the GMI", () => {
-            gel.config.restart.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).restart.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain");
         });
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
             mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
-            gel.config.restart.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).restart.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
         });
     });
 
     describe("Continue Game Button Callback", () => {
         test("sends a stat to the GMI", () => {
-            gel.config.continueGame.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).continueGame.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "continue");
         });
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
             mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
-            gel.config.continueGame.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).continueGame.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "continue", { source: testLevelId });
         });
     });
 
     describe("How To Play Button Callback", () => {
         beforeEach(() => {
-            gel.config.howToPlay.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).howToPlay.action({ screen: mockCurrentScreen });
         });
 
         test("creates a how to play screen", () => {

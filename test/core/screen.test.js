@@ -197,7 +197,7 @@ describe("Screen", () => {
             screen.removeAll();
             expect(screen.layouts).toEqual([]);
             expect(layout.destroy).toHaveBeenCalled();
-            expect(signal.bus.removeChannel).toHaveBeenCalledWith(`${buttonsChannel}-screenKey`);
+            expect(signal.bus.removeChannel).toHaveBeenCalledWith(buttonsChannel(screen));
         });
     });
 

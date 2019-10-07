@@ -153,15 +153,15 @@ describe("Select Screen", () => {
 
         test("adds signal subscriptions to all the buttons", () => {
             expect(signal.bus.subscribe).toHaveBeenCalledTimes(3);
-            expect(signal.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel + "-test-select");
+            expect(signal.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(selectScreen));
             expect(signal.bus.subscribe.mock.calls[0][0].name).toBe("previous");
-            expect(signal.bus.subscribe.mock.calls[1][0].channel).toBe(buttonsChannel + "-test-select");
+            expect(signal.bus.subscribe.mock.calls[1][0].channel).toBe(buttonsChannel(selectScreen));
             expect(signal.bus.subscribe.mock.calls[1][0].name).toBe("next");
-            expect(signal.bus.subscribe.mock.calls[2][0].channel).toBe(buttonsChannel + "-test-select");
+            expect(signal.bus.subscribe.mock.calls[2][0].channel).toBe(buttonsChannel(selectScreen));
             expect(signal.bus.subscribe.mock.calls[2][0].name).toBe("continue");
-            // expect(signal.bus.subscribe.mock.calls[3][0].channel).toBe(buttonsChannel + "-test-select");
+            // expect(signal.bus.subscribe.mock.calls[3][0].channel).toBe(buttonsChannel(selectScreen));
             // expect(signal.bus.subscribe.mock.calls[3][0].name).toBe("pause");
-            // expect(signal.bus.subscribe.mock.calls[4][0].channel).toBe(buttonsChannel + "-test-select");
+            // expect(signal.bus.subscribe.mock.calls[4][0].channel).toBe(buttonsChannel(selectScreen));
             // expect(signal.bus.subscribe.mock.calls[4][0].name).toBe("play");
         });
 

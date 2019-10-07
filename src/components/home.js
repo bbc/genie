@@ -20,7 +20,7 @@ export class Home extends Screen {
         this.addLayout(buttons.concat(achievements));
 
         signal.bus.subscribe({
-            channel: `${buttonsChannel}-${this.scene.key}`,
+            channel: buttonsChannel(this),
             name: "play",
             callback: this.navigation.next,
         });
