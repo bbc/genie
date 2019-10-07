@@ -20,7 +20,6 @@ export class Select extends Screen {
         this.add.image(0, 0, `${this.scene.key}.background`);
 
         this.theme = this.context.config.theme[this.scene.key];
-        console.log(this.theme);
         this.currentIndex = 0;
         this.choiceSprites = this.createChoiceSprites(this.theme.choices);
         this.add.image(0, -170, `${this.scene.key}.title`);
