@@ -68,14 +68,10 @@ describe("Select Screen", () => {
             return {
                 buttons: {
                     previous: {
-                        alpha: 1,
-                        setInteractive: jest.fn(),
-                        disableInteractive: jest.fn(),
+                        visible: true,
                     },
                     next: {
-                        alpha: 1,
-                        setInteractive: jest.fn(),
-                        disableInteractive: jest.fn(),
+                        visible: true,
                     },
                 },
             };
@@ -221,6 +217,13 @@ describe("Select Screen", () => {
                 expect(selectScreen.choiceSprites[2].visible).toBe(false);
             });
 
+            test("previous button is not disabled when on the first item by default", () => {
+                selectScreen.currentIndex = 0;
+                selectScreen.update();
+
+                expect(selectScreen.buttonLayout.buttons.previous.visible).toBeTruthy();
+            });
+
             test("previous button is disabled when how to play and on the first item", () => {
                 selectScreen.setData(mockHowToPlayData);
                 selectScreen.currentIndex = 0;
@@ -277,6 +280,13 @@ describe("Select Screen", () => {
                 expect(selectScreen.choiceSprites[0].visible).toBe(false);
                 expect(selectScreen.choiceSprites[1].visible).toBe(true);
                 expect(selectScreen.choiceSprites[2].visible).toBe(false);
+            });
+
+            test("next button is not disabled when on the last item by default", () => {
+                selectScreen.currentIndex = 2;
+                selectScreen.update();
+
+                expect(selectScreen.buttonLayout.buttons.next.visible).toBeTruthy();
             });
 
             test("next button is disabled when how to play and on the last item", () => {
