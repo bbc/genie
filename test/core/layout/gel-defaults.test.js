@@ -17,9 +17,24 @@ describe("Layout - Gel Defaults", () => {
 
     beforeEach(() => {
         clearIndicatorSpy = jest.fn();
-        mockPausedScreen = { scene: { resume: jest.fn(), isPaused: () => true } };
+        mockPausedScreen = { scene: { key: "belowScreenKey", resume: jest.fn(), isPaused: () => true } };
         mockCurrentScreen = {
             key: "current-screen",
+            context: {
+                parentScreens: [
+                    {
+                        screen: mockPausedScreen,
+                    },
+                ],
+                navigation: {
+                    belowScreenKey: {
+                        routes: {
+                            restart: "home",
+                        },
+                    },
+                },
+                transientData: [],
+            },
             game: {
                 scene: {
                     getScenes: () => [mockPausedScreen],
@@ -33,6 +48,7 @@ describe("Layout - Gel Defaults", () => {
                 achievements: jest.fn(),
                 back: jest.fn(),
             },
+            _navigate: jest.fn(),
             layouts: [
                 {
                     buttons: { achievements: { setIndicator: clearIndicatorSpy } },
@@ -203,28 +219,28 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Replay Button Callback", () => {
         test("sends a stat to the GMI", () => {
-            gel.config.replay.action({ game: mockGame });
+            gel.config.replay.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain");
         });
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
-            mockGame.state.states["current-screen"].transientData["level-select"] = { choice: { title: testLevelId } };
-            gel.config.replay.action({ game: mockGame });
+            mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
+            gel.config.replay.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
         });
     });
 
     describe("Pause Replay Button Callback", () => {
         test("sends a stat to the GMI", () => {
-            gel.config.pauseReplay.action({ game: mockGame });
+            gel.config.pauseReplay.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain");
         });
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
-            mockGame.state.states["current-screen"].transientData["level-select"] = { choice: { title: testLevelId } };
-            gel.config.pauseReplay.action({ game: mockGame });
+            mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
+            gel.config.pauseReplay.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
         });
     });
@@ -273,28 +289,28 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Restart Button Callback", () => {
         test("sends a stat to the GMI", () => {
-            gel.config.restart.action({ game: mockGame });
+            gel.config.restart.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain");
         });
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
-            mockGame.state.states["current-screen"].transientData["level-select"] = { choice: { title: testLevelId } };
-            gel.config.restart.action({ game: mockGame });
+            mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
+            gel.config.restart.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
         });
     });
 
     describe("Continue Game Button Callback", () => {
         test("sends a stat to the GMI", () => {
-            gel.config.continueGame.action({ game: mockGame });
+            gel.config.continueGame.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "continue");
         });
 
         test("appends level id to stats if it exists", () => {
             const testLevelId = "test level id";
-            mockGame.state.states["current-screen"].transientData["level-select"] = { choice: { title: testLevelId } };
-            gel.config.continueGame.action({ game: mockGame });
+            mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
+            gel.config.continueGame.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "continue", { source: testLevelId });
         });
     });

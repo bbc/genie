@@ -8,9 +8,13 @@ import { gmi } from "../../core/gmi/gmi.js";
 import * as signal from "../signal-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
-const pushLevelId = (game, params) => {
-    const levelId = fp.get("transientData.level-select.choice.title", game.state.states[game.state.current]);
+const pushLevelId = (screen, params) => {
+    const levelId = fp.get("transientData.level-select.choice.title", screen.context);
     return levelId ? [...params, { source: levelId }] : params;
+};
+
+const getScreenBelow = screen => {
+    return screen.context.parentScreens.slice(-1)[0].screen;
 };
 
 export const buttonsChannel = "gel-buttons";
@@ -155,8 +159,8 @@ export const config = {
         ariaLabel: "Replay Game",
         order: 8,
         id: "__replay",
-        action: ({ game }) => {
-            const params = pushLevelId(game, ["level", "playagain"]);
+        action: ({ screen }) => {
+            const params = pushLevelId(screen, ["level", "playagain"]);
             gmi.sendStatsEvent(...params);
         },
     },
@@ -167,9 +171,11 @@ export const config = {
         ariaLabel: "Replay Game",
         order: 8,
         id: "__replay",
-        channel: "pause-gel-buttons",
-        action: ({ game }) => {
-            const params = pushLevelId(game, ["level", "playagain"]);
+        channel: buttonsChannel,
+        action: ({ screen }) => {
+            const belowScreenKey = getScreenBelow(screen).scene.key;
+            screen._navigate(screen.context.navigation[belowScreenKey].routes.restart);
+            const params = pushLevelId(screen, ["level", "playagain"]);
             gmi.sendStatsEvent(...params);
         },
     },
@@ -192,10 +198,9 @@ export const config = {
         ariaLabel: "Play Game",
         order: 8,
         id: "__play",
-        channel: "pause-gel-buttons",
+        channel: buttonsChannel,
         action: ({ screen }) => {
-            const pausedScenes = screen.game.scene.getScenes(false, true).filter(scene => scene.scene.isPaused());
-            pausedScenes[0].scene.resume();
+            getScreenBelow(screen).scene.resume();
             gmi.sendStatsEvent("play", "click");
             screen.removeOverlay();
         },
@@ -234,8 +239,8 @@ export const config = {
         order: 12,
         id: "__restart",
         channel: buttonsChannel,
-        action: ({ game }) => {
-            const params = pushLevelId(game, ["level", "playagain"]);
+        action: ({ screen }) => {
+            const params = pushLevelId(screen, ["level", "playagain"]);
             gmi.sendStatsEvent(...params);
         },
     },
@@ -256,8 +261,8 @@ export const config = {
         order: 13,
         id: "__continue",
         channel: buttonsChannel,
-        action: ({ game }) => {
-            const params = pushLevelId(game, ["level", "continue"]);
+        action: ({ screen }) => {
+            const params = pushLevelId(screen, ["level", "continue"]);
             gmi.sendStatsEvent(...params);
         },
     },

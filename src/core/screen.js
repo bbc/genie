@@ -33,6 +33,7 @@ export class Screen extends Phaser.Scene {
         return {
             config: this.#data.config,
             parentScreens: this.#data.parentScreens,
+            navigation: this.#data.navigation,
             transientData: this.#data.transient || {},
         };
     }
@@ -86,7 +87,7 @@ export class Screen extends Phaser.Scene {
         const routes = this.scene.key === "boot" ? { next: "loader" } : this.#data.navigation[this.scene.key].routes;
         this.navigation = fp.mapValues(
             route => () => {
-                this.#navigate(route);
+                this._navigate(route);
             },
             routes,
         );
@@ -98,12 +99,13 @@ export class Screen extends Phaser.Scene {
             name: key,
             callback: this._removeOverlay,
         });
-        this.#data.parentScreens[this.scene.key] = this;
+        this.#data.parentScreens.push({ key: this.scene.key, screen: this });
         this.scene.run(key, this.#data);
         this.scene.bringToTop(key);
     }
 
     removeOverlay = () => {
+        this.#data.parentScreens.pop();
         signal.bus.publish({
             channel: overlayChannel,
             name: this.scene.key,
@@ -124,12 +126,11 @@ export class Screen extends Phaser.Scene {
         this.#layouts = [];
     };
 
-    #navigate = route => {
+    _navigate = route => {
         this.scene.bringToTop(route);
-        Object.keys(this.#data.parentScreens).forEach(key => {
-            this.#data.parentScreens[key].removeAll();
-            delete this.#data.parentScreens[key];
-        });
+        while (this.#data.parentScreens.length > 0) {
+            this.#data.parentScreens.pop().screen.removeAll();
+        }
         this.removeAll();
         this.scene.start(route, this.#data);
     };
