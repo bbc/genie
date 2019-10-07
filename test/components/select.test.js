@@ -3,25 +3,25 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { domElement } from "../mock/dom-element";
+// import { domElement } from "../mock/dom-element";
 
 import { createMockGmi } from "../mock/gmi";
 import { Select } from "../../src/components/select";
-import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
+// import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
 describe("Select Screen", () => {
     let characterSprites;
-    let mockAccessibleElements;
+    // let mockAccessibleElements;
     let mockData;
-    let mockDataOverlay;
+    let mockHowToPlayData;
     let selectScreen;
     let mockGmi;
 
     beforeEach(() => {
         characterSprites = [{ visible: "" }, { visible: "" }, { visible: "" }];
-        mockAccessibleElements = [domElement(), domElement(), domElement()];
+        // mockAccessibleElements = [domElement(), domElement(), domElement()];
         mockData = {
             config: {
                 theme: {
@@ -38,7 +38,7 @@ describe("Select Screen", () => {
             qaMode: { active: false },
             popupScreens: [],
         };
-        mockDataOverlay = {
+        mockHowToPlayData = {
             config: {
                 theme: {
                     "test-select": {
@@ -60,15 +60,26 @@ describe("Select Screen", () => {
         createMockGmi(mockGmi);
 
         selectScreen = new Select();
-        selectScreen.layoutManager = {
-            addToBackground: jest.fn(),
-            addLayout: jest.fn(),
-        };
 
         selectScreen.setData(mockData);
         selectScreen.transientData = {};
         selectScreen.scene = { key: "test-select" };
-        selectScreen.addLayout = jest.fn();
+        selectScreen.addLayout = jest.fn(() => {
+            return {
+                buttons: {
+                    previous: {
+                        alpha: 1,
+                        setInteractive: jest.fn(),
+                        disableInteractive: jest.fn(),
+                    },
+                    next: {
+                        alpha: 1,
+                        setInteractive: jest.fn(),
+                        disableInteractive: jest.fn(),
+                    },
+                },
+            };
+        });
         selectScreen.navigation = { next: jest.fn() };
         selectScreen.add = {
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
@@ -84,18 +95,6 @@ describe("Select Screen", () => {
                 }
             }),
             container: jest.fn(),
-        };
-        selectScreen.layouts[0] = {};
-        selectScreen.layouts[0].buttons = {};
-        selectScreen.layouts[0].buttons.previous = {
-            alpha: 1,
-            setInteractive: jest.fn(),
-            disableInteractive: jest.fn(),
-        };
-        selectScreen.layouts[0].buttons.next = {
-            alpha: 1,
-            setInteractive: jest.fn(),
-            disableInteractive: jest.fn(),
         };
     });
 
@@ -118,7 +117,7 @@ describe("Select Screen", () => {
         });
 
         test("adds GEL buttons to layout when how to play", () => {
-            selectScreen.setData(mockDataOverlay);
+            selectScreen.setData(mockHowToPlayData);
             selectScreen.create();
             const expectedButtons = ["overlayBack", "audio", "settings", "previous", "next"];
             expect(selectScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
@@ -153,17 +152,17 @@ describe("Select Screen", () => {
         });
 
         test("adds signal subscriptions to all the buttons", () => {
-            expect(signal.bus.subscribe).toHaveBeenCalledTimes(5);
+            expect(signal.bus.subscribe).toHaveBeenCalledTimes(3);
             expect(signal.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel + "-test-select");
             expect(signal.bus.subscribe.mock.calls[0][0].name).toBe("previous");
             expect(signal.bus.subscribe.mock.calls[1][0].channel).toBe(buttonsChannel + "-test-select");
             expect(signal.bus.subscribe.mock.calls[1][0].name).toBe("next");
             expect(signal.bus.subscribe.mock.calls[2][0].channel).toBe(buttonsChannel + "-test-select");
             expect(signal.bus.subscribe.mock.calls[2][0].name).toBe("continue");
-            expect(signal.bus.subscribe.mock.calls[3][0].channel).toBe(buttonsChannel + "-test-select");
-            expect(signal.bus.subscribe.mock.calls[3][0].name).toBe("pause");
-            expect(signal.bus.subscribe.mock.calls[4][0].channel).toBe(buttonsChannel + "-test-select");
-            expect(signal.bus.subscribe.mock.calls[4][0].name).toBe("play");
+            // expect(signal.bus.subscribe.mock.calls[3][0].channel).toBe(buttonsChannel + "-test-select");
+            // expect(signal.bus.subscribe.mock.calls[3][0].name).toBe("pause");
+            // expect(signal.bus.subscribe.mock.calls[4][0].channel).toBe(buttonsChannel + "-test-select");
+            // expect(signal.bus.subscribe.mock.calls[4][0].name).toBe("play");
         });
 
         test("moves to the next game screen when the continue button is pressed", () => {
@@ -222,6 +221,25 @@ describe("Select Screen", () => {
                 expect(selectScreen.choiceSprites[2].visible).toBe(false);
             });
 
+            test("previous button is disabled when how to play and on the first item", () => {
+                selectScreen.setData(mockHowToPlayData);
+                selectScreen.currentIndex = 0;
+                selectScreen.create();
+
+                expect(selectScreen.buttonLayout.buttons.previous.alpha).toBe(0);
+                expect(selectScreen.buttonLayout.buttons.previous.disableInteractive).toHaveBeenCalled();
+            });
+
+            test("previous button gets disabled when how to play and moving to first item", () => {
+                selectScreen.setData(mockHowToPlayData);
+                selectScreen.create();
+                selectScreen.currentIndex = 1;
+                selectScreen.leftButton();
+
+                expect(selectScreen.buttonLayout.buttons.previous.alpha).toBe(0);
+                expect(selectScreen.buttonLayout.buttons.previous.disableInteractive).toHaveBeenCalled();
+            });
+
             // TODO P3 Accessibility
             // test("set 'aria-hidden' = true on all the choices except the current one", () => {
             //     selectScreen.currentIndex = 2;
@@ -256,7 +274,7 @@ describe("Select Screen", () => {
             });
 
             test("switches to the next item in howtoplay mode", () => {
-                selectScreen.setData(mockDataOverlay);
+                selectScreen.setData(mockHowToPlayData);
                 selectScreen.create();
                 selectScreen.currentIndex = 1;
                 signal.bus.subscribe.mock.calls[1][0].callback();
@@ -269,6 +287,16 @@ describe("Select Screen", () => {
                 expect(selectScreen.choiceSprites[0].visible).toBe(false);
                 expect(selectScreen.choiceSprites[1].visible).toBe(true);
                 expect(selectScreen.choiceSprites[2].visible).toBe(false);
+            });
+
+            test("next button gets disabled when how to play and moving to the last item", () => {
+                selectScreen.setData(mockHowToPlayData);
+                selectScreen.create();
+                selectScreen.currentIndex = 1;
+                selectScreen.rightButton();
+
+                expect(selectScreen.buttonLayout.buttons.next.alpha).toBe(0);
+                expect(selectScreen.buttonLayout.buttons.next.disableInteractive).toHaveBeenCalled();
             });
 
             // TODO P3 Accessibility

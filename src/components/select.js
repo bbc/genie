@@ -20,16 +20,17 @@ export class Select extends Screen {
         this.add.image(0, 0, `${this.scene.key}.background`);
 
         this.theme = this.context.config.theme[this.scene.key];
+        console.log(this.theme);
         this.currentIndex = 0;
         this.choiceSprites = this.createChoiceSprites(this.theme.choices);
         this.add.image(0, -170, `${this.scene.key}.title`);
 
         if (this.theme.howToPlay) {
-            this.addLayout(["overlayBack", "audio", "settings", "previous", "next"]);
-            this.layouts[0].buttons.previous.alpha = 0;
-            this.layouts[0].buttons.previous.disableInteractive();
+            this.buttonLayout = this.addLayout(["overlayBack", "audio", "settings", "previous", "next"]);
+            this.buttonLayout.buttons.previous.alpha = 0;
+            this.buttonLayout.buttons.previous.disableInteractive();
         } else {
-            this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
+            this.buttonLayout = this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
         }
 
         // TODO P3 Accessibility
@@ -56,24 +57,24 @@ export class Select extends Screen {
     }
 
     leftButton() {
-        this.layouts[0].buttons.next.alpha = 1;
-        this.layouts[0].buttons.next.setInteractive();
+        this.buttonLayout.buttons.next.alpha = 1;
+        this.buttonLayout.buttons.next.setInteractive();
         this.currentIndex = wrapRange(--this.currentIndex, this.choiceSprites.length);
         this.showChoice();
-        if (this.currentIndex == 0 && this.theme.howToPlay) {
-            this.layouts[0].buttons.previous.alpha = 0;
-            this.layouts[0].buttons.previous.disableInteractive();
+        if (this.currentIndex === 0 && this.theme.howToPlay) {
+            this.buttonLayout.buttons.previous.alpha = 0;
+            this.buttonLayout.buttons.previous.disableInteractive();
         }
     }
 
     rightButton() {
-        this.layouts[0].buttons.previous.alpha = 1;
-        this.layouts[0].buttons.previous.setInteractive();
+        this.buttonLayout.buttons.previous.alpha = 1;
+        this.buttonLayout.buttons.previous.setInteractive();
         this.currentIndex = wrapRange(++this.currentIndex, this.choiceSprites.length);
         this.showChoice();
-        if (this.currentIndex + 1 == this.choiceSprites.length && this.theme.howToPlay) {
-            this.layouts[0].buttons.next.alpha = 0;
-            this.layouts[0].buttons.next.disableInteractive();
+        if (this.currentIndex + 1 === this.choiceSprites.length && this.theme.howToPlay) {
+            this.buttonLayout.buttons.next.alpha = 0;
+            this.buttonLayout.buttons.next.disableInteractive();
         }
     }
 
@@ -118,24 +119,24 @@ export class Select extends Screen {
             callback: this.startGame.bind(this),
         });
 
-        signal.bus.subscribe({
-            channel: `${buttonsChannel}-${this.scene.key}`,
-            name: "pause",
-            callback: () => {
-                //stops screenreader from announcing the options when the pause overlay is covering them
-                // this.accessibleElements.forEach(element => {
-                //     element.setAttribute("aria-hidden", true);
-                // });
-            },
-        });
+        // signal.bus.subscribe({
+        //     channel: `${buttonsChannel}-${this.scene.key}`,
+        //     name: "pause",
+        //     callback: () => {
+        // // stops screenreader from announcing the options when the pause overlay is covering them
+        // this.accessibleElements.forEach(element => {
+        //     element.setAttribute("aria-hidden", true);
+        // });
+        //     },
+        // });
 
-        signal.bus.subscribe({
-            channel: `${buttonsChannel}-${this.scene.key}`,
-            name: "play",
-            callback: () => {
-                // makes the screenreader announce the selected option
-                // this.accessibleElements[this.currentIndex].setAttribute("aria-hidden", false);
-            },
-        });
+        // signal.bus.subscribe({
+        //     channel: `${buttonsChannel}-${this.scene.key}`,
+        //     name: "play",
+        //     callback: () => {
+        // // makes the screenreader announce the selected option
+        // this.accessibleElements[this.currentIndex].setAttribute("aria-hidden", false);
+        //     },
+        // });
     }
 }
