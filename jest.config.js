@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 module.exports = {
-    collectCoverageFrom: ["src/**/*.js", "!src/output/**/*.js", "!src/components/overlays/pause-old.js"],
+    collectCoverageFrom: ["src/**/*.js", "!src/output/**/*.js"],
     coverageThreshold: {
         // global: {
         //     statements: 94.34,
