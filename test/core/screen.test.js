@@ -244,7 +244,7 @@ describe("Screen", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
             createAndInitScreen();
             screen._removeOverlay({ overlay: mockOverlay });
-            expect(signal.bus.removeChannel).toHaveBeenCalledWith(`${buttonsChannel}-select`);
+            expect(signal.bus.removeChannel).toHaveBeenCalledWith(buttonsChannel(mockOverlay));
         });
 
         test("removing an overlay, calls removeAll on the overlay and stops it", () => {

@@ -115,7 +115,7 @@ export class Screen extends Phaser.Scene {
     };
 
     _removeOverlay = data => {
-        signal.bus.removeChannel(`${buttonsChannel}-${data.overlay.scene.key}`);
+        signal.bus.removeChannel(buttonsChannel(data.overlay));
         data.overlay.removeAll();
         data.overlay.scene.stop();
     };
