@@ -25,7 +25,6 @@ module.exports = {
         "/node_modules/",
         "/.node_modules.+/",
         ".node_modules_production",
-        "./test/components/overlays/how-to-play",
         "./test/core/accessibility",
     ],
     setupFilesAfterEnv: ["./test/set-up-jest.js"],
