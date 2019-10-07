@@ -34,8 +34,8 @@ const noIndicator = {
 export class GelButton extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, metrics, config) {
         super(scene, x, y, assetPath({ key: config.key, isMobile: metrics.isMobile }));
-        this._id = config.key;
         config.channel = `${config.channel}-${scene.scene.key}`;
+        this._id = config.key;
         this._isMobile = metrics.isMobile;
         this.positionOverride = config.positionOverride;
         this.indicator = noIndicator;
