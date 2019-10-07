@@ -225,19 +225,9 @@ describe("Select Screen", () => {
                 selectScreen.setData(mockHowToPlayData);
                 selectScreen.currentIndex = 0;
                 selectScreen.create();
+                selectScreen.update();
 
-                expect(selectScreen.buttonLayout.buttons.previous.alpha).toBe(0);
-                expect(selectScreen.buttonLayout.buttons.previous.disableInteractive).toHaveBeenCalled();
-            });
-
-            test("previous button gets disabled when how to play and moving to first item", () => {
-                selectScreen.setData(mockHowToPlayData);
-                selectScreen.create();
-                selectScreen.currentIndex = 1;
-                selectScreen.leftButton();
-
-                expect(selectScreen.buttonLayout.buttons.previous.alpha).toBe(0);
-                expect(selectScreen.buttonLayout.buttons.previous.disableInteractive).toHaveBeenCalled();
+                expect(selectScreen.buttonLayout.buttons.previous.visible).toBeFalsy();
             });
 
             // TODO P3 Accessibility
@@ -289,14 +279,13 @@ describe("Select Screen", () => {
                 expect(selectScreen.choiceSprites[2].visible).toBe(false);
             });
 
-            test("next button gets disabled when how to play and moving to the last item", () => {
+            test("next button is disabled when how to play and on the last item", () => {
                 selectScreen.setData(mockHowToPlayData);
                 selectScreen.create();
-                selectScreen.currentIndex = 1;
-                selectScreen.rightButton();
+                selectScreen.currentIndex = 2;
+                selectScreen.update();
 
-                expect(selectScreen.buttonLayout.buttons.next.alpha).toBe(0);
-                expect(selectScreen.buttonLayout.buttons.next.disableInteractive).toHaveBeenCalled();
+                expect(selectScreen.buttonLayout.buttons.next.visible).toBeFalsy();
             });
 
             // TODO P3 Accessibility

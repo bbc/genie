@@ -26,8 +26,6 @@ export class Select extends Screen {
 
         if (this.theme.howToPlay) {
             this.buttonLayout = this.addLayout(["overlayBack", "audio", "settings", "previous", "next"]);
-            this.buttonLayout.buttons.previous.alpha = 0;
-            this.buttonLayout.buttons.previous.disableInteractive();
         } else {
             this.buttonLayout = this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
         }
@@ -43,6 +41,21 @@ export class Select extends Screen {
         this.addSignalSubscriptions();
     }
 
+    setLeftButtonState() {
+        this.buttonLayout.buttons.previous.visible = this.currentIndex === 0 ? false : true;
+    }
+
+    setRightButtonState() {
+        this.buttonLayout.buttons.next.visible = this.currentIndex + 1 === this.choiceSprites.length ? false : true;
+    }
+
+    update() {
+        if (this.theme.howToPlay) {
+            this.setLeftButtonState();
+            this.setRightButtonState();
+        }
+    }
+
     createChoiceSprites(choices) {
         const choiceSprites = [];
         choices.forEach((item, index) => {
@@ -56,25 +69,13 @@ export class Select extends Screen {
     }
 
     leftButton() {
-        this.buttonLayout.buttons.next.alpha = 1;
-        this.buttonLayout.buttons.next.setInteractive();
         this.currentIndex = wrapRange(--this.currentIndex, this.choiceSprites.length);
         this.showChoice();
-        if (this.currentIndex === 0 && this.theme.howToPlay) {
-            this.buttonLayout.buttons.previous.alpha = 0;
-            this.buttonLayout.buttons.previous.disableInteractive();
-        }
     }
 
     rightButton() {
-        this.buttonLayout.buttons.previous.alpha = 1;
-        this.buttonLayout.buttons.previous.setInteractive();
         this.currentIndex = wrapRange(++this.currentIndex, this.choiceSprites.length);
         this.showChoice();
-        if (this.currentIndex + 1 === this.choiceSprites.length && this.theme.howToPlay) {
-            this.buttonLayout.buttons.next.alpha = 0;
-            this.buttonLayout.buttons.next.disableInteractive();
-        }
     }
 
     showChoice() {
