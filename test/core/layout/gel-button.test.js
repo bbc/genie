@@ -15,9 +15,6 @@ describe("Gel Button", () => {
 
     beforeEach(() => {
         mockScene = {
-            scene: {
-                key: "mockKey",
-            },
             sys: {
                 queueDepthSort: jest.fn(),
                 anims: {
