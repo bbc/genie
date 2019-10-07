@@ -14,7 +14,7 @@ const pushLevelId = (screen, params) => {
 };
 
 const getScreenBelow = screen => {
-    return screen.context.parentScreens.slice(-1)[0].screen;
+    return screen.context.parentScreens.slice(-1)[0];
 };
 
 export const buttonsChannel = screen => (screen ? `gel-buttons-${screen.scene.key}` : "gel-buttons");

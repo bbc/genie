@@ -99,7 +99,7 @@ export class Screen extends Phaser.Scene {
             name: key,
             callback: this._removeOverlay,
         });
-        this.#data.parentScreens.push({ key: this.scene.key, screen: this });
+        this.#data.parentScreens.push(this);
         this.scene.run(key, this.#data);
         this.scene.bringToTop(key);
     }
@@ -129,7 +129,7 @@ export class Screen extends Phaser.Scene {
     _navigate = route => {
         this.scene.bringToTop(route);
         while (this.#data.parentScreens.length > 0) {
-            this.#data.parentScreens.pop().screen.removeAll();
+            this.#data.parentScreens.pop().removeAll();
         }
         this.removeAll();
         this.scene.start(route, this.#data);

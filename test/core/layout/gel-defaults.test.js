@@ -21,11 +21,7 @@ describe("Layout - Gel Defaults", () => {
         mockCurrentScreen = {
             key: "current-screen",
             context: {
-                parentScreens: [
-                    {
-                        screen: mockPausedScreen,
-                    },
-                ],
+                parentScreens: [mockPausedScreen],
                 navigation: {
                     belowScreenKey: {
                         routes: {

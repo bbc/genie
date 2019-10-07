@@ -36,7 +36,7 @@ describe("Screen", () => {
         mockData = {
             navigation: mockNavigation,
             config: { theme: { loadscreen: { music: "test/music" } } },
-            parentScreens: [{ key: "select", screen: { removeAll: jest.fn() } }],
+            parentScreens: [{ key: "select", removeAll: jest.fn() }],
             transient: mockTransientData,
         };
         screen.init(mockData);
@@ -216,7 +216,7 @@ describe("Screen", () => {
         test("adding an overlay, adds the scene to the list of parent screens", () => {
             createAndInitScreen();
             screen.addOverlay("overlay");
-            expect(screen.context.parentScreens).toEqual([mockData.parentScreens[0], { key: "screenKey", screen }]);
+            expect(screen.context.parentScreens).toEqual([mockData.parentScreens[0], screen]);
         });
 
         test("adding an overlay, tells the scene manager to run it", () => {
