@@ -199,13 +199,13 @@ describe("Select Screen", () => {
             test("switches to the last item when the first item is showing", () => {
                 selectScreen.currentIndex = 0;
                 signal.bus.subscribe.mock.calls[0][0].callback();
-                expect(selectScreen.currentIndex === 2).toBeTruthy();
+                expect(selectScreen.currentIndex === 2).toBe(true);
             });
 
             test("switches to the previous item when any other choice is showing", () => {
                 selectScreen.currentIndex = 2;
                 signal.bus.subscribe.mock.calls[0][0].callback();
-                expect(selectScreen.currentIndex === 1).toBeTruthy();
+                expect(selectScreen.currentIndex === 1).toBe(true);
             });
 
             test("hides all the choices except the current one", () => {
@@ -221,7 +221,7 @@ describe("Select Screen", () => {
                 selectScreen.currentIndex = 0;
                 selectScreen.update();
 
-                expect(selectScreen.buttonLayout.buttons.previous.visible).toBeTruthy();
+                expect(selectScreen.buttonLayout.buttons.previous.visible).toBe(true);
             });
 
             test("previous button is disabled when how to play and on the first item", () => {
@@ -230,7 +230,7 @@ describe("Select Screen", () => {
                 selectScreen.create();
                 selectScreen.update();
 
-                expect(selectScreen.buttonLayout.buttons.previous.visible).toBeFalsy();
+                expect(selectScreen.buttonLayout.buttons.previous.visible).toBe(false);
             });
 
             // TODO P3 Accessibility
@@ -257,13 +257,13 @@ describe("Select Screen", () => {
             test("switches to the first item when the last item is showing", () => {
                 selectScreen.currentIndex = 3;
                 signal.bus.subscribe.mock.calls[1][0].callback();
-                expect(selectScreen.currentIndex === 1).toBeTruthy();
+                expect(selectScreen.currentIndex === 1).toBe(true);
             });
 
             test("switches to the next item when any other choice is showing", () => {
                 selectScreen.currentIndex = 1;
                 signal.bus.subscribe.mock.calls[1][0].callback();
-                expect(selectScreen.currentIndex === 2).toBeTruthy();
+                expect(selectScreen.currentIndex === 2).toBe(true);
             });
 
             test("switches to the next item in howtoplay mode", () => {
@@ -271,7 +271,7 @@ describe("Select Screen", () => {
                 selectScreen.create();
                 selectScreen.currentIndex = 1;
                 signal.bus.subscribe.mock.calls[1][0].callback();
-                expect(selectScreen.currentIndex === 2).toBeTruthy();
+                expect(selectScreen.currentIndex === 2).toBe(true);
             });
 
             test("hides all the choices except the current one", () => {
@@ -286,7 +286,7 @@ describe("Select Screen", () => {
                 selectScreen.currentIndex = 2;
                 selectScreen.update();
 
-                expect(selectScreen.buttonLayout.buttons.next.visible).toBeTruthy();
+                expect(selectScreen.buttonLayout.buttons.next.visible).toBe(true);
             });
 
             test("next button is disabled when how to play and on the last item", () => {
@@ -295,7 +295,7 @@ describe("Select Screen", () => {
                 selectScreen.currentIndex = 2;
                 selectScreen.update();
 
-                expect(selectScreen.buttonLayout.buttons.next.visible).toBeFalsy();
+                expect(selectScreen.buttonLayout.buttons.next.visible).toBe(false);
             });
 
             // TODO P3 Accessibility
