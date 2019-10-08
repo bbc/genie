@@ -20,12 +20,16 @@ export class Select extends Screen {
     create() {
         this.add.image(0, 0, `${this.scene.key}.background`);
 
-        const theme = this.context.config.theme[this.scene.key];
+        this.theme = this.context.config.theme[this.scene.key];
         this.currentIndex = 0;
-        this.choiceSprites = this.createChoiceSprites(theme.choices);
+        this.choiceSprites = this.createChoiceSprites(this.theme.choices);
         this.add.image(0, -170, `${this.scene.key}.title`);
 
-        this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
+        if (this.theme.howToPlay) {
+            this.buttonLayout = this.addLayout(["overlayBack", "audio", "settings", "previous", "next"]);
+        } else {
+            this.buttonLayout = this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
+        }
 
         // TODO P3 Accessibility
         // this.accessibleElements = accessibleCarouselElements.create(
@@ -37,6 +41,21 @@ export class Select extends Screen {
 
         this.addSignalSubscriptions();
         createTestHarnessDisplay(this);
+    }
+
+    setLeftButtonState() {
+        this.buttonLayout.buttons.previous.visible = this.currentIndex === 0 ? false : true;
+    }
+
+    setRightButtonState() {
+        this.buttonLayout.buttons.next.visible = this.currentIndex + 1 === this.choiceSprites.length ? false : true;
+    }
+
+    update() {
+        if (this.theme.howToPlay) {
+            this.setLeftButtonState();
+            this.setRightButtonState();
+        }
     }
 
     createChoiceSprites(choices) {
@@ -85,41 +104,41 @@ export class Select extends Screen {
 
     addSignalSubscriptions() {
         signal.bus.subscribe({
-            channel: buttonsChannel,
+            channel: buttonsChannel(this),
             name: "previous",
             callback: this.leftButton.bind(this),
         });
 
         signal.bus.subscribe({
-            channel: buttonsChannel,
+            channel: buttonsChannel(this),
             name: "next",
             callback: this.rightButton.bind(this),
         });
 
         signal.bus.subscribe({
-            channel: buttonsChannel,
+            channel: buttonsChannel(this),
             name: "continue",
             callback: this.startGame.bind(this),
         });
 
-        signal.bus.subscribe({
-            channel: buttonsChannel,
-            name: "pause",
-            callback: () => {
-                //stops screenreader from announcing the options when the pause overlay is covering them
-                this.accessibleElements.forEach(element => {
-                    element.setAttribute("aria-hidden", true);
-                });
-            },
-        });
+        // signal.bus.subscribe({
+        //     channel: buttonsChannel(this),
+        //     name: "pause",
+        //     callback: () => {
+        // // stops screenreader from announcing the options when the pause overlay is covering them
+        // this.accessibleElements.forEach(element => {
+        //     element.setAttribute("aria-hidden", true);
+        // });
+        //     },
+        // });
 
-        signal.bus.subscribe({
-            channel: buttonsChannel,
-            name: "play",
-            callback: () => {
-                // makes the screenreader announce the selected option
-                this.accessibleElements[this.currentIndex].setAttribute("aria-hidden", false);
-            },
-        });
+        // signal.bus.subscribe({
+        //     channel: buttonsChannel(this),
+        //     name: "play",
+        //     callback: () => {
+        // // makes the screenreader announce the selected option
+        // this.accessibleElements[this.currentIndex].setAttribute("aria-hidden", false);
+        //     },
+        // });
     }
 }

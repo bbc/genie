@@ -69,7 +69,7 @@ describe("Home Screen", () => {
         });
 
         test("adds a signal subscription to the play button", () => {
-            expect(signal.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel);
+            expect(signal.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(homeScreen));
             expect(signal.bus.subscribe.mock.calls[0][0].name).toBe("play");
         });
 

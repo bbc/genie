@@ -37,7 +37,7 @@ export class Boot extends Screen {
         this.load.json("asset-master-pack", "asset-master-pack.json");
 
         this.setData({
-            popupScreens: [],
+            parentScreens: [],
             transient: {},
             navigation: this.#navigationConfig,
         });

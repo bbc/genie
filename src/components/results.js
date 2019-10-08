@@ -40,13 +40,13 @@ export class Results extends Screen {
 
         signal.bus.subscribe({
             name: "continue",
-            channel: buttonsChannel,
+            channel: buttonsChannel(this),
             callback: this.navigation.next,
         });
 
         signal.bus.subscribe({
             name: "restart",
-            channel: buttonsChannel,
+            channel: buttonsChannel(this),
             callback: () => {
                 this.navigation.game(this.transientData);
             },

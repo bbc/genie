@@ -15,7 +15,7 @@ import { GelGroup } from "./gel-group.js";
 import { gmi } from "../gmi/gmi.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
-const tabSort = fp.sortBy(getOrder(gel.config));
+const tabSort = fp.sortBy(getOrder(gel.config()));
 
 const checkGMIFlags = fp.cond([
     [name => name === "audio", () => gmi.shouldDisplayMuteButton],
@@ -44,7 +44,7 @@ export function create(scene, metrics, buttonIds, root) {
 
     const overrides = scene.cache.json.get("config").theme[scene.scene.key]["button-overrides"];
 
-    const config = shallowMergeOverrides(gel.config, overrides);
+    const config = shallowMergeOverrides(gel.config(scene), overrides);
 
     //TODO P3 root passed to get this working [NT]
     //const root = new Phaser.Group(game, game.world, undefined);

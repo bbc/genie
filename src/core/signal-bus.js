@@ -41,8 +41,10 @@ export const create = () => {
      * @memberof module:core/signal-bus
      */
     const removeChannel = channel => {
-        _bus[channel].destroy();
-        delete _bus[channel];
+        if (_bus[channel]) {
+            _bus[channel].destroy();
+            delete _bus[channel];
+        }
     };
 
     const addSubscription = message => {
@@ -86,7 +88,7 @@ export const create = () => {
         publishMessage,
     );
 
-    return { subscribe, publish, removeChannel };
+    return { subscribe, publish, removeChannel, removeSubscription };
 };
 
 //Single instance

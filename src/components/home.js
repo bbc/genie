@@ -23,7 +23,7 @@ export class Home extends Screen {
         createTestHarnessDisplay(this);
 
         signal.bus.subscribe({
-            channel: buttonsChannel,
+            channel: buttonsChannel(this),
             name: "play",
             callback: this.navigation.next,
         });
