@@ -5,13 +5,16 @@
  */
 
 import { createTestHarnessDisplay } from "../../../src/core/qa/layout-harness.js";
+import { onScaleChange } from "../../../src/core/scaler.js";
 
 describe("Layout Harness", () => {
     let mockScene;
     let mockOnUpEvent;
     let mockGraphicsObject;
+    let onResizeFunction;
 
     beforeEach(() => {
+        onScaleChange.add = jest.fn(resizeFunc => (onResizeFunction = resizeFunc));
         jest.spyOn(global.console, "log").mockImplementation(() => {});
         global.window.__qaMode = {};
         mockOnUpEvent = jest.fn((name, callback) => callback());
@@ -37,6 +40,7 @@ describe("Layout Harness", () => {
     });
 
     afterEach(() => {
+        onResizeFunction = undefined;
         jest.clearAllMocks();
         jest.restoreAllMocks();
     });
@@ -86,6 +90,19 @@ describe("Layout Harness", () => {
             });
             expect(mockGraphicsObject.strokeRect).toHaveBeenCalledWith(-392, -292, 784, 584);
         });
+
+        test("draws a box to represent the outer GEL padding when layout harness is toggled on and aspect ratio is above 4:3", () => {
+            mockScene.game.scale.parent = { offsetWidth: 1600, offsetHeight: 800 };
+            createTestHarnessDisplay(mockScene);
+            expect(mockScene.add.graphics).toHaveBeenCalledWith({
+                lineStyle: {
+                    width: 24,
+                    color: 0xffff00,
+                    alpha: 0.5,
+                },
+            });
+            expect(mockGraphicsObject.strokeRect).toHaveBeenCalledWith(-588, -288, 1176, 576);
+        });
     });
 
     describe("Toggle off", () => {
@@ -99,6 +116,16 @@ describe("Layout Harness", () => {
             createTestHarnessDisplay(mockScene);
             mockOnUpEvent.mock.calls[0][1]();
             expect(mockGraphicsObject.destroy).toHaveBeenCalledTimes(2);
+        });
+    });
+
+    describe("On Resize", () => {
+        test("destroys and recreates graphics with new measurements", () => {
+            createTestHarnessDisplay(mockScene);
+            jest.clearAllMocks();
+            onResizeFunction();
+            expect(mockGraphicsObject.destroy).toHaveBeenCalledTimes(2);
+            expect(mockScene.add.graphics).toHaveBeenCalledTimes(2);
         });
     });
 });

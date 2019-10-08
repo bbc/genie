@@ -51,7 +51,7 @@ export function createTestHarnessDisplay(scene) {
             GEL_MAX_ASPECT_RATIO,
             scene.game.scale.parent.offsetWidth / scene.game.scale.parent.offsetHeight,
         );
-        const size = aspectRatio < 4 / 3 ? { width: 800, height: 600 } : { width: aspectRatio * 600, height: 600 };
+        const size = aspectRatio <= 4 / 3 ? { width: 800, height: 600 } : { width: aspectRatio * 600, height: 600 };
         const paddingWidth = getPaddingWidth(size);
 
         outerPaddingGraphics = scene.add.graphics({
