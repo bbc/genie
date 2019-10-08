@@ -3,13 +3,15 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { GEL_MIN_ASPECT_RATIO } from "../../core/layout/calculate-metrics.js";
+import { onScaleChange } from "../scaler.js";
+import { GEL_MIN_ASPECT_RATIO, GEL_MAX_ASPECT_RATIO } from "../../core/layout/calculate-metrics.js";
 
 export function createTestHarnessDisplay(scene) {
     let gameAreaGraphics;
     let outerPaddingGraphics;
 
     console.log("scene", scene);
+    onScaleChange.add(onResize.bind(this, scene));
 
     if (window.__qaMode) {
         const qaKey = scene.input.keyboard.addKey("q");
@@ -45,8 +47,12 @@ export function createTestHarnessDisplay(scene) {
     }
 
     function drawOuterPadding(scene) {
-        const baseSize = { width: 800, height: 600 };
-        const paddingWidth = getPaddingWidth(baseSize);
+        const aspectRatio = Math.min(
+            GEL_MAX_ASPECT_RATIO,
+            scene.game.scale.parent.offsetWidth / scene.game.scale.parent.offsetHeight,
+        );
+        const size = aspectRatio < 4 / 3 ? { width: 800, height: 600 } : { width: aspectRatio * 600, height: 600 };
+        const paddingWidth = getPaddingWidth(size);
 
         outerPaddingGraphics = scene.add.graphics({
             lineStyle: {
@@ -55,12 +61,18 @@ export function createTestHarnessDisplay(scene) {
                 alpha: 0.5,
             },
         });
+
         outerPaddingGraphics.strokeRect(
-            (paddingWidth - baseSize.width) / 2,
-            (paddingWidth - baseSize.height) / 2,
-            baseSize.width - paddingWidth,
-            baseSize.height - paddingWidth,
+            (paddingWidth - size.width) / 2,
+            (paddingWidth - size.height) / 2,
+            size.width - paddingWidth,
+            size.height - paddingWidth,
         );
+    }
+
+    function onResize(scene) {
+        hide();
+        show(scene);
     }
 
     function hide() {
