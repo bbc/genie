@@ -11,10 +11,15 @@ describe("Layout Harness", () => {
     let mockScene;
     let mockOnUpEvent;
     let mockGraphicsObject;
+    let mockSignal;
     let onResizeFunction;
 
     beforeEach(() => {
-        onScaleChange.add = jest.fn(resizeFunc => (onResizeFunction = resizeFunc));
+        mockSignal = { unsubscribe: jest.fn() };
+        onScaleChange.add = jest.fn(resizeFunc => {
+            onResizeFunction = resizeFunc;
+            return mockSignal;
+        });
         jest.spyOn(global.console, "log").mockImplementation(() => {});
         global.window.__qaMode = {};
         mockOnUpEvent = jest.fn((name, callback) => callback());
@@ -60,6 +65,11 @@ describe("Layout Harness", () => {
         test("outputs a console log when layout harness is toggled on", () => {
             createTestHarnessDisplay(mockScene);
             expect(global.console.log).toHaveBeenCalledWith("Layout Test Harness Displayed");
+        });
+
+        test("adds a callback to the onScaleChange event", () => {
+            createTestHarnessDisplay(mockScene);
+            expect(onScaleChange.add).toHaveBeenCalled();
         });
 
         test("draws a rectangle to represent the game area when layout harness is on", () => {
@@ -117,6 +127,12 @@ describe("Layout Harness", () => {
             mockOnUpEvent.mock.calls[0][1]();
             expect(mockGraphicsObject.destroy).toHaveBeenCalledTimes(2);
         });
+
+        test("unsubscribes from the signal bus", () => {
+            createTestHarnessDisplay(mockScene);
+            mockOnUpEvent.mock.calls[0][1]();
+            expect(mockSignal.unsubscribe).toHaveBeenCalled();
+        });
     });
 
     describe("On Resize", () => {
@@ -126,6 +142,8 @@ describe("Layout Harness", () => {
             onResizeFunction();
             expect(mockGraphicsObject.destroy).toHaveBeenCalledTimes(2);
             expect(mockScene.add.graphics).toHaveBeenCalledTimes(2);
+            expect(onScaleChange.add).toHaveBeenCalled();
+            expect(mockSignal.unsubscribe).toHaveBeenCalled();
         });
     });
 });

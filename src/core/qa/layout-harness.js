@@ -9,9 +9,9 @@ import { GEL_MIN_ASPECT_RATIO, GEL_MAX_ASPECT_RATIO } from "../../core/layout/ca
 export function createTestHarnessDisplay(scene) {
     let gameAreaGraphics;
     let outerPaddingGraphics;
+    let signal;
 
     console.log("scene", scene);
-    onScaleChange.add(onResize.bind(this, scene));
 
     if (window.__qaMode) {
         const qaKey = scene.input.keyboard.addKey("q");
@@ -32,6 +32,7 @@ export function createTestHarnessDisplay(scene) {
         drawGameArea(scene);
         drawOuterPadding(scene);
         window.__qaMode.testHarnessLayoutDisplayed = true;
+        signal = onScaleChange.add(onResize.bind(this, scene));
     }
 
     function drawGameArea(scene) {
@@ -79,6 +80,7 @@ export function createTestHarnessDisplay(scene) {
         gameAreaGraphics.destroy();
         outerPaddingGraphics.destroy();
         window.__qaMode.testHarnessLayoutDisplayed = false;
+        signal.unsubscribe();
     }
 
     function getPaddingWidth(canvas) {
