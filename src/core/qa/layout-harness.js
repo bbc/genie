@@ -9,7 +9,7 @@ export function createTestHarnessDisplay(scene) {
     let gameAreaGraphics;
     let outerPaddingGraphics;
 
-    console.log("scene", scene)
+    console.log("scene", scene);
 
     if (window.__qaMode) {
         const qaKey = scene.input.keyboard.addKey("q");
@@ -45,31 +45,21 @@ export function createTestHarnessDisplay(scene) {
     }
 
     function drawOuterPadding(scene) {
-        const canvas = scene.game.canvas;
-        const paddingWidth = getPaddingWidth(canvas);
-        const gameLeftEdge = (paddingWidth * 2 - canvas.width) * 0.5;
-        const gameTopEdge = (paddingWidth - canvas.height) * 0.5;
-        const gameRightEdge = (paddingWidth * 2 - canvas.width) * -0.5;
-        const gameBottomEdge = (paddingWidth - canvas.height) * -0.5;
+        const baseSize = { width: 800, height: 600 };
+        const paddingWidth = getPaddingWidth(baseSize);
+
         outerPaddingGraphics = scene.add.graphics({
-            fillStyle: { color: 0xffff00, alpha: 0.5 },
             lineStyle: {
                 width: paddingWidth,
                 color: 0xffff00,
                 alpha: 0.5,
             },
-            add: true,
         });
-
-        outerPaddingGraphics.strokePoints(
-            [
-                { x: gameLeftEdge, y: gameTopEdge },
-                { x: gameRightEdge, y: gameTopEdge },
-                { x: gameRightEdge, y: gameBottomEdge },
-                { x: gameLeftEdge, y: gameBottomEdge },
-            ],
-            true,
-            true,
+        outerPaddingGraphics.strokeRect(
+            (paddingWidth - baseSize.width) / 2,
+            (paddingWidth - baseSize.height) / 2,
+            baseSize.width - paddingWidth,
+            baseSize.height - paddingWidth,
         );
     }
 
