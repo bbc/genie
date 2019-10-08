@@ -8,12 +8,14 @@ import _ from "../../lib/lodash/lodash.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import * as signal from "../core/signal-bus.js";
-import * as GameSound from "../core/game-sound.js";
-import * as a11y from "../core/accessibility/accessibility-layer.js";
-import * as VisibleLayer from "../core/visible-layer.js";
+// import * as GameSound from "../core/game-sound.js";
+// import * as a11y from "../core/accessibility/accessibility-layer.js";
+// import * as VisibleLayer from "../core/visible-layer.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
+
+export const overlayChannel = "gel-overlays";
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
@@ -30,8 +32,9 @@ export class Screen extends Phaser.Scene {
     get context() {
         return {
             config: this.#data.config,
-            popupScreens: this.#data.popupScreens,
-            transientData: this.#data.transient,
+            parentScreens: this.#data.parentScreens,
+            navigation: this.#data.navigation,
+            transientData: this.#data.transient || {},
         };
     }
 
@@ -59,15 +62,15 @@ export class Screen extends Phaser.Scene {
         this.cameras.main.scrollX = -700;
         this.cameras.main.scrollY = -300;
 
+        if (this.scene.key !== "loader" && this.scene.key !== "boot") {
+            gmi.setStatsScreen(this.scene.key);
+        }
+
         //TODO P3 commented out lines need re-enabling
         //const themeScreenConfig = this.context.config.theme[this.game.state.current];
-        //if (this.game.state.current !== "loader") {
-        //    gmi.setStatsScreen(this.game.state.current);
-        //}
         //GameSound.setupScreenMusic(this.game, themeScreenConfig);
-        a11y.clearAccessibleButtons();
+        // a11y.clearAccessibleButtons();
         //a11y.clearElementsFromDom();
-        //this.overlaySetup();
 
         this.#makeNavigation();
     }
@@ -80,47 +83,55 @@ export class Screen extends Phaser.Scene {
         this.#data.config = newConfig;
     }
 
-    overlaySetup() {
-        signal.bus.subscribe({
-            channel: "overlays",
-            name: "overlay-closed",
-            callback: this.onOverlayClosed.bind(this),
-        });
-    }
-
-    onOverlayClosed(data) {
-        a11y.clearElementsFromDom();
-        a11y.clearAccessibleButtons(this);
-        this.context.popupScreens.pop();
-        a11y.appendElementsToDom(this);
-        if (data.firePageStat) {
-            gmi.setStatsScreen(this.game.state.current);
-        }
-        signal.bus.removeChannel("overlays");
-        this.overlaySetup();
-    }
-
     #makeNavigation = () => {
         const routes = this.scene.key === "boot" ? { next: "loader" } : this.#data.navigation[this.scene.key].routes;
         this.navigation = fp.mapValues(
             route => () => {
-                this.#navigate(route);
+                this._navigate(route);
             },
             routes,
         );
     };
 
-    #removeAll = () => {
-        if (this.#layouts.length > 0) {
-            signal.bus.removeChannel(buttonsChannel);
-        }
+    addOverlay(key) {
+        signal.bus.subscribe({
+            channel: overlayChannel,
+            name: key,
+            callback: this._removeOverlay,
+        });
+        this.#data.parentScreens.push(this);
+        this.scene.run(key, this.#data);
+        this.scene.bringToTop(key);
+    }
+
+    removeOverlay = () => {
+        this.#data.parentScreens.pop();
+        signal.bus.publish({
+            channel: overlayChannel,
+            name: this.scene.key,
+            data: { overlay: this },
+        });
+        signal.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
+    };
+
+    _removeOverlay = data => {
+        signal.bus.removeChannel(buttonsChannel(data.overlay));
+        data.overlay.removeAll();
+        data.overlay.scene.stop();
+    };
+
+    removeAll = () => {
+        signal.bus.removeChannel(buttonsChannel(this));
         this.#layouts.forEach(layout => layout.destroy());
         this.#layouts = [];
     };
 
-    #navigate = route => {
-        //TODO P3 navigation 'gotoscreen' also did some cleanup we may need to re-enable here [NT]
-        this.#removeAll();
+    _navigate = route => {
+        this.scene.bringToTop(route);
+        while (this.#data.parentScreens.length > 0) {
+            this.#data.parentScreens.pop().removeAll();
+        }
+        this.removeAll();
         this.scene.start(route, this.#data);
     };
 
@@ -146,7 +157,7 @@ export class Screen extends Phaser.Scene {
         return layout;
     }
 
-    get visibleLayer() {
-        return VisibleLayer.get(this.game, this.context);
-    }
+    // get visibleLayer() {
+    //     return VisibleLayer.get(this.game, this.context);
+    // }
 }

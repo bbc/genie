@@ -64,6 +64,29 @@
                 "key": "pauseBackground",
                 "url": "pause/pause-background.png",
                 "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "title",
+                "url": "pause/title.png",
+                "overwrite": false
+            }
+        ]
+    },
+    "pause-noreplay": {
+        "prefix": "pause-noreplay.",
+        "files": [
+            {
+                "type": "image",
+                "key": "pauseBackground",
+                "url": "pause/pause-background.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "title",
+                "url": "pause/title.png",
+                "overwrite": false
             }
         ]
     },

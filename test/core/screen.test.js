@@ -5,34 +5,41 @@
  */
 import { createMockGmi } from "../mock/gmi";
 
-import { Screen } from "../../src/core/screen";
-import { createMockGame } from "../mock/phaser-game.js";
-import * as GameSound from "../../src/core/game-sound";
-import * as VisibleLayer from "../../src/core/visible-layer.js";
-import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
+import { Screen, overlayChannel } from "../../src/core/screen";
+import * as Layout from "../../src/core/layout/layout.js";
+import * as Scaler from "../../src/core/scaler.js";
+// import * as GameSound from "../../src/core/game-sound";
+// import * as VisibleLayer from "../../src/core/visible-layer.js";
+// import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import * as signal from "../../src/core/signal-bus.js";
+import { buttonsChannel } from "../../src/core/layout/gel-defaults";
 
 describe("Screen", () => {
     let screen;
+    let mockData;
     let mockGmi;
-    let mockLayoutManager;
-    let mockContext;
     let mockTransientData;
     let mockNavigation;
 
-    const createScreen = () => {
+    const createScreen = (key = "screenKey") => {
         screen = new Screen();
-        mockTransientData = { transient: "data" };
-        screen.game = createMockGame();
-        screen.game.state.current = "loadscreen";
+        screen.scene = { key, bringToTop: jest.fn(), start: jest.fn(), run: jest.fn() };
+        screen.cameras = { main: { scrollX: 0, scrollY: 0 } };
+        screen.add = { container: () => "root" };
+        mockTransientData = { key: "data" };
     };
 
     const initScreen = () => {
         mockNavigation = {
-            loadscreen: { routes: { testRoute: jest.fn().mockReturnValue("loadscreen-test-route") } },
-            select: { routes: "select-routes" },
+            screenKey: { routes: { next: "nextscreen" } },
         };
-        screen.init(mockTransientData, mockLayoutManager, mockContext, mockNavigation);
+        mockData = {
+            navigation: mockNavigation,
+            config: { theme: { loadscreen: { music: "test/music" } } },
+            parentScreens: [{ key: "select", removeAll: jest.fn() }],
+            transient: mockTransientData,
+        };
+        screen.init(mockData);
     };
 
     const createAndInitScreen = () => {
@@ -42,171 +49,210 @@ describe("Screen", () => {
 
     beforeEach(() => {
         jest.spyOn(signal.bus, "subscribe");
+        jest.spyOn(signal.bus, "publish");
         jest.spyOn(signal.bus, "removeChannel");
-        jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
-        jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
-        jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
-        jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
-        jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
+        jest.spyOn(signal.bus, "removeSubscription");
+        // jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
+        // jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
+        // jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
+        // jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
+        // jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
 
-        mockLayoutManager = { addToBackground: jest.fn() };
         mockGmi = { setStatsScreen: jest.fn() };
         createMockGmi(mockGmi);
 
-        mockContext = {
-            popupScreens: ["pause"],
-            config: { theme: { loadscreen: { music: "test/music" } } },
-        };
         delete window.__qaMode;
     });
 
     afterEach(() => jest.clearAllMocks());
 
     describe("Initialisation", () => {
-        test("sets the layoutManager", () => {
-            createAndInitScreen();
-            expect(screen.layoutManager).toEqual(mockLayoutManager);
-        });
-
         test("sets the context", () => {
             createAndInitScreen();
-            expect(screen._context).toEqual(mockContext);
+            expect(screen.context).toEqual({
+                config: mockData.config,
+                navigation: mockNavigation,
+                parentScreens: mockData.parentScreens,
+                transientData: mockTransientData,
+            });
         });
 
         test("sets the navigation", () => {
             createAndInitScreen();
-            expect(screen.navigation.testRoute()).toBe("loadscreen-test-route");
+            expect(screen.navigation).toEqual({ next: expect.any(Function) });
+        });
+
+        test("sets the navigation when on the boot screen", () => {
+            createScreen("boot");
+            initScreen();
+            expect(screen.navigation).toEqual({ next: expect.any(Function) });
         });
 
         test("passes transientData to next screen on navigation", () => {
             createAndInitScreen();
-            screen.navigation.testRoute();
-            expect(mockNavigation.loadscreen.routes.testRoute).toHaveBeenCalledWith(mockTransientData);
+            screen.navigation.next();
+            expect(screen.scene.start).toHaveBeenCalledWith("nextscreen", mockData);
         });
 
         test("defaults transientData to empty Object", () => {
-            createAndInitScreen();
-            delete screen.transientData;
-            screen.navigation.testRoute();
-            expect(mockNavigation.loadscreen.routes.testRoute).toHaveBeenCalledWith({});
+            createScreen();
+            delete mockData.transient;
+            screen.init(mockData);
+            expect(screen.context.transientData).toEqual({});
         });
 
-        test("sets the background music using the theme config", () => {
-            createAndInitScreen();
-            const expectedThemeConfig = mockContext.config.theme.loadscreen;
-            expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.game, expectedThemeConfig);
-        });
+        // test("sets the background music using the theme config", () => {
+        //     createAndInitScreen();
+        //     const expectedThemeConfig = mockContext.config.theme.loadscreen;
+        //     expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.game, expectedThemeConfig);
+        // });
 
-        test("sets transientData", () => {
-            createAndInitScreen();
-            expect(screen.transientData).toEqual(mockTransientData);
-        });
+        // test("clears the currently stored accessible buttons", () => {
+        //     createAndInitScreen();
+        //     expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
+        // });
 
-        test("clears the currently stored accessible buttons", () => {
-            createAndInitScreen();
-            expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
-        });
-
-        test("resets the accessiblity layer DOM", () => {
-            createAndInitScreen();
-            expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
-        });
+        // test("resets the accessiblity layer DOM", () => {
+        //     createAndInitScreen();
+        //     expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
+        // });
 
         test("sets the stats screen to the current screen, if not on the loadscreen", () => {
-            createScreen();
-            screen.game.state.current = "select";
-            initScreen();
-            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith(screen.game.state.current);
+            createAndInitScreen();
+            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith(screen.scene.key);
         });
 
         test("does not set the stats screen to the current screen, if on the loadscreen", () => {
-            createScreen();
-            screen.game.state.current = "loadscreen";
-            initScreen();
+            createScreen("loader");
+            mockData.navigation = {
+                loader: { routes: { next: "nextscreen" } },
+            };
+            screen.init(mockData);
             expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
         });
 
-        test("creates the overlay closed signal", () => {
-            createAndInitScreen();
-            expect(signal.bus.subscribe).toHaveBeenCalledWith({
-                channel: "overlays",
-                name: "overlay-closed",
-                callback: expect.any(Function),
-            });
+        test("does not set the stats screen to the current screen, if on the boot screen", () => {
+            createScreen("boot");
+            mockData.navigation = {
+                boot: { routes: { next: "nextscreen" } },
+            };
+            screen.init(mockData);
+            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
         });
     });
 
-    describe("context getter/setter", () => {
-        test("gets context", () => {
-            createAndInitScreen();
-            expect(screen.context).toEqual(mockContext);
-        });
-
-        test("sets context by merging new value with current value", () => {
-            const expectedContext = {
-                popupScreens: ["pause"],
-                config: {
-                    theme: { loadscreen: { music: "test/music" }, pause: { data: "some-data" } },
-                },
+    describe("getter/setters", () => {
+        test("sets transient data by merging new value with current value", () => {
+            const expectedTransientData = {
+                key: "data",
+                more: "data",
             };
             createAndInitScreen();
-            screen.context = { config: { theme: { pause: { data: "some-data" } } } };
+            screen.transientData = { more: "data" };
+            expect(screen.context.transientData).toEqual(expectedTransientData);
+        });
 
-            expect(screen.context).toEqual(expectedContext);
+        test("sets theme config by replacing the original config", () => {
+            const expectedConfig = {
+                key: "data",
+                more: "data",
+            };
+            createAndInitScreen();
+            screen.setConfig(expectedConfig);
+            expect(screen.context.config).toBe(expectedConfig);
         });
     });
 
-    describe("getAsset method", () => {
-        test("gets asset by name", () => {
+    describe("Add Layout", () => {
+        test("adds a new layout to the array", () => {
+            const mockLayout = buttons => {
+                return { buttons, destroy: jest.fn() };
+            };
+            Layout.create = jest.fn((screen, metrics, buttons) => mockLayout(buttons));
+            Scaler.getMetrics = () => {};
             createAndInitScreen();
-            const expectedName = "some-name";
-            expect(screen.getAsset(expectedName)).toBe("loadscreen.some-name");
+            const layout = screen.addLayout(["somebutton", "another"]);
+            expect(screen.layouts).toEqual([layout]);
+        });
+
+        test("calls layout.create with correct arguments", () => {
+            const expectedButtons = ["somebutton", "another"];
+            Layout.create = jest.fn();
+            Scaler.getMetrics = () => "somemetrics";
+            createAndInitScreen();
+            screen.addLayout(expectedButtons);
+            expect(Layout.create).toHaveBeenCalledWith(screen, "somemetrics", expectedButtons, "root");
         });
     });
 
-    describe("visibleLayer getter/setter", () => {
-        test("calls visible layer with correct params", () => {
-            jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
+    describe("Remove All", () => {
+        test("cleans up the layout and the signal bus", () => {
+            const mockLayout = buttons => {
+                return { buttons, destroy: jest.fn() };
+            };
+            Layout.create = jest.fn((screen, metrics, buttons) => mockLayout(buttons));
+            Scaler.getMetrics = () => {};
             createAndInitScreen();
-            expect(screen.visibleLayer).toEqual("current-layer");
-            expect(VisibleLayer.get).toHaveBeenCalledWith(screen.game, screen.context);
+            const layout = screen.addLayout(["somebutton", "another"]);
+            screen.removeAll();
+            expect(screen.layouts).toEqual([]);
+            expect(layout.destroy).toHaveBeenCalled();
+            expect(signal.bus.removeChannel).toHaveBeenCalledWith(buttonsChannel(screen));
         });
     });
 
-    describe("When overlay-closed signal is fired", () => {
-        beforeEach(() => {
-            mockContext.popupScreens = ["how-to-play"];
+    describe("Overlays", () => {
+        test("adding an overlay, subscribes to signal bus correctly", () => {
+            const expectedName = "overlay";
             createAndInitScreen();
+            screen.addOverlay(expectedName);
+            expect(signal.bus.subscribe).toHaveBeenCalledWith({
+                channel: overlayChannel,
+                name: expectedName,
+                callback: screen._removeOverlay,
+            });
         });
 
-        test("clears accessible elements from DOM", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(2);
+        test("adding an overlay, adds the scene to the list of parent screens", () => {
+            createAndInitScreen();
+            screen.addOverlay("overlay");
+            expect(screen.context.parentScreens).toEqual([mockData.parentScreens[0], screen]);
         });
 
-        test("clears accessible buttons object", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(2);
+        test("adding an overlay, tells the scene manager to run it", () => {
+            createAndInitScreen();
+            screen.addOverlay("overlay");
+            expect(screen.scene.run).toHaveBeenCalledWith("overlay", mockData);
+            expect(screen.scene.bringToTop).toHaveBeenCalled();
         });
 
-        test("appends accessible elements to DOM", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(a11y.appendElementsToDom).toHaveBeenCalledTimes(1);
+        test("removing an overlay, publishes to and removes subscription from signal bus correctly", () => {
+            createAndInitScreen();
+            screen.removeOverlay("select");
+            expect(signal.bus.publish).toHaveBeenCalledWith({
+                channel: overlayChannel,
+                name: screen.scene.key,
+                data: { overlay: expect.any(Screen) },
+            });
+            expect(signal.bus.removeSubscription).toHaveBeenCalledWith({
+                channel: overlayChannel,
+                name: screen.scene.key,
+            });
         });
 
-        test("fires a page stat with the current screen when firePageStat is true", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: true } });
-            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith(screen.game.state.current);
+        test("removing an overlay, removes the overlays button channel", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
+            createAndInitScreen();
+            screen._removeOverlay({ overlay: mockOverlay });
+            expect(signal.bus.removeChannel).toHaveBeenCalledWith(buttonsChannel(mockOverlay));
         });
 
-        test("does not fire a page stat when firePageStat is false", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
-        });
-
-        test("removes the overlays channel", () => {
-            signal.bus.publish({ channel: "overlays", name: "overlay-closed", data: { firePageStat: false } });
-            expect(signal.bus.removeChannel).toHaveBeenCalledTimes(1);
+        test("removing an overlay, calls removeAll on the overlay and stops it", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
+            createAndInitScreen();
+            screen._removeOverlay({ overlay: mockOverlay });
+            expect(mockOverlay.removeAll).toHaveBeenCalled();
+            expect(mockOverlay.scene.stop).toHaveBeenCalled();
         });
     });
 });
