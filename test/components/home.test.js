@@ -14,7 +14,7 @@ describe("Home Screen", () => {
     let mockContext;
 
     beforeEach(() => {
-        jest.spyOn(layoutHarness, "createTestHarnessDisplay");
+        layoutHarness.createTestHarnessDisplay = jest.fn();
 
         mockContext = { config: { theme: { game: { achievements: undefined } } } };
 

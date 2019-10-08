@@ -31,6 +31,7 @@ describe("Layout Harness", () => {
             },
             game: {
                 canvas: { width: 800, height: 600 },
+                scale: { parent: { offsetWidth: 800, offsetHeight: 600 } },
             },
         };
     });
