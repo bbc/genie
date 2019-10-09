@@ -32,6 +32,7 @@ describe("Layout Harness", () => {
             input: {
                 keyboard: {
                     addKey: jest.fn(() => ({ on: mockOnUpEvent })),
+                    removeKey: jest.fn(),
                 },
             },
             add: {
@@ -41,6 +42,7 @@ describe("Layout Harness", () => {
                 canvas: { width: 800, height: 600 },
                 scale: { parent: { offsetWidth: 800, offsetHeight: 600 } },
             },
+            events: { on: jest.fn() },
         };
     });
 
@@ -59,6 +61,12 @@ describe("Layout Harness", () => {
         delete global.window.__qaMode;
         createTestHarnessDisplay(mockScene);
         expect(mockScene.input.keyboard.addKey).not.toHaveBeenCalledWith("q");
+    });
+
+    test("removes the 'q' key event listener when the screen is destroyed", () => {
+        mockScene.events.on.mockImplementation((name, callback) => callback());
+        createTestHarnessDisplay(mockScene);
+        expect(mockScene.input.keyboard.removeKey).toHaveBeenCalledWith("q");
     });
 
     describe("Toggle on", () => {

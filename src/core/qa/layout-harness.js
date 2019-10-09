@@ -13,7 +13,11 @@ export function createTestHarnessDisplay(scene) {
 
     if (window.__qaMode) {
         const qaKey = scene.input.keyboard.addKey("q");
-        qaKey.on("up", () => toggle(scene));
+        const toggleQaMode = () => toggle(scene);
+        qaKey.on("up", toggleQaMode);
+        scene.events.on("destroy", () => {
+            scene.input.keyboard.removeKey("q");
+        });
     }
 
     function toggle(scene) {
