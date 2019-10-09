@@ -9,15 +9,20 @@ import { GEL_MIN_ASPECT_RATIO, GEL_MAX_ASPECT_RATIO } from "../../core/layout/ca
 export function createTestHarnessDisplay(scene) {
     let gameAreaGraphics;
     let outerPaddingGraphics;
-    let signal;
+    let onScaleChangeSignal;
+    let qaKeySignal;
 
     if (window.__qaMode) {
+        setupQaKey();
+        scene.events.on("onoverlayadded", onOverlayAdded);
+        scene.events.on("onoverlayremoved", setupQaKey);
+        scene.events.once("onscreenexit", onExit);
+    }
+
+    function setupQaKey() {
         const qaKey = scene.input.keyboard.addKey("q");
         const toggleQaMode = () => toggle(scene);
-        qaKey.on("up", toggleQaMode);
-        scene.events.on("destroy", () => {
-            scene.input.keyboard.removeKey("q");
-        });
+        qaKeySignal = qaKey.on("up", toggleQaMode);
     }
 
     function toggle(scene) {
@@ -34,7 +39,7 @@ export function createTestHarnessDisplay(scene) {
         drawGameArea(scene);
         drawOuterPadding(scene);
         window.__qaMode.testHarnessLayoutDisplayed = true;
-        signal = onScaleChange.add(onResize.bind(this, scene));
+        onScaleChangeSignal = onScaleChange.add(onResize.bind(this, scene));
     }
 
     function drawGameArea(scene) {
@@ -79,10 +84,24 @@ export function createTestHarnessDisplay(scene) {
     }
 
     function hide() {
-        gameAreaGraphics.destroy();
-        outerPaddingGraphics.destroy();
-        window.__qaMode.testHarnessLayoutDisplayed = false;
-        signal.unsubscribe();
+        if (window.__qaMode.testHarnessLayoutDisplayed) {
+            gameAreaGraphics.destroy();
+            outerPaddingGraphics.destroy();
+            window.__qaMode.testHarnessLayoutDisplayed = false;
+            onScaleChangeSignal.unsubscribe();
+        }
+    }
+
+    function onOverlayAdded() {
+        qaKeySignal.destroy();
+        hide();
+    }
+
+    function onExit() {
+        qaKeySignal.destroy();
+        hide();
+        scene.events.removeListener("onoverlayadded", onOverlayAdded);
+        scene.events.removeListener("onoverlayremoved", setupQaKey);
     }
 
     function getPaddingWidth(canvas) {

@@ -94,6 +94,7 @@ export class Screen extends Phaser.Scene {
     };
 
     addOverlay(key) {
+        this.events.emit("onoverlayadded");
         signal.bus.subscribe({
             channel: overlayChannel,
             name: key,
@@ -105,6 +106,7 @@ export class Screen extends Phaser.Scene {
     }
 
     removeOverlay = () => {
+        this.events.emit("onscreenexit");
         this.#data.parentScreens.pop();
         signal.bus.publish({
             channel: overlayChannel,
@@ -115,6 +117,7 @@ export class Screen extends Phaser.Scene {
     };
 
     _removeOverlay = data => {
+        this.events.emit("onoverlayremoved");
         signal.bus.removeChannel(buttonsChannel(data.overlay));
         data.overlay.removeAll();
         data.overlay.scene.stop();
@@ -127,6 +130,7 @@ export class Screen extends Phaser.Scene {
     };
 
     _navigate = route => {
+        this.events.emit("onscreenexit");
         this.scene.bringToTop(route);
         while (this.#data.parentScreens.length > 0) {
             this.#data.parentScreens.pop().removeAll();
