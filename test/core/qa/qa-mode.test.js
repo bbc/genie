@@ -6,7 +6,7 @@
 import * as qaMode from "../../../src/core/qa/qa-mode.js";
 import * as parseUrlParams from "../../../src/core/parseUrlParams.js";
 
-describe("QAMode", () => {
+describe("QA Mode", () => {
     const game = {};
     const qaModeWindow = {
         testHarnessLayoutDisplayed: false,
@@ -38,7 +38,7 @@ describe("QAMode", () => {
         expect(testWindow.__qaMode).toEqual(qaModeWindow);
     });
 
-    test("is QAMode when URL includes www.test.bbc.", () => {
+    test("QAMode when URL includes www.test.bbc.", () => {
         jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ qaMode: false }));
         testWindow = {
             location: {
@@ -57,15 +57,17 @@ describe("QAMode", () => {
         expect(testWindow.__qaMode).toEqual({});
     });
 
-    test("is debugMode when url does not includes parameter 'debugMode=true'", () => {
-        jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debugMode: false }));
+    describe("Debug Mode", () => {
+        test("is false when url does not includes parameter 'debugMode=true'", () => {
+            jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debugMode: false }));
 
-        expect(qaMode.debugMode()).toEqual(false);
-    });
+            expect(qaMode.debugMode()).toEqual(false);
+        });
 
-    test("is debugMode when url includes parameter 'debugMode=true'", () => {
-        jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debugMode: true }));
+        test("is true when url includes parameter 'debugMode=true'", () => {
+            jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debugMode: true }));
 
-        expect(qaMode.debugMode()).toEqual(true);
+            expect(qaMode.debugMode()).toEqual(true);
+        });
     });
 });

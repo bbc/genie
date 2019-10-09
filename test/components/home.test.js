@@ -3,18 +3,18 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Home } from "../../src/components/home";
-// import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
+import * as layoutHarness from "../../src/core/qa/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
+
+import { Home } from "../../src/components/home";
 
 describe("Home Screen", () => {
     let homeScreen;
     let mockContext;
 
     beforeEach(() => {
-        //TODO P3 fix  test harness
-        // jest.spyOn(layoutHarness, "createTestHarnessDisplay");
+        layoutHarness.createTestHarnessDisplay = jest.fn();
 
         mockContext = { config: { theme: { game: { achievements: undefined } } } };
 
@@ -46,14 +46,9 @@ describe("Home Screen", () => {
             expect(homeScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        // TODO P3 fix  test harness
-        // test("creates a layout harness with correct params", () => {
-        //     expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
-        //         mockGame,
-        //         mockContext,
-        //         homeScreen.layoutManager,
-        //     );
-        // });
+        test("creates a layout harness with correct params", () => {
+            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(homeScreen);
+        });
     });
 
     describe("Achievements button", () => {

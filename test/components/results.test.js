@@ -5,9 +5,10 @@
  */
 import { createMockGmi } from "../mock/gmi";
 
-import { Results } from "../../src/components/results";
-// import * as layoutHarness from "../../src/components/test-harness/layout-harness.js";
+import * as layoutHarness from "../../src/core/qa/layout-harness.js";
 import * as signal from "../../src/core/signal-bus.js";
+
+import { Results } from "../../src/components/results";
 
 describe("Results Screen", () => {
     let resultsScreen;
@@ -15,7 +16,7 @@ describe("Results Screen", () => {
     let mockGmi;
 
     beforeEach(() => {
-        // jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
+        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
 
         mockData = {
             config: {
@@ -78,15 +79,10 @@ describe("Results Screen", () => {
             expect(resultsScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        //TODO layout harness
-        // test("creates a layout harness with correct params", () => {
-        //     resultsScreen.create();
-        //     expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(
-        //         mockGame,
-        //         mockContext,
-        //         resultsScreen.layoutManager,
-        //     );
-        // });
+        test("creates a layout harness with correct params", () => {
+            resultsScreen.create();
+            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(resultsScreen);
+        });
 
         test("adds the achievement button when theme flag is set", () => {
             resultsScreen.context.config.theme.game.achievements = true;

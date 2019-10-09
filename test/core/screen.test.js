@@ -23,6 +23,7 @@ describe("Screen", () => {
 
     const createScreen = (key = "screenKey") => {
         screen = new Screen();
+        screen.events = { emit: jest.fn() };
         screen.scene = { key, bringToTop: jest.fn(), start: jest.fn(), run: jest.fn() };
         screen.cameras = { main: { scrollX: 0, scrollY: 0 } };
         screen.add = { container: () => "root" };
@@ -86,12 +87,6 @@ describe("Screen", () => {
             createScreen("boot");
             initScreen();
             expect(screen.navigation).toEqual({ next: expect.any(Function) });
-        });
-
-        test("passes transientData to next screen on navigation", () => {
-            createAndInitScreen();
-            screen.navigation.next();
-            expect(screen.scene.start).toHaveBeenCalledWith("nextscreen", mockData);
         });
 
         test("defaults transientData to empty Object", () => {
@@ -163,6 +158,20 @@ describe("Screen", () => {
         });
     });
 
+    describe("Navigation", () => {
+        test("passes transientData to next screen on navigation", () => {
+            createAndInitScreen();
+            screen.navigation.next();
+            expect(screen.scene.start).toHaveBeenCalledWith("nextscreen", mockData);
+        });
+
+        test("emits a onscreenexit event on navigation", () => {
+            createAndInitScreen();
+            screen.navigation.next();
+            expect(screen.events.emit).toHaveBeenCalledWith("onscreenexit");
+        });
+    });
+
     describe("Add Layout", () => {
         test("adds a new layout to the array", () => {
             const mockLayout = buttons => {
@@ -226,9 +235,15 @@ describe("Screen", () => {
             expect(screen.scene.bringToTop).toHaveBeenCalled();
         });
 
+        test("adding an overlay, emits a onoverlayadded event", () => {
+            createAndInitScreen();
+            screen.addOverlay("overlay");
+            expect(screen.events.emit).toHaveBeenCalledWith("onoverlayadded");
+        });
+
         test("removing an overlay, publishes to and removes subscription from signal bus correctly", () => {
             createAndInitScreen();
-            screen.removeOverlay("select");
+            screen.removeOverlay();
             expect(signal.bus.publish).toHaveBeenCalledWith({
                 channel: overlayChannel,
                 name: screen.scene.key,
@@ -253,6 +268,19 @@ describe("Screen", () => {
             screen._removeOverlay({ overlay: mockOverlay });
             expect(mockOverlay.removeAll).toHaveBeenCalled();
             expect(mockOverlay.scene.stop).toHaveBeenCalled();
+        });
+
+        test("removing an overlay, emits a onscreenexit event", () => {
+            createAndInitScreen();
+            screen.removeOverlay();
+            expect(screen.events.emit).toHaveBeenCalledWith("onscreenexit");
+        });
+
+        test("removing an overlay, emits a onoverlayremoved event on the parent screen", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
+            createAndInitScreen();
+            screen._removeOverlay({ overlay: mockOverlay });
+            expect(screen.events.emit).toHaveBeenCalledWith("onoverlayremoved");
         });
     });
 });
