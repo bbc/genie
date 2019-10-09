@@ -11,8 +11,6 @@ export function createTestHarnessDisplay(scene) {
     let outerPaddingGraphics;
     let signal;
 
-    console.log("scene", scene);
-
     if (window.__qaMode) {
         const qaKey = scene.input.keyboard.addKey("q");
         qaKey.on("up", () => toggle(scene));
