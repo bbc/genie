@@ -36,5 +36,23 @@ export const loadPack = {
             url: "loader/load-bar-fill.png",
             overwrite: false,
         },
+        {
+            type: "audio",
+            key: "backgroundMusic",
+            urls: ["shared/background-music.mp3", "shared/background-music.ogg"],
+            autoDecode: true,
+        },
+        {
+            type: "audio",
+            key: "backgroundMusicTwo",
+            urls: ["shared/background-music-2.mp3", "shared/background-music-2.ogg"],
+            autoDecode: true,
+        },
+        {
+            type: "audio",
+            key: "buttonClick",
+            urls: ["shared/button-click.mp3", "shared/button-click.ogg"],
+            autoDecode: true,
+        },
     ],
 };
