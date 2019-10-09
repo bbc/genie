@@ -1,21 +1,4 @@
 {
-    "loader": {
-        "prefix": "loader.",
-        "files": [
-            {
-                "type": "audio",
-                "key": "backgroundMusic",
-                "urls": ["shared/background-music.mp3", "shared/background-music.ogg"],
-                "autoDecode": true
-            },
-            {
-                "type": "audio",
-                "key": "buttonClick",
-                "urls": ["shared/button-click.mp3", "shared/button-click.ogg"],
-                "autoDecode": true
-            }
-        ],
-    },
     "home": {
         "prefix": "home.",
         "files": [
@@ -31,7 +14,7 @@
                 "url": "shared/background.png",
                 "overwrite": false
             }
-        ],
+        ]
     },
     "results": {
         "prefix": "results.",
@@ -48,7 +31,7 @@
                 "url": "shared/title.png",
                 "overwrite": false
             }
-        ],
+        ]
     },
     "pause": {
         "prefix": "pause.",
@@ -59,7 +42,7 @@
                 "url": "pause/pause-background.png",
                 "overwrite": false
             }
-        ],
+        ]
     },
     "howToPlay": {
         "prefix": "howToPlay.",
