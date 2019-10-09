@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 
+import * as layoutHarness from "../../../src/core/qa/layout-harness.js";
 import { Pause } from "../../../src/components/overlays/pause";
 
 describe("Pause Overlay", () => {
@@ -11,6 +12,7 @@ describe("Pause Overlay", () => {
     let mockData;
 
     beforeEach(() => {
+        layoutHarness.createTestHarnessDisplay = jest.fn();
         mockData = {
             config: {
                 theme: {
@@ -62,6 +64,11 @@ describe("Pause Overlay", () => {
             pauseScreen.scene.key = "pause-noreplay";
             pauseScreen.create();
             expect(pauseScreen.addLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
+        });
+
+        test("creates a layout harness with correct params", () => {
+            pauseScreen.create();
+            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(pauseScreen);
         });
     });
 });
