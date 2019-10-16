@@ -10,7 +10,7 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import * as signal from "../core/signal-bus.js";
 // import * as GameSound from "../core/game-sound.js";
 // import * as a11y from "../core/accessibility/accessibility-layer.js";
-// import * as VisibleLayer from "../core/visible-layer.js";
+import * as VisibleLayer from "../core/visible-layer.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
@@ -50,6 +50,10 @@ export class Screen extends Phaser.Scene {
 
     get transientData() {
         return this.#data.transient;
+    }
+
+    get visibleLayer() {
+        return VisibleLayer.get(this);
     }
 
     init(data) {
@@ -160,8 +164,4 @@ export class Screen extends Phaser.Scene {
 
         return layout;
     }
-
-    // get visibleLayer() {
-    //     return VisibleLayer.get(this.game, this.context);
-    // }
 }

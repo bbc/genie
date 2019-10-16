@@ -4,12 +4,12 @@
  * @license Apache-2.0
  */
 
-export const get = (gameInstance, gameContext) => {
-    const popupScreens = gameContext.popupScreens;
+export const get = screen => {
+    const parentScreens = screen.context.parentScreens;
 
-    if (popupScreens.length > 0) {
-        return popupScreens[popupScreens.length - 1];
+    if (parentScreens.length > 0) {
+        return parentScreens[parentScreens.length - 1].scene.key;
     } else {
-        return gameInstance.scene.key;
+        return screen.scene.key;
     }
 };
