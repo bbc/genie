@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 
+import * as signal from "../../../src/core/signal-bus.js";
 import { GelButton, assetPath } from "../../../src/core/layout/gel-button";
 
 describe("Gel Button", () => {
@@ -14,6 +15,7 @@ describe("Gel Button", () => {
     let mockConfig;
 
     beforeEach(() => {
+        signal.bus.publish = jest.fn();
         mockScene = {
             sys: {
                 queueDepthSort: jest.fn(),
@@ -26,6 +28,10 @@ describe("Gel Button", () => {
                     })),
                 },
                 game: {
+                    input: {
+                        pointers: [],
+                        updateInputPlugins: jest.fn(),
+                    },
                     renderer: {},
                 },
                 input: {
@@ -39,6 +45,7 @@ describe("Gel Button", () => {
             isMobile: true,
         };
         mockConfig = {
+            channel: "mockChannel",
             key: "mockKey",
             shiftX: 9,
             shiftY: 21,
@@ -79,6 +86,26 @@ describe("Gel Button", () => {
             GelButton.prototype.setHitArea = jest.fn();
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             expect(gelButton.setHitArea).toHaveBeenCalledWith(mockMetrics);
+        });
+    });
+
+    describe("Pointer events", () => {
+        test("pointerup function publishes to signal bus", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.onPointerUp(mockConfig, mockScene);
+            expect(signal.bus.publish).toHaveBeenCalledWith({
+                channel: mockConfig.channel,
+                name: mockConfig.key,
+                data: { screen: mockScene },
+            });
+        });
+        test("pointerup function updates pointer states", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.onPointerUp(mockConfig, mockScene);
+            expect(mockScene.sys.game.input.updateInputPlugins).toHaveBeenCalledWith(
+                "",
+                mockScene.sys.game.input.pointers,
+            );
         });
     });
 

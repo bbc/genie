@@ -46,8 +46,14 @@ export class GelButton extends Phaser.GameObjects.Sprite {
         this.setupMouseEvents(config, scene);
     }
 
+    onPointerUp(config, screen) {
+        const inputManager = this.scene.sys.game.input;
+        inputManager.updateInputPlugins("", inputManager.pointers);
+        publish(config, { screen })();
+    }
+
     setupMouseEvents(config, screen) {
-        this.on("pointerup", publish(config, { screen }));
+        this.on("pointerup", () => this.onPointerUp(config, screen));
         this.on("pointerout", () => this.setFrame(0));
         this.on("pointerover", () => this.setFrame(1));
     }
@@ -58,7 +64,7 @@ export class GelButton extends Phaser.GameObjects.Sprite {
         const width = this.width + hitPadding;
         const height = this.height + hitPadding;
         if (this.input) {
-            this.input.hitArea = new Phaser.Geom.Rectangle(0, 0, width, height);
+            this.input.hitArea = new Phaser.Geom.Rectangle(-hitPadding / 2, -hitPadding / 2, width, height);
         }
     }
 

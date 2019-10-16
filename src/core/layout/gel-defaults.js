@@ -67,6 +67,7 @@ export const config = screen => {
             id: "__back",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
+                getScreenBelow(screen).scene.resume();
                 gmi.sendStatsEvent("back", "click");
                 screen.removeOverlay();
             },
@@ -267,6 +268,7 @@ export const config = screen => {
             id: "__how-to-play",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
+                screen.scene.pause();
                 screen.addOverlay("how-to-play");
                 gmi.sendStatsEvent("howtoplay", "click");
             },
