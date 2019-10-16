@@ -11,8 +11,8 @@ const horizontal = {
     left: (metrics, group, horizontalsType) => {
         let hitAreaOffset = 0;
         fp.forEach(child => {
-            if (!child.hitArea) return;
-            hitAreaOffset = fp.max([hitAreaOffset, -(child.x + child.hitArea.left) / metrics.scale]);
+            if (!child.input.hitArea) return;
+            hitAreaOffset = fp.max([hitAreaOffset, -(child.x - child.input.hitArea.width / 2) / metrics.scale]);
         }, group.list);
         group.x = metrics[horizontalsType].left + metrics.borderPad + hitAreaOffset;
     },
@@ -22,8 +22,11 @@ const horizontal = {
     right: (metrics, group, horizontalsType) => {
         let hitAreaOffset = 0;
         fp.forEach(child => {
-            if (!child.hitArea) return;
-            hitAreaOffset = fp.max([hitAreaOffset, (child.x + child.hitArea.right) / metrics.scale - group.width]);
+            if (!child.input.hitArea) return;
+            hitAreaOffset = fp.max([
+                hitAreaOffset,
+                (child.x + child.input.hitArea.width / 2) / metrics.scale - group.getBounds().width,
+            ]);
         }, group.list);
         group.x = metrics[horizontalsType].right - metrics.borderPad - hitAreaOffset - group.getBounds().width;
     },
@@ -33,8 +36,8 @@ const vertical = {
     top: (metrics, group) => {
         let hitAreaOffset = 0;
         fp.forEach(child => {
-            if (!child.hitArea) return;
-            hitAreaOffset = fp.max([hitAreaOffset, -(child.y + child.hitArea.top) / metrics.scale]);
+            if (!child.input.hitArea) return;
+            hitAreaOffset = fp.max([hitAreaOffset, -(child.y - child.input.hitArea.height / 2) / metrics.scale]);
         }, group.list);
         group.y = metrics.verticals.top + metrics.borderPad + hitAreaOffset;
     },
@@ -44,8 +47,11 @@ const vertical = {
     bottom: (metrics, group) => {
         let hitAreaOffset = 0;
         fp.forEach(child => {
-            if (!child.hitArea) return;
-            hitAreaOffset = fp.max([hitAreaOffset, (child.y + child.hitArea.bottom) / metrics.scale - group.height]);
+            if (!child.input.hitArea) return;
+            hitAreaOffset = fp.max([
+                hitAreaOffset,
+                (child.y + child.input.hitArea.height / 2) / metrics.scale - group.getBounds().height,
+            ]);
         }, group.list);
         group.y = metrics.verticals.bottom - metrics.borderPad - hitAreaOffset - group.getBounds().height;
     },
