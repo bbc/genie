@@ -125,6 +125,10 @@ describe("Layout - Gel Defaults", () => {
         test("removes overlay screen", () => {
             expect(mockCurrentScreen.removeOverlay).toHaveBeenCalled();
         });
+
+        test("resumes the screen below", () => {
+            expect(mockPausedScreen.scene.resume).toHaveBeenCalled();
+        });
     });
 
     describe("Audio Callback", () => {
@@ -322,6 +326,10 @@ describe("Layout - Gel Defaults", () => {
 
         test("sends a stat to the GMI", () => {
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("howtoplay", "click");
+        });
+
+        test("pauses the screen below", () => {
+            expect(mockCurrentScreen.scene.pause).toHaveBeenCalled();
         });
     });
 });
