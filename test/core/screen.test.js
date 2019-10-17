@@ -280,5 +280,26 @@ describe("Screen", () => {
             screen._removeOverlay({ overlay: mockOverlay });
             expect(screen.events.emit).toHaveBeenCalledWith("onoverlayremoved");
         });
+
+        test("removing an overlay, clears accessible buttons and clears elements from DOM", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
+            createAndInitScreen();
+            jest.clearAllMocks();
+            screen._removeOverlay({ overlay: mockOverlay });
+            expect(a11y.clearAccessibleButtons).toHaveBeenCalled();
+            expect(a11y.clearElementsFromDom).toHaveBeenCalled();
+        });
+
+        test("removing an overlay, makes the parent screens buttons accessible again", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
+            const mockLayout = { makeAccessible: jest.fn() };
+            createAndInitScreen();
+            Layout.create = () => mockLayout;
+            screen.addLayout();
+            jest.clearAllMocks();
+            screen._removeOverlay({ overlay: mockOverlay });
+            expect(mockLayout.makeAccessible).toHaveBeenCalled();
+            expect(a11y.appendElementsToDom).toHaveBeenCalledWith(screen);
+        });
     });
 });
