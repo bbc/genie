@@ -100,15 +100,15 @@ describe("Screen", () => {
         //     expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.game, expectedThemeConfig);
         // });
 
-        // test("clears the currently stored accessible buttons", () => {
-        //     createAndInitScreen();
-        //     expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
-        // });
+        test("clears the currently stored accessible buttons", () => {
+            createAndInitScreen();
+            expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
+        });
 
-        // test("resets the accessiblity layer DOM", () => {
-        //     createAndInitScreen();
-        //     expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
-        // });
+        test("resets the accessibility layer DOM", () => {
+            createAndInitScreen();
+            expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
+        });
 
         test("sets the stats screen to the current screen, if not on the loadscreen", () => {
             createAndInitScreen();
