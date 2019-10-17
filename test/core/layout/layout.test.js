@@ -72,6 +72,7 @@ describe("Layout", () => {
             reset: jest.fn(),
             addToGroup: jest.fn(),
             destroy: jest.fn(),
+            makeAccessible: jest.fn(),
         };
         GelGroup.mockImplementation(() => mockGelGroup);
         mockPhaserGroup = { destroy: jest.fn() };
@@ -212,6 +213,14 @@ describe("Layout", () => {
 
         test("calls destroy on the root", () => {
             expect(mockRoot.destroy).toHaveBeenCalled();
+        });
+    });
+
+    describe("make accessible method", () => {
+        test("calls make accessible method on each group in the layout", () => {
+            const layout = Layout.create(mockScene, mockMetrics, ["achievements", "exit", "settings"], mockRoot);
+            layout.makeAccessible();
+            expect(mockGelGroup.makeAccessible).toHaveBeenCalled();
         });
     });
 
