@@ -24,7 +24,7 @@ export function accessibilify(button, config, gameButton = true) {
     let signal;
     const sys = button.scene.sys;
     const scene = button.scene;
-    const elementId = scene.visibleLayer + config.id;
+    const elementId = scene.scene.key + config.id;
     const accessibleElement = newAccessibleElement();
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
 
@@ -82,10 +82,8 @@ export function accessibilify(button, config, gameButton = true) {
     }
 
     function setElementSizeAndPosition() {
-        console.log("SETTING");
         if (button.active) {
             const bounds = getHitAreaBounds();
-            console.log("ALIVE", bounds);
             accessibleElement.position(bounds);
         }
     }
