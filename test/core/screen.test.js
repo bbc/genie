@@ -9,8 +9,7 @@ import { Screen, overlayChannel } from "../../src/core/screen";
 import * as Layout from "../../src/core/layout/layout.js";
 import * as Scaler from "../../src/core/scaler.js";
 // import * as GameSound from "../../src/core/game-sound";
-// import * as VisibleLayer from "../../src/core/visible-layer.js";
-// import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
+import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults";
 
@@ -54,10 +53,9 @@ describe("Screen", () => {
         jest.spyOn(signal.bus, "removeChannel");
         jest.spyOn(signal.bus, "removeSubscription");
         // jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
-        // jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
-        // jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
-        // jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
-        // jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
+        jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
+        jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
+        jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
 
         mockGmi = { setStatsScreen: jest.fn() };
         createMockGmi(mockGmi);
@@ -102,15 +100,15 @@ describe("Screen", () => {
         //     expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.game, expectedThemeConfig);
         // });
 
-        // test("clears the currently stored accessible buttons", () => {
-        //     createAndInitScreen();
-        //     expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
-        // });
+        test("clears the currently stored accessible buttons", () => {
+            createAndInitScreen();
+            expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
+        });
 
-        // test("resets the accessiblity layer DOM", () => {
-        //     createAndInitScreen();
-        //     expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
-        // });
+        test("resets the accessibility layer DOM", () => {
+            createAndInitScreen();
+            expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
+        });
 
         test("sets the stats screen to the current screen, if not on the loadscreen", () => {
             createAndInitScreen();
@@ -281,6 +279,27 @@ describe("Screen", () => {
             createAndInitScreen();
             screen._removeOverlay({ overlay: mockOverlay });
             expect(screen.events.emit).toHaveBeenCalledWith("onoverlayremoved");
+        });
+
+        test("removing an overlay, clears accessible buttons and clears elements from DOM", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
+            createAndInitScreen();
+            jest.clearAllMocks();
+            screen._removeOverlay({ overlay: mockOverlay });
+            expect(a11y.clearAccessibleButtons).toHaveBeenCalled();
+            expect(a11y.clearElementsFromDom).toHaveBeenCalled();
+        });
+
+        test("removing an overlay, makes the parent screens buttons accessible again", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
+            const mockLayout = { makeAccessible: jest.fn() };
+            createAndInitScreen();
+            Layout.create = () => mockLayout;
+            screen.addLayout();
+            jest.clearAllMocks();
+            screen._removeOverlay({ overlay: mockOverlay });
+            expect(mockLayout.makeAccessible).toHaveBeenCalled();
+            expect(a11y.appendElementsToDom).toHaveBeenCalledWith(screen);
         });
     });
 });

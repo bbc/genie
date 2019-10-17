@@ -49,7 +49,7 @@ const createButton = fp.curry((game, metrics, config, x = 0, y = 0) => {
         return btn;
     } else {
         defaultAction(config);
-        return btn; //TODO P3 - enable accessibilify: return accessibilify(btn, config, false); [NT]
+        return accessibilify(btn, config, false);
     }
 });
 

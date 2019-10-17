@@ -15,6 +15,7 @@ import { Loader } from "./loader/loader.js";
 import { Boot } from "./loader/boot.js";
 import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
+import * as a11y from "./accessibility/accessibility-layer.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key }));
 
@@ -25,6 +26,7 @@ export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scen
 export function startup(screenConfig, settingsConfig = {}) {
     setGmi(settingsConfig, window);
     hookErrors(gmi.gameContainerId);
+    a11y.setup(getContainerDiv());
 
     const browser = getBrowser();
     const scenes = getScenes(screenConfig);

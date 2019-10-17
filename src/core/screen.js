@@ -9,8 +9,7 @@ import { gmi } from "../core/gmi/gmi.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import * as signal from "../core/signal-bus.js";
 // import * as GameSound from "../core/game-sound.js";
-// import * as a11y from "../core/accessibility/accessibility-layer.js";
-// import * as VisibleLayer from "../core/visible-layer.js";
+import * as a11y from "../core/accessibility/accessibility-layer.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
@@ -69,8 +68,8 @@ export class Screen extends Phaser.Scene {
         //TODO P3 commented out lines need re-enabling
         //const themeScreenConfig = this.context.config.theme[this.game.state.current];
         //GameSound.setupScreenMusic(this.game, themeScreenConfig);
-        // a11y.clearAccessibleButtons();
-        //a11y.clearElementsFromDom();
+        a11y.clearAccessibleButtons();
+        a11y.clearElementsFromDom();
 
         this.#makeNavigation();
     }
@@ -119,8 +118,12 @@ export class Screen extends Phaser.Scene {
     _removeOverlay = data => {
         this.events.emit("onoverlayremoved");
         signal.bus.removeChannel(buttonsChannel(data.overlay));
+        a11y.clearAccessibleButtons();
+        a11y.clearElementsFromDom();
         data.overlay.removeAll();
         data.overlay.scene.stop();
+        this.#layouts.forEach(layout => layout.makeAccessible());
+        a11y.appendElementsToDom(this);
     };
 
     removeAll = () => {
@@ -160,8 +163,4 @@ export class Screen extends Phaser.Scene {
 
         return layout;
     }
-
-    // get visibleLayer() {
-    //     return VisibleLayer.get(this.game, this.context);
-    // }
 }

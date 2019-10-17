@@ -80,6 +80,10 @@ export function create(scene, metrics, buttonIds, root) {
         groups[groupName].addToGroup(item, position);
     };
 
+    const makeAccessible = () => {
+        fp.forOwn(group => group.makeAccessible(), groups);
+    };
+
     const resize = metrics => {
         fp.forOwn(group => group.reset(metrics), groups);
     };
@@ -101,6 +105,7 @@ export function create(scene, metrics, buttonIds, root) {
         addToGroup,
         buttons,
         destroy,
+        makeAccessible,
         resize,
         root,
         removeSignals,

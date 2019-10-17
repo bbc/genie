@@ -9,6 +9,9 @@ import { onScaleChange } from "../scaler.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as a11y from "./accessibility-layer.js";
 
+const CAMERA_SCROLL_X_OFFSET = -700;
+const CAMERA_SCROLL_Y_OFFSET = -300;
+
 export function accessibilify(button, config, gameButton = true) {
     config = Object.assign(
         {
@@ -19,14 +22,14 @@ export function accessibilify(button, config, gameButton = true) {
     );
 
     let signal;
-    const game = button.game;
-    const screen = game.state.states[game.state.current];
-    const elementId = screen.visibleLayer + config.id;
+    const sys = button.scene.sys;
+    const scene = button.scene;
+    const elementId = scene.scene.key + config.id;
     const accessibleElement = newAccessibleElement();
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
 
     if (gameButton) {
-        game.accessibleButtons.push(button);
+        sys.accessibleButtons.push(button);
     }
 
     assignEvents();
@@ -37,8 +40,8 @@ export function accessibilify(button, config, gameButton = true) {
     button.elementId = elementId;
     button.elementEvents = accessibleElement.events;
 
-    a11y.addToAccessibleButtons(screen, button);
-    a11y.resetElementsInDom(screen);
+    a11y.addToAccessibleButtons(scene, button);
+    a11y.resetElementsInDom(scene);
 
     return button;
 
@@ -47,7 +50,7 @@ export function accessibilify(button, config, gameButton = true) {
             id: elementId,
             htmlClass: "gel-button",
             ariaLabel: config.ariaLabel,
-            parent: game.canvas.parentElement,
+            parent: sys.scale.parent,
             onClick: buttonAction,
             onMouseOver: mouseOver,
             onMouseOut: mouseOut,
@@ -55,23 +58,32 @@ export function accessibilify(button, config, gameButton = true) {
     }
 
     function getHitAreaBounds() {
+        const realHeight = sys.game.canvas.height;
+        const viewHeight = parseInt(sys.game.canvas.style.height, 10);
+        const marginLeft = parseInt(sys.game.canvas.style.marginLeft, 10);
+        const marginTop = parseInt(sys.game.canvas.style.marginTop, 10);
+
         let bounds = button.getBounds();
-        if (button.hitArea) {
-            bounds = button.hitArea.clone();
-            bounds.topLeft = button.toGlobal(bounds.topLeft);
-            bounds.scale(button.worldScale.x, button.worldScale.y);
+        bounds.topLeft = button.getTopLeft(bounds.topLeft, true);
+        bounds.x -= CAMERA_SCROLL_X_OFFSET;
+        bounds.x *= viewHeight / realHeight;
+        bounds.x += marginLeft;
+        bounds.y -= CAMERA_SCROLL_Y_OFFSET;
+        bounds.y *= viewHeight / realHeight;
+        bounds.y += marginTop;
+
+        if (button.input.hitArea) {
+            bounds.width = button.input.hitArea.width;
+            bounds.height = button.input.hitArea.height;
+            bounds.x += button.input.hitArea.x;
+            bounds.y += button.input.hitArea.y;
         }
-        bounds.topLeft = bounds.topLeft
-            .multiply(game.scale.scaleFactorInversed.x, game.scale.scaleFactorInversed.y)
-            .add(game.scale.margin.left, game.scale.margin.top);
-        bounds.scale(game.scale.scaleFactorInversed.x, game.scale.scaleFactorInversed.y);
         return bounds;
     }
 
     function setElementSizeAndPosition() {
-        if (button.alive) {
+        if (button.active) {
             const bounds = getHitAreaBounds();
-
             accessibleElement.position(bounds);
         }
     }
@@ -103,18 +115,18 @@ export function accessibilify(button, config, gameButton = true) {
     }
 
     function buttonAction() {
-        game.sound.unlock();
-        if (game.sound.context && game.sound.context.state === "suspended") {
-            game.sound.resumeWebAudio();
-        }
-        button.events.onInputUp.dispatch(button, game.input.activePointer, false);
+        // game.sound.unlock();
+        // if (game.sound.context && game.sound.context.state === "suspended") {
+        //     game.sound.resumeWebAudio();
+        // }
+        button.emit(Phaser.Input.Events.POINTER_UP, button, sys.input.activePointer, false);
     }
 
     function mouseOver() {
-        button.events.onInputOver.dispatch(button, game.input.activePointer, false);
+        button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false);
     }
 
     function mouseOut() {
-        button.events.onInputOut.dispatch(button, game.input.activePointer, false);
+        button.emit(Phaser.Input.Events.POINTER_OUT, button, sys.input.activePointer, false);
     }
 }

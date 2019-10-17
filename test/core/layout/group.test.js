@@ -3,6 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import { GelGroup } from "../../../src/core/layout/gel-group.js";
 
@@ -53,6 +54,7 @@ describe("Group", () => {
         vPos = "middle";
         hPos = "center";
         jest.spyOn(ButtonFactory, "create").mockImplementation(() => buttonFactory);
+        jest.spyOn(a11y, "addToAccessibleButtons").mockImplementation(() => {});
         GelGroup.prototype.addAt = jest.fn();
         GelGroup.prototype.iterate = fn => {
             capturedIterateFunction = fn;
@@ -252,6 +254,16 @@ describe("Group", () => {
             const mockPosition = 42;
             group.addToGroup(mockButton, mockPosition);
             expect(group.addAt).toHaveBeenCalledWith(mockButton, mockPosition);
+        });
+    });
+
+    describe("make accessible method", () => {
+        test("adds each button in the group to the accessible buttons", () => {
+            group.addButton(config);
+            group.addButton(config);
+            group.makeAccessible();
+
+            expect(a11y.addToAccessibleButtons).toHaveBeenCalledTimes(2);
         });
     });
 
