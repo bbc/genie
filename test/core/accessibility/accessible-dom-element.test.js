@@ -103,6 +103,11 @@ describe("Accessible DOM Element", () => {
             expect(mockElement.style.touchAction).toBe("manipulation");
         });
 
+        test("sets pointer events none to prevent firing buttons twice", () => {
+            accessibleDomElement(options);
+            expect(mockElement.style["pointer-events"]).toBe("none");
+        });
+
         test("sets inner text to be empty by default", () => {
             accessibleDomElement(options);
             expect(mockElement.innerHTML).toBe("");
