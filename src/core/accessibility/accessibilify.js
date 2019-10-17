@@ -9,6 +9,9 @@ import { onScaleChange } from "../scaler.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as a11y from "./accessibility-layer.js";
 
+const CAMERA_SCROLL_X_OFFSET = -700;
+const CAMERA_SCROLL_Y_OFFSET = -300;
+
 export function accessibilify(button, config, gameButton = true) {
     config = Object.assign(
         {
@@ -55,18 +58,26 @@ export function accessibilify(button, config, gameButton = true) {
     }
 
     function getHitAreaBounds() {
+        const realHeight = sys.game.canvas.height;
+        const viewHeight = parseInt(sys.game.canvas.style.height, 10);
+        const marginLeft = parseInt(sys.game.canvas.style.marginLeft, 10);
+        const marginTop = parseInt(sys.game.canvas.style.marginTop, 10);
+
         let bounds = button.getBounds();
-        console.log(bounds);
+        bounds.topLeft = button.getTopLeft(bounds.topLeft, true);
+        bounds.x -= CAMERA_SCROLL_X_OFFSET;
+        bounds.x *= viewHeight / realHeight;
+        bounds.x += marginLeft;
+        bounds.y -= CAMERA_SCROLL_Y_OFFSET;
+        bounds.y *= viewHeight / realHeight;
+        bounds.y += marginTop;
+
         if (button.input.hitArea) {
             bounds.width = button.input.hitArea.width;
             bounds.height = button.input.hitArea.height;
-            bounds.topLeft = button.getTopLeft(bounds.topLeft, true);
-            // scale
+            bounds.x += button.input.hitArea.x;
+            bounds.y += button.input.hitArea.y;
         }
-        bounds.topLeft = button.getTopLeft(bounds.topLeft, true);
-        // bounds.scale(sys.scale.scaleFactorInversed.x, sys.scale.scaleFactorInversed.y);
-        bounds.x += 700;
-        bounds.y += 300;
         return bounds;
     }
 
