@@ -41,8 +41,8 @@ describe("Managing accessible buttons", () => {
         let el1, el2, el3, button1, button2, button3, screen1, screen2, parentElement;
 
         beforeEach(() => {
-            screen1 = { visibleLayer: "home" };
-            screen2 = { visibleLayer: "pause" };
+            screen1 = { scene: { key: "home" } };
+            screen2 = { scene: { key: "pause" } };
             el1 = { id: "home__play" };
             el2 = { id: "home__pause" };
             el3 = { id: "pause__back" };
@@ -108,7 +108,7 @@ describe("Managing accessible buttons", () => {
         let button1, button2, button3, screen1;
 
         test("appends correct elements to the DOM", () => {
-            screen1 = { visibleLayer: "home" };
+            screen1 = { scene: { key: "home" } };
             button1 = { accessibleElement: { id: "home" } };
             button2 = { accessibleElement: { id: "pause" } };
             button3 = { accessibleElement: { id: "back" } };
@@ -129,7 +129,7 @@ describe("Managing accessible buttons", () => {
         let button1, button2, button3, screen1;
 
         test("returns the correct elements to the DOM", () => {
-            screen1 = { visibleLayer: "home" };
+            screen1 = { scene: { key: "home" } };
             button1 = { accessibleElement: { id: "home" } };
             button2 = { accessibleElement: { id: "pause" } };
             button3 = { accessibleElement: { id: "back" } };

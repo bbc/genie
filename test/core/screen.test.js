@@ -9,8 +9,7 @@ import { Screen, overlayChannel } from "../../src/core/screen";
 import * as Layout from "../../src/core/layout/layout.js";
 import * as Scaler from "../../src/core/scaler.js";
 // import * as GameSound from "../../src/core/game-sound";
-// import * as VisibleLayer from "../../src/core/visible-layer.js";
-// import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
+import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults";
 
@@ -54,10 +53,9 @@ describe("Screen", () => {
         jest.spyOn(signal.bus, "removeChannel");
         jest.spyOn(signal.bus, "removeSubscription");
         // jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
-        // jest.spyOn(VisibleLayer, "get").mockImplementation(() => "current-layer");
-        // jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
-        // jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
-        // jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
+        jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
+        jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
+        jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
 
         mockGmi = { setStatsScreen: jest.fn() };
         createMockGmi(mockGmi);

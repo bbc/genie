@@ -6,6 +6,7 @@
 import { createMockGmi } from "../mock/gmi";
 import { domElement } from "../mock/dom-element";
 
+import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 import * as styles from "../../src/core/custom-styles.js";
 import * as qaMode from "../../src/core/qa/qa-mode.js";
@@ -40,6 +41,7 @@ describe("Startup", () => {
         getBrowser.mockImplementation(() => ({ forceCanvas: false, isSilk: false }));
         jest.spyOn(styles, "addCustomStyles");
         jest.spyOn(Phaser, "Game").mockImplementation(() => {});
+        jest.spyOn(a11y, "setup").mockImplementation(() => {});
         global.window.getGMI = jest.fn().mockImplementation(() => mockGmi);
         global.window.addEventListener = jest.fn();
     });
@@ -63,6 +65,11 @@ describe("Startup", () => {
     test("injects custom styles to the game container element", () => {
         startup({});
         expect(styles.addCustomStyles).toHaveBeenCalled();
+    });
+
+    test("sets up the accessibility layer", () => {
+        startup({});
+        expect(a11y.setup).toHaveBeenCalledWith(containerDiv);
     });
 
     describe("Scenes", () => {
