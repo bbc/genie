@@ -119,6 +119,12 @@ describe("Accessibilify", () => {
             expect(a11y.resetElementsInDom).toHaveBeenCalledWith(mockScene);
         });
 
+        test("adds button to accessibleButtons array when it does not exist yet", () => {
+            delete mockScene.sys.accessibleButtons;
+            accessibilify(mockButton);
+            expect(mockScene.sys.accessibleButtons.length).toBe(1);
+        });
+
         describe("with gameButton argument", () => {
             test("adds the button to an array in the game for the overlay-layout to use", () => {
                 const gameButton = true;
@@ -147,7 +153,7 @@ describe("Accessibilify", () => {
                 expect(fp.debounce.mock.calls[0][0]).toBe(200);
             });
 
-            test("sets the initial size and position if the button is active", () => {
+            test("sets the initial size and position when the button is active", () => {
                 const expectedButtonBounds = {
                     x: 625,
                     y: 475,
@@ -166,13 +172,28 @@ describe("Accessibilify", () => {
                 expect(mockAccessibleDomElement.position.mock.calls[0][0].height).toBe(expectedButtonBounds.height);
             });
 
-            test("does not set the initial size and position if the button is not active", () => {
+            test("sets the initial size and position when the button is active and is not a game button", () => {
+                const expectedButtonBounds = {
+                    x: 625,
+                    y: 475,
+                    width: mockButton.input.hitArea.width,
+                    height: mockButton.input.hitArea.height,
+                };
+                mockButton.active = true;
+                accessibilify(mockButton, { ariaLabel: "mock" }, false);
+                expect(mockAccessibleDomElement.position.mock.calls[0][0].x).toBe(expectedButtonBounds.x);
+                expect(mockAccessibleDomElement.position.mock.calls[0][0].y).toBe(expectedButtonBounds.y);
+                expect(mockAccessibleDomElement.position.mock.calls[0][0].width).toBe(expectedButtonBounds.width);
+                expect(mockAccessibleDomElement.position.mock.calls[0][0].height).toBe(expectedButtonBounds.height);
+            });
+
+            test("does not set the initial size and position when the button is not active", () => {
                 mockButton.active = false;
                 accessibilify(mockButton);
                 expect(mockAccessibleDomElement.position).not.toHaveBeenCalled();
             });
 
-            test("changes the size and position when the scale changes if the button is active", () => {
+            test("changes the size and position when the scale changes when the button is active", () => {
                 const expectedButtonBounds = {
                     x: 1381.25,
                     y: 1043.75,
@@ -185,6 +206,22 @@ describe("Accessibilify", () => {
                 };
                 mockButton.active = true;
                 accessibilify(mockButton);
+                onScaleChange.add.mock.calls[0][0]();
+                expect(mockAccessibleDomElement.position.mock.calls[1][0].x).toBe(expectedButtonBounds.x);
+                expect(mockAccessibleDomElement.position.mock.calls[1][0].y).toBe(expectedButtonBounds.y);
+                expect(mockAccessibleDomElement.position.mock.calls[1][0].width).toBe(expectedButtonBounds.width);
+                expect(mockAccessibleDomElement.position.mock.calls[1][0].height).toBe(expectedButtonBounds.height);
+            });
+
+            test("changes the size and position when the scale changes when the button is active and is not a game button", () => {
+                const expectedButtonBounds = {
+                    x: 1381.25,
+                    y: 1043.75,
+                    width: mockButton.input.hitArea.width,
+                    height: mockButton.input.hitArea.height,
+                };
+                mockButton.active = true;
+                accessibilify(mockButton, { ariaLabel: "mock" }, false);
                 onScaleChange.add.mock.calls[0][0]();
                 expect(mockAccessibleDomElement.position.mock.calls[1][0].x).toBe(expectedButtonBounds.x);
                 expect(mockAccessibleDomElement.position.mock.calls[1][0].y).toBe(expectedButtonBounds.y);
