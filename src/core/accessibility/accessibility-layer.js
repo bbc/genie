@@ -14,7 +14,7 @@ const hasAccessibleElement = button => {
 
 const PARENT_ELEMENT_ID = "accessibility";
 
-export const getAccessibleButtons = key => _accessibleButtons[key];
+export const getAccessibleButtons = key => (_accessibleButtons[key] ? _accessibleButtons[key] : []);
 
 export const setup = gameParentElement => {
     const el = document.createElement("div");
