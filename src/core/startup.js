@@ -40,6 +40,7 @@ export function startup(screenConfig, settingsConfig = {}) {
         antialias: true,
         multiTexture: true,
         parent: getContainerDiv(),
+        banner: true,
         title: "Game Title Here", //TODO P3 these could be useful [NT]
         version: "Version Info here", //TODO P3 these could be useful [NT]
         transparent: browser.isSilk, // Fixes silk browser flickering
@@ -67,10 +68,6 @@ export function startup(screenConfig, settingsConfig = {}) {
             },
         };
     }
-
-    // Keep the console tidy:
-    window.PhaserGlobal = window.PhaserGlobal || {};
-    window.PhaserGlobal.hideBanner = true;
 
     addCustomStyles();
 
