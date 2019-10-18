@@ -173,6 +173,11 @@ describe("Managing accessible buttons", () => {
             expect(buttons[1].accessibleElement.id).toEqual("pause");
             expect(buttons[2].accessibleElement.id).toEqual("back");
         });
+
+        test("returns an empty array if there are no buttons", () => {
+            const buttons = a11y.getAccessibleButtons("random");
+            expect(buttons).toEqual([]);
+        });
     });
 
     describe("resetElementsInDom Method", () => {
