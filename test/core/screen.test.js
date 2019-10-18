@@ -57,6 +57,7 @@ describe("Screen", () => {
         jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
         jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
         jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
+        jest.spyOn(a11y, "addToAccessibleButtons").mockImplementation(() => {});
 
         mockGmi = { setStatsScreen: jest.fn() };
         createMockGmi(mockGmi);
@@ -291,7 +292,7 @@ describe("Screen", () => {
             expect(a11y.clearElementsFromDom).toHaveBeenCalled();
         });
 
-        test("removing an overlay, makes the parent screens buttons accessible again", () => {
+        test("removing an overlay, makes the parent screens gel buttons accessible again", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
             const mockLayout = { makeAccessible: jest.fn() };
             createAndInitScreen();
@@ -301,6 +302,16 @@ describe("Screen", () => {
             screen._removeOverlay({ overlay: mockOverlay });
             expect(mockLayout.makeAccessible).toHaveBeenCalled();
             expect(a11y.appendElementsToDom).toHaveBeenCalledWith(screen);
+        });
+
+        test("removing an overlay, makes the parent screens game buttons accessible again", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
+            const mockButton = { mock: "button" };
+            createAndInitScreen();
+            screen.sys.accessibleButtons = [mockButton];
+            jest.clearAllMocks();
+            screen._removeOverlay({ overlay: mockOverlay });
+            expect(a11y.addToAccessibleButtons).toHaveBeenCalledWith(screen, mockButton);
         });
     });
 });
