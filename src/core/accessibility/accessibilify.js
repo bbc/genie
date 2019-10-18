@@ -28,6 +28,10 @@ export function accessibilify(button, config, gameButton = true) {
     const accessibleElement = newAccessibleElement();
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
 
+    if (!sys.accessibleButtons) {
+        sys.accessibleButtons = [];
+    }
+
     if (gameButton) {
         sys.accessibleButtons.push(button);
     }
@@ -62,14 +66,15 @@ export function accessibilify(button, config, gameButton = true) {
         const viewHeight = parseInt(sys.game.canvas.style.height, 10);
         const marginLeft = parseInt(sys.game.canvas.style.marginLeft, 10);
         const marginTop = parseInt(sys.game.canvas.style.marginTop, 10);
+        const scale = viewHeight / realHeight;
 
         let bounds = button.getBounds();
         bounds.topLeft = button.getTopLeft(bounds.topLeft, true);
         bounds.x -= CAMERA_SCROLL_X_OFFSET;
-        bounds.x *= viewHeight / realHeight;
+        bounds.x *= scale;
         bounds.x += marginLeft;
         bounds.y -= CAMERA_SCROLL_Y_OFFSET;
-        bounds.y *= viewHeight / realHeight;
+        bounds.y *= scale;
         bounds.y += marginTop;
 
         if (button.input.hitArea) {
@@ -78,6 +83,12 @@ export function accessibilify(button, config, gameButton = true) {
             bounds.x += button.input.hitArea.x;
             bounds.y += button.input.hitArea.y;
         }
+
+        if (gameButton) {
+            bounds.width *= scale;
+            bounds.height *= scale;
+        }
+
         return bounds;
     }
 
