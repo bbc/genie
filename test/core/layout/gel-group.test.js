@@ -118,7 +118,7 @@ describe("Group", () => {
             });
         });
 
-        describe("when is vPos is middle and hPos is center and is vertical", () => {
+        describe("when vPos is middle, hPos is center and isVertical is true", () => {
             test("sets group position correctly", () => {
                 vPos = "middle";
                 hPos = "center";
