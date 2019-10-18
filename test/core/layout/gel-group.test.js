@@ -45,6 +45,7 @@ describe("Group", () => {
                 y: 50,
                 width: 200,
                 height: 100,
+                input: {},
                 updateTransform: () => {},
                 resize: buttonResizeStub,
                 shiftX: 0,
@@ -55,10 +56,13 @@ describe("Group", () => {
         hPos = "center";
         jest.spyOn(ButtonFactory, "create").mockImplementation(() => buttonFactory);
         jest.spyOn(a11y, "addToAccessibleButtons").mockImplementation(() => {});
-        GelGroup.prototype.addAt = jest.fn();
+        GelGroup.prototype.list = [];
         GelGroup.prototype.iterate = fn => {
             capturedIterateFunction = fn;
         };
+        GelGroup.prototype.addAt = jest.fn(child => {
+            group.list.push(child);
+        });
         group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false);
     });
 
@@ -114,6 +118,21 @@ describe("Group", () => {
             });
         });
 
+        describe("when is vPos is middle and hPos is center and is vertical", () => {
+            test("sets group position correctly", () => {
+                vPos = "middle";
+                hPos = "center";
+                group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false, true);
+
+                group.addButton(config);
+                group.reset();
+                group._buttons.forEach(button => capturedIterateFunction(button));
+
+                expect(group.x).toBe(0);
+                expect(group.y).toBe(0);
+            });
+        });
+
         describe("when vPos is top and hPos is right", () => {
             test("sets group position correctly", () => {
                 vPos = "top";
@@ -122,6 +141,8 @@ describe("Group", () => {
 
                 group.addButton(config);
                 group.reset(metrics);
+                group._buttons.forEach(button => capturedIterateFunction(button));
+
                 expect(group.x).toBe(900);
                 expect(group.y).toBe(-1400);
             });
@@ -135,6 +156,8 @@ describe("Group", () => {
 
                 group.addButton(config);
                 group.reset(metrics);
+                group._buttons.forEach(button => capturedIterateFunction(button));
+
                 expect(group.x).toBe(-900);
                 expect(group.y).toBe(1400);
             });
@@ -148,6 +171,8 @@ describe("Group", () => {
 
                 group.addButton(config);
                 group.reset(metrics);
+                group._buttons.forEach(button => capturedIterateFunction(button));
+
                 expect(group.x).toBe(-200);
                 expect(group.y).toBe(1400);
             });
@@ -171,9 +196,11 @@ describe("Group", () => {
                     y: 50,
                     width: 50,
                     height: 50,
-                    hitArea: {
-                        left: 0,
-                        top: 0,
+                    input: {
+                        hitArea: {
+                            left: 0,
+                            top: 0,
+                        },
                     },
                     updateTransform: () => {},
                     resize: buttonResizeStub,
@@ -185,9 +212,11 @@ describe("Group", () => {
                     y: 50,
                     width: 50,
                     height: 50,
-                    hitArea: {
-                        left: -1000,
-                        top: -1000,
+                    input: {
+                        hitArea: {
+                            left: -1000,
+                            top: -1000,
+                        },
                     },
                     updateTransform: () => {},
                     resize: buttonResizeStub,
@@ -218,9 +247,11 @@ describe("Group", () => {
                     y: 50,
                     width: 50,
                     height: 50,
-                    hitArea: {
-                        right: 1000,
-                        bottom: 1000,
+                    input: {
+                        hitArea: {
+                            right: 1000,
+                            bottom: 1000,
+                        },
                     },
                     updateTransform: () => {},
                     resize: buttonResizeStub,
@@ -232,9 +263,11 @@ describe("Group", () => {
                     y: 50,
                     width: 50,
                     height: 50,
-                    hitArea: {
-                        right: 0,
-                        bottom: 0,
+                    input: {
+                        hitArea: {
+                            right: 0,
+                            bottom: 0,
+                        },
                     },
                     updateTransform: () => {},
                     resize: buttonResizeStub,
@@ -254,6 +287,13 @@ describe("Group", () => {
             const mockPosition = 42;
             group.addToGroup(mockButton, mockPosition);
             expect(group.addAt).toHaveBeenCalledWith(mockButton, mockPosition);
+        });
+
+        test("adds item to this group at position 0 when no position provided", () => {
+            const mockButton = { button: "mock" };
+            const expectedPosition = 0;
+            group.addToGroup(mockButton);
+            expect(group.addAt).toHaveBeenCalledWith(mockButton, expectedPosition);
         });
     });
 
