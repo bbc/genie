@@ -123,6 +123,7 @@ export class Screen extends Phaser.Scene {
         data.overlay.removeAll();
         data.overlay.scene.stop();
         this.#layouts.forEach(layout => layout.makeAccessible());
+        this.sys.accessibleButtons.forEach(button => a11y.addToAccessibleButtons(this, button));
         a11y.appendElementsToDom(this);
     };
 
