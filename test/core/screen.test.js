@@ -22,6 +22,7 @@ describe("Screen", () => {
 
     const createScreen = (key = "screenKey") => {
         screen = new Screen();
+        screen.sys = { accessibleButtons: [] };
         screen.events = { emit: jest.fn() };
         screen.scene = { key, bringToTop: jest.fn(), start: jest.fn(), run: jest.fn() };
         screen.cameras = { main: { scrollX: 0, scrollY: 0 } };

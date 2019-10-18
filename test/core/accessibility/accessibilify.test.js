@@ -151,8 +151,12 @@ describe("Accessibilify", () => {
                 const expectedButtonBounds = {
                     x: 625,
                     y: 475,
-                    width: mockButton.input.hitArea.width,
-                    height: mockButton.input.hitArea.height,
+                    width:
+                        mockButton.input.hitArea.width *
+                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height),
+                    height:
+                        mockButton.input.hitArea.height *
+                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height),
                 };
                 mockButton.active = true;
                 accessibilify(mockButton);
@@ -172,8 +176,12 @@ describe("Accessibilify", () => {
                 const expectedButtonBounds = {
                     x: 1381.25,
                     y: 1043.75,
-                    width: mockButton.input.hitArea.width,
-                    height: mockButton.input.hitArea.height,
+                    width:
+                        mockButton.input.hitArea.width *
+                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height),
+                    height:
+                        mockButton.input.hitArea.height *
+                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height),
                 };
                 mockButton.active = true;
                 accessibilify(mockButton);
