@@ -102,6 +102,13 @@ describe("Screen", () => {
         //     expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.game, expectedThemeConfig);
         // });
 
+        test("clears the accessible buttons array", () => {
+            createScreen();
+            screen.sys.accessibleButtons = [{ some: "mock" }];
+            initScreen();
+            expect(screen.sys.accessibleButtons).toEqual([]);
+        });
+
         test("clears the currently stored accessible buttons", () => {
             createAndInitScreen();
             expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);

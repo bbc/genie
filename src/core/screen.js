@@ -68,6 +68,7 @@ export class Screen extends Phaser.Scene {
         //TODO P3 commented out lines need re-enabling
         //const themeScreenConfig = this.context.config.theme[this.game.state.current];
         //GameSound.setupScreenMusic(this.game, themeScreenConfig);
+        this.sys.accessibleButtons = [];
         a11y.clearAccessibleButtons();
         a11y.clearElementsFromDom();
 
