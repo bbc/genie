@@ -15,6 +15,10 @@ describe("Gel Button", () => {
     let mockConfig;
 
     beforeEach(() => {
+        GelButton.prototype.width = 64;
+        GelButton.prototype.height = 64;
+        GelButton.prototype.setFrame = jest.fn();
+        GelButton.prototype.setSizeToFrame = jest.fn();
         signal.bus.publish = jest.fn();
         mockScene = {
             sys: {
@@ -42,7 +46,19 @@ describe("Gel Button", () => {
         mockX = 7;
         mockY = 42;
         mockMetrics = {
-            isMobile: true,
+            borderPad: 24,
+            buttonMin: 64,
+            buttonPad: 24,
+            height: 600,
+            hitMin: 70,
+            horizontals: { left: -608.5, center: 0, right: 608.5 },
+            isMobile: false,
+            safeHorizontals: { left: -400, center: 0, right: 400 },
+            scale: 1,
+            stageHeight: 600,
+            stageWidth: 1217,
+            verticals: { top: -300, middle: 0, bottom: 300 },
+            width: 1217,
         };
         mockConfig = {
             channel: "mockChannel",
@@ -82,14 +98,36 @@ describe("Gel Button", () => {
             expect(gelButton.on).toHaveBeenCalledWith("pointerout", expect.any(Function));
             expect(gelButton.on).toHaveBeenCalledWith("pointerover", expect.any(Function));
         });
-        test("sets the button hit area", () => {
-            GelButton.prototype.setHitArea = jest.fn();
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.setHitArea).toHaveBeenCalledWith(mockMetrics);
-        });
     });
 
     describe("Pointer events", () => {
+        test("pointerout event sets frame to 0", () => {
+            GelButton.prototype.on = jest.fn((event, callback) => {
+                if (event === Phaser.Input.Events.POINTER_OUT) {
+                    callback();
+                }
+            });
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.setFrame).toHaveBeenCalledWith(0);
+        });
+        test("pointerover event sets frame to 1", () => {
+            GelButton.prototype.on = jest.fn((event, callback) => {
+                if (event === Phaser.Input.Events.POINTER_OVER) {
+                    callback();
+                }
+            });
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.setFrame).toHaveBeenCalledWith(1);
+        });
+        test("callback is added to the POINTER_UP event emitter", () => {
+            GelButton.prototype.on = jest.fn((event, callback) => {
+                if (event === Phaser.Input.Events.POINTER_UP) {
+                    callback();
+                }
+            });
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.on).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP, expect.any(Function));
+        });
         test("pointerup function publishes to signal bus", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.onPointerUp(mockConfig, mockScene);
@@ -109,6 +147,15 @@ describe("Gel Button", () => {
         });
     });
 
+    describe("setHitArea function", () => {
+        test("sets the correct hitarea on the button", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.input = { hitArea: {} };
+            gelButton.setHitArea(mockMetrics);
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-3, -3, 70, 70));
+        });
+    });
+
     describe("Resize function", () => {
         test("sets correct texture", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
@@ -120,9 +167,22 @@ describe("Gel Button", () => {
         });
         test("sets the button hit area", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            gelButton.setHitArea = jest.fn();
+            gelButton.input = { hitArea: {} };
+            mockMetrics.hitMin = 66;
             gelButton.resize(mockMetrics);
-            expect(gelButton.setHitArea).toHaveBeenCalledWith(mockMetrics);
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-1, -1, 66, 66));
+        });
+    });
+
+    describe("asset paths", () => {
+        test("returns the correct asset path for desktop assets", () => {
+            const path = assetPath({ key: "mockId", isMobile: false });
+            expect(path).toBe("gelDesktop.mockId");
+        });
+
+        test("returns the correct asset path for mobile assets", () => {
+            const path = assetPath({ key: "mockId", isMobile: true });
+            expect(path).toBe("gelMobile.mockId");
         });
     });
 });
