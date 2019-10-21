@@ -7,10 +7,10 @@ module.exports = {
     collectCoverageFrom: ["src/**/*.js", "!src/output/**/*.js"],
     coverageThreshold: {
         global: {
-            statements: 97.15,
-            branches: 97.9,
-            lines: 97.74,
-            functions: 95.8,
+            statements: 97.76,
+            branches: 98.32,
+            lines: 97.85,
+            functions: 97.55,
         },
     },
     testEnvironment: "jsdom",
