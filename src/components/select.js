@@ -64,7 +64,9 @@ export class Select extends Screen {
         const choiceSprites = [];
         choices.forEach((item, index) => {
             const choiceAsset = `${this.scene.key}.${choices[index].asset}`;
-            const choiceSprite = this.add.sprite(0, 0, choiceAsset);
+            const choiceSprite = this.theme.howToPlay
+                ? this.add.sprite(0, 30, choiceAsset)
+                : this.add.sprite(0, 0, choiceAsset);
 
             choiceSprite.visible = index === 0;
             choiceSprites.push(choiceSprite);
