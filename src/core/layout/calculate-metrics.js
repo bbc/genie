@@ -23,6 +23,7 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
     const stageWidth = aspectRatio * stageHeight;
     const isMobile = width < MOBILE_BREAK_WIDTH;
     const safeWidth = stageHeight * GEL_MIN_ASPECT_RATIO;
+    const borderPad = fp.floor(fp.max([stageWidth, stageHeight]) * BORDER_PAD_RATIO);
 
     const metrics = {
         width,
@@ -30,7 +31,7 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
         scale,
         stageWidth,
         stageHeight,
-        borderPad: fp.floor(fp.max([stageWidth, stageHeight]) * BORDER_PAD_RATIO),
+        borderPad,
         isMobile,
         buttonPad: isMobile ? 22 : 24,
         buttonMin: isMobile ? 42 : 64,
@@ -47,7 +48,7 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
         },
         verticals: {
             top: -stageHeight / 2,
-            middle: 0,
+            middle: 0 - borderPad,
             bottom: stageHeight / 2,
         },
     };

@@ -4,7 +4,7 @@
             "music": "loadscreen.backgroundMusic",
             "button-overrides": {
                 "play": {
-                    "shiftY": 80
+                    "shiftY": 105
                 }
             }
         },
