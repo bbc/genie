@@ -104,9 +104,9 @@ describe("Layout - Calculate Metrics", () => {
 
     describe("verticals metric", () => {
         test("returns verticals in relation to the stage height", () => {
-            const expectedFor600 = { top: -300, middle: 0, bottom: 300 };
-            const expectedFor800 = { top: -400, middle: 0, bottom: 400 };
-            const expectedFor1000 = { top: -500, middle: 0, bottom: 500 };
+            const expectedFor600 = { top: -300, middle: -16, bottom: 300 };
+            const expectedFor800 = { top: -400, middle: -21, bottom: 400 };
+            const expectedFor1000 = { top: -500, middle: -26, bottom: 500 };
             expect(getMetrics({ stageHeight: 600 }).verticals).toEqual(expectedFor600);
             expect(getMetrics({ stageHeight: 800 }).verticals).toEqual(expectedFor800);
             expect(getMetrics({ stageHeight: 1000 }).verticals).toEqual(expectedFor1000);
