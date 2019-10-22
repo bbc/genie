@@ -133,6 +133,34 @@ describe("Group", () => {
             });
         });
 
+        describe("when vPos is middle, hPos is left or right", () => {
+            test("sets group position correctly left", () => {
+                vPos = "middle";
+                hPos = "left";
+                group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, true, false);
+
+                group.addButton(config);
+                group.reset();
+                group._buttons.forEach(button => capturedIterateFunction(button));
+
+                expect(group.x).toBe(-200);
+                expect(group.y).toBe(0);
+            });
+
+            test("sets group position correctly right", () => {
+                vPos = "middle";
+                hPos = "right";
+                group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, true, true);
+
+                group.addButton(config);
+                group.reset();
+                group._buttons.forEach(button => capturedIterateFunction(button));
+
+                expect(group.x).toBe(200);
+                expect(group.y).toBe(0);
+            });
+        });
+
         describe("when vPos is top and hPos is right", () => {
             test("sets group position correctly", () => {
                 vPos = "top";
