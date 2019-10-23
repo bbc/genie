@@ -157,7 +157,7 @@ describe("Results Screen", () => {
 
             test("restarts the game and passes saved data through", () => {
                 signal.bus.subscribe.mock.calls[1][0].callback();
-                expect(resultsScreen.navigation.game).toHaveBeenCalledWith({ characterSelected: 1, results: 22 });
+                expect(resultsScreen.navigation.game).toHaveBeenCalled();
             });
         });
     });

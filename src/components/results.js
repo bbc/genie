@@ -49,7 +49,7 @@ export class Results extends Screen {
             name: "restart",
             channel: buttonsChannel(this),
             callback: () => {
-                this.navigation.game(this.transientData);
+                this.navigation.game();
             },
         });
     }
