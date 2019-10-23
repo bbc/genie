@@ -10,8 +10,7 @@ import { Screen } from "../screen.js";
 import { gmi } from "../gmi/gmi.js";
 import { settings, settingsChannel } from "../../core/settings.js";
 import * as signal from "../../core/signal-bus.js";
-//import fp from "../../../lib/lodash/fp/fp.js";
-import * as a11y from "../accessibility/accessibility-layer.js";
+// import fp from "../../../lib/lodash/fp/fp.js";
 import * as Scaler from "../scaler.js";
 
 //const triggeredByGame = arg => arg instanceof Phaser.Game;
@@ -86,7 +85,6 @@ export class Boot extends Screen {
         //TODO P3 where should this now live? [NT]
         //TODO P3 mainly just initialises scaler now?
         Scaler.init(600, this.game);
-        a11y.setup(this.game.canvas.parentElement);
         this.navigation.next();
     }
 }

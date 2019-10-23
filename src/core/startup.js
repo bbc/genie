@@ -15,6 +15,7 @@ import { Loader } from "./loader/loader.js";
 import { Boot } from "./loader/boot.js";
 import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
+import * as a11y from "./accessibility/accessibility-layer.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key }));
 
@@ -25,6 +26,7 @@ export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scen
 export function startup(screenConfig, settingsConfig = {}) {
     setGmi(settingsConfig, window);
     hookErrors(gmi.gameContainerId);
+    a11y.setup(getContainerDiv());
 
     const browser = getBrowser();
     const scenes = getScenes(screenConfig);
@@ -38,6 +40,7 @@ export function startup(screenConfig, settingsConfig = {}) {
         antialias: true,
         multiTexture: true,
         parent: getContainerDiv(),
+        banner: true,
         title: "Game Title Here", //TODO P3 these could be useful [NT]
         version: "Version Info here", //TODO P3 these could be useful [NT]
         transparent: browser.isSilk, // Fixes silk browser flickering
@@ -65,10 +68,6 @@ export function startup(screenConfig, settingsConfig = {}) {
             },
         };
     }
-
-    // Keep the console tidy:
-    window.PhaserGlobal = window.PhaserGlobal || {};
-    window.PhaserGlobal.hideBanner = true;
 
     addCustomStyles();
 

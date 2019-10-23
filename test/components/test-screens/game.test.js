@@ -5,12 +5,12 @@
  */
 
 import { createMockGmi } from "../../mock/gmi";
-
+import * as a11y from "../../../src/core/accessibility/accessibilify.js";
 import * as layoutHarness from "../../../src/core/qa/layout-harness.js";
 
 import { GameTest } from "../../../src/components/test-screens/game";
 
-describe("Test Harness - Test Screens - Game", () => {
+describe("Test Screens - Game", () => {
     let mockGmi;
     let gameTest;
     let mockTextAdd;
@@ -20,6 +20,7 @@ describe("Test Harness - Test Screens - Game", () => {
     beforeEach(() => {
         jest.spyOn(global.console, "log");
         jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
+        jest.spyOn(a11y, "accessibilify").mockImplementation(() => {});
 
         mockGmi = {
             getAllSettings: jest.fn(() => ({ gameData: "gameData" })),
@@ -129,7 +130,7 @@ describe("Test Harness - Test Screens - Game", () => {
 
                 test("sets a pointerdown event on the button image", () => {
                     const clickButtonCall = onEvent.mock.calls[1][0];
-                    expect(clickButtonCall).toBe("pointerdown");
+                    expect(clickButtonCall).toBe("pointerup");
                 });
 
                 test("saves data to the GMI when a button image is clicked", () => {

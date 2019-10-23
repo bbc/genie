@@ -4,7 +4,6 @@
  * @license Apache-2.0
  */
 import * as gmiModule from "../../../src/core/gmi/gmi.js";
-import * as VisibleLayer from "../../../src/core/visible-layer.js";
 
 describe("GMI", () => {
     let defaultSettings;
@@ -12,7 +11,6 @@ describe("GMI", () => {
     let fakeGmiObject;
 
     beforeEach(() => {
-        jest.spyOn(VisibleLayer, "get");
         jest.useFakeTimers();
         defaultSettings = {
             pages: [

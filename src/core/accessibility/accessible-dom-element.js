@@ -26,6 +26,7 @@ export function accessibleDomElement(options) {
         el.style.position = "absolute";
         el.style.cursor = "pointer";
         el.style.touchAction = "manipulation";
+        el.style["pointer-events"] = "none";
 
         el.innerHTML = options.text || "";
         if (options.ariaLabel) {

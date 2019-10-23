@@ -6,27 +6,16 @@
 module.exports = {
     collectCoverageFrom: ["src/**/*.js", "!src/output/**/*.js"],
     coverageThreshold: {
-        // global: {
-        //     statements: 94.34,
-        //     branches: 87.74,
-        //     lines: 95.25,
-        //     functions: 90.8,
-        // },
         global: {
-            statements: 0,
-            branches: 0,
-            lines: 0,
-            functions: 0,
+            statements: 97.76,
+            branches: 98.32,
+            lines: 97.85,
+            functions: 97.55,
         },
     },
     testEnvironment: "jsdom",
     modulePathIgnorePatterns: ["/.node_modules.+/"],
-    testPathIgnorePatterns: [
-        "/node_modules/",
-        "/.node_modules.+/",
-        ".node_modules_production",
-        "./test/core/accessibility",
-    ],
+    testPathIgnorePatterns: ["/node_modules/", "/.node_modules.+/", ".node_modules_production"],
     setupFilesAfterEnv: ["./test/set-up-jest.js"],
     transform: { "^.+\\.js$": "babel-jest" },
     transformIgnorePatterns: ["node_modules/(?!(bowser)/)"],
