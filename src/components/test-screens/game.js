@@ -48,13 +48,11 @@ export class GameTest extends Screen {
         }, this);
 
         const onGameComplete = buttonNumber => {
-            const results = {
-                results: "You pressed button " + buttonNumber,
-                characterSelected: this.transientData["character-select"].choice.title,
-            };
+            const results = "You pressed button " + buttonNumber;
             gmi.setGameData("buttonPressed", buttonNumber);
             console.log("Data saved to GMI:", gmi.getAllSettings().gameData); // eslint-disable-line no-console
-            this.navigation.next(results);
+            this.transientData.results = results;
+            this.navigation.next();
         };
 
         this.add
