@@ -139,6 +139,32 @@ describe("Select Screen", () => {
             expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(selectScreen);
         });
 
+        test("does not adjust page title position when on how to play", () => {
+            expect(selectScreen.add.image.mock.calls[1]).toEqual([0, -170, "test-select.title"]);
+        });
+
+        test("adjusts page title position when on how to play", () => {
+            selectScreen.setData(mockHowToPlayData);
+            selectScreen.currentIndex = 0;
+            jest.clearAllMocks();
+            selectScreen.create();
+
+            expect(selectScreen.add.image.mock.calls[1]).toEqual([0, -230, "test-select.title"]);
+        });
+
+        test("does not adjust choice sprite position when on how to play", () => {
+            expect(selectScreen.add.sprite.mock.calls[0]).toEqual([0, 0, "test-select.character1"]);
+        });
+
+        test("adjusts choice sprite position when on how to play", () => {
+            selectScreen.setData(mockHowToPlayData);
+            selectScreen.currentIndex = 0;
+            jest.clearAllMocks();
+            selectScreen.create();
+
+            expect(selectScreen.add.sprite.mock.calls[0]).toEqual([0, 30, "test-select.character1"]);
+        });
+
         // TODO P3 Accessibility
         // test("creates an accessible carousel for the choices", () => {
         //     expect(accessibleCarouselElements.create).toHaveBeenCalledWith(
