@@ -23,7 +23,9 @@ export class Select extends Screen {
         this.theme = this.context.config.theme[this.scene.key];
         this.currentIndex = 0;
         this.choiceSprites = this.createChoiceSprites(this.theme.choices);
-        this.add.image(0, -170, `${this.scene.key}.title`);
+        this.theme.howToPlay
+            ? this.add.image(0, -230, `${this.scene.key}.title`)
+            : this.add.image(0, -170, `${this.scene.key}.title`);
 
         if (this.theme.howToPlay) {
             this.buttonLayout = this.addLayout(["overlayBack", "audio", "settings", "previous", "next"]);
@@ -62,7 +64,9 @@ export class Select extends Screen {
         const choiceSprites = [];
         choices.forEach((item, index) => {
             const choiceAsset = `${this.scene.key}.${choices[index].asset}`;
-            const choiceSprite = this.add.sprite(0, 0, choiceAsset);
+            const choiceSprite = this.theme.howToPlay
+                ? this.add.sprite(0, 30, choiceAsset)
+                : this.add.sprite(0, 0, choiceAsset);
 
             choiceSprite.visible = index === 0;
             choiceSprites.push(choiceSprite);
