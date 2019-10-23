@@ -14,7 +14,7 @@ const hasAccessibleElement = button => {
 
 const PARENT_ELEMENT_ID = "accessibility";
 
-export const getAccessibleButtons = visibleLayer => _accessibleButtons[visibleLayer];
+export const getAccessibleButtons = key => (_accessibleButtons[key] ? _accessibleButtons[key] : []);
 
 export const setup = gameParentElement => {
     const el = document.createElement("div");
@@ -24,29 +24,29 @@ export const setup = gameParentElement => {
 };
 
 export const addToAccessibleButtons = (screen, button) => {
-    const visibleLayer = screen.visibleLayer;
+    const visibleScreenKey = screen.scene.key;
     Buttons[button.elementId] = button;
 
-    if (_accessibleButtons[visibleLayer]) {
-        _accessibleButtons[visibleLayer].push(button);
+    if (_accessibleButtons[visibleScreenKey]) {
+        _accessibleButtons[visibleScreenKey].push(button);
     } else {
-        _accessibleButtons[visibleLayer] = [button];
+        _accessibleButtons[visibleScreenKey] = [button];
     }
 };
 
 export const removeFromAccessibleButtons = (screen, button) => {
-    const visibleLayer = screen.visibleLayer;
+    const visibleScreenKey = screen.scene.key;
 
-    const idx = _accessibleButtons[visibleLayer].indexOf(button);
+    const idx = _accessibleButtons[visibleScreenKey].indexOf(button);
 
     if (idx !== -1) {
-        _accessibleButtons[visibleLayer].splice(idx, 1);
+        _accessibleButtons[visibleScreenKey].splice(idx, 1);
     }
 };
 
 export const clearAccessibleButtons = screen => {
     if (screen) {
-        _accessibleButtons[screen.visibleLayer] = [];
+        _accessibleButtons[screen.scene.key] = [];
     } else {
         _accessibleButtons = {};
     }
@@ -67,7 +67,7 @@ export const clearElementsFromDom = () => {
 };
 
 export const appendElementsToDom = screen => {
-    const buttons = getAccessibleButtons(screen.visibleLayer);
+    const buttons = getAccessibleButtons(screen.scene.key);
     const parentElement = document.getElementById(PARENT_ELEMENT_ID);
 
     buttons.forEach(button => {

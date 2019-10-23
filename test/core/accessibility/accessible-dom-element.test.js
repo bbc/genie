@@ -103,6 +103,11 @@ describe("Accessible DOM Element", () => {
             expect(mockElement.style.touchAction).toBe("manipulation");
         });
 
+        test("sets pointer events none to prevent firing buttons twice", () => {
+            accessibleDomElement(options);
+            expect(mockElement.style["pointer-events"]).toBe("none");
+        });
+
         test("sets inner text to be empty by default", () => {
             accessibleDomElement(options);
             expect(mockElement.innerHTML).toBe("");
@@ -170,6 +175,13 @@ describe("Accessible DOM Element", () => {
             const keyUpEvent = { key: "Enter" };
             mockElement.events.keyup(keyUpEvent);
             expect(options.onClick).toHaveBeenCalled();
+        });
+
+        test("does not call onClick when a key that isn't space or escape fires the event", () => {
+            const mockElement = accessibleDomElement(options);
+            const keyUpEvent = { key: "mockKey" };
+            mockElement.events.keyup(keyUpEvent);
+            expect(options.onClick).not.toHaveBeenCalled();
         });
 
         test("returns a click function", () => {

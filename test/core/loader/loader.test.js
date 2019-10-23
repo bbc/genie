@@ -7,6 +7,7 @@
 import { createMockGmi } from "../../mock/gmi.js";
 
 import { Loader } from "../../../src/core/loader/loader.js";
+import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as GameSound from "../../../src/core/game-sound.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
@@ -24,6 +25,10 @@ describe("Loader", () => {
         //jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {
         //    play: jest.fn();
         //});
+
+        jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
+        jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
+        jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
 
         mockGmi = {
             embedVars: { configPath: "test-config-path" },

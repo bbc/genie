@@ -15,7 +15,6 @@ export const showElement = el => {
     el.setAttribute("tabindex", "0");
     el.addEventListener("click", button.elementEvents.click);
     el.addEventListener("keyup", button.elementEvents.keyup);
-    button.input.enabled = true;
 };
 
 export const hideElement = el => {
@@ -29,7 +28,6 @@ export const hideElement = el => {
     el.setAttribute("tabindex", "-1");
     el.removeEventListener("click", button.elementEvents.click);
     el.removeEventListener("keyup", button.elementEvents.keyup);
-    button.input.enabled = false;
 };
 
 export const hideAndDisableElement = el => {

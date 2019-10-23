@@ -105,7 +105,6 @@ describe("Boot", () => {
 
             expect(Scaler.init).toHaveBeenCalledWith(600, mockGame);
             expect(bootScreen.navigation.next).toHaveBeenCalled();
-            expect(a11y.setup).toHaveBeenCalledWith(mockGame.canvas.parentElement);
         });
     });
 });
