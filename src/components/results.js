@@ -26,10 +26,11 @@ const fireGameCompleteStat = result => {
 
 export class Results extends Screen {
     create() {
-        const theme = this.context.config.theme[this.scene.key];
         this.add.image(0, 0, "results.background");
         this.add.image(0, -150, "results.title");
-        this.add.text(0, 50, this.context.transientData.results, theme.resultText.style);
+        this.theme = this.context.config.theme[this.scene.key];
+        const resultsText = this.add.text(0, 50, this.context.transientData.results, this.theme.resultText.style);
+        resultsText.setOrigin(0.5, 0.5);
 
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         const buttons = ["pause", "restart", "continueGame"];

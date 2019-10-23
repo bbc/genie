@@ -14,6 +14,7 @@ describe("Results Screen", () => {
     let resultsScreen;
     let mockData;
     let mockGmi;
+    let mockTextAdd;
 
     beforeEach(() => {
         jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
@@ -38,11 +39,19 @@ describe("Results Screen", () => {
         mockGmi = { sendStatsEvent: jest.fn() };
         createMockGmi(mockGmi);
 
+        mockTextAdd = {
+            setOrigin: jest.fn(() => ({
+                setInteractive: jest.fn(() => ({
+                    on: jest.fn(),
+                })),
+            })),
+        };
+
         resultsScreen = new Results();
         resultsScreen.addLayout = jest.fn();
         resultsScreen.add = {
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
-            text: jest.fn(),
+            text: jest.fn().mockImplementation(() => mockTextAdd),
         };
         resultsScreen.scene = {
             key: "resultsScreen",
