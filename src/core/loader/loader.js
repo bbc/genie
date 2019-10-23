@@ -37,8 +37,8 @@ export class Loader extends Screen {
             this.load.json("achievements-data", "achievements/config.json");
         }
 
-        const masterPack = this.cache.json.get("asset-master-pack");
         const gamePacksToLoad = ["gel/gel-pack"].concat(getMissingPacks(masterPack, this.scene.manager.keys));
+        const masterPack = this.cache.json.get("asset-master-pack");
 
         this.load.addPack(masterPack);
         gamePacksToLoad.forEach(pack => this.load.pack(pack));
