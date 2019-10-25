@@ -102,7 +102,7 @@ describe("Accessible Carousel Elements", () => {
         expect(mockParentElement.removeChild).toHaveBeenCalledWith(mockCarouselDomElement);
     });
 
-    test("does not removes the carousel if the first item's parent is not a carousel", () => {
+    test("does not remove the carousel if the first item's parent is not a carousel", () => {
         mockParentElement.contains.mockImplementation(() => false);
         accessibleCarouselElements.create("select-screen", mockSprites, mockParentElement);
         const destroyCallback = firstMockSprite.on.mock.calls[0][1];
