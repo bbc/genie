@@ -94,7 +94,6 @@ const paths = [[x => x.isMobile, x => "gelMobile." + x.key], [x => !x.isMobile, 
 export const assetPath = fp.cond(paths);
 
 const publish = (config, data) => () => {
-    //TODO P3 re- enable sound [NT]
     GameSound.Assets.buttonClick.play();
     signal.bus.publish({
         channel: config.channel,
