@@ -33,6 +33,10 @@ export class Loader extends Screen {
         const config = this.cache.json.get("config");
         this.setConfig(config);
 
+        loadPack.files.forEach(file => {
+            if (file.type === "audio") this.load.audio(file.key, file.urls);
+        });
+
         if (config.theme.game && config.theme.game.achievements === true) {
             this.load.json("achievements-data", "achievements/config.json");
         }
@@ -75,11 +79,10 @@ export class Loader extends Screen {
     }
 
     create() {
-        //GameSound.setButtonClickSound(this.game, "loader.buttonClick");
+        GameSound.setButtonClickSound(this.scene.scene, "buttonClick");
         if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
             gmi.achievements.init(this.cache.json.get("achievements-data"));
         }
-
         this.navigation.next();
         gmi.sendStatsEvent("gameloaded", "true");
         gmi.gameLoaded();

@@ -11,18 +11,18 @@ const Assets = {
 const SOUND_FADE_PERIOD = 1000;
 let fadingMusic;
 
-const setButtonClickSound = (game, audioKey) => {
-    Assets.buttonClick = game.add.audio(audioKey);
+const setButtonClickSound = (scene, audioKey) => {
+    Assets.buttonClick = scene.sound.add(audioKey);
 };
 
-const setupScreenMusic = (game, themeScreenConfig = {}) => {
+const setupScreenMusic = (scene, themeScreenConfig = {}) => {
     if (isAlreadyPlaying(themeScreenConfig.music)) return;
 
-    stopCurrentMusic(game);
-    Assets.backgroundMusic = startMusic(game, themeScreenConfig.music);
+    stopCurrentMusic(scene);
+    Assets.backgroundMusic = startMusic(scene, themeScreenConfig.music);
 
     if (Assets.backgroundMusic && Assets.backgroundMusic.usingAudioTag) {
-        Assets.backgroundMusic.mute = game.sound.mute;
+        Assets.backgroundMusic.mute = scene.sound.mute;
     }
 };
 
@@ -46,10 +46,10 @@ const loopMusicStop = music => {
     music.stop();
 };
 
-const startMusic = (game, audioKey) => {
+const startMusic = (scene, audioKey) => {
     if (!audioKey) return;
 
-    let music = game.add.audio(audioKey);
+    let music = scene.sound.add(audioKey);
 
     loopMusicStart(music, !!fadingMusic);
 
@@ -64,7 +64,7 @@ const fadeIn = music => {
     }
 };
 
-const stopCurrentMusic = game => {
+const stopCurrentMusic = scene => {
     if (!Assets.backgroundMusic) {
         if (fadingMusic) {
             fadingMusic.fadeTween.pendingDelete = false;
@@ -75,7 +75,7 @@ const stopCurrentMusic = game => {
 
     if (fadingMusic) {
         loopMusicStop(fadingMusic);
-        game.sound.remove(fadingMusic);
+        scene.sound.remove(fadingMusic);
     }
 
     fadingMusic = Assets.backgroundMusic;
