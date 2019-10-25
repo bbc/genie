@@ -1,7 +1,7 @@
 {
     "theme": {
         "home": {
-            "music": "backgroundMusic",
+            "music": "loadscreen.backgroundMusic",
             "button-overrides": {
                 "play": {
                     "shiftY": 80
@@ -9,7 +9,7 @@
             }
         },
         "character-select": {
-            "music": "backgroundMusic",
+            "music": "loadscreen.backgroundMusic",
             "choices": [
                 {
                     "asset": "carousel1",
@@ -45,7 +45,7 @@
             }
         },
         "level-select": {
-            "music": "backgroundMusic",
+            "music": "loadscreen.backgroundMusic",
             "choices": [
                 {
                     "asset": "carousel1",
@@ -81,7 +81,7 @@
             }
         },
         "game": {
-            "music": "backgroundMusicTwo",
+            "music": "loadscreen.backgroundMusicTwo",
             "achievements": true
         },
         "results": {

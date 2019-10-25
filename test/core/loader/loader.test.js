@@ -20,11 +20,8 @@ describe("Loader", () => {
     let mockMasterPack;
 
     beforeEach(() => {
-        //TODO P3 need to add tests for audio once audio has been addressed [NT]
         global.window.__qaMode = undefined;
-        jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {
-            //    play: jest.fn();
-        });
+        jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {});
 
         jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
         jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
