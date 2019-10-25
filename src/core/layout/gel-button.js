@@ -25,7 +25,7 @@ class Indicator extends Phaser.GameObjects.Sprite {
     }
 }
 
-const noIndicator = {
+export const noIndicator = {
     resize: () => {},
     destroy: () => {},
 };
@@ -79,7 +79,7 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
     setIndicator() {
         this.indicator.destroy();
-        const show = this._id === "achievements"; //&& gmi.achievements.unseen;
+        const show = this._id === "achievements" && gmi.achievements.unseen;
         this.indicator = show ? new Indicator(this) : noIndicator;
     }
 
