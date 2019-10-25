@@ -69,7 +69,6 @@ export function accessibilify(button, config, gameButton = true) {
         const scale = viewHeight / realHeight;
 
         let bounds = button.getBounds();
-        bounds.topLeft = button.getTopLeft(bounds.topLeft, true);
         bounds.x -= CAMERA_SCROLL_X_OFFSET;
         bounds.x *= scale;
         bounds.x += marginLeft;
