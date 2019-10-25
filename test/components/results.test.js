@@ -14,6 +14,7 @@ describe("Results Screen", () => {
     let resultsScreen;
     let mockData;
     let mockGmi;
+    let mockTextAdd;
 
     beforeEach(() => {
         jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
@@ -38,11 +39,19 @@ describe("Results Screen", () => {
         mockGmi = { sendStatsEvent: jest.fn() };
         createMockGmi(mockGmi);
 
+        mockTextAdd = {
+            setOrigin: jest.fn(() => ({
+                setInteractive: jest.fn(() => ({
+                    on: jest.fn(),
+                })),
+            })),
+        };
+
         resultsScreen = new Results();
         resultsScreen.addLayout = jest.fn();
         resultsScreen.add = {
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
-            text: jest.fn(),
+            text: jest.fn(() => mockTextAdd),
         };
         resultsScreen.scene = {
             key: "resultsScreen",
@@ -148,7 +157,7 @@ describe("Results Screen", () => {
 
             test("restarts the game and passes saved data through", () => {
                 signal.bus.subscribe.mock.calls[1][0].callback();
-                expect(resultsScreen.navigation.game).toHaveBeenCalledWith({ characterSelected: 1, results: 22 });
+                expect(resultsScreen.navigation.game).toHaveBeenCalled();
             });
         });
     });

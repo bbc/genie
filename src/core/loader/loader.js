@@ -44,8 +44,8 @@ export class Loader extends Screen {
         const masterPack = this.cache.json.get("asset-master-pack");
         const gamePacksToLoad = ["gel/gel-pack"].concat(getMissingPacks(masterPack, this.scene.manager.keys));
 
-        this.load.addPack(masterPack);
         gamePacksToLoad.forEach(pack => this.load.pack(pack));
+        this.load.addPack(masterPack);
 
         this.add.image(0, 0, "loader.background");
         this.add.image(0, -150, "loader.title");

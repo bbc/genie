@@ -145,13 +145,10 @@ describe("Test Screens - Game", () => {
                     expect(global.console.log).toHaveBeenCalledWith("Data saved to GMI:", "gameData");
                 });
 
-                test("navigates to the next screen and passes data when button image is clicked", () => {
+                test("navigates to the next screen when button image is clicked", () => {
                     const clickButton = onEvent.mock.calls[1][1];
                     clickButton(2);
-                    expect(gameTest.navigation.next).toHaveBeenCalledWith({
-                        results: "You pressed button 2",
-                        characterSelected: "Penfold",
-                    });
+                    expect(gameTest.navigation.next).toHaveBeenCalled();
                 });
             });
 
@@ -204,13 +201,10 @@ describe("Test Screens - Game", () => {
                     expect(global.console.log).toHaveBeenCalledWith("Data saved to GMI:", "gameData");
                 });
 
-                test("navigates to the next screen and passes data when button text is clicked", () => {
+                test("navigates to the next screen when button text is clicked", () => {
                     const clickButtonText = onEventText.mock.calls[1][1];
                     clickButtonText(2);
-                    expect(gameTest.navigation.next).toHaveBeenCalledWith({
-                        results: "You pressed button 2",
-                        characterSelected: "Penfold",
-                    });
+                    expect(gameTest.navigation.next).toHaveBeenCalled();
                 });
             });
         });
