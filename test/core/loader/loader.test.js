@@ -21,9 +21,7 @@ describe("Loader", () => {
 
     beforeEach(() => {
         global.window.__qaMode = undefined;
-        jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {
-            //    play: jest.fn();
-        });
+        jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {});
 
         jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
         jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
