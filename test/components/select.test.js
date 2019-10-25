@@ -204,7 +204,7 @@ describe("Select Screen", () => {
             selectScreen.currentIndex = 1;
             signal.bus.subscribe.mock.calls[3][0].callback();
 
-            expect(selectScreen.accessibleElements.length).toEqual(3);
+            expect(selectScreen.accessibleCarouselElements.length).toEqual(3);
             expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
             expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(true);
             expect(mockAccessibleElements[2].attributes["aria-hidden"]).toBe(true);
@@ -271,9 +271,9 @@ describe("Select Screen", () => {
                 selectScreen.currentIndex = 2;
                 signal.bus.subscribe.mock.calls[0][0].callback();
 
-                expect(selectScreen.accessibleElements[0].style.display).toEqual("none");
-                expect(selectScreen.accessibleElements[1].style.display).toEqual("block");
-                expect(selectScreen.accessibleElements[2].style.display).toEqual("none");
+                expect(selectScreen.accessibleCarouselElements[0].style.display).toEqual("none");
+                expect(selectScreen.accessibleCarouselElements[1].style.display).toEqual("block");
+                expect(selectScreen.accessibleCarouselElements[2].style.display).toEqual("none");
             });
         });
 
@@ -335,9 +335,9 @@ describe("Select Screen", () => {
                 selectScreen.currentIndex = 0;
                 signal.bus.subscribe.mock.calls[1][0].callback();
 
-                expect(selectScreen.accessibleElements[0].style.display).toBe("none");
-                expect(selectScreen.accessibleElements[1].style.display).toBe("block");
-                expect(selectScreen.accessibleElements[2].style.display).toBe("none");
+                expect(selectScreen.accessibleCarouselElements[0].style.display).toBe("none");
+                expect(selectScreen.accessibleCarouselElements[1].style.display).toBe("block");
+                expect(selectScreen.accessibleCarouselElements[2].style.display).toBe("none");
             });
         });
     });

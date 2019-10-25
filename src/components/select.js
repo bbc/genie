@@ -33,7 +33,7 @@ export class Select extends Screen {
             this.buttonLayout = this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
         }
 
-        this.accessibleElements = accessibleCarouselElements.create(
+        this.accessibleCarouselElements = accessibleCarouselElements.create(
             this.scene.key,
             this.choiceSprites,
             this.game.canvas.parentElement,
@@ -46,6 +46,7 @@ export class Select extends Screen {
 
     setLeftButtonState() {
         this.buttonLayout.buttons.previous.visible = Boolean(!this.theme.howToPlay || this.currentIndex !== 0);
+        console.log("this.buttonLayout.buttons", this.buttonLayout.buttons, this.accessibleCarouselElements);
     }
 
     setRightButtonState() {
@@ -86,7 +87,7 @@ export class Select extends Screen {
         this.choiceSprites.forEach((item, index) => {
             item.visible = index === this.currentIndex;
         });
-        this.accessibleElements.forEach((element, index) => {
+        this.accessibleCarouselElements.forEach((element, index) => {
             element.setAttribute("aria-hidden", index !== this.currentIndex);
             element.style.display = index !== this.currentIndex ? "none" : "block"; //Needed for Firefox
         });
@@ -127,7 +128,7 @@ export class Select extends Screen {
             name: "pause",
             callback: () => {
                 // stops screenreader from announcing the options when the pause overlay is covering them
-                this.accessibleElements.forEach(element => {
+                this.accessibleCarouselElements.forEach(element => {
                     element.setAttribute("aria-hidden", true);
                 });
             },
@@ -138,7 +139,7 @@ export class Select extends Screen {
             name: "play",
             callback: () => {
                 // makes the screenreader announce the selected option
-                this.accessibleElements[this.currentIndex].setAttribute("aria-hidden", false);
+                this.accessibleCarouselElements[this.currentIndex].setAttribute("aria-hidden", false);
             },
         });
     }
