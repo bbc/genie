@@ -82,13 +82,13 @@ const stopCurrentMusic = scene => {
 
     if (!fadingMusic.isPlaying) {
         loopMusicStop(fadingMusic);
-        game.sound.remove(fadingMusic);
+        scene.sound.remove(fadingMusic);
         fadingMusic = undefined;
         return;
     }
 
     fadingMusic.onFadeComplete.addOnce(() => {
-        game.sound.remove(fadingMusic);
+        scene.sound.remove(fadingMusic);
         fadingMusic = undefined;
     });
     fadingMusic.fadeOut(SOUND_FADE_PERIOD / 2);

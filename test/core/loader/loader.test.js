@@ -21,10 +21,10 @@ describe("Loader", () => {
 
     beforeEach(() => {
         //TODO P3 need to add tests for audio once audio has been addressed [NT]
-        //global.window.__qaMode = undefined;
-        //jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {
-        //    play: jest.fn();
-        //});
+        global.window.__qaMode = undefined;
+        jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {
+            //    play: jest.fn();
+        });
 
         jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
         jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
@@ -70,6 +70,7 @@ describe("Loader", () => {
         });
 
         loader.load = {
+            audio: jest.fn(),
             setBaseURL: jest.fn(),
             setPath: jest.fn(),
             addPack: jest.fn(),
@@ -192,6 +193,22 @@ describe("Loader", () => {
             expect(loader.load.pack).toHaveBeenCalledWith("three");
         });
 
+        test("calls load.audio when audio content is present", () => {
+            loader.preload();
+
+            const expectedOne = ["backgroundMusic", ["shared/background-music.mp3", "shared/background-music.ogg"]];
+            const expectedTwo = [
+                "backgroundMusicTwo",
+                ["shared/background-music-2.mp3", "shared/background-music-2.ogg"],
+            ];
+            const expectedThree = ["buttonClick", ["shared/button-click.mp3", "shared/button-click.ogg"]];
+
+            expect(loader.load.audio.mock.calls.length).toBe(3);
+            expect(loader.load.audio.mock.calls[0]).toEqual(expectedOne);
+            expect(loader.load.audio.mock.calls[1]).toEqual(expectedTwo);
+            expect(loader.load.audio.mock.calls[2]).toEqual(expectedThree);
+        });
+
         test("does not load boot and loader screen packs", () => {
             loader.scene.manager.keys = { boot: {}, loader: {}, three: {} };
             loader.preload();
@@ -211,6 +228,11 @@ describe("Loader", () => {
     });
 
     describe("create method", () => {
+        test("calls GameSounds setButtonClickSound", () => {
+            loader.create();
+            expect(GameSound.setButtonClickSound).toHaveBeenCalled();
+        });
+
         test("calls this.navigation.next", () => {
             loader.navigation = { next: jest.fn() };
             loader.create();
