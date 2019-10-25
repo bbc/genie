@@ -10,7 +10,7 @@ module.exports = {
             statements: 98.29,
             branches: 98.75,
             lines: 97.93,
-            functions: 98.4,
+            functions: 97.93,
         },
     },
     testEnvironment: "jsdom",
