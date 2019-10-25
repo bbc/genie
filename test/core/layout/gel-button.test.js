@@ -6,7 +6,8 @@
 
 import * as signal from "../../../src/core/signal-bus.js";
 import * as GameSound from "../../../src/core/game-sound.js";
-import { GelButton, assetPath } from "../../../src/core/layout/gel-button";
+import { GelButton, assetPath, noIndicator } from "../../../src/core/layout/gel-button";
+import { gmi } from "../../../src/core/gmi/gmi.js";
 
 describe("Gel Button", () => {
     let mockScene;
@@ -16,6 +17,7 @@ describe("Gel Button", () => {
     let mockConfig;
 
     beforeEach(() => {
+        gmi.achievements = { unseen: false };
         GelButton.prototype.width = 64;
         GelButton.prototype.height = 64;
         GelButton.prototype.setFrame = jest.fn();
@@ -26,6 +28,10 @@ describe("Gel Button", () => {
             buttonClick: { play: jest.fn() },
         };
         mockScene = {
+            add: {
+                existing: jest.fn(),
+                tween: jest.fn(),
+            },
             sys: {
                 queueDepthSort: jest.fn(),
                 anims: {
@@ -161,6 +167,23 @@ describe("Gel Button", () => {
         });
     });
 
+    describe("Set Image function", () => {
+        test("sets the correct key", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.setTexture = jest.fn();
+            gelButton.setImage("mockKey");
+            expect(gelButton._id).toEqual("mockKey");
+        });
+        test("sets correct texture", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.setTexture = jest.fn();
+            gelButton.setImage("mockKey");
+            expect(gelButton.setTexture).toHaveBeenCalledWith(
+                assetPath({ key: "mockKey", isMobile: gelButton._isMobile }),
+            );
+        });
+    });
+
     describe("Resize function", () => {
         test("sets correct texture", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
@@ -176,6 +199,70 @@ describe("Gel Button", () => {
             mockMetrics.hitMin = 66;
             gelButton.resize(mockMetrics);
             expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-1, -1, 66, 66));
+        });
+    });
+
+    describe("Set Indicator function", () => {
+        test("creates an indicator when the id is achievements and gmi unseen is true", () => {
+            mockConfig.key = "achievements";
+            gmi.achievements.unseen = true;
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.indicator).toBeInstanceOf(Phaser.GameObjects.Sprite);
+        });
+        test("creates a noIndicator when the id is achievements and gmi unseen is false", () => {
+            mockConfig.key = "achievements";
+            gmi.achievements.unseen = false;
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.indicator).toBe(noIndicator);
+        });
+        test("creates a noIndicator when the id is not achievements and gmi unseen is true", () => {
+            mockConfig.key = "something";
+            gmi.achievements.unseen = true;
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.indicator.resize();
+            expect(gelButton.indicator).toBe(noIndicator);
+        });
+        test("creates a noIndicator when the id is not achievements and gmi unseen is false", () => {
+            mockConfig.key = "something";
+            gmi.achievements.unseen = false;
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.indicator).toBe(noIndicator);
+        });
+    });
+
+    describe("Update Indicator Position function", () => {
+        test("calls resize function on indicator", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            const mockIndicator = { resize: jest.fn() };
+            gelButton.indicator = mockIndicator;
+            gelButton.updateIndicatorPosition();
+            expect(mockIndicator.resize).toHaveBeenCalled();
+        });
+
+        test("indicator resize function updates x and y positions", () => {
+            mockConfig.key = "achievements";
+            gmi.achievements.unseen = true;
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.getBounds = () => {
+                return { x: 50, y: 80, width: 100 };
+            };
+            gelButton.updateIndicatorPosition();
+            expect(gelButton.indicator.x).toBe(150);
+            expect(gelButton.indicator.y).toBe(80);
+        });
+
+        test("indicator resize function updates texture", () => {
+            mockConfig.key = "achievements";
+            gmi.achievements.unseen = true;
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.indicator.setTexture = jest.fn();
+            gelButton.getBounds = () => {
+                return { x: 50, y: 80, width: 100 };
+            };
+            gelButton.updateIndicatorPosition();
+            expect(gelButton.indicator.setTexture).toHaveBeenCalledWith(
+                assetPath({ key: "notification", isMobile: gelButton._isMobile }),
+            );
         });
     });
 

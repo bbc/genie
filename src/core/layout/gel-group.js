@@ -117,6 +117,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
         this._buttons.forEach(button => {
             button.x = button.x + button.shiftX * metrics.scale;
             button.y = button.y + button.shiftY * metrics.scale;
+            button.updateIndicatorPosition();
         });
     }
 
