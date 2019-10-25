@@ -9,20 +9,19 @@ import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 
 class Indicator extends Phaser.GameObjects.Sprite {
-    constructor(parent) {
-        super(parent.game, 0, 0, assetPath({ key: "notification", isMobile: parent._isMobile }));
-        this.parent = parent;
-        this.scale = { x: 0, y: 0 };
-        this.anchor.set(0.5, 0.5);
-        parent.game.add.tween(this.scale).to({ x: 1, y: 1 }, 500, Phaser.Easing.Bounce.Out, true, 1000);
-        parent.addChild(this);
-        this.resize();
+    constructor(gelButton) {
+        super(gelButton.scene, 0, 0, assetPath({ key: "notification", isMobile: gelButton._isMobile }));
+        this.scene.add.existing(this);
+        this.gelButton = gelButton;
+        this.scale = 0;
+        this.scene.add.tween({ targets: this, ease: "Bounce", delay: 500, duration: 500, scale: 1 });
     }
 
     resize() {
-        this.position.x = this.parent.width / 2;
-        this.position.y = this.parent.height / -2;
-        this.setTexture(assetPath({ key: "notification", isMobile: this.parent._isMobile }));
+        const { x, y, width } = this.gelButton.getBounds();
+        this.x = x + width;
+        this.y = y;
+        this.setTexture(assetPath({ key: "notification", isMobile: this.gelButton._isMobile }));
     }
 }
 
@@ -60,7 +59,6 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
     setHitArea(metrics) {
         const hitPadding = fp.max([metrics.hitMin - this.width, metrics.hitMin - this.height, 0]);
-
         const width = this.width + hitPadding;
         const height = this.height + hitPadding;
         if (this.input) {
@@ -75,17 +73,18 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
     resize(metrics) {
         this._isMobile = metrics.isMobile;
-
         this.setTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);
-
-        this.indicator.resize();
     }
 
     setIndicator() {
         this.indicator.destroy();
-        const show = this._id === "achievements" && gmi.achievements.unseen;
+        const show = this._id === "achievements"; //&& gmi.achievements.unseen;
         this.indicator = show ? new Indicator(this) : noIndicator;
+    }
+
+    updateIndicatorPosition() {
+        this.indicator.resize();
     }
 }
 
