@@ -4,13 +4,13 @@
  * @license Apache-2.0
  */
 module.exports = {
-    collectCoverageFrom: ["src/**/*.js", "!src/output/**/*.js"],
+    collectCoverageFrom: ["src/components/**/*.js", "src/core/**/*.js", "!src/output/**/*.js"],
     coverageThreshold: {
         global: {
-            statements: 98.29,
-            branches: 98.75,
-            lines: 97.93,
-            functions: 97.93,
+            statements: 99.49,
+            branches: 99.17,
+            lines: 99.68,
+            functions: 98.95,
         },
     },
     testEnvironment: "jsdom",
