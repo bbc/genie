@@ -54,9 +54,6 @@ export class Screen extends Phaser.Scene {
     init(data) {
         this.#data = data;
 
-        //TODO P3 remove debug line - currently useful to know which screen has been started NT
-        console.log(`SCREEN INIT ${this.scene.key}:`, data);
-
         //TODO P3 This centers the camera. Should this be hard-coded [NT]
         this.cameras.main.scrollX = -700;
         this.cameras.main.scrollY = -300;
