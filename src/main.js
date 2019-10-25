@@ -3,14 +3,14 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Home } from "./components/home.js";
-import { Results } from "./components/results.js";
-import { Select } from "./components/select.js";
-import { GameTest } from "./components/test-screens/game.js";
-import { Pause } from "./components/overlays/pause.js";
-import { settingsChannel } from "./core/settings.js";
-import * as signal from "./core/signal-bus.js";
-import { startup } from "./core/startup.js";
+import { Home } from "./components/home";
+import { Results } from "./components/results";
+import { Select } from "./components/select";
+import { GameTest } from "./components/test-screens/game";
+import { Pause } from "./components/overlays/pause";
+import { settingsChannel } from "./core/settings";
+import * as signal from "./core/signal-bus";
+import { startup } from "./core/startup";
 
 const settingsConfig = {
     pages: [
