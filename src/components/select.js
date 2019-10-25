@@ -10,7 +10,7 @@
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
-// import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
+import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
@@ -33,31 +33,29 @@ export class Select extends Screen {
             this.buttonLayout = this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
         }
 
-        // TODO P3 Accessibility
-        // this.accessibleElements = accessibleCarouselElements.create(
-        //     this.visibleLayer,
-        //     this.choiceSprites,
-        //     this.game.canvas.parentElement,
-        //     theme.choices,
-        // );
+        this.accessibleElements = accessibleCarouselElements.create(
+            this.scene.key,
+            this.choiceSprites,
+            this.game.canvas.parentElement,
+            this.theme.choices,
+        );
 
         this.addSignalSubscriptions();
         createTestHarnessDisplay(this);
     }
 
     setLeftButtonState() {
-        this.buttonLayout.buttons.previous.visible = this.currentIndex === 0 ? false : true;
+        this.buttonLayout.buttons.previous.visible = Boolean(!this.theme.howToPlay || this.currentIndex !== 0);
     }
 
     setRightButtonState() {
-        this.buttonLayout.buttons.next.visible = this.currentIndex + 1 === this.choiceSprites.length ? false : true;
+        const isNotLastPage = this.currentIndex + 1 !== this.choiceSprites.length;
+        this.buttonLayout.buttons.next.visible = Boolean(!this.theme.howToPlay || isNotLastPage);
     }
 
     update() {
-        if (this.theme.howToPlay) {
-            this.setLeftButtonState();
-            this.setRightButtonState();
-        }
+        this.setLeftButtonState();
+        this.setRightButtonState();
     }
 
     createChoiceSprites(choices) {
@@ -88,11 +86,10 @@ export class Select extends Screen {
         this.choiceSprites.forEach((item, index) => {
             item.visible = index === this.currentIndex;
         });
-        // TODO P3 Accessibility
-        // this.accessibleElements.forEach((element, index) => {
-        //     element.setAttribute("aria-hidden", index !== this.currentIndex);
-        //     element.style.display = index !== this.currentIndex ? "none" : "block"; //Needed for Firefox
-        // });
+        this.accessibleElements.forEach((element, index) => {
+            element.setAttribute("aria-hidden", index !== this.currentIndex);
+            element.style.display = index !== this.currentIndex ? "none" : "block"; //Needed for Firefox
+        });
     }
 
     startGame() {
@@ -125,24 +122,24 @@ export class Select extends Screen {
             callback: this.startGame.bind(this),
         });
 
-        // signal.bus.subscribe({
-        //     channel: buttonsChannel(this),
-        //     name: "pause",
-        //     callback: () => {
-        // // stops screenreader from announcing the options when the pause overlay is covering them
-        // this.accessibleElements.forEach(element => {
-        //     element.setAttribute("aria-hidden", true);
-        // });
-        //     },
-        // });
+        signal.bus.subscribe({
+            channel: buttonsChannel(this),
+            name: "pause",
+            callback: () => {
+                // stops screenreader from announcing the options when the pause overlay is covering them
+                this.accessibleElements.forEach(element => {
+                    element.setAttribute("aria-hidden", true);
+                });
+            },
+        });
 
-        // signal.bus.subscribe({
-        //     channel: buttonsChannel(this),
-        //     name: "play",
-        //     callback: () => {
-        // // makes the screenreader announce the selected option
-        // this.accessibleElements[this.currentIndex].setAttribute("aria-hidden", false);
-        //     },
-        // });
+        signal.bus.subscribe({
+            channel: buttonsChannel(this),
+            name: "play",
+            callback: () => {
+                // makes the screenreader announce the selected option
+                this.accessibleElements[this.currentIndex].setAttribute("aria-hidden", false);
+            },
+        });
     }
 }
