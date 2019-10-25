@@ -60,11 +60,10 @@ export class Screen extends Phaser.Scene {
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
             gmi.setStatsScreen(this.scene.key);
+            //TODO P3 commented out lines need re-enabling
+            // const themeScreenConfig = this.context.config.theme[this.scene.key];
+            // GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
         }
-
-        //TODO P3 commented out lines need re-enabling
-        //const themeScreenConfig = this.context.config.theme[this.game.state.current];
-        //GameSound.setupScreenMusic(this.game, themeScreenConfig);
         this.sys.accessibleButtons = [];
         a11y.clearAccessibleButtons();
         a11y.clearElementsFromDom();
