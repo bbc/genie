@@ -39,20 +39,17 @@ export const loadPack = {
         {
             type: "audio",
             key: "backgroundMusic",
-            urls: ["shared/background-music.mp3", "shared/background-music.ogg"],
-            autoDecode: true,
+            url: ["shared/background-music.mp3", "shared/background-music.ogg"],
         },
         {
             type: "audio",
             key: "backgroundMusicTwo",
-            urls: ["shared/background-music-2.mp3", "shared/background-music-2.ogg"],
-            autoDecode: true,
+            url: ["shared/background-music-2.mp3", "shared/background-music-2.ogg"],
         },
         {
             type: "audio",
             key: "buttonClick",
-            urls: ["shared/button-click.mp3", "shared/button-click.ogg"],
-            autoDecode: true,
+            url: ["shared/button-click.mp3", "shared/button-click.ogg"],
         },
     ],
 };
