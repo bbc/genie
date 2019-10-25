@@ -15,9 +15,6 @@ describe("Game Sound", () => {
                 add: jest.fn(() => mockMusic),
                 remove: jest.fn(),
             },
-            add: {
-                audio: jest.fn(() => mockMusic),
-            },
         };
         mockMusic = {
             play: jest.fn(),
@@ -223,7 +220,7 @@ describe("Game Sound", () => {
             });
 
             test("will not try to set the background music", () => {
-                expect(mockScene.add.audio).not.toHaveBeenCalled();
+                expect(mockScene.sound.add).not.toHaveBeenCalled();
             });
         });
 
