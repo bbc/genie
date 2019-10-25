@@ -46,6 +46,7 @@ describe("Group", () => {
                 width: 200,
                 height: 100,
                 input: {},
+                updateIndicatorPosition: jest.fn(),
                 updateTransform: () => {},
                 resize: buttonResizeStub,
                 shiftX: 0,
@@ -230,6 +231,7 @@ describe("Group", () => {
                             top: 0,
                         },
                     },
+                    updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
                 }));
@@ -246,6 +248,7 @@ describe("Group", () => {
                             top: -1000,
                         },
                     },
+                    updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
                 }));
@@ -281,6 +284,7 @@ describe("Group", () => {
                             bottom: 1000,
                         },
                     },
+                    updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
                 }));
@@ -297,6 +301,7 @@ describe("Group", () => {
                             bottom: 0,
                         },
                     },
+                    updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
                 }));
@@ -372,6 +377,17 @@ describe("Group", () => {
 
             expect(group._metrics.isMobile).toBe(false);
             expect(buttonResizeStub).not.toHaveBeenCalled();
+        });
+
+        test("updates buttons indicator positions", () => {
+            const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
+            const moreDesktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
+
+            group = new GelGroup(mockScene, parentGroup, "top", "left", desktopMetrics, false);
+            const button = group.addButton(config);
+            group.reset(moreDesktopMetrics);
+
+            expect(button.updateIndicatorPosition).toHaveBeenCalled();
         });
     });
 
