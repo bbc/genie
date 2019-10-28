@@ -44,8 +44,8 @@ const createButton = fp.curry((game, metrics, config, x = 0, y = 0) => {
     const btn = new GelButton(game, x, y, metrics, config);
 
     if (config.icon) {
-        btn.inputEnabled = false;
-        btn.hitArea = null;
+        btn.disableInteractive();
+        btn.input.hitArea = null;
         return btn;
     } else {
         defaultAction(config);
