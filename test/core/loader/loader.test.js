@@ -20,11 +20,8 @@ describe("Loader", () => {
     let mockMasterPack;
 
     beforeEach(() => {
-        //TODO P3 need to add tests for audio once audio has been addressed [NT]
-        //global.window.__qaMode = undefined;
-        //jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {
-        //    play: jest.fn();
-        //});
+        global.window.__qaMode = undefined;
+        jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {});
 
         jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
         jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
@@ -70,6 +67,7 @@ describe("Loader", () => {
         });
 
         loader.load = {
+            audio: jest.fn(),
             setBaseURL: jest.fn(),
             setPath: jest.fn(),
             addPack: jest.fn(),
@@ -211,6 +209,11 @@ describe("Loader", () => {
     });
 
     describe("create method", () => {
+        test("calls GameSounds setButtonClickSound", () => {
+            loader.create();
+            expect(GameSound.setButtonClickSound).toHaveBeenCalled();
+        });
+
         test("calls this.navigation.next", () => {
             loader.navigation = { next: jest.fn() };
             loader.create();

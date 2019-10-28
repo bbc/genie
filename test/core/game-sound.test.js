@@ -5,14 +5,16 @@
  */
 describe("Game Sound", () => {
     let GameSound;
-    let mockGame;
+    let mockScene;
     let mockMusic;
 
     beforeEach(() => {
         GameSound = require("../../src/core/game-sound");
-        mockGame = {
-            add: { audio: jest.fn(() => mockMusic) },
-            sound: { remove: jest.fn() },
+        mockScene = {
+            sound: {
+                add: jest.fn(() => mockMusic),
+                remove: jest.fn(),
+            },
         };
         mockMusic = {
             play: jest.fn(),
@@ -34,34 +36,34 @@ describe("Game Sound", () => {
 
     describe("setButtonClickSound method", () => {
         test("sets the button click sound", () => {
-            GameSound.setButtonClickSound(mockGame, "test/button-click");
-            expect(mockGame.add.audio).toHaveBeenCalledWith("test/button-click");
+            GameSound.setButtonClickSound(mockScene, "test/button-click");
+            expect(mockScene.sound.add).toHaveBeenCalledWith("test/button-click");
         });
     });
 
     describe("setupScreenMusic method", () => {
         describe("when no music is playing", () => {
             test("sets the background music to the asset that matches the provided key", () => {
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
-                expect(mockGame.add.audio).toHaveBeenCalledWith("test/music");
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
+                expect(mockScene.sound.add).toHaveBeenCalledWith("test/music");
             });
 
             test("starts the background music playing in a loop", () => {
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
                 expect(mockMusic.play).toHaveBeenCalled();
                 expect(mockMusic.onStop.addOnce).toHaveBeenCalledTimes(1);
             });
 
             test("sets the new background music and then starts the new music", () => {
                 const callOrder = [];
-                mockGame.add.audio.mockImplementation(() => {
+                mockScene.sound.add.mockImplementation(() => {
                     callOrder.push("add-audio");
                     return mockMusic;
                 });
                 mockMusic.play.mockImplementation(() => {
                     callOrder.push("music-play");
                 });
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
                 expect(callOrder).toEqual(["add-audio", "music-play"]);
             });
         });
@@ -82,11 +84,11 @@ describe("Game Sound", () => {
                     },
                 };
                 const screenConfig = { music: "current-music" };
-                GameSound.setupScreenMusic(mockGame, screenConfig);
+                GameSound.setupScreenMusic(mockScene, screenConfig);
             });
 
             test("does not reload the same music asset", () => {
-                expect(mockGame.add.audio).not.toHaveBeenCalled();
+                expect(mockScene.sound.add).not.toHaveBeenCalled();
             });
 
             test("does not fade the current background music out", () => {
@@ -110,19 +112,19 @@ describe("Game Sound", () => {
             });
 
             test("fades the current background music out", () => {
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
                 expect(musicFadeOutSpy).toHaveBeenCalled();
                 expect(musicFadeOutSpy).toHaveBeenCalledWith(GameSound.SOUND_FADE_PERIOD / 2);
             });
 
             test("sets the background music to the asset that matches the provided key", () => {
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
-                expect(mockGame.add.audio).toHaveBeenCalled();
-                expect(mockGame.add.audio).toHaveBeenCalledWith("test/music");
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
+                expect(mockScene.sound.add).toHaveBeenCalled();
+                expect(mockScene.sound.add).toHaveBeenCalledWith("test/music");
             });
 
             test("fades in the new background music and starts it playing in a loop", () => {
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
                 expect(mockMusic.fadeIn).toHaveBeenCalled();
                 expect(mockMusic.fadeIn).toHaveBeenCalledWith(GameSound.SOUND_FADE_PERIOD);
             });
@@ -132,24 +134,24 @@ describe("Game Sound", () => {
                 musicFadeOutSpy.mockImplementation(() => {
                     callOrder.push("stop-current-music");
                 });
-                mockGame.add.audio.mockImplementation(() => {
+                mockScene.sound.add.mockImplementation(() => {
                     callOrder.push("add-new-music");
                     return mockMusic;
                 });
                 mockMusic.fadeIn.mockImplementation(() => {
                     callOrder.push("fade-in");
                 });
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
                 expect(callOrder).toEqual(["stop-current-music", "add-new-music", "fade-in"]);
             });
         });
 
         describe("when the SoundManager and device are both using the Audio tag instead of Web Audio", () => {
             beforeEach(() => {
-                mockGame.sound.mute = true;
+                mockScene.sound.mute = true;
                 mockMusic.mute = true;
                 mockMusic.usingAudioTag = true;
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
             });
 
             test("sets the mute value of the background music to match the mute value of the game sound", () => {
@@ -159,10 +161,10 @@ describe("Game Sound", () => {
 
         describe("when the SoundManager and device are both using Web Audio", () => {
             beforeEach(() => {
-                mockGame.sound.mute = true;
+                mockScene.sound.mute = true;
                 mockMusic.mute = false;
                 mockMusic.usingAudioTag = false;
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
             });
 
             test("does not change the mute value of the background music", () => {
@@ -184,7 +186,7 @@ describe("Game Sound", () => {
                     stop: jest.fn(),
                 };
                 const screenConfig = {};
-                GameSound.setupScreenMusic(mockGame, screenConfig);
+                GameSound.setupScreenMusic(mockScene, screenConfig);
             });
 
             test("will fade out the current music", () => {
@@ -193,7 +195,7 @@ describe("Game Sound", () => {
             });
 
             test("will not try to set new background music", () => {
-                expect(mockGame.add.audio).not.toHaveBeenCalled();
+                expect(mockScene.sound.add).not.toHaveBeenCalled();
             });
         });
 
@@ -210,7 +212,7 @@ describe("Game Sound", () => {
                     onStop: { removeAll: jest.fn() },
                     stop: jest.fn(),
                 };
-                GameSound.setupScreenMusic(mockGame, undefined);
+                GameSound.setupScreenMusic(mockScene, undefined);
             });
 
             test("will fade out the current music", () => {
@@ -218,7 +220,7 @@ describe("Game Sound", () => {
             });
 
             test("will not try to set the background music", () => {
-                expect(mockGame.add.audio).not.toHaveBeenCalled();
+                expect(mockScene.sound.add).not.toHaveBeenCalled();
             });
         });
 
@@ -240,8 +242,8 @@ describe("Game Sound", () => {
                         removeAll: mockMusicRemoveAll,
                     },
                 };
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
             });
 
             test("will stop the previous music", () => {
@@ -277,10 +279,10 @@ describe("Game Sound", () => {
                     },
                     onStop: { removeAll: jest.fn() },
                 };
-                GameSound.setupScreenMusic(mockGame, undefined);
+                GameSound.setupScreenMusic(mockScene, undefined);
                 // Simulate phaser stopping all tweens between states
                 fadeTweenSpy.pendingDelete = true;
-                GameSound.setupScreenMusic(mockGame, undefined);
+                GameSound.setupScreenMusic(mockScene, undefined);
             });
 
             test("will not stop the fading music", () => {
@@ -312,7 +314,7 @@ describe("Game Sound", () => {
                     },
                 };
                 mockMusic.fadeOut = existingAudioFadeOutSpy;
-                GameSound.setupScreenMusic(mockGame, { music: "test/music" });
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
             });
 
             test("stops current mockMusic immediately", () => {
@@ -329,7 +331,7 @@ describe("Game Sound", () => {
             });
 
             test("removes fadingMusic", () => {
-                expect(mockGame.sound.remove).toHaveBeenCalled();
+                expect(mockScene.sound.remove).toHaveBeenCalled();
             });
         });
     });

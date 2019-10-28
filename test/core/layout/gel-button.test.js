@@ -5,6 +5,7 @@
  */
 
 import * as signal from "../../../src/core/signal-bus.js";
+import * as GameSound from "../../../src/core/game-sound.js";
 import { GelButton, assetPath, noIndicator } from "../../../src/core/layout/gel-button";
 import { gmi } from "../../../src/core/gmi/gmi.js";
 
@@ -22,6 +23,10 @@ describe("Gel Button", () => {
         GelButton.prototype.setFrame = jest.fn();
         GelButton.prototype.setSizeToFrame = jest.fn();
         signal.bus.publish = jest.fn();
+        GameSound.Assets = {
+            backgroundMusic: {},
+            buttonClick: { play: jest.fn() },
+        };
         mockScene = {
             add: {
                 existing: jest.fn(),

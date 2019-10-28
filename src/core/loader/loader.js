@@ -75,11 +75,10 @@ export class Loader extends Screen {
     }
 
     create() {
-        //GameSound.setButtonClickSound(this.game, "loader.buttonClick");
+        GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
         if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
             gmi.achievements.init(this.cache.json.get("achievements-data"));
         }
-
         this.navigation.next();
         gmi.sendStatsEvent("gameloaded", "true");
         gmi.gameLoaded();
