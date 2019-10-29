@@ -13,7 +13,7 @@ const setButtonClickSound = (scene, audioKey) => {
 };
 
 const setupScreenMusic = (scene, themeScreenConfig = {}) => {
-    if (isAlreadyPlaying(themeScreenConfig.music) || themeScreenConfig.isOverlay) return;
+    if (isAlreadyPlaying(themeScreenConfig.music) || themeScreenConfig.isOverlay) return false;
 
     stopCurrentMusic(scene);
     Assets.backgroundMusic = startMusic(scene, themeScreenConfig.music);

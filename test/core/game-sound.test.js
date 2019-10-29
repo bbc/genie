@@ -93,6 +93,11 @@ describe("Game Sound", () => {
             test("does not fade the current background music out", () => {
                 expect(existingAudioFadeOutSpy).not.toHaveBeenCalled();
             });
+
+            test("does not stop music playing if screen is an overlay", () => {
+                let result = GameSound.setupScreenMusic(mockScene, { music: "test/music", isOverlay: true });
+                expect(result).toEqual(false);
+            });
         });
 
         describe("when the new music differs from the currently playing music", () => {
