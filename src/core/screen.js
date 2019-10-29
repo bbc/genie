@@ -8,7 +8,7 @@ import _ from "../../lib/lodash/lodash.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import * as signal from "../core/signal-bus.js";
-// import * as GameSound from "../core/game-sound.js";
+ import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
@@ -60,9 +60,9 @@ export class Screen extends Phaser.Scene {
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
             gmi.setStatsScreen(this.scene.key);
-            //TODO P3 commented out lines need re-enabling
-            // const themeScreenConfig = this.context.config.theme[this.scene.key];
-            // GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
+
+            const themeScreenConfig = this.#data.config.theme[this.scene.key];
+            GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
         }
         this.sys.accessibleButtons = [];
         a11y.clearAccessibleButtons();
