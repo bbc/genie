@@ -10,6 +10,11 @@ import { createTestHarnessDisplay } from "../../core/qa/layout-harness.js";
 import { Screen } from "../../core/screen.js";
 
 export class Pause extends Screen {
+    preload() {
+        this.sound.pauseAll();
+        this.events.once("onscreenexit", this.sound.resumeAll.bind(this.sound));
+    }
+
     create() {
         this.theme = this.context.config.theme[this.scene.key];
         this.add.image(0, 0, `${this.scene.key}.pauseBackground`);

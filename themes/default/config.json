@@ -101,6 +101,7 @@
             }
         },
         "how-to-play": {
+            "isOverlay": true,
             "howToPlay": true,
             "choices": [
                 {
@@ -142,9 +143,11 @@
             ]
         },
         "pause": {
+            "isOverlay": true,
             "showReplayButton": true
         },
         "pause-noreplay": {
+            "isOverlay": true,
             "showReplayButton": false
         }
     }

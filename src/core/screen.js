@@ -8,7 +8,7 @@ import _ from "../../lib/lodash/lodash.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import * as signal from "../core/signal-bus.js";
- import * as GameSound from "../core/game-sound.js";
+import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";

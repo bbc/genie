@@ -8,15 +8,12 @@ const Assets = {
     buttonClick: undefined,
 };
 
-const SOUND_FADE_PERIOD = 1000;
-let fadingMusic;
-
 const setButtonClickSound = (scene, audioKey) => {
     Assets.buttonClick = scene.sound.add(audioKey);
 };
 
 const setupScreenMusic = (scene, themeScreenConfig = {}) => {
-    if (isAlreadyPlaying(themeScreenConfig.music)) return;
+    if (isAlreadyPlaying(themeScreenConfig.music) || themeScreenConfig.isOverlay) return;
 
     stopCurrentMusic(scene);
     Assets.backgroundMusic = startMusic(scene, themeScreenConfig.music);
@@ -50,4 +47,4 @@ const stopCurrentMusic = scene => {
     }
 };
 
-export { Assets, setButtonClickSound, setupScreenMusic, SOUND_FADE_PERIOD };
+export { Assets, setButtonClickSound, setupScreenMusic };
