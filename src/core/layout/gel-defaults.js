@@ -83,7 +83,6 @@ export const config = screen => {
             // TODO P3 with AUDIO work.
             action: ({ screen }) => {
                 const enabled = screen.sound.mute;
-                console.log(enabled);
 
                 gmi.setAudio(enabled);
 
