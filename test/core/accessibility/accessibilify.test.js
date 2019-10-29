@@ -38,11 +38,9 @@ describe("Accessibilify", () => {
                     },
                 },
                 input: { activePointer: jest.fn() },
-                scale: {
-                    parent: { some: "mockParent" },
-                },
+                scale: { parent: { some: "mockParent" } },
+                events: { on: jest.fn(), off: jest.fn() },
             },
-            update: {},
             sound: {
                 unlock: jest.fn(),
                 resumeWebAudio: jest.fn(),
@@ -87,10 +85,13 @@ describe("Accessibilify", () => {
                 onInputUp: { dispatch: jest.fn() },
             },
             scene: mockScene,
+            update: jest.fn(),
         };
         mockAccessibleDomElement = {
             position: jest.fn(),
             events: { click: "someClickEvent", keyup: "someKeyupEvent" },
+            show: jest.fn(),
+            hide: jest.fn(),
         };
         accessibleDomElement.mockImplementation(() => mockAccessibleDomElement);
     });
@@ -253,6 +254,14 @@ describe("Accessibilify", () => {
             });
         });
 
+        test("ensures the scene continuously updates the button", () => {
+            accessibilify(mockButton);
+            expect(mockScene.sys.events.on).toHaveBeenCalledWith(
+                global.Phaser.Scenes.Events.UPDATE,
+                expect.any(Function),
+            );
+        });
+
         test("assigns DOM element ID to the Phaser button object", () => {
             accessibilify(mockButton);
             expect(mockButton.elementId).toBe("home__play");
@@ -266,42 +275,36 @@ describe("Accessibilify", () => {
     });
 
     describe("Button Update", () => {
-        describe("element visibility", () => {
-            test("hides when button input is disabled and the element is visible", () => {
-                mockAccessibleDomElement.visible = jest.fn(() => true);
-                mockAccessibleDomElement.hide = jest.fn();
-                mockButton.input.enabled = false;
-                accessibilify(mockButton);
-                mockButton.update();
-                expect(mockAccessibleDomElement.hide).toHaveBeenCalled();
-            });
+        test("hides when button input is disabled and the button is hidden", () => {
+            mockButton.visible = false;
+            mockButton.input.enabled = false;
+            accessibilify(mockButton);
+            mockScene.sys.events.on.mock.calls[0][1]();
+            expect(mockAccessibleDomElement.hide).toHaveBeenCalled();
+        });
 
-            test("does not hide when button input is disabled and the element is not visible", () => {
-                mockAccessibleDomElement.visible = jest.fn(() => false);
-                mockAccessibleDomElement.hide = jest.fn();
-                mockButton.input.enabled = false;
-                accessibilify(mockButton);
-                mockButton.update();
-                expect(mockAccessibleDomElement.hide).not.toHaveBeenCalled();
-            });
+        test("hides when button input is disabled but the button is shown", () => {
+            mockButton.visible = true;
+            mockButton.input.enabled = false;
+            accessibilify(mockButton);
+            mockScene.sys.events.on.mock.calls[0][1]();
+            expect(mockAccessibleDomElement.hide).toHaveBeenCalled();
+        });
 
-            test("shows when button input is enabled, the element is not visible, and is within the bounds of the screen ", () => {
-                mockAccessibleDomElement.visible = jest.fn(() => false);
-                mockAccessibleDomElement.show = jest.fn();
-                mockButton.input.enabled = true;
-                accessibilify(mockButton);
-                mockButton.update();
-                expect(mockAccessibleDomElement.show).toHaveBeenCalled();
-            });
+        test("hides when button input is enabled but the button is hidden", () => {
+            mockButton.visible = false;
+            mockButton.input.enabled = true;
+            accessibilify(mockButton);
+            mockScene.sys.events.on.mock.calls[0][1]();
+            expect(mockAccessibleDomElement.hide).toHaveBeenCalled();
+        });
 
-            test("does not show when button input is enabled and the element is visible", () => {
-                mockAccessibleDomElement.visible = jest.fn(() => true);
-                mockAccessibleDomElement.show = jest.fn();
-                mockButton.input.enabled = true;
-                accessibilify(mockButton);
-                mockButton.update();
-                expect(mockAccessibleDomElement.show).not.toHaveBeenCalled();
-            });
+        test("does not hide when button input is enabled and the button is shown", () => {
+            mockButton.visible = true;
+            mockButton.input.enabled = true;
+            accessibilify(mockButton);
+            mockScene.sys.events.on.mock.calls[0][1]();
+            expect(mockAccessibleDomElement.hide).not.toHaveBeenCalled();
         });
     });
 

@@ -39,7 +39,8 @@ export function accessibilify(button, config, gameButton = true) {
     assignEvents();
     resizeAndRepositionElement();
 
-    button.update = update;
+    sys.events.on(Phaser.Scenes.Events.UPDATE, update);
+
     button.accessibleElement = accessibleElement.el;
     button.elementId = elementId;
     button.elementEvents = accessibleElement.events;
@@ -108,19 +109,16 @@ export function accessibilify(button, config, gameButton = true) {
     }
 
     function teardown() {
+        sys.events.off(Phaser.Scenes.Events.UPDATE, update);
         signal.unsubscribe();
     }
 
     function update() {
-        if (!button.input.enabled) {
-            if (accessibleElement.visible()) {
+        if (!button.input.enabled || !button.visible) {
+            // if (accessibleElement.visible()) {
                 accessibleElement.hide();
-            }
-            return;
-        }
-
-        if (!accessibleElement.visible()) {
-            accessibleElement.show();
+            // }
+            // return;
         }
     }
 
