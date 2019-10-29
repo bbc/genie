@@ -16,7 +16,6 @@ const setButtonClickSound = (scene, audioKey) => {
 };
 
 const setupScreenMusic = (scene, themeScreenConfig = {}) => {
-
     if (isAlreadyPlaying(themeScreenConfig.music)) return;
 
     stopCurrentMusic(scene);
@@ -43,7 +42,11 @@ const startMusic = (scene, audioKey) => {
 
 const stopCurrentMusic = scene => {
     if (Assets.backgroundMusic) {
-        Assets.backgroundMusic.stop();
+        scene.tweens.add({
+            targets: Assets.backgroundMusic,
+            volume: 0,
+            duration: 500,
+        });
     }
 };
 

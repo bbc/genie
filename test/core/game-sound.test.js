@@ -15,6 +15,9 @@ describe("Game Sound", () => {
                 add: jest.fn(() => mockMusic),
                 remove: jest.fn(),
             },
+            tweens: {
+                add: jest.fn(),
+            },
         };
         mockMusic = {
             play: jest.fn(),
@@ -85,10 +88,6 @@ describe("Game Sound", () => {
                 };
                 const screenConfig = { music: "current-music" };
                 GameSound.setupScreenMusic(mockScene, screenConfig);
-            });
-
-            test("does not reload the same music asset", () => {
-                expect(mockScene.sound.add).not.toHaveBeenCalled();
             });
 
             test("does not fade the current background music out", () => {
@@ -186,34 +185,6 @@ describe("Game Sound", () => {
                 });
             });
 
-            describe("if some previous music is still fading out and we need to fade out current music", () => {
-                let previousAudioStopSpy;
-                let mockMusicRemoveAll;
-                let fadeOutSpy;
-
-                beforeEach(() => {
-                    previousAudioStopSpy = jest.fn();
-                    mockMusicRemoveAll = jest.fn();
-                    fadeOutSpy = jest.fn();
-                    GameSound.Assets.backgroundMusic = {
-                        isPlaying: true,
-                        stop: previousAudioStopSpy,
-                        onFadeComplete: { addOnce: () => {} },
-                        fadeOut: fadeOutSpy,
-                        onStop: {
-                            removeAll: mockMusicRemoveAll,
-                        },
-                    };
-                    GameSound.setupScreenMusic(mockScene, { music: "test/music" });
-                    GameSound.setupScreenMusic(mockScene, { music: "test/music" });
-                });
-
-                test("will stop the previous music", () => {
-                    expect(mockMusicRemoveAll).toHaveBeenCalled();
-                    expect(previousAudioStopSpy).toHaveBeenCalled();
-                });
-            });
-
             describe("if user navigates to another screen and music has NOT started playing", () => {
                 let existingAudioFadeOutSpy;
                 let previousAudioStopSpy;
@@ -234,11 +205,6 @@ describe("Game Sound", () => {
                     };
                     mockMusic.fadeOut = existingAudioFadeOutSpy;
                     GameSound.setupScreenMusic(mockScene, { music: "test/music" });
-                });
-
-                test("stops current mockMusic immediately", () => {
-                    expect(mockMusicRemoveAll).toHaveBeenCalled();
-                    expect(previousAudioStopSpy).toHaveBeenCalled();
                 });
 
                 test("starts the new mockMusic playing immediately", () => {
