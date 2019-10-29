@@ -9,10 +9,14 @@ import { Pause } from "../../../src/components/overlays/pause";
 
 describe("Pause Overlay", () => {
     let pauseScreen;
+    let mockBoundResumeAllFunction;
     let mockData;
 
     beforeEach(() => {
         layoutHarness.createTestHarnessDisplay = jest.fn();
+        mockBoundResumeAllFunction = {
+            some: "mock",
+        };
         mockData = {
             config: {
                 theme: {
@@ -27,6 +31,13 @@ describe("Pause Overlay", () => {
         };
 
         pauseScreen = new Pause();
+        pauseScreen.sound = {
+            pauseAll: jest.fn(),
+            resumeAll: {
+                bind: () => mockBoundResumeAllFunction,
+            },
+        };
+        pauseScreen.events = { once: jest.fn() };
         pauseScreen.setData(mockData);
         pauseScreen.addLayout = jest.fn();
         pauseScreen.scene = { key: "pause" };
@@ -36,6 +47,18 @@ describe("Pause Overlay", () => {
     });
 
     afterEach(() => jest.clearAllMocks());
+
+    describe("preload method", () => {
+        test("pauses all sounds", () => {
+            pauseScreen.preload();
+            expect(pauseScreen.sound.pauseAll).toHaveBeenCalled();
+        });
+
+        test("adds a callback to resume all sounds onscreenexit", () => {
+            pauseScreen.preload();
+            expect(pauseScreen.events.once).toHaveBeenCalledWith("onscreenexit", mockBoundResumeAllFunction);
+        });
+    });
 
     describe("create method", () => {
         test("adds a background image", () => {
