@@ -81,8 +81,9 @@ export const config = screen => {
             id: "__audio",
             channel: buttonsChannel(screen),
             // TODO P3 with AUDIO work.
-            action: ({ game }) => {
-                const enabled = game.sound.mute;
+            action: ({ screen }) => {
+                const enabled = screen.sound.mute;
+                console.log(enabled);
 
                 gmi.setAudio(enabled);
 
