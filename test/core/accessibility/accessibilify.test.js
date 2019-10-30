@@ -92,6 +92,7 @@ describe("Accessibilify", () => {
             events: { click: "someClickEvent", keyup: "someKeyupEvent" },
             show: jest.fn(),
             hide: jest.fn(),
+            visible: jest.fn(),
         };
         accessibleDomElement.mockImplementation(() => mockAccessibleDomElement);
     });
@@ -319,26 +320,6 @@ describe("Accessibilify", () => {
                 false,
             );
         });
-
-        // test("unlocks the audioContext", () => {
-        //     accessibilify(mockButton);
-        //     accessibleDomElement.mock.calls[0][0].onClick();
-        //     expect(mockScene.sound.unlock).toHaveBeenCalled();
-        // });
-
-        // test("calls resumeWebAudio if it is suspended", () => {
-        //     mockButton.game.sound.context.state = "suspended";
-        //     accessibilify(mockButton);
-        //     accessibleDomElement.mock.calls[0][0].onClick();
-        //     expect(mockScene.sound.resumeWebAudio).toHaveBeenCalled();
-        // });
-
-        // test("does not call resumeWebAudio if it is not suspended", () => {
-        //     mockButton.game.sound.context = undefined;
-        //     accessibilify(mockButton);
-        //     accessibleDomElement.mock.calls[0][0].onClick();
-        //     expect(mockScene.sound.resumeWebAudio).not.toHaveBeenCalled();
-        // });
     });
 
     describe("Hover State", () => {
