@@ -81,20 +81,16 @@ export const config = screen => {
             order: 3,
             id: "__audio",
             channel: buttonsChannel(screen),
-            // TODO P3 with AUDIO work.
-            action: ({ game }) => {
-                const enabled = game.sound.mute;
-
-                gmi.setAudio(enabled);
+            action: () => {
+                const audioEnabled = gmi.getAllSettings().audio;
+                gmi.setAudio(!audioEnabled);
 
                 signal.bus.publish({
                     channel: settingsChannel,
                     name: "audio",
-                    data: enabled,
                 });
 
-                const audioOnOrOff = enabled ? "on" : "off";
-                gmi.sendStatsEvent("audio", audioOnOrOff);
+                gmi.sendStatsEvent("audio", audioEnabled ? "on" : "off");
             },
         },
         settings: {

@@ -11,9 +11,9 @@ import * as signal from "../../../src/core/signal-bus.js";
 describe("Layout - Gel Defaults", () => {
     let mockPausedScreen;
     let mockCurrentScreen;
-    let mockGame;
     let mockGmi;
     let clearIndicatorSpy;
+    let mockSettings;
 
     beforeEach(() => {
         clearIndicatorSpy = jest.fn();
@@ -53,14 +53,10 @@ describe("Layout - Gel Defaults", () => {
             addOverlay: jest.fn(),
             removeOverlay: jest.fn(),
             transientData: {},
-        };
-        mockGame = {
             sound: { mute: false },
-            state: {
-                current: "current-screen",
-                states: { "current-screen": mockCurrentScreen },
-            },
         };
+
+        mockSettings = { audio: true };
 
         mockGmi = {
             exit: jest.fn(),
@@ -68,6 +64,7 @@ describe("Layout - Gel Defaults", () => {
             setStatsScreen: jest.fn(),
             sendStatsEvent: jest.fn(),
             achievements: { show: jest.fn() },
+            getAllSettings: jest.fn(() => mockSettings),
         };
         createMockGmi(mockGmi);
 
@@ -77,7 +74,7 @@ describe("Layout - Gel Defaults", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("Exit Button Callback", () => {
-        beforeEach(() => gel.config(mockCurrentScreen).exit.action());
+        beforeEach(() => gel.config(mockCurrentScreen).exit.action({ screen: mockCurrentScreen }));
 
         test("exits the game using the GMI", () => {
             expect(mockGmi.exit).toHaveBeenCalled();
@@ -94,7 +91,8 @@ describe("Layout - Gel Defaults", () => {
         });
 
         test("navigates to the home screen", () => {
-            const homeNavigationSpy = mockGame.state.states["current-screen"].navigation.home;
+            const homeNavigationSpy = mockCurrentScreen.navigation.home;
+
             expect(homeNavigationSpy).toHaveBeenCalled();
         });
     });
@@ -134,7 +132,7 @@ describe("Layout - Gel Defaults", () => {
     describe("Audio Callback", () => {
         beforeEach(() => {
             jest.spyOn(signal.bus, "publish");
-            gel.config(mockCurrentScreen).audio.action({ game: mockGame });
+            gel.config(mockCurrentScreen).audio.action({ screen: mockCurrentScreen });
         });
 
         test("sets audio on the GMI", () => {
@@ -145,35 +143,35 @@ describe("Layout - Gel Defaults", () => {
             expect(signal.bus.publish).toHaveBeenCalledWith({
                 channel: settingsChannel,
                 name: "audio",
-                data: false,
             });
         });
 
         test("unmutes the game audio", () => {
-            mockGame.sound.mute = true;
-            gel.config(mockCurrentScreen).audio.action({ game: mockGame });
+            mockCurrentScreen.sound.mute = true;
+            gel.config(mockCurrentScreen).audio.action();
 
             expect(signal.bus.publish).toHaveBeenCalledWith({
                 channel: settingsChannel,
                 name: "audio",
-                data: true,
             });
         });
 
         test("sends a stat to the GMI when audio is off", () => {
+            mockSettings.audio = false;
+            gel.config(mockCurrentScreen).audio.action();
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("audio", "off");
         });
 
         test("sends a stat to the GMI when audio is on", () => {
-            mockGame.sound.mute = true;
-            gel.config(mockCurrentScreen).audio.action({ game: mockGame });
+            mockSettings.audio = true;
+            gel.config(mockCurrentScreen).audio.action();
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("audio", "on");
         });
     });
 
     describe("Settings Button Callback", () => {
         beforeEach(() => {
-            gel.config(mockCurrentScreen).settings.action({ game: mockGame });
+            gel.config(mockCurrentScreen).settings.action({ game: {} });
         });
 
         test("shows the settings", () => {

@@ -10,13 +10,13 @@ import { Screen } from "../screen.js";
 import { gmi } from "../gmi/gmi.js";
 import { settings, settingsChannel } from "../../core/settings.js";
 import * as signal from "../../core/signal-bus.js";
-// import fp from "../../../lib/lodash/fp/fp.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 import * as Scaler from "../scaler.js";
 
 //const triggeredByGame = arg => arg instanceof Phaser.Game;
-//const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
-//const getButtons = fp.map(fp.get("buttons.audio"));
-//const filterUndefined = fp.filter(x => !!x);
+const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
+const getAudioButtons = fp.map(fp.get("buttons.audio"));
+const getLayouts = fp.flatMap(fp.get("layouts"));
 
 export class Boot extends Screen {
     #navigationConfig;
@@ -49,33 +49,22 @@ export class Boot extends Screen {
                 this.game.canvas.focus();
             },
         });
-        //this.configureAudioSetting();
+
+        this.configureAudioSetting();
     }
 
-    //configureAudioSetting() {
-    //    this.game.sound.mute = !settings.getAllSettings().audio;
-    //    this.game.onPause.add(arg => {
-    //        //Re enable sound if triggered by the game (from the pause menu)
-    //        //otherwise this will be a window focus event and should be muted
-    //        this.game.sound.mute = triggeredByGame(arg) ? !settings.getAllSettings().audio : true;
-    //    });
-    //
-    //    this.game.onResume.add(() => {
-    //        this.game.sound.mute = !settings.getAllSettings().audio;
-    //    });
-    //
-    //    signal.bus.subscribe({
-    //        channel: settingsChannel,
-    //        name: "audio",
-    //        callback: value => {
-    //            this.game.sound.mute = !value;
-    //            const state = this.game.state;
-    //            const layouts = state.states[state.current].layoutManager.getLayouts();
-    //
-    //            fp.map(setImage, filterUndefined(getButtons(layouts)));
-    //        },
-    //    });
-    //}
+    configureAudioSetting() {
+        signal.bus.subscribe({
+            channel: settingsChannel,
+            name: "audio",
+            callback: () => {
+                const audioEnabled = settings.getAllSettings().audio;
+                this.sound.mute = !audioEnabled;
+                const activeScenes = this.scene.manager.getScenes(true);
+                fp.map(setImage, getAudioButtons(getLayouts(activeScenes)));
+            },
+        });
+    }
 
     create() {
         //TODO P3 these could be set using this.game on loadscreen?
