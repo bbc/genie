@@ -8,42 +8,26 @@ const Assets = {
     buttonClick: undefined,
 };
 
-const SOUND_FADE_PERIOD = 1000;
-let fadingMusic;
-
 const setButtonClickSound = (scene, audioKey) => {
     Assets.buttonClick = scene.sound.add(audioKey);
 };
 
 const setupScreenMusic = (scene, themeScreenConfig = {}) => {
-    if (isAlreadyPlaying(themeScreenConfig.music)) return;
-
-    stopCurrentMusic(scene);
-    Assets.backgroundMusic = startMusic(scene, themeScreenConfig.music);
-
-    if (Assets.backgroundMusic && Assets.backgroundMusic.usingAudioTag) {
-        Assets.backgroundMusic.mute = scene.sound.mute;
-    }
+    if (isAlreadyPlaying(themeScreenConfig.music) || themeScreenConfig.isOverlay) return;
+    stopCurrentAndStartNextMusic(scene, themeScreenConfig);
 };
 
 const isAlreadyPlaying = audioKey => {
-    return audioKey && Assets.backgroundMusic && audioKey === Assets.backgroundMusic.name;
+    return audioKey && Assets.backgroundMusic && audioKey === Assets.backgroundMusic.key;
 };
 
-// Phaser music loop crashes on iOS 9.
-// Use this function to loop sounds instead of the Phaser standard way.
-const loopMusicStart = (music, fade) => {
-    if (fade) {
-        fadeIn(music);
-    } else {
-        music.play();
-    }
-    music.onStop.addOnce(() => loopMusicStart(music));
+const onFadeComplete = (scene, themeScreenConfig) => {
+    Assets.backgroundMusic.destroy();
+    startNextMusic(scene, themeScreenConfig);
 };
 
-const loopMusicStop = music => {
-    music.onStop.removeAll();
-    music.stop();
+const startNextMusic = (scene, themeScreenConfig) => {
+    Assets.backgroundMusic = startMusic(scene, themeScreenConfig.music);
 };
 
 const startMusic = (scene, audioKey) => {
@@ -51,47 +35,22 @@ const startMusic = (scene, audioKey) => {
 
     let music = scene.sound.add(audioKey);
 
-    loopMusicStart(music, !!fadingMusic);
+    music.play(undefined, { loop: true });
 
     return music;
 };
 
-const fadeIn = music => {
-    if (music.isDecoded) {
-        music.fadeIn(SOUND_FADE_PERIOD);
+const stopCurrentAndStartNextMusic = (scene, themeScreenConfig) => {
+    if (Assets.backgroundMusic) {
+        scene.tweens.add({
+            targets: Assets.backgroundMusic,
+            volume: 0,
+            duration: 500,
+            onComplete: onFadeComplete.bind(this, scene, themeScreenConfig),
+        });
     } else {
-        music.onDecoded.add(() => loopMusicStart(music));
+        startNextMusic(scene, themeScreenConfig);
     }
 };
 
-const stopCurrentMusic = scene => {
-    if (!Assets.backgroundMusic) {
-        if (fadingMusic) {
-            fadingMusic.fadeTween.pendingDelete = false;
-            fadingMusic.fadeTween.start();
-        }
-        return;
-    }
-
-    if (fadingMusic) {
-        loopMusicStop(fadingMusic);
-        scene.sound.remove(fadingMusic);
-    }
-
-    fadingMusic = Assets.backgroundMusic;
-
-    if (!fadingMusic.isPlaying) {
-        loopMusicStop(fadingMusic);
-        scene.sound.remove(fadingMusic);
-        fadingMusic = undefined;
-        return;
-    }
-
-    fadingMusic.onFadeComplete.addOnce(() => {
-        scene.sound.remove(fadingMusic);
-        fadingMusic = undefined;
-    });
-    fadingMusic.fadeOut(SOUND_FADE_PERIOD / 2);
-};
-
-export { Assets, setButtonClickSound, setupScreenMusic, SOUND_FADE_PERIOD };
+export { Assets, setButtonClickSound, setupScreenMusic };
