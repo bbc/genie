@@ -8,7 +8,7 @@ import { createMockGmi } from "../mock/gmi";
 import { Screen, overlayChannel } from "../../src/core/screen";
 import * as Layout from "../../src/core/layout/layout.js";
 import * as Scaler from "../../src/core/scaler.js";
-// import * as GameSound from "../../src/core/game-sound";
+import * as GameSound from "../../src/core/game-sound";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults";
@@ -24,7 +24,7 @@ describe("Screen", () => {
         screen = new Screen();
         screen.sys = { accessibleButtons: [] };
         screen.events = { emit: jest.fn() };
-        screen.scene = { key, bringToTop: jest.fn(), start: jest.fn(), run: jest.fn() };
+        screen.scene = { key, bringToTop: jest.fn(), start: jest.fn(), run: jest.fn(), scene: { mock: "scene" } };
         screen.cameras = { main: { scrollX: 0, scrollY: 0 } };
         screen.add = { container: () => "root" };
         mockTransientData = { key: "data" };
@@ -53,7 +53,7 @@ describe("Screen", () => {
         jest.spyOn(signal.bus, "publish");
         jest.spyOn(signal.bus, "removeChannel");
         jest.spyOn(signal.bus, "removeSubscription");
-        // jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
+        jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
         jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
         jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
         jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
@@ -96,11 +96,11 @@ describe("Screen", () => {
             expect(screen.context.transientData).toEqual({});
         });
 
-        // test("sets the background music using the theme config", () => {
-        //     createAndInitScreen();
-        //     const expectedThemeConfig = mockContext.config.theme.loadscreen;
-        //     expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.game, expectedThemeConfig);
-        // });
+        test("sets the background music using the theme config", () => {
+            createAndInitScreen();
+            const expectedThemeConfig = mockData.config.theme.screenKey;
+            expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.scene.scene, expectedThemeConfig);
+        });
 
         test("clears the accessible buttons array", () => {
             createScreen();
