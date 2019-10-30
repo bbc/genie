@@ -13,18 +13,21 @@ const setButtonClickSound = (scene, audioKey) => {
 };
 
 const setupScreenMusic = (scene, themeScreenConfig = {}) => {
-    if (isAlreadyPlaying(themeScreenConfig.music) || themeScreenConfig.isOverlay) return false;
-
-    stopCurrentMusic(scene);
-    Assets.backgroundMusic = startMusic(scene, themeScreenConfig.music);
-
-    if (Assets.backgroundMusic && Assets.backgroundMusic.usingAudioTag) {
-        Assets.backgroundMusic.mute = scene.sound.mute;
-    }
+    if (isAlreadyPlaying(themeScreenConfig.music) || themeScreenConfig.isOverlay) return;
+    stopCurrentAndStartNextMusic(scene, themeScreenConfig);
 };
 
 const isAlreadyPlaying = audioKey => {
     return audioKey && Assets.backgroundMusic && audioKey === Assets.backgroundMusic.key;
+};
+
+const onFadeComplete = (scene, themeScreenConfig) => {
+    Assets.backgroundMusic.destroy();
+    startNextMusic(scene, themeScreenConfig);
+};
+
+const startNextMusic = (scene, themeScreenConfig) => {
+    Assets.backgroundMusic = startMusic(scene, themeScreenConfig.music);
 };
 
 const startMusic = (scene, audioKey) => {
@@ -37,13 +40,16 @@ const startMusic = (scene, audioKey) => {
     return music;
 };
 
-const stopCurrentMusic = scene => {
+const stopCurrentAndStartNextMusic = (scene, themeScreenConfig) => {
     if (Assets.backgroundMusic) {
         scene.tweens.add({
             targets: Assets.backgroundMusic,
             volume: 0,
             duration: 500,
+            onComplete: onFadeComplete.bind(this, scene, themeScreenConfig),
         });
+    } else {
+        startNextMusic(scene, themeScreenConfig);
     }
 };
 
