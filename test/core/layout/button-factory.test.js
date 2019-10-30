@@ -18,7 +18,10 @@ describe("Layout - Button Factory", () => {
 
     beforeEach(() => {
         jest.spyOn(accessibilify, "accessibilify").mockImplementation(() => {});
-        jest.spyOn(GelButton, "GelButton").mockImplementation(() => {});
+        jest.spyOn(GelButton, "GelButton").mockImplementation(() => ({
+            disableInteractive: jest.fn(),
+            input: {},
+        }));
 
         mockGame = { canvas: () => {}, mockGame: "game" };
         buttonFactory = ButtonFactory.create(mockGame);
@@ -85,8 +88,8 @@ describe("Layout - Button Factory", () => {
 
             const btn = buttonFactory.createButton(false, config);
 
-            expect(btn.hitArea).toBe(null);
-            expect(btn.inputEnabled).toBe(false);
+            expect(btn.input.hitArea).toBe(null);
+            expect(btn.disableInteractive).toHaveBeenCalledTimes(1);
         });
     });
 
