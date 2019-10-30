@@ -15,14 +15,18 @@ describe("Boot", () => {
     let bootScreen;
     let mockGmi;
     let mockGame;
+    let mockAudioButton;
+    let mockSettings;
 
     beforeEach(() => {
+        mockSettings = { audio: true };
         mockGmi = {
             embedVars: { configPath: "test-config-path" },
             gameLoaded: jest.fn(),
             sendStatsEvent: jest.fn(),
             achievements: { init: jest.fn() },
             gameDir: "test-game-dir",
+            getAllSettings: jest.fn(() => mockSettings),
         };
         createMockGmi(mockGmi);
         mockGame = {
@@ -36,6 +40,10 @@ describe("Boot", () => {
             },
         };
 
+        mockAudioButton = {
+            setImage: jest.fn(),
+        };
+
         bootScreen = new Boot({});
 
         bootScreen.game = mockGame;
@@ -44,8 +52,14 @@ describe("Boot", () => {
             setPath: jest.fn(),
             json: jest.fn(),
         };
-        bootScreen.scene = { key: "boot", start: jest.fn() };
+        bootScreen.scene = {
+            key: "boot",
+            start: jest.fn(),
+            manager: { getScenes: jest.fn(() => [{ layouts: [{ buttons: { audio: mockAudioButton } }] }]) },
+        };
         bootScreen.navigation = { next: jest.fn() };
+
+        bootScreen.sound = { mute: false };
 
         Scaler.init = jest.fn();
         a11y.setup = jest.fn();
@@ -87,6 +101,23 @@ describe("Boot", () => {
             bootScreen.preload();
             signal.bus.publish({ channel: "genie-settings", name: "settings-closed" });
             expect(mockGame.canvas.focus).toHaveBeenCalled();
+        });
+
+        describe("audio setting callback", () => {
+            test("Disables audio and sets button image to audio-on when mute is false", () => {
+                bootScreen.preload();
+                signal.bus.publish({ channel: "genie-settings", name: "audio", data: false });
+                expect(bootScreen.sound.mute).toBe(false);
+                expect(mockAudioButton.setImage).toHaveBeenCalledWith("audio-on");
+            });
+
+            test("Enables audio and sets button image to audio-off when mute is true", () => {
+                mockSettings.audio = false;
+                bootScreen.preload();
+                signal.bus.publish({ channel: "genie-settings", name: "audio", data: true });
+                expect(bootScreen.sound.mute).toBe(true);
+                expect(mockAudioButton.setImage).toHaveBeenCalledWith("audio-off");
+            });
         });
     });
 
