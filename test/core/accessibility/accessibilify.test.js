@@ -364,7 +364,6 @@ describe("Accessibilify", () => {
                 expect(mockAccessibleDomElement.show).not.toHaveBeenCalled();
             });
         });
-
     });
 
     describe("Click Action", () => {
