@@ -54,14 +54,12 @@ export class Boot extends Screen {
     }
 
     configureAudioSetting() {
-        const audioEnabled = settings.getAllSettings().audio;
-        this.sound.mute = !audioEnabled;
-
         signal.bus.subscribe({
             channel: settingsChannel,
             name: "audio",
-            callback: muted => {
-                this.sound.mute = muted;
+            callback: () => {
+                const audioEnabled = settings.getAllSettings().audio;
+                this.sound.mute = !audioEnabled;
                 const activeScenes = this.scene.manager.getScenes(true);
                 fp.map(setImage, getAudioButtons(getLayouts(activeScenes)));
             },

@@ -13,6 +13,7 @@ describe("Layout - Gel Defaults", () => {
     let mockCurrentScreen;
     let mockGmi;
     let clearIndicatorSpy;
+    let mockSettings;
 
     beforeEach(() => {
         clearIndicatorSpy = jest.fn();
@@ -55,12 +56,15 @@ describe("Layout - Gel Defaults", () => {
             sound: { mute: false },
         };
 
+        mockSettings = { audio: true };
+
         mockGmi = {
             exit: jest.fn(),
             setAudio: jest.fn(),
             setStatsScreen: jest.fn(),
             sendStatsEvent: jest.fn(),
             achievements: { show: jest.fn() },
+            getAllSettings: jest.fn(() => mockSettings),
         };
         createMockGmi(mockGmi);
 
@@ -139,28 +143,28 @@ describe("Layout - Gel Defaults", () => {
             expect(signal.bus.publish).toHaveBeenCalledWith({
                 channel: settingsChannel,
                 name: "audio",
-                data: true,
             });
         });
 
         test("unmutes the game audio", () => {
             mockCurrentScreen.sound.mute = true;
-            gel.config(mockCurrentScreen).audio.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).audio.action();
 
             expect(signal.bus.publish).toHaveBeenCalledWith({
                 channel: settingsChannel,
                 name: "audio",
-                data: true,
             });
         });
 
         test("sends a stat to the GMI when audio is off", () => {
+            mockSettings.audio = false;
+            gel.config(mockCurrentScreen).audio.action();
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("audio", "off");
         });
 
         test("sends a stat to the GMI when audio is on", () => {
-            mockCurrentScreen.sound.mute = true;
-            gel.config(mockCurrentScreen).audio.action({ screen: mockCurrentScreen });
+            mockSettings.audio = true;
+            gel.config(mockCurrentScreen).audio.action();
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("audio", "on");
         });
     });

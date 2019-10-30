@@ -81,17 +81,16 @@ export const config = screen => {
             order: 3,
             id: "__audio",
             channel: buttonsChannel(screen),
-            action: ({ screen }) => {
-                const muted = !screen.sound.mute;
-                gmi.setAudio(!muted);
+            action: () => {
+                const audioEnabled = gmi.getAllSettings().audio;
+                gmi.setAudio(!audioEnabled);
 
                 signal.bus.publish({
                     channel: settingsChannel,
                     name: "audio",
-                    data: muted,
                 });
 
-                gmi.sendStatsEvent("audio", muted ? "off" : "on");
+                gmi.sendStatsEvent("audio", audioEnabled ? "on" : "off");
             },
         },
         settings: {
