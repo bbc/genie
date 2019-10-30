@@ -66,7 +66,12 @@ describe("Select Screen", () => {
         mockGmi = { sendStatsEvent: jest.fn() };
         createMockGmi(mockGmi);
 
-        mockLayout = { buttons: { previous: {}, next: {} } };
+        mockLayout = {
+            buttons: {
+                previous: { accessibleElement: { focus: jest.fn() } },
+                next: { accessibleElement: { focus: jest.fn() } },
+            },
+        };
         selectScreen = new Select();
         selectScreen.setData(mockData);
         selectScreen.transientData = {};
@@ -299,7 +304,6 @@ describe("Select Screen", () => {
             });
 
             test("hides all the choices except the current one", () => {
-                selectScreen.currentIndex = 0;
                 signal.bus.subscribe.mock.calls[1][0].callback();
                 expect(selectScreen.choiceSprites[0].visible).toBe(false);
                 expect(selectScreen.choiceSprites[1].visible).toBe(true);
@@ -316,9 +320,9 @@ describe("Select Screen", () => {
             test("next button is disabled when how to play and on the last item", () => {
                 selectScreen.setData(mockHowToPlayData);
                 selectScreen.create();
-                selectScreen.currentIndex = 2;
-                selectScreen.update();
-
+                const nextButtonClick = signal.bus.subscribe.mock.calls[1][0].callback;
+                nextButtonClick();
+                nextButtonClick();
                 expect(selectScreen.buttonLayout.buttons.next.visible).toBe(false);
             });
 
@@ -338,6 +342,23 @@ describe("Select Screen", () => {
                 expect(selectScreen.accessibleCarouselElements[0].style.display).toBe("none");
                 expect(selectScreen.accessibleCarouselElements[1].style.display).toBe("block");
                 expect(selectScreen.accessibleCarouselElements[2].style.display).toBe("none");
+            });
+
+            test("focus moves to the next arrow when at the start of the items on How To Play", () => {
+                selectScreen.setData(mockHowToPlayData);
+                selectScreen.create();
+                signal.bus.subscribe.mock.calls[1][0].callback();
+                signal.bus.subscribe.mock.calls[0][0].callback();
+                expect(selectScreen.buttonLayout.buttons.next.accessibleElement.focus).toHaveBeenCalledTimes(1);
+            });
+
+            test("focus moves to the previous arrow when at the end of the items on How To Play", () => {
+                selectScreen.setData(mockHowToPlayData);
+                selectScreen.create();
+                const nextButtonClick = signal.bus.subscribe.mock.calls[1][0].callback;
+                nextButtonClick();
+                nextButtonClick();
+                expect(selectScreen.buttonLayout.buttons.previous.accessibleElement.focus).toHaveBeenCalledTimes(1);
             });
         });
     });

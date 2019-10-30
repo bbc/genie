@@ -33,6 +33,8 @@ export class Select extends Screen {
             this.buttonLayout = this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
         }
 
+        this.setButtonVisibility();
+
         this.accessibleCarouselElements = accessibleCarouselElements.create(
             this.scene.key,
             this.choiceSprites,
@@ -44,19 +46,25 @@ export class Select extends Screen {
         createTestHarnessDisplay(this);
     }
 
-    setLeftButtonState() {
+    setButtonVisibility() {
         this.buttonLayout.buttons.previous.visible = Boolean(!this.theme.howToPlay || this.currentIndex !== 0);
-        console.log("this.buttonLayout.buttons", this.buttonLayout.buttons, this.accessibleCarouselElements);
-    }
 
-    setRightButtonState() {
         const isNotLastPage = this.currentIndex + 1 !== this.choiceSprites.length;
         this.buttonLayout.buttons.next.visible = Boolean(!this.theme.howToPlay || isNotLastPage);
     }
 
-    update() {
-        this.setLeftButtonState();
-        this.setRightButtonState();
+    focusOnButton(buttonName) {
+        const button = this.buttonLayout.buttons[buttonName];
+        button.accessibleElement.focus();
+    }
+
+    setButtonFocus() {
+        if (this.theme.howToPlay && this.currentIndex === 0) {
+            this.focusOnButton("next");
+        }
+        if (this.theme.howToPlay && this.currentIndex === this.choiceSprites.length - 1) {
+            this.focusOnButton("previous");
+        }
     }
 
     createChoiceSprites(choices) {
@@ -73,14 +81,18 @@ export class Select extends Screen {
         return choiceSprites;
     }
 
-    leftButton() {
+    handleLeftButton() {
         this.currentIndex = wrapRange(--this.currentIndex, this.choiceSprites.length);
         this.showChoice();
+        this.setButtonVisibility();
+        this.setButtonFocus();
     }
 
-    rightButton() {
+    handleRightButton() {
         this.currentIndex = wrapRange(++this.currentIndex, this.choiceSprites.length);
         this.showChoice();
+        this.setButtonVisibility();
+        this.setButtonFocus();
     }
 
     showChoice() {
@@ -108,13 +120,13 @@ export class Select extends Screen {
         signal.bus.subscribe({
             channel: buttonsChannel(this),
             name: "previous",
-            callback: this.leftButton.bind(this),
+            callback: this.handleLeftButton.bind(this),
         });
 
         signal.bus.subscribe({
             channel: buttonsChannel(this),
             name: "next",
-            callback: this.rightButton.bind(this),
+            callback: this.handleRightButton.bind(this),
         });
 
         signal.bus.subscribe({
