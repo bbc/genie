@@ -93,6 +93,13 @@ describe("Accessible Carousel Elements", () => {
         });
     });
 
+    test("focuses on the first carousel element on page load", () => {
+        accessibleCarouselElements.create("select-screen", mockSprites, mockParentElement);
+        expect(mockAccessibleElements[0].focus).toHaveBeenCalled();
+        expect(mockAccessibleElements[1].focus).not.toHaveBeenCalled();
+        expect(mockAccessibleElements[2].focus).not.toHaveBeenCalled();
+    });
+
     test("removes the carousel when the first carousel item sprite is destroyed", () => {
         mockParentElement.contains.mockImplementation(() => true);
         accessibleCarouselElements.create("select-screen", mockSprites, mockParentElement);
