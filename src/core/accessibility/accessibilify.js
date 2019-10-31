@@ -39,7 +39,8 @@ export function accessibilify(button, config, gameButton = true) {
     assignEvents();
     resizeAndRepositionElement();
 
-    button.update = update;
+    sys.events.on(Phaser.Scenes.Events.UPDATE, update);
+
     button.accessibleElement = accessibleElement.el;
     button.elementId = elementId;
     button.elementEvents = accessibleElement.events;
@@ -108,27 +109,23 @@ export function accessibilify(button, config, gameButton = true) {
     }
 
     function teardown() {
+        sys.events.off(Phaser.Scenes.Events.UPDATE, update);
         signal.unsubscribe();
     }
 
     function update() {
-        if (!button.input.enabled) {
+        if (!button.input.enabled || !button.visible) {
             if (accessibleElement.visible()) {
                 accessibleElement.hide();
             }
             return;
         }
-
         if (!accessibleElement.visible()) {
             accessibleElement.show();
         }
     }
 
     function buttonAction() {
-        // game.sound.unlock();
-        // if (game.sound.context && game.sound.context.state === "suspended") {
-        //     game.sound.resumeWebAudio();
-        // }
         button.emit(Phaser.Input.Events.POINTER_UP, button, sys.input.activePointer, false);
     }
 

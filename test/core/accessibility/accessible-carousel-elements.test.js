@@ -26,8 +26,8 @@ describe("Accessible Carousel Elements", () => {
             .mockReturnValueOnce({ el: mockAccessibleElements[1] })
             .mockReturnValueOnce({ el: mockAccessibleElements[2] });
 
-        firstMockSprite = { events: { onDestroy: { add: jest.fn() } } };
-        mockSprite = { events: { onDestroy: { add: jest.fn() } } };
+        firstMockSprite = { once: jest.fn() };
+        mockSprite = { once: jest.fn() };
         mockSprites = [firstMockSprite, mockSprite, mockSprite];
     });
 
@@ -93,12 +93,28 @@ describe("Accessible Carousel Elements", () => {
         });
     });
 
+    test("focuses on the first carousel element on page load", () => {
+        accessibleCarouselElements.create("select-screen", mockSprites, mockParentElement);
+        expect(mockAccessibleElements[0].focus).toHaveBeenCalled();
+        expect(mockAccessibleElements[1].focus).not.toHaveBeenCalled();
+        expect(mockAccessibleElements[2].focus).not.toHaveBeenCalled();
+    });
+
     test("removes the carousel when the first carousel item sprite is destroyed", () => {
         mockParentElement.contains.mockImplementation(() => true);
         accessibleCarouselElements.create("select-screen", mockSprites, mockParentElement);
-        const destroyCallback = firstMockSprite.events.onDestroy.add.mock.calls[0][0];
+        const destroyCallback = firstMockSprite.once.mock.calls[0][1];
         destroyCallback();
         expect(mockParentElement.contains).toHaveBeenCalledWith(mockCarouselDomElement);
         expect(mockParentElement.removeChild).toHaveBeenCalledWith(mockCarouselDomElement);
+    });
+
+    test("does not remove the carousel if the first item's parent is not a carousel", () => {
+        mockParentElement.contains.mockImplementation(() => false);
+        accessibleCarouselElements.create("select-screen", mockSprites, mockParentElement);
+        const destroyCallback = firstMockSprite.once.mock.calls[0][1];
+        destroyCallback();
+        expect(mockParentElement.contains).toHaveBeenCalledWith(mockCarouselDomElement);
+        expect(mockParentElement.removeChild).not.toHaveBeenCalled();
     });
 });

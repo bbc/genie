@@ -10,7 +10,7 @@
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import * as signal from "../core/signal-bus.js";
-// import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
+import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
@@ -33,30 +33,37 @@ export class Select extends Screen {
             this.buttonLayout = this.addLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
         }
 
-        // TODO P3 Accessibility
-        // this.accessibleElements = accessibleCarouselElements.create(
-        //     this.visibleLayer,
-        //     this.choiceSprites,
-        //     this.game.canvas.parentElement,
-        //     theme.choices,
-        // );
+        this.setButtonVisibility();
+
+        this.accessibleCarouselElements = accessibleCarouselElements.create(
+            this.scene.key,
+            this.choiceSprites,
+            this.game.canvas.parentElement,
+            this.theme.choices,
+        );
 
         this.addSignalSubscriptions();
         createTestHarnessDisplay(this);
     }
 
-    setLeftButtonState() {
-        this.buttonLayout.buttons.previous.visible = this.currentIndex === 0 ? false : true;
+    setButtonVisibility() {
+        this.buttonLayout.buttons.previous.visible = Boolean(!this.theme.howToPlay || this.currentIndex !== 0);
+
+        const isNotLastPage = this.currentIndex + 1 !== this.choiceSprites.length;
+        this.buttonLayout.buttons.next.visible = Boolean(!this.theme.howToPlay || isNotLastPage);
     }
 
-    setRightButtonState() {
-        this.buttonLayout.buttons.next.visible = this.currentIndex + 1 === this.choiceSprites.length ? false : true;
+    focusOnButton(buttonName) {
+        const button = this.buttonLayout.buttons[buttonName];
+        button.accessibleElement.focus();
     }
 
-    update() {
-        if (this.theme.howToPlay) {
-            this.setLeftButtonState();
-            this.setRightButtonState();
+    setButtonFocus() {
+        if (this.theme.howToPlay && this.currentIndex === 0) {
+            this.focusOnButton("next");
+        }
+        if (this.theme.howToPlay && this.currentIndex === this.choiceSprites.length - 1) {
+            this.focusOnButton("previous");
         }
     }
 
@@ -74,25 +81,28 @@ export class Select extends Screen {
         return choiceSprites;
     }
 
-    leftButton() {
+    handleLeftButton() {
         this.currentIndex = wrapRange(--this.currentIndex, this.choiceSprites.length);
         this.showChoice();
+        this.setButtonVisibility();
+        this.setButtonFocus();
     }
 
-    rightButton() {
+    handleRightButton() {
         this.currentIndex = wrapRange(++this.currentIndex, this.choiceSprites.length);
         this.showChoice();
+        this.setButtonVisibility();
+        this.setButtonFocus();
     }
 
     showChoice() {
         this.choiceSprites.forEach((item, index) => {
             item.visible = index === this.currentIndex;
         });
-        // TODO P3 Accessibility
-        // this.accessibleElements.forEach((element, index) => {
-        //     element.setAttribute("aria-hidden", index !== this.currentIndex);
-        //     element.style.display = index !== this.currentIndex ? "none" : "block"; //Needed for Firefox
-        // });
+        this.accessibleCarouselElements.forEach((element, index) => {
+            element.setAttribute("aria-hidden", index !== this.currentIndex);
+            element.style.display = index !== this.currentIndex ? "none" : "block"; //Needed for Firefox
+        });
     }
 
     startGame() {
@@ -110,13 +120,13 @@ export class Select extends Screen {
         signal.bus.subscribe({
             channel: buttonsChannel(this),
             name: "previous",
-            callback: this.leftButton.bind(this),
+            callback: this.handleLeftButton.bind(this),
         });
 
         signal.bus.subscribe({
             channel: buttonsChannel(this),
             name: "next",
-            callback: this.rightButton.bind(this),
+            callback: this.handleRightButton.bind(this),
         });
 
         signal.bus.subscribe({
@@ -125,24 +135,24 @@ export class Select extends Screen {
             callback: this.startGame.bind(this),
         });
 
-        // signal.bus.subscribe({
-        //     channel: buttonsChannel(this),
-        //     name: "pause",
-        //     callback: () => {
-        // // stops screenreader from announcing the options when the pause overlay is covering them
-        // this.accessibleElements.forEach(element => {
-        //     element.setAttribute("aria-hidden", true);
-        // });
-        //     },
-        // });
+        signal.bus.subscribe({
+            channel: buttonsChannel(this),
+            name: "pause",
+            callback: () => {
+                // stops screenreader from announcing the options when the pause overlay is covering them
+                this.accessibleCarouselElements.forEach(element => {
+                    element.setAttribute("aria-hidden", true);
+                });
+            },
+        });
 
-        // signal.bus.subscribe({
-        //     channel: buttonsChannel(this),
-        //     name: "play",
-        //     callback: () => {
-        // // makes the screenreader announce the selected option
-        // this.accessibleElements[this.currentIndex].setAttribute("aria-hidden", false);
-        //     },
-        // });
+        signal.bus.subscribe({
+            channel: buttonsChannel(this),
+            name: "play",
+            callback: () => {
+                // makes the screenreader announce the selected option
+                this.accessibleCarouselElements[this.currentIndex].setAttribute("aria-hidden", false);
+            },
+        });
     }
 }
