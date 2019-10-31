@@ -8,7 +8,7 @@
  */
 import { Screen } from "../screen.js";
 import { gmi } from "../gmi/gmi.js";
-import { settingsChannel } from "../../core/settings.js";
+import { settings, settingsChannel } from "../../core/settings.js";
 import * as signal from "../../core/signal-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as Scaler from "../scaler.js";
