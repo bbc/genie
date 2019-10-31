@@ -26,8 +26,8 @@ describe("Accessible Carousel Elements", () => {
             .mockReturnValueOnce({ el: mockAccessibleElements[1] })
             .mockReturnValueOnce({ el: mockAccessibleElements[2] });
 
-        firstMockSprite = { on: jest.fn() };
-        mockSprite = { on: jest.fn() };
+        firstMockSprite = { once: jest.fn() };
+        mockSprite = { once: jest.fn() };
         mockSprites = [firstMockSprite, mockSprite, mockSprite];
     });
 
@@ -103,7 +103,7 @@ describe("Accessible Carousel Elements", () => {
     test("removes the carousel when the first carousel item sprite is destroyed", () => {
         mockParentElement.contains.mockImplementation(() => true);
         accessibleCarouselElements.create("select-screen", mockSprites, mockParentElement);
-        const destroyCallback = firstMockSprite.on.mock.calls[0][1];
+        const destroyCallback = firstMockSprite.once.mock.calls[0][1];
         destroyCallback();
         expect(mockParentElement.contains).toHaveBeenCalledWith(mockCarouselDomElement);
         expect(mockParentElement.removeChild).toHaveBeenCalledWith(mockCarouselDomElement);
@@ -112,7 +112,7 @@ describe("Accessible Carousel Elements", () => {
     test("does not remove the carousel if the first item's parent is not a carousel", () => {
         mockParentElement.contains.mockImplementation(() => false);
         accessibleCarouselElements.create("select-screen", mockSprites, mockParentElement);
-        const destroyCallback = firstMockSprite.on.mock.calls[0][1];
+        const destroyCallback = firstMockSprite.once.mock.calls[0][1];
         destroyCallback();
         expect(mockParentElement.contains).toHaveBeenCalledWith(mockCarouselDomElement);
         expect(mockParentElement.removeChild).not.toHaveBeenCalled();
