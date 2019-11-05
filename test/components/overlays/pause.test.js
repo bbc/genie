@@ -39,7 +39,7 @@ describe("Pause Overlay", () => {
         };
         pauseScreen.events = { once: jest.fn() };
         pauseScreen.setData(mockData);
-        pauseScreen.addLayout = jest.fn();
+        pauseScreen.setLayout = jest.fn();
         pauseScreen.scene = { key: "pause" };
         pauseScreen.add = {
             image: jest.fn(),

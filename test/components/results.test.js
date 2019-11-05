@@ -48,7 +48,7 @@ describe("Results Screen", () => {
         };
 
         resultsScreen = new Results();
-        resultsScreen.addLayout = jest.fn();
+        resultsScreen.setLayout = jest.fn();
         resultsScreen.add = {
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
             text: jest.fn(() => mockTextAdd),

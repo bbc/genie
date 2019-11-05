@@ -47,12 +47,12 @@ describe("Test Screens - Game", () => {
             "character-select": { choice: { title: "Penfold" } },
         };
         gameTest = new GameTest();
-        gameTest.addLayout = jest.fn();
+        gameTest.setLayout = jest.fn();
         gameTest.add = {
             image: jest.fn().mockImplementation(() => mockImageAdd),
             text: jest.fn().mockImplementation(() => mockTextAdd),
         };
-        gameTest.addLayout = jest.fn();
+        gameTest.setLayout = jest.fn();
         gameTest.scene = {
             key: "game",
         };

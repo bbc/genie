@@ -21,7 +21,7 @@ describe("Home Screen", () => {
         homeScreen = new Home();
         homeScreen.scene = { key: "home" };
         homeScreen.add = { image: jest.fn() };
-        homeScreen.addLayout = jest.fn();
+        homeScreen.setLayout = jest.fn();
         homeScreen.navigation = { next: jest.fn() };
     });
 

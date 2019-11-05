@@ -78,7 +78,7 @@ describe("Select Screen", () => {
         selectScreen.scene = { key: "test-select" };
         selectScreen.game = { canvas: { parentElement: "parent-element" } };
         selectScreen.navigation = { next: jest.fn() };
-        selectScreen.addLayout = jest.fn(() => mockLayout);
+        selectScreen.setLayout = jest.fn(() => mockLayout);
         selectScreen.add = {
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
             sprite: jest.fn().mockImplementation((x, y, assetName) => {

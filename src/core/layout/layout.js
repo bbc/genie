@@ -35,19 +35,17 @@ const shallowMergeOverrides = (config, overrides) => assignProperties(copyFirstC
 /**
  * Creates a new layout. Called by screen.addLayout for each screen component
  *
- * @param {Phaser.Scene} game - Phaser Scene Instance
+ * @param {Phaser.Scene} scene - Phaser Scene Instance
  * @param {Object} metrics - viewport metrics
  * @param {Array.<string>} buttonIds
  */
-export function create(scene, metrics, buttonIds, root) {
+export function create(scene, metrics, buttonIds) {
     buttonIds = buttonIds.filter(checkGMIFlags);
 
     const overrides = scene.cache.json.get("config").theme[scene.scene.key]["button-overrides"];
-
     const config = shallowMergeOverrides(gel.config(scene), overrides);
+    const root = new Phaser.GameObjects.Container(scene,0, 0);
 
-    //TODO P3 root passed to get this working [NT]
-    //const root = new Phaser.Group(game, game.world, undefined);
     const groups = fp.zipObject(
         groupLayouts.map(layout =>
             fp.camelCase([layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" ")),

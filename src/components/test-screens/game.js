@@ -18,7 +18,7 @@ export class GameTest extends Screen {
                 align: "center",
             })
             .setOrigin(0.5);
-        this.addLayout(["pause"]);
+        this.setLayout(["pause"]);
         createTestHarnessDisplay(this);
 
         const buttonKey = `${this.scene.key}.basicButton`;

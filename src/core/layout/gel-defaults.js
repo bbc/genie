@@ -218,7 +218,7 @@ export const config = screen => {
                 } else {
                     gmi.achievements.show();
                 }
-                screen.layouts[0].buttons.achievements.setIndicator();
+                screen.layout.buttons.achievements.setIndicator();
             },
         },
         restart: {
