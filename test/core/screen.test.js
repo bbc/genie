@@ -26,7 +26,12 @@ describe("Screen", () => {
         screen.events = { emit: jest.fn() };
         screen.scene = { key, bringToTop: jest.fn(), start: jest.fn(), run: jest.fn(), scene: { mock: "scene" } };
         screen.cameras = { main: { scrollX: 0, scrollY: 0 } };
-        screen.add = { container: () => "root" };
+        screen.add = { container: () => "root", existing: jest.fn() };
+        screen._layout = {
+            makeAccessible: jest.fn(),
+            root: {},
+            destroy: jest.fn(),
+        };
         mockTransientData = { key: "data" };
     };
 
@@ -165,7 +170,7 @@ describe("Screen", () => {
         });
     });
 
-    describe("Navigation", () => {
+    describe.only("Navigation", () => {
         test("passes transientData to next screen on navigation", () => {
             createAndInitScreen();
             screen.navigation.next();
@@ -179,25 +184,25 @@ describe("Screen", () => {
         });
     });
 
-    describe("Add Layout", () => {
-        test("adds a new layout to the array", () => {
+    describe("set Layout", () => {
+        test("creates a new layout", () => {
             const mockLayout = buttons => {
-                return { buttons, destroy: jest.fn() };
+                return { buttons, destroy: jest.fn(), root: {} };
             };
             Layout.create = jest.fn((screen, metrics, buttons) => mockLayout(buttons));
             Scaler.getMetrics = () => {};
             createAndInitScreen();
-            const layout = screen.addLayout(["somebutton", "another"]);
-            expect(screen.layouts).toEqual([layout]);
+            const layout = screen.setLayout(["somebutton", "another"]);
+            expect(screen.layout).toEqual(layout);
         });
 
         test("calls layout.create with correct arguments", () => {
             const expectedButtons = ["somebutton", "another"];
-            Layout.create = jest.fn();
+            Layout.create = jest.fn(() => ({ root: {} }));
             Scaler.getMetrics = () => "somemetrics";
             createAndInitScreen();
-            screen.addLayout(expectedButtons);
-            expect(Layout.create).toHaveBeenCalledWith(screen, "somemetrics", expectedButtons, "root");
+            screen.setLayout(expectedButtons);
+            expect(Layout.create).toHaveBeenCalledWith(screen, "somemetrics", expectedButtons);
         });
     });
 
@@ -209,9 +214,9 @@ describe("Screen", () => {
             Layout.create = jest.fn((screen, metrics, buttons) => mockLayout(buttons));
             Scaler.getMetrics = () => {};
             createAndInitScreen();
-            const layout = screen.addLayout(["somebutton", "another"]);
+            const layout = screen.setLayout(["somebutton", "another"]);
             screen.removeAll();
-            expect(screen.layouts).toEqual([]);
+            expect(screen.layout).not.toBeDefined();
             expect(layout.destroy).toHaveBeenCalled();
             expect(signal.bus.removeChannel).toHaveBeenCalledWith(buttonsChannel(screen));
         });
@@ -225,7 +230,7 @@ describe("Screen", () => {
             expect(signal.bus.subscribe).toHaveBeenCalledWith({
                 channel: overlayChannel,
                 name: expectedName,
-                callback: screen._removeOverlay,
+                callback: screen._onOverlayRemoved,
             });
         });
 
@@ -265,14 +270,14 @@ describe("Screen", () => {
         test("removing an overlay, removes the overlays button channel", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
             createAndInitScreen();
-            screen._removeOverlay({ overlay: mockOverlay });
+            screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(signal.bus.removeChannel).toHaveBeenCalledWith(buttonsChannel(mockOverlay));
         });
 
         test("removing an overlay, calls removeAll on the overlay and stops it", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
             createAndInitScreen();
-            screen._removeOverlay({ overlay: mockOverlay });
+            screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(mockOverlay.removeAll).toHaveBeenCalled();
             expect(mockOverlay.scene.stop).toHaveBeenCalled();
         });
@@ -286,7 +291,7 @@ describe("Screen", () => {
         test("removing an overlay, emits a onoverlayremoved event on the parent screen", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
             createAndInitScreen();
-            screen._removeOverlay({ overlay: mockOverlay });
+            screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(screen.events.emit).toHaveBeenCalledWith("onoverlayremoved");
         });
 
@@ -294,7 +299,7 @@ describe("Screen", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
             createAndInitScreen();
             jest.clearAllMocks();
-            screen._removeOverlay({ overlay: mockOverlay });
+            screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(a11y.clearAccessibleButtons).toHaveBeenCalled();
             expect(a11y.clearElementsFromDom).toHaveBeenCalled();
         });
@@ -304,9 +309,9 @@ describe("Screen", () => {
             const mockLayout = { makeAccessible: jest.fn() };
             createAndInitScreen();
             Layout.create = () => mockLayout;
-            screen.addLayout();
+            screen.setLayout();
             jest.clearAllMocks();
-            screen._removeOverlay({ overlay: mockOverlay });
+            screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(mockLayout.makeAccessible).toHaveBeenCalled();
             expect(a11y.appendElementsToDom).toHaveBeenCalledWith(screen);
         });
@@ -317,7 +322,7 @@ describe("Screen", () => {
             createAndInitScreen();
             screen.sys.accessibleButtons = [mockButton];
             jest.clearAllMocks();
-            screen._removeOverlay({ overlay: mockOverlay });
+            screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(a11y.addToAccessibleButtons).toHaveBeenCalledWith(screen, mockButton);
         });
     });

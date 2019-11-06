@@ -73,7 +73,7 @@ describe("Pause Overlay", () => {
 
         test("adds correct gel layout buttons when replay button should be shown", () => {
             pauseScreen.create();
-            expect(pauseScreen.addLayout).toHaveBeenCalledWith([
+            expect(pauseScreen.setLayout).toHaveBeenCalledWith([
                 "home",
                 "audio",
                 "settings",
@@ -86,7 +86,7 @@ describe("Pause Overlay", () => {
         test("adds correct gel layout buttons when replay button should be hidden", () => {
             pauseScreen.scene.key = "pause-noreplay";
             pauseScreen.create();
-            expect(pauseScreen.addLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
+            expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
         });
 
         test("creates a layout harness with correct params", () => {

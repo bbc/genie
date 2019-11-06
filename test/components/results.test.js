@@ -85,7 +85,7 @@ describe("Results Screen", () => {
         test("adds GEL buttons to layout", () => {
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame"];
-            expect(resultsScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
         test("creates a layout harness with correct params", () => {
@@ -97,7 +97,7 @@ describe("Results Screen", () => {
             resultsScreen.context.config.theme.game.achievements = true;
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame", "achievements"];
-            expect(resultsScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
         describe("Stats", () => {

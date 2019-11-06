@@ -89,7 +89,7 @@ describe("Test Screens - Game", () => {
 
         test("adds a pause GEL button to the layout", () => {
             gameTest.create();
-            expect(gameTest.addLayout).toHaveBeenCalledWith(["pause"]);
+            expect(gameTest.setLayout).toHaveBeenCalledWith(["pause"]);
         });
 
         test("creates a layout harness with correct params", () => {
