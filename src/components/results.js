@@ -34,7 +34,7 @@ export class Results extends Screen {
 
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         const buttons = ["pause", "restart", "continueGame"];
-        this.addLayout(buttons.concat(achievements));
+        this.setLayout(buttons.concat(achievements));
 
         fireGameCompleteStat(this.transientData.results);
         createTestHarnessDisplay(this);

@@ -15,8 +15,7 @@ import * as Scaler from "../scaler.js";
 
 //const triggeredByGame = arg => arg instanceof Phaser.Game;
 const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
-const getAudioButtons = fp.map(fp.get("buttons.audio"));
-const getLayouts = fp.flatMap(fp.get("layouts"));
+const getAudioButtons = fp.map(fp.get("layout.buttons.audio"));
 
 export class Boot extends Screen {
     #navigationConfig;
@@ -61,7 +60,8 @@ export class Boot extends Screen {
                 const audioEnabled = settings.getAllSettings().audio;
                 this.sound.mute = !audioEnabled;
                 const activeScenes = this.scene.manager.getScenes(true);
-                fp.map(setImage, getAudioButtons(getLayouts(activeScenes)));
+
+                fp.map(setImage, getAudioButtons(activeScenes));
             },
         });
     }

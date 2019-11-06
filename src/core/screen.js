@@ -21,38 +21,35 @@ export const overlayChannel = "gel-overlays";
  * All the game screens will extend from this class.
  */
 export class Screen extends Phaser.Scene {
-    #data;
-    #layouts = [];
-
     constructor(sceneConfig) {
         super(sceneConfig);
     }
 
     get context() {
         return {
-            config: this.#data.config,
-            parentScreens: this.#data.parentScreens,
-            navigation: this.#data.navigation,
-            transientData: this.#data.transient || {},
+            config: this._data.config,
+            parentScreens: this._data.parentScreens,
+            navigation: this._data.navigation,
+            transientData: this._data.transient || {},
         };
     }
 
-    get layouts() {
-        return this.#layouts;
+    get layout() {
+        return this._layout;
     }
 
     //TODO P3 the only context parts we want them to set is transient data
     //TODO P3 maybe it should be separate? [NT]
     set transientData(newData) {
-        this.#data.transient = _.merge({}, this.#data.transient, newData);
+        this._data.transient = _.merge({}, this._data.transient, newData);
     }
 
     get transientData() {
-        return this.#data.transient;
+        return this._data.transient;
     }
 
     init(data) {
-        this.#data = data;
+        this._data = data;
 
         //TODO P3 This centers the camera. Should this be hard-coded [NT]
         this.cameras.main.scrollX = -700;
@@ -61,26 +58,26 @@ export class Screen extends Phaser.Scene {
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
             gmi.setStatsScreen(this.scene.key);
 
-            const themeScreenConfig = this.#data.config.theme[this.scene.key];
+            const themeScreenConfig = this._data.config.theme[this.scene.key];
             GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
         }
         this.sys.accessibleButtons = [];
         a11y.clearAccessibleButtons();
         a11y.clearElementsFromDom();
 
-        this.#makeNavigation();
+        this._makeNavigation();
     }
 
     setData(newData) {
-        this.#data = newData;
+        this._data = newData;
     }
 
     setConfig(newConfig) {
-        this.#data.config = newConfig;
+        this._data.config = newConfig;
     }
 
-    #makeNavigation = () => {
-        const routes = this.scene.key === "boot" ? { next: "loader" } : this.#data.navigation[this.scene.key].routes;
+    _makeNavigation = () => {
+        const routes = this.scene.key === "boot" ? { next: "loader" } : this._data.navigation[this.scene.key].routes;
         this.navigation = fp.mapValues(
             route => () => {
                 this._navigate(route);
@@ -94,16 +91,16 @@ export class Screen extends Phaser.Scene {
         signal.bus.subscribe({
             channel: overlayChannel,
             name: key,
-            callback: this._removeOverlay,
+            callback: this._onOverlayRemoved,
         });
-        this.#data.parentScreens.push(this);
-        this.scene.run(key, this.#data);
+        this._data.parentScreens.push(this);
+        this.scene.run(key, this._data);
         this.scene.bringToTop(key);
     }
 
     removeOverlay = () => {
         this.events.emit("onscreenexit");
-        this.#data.parentScreens.pop();
+        this._data.parentScreens.pop();
         signal.bus.publish({
             channel: overlayChannel,
             name: this.scene.key,
@@ -112,32 +109,32 @@ export class Screen extends Phaser.Scene {
         signal.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
     };
 
-    _removeOverlay = data => {
+    _onOverlayRemoved = data => {
         this.events.emit("onoverlayremoved");
         signal.bus.removeChannel(buttonsChannel(data.overlay));
         a11y.clearAccessibleButtons();
         a11y.clearElementsFromDom();
         data.overlay.removeAll();
         data.overlay.scene.stop();
-        this.#layouts.forEach(layout => layout.makeAccessible());
+        this._layout.makeAccessible();
         this.sys.accessibleButtons.forEach(button => a11y.addToAccessibleButtons(this, button));
         a11y.appendElementsToDom(this);
     };
 
     removeAll = () => {
         signal.bus.removeChannel(buttonsChannel(this));
-        this.#layouts.forEach(layout => layout.destroy());
-        this.#layouts = [];
+        this._layout && this._layout.destroy();
+        delete this._layout;
     };
 
     _navigate = route => {
         this.events.emit("onscreenexit");
         this.scene.bringToTop(route);
-        while (this.#data.parentScreens.length > 0) {
-            this.#data.parentScreens.pop().removeAll();
+        while (this._data.parentScreens.length > 0) {
+            this._data.parentScreens.pop().removeAll();
         }
         this.removeAll();
-        this.scene.start(route, this.#data);
+        this.scene.start(route, this._data);
     };
 
     /**
@@ -145,20 +142,16 @@ export class Screen extends Phaser.Scene {
      * Called in the create method of a given screen
      *
      * @example
-     * this.addLayout(["home", "restart", "continue", "pause"]);
+     * this.setLayout(["home", "restart", "continue", "pause"]);
      * @param {Array} buttons - Array of standard button names to include. See {@link layout/gel-defaults.js} for available names
      *
      * @memberof module:screen
      * @returns {Object}
      */
-    addLayout(buttons) {
-        //TODO P3 passing in the root here . Maybe it can be moved?
-        const layoutRoot = this.add.container(0, 0);
+    setLayout(buttons) {
+        this._layout = Layout.create(this, Scaler.getMetrics(), buttons);
+        this.add.existing(this._layout.root);
 
-        //P3 TODO passing in "this" smells [NT]
-        const layout = Layout.create(this, Scaler.getMetrics(), buttons, layoutRoot);
-        this.#layouts.push(layout);
-
-        return layout;
+        return this._layout;
     }
 }

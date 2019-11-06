@@ -21,7 +21,7 @@ describe("Home Screen", () => {
         homeScreen = new Home();
         homeScreen.scene = { key: "home" };
         homeScreen.add = { image: jest.fn() };
-        homeScreen.addLayout = jest.fn();
+        homeScreen.setLayout = jest.fn();
         homeScreen.navigation = { next: jest.fn() };
     });
 
@@ -43,7 +43,7 @@ describe("Home Screen", () => {
 
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings"];
-            expect(homeScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
         test("creates a layout harness with correct params", () => {
@@ -57,7 +57,7 @@ describe("Home Screen", () => {
             Object.defineProperty(homeScreen, "context", { get: jest.fn(() => mockContext) });
             homeScreen.create();
             const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "achievements"];
-            expect(homeScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
     });
 

@@ -55,7 +55,7 @@ describe("Boot", () => {
         bootScreen.scene = {
             key: "boot",
             start: jest.fn(),
-            manager: { getScenes: jest.fn(() => [{ layouts: [{ buttons: { audio: mockAudioButton } }] }]) },
+            manager: { getScenes: jest.fn(() => [{ layout: { buttons: { audio: mockAudioButton } } }]) },
         };
         bootScreen.navigation = { next: jest.fn() };
 

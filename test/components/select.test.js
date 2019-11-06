@@ -78,7 +78,7 @@ describe("Select Screen", () => {
         selectScreen.scene = { key: "test-select" };
         selectScreen.game = { canvas: { parentElement: "parent-element" } };
         selectScreen.navigation = { next: jest.fn() };
-        selectScreen.addLayout = jest.fn(() => mockLayout);
+        selectScreen.setLayout = jest.fn(() => mockLayout);
         selectScreen.add = {
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
             sprite: jest.fn().mockImplementation((x, y, assetName) => {
@@ -110,14 +110,14 @@ describe("Select Screen", () => {
 
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["home", "audio", "pauseNoReplay", "previous", "next", "continue"];
-            expect(selectScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
         test("adds GEL buttons to layout when how to play", () => {
             selectScreen.setData(mockHowToPlayData);
             selectScreen.create();
             const expectedButtons = ["overlayBack", "audio", "settings", "previous", "next"];
-            expect(selectScreen.addLayout).toHaveBeenCalledWith(expectedButtons);
+            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
         test("creates sprites for each choice", () => {
