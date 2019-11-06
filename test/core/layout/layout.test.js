@@ -77,9 +77,7 @@ describe("Layout", () => {
         GelGroup.mockImplementation(() => mockGelGroup);
         mockPhaserGroup = { destroy: jest.fn() };
         global.Phaser.Group = jest.fn(() => mockPhaserGroup);
-        global.Phaser.GameObjects.Container = jest.fn(() => ({
-            add: jest.fn(),
-        }));
+        global.Phaser.GameObjects.Container = jest.fn(() => mockRoot);
 
         settingsIconsUnsubscribeSpy = jest.fn();
         jest.spyOn(settingsIcons, "create").mockImplementation(() => ({ unsubscribe: settingsIconsUnsubscribeSpy }));
@@ -168,7 +166,7 @@ describe("Layout", () => {
         });
 
         test("resets the groups after they have been added to the layout", () => {
-            Layout.create(mockScene, mockMetrics, [], mockRoot);
+            Layout.create(mockScene, mockMetrics, []);
             expect(mockGelGroup.reset).toHaveBeenCalledTimes(11);
             expect(mockGelGroup.reset).toHaveBeenCalledWith(mockMetrics);
         });
@@ -253,7 +251,7 @@ describe("Layout", () => {
         });
     });
 
-    describe.only("button overrides", () => {
+    describe("button overrides", () => {
         test("merges overrides to button config", () => {
             mockJson.theme.mockSceneKey["button-overrides"] = { play: { shiftX: 99, shiftY: 88, group: "topRight" } };
             const layout = Layout.create(mockScene, mockMetrics, ["play"]);

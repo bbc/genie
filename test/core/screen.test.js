@@ -170,7 +170,7 @@ describe("Screen", () => {
         });
     });
 
-    describe.only("Navigation", () => {
+    describe("Navigation", () => {
         test("passes transientData to next screen on navigation", () => {
             createAndInitScreen();
             screen.navigation.next();

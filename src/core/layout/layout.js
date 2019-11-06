@@ -44,7 +44,7 @@ export function create(scene, metrics, buttonIds) {
 
     const overrides = scene.cache.json.get("config").theme[scene.scene.key]["button-overrides"];
     const config = shallowMergeOverrides(gel.config(scene), overrides);
-    const root = new Phaser.GameObjects.Container(scene,0, 0);
+    const root = new Phaser.GameObjects.Container(scene, 0, 0);
 
     const groups = fp.zipObject(
         groupLayouts.map(layout =>
