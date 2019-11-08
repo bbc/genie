@@ -51,7 +51,8 @@ export function create(pageName, carouselSprites, parentElement, choices) {
         accessibleElements.push(accessibleElement);
 
         if (index === 0) {
-            sprite.events.onDestroy.add(() => {
+            accessibleElement.focus();
+            sprite.once("destroy", () => {
                 if (parentElement.contains(carousel)) {
                     parentElement.removeChild(carousel);
                 }

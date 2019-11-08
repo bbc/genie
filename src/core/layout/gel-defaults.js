@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { settings, settingsChannel } from "../../core/settings.js";
-import * as GameSound from "../../core/game-sound.js";
+// import * as GameSound from "../../core/game-sound.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import * as signal from "../signal-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
@@ -81,20 +81,16 @@ export const config = screen => {
             order: 3,
             id: "__audio",
             channel: buttonsChannel(screen),
-            // TODO P3 with AUDIO work.
-            action: ({ game }) => {
-                const enabled = game.sound.mute;
-
-                gmi.setAudio(enabled);
+            action: () => {
+                const audioEnabled = gmi.getAllSettings().audio;
+                gmi.setAudio(!audioEnabled);
 
                 signal.bus.publish({
                     channel: settingsChannel,
                     name: "audio",
-                    data: enabled,
                 });
 
-                const audioOnOrOff = enabled ? "on" : "off";
-                gmi.sendStatsEvent("audio", audioOnOrOff);
+                gmi.sendStatsEvent("audio", audioEnabled ? "on" : "off");
             },
         },
         settings: {
@@ -134,7 +130,7 @@ export const config = screen => {
             action: ({ screen }) => {
                 screen.scene.pause();
                 gmi.sendStatsEvent("pause", "click");
-                screen.addOverlay("pause-noreplay");
+                screen.addOverlay("pause");
             },
         },
         previous: {
@@ -222,7 +218,7 @@ export const config = screen => {
                 } else {
                     gmi.achievements.show();
                 }
-                screen.layouts[0].buttons.achievements.setIndicator();
+                screen.layout.buttons.achievements.setIndicator();
             },
         },
         restart: {

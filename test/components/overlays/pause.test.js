@@ -18,15 +18,9 @@ describe("Pause Overlay", () => {
             some: "mock",
         };
         mockData = {
-            config: {
-                theme: {
-                    pause: {
-                        showReplayButton: true,
-                    },
-                    "pause-noreplay": {
-                        showReplayButton: false,
-                    },
-                },
+            parentScreens: [{ scene: { key: "level-select" } }],
+            navigation: {
+                "level-select": { routes: { restart: "home" } },
             },
         };
 
@@ -39,7 +33,7 @@ describe("Pause Overlay", () => {
         };
         pauseScreen.events = { once: jest.fn() };
         pauseScreen.setData(mockData);
-        pauseScreen.addLayout = jest.fn();
+        pauseScreen.setLayout = jest.fn();
         pauseScreen.scene = { key: "pause" };
         pauseScreen.add = {
             image: jest.fn(),
@@ -73,7 +67,7 @@ describe("Pause Overlay", () => {
 
         test("adds correct gel layout buttons when replay button should be shown", () => {
             pauseScreen.create();
-            expect(pauseScreen.addLayout).toHaveBeenCalledWith([
+            expect(pauseScreen.setLayout).toHaveBeenCalledWith([
                 "home",
                 "audio",
                 "settings",
@@ -84,9 +78,9 @@ describe("Pause Overlay", () => {
         });
 
         test("adds correct gel layout buttons when replay button should be hidden", () => {
-            pauseScreen.scene.key = "pause-noreplay";
+            mockData.navigation["level-select"] = { routes: {} };
             pauseScreen.create();
-            expect(pauseScreen.addLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
+            expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
         });
 
         test("creates a layout harness with correct params", () => {

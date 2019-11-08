@@ -18,7 +18,7 @@ export class Home extends Screen {
         this.add.image(0, -150, `${this.scene.key}.title`);
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
-        this.addLayout(buttons.concat(achievements));
+        this.setLayout(buttons.concat(achievements));
 
         createTestHarnessDisplay(this);
 

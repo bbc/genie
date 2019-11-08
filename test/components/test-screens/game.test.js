@@ -47,12 +47,12 @@ describe("Test Screens - Game", () => {
             "character-select": { choice: { title: "Penfold" } },
         };
         gameTest = new GameTest();
-        gameTest.addLayout = jest.fn();
+        gameTest.setLayout = jest.fn();
         gameTest.add = {
             image: jest.fn().mockImplementation(() => mockImageAdd),
             text: jest.fn().mockImplementation(() => mockTextAdd),
         };
-        gameTest.addLayout = jest.fn();
+        gameTest.setLayout = jest.fn();
         gameTest.scene = {
             key: "game",
         };
@@ -89,7 +89,7 @@ describe("Test Screens - Game", () => {
 
         test("adds a pause GEL button to the layout", () => {
             gameTest.create();
-            expect(gameTest.addLayout).toHaveBeenCalledWith(["pause"]);
+            expect(gameTest.setLayout).toHaveBeenCalledWith(["pause"]);
         });
 
         test("creates a layout harness with correct params", () => {
