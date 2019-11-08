@@ -58,6 +58,12 @@ describe("Main", () => {
             },
             game: {
                 scene: GameTest,
+                settings: {
+                    physics: {
+                        default: "arcade",
+                        arcade: {},
+                    },
+                },
                 routes: {
                     next: "results",
                     home: "home",
