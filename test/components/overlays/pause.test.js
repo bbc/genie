@@ -18,15 +18,9 @@ describe("Pause Overlay", () => {
             some: "mock",
         };
         mockData = {
-            config: {
-                theme: {
-                    pause: {
-                        showReplayButton: true,
-                    },
-                    "pause-noreplay": {
-                        showReplayButton: false,
-                    },
-                },
+            parentScreens: [{ scene: { key: "level-select" } }],
+            navigation: {
+                "level-select": { routes: { restart: "home" } },
             },
         };
 
@@ -84,7 +78,7 @@ describe("Pause Overlay", () => {
         });
 
         test("adds correct gel layout buttons when replay button should be hidden", () => {
-            pauseScreen.scene.key = "pause-noreplay";
+            mockData.navigation["level-select"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
         });

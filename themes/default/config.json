@@ -135,20 +135,15 @@
                     "fontWeight": "bold",
                     "fill": "white"
                 }
-            },	
-            "panelText": [		
-                { "accessibilityText": "Instructions on playing the game" },		
-                { "accessibilityText": "More on how to play" },		
-                { "accessibilityText": "Final instructions on playing" }		
+            },
+            "panelText": [
+                { "accessibilityText": "Instructions on playing the game" },
+                { "accessibilityText": "More on how to play" },
+                { "accessibilityText": "Final instructions on playing" }
             ]
         },
         "pause": {
-            "isOverlay": true,
-            "showReplayButton": true
-        },
-        "pause-noreplay": {
-            "isOverlay": true,
-            "showReplayButton": false
+            "isOverlay": true
         }
     }
 }
