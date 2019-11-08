@@ -16,10 +16,13 @@ export class Pause extends Screen {
     }
 
     create() {
-        this.theme = this.context.config.theme[this.scene.key];
         this.add.image(0, 0, `${this.scene.key}.pauseBackground`);
         const buttons = ["home", "audio", "settings", "pausePlay", "howToPlay"];
-        const replayButton = this.theme.showReplayButton ? ["pauseReplay"] : [];
+
+        const parentKey = this.context.parentScreens.slice(-1)[0].scene.key;
+        const showReplay = Boolean(this.context.navigation[parentKey].routes.restart);
+
+        const replayButton = showReplay ? ["pauseReplay"] : [];
 
         this.setLayout(buttons.concat(replayButton));
         this.add.image(0, -170, `${this.scene.key}.title`);

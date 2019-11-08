@@ -204,10 +204,6 @@ describe("Layout - Gel Defaults", () => {
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("pause", "click");
         });
 
-        test("creates a pause screen with replay button hidden", () => {
-            expect(mockCurrentScreen.addOverlay).toHaveBeenCalledWith("pause-noreplay");
-        });
-
         test("pauses the screen", () => {
             expect(mockCurrentScreen.scene.pause).toHaveBeenCalled();
         });

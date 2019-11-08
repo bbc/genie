@@ -130,7 +130,7 @@ export const config = screen => {
             action: ({ screen }) => {
                 screen.scene.pause();
                 gmi.sendStatsEvent("pause", "click");
-                screen.addOverlay("pause-noreplay");
+                screen.addOverlay("pause");
             },
         },
         previous: {

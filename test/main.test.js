@@ -45,7 +45,6 @@ describe("Main", () => {
                 routes: {
                     next: "level-select",
                     home: "home",
-                    restart: "home",
                 },
             },
             "level-select": {
@@ -53,7 +52,6 @@ describe("Main", () => {
                 routes: {
                     next: "game",
                     home: "home",
-                    restart: "home",
                 },
             },
             game: {
@@ -86,12 +84,6 @@ describe("Main", () => {
                 },
             },
             pause: {
-                scene: Pause,
-                routes: {
-                    home: "home",
-                },
-            },
-            "pause-noreplay": {
                 scene: Pause,
                 routes: {
                     home: "home",

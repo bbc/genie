@@ -53,7 +53,6 @@ const screenConfig = {
         routes: {
             next: "level-select",
             home: "home",
-            restart: "home",
         },
     },
     "level-select": {
@@ -61,7 +60,6 @@ const screenConfig = {
         routes: {
             next: "game",
             home: "home",
-            restart: "home",
         },
     },
     game: {
@@ -95,12 +93,6 @@ const screenConfig = {
         },
     },
     pause: {
-        scene: Pause,
-        routes: {
-            home: "home",
-        },
-    },
-    "pause-noreplay": {
         scene: Pause,
         routes: {
             home: "home",
