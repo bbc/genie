@@ -16,7 +16,6 @@ export class Pause extends Screen {
     }
 
     create() {
-        this.theme = this.context.config.theme[this.scene.key];
         this.add.image(0, 0, `${this.scene.key}.pauseBackground`);
         const buttons = ["home", "audio", "settings", "pausePlay", "howToPlay"];
 
