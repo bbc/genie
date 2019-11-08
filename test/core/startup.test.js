@@ -105,6 +105,15 @@ describe("Startup", () => {
                 { game: "game" },
             ]);
         });
+
+        test("creates scene with settings object from screenConfig", () => {
+            fakeScreenConfig.game.settings = { physics: { default: "arcade", arcade: {} } };
+            startup(fakeScreenConfig);
+            expect(fakeScreenConfig.game.scene).toHaveBeenCalledWith({
+                key: "game",
+                physics: { default: "arcade", arcade: {} },
+            });
+        });
     });
 
     describe("Phaser Game Config", () => {

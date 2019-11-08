@@ -17,7 +17,7 @@ import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 
-export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key }));
+export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key, ...conf[key].settings }));
 
 /**
  * @param {Object=} settingsConfig - Additional state that is added to the inState context.
