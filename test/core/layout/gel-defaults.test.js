@@ -164,7 +164,6 @@ describe("Layout - Gel Defaults", () => {
         test("sends a stat to the GMI when audio is on", () => {
             mockSettings.audio = false;
             gel.config(mockCurrentScreen).audio.action();
-            console.log("mockSettings.audio", mockSettings.audio)
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("audio", "on");
         });
     });
