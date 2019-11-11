@@ -90,7 +90,7 @@ export const config = screen => {
                     name: "audio",
                 });
 
-                gmi.sendStatsEvent("audio", audioEnabled ? "on" : "off");
+                gmi.sendStatsEvent("audio", gmi.getAllSettings().audio ? "on" : "off");
             },
         },
         settings: {

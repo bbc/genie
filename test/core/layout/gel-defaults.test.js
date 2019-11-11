@@ -58,7 +58,9 @@ describe("Layout - Gel Defaults", () => {
 
         mockGmi = {
             exit: jest.fn(),
-            setAudio: jest.fn(),
+            setAudio: jest.fn(value => {
+                mockSettings.audio = value;
+            }),
             setStatsScreen: jest.fn(),
             sendStatsEvent: jest.fn(),
             achievements: { show: jest.fn() },
@@ -128,16 +130,14 @@ describe("Layout - Gel Defaults", () => {
     });
 
     describe("Audio Callback", () => {
-        beforeEach(() => {
-            jest.spyOn(signal.bus, "publish");
-            gel.config(mockCurrentScreen).audio.action({ screen: mockCurrentScreen });
-        });
-
         test("sets audio on the GMI", () => {
+            gel.config(mockCurrentScreen).audio.action({ screen: mockCurrentScreen });
             expect(mockGmi.setAudio).toHaveBeenCalledWith(false);
         });
 
         test("mutes the game audio", () => {
+            jest.spyOn(signal.bus, "publish");
+            gel.config(mockCurrentScreen).audio.action({ screen: mockCurrentScreen });
             expect(signal.bus.publish).toHaveBeenCalledWith({
                 channel: settingsChannel,
                 name: "audio",
@@ -155,13 +155,14 @@ describe("Layout - Gel Defaults", () => {
         });
 
         test("sends a stat to the GMI when audio is off", () => {
-            mockSettings.audio = false;
+            mockSettings.audio = true;
             gel.config(mockCurrentScreen).audio.action();
+
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("audio", "off");
         });
 
         test("sends a stat to the GMI when audio is on", () => {
-            mockSettings.audio = true;
+            mockSettings.audio = false;
             gel.config(mockCurrentScreen).audio.action();
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("audio", "on");
         });
