@@ -325,5 +325,14 @@ describe("Screen", () => {
             screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(a11y.addToAccessibleButtons).toHaveBeenCalledWith(screen, mockButton);
         });
+
+        test("removing an overlay sets stat screen back to the underlying screen", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "overlay", stop: jest.fn() } };
+            createAndInitScreen();
+            jest.clearAllMocks();
+            screen._onOverlayRemoved({ overlay: mockOverlay });
+
+            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith("screenKey");
+        });
     });
 });

@@ -95,6 +95,10 @@ describe("Layout - Gel Defaults", () => {
 
             expect(homeNavigationSpy).toHaveBeenCalled();
         });
+
+        test("fires a click stat", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("home", "click");
+        });
     });
 
     describe("Back Button Callback", () => {

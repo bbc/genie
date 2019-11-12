@@ -43,6 +43,7 @@ export const config = screen => {
             id: "__home",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
+                gmi.sendStatsEvent("home", "click");
                 screen.navigation.home();
             },
         },
