@@ -200,20 +200,6 @@ describe("Layout - Gel Defaults", () => {
         });
     });
 
-    describe("Pause No Replay Button Callback", () => {
-        beforeEach(() => {
-            gel.config(mockCurrentScreen).pauseNoReplay.action({ screen: mockCurrentScreen });
-        });
-
-        test("sends a stat to the GMI", () => {
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("pause", "click");
-        });
-
-        test("pauses the screen", () => {
-            expect(mockCurrentScreen.scene.pause).toHaveBeenCalled();
-        });
-    });
-
     describe("Replay Button Callback", () => {
         test("sends a stat to the GMI", () => {
             gel.config(mockCurrentScreen).replay.action({ screen: mockCurrentScreen });

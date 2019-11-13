@@ -120,20 +120,6 @@ export const config = screen => {
                 screen.addOverlay("pause");
             },
         },
-        pauseNoReplay: {
-            group: "topRight",
-            title: "Pause",
-            key: "pause",
-            ariaLabel: "Pause Game",
-            order: 6,
-            id: "__pause",
-            channel: buttonsChannel(screen),
-            action: ({ screen }) => {
-                screen.scene.pause();
-                gmi.sendStatsEvent("pause", "click");
-                screen.addOverlay("pause");
-            },
-        },
         previous: {
             group: "middleLeftSafe",
             title: "Previous",

@@ -30,7 +30,7 @@ export class Select extends Screen {
         if (this.theme.howToPlay) {
             this.buttonLayout = this.setLayout(["overlayBack", "audio", "settings", "previous", "next"]);
         } else {
-            this.buttonLayout = this.setLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
+            this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
         }
 
         this.setButtonVisibility();

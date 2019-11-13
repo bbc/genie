@@ -129,6 +129,7 @@ export class Screen extends Phaser.Scene {
     };
 
     _navigate = route => {
+        signal.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
         this.events.emit("onscreenexit");
         this.scene.bringToTop(route);
         while (this._data.parentScreens.length > 0) {
