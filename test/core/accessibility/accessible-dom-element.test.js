@@ -133,12 +133,6 @@ describe("Accessible DOM Element", () => {
             expect(options.onClick).toHaveBeenCalled();
         });
 
-        test("click events are handled", () => {
-            accessibleDomElement(options);
-            events.click();
-            expect(options.onClick).toHaveBeenCalled();
-        });
-
         test("mouseover events are handled", () => {
             accessibleDomElement(options);
             events.mouseover();
