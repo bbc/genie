@@ -53,7 +53,7 @@ export const create = () => {
     };
 
     const removeSubscription = message => {
-        _bus[message.channel].off(message.name, message.callback);
+        _bus[message.channel] && _bus[message.channel].off(message.name, message.callback);
     };
 
     const publishMessage = message => _bus[message.channel].emit(message.name, message.data);

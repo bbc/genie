@@ -109,7 +109,7 @@ describe("Select Screen", () => {
         });
 
         test("adds GEL buttons to layout", () => {
-            const expectedButtons = ["home", "audio", "pauseNoReplay", "previous", "next", "continue"];
+            const expectedButtons = ["home", "audio", "pause", "previous", "next", "continue"];
             expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 

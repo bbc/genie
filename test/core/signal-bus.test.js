@@ -69,23 +69,41 @@ describe("Signal Bus", () => {
         expect(callbackSpy.mock.calls[1][0]).toEqual(expectedData2);
     });
 
-    test("removes the channel when removeChannel is called", () => {
-        const bus = SignalBus.create();
-        const callback = jest.fn();
+    describe("removeChannel", () => {
+        test("removes the channel when removeChannel is called", () => {
+            const bus = SignalBus.create();
+            const callback = jest.fn();
 
-        bus.subscribe({ callback, channel: "testChannel2", name: "testSignal1" });
-        bus.removeChannel("testChannel2");
-        bus.publish({ channel: "testChannel2", name: "testSignal1" });
-        expect(callback).not.toHaveBeenCalled();
+            bus.subscribe({ callback, channel: "testChannel2", name: "testSignal1" });
+            bus.removeChannel("testChannel2");
+            bus.publish({ channel: "testChannel2", name: "testSignal1" });
+            expect(callback).not.toHaveBeenCalled();
+        });
+
+        test("destroys the channel when removeChannel is called", () => {
+            createMockEventEmitter();
+            const bus = SignalBus.create();
+            const callback = jest.fn();
+
+            bus.subscribe({ callback, channel: "testChannel2", name: "testSignal1" });
+            bus.removeChannel("testChannel2");
+            expect(mockEventEmitter.destroy).toHaveBeenCalled();
+        });
+
+        test("does not error attempting to remove channel that does not exist", () => {
+            const bus = SignalBus.create();
+            expect(() => {
+                bus.removeChannel("testChannel2");
+            }).not.toThrow();
+        });
     });
 
-    test("destroys the channel when removeChannel is called", () => {
-        createMockEventEmitter();
-        const bus = SignalBus.create();
-        const callback = jest.fn();
-
-        bus.subscribe({ callback, channel: "testChannel2", name: "testSignal1" });
-        bus.removeChannel("testChannel2");
-        expect(mockEventEmitter.destroy).toHaveBeenCalled();
+    describe("removeSubscription", () => {
+        test("does not error attempting to remove a subscriptio that does not exist", () => {
+            const bus = SignalBus.create();
+            expect(() => {
+                bus.removeSubscription({ channel: "testChannel", name: "testName", callback: "textCb" });
+            }).not.toThrow();
+        });
     });
 });
