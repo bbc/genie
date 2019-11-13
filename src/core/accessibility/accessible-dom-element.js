@@ -41,7 +41,6 @@ export function accessibleDomElement(options) {
 
     function assignEvents() {
         el.addEventListener("keyup", keyUp);
-        el.addEventListener("click", options.onClick);
         el.addEventListener("mouseover", options.onMouseOver);
         el.addEventListener("mouseleave", options.onMouseOut);
         el.addEventListener("focus", options.onMouseOver);
