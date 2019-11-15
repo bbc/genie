@@ -119,7 +119,7 @@ describe("Boot", () => {
                 expect(mockAudioButton.setImage).toHaveBeenCalledWith("audio-off");
             });
 
-            test("Toogles audio on the scenes that are sleeping as well as the active ones", () => {
+            test("Toggles audio on the scenes that are sleeping as well as the active ones", () => {
                 const mockAudioButton2 = { setImage: jest.fn() };
                 const mockScenes = [
                     { layout: { buttons: { audio: mockAudioButton } } },
