@@ -5,7 +5,7 @@
  */
 import { createMockGmi } from "../mock/gmi";
 import { create as createSettings } from "../../src/core/settings.js";
-import * as signal from "../../src/core/signal-bus.js";
+import * as event from "../../src/core/event-bus.js";
 
 jest.mock("../../src/core/accessibility/accessibility-layer.js");
 
@@ -21,8 +21,8 @@ describe("Settings", () => {
 
     beforeEach(() => {
         createGmi();
-        jest.spyOn(signal.bus, "subscribe").mockImplementation(() => {});
-        jest.spyOn(signal.bus, "publish").mockImplementation(() => {});
+        jest.spyOn(event.bus, "subscribe").mockImplementation(() => {});
+        jest.spyOn(event.bus, "publish").mockImplementation(() => {});
 
         const layout = [{ buttons: { pause: {} } }];
 
@@ -55,8 +55,8 @@ describe("Settings", () => {
             expect(mockGmi.showSettings).toHaveBeenCalledTimes(1);
         });
 
-        test("publishes a signal when a setting has been changed", () => {
-            const expectedSignal = {
+        test("publishes a event when a setting has been changed", () => {
+            const expectedEvent = {
                 channel: "genie-settings",
                 name: "audio",
                 data: false,
@@ -64,22 +64,22 @@ describe("Settings", () => {
             settings.show(mockGame);
             const onSettingChangedCallback = mockGmi.showSettings.mock.calls[0][0];
             onSettingChangedCallback("audio", false);
-            expect(signal.bus.publish).toHaveBeenCalledTimes(1);
-            expect(signal.bus.publish).toHaveBeenCalledWith(expectedSignal);
+            expect(event.bus.publish).toHaveBeenCalledTimes(1);
+            expect(event.bus.publish).toHaveBeenCalledWith(expectedEvent);
         });
 
-        test("publishes a signal when settings has been closed", () => {
-            const expectedSignal = {
+        test("publishes a event when settings has been closed", () => {
+            const expectedEvent = {
                 channel: "genie-settings",
                 name: "settings-closed",
             };
             settings.show(mockGame);
             const onSettingsClosedCallback = mockGmi.showSettings.mock.calls[0][1];
             onSettingsClosedCallback();
-            const publishConfig = signal.bus.publish.mock.calls[0][0];
-            expect(signal.bus.publish).toHaveBeenCalledTimes(1);
-            expect(publishConfig.channel).toBe(expectedSignal.channel);
-            expect(publishConfig.name).toBe(expectedSignal.name);
+            const publishConfig = event.bus.publish.mock.calls[0][0];
+            expect(event.bus.publish).toHaveBeenCalledTimes(1);
+            expect(publishConfig.channel).toBe(expectedEvent.channel);
+            expect(publishConfig.name).toBe(expectedEvent.name);
         });
     });
 

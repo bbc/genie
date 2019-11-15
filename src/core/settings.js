@@ -3,14 +3,14 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as signal from "../core/signal-bus.js";
+import * as event from "../core/event-bus.js";
 import { gmi } from "./gmi/gmi.js";
 
 export const settingsChannel = "genie-settings";
 
 export const create = () => {
     const onSettingChanged = (key, value) => {
-        signal.bus.publish({
+        event.bus.publish({
             channel: settingsChannel,
             name: key,
             data: value,
@@ -18,7 +18,7 @@ export const create = () => {
     };
 
     const onSettingsClosed = () => {
-        signal.bus.publish({
+        event.bus.publish({
             channel: settingsChannel,
             name: "settings-closed",
         });

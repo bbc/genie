@@ -147,7 +147,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
         this._buttons.forEach(button => a11y.addToAccessibleButtons(this.scene, button));
     }
 
-    //TODO this is currently observer pattern but will eventually use pub/sub Phaser.Signals
+    //TODO this is currently observer pattern but will eventually use pub/sub Phaser.Events
     resetButtons(metrics) {
         this._buttons.forEach(button => button.resize(metrics));
     }

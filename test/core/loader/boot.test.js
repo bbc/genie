@@ -9,7 +9,7 @@ import { createMockGmi } from "../../mock/gmi.js";
 import { Boot } from "../../../src/core/loader/boot.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
-import * as signal from "../../../src/core/signal-bus.js";
+import * as event from "../../../src/core/event-bus.js";
 
 describe("Boot", () => {
     let bootScreen;
@@ -99,14 +99,14 @@ describe("Boot", () => {
 
         test("focuses the canvas when settings are closed", () => {
             bootScreen.preload();
-            signal.bus.publish({ channel: "genie-settings", name: "settings-closed" });
+            event.bus.publish({ channel: "genie-settings", name: "settings-closed" });
             expect(mockGame.canvas.focus).toHaveBeenCalled();
         });
 
         describe("audio setting callback", () => {
             test("Disables audio and sets button image to audio-on when mute is false", () => {
                 bootScreen.preload();
-                signal.bus.publish({ channel: "genie-settings", name: "audio", data: false });
+                event.bus.publish({ channel: "genie-settings", name: "audio", data: false });
                 expect(bootScreen.sound.mute).toBe(false);
                 expect(mockAudioButton.setImage).toHaveBeenCalledWith("audio-on");
             });
@@ -114,7 +114,7 @@ describe("Boot", () => {
             test("Enables audio and sets button image to audio-off when mute is true", () => {
                 mockSettings.audio = false;
                 bootScreen.preload();
-                signal.bus.publish({ channel: "genie-settings", name: "audio", data: true });
+                event.bus.publish({ channel: "genie-settings", name: "audio", data: true });
                 expect(bootScreen.sound.mute).toBe(true);
                 expect(mockAudioButton.setImage).toHaveBeenCalledWith("audio-off");
             });
@@ -128,7 +128,7 @@ describe("Boot", () => {
                 ];
                 bootScreen.scene.manager.getScenes.mockReturnValue(mockScenes);
                 bootScreen.preload();
-                signal.bus.publish({ channel: "genie-settings", name: "audio", data: false });
+                event.bus.publish({ channel: "genie-settings", name: "audio", data: false });
                 expect(bootScreen.sound.mute).toBe(false);
                 expect(mockAudioButton.setImage).toHaveBeenCalledWith("audio-on");
                 expect(mockAudioButton2.setImage).toHaveBeenCalledWith("audio-on");

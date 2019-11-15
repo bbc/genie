@@ -11,22 +11,22 @@ describe("Layout Harness", () => {
     let mockScene;
     let mockOnUpEvent;
     let mockGraphicsObject;
-    let mockQaKeySignal;
-    let mockSignal;
+    let mockQaKeyEvent;
+    let mockEvent;
     let onResizeFunction;
 
     beforeEach(() => {
-        mockQaKeySignal = { destroy: jest.fn() };
-        mockSignal = { unsubscribe: jest.fn() };
+        mockQaKeyEvent = { destroy: jest.fn() };
+        mockEvent = { unsubscribe: jest.fn() };
         onScaleChange.add = jest.fn(resizeFunc => {
             onResizeFunction = resizeFunc;
-            return mockSignal;
+            return mockEvent;
         });
         jest.spyOn(global.console, "log").mockImplementation(() => {});
         global.window.__qaMode = {};
         mockOnUpEvent = jest.fn((name, callback) => {
             callback();
-            return mockQaKeySignal;
+            return mockQaKeyEvent;
         });
         mockGraphicsObject = {
             fillRectShape: jest.fn(),
@@ -71,7 +71,7 @@ describe("Layout Harness", () => {
     test("removes the 'q' key event listener when the screen is destroyed", () => {
         mockScene.events.on.mockImplementation((name, callback) => callback());
         createTestHarnessDisplay(mockScene);
-        expect(mockQaKeySignal.destroy).toHaveBeenCalled();
+        expect(mockQaKeyEvent.destroy).toHaveBeenCalled();
     });
 
     test("listens to overlay and screen navigation events when QA mode is on", () => {
@@ -84,8 +84,8 @@ describe("Layout Harness", () => {
     test("stops listening to all events when the screen is destroyed", () => {
         mockScene.events.once = jest.fn((name, callback) => callback());
         createTestHarnessDisplay(mockScene);
-        expect(mockSignal.unsubscribe).toHaveBeenCalled();
-        expect(mockQaKeySignal.destroy).toHaveBeenCalled();
+        expect(mockEvent.unsubscribe).toHaveBeenCalled();
+        expect(mockQaKeyEvent.destroy).toHaveBeenCalled();
         expect(mockScene.events.removeListener).toHaveBeenCalledWith("onoverlayadded", expect.any(Function));
         expect(mockScene.events.removeListener).toHaveBeenCalledWith("onoverlayremoved", expect.any(Function));
     });
@@ -157,10 +157,10 @@ describe("Layout Harness", () => {
             expect(mockGraphicsObject.destroy).toHaveBeenCalledTimes(2);
         });
 
-        test("unsubscribes from the signal bus", () => {
+        test("unsubscribes from the event bus", () => {
             createTestHarnessDisplay(mockScene);
             mockOnUpEvent.mock.calls[0][1]();
-            expect(mockSignal.unsubscribe).toHaveBeenCalled();
+            expect(mockEvent.unsubscribe).toHaveBeenCalled();
         });
         test("does not destroy when there is no layout active", () => {
             mockScene.events.once = jest.fn((name, callback) => callback());
@@ -184,7 +184,7 @@ describe("Layout Harness", () => {
             expect(mockGraphicsObject.destroy).toHaveBeenCalledTimes(2);
             expect(mockScene.add.graphics).toHaveBeenCalledTimes(2);
             expect(onScaleChange.add).toHaveBeenCalled();
-            expect(mockSignal.unsubscribe).toHaveBeenCalled();
+            expect(mockEvent.unsubscribe).toHaveBeenCalled();
         });
     });
 });

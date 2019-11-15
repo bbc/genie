@@ -7,7 +7,7 @@ import _ from "../../lib/lodash/lodash.js";
 
 import { gmi } from "../core/gmi/gmi.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
-import * as signal from "../core/signal-bus.js";
+import * as event from "../core/event-bus.js";
 import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
 import fp from "../../lib/lodash/fp/fp.js";
@@ -89,7 +89,7 @@ export class Screen extends Phaser.Scene {
 
     addOverlay(key) {
         this.events.emit("onoverlayadded");
-        signal.bus.subscribe({
+        event.bus.subscribe({
             channel: overlayChannel,
             name: key,
             callback: this._onOverlayRemoved,
@@ -102,17 +102,17 @@ export class Screen extends Phaser.Scene {
     removeOverlay = () => {
         this.events.emit("onscreenexit");
         this._data.parentScreens.pop();
-        signal.bus.publish({
+        event.bus.publish({
             channel: overlayChannel,
             name: this.scene.key,
             data: { overlay: this },
         });
-        signal.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
+        event.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
     };
 
     _onOverlayRemoved = data => {
         this.events.emit("onoverlayremoved");
-        signal.bus.removeChannel(buttonsChannel(data.overlay));
+        event.bus.removeChannel(buttonsChannel(data.overlay));
         a11y.clearAccessibleButtons();
         a11y.clearElementsFromDom();
         data.overlay.removeAll();
@@ -122,7 +122,7 @@ export class Screen extends Phaser.Scene {
         a11y.appendElementsToDom(this);
         gmi.setStatsScreen(this.scene.key);
 
-        signal.bus.publish({
+        event.bus.publish({
             channel: settingsChannel,
             name: "audio",
             data: gmi.getAllSettings().audio,
@@ -130,13 +130,13 @@ export class Screen extends Phaser.Scene {
     };
 
     removeAll = () => {
-        signal.bus.removeChannel(buttonsChannel(this));
+        event.bus.removeChannel(buttonsChannel(this));
         this._layout && this._layout.destroy();
         delete this._layout;
     };
 
     _navigate = route => {
-        signal.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
+        event.bus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
         this.events.emit("onscreenexit");
         this.scene.bringToTop(route);
         while (this._data.parentScreens.length > 0) {

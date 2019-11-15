@@ -8,7 +8,7 @@ import { createMockGmi } from "../mock/gmi";
 
 import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
 import * as layoutHarness from "../../src/core/qa/layout-harness.js";
-import * as signal from "../../src/core/signal-bus.js";
+import * as event from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
 import { Select } from "../../src/components/select";
@@ -172,34 +172,34 @@ describe("Select Screen", () => {
         });
     });
 
-    describe("signals", () => {
+    describe("events", () => {
         beforeEach(() => {
-            jest.spyOn(signal.bus, "subscribe");
+            jest.spyOn(event.bus, "subscribe");
             selectScreen.create();
         });
 
-        test("adds signal subscriptions to all the buttons", () => {
-            expect(signal.bus.subscribe).toHaveBeenCalledTimes(5);
-            expect(signal.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(signal.bus.subscribe.mock.calls[0][0].name).toBe("previous");
-            expect(signal.bus.subscribe.mock.calls[1][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(signal.bus.subscribe.mock.calls[1][0].name).toBe("next");
-            expect(signal.bus.subscribe.mock.calls[2][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(signal.bus.subscribe.mock.calls[2][0].name).toBe("continue");
-            expect(signal.bus.subscribe.mock.calls[3][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(signal.bus.subscribe.mock.calls[3][0].name).toBe("pause");
-            expect(signal.bus.subscribe.mock.calls[4][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(signal.bus.subscribe.mock.calls[4][0].name).toBe("play");
+        test("adds event subscriptions to all the buttons", () => {
+            expect(event.bus.subscribe).toHaveBeenCalledTimes(5);
+            expect(event.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(selectScreen));
+            expect(event.bus.subscribe.mock.calls[0][0].name).toBe("previous");
+            expect(event.bus.subscribe.mock.calls[1][0].channel).toBe(buttonsChannel(selectScreen));
+            expect(event.bus.subscribe.mock.calls[1][0].name).toBe("next");
+            expect(event.bus.subscribe.mock.calls[2][0].channel).toBe(buttonsChannel(selectScreen));
+            expect(event.bus.subscribe.mock.calls[2][0].name).toBe("continue");
+            expect(event.bus.subscribe.mock.calls[3][0].channel).toBe(buttonsChannel(selectScreen));
+            expect(event.bus.subscribe.mock.calls[3][0].name).toBe("pause");
+            expect(event.bus.subscribe.mock.calls[4][0].channel).toBe(buttonsChannel(selectScreen));
+            expect(event.bus.subscribe.mock.calls[4][0].name).toBe("play");
         });
 
         test("moves to the next game screen when the continue button is pressed", () => {
-            signal.bus.subscribe.mock.calls[2][0].callback();
+            event.bus.subscribe.mock.calls[2][0].callback();
             expect(selectScreen.navigation.next).toHaveBeenCalled();
         });
 
         test("fires a score stat to the GMI with when you select an item ", () => {
             selectScreen.currentIndex = 1;
-            signal.bus.subscribe.mock.calls[2][0].callback();
+            event.bus.subscribe.mock.calls[2][0].callback();
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("test", "select", {
                 metadata: "ELE=[character_2]",
             });
@@ -207,7 +207,7 @@ describe("Select Screen", () => {
 
         test("hides all the accessible elements when the pause button is pressed", () => {
             selectScreen.currentIndex = 1;
-            signal.bus.subscribe.mock.calls[3][0].callback();
+            event.bus.subscribe.mock.calls[3][0].callback();
 
             expect(selectScreen.accessibleCarouselElements.length).toEqual(3);
             expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
@@ -217,8 +217,8 @@ describe("Select Screen", () => {
 
         test("shows the current accessible element when the game is unpaused (by pressing play)", () => {
             selectScreen.currentIndex = 2;
-            signal.bus.subscribe.mock.calls[3][0].callback(); //pauses
-            signal.bus.subscribe.mock.calls[4][0].callback(); //unpauses
+            event.bus.subscribe.mock.calls[3][0].callback(); //pauses
+            event.bus.subscribe.mock.calls[4][0].callback(); //unpauses
 
             expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
             expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(true);
@@ -228,19 +228,19 @@ describe("Select Screen", () => {
         describe("previous button", () => {
             test("switches to the last item when the first item is showing", () => {
                 selectScreen.currentIndex = 0;
-                signal.bus.subscribe.mock.calls[0][0].callback();
+                event.bus.subscribe.mock.calls[0][0].callback();
                 expect(selectScreen.currentIndex === 2).toBe(true);
             });
 
             test("switches to the previous item when any other choice is showing", () => {
                 selectScreen.currentIndex = 2;
-                signal.bus.subscribe.mock.calls[0][0].callback();
+                event.bus.subscribe.mock.calls[0][0].callback();
                 expect(selectScreen.currentIndex === 1).toBe(true);
             });
 
             test("hides all the choices except the current one", () => {
                 selectScreen.currentIndex = 2;
-                signal.bus.subscribe.mock.calls[0][0].callback();
+                event.bus.subscribe.mock.calls[0][0].callback();
 
                 expect(selectScreen.choiceSprites[0].visible).toBe(false);
                 expect(selectScreen.choiceSprites[1].visible).toBe(true);
@@ -265,7 +265,7 @@ describe("Select Screen", () => {
 
             test("set 'aria-hidden' = true on all the choices except the current one", () => {
                 selectScreen.currentIndex = 2;
-                signal.bus.subscribe.mock.calls[0][0].callback();
+                event.bus.subscribe.mock.calls[0][0].callback();
 
                 expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
                 expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(false);
@@ -274,7 +274,7 @@ describe("Select Screen", () => {
 
             test("set display: none on all the choices except the current one", () => {
                 selectScreen.currentIndex = 2;
-                signal.bus.subscribe.mock.calls[0][0].callback();
+                event.bus.subscribe.mock.calls[0][0].callback();
 
                 expect(selectScreen.accessibleCarouselElements[0].style.display).toEqual("none");
                 expect(selectScreen.accessibleCarouselElements[1].style.display).toEqual("block");
@@ -285,13 +285,13 @@ describe("Select Screen", () => {
         describe("next button", () => {
             test("switches to the first item when the last item is showing", () => {
                 selectScreen.currentIndex = 3;
-                signal.bus.subscribe.mock.calls[1][0].callback();
+                event.bus.subscribe.mock.calls[1][0].callback();
                 expect(selectScreen.currentIndex === 1).toBe(true);
             });
 
             test("switches to the next item when any other choice is showing", () => {
                 selectScreen.currentIndex = 1;
-                signal.bus.subscribe.mock.calls[1][0].callback();
+                event.bus.subscribe.mock.calls[1][0].callback();
                 expect(selectScreen.currentIndex === 2).toBe(true);
             });
 
@@ -299,12 +299,12 @@ describe("Select Screen", () => {
                 selectScreen.setData(mockHowToPlayData);
                 selectScreen.create();
                 selectScreen.currentIndex = 1;
-                signal.bus.subscribe.mock.calls[1][0].callback();
+                event.bus.subscribe.mock.calls[1][0].callback();
                 expect(selectScreen.currentIndex === 2).toBe(true);
             });
 
             test("hides all the choices except the current one", () => {
-                signal.bus.subscribe.mock.calls[1][0].callback();
+                event.bus.subscribe.mock.calls[1][0].callback();
                 expect(selectScreen.choiceSprites[0].visible).toBe(false);
                 expect(selectScreen.choiceSprites[1].visible).toBe(true);
                 expect(selectScreen.choiceSprites[2].visible).toBe(false);
@@ -320,7 +320,7 @@ describe("Select Screen", () => {
             test("next button is disabled when how to play and on the last item", () => {
                 selectScreen.setData(mockHowToPlayData);
                 selectScreen.create();
-                const nextButtonClick = signal.bus.subscribe.mock.calls[1][0].callback;
+                const nextButtonClick = event.bus.subscribe.mock.calls[1][0].callback;
                 nextButtonClick();
                 nextButtonClick();
                 expect(selectScreen.buttonLayout.buttons.next.visible).toBe(false);
@@ -328,7 +328,7 @@ describe("Select Screen", () => {
 
             test("set 'aria-hidden' = true on all the choices except the current one", () => {
                 selectScreen.currentIndex = 0;
-                signal.bus.subscribe.mock.calls[1][0].callback();
+                event.bus.subscribe.mock.calls[1][0].callback();
 
                 expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
                 expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(false);
@@ -337,7 +337,7 @@ describe("Select Screen", () => {
 
             test("set display: none on all the choices except the current one", () => {
                 selectScreen.currentIndex = 0;
-                signal.bus.subscribe.mock.calls[1][0].callback();
+                event.bus.subscribe.mock.calls[1][0].callback();
 
                 expect(selectScreen.accessibleCarouselElements[0].style.display).toBe("none");
                 expect(selectScreen.accessibleCarouselElements[1].style.display).toBe("block");
@@ -347,15 +347,15 @@ describe("Select Screen", () => {
             test("focus moves to the next arrow when at the start of the items on How To Play", () => {
                 selectScreen.setData(mockHowToPlayData);
                 selectScreen.create();
-                signal.bus.subscribe.mock.calls[1][0].callback();
-                signal.bus.subscribe.mock.calls[0][0].callback();
+                event.bus.subscribe.mock.calls[1][0].callback();
+                event.bus.subscribe.mock.calls[0][0].callback();
                 expect(selectScreen.buttonLayout.buttons.next.accessibleElement.focus).toHaveBeenCalledTimes(1);
             });
 
             test("focus moves to the previous arrow when at the end of the items on How To Play", () => {
                 selectScreen.setData(mockHowToPlayData);
                 selectScreen.create();
-                const nextButtonClick = signal.bus.subscribe.mock.calls[1][0].callback;
+                const nextButtonClick = event.bus.subscribe.mock.calls[1][0].callback;
                 nextButtonClick();
                 nextButtonClick();
                 expect(selectScreen.buttonLayout.buttons.previous.accessibleElement.focus).toHaveBeenCalledTimes(1);
