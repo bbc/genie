@@ -118,6 +118,21 @@ describe("Boot", () => {
                 expect(bootScreen.sound.mute).toBe(true);
                 expect(mockAudioButton.setImage).toHaveBeenCalledWith("audio-off");
             });
+
+            test("Toogles audio on the scenes that are sleeping as well as the active ones", () => {
+                const mockAudioButton2 = { setImage: jest.fn() };
+                const mockScenes = [
+                    { layout: { buttons: { audio: mockAudioButton } } },
+                    { layout: { buttons: { audio: mockAudioButton2 } } },
+                    undefined,
+                ];
+                bootScreen.scene.manager.getScenes.mockReturnValue(mockScenes);
+                bootScreen.preload();
+                signal.bus.publish({ channel: "genie-settings", name: "audio", data: false });
+                expect(bootScreen.sound.mute).toBe(false);
+                expect(mockAudioButton.setImage).toHaveBeenCalledWith("audio-on");
+                expect(mockAudioButton2.setImage).toHaveBeenCalledWith("audio-on");
+            });
         });
     });
 
