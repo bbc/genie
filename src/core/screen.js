@@ -13,6 +13,7 @@ import * as a11y from "../core/accessibility/accessibility-layer.js";
 import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
+import { settingsChannel } from "./settings.js";
 
 export const overlayChannel = "gel-overlays";
 
@@ -120,6 +121,12 @@ export class Screen extends Phaser.Scene {
         this.sys.accessibleButtons.forEach(button => a11y.addToAccessibleButtons(this, button));
         a11y.appendElementsToDom(this);
         gmi.setStatsScreen(this.scene.key);
+
+        signal.bus.publish({
+            channel: settingsChannel,
+            name: "audio",
+            data: gmi.getAllSettings().audio,
+        });
     };
 
     removeAll = () => {
