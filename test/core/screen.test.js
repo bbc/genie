@@ -12,11 +12,13 @@ import * as GameSound from "../../src/core/game-sound";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import * as signal from "../../src/core/signal-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults";
+import { settingsChannel } from "../../src/core/settings.js";
 
 describe("Screen", () => {
     let screen;
     let mockData;
     let mockGmi;
+    let mockSettings;
     let mockTransientData;
     let mockNavigation;
 
@@ -64,7 +66,11 @@ describe("Screen", () => {
         jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
         jest.spyOn(a11y, "addToAccessibleButtons").mockImplementation(() => {});
 
-        mockGmi = { setStatsScreen: jest.fn() };
+        mockSettings = { audio: true };
+        mockGmi = {
+            setStatsScreen: jest.fn(),
+            getAllSettings: jest.fn(() => mockSettings),
+        };
         createMockGmi(mockGmi);
 
         delete window.__qaMode;
@@ -333,6 +339,18 @@ describe("Screen", () => {
             screen._onOverlayRemoved({ overlay: mockOverlay });
 
             expect(mockGmi.setStatsScreen).toHaveBeenCalledWith("screenKey");
+        });
+
+        test("removing an overlay ensures the settings audio is updated", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "overlay", stop: jest.fn() } };
+            createAndInitScreen();
+            jest.clearAllMocks();
+            screen._onOverlayRemoved({ overlay: mockOverlay });
+            expect(signal.bus.publish).toHaveBeenCalledWith({
+                channel: settingsChannel,
+                name: "audio",
+                data: mockSettings.audio,
+            });
         });
     });
 });
