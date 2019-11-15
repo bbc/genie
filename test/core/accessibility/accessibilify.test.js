@@ -326,6 +326,12 @@ describe("Accessibilify", () => {
                 mockScene.sys.events.on.mock.calls[0][1]();
                 expect(mockAccessibleDomElement.hide).not.toHaveBeenCalled();
             });
+
+            test("does not throw when button.input is undefined (happens after cleanup if update runs)", () => {
+                accessibilify(mockButton);
+                delete mockButton.input;
+                expect(mockScene.sys.events.on.mock.calls[0][1]).not.toThrow();
+            });
         });
         describe("Showing", () => {
             test("shows when button is enabled and visible, and the accessible element is hidden", () => {
