@@ -25,7 +25,7 @@ describe("Layout", () => {
     let mockInputUpAdd;
     let mockGelGroup;
     let mockPhaserGroup;
-    let mockSignalUnsubscribe;
+    let mockEventUnsubscribe;
     let settingsIconsUnsubscribeSpy;
 
     beforeEach(() => {
@@ -82,8 +82,8 @@ describe("Layout", () => {
         settingsIconsUnsubscribeSpy = jest.fn();
         jest.spyOn(settingsIcons, "create").mockImplementation(() => ({ unsubscribe: settingsIconsUnsubscribeSpy }));
 
-        mockSignalUnsubscribe = jest.fn();
-        jest.spyOn(onScaleChange, "add").mockImplementation(() => ({ unsubscribe: mockSignalUnsubscribe }));
+        mockEventUnsubscribe = jest.fn();
+        jest.spyOn(onScaleChange, "add").mockImplementation(() => ({ unsubscribe: mockEventUnsubscribe }));
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -171,7 +171,7 @@ describe("Layout", () => {
             expect(mockGelGroup.reset).toHaveBeenCalledWith(mockMetrics);
         });
 
-        test("subscribes to the scaler sizeChange signal", () => {
+        test("subscribes to the scaler sizeChange event", () => {
             const layout = Layout.create(mockScene, mockMetrics, ["play"]);
             expect(onScaleChange.add).toHaveBeenCalledWith(layout.resize);
         });
@@ -207,8 +207,8 @@ describe("Layout", () => {
             layout.destroy();
         });
 
-        test("removes all signals on this Layout instance", () => {
-            expect(mockSignalUnsubscribe).toHaveBeenCalled();
+        test("removes all events on this Layout instance", () => {
+            expect(mockEventUnsubscribe).toHaveBeenCalled();
             expect(settingsIconsUnsubscribeSpy).toHaveBeenCalled();
         });
 
@@ -232,11 +232,11 @@ describe("Layout", () => {
         });
     });
 
-    describe("removeSignals method", () => {
-        test("removes all signals on this Layout instance", () => {
+    describe("removeEvents method", () => {
+        test("removes all events on this Layout instance", () => {
             const layout = Layout.create(mockScene, mockMetrics, ["play"]);
-            layout.removeSignals();
-            expect(mockSignalUnsubscribe).toHaveBeenCalled();
+            layout.removeEvents();
+            expect(mockEventUnsubscribe).toHaveBeenCalled();
             expect(settingsIconsUnsubscribeSpy).toHaveBeenCalled();
         });
     });

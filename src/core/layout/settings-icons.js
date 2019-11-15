@@ -6,13 +6,13 @@
 import { settingsChannel } from "../settings.js";
 import { gmi } from "../gmi/gmi.js";
 import fp from "../../../lib/lodash/fp/fp.js";
-import * as signal from "../signal-bus.js";
+import * as event from "../event-bus.js";
 
 const fxConfig = {
     title: "FX Off",
     key: "fx-off-icon",
     id: "fx-off",
-    signalName: "motion",
+    eventName: "motion",
     icon: true,
 };
 
@@ -20,16 +20,16 @@ const audioConfig = {
     title: "Audio Off",
     key: "audio-off-icon",
     id: "audio-off",
-    signalName: "audio",
+    eventName: "audio",
     icon: true,
 };
 
-const createSignals = (group, config) => {
+const createEvents = (group, config) => {
     let icon;
 
     const callback = bool => {
         if (!bool && !icon) {
-            const position = config.signalName === "audio" ? group.length - 1 : 0;
+            const position = config.eventName === "audio" ? group.length - 1 : 0;
             icon = group.addButton(config, position);
         } else if (bool && icon) {
             group.removeButton(icon);
@@ -39,15 +39,15 @@ const createSignals = (group, config) => {
         group.reset();
     };
 
-    return signal.bus.subscribe({
+    return event.bus.subscribe({
         channel: settingsChannel,
-        name: config.signalName,
+        name: config.eventName,
         callback,
     });
 };
 
 const publish = fp.curry((settings, key) => {
-    signal.bus.publish({
+    event.bus.publish({
         channel: settingsChannel,
         name: key,
         data: settings[key],
@@ -55,17 +55,17 @@ const publish = fp.curry((settings, key) => {
 });
 
 /**
- * Subscribes two callbacks to the settings signals which show / hide the fx and audio icons
+ * Subscribes two callbacks to the settings events which show / hide the fx and audio icons
  *
  * @param {String} group - group name e.g: "top-right"
  * @param {Array.<string>} buttonIds - Array of gel button identifiers
  * @returns {{unsubscribe: Function}}
  */
 export const create = (group, buttonIds) => {
-    let iconSignals = [createSignals(group, fxConfig)];
+    let iconEvents = [createEvents(group, fxConfig)];
 
     if (!buttonIds.includes("audio")) {
-        iconSignals.push(createSignals(group, audioConfig));
+        iconEvents.push(createEvents(group, audioConfig));
     }
 
     const settings = gmi.getAllSettings();
@@ -74,7 +74,7 @@ export const create = (group, buttonIds) => {
 
     return {
         unsubscribe: () => {
-            iconSignals.forEach(iconsSignal => iconsSignal.unsubscribe());
+            iconEvents.forEach(iconsEvent => iconsEvent.unsubscribe());
         },
     };
 };

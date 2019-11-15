@@ -1,16 +1,16 @@
 /**
- * The signal bus provides a minimal wrapper for Phaser signals.
- * By importing the bus any signal can be subscribed to or published.
- * A signal is automatically created when the publish or subscribe methods are called if the signal doesn't exist.
+ * The event bus provides a minimal wrapper for Phaser events.
+ * By importing the bus any event can be subscribed to or published.
+ * A event is automatically created when the publish or subscribe methods are called if the event doesn't exist.
  *
  * @example
- * import bus from "./signal-bus.js";
+ * import bus from "./event-bus.js";
  * const myCallback = data => console.log(data);
- * bus.subscribe({ callback: myCallback, channel: "channelName", name: "signalName" });
+ * bus.subscribe({ callback: myCallback, channel: "channelName", name: "eventName" });
  *
- * bus.publish({channel: "channelName", name: "signalName", data: [1,2,3] });
+ * bus.publish({channel: "channelName", name: "eventName", data: [1,2,3] });
  *
- * @module core/signal-bus
+ * @module core/event-bus
  * @copyright BBC 2018
  * @author BBC Children's D+E
  * @license Apache-2.0
@@ -18,15 +18,15 @@
 import fp from "../../lib/lodash/fp/fp.js";
 
 /**
- * Creates a new signal bus.
+ * Creates a new event bus.
  * Use the exported const "bus" for a project global singleton
  * @function
- * @returns {{subscribe: function, publish: function, removeChannel: function }} - { {@link module:core/signal-bus.subscribe subscribe}, {@link module:core/signal-bus.publish publish}, {@link module:core/signal-bus.removeChannel removeChannel}, }
+ * @returns {{subscribe: function, publish: function, removeChannel: function }} - { {@link module:core/event-bus.subscribe subscribe}, {@link module:core/event-bus.publish publish}, {@link module:core/event-bus.removeChannel removeChannel}, }
  */
 export const create = () => {
     const _bus = {};
 
-    const addSignal = message => {
+    const addEvent = message => {
         if (!_bus[message.channel]) {
             _bus[message.channel] = new Phaser.Events.EventEmitter();
         }
@@ -34,11 +34,11 @@ export const create = () => {
     };
 
     /**
-     * Removes all signal identifiers from a given channel.
+     * Removes all event identifiers from a given channel.
      *
      * @function
      * @param {string} channel - Channel name
-     * @memberof module:core/signal-bus
+     * @memberof module:core/event-bus
      */
     const removeChannel = channel => {
         if (_bus[channel]) {
@@ -59,32 +59,32 @@ export const create = () => {
     const publishMessage = message => _bus[message.channel].emit(message.name, message.data);
 
     /**
-     * Subscribe to a given signal identifier. Create Signal if it doesn't exist.
+     * Subscribe to a given event identifier. Create Event if it doesn't exist.
      *
      * @function
      * @param {Object} message - Message Payload
      * @param {String} message.channel - Channel name
-     * @param {String} message.name - Signal identifier
-     * @param {Function} message.callback - Signal identifier
-     * @memberof module:core/signal-bus
+     * @param {String} message.name - Event identifier
+     * @param {Function} message.callback - Event identifier
+     * @memberof module:core/event-bus
      */
     const subscribe = fp.flow(
-        addSignal,
+        addEvent,
         addSubscription,
     );
 
     /**
-     * Publish to a given signal identifier. Create Signal if it doesn't exist.
+     * Publish to a given event identifier. Create Event if it doesn't exist.
      *
      * @function
      * @param {Object} message - Message Payload
      * @param {String} message.channel - Channel name
-     * @param {String} message.name - Signal identifier
+     * @param {String} message.name - Event identifier
      * @param {Object=} message.data - Arbitrary data payload sent to all listeners
-     * @memberof module:core/signal-bus
+     * @memberof module:core/event-bus
      */
     const publish = fp.flow(
-        addSignal,
+        addEvent,
         publishMessage,
     );
 

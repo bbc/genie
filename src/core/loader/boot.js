@@ -9,7 +9,7 @@
 import { Screen } from "../screen.js";
 import { gmi } from "../gmi/gmi.js";
 import { settings, settingsChannel } from "../../core/settings.js";
-import * as signal from "../../core/signal-bus.js";
+import * as event from "../../core/event-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as Scaler from "../scaler.js";
 
@@ -41,7 +41,7 @@ export class Boot extends Screen {
         });
         //TODO P3 - if the above could be changed this could potentially be part of loadscreen.js and we could delete boot
 
-        signal.bus.subscribe({
+        event.bus.subscribe({
             channel: settingsChannel,
             name: "settings-closed",
             callback: () => {
@@ -53,7 +53,7 @@ export class Boot extends Screen {
     }
 
     configureAudioSetting() {
-        signal.bus.subscribe({
+        event.bus.subscribe({
             channel: settingsChannel,
             name: "audio",
             callback: () => {

@@ -246,12 +246,12 @@ describe("Accessibilify", () => {
                 expect(mockAccessibleDomElement.position).not.toHaveBeenCalled();
             });
 
-            test("tears down the scale change signal when the button is destroyed", () => {
-                const signal = { unsubscribe: jest.fn() };
-                onScaleChange.add.mockImplementation(() => signal);
+            test("tears down the scale change event when the button is destroyed", () => {
+                const event = { unsubscribe: jest.fn() };
+                onScaleChange.add.mockImplementation(() => event);
                 accessibilify(mockButton);
                 mockButton.destroy();
-                expect(signal.unsubscribe).toHaveBeenCalled();
+                expect(event.unsubscribe).toHaveBeenCalled();
             });
         });
 
