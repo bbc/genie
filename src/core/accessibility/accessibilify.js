@@ -114,7 +114,7 @@ export function accessibilify(button, config, gameButton = true) {
     }
 
     function update() {
-        if (!button.input.enabled || !button.visible) {
+        if ((button.input && !button.input.enabled) || !button.visible) {
             if (accessibleElement.visible()) {
                 accessibleElement.hide();
             }
