@@ -61,7 +61,6 @@ export class GelGroup extends Phaser.GameObjects.Container {
     constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical) {
         super(scene, 0, 0);
         //TODO P3 we used to name the groups - useful for debugging. Might be usuaful as a propery? [NT]
-        //TODO P3 we can now use #private style class fields.
         //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
         this._vPos = vPos;
         this._hPos = hPos;
