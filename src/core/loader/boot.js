@@ -18,13 +18,11 @@ const setImage = button => button.setImage(settings.getAllSettings().audio ? "au
 const getAudioButtons = fp.map(fp.get("layout.buttons.audio"));
 
 export class Boot extends Screen {
-    #navigationConfig;
-
     constructor(navigationConfig) {
         super({ key: "boot" });
-        this.#navigationConfig = navigationConfig;
-        this.#navigationConfig.boot = { routes: { next: "loader" } };
-        this.#navigationConfig.loader = { routes: { next: "home" } };
+        this._navigationConfig = navigationConfig;
+        this._navigationConfig.boot = { routes: { next: "loader" } };
+        this._navigationConfig.loader = { routes: { next: "home" } };
     }
 
     preload() {
@@ -37,7 +35,7 @@ export class Boot extends Screen {
         this.setData({
             parentScreens: [],
             transient: {},
-            navigation: this.#navigationConfig,
+            navigation: this._navigationConfig,
         });
         //TODO P3 - if the above could be changed this could potentially be part of loadscreen.js and we could delete boot
 
