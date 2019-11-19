@@ -8,7 +8,7 @@ const Assets = {
     buttonClick: undefined,
 };
 
-const fadeDuration = 1000;
+const fadeDuration = 250;
 
 const setButtonClickSound = (scene, audioKey) => {
     Assets.buttonClick = scene.sound.add(audioKey);
@@ -25,28 +25,26 @@ const isAlreadyPlaying = audioKey => {
 
 const onFadeComplete = (scene, themeScreenConfig) => {
     Assets.backgroundMusic.destroy();
-    startNextMusic(scene, themeScreenConfig, true);
+    startNextMusic(scene, themeScreenConfig);
 };
 
-const startNextMusic = (scene, themeScreenConfig, fadeIn) => {
-    Assets.backgroundMusic = startMusic(scene, themeScreenConfig.music, fadeIn);
+const startNextMusic = (scene, themeScreenConfig) => {
+    Assets.backgroundMusic = startMusic(scene, themeScreenConfig.music);
 };
 
-const startMusic = (scene, audioKey, fadeIn = false) => {
+const startMusic = (scene, audioKey) => {
     if (!audioKey) return;
 
     let music = scene.sound.add(audioKey);
 
     music.play(undefined, { loop: true });
+    music.volume = 0;
 
-    if (fadeIn) {
-        music.volume = 0;
-        scene.tweens.add({
-            targets: music,
-            volume: 1,
-            duration: fadeDuration,
-        });
-    }
+    scene.tweens.add({
+        targets: music,
+        volume: 1,
+        duration: fadeDuration,
+    });
 
     return music;
 };
