@@ -161,7 +161,7 @@ var GMI = function(options, embedVars, gameDir) {
             settingsForm.appendChild(settingsLabel);
             settingsForm.appendChild(settingsCloseButton);
 
-            settings.append(settingsForm);
+            settings.appendChild(settingsForm);
 
             settingsCheckbox.addEventListener("change", function(){
                 onSettingsChanged("settings-changed", settingsCheckbox.value);
