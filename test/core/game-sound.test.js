@@ -18,7 +18,7 @@ describe("Game Sound", () => {
             },
             tweens: {
                 add: jest.fn(tween => {
-                    tween.onComplete ? tween.onComplete() : null;
+                    tween.onComplete ? tween.onComplete() : undefined;
                 }),
             },
         };
@@ -135,7 +135,7 @@ describe("Game Sound", () => {
                 expect(mockScene.tweens.add).toHaveBeenCalledWith({
                     targets: mockMusic,
                     volume: 1,
-                    duration: 2000,
+                    duration: 1000,
                 });
             });
 
