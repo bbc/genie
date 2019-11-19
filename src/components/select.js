@@ -9,7 +9,7 @@
 
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
-import * as signal from "../core/signal-bus.js";
+import * as event from "../core/event-bus.js";
 import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
@@ -30,7 +30,7 @@ export class Select extends Screen {
         if (this.theme.howToPlay) {
             this.buttonLayout = this.setLayout(["overlayBack", "audio", "settings", "previous", "next"]);
         } else {
-            this.buttonLayout = this.setLayout(["home", "audio", "pauseNoReplay", "previous", "next", "continue"]);
+            this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
         }
 
         this.setButtonVisibility();
@@ -42,7 +42,7 @@ export class Select extends Screen {
             this.theme.choices,
         );
 
-        this.addSignalSubscriptions();
+        this.addEventSubscriptions();
         createTestHarnessDisplay(this);
     }
 
@@ -116,26 +116,26 @@ export class Select extends Screen {
         this.navigation.next();
     }
 
-    addSignalSubscriptions() {
-        signal.bus.subscribe({
+    addEventSubscriptions() {
+        event.bus.subscribe({
             channel: buttonsChannel(this),
             name: "previous",
             callback: this.handleLeftButton.bind(this),
         });
 
-        signal.bus.subscribe({
+        event.bus.subscribe({
             channel: buttonsChannel(this),
             name: "next",
             callback: this.handleRightButton.bind(this),
         });
 
-        signal.bus.subscribe({
+        event.bus.subscribe({
             channel: buttonsChannel(this),
             name: "continue",
             callback: this.startGame.bind(this),
         });
 
-        signal.bus.subscribe({
+        event.bus.subscribe({
             channel: buttonsChannel(this),
             name: "pause",
             callback: () => {
@@ -146,7 +146,7 @@ export class Select extends Screen {
             },
         });
 
-        signal.bus.subscribe({
+        event.bus.subscribe({
             channel: buttonsChannel(this),
             name: "play",
             callback: () => {

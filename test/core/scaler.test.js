@@ -5,13 +5,13 @@
  */
 import * as Scaler from "../../src/core/scaler";
 import * as calculateMetrics from "../../src/core/layout/calculate-metrics.js";
-import * as signal from "../../src/core/signal-bus.js";
+import * as event from "../../src/core/event-bus.js";
 
 describe("Scaler", () => {
     let mockGame;
 
     beforeEach(() => {
-        signal.bus.subscribe = jest.fn();
+        event.bus.subscribe = jest.fn();
         mockGame = {
             scale: {
                 parent: {
@@ -75,7 +75,7 @@ describe("Scaler", () => {
         expect(metrics).toBe("metrics");
     });
 
-    test("adding a callback to the onScaleChange event, subscribes it to the signal bus", () => {
+    test("adding a callback to the onScaleChange event, subscribes it to the event bus", () => {
         const mockCallback = jest.fn();
         const expectedParams = {
             channel: "scaler",
@@ -84,6 +84,6 @@ describe("Scaler", () => {
         };
         Scaler.onScaleChange.add(mockCallback);
         Scaler.init(600, mockGame);
-        expect(signal.bus.subscribe).toHaveBeenCalledWith(expectedParams);
+        expect(event.bus.subscribe).toHaveBeenCalledWith(expectedParams);
     });
 });

@@ -7,19 +7,19 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import * as signal from "../../core/signal-bus.js";
+import * as event from "../../core/event-bus.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
 import { GelButton } from "./gel-button.js";
 import { settings } from "../settings.js";
 
 /**
- * Checks for a default action and if present adds its callback to the signal bus
+ * Checks for a default action and if present adds its callback to the event bus
  *
  * @param {Object} config - Gel configuration for this button
  */
 const defaultAction = config => {
     if (config.action) {
-        signal.bus.subscribe({
+        event.bus.subscribe({
             channel: config.channel,
             name: config.key,
             callback: config.action,

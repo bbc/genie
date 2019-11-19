@@ -9,7 +9,7 @@
 import { Screen } from "../screen.js";
 import { gmi } from "../gmi/gmi.js";
 import { settings, settingsChannel } from "../../core/settings.js";
-import * as signal from "../../core/signal-bus.js";
+import * as event from "../../core/event-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as Scaler from "../scaler.js";
 
@@ -18,13 +18,11 @@ const setImage = button => button.setImage(settings.getAllSettings().audio ? "au
 const getAudioButtons = fp.map(fp.get("layout.buttons.audio"));
 
 export class Boot extends Screen {
-    #navigationConfig;
-
     constructor(navigationConfig) {
         super({ key: "boot" });
-        this.#navigationConfig = navigationConfig;
-        this.#navigationConfig.boot = { routes: { next: "loader" } };
-        this.#navigationConfig.loader = { routes: { next: "home" } };
+        this._navigationConfig = navigationConfig;
+        this._navigationConfig.boot = { routes: { next: "loader" } };
+        this._navigationConfig.loader = { routes: { next: "home" } };
     }
 
     preload() {
@@ -37,11 +35,11 @@ export class Boot extends Screen {
         this.setData({
             parentScreens: [],
             transient: {},
-            navigation: this.#navigationConfig,
+            navigation: this._navigationConfig,
         });
         //TODO P3 - if the above could be changed this could potentially be part of loadscreen.js and we could delete boot
 
-        signal.bus.subscribe({
+        event.bus.subscribe({
             channel: settingsChannel,
             name: "settings-closed",
             callback: () => {
@@ -53,15 +51,15 @@ export class Boot extends Screen {
     }
 
     configureAudioSetting() {
-        signal.bus.subscribe({
+        event.bus.subscribe({
             channel: settingsChannel,
             name: "audio",
             callback: () => {
                 const audioEnabled = settings.getAllSettings().audio;
                 this.sound.mute = !audioEnabled;
-                const activeScenes = this.scene.manager.getScenes(true);
+                const activeScenes = this.scene.manager.getScenes(false);
 
-                fp.map(setImage, getAudioButtons(activeScenes));
+                fp.map(setImage, getAudioButtons(activeScenes).filter(x => x != undefined));
             },
         });
     }

@@ -9,8 +9,8 @@ import { GEL_MIN_ASPECT_RATIO, GEL_MAX_ASPECT_RATIO } from "../../core/layout/ca
 export function createTestHarnessDisplay(scene) {
     let gameAreaGraphics;
     let outerPaddingGraphics;
-    let onScaleChangeSignal;
-    let qaKeySignal;
+    let onScaleChangeEvent;
+    let qaKeyEvent;
 
     if (window.__qaMode) {
         setupQaKey();
@@ -22,7 +22,7 @@ export function createTestHarnessDisplay(scene) {
     function setupQaKey() {
         const qaKey = scene.input.keyboard.addKey("q");
         const toggleQaMode = () => toggle(scene);
-        qaKeySignal = qaKey.on("up", toggleQaMode);
+        qaKeyEvent = qaKey.on("up", toggleQaMode);
     }
 
     function toggle(scene) {
@@ -39,7 +39,7 @@ export function createTestHarnessDisplay(scene) {
         drawGameArea(scene);
         drawOuterPadding(scene);
         window.__qaMode.testHarnessLayoutDisplayed = true;
-        onScaleChangeSignal = onScaleChange.add(onResize.bind(this, scene));
+        onScaleChangeEvent = onScaleChange.add(onResize.bind(this, scene));
     }
 
     function drawGameArea(scene) {
@@ -88,17 +88,17 @@ export function createTestHarnessDisplay(scene) {
             gameAreaGraphics.destroy();
             outerPaddingGraphics.destroy();
             window.__qaMode.testHarnessLayoutDisplayed = false;
-            onScaleChangeSignal.unsubscribe();
+            onScaleChangeEvent.unsubscribe();
         }
     }
 
     function onOverlayAdded() {
-        qaKeySignal.destroy();
+        qaKeyEvent.destroy();
         hide();
     }
 
     function onExit() {
-        qaKeySignal.destroy();
+        qaKeyEvent.destroy();
         hide();
         scene.events.removeListener("onoverlayadded", onOverlayAdded);
         scene.events.removeListener("onoverlayremoved", setupQaKey);

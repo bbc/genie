@@ -61,7 +61,6 @@ export class GelGroup extends Phaser.GameObjects.Container {
     constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical) {
         super(scene, 0, 0);
         //TODO P3 we used to name the groups - useful for debugging. Might be usuaful as a propery? [NT]
-        //TODO P3 we can now use #private style class fields.
         //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
         this._vPos = vPos;
         this._hPos = hPos;
@@ -147,7 +146,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
         this._buttons.forEach(button => a11y.addToAccessibleButtons(this.scene, button));
     }
 
-    //TODO this is currently observer pattern but will eventually use pub/sub Phaser.Signals
+    //TODO this is currently observer pattern but will eventually use pub/sub Phaser.Events
     resetButtons(metrics) {
         this._buttons.forEach(button => button.resize(metrics));
     }

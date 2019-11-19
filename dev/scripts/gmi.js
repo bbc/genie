@@ -197,7 +197,7 @@ var GMI = function(options, embedVars, gameDir) {
     var isAchieved = function(config, stored) {
         var hasProgress = Boolean(config && config.maxProgress);
         var fullProgress = Boolean(stored && config && stored.progress >= config.maxProgress);
-    
+
         return (stored && !hasProgress) || (hasProgress && fullProgress);
     };
 

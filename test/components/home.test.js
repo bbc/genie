@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import * as layoutHarness from "../../src/core/qa/layout-harness.js";
-import * as signal from "../../src/core/signal-bus.js";
+import * as event from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
 import { Home } from "../../src/components/home";
@@ -61,20 +61,20 @@ describe("Home Screen", () => {
         });
     });
 
-    describe("Signals", () => {
+    describe("Events", () => {
         beforeEach(() => {
-            jest.spyOn(signal.bus, "subscribe");
+            jest.spyOn(event.bus, "subscribe");
             Object.defineProperty(homeScreen, "context", { get: jest.fn(() => mockContext) });
             homeScreen.create();
         });
 
-        test("adds a signal subscription to the play button", () => {
-            expect(signal.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(homeScreen));
-            expect(signal.bus.subscribe.mock.calls[0][0].name).toBe("play");
+        test("adds a event subscription to the play button", () => {
+            expect(event.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(homeScreen));
+            expect(event.bus.subscribe.mock.calls[0][0].name).toBe("play");
         });
 
         test("adds a callback for the play button", () => {
-            signal.bus.subscribe.mock.calls[0][0].callback();
+            event.bus.subscribe.mock.calls[0][0].callback();
             expect(homeScreen.navigation.next).toHaveBeenCalledTimes(1);
         });
     });

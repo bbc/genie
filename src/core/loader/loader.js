@@ -20,11 +20,10 @@ const getMissingPacks = (masterPack, keys) =>
         .filter(key => !masterPack.hasOwnProperty(key));
 
 export class Loader extends Screen {
-    #loadbar;
-
     constructor() {
         loadPack.path = gmi.gameDir + gmi.embedVars.configPath;
         super({ key: "loader", pack: loadPack });
+        this._loadbar = undefined;
     }
 
     preload() {
@@ -53,13 +52,13 @@ export class Loader extends Screen {
 
     createLoadBar() {
         this.add.image(0, 0, "loader.loadbarBackground");
-        this.#loadbar = this.add.image(0, 0, "loader.loadbar");
+        this._loadbar = this.add.image(0, 0, "loader.loadbar");
         this.updateLoadBar(0);
     }
 
     updateLoadBar = progress => {
-        this.#loadbar.frame.cutWidth = this.#loadbar.width * progress;
-        this.#loadbar.frame.updateUVs();
+        this._loadbar.frame.cutWidth = this._loadbar.width * progress;
+        this._loadbar.frame.updateUVs();
 
         if (window.__qaMode) {
             console.log("Loader progress:", progress); // eslint-disable-line no-console

@@ -9,7 +9,7 @@ import { Select } from "./components/select.js";
 import { GameTest } from "./components/test-screens/game.js";
 import { Pause } from "./components/overlays/pause.js";
 import { settingsChannel } from "./core/settings.js";
-import * as signal from "./core/signal-bus.js";
+import * as event from "./core/event-bus.js";
 import { startup } from "./core/startup.js";
 
 const settingsConfig = {
@@ -28,7 +28,7 @@ const settingsConfig = {
     ],
 };
 
-signal.bus.subscribe({
+event.bus.subscribe({
     channel: settingsChannel,
     name: "custom1",
     callback: value => {

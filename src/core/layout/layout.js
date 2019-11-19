@@ -62,7 +62,7 @@ export function create(scene, metrics, buttonIds) {
         tabSort(buttonIds).map(name => groups[config[name].group].addButton(config[name])),
     );
 
-    const iconSignals = settingsIcons.create(groups.topRight, buttonIds);
+    const iconEvents = settingsIcons.create(groups.topRight, buttonIds);
 
     /**
      * Attach a callback to the onInputUp event of a given Gel button
@@ -87,15 +87,15 @@ export function create(scene, metrics, buttonIds) {
     };
     resize(metrics);
 
-    const signal = onScaleChange.add(resize);
+    const event = onScaleChange.add(resize);
 
-    const removeSignals = () => {
-        signal.unsubscribe();
-        iconSignals.unsubscribe();
+    const removeEvents = () => {
+        event.unsubscribe();
+        iconEvents.unsubscribe();
     };
 
     const destroy = () => {
-        removeSignals();
+        removeEvents();
         root.destroy();
     };
 
@@ -106,7 +106,7 @@ export function create(scene, metrics, buttonIds) {
         makeAccessible,
         resize,
         root,
-        removeSignals,
+        removeEvents,
         setAction,
     };
 }
