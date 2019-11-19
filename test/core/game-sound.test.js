@@ -18,7 +18,7 @@ describe("Game Sound", () => {
             },
             tweens: {
                 add: jest.fn(tween => {
-                    tween.onComplete();
+                    tween.onComplete ? tween.onComplete() : null;
                 }),
             },
         };
@@ -127,6 +127,16 @@ describe("Game Sound", () => {
                 GameSound.setupScreenMusic(mockScene, { music: "test/music" });
                 expect(mockScene.tweens.add).toHaveBeenCalled();
                 expect(mockCurrentMusic.destroy).toHaveBeenCalled();
+            });
+
+            test("starts and fades in the next music track", () => {
+                GameSound.setupScreenMusic(mockScene, { music: "test/music" });
+                expect(mockScene.tweens.add).toHaveBeenCalledTimes(2);
+                expect(mockScene.tweens.add).toHaveBeenCalledWith({
+                    targets: mockMusic,
+                    volume: 1,
+                    duration: 2000,
+                });
             });
 
             describe("if there is no music config for the screen", () => {
