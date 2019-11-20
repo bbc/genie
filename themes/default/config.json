@@ -10,7 +10,30 @@
         },
         "character-select": {
             "music": "loader.backgroundMusic",
-            "showTitle": true,
+            "title": {
+                "image": "title",
+                "text": {
+                    "value": "",
+                    "styles": {
+                        "fontSize": "",
+                        "color": "",
+                        "align": ""
+                    }
+                },
+                "visible": true
+            },
+            "subtitle": {
+                "image": "",
+                "text": {
+                    "value": "",
+                    "styles": {
+                        "fontSize": "",
+                        "color": "",
+                        "align": ""
+                    }
+                },
+                "visible": false
+            },
             "choices": [
                 {
                     "asset": "carousel1",
