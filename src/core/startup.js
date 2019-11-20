@@ -26,7 +26,6 @@ export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scen
 export function startup(screenConfig, settingsConfig = {}) {
     setGmi(settingsConfig, window);
     hookErrors(gmi.gameContainerId);
-    a11y.setup(getContainerDiv());
 
     const browser = getBrowser();
     const scenes = getScenes(screenConfig);
@@ -74,6 +73,7 @@ export function startup(screenConfig, settingsConfig = {}) {
     const game = new Phaser.Game(phaserConfig);
 
     qaMode.create(window, game);
+    a11y.setup(getContainerDiv());
 }
 
 function getContainerDiv() {
