@@ -6,7 +6,8 @@
 
 import { Home } from "../src/components/home";
 import { Results } from "../src/components/results";
-import { Select } from "../src/components/select-new";
+import { SelectNew } from "../src/components/select-new";
+import { Select } from "../src/components/select";
 import { GameTest } from "../src/components/test-screens/game";
 import { Pause } from "../src/components/overlays/pause";
 import { settingsChannel } from "../src/core/settings";
@@ -41,7 +42,7 @@ describe("Main", () => {
                 },
             },
             "character-select": {
-                scene: Select,
+                scene: SelectNew,
                 routes: {
                     next: "level-select",
                     home: "home",
