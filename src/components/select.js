@@ -19,7 +19,7 @@ export class Select extends Screen {
 
         this.theme = this.context.config.theme[this.scene.key];
         if (this.theme.showTitle) {
-            const title = this.theme.howToPlay
+            const title = this.theme.howToPlay // eslint-disable-line no-unused-vars
                 ? this.add.image(0, -230, `${this.scene.key}.title`)
                 : this.add.image(0, -170, `${this.scene.key}.title`);
         }
