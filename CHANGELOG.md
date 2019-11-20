@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.0.0 | |
 | | Upgrade to Phaser 3 | |
 | 2.0.7 | |
 | | Remove fullscreen api usage | |

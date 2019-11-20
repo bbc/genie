@@ -6,7 +6,7 @@
 import { settings, settingsChannel } from "../../core/settings.js";
 // import * as GameSound from "../../core/game-sound.js";
 import { gmi } from "../../core/gmi/gmi.js";
-import * as signal from "../signal-bus.js";
+import * as event from "../event-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const pushLevelId = (screen, params) => {
@@ -86,7 +86,7 @@ export const config = screen => {
                 const audioEnabled = gmi.getAllSettings().audio;
                 gmi.setAudio(!audioEnabled);
 
-                signal.bus.publish({
+                event.bus.publish({
                     channel: settingsChannel,
                     name: "audio",
                 });
@@ -107,20 +107,6 @@ export const config = screen => {
             },
         },
         pause: {
-            group: "topRight",
-            title: "Pause",
-            key: "pause",
-            ariaLabel: "Pause Game",
-            order: 6,
-            id: "__pause",
-            channel: buttonsChannel(screen),
-            action: ({ screen }) => {
-                screen.scene.pause();
-                gmi.sendStatsEvent("pause", "click");
-                screen.addOverlay("pause");
-            },
-        },
-        pauseNoReplay: {
             group: "topRight",
             title: "Pause",
             key: "pause",

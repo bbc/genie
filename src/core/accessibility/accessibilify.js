@@ -21,7 +21,7 @@ export function accessibilify(button, config, gameButton = true) {
         config,
     );
 
-    let signal;
+    let event;
     const sys = button.scene.sys;
     const scene = button.scene;
     const elementId = scene.scene.key + config.id;
@@ -105,16 +105,16 @@ export function accessibilify(button, config, gameButton = true) {
             teardown();
             return _destroy.apply(button, arguments);
         };
-        signal = onScaleChange.add(resizeAndRepositionElement);
+        event = onScaleChange.add(resizeAndRepositionElement);
     }
 
     function teardown() {
         sys.events.off(Phaser.Scenes.Events.UPDATE, update);
-        signal.unsubscribe();
+        event.unsubscribe();
     }
 
     function update() {
-        if (!button.input.enabled || !button.visible) {
+        if ((button.input && !button.input.enabled) || !button.visible) {
             if (accessibleElement.visible()) {
                 accessibleElement.hide();
             }
