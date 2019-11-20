@@ -8,7 +8,7 @@ import * as layoutHarness from "../../src/core/qa/layout-harness.js";
 import * as event from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
-import { Select } from "../../src/components/select.js";
+import { Select } from "../../src/components/select-new.js/index.js";
 
 describe("Select Screen", () => {
     let mockHowToPlayData;
