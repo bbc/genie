@@ -10,6 +10,7 @@
         },
         "character-select": {
             "music": "loader.backgroundMusic",
+            "showTitle": true,
             "choices": [
                 {
                     "asset": "carousel1",
@@ -46,6 +47,7 @@
         },
         "level-select": {
             "music": "loader.backgroundMusic",
+            "showTitle": true,
             "choices": [
                 {
                     "asset": "carousel1",
@@ -101,6 +103,7 @@
             }
         },
         "how-to-play": {
+            "showTitle": true,
             "isOverlay": true,
             "howToPlay": true,
             "choices": [

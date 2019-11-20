@@ -5,7 +5,7 @@
  */
 import { Home } from "./components/home.js";
 import { Results } from "./components/results.js";
-import { Select } from "./components/select-new.js";
+import { Select } from "./components/select.js";
 import { GameTest } from "./components/test-screens/game.js";
 import { Pause } from "./components/overlays/pause.js";
 import { settingsChannel } from "./core/settings.js";
