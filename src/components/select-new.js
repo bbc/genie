@@ -39,7 +39,7 @@ export class Select extends Screen {
     }
 
     setVisualElement(config) {
-        if (config.visible) {
+        if (!!config.visible) {
             return this.theme.howToPlay
                 ? this.constructVisualElement(0, -230, config)
                 : this.constructVisualElement(0, -170, config);
@@ -53,7 +53,10 @@ export class Select extends Screen {
                 ? this.add.text(x, y, config.text.value, config.text.styles || this.styleDefaults)
                 : undefined,
         };
-        visualElements.text.setOrigin(0.5);
+        if (visualElements.text) {
+            visualElements.text.setOrigin(0.5);
+        }
+
         return visualElements;
     }
 

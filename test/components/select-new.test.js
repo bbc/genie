@@ -16,16 +16,31 @@ describe("Select Screen", () => {
     let selectScreen;
     let mockLayout;
     let mockData;
+    let defaultTextStyle;
+    let setOrigin;
 
     beforeEach(() => {
         jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
-
+        setOrigin = jest.fn();
         mockData = {
             config: {
                 theme: {
                     "test-select": {
                         displayElement: ["title", "subtitle"],
-                        showTitle: true,
+                        title: {
+                            image: "title",
+                            text: {
+                                value: "",
+                            },
+                            visible: true,
+                        },
+                        subtitle: {
+                            image: "subtitle",
+                            text: {
+                                value: "",
+                            },
+                            visible: false,
+                        },
                         showSubtitle: true,
                         choices: [
                             { asset: "character1" },
@@ -44,7 +59,20 @@ describe("Select Screen", () => {
                 theme: {
                     "test-select": {
                         howToPlay: true,
-                        showTitle: true,
+                        title: {
+                            image: "title",
+                            text: {
+                                value: "",
+                            },
+                            visible: true,
+                        },
+                        subtitle: {
+                            image: "subtitle",
+                            text: {
+                                value: "",
+                            },
+                            visible: false,
+                        },
                         showSubtitle: false,
                         choices: [
                             { asset: "character1" },
@@ -73,6 +101,9 @@ describe("Select Screen", () => {
         selectScreen.navigation = { next: jest.fn() };
         selectScreen.setLayout = jest.fn(() => mockLayout);
         selectScreen.add = {
+            text: jest.fn().mockImplementation((x, y, text, styles) => ({
+                setOrigin,
+            })),
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
             sprite: jest.fn().mockImplementation((x, y, assetName) => {
                 if (assetName === "test-select.character1") {
@@ -86,6 +117,8 @@ describe("Select Screen", () => {
                 }
             }),
         };
+
+        defaultTextStyle = { align: "center", fontFamily: "Arial", fontSize: "24px" };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -97,15 +130,129 @@ describe("Select Screen", () => {
             expect(selectScreen.add.image).toHaveBeenCalledWith(0, 0, "test-select.background");
         });
 
-        test("adds a title image when showTitle is true", () => {
-            expect(selectScreen.add.image).toHaveBeenCalledWith(0, -170, "test-select.title");
-        });
+        // TODO:
+        // Add tests for text and text styles.
+        describe("titles and subtitles", () => {
+            test("adds a title image when title.visibile is true and an image is specified", () => {
+                expect(selectScreen.add.image).toHaveBeenCalledWith(0, -170, "test-select.title");
+            });
 
-        test("does not add a title image when showTitle is false", () => {
-            jest.clearAllMocks();
-            mockData.config.theme["test-select"].showTitle = false;
-            selectScreen.create();
-            expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.title");
+            test("does not add a title image when no image is specified", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.image = "";
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.title");
+            });
+
+            test("does not add a title image when title.visible is false", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.visible = false;
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.title");
+            });
+
+            test("adds title text with default styles when text is supplied but no style is provided", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.visible = true;
+                mockData.config.theme["test-select"].title.text.value = "testTitleText";
+                selectScreen.create();
+                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -170, "testTitleText", defaultTextStyle);
+                expect(setOrigin).toHaveBeenCalledWith(0.5);
+            });
+
+            test("adds title text with config styles when text is supplied with styling", () => {
+                const styling = {
+                    id: "titleStyling",
+                };
+
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.visible = true;
+                mockData.config.theme["test-select"].title.text.value = "testTitleText";
+                mockData.config.theme["test-select"].title.text.styles = styling;
+                selectScreen.create();
+                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -170, "testTitleText", styling);
+                expect(setOrigin).toHaveBeenCalledWith(0.5);
+            });
+
+            test("does not add a title text when title.visible is false", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].subtitle.visible = false;
+                mockData.config.theme["test-select"].subtitle.text.value = "testText";
+                selectScreen.create();
+                expect(selectScreen.add.text).not.toHaveBeenCalledWith(0, -170, "testText");
+            });
+
+            test("does not add a title image when title.image is not defined", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title = {
+                    visibile: true,
+                    image: "",
+                };
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.title");
+            });
+
+            test("adds a subtitle image when subtitle.visibile is true", () => {
+                expect(selectScreen.add.image).toHaveBeenCalledWith(0, -170, "test-select.title");
+            });
+
+            test("does not add a subtitle image when subtitle.visible is false", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].subtitle.visible = false;
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.subtitle");
+            });
+
+            test("does not add a subtitle image when no image is specified", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.visible = false;
+                mockData.config.theme["test-select"].subtitle.image = "";
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.title");
+            });
+
+            test("adds subtitle text with default styles when text is supplied but no style is provided", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.visible = false;
+                mockData.config.theme["test-select"].subtitle.visible = true;
+                mockData.config.theme["test-select"].subtitle.text.value = "testSubtitleText";
+                selectScreen.create();
+                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -170, "testSubtitleText", defaultTextStyle);
+                expect(setOrigin).toHaveBeenCalledWith(0.5);
+            });
+
+            test("adds subtitle text with config styles when text is supplied with styling", () => {
+                const styling = {
+                    id: "subtitleStyling",
+                };
+
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.visible = false;
+                mockData.config.theme["test-select"].subtitle.visible = true;
+                mockData.config.theme["test-select"].subtitle.text.value = "testSubtitleText";
+                mockData.config.theme["test-select"].subtitle.text.styles = styling;
+                selectScreen.create();
+                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -170, "testSubtitleText", styling);
+                expect(setOrigin).toHaveBeenCalledWith(0.5);
+            });
+
+            test("does not add subtitle text when subtitle.visible is false", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].subtitle.visible = false;
+                mockData.config.theme["test-select"].subtitle.text.value = "testText";
+                selectScreen.create();
+                expect(selectScreen.add.text).not.toHaveBeenCalledWith(0, -170, "testText");
+            });
+
+            test("does not add a subtitle image when subtitle.image is not defined", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].subtitle = {
+                    visibile: true,
+                    image: "",
+                };
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.subtitle");
+            });
         });
 
         test("adds GEL buttons to layout", () => {
@@ -144,21 +291,6 @@ describe("Select Screen", () => {
             jest.spyOn(event.bus, "subscribe");
             selectScreen.create();
         });
-
-        // Select Screen - Will want this back once buttons are all set up correctly - JB
-        // test("adds event subscriptions to all the buttons", () => {
-        //     expect(event.bus.subscribe).toHaveBeenCalledTimes(5);
-        //     expect(event.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(selectScreen));
-        //     expect(event.bus.subscribe.mock.calls[0][0].name).toBe("previous");
-        //     expect(event.bus.subscribe.mock.calls[1][0].channel).toBe(buttonsChannel(selectScreen));
-        //     expect(event.bus.subscribe.mock.calls[1][0].name).toBe("next");
-        //     expect(event.bus.subscribe.mock.calls[2][0].channel).toBe(buttonsChannel(selectScreen));
-        //     expect(event.bus.subscribe.mock.calls[2][0].name).toBe("continue");
-        //     expect(event.bus.subscribe.mock.calls[3][0].channel).toBe(buttonsChannel(selectScreen));
-        //     expect(event.bus.subscribe.mock.calls[3][0].name).toBe("pause");
-        //     expect(event.bus.subscribe.mock.calls[4][0].channel).toBe(buttonsChannel(selectScreen));
-        //     expect(event.bus.subscribe.mock.calls[4][0].name).toBe("play");
-        // });
 
         test("adds event subscription to the continue button", () => {
             expect(event.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(selectScreen));

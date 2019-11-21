@@ -8,7 +8,7 @@ const Assets = {
     buttonClick: undefined,
 };
 
-const fadeDuration = 1000;
+const fadeDuration = 250;
 
 const setButtonClickSound = (scene, audioKey) => {
     Assets.buttonClick = scene.sound.add(audioKey);

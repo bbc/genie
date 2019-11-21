@@ -6,7 +6,7 @@
 
 import { Home } from "../src/components/home";
 import { Results } from "../src/components/results";
-import { SelectNew } from "../src/components/select-new";
+import { Select as SelectNew } from "../src/components/select-new";
 import { Select } from "../src/components/select";
 import { GameTest } from "../src/components/test-screens/game";
 import { Pause } from "../src/components/overlays/pause";
