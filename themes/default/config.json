@@ -11,21 +11,31 @@
         "character-select": {
             "music": "loader.backgroundMusic",
             "title": {
-                "image": "title",
+                "image": {
+                    "imageId": "title",
+                    "xOffset": 0,
+                    "yOffset": 0
+                },
                 "text": {
                     "value": "",
+                    "xOffset": 0,
+                    "yOffset": 0,
                     "styles": {
-                        "fontSize": "",
-                        "color": "",
-                        "align": ""
+                        "fontSize": "24px"
                     }
                 },
                 "visible": true
             },
             "subtitle": {
-                "image": "",
+                "image": {
+                    "imageId": "",
+                    "xOffset": 0,
+                    "yOffset": 0
+                },
                 "text": {
                     "value": "",
+                    "xOffset": 0,
+                    "yOffset": 0,
                     "styles": {
                         "fontSize": "",
                         "color": "",

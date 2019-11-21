@@ -39,18 +39,35 @@ export class Select extends Screen {
     }
 
     setVisualElement(config) {
-        if (!!config.visible) {
+        if (config && config.visible) {
             return this.theme.howToPlay
                 ? this.constructVisualElement(0, -230, config)
                 : this.constructVisualElement(0, -170, config);
         }
     }
 
+    calculateOffset(x, y, config) {
+        return {
+            x: x + (parseInt(config.xOffset) || 0),
+            y: y + (parseInt(config.yOffset) || 0),
+        };
+    }
+
     constructVisualElement(x, y, config) {
+        const imagePosition = this.calculateOffset(x, y, config.image);
+        const textPosition = this.calculateOffset(x, y, config.text);
+
         const visualElements = {
-            image: config.image ? this.add.image(x, y, `${this.scene.key}.${config.image}`) : undefined,
+            image: config.image.imageId
+                ? this.add.image(imagePosition.x, imagePosition.y, `${this.scene.key}.${config.image.imageId}`)
+                : undefined,
             text: config.text.value
-                ? this.add.text(x, y, config.text.value, config.text.styles || this.styleDefaults)
+                ? this.add.text(
+                      textPosition.x,
+                      textPosition.y,
+                      config.text.value,
+                      config.text.styles || this.styleDefaults,
+                  )
                 : undefined,
         };
         if (visualElements.text) {
