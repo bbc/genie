@@ -121,7 +121,7 @@ export const config = screen => {
             },
         },
         previous: {
-            group: "middleLeft",
+            group: "middleLeftSafe",
             title: "Previous",
             key: "previous",
             ariaLabel: "Previous Item",
@@ -183,7 +183,7 @@ export const config = screen => {
             },
         },
         next: {
-            group: "middleRight",
+            group: "middleRightSafe",
             title: "Next",
             key: "next",
             ariaLabel: "Next Item",
