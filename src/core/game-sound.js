@@ -54,7 +54,7 @@ const stopCurrentAndStartNextMusic = (scene, themeScreenConfig) => {
         scene.tweens.add({
             targets: Assets.backgroundMusic,
             volume: 0,
-            duration: fadeDuration / 2,
+            duration: fadeDuration,
             onComplete: onFadeComplete.bind(this, scene, themeScreenConfig),
         });
     } else {
