@@ -140,29 +140,9 @@ describe("Select Screen", () => {
             expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        test("adds GEL buttons to layout when how to play", () => {
-            selectScreen.setData(mockHowToPlayData);
-            selectScreen.create();
-            const expectedButtons = ["overlayBack", "audio", "settings", "previous", "next"];
-            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
-
         test("creates a layout harness with correct params", () => {
             selectScreen.create();
             expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(selectScreen);
-        });
-
-        test("does not adjust page title position when on how to play", () => {
-            expect(selectScreen.add.image.mock.calls[1]).toEqual([0, -170, "test-select.title"]);
-        });
-
-        test("adjusts page title position when on how to play and showTitle is true", () => {
-            selectScreen.setData(mockHowToPlayData);
-            selectScreen.currentIndex = 0;
-            jest.clearAllMocks();
-            selectScreen.create();
-
-            expect(selectScreen.add.image.mock.calls[1]).toEqual([0, -230, "test-select.title"]);
         });
 
         describe("titles", () => {

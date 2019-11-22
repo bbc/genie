@@ -30,9 +30,7 @@ export class Select extends Screen {
         this.title = this.setVisualElement(this.titleConfig);
         this.subtitle = this.setVisualElement(this.subtitleConfig);
 
-        this.buttonLayout = this.theme.howToPlay
-            ? this.setLayout(["overlayBack", "audio", "settings", "previous", "next"])
-            : this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
+        this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
         this.addEventSubscritions();
         createTestHarnessDisplay(this);
@@ -40,9 +38,7 @@ export class Select extends Screen {
 
     setVisualElement(config) {
         if (config && config.visible) {
-            return this.theme.howToPlay
-                ? this.constructVisualElement(0, -230, config)
-                : this.constructVisualElement(0, -170, config);
+            return this.constructVisualElement(0, -170, config);
         }
     }
 
