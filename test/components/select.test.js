@@ -3,36 +3,47 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { domElement } from "../mock/dom-element";
-import { createMockGmi } from "../mock/gmi";
 
-import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
 import * as layoutHarness from "../../src/core/qa/layout-harness.js";
 import * as event from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
-import { Select } from "../../src/components/select";
+import { Select } from "../../src/components/select.js";
 
 describe("Select Screen", () => {
-    let mockAccessibleElements;
     let mockHowToPlayData;
     let characterSprites;
     let selectScreen;
     let mockLayout;
     let mockData;
-    let mockGmi;
+    let defaultTextStyle;
+    let setOrigin;
 
     beforeEach(() => {
         jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
-
-        characterSprites = [{ visible: "" }, { visible: "" }, { visible: "" }];
-        mockAccessibleElements = [domElement(), domElement(), domElement()];
-
-        jest.spyOn(accessibleCarouselElements, "create").mockReturnValue(mockAccessibleElements);
+        setOrigin = jest.fn();
         mockData = {
             config: {
                 theme: {
                     "test-select": {
+                        title: {
+                            image: {
+                                imageId: "title",
+                            },
+                            text: {
+                                value: "",
+                            },
+                            visible: true,
+                        },
+                        subtitle: {
+                            image: {
+                                imageId: "subtitle",
+                            },
+                            text: {
+                                value: "",
+                            },
+                            visible: false,
+                        },
                         choices: [
                             { asset: "character1" },
                             { asset: "character2", title: "character_2" },
@@ -50,6 +61,24 @@ describe("Select Screen", () => {
                 theme: {
                     "test-select": {
                         howToPlay: true,
+                        title: {
+                            image: {
+                                imageId: "title",
+                            },
+                            text: {
+                                value: "",
+                            },
+                            visible: true,
+                        },
+                        subtitle: {
+                            image: {
+                                imageId: "subtitle",
+                            },
+                            text: {
+                                value: "",
+                            },
+                            visible: false,
+                        },
                         choices: [
                             { asset: "character1" },
                             { asset: "character2", title: "character_2" },
@@ -62,9 +91,6 @@ describe("Select Screen", () => {
             qaMode: { active: false },
             popupScreens: [],
         };
-
-        mockGmi = { sendStatsEvent: jest.fn() };
-        createMockGmi(mockGmi);
 
         mockLayout = {
             buttons: {
@@ -80,6 +106,9 @@ describe("Select Screen", () => {
         selectScreen.navigation = { next: jest.fn() };
         selectScreen.setLayout = jest.fn(() => mockLayout);
         selectScreen.add = {
+            text: jest.fn().mockImplementation((x, y, text, styles) => ({
+                setOrigin,
+            })),
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
             sprite: jest.fn().mockImplementation((x, y, assetName) => {
                 if (assetName === "test-select.character1") {
@@ -93,6 +122,8 @@ describe("Select Screen", () => {
                 }
             }),
         };
+
+        defaultTextStyle = { align: "center", fontFamily: "Arial", fontSize: "24px" };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -104,31 +135,9 @@ describe("Select Screen", () => {
             expect(selectScreen.add.image).toHaveBeenCalledWith(0, 0, "test-select.background");
         });
 
-        test("adds a title image", () => {
-            expect(selectScreen.add.image).toHaveBeenCalledWith(0, -170, "test-select.title");
-        });
-
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["home", "audio", "pause", "previous", "next", "continue"];
             expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
-
-        test("adds GEL buttons to layout when how to play", () => {
-            selectScreen.setData(mockHowToPlayData);
-            selectScreen.create();
-            const expectedButtons = ["overlayBack", "audio", "settings", "previous", "next"];
-            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
-
-        test("creates sprites for each choice", () => {
-            expect(selectScreen.add.sprite).toHaveBeenCalledTimes(3);
-            expect(selectScreen.add.sprite.mock.calls[0]).toEqual([0, 0, "test-select.character1"]);
-            expect(selectScreen.add.sprite.mock.calls[1]).toEqual([0, 0, "test-select.character2"]);
-            expect(selectScreen.add.sprite.mock.calls[2]).toEqual([0, 0, "test-select.character3"]);
-        });
-
-        test("adds the choices", () => {
-            expect(selectScreen.choiceSprites).toEqual(characterSprites);
         });
 
         test("creates a layout harness with correct params", () => {
@@ -136,39 +145,163 @@ describe("Select Screen", () => {
             expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(selectScreen);
         });
 
-        test("does not adjust page title position when on how to play", () => {
-            expect(selectScreen.add.image.mock.calls[1]).toEqual([0, -170, "test-select.title"]);
+        describe("titles", () => {
+            test("adds a title image when title.visibile is true and an image is specified", () => {
+                expect(selectScreen.add.image).toHaveBeenCalledWith(0, -170, "test-select.title");
+            });
+
+            test("does not add a title if no config is provided", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title = undefined;
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.title");
+                expect(selectScreen.add.text).not.toHaveBeenCalled();
+            });
+
+            test("does not add a title image when no image is specified", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.image = "";
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.title");
+            });
+
+            test("does not add a title image when title.visible is false", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.visible = false;
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.title");
+            });
+
+            test("adds title text with default styles when text is supplied but no style is provided", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.text.value = "testTitleText";
+                selectScreen.create();
+                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -170, "testTitleText", defaultTextStyle);
+                expect(setOrigin).toHaveBeenCalledWith(0.5);
+            });
+
+            test("adds title text with config styles when text is supplied with styling", () => {
+                const styling = {
+                    id: "titleStyling",
+                };
+
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.visible = true;
+                mockData.config.theme["test-select"].title.text.value = "testTitleText";
+                mockData.config.theme["test-select"].title.text.styles = styling;
+                selectScreen.create();
+                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -170, "testTitleText", styling);
+                expect(setOrigin).toHaveBeenCalledWith(0.5);
+            });
+
+            test("does not add a title text when title.visible is false", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].subtitle.text.value = "testText";
+                selectScreen.create();
+                expect(selectScreen.add.text).not.toHaveBeenCalledWith(0, -170, "testText");
+            });
+
+            test("does not add a title image when title.image is not defined", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title = {
+                    visibile: true,
+                    image: { imageId: "" },
+                };
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.title");
+            });
+
+            test("does respect offset coordinates provided in config", () => {
+                mockData.config.theme["test-select"].title = {
+                    visible: true,
+                    image: {
+                        imageId: "title",
+                        xOffset: 50,
+                        yOffset: 50,
+                    },
+                    text: {
+                        value: "title",
+                        xOffset: 50,
+                        yOffset: 50,
+                    },
+                };
+                jest.clearAllMocks();
+                selectScreen.create();
+                expect(selectScreen.add.image).toHaveBeenCalledWith(50, -120, "test-select.title");
+                expect(selectScreen.add.text).toHaveBeenCalledWith(50, -120, "title", defaultTextStyle);
+            });
         });
 
-        test("adjusts page title position when on how to play", () => {
-            selectScreen.setData(mockHowToPlayData);
-            selectScreen.currentIndex = 0;
-            jest.clearAllMocks();
-            selectScreen.create();
+        describe("subtitles", () => {
+            beforeEach(() => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].title.visible = false;
+                mockData.config.theme["test-select"].subtitle.visible = true;
+            });
 
-            expect(selectScreen.add.image.mock.calls[1]).toEqual([0, -230, "test-select.title"]);
-        });
+            test("adds a subtitle image when subtitle.visibile is true", () => {
+                selectScreen.create();
+                expect(selectScreen.add.image).toHaveBeenCalledWith(0, -170, "test-select.subtitle");
+            });
 
-        test("does not adjust choice sprite position when on how to play", () => {
-            expect(selectScreen.add.sprite.mock.calls[0]).toEqual([0, 0, "test-select.character1"]);
-        });
+            test("does not add a subtitle image when subtitle.visible is false", () => {
+                mockData.config.theme["test-select"].subtitle.visible = false;
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.subtitle");
+            });
 
-        test("adjusts choice sprite position when on how to play", () => {
-            selectScreen.setData(mockHowToPlayData);
-            selectScreen.currentIndex = 0;
-            jest.clearAllMocks();
-            selectScreen.create();
+            test("does not add a subtitle if no config is provided", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].subtitle = undefined;
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith((0, -170, "test-select.subtitle"));
+                expect(selectScreen.add.text).not.toHaveBeenCalled();
+            });
 
-            expect(selectScreen.add.sprite.mock.calls[0]).toEqual([0, 30, "test-select.character1"]);
-        });
+            test("does not add a subtitle image when no image is specified", () => {
+                mockData.config.theme["test-select"].subtitle.image = "";
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.subtitle");
+            });
 
-        test("creates an accessible carousel for the choices", () => {
-            expect(accessibleCarouselElements.create).toHaveBeenCalledWith(
-                selectScreen.scene.key,
-                selectScreen.choiceSprites,
-                selectScreen.game.canvas.parentElement,
-                mockData.config.theme["test-select"].choices,
-            );
+            test("adds subtitle text with default styles when text is supplied but no style is provided", () => {
+                mockData.config.theme["test-select"].subtitle.visible = true;
+                mockData.config.theme["test-select"].subtitle.text.value = "testSubtitleText";
+                selectScreen.create();
+                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -170, "testSubtitleText", defaultTextStyle);
+                expect(setOrigin).toHaveBeenCalledWith(0.5);
+            });
+
+            test("adds subtitle text with config styles when text is supplied with styling", () => {
+                const styling = {
+                    id: "subtitleStyling",
+                };
+
+                mockData.config.theme["test-select"].subtitle.visible = true;
+                mockData.config.theme["test-select"].subtitle.text.value = "testSubtitleText";
+                mockData.config.theme["test-select"].subtitle.text.styles = styling;
+                selectScreen.create();
+                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -170, "testSubtitleText", styling);
+                expect(setOrigin).toHaveBeenCalledWith(0.5);
+            });
+
+            test("does not add subtitle text when subtitle.visible is false", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].subtitle.visible = false;
+                mockData.config.theme["test-select"].subtitle.text.value = "testText";
+                selectScreen.create();
+                expect(selectScreen.add.text).not.toHaveBeenCalledWith(0, -170, "testText");
+            });
+
+            test("does not add a subtitle image when subtitle.image is not defined", () => {
+                jest.clearAllMocks();
+                mockData.config.theme["test-select"].subtitle = {
+                    visibile: true,
+                    image: "",
+                };
+                selectScreen.create();
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -170, "test-select.subtitle");
+            });
         });
     });
 
@@ -178,188 +311,14 @@ describe("Select Screen", () => {
             selectScreen.create();
         });
 
-        test("adds event subscriptions to all the buttons", () => {
-            expect(event.bus.subscribe).toHaveBeenCalledTimes(5);
+        test("adds event subscription to the continue button", () => {
             expect(event.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(event.bus.subscribe.mock.calls[0][0].name).toBe("previous");
-            expect(event.bus.subscribe.mock.calls[1][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(event.bus.subscribe.mock.calls[1][0].name).toBe("next");
-            expect(event.bus.subscribe.mock.calls[2][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(event.bus.subscribe.mock.calls[2][0].name).toBe("continue");
-            expect(event.bus.subscribe.mock.calls[3][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(event.bus.subscribe.mock.calls[3][0].name).toBe("pause");
-            expect(event.bus.subscribe.mock.calls[4][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(event.bus.subscribe.mock.calls[4][0].name).toBe("play");
+            expect(event.bus.subscribe.mock.calls[0][0].name).toBe("continue");
         });
 
         test("moves to the next game screen when the continue button is pressed", () => {
-            event.bus.subscribe.mock.calls[2][0].callback();
+            event.bus.subscribe.mock.calls[0][0].callback();
             expect(selectScreen.navigation.next).toHaveBeenCalled();
-        });
-
-        test("fires a score stat to the GMI with when you select an item ", () => {
-            selectScreen.currentIndex = 1;
-            event.bus.subscribe.mock.calls[2][0].callback();
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("test", "select", {
-                metadata: "ELE=[character_2]",
-            });
-        });
-
-        test("hides all the accessible elements when the pause button is pressed", () => {
-            selectScreen.currentIndex = 1;
-            event.bus.subscribe.mock.calls[3][0].callback();
-
-            expect(selectScreen.accessibleCarouselElements.length).toEqual(3);
-            expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
-            expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(true);
-            expect(mockAccessibleElements[2].attributes["aria-hidden"]).toBe(true);
-        });
-
-        test("shows the current accessible element when the game is unpaused (by pressing play)", () => {
-            selectScreen.currentIndex = 2;
-            event.bus.subscribe.mock.calls[3][0].callback(); //pauses
-            event.bus.subscribe.mock.calls[4][0].callback(); //unpauses
-
-            expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
-            expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(true);
-            expect(mockAccessibleElements[2].attributes["aria-hidden"]).toBe(false);
-        });
-
-        describe("previous button", () => {
-            test("switches to the last item when the first item is showing", () => {
-                selectScreen.currentIndex = 0;
-                event.bus.subscribe.mock.calls[0][0].callback();
-                expect(selectScreen.currentIndex === 2).toBe(true);
-            });
-
-            test("switches to the previous item when any other choice is showing", () => {
-                selectScreen.currentIndex = 2;
-                event.bus.subscribe.mock.calls[0][0].callback();
-                expect(selectScreen.currentIndex === 1).toBe(true);
-            });
-
-            test("hides all the choices except the current one", () => {
-                selectScreen.currentIndex = 2;
-                event.bus.subscribe.mock.calls[0][0].callback();
-
-                expect(selectScreen.choiceSprites[0].visible).toBe(false);
-                expect(selectScreen.choiceSprites[1].visible).toBe(true);
-                expect(selectScreen.choiceSprites[2].visible).toBe(false);
-            });
-
-            test("previous button is not disabled when on the first item by default", () => {
-                selectScreen.currentIndex = 0;
-                selectScreen.update();
-
-                expect(selectScreen.buttonLayout.buttons.previous.visible).toBe(true);
-            });
-
-            test("previous button is disabled when how to play and on the first item", () => {
-                selectScreen.setData(mockHowToPlayData);
-                selectScreen.currentIndex = 0;
-                selectScreen.create();
-                selectScreen.update();
-
-                expect(selectScreen.buttonLayout.buttons.previous.visible).toBe(false);
-            });
-
-            test("set 'aria-hidden' = true on all the choices except the current one", () => {
-                selectScreen.currentIndex = 2;
-                event.bus.subscribe.mock.calls[0][0].callback();
-
-                expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
-                expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(false);
-                expect(mockAccessibleElements[2].attributes["aria-hidden"]).toBe(true);
-            });
-
-            test("set display: none on all the choices except the current one", () => {
-                selectScreen.currentIndex = 2;
-                event.bus.subscribe.mock.calls[0][0].callback();
-
-                expect(selectScreen.accessibleCarouselElements[0].style.display).toEqual("none");
-                expect(selectScreen.accessibleCarouselElements[1].style.display).toEqual("block");
-                expect(selectScreen.accessibleCarouselElements[2].style.display).toEqual("none");
-            });
-        });
-
-        describe("next button", () => {
-            test("switches to the first item when the last item is showing", () => {
-                selectScreen.currentIndex = 3;
-                event.bus.subscribe.mock.calls[1][0].callback();
-                expect(selectScreen.currentIndex === 1).toBe(true);
-            });
-
-            test("switches to the next item when any other choice is showing", () => {
-                selectScreen.currentIndex = 1;
-                event.bus.subscribe.mock.calls[1][0].callback();
-                expect(selectScreen.currentIndex === 2).toBe(true);
-            });
-
-            test("switches to the next item in howtoplay mode", () => {
-                selectScreen.setData(mockHowToPlayData);
-                selectScreen.create();
-                selectScreen.currentIndex = 1;
-                event.bus.subscribe.mock.calls[1][0].callback();
-                expect(selectScreen.currentIndex === 2).toBe(true);
-            });
-
-            test("hides all the choices except the current one", () => {
-                event.bus.subscribe.mock.calls[1][0].callback();
-                expect(selectScreen.choiceSprites[0].visible).toBe(false);
-                expect(selectScreen.choiceSprites[1].visible).toBe(true);
-                expect(selectScreen.choiceSprites[2].visible).toBe(false);
-            });
-
-            test("next button is not disabled when on the last item by default", () => {
-                selectScreen.currentIndex = 2;
-                selectScreen.update();
-
-                expect(selectScreen.buttonLayout.buttons.next.visible).toBe(true);
-            });
-
-            test("next button is disabled when how to play and on the last item", () => {
-                selectScreen.setData(mockHowToPlayData);
-                selectScreen.create();
-                const nextButtonClick = event.bus.subscribe.mock.calls[1][0].callback;
-                nextButtonClick();
-                nextButtonClick();
-                expect(selectScreen.buttonLayout.buttons.next.visible).toBe(false);
-            });
-
-            test("set 'aria-hidden' = true on all the choices except the current one", () => {
-                selectScreen.currentIndex = 0;
-                event.bus.subscribe.mock.calls[1][0].callback();
-
-                expect(mockAccessibleElements[0].attributes["aria-hidden"]).toBe(true);
-                expect(mockAccessibleElements[1].attributes["aria-hidden"]).toBe(false);
-                expect(mockAccessibleElements[2].attributes["aria-hidden"]).toBe(true);
-            });
-
-            test("set display: none on all the choices except the current one", () => {
-                selectScreen.currentIndex = 0;
-                event.bus.subscribe.mock.calls[1][0].callback();
-
-                expect(selectScreen.accessibleCarouselElements[0].style.display).toBe("none");
-                expect(selectScreen.accessibleCarouselElements[1].style.display).toBe("block");
-                expect(selectScreen.accessibleCarouselElements[2].style.display).toBe("none");
-            });
-
-            test("focus moves to the next arrow when at the start of the items on How To Play", () => {
-                selectScreen.setData(mockHowToPlayData);
-                selectScreen.create();
-                event.bus.subscribe.mock.calls[1][0].callback();
-                event.bus.subscribe.mock.calls[0][0].callback();
-                expect(selectScreen.buttonLayout.buttons.next.accessibleElement.focus).toHaveBeenCalledTimes(1);
-            });
-
-            test("focus moves to the previous arrow when at the end of the items on How To Play", () => {
-                selectScreen.setData(mockHowToPlayData);
-                selectScreen.create();
-                const nextButtonClick = event.bus.subscribe.mock.calls[1][0].callback;
-                nextButtonClick();
-                nextButtonClick();
-                expect(selectScreen.buttonLayout.buttons.previous.accessibleElement.focus).toHaveBeenCalledTimes(1);
-            });
         });
     });
 });

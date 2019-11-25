@@ -6,8 +6,8 @@
 
 import { Home } from "./components/home.js";
 import { Results } from "./components/results.js";
-import { Select as SelectNew } from "./components/select-new.js";
 import { Select } from "./components/select.js";
+import { HowToPlay } from "./components/how-to-play.js";
 import { GameTest } from "./components/test-screens/game.js";
 import { Pause } from "./components/overlays/pause.js";
 import { settingsChannel } from "./core/settings.js";
@@ -51,7 +51,7 @@ const screenConfig = {
         },
     },
     "character-select": {
-        scene: SelectNew,
+        scene: Select,
         routes: {
             next: "level-select",
             home: "home",
@@ -89,7 +89,7 @@ const screenConfig = {
     },
     // Overlays
     "how-to-play": {
-        scene: Select,
+        scene: HowToPlay,
         routes: {
             home: "home",
         },
