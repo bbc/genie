@@ -10,6 +10,40 @@
         },
         "character-select": {
             "music": "loader.backgroundMusic",
+            "title": {
+                "image": {
+                    "imageId": "title",
+                    "xOffset": 0,
+                    "yOffset": 0
+                },
+                "text": {
+                    "value": "",
+                    "xOffset": 0,
+                    "yOffset": 0,
+                    "styles": {
+                        "fontSize": "24px"
+                    }
+                },
+                "visible": true
+            },
+            "subtitle": {
+                "image": {
+                    "imageId": "",
+                    "xOffset": 0,
+                    "yOffset": 0
+                },
+                "text": {
+                    "value": "",
+                    "xOffset": 0,
+                    "yOffset": 0,
+                    "styles": {
+                        "fontSize": "",
+                        "color": "",
+                        "align": ""
+                    }
+                },
+                "visible": false
+            },
             "choices": [
                 {
                     "asset": "carousel1",
@@ -46,6 +80,7 @@
         },
         "level-select": {
             "music": "loader.backgroundMusic",
+            "showTitle": true,
             "choices": [
                 {
                     "asset": "carousel1",
@@ -101,6 +136,7 @@
             }
         },
         "how-to-play": {
+            "showTitle": true,
             "isOverlay": true,
             "howToPlay": true,
             "choices": [
@@ -120,22 +156,6 @@
                     "title": "Test Level 3"
                 }
             ],
-            "leftButton": {
-                "content": "Left",
-                "style": {
-                    "font": "20px ReithSans",
-                    "fontWeight": "bold",
-                    "fill": "white"
-                }
-            },
-            "rightButton": {
-                "content": "Right",
-                "style": {
-                    "font": "20px ReithSans",
-                    "fontWeight": "bold",
-                    "fill": "white"
-                }
-            },
             "panelText": [
                 { "accessibilityText": "Instructions on playing the game" },
                 { "accessibilityText": "More on how to play" },
