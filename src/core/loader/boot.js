@@ -28,7 +28,7 @@ export class Boot extends Screen {
     preload() {
         this.load.setBaseURL(gmi.gameDir);
         this.load.setPath(gmi.embedVars.configPath);
-        this.load.json("config", "config.json");
+        this.load.pack("config/files");
         //TODO P3 this is loaded now so we can check its keys for missing files. It is also loaded again later so perhaps could be done then? NT
         this.load.json("asset-master-pack", "asset-master-pack.json");
 

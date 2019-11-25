@@ -15,6 +15,7 @@ import { Loader } from "./loader/loader.js";
 import { Boot } from "./loader/boot.js";
 import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
+import { JSON5File } from "./loader/JSON5File.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key, ...conf[key].settings }));
@@ -55,6 +56,11 @@ export function startup(screenConfig, settingsConfig = {}) {
                     plugin: FontLoaderPlugin,
                     start: true,
                 },
+                //{
+                //    key: "JSON5Loader",
+                //    plugin: JSON5Plugin,
+                //    start:true
+                //}
             ],
         },
     };

@@ -1,0 +1,25 @@
+{
+    theme: {
+        "character-select": {
+            music: "loader.backgroundMusic",
+            //Array of items used by the character select screen
+            choices: [
+                {
+                    asset: "carousel1",
+                    accessibilityText: "Character 1",
+                    title: "Cardi",
+                },
+                {
+                    asset: "carousel2",
+                    accessibilityText: "Character 2",
+                    title: "Thomas",
+                },
+                {
+                    asset: "carousel3",
+                    accessibilityText: "Character 3",
+                    title: "Barry",
+                },
+            ],
+        },
+    },
+}

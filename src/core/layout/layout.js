@@ -42,7 +42,7 @@ const shallowMergeOverrides = (config, overrides) => assignProperties(copyFirstC
 export function create(scene, metrics, buttonIds) {
     buttonIds = buttonIds.filter(checkGMIFlags);
 
-    const overrides = scene.cache.json.get("config").theme[scene.scene.key]["button-overrides"];
+    const overrides =  scene.context.config.theme[scene.scene.key]["button-overrides"];
     const config = shallowMergeOverrides(gel.config(scene), overrides);
     const root = new Phaser.GameObjects.Container(scene, 0, 0);
 
