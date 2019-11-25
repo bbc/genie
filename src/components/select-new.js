@@ -32,7 +32,7 @@ export class Select extends Screen {
 
         this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
-        this.addEventSubscritions();
+        this.addEventSubscriptions();
         createTestHarnessDisplay(this);
     }
 
@@ -78,7 +78,7 @@ export class Select extends Screen {
         this.navigation.next();
     }
 
-    addEventSubscritions() {
+    addEventSubscriptions() {
         event.bus.subscribe({
             channel: buttonsChannel(this),
             name: "continue",
