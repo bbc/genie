@@ -2,7 +2,40 @@
     theme: {
         "character-select": {
             music: "loader.backgroundMusic",
-            //Array of items used by the character select screen
+            title: {
+                image: {
+                    imageId: "title",
+                    xOffset: 0,
+                    yOffset: 0,
+                },
+                text: {
+                    value: "",
+                    xOffset: 0,
+                    yOffset: 0,
+                    styles: {
+                        fontSize: "24px",
+                    },
+                },
+                visible: true,
+            },
+            subtitle: {
+                image: {
+                    imageId: "",
+                    xOffset: 0,
+                    yOffset: 0,
+                },
+                text: {
+                    value: "",
+                    xOffset: 0,
+                    yOffset: 0,
+                    styles: {
+                        fontSize: "",
+                        color: "",
+                        align: "",
+                    },
+                },
+                visible: false,
+            },
             choices: [
                 {
                     asset: "carousel1",
@@ -20,6 +53,22 @@
                     title: "Barry",
                 },
             ],
+            leftButton: {
+                content: "Left",
+                style: {
+                    font: "20px ReithSans",
+                    fontWeight: "bold",
+                    fill: "white",
+                },
+            },
+            rightButton: {
+                content: "Right",
+                style: {
+                    font: "20px ReithSans",
+                    fontWeight: "bold",
+                    fill: "white",
+                },
+            },
         },
     },
 }
