@@ -1,0 +1,37 @@
+{
+    "config": {
+        "prefix": "config.",
+        "files": [
+            {
+                "type": "json5",
+                "key": "character-select",
+                "url": "config/character-select.json5",
+                "overwrite": false
+            },
+            {
+                "type": "json5",
+                "key": "how-to-play",
+                "url": "config/how-to-play.json5",
+                "overwrite": false
+            },
+            {
+                "type": "json5",
+                "key": "level-select",
+                "url": "config/level-select.json5",
+                "overwrite": false
+            },
+            {
+                "type": "json5",
+                "key": "home",
+                "url": "config/home.json5",
+                "overwrite": false
+            },
+            {
+                "type": "json5",
+                "key": "config",
+                "url": "config/config.json5",
+                "overwrite": false
+            }
+        ]
+    }
+}
