@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.0.0 Delta | |
 | | Add JSON5 loader plugin.  | |
 | | Split config into multiple files.  | |
 | 3.0.0 Gamma | |
