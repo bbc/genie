@@ -51,6 +51,7 @@ describe("Boot", () => {
             setBaseURL: jest.fn(),
             setPath: jest.fn(),
             json: jest.fn(),
+            pack: jest.fn(),
         };
         bootScreen.scene = {
             key: "boot",
@@ -75,10 +76,8 @@ describe("Boot", () => {
             expect(bootScreen.load.setPath).toHaveBeenCalledWith(mockGmi.embedVars.configPath);
         });
 
-        test("Loads the config file and asset master pack as json", () => {
+        test("Loads the asset master pack as json", () => {
             bootScreen.preload();
-
-            expect(bootScreen.load.json).toHaveBeenCalledWith("config", "config.json");
             expect(bootScreen.load.json).toHaveBeenCalledWith("asset-master-pack", "asset-master-pack.json");
         });
 

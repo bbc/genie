@@ -44,6 +44,7 @@ describe("Startup", () => {
         jest.spyOn(a11y, "setup").mockImplementation(() => {});
         global.window.getGMI = jest.fn().mockImplementation(() => mockGmi);
         global.window.addEventListener = jest.fn();
+        global.Phaser.Loader.FileTypesManager.register = jest.fn();
     });
 
     afterEach(() => {
@@ -247,6 +248,24 @@ describe("Startup", () => {
                 const expectedError = "Something isn't working:\n\nThere has been an error\n\n";
                 expect(mockPreTag.innerText).toBe(expectedError);
             });
+        });
+    });
+
+    describe("json5", () => {
+        test("registers a callback with FileTypesManager", () => {
+            startup({});
+            expect(global.Phaser.Loader.FileTypesManager.register).toHaveBeenCalledWith("json5", expect.any(Function));
+        });
+
+        test("callback adds file", () => {
+            startup({});
+            const registerFunc = global.Phaser.Loader.FileTypesManager.register.mock.calls[0][1];
+
+            const mockLoader = { addFile: jest.fn(), cacheManager: { json: {} } };
+
+            registerFunc.call(mockLoader, { key: "testKey" });
+
+            expect(mockLoader.addFile).toHaveBeenCalled();
         });
     });
 });
