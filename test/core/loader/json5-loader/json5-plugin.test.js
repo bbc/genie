@@ -6,44 +6,6 @@
 import { JSON5Plugin } from "../../../../src/core/loader/json5-loader/json5-plugin.js";
 import { JSON5File } from "../../../../src/core/loader/json5-loader/json5-file.js";
 
-/*
-describe("JSON5Plugin", () => {
-    let mockPluginManager;
-    let mockFileConfig;
-
-    beforeEach(() => {
-        mockPluginManager = {
-            registerFileType: jest.fn(),
-        };
-        mockFileConfig = {
-            type: "webfont",
-            key: "reithsans",
-            config: {
-                custom: {
-                    families: ["ReithSans"],
-                    urls: ["https://gel.files.bbci.co.uk/r2.302/bbc-reith.css"],
-                },
-            },
-        };
-    });
-    afterEach(() => jest.clearAllMocks());
-
-
-    test("addToScene attaches fontLoaderCallback to Phaser Loader", () => {
-        const mockScene = {
-            sys: {
-                load: {
-                    webfont: jest.fn(),
-                },
-            },
-        };
-        const fontPlugin = new FontPlugin(mockPluginManager);
-        fontPlugin.addToScene(mockScene);
-        expect(mockScene.sys.load.webfont).toBe(fontPlugin.fontLoaderCallback);
-    });
-});
-*/
-
 describe("JSON5 Plugin", () => {
     let mockPluginManager;
     let mockFileConfig;
