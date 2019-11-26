@@ -135,7 +135,7 @@ describe("Game Sound", () => {
                 expect(mockScene.tweens.add).toHaveBeenCalledWith({
                     targets: mockMusic,
                     volume: 1,
-                    duration: 250,
+                    duration: 1000,
                 });
             });
 

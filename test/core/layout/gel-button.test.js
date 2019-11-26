@@ -202,6 +202,21 @@ describe("Gel Button", () => {
         });
     });
 
+    describe("Indicator Constructor", () => {
+        test("sets depth of indicator to 1", () => {
+            mockConfig.key = "achievements";
+            gmi.achievements.unseen = true;
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.indicator.depth).toBe(1);
+        });
+        test("sets scale of indicator to 0", () => {
+            mockConfig.key = "achievements";
+            gmi.achievements.unseen = true;
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.indicator.scale).toBe(0);
+        });
+    });
+
     describe("Set Indicator function", () => {
         test("creates an indicator when the id is achievements and gmi unseen is true", () => {
             mockConfig.key = "achievements";

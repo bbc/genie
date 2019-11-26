@@ -7,6 +7,7 @@
 import { Home } from "../src/components/home";
 import { Results } from "../src/components/results";
 import { Select } from "../src/components/select";
+import { HowToPlay } from "../src/components/how-to-play";
 import { GameTest } from "../src/components/test-screens/game";
 import { Pause } from "../src/components/overlays/pause";
 import { settingsChannel } from "../src/core/settings";
@@ -78,7 +79,7 @@ describe("Main", () => {
                 },
             },
             "how-to-play": {
-                scene: Select,
+                scene: HowToPlay,
                 routes: {
                     home: "home",
                 },
