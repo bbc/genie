@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.0.0 Epsilon | |
+| | Use root path for JSON5 lib so it works as a dependency in starter pack.  | |
 | 3.0.0 Delta | |
 | | Add JSON5 loader plugin.  | |
 | | Split config into multiple files.  | |

@@ -6,7 +6,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import JSON5 from "../../../../node_modules/json5/dist/index.mjs";
+import JSON5 from "/node_modules/json5/dist/index.mjs";
 
 export class JSON5File extends Phaser.Loader.File {
     constructor(loader, fileConfig, xhrSettings, dataKey) {

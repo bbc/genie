@@ -1,6 +1,6 @@
 {
     "name": "genie",
-    "version": "3.0.0-delta",
+    "version": "3.0.0-epsilon",
     "description": "Genie - A Modular Game Engine",
     "license": "Apache-2.0",
     "private": true,
