@@ -20,22 +20,6 @@
                     title: "Test Level 3",
                 },
             ],
-            leftButton: {
-                content: "Left",
-                style: {
-                    font: "20px ReithSans",
-                    fontWeight: "bold",
-                    fill: "white",
-                },
-            },
-            rightButton: {
-                content: "Right",
-                style: {
-                    font: "20px ReithSans",
-                    fontWeight: "bold",
-                    fill: "white",
-                },
-            },
             panelText: [
                 { accessibilityText: "Instructions on playing the game" },
                 { accessibilityText: "More on how to play" },
