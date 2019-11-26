@@ -44,6 +44,7 @@ describe("Startup", () => {
         jest.spyOn(a11y, "setup").mockImplementation(() => {});
         global.window.getGMI = jest.fn().mockImplementation(() => mockGmi);
         global.window.addEventListener = jest.fn();
+        global.Phaser.Loader.FileTypesManager.register = jest.fn();
     });
 
     afterEach(() => {

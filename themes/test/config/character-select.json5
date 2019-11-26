@@ -1,0 +1,58 @@
+{
+    theme: {
+        "character-select": {
+            music: "loader.backgroundMusic",
+            title: {
+                image: {
+                    imageId: "title",
+                    xOffset: 0,
+                    yOffset: 0,
+                },
+                text: {
+                    value: "",
+                    xOffset: 0,
+                    yOffset: 0,
+                    styles: {
+                        fontSize: "24px",
+                    },
+                },
+                visible: true,
+            },
+            subtitle: {
+                image: {
+                    imageId: "",
+                    xOffset: 0,
+                    yOffset: 0,
+                },
+                text: {
+                    value: "",
+                    xOffset: 0,
+                    yOffset: 0,
+                    styles: {
+                        fontSize: "",
+                        color: "",
+                        align: "",
+                    },
+                },
+                visible: false,
+            },
+            choices: [
+                {
+                    asset: "carousel1",
+                    accessibilityText: "Character 1",
+                    title: "Clarice",
+                },
+                {
+                    asset: "carousel2",
+                    accessibilityText: "Character 2",
+                    title: "Ethel",
+                },
+                {
+                    asset: "carousel3",
+                    accessibilityText: "Character 3",
+                    title: "Gwendoline",
+                },
+            ],
+        },
+    },
+}

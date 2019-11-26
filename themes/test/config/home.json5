@@ -1,0 +1,14 @@
+{
+    theme: {
+        home: {
+            music: "loader.backgroundMusic",
+
+            //Use to shift buttons out of the way of logos etc.
+            "button-overrides": {
+                play: {
+                    shiftY: 80,
+                },
+            },
+        },
+    },
+}

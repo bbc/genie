@@ -2,8 +2,10 @@
 
 | Version | Description |
 |---------|-------------|
-| 3.0.0 | |
-| | Upgrade to Phaser 3 | |
+| | Add JSON5 loader plugin.  | |
+| | Split config into multiple files.  | |
+| 3.0.0 Gamma | |
+| | Upgrade to Phaser 3. | |
 | 2.0.7 | |
 | | Remove fullscreen api usage | |
 | | Remove disable of background elements on modals as now handled automatically in cage. | |

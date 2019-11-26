@@ -58,6 +58,9 @@ describe("Layout", () => {
             scene: {
                 key: "mockSceneKey",
             },
+            context: {
+                config: mockJson,
+            },
         };
 
         mockMetrics = {

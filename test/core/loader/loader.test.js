@@ -51,6 +51,11 @@ describe("Loader", () => {
             two: {},
         };
 
+        const mockConfigFiles = {
+            files: [{ key: "testOne" }],
+            prefix: "testPrefix.",
+        };
+
         mockConfig = {
             theme: {
                 game: {
@@ -59,6 +64,8 @@ describe("Loader", () => {
             },
         };
         const mockContext = { config: mockConfig };
+
+        //JSON is now an asset pack so has an initial key of "config"
 
         loader = new Loader();
         Object.defineProperty(loader, "context", {
@@ -79,7 +86,11 @@ describe("Loader", () => {
                 get: jest.fn(packName => {
                     if (packName === "asset-master-pack") {
                         return mockMasterPack;
-                    } else if (packName === "config") {
+                    } else if (packName === "config/files") {
+                        return {
+                            config: mockConfigFiles,
+                        };
+                    } else if (packName === "testPrefix.testOne") {
                         return mockConfig;
                     }
                 }),

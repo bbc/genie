@@ -11,6 +11,7 @@ import * as Scaler from "../scaler.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 import { loadPack } from "./loadpack.js";
+import _ from "../../../lib/lodash/lodash.js";
 
 const getMissingPacks = (masterPack, keys) =>
     Object.keys(keys)
@@ -26,10 +27,20 @@ export class Loader extends Screen {
         this._loadbar = undefined;
     }
 
+    getConfig() {
+        const configFile = this.cache.json.get("config/files").config;
+        const keys = configFile.files.map(file => configFile.prefix + file.key);
+
+        const entries = keys.map(key => this.cache.json.get(key));
+
+        return _.merge({}, ...entries);
+    }
+
     preload() {
         this.load.setBaseURL(gmi.gameDir);
         this.load.setPath(gmi.embedVars.configPath);
-        const config = this.cache.json.get("config");
+
+        const config = this.getConfig();
         this.setConfig(config);
 
         if (config.theme.game && config.theme.game.achievements === true) {

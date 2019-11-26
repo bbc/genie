@@ -22,7 +22,8 @@
         "babel-plugin-module-resolver": "^3.2.0",
         "bowser": "2.4.0",
         "expose-loader": "^0.7.5",
-        "phaser": "^3.20.1",
+        "json5": "^2.1.1",
+        "phaser": "^3.21.0",
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {
@@ -51,7 +52,7 @@
     "scripts": {
         "clean": "rm -rf .cache",
         "start": "ws --config-file dev/scripts/web-config.js",
-        "start:pack": "webpack-dev-server --config build-scripts/webpack.config.js --env.genieCore",
+        "start:pack": "webpack-dev-server -d --config build-scripts/webpack.config.js --env.genieCore",
         "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
         "eslint": "eslint . --ignore-pattern lib/ --ignore-path .gitignore",
         "jest": "jest --coverage",

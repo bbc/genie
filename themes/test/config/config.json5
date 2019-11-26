@@ -1,0 +1,28 @@
+{
+    theme: {
+        game: {
+            music: "loader.backgroundMusicTwo",
+            achievements: false, //enable or disable achievements for this theme
+        },
+        results: {
+            backgroundAnimation: "",
+            resultText: {
+                style: {
+                    font: "40px ReithSans",
+                    align: "center",
+                    fill: "#fff",
+                    boundsAlignH: "center",
+                },
+            },
+            "button-overrides": {
+                achievements: {
+                    group: "middleCenter",
+                    shiftY: 120,
+                },
+            },
+        },
+        pause: {
+            isOverlay: true,
+        },
+    },
+}

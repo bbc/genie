@@ -17,6 +17,6 @@ module.exports = {
     modulePathIgnorePatterns: ["/.node_modules.+/"],
     testPathIgnorePatterns: ["/node_modules/", "/.node_modules.+/", ".node_modules_production"],
     setupFilesAfterEnv: ["./test/set-up-jest.js"],
-    transform: { "^.+\\.js$": "babel-jest" },
-    transformIgnorePatterns: ["node_modules/(?!(bowser)/)"],
+    transform: { "^.+\\.m?js$": "babel-jest" },
+    transformIgnorePatterns: ["node_modules/(?!(bowser|json5)/)"],
 };
