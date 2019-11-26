@@ -69,7 +69,7 @@ describe("Select Screen", () => {
         selectScreen.navigation = { next: jest.fn() };
         selectScreen.setLayout = jest.fn(() => mockLayout);
         selectScreen.add = {
-            text: jest.fn().mockImplementation((x, y, text, styles) => ({
+            text: jest.fn().mockImplementation(() => ({
                 setOrigin,
             })),
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
@@ -219,7 +219,7 @@ describe("Select Screen", () => {
                 jest.clearAllMocks();
                 mockData.config.theme["test-select"].subtitle = undefined;
                 selectScreen.create();
-                expect(selectScreen.add.image).not.toHaveBeenCalledWith((anything, anything, "test-select.subtitle"));
+                expect(selectScreen.add.image).not.toHaveBeenCalledWith(anything, anything, "test-select.subtitle");
                 expect(selectScreen.add.text).not.toHaveBeenCalled();
             });
 

@@ -3,8 +3,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as JSON5Module from "../../../node_modules/json5/dist/index.mjs";
-import { JSON5File } from "../../../src/core/loader/json5-file.js";
+import * as JSON5Module from "../../../../node_modules/json5/dist/index.mjs";
+import { JSON5File } from "../../../../src/core/loader/json5-loader/json5-file.js";
 
 describe("JSON5File", () => {
     let mockLoader;

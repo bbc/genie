@@ -250,22 +250,4 @@ describe("Startup", () => {
             });
         });
     });
-
-    describe("json5", () => {
-        test("registers a callback with FileTypesManager", () => {
-            startup({});
-            expect(global.Phaser.Loader.FileTypesManager.register).toHaveBeenCalledWith("json5", expect.any(Function));
-        });
-
-        test("callback adds file", () => {
-            startup({});
-            const registerFunc = global.Phaser.Loader.FileTypesManager.register.mock.calls[0][1];
-
-            const mockLoader = { addFile: jest.fn(), cacheManager: { json: {} } };
-
-            registerFunc.call(mockLoader, { key: "testKey" });
-
-            expect(mockLoader.addFile).toHaveBeenCalled();
-        });
-    });
 });

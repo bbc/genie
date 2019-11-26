@@ -15,7 +15,7 @@ import { Loader } from "./loader/loader.js";
 import { Boot } from "./loader/boot.js";
 import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
-import { JSON5File } from "./loader/json5-file.js";
+import { JSON5Plugin } from "./loader/json5-loader/json5-plugin.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key, ...conf[key].settings }));
@@ -25,11 +25,6 @@ export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scen
  * @param {Object=} screenConfig -
  */
 export function startup(screenConfig, settingsConfig = {}) {
-    Phaser.Loader.FileTypesManager.register("json5", function(fileConfig, xhrSettings, dataKey) {
-        this.addFile(new JSON5File(this, fileConfig, xhrSettings, dataKey));
-        return this;
-    });
-
     setGmi(settingsConfig, window);
     hookErrors(gmi.gameContainerId);
 
@@ -59,6 +54,11 @@ export function startup(screenConfig, settingsConfig = {}) {
                 {
                     key: "FontLoader",
                     plugin: FontLoaderPlugin,
+                    start: true,
+                },
+                {
+                    key: "JSON5Loader",
+                    plugin: JSON5Plugin,
                     start: true,
                 },
             ],
