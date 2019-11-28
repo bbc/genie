@@ -14,13 +14,15 @@ import { getMetrics, onScaleChange } from "../core/scaler.js";
 
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
-export class Select extends Screen {
-    styleDefaults = {
-        fontSize: "24px",
-        fontFamily: "Arial",
-        align: "center",
-    };
+const styleDefaults = {
+    fontSize: "24px",
+    fontFamily: "Arial",
+    align: "center",
+};
+const baseX = 0;
+const baseY = -270;
 
+export class Select extends Screen {
     create() {
         this.add.image(0, 0, `${this.scene.key}.background`);
         this.theme = this.context.config.theme[this.scene.key];
@@ -36,12 +38,12 @@ export class Select extends Screen {
 
     scaleTitleElements() {
         if (this.title && this.title.text && this.titleConfig) {
-            const titleTextPosition = this.calculateOffset(0, -270, this.titleConfig.text);
+            const titleTextPosition = this.calculateOffset(baseX, baseY, this.titleConfig.text);
             this.positionText(this.title.text, titleTextPosition);
         }
 
         if (this.subtitle && this.subtitle.text && this.subtitleConfig) {
-            const subtitleTextPosition = this.calculateOffset(0, -270, this.subtitleConfig.text);
+            const subtitleTextPosition = this.calculateOffset(baseX, baseY, this.subtitleConfig.text);
             this.positionText(this.subtitle.text, subtitleTextPosition);
         }
     }
@@ -94,7 +96,7 @@ export class Select extends Screen {
 
     setVisualElement(config) {
         if (config && config.visible) {
-            return this.constructVisualElement(0, -270, config);
+            return this.constructVisualElement(baseX, baseY, config);
         }
     }
 
@@ -120,7 +122,7 @@ export class Select extends Screen {
                           textPosition.x,
                           textPosition.y,
                           config.text.value,
-                          config.text.styles || this.styleDefaults,
+                          config.text.styles || styleDefaults,
                       )
                     : undefined,
         };

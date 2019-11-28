@@ -10,8 +10,8 @@
                 },
                 text: {
                     value: "Title",
-                    xOffset: 0,
-                    yOffset: 0,
+                    xOffset: -60,
+                    yOffset: -20,
                     styles: {
                         fontSize: "24px",
                     },
@@ -27,9 +27,9 @@
                 text: {
                     value: "Subtitle",
                     xOffset: 0,
-                    yOffset: 600,
+                    yOffset: 80,
                     styles: {
-                        fontSize: "24px",
+                        fontSize: "16px",
                     },
                 },
                 visible: true,
