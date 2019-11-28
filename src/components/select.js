@@ -10,7 +10,6 @@
 import { Screen } from "../core/screen.js";
 import * as event from "../core/event-bus.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
-import { getMetrics } from "../core/scaler.js";
 
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
@@ -23,64 +22,23 @@ export class Select extends Screen {
 
     create() {
         this.add.image(0, 0, `${this.scene.key}.background`);
+
         this.theme = this.context.config.theme[this.scene.key];
-        this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
-
-        this.addEventSubscriptions();
-        this.setTitleElements();
-
-        createTestHarnessDisplay(this);
-    }
-
-    setTitleElements() {
         this.titleConfig = this.theme.title;
         this.subtitleConfig = this.theme.subtitle;
 
         this.title = this.setVisualElement(this.titleConfig);
         this.subtitle = this.setVisualElement(this.subtitleConfig);
-    }
 
-    restrictBounds(textElement, homeButton, secondaryButton) {
-        const metrics = getMetrics();
-        const textBounds = this.getItemBounds(textElement, metrics);
+        this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
-        const homeButtonBounds = this.getItemBounds(homeButton, metrics);
-        const secondaryButtonBounds = this.getItemBounds(secondaryButton, metrics);
-        const safeArea = {
-            top: homeButtonBounds.top,
-            bottom: homeButtonBounds.bottom,
-            left: homeButtonBounds.right,
-            right: secondaryButtonBounds.left,
-        };
-
-        if (textBounds.top < safeArea.top) {
-            textElement.setPosition(textElement.x, textElement.y - (textBounds.top - safeArea.top));
-        }
-        if (textBounds.bottom > safeArea.bottom) {
-            textElement.setPosition(textElement.x, textElement.y - (textBounds.bottom - safeArea.bottom));
-        }
-        if (textBounds.left < safeArea.left) {
-            textElement.setPosition(textElement.x - (textBounds.left - safeArea.left), textElement.y);
-        }
-        if (textBounds.right > safeArea.right) {
-            textElement.setPosition(textElement.x - (textBounds.right - safeArea.right), textElement.y);
-        }
-    }
-
-    getItemBounds(item, metrics) {
-        const bounds = item.getBounds();
-        const padding = metrics.isMobile && item.type === "Sprite" ? metrics.buttonPad : 0;
-        return {
-            top: bounds.y - padding,
-            bottom: bounds.y + bounds.height + padding,
-            left: bounds.x - padding,
-            right: bounds.x + bounds.width + padding,
-        };
+        this.addEventSubscriptions();
+        createTestHarnessDisplay(this);
     }
 
     setVisualElement(config) {
         if (config && config.visible) {
-            return this.constructVisualElement(0, -270, config);
+            return this.constructVisualElement(0, -170, config);
         }
     }
 
@@ -96,29 +54,20 @@ export class Select extends Screen {
         const textPosition = this.calculateOffset(x, y, config.text);
 
         const visualElements = {
-            image:
-                config.image && config.image.imageId
-                    ? this.add.image(imagePosition.x, imagePosition.y, `${this.scene.key}.${config.image.imageId}`)
-                    : undefined,
-            text:
-                config.text && config.text.value
-                    ? this.add.text(
-                          textPosition.x,
-                          textPosition.y,
-                          config.text.value,
-                          config.text.styles || this.styleDefaults,
-                      )
-                    : undefined,
+            image: config.image.imageId
+                ? this.add.image(imagePosition.x, imagePosition.y, `${this.scene.key}.${config.image.imageId}`)
+                : undefined,
+            text: config.text.value
+                ? this.add.text(
+                      textPosition.x,
+                      textPosition.y,
+                      config.text.value,
+                      config.text.styles || this.styleDefaults,
+                  )
+                : undefined,
         };
-
         if (visualElements.text) {
-            visualElements.text.setPosition(textPosition.x, textPosition.y);
             visualElements.text.setOrigin(0.5);
-            this.restrictBounds(
-                visualElements.text,
-                this.buttonLayout.buttons["home"],
-                this.buttonLayout.buttons["audio"],
-            );
         }
 
         return visualElements;
