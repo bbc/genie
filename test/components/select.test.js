@@ -20,6 +20,7 @@ describe("Select Screen", () => {
     let mockTextBounds;
     let mockMetrics;
     let defaultTextStyle;
+
     let setOrigin;
     let setPosition;
 
@@ -116,7 +117,9 @@ describe("Select Screen", () => {
             }),
         };
 
-        Scaler.getMetrics = () => mockMetrics;
+        Scaler.getMetrics = jest.fn(() => mockMetrics);
+        Scaler.onScaleChange = { add: jest.fn() };
+
         defaultTextStyle = { align: "center", fontFamily: "Arial", fontSize: "24px" };
     });
 
@@ -138,6 +141,77 @@ describe("Select Screen", () => {
         test("creates a layout harness with correct params", () => {
             selectScreen.create();
             expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(selectScreen);
+        });
+
+        test("adds listener for scaler", () => {
+            selectScreen.create();
+            expect(Scaler.onScaleChange.add).toHaveBeenCalled();
+        });
+
+        test("rescales title and subtitles when screen scales", () => {
+            mockData.config.theme["test-select"].title = {
+                visible: true,
+                image: {
+                    imageId: "",
+                },
+                text: {
+                    value: "title",
+                    xOffset: 50,
+                    yOffset: 50,
+                },
+            };
+
+            mockData.config.theme["test-select"].subtitle = {
+                visible: true,
+                image: {
+                    imageId: "",
+                },
+                text: {
+                    value: "title",
+                    xOffset: 50,
+                    yOffset: 50,
+                },
+            };
+
+            selectScreen.create();
+            const callback = Scaler.onScaleChange.add.mock.calls[0][0];
+            jest.clearAllMocks();
+            callback();
+
+            expect(setPosition).toHaveBeenCalled();
+        });
+
+        test("does not rescale title and subtitles when they are not present in config", () => {
+            mockData.config.theme["test-select"].title = {
+                visible: true,
+                image: {
+                    imageId: "",
+                },
+                text: {
+                    value: "",
+                    xOffset: 0,
+                    yOffset: 0,
+                },
+            };
+
+            mockData.config.theme["test-select"].subtitle = {
+                visible: true,
+                image: {
+                    imageId: "",
+                },
+                text: {
+                    value: "",
+                    xOffset: 0,
+                    yOffset: 0,
+                },
+            };
+
+            selectScreen.create();
+            const callback = Scaler.onScaleChange.add.mock.calls[0][0];
+            jest.clearAllMocks();
+            callback();
+
+            expect(setPosition).not.toHaveBeenCalled();
         });
 
         describe("titles", () => {

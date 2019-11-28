@@ -10,7 +10,7 @@
 import { Screen } from "../core/screen.js";
 import * as event from "../core/event-bus.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
-import { getMetrics } from "../core/scaler.js";
+import { getMetrics, onScaleChange } from "../core/scaler.js";
 
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
@@ -29,7 +29,21 @@ export class Select extends Screen {
         this.addEventSubscriptions();
         this.setTitleElements();
 
+        onScaleChange.add(this.scaleTitleElements.bind(this));
+
         createTestHarnessDisplay(this);
+    }
+
+    scaleTitleElements() {
+        if (this.title && this.title.text && this.titleConfig) {
+            const titleTextPosition = this.calculateOffset(0, -270, this.titleConfig.text);
+            this.positionText(this.title.text, titleTextPosition);
+        }
+
+        if (this.subtitle && this.subtitle.text && this.subtitleConfig) {
+            const subtitleTextPosition = this.calculateOffset(0, -270, this.subtitleConfig.text);
+            this.positionText(this.subtitle.text, subtitleTextPosition);
+        }
     }
 
     setTitleElements() {
@@ -111,17 +125,16 @@ export class Select extends Screen {
                     : undefined,
         };
 
-        if (visualElements.text) {
-            visualElements.text.setPosition(textPosition.x, textPosition.y);
-            visualElements.text.setOrigin(0.5);
-            this.restrictBounds(
-                visualElements.text,
-                this.buttonLayout.buttons["home"],
-                this.buttonLayout.buttons["audio"],
-            );
-        }
+        this.positionText(visualElements.text, textPosition);
 
         return visualElements;
+    }
+    positionText(text, textPosition) {
+        if (text) {
+            text.setPosition(textPosition.x, textPosition.y);
+            text.setOrigin(0.5);
+            this.restrictBounds(text, this.buttonLayout.buttons["home"], this.buttonLayout.buttons["audio"]);
+        }
     }
 
     startGame() {
