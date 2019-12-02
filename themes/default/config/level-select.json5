@@ -2,6 +2,22 @@
     theme: {
         "level-select": {
             music: "loader.backgroundMusic",
+            title: {
+                image: {
+                    imageId: "title",
+                    xOffset: 0,
+                    yOffset: 100,
+                },
+                text: {
+                    value: "",
+                    xOffset: 0,
+                    yOffset: 0,
+                    styles: {
+                        fontSize: "24px",
+                    },
+                },
+                visible: true,
+            },
             choices: [
                 {
                     asset: "carousel1",

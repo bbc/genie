@@ -11,6 +11,7 @@ import { Screen } from "../core/screen.js";
 import * as event from "../core/event-bus.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { getMetrics, onScaleChange } from "../core/scaler.js";
+import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
 
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
@@ -31,20 +32,23 @@ export class Select extends Screen {
         this.addEventSubscriptions();
         this.setTitleElements();
 
-        onScaleChange.add(this.scaleTitleElements.bind(this));
+        onScaleChange.add(this.repositionTitleElements.bind(this));
 
         createTestHarnessDisplay(this);
     }
 
-    scaleTitleElements() {
+    repositionTitleElements() {
+        const metrics = getMetrics();
+        const safeArea = this.getSafeArea(metrics);
+
         if (this.title && this.title.text && this.titleConfig) {
             const titleTextPosition = this.calculateOffset(baseX, baseY, this.titleConfig.text);
-            this.positionText(this.title.text, titleTextPosition);
+            positionElement(this.title.text, titleTextPosition, safeArea, metrics);
         }
 
         if (this.subtitle && this.subtitle.text && this.subtitleConfig) {
             const subtitleTextPosition = this.calculateOffset(baseX, baseY, this.subtitleConfig.text);
-            this.positionText(this.subtitle.text, subtitleTextPosition);
+            positionElement(this.subtitle.text, subtitleTextPosition, safeArea, metrics);
         }
     }
 
@@ -56,41 +60,18 @@ export class Select extends Screen {
         this.subtitle = this.setVisualElement(this.subtitleConfig);
     }
 
-    restrictBounds(textElement, homeButton, secondaryButton) {
-        const metrics = getMetrics();
-        const textBounds = this.getItemBounds(textElement, metrics);
+    getSafeArea(metrics) {
+        const homeButton = this.buttonLayout.buttons["home"];
+        const secondaryButton = this.buttonLayout.buttons["audio"];
 
-        const homeButtonBounds = this.getItemBounds(homeButton, metrics);
-        const secondaryButtonBounds = this.getItemBounds(secondaryButton, metrics);
-        const safeArea = {
+        const homeButtonBounds = getItemBounds(homeButton, metrics);
+        const secondaryButtonBounds = getItemBounds(secondaryButton, metrics);
+
+        return {
             top: homeButtonBounds.top,
             bottom: homeButtonBounds.bottom,
             left: homeButtonBounds.right,
             right: secondaryButtonBounds.left,
-        };
-
-        if (textBounds.top < safeArea.top) {
-            textElement.setPosition(textElement.x, textElement.y - (textBounds.top - safeArea.top));
-        }
-        if (textBounds.bottom > safeArea.bottom) {
-            textElement.setPosition(textElement.x, textElement.y - (textBounds.bottom - safeArea.bottom));
-        }
-        if (textBounds.left < safeArea.left) {
-            textElement.setPosition(textElement.x - (textBounds.left - safeArea.left), textElement.y);
-        }
-        if (textBounds.right > safeArea.right) {
-            textElement.setPosition(textElement.x - (textBounds.right - safeArea.right), textElement.y);
-        }
-    }
-
-    getItemBounds(item, metrics) {
-        const bounds = item.getBounds();
-        const padding = metrics.isMobile && item.type === "Sprite" ? metrics.buttonPad : 0;
-        return {
-            top: bounds.y - padding,
-            bottom: bounds.y + bounds.height + padding,
-            left: bounds.x - padding,
-            right: bounds.x + bounds.width + padding,
         };
     }
 
@@ -126,17 +107,12 @@ export class Select extends Screen {
                       )
                     : undefined,
         };
+        const metrics = getMetrics();
+        const safeArea = this.getSafeArea(metrics);
 
-        this.positionText(visualElements.text, textPosition);
+        positionElement(visualElements.text, textPosition, safeArea, metrics);
 
         return visualElements;
-    }
-    positionText(text, textPosition) {
-        if (text) {
-            text.setPosition(textPosition.x, textPosition.y);
-            text.setOrigin(0.5);
-            this.restrictBounds(text, this.buttonLayout.buttons["home"], this.buttonLayout.buttons["audio"]);
-        }
     }
 
     startGame() {
