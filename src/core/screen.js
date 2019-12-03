@@ -29,6 +29,7 @@ export class Screen extends Phaser.Scene {
     get context() {
         return {
             config: this._data.config,
+            theme: this._data.config.theme[this.scene.key],
             parentScreens: this._data.parentScreens,
             navigation: this._data.navigation,
             transientData: this._data.transient || {},
@@ -86,6 +87,56 @@ export class Screen extends Phaser.Scene {
             routes,
         );
     };
+
+    addAnimations() {
+        /*
+            TODO
+            * stopBackGroundAnimations method?
+            * Respect motion option
+            * Pause frame
+         */
+
+        const configs = this.context.theme.animations || [];
+
+        const spineDefaults = {
+            x: 0,
+            y: 0,
+            animationName: "default",
+            loop: true,
+            scale: 1,
+        };
+
+        const addSpine = animConfig => {
+            const config = Object.assign({}, spineDefaults, animConfig);
+            const animation = this.add.spine(config.x, config.y, config.key, config.animationName, config.loop);
+
+            Object.assign(animation, config.props)
+
+            if (!gmi.getAllSettings().motion) {
+                animation.active = false
+            }
+        }
+
+
+
+        configs.forEach(animConfig => {
+            const isSpine = () => {
+                return Boolean(this.cache.custom.spine.entries.get(animConfig.key));
+            }
+
+            const isSprite = () => false
+
+            const conditions = [
+                [isSpine, () => {addSpine(animConfig)} ],
+                [isSprite, () => {}],
+            ]
+
+            const dispatch = fp.cond(conditions)
+
+            dispatch()
+
+        }, this);
+    }
 
     addOverlay(key) {
         this.events.emit("onoverlayadded");

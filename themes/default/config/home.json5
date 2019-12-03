@@ -2,6 +2,25 @@
     theme: {
         home: {
             music: "loader.backgroundMusic",
+            animations: [
+                {
+                    key: "spine_owl",
+                    x: 380,
+                    y: 190,
+                    animationName: "idle",
+                    //Any props defined here will be set on the Spine object.
+                    props: {
+//                        angle: 0,
+//                        rotation: 0,
+//                        alpha: 1,
+//                        drawDebug: true,
+                        scale: 0.5,
+//                        scaleX: 1,
+//                        scaleY: 1,
+//                        timeScale: 0.5,
+                    },
+                },
+            ],
 
             //Use to shift buttons out of the way of logos etc.
             "button-overrides": {

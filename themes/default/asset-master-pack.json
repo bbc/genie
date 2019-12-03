@@ -1,7 +1,7 @@
 {
     "home": {
         "prefix": "home.",
-        "files":[
+        "files": [
             {
                 "type": "image",
                 "key": "title",
@@ -183,6 +183,17 @@
                 "key": "basicSprite",
                 "url": "game/basic-sprite.png",
                 "overwrite": false
+            }
+        ]
+    },
+    "spine": {
+        "prefix": "spine_",
+        "files": [
+            {
+                "type": "spine",
+                "key": "owl",
+                "jsonURL": "shared/owl/export/owl-pro.json",
+                "atlasURL": "shared/owl/export/owl-pma.atlas"
             }
         ]
     }

@@ -17,6 +17,8 @@ import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
 import { JSON5Plugin } from "./loader/json5-loader/json5-plugin.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
+//import * as SpinePlugin from "/node_modules/phaser/plugins/spine/dist/SpineWebGLPlugin.js";
+import * as SpinePlugin from "/lib/SpinePlugin.min.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key, ...conf[key].settings }));
 
@@ -61,6 +63,13 @@ export function startup(screenConfig, settingsConfig = {}) {
                     plugin: JSON5Plugin,
                     start: true,
                 },
+            ],
+            scene: [
+                {
+                    key: 'SpinePlugin',
+                    plugin: window.SpinePlugin,
+                    mapping: 'spine',
+                }
             ],
         },
     };
