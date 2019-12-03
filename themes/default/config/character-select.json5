@@ -4,14 +4,14 @@
             music: "loader.backgroundMusic",
             title: {
                 image: {
-                    imageId: "title",
+                    imageId: "",
                     xOffset: 0,
                     yOffset: 0,
                 },
                 text: {
-                    value: "",
-                    xOffset: 0,
-                    yOffset: 0,
+                    value: "Title",
+                    xOffset: -60,
+                    yOffset: -20,
                     styles: {
                         fontSize: "24px",
                     },
@@ -25,16 +25,14 @@
                     yOffset: 0,
                 },
                 text: {
-                    value: "",
+                    value: "Subtitle",
                     xOffset: 0,
-                    yOffset: 0,
+                    yOffset: 80,
                     styles: {
-                        fontSize: "",
-                        color: "",
-                        align: "",
+                        fontSize: "16px",
                     },
                 },
-                visible: false,
+                visible: true,
             },
             choices: [
                 {
