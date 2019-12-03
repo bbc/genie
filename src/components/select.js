@@ -13,6 +13,7 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
 
+import fp from "../../lib/lodash/fp/fp.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 const styleDefaults = {
@@ -41,12 +42,12 @@ export class Select extends Screen {
         const metrics = getMetrics();
         const safeArea = this.getSafeArea(metrics);
 
-        if (this.title && this.title.text && this.titleConfig) {
+        if (fp.get("text", this.title) && this.titleConfig) {
             const titleTextPosition = this.calculateOffset(baseX, baseY, this.titleConfig.text);
             positionElement(this.title.text, titleTextPosition, safeArea, metrics);
         }
 
-        if (this.subtitle && this.subtitle.text && this.subtitleConfig) {
+        if (fp.get("text", this.subtitle) && this.subtitleConfig) {
             const subtitleTextPosition = this.calculateOffset(baseX, baseY, this.subtitleConfig.text);
             positionElement(this.subtitle.text, subtitleTextPosition, safeArea, metrics);
         }
