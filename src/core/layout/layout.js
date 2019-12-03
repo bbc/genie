@@ -12,6 +12,7 @@ import * as settingsIcons from "./settings-icons.js";
 import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { GelGroup } from "./gel-group.js";
+import { GelGrid } from "./gel-grid.js";
 import { gmi } from "../gmi/gmi.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
@@ -100,7 +101,14 @@ export function create(scene, metrics, buttonIds) {
         root.destroy();
     };
 
+    const addGroup = () => {
+        const grid = new GelGrid(scene, root, "gridV", "gridH", metrics, true, false);
+        root.add(grid);
+        groups.grid = grid
+    }
+
     return {
+        addGroup,
         addToGroup,
         buttons,
         destroy,
@@ -109,5 +117,6 @@ export function create(scene, metrics, buttonIds) {
         root,
         removeEvents,
         setAction,
+        groups, //TODO DO NOT LEAVE HERE!!!
     };
 }

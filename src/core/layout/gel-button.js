@@ -33,7 +33,7 @@ export const noIndicator = {
 
 export class GelButton extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, metrics, config) {
-        super(scene, x, y, assetPath({ key: config.key, isMobile: metrics.isMobile }));
+        super(scene, x, y, assetPath(Object.assign({}, config, {isMobile: metrics.isMobile} )));
         this._id = config.key;
         this._isMobile = metrics.isMobile;
         this.positionOverride = config.positionOverride;
@@ -89,15 +89,20 @@ export class GelButton extends Phaser.GameObjects.Sprite {
     }
 }
 
-const paths = [[x => x.isMobile, x => "gelMobile." + x.key], [x => !x.isMobile, x => "gelDesktop." + x.key]];
+const paths = [
+    [x => Boolean(x.forceKey), x => "character-select." + x.forceKey ], //TODO renaming here also pass scene key in
+    [x => x.isMobile, x => "gelMobile." + x.key],
+    [x => !x.isMobile, x => "gelDesktop." + x.key]
+];
 
 export const assetPath = fp.cond(paths);
 
 const publish = (config, data) => () => {
+
     GameSound.Assets.buttonClick.play();
     event.bus.publish({
         channel: config.channel,
-        name: config.key,
+        name: config.forceKey || config.key,
         data,
     });
 };

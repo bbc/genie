@@ -32,8 +32,26 @@ export class Select extends Screen {
 
         this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
+
+
+        this.layout.addGroup()
+        this.layout.groups.grid.addGridCells()
+
+
         this.addEventSubscriptions();
         createTestHarnessDisplay(this);
+
+        window.SELECT = this;
+
+
+
+        event.bus.subscribe({
+            channel: buttonsChannel(this),
+            name: "char1",
+            callback: () => {console.log("YOU SELECTED CHARACTER ONE!")},
+        });
+
+
     }
 
     setVisualElement(config) {
