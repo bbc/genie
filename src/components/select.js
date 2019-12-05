@@ -10,27 +10,30 @@
 import { Screen } from "../core/screen.js";
 import * as event from "../core/event-bus.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
+import { getMetrics, onScaleChange } from "../core/scaler.js";
+import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
 
+import fp from "../../lib/lodash/fp/fp.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
-export class Select extends Screen {
-    styleDefaults = {
-        fontSize: "24px",
-        fontFamily: "Arial",
-        align: "center",
-    };
+const styleDefaults = {
+    fontSize: "24px",
+    fontFamily: "Arial",
+    align: "center",
+};
+const baseX = 0;
+const baseY = -270;
 
+export class Select extends Screen {
     create() {
         this.add.image(0, 0, `${this.scene.key}.background`);
-
         this.theme = this.context.config.theme[this.scene.key];
-        this.titleConfig = this.theme.title;
-        this.subtitleConfig = this.theme.subtitle;
-
-        this.title = this.setVisualElement(this.titleConfig);
-        this.subtitle = this.setVisualElement(this.subtitleConfig);
-
         this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
+
+        this.addEventSubscriptions();
+        this.setTitleElements();
+
+        onScaleChange.add(this.repositionTitleElements.bind(this));
 
         this.layout.addGroup();
         this.layout.groups.grid.addGridCells();
@@ -51,9 +54,47 @@ export class Select extends Screen {
         // });
     }
 
+    repositionTitleElements() {
+        const metrics = getMetrics();
+        const safeArea = this.getSafeArea(metrics);
+
+        if (fp.get("text", this.title) && this.titleConfig) {
+            const titleTextPosition = this.calculateOffset(baseX, baseY, this.titleConfig.text);
+            positionElement(this.title.text, titleTextPosition, safeArea, metrics);
+        }
+
+        if (fp.get("text", this.subtitle) && this.subtitleConfig) {
+            const subtitleTextPosition = this.calculateOffset(baseX, baseY, this.subtitleConfig.text);
+            positionElement(this.subtitle.text, subtitleTextPosition, safeArea, metrics);
+        }
+    }
+
+    setTitleElements() {
+        this.titleConfig = this.theme.title;
+        this.subtitleConfig = this.theme.subtitle;
+
+        this.title = this.setVisualElement(this.titleConfig);
+        this.subtitle = this.setVisualElement(this.subtitleConfig);
+    }
+
+    getSafeArea(metrics) {
+        const homeButton = this.buttonLayout.buttons["home"];
+        const secondaryButton = this.buttonLayout.buttons["audio"];
+
+        const homeButtonBounds = getItemBounds(homeButton, metrics);
+        const secondaryButtonBounds = getItemBounds(secondaryButton, metrics);
+
+        return {
+            top: homeButtonBounds.top,
+            bottom: homeButtonBounds.bottom,
+            left: homeButtonBounds.right,
+            right: secondaryButtonBounds.left,
+        };
+    }
+
     setVisualElement(config) {
         if (config && config.visible) {
-            return this.constructVisualElement(0, -170, config);
+            return this.constructVisualElement(baseX, baseY, config);
         }
     }
 
@@ -69,21 +110,24 @@ export class Select extends Screen {
         const textPosition = this.calculateOffset(x, y, config.text);
 
         const visualElements = {
-            image: config.image.imageId
-                ? this.add.image(imagePosition.x, imagePosition.y, `${this.scene.key}.${config.image.imageId}`)
-                : undefined,
-            text: config.text.value
-                ? this.add.text(
-                      textPosition.x,
-                      textPosition.y,
-                      config.text.value,
-                      config.text.styles || this.styleDefaults,
-                  )
-                : undefined,
+            image:
+                config.image && config.image.imageId
+                    ? this.add.image(imagePosition.x, imagePosition.y, `${this.scene.key}.${config.image.imageId}`)
+                    : undefined,
+            text:
+                config.text && config.text.value
+                    ? this.add.text(
+                          textPosition.x,
+                          textPosition.y,
+                          config.text.value,
+                          config.text.styles || styleDefaults,
+                      )
+                    : undefined,
         };
-        if (visualElements.text) {
-            visualElements.text.setOrigin(0.5);
-        }
+        const metrics = getMetrics();
+        const safeArea = this.getSafeArea(metrics);
+
+        positionElement(visualElements.text, textPosition, safeArea, metrics);
 
         return visualElements;
     }
