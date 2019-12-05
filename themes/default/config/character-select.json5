@@ -38,19 +38,24 @@
             },
             choices: [
                 {
-                    asset: "carousel1",
-                    accessibilityText: "Character 1",
-                    title: "Cardi",
+                    "asset": "char1",
+                    "accessibilityText": "Character 1",
+                    "title": "Liron Man"
                 },
                 {
-                    asset: "carousel2",
-                    accessibilityText: "Character 2",
-                    title: "Thomas",
+                    "asset": "char2",
+                    "accessibilityText": "Character 2",
+                    "title": "Teenage Nick"
                 },
                 {
-                    asset: "carousel3",
-                    accessibilityText: "Character 3",
-                    title: "Barry",
+                    "asset": "char3",
+                    "accessibilityText": "Character 3",
+                    "title": "Alex's Worst Nightmare"
+                }, 
+                {
+                    "asset": "char4",
+                    "accessibilityText": "Character 4",
+                    "title": "Rolff"
                 },
             ],
         },

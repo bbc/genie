@@ -32,26 +32,23 @@ export class Select extends Screen {
 
         this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
-
-
-        this.layout.addGroup()
-        this.layout.groups.grid.addGridCells()
-
+        this.layout.addGroup();
+        this.layout.groups.grid.addGridCells();
 
         this.addEventSubscriptions();
         createTestHarnessDisplay(this);
 
-        window.SELECT = this;
-
-
-
-        event.bus.subscribe({
-            channel: buttonsChannel(this),
-            name: "char1",
-            callback: () => {console.log("YOU SELECTED CHARACTER ONE!")},
-        });
-
-
+        // TODO This should use a working cellKeys() to set up the signal bus subscriptions.
+        //
+        // this.layout.groups.grid.cellKeys().map(key => {
+        //     event.bus.subscribe({
+        //         channel: buttonsChannel(this),
+        //         name: key,
+        //         callback: () => {
+        //             console.log(`You clicked ${key}`);
+        //         },
+        //     });
+        // });
     }
 
     setVisualElement(config) {

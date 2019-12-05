@@ -104,8 +104,8 @@ export function create(scene, metrics, buttonIds) {
     const addGroup = () => {
         const grid = new GelGrid(scene, root, "gridV", "gridH", metrics, true, false);
         root.add(grid);
-        groups.grid = grid
-    }
+        groups.grid = grid;
+    };
 
     return {
         addGroup,

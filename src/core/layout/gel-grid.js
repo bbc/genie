@@ -71,14 +71,15 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._cells = [];
         this._buttonFactory = ButtonFactory.create(scene);
         this._setGroupPosition = metrics => {
-            return//TODO
+            return; //TODO
             horizontal[hPos](metrics, this, isSafe ? "safeHorizontals" : "horizontals");
             vertical[vPos](metrics, this);
         };
 
+        this.x = -400;
+        this.xOffset = 0; //TODO DELETE ME!!!
 
-        this.x = -400
-        this.xOffset = 0 //TODO DELETE ME!!!
+        window.check = this.scene;
     }
 
     addGridCells() {
@@ -89,22 +90,31 @@ export class GelGrid extends Phaser.GameObjects.Container {
             ariaLabel: "Exit Game",
             order: 0,
             id: "__exit",
-            channel: "gel-buttons-" + this.scene.scene.key
+            channel: "gel-buttons-" + this.scene.scene.key,
         };
 
-        [1,2,3,4,1,2].forEach(idx => {
-            this.addCell(Object.assign({}, config, {forceKey: "char" + idx}))
-        }, this)
+        [1].forEach(idx => {
+            this.addCell(Object.assign({}, config, { forceKey: "char" + idx }));
+        }, this);
 
-        this.makeAccessible()
+        this.makeAccessible();
     }
 
+    // TODO This should return the list of cell keys (obviously) - keys need to be added to the button objects
+    //
+    // cellKeys() {
+    //     return this._cells.map(cell => {
+    //         // return cell.forceKey || cell.key; // TODO GET THE KEY/FORCEKEY here
+    //     });
+    // }
+
     addCell(config, position = this._cells.length) {
-        const newCell = new GelButton(this.scene, this.xOffset, 0, this._metrics, config)
+        const newCell = new GelButton(this.scene, this.xOffset, 0, this._metrics, config);
 
         this.xOffset = this.xOffset + 200;
 
-        newCell.setScale(0.2)
+        newCell.setScale(0.2);
+        newCell.setSize();
 
         this.addAt(newCell, position);
         this._cells.push(newCell);
@@ -114,8 +124,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
         return newCell;
     }
 
-
-
     removeCell(cellToRemove) {
         this._cell = fp.remove(n => n === cellToRemove, this._cells);
         cellToRemove.destroy();
@@ -124,27 +132,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
     addToGroup(item, position = 0) {
         this.addAt(item, position);
         this.alignChildren();
-    }
-
-    reset(metrics) {
-        metrics = metrics || this._metrics;
-        if (this._metrics.isMobile !== metrics.isMobile) {
-            this.resetCells(metrics);
-        }
-        //this.alignChildren();
-
-        this._metrics = metrics;
-        const invScale = 1 / metrics.scale;
-
-        //TODO P3 fix this - groups may have no concept of scale? [NT]
-        //this.setScale(invScale);
-        //this._setGroupPosition(metrics);
-
-        //this._cells.forEach(button => {
-        //    button.x = button.x + button.shiftX * metrics.scale;
-        //    button.y = button.y + button.shiftY * metrics.scale;
-        //    button.updateIndicatorPosition();
-        //});
     }
 
     alignChildren() {
@@ -171,10 +158,5 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     makeAccessible() {
         this._cells.forEach(cell => a11y.addToAccessibleButtons(this.scene, cell));
-    }
-
-    //TODO this is currently observer pattern but will eventually use pub/sub Phaser.Events
-    resetCells(metrics) {
-        //this._cells.forEach(button => button.resize(metrics));
     }
 }
