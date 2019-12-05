@@ -45,18 +45,18 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     // TODO This should return the list of cell keys (obviously) - keys need to be added to the button ob
     //
-    // cellKeys() {
-    //     return this._cells.map(cell => {
-    //         // return cell.forceKey || cell.key; // TODO GET THE KEY/FORCEKEY here
-    //     });
-    // }
+    cellKeys() {
+        return this._cells.map(cell => cell.forceKey || cell.key);
+    }
 
     addCell(config, position = this._cells.length) {
         const xOffset = 0;
         const yOffset = 0;
         const newCell = new GelButton(this.scene, xOffset, yOffset, this._metrics, config);
+        //const newCell = this._buttonFactory.createButton(this._metrics, config);
 
-        newCell.setSize(400);
+        newCell.setScale(0.4);
+        // newCell.setSize(400);
 
         this.addAt(newCell, position);
         this._cells.push(newCell);

@@ -41,17 +41,16 @@ export class Select extends Screen {
         this.addEventSubscriptions();
         createTestHarnessDisplay(this);
 
-        // TODO This should use a working cellKeys() to set up the signal bus subscriptions.
-        //
-        // this.layout.groups.grid.cellKeys().map(key => {
-        //     event.bus.subscribe({
-        //         channel: buttonsChannel(this),
-        //         name: key,
-        //         callback: () => {
-        //             console.log(`You clicked ${key}`);
-        //         },
-        //     });
-        // });
+        this.layout.groups.grid.cellKeys().map(key => {
+            event.bus.subscribe({
+                channel: buttonsChannel(this),
+                name: key,
+                callback: () => {
+                    this.transientData[this.scene.key] = { choice: key };
+                    this.startGame();
+                },
+            });
+        });
     }
 
     repositionTitleElements() {

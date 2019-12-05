@@ -37,6 +37,7 @@ export class GelButton extends Phaser.GameObjects.Sprite {
         // TODO keys need to be added to the button object, to be used ext.
         this._id = config.key;
         this._isMobile = metrics.isMobile;
+        this.forceKey = config.forceKey;
         this.positionOverride = config.positionOverride;
         this.indicator = noIndicator;
         this.setIndicator();
