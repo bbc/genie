@@ -27,6 +27,7 @@ const fireGameCompleteStat = result => {
 export class Results extends Screen {
     create() {
         this.add.image(0, 0, "results.background");
+        this.addAnimations();
         this.add.image(0, -150, "results.title");
         this.theme = this.context.config.theme[this.scene.key];
         const resultsText = this.add.text(0, 50, this.context.transientData.results, this.theme.resultText.style);

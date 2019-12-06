@@ -2,40 +2,6 @@
     theme: {
         home: {
             music: "loader.backgroundMusic",
-            animations: [
-                {
-                    key: "examples_spine_owl",
-                    x: 380,
-                    y: 190,
-                    animationName: "idle",
-                    //Any props defined here will be set on the Spine object.
-                    props: {
-                        //                        angle: 0,
-                        //                        rotation: 0,
-                        //                        alpha: 1,
-                        //                        drawDebug: true,
-                        scale: 0.5,
-                        //                        scaleX: 1,
-                        //                        scaleY: 1,
-                        //                        timeScale: 0.5,
-                    },
-                },
-                {
-                    key: "examples_sprite",
-                    x: -200,
-                    y: -200,
-                    frames: { key: "example_sprite_animation", start: 0, end: 7, default: 0, repeat: -1, rate: 10 },
-                    //Any props defined here will be set on the Sprite object.
-                    props: {
-                        alpha: 0.75,
-                        angle: 20,
-                        drawDebug:true,
-                        flipX: true,
-                        scale: 2,
-                    },
-                },
-            ],
-
             //Use to shift buttons out of the way of logos etc.
             "button-overrides": {
                 play: {

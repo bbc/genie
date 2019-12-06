@@ -11,6 +11,7 @@ import { createTestHarnessDisplay } from "../../core/qa/layout-harness.js";
 export class GameTest extends Screen {
     create() {
         this.add.image(0, 0, "home.background");
+        this.addAnimations();
         this.add
             .text(0, -190, "Game goes here", {
                 font: "65px ReithSans",
