@@ -116,7 +116,7 @@ describe("Select Screen", () => {
         Scaler.getMetrics = jest.fn(() => mockMetrics);
         Scaler.onScaleChange = { add: jest.fn() };
 
-        defaultTextStyle = { align: "center", fontFamily: "Arial", fontSize: "24px" };
+        defaultTextStyle = { align: "center", fontFamily: "ReithSans", fontSize: "24px" };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -244,9 +244,11 @@ describe("Select Screen", () => {
                 expect(selectScreen.add.text).toHaveBeenCalledWith(0, -270, "testTitleText", defaultTextStyle);
             });
 
-            test("adds title text with config styles when text is supplied with styling", () => {
+            test("adds title text with config styles overwriting the default when text is supplied with styling", () => {
                 const styling = {
                     id: "titleStyling",
+                    fontStyle: "Ariel",
+                    ...defaultTextStyle,
                 };
 
                 jest.clearAllMocks();
@@ -334,9 +336,10 @@ describe("Select Screen", () => {
                 expect(selectScreen.add.text).toHaveBeenCalledWith(0, -270, "testSubtitleText", defaultTextStyle);
             });
 
-            test("adds subtitle text with config styles when text is supplied with styling", () => {
+            test("adds subtitle text with config styles overwriting default styles when text is supplied with styling", () => {
                 const styling = {
                     id: "subtitleStyling",
+                    ...defaultTextStyle,
                 };
 
                 mockData.config.theme["test-select"].subtitle.visible = true;
