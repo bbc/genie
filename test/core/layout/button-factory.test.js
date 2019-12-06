@@ -7,7 +7,7 @@
 import * as ButtonFactory from "../../../src/core/layout/button-factory";
 import * as GelButton from "../../../src/core/layout/gel-button";
 import * as accessibilify from "../../../src/core/accessibility/accessibilify";
-import * as event from "../../../src/core/event-bus.js";
+import { eventBus } from "../../../src/core/event-bus.js";
 import * as settingsModule from "../../../src/core/settings.js";
 
 jest.mock("../../../src/core/settings.js");
@@ -73,11 +73,11 @@ describe("Layout - Button Factory", () => {
 
             buttonFactory.createButton(expectedIsMobile, config);
 
-            event.bus.publish({ channel: buttonsChannel, name: "play" });
-            event.bus.publish({ channel: buttonsChannel, name: "play" });
+            eventBus.publish({ channel: buttonsChannel, name: "play" });
+            eventBus.publish({ channel: buttonsChannel, name: "play" });
 
             expect(config.action).toHaveBeenCalledTimes(2);
-            event.bus.removeChannel(buttonsChannel);
+            eventBus.removeChannel(buttonsChannel);
         });
 
         test("disables hitArea and input for icons", () => {
