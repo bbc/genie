@@ -41,7 +41,8 @@ const scaleElement = (element, bounds) => {
 };
 
 const restrictBounds = (element, safeArea, metrics) => {
-    enforceTextSize(element, metrics);
+    if (element.type === "Text") enforceTextSize(element, metrics);
+
     scaleElement(element, safeArea);
 
     const elementBounds = getItemBounds(element, metrics);
