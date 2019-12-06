@@ -67,7 +67,7 @@ export const enforceTextSize = (element, { scale }) => {
     const currentSize = element.height * scale;
 
     if (currentSize < minimumSize) {
-        const newScale = currentSize / element.height;
-        element.setScale(2 - newScale);
+        const newScale = minimumSize / currentSize;
+        element.setScale(newScale);
     }
 };

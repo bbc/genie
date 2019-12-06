@@ -48,6 +48,7 @@ describe("element-bounding", () => {
         metrics = {
             isMobile: false,
             buttonPad: 15,
+            scale: 1,
         };
     });
 
@@ -121,7 +122,8 @@ describe("element-bounding", () => {
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
-            expect(mockElement.setScale).toHaveBeenCalledTimes(1);
+            expect(mockElement.setScale).toHaveBeenCalledTimes(2);
+            expect(mockElement.setScale).toHaveBeenCalledWith(1);
             expect(mockElement.setScale).toHaveBeenCalledWith(0.5);
         });
 
@@ -130,14 +132,15 @@ describe("element-bounding", () => {
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
-            expect(mockElement.setScale).toHaveBeenCalledTimes(1);
+            expect(mockElement.setScale).toHaveBeenCalledTimes(2);
+            expect(mockElement.setScale).toHaveBeenCalledWith(1);
             expect(mockElement.setScale).toHaveBeenCalledWith(0.5);
         });
 
         test("does not scale down text if it is smaller than the allowed area", () => {
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
-            expect(mockElement.setScale).not.toHaveBeenCalled();
+            expect(mockElement.setScale).not.toHaveBeenCalledWith(0.5);
         });
     });
 
@@ -177,9 +180,30 @@ describe("element-bounding", () => {
     describe("enforceTextSize", () => {
         test("Scales up text if it is bellow the 13px threshold", () => {
             mockElement.height = 10;
-            enforceTextSize(mockElement, { scale: 0.9 });
+            enforceTextSize(mockElement, { scale: 1 });
 
-            expect(mockElement.setScale).toHaveBeenCalledWith(3.333);
+            expect(mockElement.setScale).toHaveBeenCalledWith(1.3);
+        });
+
+        test("Scales up text if it is bellow the 13px threshold at any when scale is < 1", () => {
+            mockElement.height = 10;
+            enforceTextSize(mockElement, { scale: 0.5 });
+
+            expect(mockElement.setScale).toHaveBeenCalledWith(2.6);
+        });
+
+        test("Scales up text if it is bellow the 13px threshold at any when scale is > 1", () => {
+            mockElement.height = 5;
+            enforceTextSize(mockElement, { scale: 1.8 });
+
+            expect(mockElement.setScale).toHaveBeenCalledWith(1.4444444444444444);
+        });
+
+        test("Does not attempt to scale text if size is above 13px threshold", () => {
+            mockElement.height = 15;
+            enforceTextSize(mockElement, { scale: 1 });
+
+            expect(mockElement.setScale).not.toHaveBeenCalledWith(0.8666666666666667);
         });
     });
 });
