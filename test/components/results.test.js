@@ -6,7 +6,7 @@
 import { createMockGmi } from "../mock/gmi";
 
 import * as layoutHarness from "../../src/core/qa/layout-harness.js";
-import * as event from "../../src/core/event-bus.js";
+import { eventBus } from "../../src/core/event-bus.js";
 
 import { Results } from "../../src/components/results";
 
@@ -135,28 +135,28 @@ describe("Results Screen", () => {
 
     describe("events", () => {
         beforeEach(() => {
-            jest.spyOn(event.bus, "subscribe");
+            jest.spyOn(eventBus, "subscribe");
             resultsScreen.create();
         });
 
         describe("the continue button", () => {
             test("adds a event subscription", () => {
-                expect(event.bus.subscribe.mock.calls[0][0].name).toBe("continue");
+                expect(eventBus.subscribe.mock.calls[0][0].name).toBe("continue");
             });
 
             test("navigates to the next screen when clicked", () => {
-                event.bus.subscribe.mock.calls[0][0].callback();
+                eventBus.subscribe.mock.calls[0][0].callback();
                 expect(resultsScreen.navigation.next).toHaveBeenCalled();
             });
         });
 
         describe("the restart button", () => {
             test("adds a event subscription", () => {
-                expect(event.bus.subscribe.mock.calls[1][0].name).toBe("restart");
+                expect(eventBus.subscribe.mock.calls[1][0].name).toBe("restart");
             });
 
             test("restarts the game and passes saved data through", () => {
-                event.bus.subscribe.mock.calls[1][0].callback();
+                eventBus.subscribe.mock.calls[1][0].callback();
                 expect(resultsScreen.navigation.game).toHaveBeenCalled();
             });
         });

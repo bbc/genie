@@ -92,4 +92,4 @@ export const create = () => {
 };
 
 //Single instance
-export const bus = create();
+export const eventBus = create();

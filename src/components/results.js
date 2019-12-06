@@ -5,7 +5,7 @@
  */
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
-import * as event from "../core/event-bus.js";
+import { eventBus } from "../core/event-bus.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
@@ -40,13 +40,13 @@ export class Results extends Screen {
         fireGameCompleteStat(this.transientData.results);
         createTestHarnessDisplay(this);
 
-        event.bus.subscribe({
+        eventBus.subscribe({
             name: "continue",
             channel: buttonsChannel(this),
             callback: this.navigation.next,
         });
 
-        event.bus.subscribe({
+        eventBus.subscribe({
             name: "restart",
             channel: buttonsChannel(this),
             callback: () => {

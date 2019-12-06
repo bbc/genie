@@ -11,7 +11,7 @@ import { HowToPlay } from "./components/how-to-play.js";
 import { GameTest } from "./components/test-screens/game.js";
 import { Pause } from "./components/overlays/pause.js";
 import { settingsChannel } from "./core/settings.js";
-import * as event from "./core/event-bus.js";
+import { eventBus } from "./core/event-bus.js";
 import { startup } from "./core/startup.js";
 //TODO Re-enable if we can get our PR merged. NT:06:12:19
 //import "/node_modules/phaser/plugins/spine/dist/SpineWebGLPlugin.js";
@@ -33,7 +33,7 @@ const settingsConfig = {
     ],
 };
 
-event.bus.subscribe({
+eventBus.subscribe({
     channel: settingsChannel,
     name: "custom1",
     callback: value => {

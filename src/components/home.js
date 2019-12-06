@@ -8,7 +8,7 @@
  */
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
-import * as event from "../core/event-bus.js";
+import { eventBus } from "../core/event-bus.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 export class Home extends Screen {
@@ -23,7 +23,7 @@ export class Home extends Screen {
 
         createTestHarnessDisplay(this);
 
-        event.bus.subscribe({
+        eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "play",
             callback: this.navigation.next,

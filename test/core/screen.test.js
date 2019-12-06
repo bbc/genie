@@ -10,7 +10,7 @@ import * as Layout from "../../src/core/layout/layout.js";
 import * as Scaler from "../../src/core/scaler.js";
 import * as GameSound from "../../src/core/game-sound";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
-import * as event from "../../src/core/event-bus.js";
+import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults";
 import { settingsChannel } from "../../src/core/settings.js";
 
@@ -56,10 +56,10 @@ describe("Screen", () => {
     };
 
     beforeEach(() => {
-        jest.spyOn(event.bus, "subscribe");
-        jest.spyOn(event.bus, "publish");
-        jest.spyOn(event.bus, "removeChannel");
-        jest.spyOn(event.bus, "removeSubscription");
+        jest.spyOn(eventBus, "subscribe");
+        jest.spyOn(eventBus, "publish");
+        jest.spyOn(eventBus, "removeChannel");
+        jest.spyOn(eventBus, "removeSubscription");
         jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
         jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
         jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
@@ -226,7 +226,7 @@ describe("Screen", () => {
             screen.removeAll();
             expect(screen.layout).not.toBeDefined();
             expect(layout.destroy).toHaveBeenCalled();
-            expect(event.bus.removeChannel).toHaveBeenCalledWith(buttonsChannel(screen));
+            expect(eventBus.removeChannel).toHaveBeenCalledWith(buttonsChannel(screen));
         });
     });
 
@@ -235,7 +235,7 @@ describe("Screen", () => {
             const expectedName = "overlay";
             createAndInitScreen();
             screen.addOverlay(expectedName);
-            expect(event.bus.subscribe).toHaveBeenCalledWith({
+            expect(eventBus.subscribe).toHaveBeenCalledWith({
                 channel: overlayChannel,
                 name: expectedName,
                 callback: screen._onOverlayRemoved,
@@ -264,12 +264,12 @@ describe("Screen", () => {
         test("removing an overlay, publishes to and removes subscription from event bus correctly", () => {
             createAndInitScreen();
             screen.removeOverlay();
-            expect(event.bus.publish).toHaveBeenCalledWith({
+            expect(eventBus.publish).toHaveBeenCalledWith({
                 channel: overlayChannel,
                 name: screen.scene.key,
                 data: { overlay: expect.any(Screen) },
             });
-            expect(event.bus.removeSubscription).toHaveBeenCalledWith({
+            expect(eventBus.removeSubscription).toHaveBeenCalledWith({
                 channel: overlayChannel,
                 name: screen.scene.key,
             });
@@ -279,7 +279,7 @@ describe("Screen", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
             createAndInitScreen();
             screen._onOverlayRemoved({ overlay: mockOverlay });
-            expect(event.bus.removeChannel).toHaveBeenCalledWith(buttonsChannel(mockOverlay));
+            expect(eventBus.removeChannel).toHaveBeenCalledWith(buttonsChannel(mockOverlay));
         });
 
         test("removing an overlay, calls removeAll on the overlay and stops it", () => {
@@ -348,7 +348,7 @@ describe("Screen", () => {
             createAndInitScreen();
             jest.clearAllMocks();
             screen._onOverlayRemoved({ overlay: mockOverlay });
-            expect(event.bus.publish).toHaveBeenCalledWith({
+            expect(eventBus.publish).toHaveBeenCalledWith({
                 channel: settingsChannel,
                 name: "audio",
                 data: mockSettings.audio,

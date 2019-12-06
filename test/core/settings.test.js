@@ -5,7 +5,7 @@
  */
 import { createMockGmi } from "../mock/gmi";
 import { create as createSettings } from "../../src/core/settings.js";
-import * as event from "../../src/core/event-bus.js";
+import { eventBus } from "../../src/core/event-bus.js";
 
 jest.mock("../../src/core/accessibility/accessibility-layer.js");
 
@@ -21,8 +21,8 @@ describe("Settings", () => {
 
     beforeEach(() => {
         createGmi();
-        jest.spyOn(event.bus, "subscribe").mockImplementation(() => {});
-        jest.spyOn(event.bus, "publish").mockImplementation(() => {});
+        jest.spyOn(eventBus, "subscribe").mockImplementation(() => {});
+        jest.spyOn(eventBus, "publish").mockImplementation(() => {});
 
         const layout = [{ buttons: { pause: {} } }];
 
@@ -64,8 +64,8 @@ describe("Settings", () => {
             settings.show(mockGame);
             const onSettingChangedCallback = mockGmi.showSettings.mock.calls[0][0];
             onSettingChangedCallback("audio", false);
-            expect(event.bus.publish).toHaveBeenCalledTimes(1);
-            expect(event.bus.publish).toHaveBeenCalledWith(expectedEvent);
+            expect(eventBus.publish).toHaveBeenCalledTimes(1);
+            expect(eventBus.publish).toHaveBeenCalledWith(expectedEvent);
         });
 
         test("publishes a event when settings has been closed", () => {
@@ -76,8 +76,8 @@ describe("Settings", () => {
             settings.show(mockGame);
             const onSettingsClosedCallback = mockGmi.showSettings.mock.calls[0][1];
             onSettingsClosedCallback();
-            const publishConfig = event.bus.publish.mock.calls[0][0];
-            expect(event.bus.publish).toHaveBeenCalledTimes(1);
+            const publishConfig = eventBus.publish.mock.calls[0][0];
+            expect(eventBus.publish).toHaveBeenCalledTimes(1);
             expect(publishConfig.channel).toBe(expectedEvent.channel);
             expect(publishConfig.name).toBe(expectedEvent.name);
         });
