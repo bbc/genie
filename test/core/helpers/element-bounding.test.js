@@ -122,8 +122,7 @@ describe("element-bounding", () => {
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
-            expect(mockElement.setScale).toHaveBeenCalledTimes(2);
-            expect(mockElement.setScale).toHaveBeenCalledWith(1);
+            expect(mockElement.setScale).toHaveBeenCalledTimes(1);
             expect(mockElement.setScale).toHaveBeenCalledWith(0.5);
         });
 
@@ -132,8 +131,7 @@ describe("element-bounding", () => {
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
-            expect(mockElement.setScale).toHaveBeenCalledTimes(2);
-            expect(mockElement.setScale).toHaveBeenCalledWith(1);
+            expect(mockElement.setScale).toHaveBeenCalledTimes(1);
             expect(mockElement.setScale).toHaveBeenCalledWith(0.5);
         });
 
@@ -141,6 +139,17 @@ describe("element-bounding", () => {
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
             expect(mockElement.setScale).not.toHaveBeenCalledWith(0.5);
+        });
+
+        test("calls enforceTextSize and resized text", () => {
+            mockElement.height = 10;
+            mockElement.type = "Text";
+
+            positionElement(mockElement, mockElementPosition, safeArea, metrics);
+
+            expect(mockElement.setScale).toHaveBeenCalledTimes(2);
+            expect(mockElement.setScale).toHaveBeenCalledWith(1);
+            expect(mockElement.setScale).toHaveBeenCalledWith(1.3);
         });
     });
 
