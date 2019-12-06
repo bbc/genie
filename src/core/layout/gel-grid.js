@@ -25,28 +25,34 @@ export class GelGrid extends Phaser.GameObjects.Container {
         window.check = this.scene;
     }
 
+    getCellID(choice, i) {
+        return fp.camelCase(`${this.scene.scene.key}${i}${choice.asset}`);
+    }
+
     addGridCells() {
         const config = {
             group: "topLeft",
-            title: "Exit",
-            key: "IRRELEVANT",
             ariaLabel: "Exit Game",
             order: 0,
-            id: "__exit",
             channel: "gel-buttons-" + this.scene.scene.key,
         };
         this.scene.theme.choices.map((choice, i) => {
-            this.addCell(Object.assign({}, config, { forceKey: choice.asset }));
+            this.addCell(
+                Object.assign({}, config, {
+                    id: this.getCellID(choice, i),
+                    key: choice.asset,
+                    title: choice.title ? choice.title : `Option ${i + 1}`,
+                    scene: this.scene.scene.key,
+                }),
+            );
             !i ? (this._cells[i].visible = false) : (this._cells[i].visible = true);
         });
 
         this.makeAccessible();
     }
 
-    // TODO This should return the list of cell keys (obviously) - keys need to be added to the button ob
-    //
     cellKeys() {
-        return this._cells.map(cell => cell.forceKey || cell.key);
+        return this._cells.map(cell => cell.key);
     }
 
     addCell(config, position = this._cells.length) {
