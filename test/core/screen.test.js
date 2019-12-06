@@ -43,7 +43,7 @@ describe("Screen", () => {
         };
         mockData = {
             navigation: mockNavigation,
-            config: { theme: { loadscreen: { music: "test/music" } } },
+            config: { theme: { loadscreen: { music: "test/music" }, screenKey: {} } },
             parentScreens: [{ key: "select", removeAll: jest.fn() }],
             transient: mockTransientData,
         };
@@ -83,6 +83,7 @@ describe("Screen", () => {
             createAndInitScreen();
             expect(screen.context).toEqual({
                 config: mockData.config,
+                theme: mockData.config.theme.screenKey,
                 navigation: mockNavigation,
                 parentScreens: mockData.parentScreens,
                 transientData: mockTransientData,
@@ -169,6 +170,7 @@ describe("Screen", () => {
             const expectedConfig = {
                 key: "data",
                 more: "data",
+                theme: { screenKey: {} },
             };
             createAndInitScreen();
             screen.setConfig(expectedConfig);

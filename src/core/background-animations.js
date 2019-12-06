@@ -11,22 +11,20 @@ const spineDefaults = {
     y: 0,
     animationName: "default",
     loop: true,
-    scale: 1,
 };
 
 const spriteDefaults = {
     x: 0,
     y: 0,
-    loop: true,
     scale: 1,
-    frames: { frames: { default: 0, repeat: -1, rate: 10 } },
+    frames: { default: 0, repeat: -1, rate: 10 },
 };
 
 const addSpine = scene => animConfig => {
     const config = Object.assign({}, spineDefaults, animConfig);
     const animation = scene.add.spine(config.x, config.y, config.key, config.animationName, config.loop);
 
-    Object.assign(animation, config.props);
+    config.props && Object.assign(animation, config.props);
 
     animation.active = gmi.getAllSettings().motion;
 };
@@ -35,7 +33,7 @@ const addSprite = scene => animConfig => {
     const config = Object.assign({}, spriteDefaults, animConfig);
     const animation = scene.add.sprite(config.x, config.y, config.key, config.frames.default);
 
-    Object.assign(animation, config.props);
+    config.props && Object.assign(animation, config.props);
 
     scene.anims.create({
         key: config.frames.key,
