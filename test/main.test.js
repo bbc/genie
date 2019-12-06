@@ -11,7 +11,7 @@ import { HowToPlay } from "../src/components/how-to-play";
 import { GameTest } from "../src/components/test-screens/game";
 import { Pause } from "../src/components/overlays/pause";
 import { settingsChannel } from "../src/core/settings";
-import * as event from "../src/core/event-bus";
+import { eventBus } from "../src/core/event-bus";
 import { startup } from "../src/core/startup";
 import "../src/main";
 
@@ -20,7 +20,7 @@ jest.mock("../src/core/startup.js");
 
 describe("Main", () => {
     test("subscribes to the setting changed event", () => {
-        const eventSubscribeCall = event.bus.subscribe.mock.calls[0][0];
+        const eventSubscribeCall = eventBus.subscribe.mock.calls[0][0];
         expect(eventSubscribeCall.channel).toBe(settingsChannel);
         expect(eventSubscribeCall.name).toBe("custom1");
         expect(eventSubscribeCall.callback).toEqual(expect.any(Function));
@@ -29,7 +29,7 @@ describe("Main", () => {
     test("logs an example console log when a setting has been changed", () => {
         jest.spyOn(console, "log").mockImplementation(() => {});
         require("../src/main");
-        event.bus.subscribe.mock.calls[0][0].callback("difficult");
+        eventBus.subscribe.mock.calls[0][0].callback("difficult");
         expect(console.log).toHaveBeenCalledWith("Custom 1 setting changed to difficult"); // eslint-disable-line no-console
     });
 

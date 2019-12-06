@@ -11,7 +11,7 @@ import { HowToPlay } from "./components/how-to-play.js";
 import { GameTest } from "./components/test-screens/game.js";
 import { Pause } from "./components/overlays/pause.js";
 import { settingsChannel } from "./core/settings.js";
-import * as event from "./core/event-bus.js";
+import { eventBus } from "./core/event-bus.js";
 import { startup } from "./core/startup.js";
 
 const settingsConfig = {
@@ -30,7 +30,7 @@ const settingsConfig = {
     ],
 };
 
-event.bus.subscribe({
+eventBus.subscribe({
     channel: settingsChannel,
     name: "custom1",
     callback: value => {

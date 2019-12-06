@@ -5,7 +5,7 @@
  */
 
 import * as layoutHarness from "../../src/core/qa/layout-harness.js";
-import * as event from "../../src/core/event-bus.js";
+import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 import * as Scaler from "../../src/core/scaler.js";
 import * as elementBounding from "../../src/core/helpers/element-bounding.js";
@@ -368,17 +368,17 @@ describe("Select Screen", () => {
 
     describe("events", () => {
         beforeEach(() => {
-            jest.spyOn(event.bus, "subscribe");
+            jest.spyOn(eventBus, "subscribe");
             selectScreen.create();
         });
 
         test("adds event subscription to the continue button", () => {
-            expect(event.bus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(event.bus.subscribe.mock.calls[0][0].name).toBe("continue");
+            expect(eventBus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(selectScreen));
+            expect(eventBus.subscribe.mock.calls[0][0].name).toBe("continue");
         });
 
         test("moves to the next game screen when the continue button is pressed", () => {
-            event.bus.subscribe.mock.calls[0][0].callback();
+            eventBus.subscribe.mock.calls[0][0].callback();
             expect(selectScreen.navigation.next).toHaveBeenCalled();
         });
     });

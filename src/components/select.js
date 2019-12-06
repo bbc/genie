@@ -8,7 +8,7 @@
  */
 
 import { Screen } from "../core/screen.js";
-import * as event from "../core/event-bus.js";
+import { eventBus } from "../core/event-bus.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
@@ -122,7 +122,7 @@ export class Select extends Screen {
     }
 
     addEventSubscriptions() {
-        event.bus.subscribe({
+        eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "continue",
             callback: this.startGame.bind(this),

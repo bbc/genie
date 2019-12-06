@@ -7,13 +7,13 @@
 import { calculateMetrics } from "./layout/calculate-metrics.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
-import * as event from "./event-bus.js";
+import { eventBus } from "./event-bus.js";
 
 const getBounds = game => () => game.scale.parentSize;
 
 const _onSizeChangeEventCreate = (channel, name) => ({
-    dispatch: data => event.bus.publish({ channel, name, data }),
-    add: callback => event.bus.subscribe({ channel, name, callback }),
+    dispatch: data => eventBus.publish({ channel, name, data }),
+    add: callback => eventBus.subscribe({ channel, name, callback }),
 });
 const _onSizeChange = _onSizeChangeEventCreate("scaler", "sizeChange");
 const px = val => Math.floor(val) + "px";
