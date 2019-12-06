@@ -11,17 +11,14 @@ import { Home } from "../../src/components/home";
 
 describe("Home Screen", () => {
     let homeScreen;
-    let mockContext;
     let mockData;
 
     beforeEach(() => {
         layoutHarness.createTestHarnessDisplay = jest.fn();
         homeScreen = new Home();
 
-        mockContext = { config: { theme: { game: { achievements: undefined }, home: {} } } };
-
         mockData = {
-            config: { theme: { game: { achievements: undefined }, home: {} } }
+            config: { theme: { game: { achievements: undefined }, home: {} } },
         };
 
         homeScreen.setData(mockData);

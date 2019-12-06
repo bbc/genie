@@ -12,11 +12,6 @@ import * as event from "../core/event-bus.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 export class Home extends Screen {
-    preload() {
-        //this.load.setBaseURL(gmi.gameDir);
-        //this.load.setPath(gmi.embedVars.configPath);
-        //this.load.spine('spine_owl', 'shared/owl/export/owl-pro.json', [ 'shared/owl/export/owl-pma.atlas' ], true);
-    }
     create() {
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         this.add.image(0, 0, `${this.scene.key}.background`);
