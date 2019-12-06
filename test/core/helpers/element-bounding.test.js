@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { getItemBounds, positionElement } from "../../../src/core/helpers/element-bounding.js";
+import { getItemBounds, positionElement, enforceTextSize } from "../../../src/core/helpers/element-bounding.js";
 
 describe("element-bounding", () => {
     let mockElement;
@@ -171,6 +171,15 @@ describe("element-bounding", () => {
                 left: 0,
                 right: 50,
             });
+        });
+    });
+
+    describe("enforceTextSize", () => {
+        test("Scales up text if it is bellow the 13px threshold", () => {
+            mockElement.height = 10;
+            enforceTextSize(mockElement, { scale: 0.9 });
+
+            expect(mockElement.setScale).toHaveBeenCalledWith(3.333);
         });
     });
 });

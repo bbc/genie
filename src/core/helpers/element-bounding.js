@@ -41,6 +41,7 @@ const scaleElement = (element, bounds) => {
 };
 
 const restrictBounds = (element, safeArea, metrics) => {
+    enforceTextSize(element, metrics);
     scaleElement(element, safeArea);
 
     const elementBounds = getItemBounds(element, metrics);
@@ -56,5 +57,17 @@ const restrictBounds = (element, safeArea, metrics) => {
     }
     if (elementBounds.right > safeArea.right) {
         element.setPosition(element.x - (elementBounds.right - safeArea.right), element.y);
+    }
+};
+
+export const enforceTextSize = (element, { scale }) => {
+    element.setScale(1); // restore to original size.
+
+    const minimumSize = 13;
+    const currentSize = element.height * scale;
+
+    if (currentSize < minimumSize) {
+        const newScale = currentSize / element.height;
+        element.setScale(2 - newScale);
     }
 };
