@@ -17,8 +17,8 @@ import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
 import { JSON5Plugin } from "./loader/json5-loader/json5-plugin.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
-//import * as SpinePlugin from "/node_modules/phaser/plugins/spine/dist/SpineWebGLPlugin.js";
-import * as SpinePlugin from "/lib/SpinePlugin.min.js";
+//import * as SpinePlugin from "/node_modules/phaser/plugins/spine/dist/SpineWebGLPlugin.js";   //TODO Re-enable if we can get our PR merged. NT:06:12:19
+import * as SpinePlugin from "/lib/SpinePlugin.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key, ...conf[key].settings }));
 
@@ -66,10 +66,10 @@ export function startup(screenConfig, settingsConfig = {}) {
             ],
             scene: [
                 {
-                    key: 'SpinePlugin',
+                    key: "SpinePlugin",
                     plugin: window.SpinePlugin,
-                    mapping: 'spine',
-                }
+                    mapping: "spine",
+                },
             ],
         },
     };
