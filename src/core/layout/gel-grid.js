@@ -59,10 +59,12 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const xOffset = 0;
         const yOffset = 0;
         const newCell = new GelButton(this.scene, xOffset, yOffset, this._metrics, config);
-        //const newCell = this._buttonFactory.createButton(this._metrics, config);
 
-        newCell.setScale(0.4);
-        // newCell.setSize(400);
+
+        // TODO Calcuate this from metrics / breakpoints
+        // newCell.setScale(0.4);
+        newCell.displayWidth = 400;
+        newCell.displayHeight = 400;
 
         this.addAt(newCell, position);
         this._cells.push(newCell);
