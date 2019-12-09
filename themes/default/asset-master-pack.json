@@ -1,7 +1,7 @@
 {
     "home": {
         "prefix": "home.",
-        "files":[
+        "files": [
             {
                 "type": "image",
                 "key": "title",
@@ -183,6 +183,28 @@
                 "key": "basicSprite",
                 "url": "game/basic-sprite.png",
                 "overwrite": false
+            }
+        ]
+    },
+    "examples": {
+        "prefix": "examples_",
+        "files": [
+            {
+                "type": "spine",
+                "key": "spine_owl",
+                "jsonURL": "examples/spine/owl/export/owl-pro.json",
+                "atlasURL": "examples/spine/owl/export/owl-pma.atlas"
+            },
+            {
+                "type": "spritesheet",
+                "key": "sprite",
+                "url": "examples/sprite/sprite-anim.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 66,
+                    "margin": 0,
+                    "spacing": 8
+                }
             }
         ]
     }

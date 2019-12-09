@@ -11,14 +11,17 @@ import { Home } from "../../src/components/home";
 
 describe("Home Screen", () => {
     let homeScreen;
-    let mockContext;
+    let mockData;
 
     beforeEach(() => {
         layoutHarness.createTestHarnessDisplay = jest.fn();
-
-        mockContext = { config: { theme: { game: { achievements: undefined } } } };
-
         homeScreen = new Home();
+
+        mockData = {
+            config: { theme: { game: { achievements: undefined }, home: {} } },
+        };
+
+        homeScreen.setData(mockData);
         homeScreen.scene = { key: "home" };
         homeScreen.add = { image: jest.fn() };
         homeScreen.setLayout = jest.fn();
@@ -29,7 +32,6 @@ describe("Home Screen", () => {
 
     describe("create method", () => {
         beforeEach(() => {
-            Object.defineProperty(homeScreen, "context", { get: jest.fn(() => mockContext) });
             homeScreen.create();
         });
 
@@ -53,8 +55,7 @@ describe("Home Screen", () => {
 
     describe("Achievements button", () => {
         test("adds the achievement button when theme flag is set", () => {
-            mockContext.config.theme.game.achievements = true;
-            Object.defineProperty(homeScreen, "context", { get: jest.fn(() => mockContext) });
+            mockData.config.theme.game.achievements = true;
             homeScreen.create();
             const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "achievements"];
             expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
@@ -64,7 +65,6 @@ describe("Home Screen", () => {
     describe("Events", () => {
         beforeEach(() => {
             jest.spyOn(eventBus, "subscribe");
-            Object.defineProperty(homeScreen, "context", { get: jest.fn(() => mockContext) });
             homeScreen.create();
         });
 

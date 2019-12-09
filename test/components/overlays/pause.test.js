@@ -22,6 +22,11 @@ describe("Pause Overlay", () => {
             navigation: {
                 "level-select": { routes: { restart: "home" } },
             },
+            config: {
+                theme: {
+                    pause: {},
+                },
+            },
         };
 
         pauseScreen = new Pause();
