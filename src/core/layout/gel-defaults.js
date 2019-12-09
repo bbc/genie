@@ -6,7 +6,7 @@
 import { settings, settingsChannel } from "../../core/settings.js";
 // import * as GameSound from "../../core/game-sound.js";
 import { gmi } from "../../core/gmi/gmi.js";
-import * as event from "../event-bus.js";
+import { eventBus } from "../event-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const pushLevelId = (screen, params) => {
@@ -86,7 +86,7 @@ export const config = screen => {
                 const audioEnabled = gmi.getAllSettings().audio;
                 gmi.setAudio(!audioEnabled);
 
-                event.bus.publish({
+                eventBus.publish({
                     channel: settingsChannel,
                     name: "audio",
                 });

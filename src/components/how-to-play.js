@@ -9,7 +9,7 @@
 
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
-import * as event from "../core/event-bus.js";
+import { eventBus } from "../core/event-bus.js";
 import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
@@ -117,25 +117,25 @@ export class HowToPlay extends Screen {
     }
 
     addEventSubscriptions() {
-        event.bus.subscribe({
+        eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "previous",
             callback: this.handleLeftButton.bind(this),
         });
 
-        event.bus.subscribe({
+        eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "next",
             callback: this.handleRightButton.bind(this),
         });
 
-        event.bus.subscribe({
+        eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "continue",
             callback: this.startGame.bind(this),
         });
 
-        event.bus.subscribe({
+        eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "pause",
             callback: () => {
@@ -146,7 +146,7 @@ export class HowToPlay extends Screen {
             },
         });
 
-        event.bus.subscribe({
+        eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "play",
             callback: () => {

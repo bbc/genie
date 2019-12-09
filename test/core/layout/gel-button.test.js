@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import * as event from "../../../src/core/event-bus.js";
+import { eventBus } from "../../../src/core/event-bus.js";
 import * as GameSound from "../../../src/core/game-sound.js";
 import { GelButton, assetPath, noIndicator } from "../../../src/core/layout/gel-button";
 import { gmi } from "../../../src/core/gmi/gmi.js";
@@ -22,7 +22,7 @@ describe("Gel Button", () => {
         GelButton.prototype.height = 64;
         GelButton.prototype.setFrame = jest.fn();
         GelButton.prototype.setSizeToFrame = jest.fn();
-        event.bus.publish = jest.fn();
+        eventBus.publish = jest.fn();
         GameSound.Assets = {
             backgroundMusic: {},
             buttonClick: { play: jest.fn() },
@@ -142,7 +142,7 @@ describe("Gel Button", () => {
         test("pointerup function publishes to event bus", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.onPointerUp(mockConfig, mockScene);
-            expect(event.bus.publish).toHaveBeenCalledWith({
+            expect(eventBus.publish).toHaveBeenCalledWith({
                 channel: mockConfig.channel,
                 name: mockConfig.key,
                 data: { screen: mockScene },

@@ -7,7 +7,7 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import * as event from "../../core/event-bus.js";
+import { eventBus } from "../../core/event-bus.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
 import { GelButton } from "./gel-button.js";
 import { settings } from "../settings.js";
@@ -19,7 +19,7 @@ import { settings } from "../settings.js";
  */
 const defaultAction = config => {
     if (config.action) {
-        event.bus.subscribe({
+        eventBus.subscribe({
             channel: config.channel,
             name: config.key,
             callback: config.action,

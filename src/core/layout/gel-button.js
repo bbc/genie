@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import * as event from "../event-bus.js";
+import { eventBus } from "../event-bus.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 
@@ -99,7 +99,7 @@ export const assetPath = fp.cond(paths);
 
 const publish = (config, data) => () => {
     GameSound.Assets.buttonClick.play();
-    event.bus.publish({
+    eventBus.publish({
         channel: config.channel,
         name: config.key,
         data,

@@ -5,13 +5,13 @@
  */
 import * as Scaler from "../../src/core/scaler";
 import * as calculateMetrics from "../../src/core/layout/calculate-metrics.js";
-import * as event from "../../src/core/event-bus.js";
+import { eventBus } from "../../src/core/event-bus.js";
 
 describe("Scaler", () => {
     let mockGame;
 
     beforeEach(() => {
-        event.bus.subscribe = jest.fn();
+        eventBus.subscribe = jest.fn();
         mockGame = {
             scale: {
                 parent: {
@@ -84,6 +84,6 @@ describe("Scaler", () => {
         };
         Scaler.onScaleChange.add(mockCallback);
         Scaler.init(600, mockGame);
-        expect(event.bus.subscribe).toHaveBeenCalledWith(expectedParams);
+        expect(eventBus.subscribe).toHaveBeenCalledWith(expectedParams);
     });
 });

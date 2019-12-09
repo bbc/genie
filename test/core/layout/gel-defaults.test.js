@@ -6,7 +6,7 @@
 import { createMockGmi } from "../../mock/gmi";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
 import { settings, settingsChannel } from "../../../src/core/settings.js";
-import * as event from "../../../src/core/event-bus.js";
+import { eventBus } from "../../../src/core/event-bus.js";
 
 describe("Layout - Gel Defaults", () => {
     let mockPausedScreen;
@@ -140,9 +140,9 @@ describe("Layout - Gel Defaults", () => {
         });
 
         test("mutes the game audio", () => {
-            jest.spyOn(event.bus, "publish");
+            jest.spyOn(eventBus, "publish");
             gel.config(mockCurrentScreen).audio.action({ screen: mockCurrentScreen });
-            expect(event.bus.publish).toHaveBeenCalledWith({
+            expect(eventBus.publish).toHaveBeenCalledWith({
                 channel: settingsChannel,
                 name: "audio",
             });
@@ -152,7 +152,7 @@ describe("Layout - Gel Defaults", () => {
             mockCurrentScreen.sound.mute = true;
             gel.config(mockCurrentScreen).audio.action();
 
-            expect(event.bus.publish).toHaveBeenCalledWith({
+            expect(eventBus.publish).toHaveBeenCalledWith({
                 channel: settingsChannel,
                 name: "audio",
             });

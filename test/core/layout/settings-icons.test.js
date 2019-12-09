@@ -6,7 +6,7 @@
 import { createMockGmi } from "../../mock/gmi";
 
 import * as settingsIcons from "../../../src/core/layout/settings-icons.js";
-import * as event from "../../../src/core/event-bus.js";
+import { eventBus } from "../../../src/core/event-bus.js";
 
 describe("Layout - Settings Icons", () => {
     let mockGmi;
@@ -25,8 +25,8 @@ describe("Layout - Settings Icons", () => {
             length: 1,
         };
         unsubscribeSpy = jest.fn();
-        jest.spyOn(event.bus, "publish").mockImplementation(() => {});
-        jest.spyOn(event.bus, "subscribe").mockImplementation(() => ({ unsubscribe: unsubscribeSpy }));
+        jest.spyOn(eventBus, "publish").mockImplementation(() => {});
+        jest.spyOn(eventBus, "subscribe").mockImplementation(() => ({ unsubscribe: unsubscribeSpy }));
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -35,14 +35,14 @@ describe("Layout - Settings Icons", () => {
         beforeEach(() => settingsIcons.create(mockGroup, []));
 
         test("publishes events for motion", () => {
-            const motionParams = event.bus.publish.mock.calls[0][0];
+            const motionParams = eventBus.publish.mock.calls[0][0];
             expect(motionParams.channel).toBe("genie-settings");
             expect(motionParams.name).toBe("motion");
             expect(motionParams.data).toBe("motion-data");
         });
 
         test("publishes events for audio", () => {
-            const audioParams = event.bus.publish.mock.calls[1][0];
+            const audioParams = eventBus.publish.mock.calls[1][0];
             expect(audioParams.channel).toBe("genie-settings");
             expect(audioParams.name).toBe("audio");
             expect(audioParams.data).toBe("audio-data");
@@ -63,8 +63,8 @@ describe("Layout - Settings Icons", () => {
     describe("Motion FX Button Subscription", () => {
         test("has a event subscription with correct name and channel", () => {
             settingsIcons.create(mockGroup, ["audio"]);
-            expect(event.bus.subscribe).toHaveBeenCalledTimes(1);
-            const actualParams = event.bus.subscribe.mock.calls[0][0];
+            expect(eventBus.subscribe).toHaveBeenCalledTimes(1);
+            const actualParams = eventBus.subscribe.mock.calls[0][0];
             expect(actualParams.channel).toBe("genie-settings");
             expect(actualParams.name).toBe("motion");
         });
@@ -73,7 +73,7 @@ describe("Layout - Settings Icons", () => {
             test("adds the button icon to the group when the event callback is fired", () => {
                 settingsIcons.create(mockGroup, ["audio"]);
                 const iconExists = false;
-                const callback = event.bus.subscribe.mock.calls[0][0].callback;
+                const callback = eventBus.subscribe.mock.calls[0][0].callback;
                 callback(iconExists);
 
                 expect(mockGroup.addButton).toHaveBeenCalledTimes(1);
@@ -92,7 +92,7 @@ describe("Layout - Settings Icons", () => {
                 mockGroup.length = 4;
                 settingsIcons.create(mockGroup, ["audio"]);
                 const iconExists = false;
-                const callback = event.bus.subscribe.mock.calls[0][0].callback;
+                const callback = eventBus.subscribe.mock.calls[0][0].callback;
                 callback(iconExists);
 
                 const expectedPosition = 0;
@@ -102,7 +102,7 @@ describe("Layout - Settings Icons", () => {
             test("resets the group when the event callback is fired", () => {
                 settingsIcons.create(mockGroup, ["audio"]);
                 const iconExists = false;
-                const callback = event.bus.subscribe.mock.calls[0][0].callback;
+                const callback = eventBus.subscribe.mock.calls[0][0].callback;
                 callback(iconExists);
 
                 expect(mockGroup.reset).toHaveBeenCalledTimes(1);
@@ -114,7 +114,7 @@ describe("Layout - Settings Icons", () => {
                 settingsIcons.create(mockGroup, ["audio"]);
                 const iconExists = true;
                 mockGroup.addButton.mockImplementation(() => "motion-fx-icon");
-                const callback = event.bus.subscribe.mock.calls[0][0].callback;
+                const callback = eventBus.subscribe.mock.calls[0][0].callback;
                 callback(false); // creates button icon
                 callback(iconExists);
             });
@@ -136,7 +136,7 @@ describe("Layout - Settings Icons", () => {
             beforeEach(() => {
                 settingsIcons.create(mockGroup, ["audio"]);
                 mockGroup.addButton.mockImplementation(() => "motion-fx-icon");
-                callback = event.bus.subscribe.mock.calls[0][0].callback;
+                callback = eventBus.subscribe.mock.calls[0][0].callback;
             });
 
             test("does not add/remove button icon when callback is passed true but icon does not exist", () => {
@@ -159,12 +159,12 @@ describe("Layout - Settings Icons", () => {
     describe("Audio Button Subscription", () => {
         test("gets a event subscription when not already included in the buttons list", () => {
             settingsIcons.create(mockGroup, []);
-            expect(event.bus.subscribe).toHaveBeenCalledTimes(2);
+            expect(eventBus.subscribe).toHaveBeenCalledTimes(2);
         });
 
         test("has a event subscription with correct name and channel", () => {
             settingsIcons.create(mockGroup, []);
-            const actualParams = event.bus.subscribe.mock.calls[1];
+            const actualParams = eventBus.subscribe.mock.calls[1];
             expect(actualParams[0].channel).toEqual("genie-settings");
             expect(actualParams[0].name).toEqual("audio");
         });
@@ -173,7 +173,7 @@ describe("Layout - Settings Icons", () => {
             test("adds the button icon to the group when the event callback is fired", () => {
                 settingsIcons.create(mockGroup, []);
                 const iconExists = false;
-                const callback = event.bus.subscribe.mock.calls[1][0].callback;
+                const callback = eventBus.subscribe.mock.calls[1][0].callback;
                 callback(iconExists);
 
                 expect(mockGroup.addButton).toHaveBeenCalledTimes(1);
@@ -192,7 +192,7 @@ describe("Layout - Settings Icons", () => {
                 mockGroup.length = 4;
                 settingsIcons.create(mockGroup, []);
                 const iconExists = false;
-                const callback = event.bus.subscribe.mock.calls[1][0].callback;
+                const callback = eventBus.subscribe.mock.calls[1][0].callback;
                 callback(iconExists);
 
                 const expectedPosition = 3;
@@ -202,7 +202,7 @@ describe("Layout - Settings Icons", () => {
             test("resets the group when the event callback is fired", () => {
                 settingsIcons.create(mockGroup, []);
                 const iconExists = false;
-                const callback = event.bus.subscribe.mock.calls[0][0].callback;
+                const callback = eventBus.subscribe.mock.calls[0][0].callback;
                 callback(iconExists);
 
                 expect(mockGroup.reset).toHaveBeenCalledTimes(1);
@@ -214,7 +214,7 @@ describe("Layout - Settings Icons", () => {
                 settingsIcons.create(mockGroup, []);
                 const iconExists = true;
                 mockGroup.addButton.mockImplementation(() => "audio-icon");
-                const callback = event.bus.subscribe.mock.calls[0][0].callback;
+                const callback = eventBus.subscribe.mock.calls[0][0].callback;
                 callback(false); // creates button icon
                 callback(iconExists);
             });
@@ -236,7 +236,7 @@ describe("Layout - Settings Icons", () => {
             beforeEach(() => {
                 settingsIcons.create(mockGroup, []);
                 mockGroup.addButton.mockImplementation(() => "audio-icon");
-                callback = event.bus.subscribe.mock.calls[1][0].callback;
+                callback = eventBus.subscribe.mock.calls[1][0].callback;
             });
 
             test("does not add/remove button icon when callback is passed true but icon does not exist", () => {

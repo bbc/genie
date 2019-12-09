@@ -6,7 +6,7 @@
 import { settingsChannel } from "../settings.js";
 import { gmi } from "../gmi/gmi.js";
 import fp from "../../../lib/lodash/fp/fp.js";
-import * as event from "../event-bus.js";
+import { eventBus } from "../event-bus.js";
 
 const fxConfig = {
     title: "FX Off",
@@ -39,7 +39,7 @@ const createEvents = (group, config) => {
         group.reset();
     };
 
-    return event.bus.subscribe({
+    return eventBus.subscribe({
         channel: settingsChannel,
         name: config.eventName,
         callback,
@@ -47,7 +47,7 @@ const createEvents = (group, config) => {
 };
 
 const publish = fp.curry((settings, key) => {
-    event.bus.publish({
+    eventBus.publish({
         channel: settingsChannel,
         name: key,
         data: settings[key],

@@ -5,7 +5,7 @@
             {
                 "type": "image",
                 "key": "title",
-                "url": "shared/title.png",
+                "url": "shared/small-title.png",
                 "overwrite": false
             },
             {
