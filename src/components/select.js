@@ -27,6 +27,7 @@ const baseY = -270;
 export class Select extends Screen {
     create() {
         this.add.image(0, 0, `${this.scene.key}.background`);
+        this.addAnimations();
         this.theme = this.context.config.theme[this.scene.key];
 
         this.addEventSubscriptions();

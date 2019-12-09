@@ -1,340 +1,421 @@
 {
-    "gelDesktop": [
-        {
-            "type": "spritesheet",
-            "key": "achievements",
-            "url": "gel/desktop/achievements.png",
-            "frameWidth": 248,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "image",
-            "key": "notification",
-            "url": "gel/desktop/notification.png",
-            "overwrite": false
-        },
-        {
-            "type": "spritesheet",
-            "key": "play",
-            "url": "gel/desktop/play.png",
-            "frameWidth": 180,
-            "frameHeight": 180,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "exit",
-            "url": "gel/desktop/exit.png",
-            "frameWidth": 64,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "how-to-play",
-            "url": "gel/desktop/how-to-play.png",
-            "frameWidth": 248,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "settings",
-            "url": "gel/desktop/settings.png",
-            "frameWidth": 64,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "home",
-            "url": "gel/desktop/home.png",
-            "frameWidth": 64,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "back",
-            "url": "gel/desktop/back.png",
-            "frameWidth": 64,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "audio-on",
-            "url": "gel/desktop/audio-on.png",
-            "frameWidth": 64,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "audio-off",
-            "url": "gel/desktop/audio-off.png",
-            "frameWidth": 64,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "pause",
-            "url": "gel/desktop/pause.png",
-            "frameWidth": 64,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "continue",
-            "url": "gel/desktop/continue.png",
-            "frameWidth": 224,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "restart",
-            "url": "gel/desktop/restart.png",
-            "frameWidth": 224,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "previous",
-            "url": "gel/desktop/previous.png",
-            "frameWidth": 64,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "next",
-            "url": "gel/desktop/next.png",
-            "frameWidth": 64,
-            "frameHeight": 64,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "replay",
-            "url": "gel/desktop/replay.png",
-            "frameWidth": 120,
-            "frameHeight": 120,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "image",
-            "key": "audio-off-icon",
-            "url": "gel/desktop/audio-off-icon.png"
-        },
-        {
-            "type": "image",
-            "key": "fx-off-icon",
-            "url": "gel/desktop/fx-off-icon.png"
-        }
-    ],
-    "gelMobile": [
-        {
-            "type": "spritesheet",
-            "key": "achievements",
-            "url": "gel/mobile/achievements.png",
-            "frameWidth": 172,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "image",
-            "key": "notification",
-            "url": "gel/mobile/notification.png",
-            "overwrite": false
-        },
-        {
-            "type": "spritesheet",
-            "key": "play",
-            "url": "gel/mobile/play.png",
-            "frameWidth": 90,
-            "frameHeight": 90,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "exit",
-            "url": "gel/mobile/exit.png",
-            "frameWidth": 42,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "how-to-play",
-            "url": "gel/mobile/how-to-play.png",
-            "frameWidth": 172,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "settings",
-            "url": "gel/mobile/settings.png",
-            "frameWidth": 42,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "home",
-            "url": "gel/mobile/home.png",
-            "frameWidth": 42,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "back",
-            "url": "gel/mobile/back.png",
-            "frameWidth": 42,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "audio-on",
-            "url": "gel/mobile/audio-on.png",
-            "frameWidth": 42,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "audio-off",
-            "url": "gel/mobile/audio-off.png",
-            "frameWidth": 42,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "pause",
-            "url": "gel/mobile/pause.png",
-            "frameWidth": 42,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "continue",
-            "url": "gel/mobile/continue.png",
-            "frameWidth": 152,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "restart",
-            "url": "gel/mobile/restart.png",
-            "frameWidth": 152,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "previous",
-            "url": "gel/mobile/previous.png",
-            "frameWidth": 42,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "next",
-            "url": "gel/mobile/next.png",
-            "frameWidth": 42,
-            "frameHeight": 42,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "spritesheet",
-            "key": "replay",
-            "url": "gel/mobile/replay.png",
-            "frameWidth": 55,
-            "frameHeight": 55,
-            "frameMax": 2,
-            "margin": 0,
-            "spacing": 4
-        },
-        {
-            "type": "image",
-            "key": "audio-off-icon",
-            "url": "gel/mobile/audio-off-icon.png"
-        },
-        {
-            "type": "image",
-            "key": "fx-off-icon",
-            "url": "gel/mobile/fx-off-icon.png",
-            "margin": 24,
-            "spacing": 24
-        }
-    ]
+    "gelFonts": {
+        "prefix": "gelFonts.",
+        "files": [
+            {
+                "type": "webfont",
+                "key": "reithsans",
+                "config": {
+                    "custom": {
+                        "families": ["ReithSans"],
+                        "urls": ["https://gel.files.bbci.co.uk/r2.302/bbc-reith.css"]
+                    }
+                }
+            }
+        ]
+    },
+    "gelDesktop": {
+        "prefix": "gelDesktop.",
+        "files": [
+            {
+                "type": "spritesheet",
+                "key": "achievements",
+                "url": "gel/desktop/achievements.png",
+                "frameConfig": {
+                    "frameWidth": 248,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "image",
+                "key": "notification",
+                "url": "gel/desktop/notification.png",
+                "overwrite": false
+            },
+            {
+                "type": "spritesheet",
+                "key": "play",
+                "url": "gel/desktop/play.png",
+                "frameConfig": {
+                    "frameWidth": 180,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "exit",
+                "url": "gel/desktop/exit.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "how-to-play",
+                "url": "gel/desktop/how-to-play.png",
+                "frameConfig": {
+                    "frameWidth": 248,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "settings",
+                "url": "gel/desktop/settings.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "home",
+                "url": "gel/desktop/home.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "back",
+                "url": "gel/desktop/back.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "audio-on",
+                "url": "gel/desktop/audio-on.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "audio-off",
+                "url": "gel/desktop/audio-off.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "pause",
+                "url": "gel/desktop/pause.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "continue",
+                "url": "gel/desktop/continue.png",
+                "frameConfig": {
+                    "frameWidth": 224,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "restart",
+                "url": "gel/desktop/restart.png",
+                "frameConfig": {
+                    "frameWidth": 224,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "previous",
+                "url": "gel/desktop/previous.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "next",
+                "url": "gel/desktop/next.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "replay",
+                "url": "gel/desktop/replay.png",
+                "frameConfig": {
+                    "frameWidth": 120,
+                    "frameHeight": 120,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "image",
+                "key": "audio-off-icon",
+                "url": "gel/desktop/audio-off-icon.png"
+            },
+            {
+                "type": "image",
+                "key": "fx-off-icon",
+                "url": "gel/desktop/fx-off-icon.png"
+            }
+        ]
+    },
+    "gelMobile": {
+        "prefix": "gelMobile.",
+        "files": [
+            {
+                "type": "spritesheet",
+                "key": "achievements",
+                "url": "gel/mobile/achievements.png",
+                "frameConfig": {
+                    "frameWidth": 172,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "image",
+                "key": "notification",
+                "url": "gel/mobile/notification.png",
+                "overwrite": false
+            },
+            {
+                "type": "spritesheet",
+                "key": "play",
+                "url": "gel/mobile/play.png",
+                "frameConfig": {
+                    "frameWidth": 90,
+                    "frameHeight": 90,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "exit",
+                "url": "gel/mobile/exit.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "how-to-play",
+                "url": "gel/mobile/how-to-play.png",
+                "frameConfig": {
+                    "frameWidth": 172,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "settings",
+                "url": "gel/mobile/settings.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "home",
+                "url": "gel/mobile/home.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "back",
+                "url": "gel/mobile/back.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "audio-on",
+                "url": "gel/mobile/audio-on.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "audio-off",
+                "url": "gel/mobile/audio-off.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "pause",
+                "url": "gel/mobile/pause.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "continue",
+                "url": "gel/mobile/continue.png",
+                "frameConfig": {
+                    "frameWidth": 152,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "restart",
+                "url": "gel/mobile/restart.png",
+                "frameConfig": {
+                    "frameWidth": 152,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "previous",
+                "url": "gel/mobile/previous.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "next",
+                "url": "gel/mobile/next.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "replay",
+                "url": "gel/mobile/replay.png",
+                "frameConfig": {
+                    "frameWidth": 55,
+                    "frameHeight": 55,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "image",
+                "key": "audio-off-icon",
+                "url": "gel/mobile/audio-off-icon.png"
+            },
+            {
+                "type": "image",
+                "key": "fx-off-icon",
+                "url": "gel/mobile/fx-off-icon.png",
+                "margin": 24,
+                "spacing": 24
+            }
+        ]
+    }
 }

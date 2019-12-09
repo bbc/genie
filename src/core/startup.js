@@ -62,6 +62,13 @@ export function startup(screenConfig, settingsConfig = {}) {
                     start: true,
                 },
             ],
+            scene: [
+                {
+                    key: "SpinePlugin",
+                    plugin: window.SpinePlugin,
+                    mapping: "spine",
+                },
+            ],
         },
     };
 
