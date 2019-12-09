@@ -22,6 +22,7 @@ describe("element-bounding", () => {
         };
         mockElement = {
             setScale: jest.fn(),
+            setFontSize: jest.fn(),
             setPosition: jest.fn(),
             setOrigin: jest.fn(),
             getBounds: jest.fn(() => ({
@@ -30,6 +31,10 @@ describe("element-bounding", () => {
                 height: 50,
                 width: 50,
             })),
+            getMetrics: jest.fn(() => {
+                fontSize: "1px";
+            }),
+            defaultStyle: { fontSize: "1px" },
             x: 0,
             y: 0,
             height: 50,
@@ -142,14 +147,14 @@ describe("element-bounding", () => {
         });
 
         test("calls enforceTextSize and resized text", () => {
-            mockElement.height = 10;
+            mockElement.getTextMetrics = jest.fn(() => ({
+                fontSize: 5,
+            }));
             mockElement.type = "Text";
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
-            expect(mockElement.setScale).toHaveBeenCalledTimes(2);
-            expect(mockElement.setScale).toHaveBeenCalledWith(1);
-            expect(mockElement.setScale).toHaveBeenCalledWith(1.4);
+            expect(mockElement.setFontSize).toHaveBeenCalledWith("13px");
         });
     });
 
@@ -188,31 +193,39 @@ describe("element-bounding", () => {
 
     describe("enforceTextSize", () => {
         test("Scales up text if it is bellow the 13px threshold", () => {
-            mockElement.height = 10;
+            mockElement.getTextMetrics = jest.fn(() => ({
+                fontSize: 10,
+            }));
             enforceTextSize(mockElement, { scale: 1 });
 
-            expect(mockElement.setScale).toHaveBeenCalledWith(1.4);
+            expect(mockElement.setFontSize).toHaveBeenCalledWith("13px");
         });
 
         test("Scales up text if it is bellow the 13px threshold at any when scale is < 1", () => {
-            mockElement.height = 10;
+            mockElement.getTextMetrics = jest.fn(() => ({
+                fontSize: 10,
+            }));
             enforceTextSize(mockElement, { scale: 0.5 });
 
-            expect(mockElement.setScale).toHaveBeenCalledWith(2.8);
+            expect(mockElement.setFontSize).toHaveBeenCalledWith("26px");
         });
 
         test("Scales up text if it is bellow the 13px threshold at any when scale is > 1", () => {
-            mockElement.height = 5;
-            enforceTextSize(mockElement, { scale: 1.8 });
+            mockElement.getTextMetrics = jest.fn(() => ({
+                fontSize: 5,
+            }));
+            enforceTextSize(mockElement, { scale: 2 });
 
-            expect(mockElement.setScale).toHaveBeenCalledWith(1.5555555555555556);
+            expect(mockElement.setFontSize).toHaveBeenCalledWith("6.5px");
         });
 
         test("Does not attempt to scale text if size is above 13px threshold", () => {
-            mockElement.height = 15;
+            mockElement.getTextMetrics = jest.fn(() => ({
+                fontSize: 15,
+            }));
             enforceTextSize(mockElement, { scale: 1 });
 
-            expect(mockElement.setScale).not.toHaveBeenCalledWith(0.9333333333333333);
+            expect(mockElement.setFontSize).toHaveBeenCalledWith("1px");
         });
     });
 });

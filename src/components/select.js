@@ -111,6 +111,8 @@ export class Select extends Screen {
                     : undefined,
         };
 
+        if (visualElements.text) visualElements.text.defaultStyle = textStyle;
+
         return visualElements;
     }
 
