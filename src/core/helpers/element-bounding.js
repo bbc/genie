@@ -62,12 +62,11 @@ const restrictBounds = (element, safeArea, metrics) => {
 };
 
 export const enforceTextSize = (element, { scale }) => {
-    element.setFontSize(`${element.defaultStyle.fontSize}`); // reset size
-
-    const { fontSize } = element.getTextMetrics();
+    const fontSize = parseInt(element.defaultStyle.fontSize);
     const minimumSize = 13;
     const currentSize = fontSize * scale;
 
+    element.setFontSize(`${fontSize}px`);
     if (currentSize < minimumSize) {
         const newScale = minimumSize / currentSize;
         element.setFontSize(`${fontSize * newScale}px`);
