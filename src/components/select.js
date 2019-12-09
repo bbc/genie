@@ -29,11 +29,12 @@ export class Select extends Screen {
         this.add.image(0, 0, `${this.scene.key}.background`);
         this.addAnimations();
         this.theme = this.context.config.theme[this.scene.key];
-        this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
         this.addEventSubscriptions();
         this.setTitleElements();
+        this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
+        this.repositionTitleElements();
         onScaleChange.add(this.repositionTitleElements.bind(this));
 
         createTestHarnessDisplay(this);
@@ -109,10 +110,6 @@ export class Select extends Screen {
                     ? this.add.text(textPosition.x, textPosition.y, config.text.value, textStyle)
                     : undefined,
         };
-        const metrics = getMetrics();
-        const safeArea = this.getSafeArea(metrics);
-
-        positionElement(visualElements.text, textPosition, safeArea, metrics);
 
         return visualElements;
     }
