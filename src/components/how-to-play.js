@@ -19,6 +19,7 @@ const wrapRange = (value, max) => ((value % max) + max) % max;
 export class HowToPlay extends Screen {
     create() {
         this.add.image(0, 0, `${this.scene.key}.background`);
+        this.addAnimations();
 
         this.theme = this.context.config.theme[this.scene.key];
         this.currentIndex = 0;
