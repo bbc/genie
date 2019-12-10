@@ -12,7 +12,6 @@ import * as settingsIcons from "./settings-icons.js";
 import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { GelGroup } from "./gel-group.js";
-import { GelGrid } from "./gel-grid.js";
 import { gmi } from "../gmi/gmi.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
@@ -48,8 +47,10 @@ export function create(scene, metrics, buttonIds) {
     const config = shallowMergeOverrides(gel.config(scene), overrides);
     const root = new Phaser.GameObjects.Container(scene, 0, 0);
 
-    const addGroup = group => {
+    const addCustomGroup = (key, group) => {
         root.add(group);
+
+        groups[key] = group;
         return group;
     };
 
@@ -57,31 +58,27 @@ export function create(scene, metrics, buttonIds) {
         groups[groupName].addToGroup(item, position);
     };
 
-    const groups = (() => {
-        const groups = fp.zipObject(
-            groupLayouts.map(layout =>
-                fp.camelCase(
-                    [layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" "),
-                ),
+    const groups = fp.zipObject(
+        groupLayouts.map(layout =>
+            fp.camelCase(
+                [layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" "),
             ),
-            groupLayouts.map(layout => {
-                const group = new GelGroup(
-                    scene,
-                    root,
-                    layout.vPos,
-                    layout.hPos,
-                    metrics,
-                    layout.safe,
-                    layout.arrangeV,
-                );
-                root.add(group);
-                return group;
-            }),
-        );
-        groups.grid = new GelGrid(scene, "gridV", "gridH", metrics, true, false);
-        addGroup(groups.grid);
-        return groups;
-    })();
+        ),
+        groupLayouts.map(layout => {
+            const group = new GelGroup(
+                scene,
+                root,
+                layout.vPos,
+                layout.hPos,
+                metrics,
+                layout.safe,
+                layout.arrangeV,
+            );
+            root.add(group);
+            return group;
+        }),
+    );
+
 
     const buttons = fp.zipObject(
         tabSort(buttonIds),
@@ -123,7 +120,7 @@ export function create(scene, metrics, buttonIds) {
     };
 
     return {
-        addGroup,
+        addCustomGroup,
         addToGroup,
         buttons,
         destroy,
@@ -132,6 +129,5 @@ export function create(scene, metrics, buttonIds) {
         root,
         removeEvents,
         setAction,
-        groups,
     };
 }

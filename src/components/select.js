@@ -12,6 +12,7 @@ import { eventBus } from "../core/event-bus.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
+import { GelGrid } from "../core/layout/gel-grid.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
@@ -33,7 +34,11 @@ export class Select extends Screen {
 
         this.repositionTitleElements();
         onScaleChange.add(this.repositionTitleElements.bind(this));
-        this.layout.groups.grid.addGridCells();
+        this.grid = new GelGrid(this, "gridV", "gridH", getMetrics(), true, false);
+        this.layout.addCustomGroup("grid", this.grid);
+
+
+        this.grid.addGridCells();
         this.addEventSubscriptions();
         createTestHarnessDisplay(this);
     }
@@ -123,7 +128,7 @@ export class Select extends Screen {
             name: "continue",
             callback: this.startGame.bind(this),
         });
-        this.layout.groups.grid.cellKeys().map(key => {
+        this.grid.cellKeys().map(key => {
             eventBus.subscribe({
                 channel: buttonsChannel(this),
                 name: key,

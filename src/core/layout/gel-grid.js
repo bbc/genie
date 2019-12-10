@@ -101,7 +101,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     reset(metrics) {
         metrics = metrics || this._metrics;
-        // if (this._metrics.isMobile !== metrics.isMobile) { } 
+        // if (this._metrics.isMobile !== metrics.isMobile) { }
         this.resetButtons(metrics);
     }
 
