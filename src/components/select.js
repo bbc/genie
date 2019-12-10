@@ -123,7 +123,6 @@ export class Select extends Screen {
             name: "continue",
             callback: this.startGame.bind(this),
         });
-        console.log(this.layout.groups.grid.cellKeys());
         this.layout.groups.grid.cellKeys().map(key => {
             eventBus.subscribe({
                 channel: buttonsChannel(this),
