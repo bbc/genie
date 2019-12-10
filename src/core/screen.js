@@ -14,6 +14,7 @@ import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
+import { addAnimations } from "./background-animations.js";
 
 export const overlayChannel = "gel-overlays";
 
@@ -29,6 +30,7 @@ export class Screen extends Phaser.Scene {
     get context() {
         return {
             config: this._data.config,
+            theme: this._data.config.theme[this.scene.key],
             parentScreens: this._data.parentScreens,
             navigation: this._data.navigation,
             transientData: this._data.transient || {},
@@ -86,6 +88,8 @@ export class Screen extends Phaser.Scene {
             routes,
         );
     };
+
+    addAnimations = addAnimations(this);
 
     addOverlay(key) {
         this.events.emit("onoverlayadded");

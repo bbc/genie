@@ -57,7 +57,7 @@ describe("Test Screens - Game", () => {
             key: "game",
         };
         gameTest.navigation = { next: jest.fn() };
-        gameTest.setData({ transient: mockTransientData });
+        gameTest.setData({ transient: mockTransientData, config: { theme: { game: {} } } });
     });
 
     afterEach(() => jest.clearAllMocks());

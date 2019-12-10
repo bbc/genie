@@ -28,6 +28,7 @@ const baseY = -270;
 export class Select extends Screen {
     create() {
         this.add.image(0, 0, `${this.scene.key}.background`);
+        this.addAnimations();
         this.theme = this.context.config.theme[this.scene.key];
         this.setTitleElements();
         this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
@@ -36,7 +37,6 @@ export class Select extends Screen {
         onScaleChange.add(this.repositionTitleElements.bind(this));
         this.grid = new GelGrid(this, "gridV", "gridH", getMetrics(), true, false);
         this.layout.addCustomGroup("grid", this.grid);
-
 
         this.grid.addGridCells();
         this.addEventSubscriptions();
