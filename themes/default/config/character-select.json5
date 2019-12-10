@@ -25,7 +25,7 @@
                     yOffset: 0,
                 },
                 text: {
-                    value: "Subtitle",
+                    value: "Sub-Title",
                     xOffset: 0,
                     yOffset: 80,
                     styles: {
