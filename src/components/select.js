@@ -28,30 +28,14 @@ export class Select extends Screen {
     create() {
         this.add.image(0, 0, `${this.scene.key}.background`);
         this.theme = this.context.config.theme[this.scene.key];
-
-        this.addEventSubscriptions();
         this.setTitleElements();
         this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
         this.repositionTitleElements();
         onScaleChange.add(this.repositionTitleElements.bind(this));
-
-        this.layout.addGroup();
         this.layout.groups.grid.addGridCells();
-
         this.addEventSubscriptions();
         createTestHarnessDisplay(this);
-
-        this.layout.groups.grid.cellKeys().map(key => {
-            event.bus.subscribe({
-                channel: buttonsChannel(this),
-                name: key,
-                callback: () => {
-                    this.transientData[this.scene.key] = { choice: key };
-                    this.startGame();
-                },
-            });
-        });
     }
 
     repositionTitleElements() {
@@ -138,6 +122,17 @@ export class Select extends Screen {
             channel: buttonsChannel(this),
             name: "continue",
             callback: this.startGame.bind(this),
+        });
+        console.log(this.layout.groups.grid.cellKeys());
+        this.layout.groups.grid.cellKeys().map(key => {
+            eventBus.subscribe({
+                channel: buttonsChannel(this),
+                name: key,
+                callback: () => {
+                    this.transientData[this.scene.key] = { choice: key };
+                    this.startGame();
+                },
+            });
         });
     }
 }

@@ -48,16 +48,40 @@ export function create(scene, metrics, buttonIds) {
     const config = shallowMergeOverrides(gel.config(scene), overrides);
     const root = new Phaser.GameObjects.Container(scene, 0, 0);
 
-    const groups = fp.zipObject(
-        groupLayouts.map(layout =>
-            fp.camelCase([layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" ")),
-        ),
-        groupLayouts.map(layout => {
-            const group = new GelGroup(scene, root, layout.vPos, layout.hPos, metrics, layout.safe, layout.arrangeV);
-            root.add(group);
-            return group;
-        }),
-    );
+    const addGroup = group => {
+        root.add(group);
+        return group;
+    };
+
+    const addToGroup = (groupName, item, position) => {
+        groups[groupName].addToGroup(item, position);
+    };
+
+    const groups = (() => {
+        const groups = fp.zipObject(
+            groupLayouts.map(layout =>
+                fp.camelCase(
+                    [layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" "),
+                ),
+            ),
+            groupLayouts.map(layout => {
+                const group = new GelGroup(
+                    scene,
+                    root,
+                    layout.vPos,
+                    layout.hPos,
+                    metrics,
+                    layout.safe,
+                    layout.arrangeV,
+                );
+                root.add(group);
+                return group;
+            }),
+        );
+        groups.grid = new GelGrid(scene, "gridV", "gridH", metrics, true, false);
+        addGroup(groups.grid);
+        return groups;
+    })();
 
     const buttons = fp.zipObject(
         tabSort(buttonIds),
@@ -76,10 +100,6 @@ export function create(scene, metrics, buttonIds) {
         buttons[button].onInputUp.add(callback, this);
     };
 
-    const addToGroup = (groupName, item, position) => {
-        groups[groupName].addToGroup(item, position);
-    };
-
     const makeAccessible = () => {
         fp.forOwn(group => group.makeAccessible(), groups);
     };
@@ -87,6 +107,7 @@ export function create(scene, metrics, buttonIds) {
     const resize = metrics => {
         fp.forOwn(group => group.reset(metrics), groups);
     };
+
     resize(metrics);
 
     const event = onScaleChange.add(resize);
@@ -101,12 +122,6 @@ export function create(scene, metrics, buttonIds) {
         root.destroy();
     };
 
-    const addGroup = () => {
-        const grid = new GelGrid(scene, root, "gridV", "gridH", metrics, true, false);
-        root.add(grid);
-        groups.grid = grid;
-    };
-
     return {
         addGroup,
         addToGroup,
@@ -117,6 +132,6 @@ export function create(scene, metrics, buttonIds) {
         root,
         removeEvents,
         setAction,
-        groups, //TODO DO NOT LEAVE HERE!!!
+        groups,
     };
 }

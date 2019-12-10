@@ -9,7 +9,7 @@ import * as ButtonFactory from "./button-factory.js";
 import { GelButton } from "./gel-button.js";
 
 export class GelGrid extends Phaser.GameObjects.Container {
-    constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical) {
+    constructor(scene, vPos, hPos, metrics, isSafe, isVertical) {
         super(scene, 0, 0);
         //TODO P3 we used to name the groups - useful for debugging. Might be usuaful as a propery? [NT]
         //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
@@ -20,8 +20,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._isVertical = isVertical;
         this._cells = [];
         this._buttonFactory = ButtonFactory.create(scene);
-        this.x = 0;
-        this.xOffset = 0; //TODO DELETE ME!!!
         window.check = this.scene;
     }
 
@@ -45,7 +43,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
                     scene: this.scene.scene.key,
                 }),
             );
-            !i ? (this._cells[i].visible = false) : (this._cells[i].visible = true);
+            !!i ? (this._cells[i].visible = false) : (this._cells[i].visible = true);
         });
 
         this.makeAccessible();
@@ -59,12 +57,9 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const xOffset = 0;
         const yOffset = 0;
         const newCell = new GelButton(this.scene, xOffset, yOffset, this._metrics, config);
-
-
-        // TODO Calcuate this from metrics / breakpoints
-        // newCell.setScale(0.4);
         newCell.displayWidth = 400;
         newCell.displayHeight = 400;
+        newCell.key = config.key;
 
         this.addAt(newCell, position);
         this._cells.push(newCell);
@@ -106,13 +101,23 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     reset(metrics) {
         metrics = metrics || this._metrics;
-        if (this._metrics.isMobile !== metrics.isMobile) {
-            this.resetButtons(metrics);
-        }
+        // if (this._metrics.isMobile !== metrics.isMobile) { } 
+        this.resetButtons(metrics);
+    }
+
+    gridMetrics(metrics) {
+        return {
+            displayWidth: metrics.isMobile ? 300 : 400,
+            displayHeight: metrics.isMobile ? 300 : 400,
+        };
     }
 
     resetButtons(metrics) {
         // TODO This should resize the buttons for mobile/desktop breakpoints?
+        this._cells.map(cell => {
+            cell.displayWidth = this.gridMetrics(metrics).displayWidth;
+            cell.displayHeight = this.gridMetrics(metrics).displayHeight;
+        });
     }
 
     makeAccessible() {
