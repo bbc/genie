@@ -86,10 +86,6 @@ export function create(scene, metrics, buttonIds) {
         buttons[button].onInputUp.add(callback, this);
     };
 
-    const makeAccessible = () => {
-        fp.forOwn(group => group.makeAccessible(), groups);
-    };
-
     const resize = metrics => {
         fp.forOwn(group => group.reset(metrics), groups);
     };
@@ -113,7 +109,6 @@ export function create(scene, metrics, buttonIds) {
         addToGroup,
         buttons,
         destroy,
-        makeAccessible,
         resize,
         root,
         removeEvents,

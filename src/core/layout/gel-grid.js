@@ -4,7 +4,8 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import * as a11y from "../accessibility/accessibility-layer.js";
+//import * as a11y from "../accessibility/accessibility-layer.js";
+import { accessibilify } from "../accessibility/accessibilify.js";
 import * as ButtonFactory from "./button-factory.js";
 import { GelButton } from "./gel-button.js";
 
@@ -47,8 +48,21 @@ export class GelGrid extends Phaser.GameObjects.Container {
             );
             !!i ? (this._cells[i].visible = false) : (this._cells[i].visible = true);
         });
-        this.reset();
-        this.makeAccessible();
+
+        //MAKE ACCESSIBLE
+        this._cells.forEach((cell, idx) => {
+            const config = {
+                id: `__selection_${idx}`,
+                ariaLabel: `Selection ${idx}`,
+                group: "grid",
+                title: `Selection ${idx}`,
+                key: `selection_${idx}`,
+                order: 0,
+                channel: "gel-buttons-character-select",    //TODO pass in name
+            };
+
+            return accessibilify(cell, config, true);
+        });
     }
 
     cellKeys() {
@@ -119,9 +133,5 @@ export class GelGrid extends Phaser.GameObjects.Container {
             cell.displayWidth = this.gridMetrics(metrics).displayWidth;
             cell.displayHeight = this.gridMetrics(metrics).displayHeight;
         });
-    }
-
-    makeAccessible() {
-        this._cells.forEach(cell => a11y.addToAccessibleButtons(this.scene, cell));
     }
 }
