@@ -19,6 +19,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._isSafe = isSafe;
         this._isVertical = isVertical;
         this._cells = [];
+        this._displayWidth = { mobile: 300, desktop: 400 };
+        this._displayHeight = { mobile: 300, desktop: 400 };
         this._buttonFactory = ButtonFactory.create(scene);
         window.check = this.scene;
     }
@@ -45,7 +47,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
             );
             !!i ? (this._cells[i].visible = false) : (this._cells[i].visible = true);
         });
-
+        this.reset();
         this.makeAccessible();
     }
 
@@ -57,8 +59,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const xOffset = 0;
         const yOffset = 0;
         const newCell = new GelButton(this.scene, xOffset, yOffset, this._metrics, config);
-        newCell.displayWidth = 400;
-        newCell.displayHeight = 400;
         newCell.key = config.key;
 
         this.addAt(newCell, position);
@@ -106,10 +106,11 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     gridMetrics(metrics) {
-        return {
-            displayWidth: metrics.isMobile ? 300 : 400,
-            displayHeight: metrics.isMobile ? 300 : 400,
+        const gridMetrics = {
+            displayWidth: metrics.isMobile ? this._displayWidth.mobile : this._displayWidth.desktop,
+            displayHeight: metrics.isMobile ? this._displayHeight.mobile : this._displayHeight.desktop,
         };
+        return gridMetrics;
     }
 
     resetButtons(metrics) {

@@ -37,7 +37,6 @@ export class Select extends Screen {
         this.grid = new GelGrid(this, "gridV", "gridH", getMetrics(), true, false);
         this.layout.addCustomGroup("grid", this.grid);
 
-
         this.grid.addGridCells();
         this.addEventSubscriptions();
         createTestHarnessDisplay(this);

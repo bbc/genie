@@ -60,25 +60,14 @@ export function create(scene, metrics, buttonIds) {
 
     const groups = fp.zipObject(
         groupLayouts.map(layout =>
-            fp.camelCase(
-                [layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" "),
-            ),
+            fp.camelCase([layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" ")),
         ),
         groupLayouts.map(layout => {
-            const group = new GelGroup(
-                scene,
-                root,
-                layout.vPos,
-                layout.hPos,
-                metrics,
-                layout.safe,
-                layout.arrangeV,
-            );
+            const group = new GelGroup(scene, root, layout.vPos, layout.hPos, metrics, layout.safe, layout.arrangeV);
             root.add(group);
             return group;
         }),
     );
-
 
     const buttons = fp.zipObject(
         tabSort(buttonIds),
