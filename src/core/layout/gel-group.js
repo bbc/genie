@@ -4,7 +4,6 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import * as a11y from "../accessibility/accessibility-layer.js";
 import * as ButtonFactory from "./button-factory.js";
 
 const horizontal = {
@@ -140,10 +139,6 @@ export class GelGroup extends Phaser.GameObjects.Container {
                 pos.x += child.width + this._metrics.buttonPad;
             }
         }, this);
-    }
-
-    makeAccessible() {
-        this._buttons.forEach(button => a11y.addToAccessibleButtons(this.scene, button));
     }
 
     //TODO this is currently observer pattern but will eventually use pub/sub Phaser.Events
