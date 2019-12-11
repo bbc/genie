@@ -21,6 +21,7 @@ describe("Select Screen", () => {
     let mockTextBounds;
     let mockMetrics;
     let defaultTextStyle;
+    let unsubscribe = jest.fn();
 
     beforeEach(() => {
         jest.spyOn(elementBounding, "getItemBounds").mockImplementation(() => ({}));
@@ -115,8 +116,7 @@ describe("Select Screen", () => {
 
         Scaler.getMetrics = jest.fn(() => mockMetrics);
         Scaler.onScaleChange = {
-            add: jest.fn(),
-            remove: jest.fn(),
+            add: jest.fn(() => ({ unsubscribe })),
         };
 
         defaultTextStyle = { align: "center", fontFamily: "ReithSans", fontSize: "24px" };
@@ -388,9 +388,9 @@ describe("Select Screen", () => {
             expect(selectScreen.navigation.next).toHaveBeenCalled();
         });
 
-        test("removes subscriptions to onScaleChange when the continue button is pressed", () => {
+        test("unsubscribes from onScaleChange events", () => {
             eventBus.subscribe.mock.calls[0][0].callback();
-            expect(Scaler.onScaleChange.remove).toHaveBeenCalled();
+            expect(unsubscribe).toHaveBeenCalled();
         });
     });
 });

@@ -36,8 +36,7 @@ export class Select extends Screen {
 
         this.repositionTitleElements();
 
-        this._scaleCallback = this.repositionTitleElements.bind(this);
-        onScaleChange.add(this._scaleCallback);
+        this._scaleEvent = onScaleChange.add(this.repositionTitleElements.bind(this));
 
         createTestHarnessDisplay(this);
     }
@@ -120,7 +119,7 @@ export class Select extends Screen {
     }
 
     startGame() {
-        onScaleChange.remove(this._scaleCallback);
+        this._scaleEvent.unsubscribe();
         // Stats Stuff will need adding back in, once we have the carousel back
         this.navigation.next();
     }

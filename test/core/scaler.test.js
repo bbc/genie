@@ -87,16 +87,4 @@ describe("Scaler", () => {
         Scaler.init(600, mockGame);
         expect(eventBus.subscribe).toHaveBeenCalledWith(expectedParams);
     });
-
-    test("removing a callback to the onScaleChange event, removes it from the event bus", () => {
-        const mockCallback = jest.fn();
-        const expectedParams = {
-            channel: "scaler",
-            name: "sizeChange",
-            callback: mockCallback,
-        };
-        Scaler.onScaleChange.remove(mockCallback);
-        Scaler.init(600, mockGame);
-        expect(eventBus.removeSubscription).toHaveBeenCalledWith(expectedParams);
-    });
 });
