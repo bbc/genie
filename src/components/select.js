@@ -44,23 +44,24 @@ export class Select extends Screen {
         const metrics = getMetrics();
         const safeArea = this.getSafeArea(metrics);
 
-        if (fp.get("text", this.title) && this.titleConfig) {
+        if (fp.get("text", this.titleElements.title) && this.titleConfig) {
             const titleTextPosition = this.calculateOffset(baseX, baseY, this.titleConfig.text);
-            positionElement(this.title.text, titleTextPosition, safeArea, metrics);
+            positionElement(this.titleElements.title.text, titleTextPosition, safeArea, metrics);
         }
 
-        if (fp.get("text", this.subtitle) && this.subtitleConfig) {
+        if (fp.get("text", this.titleElements.subtitle) && this.subtitleConfig) {
             const subtitleTextPosition = this.calculateOffset(baseX, baseY, this.subtitleConfig.text);
-            positionElement(this.subtitle.text, subtitleTextPosition, safeArea, metrics);
+            positionElement(this.titleElements.subtitle.text, subtitleTextPosition, safeArea, metrics);
         }
     }
 
     setTitleElements() {
         this.titleConfig = this.theme.title;
         this.subtitleConfig = this.theme.subtitle;
-
-        this.title = this.setVisualElement(this.titleConfig);
-        this.subtitle = this.setVisualElement(this.subtitleConfig);
+        this.titleElements = {
+            title: this.setVisualElement(this.titleConfig),
+            subtitle: this.setVisualElement(this.subtitleConfig),
+        };
     }
 
     getSafeArea(metrics) {
@@ -117,6 +118,7 @@ export class Select extends Screen {
     }
 
     startGame() {
+        delete this.titleElements;
         // Stats Stuff will need adding back in, once we have the carousel back
         this.navigation.next();
     }
