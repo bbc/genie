@@ -44,12 +44,12 @@ export class Select extends Screen {
         const metrics = getMetrics();
         const safeArea = this.getSafeArea(metrics);
 
-        if (fp.get("text", this.titleElements.title) && this.titleConfig) {
+        if (fp.get("title.text", this.titleElements) && this.titleConfig) {
             const titleTextPosition = this.calculateOffset(baseX, baseY, this.titleConfig.text);
             positionElement(this.titleElements.title.text, titleTextPosition, safeArea, metrics);
         }
 
-        if (fp.get("text", this.titleElements.subtitle) && this.subtitleConfig) {
+        if (fp.get("subtitle.text", this.titleElements) && this.subtitleConfig) {
             const subtitleTextPosition = this.calculateOffset(baseX, baseY, this.subtitleConfig.text);
             positionElement(this.titleElements.subtitle.text, subtitleTextPosition, safeArea, metrics);
         }
