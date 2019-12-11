@@ -96,6 +96,9 @@ describe("Select Screen", () => {
         selectScreen.setData(mockData);
         selectScreen.transientData = {};
         selectScreen.scene = { key: "test-select" };
+        selectScreen.sys = {
+            queueDepthSort: () => {},
+        };
         selectScreen.game = { canvas: { parentElement: "parent-element" } };
         selectScreen.navigation = { next: jest.fn() };
         selectScreen.setLayout = jest.fn(() => mockLayout);
