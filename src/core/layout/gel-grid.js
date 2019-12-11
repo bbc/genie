@@ -4,10 +4,14 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-//import * as a11y from "../accessibility/accessibility-layer.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
-import * as ButtonFactory from "./button-factory.js";
 import { GelButton } from "./gel-button.js";
+
+const cellDefaults = {
+    group: "topLeft",
+    ariaLabel: "Exit Game",
+    order: 0,
+};
 
 export class GelGrid extends Phaser.GameObjects.Container {
     constructor(scene, vPos, hPos, metrics, isSafe, isVertical) {
@@ -22,64 +26,49 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._cells = [];
         this._displayWidth = { mobile: 300, desktop: 400 };
         this._displayHeight = { mobile: 300, desktop: 400 };
-        this._buttonFactory = ButtonFactory.create(scene);
-        window.check = this.scene;
-    }
 
-    getCellID(choice, i) {
-        return fp.camelCase(`${this.scene.scene.key}${i}${choice.asset}`);
+        this.eventChannel = `gel-buttons-${scene.scene.key}`;
     }
 
     addGridCells() {
-        const config = {
-            group: "topLeft",
-            ariaLabel: "Exit Game",
-            order: 0,
-            channel: "gel-buttons-" + this.scene.scene.key,
-        };
-        this.scene.theme.choices.map((choice, i) => {
-            this.addCell(
-                Object.assign({}, config, {
-                    id: this.getCellID(choice, i),
-                    key: choice.asset,
-                    title: choice.title ? choice.title : `Option ${i + 1}`,
-                    scene: this.scene.scene.key,
-                }),
-            );
-            !!i ? (this._cells[i].visible = false) : (this._cells[i].visible = true);
-        });
-
-        //MAKE ACCESSIBLE
-        this._cells.forEach((cell, idx) => {
-            const config = {
-                id: `__selection_${idx}`,
-                ariaLabel: `Selection ${idx}`,
-                group: "grid",
-                title: `Selection ${idx}`,
-                key: `selection_${idx}`,
-                order: 0,
-                channel: "gel-buttons-character-select",    //TODO pass in name
-            };
-
-            return accessibilify(cell, config, true);
-        });
+        this.scene.theme.choices.map(this.addCell, this);
+        this._cells.forEach(this.makeAccessible, this);
         this.reset();
+    }
+
+    makeAccessible(cell, idx) {
+        const config = {
+            id: "__" + fp.kebabCase(cell.name),
+            ariaLabel: cell.name,
+            group: "grid",
+            title: `Selection ${idx}`,
+            key: `selection_${idx}`,
+            order: 0,
+            channel: this.eventChannel,
+        };
+
+        return accessibilify(cell, config, true);
     }
 
     cellKeys() {
         return this._cells.map(cell => cell.key);
     }
 
-    addCell(config, position = this._cells.length) {
-        const xOffset = 0;
-        const yOffset = 0;
-        const newCell = new GelButton(this.scene, xOffset, yOffset, this._metrics, config);
+    addCell(choice, i) {
+        const config = Object.assign({},cellDefaults, {
+            id: fp.kebabCase(choice.title),
+            key: choice.asset,
+            name: choice.title ? choice.title : `option ${i + 1}`,
+            scene: this.scene.scene.key,
+            channel: this.eventChannel,
+        });
+
+        const newCell = new GelButton(this.scene, 0, 0, this._metrics, config);
+        newCell.visible = Boolean(i)
         newCell.key = config.key;
 
-        this.addAt(newCell, position);
+        this.addAt(newCell, this._cells.length);
         this._cells.push(newCell);
-
-        return newCell;
     }
 
     removeCell(cellToRemove) {
@@ -121,11 +110,10 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     gridMetrics(metrics) {
-        const gridMetrics = {
+        return {
             displayWidth: metrics.isMobile ? this._displayWidth.mobile : this._displayWidth.desktop,
             displayHeight: metrics.isMobile ? this._displayHeight.mobile : this._displayHeight.desktop,
         };
-        return gridMetrics;
     }
 
     resetButtons(metrics) {
