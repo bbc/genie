@@ -35,7 +35,8 @@ export class Select extends Screen {
         this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
         this.repositionTitleElements();
-        onScaleChange.add(this.repositionTitleElements.bind(this));
+
+        this._scaleEvent = onScaleChange.add(this.repositionTitleElements.bind(this));
 
         createTestHarnessDisplay(this);
     }
@@ -44,23 +45,24 @@ export class Select extends Screen {
         const metrics = getMetrics();
         const safeArea = this.getSafeArea(metrics);
 
-        if (fp.get("text", this.title) && this.titleConfig) {
+        if (fp.get("title.text", this.titleElements) && this.titleConfig) {
             const titleTextPosition = this.calculateOffset(baseX, baseY, this.titleConfig.text);
-            positionElement(this.title.text, titleTextPosition, safeArea, metrics);
+            positionElement(this.titleElements.title.text, titleTextPosition, safeArea, metrics);
         }
 
-        if (fp.get("text", this.subtitle) && this.subtitleConfig) {
+        if (fp.get("subtitle.text", this.titleElements) && this.subtitleConfig) {
             const subtitleTextPosition = this.calculateOffset(baseX, baseY, this.subtitleConfig.text);
-            positionElement(this.subtitle.text, subtitleTextPosition, safeArea, metrics);
+            positionElement(this.titleElements.subtitle.text, subtitleTextPosition, safeArea, metrics);
         }
     }
 
     setTitleElements() {
         this.titleConfig = this.theme.title;
         this.subtitleConfig = this.theme.subtitle;
-
-        this.title = this.setVisualElement(this.titleConfig);
-        this.subtitle = this.setVisualElement(this.subtitleConfig);
+        this.titleElements = {
+            title: this.setVisualElement(this.titleConfig),
+            subtitle: this.setVisualElement(this.subtitleConfig),
+        };
     }
 
     getSafeArea(metrics) {
@@ -117,6 +119,7 @@ export class Select extends Screen {
     }
 
     startGame() {
+        this._scaleEvent.unsubscribe();
         // Stats Stuff will need adding back in, once we have the carousel back
         this.navigation.next();
     }

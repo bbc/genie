@@ -12,6 +12,7 @@ describe("Scaler", () => {
 
     beforeEach(() => {
         eventBus.subscribe = jest.fn();
+        eventBus.removeSubscription = jest.fn();
         mockGame = {
             scale: {
                 parent: {
