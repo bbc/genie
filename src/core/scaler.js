@@ -14,11 +14,15 @@ const getBounds = game => () => game.scale.parentSize;
 const _onSizeChangeEventCreate = (channel, name) => ({
     dispatch: data => eventBus.publish({ channel, name, data }),
     add: callback => eventBus.subscribe({ channel, name, callback }),
+    remove: callback => eventBus.removeSubscription({channel, name, callback});
 });
 const _onSizeChange = _onSizeChangeEventCreate("scaler", "sizeChange");
 const px = val => Math.floor(val) + "px";
 
-export const onScaleChange = { add: _onSizeChange.add };
+export const onScaleChange = { 
+    add: _onSizeChange.add,
+    remove: _onSizeChange.remove,
+ };
 
 export let getMetrics;
 
