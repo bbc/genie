@@ -39,7 +39,7 @@ export class Select extends Screen {
         this.layout.addCustomGroup("grid", this.grid);
 
         this.grid.addGridCells();
-        this.addEventSubscriptions();
+        // this.addEventSubscriptions();
         createTestHarnessDisplay(this);
     }
 
