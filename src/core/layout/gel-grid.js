@@ -55,7 +55,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     addCell(choice, i) {
-        const config = Object.assign({},cellDefaults, {
+        const config = Object.assign({}, cellDefaults, {
             id: fp.kebabCase(choice.title),
             key: choice.asset,
             name: choice.title ? choice.title : `option ${i + 1}`,
@@ -64,7 +64,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         });
 
         const newCell = new GelButton(this.scene, 0, 0, this._metrics, config);
-        newCell.visible = Boolean(i)
+        newCell.visible = Boolean(!i);
         newCell.key = config.key;
 
         this.addAt(newCell, this._cells.length);
