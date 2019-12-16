@@ -49,7 +49,6 @@ export function create(scene, metrics, buttonIds) {
 
     const addCustomGroup = (key, group) => {
         root.add(group);
-
         groups[key] = group;
         return group;
     };

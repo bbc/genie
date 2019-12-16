@@ -11,6 +11,7 @@ import * as Scaler from "../../src/core/scaler.js";
 import * as elementBounding from "../../src/core/helpers/element-bounding.js";
 
 import { Select } from "../../src/components/select.js";
+import { GelGrid } from "../../src/core/layout/gel-grid.js";
 jest.mock("../../src/core/layout/gel-grid.js");
 jest.mock("../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
@@ -24,12 +25,29 @@ describe("Select Screen", () => {
     let mockBounds;
     let mockTextBounds;
     let mockMetrics;
+    let mockCellKeys;
     let defaultTextStyle;
 
     beforeEach(() => {
         jest.spyOn(elementBounding, "getItemBounds").mockImplementation(() => ({}));
         jest.spyOn(elementBounding, "positionElement").mockImplementation(() => {});
         jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
+
+        const mockGelGrid = {
+            cellKeys: jest.fn(() => {
+                return mockCellKeys;
+            }),
+            addGridCells: jest.fn(),
+            makeAccessible: jest.fn(),
+            addCell: jest.fn(),
+            removeCell: jest.fn(),
+            addToGroup: jest.fn(),
+            alignChildren: jest.fn(),
+            reset: jest.fn(),
+            gridMetrics: jest.fn(),
+            resetButtons: jest.fn(),
+        };
+        GelGrid.mockImplementation(() => mockGelGrid);
         mockData = {
             config: {
                 theme: {
@@ -92,6 +110,7 @@ describe("Select Screen", () => {
             isMobile: false,
             buttonPad: 12,
         };
+        mockCellKeys = [];
         selectScreen = new Select();
         selectScreen.setData(mockData);
         selectScreen.transientData = {};
@@ -117,6 +136,7 @@ describe("Select Screen", () => {
                 }
             }),
         };
+        selectScreen.addAnimations = jest.fn();
         Object.defineProperty(selectScreen, "layout", {
             get: jest.fn(() => mockLayout),
         });
@@ -377,24 +397,27 @@ describe("Select Screen", () => {
         });
     });
 
-    describe.skip("events", () => {
+    describe("events", () => {
         beforeEach(() => {
             jest.spyOn(eventBus, "subscribe");
-            selectScreen.create();
         });
 
         test("adds event subscription to the continue button", () => {
+            selectScreen.create();
             expect(eventBus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(selectScreen));
             expect(eventBus.subscribe.mock.calls[0][0].name).toBe("continue");
         });
 
         test("moves to the next game screen when the continue button is pressed", () => {
+            selectScreen.create();
             eventBus.subscribe.mock.calls[0][0].callback();
             expect(selectScreen.navigation.next).toHaveBeenCalled();
         });
 
-        // test("adds event subscriptions for grid buttons", () => {
-        //     expect(eventBus.subscribe.mock.calls[0][1].channel).toBe(buttonsChannel(selectScreen));
-        // });
+        test("adds event subscriptions for grid buttons", () => {
+            mockCellKeys = ["key1", "key2"];
+            selectScreen.create();
+            expect(eventBus.subscribe.mock.calls[1][0].name).toBe("key1");
+        });
     });
 });

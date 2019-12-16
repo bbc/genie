@@ -76,6 +76,7 @@ describe("Layout", () => {
             addToGroup: jest.fn(),
             destroy: jest.fn(),
             makeAccessible: jest.fn(),
+            addCustomGroup: jest.fn(),
         };
         GelGroup.mockImplementation(() => mockGelGroup);
         mockPhaserGroup = { destroy: jest.fn() };
@@ -130,6 +131,14 @@ describe("Layout", () => {
             GelGroup.mock.calls.forEach((call, index) => {
                 expect(GelGroup.mock.calls[index]).toEqual(getExpectedParams(index));
             });
+        });
+
+        test("adds custom group", () => {
+            const expectedGroups = [{ customkey1: "customgroup" }];
+            const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
+            layout.addCustomGroup("customkey1", "customgroup");
+            console.log(layout);
+            expect(layout.groups).toEqual(expect.arrayContaining(expectedGroups));
         });
 
         test("adds buttons using the correct tab order", () => {
