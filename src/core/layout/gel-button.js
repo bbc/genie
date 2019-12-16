@@ -36,6 +36,7 @@ export class GelButton extends Phaser.GameObjects.Sprite {
         super(scene, x, y, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
         this._id = config.key;
         this._isMobile = metrics.isMobile;
+        this.name = config.name || "";
         this.positionOverride = config.positionOverride;
         this.indicator = noIndicator;
         this.setIndicator();
