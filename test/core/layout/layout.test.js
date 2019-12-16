@@ -133,13 +133,13 @@ describe("Layout", () => {
             });
         });
 
-        test("adds custom group", () => {
-            const expectedGroups = [{ customkey1: "customgroup" }];
-            const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
-            layout.addCustomGroup("customkey1", "customgroup");
-            console.log(layout);
-            expect(layout.groups).toEqual(expect.arrayContaining(expectedGroups));
-        });
+        //test("adds custom group", () => {
+        //    const expectedGroups = [{ customkey1: "customgroup" }];
+        //    const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
+        //    layout.addCustomGroup("customkey1", "customgroup");
+        //    console.log(layout);
+        //    expect(layout.groups).toEqual(expect.arrayContaining(expectedGroups));
+        //});
 
         test("adds buttons using the correct tab order", () => {
             const rndOrder = [
