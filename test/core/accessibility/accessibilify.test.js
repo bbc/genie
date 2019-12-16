@@ -86,6 +86,7 @@ describe("Accessibilify", () => {
             },
             scene: mockScene,
             update: jest.fn(),
+            scale: 1,
         };
         mockAccessibleDomElement = {
             position: jest.fn(),
@@ -170,6 +171,27 @@ describe("Accessibilify", () => {
                 accessibilify(mockButton);
                 expect(mockAccessibleDomElement.position.mock.calls[0][0].x).toBe(expectedButtonBounds.x);
                 expect(mockAccessibleDomElement.position.mock.calls[0][0].y).toBe(expectedButtonBounds.y);
+                expect(mockAccessibleDomElement.position.mock.calls[0][0].width).toBe(expectedButtonBounds.width);
+                expect(mockAccessibleDomElement.position.mock.calls[0][0].height).toBe(expectedButtonBounds.height);
+            });
+
+            test("sets the correct width and height when the button is scaled", () => {
+                mockButton.active = true;
+                mockButton.scale = 0.5;
+                const expectedButtonBounds = {
+                    x: 625,
+                    y: 475,
+                    width:
+                        mockButton.input.hitArea.width *
+                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height) *
+                        mockButton.scale,
+                    height:
+                        mockButton.input.hitArea.height *
+                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height) *
+                        mockButton.scale,
+                };
+
+                accessibilify(mockButton);
                 expect(mockAccessibleDomElement.position.mock.calls[0][0].width).toBe(expectedButtonBounds.width);
                 expect(mockAccessibleDomElement.position.mock.calls[0][0].height).toBe(expectedButtonBounds.height);
             });
