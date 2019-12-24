@@ -8,8 +8,8 @@ import { accessibilify } from "../accessibility/accessibilify.js";
 import { GelButton } from "./gel-button.js";
 
 const cellDefaults = {
-    group: "topLeft",
-    ariaLabel: "Exit Game",
+    group: "grid",
+    ariaLabel: "",
     order: 0,
 };
 
