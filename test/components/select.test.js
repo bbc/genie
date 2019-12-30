@@ -421,6 +421,23 @@ describe("Select Screen", () => {
             mockCellKeys = ["key1", "key2"];
             selectScreen.create();
             expect(eventBus.subscribe.mock.calls[1][0].name).toBe("key1");
+            expect(eventBus.subscribe.mock.calls[2][0].name).toBe("key2");
+        });
+
+        test("moves to the next screen when grid cell is pressed", () => {
+            mockCellKeys = ["key1", "key2"];
+            selectScreen.create();
+
+            eventBus.subscribe.mock.calls[1][0].callback();
+            expect(selectScreen.navigation.next).toHaveBeenCalled();
+        });
+
+        test("saves choice to transient data", () => {
+            mockCellKeys = ["key1"];
+            selectScreen.create();
+
+            eventBus.subscribe.mock.calls[1][0].callback();
+            expect(selectScreen.transientData["test-select"].choice).toBe("key1");
         });
     });
 });

@@ -291,5 +291,10 @@ describe("Gel Button", () => {
             const path = assetPath({ key: "mockId", isMobile: true });
             expect(path).toBe("gelMobile.mockId");
         });
+
+        test("returns the correct asset path for game buttons", () => {
+            const path = assetPath({ key: "mockId", scene: "mockScene", gameButton: true });
+            expect(path).toBe("mockScene.mockId");
+        });
     });
 });

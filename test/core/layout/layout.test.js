@@ -24,7 +24,6 @@ describe("Layout", () => {
     let mockMetrics;
     let mockInputUpAdd;
     let mockGelGroup;
-    let mockPhaserGroup;
     let mockEventUnsubscribe;
     let settingsIconsUnsubscribeSpy;
 
@@ -79,8 +78,6 @@ describe("Layout", () => {
             addCustomGroup: jest.fn(),
         };
         GelGroup.mockImplementation(() => mockGelGroup);
-        mockPhaserGroup = { destroy: jest.fn() };
-        global.Phaser.Group = jest.fn(() => mockPhaserGroup);
         global.Phaser.GameObjects.Container = jest.fn(() => mockRoot);
 
         settingsIconsUnsubscribeSpy = jest.fn();
@@ -190,6 +187,25 @@ describe("Layout", () => {
         test("creates the settings icons", () => {
             Layout.create(mockScene, mockMetrics, ["play"]);
             expect(settingsIcons.create).toHaveBeenCalledWith(mockGelGroup, ["play"]);
+        });
+    });
+
+    describe("addCustomGroup Method", () => {
+        test("returns group", () => {
+            const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
+            const key = "test_key";
+            const customGroup = { test_key: "test_value" };
+
+            expect(layout.addCustomGroup(key, customGroup)).toEqual(customGroup);
+        });
+
+        test("adds custom group to layout", () => {
+            const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
+            const key = "test_key";
+            const customGroup = { test_key: "test_value" };
+            layout.addCustomGroup(key, customGroup);
+
+            expect(mockRoot.add).toHaveBeenCalledWith(customGroup);
         });
     });
 

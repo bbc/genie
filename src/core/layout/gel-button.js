@@ -91,7 +91,7 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 }
 
 const paths = [
-    [x => Boolean(x.scene ? x.scene === "character-select" : false), x => "character-select." + x.key],
+    [x => x.gameButton, x => `${x.scene}.${x.key}`],
     [x => x.isMobile, x => "gelMobile." + x.key],
     [x => !x.isMobile, x => "gelDesktop." + x.key],
 ];

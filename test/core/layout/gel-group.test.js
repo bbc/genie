@@ -330,16 +330,6 @@ describe("Group", () => {
         });
     });
 
-    describe("make accessible method", () => {
-        test("adds each button in the group to the accessible buttons", () => {
-            group.addButton(config);
-            group.addButton(config);
-            group.makeAccessible();
-
-            expect(a11y.addToAccessibleButtons).toHaveBeenCalledTimes(2);
-        });
-    });
-
     describe("reset method", () => {
         test("sets group position when resizing from desktop to desktop", () => {
             const expectedGroupXPosition = 0;
