@@ -34,8 +34,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.scene.theme.choices.map((cell, idx) => {
             this.addCell(cell, idx);
         });
-        // this._cells.forEach(this.makeAccessible, this); // TODO - enable
-        // this.reset(); // TODO - enable
+        this._cells.forEach(this.makeAccessible, this);
+        this.reset();
     }
 
     makeAccessible(cell, idx) {
@@ -67,14 +67,11 @@ export class GelGrid extends Phaser.GameObjects.Container {
             channel: this.eventChannel,
         });
 
-        let newCell = {};
-        newCell = new GelButton(this.scene, 0, 0, this._metrics, config);
+        const newCell = new GelButton(this.scene, 0, 0, this._metrics, config);
         newCell.visible = Boolean(!idx);
         newCell.key = config.key;
         this._cells.push(newCell);
-        console.log("newCell: ", newCell);
-        console.log("cells:", this._cells);
-        // this.addAt(newCell, this._cells.length); // TODO - enable
+        this.addAt(newCell, this._cells.length);
     }
 
     removeCell(cellToRemove) {
