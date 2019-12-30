@@ -27,6 +27,7 @@ describe("Select Screen", () => {
     let mockMetrics;
     let mockCellKeys;
     let defaultTextStyle;
+    let unsubscribe = jest.fn();
 
     beforeEach(() => {
         jest.spyOn(elementBounding, "getItemBounds").mockImplementation(() => ({}));
@@ -142,7 +143,9 @@ describe("Select Screen", () => {
         });
 
         Scaler.getMetrics = jest.fn(() => mockMetrics);
-        Scaler.onScaleChange = { add: jest.fn() };
+        Scaler.onScaleChange = {
+            add: jest.fn(() => ({ unsubscribe })),
+        };
 
         defaultTextStyle = { align: "center", fontFamily: "ReithSans", fontSize: "24px" };
     });
