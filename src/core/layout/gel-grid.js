@@ -7,6 +7,12 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
 import { GelButton } from "./gel-button.js";
 
+const cellDefaults = {
+    group: "grid",
+    ariaLabel: "",
+    order: 0,
+};
+
 export class GelGrid extends Phaser.GameObjects.Container {
     constructor(scene, vPos, hPos, metrics, isSafe, isVertical) {
         super(scene, 0, 0);
@@ -25,9 +31,11 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     addGridCells() {
-        this.scene.theme.choices.map(this.addCell, this);
-        this._cells.forEach(this.makeAccessible, this);
-        this.reset();
+        this.scene.theme.choices.map((cell, idx) => {
+            this.addCell(cell, idx);
+        });
+        // this._cells.forEach(this.makeAccessible, this); // TODO - enable
+        // this.reset(); // TODO - enable
     }
 
     makeAccessible(cell, idx) {
@@ -45,59 +53,33 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     cellKeys() {
-        return this._cells.map(cell => cell.key);
+        return this._cells.map(cell => {
+            return cell.key;
+        });
     }
 
-    addCell(choice, i) {
-        const config = {
+    addCell(choice, idx) {
+        const config = Object.assign({}, cellDefaults, {
             id: fp.kebabCase(choice.title),
             key: choice.asset,
-            name: choice.title ? choice.title : `option ${i + 1}`,
+            name: choice.title ? choice.title : `option ${idx + 1}`,
             scene: this.scene.scene.key,
             channel: this.eventChannel,
-            gameButton: true,
-            group: "grid",
-            order: 0,
-        };
+        });
 
-        const newCell = new GelButton(this.scene, 0, 0, this._metrics, config);
-        newCell.visible = Boolean(i)
+        let newCell = {};
+        newCell = new GelButton(this.scene, 0, 0, this._metrics, config);
+        newCell.visible = Boolean(!idx);
         newCell.key = config.key;
-
-        this.addAt(newCell, this._cells.length);
         this._cells.push(newCell);
+        console.log("newCell: ", newCell);
+        console.log("cells:", this._cells);
+        // this.addAt(newCell, this._cells.length); // TODO - enable
     }
 
     removeCell(cellToRemove) {
         this._cell = fp.remove(n => n === cellToRemove, this._cells);
         cellToRemove.destroy();
-    }
-
-    addToGroup(item, position = 0) {
-        this.addAt(item, position);
-        this.alignChildren();
-    }
-
-    alignChildren() {
-        const pos = { x: 0, y: 0 };
-
-        const halfWidth = this.width / 2; //Save here as size changes when you move children below
-        this.iterate(child => {
-            child.y = pos.y + child.height / 2;
-
-            if (this._isVertical) {
-                child.x = halfWidth;
-                pos.y += child.height + this._metrics.buttonPad;
-            } else if (this._vPos === "middle") {
-                child.y = 0;
-
-                child.x = pos.x + child.width / 2;
-                pos.x += child.width + this._metrics.buttonPad * 3;
-            } else {
-                child.x = pos.x + child.width / 2;
-                pos.x += child.width + this._metrics.buttonPad;
-            }
-        }, this);
     }
 
     reset(metrics) {
