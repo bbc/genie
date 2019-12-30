@@ -17,10 +17,8 @@ describe("Grid", () => {
     let hPos;
     let mockRoot;
     let mockPhaserGroup;
-    let capturedIterateFunction;
     let grid;
     let mockGelButton;
-    let config;
 
     beforeEach(() => {
         mockScene = {
@@ -62,15 +60,15 @@ describe("Grid", () => {
             x: 50,
             y: 50,
         };
-        // accessibilify.mockImplementation(() => {});
+        accessibilify.mockImplementation(() => {});
         jest.spyOn(GelButton, "GelButton").mockImplementation(() => mockGelButton);
 
         GelGrid.prototype.list = [];
-        // GelGrid.prototype.iterate = fn => { // TODO - enable
-        //     capturedIterateFunction = fn;
-        // };
-        GelGrid.prototype.addAt = jest.fn((child, position) => {
-            // grid.list.push(child); // TODO - enable
+        GelGrid.prototype.iterate = fn => {
+            capturedIterateFunction = fn;
+        };
+        GelGrid.prototype.addAt = jest.fn(child => {
+            grid.list.push(child);
         });
     });
 
@@ -141,12 +139,11 @@ describe("Grid", () => {
         expect(grid.gridMetrics(metrics).displayHeight).toEqual(grid._displayHeight.desktop);
     });
 
-    test.only("returns keys for multiple cells", () => {
+    test("returns keys for multiple cells", () => {
         mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }, { asset: "asset_name_3" }];
         const expectedKeys = ["asset_name_1", "asset_name_2", "asset_name_3"];
         grid = new GelGrid(mockScene, vPos, hPos, metrics, false, false);
         grid.addGridCells();
-        console.log(JSON.stringify(mockScene));
         expect(grid.cellKeys()).toEqual(expectedKeys);
     });
 

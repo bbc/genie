@@ -70,7 +70,11 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const newCell = new GelButton(this.scene, 0, 0, this._metrics, config);
         newCell.visible = Boolean(!idx);
         newCell.key = config.key;
-        this._cells.push(newCell);
+        cells = this._cells.slice();
+        console.log("before push", cells);
+        cells.push(newCell);
+        console.log("after push", cells);
+        this._cells = cells.slice();
         this.addAt(newCell, this._cells.length);
     }
 
