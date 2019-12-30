@@ -137,7 +137,6 @@ describe("Layout", () => {
             const expectedGroups = [{ customkey1: "customgroup" }];
             const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
             layout.addCustomGroup("customkey1", "customgroup");
-            console.log(layout);
             expect(layout.groups).toEqual(expect.arrayContaining(expectedGroups));
         });
 
