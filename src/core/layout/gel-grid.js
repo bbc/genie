@@ -10,8 +10,6 @@ import { GelButton } from "./gel-button.js";
 export class GelGrid extends Phaser.GameObjects.Container {
     constructor(scene, vPos, hPos, metrics, isSafe, isVertical) {
         super(scene, 0, 0);
-        //TODO P3 we used to name the groups - useful for debugging. Might be usuaful as a propery? [NT]
-        //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
         this._vPos = vPos;
         this._hPos = hPos;
         this._metrics = metrics;
@@ -78,7 +76,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     reset(metrics) {
         metrics = metrics || this._metrics;
-        // if (this._metrics.isMobile !== metrics.isMobile) { }
         this.resetButtons(metrics);
     }
 
@@ -90,7 +87,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     resetButtons(metrics) {
-        // TODO This should resize the buttons for mobile/desktop breakpoints?
         this._cells.map(cell => {
             cell.displayWidth = this.gridMetrics(metrics).displayWidth;
             cell.displayHeight = this.gridMetrics(metrics).displayHeight;

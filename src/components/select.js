@@ -121,27 +121,26 @@ export class Select extends Screen {
         return visualElements;
     }
 
-    startGame() {
+    next(title) {
         this._scaleEvent.unsubscribe();
-        // Stats Stuff will need adding back in, once we have the carousel back
+        //TODO  Stats Stuff will need adding back in, once we have the carousel back
+        //TODO work out the correct key if "continue" is passed here when continue button used vs grid button
+        this.transientData[this.scene.key] = { choice: { title } };
         this.navigation.next();
     }
 
     addEventSubscriptions() {
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "continue",
-            callback: this.startGame.bind(this),
-        });
-        this.grid.cellKeys().map(key => {
-            eventBus.subscribe({
-                channel: buttonsChannel(this),
-                name: key,
-                callback: () => {
-                    this.transientData[this.scene.key] = { choice: key };
-                    this.startGame();
-                },
+        this.grid
+            .cellKeys()
+            .concat(["continue"])
+            .map(key => {
+                eventBus.subscribe({
+                    channel: buttonsChannel(this),
+                    name: key,
+                    callback: () => {
+                        this.next(key);
+                    },
+                });
             });
-        });
     }
 }
