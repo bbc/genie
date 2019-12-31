@@ -18,7 +18,6 @@ describe("Grid", () => {
     let mockRoot;
     let mockPhaserGroup;
     let grid;
-    let mockGelButton;
 
     beforeEach(() => {
         mockScene = {
@@ -55,12 +54,11 @@ describe("Grid", () => {
         global.Phaser.Group = jest.fn(() => mockPhaserGroup);
         global.Phaser.GameObjects.Container = jest.fn(() => mockRoot);
 
-        mockGelButton = {
+        accessibilify.mockImplementation(() => {});
+        jest.spyOn(GelButton, "GelButton").mockImplementation(() => ({
             x: 50,
             y: 50,
-        };
-        accessibilify.mockImplementation(() => {});
-        jest.spyOn(GelButton, "GelButton").mockImplementation(() => mockGelButton);
+        }));
 
         GelGrid.prototype.list = [];
         GelGrid.prototype.iterate = fn => {

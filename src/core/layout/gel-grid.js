@@ -7,12 +7,6 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
 import { GelButton } from "./gel-button.js";
 
-const cellDefaults = {
-    group: "grid",
-    ariaLabel: "",
-    order: 0,
-};
-
 export class GelGrid extends Phaser.GameObjects.Container {
     constructor(scene, vPos, hPos, metrics, isSafe, isVertical) {
         super(scene, 0, 0);
@@ -53,13 +47,11 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     cellKeys() {
-        return this._cells.map(cell => {
-            return cell.key;
-        });
+        return this._cells.map(cell => cell.key);
     }
 
     addCell(choice, idx) {
-        const config = Object.assign({}, cellDefaults, {
+        const config = {
             id: fp.kebabCase(choice.title),
             key: choice.asset,
             name: choice.title ? choice.title : `option ${idx + 1}`,
@@ -68,14 +60,14 @@ export class GelGrid extends Phaser.GameObjects.Container {
             gameButton: true,
             group: "grid",
             order: 0,
-        });
+            ariaLabel: "",
+        };
 
         const newCell = new GelButton(this.scene, 0, 0, this._metrics, config);
         newCell.visible = Boolean(!idx);
         newCell.key = config.key;
-        const cells = this._cells.slice();
-        cells.push(newCell);
-        this._cells = cells.slice();
+
+        this._cells.push(newCell);
         this.addAt(newCell, this._cells.length);
     }
 
