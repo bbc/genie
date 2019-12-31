@@ -184,6 +184,8 @@ describe("Grid", () => {
     });
 
     describe("removing cells", () => {
+        // This functionality is not yet implemented in the module
+        // it should be tested where implemented rather than using internal values (_cells)
         test("calls destroy on cell", () => {
             grid = new GelGrid(mockScene, vPos, hPos, metrics, false, false);
             const destroySpy = jest.fn();
