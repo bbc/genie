@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-// import * as phaserSplit from "../../../node_modules/phaser-ce/build/custom/phaser-split.js";
 import { createMockGmi } from "../../mock/gmi";
 
 import { groupLayouts } from "../../../src/core/layout/group-layouts.js";
@@ -187,7 +186,7 @@ describe("Layout", () => {
         test("returns group", () => {
             const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
             const key = "test_key";
-            const customGroup = {test_key: "test_value"};
+            const customGroup = { test_key: "test_value" };
 
             expect(layout.addCustomGroup(key, customGroup)).toEqual(customGroup);
         });
@@ -195,8 +194,8 @@ describe("Layout", () => {
         test("adds custom group to layout", () => {
             const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
             const key = "test_key";
-            const customGroup = {test_key: "test_value"};
-            layout.addCustomGroup(key, customGroup)
+            const customGroup = { test_key: "test_value" };
+            layout.addCustomGroup(key, customGroup);
 
             expect(mockRoot.add).toHaveBeenCalledWith(customGroup);
         });

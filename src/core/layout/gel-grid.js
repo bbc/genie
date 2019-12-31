@@ -34,8 +34,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.scene.theme.choices.map((cell, idx) => {
             this.addCell(cell, idx);
         });
-        // this._cells.forEach(this.makeAccessible, this); // TODO - enable
-        // this.reset(); // TODO - enable
+        this._cells.forEach(this.makeAccessible, this);
+        this.reset();
     }
 
     makeAccessible(cell, idx) {
@@ -65,20 +65,22 @@ export class GelGrid extends Phaser.GameObjects.Container {
             name: choice.title ? choice.title : `option ${idx + 1}`,
             scene: this.scene.scene.key,
             channel: this.eventChannel,
+            gameButton: true,
+            group: "grid",
+            order: 0,
         });
 
-        let newCell = {};
-        newCell = new GelButton(this.scene, 0, 0, this._metrics, config);
+        const newCell = new GelButton(this.scene, 0, 0, this._metrics, config);
         newCell.visible = Boolean(!idx);
         newCell.key = config.key;
-        this._cells.push(newCell);
-        console.log("newCell: ", newCell);
-        console.log("cells:", this._cells);
-        // this.addAt(newCell, this._cells.length); // TODO - enable
+        const cells = this._cells.slice();
+        cells.push(newCell);
+        this._cells = cells.slice();
+        this.addAt(newCell, this._cells.length);
     }
 
     removeCell(cellToRemove) {
-        this._cell = fp.remove(n => n === cellToRemove, this._cells);
+        this._cells = fp.remove(n => n === cellToRemove, this._cells);
         cellToRemove.destroy();
     }
 
