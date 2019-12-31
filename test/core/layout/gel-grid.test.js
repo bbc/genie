@@ -182,4 +182,28 @@ describe("Grid", () => {
             });
         });
     });
+
+    describe("removing cells", () => {
+        test("calls destroy on cell", () => {
+            grid = new GelGrid(mockScene, vPos, hPos, metrics, false, false);
+            const destroySpy = jest.fn();
+            grid.removeCell({ destroy: destroySpy });
+
+            expect(destroySpy).toHaveBeenCalled();
+        });
+
+        test("removes cell from grid", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
+            grid = new GelGrid(mockScene, vPos, hPos, metrics, false, false);
+            grid.addGridCells();
+            grid._cells[0].destroy = jest.fn();
+            const cell0 = grid._cells[0];
+            const cell1 = grid._cells[1];
+
+            grid.removeCell(cell0);
+
+            expect(grid._cells.length).toBe(1);
+            expect(grid._cells[0]).toBe(cell1);
+        });
+    });
 });

@@ -80,7 +80,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     removeCell(cellToRemove) {
-        this._cell = fp.remove(n => n === cellToRemove, this._cells);
+        this._cells = fp.remove(n => n === cellToRemove, this._cells);
         cellToRemove.destroy();
     }
 
