@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-// import * as phaserSplit from "../../../node_modules/phaser-ce/build/custom/phaser-split.js";
 import { createMockGmi } from "../../mock/gmi";
 
 import { groupLayouts } from "../../../src/core/layout/group-layouts.js";
@@ -24,7 +23,6 @@ describe("Layout", () => {
     let mockMetrics;
     let mockInputUpAdd;
     let mockGelGroup;
-    let mockPhaserGroup;
     let mockEventUnsubscribe;
     let settingsIconsUnsubscribeSpy;
 
@@ -76,10 +74,9 @@ describe("Layout", () => {
             addToGroup: jest.fn(),
             destroy: jest.fn(),
             makeAccessible: jest.fn(),
+            addCustomGroup: jest.fn(),
         };
         GelGroup.mockImplementation(() => mockGelGroup);
-        mockPhaserGroup = { destroy: jest.fn() };
-        global.Phaser.Group = jest.fn(() => mockPhaserGroup);
         global.Phaser.GameObjects.Container = jest.fn(() => mockRoot);
 
         settingsIconsUnsubscribeSpy = jest.fn();
@@ -185,6 +182,25 @@ describe("Layout", () => {
         });
     });
 
+    describe("addCustomGroup Method", () => {
+        test("returns group", () => {
+            const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
+            const key = "test_key";
+            const customGroup = { test_key: "test_value" };
+
+            expect(layout.addCustomGroup(key, customGroup)).toEqual(customGroup);
+        });
+
+        test("adds custom group to layout", () => {
+            const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
+            const key = "test_key";
+            const customGroup = { test_key: "test_value" };
+            layout.addCustomGroup(key, customGroup);
+
+            expect(mockRoot.add).toHaveBeenCalledWith(customGroup);
+        });
+    });
+
     describe("addToGroup Method", () => {
         test("adds items to the correct group", () => {
             const layout = Layout.create(mockScene, mockMetrics, []);
@@ -217,14 +233,6 @@ describe("Layout", () => {
 
         test("calls destroy on the root", () => {
             expect(mockRoot.destroy).toHaveBeenCalled();
-        });
-    });
-
-    describe("make accessible method", () => {
-        test("calls make accessible method on each group in the layout", () => {
-            const layout = Layout.create(mockScene, mockMetrics, ["achievements", "exit", "settings"]);
-            layout.makeAccessible();
-            expect(mockGelGroup.makeAccessible).toHaveBeenCalled();
         });
     });
 

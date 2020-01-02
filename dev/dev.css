@@ -65,3 +65,7 @@ body {
 .achievements-container details:nth-child(even) summary { background-color: papayawhip; }
 
 details[open] > summary { font-weight: bold; }
+
+#accessibility div {
+    /* background-color: rgba(255,0,0,0.3); */
+}

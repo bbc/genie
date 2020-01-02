@@ -78,8 +78,8 @@ export function accessibilify(button, config, gameButton = true) {
         bounds.y += marginTop;
 
         if (button.input.hitArea) {
-            bounds.width = button.input.hitArea.width;
-            bounds.height = button.input.hitArea.height;
+            bounds.width = button.input.hitArea.width * button.scale;
+            bounds.height = button.input.hitArea.height * button.scale;
             bounds.x += button.input.hitArea.x;
             bounds.y += button.input.hitArea.y;
         }

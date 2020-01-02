@@ -16,20 +16,26 @@
             },
             {
                 "type": "image",
-                "key": "carousel1",
-                "url": "options/carousel_1.png",
+                "key": "char1",
+                "url": "select/char_1.png",
                 "overwrite": false
             },
             {
                 "type": "image",
-                "key": "carousel2",
-                "url": "options/carousel_2.png",
+                "key": "char2",
+                "url": "select/char_2.png",
                 "overwrite": false
             },
             {
                 "type": "image",
-                "key": "carousel3",
-                "url": "options/carousel_3.png",
+                "key": "char3",
+                "url": "select/char_3.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "char4",
+                "url": "select/char_4.png",
                 "overwrite": false
             }
         ]

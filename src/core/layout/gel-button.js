@@ -33,9 +33,10 @@ export const noIndicator = {
 
 export class GelButton extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, metrics, config) {
-        super(scene, x, y, assetPath({ key: config.key, isMobile: metrics.isMobile }));
+        super(scene, x, y, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
         this._id = config.key;
         this._isMobile = metrics.isMobile;
+        this.name = config.name || "";
         this.positionOverride = config.positionOverride;
         this.indicator = noIndicator;
         this.setIndicator();
@@ -89,7 +90,11 @@ export class GelButton extends Phaser.GameObjects.Sprite {
     }
 }
 
-const paths = [[x => x.isMobile, x => "gelMobile." + x.key], [x => !x.isMobile, x => "gelDesktop." + x.key]];
+const paths = [
+    [x => x.gameButton, x => `${x.scene}.${x.key}`],
+    [x => x.isMobile, x => "gelMobile." + x.key],
+    [x => !x.isMobile, x => "gelDesktop." + x.key],
+];
 
 export const assetPath = fp.cond(paths);
 

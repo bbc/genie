@@ -12,6 +12,7 @@ import { eventBus } from "../core/event-bus.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
+import { GelGrid } from "../core/layout/gel-grid.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
@@ -29,15 +30,17 @@ export class Select extends Screen {
         this.add.image(0, 0, `${this.scene.key}.background`);
         this.addAnimations();
         this.theme = this.context.config.theme[this.scene.key];
-
-        this.addEventSubscriptions();
         this.setTitleElements();
         this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
         this.repositionTitleElements();
+        this.grid = new GelGrid(this, "gridV", "gridH", getMetrics(), true, false);
+        this.layout.addCustomGroup("grid", this.grid);
 
         this._scaleEvent = onScaleChange.add(this.repositionTitleElements.bind(this));
 
+        this.grid.addGridCells();
+        this.addEventSubscriptions();
         createTestHarnessDisplay(this);
     }
 
@@ -118,17 +121,26 @@ export class Select extends Screen {
         return visualElements;
     }
 
-    startGame() {
+    next(title) {
         this._scaleEvent.unsubscribe();
-        // Stats Stuff will need adding back in, once we have the carousel back
+        //TODO  Stats Stuff will need adding back in, once we have the carousel back
+        //TODO work out the correct key if "continue" is passed here when continue button used vs grid button
+        this.transientData[this.scene.key] = { choice: { title } };
         this.navigation.next();
     }
 
     addEventSubscriptions() {
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "continue",
-            callback: this.startGame.bind(this),
-        });
+        this.grid
+            .cellKeys()
+            .concat(["continue"])
+            .map(key => {
+                eventBus.subscribe({
+                    channel: buttonsChannel(this),
+                    name: key,
+                    callback: () => {
+                        this.next(key);
+                    },
+                });
+            });
     }
 }

@@ -47,6 +47,16 @@ export function create(scene, metrics, buttonIds) {
     const config = shallowMergeOverrides(gel.config(scene), overrides);
     const root = new Phaser.GameObjects.Container(scene, 0, 0);
 
+    const addCustomGroup = (key, group) => {
+        root.add(group);
+        groups[key] = group;
+        return group;
+    };
+
+    const addToGroup = (groupName, item, position) => {
+        groups[groupName].addToGroup(item, position);
+    };
+
     const groups = fp.zipObject(
         groupLayouts.map(layout =>
             fp.camelCase([layout.vPos, layout.hPos, layout.safe ? "safe" : "", layout.arrangeV ? "v" : ""].join(" ")),
@@ -75,17 +85,10 @@ export function create(scene, metrics, buttonIds) {
         buttons[button].onInputUp.add(callback, this);
     };
 
-    const addToGroup = (groupName, item, position) => {
-        groups[groupName].addToGroup(item, position);
-    };
-
-    const makeAccessible = () => {
-        fp.forOwn(group => group.makeAccessible(), groups);
-    };
-
     const resize = metrics => {
         fp.forOwn(group => group.reset(metrics), groups);
     };
+
     resize(metrics);
 
     const event = onScaleChange.add(resize);
@@ -101,10 +104,10 @@ export function create(scene, metrics, buttonIds) {
     };
 
     return {
+        addCustomGroup,
         addToGroup,
         buttons,
         destroy,
-        makeAccessible,
         resize,
         root,
         removeEvents,
