@@ -30,7 +30,6 @@ describe("Select Screen", () => {
     let unsubscribe = jest.fn();
 
     beforeEach(() => {
-        jest.spyOn(elementBounding, "getItemBounds").mockImplementation(() => ({}));
         jest.spyOn(elementBounding, "positionElement").mockImplementation(() => {});
         jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
 
@@ -102,14 +101,16 @@ describe("Select Screen", () => {
                     getBounds: jest.fn(() => mockBounds),
                     type: "Sprite",
                 },
-                previous: { accessibleElement: { focus: jest.fn() } },
-                next: { accessibleElement: { focus: jest.fn() } },
+                previous: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds) },
+                next: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds) },
+                continue: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds) },
             },
             addCustomGroup: jest.fn(),
         };
         mockMetrics = {
             isMobile: false,
             buttonPad: 12,
+            screenToCanvas: jest.fn()
         };
         mockCellKeys = [];
         selectScreen = new Select();

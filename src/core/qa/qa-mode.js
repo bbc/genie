@@ -20,6 +20,6 @@ const create = (window, game) => {
     }
 };
 
-const debugMode = () => !!urlParams(window).debugMode;
+const debugMode = () => Boolean(urlParams(window).debugMode);
 
 export { debugMode, create };

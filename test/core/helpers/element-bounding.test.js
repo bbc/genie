@@ -156,7 +156,7 @@ describe("element-bounding", () => {
 
     describe("getItemBounds", () => {
         test("returns bounds for an element", () => {
-            expect(getItemBounds(mockElement, metrics)).toEqual({
+            expect(getItemBounds(metrics, mockElement)).toEqual({
                 top: 0,
                 bottom: 50,
                 left: 0,
@@ -167,7 +167,7 @@ describe("element-bounding", () => {
         test("padding is respected by boundaries when isMobile equals true and element is a sprite", () => {
             metrics.isMobile = true;
             mockElement.type = "Sprite";
-            expect(getItemBounds(mockElement, metrics)).toEqual({
+            expect(getItemBounds(metrics, mockElement)).toEqual({
                 top: -15,
                 bottom: 65,
                 left: -15,
@@ -178,7 +178,7 @@ describe("element-bounding", () => {
         test("padding is not respected by boundaries when isMobile equals true and element is a text", () => {
             metrics.isMobile = true;
             mockElement.type = "Text";
-            expect(getItemBounds(mockElement, metrics)).toEqual({
+            expect(getItemBounds(metrics, mockElement)).toEqual({
                 top: 0,
                 bottom: 50,
                 left: 0,

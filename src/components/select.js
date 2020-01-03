@@ -13,6 +13,7 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
 import { GelGrid } from "../core/layout/gel-grid.js";
+import { debugMode } from "../core/qa/qa-mode.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
@@ -31,8 +32,7 @@ export class Select extends Screen {
         this.addAnimations();
         this.theme = this.context.config.theme[this.scene.key];
         this.setTitleElements();
-        this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
-
+        this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
         this.grid = new GelGrid(this, "gridV", "gridH", getMetrics(), true, false);
         this.layout.addCustomGroup("grid", this.grid);
@@ -46,15 +46,15 @@ export class Select extends Screen {
         this.safeArea = new Phaser.Geom.Rectangle(50, 50, 300, 200);
         this.resize();
 
-
-        this.graphics = this.add.graphics();
+        if (debugMode()) {
+            this.graphics = this.add.graphics();
+        }
     }
 
-    resize()
-    {
+    resize() {
         const metrics = getMetrics();
         this.updateSafeArea(metrics);
-        this.repositionTitleElements(metrics)
+        this.repositionTitleElements(metrics);
     }
 
     repositionTitleElements(metrics) {
@@ -81,11 +81,11 @@ export class Select extends Screen {
     }
 
     getTitleSafeArea(metrics) {
-        const homeButton = this.buttonLayout.buttons["home"];
-        const secondaryButton = this.buttonLayout.buttons["audio"];
+        const homeButton = this.layout.buttons["home"];
+        const secondaryButton = this.layout.buttons["audio"];
 
-        const homeButtonBounds = getItemBounds(homeButton, metrics);
-        const secondaryButtonBounds = getItemBounds(secondaryButton, metrics);
+        const homeButtonBounds = getItemBounds(metrics, homeButton);
+        const secondaryButtonBounds = getItemBounds(metrics, secondaryButton);
 
         return {
             top: homeButtonBounds.top,
@@ -96,29 +96,26 @@ export class Select extends Screen {
     }
 
     update(time, delta) {
+        if (!debugMode()) {
+            return;
+        }
+
         this.graphics.clear();
-        this.graphics.fillStyle( 0xff3333, 0.3); // color: 0xRRGGBB
+        this.graphics.fillStyle(0xff3333, 0.3);
         this.graphics.fillRectShape(this.safeArea);
     }
 
     updateSafeArea(metrics) {
+        const bounds = ["home", "previous", "next", "continue"]
+            .map(key => this.layout.buttons[key])
+            .map(getItemBounds(metrics));
 
-        const getBounds = metrics => button => getItemBounds(button, metrics)
-
-        const bounds = ["home", "next", "previous", "continue"]
-            .map(key => this.buttonLayout.buttons[key])
-            .map(getBounds(metrics))
-
-        //TODO could try adding all buttons as this method should still work?
-        const lefts = bounds.map(bound => bound.right).filter(x => x < 0);  //trim anything from the right hand side
+        const lefts = bounds.map(bound => bound.right).filter(x => x < 0);
         const rights = bounds.map(bound => bound.left).filter(x => x > 0);
         const tops = bounds.map(bound => bound.bottom).filter(y => y < 0);
         const bottoms = bounds.map(bound => bound.top).filter(y => y > 0);
 
-
-        const screenToCanvas = x => x / metrics.scale;
-        const pad = metrics.isMobile? 0 : screenToCanvas(20);
-
+        const pad = metrics.isMobile ? 0 : metrics.screenToCanvas(20);
 
         this.safeArea.left = Math.max(...lefts) + pad;
         this.safeArea.right = Math.min(...rights) - pad;
