@@ -54,7 +54,7 @@ export class Select extends Screen {
     {
         const metrics = getMetrics();
         this.updateSafeArea(metrics);
-        this.repositionTitleElements()
+        this.repositionTitleElements(metrics)
     }
 
     repositionTitleElements(metrics) {
