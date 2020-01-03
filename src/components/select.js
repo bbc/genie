@@ -94,7 +94,7 @@ export class Select extends Screen {
         };
     }
 
-    update(time, delta) {
+    update() {
         if (!debugMode()) {
             return;
         }
