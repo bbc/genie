@@ -33,29 +33,41 @@ export class Select extends Screen {
         this.setTitleElements();
         this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
-        this.repositionTitleElements();
+
         this.grid = new GelGrid(this, "gridV", "gridH", getMetrics(), true, false);
         this.layout.addCustomGroup("grid", this.grid);
 
-        this._scaleEvent = onScaleChange.add(this.repositionTitleElements.bind(this));
+        this._scaleEvent = onScaleChange.add(this.resize.bind(this));
 
         this.grid.addGridCells();
         this.addEventSubscriptions();
         createTestHarnessDisplay(this);
+
+        this.safeArea = new Phaser.Geom.Rectangle(50, 50, 300, 200);
+        this.resize();
+
+
+        this.graphics = this.add.graphics();
     }
 
-    repositionTitleElements() {
+    resize()
+    {
         const metrics = getMetrics();
-        const safeArea = this.getSafeArea(metrics);
+        this.updateSafeArea(metrics);
+        this.repositionTitleElements()
+    }
+
+    repositionTitleElements(metrics) {
+        const titleArea = this.getTitleSafeArea(metrics);
 
         if (fp.get("title.text", this.titleElements) && this.titleConfig) {
             const titleTextPosition = this.calculateOffset(baseX, baseY, this.titleConfig.text);
-            positionElement(this.titleElements.title.text, titleTextPosition, safeArea, metrics);
+            positionElement(this.titleElements.title.text, titleTextPosition, titleArea, metrics);
         }
 
         if (fp.get("subtitle.text", this.titleElements) && this.subtitleConfig) {
             const subtitleTextPosition = this.calculateOffset(baseX, baseY, this.subtitleConfig.text);
-            positionElement(this.titleElements.subtitle.text, subtitleTextPosition, safeArea, metrics);
+            positionElement(this.titleElements.subtitle.text, subtitleTextPosition, titleArea, metrics);
         }
     }
 
@@ -68,7 +80,7 @@ export class Select extends Screen {
         };
     }
 
-    getSafeArea(metrics) {
+    getTitleSafeArea(metrics) {
         const homeButton = this.buttonLayout.buttons["home"];
         const secondaryButton = this.buttonLayout.buttons["audio"];
 
@@ -81,6 +93,37 @@ export class Select extends Screen {
             left: homeButtonBounds.right,
             right: secondaryButtonBounds.left,
         };
+    }
+
+    update(time, delta) {
+        this.graphics.clear();
+        this.graphics.fillStyle( 0xff3333, 0.3); // color: 0xRRGGBB
+        this.graphics.fillRectShape(this.safeArea);
+    }
+
+    updateSafeArea(metrics) {
+
+        const getBounds = metrics => button => getItemBounds(button, metrics)
+
+        const bounds = ["home", "next", "previous", "continue"]
+            .map(key => this.buttonLayout.buttons[key])
+            .map(getBounds(metrics))
+
+        //TODO could try adding all buttons as this method should still work?
+        const lefts = bounds.map(bound => bound.right).filter(x => x < 0);  //trim anything from the right hand side
+        const rights = bounds.map(bound => bound.left).filter(x => x > 0);
+        const tops = bounds.map(bound => bound.bottom).filter(y => y < 0);
+        const bottoms = bounds.map(bound => bound.top).filter(y => y > 0);
+
+
+        const screenToCanvas = x => x / metrics.scale;
+        const pad = metrics.isMobile? 0 : screenToCanvas(20);
+
+
+        this.safeArea.left = Math.max(...lefts) + pad;
+        this.safeArea.right = Math.min(...rights) - pad;
+        this.safeArea.top = Math.max(...tops);
+        this.safeArea.bottom = Math.min(...bottoms);
     }
 
     setVisualElement(config) {
