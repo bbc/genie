@@ -6,7 +6,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";

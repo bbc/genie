@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 import * as layoutHarness from "../../src/core/qa/layout-harness.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
@@ -12,6 +11,7 @@ import * as elementBounding from "../../src/core/helpers/element-bounding.js";
 
 import { Select } from "../../src/components/select.js";
 import { GelGrid } from "../../src/core/layout/gel-grid.js";
+import * as qaMode from "../../src/core/qa/qa-mode.js";
 jest.mock("../../src/core/layout/gel-grid.js");
 jest.mock("../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
@@ -19,6 +19,7 @@ jest.mock("../../src/core/layout/layout.js", () => ({
 
 describe("Select Screen", () => {
     let characterSprites;
+    let fillRectShapeSpy;
     let selectScreen;
     let mockLayout;
     let mockData;
@@ -110,9 +111,10 @@ describe("Select Screen", () => {
         mockMetrics = {
             isMobile: false,
             buttonPad: 12,
-            screenToCanvas: jest.fn()
+            screenToCanvas: jest.fn(x => x),
         };
         mockCellKeys = [];
+        fillRectShapeSpy = jest.fn();
         selectScreen = new Select();
         selectScreen.setData(mockData);
         selectScreen.transientData = {};
@@ -121,12 +123,17 @@ describe("Select Screen", () => {
         selectScreen.navigation = { next: jest.fn() };
         selectScreen.setLayout = jest.fn(() => mockLayout);
         selectScreen.add = {
-            text: jest.fn().mockImplementation(() => ({
+            graphics: jest.fn(() => ({
+                fillRectShape: fillRectShapeSpy,
+                clear: jest.fn(),
+                fillStyle: jest.fn(),
+            })),
+            text: jest.fn(() => ({
                 ...mockTextBounds,
                 getBounds: jest.fn(() => mockTextBounds),
             })),
-            image: jest.fn().mockImplementation((x, y, imageName) => imageName),
-            sprite: jest.fn().mockImplementation((x, y, assetName) => {
+            image: jest.fn((x, y, imageName) => imageName),
+            sprite: jest.fn((x, y, assetName) => {
                 if (assetName === "test-select.character1") {
                     return characterSprites[0];
                 }
@@ -439,6 +446,68 @@ describe("Select Screen", () => {
 
             eventBus.subscribe.mock.calls[0][0].callback();
             expect(selectScreen.transientData["test-select"].choice.title).toBe("key1");
+        });
+    });
+
+    describe("Safe Area", () => {
+        test("Creates a safe area with the correct offsets in desktop mode", () => {
+            selectScreen.create();
+            selectScreen.layout.buttons = {
+                home: { getBounds: () => ({ x: -500, y: -500, height: 10, width: 10 }) }, //top
+                previous: { getBounds: () => ({ x: -500, y: -5, height: 10, width: 10 }) }, //left
+                next: { getBounds: () => ({ x: 500, y: -5, height: 10, width: 10 }) }, //right
+                continue: { getBounds: () => ({ x: 0, y: 500, height: 10, width: 10 }) }, //bottom
+            };
+
+            selectScreen.updateSafeArea(mockMetrics);
+
+            expect(selectScreen.safeArea.x).toBe(-470);
+            expect(selectScreen.safeArea.y).toBe(-490);
+            expect(selectScreen.safeArea.width).toBe(950);
+            expect(selectScreen.safeArea.height).toBe(990);
+        });
+
+        test("Creates a safe area with the correct offsets in mobile mode", () => {
+            selectScreen.create();
+            selectScreen.layout.buttons = {
+                home: { getBounds: () => ({ x: -500, y: -500, height: 10, width: 10 }) }, //top
+                previous: { getBounds: () => ({ x: -500, y: -5, height: 10, width: 10 }) }, //left
+                next: { getBounds: () => ({ x: 500, y: -5, height: 10, width: 10 }) }, //right
+                continue: { getBounds: () => ({ x: 0, y: 500, height: 10, width: 10 }) }, //bottom
+            };
+            mockMetrics.isMobile = true;
+
+            selectScreen.updateSafeArea(mockMetrics);
+
+            expect(selectScreen.safeArea.x).toBe(-490);
+            expect(selectScreen.safeArea.y).toBe(-490);
+            expect(selectScreen.safeArea.width).toBe(990);
+            expect(selectScreen.safeArea.height).toBe(990);
+        });
+    });
+
+    describe("Debug Mode", () => {
+        test("Does not add a graphics object if debug unset", () => {
+            qaMode.debugMode = jest.fn(() => false);
+
+            selectScreen.create();
+            expect(selectScreen.graphics).not.toBeDefined();
+        });
+
+        test("Does draw a debug rect if debug unset", () => {
+            qaMode.debugMode = jest.fn(() => false);
+
+            selectScreen.create();
+            selectScreen.update();
+            expect(fillRectShapeSpy).not.toHaveBeenCalled();
+        });
+
+        test("draws a safe area rectangle on update when debugMode is enabled", () => {
+            qaMode.debugMode = jest.fn(() => true);
+
+            selectScreen.create();
+            selectScreen.update();
+            expect(fillRectShapeSpy).toHaveBeenCalled();
         });
     });
 });
