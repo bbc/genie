@@ -197,7 +197,7 @@ describe("Loader", () => {
             loader.preload();
 
             expect(loader.load.pack).toHaveBeenCalledWith("gel/gel-pack");
-            expect(loader.load.pack).toHaveBeenCalledWith("three");
+            expect(loader.load.pack).toHaveBeenCalledWith("asset-packs/three");
         });
 
         test("does not load boot and loader screen packs", () => {
@@ -207,7 +207,7 @@ describe("Loader", () => {
             expect(loader.load.pack).toHaveBeenCalledWith("gel/gel-pack");
             expect(loader.load.pack).not.toHaveBeenCalledWith("boot");
             expect(loader.load.pack).not.toHaveBeenCalledWith("loader");
-            expect(loader.load.pack).toHaveBeenCalledWith("three");
+            expect(loader.load.pack).toHaveBeenCalledWith("asset-packs/three");
         });
 
         test("adds background and title images", () => {

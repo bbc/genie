@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Move asset pack files to own sub folder in themes.  | |
 | | Spine loader and Background animation system.  | |
 | 3.0.0 Epsilon | |
 | | Use root path for JSON5 lib so it works as a dependency in starter pack.  | |
