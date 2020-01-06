@@ -112,4 +112,13 @@ describe("Layout - Calculate Metrics", () => {
             expect(getMetrics({ stageHeight: 1000 }).verticals).toEqual(expectedFor1000);
         });
     });
+
+    describe("screenToCanvas method", () => {
+        test("converts screen pixels to canvas pixels", () => {
+            expect(getMetrics({ stageHeight: 150 }).screenToCanvas(20)).toEqual(5);
+            expect(getMetrics({ stageHeight: 300 }).screenToCanvas(20)).toEqual(10);
+            expect(getMetrics({ stageHeight: 600 }).screenToCanvas(20)).toEqual(20);
+            expect(getMetrics({ stageHeight: 900 }).screenToCanvas(20)).toEqual(30);
+        });
+    });
 });
