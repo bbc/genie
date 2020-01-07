@@ -53,6 +53,7 @@ export class Select extends Screen {
     resize() {
         const metrics = getMetrics();
         this.updateSafeArea(metrics);
+        this.grid.resize(metrics, this.safeArea);
         this.repositionTitleElements(metrics);
     }
 

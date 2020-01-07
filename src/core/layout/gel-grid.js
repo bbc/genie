@@ -8,17 +8,14 @@ import { accessibilify } from "../accessibility/accessibilify.js";
 import { GelButton } from "./gel-button.js";
 
 export class GelGrid extends Phaser.GameObjects.Container {
-    constructor(scene, vPos, hPos, metrics, isSafe, isVertical) {
+    constructor(scene, metrics, safeArea) {
         super(scene, 0, 0);
-        this._vPos = vPos;
-        this._hPos = hPos;
         this._metrics = metrics;
-        this._isSafe = isSafe;
-        this._isVertical = isVertical;
+        this._safeArea = safeArea;
         this._cells = [];
-        this._displayWidth = { mobile: 300, desktop: 400 };
-        this._displayHeight = { mobile: 300, desktop: 400 };
-
+        this._columns = scene.theme.columns || 1;
+        this._rows = scene.theme.rows || 1;
+        this._cellPadding = metrics.isMobile ? 16 : 24;
         this.eventChannel = `gel-buttons-${scene.scene.key}`;
     }
 
@@ -27,6 +24,26 @@ export class GelGrid extends Phaser.GameObjects.Container {
             this.addCell(cell, idx);
         });
         this._cells.forEach(this.makeAccessible, this);
+        this.reset();
+        return this._cells;
+    }
+
+    calculateCellSize() {
+        const colPaddingCount = this._columns ? this._columns - 1 : 0;
+        const rowPaddingCount = this._rows ? this._rows - 1 : 0;
+        const paddingAdjustmentX = colPaddingCount * this._cellPadding;
+        const paddingAdjustmentY = rowPaddingCount * this._cellPadding;
+        return {
+            width: (this._safeArea.right - this._safeArea.left - paddingAdjustmentX) / this._columns,
+            height: (this._safeArea.bottom - this._safeArea.top - paddingAdjustmentY) / this._rows,
+        };
+    }
+
+    resize(metrics, safeArea) {
+        this._metrics = metrics;
+        this._safeArea = safeArea;
+        this._cellPadding = metrics.isMobile ? 16 : 24;
+
         this.reset();
     }
 
@@ -40,6 +57,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
             order: 0,
             channel: this.eventChannel,
         };
+        cell.input.enabled = true;
 
         return accessibilify(cell, config, true);
     }
@@ -69,27 +87,63 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.addAt(newCell, this._cells.length);
     }
 
+    setCellSize(cell) {
+        const cellSize = this.calculateCellSize();
+
+        cell.displayWidth = cellSize.width;
+        cell.displayHeight = cellSize.height;
+    }
+
+    setCellVisibility(cell, col, row) {
+        const rows = this._rows;
+        const columns = this._columns;
+
+        if (row < rows && col < columns) {
+            cell.visible = true;
+        }
+        return cell;
+    }
+
+    setCellPosition(cell, col, row) {
+        const paddingXTotal = col * this._cellPadding;
+        const leftBound = this._safeArea.left + col * cell.displayWidth;
+        const cellXCentre = cell.displayWidth / 2;
+
+        const paddingYTotal = row * this._cellPadding;
+        const topBound = this._safeArea.top + row * cell.displayHeight;
+        const cellYCentre = cell.displayHeight / 2;
+
+        cell.x = leftBound + paddingXTotal + cellXCentre;
+        cell.y = topBound + cellYCentre + paddingYTotal;
+        return cell;
+    }
+
     removeCell(cellToRemove) {
         this._cells = fp.remove(n => n === cellToRemove, this._cells);
         cellToRemove.destroy();
     }
 
-    reset(metrics) {
-        metrics = metrics || this._metrics;
-        this.resetButtons(metrics);
+    reset() {
+        this.resetButtons();
     }
 
-    gridMetrics(metrics) {
-        return {
-            displayWidth: metrics.isMobile ? this._displayWidth.mobile : this._displayWidth.desktop,
-            displayHeight: metrics.isMobile ? this._displayHeight.mobile : this._displayHeight.desktop,
-        };
-    }
+    resetButtons() {
+        const rows = this._rows;
+        const columns = this._columns;
 
-    resetButtons(metrics) {
-        this._cells.map(cell => {
-            cell.displayWidth = this.gridMetrics(metrics).displayWidth;
-            cell.displayHeight = this.gridMetrics(metrics).displayHeight;
-        });
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < columns; col++) {
+                let cell = row * columns + col;
+                this.setCellSize(this._cells[cell], col, row);
+                this.setCellVisibility(this._cells[cell], col, row);
+                this.setCellPosition(this._cells[cell], col, row);
+            }
+        }
+
+        // this._cells.map((cell, idx) => {
+        //     cell.displayWidth = cellSize.width;
+        //     cell.displayHeight = cellSize.height;
+        //     this.setCellVisibility(cell, idx);
+        // });
     }
 }
