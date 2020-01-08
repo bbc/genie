@@ -144,7 +144,7 @@ describe("Grid", () => {
             expect(actualParams[3]).toEqual(metrics);
         });
 
-        test("gel button is centered", () => {
+        test("multiple gel buttons are created", () => {
             mockScene.theme.choices = [{ asset: "asset_name_1", title: "asset title 1" }];
 
             grid = new GelGrid(mockScene, metrics, safeArea);
