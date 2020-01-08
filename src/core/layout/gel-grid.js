@@ -23,7 +23,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.scene.theme.choices.map((cell, idx) => {
             this.addCell(cell, idx);
         });
-        this._cells.forEach(this.makeAccessible, this);
+        this.makeAccessible();
         this.reset();
         return this._cells;
     }
@@ -47,7 +47,11 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.reset();
     }
 
-    makeAccessible(cell, idx) {
+    makeAccessible() {
+        this._cells.forEach(this.makeCellAccessible, this);
+    }
+
+    makeCellAccessible(cell, idx) {
         const config = {
             id: "__" + fp.kebabCase(cell.name),
             ariaLabel: cell.name,
