@@ -40,8 +40,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     resize(metrics, safeArea) {
-        this._metrics = metrics;
-        this._safeArea = safeArea;
+        this._metrics = metrics || this._metrics;
+        this._safeArea = safeArea || this._safeArea;
         this._cellPadding = metrics.isMobile ? 16 : 24;
 
         this.reset();
@@ -99,10 +99,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     setCellVisibility(cell, col, row) {
-        const rows = this._rows;
-        const columns = this._columns;
-
-        if (row < rows && col < columns) {
+        if (row < this._rows && col < this._columns) {
             cell.visible = true;
         }
         return cell;
@@ -127,27 +124,29 @@ export class GelGrid extends Phaser.GameObjects.Container {
         cellToRemove.destroy();
     }
 
+    setLayoutLimits() {
+        const columns = this._columns;
+        const rows = this._rows;
+        const maxColumns = rows == 1 ? 4 : 3;
+        const maxRows = 2;
+        this._columns = columns > maxColumns ? maxColumns : columns;
+        this._rows = rows > maxRows ? maxRows : rows;
+    }
+
     reset() {
         this.resetButtons();
     }
 
     resetButtons() {
-        const rows = this._rows;
-        const columns = this._columns;
+        this.setLayoutLimits();
 
-        for (let row = 0; row < rows; row++) {
-            for (let col = 0; col < columns; col++) {
-                let cell = row * columns + col;
+        for (let row = 0; row < this._rows; row++) {
+            for (let col = 0; col < this._columns; col++) {
+                let cell = row * this._columns + col;
                 this.setCellSize(this._cells[cell], col, row);
                 this.setCellVisibility(this._cells[cell], col, row);
                 this.setCellPosition(this._cells[cell], col, row);
             }
         }
-
-        // this._cells.map((cell, idx) => {
-        //     cell.displayWidth = cellSize.width;
-        //     cell.displayHeight = cellSize.height;
-        //     this.setCellVisibility(cell, idx);
-        // });
     }
 }

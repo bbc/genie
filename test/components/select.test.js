@@ -47,6 +47,7 @@ describe("Select Screen", () => {
             reset: jest.fn(),
             gridMetrics: jest.fn(),
             resetButtons: jest.fn(),
+            resize: jest.fn(),
         };
         GelGrid.mockImplementation(() => mockGelGrid);
         mockData = {

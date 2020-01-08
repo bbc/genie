@@ -233,6 +233,26 @@ describe("Grid", () => {
             expect(resultCells[3].visible).toBe(false);
         });
 
+        test("only the first 4 cells are visible when `columns > 4` in config", () => {
+            mockScene.theme.choices = [
+                { asset: "asset_name_0" },
+                { asset: "asset_name_1" },
+                { asset: "asset_name_2" },
+                { asset: "asset_name_3" },
+                { asset: "asset_name_4" },
+            ];
+            mockScene.theme.columns = 5;
+
+            grid = new GelGrid(mockScene, metrics, safeArea);
+            const resultCells = grid.addGridCells();
+
+            expect(resultCells[0].visible).toBe(true);
+            expect(resultCells[1].visible).toBe(true);
+            expect(resultCells[2].visible).toBe(true);
+            expect(resultCells[3].visible).toBe(true);
+            expect(resultCells[4].visible).toBe(false);
+        });
+
         test("first four cells are visible when `columns = 2` and `rows = 2`", () => {
             mockScene.theme.choices = [
                 { asset: "asset_name_1" },
@@ -319,12 +339,12 @@ describe("Grid", () => {
             grid = new GelGrid(mockScene, metrics, safeArea);
             const resultCells = grid.addGridCells();
 
-            const expectedCellWidth = (800 - 24) / 2;
+            const expectedCellWidth = (800 - desktopCellPadding) / 2;
 
             expect(resultCells[0].displayWidth).toEqual(expectedCellWidth);
         });
 
-        test("cell width when 4 columns with desktop grid padding", () => {
+        test("cell width when 4 columns with mobile grid padding", () => {
             metrics.isMobile = true;
             mockScene.theme.choices = [
                 { asset: "asset_name_0" },
@@ -339,7 +359,7 @@ describe("Grid", () => {
             grid = new GelGrid(mockScene, metrics, safeArea);
             const resultCells = grid.addGridCells();
 
-            const expectedCellWidth = (800 - 48) / 4;
+            const expectedCellWidth = (800 - mobileCellPadding * 3) / 4;
 
             expect(resultCells[0].displayWidth).toEqual(expectedCellWidth);
         });
@@ -368,7 +388,7 @@ describe("Grid", () => {
             grid = new GelGrid(mockScene, metrics, safeArea);
             const resultCells = grid.addGridCells();
 
-            const expectedCellWidth = (800 - 16) / 2;
+            const expectedCellWidth = (800 - mobileCellPadding) / 2;
 
             expect(resultCells[0].displayWidth).toEqual(expectedCellWidth);
         });
@@ -395,7 +415,7 @@ describe("Grid", () => {
             safeArea.top = -400;
             safeArea.bottom = 400;
 
-            const expectedCellHeight = (800 - 16) / 2;
+            const expectedCellHeight = (800 - mobileCellPadding) / 2;
 
             grid = new GelGrid(mockScene, metrics, safeArea);
             const resultCells = grid.addGridCells();
@@ -452,11 +472,11 @@ describe("Grid", () => {
                     y: 0,
                 },
                 {
-                    x: safeArea.left + 184 + 24 + 92,
+                    x: safeArea.left + 184 + desktopCellPadding + 92,
                     y: 0,
                 },
                 {
-                    x: safeArea.left + 184 + 24 + 92 + 24,
+                    x: safeArea.left + 184 + desktopCellPadding + 92 + desktopCellPadding,
                     y: 0,
                 },
             ];
@@ -483,7 +503,7 @@ describe("Grid", () => {
                 },
                 {
                     x: 0,
-                    y: safeArea.top + 188 + 24 + 94,
+                    y: safeArea.top + 188 + desktopCellPadding + 94,
                 },
             ];
 
@@ -491,6 +511,77 @@ describe("Grid", () => {
             expect(resultCells[1].y).toEqual(expectedPositions[1].y);
             expect(resultCells[0].x).toEqual(expectedPositions[0].x);
             expect(resultCells[1].x).toEqual(expectedPositions[1].x);
+        });
+
+        test("resize method sets cell positions", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 2;
+            const initialSafeArea = {
+                left: -400,
+                right: 400,
+                top: -300,
+                bottom: 300,
+            };
+            const resizedSafeArea = {
+                left: -800,
+                right: 800,
+                top: -600,
+                bottom: 600,
+            };
+
+            grid = new GelGrid(mockScene, metrics, initialSafeArea);
+            grid.addGridCells();
+            grid.resize(metrics, resizedSafeArea);
+
+            const expectedPositions = [
+                {
+                    x: -406,
+                    y: 0,
+                },
+                {
+                    x: 406,
+                    y: 0,
+                },
+            ];
+
+            expect(grid._cells[0].x).toEqual(expectedPositions[0].x);
+            expect(grid._cells[1].x).toEqual(expectedPositions[1].x);
+        });
+
+        test("resize method sets correct cell positions when mobile", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 2;
+            metrics.isMobile = true;
+            const initialSafeArea = {
+                left: -400,
+                right: 400,
+                top: -300,
+                bottom: 300,
+            };
+            const resizedSafeArea = {
+                left: -800,
+                right: 800,
+                top: -600,
+                bottom: 600,
+            };
+
+            grid = new GelGrid(mockScene, metrics, initialSafeArea);
+            grid.addGridCells();
+            grid.resize(metrics, resizedSafeArea);
+
+            const expectedPositions = [
+                {
+                    x: -404,
+                    y: 0,
+                },
+                {
+                    x: 404,
+                    y: 0,
+                },
+            ];
+
+            expect(grid._cells[0].x).toEqual(expectedPositions[0].x);
+            expect(grid._cells[1].x).toEqual(expectedPositions[1].x);
         });
     });
 
