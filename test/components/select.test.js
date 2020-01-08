@@ -119,7 +119,7 @@ describe("Select Screen", () => {
         selectScreen = new Select();
         selectScreen.setData(mockData);
         selectScreen.transientData = {};
-        selectScreen.scene = { key: "test-select" };
+        selectScreen.scene = { key: "test-select", scene: { events: { on: jest.fn() } } };
         selectScreen.game = { canvas: { parentElement: "parent-element" } };
         selectScreen.navigation = { next: jest.fn() };
         selectScreen.setLayout = jest.fn(() => mockLayout);
