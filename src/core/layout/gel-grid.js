@@ -134,10 +134,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     reset() {
-        this.resetButtons();
-    }
-
-    resetButtons() {
         this.setLayoutLimits();
 
         for (let row = 0; row < this._rows; row++) {
