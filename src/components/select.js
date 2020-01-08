@@ -41,6 +41,7 @@ export class Select extends Screen {
         this.layout.addCustomGroup("grid", this.grid);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
+        this.scene.scene.events.on("shutdown", this._scaleEvent.unsubscribe, this);
 
         this.resize();
 
