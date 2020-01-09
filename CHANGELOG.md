@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Update Fake GMI to no longer use areCookiesAllowed. | |
 | | Spine loader and Background animation system.  | |
 | 3.0.0 Epsilon | |
 | | Use root path for JSON5 lib so it works as a dependency in starter pack.  | |
