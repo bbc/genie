@@ -65,9 +65,6 @@ var GMI = function(options, embedVars, gameDir) {
     };
     var gameSettings = {};
     var staticAchievementList = [];
-    function areCookiesAllowed() {
-        return true;
-    }
     function parseLocalStorage(key) {
         var data = window.localStorage.getItem(key);
         try {
@@ -88,37 +85,28 @@ var GMI = function(options, embedVars, gameDir) {
             globalSettings.subtitles = !!globalSettings.subtitles;
             globalSettings.motion = !globalSettings.hasOwnProperty("motion") || globalSettings.motion;
         }
-        if (areCookiesAllowed()) {
-            globalSettings = parseLocalStorage(GMI_LOCAL_STORAGE_KEY) || getDefaultSettings();
-            ensureGlobalSettingsAreBools();
-            gameSettings = parseLocalStorage(GMI_GAME_STORAGE_KEY) || {};
-        } else {
-            return getDefaultSettings();
-        }
+        
+        globalSettings = parseLocalStorage(GMI_LOCAL_STORAGE_KEY) || getDefaultSettings();
+        ensureGlobalSettingsAreBools();
+        gameSettings = parseLocalStorage(GMI_GAME_STORAGE_KEY) || {};
     }
     function saveGlobalSettings() {
-        if (areCookiesAllowed()) {
-            try {
-                window.localStorage.setItem(GMI_LOCAL_STORAGE_KEY, JSON.stringify(globalSettings));
-            } catch (e) {}
-        }
+        try {
+            window.localStorage.setItem(GMI_LOCAL_STORAGE_KEY, JSON.stringify(globalSettings));
+        } catch (e) {}
     }
     GMI.prototype.getAllSettings = function() {
         var settings = JSON.parse(JSON.stringify(globalSettings)); //Prevents reference assignment
-        if (areCookiesAllowed()) {
-            settings.gameData = gameSettings;
-        }
+        settings.gameData = gameSettings;
         return settings;
     };
     GMI.prototype.setGameData = function(key, value) {
-        if (areCookiesAllowed()) {
-            gameSettings[key] = value;
-            // In Safari Private browsing mode on OSX and iOS localStorage is read only, and will throw
-            // QuotaExceededError if an attempt to call setItem is made
-            try {
-                window.localStorage.setItem(GMI_GAME_STORAGE_KEY, JSON.stringify(gameSettings));
-            } catch (e) {}
-        }
+        gameSettings[key] = value;
+        // In Safari Private browsing mode on OSX and iOS localStorage is read only, and will throw
+        // QuotaExceededError if an attempt to call setItem is made
+        try {
+            window.localStorage.setItem(GMI_GAME_STORAGE_KEY, JSON.stringify(gameSettings));
+        } catch (e) {}
     };
     GMI.prototype.setAudio = function(state) {
         globalSettings.audio = !!state;
