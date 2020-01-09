@@ -13,6 +13,7 @@ import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
 import { GelGrid } from "../core/layout/gel-grid.js";
 import { debugMode } from "../core/qa/qa-mode.js";
+import { create as createState } from "../core/state.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
@@ -48,6 +49,12 @@ export class Select extends Screen {
         if (debugMode()) {
             this.graphics = this.add.graphics();
         }
+
+        const selectionStates = createState(this.context.theme.storageKey);
+
+        selectionStates.setState("char1", "unlocked");
+
+        console.log("state", selectionStates.getAll())
     }
 
     resize() {

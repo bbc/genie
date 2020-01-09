@@ -111,6 +111,7 @@ export function create(scene, metrics, buttonIds) {
         addCustomGroup,
         addToGroup,
         buttons,
+        groups,
         destroy,
         makeAccessible,
         resize,

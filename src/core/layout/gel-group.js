@@ -17,7 +17,7 @@ const horizontal = {
         group.x = metrics[horizontalsType].left + metrics.borderPad + hitAreaOffset;
     },
     center: (metrics, group, horizontalsType) => {
-        group.x = metrics[horizontalsType].center - group.getBounds().width / 2;
+        group.x = metrics[horizontalsType].center - group.width / 2;
     },
     right: (metrics, group, horizontalsType) => {
         let hitAreaOffset = 0;
@@ -25,10 +25,10 @@ const horizontal = {
             if (!child.input.hitArea) return;
             hitAreaOffset = fp.max([
                 hitAreaOffset,
-                (child.x + child.input.hitArea.width / 2) / metrics.scale - group.getBounds().width,
+                (child.x + child.input.hitArea.width / 2) / metrics.scale - group.width,
             ]);
         }, group.list);
-        group.x = metrics[horizontalsType].right - metrics.borderPad - hitAreaOffset - group.getBounds().width;
+        group.x = metrics[horizontalsType].right - metrics.borderPad - hitAreaOffset - group.width;
     },
 };
 
@@ -50,15 +50,15 @@ const vertical = {
             if (!child.input.hitArea) return;
             hitAreaOffset = fp.max([
                 hitAreaOffset,
-                (child.y + child.input.hitArea.height / 2) / metrics.scale - group.getBounds().height,
+                (child.y + child.input.hitArea.height / 2) / metrics.scale - group.height,
             ]);
         }, group.list);
-        group.y = metrics.verticals.bottom - metrics.borderPad - hitAreaOffset - group.getBounds().height;
+        group.y = metrics.verticals.bottom - metrics.borderPad - hitAreaOffset - group.height;
     },
 };
 
 export class GelGroup extends Phaser.GameObjects.Container {
-    constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical) {
+    constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical = false) {
         super(scene, 0, 0);
         //TODO P3 we used to name the groups - useful for debugging. Might be usuaful as a propery? [NT]
         //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
@@ -70,6 +70,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
         this._buttons = [];
         this._buttonFactory = ButtonFactory.create(scene);
         this._setGroupPosition = metrics => {
+            //TODO change this to returns e.g: this.y = vertical[vPos](metrics, this);
             horizontal[hPos](metrics, this, isSafe ? "safeHorizontals" : "horizontals");
             vertical[vPos](metrics, this);
         };
@@ -84,7 +85,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
         this.addAt(newButton, position);
         this._buttons.push(newButton);
 
-        this.alignChildren();
+        this.reset(this._metrics);
 
         return newButton;
     }
@@ -96,7 +97,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
 
     addToGroup(item, position = 0) {
         this.addAt(item, position);
-        this.alignChildren();
+        this.reset();
     }
 
     reset(metrics) {
@@ -109,7 +110,6 @@ export class GelGroup extends Phaser.GameObjects.Container {
         this._metrics = metrics;
         const invScale = 1 / metrics.scale;
 
-        //TODO P3 fix this - groups may have no concept of scale? [NT]
         this.setScale(invScale);
         this._setGroupPosition(metrics);
 
@@ -118,6 +118,23 @@ export class GelGroup extends Phaser.GameObjects.Container {
             button.y = button.y + button.shiftY * metrics.scale;
             button.updateIndicatorPosition();
         });
+
+        this.updateSize()
+    }
+
+    updateSize() {
+        let height = 0;
+        let width = 0;
+
+        this.iterate(x => {
+            height = this._isVertical? height + (x.height * this.scale) : x.height * this.scale;
+            width +=  x.width * this.scale;
+        });
+
+        width += this._isVertical? 0 : this._metrics.buttonPad * (this.list.length - 1)
+        height += this._isVertical? this._metrics.buttonPad * (this.list.length - 1) : 0 ;
+
+        this.setSize(width, height);
     }
 
     alignChildren() {

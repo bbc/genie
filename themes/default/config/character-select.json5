@@ -34,24 +34,29 @@
                 },
                 visible: true,
             },
+            storageKey: "characters",
             choices: [
                 {
+                    "key": "char1",
                     "asset": "char1",
                     "accessibilityText": "Character 1",
-                    "title": "Liron Man"
-                    
+                    "title": "Liron Man",
+                    "state": "locked",
                 },
                 {
+                    "key": "char2",
                     "asset": "char2",
                     "accessibilityText": "Character 2",
                     "title": "Teenage Nick"
                 },
                 {
+                    "key": "char3",
                     "asset": "char3",
                     "accessibilityText": "Character 3",
                     "title": "Alex's Worst Nightmare"
-                }, 
+                },
                 {
+                    "key": "char4",
                     "asset": "char4",
                     "accessibilityText": "Character 4",
                     "title": "Rolff"

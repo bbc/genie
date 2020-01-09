@@ -31,9 +31,24 @@ export const noIndicator = {
     destroy: () => {},
 };
 
-export class GelButton extends Phaser.GameObjects.Sprite {
+/*
+    addOverlay(key, x, y) //key is unique so we can always pull that out
+    removeOverlay(key)  //
+
+    //maybe the above should just pass the sprite in?
+
+    //Could we also combine the above
+    all it needs is resize calling on it?
+
+ */
+
+export class GelButton extends Phaser.GameObjects.Container {
     constructor(scene, x, y, metrics, config) {
-        super(scene, x, y, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
+        super(scene, x, y);
+
+        this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })))
+        this.add(this.sprite)
+
         this._id = config.key;
         this._isMobile = metrics.isMobile;
         this.name = config.name || "";
@@ -42,9 +57,16 @@ export class GelButton extends Phaser.GameObjects.Sprite {
         this.setIndicator();
         this.shiftX = config.shiftX || 0;
         this.shiftY = config.shiftY || 0;
-        this.setInteractive({ useHandCursor: true });
+
+        this.setInteractive({ hitArea: this.sprite, useHandCursor: true, hitAreaCallback: Phaser.Geom.Rectangle.Contains });
         this.setHitArea(metrics);
         this.setupMouseEvents(config, scene);
+    }
+
+    addOverlay(x, y, key) {
+        //Todo X and Y should be rel to button? Will this work with containers automatically?
+        //needs to be added to an array
+        this.scene.add.sprite(x, y, key);
     }
 
     onPointerUp(config, screen) {
@@ -55,17 +77,21 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
     setupMouseEvents(config, screen) {
         this.on("pointerup", () => this.onPointerUp(config, screen));
-        this.on("pointerout", () => this.setFrame(0));
-        this.on("pointerover", () => this.setFrame(1));
+        this.on("pointerout", () => this.sprite.setFrame(0));
+        this.on("pointerover", () => this.sprite.setFrame(1));
     }
 
     setHitArea(metrics) {
-        const hitPadding = fp.max([metrics.hitMin - this.width, metrics.hitMin - this.height, 0]);
-        const width = this.width + hitPadding;
-        const height = this.height + hitPadding;
+        const hitPadding = fp.max([metrics.hitMin - this.sprite.width, metrics.hitMin - this.sprite.height, 0]);
+        const width = this.sprite.width + hitPadding;
+        const height = this.sprite.height + hitPadding;
+
+        Object.assign(this, fp.pick(["width", "height"], this.getBounds()))
         if (this.input) {
             this.input.hitArea = new Phaser.Geom.Rectangle(-hitPadding / 2, -hitPadding / 2, width, height);
         }
+
+        this.setSize(width, height)
     }
 
     setImage(key) {
@@ -75,8 +101,8 @@ export class GelButton extends Phaser.GameObjects.Sprite {
 
     resize(metrics) {
         this._isMobile = metrics.isMobile;
-        this.setTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
-        this.setHitArea(metrics);
+        this.sprite.setTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
+        //this.setHitArea(metrics);
     }
 
     setIndicator() {
