@@ -18,7 +18,8 @@ const getMissingPacks = (masterPack, keys) =>
         .filter(key => key !== "default")
         .filter(key => key !== "boot")
         .filter(key => key !== "loader")
-        .filter(key => !masterPack.hasOwnProperty(key));
+        .filter(key => !masterPack.hasOwnProperty(key))
+        .map(key => `asset-packs/${key}`);
 
 export class Loader extends Screen {
     constructor() {

@@ -236,6 +236,14 @@ describe("Layout", () => {
         });
     });
 
+    describe("make accessible method", () => {
+        test("calls make accessible method on each group in the layout", () => {
+            const layout = Layout.create(mockScene, mockMetrics, ["achievements", "exit", "settings"]);
+            layout.makeAccessible();
+            expect(mockGelGroup.makeAccessible).toHaveBeenCalled();
+        });
+    });
+
     describe("root property", () => {
         test("returns the root", () => {
             const layout = Layout.create(mockScene, mockMetrics, ["achievements", "exit", "settings"]);
