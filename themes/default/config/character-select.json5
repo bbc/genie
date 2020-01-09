@@ -69,6 +69,7 @@
             ],
             rows: 2,
             columns: 3,
+            align: "left"
         },
     },
 }

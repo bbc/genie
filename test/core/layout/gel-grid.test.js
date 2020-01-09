@@ -42,6 +42,7 @@ describe("Grid", () => {
             safeHorizontals: { left: -300, center: 0, right: 300 },
             verticals: { top: -1500, middle: 0, bottom: 1500 },
             scale: 1,
+            screenToCanvas: jest.fn(n => n),
         };
         safeArea = {
             top: -1000,
@@ -317,6 +318,18 @@ describe("Grid", () => {
             expect(resultCells[6].visible).toBe(false);
             expect(resultCells[7].visible).toBe(false);
         });
+
+        test("empty choices do not get added as cells", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 3;
+
+            grid = new GelGrid(mockScene, metrics, safeArea);
+            const resultCells = grid.addGridCells();
+
+            expect(resultCells[0]).toBeTruthy();
+            expect(resultCells[1]).toBeTruthy();
+            expect(resultCells[2]).toBeFalsy();
+        });
     });
 
     describe("grid cell sizes", () => {
@@ -582,6 +595,88 @@ describe("Grid", () => {
 
             expect(grid._cells[0].x).toEqual(expectedPositions[0].x);
             expect(grid._cells[1].x).toEqual(expectedPositions[1].x);
+        });
+
+        test("remainder of 2 cells in a 3 column layout are centre justified", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 3;
+            const mockSafeArea = {
+                left: -300,
+                right: 300,
+                top: -300,
+                bottom: 300,
+            };
+
+            const expectedPositions = [
+                {
+                    x: -104,
+                },
+                {
+                    x: 104,
+                },
+            ];
+
+            grid = new GelGrid(mockScene, metrics, mockSafeArea);
+            const resultCells = grid.addGridCells();
+
+            // expect(resultCells[0].x).toEqual(expectedPositions[0].x);
+            expect(resultCells[1].x).toEqual(expectedPositions[1].x);
+        });
+
+        test("remainder of 2 cells in a 3 column layout are left justified from config", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 3;
+            mockScene.theme.align = "left";
+
+            const mockSafeArea = {
+                left: -300,
+                right: 300,
+                top: -300,
+                bottom: 300,
+            };
+
+            const expectedPositions = [
+                {
+                    x: -208,
+                },
+                {
+                    x: 0,
+                },
+            ];
+
+            grid = new GelGrid(mockScene, metrics, mockSafeArea);
+            const resultCells = grid.addGridCells();
+
+            expect(resultCells[0].x).toEqual(expectedPositions[0].x);
+            expect(resultCells[1].x).toEqual(expectedPositions[1].x);
+        });
+
+        test("remainder of 2 cells in a 3 column layout are right justified from config", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 3;
+            mockScene.theme.align = "right";
+
+            const mockSafeArea = {
+                left: -300,
+                right: 300,
+                top: -300,
+                bottom: 300,
+            };
+
+            const expectedPositions = [
+                {
+                    x: 0,
+                },
+                {
+                    x: 208,
+                },
+            ];
+
+            grid = new GelGrid(mockScene, metrics, mockSafeArea);
+            const resultCells = grid.addGridCells();
+
+            expect(resultCells[0].x).toEqual(expectedPositions[0].x);
+            expect(resultCells[1].x).toEqual(expectedPositions[1].x);
         });
     });
 
