@@ -33,18 +33,19 @@ export class Select extends Screen {
         this.setTitleElements();
         this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
-        this.grid = new GelGrid(this, "gridV", "gridH", getMetrics(), true, false);
-        this.layout.addCustomGroup("grid", this.grid);
-
-        this._scaleEvent = onScaleChange.add(this.resize.bind(this));
-
-        this.grid.addGridCells();
-        this.addEventSubscriptions();
         createTestHarnessDisplay(this);
 
         this.safeArea = new Phaser.Geom.Rectangle(50, 50, 300, 200);
+        this.grid = new GelGrid(this, getMetrics(), this.safeArea);
+        this.grid.addGridCells();
+        this.layout.addCustomGroup("grid", this.grid);
+
+        this._scaleEvent = onScaleChange.add(this.resize.bind(this));
+        this.scene.scene.events.on("shutdown", this._scaleEvent.unsubscribe, this);
+
         this.resize();
 
+        this.addEventSubscriptions();
         if (debugMode()) {
             this.graphics = this.add.graphics();
         }
@@ -53,6 +54,7 @@ export class Select extends Screen {
     resize() {
         const metrics = getMetrics();
         this.updateSafeArea(metrics);
+        this.grid.resize(metrics, this.safeArea);
         this.repositionTitleElements(metrics);
     }
 
