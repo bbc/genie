@@ -61,7 +61,16 @@
                     "accessibilityText": "Character 4",
                     "title": "Rolff"
                 },
+                {
+                    "key": "char5",
+                    "asset": "char2",
+                    "accessibilityText": "Character 5",
+                    "title": "Teenage Nick Repeated",
+                },
             ],
+            rows: 2,
+            columns: 3,
+            align: "left"
         },
     },
 }

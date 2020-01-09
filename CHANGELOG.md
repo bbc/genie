@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Update Fake GMI to no longer use areCookiesAllowed. | |
 | | Move asset pack files to own sub folder in themes.  | |
 | | Spine loader and Background animation system.  | |
 | 3.0.0 Epsilon | |
