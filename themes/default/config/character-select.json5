@@ -39,7 +39,6 @@
                     "asset": "char1",
                     "accessibilityText": "Character 1",
                     "title": "Liron Man"
-                    
                 },
                 {
                     "asset": "char2",
@@ -57,18 +56,14 @@
                     "title": "Rolff"
                 },
                 {
-                    "asset": "char3",
+                    "asset": "char2",
                     "accessibilityText": "Character 5",
-                    "title": "Alex's Worst Nightmare"
-                }, 
-                {
-                    "asset": "char4",
-                    "accessibilityText": "Character 6",
-                    "title": "Rolff"
+                    "title": "Teenage Nick Repeated"
                 },
             ],
             rows: 2,
             columns: 3,
+            align: "left"
         },
     },
 }
