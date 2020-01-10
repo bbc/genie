@@ -53,9 +53,7 @@ export function create(scene, metrics, buttonIds) {
         return group;
     };
 
-    const addToGroup = (groupName, item, position) => {
-        groups[groupName].addToGroup(item, position);
-    };
+    const addToGroup = (groupName, item, position) => groups[groupName].addToGroup(item, position);
 
     const groups = fp.zipObject(
         groupLayouts.map(layout =>
@@ -81,17 +79,11 @@ export function create(scene, metrics, buttonIds) {
      * @param button - gel button identifier
      * @param callback - callback function to attach
      */
-    const setAction = (button, callback) => {
-        buttons[button].onInputUp.add(callback, this);
-    };
+    const setAction = (button, callback) => buttons[button].onInputUp.add(callback, this);
 
-    const makeAccessible = () => {
-        fp.forOwn(group => group.makeAccessible(), groups);
-    };
+    const makeAccessible = () => fp.forOwn(group => group.makeAccessible(), groups);
 
-    const resize = metrics => {
-        fp.forOwn(group => group.reset(metrics), groups);
-    };
+    const resize = metrics => fp.forOwn(group => group.reset(metrics), groups);
 
     resize(metrics);
 
@@ -107,11 +99,34 @@ export function create(scene, metrics, buttonIds) {
         root.destroy();
     };
 
+    const getSafeArea = () => {
+        const x = groups.middleLeftSafe.x + groups.middleLeftSafe.width;
+        const y = groups.topLeft.y + groups.topLeft.height;
+
+        return new Phaser.Geom.Rectangle(x, y, groups.middleRightSafe.x - x, groups.bottomCenter.y - y);
+    };
+
+    const drawGroups = graphics => {
+        graphics.lineStyle(1, 0x33ff33, 1);
+        fp.mapValues(group => graphics.strokeRectShape(group.getBoundingRect()), groups);
+    };
+
+    const drawButtons = graphics => {
+        graphics.lineStyle(1, 0x3333ff, 1);
+        fp.mapValues(button => graphics.strokeRectShape(button.getHitAreaBounds()), buttons);
+    };
+
+    const debug = {
+        groups: drawGroups,
+        buttons: drawButtons,
+    };
+
     return {
         addCustomGroup,
         addToGroup,
         buttons,
-        groups,
+        debug,
+        getSafeArea,
         destroy,
         makeAccessible,
         resize,

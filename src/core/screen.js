@@ -15,6 +15,7 @@ import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
 import { addAnimations } from "./background-animations.js";
+import { debugMode } from "./qa/qa-mode.js";
 
 export const overlayChannel = "gel-overlays";
 
@@ -63,12 +64,32 @@ export class Screen extends Phaser.Scene {
 
             const themeScreenConfig = this._data.config.theme[this.scene.key];
             GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
+
+            this.setDebugDraw();
         }
         this.sys.accessibleButtons = [];
         a11y.clearAccessibleButtons();
         a11y.clearElementsFromDom();
 
         this._makeNavigation();
+    }
+
+    addDebugGraphics() {
+        this.debugGraphics = this.add.graphics();
+    }
+
+    debugDraw() {
+        this.debugGraphics.clear();
+
+        this.layout.debug.groups(this.debugGraphics);
+        this.layout.debug.buttons(this.debugGraphics);
+    }
+
+    setDebugDraw() {
+        if (debugMode()) {
+            this.events.on("create", this.addDebugGraphics, this);
+            this.events.on("update", this.debugDraw, this);
+        }
     }
 
     setData(newData) {

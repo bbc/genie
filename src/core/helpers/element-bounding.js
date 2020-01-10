@@ -18,12 +18,12 @@ export const positionElement = (element, position, safeArea, metrics) => {
 
 export const getItemBounds = fp.curry((metrics, item) => {
     const bounds = item.getBounds();
-    const padding = metrics.isMobile && item.type === "Sprite" ? metrics.buttonPad : 0;
+    const padding = metrics.isMobile && item.type === "Container" ? metrics.buttonPad : 0;
     return {
-        top: bounds.y - padding,
-        bottom: bounds.y + bounds.height + padding,
-        left: bounds.x - padding,
-        right: bounds.x + bounds.width + padding,
+        top: item.y - padding,
+        bottom: item.y + item.height + padding,
+        left: item.x - padding,
+        right: item.x + item.width + padding,
     };
 });
 

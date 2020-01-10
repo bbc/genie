@@ -19,7 +19,7 @@ export class Home extends Screen {
         this.add.image(0, -150, `${this.scene.key}.title`);
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
-        this.setLayout(buttons);
+        this.setLayout(buttons.concat(achievements));
 
         createTestHarnessDisplay(this);
 
@@ -28,36 +28,5 @@ export class Home extends Screen {
             name: "play",
             callback: this.navigation.next,
         });
-        this.graphics = this.add.graphics();
-    }
-
-    update() {
-        //debug draw groups.
-        this.graphics.clear();
-
-        this.debugDrawGroups()
-        //this.debugDrawButtons()
-    }
-
-    debugDrawGroups() {
-        //Gel Groups
-        this.graphics.lineStyle(1,0x33ff33, 1);
-
-        Object.keys(this.layout.groups).map(key => {
-            const group = this.layout.groups[key]   //.getBounds();
-            this.graphics.strokeRectShape(new Phaser.Geom.Rectangle(group.x, group.y, group.width, group.height));
-        })
-
-    }
-
-    debugDrawButtons() {
-        //Gel Groups
-        this.graphics.lineStyle(1,0x3333ff, 1);
-
-        Object.keys(this.layout.buttons).map(key => {
-            const button = this.layout.buttons[key];
-            this.graphics.strokeRectShape(new Phaser.Geom.Rectangle(button.x, button.y, button.width, button.height));
-        })
-
     }
 }

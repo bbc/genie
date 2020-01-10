@@ -12,7 +12,6 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
 import { GelGrid } from "../core/layout/gel-grid.js";
-import { debugMode } from "../core/qa/qa-mode.js";
 import { create as createState } from "../core/state.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
@@ -36,8 +35,7 @@ export class Select extends Screen {
 
         createTestHarnessDisplay(this);
 
-        this.safeArea = new Phaser.Geom.Rectangle(50, 50, 300, 200);
-        this.grid = new GelGrid(this, getMetrics(), this.safeArea);
+        this.grid = new GelGrid(this, getMetrics(), this.layout.getSafeArea());
         this.grid.addGridCells();
         this.layout.addCustomGroup("grid", this.grid);
 
@@ -47,9 +45,6 @@ export class Select extends Screen {
         this.resize();
 
         this.addEventSubscriptions();
-        if (debugMode()) {
-            this.graphics = this.add.graphics();
-        }
 
         const selectionStates = createState(this.context.theme.storageKey);
 
@@ -60,8 +55,7 @@ export class Select extends Screen {
 
     resize() {
         const metrics = getMetrics();
-        this.updateSafeArea(metrics);
-        this.grid.resize(metrics, this.safeArea);
+        this.grid.resize(metrics, this.layout.getSafeArea());
         this.repositionTitleElements(metrics);
     }
 
@@ -101,34 +95,6 @@ export class Select extends Screen {
             left: homeButtonBounds.right,
             right: secondaryButtonBounds.left,
         };
-    }
-
-    update() {
-        if (!debugMode()) {
-            return;
-        }
-
-        this.graphics.clear();
-        this.graphics.fillStyle(0xff3333, 0.3);
-        this.graphics.fillRectShape(this.safeArea);
-    }
-
-    updateSafeArea(metrics) {
-        const bounds = ["home", "previous", "next", "continue"]
-            .map(key => this.layout.buttons[key])
-            .map(getItemBounds(metrics));
-
-        const lefts = bounds.map(bound => bound.right).filter(x => x < 0);
-        const rights = bounds.map(bound => bound.left).filter(x => x > 0);
-        const tops = bounds.map(bound => bound.bottom).filter(y => y < 0);
-        const bottoms = bounds.map(bound => bound.top).filter(y => y > 0);
-
-        const pad = metrics.isMobile ? 0 : metrics.screenToCanvas(20);
-
-        this.safeArea.left = Math.max(...lefts) + pad;
-        this.safeArea.right = Math.min(...rights) - pad;
-        this.safeArea.top = Math.max(...tops);
-        this.safeArea.bottom = Math.min(...bottoms);
     }
 
     setVisualElement(config) {

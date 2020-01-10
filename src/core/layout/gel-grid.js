@@ -18,6 +18,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._rows = scene.theme.rows || 1;
         this._cellPadding = metrics.isMobile ? 16 : 24;
         this.eventChannel = `gel-buttons-${scene.scene.key}`;
+
+        window.grid = this;
     }
 
     addGridCells() {
@@ -35,8 +37,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const paddingAdjustmentX = colPaddingCount * this._cellPadding;
         const paddingAdjustmentY = rowPaddingCount * this._cellPadding;
         return {
-            width: (this._safeArea.right - this._safeArea.left - paddingAdjustmentX) / this._columns,
-            height: (this._safeArea.bottom - this._safeArea.top - paddingAdjustmentY) / this._rows,
+            width: (this._safeArea.width - paddingAdjustmentX) / this._columns,
+            height: (this._safeArea.height - paddingAdjustmentY) / this._rows,
         };
     }
 
@@ -141,6 +143,10 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const maxRows = 2;
         this._columns = Math.min(columns, maxColumns);
         this._rows = Math.min(maxRows, rows);
+    }
+
+    getBoundingRect() {
+        return this._safeArea;
     }
 
     rowCellsCount(row) {

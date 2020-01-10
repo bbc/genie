@@ -88,15 +88,29 @@ export class GelButton extends Phaser.GameObjects.Container {
 
         Object.assign(this, fp.pick(["width", "height"], this.getBounds()))
         if (this.input) {
+
+            //TODO Fix hitarea
             this.input.hitArea = new Phaser.Geom.Rectangle(-hitPadding / 2, -hitPadding / 2, width, height);
+            this.input.hitArea = new Phaser.Geom.Rectangle(0, 0, this.sprite.width, this.sprite.height);
         }
 
         this.setSize(width, height)
     }
 
+    getHitAreaBounds() {
+        const wtm = this.getWorldTransformMatrix();
+
+        return new Phaser.Geom.Rectangle(
+            wtm.getX(-this.input.hitArea.width / 2, 0),
+            wtm.getY(0, -this.input.hitArea.height / 2),
+            this.input.hitArea.width * this.parentContainer.scale,
+            this.input.hitArea.height * this.parentContainer.scale
+        )
+    }
+
     setImage(key) {
         this._id = key;
-        this.setTexture(assetPath({ key: this._id, isMobile: this._isMobile }));
+        this.sprite.setTexture(assetPath({ key: this._id, isMobile: this._isMobile }));
     }
 
     resize(metrics) {

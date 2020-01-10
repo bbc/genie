@@ -90,6 +90,10 @@ export class GelGroup extends Phaser.GameObjects.Container {
         return newButton;
     }
 
+    getBoundingRect() {
+        return new Phaser.Geom.Rectangle(this.x, this.y, this.width, this.height)
+    }
+
     removeButton(buttonToRemove) {
         this._buttons = fp.remove(n => n === buttonToRemove, this._buttons);
         buttonToRemove.destroy();
@@ -127,8 +131,9 @@ export class GelGroup extends Phaser.GameObjects.Container {
         let width = 0;
 
         this.iterate(x => {
-            height = this._isVertical? height + (x.height * this.scale) : x.height * this.scale;
-            width +=  x.width * this.scale;
+            const hitBounds = x.getHitAreaBounds();
+            height = this._isVertical? height + (hitBounds.height) : hitBounds.height;
+            width +=  hitBounds.width;
         });
 
         width += this._isVertical? 0 : this._metrics.buttonPad * (this.list.length - 1)
