@@ -31,12 +31,15 @@ const scaleElement = (element, bounds) => {
     const safeHeight = bounds.bottom - bounds.top;
     const safeWidth = bounds.right - bounds.left;
 
-    if (element.height > safeHeight) {
+    if (element.height > safeHeight && safeHeight > 0) {
         const hDiff = (element.height - safeHeight) / element.height;
+        console.log(`hDiff ${hDiff}`);
         element.setScale(1 - hDiff);
     }
-    if (element.width > safeWidth) {
+    // Check safeWidth is positive, can scale negatively when the screen is too small
+    if (element.width > safeWidth && safeWidth > 0) {
         const wDiff = (element.width - safeWidth) / element.width;
+        console.log(`wDiff ${wDiff}`);
         element.setScale(1 - wDiff);
     }
 };
@@ -66,7 +69,6 @@ export const enforceTextSize = (element, { scale }) => {
     const fontSize = parseInt(element.defaultStyle.fontSize);
     const minimumSize = 13;
     const currentSize = fontSize * scale;
-
     element.setFontSize(`${fontSize}px`);
     if (currentSize < minimumSize) {
         const newScale = minimumSize / currentSize;
