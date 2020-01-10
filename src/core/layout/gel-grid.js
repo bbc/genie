@@ -17,6 +17,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._align = scene.theme.align || "center";
         this._rows = scene.theme.rows || 1;
         this._cellPadding = metrics.isMobile ? 16 : 24;
+        this._page = 0;
         this.eventChannel = `gel-buttons-${scene.scene.key}`;
     }
 
@@ -25,6 +26,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
             this.addCell(cell, idx);
         });
         this.makeAccessible();
+        this.setLayoutLimits();
         this.reset();
         return this._cells;
     }
@@ -139,11 +141,12 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const maxRows = 2;
         this._columns = Math.min(columns, maxColumns);
         this._rows = Math.min(maxRows, rows);
+        this._cellsPerPage = this._rows * this._columns;
     }
 
     rowCellsCount(row) {
         let count = 0;
-        while (this._cells[row * this._columns + count] && count < this._columns) {
+        while (this._cells[this.getCellIndex(row, count)] && count < this._columns) {
             count++;
         }
         return this._columns - count;
@@ -155,12 +158,36 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.setCellPosition(cellIndex, col, row);
     }
 
-    reset() {
-        this.setLayoutLimits();
+    resetCells() {
+        this._cells.map(cell => {
+            cell.visible = false;
+        });
+    }
 
+    getPageCount() {
+        return Math.ceil(this._cells.length / this._cellsPerPage);
+    }
+
+    nextPage() {
+        this._page = this._page + 1 > this.getPageCount() - 1 ? 0 : this._page + 1;
+        this.reset();
+    }
+
+    previousPage() {
+        this._page = this._page == 0 ? this.getPageCount() - 1 : this._page - 1;
+        this.reset();
+    }
+
+    getCellIndex(row, col) {
+        const firstCell = this._page * this._cellsPerPage;
+        return firstCell + this._columns * row + col;
+    }
+
+    reset() {
+        this.resetCells();
         for (let row = 0; row < this._rows; row++) {
             for (let col = 0; col < this._columns; col++) {
-                let cellIndex = row * this._columns + col;
+                const cellIndex = this.getCellIndex(row, col);
                 if (this._cells[cellIndex]) {
                     this.resetCell(cellIndex, col, row);
                 }

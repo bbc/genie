@@ -60,6 +60,21 @@
                     "accessibilityText": "Character 5",
                     "title": "Teenage Nick Repeated"
                 },
+                {
+                    "asset": "char3",
+                    "accessibilityText": "Character 3",
+                    "title": "Alex's Worst Nightmare"
+                }, 
+                {
+                    "asset": "char4",
+                    "accessibilityText": "Character 4",
+                    "title": "Rolff"
+                },
+                {
+                    "asset": "char1",
+                    "accessibilityText": "Character 1",
+                    "title": "Liron Man"
+                },
             ],
             rows: 2,
             columns: 3,
