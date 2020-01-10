@@ -169,13 +169,15 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     nextPage() {
-        this._page = this._page + 1 > this.getPageCount() - 1 ? 0 : this._page + 1;
+        this._page = (this._page + 1) % this.getPageCount();
         this.reset();
+        return this._page;
     }
 
     previousPage() {
-        this._page = this._page == 0 ? this.getPageCount() - 1 : this._page - 1;
+        this._page = (this._page - 1 + this.getPageCount()) % this.getPageCount();
         this.reset();
+        return this._page;
     }
 
     getCellIndex(row, col) {

@@ -670,6 +670,7 @@ describe("Grid", () => {
             expect(grid._cells[0].visible).toBe(false);
             expect(grid._cells[1].visible).toBe(true);
         });
+
         test("last page loops to first page", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             grid = new GelGrid(mockScene, metrics, mockSafeArea);
