@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { createTestHarnessDisplay } from "../../../src/core/qa/layout-harness.js";
+import { createTestHarnessDisplay } from "../../../src/core/debug/layout-debugDraw.js";
 import { onScaleChange } from "../../../src/core/scaler.js";
 
 describe("Layout Harness", () => {

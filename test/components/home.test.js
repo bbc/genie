@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as layoutHarness from "../../src/core/qa/layout-harness.js";
+import * as layoutHarness from "../../src/core/debug/layout-debugDraw.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 

@@ -9,7 +9,7 @@
  */
 import { gmi, setGmi } from "./gmi/gmi.js";
 import { addCustomStyles } from "./custom-styles.js";
-import * as qaMode from "./qa/qa-mode.js";
+import * as qaMode from "./debug/debug-mode.js";
 import { getBrowser } from "./browser.js";
 import { Loader } from "./loader/loader.js";
 import { Boot } from "./loader/boot.js";

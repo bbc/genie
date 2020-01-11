@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as layoutHarness from "../../src/core/qa/layout-harness.js";
+import * as layoutHarness from "../../src/core/debug/layout-debugDraw.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 import * as Scaler from "../../src/core/scaler.js";
@@ -11,7 +11,7 @@ import * as elementBounding from "../../src/core/helpers/element-bounding.js";
 
 import { Select } from "../../src/components/select.js";
 import { GelGrid } from "../../src/core/layout/gel-grid.js";
-import * as qaMode from "../../src/core/qa/qa-mode.js";
+import * as qaMode from "../../src/core/debug/debug-mode.js";
 jest.mock("../../src/core/layout/gel-grid.js");
 jest.mock("../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),

@@ -9,7 +9,7 @@ import { domElement } from "../mock/dom-element";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 import * as styles from "../../src/core/custom-styles.js";
-import * as qaMode from "../../src/core/qa/qa-mode.js";
+import * as qaMode from "../../src/core/debug/debug-mode.js";
 import { getBrowser } from "../../src/core/browser.js";
 import { Loader } from "../../src/core/loader/loader.js";
 import { Boot } from "../../src/core/loader/boot.js";

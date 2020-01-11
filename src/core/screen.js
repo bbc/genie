@@ -15,8 +15,8 @@ import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
 import { addAnimations } from "./background-animations.js";
-import { debugMode } from "./qa/qa-mode.js";
-import { createTestHarnessDisplay } from "./qa/layout-harness.js";
+import { debugMode } from "./debug/debug-mode.js";
+import { debugDrawLayout, setupQaKey } from "./debug/layout-debugDraw.js";
 
 export const overlayChannel = "gel-overlays";
 
@@ -77,7 +77,7 @@ export class Screen extends Phaser.Scene {
 
     addDebugGraphics() {
         this.debugGraphics = this.add.graphics();
-        createTestHarnessDisplay(this)
+        setupQaKey(this);
     }
 
     debugDraw() {
@@ -85,6 +85,8 @@ export class Screen extends Phaser.Scene {
 
         this.layout.debug.groups(this.debugGraphics);
         this.layout.debug.buttons(this.debugGraphics);
+
+        debugDrawLayout(this);
     }
 
     setupDebug() {

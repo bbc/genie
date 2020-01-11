@@ -5,7 +5,7 @@
  */
 import { createMockGmi } from "../mock/gmi";
 
-import * as layoutHarness from "../../src/core/qa/layout-harness.js";
+import * as layoutHarness from "../../src/core/debug/layout-debugDraw.js";
 import { eventBus } from "../../src/core/event-bus.js";
 
 import { Results } from "../../src/components/results";

@@ -9,17 +9,17 @@ const urlParams = window => parseUrlParams(window.location.search);
 
 const testURL = window => window.location.hostname.includes("www.test.bbc.");
 
-const qaMode = game => ({
+const __qaMode = game => ({
     testHarnessLayoutDisplayed: false,
     game,
 });
 
 const create = (window, game) => {
-    if (urlParams(window).qaMode || testURL(window)) {
-        window.__qaMode = qaMode(game);
+    if (debugMode() || testURL(window)) {
+        window.__qaMode = __qaMode(game);
     }
 };
 
-const debugMode = () => Boolean(urlParams(window).debugMode);
+const debugMode = () => Boolean(urlParams(window).debug);
 
 export { debugMode, create };

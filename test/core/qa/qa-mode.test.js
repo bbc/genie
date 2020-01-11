@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as qaMode from "../../../src/core/qa/qa-mode.js";
+import * as qaMode from "../../../src/core/debug/debug-mode.js";
 import * as parseUrlParams from "../../../src/core/parseUrlParams.js";
 
 describe("QA Mode", () => {
