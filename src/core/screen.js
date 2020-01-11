@@ -16,6 +16,7 @@ import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
 import { addAnimations } from "./background-animations.js";
 import { debugMode } from "./qa/qa-mode.js";
+import { createTestHarnessDisplay } from "./qa/layout-harness.js";
 
 export const overlayChannel = "gel-overlays";
 
@@ -65,7 +66,7 @@ export class Screen extends Phaser.Scene {
             const themeScreenConfig = this._data.config.theme[this.scene.key];
             GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
 
-            this.setDebugDraw();
+            this.setupDebug();
         }
         this.sys.accessibleButtons = [];
         a11y.clearAccessibleButtons();
@@ -76,6 +77,7 @@ export class Screen extends Phaser.Scene {
 
     addDebugGraphics() {
         this.debugGraphics = this.add.graphics();
+        createTestHarnessDisplay(this)
     }
 
     debugDraw() {
@@ -85,7 +87,7 @@ export class Screen extends Phaser.Scene {
         this.layout.debug.buttons(this.debugGraphics);
     }
 
-    setDebugDraw() {
+    setupDebug() {
         if (debugMode()) {
             this.events.on("create", this.addDebugGraphics, this);
             this.events.on("update", this.debugDraw, this);

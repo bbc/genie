@@ -90,7 +90,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         newCell.visible = Boolean(!idx);
         newCell.key = config.key;
 
-        newCell.addOverlay(0, 0, "character-select.lock")
+        newCell.addOverlay(300, 300, "character-select.lock")
 
         this._cells.push(newCell);
         this.addAt(newCell, this._cells.length);

@@ -9,7 +9,6 @@
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
-import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 export class Home extends Screen {
     create() {
@@ -20,8 +19,6 @@ export class Home extends Screen {
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
         this.setLayout(buttons.concat(achievements));
-
-        createTestHarnessDisplay(this);
 
         eventBus.subscribe({
             channel: buttonsChannel(this),

@@ -7,7 +7,6 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
 import { gmi } from "../core/gmi/gmi.js";
-import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 const getScoreMetaData = result => {
     if (typeof result === "number") {
@@ -38,7 +37,6 @@ export class Results extends Screen {
         this.setLayout(buttons.concat(achievements));
 
         fireGameCompleteStat(this.transientData.results);
-        createTestHarnessDisplay(this);
 
         eventBus.subscribe({
             name: "continue",

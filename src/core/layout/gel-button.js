@@ -7,29 +7,8 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import { eventBus } from "../event-bus.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
-
-class Indicator extends Phaser.GameObjects.Sprite {
-    constructor(gelButton) {
-        super(gelButton.scene, 0, 0, assetPath({ key: "notification", isMobile: gelButton._isMobile }));
-        this.scene.add.existing(this);
-        this.setDepth(1);
-        this.gelButton = gelButton;
-        this.scale = 0;
-        this.scene.add.tween({ targets: this, ease: "Bounce", delay: 500, duration: 500, scale: 1 });
-    }
-
-    resize() {
-        const { x, y, width } = this.gelButton.getBounds();
-        this.x = x + width;
-        this.y = y;
-        this.setTexture(assetPath({ key: "notification", isMobile: this.gelButton._isMobile }));
-    }
-}
-
-export const noIndicator = {
-    resize: () => {},
-    destroy: () => {},
-};
+import { assetPath } from "./asset-paths.js";
+import { Indicator, noIndicator } from "./gel-indicator.js";
 
 /*
     addOverlay(key, x, y) //key is unique so we can always pull that out
@@ -46,8 +25,8 @@ export class GelButton extends Phaser.GameObjects.Container {
     constructor(scene, x, y, metrics, config) {
         super(scene, x, y);
 
-        this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })))
-        this.add(this.sprite)
+        this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
+        this.add(this.sprite);
 
         this._id = config.key;
         this._isMobile = metrics.isMobile;
@@ -57,7 +36,11 @@ export class GelButton extends Phaser.GameObjects.Container {
         this.shiftX = config.shiftX || 0;
         this.shiftY = config.shiftY || 0;
 
-        this.setInteractive({ hitArea: this.sprite, useHandCursor: true, hitAreaCallback: Phaser.Geom.Rectangle.Contains });
+        this.setInteractive({
+            hitArea: this.sprite,
+            useHandCursor: true,
+            hitAreaCallback: Phaser.Geom.Rectangle.Contains,
+        });
         this.setHitArea(metrics);
         this.setupMouseEvents(config, scene);
     }
@@ -65,7 +48,8 @@ export class GelButton extends Phaser.GameObjects.Container {
     addOverlay(x, y, key) {
         //Todo X and Y should be rel to button? Will this work with containers automatically?
         //needs to be added to an array
-        this.scene.add.sprite(x, y, key);
+        const overlay = this.scene.add.sprite(x, y, key);
+        this.add(overlay);
     }
 
     onPointerUp(config, screen) {
@@ -88,7 +72,7 @@ export class GelButton extends Phaser.GameObjects.Container {
             this.input.hitArea = new Phaser.Geom.Rectangle(-hitPadding / 2, -hitPadding / 2, width, height);
         }
 
-        this.setSize(width, height)
+        this.setSize(width, height);
     }
 
     getHitAreaBounds() {
@@ -98,8 +82,8 @@ export class GelButton extends Phaser.GameObjects.Container {
             wtm.getX(-this.input.hitArea.width / 2, 0),
             wtm.getY(0, -this.input.hitArea.height / 2),
             this.input.hitArea.width * this.parentContainer.scale,
-            this.input.hitArea.height * this.parentContainer.scale
-        )
+            this.input.hitArea.height * this.parentContainer.scale,
+        );
     }
 
     setImage(key) {
@@ -123,14 +107,6 @@ export class GelButton extends Phaser.GameObjects.Container {
         this.indicator.resize();
     }
 }
-
-const paths = [
-    [x => x.gameButton, x => `${x.scene}.${x.key}`],
-    [x => x.isMobile, x => "gelMobile." + x.key],
-    [x => !x.isMobile, x => "gelDesktop." + x.key],
-];
-
-export const assetPath = fp.cond(paths);
 
 const publish = (config, data) => () => {
     GameSound.Assets.buttonClick.play();

@@ -15,7 +15,6 @@ import { GelGrid } from "../core/layout/gel-grid.js";
 import { create as createState } from "../core/state.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
-import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 const styleDefaults = {
     fontSize: "24px",
@@ -32,8 +31,6 @@ export class Select extends Screen {
         this.theme = this.context.config.theme[this.scene.key];
         this.setTitleElements();
         this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
-
-        createTestHarnessDisplay(this);
 
         this.grid = new GelGrid(this, getMetrics(), this.layout.getSafeArea());
         this.grid.addGridCells();
