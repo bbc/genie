@@ -52,7 +52,6 @@ export class GelButton extends Phaser.GameObjects.Container {
         this._id = config.key;
         this._isMobile = metrics.isMobile;
         this.name = config.name || "";
-        this.positionOverride = config.positionOverride;
         this.indicator = noIndicator;
         this.setIndicator();
         this.shiftX = config.shiftX || 0;
@@ -85,13 +84,8 @@ export class GelButton extends Phaser.GameObjects.Container {
         const hitPadding = fp.max([metrics.hitMin - this.sprite.width, metrics.hitMin - this.sprite.height, 0]);
         const width = this.sprite.width + hitPadding;
         const height = this.sprite.height + hitPadding;
-
-        Object.assign(this, fp.pick(["width", "height"], this.getBounds()))
         if (this.input) {
-
-            //TODO Fix hitarea
             this.input.hitArea = new Phaser.Geom.Rectangle(-hitPadding / 2, -hitPadding / 2, width, height);
-            this.input.hitArea = new Phaser.Geom.Rectangle(0, 0, this.sprite.width, this.sprite.height);
         }
 
         this.setSize(width, height)
@@ -116,7 +110,7 @@ export class GelButton extends Phaser.GameObjects.Container {
     resize(metrics) {
         this._isMobile = metrics.isMobile;
         this.sprite.setTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
-        //this.setHitArea(metrics);
+        this.setHitArea(metrics);
     }
 
     setIndicator() {

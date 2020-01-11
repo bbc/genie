@@ -42,7 +42,7 @@ const vertical = {
         group.y = metrics.verticals.top + metrics.borderPad + hitAreaOffset;
     },
     middle: (metrics, group) => {
-        group.y = metrics.verticals.middle;
+        group.y = metrics.verticals.middle - group.height / 2;
     },
     bottom: (metrics, group) => {
         let hitAreaOffset = 0;
@@ -91,7 +91,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
     }
 
     getBoundingRect() {
-        return new Phaser.Geom.Rectangle(this.x, this.y, this.width, this.height)
+        return new Phaser.Geom.Rectangle(this.x, this.y, this.width, this.height);
     }
 
     removeButton(buttonToRemove) {
@@ -109,6 +109,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
         if (this._metrics.isMobile !== metrics.isMobile) {
             this.resetButtons(metrics);
         }
+
         this.alignChildren();
 
         this._metrics = metrics;
@@ -123,7 +124,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
             button.updateIndicatorPosition();
         });
 
-        this.updateSize()
+        this.updateSize();
     }
 
     updateSize() {
@@ -132,31 +133,24 @@ export class GelGroup extends Phaser.GameObjects.Container {
 
         this.iterate(x => {
             const hitBounds = x.getHitAreaBounds();
-            height = this._isVertical? height + (hitBounds.height) : hitBounds.height;
-            width +=  hitBounds.width;
+            height = this._isVertical ? height + hitBounds.height : hitBounds.height;
+            width += hitBounds.width;
         });
 
-        width += this._isVertical? 0 : this._metrics.buttonPad * (this.list.length - 1)
-        height += this._isVertical? this._metrics.buttonPad * (this.list.length - 1) : 0 ;
+        width += this._isVertical ? 0 : this._metrics.buttonPad * (this.list.length - 1) * this.scale;
+        height += this._isVertical ? this._metrics.buttonPad * (this.list.length - 1) * this.scale : 0;
 
         this.setSize(width, height);
     }
 
     alignChildren() {
         const pos = { x: 0, y: 0 };
-
-        const halfWidth = this.width / 2; //Save here as size changes when you move children below
         this.iterate(child => {
             child.y = pos.y + child.height / 2;
 
             if (this._isVertical) {
-                child.x = halfWidth;
+                child.x = 0;
                 pos.y += child.height + this._metrics.buttonPad;
-            } else if (this._vPos === "middle") {
-                child.y = 0;
-
-                child.x = pos.x + child.width / 2;
-                pos.x += child.width + this._metrics.buttonPad * 3;
             } else {
                 child.x = pos.x + child.width / 2;
                 pos.x += child.width + this._metrics.buttonPad;

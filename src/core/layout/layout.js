@@ -106,9 +106,11 @@ export function create(scene, metrics, buttonIds) {
         return new Phaser.Geom.Rectangle(x, y, groups.middleRightSafe.x - x, groups.bottomCenter.y - y);
     };
 
+    const groupHasChildren = group => group.list.length;
+
     const drawGroups = graphics => {
-        graphics.lineStyle(1, 0x33ff33, 1);
-        fp.mapValues(group => graphics.strokeRectShape(group.getBoundingRect()), groups);
+        graphics.lineStyle(2, 0x33ff33, 1);
+        fp.mapValues(group => {graphics.strokeRectShape(group.getBoundingRect())}, fp.pickBy(groupHasChildren, groups));
     };
 
     const drawButtons = graphics => {
