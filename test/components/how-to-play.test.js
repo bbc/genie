@@ -7,7 +7,7 @@ import { domElement } from "../mock/dom-element";
 import { createMockGmi } from "../mock/gmi";
 
 import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
-import * as layoutHarness from "../../src/core/debug/layout-debugDraw.js";
+import * as layoutHarness from "../../src/core/debug/layout-debug-draw.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 

@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import * as layoutHarness from "../../../src/core/debug/layout-debugDraw.js";
+import * as layoutHarness from "../../../src/core/debug/layout-debug-draw.js";
 import { Pause } from "../../../src/components/overlays/pause";
 
 describe("Pause Overlay", () => {

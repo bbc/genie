@@ -16,7 +16,7 @@ import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
 import { addAnimations } from "./background-animations.js";
 import { debugMode } from "./debug/debug-mode.js";
-import { debugDrawLayout, setupQaKey } from "./debug/layout-debugDraw.js";
+import { debugDraw, setupDebugKeys } from "./debug/layout-debug-draw.js";
 
 export const overlayChannel = "gel-overlays";
 
@@ -77,16 +77,12 @@ export class Screen extends Phaser.Scene {
 
     addDebugGraphics() {
         this.debugGraphics = this.add.graphics();
-        setupQaKey(this);
+        setupDebugKeys(this);
     }
 
     debugDraw() {
         this.debugGraphics.clear();
-
-        this.layout.debug.groups(this.debugGraphics);
-        this.layout.debug.buttons(this.debugGraphics);
-
-        debugDrawLayout(this);
+        debugDraw();
     }
 
     setupDebug() {

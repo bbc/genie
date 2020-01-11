@@ -32,18 +32,34 @@ const drawOuterPadding = screen => {
     );
 };
 
-export const debugDrawLayout = screen => {
-    if (!qaOn) {
-        return;
-    }
+const debugDrawLayout = screen => {
     draw43Area(screen);
     drawOuterPadding(screen);
 };
 
-let qaOn = false;
+const noop = () => {};
 
-export const setupQaKey = screen => {
-    const qaKey = screen.input.keyboard.addKey("q");
-    const toggleQaMode = () => (qaOn = !qaOn);
-    qaKey.on("up", toggleQaMode);
+let draw = {
+    layout: noop,
+    groups: noop,
+    buttons: noop,
+};
+
+export const debugDraw = () => {
+    draw.layout();
+    draw.groups();
+    draw.buttons();
+}
+
+const makeToggle = (val, fn) => () => draw[val] = draw[val] === noop ? fn : noop;
+
+export const setupDebugKeys = screen => {
+    const qKey = screen.input.keyboard.addKey("q");
+    qKey.on("up", makeToggle("layout", () => {debugDrawLayout(screen)}));
+
+    const wKey = screen.input.keyboard.addKey("w");
+    wKey.on("up", makeToggle("groups", () => {screen.layout.debug.groups(screen.debugGraphics)}));
+
+    const eKey = screen.input.keyboard.addKey("e");
+    eKey.on("up", makeToggle("buttons", () => {screen.layout.debug.buttons(screen.debugGraphics)}));
 };
