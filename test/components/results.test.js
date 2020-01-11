@@ -4,8 +4,6 @@
  * @license Apache-2.0
  */
 import { createMockGmi } from "../mock/gmi";
-
-import * as layoutHarness from "../../src/core/debug/layout-debug-draw.js";
 import { eventBus } from "../../src/core/event-bus.js";
 
 import { Results } from "../../src/components/results";
@@ -17,8 +15,6 @@ describe("Results Screen", () => {
     let mockTextAdd;
 
     beforeEach(() => {
-        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
-
         mockData = {
             config: {
                 theme: {
@@ -86,11 +82,6 @@ describe("Results Screen", () => {
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
-
-        test("creates a layout harness with correct params", () => {
-            resultsScreen.create();
-            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(resultsScreen);
         });
 
         test("adds the achievement button when theme flag is set", () => {

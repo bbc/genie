@@ -6,7 +6,6 @@
 
 import { createMockGmi } from "../../mock/gmi";
 import * as a11y from "../../../src/core/accessibility/accessibilify.js";
-import * as layoutHarness from "../../../src/core/debug/layout-debug-draw.js";
 
 import { GameTest } from "../../../src/components/test-screens/game";
 
@@ -19,7 +18,6 @@ describe("Test Screens - Game", () => {
 
     beforeEach(() => {
         jest.spyOn(global.console, "log");
-        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
         jest.spyOn(a11y, "accessibilify").mockImplementation(() => {});
 
         mockGmi = {
@@ -90,11 +88,6 @@ describe("Test Screens - Game", () => {
         test("adds a pause GEL button to the layout", () => {
             gameTest.create();
             expect(gameTest.setLayout).toHaveBeenCalledWith(["pause"]);
-        });
-
-        test("creates a layout harness with correct params", () => {
-            gameTest.create();
-            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(gameTest);
         });
 
         describe("Game Buttons", () => {
