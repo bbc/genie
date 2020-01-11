@@ -43,11 +43,11 @@ export class Select extends Screen {
 
         this.addEventSubscriptions();
 
-        const selectionStates = createState(this.context.theme.storageKey);
-
-        selectionStates.setState("char1", "unlocked");
-
-        console.log("state", selectionStates.getAll())
+        //const selectionStates = createState(this.context.theme.storageKey);
+        //
+        //selectionStates.setState("char1", "unlocked");
+        //
+        //console.log("state", selectionStates.getAll())
     }
 
     resize() {
