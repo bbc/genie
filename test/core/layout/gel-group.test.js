@@ -331,6 +331,21 @@ describe("Group", () => {
         });
     });
 
+    describe("getBoundingRect method", () => {
+        test("returns a Phaser rectangle the same size as the group", () => {
+            group.width = 200;
+            group.height = 100;
+            group.x = 10;
+            group.y = 20
+
+            const boundingRect = group.getBoundingRect();
+            expect(boundingRect.x).toEqual(10);
+            expect(boundingRect.y).toEqual(20);
+            expect(boundingRect.width).toEqual(200);
+            expect(boundingRect.height).toEqual(100);
+        });
+    });
+
     describe("make accessible method", () => {
         test("adds each button in the group to the accessible buttons", () => {
             group.addButton(config);
