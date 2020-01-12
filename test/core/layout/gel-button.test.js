@@ -262,6 +262,32 @@ describe("Gel Button", () => {
             gelButton.updateIndicatorPosition();
             expect(mockIndicator.resize).toHaveBeenCalled();
         });
+    });
+
+    describe("getHitAreaBounds method", () => {
+        test("returns the hit Area as a Phaser rectangle in world space", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+
+            gelButton.input = {
+                hitArea: {
+                    width: 200,
+                    height: 100,
+                },
+            };
+
+            gelButton.parentContainer = {
+                scale: 2,
+            };
+
+            const mockWtm = {
+                getX: () => 0,
+                getY: () => 0,
+            };
+
+            gelButton.getWorldTransformMatrix = () => mockWtm;
+
+            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 400, 200));
+        });
 
         test("indicator resize function updates x and y positions", () => {
             mockConfig.key = "achievements";

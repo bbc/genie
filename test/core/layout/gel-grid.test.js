@@ -704,4 +704,11 @@ describe("Grid", () => {
             expect(grid._cells[0]).toBe(cell1);
         });
     });
+
+    describe("getBoundingRect method", () => {
+        test("returns the current safe area for use by layout.js debug draw methods on groups", () => {
+            grid = new GelGrid(mockScene, metrics, safeArea);
+            expect(grid.getBoundingRect()).toEqual(safeArea);
+        });
+    });
 });
