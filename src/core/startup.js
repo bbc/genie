@@ -17,7 +17,7 @@ import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
 import { JSON5Plugin } from "./loader/json5-loader/json5-plugin.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
-import { addGelButton } from "./layout/gel-gameObjects.js";
+import { addGelButton } from "./layout/gel-game-objects.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key, ...conf[key].settings }));
 
