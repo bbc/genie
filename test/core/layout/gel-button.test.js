@@ -3,11 +3,12 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as GameSound from "../../../src/core/game-sound.js";
-import { GelButton, assetPath, noIndicator } from "../../../src/core/layout/gel-button";
+import { GelButton } from "../../../src/core/layout/gel-button";
+import { noIndicator } from "../../../src/core/layout/gel-indicator.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
+import { assetPath } from "../../../src/core/layout/asset-paths.js";
 
 describe("Gel Button", () => {
     let mockScene;
@@ -15,6 +16,7 @@ describe("Gel Button", () => {
     let mockY;
     let mockMetrics;
     let mockConfig;
+    let mockSprite;
 
     beforeEach(() => {
         gmi.achievements = { unseen: false };
@@ -22,15 +24,23 @@ describe("Gel Button", () => {
         GelButton.prototype.height = 64;
         GelButton.prototype.setFrame = jest.fn();
         GelButton.prototype.setSizeToFrame = jest.fn();
+        GelButton.prototype.add = jest.fn();
         eventBus.publish = jest.fn();
         GameSound.Assets = {
             backgroundMusic: {},
             buttonClick: { play: jest.fn() },
         };
+        mockSprite = {
+            width: 100,
+            height: 50,
+            setTexture: jest.fn(),
+            setFrame: jest.fn(),
+        };
         mockScene = {
             add: {
                 existing: jest.fn(),
                 tween: jest.fn(),
+                sprite: jest.fn(() => mockSprite),
             },
             sys: {
                 queueDepthSort: jest.fn(),
@@ -100,7 +110,7 @@ describe("Gel Button", () => {
         test("makes the sprite interactive", () => {
             GelButton.prototype.setInteractive = jest.fn();
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.setInteractive).toHaveBeenCalledWith({ useHandCursor: true });
+            expect(gelButton.setInteractive).toHaveBeenCalled();
         });
         test("sets up mouse events", () => {
             GelButton.prototype.on = jest.fn();
@@ -119,7 +129,7 @@ describe("Gel Button", () => {
                 }
             });
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.setFrame).toHaveBeenCalledWith(0);
+            expect(mockSprite.setFrame).toHaveBeenCalledWith(0);
         });
         test("pointerover event sets frame to 1", () => {
             GelButton.prototype.on = jest.fn((event, callback) => {
@@ -128,7 +138,7 @@ describe("Gel Button", () => {
                 }
             });
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.setFrame).toHaveBeenCalledWith(1);
+            expect(mockSprite.setFrame).toHaveBeenCalledWith(1);
         });
         test("callback is added to the POINTER_UP event emitter", () => {
             GelButton.prototype.on = jest.fn((event, callback) => {
@@ -163,7 +173,7 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.input = { hitArea: {} };
             gelButton.setHitArea(mockMetrics);
-            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-3, -3, 70, 70));
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-10, -10, 120, 70));
         });
     });
 
@@ -178,7 +188,7 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.setTexture = jest.fn();
             gelButton.setImage("mockKey");
-            expect(gelButton.setTexture).toHaveBeenCalledWith(
+            expect(mockSprite.setTexture).toHaveBeenCalledWith(
                 assetPath({ key: "mockKey", isMobile: gelButton._isMobile }),
             );
         });
@@ -187,9 +197,8 @@ describe("Gel Button", () => {
     describe("Resize function", () => {
         test("sets correct texture", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            gelButton.setTexture = jest.fn();
             gelButton.resize(mockMetrics);
-            expect(gelButton.setTexture).toHaveBeenCalledWith(
+            expect(mockSprite.setTexture).toHaveBeenCalledWith(
                 assetPath({ key: gelButton._id, isMobile: gelButton._isMobile }),
             );
         });
@@ -198,7 +207,7 @@ describe("Gel Button", () => {
             gelButton.input = { hitArea: {} };
             mockMetrics.hitMin = 66;
             gelButton.resize(mockMetrics);
-            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-1, -1, 66, 66));
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-8, -8, 116, 66));
         });
     });
 
@@ -271,30 +280,11 @@ describe("Gel Button", () => {
             gmi.achievements.unseen = true;
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.indicator.setTexture = jest.fn();
-            gelButton.getBounds = () => {
-                return { x: 50, y: 80, width: 100 };
-            };
+            gelButton.getBounds = () => ({ x: 50, y: 80, width: 100 });
             gelButton.updateIndicatorPosition();
             expect(gelButton.indicator.setTexture).toHaveBeenCalledWith(
                 assetPath({ key: "notification", isMobile: gelButton._isMobile }),
             );
-        });
-    });
-
-    describe("asset paths", () => {
-        test("returns the correct asset path for desktop assets", () => {
-            const path = assetPath({ key: "mockId", isMobile: false });
-            expect(path).toBe("gelDesktop.mockId");
-        });
-
-        test("returns the correct asset path for mobile assets", () => {
-            const path = assetPath({ key: "mockId", isMobile: true });
-            expect(path).toBe("gelMobile.mockId");
-        });
-
-        test("returns the correct asset path for game buttons", () => {
-            const path = assetPath({ key: "mockId", scene: "mockScene", gameButton: true });
-            expect(path).toBe("mockScene.mockId");
         });
     });
 });
