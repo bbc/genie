@@ -14,6 +14,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._safeArea = safeArea;
         this._cells = [];
         this._columns = scene.theme.columns || 1;
+        this._align = scene.theme.align || "center";
         this._rows = scene.theme.rows || 1;
         this._cellPadding = metrics.isMobile ? 16 : 24;
         this.eventChannel = `gel-buttons-${scene.scene.key}`;
@@ -42,7 +43,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     resize(metrics, safeArea) {
         this._metrics = metrics;
         this._safeArea = safeArea;
-        this._cellPadding = metrics.isMobile ? 16 : 24;
+        this._cellPadding = metrics.screenToCanvas(metrics.isMobile ? 16 : 24);
 
         this.reset();
     }
@@ -92,18 +93,29 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.addAt(newCell, this._cells.length);
     }
 
-    setCellSize(cell) {
+    setCellSize(cellIndex) {
         const cellSize = this.calculateCellSize();
 
-        cell.displayWidth = cellSize.width;
-        cell.displayHeight = cellSize.height;
+        this._cells[cellIndex].displayWidth = cellSize.width;
+        this._cells[cellIndex].displayHeight = cellSize.height;
     }
 
-    setCellVisibility(cell) {
-        cell.visible = true;
+    setCellVisibility(cellIndex) {
+        this._cells[cellIndex].visible = true;
     }
 
-    setCellPosition(cell, col, row) {
+    setCellPosition(cellIndex, col, row) {
+        const cellCount = this.rowCellsCount(row);
+        const cell = this._cells[cellIndex];
+        let alignmentFactor = 1;
+
+        if (this._align == "right") {
+            alignmentFactor = 2;
+        } else if (this._align == "left") {
+            alignmentFactor = 0;
+        }
+
+        const blankPadding = cellCount * ((cell.displayWidth + this._cellPadding) / 2) * alignmentFactor;
         const paddingXTotal = col * this._cellPadding;
         const leftBound = this._safeArea.left + col * cell.displayWidth;
         const cellXCentre = cell.displayWidth / 2;
@@ -112,7 +124,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const topBound = this._safeArea.top + row * cell.displayHeight;
         const cellYCentre = cell.displayHeight / 2;
 
-        cell.x = leftBound + paddingXTotal + cellXCentre;
+        cell.x = leftBound + paddingXTotal + cellXCentre + blankPadding;
         cell.y = topBound + cellYCentre + paddingYTotal;
     }
 
@@ -130,15 +142,29 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._rows = Math.min(maxRows, rows);
     }
 
+    rowCellsCount(row) {
+        let count = 0;
+        while (this._cells[row * this._columns + count] && count < this._columns) {
+            count++;
+        }
+        return this._columns - count;
+    }
+
+    resetCell(cellIndex, col, row) {
+        this.setCellSize(cellIndex, col, row);
+        this.setCellVisibility(cellIndex, col, row);
+        this.setCellPosition(cellIndex, col, row);
+    }
+
     reset() {
         this.setLayoutLimits();
 
         for (let row = 0; row < this._rows; row++) {
             for (let col = 0; col < this._columns; col++) {
-                let cell = row * this._columns + col;
-                this.setCellSize(this._cells[cell], col, row);
-                this.setCellVisibility(this._cells[cell], col, row);
-                this.setCellPosition(this._cells[cell], col, row);
+                let cellIndex = row * this._columns + col;
+                if (this._cells[cellIndex]) {
+                    this.resetCell(cellIndex, col, row);
+                }
             }
         }
     }
