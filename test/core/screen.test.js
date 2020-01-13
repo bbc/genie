@@ -13,6 +13,8 @@ import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults";
 import { settingsChannel } from "../../src/core/settings.js";
+import * as qaMode from "../../src/core/debug/debug-mode.js";
+import * as debugDrawModule from "../../src/core/debug/layout-debug-draw.js";
 
 describe("Screen", () => {
     let screen;
@@ -21,14 +23,15 @@ describe("Screen", () => {
     let mockSettings;
     let mockTransientData;
     let mockNavigation;
+    const mockGfx = { test: "1234" };
 
-    const createScreen = (key = "screenKey") => {
+    const createScreen = key => {
         screen = new Screen();
         screen.sys = { accessibleButtons: [] };
-        screen.events = { emit: jest.fn() };
+        screen.events = { emit: jest.fn(), on: jest.fn() };
         screen.scene = { key, bringToTop: jest.fn(), start: jest.fn(), run: jest.fn(), scene: { mock: "scene" } };
         screen.cameras = { main: { scrollX: 0, scrollY: 0 } };
-        screen.add = { container: () => "root", existing: jest.fn() };
+        screen.add = { container: () => "root", existing: jest.fn(), graphics: jest.fn(() => mockGfx) };
         screen._layout = {
             makeAccessible: jest.fn(),
             root: {},
@@ -40,6 +43,8 @@ describe("Screen", () => {
     const initScreen = () => {
         mockNavigation = {
             screenKey: { routes: { next: "nextscreen" } },
+            boot: { routes: { next: "loader" } },
+            loader: { routes: { next: "home" } },
         };
         mockData = {
             navigation: mockNavigation,
@@ -50,8 +55,8 @@ describe("Screen", () => {
         screen.init(mockData);
     };
 
-    const createAndInitScreen = () => {
-        createScreen();
+    const createAndInitScreen = (key = "screenKey") => {
+        createScreen(key);
         initScreen();
     };
 
@@ -104,6 +109,7 @@ describe("Screen", () => {
         test("defaults transientData to empty Object", () => {
             createScreen();
             delete mockData.transient;
+            screen.scene.key = "screenKey";
             screen.init(mockData);
             expect(screen.context.transientData).toEqual({});
         });
@@ -115,7 +121,7 @@ describe("Screen", () => {
         });
 
         test("clears the accessible buttons array", () => {
-            createScreen();
+            createScreen("screenKey");
             screen.sys.accessibleButtons = [{ some: "mock" }];
             initScreen();
             expect(screen.sys.accessibleButtons).toEqual([]);
@@ -353,6 +359,77 @@ describe("Screen", () => {
                 name: "audio",
                 data: mockSettings.audio,
             });
+        });
+    });
+
+    describe("data handling", () => {
+        test("setData method updates _data property", () => {
+            createAndInitScreen();
+            const testData = { test: "data" };
+
+            screen.setData(testData);
+
+            expect(screen._data).toEqual(testData);
+        });
+
+        test("transientData getter returns transient part of _data property", () => {
+            createAndInitScreen();
+            const testTransientData = "testTransient";
+            const testData = { test: "data", transient: testTransientData };
+            screen.setData(testData);
+
+            expect(screen.transientData).toEqual(testTransientData);
+        });
+    });
+
+    describe("Debug", () => {
+        test("Does not setup debug events if debugMode is unset", () => {
+            qaMode.debugMode = jest.fn().mockImplementation(() => false);
+            createAndInitScreen();
+
+            expect(screen.events.on).not.toHaveBeenCalled();
+        });
+
+        test("Does not setup debug events if scene is loader", () => {
+            qaMode.debugMode = jest.fn().mockImplementation(() => true);
+            createAndInitScreen("loader");
+
+            expect(screen.events.on).not.toHaveBeenCalled();
+        });
+
+        test("Does not setup debug events if scene is boot", () => {
+            qaMode.debugMode = jest.fn().mockImplementation(() => true);
+            createAndInitScreen("boot");
+
+            expect(screen.events.on).not.toHaveBeenCalled();
+        });
+
+        test("Sets up debug events when debugMode on scene is not loader or boot", () => {
+            qaMode.debugMode = jest.fn().mockImplementation(() => true);
+            createAndInitScreen();
+
+            expect(screen.events.on).toHaveBeenCalledWith("create", screen.addDebugGraphics, screen);
+        });
+
+        test("debugDraw method clears graphics and calls debugDraw Module", () => {
+            debugDrawModule.debugDraw = jest.fn();
+            createAndInitScreen();
+            screen.debugGraphics = { clear: jest.fn() };
+
+            screen.debugDraw();
+
+            expect(screen.debugGraphics.clear).toHaveBeenCalled();
+            expect(debugDrawModule.debugDraw).toHaveBeenCalled();
+        });
+
+        test("addDebugGraphics method calls debugKeys setup on debugdraw module", () => {
+            debugDrawModule.setupDebugKeys = jest.fn();
+            createAndInitScreen();
+
+            screen.addDebugGraphics();
+
+            expect(screen.debugGraphics).toEqual(mockGfx);
+            expect(debugDrawModule.setupDebugKeys).toHaveBeenCalled();
         });
     });
 });
