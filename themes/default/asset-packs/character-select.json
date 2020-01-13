@@ -21,6 +21,12 @@
                 "overwrite": false
             },
             {
+                "type": "image",
+                "key": "complete",
+                "url": "characters/complete.png",
+                "overwrite": false
+            },
+            {
                 "type": "spritesheet",
                 "key": "char1",
                 "url": "characters/char_1.png",

@@ -56,7 +56,7 @@ export class Screen extends Phaser.Scene {
     init(data) {
         this._data = data;
 
-        //TODO P3 This centers the camera. Should this be hard-coded [NT]
+        //TODO P3 This centers the camera. This should not be hard-coded [NT]
         this.cameras.main.scrollX = -700;
         this.cameras.main.scrollY = -300;
 
@@ -68,6 +68,7 @@ export class Screen extends Phaser.Scene {
 
             this.setupDebug();
         }
+
         this.sys.accessibleButtons = [];
         a11y.clearAccessibleButtons();
         a11y.clearElementsFromDom();

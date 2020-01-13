@@ -12,7 +12,7 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
 import { GelGrid } from "../core/layout/gel-grid.js";
-import { create as createState } from "../core/state.js";
+import * as state from "../core/state.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
 
@@ -33,7 +33,7 @@ export class Select extends Screen {
         this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
         this.grid = new GelGrid(this, getMetrics(), this.layout.getSafeArea());
-        this.grid.addGridCells();
+        this._cells = this.grid.addGridCells();
         this.layout.addCustomGroup("grid", this.grid);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
@@ -42,12 +42,23 @@ export class Select extends Screen {
         this.resize();
 
         this.addEventSubscriptions();
+        this.initStates();
+        this.updateStates();
+    }
 
-        //const selectionStates = createState(this.context.theme.storageKey);
-        //
-        //selectionStates.setState("char1", "unlocked");
-        //
-        //console.log("state", selectionStates.getAll())
+    initStates() {
+        const stateConfig = this.context.theme.choices.map(({ id, state }) => ({ id, state }));
+        this.states = state.create(this.context.theme.storageKey, stateConfig);
+    }
+
+    updateStates() {
+        const states = this.states.getAll().filter(config => Boolean(config.state))
+        const keyedCells = fp.keyBy(cell => cell._id, this._cells);
+
+        states.forEach(state => {
+            const config = this.context.theme.states[state.state];
+            keyedCells[state.id].overlays.set("state", config.x, config.y, config.asset);
+        });
     }
 
     resize() {

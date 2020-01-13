@@ -8,13 +8,9 @@ import * as parseUrlParams from "../../../src/core/parseUrlParams.js";
 
 describe("Debug Mode", () => {
     const game = {};
-    const debugModeWindow = {
-        testHarnessLayoutDisplayed: false,
-        game: {},
-    };
+    const debugWindow = {};
 
     let testWindow = {
-        __qaMode: {},
         location: {
             search: "",
             hostname: "",
@@ -24,7 +20,6 @@ describe("Debug Mode", () => {
     afterEach(() => {
         jest.clearAllMocks();
         testWindow = {
-            __qaMode: {},
             location: {
                 search: "",
                 hostname: "",
@@ -32,29 +27,28 @@ describe("Debug Mode", () => {
         };
     });
 
-    test("adds __qaMode object to window when parseUrlParams returns true", () => {
+    test("adds __debug object to window when parseUrlParams returns true", () => {
         jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debug: true }));
         debugMode.create(testWindow, game);
-        expect(testWindow.__qaMode).toEqual(debugModeWindow);
+        expect(testWindow.__debug).toEqual(debugWindow);
     });
 
-    test("adds __qaMode object to window when URL includes www.test.bbc.", () => {
+    test("adds __debug object to window when URL includes www.test.bbc.", () => {
         jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debug: false }));
         testWindow = {
             location: {
                 search: "",
                 hostname: "www.test.bbc.com",
             },
-            __qaMode: {},
         };
         debugMode.create(testWindow, game);
-        expect(testWindow.__qaMode).toEqual(debugModeWindow);
+        expect(testWindow.__debug).toEqual(debugWindow);
     });
 
-    test("does not add __qaMode object to window when not correct params or URL", () => {
+    test("does not add __debug object to window when not correct params or URL", () => {
         jest.fn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debug: false }));
         debugMode.create(testWindow, game);
-        expect(testWindow.__qaMode).toEqual({});
+        expect(testWindow.__debug).toBe(undefined);
     });
 
     describe("Debug Mode", () => {

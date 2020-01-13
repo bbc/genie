@@ -1,25 +1,35 @@
 import { gmi } from "./gmi/gmi.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
-const getGenieStore = () => gmi.getAllSettings().genie || {};
+const getGenieStore = () => gmi.getAllSettings().gameData.genie || {};
 
-export const create = storageKey => {
+export let states = new Map();
 
-    const getState = key => getGenieStore()[storageKey][key];
-    const getAll = () => getGenieStore()[storageKey];
-
-    const setState = (key, value) =>
-    {
-        const genieStore = getGenieStore();
-
-        fp.set([ storageKey, key ], value, genieStore);
-
-        gmi.setGameData("genie", genieStore)
+export const create = (storageKey, config) => {
+    if (window.__debug) {
+        window.__debug.states = states;
     }
 
-    return {
-        getState,
+    const getMerged = stored => config.map(item => Object.assign(item, stored[item.id]));
+    const get = key => getGenieStore()[storageKey][key];
+    const getStored = () => getGenieStore()[storageKey] || {}; //TODO ".states" on this path?
+
+    const getAll = fp.flow(
+        getStored,
+        getMerged,
+    );
+
+    const set = (id, state) => {
+        gmi.setGameData("genie", fp.set([storageKey, id], { state }, getGenieStore()));
+    };
+
+    const state = {
+        get,
         getAll,
-        setState
-    }
-}
+        set,
+    };
+
+    states.set(storageKey, state);
+
+    return state;
+};

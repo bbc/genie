@@ -28,14 +28,14 @@ export class GelButton extends Phaser.GameObjects.Container {
         this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
         this.add(this.sprite);
 
-        this._id = config.key;
+        this._id = config.id;
+        this._key = config.key;
         this._isMobile = metrics.isMobile;
         this.name = config.name || "";
         this.indicator = noIndicator;
         this.setIndicator();
         this.shiftX = config.shiftX || 0;
         this.shiftY = config.shiftY || 0;
-
         this.setInteractive({
             hitArea: this.sprite,
             useHandCursor: true,
@@ -45,12 +45,20 @@ export class GelButton extends Phaser.GameObjects.Container {
         this.setupMouseEvents(config, scene);
     }
 
-    addOverlay(x, y, key) {
-        //Todo X and Y should be rel to button? Will this work with containers automatically?
-        //needs to be added to an array
-        const overlay = this.scene.add.sprite(x, y, key);
-        this.add(overlay);
-    }
+    overlays = {
+        set: (key, x, y, asset) => {
+            //Todo X and Y should be rel to button? Will this work with containers automatically?
+            //needs to be added to an array
+            //how do we handle breakpoints?
+            this.overlays.list[key] = this.scene.add.sprite(x, y, asset);
+            this.add(this.overlays.list[key]);
+        },
+        remove: key => {
+            this.remove(this.overlays.list[key]);
+            delete this.overlays.list[key];
+        },
+        list: {},
+    };
 
     onPointerUp(config, screen) {
         const inputManager = this.scene.sys.game.input;
@@ -87,19 +95,19 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     setImage(key) {
-        this._id = key;
-        this.sprite.setTexture(assetPath({ key: this._id, isMobile: this._isMobile }));
+        this._key = key;
+        this.sprite.setTexture(assetPath({ key, isMobile: this._isMobile }));
     }
 
     resize(metrics) {
         this._isMobile = metrics.isMobile;
-        this.sprite.setTexture(assetPath({ key: this._id, isMobile: metrics.isMobile }));
+        this.sprite.setTexture(assetPath({ key: this._key, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);
     }
 
     setIndicator() {
         this.indicator.destroy();
-        const show = this._id === "achievements" && gmi.achievements.unseen;
+        const show = this._key === "achievements" && gmi.achievements.unseen;
         this.indicator = show ? new Indicator(this) : noIndicator;
     }
 

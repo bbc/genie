@@ -7,6 +7,8 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
 import { GelButton } from "./gel-button.js";
 
+const alignmentFactor = { left: 0, center: 1, right: 2 };
+
 export class GelGrid extends Phaser.GameObjects.Container {
     constructor(scene, metrics, safeArea) {
         super(scene, 0, 0);
@@ -18,14 +20,10 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._rows = scene.theme.rows || 1;
         this._cellPadding = metrics.isMobile ? 16 : 24;
         this.eventChannel = `gel-buttons-${scene.scene.key}`;
-
-        window.grid = this;
     }
 
     addGridCells() {
-        this.scene.theme.choices.map((cell, idx) => {
-            this.addCell(cell, idx);
-        });
+        this.scene.theme.choices.map((cell, idx) => this.addCell(cell, idx));
         this.makeAccessible();
         this.reset();
         return this._cells;
@@ -75,7 +73,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     addCell(choice, idx) {
         const config = {
-            id: fp.kebabCase(choice.title),
+            id: choice.id,
             key: choice.asset,
             name: choice.title ? choice.title : `option ${idx + 1}`,
             scene: this.scene.scene.key,
@@ -89,10 +87,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const newCell = new GelButton(this.scene, 0, 0, this._metrics, config);
         newCell.visible = Boolean(!idx);
         newCell.key = config.key;
-
-        //TODO
-        //newCell.addOverlay(300, 300, "character-select.lock")
-
         this._cells.push(newCell);
         this.addAt(newCell, this._cells.length);
     }
@@ -111,15 +105,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
     setCellPosition(cellIndex, col, row) {
         const cellCount = this.rowCellsCount(row);
         const cell = this._cells[cellIndex];
-        let alignmentFactor = 1;
 
-        if (this._align == "right") {
-            alignmentFactor = 2;
-        } else if (this._align == "left") {
-            alignmentFactor = 0;
-        }
-
-        const blankPadding = cellCount * ((cell.displayWidth + this._cellPadding) / 2) * alignmentFactor;
+        const blankPadding = cellCount * ((cell.displayWidth + this._cellPadding) / 2) * alignmentFactor[this._align];
         const paddingXTotal = col * this._cellPadding;
         const leftBound = this._safeArea.left + col * cell.displayWidth;
         const cellXCentre = cell.displayWidth / 2;
