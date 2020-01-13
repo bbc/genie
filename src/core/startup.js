@@ -75,15 +75,6 @@ export function startup(screenConfig, settingsConfig = {}) {
         },
     };
 
-    if (qaMode.debugMode()) {
-        phaserConfig.physics = {
-            default: "arcade",
-            arcade: {
-                debug: true,
-            },
-        };
-    }
-
     addCustomStyles();
 
     const game = new Phaser.Game(phaserConfig);
