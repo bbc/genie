@@ -137,7 +137,7 @@ describe("Gel Button", () => {
                     callback();
                 }
             });
-            GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             expect(mockSprite.setFrame).toHaveBeenCalledWith(1);
         });
         test("callback is added to the POINTER_UP event emitter", () => {
@@ -313,4 +313,57 @@ describe("Gel Button", () => {
             );
         });
     });
+
+    describe("overlays", () => {
+        test("set adds sprite to overlays list", () => {
+            mockScene.add.sprite = jest.fn((x, y, asset) => ({ x, y, asset }));
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+
+            gelButton.overlays.set("test_key", 10, 20, "test_asset");
+
+            expect(gelButton.overlays.list.test_key).toEqual({ x: 10, y: 20, asset: "test_asset" });
+        });
+
+        test("set makes sprite a child of the button's container", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.add = jest.fn();
+
+            gelButton.overlays.set("test_key", 10, 20, "test_asset");
+
+            expect(gelButton.add).toHaveBeenCalledTimes(1);
+        });
+
+        test("remove deletes sprite from overlays list", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+
+            gelButton.overlays.set("test_key", 10, 20, "test_asset");
+            gelButton.overlays.remove("test_key")
+
+            expect(gelButton.overlays.list.test_key).not.toBeDefined();
+        });
+
+        test("remove unparents sprite from button's container", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.remove = jest.fn();
+
+            gelButton.overlays.set("test_key", 10, 20, "test_asset");
+            gelButton.overlays.remove("test_key")
+
+            expect(gelButton.remove).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    /*
+        set: (key, x, y, asset) => {
+            //how do we handle breakpoints?
+            this.overlays.list[key] = this.scene.add.sprite(x, y, asset);
+            this.add(this.overlays.list[key]);
+        },
+        remove: key => {
+            this.remove(this.overlays.list[key]);
+            delete this.overlays.list[key];
+        },
+        list: {},
+
+    */
 });

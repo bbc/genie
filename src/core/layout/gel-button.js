@@ -47,8 +47,6 @@ export class GelButton extends Phaser.GameObjects.Container {
 
     overlays = {
         set: (key, x, y, asset) => {
-            //Todo X and Y should be rel to button? Will this work with containers automatically?
-            //needs to be added to an array
             //how do we handle breakpoints?
             this.overlays.list[key] = this.scene.add.sprite(x, y, asset);
             this.add(this.overlays.list[key]);

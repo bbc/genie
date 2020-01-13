@@ -48,7 +48,7 @@ describe("Debug Mode", () => {
     test("does not add __debug object to window when not correct params or URL", () => {
         jest.fn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debug: false }));
         debugMode.create(testWindow, game);
-        expect(testWindow.__debug).toBe(undefined);
+        expect(testWindow.__debug).not.toBeDefined();
     });
 
     describe("Debug Mode", () => {

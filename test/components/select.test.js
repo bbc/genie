@@ -455,7 +455,7 @@ describe("Select Screen", () => {
             selectScreen._cells = [{ _id: "id_one", overlays: { set: jest.fn() } }];
             selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
 
-            selectScreen.context.theme.states = {locked: {x: 10, y: 20, asset: "test_asset"}}
+            selectScreen.context.theme.states = { locked: { x: 10, y: 20, asset: "test_asset" } };
 
             selectScreen.updateStates();
 
