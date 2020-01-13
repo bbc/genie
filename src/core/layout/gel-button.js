@@ -42,6 +42,13 @@ export class GelButton extends Phaser.GameObjects.Sprite {
         this.setIndicator();
         this.shiftX = config.shiftX || 0;
         this.shiftY = config.shiftY || 0;
+
+        if (config.animConfig) {
+            config.animConfig.frames = this.scene.anims.generateFrameNumbers(config.animConfig.key);
+            this.scene.anims.create(config.animConfig);
+            this.play(config.animConfig.key);
+        }
+
         this.setInteractive({ useHandCursor: true });
         this.setHitArea(metrics);
         this.setupMouseEvents(config, scene);
@@ -106,3 +113,13 @@ const publish = (config, data) => () => {
         data,
     });
 };
+
+/* istanbul ignore next */
+Phaser.GameObjects.GameObjectFactory.register("gelButton", function(x, y, metrics, config) {
+    const gelButton = new GelButton(this.scene, x, y, metrics, config);
+
+    this.displayList.add(gelButton);
+    this.updateList.add(gelButton);
+
+    return gelButton;
+});
