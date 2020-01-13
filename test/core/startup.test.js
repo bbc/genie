@@ -9,7 +9,6 @@ import { domElement } from "../mock/dom-element";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 import * as styles from "../../src/core/custom-styles.js";
-import * as qaMode from "../../src/core/debug/debug-mode.js";
 import { getBrowser } from "../../src/core/browser.js";
 import { Loader } from "../../src/core/loader/loader.js";
 import { Boot } from "../../src/core/loader/boot.js";
@@ -168,30 +167,6 @@ describe("Startup", () => {
             document.getElementById.mockImplementation(() => false);
             const startupNoContainer = () => startup({});
             expect(startupNoContainer).toThrowError(`Container element "#some-id" not found`); // eslint-disable-line quotes
-        });
-
-        describe("Debug Mode", () => {
-            const expectedDebugConfig = {
-                physics: {
-                    default: "arcade",
-                    arcade: { debug: true },
-                },
-            };
-
-            test("additional debugging config is passed if url parameter is set", () => {
-                qaMode.debugMode = jest.fn().mockImplementation(() => true);
-
-                startup({});
-                const actualConfig = Phaser.Game.mock.calls[0][0];
-                expect(actualConfig).toEqual(expect.objectContaining(expectedDebugConfig));
-            });
-
-            test("additional debugging config is not passed if url parameter is not set", () => {
-                qaMode.debugMode = jest.fn().mockImplementation(() => false);
-                startup({});
-                const actualConfig = Phaser.Game.mock.calls[0][0];
-                expect(actualConfig).toEqual(expect.not.objectContaining(expectedDebugConfig));
-            });
         });
     });
 

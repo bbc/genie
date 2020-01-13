@@ -42,17 +42,15 @@ export class Select extends Screen {
         this.resize();
 
         this.addEventSubscriptions();
-        this.initStates();
+
+        const stateConfig = this.context.theme.choices.map(({ id, state }) => ({ id, state }));
+        this.states = state.create(this.context.theme.storageKey, stateConfig);
+
         this.updateStates();
     }
 
-    initStates() {
-        const stateConfig = this.context.theme.choices.map(({ id, state }) => ({ id, state }));
-        this.states = state.create(this.context.theme.storageKey, stateConfig);
-    }
-
     updateStates() {
-        const states = this.states.getAll().filter(config => Boolean(config.state))
+        const states = this.states.getAll().filter(config => Boolean(config.state));
         const keyedCells = fp.keyBy(cell => cell._id, this._cells);
 
         states.forEach(state => {

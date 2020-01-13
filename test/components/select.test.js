@@ -15,6 +15,12 @@ jest.mock("../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
 }));
 
+jest.mock("../../src/core/state.js", () => ({
+    create: jest.fn(() => ({
+        getAll: jest.fn(() => []),
+    })),
+}));
+
 describe("Select Screen", () => {
     let characterSprites;
     let fillRectShapeSpy;
@@ -439,6 +445,21 @@ describe("Select Screen", () => {
 
             eventBus.subscribe.mock.calls[0][0].callback();
             expect(selectScreen.transientData["test-select"].choice.title).toBe("key1");
+        });
+    });
+
+    describe("updateStates method", () => {
+        test("updates the overlays for cells with matching id", () => {
+            selectScreen.create();
+
+            selectScreen._cells = [{ _id: "id_one", overlays: { set: jest.fn() } }];
+            selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
+
+            selectScreen.context.theme.states = {locked: {x: 10, y: 20, asset: "test_asset"}}
+
+            selectScreen.updateStates();
+
+            expect(selectScreen._cells[0].overlays.set).toHaveBeenCalledWith("state", 10, 20, "test_asset");
         });
     });
 });

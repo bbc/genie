@@ -94,7 +94,7 @@ describe("Gel Button", () => {
     describe("Constructor", () => {
         test("correctly sets class properties", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton._id).toBe(mockConfig.key);
+            expect(gelButton._key).toBe(mockConfig.key);
             expect(gelButton._isMobile).toBe(mockMetrics.isMobile);
             expect(gelButton.positionOverride).toBe(mockConfig.positionOverride);
             expect(gelButton.shiftX).toBe(mockConfig.shiftX);
@@ -128,7 +128,7 @@ describe("Gel Button", () => {
                     callback();
                 }
             });
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             expect(mockSprite.setFrame).toHaveBeenCalledWith(0);
         });
         test("pointerover event sets frame to 1", () => {
@@ -137,7 +137,7 @@ describe("Gel Button", () => {
                     callback();
                 }
             });
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             expect(mockSprite.setFrame).toHaveBeenCalledWith(1);
         });
         test("callback is added to the POINTER_UP event emitter", () => {
@@ -182,7 +182,7 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.setTexture = jest.fn();
             gelButton.setImage("mockKey");
-            expect(gelButton._id).toEqual("mockKey");
+            expect(gelButton._key).toEqual("mockKey");
         });
         test("sets correct texture", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
@@ -199,7 +199,7 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.resize(mockMetrics);
             expect(mockSprite.setTexture).toHaveBeenCalledWith(
-                assetPath({ key: gelButton._id, isMobile: gelButton._isMobile }),
+                assetPath({ key: gelButton._key, isMobile: gelButton._isMobile }),
             );
         });
         test("sets the button hit area", () => {
