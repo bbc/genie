@@ -379,7 +379,7 @@ describe("Grid", () => {
 
             const expectedCellHeight = (800 - 24) / 2;
 
-            grid = new GelGrid(mockScene, metrics, safeArea);
+            grid = new GelGrid(mockScene, metrics, mockSafeArea);
             const resultCells = grid.addGridCells();
 
             expect(resultCells[0].displayHeight).toEqual(expectedCellHeight);
@@ -748,8 +748,8 @@ describe("Grid", () => {
 
     describe("getBoundingRect method", () => {
         test("returns the current safe area for use by layout.js debug draw methods on groups", () => {
-            grid = new GelGrid(mockScene, metrics, safeArea);
-            expect(grid.getBoundingRect()).toEqual(safeArea);
+            grid = new GelGrid(mockScene, metrics, mockSafeArea);
+            expect(grid.getBoundingRect()).toEqual(mockSafeArea);
         });
     });
 });

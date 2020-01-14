@@ -7,6 +7,7 @@ import { addGelButton } from "../../../src/core/layout/gel-game-objects.js";
 
 const mockGelButton = {
     test: "data",
+    sprite: "testSprite"
 };
 
 jest.mock("../../../src/core/layout/gel-button.js", () => ({
@@ -51,9 +52,9 @@ describe("addGelButton", () => {
         expect(mockThis.displayList.add).toHaveBeenCalledWith(button);
     });
 
-    test("it adds a gel button to the scene's update list", () => {
+    test("it adds the gel button's sprite to the scene's update list", () => {
         const button = addGelButton.call(mockThis, 0, 0, {}, {});
-        expect(mockThis.updateList.add).toHaveBeenCalledWith(button);
+        expect(mockThis.updateList.add).toHaveBeenCalledWith(button.sprite);
     });
 
     test("creates and returns a gel button", () => {
