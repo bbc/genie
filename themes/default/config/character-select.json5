@@ -38,7 +38,14 @@
                 {
                     "asset": "char1",
                     "accessibilityText": "Character 1",
-                    "title": "Liron Man"
+                    "title": "Liron Man",
+                    "animConfig": {
+                        "key": "character-select.char1",
+                        "frames": 18,
+                        "frameRate": 6,
+                        "yoyo": true,
+                        "repeat": -1
+                    }
                 },
                 {
                     "asset": "char2",

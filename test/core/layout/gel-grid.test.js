@@ -28,6 +28,7 @@ describe("Grid", () => {
             scene: {
                 key: "item-select",
             },
+            add: { gelButton: jest.fn(() => ({ visible: false, input: {} })) },
             sys: {
                 queueDepthSort: () => {},
                 anims: {
@@ -92,7 +93,7 @@ describe("Grid", () => {
             grid = new GelGrid(mockScene, metrics, mockSafeArea);
             grid.addCell({});
 
-            expect(GelButton.GelButton.mock.calls.length).toEqual(1);
+            expect(mockScene.add.gelButton).toHaveBeenCalledTimes(1);
         });
 
         test("adds multiple cells to the grid from theme config", () => {
@@ -102,7 +103,7 @@ describe("Grid", () => {
             grid.addGridCells();
 
             expect(grid.addAt).toHaveBeenCalledTimes(3);
-            expect(GelButton.GelButton.mock.calls.length).toEqual(3);
+            expect(mockScene.add.gelButton).toHaveBeenCalledTimes(3);
         });
 
         test("cell is added with key from config data", () => {
@@ -114,8 +115,8 @@ describe("Grid", () => {
             grid = new GelGrid(mockScene, metrics, mockSafeArea);
             grid.addGridCells();
 
-            const resultParams = GelButton.GelButton.mock.calls[0];
-            expect(resultParams[4]).toEqual(expect.objectContaining(expectedConfig));
+            const resultParams = mockScene.add.gelButton.mock.calls[0];
+            expect(resultParams[3]).toEqual(expect.objectContaining(expectedConfig));
         });
 
         test("cell is added with the title from config data", () => {
@@ -127,12 +128,8 @@ describe("Grid", () => {
             grid = new GelGrid(mockScene, metrics, mockSafeArea);
             grid.addGridCells();
 
-            const actualParams = GelButton.GelButton.mock.calls[0];
-            // expect(actualParams[0]).toEqual(mockScene); // TODO - another test for these?
-            // expect(actualParams[1]).toBe(0);
-            // expect(actualParams[2]).toBe(0);
-            // expect(actualParams[3]).toEqual(metrics);
-            expect(actualParams[4]).toEqual(expect.objectContaining(expectedConfig));
+            const actualParams = mockScene.add.gelButton.mock.calls[0];
+            expect(actualParams[3]).toEqual(expect.objectContaining(expectedConfig));
         });
 
         test("gel button is created using metrics passed from the grid", () => {
@@ -141,8 +138,8 @@ describe("Grid", () => {
             grid = new GelGrid(mockScene, metrics, mockSafeArea);
             grid.addGridCells();
 
-            const actualParams = GelButton.GelButton.mock.calls[0];
-            expect(actualParams[3]).toEqual(metrics);
+            const actualParams = mockScene.add.gelButton.mock.calls[0];
+            expect(actualParams[2]).toEqual(metrics);
         });
 
         test("multiple gel buttons are created", () => {
@@ -151,9 +148,9 @@ describe("Grid", () => {
             grid = new GelGrid(mockScene, metrics, mockSafeArea);
             grid.addGridCells();
 
-            const actualParams = GelButton.GelButton.mock.calls[0];
+            const actualParams = mockScene.add.gelButton.mock.calls[0];
+            expect(actualParams[0]).toBe(0);
             expect(actualParams[1]).toBe(0);
-            expect(actualParams[2]).toBe(0);
         });
 
         test("returns keys for multiple cells", () => {
