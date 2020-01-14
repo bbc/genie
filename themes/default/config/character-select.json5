@@ -38,7 +38,14 @@
                 {
                     "asset": "char1",
                     "accessibilityText": "Character 1",
-                    "title": "Liron Man"
+                    "title": "Liron Man",
+                    "animConfig": {
+                        "key": "character-select.char1",
+                        "frames": 18,
+                        "frameRate": 6,
+                        "yoyo": true,
+                        "repeat": -1
+                    }
                 },
                 {
                     "asset": "char2",
@@ -59,6 +66,21 @@
                     "asset": "char2",
                     "accessibilityText": "Character 5",
                     "title": "Teenage Nick Repeated"
+                },
+                {
+                    "asset": "char3",
+                    "accessibilityText": "Character 3",
+                    "title": "Alex's Worst Nightmare"
+                }, 
+                {
+                    "asset": "char4",
+                    "accessibilityText": "Character 4",
+                    "title": "Rolff"
+                },
+                {
+                    "asset": "char1",
+                    "accessibilityText": "Character 1",
+                    "title": "Liron Man"
                 },
             ],
             rows: 2,

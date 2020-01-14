@@ -36,6 +36,7 @@ describe("Gel Button", () => {
                 queueDepthSort: jest.fn(),
                 anims: {
                     once: jest.fn(),
+                    generateFrameNumbers: jest.fn(),
                 },
                 textures: {
                     get: jest.fn(() => ({
@@ -52,6 +53,12 @@ describe("Gel Button", () => {
                 input: {
                     enable: jest.fn(),
                 },
+            },
+            anims: {
+                once: jest.fn(),
+                generateFrameNumbers: jest.fn(),
+                create: jest.fn(),
+                load: jest.fn(),
             },
         };
         mockX = 7;
@@ -295,6 +302,21 @@ describe("Gel Button", () => {
         test("returns the correct asset path for game buttons", () => {
             const path = assetPath({ key: "mockId", scene: "mockScene", gameButton: true });
             expect(path).toBe("mockScene.mockId");
+        });
+    });
+
+    describe("Animated Buttons", () => {
+        test("sets depth of indicator to 1", () => {
+            mockConfig.animConfig = {
+                key: "character-select.char1",
+                frames: 18,
+                frameRate: 6,
+                yoyo: true,
+                repeat: -1,
+            };
+            GelButton.prototype.play = jest.fn();
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.indicator).toBe(noIndicator);
         });
     });
 });
