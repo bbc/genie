@@ -33,6 +33,8 @@ describe("Select Screen", () => {
     let mockCellKeys;
     let defaultTextStyle;
     let unsubscribe = jest.fn();
+    let mockNextPage = jest.fn();
+    let mockPreviousPage = jest.fn();
 
     beforeEach(() => {
         jest.spyOn(elementBounding, "positionElement").mockImplementation(() => {});
@@ -51,6 +53,8 @@ describe("Select Screen", () => {
             gridMetrics: jest.fn(),
             resetButtons: jest.fn(),
             resize: jest.fn(),
+            nextPage: mockNextPage,
+            previousPage: mockPreviousPage,
         };
         GelGrid.mockImplementation(() => mockGelGrid);
         mockData = {
@@ -437,6 +441,24 @@ describe("Select Screen", () => {
 
             eventBus.subscribe.mock.calls[1][0].callback();
             expect(selectScreen.navigation.next).toHaveBeenCalled();
+        });
+
+        test("moves to the next page when next page is pressed", () => {
+            mockCellKeys = ["key1", "key2"];
+            selectScreen.create();
+
+            eventBus.subscribe.mock.calls[3][0].callback();
+            expect(eventBus.subscribe.mock.calls[3][0].name).toBe("next");
+            expect(mockNextPage).toHaveBeenCalled();
+        });
+
+        test("moves to the previous page when next page is pressed", () => {
+            mockCellKeys = ["key1", "key2"];
+            selectScreen.create();
+
+            eventBus.subscribe.mock.calls[4][0].callback();
+            expect(eventBus.subscribe.mock.calls[4][0].name).toBe("previous");
+            expect(mockPreviousPage).toHaveBeenCalled();
         });
 
         test("saves choice to transient data", () => {

@@ -42,10 +42,17 @@
             choices: [
                 {
                     id: "char1",
-                    asset: "char1",
-                    accessibilityText: "Character 1",
-                    title: "Liron Man",
-                    state: "locked",
+                    "asset": "char1",
+                    "accessibilityText": "Character 1",
+                    "title": "Liron Man",
+                    "animConfig": {
+                        "key": "character-select.char1",
+                        "frames": 18,
+                        "frameRate": 6,
+                        "yoyo": true,
+                        "repeat": -1
+                    },
+                    state: "locked"
                 },
                 {
                     id: "char2",
@@ -72,6 +79,24 @@
                     asset: "char2",
                     accessibilityText: "Character 5",
                     title: "Teenage Nick Repeated",
+                },
+                {
+                    id: "char6",
+                    "asset": "char3",
+                    "accessibilityText": "Character 3",
+                    "title": "Alex's Worst Nightmare"
+                },
+                {
+                    id: "char7",
+                    "asset": "char4",
+                    "accessibilityText": "Character 4",
+                    "title": "Rolff"
+                },
+                {
+                    id: "char8",
+                    "asset": "char1",
+                    "accessibilityText": "Character 1",
+                    "title": "Liron Man"
                 },
             ],
             rows: 2,

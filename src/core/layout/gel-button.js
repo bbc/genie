@@ -36,11 +36,19 @@ export class GelButton extends Phaser.GameObjects.Container {
         this.setIndicator();
         this.shiftX = config.shiftX || 0;
         this.shiftY = config.shiftY || 0;
+
+        if (config.animConfig) {
+            config.animConfig.frames = this.scene.anims.generateFrameNumbers(config.animConfig.key);
+            this.scene.anims.create(config.animConfig);
+            this.sprite.play(config.animConfig.key);
+        }
+
         this.setInteractive({
             hitArea: this.sprite,
             useHandCursor: true,
             hitAreaCallback: Phaser.Geom.Rectangle.Contains,
         });
+
         this.setHitArea(metrics);
         this.setupMouseEvents(config, scene);
     }

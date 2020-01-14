@@ -162,5 +162,19 @@ export class Select extends Screen {
                     },
                 });
             });
+        eventBus.subscribe({
+            channel: buttonsChannel(this),
+            name: "next",
+            callback: () => {
+                this.grid.nextPage();
+            },
+        });
+        eventBus.subscribe({
+            channel: buttonsChannel(this),
+            name: "previous",
+            callback: () => {
+                this.grid.previousPage();
+            },
+        });
     }
 }

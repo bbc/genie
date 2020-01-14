@@ -46,6 +46,7 @@ describe("Gel Button", () => {
                 queueDepthSort: jest.fn(),
                 anims: {
                     once: jest.fn(),
+                    generateFrameNumbers: jest.fn(),
                 },
                 textures: {
                     get: jest.fn(() => ({
@@ -62,6 +63,12 @@ describe("Gel Button", () => {
                 input: {
                     enable: jest.fn(),
                 },
+            },
+            anims: {
+                once: jest.fn(),
+                generateFrameNumbers: jest.fn(),
+                create: jest.fn(),
+                load: jest.fn(),
             },
         };
         mockX = 7;
@@ -353,17 +360,18 @@ describe("Gel Button", () => {
         });
     });
 
-    /*
-        set: (key, x, y, asset) => {
-            //how do we handle breakpoints?
-            this.overlays.list[key] = this.scene.add.sprite(x, y, asset);
-            this.add(this.overlays.list[key]);
-        },
-        remove: key => {
-            this.remove(this.overlays.list[key]);
-            delete this.overlays.list[key];
-        },
-        list: {},
-
-    */
+    describe("Animated Buttons", () => {
+        test("sets depth of indicator to 1", () => {
+            mockConfig.animConfig = {
+                key: "character-select.char1",
+                frames: 18,
+                frameRate: 6,
+                yoyo: true,
+                repeat: -1,
+            };
+            GelButton.prototype.play = jest.fn();
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.indicator).toBe(noIndicator);
+        });
+    });
 });
