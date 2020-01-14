@@ -9,7 +9,7 @@
  */
 import { gmi, setGmi } from "./gmi/gmi.js";
 import { addCustomStyles } from "./custom-styles.js";
-import * as qaMode from "./debug/debug-mode.js";
+import * as debugMode from "./debug/debug-mode.js";
 import { getBrowser } from "./browser.js";
 import { Loader } from "./loader/loader.js";
 import { Boot } from "./loader/boot.js";
@@ -79,7 +79,7 @@ export function startup(screenConfig, settingsConfig = {}) {
 
     const game = new Phaser.Game(phaserConfig);
 
-    qaMode.create(window, game);
+    debugMode.create(window, game);
     a11y.setup(getContainerDiv());
 }
 
