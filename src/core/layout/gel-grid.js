@@ -5,7 +5,6 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
-import { GelButton } from "./gel-button.js";
 
 export class GelGrid extends Phaser.GameObjects.Container {
     constructor(scene, metrics, safeArea, rows = 1, columns = 1) {
