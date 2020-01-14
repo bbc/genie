@@ -56,7 +56,7 @@ describe("Boot", () => {
         bootScreen.scene = {
             key: "boot",
             start: jest.fn(),
-            manager: { getScenes: jest.fn(() => [{ layout: { buttons: { audio: mockAudioButton } } }]) },
+            manager: { getScenes: jest.fn(() => [{ scene: { layout: { buttons: { audio: mockAudioButton } } } }]) },
         };
         bootScreen.navigation = { next: jest.fn() };
 
@@ -124,8 +124,8 @@ describe("Boot", () => {
             test("Toggles audio on the scenes that are sleeping as well as the active ones", () => {
                 const mockAudioButton2 = { setImage: jest.fn() };
                 const mockScenes = [
-                    { layout: { buttons: { audio: mockAudioButton } } },
-                    { layout: { buttons: { audio: mockAudioButton2 } } },
+                    { scene: { layout: { buttons: { audio: mockAudioButton } } } },
+                    { scene: { layout: { buttons: { audio: mockAudioButton2 } } } },
                     undefined,
                 ];
                 bootScreen.scene.manager.getScenes.mockReturnValue(mockScenes);
