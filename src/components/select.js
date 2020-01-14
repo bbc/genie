@@ -32,12 +32,12 @@ export class Select extends Screen {
         this.setTitleElements();
         this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
-        this.grid = new GelGrid(this, getMetrics(), this.layout.getSafeArea());
-        this._cells = this.grid.addGridCells();
+        this.grid = new GelGrid(this, getMetrics(), this.layout.getSafeArea(), this.theme.rows, this.theme.columns);
+        this._cells = this.grid.addGridCells(this.theme.choices);
         this.layout.addCustomGroup("grid", this.grid);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
-        this.scene.scene.events.once("shutdown", this._scaleEvent.unsubscribe, this);
+        this.scene.scene.events.on("shutdown", this._scaleEvent.unsubscribe, this);
 
         this.resize();
 
