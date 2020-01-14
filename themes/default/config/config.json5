@@ -4,23 +4,6 @@
             music: "loader.backgroundMusicTwo",
             achievements: true, //enable or disable achievements for this theme
         },
-        results: {
-            backgroundAnimation: "",
-            resultText: {
-                style: {
-                    font: "40px ReithSans",
-                    align: "center",
-                    fill: "#fff",
-                    boundsAlignH: "center",
-                },
-            },
-            "button-overrides": {
-                achievements: {
-                    group: "middleCenter",
-                    shiftY: 120,
-                },
-            },
-        },
         pause: {
             isOverlay: true,
         },

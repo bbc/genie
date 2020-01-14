@@ -4,6 +4,12 @@
         "files": [
             {
                 "type": "json5",
+                "key": "results",
+                "url": "config/results.json5",
+                "overwrite": false
+            },
+            {
+                "type": "json5",
                 "key": "character-select",
                 "url": "config/character-select.json5",
                 "overwrite": false

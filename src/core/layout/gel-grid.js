@@ -5,24 +5,23 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
-import { GelButton } from "./gel-button.js";
 
 export class GelGrid extends Phaser.GameObjects.Container {
-    constructor(scene, metrics, safeArea) {
+    constructor(scene, metrics, safeArea, rows = 1, columns = 1) {
         super(scene, 0, 0);
         this._metrics = metrics;
         this._safeArea = safeArea;
+        this._rows = rows;
+        this._columns = columns;
         this._cells = [];
-        this._columns = scene.theme.columns || 1;
         this._align = scene.theme.align || "center";
-        this._rows = scene.theme.rows || 1;
         this._cellPadding = metrics.isMobile ? 16 : 24;
         this._page = 0;
         this.eventChannel = `gel-buttons-${scene.scene.key}`;
     }
 
-    addGridCells() {
-        this.scene.theme.choices.map((cell, idx) => {
+    addGridCells(gridCells) {
+        gridCells.map((cell, idx) => {
             this.addCell(cell, idx);
         });
         this.makeAccessible();

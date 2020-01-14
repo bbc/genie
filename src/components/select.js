@@ -36,8 +36,8 @@ export class Select extends Screen {
         createTestHarnessDisplay(this);
 
         this.safeArea = new Phaser.Geom.Rectangle(50, 50, 300, 200);
-        this.grid = new GelGrid(this, getMetrics(), this.safeArea);
-        this.grid.addGridCells();
+        this.grid = new GelGrid(this, getMetrics(), this.safeArea, this.theme.rows, this.theme.columns);
+        this.grid.addGridCells(this.theme.choices);
         this.layout.addCustomGroup("grid", this.grid);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
