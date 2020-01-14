@@ -29,30 +29,12 @@
             {
                 "type": "spritesheet",
                 "key": "char1",
-                "url": "select/char_1_anim.png",
+                "url": "characters/char_1_anim.png",
                 "overwrite": false,
                 "frameConfig": {
                     "frameWidth": 37,
                     "frameHeight": 45,
                     "frameMax": 10
-                }
-            },
-            {
-                "type": "image",
-                "key": "char2",
-                "url": "select/char_2.png",
-                "overwrite": false
-            },
-            {
-                "type": "spritesheet",
-                "key": "char1",
-                "url": "characters/char_1.png",
-                "frameConfig": {
-                    "frameWidth": 800,
-                    "frameHeight": 800,
-                    "frameMax": 2,
-                    "margin": 0,
-                    "spacing": 4
                 }
             },
             {

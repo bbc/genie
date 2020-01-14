@@ -10,17 +10,6 @@ import { gmi } from "../gmi/gmi.js";
 import { assetPath } from "./asset-paths.js";
 import { Indicator, noIndicator } from "./gel-indicator.js";
 
-/*
-    addOverlay(key, x, y) //key is unique so we can always pull that out
-    removeOverlay(key)  //
-
-    //maybe the above should just pass the sprite in?
-
-    //Could we also combine the above
-    all it needs is resize calling on it?
-
- */
-
 export class GelButton extends Phaser.GameObjects.Container {
     constructor(scene, x, y, metrics, config) {
         super(scene, x, y);
@@ -37,10 +26,10 @@ export class GelButton extends Phaser.GameObjects.Container {
         this.shiftX = config.shiftX || 0;
         this.shiftY = config.shiftY || 0;
 
-        if (config.animConfig) {
-            config.animConfig.frames = this.scene.anims.generateFrameNumbers(config.animConfig.key);
-            this.scene.anims.create(config.animConfig);
-            this.sprite.play(config.animConfig.key);
+        if (config.anim) {
+            config.anim.frames = this.scene.anims.generateFrameNumbers(config.anim.key);
+            this.scene.anims.create(config.anim);
+            this.sprite.play(config.anim.key);
         }
 
         this.setInteractive({

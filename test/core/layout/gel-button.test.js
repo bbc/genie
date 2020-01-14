@@ -35,6 +35,7 @@ describe("Gel Button", () => {
             height: 50,
             setTexture: jest.fn(),
             setFrame: jest.fn(),
+            play: jest.fn(),
         };
         mockScene = {
             add: {
@@ -369,7 +370,6 @@ describe("Gel Button", () => {
                 yoyo: true,
                 repeat: -1,
             };
-            GelButton.prototype.play = jest.fn();
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             expect(gelButton.indicator).toBe(noIndicator);
         });

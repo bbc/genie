@@ -10,7 +10,6 @@ import fp from "../../lib/lodash/fp/fp.js";
 const getGenieStore = () => gmi.getAllSettings().gameData.genie || {};
 
 export let states = new Map();
-
 export const create = (stateKey, config) => {
     if (window.__debug) {
         window.__debug.states = states;

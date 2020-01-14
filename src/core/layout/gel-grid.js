@@ -5,7 +5,6 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
-import { GelButton } from "./gel-button.js";
 
 const alignmentFactor = { left: 0, center: 1, right: 2 };
 
@@ -84,7 +83,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
             group: "grid",
             order: 0,
             ariaLabel: "",
-            animConfig: choice.animConfig || undefined,
+            anim: choice.anim,
         };
 
         const newCell = this.scene.add.gelButton(0, 0, this._metrics, config);
