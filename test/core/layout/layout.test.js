@@ -318,16 +318,16 @@ describe("Layout", () => {
         test("returns the central screen rectangle", () => {
             const mockGroup = { addButton: jest.fn(), reset: jest.fn() };
             const mockGroups = [
-                Object.assign({ y: -150, height: 50}, mockGroup),   //topLeft
+                Object.assign({ y: -150, height: 50 }, mockGroup), //topLeft
                 mockGroup,
                 mockGroup,
-                Object.assign({ x: -250, width: 50 }, mockGroup),   //middleLeftSafe
+                Object.assign({ x: -250, width: 50 }, mockGroup), //middleLeftSafe
                 mockGroup,
                 mockGroup,
                 mockGroup,
-                Object.assign({ x: 200 }, mockGroup),   //middleRightSafe
+                Object.assign({ x: 200 }, mockGroup), //middleRightSafe
                 mockGroup,
-                Object.assign({ y: 100 }, mockGroup),   //bottomCenter
+                Object.assign({ y: 100 }, mockGroup), //bottomCenter
                 mockGroup,
             ];
 

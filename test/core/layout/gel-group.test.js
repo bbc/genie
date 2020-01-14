@@ -44,7 +44,7 @@ describe("Group", () => {
             top: 50,
             width: 200,
             height: 100,
-        }
+        };
 
         mockGetHitAreaBounds = jest.fn(() => hitAreaBounds);
 
@@ -286,7 +286,7 @@ describe("Group", () => {
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
-                    getHitAreaBounds: () => ({right:1000, bottom:1000}),
+                    getHitAreaBounds: () => ({ right: 1000, bottom: 1000 }),
                 }));
                 group.addButton(config);
 
@@ -304,7 +304,7 @@ describe("Group", () => {
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
-                    getHitAreaBounds: () => ({right:0, bottom:0}),
+                    getHitAreaBounds: () => ({ right: 0, bottom: 0 }),
                 }));
                 group.addButton(config);
                 group.reset(metrics);
@@ -336,7 +336,7 @@ describe("Group", () => {
             group.width = 200;
             group.height = 100;
             group.x = 10;
-            group.y = 20
+            group.y = 20;
 
             const boundingRect = group.getBoundingRect();
             expect(boundingRect.x).toEqual(10);

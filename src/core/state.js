@@ -1,3 +1,9 @@
+/**
+ * @copyright BBC 2020
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
+
 import { gmi } from "./gmi/gmi.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
@@ -5,14 +11,14 @@ const getGenieStore = () => gmi.getAllSettings().gameData.genie || {};
 
 export let states = new Map();
 
-export const create = (storageKey, config) => {
+export const create = (stateKey, config) => {
     if (window.__debug) {
         window.__debug.states = states;
     }
 
     const getMerged = stored => config.map(item => Object.assign(item, stored[item.id]));
-    const get = key => getGenieStore()[storageKey][key];
-    const getStored = () => getGenieStore()[storageKey] || {}; //TODO ".states" on this path?
+    const get = key => Object.assign({}, config.find(conf => conf.id === key), getGenieStore()[stateKey][key]);
+    const getStored = () => getGenieStore()[stateKey] || {}; //TODO ".states" on this path?
 
     const getAll = fp.flow(
         getStored,
@@ -20,7 +26,7 @@ export const create = (storageKey, config) => {
     );
 
     const set = (id, state) => {
-        gmi.setGameData("genie", fp.set([storageKey, id], { state }, getGenieStore()));
+        gmi.setGameData("genie", fp.set([stateKey, id], { state }, getGenieStore()));
     };
 
     const state = {
@@ -29,7 +35,7 @@ export const create = (storageKey, config) => {
         set,
     };
 
-    states.set(storageKey, state);
+    states.set(stateKey, state);
 
     return state;
 };

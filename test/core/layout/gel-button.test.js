@@ -337,7 +337,7 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
 
             gelButton.overlays.set("test_key", 10, 20, "test_asset");
-            gelButton.overlays.remove("test_key")
+            gelButton.overlays.remove("test_key");
 
             expect(gelButton.overlays.list.test_key).not.toBeDefined();
         });
@@ -347,7 +347,7 @@ describe("Gel Button", () => {
             gelButton.remove = jest.fn();
 
             gelButton.overlays.set("test_key", 10, 20, "test_asset");
-            gelButton.overlays.remove("test_key")
+            gelButton.overlays.remove("test_key");
 
             expect(gelButton.remove).toHaveBeenCalledTimes(1);
         });

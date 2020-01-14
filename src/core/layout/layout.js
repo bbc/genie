@@ -110,7 +110,9 @@ export function create(scene, metrics, buttonIds) {
 
     const drawGroups = graphics => {
         graphics.lineStyle(2, 0x33ff33, 1);
-        fp.mapValues(group => {graphics.strokeRectShape(group.getBoundingRect())}, fp.pickBy(groupHasChildren, groups));
+        fp.mapValues(group => {
+            graphics.strokeRectShape(group.getBoundingRect());
+        }, fp.pickBy(groupHasChildren, groups));
     };
 
     const drawButtons = graphics => {
