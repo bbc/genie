@@ -33,6 +33,8 @@ export function startup(screenConfig, settingsConfig = {}) {
     scenes.unshift(new Loader());
     scenes.unshift(new Boot(screenConfig));
 
+    Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
+
     const phaserConfig = {
         width: 1400,
         height: 600,

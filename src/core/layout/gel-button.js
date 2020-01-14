@@ -113,13 +113,3 @@ const publish = (config, data) => () => {
         data,
     });
 };
-
-/* istanbul ignore next */
-Phaser.GameObjects.GameObjectFactory.register("gelButton", function(x, y, metrics, config) {
-    const gelButton = new GelButton(this.scene, x, y, metrics, config);
-
-    this.displayList.add(gelButton);
-    this.updateList.add(gelButton);
-
-    return gelButton;
-});
