@@ -20,7 +20,6 @@ describe("Results Screen", () => {
     let mockTextAdd;
 
     beforeEach(() => {
-        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
         Scaler.getMetrics = jest.fn();
 
         mockConfig = {
