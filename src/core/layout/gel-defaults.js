@@ -208,6 +208,23 @@ export const config = screen => {
                 screen.layout.buttons.achievements.setIndicator();
             },
         },
+        achievementsCircular: {
+            group: "topLeft",
+            title: "Achievements",
+            key: "achievements-circular",
+            ariaLabel: "Your Achievements",
+            order: 12,
+            id: "__achievements-results",
+            channel: buttonsChannel(screen),
+            action: ({ screen }) => {
+                if (screen.navigation.achievements) {
+                    screen.navigation.achievements();
+                } else {
+                    gmi.achievements.show();
+                }
+                screen.layout.buttons.achievementsCircular.setIndicator();
+            },
+        },
         restart: {
             group: "bottomCenter",
             title: "Restart",
