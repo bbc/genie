@@ -5,9 +5,7 @@
  */
 import { accessibilify } from "../../../src/core/accessibility/accessibilify.js";
 import { GelGrid } from "../../../src/core/layout/gel-grid.js";
-import * as GelButton from "../../../src/core/layout/gel-button.js";
 
-jest.mock("../../../src/core/layout/gel-button.js");
 jest.mock("../../../src/core/accessibility/accessibilify.js");
 
 describe("Grid", () => {
@@ -28,7 +26,23 @@ describe("Grid", () => {
             scene: {
                 key: "item-select",
             },
-            add: { gelButton: jest.fn(() => ({ visible: false, input: {} })) },
+            add: {
+                gelButton: jest.fn(() => ({
+                    visible: false,
+                    input: { enabled: false },
+                    x: 50,
+                    y: 50,
+                    setSize: function(width, height) {
+                        this.width = width;
+                        this.height = height;
+                    },
+                    setDisplaySize: function(width, height) {
+                        this.displayWidth = width;
+                        this.displayHeight = height;
+                    },
+                })),
+            },
+            input: { enabled: false },
             sys: {
                 queueDepthSort: () => {},
                 anims: {
@@ -47,10 +61,11 @@ describe("Grid", () => {
         };
         mockSafeArea = {
             left: -300,
-            right: 300,
             top: -300,
-            bottom: 300,
+            width: 600,
+            height: 600,
         };
+
         desktopCellPadding = 24;
         mobileCellPadding = 16;
 
@@ -64,16 +79,8 @@ describe("Grid", () => {
         global.Phaser.GameObjects.Container = jest.fn(() => mockRoot);
 
         accessibilify.mockImplementation(() => {});
-        jest.spyOn(GelButton, "GelButton").mockImplementation(() => ({
-            x: 50,
-            y: 50,
-            input: { enabled: false },
-        }));
 
         GelGrid.prototype.list = [];
-        GelGrid.prototype.iterate = fn => {
-            capturedIterateFunction = fn;
-        };
         GelGrid.prototype.addAt = jest.fn(child => {
             grid.list.push(child);
         });
@@ -336,15 +343,17 @@ describe("Grid", () => {
             grid = new GelGrid(mockScene, metrics, mockSafeArea);
             const resultCells = grid.addGridCells(mockScene.theme.choices);
 
-            expect(resultCells[0].displayWidth).toEqual(mockSafeArea.right - mockSafeArea.left);
-            expect(resultCells[0].displayHeight).toEqual(mockSafeArea.bottom - mockSafeArea.top);
+            expect(resultCells[0].displayWidth).toEqual(mockSafeArea.width);
+            expect(resultCells[0].displayHeight).toEqual(mockSafeArea.height);
         });
 
         test("cell width when 2 columns with desktop grid padding", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.columns = 2;
             mockSafeArea.left = -400;
-            mockSafeArea.right = 400;
+            mockSafeArea.top = -400;
+            mockSafeArea.width = 800;
+            mockSafeArea.height = 800;
 
             grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme.rows, mockScene.theme.columns);
             const resultCells = grid.addGridCells(mockScene.theme.choices);
@@ -364,7 +373,9 @@ describe("Grid", () => {
             ];
             mockScene.theme.columns = 4;
             mockSafeArea.left = -400;
-            mockSafeArea.right = 400;
+            mockSafeArea.top = -400;
+            mockSafeArea.width = 800;
+            mockSafeArea.height = 800;
 
             grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme.rows, mockScene.theme.columns);
             const resultCells = grid.addGridCells(mockScene.theme.choices);
@@ -378,7 +389,9 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.rows = 2;
             mockSafeArea.top = -400;
-            mockSafeArea.bottom = 400;
+            mockSafeArea.left = -400;
+            mockSafeArea.width = 800;
+            mockSafeArea.height = 800;
 
             const expectedCellHeight = (800 - 24) / 2;
 
@@ -392,8 +405,10 @@ describe("Grid", () => {
             metrics.isMobile = true;
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.columns = 2;
+            mockSafeArea.top = -400;
             mockSafeArea.left = -400;
-            mockSafeArea.right = 400;
+            mockSafeArea.width = 800;
+            mockSafeArea.height = 800;
 
             grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme.rows, mockScene.theme.columns);
             const resultCells = grid.addGridCells(mockScene.theme.choices);
@@ -423,7 +438,9 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.rows = 2;
             mockSafeArea.top = -400;
-            mockSafeArea.bottom = 400;
+            mockSafeArea.left = -400;
+            mockSafeArea.width = 800;
+            mockSafeArea.height = 800;
 
             const expectedCellHeight = (800 - mobileCellPadding) / 2;
 
@@ -449,16 +466,16 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.columns = 2;
             mockSafeArea.left = -400;
-            mockSafeArea.right = 400;
             mockSafeArea.top = -300;
-            mockSafeArea.bottom = 300;
+            mockSafeArea.width = 700;
+            mockSafeArea.height = 700;
 
             grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme.rows, mockScene.theme.columns);
             const resultCells = grid.addGridCells(mockScene.theme.choices);
 
             const expectedPositions = [
                 { x: mockSafeArea.left + resultCells[0].displayWidth / 2 },
-                { x: mockSafeArea.right - resultCells[1].displayWidth / 2 },
+                { x: mockSafeArea.left + mockSafeArea.width - resultCells[1].displayWidth / 2 },
             ];
 
             expect(resultCells[0].x).toEqual(expectedPositions[0].x);
@@ -469,9 +486,9 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }, { asset: "asset_name_2" }];
             mockScene.theme.columns = 3;
             mockSafeArea.left = -300;
-            mockSafeArea.right = 300;
             mockSafeArea.top = -200;
-            mockSafeArea.bottom = 200;
+            mockSafeArea.width = 600;
+            mockSafeArea.height = 400;
 
             grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme.rows, mockScene.theme.columns);
             const resultCells = grid.addGridCells(mockScene.theme.choices);
@@ -499,9 +516,9 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.rows = 2;
             mockSafeArea.top = -200;
-            mockSafeArea.bottom = 200;
-            mockSafeArea.top = -200;
-            mockSafeArea.bottom = 200;
+            mockSafeArea.left = -200;
+            mockSafeArea.width = 400;
+            mockSafeArea.height = 400;
 
             grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme.rows, mockScene.theme.columns);
             const resultCells = grid.addGridCells(mockScene.theme.choices);
@@ -528,15 +545,15 @@ describe("Grid", () => {
             mockScene.theme.columns = 2;
             const initialSafeArea = {
                 left: -400,
-                right: 400,
                 top: -300,
-                bottom: 300,
+                height: 600,
+                width: 800,
             };
             const resizedSafeArea = {
                 left: -800,
-                right: 800,
                 top: -600,
-                bottom: 600,
+                width: 1600,
+                height: 1200,
             };
 
             grid = new GelGrid(mockScene, metrics, initialSafeArea, mockScene.theme.rows, mockScene.theme.columns);
@@ -564,15 +581,15 @@ describe("Grid", () => {
             metrics.isMobile = true;
             const initialSafeArea = {
                 left: -400,
-                right: 400,
                 top: -300,
-                bottom: 300,
+                height: 600,
+                width: 800,
             };
             const resizedSafeArea = {
                 left: -800,
-                right: 800,
                 top: -600,
-                bottom: 600,
+                width: 1600,
+                height: 1200,
             };
 
             grid = new GelGrid(mockScene, metrics, initialSafeArea, mockScene.theme.rows, mockScene.theme.columns);
@@ -746,6 +763,13 @@ describe("Grid", () => {
 
             expect(grid._cells.length).toBe(1);
             expect(grid._cells[0]).toBe(cell1);
+        });
+    });
+
+    describe("getBoundingRect method", () => {
+        test("returns the current safe area for use by layout.js debug draw methods on groups", () => {
+            grid = new GelGrid(mockScene, metrics, mockSafeArea);
+            expect(grid.getBoundingRect()).toEqual(mockSafeArea);
         });
     });
 });

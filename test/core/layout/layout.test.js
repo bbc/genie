@@ -25,6 +25,7 @@ describe("Layout", () => {
     let mockGelGroup;
     let mockEventUnsubscribe;
     let settingsIconsUnsubscribeSpy;
+    let mockHitAreaBounds;
 
     beforeEach(() => {
         mockGmi = {
@@ -67,14 +68,22 @@ describe("Layout", () => {
             verticals: jest.fn(),
         };
 
+        mockHitAreaBounds = { left: 0, top: 0, width: 200, height: 100 };
+
         mockInputUpAdd = jest.fn();
         mockGelGroup = {
-            addButton: jest.fn(name => ({ buttonName: name, onInputUp: { add: mockInputUpAdd } })),
+            addButton: jest.fn(name => ({
+                buttonName: name,
+                onInputUp: { add: mockInputUpAdd },
+                getHitAreaBounds: jest.fn(() => mockHitAreaBounds),
+            })),
             reset: jest.fn(),
             addToGroup: jest.fn(),
             destroy: jest.fn(),
             makeAccessible: jest.fn(),
             addCustomGroup: jest.fn(),
+            getBoundingRect: jest.fn(() => mockHitAreaBounds),
+            list: [1],
         };
         GelGroup.mockImplementation(() => mockGelGroup);
         global.Phaser.GameObjects.Container = jest.fn(() => mockRoot);
@@ -278,6 +287,59 @@ describe("Layout", () => {
             expect(layout.buttons.play.buttonName.shiftX).toBe(99);
             expect(layout.buttons.play.buttonName.shiftY).toBe(88);
             expect(layout.buttons.play.buttonName.group).toBe("topRight");
+        });
+    });
+
+    describe("Debug", () => {
+        test("draws groups that contain at least 1 item", () => {
+            const mockGfx = { lineStyle: jest.fn(), strokeRectShape: jest.fn() };
+            const layout = Layout.create(mockScene, mockMetrics, ["play", "home", "achievements"]);
+
+            layout.debug.groups(mockGfx);
+
+            expect(mockGfx.lineStyle).toHaveBeenCalledWith(2, 0x33ff33, 1);
+            expect(mockGfx.strokeRectShape).toHaveBeenCalledWith(mockHitAreaBounds);
+            expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(11);
+        });
+
+        test("draws buttons", () => {
+            const mockGfx = { lineStyle: jest.fn(), strokeRectShape: jest.fn() };
+            const layout = Layout.create(mockScene, mockMetrics, ["play", "home", "achievements"]);
+
+            layout.debug.buttons(mockGfx);
+
+            expect(mockGfx.lineStyle).toHaveBeenCalledWith(1, 0x3333ff, 1);
+            expect(mockGfx.strokeRectShape).toHaveBeenCalledWith(mockHitAreaBounds);
+            expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(3);
+        });
+    });
+
+    describe("getSafeArea method", () => {
+        test("returns the central screen rectangle", () => {
+            const mockGroup = { addButton: jest.fn(), reset: jest.fn() };
+            const mockGroups = [
+                Object.assign({ y: -150, height: 50 }, mockGroup), //topLeft
+                mockGroup,
+                mockGroup,
+                Object.assign({ x: -250, width: 50 }, mockGroup), //middleLeftSafe
+                mockGroup,
+                mockGroup,
+                mockGroup,
+                Object.assign({ x: 200 }, mockGroup), //middleRightSafe
+                mockGroup,
+                Object.assign({ y: 100 }, mockGroup), //bottomCenter
+                mockGroup,
+            ];
+
+            let idx = -1;
+            GelGroup.mockImplementation(() => {
+                idx++;
+                return mockGroups[idx];
+            });
+
+            const layout = Layout.create(mockScene, mockMetrics, ["previous", "next", "home", "continue"]);
+
+            expect(layout.getSafeArea()).toEqual(new Phaser.Geom.Rectangle(-200, -100, 400, 200));
         });
     });
 });

@@ -12,10 +12,9 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
 import { GelGrid } from "../core/layout/gel-grid.js";
-import { debugMode } from "../core/qa/qa-mode.js";
+import * as state from "../core/state.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
-import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 const styleDefaults = {
     fontSize: "24px",
@@ -33,11 +32,8 @@ export class Select extends Screen {
         this.setTitleElements();
         this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
-        createTestHarnessDisplay(this);
-
-        this.safeArea = new Phaser.Geom.Rectangle(50, 50, 300, 200);
-        this.grid = new GelGrid(this, getMetrics(), this.safeArea, this.theme.rows, this.theme.columns);
-        this.grid.addGridCells(this.theme.choices);
+        this.grid = new GelGrid(this, getMetrics(), this.layout.getSafeArea(), this.theme.rows, this.theme.columns);
+        this._cells = this.grid.addGridCells(this.theme.choices);
         this.layout.addCustomGroup("grid", this.grid);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
@@ -46,15 +42,26 @@ export class Select extends Screen {
         this.resize();
 
         this.addEventSubscriptions();
-        if (debugMode()) {
-            this.graphics = this.add.graphics();
-        }
+
+        const stateConfig = this.context.theme.choices.map(({ id, state }) => ({ id, state }));
+        this.states = state.create(this.context.theme.storageKey, stateConfig);
+
+        this.updateStates();
+    }
+
+    updateStates() {
+        const states = this.states.getAll().filter(config => Boolean(config.state));
+        const keyedCells = fp.keyBy(cell => cell._id, this._cells);
+
+        states.forEach(state => {
+            const config = this.context.theme.states[state.state];
+            keyedCells[state.id].overlays.set("state", config.x, config.y, config.asset);
+        });
     }
 
     resize() {
         const metrics = getMetrics();
-        this.updateSafeArea(metrics);
-        this.grid.resize(metrics, this.safeArea);
+        this.grid.resize(metrics, this.layout.getSafeArea());
         this.repositionTitleElements(metrics);
     }
 
@@ -94,34 +101,6 @@ export class Select extends Screen {
             left: homeButtonBounds.right,
             right: secondaryButtonBounds.left,
         };
-    }
-
-    update() {
-        if (!debugMode()) {
-            return;
-        }
-
-        this.graphics.clear();
-        this.graphics.fillStyle(0xff3333, 0.3);
-        this.graphics.fillRectShape(this.safeArea);
-    }
-
-    updateSafeArea(metrics) {
-        const bounds = ["home", "previous", "next", "continue"]
-            .map(key => this.layout.buttons[key])
-            .map(getItemBounds(metrics));
-
-        const lefts = bounds.map(bound => bound.right).filter(x => x < 0);
-        const rights = bounds.map(bound => bound.left).filter(x => x > 0);
-        const tops = bounds.map(bound => bound.bottom).filter(y => y < 0);
-        const bottoms = bounds.map(bound => bound.top).filter(y => y > 0);
-
-        const pad = metrics.isMobile ? 0 : metrics.screenToCanvas(20);
-
-        this.safeArea.left = Math.max(...lefts) + pad;
-        this.safeArea.right = Math.min(...rights) - pad;
-        this.safeArea.top = Math.max(...tops);
-        this.safeArea.bottom = Math.min(...bottoms);
     }
 
     setVisualElement(config) {

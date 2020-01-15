@@ -4,8 +4,6 @@
  * @license Apache-2.0
  */
 import { createMockGmi } from "../mock/gmi";
-
-import * as layoutHarness from "../../src/core/qa/layout-harness.js";
 import * as Scaler from "../../src/core/scaler.js";
 import { eventBus } from "../../src/core/event-bus.js";
 
@@ -22,7 +20,6 @@ describe("Results Screen", () => {
     let mockTextAdd;
 
     beforeEach(() => {
-        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
         Scaler.getMetrics = jest.fn();
 
         mockConfig = {
@@ -99,11 +96,6 @@ describe("Results Screen", () => {
             resultsScreen.create();
             expect(resultsScreen.grid.addGridCells).toHaveBeenCalledWith(mockConfig.theme.resultsScreen.rows);
             expect(resultsScreen.layout.addCustomGroup).toHaveBeenCalledWith("grid", resultsScreen.grid);
-        });
-
-        test("creates a layout harness with correct params", () => {
-            resultsScreen.create();
-            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(resultsScreen);
         });
 
         test("adds the achievement button when theme flag is set", () => {

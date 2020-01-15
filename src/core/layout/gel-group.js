@@ -17,7 +17,7 @@ const horizontal = {
         group.x = metrics[horizontalsType].left + metrics.borderPad + hitAreaOffset;
     },
     center: (metrics, group, horizontalsType) => {
-        group.x = metrics[horizontalsType].center - group.getBounds().width / 2;
+        group.x = metrics[horizontalsType].center - group.width / 2;
     },
     right: (metrics, group, horizontalsType) => {
         let hitAreaOffset = 0;
@@ -25,10 +25,10 @@ const horizontal = {
             if (!child.input.hitArea) return;
             hitAreaOffset = fp.max([
                 hitAreaOffset,
-                (child.x + child.input.hitArea.width / 2) / metrics.scale - group.getBounds().width,
+                (child.x + child.input.hitArea.width / 2) / metrics.scale - group.width,
             ]);
         }, group.list);
-        group.x = metrics[horizontalsType].right - metrics.borderPad - hitAreaOffset - group.getBounds().width;
+        group.x = metrics[horizontalsType].right - metrics.borderPad - hitAreaOffset - group.width;
     },
 };
 
@@ -42,7 +42,7 @@ const vertical = {
         group.y = metrics.verticals.top + metrics.borderPad + hitAreaOffset;
     },
     middle: (metrics, group) => {
-        group.y = metrics.verticals.middle;
+        group.y = metrics.verticals.middle - group.height / 2;
     },
     bottom: (metrics, group) => {
         let hitAreaOffset = 0;
@@ -50,15 +50,15 @@ const vertical = {
             if (!child.input.hitArea) return;
             hitAreaOffset = fp.max([
                 hitAreaOffset,
-                (child.y + child.input.hitArea.height / 2) / metrics.scale - group.getBounds().height,
+                (child.y + child.input.hitArea.height / 2) / metrics.scale - group.height,
             ]);
         }, group.list);
-        group.y = metrics.verticals.bottom - metrics.borderPad - hitAreaOffset - group.getBounds().height;
+        group.y = metrics.verticals.bottom - metrics.borderPad - hitAreaOffset - group.height;
     },
 };
 
 export class GelGroup extends Phaser.GameObjects.Container {
-    constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical) {
+    constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical = false) {
         super(scene, 0, 0);
         //TODO P3 we used to name the groups - useful for debugging. Might be usuaful as a propery? [NT]
         //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
@@ -70,6 +70,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
         this._buttons = [];
         this._buttonFactory = ButtonFactory.create(scene);
         this._setGroupPosition = metrics => {
+            //TODO change this to returns e.g: this.y = vertical[vPos](metrics, this);
             horizontal[hPos](metrics, this, isSafe ? "safeHorizontals" : "horizontals");
             vertical[vPos](metrics, this);
         };
@@ -84,9 +85,13 @@ export class GelGroup extends Phaser.GameObjects.Container {
         this.addAt(newButton, position);
         this._buttons.push(newButton);
 
-        this.alignChildren();
+        this.reset(this._metrics);
 
         return newButton;
+    }
+
+    getBoundingRect() {
+        return new Phaser.Geom.Rectangle(this.x, this.y, this.width, this.height);
     }
 
     removeButton(buttonToRemove) {
@@ -96,7 +101,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
 
     addToGroup(item, position = 0) {
         this.addAt(item, position);
-        this.alignChildren();
+        this.reset();
     }
 
     reset(metrics) {
@@ -104,13 +109,14 @@ export class GelGroup extends Phaser.GameObjects.Container {
         if (this._metrics.isMobile !== metrics.isMobile) {
             this.resetButtons(metrics);
         }
+
         this.alignChildren();
 
         this._metrics = metrics;
         const invScale = 1 / metrics.scale;
 
-        //TODO P3 fix this - groups may have no concept of scale? [NT]
         this.setScale(invScale);
+        this.updateSize();
         this._setGroupPosition(metrics);
 
         this._buttons.forEach(button => {
@@ -120,21 +126,30 @@ export class GelGroup extends Phaser.GameObjects.Container {
         });
     }
 
+    updateSize() {
+        let height = 0;
+        let width = 0;
+
+        this.iterate(x => {
+            const hitBounds = x.getHitAreaBounds();
+            height = this._isVertical ? height + hitBounds.height : hitBounds.height;
+            width += hitBounds.width;
+        });
+
+        width += this._isVertical ? 0 : this._metrics.buttonPad * (this.list.length - 1) * this.scale;
+        height += this._isVertical ? this._metrics.buttonPad * (this.list.length - 1) * this.scale : 0;
+
+        this.setSize(width, height);
+    }
+
     alignChildren() {
         const pos = { x: 0, y: 0 };
-
-        const halfWidth = this.width / 2; //Save here as size changes when you move children below
         this.iterate(child => {
             child.y = pos.y + child.height / 2;
 
             if (this._isVertical) {
-                child.x = halfWidth;
+                child.x = 0;
                 pos.y += child.height + this._metrics.buttonPad;
-            } else if (this._vPos === "middle") {
-                child.y = 0;
-
-                child.x = pos.x + child.width / 2;
-                pos.x += child.width + this._metrics.buttonPad * 3;
             } else {
                 child.x = pos.x + child.width / 2;
                 pos.x += child.width + this._metrics.buttonPad;

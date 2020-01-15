@@ -53,9 +53,7 @@ export function create(scene, metrics, buttonIds) {
         return group;
     };
 
-    const addToGroup = (groupName, item, position) => {
-        groups[groupName].addToGroup(item, position);
-    };
+    const addToGroup = (groupName, item, position) => groups[groupName].addToGroup(item, position);
 
     const groups = fp.zipObject(
         groupLayouts.map(layout =>
@@ -81,17 +79,11 @@ export function create(scene, metrics, buttonIds) {
      * @param button - gel button identifier
      * @param callback - callback function to attach
      */
-    const setAction = (button, callback) => {
-        buttons[button].onInputUp.add(callback, this);
-    };
+    const setAction = (button, callback) => buttons[button].onInputUp.add(callback, this);
 
-    const makeAccessible = () => {
-        fp.forOwn(group => group.makeAccessible(), groups);
-    };
+    const makeAccessible = () => fp.forOwn(group => group.makeAccessible(), groups);
 
-    const resize = metrics => {
-        fp.forOwn(group => group.reset(metrics), groups);
-    };
+    const resize = metrics => fp.forOwn(group => group.reset(metrics), groups);
 
     resize(metrics);
 
@@ -114,10 +106,30 @@ export function create(scene, metrics, buttonIds) {
         return new Phaser.Geom.Rectangle(x, y, groups.middleRightSafe.x - x, groups.bottomCenter.y - y);
     };
 
+    const groupHasChildren = group => Boolean(group.list.length);
+
+    const drawGroups = graphics => {
+        graphics.lineStyle(2, 0x33ff33, 1);
+        fp.mapValues(group => {
+            graphics.strokeRectShape(group.getBoundingRect());
+        }, fp.pickBy(groupHasChildren, groups));
+    };
+
+    const drawButtons = graphics => {
+        graphics.lineStyle(1, 0x3333ff, 1);
+        fp.mapValues(button => graphics.strokeRectShape(button.getHitAreaBounds()), buttons);
+    };
+
+    const debug = {
+        groups: drawGroups,
+        buttons: drawButtons,
+    };
+
     return {
         addCustomGroup,
         addToGroup,
         buttons,
+        debug,
         getSafeArea,
         destroy,
         makeAccessible,

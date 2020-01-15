@@ -6,7 +6,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createTestHarnessDisplay } from "../../core/qa/layout-harness.js";
 import { Screen } from "../../core/screen.js";
 
 export class Pause extends Screen {
@@ -26,7 +25,5 @@ export class Pause extends Screen {
 
         this.setLayout(buttons.concat(replayButton));
         this.add.image(0, -170, `${this.scene.key}.title`);
-
-        createTestHarnessDisplay(this);
     }
 }

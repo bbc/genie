@@ -15,9 +15,21 @@
                 "overwrite": false
             },
             {
+                "type": "image",
+                "key": "lock",
+                "url": "characters/lock.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "complete",
+                "url": "characters/complete.png",
+                "overwrite": false
+            },
+            {
                 "type": "spritesheet",
                 "key": "char1",
-                "url": "select/char_1_anim.png",
+                "url": "characters/char_1_anim.png",
                 "overwrite": false,
                 "frameConfig": {
                     "frameWidth": 37,
@@ -26,22 +38,40 @@
                 }
             },
             {
-                "type": "image",
+                "type": "spritesheet",
                 "key": "char2",
-                "url": "select/char_2.png",
-                "overwrite": false
+                "url": "characters/char_2.png",
+                "frameConfig": {
+                    "frameWidth": 800,
+                    "frameHeight": 800,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
             },
             {
-                "type": "image",
+                "type": "spritesheet",
                 "key": "char3",
-                "url": "select/char_3.png",
-                "overwrite": false
+                "url": "characters/char_3.png",
+                "frameConfig": {
+                    "frameWidth": 800,
+                    "frameHeight": 800,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
             },
             {
-                "type": "image",
+                "type": "spritesheet",
                 "key": "char4",
-                "url": "select/char_4.png",
-                "overwrite": false
+                "url": "characters/char_4.png",
+                "frameConfig": {
+                    "frameWidth": 800,
+                    "frameHeight": 800,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
             }
         ]
     }
