@@ -7,8 +7,7 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
 import { gmi } from "../core/gmi/gmi.js";
-import { getMetrics } from "../core/scaler.js";
-import { GelGrid } from "../core/layout/gel-grid.js";
+import * as GelRows from "../core/layout/gel-rows.js";
 import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 const getScoreMetaData = result => {
@@ -46,10 +45,8 @@ export class Results extends Screen {
         const buttons = ["pause", "restart", "continueGame"];
         this.setLayout(buttons.concat(achievements));
 
-        this.safeArea = new Phaser.Geom.Rectangle(50, 50, 300, 200);
-        this.grid = new GelGrid(this, getMetrics(), this.safeArea, this.theme.rows.length);
-        this.grid.addGridCells(this.theme.rows);
-        this.layout.addCustomGroup("grid", this.grid);
+        this.gelRows = GelRows.create(this, this.theme.rows, GelRows.RowType.Results);
+        this.gelRows.containers.forEach((container, index) => this.layout.addCustomGroup(`row-${index}`, container));
     }
 
     subscribeToEventBus() {

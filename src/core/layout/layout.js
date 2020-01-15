@@ -107,10 +107,18 @@ export function create(scene, metrics, buttonIds) {
         root.destroy();
     };
 
+    const getSafeArea = () => {
+        const x = groups.middleLeftSafe.x + groups.middleLeftSafe.width;
+        const y = groups.topLeft.y + groups.topLeft.height;
+
+        return new Phaser.Geom.Rectangle(x, y, groups.middleRightSafe.x - x, groups.bottomCenter.y - y);
+    };
+
     return {
         addCustomGroup,
         addToGroup,
         buttons,
+        getSafeArea,
         destroy,
         makeAccessible,
         resize,
