@@ -14,6 +14,8 @@ import { Loader } from "../../src/core/loader/loader.js";
 import { Boot } from "../../src/core/loader/boot.js";
 
 import { startup } from "../../src/core/startup.js";
+import { addGelButton } from "../../src/core/layout/gel-game-objects.js";
+import * as debugModeModule from "../../src/core/debug/debug-mode.js";
 
 jest.mock("../../src/core/browser.js");
 jest.mock("../../src/core/custom-styles.js");
@@ -223,6 +225,23 @@ describe("Startup", () => {
                 const expectedError = "Something isn't working:\n\nThere has been an error\n\n";
                 expect(mockPreTag.innerText).toBe(expectedError);
             });
+        });
+    });
+
+    describe("GelButton GameObject Factory", () => {
+        test("registers addGelButton gameobject factory with Phaser", () => {
+            const regSpy = jest.fn();
+            global.Phaser.GameObjects.GameObjectFactory.register = regSpy;
+            startup({});
+            expect(regSpy).toHaveBeenCalledWith("gelButton", addGelButton);
+        });
+    });
+
+    describe("DebugMode", () => {
+        test("initilialises debug mode", () => {
+            const debugCreateSpy = jest.spyOn(debugModeModule, "create");
+            startup({});
+            expect(debugCreateSpy).toHaveBeenCalledWith(window, {});
         });
     });
 });
