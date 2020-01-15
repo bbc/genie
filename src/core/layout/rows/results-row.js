@@ -5,16 +5,16 @@
  */
 
 export class ResultsRow extends Phaser.GameObjects.Container {
-    constructor(scene, rowConfig, drawArea) {
+    constructor(scene, rowConfig, getDrawArea) {
         super(scene);
-        this._buttons = [];
         this.rowConfig = rowConfig;
-        this.drawArea = drawArea;
+        this.getDrawArea = getDrawArea;
+
         this.debugDraw();
-        console.log(this.drawArea, this.debugGraphics);
     }
 
     debugDraw() {
+        this.drawArea = this.getDrawArea();
         this.debugGraphics = this.scene.add.graphics();
         this.debugGraphics.lineStyle(2, 0xff0000, 1);
         this.debugGraphics.strokeRectShape(this.drawArea);

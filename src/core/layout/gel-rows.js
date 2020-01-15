@@ -13,7 +13,7 @@ export const RowType = {
 export function create(scene, rowsConfig, rowType) {
     let containers = [];
 
-    const getRectForRow = index => {
+    const getRectForRow = index => () => {
         const drawArea = scene.layout.getSafeArea();
         const numberOfRows = rowsConfig.length;
         const rowHeight = drawArea.height / numberOfRows;
