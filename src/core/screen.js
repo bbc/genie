@@ -66,7 +66,7 @@ export class Screen extends Phaser.Scene {
             const themeScreenConfig = this._data.config.theme[this.scene.key];
             GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
 
-            this.setupDebug();
+            debugMode() && this.debug.addEvents.call(this);
         }
 
         this.sys.accessibleButtons = [];
@@ -76,22 +76,20 @@ export class Screen extends Phaser.Scene {
         this._makeNavigation();
     }
 
-    addDebugGraphics() {
-        this.debugGraphics = this.add.graphics();
-        setupDebugKeys(this);
-    }
-
-    debugDraw() {
-        this.debugGraphics.clear();
-        debugDraw();
-    }
-
-    setupDebug() {
-        if (debugMode()) {
-            this.events.on("create", this.addDebugGraphics, this);
-            this.events.on("update", this.debugDraw, this);
-        }
-    }
+    debug = {
+        create: function() {
+            this.debugGraphics = this.add.graphics();
+            setupDebugKeys(this);
+        },
+        draw: function() {
+            this.debugGraphics.clear();
+            debugDraw();
+        },
+        addEvents: function() {
+            this.events.on("create", this.debug.create, this);
+            this.events.on("update", this.debug.draw, this);
+        },
+    };
 
     setData(newData) {
         this._data = newData;

@@ -13,7 +13,7 @@ import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults";
 import { settingsChannel } from "../../src/core/settings.js";
-import * as qaMode from "../../src/core/debug/debug-mode.js";
+import * as debugModeModule from "../../src/core/debug/debug-mode.js";
 import * as debugDrawModule from "../../src/core/debug/debug-draw.js";
 
 describe("Screen", () => {
@@ -384,49 +384,49 @@ describe("Screen", () => {
 
     describe("Debug", () => {
         test("Does not setup debug events if debugMode is unset", () => {
-            qaMode.debugMode = jest.fn().mockImplementation(() => false);
+            debugModeModule.debugMode = jest.fn().mockImplementation(() => false);
             createAndInitScreen();
 
             expect(screen.events.on).not.toHaveBeenCalled();
         });
 
         test("Does not setup debug events if scene is loader", () => {
-            qaMode.debugMode = jest.fn().mockImplementation(() => true);
+            debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
             createAndInitScreen("loader");
 
             expect(screen.events.on).not.toHaveBeenCalled();
         });
 
         test("Does not setup debug events if scene is boot", () => {
-            qaMode.debugMode = jest.fn().mockImplementation(() => true);
+            debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
             createAndInitScreen("boot");
 
             expect(screen.events.on).not.toHaveBeenCalled();
         });
 
         test("Sets up debug events when debugMode on scene is not loader or boot", () => {
-            qaMode.debugMode = jest.fn().mockImplementation(() => true);
+            debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
             createAndInitScreen();
 
-            expect(screen.events.on).toHaveBeenCalledWith("create", screen.addDebugGraphics, screen);
+            expect(screen.events.on).toHaveBeenCalledWith("create", screen.debug.create, screen);
         });
 
-        test("debugDraw method clears graphics and calls debugDraw Module", () => {
+        test("debug.draw method clears graphics and calls debugDraw Module", () => {
             debugDrawModule.debugDraw = jest.fn();
             createAndInitScreen();
             screen.debugGraphics = { clear: jest.fn() };
 
-            screen.debugDraw();
+            screen.debug.draw.call(screen);
 
             expect(screen.debugGraphics.clear).toHaveBeenCalled();
             expect(debugDrawModule.debugDraw).toHaveBeenCalled();
         });
 
-        test("addDebugGraphics method calls debugKeys setup on debugdraw module", () => {
+        test("debug.addEvents method calls debugKeys setup on debugdraw module", () => {
             debugDrawModule.setupDebugKeys = jest.fn();
             createAndInitScreen();
 
-            screen.addDebugGraphics();
+            screen.debug.create.call(screen);
 
             expect(screen.debugGraphics).toEqual(mockGfx);
             expect(debugDrawModule.setupDebugKeys).toHaveBeenCalled();
