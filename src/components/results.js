@@ -9,7 +9,6 @@ import { eventBus } from "../core/event-bus.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { getMetrics } from "../core/scaler.js";
 import { GelGrid } from "../core/layout/gel-grid.js";
-import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 const getScoreMetaData = result => {
     if (typeof result === "number") {
@@ -37,7 +36,6 @@ export class Results extends Screen {
 
         this.createLayout();
         fireGameCompleteStat(this.transientData.results);
-        createTestHarnessDisplay(this);
         this.subscribeToEventBus();
     }
 

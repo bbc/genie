@@ -7,7 +7,6 @@ import { domElement } from "../mock/dom-element";
 import { createMockGmi } from "../mock/gmi";
 
 import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
-import * as layoutHarness from "../../src/core/qa/layout-harness.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
@@ -23,8 +22,6 @@ describe("How To Play Screen", () => {
     let mockGmi;
 
     beforeEach(() => {
-        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
-
         characterSprites = [{ visible: "" }, { visible: "" }, { visible: "" }];
         mockAccessibleElements = [domElement(), domElement(), domElement()];
 
@@ -129,11 +126,6 @@ describe("How To Play Screen", () => {
 
         test("adds the choices", () => {
             expect(howToPlayScreen.choiceSprites).toEqual(characterSprites);
-        });
-
-        test("creates a layout harness with correct params", () => {
-            howToPlayScreen.create();
-            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(howToPlayScreen);
         });
 
         test("does not adjust page title position when on how to play", () => {

@@ -9,7 +9,7 @@
  */
 import { gmi, setGmi } from "./gmi/gmi.js";
 import { addCustomStyles } from "./custom-styles.js";
-import * as qaMode from "./qa/qa-mode.js";
+import * as debugMode from "./debug/debug-mode.js";
 import { getBrowser } from "./browser.js";
 import { Loader } from "./loader/loader.js";
 import { Boot } from "./loader/boot.js";
@@ -17,6 +17,7 @@ import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
 import { JSON5Plugin } from "./loader/json5-loader/json5-plugin.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
+import { addGelButton } from "./layout/gel-game-objects.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key, ...conf[key].settings }));
 
@@ -27,6 +28,8 @@ export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scen
 export function startup(screenConfig, settingsConfig = {}) {
     setGmi(settingsConfig, window);
     hookErrors(gmi.gameContainerId);
+
+    Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
 
     const browser = getBrowser();
     const scenes = getScenes(screenConfig);
@@ -72,20 +75,11 @@ export function startup(screenConfig, settingsConfig = {}) {
         },
     };
 
-    if (qaMode.debugMode()) {
-        phaserConfig.physics = {
-            default: "arcade",
-            arcade: {
-                debug: true,
-            },
-        };
-    }
-
     addCustomStyles();
 
     const game = new Phaser.Game(phaserConfig);
 
-    qaMode.create(window, game);
+    debugMode.create(window, game);
     a11y.setup(getContainerDiv());
 }
 

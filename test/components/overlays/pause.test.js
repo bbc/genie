@@ -3,8 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
-import * as layoutHarness from "../../../src/core/qa/layout-harness.js";
 import { Pause } from "../../../src/components/overlays/pause";
 
 describe("Pause Overlay", () => {
@@ -13,7 +11,6 @@ describe("Pause Overlay", () => {
     let mockData;
 
     beforeEach(() => {
-        layoutHarness.createTestHarnessDisplay = jest.fn();
         mockBoundResumeAllFunction = {
             some: "mock",
         };
@@ -86,11 +83,6 @@ describe("Pause Overlay", () => {
             mockData.navigation["level-select"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
-        });
-
-        test("creates a layout harness with correct params", () => {
-            pauseScreen.create();
-            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(pauseScreen);
         });
     });
 });
