@@ -12,7 +12,6 @@ import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
 import * as accessibleCarouselElements from "../core/accessibility/accessible-carousel-elements.js";
 import { gmi } from "../core/gmi/gmi.js";
-import { createTestHarnessDisplay } from "../core/qa/layout-harness.js";
 
 const wrapRange = (value, max) => ((value % max) + max) % max;
 
@@ -44,7 +43,6 @@ export class HowToPlay extends Screen {
         );
 
         this.addEventSubscriptions();
-        createTestHarnessDisplay(this);
     }
 
     setButtonVisibility() {
