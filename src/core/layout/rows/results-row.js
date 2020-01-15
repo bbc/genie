@@ -9,19 +9,21 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         super(scene);
         this.rowConfig = rowConfig;
         this.getDrawArea = getDrawArea;
-
-        this.debugDraw();
+        this.drawRow();
     }
 
-    debugDraw() {
-        this.drawArea = this.getDrawArea();
-        this.debugGraphics = this.scene.add.graphics();
-        this.debugGraphics.lineStyle(2, 0xff0000, 1);
-        this.debugGraphics.strokeRectShape(this.drawArea);
+    drawRow() {
+        const drawArea = this.getDrawArea();
+        this.addAt(
+            new Phaser.GameObjects.Text(this.scene, drawArea.centerX, drawArea.centerY, "Placeholder Row Text", {
+                color: "#000000",
+            }).setOrigin(0.5, 0.5),
+        );
     }
 
-    reset() {
-        this.debugGraphics.clear();
-        this.debugDraw();
+    getBoundingRect() {
+        return this.getDrawArea();
     }
+
+    reset() {}
 }
