@@ -206,6 +206,17 @@ describe("Group", () => {
 
         describe("when vPos is top and hPos is left", () => {
             it("correctly takes hitArea into account", () => {
+                /*
+                metrics = {
+            borderPad: 100,
+            buttonPad: 50,
+            horizontals: { left: -1000, center: 0, right: 1000 },
+            safeHorizontals: { left: -300, center: 0, right: 300 },
+            verticals: { top: -1500, middle: 0, bottom: 1500 },
+            scale: 1,
+        };
+                 */
+
                 const leftSpy = jest.fn();
                 const topSpy = jest.fn();
                 const createButtonStub = jest.spyOn(buttonFactory, "createButton");
@@ -261,16 +272,8 @@ describe("Group", () => {
 
         describe("when vPos is bottom and hPos is right", () => {
             test("correctly takes hitArea into account", () => {
-                const rightSpy = jest.fn();
-                const bottomSpy = jest.fn();
                 const createButtonStub = jest.spyOn(buttonFactory, "createButton");
-
-                vPos = "bottom";
-                hPos = "right";
-                group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics);
-
-                Object.defineProperty(group, "x", { set: rightSpy });
-                Object.defineProperty(group, "y", { set: bottomSpy });
+                group = new GelGroup(mockScene, parentGroup, "bottom", "right", metrics);
 
                 createButtonStub.mockImplementation(() => ({
                     x: 50,
@@ -278,39 +281,17 @@ describe("Group", () => {
                     width: 50,
                     height: 50,
                     input: {
-                        hitArea: {
-                            right: 1000,
-                            bottom: 1000,
-                        },
+                        hitArea: {},
                     },
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
-                    getHitAreaBounds: () => ({ right: 1000, bottom: 1000 }),
+                    getHitAreaBounds: () => ({ top: -50, left: -100, width: 100, height: 50 }),
                 }));
                 group.addButton(config);
 
-                createButtonStub.mockImplementation(() => ({
-                    x: 50,
-                    y: 50,
-                    width: 50,
-                    height: 50,
-                    input: {
-                        hitArea: {
-                            right: 0,
-                            bottom: 0,
-                        },
-                    },
-                    updateIndicatorPosition: () => {},
-                    updateTransform: () => {},
-                    resize: buttonResizeStub,
-                    getHitAreaBounds: () => ({ right: 0, bottom: 0 }),
-                }));
-                group.addButton(config);
-                group.reset(metrics);
-
-                expect(rightSpy).toHaveBeenCalledWith(900);
-                expect(bottomSpy).toHaveBeenCalledWith(1400);
+                expect(group.x).toBe(800);
+                expect(group.y).toBe(1350);
             });
         });
     });
@@ -361,7 +342,13 @@ describe("Group", () => {
             const expectedGroupXPosition = 0;
             const expectedGroupYPosition = -333;
             const desktopMetrics = { horizontals: {}, verticals: {} };
-            const moreDesktopMetrics = { borderPad: 0, horizontals: { center: 0 }, verticals: { top: -333 } };
+            const moreDesktopMetrics = {
+                borderPad: 0,
+                horizontals: { center: 0 },
+                verticals: { top: -333 },
+                buttonPad: 0,
+                scale: 1,
+            };
 
             group = new GelGroup(mockScene, parentGroup, "top", "center", desktopMetrics, false);
             group.reset(moreDesktopMetrics);

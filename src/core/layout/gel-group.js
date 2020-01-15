@@ -116,6 +116,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
         const invScale = 1 / metrics.scale;
 
         this.setScale(invScale);
+        this.updateSize();
         this._setGroupPosition(metrics);
 
         this._buttons.forEach(button => {
@@ -123,8 +124,6 @@ export class GelGroup extends Phaser.GameObjects.Container {
             button.y = button.y + button.shiftY * metrics.scale;
             button.updateIndicatorPosition();
         });
-
-        this.updateSize();
     }
 
     updateSize() {
