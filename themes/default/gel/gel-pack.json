@@ -30,6 +30,18 @@
                 }
             },
             {
+                "type": "spritesheet",
+                "key": "achievements-circular",
+                "url": "gel/desktop/achievements-results.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 3
+                }
+            },
+            {
                 "type": "image",
                 "key": "notification",
                 "url": "gel/desktop/notification.png",
@@ -228,6 +240,18 @@
                     "frameMax": 2,
                     "margin": 0,
                     "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "achievements-circular",
+                "url": "gel/mobile/achievements-results.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 3
                 }
             },
             {
