@@ -26,9 +26,4 @@ export class Home extends Screen {
             callback: this.navigation.next,
         });
     }
-
-    //update() {
-    //    this.debugGraphics.lineStyle(5,0xFF0000, 1)
-    //    this.debugGraphics.strokeCircle(0,0,50)
-    //}
 }
