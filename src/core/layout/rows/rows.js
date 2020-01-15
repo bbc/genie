@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { ResultsRow } from "./rows/results-row.js";
+import { ResultsRow } from "./results-row.js";
 
 export const RowType = {
     Results: ResultsRow,
@@ -12,6 +12,12 @@ export const RowType = {
 
 export function create(scene, rowsConfig, rowType) {
     let containers = [];
+
+    const createRow = (rowConfig, index) => {
+        const container = new rowType(scene, rowConfig, getRectForRow(index));
+        containers.push(container);
+        scene.layout.addCustomGroup(`row-${index}`, container);
+    };
 
     const getRectForRow = index => () => {
         const drawArea = scene.layout.getSafeArea();
@@ -22,8 +28,7 @@ export function create(scene, rowsConfig, rowType) {
         return new Phaser.Geom.Rectangle(drawArea.x, topOfRow, drawArea.width, rowHeight);
     };
 
-    const addRow = (rowConfig, index) => containers.push(new rowType(scene, rowConfig, getRectForRow(index)));
-    rowsConfig.forEach((rowConfig, index) => addRow(rowConfig, index));
+    rowsConfig.forEach((rowConfig, index) => createRow(rowConfig, index));
 
     return {
         containers,

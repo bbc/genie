@@ -7,7 +7,7 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
 import { gmi } from "../core/gmi/gmi.js";
-import * as GelRows from "../core/layout/gel-rows.js";
+import * as Rows from "../core/layout/rows/rows.js";
 
 const getScoreMetaData = result => {
     if (typeof result === "number") {
@@ -43,8 +43,7 @@ export class Results extends Screen {
         const buttons = ["pause", "restart", "continueGame"];
         this.setLayout(buttons.concat(achievements));
 
-        this.gelRows = GelRows.create(this, this.theme.rows, GelRows.RowType.Results);
-        this.gelRows.containers.forEach((container, index) => this.layout.addCustomGroup(`row-${index}`, container));
+        this.rows = Rows.create(this, this.theme.rows, Rows.RowType.Results);
     }
 
     subscribeToEventBus() {
