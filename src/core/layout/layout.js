@@ -106,7 +106,7 @@ export function create(scene, metrics, buttonIds) {
         return new Phaser.Geom.Rectangle(x, y, groups.middleRightSafe.x - x, groups.bottomCenter.y - y);
     };
 
-    const groupHasChildren = group => group.list.length;
+    const groupHasChildren = group => Boolean(group.list.length);
 
     const drawGroups = graphics => {
         graphics.lineStyle(2, 0x33ff33, 1);

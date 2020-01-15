@@ -14,15 +14,6 @@ jest.mock("../../../src/core/layout/gel-button.js", () => ({
     GelButton: jest.fn(() => mockGelButton),
 }));
 
-/*
-export function addGelButton(x, y, metrics, config) {
-    const gelButton = new GelButton(this.scene, x, y, metrics, config);
-    return gelButton;
-}
-
-
- */
-
 describe("addGelButton", () => {
     let mockScene;
     let mockThis;
