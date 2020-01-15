@@ -6,10 +6,11 @@
 import { createMockGmi } from "../mock/gmi";
 import * as Scaler from "../../src/core/scaler.js";
 import { eventBus } from "../../src/core/event-bus.js";
+import * as Rows from "../../src/core/layout/rows/rows.js";
 
 import { Results } from "../../src/components/results";
 
-jest.mock("../../src/core/layout/gel-grid.js");
+jest.mock("../../src/core/layout/rows/rows.js");
 jest.mock("../../src/core/screen.js");
 
 describe("Results Screen", () => {
@@ -92,10 +93,9 @@ describe("Results Screen", () => {
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        test("adds a gel grid to the layout", () => {
+        test("creates rows for the results screen", () => {
             resultsScreen.create();
-            expect(resultsScreen.grid.addGridCells).toHaveBeenCalledWith(mockConfig.theme.resultsScreen.rows);
-            expect(resultsScreen.layout.addCustomGroup).toHaveBeenCalledWith("grid", resultsScreen.grid);
+            expect(Rows.create).toHaveBeenCalledWith(resultsScreen, resultsScreen.theme.rows, Rows.RowType.Results);
         });
 
         test("adds the achievement button when theme flag is set", () => {

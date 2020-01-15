@@ -10,6 +10,7 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.rowConfig = rowConfig;
         this.getDrawArea = getDrawArea;
         this.drawRow();
+        this.reset();
     }
 
     drawRow() {
