@@ -7,7 +7,7 @@ import { addGelButton } from "../../../src/core/layout/gel-game-objects.js";
 
 const mockGelButton = {
     test: "data",
-    sprite: "testSprite"
+    sprite: "testSprite",
 };
 
 jest.mock("../../../src/core/layout/gel-button.js", () => ({

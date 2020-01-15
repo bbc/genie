@@ -16,7 +16,7 @@ import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
 import { addAnimations } from "./background-animations.js";
 import { debugMode } from "./debug/debug-mode.js";
-import { debugDraw, setupDebugKeys } from "./debug/layout-debug-draw.js";
+import { debugDraw, setupDebugKeys } from "./debug/debug-draw.js";
 
 export const overlayChannel = "gel-overlays";
 

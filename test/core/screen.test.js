@@ -14,7 +14,7 @@ import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults";
 import { settingsChannel } from "../../src/core/settings.js";
 import * as qaMode from "../../src/core/debug/debug-mode.js";
-import * as debugDrawModule from "../../src/core/debug/layout-debug-draw.js";
+import * as debugDrawModule from "../../src/core/debug/debug-draw.js";
 
 describe("Screen", () => {
     let screen;

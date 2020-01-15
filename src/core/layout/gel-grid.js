@@ -35,10 +35,10 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const rowPaddingCount = this._rows - 1;
         const paddingAdjustmentX = colPaddingCount * this._cellPadding;
         const paddingAdjustmentY = rowPaddingCount * this._cellPadding;
-        return {
-            width: (this._safeArea.width - paddingAdjustmentX) / this._columns,
-            height: (this._safeArea.height - paddingAdjustmentY) / this._rows,
-        };
+        return [
+            (this._safeArea.width - paddingAdjustmentX) / this._columns,
+            (this._safeArea.height - paddingAdjustmentY) / this._rows,
+        ];
     }
 
     resize(metrics, safeArea) {
@@ -94,10 +94,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     setCellSize(cellIndex) {
-        const cellSize = this.calculateCellSize();
-
-        this._cells[cellIndex].displayWidth = cellSize.width;
-        this._cells[cellIndex].displayHeight = cellSize.height;
+        //this._cells[cellIndex].setSize(...this.calculateCellSize())
+        this._cells[cellIndex].setDisplaySize(...this.calculateCellSize());
     }
 
     setCellVisibility(cellIndex) {
@@ -129,7 +127,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     setLayoutLimits() {
         const columns = this._columns;
         const rows = this._rows;
-        const maxColumns = rows == 1 ? 4 : 3;
+        const maxColumns = rows === 1 ? 4 : 3;
         const maxRows = 2;
         this._columns = Math.min(columns, maxColumns);
         this._rows = Math.min(maxRows, rows);
@@ -155,9 +153,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     resetCells() {
-        this._cells.map(cell => {
-            cell.visible = false;
-        });
+        this._cells.map(cell => (cell.visible = false));
     }
 
     getPageCount() {

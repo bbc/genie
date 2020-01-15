@@ -363,7 +363,7 @@ describe("Gel Button", () => {
 
     describe("Animated Buttons", () => {
         test("sets depth of indicator to 1", () => {
-            mockConfig.animConfig = {
+            mockConfig.anim = {
                 key: "character-select.char1",
                 frames: 18,
                 frameRate: 6,
