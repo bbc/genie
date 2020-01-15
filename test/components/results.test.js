@@ -4,32 +4,39 @@
  * @license Apache-2.0
  */
 import { createMockGmi } from "../mock/gmi";
+import * as Scaler from "../../src/core/scaler.js";
 import { eventBus } from "../../src/core/event-bus.js";
 
 import { Results } from "../../src/components/results";
 
+jest.mock("../../src/core/layout/gel-grid.js");
+jest.mock("../../src/core/screen.js");
+
 describe("Results Screen", () => {
     let resultsScreen;
-    let mockData;
+    let mockConfig;
+    let mockTransientData;
     let mockGmi;
     let mockTextAdd;
 
     beforeEach(() => {
-        mockData = {
-            config: {
-                theme: {
-                    resultsScreen: {
-                        resultText: {
-                            style: { font: "36px ReithSans" },
-                        },
+        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
+        Scaler.getMetrics = jest.fn();
+
+        mockConfig = {
+            theme: {
+                resultsScreen: {
+                    resultText: {
+                        style: { font: "36px ReithSans" },
                     },
-                    game: {},
+                    rows: [],
                 },
+                game: {},
             },
-            transient: {
-                results: 22,
-                characterSelected: 1,
-            },
+        };
+        mockTransientData = {
+            results: 22,
+            characterSelected: 1,
         };
 
         mockGmi = { sendStatsEvent: jest.fn() };
@@ -42,8 +49,11 @@ describe("Results Screen", () => {
                 })),
             })),
         };
-
         resultsScreen = new Results();
+        resultsScreen.layout = { addCustomGroup: jest.fn() };
+        resultsScreen.context = { config: mockConfig, transientData: mockTransientData };
+        resultsScreen.transientData = mockTransientData;
+        resultsScreen.addAnimations = jest.fn(() => () => {});
         resultsScreen.setLayout = jest.fn();
         resultsScreen.add = {
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
@@ -52,7 +62,6 @@ describe("Results Screen", () => {
         resultsScreen.scene = {
             key: "resultsScreen",
         };
-        resultsScreen.setData(mockData);
         resultsScreen.navigation = {
             next: jest.fn(),
             game: jest.fn(),
@@ -82,6 +91,12 @@ describe("Results Screen", () => {
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+
+        test("adds a gel grid to the layout", () => {
+            resultsScreen.create();
+            expect(resultsScreen.grid.addGridCells).toHaveBeenCalledWith(mockConfig.theme.resultsScreen.rows);
+            expect(resultsScreen.layout.addCustomGroup).toHaveBeenCalledWith("grid", resultsScreen.grid);
         });
 
         test("adds the achievement button when theme flag is set", () => {
