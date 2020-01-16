@@ -50,7 +50,13 @@ describe("Results Screen", () => {
             })),
         };
         resultsScreen = new Results();
-        resultsScreen.layout = { addCustomGroup: jest.fn() };
+        resultsScreen.layout = {
+            addCustomGroup: jest.fn(),
+            buttons: {
+                next: {},
+                previous: {},
+            },
+        };
         resultsScreen.context = { config: mockConfig, transientData: mockTransientData };
         resultsScreen.transientData = mockTransientData;
         resultsScreen.addAnimations = jest.fn(() => () => {});
@@ -89,7 +95,7 @@ describe("Results Screen", () => {
 
         test("adds GEL buttons to layout", () => {
             resultsScreen.create();
-            const expectedButtons = ["pause", "restart", "continueGame"];
+            const expectedButtons = ["pause", "restart", "continueGame", "next", "previous"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
@@ -101,7 +107,7 @@ describe("Results Screen", () => {
         test("adds the achievement button when theme flag is set", () => {
             resultsScreen.context.config.theme.game.achievements = true;
             resultsScreen.create();
-            const expectedButtons = ["pause", "restart", "continueGame", "achievements"];
+            const expectedButtons = ["pause", "restart", "continueGame", "next", "previous", "achievements"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
