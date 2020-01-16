@@ -72,7 +72,9 @@ describe("Accessibilify", () => {
             active: true,
             disableInteractive: jest.fn(),
             emit: jest.fn(),
-            name: "__play",
+            config: {
+                name: "__play",
+            },
             game: mockScene,
             getTopLeft: () => mockButtonBounds.topLeft,
             toGlobal: p => p,

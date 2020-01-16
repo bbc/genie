@@ -30,7 +30,7 @@ describe("Select Screen", () => {
     let mockBounds;
     let mockTextBounds;
     let mockMetrics;
-    let mockCellKeys;
+    let mockCellIds;
     let defaultTextStyle;
     let unsubscribe = jest.fn();
     let mockNextPage = jest.fn();
@@ -40,8 +40,8 @@ describe("Select Screen", () => {
         jest.spyOn(elementBounding, "positionElement").mockImplementation(() => {});
 
         const mockGelGrid = {
-            cellKeys: jest.fn(() => {
-                return mockCellKeys;
+            cellIds: jest.fn(() => {
+                return mockCellIds;
             }),
             addGridCells: jest.fn(),
             makeAccessible: jest.fn(),
@@ -121,7 +121,7 @@ describe("Select Screen", () => {
             buttonPad: 12,
             screenToCanvas: jest.fn(x => x),
         };
-        mockCellKeys = [];
+        mockCellIds = [];
         fillRectShapeSpy = jest.fn();
         selectScreen = new Select();
         selectScreen.setData(mockData);
@@ -150,6 +150,9 @@ describe("Select Screen", () => {
                 }
                 if (assetName === "test-select.character3") {
                     return characterSprites[2];
+                }
+                if (assetName === "test_asset") {
+                    return "test-sprite";
                 }
             }),
         };
@@ -429,14 +432,14 @@ describe("Select Screen", () => {
         });
 
         test("adds event subscriptions for grid buttons", () => {
-            mockCellKeys = ["key1", "key2"];
+            mockCellIds = ["key1", "key2"];
             selectScreen.create();
             expect(eventBus.subscribe.mock.calls[0][0].name).toBe("key1");
             expect(eventBus.subscribe.mock.calls[1][0].name).toBe("key2");
         });
 
         test("moves to the next screen when grid cell is pressed", () => {
-            mockCellKeys = ["key1", "key2"];
+            mockCellIds = ["key1", "key2"];
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[1][0].callback();
@@ -444,7 +447,7 @@ describe("Select Screen", () => {
         });
 
         test("moves to the next page when next page is pressed", () => {
-            mockCellKeys = ["key1", "key2"];
+            mockCellIds = ["key1", "key2"];
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[3][0].callback();
@@ -453,7 +456,7 @@ describe("Select Screen", () => {
         });
 
         test("moves to the previous page when next page is pressed", () => {
-            mockCellKeys = ["key1", "key2"];
+            mockCellIds = ["key1", "key2"];
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[4][0].callback();
@@ -462,7 +465,7 @@ describe("Select Screen", () => {
         });
 
         test("saves choice to transient data", () => {
-            mockCellKeys = ["key1"];
+            mockCellIds = ["key1"];
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[0][0].callback();
@@ -474,14 +477,14 @@ describe("Select Screen", () => {
         test("updates the overlays for cells with matching id", () => {
             selectScreen.create();
 
-            selectScreen._cells = [{ _id: "id_one", overlays: { set: jest.fn() } }];
+            selectScreen._cells = [{ config: { id: "id_one" }, overlays: { set: jest.fn() } }];
             selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
 
             selectScreen.context.theme.states = { locked: { x: 10, y: 20, asset: "test_asset" } };
 
             selectScreen.updateStates();
 
-            expect(selectScreen._cells[0].overlays.set).toHaveBeenCalledWith("state", 10, 20, "test_asset");
+            expect(selectScreen._cells[0].overlays.set).toHaveBeenCalledWith("state", "test-sprite");
         });
     });
 });

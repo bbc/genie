@@ -69,7 +69,7 @@ export function accessibilify(button, gameButton = true) {
         const marginTop = parseInt(sys.game.canvas.style.marginTop, 10);
         const scale = viewHeight / realHeight;
 
-        let bounds = button.getBounds();
+        let bounds = button.getHitAreaBounds();
         bounds.x -= CAMERA_SCROLL_X_OFFSET;
         bounds.x *= scale;
         bounds.x += marginLeft;
@@ -80,8 +80,6 @@ export function accessibilify(button, gameButton = true) {
         if (button.input.hitArea) {
             bounds.width = button.input.hitArea.width * button.scale;
             bounds.height = button.input.hitArea.height * button.scale;
-            bounds.x += button.input.hitArea.x;
-            bounds.y += button.input.hitArea.y;
         }
 
         if (gameButton) {

@@ -56,7 +56,7 @@ export class Select extends Screen {
         states.forEach(state => {
             const config = this.context.theme.states[state.state];
             keyedCells[state.id].overlays.set("state", this.add.sprite(config.x, config.y, config.asset));
-        });
+        }, this);
     }
 
     resize() {
@@ -154,8 +154,6 @@ export class Select extends Screen {
             .cellIds()
             .concat(["continue"])
             .map(key => {
-
-                console.log(key)
                 eventBus.subscribe({
                     channel: buttonsChannel(this),
                     name: key,

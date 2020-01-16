@@ -58,8 +58,10 @@ describe("Group", () => {
                 updateIndicatorPosition: jest.fn(),
                 updateTransform: () => {},
                 resize: buttonResizeStub,
-                shiftX: 0,
-                shiftY: 0,
+                config: {
+                    shiftX: 0,
+                    shiftY: 0,
+                },
                 getHitAreaBounds: mockGetHitAreaBounds,
             }),
         };
