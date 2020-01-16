@@ -17,8 +17,8 @@ export class Indicator extends Phaser.GameObjects.Sprite {
 
     resize() {
         const { x, y, width } = this.gelButton.getBounds();
-        this.x = x + width;
-        this.y = y;
+        this.x = x + width - this.width / 2 + 3;
+        this.y = y - 3 + this.height / 2;
         this.setTexture(assetPath({ key: "notification", isMobile: this.gelButton._isMobile }));
     }
 }

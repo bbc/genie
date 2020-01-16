@@ -102,8 +102,8 @@ export class GelButton extends Phaser.GameObjects.Container {
 
     setIndicator() {
         this.indicator.destroy();
-        const show = this._key === "achievements" && gmi.achievements.unseen;
-        this.indicator = show ? new Indicator(this) : noIndicator;
+        const show = (this._key === "achievements" || this._key === "achievements-circular") && gmi.achievements.unseen;
+        this.indicator = show ? new Indicator(this.sprite, this._key) : noIndicator;
     }
 
     updateIndicatorPosition() {

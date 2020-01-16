@@ -72,6 +72,7 @@ describe("Gel Button", () => {
                 load: jest.fn(),
             },
         };
+        mockSprite.scene = mockScene;
         mockX = 7;
         mockY = 42;
         mockMetrics = {
@@ -301,12 +302,14 @@ describe("Gel Button", () => {
             mockConfig.key = "achievements";
             gmi.achievements.unseen = true;
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            gelButton.getBounds = () => {
+            gelButton.sprite.getBounds = () => {
                 return { x: 50, y: 80, width: 100 };
             };
+            gelButton.indicator.height = 24;
+            gelButton.indicator.width = 24;
             gelButton.updateIndicatorPosition();
-            expect(gelButton.indicator.x).toBe(150);
-            expect(gelButton.indicator.y).toBe(80);
+            expect(gelButton.indicator.x).toBe(141);
+            expect(gelButton.indicator.y).toBe(89);
         });
 
         test("indicator resize function updates texture", () => {
@@ -314,7 +317,9 @@ describe("Gel Button", () => {
             gmi.achievements.unseen = true;
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.indicator.setTexture = jest.fn();
-            gelButton.getBounds = () => ({ x: 50, y: 80, width: 100 });
+            gelButton.indicator.height = 24;
+            gelButton.indicator.width = 24;
+            gelButton.sprite.getBounds = () => ({ x: 50, y: 80, width: 100 });
             gelButton.updateIndicatorPosition();
             expect(gelButton.indicator.setTexture).toHaveBeenCalledWith(
                 assetPath({ key: "notification", isMobile: gelButton._isMobile }),
