@@ -37,6 +37,8 @@
                     transition: 'appear', // (appear|fade|pop) look at passing generic phaser ease in
                 },
                 {},
+                {},
+                {},
             ],
         },
     },
