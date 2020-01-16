@@ -32,5 +32,6 @@ export function create(scene, rowsConfig, rowType) {
 
     return {
         containers,
+        getRectForRow,
     };
 }
