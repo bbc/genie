@@ -7,8 +7,7 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
 import { gmi } from "../core/gmi/gmi.js";
-import { getMetrics } from "../core/scaler.js";
-import { GelGrid } from "../core/layout/gel-grid.js";
+import * as Rows from "../core/layout/rows/rows.js";
 
 const getScoreMetaData = result => {
     if (typeof result === "number") {
@@ -41,13 +40,12 @@ export class Results extends Screen {
 
     createLayout() {
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
-        const buttons = ["pause", "restart", "continueGame"];
+        const buttons = ["pause", "restart", "continueGame", "next", "previous"]; // TODO remove next and previous buttons
         this.setLayout(buttons.concat(achievements));
+        this.layout.buttons.next.visible = false;
+        this.layout.buttons.previous.visible = false;
 
-        this.safeArea = new Phaser.Geom.Rectangle(50, 50, 300, 200);
-        this.grid = new GelGrid(this, getMetrics(), this.safeArea, this.theme.rows.length);
-        this.grid.addGridCells(this.theme.rows);
-        this.layout.addCustomGroup("grid", this.grid);
+        this.rows = Rows.create(this, this.theme.rows, Rows.RowType.Results);
     }
 
     subscribeToEventBus() {
