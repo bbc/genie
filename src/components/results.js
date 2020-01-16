@@ -40,8 +40,10 @@ export class Results extends Screen {
 
     createLayout() {
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
-        const buttons = ["pause", "restart", "continueGame"];
+        const buttons = ["pause", "restart", "continueGame", "next", "previous"]; // TODO remove next and previous buttons
         this.setLayout(buttons.concat(achievements));
+        this.layout.buttons.next.visible = false;
+        this.layout.buttons.previous.visible = false;
 
         this.rows = Rows.create(this, this.theme.rows, Rows.RowType.Results);
     }
