@@ -23,7 +23,7 @@
         "bowser": "2.4.0",
         "expose-loader": "^0.7.5",
         "json5": "^2.1.1",
-        "phaser": "^3.21.0",
+        "phaser": "^3.22.0",
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {
