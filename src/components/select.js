@@ -51,11 +51,11 @@ export class Select extends Screen {
 
     updateStates() {
         const states = this.states.getAll().filter(config => Boolean(config.state));
-        const keyedCells = fp.keyBy(cell => cell._id, this._cells);
+        const keyedCells = fp.keyBy(cell => cell.config.id, this._cells);
 
         states.forEach(state => {
             const config = this.context.theme.states[state.state];
-            keyedCells[state.id].overlays.set("state", config.x, config.y, config.asset);
+            keyedCells[state.id].overlays.set("state", this.add.sprite(config.x, config.y, config.asset));
         });
     }
 
@@ -151,9 +151,11 @@ export class Select extends Screen {
 
     addEventSubscriptions() {
         this.grid
-            .cellKeys()
+            .cellIds()
             .concat(["continue"])
             .map(key => {
+
+                console.log(key)
                 eventBus.subscribe({
                     channel: buttonsChannel(this),
                     name: key,

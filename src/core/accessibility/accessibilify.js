@@ -12,13 +12,13 @@ import * as a11y from "./accessibility-layer.js";
 const CAMERA_SCROLL_X_OFFSET = -700;
 const CAMERA_SCROLL_Y_OFFSET = -300;
 
-export function accessibilify(button, config, gameButton = true) {
-    config = Object.assign(
+export function accessibilify(button, gameButton = true) {
+    const config = Object.assign(
         {
-            id: button.name,
-            ariaLabel: button.name,
+            id: button.config.name,
+            ariaLabel: button.config.name,
         },
-        config,
+        button.config,
     );
 
     let event;

@@ -103,7 +103,7 @@ describe("Gel Button", () => {
         test("correctly sets class properties", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             expect(gelButton._key).toBe(mockConfig.key);
-            expect(gelButton._isMobile).toBe(mockMetrics.isMobile);
+            expect(gelButton.isMobile).toBe(mockMetrics.isMobile);
             expect(gelButton.positionOverride).toBe(mockConfig.positionOverride);
             expect(gelButton.shiftX).toBe(mockConfig.shiftX);
             expect(gelButton.shiftY).toBe(mockConfig.shiftY);
@@ -197,7 +197,7 @@ describe("Gel Button", () => {
             gelButton.setTexture = jest.fn();
             gelButton.setImage("mockKey");
             expect(mockSprite.setTexture).toHaveBeenCalledWith(
-                assetPath({ key: "mockKey", isMobile: gelButton._isMobile }),
+                assetPath({ key: "mockKey", isMobile: gelButton.isMobile }),
             );
         });
     });
@@ -207,7 +207,7 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.resize(mockMetrics);
             expect(mockSprite.setTexture).toHaveBeenCalledWith(
-                assetPath({ key: gelButton._key, isMobile: gelButton._isMobile }),
+                assetPath({ key: gelButton._key, isMobile: gelButton.isMobile }),
             );
         });
         test("sets the button hit area", () => {
@@ -317,7 +317,7 @@ describe("Gel Button", () => {
             gelButton.getBounds = () => ({ x: 50, y: 80, width: 100 });
             gelButton.updateIndicatorPosition();
             expect(gelButton.indicator.setTexture).toHaveBeenCalledWith(
-                assetPath({ key: "notification", isMobile: gelButton._isMobile }),
+                assetPath({ key: "notification", isMobile: gelButton.isMobile }),
             );
         });
     });
