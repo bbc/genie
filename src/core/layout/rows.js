@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { ResultsRow } from "./results-row.js";
+import { ResultsRow } from "../../components/results/results-row.js";
 
 export const RowType = {
     Results: ResultsRow,
