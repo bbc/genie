@@ -27,7 +27,7 @@ describe("Grid", () => {
                 key: "item-select",
             },
             add: {
-                gelButton: jest.fn(() => ({
+                gelButton: jest.fn((x, y, metrics, config) => ({
                     visible: false,
                     input: { enabled: false },
                     x: 50,
@@ -39,6 +39,9 @@ describe("Grid", () => {
                     setDisplaySize: function(width, height) {
                         this.displayWidth = width;
                         this.displayHeight = height;
+                    },
+                    config: {
+                        id: config.id,
                     },
                 })),
             },
@@ -160,12 +163,12 @@ describe("Grid", () => {
             expect(actualParams[1]).toBe(0);
         });
 
-        test("returns keys for multiple cells", () => {
-            mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }, { asset: "asset_name_3" }];
-            const expectedKeys = ["asset_name_1", "asset_name_2", "asset_name_3"];
+        test("returns ids for multiple cells", () => {
+            mockScene.theme.choices = [{ id: "asset_name_1" }, { id: "asset_name_2" }, { id: "asset_name_3" }];
+            const expectedIds = ["asset_name_1", "asset_name_2", "asset_name_3"];
             grid = new GelGrid(mockScene, metrics, mockSafeArea);
             grid.addGridCells(mockScene.theme.choices);
-            expect(grid.cellKeys()).toEqual(expectedKeys);
+            expect(grid.cellIds()).toEqual(expectedIds);
         });
 
         describe("accessibility", () => {

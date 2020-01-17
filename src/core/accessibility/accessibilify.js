@@ -12,13 +12,13 @@ import * as a11y from "./accessibility-layer.js";
 const CAMERA_SCROLL_X_OFFSET = -700;
 const CAMERA_SCROLL_Y_OFFSET = -300;
 
-export function accessibilify(button, config, gameButton = true) {
-    config = Object.assign(
+export function accessibilify(button, gameButton = true) {
+    const config = Object.assign(
         {
-            id: button.name,
-            ariaLabel: button.name,
+            id: button.config.name,
+            ariaLabel: button.config.name,
         },
-        config,
+        button.config,
     );
 
     let event;
@@ -69,7 +69,7 @@ export function accessibilify(button, config, gameButton = true) {
         const marginTop = parseInt(sys.game.canvas.style.marginTop, 10);
         const scale = viewHeight / realHeight;
 
-        let bounds = button.getBounds();
+        let bounds = button.getHitAreaBounds ? button.getHitAreaBounds() : button.getBounds();
         bounds.x -= CAMERA_SCROLL_X_OFFSET;
         bounds.x *= scale;
         bounds.x += marginLeft;
@@ -80,8 +80,6 @@ export function accessibilify(button, config, gameButton = true) {
         if (button.input.hitArea) {
             bounds.width = button.input.hitArea.width * button.scale;
             bounds.height = button.input.hitArea.height * button.scale;
-            bounds.x += button.input.hitArea.x;
-            bounds.y += button.input.hitArea.y;
         }
 
         if (gameButton) {
