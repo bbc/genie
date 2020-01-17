@@ -26,5 +26,13 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         return this.getDrawArea();
     }
 
-    reset() {}
+    reset() {
+        const drawArea = this.getDrawArea();
+        this.iterate(gameObject => {
+            gameObject.x = drawArea.centerX;
+            gameObject.y = drawArea.centerY;
+        });
+    }
+
+    makeAccessible() {}
 }
