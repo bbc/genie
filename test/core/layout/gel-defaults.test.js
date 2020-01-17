@@ -48,7 +48,7 @@ describe("Layout - Gel Defaults", () => {
             layout: {
                 buttons: {
                     achievements: { setIndicator: clearIndicatorSpy },
-                    achievementsCircular: { setIndicator: clearIndicatorSpy },
+                    achievementsSmall: { setIndicator: clearIndicatorSpy },
                 },
             },
             addOverlay: jest.fn(),
@@ -275,18 +275,18 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Circular Achievements Button Callback", () => {
         test("navigates to the achievements screen if it exists locally", () => {
-            gel.config(mockCurrentScreen).achievementsCircular.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).achievementsSmall.action({ screen: mockCurrentScreen });
             expect(mockCurrentScreen.navigation.achievements).toHaveBeenCalled();
         });
 
         test("opens the CAGE achievements screen if there is no local navigation", () => {
             delete mockCurrentScreen.navigation.achievements;
-            gel.config(mockCurrentScreen).achievementsCircular.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).achievementsSmall.action({ screen: mockCurrentScreen });
             expect(mockGmi.achievements.show).toHaveBeenCalled();
         });
 
         test("clears the indicator", () => {
-            gel.config(mockCurrentScreen).achievementsCircular.action({ screen: mockCurrentScreen });
+            gel.config(mockCurrentScreen).achievementsSmall.action({ screen: mockCurrentScreen });
             expect(clearIndicatorSpy).toHaveBeenCalled();
         });
     });

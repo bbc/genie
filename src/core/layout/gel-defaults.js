@@ -214,7 +214,7 @@ export const config = screen => {
                 screen.layout.buttons.achievements.setIndicator();
             },
         },
-        achievementsCircular: {
+        achievementsSmall: {
             group: "topLeft",
             title: "Achievements",
             key: "achievements-circular",
@@ -234,7 +234,7 @@ export const config = screen => {
                 } else {
                     gmi.achievements.show();
                 }
-                screen.layout.buttons.achievementsCircular.setIndicator();
+                screen.layout.buttons.achievementsSmall.setIndicator();
             },
         },
         restart: {
