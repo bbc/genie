@@ -10,7 +10,6 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.rowConfig = rowConfig;
         this.getDrawArea = getDrawArea;
         this.drawRow();
-        this.reset();
     }
 
     drawRow() {
@@ -22,9 +21,18 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         );
     }
 
+    clearRow() {
+        this.removeAll();
+    }
+
     getBoundingRect() {
         return this.getDrawArea();
     }
 
-    reset() {}
+    reset() {
+        this.clearRow();
+        this.drawRow();
+    }
+
+    makeAccessible() {}
 }

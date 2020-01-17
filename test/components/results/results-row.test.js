@@ -36,10 +36,26 @@ describe("ResultsRow", () => {
         };
         mockGetDrawArea = () => mockDrawArea;
         ResultsRow.prototype.addAt = jest.fn();
+        ResultsRow.prototype.removeAll = jest.fn();
     });
+
+    afterEach(() => jest.clearAllMocks());
 
     test("getBoundingRect returns getDrawArea function", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         expect(resultsRow.getBoundingRect()).toEqual(mockDrawArea);
+    });
+
+    test("reset removes all gameobjects and adds new ones", () => {
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        jest.clearAllMocks();
+        resultsRow.reset();
+        expect(resultsRow.removeAll).toHaveBeenCalledTimes(1);
+        expect(resultsRow.addAt).toHaveBeenCalledTimes(1);
+    });
+
+    test("the makeAccessible function has been implemented", () => {
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        expect(resultsRow.makeAccessible).not.toThrow();
     });
 });
