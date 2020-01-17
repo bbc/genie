@@ -131,6 +131,7 @@ export function create(scene, metrics, buttonIds) {
         buttons,
         debug,
         getSafeArea,
+        groups,
         destroy,
         makeAccessible,
         resize,
