@@ -288,34 +288,6 @@ describe("Gel Button", () => {
 
             expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 400, 200));
         });
-
-        test("indicator resize function updates x and y positions", () => {
-            mockConfig.key = "achievements";
-            gmi.achievements.unseen = true;
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            gelButton.sprite.getBounds = () => {
-                return { x: 50, y: 80, width: 100 };
-            };
-            gelButton.indicator.height = 24;
-            gelButton.indicator.width = 24;
-            gelButton.updateIndicatorPosition();
-            expect(gelButton.indicator.x).toBe(141);
-            expect(gelButton.indicator.y).toBe(89);
-        });
-
-        test("indicator resize function updates texture", () => {
-            mockConfig.key = "achievements";
-            gmi.achievements.unseen = true;
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            gelButton.indicator.setTexture = jest.fn();
-            gelButton.indicator.height = 24;
-            gelButton.indicator.width = 24;
-            gelButton.sprite.getBounds = () => ({ x: 50, y: 80, width: 100 });
-            gelButton.updateIndicatorPosition();
-            expect(gelButton.indicator.setTexture).toHaveBeenCalledWith(
-                assetPath({ key: "notification", isMobile: gelButton._isMobile }),
-            );
-        });
     });
 
     describe("overlays", () => {
