@@ -241,6 +241,10 @@ describe("Group", () => {
                             top: 0,
                         },
                     },
+                    config: {
+                        shiftX: 0,
+                        shiftY: 0,
+                    },
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
@@ -258,6 +262,10 @@ describe("Group", () => {
                             left: -1000,
                             top: -1000,
                         },
+                    },
+                    config: {
+                        shiftX: 0,
+                        shiftY: 0,
                     },
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},

@@ -79,7 +79,7 @@ describe("Accessibilify", () => {
             getTopLeft: () => mockButtonBounds.topLeft,
             toGlobal: p => p,
             destroy: jest.fn(),
-            getBounds: jest.fn(() => mockButtonBounds),
+            getHitAreaBounds: jest.fn(() => mockButtonBounds),
             input: { enabled: true, hitArea: mockHitArea },
             events: {
                 onInputOver: { dispatch: jest.fn() },
@@ -108,15 +108,15 @@ describe("Accessibilify", () => {
             const accessibleDomElementCall = accessibleDomElement.mock.calls[0][0];
             expect(accessibleDomElementCall.id).toBe("home__play");
             expect(accessibleDomElementCall.htmlClass).toBe("gel-button");
-            expect(accessibleDomElementCall.ariaLabel).toBe(mockButton.name);
+            expect(accessibleDomElementCall.ariaLabel).toBe(mockButton.config.name);
             expect(accessibleDomElementCall.parent).toEqual(mockScene.sys.scale.parent);
         });
 
         test("calls accessibleDomElement with an aria label when provided in the config", () => {
-            const config = { ariaLabel: "aria-label" };
-            accessibilify(mockButton, config);
+            mockButton.config = { name: "aria-label" }
+            accessibilify(mockButton);
             const accessibleDomElementCall = accessibleDomElement.mock.calls[0][0];
-            expect(accessibleDomElementCall.ariaLabel).toBe(config.ariaLabel);
+            expect(accessibleDomElementCall.ariaLabel).toBe(mockButton.config.name);
         });
 
         test("resets the accessible elements in the DOM for this screen", () => {
@@ -133,15 +133,13 @@ describe("Accessibilify", () => {
         describe("with gameButton argument", () => {
             test("adds the button to an array in the game for the overlay-layout to use", () => {
                 const gameButton = true;
-                const config = { ariaLabel: "aria-label" };
-                accessibilify(mockButton, config, gameButton);
+                accessibilify(mockButton, gameButton);
                 expect(mockScene.sys.accessibleButtons[0]).toEqual(mockButton);
             });
 
             test("doesn't add the button to an array in the game for the overlay-layout to use when argument is false", () => {
                 const gameButton = false;
-                const config = { ariaLabel: "aria-label" };
-                accessibilify(mockButton, config, gameButton);
+                accessibilify(mockButton, gameButton);
                 expect(mockScene.sys.accessibleButtons).toEqual([]);
             });
         });
@@ -206,7 +204,7 @@ describe("Accessibilify", () => {
                     height: mockButton.input.hitArea.height,
                 };
                 mockButton.active = true;
-                accessibilify(mockButton, { ariaLabel: "mock" }, false);
+                accessibilify(mockButton, false);
                 expect(mockAccessibleDomElement.position.mock.calls[0][0].x).toBe(expectedButtonBounds.x);
                 expect(mockAccessibleDomElement.position.mock.calls[0][0].y).toBe(expectedButtonBounds.y);
                 expect(mockAccessibleDomElement.position.mock.calls[0][0].width).toBe(expectedButtonBounds.width);
@@ -247,7 +245,7 @@ describe("Accessibilify", () => {
                     height: mockButton.input.hitArea.height,
                 };
                 mockButton.active = true;
-                accessibilify(mockButton, { ariaLabel: "mock" }, false);
+                accessibilify(mockButton,  false);
                 onScaleChange.add.mock.calls[0][0]();
                 expect(mockAccessibleDomElement.position.mock.calls[1][0].x).toBe(expectedButtonBounds.x);
                 expect(mockAccessibleDomElement.position.mock.calls[1][0].y).toBe(expectedButtonBounds.y);

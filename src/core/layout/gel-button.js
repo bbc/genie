@@ -95,7 +95,7 @@ export class GelButton extends Phaser.GameObjects.Container {
 
     setImage(key) {
         this.config.key = key;
-        this.sprite.setTexture(assetPath({ key, isMobile }));
+        this.sprite.setTexture(assetPath({ key, isMobile: this.isMobile }));
     }
 
     resize(metrics) {
