@@ -35,7 +35,7 @@ const restrictBounds = (element, safeArea, metrics) => {
 
     scaleElement(element, safeArea);
 
-    const hitArea = element.getHitAreaBounds();
+    const hitArea = element.getBounds();
 
     const elementBounds = {
         top: hitArea.y,
@@ -43,6 +43,7 @@ const restrictBounds = (element, safeArea, metrics) => {
         left: hitArea.x,
         right: hitArea.x + hitArea.width,
     };
+
     if (elementBounds.top < safeArea.top) {
         element.setPosition(element.x, element.y - (elementBounds.top - safeArea.top));
     }

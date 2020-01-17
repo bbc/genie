@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { getItemBounds, positionElement, enforceTextSize } from "../../../src/core/helpers/element-bounding.js";
+import { positionElement, enforceTextSize } from "../../../src/core/helpers/element-bounding.js";
 
 describe("element-bounding", () => {
     let mockElement;
@@ -25,7 +25,7 @@ describe("element-bounding", () => {
             setFontSize: jest.fn(),
             setPosition: jest.fn(),
             setOrigin: jest.fn(),
-            getHitAreaBounds: jest.fn(() => ({
+            getBounds: jest.fn(() => ({
                 x: 0,
                 y: 0,
                 height: 50,
@@ -80,7 +80,7 @@ describe("element-bounding", () => {
             mockElementBounds.y = -250;
             mockElement.y = -250;
 
-            mockElement.getHitAreaBounds = jest.fn(() => mockElementBounds);
+            mockElement.getBounds = jest.fn(() => mockElementBounds);
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
             expect(mockElement.setPosition).toHaveBeenCalledWith(0, -100);
@@ -90,7 +90,7 @@ describe("element-bounding", () => {
             mockElementBounds.y = -200;
             mockElement.y = -200;
 
-            mockElement.getHitAreaBounds = jest.fn(() => mockElementBounds);
+            mockElement.getBounds = jest.fn(() => mockElementBounds);
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
@@ -101,7 +101,7 @@ describe("element-bounding", () => {
             mockElementBounds.x = -150;
             mockElement.x = -150;
 
-            mockElement.getHitAreaBounds = jest.fn(() => mockElementBounds);
+            mockElement.getBounds = jest.fn(() => mockElementBounds);
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
@@ -112,7 +112,7 @@ describe("element-bounding", () => {
             mockElementBounds.x = 150;
             mockElement.x = 150;
 
-            mockElement.getHitAreaBounds = jest.fn(() => mockElementBounds);
+            mockElement.getBounds = jest.fn(() => mockElementBounds);
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 

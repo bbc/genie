@@ -70,7 +70,7 @@ export class Select extends Screen {
 
         if (fp.get("title.text", this.titleElements) && this.titleConfig) {
             const titleTextPosition = this.calculateOffset(baseX, baseY, this.titleConfig.text);
-            // positionElement(this.titleElements.title.text, titleTextPosition, titleArea, metrics);
+            positionElement(this.titleElements.title.text, titleTextPosition, titleArea, metrics);
         }
 
         if (fp.get("subtitle.text", this.titleElements) && this.subtitleConfig) {
