@@ -25,7 +25,7 @@ describe("element-bounding", () => {
             setFontSize: jest.fn(),
             setPosition: jest.fn(),
             setOrigin: jest.fn(),
-            getBounds: jest.fn(() => ({
+            getHitAreaBounds: jest.fn(() => ({
                 x: 0,
                 y: 0,
                 height: 50,
@@ -80,7 +80,7 @@ describe("element-bounding", () => {
             mockElementBounds.y = -250;
             mockElement.y = -250;
 
-            mockElement.getBounds = jest.fn(() => mockElementBounds);
+            mockElement.getHitAreaBounds = jest.fn(() => mockElementBounds);
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
             expect(mockElement.setPosition).toHaveBeenCalledWith(0, -100);
@@ -90,7 +90,7 @@ describe("element-bounding", () => {
             mockElementBounds.y = -200;
             mockElement.y = -200;
 
-            mockElement.getBounds = jest.fn(() => mockElementBounds);
+            mockElement.getHitAreaBounds = jest.fn(() => mockElementBounds);
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
@@ -101,7 +101,7 @@ describe("element-bounding", () => {
             mockElementBounds.x = -150;
             mockElement.x = -150;
 
-            mockElement.getBounds = jest.fn(() => mockElementBounds);
+            mockElement.getHitAreaBounds = jest.fn(() => mockElementBounds);
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
@@ -112,7 +112,7 @@ describe("element-bounding", () => {
             mockElementBounds.x = 150;
             mockElement.x = 150;
 
-            mockElement.getBounds = jest.fn(() => mockElementBounds);
+            mockElement.getHitAreaBounds = jest.fn(() => mockElementBounds);
 
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
@@ -151,39 +151,6 @@ describe("element-bounding", () => {
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
             expect(mockElement.setFontSize).toHaveBeenCalledWith("13px");
-        });
-    });
-
-    describe("getItemBounds", () => {
-        test("returns bounds for an element", () => {
-            expect(getItemBounds(metrics, mockElement)).toEqual({
-                top: 0,
-                bottom: 50,
-                left: 0,
-                right: 50,
-            });
-        });
-
-        test("padding is respected by boundaries when isMobile equals true and element is a sprite", () => {
-            metrics.isMobile = true;
-            mockElement.type = "Sprite";
-            expect(getItemBounds(metrics, mockElement)).toEqual({
-                top: -15,
-                bottom: 65,
-                left: -15,
-                right: 65,
-            });
-        });
-
-        test("padding is not respected by boundaries when isMobile equals true and element is a text", () => {
-            metrics.isMobile = true;
-            mockElement.type = "Text";
-            expect(getItemBounds(metrics, mockElement)).toEqual({
-                top: 0,
-                bottom: 50,
-                left: 0,
-                right: 50,
-            });
         });
     });
 

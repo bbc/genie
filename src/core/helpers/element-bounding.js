@@ -6,7 +6,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import fp from "../../../lib/lodash/fp/fp.js";
 
 export const positionElement = (element, position, safeArea, metrics) => {
     if (element) {
@@ -15,17 +14,6 @@ export const positionElement = (element, position, safeArea, metrics) => {
         restrictBounds(element, safeArea, metrics);
     }
 };
-
-export const getItemBounds = fp.curry((metrics, item) => {
-    const bounds = item.getBounds();
-    const padding = metrics.isMobile && item.type === "Sprite" ? metrics.buttonPad : 0;
-    return {
-        top: bounds.y - padding,
-        bottom: bounds.y + bounds.height + padding,
-        left: bounds.x - padding,
-        right: bounds.x + bounds.width + padding,
-    };
-});
 
 const scaleElement = (element, bounds) => {
     const safeHeight = bounds.bottom - bounds.top;
@@ -47,8 +35,14 @@ const restrictBounds = (element, safeArea, metrics) => {
 
     scaleElement(element, safeArea);
 
-    const elementBounds = getItemBounds(metrics, element);
+    const hitArea = element.getHitAreaBounds();
 
+    const elementBounds = {
+        top: hitArea.y,
+        bottom: hitArea.y + hitArea.height,
+        left: hitArea.x,
+        right: hitArea.x + hitArea.width,
+    };
     if (elementBounds.top < safeArea.top) {
         element.setPosition(element.x, element.y - (elementBounds.top - safeArea.top));
     }

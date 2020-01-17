@@ -10,7 +10,7 @@ import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { getMetrics, onScaleChange } from "../core/scaler.js";
-import { positionElement, getItemBounds } from "../core/helpers/element-bounding.js";
+import { positionElement } from "../core/helpers/element-bounding.js";
 import { GelGrid } from "../core/layout/gel-grid.js";
 import * as state from "../core/state.js";
 
@@ -70,7 +70,7 @@ export class Select extends Screen {
 
         if (fp.get("title.text", this.titleElements) && this.titleConfig) {
             const titleTextPosition = this.calculateOffset(baseX, baseY, this.titleConfig.text);
-            positionElement(this.titleElements.title.text, titleTextPosition, titleArea, metrics);
+            // positionElement(this.titleElements.title.text, titleTextPosition, titleArea, metrics);
         }
 
         if (fp.get("subtitle.text", this.titleElements) && this.subtitleConfig) {
@@ -88,12 +88,12 @@ export class Select extends Screen {
         };
     }
 
-    getTitleSafeArea(metrics) {
+    getTitleSafeArea() {
         const homeButton = this.layout.buttons["home"];
         const secondaryButton = this.layout.buttons["audio"];
 
-        const homeButtonBounds = getItemBounds(metrics, homeButton);
-        const secondaryButtonBounds = getItemBounds(metrics, secondaryButton);
+        const homeButtonBounds = homeButton.getHitAreaBounds();
+        const secondaryButtonBounds = secondaryButton.getHitAreaBounds();
 
         return {
             top: homeButtonBounds.top,
