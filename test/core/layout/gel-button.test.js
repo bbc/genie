@@ -72,7 +72,6 @@ describe("Gel Button", () => {
                 load: jest.fn(),
             },
         };
-        mockSprite.scene = mockScene;
         mockX = 7;
         mockY = 42;
         mockMetrics = {
