@@ -3,15 +3,15 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createMockGmi } from "../mock/gmi";
-import * as Scaler from "../../src/core/scaler.js";
-import { eventBus } from "../../src/core/event-bus.js";
-import * as Rows from "../../src/core/layout/rows/rows.js";
+import { createMockGmi } from "../../mock/gmi.js";
+import * as Scaler from "../../../src/core/scaler.js";
+import { eventBus } from "../../../src/core/event-bus.js";
+import * as Rows from "../../../src/core/layout/rows.js";
 
-import { Results } from "../../src/components/results";
+import { Results } from "../../../src/components/results/results-screen.js";
 
-jest.mock("../../src/core/layout/rows/rows.js");
-jest.mock("../../src/core/screen.js");
+jest.mock("../../../src/core/layout/rows.js");
+jest.mock("../../../src/core/screen.js");
 
 describe("Results Screen", () => {
     let resultsScreen;

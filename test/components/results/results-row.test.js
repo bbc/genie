@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { ResultsRow } from "../../../../src/core/layout/rows/results-row.js";
+import { ResultsRow } from "../../../src/components/results/results-row.js";
 
 describe("ResultsRow", () => {
     let mockScene;
