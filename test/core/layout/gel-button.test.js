@@ -245,21 +245,21 @@ describe("Gel Button", () => {
             gmi.achievements.unseen = false;
             delete mockConfig.indicator;
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.indicator).not.toBeDefined;
+            expect(gelButton.indicator).not.toBeDefined();
         });
 
         test("does not create an indicator when no config block and gmi unseen is true", () => {
             gmi.achievements.unseen = true;
             delete mockConfig.indicator;
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.indicator).not.toBeDefined;
+            expect(gelButton.indicator).not.toBeDefined();
         });
 
         test("does not create an indicator when has config block and gmi unseen is false", () => {
             gmi.achievements.unseen = false;
             mockConfig.indicator = { offsets: { desktop: { x: 0, y: 0 } } };
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.indicator).not.toBeDefined;
+            expect(gelButton.indicator).not.toBeDefined();
         });
     });
 

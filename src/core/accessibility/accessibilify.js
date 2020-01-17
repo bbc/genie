@@ -69,7 +69,7 @@ export function accessibilify(button, gameButton = true) {
         const marginTop = parseInt(sys.game.canvas.style.marginTop, 10);
         const scale = viewHeight / realHeight;
 
-        let bounds = button.getHitAreaBounds();
+        let bounds = button.getHitAreaBounds ? button.getHitAreaBounds() : button.getBounds();
         bounds.x -= CAMERA_SCROLL_X_OFFSET;
         bounds.x *= scale;
         bounds.x += marginLeft;

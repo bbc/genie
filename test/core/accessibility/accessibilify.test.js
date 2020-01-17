@@ -80,6 +80,7 @@ describe("Accessibilify", () => {
             toGlobal: p => p,
             destroy: jest.fn(),
             getHitAreaBounds: jest.fn(() => mockButtonBounds),
+            getBounds: jest.fn(() => mockButtonBounds),
             input: { enabled: true, hitArea: mockHitArea },
             events: {
                 onInputOver: { dispatch: jest.fn() },
@@ -113,7 +114,7 @@ describe("Accessibilify", () => {
         });
 
         test("calls accessibleDomElement with an aria label when provided in the config", () => {
-            mockButton.config = { name: "aria-label" }
+            mockButton.config = { name: "aria-label" };
             accessibilify(mockButton);
             const accessibleDomElementCall = accessibleDomElement.mock.calls[0][0];
             expect(accessibleDomElementCall.ariaLabel).toBe(mockButton.config.name);
@@ -173,6 +174,12 @@ describe("Accessibilify", () => {
                 expect(mockAccessibleDomElement.position.mock.calls[0][0].y).toBe(expectedButtonBounds.y);
                 expect(mockAccessibleDomElement.position.mock.calls[0][0].width).toBe(expectedButtonBounds.width);
                 expect(mockAccessibleDomElement.position.mock.calls[0][0].height).toBe(expectedButtonBounds.height);
+            });
+
+            test("Uses standard getBounds function if getHitAreaBounds is not present (non-gel buttons)", () => {
+                delete mockButton.getHitAreaBounds;
+                accessibilify(mockButton);
+                expect(mockButton.getBounds).toHaveBeenCalled();
             });
 
             test("sets the correct width and height when the button is scaled", () => {
@@ -245,7 +252,7 @@ describe("Accessibilify", () => {
                     height: mockButton.input.hitArea.height,
                 };
                 mockButton.active = true;
-                accessibilify(mockButton,  false);
+                accessibilify(mockButton, false);
                 onScaleChange.add.mock.calls[0][0]();
                 expect(mockAccessibleDomElement.position.mock.calls[1][0].x).toBe(expectedButtonBounds.x);
                 expect(mockAccessibleDomElement.position.mock.calls[1][0].y).toBe(expectedButtonBounds.y);
