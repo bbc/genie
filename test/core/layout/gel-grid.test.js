@@ -42,7 +42,7 @@ describe("Grid", () => {
                     },
                     config: {
                         id: config.id,
-                    }
+                    },
                 })),
             },
             input: { enabled: false },

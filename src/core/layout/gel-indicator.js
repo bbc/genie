@@ -17,10 +17,10 @@ export class Indicator extends Phaser.GameObjects.Sprite {
 
     resize() {
         const { height, width, isMobile } = this.gelButton;
-        const mobOrDesk = isMobile? "mobile": "desktop";
+        const mobOrDesk = isMobile ? "mobile" : "desktop";
         const offsets = this.gelButton.config.indicator.offsets[mobOrDesk];
 
-        this.x = width / 2 + offsets.x
+        this.x = width / 2 + offsets.x;
         this.y = -height / 2 + offsets.y;
         this.setTexture(assetPath({ key: "notification", isMobile }));
     }

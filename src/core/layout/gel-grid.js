@@ -53,7 +53,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._cells.forEach(this.makeCellAccessible, this);
     }
 
-    makeCellAccessible(cell, idx) {
+    makeCellAccessible(cell) {
         cell.input.enabled = true;
 
         return accessibilify(cell, true);

@@ -158,8 +158,8 @@ describe("Accessibilify", () => {
 
             test("sets the initial size and position when the button is active", () => {
                 const expectedButtonBounds = {
-                    x: 625,
-                    y: 475,
+                    x: 525,
+                    y: 425,
                     width:
                         mockButton.input.hitArea.width *
                         (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height),
@@ -179,8 +179,8 @@ describe("Accessibilify", () => {
                 mockButton.active = true;
                 mockButton.scale = 0.5;
                 const expectedButtonBounds = {
-                    x: 625,
-                    y: 475,
+                    x: 525,
+                    y: 425,
                     width:
                         mockButton.input.hitArea.width *
                         (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height) *
@@ -198,8 +198,8 @@ describe("Accessibilify", () => {
 
             test("sets the initial size and position when the button is active and is not a game button", () => {
                 const expectedButtonBounds = {
-                    x: 625,
-                    y: 475,
+                    x: 525,
+                    y: 425,
                     width: mockButton.input.hitArea.width,
                     height: mockButton.input.hitArea.height,
                 };
@@ -219,8 +219,8 @@ describe("Accessibilify", () => {
 
             test("changes the size and position when the scale changes when the button is active", () => {
                 const expectedButtonBounds = {
-                    x: 1381.25,
-                    y: 1043.75,
+                    x: 1156.25,
+                    y: 931.25,
                     width:
                         mockButton.input.hitArea.width *
                         (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height),
@@ -239,8 +239,8 @@ describe("Accessibilify", () => {
 
             test("changes the size and position when the scale changes when the button is active and is not a game button", () => {
                 const expectedButtonBounds = {
-                    x: 1381.25,
-                    y: 1043.75,
+                    x: 1156.25,
+                    y: 931.25,
                     width: mockButton.input.hitArea.width,
                     height: mockButton.input.hitArea.height,
                 };
