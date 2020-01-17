@@ -3,10 +3,10 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as Rows from "../../../../src/core/layout/rows/rows.js";
-import { ResultsRow } from "../../../../src/core/layout/rows/results-row.js";
+import * as Rows from "../../../src/core/layout/rows.js";
+import { ResultsRow } from "../../../src/components/results/results-row.js";
 
-jest.mock("../../../../src/core/layout/rows/results-row.js");
+jest.mock("../../../src/components/results/results-row.js");
 
 describe("Rows", () => {
     let mockScene;
