@@ -37,7 +37,7 @@ describe("Test Screens - Game", () => {
         mockImageAdd = {
             setOrigin: jest.fn(() => ({
                 setInteractive: jest.fn(() => ({
-                    on: jest.fn(),
+                    on: jest.fn(() => ({})),
                 })),
             })),
         };
@@ -47,8 +47,8 @@ describe("Test Screens - Game", () => {
         gameTest = new GameTest();
         gameTest.setLayout = jest.fn();
         gameTest.add = {
-            image: jest.fn().mockImplementation(() => mockImageAdd),
-            text: jest.fn().mockImplementation(() => mockTextAdd),
+            image: jest.fn(() => mockImageAdd),
+            text: jest.fn(() => mockTextAdd),
         };
         gameTest.setLayout = jest.fn();
         gameTest.scene = {
@@ -97,7 +97,7 @@ describe("Test Screens - Game", () => {
 
                 beforeEach(() => {
                     global.console.log.mockImplementation(() => {});
-                    onEvent = jest.fn();
+                    onEvent = jest.fn(() => ({}));
                     buttonImage = {
                         setOrigin: jest.fn(() => ({
                             setInteractive: jest.fn(() => ({

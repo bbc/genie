@@ -53,23 +53,14 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._cells.forEach(this.makeCellAccessible, this);
     }
 
-    makeCellAccessible(cell, idx) {
-        const config = {
-            id: "__" + fp.kebabCase(cell.name),
-            ariaLabel: cell.name,
-            group: "grid",
-            title: `Selection ${idx}`,
-            key: `selection_${idx}`,
-            order: 0,
-            channel: this.eventChannel,
-        };
+    makeCellAccessible(cell) {
         cell.input.enabled = true;
 
-        return accessibilify(cell, config, true);
+        return accessibilify(cell, true);
     }
 
-    cellKeys() {
-        return this._cells.map(cell => cell.key);
+    cellIds() {
+        return this._cells.map(cell => cell.config.id);
     }
 
     addCell(choice, idx) {
@@ -94,7 +85,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     setCellSize(cellIndex) {
-        //this._cells[cellIndex].setSize(...this.calculateCellSize())
         this._cells[cellIndex].setDisplaySize(...this.calculateCellSize());
     }
 
