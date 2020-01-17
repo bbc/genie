@@ -6,7 +6,6 @@
 
 import { createMockGmi } from "../../mock/gmi";
 import * as a11y from "../../../src/core/accessibility/accessibilify.js";
-import * as layoutHarness from "../../../src/core/qa/layout-harness.js";
 
 import { GameTest } from "../../../src/components/test-screens/game";
 
@@ -19,7 +18,6 @@ describe("Test Screens - Game", () => {
 
     beforeEach(() => {
         jest.spyOn(global.console, "log");
-        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
         jest.spyOn(a11y, "accessibilify").mockImplementation(() => {});
 
         mockGmi = {
@@ -39,7 +37,7 @@ describe("Test Screens - Game", () => {
         mockImageAdd = {
             setOrigin: jest.fn(() => ({
                 setInteractive: jest.fn(() => ({
-                    on: jest.fn(),
+                    on: jest.fn(() => ({})),
                 })),
             })),
         };
@@ -49,8 +47,8 @@ describe("Test Screens - Game", () => {
         gameTest = new GameTest();
         gameTest.setLayout = jest.fn();
         gameTest.add = {
-            image: jest.fn().mockImplementation(() => mockImageAdd),
-            text: jest.fn().mockImplementation(() => mockTextAdd),
+            image: jest.fn(() => mockImageAdd),
+            text: jest.fn(() => mockTextAdd),
         };
         gameTest.setLayout = jest.fn();
         gameTest.scene = {
@@ -92,11 +90,6 @@ describe("Test Screens - Game", () => {
             expect(gameTest.setLayout).toHaveBeenCalledWith(["pause"]);
         });
 
-        test("creates a layout harness with correct params", () => {
-            gameTest.create();
-            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(gameTest);
-        });
-
         describe("Game Buttons", () => {
             describe("Button Images", () => {
                 let onEvent;
@@ -104,7 +97,7 @@ describe("Test Screens - Game", () => {
 
                 beforeEach(() => {
                     global.console.log.mockImplementation(() => {});
-                    onEvent = jest.fn();
+                    onEvent = jest.fn(() => ({}));
                     buttonImage = {
                         setOrigin: jest.fn(() => ({
                             setInteractive: jest.fn(() => ({

@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Bug fix: carousel buttons causing crashes. | |
 | | Update Fake GMI to no longer use areCookiesAllowed. | |
 | | Move asset pack files to own sub folder in themes.  | |
 | | Spine loader and Background animation system.  | |

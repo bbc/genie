@@ -6,7 +6,6 @@
 import { gmi } from "../../core/gmi/gmi.js";
 import { Screen } from "../../core/screen.js";
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
-import { createTestHarnessDisplay } from "../../core/qa/layout-harness.js";
 
 export class GameTest extends Screen {
     create() {
@@ -20,7 +19,6 @@ export class GameTest extends Screen {
             })
             .setOrigin(0.5);
         this.setLayout(["pause"]);
-        createTestHarnessDisplay(this);
 
         const buttonKey = `${this.scene.key}.basicButton`;
         const buttonTextStyle = {
@@ -34,7 +32,6 @@ export class GameTest extends Screen {
         [-70, 20, 110].forEach((buttonYPosition, index) => {
             const buttonNumber = index + 1;
             const buttonText = "Button " + buttonNumber;
-            const buttonConfig = { id: buttonNumber, ariaLabel: buttonText };
             const button = this.add
                 .image(0, buttonYPosition, buttonKey)
                 .setOrigin(0.5)
@@ -45,7 +42,9 @@ export class GameTest extends Screen {
                 .setOrigin(0.5)
                 .setInteractive({ useHandCursor: true })
                 .on("pointerup", () => onGameComplete(buttonNumber));
-            accessibilify(button, buttonConfig);
+
+            button.config = { id: buttonNumber, ariaLabel: buttonText };
+            accessibilify(button);
         }, this);
 
         const onGameComplete = buttonNumber => {

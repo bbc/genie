@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as layoutHarness from "../../src/core/qa/layout-harness.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 import * as Scaler from "../../src/core/scaler.js";
@@ -11,10 +10,15 @@ import * as elementBounding from "../../src/core/helpers/element-bounding.js";
 
 import { Select } from "../../src/components/select.js";
 import { GelGrid } from "../../src/core/layout/gel-grid.js";
-import * as qaMode from "../../src/core/qa/qa-mode.js";
 jest.mock("../../src/core/layout/gel-grid.js");
 jest.mock("../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
+}));
+
+jest.mock("../../src/core/state.js", () => ({
+    create: jest.fn(() => ({
+        getAll: jest.fn(() => []),
+    })),
 }));
 
 describe("Select Screen", () => {
@@ -26,17 +30,18 @@ describe("Select Screen", () => {
     let mockBounds;
     let mockTextBounds;
     let mockMetrics;
-    let mockCellKeys;
+    let mockCellIds;
     let defaultTextStyle;
     let unsubscribe = jest.fn();
+    let mockNextPage = jest.fn();
+    let mockPreviousPage = jest.fn();
 
     beforeEach(() => {
         jest.spyOn(elementBounding, "positionElement").mockImplementation(() => {});
-        jest.spyOn(layoutHarness, "createTestHarnessDisplay").mockImplementation(() => {});
 
         const mockGelGrid = {
-            cellKeys: jest.fn(() => {
-                return mockCellKeys;
+            cellIds: jest.fn(() => {
+                return mockCellIds;
             }),
             addGridCells: jest.fn(),
             makeAccessible: jest.fn(),
@@ -48,6 +53,8 @@ describe("Select Screen", () => {
             gridMetrics: jest.fn(),
             resetButtons: jest.fn(),
             resize: jest.fn(),
+            nextPage: mockNextPage,
+            previousPage: mockPreviousPage,
         };
         GelGrid.mockImplementation(() => mockGelGrid);
         mockData = {
@@ -81,7 +88,6 @@ describe("Select Screen", () => {
                     game: {},
                 },
             },
-            qaMode: { active: false },
             popupScreens: [],
         };
         mockBounds = {
@@ -108,13 +114,14 @@ describe("Select Screen", () => {
                 continue: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds) },
             },
             addCustomGroup: jest.fn(),
+            getSafeArea: jest.fn(),
         };
         mockMetrics = {
             isMobile: false,
             buttonPad: 12,
             screenToCanvas: jest.fn(x => x),
         };
-        mockCellKeys = [];
+        mockCellIds = [];
         fillRectShapeSpy = jest.fn();
         selectScreen = new Select();
         selectScreen.setData(mockData);
@@ -144,6 +151,9 @@ describe("Select Screen", () => {
                 if (assetName === "test-select.character3") {
                     return characterSprites[2];
                 }
+                if (assetName === "test_asset") {
+                    return "test-sprite";
+                }
             }),
         };
         selectScreen.addAnimations = jest.fn();
@@ -172,11 +182,6 @@ describe("Select Screen", () => {
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["home", "audio", "pause", "previous", "next", "continue"];
             expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
-
-        test("creates a layout harness with correct params", () => {
-            selectScreen.create();
-            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(selectScreen);
         });
 
         test("adds listener for scaler", () => {
@@ -427,22 +432,40 @@ describe("Select Screen", () => {
         });
 
         test("adds event subscriptions for grid buttons", () => {
-            mockCellKeys = ["key1", "key2"];
+            mockCellIds = ["key1", "key2"];
             selectScreen.create();
             expect(eventBus.subscribe.mock.calls[0][0].name).toBe("key1");
             expect(eventBus.subscribe.mock.calls[1][0].name).toBe("key2");
         });
 
         test("moves to the next screen when grid cell is pressed", () => {
-            mockCellKeys = ["key1", "key2"];
+            mockCellIds = ["key1", "key2"];
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[1][0].callback();
             expect(selectScreen.navigation.next).toHaveBeenCalled();
         });
 
+        test("moves to the next page when next page is pressed", () => {
+            mockCellIds = ["key1", "key2"];
+            selectScreen.create();
+
+            eventBus.subscribe.mock.calls[3][0].callback();
+            expect(eventBus.subscribe.mock.calls[3][0].name).toBe("next");
+            expect(mockNextPage).toHaveBeenCalled();
+        });
+
+        test("moves to the previous page when next page is pressed", () => {
+            mockCellIds = ["key1", "key2"];
+            selectScreen.create();
+
+            eventBus.subscribe.mock.calls[4][0].callback();
+            expect(eventBus.subscribe.mock.calls[4][0].name).toBe("previous");
+            expect(mockPreviousPage).toHaveBeenCalled();
+        });
+
         test("saves choice to transient data", () => {
-            mockCellKeys = ["key1"];
+            mockCellIds = ["key1"];
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[0][0].callback();
@@ -450,65 +473,18 @@ describe("Select Screen", () => {
         });
     });
 
-    describe("Safe Area", () => {
-        test("Creates a safe area with the correct offsets in desktop mode", () => {
+    describe("updateStates method", () => {
+        test("updates the overlays for cells with matching id", () => {
             selectScreen.create();
-            selectScreen.layout.buttons = {
-                home: { getBounds: () => ({ x: -500, y: -500, height: 10, width: 10 }) }, //top
-                previous: { getBounds: () => ({ x: -500, y: -5, height: 10, width: 10 }) }, //left
-                next: { getBounds: () => ({ x: 500, y: -5, height: 10, width: 10 }) }, //right
-                continue: { getBounds: () => ({ x: 0, y: 500, height: 10, width: 10 }) }, //bottom
-            };
 
-            selectScreen.updateSafeArea(mockMetrics);
+            selectScreen._cells = [{ config: { id: "id_one" }, overlays: { set: jest.fn() } }];
+            selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
 
-            expect(selectScreen.safeArea.x).toBe(-470);
-            expect(selectScreen.safeArea.y).toBe(-490);
-            expect(selectScreen.safeArea.width).toBe(950);
-            expect(selectScreen.safeArea.height).toBe(990);
-        });
+            selectScreen.context.theme.states = { locked: { x: 10, y: 20, asset: "test_asset" } };
 
-        test("Creates a safe area with the correct offsets in mobile mode", () => {
-            selectScreen.create();
-            selectScreen.layout.buttons = {
-                home: { getBounds: () => ({ x: -500, y: -500, height: 10, width: 10 }) }, //top
-                previous: { getBounds: () => ({ x: -500, y: -5, height: 10, width: 10 }) }, //left
-                next: { getBounds: () => ({ x: 500, y: -5, height: 10, width: 10 }) }, //right
-                continue: { getBounds: () => ({ x: 0, y: 500, height: 10, width: 10 }) }, //bottom
-            };
-            mockMetrics.isMobile = true;
+            selectScreen.updateStates();
 
-            selectScreen.updateSafeArea(mockMetrics);
-
-            expect(selectScreen.safeArea.x).toBe(-490);
-            expect(selectScreen.safeArea.y).toBe(-490);
-            expect(selectScreen.safeArea.width).toBe(990);
-            expect(selectScreen.safeArea.height).toBe(990);
-        });
-    });
-
-    describe("Debug Mode", () => {
-        test("Does not add a graphics object if debug unset", () => {
-            qaMode.debugMode = jest.fn(() => false);
-
-            selectScreen.create();
-            expect(selectScreen.graphics).not.toBeDefined();
-        });
-
-        test("Does draw a debug rect if debug unset", () => {
-            qaMode.debugMode = jest.fn(() => false);
-
-            selectScreen.create();
-            selectScreen.update();
-            expect(fillRectShapeSpy).not.toHaveBeenCalled();
-        });
-
-        test("draws a safe area rectangle on update when debugMode is enabled", () => {
-            qaMode.debugMode = jest.fn(() => true);
-
-            selectScreen.create();
-            selectScreen.update();
-            expect(fillRectShapeSpy).toHaveBeenCalled();
+            expect(selectScreen._cells[0].overlays.set).toHaveBeenCalledWith("state", "test-sprite");
         });
     });
 });

@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as layoutHarness from "../../src/core/qa/layout-harness.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
@@ -14,7 +13,6 @@ describe("Home Screen", () => {
     let mockData;
 
     beforeEach(() => {
-        layoutHarness.createTestHarnessDisplay = jest.fn();
         homeScreen = new Home();
 
         mockData = {
@@ -46,10 +44,6 @@ describe("Home Screen", () => {
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings"];
             expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
-
-        test("creates a layout harness with correct params", () => {
-            expect(layoutHarness.createTestHarnessDisplay).toHaveBeenCalledWith(homeScreen);
         });
     });
 

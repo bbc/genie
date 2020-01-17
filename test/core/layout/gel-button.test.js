@@ -3,11 +3,12 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as GameSound from "../../../src/core/game-sound.js";
-import { GelButton, assetPath, noIndicator } from "../../../src/core/layout/gel-button";
+import { GelButton } from "../../../src/core/layout/gel-button";
+import { Indicator } from "../../../src/core/layout/gel-indicator.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
+import { assetPath } from "../../../src/core/layout/asset-paths.js";
 
 describe("Gel Button", () => {
     let mockScene;
@@ -15,6 +16,7 @@ describe("Gel Button", () => {
     let mockY;
     let mockMetrics;
     let mockConfig;
+    let mockSprite;
 
     beforeEach(() => {
         gmi.achievements = { unseen: false };
@@ -22,20 +24,30 @@ describe("Gel Button", () => {
         GelButton.prototype.height = 64;
         GelButton.prototype.setFrame = jest.fn();
         GelButton.prototype.setSizeToFrame = jest.fn();
+        GelButton.prototype.add = jest.fn();
         eventBus.publish = jest.fn();
         GameSound.Assets = {
             backgroundMusic: {},
             buttonClick: { play: jest.fn() },
         };
+        mockSprite = {
+            width: 100,
+            height: 50,
+            setTexture: jest.fn(),
+            setFrame: jest.fn(),
+            play: jest.fn(),
+        };
         mockScene = {
             add: {
                 existing: jest.fn(),
                 tween: jest.fn(),
+                sprite: jest.fn(() => mockSprite),
             },
             sys: {
                 queueDepthSort: jest.fn(),
                 anims: {
                     once: jest.fn(),
+                    generateFrameNumbers: jest.fn(),
                 },
                 textures: {
                     get: jest.fn(() => ({
@@ -52,6 +64,12 @@ describe("Gel Button", () => {
                 input: {
                     enable: jest.fn(),
                 },
+            },
+            anims: {
+                once: jest.fn(),
+                generateFrameNumbers: jest.fn(),
+                create: jest.fn(),
+                load: jest.fn(),
             },
         };
         mockX = 7;
@@ -76,6 +94,7 @@ describe("Gel Button", () => {
             key: "mockKey",
             shiftX: 9,
             shiftY: 21,
+            name: "test name",
         };
     });
 
@@ -84,23 +103,27 @@ describe("Gel Button", () => {
     describe("Constructor", () => {
         test("correctly sets class properties", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton._id).toBe(mockConfig.key);
-            expect(gelButton._isMobile).toBe(mockMetrics.isMobile);
-            expect(gelButton.positionOverride).toBe(mockConfig.positionOverride);
-            expect(gelButton.shiftX).toBe(mockConfig.shiftX);
-            expect(gelButton.shiftY).toBe(mockConfig.shiftY);
+            expect(gelButton.config).toEqual(mockConfig);
+            expect(gelButton.isMobile).toBe(mockMetrics.isMobile);
         });
+
+        test("correctly sets name default if not provided in config", () => {
+            delete mockConfig.name;
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(gelButton.config.name).toBe("");
+        });
+
         test("correctly sets shift defaults if not provided in config", () => {
             delete mockConfig.shiftX;
             delete mockConfig.shiftY;
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.shiftX).toBe(0);
-            expect(gelButton.shiftY).toBe(0);
+            expect(gelButton.config.shiftX).toBe(0);
+            expect(gelButton.config.shiftY).toBe(0);
         });
         test("makes the sprite interactive", () => {
             GelButton.prototype.setInteractive = jest.fn();
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.setInteractive).toHaveBeenCalledWith({ useHandCursor: true });
+            expect(gelButton.setInteractive).toHaveBeenCalled();
         });
         test("sets up mouse events", () => {
             GelButton.prototype.on = jest.fn();
@@ -118,8 +141,8 @@ describe("Gel Button", () => {
                     callback();
                 }
             });
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.setFrame).toHaveBeenCalledWith(0);
+            new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(mockSprite.setFrame).toHaveBeenCalledWith(0);
         });
         test("pointerover event sets frame to 1", () => {
             GelButton.prototype.on = jest.fn((event, callback) => {
@@ -127,8 +150,8 @@ describe("Gel Button", () => {
                     callback();
                 }
             });
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.setFrame).toHaveBeenCalledWith(1);
+            new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            expect(mockSprite.setFrame).toHaveBeenCalledWith(1);
         });
         test("callback is added to the POINTER_UP event emitter", () => {
             GelButton.prototype.on = jest.fn((event, callback) => {
@@ -163,7 +186,7 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.input = { hitArea: {} };
             gelButton.setHitArea(mockMetrics);
-            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-3, -3, 70, 70));
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-10, -10, 120, 70));
         });
     });
 
@@ -172,14 +195,14 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.setTexture = jest.fn();
             gelButton.setImage("mockKey");
-            expect(gelButton._id).toEqual("mockKey");
+            expect(gelButton.config.key).toEqual("mockKey");
         });
         test("sets correct texture", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.setTexture = jest.fn();
             gelButton.setImage("mockKey");
-            expect(gelButton.setTexture).toHaveBeenCalledWith(
-                assetPath({ key: "mockKey", isMobile: gelButton._isMobile }),
+            expect(mockSprite.setTexture).toHaveBeenCalledWith(
+                assetPath({ key: "mockKey", isMobile: gelButton.isMobile }),
             );
         });
     });
@@ -187,10 +210,9 @@ describe("Gel Button", () => {
     describe("Resize function", () => {
         test("sets correct texture", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            gelButton.setTexture = jest.fn();
             gelButton.resize(mockMetrics);
-            expect(gelButton.setTexture).toHaveBeenCalledWith(
-                assetPath({ key: gelButton._id, isMobile: gelButton._isMobile }),
+            expect(mockSprite.setTexture).toHaveBeenCalledWith(
+                assetPath({ key: gelButton.config.key, isMobile: gelButton.isMobile }),
             );
         });
         test("sets the button hit area", () => {
@@ -198,103 +220,127 @@ describe("Gel Button", () => {
             gelButton.input = { hitArea: {} };
             mockMetrics.hitMin = 66;
             gelButton.resize(mockMetrics);
-            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-1, -1, 66, 66));
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-8, -8, 116, 66));
         });
-    });
+        test("calls any overlays that have a resize method", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            const mockOverlay = { resize: jest.fn() };
 
-    describe("Indicator Constructor", () => {
-        test("sets depth of indicator to 1", () => {
-            mockConfig.key = "achievements";
-            gmi.achievements.unseen = true;
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.indicator.depth).toBe(1);
-        });
-        test("sets scale of indicator to 0", () => {
-            mockConfig.key = "achievements";
-            gmi.achievements.unseen = true;
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.indicator.scale).toBe(0);
+            gelButton.overlays.set("test", mockOverlay);
+            gelButton.resize(mockMetrics);
+            expect(mockOverlay.resize).toHaveBeenCalled();
         });
     });
 
     describe("Set Indicator function", () => {
-        test("creates an indicator when the id is achievements and gmi unseen is true", () => {
-            mockConfig.key = "achievements";
+        test("creates an indicator when gmi unseen is true and button config has an indicator block", () => {
             gmi.achievements.unseen = true;
+            mockConfig.indicator = { offsets: { desktop: { x: 0, y: 0 } } };
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.indicator).toBeInstanceOf(Phaser.GameObjects.Sprite);
+
+            expect(gelButton.overlays.list.indicator).toBeInstanceOf(Indicator);
         });
-        test("creates a noIndicator when the id is achievements and gmi unseen is false", () => {
-            mockConfig.key = "achievements";
+
+        test("does not create an indicator when no config block and gmi unseen is false", () => {
             gmi.achievements.unseen = false;
+            delete mockConfig.indicator;
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.indicator).toBe(noIndicator);
+            expect(gelButton.indicator).not.toBeDefined();
         });
-        test("creates a noIndicator when the id is not achievements and gmi unseen is true", () => {
-            mockConfig.key = "something";
+
+        test("does not create an indicator when no config block and gmi unseen is true", () => {
             gmi.achievements.unseen = true;
+            delete mockConfig.indicator;
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            gelButton.indicator.resize();
-            expect(gelButton.indicator).toBe(noIndicator);
+            expect(gelButton.indicator).not.toBeDefined();
         });
-        test("creates a noIndicator when the id is not achievements and gmi unseen is false", () => {
-            mockConfig.key = "something";
+
+        test("does not create an indicator when has config block and gmi unseen is false", () => {
             gmi.achievements.unseen = false;
+            mockConfig.indicator = { offsets: { desktop: { x: 0, y: 0 } } };
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.indicator).toBe(noIndicator);
+            expect(gelButton.indicator).not.toBeDefined();
         });
     });
 
-    describe("Update Indicator Position function", () => {
-        test("calls resize function on indicator", () => {
+    describe("getHitAreaBounds method", () => {
+        test("returns the hit Area as a Phaser rectangle in world space", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            const mockIndicator = { resize: jest.fn() };
-            gelButton.indicator = mockIndicator;
-            gelButton.updateIndicatorPosition();
-            expect(mockIndicator.resize).toHaveBeenCalled();
-        });
 
-        test("indicator resize function updates x and y positions", () => {
-            mockConfig.key = "achievements";
-            gmi.achievements.unseen = true;
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            gelButton.getBounds = () => {
-                return { x: 50, y: 80, width: 100 };
+            gelButton.input = {
+                hitArea: {
+                    width: 200,
+                    height: 100,
+                },
             };
-            gelButton.updateIndicatorPosition();
-            expect(gelButton.indicator.x).toBe(150);
-            expect(gelButton.indicator.y).toBe(80);
-        });
 
-        test("indicator resize function updates texture", () => {
-            mockConfig.key = "achievements";
-            gmi.achievements.unseen = true;
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            gelButton.indicator.setTexture = jest.fn();
-            gelButton.getBounds = () => {
-                return { x: 50, y: 80, width: 100 };
+            gelButton.parentContainer = {
+                scale: 2,
             };
-            gelButton.updateIndicatorPosition();
-            expect(gelButton.indicator.setTexture).toHaveBeenCalledWith(
-                assetPath({ key: "notification", isMobile: gelButton._isMobile }),
-            );
+
+            const mockWtm = {
+                getX: () => 0,
+                getY: () => 0,
+            };
+
+            gelButton.getWorldTransformMatrix = () => mockWtm;
+
+            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 400, 200));
         });
     });
 
-    describe("asset paths", () => {
-        test("returns the correct asset path for desktop assets", () => {
-            const path = assetPath({ key: "mockId", isMobile: false });
-            expect(path).toBe("gelDesktop.mockId");
+    describe("overlays", () => {
+        test("set adds sprite to overlays list", () => {
+            mockScene.add.sprite = jest.fn((x, y, asset) => ({ x, y, asset }));
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+
+            gelButton.overlays.set("test_key", "test_asset");
+
+            expect(gelButton.overlays.list.test_key).toEqual("test_asset");
         });
 
-        test("returns the correct asset path for mobile assets", () => {
-            const path = assetPath({ key: "mockId", isMobile: true });
-            expect(path).toBe("gelMobile.mockId");
+        test("set makes sprite a child of the button's container", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.add = jest.fn();
+
+            gelButton.overlays.set("test_key", "test_asset");
+
+            expect(gelButton.add).toHaveBeenCalledTimes(1);
         });
 
-        test("returns the correct asset path for game buttons", () => {
-            const path = assetPath({ key: "mockId", scene: "mockScene", gameButton: true });
-            expect(path).toBe("mockScene.mockId");
+        test("remove deletes sprite from overlays list", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+
+            gelButton.overlays.set("test_key", { destroy: jest.fn() });
+            gelButton.overlays.remove("test_key");
+
+            expect(gelButton.overlays.list.test_key).not.toBeDefined();
+        });
+
+        test("remove unparents sprite from button's container", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.remove = jest.fn();
+
+            gelButton.overlays.set("test_key", { destroy: jest.fn() });
+            gelButton.overlays.remove("test_key");
+
+            expect(gelButton.remove).toHaveBeenCalledTimes(1);
+        });
+    });
+
+    describe("Animated Buttons", () => {
+        test("Creates and plays an animation if config is present", () => {
+            mockConfig.anim = {
+                key: "character-select.char1",
+                frames: 18,
+                frameRate: 6,
+                yoyo: true,
+                repeat: -1,
+            };
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+
+            expect(mockScene.anims.create).toHaveBeenCalledWith(mockConfig.anim);
+            expect(gelButton.sprite.play).toHaveBeenCalledWith(mockConfig.anim.key);
         });
     });
 });

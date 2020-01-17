@@ -17,7 +17,7 @@ describe("Group", () => {
     let config;
     let vPos;
     let hPos;
-    let capturedIterateFunction;
+    let mockGetHitAreaBounds;
 
     beforeEach(() => {
         mockScene = {
@@ -39,6 +39,15 @@ describe("Group", () => {
             scale: 1,
         };
         buttonResizeStub = jest.fn();
+        const hitAreaBounds = {
+            left: 50,
+            top: 50,
+            width: 200,
+            height: 100,
+        };
+
+        mockGetHitAreaBounds = jest.fn(() => hitAreaBounds);
+
         buttonFactory = {
             createButton: () => ({
                 x: 50,
@@ -49,18 +58,17 @@ describe("Group", () => {
                 updateIndicatorPosition: jest.fn(),
                 updateTransform: () => {},
                 resize: buttonResizeStub,
-                shiftX: 0,
-                shiftY: 0,
+                config: {
+                    shiftX: 0,
+                    shiftY: 0,
+                },
+                getHitAreaBounds: mockGetHitAreaBounds,
             }),
         };
         vPos = "middle";
         hPos = "center";
         jest.spyOn(ButtonFactory, "create").mockImplementation(() => buttonFactory);
         jest.spyOn(a11y, "addToAccessibleButtons").mockImplementation(() => {});
-        GelGroup.prototype.list = [];
-        GelGroup.prototype.iterate = fn => {
-            capturedIterateFunction = fn;
-        };
         GelGroup.prototype.addAt = jest.fn(child => {
             group.list.push(child);
         });
@@ -92,7 +100,6 @@ describe("Group", () => {
 
             group.addButton(config);
             group.addButton(config);
-            group._buttons.forEach(button => capturedIterateFunction(button));
 
             expect(group._buttons[0].x).toBe(100);
             expect(group._buttons[1].x).toBe(350);
@@ -102,20 +109,18 @@ describe("Group", () => {
             group.addButton(config);
             group.addButton(config);
             group.reset(metrics);
-            group._buttons.forEach(button => capturedIterateFunction(button));
 
-            expect(group._buttons[0].y).toBe(0);
-            expect(group._buttons[1].y).toBe(0);
+            expect(group._buttons[0].y).toBe(50);
+            expect(group._buttons[1].y).toBe(50);
         });
 
         describe("when vPos is middle and hPos is center", () => {
             test("sets group position correctly", () => {
                 group.addButton(config);
                 group.reset(metrics);
-                group._buttons.forEach(button => capturedIterateFunction(button));
 
-                expect(group.x).toBe(0);
-                expect(group.y).toBe(0);
+                expect(group.x).toBe(-100);
+                expect(group.y).toBe(-50);
             });
         });
 
@@ -127,10 +132,9 @@ describe("Group", () => {
 
                 group.addButton(config);
                 group.reset();
-                group._buttons.forEach(button => capturedIterateFunction(button));
 
-                expect(group.x).toBe(0);
-                expect(group.y).toBe(0);
+                expect(group.x).toBe(-100);
+                expect(group.y).toBe(-50);
             });
         });
 
@@ -142,10 +146,9 @@ describe("Group", () => {
 
                 group.addButton(config);
                 group.reset();
-                group._buttons.forEach(button => capturedIterateFunction(button));
 
                 expect(group.x).toBe(-200);
-                expect(group.y).toBe(0);
+                expect(group.y).toBe(-50);
             });
 
             test("sets group position correctly right", () => {
@@ -155,10 +158,9 @@ describe("Group", () => {
 
                 group.addButton(config);
                 group.reset();
-                group._buttons.forEach(button => capturedIterateFunction(button));
 
-                expect(group.x).toBe(200);
-                expect(group.y).toBe(0);
+                expect(group.x).toBe(0);
+                expect(group.y).toBe(-50);
             });
         });
 
@@ -170,9 +172,8 @@ describe("Group", () => {
 
                 group.addButton(config);
                 group.reset(metrics);
-                group._buttons.forEach(button => capturedIterateFunction(button));
 
-                expect(group.x).toBe(900);
+                expect(group.x).toBe(700);
                 expect(group.y).toBe(-1400);
             });
         });
@@ -185,10 +186,9 @@ describe("Group", () => {
 
                 group.addButton(config);
                 group.reset(metrics);
-                group._buttons.forEach(button => capturedIterateFunction(button));
 
                 expect(group.x).toBe(-900);
-                expect(group.y).toBe(1400);
+                expect(group.y).toBe(1300);
             });
         });
 
@@ -200,10 +200,9 @@ describe("Group", () => {
 
                 group.addButton(config);
                 group.reset(metrics);
-                group._buttons.forEach(button => capturedIterateFunction(button));
 
                 expect(group.x).toBe(-200);
-                expect(group.y).toBe(1400);
+                expect(group.y).toBe(1300);
             });
         });
 
@@ -231,9 +230,14 @@ describe("Group", () => {
                             top: 0,
                         },
                     },
+                    config: {
+                        shiftX: 0,
+                        shiftY: 0,
+                    },
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
+                    getHitAreaBounds: mockGetHitAreaBounds,
                 }));
                 group.addButton(config);
 
@@ -248,9 +252,14 @@ describe("Group", () => {
                             top: -1000,
                         },
                     },
+                    config: {
+                        shiftX: 0,
+                        shiftY: 0,
+                    },
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
+                    getHitAreaBounds: mockGetHitAreaBounds,
                 }));
                 group.addButton(config);
                 group.reset(metrics);
@@ -262,16 +271,8 @@ describe("Group", () => {
 
         describe("when vPos is bottom and hPos is right", () => {
             test("correctly takes hitArea into account", () => {
-                const rightSpy = jest.fn();
-                const bottomSpy = jest.fn();
                 const createButtonStub = jest.spyOn(buttonFactory, "createButton");
-
-                vPos = "bottom";
-                hPos = "right";
-                group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics);
-
-                Object.defineProperty(group, "x", { set: rightSpy });
-                Object.defineProperty(group, "y", { set: bottomSpy });
+                group = new GelGroup(mockScene, parentGroup, "bottom", "right", metrics);
 
                 createButtonStub.mockImplementation(() => ({
                     x: 50,
@@ -279,54 +280,53 @@ describe("Group", () => {
                     width: 50,
                     height: 50,
                     input: {
-                        hitArea: {
-                            right: 1000,
-                            bottom: 1000,
-                        },
+                        hitArea: {},
+                    },
+                    config: {
+                        shiftX: 0,
+                        shiftY: 0,
                     },
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
+                    getHitAreaBounds: () => ({ top: -50, left: -100, width: 100, height: 50 }),
                 }));
                 group.addButton(config);
 
-                createButtonStub.mockImplementation(() => ({
-                    x: 50,
-                    y: 50,
-                    width: 50,
-                    height: 50,
-                    input: {
-                        hitArea: {
-                            right: 0,
-                            bottom: 0,
-                        },
-                    },
-                    updateIndicatorPosition: () => {},
-                    updateTransform: () => {},
-                    resize: buttonResizeStub,
-                }));
-                group.addButton(config);
-                group.reset(metrics);
-
-                expect(rightSpy).toHaveBeenCalledWith(900);
-                expect(bottomSpy).toHaveBeenCalledWith(1400);
+                expect(group.x).toBe(800);
+                expect(group.y).toBe(1350);
             });
         });
     });
 
     describe("addToGroup method", () => {
         test("adds item to this group", () => {
-            const mockButton = { button: "mock" };
+            const mockButton = { button: "mock", getHitAreaBounds: mockGetHitAreaBounds };
             const mockPosition = 42;
             group.addToGroup(mockButton, mockPosition);
             expect(group.addAt).toHaveBeenCalledWith(mockButton, mockPosition);
         });
 
         test("adds item to this group at position 0 when no position provided", () => {
-            const mockButton = { button: "mock" };
+            const mockButton = { button: "mock", getHitAreaBounds: mockGetHitAreaBounds };
             const expectedPosition = 0;
             group.addToGroup(mockButton);
             expect(group.addAt).toHaveBeenCalledWith(mockButton, expectedPosition);
+        });
+    });
+
+    describe("getBoundingRect method", () => {
+        test("returns a Phaser rectangle the same size as the group", () => {
+            group.width = 200;
+            group.height = 100;
+            group.x = 10;
+            group.y = 20;
+
+            const boundingRect = group.getBoundingRect();
+            expect(boundingRect.x).toEqual(10);
+            expect(boundingRect.y).toEqual(20);
+            expect(boundingRect.width).toEqual(200);
+            expect(boundingRect.height).toEqual(100);
         });
     });
 
@@ -345,10 +345,15 @@ describe("Group", () => {
             const expectedGroupXPosition = 0;
             const expectedGroupYPosition = -333;
             const desktopMetrics = { horizontals: {}, verticals: {} };
-            const moreDesktopMetrics = { borderPad: 0, horizontals: { center: 0 }, verticals: { top: -333 } };
+            const moreDesktopMetrics = {
+                borderPad: 0,
+                horizontals: { center: 0 },
+                verticals: { top: -333 },
+                buttonPad: 0,
+                scale: 1,
+            };
 
             group = new GelGroup(mockScene, parentGroup, "top", "center", desktopMetrics, false);
-            group.addButton(config);
             group.reset(moreDesktopMetrics);
 
             expect(group.x).toBe(expectedGroupXPosition);
@@ -364,30 +369,7 @@ describe("Group", () => {
             group.reset(mobileMetrics);
 
             expect(group._metrics.isMobile).toBe(true);
-            expect(buttonResizeStub).toHaveBeenCalledTimes(1);
-        });
-
-        test("does not resize buttons after resizing the group and the width remains above the mobile breakpoint", () => {
-            const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
-            const moreDesktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
-
-            group = new GelGroup(mockScene, parentGroup, "top", "left", desktopMetrics, false);
-            group.addButton(config);
-            group.reset(moreDesktopMetrics);
-
-            expect(group._metrics.isMobile).toBe(false);
-            expect(buttonResizeStub).not.toHaveBeenCalled();
-        });
-
-        test("updates buttons indicator positions", () => {
-            const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
-            const moreDesktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
-
-            group = new GelGroup(mockScene, parentGroup, "top", "left", desktopMetrics, false);
-            const button = group.addButton(config);
-            group.reset(moreDesktopMetrics);
-
-            expect(button.updateIndicatorPosition).toHaveBeenCalled();
+            expect(buttonResizeStub).toHaveBeenCalledTimes(2);
         });
     });
 

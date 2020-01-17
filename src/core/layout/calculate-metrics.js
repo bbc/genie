@@ -5,8 +5,8 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 
-const BORDER_PAD_RATIO = 0.02;
 const MOBILE_BREAK_WIDTH = 770;
+export const BORDER_PAD_RATIO = 0.02;
 export const GEL_MIN_ASPECT_RATIO = 4 / 3;
 export const GEL_MAX_ASPECT_RATIO = 7 / 3;
 
