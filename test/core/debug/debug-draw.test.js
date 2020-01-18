@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { debugDraw, setupDebugKeys } from "../../../src/core/debug/debug-draw.js";
+import { debugDraw, setupDebugKeys } from "../../../src/core/debug/debug.js";
 
 import * as debugLayoutModule from "../../../src/core/debug/layout-debug-draw.js";
 

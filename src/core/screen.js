@@ -16,7 +16,7 @@ import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
 import { addAnimations } from "./background-animations.js";
 import { debugMode } from "./debug/debug-mode.js";
-import { debugDraw, setupDebugKeys } from "./debug/debug-draw.js";
+import * as debug from "./debug/debug.js";
 
 export const overlayChannel = "gel-overlays";
 
@@ -66,7 +66,7 @@ export class Screen extends Phaser.Scene {
             const themeScreenConfig = this._data.config.theme[this.scene.key];
             GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
 
-            debugMode() && this.debug.addEvents.call(this);
+            debugMode() && this.addDebugEvents.call(this);
         }
 
         this.sys.accessibleButtons = [];
@@ -76,20 +76,16 @@ export class Screen extends Phaser.Scene {
         this._makeNavigation();
     }
 
-    debug = {
-        create: function() {
-            this.debugGraphics = this.add.graphics();
-            setupDebugKeys(this);
-        },
-        draw: function() {
-            this.debugGraphics.clear();
-            debugDraw();
-        },
-        addEvents: function() {
-            this.events.on("create", this.debug.create, this);
-            this.events.on("update", this.debug.draw, this);
-        },
-    };
+    addDebugEvents() {
+        this.events.on("create", debug.create, this);
+        this.events.on("update", debug.draw, this);
+
+        this.events.once("shutdown", () => {
+            this.events.off("create", debug.create, this);
+            this.events.off("update", debug.draw, this);
+            debug.destroy.call(this);
+        });
+    }
 
     setData(newData) {
         this._data = newData;
