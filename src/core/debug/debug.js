@@ -8,16 +8,16 @@ import { debugLayout } from "./layout-debug-draw.js";
 
 let debugDraw;
 
-export function draw() {
+const makeToggle = (val, fn) => () => (debugDraw[val] = debugDraw[val] === fp.identity ? fn : fp.identity);
+
+export function update() {
     this.debugGraphics.clear();
     debugDraw.layout(this);
     debugDraw.groups(this.debugGraphics);
     debugDraw.buttons(this.debugGraphics);
 }
 
-const makeToggle = (val, fn) => () => (debugDraw[val] = debugDraw[val] === fp.identity ? fn : fp.identity);
-
-export function create() {
+function create() {
     this.debugGraphics = this.add.graphics();
 
     debugDraw = {
@@ -31,8 +31,19 @@ export function create() {
     this.input.keyboard.addKey("e").on("up", makeToggle("buttons", this.layout.debug.buttons));
 }
 
-export function destroy() {
+function destroy() {
     this.input.keyboard.removeKey("q");
     this.input.keyboard.removeKey("w");
     this.input.keyboard.removeKey("e");
+}
+
+export function addEvents() {
+    this.events.on("create", create, this);
+    this.events.on("update", update, this);
+
+    this.events.once("shutdown", () => {
+        this.events.off("create", create, this);
+        this.events.off("update", update, this);
+        destroy.call(this);
+    });
 }

@@ -66,7 +66,7 @@ export class Screen extends Phaser.Scene {
             const themeScreenConfig = this._data.config.theme[this.scene.key];
             GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
 
-            debugMode() && this.addDebugEvents.call(this);
+            debugMode() && debug.addEvents.call(this);
         }
 
         this.sys.accessibleButtons = [];
@@ -74,17 +74,6 @@ export class Screen extends Phaser.Scene {
         a11y.clearElementsFromDom();
 
         this._makeNavigation();
-    }
-
-    addDebugEvents() {
-        this.events.on("create", debug.create, this);
-        this.events.on("update", debug.draw, this);
-
-        this.events.once("shutdown", () => {
-            this.events.off("create", debug.create, this);
-            this.events.off("update", debug.draw, this);
-            debug.destroy.call(this);
-        });
     }
 
     setData(newData) {
