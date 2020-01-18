@@ -36,23 +36,33 @@
             },
             storageKey: "characters",
             states: {
-                locked: { asset: "character-select.lock", x: 300, y: 300 },
-                complete: { asset: "character-select.complete", x: 300, y: 300 },
+                locked: {
+                    asset: "char2",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
+                    overlayAsset: "character-select.lock",  //
+                    x: 300,
+                    y: 300,
+                    properties: {      //phaser properties assigned to the base sprite
+                        alpha: 0.25,
+                        tint: 0xff0000,
+                    },
+                    enabled: false, //enable or disable touch input on this state - default true
+                },
+                complete: { overlayAsset: "character-select.complete", x: 300, y: 300 },
             },
             choices: [
                 {
                     id: "char1",
-                    "asset": "char1",
-                    "accessibilityText": "Character 1",
-                    "title": "Liron Man",
-                    "anim": {
-                        "key": "character-select.char1",
-                        "frames": 18,
-                        "frameRate": 6,
-                        "yoyo": true,
-                        "repeat": -1
+                    asset: "char1",
+                    accessibilityText: "Character 1",
+                    title: "Liron Man",
+                    anim: {
+                        key: "character-select.char1",
+                        frames: 18,
+                        frameRate: 6,
+                        yoyo: true,
+                        repeat: -1,
                     },
-                    state: "locked"
+                    state: "locked",
                 },
                 {
                     id: "char2",
@@ -82,21 +92,21 @@
                 },
                 {
                     id: "char6",
-                    "asset": "char3",
-                    "accessibilityText": "Character 3",
-                    "title": "Alex's Worst Nightmare"
+                    asset: "char3",
+                    accessibilityText: "Character 3",
+                    title: "Alex's Worst Nightmare",
                 },
                 {
                     id: "char7",
-                    "asset": "char4",
-                    "accessibilityText": "Character 4",
-                    "title": "Rolff"
+                    asset: "char4",
+                    accessibilityText: "Character 4",
+                    title: "Rolff",
                 },
                 {
                     id: "char8",
-                    "asset": "char1",
-                    "accessibilityText": "Character 1",
-                    "title": "Liron Man"
+                    asset: "char1",
+                    accessibilityText: "Character 1",
+                    title: "Liron Man",
                 },
             ],
             rows: 2,
