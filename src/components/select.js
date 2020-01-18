@@ -56,6 +56,8 @@ export class Select extends Screen {
         states.forEach(state => {
             const config = this.context.theme.states[state.state];
             keyedCells[state.id].overlays.set("state", this.add.sprite(config.x, config.y, config.asset));
+
+            keyedCells[state.id].input.enabled = Boolean(state.state !== "locked")
         }, this);
     }
 
