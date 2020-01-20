@@ -366,7 +366,6 @@ describe("Accessibilify", () => {
                 expect(mockScene.sys.events.on.mock.calls[0][1]).not.toThrow();
             });
 
-
             test("Updates aria label if changed", () => {
                 mockAccessibleDomElement.el.getAttribute.mockReturnValue("test-name");
                 mockButton.config.ariaLabel = "test-name locked";

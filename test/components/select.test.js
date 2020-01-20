@@ -561,7 +561,7 @@ describe("Select Screen", () => {
 
             selectScreen.updateStates();
 
-            expect(selectScreen._cells[0].overlays.set).toHaveBeenCalledWith("state", "test-sprite");
+            expect(selectScreen._cells[0].setImage).toHaveBeenCalledWith("test_asset");
         });
     });
 });
