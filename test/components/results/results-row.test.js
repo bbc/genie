@@ -46,12 +46,20 @@ describe("ResultsRow", () => {
         expect(resultsRow.getBoundingRect()).toEqual(mockDrawArea);
     });
 
-    test("reset removes all gameobjects and adds new ones", () => {
+    test("setContainerPosition sets the containers x and y position correctly", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-        jest.clearAllMocks();
+        resultsRow.setContainerPosition();
+        expect(resultsRow.x).toBe(mockDrawArea.centerX);
+        expect(resultsRow.y).toBe(mockDrawArea.centerY);
+    });
+
+    test("reset updates container position", () => {
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        mockDrawArea.centerX = 43;
+        mockDrawArea.centerY = 23;
         resultsRow.reset();
-        expect(resultsRow.removeAll).toHaveBeenCalledTimes(1);
-        expect(resultsRow.addAt).toHaveBeenCalledTimes(1);
+        expect(resultsRow.x).toBe(mockDrawArea.centerX);
+        expect(resultsRow.y).toBe(mockDrawArea.centerY);
     });
 
     test("the makeAccessible function has been implemented", () => {
