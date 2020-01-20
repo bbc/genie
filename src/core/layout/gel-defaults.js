@@ -202,7 +202,7 @@ export const config = screen => {
             indicator: {
                 offsets: {
                     mobile: { x: -12, y: 12 },
-                    desktop: { x: -4, y: 1 },
+                    desktop: { x: -4, y: 4 },
                 },
             },
             action: ({ screen }) => {
