@@ -62,7 +62,9 @@ export class Select extends Screen {
             config.asset && cell.setImage(config.asset);
             config.properties && Object.assign(cell.sprite, config.properties);
 
-            cell.input.enabled = Boolean(stored.enabled);
+            config.suffix && (cell.config.ariaLabel = [cell.config.accessibilityText, config.suffix].join(" "));
+
+            cell.input.enabled = Boolean(config.enabled !== false);
         }, this);
     }
 

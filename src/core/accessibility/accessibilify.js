@@ -112,6 +112,13 @@ export function accessibilify(button, gameButton = true) {
     }
 
     function update() {
+
+        // TODO investigate if there is a better way to handle this
+        // - currently all buttons are hooked into the update method and this is called every frame
+        if ( accessibleElement.el.getAttribute("aria-label") !== button.config.ariaLabel) {
+            accessibleElement.el.setAttribute("aria-label", button.config.ariaLabel)
+        };
+
         if ((button.input && !button.input.enabled) || !button.visible) {
             if (accessibleElement.visible()) {
                 accessibleElement.hide();
