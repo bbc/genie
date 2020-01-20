@@ -488,7 +488,75 @@ describe("Select Screen", () => {
             selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
 
             selectScreen.context.theme.states = {
-                locked: { x: 10, y: 20, asset: "test_asset", overlayAsset: "test_asset" },
+                locked: { x: 10, y: 20, overlayAsset: "test_asset" },
+            };
+
+            selectScreen.updateStates();
+
+            expect(selectScreen._cells[0].overlays.set).toHaveBeenCalledWith("state", "test-sprite");
+        });
+
+        test("Assigns Phaser properties if properties block exists in config", () => {
+            const mockCell = {
+                config: { id: "id_one" },
+                overlays: { set: jest.fn() },
+                setImage: jest.fn(),
+                input: {},
+                sprite: {},
+            };
+
+            selectScreen.create();
+
+            selectScreen._cells = [mockCell];
+            selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
+
+            selectScreen.context.theme.states = {
+                locked: { x: 10, y: 20, properties: { testProp: "testValue" } },
+            };
+
+            selectScreen.updateStates();
+
+            expect(selectScreen._cells[0].sprite.testProp).toBe("testValue");
+        });
+
+        test("Adds Aria label if suffix property exists in config", () => {
+            const mockCell = {
+                config: { id: "id_one", accessibilityText: "testLabel" },
+                overlays: { set: jest.fn() },
+                setImage: jest.fn(),
+                input: {},
+                sprite: {},
+            };
+
+            selectScreen.create();
+
+            selectScreen._cells = [mockCell];
+            selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
+
+            selectScreen.context.theme.states = {
+                locked: { x: 10, y: 20, suffix: "testSuffix" },
+            };
+
+            selectScreen.updateStates();
+
+            expect(selectScreen._cells[0].config.ariaLabel).toBe("testLabel testSuffix");
+        });
+
+        test("updates the image if an asset property is available in the config block", () => {
+            const mockCell = {
+                config: { id: "id_one" },
+                overlays: { set: jest.fn() },
+                setImage: jest.fn(),
+                input: {},
+            };
+
+            selectScreen.create();
+
+            selectScreen._cells = [mockCell];
+            selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
+
+            selectScreen.context.theme.states = {
+                locked: { x: 10, y: 20, asset: "test_asset" },
             };
 
             selectScreen.updateStates();

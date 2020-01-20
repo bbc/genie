@@ -55,7 +55,7 @@ export class Select extends Screen {
 
         storedStates.forEach(stored => {
             const config = this.context.theme.states[stored.state];
-            const cell = cells[stored.id]
+            const cell = cells[stored.id];
 
             cell.overlays.set("state", this.add.sprite(config.x, config.y, config.overlayAsset));
 
