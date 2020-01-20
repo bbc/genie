@@ -190,12 +190,6 @@ describe("Screen", () => {
             screen.navigation.next();
             expect(screen.scene.start).toHaveBeenCalledWith("nextscreen", mockData);
         });
-
-        test("emits a onscreenexit event on navigation", () => {
-            createAndInitScreen();
-            screen.navigation.next();
-            expect(screen.events.emit).toHaveBeenCalledWith("onscreenexit");
-        });
     });
 
     describe("set Layout", () => {
@@ -288,12 +282,6 @@ describe("Screen", () => {
             screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(mockOverlay.removeAll).toHaveBeenCalled();
             expect(mockOverlay.scene.stop).toHaveBeenCalled();
-        });
-
-        test("removing an overlay, emits a onscreenexit event", () => {
-            createAndInitScreen();
-            screen.removeOverlay();
-            expect(screen.events.emit).toHaveBeenCalledWith("onscreenexit");
         });
 
         test("removing an overlay, emits a onoverlayremoved event on the parent screen", () => {

@@ -124,7 +124,6 @@ export class Screen extends Phaser.Scene {
     }
 
     removeOverlay = () => {
-        this.events.emit("onscreenexit");
         this._data.parentScreens.pop();
         eventBus.publish({
             channel: overlayChannel,
@@ -160,7 +159,6 @@ export class Screen extends Phaser.Scene {
 
     _navigate = route => {
         eventBus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
-        this.events.emit("onscreenexit");
         this.scene.bringToTop(route);
         while (this._data.parentScreens.length > 0) {
             this._data.parentScreens.pop().removeAll();
