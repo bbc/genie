@@ -214,6 +214,29 @@ export const config = screen => {
                 screen.layout.buttons.achievements.setIndicator();
             },
         },
+        achievementsSmall: {
+            group: "topLeft",
+            title: "Achievements",
+            key: "achievements-small",
+            ariaLabel: "Your Achievements",
+            order: 12,
+            id: "__achievements-small",
+            channel: buttonsChannel(screen),
+            indicator: {
+                offsets: {
+                    mobile: { x: -17, y: 17 },
+                    desktop: { x: -12, y: 12 },
+                },
+            },
+            action: ({ screen }) => {
+                if (screen.navigation.achievements) {
+                    screen.navigation.achievements();
+                } else {
+                    gmi.achievements.show();
+                }
+                screen.layout.buttons.achievementsSmall.setIndicator();
+            },
+        },
         restart: {
             group: "bottomCenter",
             title: "Restart",
