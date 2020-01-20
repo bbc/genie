@@ -58,23 +58,6 @@ describe("Layout Harness", () => {
         jest.restoreAllMocks();
     });
 
-    /*
-
-        export function addEvents() {
-    this.events.on("create", create, this);
-    this.events.on("update", update, this);
-
-    this.events.once("shutdown", () => {
-        this.events.off("create", create, this);
-        this.events.off("update", update, this);
-        destroy.call(this);
-    });
-}
-
-
-
-     */
-
     describe("addEvents", () => {
         test("sets up create and update methods", () => {
             addEvents.call(mockScreen);
