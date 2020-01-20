@@ -475,12 +475,21 @@ describe("Select Screen", () => {
 
     describe("updateStates method", () => {
         test("updates the overlays for cells with matching id", () => {
+            const mockCell = {
+                config: { id: "id_one" },
+                overlays: { set: jest.fn() },
+                setImage: jest.fn(),
+                input: {},
+            };
+
             selectScreen.create();
 
-            selectScreen._cells = [{ config: { id: "id_one" }, overlays: { set: jest.fn() } }];
+            selectScreen._cells = [mockCell];
             selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
 
-            selectScreen.context.theme.states = { locked: { x: 10, y: 20, asset: "test_asset" } };
+            selectScreen.context.theme.states = {
+                locked: { x: 10, y: 20, asset: "test_asset", overlayAsset: "test_asset" },
+            };
 
             selectScreen.updateStates();
 
