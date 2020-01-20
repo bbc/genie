@@ -21,10 +21,6 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         );
     }
 
-    clearRow() {
-        this.removeAll();
-    }
-
     getBoundingRect() {
         return this.getDrawArea();
     }
