@@ -32,7 +32,9 @@ export class Select extends Screen {
         this.setTitleElements();
         this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
 
-        this.grid = new GelGrid(this, getMetrics(), this.layout.getSafeArea(), this.theme.rows, this.theme.columns);
+        const metrics = getMetrics();
+
+        this.grid = new GelGrid(this, metrics, this.layout.getSafeArea(metrics), this.theme.rows, this.theme.columns);
         this._cells = this.grid.addGridCells(this.theme.choices);
         this.layout.addCustomGroup("grid", this.grid);
 
@@ -61,7 +63,7 @@ export class Select extends Screen {
 
     resize() {
         const metrics = getMetrics();
-        this.grid.resize(metrics, this.layout.getSafeArea());
+        this.grid.resize(metrics, this.layout.getSafeArea(metrics));
         this.repositionTitleElements(metrics);
     }
 
