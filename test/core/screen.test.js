@@ -14,7 +14,7 @@ import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults";
 import { settingsChannel } from "../../src/core/settings.js";
 import * as debugModeModule from "../../src/core/debug/debug-mode.js";
-import * as debugDrawModule from "../../src/core/debug/debug-draw.js";
+import * as debugModule from "../../src/core/debug/debug.js";
 
 describe("Screen", () => {
     let screen;
@@ -28,7 +28,7 @@ describe("Screen", () => {
     const createScreen = key => {
         screen = new Screen();
         screen.sys = { accessibleButtons: [] };
-        screen.events = { emit: jest.fn(), on: jest.fn() };
+        screen.events = { emit: jest.fn(), on: jest.fn(), once: jest.fn() };
         screen.scene = { key, bringToTop: jest.fn(), start: jest.fn(), run: jest.fn(), scene: { mock: "scene" } };
         screen.cameras = { main: { scrollX: 0, scrollY: 0 } };
         screen.add = { container: () => "root", existing: jest.fn(), graphics: jest.fn(() => mockGfx) };
@@ -190,12 +190,6 @@ describe("Screen", () => {
             screen.navigation.next();
             expect(screen.scene.start).toHaveBeenCalledWith("nextscreen", mockData);
         });
-
-        test("emits a onscreenexit event on navigation", () => {
-            createAndInitScreen();
-            screen.navigation.next();
-            expect(screen.events.emit).toHaveBeenCalledWith("onscreenexit");
-        });
     });
 
     describe("set Layout", () => {
@@ -261,12 +255,6 @@ describe("Screen", () => {
             expect(screen.scene.bringToTop).toHaveBeenCalled();
         });
 
-        test("adding an overlay, emits a onoverlayadded event", () => {
-            createAndInitScreen();
-            screen.addOverlay("overlay");
-            expect(screen.events.emit).toHaveBeenCalledWith("onoverlayadded");
-        });
-
         test("removing an overlay, publishes to and removes subscription from event bus correctly", () => {
             createAndInitScreen();
             screen.removeOverlay();
@@ -294,19 +282,6 @@ describe("Screen", () => {
             screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(mockOverlay.removeAll).toHaveBeenCalled();
             expect(mockOverlay.scene.stop).toHaveBeenCalled();
-        });
-
-        test("removing an overlay, emits a onscreenexit event", () => {
-            createAndInitScreen();
-            screen.removeOverlay();
-            expect(screen.events.emit).toHaveBeenCalledWith("onscreenexit");
-        });
-
-        test("removing an overlay, emits a onoverlayremoved event on the parent screen", () => {
-            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
-            createAndInitScreen();
-            screen._onOverlayRemoved({ overlay: mockOverlay });
-            expect(screen.events.emit).toHaveBeenCalledWith("onoverlayremoved");
         });
 
         test("removing an overlay, clears accessible buttons and clears elements from DOM", () => {
@@ -384,52 +359,35 @@ describe("Screen", () => {
 
     describe("Debug", () => {
         test("Does not setup debug events if debugMode is unset", () => {
+            jest.spyOn(debugModule, "addEvents");
             debugModeModule.debugMode = jest.fn().mockImplementation(() => false);
             createAndInitScreen();
 
-            expect(screen.events.on).not.toHaveBeenCalled();
+            expect(debugModule.addEvents).not.toHaveBeenCalled();
         });
 
         test("Does not setup debug events if scene is loader", () => {
+            jest.spyOn(debugModule, "addEvents");
             debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
             createAndInitScreen("loader");
 
-            expect(screen.events.on).not.toHaveBeenCalled();
+            expect(debugModule.addEvents).not.toHaveBeenCalled();
         });
 
         test("Does not setup debug events if scene is boot", () => {
+            jest.spyOn(debugModule, "addEvents");
             debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
             createAndInitScreen("boot");
 
-            expect(screen.events.on).not.toHaveBeenCalled();
+            expect(debugModule.addEvents).not.toHaveBeenCalled();
         });
 
         test("Sets up debug events when debugMode on scene is not loader or boot", () => {
+            jest.spyOn(debugModule, "addEvents");
             debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
             createAndInitScreen();
 
-            expect(screen.events.on).toHaveBeenCalledWith("create", screen.debug.create, screen);
-        });
-
-        test("debug.draw method clears graphics and calls debugDraw Module", () => {
-            debugDrawModule.debugDraw = jest.fn();
-            createAndInitScreen();
-            screen.debugGraphics = { clear: jest.fn() };
-
-            screen.debug.draw.call(screen);
-
-            expect(screen.debugGraphics.clear).toHaveBeenCalled();
-            expect(debugDrawModule.debugDraw).toHaveBeenCalled();
-        });
-
-        test("debug.addEvents method calls debugKeys setup on debugdraw module", () => {
-            debugDrawModule.setupDebugKeys = jest.fn();
-            createAndInitScreen();
-
-            screen.debug.create.call(screen);
-
-            expect(screen.debugGraphics).toEqual(mockGfx);
-            expect(debugDrawModule.setupDebugKeys).toHaveBeenCalled();
+            expect(debugModule.addEvents).toHaveBeenCalled();
         });
     });
 });
