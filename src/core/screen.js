@@ -112,7 +112,6 @@ export class Screen extends Phaser.Scene {
     addAnimations = addAnimations(this);
 
     addOverlay(key) {
-        this.events.emit("onoverlayadded");
         eventBus.subscribe({
             channel: overlayChannel,
             name: key,
