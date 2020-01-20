@@ -116,7 +116,7 @@ describe("Results Screen", () => {
         test("adds the achievement button when theme flag is set", () => {
             resultsScreen.context.config.theme.game.achievements = true;
             resultsScreen.create();
-            const expectedButtons = ["pause", "restart", "continueGame", "achievements"];
+            const expectedButtons = ["pause", "restart", "continueGame", "achievementsSmall"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 

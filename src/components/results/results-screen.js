@@ -49,7 +49,7 @@ export class Results extends Screen {
     }
 
     createLayout() {
-        const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
+        const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
         this.setLayout(buttons.concat(achievements));
 
