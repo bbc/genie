@@ -135,7 +135,6 @@ export class Screen extends Phaser.Scene {
     };
 
     _onOverlayRemoved = data => {
-        this.events.emit("onoverlayremoved");
         eventBus.removeChannel(buttonsChannel(data.overlay));
         a11y.clearAccessibleButtons();
         a11y.clearElementsFromDom();

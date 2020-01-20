@@ -261,12 +261,6 @@ describe("Screen", () => {
             expect(screen.scene.bringToTop).toHaveBeenCalled();
         });
 
-        test("adding an overlay, emits a onoverlayadded event", () => {
-            createAndInitScreen();
-            screen.addOverlay("overlay");
-            expect(screen.events.emit).toHaveBeenCalledWith("onoverlayadded");
-        });
-
         test("removing an overlay, publishes to and removes subscription from event bus correctly", () => {
             createAndInitScreen();
             screen.removeOverlay();
