@@ -284,13 +284,6 @@ describe("Screen", () => {
             expect(mockOverlay.scene.stop).toHaveBeenCalled();
         });
 
-        test("removing an overlay, emits a onoverlayremoved event on the parent screen", () => {
-            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
-            createAndInitScreen();
-            screen._onOverlayRemoved({ overlay: mockOverlay });
-            expect(screen.events.emit).toHaveBeenCalledWith("onoverlayremoved");
-        });
-
         test("removing an overlay, clears accessible buttons and clears elements from DOM", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
             createAndInitScreen();
