@@ -69,6 +69,11 @@ describe("Layout", () => {
         };
 
         mockHitAreaBounds = { left: 0, top: 0, width: 200, height: 100 };
+        const mockButton = {
+            buttonName: "test_button",
+            onInputUp: { add: mockInputUpAdd },
+            getHitAreaBounds: jest.fn(() => mockHitAreaBounds),
+        };
 
         mockInputUpAdd = jest.fn();
         mockGelGroup = {
@@ -77,13 +82,16 @@ describe("Layout", () => {
                 onInputUp: { add: mockInputUpAdd },
                 getHitAreaBounds: jest.fn(() => mockHitAreaBounds),
             })),
+            iterate: jest.fn(x => {
+                x(mockButton);
+            }),
             reset: jest.fn(),
             addToGroup: jest.fn(),
             destroy: jest.fn(),
             makeAccessible: jest.fn(),
             addCustomGroup: jest.fn(),
             getBoundingRect: jest.fn(() => mockHitAreaBounds),
-            list: [1],
+            list: [mockButton],
         };
         GelGroup.mockImplementation(() => mockGelGroup);
         global.Phaser.GameObjects.Container = jest.fn(() => mockRoot);
@@ -310,7 +318,7 @@ describe("Layout", () => {
 
             expect(mockGfx.lineStyle).toHaveBeenCalledWith(1, 0x3333ff, 1);
             expect(mockGfx.strokeRectShape).toHaveBeenCalledWith(mockHitAreaBounds);
-            expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(3);
+            expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(11);
         });
     });
 
