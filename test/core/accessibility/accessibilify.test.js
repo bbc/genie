@@ -97,6 +97,10 @@ describe("Accessibilify", () => {
             show: jest.fn(),
             hide: jest.fn(),
             visible: jest.fn(),
+            el: {
+                getAttribute: jest.fn(),
+                setAttribute: jest.fn(),
+            },
         };
         accessibleDomElement.mockImplementation(() => mockAccessibleDomElement);
     });
@@ -360,6 +364,15 @@ describe("Accessibilify", () => {
                 accessibilify(mockButton);
                 delete mockButton.input;
                 expect(mockScene.sys.events.on.mock.calls[0][1]).not.toThrow();
+            });
+
+            test("Updates aria label if changed", () => {
+                mockAccessibleDomElement.el.getAttribute.mockReturnValue("test-name");
+                mockButton.config.ariaLabel = "test-name locked";
+                accessibilify(mockButton);
+                mockScene.sys.events.on.mock.calls[0][1]();
+
+                expect(mockAccessibleDomElement.el.setAttribute).toHaveBeenCalledWith("aria-label", "test-name locked");
             });
         });
         describe("Showing", () => {
