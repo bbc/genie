@@ -11,12 +11,6 @@
                     boundsAlignH: 'center',
                 },
             },
-            'button-overrides': {
-                achievements: {
-                    group: 'middleCenter',
-                    shiftY: 120,
-                },
-            },
             // New example results screen config below
             backdrop: 'imgKey', //optional added to sfafe area
             statsFormat: '', // maybe?

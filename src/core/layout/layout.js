@@ -131,7 +131,6 @@ export function create(scene, metrics, buttonIds) {
         buttons,
         debug,
         getSafeArea,
-        groups, //TODO remove this once layout.safeArea supports results screen properly.
         destroy,
         makeAccessible,
         resize,

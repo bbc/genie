@@ -50,9 +50,9 @@ describe("Pause Overlay", () => {
             expect(pauseScreen.sound.pauseAll).toHaveBeenCalled();
         });
 
-        test("adds a callback to resume all sounds onscreenexit", () => {
+        test("adds a callback to resume all sounds on shutdown", () => {
             pauseScreen.preload();
-            expect(pauseScreen.events.once).toHaveBeenCalledWith("onscreenexit", mockBoundResumeAllFunction);
+            expect(pauseScreen.events.once).toHaveBeenCalledWith("shutdown", mockBoundResumeAllFunction);
         });
     });
 

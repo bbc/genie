@@ -45,11 +45,11 @@ export class Results extends Screen {
         const safeWidth = metrics.stageHeight * GEL_MIN_ASPECT_RATIO - metrics.borderPad * 2;
         const x = -safeWidth / 2;
         const y = -metrics.stageHeight / 2 + metrics.borderPad;
-        return new Phaser.Geom.Rectangle(x, y, safeWidth, this.layout.groups.bottomCenter.y - y);
+        return new Phaser.Geom.Rectangle(x, y, safeWidth, this.layout.buttons.continueGame.parentContainer.y - y);
     }
 
     createLayout() {
-        const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
+        const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
         this.setLayout(buttons.concat(achievements));
 
