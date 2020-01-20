@@ -220,7 +220,7 @@ export const config = screen => {
             key: "achievements-small",
             ariaLabel: "Your Achievements",
             order: 12,
-            id: "__achievements-results",
+            id: "__achievements-small",
             channel: buttonsChannel(screen),
             indicator: {
                 offsets: {
