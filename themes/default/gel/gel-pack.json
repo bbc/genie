@@ -31,8 +31,8 @@
             },
             {
                 "type": "spritesheet",
-                "key": "achievements-circular",
-                "url": "gel/desktop/achievements-results.png",
+                "key": "achievements-small",
+                "url": "gel/desktop/achievements-small.png",
                 "frameConfig": {
                     "frameWidth": 64,
                     "frameHeight": 64,
@@ -244,14 +244,14 @@
             },
             {
                 "type": "spritesheet",
-                "key": "achievements-circular",
-                "url": "gel/mobile/achievements-results.png",
+                "key": "achievements-small",
+                "url": "gel/mobile/achievements-small.png",
                 "frameConfig": {
                     "frameWidth": 42,
                     "frameHeight": 42,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 3
+                    "spacing": 4
                 }
             },
             {

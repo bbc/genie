@@ -217,7 +217,7 @@ export const config = screen => {
         achievementsSmall: {
             group: "topLeft",
             title: "Achievements",
-            key: "achievements-circular",
+            key: "achievements-small",
             ariaLabel: "Your Achievements",
             order: 12,
             id: "__achievements-results",
