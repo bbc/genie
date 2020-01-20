@@ -190,12 +190,6 @@ describe("Screen", () => {
             screen.navigation.next();
             expect(screen.scene.start).toHaveBeenCalledWith("nextscreen", mockData);
         });
-
-        test("emits a onscreenexit event on navigation", () => {
-            createAndInitScreen();
-            screen.navigation.next();
-            expect(screen.events.emit).toHaveBeenCalledWith("onscreenexit");
-        });
     });
 
     describe("set Layout", () => {
@@ -261,12 +255,6 @@ describe("Screen", () => {
             expect(screen.scene.bringToTop).toHaveBeenCalled();
         });
 
-        test("adding an overlay, emits a onoverlayadded event", () => {
-            createAndInitScreen();
-            screen.addOverlay("overlay");
-            expect(screen.events.emit).toHaveBeenCalledWith("onoverlayadded");
-        });
-
         test("removing an overlay, publishes to and removes subscription from event bus correctly", () => {
             createAndInitScreen();
             screen.removeOverlay();
@@ -294,19 +282,6 @@ describe("Screen", () => {
             screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(mockOverlay.removeAll).toHaveBeenCalled();
             expect(mockOverlay.scene.stop).toHaveBeenCalled();
-        });
-
-        test("removing an overlay, emits a onscreenexit event", () => {
-            createAndInitScreen();
-            screen.removeOverlay();
-            expect(screen.events.emit).toHaveBeenCalledWith("onscreenexit");
-        });
-
-        test("removing an overlay, emits a onoverlayremoved event on the parent screen", () => {
-            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
-            createAndInitScreen();
-            screen._onOverlayRemoved({ overlay: mockOverlay });
-            expect(screen.events.emit).toHaveBeenCalledWith("onoverlayremoved");
         });
 
         test("removing an overlay, clears accessible buttons and clears elements from DOM", () => {

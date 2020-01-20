@@ -54,10 +54,10 @@ describe("Results Screen", () => {
             buttons: {
                 next: {},
                 previous: {},
-            },
-            groups: {
-                bottomCenter: {
-                    y: 121,
+                continueGame: {
+                    parentContainer: {
+                        y: 121,
+                    },
                 },
             },
         };
@@ -116,7 +116,7 @@ describe("Results Screen", () => {
         test("adds the achievement button when theme flag is set", () => {
             resultsScreen.context.config.theme.game.achievements = true;
             resultsScreen.create();
-            const expectedButtons = ["pause", "restart", "continueGame", "achievements"];
+            const expectedButtons = ["pause", "restart", "continueGame", "achievementsSmall"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
@@ -155,7 +155,7 @@ describe("Results Screen", () => {
 
     describe("getResultsArea", () => {
         test("returns the correct rectangle for the area available", () => {
-            resultsScreen.layout.groups.bottomCenter.y = 121;
+            resultsScreen.layout.buttons.continueGame.parentContainer.y = 121;
             Scaler.getMetrics.mockImplementation(() => ({
                 stageHeight: 600,
                 borderPad: 20,
@@ -166,7 +166,12 @@ describe("Results Screen", () => {
             const y = -600 / 2 + 20;
 
             expect(resultsScreen.getResultsArea()).toEqual(
-                new Phaser.Geom.Rectangle(x, y, safeWidth, resultsScreen.layout.groups.bottomCenter.y - y),
+                new Phaser.Geom.Rectangle(
+                    x,
+                    y,
+                    safeWidth,
+                    resultsScreen.layout.buttons.continueGame.parentContainer.y - y,
+                ),
             );
         });
     });
