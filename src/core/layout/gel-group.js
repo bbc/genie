@@ -107,6 +107,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
     reset(metrics) {
         metrics = metrics || this._metrics;
         this.resetButtons(metrics);
+        this.alignChildren();
 
         this._metrics = metrics;
         const invScale = 1 / metrics.scale;
