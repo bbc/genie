@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { ResultsRow } from "../../../../src/core/layout/rows/results-row.js";
+import { ResultsRow } from "../../../src/components/results/results-row.js";
 
 describe("ResultsRow", () => {
     let mockScene;
@@ -36,10 +36,34 @@ describe("ResultsRow", () => {
         };
         mockGetDrawArea = () => mockDrawArea;
         ResultsRow.prototype.addAt = jest.fn();
+        ResultsRow.prototype.removeAll = jest.fn();
     });
+
+    afterEach(() => jest.clearAllMocks());
 
     test("getBoundingRect returns getDrawArea function", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         expect(resultsRow.getBoundingRect()).toEqual(mockDrawArea);
+    });
+
+    test("setContainerPosition sets the containers x and y position correctly", () => {
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        resultsRow.setContainerPosition();
+        expect(resultsRow.x).toBe(mockDrawArea.centerX);
+        expect(resultsRow.y).toBe(mockDrawArea.centerY);
+    });
+
+    test("reset updates container position", () => {
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        mockDrawArea.centerX = 43;
+        mockDrawArea.centerY = 23;
+        resultsRow.reset();
+        expect(resultsRow.x).toBe(mockDrawArea.centerX);
+        expect(resultsRow.y).toBe(mockDrawArea.centerY);
+    });
+
+    test("the makeAccessible function has been implemented", () => {
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        expect(resultsRow.makeAccessible).not.toThrow();
     });
 });

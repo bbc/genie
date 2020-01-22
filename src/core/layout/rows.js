@@ -4,13 +4,13 @@
  * @license Apache-2.0
  */
 
-import { ResultsRow } from "./results-row.js";
+import { ResultsRow } from "../../components/results/results-row.js";
 
 export const RowType = {
     Results: ResultsRow,
 };
 
-export function create(scene, rowsConfig, rowType) {
+export function create(scene, getArea, rowsConfig, rowType) {
     let containers = [];
 
     const createRow = (rowConfig, index) => {
@@ -20,7 +20,7 @@ export function create(scene, rowsConfig, rowType) {
     };
 
     const getRectForRow = index => () => {
-        const drawArea = scene.layout.getSafeArea();
+        const drawArea = getArea();
         const numberOfRows = rowsConfig.length;
         const rowHeight = drawArea.height / numberOfRows;
         const topOfRow = drawArea.y + rowHeight * index;

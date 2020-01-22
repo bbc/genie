@@ -73,7 +73,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
             gameButton: true,
             group: "grid",
             order: 0,
-            ariaLabel: "",
+            ariaLabel: choice.accessibilityText,
+            accessibilityText: choice.accessibilityText,
             anim: choice.anim,
         };
 
