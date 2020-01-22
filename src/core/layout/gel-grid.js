@@ -109,20 +109,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         cellSize[borkedAxis] *= borkedAxis === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
         this._cells[cellIndex].setDisplaySize(...cellSize);
         this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
-
-        // this.setSpriteSize(this._cells[cellIndex], ...cellSize);
     }
-
-    // setSpriteSize(cell) {
-    //     const spriteAspect = cell.sprite.width / cell.sprite.height;
-    //     const cellAspect = cell.displayWidth / cell.displayHeight;
-    //     const scaleAxis = spriteAspect < cellAspect ? "scaleX" : "scaleY";
-
-    //     const aspectRatioRatio = spriteAspect / cellAspect;
-    //     console.log("scaleAxis", scaleAxis);
-
-    //     cell.sprite[scaleAxis] = scaleAxis === "scaleX" ? aspectRatioRatio : 1 / aspectRatioRatio;
-    // }
 
     setCellVisibility(cellIndex) {
         this._cells[cellIndex].visible = true;
