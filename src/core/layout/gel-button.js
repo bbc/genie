@@ -25,6 +25,7 @@ export class GelButton extends Phaser.GameObjects.Container {
         this.setIndicator();
         this.shiftX = config.shiftX || 0;
         this.shiftY = config.shiftY || 0;
+        this.config = config;
 
         if (config.anim) {
             config.anim.frames = this.scene.anims.generateFrameNumbers(config.anim.key);
@@ -97,7 +98,7 @@ export class GelButton extends Phaser.GameObjects.Container {
     resize(metrics) {
         this._isMobile = metrics.isMobile;
         this.sprite.setTexture(assetPath({ key: this._key, isMobile: metrics.isMobile }));
-        this.setHitArea(metrics);
+        !this.config.gameButton && this.setHitArea(metrics);
     }
 
     setIndicator() {

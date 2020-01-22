@@ -94,9 +94,35 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     setCellSize(cellIndex) {
-        //this._cells[cellIndex].setSize(...this.calculateCellSize())
-        this._cells[cellIndex].setDisplaySize(...this.calculateCellSize());
+        const cellSize = this.calculateCellSize();
+        const hitSize = cellSize.slice();
+        hitSize[0] *= 1 / this._cells[cellIndex].scaleX;
+        hitSize[1] *= 1 / this._cells[cellIndex].scaleY;
+
+        const spriteAspect = this._cells[cellIndex].sprite.width / this._cells[cellIndex].sprite.height;
+        const cellAspect = cellSize[0] / cellSize[1];
+
+        const borkedAxis = spriteAspect < cellAspect ? 0 : 1;
+
+        const aspectRatioRatio = spriteAspect / cellAspect;
+
+        cellSize[borkedAxis] *= borkedAxis === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
+        this._cells[cellIndex].setDisplaySize(...cellSize);
+        this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
+
+        // this.setSpriteSize(this._cells[cellIndex], ...cellSize);
     }
+
+    // setSpriteSize(cell) {
+    //     const spriteAspect = cell.sprite.width / cell.sprite.height;
+    //     const cellAspect = cell.displayWidth / cell.displayHeight;
+    //     const scaleAxis = spriteAspect < cellAspect ? "scaleX" : "scaleY";
+
+    //     const aspectRatioRatio = spriteAspect / cellAspect;
+    //     console.log("scaleAxis", scaleAxis);
+
+    //     cell.sprite[scaleAxis] = scaleAxis === "scaleX" ? aspectRatioRatio : 1 / aspectRatioRatio;
+    // }
 
     setCellVisibility(cellIndex) {
         this._cells[cellIndex].visible = true;

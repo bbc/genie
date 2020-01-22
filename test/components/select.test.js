@@ -141,17 +141,7 @@ describe("Select Screen", () => {
                 getBounds: jest.fn(() => mockTextBounds),
             })),
             image: jest.fn((x, y, imageName) => imageName),
-            sprite: jest.fn((x, y, assetName) => {
-                if (assetName === "test-select.character1") {
-                    return characterSprites[0];
-                }
-                if (assetName === "test-select.character2") {
-                    return characterSprites[1];
-                }
-                if (assetName === "test-select.character3") {
-                    return characterSprites[2];
-                }
-            }),
+            sprite: jest.fn((x, y, assetName) => {}),
         };
         selectScreen.addAnimations = jest.fn();
         Object.defineProperty(selectScreen, "layout", {
@@ -482,6 +472,14 @@ describe("Select Screen", () => {
             selectScreen.updateStates();
 
             expect(selectScreen._cells[0].overlays.set).toHaveBeenCalledWith("state", 10, 20, "test_asset");
+        });
+    });
+
+    describe("resizing button sprites", () => {
+        test("", () => {
+            selectScreen.create();
+
+            selectScreen._cells = [{ _id: "id_one", overlays: { set: jest.fn() } }];
         });
     });
 });
