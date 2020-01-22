@@ -22,7 +22,6 @@ describe("Results Screen", () => {
 
     beforeEach(() => {
         Scaler.getMetrics = jest.fn();
-
         mockConfig = {
             theme: {
                 resultsScreen: {
@@ -55,6 +54,11 @@ describe("Results Screen", () => {
             buttons: {
                 next: {},
                 previous: {},
+                continueGame: {
+                    parentContainer: {
+                        y: 121,
+                    },
+                },
             },
         };
         resultsScreen.context = { config: mockConfig, transientData: mockTransientData };
@@ -95,19 +99,24 @@ describe("Results Screen", () => {
 
         test("adds GEL buttons to layout", () => {
             resultsScreen.create();
-            const expectedButtons = ["pause", "restart", "continueGame", "next", "previous"];
+            const expectedButtons = ["pause", "restart", "continueGame"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
         test("creates rows for the results screen", () => {
             resultsScreen.create();
-            expect(Rows.create).toHaveBeenCalledWith(resultsScreen, resultsScreen.theme.rows, Rows.RowType.Results);
+            expect(Rows.create).toHaveBeenCalledWith(
+                resultsScreen,
+                expect.any(Function),
+                resultsScreen.theme.rows,
+                Rows.RowType.Results,
+            );
         });
 
         test("adds the achievement button when theme flag is set", () => {
             resultsScreen.context.config.theme.game.achievements = true;
             resultsScreen.create();
-            const expectedButtons = ["pause", "restart", "continueGame", "next", "previous", "achievements"];
+            const expectedButtons = ["pause", "restart", "continueGame", "achievementsSmall"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
@@ -141,6 +150,29 @@ describe("Results Screen", () => {
                 resultsScreen.create();
                 expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
             });
+        });
+    });
+
+    describe("getResultsArea", () => {
+        test("returns the correct rectangle for the area available", () => {
+            resultsScreen.layout.buttons.continueGame.parentContainer.y = 121;
+            Scaler.getMetrics.mockImplementation(() => ({
+                stageHeight: 600,
+                borderPad: 20,
+            }));
+
+            const safeWidth = 600 * (4 / 3) - 20 * 2;
+            const x = -safeWidth / 2;
+            const y = -600 / 2 + 20;
+
+            expect(resultsScreen.getResultsArea()).toEqual(
+                new Phaser.Geom.Rectangle(
+                    x,
+                    y,
+                    safeWidth,
+                    resultsScreen.layout.buttons.continueGame.parentContainer.y - y,
+                ),
+            );
         });
     });
 

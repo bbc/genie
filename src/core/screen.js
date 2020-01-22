@@ -16,7 +16,7 @@ import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
 import { addAnimations } from "./background-animations.js";
 import { debugMode } from "./debug/debug-mode.js";
-import { debugDraw, setupDebugKeys } from "./debug/debug-draw.js";
+import * as debug from "./debug/debug.js";
 
 export const overlayChannel = "gel-overlays";
 
@@ -66,7 +66,7 @@ export class Screen extends Phaser.Scene {
             const themeScreenConfig = this._data.config.theme[this.scene.key];
             GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
 
-            debugMode() && this.debug.addEvents.call(this);
+            debugMode() && debug.addEvents.call(this);
         }
 
         this.sys.accessibleButtons = [];
@@ -75,21 +75,6 @@ export class Screen extends Phaser.Scene {
 
         this._makeNavigation();
     }
-
-    debug = {
-        create: function() {
-            this.debugGraphics = this.add.graphics();
-            setupDebugKeys(this);
-        },
-        draw: function() {
-            this.debugGraphics.clear();
-            debugDraw();
-        },
-        addEvents: function() {
-            this.events.on("create", this.debug.create, this);
-            this.events.on("update", this.debug.draw, this);
-        },
-    };
 
     setData(newData) {
         this._data = newData;
@@ -112,7 +97,6 @@ export class Screen extends Phaser.Scene {
     addAnimations = addAnimations(this);
 
     addOverlay(key) {
-        this.events.emit("onoverlayadded");
         eventBus.subscribe({
             channel: overlayChannel,
             name: key,
@@ -124,7 +108,6 @@ export class Screen extends Phaser.Scene {
     }
 
     removeOverlay = () => {
-        this.events.emit("onscreenexit");
         this._data.parentScreens.pop();
         eventBus.publish({
             channel: overlayChannel,
@@ -135,7 +118,6 @@ export class Screen extends Phaser.Scene {
     };
 
     _onOverlayRemoved = data => {
-        this.events.emit("onoverlayremoved");
         eventBus.removeChannel(buttonsChannel(data.overlay));
         a11y.clearAccessibleButtons();
         a11y.clearElementsFromDom();
@@ -161,7 +143,6 @@ export class Screen extends Phaser.Scene {
 
     _navigate = route => {
         eventBus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
-        this.events.emit("onscreenexit");
         this.scene.bringToTop(route);
         while (this._data.parentScreens.length > 0) {
             this._data.parentScreens.pop().removeAll();

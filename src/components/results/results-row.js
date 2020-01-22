@@ -10,13 +10,12 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.rowConfig = rowConfig;
         this.getDrawArea = getDrawArea;
         this.drawRow();
-        this.reset();
+        this.setContainerPosition();
     }
 
     drawRow() {
-        const drawArea = this.getDrawArea();
         this.addAt(
-            new Phaser.GameObjects.Text(this.scene, drawArea.centerX, drawArea.centerY, "Placeholder Row Text", {
+            new Phaser.GameObjects.Text(this.scene, 0, 0, "Placeholder Row Text", {
                 color: "#000000",
             }).setOrigin(0.5, 0.5),
         );
@@ -26,5 +25,15 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         return this.getDrawArea();
     }
 
-    reset() {}
+    setContainerPosition() {
+        const { centerX, centerY } = this.getDrawArea();
+        this.x = centerX;
+        this.y = centerY;
+    }
+
+    reset() {
+        this.setContainerPosition();
+    }
+
+    makeAccessible() {}
 }
