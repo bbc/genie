@@ -7,6 +7,7 @@ import { createMockGmi } from "../../mock/gmi.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as Rows from "../../../src/core/layout/rows.js";
+import * as MetricsModule from "../../../src/core/layout/calculate-metrics.js";
 
 import { Results } from "../../../src/components/results/results-screen.js";
 
@@ -21,7 +22,8 @@ describe("Results Screen", () => {
     let mockTextAdd;
 
     beforeEach(() => {
-        Scaler.getMetrics = jest.fn();
+        Scaler.getMetrics = jest.fn(() => ({ test: "metrics" }));
+        MetricsModule.getMetrics = jest.fn();
         mockConfig = {
             theme: {
                 resultsScreen: {
@@ -60,6 +62,7 @@ describe("Results Screen", () => {
                     },
                 },
             },
+            getSafeArea: jest.fn(),
         };
         resultsScreen.context = { config: mockConfig, transientData: mockTransientData };
         resultsScreen.transientData = mockTransientData;
@@ -113,6 +116,14 @@ describe("Results Screen", () => {
             );
         });
 
+        test("Creates a callback that calls getSafeArea with metrics and top: false group overrides ", () => {
+            resultsScreen.create();
+            const safeAreaCallback = Rows.create.mock.calls[0][1];
+            safeAreaCallback();
+
+            expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ test: "metrics" }, { top: false });
+        });
+
         test("adds the achievement button when theme flag is set", () => {
             resultsScreen.context.config.theme.game.achievements = true;
             resultsScreen.create();
@@ -150,29 +161,6 @@ describe("Results Screen", () => {
                 resultsScreen.create();
                 expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
             });
-        });
-    });
-
-    describe("getResultsArea", () => {
-        test("returns the correct rectangle for the area available", () => {
-            resultsScreen.layout.buttons.continueGame.parentContainer.y = 121;
-            Scaler.getMetrics.mockImplementation(() => ({
-                stageHeight: 600,
-                borderPad: 20,
-            }));
-
-            const safeWidth = 600 * (4 / 3) - 20 * 2;
-            const x = -safeWidth / 2;
-            const y = -600 / 2 + 20;
-
-            expect(resultsScreen.getResultsArea()).toEqual(
-                new Phaser.Geom.Rectangle(
-                    x,
-                    y,
-                    safeWidth,
-                    resultsScreen.layout.buttons.continueGame.parentContainer.y - y,
-                ),
-            );
         });
     });
 

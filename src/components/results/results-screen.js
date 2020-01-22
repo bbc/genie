@@ -9,7 +9,6 @@ import { eventBus } from "../../core/event-bus.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import * as Rows from "../../core/layout/rows.js";
 import { getMetrics } from "../../core/scaler.js";
-import { GEL_MIN_ASPECT_RATIO } from "../../core/layout/calculate-metrics.js";
 
 const getScoreMetaData = result => {
     if (typeof result === "number") {
@@ -40,20 +39,18 @@ export class Results extends Screen {
         this.subscribeToEventBus();
     }
 
-    getResultsArea() {
-        const metrics = getMetrics();
-        const safeWidth = metrics.stageHeight * GEL_MIN_ASPECT_RATIO - metrics.borderPad * 2;
-        const x = -safeWidth / 2;
-        const y = -metrics.stageHeight / 2 + metrics.borderPad;
-        return new Phaser.Geom.Rectangle(x, y, safeWidth, this.layout.buttons.continueGame.parentContainer.y - y);
-    }
-
     createLayout() {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
         this.setLayout(buttons.concat(achievements));
+        const getSafeArea = this.layout.getSafeArea;
 
-        this.rows = Rows.create(this, this.getResultsArea.bind(this), this.theme.rows, Rows.RowType.Results);
+        this.rows = Rows.create(
+            this,
+            () => getSafeArea(getMetrics(), { top: false }),
+            this.theme.rows,
+            Rows.RowType.Results,
+        );
     }
 
     subscribeToEventBus() {

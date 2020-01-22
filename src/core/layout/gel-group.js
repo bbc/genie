@@ -132,8 +132,10 @@ export class GelGroup extends Phaser.GameObjects.Container {
             width += hitBounds.width;
         });
 
-        width += this._isVertical ? 0 : this._metrics.buttonPad * (this.list.length - 1) * this.scale;
-        height += this._isVertical ? this._metrics.buttonPad * (this.list.length - 1) * this.scale : 0;
+        const combinedPadding = Math.max(this.list.length - 1, 0) * this._metrics.buttonPad * this.scale;
+
+        width += this._isVertical ? 0 : combinedPadding;
+        height += this._isVertical ? combinedPadding : 0;
 
         this.setSize(width, height);
     }
