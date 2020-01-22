@@ -107,14 +107,12 @@ export class GelGroup extends Phaser.GameObjects.Container {
     reset(metrics) {
         metrics = metrics || this._metrics;
         this.resetButtons(metrics);
-        const xx = this.alignChildren();
 
         this._metrics = metrics;
         const invScale = 1 / metrics.scale;
 
         this.setScale(invScale);
-        //this.updateSize();
-        this.setSize(xx.x, xx.y);
+        this.updateSize();
         this._setGroupPosition(metrics);
 
         this._buttons.forEach(button => {
@@ -133,7 +131,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
             width += hitBounds.width;
         });
 
-        const combinedPadding = this.list.reduce((acc, cur) => this._metrics.buttonPad * this.scale, 0)
+        const combinedPadding = Math.max(this.list.length - 1, 0) * this._metrics.buttonPad * this.scale;
 
         width += this._isVertical ? 0 : combinedPadding;
         height += this._isVertical ? combinedPadding : 0;
@@ -154,8 +152,6 @@ export class GelGroup extends Phaser.GameObjects.Container {
                 pos.x += child.width + this._metrics.buttonPad;
             }
         }, this);
-
-        return pos;
     }
 
     makeAccessible() {
