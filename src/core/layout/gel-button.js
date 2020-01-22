@@ -72,11 +72,14 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     setHitArea(metrics) {
-        const hitPadding = fp.max([metrics.hitMin - this.sprite.width, metrics.hitMin - this.sprite.height, 0]);
-        const width = this.sprite.width + hitPadding;
-        const height = this.sprite.height + hitPadding;
+        const hitPadding = {
+            x: fp.max([metrics.hitMin - this.sprite.width, 0]),
+            y: fp.max([metrics.hitMin - this.sprite.height, 0]),
+        };
+        const width = this.sprite.width + hitPadding.x;
+        const height = this.sprite.height + hitPadding.y;
         if (this.input) {
-            this.input.hitArea = new Phaser.Geom.Rectangle(-hitPadding / 2, -hitPadding / 2, width, height);
+            this.input.hitArea = new Phaser.Geom.Rectangle(-hitPadding.x / 2, -hitPadding.y / 2, width, height);
         }
 
         this.setSize(width, height);
