@@ -121,7 +121,7 @@ export function create(scene, metrics, buttonIds) {
         graphics.lineStyle(2, 0x33ff33, 1);
         fp.mapValues(group => {
             graphics.strokeRectShape(group.getBoundingRect());
-        }, fp.pickBy(groupHasChildren, groups));
+        }, groups);
     };
 
     const drawButtons = graphics => {
