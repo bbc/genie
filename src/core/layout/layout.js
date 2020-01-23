@@ -29,6 +29,13 @@ const assignProperties = (object, overrides) => {
     return object;
 };
 
+const defaultSafeAreaGroups = {
+    top: "topLeft",
+    left: "middleLeftSafe",
+    bottom: "bottomCenter",
+    right: "middleRightSafe",
+};
+
 // Copy gel config with only objects / functions as a reference.
 const shallowMergeOverrides = (config, overrides) => assignProperties(copyFirstChildren(config), overrides);
 
@@ -99,11 +106,13 @@ export function create(scene, metrics, buttonIds) {
         root.destroy();
     };
 
-    const getSafeArea = () => {
-        const x = groups.middleLeftSafe.x + groups.middleLeftSafe.width;
-        const y = groups.topLeft.y + groups.topLeft.height;
+    const getSafeArea = (metrics, groupOverrides = {}) => {
+        const safe = { ...defaultSafeAreaGroups, ...groupOverrides };
+        const pad = metrics.isMobile ? 0 : metrics.screenToCanvas(20);
+        const x = groups[safe.left].x + groups[safe.left].width + pad;
+        const y = safe.top ? groups[safe.top].y + groups[safe.top].height : metrics.borderPad - metrics.stageHeight / 2;
 
-        return new Phaser.Geom.Rectangle(x, y, groups.middleRightSafe.x - x, groups.bottomCenter.y - y);
+        return new Phaser.Geom.Rectangle(x, y, groups[safe.right].x - x - pad, groups[safe.bottom].y - y);
     };
 
     const groupHasChildren = group => Boolean(group.list.length);
@@ -112,7 +121,7 @@ export function create(scene, metrics, buttonIds) {
         graphics.lineStyle(2, 0x33ff33, 1);
         fp.mapValues(group => {
             graphics.strokeRectShape(group.getBoundingRect());
-        }, fp.pickBy(groupHasChildren, groups));
+        }, groups);
     };
 
     const drawButtons = graphics => {
