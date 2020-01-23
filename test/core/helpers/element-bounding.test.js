@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { getItemBounds, positionElement, enforceTextSize } from "../../../src/core/helpers/element-bounding.js";
+import { positionElement, enforceTextSize } from "../../../src/core/helpers/element-bounding.js";
 
 describe("element-bounding", () => {
     let mockElement;
@@ -151,39 +151,6 @@ describe("element-bounding", () => {
             positionElement(mockElement, mockElementPosition, safeArea, metrics);
 
             expect(mockElement.setFontSize).toHaveBeenCalledWith("13px");
-        });
-    });
-
-    describe("getItemBounds", () => {
-        test("returns bounds for an element", () => {
-            expect(getItemBounds(metrics, mockElement)).toEqual({
-                top: 0,
-                bottom: 50,
-                left: 0,
-                right: 50,
-            });
-        });
-
-        test("padding is respected by boundaries when isMobile equals true and element is a sprite", () => {
-            metrics.isMobile = true;
-            mockElement.type = "Sprite";
-            expect(getItemBounds(metrics, mockElement)).toEqual({
-                top: -15,
-                bottom: 65,
-                left: -15,
-                right: 65,
-            });
-        });
-
-        test("padding is not respected by boundaries when isMobile equals true and element is a text", () => {
-            metrics.isMobile = true;
-            mockElement.type = "Text";
-            expect(getItemBounds(metrics, mockElement)).toEqual({
-                top: 0,
-                bottom: 50,
-                left: 0,
-                right: 50,
-            });
         });
     });
 

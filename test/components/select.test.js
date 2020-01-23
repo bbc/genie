@@ -105,11 +105,11 @@ describe("Select Screen", () => {
         mockLayout = {
             buttons: {
                 home: {
-                    getBounds: jest.fn(() => mockBounds),
+                    getHitAreaBounds: jest.fn(() => mockBounds),
                     type: "Sprite",
                 },
                 audio: {
-                    getBounds: jest.fn(() => mockBounds),
+                    getHitAreaBounds: jest.fn(() => mockBounds),
                     type: "Sprite",
                 },
                 previous: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds) },
