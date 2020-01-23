@@ -87,17 +87,18 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     setCellSize(cellIndex) {
         const cellSize = this.calculateCellSize();
-        const hitSize = this.calculateCellSize(1 / this._cells[cellIndex].scaleX, 1 / this._cells[cellIndex].scaleY);
-
         const spriteAspect = this._cells[cellIndex].sprite.width / this._cells[cellIndex].sprite.height;
         const cellAspect = cellSize[0] / cellSize[1];
-
         const axisScale = spriteAspect < cellAspect ? 0 : 1;
-
         const aspectRatioRatio = spriteAspect / cellAspect;
-        cellSize[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
 
+        cellSize[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
         this._cells[cellIndex].setDisplaySize(...cellSize);
+
+        // TODO This calculation should be retained for possible inclusion of hit area adjustment,
+        // currently being skipped due to unexplained behaviour with the scaling calculations.
+        //
+        // const hitSize = this.calculateCellSize(1 / this._cells[cellIndex].scaleX, 1 / this._cells[cellIndex].scaleY);
         // this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
     }
 
