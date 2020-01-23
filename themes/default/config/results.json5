@@ -12,7 +12,10 @@
                 },
             },
             // New example results screen config below
-            backdrop: 'imgKey', //optional added to sfafe area
+            backdrop: {
+                        key: 'results.backdrop',
+                        alpha: 1,
+            }, //optional added to sfafe area
             statsFormat: '', // maybe?
             title: { text: 'titleText', styling: {} },
             rows: [

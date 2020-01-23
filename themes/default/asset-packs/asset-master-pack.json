@@ -30,6 +30,24 @@
                 "key": "title",
                 "url": "shared/title.png",
                 "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "backdrop",
+                "url": "results/background-overlay.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "backdropTransparent",
+                "url": "results/background-transparent.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "backdropFill",
+                "url": "results/backdrop-fill.png",
+                "overwrite": false
             }
         ]
     },
