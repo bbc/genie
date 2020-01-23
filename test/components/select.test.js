@@ -565,7 +565,7 @@ describe("Select Screen", () => {
             expect(selectScreen._cells[0].setImage).toHaveBeenCalledWith("test_asset");
         });
     });
-    describe("create methond without continue button", () => {
+    describe("create method without continue button", () => {
         test("adds GEL buttons to layout without continue button", () => {
             const modifiedData = mockData;
             modifiedData.config.theme["test-select"].rows = 2;
