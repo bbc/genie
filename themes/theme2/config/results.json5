@@ -14,7 +14,7 @@
             // New example results screen config below
             backdrop: {
                         key: 'results.backdrop',
-                        alpha: 0.4,
+                        alpha: 1,
             }, //optional added to sfafe area
             statsFormat: '', // maybe?
             title: { text: 'titleText', styling: {} },
