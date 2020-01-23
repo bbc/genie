@@ -30,14 +30,14 @@ export class GelGrid extends Phaser.GameObjects.Container {
         return this._cells;
     }
 
-    calculateCellSize() {
+    calculateCellSize(scaleX = 1, scaleY = 1) {
         const colPaddingCount = this._columns - 1;
         const rowPaddingCount = this._rows - 1;
         const paddingAdjustmentX = colPaddingCount * this._cellPadding;
         const paddingAdjustmentY = rowPaddingCount * this._cellPadding;
         return [
-            (this._safeArea.width - paddingAdjustmentX) / this._columns,
-            (this._safeArea.height - paddingAdjustmentY) / this._rows,
+            scaleX * ((this._safeArea.width - paddingAdjustmentX) / this._columns),
+            scaleY * ((this._safeArea.height - paddingAdjustmentY) / this._rows),
         ];
     }
 
@@ -87,9 +87,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     setCellSize(cellIndex) {
         const cellSize = this.calculateCellSize();
-        const hitSize = cellSize.slice();
-        hitSize[0] *= 1 / this._cells[cellIndex].scaleX;
-        hitSize[1] *= 1 / this._cells[cellIndex].scaleY;
+        const hitSize = this.calculateCellSize(1 / this._cells[cellIndex].scaleX, 1 / this._cells[cellIndex].scaleY);
 
         const spriteAspect = this._cells[cellIndex].sprite.width / this._cells[cellIndex].sprite.height;
         const cellAspect = cellSize[0] / cellSize[1];
@@ -97,11 +95,10 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const axisScale = spriteAspect < cellAspect ? 0 : 1;
 
         const aspectRatioRatio = spriteAspect / cellAspect;
-
         cellSize[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
-        //. TODO Sprite position needs to be offset to centre of hitarea??????????
+
         this._cells[cellIndex].setDisplaySize(...cellSize);
-        this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
+        // this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
     }
 
     setCellVisibility(cellIndex) {
@@ -111,15 +108,16 @@ export class GelGrid extends Phaser.GameObjects.Container {
     setCellPosition(cellIndex, col, row) {
         const cellCount = this.rowCellsCount(row);
         const cell = this._cells[cellIndex];
+        const cellSize = this.calculateCellSize();
 
         const blankPadding = cellCount * ((cell.displayWidth + this._cellPadding) / 2) * alignmentFactor[this._align];
         const paddingXTotal = col * this._cellPadding;
         const leftBound = this._safeArea.left + col * cell.displayWidth;
-        const cellXCentre = cell.displayWidth / 2;
+        const cellXCentre = cellSize[0] / 2;
 
         const paddingYTotal = row * this._cellPadding;
         const topBound = this._safeArea.top + row * cell.displayHeight;
-        const cellYCentre = cell.displayHeight / 2;
+        const cellYCentre = cellSize[1] / 2;
 
         cell.x = leftBound + paddingXTotal + cellXCentre + blankPadding;
         cell.y = topBound + cellYCentre + paddingYTotal;
