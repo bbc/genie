@@ -31,6 +31,12 @@
                 "key": "config",
                 "url": "config/config.json5",
                 "overwrite": false
+            },
+            {
+                "type": "json5",
+                "key": "results",
+                "url": "config/results.json5",
+                "overwrite": false
             }
         ]
     }
