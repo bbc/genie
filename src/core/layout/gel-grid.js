@@ -118,7 +118,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const cellXCentre = cell.displayWidth / 2;
 
         const paddingYTotal = row * this._cellPadding;
-        const topBound = this._safeArea.top + row * cell.height;
+        const topBound = this._safeArea.top + row * cell.displayHeight;
         const cellYCentre = cell.displayHeight / 2;
 
         cell.x = leftBound + paddingXTotal + cellXCentre + blankPadding;
