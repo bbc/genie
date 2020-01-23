@@ -79,7 +79,7 @@ describe("Results Screen", () => {
         resultsScreen.addAnimations = jest.fn(() => () => {});
         resultsScreen.setLayout = jest.fn();
         resultsScreen.add = {
-            image: jest.fn().mockImplementation((x, y, imageName) => { 
+            image: jest.fn().mockImplementation((x, y, imageName) => {
                 mockImage.imageName = imageName;
                 return mockImage;
             }),
@@ -137,19 +137,21 @@ describe("Results Screen", () => {
 
         test("adds a backdrop image centred within the results area", () => {
             mockResultsArea = {
-                x: 10,
-                y: 10,
+                centerX: 15,
+                centerY: 15,
                 width: 10,
                 height: 10,
             };
             resultsScreen.create();
-            expect(resultsScreen.add.image).toHaveBeenCalledWith(15, 15, "mockKey");
+            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+            expect(mockImage.x).toBe(15);
+            expect(mockImage.y).toEqual(15);
         });
 
         test("image is scaled to the width of the safe area to preserve aspect ratio", () => {
             mockResultsArea = {
-                x: 10,
-                y: 10,
+                centerX: 15,
+                centerY: 15,
                 width: 10,
                 height: 10,
             };
@@ -163,8 +165,6 @@ describe("Results Screen", () => {
 
         test("image is scaled to the height of the safe area to preserve aspect ratio", () => {
             mockResultsArea = {
-                x: 10,
-                y: 10,
                 width: 10,
                 height: 10,
             };

@@ -42,27 +42,24 @@ export class Results extends Screen {
     createLayout() {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
-        this.setLayout(buttons.concat(achievements));
-        this.resultsArea = this.layout.getSafeArea(getMetrics());
         this.backdropFill();
+        this.setLayout(buttons.concat(achievements));
+        this.resultsArea = this.layout.getSafeArea(getMetrics()); //rename
+        this.backdrop.safeArea = this.resultsArea;
+        this.sizeToParent(this.backdrop);
 
         this.rows = Rows.create(this, this.resultsArea, this.theme.rows, Rows.RowType.Results);
     }
 
     backdropFill() {
-        this.backdrop = this.add.image(
-            this.resultsArea.x + this.resultsArea.width / 2,
-            this.resultsArea.y + this.resultsArea.height / 2,
-            this.theme.backdrop.key,
-        );
+        this.backdrop = this.add.image(0, 0, this.theme.backdrop.key);
         this.backdrop.alpha = this.theme.backdrop.alpha;
-        this.backdrop.parentContainer = this.resultsArea;
-
-        this.sizeToParent(this.backdrop);
     }
 
     sizeToParent(item) {
-        item.scale = Math.min(item.parentContainer.width / item.width, item.parentContainer.height / item.height);
+        item.x = item.safeArea.centerX;
+        item.y = item.safeArea.centerY;
+        item.scale = Math.min(item.safeArea.width / item.width, item.safeArea.height / item.height);
     }
 
     subscribeToEventBus() {
