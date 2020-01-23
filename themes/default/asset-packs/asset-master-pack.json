@@ -34,19 +34,7 @@
             {
                 "type": "image",
                 "key": "backdrop",
-                "url": "results/background-overlay.png",
-                "overwrite": false
-            },
-            {
-                "type": "image",
-                "key": "backdropTransparent",
-                "url": "results/background-transparent.png",
-                "overwrite": false
-            },
-            {
-                "type": "image",
-                "key": "backdropFill",
-                "url": "results/backdrop-fill.png",
+                "url": "results/backdrop-overlay.png",
                 "overwrite": false
             }
         ]
