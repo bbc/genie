@@ -106,10 +106,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
 
     reset(metrics) {
         metrics = metrics || this._metrics;
-        if (this._metrics.isMobile !== metrics.isMobile) {
-            this.resetButtons(metrics);
-        }
-
+        this.resetButtons(metrics);
         this.alignChildren();
 
         this._metrics = metrics;
@@ -120,9 +117,8 @@ export class GelGroup extends Phaser.GameObjects.Container {
         this._setGroupPosition(metrics);
 
         this._buttons.forEach(button => {
-            button.x = button.x + button.shiftX * metrics.scale;
-            button.y = button.y + button.shiftY * metrics.scale;
-            button.updateIndicatorPosition();
+            button.x = button.x + button.config.shiftX * metrics.scale;
+            button.y = button.y + button.config.shiftY * metrics.scale;
         });
     }
 

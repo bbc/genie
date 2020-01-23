@@ -53,23 +53,14 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._cells.forEach(this.makeCellAccessible, this);
     }
 
-    makeCellAccessible(cell, idx) {
-        const config = {
-            id: "__" + fp.kebabCase(cell.name),
-            ariaLabel: cell.name,
-            group: "grid",
-            title: `Selection ${idx}`,
-            key: `selection_${idx}`,
-            order: 0,
-            channel: this.eventChannel,
-        };
+    makeCellAccessible(cell) {
         cell.input.enabled = true;
 
-        return accessibilify(cell, config, true);
+        return accessibilify(cell, true);
     }
 
-    cellKeys() {
-        return this._cells.map(cell => cell.key);
+    cellIds() {
+        return this._cells.map(cell => cell.config.id);
     }
 
     addCell(choice, idx) {
@@ -82,7 +73,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
             gameButton: true,
             group: "grid",
             order: 0,
-            ariaLabel: "",
+            ariaLabel: choice.accessibilityText,
+            accessibilityText: choice.accessibilityText,
             anim: choice.anim,
         };
 
@@ -102,11 +94,12 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const spriteAspect = this._cells[cellIndex].sprite.width / this._cells[cellIndex].sprite.height;
         const cellAspect = cellSize[0] / cellSize[1];
 
-        const borkedAxis = spriteAspect < cellAspect ? 0 : 1;
+        const axisScale = spriteAspect < cellAspect ? 0 : 1;
 
         const aspectRatioRatio = spriteAspect / cellAspect;
 
-        cellSize[borkedAxis] *= borkedAxis === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
+        cellSize[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
+        //. TODO Sprite position needs to be offset to centre of hitarea??????????
         this._cells[cellIndex].setDisplaySize(...cellSize);
         this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
     }
@@ -125,7 +118,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const cellXCentre = cell.displayWidth / 2;
 
         const paddingYTotal = row * this._cellPadding;
-        const topBound = this._safeArea.top + row * cell.displayHeight;
+        const topBound = this._safeArea.top + row * cell.height;
         const cellYCentre = cell.displayHeight / 2;
 
         cell.x = leftBound + paddingXTotal + cellXCentre + blankPadding;
@@ -161,8 +154,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     resetCell(cellIndex, col, row) {
         this.setCellSize(cellIndex, col, row);
-        this.setCellVisibility(cellIndex, col, row);
         this.setCellPosition(cellIndex, col, row);
+        this.setCellVisibility(cellIndex, col, row);
     }
 
     resetCells() {

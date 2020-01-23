@@ -3,14 +3,15 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createMockGmi } from "../mock/gmi";
-import * as Scaler from "../../src/core/scaler.js";
-import { eventBus } from "../../src/core/event-bus.js";
+import { createMockGmi } from "../../mock/gmi.js";
+import * as Scaler from "../../../src/core/scaler.js";
+import { eventBus } from "../../../src/core/event-bus.js";
+import * as Rows from "../../../src/core/layout/rows.js";
 
-import { Results } from "../../src/components/results";
+import { Results } from "../../../src/components/results/results-screen.js";
 
-jest.mock("../../src/core/layout/gel-grid.js");
-jest.mock("../../src/core/screen.js");
+jest.mock("../../../src/core/layout/rows.js");
+jest.mock("../../../src/core/screen.js");
 
 describe("Results Screen", () => {
     let resultsScreen;
@@ -21,7 +22,6 @@ describe("Results Screen", () => {
 
     beforeEach(() => {
         Scaler.getMetrics = jest.fn();
-
         mockConfig = {
             theme: {
                 resultsScreen: {
@@ -49,7 +49,18 @@ describe("Results Screen", () => {
             })),
         };
         resultsScreen = new Results();
-        resultsScreen.layout = { addCustomGroup: jest.fn() };
+        resultsScreen.layout = {
+            addCustomGroup: jest.fn(),
+            buttons: {
+                next: {},
+                previous: {},
+                continueGame: {
+                    parentContainer: {
+                        y: 121,
+                    },
+                },
+            },
+        };
         resultsScreen.context = { config: mockConfig, transientData: mockTransientData };
         resultsScreen.transientData = mockTransientData;
         resultsScreen.addAnimations = jest.fn(() => () => {});
@@ -92,16 +103,20 @@ describe("Results Screen", () => {
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        test("adds a gel grid to the layout", () => {
+        test("creates rows for the results screen", () => {
             resultsScreen.create();
-            expect(resultsScreen.grid.addGridCells).toHaveBeenCalledWith(mockConfig.theme.resultsScreen.rows);
-            expect(resultsScreen.layout.addCustomGroup).toHaveBeenCalledWith("grid", resultsScreen.grid);
+            expect(Rows.create).toHaveBeenCalledWith(
+                resultsScreen,
+                expect.any(Function),
+                resultsScreen.theme.rows,
+                Rows.RowType.Results,
+            );
         });
 
         test("adds the achievement button when theme flag is set", () => {
             resultsScreen.context.config.theme.game.achievements = true;
             resultsScreen.create();
-            const expectedButtons = ["pause", "restart", "continueGame", "achievements"];
+            const expectedButtons = ["pause", "restart", "continueGame", "achievementsSmall"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
@@ -135,6 +150,29 @@ describe("Results Screen", () => {
                 resultsScreen.create();
                 expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
             });
+        });
+    });
+
+    describe("getResultsArea", () => {
+        test("returns the correct rectangle for the area available", () => {
+            resultsScreen.layout.buttons.continueGame.parentContainer.y = 121;
+            Scaler.getMetrics.mockImplementation(() => ({
+                stageHeight: 600,
+                borderPad: 20,
+            }));
+
+            const safeWidth = 600 * (4 / 3) - 20 * 2;
+            const x = -safeWidth / 2;
+            const y = -600 / 2 + 20;
+
+            expect(resultsScreen.getResultsArea()).toEqual(
+                new Phaser.Geom.Rectangle(
+                    x,
+                    y,
+                    safeWidth,
+                    resultsScreen.layout.buttons.continueGame.parentContainer.y - y,
+                ),
+            );
         });
     });
 

@@ -199,6 +199,12 @@ export const config = screen => {
             order: 11,
             id: "__achievements",
             channel: buttonsChannel(screen),
+            indicator: {
+                offsets: {
+                    mobile: { x: -12, y: 12 },
+                    desktop: { x: -4, y: 4 },
+                },
+            },
             action: ({ screen }) => {
                 if (screen.navigation.achievements) {
                     screen.navigation.achievements();
@@ -206,6 +212,29 @@ export const config = screen => {
                     gmi.achievements.show();
                 }
                 screen.layout.buttons.achievements.setIndicator();
+            },
+        },
+        achievementsSmall: {
+            group: "topLeft",
+            title: "Achievements",
+            key: "achievements-small",
+            ariaLabel: "Your Achievements",
+            order: 12,
+            id: "__achievements-small",
+            channel: buttonsChannel(screen),
+            indicator: {
+                offsets: {
+                    mobile: { x: -17, y: 17 },
+                    desktop: { x: -12, y: 12 },
+                },
+            },
+            action: ({ screen }) => {
+                if (screen.navigation.achievements) {
+                    screen.navigation.achievements();
+                } else {
+                    gmi.achievements.show();
+                }
+                screen.layout.buttons.achievementsSmall.setIndicator();
             },
         },
         restart: {

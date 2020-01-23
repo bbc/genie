@@ -11,7 +11,7 @@ import { Screen } from "../../core/screen.js";
 export class Pause extends Screen {
     preload() {
         this.sound.pauseAll();
-        this.events.once("onscreenexit", this.sound.resumeAll.bind(this.sound));
+        this.events.once("shutdown", this.sound.resumeAll.bind(this.sound));
     }
 
     create() {

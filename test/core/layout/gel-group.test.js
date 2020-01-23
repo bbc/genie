@@ -58,8 +58,10 @@ describe("Group", () => {
                 updateIndicatorPosition: jest.fn(),
                 updateTransform: () => {},
                 resize: buttonResizeStub,
-                shiftX: 0,
-                shiftY: 0,
+                config: {
+                    shiftX: 0,
+                    shiftY: 0,
+                },
                 getHitAreaBounds: mockGetHitAreaBounds,
             }),
         };
@@ -206,17 +208,6 @@ describe("Group", () => {
 
         describe("when vPos is top and hPos is left", () => {
             it("correctly takes hitArea into account", () => {
-                /*
-                metrics = {
-            borderPad: 100,
-            buttonPad: 50,
-            horizontals: { left: -1000, center: 0, right: 1000 },
-            safeHorizontals: { left: -300, center: 0, right: 300 },
-            verticals: { top: -1500, middle: 0, bottom: 1500 },
-            scale: 1,
-        };
-                 */
-
                 const leftSpy = jest.fn();
                 const topSpy = jest.fn();
                 const createButtonStub = jest.spyOn(buttonFactory, "createButton");
@@ -239,6 +230,10 @@ describe("Group", () => {
                             top: 0,
                         },
                     },
+                    config: {
+                        shiftX: 0,
+                        shiftY: 0,
+                    },
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
@@ -256,6 +251,10 @@ describe("Group", () => {
                             left: -1000,
                             top: -1000,
                         },
+                    },
+                    config: {
+                        shiftX: 0,
+                        shiftY: 0,
                     },
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
@@ -282,6 +281,10 @@ describe("Group", () => {
                     height: 50,
                     input: {
                         hitArea: {},
+                    },
+                    config: {
+                        shiftX: 0,
+                        shiftY: 0,
                     },
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
@@ -366,30 +369,7 @@ describe("Group", () => {
             group.reset(mobileMetrics);
 
             expect(group._metrics.isMobile).toBe(true);
-            expect(buttonResizeStub).toHaveBeenCalledTimes(1);
-        });
-
-        test("does not resize buttons after resizing the group and the width remains above the mobile breakpoint", () => {
-            const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
-            const moreDesktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
-
-            group = new GelGroup(mockScene, parentGroup, "top", "left", desktopMetrics, false);
-            group.addButton(config);
-            group.reset(moreDesktopMetrics);
-
-            expect(group._metrics.isMobile).toBe(false);
-            expect(buttonResizeStub).not.toHaveBeenCalled();
-        });
-
-        test("updates buttons indicator positions", () => {
-            const desktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
-            const moreDesktopMetrics = { isMobile: false, horizontals: {}, verticals: {} };
-
-            group = new GelGroup(mockScene, parentGroup, "top", "left", desktopMetrics, false);
-            const button = group.addButton(config);
-            group.reset(moreDesktopMetrics);
-
-            expect(button.updateIndicatorPosition).toHaveBeenCalled();
+            expect(buttonResizeStub).toHaveBeenCalledTimes(2);
         });
     });
 

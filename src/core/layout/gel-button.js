@@ -8,7 +8,13 @@ import { eventBus } from "../event-bus.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 import { assetPath } from "./asset-paths.js";
-import { Indicator, noIndicator } from "./gel-indicator.js";
+import { Indicator } from "./gel-indicator.js";
+
+const defaults = {
+    shiftX: 0,
+    shiftY: 0,
+    name: "",
+};
 
 export class GelButton extends Phaser.GameObjects.Container {
     constructor(scene, x, y, metrics, config) {
@@ -17,15 +23,9 @@ export class GelButton extends Phaser.GameObjects.Container {
         this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
         this.add(this.sprite);
 
-        this._id = config.id;
-        this._key = config.key;
-        this._isMobile = metrics.isMobile;
-        this.name = config.name || "";
-        this.indicator = noIndicator;
-        this.setIndicator();
-        this.shiftX = config.shiftX || 0;
-        this.shiftY = config.shiftY || 0;
-        this.config = config;
+        this.config = { ...defaults, ...config };
+        this.isMobile = metrics.isMobile;
+        config.indicator && this.setIndicator();
 
         if (config.anim) {
             config.anim.frames = this.scene.anims.generateFrameNumbers(config.anim.key);
@@ -44,13 +44,16 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     overlays = {
-        set: (key, x, y, asset) => {
-            //how do we handle breakpoints?
-            this.overlays.list[key] = this.scene.add.sprite(x, y, asset);
+        set: (key, asset) => {
+            this.overlays.list[key] = asset;
             this.add(this.overlays.list[key]);
         },
         remove: key => {
+            if (!this.overlays.list[key]) {
+                return;
+            }
             this.remove(this.overlays.list[key]);
+            this.overlays.list[key].destroy();
             delete this.overlays.list[key];
         },
         list: {},
@@ -69,11 +72,14 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     setHitArea(metrics) {
-        const hitPadding = fp.max([metrics.hitMin - this.sprite.width, metrics.hitMin - this.sprite.height, 0]);
-        const width = this.sprite.width + hitPadding;
-        const height = this.sprite.height + hitPadding;
+        const hitPadding = {
+            x: fp.max([metrics.hitMin - this.sprite.width, 0]),
+            y: fp.max([metrics.hitMin - this.sprite.height, 0]),
+        };
+        const width = this.sprite.width + hitPadding.x;
+        const height = this.sprite.height + hitPadding.y;
         if (this.input) {
-            this.input.hitArea = new Phaser.Geom.Rectangle(-hitPadding / 2, -hitPadding / 2, width, height);
+            this.input.hitArea = new Phaser.Geom.Rectangle(-hitPadding.x / 2, -hitPadding.y / 2, width, height);
         }
 
         this.setSize(width, height);
@@ -91,24 +97,29 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     setImage(key) {
-        this._key = key;
-        this.sprite.setTexture(assetPath({ key, isMobile: this._isMobile }));
+        this.config.key = key;
+        this.sprite.setTexture(assetPath({ ...this.config, key, isMobile: this.isMobile }));
     }
 
     resize(metrics) {
-        this._isMobile = metrics.isMobile;
-        this.sprite.setTexture(assetPath({ key: this._key, isMobile: metrics.isMobile }));
         !this.config.gameButton && this.setHitArea(metrics);
+        this.isMobile = metrics.isMobile;
+        this.sprite.setTexture(assetPath({ key: this.config.key, isMobile: metrics.isMobile }));
+        this.setHitArea(metrics);
+
+        Object.values(this.overlays.list)
+            .filter(overlay => Boolean(overlay.resize))
+            .map(overlay => overlay.resize());
     }
 
     setIndicator() {
-        this.indicator.destroy();
-        const show = this._key === "achievements" && gmi.achievements.unseen;
-        this.indicator = show ? new Indicator(this) : noIndicator;
-    }
+        this.overlays.remove("indicator");
+        if (!gmi.achievements.unseen) {
+            return;
+        }
 
-    updateIndicatorPosition() {
-        this.indicator.resize();
+        this.overlays.set("indicator", new Indicator(this));
+        this.overlays.list.indicator.resize();
     }
 }
 

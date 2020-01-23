@@ -50,13 +50,22 @@ export class Select extends Screen {
     }
 
     updateStates() {
-        const states = this.states.getAll().filter(config => Boolean(config.state));
-        const keyedCells = fp.keyBy(cell => cell._id, this._cells);
+        const storedStates = this.states.getAll().filter(config => Boolean(config.state));
+        const cells = fp.keyBy(cell => cell.config.id, this._cells);
 
-        states.forEach(state => {
-            const config = this.context.theme.states[state.state];
-            keyedCells[state.id].overlays.set("state", config.x, config.y, config.asset);
-        });
+        storedStates.forEach(stored => {
+            const config = this.context.theme.states[stored.state];
+            const cell = cells[stored.id];
+
+            cell.overlays.set("state", this.add.sprite(config.x, config.y, config.overlayAsset));
+
+            config.asset && cell.setImage(config.asset);
+            config.properties && Object.assign(cell.sprite, config.properties);
+
+            config.suffix && (cell.config.ariaLabel = [cell.config.accessibilityText, config.suffix].join(" "));
+
+            cell.input.enabled = Boolean(config.enabled !== false);
+        }, this);
     }
 
     resize() {
@@ -151,7 +160,7 @@ export class Select extends Screen {
 
     addEventSubscriptions() {
         this.grid
-            .cellKeys()
+            .cellIds()
             .concat(["continue"])
             .map(key => {
                 eventBus.subscribe({

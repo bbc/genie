@@ -117,7 +117,11 @@ export function create(scene, metrics, buttonIds) {
 
     const drawButtons = graphics => {
         graphics.lineStyle(1, 0x3333ff, 1);
-        fp.mapValues(button => graphics.strokeRectShape(button.getHitAreaBounds()), buttons);
+        fp.mapValues(group => {
+            group.list
+                .filter(gameObject => Boolean(gameObject.getHitAreaBounds))
+                .map(button => graphics.strokeRectShape(button.getHitAreaBounds()));
+        }, fp.pickBy(groupHasChildren, groups));
     };
 
     const debug = {
