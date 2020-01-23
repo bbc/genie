@@ -10,7 +10,7 @@ export const RowType = {
     Results: ResultsRow,
 };
 
-export function create(scene, getArea, rowsConfig, rowType) {
+export function create(scene, area, rowsConfig, rowType) {
     let containers = [];
 
     const createRow = (rowConfig, index) => {
@@ -20,7 +20,7 @@ export function create(scene, getArea, rowsConfig, rowType) {
     };
 
     const getRectForRow = index => () => {
-        const drawArea = getArea();
+        const drawArea = area;
         const numberOfRows = rowsConfig.length;
         const rowHeight = drawArea.height / numberOfRows;
         const topOfRow = drawArea.y + rowHeight * index;

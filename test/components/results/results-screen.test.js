@@ -20,13 +20,17 @@ describe("Results Screen", () => {
     let mockTransientData;
     let mockGmi;
     let mockTextAdd;
+    let mockResultsArea;
+    let mockImage;
 
     beforeEach(() => {
         Scaler.getMetrics = jest.fn(() => ({ test: "metrics" }));
         MetricsModule.getMetrics = jest.fn();
+        mockImage = {};
         mockConfig = {
             theme: {
                 resultsScreen: {
+                    backdrop: { key: "mockKey", alpha: 1 },
                     resultText: {
                         style: { font: "36px ReithSans" },
                     },
@@ -38,6 +42,12 @@ describe("Results Screen", () => {
         mockTransientData = {
             results: 22,
             characterSelected: 1,
+        };
+        mockResultsArea = {
+            x: 0,
+            y: 0,
+            width: 0,
+            height: 0,
         };
 
         mockGmi = { sendStatsEvent: jest.fn() };
@@ -62,14 +72,17 @@ describe("Results Screen", () => {
                     },
                 },
             },
-            getSafeArea: jest.fn(),
+            getSafeArea: jest.fn(() => mockResultsArea),
         };
         resultsScreen.context = { config: mockConfig, transientData: mockTransientData };
         resultsScreen.transientData = mockTransientData;
         resultsScreen.addAnimations = jest.fn(() => () => {});
         resultsScreen.setLayout = jest.fn();
         resultsScreen.add = {
-            image: jest.fn().mockImplementation((x, y, imageName) => imageName),
+            image: jest.fn().mockImplementation((x, y, imageName) => { 
+                mockImage.imageName = imageName;
+                return mockImage;
+            }),
             text: jest.fn(() => mockTextAdd),
         };
         resultsScreen.scene = {
@@ -110,19 +123,67 @@ describe("Results Screen", () => {
             resultsScreen.create();
             expect(Rows.create).toHaveBeenCalledWith(
                 resultsScreen,
-                expect.any(Function),
+                mockResultsArea,
                 resultsScreen.theme.rows,
                 Rows.RowType.Results,
             );
         });
 
-        test("Creates a callback that calls getSafeArea with metrics and top: false group overrides ", () => {
+        test("adds a backdrop image when one is specified in config", () => {
             resultsScreen.create();
-            const safeAreaCallback = Rows.create.mock.calls[0][1];
-            safeAreaCallback();
-
-            expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ test: "metrics" }, { top: false });
+            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+            expect(mockImage.alpha).toEqual(1);
         });
+
+        test("adds a backdrop image centred within the results area", () => {
+            mockResultsArea = {
+                x: 10,
+                y: 10,
+                width: 10,
+                height: 10,
+            };
+            resultsScreen.create();
+            expect(resultsScreen.add.image).toHaveBeenCalledWith(15, 15, "mockKey");
+        });
+
+        test("image is scaled to the width of the safe area to preserve aspect ratio", () => {
+            mockResultsArea = {
+                x: 10,
+                y: 10,
+                width: 10,
+                height: 10,
+            };
+            mockImage = {
+                width: 8,
+                height: 5,
+            };
+            resultsScreen.create();
+            expect(mockImage.scale).toEqual(1.25);
+        });
+
+        test("image is scaled to the height of the safe area to preserve aspect ratio", () => {
+            mockResultsArea = {
+                x: 10,
+                y: 10,
+                width: 10,
+                height: 10,
+            };
+            mockImage = {
+                width: 4,
+                height: 5,
+            };
+            resultsScreen.create();
+            expect(mockImage.scale).toEqual(2);
+        });
+
+        // Uncomment if we want to move the backdrop into rows
+        // test("Creates a callback that calls getSafeArea with metrics and top: false group overrides ", () => {
+        //     resultsScreen.create();
+        //     const safeAreaCallback = Rows.create.mock.calls[0][1];
+        //     safeAreaCallback();
+
+        //     expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ test: "metrics" }, { top: false });
+        // });
 
         test("adds the achievement button when theme flag is set", () => {
             resultsScreen.context.config.theme.game.achievements = true;

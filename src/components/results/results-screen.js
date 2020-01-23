@@ -43,14 +43,26 @@ export class Results extends Screen {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
         this.setLayout(buttons.concat(achievements));
-        const getSafeArea = this.layout.getSafeArea;
+        this.resultsArea = this.layout.getSafeArea(getMetrics());
+        this.backdropFill();
 
-        this.rows = Rows.create(
-            this,
-            () => getSafeArea(getMetrics(), { top: false }),
-            this.theme.rows,
-            Rows.RowType.Results,
+        this.rows = Rows.create(this, this.resultsArea, this.theme.rows, Rows.RowType.Results);
+    }
+
+    backdropFill() {
+        this.backdrop = this.add.image(
+            this.resultsArea.x + this.resultsArea.width / 2,
+            this.resultsArea.y + this.resultsArea.height / 2,
+            this.theme.backdrop.key,
         );
+        this.backdrop.alpha = this.theme.backdrop.alpha;
+        this.backdrop.parentContainer = this.resultsArea;
+
+        this.sizeToParent(this.backdrop);
+    }
+
+    sizeToParent(item) {
+        item.scale = Math.min(item.parentContainer.width / item.width, item.parentContainer.height / item.height);
     }
 
     subscribeToEventBus() {
