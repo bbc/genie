@@ -20,7 +20,10 @@
             title: { text: 'titleText', styling: {} },
             rows: [
                 {
-                    textStyle: {}, //optional
+                    textStyle: {
+                        fontSize: "48px", // Font size should be a minimum of 13px as per GEL
+                        color: '#000000', // This should meet the colour contrast requirement as per GEL
+                    },
                     format: [
                         '{results.imgtag$}',
                         'you collected ',
@@ -33,9 +36,24 @@
                     backdrop: 'imgKey', //optional
                     transition: 'appear', // (appear|fade|pop) look at passing generic phaser ease in
                 },
-                {},
-                {},
-                {},
+                {
+                    textStyle: {
+                        fontSize: "24px",
+                        color: '#FF0000',
+                    }
+                },
+                {
+                    textStyle: {
+                        fontSize: "24px",
+                        color: '#00FF00',
+                    }
+                },
+                {
+                    textStyle: {
+                        fontSize: "24px",
+                        color: '#0000FF',
+                    }
+                },
             ],
         },
     },

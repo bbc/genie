@@ -39,11 +39,11 @@
             },
             {
                 "type": "spritesheet",
-                "key": "char2",
-                "url": "characters/char_2.png",
+                "key": "mary",
+                "url": "characters/1.png",
                 "frameConfig": {
-                    "frameWidth": 800,
-                    "frameHeight": 800,
+                    "frameWidth": 208,
+                    "frameHeight": 180,
                     "frameMax": 2,
                     "margin": 0,
                     "spacing": 4
@@ -51,11 +51,11 @@
             },
             {
                 "type": "spritesheet",
-                "key": "char3",
-                "url": "characters/char_3.png",
+                "key": "kyle",
+                "url": "characters/2.png",
                 "frameConfig": {
-                    "frameWidth": 800,
-                    "frameHeight": 800,
+                    "frameWidth": 208,
+                    "frameHeight": 180,
                     "frameMax": 2,
                     "margin": 0,
                     "spacing": 4
@@ -63,11 +63,95 @@
             },
             {
                 "type": "spritesheet",
-                "key": "char4",
-                "url": "characters/char_4.png",
+                "key": "suzy",
+                "url": "characters/3.png",
                 "frameConfig": {
-                    "frameWidth": 800,
-                    "frameHeight": 800,
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "greg",
+                "url": "characters/4.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "ange",
+                "url": "characters/5.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "phil",
+                "url": "characters/6.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "mike",
+                "url": "characters/7.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "suzytoo",
+                "url": "characters/8.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "timmy",
+                "url": "characters/9.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "elliot",
+                "url": "characters/10.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
                     "frameMax": 2,
                     "margin": 0,
                     "spacing": 4
