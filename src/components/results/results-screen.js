@@ -9,6 +9,7 @@ import { eventBus } from "../../core/event-bus.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import * as Rows from "../../core/layout/rows.js";
 import { getMetrics } from "../../core/scaler.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 const getScoreMetaData = result => {
     if (typeof result === "number") {
@@ -42,24 +43,27 @@ export class Results extends Screen {
     createLayout() {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
-        this.backdropFill();
+
+        fp.get("backdrop.key", this.theme) && this.backdropFill();
+
         this.setLayout(buttons.concat(achievements));
-        this.resultsArea = this.layout.getSafeArea(getMetrics()); //rename
-        this.backdrop.safeArea = this.resultsArea;
-        this.sizeToParent(this.backdrop);
+        this.resultsArea = this.layout.getSafeArea(getMetrics());
+        this.sizeToParent(this.backdrop, this.resultsArea);
 
         this.rows = Rows.create(this, this.resultsArea, this.theme.rows, Rows.RowType.Results);
     }
 
     backdropFill() {
         this.backdrop = this.add.image(0, 0, this.theme.backdrop.key);
-        this.backdrop.alpha = this.theme.backdrop.alpha;
+        this.backdrop.alpha = this.theme.backdrop.alpha || 1;
     }
 
-    sizeToParent(item) {
-        item.x = item.safeArea.centerX;
-        item.y = item.safeArea.centerY;
-        item.scale = Math.min(item.safeArea.width / item.width, item.safeArea.height / item.height);
+    sizeToParent(item, safeArea) {
+        if (fp.get("backdrop.key", this.theme)) {
+            item.x = safeArea.centerX;
+            item.y = safeArea.centerY;
+            item.scale = Math.min(safeArea.width / item.width, safeArea.height / item.height);
+        }
     }
 
     subscribeToEventBus() {

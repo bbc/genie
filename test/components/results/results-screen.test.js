@@ -44,8 +44,8 @@ describe("Results Screen", () => {
             characterSelected: 1,
         };
         mockResultsArea = {
-            x: 0,
-            y: 0,
+            centerX: 0,
+            centerY: 0,
             width: 0,
             height: 0,
         };
@@ -129,7 +129,16 @@ describe("Results Screen", () => {
             );
         });
 
-        test("adds a backdrop image when one is specified in config", () => {
+        test("adds a backdrop image with specified properties when one is specified in config", () => {
+            mockConfig.theme.resultsScreen.backdrop.alpha = 0.5;
+            resultsScreen.create();
+            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+            expect(mockImage.alpha).toEqual(0.5);
+        });
+
+        test("adds an image with a default alpha of 1 when no alpha is specified", () => {
+            mockConfig.theme.resultsScreen.backdrop.alpha = undefined;
+
             resultsScreen.create();
             expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
             expect(mockImage.alpha).toEqual(1);
@@ -174,6 +183,12 @@ describe("Results Screen", () => {
             };
             resultsScreen.create();
             expect(mockImage.scale).toEqual(2);
+        });
+
+        test("does not render image when no key is provided on the backdrop object", () => {
+            mockConfig.theme.resultsScreen.backdrop.key = undefined;
+            resultsScreen.create();
+            expect(resultsScreen.add.image).not.toHaveBeenCalledWith(0, 0, "mockKey");
         });
 
         // Uncomment if we want to move the backdrop into rows
