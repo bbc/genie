@@ -52,6 +52,20 @@
             },
             choices: [
                 {
+                    id: "char1",                        //Must be unique
+                    asset: "char1",                     //Phaser asset key
+                    accessibilityText: "Character 1",
+                    title: "Liron Man",
+                    anim: {
+                        key: "character-select.char1",
+                        frames: 18,
+                        frameRate: 6,
+                        yoyo: true,
+                        repeat: -1,
+                    },
+                    state: "locked",
+                },
+                {
                     id: "char2",
                     asset: "char2",
                     accessibilityText: "Character 2",
