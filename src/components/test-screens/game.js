@@ -31,14 +31,14 @@ export class GameTest extends Screen {
             wordWrapWidth: 223,
         };
 
-        const buttonNames = ["Key", "Gem", "Star"];
+        const buttonNames = ["Star", "Gem", "Key"];
 
-        this.add.image(0, -70, `${this.scene.key}.key`);
+        this.add.image(0, -70, `${this.scene.key}.star`);
         this.add.image(0, 20, `${this.scene.key}.gem`);
-        this.add.image(0, 110, `${this.scene.key}.star`);
-        const keyScore = this.add.text(-50, -70, "0", buttonTextStyle).setOrigin(0.5);
+        this.add.image(0, 110, `${this.scene.key}.key`);
+        const starScore = this.add.text(-50, -70, "0", buttonTextStyle).setOrigin(0.5);
         const gemScore = this.add.text(-50, 20, "0", buttonTextStyle).setOrigin(0.5);
-        const starScore = this.add.text(-50, 110, "0", buttonTextStyle).setOrigin(0.5);
+        const keyScore = this.add.text(-50, 110, "0", buttonTextStyle).setOrigin(0.5);
 
         this.add
             .image(300, 20, buttonKey)
@@ -69,22 +69,22 @@ export class GameTest extends Screen {
         }, this);
 
         const onGameComplete = () => {
-            this.transientData[this.scene.key] = { keys, gems, stars };
+            this.transientData.results = { keys, gems, stars };
             this.navigation.next();
         };
 
         const increaseScores = index => {
             if (index == 0) {
-                keys++;
-                keyScore.text = keys;
+                stars++;
+                starScore.text = stars;
             }
             if (index == 1) {
                 gems++;
                 gemScore.text = gems;
             }
             if (index == 2) {
-                stars++;
-                starScore.text = stars;
+                keys++;
+                keyScore.text = keys;
             }
         };
 

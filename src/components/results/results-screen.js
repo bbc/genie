@@ -28,7 +28,6 @@ const fireGameCompleteStat = result => {
 
 export class Results extends Screen {
     create() {
-        this.transientData[this.scene.key] = { stars: 10 }; // TODO remove this fake data
         this.theme = this.context.config.theme[this.scene.key];
         this.add.image(0, 0, "results.background").setDepth(-1);
         this.addAnimations();
