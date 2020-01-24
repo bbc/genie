@@ -10,7 +10,6 @@ import * as Rows from "../../../src/core/layout/rows.js";
 import * as MetricsModule from "../../../src/core/layout/calculate-metrics.js";
 
 import { Results } from "../../../src/components/results/results-screen.js";
-import result from "../../../lib/lodash/result.js";
 
 jest.mock("../../../src/core/layout/rows.js");
 jest.mock("../../../src/core/screen.js");
