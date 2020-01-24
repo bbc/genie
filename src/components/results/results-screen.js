@@ -31,7 +31,6 @@ export class Results extends Screen {
         this.theme = this.context.config.theme[this.scene.key];
         this.add.image(0, 0, "results.background");
         this.addAnimations();
-        this.add.image(0, -150, "results.title");
         const resultsText = this.add.text(0, 50, this.context.transientData.results, this.theme.resultText.style);
         resultsText.setOrigin(0.5, 0.5);
 
