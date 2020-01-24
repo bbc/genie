@@ -31,7 +31,7 @@ export class Select extends Screen {
         this.theme = this.context.config.theme[this.scene.key];
         this.setTitleElements();
         const continueBtn = this.theme.rows === 1 && this.theme.columns === 1 ? ["continue"] : [];
-        const buttons = ["home", "audio", "pause", "previous", "next"];
+        const buttons = ["home", "pause", "previous", "next"];
         this.setLayout(buttons.concat(continueBtn));
         const metrics = getMetrics();
         this.grid = new GelGrid(this, metrics, this.layout.getSafeArea(metrics), this.theme.rows, this.theme.columns);
@@ -101,7 +101,7 @@ export class Select extends Screen {
 
     getTitleSafeArea() {
         const homeButton = this.layout.buttons["home"];
-        const secondaryButton = this.layout.buttons["audio"];
+        const secondaryButton = this.layout.buttons["pause"];
 
         const homeButtonBounds = homeButton.getHitAreaBounds();
         const secondaryButtonBounds = secondaryButton.getHitAreaBounds();

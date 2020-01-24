@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import * as Scaler from "../../src/core/scaler";
-import * as calculateMetrics from "../../src/core/layout/calculate-metrics.js";
+import * as MetricsModule from "../../src/core/layout/metrics.js";
 import { eventBus } from "../../src/core/event-bus.js";
 
 describe("Scaler", () => {
@@ -70,7 +70,7 @@ describe("Scaler", () => {
     });
 
     test("returns correct metrics when calculateMetrics is called", () => {
-        jest.spyOn(calculateMetrics, "calculateMetrics").mockImplementation(() => jest.fn(() => "metrics"));
+        jest.spyOn(MetricsModule, "calculateMetrics").mockImplementation(() => jest.fn(() => "metrics"));
         Scaler.init(600, mockGame);
         const metrics = Scaler.getMetrics();
         expect(metrics).toBe("metrics");

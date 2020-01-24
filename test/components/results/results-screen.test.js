@@ -7,7 +7,7 @@ import { createMockGmi } from "../../mock/gmi.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as Rows from "../../../src/core/layout/rows.js";
-import * as MetricsModule from "../../../src/core/layout/calculate-metrics.js";
+import * as MetricsModule from "../../../src/core/layout/metrics.js";
 
 import { Results } from "../../../src/components/results/results-screen.js";
 
