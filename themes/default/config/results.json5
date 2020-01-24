@@ -13,6 +13,7 @@
                         {
                             type: 'text',
                             content: 'Results Screen',
+                            offsetX: 0,
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
@@ -26,7 +27,6 @@
                     transition: 'appear', // (appear|fade|pop) look at passing generic phaser ease in
                 },
                 {
-                    align: 'center',
                     format: [
                         {
                             type: 'text',
@@ -37,7 +37,7 @@
                                 color: '#FFFFFF',
                             },
                         },
-                        { type: 'image', key: 'results.starImage' },
+                        { type: 'image', key: 'game.star' },
                         {
                             type: 'text',
                             content: '<%= stars %> stars',
@@ -59,31 +59,65 @@
                     ],
                 },
                 {
-                    align: 'left',
                     format: [
                         {
                             type: 'text',
-                            content: 'Placeholder Text 1',
-                            offsetX: -80,
+                            content: 'You collected ',
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
-                                color: '#FF0000',
+                                color: '#FFFFFF',
+                            },
+                        },
+                        { type: 'image', key: 'game.gem' },
+                        {
+                            type: 'text',
+                            content: '<%= gems %> gems',
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#00FF00',
+                            },
+                        },
+                        {
+                            type: 'text',
+                            content: '!',
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFFFF',
                             },
                         },
                     ],
                 },
                 {
-                    align: 'right',
                     format: [
                         {
                             type: 'text',
-                            content: 'Placeholder Text 2',
-                            offsetX: 80,
+                            content: 'You collected ',
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
-                                color: '#00FF00',
+                                color: '#FFFFFF',
+                            },
+                        },
+                        { type: 'image', key: 'game.key' },
+                        {
+                            type: 'text',
+                            content: '<%= keys %> keys',
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFA500',
+                            },
+                        },
+                        {
+                            type: 'text',
+                            content: '!',
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFFFF',
                             },
                         },
                     ],

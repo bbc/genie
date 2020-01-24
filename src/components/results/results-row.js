@@ -19,22 +19,15 @@ export class ResultsRow extends Phaser.GameObjects.Container {
     align() {
         const lastGameObject = this.list.slice(-1)[0];
         const rowWidth = lastGameObject ? lastGameObject.x + lastGameObject.width : 0;
-        if (this.rowConfig.align === "left") {
-            this.list.forEach(gameObject => (gameObject.x += -rowWidth + gameObject.offsetX));
-            return;
-        }
-        if (this.rowConfig.align === "right") {
-            this.list.forEach(gameObject => (gameObject.x += gameObject.offsetX));
-            return;
-        }
-        this.list.forEach(gameObject => (gameObject.x -= rowWidth / 2 - gameObject.offsetX));
+        this.list.forEach(gameObject => (gameObject.x -= rowWidth / 2));
     }
 
     addSection(gameObject, offsetX = 0, offsetY = 0) {
         const lastGameObject = this.list.slice(-1)[0];
         gameObject.x = lastGameObject ? lastGameObject.x + lastGameObject.width : 0;
-        gameObject.y -= gameObject.height / 2 - offsetY;
-        gameObject.offsetX = offsetX;
+        gameObject.y -= gameObject.height / 2;
+        gameObject.x += offsetX;
+        gameObject.y += offsetY;
         this.add(gameObject);
     }
 

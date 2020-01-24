@@ -33,8 +33,6 @@ describe("ResultsRow", () => {
             y: 0,
             width: 100,
             height: 100,
-            offsetX: 0,
-            offsetY: 0,
         };
         ResultsRow.prototype.add = jest.fn();
         ResultsRow.prototype.removeAll = jest.fn();
@@ -49,30 +47,6 @@ describe("ResultsRow", () => {
         expect(mockGameObject.x).toBe(-25);
     });
 
-    test("align moves the gameobject half the rows width by default and applies the x offset correctly", () => {
-        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-        mockGameObject.offsetX = 50;
-        resultsRow.list = [mockGameObject];
-        resultsRow.align();
-        expect(mockGameObject.x).toBe(25);
-    });
-
-    test("align does not move the gameobject when alignment set to right", () => {
-        mockRowConfig.align = "right";
-        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-        resultsRow.list = [mockGameObject];
-        resultsRow.align();
-        expect(mockGameObject.x).toBe(50);
-    });
-
-    test("align moves the gameobject left by the width of the row when alignment set to left", () => {
-        mockRowConfig.align = "left";
-        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-        resultsRow.list = [mockGameObject];
-        resultsRow.align();
-        expect(mockGameObject.x).toBe(-100);
-    });
-
     test("addSection adds the gameobject to the container", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         resultsRow.addSection(mockGameObject);
@@ -85,11 +59,16 @@ describe("ResultsRow", () => {
         expect(mockGameObject.x).toBe(0);
     });
 
+    test("addSection applies the x offset", () => {
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        resultsRow.addSection(mockGameObject, 50, 0);
+        expect(mockGameObject.x).toBe(50);
+    });
+
     test("addSection applies the y offset", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-        mockGameObject.offsetY = 50;
-        resultsRow.addSection(mockGameObject);
-        expect(mockGameObject.y).toBe(-50);
+        resultsRow.addSection(mockGameObject, 0, 50);
+        expect(mockGameObject.y).toBe(0);
     });
 
     test("addSection sets the gameobjects x to the end of the last added object when it is the only object in the container", () => {
