@@ -52,6 +52,7 @@ describe("Select Screen", () => {
             reset: jest.fn(),
             gridMetrics: jest.fn(),
             resetButtons: jest.fn(),
+            getCurrentPageKey: jest.fn(),
             resize: jest.fn(),
             nextPage: mockNextPage,
             previousPage: mockPreviousPage,
@@ -84,6 +85,8 @@ describe("Select Screen", () => {
                             { asset: "character2", title: "character_2" },
                             { asset: "character3" },
                         ],
+                        rows: 1,
+                        columns: 1,
                     },
                     game: {},
                 },
@@ -451,7 +454,6 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[3][0].callback();
-            expect(eventBus.subscribe.mock.calls[3][0].name).toBe("next");
             expect(mockNextPage).toHaveBeenCalled();
         });
 
@@ -460,7 +462,6 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[4][0].callback();
-            expect(eventBus.subscribe.mock.calls[4][0].name).toBe("previous");
             expect(mockPreviousPage).toHaveBeenCalled();
         });
 
@@ -562,6 +563,23 @@ describe("Select Screen", () => {
             selectScreen.updateStates();
 
             expect(selectScreen._cells[0].setImage).toHaveBeenCalledWith("test_asset");
+        });
+    });
+    describe("create method without continue button", () => {
+        test("adds GEL buttons to layout without continue button", () => {
+            const modifiedData = mockData;
+            modifiedData.config.theme["test-select"].rows = 2;
+            selectScreen.setData(modifiedData);
+            selectScreen.create();
+            const expectedButtons = ["home", "audio", "pause", "previous", "next"];
+            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+    });
+    describe("resizing button sprites", () => {
+        test("", () => {
+            selectScreen.create();
+
+            selectScreen._cells = [{ _id: "id_one", overlays: { set: jest.fn() } }];
         });
     });
 });

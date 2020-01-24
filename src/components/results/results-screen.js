@@ -8,7 +8,8 @@ import { Screen } from "../../core/screen.js";
 import { eventBus } from "../../core/event-bus.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import * as Rows from "../../core/layout/rows.js";
-import { getMetrics } from "../../core/scaler.js";
+import { getMetrics, onScaleChange } from "../../core/scaler.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 const getScoreMetaData = result => {
     if (typeof result === "number") {
@@ -42,8 +43,17 @@ export class Results extends Screen {
     createLayout() {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
+
+        fp.get("backdrop.key", this.theme) && this.backdropFill();
         this.setLayout(buttons.concat(achievements));
+
         const getSafeArea = this.layout.getSafeArea;
+        this.resultsArea = getSafeArea(getMetrics(), { top: false });
+        this.sizeToParent(this.backdrop, this.resultsArea);
+
+        const scaleEvent = onScaleChange.add(() =>
+            this.sizeToParent(this.backdrop, getSafeArea(getMetrics(), { top: false })),
+        );
 
         this.rows = Rows.create(
             this,
@@ -51,6 +61,20 @@ export class Results extends Screen {
             this.theme.rows,
             Rows.RowType.Results,
         );
+        this.events.once("shutdown", scaleEvent.unsubscribe);
+    }
+
+    backdropFill() {
+        this.backdrop = this.add.image(0, 0, this.theme.backdrop.key);
+        this.backdrop.alpha = this.theme.backdrop.alpha || 1;
+    }
+
+    sizeToParent(item, safeArea) {
+        if (fp.get("backdrop.key", this.theme) && safeArea) {
+            item.x = safeArea.centerX;
+            item.y = safeArea.centerY;
+            item.scale = Math.min(safeArea.width / item.width, safeArea.height / item.height);
+        }
     }
 
     subscribeToEventBus() {
@@ -63,9 +87,7 @@ export class Results extends Screen {
         eventBus.subscribe({
             name: "restart",
             channel: buttonsChannel(this),
-            callback: () => {
-                this.navigation.game();
-            },
+            callback: this.navigation.game,
         });
     }
 }
