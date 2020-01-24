@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 import { ResultsRow } from "../../../src/components/results/results-row.js";
+import { mockBaseScene } from "../../mock/mock-scene.js";
 
 describe("ResultsRow", () => {
     let mockScene;
@@ -12,23 +13,7 @@ describe("ResultsRow", () => {
     let mockDrawArea;
 
     beforeEach(() => {
-        mockScene = {
-            sys: {
-                game: {
-                    config: {
-                        resolution: {},
-                    },
-                    events: { on: () => {} },
-                    renderer: {},
-                },
-                queueDepthSort: () => {},
-                textures: {
-                    addCanvas: () => ({
-                        get: () => ({ source: {}, resolution: {}, setSize: () => {} }),
-                    }),
-                },
-            },
-        };
+        mockScene = mockBaseScene();
         mockRowConfig = {};
         mockDrawArea = {
             centerX: 47,
