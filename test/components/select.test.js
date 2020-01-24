@@ -108,7 +108,7 @@ describe("Select Screen", () => {
                     getHitAreaBounds: jest.fn(() => mockBounds),
                     type: "Sprite",
                 },
-                audio: {
+                pause: {
                     getHitAreaBounds: jest.fn(() => mockBounds),
                     type: "Sprite",
                 },
@@ -183,7 +183,7 @@ describe("Select Screen", () => {
         });
 
         test("adds GEL buttons to layout", () => {
-            const expectedButtons = ["home", "audio", "pause", "previous", "next", "continue"];
+            const expectedButtons = ["home", "pause", "previous", "next", "continue"];
             expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
@@ -571,7 +571,7 @@ describe("Select Screen", () => {
             modifiedData.config.theme["test-select"].rows = 2;
             selectScreen.setData(modifiedData);
             selectScreen.create();
-            const expectedButtons = ["home", "audio", "pause", "previous", "next"];
+            const expectedButtons = ["home", "pause", "previous", "next"];
             expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
     });

@@ -31,7 +31,7 @@ export class Select extends Screen {
         this.theme = this.context.config.theme[this.scene.key];
         this.setTitleElements();
         const continueBtn = this.theme.rows === 1 && this.theme.columns === 1 ? ["continue"] : [];
-        const buttons = ["home", "audio", "pause", "previous", "next"];
+        const buttons = ["home", "pause", "previous", "next"];
         this.setLayout(buttons.concat(continueBtn));
         const metrics = getMetrics();
         this.grid = new GelGrid(this, metrics, this.layout.getSafeArea(metrics), this.theme.rows, this.theme.columns);
@@ -101,7 +101,7 @@ export class Select extends Screen {
 
     getTitleSafeArea() {
         const homeButton = this.layout.buttons["home"];
-        const secondaryButton = this.layout.buttons["audio"];
+        const secondaryButton = this.layout.buttons["pause"];
 
         const homeButtonBounds = homeButton.getHitAreaBounds();
         const secondaryButtonBounds = secondaryButton.getHitAreaBounds();
@@ -152,44 +152,37 @@ export class Select extends Screen {
         return visualElements;
     }
 
-    next(title) {
+    next = getTitle => () => {
         this._scaleEvent.unsubscribe();
         //TODO  Stats Stuff will need adding back in, once we have the carousel back
         //TODO work out the correct key if "continue" is passed here when continue button used vs grid button
-        this.transientData[this.scene.key] = { choice: { title } };
+        this.transientData[this.scene.key] = { choice: { title: getTitle.call(this.grid) } };
         this.navigation.next();
-    }
+    };
 
     addEventSubscriptions() {
-        this.grid.cellIds().map(key => {
+        const grid = this.grid;
+        grid.cellIds().map(key => {
             eventBus.subscribe({
                 channel: buttonsChannel(this),
                 name: key,
-                callback: () => {
-                    this.next(key);
-                },
+                callback: this.next(() => key),
             });
         });
         eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "continue",
-            callback: () => {
-                this.next(this.grid.getCurrentPageKey());
-            },
+            callback: this.next(this.grid.getCurrentPageKey),
         });
         eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "next",
-            callback: () => {
-                this.grid.nextPage();
-            },
+            callback: grid.nextPage.bind(grid),
         });
         eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "previous",
-            callback: () => {
-                this.grid.previousPage();
-            },
+            callback: grid.previousPage.bind(grid),
         });
     }
 }
