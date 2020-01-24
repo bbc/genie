@@ -13,25 +13,25 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.getDrawArea = getDrawArea;
         this.drawRow();
         this.setContainerPosition();
-        this.justify();
+        this.align();
     }
 
-    justify() {
+    align() {
         const drawArea = this.getDrawArea();
         const lastGameObject = this.list.slice(-1)[0];
         const rowWidth = lastGameObject ? lastGameObject.x + lastGameObject.width : 0;
-        if (this.rowConfig.justification === "left") {
+        if (this.rowConfig.align === "left") {
             this.list.forEach(gameObject => (gameObject.x += -rowWidth));
             return;
         }
-        if (this.rowConfig.justification === "right") {
+        if (this.rowConfig.align === "right") {
             return;
         }
-        if (this.rowConfig.justification === "marginLeft") {
+        if (this.rowConfig.align === "marginLeft") {
             this.list.forEach(gameObject => (gameObject.x += drawArea.x));
             return;
         }
-        if (this.rowConfig.justification === "marginRight") {
+        if (this.rowConfig.align === "marginRight") {
             const lastGameObject = this.list.slice(-1)[0];
             this.list.forEach(gameObject => (gameObject.x -= drawArea.x + lastGameObject.x + lastGameObject.width));
             return;
@@ -39,13 +39,13 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.list.forEach(gameObject => (gameObject.x -= rowWidth / 2));
     }
 
-    updateMarginJustification() {
+    updateMarginAlignment() {
         const drawArea = this.getDrawArea();
-        if (this.rowConfig.justification === "marginLeft") {
+        if (this.rowConfig.align === "marginLeft") {
             const oldDrawAreaX = this.list[0] ? this.list[0].x : 0;
             this.list.forEach(gameObject => (gameObject.x += drawArea.x - oldDrawAreaX));
         }
-        if (this.rowConfig.justification === "marginRight") {
+        if (this.rowConfig.align === "marginRight") {
             const lastGameObject = this.list.slice(-1)[0];
             const oldDrawAreaX = -lastGameObject.x - lastGameObject.width;
             this.list.forEach(gameObject => (gameObject.x -= drawArea.x - oldDrawAreaX));
@@ -80,7 +80,7 @@ export class ResultsRow extends Phaser.GameObjects.Container {
 
     reset() {
         this.setContainerPosition();
-        this.updateMarginJustification();
+        this.updateMarginAlignment();
     }
 
     makeAccessible() {}
