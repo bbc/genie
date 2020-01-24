@@ -7,6 +7,24 @@
                 "key": "basicButton",
                 "url": "game/basic-button.png",
                 "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "key",
+                "url": "game/key.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "gem",
+                "url": "game/gem.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "star",
+                "url": "game/star.png",
+                "overwrite": false
             }
         ]
     }
