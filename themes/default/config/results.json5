@@ -13,6 +13,7 @@
                         {
                             type: 'text',
                             content: 'Results Screen',
+                            offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -63,6 +64,7 @@
                         {
                             type: 'text',
                             content: 'Placeholder Text 1',
+                            offsetX: 50,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -72,11 +74,12 @@
                     ],
                 },
                 {
-                    align: 'left',
+                    align: 'right',
                     format: [
                         {
                             type: 'text',
                             content: 'Placeholder Text 2',
+                            offsetX: 100,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
