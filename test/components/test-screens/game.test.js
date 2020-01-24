@@ -43,6 +43,7 @@ describe("Test Screens - Game", () => {
         };
         mockTransientData = {
             "character-select": { choice: { title: "Penfold" } },
+            "level-select": { choice: { title: "Level1" } },
         };
         gameTest = new GameTest();
         gameTest.setLayout = jest.fn();

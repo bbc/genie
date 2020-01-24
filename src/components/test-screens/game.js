@@ -62,5 +62,12 @@ export class GameTest extends Screen {
                 align: "center",
             })
             .setOrigin(0.5);
+        this.add
+            .text(0, 250, `Character Selected: ${this.transientData["level-select"].choice.title}`, {
+                font: "32px ReithSans",
+                fill: "#f6931e",
+                align: "center",
+            })
+            .setOrigin(0.5);
     }
 }
