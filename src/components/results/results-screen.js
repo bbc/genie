@@ -27,13 +27,10 @@ const fireGameCompleteStat = result => {
 
 export class Results extends Screen {
     create() {
+        this.transientData[this.scene.key] = { stars: 10 }; // TODO remove this fake data
         this.theme = this.context.config.theme[this.scene.key];
         this.add.image(0, 0, "results.background");
         this.addAnimations();
-        this.add.image(0, -150, "results.title");
-        const resultsText = this.add.text(0, 50, this.context.transientData.results, this.theme.resultText.style);
-        resultsText.setOrigin(0.5, 0.5);
-
         this.createLayout();
         fireGameCompleteStat(this.transientData.results);
         this.subscribeToEventBus();

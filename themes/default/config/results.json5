@@ -1,55 +1,71 @@
 {
     theme: {
         results: {
-            // Old Results screen config below - delete when possible
-            backgroundAnimation: '',
-            resultText: {
-                style: {
-                    font: '40px ReithSans',
-                    align: 'center',
-                    fill: '#fff',
-                    boundsAlignH: 'center',
-                },
-            },
-            // New example results screen config below
             backdrop: 'imgKey', //optional added to sfafe area
             statsFormat: '', // maybe?
             title: { text: 'titleText', styling: {} },
             rows: [
                 {
-                    textStyle: {
-                        fontSize: "48px", // Font size should be a minimum of 13px as per GEL
-                        color: '#000000', // This should meet the colour contrast requirement as per GEL
-                    },
-                    format: [
-                        '{results.imgtag$}',
-                        'you collected ',
-                        'STRING(results.stars)',
-                        'SPRITE',
-                        'SPINE',
-                        'COUNTUP(start: results.countup1.start, results,countup1.end, soundKey, pitchStart, pitchEnd, 5)',
-                    ], //better weird tags
+                    format: [{ type: 'image', content: 'results.title' }],
                     sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
                     backdrop: 'imgKey', //optional
                     transition: 'appear', // (appear|fade|pop) look at passing generic phaser ease in
                 },
                 {
-                    textStyle: {
-                        fontSize: "24px",
-                        color: '#FF0000',
-                    }
+                    justification: "center",
+                    format: [
+                        {
+                            type: 'text',
+                            content: 'You collected ',
+                            textStyle: {
+                                fontSize: '24px',
+                                color: '#000000',
+                            },
+                        },
+                        { type: 'image', key: 'results.starImage' },
+                        {
+                            type: 'text',
+                            content: '<%= stars %> stars',
+                            textStyle: {
+                                fontSize: '24px',
+                                color: '#FFFF00',
+                            },
+                        },
+                        {
+                            type: 'text',
+                            content: '!',
+                            textStyle: {
+                                fontSize: '24px',
+                                color: '#000000',
+                            },
+                        },
+                    ],
                 },
                 {
-                    textStyle: {
-                        fontSize: "24px",
-                        color: '#00FF00',
-                    }
+                    justification: "right",
+                    format: [
+                        {
+                            type: 'text',
+                            content: 'Placeholder Text 1',
+                            textStyle: {
+                                fontSize: '24px',
+                                color: '#FF0000',
+                            },
+                        },
+                    ],
                 },
                 {
-                    textStyle: {
-                        fontSize: "24px",
-                        color: '#0000FF',
-                    }
+                    justification: "left",
+                    format: [
+                        {
+                            type: 'text',
+                            content: 'Placeholder Text 2',
+                            textStyle: {
+                                fontSize: '24px',
+                                color: '#00FF00',
+                            },
+                        },
+                    ],
                 },
             ],
         },
