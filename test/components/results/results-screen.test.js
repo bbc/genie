@@ -113,11 +113,6 @@ describe("Results Screen", () => {
             expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "results.background");
         });
 
-        test("adds a title image", () => {
-            resultsScreen.create();
-            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, -150, "results.title");
-        });
-
         test("loads the game results text", () => {
             resultsScreen.create();
             const expectedResultsData = 22;
