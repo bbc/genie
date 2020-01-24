@@ -22,11 +22,18 @@ describe("Results Screen", () => {
     let mockTextAdd;
     let mockResultsArea;
     let mockImage;
+    let unsubscribe = jest.fn();
 
     beforeEach(() => {
         Scaler.getMetrics = jest.fn(() => ({ test: "metrics" }));
+        Scaler.onScaleChange = {
+            add: jest.fn(() => ({ unsubscribe })),
+        };
         MetricsModule.getMetrics = jest.fn();
-        mockImage = {};
+        mockImage = {
+            height: 5,
+            width: 5,
+        };
         mockConfig = {
             theme: {
                 resultsScreen: {
@@ -123,7 +130,7 @@ describe("Results Screen", () => {
             resultsScreen.create();
             expect(Rows.create).toHaveBeenCalledWith(
                 resultsScreen,
-                mockResultsArea,
+                expect.any(Function),
                 resultsScreen.theme.rows,
                 Rows.RowType.Results,
             );
@@ -191,20 +198,41 @@ describe("Results Screen", () => {
             expect(resultsScreen.add.image).not.toHaveBeenCalledWith(0, 0, "mockKey");
         });
 
-        // Uncomment if we want to move the backdrop into rows
-        // test("Creates a callback that calls getSafeArea with metrics and top: false group overrides ", () => {
-        //     resultsScreen.create();
-        //     const safeAreaCallback = Rows.create.mock.calls[0][1];
-        //     safeAreaCallback();
+        test("Creates a callback that calls getSafeArea with metrics and top: false group overrides ", () => {
+            resultsScreen.create();
+            const safeAreaCallback = Rows.create.mock.calls[0][1];
+            safeAreaCallback();
 
-        //     expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ test: "metrics" }, { top: false });
-        // });
+            expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ test: "metrics" }, { top: false });
+        });
 
         test("adds the achievement button when theme flag is set", () => {
             resultsScreen.context.config.theme.game.achievements = true;
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame", "achievementsSmall"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+
+        test("resizes on a scale event", () => {
+            mockImage = {
+                height: 5,
+                width: 5,
+            };
+            mockResultsArea = {
+                centerX: 0,
+                centerY: 0,
+                height: 10,
+                width: 10,
+            };
+
+            resultsScreen.create();
+            expect(mockImage.scale).toEqual(2);
+
+            mockResultsArea.width = 5;
+            Scaler.onScaleChange.add.mock.calls[0][0]();
+
+            expect(Scaler.onScaleChange.add).toHaveBeenCalled();
+            expect(mockImage.scale).toEqual(1);
         });
 
         describe("Stats", () => {
@@ -255,6 +283,11 @@ describe("Results Screen", () => {
                 eventBus.subscribe.mock.calls[0][0].callback();
                 expect(resultsScreen.navigation.next).toHaveBeenCalled();
             });
+
+            test("unsubscribes from scale events", () => {
+                eventBus.subscribe.mock.calls[1][0].callback();
+                expect(unsubscribe).toHaveBeenCalled();
+            });
         });
 
         describe("the restart button", () => {
@@ -265,6 +298,11 @@ describe("Results Screen", () => {
             test("restarts the game and passes saved data through", () => {
                 eventBus.subscribe.mock.calls[1][0].callback();
                 expect(resultsScreen.navigation.game).toHaveBeenCalled();
+            });
+
+            test("unsubscribes from scale events", () => {
+                eventBus.subscribe.mock.calls[1][0].callback();
+                expect(unsubscribe).toHaveBeenCalled();
             });
         });
     });

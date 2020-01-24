@@ -8,7 +8,7 @@ import { Screen } from "../../core/screen.js";
 import { eventBus } from "../../core/event-bus.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import * as Rows from "../../core/layout/rows.js";
-import { getMetrics } from "../../core/scaler.js";
+import { getMetrics, onScaleChange } from "../../core/scaler.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const getScoreMetaData = result => {
@@ -45,12 +45,21 @@ export class Results extends Screen {
         const buttons = ["pause", "restart", "continueGame"];
 
         fp.get("backdrop.key", this.theme) && this.backdropFill();
-
         this.setLayout(buttons.concat(achievements));
-        this.resultsArea = this.layout.getSafeArea(getMetrics());
+
+        const getSafeArea = this.layout.getSafeArea;
+        this.resultsArea = getSafeArea(getMetrics(), { top: false });
         this.sizeToParent(this.backdrop, this.resultsArea);
 
-        this.rows = Rows.create(this, this.resultsArea, this.theme.rows, Rows.RowType.Results);
+        const scaleBackdrop = () => this.sizeToParent(this.backdrop, getSafeArea(getMetrics(), { top: false }));
+        this._scaleEvent = onScaleChange.add(scaleBackdrop.bind(this));
+
+        this.rows = Rows.create(
+            this,
+            () => getSafeArea(getMetrics(), { top: false }),
+            this.theme.rows,
+            Rows.RowType.Results,
+        );
     }
 
     backdropFill() {
@@ -59,7 +68,7 @@ export class Results extends Screen {
     }
 
     sizeToParent(item, safeArea) {
-        if (fp.get("backdrop.key", this.theme)) {
+        if (fp.get("backdrop.key", this.theme) && safeArea) {
             item.x = safeArea.centerX;
             item.y = safeArea.centerY;
             item.scale = Math.min(safeArea.width / item.width, safeArea.height / item.height);
@@ -70,13 +79,17 @@ export class Results extends Screen {
         eventBus.subscribe({
             name: "continue",
             channel: buttonsChannel(this),
-            callback: this.navigation.next,
+            callback: () => {
+                this._scaleEvent.unsubscribe();
+                this.navigation.next();
+            },
         });
 
         eventBus.subscribe({
             name: "restart",
             channel: buttonsChannel(this),
             callback: () => {
+                this._scaleEvent.unsubscribe();
                 this.navigation.game();
             },
         });
