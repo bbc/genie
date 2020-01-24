@@ -3,16 +3,18 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { gmi } from "../../core/gmi/gmi.js";
 import { Screen } from "../../core/screen.js";
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 
 export class GameTest extends Screen {
     create() {
+        let keys = 0;
+        let gems = 0;
+        let stars = 0;
         this.add.image(0, 0, "home.background");
         this.addAnimations();
         this.add
-            .text(0, -190, "Game goes here", {
+            .text(0, -190, "Test Game: Collect Items", {
                 font: "65px ReithSans",
                 fill: "#f6931e",
                 align: "center",
@@ -29,30 +31,61 @@ export class GameTest extends Screen {
             wordWrapWidth: 223,
         };
 
+        const buttonNames = ["Key", "Gem", "Star"];
+
+        this.add.image(0, -70, `${this.scene.key}.key`);
+        this.add.image(0, 20, `${this.scene.key}.gem`);
+        this.add.image(0, 110, `${this.scene.key}.star`);
+        const keyScore = this.add.text(-50, -70, "0", buttonTextStyle).setOrigin(0.5);
+        const gemScore = this.add.text(-50, 20, "0", buttonTextStyle).setOrigin(0.5);
+        const starScore = this.add.text(-50, 110, "0", buttonTextStyle).setOrigin(0.5);
+
+        this.add
+            .image(300, 20, buttonKey)
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true })
+            .on("pointerup", () => onGameComplete());
+        this.add
+            .text(300, 20, "Continue", buttonTextStyle)
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true })
+            .on("pointerup", () => onGameComplete());
+
         [-70, 20, 110].forEach((buttonYPosition, index) => {
             const buttonNumber = index + 1;
-            const buttonText = "Button " + buttonNumber;
+            const buttonText = "Collect " + buttonNames[index];
             const button = this.add
-                .image(0, buttonYPosition, buttonKey)
+                .image(-200, buttonYPosition, buttonKey)
                 .setOrigin(0.5)
                 .setInteractive({ useHandCursor: true })
-                .on("pointerup", () => onGameComplete(buttonNumber));
+                .on("pointerup", () => increaseScores(index));
             this.add
-                .text(0, buttonYPosition, buttonText, buttonTextStyle)
+                .text(-200, buttonYPosition, buttonText, buttonTextStyle)
                 .setOrigin(0.5)
                 .setInteractive({ useHandCursor: true })
-                .on("pointerup", () => onGameComplete(buttonNumber));
-
+                .on("pointerup", () => increaseScores(index));
             button.config = { id: buttonNumber, ariaLabel: buttonText };
             accessibilify(button);
         }, this);
 
-        const onGameComplete = buttonNumber => {
-            const results = "You pressed button " + buttonNumber;
-            gmi.setGameData("buttonPressed", buttonNumber);
-            console.log("Data saved to GMI:", gmi.getAllSettings().gameData); // eslint-disable-line no-console
-            this.transientData.results = results;
+        const onGameComplete = () => {
+            this.transientData[this.scene.key] = { keys, gems, stars };
             this.navigation.next();
+        };
+
+        const increaseScores = index => {
+            if (index == 0) {
+                keys++;
+                keyScore.text = keys;
+            }
+            if (index == 1) {
+                gems++;
+                gemScore.text = gems;
+            }
+            if (index == 2) {
+                stars++;
+                starScore.text = stars;
+            }
         };
 
         this.add
@@ -63,7 +96,7 @@ export class GameTest extends Screen {
             })
             .setOrigin(0.5);
         this.add
-            .text(0, 250, `Character Selected: ${this.transientData["level-select"].choice.title}`, {
+            .text(0, 250, `Level Selected: ${this.transientData["level-select"].choice.title}`, {
                 font: "32px ReithSans",
                 fill: "#f6931e",
                 align: "center",
