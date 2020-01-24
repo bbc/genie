@@ -1,0 +1,42 @@
+{
+    theme: {
+        results: {
+            // Old Results screen config below - delete when possible
+            backgroundAnimation: '',
+            resultText: {
+                style: {
+                    font: '40px ReithSans',
+                    align: 'center',
+                    fill: '#fff',
+                    boundsAlignH: 'center',
+                },
+            },
+            // New example results screen config below
+            backdrop: {
+                        key: 'results.backdrop',
+                        alpha: 1,
+            }, //optional added to sfafe area
+            statsFormat: '', // maybe?
+            title: { text: 'titleText', styling: {} },
+            rows: [
+                {
+                    textStyle: {}, //optional
+                    format: [
+                        '{results.imgtag$}',
+                        'you collected ',
+                        'STRING(results.stars)',
+                        'SPRITE',
+                        'SPINE',
+                        'COUNTUP(start: results.countup1.start, results,countup1.end, soundKey, pitchStart, pitchEnd, 5)',
+                    ], //better weird tags
+                    sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
+                    backdrop: 'imgKey', //optional
+                    transition: 'appear', // (appear|fade|pop) look at passing generic phaser ease in
+                },
+                {},
+                {},
+                {},
+            ],
+        },
+    },
+}

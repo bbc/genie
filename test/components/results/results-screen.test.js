@@ -10,6 +10,7 @@ import * as Rows from "../../../src/core/layout/rows.js";
 import * as MetricsModule from "../../../src/core/layout/calculate-metrics.js";
 
 import { Results } from "../../../src/components/results/results-screen.js";
+import result from "../../../lib/lodash/result.js";
 
 jest.mock("../../../src/core/layout/rows.js");
 jest.mock("../../../src/core/screen.js");
@@ -20,13 +21,24 @@ describe("Results Screen", () => {
     let mockTransientData;
     let mockGmi;
     let mockTextAdd;
+    let mockResultsArea;
+    let mockImage;
+    let unsubscribe = jest.fn();
 
     beforeEach(() => {
         Scaler.getMetrics = jest.fn(() => ({ test: "metrics" }));
+        Scaler.onScaleChange = {
+            add: jest.fn(() => ({ unsubscribe })),
+        };
         MetricsModule.getMetrics = jest.fn();
+        mockImage = {
+            height: 5,
+            width: 5,
+        };
         mockConfig = {
             theme: {
                 resultsScreen: {
+                    backdrop: { key: "mockKey", alpha: 1 },
                     resultText: {
                         style: { font: "36px ReithSans" },
                     },
@@ -38,6 +50,12 @@ describe("Results Screen", () => {
         mockTransientData = {
             results: 22,
             characterSelected: 1,
+        };
+        mockResultsArea = {
+            centerX: 0,
+            centerY: 0,
+            width: 0,
+            height: 0,
         };
 
         mockGmi = { sendStatsEvent: jest.fn() };
@@ -62,14 +80,17 @@ describe("Results Screen", () => {
                     },
                 },
             },
-            getSafeArea: jest.fn(),
+            getSafeArea: jest.fn(() => mockResultsArea),
         };
         resultsScreen.context = { config: mockConfig, transientData: mockTransientData };
         resultsScreen.transientData = mockTransientData;
         resultsScreen.addAnimations = jest.fn(() => () => {});
         resultsScreen.setLayout = jest.fn();
         resultsScreen.add = {
-            image: jest.fn().mockImplementation((x, y, imageName) => imageName),
+            image: jest.fn().mockImplementation((x, y, imageName) => {
+                mockImage.imageName = imageName;
+                return mockImage;
+            }),
             text: jest.fn(() => mockTextAdd),
         };
         resultsScreen.scene = {
@@ -78,6 +99,9 @@ describe("Results Screen", () => {
         resultsScreen.navigation = {
             next: jest.fn(),
             game: jest.fn(),
+        };
+        resultsScreen.events = {
+            once: jest.fn(),
         };
     });
 
@@ -116,6 +140,68 @@ describe("Results Screen", () => {
             );
         });
 
+        test("adds a backdrop image with specified properties when one is specified in config", () => {
+            mockConfig.theme.resultsScreen.backdrop.alpha = 0.5;
+            resultsScreen.create();
+            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+            expect(mockImage.alpha).toEqual(0.5);
+        });
+
+        test("adds an image with a default alpha of 1 when no alpha is specified", () => {
+            mockConfig.theme.resultsScreen.backdrop.alpha = undefined;
+
+            resultsScreen.create();
+            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+            expect(mockImage.alpha).toEqual(1);
+        });
+
+        test("adds a backdrop image centred within the results area", () => {
+            mockResultsArea = {
+                centerX: 15,
+                centerY: 15,
+                width: 10,
+                height: 10,
+            };
+            resultsScreen.create();
+            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+            expect(mockImage.x).toBe(15);
+            expect(mockImage.y).toEqual(15);
+        });
+
+        test("image is scaled to the width of the safe area to preserve aspect ratio", () => {
+            mockResultsArea = {
+                centerX: 15,
+                centerY: 15,
+                width: 10,
+                height: 10,
+            };
+            mockImage = {
+                width: 8,
+                height: 5,
+            };
+            resultsScreen.create();
+            expect(mockImage.scale).toEqual(1.25);
+        });
+
+        test("image is scaled to the height of the safe area to preserve aspect ratio", () => {
+            mockResultsArea = {
+                width: 10,
+                height: 10,
+            };
+            mockImage = {
+                width: 4,
+                height: 5,
+            };
+            resultsScreen.create();
+            expect(mockImage.scale).toEqual(2);
+        });
+
+        test("does not render image when no key is provided on the backdrop object", () => {
+            mockConfig.theme.resultsScreen.backdrop.key = undefined;
+            resultsScreen.create();
+            expect(resultsScreen.add.image).not.toHaveBeenCalledWith(0, 0, "mockKey");
+        });
+
         test("Creates a callback that calls getSafeArea with metrics and top: false group overrides ", () => {
             resultsScreen.create();
             const safeAreaCallback = Rows.create.mock.calls[0][1];
@@ -129,6 +215,40 @@ describe("Results Screen", () => {
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame", "achievementsSmall"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+
+        test("resizes on a scale event", () => {
+            mockImage = {
+                height: 5,
+                width: 5,
+            };
+            mockResultsArea = {
+                centerX: 0,
+                centerY: 0,
+                height: 10,
+                width: 10,
+            };
+
+            resultsScreen.create();
+            expect(mockImage.scale).toEqual(2);
+
+            mockResultsArea.width = 5;
+            Scaler.onScaleChange.add.mock.calls[0][0]();
+
+            expect(Scaler.onScaleChange.add).toHaveBeenCalled();
+            expect(mockImage.scale).toEqual(1);
+        });
+
+        test("adds a callback to unsubscribe from scale events on shutdown", () => {
+            resultsScreen.create();
+            expect(resultsScreen.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
+        });
+
+        test("unsubscribes from scale events on shutdown", () => {
+            resultsScreen.create();
+
+            resultsScreen.events.once.mock.calls[0][1]();
+            expect(unsubscribe).toHaveBeenCalled();
         });
 
         describe("Stats", () => {

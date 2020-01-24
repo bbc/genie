@@ -1,7 +1,10 @@
 {
     theme: {
         results: {
-            backdrop: 'imgKey', //optional added to sfafe area
+            backdrop: {
+                key: 'results.backdrop',
+                alpha: 1,
+            }, //optional added to safe area
             statsFormat: '', // maybe?
             title: { text: 'titleText', styling: {} },
             rows: [
@@ -12,7 +15,7 @@
                     transition: 'appear', // (appear|fade|pop) look at passing generic phaser ease in
                 },
                 {
-                    align: "center",
+                    align: 'center',
                     format: [
                         {
                             type: 'text',
@@ -45,7 +48,7 @@
                     ],
                 },
                 {
-                    align: "marginLeft",
+                    align: 'marginLeft',
                     format: [
                         {
                             type: 'text',
@@ -59,7 +62,7 @@
                     ],
                 },
                 {
-                    align: "left",
+                    align: 'left',
                     format: [
                         {
                             type: 'text',

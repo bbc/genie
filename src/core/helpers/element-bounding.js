@@ -6,7 +6,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import fp from "../../../lib/lodash/fp/fp.js";
 
 export const positionElement = (element, position, safeArea, metrics) => {
     if (element) {
@@ -16,26 +15,16 @@ export const positionElement = (element, position, safeArea, metrics) => {
     }
 };
 
-export const getItemBounds = fp.curry((metrics, item) => {
-    const bounds = item.getBounds();
-    const padding = metrics.isMobile && item.type === "Sprite" ? metrics.buttonPad : 0;
-    return {
-        top: bounds.y - padding,
-        bottom: bounds.y + bounds.height + padding,
-        left: bounds.x - padding,
-        right: bounds.x + bounds.width + padding,
-    };
-});
-
 const scaleElement = (element, bounds) => {
     const safeHeight = bounds.bottom - bounds.top;
     const safeWidth = bounds.right - bounds.left;
 
-    if (element.height > safeHeight) {
+    if (element.height > safeHeight && safeHeight > 0) {
         const hDiff = (element.height - safeHeight) / element.height;
         element.setScale(1 - hDiff);
     }
-    if (element.width > safeWidth) {
+    // Check safeWidth is positive, can scale negatively when the screen is too small
+    if (element.width > safeWidth && safeWidth > 0) {
         const wDiff = (element.width - safeWidth) / element.width;
         element.setScale(1 - wDiff);
     }
@@ -46,7 +35,14 @@ const restrictBounds = (element, safeArea, metrics) => {
 
     scaleElement(element, safeArea);
 
-    const elementBounds = getItemBounds(metrics, element);
+    const hitArea = element.getBounds();
+
+    const elementBounds = {
+        top: hitArea.y,
+        bottom: hitArea.y + hitArea.height,
+        left: hitArea.x,
+        right: hitArea.x + hitArea.width,
+    };
 
     if (elementBounds.top < safeArea.top) {
         element.setPosition(element.x, element.y - (elementBounds.top - safeArea.top));
@@ -66,7 +62,6 @@ export const enforceTextSize = (element, { scale }) => {
     const fontSize = parseInt(element.defaultStyle.fontSize);
     const minimumSize = 13;
     const currentSize = fontSize * scale;
-
     element.setFontSize(`${fontSize}px`);
     if (currentSize < minimumSize) {
         const newScale = minimumSize / currentSize;

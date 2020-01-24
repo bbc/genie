@@ -36,6 +36,7 @@ describe("Gel Button", () => {
             setTexture: jest.fn(),
             setFrame: jest.fn(),
             play: jest.fn(),
+            setDisplaySize: jest.fn(),
         };
         mockScene = {
             add: {
@@ -94,6 +95,7 @@ describe("Gel Button", () => {
             key: "mockKey",
             shiftX: 9,
             shiftY: 21,
+            gameButton: false,
             name: "test name",
         };
     });
@@ -323,7 +325,6 @@ describe("Gel Button", () => {
 
             gelButton.overlays.set("test_key", { destroy: jest.fn() });
             gelButton.overlays.remove("test_key");
-
             expect(gelButton.remove).toHaveBeenCalledTimes(1);
         });
     });
