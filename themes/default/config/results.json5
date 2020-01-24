@@ -42,7 +42,7 @@
                     ],
                 },
                 {
-                    justification: "right",
+                    justification: "marginLeft",
                     format: [
                         {
                             type: 'text',
