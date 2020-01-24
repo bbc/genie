@@ -42,7 +42,7 @@ export class ResultsRow extends Phaser.GameObjects.Container {
     updateMarginAlignment() {
         const drawArea = this.getDrawArea();
         if (this.rowConfig.align === "marginLeft") {
-            const oldDrawAreaX = this.list[0] ? this.list[0].x : 0;
+            const oldDrawAreaX = this.list[0].x;
             this.list.forEach(gameObject => (gameObject.x += drawArea.x - oldDrawAreaX));
         }
         if (this.rowConfig.align === "marginRight") {

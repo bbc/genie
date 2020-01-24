@@ -9,7 +9,17 @@
             title: { text: 'titleText', styling: {} },
             rows: [
                 {
-                    format: [{ type: 'image', content: 'results.title' }],
+                    format: [
+                        {
+                            type: 'text',
+                            content: 'Results Screen',
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFFFF',
+                            },
+                        },
+                    ],
                     sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
                     backdrop: 'imgKey', //optional
                     transition: 'appear', // (appear|fade|pop) look at passing generic phaser ease in
