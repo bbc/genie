@@ -102,6 +102,7 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     resize(metrics) {
+        !this.config.gameButton && this.setHitArea(metrics);
         this.isMobile = metrics.isMobile;
         this.sprite.setTexture(assetPath({ key: this.config.key, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);

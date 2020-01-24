@@ -564,4 +564,12 @@ describe("Select Screen", () => {
             expect(selectScreen._cells[0].setImage).toHaveBeenCalledWith("test_asset");
         });
     });
+
+    describe("resizing button sprites", () => {
+        test("", () => {
+            selectScreen.create();
+
+            selectScreen._cells = [{ _id: "id_one", overlays: { set: jest.fn() } }];
+        });
+    });
 });
