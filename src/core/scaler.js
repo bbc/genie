@@ -4,7 +4,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { calculateMetrics } from "./layout/calculate-metrics.js";
+import { calculateMetrics } from "./layout/metrics.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
 import { eventBus } from "./event-bus.js";

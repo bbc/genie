@@ -6,7 +6,7 @@
 
 import * as _ from "lodash";
 
-import { calculateMetrics } from "../../../src/core/layout/calculate-metrics";
+import { calculateMetrics } from "../../../src/core/layout/metrics.js";
 
 const defaultValues = {
     width: 800,

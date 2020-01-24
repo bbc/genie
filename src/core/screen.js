@@ -17,6 +17,7 @@ import { settingsChannel } from "./settings.js";
 import { addAnimations } from "./background-animations.js";
 import { debugMode } from "./debug/debug-mode.js";
 import * as debug from "./debug/debug.js";
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./layout/metrics.js";
 
 export const overlayChannel = "gel-overlays";
 
@@ -55,10 +56,8 @@ export class Screen extends Phaser.Scene {
 
     init(data) {
         this._data = data;
-
-        //TODO P3 This centers the camera. This should not be hard-coded [NT]
-        this.cameras.main.scrollX = -700;
-        this.cameras.main.scrollY = -300;
+        this.cameras.main.scrollX = -CANVAS_WIDTH / 2;
+        this.cameras.main.scrollY = -CANVAS_HEIGHT / 2;
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
             gmi.setStatsScreen(this.scene.key);
