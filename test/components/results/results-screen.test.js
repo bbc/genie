@@ -10,6 +10,7 @@ import * as Rows from "../../../src/core/layout/rows.js";
 import * as MetricsModule from "../../../src/core/layout/calculate-metrics.js";
 
 import { Results } from "../../../src/components/results/results-screen.js";
+import result from "../../../lib/lodash/result.js";
 
 jest.mock("../../../src/core/layout/rows.js");
 jest.mock("../../../src/core/screen.js");
@@ -98,6 +99,9 @@ describe("Results Screen", () => {
         resultsScreen.navigation = {
             next: jest.fn(),
             game: jest.fn(),
+        };
+        resultsScreen.events = {
+            once: jest.fn(),
         };
     });
 
@@ -235,6 +239,18 @@ describe("Results Screen", () => {
             expect(mockImage.scale).toEqual(1);
         });
 
+        test("adds a callback to unsubscribe from scale events on shutdown", () => {
+            resultsScreen.create();
+            expect(resultsScreen.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
+        });
+
+        test("unsubscribes from scale events on shutdown", () => {
+            resultsScreen.create();
+
+            resultsScreen.events.once.mock.calls[0][1]();
+            expect(unsubscribe).toHaveBeenCalled();
+        });
+
         describe("Stats", () => {
             test("fires a score stat with results if given as a number", () => {
                 resultsScreen.transientData.results = 45;
@@ -283,11 +299,6 @@ describe("Results Screen", () => {
                 eventBus.subscribe.mock.calls[0][0].callback();
                 expect(resultsScreen.navigation.next).toHaveBeenCalled();
             });
-
-            test("unsubscribes from scale events", () => {
-                eventBus.subscribe.mock.calls[1][0].callback();
-                expect(unsubscribe).toHaveBeenCalled();
-            });
         });
 
         describe("the restart button", () => {
@@ -298,11 +309,6 @@ describe("Results Screen", () => {
             test("restarts the game and passes saved data through", () => {
                 eventBus.subscribe.mock.calls[1][0].callback();
                 expect(resultsScreen.navigation.game).toHaveBeenCalled();
-            });
-
-            test("unsubscribes from scale events", () => {
-                eventBus.subscribe.mock.calls[1][0].callback();
-                expect(unsubscribe).toHaveBeenCalled();
             });
         });
     });

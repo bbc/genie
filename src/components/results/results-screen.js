@@ -51,8 +51,9 @@ export class Results extends Screen {
         this.resultsArea = getSafeArea(getMetrics(), { top: false });
         this.sizeToParent(this.backdrop, this.resultsArea);
 
-        const scaleBackdrop = () => this.sizeToParent(this.backdrop, getSafeArea(getMetrics(), { top: false }));
-        this._scaleEvent = onScaleChange.add(scaleBackdrop.bind(this));
+        const scaleEvent = onScaleChange.add(() =>
+            this.sizeToParent(this.backdrop, getSafeArea(getMetrics(), { top: false })),
+        );
 
         this.rows = Rows.create(
             this,
@@ -60,6 +61,7 @@ export class Results extends Screen {
             this.theme.rows,
             Rows.RowType.Results,
         );
+        this.events.once("shutdown", scaleEvent.unsubscribe);
     }
 
     backdropFill() {
@@ -79,19 +81,13 @@ export class Results extends Screen {
         eventBus.subscribe({
             name: "continue",
             channel: buttonsChannel(this),
-            callback: () => {
-                this._scaleEvent.unsubscribe();
-                this.navigation.next();
-            },
+            callback: this.navigation.next,
         });
 
         eventBus.subscribe({
             name: "restart",
             channel: buttonsChannel(this),
-            callback: () => {
-                this._scaleEvent.unsubscribe();
-                this.navigation.game();
-            },
+            callback: this.navigation.game,
         });
     }
 }
