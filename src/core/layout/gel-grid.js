@@ -9,12 +9,14 @@ import { accessibilify } from "../accessibility/accessibilify.js";
 const alignmentFactor = { left: 0, center: 1, right: 2 };
 
 export class GelGrid extends Phaser.GameObjects.Container {
-    constructor(scene, metrics, safeArea, rows = 1, columns = 1) {
+    constructor(scene, metrics, safeArea, rows = 1, columns = 1, ease = "Cubic.easeInOut", duration = 500) {
         super(scene, 0, 0);
         this._metrics = metrics;
         this._safeArea = safeArea;
         this._rows = rows;
         this._columns = columns;
+        this._ease = ease;
+        this._duration = duration;
         this._cells = [];
         this._align = scene.theme.align || "center";
         this._cellPadding = metrics.isMobile ? 16 : 24;
@@ -158,7 +160,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         return Math.ceil(this._cells.length / this._cellsPerPage);
     }
 
-    pageTransition(goForwards = true, ease = "Cubic.easeInOut", duration = 500) {
+    pageTransition(goForwards = true) {
         const currentPage = this._page;
         const previousPage = goForwards ? this._page + 1 : this._page - 1 + this.getPageCount();
 
@@ -171,26 +173,26 @@ export class GelGrid extends Phaser.GameObjects.Container {
         cellsToTweenIn.forEach(cell => {
             this.scene.add.tween({
                 targets: cell,
-                ease,
+                ease: this._ease,
                 x: {
                     from: goForwards ? cell.x + this._safeArea.width : cell.x - this._safeArea.width,
                     to: cell.x,
                 },
                 alpha: { from: 0, to: 1 },
-                duration,
+                duration: this._duration,
             });
         });
 
         cellsToTweenOut.forEach(cell => {
             this.scene.add.tween({
                 targets: cell,
-                ease,
+                ease: this._ease,
                 x: {
                     from: cell.x,
                     to: goForwards ? cell.x - this._safeArea.width : cell.x + this._safeArea.width,
                 },
                 alpha: { from: 1, to: 0 },
-                duration,
+                duration: this._duration,
             });
         });
     }

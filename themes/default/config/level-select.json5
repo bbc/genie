@@ -37,6 +37,8 @@
             ],
             rows: 1,
             columns: 2,
+            ease: "Cubic.easeInOut",
+            duration: 500,
         },
     },
 }

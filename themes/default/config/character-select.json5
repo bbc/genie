@@ -129,6 +129,8 @@
             ],
             rows: 2,
             columns: 3,
+            ease: "Cubic.easeInOut",
+            duration: 500,
             align: "left",
         },
     },
