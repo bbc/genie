@@ -14,7 +14,7 @@ export class ResultsRow extends Phaser.GameObjects.Container {
     }
 
     drawRow() {
-        this.addAt(
+        this.add(
             new Phaser.GameObjects.Text(this.scene, 0, 0, "Placeholder Text", this.rowConfig.textStyle).setOrigin(
                 0.5,
                 0.5,

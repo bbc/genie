@@ -35,7 +35,7 @@ describe("ResultsRow", () => {
             centerY: 23,
         };
         mockGetDrawArea = () => mockDrawArea;
-        ResultsRow.prototype.addAt = jest.fn();
+        ResultsRow.prototype.add = jest.fn();
         ResultsRow.prototype.removeAll = jest.fn();
     });
 
