@@ -33,6 +33,8 @@ describe("ResultsRow", () => {
             y: 0,
             width: 100,
             height: 100,
+            offsetX: 0,
+            offsetY: 0,
         };
         ResultsRow.prototype.add = jest.fn();
         ResultsRow.prototype.removeAll = jest.fn();
@@ -45,6 +47,14 @@ describe("ResultsRow", () => {
         resultsRow.list = [mockGameObject];
         resultsRow.align();
         expect(mockGameObject.x).toBe(-25);
+    });
+
+    test("align moves the gameobject half the rows width by default and applies the x offset correctly", () => {
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        mockGameObject.offsetX = 50;
+        resultsRow.list = [mockGameObject];
+        resultsRow.align();
+        expect(mockGameObject.x).toBe(25);
     });
 
     test("align does not move the gameobject when alignment set to right", () => {
@@ -63,22 +73,6 @@ describe("ResultsRow", () => {
         expect(mockGameObject.x).toBe(-100);
     });
 
-    test("align sets gameobject.x left by drawArea.x when alignment set to marginLeft", () => {
-        mockRowConfig.align = "marginLeft";
-        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-        resultsRow.list = [mockGameObject];
-        resultsRow.align();
-        expect(mockGameObject.x).toBe(mockDrawArea.x + 50);
-    });
-
-    test("align sets gameobject.x right by drawArea.x and the width of the row when alignment set to marginRight", () => {
-        mockRowConfig.align = "marginRight";
-        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-        resultsRow.list = [mockGameObject];
-        resultsRow.align();
-        expect(mockGameObject.x).toBe(50 - mockDrawArea.x - 150);
-    });
-
     test("addSection adds the gameobject to the container", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         resultsRow.addSection(mockGameObject);
@@ -89,6 +83,13 @@ describe("ResultsRow", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         resultsRow.addSection(mockGameObject);
         expect(mockGameObject.x).toBe(0);
+    });
+
+    test("addSection applies the y offset", () => {
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        mockGameObject.offsetY = 50;
+        resultsRow.addSection(mockGameObject);
+        expect(mockGameObject.y).toBe(-50);
     });
 
     test("addSection sets the gameobjects x to the end of the last added object when it is the only object in the container", () => {
@@ -108,30 +109,6 @@ describe("ResultsRow", () => {
     test("drawRow adds a ResultsText object to the container when defined in rowConfig", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         expect(resultsRow.add).toHaveBeenCalledWith(expect.any(ResultsText));
-    });
-
-    test("updateMarginAlignment does not update gameObjects positions when align is not marginLeft or marginRight", () => {
-        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-        mockRowConfig.align = "center";
-        resultsRow.list = [mockGameObject];
-        resultsRow.updateMarginAlignment();
-        expect(mockGameObject.x).toBe(50);
-    });
-
-    test("updateMarginAlignment updates gameObjects x positions correctly when align is marginLeft", () => {
-        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-        mockRowConfig.align = "marginLeft";
-        resultsRow.list = [mockGameObject];
-        resultsRow.updateMarginAlignment();
-        expect(mockGameObject.x).toBe(-12);
-    });
-
-    test("updateMarginAlignment updates gameObjects x positions correctly when align is marginRight", () => {
-        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-        mockRowConfig.align = "marginRight";
-        resultsRow.list = [mockGameObject];
-        resultsRow.updateMarginAlignment();
-        expect(mockGameObject.x).toBe(-88);
     });
 
     test("getBoundingRect returns getDrawArea function", () => {

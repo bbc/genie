@@ -59,12 +59,12 @@
                     ],
                 },
                 {
-                    align: 'marginLeft',
+                    align: 'left',
                     format: [
                         {
                             type: 'text',
                             content: 'Placeholder Text 1',
-                            offsetX: 50,
+                            offsetX: -80,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -79,7 +79,7 @@
                         {
                             type: 'text',
                             content: 'Placeholder Text 2',
-                            offsetX: 100,
+                            offsetX: 80,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
