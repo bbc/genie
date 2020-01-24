@@ -12,10 +12,10 @@
                 },
             },
             // New example results screen config below
-            backdrop: {
+            backdrop: {// optional backdrop image
                         key: 'results.backdrop',
                         alpha: 1,
-            }, //optional added to sfafe area
+            },// rendered within results screen central safearea
             statsFormat: '', // maybe?
             title: { text: 'titleText', styling: {} },
             rows: [
