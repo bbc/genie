@@ -565,6 +565,7 @@ describe("Select Screen", () => {
             expect(selectScreen._cells[0].setImage).toHaveBeenCalledWith("test_asset");
         });
     });
+  
     describe("create method without continue button", () => {
         test("adds GEL buttons to layout without continue button", () => {
             const modifiedData = mockData;
@@ -573,6 +574,12 @@ describe("Select Screen", () => {
             selectScreen.create();
             const expectedButtons = ["home", "audio", "pause", "previous", "next"];
             expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
+    });
+
+    describe("resizing button sprites", () => {
+        test("", () => {
+            selectScreen.create();
+
+            selectScreen._cells = [{ _id: "id_one", overlays: { set: jest.fn() } }];
     });
 });
