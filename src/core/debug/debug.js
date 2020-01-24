@@ -20,6 +20,26 @@ export function update() {
 function create() {
     this.debugGraphics = this.add.graphics();
 
+
+    //const tile = this.add.tileSprite(0, 0, 200, 200, "gelDebug.FF0030-hatch");
+
+    const mesh = this.make.mesh({
+        key: 'gelDebug.FF0030-hatch',
+        x: 0,
+        y: 0,
+        vertices: [
+            -400, -300,
+            -400, 300,
+            400, 300,
+
+            -400, -300,
+            400, 300,
+            400, -300
+        ],
+        uv: [ 0, 0, 0, 100, 100, 100, 0, 0, 100, 100, 100, 0 ]
+    });
+
+
     debugDraw = {
         layout: fp.identity,
         groups: fp.identity,

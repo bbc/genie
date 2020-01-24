@@ -11,7 +11,11 @@ const getPaddingWidth = canvas => Math.max(canvas.width, canvas.height) * BORDER
 const draw43Area = screen => {
     const areaWidth = GEL_MIN_ASPECT_RATIO * screen.game.canvas.height;
     const areaHeight = screen.game.canvas.height;
-    screen.debugGraphics.fillStyle(0x32cd32, 0.5);
+    //screen.debugGraphics.fillStyle(0x32cd32, 0.5);
+
+    //const tile = new Phaser.GameObjects.TileSprite(screen, 0, 0, 200, 200, "gelDebug.FF0030-hatch");
+
+    //screen.debugGraphics.setTexture("gelDebug.FF0030-hatch", 0, 0);
 
     const rectangle = new Phaser.Geom.Rectangle(-areaWidth * 0.5, -areaHeight * 0.5, areaWidth, areaHeight);
     screen.debugGraphics.fillRectShape(rectangle);
