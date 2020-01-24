@@ -23,7 +23,7 @@
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
-                                color: '#000000',
+                                color: '#FFFFFF',
                             },
                         },
                         { type: 'image', key: 'results.starImage' },
@@ -42,7 +42,7 @@
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
-                                color: '#000000',
+                                color: '#FFFFFF',
                             },
                         },
                     ],
