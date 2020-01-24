@@ -825,6 +825,14 @@ describe("Grid", () => {
             expect(grid._cells[3].x).toEqual(expectedPositions[0].x);
             expect(grid._cells[4].x).toEqual(expectedPositions[1].x);
         });
+
+        test("page names are returned correctly", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            grid = new GelGrid(mockScene, metrics, mockSafeArea);
+            grid.addGridCells(mockScene.theme.choices);
+            const result = grid.getCurrentPageKey();
+            expect(result).toEqual("asset_name_0");
+        });
     });
 
     describe("removing cells", () => {

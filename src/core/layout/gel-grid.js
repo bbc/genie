@@ -171,6 +171,10 @@ export class GelGrid extends Phaser.GameObjects.Container {
         return this._page;
     }
 
+    getCurrentPageKey() {
+        return this._cells[this._page].key;
+    }
+
     previousPage() {
         this._page = (this._page - 1 + this.getPageCount()) % this.getPageCount();
         this.reset();

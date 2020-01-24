@@ -30,10 +30,10 @@ export class Select extends Screen {
         this.addAnimations();
         this.theme = this.context.config.theme[this.scene.key];
         this.setTitleElements();
-        this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
-
+        const continueBtn = this.theme.rows === 1 && this.theme.columns === 1 ? ["continue"] : [];
+        const buttons = ["home", "audio", "pause", "previous", "next"];
+        this.setLayout(buttons.concat(continueBtn));
         const metrics = getMetrics();
-
         this.grid = new GelGrid(this, metrics, this.layout.getSafeArea(metrics), this.theme.rows, this.theme.columns);
         this._cells = this.grid.addGridCells(this.theme.choices);
         this.layout.addCustomGroup("grid", this.grid);
@@ -161,18 +161,22 @@ export class Select extends Screen {
     }
 
     addEventSubscriptions() {
-        this.grid
-            .cellIds()
-            .concat(["continue"])
-            .map(key => {
-                eventBus.subscribe({
-                    channel: buttonsChannel(this),
-                    name: key,
-                    callback: () => {
-                        this.next(key);
-                    },
-                });
+        this.grid.cellIds().map(key => {
+            eventBus.subscribe({
+                channel: buttonsChannel(this),
+                name: key,
+                callback: () => {
+                    this.next(key);
+                },
             });
+        });
+        eventBus.subscribe({
+            channel: buttonsChannel(this),
+            name: "continue",
+            callback: () => {
+                this.next(this.grid.getCurrentPageKey());
+            },
+        });
         eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "next",
