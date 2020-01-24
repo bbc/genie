@@ -20,6 +20,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._cellPadding = metrics.isMobile ? 16 : 24;
         this._page = 0;
         this.eventChannel = `gel-buttons-${scene.scene.key}`;
+
+        window.grid = this;
     }
 
     addGridCells(gridCells) {
@@ -102,10 +104,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
         // this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
     }
 
-    setCellVisibility(cellIndex) {
-        this._cells[cellIndex].visible = true;
-    }
-
     setCellPosition(cellIndex, col, row) {
         const cellCount = this.rowCellsCount(row);
         const cell = this._cells[cellIndex];
@@ -152,22 +150,53 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     resetCell(cellIndex, col, row) {
-        this.setCellSize(cellIndex, col, row);
+        this.setCellSize(cellIndex);
         this.setCellPosition(cellIndex, col, row);
-        this.setCellVisibility(cellIndex, col, row);
-    }
-
-    resetCells() {
-        this._cells.map(cell => (cell.visible = false));
     }
 
     getPageCount() {
         return Math.ceil(this._cells.length / this._cellsPerPage);
     }
 
-    nextPage() {
-        this._page = (this._page + 1) % this.getPageCount();
+    pageTransition(goForwards = true, ease = "Cubic.easeInOut", duration = 500) {
+        const currentPage = this._page;
+        const previousPage = goForwards ? this._page + 1 : this._page - 1 + this.getPageCount();
+
+        this._page = previousPage % this.getPageCount();
         this.reset();
+
+        const cellsToTweenOut = this.getPageCells(currentPage);
+        const cellsToTweenIn = this.getPageCells(this._page);
+
+        cellsToTweenIn.forEach(cell => {
+            this.scene.add.tween({
+                targets: cell,
+                ease,
+                x: {
+                    from: goForwards ? cell.x + this._safeArea.width : cell.x - this._safeArea.width,
+                    to: cell.x,
+                },
+                alpha: { from: 0, to: 1 },
+                duration,
+            });
+        });
+
+        cellsToTweenOut.forEach(cell => {
+            this.scene.add.tween({
+                targets: cell,
+                ease,
+                x: {
+                    from: cell.x,
+                    to: goForwards ? cell.x - this._safeArea.width : cell.x + this._safeArea.width,
+                },
+                alpha: { from: 1, to: 0 },
+                duration,
+            });
+        });
+    }
+
+    nextPage() {
+        this.pageTransition();
         return this._page;
     }
 
@@ -176,8 +205,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     previousPage() {
-        this._page = (this._page - 1 + this.getPageCount()) % this.getPageCount();
-        this.reset();
+        const goForwards = false;
+        this.pageTransition(goForwards);
         return this._page;
     }
 
@@ -186,8 +215,20 @@ export class GelGrid extends Phaser.GameObjects.Container {
         return firstCell + this._columns * row + col;
     }
 
+    showPage(pageNum, show = true) {
+        this.getPageCells(pageNum).forEach(cell => (cell.visible = show));
+    }
+
+    getPageCells(pageNum) {
+        const cellsPerPage = this._rows * this._columns;
+        const pageMax = cellsPerPage * (pageNum + 1);
+        const pageMin = cellsPerPage * pageNum;
+        return this._cells.filter((cell, idx) => idx >= pageMin && idx < pageMax);
+    }
+
     reset() {
-        this.resetCells();
+        this.showPage(this._page);
+
         for (let row = 0; row < this._rows; row++) {
             for (let col = 0; col < this._columns; col++) {
                 const cellIndex = this.getCellIndex(row, col);
