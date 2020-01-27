@@ -9,7 +9,8 @@ import { ResultsSprite } from "../../../src/components/results/results-sprite.js
 import { mockBaseScene } from "../../mock/mock-scene.js";
 
 jest.mock("../../../src/components/results/results-text.js");
-jest.mock("../../../src/components/results/results-sprite.js")
+jest.mock("../../../src/components/results/results-sprite.js");
+
 describe("ResultsRow", () => {
     let mockScene;
     let mockRowConfig;
