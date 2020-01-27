@@ -228,11 +228,14 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     reset() {
         this.showPage(this._page);
+        // console.log("this._cells", this._cells);
 
         for (let row = 0; row < this._rows; row++) {
             for (let col = 0; col < this._columns; col++) {
                 const cellIndex = this.getCellIndex(row, col);
+                // console.log("cellIndex", cellIndex);
                 if (this._cells[cellIndex]) {
+                    // console.log("this._cells[cellIndex]", this._cells[cellIndex]);
                     this.resetCell(cellIndex, col, row);
                 }
             }

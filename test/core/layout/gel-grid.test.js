@@ -24,6 +24,7 @@ describe("Grid", () => {
             width: 2,
             height: 1,
         };
+
         mockScene = {
             theme: {
                 choices: [{ asset: "asset_name" }],
@@ -764,44 +765,182 @@ describe("Grid", () => {
     });
 
     describe("pagination", () => {
-        test("second page has second cell", () => {
-            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-            grid = new GelGrid(mockScene, metrics, mockSafeArea);
-            grid.addGridCells(mockScene.theme.choices);
-            grid.nextPage();
-            expect(grid._page).toBe(1);
-            expect(grid._cells[0].visible).toBe(false);
-            expect(grid._cells[1].visible).toBe(true);
+        beforeEach(() => {
+            mockScene.add.tween = jest.fn();
         });
 
-        test("last page loops to first page", () => {
-            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-            grid = new GelGrid(mockScene, metrics, mockSafeArea);
-            grid.addGridCells(mockScene.theme.choices);
-            grid.nextPage();
-            grid.nextPage();
-            expect(grid._page).toBe(0);
-            expect(grid._cells[0].visible).toBe(true);
+        describe("next page behaviour", () => {
+            beforeEach(() => {
+                mockScene.theme.choices = [
+                    { asset: "asset_name_0" },
+                    { asset: "asset_name_1" },
+                    { asset: "asset_name_2" },
+                    { asset: "asset_name_3" },
+                    { asset: "asset_name_4" },
+                    { asset: "asset_name_5" },
+                    { asset: "asset_name_6" },
+                    { asset: "asset_name_7" },
+                    { asset: "asset_name_8" },
+                    { asset: "asset_name_9" },
+                ];
+                grid = new GelGrid(mockScene, metrics, mockSafeArea, 2, 2);
+                grid.addGridCells(mockScene.theme.choices);
+            });
+
+            test("tweens all the cells on this and the next page", () => {
+                grid.nextPage();
+                expect(mockScene.add.tween).toHaveBeenCalledTimes(8);
+            });
+
+            test("tweens in all the cells on the next page taking into account the safe area", () => {
+                grid.nextPage();
+                const tweenCalls = mockScene.add.tween.mock.calls;
+                expect(tweenCalls[0][0]).toEqual({
+                    targets: grid._cells[4],
+                    ease: "Cubic.easeInOut",
+                    x: { from: 444, to: -156 },
+                    alpha: { from: 0, to: 1 },
+                    duration: 500,
+                });
+                expect(tweenCalls[1][0]).toEqual({
+                    targets: grid._cells[5],
+                    ease: "Cubic.easeInOut",
+                    x: { from: 756, to: 156 },
+                    alpha: { from: 0, to: 1 },
+                    duration: 500,
+                });
+                expect(tweenCalls[2][0]).toEqual({
+                    targets: grid._cells[6],
+                    ease: "Cubic.easeInOut",
+                    x: { from: 444, to: -156 },
+                    alpha: { from: 0, to: 1 },
+                    duration: 500,
+                });
+                expect(tweenCalls[3][0]).toEqual({
+                    targets: grid._cells[7],
+                    ease: "Cubic.easeInOut",
+                    x: { from: 756, to: 156 },
+                    alpha: { from: 0, to: 1 },
+                    duration: 500,
+                });
+            });
+
+            test("tweens out all the cells on the current page taking into account the safe area", () => {
+                grid.nextPage();
+                const tweenCalls = mockScene.add.tween.mock.calls;
+                expect(tweenCalls[4][0]).toEqual({
+                    targets: grid._cells[0],
+                    ease: "Cubic.easeInOut",
+                    x: { from: -156, to: -756 },
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                });
+                expect(tweenCalls[5][0]).toEqual({
+                    targets: grid._cells[1],
+                    ease: "Cubic.easeInOut",
+                    x: { from: 156, to: -444 },
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                });
+                expect(tweenCalls[6][0]).toEqual({
+                    targets: grid._cells[2],
+                    ease: "Cubic.easeInOut",
+                    x: { from: -156, to: -756 },
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                });
+                expect(tweenCalls[7][0]).toEqual({
+                    targets: grid._cells[3],
+                    ease: "Cubic.easeInOut",
+                    x: { from: 156, to: -444 },
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                });
+            });
+
+            test("returns the new page number", () => {
+                expect(grid.nextPage()).toBe(1);
+            });
         });
 
-        test("previous page loops to last page", () => {
-            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }, { asset: "asset_name_2" }];
-            grid = new GelGrid(mockScene, metrics, mockSafeArea);
-            grid.addGridCells(mockScene.theme.choices);
-            grid.previousPage();
-            expect(grid._page).toBe(2);
-        });
+        describe("previous page behaviour", () => {
+            beforeEach(() => {
+                mockScene.theme.choices = [
+                    { asset: "asset_name_0" },
+                    { asset: "asset_name_1" },
+                    { asset: "asset_name_2" },
+                    { asset: "asset_name_3" },
+                    { asset: "asset_name_4" },
+                    { asset: "asset_name_5" },
+                    { asset: "asset_name_6" },
+                    { asset: "asset_name_7" },
+                    { asset: "asset_name_8" },
+                    { asset: "asset_name_9" },
+                ];
+                grid = new GelGrid(mockScene, metrics, mockSafeArea, 2, 2);
+                grid.addGridCells(mockScene.theme.choices);
+            });
 
-        test("previous page from second page goes to first page ", () => {
-            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }, { asset: "asset_name_2" }];
-            grid = new GelGrid(mockScene, metrics, mockSafeArea);
-            grid.addGridCells(mockScene.theme.choices);
-            grid.nextPage();
-            grid.previousPage();
-            expect(grid._cells[0].visible).toBe(true);
-            expect(grid._cells[1].visible).toBe(false);
-            expect(grid._cells[2].visible).toBe(false);
-            expect(grid._page).toBe(0);
+            test("tweens all the cells on this and the previous page", () => {
+                grid.previousPage();
+                expect(mockScene.add.tween).toHaveBeenCalledTimes(6);
+            });
+
+            test("tweens in all the cells on the previous page taking into account the safe area", () => {
+                grid.previousPage();
+                const tweenCalls = mockScene.add.tween.mock.calls;
+                expect(tweenCalls[0][0]).toEqual({
+                    targets: grid._cells[8],
+                    ease: "Cubic.easeInOut",
+                    x: { from: -756, to: -156 },
+                    alpha: { from: 0, to: 1 },
+                    duration: 500,
+                });
+                expect(tweenCalls[1][0]).toEqual({
+                    targets: grid._cells[9],
+                    ease: "Cubic.easeInOut",
+                    x: { from: -444, to: 156 },
+                    alpha: { from: 0, to: 1 },
+                    duration: 500,
+                });
+            });
+
+            test("tweens out all the cells on the current page taking into account the safe area", () => {
+                grid.previousPage();
+                const tweenCalls = mockScene.add.tween.mock.calls;
+                expect(tweenCalls[2][0]).toEqual({
+                    targets: grid._cells[0],
+                    ease: "Cubic.easeInOut",
+                    x: { from: -156, to: 444 },
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                });
+                expect(tweenCalls[3][0]).toEqual({
+                    targets: grid._cells[1],
+                    ease: "Cubic.easeInOut",
+                    x: { from: 156, to: 756 },
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                });
+                expect(tweenCalls[4][0]).toEqual({
+                    targets: grid._cells[2],
+                    ease: "Cubic.easeInOut",
+                    x: { from: -156, to: 444 },
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                });
+                expect(tweenCalls[5][0]).toEqual({
+                    targets: grid._cells[3],
+                    ease: "Cubic.easeInOut",
+                    x: { from: 156, to: 756 },
+                    alpha: { from: 1, to: 0 },
+                    duration: 500,
+                });
+            });
+
+            test("returns the new page number", () => {
+                expect(grid.previousPage()).toBe(2);
+            });
         });
 
         test("remainder of 2 cells in a 3 column layout are correctly justified on last page", () => {
