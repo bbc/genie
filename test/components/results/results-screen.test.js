@@ -33,6 +33,7 @@ describe("Results Screen", () => {
         mockImage = {
             height: 5,
             width: 5,
+            setDepth: jest.fn(),
         };
         mockConfig = {
             theme: {
@@ -110,17 +111,7 @@ describe("Results Screen", () => {
         test("adds a background image", () => {
             resultsScreen.create();
             expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "results.background");
-        });
-
-        test("adds a title image", () => {
-            resultsScreen.create();
-            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, -150, "results.title");
-        });
-
-        test("loads the game results text", () => {
-            resultsScreen.create();
-            const expectedResultsData = 22;
-            expect(resultsScreen.add.text).toHaveBeenCalledWith(0, 50, expectedResultsData, { font: "36px ReithSans" });
+            expect(mockImage.setDepth).toHaveBeenCalledWith(-1);
         });
 
         test("adds GEL buttons to layout", () => {
@@ -163,11 +154,12 @@ describe("Results Screen", () => {
             };
             resultsScreen.create();
             expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+            expect(mockImage.setDepth).toHaveBeenCalledWith(-1);
             expect(mockImage.x).toBe(15);
             expect(mockImage.y).toEqual(15);
         });
 
-        test("image is scaled to the width of the safe area to preserve aspect ratio", () => {
+        test("backdrop image is scaled to the width of the safe area to preserve aspect ratio", () => {
             mockResultsArea = {
                 centerX: 15,
                 centerY: 15,
@@ -177,12 +169,13 @@ describe("Results Screen", () => {
             mockImage = {
                 width: 8,
                 height: 5,
+                setDepth: () => {},
             };
             resultsScreen.create();
             expect(mockImage.scale).toEqual(1.25);
         });
 
-        test("image is scaled to the height of the safe area to preserve aspect ratio", () => {
+        test("backdrop image is scaled to the height of the safe area to preserve aspect ratio", () => {
             mockResultsArea = {
                 width: 10,
                 height: 10,
@@ -190,9 +183,33 @@ describe("Results Screen", () => {
             mockImage = {
                 width: 4,
                 height: 5,
+                setDepth: () => {},
             };
             resultsScreen.create();
             expect(mockImage.scale).toEqual(2);
+        });
+
+        test("backdrop image resizes on a scale event", () => {
+            mockImage = {
+                height: 5,
+                width: 5,
+                setDepth: () => {},
+            };
+            mockResultsArea = {
+                centerX: 0,
+                centerY: 0,
+                height: 10,
+                width: 10,
+            };
+
+            resultsScreen.create();
+            expect(mockImage.scale).toEqual(2);
+
+            mockResultsArea.width = 5;
+            Scaler.onScaleChange.add.mock.calls[0][0]();
+
+            expect(Scaler.onScaleChange.add).toHaveBeenCalled();
+            expect(mockImage.scale).toEqual(1);
         });
 
         test("does not render image when no key is provided on the backdrop object", () => {
@@ -214,28 +231,6 @@ describe("Results Screen", () => {
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame", "achievementsSmall"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
-
-        test("resizes on a scale event", () => {
-            mockImage = {
-                height: 5,
-                width: 5,
-            };
-            mockResultsArea = {
-                centerX: 0,
-                centerY: 0,
-                height: 10,
-                width: 10,
-            };
-
-            resultsScreen.create();
-            expect(mockImage.scale).toEqual(2);
-
-            mockResultsArea.width = 5;
-            Scaler.onScaleChange.add.mock.calls[0][0]();
-
-            expect(Scaler.onScaleChange.add).toHaveBeenCalled();
-            expect(mockImage.scale).toEqual(1);
         });
 
         test("adds a callback to unsubscribe from scale events on shutdown", () => {

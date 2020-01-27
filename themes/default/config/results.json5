@@ -1,58 +1,134 @@
 {
     theme: {
         results: {
-            // Old Results screen config below - delete when possible
-            backgroundAnimation: '',
-            resultText: {
-                style: {
-                    font: '40px ReithSans',
-                    align: 'center',
-                    fill: '#fff',
-                    boundsAlignH: 'center',
-                },
-            },
-            // New example results screen config below
             backdrop: {
-                        key: 'results.backdrop',
-                        alpha: 1,
-            }, //optional added to sfafe area
+                key: 'results.backdrop',
+                alpha: 1,
+            }, //optional added to safe area
             statsFormat: '', // maybe?
-            title: { text: 'titleText', styling: {} },
             rows: [
                 {
-                    textStyle: {
-                        fontSize: "48px", // Font size should be a minimum of 13px as per GEL
-                        color: '#000000', // This should meet the colour contrast requirement as per GEL
-                    },
                     format: [
-                        '{results.imgtag$}',
-                        'you collected ',
-                        'STRING(results.stars)',
-                        'SPRITE',
-                        'SPINE',
-                        'COUNTUP(start: results.countup1.start, results,countup1.end, soundKey, pitchStart, pitchEnd, 5)',
-                    ], //better weird tags
+                        {
+                            type: 'text',
+                            content: 'Results Screen',
+                            offsetX: 0,
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFFFF',
+                            },
+                        },
+                    ],
                     sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
                     backdrop: 'imgKey', //optional
                     transition: 'appear', // (appear|fade|pop) look at passing generic phaser ease in
                 },
                 {
-                    textStyle: {
-                        fontSize: "24px",
-                        color: '#FF0000',
-                    }
+                    format: [
+                        {
+                            type: 'text',
+                            content: 'You collected ',
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFFFF',
+                            },
+                        },
+                        { type: 'image', key: 'game.star' },
+                        {
+                            type: 'text',
+                            content: '<%= stars %> stars',
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFF00',
+                            },
+                        },
+                        {
+                            type: 'text',
+                            content: '!',
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFFFF',
+                            },
+                        },
+                    ],
                 },
                 {
-                    textStyle: {
-                        fontSize: "24px",
-                        color: '#00FF00',
-                    }
+                    format: [
+                        {
+                            type: 'text',
+                            content: 'You collected ',
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFFFF',
+                            },
+                        },
+                        { type: 'image', key: 'game.gem' },
+                        {
+                            type: 'text',
+                            content: '<%= gems %> gems',
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#00FF00',
+                            },
+                        },
+                        {
+                            type: 'text',
+                            content: '!',
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFFFF',
+                            },
+                        },
+                    ],
                 },
                 {
-                    textStyle: {
-                        fontSize: "24px",
-                        color: '#0000FF',
-                    }
+                    format: [
+                        {
+                            type: 'text',
+                            content: 'You collected ',
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFFFF',
+                            },
+                        },
+                        { type: 'image', key: 'game.key' },
+                        {
+                            type: 'text',
+                            content: '<%= keys %> keys',
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFA500',
+                            },
+                        },
+                        {
+                            type: 'text',
+                            content: '!',
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFFFF',
+                            },
+                        },
+                    ],
                 },
             ],
         },

@@ -37,18 +37,18 @@
             storageKey: "characters",
             states: {
                 locked: {
-                    asset: "char2",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
+                    asset: "suzytoo",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
                     overlayAsset: "character-select.lock",
                     suffix: "locked",       //appended to aria label of accessibility div
-                    x: 300,
-                    y: 300,
+                    x: 55,
+                    y: 60,
                     properties: {           //phaser properties assigned to the base sprite
                         alpha: 0.25,
                         tint: 0xff0000,
                     },
                     enabled: false,         //enable or disable touch input on this state - default true
                 },
-                complete: { overlayAsset: "character-select.complete", x: 300, y: 300, suffix: "completed"},
+                complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed"},
             },
             choices: [
                 {
@@ -56,6 +56,7 @@
                     asset: "mary",
                     accessibilityText: "Mary",
                     title: "Mary",
+                    state: "complete"
                 },
                 {
                     id: "kyle",
@@ -98,18 +99,21 @@
                     asset: "suzytoo",
                     accessibilityText: "Suzy Too",
                     title: "Suzy Too",
+                    state: "locked",
                 },
                 {
                     id: "timmy",
                     asset: "timmy",
                     accessibilityText: "Timmy",
                     title: "Timmy",
+                    state: "locked",
                 },
                 {
                     id: "elliot",
                     asset: "elliot",
                     accessibilityText: "Elliot",
                     title: "Elliot",
+                    state: "locked",
                 }
 //                {
 //                    id: "char1",                        //Must be unique

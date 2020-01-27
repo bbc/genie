@@ -29,44 +29,36 @@ const fireGameCompleteStat = result => {
 export class Results extends Screen {
     create() {
         this.theme = this.context.config.theme[this.scene.key];
-        this.add.image(0, 0, "results.background");
+        this.add.image(0, 0, "results.background").setDepth(-1);
         this.addAnimations();
-        this.add.image(0, -150, "results.title");
-        const resultsText = this.add.text(0, 50, this.context.transientData.results, this.theme.resultText.style);
-        resultsText.setOrigin(0.5, 0.5);
-
         this.createLayout();
+        this.createBackdrop();
         fireGameCompleteStat(this.transientData.results);
         this.subscribeToEventBus();
+    }
+
+    resultsArea() {
+        return this.layout.getSafeArea(getMetrics(), { top: false });
     }
 
     createLayout() {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
 
-        fp.get("backdrop.key", this.theme) && this.backdropFill();
         this.setLayout(buttons.concat(achievements));
 
-        const getSafeArea = this.layout.getSafeArea;
-        this.resultsArea = getSafeArea(getMetrics(), { top: false });
-        this.sizeToParent(this.backdrop, this.resultsArea);
+        this.rows = Rows.create(this, () => this.resultsArea(), this.theme.rows, Rows.RowType.Results);
+    }
 
-        const scaleEvent = onScaleChange.add(() =>
-            this.sizeToParent(this.backdrop, getSafeArea(getMetrics(), { top: false })),
-        );
-
-        this.rows = Rows.create(
-            this,
-            () => getSafeArea(getMetrics(), { top: false }),
-            this.theme.rows,
-            Rows.RowType.Results,
-        );
-        this.events.once("shutdown", scaleEvent.unsubscribe);
+    createBackdrop() {
+        fp.get("backdrop.key", this.theme) && this.backdropFill();
+        this.sizeToParent(this.backdrop, this.resultsArea());
     }
 
     backdropFill() {
         this.backdrop = this.add.image(0, 0, this.theme.backdrop.key);
         this.backdrop.alpha = this.theme.backdrop.alpha || 1;
+        this.backdrop.setDepth(-1);
     }
 
     sizeToParent(item, safeArea) {
@@ -78,6 +70,8 @@ export class Results extends Screen {
     }
 
     subscribeToEventBus() {
+        const scaleEvent = onScaleChange.add(() => this.sizeToParent(this.backdrop, this.resultsArea()));
+        this.events.once("shutdown", scaleEvent.unsubscribe);
         eventBus.subscribe({
             name: "continue",
             channel: buttonsChannel(this),
