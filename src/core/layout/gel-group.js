@@ -25,7 +25,7 @@ const horizontal = {
             if (!child.input.hitArea) return;
             hitAreaOffset = fp.max([
                 hitAreaOffset,
-                (child.x + child.input.hitArea.width / 2) / metrics.scale - group.width,
+                (child.x + (child.input.hitArea.width  / 2)) / metrics.scale - group.width,
             ]);
         }, group.list);
         group.x = metrics[horizontalsType].right - metrics.borderPad - hitAreaOffset - group.width;
@@ -123,21 +123,14 @@ export class GelGroup extends Phaser.GameObjects.Container {
     }
 
     updateSize() {
-        let height = 0;
-        let width = 0;
+        const childBounds = this.list.map(child => child.getHitAreaBounds());
 
-        this.iterate(x => {
-            const hitBounds = x.getHitAreaBounds();
-            height = this._isVertical ? height + hitBounds.height : hitBounds.height;
-            width += hitBounds.width;
-        });
+        const left = Math.min(...childBounds.map(bounds => bounds.x))
+        const right = Math.max(...childBounds.map(bounds => bounds.x + bounds.width))
+        const top = Math.min(...childBounds.map(bounds => bounds.y))
+        const bottom = Math.max(...childBounds.map(bounds => bounds.y + bounds.height))
 
-        const combinedPadding = Math.max(this.list.length - 1, 0) * this._metrics.buttonPad * this.scale;
-
-        width += this._isVertical ? 0 : combinedPadding;
-        height += this._isVertical ? combinedPadding : 0;
-
-        this.setSize(width, height);
+        this.setSize(right - left, bottom - top);
     }
 
     alignChildren() {
@@ -147,10 +140,10 @@ export class GelGroup extends Phaser.GameObjects.Container {
 
             if (this._isVertical) {
                 child.x = 0;
-                pos.y += child.height + this._metrics.buttonPad;
+                pos.y += child.height + Math.max(0, this._metrics.buttonPad - child.height + child.sprite.height);
             } else {
                 child.x = pos.x + child.width / 2;
-                pos.x += child.width + this._metrics.buttonPad;
+                pos.x += child.width + Math.max(0, this._metrics.buttonPad - child.width + child.sprite.width)
             }
         }, this);
     }
