@@ -21,7 +21,7 @@ const defaultAction = config => {
     if (config.action) {
         eventBus.subscribe({
             channel: config.channel,
-            name: config.key,
+            name: config.id,
             callback: config.action,
         });
     }

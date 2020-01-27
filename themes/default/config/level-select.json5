@@ -20,18 +20,21 @@
             },
             choices: [
                 {
-                    asset: "carousel1",
-                    accessibilityText: "Level 1",
+                    id: "item1",
+                    key: "carousel1",
+                    ariaLabel: "Level 1",
                     title: "Test Level 1",
                 },
                 {
-                    asset: "carousel2",
-                    accessibilityText: "Level 2",
+                    id: "item2",
+                    key: "carousel2",
+                    ariaLabel: "Level 2",
                     title: "Test Level 2",
                 },
                 {
-                    asset: "carousel3",
-                    accessibilityText: "Level 3",
+                    id: "item3",
+                    key: "carousel3",
+                    ariaLabel: "Level 3",
                     title: "Test Level 3",
                 },
             ],
