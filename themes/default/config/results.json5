@@ -6,7 +6,6 @@
                 alpha: 1,
             }, //optional added to safe area
             statsFormat: '', // maybe?
-            title: { text: 'titleText', styling: {} },
             rows: [
                 {
                     format: [
