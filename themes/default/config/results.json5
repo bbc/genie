@@ -16,8 +16,8 @@
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#FFFFFF',
+                                fontSize: '24px', // Font size should be a minimum of 13px as per GEL
+                                color: '#FFFFFF', // This should meet the colour contrast requirement as per GEL
                             },
                         },
                     ],
@@ -40,7 +40,7 @@
                         { type: 'image', key: 'game.star' },
                         {
                             type: 'text',
-                            content: '<%= stars %> stars',
+                            content: '<%= stars %> star<% stars !== 1 && print("s") %>',
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
@@ -75,7 +75,7 @@
                         { type: 'image', key: 'game.gem' },
                         {
                             type: 'text',
-                            content: '<%= gems %> gems',
+                            content: '<%= gems %> gem<% gems !== 1 && print("s") %>',
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
@@ -110,7 +110,7 @@
                         { type: 'image', key: 'game.key' },
                         {
                             type: 'text',
-                            content: '<%= keys %> keys',
+                            content: '<%= keys %> key<% keys !== 1 && print("s") %>',
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
