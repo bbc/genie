@@ -75,6 +75,8 @@ describe("Select Screen", () => {
                         ],
                         rows: 1,
                         columns: 1,
+                        ease: "Cubic.easeInOut",
+                        duration: 500,
                     },
                     game: {},
                 },
@@ -105,7 +107,7 @@ describe("Select Screen", () => {
                 continue: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds) },
             },
             addCustomGroup: jest.fn(),
-            getSafeArea: jest.fn(),
+            getSafeArea: jest.fn(() => "layout safe area"),
         };
         mockMetrics = {
             isMobile: false,
@@ -237,7 +239,7 @@ describe("Select Screen", () => {
             };
 
             selectScreen.create();
-            const callback = Scaler.onScaleChange.add.mock.calls[0][0]
+            const callback = Scaler.onScaleChange.add.mock.calls[0][0];
             callback();
 
             expect(elementBounding.positionElement).not.toHaveBeenCalled();
@@ -317,6 +319,20 @@ describe("Select Screen", () => {
                 selectScreen.create();
                 expect(selectScreen.add.image).toHaveBeenCalledWith(50, -220, "test-select.title");
                 expect(selectScreen.add.text).toHaveBeenCalledWith(50, -220, "title", defaultTextStyle);
+            });
+
+            test("creates a new GEL grid with correct params", () => {
+                selectScreen.create();
+                const mockConfig = mockData.config.theme["test-select"];
+                expect(GelGrid).toHaveBeenCalledWith(
+                    selectScreen,
+                    mockMetrics,
+                    "layout safe area",
+                    mockConfig.rows,
+                    mockConfig.columns,
+                    mockConfig.ease,
+                    mockConfig.duration,
+                );
             });
         });
 
