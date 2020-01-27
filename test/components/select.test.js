@@ -31,18 +31,14 @@ describe("Select Screen", () => {
     let mockTextBounds;
     let mockMetrics;
     let mockCellIds;
+    let mockGelGrid;
     let defaultTextStyle;
-    let unsubscribe = jest.fn();
-    let mockNextPage = jest.fn();
-    let mockPreviousPage = jest.fn();
 
     beforeEach(() => {
         jest.spyOn(elementBounding, "positionElement").mockImplementation(() => {});
 
-        const mockGelGrid = {
-            cellIds: jest.fn(() => {
-                return mockCellIds;
-            }),
+        mockGelGrid = {
+            cellIds: jest.fn(() => mockCellIds),
             addGridCells: jest.fn(),
             makeAccessible: jest.fn(),
             addCell: jest.fn(),
@@ -54,8 +50,8 @@ describe("Select Screen", () => {
             resetButtons: jest.fn(),
             getCurrentPageKey: jest.fn(),
             resize: jest.fn(),
-            nextPage: mockNextPage,
-            previousPage: mockPreviousPage,
+            nextPage: jest.fn(),
+            previousPage: jest.fn(),
         };
         GelGrid.mockImplementation(() => mockGelGrid);
         mockData = {
@@ -166,7 +162,7 @@ describe("Select Screen", () => {
 
         Scaler.getMetrics = jest.fn(() => mockMetrics);
         Scaler.onScaleChange = {
-            add: jest.fn(() => ({ unsubscribe })),
+            add: jest.fn(() => ({ unsubscribe: jest.fn() })),
         };
 
         defaultTextStyle = { align: "center", fontFamily: "ReithSans", fontSize: "24px" };
@@ -454,7 +450,7 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[3][0].callback();
-            expect(mockNextPage).toHaveBeenCalled();
+            expect(mockGelGrid.nextPage).toHaveBeenCalled();
         });
 
         test("moves to the previous page when next page is pressed", () => {
@@ -462,7 +458,7 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[4][0].callback();
-            expect(mockPreviousPage).toHaveBeenCalled();
+            expect(mockGelGrid.previousPage).toHaveBeenCalled();
         });
 
         test("saves choice to transient data", () => {
