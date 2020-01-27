@@ -5,9 +5,11 @@
  */
 import { ResultsRow } from "../../../src/components/results/results-row.js";
 import { ResultsText } from "../../../src/components/results/results-text.js";
+import { ResultsSprite } from "../../../src/components/results/results-sprite.js";
 import { mockBaseScene } from "../../mock/mock-scene.js";
 
 jest.mock("../../../src/components/results/results-text.js");
+jest.mock("../../../src/components/results/results-sprite.js")
 describe("ResultsRow", () => {
     let mockScene;
     let mockRowConfig;
@@ -19,7 +21,7 @@ describe("ResultsRow", () => {
         mockScene = mockBaseScene();
         mockScene.scene = { key: "results" };
         mockRowConfig = {
-            format: [{ type: "text", content: "" }, { type: "image", key: "mock" }],
+            format: [{ type: "text", content: "" }],
         };
         mockDrawArea = {
             x: -12,
@@ -88,6 +90,14 @@ describe("ResultsRow", () => {
     test("drawRow adds a ResultsText object to the container when defined in rowConfig", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         expect(resultsRow.add).toHaveBeenCalledWith(expect.any(ResultsText));
+    });
+
+    test("drawRow adds a ResultsSprite object to the container when defined in rowConfig", () => {
+        mockRowConfig = {
+            format: [{ type: "sprite", key: "image", frame: 0 }],
+        };
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        expect(resultsRow.add).toHaveBeenCalledWith(expect.any(ResultsSprite));
     });
 
     test("getBoundingRect returns getDrawArea function", () => {
