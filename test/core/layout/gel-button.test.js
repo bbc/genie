@@ -92,6 +92,7 @@ describe("Gel Button", () => {
         };
         mockConfig = {
             channel: "mockChannel",
+            id: "mockId",
             key: "mockKey",
             shiftX: 9,
             shiftY: 21,
@@ -107,12 +108,6 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             expect(gelButton.config).toEqual(mockConfig);
             expect(gelButton.isMobile).toBe(mockMetrics.isMobile);
-        });
-
-        test("correctly sets name default if not provided in config", () => {
-            delete mockConfig.name;
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.config.name).toBe("");
         });
 
         test("correctly sets shift defaults if not provided in config", () => {
@@ -169,7 +164,7 @@ describe("Gel Button", () => {
             gelButton.onPointerUp(mockConfig, mockScene);
             expect(eventBus.publish).toHaveBeenCalledWith({
                 channel: mockConfig.channel,
-                name: mockConfig.key,
+                name: mockConfig.id,
                 data: { screen: mockScene },
             });
         });
