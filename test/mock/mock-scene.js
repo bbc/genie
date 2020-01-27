@@ -12,7 +12,6 @@ export const mockBaseScene = () => ({
             addCanvas: () => ({
                 get: () => ({ source: {}, resolution: {}, setSize: () => {} }),
             }),
-            get: () => {},
         },
     },
 });
