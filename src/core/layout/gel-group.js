@@ -125,10 +125,10 @@ export class GelGroup extends Phaser.GameObjects.Container {
     updateSize() {
         const childBounds = this.list.map(child => child.getHitAreaBounds());
 
-        const left = Math.min(...childBounds.map(bounds => bounds.x))
-        const right = Math.max(...childBounds.map(bounds => bounds.x + bounds.width))
-        const top = Math.min(...childBounds.map(bounds => bounds.y))
-        const bottom = Math.max(...childBounds.map(bounds => bounds.y + bounds.height))
+        const left = childBounds[0]? Math.min(...childBounds.map(bounds => bounds.x)) : 0
+        const right = childBounds[0]? Math.max(...childBounds.map(bounds => bounds.x + bounds.width)) : 0
+        let top = childBounds[0]? Math.min(...childBounds.map(bounds => bounds.y)) : 0
+        let bottom = childBounds[0]? Math.max(...childBounds.map(bounds => bounds.y + bounds.height)) : 0
 
         this.setSize(right - left, bottom - top);
     }
