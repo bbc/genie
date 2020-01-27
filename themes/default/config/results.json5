@@ -40,7 +40,7 @@
                         { type: 'image', key: 'game.star' },
                         {
                             type: 'text',
-                            content: '<%= stars %> stars',
+                            content: '<% stars !== 1 ? print(stars + " stars") : print(stars + " star")%>',
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
@@ -75,7 +75,7 @@
                         { type: 'image', key: 'game.gem' },
                         {
                             type: 'text',
-                            content: '<%= gems %> gems',
+                            content: '<% gems !== 1 ? print(gems + " gems") : print(gems + " gem")%>',
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
@@ -110,7 +110,7 @@
                         { type: 'image', key: 'game.key' },
                         {
                             type: 'text',
-                            content: '<%= keys %> keys',
+                            content: '<% keys !== 1 ? print(keys + " keys") : print(keys + " key")%>',
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
