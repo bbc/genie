@@ -22,8 +22,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._cellPadding = metrics.isMobile ? 16 : 24;
         this._page = 0;
         this.eventChannel = `gel-buttons-${scene.scene.key}`;
-
-        window.grid = this;
     }
 
     addGridCells(gridCells) {
