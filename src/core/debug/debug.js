@@ -23,16 +23,18 @@ function create() {
 
     //const tile = this.add.tileSprite(0, 0, 200, 200, "gelDebug.FF0030-hatch");
 
+    const xx = this.game.renderer.createTexture2D(0, 0, 0, 1, 1, 1, this.gl.RGBA, 100, 100)
+
     const mesh = this.make.mesh({
         key: 'gelDebug.FF0030-hatch',
         x: 0,
         y: 0,
         vertices: [
-            -400, -300,
+            -400, -300,     //TRI1
             -400, 300,
             400, 300,
 
-            -400, -300,
+            -400, -300,     //TRI2
             400, 300,
             400, -300
         ],
