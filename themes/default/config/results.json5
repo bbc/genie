@@ -30,6 +30,7 @@
                         {
                             type: 'text',
                             content: 'You collected ',
+                            offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -40,6 +41,7 @@
                         {
                             type: 'text',
                             content: '<%= stars %> stars',
+                            offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -49,6 +51,7 @@
                         {
                             type: 'text',
                             content: '!',
+                            offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -62,6 +65,7 @@
                         {
                             type: 'text',
                             content: 'You collected ',
+                            offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -72,6 +76,7 @@
                         {
                             type: 'text',
                             content: '<%= gems %> gems',
+                            offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -81,6 +86,7 @@
                         {
                             type: 'text',
                             content: '!',
+                            offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -94,6 +100,7 @@
                         {
                             type: 'text',
                             content: 'You collected ',
+                            offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -104,6 +111,7 @@
                         {
                             type: 'text',
                             content: '<%= keys %> keys',
+                            offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -113,6 +121,7 @@
                         {
                             type: 'text',
                             content: '!',
+                            offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
