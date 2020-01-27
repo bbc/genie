@@ -5,6 +5,7 @@
  */
 
 import { ResultsText } from "./results-text.js";
+import { ResultsSprite } from "./results-sprite.js";
 
 export class ResultsRow extends Phaser.GameObjects.Container {
     constructor(scene, rowConfig, getDrawArea) {
@@ -36,6 +37,9 @@ export class ResultsRow extends Phaser.GameObjects.Container {
             this.rowConfig.format.forEach(object => {
                 if (object.type === "text") {
                     this.addSection(new ResultsText(this.scene, object), object.offsetX, object.offsetY);
+                }
+                if (object.type === "sprite") {
+                    this.addSection(new ResultsSprite(this.scene, object), object.offsetX, object.offsetY);
                 }
             });
     }
