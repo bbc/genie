@@ -5,6 +5,7 @@
  */
 export const mockBaseScene = () => ({
     sys: {
+        anims: { once: () => {} },
         game: { config: { resolution: {} }, events: { on: () => {} }, renderer: {} },
         queueDepthSort: () => {},
         textures: {
