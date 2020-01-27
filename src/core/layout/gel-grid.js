@@ -174,8 +174,18 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.getPageCells(currentPage).forEach(this.addTweens({ ...this._config, tweenIn: false, goForwards }));
         this.scene.time.addEvent({
             delay: this._config.duration + 1,
-            callback: () => (this.scene.input.enabled = true),
+            callback: this.transitionCallback,
+            callbackScope: this,
+            args: [currentPage, this._page],
         });
+    }
+
+    transitionCallback(pageToDisable, pageToEnable) {
+        this.showPage(pageToDisable, false);
+        this.showPage(pageToEnable, true);
+        this.makeAccessible();
+        this.scene.input.enabled = true;
+        this.reset();
     }
 
     nextPage() {

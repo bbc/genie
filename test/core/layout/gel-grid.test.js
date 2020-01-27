@@ -19,6 +19,7 @@ describe("Grid", () => {
     let grid;
     let mockSafeArea;
     let desktopCellPadding;
+    let transitionCallback;
     //let mobileCellPadding;
 
     beforeEach(() => {
@@ -26,7 +27,7 @@ describe("Grid", () => {
             width: 2,
             height: 1,
         };
-
+        transitionCallback = () => {};
         mockScene = {
             theme: {
                 choices: [{ asset: "asset_name" }],
@@ -35,7 +36,11 @@ describe("Grid", () => {
                 key: "item-select",
             },
             time: {
-                addEvent: jest.fn(),
+                addEvent: jest.fn(({ delay, callback, callbackScope, args }) => {
+                    transitionCallback = () => {
+                        callback.apply(callbackScope, args);
+                    };
+                }),
             },
             add: {
                 gelButton: jest.fn((x, y, metrics, config) => ({
@@ -795,9 +800,7 @@ describe("Grid", () => {
 
             test("enables input in end timer", () => {
                 grid.nextPage();
-                const callback = mockScene.time.addEvent.mock.calls[0][0].callback;
-
-                callback();
+                transitionCallback();
                 expect(mockScene.input.enabled).toBe(true);
             });
 
