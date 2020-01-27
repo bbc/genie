@@ -25,7 +25,7 @@ const horizontal = {
             if (!child.input.hitArea) return;
             hitAreaOffset = fp.max([
                 hitAreaOffset,
-                (child.x + (child.input.hitArea.width  / 2)) / metrics.scale - group.width,
+                (child.x + child.input.hitArea.width / 2) / metrics.scale - group.width,
             ]);
         }, group.list);
         group.x = metrics[horizontalsType].right - metrics.borderPad - hitAreaOffset - group.width;
@@ -60,7 +60,7 @@ const vertical = {
 export class GelGroup extends Phaser.GameObjects.Container {
     constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical = false) {
         super(scene, 0, 0);
-        //TODO P3 we used to name the groups - useful for debugging. Might be usuaful as a propery? [NT]
+        //TODO P3 we used to name the groups - useful for debugging. Might be useful as a property? [NT]
         //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
         this._vPos = vPos;
         this._hPos = hPos;
@@ -125,10 +125,10 @@ export class GelGroup extends Phaser.GameObjects.Container {
     updateSize() {
         const childBounds = this.list.map(child => child.getHitAreaBounds());
 
-        const left = childBounds[0]? Math.min(...childBounds.map(bounds => bounds.x)) : 0
-        const right = childBounds[0]? Math.max(...childBounds.map(bounds => bounds.x + bounds.width)) : 0
-        let top = childBounds[0]? Math.min(...childBounds.map(bounds => bounds.y)) : 0
-        let bottom = childBounds[0]? Math.max(...childBounds.map(bounds => bounds.y + bounds.height)) : 0
+        const left = childBounds[0] ? Math.min(...childBounds.map(bounds => bounds.x)) : 0;
+        const right = childBounds[0] ? Math.max(...childBounds.map(bounds => bounds.x + bounds.width)) : 0;
+        let top = childBounds[0] ? Math.min(...childBounds.map(bounds => bounds.y)) : 0;
+        let bottom = childBounds[0] ? Math.max(...childBounds.map(bounds => bounds.y + bounds.height)) : 0;
 
         this.setSize(right - left, bottom - top);
     }
@@ -143,7 +143,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
                 pos.y += child.height + Math.max(0, this._metrics.buttonPad - child.height + child.sprite.height);
             } else {
                 child.x = pos.x + child.width / 2;
-                pos.x += child.width + Math.max(0, this._metrics.buttonPad - child.width + child.sprite.width)
+                pos.x += child.width + Math.max(0, this._metrics.buttonPad - child.width + child.sprite.width);
             }
         }, this);
     }
