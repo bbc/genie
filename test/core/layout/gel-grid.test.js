@@ -127,29 +127,16 @@ describe("Grid", () => {
         });
 
         test("cell is added with key from config data", () => {
-            mockScene.theme.choices = [{ asset: "asset_name_1" }];
+            mockScene.theme.choices = [{ key: "asset_name_1" }];
 
             const expectedConfig = {
-                key: mockScene.theme.choices[0].asset,
+                key: mockScene.theme.choices[0].key,
             };
             grid = new GelGrid(mockScene, metrics, mockSafeArea);
             grid.addGridCells(mockScene.theme.choices);
 
             const resultParams = mockScene.add.gelButton.mock.calls[0];
             expect(resultParams[3]).toEqual(expect.objectContaining(expectedConfig));
-        });
-
-        test("cell is added with the title from config data", () => {
-            mockScene.theme.choices = [{ asset: "asset_name_1", title: "asset title 1" }];
-
-            const expectedConfig = {
-                name: "asset title 1",
-            };
-            grid = new GelGrid(mockScene, metrics, mockSafeArea);
-            grid.addGridCells(mockScene.theme.choices);
-
-            const actualParams = mockScene.add.gelButton.mock.calls[0];
-            expect(actualParams[3]).toEqual(expect.objectContaining(expectedConfig));
         });
 
         test("gel button is created using metrics passed from the grid", () => {
@@ -966,7 +953,7 @@ describe("Grid", () => {
         });
 
         test("page names are returned correctly", () => {
-            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.choices = [{ key: "asset_name_0" }, { key: "asset_name_1" }];
             grid = new GelGrid(mockScene, metrics, mockSafeArea);
             grid.addGridCells(mockScene.theme.choices);
             const result = grid.getCurrentPageKey();
