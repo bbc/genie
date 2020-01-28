@@ -59,14 +59,10 @@ describe("Layout - Button Factory", () => {
             expect(actualParams[4]).toEqual(config);
         });
 
-        // test("makes the button accessible", () => {
-        //     expect(accessibilify.accessibilify).toHaveBeenCalled();
-        // });
-
         test("adds defaults actions to the event bus", () => {
             const buttonsChannel = "buttonsChannel";
             const config = {
-                key: "play",
+                id: "play",
                 action: jest.fn(),
                 channel: buttonsChannel,
             };

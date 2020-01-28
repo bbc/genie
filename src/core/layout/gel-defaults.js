@@ -27,7 +27,7 @@ export const config = screen => {
             key: "exit",
             ariaLabel: "Exit Game",
             order: 0,
-            id: "__exit",
+            id: "exit",
             channel: buttonsChannel(screen),
             action: () => {
                 gmi.exit();
@@ -40,7 +40,7 @@ export const config = screen => {
             key: "home",
             ariaLabel: "Home",
             order: 1,
-            id: "__home",
+            id: "home",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 gmi.sendStatsEvent("home", "click");
@@ -53,7 +53,7 @@ export const config = screen => {
             key: "back",
             ariaLabel: "Back",
             order: 2,
-            id: "__back",
+            id: "back",
             channel: buttonsChannel,
             action: ({ screen }) => {
                 gmi.sendStatsEvent("back", "click");
@@ -66,7 +66,7 @@ export const config = screen => {
             key: "back",
             ariaLabel: "Back",
             order: 2,
-            id: "__back",
+            id: "back",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 getScreenBelow(screen).scene.resume();
@@ -80,7 +80,7 @@ export const config = screen => {
             key: "audio-on",
             ariaLabel: "Toggle Sound",
             order: 3,
-            id: "__audio",
+            id: "audio",
             channel: buttonsChannel(screen),
             action: () => {
                 const audioEnabled = gmi.getAllSettings().audio;
@@ -100,7 +100,7 @@ export const config = screen => {
             key: "settings",
             ariaLabel: "Game Settings",
             order: 5,
-            id: "__settings",
+            id: "settings",
             channel: buttonsChannel(screen),
             action: ({ game }) => {
                 settings.show(game);
@@ -112,7 +112,7 @@ export const config = screen => {
             key: "pause",
             ariaLabel: "Pause Game",
             order: 6,
-            id: "__pause",
+            id: "pause",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 screen.scene.pause();
@@ -126,7 +126,7 @@ export const config = screen => {
             key: "previous",
             ariaLabel: "Previous Item",
             order: 7,
-            id: "__previous",
+            id: "previous",
             channel: buttonsChannel(screen),
         },
         replay: {
@@ -135,7 +135,7 @@ export const config = screen => {
             key: "replay",
             ariaLabel: "Replay Game",
             order: 8,
-            id: "__replay",
+            id: "replay",
             action: ({ screen }) => {
                 const params = pushLevelId(screen, ["level", "playagain"]);
                 gmi.sendStatsEvent(...params);
@@ -147,7 +147,7 @@ export const config = screen => {
             key: "replay",
             ariaLabel: "Replay Game",
             order: 8,
-            id: "__replay",
+            id: "replay",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 const belowScreenKey = getScreenBelow(screen).scene.key;
@@ -162,7 +162,7 @@ export const config = screen => {
             key: "play",
             ariaLabel: "Play Game",
             order: 9,
-            id: "__play",
+            id: "play",
             channel: buttonsChannel(screen),
             action: () => {
                 gmi.sendStatsEvent("play", "click");
@@ -174,7 +174,7 @@ export const config = screen => {
             key: "play",
             ariaLabel: "Play Game",
             order: 8,
-            id: "__play",
+            id: "play",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 getScreenBelow(screen).scene.resume();
@@ -188,7 +188,7 @@ export const config = screen => {
             key: "next",
             ariaLabel: "Next Item",
             order: 10,
-            id: "__next",
+            id: "next",
             channel: buttonsChannel(screen),
         },
         achievements: {
@@ -197,7 +197,7 @@ export const config = screen => {
             key: "achievements",
             ariaLabel: "Your Achievements",
             order: 11,
-            id: "__achievements",
+            id: "achievements",
             channel: buttonsChannel(screen),
             indicator: {
                 offsets: {
@@ -220,7 +220,7 @@ export const config = screen => {
             key: "achievements-small",
             ariaLabel: "Your Achievements",
             order: 12,
-            id: "__achievements-small",
+            id: "achievements-small",
             channel: buttonsChannel(screen),
             indicator: {
                 offsets: {
@@ -243,7 +243,7 @@ export const config = screen => {
             key: "restart",
             ariaLabel: "Restart Game",
             order: 12,
-            id: "__restart",
+            id: "restart",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 const params = pushLevelId(screen, ["level", "playagain"]);
@@ -256,7 +256,7 @@ export const config = screen => {
             key: "continue",
             ariaLabel: "Continue",
             order: 13,
-            id: "__continue",
+            id: "continue",
             channel: buttonsChannel(screen),
         },
         continueGame: {
@@ -265,7 +265,7 @@ export const config = screen => {
             key: "continue",
             ariaLabel: "Continue Game",
             order: 13,
-            id: "__continue",
+            id: "continue",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 const params = pushLevelId(screen, ["level", "continue"]);
@@ -278,7 +278,7 @@ export const config = screen => {
             key: "how-to-play",
             ariaLabel: "Game Instructions",
             order: 14,
-            id: "__how-to-play",
+            id: "how-to-play",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 screen.scene.pause();

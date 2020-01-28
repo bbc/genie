@@ -24,7 +24,7 @@ export function accessibilify(button, gameButton = true) {
     let event;
     const sys = button.scene.sys;
     const scene = button.scene;
-    const elementId = scene.scene.key + config.id;
+    const elementId = [scene.scene.key, config.id].join("__");
     const accessibleElement = newAccessibleElement();
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
 
