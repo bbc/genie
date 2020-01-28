@@ -105,13 +105,14 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     setCellPosition(cell, idx) {
-        const col = idx % (this._config.rows + 1);
+        const col = idx % this._config.columns;
         const row = Math.floor(idx / this._config.columns);
-        const blankCellCount = Math.max(this._config.columns * (row + 1) - this.getPageCells(this._page).length, 0)
+        const blankCellCount = Math.max(this._config.columns * (row + 1) - this.getPageCells(this._page).length, 0);
         const cellSize = this.calculateCellSize(); //TODO - every time?
 
         const blankPadding =
             blankCellCount * ((cell.displayWidth + this._cellPadding) / 2) * alignmentFactor[this._config.align];
+
         const paddingXTotal = col * this._cellPadding;
         const leftBound = this._safeArea.left + col * cell.displayWidth;
         const cellXCentre = cellSize[0] / 2;

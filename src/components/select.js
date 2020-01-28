@@ -34,12 +34,7 @@ export class Select extends Screen {
         const buttons = ["home", "pause", "previous", "next"];
         this.setLayout(buttons.concat(continueBtn));
         const metrics = getMetrics();
-        this.grid = new GelGrid(
-            this,
-            metrics,
-            this.layout.getSafeArea(metrics),
-            this.theme,
-        );
+        this.grid = new GelGrid(this, metrics, this.layout.getSafeArea(metrics), this.theme);
         this._cells = this.grid.addGridCells(this.theme.choices);
         this.layout.addCustomGroup("grid", this.grid);
 
