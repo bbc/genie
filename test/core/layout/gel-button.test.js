@@ -25,6 +25,9 @@ describe("Gel Button", () => {
         GelButton.prototype.setFrame = jest.fn();
         GelButton.prototype.setSizeToFrame = jest.fn();
         GelButton.prototype.add = jest.fn();
+        GelButton.prototype.setInteractive = jest.fn(function() {
+            this.input = {};
+        });
         eventBus.publish = jest.fn();
         GameSound.Assets = {
             backgroundMusic: {},
@@ -92,6 +95,7 @@ describe("Gel Button", () => {
         };
         mockConfig = {
             channel: "mockChannel",
+            id: "mockId",
             key: "mockKey",
             shiftX: 9,
             shiftY: 21,
@@ -109,12 +113,6 @@ describe("Gel Button", () => {
             expect(gelButton.isMobile).toBe(mockMetrics.isMobile);
         });
 
-        test("correctly sets name default if not provided in config", () => {
-            delete mockConfig.name;
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
-            expect(gelButton.config.name).toBe("");
-        });
-
         test("correctly sets shift defaults if not provided in config", () => {
             delete mockConfig.shiftX;
             delete mockConfig.shiftY;
@@ -123,7 +121,6 @@ describe("Gel Button", () => {
             expect(gelButton.config.shiftY).toBe(0);
         });
         test("makes the sprite interactive", () => {
-            GelButton.prototype.setInteractive = jest.fn();
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             expect(gelButton.setInteractive).toHaveBeenCalled();
         });
@@ -169,7 +166,7 @@ describe("Gel Button", () => {
             gelButton.onPointerUp(mockConfig, mockScene);
             expect(eventBus.publish).toHaveBeenCalledWith({
                 channel: mockConfig.channel,
-                name: mockConfig.key,
+                name: mockConfig.id,
                 data: { screen: mockScene },
             });
         });
@@ -188,7 +185,7 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.input = { hitArea: {} };
             gelButton.setHitArea(mockMetrics);
-            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-0, -10, 100, 70));
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(0, 0, 100, 70));
         });
     });
 
@@ -222,7 +219,7 @@ describe("Gel Button", () => {
             gelButton.input = { hitArea: {} };
             mockMetrics.hitMin = 66;
             gelButton.resize(mockMetrics);
-            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-0, -8, 100, 66));
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(0, 0, 100, 66));
         });
         test("calls any overlays that have a resize method", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);

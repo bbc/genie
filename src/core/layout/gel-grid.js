@@ -72,17 +72,12 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     addCell(choice, idx) {
         const config = {
-            id: choice.id,
-            key: choice.asset,
-            name: choice.title ? choice.title : `option ${idx + 1}`,
+            ...choice,
             scene: this.scene.scene.key,
             channel: this.eventChannel,
             gameButton: true,
             group: "grid",
             order: 0,
-            ariaLabel: choice.accessibilityText,
-            accessibilityText: choice.accessibilityText,
-            anim: choice.anim,
         };
 
         const newCell = this.scene.add.gelButton(0, 0, this._metrics, config);

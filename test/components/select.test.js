@@ -503,7 +503,7 @@ describe("Select Screen", () => {
 
         test("Adds Aria label if suffix property exists in config", () => {
             const mockCell = {
-                config: { id: "id_one", accessibilityText: "testLabel" },
+                config: { id: "id_one", ariaLabel: "testLabel" },
                 overlays: { set: jest.fn() },
                 setImage: jest.fn(),
                 input: {},

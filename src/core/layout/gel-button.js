@@ -13,7 +13,6 @@ import { Indicator } from "./gel-indicator.js";
 const defaults = {
     shiftX: 0,
     shiftY: 0,
-    name: "",
 };
 
 export class GelButton extends Phaser.GameObjects.Container {
@@ -72,15 +71,10 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     setHitArea(metrics) {
-        const hitPadding = {
-            x: fp.max([metrics.hitMin - this.sprite.width, 0]),
-            y: fp.max([metrics.hitMin - this.sprite.height, 0]),
-        };
-        const width = this.sprite.width + hitPadding.x;
-        const height = this.sprite.height + hitPadding.y;
-        if (this.input) {
-            this.input.hitArea = new Phaser.Geom.Rectangle(-hitPadding.x / 2, -hitPadding.y / 2, width, height);
-        }
+        const width = this.sprite.width + fp.max([metrics.hitMin - this.sprite.width, 0]);
+        const height = this.sprite.height + fp.max([metrics.hitMin - this.sprite.height, 0]);
+
+        this.input.hitArea = new Phaser.Geom.Rectangle(0, 0, width, height);
 
         this.setSize(width, height);
     }
@@ -102,7 +96,6 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     resize(metrics) {
-        !this.config.gameButton && this.setHitArea(metrics);
         this.isMobile = metrics.isMobile;
         this.sprite.setTexture(assetPath({ key: this.config.key, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);
@@ -127,7 +120,7 @@ const publish = (config, data) => () => {
     GameSound.Assets.buttonClick.play();
     eventBus.publish({
         channel: config.channel,
-        name: config.key,
+        name: config.id,
         data,
     });
 };

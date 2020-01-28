@@ -69,7 +69,7 @@ export class Select extends Screen {
             config.asset && cell.setImage(config.asset);
             config.properties && Object.assign(cell.sprite, config.properties);
 
-            config.suffix && (cell.config.ariaLabel = [cell.config.accessibilityText, config.suffix].join(" "));
+            config.suffix && (cell.config.ariaLabel = [cell.config.ariaLabel, config.suffix].join(" "));
 
             cell.input.enabled = Boolean(config.enabled !== false);
         }, this);
