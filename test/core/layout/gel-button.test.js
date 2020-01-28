@@ -25,6 +25,9 @@ describe("Gel Button", () => {
         GelButton.prototype.setFrame = jest.fn();
         GelButton.prototype.setSizeToFrame = jest.fn();
         GelButton.prototype.add = jest.fn();
+        GelButton.prototype.setInteractive = jest.fn(function() {
+            this.input = {};
+        });
         eventBus.publish = jest.fn();
         GameSound.Assets = {
             backgroundMusic: {},
@@ -118,7 +121,6 @@ describe("Gel Button", () => {
             expect(gelButton.config.shiftY).toBe(0);
         });
         test("makes the sprite interactive", () => {
-            GelButton.prototype.setInteractive = jest.fn();
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             expect(gelButton.setInteractive).toHaveBeenCalled();
         });
@@ -183,7 +185,7 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             gelButton.input = { hitArea: {} };
             gelButton.setHitArea(mockMetrics);
-            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-0, -10, 100, 70));
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(0, 0, 100, 70));
         });
     });
 
@@ -217,7 +219,7 @@ describe("Gel Button", () => {
             gelButton.input = { hitArea: {} };
             mockMetrics.hitMin = 66;
             gelButton.resize(mockMetrics);
-            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(-0, -8, 100, 66));
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(0, 0, 100, 66));
         });
         test("calls any overlays that have a resize method", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
