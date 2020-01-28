@@ -25,7 +25,7 @@ describe("Results Screen", () => {
     let unsubscribe = jest.fn();
 
     beforeEach(() => {
-        Scaler.getMetrics = jest.fn(() => ({ test: "metrics" }));
+        Scaler.getMetrics = jest.fn(() => ({ width: 0 }));
         Scaler.onScaleChange = {
             add: jest.fn(() => ({ unsubscribe })),
         };
@@ -130,6 +130,14 @@ describe("Results Screen", () => {
             );
         });
 
+        test("results screen area returned has 5% width padding correctly applied to it", () => {
+            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
+            const expectedArea = mockResultsArea;
+            expectedArea.y -= 5;
+            expectedArea.height -= 10;
+            expect(resultsScreen.resultsArea()).toBe(mockResultsArea);
+        });
+
         test("adds a backdrop image with specified properties when one is specified in config", () => {
             mockConfig.theme.resultsScreen.backdrop.alpha = 0.5;
             resultsScreen.create();
@@ -223,7 +231,7 @@ describe("Results Screen", () => {
             const safeAreaCallback = Rows.create.mock.calls[0][1];
             safeAreaCallback();
 
-            expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ test: "metrics" }, { top: false });
+            expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ width: 0 }, { top: false });
         });
 
         test("adds the achievement button when theme flag is set", () => {

@@ -13,7 +13,7 @@
                             type: 'text',
                             content: 'Results Screen',
                             offsetX: 0,
-                            offsetY: -20,
+                            offsetY: -18,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px', // Font size should be a minimum of 13px as per GEL
