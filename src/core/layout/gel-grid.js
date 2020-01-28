@@ -23,12 +23,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._metrics = metrics;
         this._safeArea = safeArea;
         this._config = { ...defaults, ...config };
-        //this._rows = rows;
-        //this._columns = columns;
-        //this._ease = ease;
-        //this._duration = duration;
         this._cells = [];
-        //this._align = scene.theme.align || "center";
         this._cellPadding = metrics.isMobile ? 16 : 24;
         this._page = 0;
         this.eventChannel = `gel-buttons-${scene.scene.key}`;
@@ -97,15 +92,15 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.addAt(newCell, this._cells.length);
     }
 
-    setCellSize(cellIndex) {
+    setCellSize(cell) {
         const cellSize = this.calculateCellSize();
-        const spriteAspect = this._cells[cellIndex].sprite.width / this._cells[cellIndex].sprite.height;
+        const spriteAspect = cell.sprite.width / cell.sprite.height;
         const cellAspect = cellSize[0] / cellSize[1];
         const axisScale = spriteAspect < cellAspect ? 0 : 1;
         const aspectRatioRatio = spriteAspect / cellAspect;
 
         cellSize[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
-        this._cells[cellIndex].setDisplaySize(...cellSize);
+        cell.setDisplaySize(...cellSize);
 
         // TODO This calculation should be retained for possible inclusion of hit area adjustment,
         // currently being skipped due to unexplained behaviour with the scaling calculations.
@@ -114,13 +109,15 @@ export class GelGrid extends Phaser.GameObjects.Container {
         // this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
     }
 
-    setCellPosition(cellIndex, col, row) {
-        const cellCount = this.rowCellsCount(row);
-        const cell = this._cells[cellIndex];
-        const cellSize = this.calculateCellSize();
+    setCellPosition(cell, idx) {
+        const col = idx % (this._config.rows + 1);
+        const row = Math.floor(idx / this._config.columns);
+
+        const blankCellCount = this._config.columns * (row + 1) % this.getPageCells(this._page).length;
+        const cellSize = this.calculateCellSize(); //TODO - every time?
 
         const blankPadding =
-            cellCount * ((cell.displayWidth + this._cellPadding) / 2) * alignmentFactor[this._config.align];
+            blankCellCount * ((cell.displayWidth + this._cellPadding) / 2) * alignmentFactor[this._config.align];
         const paddingXTotal = col * this._cellPadding;
         const leftBound = this._safeArea.left + col * cell.displayWidth;
         const cellXCentre = cellSize[0] / 2;
@@ -150,17 +147,9 @@ export class GelGrid extends Phaser.GameObjects.Container {
         return this._safeArea;
     }
 
-    rowCellsCount(row) {
-        let count = 0;
-        while (this._cells[this.getCellIndex(row, count)] && count < this._config.columns) {
-            count++;
-        }
-        return this._config.columns - count;
-    }
-
-    resetCell(cellIndex, col, row) {
-        this.setCellSize(cellIndex);
-        this.setCellPosition(cellIndex, col, row);
+    resetCell(cell, idx) {
+        this.setCellSize(cell);
+        this.setCellPosition(cell, idx);
     }
 
     getPageCount() {
@@ -177,9 +166,9 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     pageTransition(goForwards = true) {
         const currentPage = this._page;
-        const previousPage = goForwards ? this._page + 1 : this._page - 1 + this.getPageCount();
+        const nextPage = goForwards ? this._page + 1 : this._page - 1 + this.getPageCount();
 
-        this._page = previousPage % this.getPageCount();
+        this._page = nextPage % this.getPageCount();
         this.reset();
 
         this.scene.input.enabled = false;
@@ -202,14 +191,9 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     previousPage() {
-        const goForwards = false;
-        this.pageTransition(goForwards);
+        const goForward = false;
+        this.pageTransition(goForward);
         return this._page;
-    }
-
-    getCellIndex(row, col) {
-        const firstCell = this._page * this._cellsPerPage;
-        return firstCell + this._config.columns * row + col;
     }
 
     showPage(pageNum, show = true) {
@@ -217,22 +201,13 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     getPageCells(pageNum) {
-        const cellsPerPage = this._config.rows * this._config.columns;
-        const pageMax = cellsPerPage * (pageNum + 1);
-        const pageMin = cellsPerPage * pageNum;
+        const pageMax = this._cellsPerPage * (pageNum + 1);
+        const pageMin = this._cellsPerPage * pageNum;
         return this._cells.filter((cell, idx) => idx >= pageMin && idx < pageMax);
     }
 
     reset() {
         this.showPage(this._page);
-
-        for (let row = 0; row < this._config.rows; row++) {
-            for (let col = 0; col < this._config.columns; col++) {
-                const cellIndex = this.getCellIndex(row, col);
-                if (this._cells[cellIndex]) {
-                    this.resetCell(cellIndex, col, row);
-                }
-            }
-        }
+        this.getPageCells(this._page).forEach(this.resetCell, this);
     }
 }
