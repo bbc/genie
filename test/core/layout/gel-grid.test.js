@@ -32,6 +32,9 @@ describe("Grid", () => {
             scene: {
                 key: "item-select",
             },
+            time: {
+                addEvent: jest.fn(),
+            },
             add: {
                 gelButton: jest.fn((x, y, metrics, config) => ({
                     visible: false,
