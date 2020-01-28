@@ -38,10 +38,7 @@ export class Select extends Screen {
             this,
             metrics,
             this.layout.getSafeArea(metrics),
-            this.theme.rows,
-            this.theme.columns,
-            this.theme.ease,
-            this.theme.duration,
+            this.theme,
         );
         this._cells = this.grid.addGridCells(this.theme.choices);
         this.layout.addCustomGroup("grid", this.grid);
