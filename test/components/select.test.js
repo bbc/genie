@@ -328,10 +328,7 @@ describe("Select Screen", () => {
                     selectScreen,
                     mockMetrics,
                     "layout safe area",
-                    mockConfig.rows,
-                    mockConfig.columns,
-                    mockConfig.ease,
-                    mockConfig.duration,
+                    mockConfig
                 );
             });
         });
