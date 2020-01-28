@@ -13,7 +13,6 @@ import { Indicator } from "./gel-indicator.js";
 const defaults = {
     shiftX: 0,
     shiftY: 0,
-    name: "",
 };
 
 export class GelButton extends Phaser.GameObjects.Container {
@@ -127,7 +126,7 @@ const publish = (config, data) => () => {
     GameSound.Assets.buttonClick.play();
     eventBus.publish({
         channel: config.channel,
-        name: config.key,
+        name: config.id,
         data,
     });
 };
