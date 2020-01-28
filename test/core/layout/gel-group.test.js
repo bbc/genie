@@ -40,8 +40,8 @@ describe("Group", () => {
         };
         buttonResizeStub = jest.fn();
         const hitAreaBounds = {
-            left: 50,
-            top: 50,
+            x: 50,
+            y: 50,
             width: 200,
             height: 100,
         };
@@ -63,6 +63,10 @@ describe("Group", () => {
                     shiftY: 0,
                 },
                 getHitAreaBounds: mockGetHitAreaBounds,
+                sprite: {
+                    width: 200,
+                    height: 100,
+                },
             }),
         };
         vPos = "middle";
@@ -238,6 +242,7 @@ describe("Group", () => {
                     updateTransform: () => {},
                     resize: buttonResizeStub,
                     getHitAreaBounds: mockGetHitAreaBounds,
+                    sprite: { width: 200, height: 100 },
                 }));
                 group.addButton(config);
 
@@ -260,6 +265,7 @@ describe("Group", () => {
                     updateTransform: () => {},
                     resize: buttonResizeStub,
                     getHitAreaBounds: mockGetHitAreaBounds,
+                    sprite: { width: 200, height: 100 },
                 }));
                 group.addButton(config);
                 group.reset(metrics);
@@ -280,7 +286,7 @@ describe("Group", () => {
                     width: 50,
                     height: 50,
                     input: {
-                        hitArea: {},
+                        hitArea: { width: 200, height: 100 },
                     },
                     config: {
                         shiftX: 0,
@@ -289,26 +295,35 @@ describe("Group", () => {
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
-                    getHitAreaBounds: () => ({ top: -50, left: -100, width: 100, height: 50 }),
+                    getHitAreaBounds: () => ({ y: -50, x: -100, width: 100, height: 50 }),
+                    sprite: { width: 50, height: 50 },
                 }));
                 group.addButton(config);
 
-                expect(group.x).toBe(800);
-                expect(group.y).toBe(1350);
+                expect(group.x).toBe(775);
+                expect(group.y).toBe(1325);
             });
         });
     });
 
     describe("addToGroup method", () => {
         test("adds item to this group", () => {
-            const mockButton = { button: "mock", getHitAreaBounds: mockGetHitAreaBounds };
+            const mockButton = {
+                button: "mock",
+                getHitAreaBounds: mockGetHitAreaBounds,
+                sprite: { width: 200, height: 100 },
+            };
             const mockPosition = 42;
             group.addToGroup(mockButton, mockPosition);
             expect(group.addAt).toHaveBeenCalledWith(mockButton, mockPosition);
         });
 
         test("adds item to this group at position 0 when no position provided", () => {
-            const mockButton = { button: "mock", getHitAreaBounds: mockGetHitAreaBounds };
+            const mockButton = {
+                button: "mock",
+                getHitAreaBounds: mockGetHitAreaBounds,
+                sprite: { width: 200, height: 100 },
+            };
             const expectedPosition = 0;
             group.addToGroup(mockButton);
             expect(group.addAt).toHaveBeenCalledWith(mockButton, expectedPosition);
@@ -390,7 +405,7 @@ describe("Group", () => {
 
             group = new GelGroup(mockScene, parentGroup, "top", "center", metrics, false);
 
-            group.addButton({ key: "test_1" });
+            group.addButton({ key: "test_1", sprite: { width: 200 } });
             group.addButton({ key: "test_2" });
             group.addButton({ key: "test_3" });
 
