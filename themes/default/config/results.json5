@@ -39,8 +39,26 @@
                         },
                         { type: 'sprite', key: 'game.star', offsetX: 20, offsetY: -20 },
                         {
+                            type: 'countup',
+                            startCount: 0,
+                            endCount: "<%= stars %>",
+                            tickDuration: 500, // in ms
+                            audio: {
+                                key: "testaudio",
+                                rateStart: 0.5,
+                                rateEnd: 2,
+                            },
+                            offsetX: 15,
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFF00',
+                            },
+                        },
+                        {
                             type: 'text',
-                            content: '<%= stars %> star<% stars !== 1 && print("s") %>',
+                            content: ' star<% stars !== 1 && print("s") %>',
                             offsetX: 15,
                             offsetY: -20,
                             textStyle: {
