@@ -41,10 +41,11 @@
                         {
                             type: 'countup',
                             startCount: 0,
-                            endCount: "<%= stars %>",
-                            countupDuration: 5000, // in ms
+                            endCount: '<%= stars %>',
+                            startDelay: 1000,
+                            countupDuration: 1000, // in ms
                             audio: {
-                                key: "testaudio",
+                                key: 'testaudio',
                                 rateStart: 0.5,
                                 rateEnd: 2,
                             },
@@ -93,14 +94,33 @@
                         },
                         { type: 'sprite', key: 'game.gem', offsetX: 20, offsetY: -20 },
                         {
-                            type: 'text',
-                            content: '<%= gems %> gem<% gems !== 1 && print("s") %>',
+                            type: 'countup',
+                            startCount: 0,
+                            endCount: '<%= gems %>',
+                            startDelay: 2500,
+                            countupDuration: 1000, // in ms
+                            audio: {
+                                key: 'testaudio',
+                                rateStart: 0.5,
+                                rateEnd: 2,
+                            },
                             offsetX: 15,
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
                                 color: '#00FF00',
+                                align: 'center',
+                            },
+                        },
+                        {
+                            type: 'text',
+                            content: ' gem<% gems !== 1 && print("s") %>',
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFF00',
                             },
                         },
                         {

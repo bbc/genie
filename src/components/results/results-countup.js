@@ -14,6 +14,7 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
         this.endCount = this.textFromTemplate(countupConfig.endCount, scene.transientData);
         this.text = this.startCount;
         this.setFixedSize(this.getFinalWidth(this.endCount), 0);
+        this.startCountWithDelay(countupConfig.startDelay);
     }
 
     getFinalWidth(finalText) {
@@ -29,7 +30,25 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
         return template(transientData[this.scene.scene.key]);
     }
 
+    incrementTextByOne() {
+        this.text = parseInt(this.text) + 1;
+    }
+
+    startCountWithDelay(startDelay) {
+        this.scene.time.delayedCall(startDelay, this.startCountingUp, undefined, this);
+    }
+
     startCountingUp() {
-        this.text = this.startCount;
+        if (this.startCount === this.endCount) {
+            return;
+        }
+        const repeat = this.endCount - this.startCount - 1;
+        const delay = repeat ? this.countupConfig.countupDuration / repeat : this.countupConfig.countupDuration;
+        this.scene.time.addEvent({
+            delay,
+            callback: this.incrementTextByOne,
+            callbackScope: this,
+            repeat,
+        });
     }
 }
