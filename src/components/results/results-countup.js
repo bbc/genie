@@ -31,7 +31,7 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
     }
 
     canPlaySound(value) {
-        const fireRate = Math.max(this.countupConfig.audio.fireRate, 1);
+        const fireRate = this.countupConfig.audio.fireRate >= 1 ? this.countupConfig.audio.fireRate : 1;
         return value % fireRate === 0;
     }
 
