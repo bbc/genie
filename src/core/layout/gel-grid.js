@@ -88,14 +88,14 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     setCellSize(cell) {
-        const cellSize = this.calculateCellSize();
+        const size = [...this._cellSize];
         const spriteAspect = cell.sprite.width / cell.sprite.height;
-        const cellAspect = cellSize[0] / cellSize[1];
+        const cellAspect = size[0] / size[1];
         const axisScale = spriteAspect < cellAspect ? 0 : 1;
         const aspectRatioRatio = spriteAspect / cellAspect;
 
-        cellSize[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
-        cell.setDisplaySize(...cellSize);
+        size[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
+        cell.setDisplaySize(...size);
 
         // TODO This calculation should be retained for possible inclusion of hit area adjustment,
         // currently being skipped due to unexplained behaviour with the scaling calculations.
@@ -108,18 +108,17 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const col = idx % this._config.columns;
         const row = Math.floor(idx / this._config.columns);
         const blankCellCount = Math.max(this._config.columns * (row + 1) - this.getPageCells(this._page).length, 0);
-        const cellSize = this.calculateCellSize(); //TODO - every time?
 
         const blankPadding =
             blankCellCount * ((cell.displayWidth + this._cellPadding) / 2) * alignmentFactor[this._config.align];
 
         const paddingXTotal = col * this._cellPadding;
         const leftBound = this._safeArea.left + col * cell.displayWidth;
-        const cellXCentre = cellSize[0] / 2;
+        const cellXCentre = this._cellSize[0] / 2;
 
         const paddingYTotal = row * this._cellPadding;
         const topBound = this._safeArea.top + row * cell.displayHeight;
-        const cellYCentre = cellSize[1] / 2;
+        const cellYCentre = this._cellSize[1] / 2;
 
         cell.x = leftBound + paddingXTotal + cellXCentre + blankPadding;
         cell.y = topBound + cellYCentre + paddingYTotal;
@@ -202,6 +201,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     reset() {
+        this._cellSize = this.calculateCellSize();
         this.showPage(this._page);
         this.getPageCells(this._page).forEach(this.resetCell, this);
     }
