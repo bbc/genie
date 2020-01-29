@@ -3,9 +3,11 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import { gmi } from "../../../src/core/gmi/gmi.js";
 import { accessibilify } from "../../../src/core/accessibility/accessibilify.js";
 import { GelGrid } from "../../../src/core/layout/gel-grid.js";
 
+jest.mock("../../../src/core/gmi/gmi.js");
 jest.mock("../../../src/core/accessibility/accessibilify.js");
 
 describe("Grid", () => {
@@ -755,7 +757,11 @@ describe("Grid", () => {
     });
 
     describe("pagination", () => {
+        let motion;
+
         beforeEach(() => {
+            motion = true;
+            gmi.getAllSettings = jest.fn(() => ({ motion }));
             mockScene.add.tween = jest.fn();
         });
 
@@ -861,6 +867,15 @@ describe("Grid", () => {
                 });
             });
 
+            test("sets the tween duration to zero when motion is turned off in the GMI", () => {
+                motion = false;
+                grid.nextPage();
+                const tweenCalls = mockScene.add.tween.mock.calls;
+                tweenCalls.forEach(tweenCall => {
+                    expect(tweenCall[0].duration).toBe(0);
+                });
+            });
+
             test("returns the new page number", () => {
                 expect(grid.nextPage()).toBe(1);
             });
@@ -938,6 +953,15 @@ describe("Grid", () => {
                     x: { from: 156, to: 756 },
                     alpha: { from: 1, to: 0 },
                     duration: 500,
+                });
+            });
+
+            test("sets the tween duration to zero when motion is turned off in the GMI", () => {
+                motion = false;
+                grid.previousPage();
+                const tweenCalls = mockScene.add.tween.mock.calls;
+                tweenCalls.forEach(tweenCall => {
+                    expect(tweenCall[0].duration).toBe(0);
                 });
             });
 
