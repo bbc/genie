@@ -35,13 +35,12 @@ export class Select extends Screen {
         this.setLayout(buttons.concat(continueBtn));
         const metrics = getMetrics();
         this.grid = new GelGrid(this, metrics, this.layout.getSafeArea(metrics), this.theme);
+        this.resize();
         this._cells = this.grid.addGridCells(this.theme.choices);
         this.layout.addCustomGroup("grid", this.grid);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
         this.scene.scene.events.on("shutdown", this._scaleEvent.unsubscribe, this);
-
-        this.resize();
 
         this.addEventSubscriptions();
 
