@@ -324,15 +324,7 @@ describe("Select Screen", () => {
             test("creates a new GEL grid with correct params", () => {
                 selectScreen.create();
                 const mockConfig = mockData.config.theme["test-select"];
-                expect(GelGrid).toHaveBeenCalledWith(
-                    selectScreen,
-                    mockMetrics,
-                    "layout safe area",
-                    mockConfig.rows,
-                    mockConfig.columns,
-                    mockConfig.ease,
-                    mockConfig.duration,
-                );
+                expect(GelGrid).toHaveBeenCalledWith(selectScreen, mockMetrics, "layout safe area", mockConfig);
             });
         });
 
