@@ -45,7 +45,7 @@
                             startDelay: 1000,
                             countupDuration: 1000, // in ms
                             audio: {
-                                key: 'testaudio',
+                                key: 'results.coin-sfx',
                                 rateStart: 0.5,
                                 rateEnd: 2,
                             },
@@ -100,7 +100,7 @@
                             startDelay: 2500,
                             countupDuration: 1000, // in ms
                             audio: {
-                                key: 'testaudio',
+                                key: 'results.gem-sfx',
                                 rateStart: 0.5,
                                 rateEnd: 2,
                             },
@@ -155,7 +155,7 @@
                             startDelay: 4000,
                             countupDuration: 1000, // in ms
                             audio: {
-                                key: 'testaudio',
+                                key: 'results.key-sfx',
                                 rateStart: 0.5,
                                 rateEnd: 2,
                             },

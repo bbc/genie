@@ -32,6 +32,9 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
 
     incrementTextByOne() {
         this.text = parseInt(this.text) + 1;
+        if (this.countupConfig.audio) {
+            this.scene.sound.play(this.countupConfig.audio.key);
+        }
     }
 
     startCountWithDelay(startDelay) {
