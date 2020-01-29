@@ -42,12 +42,13 @@
                             type: 'countup',
                             startCount: 0,
                             endCount: '<%= stars %>',
-                            startDelay: 1000,
+                            startDelay: 1000, // in ms
                             countupDuration: 1000, // in ms
                             audio: {
                                 key: 'results.coin-sfx',
-                                rateStart: 0.5,
-                                rateEnd: 2,
+                                fireRate: 2, // fire every x score
+                                startPlayRate: 0.8,
+                                endPlayRate: 1.2,
                             },
                             offsetX: 15,
                             offsetY: -20,
@@ -101,8 +102,6 @@
                             countupDuration: 1000, // in ms
                             audio: {
                                 key: 'results.gem-sfx',
-                                rateStart: 0.5,
-                                rateEnd: 2,
                             },
                             offsetX: 15,
                             offsetY: -20,
@@ -156,8 +155,6 @@
                             countupDuration: 1000, // in ms
                             audio: {
                                 key: 'results.key-sfx',
-                                rateStart: 0.5,
-                                rateEnd: 2,
                             },
                             offsetX: 15,
                             offsetY: -20,
