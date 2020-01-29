@@ -6,6 +6,7 @@
 
 import { ResultsText } from "./results-text.js";
 import { ResultsSprite } from "./results-sprite.js";
+import { ResultsCountup } from "./results-countup.js";
 
 export class ResultsRow extends Phaser.GameObjects.Container {
     constructor(scene, rowConfig, getDrawArea) {
@@ -40,6 +41,9 @@ export class ResultsRow extends Phaser.GameObjects.Container {
                 }
                 if (object.type === "sprite") {
                     this.addSection(new ResultsSprite(this.scene, object), object.offsetX, object.offsetY);
+                }
+                if (object.type === "countup") {
+                    this.addSection(new ResultsCountup(this.scene, object), object.offsetX, object.offsetY);
                 }
             });
     }

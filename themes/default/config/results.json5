@@ -42,7 +42,7 @@
                             type: 'countup',
                             startCount: 0,
                             endCount: "<%= stars %>",
-                            tickDuration: 500, // in ms
+                            countupDuration: 5000, // in ms
                             audio: {
                                 key: "testaudio",
                                 rateStart: 0.5,
@@ -54,12 +54,12 @@
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
                                 color: '#FFFF00',
+                                align: 'center',
                             },
                         },
                         {
                             type: 'text',
                             content: ' star<% stars !== 1 && print("s") %>',
-                            offsetX: 15,
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
