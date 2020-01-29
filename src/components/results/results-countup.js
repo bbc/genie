@@ -36,13 +36,13 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
     }
 
     incrementCountByOne() {
-        const startRate = this.countupConfig.audio.startPlayRate || 1;
-        const endRate = this.countupConfig.audio.endPlayRate || 1;
         const currentValue = parseInt(this.text);
         this.text = currentValue + 1;
-        const progress = (currentValue + 1) / (this.endCount - this.startCount);
-        const currentRate = startRate + progress * (endRate - startRate);
         if (this.countupConfig.audio && this.canPlaySound(currentValue + 1)) {
+            const startRate = this.countupConfig.audio.startPlayRate || 1;
+            const endRate = this.countupConfig.audio.endPlayRate || 1;
+            const progress = (currentValue + 1) / (this.endCount - this.startCount);
+            const currentRate = startRate + progress * (endRate - startRate);
             this.scene.sound.play(this.countupConfig.audio.key, { rate: currentRate });
         }
     }
@@ -56,7 +56,7 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
             return;
         }
         const repeat = this.endCount - this.startCount - 1;
-        const delay = repeat ? this.countupConfig.countupDuration / repeat : this.countupConfig.countupDuration;
+        const delay = repeat ? this.countupConfig.countupDuration / repeat : undefined;
         this.scene.time.addEvent({
             delay,
             callback: this.incrementCountByOne,
