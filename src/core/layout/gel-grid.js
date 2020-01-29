@@ -4,6 +4,8 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
+
+import { gmi } from "../../core/gmi/gmi.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
 
 const alignmentFactor = { left: 0, center: 1, right: 2 };
@@ -154,8 +156,9 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const edge = config.goForwards ? this._safeArea.width : -this._safeArea.width;
         const x = { from: config.tweenIn ? cell.x + edge : cell.x, to: config.tweenIn ? cell.x : cell.x - edge };
         const alpha = { from: config.tweenIn ? 0 : 1, to: config.tweenIn ? 1 : 0 };
+        const duration = !gmi.getAllSettings().motion ? 0 : config.duration;
 
-        this.scene.add.tween({ targets: cell, ease: config.ease, x, alpha, duration: config.duration });
+        this.scene.add.tween({ targets: cell, ease: config.ease, x, alpha, duration });
     };
 
     pageTransition(goForwards = true) {
