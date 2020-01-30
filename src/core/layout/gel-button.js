@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import fp from "../../../lib/lodash/fp/fp.js";
 import { eventBus } from "../event-bus.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
@@ -71,8 +70,9 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     setHitArea(metrics) {
-        const width = this.sprite.width + fp.max([metrics.hitMin - this.sprite.width, 0]);
-        const height = this.sprite.height + fp.max([metrics.hitMin - this.sprite.height, 0]);
+        const hitPad = Math.max(metrics.hitMin - this.sprite.width, metrics.hitMin - this.sprite.height, 0);
+        const width = this.sprite.width + hitPad;
+        const height = this.sprite.height + hitPad;
 
         this.input.hitArea = new Phaser.Geom.Rectangle(0, 0, width, height);
 
