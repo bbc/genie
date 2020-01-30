@@ -36,7 +36,7 @@ describe("Grid", () => {
                 key: "item-select",
             },
             time: {
-                addEvent: jest.fn(({ delay, callback, callbackScope, args }) => {
+                addEvent: jest.fn(({ callback, callbackScope, args }) => {
                     transitionCallback = () => {
                         callback.apply(callbackScope, args);
                     };
