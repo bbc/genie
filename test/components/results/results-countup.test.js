@@ -98,6 +98,7 @@ describe("ResultsCountup", () => {
             callback: resultsCountup.incrementCountByOne,
             callbackScope: resultsCountup,
             repeat: 9,
+            startAt: mockConfig.countupDuration / 9,
         });
     });
 
