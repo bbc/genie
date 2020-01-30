@@ -1,0 +1,43 @@
+{
+    "results": {
+        "prefix": "results.",
+        "files": [
+            {
+                "type": "image",
+                "key": "background",
+                "url": "shared/background.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "title",
+                "url": "shared/title.png",
+                "overwrite": false
+            },
+            {
+                "type": "image",
+                "key": "backdrop",
+                "url": "results/backdrop-overlay.png",
+                "overwrite": false
+            },
+            {
+                "type": "audio",
+                "key": "coin-sfx",
+                "url": ["results/coin-sfx.mp3", "results/coin-sfx.ogg"],
+                "overwrite": false
+            },
+            {
+                "type": "audio",
+                "key": "gem-sfx",
+                "url": ["results/gem-sfx.mp3", "results/gem-sfx.ogg"],
+                "overwrite": false
+            },
+            {
+                "type": "audio",
+                "key": "key-sfx",
+                "url": ["results/key-sfx.mp3", "results/key-sfx.ogg"],
+                "overwrite": false
+            }
+        ]
+    }
+}

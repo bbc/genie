@@ -6,10 +6,12 @@
 import { ResultsRow } from "../../../src/components/results/results-row.js";
 import { ResultsText } from "../../../src/components/results/results-text.js";
 import { ResultsSprite } from "../../../src/components/results/results-sprite.js";
+import { ResultsCountup } from "../../../src/components/results/results-countup.js";
 import { mockBaseScene } from "../../mock/mock-scene.js";
 
 jest.mock("../../../src/components/results/results-text.js");
 jest.mock("../../../src/components/results/results-sprite.js");
+jest.mock("../../../src/components/results/results-countup.js");
 
 describe("ResultsRow", () => {
     let mockScene;
@@ -99,6 +101,14 @@ describe("ResultsRow", () => {
         };
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         expect(resultsRow.add).toHaveBeenCalledWith(expect.any(ResultsSprite));
+    });
+
+    test("drawRow adds a ResultsCountup object to the container when defined in rowConfig", () => {
+        mockRowConfig = {
+            format: [{ type: "countup", content: "test" }],
+        };
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        expect(resultsRow.add).toHaveBeenCalledWith(expect.any(ResultsCountup));
     });
 
     test("getBoundingRect returns getDrawArea function", () => {

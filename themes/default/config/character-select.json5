@@ -1,6 +1,11 @@
 {
     theme: {
         "character-select": {
+            rows: 2,
+            columns: 3,
+            ease: "Cubic.easeInOut",
+            duration: 500,
+            align: "left",
             music: "loader.backgroundMusic",
             title: {
                 image: {
@@ -37,7 +42,7 @@
             storageKey: "characters",
             states: {
                 locked: {
-                    asset: "suzytoo",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
+                    //asset: "suzytoo",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
                     overlayAsset: "character-select.lock",
                     suffix: "locked",       //appended to aria label of accessibility div
                     x: 55,
@@ -131,11 +136,6 @@
 //                },
 
             ],
-            rows: 2,
-            columns: 3,
-            ease: "Cubic.easeInOut",
-            duration: 500,
-            align: "left",
         },
     },
 }
