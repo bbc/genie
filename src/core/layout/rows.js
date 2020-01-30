@@ -28,10 +28,21 @@ export function create(scene, getArea, rowsConfig, rowType) {
         return new Phaser.Geom.Rectangle(drawArea.x, topOfRow, drawArea.width, rowHeight);
     };
 
+    const rowTransitions = () => {
+        containers.forEach(row => {
+            scene.add.tween({
+                targets: row,
+                alpha: 1,
+                ...row.rowConfig.transition,
+            });
+        });
+    };
+
     rowsConfig.forEach((rowConfig, index) => createRow(rowConfig, index));
 
     return {
         containers,
         getRectForRow,
+        rowTransitions,
     };
 }

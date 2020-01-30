@@ -19,6 +19,9 @@ describe("Rows", () => {
             layout: {
                 addCustomGroup: jest.fn(),
             },
+            add: {
+                tween: jest.fn(),
+            },
         };
         mockRowsConfig = [{}, {}, {}];
         mockArea = {
@@ -71,5 +74,26 @@ describe("Rows", () => {
                 mockArea.height / mockRowsConfig.length,
             ),
         );
+    });
+
+    test("rowTransitions sets up tweens as specified in config", () => {
+        const mockTweenConfig = {
+            duration: 1000,
+            alpha: { from: 0, to: 1 },
+        };
+        mockRowsConfig = [
+            {
+                transition: mockTweenConfig,
+            },
+        ];
+        const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
+        rows.rowTransitions();
+        expect(mockScene.add.tween).toHaveBeenCalledWith(expect.objectContaining(mockTweenConfig));
+    });
+
+    test("rowTransitions sets alpha to 1 when no config is passed", () => {
+        const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
+        rows.rowTransitions();
+        expect(mockScene.add.tween).toHaveBeenCalledWith(expect.objectContaining({ alpha: 1 }));
     });
 });

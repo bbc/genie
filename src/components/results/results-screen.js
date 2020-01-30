@@ -37,7 +37,7 @@ export class Results extends Screen {
         this.createBackdrop();
         fireGameCompleteStat(this.transientData.results);
         this.subscribeToEventBus();
-        this.rowAnimations();
+        this.rows.rowTransitions();
     }
 
     resultsArea() {
@@ -90,15 +90,6 @@ export class Results extends Screen {
             name: "restart",
             channel: buttonsChannel(this),
             callback: this.navigation.game,
-        });
-    }
-    rowAnimations() {
-        this.rows.containers.forEach(row => {
-            this.add.tween({
-                targets: row,
-                alpha: 1,
-                ...row.rowConfig.transition,
-            });
         });
     }
 }
