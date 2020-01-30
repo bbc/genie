@@ -39,9 +39,29 @@
                         },
                         { type: 'sprite', key: 'game.star', offsetX: 20, offsetY: -20 },
                         {
-                            type: 'text',
-                            content: '<%= stars %> star<% stars !== 1 && print("s") %>',
+                            type: 'countup',
+                            startCount: 0,
+                            endCount: '<%= stars %>',
+                            startDelay: 1000, // in ms
+                            countupDuration: 1000, // in ms
+                            audio: {
+                                key: 'results.coin-sfx',
+                                fireRate: 2, // fire every x score
+                                startPlayRate: 0.8,
+                                endPlayRate: 1.2,
+                            },
                             offsetX: 15,
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFF00',
+                                align: 'center',
+                            },
+                        },
+                        {
+                            type: 'text',
+                            content: ' star<% stars !== 1 && print("s") %>',
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
@@ -75,9 +95,26 @@
                         },
                         { type: 'sprite', key: 'game.gem', offsetX: 20, offsetY: -20 },
                         {
-                            type: 'text',
-                            content: '<%= gems %> gem<% gems !== 1 && print("s") %>',
+                            type: 'countup',
+                            startCount: 0,
+                            endCount: '<%= gems %>',
+                            startDelay: 3000,
+                            countupDuration: 1000, // in ms
+                            audio: {
+                                key: 'results.gem-sfx',
+                            },
                             offsetX: 15,
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#00FF00',
+                                align: 'center',
+                            },
+                        },
+                        {
+                            type: 'text',
+                            content: ' gem<% gems !== 1 && print("s") %>',
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
@@ -111,9 +148,26 @@
                         },
                         { type: 'sprite', key: 'game.key', offsetX: 20, offsetY: -20 },
                         {
-                            type: 'text',
-                            content: '<%= keys %> key<% keys !== 1 && print("s") %>',
+                            type: 'countup',
+                            startCount: 0,
+                            endCount: '<%= keys %>',
+                            startDelay: 5000,
+                            countupDuration: 1000, // in ms
+                            audio: {
+                                key: 'results.key-sfx',
+                            },
                             offsetX: 15,
+                            offsetY: -20,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFA500',
+                                align: 'center',
+                            },
+                        },
+                        {
+                            type: 'text',
+                            content: ' key<% keys !== 1 && print("s") %>',
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
