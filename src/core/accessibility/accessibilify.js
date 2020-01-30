@@ -13,23 +13,20 @@ import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../layout/metrics.js";
 const CAMERA_SCROLL_X_OFFSET = CANVAS_WIDTH / 2;
 const CAMERA_SCROLL_Y_OFFSET = CANVAS_HEIGHT / 2;
 
-export function accessibilify(button, config, gameButton = true) {
-    const fallbackNames = { id: button.name, ariaLabel: button.name };
-    config = Object.assign(fallbackNames, config);
-
+export function accessibilify(button, gameButton = true) {
     let event;
     const sys = button.scene.sys;
     const scene = button.scene;
-    const elementId = scene.scene.key + config.id;
+    const id = [scene.scene.key, button.config.id].join("__");
 
     const buttonAction = () => button.emit(Phaser.Input.Events.POINTER_UP, button, sys.input.activePointer, false);
     const mouseOver = () => button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false);
     const mouseOut = () => button.emit(Phaser.Input.Events.POINTER_OUT, button, sys.input.activePointer, false);
 
     const options = {
-        id: elementId,
+        id,
         htmlClass: "gel-button",
-        ariaLabel: config.ariaLabel,
+        ariaLabel: button.config.ariaLabel,
         parent: sys.scale.parent,
         onClick: buttonAction,
         onMouseOver: mouseOver,
@@ -39,7 +36,7 @@ export function accessibilify(button, config, gameButton = true) {
     const getHitAreaBounds = () => {
         const marginLeft = parseInt(sys.game.canvas.style.marginLeft, 10);
         const marginTop = parseInt(sys.game.canvas.style.marginTop, 10);
-        let bounds = button.getHitAreaBounds? button.getHitAreaBounds() : button.getBounds();
+        let bounds = button.getHitAreaBounds ? button.getHitAreaBounds() : button.getBounds();
 
         const metrics = getMetrics();
 
@@ -49,11 +46,8 @@ export function accessibilify(button, config, gameButton = true) {
         bounds.y += CAMERA_SCROLL_Y_OFFSET;
         bounds.y *= metrics.scale;
         bounds.y += marginTop;
-
-        if (gameButton) {
-            bounds.width *= metrics.scale;
-            bounds.height *= metrics.scale;
-        }
+        bounds.width *= metrics.scale;
+        bounds.height *= metrics.scale;
 
         return bounds;
     };
@@ -69,8 +63,7 @@ export function accessibilify(button, config, gameButton = true) {
 
     const setElementSizeAndPosition = () => {
         if (button.active) {
-            const bounds = getHitAreaBounds();
-            accessibleElement.position(bounds);
+            accessibleElement.position(getHitAreaBounds());
         }
     };
 
@@ -89,7 +82,7 @@ export function accessibilify(button, config, gameButton = true) {
     resizeAndRepositionElement();
 
     button.accessibleElement = accessibleElement.el;
-    button.elementId = elementId;
+    button.elementId = id;
     button.elementEvents = accessibleElement.events;
 
     a11y.addToAccessibleButtons(scene, button);
