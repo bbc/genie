@@ -16,7 +16,7 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.drawRow();
         this.setContainerPosition();
         this.align();
-        this.alpha = 0; // hides the row until the transition tween is appliedg
+        this.alpha = 0; // hides the row until the transition tween is applied
     }
 
     align() {
