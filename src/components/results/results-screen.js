@@ -11,8 +11,6 @@ import * as Rows from "../../core/layout/rows.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
-const PADDING_RATIO = 0.05;
-
 const getScoreMetaData = result => {
     if (typeof result === "number") {
         return { metadata: `SCO=[${result}]` };
@@ -40,12 +38,7 @@ export class Results extends Screen {
     }
 
     resultsArea() {
-        const metrics = getMetrics();
-        const safeArea = this.layout.getSafeArea(metrics, { top: false });
-        const bottomPadding = metrics.width * PADDING_RATIO;
-        safeArea.y += bottomPadding / 2;
-        safeArea.height -= bottomPadding;
-        return safeArea;
+        return this.layout.getSafeArea(getMetrics(), { top: false, left: "topLeft" });
     }
 
     createLayout() {
