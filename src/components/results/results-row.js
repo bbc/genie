@@ -15,6 +15,7 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.drawRow();
         this.setContainerPosition();
         this.align();
+        this.alpha = rowConfig.transition ? 0 : 1;
     }
 
     align() {
