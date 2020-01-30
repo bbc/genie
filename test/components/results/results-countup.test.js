@@ -124,4 +124,20 @@ describe("ResultsCountup", () => {
         resultsCountup.incrementCountByOne();
         expect(mockScene.sound.play).toHaveBeenCalledWith(mockCountupConfig.audio.key, { rate: 0.8 + (1 / 10) * 0.4 });
     });
+
+    test("incrementCountByOne does not play audio when it is not defined in config", () => {
+        delete mockCountupConfig.audio;
+        const resultsCountup = new ResultsCountup(mockScene, mockCountupConfig);
+        resultsCountup.incrementCountByOne();
+        expect(mockScene.sound.play).not.toHaveBeenCalled();
+        expect(resultsCountup.text).toBe("1");
+    });
+
+    test("incrementCountByOne defaults starting and ending play rate to 1", () => {
+        delete mockCountupConfig.audio.startPlayRate;
+        delete mockCountupConfig.audio.endPlayRate;
+        const resultsCountup = new ResultsCountup(mockScene, mockCountupConfig);
+        resultsCountup.incrementCountByOne();
+        expect(mockScene.sound.play).toHaveBeenCalledWith(mockCountupConfig.audio.key, { rate: 1 });
+    });
 });
