@@ -62,6 +62,7 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
             callback: this.incrementCountByOne,
             callbackScope: this,
             repeat,
+            startAt: delay,
         });
     }
 }
