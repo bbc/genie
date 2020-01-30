@@ -23,7 +23,7 @@
                     ],
                     sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
                     backdrop: 'imgKey', //optional
-                    alpha: 1
+                    // alpha: 1
                 },
                 {
                     format: [
@@ -82,7 +82,7 @@
                     ],
                     alpha: 0,
                     // Transitions object is passed as part of a tween config to the scene 
-                    transition: { rotation: { from: -4, to: 0 }, duration: 1000 },
+                    transition: { rotation: { from: -4, to: 0 }, alpha: {from: 0, to: 1}, duration: 1000 },
                 },
                 {
                     format: [
@@ -202,7 +202,7 @@
                         },
                     ],
                     alpha: 0,
-                    transition: { scale: { from: 0, to: 1 }, duration: 2000, ease: "Elastic.Out", delay: 5000 }
+                    transition: { scale: { from: 0, to: 1 }, alpha: 1, duration: 2000, ease: "Elastic.Out", delay: 5000 }
                 },
             ],
         },
