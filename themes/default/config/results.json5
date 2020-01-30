@@ -23,7 +23,7 @@
                     ],
                     sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
                     backdrop: 'imgKey', //optional
-                    // transition: { alpha: { from: 0, to: 1 }, duration: 2000 }, // (appear|fade|pop) look at passing generic phaser ease in
+                    initialAlpha: 1
                 },
                 {
                     format: [
@@ -80,7 +80,9 @@
                             },
                         },
                     ],
-                    transition: { rotation: { from: -4, to: 0 }, duration: 1000 }, // (appear|fade|pop) look at passing generic phaser ease in
+                    initialAlpha: 0,
+                    // Transitions object is passed as part of a tween config to the scene 
+                    transition: { rotation: { from: -4, to: 0 }, duration: 1000 },
                 },
                 {
                     format: [
@@ -134,7 +136,7 @@
                             },
                         },
                     ],
-                    // Transitions object is passed as part of a tween config to the scene 
+                    initialAlpha: 0,
                     transition: { 
                         alpha: { 
                             from: 0, to: 1 
@@ -199,6 +201,7 @@
                             },
                         },
                     ],
+                    initialAlpha: 0,
                     transition: { scale: { from: 0, to: 1 }, duration: 2000, ease: "Elastic.Out", delay: 5000 }
                 },
             ],

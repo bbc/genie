@@ -45,6 +45,17 @@ describe("ResultsRow", () => {
 
     afterEach(() => jest.clearAllMocks());
 
+    test("sets container alpha when specified in config", () => {
+        mockRowConfig.initialAlpha = 0.6;
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        expect(resultsRow.alpha).toEqual(0.6);
+    });
+
+    test("sets container alpha to 1 when not specified in config", () => {
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        expect(resultsRow.alpha).toEqual(1);
+    });
+
     test("align moves the gameobject half the rows width by default", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         resultsRow.list = [mockGameObject];

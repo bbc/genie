@@ -32,7 +32,6 @@ export function create(scene, getArea, rowsConfig, rowType) {
         containers.forEach(row => {
             scene.add.tween({
                 targets: row,
-                alpha: 1,
                 ...row.rowConfig.transition,
             });
         });
