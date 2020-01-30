@@ -5,9 +5,9 @@
  */
 
 export class ResultsSprite extends Phaser.GameObjects.Sprite {
-    constructor(scene, spriteConfig) {
-        super(scene, 0, 0, spriteConfig.key, spriteConfig.frame);
-        this.spriteConfig = spriteConfig;
+    constructor(scene, config) {
+        super(scene, 0, 0, config.key, config.frame);
+        this.config = config;
         this.setOrigin(0, 0);
     }
 }

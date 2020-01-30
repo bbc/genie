@@ -8,7 +8,7 @@ import { mockBaseScene } from "../../mock/mock-scene.js";
 
 describe("ResultsText", () => {
     let mockScene;
-    let mockTextConfig;
+    let mockConfig;
 
     beforeEach(() => {
         mockScene = mockBaseScene();
@@ -18,7 +18,7 @@ describe("ResultsText", () => {
                 name: "darkness",
             },
         };
-        mockTextConfig = {
+        mockConfig = {
             content: "Hello <%= name %>",
         };
     });
@@ -26,7 +26,7 @@ describe("ResultsText", () => {
     afterEach(() => jest.clearAllMocks());
 
     test("sets text on the gameobject using transient data and the string template", () => {
-        const resultsText = new ResultsText(mockScene, mockTextConfig);
+        const resultsText = new ResultsText(mockScene, mockConfig);
         expect(resultsText.text).toBe("Hello darkness");
     });
 });

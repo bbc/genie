@@ -7,10 +7,10 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 
 export class ResultsText extends Phaser.GameObjects.Text {
-    constructor(scene, textConfig) {
-        super(scene, 0, 0, undefined, textConfig.textStyle);
-        this.textConfig = textConfig;
-        this.setTextFromTemplate(textConfig.content, scene.transientData);
+    constructor(scene, config) {
+        super(scene, 0, 0, undefined, config.textStyle);
+        this.config = config;
+        this.setTextFromTemplate(config.content, scene.transientData);
     }
 
     setTextFromTemplate(templateString, transientData) {

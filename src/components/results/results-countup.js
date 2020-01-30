@@ -7,14 +7,14 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 
 export class ResultsCountup extends Phaser.GameObjects.Text {
-    constructor(scene, countupConfig) {
-        super(scene, 0, 0, undefined, countupConfig.textStyle);
-        this.countupConfig = countupConfig;
-        this.startCount = this.textFromTemplate(countupConfig.startCount, scene.transientData);
-        this.endCount = this.textFromTemplate(countupConfig.endCount, scene.transientData);
+    constructor(scene, config) {
+        super(scene, 0, 0, undefined, config.textStyle);
+        this.config = config;
+        this.startCount = this.textFromTemplate(config.startCount, scene.transientData);
+        this.endCount = this.textFromTemplate(config.endCount, scene.transientData);
         this.text = this.startCount;
         this.setFixedSize(this.getFinalWidth(this.endCount), 0);
-        this.startCountWithDelay(countupConfig.startDelay);
+        this.startCountWithDelay(config.startDelay);
     }
 
     getFinalWidth(finalText) {
@@ -31,19 +31,19 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
     }
 
     canPlaySound(value) {
-        const fireRate = this.countupConfig.audio.fireRate >= 1 ? this.countupConfig.audio.fireRate : 1;
+        const fireRate = this.config.audio.fireRate >= 1 ? this.config.audio.fireRate : 1;
         return value % fireRate === 0;
     }
 
     incrementCountByOne() {
         const currentValue = parseInt(this.text);
         this.text = currentValue + 1;
-        if (this.countupConfig.audio && this.canPlaySound(currentValue + 1)) {
-            const startRate = this.countupConfig.audio.startPlayRate || 1;
-            const endRate = this.countupConfig.audio.endPlayRate || 1;
+        if (this.config.audio && this.canPlaySound(currentValue + 1)) {
+            const startRate = this.config.audio.startPlayRate || 1;
+            const endRate = this.config.audio.endPlayRate || 1;
             const progress = (currentValue + 1) / (this.endCount - this.startCount);
             const currentRate = startRate + progress * (endRate - startRate);
-            this.scene.sound.play(this.countupConfig.audio.key, { rate: currentRate });
+            this.scene.sound.play(this.config.audio.key, { rate: currentRate });
         }
     }
 
@@ -56,7 +56,7 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
             return;
         }
         const repeat = this.endCount - this.startCount - 1;
-        const delay = repeat ? this.countupConfig.countupDuration / repeat : undefined;
+        const delay = repeat ? this.config.countupDuration / repeat : undefined;
         this.scene.time.addEvent({
             delay,
             callback: this.incrementCountByOne,
