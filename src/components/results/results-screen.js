@@ -38,7 +38,7 @@ export class Results extends Screen {
     }
 
     resultsArea() {
-        return this.layout.getSafeArea(getMetrics(), { top: false, left: "topLeft" });
+        return this.layout.getSafeArea(getMetrics(), { top: false });
     }
 
     createLayout() {
