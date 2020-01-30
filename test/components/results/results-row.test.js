@@ -46,7 +46,7 @@ describe("ResultsRow", () => {
     afterEach(() => jest.clearAllMocks());
 
     test("sets container alpha when specified in config", () => {
-        mockRowConfig.initialAlpha = 0.6;
+        mockRowConfig.alpha = 0.6;
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         expect(resultsRow.alpha).toEqual(0.6);
     });
