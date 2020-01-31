@@ -23,7 +23,7 @@
                     ],
                     sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
                     backdrop: 'imgKey', //optional
-                    transition: 'appear', // (appear|fade|pop) look at passing generic phaser ease in
+                    // alpha: 1
                 },
                 {
                     format: [
@@ -80,6 +80,9 @@
                             },
                         },
                     ],
+                    alpha: 0,
+                    // Transitions object is passed as part of a tween config to the scene 
+                    transition: { rotation: { from: -4, to: 0 }, alpha: {from: 0, to: 1}, duration: 1000 },
                 },
                 {
                     format: [
@@ -98,7 +101,7 @@
                             type: 'countup',
                             startCount: 0,
                             endCount: '<%= gems %>',
-                            startDelay: 3000,
+                            startDelay: 4000,
                             countupDuration: 1000, // in ms
                             audio: {
                                 key: 'results.gem-sfx',
@@ -133,6 +136,18 @@
                             },
                         },
                     ],
+                    alpha: 0,
+                    transition: { 
+                        alpha: { 
+                            from: 0, to: 1 
+                        }, 
+                        x: {
+                            from: -200, 
+                            to: 0 
+                        }, 
+                        duration: 2000, 
+                        delay: 2000 
+                    },
                 },
                 {
                     format: [
@@ -151,7 +166,7 @@
                             type: 'countup',
                             startCount: 0,
                             endCount: '<%= keys %>',
-                            startDelay: 5000,
+                            startDelay: 7000,
                             countupDuration: 1000, // in ms
                             audio: {
                                 key: 'results.key-sfx',
@@ -186,6 +201,8 @@
                             },
                         },
                     ],
+                    alpha: 0,
+                    transition: { scale: { from: 0, to: 1 }, alpha: 1, duration: 2000, ease: "Elastic.Out", delay: 5000 }
                 },
             ],
         },

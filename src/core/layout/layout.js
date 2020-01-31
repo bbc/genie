@@ -108,11 +108,18 @@ export function create(scene, metrics, buttonIds) {
 
     const getSafeArea = (metrics, groupOverrides = {}) => {
         const safe = { ...defaultSafeAreaGroups, ...groupOverrides };
-        const pad = metrics.isMobile ? 0 : metrics.screenToCanvas(20);
-        const x = groups[safe.left].x + groups[safe.left].width + pad;
-        const y = safe.top ? groups[safe.top].y + groups[safe.top].height : metrics.borderPad - metrics.stageHeight / 2;
+        const pad = metrics.isMobile ? { x: 0, y: 0 } : fp.mapValues(metrics.screenToCanvas, { x: 20, y: 10 });
+        const left = groups[safe.left].x + groups[safe.left].width + pad.x;
+        const top = safe.top
+            ? groups[safe.top].y + groups[safe.top].height
+            : metrics.borderPad - metrics.stageHeight / 2;
 
-        return new Phaser.Geom.Rectangle(x, y, groups[safe.right].x - x - pad, groups[safe.bottom].y - y);
+        const bottom = Math.min(groups[safe.bottom].y - pad.y, -top);
+
+        const height = bottom - top;
+        const width = groups[safe.right].x - left - pad.x;
+
+        return new Phaser.Geom.Rectangle(left, top, width, height);
     };
 
     const groupHasChildren = group => Boolean(group.list.length);

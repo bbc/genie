@@ -6,10 +6,10 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 
 import { domElement } from "../../mock/dom-element";
-import { onScaleChange } from "../../../src/core/scaler.js";
 import { accessibilify } from "../../../src/core/accessibility/accessibilify.js";
 import { accessibleDomElement } from "../../../src/core/accessibility/accessible-dom-element.js";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
+import * as scalerModule from "../../../src/core/scaler.js";
 
 jest.mock("../../../src/core/accessibility/accessible-dom-element.js");
 
@@ -22,6 +22,7 @@ describe("Accessibilify", () => {
 
     beforeEach(() => {
         jest.spyOn(a11y, "resetElementsInDom").mockImplementation(() => {});
+        scalerModule.getMetrics = jest.fn(() => ({ width: 0, scale: 1 }));
         mockScene = {
             scale: {
                 onSizeChange: { add: jest.fn(), remove: jest.fn() },
@@ -47,7 +48,7 @@ describe("Accessibilify", () => {
                 context: {},
             },
         };
-        mockButtonBounds = { x: 20, y: 20 };
+        mockButtonBounds = { x: 20, y: 20, width: 200, height: 100 };
         mockHitArea = {
             clone: () => mockButton.input.hitArea,
             get topLeft() {
@@ -73,7 +74,7 @@ describe("Accessibilify", () => {
             disableInteractive: jest.fn(),
             emit: jest.fn(),
             config: {
-                name: "play",
+                id: "play",
             },
             game: mockScene,
             getTopLeft: () => mockButtonBounds.topLeft,
@@ -118,10 +119,10 @@ describe("Accessibilify", () => {
         });
 
         test("calls accessibleDomElement with an aria label when provided in the config", () => {
-            mockButton.config = { name: "aria-label" };
+            mockButton.config = { ariaLabel: "aria-label" };
             accessibilify(mockButton);
             const accessibleDomElementCall = accessibleDomElement.mock.calls[0][0];
-            expect(accessibleDomElementCall.ariaLabel).toBe(mockButton.config.name);
+            expect(accessibleDomElementCall.ariaLabel).toBe(mockButton.config.ariaLabel);
         });
 
         test("resets the accessible elements in the DOM for this screen", () => {
@@ -151,7 +152,7 @@ describe("Accessibilify", () => {
 
         describe("Scaling and positioning", () => {
             beforeEach(() => {
-                jest.spyOn(onScaleChange, "add").mockImplementation(() => {});
+                scalerModule.onScaleChange.add = jest.fn(() => {});
                 jest.spyOn(fp, "debounce").mockImplementation((value, callback) => callback);
             });
 
@@ -163,63 +164,20 @@ describe("Accessibilify", () => {
 
             test("sets the initial size and position when the button is active", () => {
                 const expectedButtonBounds = {
-                    x: 525,
-                    y: 425,
-                    width:
-                        mockButton.input.hitArea.width *
-                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height),
-                    height:
-                        mockButton.input.hitArea.height *
-                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height),
+                    x: 345,
+                    y: 345,
+                    width: 200,
+                    height: 100,
                 };
                 mockButton.active = true;
                 accessibilify(mockButton);
-                expect(mockAccessibleDomElement.position.mock.calls[0][0].x).toBe(expectedButtonBounds.x);
-                expect(mockAccessibleDomElement.position.mock.calls[0][0].y).toBe(expectedButtonBounds.y);
-                expect(mockAccessibleDomElement.position.mock.calls[0][0].width).toBe(expectedButtonBounds.width);
-                expect(mockAccessibleDomElement.position.mock.calls[0][0].height).toBe(expectedButtonBounds.height);
+                expect(mockAccessibleDomElement.position.mock.calls[0][0]).toStrictEqual(expectedButtonBounds);
             });
 
             test("Uses standard getBounds function if getHitAreaBounds is not present (non-gel buttons)", () => {
                 delete mockButton.getHitAreaBounds;
                 accessibilify(mockButton);
                 expect(mockButton.getBounds).toHaveBeenCalled();
-            });
-
-            test("sets the correct width and height when the button is scaled", () => {
-                mockButton.active = true;
-                mockButton.scale = 0.5;
-                const expectedButtonBounds = {
-                    x: 525,
-                    y: 425,
-                    width:
-                        mockButton.input.hitArea.width *
-                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height) *
-                        mockButton.scale,
-                    height:
-                        mockButton.input.hitArea.height *
-                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height) *
-                        mockButton.scale,
-                };
-
-                accessibilify(mockButton);
-                expect(mockAccessibleDomElement.position.mock.calls[0][0].width).toBe(expectedButtonBounds.width);
-                expect(mockAccessibleDomElement.position.mock.calls[0][0].height).toBe(expectedButtonBounds.height);
-            });
-
-            test("sets the initial size and position when the button is active and is not a game button", () => {
-                const expectedButtonBounds = {
-                    x: 525,
-                    y: 425,
-                    width: mockButton.input.hitArea.width,
-                    height: mockButton.input.hitArea.height,
-                };
-                mockButton.active = true;
-                accessibilify(mockButton, false);
-                expect(mockAccessibleDomElement.position.mock.calls[0][0].x).toBe(expectedButtonBounds.x);
-                expect(mockAccessibleDomElement.position.mock.calls[0][0].y).toBe(expectedButtonBounds.y);
-                expect(mockAccessibleDomElement.position.mock.calls[0][0].width).toBe(expectedButtonBounds.width);
-                expect(mockAccessibleDomElement.position.mock.calls[0][0].height).toBe(expectedButtonBounds.height);
             });
 
             test("does not set the initial size and position when the button is not active", () => {
@@ -230,58 +188,48 @@ describe("Accessibilify", () => {
 
             test("changes the size and position when the scale changes when the button is active", () => {
                 const expectedButtonBounds = {
-                    x: 1156.25,
-                    y: 931.25,
-                    width:
-                        mockButton.input.hitArea.width *
-                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height),
-                    height:
-                        mockButton.input.hitArea.height *
-                        (mockScene.sys.game.canvas.style.height / mockScene.sys.game.canvas.height),
+                    x: 670,
+                    y: 670,
+                    width: 200,
+                    height: 100,
                 };
                 mockButton.active = true;
                 accessibilify(mockButton);
-                onScaleChange.add.mock.calls[0][0]();
-                expect(mockAccessibleDomElement.position.mock.calls[1][0].x).toBe(expectedButtonBounds.x);
-                expect(mockAccessibleDomElement.position.mock.calls[1][0].y).toBe(expectedButtonBounds.y);
-                expect(mockAccessibleDomElement.position.mock.calls[1][0].width).toBe(expectedButtonBounds.width);
-                expect(mockAccessibleDomElement.position.mock.calls[1][0].height).toBe(expectedButtonBounds.height);
+                scalerModule.onScaleChange.add.mock.calls[0][0]();
+                expect(mockAccessibleDomElement.position.mock.calls[1][0]).toStrictEqual(expectedButtonBounds);
             });
 
             test("changes the size and position when the scale changes when the button is active and is not a game button", () => {
                 const expectedButtonBounds = {
-                    x: 1156.25,
-                    y: 931.25,
-                    width: mockButton.input.hitArea.width,
-                    height: mockButton.input.hitArea.height,
+                    x: 670,
+                    y: 670,
+                    width: 200,
+                    height: 100,
                 };
                 mockButton.active = true;
                 accessibilify(mockButton, false);
-                onScaleChange.add.mock.calls[0][0]();
-                expect(mockAccessibleDomElement.position.mock.calls[1][0].x).toBe(expectedButtonBounds.x);
-                expect(mockAccessibleDomElement.position.mock.calls[1][0].y).toBe(expectedButtonBounds.y);
-                expect(mockAccessibleDomElement.position.mock.calls[1][0].width).toBe(expectedButtonBounds.width);
-                expect(mockAccessibleDomElement.position.mock.calls[1][0].height).toBe(expectedButtonBounds.height);
+                scalerModule.onScaleChange.add.mock.calls[0][0]();
+                expect(mockAccessibleDomElement.position.mock.calls[1][0]).toStrictEqual(expectedButtonBounds);
             });
 
             test("changes the size and position when the scale changes if the button is active but does not have a hit area", () => {
                 mockButton.active = true;
                 mockButton.input.hitArea = null;
                 accessibilify(mockButton);
-                onScaleChange.add.mock.calls[0][0]();
+                scalerModule.onScaleChange.add.mock.calls[0][0]();
                 expect(mockAccessibleDomElement.position.mock.calls[1][0]).toEqual(mockButtonBounds);
             });
 
             test("does not change the size and position when the scale changes if the button is not active", () => {
                 mockButton.active = false;
                 accessibilify(mockButton);
-                onScaleChange.add.mock.calls[0][0]();
+                scalerModule.onScaleChange.add.mock.calls[0][0]();
                 expect(mockAccessibleDomElement.position).not.toHaveBeenCalled();
             });
 
             test("tears down the scale change event when the button is destroyed", () => {
                 const event = { unsubscribe: jest.fn() };
-                onScaleChange.add.mockImplementation(() => event);
+                scalerModule.onScaleChange.add.mockImplementation(() => event);
                 accessibilify(mockButton);
                 mockButton.destroy();
                 expect(event.unsubscribe).toHaveBeenCalled();
