@@ -33,9 +33,9 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     addGridCells(gridCells) {
         gridCells.map((cell, idx) => this.addCell(cell, idx));
-        this.makeAccessible();
         this.setLayoutLimits();
         this.reset();
+        this.makeCellsAccessible();
         return this._cells;
     }
 
@@ -54,11 +54,10 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._metrics = metrics;
         this._safeArea = safeArea;
         this._cellPadding = metrics.screenToCanvas(metrics.isMobile ? 16 : 24);
-
         this.reset();
     }
 
-    makeAccessible() {
+    makeCellsAccessible() {
         this._cells.forEach(this.makeCellAccessible, this);
     }
 
@@ -181,9 +180,9 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     transitionCallback(pageToDisable, pageToEnable) {
-        this.showPage(pageToDisable, false);
-        this.showPage(pageToEnable, true);
-        this.makeAccessible();
+        this.setPageVisibility(pageToDisable, false);
+        this.setPageVisibility(pageToEnable, true);
+        this.makeCellsAccessible();
         this.scene.input.enabled = true;
         this.reset();
     }
@@ -203,8 +202,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
         return this._page;
     }
 
-    showPage(pageNum, show = true) {
-        this.getPageCells(pageNum).forEach(cell => (cell.visible = show));
+    setPageVisibility(pageNum, visibility) {
+        this.getPageCells(pageNum).forEach(cell => (cell.visible = visibility));
     }
 
     getPageCells(pageNum) {
@@ -215,7 +214,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     reset() {
         this._cellSize = this.calculateCellSize();
-        this.showPage(this._page);
+        this.setPageVisibility(this._page, true);
         this.getPageCells(this._page).forEach(this.resetCell, this);
     }
 }

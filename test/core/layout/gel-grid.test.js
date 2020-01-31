@@ -882,6 +882,19 @@ describe("Grid", () => {
             test("returns the new page number", () => {
                 expect(grid.nextPage()).toBe(1);
             });
+
+            test("sets visibility of cells after paginating", () => {
+                mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
+
+                grid = new GelGrid(mockScene, metrics, mockSafeArea);
+                grid.addGridCells(mockScene.theme.choices);
+
+                grid.nextPage();
+                transitionCallback();
+
+                expect(grid._cells[0].visible).toEqual(false);
+                expect(grid._cells[1].visible).toEqual(true);
+            });
         });
 
         describe("previous page behaviour", () => {
@@ -1001,6 +1014,20 @@ describe("Grid", () => {
             grid.addGridCells(mockScene.theme.choices);
             const result = grid.getCurrentPageKey();
             expect(result).toEqual("asset_name_0");
+        });
+
+        describe("accessibility", () => {
+            test("calls accessibilify on cells after paginating", () => {
+                mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
+
+                grid = new GelGrid(mockScene, metrics, mockSafeArea);
+                grid.addGridCells(mockScene.theme.choices);
+
+                grid.nextPage();
+                transitionCallback();
+
+                expect(accessibilify).toHaveBeenCalledTimes(4);
+            });
         });
     });
 
