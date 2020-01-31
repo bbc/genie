@@ -103,8 +103,10 @@
                             offsetX: 20,
                             offsetY: -20,
                             anim: {
-                                start: 0,
-                                end: 14,
+                                frames: {
+                                    start: 0,
+                                    end: 14,
+                                },
                                 frameRate: 7,
                                 repeat: -1,
                             },
