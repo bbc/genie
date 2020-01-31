@@ -34,6 +34,9 @@ export function create(scene, getArea, rowsConfig, rowType) {
                 targets: row,
                 ...row.rowConfig.transition,
             });
+            if (row.rowConfig.audio) {
+                scene.sound.play(row.rowConfig.audio.key, row.rowConfig.audio);
+            }
         });
     };
 

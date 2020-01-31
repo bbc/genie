@@ -22,6 +22,9 @@ describe("Rows", () => {
             add: {
                 tween: jest.fn(),
             },
+            sound: {
+                play: jest.fn(),
+            },
         };
         mockRowsConfig = [{}, {}, {}];
         mockArea = {
@@ -89,5 +92,23 @@ describe("Rows", () => {
         const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
         rows.rowTransitions();
         expect(mockScene.add.tween).toHaveBeenCalledWith(expect.objectContaining(mockTweenConfig));
+    });
+
+    test("rowTransitions sets up audio when specified in config", () => {
+        mockRowsConfig = [
+            {
+                audio: { key: "mockAudioKey", delay: 1 },
+            },
+        ];
+        const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
+        rows.rowTransitions();
+        expect(mockScene.sound.play.mock.calls[0][0]).toEqual("mockAudioKey");
+        expect(mockScene.sound.play.mock.calls[0][1]).toEqual({ key: "mockAudioKey", delay: 1 });
+    });
+
+    test("rowTransitions does not set up audio when absent from config", () => {
+        const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
+        rows.rowTransitions();
+        expect(mockScene.sound.play).not.toHaveBeenCalled();
     });
 });

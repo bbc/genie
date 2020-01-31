@@ -83,6 +83,7 @@
                     alpha: 0,
                     // Transitions object is passed as part of a tween config to the scene 
                     transition: { rotation: { from: -4, to: 0 }, alpha: {from: 0, to: 1}, duration: 1000 },
+                    audio: { key: 'results.woosh' },
                 },
                 {
                     format: [
@@ -147,7 +148,8 @@
                         }, 
                         duration: 2000, 
                         delay: 2000 
-                    },
+                    }, // Tween delays are in milliseconds
+                    audio: { key: 'results.slide', delay: 2.5 }, // Audio delays are in seconds
                 },
                 {
                     format: [
@@ -202,7 +204,8 @@
                         },
                     ],
                     alpha: 0,
-                    transition: { scale: { from: 0, to: 1 }, alpha: 1, duration: 2000, ease: "Elastic.Out", delay: 5000 }
+                    transition: { scale: { from: 0, to: 1 }, alpha: 1, duration: 2000, ease: "Elastic.Out", delay: 5000 },
+                    audio: { key: 'results.boing', delay: 5 },
                 },
             ],
         },
