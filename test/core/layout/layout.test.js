@@ -365,7 +365,7 @@ describe("Layout", () => {
                 mockGroup,
                 mockGroup,
                 mockGroup,
-                Object.assign({ x: 200 }, mockGroup), //middleRightSafe
+                Object.assign({ x: 190 }, mockGroup), //middleRightSafe
                 mockGroup,
                 Object.assign({ y: 100 }, mockGroup), //bottomCenter
                 mockGroup,
@@ -379,7 +379,7 @@ describe("Layout", () => {
 
             const layout = Layout.create(mockScene, mockMetrics, ["previous", "next", "home", "continue"]);
 
-            expect(layout.getSafeArea(mockMetrics)).toEqual(new Phaser.Geom.Rectangle(-180, -100, 360, 200));
+            expect(layout.getSafeArea(mockMetrics)).toEqual(new Phaser.Geom.Rectangle(-180, -100, 350, 190));
         });
 
         test("Sets top position to border pad if top: false is passed in to group overrides", () => {
@@ -408,7 +408,37 @@ describe("Layout", () => {
             const layout = Layout.create(mockScene, mockMetrics, ["previous", "next", "home", "continue"]);
 
             expect(layout.getSafeArea(mockMetrics, { top: false })).toEqual(
-                new Phaser.Geom.Rectangle(-180, -384, 360, 484),
+                new Phaser.Geom.Rectangle(-180, -384, 360, 474),
+            );
+        });
+
+        test("Forces top and bottom pad to be the same if one is smaller", () => {
+            mockMetrics.isMobile = false;
+            const mockGroup = { addButton: jest.fn(), reset: jest.fn() };
+            const mockGroups = [
+                Object.assign({ y: -150, height: 50 }, mockGroup), //topLeft
+                mockGroup,
+                mockGroup,
+                Object.assign({ x: -250, width: 50 }, mockGroup), //middleLeftSafe
+                mockGroup,
+                mockGroup,
+                mockGroup,
+                Object.assign({ x: 200 }, mockGroup), //middleRightSafe
+                mockGroup,
+                Object.assign({ y: 1000 }, mockGroup), //bottomCenter
+                mockGroup,
+            ];
+
+            let idx = -1;
+            GelGroup.mockImplementation(() => {
+                idx++;
+                return mockGroups[idx];
+            });
+
+            const layout = Layout.create(mockScene, mockMetrics, ["previous", "next", "home", "continue"]);
+
+            expect(layout.getSafeArea(mockMetrics, { top: false })).toEqual(
+                new Phaser.Geom.Rectangle(-180, -384, 360, 768),
             );
         });
     });
