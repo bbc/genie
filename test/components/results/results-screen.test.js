@@ -30,6 +30,9 @@ describe("Results Screen", () => {
             add: jest.fn(() => ({ unsubscribe })),
         };
         MetricsModule.getMetrics = jest.fn();
+        Rows.create = jest.fn(() => ({
+            rowTransitions: jest.fn(),
+        }));
         mockImage = {
             height: 5,
             width: 5,
