@@ -67,5 +67,5 @@ body {
 details[open] > summary { font-weight: bold; }
 
 #accessibility div {
-    /* background-color: rgba(255,0,0,0.3); */
+     /*background-color: rgba(255,0,0,0.3);*/
 }

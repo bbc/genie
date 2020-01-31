@@ -83,6 +83,20 @@ export class GelGrid extends Phaser.GameObjects.Container {
         };
 
         const newCell = this.scene.add.gelButton(0, 0, this._metrics, config);
+
+        const transition = newKey => {
+            if (this.getCurrentPageKey() === newKey) {
+                return;
+            }
+            this.pageTransition(true);
+        };
+
+        function transitionOnTab() {
+            transition(this.config.id);
+        }
+
+        newCell.on(Phaser.Input.Events.POINTER_OVER, transitionOnTab, newCell);
+
         newCell.visible = Boolean(!idx);
         newCell.key = config.key;
         this._cells.push(newCell);
