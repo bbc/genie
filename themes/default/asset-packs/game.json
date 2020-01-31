@@ -21,6 +21,17 @@
                 "overwrite": false
             },
             {
+                "type": "spritesheet",
+                "key": "diamond",
+                "url": "game/diamond.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "margin": 2,
+                    "spacing": 2
+                }
+            },
+            {
                 "type": "image",
                 "key": "star",
                 "url": "game/star.png",

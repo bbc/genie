@@ -81,8 +81,8 @@
                         },
                     ],
                     alpha: 0,
-                    // Transitions object is passed as part of a tween config to the scene 
-                    transition: { rotation: { from: -4, to: 0 }, alpha: {from: 0, to: 1}, duration: 1000 },
+                    // Transitions object is passed as part of a tween config to the scene
+                    transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 },
                 },
                 {
                     format: [
@@ -96,7 +96,18 @@
                                 color: '#FFFFFF',
                             },
                         },
-                        { type: 'sprite', key: 'game.gem', offsetX: 20, offsetY: -20 },
+                        {
+                            type: 'sprite',
+                            key: 'game.diamond',
+                            offsetX: 20,
+                            offsetY: -20,
+                            anim: {
+                                start: 0,
+                                end: 14,
+                                frameRate: 7,
+                                repeat: -1,
+                            },
+                        },
                         {
                             type: 'countup',
                             startCount: 0,
@@ -137,16 +148,17 @@
                         },
                     ],
                     alpha: 0,
-                    transition: { 
-                        alpha: { 
-                            from: 0, to: 1 
-                        }, 
+                    transition: {
+                        alpha: {
+                            from: 0,
+                            to: 1,
+                        },
                         x: {
-                            from: -200, 
-                            to: 0 
-                        }, 
-                        duration: 2000, 
-                        delay: 2000 
+                            from: -200,
+                            to: 0,
+                        },
+                        duration: 2000,
+                        delay: 2000,
                     },
                 },
                 {
@@ -202,7 +214,13 @@
                         },
                     ],
                     alpha: 0,
-                    transition: { scale: { from: 0, to: 1 }, alpha: 1, duration: 2000, ease: "Elastic.Out", delay: 5000 }
+                    transition: {
+                        scale: { from: 0, to: 1 },
+                        alpha: 1,
+                        duration: 2000,
+                        ease: 'Elastic.Out',
+                        delay: 5000,
+                    },
                 },
             ],
         },
