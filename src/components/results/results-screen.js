@@ -35,6 +35,7 @@ export class Results extends Screen {
         this.createBackdrop();
         fireGameCompleteStat(this.transientData.results);
         this.subscribeToEventBus();
+        this.rows.rowTransitions();
     }
 
     resultsArea() {
