@@ -17,7 +17,7 @@ export class ResultsSprite extends Phaser.GameObjects.Sprite {
                 key: config.key,
                 frames: this.scene.anims.generateFrameNumbers(config.key, config.anim.frames),
             });
-            this.play(config.key, false, 0);
+            this.play(config.key);
         }
     }
 }
