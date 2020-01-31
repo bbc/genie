@@ -99,6 +99,7 @@
                         {
                             type: 'sprite',
                             key: 'game.diamond',
+                            frame: 0,
                             offsetX: 20,
                             offsetY: -20,
                             anim: {
