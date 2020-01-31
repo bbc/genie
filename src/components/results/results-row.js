@@ -35,17 +35,15 @@ export class ResultsRow extends Phaser.GameObjects.Container {
     }
 
     drawRow() {
+        const objectType = {
+            text: ResultsText,
+            sprite: ResultsSprite,
+            countup: ResultsCountup,
+        };
+
         this.rowConfig.format &&
             this.rowConfig.format.forEach(object => {
-                if (object.type === "text") {
-                    this.addSection(new ResultsText(this.scene, object), object.offsetX, object.offsetY);
-                }
-                if (object.type === "sprite") {
-                    this.addSection(new ResultsSprite(this.scene, object), object.offsetX, object.offsetY);
-                }
-                if (object.type === "countup") {
-                    this.addSection(new ResultsCountup(this.scene, object), object.offsetX, object.offsetY);
-                }
+                this.addSection(new objectType[object.type](this.scene, object), object.offsetX, object.offsetY);
             });
     }
 
