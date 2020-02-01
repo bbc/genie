@@ -8,7 +8,7 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import { onScaleChange, getMetrics } from "../scaler.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as a11y from "./accessibility-layer.js";
-import { CAMERA_X, CAMERA_Y} from "../layout/metrics.js";
+import { CAMERA_X, CAMERA_Y } from "../layout/metrics.js";
 
 export function accessibilify(button, gameButton = true) {
     let event;
@@ -38,8 +38,8 @@ export function accessibilify(button, gameButton = true) {
         const metrics = getMetrics();
 
         return {
-            x: ((bounds.x + CAMERA_X) * metrics.scale) + marginLeft,
-            y: ((bounds.y + CAMERA_Y) * metrics.scale) + marginTop,
+            x: (bounds.x + CAMERA_X) * metrics.scale + marginLeft,
+            y: (bounds.y + CAMERA_Y) * metrics.scale + marginTop,
             width: bounds.width * metrics.scale,
             height: bounds.height * metrics.scale,
         };
@@ -96,17 +96,14 @@ export function accessibilify(button, gameButton = true) {
 
         //TODO is this only used on how to play? nowehere else sets visibility
         //select continue sets disabled
-        //if (button.input && !button.input.enabled) {
-        //    accessibleElement.visible() && accessibleElement.hide();
-        //}
-        //
-        ////else if (!button.visible) {
-        ////    accessibleElement.visible() && accessibleElement.setInvisible();
-        ////}
-        //
-        //else if (!accessibleElement.visible()) {
-        //    accessibleElement.show();
-        //}
+        if (
+            (!button.config.tabbable && button.input && !button.input.enabled) ||
+            (!button.visible && !button.config.tabbable)
+        ) {
+            accessibleElement.visible() && accessibleElement.hide();
+        } else if (!accessibleElement.visible()) {
+            accessibleElement.show();
+        }
     };
 
     sys.events.on(Phaser.Scenes.Events.UPDATE, update);

@@ -3,10 +3,10 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import fp from "../../../lib/lodash/fp/fp.js";
-
 import { gmi } from "../../core/gmi/gmi.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
+
+const accessibilifyGameButton = cell => accessibilify(cell, true);
 
 const alignmentFactor = { left: 0, center: 1, right: 2 };
 
@@ -42,7 +42,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     addGridCells(gridCells) {
         gridCells.map((cell, idx) => this.addCell(cell, idx));
         this.reset();
-        this.makeCellsAccessible(); //TODO At the point these are called they are added to the DOM. Maybe we div by group in the DOM?
+        this._cells.forEach(accessibilifyGameButton);
         return this._cells;
     }
 
@@ -64,17 +64,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.reset();
     }
 
-    makeCellsAccessible() {
-        this._cells.forEach(this.makeCellAccessible, this);
-    }
-
-    makeCellAccessible(cell) {
-        //TODO needed??
-        cell.input.enabled = true;
-
-        return accessibilify(cell, true);
-    }
-
     cellIds() {
         return this._cells.map(cell => cell.config.id);
     }
@@ -87,6 +76,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
             gameButton: true,
             group: "grid",
             order: 0,
+            tabbable: this.cellsPerPage === 1,
         };
 
         const newCell = this.scene.add.gelButton(0, 0, this._metrics, config);
@@ -95,7 +85,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.cellsPerPage > 1 && (newCell.visible = Boolean(!idx));
         newCell.key = config.key;
         this._cells.push(newCell);
-        this.addAt(newCell, this._cells.length);
+        this.add(newCell);
     }
 
     setCellSize(cell) {
@@ -134,11 +124,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
         cell.x = leftBound + paddingXTotal + cellXCentre + blankPadding;
         cell.y = topBound + cellYCentre + paddingYTotal;
-    }
-
-    removeCell(cellToRemove) {
-        this._cells = fp.remove(n => n === cellToRemove, this._cells);
-        cellToRemove.destroy();
     }
 
     setLayoutLimits() {
@@ -182,7 +167,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
         this.scene.input.enabled = false;
 
-
         this.getPageCells(this._page).forEach(this.addTweens({ ...this._config, tweenIn: true, goForwards }));
         this.getPageCells(currentPage).forEach(this.addTweens({ ...this._config, tweenIn: false, goForwards }));
         this.scene.time.addEvent({
@@ -195,12 +179,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     transitionCallback(pageToDisable) {
         this.setPageVisibility(pageToDisable, false);
-
-        // TODO check if needed - this causes resets on everything and we lose focus
-        // this.makeCellsAccessible();
         this.scene.input.enabled = true;
-        //TODO - this calls similar to above. Unnecessary?
-        //this.reset();
     }
 
     nextPage() {
@@ -219,9 +198,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     setPageVisibility(pageNum, visibility) {
-        //this.cellsPerPage > 1 && this.getPageCells(pageNum).forEach(cell => (cell.visible = visibility));
         this.getPageCells(pageNum).forEach(cell => (cell.visible = visibility));
-        //TODO perhaps we need a way to hide but keep tabbable?
     }
 
     getPageCells(pageNum) {
@@ -234,7 +211,5 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._cellSize = this.calculateCellSize();
         this._cells.forEach(this.resetCell, this);
         this.setPageVisibility(this._page, true);
-        //this.getPageCells(this._page).forEach(this.resetCell, this);
-
     }
 }
