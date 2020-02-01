@@ -42,7 +42,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         gridCells.map((cell, idx) => this.addCell(cell, idx));
         this.setLayoutLimits();
         this.reset();
-        this.makeCellsAccessible();
+        this.makeCellsAccessible(); //TODO At the point these are called they are added to the DOM. Maybe we div by group in the DOM?
         return this._cells;
     }
 
@@ -90,8 +90,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
         const newCell = this.scene.add.gelButton(0, 0, this._metrics, config);
 
-        newCell.on(Phaser.Input.Events.POINTER_OVER, transitionOnTab(this, newCell));
-        newCell.visible = Boolean(!idx);
+        this.cellsPerPage === 1 && newCell.on(Phaser.Input.Events.POINTER_OVER, transitionOnTab(this, newCell));
+        this.cellsPerPage > 1 && (newCell.visible = Boolean(!idx));
         newCell.key = config.key;
         this._cells.push(newCell);
         this.addAt(newCell, this._cells.length);
@@ -144,7 +144,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const maxRows = 2;
         this._config.columns = Math.min(this._config.columns, maxColumns);
         this._config.rows = Math.min(maxRows, this._config.rows);
-        this._cellsPerPage = this._config.rows * this._config.columns;
+        this.cellsPerPage = this._config.rows * this._config.columns;
     }
 
     getBoundingRect() {
@@ -157,7 +157,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     getPageCount() {
-        return Math.ceil(this._cells.length / this._cellsPerPage);
+        return Math.ceil(this._cells.length / this.cellsPerPage);
     }
 
     addTweens = config => cell => {
@@ -191,9 +191,11 @@ export class GelGrid extends Phaser.GameObjects.Container {
     transitionCallback(pageToDisable, pageToEnable) {
         this.setPageVisibility(pageToDisable, false);
         this.setPageVisibility(pageToEnable, true);
-        this.makeCellsAccessible();
+        // TODO check if needed - this causes resets on everything and we lose focus
+        // this.makeCellsAccessible();
         this.scene.input.enabled = true;
-        this.reset();
+        //TODO - this calls similar to above. Unnecessary?
+        //this.reset();
     }
 
     nextPage() {
@@ -212,12 +214,13 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     setPageVisibility(pageNum, visibility) {
-        this.getPageCells(pageNum).forEach(cell => (cell.visible = visibility));
+        this.cellsPerPage > 1 && this.getPageCells(pageNum).forEach(cell => (cell.visible = visibility));
+        //TODO perhaps we need a way to hide but keep tabbable?
     }
 
     getPageCells(pageNum) {
-        const pageMax = this._cellsPerPage * (pageNum + 1);
-        const pageMin = this._cellsPerPage * pageNum;
+        const pageMax = this.cellsPerPage * (pageNum + 1);
+        const pageMin = this.cellsPerPage * pageNum;
         return this._cells.filter((cell, idx) => idx >= pageMin && idx < pageMax);
     }
 

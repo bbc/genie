@@ -129,12 +129,12 @@ describe("Screen", () => {
 
         test("clears the currently stored accessible buttons", () => {
             createAndInitScreen();
-            expect(a11y.clearAccessibleButtons).toHaveBeenCalledTimes(1);
+            expect(a11y.clearButtons).toHaveBeenCalledTimes(1);
         });
 
         test("resets the accessibility layer DOM", () => {
             createAndInitScreen();
-            expect(a11y.clearElementsFromDom).toHaveBeenCalledTimes(1);
+            expect(a11y.clear).toHaveBeenCalledTimes(1);
         });
 
         test("sets the stats screen to the current screen, if not on the loadscreen", () => {
@@ -289,8 +289,8 @@ describe("Screen", () => {
             createAndInitScreen();
             jest.clearAllMocks();
             screen._onOverlayRemoved({ overlay: mockOverlay });
-            expect(a11y.clearAccessibleButtons).toHaveBeenCalled();
-            expect(a11y.clearElementsFromDom).toHaveBeenCalled();
+            expect(a11y.clearButtons).toHaveBeenCalled();
+            expect(a11y.clear).toHaveBeenCalled();
         });
 
         test("removing an overlay, makes the parent screens gel buttons accessible again", () => {
@@ -302,7 +302,7 @@ describe("Screen", () => {
             jest.clearAllMocks();
             screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(mockLayout.makeAccessible).toHaveBeenCalled();
-            expect(a11y.appendElementsToDom).toHaveBeenCalledWith(screen);
+            expect(a11y.appendToDom).toHaveBeenCalledWith(screen);
         });
 
         test("removing an overlay, makes the parent screens game buttons accessible again", () => {
@@ -312,7 +312,7 @@ describe("Screen", () => {
             screen.sys.accessibleButtons = [mockButton];
             jest.clearAllMocks();
             screen._onOverlayRemoved({ overlay: mockOverlay });
-            expect(a11y.addToAccessibleButtons).toHaveBeenCalledWith(screen, mockButton);
+            expect(a11y.addButton).toHaveBeenCalledWith(screen, mockButton);
         });
 
         test("removing an overlay sets stat screen back to the underlying screen", () => {

@@ -9,7 +9,7 @@ import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import * as elementManipulator from "../../../src/core/accessibility/element-manipulator.js";
 
 describe("Managing accessible buttons", () => {
-    beforeEach(() => a11y.clearAccessibleButtons());
+    beforeEach(() => a11y.clearButtons());
     afterEach(() => jest.clearAllMocks());
 
     describe("Set up", () => {
@@ -60,20 +60,20 @@ describe("Managing accessible buttons", () => {
         });
 
         test("appends correct elements to the DOM", () => {
-            a11y.addToAccessibleButtons(screen1, button1);
-            a11y.addToAccessibleButtons(screen1, button2);
-            a11y.addToAccessibleButtons(screen2, button3);
-            a11y.appendElementsToDom(screen1);
+            a11y.addButton(screen1, button1);
+            a11y.addButton(screen1, button2);
+            a11y.addButton(screen2, button3);
+            a11y.appendToDom(screen1);
             expect(parentElement.appendChild).toHaveBeenCalledWith(el1);
             expect(parentElement.appendChild).toHaveBeenCalledWith(el2);
             expect(parentElement.appendChild).not.toHaveBeenCalledWith(el3);
         });
 
         test("only appends elements with accessible element", () => {
-            a11y.addToAccessibleButtons(screen1, button1);
-            a11y.addToAccessibleButtons(screen1, button2);
-            a11y.addToAccessibleButtons(screen1, fakeButton);
-            a11y.appendElementsToDom(screen1);
+            a11y.addButton(screen1, button1);
+            a11y.addButton(screen1, button2);
+            a11y.addButton(screen1, fakeButton);
+            a11y.appendToDom(screen1);
             expect(parentElement.appendChild).toHaveBeenCalledWith(el1);
             expect(parentElement.appendChild).toHaveBeenCalledWith(el2);
             expect(parentElement.appendChild).not.toHaveBeenCalledWith(fakeEl);
@@ -103,7 +103,7 @@ describe("Managing accessible buttons", () => {
             jest.spyOn(elementManipulator, "hideAndDisableElement").mockImplementation(() => {});
             jest.spyOn(Array, "from").mockImplementation(argument => argument);
 
-            a11y.clearElementsFromDom();
+            a11y.clear();
         });
 
         test("clears all accessible elements from the DOM except the currently focused one", () => {
@@ -123,10 +123,10 @@ describe("Managing accessible buttons", () => {
             button1 = { accessibleElement: { id: "home" } };
             button2 = { accessibleElement: { id: "pause" } };
             button3 = { accessibleElement: { id: "back" } };
-            a11y.addToAccessibleButtons(screen1, button1);
-            a11y.addToAccessibleButtons(screen1, button2);
-            a11y.addToAccessibleButtons(screen1, button3);
-            a11y.removeFromAccessibleButtons(screen1, button2);
+            a11y.addButton(screen1, button1);
+            a11y.addButton(screen1, button2);
+            a11y.addButton(screen1, button3);
+            a11y.removeButtons(screen1, button2);
 
             const buttons = a11y.getAccessibleButtons("home");
 
@@ -140,10 +140,10 @@ describe("Managing accessible buttons", () => {
             button1 = { accessibleElement: { id: "home" } };
             button2 = { accessibleElement: { id: "pause" } };
             button3 = { accessibleElement: { id: "back" } };
-            a11y.addToAccessibleButtons(screen1, button1);
-            a11y.addToAccessibleButtons(screen1, button2);
-            a11y.addToAccessibleButtons(screen1, button3);
-            a11y.removeFromAccessibleButtons(screen1, { some: "fakeButton" });
+            a11y.addButton(screen1, button1);
+            a11y.addButton(screen1, button2);
+            a11y.addButton(screen1, button3);
+            a11y.removeButtons(screen1, { some: "fakeButton" });
 
             const buttons = a11y.getAccessibleButtons("home");
 
@@ -162,9 +162,9 @@ describe("Managing accessible buttons", () => {
             button1 = { accessibleElement: { id: "home" } };
             button2 = { accessibleElement: { id: "pause" } };
             button3 = { accessibleElement: { id: "back" } };
-            a11y.addToAccessibleButtons(screen1, button1);
-            a11y.addToAccessibleButtons(screen1, button2);
-            a11y.addToAccessibleButtons(screen1, button3);
+            a11y.addButton(screen1, button1);
+            a11y.addButton(screen1, button2);
+            a11y.addButton(screen1, button3);
 
             const buttons = a11y.getAccessibleButtons("home");
 
@@ -190,10 +190,10 @@ describe("Managing accessible buttons", () => {
                     return parentElement;
                 }
             });
-            a11y.addToAccessibleButtons(screen1, button1);
+            a11y.addButton(screen1, button1);
 
             const expectedButtons = a11y.getAccessibleButtons("home");
-            a11y.resetElementsInDom(screen1);
+            a11y.reset(screen1);
             const buttons = a11y.getAccessibleButtons("home");
             expect(buttons).toBe(expectedButtons);
         });
@@ -203,10 +203,10 @@ describe("Managing accessible buttons", () => {
         test("clears all the accessible buttons for a screen", () => {
             const screen1 = { scene: { key: "home" } };
             const button1 = { accessibleElement: { id: "home" } };
-            a11y.addToAccessibleButtons(screen1, button1);
+            a11y.addButton(screen1, button1);
 
             const expectedButtons = [];
-            a11y.clearAccessibleButtons(screen1);
+            a11y.clearButtons(screen1);
             const buttons = a11y.getAccessibleButtons("home");
             expect(buttons).toEqual(expectedButtons);
         });

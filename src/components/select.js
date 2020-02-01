@@ -13,6 +13,7 @@ import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement } from "../core/helpers/element-bounding.js";
 import { GelGrid } from "../core/layout/gel-grid.js";
 import * as state from "../core/state.js";
+import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
 
@@ -35,9 +36,10 @@ export class Select extends Screen {
         this.setLayout(buttons.concat(continueBtn));
         const metrics = getMetrics();
         this.grid = new GelGrid(this, metrics, this.layout.getSafeArea(metrics), this.theme);
+        a11y.addGroupAt(this.scene.key, "grid", 6);
         this.resize();
         this._cells = this.grid.addGridCells(this.theme.choices);
-        this.layout.addCustomGroup("grid", this.grid);
+        this.layout.addCustomGroup("grid", this.grid, 2);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
         this.scene.scene.events.on("shutdown", this._scaleEvent.unsubscribe, this);
@@ -48,6 +50,14 @@ export class Select extends Screen {
         this.states = state.create(this.context.theme.storageKey, stateConfig);
 
         this.updateStates();
+    }
+
+    updateContinue() {
+        if (!this.layout.buttons.continue) return;
+
+        const bool = this.currentEnabled();
+        this.layout.buttons.continue.input.enabled = bool;
+        this.layout.buttons.continue.alpha = bool ? 1 : 0.5;
     }
 
     updateStates() {
@@ -65,6 +75,7 @@ export class Select extends Screen {
 
             config.suffix && (cell.config.ariaLabel = [cell.config.ariaLabel, config.suffix].join(" "));
 
+            //.TODO prob need a way to set inout disabled and also have tabindex zero
             cell.input.enabled = Boolean(config.enabled !== false);
         }, this);
     }
@@ -151,8 +162,19 @@ export class Select extends Screen {
         return visualElements;
     }
 
+    currentEnabled() {
+        const currentState = this.states.get(this.grid.getCurrentPageKey()).state;
+
+        const st = this.context.theme.states[currentState];
+
+        return st === undefined || st.enabled !== false;
+
+        //TODO when grid navs to new page need to know whether to disable button
+    }
+
     next = getTitle => () => {
         this._scaleEvent.unsubscribe();
+
         //TODO  Stats Stuff will need adding back in, once we have the carousel back
         //TODO work out the correct key if "continue" is passed here when continue button used vs grid button
         this.transientData[this.scene.key] = { choice: { title: getTitle.call(this.grid) } };
@@ -176,12 +198,18 @@ export class Select extends Screen {
         eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "next",
-            callback: grid.nextPage.bind(grid),
+            callback: function() {
+                grid.nextPage();
+                this.updateContinue();
+            }.bind(this),
         });
         eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "previous",
-            callback: grid.previousPage.bind(grid),
+            callback: function() {
+                grid.previousPage();
+                this.updateContinue();
+            }.bind(this),
         });
     }
 }

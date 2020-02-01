@@ -17,7 +17,7 @@ import { settingsChannel } from "./settings.js";
 import { addAnimations } from "./background-animations.js";
 import { debugMode } from "./debug/debug-mode.js";
 import * as debug from "./debug/debug.js";
-import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./layout/metrics.js";
+import { CAMERA_X, CAMERA_Y } from "./layout/metrics.js";
 
 export const overlayChannel = "gel-overlays";
 
@@ -56,8 +56,8 @@ export class Screen extends Phaser.Scene {
 
     init(data) {
         this._data = data;
-        this.cameras.main.scrollX = -CANVAS_WIDTH / 2;
-        this.cameras.main.scrollY = -CANVAS_HEIGHT / 2;
+        this.cameras.main.scrollX = -CAMERA_X;
+        this.cameras.main.scrollY = -CAMERA_Y;
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
             gmi.setStatsScreen(this.scene.key);
@@ -69,8 +69,8 @@ export class Screen extends Phaser.Scene {
         }
 
         this.sys.accessibleButtons = [];
-        a11y.clearAccessibleButtons();
-        a11y.clearElementsFromDom();
+        a11y.clearButtons();
+        a11y.clear(this.scene.key);
 
         this._makeNavigation();
     }
@@ -118,13 +118,13 @@ export class Screen extends Phaser.Scene {
 
     _onOverlayRemoved = data => {
         eventBus.removeChannel(buttonsChannel(data.overlay));
-        a11y.clearAccessibleButtons();
-        a11y.clearElementsFromDom();
+        a11y.clearButtons();
+        a11y.clear();
         data.overlay.removeAll();
         data.overlay.scene.stop();
         this._layout.makeAccessible();
-        this.sys.accessibleButtons.forEach(button => a11y.addToAccessibleButtons(this, button));
-        a11y.appendElementsToDom(this);
+        this.sys.accessibleButtons.forEach(button => a11y.addButton(this.scene.key, button));
+        a11y.appendToDom(this.scene.key);
         gmi.setStatsScreen(this.scene.key);
 
         eventBus.publish({

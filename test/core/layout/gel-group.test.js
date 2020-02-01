@@ -351,7 +351,7 @@ describe("Group", () => {
             group.addButton(config);
             group.makeAccessible();
 
-            expect(a11y.addToAccessibleButtons).toHaveBeenCalledTimes(2);
+            expect(a11y.addButton).toHaveBeenCalledTimes(2);
         });
     });
 

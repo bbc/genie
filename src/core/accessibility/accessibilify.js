@@ -8,10 +8,7 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import { onScaleChange, getMetrics } from "../scaler.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as a11y from "./accessibility-layer.js";
-import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../layout/metrics.js";
-
-const CAMERA_SCROLL_X_OFFSET = CANVAS_WIDTH / 2;
-const CAMERA_SCROLL_Y_OFFSET = CANVAS_HEIGHT / 2;
+import { CAMERA_X, CAMERA_Y} from "../layout/metrics.js";
 
 export function accessibilify(button, gameButton = true) {
     let event;
@@ -25,8 +22,9 @@ export function accessibilify(button, gameButton = true) {
 
     const options = {
         id,
-        htmlClass: "gel-button",
-        ariaLabel: button.config.ariaLabel,
+        button,
+        class: "gel-button",
+        "aria-label": button.config.ariaLabel,
         parent: sys.scale.parent,
         onClick: buttonAction,
         onMouseOver: mouseOver,
@@ -37,19 +35,14 @@ export function accessibilify(button, gameButton = true) {
         const marginLeft = parseInt(sys.game.canvas.style.marginLeft, 10);
         const marginTop = parseInt(sys.game.canvas.style.marginTop, 10);
         let bounds = button.getHitAreaBounds ? button.getHitAreaBounds() : button.getBounds();
-
         const metrics = getMetrics();
 
-        bounds.x += CAMERA_SCROLL_X_OFFSET;
-        bounds.x *= metrics.scale;
-        bounds.x += marginLeft;
-        bounds.y += CAMERA_SCROLL_Y_OFFSET;
-        bounds.y *= metrics.scale;
-        bounds.y += marginTop;
-        bounds.width *= metrics.scale;
-        bounds.height *= metrics.scale;
-
-        return bounds;
+        return {
+            x: ((bounds.x + CAMERA_X) * metrics.scale) + marginLeft,
+            y: ((bounds.y + CAMERA_Y) * metrics.scale) + marginTop,
+            width: bounds.width * metrics.scale,
+            height: bounds.height * metrics.scale,
+        };
     };
 
     const assignEvents = () => {
@@ -85,14 +78,15 @@ export function accessibilify(button, gameButton = true) {
     button.elementId = id;
     button.elementEvents = accessibleElement.events;
 
-    a11y.addToAccessibleButtons(scene, button);
-    a11y.resetElementsInDom(scene);
+    a11y.addButton(scene.scene.key, button);
+    a11y.reset(scene.scene.key);
 
     const teardown = () => {
         sys.events.off(Phaser.Scenes.Events.UPDATE, update);
         event.unsubscribe();
     };
 
+    //TODO we need to make this call on some kind of event not on every frame
     const update = () => {
         // TODO investigate if there is a better way to handle this
         // - currently all buttons are hooked into the update method and this is called every frame
@@ -106,6 +100,9 @@ export function accessibilify(button, gameButton = true) {
             }
             return;
         }
+
+        //TODO check what this is for:
+        //check if the dom element isn't already set to visible and if not sets it
         if (!accessibleElement.visible()) {
             accessibleElement.show();
         }

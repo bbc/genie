@@ -127,7 +127,7 @@ describe("Accessibilify", () => {
 
         test("resets the accessible elements in the DOM for this screen", () => {
             accessibilify(mockButton);
-            expect(a11y.resetElementsInDom).toHaveBeenCalledWith(mockScene);
+            expect(a11y.reset).toHaveBeenCalledWith(mockScene);
         });
 
         test("adds button to accessibleButtons array when it does not exist yet", () => {
