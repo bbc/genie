@@ -9,7 +9,7 @@ import * as Scaler from "../../src/core/scaler.js";
 import * as elementBounding from "../../src/core/helpers/element-bounding.js";
 
 import { Select } from "../../src/components/select.js";
-import { GelGrid } from "../../src/core/layout/gel-grid.js";
+import { GelGrid } from "../../src/core/layout/grid/grid.js";
 jest.mock("../../src/core/layout/gel-grid.js");
 jest.mock("../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),

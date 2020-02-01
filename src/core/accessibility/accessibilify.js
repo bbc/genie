@@ -97,8 +97,8 @@ export function accessibilify(button, gameButton = true) {
         //TODO is this only used on how to play? nowehere else sets visibility
         //select continue sets disabled
         if (
-            (!button.config.tabbable && button.input && !button.input.enabled) ||
-            (!button.visible && !button.config.tabbable)
+            (!button.config.alwaysTab) && ((button.input && !button.input.enabled) ||
+            (!button.visible))
         ) {
             accessibleElement.visible() && accessibleElement.hide();
         } else if (!accessibleElement.visible()) {

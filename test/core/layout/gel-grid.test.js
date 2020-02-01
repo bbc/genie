@@ -5,7 +5,7 @@
  */
 import { gmi } from "../../../src/core/gmi/gmi.js";
 import { accessibilify } from "../../../src/core/accessibility/accessibilify.js";
-import { GelGrid } from "../../../src/core/layout/gel-grid.js";
+import { GelGrid } from "../../../src/core/layout/grid/grid.js";
 
 jest.mock("../../../src/core/gmi/gmi.js");
 jest.mock("../../../src/core/accessibility/accessibilify.js");

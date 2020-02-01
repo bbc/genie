@@ -11,7 +11,7 @@ import { eventBus } from "../core/event-bus.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement } from "../core/helpers/element-bounding.js";
-import { GelGrid } from "../core/layout/gel-grid.js";
+import { GelGrid } from "../core/layout/grid/grid.js";
 import * as state from "../core/state.js";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 
@@ -62,21 +62,21 @@ export class Select extends Screen {
 
     updateStates() {
         const storedStates = this.states.getAll().filter(config => Boolean(config.state));
-        const cells = fp.keyBy(cell => cell.config.id, this._cells);
+        const cells = fp.keyBy(cell => cell.button.config.id, this._cells);
 
         storedStates.forEach(stored => {
             const config = this.context.theme.states[stored.state];
-            const cell = cells[stored.id];
+            const button = cells[stored.id].button;
 
-            cell.overlays.set("state", this.add.sprite(config.x, config.y, config.overlayAsset));
+            button.overlays.set("state", this.add.sprite(config.x, config.y, config.overlayAsset));
 
-            config.asset && cell.setImage(config.asset);
-            config.properties && Object.assign(cell.sprite, config.properties);
+            config.asset && button.setImage(config.asset);
+            config.properties && Object.assign(button.sprite, config.properties);
 
-            config.suffix && (cell.config.ariaLabel = [cell.config.ariaLabel, config.suffix].join(" "));
+            config.suffix && (button.config.ariaLabel = [button.config.ariaLabel, config.suffix].join(" "));
 
             //.TODO prob need a way to set inout disabled and also have tabindex zero
-            cell.input.enabled = Boolean(config.enabled !== false);
+            button.input.enabled = Boolean(config.enabled !== false);
         }, this);
     }
 
