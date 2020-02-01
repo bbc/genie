@@ -55,6 +55,7 @@ export const appendToDom = sceneKey => {
         el.parentNode && el.parentNode.removeChild(el);
     });
 
+    //TODO remove this
     tempGroupTracker = {};
 
     domGroups[sceneKey].forEach(id => {

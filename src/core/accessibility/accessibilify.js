@@ -94,18 +94,19 @@ export function accessibilify(button, gameButton = true) {
             accessibleElement.el.setAttribute("aria-label", button.config.ariaLabel);
         }
 
-        if ((button.input && !button.input.enabled) || !button.visible) {
-            if (accessibleElement.visible()) {
-                accessibleElement.hide();
-            }
-            return;
-        }
-
-        //TODO check what this is for:
-        //check if the dom element isn't already set to visible and if not sets it
-        if (!accessibleElement.visible()) {
-            accessibleElement.show();
-        }
+        //TODO is this only used on how to play? nowehere else sets visibility
+        //select continue sets disabled
+        //if (button.input && !button.input.enabled) {
+        //    accessibleElement.visible() && accessibleElement.hide();
+        //}
+        //
+        ////else if (!button.visible) {
+        ////    accessibleElement.visible() && accessibleElement.setInvisible();
+        ////}
+        //
+        //else if (!accessibleElement.visible()) {
+        //    accessibleElement.show();
+        //}
     };
 
     sys.events.on(Phaser.Scenes.Events.UPDATE, update);
