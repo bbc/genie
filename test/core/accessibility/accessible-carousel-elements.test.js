@@ -64,7 +64,7 @@ describe("Accessible Carousel Elements", () => {
             const expectedHidden = index !== 0;
 
             expect(domElement.id).toEqual("carousel-select-screen__" + count);
-            expect(domElement.ariaHidden).toBe(expectedHidden);
+            expect(domElement["aria-hidden"]).toBe(expectedHidden);
             expect(domElement.parent).toEqual(mockCarouselDomElement);
             expect(domElement.text).toEqual("Page " + count);
             expect(domElement.notClickable).toBe(true);

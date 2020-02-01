@@ -37,11 +37,11 @@ describe("Accessible DOM Element", () => {
         test("sets the id to 'play-button", () => {
             options.id = "play-button";
             accessibleDomElement(options);
-            expect(mockElement.id).toBe(options.id);
+            expect(mockElement.getAttribute("id")).toBe(options.id);
         });
 
         test("sets the html class if provided", () => {
-            options.htmlClass = "gel-button";
+            options.class = "gel-button";
             accessibleDomElement(options);
             expect(mockElement.getAttribute("class")).toBe("gel-button");
         });
@@ -53,16 +53,11 @@ describe("Accessible DOM Element", () => {
 
         test("sets tabindex to 0", () => {
             accessibleDomElement(options);
-            expect(mockElement.getAttribute("tabindex")).toBe("0");
-        });
-
-        test("sets aria-hidden to false by default", () => {
-            accessibleDomElement(options);
-            expect(mockElement.getAttribute("aria-hidden")).toBe(false);
+            expect(mockElement.setAttribute).toHaveBeenCalledWith("tabindex", 0);
         });
 
         test("sets aria-hidden to the given value", () => {
-            options.ariaHidden = true;
+            options["aria-hidden"] = true;
             accessibleDomElement(options);
             expect(mockElement.getAttribute("aria-hidden")).toBe(true);
         });
@@ -73,14 +68,14 @@ describe("Accessible DOM Element", () => {
         });
 
         test("sets an aria-label if given", () => {
-            options.ariaLabel = "Play button";
+            options["aria-label"] = "Play button";
             accessibleDomElement(options);
-            expect(mockElement.getAttribute("aria-label")).toBe(options.ariaLabel);
+            expect(mockElement.getAttribute("aria-label")).toBe("Play button");
         });
 
-        test("sets aria-hidden to correct value", () => {
+        test("does not set aria-hidden by default", () => {
             accessibleDomElement(options);
-            expect(mockElement.getAttribute("aria-hidden")).toBe(false);
+            expect(mockElement.getAttribute("aria-hidden")).not.toBeDefined();
         });
 
         test("sets role to correct value", () => {
@@ -108,15 +103,15 @@ describe("Accessible DOM Element", () => {
             expect(mockElement.style["pointer-events"]).toBe("none");
         });
 
-        test("sets inner text to be empty by default", () => {
-            accessibleDomElement(options);
-            expect(mockElement.innerHTML).toBe("");
-        });
+        //test("Leaves inner text to be empty by default", () => {
+        //    accessibleDomElement(options);
+        //    expect(mockElement.appendChild).toHaveBeenCalledWith();
+        //});
 
         test("sets inner text if given", () => {
             options.text = "Text goes here";
             accessibleDomElement(options);
-            expect(mockElement.innerHTML).toBe(options.text);
+            expect(mockElement.appendChild).toHaveBeenCalledWith(document.createTextNode("Text goes here"));
         });
 
         test("pressing enter fires the onclick event", () => {

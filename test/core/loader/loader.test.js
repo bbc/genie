@@ -22,9 +22,9 @@ describe("Loader", () => {
     beforeEach(() => {
         global.window.__qaMode = undefined;
         jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {});
-        jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
-        jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
-        jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
+        jest.spyOn(a11y, "clear").mockImplementation(() => {});
+        jest.spyOn(a11y, "clearButtons").mockImplementation(() => {});
+        jest.spyOn(a11y, "appendToDom").mockImplementation(() => {});
 
         mockGmi = {
             embedVars: { configPath: "test-config-path" },

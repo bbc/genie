@@ -24,6 +24,9 @@ describe("Group", () => {
             sys: {
                 queueDepthSort: () => {},
             },
+            scene: {
+                key: "sceneKey",
+            },
         };
         parentGroup = {
             addChild: () => {},
@@ -72,7 +75,7 @@ describe("Group", () => {
         vPos = "middle";
         hPos = "center";
         jest.spyOn(ButtonFactory, "create").mockImplementation(() => buttonFactory);
-        jest.spyOn(a11y, "addToAccessibleButtons").mockImplementation(() => {});
+        jest.spyOn(a11y, "addButton").mockImplementation(() => {});
         GelGroup.prototype.addAt = jest.fn(child => {
             group.list.push(child);
         });
