@@ -134,7 +134,7 @@ describe("Screen", () => {
 
         test("resets the accessibility layer DOM", () => {
             createAndInitScreen();
-            expect(a11y.clear).toHaveBeenCalledTimes(1);
+            expect(a11y.destroy).toHaveBeenCalledTimes(1);
         });
 
         test("sets the stats screen to the current screen, if not on the loadscreen", () => {
@@ -290,7 +290,7 @@ describe("Screen", () => {
             jest.clearAllMocks();
             screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(a11y.clearButtons).toHaveBeenCalled();
-            expect(a11y.clear).toHaveBeenCalled();
+            expect(a11y.destroy).toHaveBeenCalled();
         });
 
         test("removing an overlay, makes the parent screens gel buttons accessible again", () => {
@@ -303,7 +303,7 @@ describe("Screen", () => {
             jest.clearAllMocks();
             screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(mockLayout.makeAccessible).toHaveBeenCalled();
-            expect(a11y.appendToDom).toHaveBeenCalledWith("screenKey");
+            expect(a11y.createDom).toHaveBeenCalledWith("screenKey");
         });
 
         test("removing an overlay, makes the parent screens game buttons accessible again", () => {

@@ -31,6 +31,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     addGridCells(gridCells) {
         this._cells = gridCells.map((cell, idx) => createCell(this, cell, idx));
+        this.makeAccessible();
         this.reset();
         return this._cells;
     }
@@ -71,6 +72,10 @@ export class GelGrid extends Phaser.GameObjects.Container {
 
     getPageCount() {
         return Math.ceil(this._cells.length / this.cellsPerPage);
+    }
+
+    makeAccessible() {
+        this._cells.forEach(cell => cell.makeAccessible());
     }
 
     pageTransition(goForwards = true) {

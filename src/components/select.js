@@ -36,7 +36,7 @@ export class Select extends Screen {
         this.setLayout(buttons.concat(continueBtn));
         const metrics = getMetrics();
         this.grid = new GelGrid(this, metrics, this.layout.getSafeArea(metrics), this.theme);
-        a11y.addGroupAt(this.scene.key, "grid", 6);
+        a11y.addGroupAt("grid", 6);
         this.resize();
         this._cells = this.grid.addGridCells(this.theme.choices);
         this.layout.addCustomGroup("grid", this.grid, 2);
@@ -58,6 +58,7 @@ export class Select extends Screen {
         const bool = this.currentEnabled();
         this.layout.buttons.continue.input.enabled = bool;
         this.layout.buttons.continue.alpha = bool ? 1 : 0.5;
+        this.layout.buttons.continue.tint = bool ? 0xffffff : 0x555555;
         this.layout.buttons.continue.accessibleElement.update();
     }
 

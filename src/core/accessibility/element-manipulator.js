@@ -5,31 +5,34 @@
  */
 export const removeFromParent = el => el.parentElement && el.parentElement.removeChild(el);
 
-export const showElement = el => {
+const showElement = accessibleElement => {
+    const el = accessibleElement.el;
     el.setAttribute("aria-label", releaseAccessibilityLabel(el));
     el.classList.remove("hide-focus-ring");
     el.style.cursor = "pointer";
     el.style["z-index"] = 0;
     el.setAttribute("tabindex", "0");
-    el.addEventListener("click", el.events.click);
-    el.addEventListener("keyup", el.events.keyup);
+    el.addEventListener("click", accessibleElement.events.click);
+    el.addEventListener("keyup", accessibleElement.events.keyup);
 };
 
-export const hideElement = el => {
+const hideElement = accessibleElement => {
+    const el = accessibleElement.el;
     preserveAccessibilityLabel(el);
     el.setAttribute("aria-label", "");
     el.classList.add("hide-focus-ring");
     el.style.cursor = "default";
     el.style["z-index"] = -1;
     el.setAttribute("tabindex", "-1");
-    el.removeEventListener("click", el.events.click);
-    el.removeEventListener("keyup", el.events.keyup);
+    el.removeEventListener("click", accessibleElement.events.click);
+    el.removeEventListener("keyup", accessibleElement.events.keyup);
 };
 
-export const hideAndDisableElement = el => {
+export const hideAndDisableElement = accessibleElement => {
+    const el = accessibleElement.el;
     if (!elementHiddenAndDisabled(el)) {
-        hideElement(el);
-        const resetElement = () => resetElementToDefault(el, resetElement);
+        hideElement(accessibleElement);
+        const resetElement = () => resetElementToDefault(accessibleElement, resetElement);
         el.addEventListener("blur", resetElement);
         setElementAsHiddenAndDisabled(el);
     }
@@ -38,11 +41,12 @@ export const hideAndDisableElement = el => {
 //eslint-disable-next-line local-rules/disallow-timers
 const callOnNextTick = fn => setTimeout(fn, 0);
 
-const resetElementToDefault = (el, self) => {
+const resetElementToDefault = (accessibleElement, self) => {
+    const el = accessibleElement.el;
     el.removeEventListener("blur", self);
     callOnNextTick(() => {
         el.parentElement && el.parentElement.removeChild(el);
-        showElement(el);
+        showElement(accessibleElement);
         unsetElementAsHiddenAndDisabled(el);
     });
 };

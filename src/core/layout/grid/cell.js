@@ -19,8 +19,8 @@ const transitionOnTab = (grid, button) => () => {
         return;
     }
 
-    const currentIdx = grid.cellIds().indexOf(grid.getCurrentPageKey())
-    const nextIdx = grid.cellIds().indexOf(button.config.id)
+    const currentIdx = grid.cellIds().indexOf(grid.getCurrentPageKey());
+    const nextIdx = grid.cellIds().indexOf(button.config.id);
     grid.pageTransition(nextIdx > currentIdx);
 };
 
@@ -77,7 +77,9 @@ export const create = (grid, choice, idx) => {
     button.key = config.key;
     grid.add(button);
 
-    accessibilify(button, true);
+    const makeAccessible = () => {
+        accessibilify(button, true);
+    };
 
     const reset = () => {
         setSize(grid, button);
@@ -102,5 +104,6 @@ export const create = (grid, choice, idx) => {
         button,
         reset,
         addTweens,
+        makeAccessible,
     };
 };
