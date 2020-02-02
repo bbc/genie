@@ -73,40 +73,12 @@ export function accessibilify(button, gameButton = true) {
 
     assignEvents();
     resizeAndRepositionElement();
-
-    button.accessibleElement = accessibleElement.el;
-    button.elementId = id;
-    button.elementEvents = accessibleElement.events;
+    button.accessibleElement = accessibleElement;
 
     a11y.addButton(scene.scene.key, button);
     a11y.reset(scene.scene.key);
 
-    const teardown = () => {
-        sys.events.off(Phaser.Scenes.Events.UPDATE, update);
-        event.unsubscribe();
-    };
-
-    //TODO we need to make this call on some kind of event not on every frame
-    const update = () => {
-        // TODO investigate if there is a better way to handle this
-        // - currently all buttons are hooked into the update method and this is called every frame
-        if (accessibleElement.el.getAttribute("aria-label") !== button.config.ariaLabel) {
-            accessibleElement.el.setAttribute("aria-label", button.config.ariaLabel);
-        }
-
-        //TODO is this only used on how to play? nowehere else sets visibility
-        //select continue sets disabled
-        if (
-            (!button.config.alwaysTab) && ((button.input && !button.input.enabled) ||
-            (!button.visible))
-        ) {
-            accessibleElement.visible() && accessibleElement.hide();
-        } else if (!accessibleElement.visible()) {
-            accessibleElement.show();
-        }
-    };
-
-    sys.events.on(Phaser.Scenes.Events.UPDATE, update);
+    const teardown = () => event.unsubscribe();
 
     return button;
 }

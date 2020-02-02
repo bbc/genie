@@ -83,6 +83,7 @@ export const create = (grid, choice, idx) => {
         setSize(grid, button);
         setPosition(grid, button, idx);
         button.visible = false;
+        button.accessibleElement.update();
     };
 
     const addTweens = config => {

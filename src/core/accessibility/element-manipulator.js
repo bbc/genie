@@ -11,8 +11,8 @@ export const showElement = el => {
     el.style.cursor = "pointer";
     el.style["z-index"] = 0;
     el.setAttribute("tabindex", "0");
-    el.addEventListener("click", el.button.elementEvents.click);
-    el.addEventListener("keyup", el.button.elementEvents.keyup);
+    el.addEventListener("click", el.events.click);
+    el.addEventListener("keyup", el.events.keyup);
 };
 
 export const hideElement = el => {
@@ -22,8 +22,8 @@ export const hideElement = el => {
     el.style.cursor = "default";
     el.style["z-index"] = -1;
     el.setAttribute("tabindex", "-1");
-    el.removeEventListener("click", el.button.elementEvents.click);
-    el.removeEventListener("keyup", el.button.elementEvents.keyup);
+    el.removeEventListener("click", el.events.click);
+    el.removeEventListener("keyup", el.events.keyup);
 };
 
 export const hideAndDisableElement = el => {

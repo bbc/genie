@@ -58,6 +58,7 @@ export class Select extends Screen {
         const bool = this.currentEnabled();
         this.layout.buttons.continue.input.enabled = bool;
         this.layout.buttons.continue.alpha = bool ? 1 : 0.5;
+        this.layout.buttons.continue.accessibleElement.update();
     }
 
     updateStates() {
@@ -74,9 +75,8 @@ export class Select extends Screen {
             config.properties && Object.assign(button.sprite, config.properties);
 
             config.suffix && (button.config.ariaLabel = [button.config.ariaLabel, config.suffix].join(" "));
-
-            //.TODO prob need a way to set inout disabled and also have tabindex zero
             button.input.enabled = Boolean(config.enabled !== false);
+            button.accessibleElement.update();
         }, this);
     }
 

@@ -8,18 +8,21 @@ import crel from "../../../node_modules/crel/crel.es.js";
 
 let domButtons = {};
 let domGroups = {};
-let accessibiltyEl = crel("div", { id: "accessibility", role: "application" });
+let root = crel("div", { id: "accessibility", role: "application" });
 
-const hasAccessibleElement = button => Boolean(button.accessibleElement && button.accessibleElement.id);
-const getAccessibleButtons = key => (domButtons[key] ? domButtons[key] : []);
+const hasAccessibleElement = button => Boolean(button.accessibleElement.el && button.accessibleElement.el.id);
+const getButtons = key => (domButtons[key] ? domButtons[key] : []);
+const getGroups = key => (domGroups[key] ? domGroups[key] : []);
 
-export const addGroupAt = (sceneKey, name, pos) => {
+export const addGroupAt = (sceneKey, id, pos) => {
     domGroups[sceneKey] || (domGroups[sceneKey] = []);
     pos = pos || domGroups[sceneKey].length;
-    domGroups[sceneKey].splice(pos, 0, name);
+
+    const el = crel("div", { id: "accessible-group-" + id, "data-type": "group" });
+    domGroups[sceneKey].splice(pos, 0, { el, id });
 };
 
-export const setup = gameParentElement => gameParentElement.appendChild(accessibiltyEl);
+export const setup = gameParentElement => gameParentElement.appendChild(root);
 
 export const addButton = (sceneKey, button) => {
     domButtons[sceneKey] || (domButtons[sceneKey] = []);
@@ -31,43 +34,36 @@ export const removeButton = (screenKey, buttonToRemove) =>
 
 export const clearButtons = () => {
     domButtons = {};
-    tempGroupTracker = {};
     domGroups = {};
 };
 
 //TODO - difference between clear and clearButtons is?
 export const clear = () => {
-    const buttons = Array.from(accessibiltyEl.childNodes);
-    //const buttons = domButtons[sceneKey] || [];
+    const children = Array.from(root.childNodes);
+    const groups = children.filter(child => child.dataset.type === "group");
+    const rootButtons = children.filter(child => child.dataset.type !== "group");
+    const buttons = groups.reduce((acc, group) => acc.concat(Array.from(group.childNodes)), []).concat(rootButtons);
+
     buttons.filter(el => document.activeElement === el).map(hideAndDisableElement);
     buttons.filter(el => document.activeElement !== el).map(removeFromParent);
+    groups.map(removeFromParent);
 
-    return accessibiltyEl;
+    return root;
 };
 
-let tempGroupTracker = {};
-
 export const appendToDom = sceneKey => {
-    const buttons = getAccessibleButtons(sceneKey);
+    const addGroupToLayer = group => root.appendChild(group.el);
 
-    Object.keys(tempGroupTracker).forEach(key => {
-        const el = tempGroupTracker[key];
-        el.parentNode && el.parentNode.removeChild(el);
-    });
+    getGroups(sceneKey).forEach(addGroupToLayer);
 
-    //TODO remove this
-    tempGroupTracker = {};
+    const addButtonToLayer = button => {
+        const parent = getGroups(sceneKey).find(group => group.id === button.config.group).el || root;
+        parent.appendChild(button.accessibleElement.el);
+    };
 
-    domGroups[sceneKey].forEach(id => {
-        const group = crel("div", { id: "accessible-group-" + id });
-        accessibiltyEl.appendChild(group);
-        tempGroupTracker[id] = group;
-    });
-
-    buttons.filter(hasAccessibleElement).forEach(button => {
-        const parent = tempGroupTracker[button.config.group] || accessibiltyEl;
-        parent.appendChild(button.accessibleElement);
-    });
+    getButtons(sceneKey)
+        .filter(hasAccessibleElement)
+        .forEach(addButtonToLayer);
 };
 
 export const reset = sceneKey => {

@@ -40,7 +40,25 @@ const style = {
     "pointer-events": "none",
 };
 
+const visible = el => el.style.visibility !== "hidden";
+
+const show = el => {
+    el.setAttribute("aria-hidden", false);
+    el.setAttribute("tabindex", "0");
+    el.style.display = "block";
+    el.style.visibility = "visible";
+};
+
+const hide = el => {
+    el.setAttribute("aria-hidden", true);
+    el.setAttribute("tabindex", "-1");
+    el.style.display = "none";
+    el.style.visibility = "hidden";
+};
+
 export const accessibleDomElement = options => {
+    const button = options.button;
+
     const el = crel(
         "div",
         { ...defaultAttributes, ...fp.pick(["id", "class", "aria-label", "aria-hidden"], options) },
@@ -49,22 +67,6 @@ export const accessibleDomElement = options => {
     Object.assign(el.style, style);
     const events = assignEvents(el, options);
 
-    const visible = () => el.style.visibility !== "hidden";
-
-    const hide = () => {
-        el.setAttribute("aria-hidden", true);
-        el.setAttribute("tabindex", "-1");
-        el.style.display = "none";
-        el.style.visibility = "hidden";
-    };
-
-    const show = () => {
-        el.setAttribute("aria-hidden", false);
-        el.setAttribute("tabindex", "0");
-        el.style.display = "block";
-        el.style.visibility = "visible";
-    };
-
     const position = pos => {
         el.style.left = pos.x.toString() + "px";
         el.style.top = pos.y.toString() + "px";
@@ -72,13 +74,22 @@ export const accessibleDomElement = options => {
         el.style.height = pos.height.toString() + "px";
     };
 
+    const update = () => {
+        if (el.getAttribute("aria-label") !== button.config.ariaLabel) {
+            el.setAttribute("aria-label", button.config.ariaLabel);
+        }
+        if (!button.config.alwaysTab && ((button.input && !button.input.enabled) || !button.visible)) {
+            visible(el) && hide(el);
+        } else if (!visible(el)) {
+            show(el);
+        }
+    };
+
     return {
         el,
-        button: options.button,
-        hide,
-        show,
-        visible,
+        button,
         position,
+        update,
         events,
     };
 };
