@@ -69,6 +69,7 @@ export class Screen extends Phaser.Scene {
         }
 
         this.sys.accessibleButtons = [];
+        this.sys.accessibleGroups = [];
         a11y.destroy();
 
         this._makeNavigation();
@@ -121,8 +122,8 @@ export class Screen extends Phaser.Scene {
         data.overlay.removeAll();
         data.overlay.scene.stop();
         this._layout.makeAccessible();
-        this.sys.accessibleButtons.forEach(button => a11y.addButton(this.scene.key, button));
-        a11y.createDom();
+        this.sys.accessibleButtons.forEach(button => a11y.addButton(button));
+        a11y.reset();
         gmi.setStatsScreen(this.scene.key);
 
         eventBus.publish({

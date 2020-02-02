@@ -71,7 +71,7 @@ describe("Startup", () => {
 
     test("sets up the accessibility layer", () => {
         startup({});
-        expect(a11y.setup).toHaveBeenCalledWith(containerDiv);
+        expect(a11y.create).toHaveBeenCalledWith(containerDiv);
     });
 
     describe("Scenes", () => {

@@ -20,7 +20,7 @@ export const addGroupAt = (id, pos) => {
     domGroups.splice(pos, 0, { el, id });
 };
 
-export const setup = gameParentElement => gameParentElement.appendChild(root);
+export const create = gameParentElement => gameParentElement.appendChild(root);
 
 export const addButton = button => domButtons.push(button);
 
@@ -68,9 +68,8 @@ const addButtonToLayer = button => {
 
 const addGroupToLayer = group => root.appendChild(group.el);
 
-export const createDom = () => {
+const createDom = () => {
     domGroups.forEach(addGroupToLayer);
-
     domButtons.filter(hasAccessibleElement).forEach(addButtonToLayer);
 };
 

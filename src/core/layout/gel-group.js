@@ -75,7 +75,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
             vertical[vPos](metrics, this);
         };
 
-        a11y.addGroupAt(fp.camelCase([vPos, hPos, isVertical ? "v" : "", isSafe? "safe": ""].join("-")))
+        this.makeAccessible();
     }
 
     /**
@@ -151,6 +151,9 @@ export class GelGroup extends Phaser.GameObjects.Container {
     }
 
     makeAccessible() {
+        a11y.addGroupAt(
+            fp.camelCase([this._vPos, this._hPos, this._isVertical ? "v" : "", this._isSafe ? "safe" : ""].join("-")),
+        );
         this._buttons.forEach(a11y.addButton);
     }
 

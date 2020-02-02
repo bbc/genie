@@ -13,7 +13,6 @@ import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement } from "../core/helpers/element-bounding.js";
 import { GelGrid } from "../core/layout/grid/grid.js";
 import * as state from "../core/state.js";
-import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 
 import fp from "../../lib/lodash/fp/fp.js";
 
@@ -25,6 +24,10 @@ const styleDefaults = {
 const baseX = 0;
 const baseY = -270;
 
+const gridDefaults = {
+    tabIndex: 6,
+};
+
 export class Select extends Screen {
     create() {
         this.add.image(0, 0, `${this.scene.key}.background`);
@@ -35,8 +38,7 @@ export class Select extends Screen {
         const buttons = ["home", "pause", "previous", "next"];
         this.setLayout(buttons.concat(continueBtn));
         const metrics = getMetrics();
-        this.grid = new GelGrid(this, metrics, this.layout.getSafeArea(metrics), this.theme);
-        a11y.addGroupAt("grid", 6);
+        this.grid = new GelGrid(this, metrics, this.layout.getSafeArea(metrics), Object.assign(this.theme, gridDefaults));
         this.resize();
         this._cells = this.grid.addGridCells(this.theme.choices);
         this.layout.addCustomGroup("grid", this.grid, 2);

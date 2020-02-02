@@ -22,7 +22,7 @@ describe.skip("Managing accessible buttons", () => {
             jest.spyOn(element, "setAttribute");
             jest.spyOn(global.document, "createElement").mockImplementation(() => element);
 
-            a11y.setup(gameParentElement);
+            a11y.create(gameParentElement);
         });
 
         test("creates and appends the parent DOM element", () => {

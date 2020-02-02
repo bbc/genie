@@ -68,10 +68,6 @@ export function accessibilify(button, gameButton = true) {
 
     const accessibleElement = accessibleDomElement(options);
 
-    if (!sys.accessibleButtons) {
-        sys.accessibleButtons = [];
-    }
-
     if (gameButton) {
         sys.accessibleButtons.push(button);
     }

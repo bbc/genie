@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 import { create as createCell } from "./cell.js";
+import * as a11y from '../../accessibility/accessibility-layer.js'
 
 const defaults = {
     rows: 1,
@@ -75,6 +76,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     makeAccessible() {
+        a11y.addGroupAt("grid", this._config.tabIndex);
         this._cells.forEach(cell => cell.makeAccessible());
     }
 
