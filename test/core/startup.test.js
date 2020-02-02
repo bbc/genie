@@ -42,7 +42,7 @@ describe("Startup", () => {
         getBrowser.mockImplementation(() => ({ forceCanvas: false, isSilk: false }));
         jest.spyOn(styles, "addCustomStyles");
         jest.spyOn(Phaser, "Game").mockImplementation(() => {});
-        jest.spyOn(a11y, "setup").mockImplementation(() => {});
+        jest.spyOn(a11y, "create").mockImplementation(() => {});
         global.window.getGMI = jest.fn().mockImplementation(() => mockGmi);
         global.window.addEventListener = jest.fn();
         global.Phaser.Loader.FileTypesManager.register = jest.fn();

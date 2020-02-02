@@ -66,9 +66,8 @@ describe("Screen", () => {
         jest.spyOn(eventBus, "removeChannel");
         jest.spyOn(eventBus, "removeSubscription");
         jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
-        jest.spyOn(a11y, "clear").mockImplementation(() => {});
-        jest.spyOn(a11y, "clearButtons").mockImplementation(() => {});
-        jest.spyOn(a11y, "appendToDom").mockImplementation(() => {});
+        jest.spyOn(a11y, "reset").mockImplementation(() => {});
+        jest.spyOn(a11y, "destroy").mockImplementation(() => {});
         jest.spyOn(a11y, "addButton").mockImplementation(() => {});
 
         mockSettings = { audio: true };
@@ -125,11 +124,6 @@ describe("Screen", () => {
             screen.sys.accessibleButtons = [{ some: "mock" }];
             initScreen();
             expect(screen.sys.accessibleButtons).toEqual([]);
-        });
-
-        test("clears the currently stored accessible buttons", () => {
-            createAndInitScreen();
-            expect(a11y.clearButtons).toHaveBeenCalledTimes(1);
         });
 
         test("resets the accessibility layer DOM", () => {
@@ -289,7 +283,6 @@ describe("Screen", () => {
             createAndInitScreen();
             jest.clearAllMocks();
             screen._onOverlayRemoved({ overlay: mockOverlay });
-            expect(a11y.clearButtons).toHaveBeenCalled();
             expect(a11y.destroy).toHaveBeenCalled();
         });
 
@@ -303,7 +296,7 @@ describe("Screen", () => {
             jest.clearAllMocks();
             screen._onOverlayRemoved({ overlay: mockOverlay });
             expect(mockLayout.makeAccessible).toHaveBeenCalled();
-            expect(a11y.createDom).toHaveBeenCalledWith("screenKey");
+            expect(a11y.reset).toHaveBeenCalled();
         });
 
         test("removing an overlay, makes the parent screens game buttons accessible again", () => {
@@ -313,7 +306,7 @@ describe("Screen", () => {
             screen.sys.accessibleButtons = [mockButton];
             jest.clearAllMocks();
             screen._onOverlayRemoved({ overlay: mockOverlay });
-            expect(a11y.addButton).toHaveBeenCalledWith("screenKey", mockButton);
+            expect(a11y.addButton).toHaveBeenCalledWith( mockButton);
         });
 
         test("removing an overlay sets stat screen back to the underlying screen", () => {

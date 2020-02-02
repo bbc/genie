@@ -63,6 +63,9 @@ describe("Grid", () => {
                         gameButton: false,
                         id: config.id,
                     },
+                    accessibleElement: {
+                        update: jest.fn(),
+                    },
                 })),
             },
             input: { enabled: false },

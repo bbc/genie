@@ -186,52 +186,6 @@ describe("Accessible DOM Element", () => {
         });
     });
 
-    describe("hiding the mockElement", () => {
-        test("hides mockElement when calling hide function on the module", () => {
-            const newAccessibleElement = accessibleDomElement(options);
-            newAccessibleElement.hide();
-            expect(mockElement.getAttribute("aria-hidden")).toBe(true);
-            expect(mockElement.getAttribute("tabindex")).toBe("-1");
-            expect(mockElement.style.visibility).toBe("hidden");
-            expect(mockElement.style.display).toBe("none");
-        });
-    });
-
-    describe("showing the mockElement", () => {
-        test("shows mockElement when calling show function on the module", () => {
-            mockElement.setAttribute("aria-hidden", "true");
-            mockElement.setAttribute("tabindex", "-1");
-            mockElement.style.visibility = "hidden";
-
-            const newAccessibleElement = accessibleDomElement(options);
-            newAccessibleElement.show();
-
-            expect(mockElement.getAttribute("aria-hidden")).toBe(false);
-            expect(mockElement.getAttribute("tabindex")).toBe("0");
-            expect(mockElement.style.visibility).toBe("visible");
-            expect(mockElement.style.display).toBe("block");
-        });
-    });
-
-    describe("checking visibility of mockElement", () => {
-        test("calling visible function returns true when mockElement has been created", () => {
-            const newAccessibleElement = accessibleDomElement(options);
-            expect(newAccessibleElement.visible()).toBe(true);
-        });
-
-        test("calling visible function returns true when mockElement is visible", () => {
-            const newAccessibleElement = accessibleDomElement(options);
-            newAccessibleElement.show();
-            expect(newAccessibleElement.visible()).toBe(true);
-        });
-
-        test("calling visible function returns false when mockElement is not visible", () => {
-            const newAccessibleElement = accessibleDomElement(options);
-            newAccessibleElement.hide();
-            expect(newAccessibleElement.visible()).toBe(false);
-        });
-    });
-
     describe("setting position of mockElement via position function", () => {
         test("sets css values correctly", () => {
             const newAccessibleElement = accessibleDomElement(options);

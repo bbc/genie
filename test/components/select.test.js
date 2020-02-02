@@ -105,7 +105,7 @@ describe("Select Screen", () => {
                 },
                 previous: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds) },
                 next: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds) },
-                continue: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds), input: {} },
+                continue: { accessibleElement: { update: jest.fn(), focus: jest.fn() }, getBounds: jest.fn(() => mockBounds), input: {} },
             },
             addCustomGroup: jest.fn(),
             getSafeArea: jest.fn(() => "layout safe area"),
@@ -463,6 +463,9 @@ describe("Select Screen", () => {
                     overlays: { set: jest.fn() },
                     setImage: jest.fn(),
                     input: {},
+                    accessibleElement: {
+                        update: jest.fn(),
+                    },
                 },
             };
 
@@ -489,6 +492,9 @@ describe("Select Screen", () => {
                     setImage: jest.fn(),
                     input: {},
                     sprite: {},
+                    accessibleElement: {
+                        update: jest.fn(),
+                    },
                 },
             };
 
@@ -514,6 +520,9 @@ describe("Select Screen", () => {
                     setImage: jest.fn(),
                     input: {},
                     sprite: {},
+                    accessibleElement: {
+                        update: jest.fn(),
+                    },
                 },
             };
 
@@ -538,6 +547,9 @@ describe("Select Screen", () => {
                     overlays: { set: jest.fn() },
                     setImage: jest.fn(),
                     input: {},
+                    accessibleElement: {
+                        update: jest.fn(),
+                    },
                 },
             };
 
