@@ -3,14 +3,14 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { buttonsChannel } from "../../core/layout/gel-defaults.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 import { Screen } from "../../core/screen.js";
+import * as Rows from "../../core/layout/rows.js";
+import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 import { eventBus } from "../../core/event-bus.js";
 import { gmi } from "../../core/gmi/gmi.js";
-import * as Rows from "../../core/layout/rows.js";
-import { tweenRows } from "./results-row-tween.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
-import fp from "../../../lib/lodash/fp/fp.js";
+import { tweenRows } from "./results-row-tween.js";
 import { playRowAudio } from "./results-row-audio.js";
 
 const getScoreMetaData = result => {
@@ -35,8 +35,8 @@ export class Results extends Screen {
         this.addAnimations();
         this.createLayout();
         this.createBackdrop();
-        fireGameCompleteStat(this.transientData.results);
         this.subscribeToEventBus();
+        fireGameCompleteStat(this.transientData.results);
     }
 
     resultsArea() {
@@ -46,9 +46,11 @@ export class Results extends Screen {
     createLayout() {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
-
         this.setLayout(buttons.concat(achievements));
+        createRows();
+    }
 
+    createRows() {
         this.rows = Rows.create(this, () => this.resultsArea(), this.theme.rows, Rows.RowType.Results);
         tweenRows(this, this.rows.containers);
         playRowAudio(this, this.rows.containers);
