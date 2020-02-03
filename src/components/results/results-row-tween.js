@@ -5,9 +5,11 @@
  */
 export const tweenRows = (scene, containers) => {
     containers.forEach(row => {
-        scene.add.tween({
-            targets: row,
-            ...row.rowConfig.transition,
-        });
+        if (row.rowConfig.transition) {
+            scene.add.tween({
+                targets: row,
+                ...row.rowConfig.transition,
+            });
+        }
     });
 };
