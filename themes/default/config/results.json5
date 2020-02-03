@@ -22,7 +22,7 @@
                         },
                     ],
                     sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
-                    alpha: 1 //optional
+                    alpha: 1, //optional
                     backdrop: 'imgKey', //optional
                 },
                 {
@@ -106,7 +106,7 @@
                             key: 'game.diamond',
                             frame: 0,
                             offsetX: 20,
-                            offsetY: -20,
+                            offsetY: 0,
                             anim: {
                                 frames: {
                                     start: 0,
