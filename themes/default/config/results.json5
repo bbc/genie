@@ -148,7 +148,7 @@
                         duration: 2000, 
                         delay: 2000 
                     }, // Tween delays are in milliseconds
-                    audio: { key: 'results.slide', delay: 2500 },
+                    audio: { key: 'results.slide', delay: 2500 }, // What happens when motion effects are turned off?
                 },
                 {
                     format: [
