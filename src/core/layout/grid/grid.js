@@ -82,7 +82,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     showPage(pageNum) {
-        //goForwards = true) {
         const previousPage = this.page;
         const goForwards = pageNum > previousPage;
         this.page = (pageNum + this.getPageCount()) % this.getPageCount();
@@ -90,7 +89,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.reset();
         this.setPageVisibility(previousPage, true);
         this.scene.input.enabled = false;
-
         this._config.onTransitionStart();
 
         this.getPageCells(this.page).forEach(cell => cell.addTweens({ ...this._config, tweenIn: true, goForwards }));
