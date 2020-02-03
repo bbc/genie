@@ -37,6 +37,24 @@
                 "key": "key-sfx",
                 "url": ["results/key-sfx.mp3", "results/key-sfx.ogg"],
                 "overwrite": false
+            },
+            {
+                "type": "audio",
+                "key": "woosh",
+                "url": ["results/woosh.mp3", "results/woosh.ogg"],
+                "overwrite": false
+            },
+            {
+                "type": "audio",
+                "key": "slide",
+                "url": ["results/slide.mp3", "results/slide.ogg"],
+                "overwrite": false
+            },
+            {
+                "type": "audio",
+                "key": "boing",
+                "url": ["results/boing.mp3", "results/boing.ogg"],
+                "overwrite": false
             }
         ]
     }
