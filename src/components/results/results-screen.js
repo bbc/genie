@@ -47,7 +47,7 @@ export class Results extends Screen {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
         this.setLayout(buttons.concat(achievements));
-        createRows();
+        this.createRows();
     }
 
     createRows() {
@@ -78,16 +78,9 @@ export class Results extends Screen {
     subscribeToEventBus() {
         const scaleEvent = onScaleChange.add(() => this.sizeToParent(this.backdrop, this.resultsArea()));
         this.events.once("shutdown", scaleEvent.unsubscribe);
-        eventBus.subscribe({
-            name: "continue",
-            channel: buttonsChannel(this),
-            callback: this.navigation.next,
-        });
-
-        eventBus.subscribe({
-            name: "restart",
-            channel: buttonsChannel(this),
-            callback: this.navigation.game,
-        });
+        fp.toPairs({
+            continue: this.navigation.next,
+            restart: this.navigation.game,
+        }).map(([name, callback]) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }));
     }
 }
