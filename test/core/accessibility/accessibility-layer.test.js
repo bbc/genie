@@ -8,207 +8,178 @@ import { domElement } from "../../mock/dom-element.js";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import * as elementManipulator from "../../../src/core/accessibility/element-manipulator.js";
 
-describe.skip("Managing accessible buttons", () => {
-    beforeEach(() => a11y.clearButtons());
+describe("Accessibility Layer", () => {
+    let gameParentElement;
+    let element;
+
+    beforeEach(() => {
+        jest.spyOn(global.document, "createElement").mockImplementation(() => element);
+        gameParentElement = domElement();
+        a11y.destroy();
+    });
     afterEach(() => jest.clearAllMocks());
 
-    describe.skip("Set up", () => {
-        let gameParentElement;
-        let element;
-
+    describe("create Method", () => {
         beforeEach(() => {
-            gameParentElement = domElement();
+            a11y.create(gameParentElement);
+        });
+
+        test("Appends the root DOM element", () => {
+            const rootDiv = gameParentElement.appendChild.mock.calls[0][0];
+            expect(rootDiv.tagName).toBe("DIV");
+            expect(rootDiv.id).toBe("accessibility");
+        });
+
+        test("sets the role of the accessibility container div to 'application' (for NVDA/FF tabbing focus)", () => {
+            const rootDiv = gameParentElement.appendChild.mock.calls[0][0];
+            expect(rootDiv.getAttribute("role")).toBe("application");
+        });
+    });
+
+    describe("addGroupAt Method", () => {
+        beforeEach(() => {
             element = domElement();
-            jest.spyOn(element, "setAttribute");
             jest.spyOn(global.document, "createElement").mockImplementation(() => element);
 
             a11y.create(gameParentElement);
         });
 
-        test("creates and appends the parent DOM element", () => {
-            expect(global.document.createElement).toHaveBeenCalledWith("div");
-            expect(gameParentElement.appendChild).toHaveBeenCalledWith(element);
-            expect(element.id).toEqual("accessibility");
+        test("Creates a new group element with correct id", () => {
+            a11y.addGroupAt("test-group-id");
+            expect(element.getAttribute("id")).toBe("accessible-group-test-group-id");
         });
 
-        test("sets the role of the accessibility container div to 'application' (for NVDA/FF tabbing focus)", () => {
-            expect(element.setAttribute).toHaveBeenCalledTimes(1);
-            expect(element.setAttribute).toHaveBeenCalledWith("role", "application");
+        test("Adds the data-type 'group' to each element", () => {
+            a11y.addGroupAt("test-group-id");
+            expect(element.getAttribute("data-type")).toBe("group");
         });
     });
 
-    //describe("appendToDom Method", () => {
-    //    let el1, el2, el3, fakeEl, fakeButton, button1, button2, button3, screen1, screen2, parentElement;
-    //
-    //    beforeEach(() => {
-    //        screen1 = { scene: { key: "home" } };
-    //        screen2 = { scene: { key: "pause" } };
-    //        el1 = { id: "home__play" };
-    //        el2 = { id: "home__pause" };
-    //        el3 = { id: "pause__back" };
-    //        fakeEl = {};
-    //        button1 = { accessibleElement: el1 };
-    //        button2 = { accessibleElement: el2 };
-    //        button3 = { accessibleElement: el3 };
-    //        fakeButton = { accessibleElement: fakeEl };
-    //        parentElement = domElement();
-    //        jest.spyOn(global.document, "getElementById").mockImplementation(argument => {
-    //            if (argument === "accessibility") {
-    //                return parentElement;
-    //            }
-    //        });
-    //    });
-    //
-    //    test("appends correct elements to the DOM", () => {
-    //        a11y.addButton(screen1, button1);
-    //        a11y.addButton(screen1, button2);
-    //        a11y.addButton(screen2, button3);
-    //        a11y.appendToDom(screen1);
-    //        expect(parentElement.appendChild).toHaveBeenCalledWith(el1);
-    //        expect(parentElement.appendChild).toHaveBeenCalledWith(el2);
-    //        expect(parentElement.appendChild).not.toHaveBeenCalledWith(el3);
-    //    });
-    //
-    //    test("only appends elements with accessible element", () => {
-    //        a11y.addButton(screen1, button1);
-    //        a11y.addButton(screen1, button2);
-    //        a11y.addButton(screen1, fakeButton);
-    //        a11y.appendToDom(screen1);
-    //        expect(parentElement.appendChild).toHaveBeenCalledWith(el1);
-    //        expect(parentElement.appendChild).toHaveBeenCalledWith(el2);
-    //        expect(parentElement.appendChild).not.toHaveBeenCalledWith(fakeEl);
-    //    });
-    //});
+    describe("addButton Method", () => {
+        beforeEach(() => {
+            a11y.create(gameParentElement);
+        });
 
-    //describe("clear Method", () => {
-    //    let parentElement, el1, el2, el3;
-    //
-    //    beforeEach(() => {
-    //        el1 = domElement();
-    //        el2 = domElement();
-    //        el3 = domElement();
-    //        parentElement = {
-    //            childNodes: [el1, el2, el3],
-    //            removeChild: jest.fn(),
-    //        };
-    //        el1.parentElement = parentElement;
-    //        el2.parentElement = parentElement;
-    //        el3.parentElement = parentElement;
-    //        jest.spyOn(global.document, "getElementById").mockImplementation(argument => {
-    //            if (argument === "accessibility") {
-    //                return parentElement;
-    //            }
-    //        });
-    //        Object.defineProperty(global.document, "activeElement", { get: jest.fn(() => el1) });
-    //        jest.spyOn(elementManipulator, "hideAndDisableElement").mockImplementation(() => {});
-    //        jest.spyOn(Array, "from").mockImplementation(argument => argument);
-    //
-    //        a11y.clear();
-    //    });
-    //
-    //    test("clears all accessible elements from the DOM except the currently focused one", () => {
-    //        expect(elementManipulator.hideAndDisableElement).toHaveBeenCalledWith(el1);
-    //        expect(parentElement.removeChild).toHaveBeenCalledTimes(2);
-    //        expect(elementManipulator.hideAndDisableElement).toHaveBeenCalledWith(el1);
-    //        expect(parentElement.removeChild).toHaveBeenCalledWith(el2);
-    //        expect(parentElement.removeChild).toHaveBeenCalledWith(el3);
-    //    });
-    //});
+        test("Add items to the domButtons array", () => {
+            expect(a11y.addButton("test-button")).toBe(1);
+            expect(a11y.addButton("test-button")).toBe(2);
+        });
+    });
 
-    //describe("removeFromAccessibleButtons Method", () => {
-    //    let button1, button2, button3, screen1;
-    //
-    //    test("appends correct elements to the DOM", () => {
-    //        screen1 = { scene: { key: "home" } };
-    //        button1 = { accessibleElement: { id: "home" } };
-    //        button2 = { accessibleElement: { id: "pause" } };
-    //        button3 = { accessibleElement: { id: "back" } };
-    //        a11y.addButton(screen1, button1);
-    //        a11y.addButton(screen1, button2);
-    //        a11y.addButton(screen1, button3);
-    //        a11y.removeButtons(screen1, button2);
-    //
-    //        const buttons = a11y.getAccessibleButtons("home");
-    //
-    //        expect(buttons.length).toEqual(2);
-    //        expect(buttons[0].accessibleElement.id).toEqual("home");
-    //        expect(buttons[1].accessibleElement.id).toEqual("back");
-    //    });
-    //
-    //    test("does nothing if the button does not exist", () => {
-    //        screen1 = { scene: { key: "home" } };
-    //        button1 = { accessibleElement: { id: "home" } };
-    //        button2 = { accessibleElement: { id: "pause" } };
-    //        button3 = { accessibleElement: { id: "back" } };
-    //        a11y.addButton(screen1, button1);
-    //        a11y.addButton(screen1, button2);
-    //        a11y.addButton(screen1, button3);
-    //        a11y.removeButtons(screen1, { some: "fakeButton" });
-    //
-    //        const buttons = a11y.getAccessibleButtons("home");
-    //
-    //        expect(buttons.length).toEqual(3);
-    //        expect(buttons[0].accessibleElement.id).toEqual("home");
-    //        expect(buttons[1].accessibleElement.id).toEqual("pause");
-    //        expect(buttons[2].accessibleElement.id).toEqual("back");
-    //    });
-    //});
+    describe("removeButton Method", () => {
+        beforeEach(() => {
+            a11y.create(gameParentElement);
+        });
 
-    //describe("getAccessibleButtons Method", () => {
-    //    let button1, button2, button3, screen1;
-    //
-    //    test("returns the correct elements to the DOM", () => {
-    //        screen1 = { scene: { key: "home" } };
-    //        button1 = { accessibleElement: { id: "home" } };
-    //        button2 = { accessibleElement: { id: "pause" } };
-    //        button3 = { accessibleElement: { id: "back" } };
-    //        a11y.addButton(screen1, button1);
-    //        a11y.addButton(screen1, button2);
-    //        a11y.addButton(screen1, button3);
-    //
-    //        const buttons = a11y.getAccessibleButtons("home");
-    //
-    //        expect(buttons.length).toEqual(3);
-    //        expect(buttons[0].accessibleElement.id).toEqual("home");
-    //        expect(buttons[1].accessibleElement.id).toEqual("pause");
-    //        expect(buttons[2].accessibleElement.id).toEqual("back");
-    //    });
-    //
-    //    test("returns an empty array if there are no buttons", () => {
-    //        const buttons = a11y.getAccessibleButtons("random");
-    //        expect(buttons).toEqual([]);
-    //    });
-    //});
+        test("Removes items from the domButtons array", () => {
+            a11y.addButton("test-button1");
+            a11y.addButton("test-button2");
+            a11y.addButton("test-button3");
 
-    //describe("resetElementsInDom Method", () => {
-    //    test("clears elements from the DOM, then appends the elements to the DOM", () => {
-    //        const screen1 = { scene: { key: "home" } };
-    //        const button1 = { accessibleElement: { id: "home" } };
-    //        const parentElement = domElement();
-    //        jest.spyOn(global.document, "getElementById").mockImplementation(argument => {
-    //            if (argument === "accessibility") {
-    //                return parentElement;
-    //            }
-    //        });
-    //        a11y.addButton(screen1, button1);
-    //
-    //        const expectedButtons = a11y.getAccessibleButtons("home");
-    //        a11y.reset(screen1);
-    //        const buttons = a11y.getAccessibleButtons("home");
-    //        expect(buttons).toBe(expectedButtons);
-    //    });
-    //});
+            expect(a11y.removeButton("test-button3")).toStrictEqual(["test-button1", "test-button2"]);
+        });
+    });
 
-    //describe("clearAccessibleButtons Method", () => {
-    //    test("clears all the accessible buttons for a screen", () => {
-    //        const screen1 = { scene: { key: "home" } };
-    //        const button1 = { accessibleElement: { id: "home" } };
-    //        a11y.addButton(screen1, button1);
-    //
-    //        const expectedButtons = [];
-    //        a11y.clearButtons(screen1);
-    //        const buttons = a11y.getAccessibleButtons("home");
-    //        expect(buttons).toEqual(expectedButtons);
-    //    });
-    //});
+    describe("reset Method", () => {
+        beforeEach(() => {
+            a11y.create(gameParentElement);
+            global.document.createElement.mockImplementation(() => domElement());
+        });
+
+        test("Calls hideAndDisableElement on a button's accessibleElement if it currently has focus", () => {
+            jest.spyOn(elementManipulator, "hideAndDisableElement").mockImplementation(() => {});
+            const rootDiv = gameParentElement.appendChild.mock.calls[0][0];
+            rootDiv.appendChild = jest.fn();
+
+            const mockButton = {
+                id: "mock-button-id",
+                config: { group: "test-group-1" },
+                accessibleElement: { el: { id: "mock-button-id" } },
+                dataset: {},
+            };
+
+            Object.defineProperty(rootDiv, "childNodes", { get: jest.fn(() => [mockButton]), configurable: true });
+            Object.defineProperty(global.document, "activeElement", {
+                get: jest.fn(() => mockButton),
+                configurable: true,
+            });
+            a11y.addButton(mockButton);
+            a11y.reset();
+            expect(elementManipulator.hideAndDisableElement.mock.calls[0][0]).toBe(mockButton.accessibleElement);
+        });
+
+        test("Calls removeFromParent on an button if it does not have focus", () => {
+            jest.spyOn(elementManipulator, "removeFromParent").mockImplementation(() => {});
+            const rootDiv = gameParentElement.appendChild.mock.calls[0][0];
+            rootDiv.appendChild = jest.fn();
+
+            const mockButton = {
+                id: "mock-button-id",
+                config: { group: "test-group-1" },
+                accessibleElement: { el: { id: "mock-button-id" } },
+                dataset: {},
+            };
+
+            Object.defineProperty(rootDiv, "childNodes", { get: jest.fn(() => [mockButton]), configurable: true });
+            Object.defineProperty(global.document, "activeElement", { get: jest.fn(() => {}), configurable: true });
+            a11y.addButton(mockButton);
+            a11y.reset();
+            expect(elementManipulator.removeFromParent.mock.calls[0][0]).toBe(mockButton);
+        });
+
+        test("Calls removeFromParent on buttons in groups", () => {
+            jest.spyOn(elementManipulator, "removeFromParent").mockImplementation(() => {});
+
+            const mockButton = {
+                id: "mock-button-id",
+                config: { group: "test-group-1" },
+                accessibleElement: { el: { id: "mock-button-id" } },
+                dataset: {},
+            };
+
+            const rootDiv = gameParentElement.appendChild.mock.calls[0][0];
+            rootDiv.appendChild = jest.fn();
+            const group1 = { dataset: { type: "group" }, childNodes: [mockButton] };
+
+            a11y.addGroupAt(group1);
+
+            Object.defineProperty(rootDiv, "childNodes", { get: jest.fn(() => [group1]), configurable: true });
+
+            a11y.addButton(mockButton);
+            a11y.reset();
+            expect(elementManipulator.removeFromParent.mock.calls[0][0]).toStrictEqual(mockButton);
+        });
+
+        test("attaches groups to the root element in the correct order", () => {
+            const rootDiv = gameParentElement.appendChild.mock.calls[0][0];
+
+            rootDiv.appendChild = jest.fn();
+
+            a11y.addGroupAt("test-group-1");
+            a11y.addGroupAt("test-group-2");
+            a11y.addGroupAt("test-group-3", 1);
+            a11y.reset();
+
+            expect(rootDiv.appendChild.mock.calls[0][0].getAttribute("id")).toBe("accessible-group-test-group-1");
+            expect(rootDiv.appendChild.mock.calls[1][0].getAttribute("id")).toBe("accessible-group-test-group-3");
+            expect(rootDiv.appendChild.mock.calls[2][0].getAttribute("id")).toBe("accessible-group-test-group-2");
+        });
+
+        test("attaches button to assigned group", () => {
+            const rootDiv = gameParentElement.appendChild.mock.calls[0][0];
+            rootDiv.appendChild = jest.fn();
+
+            a11y.addGroupAt("test-group-1");
+
+            const mockButton = {
+                config: { group: "test-group-1" },
+                accessibleElement: { el: { id: "mock-button-id" } },
+            };
+
+            a11y.addButton(mockButton);
+            a11y.reset();
+            const testGroup1 = rootDiv.appendChild.mock.calls[0][0];
+            expect(testGroup1.appendChild.mock.calls[0][0].id).toBe("mock-button-id");
+        });
+    });
 });

@@ -12,27 +12,16 @@ let domGroups = [];
 let root = crel("div", { id: "accessibility", role: "application" });
 
 const hasAccessibleElement = button => Boolean(fp.get("accessibleElement.el.id", button));
-
-export const addGroupAt = (id, pos) => {
-    pos = pos || domGroups.length;
-
-    const el = crel("div", { id: "accessible-group-" + id, "data-type": "group" });
-    domGroups.splice(pos, 0, { el, id });
-};
-
-export const create = gameParentElement => gameParentElement.appendChild(root);
-
-export const addButton = button => domButtons.push(button);
-
-export const removeButton = buttonToRemove => (domButtons = domButtons.filter(button => button !== buttonToRemove));
+const buttonInDomElements = domEl => button => button.accessibleElement.el.id === domEl.id;
 
 const getElFromDom = domEl => {
-    const domButton = domButtons
-        .filter(hasAccessibleElement)
-        .find(button => button.accessibleElement.el.id === domEl.id);
-
+    const domButton = domButtons.filter(hasAccessibleElement).find(buttonInDomElements(domEl));
     return fp.get("accessibleElement", domButton);
 };
+
+const isDefined = value => Boolean(value);
+const isActiveElement = el => document.activeElement === el;
+const isNotActiveElement = el => document.activeElement !== el;
 
 const clear = () => {
     const children = Array.from(root.childNodes);
@@ -41,11 +30,12 @@ const clear = () => {
     const buttons = groups.reduce((acc, group) => acc.concat(Array.from(group.childNodes)), []).concat(rootButtons);
 
     buttons
-        .filter(el => document.activeElement === el)
+        .filter(isActiveElement)
         .map(getElFromDom)
-        .filter(x => Boolean(x))
+        .filter(isDefined)
         .map(hideAndDisableElement);
-    buttons.filter(el => document.activeElement !== el).map(removeFromParent);
+
+    buttons.filter(isNotActiveElement).map(removeFromParent);
     groups.map(removeFromParent);
 };
 
@@ -53,8 +43,6 @@ const clearButtons = () => {
     domButtons = [];
     domGroups = [];
 };
-
-export const destroy = fp.flow([clear, clearButtons]);
 
 const getParent = (sceneGroups, buttonGroup) => {
     const group = sceneGroups.find(group => group.id === buttonGroup);
@@ -73,4 +61,15 @@ const createDom = () => {
     domButtons.filter(hasAccessibleElement).forEach(addButtonToLayer);
 };
 
+export const addGroupAt = (id, pos) => {
+    pos = pos || domGroups.length;
+
+    const el = crel("div", { id: "accessible-group-" + id, "data-type": "group" });
+    domGroups.splice(pos, 0, { el, id });
+};
+
+export const create = gameParentElement => gameParentElement.appendChild(root);
+export const addButton = button => domButtons.push(button);
+export const removeButton = buttonToRemove => (domButtons = domButtons.filter(button => button !== buttonToRemove));
+export const destroy = fp.flow([clear, clearButtons]);
 export const reset = fp.flow([clear, createDom]);
