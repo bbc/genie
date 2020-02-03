@@ -45,7 +45,7 @@ const resetElementToDefault = (accessibleElement, self) => {
     const el = accessibleElement.el;
     el.removeEventListener("blur", self);
     callOnNextTick(() => {
-        el.parentElement && el.parentElement.removeChild(el);
+        removeFromParent(el);
         showElement(accessibleElement);
         unsetElementAsHiddenAndDisabled(el);
     });

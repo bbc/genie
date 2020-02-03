@@ -42,6 +42,8 @@ describe("element manipulator", () => {
         },
     });
 
+    jest.useFakeTimers();
+
     beforeEach(() => {
         sequentialCounter++;
         button = {
@@ -56,27 +58,57 @@ describe("element manipulator", () => {
         accessibleElement = getNewElement("home__" + sequentialCounter);
     });
 
-    afterEach(() => jest.restoreAllMocks());
+    afterEach(jest.clearAllMocks);
 
     describe("hideAndDisableElement Method", () => {
         beforeEach(() => {
             elementManipulator.hideAndDisableElement(accessibleElement);
         });
 
-        //describe("when element has already been hidden and disabled", () => {
-        //    test("only runs once and no more for that element", () => {
-        //        elementManipulator.hideAndDisableElement(element);
-        //        elementManipulator.hideAndDisableElement(element);
-        //        elementManipulator.hideAndDisableElement(element);
-        //
-        //        expect(accessibleButtons.findButtonByElementId).toHaveBeenCalledTimes(1);
-        //    });
-        //});
-
         describe("when element has NOT already been hidden and disabled", () => {
             test("adds a 'blur' event listener", () => {
                 expect(accessibleElement.el.addEventListener).toHaveBeenCalledTimes(1);
+                expect(accessibleElement.el.addEventListener.mock.calls[0][0]).toBe("blur");
             });
+
+            test("removes click and keyup events", () => {
+                expect(accessibleElement.el.removeEventListener.mock.calls[0][0]).toBe("click");
+                expect(accessibleElement.el.removeEventListener.mock.calls[1][0]).toBe("keyup");
+            });
+
+            test("removes blur event onblur and keyup events", () => {
+                const onBlur = accessibleElement.el.addEventListener.mock.calls[0][1];
+                onBlur();
+                expect(accessibleElement.el.removeEventListener.mock.calls[2][0]).toBe("blur");
+            });
+
+            test("unparents element on next tick", () => {
+                const onBlur = accessibleElement.el.addEventListener.mock.calls[0][1];
+                onBlur();
+                jest.runAllTimers();
+                expect(accessibleElement.el.parentElement.removeChild).toHaveBeenCalledWith(accessibleElement.el);
+            });
+        });
+
+        describe("when element has already been hidden and disabled", () => {
+            test("only runs once and no more for that element", () => {
+                elementManipulator.hideAndDisableElement(accessibleElement);
+                elementManipulator.hideAndDisableElement(accessibleElement);
+                elementManipulator.hideAndDisableElement(accessibleElement);
+
+                expect(accessibleElement.el.addEventListener).toHaveBeenCalledTimes(1);
+            });
+        });
+    });
+
+    describe("removeFromParent Method", () => {
+        test("calls removeChild on parentElement", () => {
+            const removeChildSpy = jest.fn();
+            const testEl = { parentElement: { removeChild: removeChildSpy } };
+
+            elementManipulator.removeFromParent(testEl);
+
+            expect(removeChildSpy).toHaveBeenCalledWith(testEl);
         });
     });
 });
