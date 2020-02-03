@@ -17,9 +17,7 @@ describe("Grid", () => {
     let mockSprite;
     let grid;
     let mockSafeArea;
-    let desktopCellPadding;
     let transitionCallback;
-    //let mobileCellPadding;
 
     beforeEach(() => {
         mockSprite = {
@@ -96,9 +94,6 @@ describe("Grid", () => {
             scale: 1,
             screenToCanvas: jest.fn(n => n),
         };
-
-        desktopCellPadding = 24;
-        //mobileCellPadding = 16;
 
         mockRoot = {
             add: jest.fn(),
@@ -697,6 +692,36 @@ describe("Grid", () => {
     //    });
     //});
 
+    describe("resize method", () => {
+        test("stores safeArea and metrics on class", () => {
+            grid = new GelGrid(mockScene, metrics, { rows: 1, columns: 3 });
+            grid.resize(metrics, mockSafeArea);
+            expect(grid._safeArea).toBe(mockSafeArea);
+            expect(grid._metrics).toBe(metrics);
+        });
+
+        test("sets correct cellpadding when desktop mode", () => {
+            metrics.isMobile = false;
+            grid = new GelGrid(mockScene, metrics, { rows: 1, columns: 3 });
+            grid.resize(metrics, mockSafeArea);
+            expect(grid._cellPadding).toBe(24);
+        });
+
+        test("sets correct cellpadding when mobile mode", () => {
+            metrics.isMobile = true;
+            grid = new GelGrid(mockScene, metrics, { rows: 1, columns: 3 });
+            grid.resize(metrics, mockSafeArea);
+            expect(grid._cellPadding).toBe(16);
+        });
+
+        test("resets grid", () => {
+            grid = new GelGrid(mockScene, metrics, { rows: 1, columns: 3 });
+            grid.reset = jest.fn();
+            grid.resize(metrics, mockSafeArea);
+            expect(grid.reset).toHaveBeenCalled();
+        });
+    });
+
     describe("cell sprite sizes", () => {
         test("square cell sprite is scaled to fit into portrait aspect cell", () => {
             mockSprite = {
@@ -774,10 +799,7 @@ describe("Grid", () => {
     });
 
     describe("pagination", () => {
-        let motion;
-
         beforeEach(() => {
-            motion = true;
             mockScene.add.tween = jest.fn();
         });
 
@@ -881,7 +903,6 @@ describe("Grid", () => {
             //    });
             //});
 
-
             test("sets visibility of cells after paginating", () => {
                 mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
 
@@ -971,15 +992,6 @@ describe("Grid", () => {
             //        duration: 500,
             //    });
             //});
-
-            test("sets the tween duration to zero when motion is turned off in the GMI", () => {
-                motion = false;
-                grid.showPage(-1);
-                const tweenCalls = mockScene.add.tween.mock.calls;
-                tweenCalls.forEach(tweenCall => {
-                    expect(tweenCall[0].duration).toBe(0);
-                });
-            });
         });
 
         //test("remainder of 2 cells in a 3 column layout are correctly justified on last page", () => {

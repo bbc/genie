@@ -292,43 +292,43 @@ describe("Accessibilify", () => {
     //            expect(mockAccessibleDomElement.el.setAttribute).toHaveBeenCalledWith("aria-label", "test-name locked");
     //        });
     //    });
-        //describe("Showing", () => {
-        //    test("shows when button is enabled and visible, and the accessible element is hidden", () => {
-        //        mockAccessibleDomElement.visible.mockReturnValue(false);
-        //        mockButton.input.enabled = true;
-        //        mockButton.visible = true;
-        //        accessibilify(mockButton);
-        //        mockScene.sys.events.on.mock.calls[0][1]();
-        //        expect(mockAccessibleDomElement.show).toHaveBeenCalled();
-        //    });
-        //
-        //    //test("does not show when button is disabled and visible, and the accessible element is hidden", () => {
-        //    //    mockAccessibleDomElement.visible.mockReturnValue(false);
-        //    //    mockButton.input.enabled = false;
-        //    //    mockButton.visible = true;
-        //    //    accessibilify(mockButton);
-        //    //    mockScene.sys.events.on.mock.calls[0][1]();
-        //    //    expect(mockAccessibleDomElement.show).not.toHaveBeenCalled();
-        //    //});
-        //
-        //    test("does not show when button is enabled and hidden, and the accessible element is hidden", () => {
-        //        mockAccessibleDomElement.visible.mockReturnValue(false);
-        //        mockButton.input.enabled = true;
-        //        mockButton.visible = false;
-        //        accessibilify(mockButton);
-        //        mockScene.sys.events.on.mock.calls[0][1]();
-        //        expect(mockAccessibleDomElement.show).not.toHaveBeenCalled();
-        //    });
-        //
-        //    test("does not show when button is enabled and visible, and the accessible element is shown", () => {
-        //        mockAccessibleDomElement.visible.mockReturnValue(true);
-        //        mockButton.input.enabled = true;
-        //        mockButton.visible = true;
-        //        accessibilify(mockButton);
-        //        mockScene.sys.events.on.mock.calls[0][1]();
-        //        expect(mockAccessibleDomElement.show).not.toHaveBeenCalled();
-        //    });
-        //});
+    //describe("Showing", () => {
+    //    test("shows when button is enabled and visible, and the accessible element is hidden", () => {
+    //        mockAccessibleDomElement.visible.mockReturnValue(false);
+    //        mockButton.input.enabled = true;
+    //        mockButton.visible = true;
+    //        accessibilify(mockButton);
+    //        mockScene.sys.events.on.mock.calls[0][1]();
+    //        expect(mockAccessibleDomElement.show).toHaveBeenCalled();
+    //    });
+    //
+    //    //test("does not show when button is disabled and visible, and the accessible element is hidden", () => {
+    //    //    mockAccessibleDomElement.visible.mockReturnValue(false);
+    //    //    mockButton.input.enabled = false;
+    //    //    mockButton.visible = true;
+    //    //    accessibilify(mockButton);
+    //    //    mockScene.sys.events.on.mock.calls[0][1]();
+    //    //    expect(mockAccessibleDomElement.show).not.toHaveBeenCalled();
+    //    //});
+    //
+    //    test("does not show when button is enabled and hidden, and the accessible element is hidden", () => {
+    //        mockAccessibleDomElement.visible.mockReturnValue(false);
+    //        mockButton.input.enabled = true;
+    //        mockButton.visible = false;
+    //        accessibilify(mockButton);
+    //        mockScene.sys.events.on.mock.calls[0][1]();
+    //        expect(mockAccessibleDomElement.show).not.toHaveBeenCalled();
+    //    });
+    //
+    //    test("does not show when button is enabled and visible, and the accessible element is shown", () => {
+    //        mockAccessibleDomElement.visible.mockReturnValue(true);
+    //        mockButton.input.enabled = true;
+    //        mockButton.visible = true;
+    //        accessibilify(mockButton);
+    //        mockScene.sys.events.on.mock.calls[0][1]();
+    //        expect(mockAccessibleDomElement.show).not.toHaveBeenCalled();
+    //    });
+    //});
     //});
 
     describe("Click Action", () => {

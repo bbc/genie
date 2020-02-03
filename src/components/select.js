@@ -157,7 +157,6 @@ export class Select extends Screen {
     }
 
     currentEnabled() {
-        console.log(this.grid.getCurrentPageKey());
         const currentState = this.states.get(this.grid.getCurrentPageKey()).state;
         const stateDefinition = this.context.theme.states[currentState];
         return stateDefinition === undefined || stateDefinition.enabled !== false;

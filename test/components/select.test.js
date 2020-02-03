@@ -619,7 +619,7 @@ describe("Select Screen", () => {
         test("does not error if no continue button", () => {
             selectScreen.create();
             delete mockLayout.buttons.continue;
-            expect(selectScreen.onTransitionStart.bind(selectScreen)).not.toThrow()
+            expect(selectScreen.onTransitionStart.bind(selectScreen)).not.toThrow();
         });
     });
 });

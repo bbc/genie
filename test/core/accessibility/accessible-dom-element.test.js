@@ -225,7 +225,7 @@ describe("Accessible DOM Element", () => {
             options.button = { config: { ariaLabel: "test-label" }, visible: true };
 
             const accessibleElement = accessibleDomElement(options);
-            accessibleElement.el.setAttribute("aria-label", "test-label")
+            accessibleElement.el.setAttribute("aria-label", "test-label");
             jest.clearAllMocks();
             accessibleElement.update();
             expect(accessibleElement.el.setAttribute).not.toHaveBeenCalled();

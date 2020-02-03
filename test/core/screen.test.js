@@ -306,7 +306,7 @@ describe("Screen", () => {
             screen.sys.accessibleButtons = [mockButton];
             jest.clearAllMocks();
             screen._onOverlayRemoved({ overlay: mockOverlay });
-            expect(a11y.addButton).toHaveBeenCalledWith( mockButton);
+            expect(a11y.addButton).toHaveBeenCalledWith(mockButton);
         });
 
         test("removing an overlay sets stat screen back to the underlying screen", () => {
