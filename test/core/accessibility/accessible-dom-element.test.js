@@ -103,11 +103,6 @@ describe("Accessible DOM Element", () => {
             expect(mockElement.style["pointer-events"]).toBe("none");
         });
 
-        //test("Leaves inner text to be empty by default", () => {
-        //    accessibleDomElement(options);
-        //    expect(mockElement.appendChild).toHaveBeenCalledWith();
-        //});
-
         test("sets inner text if given", () => {
             options.text = "Text goes here";
             accessibleDomElement(options);
@@ -200,6 +195,40 @@ describe("Accessible DOM Element", () => {
             expect(mockElement.style.top).toBe("50px");
             expect(mockElement.style.width).toBe("200px");
             expect(mockElement.style.height).toBe("100px");
+        });
+    });
+
+    describe("update method", () => {
+        test("changes aria label", () => {
+            options.button = { config: { ariaLabel: "initial-label" } };
+
+            const accessibleElement = accessibleDomElement(options);
+            accessibleElement.button.config.ariaLabel = "updated-label";
+            accessibleElement.update();
+            expect(accessibleElement.el.getAttribute("aria-label")).toBe("updated-label");
+        });
+
+        test("shows element if input disabled", () => {
+            options.button = { input: { enabled: true }, config: { ariaLabel: "initial-label" }, visible: true };
+
+            const accessibleElement = accessibleDomElement(options);
+            accessibleElement.el.style.visibility = "hidden";
+            accessibleElement.update();
+
+            expect(accessibleElement.el.getAttribute("aria-hidden")).toBe(false);
+            expect(accessibleElement.el.getAttribute("tabindex")).toBe("0");
+            expect(accessibleElement.el.style.display).toBe("block");
+            expect(accessibleElement.el.style.visibility).toBe("visible");
+        });
+
+        test("does not change aria label if the same as button config's", () => {
+            options.button = { config: { ariaLabel: "test-label" }, visible: true };
+
+            const accessibleElement = accessibleDomElement(options);
+            accessibleElement.el.setAttribute("aria-label", "test-label")
+            jest.clearAllMocks();
+            accessibleElement.update();
+            expect(accessibleElement.el.setAttribute).not.toHaveBeenCalled();
         });
     });
 });
