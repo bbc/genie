@@ -3,9 +3,12 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+
+import { gmi } from "../../../src/core/gmi/gmi.js";
 import * as Rows from "../../../src/core/layout/rows.js";
 import { ResultsRow } from "../../../src/components/results/results-row.js";
 
+jest.mock("../../../src/core/gmi/gmi.js");
 jest.mock("../../../src/components/results/results-row.js");
 
 describe("Rows", () => {
@@ -13,6 +16,7 @@ describe("Rows", () => {
     let mockRowsConfig;
     let mockArea;
     let getMockArea;
+    let mockSettings;
 
     beforeEach(() => {
         mockScene = {
@@ -37,6 +41,8 @@ describe("Rows", () => {
             y: 36,
         };
         getMockArea = () => mockArea;
+        mockSettings = { motion: true };
+        gmi.getAllSettings = jest.fn(() => mockSettings);
     });
 
     test("RowTypes.Results enum points to ResultsRow", () => {

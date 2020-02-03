@@ -21,8 +21,9 @@
                             },
                         },
                     ],
+                    sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
+                    alpha: 1, //optional
                     backdrop: 'imgKey', //optional
-                    // alpha: 1
                 },
                 {
                     format: [
@@ -79,7 +80,13 @@
                             },
                         },
                     ],
-                    alpha: 0,
+                    backdrop: {
+                        //optional
+                        key: 'results.row-backdrop-1',
+                        alpha: 0.5,
+                        offsetY: -20
+                    },
+                    alpha: 1, //optional
                     // Transitions object is passed as part of a tween config to the scene
                     transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 },
                     audio: { key: 'results.woosh' },
@@ -150,6 +157,12 @@
                             },
                         },
                     ],
+                    backdrop: {
+                        //optional
+                        key: 'results.row-backdrop-2',
+                        alpha: 0.5,
+                        offsetY: -20
+                    },
                     alpha: 0,
                     transition: {
                         alpha: {
@@ -177,7 +190,7 @@
                                 color: '#FFFFFF',
                             },
                         },
-                        { type: 'sprite', key: 'game.key', offsetX: 20, offsetY: -20 },
+                        { type: 'sprite', key: 'game.key', offsetX: 0, offsetY: -20 },
                         {
                             type: 'countup',
                             startCount: 0,
@@ -217,6 +230,12 @@
                             },
                         },
                     ],
+                    backdrop: {
+                        //optional
+                        key: 'results.row-backdrop-3',
+                        alpha: 0.5,
+                        offsetY: -20
+                    },
                     alpha: 0,
                     transition: {
                         scale: { from: 0, to: 1 },
