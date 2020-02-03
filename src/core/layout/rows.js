@@ -35,6 +35,17 @@ export function create(scene, getArea, rowsConfig, rowType) {
                 row.rowConfig.transition.duration = 0;
             }
             scene.add.tween({ targets: row, ...row.rowConfig.transition });
+
+            if (row.rowConfig.audio) {
+                delayedAudio(row.rowConfig);
+            }
+        });
+    };
+
+    const delayedAudio = rowConfig => {
+        scene.time.addEvent({
+            delay: rowConfig.audio.delay,
+            callback: () => scene.sound.play(rowConfig.audio.key),
         });
     };
 

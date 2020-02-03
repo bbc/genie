@@ -286,6 +286,31 @@ describe("Gel Button", () => {
 
             expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 400, 200));
         });
+
+        test("Takes button scale into account", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
+            gelButton.scale = 0.5;
+
+            gelButton.input = {
+                hitArea: {
+                    width: 200,
+                    height: 100,
+                },
+            };
+
+            gelButton.parentContainer = {
+                scale: 2,
+            };
+
+            const mockWtm = {
+                getX: () => 0,
+                getY: () => 0,
+            };
+
+            gelButton.getWorldTransformMatrix = () => mockWtm;
+
+            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 200, 100));
+        });
     });
 
     describe("overlays", () => {

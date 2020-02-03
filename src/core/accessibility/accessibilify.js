@@ -5,27 +5,69 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import { onScaleChange } from "../scaler.js";
+import { onScaleChange, getMetrics } from "../scaler.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as a11y from "./accessibility-layer.js";
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../layout/metrics.js";
 
-const CAMERA_SCROLL_X_OFFSET = -700;
-const CAMERA_SCROLL_Y_OFFSET = -300;
+const CAMERA_SCROLL_X_OFFSET = CANVAS_WIDTH / 2;
+const CAMERA_SCROLL_Y_OFFSET = CANVAS_HEIGHT / 2;
 
 export function accessibilify(button, gameButton = true) {
-    const config = Object.assign(
-        {
-            id: button.config.name,
-            ariaLabel: button.config.name,
-        },
-        button.config,
-    );
-
     let event;
     const sys = button.scene.sys;
     const scene = button.scene;
-    const elementId = [scene.scene.key, config.id].join("__");
-    const accessibleElement = newAccessibleElement();
+    const id = [scene.scene.key, button.config.id].join("__");
+
+    const buttonAction = () => button.emit(Phaser.Input.Events.POINTER_UP, button, sys.input.activePointer, false);
+    const mouseOver = () => button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false);
+    const mouseOut = () => button.emit(Phaser.Input.Events.POINTER_OUT, button, sys.input.activePointer, false);
+
+    const options = {
+        id,
+        htmlClass: "gel-button",
+        ariaLabel: button.config.ariaLabel,
+        parent: sys.scale.parent,
+        onClick: buttonAction,
+        onMouseOver: mouseOver,
+        onMouseOut: mouseOut,
+    };
+
+    const getHitAreaBounds = () => {
+        const marginLeft = parseInt(sys.game.canvas.style.marginLeft, 10);
+        const marginTop = parseInt(sys.game.canvas.style.marginTop, 10);
+        let bounds = button.getHitAreaBounds ? button.getHitAreaBounds() : button.getBounds();
+
+        const metrics = getMetrics();
+
+        bounds.x += CAMERA_SCROLL_X_OFFSET;
+        bounds.x *= metrics.scale;
+        bounds.x += marginLeft;
+        bounds.y += CAMERA_SCROLL_Y_OFFSET;
+        bounds.y *= metrics.scale;
+        bounds.y += marginTop;
+        bounds.width *= metrics.scale;
+        bounds.height *= metrics.scale;
+
+        return bounds;
+    };
+
+    const assignEvents = () => {
+        const _destroy = button.destroy;
+        button.destroy = () => {
+            teardown();
+            return _destroy.apply(button, arguments);
+        };
+        event = onScaleChange.add(resizeAndRepositionElement);
+    };
+
+    const setElementSizeAndPosition = () => {
+        if (button.active) {
+            accessibleElement.position(getHitAreaBounds());
+        }
+    };
+
+    const accessibleElement = accessibleDomElement(options);
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
 
     if (!sys.accessibleButtons) {
@@ -39,79 +81,19 @@ export function accessibilify(button, gameButton = true) {
     assignEvents();
     resizeAndRepositionElement();
 
-    sys.events.on(Phaser.Scenes.Events.UPDATE, update);
-
     button.accessibleElement = accessibleElement.el;
-    button.elementId = elementId;
+    button.elementId = id;
     button.elementEvents = accessibleElement.events;
 
     a11y.addToAccessibleButtons(scene, button);
     a11y.resetElementsInDom(scene);
 
-    return button;
-
-    function newAccessibleElement() {
-        return accessibleDomElement({
-            id: elementId,
-            htmlClass: "gel-button",
-            ariaLabel: config.ariaLabel,
-            parent: sys.scale.parent,
-            onClick: buttonAction,
-            onMouseOver: mouseOver,
-            onMouseOut: mouseOut,
-        });
-    }
-
-    function getHitAreaBounds() {
-        const realHeight = sys.game.canvas.height;
-        const viewHeight = parseInt(sys.game.canvas.style.height, 10);
-        const marginLeft = parseInt(sys.game.canvas.style.marginLeft, 10);
-        const marginTop = parseInt(sys.game.canvas.style.marginTop, 10);
-        const scale = viewHeight / realHeight;
-
-        let bounds = button.getHitAreaBounds ? button.getHitAreaBounds() : button.getBounds();
-        bounds.x -= CAMERA_SCROLL_X_OFFSET;
-        bounds.x *= scale;
-        bounds.x += marginLeft;
-        bounds.y -= CAMERA_SCROLL_Y_OFFSET;
-        bounds.y *= scale;
-        bounds.y += marginTop;
-
-        if (button.input.hitArea) {
-            bounds.width = button.input.hitArea.width * button.scale;
-            bounds.height = button.input.hitArea.height * button.scale;
-        }
-
-        if (gameButton) {
-            bounds.width *= scale;
-            bounds.height *= scale;
-        }
-
-        return bounds;
-    }
-
-    function setElementSizeAndPosition() {
-        if (button.active) {
-            const bounds = getHitAreaBounds();
-            accessibleElement.position(bounds);
-        }
-    }
-
-    function assignEvents() {
-        const _destroy = button.destroy;
-        button.destroy = () => {
-            teardown();
-            return _destroy.apply(button, arguments);
-        };
-        event = onScaleChange.add(resizeAndRepositionElement);
-    }
-
-    function teardown() {
+    const teardown = () => {
         sys.events.off(Phaser.Scenes.Events.UPDATE, update);
         event.unsubscribe();
-    }
+    };
 
-    function update() {
+    const update = () => {
         // TODO investigate if there is a better way to handle this
         // - currently all buttons are hooked into the update method and this is called every frame
         if (accessibleElement.el.getAttribute("aria-label") !== button.config.ariaLabel) {
@@ -127,17 +109,9 @@ export function accessibilify(button, gameButton = true) {
         if (!accessibleElement.visible()) {
             accessibleElement.show();
         }
-    }
+    };
 
-    function buttonAction() {
-        button.emit(Phaser.Input.Events.POINTER_UP, button, sys.input.activePointer, false);
-    }
+    sys.events.on(Phaser.Scenes.Events.UPDATE, update);
 
-    function mouseOver() {
-        button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false);
-    }
-
-    function mouseOut() {
-        button.emit(Phaser.Input.Events.POINTER_OUT, button, sys.input.activePointer, false);
-    }
+    return button;
 }

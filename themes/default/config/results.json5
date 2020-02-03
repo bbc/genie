@@ -23,6 +23,7 @@
                     ],
                     sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
                     alpha: 1 //optional
+                    backdrop: 'imgKey', //optional
                 },
                 {
                     format: [
@@ -86,6 +87,7 @@
                     alpha: 1, //optional
                     // Transitions object is passed as part of a tween config to the scene
                     transition: { rotation: { from: -4, to: 0 }, alpha: {from: 0, to: 1}, duration: 1000 },
+                    audio: { key: 'results.woosh' },
                 },
                 {
                     format: [
@@ -99,7 +101,21 @@
                                 color: '#FFFFFF',
                             },
                         },
-                        { type: 'sprite', key: 'game.gem', offsetX: 20, offsetY: 0 },
+                        {
+                            type: 'sprite',
+                            key: 'game.diamond',
+                            frame: 0,
+                            offsetX: 20,
+                            offsetY: -20,
+                            anim: {
+                                frames: {
+                                    start: 0,
+                                    end: 14,
+                                },
+                                frameRate: 7,
+                                repeat: -1,
+                            },
+                        },
                         {
                             type: 'countup',
                             startCount: 0,
@@ -143,18 +159,20 @@
                         key: 'results.row-backdrop-2',
                         alpha: 0.5,
                     },
-                    alpha: 0, //optional
+                    alpha: 0,
                     transition: {
                         alpha: {
-                            from: 0, to: 1
+                            from: 0,
+                            to: 1,
                         },
                         x: {
                             from: -200,
-                            to: 0
+                            to: 0,
                         },
                         duration: 2000,
-                        delay: 2000
-                    },
+                        delay: 2000,
+                    }, // Tween delays are in milliseconds
+                    audio: { key: 'results.slide', delay: 2500 }, // What happens when motion effects are turned off?
                 },
                 {
                     format: [
@@ -213,7 +231,14 @@
                         alpha: 0.5,
                     },
                     alpha: 0,
-                    transition: { scale: { from: 0, to: 1 }, alpha: 1, duration: 2000, ease: "Elastic.Out", delay: 5000 }
+                    transition: {
+                        scale: { from: 0, to: 1 },
+                        alpha: 1,
+                        duration: 2000,
+                        ease: 'Elastic.Out',
+                        delay: 5000,
+                    },
+                    audio: { key: 'results.boing', delay: 5000 },
                 },
             ],
         },

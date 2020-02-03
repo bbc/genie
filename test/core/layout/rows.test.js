@@ -26,6 +26,12 @@ describe("Rows", () => {
             add: {
                 tween: jest.fn(),
             },
+            sound: {
+                play: jest.fn(),
+            },
+            time: {
+                addEvent: jest.fn(),
+            },
         };
         mockRowsConfig = [{}, {}, {}];
         mockArea = {
@@ -104,5 +110,39 @@ describe("Rows", () => {
         rows.rowTransitions();
         mockTweenConfig.duration = 0;
         expect(mockScene.add.tween.mock.calls[0][0].duration).toBe(0);
+    });
+
+    test("rowTransitions sets up a time event for audio when specified in config", () => {
+        mockRowsConfig = [
+            {
+                audio: { key: "mockAudioKey", delay: 1000 },
+            },
+        ];
+        const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
+        rows.rowTransitions();
+
+        expect(mockScene.time.addEvent.mock.calls[0][0]).toEqual(
+            expect.objectContaining({ delay: 1000, callback: expect.any(Function) }),
+        );
+    });
+
+    test("rowTransitions callback triggers audio", () => {
+        mockRowsConfig = [
+            {
+                audio: { key: "mockAudioKey", delay: 1000 },
+            },
+        ];
+        const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
+        rows.rowTransitions();
+
+        const callback = mockScene.time.addEvent.mock.calls[0][0].callback;
+        callback();
+        expect(mockScene.sound.play).toHaveBeenCalledWith("mockAudioKey");
+    });
+
+    test("rowTransitions does not set up audio when absent from config", () => {
+        const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
+        rows.rowTransitions();
+        expect(mockScene.time.addEvent).not.toHaveBeenCalled();
     });
 });
