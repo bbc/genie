@@ -588,4 +588,38 @@ describe("Select Screen", () => {
             selectScreen._cells = [{ _id: "id_one", overlays: { set: jest.fn() } }];
         });
     });
+
+    describe("onTransitionStart method", () => {
+        test("disables the continue button if current cell state is disabled", () => {
+            selectScreen.create();
+            selectScreen.currentEnabled = jest.fn(() => false);
+
+            selectScreen.onTransitionStart();
+
+            expect(mockLayout.buttons.continue.input.enabled).toBe(false);
+            expect(mockLayout.buttons.continue.alpha).toBe(0.5);
+        });
+
+        test("enables the continue button if current cell state is enabled", () => {
+            selectScreen.create();
+            selectScreen.currentEnabled = jest.fn(() => true);
+
+            selectScreen.onTransitionStart();
+
+            expect(mockLayout.buttons.continue.input.enabled).toBe(true);
+            expect(mockLayout.buttons.continue.alpha).toBe(1);
+        });
+
+        test("updates the accessible dom element", () => {
+            selectScreen.create();
+            selectScreen.onTransitionStart();
+            expect(mockLayout.buttons.continue.accessibleElement.update).toHaveBeenCalled();
+        });
+
+        test("does not error if no continue button", () => {
+            selectScreen.create();
+            delete mockLayout.buttons.continue;
+            expect(selectScreen.onTransitionStart.bind(selectScreen)).not.toThrow()
+        });
+    });
 });
