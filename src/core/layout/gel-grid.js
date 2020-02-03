@@ -35,7 +35,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         gridCells.map((cell, idx) => this.addCell(cell, idx));
         this.setLayoutLimits();
         this.reset();
-        this.makeCellsAccessible();
+        this.makeAccessible();
         return this._cells;
     }
 
@@ -57,7 +57,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.reset();
     }
 
-    makeCellsAccessible() {
+    makeAccessible() {
         this._cells.forEach(this.makeCellAccessible, this);
     }
 
@@ -182,7 +182,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     transitionCallback(pageToDisable, pageToEnable) {
         this.setPageVisibility(pageToDisable, false);
         this.setPageVisibility(pageToEnable, true);
-        this.makeCellsAccessible();
+        this.makeAccessible();
         this.scene.input.enabled = true;
         this.reset();
     }
