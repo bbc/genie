@@ -1,5 +1,5 @@
 /**
- * @copyright BBC 2018
+ * @copyright BBC 2020
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
@@ -8,8 +8,10 @@ import { Screen } from "../../core/screen.js";
 import { eventBus } from "../../core/event-bus.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import * as Rows from "../../core/layout/rows.js";
+import { tweenRows } from "./results-row-tween.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
 import fp from "../../../lib/lodash/fp/fp.js";
+import { playRowAudio } from "./results-row-audio.js";
 
 const getScoreMetaData = result => {
     if (typeof result === "number") {
@@ -35,7 +37,6 @@ export class Results extends Screen {
         this.createBackdrop();
         fireGameCompleteStat(this.transientData.results);
         this.subscribeToEventBus();
-        this.rows.rowTransitions();
     }
 
     resultsArea() {
@@ -49,6 +50,8 @@ export class Results extends Screen {
         this.setLayout(buttons.concat(achievements));
 
         this.rows = Rows.create(this, () => this.resultsArea(), this.theme.rows, Rows.RowType.Results);
+        tweenRows(this, this.rows.containers);
+        playRowAudio(this, this.rows.containers);
     }
 
     createBackdrop() {
