@@ -65,8 +65,8 @@ describe("How To Play Screen", () => {
 
         mockLayout = {
             buttons: {
-                previous: { accessibleElement: { focus: jest.fn() } },
-                next: { accessibleElement: { focus: jest.fn() } },
+                previous: { accessibleElement: { el: { focus: jest.fn() } } },
+                next: { accessibleElement: { el: { focus: jest.fn() } } },
             },
         };
         howToPlayScreen = new HowToPlay();
@@ -341,7 +341,7 @@ describe("How To Play Screen", () => {
                 howToPlayScreen.create();
                 eventBus.subscribe.mock.calls[1][0].callback();
                 eventBus.subscribe.mock.calls[0][0].callback();
-                expect(howToPlayScreen.buttonLayout.buttons.next.accessibleElement.focus).toHaveBeenCalledTimes(1);
+                expect(howToPlayScreen.buttonLayout.buttons.next.accessibleElement.el.focus).toHaveBeenCalledTimes(1);
             });
 
             test("focus moves to the previous arrow when at the end of the items on How To Play", () => {
@@ -350,7 +350,9 @@ describe("How To Play Screen", () => {
                 const nextButtonClick = eventBus.subscribe.mock.calls[1][0].callback;
                 nextButtonClick();
                 nextButtonClick();
-                expect(howToPlayScreen.buttonLayout.buttons.previous.accessibleElement.focus).toHaveBeenCalledTimes(1);
+                expect(howToPlayScreen.buttonLayout.buttons.previous.accessibleElement.el.focus).toHaveBeenCalledTimes(
+                    1,
+                );
             });
         });
     });
