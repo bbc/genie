@@ -5,20 +5,17 @@
             {
                 "type": "image",
                 "key": "basicButton",
-                "url": "game/basic-button.png",
-                "overwrite": false
+                "url": "game/basic-button.png"
             },
             {
                 "type": "image",
                 "key": "key",
-                "url": "game/key.png",
-                "overwrite": false
+                "url": "game/key.png"
             },
             {
                 "type": "image",
                 "key": "gem",
-                "url": "game/gem.png",
-                "overwrite": false
+                "url": "game/gem.png"
             },
             {
                 "type": "spritesheet",
@@ -34,8 +31,7 @@
             {
                 "type": "image",
                 "key": "star",
-                "url": "game/star.png",
-                "overwrite": false
+                "url": "game/star.png"
             }
         ]
     }

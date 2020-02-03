@@ -1,64 +1,133 @@
 {
     theme: {
-        "character-select": {
-            music: "loader.backgroundMusic",
+        'character-select': {
+            rows: 2,
+            columns: 3,
+            ease: 'Cubic.easeInOut',
+            duration: 500,
+            align: 'left',
+            music: 'loader.backgroundMusic',
             animations: [
                 {
-                    key: "examples_sprite",
+                    key: 'examples_sprite',
                     x: -400,
                     y: -200,
-                    frames: { key: "example_sprite_animation", start: 0, end: 7, default: 0, repeat: -1, rate: 10 },
+                    frames: { key: 'example_sprite_animation', start: 0, end: 7, default: 0, repeat: -1, rate: 10 },
                 },
             ],
             title: {
                 image: {
-                    imageId: "title",
+                    imageId: '',
                     xOffset: 0,
                     yOffset: 0,
                 },
                 text: {
-                    value: "",
-                    xOffset: 0,
-                    yOffset: 0,
+                    value: 'Title',
+                    xOffset: -60,
+                    yOffset: -20,
                     styles: {
-                        fontSize: "24px",
+                        fontSize: '24px',
                     },
                 },
                 visible: true,
             },
             subtitle: {
                 image: {
-                    imageId: "",
+                    imageId: '',
                     xOffset: 0,
                     yOffset: 0,
                 },
                 text: {
-                    value: "",
+                    value: 'Sub-Title',
                     xOffset: 0,
-                    yOffset: 0,
+                    yOffset: 80,
                     styles: {
-                        fontSize: "",
-                        color: "",
-                        align: "",
+                        fontSize: '16px',
                     },
                 },
-                visible: false,
+                visible: true,
+            },
+            storageKey: 'characters',
+            states: {
+                locked: {
+                    //asset: "suzytoo",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
+                    overlayAsset: 'character-select.lock',
+                    suffix: 'locked', //appended to aria label of accessibility div
+                    x: 55,
+                    y: 60,
+                    properties: {
+                        //phaser properties assigned to the base sprite
+                        alpha: 0.25,
+                        tint: 0xff0000,
+                    },
+                    enabled: false, //enable or disable touch input on this state - default true
+                },
+                complete: { overlayAsset: 'character-select.complete', x: 55, y: 60, suffix: 'completed' },
             },
             choices: [
                 {
-                    asset: "carousel1",
-                    accessibilityText: "Character 1",
-                    title: "Clarice",
+                    id: 'mary',
+                    key: 'mary',
+                    ariaLabel: 'Mary',
+                    title: 'Mary',
+                    state: 'complete',
                 },
                 {
-                    asset: "carousel2",
-                    accessibilityText: "Character 2",
-                    title: "Ethel",
+                    id: 'kyle',
+                    key: 'kyle',
+                    ariaLabel: 'Kyle',
+                    title: 'Kyle',
                 },
                 {
-                    asset: "carousel3",
-                    accessibilityText: "Character 3",
-                    title: "Gwendoline",
+                    id: 'suzy',
+                    key: 'suzy',
+                    ariaLabel: 'Suzy',
+                    title: 'Suzy',
+                },
+                {
+                    id: 'greg',
+                    key: 'greg',
+                    ariaLabel: 'Greg',
+                    title: 'Greg',
+                },
+                {
+                    id: 'ange',
+                    key: 'ange',
+                    ariaLabel: 'Ange',
+                    title: 'Ange',
+                },
+                {
+                    id: 'phil',
+                    key: 'phil',
+                    ariaLabel: 'Phil',
+                    title: 'Phil',
+                },
+                {
+                    id: 'mike',
+                    key: 'mike',
+                    ariaLabel: 'Mike',
+                    title: 'Mike',
+                },
+                {
+                    id: 'suzytoo',
+                    key: 'suzytoo',
+                    ariaLabel: 'Suzy Too',
+                    title: 'Suzy Too',
+                    state: 'locked',
+                },
+                {
+                    id: 'timmy',
+                    key: 'timmy',
+                    ariaLabel: 'Timmy',
+                    title: 'Timmy',
+                    state: 'locked',
+                },
+                {
+                    id: 'elliot',
+                    key: 'elliot',
+                    ariaLabel: 'Elliot',
+                    title: 'Elliot',
+                    state: 'locked',
                 },
             ],
         },

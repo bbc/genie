@@ -5,32 +5,27 @@
             {
                 "type": "image",
                 "key": "title",
-                "url": "shared/small-title.png",
-                "overwrite": false
+                "url": "shared/small-title.png"
             },
             {
                 "type": "image",
                 "key": "background",
-                "url": "shared/background.png",
-                "overwrite": false
+                "url": "shared/background.png"
             },
             {
                 "type": "image",
                 "key": "carousel1",
-                "url": "options/secondcarousel_1.png",
-                "overwrite": false
+                "url": "options/secondcarousel_1.png"
             },
             {
                 "type": "image",
                 "key": "carousel2",
-                "url": "options/secondcarousel_2.png",
-                "overwrite": false
+                "url": "options/secondcarousel_2.png"
             },
             {
                 "type": "image",
                 "key": "carousel3",
-                "url": "options/secondcarousel_3.png",
-                "overwrite": false
+                "url": "options/secondcarousel_3.png"
             }
         ]
     }
