@@ -35,8 +35,17 @@ export function create(scene, getArea, rowsConfig, rowType) {
                 ...row.rowConfig.transition,
             });
             if (row.rowConfig.audio) {
-                scene.sound.play(row.rowConfig.audio.key, row.rowConfig.audio);
+                delayedAudio(row.rowConfig);
             }
+        });
+    };
+
+    // Audio delays arent paused when we add an overlay.
+    // Use a scene.time event to count down to the audio timer add it here and call it in row-transitions.
+    const delayedAudio = rowConfig => {
+        scene.time.addEvent({
+            delay: rowConfig.audio.delay,
+            callback: () => scene.sound.play(rowConfig.audio.key),
         });
     };
 
