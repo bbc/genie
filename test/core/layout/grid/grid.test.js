@@ -881,14 +881,6 @@ describe("Grid", () => {
             //    });
             //});
 
-            test("sets the tween duration to zero when motion is turned off in the GMI", () => {
-                motion = false;
-                grid.showPage(1);
-                const tweenCalls = mockScene.add.tween.mock.calls;
-                tweenCalls.forEach(tweenCall => {
-                    expect(tweenCall[0].duration).toBe(0);
-                });
-            });
 
             test("sets visibility of cells after paginating", () => {
                 mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
