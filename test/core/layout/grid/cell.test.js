@@ -185,18 +185,7 @@ describe("Grid Cells", () => {
             expect(accessibilify).toHaveBeenCalledWith(mockButton, true);
         });
     });
-    /*
-export const setSize = (grid, button) => {
-    const size = [...grid._cellSize];
-    const spriteAspect = button.sprite.width / button.sprite.height;
-    const cellAspect = size[0] / size[1];
-    const axisScale = spriteAspect < cellAspect ? 0 : 1;
-    const aspectRatioRatio = spriteAspect / cellAspect;
 
-    size[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
-    button.setDisplaySize(...size);
-};
- */
     describe("setSize method", () => {
         test("sets correct size of button when button is same size as cell", () => {
             setSize(mockGrid, mockButton);
