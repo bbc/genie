@@ -148,7 +148,7 @@
                         duration: 2000, 
                         delay: 2000 
                     }, // Tween delays are in milliseconds
-                    audio: { key: 'results.slide', delay: 2500 }, // Audio delays are in seconds
+                    audio: { key: 'results.slide', delay: 2500 },
                 },
                 {
                     format: [
