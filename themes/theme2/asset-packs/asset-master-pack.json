@@ -5,37 +5,12 @@
             {
                 "type": "image",
                 "key": "title",
-                "url": "shared/title.png",
-                "overwrite": false
+                "url": "shared/title.png"
             },
             {
                 "type": "image",
                 "key": "background",
-                "url": "shared/background.png",
-                "overwrite": false
-            }
-        ]
-    },
-    "results": {
-        "prefix": "results.",
-        "files": [
-            {
-                "type": "image",
-                "key": "background",
-                "url": "shared/background.png",
-                "overwrite": false
-            },
-            {
-                "type": "image",
-                "key": "title",
-                "url": "shared/title.png",
-                "overwrite": false
-            },
-            {
-                "type": "image",
-                "key": "backdrop",
-                "url": "results/backdrop-fill.png",
-                "overwrite": false
+                "url": "shared/background.png"
             }
         ]
     },
@@ -45,8 +20,12 @@
             {
                 "type": "image",
                 "key": "pauseBackground",
-                "url": "pause/pause-background.png",
-                "overwrite": false
+                "url": "pause/pause-background.png"
+            },
+            {
+                "type": "image",
+                "key": "title",
+                "url": "pause/title.png"
             }
         ]
     },

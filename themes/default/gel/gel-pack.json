@@ -44,8 +44,7 @@
             {
                 "type": "image",
                 "key": "notification",
-                "url": "gel/desktop/notification.png",
-                "overwrite": false
+                "url": "gel/desktop/notification.png"
             },
             {
                 "type": "spritesheet",
@@ -257,8 +256,7 @@
             {
                 "type": "image",
                 "key": "notification",
-                "url": "gel/mobile/notification.png",
-                "overwrite": false
+                "url": "gel/mobile/notification.png"
             },
             {
                 "type": "spritesheet",

@@ -5,14 +5,12 @@
             {
                 "type": "image",
                 "key": "title",
-                "url": "shared/title.png",
-                "overwrite": false
+                "url": "shared/title.png"
             },
             {
                 "type": "image",
                 "key": "background",
-                "url": "shared/background.png",
-                "overwrite": false
+                "url": "shared/background.png"
             }
         ]
     },
@@ -22,14 +20,12 @@
             {
                 "type": "image",
                 "key": "pauseBackground",
-                "url": "pause/pause-background.png",
-                "overwrite": false
+                "url": "pause/pause-background.png"
             },
             {
                 "type": "image",
                 "key": "title",
-                "url": "pause/title.png",
-                "overwrite": false
+                "url": "pause/title.png"
             }
         ]
     },
@@ -39,44 +35,37 @@
             {
                 "type": "image",
                 "key": "background",
-                "url": "how-to-play/background.png",
-                "overwrite": false
+                "url": "how-to-play/background.png"
             },
             {
                 "type": "image",
                 "key": "title",
-                "url": "how-to-play/title.png",
-                "overwrite": false
+                "url": "how-to-play/title.png"
             },
             {
                 "type": "image",
                 "key": "panel1",
-                "url": "how-to-play/how_to_play_1.png",
-                "overwrite": false
+                "url": "how-to-play/how_to_play_1.png"
             },
             {
                 "type": "image",
                 "key": "panel2",
-                "url": "how-to-play/how_to_play_2.png",
-                "overwrite": false
+                "url": "how-to-play/how_to_play_2.png"
             },
             {
                 "type": "image",
                 "key": "panel3",
-                "url": "how-to-play/how_to_play_3.png",
-                "overwrite": false
+                "url": "how-to-play/how_to_play_3.png"
             },
             {
                 "type": "image",
                 "key": "pipOn",
-                "url": "how-to-play/pip_on.png",
-                "overwrite": false
+                "url": "how-to-play/pip_on.png"
             },
             {
                 "type": "image",
                 "key": "pipOff",
-                "url": "how-to-play/pip_off.png",
-                "overwrite": false
+                "url": "how-to-play/pip_off.png"
             }
         ]
     },
@@ -86,8 +75,7 @@
             {
                 "type": "image",
                 "key": "basicSprite",
-                "url": "game/basic-sprite.png",
-                "overwrite": false
+                "url": "game/basic-sprite.png"
             }
         ]
     },
@@ -97,8 +85,7 @@
             {
                 "type": "image",
                 "key": "basicSprite",
-                "url": "game/basic-sprite.png",
-                "overwrite": false
+                "url": "game/basic-sprite.png"
             }
         ]
     },
@@ -108,8 +95,7 @@
             {
                 "type": "image",
                 "key": "basicSprite",
-                "url": "game/basic-sprite.png",
-                "overwrite": false
+                "url": "game/basic-sprite.png"
             }
         ]
     },
@@ -119,8 +105,7 @@
             {
                 "type": "image",
                 "key": "basicSprite",
-                "url": "game/basic-sprite.png",
-                "overwrite": false
+                "url": "game/basic-sprite.png"
             }
         ]
     },
@@ -130,14 +115,12 @@
             {
                 "type": "image",
                 "key": "basicSprite",
-                "url": "game/basic-sprite.png",
-                "overwrite": false
+                "url": "game/basic-sprite.png"
             },
             {
                 "type": "image",
                 "key": "grassTile",
-                "url": "game/grass-tile.png",
-                "overwrite": false
+                "url": "game/grass-tile.png"
             }
         ]
     },
@@ -147,8 +130,7 @@
             {
                 "type": "image",
                 "key": "basicSprite",
-                "url": "game/basic-sprite.png",
-                "overwrite": false
+                "url": "game/basic-sprite.png"
             }
         ]
     },

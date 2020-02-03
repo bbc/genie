@@ -5,32 +5,152 @@
             {
                 "type": "image",
                 "key": "title",
-                "url": "shared/title.png",
-                "overwrite": false
+                "url": "shared/small-title.png"
             },
             {
                 "type": "image",
                 "key": "background",
-                "url": "shared/background.png",
-                "overwrite": false
+                "url": "shared/background.png"
             },
             {
                 "type": "image",
-                "key": "carousel1",
-                "url": "options/carousel_1.png",
-                "overwrite": false
+                "key": "lock",
+                "url": "characters/lock.png"
             },
             {
                 "type": "image",
-                "key": "carousel2",
-                "url": "options/carousel_2.png",
-                "overwrite": false
+                "key": "complete",
+                "url": "characters/complete.png"
             },
             {
-                "type": "image",
-                "key": "carousel3",
-                "url": "options/carousel_3.png",
-                "overwrite": false
+                "type": "spritesheet",
+                "key": "char1",
+                "url": "characters/char_1_anim.png",
+                "frameConfig": {
+                    "frameWidth": 37,
+                    "frameHeight": 45,
+                    "frameMax": 10
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "mary",
+                "url": "characters/1.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "kyle",
+                "url": "characters/2.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "suzy",
+                "url": "characters/3.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "greg",
+                "url": "characters/4.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "ange",
+                "url": "characters/5.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "phil",
+                "url": "characters/6.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "mike",
+                "url": "characters/7.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "suzytoo",
+                "url": "characters/8.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "timmy",
+                "url": "characters/9.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "elliot",
+                "url": "characters/10.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
             }
         ]
     }

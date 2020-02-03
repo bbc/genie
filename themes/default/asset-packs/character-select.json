@@ -5,32 +5,27 @@
             {
                 "type": "image",
                 "key": "title",
-                "url": "shared/small-title.png",
-                "overwrite": false
+                "url": "shared/small-title.png"
             },
             {
                 "type": "image",
                 "key": "background",
-                "url": "shared/background.png",
-                "overwrite": false
+                "url": "shared/background.png"
             },
             {
                 "type": "image",
                 "key": "lock",
-                "url": "characters/lock.png",
-                "overwrite": false
+                "url": "characters/lock.png"
             },
             {
                 "type": "image",
                 "key": "complete",
-                "url": "characters/complete.png",
-                "overwrite": false
+                "url": "characters/complete.png"
             },
             {
                 "type": "spritesheet",
                 "key": "char1",
                 "url": "characters/char_1_anim.png",
-                "overwrite": false,
                 "frameConfig": {
                     "frameWidth": 37,
                     "frameHeight": 45,
