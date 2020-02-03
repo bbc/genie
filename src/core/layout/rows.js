@@ -34,6 +34,16 @@ export function create(scene, getArea, rowsConfig, rowType) {
                 targets: row,
                 ...row.rowConfig.transition,
             });
+            if (row.rowConfig.audio) {
+                delayedAudio(row.rowConfig);
+            }
+        });
+    };
+
+    const delayedAudio = rowConfig => {
+        scene.time.addEvent({
+            delay: rowConfig.audio.delay,
+            callback: () => scene.sound.play(rowConfig.audio.key),
         });
     };
 
