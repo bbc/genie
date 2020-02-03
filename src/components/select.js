@@ -34,14 +34,15 @@ export class Select extends Screen {
         this.addAnimations();
         this.theme = this.context.config.theme[this.scene.key];
         this.setTitleElements();
-        const continueBtn = this.theme.rows === 1 && this.theme.columns === 1 ? ["continue"] : [];
+        const continueBtn = this.theme.rows * this.theme.columns === 1 ? ["continue"] : [];
         const buttons = ["home", "pause", "previous", "next"];
         this.setLayout(buttons.concat(continueBtn));
         const metrics = getMetrics();
-        this.grid = new GelGrid(this, metrics, this.layout.getSafeArea(metrics), Object.assign(this.theme, gridDefaults));
+        const onTransitionStart = this.onTransitionStart.bind(this);
+        this.grid = new GelGrid(this, metrics, Object.assign(this.theme, gridDefaults, { onTransitionStart }));
         this.resize();
         this._cells = this.grid.addGridCells(this.theme.choices);
-        this.layout.addCustomGroup("grid", this.grid, 2);
+        this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
         this.scene.scene.events.on("shutdown", this._scaleEvent.unsubscribe, this);
@@ -52,16 +53,6 @@ export class Select extends Screen {
         this.states = state.create(this.context.theme.storageKey, stateConfig);
 
         this.updateStates();
-    }
-
-    updateContinue() {
-        if (!this.layout.buttons.continue) return;
-
-        const bool = this.currentEnabled();
-        this.layout.buttons.continue.input.enabled = bool;
-        this.layout.buttons.continue.alpha = bool ? 1 : 0.5;
-        this.layout.buttons.continue.tint = bool ? 0xffffff : 0x555555;
-        this.layout.buttons.continue.accessibleElement.update();
     }
 
     updateStates() {
@@ -166,13 +157,19 @@ export class Select extends Screen {
     }
 
     currentEnabled() {
+        console.log(this.grid.getCurrentPageKey());
         const currentState = this.states.get(this.grid.getCurrentPageKey()).state;
+        const stateDefinition = this.context.theme.states[currentState];
+        return stateDefinition === undefined || stateDefinition.enabled !== false;
+    }
 
-        const st = this.context.theme.states[currentState];
+    onTransitionStart() {
+        if (!this.layout.buttons.continue) return;
 
-        return st === undefined || st.enabled !== false;
-
-        //TODO when grid navs to new page need to know whether to disable button
+        const bool = this.currentEnabled();
+        this.layout.buttons.continue.input.enabled = bool;
+        this.layout.buttons.continue.alpha = bool ? 1 : 0.5;
+        this.layout.buttons.continue.accessibleElement.update();
     }
 
     next = getTitle => () => {
@@ -201,18 +198,12 @@ export class Select extends Screen {
         eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "next",
-            callback: function() {
-                grid.nextPage();
-                this.updateContinue();
-            }.bind(this),
+            callback: () => grid.showPage(grid.page + 1),
         });
         eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "previous",
-            callback: function() {
-                grid.previousPage();
-                this.updateContinue();
-            }.bind(this),
+            callback: () => grid.showPage(grid.page - 1),
         });
     }
 }

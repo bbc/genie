@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { create as createCell } from "./cell.js";
-import * as a11y from '../../accessibility/accessibility-layer.js'
+import * as a11y from "../../accessibility/accessibility-layer.js";
 
 const defaults = {
     rows: 1,
@@ -12,20 +12,21 @@ const defaults = {
     ease: "Cubic.easeInOut",
     duration: 500,
     align: "center",
+    onTransitionStart: () => {},
 };
 
 const resetCell = cell => cell.reset();
 
 export class GelGrid extends Phaser.GameObjects.Container {
-    constructor(scene, metrics, safeArea, config) {
+    constructor(scene, metrics, config) {
         super(scene, 0, 0);
 
         this._metrics = metrics;
-        this._safeArea = safeArea;
+        this._safeArea = scene.layout.getSafeArea(metrics);
         this._config = { ...defaults, ...config };
         this._cells = [];
         this._cellPadding = metrics.isMobile ? 16 : 24;
-        this._page = 0;
+        this.page = 0;
         this.eventChannel = `gel-buttons-${scene.scene.key}`;
         this.enforceLimits();
     }
@@ -80,22 +81,27 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._cells.forEach(cell => cell.makeAccessible());
     }
 
-    pageTransition(goForwards = true) {
-        const currentPage = this._page;
-        const nextPage = goForwards ? this._page + 1 : this._page - 1 + this.getPageCount();
+    showPage(pageNum) {
+        //goForwards = true) {
+        const previousPage = this.page;
+        const goForwards = pageNum > previousPage;
+        this.page = (pageNum + this.getPageCount()) % this.getPageCount();
 
-        this._page = nextPage % this.getPageCount();
         this.reset();
-        this.setPageVisibility(currentPage, true);
+        this.setPageVisibility(previousPage, true);
         this.scene.input.enabled = false;
 
-        this.getPageCells(this._page).forEach(cell => cell.addTweens({ ...this._config, tweenIn: true, goForwards }));
-        this.getPageCells(currentPage).forEach(cell => cell.addTweens({ ...this._config, tweenIn: false, goForwards }));
+        this._config.onTransitionStart();
+
+        this.getPageCells(this.page).forEach(cell => cell.addTweens({ ...this._config, tweenIn: true, goForwards }));
+        this.getPageCells(previousPage).forEach(cell =>
+            cell.addTweens({ ...this._config, tweenIn: false, goForwards }),
+        );
         this.scene.time.addEvent({
             delay: this._config.duration + 1,
             callback: this.transitionCallback,
             callbackScope: this,
-            args: [currentPage],
+            args: [previousPage],
         });
     }
 
@@ -104,19 +110,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.scene.input.enabled = true;
     }
 
-    nextPage() {
-        this.pageTransition();
-        return this._page;
-    }
-
     getCurrentPageKey() {
-        return this._cells[this._page].button.key;
-    }
-
-    previousPage() {
-        const goForward = false;
-        this.pageTransition(goForward);
-        return this._page;
+        return this._cells[this.page].button.key;
     }
 
     setPageVisibility(pageNum, visibility) {
@@ -135,6 +130,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
     reset() {
         this._cellSize = this.calculateCellSize();
         this._cells.forEach(resetCell);
-        this.setPageVisibility(this._page, true);
+        this.setPageVisibility(this.page, true);
     }
 }

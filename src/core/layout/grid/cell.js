@@ -15,13 +15,9 @@ const defaults = {
 };
 
 const transitionOnTab = (grid, button) => () => {
-    if (grid.getCurrentPageKey() === button.config.id) {
-        return;
-    }
-
-    const currentIdx = grid.cellIds().indexOf(grid.getCurrentPageKey());
+    if (grid.getCurrentPageKey() === button.config.id) return;
     const nextIdx = grid.cellIds().indexOf(button.config.id);
-    grid.pageTransition(nextIdx > currentIdx);
+    grid.showPage(nextIdx);
 };
 
 export const setSize = (grid, button) => {

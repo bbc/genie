@@ -342,6 +342,13 @@ describe("Accessibilify", () => {
                 false,
             );
         });
+
+        test("does not dispatches event if input disabled", () => {
+            mockButton.input.enabled = false;
+            accessibilify(mockButton);
+            accessibleDomElement.mock.calls[0][0].onClick();
+            expect(mockButton.emit).not.toHaveBeenCalled();
+        });
     });
 
     describe("Hover State", () => {
