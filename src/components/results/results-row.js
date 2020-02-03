@@ -3,6 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import fp from "../../../lib/lodash/fp/fp.js";
 
 import { ResultsText } from "./results-text.js";
 import { ResultsSprite } from "./results-sprite.js";
@@ -17,6 +18,7 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.setContainerPosition();
         this.align();
         this.setAlpha(rowConfig.alpha);
+        this.createBackdrop();
     }
 
     align() {
@@ -57,9 +59,19 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.y = centerY;
     }
 
+    createBackdrop() {
+        fp.get("backdrop.key", this.rowConfig) && this.backdropFill();
+    }
+
+    backdropFill() {
+        const backdrop = this.scene.add.image(0, 0, this.rowConfig.backdrop.key);
+        backdrop.alpha = this.rowConfig.backdrop.alpha || 1;
+        backdrop.height = this.displayHeight;
+        this.add(backdrop);
+        this.sendToBack(backdrop);
+    }
+
     reset() {
         this.setContainerPosition();
     }
-
-    makeAccessible() {}
 }
