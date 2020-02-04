@@ -11,7 +11,7 @@ import * as Scaler from "../scaler.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 import { loadPack } from "./loadpack.js";
-import _ from "../../../lib/lodash/lodash.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 const getMissingPacks = (masterPack, keys) =>
     Object.keys(keys)
@@ -34,7 +34,7 @@ export class Loader extends Screen {
 
         const entries = keys.map(key => this.cache.json.get(key));
 
-        return _.merge({}, ...entries);
+        return fp.merge(...entries, {});
     }
 
     preload() {

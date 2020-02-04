@@ -3,14 +3,13 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import _ from "../../lib/lodash/lodash.js";
+import fp from "../../lib/lodash/fp/fp.js";
 
 import { gmi } from "../core/gmi/gmi.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { eventBus } from "../core/event-bus.js";
 import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
-import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
@@ -47,7 +46,7 @@ export class Screen extends Phaser.Scene {
     //TODO P3 the only context parts we want them to set is transient data
     //TODO P3 maybe it should be separate? [NT]
     set transientData(newData) {
-        this._data.transient = _.merge({}, this._data.transient, newData);
+        this._data.transient = fp.merge(this._data.transient, newData, {});
     }
 
     get transientData() {

@@ -64,8 +64,9 @@ export class ResultsRow extends Phaser.GameObjects.Container {
     }
 
     backdropFill() {
-        const backdrop = this.scene.add.image(0, 0, this.rowConfig.backdrop.key);
-        backdrop.alpha = this.rowConfig.backdrop.alpha || 1;
+        const config = this.rowConfig.backdrop;
+        const backdrop = this.scene.add.image(config.offsetX || 0, config.offsetY || 0, config.key);
+        backdrop.alpha = config.alpha || 1;
         backdrop.height = this.displayHeight;
         this.add(backdrop);
         this.sendToBack(backdrop);

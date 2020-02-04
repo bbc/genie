@@ -139,10 +139,16 @@ describe("Results Row", () => {
     });
 
     describe("Backdrop Image", () => {
-        test("creates a backdrop image for the row", () => {
+        test("creates a backdrop image for the row at 0, 0 by default", () => {
             mockRowConfig.backdrop = { key: "results.row-backdrop-1", alpha: 0.5 };
             new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
             expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, mockRowConfig.backdrop.key);
+        });
+
+        test("creates a backdrop image with correct x and y offsets", () => {
+            mockRowConfig.backdrop = { key: "results.row-backdrop-1", offsetX: 20, offsetY: 40 };
+            new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+            expect(mockScene.add.image).toHaveBeenCalledWith(20, 40, mockRowConfig.backdrop.key);
         });
 
         test("does not create a backdrop if not set in the config", () => {

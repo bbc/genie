@@ -1,16 +1,17 @@
 /**
- * @copyright BBC 2018
+ * @copyright BBC 2020
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-
-import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 import { Screen } from "../../core/screen.js";
+import * as Rows from "../../core/layout/rows.js";
+import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 import { eventBus } from "../../core/event-bus.js";
 import { gmi } from "../../core/gmi/gmi.js";
-import * as Rows from "../../core/layout/rows.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
+import { tweenRows } from "./results-row-tween.js";
+import { playRowAudio } from "./results-row-audio.js";
 
 const getScoreMetaData = result => {
     if (typeof result === "number") {
@@ -34,9 +35,8 @@ export class Results extends Screen {
         this.addAnimations();
         this.createLayout();
         this.createBackdrop();
-        fireGameCompleteStat(this.transientData.results);
         this.subscribeToEventBus();
-        this.rows.rowTransitions();
+        fireGameCompleteStat(this.transientData.results);
     }
 
     resultsArea() {
@@ -46,10 +46,14 @@ export class Results extends Screen {
     createLayout() {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
-
         this.setLayout(buttons.concat(achievements));
+        this.createRows();
+    }
 
+    createRows() {
         this.rows = Rows.create(this, () => this.resultsArea(), this.theme.rows, Rows.RowType.Results);
+        tweenRows(this, this.rows.containers);
+        playRowAudio(this, this.rows.containers);
     }
 
     createBackdrop() {
@@ -74,16 +78,10 @@ export class Results extends Screen {
     subscribeToEventBus() {
         const scaleEvent = onScaleChange.add(() => this.sizeToParent(this.backdrop, this.resultsArea()));
         this.events.once("shutdown", scaleEvent.unsubscribe);
-        eventBus.subscribe({
-            name: "continue",
-            channel: buttonsChannel(this),
-            callback: this.navigation.next,
-        });
-
-        eventBus.subscribe({
-            name: "restart",
-            channel: buttonsChannel(this),
-            callback: this.navigation.game,
+        const fpMap = fp.map.convert({ cap: false });
+        fpMap((callback, name) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }), {
+            continue: this.navigation.next,
+            restart: this.navigation.game,
         });
     }
 }
