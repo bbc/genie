@@ -46,11 +46,11 @@ const setPosition = (grid, button, idx) => {
         blankCellCount * ((button.displayWidth + grid._cellPadding) / 2) * alignmentFactor[grid._config.align];
 
     const paddingXTotal = col * grid._cellPadding;
-    const leftBound = grid._safeArea.left + col * button.displayWidth;
+    const leftBound = grid._safeArea.left + col * grid._cellSize[0];
     const cellXCentre = grid._cellSize[0] / 2;
 
     const paddingYTotal = row * grid._cellPadding;
-    const topBound = grid._safeArea.top + row * button.displayHeight;
+    const topBound = grid._safeArea.top + row * grid._cellSize[1];
     const cellYCentre = grid._cellSize[1] / 2;
 
     button.x = leftBound + paddingXTotal + cellXCentre + blankPadding;
