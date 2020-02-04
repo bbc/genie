@@ -41,8 +41,7 @@ const setPosition = (grid, button, idx) => {
     const pageIdx = idx % grid.cellsPerPage;
     const col = pageIdx % grid._config.columns;
     const row = Math.floor(pageIdx / grid._config.columns);
-    const blankCellCount = Math.max(grid._config.columns * (row + 1) - grid.getPageCells(grid._page).length, 0);
-
+    const blankCellCount = Math.max(grid._config.columns * (row + 1) - grid.getPageCells(grid.page).length, 0);
     const blankPadding =
         blankCellCount * ((button.displayWidth + grid._cellPadding) / 2) * alignmentFactor[grid._config.align];
 

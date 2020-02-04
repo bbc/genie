@@ -472,228 +472,228 @@ describe("Grid", () => {
     //    });
     //});
 
-    //describe("grid cell positions", () => {
-    //    test("single cell is added at the centre of the safe area", () => {
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }];
-    //
-    //        grid = new GelGrid(mockScene, metrics);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
-    //
-    //        expect(resultCells[0].button.x).toEqual(0);
-    //        expect(resultCells[0].button.y).toEqual(0);
-    //    });
-    //
-    //    test("2 cells are aligned to the edges of the safe area in a 2 column layout", () => {
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-    //        mockScene.theme.columns = 2;
-    //        mockSafeArea.left = -400;
-    //        mockSafeArea.top = -300;
-    //        mockSafeArea.width = 700;
-    //        mockSafeArea.height = 700;
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
-    //
-    //        const expectedPositions = [
-    //            { x: mockSafeArea.left + resultCells[0].button.displayWidth / 2 },
-    //            { x: mockSafeArea.left + mockSafeArea.width - resultCells[1].button.displayWidth / 2 },
-    //        ];
-    //
-    //        expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
-    //        expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
-    //    });
-    //
-    //    test("3 cells are aligned in a 3 column layout", () => {
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }, { asset: "asset_name_2" }];
-    //        mockScene.theme.columns = 3;
-    //        mockSafeArea.left = -300;
-    //        mockSafeArea.top = -200;
-    //        mockSafeArea.width = 600;
-    //        mockSafeArea.height = 400;
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
-    //
-    //        const expectedPositions = [
-    //            {
-    //                x: mockSafeArea.left + 92,
-    //                y: 0,
-    //            },
-    //            {
-    //                x: mockSafeArea.left + 184 + desktopCellPadding + 92,
-    //                y: 0,
-    //            },
-    //            {
-    //                x: mockSafeArea.left + 184 + desktopCellPadding + 92 + desktopCellPadding,
-    //                y: 0,
-    //            },
-    //        ];
-    //
-    //        expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
-    //        expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
-    //    });
-    //
-    //    test("2 cells are aligned in a 1 column, 2 row layout", () => {
-    //        mockScene.theme.choices = [{ key: "asset_name_0" }, { key: "asset_name_1" }];
-    //        mockScene.theme.rows = 2;
-    //        mockSafeArea.top = -200;
-    //        mockSafeArea.left = -200;
-    //        mockSafeArea.width = 400;
-    //        mockSafeArea.height = 400;
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
-    //
-    //        const expectedPositions = [
-    //            {
-    //                x: 0,
-    //                y: mockSafeArea.top + 94,
-    //            },
-    //            {
-    //                x: 0,
-    //                y: mockSafeArea.top + 188 + desktopCellPadding + 94,
-    //            },
-    //        ];
-    //
-    //        expect(resultCells[0].button.y).toEqual(expectedPositions[0].y);
-    //        expect(resultCells[1].button.y).toEqual(expectedPositions[1].y);
-    //        expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
-    //        expect(resultCells[1].button.x).toEqual(expectedPositions[1].x); //expected 0 received 400
-    //    });
-    //
-    //    test("resize method sets cell positions", () => {
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-    //        mockScene.theme.columns = 2;
-    //        const initialSafeArea = {
-    //            left: -400,
-    //            top: -300,
-    //            height: 600,
-    //            width: 800,
-    //        };
-    //        const resizedSafeArea = {
-    //            left: -800,
-    //            top: -600,
-    //            width: 1600,
-    //            height: 1200,
-    //        };
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockScene.theme);
-    //        grid.addGridCells(mockScene.theme.choices);
-    //        grid.resize(metrics, resizedSafeArea);
-    //
-    //        const expectedPositions = [
-    //            {
-    //                x: -406,
-    //                y: 0,
-    //            },
-    //            {
-    //                x: 406,
-    //                y: 0,
-    //            },
-    //        ];
-    //
-    //        expect(grid._cells[0].button.x).toEqual(expectedPositions[0].x);
-    //        expect(grid._cells[1].button.x).toEqual(expectedPositions[1].x);
-    //    });
-    //
-    //    test("resize method sets correct cell positions when mobile", () => {
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-    //        mockScene.theme.columns = 2;
-    //        metrics.isMobile = true;
-    //        const initialSafeArea = {
-    //            left: -400,
-    //            top: -300,
-    //            height: 600,
-    //            width: 800,
-    //        };
-    //        const resizedSafeArea = {
-    //            left: -800,
-    //            top: -600,
-    //            width: 1600,
-    //            height: 1200,
-    //        };
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockScene.theme);
-    //        grid.addGridCells(mockScene.theme.choices);
-    //        grid.resize(metrics, resizedSafeArea);
-    //
-    //        const expectedPositions = [
-    //            {
-    //                x: -404,
-    //                y: 0,
-    //            },
-    //            {
-    //                x: 404,
-    //                y: 0,
-    //            },
-    //        ];
-    //
-    //        expect(grid._cells[0].button.x).toEqual(expectedPositions[0].x);
-    //        expect(grid._cells[1].button.x).toEqual(expectedPositions[1].x);
-    //    });
-    //
-    //    test("remainder of 2 cells in a 3 column layout are centre justified", () => {
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-    //        mockScene.theme.columns = 3;
-    //
-    //        const expectedPositions = [
-    //            {
-    //                x: -104,
-    //            },
-    //            {
-    //                x: 104,
-    //            },
-    //        ];
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
-    //
-    //        // expect(resultCells[0].x).toEqual(expectedPositions[0].x);
-    //        expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
-    //    });
-    //
-    //    test("remainder of 2 cells in a 3 column layout are left justified from config", () => {
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-    //        mockScene.theme.columns = 3;
-    //        mockScene.theme.align = "left";
-    //
-    //        const expectedPositions = [
-    //            {
-    //                x: -208,
-    //            },
-    //            {
-    //                x: 0,
-    //            },
-    //        ];
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
-    //
-    //        expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
-    //        expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
-    //    });
-    //
-    //    test("remainder of 2 cells in a 3 column layout are right justified from config", () => {
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-    //        mockScene.theme.columns = 3;
-    //        mockScene.theme.align = "right";
-    //
-    //        const expectedPositions = [
-    //            {
-    //                x: 0,
-    //            },
-    //            {
-    //                x: 208,
-    //            },
-    //        ];
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
-    //
-    //        expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
-    //        expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
-    //    });
-    //});
+    describe("grid cell positions", () => {
+        test("single cell is added at the centre of the safe area", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }];
+
+            grid = new GelGrid(mockScene, metrics);
+            const resultCells = grid.addGridCells(mockScene.theme.choices);
+
+            expect(resultCells[0].button.x).toEqual(0);
+            expect(resultCells[0].button.y).toEqual(0);
+        });
+
+        test("2 cells are aligned to the edges of the safe area in a 2 column layout", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 2;
+            mockSafeArea.left = -400;
+            mockSafeArea.top = -300;
+            mockSafeArea.width = 700;
+            mockSafeArea.height = 700;
+
+            grid = new GelGrid(mockScene, metrics, mockScene.theme);
+            const resultCells = grid.addGridCells(mockScene.theme.choices);
+
+            const expectedPositions = [
+                { x: mockSafeArea.left + resultCells[0].button.displayWidth / 2 },
+                { x: mockSafeArea.left + mockSafeArea.width - resultCells[1].button.displayWidth / 2 },
+            ];
+
+            expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
+            expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
+        });
+
+        test("3 cells are aligned in a 3 column layout", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }, { asset: "asset_name_2" }];
+            mockScene.theme.columns = 3;
+            mockSafeArea.left = -300;
+            mockSafeArea.top = -200;
+            mockSafeArea.width = 600;
+            mockSafeArea.height = 400;
+
+            grid = new GelGrid(mockScene, metrics, mockScene.theme);
+            const resultCells = grid.addGridCells(mockScene.theme.choices);
+
+            const expectedPositions = [
+                {
+                    x: mockSafeArea.left + 92,
+                    y: 0,
+                },
+                {
+                    x: mockSafeArea.left + 184 + desktopCellPadding + 92,
+                    y: 0,
+                },
+                {
+                    x: mockSafeArea.left + 184 + desktopCellPadding + 92 + desktopCellPadding,
+                    y: 0,
+                },
+            ];
+
+            expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
+            expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
+        });
+
+        test("2 cells are aligned in a 1 column, 2 row layout", () => {
+            mockScene.theme.choices = [{ key: "asset_name_0" }, { key: "asset_name_1" }];
+            mockScene.theme.rows = 2;
+            mockSafeArea.top = -200;
+            mockSafeArea.left = -200;
+            mockSafeArea.width = 400;
+            mockSafeArea.height = 400;
+
+            grid = new GelGrid(mockScene, metrics, mockScene.theme);
+            const resultCells = grid.addGridCells(mockScene.theme.choices);
+
+            const expectedPositions = [
+                {
+                    x: 0,
+                    y: mockSafeArea.top + 94,
+                },
+                {
+                    x: 0,
+                    y: mockSafeArea.top + 188 + desktopCellPadding + 94,
+                },
+            ];
+
+            expect(resultCells[0].button.y).toEqual(expectedPositions[0].y);
+            expect(resultCells[1].button.y).toEqual(expectedPositions[1].y);
+            expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
+            expect(resultCells[1].button.x).toEqual(expectedPositions[1].x); //expected 0 received 400
+        });
+
+        test("resize method sets cell positions", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 2;
+            const initialSafeArea = {
+                left: -400,
+                top: -300,
+                height: 600,
+                width: 800,
+            };
+            const resizedSafeArea = {
+                left: -800,
+                top: -600,
+                width: 1600,
+                height: 1200,
+            };
+
+            grid = new GelGrid(mockScene, metrics, mockScene.theme);
+            grid.addGridCells(mockScene.theme.choices);
+            grid.resize(metrics, resizedSafeArea);
+
+            const expectedPositions = [
+                {
+                    x: -406,
+                    y: 0,
+                },
+                {
+                    x: 406,
+                    y: 0,
+                },
+            ];
+
+            expect(grid._cells[0].button.x).toEqual(expectedPositions[0].x);
+            expect(grid._cells[1].button.x).toEqual(expectedPositions[1].x);
+        });
+
+        test("resize method sets correct cell positions when mobile", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 2;
+            metrics.isMobile = true;
+            const initialSafeArea = {
+                left: -400,
+                top: -300,
+                height: 600,
+                width: 800,
+            };
+            const resizedSafeArea = {
+                left: -800,
+                top: -600,
+                width: 1600,
+                height: 1200,
+            };
+
+            grid = new GelGrid(mockScene, metrics, mockScene.theme);
+            grid.addGridCells(mockScene.theme.choices);
+            grid.resize(metrics, resizedSafeArea);
+
+            const expectedPositions = [
+                {
+                    x: -404,
+                    y: 0,
+                },
+                {
+                    x: 404,
+                    y: 0,
+                },
+            ];
+
+            expect(grid._cells[0].button.x).toEqual(expectedPositions[0].x);
+            expect(grid._cells[1].button.x).toEqual(expectedPositions[1].x);
+        });
+
+        test("remainder of 2 cells in a 3 column layout are centre justified", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 3;
+
+            const expectedPositions = [
+                {
+                    x: -104,
+                },
+                {
+                    x: 104,
+                },
+            ];
+
+            grid = new GelGrid(mockScene, metrics, mockScene.theme);
+            const resultCells = grid.addGridCells(mockScene.theme.choices);
+
+            // expect(resultCells[0].x).toEqual(expectedPositions[0].x);
+            expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
+        });
+
+        test("remainder of 2 cells in a 3 column layout are left justified from config", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 3;
+            mockScene.theme.align = "left";
+
+            const expectedPositions = [
+                {
+                    x: -208,
+                },
+                {
+                    x: 0,
+                },
+            ];
+
+            grid = new GelGrid(mockScene, metrics, mockScene.theme);
+            const resultCells = grid.addGridCells(mockScene.theme.choices);
+
+            expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
+            expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
+        });
+
+        test("remainder of 2 cells in a 3 column layout are right justified from config", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
+            mockScene.theme.columns = 3;
+            mockScene.theme.align = "right";
+
+            const expectedPositions = [
+                {
+                    x: 0,
+                },
+                {
+                    x: 208,
+                },
+            ];
+
+            grid = new GelGrid(mockScene, metrics, mockScene.theme);
+            const resultCells = grid.addGridCells(mockScene.theme.choices);
+
+            expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
+            expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
+        });
+    });
 
     describe("resize method", () => {
         test("stores safeArea and metrics on class", () => {
