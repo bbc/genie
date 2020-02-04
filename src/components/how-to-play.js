@@ -7,7 +7,7 @@
  * @license Apache-2.0
  */
 
-import _ from "../../../lib/lodash/lodash.js";
+import _ from "../../lib/lodash/lodash.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
