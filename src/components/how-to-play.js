@@ -7,6 +7,7 @@
  * @license Apache-2.0
  */
 
+import fp from "../../lib/lodash/fp/fp.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
@@ -116,42 +117,20 @@ export class HowToPlay extends Screen {
     }
 
     addEventSubscriptions() {
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "previous",
-            callback: this.handleLeftButton.bind(this),
-        });
-
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "next",
-            callback: this.handleRightButton.bind(this),
-        });
-
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "continue",
-            callback: this.startGame.bind(this),
-        });
-
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "pause",
-            callback: () => {
+        fp.toPairs({
+            previous: this.handleLeftButton.bind(this),
+            next: this.handleRightButton.bind(this),
+            continue: this.startGame.bind(this),
+            pause: () => {
                 // stops screenreader from announcing the options when the pause overlay is covering them
                 this.accessibleCarouselElements.forEach(element => {
                     element.setAttribute("aria-hidden", true);
                 });
             },
-        });
-
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "play",
-            callback: () => {
+            play: () => {
                 // makes the screenreader announce the selected option
                 this.accessibleCarouselElements[this.currentIndex].setAttribute("aria-hidden", false);
             },
-        });
+        }).map(([name, callback]) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }));
     }
 }
