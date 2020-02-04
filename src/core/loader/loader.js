@@ -33,7 +33,7 @@ export class Loader extends Screen {
         const keys = configFile.files.map(file => configFile.prefix + file.key);
         const entries = keys.map(key => this.cache.json.get(key));
 
-        return entries.reduce((acc, entry) => fp.merge(acc, entry), {})
+        return entries.reduce((acc, entry) => fp.merge(acc, entry), {});
     }
 
     preload() {
