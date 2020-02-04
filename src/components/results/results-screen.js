@@ -79,12 +79,10 @@ export class Results extends Screen {
     subscribeToEventBus() {
         const scaleEvent = onScaleChange.add(() => this.sizeToParent(this.backdrop, this.resultsArea()));
         this.events.once("shutdown", scaleEvent.unsubscribe);
-        _.mapValues(
-            {
-                continue: this.navigation.next,
-                restart: this.navigation.game,
-            },
-            (callback, name) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }),
-        );
+        const fpMap = fp.map.convert({ cap: false });
+        fpMap((callback, name) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }), {
+            continue: this.navigation.next,
+            restart: this.navigation.game,
+        });
     }
 }
