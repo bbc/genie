@@ -17,6 +17,7 @@ describe("Grid", () => {
     let mockSprite;
     let grid;
     let mockSafeArea;
+    let desktopCellPadding;
     let transitionCallback;
 
     beforeEach(() => {
@@ -94,6 +95,8 @@ describe("Grid", () => {
             scale: 1,
             screenToCanvas: jest.fn(n => n),
         };
+
+        desktopCellPadding = 24;
 
         mockRoot = {
             add: jest.fn(),
