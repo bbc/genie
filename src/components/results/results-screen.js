@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
+import _ from "../../../lib/lodash/lodash.js";
 import { Screen } from "../../core/screen.js";
 import * as Rows from "../../core/layout/rows.js";
 import { buttonsChannel } from "../../core/layout/gel-defaults.js";
@@ -78,9 +79,12 @@ export class Results extends Screen {
     subscribeToEventBus() {
         const scaleEvent = onScaleChange.add(() => this.sizeToParent(this.backdrop, this.resultsArea()));
         this.events.once("shutdown", scaleEvent.unsubscribe);
-        fp.toPairs({
-            continue: this.navigation.next,
-            restart: this.navigation.game,
-        }).map(([name, callback]) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }));
+        _.mapValues(
+            {
+                continue: this.navigation.next,
+                restart: this.navigation.game,
+            },
+            (callback, name) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }),
+        );
     }
 }

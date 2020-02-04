@@ -7,7 +7,7 @@
  * @license Apache-2.0
  */
 
-import fp from "../../lib/lodash/fp/fp.js";
+import _ from "../../../lib/lodash/lodash.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
@@ -117,20 +117,23 @@ export class HowToPlay extends Screen {
     }
 
     addEventSubscriptions() {
-        fp.toPairs({
-            previous: this.handleLeftButton.bind(this),
-            next: this.handleRightButton.bind(this),
-            continue: this.startGame.bind(this),
-            pause: () => {
-                // stops screenreader from announcing the options when the pause overlay is covering them
-                this.accessibleCarouselElements.forEach(element => {
-                    element.setAttribute("aria-hidden", true);
-                });
+        _.mapValues(
+            {
+                previous: this.handleLeftButton.bind(this),
+                next: this.handleRightButton.bind(this),
+                continue: this.startGame.bind(this),
+                pause: () => {
+                    // stops screenreader from announcing the options when the pause overlay is covering them
+                    this.accessibleCarouselElements.forEach(element => {
+                        element.setAttribute("aria-hidden", true);
+                    });
+                },
+                play: () => {
+                    // makes the screenreader announce the selected option
+                    this.accessibleCarouselElements[this.currentIndex].setAttribute("aria-hidden", false);
+                },
             },
-            play: () => {
-                // makes the screenreader announce the selected option
-                this.accessibleCarouselElements[this.currentIndex].setAttribute("aria-hidden", false);
-            },
-        }).map(([name, callback]) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }));
+            (callback, name) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }),
+        );
     }
 }
