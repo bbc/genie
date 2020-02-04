@@ -5,7 +5,7 @@
  */
 import { createMockGmi } from "../mock/gmi";
 
-import { Screen, overlayChannel } from "../../src/core/screen";
+import { Screen } from "../../src/core/screen";
 import * as Layout from "../../src/core/layout/layout.js";
 import * as Scaler from "../../src/core/scaler.js";
 import * as GameSound from "../../src/core/game-sound";
@@ -23,6 +23,7 @@ describe("Screen", () => {
     let mockSettings;
     let mockTransientData;
     let mockNavigation;
+    let mockParentScreen;
     const mockGfx = { test: "1234" };
 
     const createScreen = key => {
@@ -46,10 +47,11 @@ describe("Screen", () => {
             boot: { routes: { next: "loader" } },
             loader: { routes: { next: "home" } },
         };
+        mockParentScreen = { key: "select", removeAll: jest.fn(), _onOverlayRemoved: jest.fn() };
         mockData = {
             navigation: mockNavigation,
             config: { theme: { loadscreen: { music: "test/music" }, screenKey: {} } },
-            parentScreens: [{ key: "select", removeAll: jest.fn() }],
+            parentScreens: [mockParentScreen],
             transient: mockTransientData,
         };
         screen.init(mockData);
@@ -225,17 +227,6 @@ describe("Screen", () => {
     });
 
     describe("Overlays", () => {
-        test("adding an overlay, subscribes to event bus correctly", () => {
-            const expectedName = "overlay";
-            createAndInitScreen();
-            screen.addOverlay(expectedName);
-            expect(eventBus.subscribe).toHaveBeenCalledWith({
-                channel: overlayChannel,
-                name: expectedName,
-                callback: screen._onOverlayRemoved,
-            });
-        });
-
         test("adding an overlay, adds the scene to the list of parent screens", () => {
             createAndInitScreen();
             screen.addOverlay("overlay");
@@ -249,31 +240,16 @@ describe("Screen", () => {
             expect(screen.scene.bringToTop).toHaveBeenCalled();
         });
 
-        test("removing an overlay, publishes to and removes subscription from event bus correctly", () => {
+        test("removing an overlay, calls onOverlayRemoved on the parent screen", () => {
             createAndInitScreen();
             screen.removeOverlay();
-            expect(eventBus.publish).toHaveBeenCalledWith({
-                channel: overlayChannel,
-                name: screen.scene.key,
-                data: { overlay: expect.any(Screen) },
-            });
-            expect(eventBus.removeSubscription).toHaveBeenCalledWith({
-                channel: overlayChannel,
-                name: screen.scene.key,
-            });
-        });
-
-        test("removing an overlay, removes the overlays button channel", () => {
-            const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
-            createAndInitScreen();
-            screen._onOverlayRemoved({ overlay: mockOverlay });
-            expect(eventBus.removeChannel).toHaveBeenCalledWith(buttonsChannel(mockOverlay));
+            expect(mockParentScreen._onOverlayRemoved).toHaveBeenCalledWith(screen);
         });
 
         test("removing an overlay, calls removeAll on the overlay and stops it", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
             createAndInitScreen();
-            screen._onOverlayRemoved({ overlay: mockOverlay });
+            screen._onOverlayRemoved(mockOverlay);
             expect(mockOverlay.removeAll).toHaveBeenCalled();
             expect(mockOverlay.scene.stop).toHaveBeenCalled();
         });
@@ -282,7 +258,7 @@ describe("Screen", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "select", stop: jest.fn() } };
             createAndInitScreen();
             jest.clearAllMocks();
-            screen._onOverlayRemoved({ overlay: mockOverlay });
+            screen._onOverlayRemoved(mockOverlay);
             expect(a11y.destroy).toHaveBeenCalled();
         });
 
@@ -294,7 +270,7 @@ describe("Screen", () => {
             Layout.create = () => mockLayout;
             screen.setLayout();
             jest.clearAllMocks();
-            screen._onOverlayRemoved({ overlay: mockOverlay });
+            screen._onOverlayRemoved(mockOverlay);
             expect(mockLayout.makeAccessible).toHaveBeenCalled();
             expect(a11y.reset).toHaveBeenCalled();
         });
@@ -305,7 +281,7 @@ describe("Screen", () => {
             createAndInitScreen();
             screen.sys.accessibleButtons = [mockButton];
             jest.clearAllMocks();
-            screen._onOverlayRemoved({ overlay: mockOverlay });
+            screen._onOverlayRemoved(mockOverlay);
             expect(a11y.addButton).toHaveBeenCalledWith(mockButton);
         });
 
@@ -313,7 +289,7 @@ describe("Screen", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "overlay", stop: jest.fn() } };
             createAndInitScreen();
             jest.clearAllMocks();
-            screen._onOverlayRemoved({ overlay: mockOverlay });
+            screen._onOverlayRemoved(mockOverlay);
 
             expect(mockGmi.setStatsScreen).toHaveBeenCalledWith("screenKey");
         });
@@ -322,7 +298,7 @@ describe("Screen", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "overlay", stop: jest.fn() } };
             createAndInitScreen();
             jest.clearAllMocks();
-            screen._onOverlayRemoved({ overlay: mockOverlay });
+            screen._onOverlayRemoved(mockOverlay);
             expect(eventBus.publish).toHaveBeenCalledWith({
                 channel: settingsChannel,
                 name: "audio",
