@@ -4,7 +4,6 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import _ from "../../../lib/lodash/lodash.js";
 import { Screen } from "../../core/screen.js";
 import * as Rows from "../../core/layout/rows.js";
 import { buttonsChannel } from "../../core/layout/gel-defaults.js";
