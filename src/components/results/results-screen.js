@@ -3,13 +3,14 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import fp from "../../../lib/lodash/fp/fp.js";
+
 import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 import { Screen } from "../../core/screen.js";
 import { eventBus } from "../../core/event-bus.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import * as Rows from "../../core/layout/rows.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
-import fp from "../../../lib/lodash/fp/fp.js";
 
 const getScoreMetaData = result => {
     if (typeof result === "number") {

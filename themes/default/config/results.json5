@@ -21,22 +21,23 @@
                             },
                         },
                     ],
+                    sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
+                    alpha: 1, //optional
                     backdrop: 'imgKey', //optional
-                    // alpha: 1
                 },
                 {
                     format: [
                         {
                             type: 'text',
                             content: 'You collected: ',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
                                 color: '#FFFFFF',
                             },
                         },
-                        { type: 'sprite', key: 'game.star', offsetX: 20, offsetY: -20 },
+                        { type: 'sprite', key: 'game.star', offsetX: 20, offsetY: 0 },
                         {
                             type: 'countup',
                             startCount: 0,
@@ -50,7 +51,7 @@
                                 endPlayRate: 1.2,
                             },
                             offsetX: 15,
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -61,7 +62,7 @@
                         {
                             type: 'text',
                             content: ' star<% stars !== 1 && print("s") %>',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -71,7 +72,7 @@
                         {
                             type: 'text',
                             content: '!',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -79,9 +80,13 @@
                             },
                         },
                     ],
-                    alpha: 0,
+                    backdrop: { //optional
+                        key: 'results.row-backdrop-1',
+                        alpha: 0.5,
+                    },
+                    alpha: 1, //optional
                     // Transitions object is passed as part of a tween config to the scene
-                    transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 },
+                    transition: { rotation: { from: -4, to: 0 }, alpha: {from: 0, to: 1}, duration: 1000 },
                     audio: { key: 'results.woosh' },
                 },
                 {
@@ -89,7 +94,7 @@
                         {
                             type: 'text',
                             content: 'You collected: ',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -101,7 +106,7 @@
                             key: 'game.diamond',
                             frame: 0,
                             offsetX: 20,
-                            offsetY: -20,
+                            offsetY: 0,
                             anim: {
                                 frames: {
                                     start: 0,
@@ -121,7 +126,7 @@
                                 key: 'results.gem-sfx',
                             },
                             offsetX: 15,
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -132,7 +137,7 @@
                         {
                             type: 'text',
                             content: ' gem<% gems !== 1 && print("s") %>',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -142,7 +147,7 @@
                         {
                             type: 'text',
                             content: '!',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -150,6 +155,10 @@
                             },
                         },
                     ],
+                    backdrop: { //optional
+                        key: 'results.row-backdrop-2',
+                        alpha: 0.5,
+                    },
                     alpha: 0,
                     transition: {
                         alpha: {
@@ -170,14 +179,14 @@
                         {
                             type: 'text',
                             content: 'You collected: ',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
                                 color: '#FFFFFF',
                             },
                         },
-                        { type: 'sprite', key: 'game.key', offsetX: 20, offsetY: -20 },
+                        { type: 'sprite', key: 'game.key', offsetX: 0, offsetY: 0 },
                         {
                             type: 'countup',
                             startCount: 0,
@@ -188,7 +197,7 @@
                                 key: 'results.key-sfx',
                             },
                             offsetX: 15,
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -199,7 +208,7 @@
                         {
                             type: 'text',
                             content: ' key<% keys !== 1 && print("s") %>',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -209,7 +218,7 @@
                         {
                             type: 'text',
                             content: '!',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -217,6 +226,10 @@
                             },
                         },
                     ],
+                    backdrop: { //optional
+                        key: 'results.row-backdrop-3',
+                        alpha: 0.5,
+                    },
                     alpha: 0,
                     transition: {
                         scale: { from: 0, to: 1 },

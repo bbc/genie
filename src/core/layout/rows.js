@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 
+import { gmi } from "../gmi/gmi.js";
 import { ResultsRow } from "../../components/results/results-row.js";
 
 export const RowType = {
@@ -30,10 +31,11 @@ export function create(scene, getArea, rowsConfig, rowType) {
 
     const rowTransitions = () => {
         containers.forEach(row => {
-            scene.add.tween({
-                targets: row,
-                ...row.rowConfig.transition,
-            });
+            if (!gmi.getAllSettings().motion) {
+                row.rowConfig.transition.duration = 0;
+            }
+            scene.add.tween({ targets: row, ...row.rowConfig.transition });
+
             if (row.rowConfig.audio) {
                 delayedAudio(row.rowConfig);
             }
