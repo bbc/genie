@@ -12,14 +12,19 @@ import { getMetrics, onScaleChange } from "../../core/scaler.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const getScoreMetaData = result => {
-    if (typeof result === "number") {
-        return { metadata: `SCO=[${result}]` };
+    if (result == "" || result == undefined) {
+        return undefined;
     }
-    if (typeof result === "string") {
-        const digitsRegex = /\d+/;
-        const score = result.match(digitsRegex);
-        return score ? { metadata: `SCO=[${score}]` } : undefined;
+    let resultString = resultsToString(result);
+    return { metadata: `SCO=[${resultString}]` };
+};
+
+const resultsToString = obj => {
+    let resultString = "";
+    for (const x in obj) {
+        str += x + ":" + obj[x] + ",";
     }
+    return resultString;
 };
 
 const fireGameCompleteStat = result => {
