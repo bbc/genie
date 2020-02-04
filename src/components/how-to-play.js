@@ -55,7 +55,7 @@ export class HowToPlay extends Screen {
 
     focusOnButton(buttonName) {
         const button = this.buttonLayout.buttons[buttonName];
-        button.accessibleElement.focus();
+        button.accessibleElement.el.focus();
     }
 
     setButtonFocus() {

@@ -29,6 +29,7 @@ export const create = (stateKey, config) => {
     };
 
     const state = {
+        config,
         get,
         getAll,
         set,

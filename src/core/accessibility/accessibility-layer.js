@@ -3,81 +3,73 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Buttons } from "./accessible-buttons.js";
-import { hideAndDisableElement } from "./element-manipulator.js";
+import { hideAndDisableElement, removeFromParent } from "./element-manipulator.js";
+import fp from "../../../lib/lodash/fp/fp.js";
+import crel from "../../../node_modules/crel/crel.es.js";
 
-let _accessibleButtons = {};
+let domButtons = [];
+let domGroups = [];
+let root = crel("div", { id: "accessibility", role: "application" });
 
-const hasAccessibleElement = button => {
-    return !!(button.accessibleElement && button.accessibleElement.id);
+const hasAccessibleElement = button => Boolean(fp.get("accessibleElement.el.id", button));
+const buttonInDomElements = domEl => button => button.accessibleElement.el.id === domEl.id;
+
+const getElFromDom = domEl => {
+    const domButton = domButtons.filter(hasAccessibleElement).find(buttonInDomElements(domEl));
+    return fp.get("accessibleElement", domButton);
 };
 
-const PARENT_ELEMENT_ID = "accessibility";
+const isDefined = value => Boolean(value);
+const isActiveElement = el => document.activeElement === el;
+const isNotActiveElement = el => document.activeElement !== el;
 
-export const getAccessibleButtons = key => (_accessibleButtons[key] ? _accessibleButtons[key] : []);
+const clear = () => {
+    const children = Array.from(root.childNodes);
+    const groups = children.filter(child => child.dataset.type === "group");
+    const rootButtons = children.filter(child => child.dataset.type !== "group");
+    const buttons = groups.reduce((acc, group) => acc.concat(Array.from(group.childNodes)), []).concat(rootButtons);
 
-export const setup = gameParentElement => {
-    const el = document.createElement("div");
-    el.id = PARENT_ELEMENT_ID;
-    el.setAttribute("role", "application");
-    gameParentElement.appendChild(el);
+    buttons
+        .filter(isActiveElement)
+        .map(getElFromDom)
+        .filter(isDefined)
+        .map(hideAndDisableElement);
+
+    buttons.filter(isNotActiveElement).map(removeFromParent);
+    groups.map(removeFromParent);
 };
 
-export const addToAccessibleButtons = (screen, button) => {
-    const visibleScreenKey = screen.scene.key;
-    Buttons[button.elementId] = button;
-
-    if (_accessibleButtons[visibleScreenKey]) {
-        _accessibleButtons[visibleScreenKey].push(button);
-    } else {
-        _accessibleButtons[visibleScreenKey] = [button];
-    }
+const clearButtons = () => {
+    domButtons = [];
+    domGroups = [];
 };
 
-export const removeFromAccessibleButtons = (screen, button) => {
-    const visibleScreenKey = screen.scene.key;
-
-    const idx = _accessibleButtons[visibleScreenKey].indexOf(button);
-
-    if (idx !== -1) {
-        _accessibleButtons[visibleScreenKey].splice(idx, 1);
-    }
+const getParent = (sceneGroups, buttonGroup) => {
+    const group = sceneGroups.find(group => group.id === buttonGroup);
+    return group ? group.el : root;
 };
 
-export const clearAccessibleButtons = screen => {
-    if (screen) {
-        _accessibleButtons[screen.scene.key] = [];
-    } else {
-        _accessibleButtons = {};
-    }
+const addButtonToLayer = button => {
+    const parent = getParent(domGroups, button.config.group);
+    parent.appendChild(button.accessibleElement.el);
 };
 
-export const clearElementsFromDom = () => {
-    const parentElement = document.getElementById(PARENT_ELEMENT_ID);
-    const childNodes = Array.from(parentElement.childNodes);
-    childNodes.forEach(el => {
-        if (document.activeElement === el) {
-            hideAndDisableElement(el);
-        } else {
-            el.parentElement.removeChild(el);
-        }
-    });
+const addGroupToLayer = group => root.appendChild(group.el);
 
-    return parentElement;
+const createDom = () => {
+    domGroups.forEach(addGroupToLayer);
+    domButtons.filter(hasAccessibleElement).forEach(addButtonToLayer);
 };
 
-export const appendElementsToDom = screen => {
-    const buttons = getAccessibleButtons(screen.scene.key);
-    const parentElement = document.getElementById(PARENT_ELEMENT_ID);
+export const addGroupAt = (id, pos) => {
+    pos = pos || domGroups.length;
 
-    buttons.forEach(button => {
-        if (hasAccessibleElement(button)) {
-            parentElement.appendChild(button.accessibleElement);
-        }
-    });
+    const el = crel("div", { id: "accessible-group-" + id, "data-type": "group" });
+    domGroups.splice(pos, 0, { el, id });
 };
 
-export const resetElementsInDom = screen => {
-    clearElementsFromDom();
-    appendElementsToDom(screen);
-};
+export const create = gameParentElement => gameParentElement.appendChild(root);
+export const addButton = button => domButtons.push(button);
+export const removeButton = buttonToRemove => (domButtons = domButtons.filter(button => button !== buttonToRemove));
+export const destroy = fp.flow([clear, clearButtons]);
+export const reset = fp.flow([clear, createDom]);

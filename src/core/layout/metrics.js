@@ -11,6 +11,8 @@ export const GEL_MIN_ASPECT_RATIO = 4 / 3;
 export const GEL_MAX_ASPECT_RATIO = 7 / 3;
 export const CANVAS_WIDTH = 1400;
 export const CANVAS_HEIGHT = 600;
+export const CAMERA_X = CANVAS_WIDTH / 2;
+export const CAMERA_Y = CANVAS_HEIGHT / 2;
 
 const getScale = fp.curry((stageHeight, width, height) =>
     fp.cond([
@@ -27,7 +29,7 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
     const safeWidth = stageHeight * GEL_MIN_ASPECT_RATIO;
     const screenToCanvas = x => x / scale;
 
-    const metrics = {
+    return {
         width,
         height,
         scale,
@@ -55,6 +57,4 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
             bottom: stageHeight / 2,
         },
     };
-
-    return metrics;
 });

@@ -37,6 +37,7 @@ describe("Layout", () => {
 
         mockRoot = {
             add: jest.fn(),
+            addAt: jest.fn(),
             destroy: jest.fn(),
         };
 
@@ -218,7 +219,7 @@ describe("Layout", () => {
             const customGroup = { test_key: "test_value" };
             layout.addCustomGroup(key, customGroup);
 
-            expect(mockRoot.add).toHaveBeenCalledWith(customGroup);
+            expect(mockRoot.addAt).toHaveBeenCalledWith(customGroup, 0);
         });
     });
 
