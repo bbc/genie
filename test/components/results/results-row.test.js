@@ -191,4 +191,9 @@ describe("Results Row", () => {
         expect(resultsRow.x).toBe(mockDrawArea.centerX);
         expect(resultsRow.y).toBe(mockDrawArea.centerY);
     });
+
+    test("the makeAccessible function has been implemented to stop overlays from crashing", () => {
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        expect(resultsRow.makeAccessible).not.toThrow();
+    });
 });

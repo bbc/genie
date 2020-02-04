@@ -75,4 +75,6 @@ export class ResultsRow extends Phaser.GameObjects.Container {
     reset() {
         this.setContainerPosition();
     }
+
+    makeAccessible() {}
 }
