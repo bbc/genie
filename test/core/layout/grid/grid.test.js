@@ -564,12 +564,6 @@ describe("Grid", () => {
         test("resize method sets cell positions", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.columns = 2;
-            const initialSafeArea = {
-                left: -400,
-                top: -300,
-                height: 600,
-                width: 800,
-            };
             const resizedSafeArea = {
                 left: -800,
                 top: -600,
@@ -600,12 +594,6 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.columns = 2;
             metrics.isMobile = true;
-            const initialSafeArea = {
-                left: -400,
-                top: -300,
-                height: 600,
-                width: 800,
-            };
             const resizedSafeArea = {
                 left: -800,
                 top: -600,
