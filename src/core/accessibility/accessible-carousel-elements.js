@@ -38,7 +38,7 @@ export function create(pageName, carouselSprites, parentElement, choices) {
     carouselSprites.forEach((sprite, index) => {
         const accessibleElement = accessibleDomElement({
             id: "carousel-" + pageName + "__" + (index + 1),
-            ariaHidden: index !== 0,
+            "aria-hidden": index !== 0,
             parent: carousel,
             text: getAccessibilityText(choices, index),
             notClickable: true,

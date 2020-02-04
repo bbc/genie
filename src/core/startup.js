@@ -81,7 +81,7 @@ export function startup(screenConfig, settingsConfig = {}) {
     const game = new Phaser.Game(phaserConfig);
 
     debugMode.create(window, game);
-    a11y.setup(getContainerDiv());
+    a11y.create(getContainerDiv());
 }
 
 function getContainerDiv() {

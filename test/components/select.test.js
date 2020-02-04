@@ -9,8 +9,8 @@ import * as Scaler from "../../src/core/scaler.js";
 import * as elementBounding from "../../src/core/helpers/element-bounding.js";
 
 import { Select } from "../../src/components/select.js";
-import { GelGrid } from "../../src/core/layout/gel-grid.js";
-jest.mock("../../src/core/layout/gel-grid.js");
+import { GelGrid } from "../../src/core/layout/grid/grid.js";
+jest.mock("../../src/core/layout/grid/grid.js");
 jest.mock("../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
 }));
@@ -18,6 +18,7 @@ jest.mock("../../src/core/layout/layout.js", () => ({
 jest.mock("../../src/core/state.js", () => ({
     create: jest.fn(() => ({
         getAll: jest.fn(() => []),
+        get: jest.fn(() => ({ state: "locked" })),
     })),
 }));
 
@@ -38,6 +39,7 @@ describe("Select Screen", () => {
         jest.spyOn(elementBounding, "positionElement").mockImplementation(() => {});
 
         mockGelGrid = {
+            page: 1,
             cellIds: jest.fn(() => mockCellIds),
             addGridCells: jest.fn(),
             makeAccessible: jest.fn(),
@@ -50,8 +52,7 @@ describe("Select Screen", () => {
             resetButtons: jest.fn(),
             getCurrentPageKey: jest.fn(),
             resize: jest.fn(),
-            nextPage: jest.fn(),
-            previousPage: jest.fn(),
+            showPage: jest.fn(),
         };
         GelGrid.mockImplementation(() => mockGelGrid);
         mockData = {
@@ -104,7 +105,11 @@ describe("Select Screen", () => {
                 },
                 previous: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds) },
                 next: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds) },
-                continue: { accessibleElement: { focus: jest.fn() }, getBounds: jest.fn(() => mockBounds) },
+                continue: {
+                    accessibleElement: { update: jest.fn(), focus: jest.fn() },
+                    getBounds: jest.fn(() => mockBounds),
+                    input: {},
+                },
             },
             addCustomGroup: jest.fn(),
             getSafeArea: jest.fn(() => "layout safe area"),
@@ -150,6 +155,10 @@ describe("Select Screen", () => {
             }),
         };
         selectScreen.addAnimations = jest.fn();
+        selectScreen.context.theme.states = {
+            locked: { x: 10, y: 20, asset: "test_asset" },
+        };
+
         Object.defineProperty(selectScreen, "layout", {
             get: jest.fn(() => mockLayout),
         });
@@ -324,7 +333,7 @@ describe("Select Screen", () => {
             test("creates a new GEL grid with correct params", () => {
                 selectScreen.create();
                 const mockConfig = mockData.config.theme["test-select"];
-                expect(GelGrid).toHaveBeenCalledWith(selectScreen, mockMetrics, "layout safe area", mockConfig);
+                expect(GelGrid).toHaveBeenCalledWith(selectScreen, mockMetrics, mockConfig);
             });
         });
 
@@ -430,7 +439,7 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[3][0].callback();
-            expect(mockGelGrid.nextPage).toHaveBeenCalled();
+            expect(mockGelGrid.showPage).toHaveBeenCalledWith(2);
         });
 
         test("moves to the previous page when next page is pressed", () => {
@@ -438,7 +447,7 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[4][0].callback();
-            expect(mockGelGrid.previousPage).toHaveBeenCalled();
+            expect(mockGelGrid.showPage).toHaveBeenCalledWith(0);
         });
 
         test("saves choice to transient data", () => {
@@ -453,16 +462,22 @@ describe("Select Screen", () => {
     describe("updateStates method", () => {
         test("updates the overlays for cells with matching id", () => {
             const mockCell = {
-                config: { id: "id_one" },
-                overlays: { set: jest.fn() },
-                setImage: jest.fn(),
-                input: {},
+                button: {
+                    config: { id: "id_one" },
+                    overlays: { set: jest.fn() },
+                    setImage: jest.fn(),
+                    input: {},
+                    accessibleElement: {
+                        update: jest.fn(),
+                    },
+                },
             };
 
             selectScreen.create();
 
             selectScreen._cells = [mockCell];
             selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
+            selectScreen.states.get = () => ({ id: "id_one", state: "locked" });
 
             selectScreen.context.theme.states = {
                 locked: { x: 10, y: 20, overlayAsset: "test_asset" },
@@ -470,16 +485,21 @@ describe("Select Screen", () => {
 
             selectScreen.updateStates();
 
-            expect(selectScreen._cells[0].overlays.set).toHaveBeenCalledWith("state", "test-sprite");
+            expect(selectScreen._cells[0].button.overlays.set).toHaveBeenCalledWith("state", "test-sprite");
         });
 
         test("Assigns Phaser properties if properties block exists in config", () => {
             const mockCell = {
-                config: { id: "id_one" },
-                overlays: { set: jest.fn() },
-                setImage: jest.fn(),
-                input: {},
-                sprite: {},
+                button: {
+                    config: { id: "id_one" },
+                    overlays: { set: jest.fn() },
+                    setImage: jest.fn(),
+                    input: {},
+                    sprite: {},
+                    accessibleElement: {
+                        update: jest.fn(),
+                    },
+                },
             };
 
             selectScreen.create();
@@ -493,16 +513,21 @@ describe("Select Screen", () => {
 
             selectScreen.updateStates();
 
-            expect(selectScreen._cells[0].sprite.testProp).toBe("testValue");
+            expect(selectScreen._cells[0].button.sprite.testProp).toBe("testValue");
         });
 
         test("Adds Aria label if suffix property exists in config", () => {
             const mockCell = {
-                config: { id: "id_one", ariaLabel: "testLabel" },
-                overlays: { set: jest.fn() },
-                setImage: jest.fn(),
-                input: {},
-                sprite: {},
+                button: {
+                    config: { id: "id_one", ariaLabel: "testLabel" },
+                    overlays: { set: jest.fn() },
+                    setImage: jest.fn(),
+                    input: {},
+                    sprite: {},
+                    accessibleElement: {
+                        update: jest.fn(),
+                    },
+                },
             };
 
             selectScreen.create();
@@ -516,15 +541,20 @@ describe("Select Screen", () => {
 
             selectScreen.updateStates();
 
-            expect(selectScreen._cells[0].config.ariaLabel).toBe("testLabel testSuffix");
+            expect(selectScreen._cells[0].button.config.ariaLabel).toBe("testLabel testSuffix");
         });
 
         test("updates the image if an asset property is available in the config block", () => {
             const mockCell = {
-                config: { id: "id_one" },
-                overlays: { set: jest.fn() },
-                setImage: jest.fn(),
-                input: {},
+                button: {
+                    config: { id: "id_one" },
+                    overlays: { set: jest.fn() },
+                    setImage: jest.fn(),
+                    input: {},
+                    accessibleElement: {
+                        update: jest.fn(),
+                    },
+                },
             };
 
             selectScreen.create();
@@ -538,7 +568,7 @@ describe("Select Screen", () => {
 
             selectScreen.updateStates();
 
-            expect(selectScreen._cells[0].setImage).toHaveBeenCalledWith("test_asset");
+            expect(selectScreen._cells[0].button.setImage).toHaveBeenCalledWith("test_asset");
         });
     });
     describe("create method without continue button", () => {
@@ -556,6 +586,40 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             selectScreen._cells = [{ _id: "id_one", overlays: { set: jest.fn() } }];
+        });
+    });
+
+    describe("onTransitionStart method", () => {
+        test("disables the continue button if current cell state is disabled", () => {
+            selectScreen.create();
+            selectScreen.currentEnabled = jest.fn(() => false);
+
+            selectScreen.onTransitionStart();
+
+            expect(mockLayout.buttons.continue.input.enabled).toBe(false);
+            expect(mockLayout.buttons.continue.alpha).toBe(0.5);
+        });
+
+        test("enables the continue button if current cell state is enabled", () => {
+            selectScreen.create();
+            selectScreen.currentEnabled = jest.fn(() => true);
+
+            selectScreen.onTransitionStart();
+
+            expect(mockLayout.buttons.continue.input.enabled).toBe(true);
+            expect(mockLayout.buttons.continue.alpha).toBe(1);
+        });
+
+        test("updates the accessible dom element", () => {
+            selectScreen.create();
+            selectScreen.onTransitionStart();
+            expect(mockLayout.buttons.continue.accessibleElement.update).toHaveBeenCalled();
+        });
+
+        test("does not error if no continue button", () => {
+            selectScreen.create();
+            delete mockLayout.buttons.continue;
+            expect(selectScreen.onTransitionStart.bind(selectScreen)).not.toThrow();
         });
     });
 });

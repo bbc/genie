@@ -21,6 +21,7 @@
         "babel-loader": "^8.0.6",
         "babel-plugin-module-resolver": "^3.2.0",
         "bowser": "2.4.0",
+        "crel": "^4.2.0",
         "expose-loader": "^0.7.5",
         "json5": "^2.1.1",
         "phaser": "^3.22.0",

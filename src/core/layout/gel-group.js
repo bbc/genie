@@ -74,6 +74,8 @@ export class GelGroup extends Phaser.GameObjects.Container {
             horizontal[hPos](metrics, this, isSafe ? "safeHorizontals" : "horizontals");
             vertical[vPos](metrics, this);
         };
+
+        this.makeAccessible();
     }
 
     /**
@@ -149,7 +151,10 @@ export class GelGroup extends Phaser.GameObjects.Container {
     }
 
     makeAccessible() {
-        this._buttons.forEach(button => a11y.addToAccessibleButtons(this.scene, button));
+        a11y.addGroupAt(
+            fp.camelCase([this._vPos, this._hPos, this._isVertical ? "v" : "", this._isSafe ? "safe" : ""].join("-")),
+        );
+        this._buttons.forEach(a11y.addButton);
     }
 
     //TODO this is currently observer pattern but will eventually use pub/sub Phaser.Events
