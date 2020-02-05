@@ -16,13 +16,19 @@ const getScoreMetaData = result => {
         return undefined;
     }
     let resultString = resultsToString(result);
-    return { metadata: `SCO=[${resultString}]` };
+    return { metadata: `SCO=${resultString}` };
 };
 
 const resultsToString = obj => {
     let resultString = "";
+    let first = true;
     for (const x in obj) {
-        str += x + ":" + obj[x] + ",";
+        if (first === true) {
+            resultString += "[" + x + ":" + obj[x] + "]";
+            first = false;
+        } else {
+            resultString += "::[" + x + ":" + obj[x] + "]";
+        }
     }
     return resultString;
 };

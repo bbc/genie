@@ -260,14 +260,14 @@ describe("Results Screen", () => {
             test("fires a score stat with results if given as a number", () => {
                 resultsScreen.transientData.results = { keys: 45 };
                 resultsScreen.create();
-                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", { metadata: "SCO=[keys:45,]" });
+                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", { metadata: "SCO=[keys:45]" });
             });
 
             test("fires a score stat with results with two results", () => {
                 resultsScreen.transientData.results = { keys: 45, gems: 30 };
                 resultsScreen.create();
                 expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", {
-                    metadata: "SCO=[keys:45,gems:30,]",
+                    metadata: "SCO=[keys:45]::[gems:30]",
                 });
             });
 
