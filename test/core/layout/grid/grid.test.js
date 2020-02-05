@@ -916,8 +916,8 @@ describe("Grid", () => {
                 grid.showPage(1);
                 transitionCallback();
 
-                expect(grid._cells[0].button.config.alwaysTab).toEqual(false);
-                expect(grid._cells[1].button.config.alwaysTab).toEqual(true);
+                expect(grid._cells[0].button.config.tabbable).toEqual(false);
+                expect(grid._cells[1].button.config.tabbable).toEqual(true);
             });
         });
 
