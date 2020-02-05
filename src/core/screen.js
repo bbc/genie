@@ -3,23 +3,20 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import _ from "../../lib/lodash/lodash.js";
+import fp from "../../lib/lodash/fp/fp.js";
 
 import { gmi } from "../core/gmi/gmi.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { eventBus } from "../core/event-bus.js";
 import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
-import fp from "../../lib/lodash/fp/fp.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
 import { addAnimations } from "./background-animations.js";
 import { debugMode } from "./debug/debug-mode.js";
 import * as debug from "./debug/debug.js";
-import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./layout/metrics.js";
-
-export const overlayChannel = "gel-overlays";
+import { CAMERA_X, CAMERA_Y } from "./layout/metrics.js";
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
@@ -47,7 +44,7 @@ export class Screen extends Phaser.Scene {
     //TODO P3 the only context parts we want them to set is transient data
     //TODO P3 maybe it should be separate? [NT]
     set transientData(newData) {
-        this._data.transient = _.merge({}, this._data.transient, newData);
+        this._data.transient = fp.merge(this._data.transient, newData, {});
     }
 
     get transientData() {
@@ -56,8 +53,8 @@ export class Screen extends Phaser.Scene {
 
     init(data) {
         this._data = data;
-        this.cameras.main.scrollX = -CANVAS_WIDTH / 2;
-        this.cameras.main.scrollY = -CANVAS_HEIGHT / 2;
+        this.cameras.main.scrollX = -CAMERA_X;
+        this.cameras.main.scrollY = -CAMERA_Y;
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
             gmi.setStatsScreen(this.scene.key);
@@ -69,8 +66,8 @@ export class Screen extends Phaser.Scene {
         }
 
         this.sys.accessibleButtons = [];
-        a11y.clearAccessibleButtons();
-        a11y.clearElementsFromDom();
+        this.sys.accessibleGroups = [];
+        a11y.destroy();
 
         this._makeNavigation();
     }
@@ -96,35 +93,23 @@ export class Screen extends Phaser.Scene {
     addAnimations = addAnimations(this);
 
     addOverlay(key) {
-        eventBus.subscribe({
-            channel: overlayChannel,
-            name: key,
-            callback: this._onOverlayRemoved,
-        });
         this._data.parentScreens.push(this);
         this.scene.run(key, this._data);
         this.scene.bringToTop(key);
     }
 
     removeOverlay = () => {
-        this._data.parentScreens.pop();
-        eventBus.publish({
-            channel: overlayChannel,
-            name: this.scene.key,
-            data: { overlay: this },
-        });
-        eventBus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
+        const parentScreen = this._data.parentScreens.pop();
+        parentScreen._onOverlayRemoved(this);
     };
 
-    _onOverlayRemoved = data => {
-        eventBus.removeChannel(buttonsChannel(data.overlay));
-        a11y.clearAccessibleButtons();
-        a11y.clearElementsFromDom();
-        data.overlay.removeAll();
-        data.overlay.scene.stop();
+    _onOverlayRemoved = overlay => {
+        a11y.destroy();
+        overlay.removeAll();
+        overlay.scene.stop();
         this._layout.makeAccessible();
-        this.sys.accessibleButtons.forEach(button => a11y.addToAccessibleButtons(this, button));
-        a11y.appendElementsToDom(this);
+        this.sys.accessibleButtons.forEach(button => a11y.addButton(button));
+        a11y.reset();
         gmi.setStatsScreen(this.scene.key);
 
         eventBus.publish({
@@ -141,10 +126,11 @@ export class Screen extends Phaser.Scene {
     };
 
     _navigate = route => {
-        eventBus.removeSubscription({ channel: overlayChannel, name: this.scene.key });
         this.scene.bringToTop(route);
         while (this._data.parentScreens.length > 0) {
-            this._data.parentScreens.pop().removeAll();
+            const parentScreen = this._data.parentScreens.pop();
+            parentScreen.removeAll();
+            parentScreen.scene.stop();
         }
         this.removeAll();
         this.scene.start(route, this._data);

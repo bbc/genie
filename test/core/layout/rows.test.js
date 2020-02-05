@@ -3,9 +3,12 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+
+import { gmi } from "../../../src/core/gmi/gmi.js";
 import * as Rows from "../../../src/core/layout/rows.js";
 import { ResultsRow } from "../../../src/components/results/results-row.js";
 
+jest.mock("../../../src/core/gmi/gmi.js");
 jest.mock("../../../src/components/results/results-row.js");
 
 describe("Rows", () => {
@@ -13,6 +16,7 @@ describe("Rows", () => {
     let mockRowsConfig;
     let mockArea;
     let getMockArea;
+    let mockSettings;
 
     beforeEach(() => {
         mockScene = {
@@ -37,6 +41,8 @@ describe("Rows", () => {
             y: 36,
         };
         getMockArea = () => mockArea;
+        mockSettings = { motion: true };
+        gmi.getAllSettings = jest.fn(() => mockSettings);
     });
 
     test("RowTypes.Results enum points to ResultsRow", () => {
@@ -80,54 +86,5 @@ describe("Rows", () => {
                 mockArea.height / mockRowsConfig.length,
             ),
         );
-    });
-
-    test("rowTransitions sets up tweens as specified in config", () => {
-        const mockTweenConfig = {
-            duration: 1000,
-            alpha: { from: 0, to: 1 },
-        };
-        mockRowsConfig = [
-            {
-                transition: mockTweenConfig,
-            },
-        ];
-        const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
-        rows.rowTransitions();
-        expect(mockScene.add.tween).toHaveBeenCalledWith(expect.objectContaining(mockTweenConfig));
-    });
-
-    test("rowTransitions sets up a time event for audio when specified in config", () => {
-        mockRowsConfig = [
-            {
-                audio: { key: "mockAudioKey", delay: 1000 },
-            },
-        ];
-        const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
-        rows.rowTransitions();
-
-        expect(mockScene.time.addEvent.mock.calls[0][0]).toEqual(
-            expect.objectContaining({ delay: 1000, callback: expect.any(Function) }),
-        );
-    });
-
-    test("rowTransitions callback triggers audio", () => {
-        mockRowsConfig = [
-            {
-                audio: { key: "mockAudioKey", delay: 1000 },
-            },
-        ];
-        const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
-        rows.rowTransitions();
-
-        const callback = mockScene.time.addEvent.mock.calls[0][0].callback;
-        callback();
-        expect(mockScene.sound.play).toHaveBeenCalledWith("mockAudioKey");
-    });
-
-    test("rowTransitions does not set up audio when absent from config", () => {
-        const rows = Rows.create(mockScene, getMockArea, mockRowsConfig, (scene, config) => ({ rowConfig: config }));
-        rows.rowTransitions();
-        expect(mockScene.time.addEvent).not.toHaveBeenCalled();
     });
 });

@@ -18,6 +18,21 @@
                 "url": "results/backdrop-overlay.png"
             },
             {
+                "type": "image",
+                "key": "row-backdrop-1",
+                "url": "results/row-backdrop-1.png"
+            },
+            {
+                "type": "image",
+                "key": "row-backdrop-2",
+                "url": "results/row-backdrop-2.png"
+            },
+            {
+                "type": "image",
+                "key": "row-backdrop-3",
+                "url": "results/row-backdrop-3.png"
+            },
+            {
                 "type": "audio",
                 "key": "coin-sfx",
                 "url": ["results/coin-sfx.mp3", "results/coin-sfx.ogg"]

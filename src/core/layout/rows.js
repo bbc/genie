@@ -28,30 +28,10 @@ export function create(scene, getArea, rowsConfig, rowType) {
         return new Phaser.Geom.Rectangle(drawArea.x, topOfRow, drawArea.width, rowHeight);
     };
 
-    const rowTransitions = () => {
-        containers.forEach(row => {
-            scene.add.tween({
-                targets: row,
-                ...row.rowConfig.transition,
-            });
-            if (row.rowConfig.audio) {
-                delayedAudio(row.rowConfig);
-            }
-        });
-    };
-
-    const delayedAudio = rowConfig => {
-        scene.time.addEvent({
-            delay: rowConfig.audio.delay,
-            callback: () => scene.sound.play(rowConfig.audio.key),
-        });
-    };
-
     rowsConfig.forEach((rowConfig, index) => createRow(rowConfig, index));
 
     return {
         containers,
         getRectForRow,
-        rowTransitions,
     };
 }

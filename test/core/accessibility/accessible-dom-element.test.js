@@ -37,11 +37,11 @@ describe("Accessible DOM Element", () => {
         test("sets the id to 'play-button", () => {
             options.id = "play-button";
             accessibleDomElement(options);
-            expect(mockElement.id).toBe(options.id);
+            expect(mockElement.getAttribute("id")).toBe(options.id);
         });
 
         test("sets the html class if provided", () => {
-            options.htmlClass = "gel-button";
+            options.class = "gel-button";
             accessibleDomElement(options);
             expect(mockElement.getAttribute("class")).toBe("gel-button");
         });
@@ -53,16 +53,11 @@ describe("Accessible DOM Element", () => {
 
         test("sets tabindex to 0", () => {
             accessibleDomElement(options);
-            expect(mockElement.getAttribute("tabindex")).toBe("0");
-        });
-
-        test("sets aria-hidden to false by default", () => {
-            accessibleDomElement(options);
-            expect(mockElement.getAttribute("aria-hidden")).toBe(false);
+            expect(mockElement.setAttribute).toHaveBeenCalledWith("tabindex", 0);
         });
 
         test("sets aria-hidden to the given value", () => {
-            options.ariaHidden = true;
+            options["aria-hidden"] = true;
             accessibleDomElement(options);
             expect(mockElement.getAttribute("aria-hidden")).toBe(true);
         });
@@ -73,14 +68,14 @@ describe("Accessible DOM Element", () => {
         });
 
         test("sets an aria-label if given", () => {
-            options.ariaLabel = "Play button";
+            options["aria-label"] = "Play button";
             accessibleDomElement(options);
-            expect(mockElement.getAttribute("aria-label")).toBe(options.ariaLabel);
+            expect(mockElement.getAttribute("aria-label")).toBe("Play button");
         });
 
-        test("sets aria-hidden to correct value", () => {
+        test("does not set aria-hidden by default", () => {
             accessibleDomElement(options);
-            expect(mockElement.getAttribute("aria-hidden")).toBe(false);
+            expect(mockElement.getAttribute("aria-hidden")).not.toBeDefined();
         });
 
         test("sets role to correct value", () => {
@@ -108,15 +103,10 @@ describe("Accessible DOM Element", () => {
             expect(mockElement.style["pointer-events"]).toBe("none");
         });
 
-        test("sets inner text to be empty by default", () => {
-            accessibleDomElement(options);
-            expect(mockElement.innerHTML).toBe("");
-        });
-
         test("sets inner text if given", () => {
             options.text = "Text goes here";
             accessibleDomElement(options);
-            expect(mockElement.innerHTML).toBe(options.text);
+            expect(mockElement.appendChild).toHaveBeenCalledWith(document.createTextNode("Text goes here"));
         });
 
         test("pressing enter fires the onclick event", () => {
@@ -191,52 +181,6 @@ describe("Accessible DOM Element", () => {
         });
     });
 
-    describe("hiding the mockElement", () => {
-        test("hides mockElement when calling hide function on the module", () => {
-            const newAccessibleElement = accessibleDomElement(options);
-            newAccessibleElement.hide();
-            expect(mockElement.getAttribute("aria-hidden")).toBe(true);
-            expect(mockElement.getAttribute("tabindex")).toBe("-1");
-            expect(mockElement.style.visibility).toBe("hidden");
-            expect(mockElement.style.display).toBe("none");
-        });
-    });
-
-    describe("showing the mockElement", () => {
-        test("shows mockElement when calling show function on the module", () => {
-            mockElement.setAttribute("aria-hidden", "true");
-            mockElement.setAttribute("tabindex", "-1");
-            mockElement.style.visibility = "hidden";
-
-            const newAccessibleElement = accessibleDomElement(options);
-            newAccessibleElement.show();
-
-            expect(mockElement.getAttribute("aria-hidden")).toBe(false);
-            expect(mockElement.getAttribute("tabindex")).toBe("0");
-            expect(mockElement.style.visibility).toBe("visible");
-            expect(mockElement.style.display).toBe("block");
-        });
-    });
-
-    describe("checking visibility of mockElement", () => {
-        test("calling visible function returns true when mockElement has been created", () => {
-            const newAccessibleElement = accessibleDomElement(options);
-            expect(newAccessibleElement.visible()).toBe(true);
-        });
-
-        test("calling visible function returns true when mockElement is visible", () => {
-            const newAccessibleElement = accessibleDomElement(options);
-            newAccessibleElement.show();
-            expect(newAccessibleElement.visible()).toBe(true);
-        });
-
-        test("calling visible function returns false when mockElement is not visible", () => {
-            const newAccessibleElement = accessibleDomElement(options);
-            newAccessibleElement.hide();
-            expect(newAccessibleElement.visible()).toBe(false);
-        });
-    });
-
     describe("setting position of mockElement via position function", () => {
         test("sets css values correctly", () => {
             const newAccessibleElement = accessibleDomElement(options);
@@ -251,6 +195,40 @@ describe("Accessible DOM Element", () => {
             expect(mockElement.style.top).toBe("50px");
             expect(mockElement.style.width).toBe("200px");
             expect(mockElement.style.height).toBe("100px");
+        });
+    });
+
+    describe("update method", () => {
+        test("changes aria label", () => {
+            options.button = { config: { ariaLabel: "initial-label" } };
+
+            const accessibleElement = accessibleDomElement(options);
+            accessibleElement.button.config.ariaLabel = "updated-label";
+            accessibleElement.update();
+            expect(accessibleElement.el.getAttribute("aria-label")).toBe("updated-label");
+        });
+
+        test("shows element if input disabled", () => {
+            options.button = { input: { enabled: true }, config: { ariaLabel: "initial-label" }, visible: true };
+
+            const accessibleElement = accessibleDomElement(options);
+            accessibleElement.el.style.visibility = "hidden";
+            accessibleElement.update();
+
+            expect(accessibleElement.el.getAttribute("aria-hidden")).toBe(false);
+            expect(accessibleElement.el.getAttribute("tabindex")).toBe("0");
+            expect(accessibleElement.el.style.display).toBe("block");
+            expect(accessibleElement.el.style.visibility).toBe("visible");
+        });
+
+        test("does not change aria label if the same as button config's", () => {
+            options.button = { config: { ariaLabel: "test-label" }, visible: true };
+
+            const accessibleElement = accessibleDomElement(options);
+            accessibleElement.el.setAttribute("aria-label", "test-label");
+            jest.clearAllMocks();
+            accessibleElement.update();
+            expect(accessibleElement.el.setAttribute).not.toHaveBeenCalled();
         });
     });
 });

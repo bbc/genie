@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import * as _ from "lodash";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 import { calculateMetrics } from "../../../src/core/layout/metrics.js";
 
@@ -15,7 +15,7 @@ const defaultValues = {
 };
 
 const getMetrics = newValues => {
-    const values = _.merge({}, defaultValues, newValues);
+    const values = fp.merge(defaultValues, newValues, {});
     return calculateMetrics(values.stageHeight, { width: values.width, height: values.height });
 };
 

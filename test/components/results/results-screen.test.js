@@ -7,12 +7,16 @@ import { createMockGmi } from "../../mock/gmi.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as Rows from "../../../src/core/layout/rows.js";
+import { playRowAudio } from "../../../src/components/results/results-row-audio.js";
+import { tweenRows } from "../../../src/components/results/results-row-tween.js";
 import * as MetricsModule from "../../../src/core/layout/metrics.js";
 
 import { Results } from "../../../src/components/results/results-screen.js";
 
 jest.mock("../../../src/core/layout/rows.js");
 jest.mock("../../../src/core/screen.js");
+jest.mock("../../../src/components/results/results-row-tween.js");
+jest.mock("../../../src/components/results/results-row-audio.js");
 
 describe("Results Screen", () => {
     let resultsScreen;
@@ -22,6 +26,7 @@ describe("Results Screen", () => {
     let mockTextAdd;
     let mockResultsArea;
     let mockImage;
+    let mockRows;
     let unsubscribe = jest.fn();
 
     beforeEach(() => {
@@ -30,9 +35,8 @@ describe("Results Screen", () => {
             add: jest.fn(() => ({ unsubscribe })),
         };
         MetricsModule.getMetrics = jest.fn();
-        Rows.create = jest.fn(() => ({
-            rowTransitions: jest.fn(),
-        }));
+        mockRows = { containers: "mockcontainer" };
+        Rows.create = jest.fn(() => mockRows);
         mockImage = {
             height: 5,
             width: 5,
@@ -131,6 +135,16 @@ describe("Results Screen", () => {
                 resultsScreen.theme.rows,
                 Rows.RowType.Results,
             );
+        });
+
+        test("adds tweens to the rows", () => {
+            resultsScreen.create();
+            expect(tweenRows).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
+        });
+
+        test("plays row audio", () => {
+            resultsScreen.create();
+            expect(playRowAudio).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
         });
 
         test("results screen area returned has 5% width padding correctly applied to it", () => {

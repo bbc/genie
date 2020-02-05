@@ -3,6 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import fp from "../../../lib/lodash/fp/fp.js";
 
 import { ResultsText } from "./results-text.js";
 import { ResultsSprite } from "./results-sprite.js";
@@ -17,6 +18,7 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.setContainerPosition();
         this.align();
         this.setAlpha(rowConfig.alpha);
+        this.createBackdrop();
     }
 
     align() {
@@ -35,17 +37,15 @@ export class ResultsRow extends Phaser.GameObjects.Container {
     }
 
     drawRow() {
+        const objectType = {
+            text: ResultsText,
+            sprite: ResultsSprite,
+            countup: ResultsCountup,
+        };
+
         this.rowConfig.format &&
             this.rowConfig.format.forEach(object => {
-                if (object.type === "text") {
-                    this.addSection(new ResultsText(this.scene, object), object.offsetX, object.offsetY);
-                }
-                if (object.type === "sprite") {
-                    this.addSection(new ResultsSprite(this.scene, object), object.offsetX, object.offsetY);
-                }
-                if (object.type === "countup") {
-                    this.addSection(new ResultsCountup(this.scene, object), object.offsetX, object.offsetY);
-                }
+                this.addSection(new objectType[object.type](this.scene, object), object.offsetX, object.offsetY);
             });
     }
 
@@ -57,6 +57,19 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         const { centerX, centerY } = this.getDrawArea();
         this.x = centerX;
         this.y = centerY;
+    }
+
+    createBackdrop() {
+        fp.get("backdrop.key", this.rowConfig) && this.backdropFill();
+    }
+
+    backdropFill() {
+        const config = this.rowConfig.backdrop;
+        const backdrop = this.scene.add.image(config.offsetX || 0, config.offsetY || 0, config.key);
+        backdrop.alpha = config.alpha || 1;
+        backdrop.height = this.displayHeight;
+        this.add(backdrop);
+        this.sendToBack(backdrop);
     }
 
     reset() {

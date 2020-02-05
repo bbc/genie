@@ -54,8 +54,8 @@ export function create(scene, metrics, buttonIds) {
     const config = shallowMergeOverrides(gel.config(scene), overrides);
     const root = new Phaser.GameObjects.Container(scene, 0, 0);
 
-    const addCustomGroup = (key, group) => {
-        root.add(group);
+    const addCustomGroup = (key, group, pos = 0) => {
+        root.addAt(group, pos);
         groups[key] = group;
         return group;
     };
