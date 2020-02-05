@@ -16,7 +16,8 @@ export const create = (stateKey, config) => {
     }
 
     const getMerged = stored => config.map(item => Object.assign(item, stored[item.id]));
-    const get = key => Object.assign({}, config.find(conf => conf.id === key), getGenieStore()[stateKey][key]);
+    const get = key =>
+        Object.assign({}, config.find(conf => conf.id === key), fp.get(`${stateKey}.${key}`, getGenieStore()));
     const getStored = () => getGenieStore()[stateKey] || {}; //TODO ".states" on this path?
 
     const getAll = fp.flow(
