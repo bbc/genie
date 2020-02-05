@@ -62,6 +62,13 @@ describe("State", () => {
     });
 
     describe("Returned get method", () => {
+        test("does not fail if gameData.genie is blank", () => {
+            delete mockSettings.gameData.genie;
+            const stateSet = create("stateKey", []);
+
+            expect(() => stateSet.get("test_choice")).not.toThrow();
+        });
+
         test("Returns current state for given key", () => {
             const expectedData = { test: "data" };
             mockSettings.gameData.genie = { stateKey: { test_choice: expectedData } };
