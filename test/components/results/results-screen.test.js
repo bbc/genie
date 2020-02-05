@@ -290,12 +290,6 @@ describe("Results Screen", () => {
                 resultsScreen.create();
                 expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
             });
-
-            test("fires a score stat to the GMI without results if not provided", () => {
-                resultsScreen.transientData.results = undefined;
-                resultsScreen.create();
-                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
-            });
         });
     });
 

@@ -14,10 +14,10 @@ import { tweenRows } from "./results-row-tween.js";
 import { playRowAudio } from "./results-row-audio.js";
 
 const getScoreMetaData = result => {
-    if (result === "" || result === undefined) {
+    if (Object.keys(result).length === 0) {
         return undefined;
     }
-    const resultString = resultsToString(result);
+    let resultString = resultsToString(result);
     return { metadata: `SCO=${resultString}` };
 };
 
