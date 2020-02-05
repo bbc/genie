@@ -128,7 +128,9 @@ export class Screen extends Phaser.Scene {
     _navigate = route => {
         this.scene.bringToTop(route);
         while (this._data.parentScreens.length > 0) {
-            this._data.parentScreens.pop().removeAll();
+            const parentScreen = this._data.parentScreens.pop();
+            parentScreen.removeAll();
+            parentScreen.scene.stop();
         }
         this.removeAll();
         this.scene.start(route, this._data);
