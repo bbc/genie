@@ -34,7 +34,7 @@ const defaultSafeAreaGroups = {
     left: "middleLeftSafe",
     bottom: "bottomCenter",
     right: "middleRightSafe",
-    fill: { width: 64, height: 64 },
+    minWidth: 64,
 };
 
 // Copy gel config with only objects / functions as a reference.
@@ -107,22 +107,10 @@ export function create(scene, metrics, buttonIds) {
         root.destroy();
     };
 
-    const debugFill = (x,y,w,h) => {
-        scene.debugGraphics.lineStyle(2, 0xff00ff, 1);
-        scene.debugGraphics.strokeRect(x,y,w,h);
-    }
-
     const getSafeArea = (metrics, groupOverrides = {}) => {
         const safe = { ...defaultSafeAreaGroups, ...groupOverrides };
-
-
-        const fillRight = metrics.screenToCanvas(Math.max((safe.fill.width - groups[safe.right].width), 0))
-        const fillLeft = metrics.screenToCanvas(Math.max((safe.fill.width - groups[safe.left].width), 0))
-        //need to make this work with breakpoints and potentially scale.
-        console.log(fillLeft, fillRight, groups[safe.right].width, groups[safe.right].width)
-
-        debugFill(groups[safe.left],0,fillRight)
-
+        const fillRight = metrics.screenToCanvas(Math.max(safe.minWidth - groups[safe.right].width, 0));
+        const fillLeft = metrics.screenToCanvas(Math.max(safe.minWidth - groups[safe.left].width, 0));
 
         const pad = metrics.isMobile ? { x: 0, y: 0 } : fp.mapValues(metrics.screenToCanvas, { x: 20, y: 10 });
         const left = groups[safe.left].x + groups[safe.left].width + pad.x + fillLeft;
@@ -133,7 +121,7 @@ export function create(scene, metrics, buttonIds) {
         const bottom = Math.min(groups[safe.bottom].y - pad.y, -top);
 
         const height = bottom - top;
-        const width = groups[safe.right].x - left - pad.x - fillRight - fillLeft;
+        const width = groups[safe.right].x - left - pad.x - fillRight;
 
         return new Phaser.Geom.Rectangle(left, top, width, height);
     };
