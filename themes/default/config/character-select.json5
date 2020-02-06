@@ -42,7 +42,7 @@
             storageKey: "characters",
             states: {
                 locked: {
-                    //asset: "suzytoo",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
+                    //asset: "debby",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
                     overlayAsset: "character-select.lock",
                     suffix: "locked",       //appended to aria label of accessibility div
                     x: 55,
@@ -60,7 +60,6 @@
                     fontFamily: "ReithSans",
                     fontSize: "19px",
                     color: "#424242",
-                    resolution: 1, // resolution 1 seems to make a good difference.
                 },
                 titlePosition: {
                     x: 0,
@@ -70,7 +69,6 @@
                     fontFamily: "ReithSans",
                     fontSize: "16px",
                     color: "#fff",
-                    resolution: 1, // resolution 1 seems to make a good difference.
                 },
                 subtitlePosition: {
                     x: 0,
@@ -83,7 +81,7 @@
                     key: "mary",
                     ariaLabel: "Mary",
                     title: "Mary",
-                    subtitle: "Is very tall", // optional
+                    subtitle: "Is very tall", // optional - for text overlay only
                     state: "complete"
                 },
                 {
@@ -91,42 +89,42 @@
                     key: "kyle",
                     ariaLabel: "Kyle",
                     title: "Kyle",
-                    subtitle: "Has a mohawk", // optional
+                    subtitle: "Has a mohawk", // optional - for text overlay only
                 },
                 {
                     id: "suzy",
                     key: "suzy",
                     ariaLabel: "Suzy",
                     title: "Suzy",
-                    subtitle: "Has purple hair", // optional
+                    subtitle: "Has purple hair", // optional - for text overlay only
                 },
                 {
                     id: "greg",
                     key: "greg",
                     ariaLabel: "Greg",
                     title: "Greg",
-                    subtitle: "Is a geography teacher", // optional
+                    subtitle: "Is a geography teacher", // optional - for text overlay only
                 },
                 {
                     id: "ezinma",
                     key: "ezinma",
                     ariaLabel: "Ezinma",
                     title: "Ezinma",
-                    subtitle: "Likes snowboarding", // optional
+                    subtitle: "Likes snowboarding", // optional - for text overlay only
                 },
                 {
                     id: "phil",
                     key: "phil",
                     ariaLabel: "Phil",
                     title: "Phil",
-                    subtitle: "Wears a baseball cap", // optional
+                    subtitle: "Wears a baseball cap", // optional - for text overlay only
                 },
                 {
                     id: "mike",
                     key: "mike",
                     ariaLabel: "Mike",
                     title: "Mike",
-                    subtitle: "Also known as Ant", // optional
+                    subtitle: "Also known as Ant", // optional - for text overlay only
                 },
                 {
                     id: "debby",
@@ -134,7 +132,7 @@
                     ariaLabel: "Debby",
                     title: "Debby",
                     state: "locked",
-                    subtitle: "Has a twin called Suzy", // optional
+                    subtitle: "Has a twin called Suzy", // optional - for text overlay only
                 },
                 {
                     id: "timmy",
@@ -142,7 +140,7 @@
                     ariaLabel: "Timmy",
                     title: "Timmy",
                     state: "locked",
-                    subtitle: "Is the youngest", // optional
+                    subtitle: "Is the youngest", // optional - for text overlay only
                 },
                 {
                     id: "elliot",
@@ -150,7 +148,7 @@
                     ariaLabel: "Elliot",
                     title: "Elliot",
                     state: "locked",
-                    subtitle: "Likes to climb trees", // optional
+                    subtitle: "Likes to climb trees", // optional - for text overlay only
                 }
 //                {
 //                    id: "char1",                        //Must be unique
