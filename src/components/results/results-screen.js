@@ -26,10 +26,10 @@ const resultsToString = obj => {
     let first = true;
     for (const x in obj) {
         if (first === true) {
-            resultString += `[${x}:${obj[x]}]`;
+            resultString += `[${x}-${obj[x]}]`;
             first = false;
         } else {
-            resultString += `::[${x}:${obj[x]}]`;
+            resultString += `::[${x}-${obj[x]}]`;
         }
     }
     return resultString;
