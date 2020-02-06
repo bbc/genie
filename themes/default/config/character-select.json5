@@ -55,25 +55,41 @@
                 },
                 complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed"},
             },
-            choicesStyling: { //optional - provide if you want title/subtitle text to appear over each choice
-                titleText: {
-                    fontFamily: "ReithSans",
-                    fontSize: "19px",
-                    color: "#424242",
+            //optional - provide if you want title/subtitle text to appear over each choice
+            choicesStyling: {
+                default: {
+                    title: {
+                        style: {
+                            fontFamily: "ReithSans",
+                            fontSize: "19px",
+                            color: "#424242",
+                        },
+                        position: {
+                            x: 0,
+                            y: 68,
+                        },
+                    },
+                    subtitle: {
+                        style: {
+                            fontFamily: "ReithSans",
+                            fontSize: "16px",
+                            color: "#fff",
+                        },
+                        position: {
+                            x: 0,
+                            y: 100,
+                        },
+                    },
                 },
-                titlePosition: {
-                    x: 0,
-                    y: 68,
-                },
-                subtitleText: {
-                    fontFamily: "ReithSans",
-                    fontSize: "16px",
-                    color: "#fff",
-                },
-                subtitlePosition: {
-                    x: 0,
-                    y: 100,
-                },
+                // optional styling for extra button states (will override default styles above)
+                locked : {
+                    title: {
+                        style: {
+                            color: "#fff"
+                        }
+                    }
+                }
+
             },
             choices: [
                 {
