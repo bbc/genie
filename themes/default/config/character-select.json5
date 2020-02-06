@@ -14,8 +14,8 @@
                     yOffset: 0,
                 },
                 text: {
-                    value: "Title",
-                    xOffset: -60,
+                    value: "Select Your Character",
+                    xOffset: 0,
                     yOffset: -20,
                     styles: {
                         fontSize: "24px",
@@ -55,12 +55,35 @@
                 },
                 complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed"},
             },
+            choicesStyling: {
+                titleText: {
+                    fontFamily: "ReithSans",
+                    fontSize: "12px",
+                    color: "#424242",
+                    resolution: 1, // resolution 1 seems to make a good difference.
+                },
+                titlePosition: {
+                    x: 0,
+                    y: 0,
+                },
+                subtitleText: {
+                    fontFamily: "ReithSans",
+                    fontSize: "14px",
+                    color: "#fff",
+                    resolution: 1, // resolution 1 seems to make a good difference.
+                },
+                subtitlePosition: {
+                    x: 0,
+                    y: 0,
+                },
+            },
             choices: [
                 {
                     id: "mary",
                     key: "mary",
                     ariaLabel: "Mary",
                     title: "Mary",
+                    subtitle: "Is very tall",
                     state: "complete"
                 },
                 {
@@ -68,43 +91,50 @@
                     key: "kyle",
                     ariaLabel: "Kyle",
                     title: "Kyle",
+                    subtitle: "Has a mohawk",
                 },
                 {
                     id: "suzy",
                     key: "suzy",
                     ariaLabel: "Suzy",
                     title: "Suzy",
+                    subtitle: "Has purple hair",
                 },
                 {
                     id: "greg",
                     key: "greg",
                     ariaLabel: "Greg",
                     title: "Greg",
+                    subtitle: "Is a geography teacher",
                 },
                 {
-                    id: "ange",
-                    key: "ange",
-                    ariaLabel: "Ange",
-                    title: "Ange",
+                    id: "ezinma",
+                    key: "ezinma",
+                    ariaLabel: "Ezinma",
+                    title: "Ezinma",
+                    subtitle: "Likes snowboarding",
                 },
                 {
                     id: "phil",
                     key: "phil",
                     ariaLabel: "Phil",
                     title: "Phil",
+                    subtitle: "Wears a baseball cap",
                 },
                 {
                     id: "mike",
                     key: "mike",
                     ariaLabel: "Mike",
                     title: "Mike",
+                    subtitle: "Also known as Ant",
                 },
                 {
-                    id: "suzytoo",
-                    key: "suzytoo",
-                    ariaLabel: "Suzy Too",
-                    title: "Suzy Too",
+                    id: "debby",
+                    key: "debby",
+                    ariaLabel: "Debby",
+                    title: "Debby",
                     state: "locked",
+                    subtitle: "Has a twin called Suzy",
                 },
                 {
                     id: "timmy",
@@ -112,6 +142,7 @@
                     ariaLabel: "Timmy",
                     title: "Timmy",
                     state: "locked",
+                    subtitle: "Is the youngest",
                 },
                 {
                     id: "elliot",
@@ -119,6 +150,7 @@
                     ariaLabel: "Elliot",
                     title: "Elliot",
                     state: "locked",
+                    subtitle: "Likes to climb trees",
                 }
 //                {
 //                    id: "char1",                        //Must be unique
