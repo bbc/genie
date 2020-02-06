@@ -14,14 +14,25 @@ import { tweenRows } from "./results-row-tween.js";
 import { playRowAudio } from "./results-row-audio.js";
 
 const getScoreMetaData = result => {
-    if (typeof result === "number") {
-        return { metadata: `SCO=[${result}]` };
+    if (Object.keys(result).length === 0) {
+        return undefined;
     }
-    if (typeof result === "string") {
-        const digitsRegex = /\d+/;
-        const score = result.match(digitsRegex);
-        return score ? { metadata: `SCO=[${score}]` } : undefined;
+    let resultString = resultsToString(result);
+    return { metadata: `SCO=${resultString}` };
+};
+
+const resultsToString = obj => {
+    let resultString = "";
+    let first = true;
+    for (const x in obj) {
+        if (first === true) {
+            resultString += `[${x}-${obj[x]}]`;
+            first = false;
+        } else {
+            resultString += `::[${x}-${obj[x]}]`;
+        }
     }
+    return resultString;
 };
 
 const fireGameCompleteStat = result => {

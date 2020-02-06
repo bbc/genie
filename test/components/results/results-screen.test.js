@@ -272,31 +272,21 @@ describe("Results Screen", () => {
 
         describe("Stats", () => {
             test("fires a score stat with results if given as a number", () => {
-                resultsScreen.transientData.results = 45;
+                resultsScreen.transientData.results = { keys: 45 };
                 resultsScreen.create();
-                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", { metadata: "SCO=[45]" });
+                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", { metadata: "SCO=[keys-45]" });
             });
 
-            test("fires a score stat with results if given as a string with numbers in", () => {
-                resultsScreen.transientData.results = "Your score is 593";
+            test("fires a score stat with results with two results", () => {
+                resultsScreen.transientData.results = { keys: 45, gems: 30 };
                 resultsScreen.create();
-                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", { metadata: "SCO=[593]" });
-            });
-
-            test("fires a score stat without results if a string with no numbers is given", () => {
-                resultsScreen.transientData.results = "You completed the game!";
-                resultsScreen.create();
-                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
+                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", {
+                    metadata: "SCO=[keys-45]::[gems-30]",
+                });
             });
 
             test("fires a score stat to the GMI without results if neither a string nor a number is given", () => {
                 resultsScreen.transientData.results = [];
-                resultsScreen.create();
-                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
-            });
-
-            test("fires a score stat to the GMI without results if not provided", () => {
-                resultsScreen.transientData.results = undefined;
                 resultsScreen.create();
                 expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
             });

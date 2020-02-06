@@ -906,6 +906,19 @@ describe("Grid", () => {
                 expect(grid._cells[0].button.visible).toEqual(false);
                 expect(grid._cells[1].button.visible).toEqual(true);
             });
+
+            test("sets alwaysTab to match visibility", () => {
+                mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
+
+                grid = new GelGrid(mockScene, metrics);
+                grid.addGridCells(mockScene.theme.choices);
+
+                grid.showPage(1);
+                transitionCallback();
+
+                expect(grid._cells[0].button.config.tabbable).toEqual(false);
+                expect(grid._cells[1].button.config.tabbable).toEqual(true);
+            });
         });
 
         describe("previous page behaviour", () => {
