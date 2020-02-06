@@ -483,7 +483,7 @@ describe("Grid", () => {
             expect(resultCells[0].button.y).toEqual(0);
         });
 
-        test("2 cells are aligned to the edges of the safe area in a 2 column layout", () => {
+        test("2 cells are aligned to the centre in a 2 column layout", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.columns = 2;
             mockSafeArea.left = -400;
@@ -495,8 +495,8 @@ describe("Grid", () => {
             const resultCells = grid.addGridCells(mockScene.theme.choices);
 
             const expectedPositions = [
-                { x: mockSafeArea.left + resultCells[0].button.displayWidth / 2 },
-                { x: mockSafeArea.left + mockSafeArea.width - resultCells[1].button.displayWidth / 2 },
+                { x: 0 - resultCells[0].button.displayWidth / 2 - 12 },
+                { x: 0 + resultCells[1].button.displayWidth / 2 + 12 },
             ];
 
             expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
