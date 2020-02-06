@@ -55,26 +55,26 @@
                 },
                 complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed"},
             },
-            choicesStyling: {
+            choicesStyling: { //optional - provide if you want title/subtitle text to appear over each choice
                 titleText: {
                     fontFamily: "ReithSans",
-                    fontSize: "12px",
+                    fontSize: "19px",
                     color: "#424242",
                     resolution: 1, // resolution 1 seems to make a good difference.
                 },
                 titlePosition: {
                     x: 0,
-                    y: 0,
+                    y: 68,
                 },
                 subtitleText: {
                     fontFamily: "ReithSans",
-                    fontSize: "14px",
+                    fontSize: "16px",
                     color: "#fff",
                     resolution: 1, // resolution 1 seems to make a good difference.
                 },
                 subtitlePosition: {
                     x: 0,
-                    y: 0,
+                    y: 100,
                 },
             },
             choices: [
@@ -83,7 +83,7 @@
                     key: "mary",
                     ariaLabel: "Mary",
                     title: "Mary",
-                    subtitle: "Is very tall",
+                    subtitle: "Is very tall", // optional
                     state: "complete"
                 },
                 {
@@ -91,42 +91,42 @@
                     key: "kyle",
                     ariaLabel: "Kyle",
                     title: "Kyle",
-                    subtitle: "Has a mohawk",
+                    subtitle: "Has a mohawk", // optional
                 },
                 {
                     id: "suzy",
                     key: "suzy",
                     ariaLabel: "Suzy",
                     title: "Suzy",
-                    subtitle: "Has purple hair",
+                    subtitle: "Has purple hair", // optional
                 },
                 {
                     id: "greg",
                     key: "greg",
                     ariaLabel: "Greg",
                     title: "Greg",
-                    subtitle: "Is a geography teacher",
+                    subtitle: "Is a geography teacher", // optional
                 },
                 {
                     id: "ezinma",
                     key: "ezinma",
                     ariaLabel: "Ezinma",
                     title: "Ezinma",
-                    subtitle: "Likes snowboarding",
+                    subtitle: "Likes snowboarding", // optional
                 },
                 {
                     id: "phil",
                     key: "phil",
                     ariaLabel: "Phil",
                     title: "Phil",
-                    subtitle: "Wears a baseball cap",
+                    subtitle: "Wears a baseball cap", // optional
                 },
                 {
                     id: "mike",
                     key: "mike",
                     ariaLabel: "Mike",
                     title: "Mike",
-                    subtitle: "Also known as Ant",
+                    subtitle: "Also known as Ant", // optional
                 },
                 {
                     id: "debby",
@@ -134,7 +134,7 @@
                     ariaLabel: "Debby",
                     title: "Debby",
                     state: "locked",
-                    subtitle: "Has a twin called Suzy",
+                    subtitle: "Has a twin called Suzy", // optional
                 },
                 {
                     id: "timmy",
@@ -142,7 +142,7 @@
                     ariaLabel: "Timmy",
                     title: "Timmy",
                     state: "locked",
-                    subtitle: "Is the youngest",
+                    subtitle: "Is the youngest", // optional
                 },
                 {
                     id: "elliot",
@@ -150,7 +150,7 @@
                     ariaLabel: "Elliot",
                     title: "Elliot",
                     state: "locked",
-                    subtitle: "Likes to climb trees",
+                    subtitle: "Likes to climb trees", // optional
                 }
 //                {
 //                    id: "char1",                        //Must be unique
