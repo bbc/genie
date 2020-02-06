@@ -107,6 +107,11 @@ export function create(scene, metrics, buttonIds) {
         root.destroy();
     };
 
+    const debugFill = (x,y,w,h) => {
+        scene.debugGraphics.lineStyle(2, 0xff00ff, 1);
+        scene.debugGraphics.strokeRect(x,y,w,h);
+    }
+
     const getSafeArea = (metrics, groupOverrides = {}) => {
         const safe = { ...defaultSafeAreaGroups, ...groupOverrides };
 
@@ -115,6 +120,8 @@ export function create(scene, metrics, buttonIds) {
         const fillLeft = metrics.screenToCanvas(Math.max((safe.fill.width - groups[safe.left].width), 0))
         //need to make this work with breakpoints and potentially scale.
         console.log(fillLeft, fillRight, groups[safe.right].width, groups[safe.right].width)
+
+        debugFill(groups[safe.left],0,fillRight)
 
 
         const pad = metrics.isMobile ? { x: 0, y: 0 } : fp.mapValues(metrics.screenToCanvas, { x: 20, y: 10 });
