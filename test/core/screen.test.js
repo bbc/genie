@@ -47,7 +47,12 @@ describe("Screen", () => {
             boot: { routes: { next: "loader" } },
             loader: { routes: { next: "home" } },
         };
-        mockParentScreen = { key: "select", removeAll: jest.fn(), _onOverlayRemoved: jest.fn() };
+        mockParentScreen = {
+            key: "select",
+            removeAll: jest.fn(),
+            _onOverlayRemoved: jest.fn(),
+            scene: { stop: jest.fn() },
+        };
         mockData = {
             navigation: mockNavigation,
             config: { theme: { loadscreen: { music: "test/music" }, screenKey: {} } },
@@ -185,6 +190,31 @@ describe("Screen", () => {
             createAndInitScreen();
             screen.navigation.next();
             expect(screen.scene.start).toHaveBeenCalledWith("nextscreen", mockData);
+        });
+
+        test("brings the screen to the top on navigation", () => {
+            createAndInitScreen();
+            screen.navigation.next();
+            expect(screen.scene.bringToTop).toHaveBeenCalled();
+        });
+
+        test("calls removeAll on the screen on navigation", () => {
+            createAndInitScreen();
+            screen.removeAll = jest.fn();
+            screen.navigation.next();
+            expect(screen.removeAll).toHaveBeenCalled();
+        });
+
+        test("calls removeAll on parent screens on navigation", () => {
+            createAndInitScreen();
+            screen.navigation.next();
+            expect(mockParentScreen.removeAll).toHaveBeenCalled();
+        });
+
+        test("stops the parent screens scenes on navigation", () => {
+            createAndInitScreen();
+            screen.navigation.next();
+            expect(mockParentScreen.scene.stop).toHaveBeenCalled();
         });
     });
 
