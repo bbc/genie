@@ -37,24 +37,21 @@ export const setSize = (grid, button) => {
     // this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
 };
 
+const getBlankCellCount = (grid, row) => {
+    let blankCellCount = Math.max(grid._config.columns * (row + 1) - grid.getPageCells(grid.page).length, 0);
+    return blankCellCount - (blankCellCount % 2) * 0.5;
+};
+
 const setPosition = (grid, button, idx) => {
     const pageIdx = idx % grid.cellsPerPage;
     const col = pageIdx % grid._config.columns;
     const row = Math.floor(pageIdx / grid._config.columns);
-    const blankCellCount = Math.max(grid._config.columns * (row + 1) - grid.getPageCells(grid.page).length, 0);
-    const blankPadding =
-        blankCellCount * ((button.displayWidth + grid._cellPadding) / 2) * alignmentFactor[grid._config.align];
 
-    const paddingXTotal = col * grid._cellPadding;
-    const leftBound = grid._safeArea.left + col * grid._cellSize[0];
-    const cellXCentre = grid._cellSize[0] / 2;
+    const alignFactorX = col + getBlankCellCount(grid, row) - (grid._config.columns - 1) / 2;
+    const alignFactorY = row - (grid._config.rows - 1) / 2;
 
-    const paddingYTotal = row * grid._cellPadding;
-    const topBound = grid._safeArea.top + row * grid._cellSize[1];
-    const cellYCentre = grid._cellSize[1] / 2;
-
-    button.x = leftBound + paddingXTotal + cellXCentre + blankPadding;
-    button.y = topBound + cellYCentre + paddingYTotal;
+    button.x = button.displayWidth * alignFactorX + grid._cellPadding * alignFactorX;
+    button.y = button.displayHeight * alignFactorY + grid._cellPadding * alignFactorY;
 };
 
 export const create = (grid, choice, idx) => {
@@ -62,10 +59,11 @@ export const create = (grid, choice, idx) => {
         ...choice,
         scene: grid.scene.scene.key,
         channel: grid.eventChannel,
-        tabbable: true,
+        alwaysTab: grid.cellsPerPage === 1,
     };
 
     const button = grid.scene.add.gelButton(0, 0, grid._metrics, { ...defaults, ...config }); //TODO access private
+
     grid.cellsPerPage === 1 && button.on(Phaser.Input.Events.POINTER_OVER, transitionOnTab(grid, button));
     grid.cellsPerPage > 1 && (button.visible = Boolean(!idx));
     button.key = config.key;

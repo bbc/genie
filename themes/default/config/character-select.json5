@@ -5,7 +5,7 @@
             columns: 3,
             ease: "Cubic.easeInOut",
             duration: 500,
-            align: "left",
+            align: "center",
             music: "loader.backgroundMusic",
             title: {
                 image: {
@@ -119,6 +119,12 @@
                     ariaLabel: "Elliot",
                     title: "Elliot",
                     state: "locked",
+                },
+                {
+                    id: "kyle2",
+                    key: "kyle",
+                    ariaLabel: "Kyle's Twin Brother",
+                    title: "Kyle's Twin Brother",
                 }
 //                {
 //                    id: "char1",                        //Must be unique
