@@ -78,7 +78,7 @@ export const accessibleDomElement = options => {
         if (el.getAttribute("aria-label") !== button.config.ariaLabel) {
             el.setAttribute("aria-label", button.config.ariaLabel);
         }
-        if (!button.config.alwaysTab && ((button.input && !button.input.enabled) || !button.visible)) {
+        if (!button.config.tabbable && ((button.input && !button.input.enabled) || !button.visible)) {
             visible(el) && hide(el);
         } else if (!visible(el)) {
             show(el);
