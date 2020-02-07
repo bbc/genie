@@ -13,6 +13,7 @@ import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { GelGroup } from "./gel-group.js";
 import { gmi } from "../gmi/gmi.js";
+import { getSafeArea } from "./safe-area.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
 const tabSort = fp.sortBy(getOrder(gel.config()));
@@ -27,14 +28,6 @@ const copyFirstChildren = fp.mapValues(key => Object.assign({}, key));
 const assignProperties = (object, overrides) => {
     fp.mapKeys(key => Object.assign(object[key], overrides[key]), overrides);
     return object;
-};
-
-const defaultSafeAreaGroups = {
-    top: "topLeft",
-    left: "middleLeftSafe",
-    bottom: "bottomCenter",
-    right: "middleRightSafe",
-    minWidth: 64,
 };
 
 // Copy gel config with only objects / functions as a reference.
@@ -107,25 +100,6 @@ export function create(scene, metrics, buttonIds) {
         root.destroy();
     };
 
-    const getSafeArea = (metrics, groupOverrides = {}) => {
-        const safe = { ...defaultSafeAreaGroups, ...groupOverrides };
-        const fillRight = metrics.screenToCanvas(Math.max(safe.minWidth - groups[safe.right].width, 0));
-        const fillLeft = metrics.screenToCanvas(Math.max(safe.minWidth - groups[safe.left].width, 0));
-
-        const pad = metrics.isMobile ? { x: 0, y: 0 } : fp.mapValues(metrics.screenToCanvas, { x: 20, y: 10 });
-        const left = groups[safe.left].x + groups[safe.left].width + pad.x + fillLeft;
-        const top = safe.top
-            ? groups[safe.top].y + groups[safe.top].height
-            : metrics.borderPad - metrics.stageHeight / 2;
-
-        const bottom = Math.min(groups[safe.bottom].y - pad.y, -top);
-
-        const height = bottom - top;
-        const width = groups[safe.right].x - left - pad.x - fillRight;
-
-        return new Phaser.Geom.Rectangle(left, top, width, height);
-    };
-
     const groupHasChildren = group => Boolean(group.list.length);
 
     const drawGroups = graphics => {
@@ -154,7 +128,7 @@ export function create(scene, metrics, buttonIds) {
         addToGroup,
         buttons,
         debug,
-        getSafeArea,
+        getSafeArea: getSafeArea(groups),
         destroy,
         makeAccessible,
         resize,
