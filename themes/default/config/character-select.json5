@@ -112,7 +112,7 @@
                     key: "suzy",
                     ariaLabel: "Suzy",
                     title: "Suzy",
-                    subtitle: "Has purple hair", // optional - for text overlay only
+                    subtitle: "Can tapdance", // optional - for text overlay only
                 },
                 {
                     id: "greg",
