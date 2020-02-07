@@ -252,7 +252,7 @@ describe("Accessible DOM Element", () => {
 
             const accessibleElement = accessibleDomElement(options);
             accessibleElement.update();
-            expect(accessibleElement.el.getAttribute("aria-hidden")).not.toBe(true);
+            expect(accessibleElement.el.getAttribute("aria-hidden")).toBe(undefined);
         });
     });
 });
