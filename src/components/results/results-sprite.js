@@ -12,16 +12,14 @@ export class ResultsSprite extends Phaser.GameObjects.Sprite {
         this.config = config;
         this.setOrigin(0, 0);
 
-        if (config.anim) {
+        if (config.anim && gmi.getAllSettings().motion) {
             scene.add.existing(this);
-            if (gmi.getAllSettings().motion) {
-                scene.anims.create({
-                    ...config.anim,
-                    key: config.key,
-                    frames: scene.anims.generateFrameNumbers(config.key, config.anim.frames),
-                });
-                this.play(config.key);
-            }
+            scene.anims.create({
+                ...config.anim,
+                key: config.key,
+                frames: scene.anims.generateFrameNumbers(config.key, config.anim.frames),
+            });
+            this.play(config.key);
         }
     }
 }
