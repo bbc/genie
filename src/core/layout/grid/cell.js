@@ -86,16 +86,6 @@ const addTextToButton = (scene, config, btn, theme) => {
     addTextToScene(scene, styles.title, config.title, btn, "titleText");
 
     if (config.subtitle && styles.subtitle) {
-        // const subtitleText = scene.add.text(
-        //     styles.subtitle.position.x,
-        //     styles.subtitle.position.y,
-        //     config.subtitle,
-        //     styles.subtitle.style,
-        // );
-        // subtitleText.setOrigin(0.5, 0.5);
-        // btn.overlays.set("subtitleText", subtitleText);
-
-
         addTextToScene(scene, styles.subtitle, config.subtitle, btn, "subtitleText");
     }
 };
