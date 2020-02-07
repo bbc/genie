@@ -13,7 +13,7 @@ import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { GelGroup } from "./gel-group.js";
 import { gmi } from "../gmi/gmi.js";
-import { getSafeArea } from "./safe-area.js";
+import { getSafeAreaFn } from "./safe-area.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
 const tabSort = fp.sortBy(getOrder(gel.config()));
@@ -128,7 +128,7 @@ export function create(scene, metrics, buttonIds) {
         addToGroup,
         buttons,
         debug,
-        getSafeArea: getSafeArea(groups),
+        getSafeArea: getSafeAreaFn(groups),
         destroy,
         makeAccessible,
         resize,
