@@ -1,3 +1,5 @@
+import { gmi } from "../../core/gmi/gmi.js";
+
 /**
  * @copyright BBC 2020
  * @author BBC Children's D+E
@@ -12,12 +14,14 @@ export class ResultsSprite extends Phaser.GameObjects.Sprite {
 
         if (config.anim) {
             scene.add.existing(this);
-            scene.anims.create({
-                ...config.anim,
-                key: config.key,
-                frames: scene.anims.generateFrameNumbers(config.key, config.anim.frames),
-            });
-            this.play(config.key);
+            if (gmi.getAllSettings().motion) {
+                scene.anims.create({
+                    ...config.anim,
+                    key: config.key,
+                    frames: scene.anims.generateFrameNumbers(config.key, config.anim.frames),
+                });
+                this.play(config.key);
+            }
         }
     }
 }
