@@ -65,12 +65,12 @@ const getStates = theme => {
     return state.create(theme.storageKey, stateConfig);
 };
 
-const getButtonStyling = (btn, states, styling) => styling[fp.get("state", states.get(btn.key))] || {};
+const getStylingForState = (btn, states, styling) => styling[fp.get("state", states.get(btn.key))] || {};
 
 const getStyles = (btn, theme) => {
     const states = getStates(theme);
     const defaultStyles = theme.choicesStyling.default;
-    const stylesOverride = getButtonStyling(btn, states, theme.choicesStyling);
+    const stylesOverride = getStylingForState(btn, states, theme.choicesStyling);
     return fp.merge(defaultStyles, stylesOverride);
 };
 
