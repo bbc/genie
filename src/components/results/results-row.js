@@ -12,13 +12,30 @@ import { ResultsCountup } from "./results-countup.js";
 export class ResultsRow extends Phaser.GameObjects.Container {
     constructor(scene, rowConfig, getDrawArea) {
         super(scene);
+        let rowText = "";
         this.rowConfig = rowConfig;
+        this.rowConfig.format.forEach(object => {
+            if (object.type === "text") {
+                rowText = rowText + this.setTextFromTemplate(object.content, scene.transientData);
+            }
+            if (object.type === "countup") {
+                rowText = rowText + this.setTextFromTemplate(object.endCount, scene.transientData);
+            }
+        });
+        this.config = {};
+        this.config.ariaLabel = rowText;
         this.getDrawArea = getDrawArea;
         this.drawRow();
         this.setContainerPosition();
         this.align();
         this.setAlpha(rowConfig.alpha);
         this.createBackdrop();
+    }
+
+    setTextFromTemplate(templateString, transientData) {
+        const template = fp.template(templateString);
+        const text = template(transientData[this.scene.scene.key]);
+        return text;
     }
 
     align() {
