@@ -60,34 +60,43 @@ const setPosition = (grid, button, idx) => {
     button.y = topBound + cellYCentre + paddingYTotal;
 };
 
+const getStates = theme => {
+    const stateConfig = theme.choices.map(({ id, state }) => ({ id, state }));
+    return state.create(theme.storageKey, stateConfig);
+};
+
 const getButtonStyling = (btn, states, styling) => styling[fp.get("state", states.get(btn.key))] || {};
 
+const getStyles = (btn, states, choicesStyling) => {
+    const defaultStyles = choicesStyling.default;
+    const stylesOverride = getButtonStyling(btn, states, choicesStyling);
+    return fp.merge(defaultStyles, stylesOverride);
+};
+
+const addTextToScene = (scene, styles, text, btn, key) => {
+    const textOnScene = scene.add.text(styles.position.x, styles.position.y, text, styles.style);
+    textOnScene.setOrigin(0.5, 0.5);
+    btn.overlays.set(key, textOnScene);
+};
+
 const addTextToButton = (scene, config, btn, theme) => {
-    const stateConfig = theme.choices.map(({ id, state }) => ({ id, state }));
-    const states = state.create(theme.storageKey, stateConfig);
+    const states = getStates(theme);
+    const styles = getStyles(btn, states, theme.choicesStyling);
 
-    const defaultStyles = theme.choicesStyling.default;
-    const stylesOverride = getButtonStyling(btn, states, theme.choicesStyling);
-    const styles = fp.merge(defaultStyles, stylesOverride);
-
-    const titleText = scene.add.text(
-        styles.title.position.x,
-        styles.title.position.y,
-        config.title,
-        styles.title.style,
-    );
-    titleText.setOrigin(0.5, 0.5);
-    btn.overlays.set("titleText", titleText);
+    addTextToScene(scene, styles.title, config.title, btn, "titleText");
 
     if (config.subtitle && styles.subtitle) {
-        const subtitleText = scene.add.text(
-            styles.subtitle.position.x,
-            styles.subtitle.position.y,
-            config.subtitle,
-            styles.subtitle.style,
-        );
-        subtitleText.setOrigin(0.5, 0.5);
-        btn.overlays.set("subtitleText", subtitleText);
+        // const subtitleText = scene.add.text(
+        //     styles.subtitle.position.x,
+        //     styles.subtitle.position.y,
+        //     config.subtitle,
+        //     styles.subtitle.style,
+        // );
+        // subtitleText.setOrigin(0.5, 0.5);
+        // btn.overlays.set("subtitleText", subtitleText);
+
+
+        addTextToScene(scene, styles.subtitle, config.subtitle, btn, "subtitleText");
     }
 };
 
