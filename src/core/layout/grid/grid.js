@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { create as createCell } from "./cell.js";
+import { createCell } from "./cell.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 
 const defaults = {
@@ -31,8 +31,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.enforceLimits();
     }
 
-    addGridCells(gridCells) {
-        this._cells = gridCells.map((cell, idx) => createCell(this, cell, idx));
+    addGridCells(theme) {
+        this._cells = theme.choices.map((cell, idx) => createCell(this, cell, idx, theme));
         this.makeAccessible();
         this.reset();
         return this._cells;
