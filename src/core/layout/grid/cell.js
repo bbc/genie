@@ -67,9 +67,10 @@ const getStates = theme => {
 
 const getButtonStyling = (btn, states, styling) => styling[fp.get("state", states.get(btn.key))] || {};
 
-const getStyles = (btn, states, choicesStyling) => {
-    const defaultStyles = choicesStyling.default;
-    const stylesOverride = getButtonStyling(btn, states, choicesStyling);
+const getStyles = (btn, theme) => {
+    const states = getStates(theme);
+    const defaultStyles = theme.choicesStyling.default;
+    const stylesOverride = getButtonStyling(btn, states, theme.choicesStyling);
     return fp.merge(defaultStyles, stylesOverride);
 };
 
@@ -80,9 +81,7 @@ const addTextToScene = (scene, styles, text, btn, key) => {
 };
 
 const addTextToButton = (scene, config, btn, theme) => {
-    const states = getStates(theme);
-    const styles = getStyles(btn, states, theme.choicesStyling);
-
+    const styles = getStyles(btn, theme);
     addTextToScene(scene, styles.title, config.title, btn, "titleText");
 
     if (config.subtitle && styles.subtitle) {
