@@ -243,7 +243,7 @@ describe("Accessible DOM Element", () => {
             expect(accessibleElement.el.setAttribute).toHaveBeenCalledWith("aria-hidden", true);
         });
 
-        test("aria hidden is false if the button config is set to tabbable", () => {
+        test("aria hidden is not set if the button config is set to tabbable", () => {
             options.button = {
                 config: { ariaLabel: "test-label", tabbable: true },
                 visable: true,
