@@ -1,19 +1,18 @@
 {
     theme: {
         results: {
-            backdrop: {
-                key: 'results.backdrop',
+            backdrop: { // optional central area backdrop
+                key: 'results.backdrop', // asset key
                 alpha: 1,
-            }, //optional added to safe area
-            statsFormat: '', // maybe?
-            rows: [
+            },
+            rows: [ // an array of rows
                 {
-                    format: [
+                    format: [ // each object in this array generates a visible object in the row
                         {
                             type: 'text',
                             content: 'Results Screen',
-                            offsetX: 0,
-                            offsetY: -18,
+                            offsetX: 0, // offset the x position of this text object
+                            offsetY: -18, // offset the y position of this text object
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px', // Font size should be a minimum of 13px as per GEL
@@ -21,9 +20,6 @@
                             },
                         },
                     ],
-                    sound: [{ key: 'soundKey', start: 500 }], //what happens with motion off?
-                    alpha: 1, //optional
-                    backdrop: 'imgKey', //optional
                 },
                 {
                     format: [
@@ -40,15 +36,15 @@
                         { type: 'sprite', key: 'game.star', offsetX: 20, offsetY: -20 },
                         {
                             type: 'countup',
-                            startCount: 0,
-                            endCount: '<%= stars %>',
-                            startDelay: 1000, // in ms
-                            countupDuration: 1000, // in ms
+                            startCount: 0, // the number to start counting from
+                            endCount: '<%= stars %>', // the number to count up to
+                            startDelay: 1000, // delay before the countup starts (in ms)
+                            countupDuration: 1000, // how long the countup should last (in ms)
                             audio: {
                                 key: 'results.coin-sfx',
-                                fireRate: 2, // fire every x score
-                                startPlayRate: 0.8,
-                                endPlayRate: 1.2,
+                                fireRate: 2, // fire every x score (instead of every 1 score)
+                                startPlayRate: 0.8, // initial play rate - used for pitch shifting
+                                endPlayRate: 1.2, // final play rate - used for pitch shifting
                             },
                             offsetX: 15,
                             offsetY: -20,
@@ -80,16 +76,14 @@
                             },
                         },
                     ],
-                    backdrop: {
-                        //optional
-                        key: 'results.row-backdrop-1',
+                    backdrop: { // optional row backdrop
+                        key: 'results.row-backdrop-1', // asset key
                         alpha: 0.5,
-                        offsetY: -20
+                        offsetY: -20,
                     },
-                    alpha: 1, //optional
-                    // Transitions object is passed as part of a tween config to the scene
-                    transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 },
-                    audio: { key: 'results.woosh' },
+                    alpha: 1, // set the alpha on the whole row
+                    transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 }, // phaser tweendata config
+                    audio: { key: 'results.woosh', delay: 0 }, // asset key and delay for audio to be played
                 },
                 {
                     format: [
@@ -105,11 +99,11 @@
                         },
                         {
                             type: 'sprite',
-                            key: 'game.diamond',
-                            frame: 0,
+                            key: 'game.diamond', // asset key of spritesheet
+                            frame: 0, // the initial frame of the sprite to display
                             offsetX: 20,
                             offsetY: -20,
-                            anim: {
+                            anim: { // a phaser animation configuration object
                                 frames: {
                                     start: 0,
                                     end: 14,
@@ -123,7 +117,7 @@
                             startCount: 0,
                             endCount: '<%= gems %>',
                             startDelay: 4000,
-                            countupDuration: 1000, // in ms
+                            countupDuration: 1000,
                             audio: {
                                 key: 'results.gem-sfx',
                             },
@@ -158,10 +152,9 @@
                         },
                     ],
                     backdrop: {
-                        //optional
                         key: 'results.row-backdrop-2',
                         alpha: 0.5,
-                        offsetY: -20
+                        offsetY: -20,
                     },
                     alpha: 0,
                     transition: {
@@ -175,8 +168,8 @@
                         },
                         duration: 2000,
                         delay: 2000,
-                    }, // Tween delays are in milliseconds
-                    audio: { key: 'results.slide', delay: 2500 }, // What happens when motion effects are turned off?
+                    },
+                    audio: { key: 'results.slide', delay: 2500 },
                 },
                 {
                     format: [
@@ -196,7 +189,7 @@
                             startCount: 0,
                             endCount: '<%= keys %>',
                             startDelay: 7000,
-                            countupDuration: 1000, // in ms
+                            countupDuration: 1000,
                             audio: {
                                 key: 'results.key-sfx',
                             },
@@ -231,10 +224,9 @@
                         },
                     ],
                     backdrop: {
-                        //optional
                         key: 'results.row-backdrop-3',
                         alpha: 0.5,
-                        offsetY: -20
+                        offsetY: -20,
                     },
                     alpha: 0,
                     transition: {
