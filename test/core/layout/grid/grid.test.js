@@ -644,6 +644,12 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.columns = 3;
             mockScene.theme.align = "left";
+            mockSafeArea = {
+                left: -200,
+                top: -300,
+                width: 600,
+                height: 600,
+            };
 
             const expectedPositions = [
                 {

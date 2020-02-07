@@ -47,7 +47,8 @@ const setPosition = (grid, button, idx) => {
     const col = pageIdx % grid._config.columns;
     const row = Math.floor(pageIdx / grid._config.columns);
 
-    const alignFactorX = col + getBlankCellCount(grid, row) - (grid._config.columns - 1) / 2;
+    const alignFactorX =
+        col + getBlankCellCount(grid, row) * alignmentFactor[grid._config.align] - (grid._config.columns - 1) / 2;
     const alignFactorY = row - (grid._config.rows - 1) / 2;
 
     button.x = button.displayWidth * alignFactorX + grid._cellPadding * alignFactorX;
