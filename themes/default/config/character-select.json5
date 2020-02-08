@@ -1,8 +1,8 @@
 {
     theme: {
         "character-select": {
-            rows: 2,
-            columns: 3,
+            rows: 1,
+            columns: 1,
             ease: "Cubic.easeInOut",
             duration: 500,
             align: "left",
@@ -14,7 +14,7 @@
                     yOffset: 0,
                 },
                 text: {
-                    value: "Title",
+                    value: "Select a Character",
                     xOffset: -60,
                     yOffset: -20,
                     styles: {

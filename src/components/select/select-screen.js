@@ -6,23 +6,14 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Screen } from "../core/screen.js";
-import { eventBus } from "../core/event-bus.js";
-import { buttonsChannel } from "../core/layout/gel-defaults.js";
-import { getMetrics, onScaleChange } from "../core/scaler.js";
-import { positionElement } from "../core/helpers/element-bounding.js";
-import { GelGrid } from "../core/layout/grid/grid.js";
-import * as state from "../core/state.js";
-
-import fp from "../../lib/lodash/fp/fp.js";
-
-const styleDefaults = {
-    fontSize: "24px",
-    fontFamily: "ReithSans",
-    align: "center",
-};
-const baseX = 0;
-const baseY = -270;
+import { Screen } from "../../core/screen.js";
+import { eventBus } from "../../core/event-bus.js";
+import { buttonsChannel } from "../../core/layout/gel-defaults.js";
+import { getMetrics, onScaleChange } from "../../core/scaler.js";
+import { GelGrid } from "../../core/layout/grid/grid.js";
+import * as state from "../../core/state.js";
+import fp from "../../../lib/lodash/fp/fp.js";
+import { createTitles } from "./titles.js";
 
 const gridDefaults = {
     tabIndex: 6,
@@ -33,7 +24,7 @@ export class Select extends Screen {
         this.add.image(0, 0, `${this.scene.key}.background`);
         this.addAnimations();
         this.theme = this.context.config.theme[this.scene.key];
-        this.setTitleElements();
+        this.titles = createTitles(this);
         const continueBtn = this.theme.rows * this.theme.columns === 1 ? ["continue"] : [];
         const buttons = ["home", "pause", "previous", "next"];
         this.setLayout(buttons.concat(continueBtn));
@@ -52,7 +43,36 @@ export class Select extends Screen {
         const stateConfig = this.context.theme.choices.map(({ id, state }) => ({ id, state }));
         this.states = state.create(this.context.theme.storageKey, stateConfig);
 
+        const continueButton = this.layout.buttons.continue ? [this.layout.buttons.continue] : [];
+        continueButton.map(this.linkHover.bind(this));
+
         this.updateStates();
+        this.onTransitionStart();
+    }
+
+    linkHover(button) {
+        //button is continueButton
+        //
+
+        button.on(
+            "pointerover",
+            function() {
+                this.grid.getPageCells(this.grid.page)[0].button.sprite.setFrame(1);
+                console.log("hover");
+            }.bind(this),
+        );
+
+        button.on(
+            "pointerout",
+            function() {
+                this.grid.getPageCells(this.grid.page)[0].button.sprite.setFrame(0);
+            }.bind(this),
+        );
+
+        this._cells.map(cell => {
+            cell.button.on("pointerover", () => button.sprite.setFrame(1));
+            cell.button.on("pointerout", () => button.sprite.setFrame(0));
+        });
     }
 
     updateStates() {
@@ -77,83 +97,8 @@ export class Select extends Screen {
     resize() {
         const metrics = getMetrics();
         this.grid.resize(metrics, this.layout.getSafeArea(metrics));
-        this.repositionTitleElements(metrics);
-    }
 
-    repositionTitleElements(metrics) {
-        const titleArea = this.getTitleSafeArea(metrics);
-
-        if (fp.get("title.text", this.titleElements) && this.titleConfig) {
-            const titleTextPosition = this.calculateOffset(baseX, baseY, this.titleConfig.text);
-            positionElement(this.titleElements.title.text, titleTextPosition, titleArea, metrics);
-        }
-
-        if (fp.get("subtitle.text", this.titleElements) && this.subtitleConfig) {
-            const subtitleTextPosition = this.calculateOffset(baseX, baseY, this.subtitleConfig.text);
-            positionElement(this.titleElements.subtitle.text, subtitleTextPosition, titleArea, metrics);
-        }
-    }
-
-    setTitleElements() {
-        this.titleConfig = this.theme.title;
-        this.subtitleConfig = this.theme.subtitle;
-        this.titleElements = {
-            title: this.setVisualElement(this.titleConfig),
-            subtitle: this.setVisualElement(this.subtitleConfig),
-        };
-    }
-
-    getTitleSafeArea() {
-        const homeButton = this.layout.buttons["home"];
-        const secondaryButton = this.layout.buttons["pause"];
-
-        const homeButtonBounds = homeButton.getHitAreaBounds();
-        const secondaryButtonBounds = secondaryButton.getHitAreaBounds();
-
-        return {
-            top: homeButtonBounds.top,
-            bottom: homeButtonBounds.bottom,
-            left: homeButtonBounds.right,
-            right: secondaryButtonBounds.left,
-        };
-    }
-
-    setVisualElement(config) {
-        if (config && config.visible) {
-            return this.constructVisualElement(baseX, baseY, config);
-        }
-    }
-
-    calculateOffset(x, y, config) {
-        return {
-            x: x + (parseInt(config.xOffset) || 0),
-            y: y + (parseInt(config.yOffset) || 0),
-        };
-    }
-
-    constructVisualElement(x, y, config) {
-        const imagePosition = this.calculateOffset(x, y, config.image);
-        const textPosition = this.calculateOffset(x, y, config.text);
-
-        const textStyle = {
-            ...styleDefaults,
-            ...fp.get("text.styles", config),
-        };
-
-        const visualElements = {
-            image:
-                config.image && config.image.imageId
-                    ? this.add.image(imagePosition.x, imagePosition.y, `${this.scene.key}.${config.image.imageId}`)
-                    : undefined,
-            text:
-                config.text && config.text.value
-                    ? this.add.text(textPosition.x, textPosition.y, config.text.value, textStyle)
-                    : undefined,
-        };
-
-        if (visualElements.text) visualElements.text.defaultStyle = textStyle;
-
-        return visualElements;
+        this.titles.reposition(metrics, this.layout.buttons);
     }
 
     currentEnabled() {
