@@ -14,6 +14,7 @@ import { GelGrid } from "../../core/layout/grid/grid.js";
 import * as state from "../../core/state.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import { createTitles } from "./titles.js";
+import * as a11y from "../../core/accessibility/accessibility-layer.js";
 
 const gridDefaults = {
     tabIndex: 6,
@@ -53,6 +54,13 @@ export class Select extends Screen {
     linkHover(button) {
         //button is continueButton
         //
+
+        a11y.removeButton(button)
+        a11y.removeButton(this.layout.buttons.next)
+        a11y.removeButton(this.layout.buttons.previous)
+        a11y.reset()
+
+        this._cells.map(cell => cell.button.accessibleElement.update());
 
         button.on(
             "pointerover",

@@ -27,66 +27,36 @@ const getTitleSafeArea = buttons => {
     };
 };
 
-const calculateOffset = (x, y, config) => ({
-    x: x + (parseInt(config.xOffset) || 0),
-    y: y + (parseInt(config.yOffset) || 0),
+const calculateOffset = config => ({
+    x: baseX + (parseInt(config.xOffset) || 0),
+    y: baseY + (parseInt(config.yOffset) || 0),
 });
 
-const constructVisualElement = (scene, config) => {
-    const imagePosition = calculateOffset(baseX, baseY, config.image);
-    const textPosition = calculateOffset(baseX, baseY, config.text);
-
-    const textStyle = {
-        ...styleDefaults,
-        ...fp.get("text.styles", config),
-    };
-
-    const visualElements = {
-        image:
-            config.image && config.image.imageId
-                ? scene.add.image(imagePosition.x, imagePosition.y, `${scene.scene.key}.${config.image.imageId}`)
-                : undefined,
-        text:
-            config.text && config.text.value
-                ? scene.add.text(textPosition.x, textPosition.y, config.text.value, textStyle)
-                : undefined,
-    };
-
-    if (visualElements.text) visualElements.text.defaultStyle = textStyle;
-
-    return visualElements;
+const makeElements = makerFns => conf => {
+    const pos = calculateOffset(conf);
+    return makerFns[conf.type](pos, conf);
 };
-const isDefined = value => Boolean(value);
 
 export const createTitles = scene => {
+    const image = (pos, conf) => scene.add.image(pos.x, pos.y, `${scene.scene.key}.${conf.key}`);
 
-    const setVisualElement = config => {
-    if (config && config.visible) {
-        return constructVisualElement(scene, config);
-    }
-};
+    const text = (pos, conf) => {
+        const textStyle = { ...styleDefaults, ...fp.get("text.styles", conf) };
+        const textSprite = scene.add.text(pos.x, pos.y, conf.value, textStyle);
+        textSprite.defaultStyle = textStyle;
+        return textSprite;
+    };
 
-    //TODO this can remain inside the module rather than being re-assigned.
-    //they are used in repositionTitles#
-    //TODO - get rid of title and subtitle and make theme.titles an array
-    const configs = [scene.theme.title, scene.theme.subtitle].filter(isDefined);
+    const constructElement = configs => configs.map(makeElements({ image, text }));
 
-    const elements = configs.map(setVisualElement);
+    //TODO image examples. Current ones are blank
+    const configs = scene.theme.titles;
+    const elements = configs.map(constructElement);
 
     const reposition = (metrics, buttons) => {
         const titleArea = getTitleSafeArea(buttons);
 
-        fp.toPairs(elements, configs).map(x => {
-            const element = x[0];
-            const conf = x[1];
-
-            const textPosition = calculateOffset(baseX, baseY, conf.text);
-
-            positionElement(element.text, textPosition, titleArea, metrics);
-        });
+        configs.map((config, idx) => positionElement(elements[idx][0], calculateOffset(config[0]), titleArea, metrics));
     };
-
     return { reposition };
 };
-
-

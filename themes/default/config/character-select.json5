@@ -7,53 +7,58 @@
             duration: 500,
             align: "left",
             music: "loader.backgroundMusic",
-            title: {
-                image: {
-                    imageId: "",
-                    xOffset: 0,
-                    yOffset: 0,
-                },
-                text: {
-                    value: "Select a Character",
-                    xOffset: -60,
-                    yOffset: -20,
-                    styles: {
-                        fontSize: "24px",
+            titles: [
+                [
+                    //                 {
+                    //                      type: "image",
+                    //                    key: "",
+                    //                    xOffset: 0,
+                    //                    yOffset: 0,
+                    //                },
+                    {
+                        type: "text",
+                        value: "Select a Character",
+                        xOffset: -60,
+                        yOffset: -20,
+                        styles: {
+                            fontSize: "24px",
+                        },
                     },
-                },
-                visible: true,
-            },
-            subtitle: {
-                image: {
-                    imageId: "",
-                    xOffset: 0,
-                    yOffset: 0,
-                },
-                text: {
-                    value: "Sub-Title",
-                    xOffset: 0,
-                    yOffset: 80,
-                    styles: {
-                        fontSize: "16px",
-                    },
-                },
-                visible: true,
-            },
+                ],
+                [
+                    //                 {
+                    //                  type: "image",
+                    //                    imageId: "",
+                    //                    xOffset: 0,
+                    //                    yOffset: 0,
+                    //                },
+                    {
+                        type: "text",
+                        value: "Sub-Title",
+                        xOffset: 0,
+                        yOffset: 80,
+                        styles: {
+                            fontSize: "16px",
+                        },
+                    }
+                ],
+            ],
             storageKey: "characters",
             states: {
                 locked: {
                     //asset: "suzytoo",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
                     overlayAsset: "character-select.lock",
-                    suffix: "locked",       //appended to aria label of accessibility div
+                    suffix: "locked", //appended to aria label of accessibility div
                     x: 55,
                     y: 60,
-                    properties: {           //phaser properties assigned to the base sprite
+                    properties: {
+                        //phaser properties assigned to the base sprite
                         alpha: 0.25,
                         tint: 0xff0000,
                     },
-                    enabled: false,         //enable or disable touch input on this state - default true
+                    enabled: false, //enable or disable touch input on this state - default true
                 },
-                complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed"},
+                complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed" },
             },
             choices: [
                 {
@@ -61,7 +66,7 @@
                     key: "mary",
                     ariaLabel: "Mary",
                     title: "Mary",
-                    state: "complete"
+                    state: "complete",
                 },
                 {
                     id: "kyle",
@@ -119,22 +124,21 @@
                     ariaLabel: "Elliot",
                     title: "Elliot",
                     state: "locked",
-                }
-//                {
-//                    id: "char1",                        //Must be unique
-//                    asset: "char1",                     //Phaser asset key
-//                    accessibilityText: "Character 1",
-//                    title: "Liron Man",
-//                    anim: {
-//                        key: "character-select.char1",
-//                        frames: 18,
-//                        frameRate: 6,
-//                        yoyo: true,
-//                        repeat: -1,
-//                    },
-//                    state: "locked",
-//                },
-
+                },
+                //                {
+                //                    id: "char1",                        //Must be unique
+                //                    asset: "char1",                     //Phaser asset key
+                //                    accessibilityText: "Character 1",
+                //                    title: "Liron Man",
+                //                    anim: {
+                //                        key: "character-select.char1",
+                //                        frames: 18,
+                //                        frameRate: 6,
+                //                        yoyo: true,
+                //                        repeat: -1,
+                //                    },
+                //                    state: "locked",
+                //                },
             ],
         },
     },
