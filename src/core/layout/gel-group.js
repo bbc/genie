@@ -78,11 +78,8 @@ export class GelGroup extends Phaser.GameObjects.Container {
         this.makeAccessible();
     }
 
-    /**
-     * TODO add interface for config
-     */
     addButton(config, position = this._buttons.length) {
-        const newButton = this._buttonFactory.createButton(this._metrics, config, this.width / 2, this.height / 2);
+        const newButton = this._buttonFactory.createButton(config, this.width / 2, this.height / 2);
 
         this.addAt(newButton, position);
         this._buttons.push(newButton);

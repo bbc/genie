@@ -3,8 +3,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import fp from "../../../lib/lodash/fp/fp.js";
 import { positionElement } from "../../core/helpers/element-bounding.js";
+import { getMetrics } from "../../core/scaler.js";
 
 const styleDefaults = {
     fontSize: "24px",
@@ -41,22 +41,21 @@ export const createTitles = scene => {
     const image = (pos, conf) => scene.add.image(pos.x, pos.y, `${scene.scene.key}.${conf.key}`);
 
     const text = (pos, conf) => {
-        const textStyle = { ...styleDefaults, ...fp.get("text.styles", conf) };
+        const textStyle = { ...styleDefaults, ...conf.styles };
         const textSprite = scene.add.text(pos.x, pos.y, conf.value, textStyle);
         textSprite.defaultStyle = textStyle;
         return textSprite;
     };
 
-    const constructElement = configs => configs.map(makeElements({ image, text }));
-
     //TODO image examples. Current ones are blank
-    const configs = scene.theme.titles;
-    const elements = configs.map(constructElement);
+    const configs = scene.theme.titles || [];
+    const elements = configs.map(makeElements({ image, text }));
 
-    const reposition = (metrics, buttons) => {
+    const reposition = buttons => {
         const titleArea = getTitleSafeArea(buttons);
+        const metrics = getMetrics();
 
-        configs.map((config, idx) => positionElement(elements[idx][0], calculateOffset(config[0]), titleArea, metrics));
+        configs.map((config, idx) => positionElement(elements[idx], calculateOffset(config), titleArea, metrics));
     };
     return { reposition };
 };

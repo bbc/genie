@@ -7,17 +7,25 @@
  * @license Apache-2.0
  */
 import { Screen } from "../../core/screen.js";
-import { eventBus } from "../../core/event-bus.js";
-import { buttonsChannel } from "../../core/layout/gel-defaults.js";
-import { getMetrics, onScaleChange } from "../../core/scaler.js";
+import { onScaleChange } from "../../core/scaler.js";
 import { GelGrid } from "../../core/layout/grid/grid.js";
 import * as state from "../../core/state.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import { createTitles } from "./titles.js";
-import * as a11y from "../../core/accessibility/accessibility-layer.js";
+import * as singleItemMode from "./single-item-mode.js";
+import { addEvents } from "./add-events.js";
 
 const gridDefaults = {
     tabIndex: 6,
+};
+
+const getOnTransitionStartFn = scene => () => {
+    if (!scene.layout.buttons.continue) return;
+
+    const bool = scene.currentEnabled();
+    scene.layout.buttons.continue.input.enabled = bool;
+    scene.layout.buttons.continue.alpha = bool ? 1 : 0.5;
+    scene.layout.buttons.continue.accessibleElement.update();
 };
 
 export class Select extends Screen {
@@ -26,12 +34,10 @@ export class Select extends Screen {
         this.addAnimations();
         this.theme = this.context.config.theme[this.scene.key];
         this.titles = createTitles(this);
-        const continueBtn = this.theme.rows * this.theme.columns === 1 ? ["continue"] : [];
         const buttons = ["home", "pause", "previous", "next"];
-        this.setLayout(buttons.concat(continueBtn));
-        const metrics = getMetrics();
-        const onTransitionStart = this.onTransitionStart.bind(this);
-        this.grid = new GelGrid(this, metrics, Object.assign(this.theme, gridDefaults, { onTransitionStart }));
+        this.setLayout(buttons.concat(singleItemMode.continueBtn(this)));
+        const onTransitionStart = getOnTransitionStartFn(this);
+        this.grid = new GelGrid(this, Object.assign(this.theme, gridDefaults, { onTransitionStart }));
         this.resize();
         this._cells = this.grid.addGridCells(this.theme.choices);
         this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
@@ -39,48 +45,15 @@ export class Select extends Screen {
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
         this.scene.scene.events.on("shutdown", this._scaleEvent.unsubscribe, this);
 
-        this.addEventSubscriptions();
+        addEvents(this);
 
         const stateConfig = this.context.theme.choices.map(({ id, state }) => ({ id, state }));
         this.states = state.create(this.context.theme.storageKey, stateConfig);
 
-        const continueButton = this.layout.buttons.continue ? [this.layout.buttons.continue] : [];
-        continueButton.map(this.linkHover.bind(this));
+        singleItemMode.create(this);
 
         this.updateStates();
-        this.onTransitionStart();
-    }
-
-    linkHover(button) {
-        //button is continueButton
-        //
-
-        a11y.removeButton(button)
-        a11y.removeButton(this.layout.buttons.next)
-        a11y.removeButton(this.layout.buttons.previous)
-        a11y.reset()
-
-        this._cells.map(cell => cell.button.accessibleElement.update());
-
-        button.on(
-            "pointerover",
-            function() {
-                this.grid.getPageCells(this.grid.page)[0].button.sprite.setFrame(1);
-                console.log("hover");
-            }.bind(this),
-        );
-
-        button.on(
-            "pointerout",
-            function() {
-                this.grid.getPageCells(this.grid.page)[0].button.sprite.setFrame(0);
-            }.bind(this),
-        );
-
-        this._cells.map(cell => {
-            cell.button.on("pointerover", () => button.sprite.setFrame(1));
-            cell.button.on("pointerout", () => button.sprite.setFrame(0));
-        });
+        onTransitionStart();
     }
 
     updateStates() {
@@ -103,25 +76,14 @@ export class Select extends Screen {
     }
 
     resize() {
-        const metrics = getMetrics();
-        this.grid.resize(metrics, this.layout.getSafeArea(metrics));
-
-        this.titles.reposition(metrics, this.layout.buttons);
+        this.grid.resize(this.layout.getSafeArea());
+        this.titles.reposition(this.layout.buttons);
     }
 
     currentEnabled() {
         const currentState = this.states.get(this.grid.getCurrentPageKey()).state;
         const stateDefinition = this.context.theme.states[currentState];
         return stateDefinition === undefined || stateDefinition.enabled !== false;
-    }
-
-    onTransitionStart() {
-        if (!this.layout.buttons.continue) return;
-
-        const bool = this.currentEnabled();
-        this.layout.buttons.continue.input.enabled = bool;
-        this.layout.buttons.continue.alpha = bool ? 1 : 0.5;
-        this.layout.buttons.continue.accessibleElement.update();
     }
 
     next = getTitle => () => {
@@ -132,30 +94,4 @@ export class Select extends Screen {
         this.transientData[this.scene.key] = { choice: { title: getTitle.call(this.grid) } };
         this.navigation.next();
     };
-
-    addEventSubscriptions() {
-        const grid = this.grid;
-        grid.cellIds().map(key => {
-            eventBus.subscribe({
-                channel: buttonsChannel(this),
-                name: key,
-                callback: this.next(() => key),
-            });
-        });
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "continue",
-            callback: this.next(this.grid.getCurrentPageKey),
-        });
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "next",
-            callback: () => grid.showPage(grid.page + 1),
-        });
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "previous",
-            callback: () => grid.showPage(grid.page - 1),
-        });
-    }
 }

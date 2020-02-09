@@ -65,7 +65,7 @@ export const create = (grid, choice, idx) => {
         tabbable: true,
     };
 
-    const button = grid.scene.add.gelButton(0, 0, grid._metrics, { ...defaults, ...config }); //TODO access private
+    const button = grid.scene.add.gelButton(0, 0, { ...defaults, ...config });
     grid.cellsPerPage === 1 && button.on(Phaser.Input.Events.POINTER_OVER, transitionOnTab(grid, button));
     grid.cellsPerPage > 1 && (button.visible = Boolean(!idx));
     button.key = config.key;

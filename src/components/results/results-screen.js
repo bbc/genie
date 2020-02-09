@@ -9,7 +9,7 @@ import * as Rows from "../../core/layout/rows.js";
 import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 import { eventBus } from "../../core/event-bus.js";
 import { gmi } from "../../core/gmi/gmi.js";
-import { getMetrics, onScaleChange } from "../../core/scaler.js";
+import { onScaleChange } from "../../core/scaler.js";
 import { tweenRows } from "./results-row-tween.js";
 import { playRowAudio } from "./results-row-audio.js";
 
@@ -51,7 +51,7 @@ export class Results extends Screen {
     }
 
     resultsArea() {
-        return this.layout.getSafeArea(getMetrics(), { top: false });
+        return this.layout.getSafeArea({ top: false });
     }
 
     createLayout() {

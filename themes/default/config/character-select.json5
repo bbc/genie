@@ -8,41 +8,38 @@
             align: "left",
             music: "loader.backgroundMusic",
             titles: [
-                [
-                    //                 {
-                    //                      type: "image",
-                    //                    key: "",
-                    //                    xOffset: 0,
-                    //                    yOffset: 0,
-                    //                },
-                    {
-                        type: "text",
-                        value: "Select a Character",
-                        xOffset: -60,
-                        yOffset: -20,
-                        styles: {
-                            fontSize: "24px",
-                        },
+                //                 {
+                //                      type: "image",
+                //                    key: "",
+                //                    xOffset: 0,
+                //                    yOffset: 0,
+                //                },
+                {
+                    type: "text",
+                    value: "Select a Character",
+                    xOffset: -60,
+                    yOffset: -20,
+                    styles: {
+                        fontSize: "24px",
                     },
-                ],
-                [
-                    //                 {
-                    //                  type: "image",
-                    //                    imageId: "",
-                    //                    xOffset: 0,
-                    //                    yOffset: 0,
-                    //                },
-                    {
-                        type: "text",
-                        value: "Sub-Title",
-                        xOffset: 0,
-                        yOffset: 80,
-                        styles: {
-                            fontSize: "16px",
-                        },
-                    }
-                ],
+                },
+                //                 {
+                //                  type: "image",
+                //                    imageId: "",
+                //                    xOffset: 0,
+                //                    yOffset: 0,
+                //                },
+                {
+                    type: "text",
+                    value: "Sub-Title",
+                    xOffset: 0,
+                    yOffset: 80,
+                    styles: {
+                        fontSize: "16px",
+                    },
+                },
             ],
+
             storageKey: "characters",
             states: {
                 locked: {

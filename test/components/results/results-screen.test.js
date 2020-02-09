@@ -243,12 +243,12 @@ describe("Results Screen", () => {
             expect(resultsScreen.add.image).not.toHaveBeenCalledWith(0, 0, "mockKey");
         });
 
-        test("Creates a callback that calls getSafeArea with metrics and top: false group overrides ", () => {
+        test("Creates a callback that calls getSafeArea with top: false group overrides ", () => {
             resultsScreen.create();
             const safeAreaCallback = Rows.create.mock.calls[0][1];
             safeAreaCallback();
 
-            expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ width: 0 }, { top: false });
+            expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ top: false });
         });
 
         test("adds the achievement button when theme flag is set", () => {
