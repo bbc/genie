@@ -10,7 +10,7 @@ import * as a11y from "../../core/accessibility/accessibility-layer.js";
 
 export const create = scene => {
     const continueButton = scene.layout.buttons.continue;
-    if (!continueButton) return;
+    if (!continueButton) return false;
 
     a11y.removeButton(continueButton);
     a11y.removeButton(scene.layout.buttons.next);
@@ -27,8 +27,10 @@ export const create = scene => {
         cell.button.on("pointerout", () => continueButton.sprite.setFrame(0));
     });
 
-    const lastCell = scene._cells[scene._cells.length - 1] || [];
+    const lastCell = [scene._cells[scene._cells.length - 1]].filter(x => x);
     lastCell.map(cell => cell.button.on("pointerout", () => scene.grid.showPage(scene.grid.page + 1)));
+
+    return true;
 };
 
 export const continueBtn = scene => (scene.theme.rows * scene.theme.columns === 1 ? ["continue"] : []);

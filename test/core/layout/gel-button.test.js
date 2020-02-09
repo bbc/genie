@@ -95,7 +95,7 @@ describe("Gel Button", () => {
             width: 1217,
         };
 
-        ScalerModule.getMetrics = jest.fn(() => mockMetrics)
+        ScalerModule.getMetrics = jest.fn(() => mockMetrics);
         mockConfig = {
             channel: "mockChannel",
             id: "mockId",

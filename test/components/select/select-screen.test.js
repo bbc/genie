@@ -1,21 +1,21 @@
 /**
- * @copyright BBC 2018
+ * @copyright BBC 2020
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { eventBus } from "../../src/core/event-bus.js";
-import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
-import * as Scaler from "../../src/core/scaler.js";
-import * as elementBounding from "../../src/core/helpers/element-bounding.js";
+import { eventBus } from "../../../src/core/event-bus.js";
+import { buttonsChannel } from "../../../src/core/layout/gel-defaults.js";
+import * as Scaler from "../../../src/core/scaler.js";
+import * as elementBounding from "../../../src/core/helpers/element-bounding.js";
 
-import { Select } from "../../src/components/select/select-screen.js";
-import { GelGrid } from "../../src/core/layout/grid/grid.js";
-jest.mock("../../src/core/layout/grid/grid.js");
-jest.mock("../../src/core/layout/layout.js", () => ({
+import { Select } from "../../../src/components/select/select-screen.js";
+import { GelGrid } from "../../../src/core/layout/grid/grid.js";
+jest.mock("../../../src/core/layout/grid/grid.js");
+jest.mock("../../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
 }));
 
-jest.mock("../../src/core/state.js", () => ({
+jest.mock("../../../src/core/state.js", () => ({
     create: jest.fn(() => ({
         getAll: jest.fn(() => []),
         get: jest.fn(() => ({ state: "locked" })),

@@ -35,7 +35,7 @@ describe("getSafeArea", () => {
             borderPad: 16,
         };
 
-         ScalerModule.getMetrics = jest.fn(() => mockMetrics);
+        ScalerModule.getMetrics = jest.fn(() => mockMetrics);
     });
 
     afterEach(() => jest.clearAllMocks());
