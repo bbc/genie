@@ -20,10 +20,10 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
         this.endCount = this.textFromTemplate(config.endCount, scene.transientData);
 
         this.delayProgress = 0;
-        this.numberOfFires = 0;
+        this.numberOfTicks = 0;
         this.currentValue = parseInt(this.startCount);
         this.countupRange = this.endCount - this.startCount;
-        this.shouldSingleTick = this.countupRange <= this.config.audio.singleTicksRange;
+        this.shouldSingleTick = this.config.audio ? this.countupRange <= this.config.audio.singleTicksRange : false;
 
         this.text = this.startCount;
         this.setFixedSize(this.getFinalWidth(this.endCount), 0);
@@ -67,8 +67,8 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
 
     canPlaySound(progress, ticksPerSecond, countupDuration) {
         if (ticksPerSecond && !this.shouldSingleTick) {
-            const expectedNumberOfFires = (progress * ticksPerSecond * countupDuration) / 1000;
-            return expectedNumberOfFires > this.numberOfFires ? true : false;
+            const expectedNumberOfTicks = (progress * ticksPerSecond * countupDuration) / 1000;
+            return expectedNumberOfTicks > this.numberOfTicks ? true : false;
         }
         return this.text !== this.previousText ? true : false;
     }
@@ -78,7 +78,7 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
         const endRate = this.config.audio.endPlayRate || 1;
         const currentRate = startRate + progress * (endRate - startRate);
         this.scene.sound.play(this.config.audio.key, { rate: currentRate });
-        this.numberOfFires += 1;
+        this.numberOfTicks += 1;
     }
 
     incrementCount(dt, config) {
