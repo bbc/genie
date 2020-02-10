@@ -47,7 +47,6 @@ export const createTitles = scene => {
         return textSprite;
     };
 
-    //TODO image examples. Current ones are blank
     const configs = scene.theme.titles || [];
     const elements = configs.map(makeElements({ image, text }));
 
