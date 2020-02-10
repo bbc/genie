@@ -20,15 +20,20 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
         this.endCount = this.textFromTemplate(config.endCount, scene.transientData);
 
         this.delayProgress = 0;
+        this.numberOfFires = 0;
         this.currentValue = parseInt(this.startCount);
-        this.numberOfTicks = this.endCount - this.startCount;
+        this.countupRange = this.endCount - this.startCount;
+        this.shouldSingleTick = this.countupRange <= this.config.audio.singleTicksRange;
 
         this.text = this.startCount;
         this.setFixedSize(this.getFinalWidth(this.endCount), 0);
 
         this.countupState = COUNTUP_STATE.DELAYED;
         this.boundUpdateFn = this.update.bind(this);
-        scene.events.on(Phaser.Scenes.Events.UPDATE, this.boundUpdateFn);
+        scene.events.on("update", this.boundUpdateFn);
+        scene.events.once("shutdown", () => {
+            scene.events.off("update", this.boundUpdateFn);
+        });
     }
 
     getFinalWidth(finalText) {
@@ -49,7 +54,7 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
             this.incrementDelayCount(dt, this.config.startDelay);
         }
         if (this.countupState === COUNTUP_STATE.COUNTING) {
-            this.incrementCount(dt, this.config.countupDuration);
+            this.incrementCount(dt, this.config);
         }
     }
 
@@ -60,26 +65,33 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
         }
     }
 
-    canPlaySound(oldValue, newValue) {
-        //const fireRate = this.config.audio.fireRate >= 1 ? this.config.audio.fireRate : 1;
-        return newValue !== oldValue ? true : false; //value % fireRate === 0;
+    canPlaySound(progress, ticksPerSecond, countupDuration) {
+        if (ticksPerSecond && !this.shouldSingleTick) {
+            const expectedNumberOfFires = (progress * ticksPerSecond * countupDuration) / 1000;
+            return expectedNumberOfFires > this.numberOfFires ? true : false;
+        }
+        return this.text !== this.previousText ? true : false;
     }
 
-    incrementCount(dt, countupDuration) {
-        this.currentValue += (dt / countupDuration) * this.numberOfTicks;
+    playAudio(progress) {
+        const startRate = this.config.audio.startPlayRate || 1;
+        const endRate = this.config.audio.endPlayRate || 1;
+        const currentRate = startRate + progress * (endRate - startRate);
+        this.scene.sound.play(this.config.audio.key, { rate: currentRate });
+        this.numberOfFires += 1;
+    }
+
+    incrementCount(dt, config) {
+        this.currentValue += (dt / config.countupDuration) * this.countupRange;
         this.previousText = this.text;
         this.text = parseInt(this.currentValue);
         if (this.currentValue >= this.endCount) {
             this.text = this.endCount;
             this.countupState = COUNTUP_STATE.ENDED;
-            this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.boundUpdateFn);
         }
-        if (this.config.audio && this.canPlaySound(this.previousText, this.text)) {
-            const startRate = this.config.audio.startPlayRate || 1;
-            const endRate = this.config.audio.endPlayRate || 1;
-            const progress = this.currentValue / (this.endCount - this.startCount);
-            const currentRate = startRate + progress * (endRate - startRate);
-            this.scene.sound.play(this.config.audio.key, { rate: currentRate });
+        const progress = (this.currentValue - this.startCount) / (this.endCount - this.startCount);
+        if (this.config.audio && this.canPlaySound(progress, config.audio.ticksPerSecond, config.countupDuration)) {
+            this.playAudio(progress);
         }
     }
 }
