@@ -60,7 +60,7 @@ export const create = (grid, choice, idx) => {
         ...choice,
         scene: grid.scene.scene.key,
         channel: grid.eventChannel,
-        alwaysTab: grid.cellsPerPage === 1,
+        tabbable: true,
     };
 
     const button = grid.scene.add.gelButton(0, 0, grid._metrics, { ...defaults, ...config }); //TODO access private
