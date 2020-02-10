@@ -309,6 +309,11 @@ describe("Select Screen", () => {
                 expect(GelGrid).toHaveBeenCalledWith(selectScreen, mockConfig);
             });
         });
+
+        test("creates grid cells", () => {
+            selectScreen.create();
+            expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.theme);
+        });
     });
 
     describe("events", () => {

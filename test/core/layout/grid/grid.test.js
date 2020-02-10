@@ -5,6 +5,7 @@
  */
 import { accessibilify } from "../../../../src/core/accessibility/accessibilify.js";
 import { GelGrid } from "../../../../src/core/layout/grid/grid.js";
+import * as Cell from "../../../../src/core/layout/grid/cell.js";
 import * as gmiModule from "../../../../src/core/gmi/gmi.js";
 import * as ScalerModule from "../../../../src/core/scaler.js";
 
@@ -125,20 +126,6 @@ describe("Grid", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("adding cells", () => {
-        //test("add a cell to the grid", () => {
-        //    grid = new GelGrid(mockScene, metrics, mockSafeArea);
-        //    grid.addCell({});
-        //
-        //    expect(grid.addAt).toHaveBeenCalledTimes(1);
-        //});
-        //
-        //test("adds a button to the grid when adding a cell", () => {
-        //    grid = new GelGrid(mockScene, metrics, mockSafeArea);
-        //    grid.addCell({});
-        //
-        //    expect(mockScene.add.gelButton).toHaveBeenCalledTimes(1);
-        //});
-
         test("adds multiple cells to the grid from theme config", () => {
             mockScene.theme.choices = [
                 { asset: "asset_name_1", id: "asset_id_1" },
@@ -147,10 +134,23 @@ describe("Grid", () => {
             ];
 
             grid = new GelGrid(mockScene);
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
 
             expect(grid.add).toHaveBeenCalledTimes(3);
             expect(mockScene.add.gelButton).toHaveBeenCalledTimes(3);
+        });
+
+        test("cells are created with correct params", () => {
+            jest.spyOn(Cell, "createCell");
+            mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }, { asset: "asset_name_3" }];
+
+            grid = new GelGrid(mockScene, metrics);
+            grid.addGridCells(mockScene.theme);
+
+            expect.assertions(3);
+            mockScene.theme.choices.forEach((choice, index) => {
+                expect(Cell.createCell).toHaveBeenCalledWith(grid, choice, index, mockScene.theme);
+            });
         });
 
         test("cell is added with key from config data", () => {
@@ -160,17 +160,28 @@ describe("Grid", () => {
                 key: mockScene.theme.choices[0].key,
             };
             grid = new GelGrid(mockScene);
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
 
             const resultParams = mockScene.add.gelButton.mock.calls[0];
             expect(resultParams[2]).toEqual(expect.objectContaining(expectedConfig));
+            expect(resultParams[3]).toEqual(expect.objectContaining(expectedConfig));
+        });
+
+        test("gel button is created using metrics passed from the grid", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_1", title: "asset title 1" }];
+
+            grid = new GelGrid(mockScene, metrics);
+            grid.addGridCells(mockScene.theme);
+
+            const actualParams = mockScene.add.gelButton.mock.calls[0];
+            expect(actualParams[2]).toEqual(metrics);
         });
 
         test("multiple gel buttons are created", () => {
             mockScene.theme.choices = [{ asset: "asset_name_1", title: "asset title 1" }];
 
             grid = new GelGrid(mockScene);
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
 
             const actualParams = mockScene.add.gelButton.mock.calls[0];
             expect(actualParams[0]).toBe(0);
@@ -181,7 +192,7 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ id: "asset_name_1" }, { id: "asset_name_2" }, { id: "asset_name_3" }];
             const expectedIds = ["asset_name_1", "asset_name_2", "asset_name_3"];
             grid = new GelGrid(mockScene);
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
             expect(grid.cellIds()).toEqual(expectedIds);
         });
 
@@ -190,7 +201,7 @@ describe("Grid", () => {
                 mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
 
                 grid = new GelGrid(mockScene);
-                grid.addGridCells(mockScene.theme.choices);
+                grid.addGridCells(mockScene.theme);
 
                 expect(accessibilify).toHaveBeenCalledTimes(2);
             });
@@ -202,7 +213,7 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }, { asset: "asset_name_3" }];
 
             grid = new GelGrid(mockScene);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[0].button.visible).toBe(true);
         });
@@ -211,7 +222,7 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }, { asset: "asset_name_3" }];
 
             grid = new GelGrid(mockScene);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[1].button.visible).toBe(false);
             expect(resultCells[2].button.visible).toBe(false);
@@ -222,7 +233,7 @@ describe("Grid", () => {
             mockScene.theme.columns = 2;
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[0].button.visible).toBe(true);
             expect(resultCells[1].button.visible).toBe(true);
@@ -233,7 +244,7 @@ describe("Grid", () => {
             mockScene.theme.rows = 2;
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[0].button.visible).toBe(true);
             expect(resultCells[1].button.visible).toBe(true);
@@ -249,7 +260,7 @@ describe("Grid", () => {
             mockScene.theme.columns = 2;
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[2].button.visible).toBe(false);
             expect(resultCells[3].button.visible).toBe(false);
@@ -266,7 +277,7 @@ describe("Grid", () => {
             mockScene.theme.columns = 5;
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[0].button.visible).toBe(true);
             expect(resultCells[1].button.visible).toBe(true);
@@ -286,7 +297,7 @@ describe("Grid", () => {
             mockScene.theme.rows = 2;
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[0].button.visible).toBe(true);
             expect(resultCells[1].button.visible).toBe(true);
@@ -307,7 +318,7 @@ describe("Grid", () => {
             mockScene.theme.rows = 2;
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[4].button.visible).toBe(false);
             expect(resultCells[5].button.visible).toBe(false);
@@ -328,7 +339,7 @@ describe("Grid", () => {
             mockScene.theme.rows = 2;
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[0].button.visible).toBe(true);
             expect(resultCells[1].button.visible).toBe(true);
@@ -345,7 +356,7 @@ describe("Grid", () => {
             mockScene.theme.columns = 3;
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[0]).toBeTruthy();
             expect(resultCells[1]).toBeTruthy();
@@ -359,7 +370,7 @@ describe("Grid", () => {
     //        mockScene.theme.choices = [{ asset: "asset_name_0" }];
     //
     //        grid = new GelGrid(mockScene, metrics, mockSafeArea);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
+    //        const resultCells = grid.addGridCells(mockScene.theme);
     //
     //        expect(resultCells[0].input.hitArea.width).toEqual(mockSafeArea.width);
     //        expect(resultCells[0].input.hitArea.height).toEqual(mockSafeArea.height);
@@ -374,7 +385,7 @@ describe("Grid", () => {
     //        mockSafeArea.height = 800;
     //
     //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
+    //        const resultCells = grid.addGridCells(mockScene.theme);
     //
     //        const expectedCellWidth = (800 - desktopCellPadding) / 2;
     //
@@ -396,7 +407,7 @@ describe("Grid", () => {
     //        mockSafeArea.height = 800;
     //
     //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
+    //        const resultCells = grid.addGridCells(mockScene.theme);
     //
     //        const expectedCellWidth = (800 - mobileCellPadding * 3) / 4;
     //
@@ -414,7 +425,7 @@ describe("Grid", () => {
     //        const expectedCellHeight = (800 - 24) / 2;
     //
     //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
+    //        const resultCells = grid.addGridCells(mockScene.theme);
     //
     //        expect(resultCells[0].input.hitArea.height).toEqual(expectedCellHeight);
     //    });
@@ -429,7 +440,7 @@ describe("Grid", () => {
     //        mockSafeArea.height = 800;
     //
     //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
+    //        const resultCells = grid.addGridCells(mockScene.theme);
     //
     //        const expectedCellWidth = (800 - mobileCellPadding) / 2;
     //
@@ -444,7 +455,7 @@ describe("Grid", () => {
     //        mockSafeArea.right = 300;
     //
     //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
+    //        const resultCells = grid.addGridCells(mockScene.theme);
     //
     //        const expectedCellWidth = (600 - 32) / 3;
     //
@@ -463,7 +474,7 @@ describe("Grid", () => {
     //        const expectedCellHeight = (800 - mobileCellPadding) / 2;
     //
     //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme.choices);
+    //        const resultCells = grid.addGridCells(mockScene.theme);
     //
     //        expect(resultCells[0].input.hitArea.height).toEqual(expectedCellHeight);
     //    });
@@ -474,13 +485,13 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }];
 
             grid = new GelGrid(mockScene);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[0].button.x).toEqual(0);
             expect(resultCells[0].button.y).toEqual(0);
         });
 
-        test("2 cells are aligned to the edges of the safe area in a 2 column layout", () => {
+        test("2 cells are aligned to the centre in a 2 column layout", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.columns = 2;
             mockSafeArea.left = -400;
@@ -489,11 +500,11 @@ describe("Grid", () => {
             mockSafeArea.height = 700;
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             const expectedPositions = [
-                { x: mockSafeArea.left + resultCells[0].button.displayWidth / 2 },
-                { x: mockSafeArea.left + mockSafeArea.width - resultCells[1].button.displayWidth / 2 },
+                { x: 0 - resultCells[0].button.displayWidth / 2 - 12 },
+                { x: 0 + resultCells[1].button.displayWidth / 2 + 12 },
             ];
 
             expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
@@ -509,7 +520,7 @@ describe("Grid", () => {
             mockSafeArea.height = 400;
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             const expectedPositions = [
                 {
@@ -539,7 +550,7 @@ describe("Grid", () => {
             mockSafeArea.height = 400;
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             const expectedPositions = [
                 {
@@ -558,6 +569,36 @@ describe("Grid", () => {
             expect(resultCells[1].button.x).toEqual(expectedPositions[1].x); //expected 0 received 400
         });
 
+        test("wide aspect ratio assets are vertically spaced in 2 row layout", () => {
+            mockSprite = {
+                width: 600,
+                height: 100,
+            };
+            mockScene.theme.choices = [{ key: "asset_name_0" }, { key: "asset_name_1" }];
+            mockScene.theme.rows = 2;
+            mockSafeArea.top = -200;
+            mockSafeArea.left = -300;
+            mockSafeArea.width = 600;
+            mockSafeArea.height = 400;
+
+            grid = new GelGrid(mockScene, mockScene.theme);
+            const resultCells = grid.addGridCells(mockScene.theme);
+
+            const expectedPositions = [
+                {
+                    x: 0,
+                    y: 0 - mockSprite.height / 2 - desktopCellPadding / 2,
+                },
+                {
+                    x: 0,
+                    y: 0 + mockSprite.height / 2 + desktopCellPadding / 2,
+                },
+            ];
+
+            expect(resultCells[0].button.y).toEqual(expectedPositions[0].y);
+            expect(resultCells[1].button.y).toEqual(expectedPositions[1].y);
+        });
+
         test("resize method sets cell positions", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.columns = 2;
@@ -569,7 +610,7 @@ describe("Grid", () => {
             };
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
             grid.resize(resizedSafeArea);
 
             const expectedPositions = [
@@ -599,7 +640,7 @@ describe("Grid", () => {
             };
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
             grid.resize(resizedSafeArea);
 
             const expectedPositions = [
@@ -631,7 +672,7 @@ describe("Grid", () => {
             ];
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             // expect(resultCells[0].x).toEqual(expectedPositions[0].x);
             expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
@@ -652,7 +693,7 @@ describe("Grid", () => {
             ];
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
             expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
@@ -673,7 +714,7 @@ describe("Grid", () => {
             ];
 
             grid = new GelGrid(mockScene, mockScene.theme);
-            const resultCells = grid.addGridCells(mockScene.theme.choices);
+            const resultCells = grid.addGridCells(mockScene.theme);
 
             expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
             expect(resultCells[1].button.x).toEqual(expectedPositions[1].x);
@@ -717,7 +758,7 @@ describe("Grid", () => {
             };
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }, { asset: "asset_name_1" }];
             grid = new GelGrid(mockScene, { rows: 1, columns: 3 });
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
             expect(grid._cells[0].button.displayWidth).toBe(184);
             expect(grid._cells[0].button.displayHeight).toBe(184);
         });
@@ -729,7 +770,7 @@ describe("Grid", () => {
             };
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }, { asset: "asset_name_1" }];
             grid = new GelGrid(mockScene, { rows: 1, columns: 3 });
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
             expect(grid._cells[0].button.displayWidth).toBe(184);
             expect(grid._cells[0].button.displayHeight).toBe(368);
         });
@@ -741,7 +782,7 @@ describe("Grid", () => {
             };
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }, { asset: "asset_name_1" }];
             grid = new GelGrid(mockScene, { rows: 1, columns: 3 });
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
             expect(grid._cells[0].button.displayWidth).toBe(184);
             expect(grid._cells[0].button.displayHeight).toBe(92);
         });
@@ -753,7 +794,7 @@ describe("Grid", () => {
             };
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             grid = new GelGrid(mockScene, { rows: 2, columns: 1 });
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
             expect(grid._cells[0].button.displayWidth).toBe(288);
             expect(grid._cells[0].button.displayHeight).toBe(288);
         });
@@ -766,7 +807,7 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             grid = new GelGrid(mockScene, { rows: 2, columns: 1 });
 
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
             expect(grid._cells[0].button.displayWidth).toBe(144);
             expect(grid._cells[0].button.displayHeight).toBe(288);
         });
@@ -779,7 +820,7 @@ describe("Grid", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             grid = new GelGrid(mockScene, { rows: 2, columns: 1 });
 
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
             expect(grid._cells[0].button.displayWidth).toBe(576);
             expect(grid._cells[0].button.displayHeight).toBe(288);
         });
@@ -805,7 +846,7 @@ describe("Grid", () => {
                     { asset: "asset_name_9" },
                 ];
                 grid = new GelGrid(mockScene, { rows: 2, columns: 2 });
-                grid.addGridCells(mockScene.theme.choices);
+                grid.addGridCells(mockScene.theme);
             });
 
             //test("tweens all the cells on this and the next page", () => {
@@ -894,7 +935,7 @@ describe("Grid", () => {
                 mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
 
                 grid = new GelGrid(mockScene);
-                grid.addGridCells(mockScene.theme.choices);
+                grid.addGridCells(mockScene.theme);
 
                 grid.showPage(1);
                 transitionCallback();
@@ -919,7 +960,7 @@ describe("Grid", () => {
                     { key: "asset_name_9" },
                 ];
                 grid = new GelGrid(mockScene, { rows: 2, columns: 2 });
-                grid.addGridCells(mockScene.theme.choices);
+                grid.addGridCells(mockScene.theme);
             });
 
             test("tweens all the cells on this and the previous page", () => {
@@ -996,7 +1037,7 @@ describe("Grid", () => {
         //    const expectedPositions = [{ x: 0 }, { x: 208 }];
         //
         //    grid = new GelGrid(mockScene, metrics, mockScene.theme);
-        //    grid.addGridCells(mockScene.theme.choices);
+        //    grid.addGridCells(mockScene.theme);
         //    grid.showPage(1);
         //
         //    expect(grid._cells[3].button.x).toEqual(expectedPositions[0].x);
@@ -1006,7 +1047,7 @@ describe("Grid", () => {
         test("page names are returned correctly", () => {
             mockScene.theme.choices = [{ key: "asset_name_0" }, { key: "asset_name_1" }];
             grid = new GelGrid(mockScene);
-            grid.addGridCells(mockScene.theme.choices);
+            grid.addGridCells(mockScene.theme);
             const result = grid.getCurrentPageKey();
             expect(result).toEqual("asset_name_0");
         });
@@ -1016,7 +1057,7 @@ describe("Grid", () => {
         //        mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
         //
         //        grid = new GelGrid(mockScene, metrics, mockSafeArea);
-        //        grid.addGridCells(mockScene.theme.choices);
+        //        grid.addGridCells(mockScene.theme);
         //
         //        grid.nextPage();
         //        transitionCallback();
