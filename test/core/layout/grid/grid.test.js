@@ -144,7 +144,7 @@ describe("Grid", () => {
             jest.spyOn(Cell, "createCell");
             mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }, { asset: "asset_name_3" }];
 
-            grid = new GelGrid(mockScene, metrics);
+            grid = new GelGrid(mockScene);
             grid.addGridCells(mockScene.theme);
 
             expect.assertions(3);
@@ -164,17 +164,6 @@ describe("Grid", () => {
 
             const resultParams = mockScene.add.gelButton.mock.calls[0];
             expect(resultParams[2]).toEqual(expect.objectContaining(expectedConfig));
-            expect(resultParams[3]).toEqual(expect.objectContaining(expectedConfig));
-        });
-
-        test("gel button is created using metrics passed from the grid", () => {
-            mockScene.theme.choices = [{ asset: "asset_name_1", title: "asset title 1" }];
-
-            grid = new GelGrid(mockScene, metrics);
-            grid.addGridCells(mockScene.theme);
-
-            const actualParams = mockScene.add.gelButton.mock.calls[0];
-            expect(actualParams[2]).toEqual(metrics);
         });
 
         test("multiple gel buttons are created", () => {
@@ -185,7 +174,6 @@ describe("Grid", () => {
 
             const actualParams = mockScene.add.gelButton.mock.calls[0];
             expect(actualParams[0]).toBe(0);
-            expect(actualParams[1]).toBe(0);
         });
 
         test("returns ids for multiple cells", () => {
@@ -363,122 +351,6 @@ describe("Grid", () => {
             expect(resultCells[2]).toBeFalsy();
         });
     });
-
-    // TODO These tests should be retained for possible inclusion of hit area adjustment, currently being skipped due to unexplained behaviour with the scaling calculations.
-    //describe.skip("grid cell sizes", () => {
-    //    test("single cell hit area is full width and height of the safe area", () => {
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }];
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockSafeArea);
-    //        const resultCells = grid.addGridCells(mockScene.theme);
-    //
-    //        expect(resultCells[0].input.hitArea.width).toEqual(mockSafeArea.width);
-    //        expect(resultCells[0].input.hitArea.height).toEqual(mockSafeArea.height);
-    //    });
-    //
-    //    test("cell hit area width when 2 columns with desktop grid padding", () => {
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-    //        mockScene.theme.columns = 2;
-    //        mockSafeArea.left = -400;
-    //        mockSafeArea.top = -400;
-    //        mockSafeArea.width = 800;
-    //        mockSafeArea.height = 800;
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme);
-    //
-    //        const expectedCellWidth = (800 - desktopCellPadding) / 2;
-    //
-    //        expect(resultCells[0].input.hitArea.width).toEqual(expectedCellWidth);
-    //    });
-    //
-    //    test("cell hit area width when 4 columns with mobile grid padding", () => {
-    //        metrics.isMobile = true;
-    //        mockScene.theme.choices = [
-    //            { asset: "asset_name_0" },
-    //            { asset: "asset_name_1" },
-    //            { asset: "asset_name_2" },
-    //            { asset: "asset_name_3" },
-    //        ];
-    //        mockScene.theme.columns = 4;
-    //        mockSafeArea.left = -400;
-    //        mockSafeArea.top = -400;
-    //        mockSafeArea.width = 800;
-    //        mockSafeArea.height = 800;
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme);
-    //
-    //        const expectedCellWidth = (800 - mobileCellPadding * 3) / 4;
-    //
-    //        expect(resultCells[0].input.hitArea.width).toEqual(expectedCellWidth);
-    //    });
-    //
-    //    test("cell hit area height when 2 rows with desktop grid padding", () => {
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-    //        mockScene.theme.rows = 2;
-    //        mockSafeArea.top = -400;
-    //        mockSafeArea.left = -400;
-    //        mockSafeArea.width = 800;
-    //        mockSafeArea.height = 800;
-    //
-    //        const expectedCellHeight = (800 - 24) / 2;
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme);
-    //
-    //        expect(resultCells[0].input.hitArea.height).toEqual(expectedCellHeight);
-    //    });
-    //
-    //    test("cell hit area width when 2 columns with mobile grid padding", () => {
-    //        metrics.isMobile = true;
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-    //        mockScene.theme.columns = 2;
-    //        mockSafeArea.top = -400;
-    //        mockSafeArea.left = -400;
-    //        mockSafeArea.width = 800;
-    //        mockSafeArea.height = 800;
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme);
-    //
-    //        const expectedCellWidth = (800 - mobileCellPadding) / 2;
-    //
-    //        expect(resultCells[0].input.hitArea.width).toEqual(expectedCellWidth);
-    //    });
-    //
-    //    test("cell hit area width when 3 columns with mobile grid padding", () => {
-    //        metrics.isMobile = true;
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }, { asset: "asset_name_2" }];
-    //        mockScene.theme.columns = 3;
-    //        mockSafeArea.left = -300;
-    //        mockSafeArea.right = 300;
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme);
-    //
-    //        const expectedCellWidth = (600 - 32) / 3;
-    //
-    //        expect(resultCells[0].input.hitArea.width).toEqual(expectedCellWidth);
-    //    });
-    //
-    //    test("cell hit area height when 2 rows with mobile grid padding", () => {
-    //        metrics.isMobile = true;
-    //        mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
-    //        mockScene.theme.rows = 2;
-    //        mockSafeArea.top = -400;
-    //        mockSafeArea.left = -400;
-    //        mockSafeArea.width = 800;
-    //        mockSafeArea.height = 800;
-    //
-    //        const expectedCellHeight = (800 - mobileCellPadding) / 2;
-    //
-    //        grid = new GelGrid(mockScene, metrics, mockSafeArea, mockScene.theme);
-    //        const resultCells = grid.addGridCells(mockScene.theme);
-    //
-    //        expect(resultCells[0].input.hitArea.height).toEqual(expectedCellHeight);
-    //    });
-    //});
 
     describe("grid cell positions", () => {
         test("single cell is added at the centre of the safe area", () => {
@@ -849,88 +721,6 @@ describe("Grid", () => {
                 grid.addGridCells(mockScene.theme);
             });
 
-            //test("tweens all the cells on this and the next page", () => {
-            //    grid.nextPage();
-            //    expect(mockScene.add.tween).toHaveBeenCalledTimes(8);
-            //});
-
-            //test("disables input on start of animation", () => {
-            //    grid.nextPage();
-            //    expect(mockScene.input.enabled).toBe(false);
-            //});
-            //
-            //test("enables input in end timer", () => {
-            //    grid.nextPage();
-            //    transitionCallback();
-            //    expect(mockScene.input.enabled).toBe(true);
-            //});
-
-            //test("tweens in all the cells on the next page taking into account the safe area", () => {
-            //    grid.nextPage();
-            //    const tweenCalls = mockScene.add.tween.mock.calls;
-            //    expect(tweenCalls[0][0]).toEqual({
-            //        targets: grid._cells[4],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: 444, to: -156 },
-            //        alpha: { from: 0, to: 1 },
-            //        duration: 500,
-            //    });
-            //    expect(tweenCalls[1][0]).toEqual({
-            //        targets: grid._cells[5],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: 756, to: 156 },
-            //        alpha: { from: 0, to: 1 },
-            //        duration: 500,
-            //    });
-            //    expect(tweenCalls[2][0]).toEqual({
-            //        targets: grid._cells[6],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: 444, to: -156 },
-            //        alpha: { from: 0, to: 1 },
-            //        duration: 500,
-            //    });
-            //    expect(tweenCalls[3][0]).toEqual({
-            //        targets: grid._cells[7],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: 756, to: 156 },
-            //        alpha: { from: 0, to: 1 },
-            //        duration: 500,
-            //    });
-            //});
-
-            //test("tweens out all the cells on the current page taking into account the safe area", () => {
-            //    grid.nextPage();
-            //    const tweenCalls = mockScene.add.tween.mock.calls;
-            //    expect(tweenCalls[4][0]).toEqual({
-            //        targets: grid._cells[0],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: -156, to: -756 },
-            //        alpha: { from: 1, to: 0 },
-            //        duration: 500,
-            //    });
-            //    expect(tweenCalls[5][0]).toEqual({
-            //        targets: grid._cells[1],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: 156, to: -444 },
-            //        alpha: { from: 1, to: 0 },
-            //        duration: 500,
-            //    });
-            //    expect(tweenCalls[6][0]).toEqual({
-            //        targets: grid._cells[2],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: -156, to: -756 },
-            //        alpha: { from: 1, to: 0 },
-            //        duration: 500,
-            //    });
-            //    expect(tweenCalls[7][0]).toEqual({
-            //        targets: grid._cells[3],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: 156, to: -444 },
-            //        alpha: { from: 1, to: 0 },
-            //        duration: 500,
-            //    });
-            //});
-
             test("sets visibility of cells after paginating", () => {
                 mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
 
@@ -968,81 +758,7 @@ describe("Grid", () => {
                 grid.showPage(0);
                 expect(mockScene.add.tween).toHaveBeenCalledTimes(8);
             });
-
-            //test("tweens in all the cells on the previous page taking into account the safe area", () => {
-            //    grid.previousPage();
-            //    const tweenCalls = mockScene.add.tween.mock.calls;
-            //    expect(tweenCalls[0][0]).toEqual({
-            //        targets: grid._cells[8],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: -756, to: -156 },
-            //        alpha: { from: 0, to: 1 },
-            //        duration: 500,
-            //    });
-            //    expect(tweenCalls[1][0]).toEqual({
-            //        targets: grid._cells[9],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: -444, to: 156 },
-            //        alpha: { from: 0, to: 1 },
-            //        duration: 500,
-            //    });
-            //});
-
-            //test("tweens out all the cells on the current page taking into account the safe area", () => {
-            //    grid.previousPage();
-            //    const tweenCalls = mockScene.add.tween.mock.calls;
-            //    expect(tweenCalls[2][0]).toEqual({
-            //        targets: grid._cells[0],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: -156, to: 444 },
-            //        alpha: { from: 1, to: 0 },
-            //        duration: 500,
-            //    });
-            //    expect(tweenCalls[3][0]).toEqual({
-            //        targets: grid._cells[1],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: 156, to: 756 },
-            //        alpha: { from: 1, to: 0 },
-            //        duration: 500,
-            //    });
-            //    expect(tweenCalls[4][0]).toEqual({
-            //        targets: grid._cells[2],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: -156, to: 444 },
-            //        alpha: { from: 1, to: 0 },
-            //        duration: 500,
-            //    });
-            //    expect(tweenCalls[5][0]).toEqual({
-            //        targets: grid._cells[3],
-            //        ease: "Cubic.easeInOut",
-            //        x: { from: 156, to: 756 },
-            //        alpha: { from: 1, to: 0 },
-            //        duration: 500,
-            //    });
-            //});
         });
-
-        //test("remainder of 2 cells in a 3 column layout are correctly justified on last page", () => {
-        //    mockScene.theme.choices = [
-        //        { key: "asset_name_0" },
-        //        { key: "asset_name_1" },
-        //        { key: "asset_name_2" },
-        //        { key: "asset_name_3" },
-        //        { key: "asset_name_4" },
-        //    ];
-        //    mockScene.theme.columns = 3;
-        //    mockScene.theme.rows = 2;
-        //    mockScene.theme.align = "right";
-        //
-        //    const expectedPositions = [{ x: 0 }, { x: 208 }];
-        //
-        //    grid = new GelGrid(mockScene, metrics, mockScene.theme);
-        //    grid.addGridCells(mockScene.theme);
-        //    grid.showPage(1);
-        //
-        //    expect(grid._cells[3].button.x).toEqual(expectedPositions[0].x);
-        //    expect(grid._cells[4].button.x).toEqual(expectedPositions[1].x);
-        //});
 
         test("page names are returned correctly", () => {
             mockScene.theme.choices = [{ key: "asset_name_0" }, { key: "asset_name_1" }];
@@ -1051,20 +767,6 @@ describe("Grid", () => {
             const result = grid.getCurrentPageKey();
             expect(result).toEqual("asset_name_0");
         });
-
-        //describe("accessibility", () => {
-        //    test("calls accessibilify on cells after paginating", () => {
-        //        mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
-        //
-        //        grid = new GelGrid(mockScene, metrics, mockSafeArea);
-        //        grid.addGridCells(mockScene.theme);
-        //
-        //        grid.nextPage();
-        //        transitionCallback();
-        //
-        //        expect(accessibilify).toHaveBeenCalledTimes(4);
-        //    });
-        //});
     });
 
     describe("getBoundingRect method", () => {

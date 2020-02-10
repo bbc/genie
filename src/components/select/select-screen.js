@@ -39,7 +39,7 @@ export class Select extends Screen {
         const onTransitionStart = getOnTransitionStartFn(this);
         this.grid = new GelGrid(this, Object.assign(this.theme, gridDefaults, { onTransitionStart }));
         this.resize();
-        this._cells = this.grid.addGridCells(this.theme.choices);
+        this._cells = this.grid.addGridCells(this.theme);
         this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
