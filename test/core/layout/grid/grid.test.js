@@ -561,6 +561,36 @@ describe("Grid", () => {
             expect(resultCells[1].button.x).toEqual(expectedPositions[1].x); //expected 0 received 400
         });
 
+        test("wide aspect ratio assets are vertically spcaes in 2 row layout", () => {
+            mockSprite = {
+                width: 600,
+                height: 100,
+            };
+            mockScene.theme.choices = [{ key: "asset_name_0" }, { key: "asset_name_1" }];
+            mockScene.theme.rows = 2;
+            mockSafeArea.top = -200;
+            mockSafeArea.left = -300;
+            mockSafeArea.width = 600;
+            mockSafeArea.height = 400;
+
+            grid = new GelGrid(mockScene, metrics, mockScene.theme);
+            const resultCells = grid.addGridCells(mockScene.theme);
+
+            const expectedPositions = [
+                {
+                    x: 0,
+                    y: 0 - mockSprite.height / 2 - desktopCellPadding / 2,
+                },
+                {
+                    x: 0,
+                    y: 0 + mockSprite.height / 2 + desktopCellPadding / 2,
+                },
+            ];
+
+            expect(resultCells[0].button.y).toEqual(expectedPositions[0].y);
+            expect(resultCells[1].button.y).toEqual(expectedPositions[1].y);
+        });
+
         test("resize method sets cell positions", () => {
             mockScene.theme.choices = [{ asset: "asset_name_0" }, { asset: "asset_name_1" }];
             mockScene.theme.columns = 2;
