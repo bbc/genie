@@ -18,16 +18,25 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
         this.config = config;
         this.startCount = this.textFromTemplate(config.startCount, scene.transientData);
         this.endCount = this.textFromTemplate(config.endCount, scene.transientData);
+        this.initialise();
+        this.setTextAndFixedSize();
+        this.startUpdateLoop(scene);
+    }
 
+    initialise() {
         this.delayProgress = 0;
         this.numberOfTicks = 0;
         this.currentValue = parseInt(this.startCount);
         this.countupRange = this.endCount - this.startCount;
         this.shouldSingleTick = this.config.audio ? this.countupRange <= this.config.audio.singleTicksRange : false;
+    }
 
+    setTextAndFixedSize() {
         this.text = this.startCount;
         this.setFixedSize(this.getFinalWidth(this.endCount), 0);
+    }
 
+    startUpdateLoop(scene) {
         this.countupState = COUNTUP_STATE.DELAYED;
         this.boundUpdateFn = this.update.bind(this);
         scene.events.on("update", this.boundUpdateFn);
