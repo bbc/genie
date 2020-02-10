@@ -42,7 +42,8 @@
                             countupDuration: 1000, // How long the countup should last (in ms)
                             audio: {
                                 key: 'results.coin-sfx',
-                                fireRate: 2, // Fire every x score (instead of every 1 score)
+                                singleTicksRange: 10, // Plays audio every text update, for scores that are x above startCount, otherwise will play x ticksPerSecond.
+                                ticksPerSecond: 6, // Fire x times in a second - if this is not defined, everything will play every text update instead.
                                 startPlayRate: 0.8, // Initial play rate - used for pitch shifting
                                 endPlayRate: 1.2, // Final play rate - used for pitch shifting
                             },
@@ -120,6 +121,8 @@
                             countupDuration: 1000,
                             audio: {
                                 key: 'results.gem-sfx',
+                                singleTicksRange: 10,
+                                ticksPerSecond: 6,
                             },
                             offsetX: 15,
                             offsetY: -20,
@@ -192,6 +195,8 @@
                             countupDuration: 1000,
                             audio: {
                                 key: 'results.key-sfx',
+                                singleTicksRange: 10,
+                                ticksPerSecond: 6,
                             },
                             offsetX: 15,
                             offsetY: -20,
@@ -234,9 +239,9 @@
                         alpha: 1,
                         duration: 2000,
                         ease: 'Elastic.Out',
-                        delay: 5000,
+                        delay: 5500,
                     },
-                    audio: { key: 'results.boing', delay: 5000 },
+                    audio: { key: 'results.boing', delay: 5500 },
                 },
             ],
         },
