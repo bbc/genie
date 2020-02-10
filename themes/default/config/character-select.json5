@@ -14,8 +14,8 @@
                     yOffset: 0,
                 },
                 text: {
-                    value: "Title",
-                    xOffset: -60,
+                    value: "Select Your Character",
+                    xOffset: 0,
                     yOffset: -20,
                     styles: {
                         fontSize: "24px",
@@ -42,7 +42,7 @@
             storageKey: "characters",
             states: {
                 locked: {
-                    //asset: "suzytoo",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
+                    //asset: "debby",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
                     overlayAsset: "character-select.lock",
                     suffix: "locked",       //appended to aria label of accessibility div
                     x: 55,
@@ -55,12 +55,49 @@
                 },
                 complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed"},
             },
+            //optional - provide if you want title/subtitle text to appear over each choice
+            choicesStyling: {
+                default: {
+                    title: {
+                        style: {
+                            fontFamily: "ReithSans",
+                            fontSize: "19px",
+                            color: "#424242",
+                        },
+                        position: {
+                            x: 0,
+                            y: 68,
+                        },
+                    },
+                    subtitle: {
+                        style: {
+                            fontFamily: "ReithSans",
+                            fontSize: "16px",
+                            color: "#fff",
+                        },
+                        position: {
+                            x: 0,
+                            y: 100,
+                        },
+                    },
+                },
+                // optional styling for extra button states (will override default styles above)
+                locked : {
+                    title: {
+                        style: {
+                            color: "#fff"
+                        }
+                    }
+                }
+
+            },
             choices: [
                 {
                     id: "mary",
                     key: "mary",
                     ariaLabel: "Mary",
                     title: "Mary",
+                    subtitle: "Is very tall", // optional - for text overlay only
                     state: "complete"
                 },
                 {
@@ -68,43 +105,50 @@
                     key: "kyle",
                     ariaLabel: "Kyle",
                     title: "Kyle",
+                    subtitle: "Has a mohawk", // optional - for text overlay only
                 },
                 {
                     id: "suzy",
                     key: "suzy",
                     ariaLabel: "Suzy",
                     title: "Suzy",
+                    subtitle: "Can tapdance", // optional - for text overlay only
                 },
                 {
                     id: "greg",
                     key: "greg",
                     ariaLabel: "Greg",
                     title: "Greg",
+                    subtitle: "Is a geography teacher", // optional - for text overlay only
                 },
                 {
-                    id: "ange",
-                    key: "ange",
-                    ariaLabel: "Ange",
-                    title: "Ange",
+                    id: "ezinma",
+                    key: "ezinma",
+                    ariaLabel: "Ezinma",
+                    title: "Ezinma",
+                    subtitle: "Likes snowboarding", // optional - for text overlay only
                 },
                 {
                     id: "phil",
                     key: "phil",
                     ariaLabel: "Phil",
                     title: "Phil",
+                    subtitle: "Wears a baseball cap", // optional - for text overlay only
                 },
                 {
                     id: "mike",
                     key: "mike",
                     ariaLabel: "Mike",
                     title: "Mike",
+                    subtitle: "Also known as Ant", // optional - for text overlay only
                 },
                 {
-                    id: "suzytoo",
-                    key: "suzytoo",
-                    ariaLabel: "Suzy Too",
-                    title: "Suzy Too",
+                    id: "debby",
+                    key: "debby",
+                    ariaLabel: "Debby",
+                    title: "Debby",
                     state: "locked",
+                    subtitle: "Has a twin called Suzy", // optional - for text overlay only
                 },
                 {
                     id: "timmy",
@@ -112,6 +156,7 @@
                     ariaLabel: "Timmy",
                     title: "Timmy",
                     state: "locked",
+                    subtitle: "Is the youngest", // optional - for text overlay only
                 },
                 {
                     id: "elliot",
@@ -119,6 +164,7 @@
                     ariaLabel: "Elliot",
                     title: "Elliot",
                     state: "locked",
+                    subtitle: "Likes to climb trees", // optional - for text overlay only
                 }
 //                {
 //                    id: "char1",                        //Must be unique
