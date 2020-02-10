@@ -159,7 +159,7 @@
                     ariaLabel: "Elliot",
                     title: "Elliot",
                     state: "locked",
-                    subtitle: "Likes to climb trees", // optional - for text overlay only
+                    subtitle: "Likes astrophysics", // optional - for text overlay only
                 },
                 //                {
                 //                    id: "char1",                        //Must be unique
