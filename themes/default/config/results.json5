@@ -1,22 +1,22 @@
 {
     theme: {
         results: {
-            backdrop: { // optional central area backdrop
-                key: 'results.backdrop', // asset key
+            backdrop: { // Optional central area backdrop
+                key: 'results.backdrop', // Asset key
                 alpha: 1,
             },
-            rows: [ // an array of rows
+            rows: [ // An array of rows which will be displayed on the screen.
                 {
-                    format: [ // each object in this array generates a visible object in the row
+                    format: [ // Each object in this array generates a visible object in the row
                         {
-                            type: 'text',
+                            type: 'text', // 'Text' shows static text which can contain template tags for transient data
                             content: 'Results Screen',
-                            offsetX: 0, // offset the x position of this text object
-                            offsetY: -18, // offset the y position of this text object
+                            offsetX: 0, // Offset the x position of this text object
+                            offsetY: -18, // Offset the y position of this text object
                             textStyle: {
                                 fontFamily: 'ReithSans',
-                                fontSize: '24px', // Font size should be a minimum of 13px as per GEL
-                                color: '#FFFFFF', // This should meet the colour contrast requirement as per GEL
+                                fontSize: '24px', // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework  
+                                color: '#FFFFFF', // This should meet the colour contrast requirement as per GEL guidelines
                             },
                         },
                     ],
@@ -36,15 +36,15 @@
                         { type: 'sprite', key: 'game.star', offsetX: 20, offsetY: -20 },
                         {
                             type: 'countup',
-                            startCount: 0, // the number to start counting from
-                            endCount: '<%= stars %>', // the number to count up to
-                            startDelay: 1000, // delay before the countup starts (in ms)
-                            countupDuration: 1000, // how long the countup should last (in ms)
+                            startCount: 0, // The number to start counting from. This can be passed in by transient data.
+                            endCount: '<%= stars %>', // The number to count up to, using variable name of the data. Object dot notation is valid.
+                            startDelay: 1000, // Delay before the countup starts (in ms). All these values may be set by template tags from data.
+                            countupDuration: 1000, // How long the countup should last (in ms)
                             audio: {
                                 key: 'results.coin-sfx',
-                                fireRate: 2, // fire every x score (instead of every 1 score)
-                                startPlayRate: 0.8, // initial play rate - used for pitch shifting
-                                endPlayRate: 1.2, // final play rate - used for pitch shifting
+                                fireRate: 2, // Fire every x score (instead of every 1 score)
+                                startPlayRate: 0.8, // Initial play rate - used for pitch shifting
+                                endPlayRate: 1.2, // Final play rate - used for pitch shifting
                             },
                             offsetX: 15,
                             offsetY: -20,
@@ -57,7 +57,7 @@
                         },
                         {
                             type: 'text',
-                            content: ' star<% stars !== 1 && print("s") %>',
+                            content: ' star<% stars !== 1 && print("s") %>', // Functional template tags will be evaluated
                             offsetY: -20,
                             textStyle: {
                                 fontFamily: 'ReithSans',
@@ -76,14 +76,14 @@
                             },
                         },
                     ],
-                    backdrop: { // optional row backdrop
+                    backdrop: { // Optional row backdrop
                         key: 'results.row-backdrop-1', // asset key
                         alpha: 0.5,
                         offsetY: -20,
                     },
-                    alpha: 1, // set the alpha on the whole row
-                    transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 }, // phaser tweendata config
-                    audio: { key: 'results.woosh', delay: 0 }, // asset key and delay for audio to be played
+                    alpha: 1, // Set the alpha on the whole row
+                    transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 }, // Phaser tweendata config
+                    audio: { key: 'results.woosh', delay: 0 }, // Asset key and delay for audio to be played
                 },
                 {
                     format: [
@@ -99,11 +99,11 @@
                         },
                         {
                             type: 'sprite',
-                            key: 'game.diamond', // asset key of spritesheet
-                            frame: 0, // the initial frame of the sprite to display
+                            key: 'game.diamond', // Asset key of spritesheet
+                            frame: 0, // The initial frame of the sprite to display
                             offsetX: 20,
                             offsetY: -20,
-                            anim: { // a phaser animation configuration object
+                            anim: { // A phaser animation configuration object
                                 frames: {
                                     start: 0,
                                     end: 14,
