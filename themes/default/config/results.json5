@@ -36,9 +36,9 @@
                         { type: 'sprite', key: 'game.star', offsetX: 20, offsetY: -20 },
                         {
                             type: 'countup',
-                            startCount: 0, // The number to start counting from
+                            startCount: 0, // The number to start counting from. This can be passed in by transient data.
                             endCount: '<%= stars %>', // The number to count up to, using variable name of the data. Object dot notation is valid.
-                            startDelay: 1000, // Delay before the countup starts (in ms)
+                            startDelay: 1000, // Delay before the countup starts (in ms). All these values may be set by template tags from data.
                             countupDuration: 1000, // How long the countup should last (in ms)
                             audio: {
                                 key: 'results.coin-sfx',
