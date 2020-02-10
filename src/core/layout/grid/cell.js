@@ -3,8 +3,11 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import fp from "../../../../lib/lodash/fp/fp.js";
+
 import { accessibilify } from "../../accessibility/accessibilify.js";
 import { gmi } from "../../gmi/gmi.js";
+import * as state from "../../state.js";
 
 const alignmentFactor = { left: 0, center: 1, right: 2 };
 
@@ -55,7 +58,36 @@ const setPosition = (grid, button, idx) => {
     button.y = button.displayHeight * alignFactorY + grid._cellPadding * alignFactorY;
 };
 
-export const create = (grid, choice, idx) => {
+const getStates = theme => {
+    const stateConfig = theme.choices.map(({ id, state }) => ({ id, state }));
+    return state.create(theme.storageKey, stateConfig);
+};
+
+const getStylingForState = (btn, states, styling) => styling[fp.get("state", states.get(btn.key))] || {};
+
+const getStyles = (btn, theme) => {
+    const states = getStates(theme);
+    const defaultStyles = theme.choicesStyling.default;
+    const stylesOverride = getStylingForState(btn, states, theme.choicesStyling);
+    return fp.merge(defaultStyles, stylesOverride);
+};
+
+const addTextToScene = (scene, styles, text, btn, key) => {
+    const textOnScene = scene.add.text(styles.position.x, styles.position.y, text, styles.style);
+    textOnScene.setOrigin(0.5, 0.5);
+    btn.overlays.set(key, textOnScene);
+};
+
+const addTextToButton = (scene, config, btn, theme) => {
+    const styles = getStyles(btn, theme);
+    addTextToScene(scene, styles.title, config.title, btn, "titleText");
+
+    if (config.subtitle && styles.subtitle) {
+        addTextToScene(scene, styles.subtitle, config.subtitle, btn, "subtitleText");
+    }
+};
+
+export const createCell = (grid, choice, idx, theme) => {
     const config = {
         ...choice,
         scene: grid.scene.scene.key,
@@ -68,6 +100,10 @@ export const create = (grid, choice, idx) => {
     grid.cellsPerPage === 1 && button.on(Phaser.Input.Events.POINTER_OVER, transitionOnTab(grid, button));
     grid.cellsPerPage > 1 && (button.visible = Boolean(!idx));
     button.key = config.key;
+
+    if (fp.get("choicesStyling.default", theme)) {
+        addTextToButton(grid.scene, config, button, theme);
+    }
     grid.add(button);
 
     const makeAccessible = () => {

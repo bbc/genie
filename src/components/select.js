@@ -6,6 +6,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import fp from "../../lib/lodash/fp/fp.js";
+
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
@@ -13,8 +15,6 @@ import { getMetrics, onScaleChange } from "../core/scaler.js";
 import { positionElement } from "../core/helpers/element-bounding.js";
 import { GelGrid } from "../core/layout/grid/grid.js";
 import * as state from "../core/state.js";
-
-import fp from "../../lib/lodash/fp/fp.js";
 
 const styleDefaults = {
     fontSize: "24px",
@@ -41,7 +41,7 @@ export class Select extends Screen {
         const onTransitionStart = this.onTransitionStart.bind(this);
         this.grid = new GelGrid(this, metrics, Object.assign(this.theme, gridDefaults, { onTransitionStart }));
         this.resize();
-        this._cells = this.grid.addGridCells(this.theme.choices);
+        this._cells = this.grid.addGridCells(this.theme);
         this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));

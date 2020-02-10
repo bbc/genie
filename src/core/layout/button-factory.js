@@ -29,19 +29,20 @@ const defaultAction = config => {
 
 /**
  * Creates a new Gel button.
- * Phaser Game, x, y params are always stored in a curried version
+ * Phaser Scene, x, y params are always stored in a curried version
  *
  * @function
  * @memberOf module:layout/button-factory
  * @param {Boolean} isMobile - Whether to use mobile or desktop sized assets
  * @param {Object} config - Gel configuration for this button
  */
-const createButton = fp.curry((game, metrics, config, x = 0, y = 0) => {
+
+const createButton = fp.curry((scene, metrics, config, x = 0, y = 0) => {
     if (config.id === "__audio") {
         config.key = settings.getAllSettings().audio ? "audio-on" : "audio-off";
     }
 
-    const btn = new GelButton(game, x, y, metrics, config);
+    const btn = new GelButton(scene, x, y, metrics, config);
 
     if (config.icon) {
         btn.disableInteractive();

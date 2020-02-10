@@ -400,6 +400,11 @@ describe("Select Screen", () => {
                 expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -270, "test-select.subtitle");
             });
         });
+
+        test("creates grid cells", () => {
+            selectScreen.create();
+            expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.theme);
+        });
     });
 
     describe("events", () => {
