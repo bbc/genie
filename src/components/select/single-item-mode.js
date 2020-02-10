@@ -27,6 +27,7 @@ export const create = scene => {
     scene._cells.map(cell => {
         cell.button.on("pointerover", () => continueButton.sprite.setFrame(1));
         cell.button.on("pointerout", () => continueButton.sprite.setFrame(0));
+        cell.button.config.tabbable = true;
     });
 
     const goToStart = event => {

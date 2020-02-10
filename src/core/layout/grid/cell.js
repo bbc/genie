@@ -92,7 +92,7 @@ export const createCell = (grid, choice, idx, theme) => {
         ...choice,
         scene: grid.scene.scene.key,
         channel: grid.eventChannel,
-        tabbable: true,
+        tabbable: false,
     };
 
     const button = grid.scene.add.gelButton(0, 0, { ...defaults, ...config });

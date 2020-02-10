@@ -116,6 +116,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     setPageVisibility(pageNum, visibility) {
         this.getPageCells(pageNum).forEach(cell => {
             cell.button.visible = visibility;
+            this.cellsPerPage > 1 && (cell.button.config.tabbable = visibility);
             cell.button.accessibleElement.update();
         });
     }

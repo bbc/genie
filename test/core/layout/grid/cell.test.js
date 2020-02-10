@@ -104,7 +104,7 @@ describe("Grid Cells", () => {
                 group: "grid",
                 order: 0,
                 scene: "scene-key",
-                tabbable: true,
+                tabbable: false,
             };
             expect(mockGrid.scene.add.gelButton).toHaveBeenCalledWith(0, 0, expectedConfig);
         });

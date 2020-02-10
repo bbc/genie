@@ -15,8 +15,8 @@ describe("Select Screen Single Item Mode", () => {
                 buttons: { continue: { on: jest.fn(), sprite: { setFrame: jest.fn() } } },
             },
             _cells: [
-                { button: { on: jest.fn(), accessibleElement: { update: jest.fn() } } },
-                { button: { on: jest.fn(), accessibleElement: { update: jest.fn() } } },
+                { button: { on: jest.fn(), accessibleElement: { update: jest.fn() }, config: {} } },
+                { button: { on: jest.fn(), accessibleElement: { update: jest.fn() }, config: {} } },
             ],
             grid: {
                 page: 4,
