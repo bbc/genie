@@ -8,27 +8,21 @@
             align: "center",
             music: "loader.backgroundMusic",
             titles: [
-                //                 {
-                //                      type: "image",
-                //                    key: "",
-                //                    xOffset: 0,
-                //                    yOffset: 0,
-                //                },
+                {
+                    type: "image",
+                    key: "title",
+                    xOffset: 0,
+                    yOffset: 0,
+                },
                 {
                     type: "text",
                     value: "Select Your Character",
-                    xOffset: -60,
+                    xOffset: 0,
                     yOffset: -20,
                     styles: {
                         fontSize: "24px",
                     },
                 },
-                //                 {
-                //                  type: "image",
-                //                    imageId: "",
-                //                    xOffset: 0,
-                //                    yOffset: 0,
-                //                },
                 {
                     type: "text",
                     value: "Sub-Title",
@@ -48,13 +42,14 @@
                     suffix: "locked", //appended to aria label of accessibility div
                     x: 55,
                     y: 60,
-                    properties: { //phaser properties assigned to the base sprite
+                    properties: {
+                        //phaser properties assigned to the base sprite
                         alpha: 0.25,
                         tint: 0xff0000,
                     },
                     enabled: false, //enable or disable touch input on this state - default true
                 },
-                complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed"},
+                complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed" },
             },
             //optional - provide if you want title/subtitle text to appear over each choice
             choicesStyling: {
@@ -83,14 +78,13 @@
                     },
                 },
                 // optional styling for extra button states (will override default styles above)
-                locked : {
+                locked: {
                     title: {
                         style: {
-                            color: "#fff"
-                        }
-                    }
-                }
-
+                            color: "#fff",
+                        },
+                    },
+                },
             },
             choices: [
                 {
@@ -99,7 +93,7 @@
                     ariaLabel: "Mary",
                     title: "Mary",
                     subtitle: "Is very tall", // optional - for text overlay only
-                    state: "complete"
+                    state: "complete",
                 },
                 {
                     id: "kyle",
@@ -166,21 +160,21 @@
                     title: "Elliot",
                     state: "locked",
                     subtitle: "Likes to climb trees", // optional - for text overlay only
-                }
-//                {
-//                    id: "char1",                        //Must be unique
-//                    asset: "char1",                     //Phaser asset key
-//                    accessibilityText: "Character 1",
-//                    title: "Liron Man",
-//                    anim: {
-//                        key: "character-select.char1",
-//                        frames: 18,
-//                        frameRate: 6,
-//                        yoyo: true,
-//                        repeat: -1,
-//                    },
-//                    state: "locked",
-//                },
+                },
+                //                {
+                //                    id: "char1",                        //Must be unique
+                //                    asset: "char1",                     //Phaser asset key
+                //                    accessibilityText: "Character 1",
+                //                    title: "Liron Man",
+                //                    anim: {
+                //                        key: "character-select.char1",
+                //                        frames: 18,
+                //                        frameRate: 6,
+                //                        yoyo: true,
+                //                        repeat: -1,
+                //                    },
+                //                    state: "locked",
+                //                },
             ],
         },
     },
