@@ -8,6 +8,8 @@
  */
 import * as a11y from "../../core/accessibility/accessibility-layer.js";
 
+const currentCellIsLast = scene => scene.grid.getCurrentPageKey() === scene._cells[scene._cells.length - 1].button.key;
+
 export const create = scene => {
     const continueButton = scene.layout.buttons.continue;
     if (!continueButton) return false;
@@ -27,8 +29,19 @@ export const create = scene => {
         cell.button.on("pointerout", () => continueButton.sprite.setFrame(0));
     });
 
-    const lastCell = [scene._cells[scene._cells.length - 1]].filter(x => x);
-    lastCell.map(cell => cell.button.on("pointerout", () => scene.grid.showPage(scene.grid.page + 1)));
+    const goToStart = event => {
+        if (event.key === "Tab" && currentCellIsLast(scene)) {
+            scene.grid.showPage(0);
+        }
+    };
+
+    document.addEventListener("keydown", goToStart);
+
+    const shutdown = () => {
+        document.removeEventListener("keydown", goToStart);
+    };
+
+    scene.events.once(Phaser.Scenes.Events.SHUTDOWN, shutdown);
 
     return true;
 };

@@ -163,6 +163,9 @@ describe("Select Screen", () => {
                 }
             }),
         };
+        selectScreen.events = {
+            once: jest.fn(),
+        };
         selectScreen.addAnimations = jest.fn();
         selectScreen.context.theme.states = {
             locked: { x: 10, y: 20, asset: "test_asset" },

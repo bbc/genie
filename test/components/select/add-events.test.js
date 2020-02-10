@@ -26,6 +26,9 @@ describe("Select Screen addEvents", () => {
                 page: 4,
             },
             next: jest.fn(() => nextSpy),
+            events: {
+                once: jest.fn(),
+            },
         };
     });
 
