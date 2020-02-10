@@ -4,7 +4,6 @@
  * @license Apache-2.0
  */
 import { eventBus } from "../../../src/core/event-bus.js";
-import { buttonsChannel } from "../../../src/core/layout/gel-defaults.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as elementBounding from "../../../src/core/helpers/element-bounding.js";
 
@@ -312,49 +311,6 @@ describe("Select Screen", () => {
     describe("events", () => {
         beforeEach(() => {
             jest.spyOn(eventBus, "subscribe");
-        });
-
-        test("adds event subscription to the continue button", () => {
-            selectScreen.create();
-            expect(eventBus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(eventBus.subscribe.mock.calls[0][0].name).toBe("continue");
-        });
-
-        test("moves to the next game screen when the continue button is pressed", () => {
-            selectScreen.create();
-            eventBus.subscribe.mock.calls[0][0].callback();
-            expect(selectScreen.navigation.next).toHaveBeenCalled();
-        });
-
-        test("adds event subscriptions for grid buttons", () => {
-            mockCellIds = ["key1", "key2"];
-            selectScreen.create();
-            expect(eventBus.subscribe.mock.calls[0][0].name).toBe("key1");
-            expect(eventBus.subscribe.mock.calls[1][0].name).toBe("key2");
-        });
-
-        test("moves to the next screen when grid cell is pressed", () => {
-            mockCellIds = ["key1", "key2"];
-            selectScreen.create();
-
-            eventBus.subscribe.mock.calls[1][0].callback();
-            expect(selectScreen.navigation.next).toHaveBeenCalled();
-        });
-
-        test("moves to the next page when next page is pressed", () => {
-            mockCellIds = ["key1", "key2"];
-            selectScreen.create();
-
-            eventBus.subscribe.mock.calls[3][0].callback();
-            expect(mockGelGrid.showPage).toHaveBeenCalledWith(2);
-        });
-
-        test("moves to the previous page when next page is pressed", () => {
-            mockCellIds = ["key1", "key2"];
-            selectScreen.create();
-
-            eventBus.subscribe.mock.calls[4][0].callback();
-            expect(mockGelGrid.showPage).toHaveBeenCalledWith(0);
         });
 
         test("saves choice to transient data", () => {

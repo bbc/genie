@@ -120,7 +120,6 @@
                     key: "elliot",
                     ariaLabel: "Elliot",
                     title: "Elliot",
-                    state: "locked",
                 },
                 //                {
                 //                    id: "char1",                        //Must be unique
