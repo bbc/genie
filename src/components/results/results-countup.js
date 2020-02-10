@@ -27,7 +27,8 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
         this.setFixedSize(this.getFinalWidth(this.endCount), 0);
 
         this.countupState = COUNTUP_STATE.DELAYED;
-        scene.events.on(Phaser.Scenes.Events.UPDATE, this.update.bind(this));
+        this.boundUpdateFn = this.update.bind(this);
+        scene.events.on(Phaser.Scenes.Events.UPDATE, this.boundUpdateFn);
     }
 
     getFinalWidth(finalText) {
@@ -68,8 +69,10 @@ export class ResultsCountup extends Phaser.GameObjects.Text {
         this.currentValue += (dt / countupDuration) * this.numberOfTicks;
         this.previousText = this.text;
         this.text = parseInt(this.currentValue);
-        if (this.text === this.endCount) {
+        if (this.currentValue >= this.endCount) {
+            this.text = this.endCount;
             this.countupState = COUNTUP_STATE.ENDED;
+            this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.boundUpdateFn);
         }
         if (this.config.audio && this.canPlaySound(this.previousText, this.text)) {
             const startRate = this.config.audio.startPlayRate || 1;
