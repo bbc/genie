@@ -3,10 +3,10 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Screen } from "../../core/screen.js";
-import { accessibilify } from "../../core/accessibility/accessibilify.js";
+import { Screen } from "../core/screen.js";
+import { accessibilify } from "../core/accessibility/accessibilify.js";
 
-export class GameTest extends Screen {
+export class Game extends Screen {
     create() {
         let keys = 0;
         let gems = 0;
@@ -43,6 +43,7 @@ export class GameTest extends Screen {
         this.add
             .image(300, 20, buttonKey)
             .setOrigin(0.5)
+
             .setInteractive({ useHandCursor: true })
             .on("pointerup", () => onGameComplete());
         this.add

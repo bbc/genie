@@ -8,7 +8,7 @@ import { Home } from "../src/components/home";
 import { Results } from "../src/components/results/results-screen.js";
 import { Select } from "../src/components/select";
 import { HowToPlay } from "../src/components/how-to-play";
-import { GameTest } from "../src/components/test-screens/game";
+import { Game } from "../src/components/game";
 import { Pause } from "../src/components/overlays/pause";
 import { settingsChannel } from "../src/core/settings";
 import { eventBus } from "../src/core/event-bus";
@@ -56,7 +56,7 @@ describe("Main", () => {
                 },
             },
             game: {
-                scene: GameTest,
+                scene: Game,
                 settings: {
                     physics: {
                         default: "arcade",

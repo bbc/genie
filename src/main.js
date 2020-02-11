@@ -8,7 +8,7 @@ import { Home } from "./components/home.js";
 import { Results } from "./components/results/results-screen.js";
 import { Select } from "./components/select.js";
 import { HowToPlay } from "./components/how-to-play.js";
-import { GameTest } from "./components/test-screens/game.js";
+import { Game } from "./components/game.js";
 import { Pause } from "./components/overlays/pause.js";
 import { settingsChannel } from "./core/settings.js";
 import { eventBus } from "./core/event-bus.js";
@@ -68,7 +68,7 @@ const screenConfig = {
         },
     },
     game: {
-        scene: GameTest,
+        scene: Game,
         settings: {
             physics: {
                 default: "arcade",
