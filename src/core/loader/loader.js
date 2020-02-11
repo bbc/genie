@@ -54,7 +54,8 @@ export class Loader extends Screen {
         this.load.addPack(masterPack);
 
         this.add.image(0, 0, "loader.background");
-        this.add.image(0, -150, "loader.title");
+        this.add.image(0, -120, "loader.title");
+
         this.createLoadBar();
         this.createBrandLogo();
 
@@ -62,8 +63,8 @@ export class Loader extends Screen {
     }
 
     createLoadBar() {
-        this.add.image(0, 110, "loader.loadbarBackground");
-        this._loadbar = this.add.image(0, 110, "loader.loadbar");
+        this.add.image(0, 130, "loader.loadbarBackground");
+        this._loadbar = this.add.image(0, 130, "loader.loadbar");
         this.updateLoadBar(0);
     }
 

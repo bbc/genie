@@ -16,6 +16,7 @@ describe("Loader", () => {
     let loader;
     let mockGmi;
     let mockImage;
+    let mockText;
     let mockConfig;
     let mockMasterPack;
 
@@ -41,6 +42,9 @@ describe("Loader", () => {
             },
             setOrigin: jest.fn(),
         };
+        mockText = {
+            setOrigin: jest.fn(),
+        };
 
         mockMasterPack = {
             default: {},
@@ -58,6 +62,13 @@ describe("Loader", () => {
             theme: {
                 game: {
                     achievements: true,
+                },
+                loader: {
+                    textStyle: {
+                        color: "black",
+                        font: "30px Helvetica",
+                        align: "center",
+                    },
                 },
             },
         };
@@ -97,6 +108,7 @@ describe("Loader", () => {
 
         loader.add = {
             image: jest.fn(() => mockImage),
+            text: jest.fn(() => mockText),
         };
 
         const mockData = { navigation: { loader: { routes: { next: "test" } } }, parentScreens: [] };
@@ -165,8 +177,8 @@ describe("Loader", () => {
             loader.updateLoadBar = jest.fn();
             loader.createLoadBar();
 
-            expect(loader.add.image).toHaveBeenCalledWith(0, 110, "loader.loadbarBackground");
-            expect(loader.add.image).toHaveBeenCalledWith(0, 110, "loader.loadbar");
+            expect(loader.add.image).toHaveBeenCalledWith(0, 130, "loader.loadbarBackground");
+            expect(loader.add.image).toHaveBeenCalledWith(0, 130, "loader.loadbar");
             expect(loader.updateLoadBar).toHaveBeenCalledWith(0);
         });
     });
@@ -212,7 +224,7 @@ describe("Loader", () => {
             loader.preload();
 
             expect(loader.add.image).toHaveBeenCalledWith(0, 0, "loader.background");
-            expect(loader.add.image).toHaveBeenCalledWith(0, -150, "loader.title");
+            expect(loader.add.image).toHaveBeenCalledWith(0, -120, "loader.title");
         });
     });
 
