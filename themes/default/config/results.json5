@@ -38,11 +38,11 @@
                             type: 'countup', // Check the documentation for more detailed information on count ups. https://github.com/bbc/genie-starter-pack/tree/master/docs/development/results-screen/results-countup.md
                             startCount: 0, // The number to start counting from. This can be passed in by transient data.
                             endCount: '<%= stars %>', // The number to count up to. Can use transient data variable. Object dot notation is valid.
-                            startDelay: 1000, // Delay before the countup starts (in ms). 
+                            startDelay: 1000, // Delay before the countup starts (in ms).
                             countupDuration: 1000, // How long the countup should last (in ms).
                             audio: {
                                 key: 'results.coin-sfx',
-                                singleTicksRange: 10, // Plays audio every text update, for scores that are x above startCount, otherwise will play x  ticksPerSecond.
+                                singleTicksRange: 10, // Plays audio every text update, for scores that are x above startCount, otherwise will play x ticksPerSecond.
                                 ticksPerSecond: 6, // Fire x times in a second - if this is not defined, everything will play every text update instead.
                                 startPlayRate: 0.8, // Initial play rate - used for pitch shifting.
                                 endPlayRate: 1.2, // Final play rate - used for pitch shifting.
