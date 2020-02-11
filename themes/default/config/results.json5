@@ -35,7 +35,7 @@
                         },
                         { type: 'sprite', key: 'game.star', offsetX: 20, offsetY: -20 },
                         {
-                            type: 'countup',
+                            type: 'countup', // Check the documentation for more detailed information on count ups. https://github.com/bbc/genie-starter-pack/tree/master/docs/development/results-screen/results-countup.md
                             startCount: 0, // The number to start counting from. This can be passed in by transient data.
                             endCount: '<%= stars %>', // The number to count up to. Can use transient data variable. Object dot notation is valid.
                             startDelay: 1000, // Delay before the countup starts (in ms). 
