@@ -1,21 +1,20 @@
 /**
- * @copyright BBC 2018
+ * @copyright BBC 2020
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { eventBus } from "../../src/core/event-bus.js";
-import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
-import * as Scaler from "../../src/core/scaler.js";
-import * as elementBounding from "../../src/core/helpers/element-bounding.js";
+import { eventBus } from "../../../src/core/event-bus.js";
+import * as Scaler from "../../../src/core/scaler.js";
+import * as elementBounding from "../../../src/core/helpers/element-bounding.js";
 
-import { Select } from "../../src/components/select.js";
-import { GelGrid } from "../../src/core/layout/grid/grid.js";
-jest.mock("../../src/core/layout/grid/grid.js");
-jest.mock("../../src/core/layout/layout.js", () => ({
+import { Select } from "../../../src/components/select/select-screen.js";
+import { GelGrid } from "../../../src/core/layout/grid/grid.js";
+jest.mock("../../../src/core/layout/grid/grid.js");
+jest.mock("../../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
 }));
 
-jest.mock("../../src/core/state.js", () => ({
+jest.mock("../../../src/core/state.js", () => ({
     create: jest.fn(() => ({
         getAll: jest.fn(() => []),
         get: jest.fn(() => ({ state: "locked" })),
@@ -41,7 +40,7 @@ describe("Select Screen", () => {
         mockGelGrid = {
             page: 1,
             cellIds: jest.fn(() => mockCellIds),
-            addGridCells: jest.fn(),
+            addGridCells: jest.fn(() => []),
             makeAccessible: jest.fn(),
             addCell: jest.fn(),
             removeCell: jest.fn(),
@@ -59,16 +58,25 @@ describe("Select Screen", () => {
             config: {
                 theme: {
                     "test-select": {
-                        title: {
-                            image: { imageId: "title" },
-                            text: { value: "" },
-                            visible: true,
-                        },
-                        subtitle: {
-                            image: { imageId: "subtitle" },
-                            text: { value: "" },
-                            visible: false,
-                        },
+                        titles: [
+                            {
+                                type: "image",
+                                key: "title",
+                            },
+                            {
+                                type: "text",
+                                value: "",
+                            },
+                            {
+                                type: "image",
+                                key: "subtitle",
+                            },
+                            {
+                                type: "text",
+                                value: "",
+                                visible: false,
+                            },
+                        ],
                         choices: [
                             { asset: "character1" },
                             { asset: "character2", title: "character_2" },
@@ -109,6 +117,7 @@ describe("Select Screen", () => {
                     accessibleElement: { update: jest.fn(), focus: jest.fn() },
                     getBounds: jest.fn(() => mockBounds),
                     input: {},
+                    on: jest.fn(),
                 },
             },
             addCustomGroup: jest.fn(),
@@ -154,6 +163,9 @@ describe("Select Screen", () => {
                 }
             }),
         };
+        selectScreen.events = {
+            once: jest.fn(),
+        };
         selectScreen.addAnimations = jest.fn();
         selectScreen.context.theme.states = {
             locked: { x: 10, y: 20, asset: "test_asset" },
@@ -190,30 +202,29 @@ describe("Select Screen", () => {
             expect(Scaler.onScaleChange.add).toHaveBeenCalled();
         });
 
-        test("rescales title and subtitles when screen scales", () => {
-            mockData.config.theme["test-select"].title = {
-                visible: true,
-                image: {
-                    imageId: "",
+        test("rescales all elements when screen scales", () => {
+            mockData.config.theme["test-select"].titles = [
+                {
+                    type: "image",
+                    key: "",
                 },
-                text: {
+                {
+                    type: "text",
                     value: "title",
                     xOffset: 50,
                     yOffset: 50,
                 },
-            };
-
-            mockData.config.theme["test-select"].subtitle = {
-                visible: true,
-                image: {
-                    imageId: "",
+                {
+                    type: "image",
+                    key: "",
                 },
-                text: {
+                {
+                    type: "text",
                     value: "title",
                     xOffset: 50,
                     yOffset: 50,
                 },
-            };
+            ];
 
             selectScreen.create();
             const callback = Scaler.onScaleChange.add.mock.calls[0][0];
@@ -222,30 +233,8 @@ describe("Select Screen", () => {
             expect(elementBounding.positionElement).toHaveBeenCalled();
         });
 
-        test("does not rescale title and subtitles when they are not present in config", () => {
-            mockData.config.theme["test-select"].title = {
-                visible: true,
-                image: {
-                    imageId: "",
-                },
-                text: {
-                    value: "",
-                    xOffset: 0,
-                    yOffset: 0,
-                },
-            };
-
-            mockData.config.theme["test-select"].subtitle = {
-                visible: true,
-                image: {
-                    imageId: "",
-                },
-                text: {
-                    value: "",
-                    xOffset: 0,
-                    yOffset: 0,
-                },
-            };
+        test("does not rescale titles when they are not present in config", () => {
+            mockData.config.theme["test-select"].titles = [];
 
             selectScreen.create();
             const callback = Scaler.onScaleChange.add.mock.calls[0][0];
@@ -260,8 +249,8 @@ describe("Select Screen", () => {
                 expect(selectScreen.add.image).toHaveBeenCalledWith(0, -270, "test-select.title");
             });
 
-            test("does not add a title if no config is provided", () => {
-                delete mockData.config.theme["test-select"].title;
+            test("does not add a titles if no config is provided", () => {
+                delete mockData.config.theme["test-select"].titles;
                 selectScreen.setData(mockData);
                 selectScreen.create();
                 expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -270, "test-select.title");
@@ -269,19 +258,14 @@ describe("Select Screen", () => {
             });
 
             test("does not add a title image when no image is specified", () => {
-                mockData.config.theme["test-select"].title.image = "";
-                selectScreen.create();
-                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -270, "test-select.title");
-            });
-
-            test("does not add a title image when title.visible is false", () => {
-                mockData.config.theme["test-select"].title.visible = false;
+                const noImageTheme = mockData.config.theme["test-select"].titles.filter(x => x.type != "image");
+                mockData.config.theme["test-select"].titles = noImageTheme;
                 selectScreen.create();
                 expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -270, "test-select.title");
             });
 
             test("adds title text with default styles when text is supplied but no style is provided", () => {
-                mockData.config.theme["test-select"].title.text.value = "testTitleText";
+                mockData.config.theme["test-select"].titles[1] = { type: "text", value: "testTitleText" };
                 selectScreen.create();
                 expect(selectScreen.add.text).toHaveBeenCalledWith(0, -270, "testTitleText", defaultTextStyle);
             });
@@ -292,39 +276,28 @@ describe("Select Screen", () => {
                     fontStyle: "Ariel",
                     ...defaultTextStyle,
                 };
-                mockData.config.theme["test-select"].title.visible = true;
-                mockData.config.theme["test-select"].title.text.value = "testTitleText";
-                mockData.config.theme["test-select"].title.text.styles = styling;
+
+                mockData.config.theme["test-select"].titles[1].value = "testTitleText";
+                mockData.config.theme["test-select"].titles[1].styles = styling;
                 selectScreen.create();
                 expect(selectScreen.add.text).toHaveBeenCalledWith(0, -270, "testTitleText", styling);
             });
 
-            test("does not add a title text when title.visible is false", () => {
-                mockData.config.theme["test-select"].title.visible = false;
-                selectScreen.create();
-                expect(selectScreen.add.text).not.toHaveBeenCalledWith(0, -270, "testText");
-            });
-
-            test("does not add a title image when title.image is not defined", () => {
-                mockData.config.theme["test-select"].title = { image: { imageId: "" } };
-                selectScreen.create();
-                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -270, "test-select.title");
-            });
-
             test("does respect offset coordinates provided in config", () => {
-                mockData.config.theme["test-select"].title = {
-                    visible: true,
-                    image: {
-                        imageId: "title",
+                mockData.config.theme["test-select"].titles = [
+                    {
+                        type: "image",
+                        key: "title",
                         xOffset: 50,
                         yOffset: 50,
                     },
-                    text: {
+                    {
+                        type: "text",
                         value: "title",
                         xOffset: 50,
                         yOffset: 50,
                     },
-                };
+                ];
                 selectScreen.create();
                 expect(selectScreen.add.image).toHaveBeenCalledWith(50, -220, "test-select.title");
                 expect(selectScreen.add.text).toHaveBeenCalledWith(50, -220, "title", defaultTextStyle);
@@ -333,71 +306,7 @@ describe("Select Screen", () => {
             test("creates a new GEL grid with correct params", () => {
                 selectScreen.create();
                 const mockConfig = mockData.config.theme["test-select"];
-                expect(GelGrid).toHaveBeenCalledWith(selectScreen, mockMetrics, mockConfig);
-            });
-        });
-
-        describe("subtitles", () => {
-            beforeEach(() => {
-                mockData.config.theme["test-select"].title.visible = false;
-                mockData.config.theme["test-select"].subtitle.visible = true;
-            });
-
-            test("adds a subtitle image when subtitle.visible is true", () => {
-                selectScreen.create();
-                expect(selectScreen.add.image).toHaveBeenCalledWith(0, -270, "test-select.subtitle");
-            });
-
-            test("does not add a subtitle image when subtitle.visible is false", () => {
-                mockData.config.theme["test-select"].subtitle.visible = false;
-                selectScreen.create();
-                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -270, "test-select.subtitle");
-            });
-
-            test("does not add a subtitle if no config is provided", () => {
-                mockData.config.theme["test-select"].subtitle = undefined;
-                selectScreen.create();
-                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -270, "test-select.subtitle");
-                expect(selectScreen.add.text).not.toHaveBeenCalled();
-            });
-
-            test("does not add a subtitle image when no image is specified", () => {
-                mockData.config.theme["test-select"].subtitle.image = "";
-                selectScreen.create();
-                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -270, "test-select.subtitle");
-            });
-
-            test("adds subtitle text with default styles when text is supplied but no style is provided", () => {
-                mockData.config.theme["test-select"].subtitle.visible = true;
-                mockData.config.theme["test-select"].subtitle.text.value = "testSubtitleText";
-                selectScreen.create();
-                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -270, "testSubtitleText", defaultTextStyle);
-            });
-
-            test("adds subtitle text with config styles overwriting default styles when text is supplied with styling", () => {
-                const styling = {
-                    id: "subtitleStyling",
-                    ...defaultTextStyle,
-                };
-
-                mockData.config.theme["test-select"].subtitle.visible = true;
-                mockData.config.theme["test-select"].subtitle.text.value = "testSubtitleText";
-                mockData.config.theme["test-select"].subtitle.text.styles = styling;
-                selectScreen.create();
-                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -270, "testSubtitleText", styling);
-            });
-
-            test("does not add subtitle text when subtitle.visible is false", () => {
-                mockData.config.theme["test-select"].subtitle.visible = false;
-                mockData.config.theme["test-select"].subtitle.text.value = "testText";
-                selectScreen.create();
-                expect(selectScreen.add.text).not.toHaveBeenCalledWith(0, -270, "testText");
-            });
-
-            test("does not add a subtitle image when subtitle.image is not defined", () => {
-                mockData.config.theme["test-select"].subtitle = { image: "" };
-                selectScreen.create();
-                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -270, "test-select.subtitle");
+                expect(GelGrid).toHaveBeenCalledWith(selectScreen, mockConfig);
             });
         });
 
@@ -410,49 +319,6 @@ describe("Select Screen", () => {
     describe("events", () => {
         beforeEach(() => {
             jest.spyOn(eventBus, "subscribe");
-        });
-
-        test("adds event subscription to the continue button", () => {
-            selectScreen.create();
-            expect(eventBus.subscribe.mock.calls[0][0].channel).toBe(buttonsChannel(selectScreen));
-            expect(eventBus.subscribe.mock.calls[0][0].name).toBe("continue");
-        });
-
-        test("moves to the next game screen when the continue button is pressed", () => {
-            selectScreen.create();
-            eventBus.subscribe.mock.calls[0][0].callback();
-            expect(selectScreen.navigation.next).toHaveBeenCalled();
-        });
-
-        test("adds event subscriptions for grid buttons", () => {
-            mockCellIds = ["key1", "key2"];
-            selectScreen.create();
-            expect(eventBus.subscribe.mock.calls[0][0].name).toBe("key1");
-            expect(eventBus.subscribe.mock.calls[1][0].name).toBe("key2");
-        });
-
-        test("moves to the next screen when grid cell is pressed", () => {
-            mockCellIds = ["key1", "key2"];
-            selectScreen.create();
-
-            eventBus.subscribe.mock.calls[1][0].callback();
-            expect(selectScreen.navigation.next).toHaveBeenCalled();
-        });
-
-        test("moves to the next page when next page is pressed", () => {
-            mockCellIds = ["key1", "key2"];
-            selectScreen.create();
-
-            eventBus.subscribe.mock.calls[3][0].callback();
-            expect(mockGelGrid.showPage).toHaveBeenCalledWith(2);
-        });
-
-        test("moves to the previous page when next page is pressed", () => {
-            mockCellIds = ["key1", "key2"];
-            selectScreen.create();
-
-            eventBus.subscribe.mock.calls[4][0].callback();
-            expect(mockGelGrid.showPage).toHaveBeenCalledWith(0);
         });
 
         test("saves choice to transient data", () => {
@@ -599,7 +465,8 @@ describe("Select Screen", () => {
             selectScreen.create();
             selectScreen.currentEnabled = jest.fn(() => false);
 
-            selectScreen.onTransitionStart();
+            const onTransitionStartFn = GelGrid.mock.calls[0][1].onTransitionStart;
+            onTransitionStartFn();
 
             expect(mockLayout.buttons.continue.input.enabled).toBe(false);
             expect(mockLayout.buttons.continue.alpha).toBe(0.5);
@@ -609,7 +476,8 @@ describe("Select Screen", () => {
             selectScreen.create();
             selectScreen.currentEnabled = jest.fn(() => true);
 
-            selectScreen.onTransitionStart();
+            const onTransitionStartFn = GelGrid.mock.calls[0][1].onTransitionStart;
+            onTransitionStartFn();
 
             expect(mockLayout.buttons.continue.input.enabled).toBe(true);
             expect(mockLayout.buttons.continue.alpha).toBe(1);
@@ -617,14 +485,16 @@ describe("Select Screen", () => {
 
         test("updates the accessible dom element", () => {
             selectScreen.create();
-            selectScreen.onTransitionStart();
+            const onTransitionStartFn = GelGrid.mock.calls[0][1].onTransitionStart;
+            onTransitionStartFn();
             expect(mockLayout.buttons.continue.accessibleElement.update).toHaveBeenCalled();
         });
 
         test("does not error if no continue button", () => {
             selectScreen.create();
             delete mockLayout.buttons.continue;
-            expect(selectScreen.onTransitionStart.bind(selectScreen)).not.toThrow();
+            const onTransitionStartFn = GelGrid.mock.calls[0][1].onTransitionStart;
+            expect(onTransitionStartFn).not.toThrow();
         });
     });
 });

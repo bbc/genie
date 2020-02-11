@@ -6,7 +6,7 @@
 
 import { Home } from "./components/home.js";
 import { Results } from "./components/results/results-screen.js";
-import { Select } from "./components/select.js";
+import { Select } from "./components/select/select-screen.js";
 import { HowToPlay } from "./components/how-to-play.js";
 import { GameTest } from "./components/test-screens/game.js";
 import { Pause } from "./components/overlays/pause.js";

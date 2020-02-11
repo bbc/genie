@@ -36,13 +36,12 @@ const defaultAction = config => {
  * @param {Boolean} isMobile - Whether to use mobile or desktop sized assets
  * @param {Object} config - Gel configuration for this button
  */
-
-const createButton = fp.curry((scene, metrics, config, x = 0, y = 0) => {
+const createButton = fp.curry((scene, config, x = 0, y = 0) => {
     if (config.id === "__audio") {
         config.key = settings.getAllSettings().audio ? "audio-on" : "audio-off";
     }
 
-    const btn = new GelButton(scene, x, y, metrics, config);
+    const btn = new GelButton(scene, x, y, config);
 
     if (config.icon) {
         btn.disableInteractive();
@@ -54,4 +53,4 @@ const createButton = fp.curry((scene, metrics, config, x = 0, y = 0) => {
     }
 });
 
-export const create = game => ({ createButton: createButton(game) });
+export const create = scene => ({ createButton: createButton(scene) });

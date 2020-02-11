@@ -8,11 +8,9 @@
  */
 
 export const positionElement = (element, position, safeArea, metrics) => {
-    if (element) {
-        element.setPosition(position.x, position.y);
-        element.setOrigin(0.5);
-        restrictBounds(element, safeArea, metrics);
-    }
+    element.setPosition(position.x, position.y);
+    element.setOrigin(0.5);
+    restrictBounds(element, safeArea, metrics);
 };
 
 const scaleElement = (element, bounds) => {
