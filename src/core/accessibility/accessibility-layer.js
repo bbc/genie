@@ -5,7 +5,7 @@
  */
 import { hideAndDisableElement, removeFromParent } from "./element-manipulator.js";
 import fp from "../../../lib/lodash/fp/fp.js";
-import crel from "../../../node_modules/crel/crel.es.js";
+import crel from "../../../lib/crel.es.js";
 
 let domButtons = [];
 let domGroups = [];

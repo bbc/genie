@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 import { Home } from "./components/home.js";
 import { Results } from "./components/results/results-screen.js";
 import { Select } from "./components/select/select-screen.js";
