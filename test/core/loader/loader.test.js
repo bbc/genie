@@ -16,7 +16,6 @@ describe("Loader", () => {
     let loader;
     let mockGmi;
     let mockImage;
-    let mockText;
     let mockConfig;
     let mockMasterPack;
 
@@ -42,9 +41,6 @@ describe("Loader", () => {
             },
             setOrigin: jest.fn(),
         };
-        mockText = {
-            setOrigin: jest.fn(),
-        };
 
         mockMasterPack = {
             default: {},
@@ -62,13 +58,6 @@ describe("Loader", () => {
             theme: {
                 game: {
                     achievements: true,
-                },
-                loader: {
-                    textStyle: {
-                        color: "black",
-                        font: "30px Helvetica",
-                        align: "center",
-                    },
                 },
             },
         };
@@ -108,7 +97,6 @@ describe("Loader", () => {
 
         loader.add = {
             image: jest.fn(() => mockImage),
-            text: jest.fn(() => mockText),
         };
 
         const mockData = { navigation: { loader: { routes: { next: "test" } } }, parentScreens: [] };
