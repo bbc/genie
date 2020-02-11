@@ -59,10 +59,6 @@ describe("element-bounding", () => {
     });
 
     describe("position elements", () => {
-        test("does not throw errors when no element is provided", () => {
-            positionElement(undefined, mockElementPosition, safeArea, metrics);
-            expect(positionElement).not.toThrow();
-        });
         test("positions element with provided coordinates", () => {
             mockElementPosition.x = 10;
             mockElementPosition.y = 30;
