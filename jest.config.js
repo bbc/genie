@@ -15,7 +15,6 @@ module.exports = {
     },
     testEnvironment: "jsdom",
     modulePathIgnorePatterns: ["/.node_modules.+/"],
-    coveragePathIgnorePatterns: ["/src/components/test-screens/game.js"],
     testPathIgnorePatterns: ["/node_modules/", "/.node_modules.+/", ".node_modules_production"],
     setupFilesAfterEnv: ["./test/set-up-jest.js"],
     transform: { "^.+\\.m?js$": "babel-jest" },
