@@ -26,6 +26,7 @@ export class Loader extends Screen {
         loadPack.path = gmi.gameDir + gmi.embedVars.configPath;
         super({ key: "loader", pack: loadPack });
         this._loadbar = undefined;
+        this._progress = 0;
     }
 
     getConfig() {
@@ -69,10 +70,12 @@ export class Loader extends Screen {
     }
 
     updateLoadBar = progress => {
-        this._loadbar.frame.cutWidth = this._loadbar.width * progress;
-        this._loadbar.frame.updateUVs();
-
-        if (window.__qaMode) {
+        if (progress >= this._progress) {
+            this._progress = progress;
+            this._loadbar.frame.cutWidth = this._loadbar.width * progress;
+            this._loadbar.frame.updateUVs();
+        }
+        if (window.__debug) {
             console.log("Loader progress:", progress); // eslint-disable-line no-console
         }
     };

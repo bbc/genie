@@ -20,7 +20,7 @@ describe("Loader", () => {
     let mockMasterPack;
 
     beforeEach(() => {
-        global.window.__qaMode = undefined;
+        global.window.__debug = undefined;
         jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {});
         jest.spyOn(a11y, "destroy").mockImplementation(() => {});
 
@@ -138,6 +138,15 @@ describe("Loader", () => {
             loader.updateLoadBar(progress);
             expect(mockImage.frame.cutWidth).toEqual(progress);
         });
+
+        test("does not update the loading bar fill when progress is backwards", () => {
+            const progress = 42;
+
+            loader.preload();
+            loader.updateLoadBar(progress);
+            loader.updateLoadBar(41);
+            expect(mockImage.frame.cutWidth).toEqual(progress);
+        });
     });
 
     describe("createBrandLogo method", () => {
@@ -235,14 +244,14 @@ describe("Loader", () => {
         });
     });
 
-    describe("qaMode", () => {
+    describe("debug mode", () => {
         beforeEach(() => {
             jest.spyOn(console, "log").mockImplementation(() => {});
             loader.preload();
         });
 
-        test("logs the progress to the console when qaMode is true", () => {
-            global.window.__qaMode = true;
+        test("logs the progress to the console when debug is true", () => {
+            global.window.__debug = true;
             loader.updateLoadBar("50");
             expect(console.log.mock.calls[0]).toEqual(["Loader progress:", "50"]); // eslint-disable-line no-console
         });
