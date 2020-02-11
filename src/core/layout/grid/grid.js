@@ -5,6 +5,7 @@
  */
 import { createCell } from "./cell.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
+import { getMetrics } from "../../../core/scaler.js";
 
 const defaults = {
     rows: 1,
@@ -18,10 +19,10 @@ const defaults = {
 const resetCell = cell => cell.reset();
 
 export class GelGrid extends Phaser.GameObjects.Container {
-    constructor(scene, metrics, config) {
+    constructor(scene, config) {
         super(scene, 0, 0);
 
-        this._metrics = metrics;
+        const metrics = getMetrics();
         this._safeArea = scene.layout.getSafeArea(metrics);
         this._config = { ...defaults, ...config };
         this._cells = [];
@@ -49,8 +50,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
         ];
     }
 
-    resize(metrics, safeArea) {
-        this._metrics = metrics;
+    resize(safeArea) {
+        const metrics = getMetrics();
         this._safeArea = safeArea;
         this._cellPadding = metrics.screenToCanvas(metrics.isMobile ? 16 : 24);
         this.reset();
@@ -115,7 +116,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     setPageVisibility(pageNum, visibility) {
         this.getPageCells(pageNum).forEach(cell => {
             cell.button.visible = visibility;
-            cell.button.config.tabbable = visibility;
+            this.cellsPerPage > 1 && (cell.button.config.tabbable = visibility);
             cell.button.accessibleElement.update();
         });
     }

@@ -104,9 +104,9 @@ describe("Grid Cells", () => {
                 group: "grid",
                 order: 0,
                 scene: "scene-key",
-                tabbable: true,
+                tabbable: false,
             };
-            expect(mockGrid.scene.add.gelButton).toHaveBeenCalledWith(0, 0, mockGrid._metrics, expectedConfig);
+            expect(mockGrid.scene.add.gelButton).toHaveBeenCalledWith(0, 0, expectedConfig);
         });
 
         test("makes the first button visible when there is more than one cell per page", () => {

@@ -7,6 +7,8 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
+import { getMetrics } from "../scaler.js";
+
 const defaultSafeAreaGroups = {
     top: "topLeft",
     left: [{ id: "middleLeftSafe" }, { id: "topLeft", fixedWidth: 64 }],
@@ -14,7 +16,8 @@ const defaultSafeAreaGroups = {
     right: [{ id: "middleRightSafe" }, { id: "topRight", fixedWidth: 64 }],
 };
 
-export const getSafeAreaFn = groups => (metrics, groupOverrides = {}) => {
+export const getSafeAreaFn = groups => (groupOverrides = {}) => {
+    const metrics = getMetrics();
     const safe = { ...defaultSafeAreaGroups, ...groupOverrides };
     const pad = metrics.isMobile ? { x: 0, y: 0 } : fp.mapValues(metrics.screenToCanvas, { x: 20, y: 10 });
 

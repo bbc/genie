@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 import { getSafeAreaFn } from "../../../src/core/layout/safe-area.js";
+import * as ScalerModule from "../../../src/core/scaler.js";
 
 describe("getSafeArea", () => {
     let mockMetrics;
@@ -33,38 +34,40 @@ describe("getSafeArea", () => {
             stageHeight: 800,
             borderPad: 16,
         };
+
+        ScalerModule.getMetrics = jest.fn(() => mockMetrics);
     });
 
     afterEach(() => jest.clearAllMocks());
 
     test("returns the central screen rectangle on mobile", () => {
         const safeAreaFn = getSafeAreaFn(mockGroups);
-        expect(safeAreaFn(mockMetrics)).toEqual(new Phaser.Geom.Rectangle(-150, -100, 400, 200));
+        expect(safeAreaFn()).toEqual(new Phaser.Geom.Rectangle(-150, -100, 400, 200));
     });
 
     test("returns the central screen rectangle on desktop", () => {
         mockMetrics.isMobile = false;
         const safeAreaFn = getSafeAreaFn(mockGroups);
-        expect(safeAreaFn(mockMetrics)).toEqual(new Phaser.Geom.Rectangle(-130, -100, 360, 190));
+        expect(safeAreaFn()).toEqual(new Phaser.Geom.Rectangle(-130, -100, 360, 190));
     });
 
     test("Sets top position to border pad if top: false is passed in to group overrides", () => {
         mockMetrics.isMobile = false;
         const safeAreaFn = getSafeAreaFn(mockGroups);
-        expect(safeAreaFn(mockMetrics, { top: false })).toEqual(new Phaser.Geom.Rectangle(-130, -384, 360, 474));
+        expect(safeAreaFn({ top: false })).toEqual(new Phaser.Geom.Rectangle(-130, -384, 360, 474));
     });
 
     test("Forces top and bottom pad to be the same if one is smaller", () => {
         mockMetrics.isMobile = false;
         mockGroups.bottomCenter.y = 1000;
         const safeAreaFn = getSafeAreaFn(mockGroups);
-        expect(safeAreaFn(mockMetrics, { top: false })).toEqual(new Phaser.Geom.Rectangle(-130, -384, 360, 768));
+        expect(safeAreaFn({ top: false })).toEqual(new Phaser.Geom.Rectangle(-130, -384, 360, 768));
     });
 
     test("topLeft and topRight values have a fixed width of 64 ", () => {
         mockGroups.topLeft.width = 0;
         mockGroups.topRight.width = 0;
         const safeAreaFn = getSafeAreaFn(mockGroups);
-        expect(safeAreaFn(mockMetrics)).toEqual(new Phaser.Geom.Rectangle(-150, -100, 400, 200));
+        expect(safeAreaFn()).toEqual(new Phaser.Geom.Rectangle(-150, -100, 400, 200));
     });
 });

@@ -1,19 +1,21 @@
 {
     theme: {
         "character-select": {
-            rows: 2,
-            columns: 3,
+            rows: 1,
+            columns: 1,
             ease: "Cubic.easeInOut",
             duration: 500,
             align: "center",
             music: "loader.backgroundMusic",
-            title: {
-                image: {
-                    imageId: "",
+            titles: [
+                {
+                    type: "image",
+                    key: "title",
                     xOffset: 0,
                     yOffset: 0,
                 },
-                text: {
+                {
+                    type: "text",
                     value: "Select Your Character",
                     xOffset: 0,
                     yOffset: -20,
@@ -21,15 +23,8 @@
                         fontSize: "24px",
                     },
                 },
-                visible: true,
-            },
-            subtitle: {
-                image: {
-                    imageId: "",
-                    xOffset: 0,
-                    yOffset: 0,
-                },
-                text: {
+                {
+                    type: "text",
                     value: "Sub-Title",
                     xOffset: 0,
                     yOffset: 80,
@@ -37,23 +32,24 @@
                         fontSize: "16px",
                     },
                 },
-                visible: true,
-            },
+            ],
+
             storageKey: "characters",
             states: {
                 locked: {
                     //asset: "debby",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
                     overlayAsset: "character-select.lock",
-                    suffix: "locked",       //appended to aria label of accessibility div
+                    suffix: "locked", //appended to aria label of accessibility div
                     x: 55,
                     y: 60,
-                    properties: {           //phaser properties assigned to the base sprite
+                    properties: {
+                        //phaser properties assigned to the base sprite
                         alpha: 0.25,
                         tint: 0xff0000,
                     },
-                    enabled: false,         //enable or disable touch input on this state - default true
+                    enabled: false, //enable or disable touch input on this state - default true
                 },
-                complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed"},
+                complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed" },
             },
             //optional - provide if you want title/subtitle text to appear over each choice
             choicesStyling: {
@@ -82,14 +78,13 @@
                     },
                 },
                 // optional styling for extra button states (will override default styles above)
-                locked : {
+                locked: {
                     title: {
                         style: {
-                            color: "#fff"
-                        }
-                    }
-                }
-
+                            color: "#fff",
+                        },
+                    },
+                },
             },
             choices: [
                 {
@@ -98,7 +93,7 @@
                     ariaLabel: "Mary",
                     title: "Mary",
                     subtitle: "Is very tall", // optional - for text overlay only
-                    state: "complete"
+                    state: "complete",
                 },
                 {
                     id: "kyle",
@@ -145,8 +140,8 @@
                 {
                     id: "debby",
                     key: "debby",
-                    ariaLabel: "Debby",
-                    title: "Debby",
+                    ariaLabel: "Debbeh",
+                    title: "Debbeh",
                     state: "locked",
                     subtitle: "Has a twin called Suzy", // optional - for text overlay only
                 },
@@ -164,23 +159,22 @@
                     ariaLabel: "Elliot",
                     title: "Elliot",
                     state: "locked",
-                    subtitle: "Likes to climb trees", // optional - for text overlay only
-                }
-//                {
-//                    id: "char1",                        //Must be unique
-//                    asset: "char1",                     //Phaser asset key
-//                    accessibilityText: "Character 1",
-//                    title: "Liron Man",
-//                    anim: {
-//                        key: "character-select.char1",
-//                        frames: 18,
-//                        frameRate: 6,
-//                        yoyo: true,
-//                        repeat: -1,
-//                    },
-//                    state: "locked",
-//                },
-
+                    subtitle: "Likes astrophysics", // optional - for text overlay only
+                },
+                //                {
+                //                    id: "char1",                        //Must be unique
+                //                    asset: "char1",                     //Phaser asset key
+                //                    accessibilityText: "Character 1",
+                //                    title: "Liron Man",
+                //                    anim: {
+                //                        key: "character-select.char1",
+                //                        frames: 18,
+                //                        frameRate: 6,
+                //                        yoyo: true,
+                //                        repeat: -1,
+                //                    },
+                //                    state: "locked",
+                //                },
             ],
         },
     },
