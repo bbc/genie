@@ -36,7 +36,6 @@ describe("Layout - Button Factory", () => {
     });
 
     describe("createButton method", () => {
-        const expectedIsMobile = false;
         const expectedKey = "play";
         const config = {
             id: "expectedId",
@@ -46,17 +45,16 @@ describe("Layout - Button Factory", () => {
         };
 
         beforeEach(() => {
-            buttonFactory.createButton(expectedIsMobile, config);
+            buttonFactory.createButton(config);
         });
 
         test("creates a GEL button", () => {
             const actualParams = GelButton.GelButton.mock.calls[0];
-            expect(actualParams.length).toEqual(5);
+            expect(actualParams.length).toEqual(4);
             expect(actualParams[0]).toEqual(mockGame);
             expect(actualParams[1]).toBe(0);
             expect(actualParams[2]).toBe(0);
-            expect(actualParams[3]).toEqual(expectedIsMobile);
-            expect(actualParams[4]).toEqual(config);
+            expect(actualParams[3]).toEqual(config);
         });
 
         test("adds defaults actions to the event bus", () => {
@@ -67,7 +65,7 @@ describe("Layout - Button Factory", () => {
                 channel: buttonsChannel,
             };
 
-            buttonFactory.createButton(expectedIsMobile, config);
+            buttonFactory.createButton(config);
 
             eventBus.publish({ channel: buttonsChannel, name: "play" });
             eventBus.publish({ channel: buttonsChannel, name: "play" });
@@ -82,7 +80,7 @@ describe("Layout - Button Factory", () => {
                 icon: true,
             };
 
-            const btn = buttonFactory.createButton(false, config);
+            const btn = buttonFactory.createButton(config);
 
             expect(btn.input.hitArea).toBe(null);
             expect(btn.disableInteractive).toHaveBeenCalledTimes(1);
@@ -96,8 +94,8 @@ describe("Layout - Button Factory", () => {
                 get: jest.fn(() => mockSettings),
             });
 
-            buttonFactory.createButton(false, { id: "__audio" });
-            expect(GelButton.GelButton.mock.calls[0][4].key).toBe("audio-on");
+            buttonFactory.createButton({ id: "__audio" });
+            expect(GelButton.GelButton.mock.calls[0][3].key).toBe("audio-on");
         });
 
         test("sets audio button config key to audio-off if gmi audio setting is true", () => {
@@ -106,9 +104,9 @@ describe("Layout - Button Factory", () => {
                 get: jest.fn(() => mockSettings),
             });
 
-            buttonFactory.createButton(false, { id: "__audio" });
+            buttonFactory.createButton({ id: "__audio" });
 
-            expect(GelButton.GelButton.mock.calls[0][4].key).toBe("audio-off");
+            expect(GelButton.GelButton.mock.calls[0][3].key).toBe("audio-off");
         });
     });
 });
