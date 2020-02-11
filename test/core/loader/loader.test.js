@@ -165,8 +165,8 @@ describe("Loader", () => {
             loader.updateLoadBar = jest.fn();
             loader.createLoadBar();
 
-            expect(loader.add.image).toHaveBeenCalledWith(0, 0, "loader.loadbarBackground");
-            expect(loader.add.image).toHaveBeenCalledWith(0, 0, "loader.loadbar");
+            expect(loader.add.image).toHaveBeenCalledWith(0, 130, "loader.loadbarBackground");
+            expect(loader.add.image).toHaveBeenCalledWith(0, 130, "loader.loadbar");
             expect(loader.updateLoadBar).toHaveBeenCalledWith(0);
         });
     });
@@ -212,7 +212,7 @@ describe("Loader", () => {
             loader.preload();
 
             expect(loader.add.image).toHaveBeenCalledWith(0, 0, "loader.background");
-            expect(loader.add.image).toHaveBeenCalledWith(0, -150, "loader.title");
+            expect(loader.add.image).toHaveBeenCalledWith(0, -120, "loader.title");
         });
     });
 
