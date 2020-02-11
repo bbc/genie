@@ -138,6 +138,15 @@ describe("Loader", () => {
             loader.updateLoadBar(progress);
             expect(mockImage.frame.cutWidth).toEqual(progress);
         });
+
+        test("does not update the loading bar fill when progress is backwards", () => {
+            const progress = 42;
+
+            loader.preload();
+            loader.updateLoadBar(progress);
+            loader.updateLoadBar(41);
+            expect(mockImage.frame.cutWidth).toEqual(progress);
+        });
     });
 
     describe("createBrandLogo method", () => {
