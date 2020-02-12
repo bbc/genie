@@ -80,6 +80,13 @@ describe("Select Screen Single Item Mode", () => {
         expect(mockScene.layout.buttons.continue.sprite.setFrame).toHaveBeenCalledWith(0);
     });
 
+    test("sets cells to tabbable and calls update on their accessible element", () => {
+        singleItemMode.create(mockScene);
+
+        expect(mockScene._cells[0].button.config.tabbable).toBe(true);
+        expect(mockScene._cells[0].button.accessibleElement.update).toHaveBeenCalled();
+    });
+
     test("adds keyboard tab event which moves the grid to the next page if last item is current", () => {
         global.document.addEventListener = jest.fn();
         currentPageKey = "test-page-key";
