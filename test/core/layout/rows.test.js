@@ -10,6 +10,8 @@ import { ResultsRow } from "../../../src/components/results/results-row.js";
 
 jest.mock("../../../src/core/gmi/gmi.js");
 jest.mock("../../../src/components/results/results-row.js");
+ResultsRow.prototype.scene = { scene: { key: "test" } };
+ResultsRow.prototype.config = {};
 
 describe("Rows", () => {
     let mockScene;
@@ -33,6 +35,7 @@ describe("Rows", () => {
                 addEvent: jest.fn(),
             },
         };
+        mockScene.scene = { key: "results" };
         mockRowsConfig = [{}, {}, {}];
         mockArea = {
             height: 6,

@@ -14,11 +14,17 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         super(scene);
         this.rowConfig = rowConfig;
         this.getDrawArea = getDrawArea;
-        this.drawRow();
+        this.drawRow(scene);
         this.setContainerPosition();
         this.align();
         this.setAlpha(rowConfig.alpha);
         this.createBackdrop();
+    }
+
+    setTextFromTemplate(templateString, transientData) {
+        const template = fp.template(templateString);
+        this.text = template(transientData[this.scene.scene.key]);
+        return this.text;
     }
 
     align() {
@@ -36,7 +42,8 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.add(gameObject);
     }
 
-    drawRow() {
+    drawRow(scene) {
+        let rowText = "";
         const objectType = {
             text: ResultsText,
             sprite: ResultsSprite,
@@ -45,6 +52,14 @@ export class ResultsRow extends Phaser.GameObjects.Container {
 
         this.rowConfig.format &&
             this.rowConfig.format.forEach(object => {
+                if (object.type === "text") {
+                    rowText = rowText + this.setTextFromTemplate(object.content, scene.transientData);
+                }
+                if (object.type === "countup") {
+                    rowText = rowText + this.setTextFromTemplate(object.endCount, scene.transientData);
+                }
+                this.config = {};
+                this.config.ariaLabel = rowText;
                 this.addSection(new objectType[object.type](this.scene, object), object.offsetX, object.offsetY);
             });
     }

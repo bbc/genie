@@ -15,6 +15,11 @@ const keyUp = options => event => {
     }
 };
 
+const defaultAttributes = {
+    tabindex: 0,
+    role: "button",
+};
+
 const assignEvents = (el, options) => {
     const keyup = keyUp(options);
     el.addEventListener("keyup", keyup);
@@ -25,12 +30,12 @@ const assignEvents = (el, options) => {
 
     el.addEventListener("touchmove", e => e.preventDefault());
 
-    return { keyup, click: options.onClick };
-};
+    if (options.interactive === false) {
+        el.setAttribute("tabindex", "-1");
+        defaultAttributes.role = "label";
+    }
 
-const defaultAttributes = {
-    tabindex: 0,
-    role: "button",
+    return { keyup, click: options.onClick };
 };
 
 const style = {
