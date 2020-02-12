@@ -1,67 +1,56 @@
 [
     {
-        "key": "achievement_1",
-        "name": "Default Achievement 1",
-        "description": "Default achievement 1",
+        "key": "just_started",
+        "name": "Just Getting Star-ted",
+        "description": "You collected your first star.",
         "points": 100
     },
     {
-        "key": "achievement_2",
-        "name": "Default Achievement 2",
-        "description": "Default achievement 2",
+        "key": "rock_star",
+        "name": "Rock Star",
+        "description": "You collected five stars.",
         "points": 100
     },
     {
-        "key": "achievement_3",
-        "name": "Default Achievement 3",
-        "description": "Default achievement 3",
+        "key": "stellar",
+        "name": "Stellar Achievement",
+        "description": "You collected ten stars.",
         "points": 100
     },
     {
-        "key": "achievement_4",
-        "name": "Default Achievement 4",
-        "description": "Default achievement 4",
+        "key": "diamond_in_the_rough",
+        "name": "Diamond In The Rough",
+        "description": "You collected your first gem.",
         "points": 100
     },
     {
-        "key": "achievement_5",
-        "name": "Default Achievement 5",
-        "description": "Default achievement 5",
+        "key": "pyrites_of_the_carribean",
+        "name": "Pyrites of The Carribean",
+        "description": "You collected five gems.",
         "points": 100
     },
     {
-        "key": "achievement_6",
-        "name": "Default Achievement 6",
-        "description": "Default achievement 6 has a maxProgress of 5",
-        "points": 100,
-        "maxProgress": 5
+        "key": "multifaceted",
+        "name": "Multifacted",
+        "description": "You collected ten gems.",
+        "points": 100
     },
     {
-        "key": "achievement_7",
-        "name": "Default Achievement 7",
-        "description": "Default achievement 7 has a maxProgress of 25",
-        "points": 100,
-        "maxProgress": 25
+        "key": "got_the_key",
+        "name": "I Got The Key",
+        "description": "You collected your first key.",
+        "points": 100
     },
     {
-        "key": "achievement_8",
-        "name": "Default Achievement 8",
-        "description": "Default achievement 8 has a maxProgress of 50",
-        "points": 100,
-        "maxProgress": 50
+        "key": "lock_around_the_clock",
+        "name": "Lock Around The Clock",
+        "description": "You collected five keys.",
+        "points": 100
     },
     {
-        "key": "achievement_9",
-        "name": "Default Achievement 9",
-        "description": "Default achievement 9 has a maxProgress of 75",
-        "points": 100,
-        "maxProgress": 75
-    },
-    {
-        "key": "achievement_10",
-        "name": "Default Achievement 10",
-        "description": "Default achievement 10 has a maxProgress of 100",
-        "points": 100,
-        "maxProgress": 100
+        "key": "super_size_key",
+        "name": "Super Size Key",
+        "description": "You collected ten keys.",
+        "points": 100
     }
 ]

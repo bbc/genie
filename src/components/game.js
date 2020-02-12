@@ -5,8 +5,21 @@
  */
 import { Screen } from "../core/screen.js";
 import { accessibilify } from "../core/accessibility/accessibilify.js";
+import { gmi } from "../core/gmi/gmi.js";
 
 export class Game extends Screen {
+    calculateAchievements(amount, keys) {
+        if (amount === 10) {
+            gmi.achievements.set({ key: keys[2] });
+        }
+        if (amount === 5) {
+            gmi.achievements.set({ key: keys[1] });
+        }
+        if (amount === 1) {
+            gmi.achievements.set({ key: keys[0] });
+        }
+    }
+
     create() {
         let keys = 0;
         let gems = 0;
@@ -43,7 +56,6 @@ export class Game extends Screen {
         this.add
             .image(300, 20, buttonKey)
             .setOrigin(0.5)
-
             .setInteractive({ useHandCursor: true })
             .on("pointerup", () => onGameComplete());
         this.add
@@ -78,14 +90,17 @@ export class Game extends Screen {
             if (index == 0) {
                 stars++;
                 starScore.text = stars;
+                this.calculateAchievements(stars, ["just_started", "rock_star", "stellar"]);
             }
             if (index == 1) {
                 gems++;
                 gemScore.text = gems;
+                this.calculateAchievements(gems, ["diamond_in_the_rough", "pyrites_of_the_carribean", "multifaceted"]);
             }
             if (index == 2) {
                 keys++;
                 keyScore.text = keys;
+                this.calculateAchievements(keys, ["got_the_key", "lock_around_the_clock", "super_size_key"]);
             }
         };
 
