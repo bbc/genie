@@ -118,6 +118,14 @@ describe("Accessibilify", () => {
             expect(accessibleDomElementCall.parent).toEqual(mockScene.sys.scale.parent);
         });
 
+        test("creates an accessibleDomElement with correct params when interactive is false", () => {
+            accessibilify(mockButton, true, false);
+            const accessibleDomElementCall = accessibleDomElement.mock.calls[0][0];
+            expect(accessibleDomElementCall.id).toBe("home__play");
+            expect(accessibleDomElementCall.class).toBe("gel-button");
+            expect(accessibleDomElementCall.ariaLabel).toBe(mockButton.config.name);
+        });
+
         test("calls accessibleDomElement with an aria label when provided in the config", () => {
             mockButton.config = { ariaLabel: "test aria label" };
             accessibilify(mockButton);
@@ -341,6 +349,14 @@ describe("Accessibilify", () => {
                 mockScene.sys.input.activePointer,
                 false,
             );
+        });
+
+        test("events not called when element is not interactive", () => {
+            accessibilify(mockButton, false, false);
+            accessibleDomElement.mock.calls[0][0].onClick();
+            accessibleDomElement.mock.calls[0][0].onMouseOver();
+            accessibleDomElement.mock.calls[0][0].onMouseOut();
+            expect(mockButton.emit).not.toHaveBeenCalled();
         });
 
         test("does not dispatches event if input disabled", () => {

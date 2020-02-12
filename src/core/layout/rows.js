@@ -18,7 +18,7 @@ export function create(scene, getArea, rowsConfig, rowType) {
         const container = new rowType(scene, rowConfig, getRectForRow(index));
         container.config.id = `row-${index}`;
         containers.push(container);
-        accessibilify(container);
+        accessibilify(container, false, false);
         scene.layout.addCustomGroup(`row-${index}`, container);
     };
 

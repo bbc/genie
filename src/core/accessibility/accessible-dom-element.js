@@ -25,6 +25,10 @@ const assignEvents = (el, options) => {
 
     el.addEventListener("touchmove", e => e.preventDefault());
 
+    if (options.interactive === false) {
+        el.setAttribute("tabindex", "-1");
+    }
+
     return { keyup, click: options.onClick };
 };
 

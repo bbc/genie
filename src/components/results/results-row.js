@@ -34,8 +34,8 @@ export class ResultsRow extends Phaser.GameObjects.Container {
 
     setTextFromTemplate(templateString, transientData) {
         const template = fp.template(templateString);
-        const text = template(transientData[this.scene.scene.key]);
-        return text;
+        this.text = template(transientData[this.scene.scene.key]);
+        return this.text;
     }
 
     align() {
