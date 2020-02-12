@@ -29,6 +29,11 @@ describe("Results Row", () => {
         mockRowConfig = {
             format: [{ type: "text", content: "" }],
         };
+        mockScene.transientData = {
+            results: {
+                name: "darkness",
+            },
+        };
         mockDrawArea = {
             x: -12,
             y: -11,
