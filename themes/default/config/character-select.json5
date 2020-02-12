@@ -49,7 +49,7 @@
                     },
                     enabled: false, //enable or disable touch input on this state - default true
                 },
-                complete: { overlayAsset: "character-select.complete", x: 80, y: 20, suffix: "completed" },
+                complete: { overlayAsset: "character-select.complete", x: 65, y: 35, suffix: "completed" },
             },
             //optional - provide if you want title/subtitle text to appear over each choice
             choicesStyling: {
@@ -60,12 +60,14 @@
                             fontSize: "19px",
                             color: "#424242",
                             backgroundColor: "#fff",
+                            fixedWidth: 75,
+                            align: "center",
                             padding: {
                                 left: 6,
                                 right: 6,
                                 top: 2,
                                 bottom: 2,
-                            }
+                            },
                         },
                         position: {
                             x: 0,
@@ -77,13 +79,13 @@
                             fontFamily: "ReithSans",
                             fontSize: "16px",
                             color: "#fff",
-                            backgroundColor: "rgba(0,0,0,0.3)",
+                            backgroundColor: "rgba(0,0,0,0.15)",
                             padding: {
                                 left: 4,
                                 right: 4,
                                 top: 2,
                                 bottom: 2,
-                            }
+                            },
                         },
                         position: {
                             x: 0,
@@ -96,6 +98,7 @@
                     title: {
                         style: {
                             color: "#fff",
+                            backgroundColor: "#7d4b4b",
                         },
                     },
                 },
@@ -115,6 +118,7 @@
                     ariaLabel: "Kyle",
                     title: "Kyle",
                     subtitle: "Has a mohawk", // optional - for text overlay only
+                    state: "complete",
                 },
                 {
                     id: "suzy",

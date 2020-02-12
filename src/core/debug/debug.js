@@ -17,7 +17,7 @@ export function update() {
     debugDraw.buttons(this.debugGraphics);
 }
 
-const toggleCSS = () => document.body.classList.toggle("debug")
+const toggleCSS = () => document.body.classList.toggle("debug");
 
 function create() {
     this.debugGraphics = this.add.graphics();
