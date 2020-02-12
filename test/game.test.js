@@ -3,8 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
-import { accessibilify } from "../src/core/accessibility/accessibilify.js";
 import { Game } from "../src/components/game";
 
 jest.mock("../src/core/accessibility/accessibilify.js");

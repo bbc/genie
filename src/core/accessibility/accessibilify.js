@@ -47,7 +47,13 @@ export function accessibilify(button, gameButton = true, interactive = true) {
     const sys = button.scene.sys;
     const scene = button.scene;
     const id = [scene.scene.key, button.config.id].join("__");
-    let options;
+    var options;
+    const defaults = {
+        id,
+        button,
+        class: "gel-button",
+        "aria-label": button.config.ariaLabel,
+    };
 
     if (interactive === true) {
         const buttonAction = () => {
@@ -57,10 +63,6 @@ export function accessibilify(button, gameButton = true, interactive = true) {
         const mouseOver = () => button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false);
         const mouseOut = () => button.emit(Phaser.Input.Events.POINTER_OUT, button, sys.input.activePointer, false);
         options = {
-            id,
-            button,
-            class: "gel-button",
-            "aria-label": button.config.ariaLabel,
             parent: sys.scale.parent,
             onClick: buttonAction,
             onMouseOver: mouseOver,
@@ -69,16 +71,14 @@ export function accessibilify(button, gameButton = true, interactive = true) {
         };
     } else {
         options = {
-            id,
-            button,
-            class: "gel-button",
-            "aria-label": button.config.ariaLabel,
             onClick: () => {},
             onMouseOver: () => {},
             onMouseOut: () => {},
             interactive: false,
         };
     }
+
+    options = { ...options, ...defaults };
 
     const accessibleElement = accessibleDomElement(options);
 
