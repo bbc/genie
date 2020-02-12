@@ -10,46 +10,36 @@ export const loadPack = {
             type: "image",
             key: "title",
             url: "loader/title.png",
-            overwrite: false,
         },
         {
             type: "image",
             key: "background",
             url: "loader/background.png",
-            overwrite: false,
         },
         {
             type: "image",
             key: "brandLogo",
             url: "loader/brand-logo.png",
-            overwrite: false,
         },
         {
             type: "image",
             key: "loadbarBackground",
             url: "loader/load-bar-bg.png",
-            overwrite: false,
         },
         {
             type: "image",
             key: "loadbar",
             url: "loader/load-bar-fill.png",
-            overwrite: false,
         },
         {
             type: "audio",
             key: "backgroundMusic",
-            url: ["shared/background-music.mp3", "shared/background-music.ogg"],
-        },
-        {
-            type: "audio",
-            key: "backgroundMusicTwo",
-            url: ["shared/background-music-2.mp3", "shared/background-music-2.ogg"],
+            url: "shared/background-music.mp3",
         },
         {
             type: "audio",
             key: "buttonClick",
-            url: ["shared/button-click.mp3", "shared/button-click.ogg"],
+            url: "shared/button-click.mp3",
         },
     ],
 };

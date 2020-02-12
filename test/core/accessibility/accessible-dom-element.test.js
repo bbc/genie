@@ -230,5 +230,29 @@ describe("Accessible DOM Element", () => {
             accessibleElement.update();
             expect(accessibleElement.el.setAttribute).not.toHaveBeenCalled();
         });
+
+        test("aria hidden is true if the button config is not set to tabbable", () => {
+            options.button = {
+                config: { ariaLabel: "test-label", tabbable: false },
+                visable: true,
+                input: { enabled: false },
+            };
+
+            const accessibleElement = accessibleDomElement(options);
+            accessibleElement.update();
+            expect(accessibleElement.el.setAttribute).toHaveBeenCalledWith("aria-hidden", true);
+        });
+
+        test("aria hidden is not set if the button config is set to tabbable", () => {
+            options.button = {
+                config: { ariaLabel: "test-label", tabbable: true },
+                visable: true,
+                input: { enabled: false },
+            };
+
+            const accessibleElement = accessibleDomElement(options);
+            accessibleElement.update();
+            expect(accessibleElement.el.getAttribute("aria-hidden")).toBe(undefined);
+        });
     });
 });

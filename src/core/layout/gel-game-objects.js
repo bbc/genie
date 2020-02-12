@@ -5,8 +5,8 @@
  */
 import { GelButton } from "./gel-button.js";
 
-export function addGelButton(x, y, metrics, config) {
-    const gelButton = new GelButton(this.scene, x, y, metrics, config);
+export function addGelButton(x, y, config) {
+    const gelButton = new GelButton(this.scene, x, y, config);
     this.displayList.add(gelButton);
     this.updateList.add(gelButton.sprite);
     return gelButton;
