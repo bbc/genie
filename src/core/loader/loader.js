@@ -26,6 +26,7 @@ export class Loader extends Screen {
         loadPack.path = gmi.gameDir + gmi.embedVars.configPath;
         super({ key: "loader", pack: loadPack });
         this._loadbar = undefined;
+        this._progress = 0;
     }
 
     getConfig() {
@@ -54,7 +55,8 @@ export class Loader extends Screen {
         this.load.addPack(masterPack);
 
         this.add.image(0, 0, "loader.background");
-        this.add.image(0, -150, "loader.title");
+        this.add.image(0, -120, "loader.title");
+
         this.createLoadBar();
         this.createBrandLogo();
 
@@ -62,16 +64,18 @@ export class Loader extends Screen {
     }
 
     createLoadBar() {
-        this.add.image(0, 0, "loader.loadbarBackground");
-        this._loadbar = this.add.image(0, 0, "loader.loadbar");
+        this.add.image(0, 130, "loader.loadbarBackground");
+        this._loadbar = this.add.image(0, 130, "loader.loadbar");
         this.updateLoadBar(0);
     }
 
     updateLoadBar = progress => {
-        this._loadbar.frame.cutWidth = this._loadbar.width * progress;
-        this._loadbar.frame.updateUVs();
-
-        if (window.__qaMode) {
+        if (progress >= this._progress) {
+            this._progress = progress;
+            this._loadbar.frame.cutWidth = this._loadbar.width * progress;
+            this._loadbar.frame.updateUVs();
+        }
+        if (window.__debug) {
             console.log("Loader progress:", progress); // eslint-disable-line no-console
         }
     };
