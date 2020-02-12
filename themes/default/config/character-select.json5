@@ -1,8 +1,8 @@
 {
     theme: {
         "character-select": {
-            rows: 1,
-            columns: 1,
+            rows: 2,
+            columns: 3,
             ease: "Cubic.easeInOut",
             duration: 500,
             align: "center",
@@ -40,8 +40,8 @@
                     //asset: "debby",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
                     overlayAsset: "character-select.lock",
                     suffix: "locked", //appended to aria label of accessibility div
-                    x: 55,
-                    y: 60,
+                    x: 65,
+                    y: 35,
                     properties: {
                         //phaser properties assigned to the base sprite
                         alpha: 0.25,
@@ -49,7 +49,7 @@
                     },
                     enabled: false, //enable or disable touch input on this state - default true
                 },
-                complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed" },
+                complete: { overlayAsset: "character-select.complete", x: 80, y: 20, suffix: "completed" },
             },
             //optional - provide if you want title/subtitle text to appear over each choice
             choicesStyling: {
@@ -59,10 +59,17 @@
                             fontFamily: "ReithSans",
                             fontSize: "19px",
                             color: "#424242",
+                            backgroundColor: "#fff",
+                            padding: {
+                                left: 6,
+                                right: 6,
+                                top: 2,
+                                bottom: 2,
+                            }
                         },
                         position: {
                             x: 0,
-                            y: 68,
+                            y: 53,
                         },
                     },
                     subtitle: {
@@ -70,10 +77,17 @@
                             fontFamily: "ReithSans",
                             fontSize: "16px",
                             color: "#fff",
+                            backgroundColor: "rgba(0,0,0,0.3)",
+                            padding: {
+                                left: 4,
+                                right: 4,
+                                top: 2,
+                                bottom: 2,
+                            }
                         },
                         position: {
                             x: 0,
-                            y: 100,
+                            y: 80,
                         },
                     },
                 },
