@@ -18,7 +18,8 @@ Inside each object, there are `scene` and `routes`.
 
 ## How to use
 
-When in a Phaser Scene that is extended from Genie's `Screen` class, you have access to `this.navigation`. If the route exists in `navigationConfig`, you can simply use `this.navigation.next()` to send the player to the next screen.
+When in a Phaser Scene that is extended from Genie's `Screen` class, you have access to `this.navigation`. If the route exists in `navigationConfig`, you can simply use `this.navigation.next()` to send the player to the next screen.  
+
 Other examples:
 
 `this.navigation.home()`
