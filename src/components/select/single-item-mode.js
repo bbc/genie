@@ -28,6 +28,7 @@ export const create = scene => {
         cell.button.on("pointerover", () => continueButton.sprite.setFrame(1));
         cell.button.on("pointerout", () => continueButton.sprite.setFrame(0));
         cell.button.config.tabbable = true;
+        cell.button.accessibleElement.update();
     });
 
     const goToStart = event => {
