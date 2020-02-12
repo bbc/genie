@@ -375,14 +375,14 @@ describe("Game", () => {
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "super_size_key" });
             });
 
-            test("fires an achievement when 5 gems are collected", () => {
+            test("fires an achievement when 5 keys are collected", () => {
                 [...Array(5)].forEach(() => keyTextClickedOn.mock.calls[0][1]());
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "got_the_key" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "lock_around_the_clock" });
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "super_size_key" });
             });
 
-            test("fires an achievement when 10 gems are collected", () => {
+            test("fires an achievement when 10 keys are collected", () => {
                 [...Array(10)].forEach(() => keyTextClickedOn.mock.calls[0][1]());
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "got_the_key" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "lock_around_the_clock" });
