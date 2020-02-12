@@ -15,7 +15,7 @@ const keyUp = options => event => {
     }
 };
 
-let defaultAttributes = {
+const defaultAttributes = {
     tabindex: 0,
     role: "button",
 };

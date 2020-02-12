@@ -47,7 +47,7 @@ export function accessibilify(button, gameButton = true, interactive = true) {
     const sys = button.scene.sys;
     const scene = button.scene;
     const id = [scene.scene.key, button.config.id].join("__");
-    var options;
+    let options;
 
     if (interactive === true) {
         const buttonAction = () => {
