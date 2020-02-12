@@ -12,20 +12,9 @@ import { ResultsCountup } from "./results-countup.js";
 export class ResultsRow extends Phaser.GameObjects.Container {
     constructor(scene, rowConfig, getDrawArea) {
         super(scene);
-        let rowText = "";
         this.rowConfig = rowConfig;
-        this.rowConfig.format.forEach(object => {
-            if (object.type === "text") {
-                rowText = rowText + this.setTextFromTemplate(object.content, scene.transientData);
-            }
-            if (object.type === "countup") {
-                rowText = rowText + this.setTextFromTemplate(object.endCount, scene.transientData);
-            }
-        });
-        this.config = {};
-        this.config.ariaLabel = rowText;
         this.getDrawArea = getDrawArea;
-        this.drawRow();
+        this.drawRow(scene);
         this.setContainerPosition();
         this.align();
         this.setAlpha(rowConfig.alpha);
@@ -53,7 +42,8 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.add(gameObject);
     }
 
-    drawRow() {
+    drawRow(scene) {
+        let rowText = "";
         const objectType = {
             text: ResultsText,
             sprite: ResultsSprite,
@@ -62,6 +52,14 @@ export class ResultsRow extends Phaser.GameObjects.Container {
 
         this.rowConfig.format &&
             this.rowConfig.format.forEach(object => {
+                if (object.type === "text") {
+                    rowText = rowText + this.setTextFromTemplate(object.content, scene.transientData);
+                }
+                if (object.type === "countup") {
+                    rowText = rowText + this.setTextFromTemplate(object.endCount, scene.transientData);
+                }
+                this.config = {};
+                this.config.ariaLabel = rowText;
                 this.addSection(new objectType[object.type](this.scene, object), object.offsetX, object.offsetY);
             });
     }
