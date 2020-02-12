@@ -87,7 +87,7 @@ describe("Select Screen Single Item Mode", () => {
         expect(mockScene._cells[0].button.accessibleElement.update).toHaveBeenCalled();
     });
 
-    test("adds keyboard tab event which moves the grid to the next page if last item is current", () => {
+    test("adds keyboard tab event which moves the grid to the first page if last item is current", () => {
         global.document.addEventListener = jest.fn();
         currentPageKey = "test-page-key";
         mockScene._cells[1].button.key = "test-page-key";
@@ -95,10 +95,23 @@ describe("Select Screen Single Item Mode", () => {
         singleItemMode.create(mockScene);
 
         const goToStartFn = global.document.addEventListener.mock.calls[0][1];
-        goToStartFn({ key: "Tab" });
+        goToStartFn({ key: "Tab", shiftKey: false });
 
         expect(global.document.addEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
         expect(mockScene.grid.showPage).toHaveBeenCalledWith(0);
+    });
+
+    test("does not go to the first page if shift tabbing", () => {
+        global.document.addEventListener = jest.fn();
+        currentPageKey = "test-page-key";
+        mockScene._cells[1].button.key = "test-page-key";
+
+        singleItemMode.create(mockScene);
+
+        const goToStartFn = global.document.addEventListener.mock.calls[0][1];
+        goToStartFn({ key: "Tab", shiftKey: true });
+
+        expect(mockScene.grid.showPage).not.toHaveBeenCalled();
     });
 
     test("does not move to the next page if key is not Tab", () => {
