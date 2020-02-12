@@ -1,7 +1,7 @@
 {
     theme: {
         game: {
-            music: "loader.backgroundMusicTwo",
+            music: "game.backgroundMusicTwo",
             achievements: false, //enable or disable achievements for this theme
         },
         pause: {

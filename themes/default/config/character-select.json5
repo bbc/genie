@@ -1,35 +1,30 @@
 {
     theme: {
         "character-select": {
-            rows: 2,
-            columns: 3,
+            rows: 1,
+            columns: 1,
             ease: "Cubic.easeInOut",
             duration: 500,
-            align: "left",
+            align: "center",
             music: "loader.backgroundMusic",
-            title: {
-                image: {
-                    imageId: "",
+            titles: [
+                {
+                    type: "image",
+                    key: "title",
                     xOffset: 0,
                     yOffset: 0,
                 },
-                text: {
-                    value: "Title",
-                    xOffset: -60,
+                {
+                    type: "text",
+                    value: "Select Your Character",
+                    xOffset: 0,
                     yOffset: -20,
                     styles: {
                         fontSize: "24px",
                     },
                 },
-                visible: true,
-            },
-            subtitle: {
-                image: {
-                    imageId: "",
-                    xOffset: 0,
-                    yOffset: 0,
-                },
-                text: {
+                {
+                    type: "text",
                     value: "Sub-Title",
                     xOffset: 0,
                     yOffset: 80,
@@ -37,23 +32,59 @@
                         fontSize: "16px",
                     },
                 },
-                visible: true,
-            },
+            ],
+
             storageKey: "characters",
             states: {
                 locked: {
-                    //asset: "suzytoo",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
+                    //asset: "debby",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
                     overlayAsset: "character-select.lock",
-                    suffix: "locked",       //appended to aria label of accessibility div
+                    suffix: "locked", //appended to aria label of accessibility div
                     x: 55,
                     y: 60,
-                    properties: {           //phaser properties assigned to the base sprite
+                    properties: {
+                        //phaser properties assigned to the base sprite
                         alpha: 0.25,
                         tint: 0xff0000,
                     },
-                    enabled: false,         //enable or disable touch input on this state - default true
+                    enabled: false, //enable or disable touch input on this state - default true
                 },
-                complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed"},
+                complete: { overlayAsset: "character-select.complete", x: 55, y: 60, suffix: "completed" },
+            },
+            //optional - provide if you want title/subtitle text to appear over each choice
+            choicesStyling: {
+                default: {
+                    title: {
+                        style: {
+                            fontFamily: "ReithSans",
+                            fontSize: "19px",
+                            color: "#424242",
+                        },
+                        position: {
+                            x: 0,
+                            y: 68,
+                        },
+                    },
+                    subtitle: {
+                        style: {
+                            fontFamily: "ReithSans",
+                            fontSize: "16px",
+                            color: "#fff",
+                        },
+                        position: {
+                            x: 0,
+                            y: 100,
+                        },
+                    },
+                },
+                // optional styling for extra button states (will override default styles above)
+                locked: {
+                    title: {
+                        style: {
+                            color: "#fff",
+                        },
+                    },
+                },
             },
             choices: [
                 {
@@ -61,50 +92,58 @@
                     key: "mary",
                     ariaLabel: "Mary",
                     title: "Mary",
-                    state: "complete"
+                    subtitle: "Is very tall", // optional - for text overlay only
+                    state: "complete",
                 },
                 {
                     id: "kyle",
                     key: "kyle",
                     ariaLabel: "Kyle",
                     title: "Kyle",
+                    subtitle: "Has a mohawk", // optional - for text overlay only
                 },
                 {
                     id: "suzy",
                     key: "suzy",
                     ariaLabel: "Suzy",
                     title: "Suzy",
+                    subtitle: "Can tapdance", // optional - for text overlay only
                 },
                 {
                     id: "greg",
                     key: "greg",
                     ariaLabel: "Greg",
                     title: "Greg",
+                    subtitle: "Is a geography teacher", // optional - for text overlay only
                 },
                 {
-                    id: "ange",
-                    key: "ange",
-                    ariaLabel: "Ange",
-                    title: "Ange",
+                    id: "ezinma",
+                    key: "ezinma",
+                    ariaLabel: "Ezinma",
+                    title: "Ezinma",
+                    subtitle: "Likes snowboarding", // optional - for text overlay only
                 },
                 {
                     id: "phil",
                     key: "phil",
                     ariaLabel: "Phil",
                     title: "Phil",
+                    subtitle: "Wears a baseball cap", // optional - for text overlay only
                 },
                 {
                     id: "mike",
                     key: "mike",
                     ariaLabel: "Mike",
                     title: "Mike",
+                    subtitle: "Also known as Ant", // optional - for text overlay only
                 },
                 {
-                    id: "suzytoo",
-                    key: "suzytoo",
-                    ariaLabel: "Suzy Too",
-                    title: "Suzy Too",
+                    id: "debby",
+                    key: "debby",
+                    ariaLabel: "Debbeh",
+                    title: "Debbeh",
                     state: "locked",
+                    subtitle: "Has a twin called Suzy", // optional - for text overlay only
                 },
                 {
                     id: "timmy",
@@ -112,6 +151,7 @@
                     ariaLabel: "Timmy",
                     title: "Timmy",
                     state: "locked",
+                    subtitle: "Is the youngest", // optional - for text overlay only
                 },
                 {
                     id: "elliot",
@@ -119,22 +159,22 @@
                     ariaLabel: "Elliot",
                     title: "Elliot",
                     state: "locked",
-                }
-//                {
-//                    id: "char1",                        //Must be unique
-//                    asset: "char1",                     //Phaser asset key
-//                    accessibilityText: "Character 1",
-//                    title: "Liron Man",
-//                    anim: {
-//                        key: "character-select.char1",
-//                        frames: 18,
-//                        frameRate: 6,
-//                        yoyo: true,
-//                        repeat: -1,
-//                    },
-//                    state: "locked",
-//                },
-
+                    subtitle: "Likes astrophysics", // optional - for text overlay only
+                },
+                //                {
+                //                    id: "char1",                        //Must be unique
+                //                    asset: "char1",                     //Phaser asset key
+                //                    accessibilityText: "Character 1",
+                //                    title: "Liron Man",
+                //                    anim: {
+                //                        key: "character-select.char1",
+                //                        frames: 18,
+                //                        frameRate: 6,
+                //                        yoyo: true,
+                //                        repeat: -1,
+                //                    },
+                //                    state: "locked",
+                //                },
             ],
         },
     },

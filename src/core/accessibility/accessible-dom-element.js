@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import crel from "../../../node_modules/crel/crel.es.js";
+import crel from "../../../lib/crel.es.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const keyUp = options => event => {
@@ -83,7 +83,7 @@ export const accessibleDomElement = options => {
         if (el.getAttribute("aria-label") !== button.config.ariaLabel) {
             el.setAttribute("aria-label", button.config.ariaLabel);
         }
-        if (!button.config.alwaysTab && ((button.input && !button.input.enabled) || !button.visible)) {
+        if (!button.config.tabbable && ((button.input && !button.input.enabled) || !button.visible)) {
             visible(el) && hide(el);
         } else if (!visible(el)) {
             show(el);

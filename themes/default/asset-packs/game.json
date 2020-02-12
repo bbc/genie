@@ -32,6 +32,11 @@
                 "type": "image",
                 "key": "star",
                 "url": "game/star.png"
+            },
+            {
+                "type": "audio",
+                "key": "backgroundMusicTwo",
+                "url": "shared/background-music-2.mp3"
             }
         ]
     }

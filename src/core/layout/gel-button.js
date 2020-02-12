@@ -8,6 +8,7 @@ import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 import { assetPath } from "./asset-paths.js";
 import { Indicator } from "./gel-indicator.js";
+import { getMetrics } from "../scaler.js";
 
 const defaults = {
     shiftX: 0,
@@ -15,7 +16,8 @@ const defaults = {
 };
 
 export class GelButton extends Phaser.GameObjects.Container {
-    constructor(scene, x, y, metrics, config) {
+    constructor(scene, x, y, config) {
+        const metrics = getMetrics();
         super(scene, x, y);
 
         this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
