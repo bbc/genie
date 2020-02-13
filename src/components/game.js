@@ -23,17 +23,17 @@ export class Game extends Screen {
         }
     }
 
+    getAchievements() {
+        const achievements = this.cache.json.get("achievements-data").map(achievement => achievement.key);
+        return { star: achievements.slice(0, 3), gem: achievements.slice(3, 7), key: achievements.slice(7, 10) };
+    }
+
     create() {
+        const achievementNames = this.getAchievements();
+
         let keys = 0;
         let gems = 0;
         let stars = 0;
-
-        const achievements = this.cache.json.get("achievements-data").map(achievement => achievement.key);
-        const achievementNames = {
-            star: achievements.slice(0, 3),
-            gem: achievements.slice(3, 7),
-            key: achievements.slice(7, 10),
-        };
 
         this.add.image(0, 0, "home.background");
         this.addAnimations();
