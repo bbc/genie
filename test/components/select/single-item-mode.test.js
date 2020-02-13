@@ -12,11 +12,11 @@ describe("Select Screen Single Item Mode", () => {
     beforeEach(() => {
         mockScene = {
             layout: {
-                buttons: { continue: { on: jest.fn(), sprite: { setFrame: jest.fn() } } },
+                buttons: { continue: { on: jest.fn(), off: jest.fn(), sprite: { setFrame: jest.fn() } } },
             },
             _cells: [
-                { button: { on: jest.fn(), accessibleElement: { update: jest.fn() }, config: {} } },
-                { button: { on: jest.fn(), accessibleElement: { update: jest.fn() }, config: {} } },
+                { button: { on: jest.fn(), off: jest.fn(), accessibleElement: { update: jest.fn() }, config: {} } },
+                { button: { on: jest.fn(), off: jest.fn(), accessibleElement: { update: jest.fn() }, config: {} } },
             ],
             grid: {
                 page: 4,
@@ -32,9 +32,12 @@ describe("Select Screen Single Item Mode", () => {
 
     afterEach(jest.clearAllMocks);
 
-    test("Exits and returns false if continue button is not present", () => {
+    test("Returns noop shutdown if continue button is not present", () => {
         delete mockScene.layout.buttons.continue;
-        expect(singleItemMode.create(mockScene)).toBe(false);
+        const noopSIMode = singleItemMode.create(mockScene);
+
+        expect(JSON.stringify(noopSIMode)).toEqual(JSON.stringify({ shutdown: () => {} }));
+        expect(noopSIMode.shutdown()).toBe(undefined);
     });
 
     test("adds pointerover event to continue button which sets the current cell to hover state", () => {
@@ -138,15 +141,33 @@ describe("Select Screen Single Item Mode", () => {
         expect(mockScene.grid.showPage).not.toHaveBeenCalled();
     });
 
-    test("adds a shutdown event which removes keyboard listener", () => {
-        global.document.removeEventListener = jest.fn();
+    describe("shutdown method", () => {
+        test("is added once to the shutdown event of the scene", () => {
+            singleItemMode.create(mockScene);
+            expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
+        });
 
-        singleItemMode.create(mockScene);
+        test("Removes keyboard listener", () => {
+            global.document.removeEventListener = jest.fn();
+            const SIMode = singleItemMode.create(mockScene);
+            SIMode.shutdown();
+            expect(global.document.removeEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
+        });
 
-        const shutDownFn = mockScene.events.once.mock.calls[0][1];
-        shutDownFn();
+        test("Removes continue button hover events", () => {
+            const SIMode = singleItemMode.create(mockScene);
+            SIMode.shutdown();
+            expect(mockScene.layout.buttons.continue.off).toHaveBeenCalledWith("pointerover", expect.any(Function));
+            expect(mockScene.layout.buttons.continue.off).toHaveBeenCalledWith("pointerout", expect.any(Function));
+        });
 
-        expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
-        expect(global.document.removeEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
+        test("Removes cell hover events for all cells", () => {
+            const SIMode = singleItemMode.create(mockScene);
+            SIMode.shutdown();
+            expect(mockScene._cells[0].button.off).toHaveBeenCalledWith("pointerover", expect.any(Function));
+            expect(mockScene._cells[0].button.off).toHaveBeenCalledWith("pointerout", expect.any(Function));
+            expect(mockScene._cells[1].button.off).toHaveBeenCalledWith("pointerover", expect.any(Function));
+            expect(mockScene._cells[1].button.off).toHaveBeenCalledWith("pointerout", expect.any(Function));
+        });
     });
 });

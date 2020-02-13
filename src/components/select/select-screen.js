@@ -32,7 +32,7 @@ export class Select extends Screen {
     create() {
         this.add.image(0, 0, `${this.scene.key}.background`);
         this.addAnimations();
-        this.theme = this.context.config.theme[this.scene.key];
+        this.theme = this.context.theme;
         this.titles = createTitles(this);
         const buttons = ["home", "pause", "previous", "next"];
         this.setLayout(buttons.concat(singleItemMode.continueBtn(this)));
@@ -47,7 +47,7 @@ export class Select extends Screen {
 
         addEvents(this);
 
-        const stateConfig = this.context.theme.choices.map(({ id, state }) => ({ id, state }));
+        const stateConfig = this.theme.choices.map(({ id, state }) => ({ id, state }));
         this.states = state.create(this.context.theme.storageKey, stateConfig);
 
         this.singleItemMode = singleItemMode.create(this);

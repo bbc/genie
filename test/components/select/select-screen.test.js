@@ -6,9 +6,18 @@
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as elementBounding from "../../../src/core/helpers/element-bounding.js";
-
+import { Screen } from "../../../src/core/screen.js";
 import { Select } from "../../../src/components/select/select-screen.js";
 import { GelGrid } from "../../../src/core/layout/grid/grid.js";
+import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
+jest.mock("../../../src/components/select/single-item-mode.js")
+jest.mock("../../../src/core/screen.js");
+jest.mock("../../../src/components/select/single-item-mode.js", () => ({
+    create: jest.fn(() => ({
+        shutdown: jest.fn(),
+    })),
+    continueBtn: () => [],
+}));
 jest.mock("../../../src/core/layout/grid/grid.js");
 jest.mock("../../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
@@ -77,6 +86,9 @@ describe("Select Screen", () => {
                                 visible: false,
                             },
                         ],
+                        states: {
+                            locked: { x: 10, y: 20, asset: "test_asset" },
+                        },
                         choices: [
                             { asset: "character1" },
                             { asset: "character2", title: "character_2" },
@@ -131,49 +143,63 @@ describe("Select Screen", () => {
         mockCellIds = [];
         fillRectShapeSpy = jest.fn();
         selectScreen = new Select();
-        selectScreen.setData(mockData);
-        selectScreen.transientData = {};
-        selectScreen.scene = { key: "test-select", scene: { events: { on: jest.fn() } } };
-        selectScreen.game = { canvas: { parentElement: "parent-element" } };
-        selectScreen.navigation = { next: jest.fn() };
-        selectScreen.setLayout = jest.fn(() => mockLayout);
-        selectScreen.add = {
-            graphics: jest.fn(() => ({
-                fillRectShape: fillRectShapeSpy,
-                clear: jest.fn(),
-                fillStyle: jest.fn(),
-            })),
-            text: jest.fn(() => ({
-                ...mockTextBounds,
-                getBounds: jest.fn(() => mockTextBounds),
-            })),
-            image: jest.fn((x, y, imageName) => imageName),
-            sprite: jest.fn((x, y, assetName) => {
-                if (assetName === "test-select.character1") {
-                    return characterSprites[0];
-                }
-                if (assetName === "test-select.character2") {
-                    return characterSprites[1];
-                }
-                if (assetName === "test-select.character3") {
-                    return characterSprites[2];
-                }
-                if (assetName === "test_asset") {
-                    return "test-sprite";
-                }
-            }),
-        };
-        selectScreen.events = {
-            once: jest.fn(),
-        };
-        selectScreen.addAnimations = jest.fn();
-        selectScreen.context.theme.states = {
-            locked: { x: 10, y: 20, asset: "test_asset" },
+
+        const addMocks = screen => {
+            screen.setData(mockData);
+            screen.transientData = {};
+            screen.scene = { key: "test-select", scene: { events: { on: jest.fn() } } };
+            screen.game = { canvas: { parentElement: "parent-element" } };
+            screen.navigation = { next: jest.fn() };
+            screen.setLayout = jest.fn(() => mockLayout);
+            screen.add = {
+                graphics: jest.fn(() => ({
+                    fillRectShape: fillRectShapeSpy,
+                    clear: jest.fn(),
+                    fillStyle: jest.fn(),
+                })),
+                text: jest.fn(() => ({
+                    ...mockTextBounds,
+                    getBounds: jest.fn(() => mockTextBounds),
+                })),
+                image: jest.fn((x, y, imageName) => imageName),
+                sprite: jest.fn((x, y, assetName) => {
+                    if (assetName === "test-select.character1") {
+                        return characterSprites[0];
+                    }
+                    if (assetName === "test-select.character2") {
+                        return characterSprites[1];
+                    }
+                    if (assetName === "test-select.character3") {
+                        return characterSprites[2];
+                    }
+                    if (assetName === "test_asset") {
+                        return "test-sprite";
+                    }
+                }),
+            };
+            screen.events = {
+                once: jest.fn(),
+            };
+            screen.addAnimations = jest.fn();
+
+            screen.context = { theme: mockData.config.theme["test-select"] };
+
+            Object.defineProperty(screen, "layout", {
+                get: jest.fn(() => mockLayout),
+            });
+
+            screen._data = {
+                parentScreens: [],
+            };
+            screen.scene.run = jest.fn();
+            screen.scene.bringToTop = jest.fn();
+
+            screen.singleItemMode = {
+                shutdown: jest.fn(),
+            };
         };
 
-        Object.defineProperty(selectScreen, "layout", {
-            get: jest.fn(() => mockLayout),
-        });
+        addMocks(selectScreen);
 
         Scaler.getMetrics = jest.fn(() => mockMetrics);
         Scaler.onScaleChange = {
@@ -193,7 +219,7 @@ describe("Select Screen", () => {
 
         test("adds GEL buttons to layout", () => {
             selectScreen.create();
-            const expectedButtons = ["home", "pause", "previous", "next", "continue"];
+            const expectedButtons = ["home", "pause", "previous", "next"];
             expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
@@ -313,6 +339,46 @@ describe("Select Screen", () => {
         test("creates grid cells", () => {
             selectScreen.create();
             expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.theme);
+        });
+    });
+
+    describe("_onOverlayRemoved method", () => {
+        test("calls super method with same args", () => {
+            selectScreen._onOverlayRemoved("testOverlay");
+
+            expect(Screen.mock.instances[0]._onOverlayRemoved).toHaveBeenCalledWith("testOverlay");
+        });
+
+        test("calls single item mode create", () => {
+            selectScreen._onOverlayRemoved("testKey");
+
+            expect(singleItemMode.create).toHaveBeenCalledWith(selectScreen);
+        });
+    });
+
+    describe("addOverlay method", () => {
+        test("calls super method with same args", () => {
+            selectScreen._data = {
+                parentScreens: [],
+            };
+            selectScreen.scene = {
+                run: jest.fn(),
+                bringToTop: jest.fn(),
+            };
+
+            selectScreen.singleItemMode = {
+                shutdown: jest.fn(),
+            };
+            selectScreen.addOverlay("testKey");
+
+            expect(Screen.mock.instances[0].addOverlay).toHaveBeenCalledWith("testKey");
+        });
+
+        test("calls single item mode shutdown", () => {
+            selectScreen.create();
+            selectScreen.addOverlay("testKey");
+
+            expect(selectScreen.singleItemMode.shutdown).toHaveBeenCalled();
         });
     });
 
