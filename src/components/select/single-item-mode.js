@@ -15,9 +15,13 @@ const removeEvents = cell => {
     cell.button.off("pointerout", cell.out);
 };
 
+const noopShutdown = {
+    shutdown: () => {},
+};
+
 export const create = scene => {
     const continueButton = scene.layout.buttons.continue;
-    if (!continueButton) return false;
+    if (!continueButton) return noopShutdown;
 
     a11y.removeButton(continueButton);
     a11y.removeButton(scene.layout.buttons.next);
