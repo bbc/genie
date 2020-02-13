@@ -17,6 +17,8 @@ export function update() {
     debugDraw.buttons(this.debugGraphics);
 }
 
+const toggleCSS = () => document.body.classList.toggle("debug");
+
 function create() {
     this.debugGraphics = this.add.graphics();
 
@@ -29,12 +31,14 @@ function create() {
     this.input.keyboard.addKey("q").on("up", makeToggle("layout", debugLayout));
     this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups));
     this.input.keyboard.addKey("e").on("up", makeToggle("buttons", this.layout.debug.buttons));
+    this.input.keyboard.addKey("r").on("up", toggleCSS);
 }
 
 function destroy() {
     this.input.keyboard.removeKey("q");
     this.input.keyboard.removeKey("w");
     this.input.keyboard.removeKey("e");
+    this.input.keyboard.removeKey("r");
 }
 
 export function addEvents() {

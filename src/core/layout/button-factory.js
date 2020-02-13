@@ -37,7 +37,7 @@ const defaultAction = config => {
  * @param {Object} config - Gel configuration for this button
  */
 const createButton = fp.curry((scene, config, x = 0, y = 0) => {
-    if (config.id === "__audio") {
+    if (config.id === "audio") {
         config.key = settings.getAllSettings().audio ? "audio-on" : "audio-off";
     }
 
