@@ -5,12 +5,36 @@
  */
 import { Screen } from "../core/screen.js";
 import { accessibilify } from "../core/accessibility/accessibilify.js";
+import { gmi } from "../core/gmi/gmi.js";
 
 export class Game extends Screen {
+    calculateAchievements(item, amount, keys) {
+        if (amount === 1) {
+            gmi.achievements.set({ key: keys[0] });
+        }
+        if (amount === 5) {
+            gmi.achievements.set({ key: keys[1] });
+        }
+        if (amount === 10) {
+            gmi.achievements.set({ key: keys[2] });
+        }
+        if (amount === 20 && item === "gem") {
+            gmi.achievements.set({ key: keys[3] });
+        }
+    }
+
+    getAchievements() {
+        const achievements = this.cache.json.get("achievements-data").map(achievement => achievement.key);
+        return { star: achievements.slice(0, 3), gem: achievements.slice(3, 7), key: achievements.slice(7, 10) };
+    }
+
     create() {
+        const achievementNames = this.getAchievements();
+
         let keys = 0;
         let gems = 0;
         let stars = 0;
+
         this.add.image(0, 0, "home.background");
         this.addAnimations();
         this.add
@@ -43,7 +67,6 @@ export class Game extends Screen {
         this.add
             .image(300, 20, buttonKey)
             .setOrigin(0.5)
-
             .setInteractive({ useHandCursor: true })
             .on("pointerup", () => onGameComplete());
         this.add
@@ -59,12 +82,12 @@ export class Game extends Screen {
                 .image(-200, buttonYPosition, buttonKey)
                 .setOrigin(0.5)
                 .setInteractive({ useHandCursor: true })
-                .on("pointerup", () => increaseScores(index));
+                .on("pointerup", () => increaseScores(buttonNames[index].toLowerCase()));
             this.add
                 .text(-200, buttonYPosition, buttonText, buttonTextStyle)
                 .setOrigin(0.5)
                 .setInteractive({ useHandCursor: true })
-                .on("pointerup", () => increaseScores(index));
+                .on("pointerup", () => increaseScores(buttonNames[index].toLowerCase()));
             button.config = { id: buttonNumber, ariaLabel: buttonText };
             accessibilify(button);
         }, this);
@@ -74,18 +97,21 @@ export class Game extends Screen {
             this.navigation.next();
         };
 
-        const increaseScores = index => {
-            if (index == 0) {
+        const increaseScores = item => {
+            if (item == "star") {
                 stars++;
                 starScore.text = stars;
+                this.calculateAchievements(item, stars, achievementNames[item]);
             }
-            if (index == 1) {
+            if (item == "gem") {
                 gems++;
                 gemScore.text = gems;
+                this.calculateAchievements(item, gems, achievementNames[item]);
             }
-            if (index == 2) {
+            if (item == "key") {
                 keys++;
                 keyScore.text = keys;
+                this.calculateAchievements(item, keys, achievementNames[item]);
             }
         };
 
