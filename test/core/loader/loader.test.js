@@ -77,7 +77,7 @@ describe("Loader", () => {
             addPack: jest.fn(),
             pack: jest.fn(),
             on: jest.fn(),
-            json: jest.fn(),
+            json5: jest.fn(),
         };
         loader.cache = {
             json: {
@@ -280,14 +280,20 @@ describe("Loader", () => {
 
         test("loads the achievements config if enabled in config", () => {
             loader.preload();
-            expect(loader.load.json).toHaveBeenCalledWith("achievements-data", "achievements/config.json");
+            expect(loader.load.json5).toHaveBeenCalledWith({
+                key: "achievements-data",
+                url: "achievements/config.json",
+            });
         });
 
         test("does not load the achievements config if disabled in config", () => {
             delete mockConfig.theme.game.achievements;
 
             loader.preload();
-            expect(loader.load.json).not.toHaveBeenCalledWith("achievements-data", "achievements/config.json");
+            expect(loader.load.json5).not.toHaveBeenCalledWith({
+                key: "achievements-data",
+                url: "achievements/config.json",
+            });
         });
     });
 });

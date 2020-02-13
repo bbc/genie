@@ -45,7 +45,10 @@ export class Loader extends Screen {
         this.setConfig(config);
 
         if (config.theme.game && config.theme.game.achievements === true) {
-            this.load.json("achievements-data", "achievements/config.json");
+            this.load.json5({
+                key: "achievements-data",
+                url: "achievements/config.json5",
+            });
         }
 
         const masterPack = this.cache.json.get("asset-master-pack");
