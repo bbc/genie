@@ -50,7 +50,7 @@ export class Select extends Screen {
         const stateConfig = this.context.theme.choices.map(({ id, state }) => ({ id, state }));
         this.states = state.create(this.context.theme.storageKey, stateConfig);
 
-        singleItemMode.create(this);
+        this.singleItemMode = singleItemMode.create(this);
 
         this.updateStates();
         onTransitionStart();
@@ -84,6 +84,16 @@ export class Select extends Screen {
         const currentState = this.states.get(this.grid.getCurrentPageKey()).state;
         const stateDefinition = this.context.theme.states[currentState];
         return stateDefinition === undefined || stateDefinition.enabled !== false;
+    }
+
+    addOverlay(key) {
+        this.singleItemMode.shutdown();
+        super.addOverlay(key);
+    }
+
+    _onOverlayRemoved(overlay) {
+        super._onOverlayRemoved(overlay);
+        this.singleItemMode = singleItemMode.create(this);
     }
 
     next = getTitle => () => {
