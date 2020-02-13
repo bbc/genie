@@ -282,7 +282,7 @@ describe("Loader", () => {
             loader.preload();
             expect(loader.load.json5).toHaveBeenCalledWith({
                 key: "achievements-data",
-                url: "achievements/config.json",
+                url: "achievements/config.json5",
             });
         });
 
@@ -292,7 +292,7 @@ describe("Loader", () => {
             loader.preload();
             expect(loader.load.json5).not.toHaveBeenCalledWith({
                 key: "achievements-data",
-                url: "achievements/config.json",
+                url: "achievements/config.json5",
             });
         });
     });
