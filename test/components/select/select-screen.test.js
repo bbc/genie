@@ -10,7 +10,7 @@ import { Screen } from "../../../src/core/screen.js";
 import { Select } from "../../../src/components/select/select-screen.js";
 import { GelGrid } from "../../../src/core/layout/grid/grid.js";
 import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
-jest.mock("../../../src/components/select/single-item-mode.js")
+jest.mock("../../../src/components/select/single-item-mode.js");
 jest.mock("../../../src/core/screen.js");
 jest.mock("../../../src/components/select/single-item-mode.js", () => ({
     create: jest.fn(() => ({
