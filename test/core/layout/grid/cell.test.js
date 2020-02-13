@@ -299,17 +299,35 @@ describe("Grid Cells", () => {
                 expect(mockGrid.getPageCells).toHaveBeenCalledWith(1);
             });
 
-            test("last cell on the current page is right aligned when set in config and single blank cell is on the page", () => {
-                mockCells = [{}, {}];
+            test("last cell on the page is left aligned when set in config and single blank cell is on the page", () => {
+                mockGrid.cellsPerPage = 3;
+                mockGrid._config.align = "left";
+                mockGrid._config.columns = 3;
+                mockGrid._config.rows = 1;
 
-                mockGrid.page = 0;
+                const cell = createCell(mockGrid, "testcell", 1);
+                mockCells = [{}, cell];
+
+                mockButton.displayWidth = 200;
+                cell.reset();
+
+                const expectedPosition = {
+                    x: 0,
+                };
+
+                expect(mockButton.x).toEqual(expectedPosition.x);
+            });
+
+            test("last cell on the page is right aligned when set in config and single blank cell is on the page", () => {
                 mockGrid.cellsPerPage = 3;
                 mockGrid._config.align = "right";
                 mockGrid._config.columns = 3;
                 mockGrid._config.rows = 1;
-                mockGrid._safeArea = { width: 600, height: 400, x: -300, y: -200 };
 
-                const cell = createCell(mockGrid, "testcell", 4);
+                const cell = createCell(mockGrid, "testcell", 1);
+                mockCells = [{}, cell];
+
+                mockButton.displayWidth = 200;
                 cell.reset();
 
                 const expectedPosition = {
@@ -319,41 +337,20 @@ describe("Grid Cells", () => {
                 expect(mockButton.x).toEqual(expectedPosition.x);
             });
 
-            test("last cell on the current page is centre aligned when set in config and single blank cell is on the page", () => {
-                mockCells = [{}, {}];
-
-                mockGrid.page = 0;
+            test("last cell on the page is centre aligned when set in config and single blank cell is on the page", () => {
                 mockGrid.cellsPerPage = 3;
-                mockGrid._config.align = "right";
+                mockGrid._config.align = "center";
                 mockGrid._config.columns = 3;
                 mockGrid._config.rows = 1;
-                mockGrid._safeArea = { width: 600, height: 400, x: -300, y: -200 };
 
-                const cell = createCell(mockGrid, "testcell", 4);
+                const cell = createCell(mockGrid, "testcell", 1);
+                mockCells = [{}, cell];
+
+                mockButton.displayWidth = 200;
                 cell.reset();
 
                 const expectedPosition = {
-                    x: cell.button.displayWidth / 2 + desktopCellPadding + cell.button.displayWidth / 2,
-                };
-
-                expect(mockButton.x).toEqual(expectedPosition.x);
-            });
-
-            test("last cell on the next page is right aligned when set in config and single blank cell is on the next page", () => {
-                mockCells = [{}, {}];
-
-                mockGrid.page = 0;
-                mockGrid.cellsPerPage = 3;
-                mockGrid._config.align = "right";
-                mockGrid._config.columns = 3;
-                mockGrid._config.rows = 1;
-                mockGrid._safeArea = { width: 600, height: 400, x: -300, y: -200 };
-
-                const cell = createCell(mockGrid, "testcell", 4);
-                cell.reset();
-
-                const expectedPosition = {
-                    x: cell.button.displayWidth / 2 + desktopCellPadding + cell.button.displayWidth / 2,
+                    x: 0 + desktopCellPadding / 2 + cell.button.displayWidth / 2,
                 };
 
                 expect(mockButton.x).toEqual(expectedPosition.x);
