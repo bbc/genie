@@ -43,15 +43,22 @@ const assignEvents = (accessibleElement, button) => {
     resizeAndRepositionElement();
 };
 
+const defaults = {
+    class: "gel-button",
+    onClick: () => {},
+    onMouseOver: () => {},
+    onMouseOut: () => {},
+    interactive: false,
+};
+
 export function accessibilify(button, gameButton = true, interactive = true) {
     const sys = button.scene.sys;
     const scene = button.scene;
     const id = [scene.scene.key, button.config.id].join("__");
-    var options;
-    const defaults = {
+
+    let options = {
         id,
         button,
-        class: "gel-button",
         "aria-label": button.config.ariaLabel,
     };
 
@@ -60,25 +67,22 @@ export function accessibilify(button, gameButton = true, interactive = true) {
             if (!button.input.enabled) return;
             button.emit(Phaser.Input.Events.POINTER_UP, button, sys.input.activePointer, false);
         };
-        const mouseOver = () => button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false);
-        const mouseOut = () => button.emit(Phaser.Input.Events.POINTER_OUT, button, sys.input.activePointer, false);
+        const onMouseOver = () => button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false);
+        const onMouseOut = () => button.emit(Phaser.Input.Events.POINTER_OUT, button, sys.input.activePointer, false);
+
         options = {
-            parent: sys.scale.parent,
-            onClick: buttonAction,
-            onMouseOver: mouseOver,
-            onMouseOut: mouseOut,
-            interactive: true,
-        };
-    } else {
-        options = {
-            onClick: () => {},
-            onMouseOver: () => {},
-            onMouseOut: () => {},
-            interactive: false,
+            ...options,
+            ...{
+                parent: sys.scale.parent,
+                onClick: buttonAction,
+                onMouseOver,
+                onMouseOut: onMouseOut,
+                interactive: true,
+            },
         };
     }
 
-    options = { ...options, ...defaults };
+    options = { ...defaults, ...options };
 
     const accessibleElement = accessibleDomElement(options);
 

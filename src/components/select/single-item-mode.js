@@ -32,7 +32,7 @@ export const create = scene => {
     });
 
     const goToStart = event => {
-        if (event.key === "Tab" && currentCellIsLast(scene)) {
+        if (event.key === "Tab" && !event.shiftKey && currentCellIsLast(scene)) {
             scene.grid.showPage(0);
         }
     };
