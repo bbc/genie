@@ -94,7 +94,7 @@ describe("Layout - Button Factory", () => {
                 get: jest.fn(() => mockSettings),
             });
 
-            buttonFactory.createButton({ id: "__audio" });
+            buttonFactory.createButton({ id: "audio" });
             expect(GelButton.GelButton.mock.calls[0][3].key).toBe("audio-on");
         });
 
@@ -104,7 +104,7 @@ describe("Layout - Button Factory", () => {
                 get: jest.fn(() => mockSettings),
             });
 
-            buttonFactory.createButton({ id: "__audio" });
+            buttonFactory.createButton({ id: "audio" });
 
             expect(GelButton.GelButton.mock.calls[0][3].key).toBe("audio-off");
         });
