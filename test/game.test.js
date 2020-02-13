@@ -20,6 +20,19 @@ describe("Game", () => {
         wordWrapWidth: 223,
     };
 
+    const mockAchievements = [
+        { key: "just_started" },
+        { key: "rock_star" },
+        { key: "stellar" },
+        { key: "diamond_in_the_rough" },
+        { key: "pyrites_of_the_carribean" },
+        { key: "sapphire_so_good" },
+        { key: "diamonds_are_forever" },
+        { key: "got_the_key" },
+        { key: "lock_around_the_clock" },
+        { key: "super_size_key" },
+    ];
+
     let game;
     let mockData;
     let mockText;
@@ -63,6 +76,7 @@ describe("Game", () => {
             "character-select": { choice: { title: "Kawabashi" } },
             "level-select": { choice: { title: "Hard level" } },
         };
+        game.cache = { json: { get: jest.fn(() => mockAchievements) } };
     });
 
     afterEach(() => jest.clearAllMocks());

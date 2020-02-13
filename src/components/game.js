@@ -27,6 +27,14 @@ export class Game extends Screen {
         let keys = 0;
         let gems = 0;
         let stars = 0;
+
+        const achievements = this.cache.json.get("achievements-data").map(achievement => achievement.key);
+        const achievementNames = {
+            star: achievements.slice(0, 3),
+            gem: achievements.slice(3, 7),
+            key: achievements.slice(7, 10),
+        };
+
         this.add.image(0, 0, "home.background");
         this.addAnimations();
         this.add
@@ -90,12 +98,6 @@ export class Game extends Screen {
         };
 
         const increaseScores = item => {
-            const achievementNames = {
-                star: ["just_started", "rock_star", "stellar"],
-                gem: ["diamond_in_the_rough", "pyrites_of_the_carribean", "sapphire_so_good", "diamonds_are_forever"],
-                key: ["got_the_key", "lock_around_the_clock", "super_size_key"],
-            };
-
             if (item == "star") {
                 stars++;
                 starScore.text = stars;
