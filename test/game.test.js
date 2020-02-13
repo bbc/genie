@@ -3,9 +3,13 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+
+import { accessibilify } from "../src/core/accessibility/accessibilify.js";
+import { gmi } from "../src/core/gmi/gmi.js";
 import { Game } from "../src/components/game";
 
 jest.mock("../src/core/accessibility/accessibilify.js");
+jest.mock("../src/core/gmi/gmi.js");
 
 describe("Game", () => {
     const expectedButtonStyle = {
@@ -15,6 +19,19 @@ describe("Game", () => {
         wordWrap: true,
         wordWrapWidth: 223,
     };
+
+    const mockAchievements = [
+        { key: "just_started" },
+        { key: "rock_star" },
+        { key: "stellar" },
+        { key: "diamond_in_the_rough" },
+        { key: "pyrites_of_the_carribean" },
+        { key: "sapphire_so_good" },
+        { key: "diamonds_are_forever" },
+        { key: "got_the_key" },
+        { key: "lock_around_the_clock" },
+        { key: "super_size_key" },
+    ];
 
     let game;
     let mockData;
@@ -28,6 +45,8 @@ describe("Game", () => {
     let mockImageOn;
 
     beforeEach(() => {
+        gmi.achievements = { set: jest.fn() };
+
         game = new Game();
 
         mockTextOn = jest.fn();
@@ -57,6 +76,7 @@ describe("Game", () => {
             "character-select": { choice: { title: "Kawabashi" } },
             "level-select": { choice: { title: "Hard level" } },
         };
+        game.cache = { json: { get: jest.fn(() => mockAchievements) } };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -197,6 +217,27 @@ describe("Game", () => {
                 starTextClickedOn.mock.calls[0][1]();
                 expect(starScore.text).toBe(1);
             });
+
+            test("fires an achievement when 1 star is collected", () => {
+                starTextClickedOn.mock.calls[0][1]();
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "just_started" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "rock_star" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "stellar" });
+            });
+
+            test("fires an achievement when 5 stars are collected", () => {
+                [...Array(5)].forEach(() => starTextClickedOn.mock.calls[0][1]());
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "just_started" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "rock_star" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "stellar" });
+            });
+
+            test("fires an achievement when 10 stars are collected", () => {
+                [...Array(10)].forEach(() => starTextClickedOn.mock.calls[0][1]());
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "just_started" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "rock_star" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "stellar" });
+            });
         });
 
         describe("Gem button", () => {
@@ -258,6 +299,38 @@ describe("Game", () => {
                 gemTextClickedOn.mock.calls[0][1]();
                 expect(gemScore.text).toBe(1);
             });
+
+            test("fires an achievement when 1 gem is collected", () => {
+                gemTextClickedOn.mock.calls[0][1]();
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "sapphire_so_good" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "diamonds_are_forever" });
+            });
+
+            test("fires an achievement when 5 gems are collected", () => {
+                [...Array(5)].forEach(() => gemTextClickedOn.mock.calls[0][1]());
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "sapphire_so_good" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "diamonds_are_forever" });
+            });
+
+            test("fires an achievement when 10 gems are collected", () => {
+                [...Array(10)].forEach(() => gemTextClickedOn.mock.calls[0][1]());
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "sapphire_so_good" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "diamonds_are_forever" });
+            });
+
+            test("fires an achievement when 20 gems are collected", () => {
+                [...Array(20)].forEach(() => gemTextClickedOn.mock.calls[0][1]());
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "sapphire_so_good" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamonds_are_forever" });
+            });
         });
 
         describe("Key button", () => {
@@ -318,6 +391,27 @@ describe("Game", () => {
             test("adds a key when 'collect key' text is clicked", () => {
                 keyTextClickedOn.mock.calls[0][1]();
                 expect(keyScore.text).toBe(1);
+            });
+
+            test("fires an achievement when 1 key is collected", () => {
+                keyTextClickedOn.mock.calls[0][1]();
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "got_the_key" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "lock_around_the_clock" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "super_size_key" });
+            });
+
+            test("fires an achievement when 5 keys are collected", () => {
+                [...Array(5)].forEach(() => keyTextClickedOn.mock.calls[0][1]());
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "got_the_key" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "lock_around_the_clock" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "super_size_key" });
+            });
+
+            test("fires an achievement when 10 keys are collected", () => {
+                [...Array(10)].forEach(() => keyTextClickedOn.mock.calls[0][1]());
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "got_the_key" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "lock_around_the_clock" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "super_size_key" });
             });
         });
 
