@@ -40,18 +40,19 @@ export const setSize = (grid, button) => {
     // this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
 };
 
-const getBlankCellCount = (grid, row) => {
-    let blankCellCount = Math.max(grid._config.columns * (row + 1) - grid.getPageCells(grid.page).length, 0);
+const getBlankCellCount = (grid, row, page) => {
+    let blankCellCount = Math.max(grid._config.columns * (row + 1) - grid.getPageCells(page).length, 0);
     return blankCellCount - (blankCellCount % 2) * 0.5;
 };
 
 const setPosition = (grid, button, idx) => {
     const pageIdx = idx % grid.cellsPerPage;
+    const page = Math.floor(idx / grid.cellsPerPage);
     const col = pageIdx % grid._config.columns;
     const row = Math.floor(pageIdx / grid._config.columns);
 
     const alignFactorX =
-        col + getBlankCellCount(grid, row) * alignmentFactor[grid._config.align] - (grid._config.columns - 1) / 2;
+        col + getBlankCellCount(grid, row, page) * alignmentFactor[grid._config.align] - (grid._config.columns - 1) / 2;
     const alignFactorY = row - (grid._config.rows - 1) / 2;
 
     button.x = button.displayWidth * alignFactorX + grid._cellPadding * alignFactorX;
