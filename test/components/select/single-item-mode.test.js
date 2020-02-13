@@ -141,6 +141,18 @@ describe("Select Screen Single Item Mode", () => {
         expect(mockScene.grid.showPage).not.toHaveBeenCalled();
     });
 
+    describe("continueButton", () => {
+        test("returns continue button if 1 row and 1 column", () => {
+            const btn = singleItemMode.continueBtn({ theme: { rows: 1, columns: 1 } });
+            expect(btn).toEqual(["continue"]);
+        });
+
+        test("returns empty array if more than 1 row and 1 column", () => {
+            const btn = singleItemMode.continueBtn({ theme: { rows: 2, columns: 3 } });
+            expect(btn).toEqual([]);
+        });
+    });
+
     describe("shutdown method", () => {
         test("is added once to the shutdown event of the scene", () => {
             singleItemMode.create(mockScene);
