@@ -8,15 +8,18 @@ import { accessibilify } from "../core/accessibility/accessibilify.js";
 import { gmi } from "../core/gmi/gmi.js";
 
 export class Game extends Screen {
-    calculateAchievements(amount, keys) {
-        if (amount === 10) {
-            gmi.achievements.set({ key: keys[2] });
+    calculateAchievements(item, amount, keys) {
+        if (amount === 1) {
+            gmi.achievements.set({ key: keys[0] });
         }
         if (amount === 5) {
             gmi.achievements.set({ key: keys[1] });
         }
-        if (amount === 1) {
-            gmi.achievements.set({ key: keys[0] });
+        if (amount === 10) {
+            gmi.achievements.set({ key: keys[2] });
+        }
+        if (amount === 20 && item === "gem") {
+            gmi.achievements.set({ key: keys[3] });
         }
     }
 
@@ -71,12 +74,12 @@ export class Game extends Screen {
                 .image(-200, buttonYPosition, buttonKey)
                 .setOrigin(0.5)
                 .setInteractive({ useHandCursor: true })
-                .on("pointerup", () => increaseScores(index));
+                .on("pointerup", () => increaseScores(buttonNames[index].toLowerCase()));
             this.add
                 .text(-200, buttonYPosition, buttonText, buttonTextStyle)
                 .setOrigin(0.5)
                 .setInteractive({ useHandCursor: true })
-                .on("pointerup", () => increaseScores(index));
+                .on("pointerup", () => increaseScores(buttonNames[index].toLowerCase()));
             button.config = { id: buttonNumber, ariaLabel: buttonText };
             accessibilify(button);
         }, this);
@@ -86,21 +89,27 @@ export class Game extends Screen {
             this.navigation.next();
         };
 
-        const increaseScores = index => {
-            if (index == 0) {
+        const increaseScores = item => {
+            const achievementNames = {
+                star: ["just_started", "rock_star", "stellar"],
+                gem: ["diamond_in_the_rough", "pyrites_of_the_carribean", "sapphire_so_good", "diamonds_are_forever"],
+                key: ["got_the_key", "lock_around_the_clock", "super_size_key"],
+            };
+
+            if (item == "star") {
                 stars++;
                 starScore.text = stars;
-                this.calculateAchievements(stars, ["just_started", "rock_star", "stellar"]);
+                this.calculateAchievements(item, stars, achievementNames[item]);
             }
-            if (index == 1) {
+            if (item == "gem") {
                 gems++;
                 gemScore.text = gems;
-                this.calculateAchievements(gems, ["diamond_in_the_rough", "pyrites_of_the_carribean", "multifaceted"]);
+                this.calculateAchievements(item, gems, achievementNames[item]);
             }
-            if (index == 2) {
+            if (item == "key") {
                 keys++;
                 keyScore.text = keys;
-                this.calculateAchievements(keys, ["got_the_key", "lock_around_the_clock", "super_size_key"]);
+                this.calculateAchievements(item, keys, achievementNames[item]);
             }
         };
 

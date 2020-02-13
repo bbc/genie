@@ -290,21 +290,32 @@ describe("Game", () => {
                 gemTextClickedOn.mock.calls[0][1]();
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
-                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "multifaceted" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "sapphire_so_good" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "diamonds_are_forever" });
             });
 
             test("fires an achievement when 5 gems are collected", () => {
                 [...Array(5)].forEach(() => gemTextClickedOn.mock.calls[0][1]());
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
-                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "multifaceted" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "sapphire_so_good" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "diamonds_are_forever" });
             });
 
             test("fires an achievement when 10 gems are collected", () => {
                 [...Array(10)].forEach(() => gemTextClickedOn.mock.calls[0][1]());
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
-                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "multifaceted" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "sapphire_so_good" });
+                expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "diamonds_are_forever" });
+            });
+
+            test("fires an achievement when 20 gems are collected", () => {
+                [...Array(20)].forEach(() => gemTextClickedOn.mock.calls[0][1]());
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "sapphire_so_good" });
+                expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamonds_are_forever" });
             });
         });
 
