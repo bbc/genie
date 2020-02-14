@@ -103,7 +103,7 @@ export class Screen extends Phaser.Scene {
         parentScreen._onOverlayRemoved(this);
     };
 
-    _onOverlayRemoved(overlay) {
+    _onOverlayRemoved = overlay => {
         a11y.destroy();
         overlay.removeAll();
         overlay.scene.stop();
@@ -117,7 +117,7 @@ export class Screen extends Phaser.Scene {
             name: "audio",
             data: gmi.getAllSettings().audio,
         });
-    }
+    };
 
     removeAll = () => {
         eventBus.removeChannel(buttonsChannel(this));
