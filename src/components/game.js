@@ -48,7 +48,7 @@ export class Game extends Screen {
 
         const buttonKey = `${this.scene.key}.basicButton`;
         const buttonTextStyle = {
-            font: "40px ReithSans",
+            font: "35px ReithSans",
             fill: "#fff",
             align: "center",
             wordWrap: true,
@@ -57,9 +57,9 @@ export class Game extends Screen {
 
         const buttonNames = ["Star", "Gem", "Key"];
 
-        this.add.image(0, -70, `${this.scene.key}.star`);
-        this.add.image(0, 20, `${this.scene.key}.gem`);
-        this.add.image(0, 110, `${this.scene.key}.key`);
+        const starImage = this.add.image(0, -70, `${this.scene.key}.star`);
+        const gemImage = this.add.image(0, 20, `${this.scene.key}.gem`);
+        const keyImage = this.add.image(0, 110, `${this.scene.key}.key`);
         const starScore = this.add.text(-50, -70, "0", buttonTextStyle).setOrigin(0.5);
         const gemScore = this.add.text(-50, 20, "0", buttonTextStyle).setOrigin(0.5);
         const keyScore = this.add.text(-50, 110, "0", buttonTextStyle).setOrigin(0.5);
@@ -97,20 +97,41 @@ export class Game extends Screen {
             this.navigation.next();
         };
 
+        const tweenItem = target => {
+            this.tweens.add({
+                targets: target,
+                scale: 1.1,
+                delay: 0,
+                duration: 50,
+            });
+            this.tweens.add({
+                targets: target,
+                scale: 1.0,
+                delay: 50,
+                duration: 50,
+            });
+        };
+
         const increaseScores = item => {
             if (item == "star") {
                 stars++;
                 starScore.text = stars;
+                tweenItem(starImage);
+                this.sound.play("results.coin-sfx");
                 this.calculateAchievements(item, stars, achievementNames[item]);
             }
             if (item == "gem") {
                 gems++;
                 gemScore.text = gems;
+                tweenItem(gemImage);
+                this.sound.play("results.gem-sfx");
                 this.calculateAchievements(item, gems, achievementNames[item]);
             }
             if (item == "key") {
                 keys++;
                 keyScore.text = keys;
+                tweenItem(keyImage);
+                this.sound.play("results.key-sfx");
                 this.calculateAchievements(item, keys, achievementNames[item]);
             }
         };
