@@ -17,6 +17,9 @@ export const create = scene => {
     const continueButton = scene.layout.buttons.continue;
     if (!continueButton) return;
 
+    const onBlur = () => scene.grid.showPage(0);
+    window.addEventListener("blur", onBlur);
+
     const removeAccessibleButtons = () => {
         a11y.removeButton(continueButton);
         a11y.removeButton(scene.layout.buttons.next);
@@ -48,6 +51,7 @@ export const create = scene => {
     });
 
     const shutdown = () => {
+        window.removeEventListener("blur", onBlur);
         scene.events.off(Phaser.Scenes.Events.RESUME, removeAccessibleButtons);
         continueButton.off("pointerover", overContinueBtn);
         continueButton.off("pointerout", outContinueBtn);

@@ -711,6 +711,19 @@ describe("Grid", () => {
             mockScene.add.tween = jest.fn();
         });
 
+        test("same page behaviour", () => {
+            mockScene.theme.choices = [{ asset: "asset_name_1" }, { asset: "asset_name_2" }];
+
+            grid = new GelGrid(mockScene, { rows: 1, columns: 1 });
+            grid.addGridCells(mockScene.theme);
+
+            grid.showPage(0);
+
+            expect(grid.page).toBe(0);
+            expect(grid._cells[0].button.visible).toEqual(true);
+            expect(grid._cells[1].button.visible).toEqual(false);
+        });
+
         describe("next page behaviour", () => {
             beforeEach(() => {
                 mockScene.theme.choices = [

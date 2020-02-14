@@ -14,6 +14,8 @@ describe("Select Screen Single Item Mode", () => {
     let currentPageKey;
 
     beforeEach(() => {
+        global.window.addEventListener = jest.fn();
+        global.window.removeEventListener = jest.fn();
         mockScene = {
             layout: {
                 buttons: {
@@ -46,6 +48,13 @@ describe("Select Screen Single Item Mode", () => {
         delete mockScene.layout.buttons.continue;
         const returnValue = singleItemMode.create(mockScene);
         expect(returnValue).toBe(undefined);
+    });
+
+    test("Adds blur window listener which sets to page 0", () => {
+        singleItemMode.create(mockScene);
+        global.window.addEventListener.mock.calls[0][1]();
+        expect(global.window.addEventListener).toHaveBeenCalledWith("blur", expect.any(Function));
+        expect(mockScene.grid.showPage).toHaveBeenCalledWith(0);
     });
 
     test("Adds scene resume listener to remove accessible buttons", () => {
@@ -127,6 +136,12 @@ describe("Select Screen Single Item Mode", () => {
         test("is added once to the shutdown event of the scene", () => {
             singleItemMode.create(mockScene);
             expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
+        });
+
+        test("Removes blur window listener", () => {
+            const SIMode = singleItemMode.create(mockScene);
+            SIMode.shutdown();
+            expect(global.window.removeEventListener).toHaveBeenCalledWith("blur", expect.any(Function));
         });
 
         test("Removes scene resume listener", () => {
