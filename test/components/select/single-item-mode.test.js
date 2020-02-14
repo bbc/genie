@@ -4,6 +4,10 @@
  * @license Apache-2.0
  */
 import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
+import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
+
+jest.mock("../../../src/core/accessibility/accessibility-layer.js");
+
 describe("Select Screen Single Item Mode", () => {
     let mockScene;
     let mockCurrentCell;
@@ -12,7 +16,11 @@ describe("Select Screen Single Item Mode", () => {
     beforeEach(() => {
         mockScene = {
             layout: {
-                buttons: { continue: { on: jest.fn(), off: jest.fn(), sprite: { setFrame: jest.fn() } } },
+                buttons: {
+                    next: { mock: "next" },
+                    previous: { mock: "previous" },
+                    continue: { on: jest.fn(), off: jest.fn(), sprite: { setFrame: jest.fn() } },
+                },
             },
             _cells: [
                 { button: { on: jest.fn(), off: jest.fn(), accessibleElement: { update: jest.fn() }, config: {} } },
@@ -26,18 +34,31 @@ describe("Select Screen Single Item Mode", () => {
             },
             events: {
                 once: jest.fn(),
+                on: jest.fn(),
+                off: jest.fn(),
             },
         };
     });
 
     afterEach(jest.clearAllMocks);
 
-    test("Returns noop shutdown if continue button is not present", () => {
+    test("Returns undefined if continue button is not present", () => {
         delete mockScene.layout.buttons.continue;
-        const noopSIMode = singleItemMode.create(mockScene);
+        const returnValue = singleItemMode.create(mockScene);
+        expect(returnValue).toBe(undefined);
+    });
 
-        expect(JSON.stringify(noopSIMode)).toEqual(JSON.stringify({ shutdown: () => {} }));
-        expect(noopSIMode.shutdown()).toBe(undefined);
+    test("Adds scene resume listener to remove accessible buttons", () => {
+        singleItemMode.create(mockScene);
+        expect(mockScene.events.on).toHaveBeenCalledWith(Phaser.Scenes.Events.RESUME, expect.any(Function));
+    });
+
+    test("Removes continue, next and previous accessible buttons", () => {
+        singleItemMode.create(mockScene);
+        expect(a11y.removeButton).toHaveBeenCalledWith(mockScene.layout.buttons.continue);
+        expect(a11y.removeButton).toHaveBeenCalledWith(mockScene.layout.buttons.next);
+        expect(a11y.removeButton).toHaveBeenCalledWith(mockScene.layout.buttons.previous);
+        expect(a11y.reset).toHaveBeenCalled();
     });
 
     test("adds pointerover event to continue button which sets the current cell to hover state", () => {
@@ -90,57 +111,6 @@ describe("Select Screen Single Item Mode", () => {
         expect(mockScene._cells[0].button.accessibleElement.update).toHaveBeenCalled();
     });
 
-    test("adds keyboard tab event which moves the grid to the first page if last item is current", () => {
-        global.document.addEventListener = jest.fn();
-        currentPageKey = "test-page-key";
-        mockScene._cells[1].button.key = "test-page-key";
-
-        singleItemMode.create(mockScene);
-
-        const goToStartFn = global.document.addEventListener.mock.calls[0][1];
-        goToStartFn({ key: "Tab", shiftKey: false });
-
-        expect(global.document.addEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
-        expect(mockScene.grid.showPage).toHaveBeenCalledWith(0);
-    });
-
-    test("does not go to the first page if shift tabbing", () => {
-        global.document.addEventListener = jest.fn();
-        currentPageKey = "test-page-key";
-        mockScene._cells[1].button.key = "test-page-key";
-
-        singleItemMode.create(mockScene);
-
-        const goToStartFn = global.document.addEventListener.mock.calls[0][1];
-        goToStartFn({ key: "Tab", shiftKey: true });
-
-        expect(mockScene.grid.showPage).not.toHaveBeenCalled();
-    });
-
-    test("does not move to the next page if key is not Tab", () => {
-        global.document.addEventListener = jest.fn();
-        currentPageKey = "test-page-key";
-        mockScene._cells[1].button.key = "test-page-key";
-
-        singleItemMode.create(mockScene);
-
-        const goToStartFn = global.document.addEventListener.mock.calls[0][1];
-        goToStartFn({ key: "OtherKey" });
-        expect(mockScene.grid.showPage).not.toHaveBeenCalled();
-    });
-
-    test("does not move to the next page if current page is not last item", () => {
-        global.document.addEventListener = jest.fn();
-        currentPageKey = "test-page-key";
-        mockScene._cells[1].button.key = "test-page-key-other";
-
-        singleItemMode.create(mockScene);
-
-        const goToStartFn = global.document.addEventListener.mock.calls[0][1];
-        goToStartFn({ key: "Tab" });
-        expect(mockScene.grid.showPage).not.toHaveBeenCalled();
-    });
-
     describe("continueButton", () => {
         test("returns continue button if 1 row and 1 column", () => {
             const btn = singleItemMode.continueBtn({ theme: { rows: 1, columns: 1 } });
@@ -159,11 +129,10 @@ describe("Select Screen Single Item Mode", () => {
             expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
         });
 
-        test("Removes keyboard listener", () => {
-            global.document.removeEventListener = jest.fn();
+        test("Removes scene resume listener", () => {
             const SIMode = singleItemMode.create(mockScene);
             SIMode.shutdown();
-            expect(global.document.removeEventListener).toHaveBeenCalledWith("keydown", expect.any(Function));
+            expect(mockScene.events.off).toHaveBeenCalledWith(Phaser.Scenes.Events.RESUME, expect.any(Function));
         });
 
         test("Removes continue button hover events", () => {

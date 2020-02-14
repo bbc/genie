@@ -8,25 +8,24 @@
  */
 import * as a11y from "../../core/accessibility/accessibility-layer.js";
 
-const currentCellIsLast = scene => scene.grid.getCurrentPageKey() === scene._cells[scene._cells.length - 1].button.key;
-
 const removeEvents = cell => {
     cell.button.off("pointerover", cell.over);
     cell.button.off("pointerout", cell.out);
 };
 
-const noopShutdown = {
-    shutdown: () => {},
-};
-
 export const create = scene => {
     const continueButton = scene.layout.buttons.continue;
-    if (!continueButton) return noopShutdown;
+    if (!continueButton) return;
 
-    a11y.removeButton(continueButton);
-    a11y.removeButton(scene.layout.buttons.next);
-    a11y.removeButton(scene.layout.buttons.previous);
-    a11y.reset();
+    const removeAccessibleButtons = () => {
+        a11y.removeButton(continueButton);
+        a11y.removeButton(scene.layout.buttons.next);
+        a11y.removeButton(scene.layout.buttons.previous);
+        a11y.reset();
+    };
+
+    removeAccessibleButtons();
+    scene.events.on(Phaser.Scenes.Events.RESUME, removeAccessibleButtons);
 
     scene._cells.map(cell => cell.button.accessibleElement.update());
 
@@ -48,16 +47,8 @@ export const create = scene => {
         return { button: cell.button, over, out };
     });
 
-    const goToStart = event => {
-        if (event.key === "Tab" && !event.shiftKey && currentCellIsLast(scene)) {
-            scene.grid.showPage(0);
-        }
-    };
-
-    document.addEventListener("keydown", goToStart);
-
     const shutdown = () => {
-        document.removeEventListener("keydown", goToStart);
+        scene.events.off(Phaser.Scenes.Events.RESUME, removeAccessibleButtons);
         continueButton.off("pointerover", overContinueBtn);
         continueButton.off("pointerout", outContinueBtn);
         cellEvents.map(removeEvents);
