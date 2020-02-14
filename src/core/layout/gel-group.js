@@ -135,13 +135,13 @@ export class GelGroup extends Phaser.GameObjects.Container {
     alignChildren() {
         const pos = { x: 0, y: 0 };
 
-        const childList = this.list.map(x => x); // Copy the array otherwise buttons may get swapped around
+        const childList = this.list.map(x => x);
         childList.sort((a, b) => {
             return b.height - a.height;
         });
 
         this.iterate(child => {
-            child.y = childList.length > 1 ? childList[0].height / 2 : child.height / 2;
+            child.y = pos.y + childList[0].height / 2;
 
             if (this._isVertical) {
                 child.x = 0;
