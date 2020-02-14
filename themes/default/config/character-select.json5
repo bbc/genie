@@ -12,13 +12,13 @@
                     type: "image",
                     key: "title",
                     xOffset: 0,
-                    yOffset: 0,
+                    yOffset: -250,
                 },
                 {
                     type: "text",
                     value: "Select Your Character",
                     xOffset: 0,
-                    yOffset: -20,
+                    yOffset: -260,
                     styles: {
                         fontSize: "24px",
                     },
@@ -27,9 +27,9 @@
                     type: "text",
                     value: "Sub-Title",
                     xOffset: 0,
-                    yOffset: 80,
+                    yOffset: -233,
                     styles: {
-                        fontSize: "16px",
+                        fontSize: "18px",
                     },
                 },
             ],
