@@ -192,8 +192,6 @@ describe("Select Screen", () => {
         Scaler.onScaleChange = {
             add: jest.fn(() => ({ unsubscribe: jest.fn() })),
         };
-
-        defaultTextStyle = { align: "center", fontFamily: "ReithSans", fontSize: "24px" };
     });
 
     afterEach(() => jest.clearAllMocks());
