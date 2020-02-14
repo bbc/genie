@@ -33,7 +33,7 @@ export class Select extends Screen {
         this.add.image(0, 0, `${this.scene.key}.background`);
         this.addAnimations();
         this.theme = this.context.config.theme[this.scene.key];
-        this.titles = createTitles(this);
+        createTitles(this);
         const buttons = ["home", "pause", "previous", "next"];
         this.setLayout(buttons.concat(singleItemMode.continueBtn(this)));
         const onTransitionStart = getOnTransitionStartFn(this);
@@ -77,7 +77,6 @@ export class Select extends Screen {
 
     resize() {
         this.grid.resize(this.layout.getSafeArea());
-        this.titles.reposition(this.layout.buttons);
     }
 
     currentEnabled() {
