@@ -5,7 +5,6 @@
  */
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as Scaler from "../../../src/core/scaler.js";
-import * as elementBounding from "../../../src/core/helpers/element-bounding.js";
 import { Select } from "../../../src/components/select/select-screen.js";
 import { GelGrid } from "../../../src/core/layout/grid/grid.js";
 import { createTitles } from "../../../src/components/select/titles.js";
@@ -42,7 +41,6 @@ describe("Select Screen", () => {
     let mockMetrics;
     let mockCellIds;
     let mockGelGrid;
-    let defaultTextStyle;
 
     beforeEach(() => {
         mockGelGrid = {
