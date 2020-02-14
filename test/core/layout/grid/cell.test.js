@@ -15,8 +15,10 @@ jest.mock("../../../../src/core/accessibility/accessibilify.js");
 describe("Grid Cells", () => {
     let mockButton;
     let mockGrid;
+    let mockCells;
     let mockText;
     let motion;
+    let desktopCellPadding;
 
     beforeEach(() => {
         gmiModule.gmi = {
@@ -40,6 +42,8 @@ describe("Grid Cells", () => {
             overlays: { set: jest.fn() },
         };
 
+        mockCells = [];
+
         mockText = { setOrigin: jest.fn() };
 
         mockGrid = {
@@ -49,11 +53,12 @@ describe("Grid Cells", () => {
                 rows: 2,
             },
             _metrics: { metrics: "metrics" },
-            getPageCells: jest.fn(() => []),
+            getPageCells: jest.fn(() => mockCells),
             getCurrentPageKey: jest.fn(() => "start-button-id"),
             cellIds: jest.fn(() => ["start-button-id", "next-button-id"]),
             showPage: jest.fn(),
             cellsPerPage: 1,
+            _cellPadding: 24,
             add: jest.fn(),
             _safeArea: {
                 width: 500,
@@ -69,6 +74,8 @@ describe("Grid Cells", () => {
                 },
             },
         };
+
+        desktopCellPadding = 24;
     });
 
     afterEach(jest.clearAllMocks);
@@ -277,6 +284,76 @@ describe("Grid Cells", () => {
                 cell.reset();
 
                 expect(mockButton.accessibleElement.update).toHaveBeenCalled();
+            });
+        });
+
+        describe("setting cell positions", () => {
+            test("getBlankCells is called for the correct page the cell belongs to", () => {
+                mockGrid.page = 0;
+                mockGrid.cellsPerPage = 3;
+                mockGrid._config.columns = 3;
+                mockGrid._config.rows = 1;
+
+                const cell = createCell(mockGrid, "testcell", 4);
+                cell.reset();
+                expect(mockGrid.getPageCells).toHaveBeenCalledWith(1);
+            });
+
+            test("last cell on the page is left aligned when set in config and single blank cell is on the page", () => {
+                mockGrid.cellsPerPage = 3;
+                mockGrid._config.align = "left";
+                mockGrid._config.columns = 3;
+                mockGrid._config.rows = 1;
+
+                const cell = createCell(mockGrid, "testcell", 1);
+                mockCells = [{}, cell];
+
+                mockButton.displayWidth = 200;
+                cell.reset();
+
+                const expectedPosition = {
+                    x: 0,
+                };
+
+                expect(mockButton.x).toEqual(expectedPosition.x);
+            });
+
+            test("last cell on the page is right aligned when set in config and single blank cell is on the page", () => {
+                mockGrid.cellsPerPage = 3;
+                mockGrid._config.align = "right";
+                mockGrid._config.columns = 3;
+                mockGrid._config.rows = 1;
+
+                const cell = createCell(mockGrid, "testcell", 1);
+                mockCells = [{}, cell];
+
+                mockButton.displayWidth = 200;
+                cell.reset();
+
+                const expectedPosition = {
+                    x: cell.button.displayWidth / 2 + desktopCellPadding + cell.button.displayWidth / 2,
+                };
+
+                expect(mockButton.x).toEqual(expectedPosition.x);
+            });
+
+            test("last cell on the page is centre aligned when set in config and single blank cell is on the page", () => {
+                mockGrid.cellsPerPage = 3;
+                mockGrid._config.align = "center";
+                mockGrid._config.columns = 3;
+                mockGrid._config.rows = 1;
+
+                const cell = createCell(mockGrid, "testcell", 1);
+                mockCells = [{}, cell];
+
+                mockButton.displayWidth = 200;
+                cell.reset();
+
+                const expectedPosition = {
+                    x: 0 + desktopCellPadding / 2 + cell.button.displayWidth / 2,
+                };
+
+                expect(mockButton.x).toEqual(expectedPosition.x);
             });
         });
 
