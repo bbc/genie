@@ -8,7 +8,9 @@ import * as Scaler from "../../../src/core/scaler.js";
 import * as elementBounding from "../../../src/core/helpers/element-bounding.js";
 import { Select } from "../../../src/components/select/select-screen.js";
 import { GelGrid } from "../../../src/core/layout/grid/grid.js";
+import { createTitles } from "../../../src/components/select/titles.js";
 
+jest.mock("../../../src/components/select/titles.js");
 jest.mock("../../../src/components/select/single-item-mode.js");
 jest.mock("../../../src/core/screen.js");
 jest.mock("../../../src/components/select/single-item-mode.js", () => ({
@@ -43,23 +45,11 @@ describe("Select Screen", () => {
     let defaultTextStyle;
 
     beforeEach(() => {
-        jest.spyOn(elementBounding, "positionElement").mockImplementation(() => {});
-
         mockGelGrid = {
-            page: 1,
             cellIds: jest.fn(() => mockCellIds),
             addGridCells: jest.fn(() => []),
-            makeAccessible: jest.fn(),
-            addCell: jest.fn(),
-            removeCell: jest.fn(),
-            addToGroup: jest.fn(),
-            alignChildren: jest.fn(),
-            reset: jest.fn(),
-            gridMetrics: jest.fn(),
-            resetButtons: jest.fn(),
             getCurrentPageKey: jest.fn(),
             resize: jest.fn(),
-            showPage: jest.fn(),
         };
         GelGrid.mockImplementation(() => mockGelGrid);
         mockData = {
@@ -216,128 +206,65 @@ describe("Select Screen", () => {
             expect(selectScreen.add.image).toHaveBeenCalledWith(0, 0, "test-select.background");
         });
 
+        test("adds animations", () => {
+            selectScreen.create();
+            jest.spyOn(selectScreen, "addAnimations");
+            expect(selectScreen.addAnimations).toHaveBeenCalledTimes(1);
+        });
+
+        test("adds the theme", () => {
+            selectScreen.create();
+            expect(selectScreen.theme).toEqual(mockData.config.theme["test-select"]);
+        });
+
+        test("creates titles", () => {
+            selectScreen.create();
+            expect(createTitles).toHaveBeenCalledTimes(1);
+        });
+
         test("adds GEL buttons to layout", () => {
             selectScreen.create();
             const expectedButtons = ["home", "pause", "previous", "next"];
             expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        test("adds listener for scaler", () => {
+        test("creates a GEL grid", () => {
+            const theme = mockData.config.theme["test-select"];
+            const expectedGridConfig = {
+                choices: theme.choices,
+                columns: 1,
+                duration: 500,
+                ease: "Cubic.easeInOut",
+                onTransitionStart: expect.any(Function),
+                rows: 1,
+                states: {
+                    locked: { asset: "test_asset", x: 10, y: 20 },
+                },
+                tabIndex: 6,
+                titles: [
+                    { key: "title", type: "image" },
+                    { type: "text", value: "" },
+                    { key: "subtitle", type: "image" },
+                    { type: "text", value: "", visible: false },
+                ],
+            };
             selectScreen.create();
-            expect(Scaler.onScaleChange.add).toHaveBeenCalled();
-        });
-
-        test("rescales all elements when screen scales", () => {
-            mockData.config.theme["test-select"].titles = [
-                {
-                    type: "image",
-                    key: "",
-                },
-                {
-                    type: "text",
-                    value: "title",
-                    xOffset: 50,
-                    yOffset: 50,
-                },
-                {
-                    type: "image",
-                    key: "",
-                },
-                {
-                    type: "text",
-                    value: "title",
-                    xOffset: 50,
-                    yOffset: 50,
-                },
-            ];
-
-            selectScreen.create();
-            const callback = Scaler.onScaleChange.add.mock.calls[0][0];
-            callback();
-
-            expect(elementBounding.positionElement).toHaveBeenCalled();
-        });
-
-        test("does not rescale titles when they are not present in config", () => {
-            mockData.config.theme["test-select"].titles = [];
-
-            selectScreen.create();
-            const callback = Scaler.onScaleChange.add.mock.calls[0][0];
-            callback();
-
-            expect(elementBounding.positionElement).not.toHaveBeenCalled();
-        });
-
-        describe("titles", () => {
-            test("adds a title image when title.visible is true and an image is specified", () => {
-                selectScreen.create();
-                expect(selectScreen.add.image).toHaveBeenCalledWith(0, -270, "test-select.title");
-            });
-
-            test("does not add a titles if no config is provided", () => {
-                delete mockData.config.theme["test-select"].titles;
-                selectScreen.setData(mockData);
-                selectScreen.create();
-                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -270, "test-select.title");
-                expect(selectScreen.add.text).not.toHaveBeenCalled();
-            });
-
-            test("does not add a title image when no image is specified", () => {
-                const noImageTheme = mockData.config.theme["test-select"].titles.filter(x => x.type != "image");
-                mockData.config.theme["test-select"].titles = noImageTheme;
-                selectScreen.create();
-                expect(selectScreen.add.image).not.toHaveBeenCalledWith(0, -270, "test-select.title");
-            });
-
-            test("adds title text with default styles when text is supplied but no style is provided", () => {
-                mockData.config.theme["test-select"].titles[1] = { type: "text", value: "testTitleText" };
-                selectScreen.create();
-                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -270, "testTitleText", defaultTextStyle);
-            });
-
-            test("adds title text with config styles overwriting the default when text is supplied with styling", () => {
-                const styling = {
-                    id: "titleStyling",
-                    fontStyle: "Ariel",
-                    ...defaultTextStyle,
-                };
-
-                mockData.config.theme["test-select"].titles[1].value = "testTitleText";
-                mockData.config.theme["test-select"].titles[1].styles = styling;
-                selectScreen.create();
-                expect(selectScreen.add.text).toHaveBeenCalledWith(0, -270, "testTitleText", styling);
-            });
-
-            test("does respect offset coordinates provided in config", () => {
-                mockData.config.theme["test-select"].titles = [
-                    {
-                        type: "image",
-                        key: "title",
-                        xOffset: 50,
-                        yOffset: 50,
-                    },
-                    {
-                        type: "text",
-                        value: "title",
-                        xOffset: 50,
-                        yOffset: 50,
-                    },
-                ];
-                selectScreen.create();
-                expect(selectScreen.add.image).toHaveBeenCalledWith(50, -220, "test-select.title");
-                expect(selectScreen.add.text).toHaveBeenCalledWith(50, -220, "title", defaultTextStyle);
-            });
-
-            test("creates a new GEL grid with correct params", () => {
-                selectScreen.create();
-                const mockConfig = mockData.config.theme["test-select"];
-                expect(GelGrid).toHaveBeenCalledWith(selectScreen, mockConfig);
-            });
+            expect(GelGrid).toHaveBeenCalledWith(selectScreen, expectedGridConfig);
         });
 
         test("creates grid cells", () => {
             selectScreen.create();
             expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.theme);
+        });
+
+        test("adds grid to layout", () => {
+            selectScreen.create();
+            expect(selectScreen.layout.addCustomGroup).toHaveBeenCalledWith("grid", mockGelGrid, 6);
+        });
+
+        test("adds listener for scaler", () => {
+            selectScreen.create();
+            expect(Scaler.onScaleChange.add).toHaveBeenCalled();
         });
     });
 
