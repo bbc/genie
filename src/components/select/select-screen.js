@@ -86,16 +86,6 @@ export class Select extends Screen {
         return stateDefinition === undefined || stateDefinition.enabled !== false;
     }
 
-    addOverlay(key) {
-        this.singleItemMode.shutdown();
-        super.addOverlay(key);
-    }
-
-    _onOverlayRemoved(overlay) {
-        super._onOverlayRemoved(overlay);
-        this.singleItemMode = singleItemMode.create(this);
-    }
-
     next = getTitle => () => {
         this._scaleEvent.unsubscribe();
 

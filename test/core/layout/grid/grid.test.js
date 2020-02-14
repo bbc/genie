@@ -193,6 +193,14 @@ describe("Grid", () => {
 
                 expect(accessibilify).toHaveBeenCalledTimes(2);
             });
+
+            test("calls cell reset method when making the screen accessible", () => {
+                grid = new GelGrid(mockScene);
+                grid.addGridCells(mockScene.theme);
+                grid._cells.forEach(cell => (cell.reset = jest.fn()));
+                grid.makeAccessible();
+                grid._cells.forEach(cell => expect(cell.reset).toHaveBeenCalledTimes(1));
+            });
         });
     });
 

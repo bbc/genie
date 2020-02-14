@@ -6,10 +6,9 @@
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as elementBounding from "../../../src/core/helpers/element-bounding.js";
-import { Screen } from "../../../src/core/screen.js";
 import { Select } from "../../../src/components/select/select-screen.js";
 import { GelGrid } from "../../../src/core/layout/grid/grid.js";
-import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
+
 jest.mock("../../../src/components/select/single-item-mode.js");
 jest.mock("../../../src/core/screen.js");
 jest.mock("../../../src/components/select/single-item-mode.js", () => ({
@@ -339,46 +338,6 @@ describe("Select Screen", () => {
         test("creates grid cells", () => {
             selectScreen.create();
             expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.theme);
-        });
-    });
-
-    describe("_onOverlayRemoved method", () => {
-        test("calls super method with same args", () => {
-            selectScreen._onOverlayRemoved("testOverlay");
-
-            expect(Screen.mock.instances[0]._onOverlayRemoved).toHaveBeenCalledWith("testOverlay");
-        });
-
-        test("calls single item mode create", () => {
-            selectScreen._onOverlayRemoved("testKey");
-
-            expect(singleItemMode.create).toHaveBeenCalledWith(selectScreen);
-        });
-    });
-
-    describe("addOverlay method", () => {
-        test("calls super method with same args", () => {
-            selectScreen._data = {
-                parentScreens: [],
-            };
-            selectScreen.scene = {
-                run: jest.fn(),
-                bringToTop: jest.fn(),
-            };
-
-            selectScreen.singleItemMode = {
-                shutdown: jest.fn(),
-            };
-            selectScreen.addOverlay("testKey");
-
-            expect(Screen.mock.instances[0].addOverlay).toHaveBeenCalledWith("testKey");
-        });
-
-        test("calls single item mode shutdown", () => {
-            selectScreen.create();
-            selectScreen.addOverlay("testKey");
-
-            expect(selectScreen.singleItemMode.shutdown).toHaveBeenCalled();
         });
     });
 

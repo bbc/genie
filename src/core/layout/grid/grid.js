@@ -80,6 +80,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     makeAccessible() {
         a11y.addGroupAt("grid", this._config.tabIndex);
         this._cells.forEach(cell => cell.makeAccessible());
+        this.reset();
     }
 
     showPage(pageNum) {
