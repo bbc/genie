@@ -52,11 +52,11 @@ describe("Group", () => {
         mockGetHitAreaBounds = jest.fn(() => hitAreaBounds);
 
         buttonFactory = {
-            createButton: () => ({
-                x: 50,
-                y: 50,
-                width: 200,
-                height: 100,
+            createButton: (config = {}) => ({
+                x: config.x || 50,
+                y: config.y || 50,
+                width: config.width || 200,
+                height: config.height || 100,
                 input: {},
                 updateIndicatorPosition: jest.fn(),
                 updateTransform: () => {},
@@ -115,10 +115,23 @@ describe("Group", () => {
         test("aligns center buttons accordingly", () => {
             group.addButton(config);
             group.addButton(config);
+
             group.reset(metrics);
 
             expect(group._buttons[0].y).toBe(50);
             expect(group._buttons[1].y).toBe(50);
+        });
+
+        test("aligns center buttons with respect to the largest button (after sorting buttons by height)", () => {
+            group.addButton({ ...config, height: 70 });
+            group.addButton({ ...config, height: 120 });
+            group.addButton({ ...config, height: 10 });
+
+            group.reset(metrics);
+
+            expect(group._buttons[0].y).toBe(60);
+            expect(group._buttons[1].y).toBe(60);
+            expect(group._buttons[2].y).toBe(60);
         });
 
         describe("when vPos is middle and hPos is center", () => {
