@@ -6,8 +6,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as a11y from "../../core/accessibility/accessibility-layer.js";
-
 const removeEvents = cell => {
     cell.button.off("pointerover", cell.over);
     cell.button.off("pointerout", cell.out);
@@ -19,16 +17,6 @@ export const create = scene => {
 
     const onBlur = () => scene.grid.showPage(0);
     window.addEventListener("blur", onBlur);
-
-    const removeAccessibleButtons = () => {
-        a11y.removeButton(continueButton);
-        a11y.removeButton(scene.layout.buttons.next);
-        a11y.removeButton(scene.layout.buttons.previous);
-        a11y.reset();
-    };
-
-    removeAccessibleButtons();
-    scene.events.on(Phaser.Scenes.Events.RESUME, removeAccessibleButtons);
 
     scene._cells.map(cell => cell.button.accessibleElement.update());
 
@@ -52,17 +40,12 @@ export const create = scene => {
 
     const shutdown = () => {
         window.removeEventListener("blur", onBlur);
-        scene.events.off(Phaser.Scenes.Events.RESUME, removeAccessibleButtons);
         continueButton.off("pointerover", overContinueBtn);
         continueButton.off("pointerout", outContinueBtn);
         cellEvents.map(removeEvents);
     };
 
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, shutdown);
-
-    return {
-        shutdown,
-    };
 };
 
-export const continueBtn = scene => (scene.theme.rows * scene.theme.columns === 1 ? ["continue"] : []);
+export const isEnabled = scene => (scene.theme.rows * scene.theme.columns === 1 ? true : false);

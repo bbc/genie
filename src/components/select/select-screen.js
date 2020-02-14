@@ -20,7 +20,7 @@ const gridDefaults = {
 };
 
 const getOnTransitionStartFn = scene => () => {
-    if (!scene.layout.buttons.continue) return;
+    if (!scene.layout.buttons.continue || !scene.layout.buttons.continue.accessibleElement) return;
 
     const bool = scene.currentEnabled();
     scene.layout.buttons.continue.input.enabled = bool;
@@ -35,7 +35,9 @@ export class Select extends Screen {
         this.theme = this.context.theme;
         createTitles(this);
         const buttons = ["home", "pause", "previous", "next"];
-        this.setLayout(buttons.concat(singleItemMode.continueBtn(this)));
+        singleItemMode.isEnabled(this)
+            ? this.setLayout(buttons.concat("continue"), ["home", "pause"])
+            : this.setLayout(buttons, ["home", "pause", "next", "previous"]);
         const onTransitionStart = getOnTransitionStartFn(this);
         this.grid = new GelGrid(this, Object.assign(this.theme, gridDefaults, { onTransitionStart }));
         this.resize();
@@ -50,7 +52,7 @@ export class Select extends Screen {
         const stateConfig = this.theme.choices.map(({ id, state }) => ({ id, state }));
         this.states = state.create(this.context.theme.storageKey, stateConfig);
 
-        this.singleItemMode = singleItemMode.create(this);
+        singleItemMode.create(this);
 
         this.updateStates();
         onTransitionStart();

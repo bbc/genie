@@ -35,7 +35,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
     addGridCells(theme) {
         this._cells = theme.choices.map((cell, idx) => createCell(this, cell, idx, theme));
         this.makeAccessible();
-        this.reset();
         return this._cells;
     }
 
