@@ -8,8 +8,11 @@ import * as Scaler from "../../../src/core/scaler.js";
 import { Select } from "../../../src/components/select/select-screen.js";
 import { GelGrid } from "../../../src/core/layout/grid/grid.js";
 import { createTitles } from "../../../src/components/select/titles.js";
+import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
 
 jest.mock("../../../src/components/select/titles.js");
+jest.mock("../../../src/components/select/single-item-mode.js");
+jest.mock("../../../src/core/screen.js");
 jest.mock("../../../src/core/layout/grid/grid.js");
 jest.mock("../../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
@@ -33,7 +36,6 @@ describe("Select Screen", () => {
     let mockMetrics;
     let mockCellIds;
     let mockGelGrid;
-    let defaultTextStyle;
 
     beforeEach(() => {
         mockGelGrid = {
@@ -43,6 +45,10 @@ describe("Select Screen", () => {
             resize: jest.fn(),
         };
         GelGrid.mockImplementation(() => mockGelGrid);
+        singleItemMode.create = jest.fn(() => ({
+            shutdown: jest.fn(),
+        }));
+        singleItemMode.isEnabled = jest.fn();
         mockData = {
             config: {
                 theme: {
@@ -66,6 +72,9 @@ describe("Select Screen", () => {
                                 visible: false,
                             },
                         ],
+                        states: {
+                            locked: { x: 10, y: 20, asset: "test_asset" },
+                        },
                         choices: [
                             { asset: "character1" },
                             { asset: "character2", title: "character_2" },
@@ -120,56 +129,64 @@ describe("Select Screen", () => {
         mockCellIds = [];
         fillRectShapeSpy = jest.fn();
         selectScreen = new Select();
-        selectScreen.setData(mockData);
-        selectScreen.transientData = {};
-        selectScreen.scene = { key: "test-select", scene: { events: { on: jest.fn() } } };
-        selectScreen.game = { canvas: { parentElement: "parent-element" } };
-        selectScreen.navigation = { next: jest.fn() };
-        selectScreen.setLayout = jest.fn(() => mockLayout);
-        selectScreen.add = {
-            graphics: jest.fn(() => ({
-                fillRectShape: fillRectShapeSpy,
-                clear: jest.fn(),
-                fillStyle: jest.fn(),
-            })),
-            text: jest.fn(() => ({
-                ...mockTextBounds,
-                getBounds: jest.fn(() => mockTextBounds),
-            })),
-            image: jest.fn((x, y, imageName) => imageName),
-            sprite: jest.fn((x, y, assetName) => {
-                if (assetName === "test-select.character1") {
-                    return characterSprites[0];
-                }
-                if (assetName === "test-select.character2") {
-                    return characterSprites[1];
-                }
-                if (assetName === "test-select.character3") {
-                    return characterSprites[2];
-                }
-                if (assetName === "test_asset") {
-                    return "test-sprite";
-                }
-            }),
-        };
-        selectScreen.events = {
-            once: jest.fn(),
-        };
-        selectScreen.addAnimations = jest.fn();
-        selectScreen.context.theme.states = {
-            locked: { x: 10, y: 20, asset: "test_asset" },
+
+        const addMocks = screen => {
+            screen.setData(mockData);
+            screen.transientData = {};
+            screen.scene = { key: "test-select", scene: { events: { on: jest.fn() } } };
+            screen.game = { canvas: { parentElement: "parent-element" } };
+            screen.navigation = { next: jest.fn() };
+            screen.setLayout = jest.fn(() => mockLayout);
+            screen.add = {
+                graphics: jest.fn(() => ({
+                    fillRectShape: fillRectShapeSpy,
+                    clear: jest.fn(),
+                    fillStyle: jest.fn(),
+                })),
+                text: jest.fn(() => ({
+                    ...mockTextBounds,
+                    getBounds: jest.fn(() => mockTextBounds),
+                })),
+                image: jest.fn((x, y, imageName) => imageName),
+                sprite: jest.fn((x, y, assetName) => {
+                    if (assetName === "test-select.character1") {
+                        return characterSprites[0];
+                    }
+                    if (assetName === "test-select.character2") {
+                        return characterSprites[1];
+                    }
+                    if (assetName === "test-select.character3") {
+                        return characterSprites[2];
+                    }
+                    if (assetName === "test_asset") {
+                        return "test-sprite";
+                    }
+                }),
+            };
+            screen.events = {
+                once: jest.fn(),
+            };
+            screen.addAnimations = jest.fn();
+
+            screen.context = { theme: mockData.config.theme["test-select"] };
+
+            Object.defineProperty(screen, "layout", {
+                get: jest.fn(() => mockLayout),
+            });
+
+            screen._data = {
+                parentScreens: [],
+            };
+            screen.scene.run = jest.fn();
+            screen.scene.bringToTop = jest.fn();
         };
 
-        Object.defineProperty(selectScreen, "layout", {
-            get: jest.fn(() => mockLayout),
-        });
+        addMocks(selectScreen);
 
         Scaler.getMetrics = jest.fn(() => mockMetrics);
         Scaler.onScaleChange = {
             add: jest.fn(() => ({ unsubscribe: jest.fn() })),
         };
-
-        defaultTextStyle = { align: "center", fontFamily: "ReithSans", fontSize: "24px" };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -196,10 +213,20 @@ describe("Select Screen", () => {
             expect(createTitles).toHaveBeenCalledTimes(1);
         });
 
-        test("adds GEL buttons to layout", () => {
+        test("adds GEL buttons to layout when singleItemMode is true", () => {
+            singleItemMode.isEnabled = jest.fn(() => true);
             selectScreen.create();
             const expectedButtons = ["home", "pause", "previous", "next", "continue"];
-            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+            const expectedAccessibleButtons = ["home", "pause"];
+            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons, expectedAccessibleButtons);
+        });
+
+        test("adds GEL buttons to layout when singleItemMode is false", () => {
+            singleItemMode.isEnabled = jest.fn(() => false);
+            selectScreen.create();
+            const expectedButtons = ["home", "pause", "previous", "next"];
+            const expectedAccessibleButtons = ["home", "pause", "next", "previous"];
+            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons, expectedAccessibleButtons);
         });
 
         test("creates a GEL grid", () => {
@@ -368,16 +395,7 @@ describe("Select Screen", () => {
             expect(selectScreen._cells[0].button.setImage).toHaveBeenCalledWith("test_asset");
         });
     });
-    describe("create method without continue button", () => {
-        test("adds GEL buttons to layout without continue button", () => {
-            const modifiedData = mockData;
-            modifiedData.config.theme["test-select"].rows = 2;
-            selectScreen.setData(modifiedData);
-            selectScreen.create();
-            const expectedButtons = ["home", "pause", "previous", "next"];
-            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
-    });
+
     describe("resizing button sprites", () => {
         test("", () => {
             selectScreen.create();
@@ -407,13 +425,6 @@ describe("Select Screen", () => {
 
             expect(mockLayout.buttons.continue.input.enabled).toBe(true);
             expect(mockLayout.buttons.continue.alpha).toBe(1);
-        });
-
-        test("updates the accessible dom element", () => {
-            selectScreen.create();
-            const onTransitionStartFn = GelGrid.mock.calls[0][1].onTransitionStart;
-            onTransitionStartFn();
-            expect(mockLayout.buttons.continue.accessibleElement.update).toHaveBeenCalled();
         });
 
         test("does not error if no continue button", () => {

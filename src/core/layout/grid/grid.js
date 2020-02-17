@@ -35,7 +35,6 @@ export class GelGrid extends Phaser.GameObjects.Container {
     addGridCells(theme) {
         this._cells = theme.choices.map((cell, idx) => createCell(this, cell, idx, theme));
         this.makeAccessible();
-        this.reset();
         return this._cells;
     }
 
@@ -80,9 +79,13 @@ export class GelGrid extends Phaser.GameObjects.Container {
     makeAccessible() {
         a11y.addGroupAt("grid", this._config.tabIndex);
         this._cells.forEach(cell => cell.makeAccessible());
+        this.reset();
     }
 
     showPage(pageNum) {
+        if (this.page === pageNum) {
+            return;
+        }
         const previousPage = this.page;
         const goForwards = pageNum > previousPage;
         this.page = (pageNum + this.getPageCount()) % this.getPageCount();
@@ -105,6 +108,9 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     transitionCallback(pageToDisable) {
+        if (this.page === pageToDisable) {
+            return;
+        }
         this.setPageVisibility(pageToDisable, false);
         this.scene.input.enabled = true;
     }

@@ -82,8 +82,9 @@ describe("Layout", () => {
 
         mockInputUpAdd = jest.fn();
         mockGelGroup = {
-            addButton: jest.fn(name => ({
-                buttonName: name,
+            addButton: jest.fn(config => ({
+                buttonName: config,
+                config,
                 onInputUp: { add: mockInputUpAdd },
                 getHitAreaBounds: jest.fn(() => mockHitAreaBounds),
             })),
@@ -239,6 +240,21 @@ describe("Layout", () => {
             expect(layout.buttons.achievements).toBeDefined();
             expect(layout.buttons.exit).toBeDefined();
             expect(layout.buttons.settings).toBeDefined();
+        });
+
+        test("returns the buttons with accessibility enabled or disabled", () => {
+            const layout = Layout.create(
+                mockScene,
+                mockMetrics,
+                ["achievements", "exit", "settings"],
+                ["exit", "blah"],
+            );
+            expect(layout.buttons.achievements).toBeDefined();
+            expect(layout.buttons.achievements.config.accessibilityEnabled).toBe(false);
+            expect(layout.buttons.exit).toBeDefined();
+            expect(layout.buttons.exit.config.accessibilityEnabled).toBe(true);
+            expect(layout.buttons.settings).toBeDefined();
+            expect(layout.buttons.settings.config.accessibilityEnabled).toBe(false);
         });
     });
 
