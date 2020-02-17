@@ -13,7 +13,7 @@ const removeEvents = cell => {
 
 export const create = scene => {
     const continueButton = scene.layout.buttons.continue;
-    if (!continueButton) return;
+    if (!continueButton) return false;
 
     const onBlur = () => scene.grid.showPage(0);
     window.addEventListener("blur", onBlur);
