@@ -47,17 +47,22 @@ export class Results extends Screen {
         this.createLayout();
         this.createBackdrop();
         this.subscribeToEventBus();
-        fireGameCompleteStat(this.transientData.results);
+        fireGameCompleteStat(this.transientData[this.scene.key]);
     }
 
     resultsArea() {
         return this.layout.getSafeArea({ top: false });
     }
 
-    createLayout() {
+    createButtons() {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
-        const buttons = ["pause", "restart", "continueGame"];
-        this.setLayout(buttons.concat(achievements));
+        const restartOrPlayAgain = this.transientData[this.scene.key].levelsRemaining ? ["restart"] : ["playagain"];
+        const buttons = ["pause", "continueGame"].concat(achievements, restartOrPlayAgain);
+        this.setLayout(buttons);
+    }
+
+    createLayout() {
+        this.createButtons();
         this.createRows();
     }
 
@@ -91,8 +96,15 @@ export class Results extends Screen {
         this.events.once("shutdown", scaleEvent.unsubscribe);
         const fpMap = fp.map.convert({ cap: false });
         fpMap((callback, name) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }), {
-            continue: this.navigation.next,
+            continue: () => {
+                if (this.transientData[this.scene.key].nextLevelData) {
+                    this.transientData = this.transientData[this.scene.key].nextLevelData;
+                    return this.navigation.game();
+                }
+                this.navigation.continue();
+            },
             restart: this.navigation.game,
+            playagain: this.navigation.game,
         });
     }
 }

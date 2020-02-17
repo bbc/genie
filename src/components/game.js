@@ -6,6 +6,7 @@
 import { Screen } from "../core/screen.js";
 import { accessibilify } from "../core/accessibility/accessibilify.js";
 import { gmi } from "../core/gmi/gmi.js";
+import * as state from "../core/state.js";
 
 export class Game extends Screen {
     calculateAchievements(item, amount, keys) {
@@ -92,8 +93,29 @@ export class Game extends Screen {
             accessibilify(button);
         }, this);
 
+        const areAnyLevelsRemaining = () => {
+            const levels = state.states.get("levels").getAll();
+            return levels.some(level => level.state !== "completed");
+        };
+
+        const getNextLevel = () => {
+            const nextLevel = state.states.get("levels").get(this.transientData["level-select"].id + 1);
+            return nextLevel.id ? nextLevel : undefined;
+        };
+
+        const markLevelAsComplete = levelTitle => {
+            state.states.get("levels").set(levelTitle, "completed");
+        };
+
         const onGameComplete = () => {
-            this.transientData.results = { keys, gems, stars };
+            markLevelAsComplete(this.transientData["level-select"].title);
+            this.transientData.results = {
+                keys,
+                gems,
+                stars,
+                levelsRemaining: areAnyLevelsRemaining(),
+                nextLevelData: getNextLevel() ? { "level-select": getNextLevel() } : undefined,
+            };
             this.navigation.next();
         };
 
@@ -137,14 +159,14 @@ export class Game extends Screen {
         };
 
         this.add
-            .text(0, 200, `Character Selected: ${this.transientData["character-select"].choice.title}`, {
+            .text(0, 200, `Character Selected: ${this.transientData["character-select"].id}`, {
                 font: "32px ReithSans",
                 fill: "#f6931e",
                 align: "center",
             })
             .setOrigin(0.5);
         this.add
-            .text(0, 250, `Level Selected: ${this.transientData["level-select"].choice.title}`, {
+            .text(0, 250, `Level Selected: ${this.transientData["level-select"].id}`, {
                 font: "32px ReithSans",
                 fill: "#f6931e",
                 align: "center",

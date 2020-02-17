@@ -83,7 +83,7 @@ const screenConfig = {
     results: {
         scene: Results,
         routes: {
-            next: "home",
+            continue: "level-select",
             game: "game",
             restart: "game",
             home: "home",
