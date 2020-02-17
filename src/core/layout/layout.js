@@ -39,9 +39,11 @@ const shallowMergeOverrides = (config, overrides) => assignProperties(copyFirstC
  * @param {Phaser.Scene} scene - Phaser Scene Instance
  * @param {Object} metrics - viewport metrics
  * @param {Array.<string>} buttonIds
+ * @param {Array.<string>} accessible buttonIds
  */
-export function create(scene, metrics, buttonIds) {
+export function create(scene, metrics, buttonIds, accessibleButtonIds) {
     buttonIds = buttonIds.filter(checkGMIFlags);
+    accessibleButtonIds = accessibleButtonIds ? accessibleButtonIds.filter(id => buttonIds.includes(id)) : buttonIds;
 
     const overrides = scene.context.config.theme[scene.scene.key]["button-overrides"];
 
@@ -69,7 +71,11 @@ export function create(scene, metrics, buttonIds) {
 
     const buttons = fp.zipObject(
         tabSort(buttonIds),
-        tabSort(buttonIds).map(name => groups[config[name].group].addButton(config[name])),
+        tabSort(buttonIds).map(name => {
+            const buttonConfig = config[name];
+            buttonConfig.accessibilityEnabled = accessibleButtonIds.includes(name);
+            return groups[buttonConfig.group].addButton(buttonConfig);
+        }),
     );
 
     const iconEvents = settingsIcons.create(groups.topRight, buttonIds);

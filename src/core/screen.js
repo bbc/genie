@@ -143,12 +143,12 @@ export class Screen extends Phaser.Scene {
      * @example
      * this.setLayout(["home", "restart", "continue", "pause"]);
      * @param {Array} buttons - Array of standard button names to include. See {@link layout/gel-defaults.js} for available names
-     *
+     * @param {Array} accessibleButtons - Array of standard button names to make accessible. By default, all are accessible.
      * @memberof module:screen
      * @returns {Object}
      */
-    setLayout(buttons) {
-        this._layout = Layout.create(this, Scaler.getMetrics(), buttons);
+    setLayout(buttons, accessibleButtons) {
+        this._layout = Layout.create(this, Scaler.getMetrics(), buttons, accessibleButtons);
         this.add.existing(this._layout.root);
 
         return this._layout;

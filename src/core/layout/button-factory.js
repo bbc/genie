@@ -47,10 +47,15 @@ const createButton = fp.curry((scene, config, x = 0, y = 0) => {
         btn.disableInteractive();
         btn.input.hitArea = null;
         return btn;
-    } else {
-        defaultAction(config);
+    }
+
+    defaultAction(config);
+
+    if (config.accessibilityEnabled) {
         return accessibilify(btn, false);
     }
+
+    return btn;
 });
 
 export const create = scene => ({ createButton: createButton(scene) });
