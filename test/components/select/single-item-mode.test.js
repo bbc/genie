@@ -4,7 +4,6 @@
  * @license Apache-2.0
  */
 import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
-import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 
 jest.mock("../../../src/core/accessibility/accessibility-layer.js");
 

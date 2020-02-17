@@ -18,7 +18,7 @@ export const create = scene => {
     const onBlur = () => scene.grid.showPage(0);
     window.addEventListener("blur", onBlur);
 
-    scene._cells.map(cell => cell.button.accessibleElement.update());
+    scene._cells.forEach(cell => cell.button.accessibleElement.update());
 
     const overContinueBtn = () => scene.grid.getPageCells(scene.grid.page)[0].button.sprite.setFrame(1);
     const outContinueBtn = () => scene.grid.getPageCells(scene.grid.page)[0].button.sprite.setFrame(0);
