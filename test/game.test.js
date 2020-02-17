@@ -11,7 +11,7 @@ jest.mock("../src/core/gmi/gmi.js");
 
 describe("Game", () => {
     const expectedButtonStyle = {
-        font: "40px ReithSans",
+        font: "35px ReithSans",
         fill: "#fff",
         align: "center",
         wordWrap: true,
@@ -63,6 +63,12 @@ describe("Game", () => {
         game.setData(mockData);
         game.scene = {
             key: "game",
+        };
+        game.tweens = {
+            add: jest.fn(),
+        };
+        game.sound = {
+            play: jest.fn(),
         };
         game.add = {
             image: jest.fn(() => mockImage),
