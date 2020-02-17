@@ -8,16 +8,11 @@ import * as Scaler from "../../../src/core/scaler.js";
 import { Select } from "../../../src/components/select/select-screen.js";
 import { GelGrid } from "../../../src/core/layout/grid/grid.js";
 import { createTitles } from "../../../src/components/select/titles.js";
+import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
 
 jest.mock("../../../src/components/select/titles.js");
 jest.mock("../../../src/components/select/single-item-mode.js");
 jest.mock("../../../src/core/screen.js");
-jest.mock("../../../src/components/select/single-item-mode.js", () => ({
-    create: jest.fn(() => ({
-        shutdown: jest.fn(),
-    })),
-    continueBtn: () => [],
-}));
 jest.mock("../../../src/core/layout/grid/grid.js");
 jest.mock("../../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
@@ -50,6 +45,10 @@ describe("Select Screen", () => {
             resize: jest.fn(),
         };
         GelGrid.mockImplementation(() => mockGelGrid);
+        singleItemMode.create = jest.fn(() => ({
+            shutdown: jest.fn(),
+        }));
+        singleItemMode.isEnabled = jest.fn();
         mockData = {
             config: {
                 theme: {
@@ -180,10 +179,6 @@ describe("Select Screen", () => {
             };
             screen.scene.run = jest.fn();
             screen.scene.bringToTop = jest.fn();
-
-            screen.singleItemMode = {
-                shutdown: jest.fn(),
-            };
         };
 
         addMocks(selectScreen);
@@ -218,10 +213,20 @@ describe("Select Screen", () => {
             expect(createTitles).toHaveBeenCalledTimes(1);
         });
 
-        test("adds GEL buttons to layout", () => {
+        test("adds GEL buttons to layout when singleItemMode is true", () => {
+            singleItemMode.isEnabled = jest.fn(() => true);
+            selectScreen.create();
+            const expectedButtons = ["home", "pause", "previous", "next", "continue"];
+            const expectedAccessibleButtons = ["home", "pause"];
+            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons, expectedAccessibleButtons);
+        });
+
+        test("adds GEL buttons to layout when singleItemMode is false", () => {
+            singleItemMode.isEnabled = jest.fn(() => false);
             selectScreen.create();
             const expectedButtons = ["home", "pause", "previous", "next"];
-            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+            const expectedAccessibleButtons = ["home", "pause", "next", "previous"];
+            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons, expectedAccessibleButtons);
         });
 
         test("creates a GEL grid", () => {
@@ -390,16 +395,7 @@ describe("Select Screen", () => {
             expect(selectScreen._cells[0].button.setImage).toHaveBeenCalledWith("test_asset");
         });
     });
-    describe("create method without continue button", () => {
-        test("adds GEL buttons to layout without continue button", () => {
-            const modifiedData = mockData;
-            modifiedData.config.theme["test-select"].rows = 2;
-            selectScreen.setData(modifiedData);
-            selectScreen.create();
-            const expectedButtons = ["home", "pause", "previous", "next"];
-            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
-    });
+
     describe("resizing button sprites", () => {
         test("", () => {
             selectScreen.create();
@@ -429,13 +425,6 @@ describe("Select Screen", () => {
 
             expect(mockLayout.buttons.continue.input.enabled).toBe(true);
             expect(mockLayout.buttons.continue.alpha).toBe(1);
-        });
-
-        test("updates the accessible dom element", () => {
-            selectScreen.create();
-            const onTransitionStartFn = GelGrid.mock.calls[0][1].onTransitionStart;
-            onTransitionStartFn();
-            expect(mockLayout.buttons.continue.accessibleElement.update).toHaveBeenCalled();
         });
 
         test("does not error if no continue button", () => {

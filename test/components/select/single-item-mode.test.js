@@ -57,19 +57,6 @@ describe("Select Screen Single Item Mode", () => {
         expect(mockScene.grid.showPage).toHaveBeenCalledWith(0);
     });
 
-    test("Adds scene resume listener to remove accessible buttons", () => {
-        singleItemMode.create(mockScene);
-        expect(mockScene.events.on).toHaveBeenCalledWith(Phaser.Scenes.Events.RESUME, expect.any(Function));
-    });
-
-    test("Removes continue, next and previous accessible buttons", () => {
-        singleItemMode.create(mockScene);
-        expect(a11y.removeButton).toHaveBeenCalledWith(mockScene.layout.buttons.continue);
-        expect(a11y.removeButton).toHaveBeenCalledWith(mockScene.layout.buttons.next);
-        expect(a11y.removeButton).toHaveBeenCalledWith(mockScene.layout.buttons.previous);
-        expect(a11y.reset).toHaveBeenCalled();
-    });
-
     test("adds pointerover event to continue button which sets the current cell to hover state", () => {
         mockCurrentCell = { button: { sprite: { setFrame: jest.fn() } } };
 
@@ -120,15 +107,15 @@ describe("Select Screen Single Item Mode", () => {
         expect(mockScene._cells[0].button.accessibleElement.update).toHaveBeenCalled();
     });
 
-    describe("continueButton", () => {
-        test("returns continue button if 1 row and 1 column", () => {
-            const btn = singleItemMode.continueBtn({ theme: { rows: 1, columns: 1 } });
-            expect(btn).toEqual(["continue"]);
+    describe("isEnabled method", () => {
+        test("returns true if 1 row and 1 column", () => {
+            const returnValue = singleItemMode.isEnabled({ theme: { rows: 1, columns: 1 } });
+            expect(returnValue).toBe(true);
         });
 
-        test("returns empty array if more than 1 row and 1 column", () => {
-            const btn = singleItemMode.continueBtn({ theme: { rows: 2, columns: 3 } });
-            expect(btn).toEqual([]);
+        test("returns false if more than 1 row and 1 column", () => {
+            const returnValue = singleItemMode.isEnabled({ theme: { rows: 2, columns: 3 } });
+            expect(returnValue).toBe(false);
         });
     });
 
@@ -139,27 +126,21 @@ describe("Select Screen Single Item Mode", () => {
         });
 
         test("Removes blur window listener", () => {
-            const SIMode = singleItemMode.create(mockScene);
-            SIMode.shutdown();
+            singleItemMode.create(mockScene);
+            mockScene.events.once.mock.calls[0][1]();
             expect(global.window.removeEventListener).toHaveBeenCalledWith("blur", expect.any(Function));
         });
 
-        test("Removes scene resume listener", () => {
-            const SIMode = singleItemMode.create(mockScene);
-            SIMode.shutdown();
-            expect(mockScene.events.off).toHaveBeenCalledWith(Phaser.Scenes.Events.RESUME, expect.any(Function));
-        });
-
         test("Removes continue button hover events", () => {
-            const SIMode = singleItemMode.create(mockScene);
-            SIMode.shutdown();
+            singleItemMode.create(mockScene);
+            mockScene.events.once.mock.calls[0][1]();
             expect(mockScene.layout.buttons.continue.off).toHaveBeenCalledWith("pointerover", expect.any(Function));
             expect(mockScene.layout.buttons.continue.off).toHaveBeenCalledWith("pointerout", expect.any(Function));
         });
 
         test("Removes cell hover events for all cells", () => {
-            const SIMode = singleItemMode.create(mockScene);
-            SIMode.shutdown();
+            singleItemMode.create(mockScene);
+            mockScene.events.once.mock.calls[0][1]();
             expect(mockScene._cells[0].button.off).toHaveBeenCalledWith("pointerover", expect.any(Function));
             expect(mockScene._cells[0].button.off).toHaveBeenCalledWith("pointerout", expect.any(Function));
             expect(mockScene._cells[1].button.off).toHaveBeenCalledWith("pointerover", expect.any(Function));
