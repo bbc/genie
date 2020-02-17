@@ -20,12 +20,11 @@ const gridDefaults = {
 };
 
 const getOnTransitionStartFn = scene => () => {
-    if (!scene.layout.buttons.continue || !scene.layout.buttons.continue.accessibleElement) return;
+    if (!scene.layout.buttons.continue) return;
 
     const bool = scene.currentEnabled();
     scene.layout.buttons.continue.input.enabled = bool;
     scene.layout.buttons.continue.alpha = bool ? 1 : 0.5;
-    scene.layout.buttons.continue.accessibleElement.update();
 };
 
 export class Select extends Screen {
