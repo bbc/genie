@@ -305,6 +305,20 @@ describe("Layout - Gel Defaults", () => {
         });
     });
 
+    describe("Play Again Button Callback", () => {
+        test("sends a stat to the GMI", () => {
+            gel.config(mockCurrentScreen).playagain.action({ screen: mockCurrentScreen });
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain");
+        });
+
+        test("appends level id to stats if it exists", () => {
+            const testLevelId = "test level id";
+            mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
+            gel.config(mockCurrentScreen).playagain.action({ screen: mockCurrentScreen });
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
+        });
+    });
+
     describe("Continue Game Button Callback", () => {
         test("sends a stat to the GMI", () => {
             gel.config(mockCurrentScreen).continueGame.action({ screen: mockCurrentScreen });
