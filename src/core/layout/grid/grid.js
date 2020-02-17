@@ -108,6 +108,9 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     transitionCallback(pageToDisable) {
+        if (this.page === pageToDisable) {
+            return;
+        }
         this.setPageVisibility(pageToDisable, false);
         this.scene.input.enabled = true;
     }

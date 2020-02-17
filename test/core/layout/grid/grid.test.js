@@ -48,8 +48,8 @@ describe("Grid", () => {
             },
             time: {
                 addEvent: jest.fn(({ callback, callbackScope, args }) => {
-                    transitionCallback = () => {
-                        callback.apply(callbackScope, args);
+                    transitionCallback = (pageNumber = args) => {
+                        callback.apply(callbackScope, pageNumber);
                     };
                 }),
             },
@@ -795,6 +795,27 @@ describe("Grid", () => {
                 expect(grid._cells[1].button.config.tabbable).not.toBeDefined();
                 expect(grid._cells[2].button.config.tabbable).not.toBeDefined();
                 expect(grid._cells[3].button.config.tabbable).not.toBeDefined();
+            });
+
+            test("transition callback does not set page visibility when pageToDisable is the visible page", () => {
+                mockScene.theme.choices = [
+                    { asset: "asset_name_1", id: "id_1" },
+                    { asset: "asset_name_2", id: "id_2" },
+                    { asset: "asset_name_3", id: "id_3" },
+                    { asset: "asset_name_4", id: "id_4" },
+                ];
+
+                grid = new GelGrid(mockScene);
+                grid.addGridCells(mockScene.theme);
+
+                grid.showPage(1);
+                const transitionArgsList = [1];
+                transitionCallback(transitionArgsList);
+
+                expect(grid._cells[0].button.visible).toEqual(true);
+                expect(grid._cells[1].button.visible).toEqual(true);
+                expect(grid._cells[2].button.visible).toEqual(false);
+                expect(grid._cells[3].button.visible).toEqual(false);
             });
         });
 
