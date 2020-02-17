@@ -3,6 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import { createMockGmi } from "../../mock/gmi.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import { Select } from "../../../src/components/select/select-screen.js";
@@ -36,8 +37,12 @@ describe("Select Screen", () => {
     let mockMetrics;
     let mockCellIds;
     let mockGelGrid;
+    let mockGmi;
 
     beforeEach(() => {
+        mockGmi = { sendStatsEvent: jest.fn() };
+        createMockGmi(mockGmi);
+
         mockGelGrid = {
             cellIds: jest.fn(() => mockCellIds),
             addGridCells: jest.fn(() => []),
@@ -432,6 +437,22 @@ describe("Select Screen", () => {
             delete mockLayout.buttons.continue;
             const onTransitionStartFn = GelGrid.mock.calls[0][1].onTransitionStart;
             expect(onTransitionStartFn).not.toThrow();
+        });
+    });
+
+    describe("stats", () => {
+        beforeEach(() => {
+            jest.spyOn(eventBus, "subscribe");
+        });
+
+        test("fires a score stat to the GMI with when you select an item", () => {
+            mockCellIds = ["character_2"];
+            selectScreen.create();
+
+            eventBus.subscribe.mock.calls[0][0].callback();
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("test", "select", {
+                metadata: "ELE=[character_2]",
+            });
         });
     });
 });

@@ -14,6 +14,7 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import { createTitles } from "./titles.js";
 import * as singleItemMode from "./single-item-mode.js";
 import { addEvents } from "./add-events.js";
+import { gmi } from "../../core/gmi/gmi.js";
 
 const gridDefaults = {
     tabIndex: 6,
@@ -88,10 +89,13 @@ export class Select extends Screen {
 
     next = getTitle => () => {
         this._scaleEvent.unsubscribe();
+        const selectionTitle = getTitle.call(this.grid);
 
-        //TODO  Stats Stuff will need adding back in, once we have the carousel back
-        //TODO work out the correct key if "continue" is passed here when continue button used vs grid button
-        this.transientData[this.scene.key] = { choice: { title: getTitle.call(this.grid) } };
+        const metaData = { metadata: `ELE=[${selectionTitle}]` };
+        const screenType = this.scene.key.split("-")[0];
+        gmi.sendStatsEvent(screenType, "select", metaData);
+
+        this.transientData[this.scene.key] = { choice: { title: selectionTitle } };
         this.navigation.next();
     };
 }
