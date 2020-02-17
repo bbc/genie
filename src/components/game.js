@@ -159,7 +159,7 @@ export class Game extends Screen {
         };
 
         this.add
-            .text(0, 200, `Character Selected: ${this.transientData["character-select"].id}`, {
+            .text(0, 200, `Character Selected: ${this.transientData["character-select"].title}`, {
                 font: "32px ReithSans",
                 fill: "#f6931e",
                 align: "center",

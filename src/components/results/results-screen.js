@@ -56,7 +56,8 @@ export class Results extends Screen {
 
     createButtons() {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
-        const restartOrPlayAgain = this.transientData[this.scene.key].levelsRemaining ? ["restart"] : ["playagain"];
+        const restartOrPlayAgain =
+            this.transientData[this.scene.key].levelsRemaining === false ? ["playagain"] : ["restart"];
         const buttons = ["pause", "continueGame"].concat(achievements, restartOrPlayAgain);
         this.setLayout(buttons);
     }

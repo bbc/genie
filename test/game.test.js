@@ -5,8 +5,10 @@
  */
 import { gmi } from "../src/core/gmi/gmi.js";
 import { Game } from "../src/components/game";
+import * as state from "../src/core/state.js";
 
 jest.mock("../src/core/accessibility/accessibilify.js");
+jest.mock("../src/core/state.js");
 jest.mock("../src/core/gmi/gmi.js");
 
 describe("Game", () => {
@@ -43,6 +45,16 @@ describe("Game", () => {
     let mockImageOn;
 
     beforeEach(() => {
+        const mockState = {
+            getAll: jest.fn(() => []),
+            get: jest.fn(() => ({
+                id: 7,
+            })),
+            set: jest.fn(),
+        };
+        state.states = {
+            get: jest.fn(() => mockState),
+        };
         gmi.achievements = { set: jest.fn() };
 
         game = new Game();
@@ -77,8 +89,8 @@ describe("Game", () => {
         game.setLayout = jest.fn();
         game.navigation = { next: jest.fn() };
         game.transientData = {
-            "character-select": { choice: { title: "Kawabashi" } },
-            "level-select": { choice: { title: "Hard level" } },
+            "character-select": { id: "Kawabashi" },
+            "level-select": { id: "Hard level" },
         };
         game.cache = { json: { get: jest.fn(() => mockAchievements) } };
     });
@@ -143,7 +155,7 @@ describe("Game", () => {
         });
 
         test("displays the character selected", () => {
-            const expectedCharacter = `Character Selected: ${game.transientData["character-select"].choice.title}`;
+            const expectedCharacter = `Character Selected: ${game.transientData["character-select"].title}`;
             expect(game.add.text).toHaveBeenCalledWith(0, 200, expectedCharacter, {
                 font: "32px ReithSans",
                 fill: "#f6931e",
@@ -152,7 +164,7 @@ describe("Game", () => {
         });
 
         test("displays the level selected", () => {
-            const expectedLevel = `Level Selected: ${game.transientData["level-select"].choice.title}`;
+            const expectedLevel = `Level Selected: ${game.transientData["level-select"].id}`;
             expect(game.add.text).toHaveBeenCalledWith(0, 250, expectedLevel, {
                 font: "32px ReithSans",
                 fill: "#f6931e",
@@ -455,12 +467,24 @@ describe("Game", () => {
 
             test("saves data from the game when the continue button image is clicked", () => {
                 continueButtonClickedOn.mock.calls[0][1]();
-                expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0 });
+                expect(game.transientData.results).toEqual({
+                    gems: 0,
+                    keys: 0,
+                    stars: 0,
+                    levelsRemaining: false,
+                    nextLevelData: { "level-select": { id: 7 } },
+                });
             });
 
             test("saves data from the game when the continue text is clicked", () => {
                 continueTextClickedOn.mock.calls[0][1]();
-                expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0 });
+                expect(game.transientData.results).toEqual({
+                    gems: 0,
+                    keys: 0,
+                    stars: 0,
+                    levelsRemaining: false,
+                    nextLevelData: { "level-select": { id: 7 } },
+                });
             });
 
             test("navigates to the next screen when the continue button image is clicked", () => {

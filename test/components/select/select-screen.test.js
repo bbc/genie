@@ -21,7 +21,7 @@ jest.mock("../../../src/core/layout/layout.js", () => ({
 jest.mock("../../../src/core/state.js", () => ({
     create: jest.fn(() => ({
         getAll: jest.fn(() => []),
-        get: jest.fn(() => ({ state: "locked" })),
+        get: jest.fn(title => ({ state: "locked", title })),
     })),
 }));
 
@@ -279,7 +279,7 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[0][0].callback();
-            expect(selectScreen.transientData["test-select"].choice.title).toBe("key1");
+            expect(selectScreen.transientData["test-select"].title).toBe("key1");
         });
     });
 
