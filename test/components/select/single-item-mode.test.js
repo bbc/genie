@@ -43,12 +43,6 @@ describe("Select Screen Single Item Mode", () => {
 
     afterEach(jest.clearAllMocks);
 
-    test("Returns undefined if continue button is not present", () => {
-        delete mockScene.layout.buttons.continue;
-        const returnValue = singleItemMode.create(mockScene);
-        expect(returnValue).toBe(undefined);
-    });
-
     test("Adds blur window listener which sets to page 0", () => {
         singleItemMode.create(mockScene);
         global.window.addEventListener.mock.calls[0][1]();
