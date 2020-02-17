@@ -252,7 +252,7 @@ export const config = screen => {
         },
         playagain: {
             group: "bottomCenter",
-            title: "Restart",
+            title: "Play Again",
             key: "playagain",
             ariaLabel: "Play Again",
             order: 12,
