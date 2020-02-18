@@ -6,7 +6,6 @@
 import { domElement } from "../../mock/dom-element.js";
 
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
-import * as elementManipulator from "../../../src/core/accessibility/element-manipulator.js";
 
 describe("Accessibility Layer", () => {
     let gameParentElement;
@@ -86,8 +85,7 @@ describe("Accessibility Layer", () => {
             global.document.createElement.mockImplementation(() => domElement());
         });
 
-        test("Calls hideAndDisableElement on a button's accessibleElement if it currently has focus", () => {
-            jest.spyOn(elementManipulator, "hideAndDisableElement").mockImplementation(() => {});
+        test("Calls removeFromParent on buttons", () => {
             const rootDiv = gameParentElement.appendChild.mock.calls[0][0];
             rootDiv.appendChild = jest.fn();
 
@@ -96,45 +94,22 @@ describe("Accessibility Layer", () => {
                 config: { group: "test-group-1" },
                 accessibleElement: { el: { id: "mock-button-id" } },
                 dataset: {},
+                parentElement: { removeChild: jest.fn() },
             };
 
             Object.defineProperty(rootDiv, "childNodes", { get: jest.fn(() => [mockButton]), configurable: true });
-            Object.defineProperty(global.document, "activeElement", {
-                get: jest.fn(() => mockButton),
-                configurable: true,
-            });
             a11y.addButton(mockButton);
             a11y.reset();
-            expect(elementManipulator.hideAndDisableElement.mock.calls[0][0]).toBe(mockButton.accessibleElement);
-        });
-
-        test("Calls removeFromParent on an button if it does not have focus", () => {
-            jest.spyOn(elementManipulator, "removeFromParent").mockImplementation(() => {});
-            const rootDiv = gameParentElement.appendChild.mock.calls[0][0];
-            rootDiv.appendChild = jest.fn();
-
-            const mockButton = {
-                id: "mock-button-id",
-                config: { group: "test-group-1" },
-                accessibleElement: { el: { id: "mock-button-id" } },
-                dataset: {},
-            };
-
-            Object.defineProperty(rootDiv, "childNodes", { get: jest.fn(() => [mockButton]), configurable: true });
-            Object.defineProperty(global.document, "activeElement", { get: jest.fn(() => {}), configurable: true });
-            a11y.addButton(mockButton);
-            a11y.reset();
-            expect(elementManipulator.removeFromParent.mock.calls[0][0]).toBe(mockButton);
+            expect(mockButton.parentElement.removeChild).toHaveBeenCalled();
         });
 
         test("Calls removeFromParent on buttons in groups", () => {
-            jest.spyOn(elementManipulator, "removeFromParent").mockImplementation(() => {});
-
             const mockButton = {
                 id: "mock-button-id",
                 config: { group: "test-group-1" },
                 accessibleElement: { el: { id: "mock-button-id" } },
                 dataset: {},
+                parentElement: { removeChild: jest.fn() },
             };
 
             const rootDiv = gameParentElement.appendChild.mock.calls[0][0];
@@ -147,7 +122,7 @@ describe("Accessibility Layer", () => {
 
             a11y.addButton(mockButton);
             a11y.reset();
-            expect(elementManipulator.removeFromParent.mock.calls[0][0]).toStrictEqual(mockButton);
+            expect(mockButton.parentElement.removeChild).toHaveBeenCalled();
         });
 
         test("attaches groups to the root element in the correct order", () => {
