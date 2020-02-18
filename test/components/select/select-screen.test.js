@@ -35,7 +35,7 @@ describe("Select Screen", () => {
     let mockBounds;
     let mockTextBounds;
     let mockMetrics;
-    let mockCellIds;
+    let mockChoices;
     let mockGelGrid;
     let mockGmi;
 
@@ -44,7 +44,7 @@ describe("Select Screen", () => {
         createMockGmi(mockGmi);
 
         mockGelGrid = {
-            cellIds: jest.fn(() => mockCellIds),
+            choices: jest.fn(() => mockChoices),
             addGridCells: jest.fn(() => []),
             getCurrentPageKey: jest.fn(),
             resize: jest.fn(),
@@ -131,7 +131,7 @@ describe("Select Screen", () => {
             buttonPad: 12,
             screenToCanvas: jest.fn(x => x),
         };
-        mockCellIds = [];
+        mockChoices = [];
         fillRectShapeSpy = jest.fn();
         selectScreen = new Select();
 
@@ -280,11 +280,11 @@ describe("Select Screen", () => {
         });
 
         test("saves choice to transient data", () => {
-            mockCellIds = ["key1"];
+            mockChoices = [{ title: "Title 1" }];
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[0][0].callback();
-            expect(selectScreen.transientData["test-select"].choice.title).toBe("key1");
+            expect(selectScreen.transientData["test-select"].choice.title).toBe("Title 1");
         });
     });
 
@@ -446,7 +446,7 @@ describe("Select Screen", () => {
         });
 
         test("fires a score stat to the GMI with when you select an item", () => {
-            mockCellIds = ["character_2"];
+            mockChoices = [{ title: "character_2" }];
             selectScreen.create();
 
             eventBus.subscribe.mock.calls[0][0].callback();

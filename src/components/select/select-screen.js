@@ -87,15 +87,15 @@ export class Select extends Screen {
         return stateDefinition === undefined || stateDefinition.enabled !== false;
     }
 
-    next = getTitle => () => {
+    next = getSelection => () => {
         this._scaleEvent.unsubscribe();
-        const selectionTitle = getTitle.call(this.grid);
+        const selection = getSelection.call(this.grid);
 
-        const metaData = { metadata: `ELE=[${selectionTitle}]` };
+        const metaData = { metadata: `ELE=[${selection.title}]` };
         const screenType = this.scene.key.split("-")[0];
         gmi.sendStatsEvent(screenType, "select", metaData);
 
-        this.transientData[this.scene.key] = { choice: { title: selectionTitle } };
+        this.transientData[this.scene.key] = { choice: { title: selection.title } };
         this.navigation.next();
     };
 }

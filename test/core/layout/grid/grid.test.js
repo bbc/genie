@@ -74,6 +74,7 @@ describe("Grid", () => {
                     config: {
                         gameButton: false,
                         id: config.id,
+                        title: config.title,
                     },
                     accessibleElement: {
                         update: jest.fn(),
@@ -182,6 +183,20 @@ describe("Grid", () => {
             grid = new GelGrid(mockScene);
             grid.addGridCells(mockScene.theme);
             expect(grid.cellIds()).toEqual(expectedIds);
+        });
+
+        test("returns choices for multiple cells", () => {
+            mockScene.theme.choices = [
+                { id: "asset_name_1", title: "Asset Ttile 1" },
+                { id: "asset_name_2", title: "Asset Ttile 2" },
+            ];
+            const expectedChoices = [
+                { id: "asset_name_1", title: "Asset Ttile 1" },
+                { id: "asset_name_2", title: "Asset Ttile 2" },
+            ];
+            grid = new GelGrid(mockScene);
+            grid.addGridCells(mockScene.theme);
+            expect(grid.choices()).toEqual(expectedChoices);
         });
 
         describe("accessibility", () => {
