@@ -91,7 +91,7 @@ export class Select extends Screen {
 
         //TODO  Stats Stuff will need adding back in, once we have the carousel back
         //TODO work out the correct key if "continue" is passed here when continue button used vs grid button
-        this.transientData[this.scene.key] = this.states.get(getTitle());
+        this.transientData[this.scene.key] = { id: getTitle() };
         this.navigation.next();
     };
 }
