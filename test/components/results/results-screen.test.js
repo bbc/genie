@@ -258,6 +258,13 @@ describe("Results Screen", () => {
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
+        test("adds the play again button when levelsRemaining set to false in transient data", () => {
+            mockTransientData.results = { levelsRemaining: false };
+            resultsScreen.create();
+            const expectedButtons = ["pause", "continueGame", "playagain"];
+            expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+
         test("adds a callback to unsubscribe from scale events on shutdown", () => {
             resultsScreen.create();
             expect(resultsScreen.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
@@ -308,6 +315,14 @@ describe("Results Screen", () => {
                 eventBus.subscribe.mock.calls[0][0].callback();
                 expect(resultsScreen.navigation.continue).toHaveBeenCalled();
             });
+
+            test("navigates to the game screen when clicked and nextLevelData is provided", () => {
+                const mockSelectData = { select: { test: "mock" } };
+                mockTransientData.results = { nextLevelData: mockSelectData };
+                eventBus.subscribe.mock.calls[0][0].callback();
+                expect(resultsScreen.navigation.game).toHaveBeenCalled();
+                expect(resultsScreen.transientData.select).toBe(mockSelectData.select);
+            });
         });
 
         describe("the restart button", () => {
@@ -317,6 +332,17 @@ describe("Results Screen", () => {
 
             test("restarts the game and passes saved data through", () => {
                 eventBus.subscribe.mock.calls[1][0].callback();
+                expect(resultsScreen.navigation.game).toHaveBeenCalled();
+            });
+        });
+
+        describe("the play again button", () => {
+            test("adds a event subscription", () => {
+                expect(eventBus.subscribe.mock.calls[2][0].name).toBe("playagain");
+            });
+
+            test("restarts the game and passes saved data through", () => {
+                eventBus.subscribe.mock.calls[2][0].callback();
                 expect(resultsScreen.navigation.game).toHaveBeenCalled();
             });
         });
