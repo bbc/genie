@@ -108,7 +108,7 @@ export class Game extends Screen {
         };
 
         const onGameComplete = () => {
-            markLevelAsComplete(this.transientData["level-select"].title);
+            markLevelAsComplete(this.transientData["level-select"].id);
             this.transientData.results = {
                 keys,
                 gems,
@@ -159,7 +159,7 @@ export class Game extends Screen {
         };
 
         this.add
-            .text(0, 200, `Character Selected: ${this.transientData["character-select"].title}`, {
+            .text(0, 200, `Character Selected: ${this.transientData["character-select"].id}`, {
                 font: "32px ReithSans",
                 fill: "#f6931e",
                 align: "center",
