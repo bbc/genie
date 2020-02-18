@@ -95,7 +95,7 @@ export class Select extends Screen {
         const screenType = this.scene.key.split("-")[0];
         gmi.sendStatsEvent(screenType, "select", metaData);
 
-        this.transientData[this.scene.key] = { choice: { title: selection.title } };
+        this.transientData[this.scene.key] = { choice: selection };
         this.navigation.next();
     };
 }
