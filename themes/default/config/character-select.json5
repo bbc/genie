@@ -1,11 +1,11 @@
 {
     theme: {
         "character-select": {
-            rows: 2,
-            columns: 3,
-            ease: "Cubic.easeInOut",
-            duration: 500,
-            align: "center",
+            columns: 3, // Number of choices to show horizontally per page. Can be 1 - 4.
+            rows: 2, // Number of choice rows to show per page. Can be either 1 or 2. When columns is 4 this is fixed to 1 row.
+            ease: "Cubic.easeInOut", // Pagination transition type
+            duration: 500, // Pagination transition duration
+            align: "center", // Alignment for any remaining choices in the last row
             music: "loader.backgroundMusic",
             titles: [
                 {
@@ -20,7 +20,7 @@
                     xOffset: 0,
                     yOffset: -260,
                     styles: {
-                        fontSize: "24px",
+                        fontSize: "24px", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
                     },
                 },
                 {
@@ -34,43 +34,43 @@
                 },
             ],
 
-            storageKey: "characters",
+            storageKey: "characters", // Points to the storage directory containing the choice assets.
             states: {
                 locked: {
-                    //asset: "debby",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
+                    // asset: "debby", // Key of sprite to set for. Renders same scale as base sprite so should be the same size.
                     overlayAsset: "character-select.lock",
-                    suffix: "locked", //appended to aria label of accessibility div
-                    x: 65,
-                    y: 35,
+                    suffix: "locked", // Appended to aria label of accessibility div.
+                    x: 65, // 0 is centre of the asset.
+                    y: 35, // These values scale with and are positioned with the asset so should be calculated based off the asset pixels.
                     properties: {
-                        //phaser properties assigned to the base sprite
+                        // Phaser properties assigned to the base sprite
                         alpha: 0.25,
                         tint: 0xff0000,
                     },
-                    enabled: false, //enable or disable touch input on this state - default true
+                    enabled: false, // Enable or disable touch input on this state - default true
                 },
                 complete: { overlayAsset: "character-select.complete", x: 65, y: 35, suffix: "completed" },
             },
-            //optional - provide if you want title/subtitle text to appear over each choice
+            // Optional - provide if you want title/subtitle text to appear over each choice
             choicesStyling: {
                 default: {
-                    title: {
+                    title: { // Styling for choice title, required to show title on choices.
                         style: {
                             fontFamily: "ReithSans",
                             fontSize: "19px",
                             color: "#424242",
                             backgroundColor: "#fff",
-                            fixedWidth: 75,
-                            align: "center",
-                            padding: {
+                            fixedWidth: 75, // Text will be clipped inside this width.
+                            align: "center", // Aligns the text within the fixed width.
+                            padding: { // Padding around the text will show a 'block' when combined with background colour.
                                 left: 6,
                                 right: 6,
                                 top: 2,
                                 bottom: 2,
                             },
                         },
-                        position: {
-                            x: 0,
+                        position: { // Required if title is being shown.
+                            x: 0, // 0 is centre of asset. These values scale with and are positioned with the asset so should be calculated based off the asset pixels.
                             y: 53,
                         },
                     },
