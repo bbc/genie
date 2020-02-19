@@ -33,6 +33,11 @@
                 "url": "results/row-backdrop-3.png"
             },
             {
+                "type": "image",
+                "key": "spark",
+                "url": "results/spark.png"
+            },
+            {
                 "type": "audio",
                 "key": "coin-sfx",
                 "url": "results/coin-sfx.mp3"

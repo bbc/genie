@@ -5,6 +5,34 @@
                 key: 'results.backdrop', // Asset key.
                 alpha: 1,
             },
+            particles: [
+                {
+                    key: "results.spark",
+                    config: {
+                        x: 400,
+                        y: 300,
+                        speed: { min: 100, max: 200 },
+                        angle: { min: -85, max: -95},
+                        scale: { start: 0, end: 1},
+                        alpha: { start: 1, end: 0},
+                        blendMode: 'SCREEN',
+                        lifespan: 1000
+                    }
+                },
+                {
+                    key: "results.spark",
+                    config: {
+                        x: -400,
+                        y: 300,
+                        speed: { min: 100, max: 200 },
+                        angle: { min: -85, max: -95},
+                        scale: { start: 0, end: 1},
+                        alpha: { start: 1, end: 0},
+                        blendMode: 'SCREEN',
+                        lifespan: 1000
+                    }
+                }
+            ],
             rows: [ // An array of rows which will be displayed on the screen.
                 {
                     format: [ // Each object in this array generates a visible object in the row.
