@@ -15,13 +15,15 @@ jest.mock("../../../src/core/settings.js");
 describe("Layout - Button Factory", () => {
     let buttonFactory;
     let mockGame;
+    let mockButton;
 
     beforeEach(() => {
-        jest.spyOn(accessibilify, "accessibilify").mockImplementation(() => {});
-        jest.spyOn(GelButton, "GelButton").mockImplementation(() => ({
+        mockButton = {
             disableInteractive: jest.fn(),
             input: {},
-        }));
+        };
+        jest.spyOn(accessibilify, "accessibilify").mockImplementation(() => {});
+        jest.spyOn(GelButton, "GelButton").mockImplementation(() => mockButton);
 
         mockGame = { canvas: () => {}, mockGame: "game" };
         buttonFactory = ButtonFactory.create(mockGame);
@@ -84,6 +86,30 @@ describe("Layout - Button Factory", () => {
 
             expect(btn.input.hitArea).toBe(null);
             expect(btn.disableInteractive).toHaveBeenCalledTimes(1);
+        });
+
+        test("accessibilifies button when accessibilityEnabled is true and icon is false", () => {
+            const config = {
+                title: "button",
+                icon: false,
+                accessibilityEnabled: true,
+            };
+
+            buttonFactory.createButton(config);
+
+            expect(accessibilify.accessibilify).toHaveBeenCalledWith(mockButton, false);
+        });
+
+        test("does not accessibilify button when accessibilityEnabled is false and icon is false", () => {
+            const config = {
+                title: "button",
+                icon: false,
+                accessibilityEnabled: false,
+            };
+
+            buttonFactory.createButton(config);
+
+            expect(accessibilify.accessibilify).not.toHaveBeenCalled();
         });
     });
 

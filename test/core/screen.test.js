@@ -232,11 +232,17 @@ describe("Screen", () => {
 
         test("calls layout.create with correct arguments", () => {
             const expectedButtons = ["somebutton", "another"];
+            const expectedAccessibleButtons = ["somebutton"];
             Layout.create = jest.fn(() => ({ root: {} }));
             Scaler.getMetrics = () => "somemetrics";
             createAndInitScreen();
-            screen.setLayout(expectedButtons);
-            expect(Layout.create).toHaveBeenCalledWith(screen, "somemetrics", expectedButtons);
+            screen.setLayout(expectedButtons, expectedAccessibleButtons);
+            expect(Layout.create).toHaveBeenCalledWith(
+                screen,
+                "somemetrics",
+                expectedButtons,
+                expectedAccessibleButtons,
+            );
         });
     });
 

@@ -46,7 +46,7 @@ describe("Results Screen", () => {
         };
         mockConfig = {
             theme: {
-                resultsScreen: {
+                results: {
                     backdrop: { key: "mockKey", alpha: 1 },
                     resultText: {
                         style: { font: "36px ReithSans" },
@@ -104,11 +104,11 @@ describe("Results Screen", () => {
             particles: jest.fn(() => mockParticle),
         };
         resultsScreen.scene = {
-            key: "resultsScreen",
+            key: "results",
         };
         resultsScreen.navigation = {
-            next: jest.fn(),
-            game: jest.fn(),
+            continue: jest.fn(),
+            restart: jest.fn(),
         };
         resultsScreen.events = {
             once: jest.fn(),
@@ -172,14 +172,14 @@ describe("Results Screen", () => {
         });
 
         test("adds a backdrop image with specified properties when one is specified in config", () => {
-            mockConfig.theme.resultsScreen.backdrop.alpha = 0.5;
+            mockConfig.theme.results.backdrop.alpha = 0.5;
             resultsScreen.create();
             expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
             expect(mockImage.alpha).toEqual(0.5);
         });
 
         test("adds an image with a default alpha of 1 when no alpha is specified", () => {
-            mockConfig.theme.resultsScreen.backdrop.alpha = undefined;
+            mockConfig.theme.results.backdrop.alpha = undefined;
 
             resultsScreen.create();
             expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
@@ -254,7 +254,7 @@ describe("Results Screen", () => {
         });
 
         test("does not render image when no key is provided on the backdrop object", () => {
-            mockConfig.theme.resultsScreen.backdrop.key = undefined;
+            mockConfig.theme.results.backdrop.key = undefined;
             resultsScreen.create();
             expect(resultsScreen.add.image).not.toHaveBeenCalledWith(0, 0, "mockKey");
         });
@@ -322,7 +322,7 @@ describe("Results Screen", () => {
 
             test("navigates to the next screen when clicked", () => {
                 eventBus.subscribe.mock.calls[0][0].callback();
-                expect(resultsScreen.navigation.next).toHaveBeenCalled();
+                expect(resultsScreen.navigation.continue).toHaveBeenCalled();
             });
         });
 
@@ -333,7 +333,7 @@ describe("Results Screen", () => {
 
             test("restarts the game and passes saved data through", () => {
                 eventBus.subscribe.mock.calls[1][0].callback();
-                expect(resultsScreen.navigation.game).toHaveBeenCalled();
+                expect(resultsScreen.navigation.restart).toHaveBeenCalled();
             });
         });
     });

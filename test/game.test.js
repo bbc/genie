@@ -3,8 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
-import { accessibilify } from "../src/core/accessibility/accessibilify.js";
 import { gmi } from "../src/core/gmi/gmi.js";
 import { Game } from "../src/components/game";
 
@@ -13,7 +11,7 @@ jest.mock("../src/core/gmi/gmi.js");
 
 describe("Game", () => {
     const expectedButtonStyle = {
-        font: "40px ReithSans",
+        font: "35px ReithSans",
         fill: "#fff",
         align: "center",
         wordWrap: true,
@@ -65,6 +63,12 @@ describe("Game", () => {
         game.setData(mockData);
         game.scene = {
             key: "game",
+        };
+        game.tweens = {
+            add: jest.fn(),
+        };
+        game.sound = {
+            play: jest.fn(),
         };
         game.add = {
             image: jest.fn(() => mockImage),

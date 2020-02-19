@@ -48,7 +48,7 @@ export class Results extends Screen {
         this.createLayout();
         this.createBackdrop();
         this.subscribeToEventBus();
-        fireGameCompleteStat(this.transientData.results);
+        fireGameCompleteStat(this.transientData[this.scene.key]);
     }
 
     addBackgroundParticles() {
@@ -99,8 +99,8 @@ export class Results extends Screen {
         this.events.once("shutdown", scaleEvent.unsubscribe);
         const fpMap = fp.map.convert({ cap: false });
         fpMap((callback, name) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }), {
-            continue: this.navigation.next,
-            restart: this.navigation.game,
+            continue: this.navigation.continue,
+            restart: this.navigation.restart,
         });
     }
 }
