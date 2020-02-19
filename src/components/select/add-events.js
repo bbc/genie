@@ -8,11 +8,11 @@ import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 
 export const addEvents = scene => {
     const grid = scene.grid;
-    grid.cellIds().map(key => {
+    grid.choices().map(choice => {
         eventBus.subscribe({
             channel: buttonsChannel(scene),
-            name: key,
-            callback: scene.next(() => key),
+            name: choice.id,
+            callback: scene.next(() => choice),
         });
     });
     eventBus.subscribe({
