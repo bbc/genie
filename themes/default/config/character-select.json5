@@ -38,7 +38,7 @@
             states: {
                 locked: {
                     // asset: "debby", // Key of sprite to set for. Renders same scale as base sprite so should be the same size.
-                    overlayAsset: "character-select.lock",
+                    overlayAsset: "character-select.lock", // Render this over the top of the choice asset for this state.
                     suffix: "locked", // Appended to aria label of accessibility div.
                     x: 65, // 0 is centre of the asset.
                     y: 35, // These values scale with and are positioned with the asset so should be calculated based off the asset pixels.
