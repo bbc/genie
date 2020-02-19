@@ -173,7 +173,7 @@ export const config = screen => {
             title: "Play",
             key: "play",
             ariaLabel: "Play Game",
-            order: 8,
+            order: 9,
             id: "play",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
