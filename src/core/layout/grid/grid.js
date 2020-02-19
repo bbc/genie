@@ -60,6 +60,12 @@ export class GelGrid extends Phaser.GameObjects.Container {
         return this._cells.map(cell => cell.button.config.id);
     }
 
+    choices() {
+        return this._cells.map(cell => {
+            return { title: cell.button.config.title, id: cell.button.config.id };
+        });
+    }
+
     enforceLimits() {
         const maxColumns = this._config.rows === 1 ? 4 : 3;
         const maxRows = 2;

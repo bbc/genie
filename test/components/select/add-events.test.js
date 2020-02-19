@@ -8,20 +8,20 @@ import { eventBus } from "../../../src/core/event-bus.js";
 
 describe("Select Screen addEvents", () => {
     let mockSelect;
-    let mockCellIds;
+    let mockChoices;
     let nextSpy;
 
     beforeEach(() => {
         jest.spyOn(eventBus, "subscribe");
 
-        mockCellIds = [];
+        mockChoices = [];
 
         nextSpy = jest.fn();
 
         mockSelect = {
             scene: { key: "testSceneKey" },
             grid: {
-                cellIds: jest.fn(() => mockCellIds),
+                choices: jest.fn(() => mockChoices),
                 showPage: jest.fn(),
                 page: 4,
             },
@@ -47,14 +47,14 @@ describe("Select Screen addEvents", () => {
     });
 
     test("adds event subscriptions for grid buttons", () => {
-        mockCellIds = ["key1", "key2"];
+        mockChoices = [{ id: "key1" }, { id: "key2" }];
         addEvents(mockSelect);
         expect(eventBus.subscribe.mock.calls[0][0].name).toBe("key1");
         expect(eventBus.subscribe.mock.calls[1][0].name).toBe("key2");
     });
 
     test("moves to the next screen when grid cell is pressed", () => {
-        mockCellIds = ["key1", "key2"];
+        mockChoices = [{ id: "key1" }, { id: "key2" }];
         addEvents(mockSelect);
 
         eventBus.subscribe.mock.calls[1][0].callback();
@@ -62,7 +62,7 @@ describe("Select Screen addEvents", () => {
     });
 
     test("moves to the next page when next page is pressed", () => {
-        mockCellIds = ["key1", "key2"];
+        mockChoices = [{ id: "key1" }, { id: "key2" }];
         addEvents(mockSelect);
 
         eventBus.subscribe.mock.calls[3][0].callback();
@@ -70,18 +70,18 @@ describe("Select Screen addEvents", () => {
     });
 
     test("moves to the previous page when next page is pressed", () => {
-        mockCellIds = ["key1", "key2"];
+        mockChoices = [{ id: "key1" }, { id: "key2" }];
         addEvents(mockSelect);
 
         eventBus.subscribe.mock.calls[4][0].callback();
         expect(mockSelect.grid.showPage).toHaveBeenCalledWith(3);
     });
 
-    test("returns key on cell callback", () => {
-        mockCellIds = ["key1"];
+    test("returns id on cell callback", () => {
+        mockChoices = [{ id: "key1" }];
         addEvents(mockSelect);
 
         const cellCallback = mockSelect.next.mock.calls[0][0];
-        expect(cellCallback()).toBe("key1");
+        expect(cellCallback().id).toBe("key1");
     });
 });
