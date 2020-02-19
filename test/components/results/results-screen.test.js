@@ -26,6 +26,7 @@ describe("Results Screen", () => {
     let mockTextAdd;
     let mockResultsArea;
     let mockImage;
+    let mockParticle;
     let mockRows;
     let unsubscribe = jest.fn();
 
@@ -37,6 +38,7 @@ describe("Results Screen", () => {
         MetricsModule.getMetrics = jest.fn();
         mockRows = { containers: "mockcontainer" };
         Rows.create = jest.fn(() => mockRows);
+        mockParticle = { setDepth: jest.fn() };
         mockImage = {
             height: 5,
             width: 5,
@@ -99,6 +101,7 @@ describe("Results Screen", () => {
                 return mockImage;
             }),
             text: jest.fn(() => mockTextAdd),
+            particles: jest.fn(() => mockParticle),
         };
         resultsScreen.scene = {
             key: "resultsScreen",
@@ -119,6 +122,19 @@ describe("Results Screen", () => {
             resultsScreen.create();
             expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "results.background");
             expect(mockImage.setDepth).toHaveBeenCalledWith(-1);
+        });
+
+        test("adds background particles if provided", () => {
+            const particles = [
+                { key: "results.spark", config: { particlesConfig: "particlesConfig1" } },
+                { key: "results.flare", config: { particlesConfig: "particlesConfig2" } },
+            ];
+            mockConfig.theme.resultsScreen.particles = particles;
+            resultsScreen.create();
+            expect(resultsScreen.add.particles).toHaveBeenCalledWith(particles[0].key, particles[0].config);
+            expect(resultsScreen.add.particles).toHaveBeenCalledWith(particles[1].key, particles[1].config);
+            expect(mockParticle.setDepth).toHaveBeenCalledWith(-1);
+            expect(mockParticle.setDepth).toHaveBeenCalledTimes(2);
         });
 
         test("adds GEL buttons to layout", () => {

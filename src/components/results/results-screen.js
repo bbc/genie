@@ -43,11 +43,19 @@ export class Results extends Screen {
     create() {
         this.theme = this.context.config.theme[this.scene.key];
         this.add.image(0, 0, "results.background").setDepth(-1);
+        this.addBackgroundParticles();
         this.addAnimations();
         this.createLayout();
         this.createBackdrop();
         this.subscribeToEventBus();
         fireGameCompleteStat(this.transientData.results);
+    }
+
+    addBackgroundParticles() {
+        this.theme.particles &&
+            this.theme.particles.forEach(particle => {
+                this.add.particles(particle.key, particle.config).setDepth(-1);
+            });
     }
 
     resultsArea() {
