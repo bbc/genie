@@ -129,7 +129,7 @@ describe("Results Screen", () => {
                 { key: "results.spark", config: { particlesConfig: "particlesConfig1" } },
                 { key: "results.flare", config: { particlesConfig: "particlesConfig2" } },
             ];
-            mockConfig.theme.resultsScreen.particles = particles;
+            mockConfig.theme.results.particles = particles;
             resultsScreen.create();
             expect(resultsScreen.add.particles).toHaveBeenCalledWith(particles[0].key, particles[0].config);
             expect(resultsScreen.add.particles).toHaveBeenCalledWith(particles[1].key, particles[1].config);
