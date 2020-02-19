@@ -40,7 +40,7 @@ export function startup(screenConfig, settingsConfig = {}) {
     const phaserConfig = {
         width: CANVAS_WIDTH,
         height: CANVAS_HEIGHT,
-        renderer: browser.forceCanvas ? Phaser.CANVAS : Phaser.AUTO,
+        type: browser.forceCanvas ? Phaser.CANVAS : Phaser.AUTO,
         antialias: true,
         multiTexture: true,
         parent: getContainerDiv(),

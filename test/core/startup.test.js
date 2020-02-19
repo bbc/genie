@@ -125,7 +125,7 @@ describe("Startup", () => {
             const expectedConfig = {
                 width: 1400,
                 height: 600,
-                renderer: 0,
+                type: 0,
                 antialias: true,
                 multiTexture: true,
                 parent: containerDiv,
@@ -137,7 +137,7 @@ describe("Startup", () => {
 
             expect(actualConfig.width).toBe(expectedConfig.width);
             expect(actualConfig.height).toBe(expectedConfig.height);
-            expect(actualConfig.renderer).toBe(expectedConfig.renderer);
+            expect(actualConfig.type).toBe(expectedConfig.type);
             expect(actualConfig.antialias).toBe(expectedConfig.antialias);
             expect(actualConfig.multiTexture).toBe(expectedConfig.multiTexture);
             expect(actualConfig.parent).toEqual(expectedConfig.parent);
@@ -157,12 +157,12 @@ describe("Startup", () => {
             expect(actualConfig.transparent).toBe(true);
         });
 
-        test("sets renderer to canvas when browser returns forceCanvas", () => {
+        test("sets type to canvas when browser returns forceCanvas", () => {
             const mockSafari9 = { name: "Safari", forceCanvas: true };
             getBrowser.mockImplementation(() => mockSafari9);
             startup({});
             const actualConfig = Phaser.Game.mock.calls[0][0];
-            expect(actualConfig.renderer).toBe(1);
+            expect(actualConfig.type).toBe(1);
         });
 
         test("throws an error if the game container element cannot be found", () => {
