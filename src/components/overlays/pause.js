@@ -16,6 +16,7 @@ export class Pause extends Screen {
 
     create() {
         this.add.image(0, 0, `${this.scene.key}.pauseBackground`);
+        this.add.image(0, -170, `${this.scene.key}.title`);
         const buttons = ["home", "audio", "settings", "pausePlay", "howToPlay"];
 
         const parentKey = this.context.parentScreens.slice(-1)[0].scene.key;
@@ -24,6 +25,5 @@ export class Pause extends Screen {
         const replayButton = showReplay ? ["pauseReplay"] : [];
 
         this.setLayout(buttons.concat(replayButton));
-        this.add.image(0, -170, `${this.scene.key}.title`);
     }
 }
