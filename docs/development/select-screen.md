@@ -41,7 +41,7 @@ const screenConfig = {
     - `main`: This refers to the image of the thing the player is selecting. For example in a character select screen, this will be the character itself.
     - `name`: This refers to the image of the name of the thing the player is selecting. For example in a character select screen, it will simply be an image of the character's name.
 
-```json
+```json5
 {
     "theme": {
         "character-select": {
@@ -63,7 +63,7 @@ const screenConfig = {
 
 Configured choices may have text labels drawn with them. These are populated by config, using the "title" and "subtitle" keys. Example:
 
-```json
+```json5
 {
     ...
     "choices": [
@@ -81,7 +81,7 @@ Configured choices may have text labels drawn with them. These are populated by 
 
 Choice text elements must have default styling associated with their text elements. Default styles are set within the select screen config, in the object `choicesStyling`, example:
 
-```json
+```json5
 {
     ...
     "choices": [...],
@@ -124,7 +124,7 @@ Choice text elements must have default styling associated with their text elemen
 
 Styles for different button states can override the default styles for each of the elements:
 
-```json
+```json5
 {
     ...
     "default": { 
