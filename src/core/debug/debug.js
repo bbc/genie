@@ -5,6 +5,8 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import { debugLayout } from "./layout-debug-draw.js";
+import { BORDER_PAD_RATIO, GEL_MAX_ASPECT_RATIO, GEL_MIN_ASPECT_RATIO } from "../layout/calculate-metrics.js";
+import { getMetrics } from "../scaler.js";
 
 let debugDraw;
 
@@ -17,30 +19,35 @@ export function update() {
     debugDraw.buttons(this.debugGraphics);
 }
 
+const getPaddingWidth = canvas => Math.max(canvas.width, canvas.height) * BORDER_PAD_RATIO;
+
+//TODO delete - this is from other setup.
+const createOuterPadding = screen => {
+    const viewAspectRatio = screen.game.scale.parent.offsetWidth / screen.game.scale.parent.offsetHeight;
+    const aspectRatio = Math.min(GEL_MAX_ASPECT_RATIO, viewAspectRatio);
+    const size = aspectRatio <= 4 / 3 ? { width: 800, height: 600 } : { width: aspectRatio * 600, height: 600 };
+    const pad = getPaddingWidth(size);
+
+    return [
+        screen.add.tileSprite(0, (pad - size.height) / 2, size.width, pad, "gelDebug.FF0030-hatch"),
+        screen.add.tileSprite(0, (size.height - pad) / 2, size.width, pad, "gelDebug.FF0030-hatch"),
+        screen.add.tileSprite((pad - size.width) / 2, 0, pad, size.height, "gelDebug.FF0030-hatch"),
+        screen.add.tileSprite((size.width - pad) / 2, 0, pad, size.height, "gelDebug.FF0030-hatch"),
+    ];
+};
+
+const create43Area = screen => {
+    const areaWidth = GEL_MIN_ASPECT_RATIO * screen.game.canvas.height;
+    const areaHeight = screen.game.canvas.height;
+
+    return [screen.add.tileSprite(0, 0, areaWidth, areaHeight, "gelDebug.FFCC00-hatch")];
+};
+
 function create() {
     this.debugGraphics = this.add.graphics();
+    const safeAreaDebugElements = [...create43Area(this), ...createOuterPadding(this)];
 
-
-    //const tile = this.add.tileSprite(0, 0, 200, 200, "gelDebug.FF0030-hatch");
-
-    const xx = this.game.renderer.createTexture2D(0, 0, 0, 1, 1, 1, this.gl.RGBA, 100, 100)
-
-    const mesh = this.make.mesh({
-        key: 'gelDebug.FF0030-hatch',
-        x: 0,
-        y: 0,
-        vertices: [
-            -400, -300,     //TRI1
-            -400, 300,
-            400, 300,
-
-            -400, -300,     //TRI2
-            400, 300,
-            400, -300
-        ],
-        uv: [ 0, 0, 0, 100, 100, 100, 0, 0, 100, 100, 100, 0 ]
-    });
-
+    setTileScale(safeAreaDebugElements);
 
     debugDraw = {
         layout: fp.identity,
@@ -52,6 +59,11 @@ function create() {
     this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups));
     this.input.keyboard.addKey("e").on("up", makeToggle("buttons", this.layout.debug.buttons));
 }
+
+const setTileScale = tiles => {
+    const metrics = getMetrics();
+    tiles.map(tile => tile.setTileScale(1 / metrics.scale));
+};
 
 function destroy() {
     this.input.keyboard.removeKey("q");
