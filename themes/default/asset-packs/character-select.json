@@ -5,32 +5,27 @@
             {
                 "type": "image",
                 "key": "title",
-                "url": "shared/small-title.png",
-                "overwrite": false
+                "url": "characters/title_drop.png"
             },
             {
                 "type": "image",
                 "key": "background",
-                "url": "shared/background.png",
-                "overwrite": false
+                "url": "shared/background.png"
             },
             {
                 "type": "image",
                 "key": "lock",
-                "url": "characters/lock.png",
-                "overwrite": false
+                "url": "characters/lock.png"
             },
             {
                 "type": "image",
                 "key": "complete",
-                "url": "characters/complete.png",
-                "overwrite": false
+                "url": "characters/complete.png"
             },
             {
                 "type": "spritesheet",
                 "key": "char1",
                 "url": "characters/char_1_anim.png",
-                "overwrite": false,
                 "frameConfig": {
                     "frameWidth": 37,
                     "frameHeight": 45,
@@ -87,7 +82,7 @@
             },
             {
                 "type": "spritesheet",
-                "key": "ange",
+                "key": "ezinma",
                 "url": "characters/5.png",
                 "frameConfig": {
                     "frameWidth": 208,
@@ -123,7 +118,7 @@
             },
             {
                 "type": "spritesheet",
-                "key": "suzytoo",
+                "key": "debby",
                 "url": "characters/8.png",
                 "frameConfig": {
                     "frameWidth": 208,

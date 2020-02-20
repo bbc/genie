@@ -81,6 +81,22 @@ describe("Layout Harness", () => {
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("q");
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("w");
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("e");
+            expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("r");
+        });
+    });
+
+    describe("CSS toggle", () => {
+        test("toggles debug class on body", () => {
+            addEvents.call(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+            createCallback.call(mockScreen);
+
+            const toggleCSS = mockOnUpEvent.mock.calls[3][1];
+            global.document.body.classList.toggle = jest.fn();
+
+            toggleCSS();
+
+            expect(document.body.classList.toggle).toHaveBeenCalledWith("debug");
         });
     });
 
@@ -94,6 +110,7 @@ describe("Layout Harness", () => {
             expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith("q");
             expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith("w");
             expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith("e");
+            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith("r");
         });
     });
 

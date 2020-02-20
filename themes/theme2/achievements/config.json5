@@ -1,0 +1,70 @@
+/**
+ * Loadscreen loads in the game's assets.
+ *keykey
+ * @modunameponents/loadscreen
+ * @copyright BBC 2019
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
+[
+    {
+        key: "just_started",
+        name: "Just Getting Star-ted",
+        description: "You collected your first star.",
+        points: 100, // the total points for all achievements should equal 1000
+    },
+    {
+        key: "rock_star",
+        name: "Rock Star",
+        description: "You collected five stars.",
+        points: 100,
+    },
+    {
+        key: "stellar",
+        name: "Stellar Achievement",
+        description: "You collected ten stars.",
+        points: 100,
+    },
+    {
+        key: "diamond_in_the_rough",
+        name: "Diamond In The Rough",
+        description: "You collected your first gem.",
+        points: 100,
+    },
+    {
+        key: "pyrites_of_the_carribean",
+        name: "Pyrites of The Carribean",
+        description: "You collected five gems.",
+        points: 100,
+    },
+    {
+        key: "sapphire_so_good",
+        name: "Sapphire So Good",
+        description: "You collected ten gems.",
+        points: 100,
+    },
+    {
+        key: "diamonds_are_forever",
+        name: "Diamonds Are Forever",
+        description: "You collected twenty gems.",
+        points: 100,
+    },
+    {
+        key: "got_the_key",
+        name: "I Got The Key",
+        description: "You collected your first key.",
+        points: 100,
+    },
+    {
+        key: "lock_around_the_clock",
+        name: "Lock Around The Clock",
+        description: "You collected five keys.",
+        points: 100,
+    },
+    {
+        key: "super_size_key",
+        name: "Super Size Key",
+        description: "You collected ten keys.",
+        points: 100,
+    },
+]

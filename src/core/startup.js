@@ -18,6 +18,7 @@ import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
 import { JSON5Plugin } from "./loader/json5-loader/json5-plugin.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addGelButton } from "./layout/gel-game-objects.js";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./layout/metrics.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key, ...conf[key].settings }));
 
@@ -37,8 +38,8 @@ export function startup(screenConfig, settingsConfig = {}) {
     scenes.unshift(new Boot(screenConfig));
 
     const phaserConfig = {
-        width: 1400,
-        height: 600,
+        width: CANVAS_WIDTH,
+        height: CANVAS_HEIGHT,
         renderer: browser.forceCanvas ? Phaser.CANVAS : Phaser.AUTO,
         antialias: true,
         multiTexture: true,
@@ -80,7 +81,7 @@ export function startup(screenConfig, settingsConfig = {}) {
     const game = new Phaser.Game(phaserConfig);
 
     debugMode.create(window, game);
-    a11y.setup(getContainerDiv());
+    a11y.create(getContainerDiv());
 }
 
 function getContainerDiv() {

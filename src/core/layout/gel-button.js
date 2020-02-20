@@ -3,21 +3,21 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import fp from "../../../lib/lodash/fp/fp.js";
 import { eventBus } from "../event-bus.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 import { assetPath } from "./asset-paths.js";
 import { Indicator } from "./gel-indicator.js";
+import { getMetrics } from "../scaler.js";
 
 const defaults = {
     shiftX: 0,
     shiftY: 0,
-    name: "",
 };
 
 export class GelButton extends Phaser.GameObjects.Container {
-    constructor(scene, x, y, metrics, config) {
+    constructor(scene, x, y, config) {
+        const metrics = getMetrics();
         super(scene, x, y);
 
         this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
@@ -72,15 +72,11 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     setHitArea(metrics) {
-        const hitPadding = {
-            x: fp.max([metrics.hitMin - this.sprite.width, 0]),
-            y: fp.max([metrics.hitMin - this.sprite.height, 0]),
-        };
-        const width = this.sprite.width + hitPadding.x;
-        const height = this.sprite.height + hitPadding.y;
-        if (this.input) {
-            this.input.hitArea = new Phaser.Geom.Rectangle(-hitPadding.x / 2, -hitPadding.y / 2, width, height);
-        }
+        const hitPad = Math.max(metrics.hitMin - this.sprite.width, metrics.hitMin - this.sprite.height, 0);
+        const width = this.sprite.width + hitPad;
+        const height = this.sprite.height + hitPad;
+
+        this.input.hitArea = new Phaser.Geom.Rectangle(0, 0, width, height);
 
         this.setSize(width, height);
     }
@@ -91,8 +87,8 @@ export class GelButton extends Phaser.GameObjects.Container {
         return new Phaser.Geom.Rectangle(
             wtm.getX(-this.input.hitArea.width / 2, 0),
             wtm.getY(0, -this.input.hitArea.height / 2),
-            this.input.hitArea.width * this.parentContainer.scale,
-            this.input.hitArea.height * this.parentContainer.scale,
+            this.input.hitArea.width * this.scale * this.parentContainer.scale,
+            this.input.hitArea.height * this.scale * this.parentContainer.scale,
         );
     }
 
@@ -126,7 +122,7 @@ const publish = (config, data) => () => {
     GameSound.Assets.buttonClick.play();
     eventBus.publish({
         channel: config.channel,
-        name: config.key,
+        name: config.id,
         data,
     });
 };

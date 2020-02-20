@@ -20,11 +20,9 @@ describe("Loader", () => {
     let mockMasterPack;
 
     beforeEach(() => {
-        global.window.__qaMode = undefined;
+        global.window.__debug = undefined;
         jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {});
-        jest.spyOn(a11y, "clearElementsFromDom").mockImplementation(() => {});
-        jest.spyOn(a11y, "clearAccessibleButtons").mockImplementation(() => {});
-        jest.spyOn(a11y, "appendElementsToDom").mockImplementation(() => {});
+        jest.spyOn(a11y, "destroy").mockImplementation(() => {});
 
         mockGmi = {
             embedVars: { configPath: "test-config-path" },
@@ -79,7 +77,7 @@ describe("Loader", () => {
             addPack: jest.fn(),
             pack: jest.fn(),
             on: jest.fn(),
-            json: jest.fn(),
+            json5: jest.fn(),
         };
         loader.cache = {
             json: {
@@ -140,6 +138,15 @@ describe("Loader", () => {
             loader.updateLoadBar(progress);
             expect(mockImage.frame.cutWidth).toEqual(progress);
         });
+
+        test("does not update the loading bar fill when progress is backwards", () => {
+            const progress = 42;
+
+            loader.preload();
+            loader.updateLoadBar(progress);
+            loader.updateLoadBar(41);
+            expect(mockImage.frame.cutWidth).toEqual(progress);
+        });
     });
 
     describe("createBrandLogo method", () => {
@@ -167,8 +174,8 @@ describe("Loader", () => {
             loader.updateLoadBar = jest.fn();
             loader.createLoadBar();
 
-            expect(loader.add.image).toHaveBeenCalledWith(0, 0, "loader.loadbarBackground");
-            expect(loader.add.image).toHaveBeenCalledWith(0, 0, "loader.loadbar");
+            expect(loader.add.image).toHaveBeenCalledWith(0, 130, "loader.loadbarBackground");
+            expect(loader.add.image).toHaveBeenCalledWith(0, 130, "loader.loadbar");
             expect(loader.updateLoadBar).toHaveBeenCalledWith(0);
         });
     });
@@ -214,7 +221,7 @@ describe("Loader", () => {
             loader.preload();
 
             expect(loader.add.image).toHaveBeenCalledWith(0, 0, "loader.background");
-            expect(loader.add.image).toHaveBeenCalledWith(0, -150, "loader.title");
+            expect(loader.add.image).toHaveBeenCalledWith(0, -120, "loader.title");
         });
     });
 
@@ -237,14 +244,14 @@ describe("Loader", () => {
         });
     });
 
-    describe("qaMode", () => {
+    describe("debug mode", () => {
         beforeEach(() => {
             jest.spyOn(console, "log").mockImplementation(() => {});
             loader.preload();
         });
 
-        test("logs the progress to the console when qaMode is true", () => {
-            global.window.__qaMode = true;
+        test("logs the progress to the console when debug is true", () => {
+            global.window.__debug = true;
             loader.updateLoadBar("50");
             expect(console.log.mock.calls[0]).toEqual(["Loader progress:", "50"]); // eslint-disable-line no-console
         });
@@ -273,14 +280,20 @@ describe("Loader", () => {
 
         test("loads the achievements config if enabled in config", () => {
             loader.preload();
-            expect(loader.load.json).toHaveBeenCalledWith("achievements-data", "achievements/config.json");
+            expect(loader.load.json5).toHaveBeenCalledWith({
+                key: "achievements-data",
+                url: "achievements/config.json5",
+            });
         });
 
         test("does not load the achievements config if disabled in config", () => {
             delete mockConfig.theme.game.achievements;
 
             loader.preload();
-            expect(loader.load.json).not.toHaveBeenCalledWith("achievements-data", "achievements/config.json");
+            expect(loader.load.json5).not.toHaveBeenCalledWith({
+                key: "achievements-data",
+                url: "achievements/config.json5",
+            });
         });
     });
 });

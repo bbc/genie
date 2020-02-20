@@ -1,6 +1,6 @@
 {
     "name": "genie",
-    "version": "3.0.0-epsilon",
+    "version": "3.0.0-omega",
     "description": "Genie - A Modular Game Engine",
     "license": "Apache-2.0",
     "private": true,
@@ -10,7 +10,7 @@
         "url": "https://github.com/bbc/childrens-games-genie"
     },
     "dependencies": {
-        "@babel/core": "^7.4.5",
+        "@babel/core": "^7.8.4",
         "@babel/plugin-proposal-class-properties": "^7.5.5",
         "@babel/plugin-proposal-private-methods": "^7.6.0",
         "@babel/polyfill": "^7.4.4",

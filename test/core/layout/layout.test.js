@@ -37,6 +37,7 @@ describe("Layout", () => {
 
         mockRoot = {
             add: jest.fn(),
+            addAt: jest.fn(),
             destroy: jest.fn(),
         };
 
@@ -81,8 +82,9 @@ describe("Layout", () => {
 
         mockInputUpAdd = jest.fn();
         mockGelGroup = {
-            addButton: jest.fn(name => ({
-                buttonName: name,
+            addButton: jest.fn(config => ({
+                buttonName: config,
+                config,
                 onInputUp: { add: mockInputUpAdd },
                 getHitAreaBounds: jest.fn(() => mockHitAreaBounds),
             })),
@@ -218,7 +220,7 @@ describe("Layout", () => {
             const customGroup = { test_key: "test_value" };
             layout.addCustomGroup(key, customGroup);
 
-            expect(mockRoot.add).toHaveBeenCalledWith(customGroup);
+            expect(mockRoot.addAt).toHaveBeenCalledWith(customGroup, 0);
         });
     });
 
@@ -238,6 +240,21 @@ describe("Layout", () => {
             expect(layout.buttons.achievements).toBeDefined();
             expect(layout.buttons.exit).toBeDefined();
             expect(layout.buttons.settings).toBeDefined();
+        });
+
+        test("returns the buttons with accessibility enabled or disabled", () => {
+            const layout = Layout.create(
+                mockScene,
+                mockMetrics,
+                ["achievements", "exit", "settings"],
+                ["exit", "blah"],
+            );
+            expect(layout.buttons.achievements).toBeDefined();
+            expect(layout.buttons.achievements.config.accessibilityEnabled).toBe(false);
+            expect(layout.buttons.exit).toBeDefined();
+            expect(layout.buttons.exit.config.accessibilityEnabled).toBe(true);
+            expect(layout.buttons.settings).toBeDefined();
+            expect(layout.buttons.settings.config.accessibilityEnabled).toBe(false);
         });
     });
 
@@ -323,93 +340,6 @@ describe("Layout", () => {
             expect(mockGfx.lineStyle).toHaveBeenCalledWith(1, 0x3333ff, 1);
             expect(mockGfx.strokeRectShape).toHaveBeenCalledWith(mockHitAreaBounds);
             expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(11);
-        });
-    });
-
-    describe("getSafeArea method", () => {
-        test("returns the central screen rectangle on mobile", () => {
-            const mockGroup = { addButton: jest.fn(), reset: jest.fn() };
-            const mockGroups = [
-                Object.assign({ y: -150, height: 50 }, mockGroup), //topLeft
-                mockGroup,
-                mockGroup,
-                Object.assign({ x: -250, width: 50 }, mockGroup), //middleLeftSafe
-                mockGroup,
-                mockGroup,
-                mockGroup,
-                Object.assign({ x: 200 }, mockGroup), //middleRightSafe
-                mockGroup,
-                Object.assign({ y: 100 }, mockGroup), //bottomCenter
-                mockGroup,
-            ];
-
-            let idx = -1;
-            GelGroup.mockImplementation(() => {
-                idx++;
-                return mockGroups[idx];
-            });
-
-            const layout = Layout.create(mockScene, mockMetrics, ["previous", "next", "home", "continue"]);
-
-            expect(layout.getSafeArea(mockMetrics)).toEqual(new Phaser.Geom.Rectangle(-200, -100, 400, 200));
-        });
-
-        test("returns the central screen rectangle on desktop", () => {
-            mockMetrics.isMobile = false;
-            const mockGroup = { addButton: jest.fn(), reset: jest.fn() };
-            const mockGroups = [
-                Object.assign({ y: -150, height: 50 }, mockGroup), //topLeft
-                mockGroup,
-                mockGroup,
-                Object.assign({ x: -250, width: 50 }, mockGroup), //middleLeftSafe
-                mockGroup,
-                mockGroup,
-                mockGroup,
-                Object.assign({ x: 200 }, mockGroup), //middleRightSafe
-                mockGroup,
-                Object.assign({ y: 100 }, mockGroup), //bottomCenter
-                mockGroup,
-            ];
-
-            let idx = -1;
-            GelGroup.mockImplementation(() => {
-                idx++;
-                return mockGroups[idx];
-            });
-
-            const layout = Layout.create(mockScene, mockMetrics, ["previous", "next", "home", "continue"]);
-
-            expect(layout.getSafeArea(mockMetrics)).toEqual(new Phaser.Geom.Rectangle(-180, -100, 360, 200));
-        });
-
-        test("Sets top position to border pad if top: false is passed in to group overrides", () => {
-            mockMetrics.isMobile = false;
-            const mockGroup = { addButton: jest.fn(), reset: jest.fn() };
-            const mockGroups = [
-                Object.assign({ y: -150, height: 50 }, mockGroup), //topLeft
-                mockGroup,
-                mockGroup,
-                Object.assign({ x: -250, width: 50 }, mockGroup), //middleLeftSafe
-                mockGroup,
-                mockGroup,
-                mockGroup,
-                Object.assign({ x: 200 }, mockGroup), //middleRightSafe
-                mockGroup,
-                Object.assign({ y: 100 }, mockGroup), //bottomCenter
-                mockGroup,
-            ];
-
-            let idx = -1;
-            GelGroup.mockImplementation(() => {
-                idx++;
-                return mockGroups[idx];
-            });
-
-            const layout = Layout.create(mockScene, mockMetrics, ["previous", "next", "home", "continue"]);
-
-            expect(layout.getSafeArea(mockMetrics, { top: false })).toEqual(
-                new Phaser.Geom.Rectangle(-180, -384, 360, 484),
-            );
         });
     });
 });

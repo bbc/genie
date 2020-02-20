@@ -19,6 +19,8 @@ export function update() {
     debugDraw.buttons(this.debugGraphics);
 }
 
+const toggleCSS = () => document.body.classList.toggle("debug");
+
 const getPaddingWidth = canvas => Math.max(canvas.width, canvas.height) * BORDER_PAD_RATIO;
 
 //TODO delete - this is from other setup.
@@ -43,6 +45,7 @@ const create43Area = screen => {
     return [screen.add.tileSprite(0, 0, areaWidth, areaHeight, "gelDebug.FFCC00-hatch")];
 };
 
+
 function create() {
     this.debugGraphics = this.add.graphics();
     const safeAreaDebugElements = [...create43Area(this), ...createOuterPadding(this)];
@@ -58,6 +61,7 @@ function create() {
     this.input.keyboard.addKey("q").on("up", makeToggle("layout", debugLayout));
     this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups));
     this.input.keyboard.addKey("e").on("up", makeToggle("buttons", this.layout.debug.buttons));
+    this.input.keyboard.addKey("r").on("up", toggleCSS);
 }
 
 const setTileScale = tiles => {
@@ -69,6 +73,7 @@ function destroy() {
     this.input.keyboard.removeKey("q");
     this.input.keyboard.removeKey("w");
     this.input.keyboard.removeKey("e");
+    this.input.keyboard.removeKey("r");
 }
 
 export function addEvents() {

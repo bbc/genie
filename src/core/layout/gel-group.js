@@ -60,7 +60,7 @@ const vertical = {
 export class GelGroup extends Phaser.GameObjects.Container {
     constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical = false) {
         super(scene, 0, 0);
-        //TODO P3 we used to name the groups - useful for debugging. Might be usuaful as a propery? [NT]
+        //TODO P3 we used to name the groups - useful for debugging. Might be useful as a property? [NT]
         //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
         this._vPos = vPos;
         this._hPos = hPos;
@@ -74,13 +74,12 @@ export class GelGroup extends Phaser.GameObjects.Container {
             horizontal[hPos](metrics, this, isSafe ? "safeHorizontals" : "horizontals");
             vertical[vPos](metrics, this);
         };
+
+        this.makeAccessible();
     }
 
-    /**
-     * TODO add interface for config
-     */
     addButton(config, position = this._buttons.length) {
-        const newButton = this._buttonFactory.createButton(this._metrics, config, this.width / 2, this.height / 2);
+        const newButton = this._buttonFactory.createButton(config, this.width / 2, this.height / 2);
 
         this.addAt(newButton, position);
         this._buttons.push(newButton);
@@ -123,40 +122,42 @@ export class GelGroup extends Phaser.GameObjects.Container {
     }
 
     updateSize() {
-        let height = 0;
-        let width = 0;
+        const childBounds = this.list.map(child => child.getHitAreaBounds());
 
-        this.iterate(x => {
-            const hitBounds = x.getHitAreaBounds();
-            height = this._isVertical ? height + hitBounds.height : hitBounds.height;
-            width += hitBounds.width;
-        });
+        const left = childBounds[0] ? Math.min(...childBounds.map(bounds => bounds.x)) : 0;
+        const right = childBounds[0] ? Math.max(...childBounds.map(bounds => bounds.x + bounds.width)) : 0;
+        let top = childBounds[0] ? Math.min(...childBounds.map(bounds => bounds.y)) : 0;
+        let bottom = childBounds[0] ? Math.max(...childBounds.map(bounds => bounds.y + bounds.height)) : 0;
 
-        const combinedPadding = Math.max(this.list.length - 1, 0) * this._metrics.buttonPad * this.scale;
-
-        width += this._isVertical ? 0 : combinedPadding;
-        height += this._isVertical ? combinedPadding : 0;
-
-        this.setSize(width, height);
+        this.setSize(right - left, bottom - top);
     }
 
     alignChildren() {
         const pos = { x: 0, y: 0 };
+
+        const childList = this.list.map(x => x);
+        childList.sort((a, b) => {
+            return b.height - a.height;
+        });
+
         this.iterate(child => {
-            child.y = pos.y + child.height / 2;
+            child.y = pos.y + childList[0].height / 2;
 
             if (this._isVertical) {
                 child.x = 0;
-                pos.y += child.height + this._metrics.buttonPad;
+                pos.y += child.height + Math.max(0, this._metrics.buttonPad - child.height + child.sprite.height);
             } else {
                 child.x = pos.x + child.width / 2;
-                pos.x += child.width + this._metrics.buttonPad;
+                pos.x += child.width + Math.max(0, this._metrics.buttonPad - child.width + child.sprite.width);
             }
         }, this);
     }
 
     makeAccessible() {
-        this._buttons.forEach(button => a11y.addToAccessibleButtons(this.scene, button));
+        a11y.addGroupAt(
+            fp.camelCase([this._vPos, this._hPos, this._isVertical ? "v" : "", this._isSafe ? "safe" : ""].join("-")),
+        );
+        this._buttons.forEach(a11y.addButton);
     }
 
     //TODO this is currently observer pattern but will eventually use pub/sub Phaser.Events

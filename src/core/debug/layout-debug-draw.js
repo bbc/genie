@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { BORDER_PAD_RATIO, GEL_MAX_ASPECT_RATIO, GEL_MIN_ASPECT_RATIO } from "../layout/calculate-metrics.js";
+import { BORDER_PAD_RATIO, GEL_MAX_ASPECT_RATIO, GEL_MIN_ASPECT_RATIO } from "../layout/metrics.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const getPaddingWidth = canvas => Math.max(canvas.width, canvas.height) * BORDER_PAD_RATIO;

@@ -64,7 +64,7 @@ describe("Boot", () => {
         bootScreen.sound = { mute: false };
 
         Scaler.init = jest.fn();
-        a11y.setup = jest.fn();
+        a11y.create = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());

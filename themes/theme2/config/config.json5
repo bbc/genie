@@ -1,32 +1,8 @@
 {
     theme: {
         game: {
-            music: "loader.backgroundMusicTwo",
+            music: "game.backgroundMusicTwo",
             achievements: false, //enable or disable achievements for this theme
-        },
-        results: {
-            animations: [
-                {
-                    key: "examples_sprite",
-                    x: -400,
-                    y: -230,
-                    frames: { key: "example_sprite_animation", start: 0, end: 7, default: 0, repeat: -1, rate: 10 },
-                },
-            ],
-            resultText: {
-                style: {
-                    font: "40px ReithSans",
-                    align: "center",
-                    fill: "#fff",
-                    boundsAlignH: "center",
-                },
-            },
-            "button-overrides": {
-                achievements: {
-                    group: "middleCenter",
-                    shiftY: 120,
-                },
-            },
         },
         pause: {
             isOverlay: true,

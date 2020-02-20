@@ -24,6 +24,9 @@ describe("Group", () => {
             sys: {
                 queueDepthSort: () => {},
             },
+            scene: {
+                key: "sceneKey",
+            },
         };
         parentGroup = {
             addChild: () => {},
@@ -40,8 +43,8 @@ describe("Group", () => {
         };
         buttonResizeStub = jest.fn();
         const hitAreaBounds = {
-            left: 50,
-            top: 50,
+            x: 50,
+            y: 50,
             width: 200,
             height: 100,
         };
@@ -49,11 +52,11 @@ describe("Group", () => {
         mockGetHitAreaBounds = jest.fn(() => hitAreaBounds);
 
         buttonFactory = {
-            createButton: () => ({
-                x: 50,
-                y: 50,
-                width: 200,
-                height: 100,
+            createButton: (config = {}) => ({
+                x: config.x || 50,
+                y: config.y || 50,
+                width: config.width || 200,
+                height: config.height || 100,
                 input: {},
                 updateIndicatorPosition: jest.fn(),
                 updateTransform: () => {},
@@ -63,12 +66,16 @@ describe("Group", () => {
                     shiftY: 0,
                 },
                 getHitAreaBounds: mockGetHitAreaBounds,
+                sprite: {
+                    width: 200,
+                    height: 100,
+                },
             }),
         };
         vPos = "middle";
         hPos = "center";
         jest.spyOn(ButtonFactory, "create").mockImplementation(() => buttonFactory);
-        jest.spyOn(a11y, "addToAccessibleButtons").mockImplementation(() => {});
+        jest.spyOn(a11y, "addButton").mockImplementation(() => {});
         GelGroup.prototype.addAt = jest.fn(child => {
             group.list.push(child);
         });
@@ -108,10 +115,23 @@ describe("Group", () => {
         test("aligns center buttons accordingly", () => {
             group.addButton(config);
             group.addButton(config);
+
             group.reset(metrics);
 
             expect(group._buttons[0].y).toBe(50);
             expect(group._buttons[1].y).toBe(50);
+        });
+
+        test("aligns center buttons with respect to the largest button (after sorting buttons by height)", () => {
+            group.addButton({ ...config, height: 70 });
+            group.addButton({ ...config, height: 120 });
+            group.addButton({ ...config, height: 10 });
+
+            group.reset(metrics);
+
+            expect(group._buttons[0].y).toBe(60);
+            expect(group._buttons[1].y).toBe(60);
+            expect(group._buttons[2].y).toBe(60);
         });
 
         describe("when vPos is middle and hPos is center", () => {
@@ -238,6 +258,7 @@ describe("Group", () => {
                     updateTransform: () => {},
                     resize: buttonResizeStub,
                     getHitAreaBounds: mockGetHitAreaBounds,
+                    sprite: { width: 200, height: 100 },
                 }));
                 group.addButton(config);
 
@@ -260,6 +281,7 @@ describe("Group", () => {
                     updateTransform: () => {},
                     resize: buttonResizeStub,
                     getHitAreaBounds: mockGetHitAreaBounds,
+                    sprite: { width: 200, height: 100 },
                 }));
                 group.addButton(config);
                 group.reset(metrics);
@@ -280,7 +302,7 @@ describe("Group", () => {
                     width: 50,
                     height: 50,
                     input: {
-                        hitArea: {},
+                        hitArea: { width: 200, height: 100 },
                     },
                     config: {
                         shiftX: 0,
@@ -289,26 +311,35 @@ describe("Group", () => {
                     updateIndicatorPosition: () => {},
                     updateTransform: () => {},
                     resize: buttonResizeStub,
-                    getHitAreaBounds: () => ({ top: -50, left: -100, width: 100, height: 50 }),
+                    getHitAreaBounds: () => ({ y: -50, x: -100, width: 100, height: 50 }),
+                    sprite: { width: 50, height: 50 },
                 }));
                 group.addButton(config);
 
-                expect(group.x).toBe(800);
-                expect(group.y).toBe(1350);
+                expect(group.x).toBe(775);
+                expect(group.y).toBe(1325);
             });
         });
     });
 
     describe("addToGroup method", () => {
         test("adds item to this group", () => {
-            const mockButton = { button: "mock", getHitAreaBounds: mockGetHitAreaBounds };
+            const mockButton = {
+                button: "mock",
+                getHitAreaBounds: mockGetHitAreaBounds,
+                sprite: { width: 200, height: 100 },
+            };
             const mockPosition = 42;
             group.addToGroup(mockButton, mockPosition);
             expect(group.addAt).toHaveBeenCalledWith(mockButton, mockPosition);
         });
 
         test("adds item to this group at position 0 when no position provided", () => {
-            const mockButton = { button: "mock", getHitAreaBounds: mockGetHitAreaBounds };
+            const mockButton = {
+                button: "mock",
+                getHitAreaBounds: mockGetHitAreaBounds,
+                sprite: { width: 200, height: 100 },
+            };
             const expectedPosition = 0;
             group.addToGroup(mockButton);
             expect(group.addAt).toHaveBeenCalledWith(mockButton, expectedPosition);
@@ -336,7 +367,7 @@ describe("Group", () => {
             group.addButton(config);
             group.makeAccessible();
 
-            expect(a11y.addToAccessibleButtons).toHaveBeenCalledTimes(2);
+            expect(a11y.addButton).toHaveBeenCalledTimes(2);
         });
     });
 
@@ -390,7 +421,7 @@ describe("Group", () => {
 
             group = new GelGroup(mockScene, parentGroup, "top", "center", metrics, false);
 
-            group.addButton({ key: "test_1" });
+            group.addButton({ key: "test_1", sprite: { width: 200 } });
             group.addButton({ key: "test_2" });
             group.addButton({ key: "test_3" });
 

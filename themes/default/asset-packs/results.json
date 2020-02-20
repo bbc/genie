@@ -1,0 +1,67 @@
+{
+    "results": {
+        "prefix": "results.",
+        "files": [
+            {
+                "type": "image",
+                "key": "background",
+                "url": "shared/background.png"
+            },
+            {
+                "type": "image",
+                "key": "title",
+                "url": "shared/title.png"
+            },
+            {
+                "type": "image",
+                "key": "backdrop",
+                "url": "results/backdrop-overlay.png"
+            },
+            {
+                "type": "image",
+                "key": "row-backdrop-1",
+                "url": "results/row-backdrop-1.png"
+            },
+            {
+                "type": "image",
+                "key": "row-backdrop-2",
+                "url": "results/row-backdrop-2.png"
+            },
+            {
+                "type": "image",
+                "key": "row-backdrop-3",
+                "url": "results/row-backdrop-3.png"
+            },
+            {
+                "type": "audio",
+                "key": "coin-sfx",
+                "url": "results/coin-sfx.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "gem-sfx",
+                "url": "results/gem-sfx.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "key-sfx",
+                "url": "results/key-sfx.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "woosh",
+                "url": "results/woosh.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "slide",
+                "url": "results/slide.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "boing",
+                "url": "results/boing.mp3"
+            }
+        ]
+    }
+}

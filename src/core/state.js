@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 import { gmi } from "./gmi/gmi.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
@@ -16,8 +15,9 @@ export const create = (stateKey, config) => {
     }
 
     const getMerged = stored => config.map(item => Object.assign(item, stored[item.id]));
-    const get = key => Object.assign({}, config.find(conf => conf.id === key), getGenieStore()[stateKey][key]);
-    const getStored = () => getGenieStore()[stateKey] || {}; //TODO ".states" on this path?
+    const get = key =>
+        Object.assign({}, config.find(conf => conf.id === key), fp.get(`${stateKey}.${key}`, getGenieStore()));
+    const getStored = () => getGenieStore()[stateKey] || {};
 
     const getAll = fp.flow(
         getStored,
@@ -29,6 +29,7 @@ export const create = (stateKey, config) => {
     };
 
     const state = {
+        config,
         get,
         getAll,
         set,

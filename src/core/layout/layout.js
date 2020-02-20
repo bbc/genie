@@ -13,6 +13,7 @@ import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { GelGroup } from "./gel-group.js";
 import { gmi } from "../gmi/gmi.js";
+import { getSafeAreaFn } from "./safe-area.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
 const tabSort = fp.sortBy(getOrder(gel.config()));
@@ -29,13 +30,6 @@ const assignProperties = (object, overrides) => {
     return object;
 };
 
-const defaultSafeAreaGroups = {
-    top: "topLeft",
-    left: "middleLeftSafe",
-    bottom: "bottomCenter",
-    right: "middleRightSafe",
-};
-
 // Copy gel config with only objects / functions as a reference.
 const shallowMergeOverrides = (config, overrides) => assignProperties(copyFirstChildren(config), overrides);
 
@@ -45,17 +39,19 @@ const shallowMergeOverrides = (config, overrides) => assignProperties(copyFirstC
  * @param {Phaser.Scene} scene - Phaser Scene Instance
  * @param {Object} metrics - viewport metrics
  * @param {Array.<string>} buttonIds
+ * @param {Array.<string>} accessible buttonIds
  */
-export function create(scene, metrics, buttonIds) {
+export function create(scene, metrics, buttonIds, accessibleButtonIds) {
     buttonIds = buttonIds.filter(checkGMIFlags);
+    accessibleButtonIds = accessibleButtonIds ? accessibleButtonIds.filter(id => buttonIds.includes(id)) : buttonIds;
 
     const overrides = scene.context.config.theme[scene.scene.key]["button-overrides"];
 
     const config = shallowMergeOverrides(gel.config(scene), overrides);
     const root = new Phaser.GameObjects.Container(scene, 0, 0);
 
-    const addCustomGroup = (key, group) => {
-        root.add(group);
+    const addCustomGroup = (key, group, pos = 0) => {
+        root.addAt(group, pos);
         groups[key] = group;
         return group;
     };
@@ -75,7 +71,11 @@ export function create(scene, metrics, buttonIds) {
 
     const buttons = fp.zipObject(
         tabSort(buttonIds),
-        tabSort(buttonIds).map(name => groups[config[name].group].addButton(config[name])),
+        tabSort(buttonIds).map(name => {
+            const buttonConfig = config[name];
+            buttonConfig.accessibilityEnabled = accessibleButtonIds.includes(name);
+            return groups[buttonConfig.group].addButton(buttonConfig);
+        }),
     );
 
     const iconEvents = settingsIcons.create(groups.topRight, buttonIds);
@@ -106,15 +106,6 @@ export function create(scene, metrics, buttonIds) {
         root.destroy();
     };
 
-    const getSafeArea = (metrics, groupOverrides = {}) => {
-        const safe = { ...defaultSafeAreaGroups, ...groupOverrides };
-        const pad = metrics.isMobile ? 0 : metrics.screenToCanvas(20);
-        const x = groups[safe.left].x + groups[safe.left].width + pad;
-        const y = safe.top ? groups[safe.top].y + groups[safe.top].height : metrics.borderPad - metrics.stageHeight / 2;
-
-        return new Phaser.Geom.Rectangle(x, y, groups[safe.right].x - x - pad, groups[safe.bottom].y - y);
-    };
-
     const groupHasChildren = group => Boolean(group.list.length);
 
     const drawGroups = graphics => {
@@ -143,7 +134,7 @@ export function create(scene, metrics, buttonIds) {
         addToGroup,
         buttons,
         debug,
-        getSafeArea,
+        getSafeArea: getSafeAreaFn(groups),
         destroy,
         makeAccessible,
         resize,

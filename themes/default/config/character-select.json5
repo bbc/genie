@@ -1,135 +1,199 @@
 {
     theme: {
         "character-select": {
+            rows: 2,
+            columns: 3,
+            ease: "Cubic.easeInOut",
+            duration: 500,
+            align: "center",
             music: "loader.backgroundMusic",
-            title: {
-                image: {
-                    imageId: "",
+            titles: [
+                {
+                    type: "image",
+                    key: "title",
                     xOffset: 0,
-                    yOffset: 0,
+                    yOffset: -250,
                 },
-                text: {
-                    value: "Title",
-                    xOffset: -60,
-                    yOffset: -20,
+                {
+                    type: "text",
+                    value: "Select Your Character",
+                    xOffset: 0,
+                    yOffset: -260,
                     styles: {
                         fontSize: "24px",
                     },
                 },
-                visible: true,
-            },
-            subtitle: {
-                image: {
-                    imageId: "",
-                    xOffset: 0,
-                    yOffset: 0,
-                },
-                text: {
+                {
+                    type: "text",
                     value: "Sub-Title",
                     xOffset: 0,
-                    yOffset: 80,
+                    yOffset: -233,
                     styles: {
-                        fontSize: "16px",
+                        fontSize: "18px",
                     },
                 },
-                visible: true,
-            },
+            ],
+
             storageKey: "characters",
             states: {
                 locked: {
-                    asset: "char2",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
+                    //asset: "debby",         //key of sprite to set for. Renders same scale as base sprite so should be the same size.
                     overlayAsset: "character-select.lock",
-                    suffix: "locked",       //appended to aria label of accessibility div
-                    x: 300,
-                    y: 300,
-                    properties: {           //phaser properties assigned to the base sprite
+                    suffix: "locked", //appended to aria label of accessibility div
+                    x: 65,
+                    y: 35,
+                    properties: {
+                        //phaser properties assigned to the base sprite
                         alpha: 0.25,
                         tint: 0xff0000,
                     },
-                    enabled: false,         //enable or disable touch input on this state - default true
+                    enabled: false, //enable or disable touch input on this state - default true
                 },
-                complete: { overlayAsset: "character-select.complete", x: 300, y: 300, suffix: "completed"},
+                complete: { overlayAsset: "character-select.complete", x: 65, y: 35, suffix: "completed" },
+            },
+            //optional - provide if you want title/subtitle text to appear over each choice
+            choicesStyling: {
+                default: {
+                    title: {
+                        style: {
+                            fontFamily: "ReithSans",
+                            fontSize: "19px",
+                            color: "#424242",
+                            backgroundColor: "#fff",
+                            fixedWidth: 75,
+                            align: "center",
+                            padding: {
+                                left: 6,
+                                right: 6,
+                                top: 2,
+                                bottom: 2,
+                            },
+                        },
+                        position: {
+                            x: 0,
+                            y: 53,
+                        },
+                    },
+                    subtitle: {
+                        style: {
+                            fontFamily: "ReithSans",
+                            fontSize: "16px",
+                            color: "#fff",
+                            backgroundColor: "rgba(0,0,0,0.15)",
+                            padding: {
+                                left: 4,
+                                right: 4,
+                                top: 2,
+                                bottom: 2,
+                            },
+                        },
+                        position: {
+                            x: 0,
+                            y: 80,
+                        },
+                    },
+                },
+                // optional styling for extra button states (will override default styles above)
+                locked: {
+                    title: {
+                        style: {
+                            color: "#fff",
+                            backgroundColor: "#7d4b4b",
+                        },
+                    },
+                },
             },
             choices: [
                 {
                     id: "mary",
-                    asset: "mary",
-                    accessibilityText: "Mary",
+                    key: "mary",
+                    ariaLabel: "Mary",
                     title: "Mary",
+                    subtitle: "Is very tall", // optional - for text overlay only
+                    state: "complete",
                 },
                 {
                     id: "kyle",
-                    asset: "kyle",
-                    accessibilityText: "Kyle",
+                    key: "kyle",
+                    ariaLabel: "Kyle",
                     title: "Kyle",
+                    subtitle: "Has a mohawk", // optional - for text overlay only
+                    state: "complete",
                 },
                 {
                     id: "suzy",
-                    asset: "suzy",
-                    accessibilityText: "Suzy",
+                    key: "suzy",
+                    ariaLabel: "Suzy",
                     title: "Suzy",
+                    subtitle: "Can tapdance", // optional - for text overlay only
                 },
                 {
                     id: "greg",
-                    asset: "greg",
-                    accessibilityText: "Greg",
+                    key: "greg",
+                    ariaLabel: "Greg",
                     title: "Greg",
+                    subtitle: "Is a geography teacher", // optional - for text overlay only
                 },
                 {
-                    id: "ange",
-                    asset: "ange",
-                    accessibilityText: "Ange",
-                    title: "Ange",
+                    id: "ezinma",
+                    key: "ezinma",
+                    ariaLabel: "Ezinma",
+                    title: "Ezinma",
+                    subtitle: "Likes snowboarding", // optional - for text overlay only
                 },
                 {
                     id: "phil",
-                    asset: "phil",
-                    accessibilityText: "Phil",
+                    key: "phil",
+                    ariaLabel: "Phil",
                     title: "Phil",
+                    subtitle: "Wears a baseball cap", // optional - for text overlay only
                 },
                 {
                     id: "mike",
-                    asset: "mike",
-                    accessibilityText: "Mike",
+                    key: "mike",
+                    ariaLabel: "Mike",
                     title: "Mike",
+                    subtitle: "Also known as Ant", // optional - for text overlay only
                 },
                 {
-                    id: "suzytoo",
-                    asset: "suzytoo",
-                    accessibilityText: "Suzy Too",
-                    title: "Suzy Too",
+                    id: "debby",
+                    key: "debby",
+                    ariaLabel: "Debbeh",
+                    title: "Debbeh",
+                    state: "locked",
+                    subtitle: "Has a twin called Suzy", // optional - for text overlay only
                 },
                 {
                     id: "timmy",
-                    asset: "timmy",
-                    accessibilityText: "Timmy",
+                    key: "timmy",
+                    ariaLabel: "Timmy",
                     title: "Timmy",
+                    state: "locked",
+                    subtitle: "Is the youngest", // optional - for text overlay only
                 },
                 {
                     id: "elliot",
-                    asset: "elliot",
-                    accessibilityText: "Elliot",
+                    key: "elliot",
+                    ariaLabel: "Elliot",
                     title: "Elliot",
-                }
-//                {
-//                    id: "char1",                        //Must be unique
-//                    asset: "char1",                     //Phaser asset key
-//                    accessibilityText: "Character 1",
-//                    title: "Liron Man",
-//                    anim: {
-//                        key: "character-select.char1",
-//                        frames: 18,
-//                        frameRate: 6,
-//                        yoyo: true,
-//                        repeat: -1,
-//                    },
-//                    state: "locked",
-//                },
-
+                    state: "locked",
+                    subtitle: "Likes astrophysics", // optional - for text overlay only
+                },
+                //                {
+                //                    id: "char1",                        //Must be unique
+                //                    asset: "char1",                     //Phaser asset key
+                //                    accessibilityText: "Character 1",
+                //                    title: "Liron Man",
+                //                    anim: {
+                //                        key: "character-select.char1",
+                //                        frames: 18,
+                //                        frameRate: 6,
+                //                        yoyo: true,
+                //                        repeat: -1,
+                //                    },
+                //                    state: "locked",
+                //                },
             ],
-            rows: 2,
-            columns: 3,
-            align: "left",
         },
     },
 }
