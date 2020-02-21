@@ -859,6 +859,34 @@ describe("Grid", () => {
             });
         });
 
+        describe("looping behaviour", () => {
+            beforeEach(() => {
+                mockScene.theme.choices = [
+                    { asset: "asset_name_1", id: "id_1" },
+                    { asset: "asset_name_2", id: "id_2" },
+                    { asset: "asset_name_3", id: "id_3" },
+                ];
+                grid = new GelGrid(mockScene, { rows: 1, columns: 1 });
+                grid.addGridCells(mockScene.theme);
+            });
+
+            test("tweens backwards when on the first page looping to the last", () => {
+                grid.page = 0;
+                grid.showPage(2);
+                const tweenCalls = mockScene.add.tween.mock.calls;
+                expect(tweenCalls[0][0].x).toEqual({ from: -600, to: 0 });
+                expect(tweenCalls[1][0].x).toEqual({ from: 0, to: 600 });
+            });
+
+            test("tweens forwards when on the last page looping to the first", () => {
+                grid.page = 2;
+                grid.showPage(0);
+                const tweenCalls = mockScene.add.tween.mock.calls;
+                expect(tweenCalls[0][0].x).toEqual({ from: 600, to: 0 });
+                expect(tweenCalls[1][0].x).toEqual({ from: 0, to: -600 });
+            });
+        });
+
         test("page names are returned correctly", () => {
             mockScene.theme.choices = [{ key: "asset_name_0" }, { key: "asset_name_1" }];
             grid = new GelGrid(mockScene);
