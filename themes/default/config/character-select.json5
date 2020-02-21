@@ -1,8 +1,8 @@
 {
     theme: {
         "character-select": {
-            columns: 3, // Number of choices to show horizontally per page. Can be 1 - 4.
-            rows: 2, // Number of choice rows to show per page. Can be either 1 or 2. When columns is 4 this is fixed to 1 row.
+            columns: 1, // Number of choices to show horizontally per page. Can be 1 - 4.
+            rows: 1, // Number of choice rows to show per page. Can be either 1 or 2. When columns is 4 this is fixed to 1 row.
             ease: "Cubic.easeInOut", // Pagination transition type
             duration: 500, // Pagination transition duration
             align: "center", // Alignment for any remaining choices in the last row
