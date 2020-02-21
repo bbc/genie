@@ -4,50 +4,73 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import { debugLayout } from "./layout-debug-draw.js";
+import * as debugLayout from "./layout-debug-draw.js";
 
-let debugDraw;
-
-const makeToggle = (val, fn) => () => (debugDraw[val] = debugDraw[val] === fp.identity ? fn : fp.identity);
+const makeToggle = (val, fn, scene) => () =>
+    (scene.debug.draw[val] = scene.debug.draw[val] === fp.identity ? fn : fp.identity);
 
 export function update() {
-    this.debugGraphics.clear();
-    debugDraw.layout(this);
-    debugDraw.groups(this.debugGraphics);
-    debugDraw.buttons(this.debugGraphics);
+    this.debug.graphics.clear();
+    this.debug.draw.groups(this.debug.graphics);
+    this.debug.draw.buttons(this.debug.graphics);
 }
 
 const toggleCSS = () => document.body.classList.toggle("debug");
 
-function create() {
-    this.debugGraphics = this.add.graphics();
+const debugStyle = {
+    fontFamily: '"Droid Sans Mono Dotted"',
+    fontSize: 12,
+    resolution: 2,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    padding: {
+        left: 6,
+        right: 6,
+        top: 4,
+        bottom: 4,
+    },
+};
 
-    debugDraw = {
-        layout: fp.identity,
-        groups: fp.identity,
-        buttons: fp.identity,
+function create() {
+    this.debug = {
+        graphics: this.add.graphics(),
+        container: this.add.container(),
+        draw: {
+            groups: fp.identity,
+            buttons: fp.identity,
+        },
     };
 
-    this.input.keyboard.addKey("q").on("up", makeToggle("layout", debugLayout));
-    this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups));
-    this.input.keyboard.addKey("e").on("up", makeToggle("buttons", this.layout.debug.buttons));
+    this.debug.draw.layout = debugLayout.create(this.debug.container);
+    this.debug.container.visible = false;
+
+    if (this.context.theme.debugDescription) {
+        const debugText = this.add.text(-390, 0, this.context.theme.debugDescription, debugStyle);
+
+        debugText.setOrigin(0, 0.5);
+    }
+
+    this.input.keyboard.addKey("q").on("up", () => (this.debug.container.visible = !this.debug.container.visible));
+    this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups, this));
+    this.input.keyboard.addKey("e").on("up", makeToggle("buttons", this.layout.debug.buttons, this));
     this.input.keyboard.addKey("r").on("up", toggleCSS);
 }
 
-function destroy() {
-    this.input.keyboard.removeKey("q");
-    this.input.keyboard.removeKey("w");
-    this.input.keyboard.removeKey("e");
-    this.input.keyboard.removeKey("r");
-}
+const shutdown = scene => {
+    scene.input.keyboard.removeKey("q");
+    scene.input.keyboard.removeKey("w");
+    scene.input.keyboard.removeKey("e");
+    scene.input.keyboard.removeKey("r");
 
-export function addEvents() {
-    this.events.on("create", create, this);
-    this.events.on("update", update, this);
+    scene.debug.draw.layout.shutdown();
+};
 
-    this.events.once("shutdown", () => {
-        this.events.off("create", create, this);
-        this.events.off("update", update, this);
-        destroy.call(this);
+export const addEvents = scene => {
+    scene.events.on("create", create, scene);
+    scene.events.on("update", update, scene);
+
+    scene.events.once("shutdown", () => {
+        scene.events.off("create", create, scene);
+        scene.events.off("update", update, scene);
+        shutdown(scene);
     });
-}
+};
