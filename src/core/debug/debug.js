@@ -6,7 +6,8 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as debugLayout from "./layout-debug-draw.js";
 
-const makeToggle = (val, fn, scene) => () => (scene.debug.draw[val] = scene.debug.draw[val] === fp.identity ? fn : fp.identity);
+const makeToggle = (val, fn, scene) => () =>
+    (scene.debug.draw[val] = scene.debug.draw[val] === fp.identity ? fn : fp.identity);
 
 export function update() {
     this.debug.graphics.clear();
@@ -16,8 +17,20 @@ export function update() {
 
 const toggleCSS = () => document.body.classList.toggle("debug");
 
-function create() {
+const debugStyle = {
+    fontFamily: '"Droid Sans Mono Dotted"',
+    fontSize: 12,
+    resolution:2,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    padding: {
+        left: 6,
+        right: 6,
+        top: 4,
+        bottom: 4,
+    },
+};
 
+function create() {
     this.debug = {
         graphics: this.add.graphics(),
         container: this.add.container(),
@@ -27,8 +40,14 @@ function create() {
         },
     };
 
-    this.debug.draw.layout = debugLayout.create(this.debug.container)
+    this.debug.draw.layout = debugLayout.create(this.debug.container);
     this.debug.container.visible = false;
+
+    if (this.context.theme.debugDescription) {
+        const debugText = this.add.text(-390, 0, this.context.theme.debugDescription, debugStyle);
+
+        debugText.setOrigin(0, 0.5);
+    }
 
     this.input.keyboard.addKey("q").on("up", () => (this.debug.container.visible = !this.debug.container.visible));
     this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups, this));
