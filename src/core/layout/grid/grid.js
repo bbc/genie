@@ -89,14 +89,16 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     shouldGoForwards(nextPageNum, currentPage, pageCount) {
-        const isFirstPageLoopingBackwards = pageCount === nextPageNum + 1 && currentPage === 0;
-        const isLastPageLoopingForwards = pageCount === currentPage + 1 && nextPageNum === 0;
-
-        if (isFirstPageLoopingBackwards) {
-            return false;
-        }
-        if (isLastPageLoopingForwards) {
-            return true;
+        const isSingleItem = this._config.columns === 1 && this._config.rows === 1;
+        if (isSingleItem) {
+            const isFirstPageLoopingBackwards = pageCount === nextPageNum + 1 && currentPage === 0;
+            const isLastPageLoopingForwards = pageCount === currentPage + 1 && nextPageNum === 0;
+            if (isFirstPageLoopingBackwards) {
+                return false;
+            }
+            if (isSingleItem && isLastPageLoopingForwards) {
+                return true;
+            }
         }
         return nextPageNum > currentPage;
     }

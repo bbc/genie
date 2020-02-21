@@ -859,7 +859,7 @@ describe("Grid", () => {
             });
         });
 
-        describe("looping behaviour", () => {
+        describe("looping behaviour when single item is showing", () => {
             beforeEach(() => {
                 mockScene.theme.choices = [
                     { asset: "asset_name_1", id: "id_1" },
@@ -884,6 +884,37 @@ describe("Grid", () => {
                 const tweenCalls = mockScene.add.tween.mock.calls;
                 expect(tweenCalls[0][0].x).toEqual({ from: 600, to: 0 });
                 expect(tweenCalls[1][0].x).toEqual({ from: 0, to: -600 });
+            });
+        });
+
+        describe("looping behaviour when multiple items are showing", () => {
+            beforeEach(() => {
+                mockScene.theme.choices = [
+                    { asset: "asset_name_1", id: "id_1" },
+                    { asset: "asset_name_2", id: "id_2" },
+                    { asset: "asset_name_3", id: "id_3" },
+                    { asset: "asset_name_4", id: "id_4" },
+                    { asset: "asset_name_5", id: "id_5" },
+                    { asset: "asset_name_6", id: "id_6" },
+                    { asset: "asset_name_7", id: "id_7" },
+                    { asset: "asset_name_8", id: "id_8" },
+                ];
+                grid = new GelGrid(mockScene, { rows: 2, columns: 3 });
+                grid.addGridCells(mockScene.theme);
+            });
+
+            test("still tweens forwards when on the first page looping to the next", () => {
+                grid.page = 0;
+                grid.showPage(-1);
+                const tweenCalls = mockScene.add.tween.mock.calls;
+                expect(tweenCalls[0][0].x).toEqual({ from: -704, to: -104 });
+                expect(tweenCalls[1][0].x).toEqual({ from: -496, to: 104 });
+                expect(tweenCalls[2][0].x).toEqual({ from: -208, to: 392 });
+                expect(tweenCalls[3][0].x).toEqual({ from: 0, to: 600 });
+                expect(tweenCalls[4][0].x).toEqual({ from: 208, to: 808 });
+                expect(tweenCalls[5][0].x).toEqual({ from: -208, to: 392 });
+                expect(tweenCalls[6][0].x).toEqual({ from: 0, to: 600 });
+                expect(tweenCalls[7][0].x).toEqual({ from: 208, to: 808 });
             });
         });
 
