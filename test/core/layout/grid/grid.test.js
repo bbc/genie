@@ -903,7 +903,7 @@ describe("Grid", () => {
                 grid.addGridCells(mockScene.theme);
             });
 
-            test("still tweens forwards when on the first page looping to the next", () => {
+            test("still tweens forwards when on the first page moving forward to the next", () => {
                 grid.page = 0;
                 grid.showPage(-1);
                 const tweenCalls = mockScene.add.tween.mock.calls;
