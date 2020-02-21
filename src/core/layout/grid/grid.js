@@ -96,7 +96,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
             if (isFirstPageLoopingBackwards) {
                 return false;
             }
-            if (isSingleItem && isLastPageLoopingForwards) {
+            if (isLastPageLoopingForwards) {
                 return true;
             }
         }
