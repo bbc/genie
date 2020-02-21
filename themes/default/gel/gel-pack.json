@@ -1,4 +1,19 @@
 {
+    "gelDebug": {
+        "prefix": "gelDebug.",
+        "files": [
+            {
+                "type": "image",
+                "key": "FF0030-hatch",
+                "url": "gel/debug/FF0030-hatch.png"
+            },
+            {
+                "type": "image",
+                "key": "FFCC00-hatch",
+                "url": "gel/debug/FFCC00-hatch.png"
+            }
+        ]
+    },
     "gelFonts": {
         "prefix": "gelFonts.",
         "files": [

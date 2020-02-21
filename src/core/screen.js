@@ -62,7 +62,7 @@ export class Screen extends Phaser.Scene {
             const themeScreenConfig = this._data.config.theme[this.scene.key];
             GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
 
-            debugMode() && debug.addEvents.call(this);
+            debugMode() && debug.addEvents(this);
         }
 
         this.sys.accessibleButtons = [];
