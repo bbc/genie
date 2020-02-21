@@ -57,6 +57,7 @@ describe("Layout Harness", () => {
             add: {
                 graphics: jest.fn(() => mockGraphicsObject),
                 container: jest.fn(() => mockContainer),
+                text: jest.fn(() => ({ setOrigin: jest.fn() })),
             },
             game: {
                 canvas: { width: 800, height: 600 },
@@ -105,6 +106,16 @@ describe("Layout Harness", () => {
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("w");
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("e");
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("r");
+        });
+
+        test("adds text description if present in theme", () => {
+            mockScreen.context.theme.debugDescription = "test-description";
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.add.text).toHaveBeenCalledWith(-390, 0, "test-description", expect.any(Object));
         });
     });
 
