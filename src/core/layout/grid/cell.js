@@ -41,8 +41,7 @@ export const setSize = (grid, button) => {
 };
 
 const getBlankCellCount = (grid, row, page) => {
-    let blankCellCount = Math.max(grid._config.columns * (row + 1) - grid.getPageCells(page).length, 0);
-    return blankCellCount - (blankCellCount % 2) * 0.5;
+    return Math.max(grid._config.columns * (row + 1) - grid.getPageCells(page).length, 0);
 };
 
 const setPosition = (grid, button, idx) => {
@@ -51,12 +50,16 @@ const setPosition = (grid, button, idx) => {
     const col = pageIdx % grid._config.columns;
     const row = Math.floor(pageIdx / grid._config.columns);
 
-    const alignFactorX =
-        col + getBlankCellCount(grid, row, page) * alignmentFactor[grid._config.align] - (grid._config.columns - 1) / 2;
-    const alignFactorY = row - (grid._config.rows - 1) / 2;
+    const positionFactorX = col - (grid._config.columns - 1) / 2;
+    const positionFactorY = row - (grid._config.rows - 1) / 2;
 
-    button.x = button.displayWidth * alignFactorX + grid._cellPadding * alignFactorX;
-    button.y = button.displayHeight * alignFactorY + grid._cellPadding * alignFactorY;
+    const alignmentX =
+        (button.displayWidth + grid._cellPadding) *
+        0.5 *
+        getBlankCellCount(grid, row, page) *
+        alignmentFactor[grid._config.align];
+    button.x = positionFactorX * button.displayWidth + positionFactorX * grid._cellPadding + alignmentX;
+    button.y = button.displayHeight * positionFactorY + grid._cellPadding * positionFactorY;
 };
 
 const getStates = theme => {

@@ -41,7 +41,7 @@ const screenConfig = {
     - `main`: This refers to the image of the thing the player is selecting. For example in a character select screen, this will be the character itself.
     - `name`: This refers to the image of the name of the thing the player is selecting. For example in a character select screen, it will simply be an image of the character's name.
 
-```json
+```json5
 {
     "theme": {
         "character-select": {
@@ -59,13 +59,97 @@ const screenConfig = {
     }
 }
 ```
+### Choice titles
+
+Configured choices may have text labels drawn with them. These are populated by config, using the "title" and "subtitle" keys. Example:
+
+```json5
+{
+    ...
+    "choices": [
+        {
+            "main": "dangermouse",
+            "name": "dangermouseName",
+            "title": "Danger Mouse",
+            "subtitle": "The world's greatest secret agent",
+        },
+    ]
+}          
+```
+
+#### Choice text styling
+
+Choice text elements must have default styling associated with their text elements. Default styles are set within the select screen config, in the object `choicesStyling`, example:
+
+```json5
+{
+    ...
+    "choices": [...],
+    "choicesStyling": {
+        "default": {
+            "title": {
+                "style": {
+                    "fontFamily": "ReithSans",
+                    "fontSize": "19px",
+                    "color": "#424242",
+                    "backgroundColor": "#fff",
+                    "fixedWidth": 75,
+                    "align": "center",
+                    "padding": {
+                        "left": 6,
+                        "right": 6,
+                        "top": 2,
+                        "bottom": 2,
+                    },
+                },
+                "position": {
+                    "x": 0,
+                    "y": 53,
+                },
+            },
+            "subtitle": {
+                "style": {
+                    ...
+                },
+                "position": {
+                    ...
+                }
+            }
+        }
+    }
+}
+```
+
+*Both `position` and `style` objects are required for the text to be be displayed.*
+
+Styles for different button states can override the default styles for each of the elements:
+
+```json5
+{
+    ...
+    "default": { 
+        ...
+    },
+    "locked": {
+        "title": {
+            "style": {
+                "color": "#fff",
+                "backgroundColor": "#7d4b4b",
+            },
+        },
+        "subtitle": {
+            ...
+        }
+    }
+}
+```
 
 ## How does it find the location of my sprite assets?
 
 - Locate the file `asset-pack-master.json` located inside `themes/your-theme/` (where `your-theme` is the name of your theme).
 - Add your sprite locations and preferred key names to this file.
 
-```javascript
+```json
 {
     ...
     "character-select": {
