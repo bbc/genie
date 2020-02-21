@@ -60,7 +60,6 @@ describe("Layout debug draw", () => {
             expect(mockTileSprite.setSize.mock.calls[4]).toEqual([16, 600]);
         });
 
-
         test("adds tilesprites to represent the outer GEL padding when aspect ratio is above 4:3", () => {
             mockScreen.game.scale.parent = { offsetWidth: 1600, offsetHeight: 800 };
 

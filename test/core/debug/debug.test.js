@@ -12,6 +12,7 @@ describe("Layout Harness", () => {
     let mockScreen;
     let mockOnUpEvent;
     let mockGraphicsObject;
+    let mockContainer;
 
     beforeEach(() => {
         debugLayoutModule.debugLayout = jest.fn();
@@ -32,7 +33,7 @@ describe("Layout Harness", () => {
             setTileScale: jest.fn(),
         };
 
-        const mockContainer = {
+        mockContainer = {
             scene: {
                 add: { tileSprite: jest.fn(() => mockTileSprite) },
                 game: { scale: { parent: {} }, canvas: { height: 10, width: 10 } },
@@ -168,7 +169,7 @@ describe("Layout Harness", () => {
             const drawCallback = mockScreen.events.on.mock.calls[1][1];
             createCallback.call(mockScreen);
 
-            const toggle1 = mockOnUpEvent.mock.calls[0][1];
+            const toggle1 = mockOnUpEvent.mock.calls[1][1];
             toggle1();
             toggle1();
 
@@ -178,19 +179,16 @@ describe("Layout Harness", () => {
             expect(mockScreen.layout.debug.buttons).not.toHaveBeenCalled();
         });
 
-        //test("Calls debugLayout when toggled on", () => {
-        //    addEvents(mockScreen);
-        //    const createCallback = mockScreen.events.on.mock.calls[0][1];
-        //    const drawCallback = mockScreen.events.on.mock.calls[1][1];
-        //    createCallback.call(mockScreen);
-        //
-        //    const toggle1 = mockOnUpEvent.mock.calls[0][1];
-        //    toggle1();
-        //
-        //    drawCallback.call(mockScreen);
-        //
-        //    expect(debugLayoutModule.debugLayout).toHaveBeenCalledWith(mockScreen);
-        //});
+        test("sets debug container to visible when toggled on", () => {
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+            createCallback.call(mockScreen);
+
+            const toggle1 = mockOnUpEvent.mock.calls[0][1];
+            toggle1();
+
+            expect(mockContainer.visible).toBe(true);
+        });
 
         test("debugs draws groups when enabled", () => {
             addEvents(mockScreen);

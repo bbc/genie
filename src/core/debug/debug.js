@@ -20,7 +20,7 @@ const toggleCSS = () => document.body.classList.toggle("debug");
 const debugStyle = {
     fontFamily: '"Droid Sans Mono Dotted"',
     fontSize: 12,
-    resolution:2,
+    resolution: 2,
     backgroundColor: "rgba(0,0,0,0.5)",
     padding: {
         left: 6,
