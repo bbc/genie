@@ -41,9 +41,13 @@ describe("Game", () => {
     let mockImageSetOrigin;
     let mockImageSetInteractive;
     let mockImageOn;
+    let mockSettings;
 
     beforeEach(() => {
+        mockSettings = { audio: true, gameData: { genie: { id: [1, 2, 3], state: [1, 2, 3] } } };
         gmi.achievements = { set: jest.fn() };
+        gmi.getAllSettings = jest.fn(() => mockSettings);
+        gmi.setGameData = jest.fn();
 
         game = new Game();
 
@@ -58,7 +62,7 @@ describe("Game", () => {
         mockImage = { setOrigin: jest.fn(() => mockImageSetOrigin) };
 
         mockData = {
-            config: { theme: { game: { achievements: undefined }, home: {} } },
+            config: { theme: { game: { achievements: undefined }, home: {}, "level-select": { choices: [1, 2, 3] } } },
         };
         game.setData(mockData);
         game.scene = {
@@ -78,7 +82,7 @@ describe("Game", () => {
         game.navigation = { next: jest.fn() };
         game.transientData = {
             "character-select": { choice: { title: "Kawabashi" } },
-            "level-select": { choice: { title: "Hard level" } },
+            "level-select": { choice: { title: "Hard level" }, choices: [1, 2, 3] },
         };
         game.cache = { json: { get: jest.fn(() => mockAchievements) } };
     });

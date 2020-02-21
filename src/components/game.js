@@ -6,6 +6,7 @@
 import { Screen } from "../core/screen.js";
 import { accessibilify } from "../core/accessibility/accessibilify.js";
 import { gmi } from "../core/gmi/gmi.js";
+import * as state from "../core/state.js";
 
 export class Game extends Screen {
     calculateAchievements(item, amount, keys) {
@@ -93,8 +94,22 @@ export class Game extends Screen {
         }, this);
 
         const onGameComplete = () => {
-            this.transientData.results = { keys, gems, stars };
+            markLevelAsComplete(this.transientData["level-select"].choice.id);
+            this.transientData.results = {
+                keys,
+                gems,
+                stars,
+            };
             this.navigation.next();
+        };
+
+        const markLevelAsComplete = levelTitle => {
+            const stateConfig = this.context.config.theme["level-select"].choices.map(({ id, state }) => ({
+                id,
+                state,
+            }));
+            this.states = state.create(this.context.config.theme["level-select"].storageKey, stateConfig);
+            this.states.set(levelTitle, "completed");
         };
 
         const tweenItem = target => {
