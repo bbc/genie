@@ -88,28 +88,42 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.reset();
     }
 
-    showPage(pageNum) {
-        if (this.page === pageNum) {
+    shouldGoForwards(nextPageNum, currentPage, pageCount) {
+        const isSingleItem = this._config.columns === 1 && this._config.rows === 1;
+        if (isSingleItem) {
+            const isFirstPageLoopingBackwards = pageCount === nextPageNum + 1 && currentPage === 0;
+            const isLastPageLoopingForwards = pageCount === currentPage + 1 && nextPageNum === 0;
+            if (isFirstPageLoopingBackwards) {
+                return false;
+            }
+            if (isLastPageLoopingForwards) {
+                return true;
+            }
+        }
+        return nextPageNum > currentPage;
+    }
+
+    showPage(nextPageNum) {
+        if (this.page === nextPageNum) {
             return;
         }
-        const previousPage = this.page;
-        const goForwards = pageNum > previousPage;
-        this.page = (pageNum + this.getPageCount()) % this.getPageCount();
+        const currentPage = this.page;
+        const pageCount = this.getPageCount();
+        const goForwards = this.shouldGoForwards(nextPageNum, currentPage, pageCount);
+        this.page = (nextPageNum + pageCount) % pageCount;
 
         this.reset();
-        this.setPageVisibility(previousPage, true);
+        this.setPageVisibility(currentPage, true);
         this.scene.input.enabled = false;
         this._config.onTransitionStart();
 
         this.getPageCells(this.page).forEach(cell => cell.addTweens({ ...this._config, tweenIn: true, goForwards }));
-        this.getPageCells(previousPage).forEach(cell =>
-            cell.addTweens({ ...this._config, tweenIn: false, goForwards }),
-        );
+        this.getPageCells(currentPage).forEach(cell => cell.addTweens({ ...this._config, tweenIn: false, goForwards }));
         this.scene.time.addEvent({
             delay: this._config.duration + 1,
             callback: this.transitionCallback,
             callbackScope: this,
-            args: [previousPage],
+            args: [currentPage],
         });
     }
 
