@@ -43,7 +43,7 @@ function create() {
     this.debug.draw.layout = debugLayout.create(this.debug.container);
     this.debug.container.visible = false;
 
-    if (this.context.theme.debugDescription) {
+    if (this.context.theme && this.context.theme.debugDescription) {
         const debugText = this.add.text(-390, 0, this.context.theme.debugDescription, debugStyle);
 
         debugText.setOrigin(0, 0.5);
@@ -53,6 +53,7 @@ function create() {
     this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups, this));
     this.input.keyboard.addKey("e").on("up", makeToggle("buttons", this.layout.debug.buttons, this));
     this.input.keyboard.addKey("r").on("up", toggleCSS);
+    this.input.keyboard.addKey("t").on("up", this.navigation.debug);
 }
 
 const shutdown = scene => {
@@ -60,6 +61,7 @@ const shutdown = scene => {
     scene.input.keyboard.removeKey("w");
     scene.input.keyboard.removeKey("e");
     scene.input.keyboard.removeKey("r");
+    scene.input.keyboard.removeKey("t");
 
     scene.debug.draw.layout.shutdown();
 };

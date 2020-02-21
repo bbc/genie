@@ -16,6 +16,8 @@ import { startup } from "./core/startup.js";
 //import "/node_modules/phaser/plugins/spine/dist/SpineWebGLPlugin.js";
 import "../lib/SpinePlugin.js"; //CAN BE REMOVED IF NOT USING SPINE
 
+import { Launcher } from "./core/debug/examples/launcher.js";
+
 const settingsConfig = {
     pages: [
         {
@@ -50,6 +52,7 @@ const screenConfig = {
         scene: Home,
         routes: {
             next: "character-select",
+            debug: "debug",
         },
     },
     "character-select": {
@@ -97,6 +100,14 @@ const screenConfig = {
     },
     pause: {
         scene: Pause,
+        routes: {
+            home: "home",
+        },
+    },
+
+    //TODO only on debug
+    debug: {
+        scene: Launcher,
         routes: {
             home: "home",
         },
