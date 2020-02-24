@@ -11,6 +11,18 @@
                 "type": "image",
                 "key": "FFCC00-hatch",
                 "url": "gel/debug/FFCC00-hatch.png"
+            },
+            {
+                "type": "spritesheet",
+                "key": "button",
+                "url": "gel/debug/button.png",
+                "frameConfig": {
+                    "frameWidth": 224,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
             }
         ]
     },
@@ -49,7 +61,7 @@
                 "key": "achievements-small",
                 "url": "gel/desktop/achievements-small.png",
                 "frameConfig": {
-                    "frameWidth": 64,
+                    "frameWidth": 224,
                     "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,

@@ -31,6 +31,21 @@
                 "type": "json5",
                 "key": "config",
                 "url": "config/config.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug",
+                "url": "config/debug.json5"
+            },
+            {
+                "type": "json5",
+                "key": "select-1",
+                "url": "config/examples/select-1.json5"
+            },
+            {
+                "type": "json5",
+                "key": "select-grid",
+                "url": "config/examples/select-grid.json5"
             }
         ]
     }
