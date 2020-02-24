@@ -925,6 +925,17 @@ describe("Grid", () => {
             const result = grid.getCurrentPageKey();
             expect(result).toEqual("asset_name_0");
         });
+
+        test("page title and IDs are returned correctly", () => {
+            mockScene.theme.choices = [
+                { title: "asset_name_0", id: "asset0" },
+                { title: "asset_name_1", id: "asset0" },
+            ];
+            grid = new GelGrid(mockScene);
+            grid.addGridCells(mockScene.theme);
+            const result = grid.getCurrentSelection();
+            expect(result).toEqual({ title: "asset_name_0", id: "asset0" });
+        });
     });
 
     describe("getBoundingRect method", () => {

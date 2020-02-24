@@ -66,6 +66,10 @@ export class GelGrid extends Phaser.GameObjects.Container {
         });
     }
 
+    getCurrentSelection() {
+        return this.choices()[this.page];
+    }
+
     enforceLimits() {
         const maxColumns = this._config.rows === 1 ? 4 : 3;
         const maxRows = 2;
