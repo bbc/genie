@@ -29,9 +29,9 @@ export class HowToPlay extends Screen {
             : this.add.image(0, -170, `${this.scene.key}.title`);
 
         if (this.theme.howToPlay) {
-            this.buttonLayout = this.setLayout(["overlayBack", "audio", "settings", "previous", "next"]);
+            this.setLayout(["overlayBack", "audio", "settings", "previous", "next"]);
         } else {
-            this.buttonLayout = this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
+            this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
         }
 
         this.setButtonVisibility();
@@ -47,14 +47,17 @@ export class HowToPlay extends Screen {
     }
 
     setButtonVisibility() {
-        this.buttonLayout.buttons.previous.visible = Boolean(!this.theme.howToPlay || this.currentIndex !== 0);
+        this.layout.buttons.previous.visible = Boolean(!this.theme.howToPlay || this.currentIndex !== 0);
 
         const isNotLastPage = this.currentIndex + 1 !== this.choiceSprites.length;
-        this.buttonLayout.buttons.next.visible = Boolean(!this.theme.howToPlay || isNotLastPage);
+        this.layout.buttons.next.visible = Boolean(!this.theme.howToPlay || isNotLastPage);
+
+        this.layout.buttons.previous.accessibleElement.update();
+        this.layout.buttons.next.accessibleElement.update();
     }
 
     focusOnButton(buttonName) {
-        const button = this.buttonLayout.buttons[buttonName];
+        const button = this.layout.buttons[buttonName];
         button.accessibleElement.el.focus();
     }
 

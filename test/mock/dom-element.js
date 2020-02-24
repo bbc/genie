@@ -29,6 +29,7 @@ const domElement = () => {
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
         childNodes: [],
+        update: jest.fn(),
     };
     return element;
 };
