@@ -74,9 +74,6 @@ describe("How To Play Screen", () => {
         howToPlayScreen.scene = { key: "test-select" };
         howToPlayScreen.game = { canvas: { parentElement: "parent-element" } };
         howToPlayScreen.navigation = { next: jest.fn() };
-        howToPlayScreen.sys = {
-            queueDepthSort: jest.fn(),
-        };
         howToPlayScreen.setLayout = jest.fn(() => mockLayout);
         Object.defineProperty(howToPlayScreen, "layout", {
             get: jest.fn(() => mockLayout),
