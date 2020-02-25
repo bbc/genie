@@ -32,7 +32,11 @@ describe("Gel Button", () => {
         eventBus.publish = jest.fn();
         GameSound.Assets = {
             backgroundMusic: {},
-            buttonClick: { play: jest.fn() },
+            buttonClick: {
+                play: jest.fn(),
+                once: jest.fn(),
+                resume: jest.fn(),
+            },
         };
         mockSprite = {
             width: 100,
@@ -180,6 +184,21 @@ describe("Gel Button", () => {
                 "",
                 mockScene.sys.game.input.pointers,
             );
+        });
+
+        test("pointerup function calls play on button click sound", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            gelButton.onPointerUp(mockConfig, mockScene);
+            expect(GameSound.Assets.buttonClick.play).toHaveBeenCalled();
+        });
+
+        test("pointerup function calls once on button click to prevent pausing", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            gelButton.onPointerUp(mockConfig, mockScene);
+            expect(GameSound.Assets.buttonClick.once).toHaveBeenCalled();
+
+            GameSound.Assets.buttonClick.once.mock.calls[0][1]();
+            expect(GameSound.Assets.buttonClick.resume).toHaveBeenCalled();
         });
     });
 
