@@ -74,6 +74,7 @@ describe("Grid Cells", () => {
                 scene: {
                     key: "scene-key",
                 },
+                assetPrefix: "scene-key",
             },
         };
 
