@@ -341,6 +341,14 @@ describe("Screen", () => {
                 data: mockSettings.audio,
             });
         });
+
+        test("does not set the stats screen if the screen is an overlay", () => {
+            createScreen("screenKey");
+            mockData.config.theme["screenKey"] = { isOverlay: true };
+            screen.init(mockData);
+
+            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
+        });
     });
 
     describe("data handling", () => {

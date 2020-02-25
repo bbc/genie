@@ -57,7 +57,7 @@ export class Screen extends Phaser.Scene {
         this.cameras.main.scrollY = -CAMERA_Y;
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
-            gmi.setStatsScreen(this.scene.key);
+            this.setStatsScreen(this.scene.key);
 
             const themeScreenConfig = this._data.config.theme[this.scene.key];
             GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
@@ -70,6 +70,12 @@ export class Screen extends Phaser.Scene {
         a11y.destroy();
 
         this._makeNavigation();
+    }
+
+    setStatsScreen(screen) {
+        if (!this._data.config.theme[this.scene.key].isOverlay) {
+            gmi.setStatsScreen(screen);
+        }
     }
 
     setData(newData) {
