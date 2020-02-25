@@ -30,7 +30,7 @@ const getOnTransitionStartFn = scene => () => {
 
 export class Select extends Screen {
     create() {
-        this.add.image(0, 0, `${this.scene.key}.background`);
+        this.add.image(0, 0, `${this.assetPrefix}.background`);
         this.addAnimations();
         this.theme = this.context.theme;
         createTitles(this);
