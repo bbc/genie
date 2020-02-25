@@ -108,13 +108,6 @@ describe("How To Play Screen", () => {
         });
 
         test("adds GEL buttons to layout", () => {
-            const expectedButtons = ["home", "audio", "pause", "previous", "next", "continue"];
-            expect(howToPlayScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
-
-        test("adds GEL buttons to layout when how to play", () => {
-            howToPlayScreen.setData(mockHowToPlayData);
-            howToPlayScreen.create();
             const expectedButtons = ["overlayBack", "audio", "settings", "previous", "next"];
             expect(howToPlayScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
@@ -255,6 +248,7 @@ describe("How To Play Screen", () => {
                 howToPlayScreen.update();
 
                 expect(howToPlayScreen.layout.buttons.previous.visible).toBe(false);
+                expect(howToPlayScreen.layout.buttons.previous.accessibleElement.update).toHaveBeenCalled();
             });
 
             test("set 'aria-hidden' = true on all the choices except the current one", () => {
@@ -318,6 +312,7 @@ describe("How To Play Screen", () => {
                 nextButtonClick();
                 nextButtonClick();
                 expect(howToPlayScreen.layout.buttons.next.visible).toBe(false);
+                expect(howToPlayScreen.layout.buttons.next.accessibleElement.update).toHaveBeenCalled();
             });
 
             test("set 'aria-hidden' = true on all the choices except the current one", () => {

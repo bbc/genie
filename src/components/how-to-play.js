@@ -28,11 +28,7 @@ export class HowToPlay extends Screen {
             ? this.add.image(0, -230, `${this.scene.key}.title`)
             : this.add.image(0, -170, `${this.scene.key}.title`);
 
-        if (this.theme.howToPlay) {
-            this.setLayout(["overlayBack", "audio", "settings", "previous", "next"]);
-        } else {
-            this.setLayout(["home", "audio", "pause", "previous", "next", "continue"]);
-        }
+        this.setLayout(["overlayBack", "audio", "settings", "previous", "next"]);
 
         this.setButtonVisibility();
 
