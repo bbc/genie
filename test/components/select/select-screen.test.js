@@ -184,6 +184,8 @@ describe("Select Screen", () => {
             };
             screen.scene.run = jest.fn();
             screen.scene.bringToTop = jest.fn();
+
+            screen.assetPrefix = "test-select";
         };
 
         addMocks(selectScreen);

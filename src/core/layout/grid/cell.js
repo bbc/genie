@@ -94,7 +94,7 @@ const addTextToButton = (scene, config, btn, theme) => {
 export const createCell = (grid, choice, idx, theme) => {
     const config = {
         ...choice,
-        scene: grid.scene.scene.key,
+        scene: grid.scene.assetPrefix,
         channel: grid.eventChannel,
         tabbable: false,
     };
