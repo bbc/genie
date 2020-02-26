@@ -51,6 +51,10 @@ export class Screen extends Phaser.Scene {
         return this._data.transient;
     }
 
+    get assetPrefix() {
+        return this.context.theme.assetPrefix || this.scene.key;
+    }
+
     init(data) {
         this._data = data;
         this.cameras.main.scrollX = -CAMERA_X;

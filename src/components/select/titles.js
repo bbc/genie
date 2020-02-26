@@ -13,7 +13,7 @@ const styleDefaults = {
 const makeElements = makerFns => conf => makerFns[conf.type]({ x: conf.xOffset, y: conf.yOffset }, conf).setOrigin(0.5);
 
 export const createTitles = scene => {
-    const image = (pos, conf) => scene.add.image(pos.x, pos.y, `${scene.scene.key}.${conf.key}`);
+    const image = (pos, conf) => scene.add.image(pos.x, pos.y, `${scene.assetPrefix}.${conf.key}`);
 
     const text = (pos, conf) => {
         const textStyle = { ...styleDefaults, ...conf.styles };
