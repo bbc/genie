@@ -59,8 +59,8 @@ export class Screen extends Phaser.Scene {
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
             this.setStatsScreen(this.scene.key);
 
-            const themeScreenConfig = this._data.config.theme[this.scene.key];
-            GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
+            this.themeScreenConfig = this._data.config.theme[this.scene.key];
+            GameSound.setupScreenMusic(this.scene.scene, this.themeScreenConfig);
 
             debugMode() && debug.addEvents(this);
         }
@@ -73,7 +73,7 @@ export class Screen extends Phaser.Scene {
     }
 
     setStatsScreen(screen) {
-        if (!this._data.config.theme[this.scene.key].isOverlay) {
+        if (!this.themeScreenConfig.isOverlay) {
             gmi.setStatsScreen(screen);
         }
     }
