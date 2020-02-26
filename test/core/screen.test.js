@@ -347,7 +347,7 @@ describe("Screen", () => {
             mockData.config.theme["screenKey"] = { isOverlay: false };
             screen.init(mockData);
 
-            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
+            expect(mockGmi.setStatsScreen).toHaveBeenCalled();
         });
 
         test("does not set the stats screen if the screen is an overlay", () => {
