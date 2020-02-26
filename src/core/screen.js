@@ -119,7 +119,7 @@ export class Screen extends Phaser.Scene {
         this._layout.makeAccessible();
         this.sys.accessibleButtons.forEach(button => a11y.addButton(button));
         a11y.reset();
-        gmi.setStatsScreen(this.scene.key);
+        this.setStatsScreen(this.scene.key);
 
         eventBus.publish({
             channel: settingsChannel,
