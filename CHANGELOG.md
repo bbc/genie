@@ -2,6 +2,10 @@
 
 | Version | Description |
 |---------|-------------|
+| | Stop stats screen from being set on overlays ||
+| | Adds assetPrefix to screens with override support in themes. | |
+| 3.0.0 | |
+| | Adds V2 select and result screens. | |
 | | Bug fix: carousel buttons causing crashes. | |
 | | Update Fake GMI to no longer use areCookiesAllowed. | |
 | | Move asset pack files to own sub folder in themes.  | |

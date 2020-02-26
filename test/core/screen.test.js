@@ -24,6 +24,7 @@ describe("Screen", () => {
     let mockTransientData;
     let mockNavigation;
     let mockParentScreen;
+    let mockConfig;
     const mockGfx = { test: "1234" };
 
     const createScreen = key => {
@@ -41,6 +42,8 @@ describe("Screen", () => {
         mockTransientData = { key: "data" };
     };
 
+    mockConfig = { theme: { loadscreen: { music: "test/music" }, screenKey: {} } };
+
     const initScreen = () => {
         mockNavigation = {
             screenKey: { routes: { next: "nextscreen" } },
@@ -55,7 +58,7 @@ describe("Screen", () => {
         };
         mockData = {
             navigation: mockNavigation,
-            config: { theme: { loadscreen: { music: "test/music" }, screenKey: {} } },
+            config: mockConfig,
             parentScreens: [mockParentScreen],
             transient: mockTransientData,
         };
@@ -341,6 +344,22 @@ describe("Screen", () => {
                 data: mockSettings.audio,
             });
         });
+
+        test("sets the stats screen if the screen is not an overlay", () => {
+            createScreen("screenKey");
+            mockData.config.theme["screenKey"] = { isOverlay: false };
+            screen.init(mockData);
+
+            expect(mockGmi.setStatsScreen).toHaveBeenCalled();
+        });
+
+        test("does not set the stats screen if the screen is an overlay", () => {
+            createScreen("screenKey");
+            mockData.config.theme["screenKey"] = { isOverlay: true };
+            screen.init(mockData);
+
+            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
+        });
     });
 
     describe("data handling", () => {
@@ -360,6 +379,21 @@ describe("Screen", () => {
             screen.setData(testData);
 
             expect(screen.transientData).toEqual(testTransientData);
+        });
+    });
+
+    describe("assetPrefix", () => {
+        test("returns scene key if 'assetPrefix' is not set in theme", () => {
+            createAndInitScreen();
+
+            expect(screen.assetPrefix).toBe("screenKey");
+        });
+
+        test("returns assetPrefix if set in theme", () => {
+            mockConfig.theme.screenKey.assetPrefix = "themePrefix";
+            createAndInitScreen();
+
+            expect(screen.assetPrefix).toBe("themePrefix");
         });
     });
 
