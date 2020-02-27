@@ -64,7 +64,7 @@ All components extend the Genie "Screen" class. The `Screen` class extends `Phas
 
 You can preview your game without bundling it through Webpack by running it in a live server using `npm start`, and viewing it in a browser at http://localhost:8080/.
 
-The qaMode query string may be added to the end to view the game in QA Mode. This gives additional console output, and if you press "q", you can see the layout overlay. http://localhost:8000/?qaMode=true.
+The `debug=true` query string may be added to the end to view the game in QA Mode. This gives additional console output, and if you press "q", you can see the layout overlay. http://localhost:8000/?debug=true.
 
 To build your game using Webpack, use `npm run build`.
 
