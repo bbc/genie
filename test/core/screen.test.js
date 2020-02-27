@@ -87,7 +87,7 @@ describe("Screen", () => {
         };
         createMockGmi(mockGmi);
 
-        delete window.__qaMode;
+        delete window.__debug;
     });
 
     afterEach(() => jest.clearAllMocks());

@@ -49,9 +49,9 @@ Then push to Github to see the new version appear.
 
 `npm run docs` generates documentation using [JSDoc](https://usejsdoc.org/) and outputs to `docs/api/index.html`.
 
-## QA Mode:
+## Debug Mode:
 
-To access QA mode, add the `qaMode=true` query string to the URL: http://localhost:8080/?qaMode=true
+To access debug mode, add the `debug=true` query string to the URL: http://localhost:8080/?debug=true
 
 This will output game loading progress and asset keylookups to the console. Pressing "q" will show the layout overlay, to show the game bounds.
 

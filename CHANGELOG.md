@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Remove references to qa mode (now debug mode) ||
 | | Stop stats screen from being set on overlays ||
 | | Adds assetPrefix to screens with override support in themes. | |
 | 3.0.0 | |
