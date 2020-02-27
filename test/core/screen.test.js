@@ -360,6 +360,16 @@ describe("Screen", () => {
 
             expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
         });
+
+        test("removing an overlay does not set stat screen back to an underlying overlay", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "overlay", stop: jest.fn() } };
+            createScreen("screenKey");
+            mockData.config.theme["screenKey"] = { isOverlay: true };
+            screen.init(mockData);
+            screen._onOverlayRemoved(mockOverlay);
+
+            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
+        });
     });
 
     describe("data handling", () => {
