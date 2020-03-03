@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Disable Phaser window events to prevent click-through on achievements / settings ||
 | | Remove references to qa mode (now debug mode) ||
 | | Stop stats screen from being set on overlays ||
 | | Adds assetPrefix to screens with override support in themes. | |
