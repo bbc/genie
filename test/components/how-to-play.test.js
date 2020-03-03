@@ -38,7 +38,6 @@ describe("How To Play Screen", () => {
                     game: {},
                 },
             },
-            qaMode: { active: false },
             popupScreens: [],
         };
         mockHowToPlayData = {
@@ -55,7 +54,6 @@ describe("How To Play Screen", () => {
                     game: {},
                 },
             },
-            qaMode: { active: false },
             popupScreens: [],
         };
 
