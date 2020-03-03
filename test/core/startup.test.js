@@ -170,6 +170,13 @@ describe("Startup", () => {
             const startupNoContainer = () => startup({});
             expect(startupNoContainer).toThrowError(`Container element "#some-id" not found`); // eslint-disable-line quotes
         });
+
+        test("disable's phaser's global window events (prevents clickthrough from achievements)", () => {
+            startup({});
+            const actualConfig = Phaser.Game.mock.calls[0][0];
+
+            expect(actualConfig.input.windowEvents).toBe(false);
+        });
     });
 
     describe("Hook errors", () => {

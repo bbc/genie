@@ -52,6 +52,9 @@ export function startup(screenConfig, settingsConfig = {}) {
         scale: {
             mode: Phaser.Scale.NONE,
         },
+        input: {
+            windowEvents: false,
+        },
         scene: scenes,
         plugins: {
             global: [
