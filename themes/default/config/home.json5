@@ -1,11 +1,17 @@
 {
     theme: {
         home: {
-            debugDescription: "DEBUG DRAW OPTIONS:\n\
+            debugLabels: [
+                {
+                    x: -390,
+                    y: -40,
+                    text: "DEBUG DRAW OPTIONS:\n\
 Q: Toggle GEL safe Area\n\
 W: Toggle Groups\n\
 E: Toggle Buttons\n\
 R: Toggle CSS debug",
+                },
+            ],
             music: "loader.backgroundMusic",
             //Use to shift buttons out of the way of logos etc.
             "button-overrides": {
