@@ -46,7 +46,7 @@ describe("Layout Harness", () => {
 
         mockScreen = {
             context: {
-                theme: {},
+                theme: { debugLabels: [] },
             },
             input: {
                 keyboard: {
@@ -109,14 +109,24 @@ describe("Layout Harness", () => {
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("r");
         });
 
-        test("adds text description if present in theme", () => {
-            mockScreen.context.theme.debugDescription = "test-description";
+        test("adds text labels if present in theme", () => {
+            mockScreen.context.theme.debugLabels = [{ x: -390, y: 100, text: "test-description" }];
             addEvents(mockScreen);
             const createCallback = mockScreen.events.on.mock.calls[0][1];
 
             createCallback.call(mockScreen);
 
-            expect(mockScreen.add.text).toHaveBeenCalledWith(-390, 0, "test-description", expect.any(Object));
+            expect(mockScreen.add.text).toHaveBeenCalledWith(-390, 100, "test-description", expect.any(Object));
+        });
+
+        test("sets label position defaults of 0 0 if not in theme", () => {
+            mockScreen.context.theme.debugLabels = [{ text: "test-description" }];
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.add.text).toHaveBeenCalledWith(0, 0, "test-description", expect.any(Object));
         });
     });
 
