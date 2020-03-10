@@ -43,11 +43,7 @@ function create() {
     this.debug.draw.layout = debugLayout.create(this.debug.container);
     this.debug.container.visible = false;
 
-    if (this.context.theme.debugDescription) {
-        const debugText = this.add.text(-390, 0, this.context.theme.debugDescription, debugStyle);
-
-        debugText.setOrigin(0, 0.5);
-    }
+    fp.map(label => this.add.text(label.x || 0, label.y || 0, label.text, debugStyle), this.context.theme.debugLabels);
 
     this.input.keyboard.addKey("q").on("up", () => (this.debug.container.visible = !this.debug.container.visible));
     this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups, this));
