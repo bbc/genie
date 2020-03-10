@@ -1,11 +1,17 @@
 {
     theme: {
         "select-1": {
-            debugDescription: "With 1 item selected tabbing behaves differently:\n\
+            debugLabels: [
+                {
+                    x: -390,
+                    y: -190,
+                    text: "With 1 item selected tabbing behaves differently:\n\
 Tabbing will automatically advance the display\n\
 standard behaviour of the accessible DOM is not altered\n\
 \n\
 Press T to return to examples launcher",
+                },
+            ],
             assetPrefix: "character-select",
             columns: 1, // Number of choices to show horizontally per page. Can be 1 - 4.
             rows: 1, // Number of choice rows to show per page. Can be either 1 or 2. When columns is 4 this is fixed to 1 row.
