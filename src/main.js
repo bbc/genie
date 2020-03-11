@@ -16,8 +16,6 @@ import { startup } from "./core/startup.js";
 //import "/node_modules/phaser/plugins/spine/dist/SpineWebGLPlugin.js";
 import "../lib/SpinePlugin.js"; //CAN BE REMOVED IF NOT USING SPINE
 
-import { Launcher } from "./core/debug/examples/launcher.js";
-
 const settingsConfig = {
     pages: [
         {
@@ -41,11 +39,6 @@ eventBus.subscribe({
         console.log("Custom 1 setting changed to " + value); // eslint-disable-line no-console
     },
 });
-
-//TODO P3
-//if (parseUrlParams(window.location.search).sanityCheck === true) {
-//    return phaserTestHarnessConfig(goToScreen);
-//}
 
 const screenConfig = {
     home: {
@@ -101,30 +94,6 @@ const screenConfig = {
     pause: {
         scene: Pause,
         routes: {
-            home: "home",
-        },
-    },
-
-    //TODO only on debug
-    debug: {
-        scene: Launcher,
-        routes: {
-            home: "home",
-            select1: "select-1",
-            selectGrid: "select-grid"
-        },
-    },
-    "select-1": {
-        scene: Select,
-        routes: {
-            next: "debug",
-            home: "home",
-        },
-    },
-    "select-grid": {
-        scene: Select,
-        routes: {
-            next: "debug",
             home: "home",
         },
     },

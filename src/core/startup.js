@@ -19,6 +19,7 @@ import { JSON5Plugin } from "./loader/json5-loader/json5-plugin.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addGelButton } from "./layout/gel-game-objects.js";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./layout/metrics.js";
+import { debugScreens } from "./debug/debug-screens.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key, ...conf[key].settings }));
 
@@ -33,7 +34,7 @@ export function startup(screenConfig, settingsConfig = {}) {
     Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
 
     const browser = getBrowser();
-    const scenes = getScenes(screenConfig);
+    const scenes = getScenes(Object.assign(screenConfig, debugScreens));
     scenes.unshift(new Loader());
     scenes.unshift(new Boot(screenConfig));
 
