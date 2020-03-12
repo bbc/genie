@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2020
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import { Launcher } from "./examples/launcher.js";
 import { Select } from "../../components/select/select-screen.js";
 
