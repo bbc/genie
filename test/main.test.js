@@ -38,6 +38,7 @@ describe("Main", () => {
             home: {
                 scene: Home,
                 routes: {
+                    debug: "debug",
                     next: "character-select",
                 },
             },

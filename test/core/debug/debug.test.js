@@ -8,7 +8,7 @@ import { addEvents } from "../../../src/core/debug/debug.js";
 import * as debugLayoutModule from "../../../src/core/debug/layout-debug-draw.js";
 import * as Scaler from "../../../src/core/scaler.js";
 
-describe("Layout Harness", () => {
+describe("Debug system", () => {
     let mockScreen;
     let mockOnUpEvent;
     let mockGraphicsObject;
@@ -75,6 +75,7 @@ describe("Layout Harness", () => {
                 once: jest.fn(),
                 off: jest.fn(),
             },
+            navigation: {},
         };
     });
 
@@ -107,6 +108,16 @@ describe("Layout Harness", () => {
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("w");
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("e");
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("r");
+        });
+
+        test("sets up example key if debug mode", () => {
+            mockScreen.navigation.debug = () => {};
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("t");
         });
 
         test("adds text labels if present in theme", () => {
