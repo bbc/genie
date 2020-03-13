@@ -24,6 +24,9 @@ describe("Examples Launcher", () => {
         };
         launcher.setLayout = jest.fn();
         launcher.navigation = { next: jest.fn(), select1: jest.fn(), selectGrid: jest.fn() };
+        launcher.scene = {
+            key: "launcher",
+        };
     });
 
     describe("create method", () => {

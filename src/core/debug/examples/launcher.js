@@ -13,14 +13,14 @@ const addButton = (scene, x, y, title, id, callback) => {
         scene: "gelDebug",
         key: "button",
         id,
-        channel: buttonsChannel(this),
+        channel: buttonsChannel(scene),
         gameButton: true,
     });
     const text = scene.add.text(0, 0, title).setOrigin(0.5, 0.5);
     button.overlays.set("text", text);
 
     eventBus.subscribe({
-        channel: buttonsChannel(this),
+        channel: buttonsChannel(scene),
         name: id,
         callback,
     });
