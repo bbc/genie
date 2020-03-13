@@ -18,6 +18,15 @@ import { debugMode } from "./debug/debug-mode.js";
 import * as debug from "./debug/debug.js";
 import { CAMERA_X, CAMERA_Y } from "./layout/metrics.js";
 
+const getRoutingFn = scene => route => {
+    const routeTypes = {
+        function: () => route(scene),
+        string: () => scene.navigate(route),
+    };
+
+    return routeTypes[typeof route];
+};
+
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
  * All the game screens will extend from this class.
@@ -91,12 +100,7 @@ export class Screen extends Phaser.Scene {
 
     _makeNavigation = () => {
         const routes = this.scene.key === "boot" ? { next: "loader" } : this._data.navigation[this.scene.key].routes;
-        this.navigation = fp.mapValues(
-            route => () => {
-                this._navigate(route);
-            },
-            routes,
-        );
+        this.navigation = fp.mapValues(getRoutingFn(this), routes);
     };
 
     addAnimations = addAnimations(this);
@@ -134,7 +138,7 @@ export class Screen extends Phaser.Scene {
         delete this._layout;
     };
 
-    _navigate = route => {
+    navigate = route => {
         this.scene.bringToTop(route);
         while (this._data.parentScreens.length > 0) {
             const parentScreen = this._data.parentScreens.pop();

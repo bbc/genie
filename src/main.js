@@ -40,16 +40,14 @@ eventBus.subscribe({
     },
 });
 
-//TODO P3
-//if (parseUrlParams(window.location.search).sanityCheck === true) {
-//    return phaserTestHarnessConfig(goToScreen);
-//}
-
 const screenConfig = {
     home: {
         scene: Home,
         routes: {
-            next: "character-select",
+            //Example of custom routing function
+            next: scene => {
+                scene.navigate("character-select");
+            },
         },
     },
     "character-select": {

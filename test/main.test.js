@@ -3,13 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
-import { Home } from "../src/components/home";
-import { Results } from "../src/components/results/results-screen.js";
-import { Select } from "../src/components/select/select-screen.js";
-import { HowToPlay } from "../src/components/how-to-play";
-import { Game } from "../src/components/game";
-import { Pause } from "../src/components/overlays/pause";
 import { settingsChannel } from "../src/core/settings";
 import { eventBus } from "../src/core/event-bus";
 import { startup } from "../src/core/startup";
@@ -33,65 +26,11 @@ describe("Main", () => {
         expect(console.log).toHaveBeenCalledWith("Custom 1 setting changed to difficult"); // eslint-disable-line no-console
     });
 
-    test("makes a call to startup with the correct screen config", () => {
-        const expectedScreenConfig = {
-            home: {
-                scene: Home,
-                routes: {
-                    next: "character-select",
-                },
-            },
-            "character-select": {
-                scene: Select,
-                routes: {
-                    next: "level-select",
-                    home: "home",
-                },
-            },
-            "level-select": {
-                scene: Select,
-                routes: {
-                    next: "game",
-                    home: "home",
-                },
-            },
-            game: {
-                scene: Game,
-                settings: {
-                    physics: {
-                        default: "arcade",
-                        arcade: {},
-                    },
-                },
-                routes: {
-                    next: "results",
-                    home: "home",
-                    restart: "game",
-                },
-            },
-            results: {
-                scene: Results,
-                routes: {
-                    continue: "level-select",
-                    restart: "game",
-                    home: "home",
-                },
-            },
-            "how-to-play": {
-                scene: HowToPlay,
-                routes: {
-                    home: "home",
-                },
-            },
-            pause: {
-                scene: Pause,
-                routes: {
-                    home: "home",
-                },
-            },
-        };
+    test("makes a call to startup with the correct screens", () => {
+        const expectedScreens = ["home", "character-select", "level-select", "game", "results", "how-to-play", "pause"];
         const actualScreenConfig = startup.mock.calls[0][0];
-        expect(actualScreenConfig).toStrictEqual(expectedScreenConfig);
+
+        expect(Object.keys(actualScreenConfig)).toStrictEqual(expectedScreens);
     });
 
     test("makes a call to startup with the correct settings config", () => {
