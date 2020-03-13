@@ -6,7 +6,7 @@
 import { Screen } from "../../../core/screen.js";
 import { eventBus } from "../../event-bus.js";
 import { buttonsChannel } from "../../layout/gel-defaults.js";
-//import { accessibilify } from "../core/accessibility/accessibilify.js";
+import { accessibilify } from "../../accessibility/accessibilify.js";
 
 const addButton = (scene, x, y, title, id, callback) => {
     const button = scene.add.gelButton(x, y, {
@@ -18,6 +18,7 @@ const addButton = (scene, x, y, title, id, callback) => {
     });
     const text = scene.add.text(0, 0, title).setOrigin(0.5, 0.5);
     button.overlays.set("text", text);
+    accessibilify(button, true);
 
     eventBus.subscribe({
         channel: buttonsChannel(scene),
