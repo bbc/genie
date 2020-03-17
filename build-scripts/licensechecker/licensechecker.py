@@ -81,8 +81,6 @@ def get_license_from_file(path):
 
 
 def get_license(path):
-    if path == "undefined":
-        return "WTFPL"
     json_path = os.path.join(path, "package.json")
     license_descriptor = get_license_from_package(json_path)
     if license_descriptor:
@@ -142,13 +140,14 @@ def check_licenses():
         split_line = line.decode("utf-8").rstrip().split(":")
         package_name = split_line[1]
         package_path = split_line[0]
-        license_valid, license_descriptor = check_license(license_whitelist, package_path)
-        if license_valid:
-            continue
-        if package_name in package_whitelist:
-            package_whitelist.remove(package_name)
-            continue
-        invalid_packages[package_name] = license_descriptor, package_path
+        if package_path != "undefined":
+            license_valid, license_descriptor = check_license(license_whitelist, package_path)
+            if license_valid:
+                continue
+            if package_name in package_whitelist:
+                package_whitelist.remove(package_name)
+                continue
+            invalid_packages[package_name] = license_descriptor, package_path
 
     if invalid_packages:
         print "\nThe following packages did not pass the licensing whitelist:\n"
