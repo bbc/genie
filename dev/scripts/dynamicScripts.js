@@ -4,29 +4,31 @@
  * @license Apache-2.0
  */
 
-"use strict";
-
-function dynamicallyLoadScript(url) {
-    var script = document.createElement("script");
+const awaitScript = url => {
+    const script = document.createElement("script");
     script.src = url;
     script.async = false;
     document.head.appendChild(script);
-}
 
-dynamicallyLoadScript("node_modules/phaser/dist/phaser.js");
-dynamicallyLoadScript("node_modules/webfontloader/webfontloader.js");
-
-/* Cannot use fetch because of IE11 */
-var request = new XMLHttpRequest();
-request.open("GET", "/globals.json", true);
-request.onload = function() {
-    if (request.status >= 400) return;
-    const globals = JSON.parse(request.responseText);
-    let global;
-    for (global in globals) {
-        if (globals.hasOwnProperty(global)) {
-            dynamicallyLoadScript(globals[global]);
-        }
-    }
+    return new Promise(resolve => (script.onload = resolve));
 };
-request.send(null);
+
+const addMain = () => {
+    const script = document.createElement("script");
+    script.type = "module";
+    script.src = "src/main.js";
+    document.head.appendChild(script);
+};
+
+fetch("/globals.json")
+    .then(response => response.json())
+    .then(globals => {
+        const awaitingScripts = [
+            awaitScript("node_modules/phaser/dist/phaser.js"),
+            awaitScript("node_modules/webfontloader/webfontloader.js"),
+        ];
+
+        Object.keys(globals).map(global => awaitingScripts.push(awaitScript(globals[global])));
+
+        Promise.all(awaitingScripts).then(addMain);
+    });
