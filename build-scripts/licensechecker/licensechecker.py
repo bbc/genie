@@ -87,6 +87,7 @@ def get_license(path):
     license_descriptor = get_license_from_package(json_path)
     if license_descriptor:
         return license_descriptor
+
     return get_license_from_file(path)
 
 
