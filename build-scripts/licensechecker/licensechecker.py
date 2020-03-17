@@ -81,11 +81,12 @@ def get_license_from_file(path):
 
 
 def get_license(path):
+    if path == "undefined":
+        return "WTFPL"
     json_path = os.path.join(path, "package.json")
     license_descriptor = get_license_from_package(json_path)
     if license_descriptor:
         return license_descriptor
-
     return get_license_from_file(path)
 
 
