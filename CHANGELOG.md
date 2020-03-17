@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.1.0 | |
 | | Allow custom routing functions in navigation config ||
 | | Provision lodash-fp ES6 bundle for development (to improve loading performance on Mac) ||
 | | Add system for debug labels ||
