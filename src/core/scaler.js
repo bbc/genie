@@ -23,11 +23,7 @@ export const onScaleChange = { add: _onSizeChange.add };
 export let getMetrics;
 
 export function init(stageHeight, game) {
-    getMetrics = fp.flow(
-        getBounds(game),
-        fp.pick(["width", "height"]),
-        calculateMetrics(stageHeight),
-    );
+    getMetrics = fp.flow(getBounds(game), fp.pick(["width", "height"]), calculateMetrics(stageHeight));
 
     const setSize = metrics => {
         const under4by3 = game.scale.parent.offsetWidth / game.scale.parent.offsetHeight < 4 / 3;
@@ -46,10 +42,7 @@ export function init(stageHeight, game) {
         _onSizeChange.dispatch(metrics);
     };
 
-    const resize = fp.flow(
-        getMetrics,
-        setSize,
-    );
+    const resize = fp.flow(getMetrics, setSize);
 
     resize();
     window.onresize = fp.debounce(500, resize);

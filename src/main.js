@@ -44,8 +44,11 @@ const screenConfig = {
     home: {
         scene: Home,
         routes: {
-            next: "character-select",
             debug: "debug",
+            //Example of custom routing function
+            next: scene => {
+                scene.navigate("character-select");
+            },
         },
     },
     "character-select": {

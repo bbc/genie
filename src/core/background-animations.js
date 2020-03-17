@@ -52,7 +52,10 @@ const isSprite = scene => config => scene.textures.exists(config.key);
 
 export const addAnimations = scene => () => {
     const configs = scene.context.theme.animations || [];
-    const conditionPairs = [[isSpine(scene), addSpine(scene)], [isSprite(scene), addSprite(scene)]];
+    const conditionPairs = [
+        [isSpine(scene), addSpine(scene)],
+        [isSprite(scene), addSprite(scene)],
+    ];
     const dispatcher = fp.cond(conditionPairs);
     configs.forEach(dispatcher);
 };

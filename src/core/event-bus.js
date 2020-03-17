@@ -68,10 +68,7 @@ export const create = () => {
      * @param {Function} message.callback - Event identifier
      * @memberof module:core/event-bus
      */
-    const subscribe = fp.flow(
-        addEvent,
-        addSubscription,
-    );
+    const subscribe = fp.flow(addEvent, addSubscription);
 
     /**
      * Publish to a given event identifier. Create Event if it doesn't exist.
@@ -83,10 +80,7 @@ export const create = () => {
      * @param {Object=} message.data - Arbitrary data payload sent to all listeners
      * @memberof module:core/event-bus
      */
-    const publish = fp.flow(
-        addEvent,
-        publishMessage,
-    );
+    const publish = fp.flow(addEvent, publishMessage);
 
     return { subscribe, publish, removeChannel, removeSubscription };
 };

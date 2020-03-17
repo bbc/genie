@@ -39,31 +39,9 @@ describe("Screen", () => {
             root: {},
             destroy: jest.fn(),
         };
-        mockTransientData = { key: "data" };
     };
 
-    mockConfig = { theme: { loadscreen: { music: "test/music" }, screenKey: {} } };
-
-    const initScreen = () => {
-        mockNavigation = {
-            screenKey: { routes: { next: "nextscreen" } },
-            boot: { routes: { next: "loader" } },
-            loader: { routes: { next: "home" } },
-        };
-        mockParentScreen = {
-            key: "select",
-            removeAll: jest.fn(),
-            _onOverlayRemoved: jest.fn(),
-            scene: { stop: jest.fn() },
-        };
-        mockData = {
-            navigation: mockNavigation,
-            config: mockConfig,
-            parentScreens: [mockParentScreen],
-            transient: mockTransientData,
-        };
-        screen.init(mockData);
-    };
+    const initScreen = () => screen.init(mockData);
 
     const createAndInitScreen = (key = "screenKey") => {
         createScreen(key);
@@ -88,6 +66,30 @@ describe("Screen", () => {
         createMockGmi(mockGmi);
 
         delete window.__debug;
+
+        mockConfig = { theme: { loadscreen: { music: "test/music" }, screenKey: {} } };
+
+        mockTransientData = { key: "data" };
+
+        mockNavigation = {
+            screenKey: { routes: { next: "nextscreen" } },
+            boot: { routes: { next: "loader" } },
+            loader: { routes: { next: "home" } },
+        };
+
+        mockParentScreen = {
+            key: "select",
+            removeAll: jest.fn(),
+            _onOverlayRemoved: jest.fn(),
+            scene: { stop: jest.fn() },
+        };
+
+        mockData = {
+            navigation: mockNavigation,
+            config: mockConfig,
+            parentScreens: [mockParentScreen],
+            transient: mockTransientData,
+        };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -107,6 +109,16 @@ describe("Screen", () => {
         test("sets the navigation", () => {
             createAndInitScreen();
             expect(screen.navigation).toEqual({ next: expect.any(Function) });
+        });
+
+        test("Creates a wrapped function with passed in scene for 'Function' routes", () => {
+            const routeFn = jest.fn();
+            mockNavigation.screenKey.routes.testFunctionRoute = routeFn;
+            createScreen("screenKey");
+            screen.init(mockData);
+            screen.navigation.testFunctionRoute();
+
+            expect(routeFn).toHaveBeenCalledWith(screen);
         });
 
         test("sets the navigation when on the boot screen", () => {
