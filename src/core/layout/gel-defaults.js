@@ -151,7 +151,7 @@ export const config = screen => {
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 const belowScreenKey = getScreenBelow(screen).scene.key;
-                screen._navigate(screen.context.navigation[belowScreenKey].routes.restart);
+                screen.navigate(screen.context.navigation[belowScreenKey].routes.restart);
                 const params = pushLevelId(screen, ["level", "playagain"]);
                 gmi.sendStatsEvent(...params);
             },
