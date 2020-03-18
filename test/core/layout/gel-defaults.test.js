@@ -44,7 +44,7 @@ describe("Layout - Gel Defaults", () => {
                 achievements: jest.fn(),
                 back: jest.fn(),
             },
-            _navigate: jest.fn(),
+            navigate: jest.fn(),
             layout: {
                 buttons: {
                     achievements: { setIndicator: clearIndicatorSpy },
