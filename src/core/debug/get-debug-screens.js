@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Launcher } from "./examples/launcher.js";
+import { Launcher } from "./launcher.js";
 import { Select } from "../../components/select/select-screen.js";
 
 const debugScreens = {
@@ -17,6 +17,7 @@ const debugScreens = {
     },
     "select-1": {
         scene: Select,
+        title: "Select 1 item",
         routes: {
             next: "debug",
             home: "debug",
@@ -24,6 +25,7 @@ const debugScreens = {
     },
     "select-grid": {
         scene: Select,
+        title: "Select Grid",
         routes: {
             next: "debug",
             home: "debug",

@@ -333,6 +333,27 @@ describe("Gel Button", () => {
 
             expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 200, 100));
         });
+
+        test("Uses a scale of 1 if button is not parented to a gel group (debug buttons)", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            gelButton.scale = 0.5;
+
+            gelButton.input = {
+                hitArea: {
+                    width: 200,
+                    height: 100,
+                },
+            };
+
+            const mockWtm = {
+                getX: () => 0,
+                getY: () => 0,
+            };
+
+            gelButton.getWorldTransformMatrix = () => mockWtm;
+
+            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 100, 50));
+        });
     });
 
     describe("overlays", () => {

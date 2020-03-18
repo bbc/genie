@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { Launcher } from "../../../../src/core/debug/examples/launcher.js";
+import { Launcher } from "../../../src/core/debug/launcher.js";
 
 describe("Examples Launcher", () => {
     let launcher;
@@ -12,7 +12,16 @@ describe("Examples Launcher", () => {
         launcher = new Launcher();
 
         const mockButton = {
+            config: {
+                id: "testButton",
+            },
             overlays: { set: jest.fn() },
+            scene: {
+                scene: {
+                    key: "testKey",
+                },
+                sys: { scale: { parent: "mockParent" }, accessibleButtons: [] },
+            },
         };
 
         launcher.add = {
