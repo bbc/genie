@@ -16,6 +16,7 @@ const addButton = config => {
         id: config.id,
         channel: buttonsChannel(config.scene),
         gameButton: true,
+        ariaLabel: config.title,
     });
     const text = config.scene.add.text(0, 0, config.title).setOrigin(0.5, 0.5);
     button.overlays.set("text", text);
