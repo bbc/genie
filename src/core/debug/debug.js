@@ -10,6 +10,7 @@ const makeToggle = (val, fn, scene) => () =>
     (scene.debug.draw[val] = scene.debug.draw[val] === fp.identity ? fn : fp.identity);
 
 export function update() {
+    if (!this.debug) return;
     this.debug.graphics.clear();
     this.debug.draw.groups(this.debug.graphics);
     this.debug.draw.buttons(this.debug.graphics);
@@ -46,8 +47,8 @@ function create() {
     fp.map(label => this.add.text(label.x || 0, label.y || 0, label.text, debugStyle), this.context.theme.debugLabels);
 
     this.input.keyboard.addKey("q").on("up", () => (this.debug.container.visible = !this.debug.container.visible));
-    this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups, this));
-    this.input.keyboard.addKey("e").on("up", makeToggle("buttons", this.layout.debug.buttons, this));
+    this.layout && this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups, this));
+    this.layout && this.input.keyboard.addKey("e").on("up", makeToggle("buttons", this.layout.debug.buttons, this));
     this.input.keyboard.addKey("r").on("up", toggleCSS);
 }
 
