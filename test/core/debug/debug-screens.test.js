@@ -18,6 +18,13 @@ describe("getDebugScreens", () => {
     });
 
     test("Returns populated object if debug mode", () => {
-        expect(Object.keys(getDebugScreens(true))).toEqual(["debug", "select-1", "select-grid"]);
+        expect(Object.keys(getDebugScreens(true))).toEqual([
+            "debug",
+            "select1",
+            "selectGrid",
+            "results1Sec",
+            "results10Sec",
+            "backgroundAnimations",
+        ]);
     });
 });
