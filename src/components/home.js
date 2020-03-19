@@ -13,9 +13,9 @@ import { eventBus } from "../core/event-bus.js";
 export class Home extends Screen {
     create() {
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
-        this.add.image(0, 0, `${this.scene.key}.background`);
+        this.add.image(0, 0, `${this.assetPrefix}.background`);
         this.addAnimations();
-        this.add.image(0, -150, `${this.scene.key}.title`);
+        this.add.image(0, -150, `${this.assetPrefix}.title`);
 
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
         this.setLayout(buttons.concat(achievements));

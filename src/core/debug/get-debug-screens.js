@@ -4,33 +4,31 @@
  * @license Apache-2.0
  */
 import { Launcher } from "./launcher.js";
-import { Select } from "../../components/select/select-screen.js";
+import { examples } from "./examples.js";
 
-const debugScreens = {
+/*
+TODO
+- Strip debug config from routes
+- Separate example config files into own loader
+- test in starter pack
+- doc or auto strip from build example files (may need a tidy here
+- check if build can strip un-needed files when it copies the themes directory
+- move debugScreens into own modules
+- standardise terminology - debug / launcher / examples?
+ */
+const launcherScreen = {
     debug: {
         scene: Launcher,
         routes: {
             home: "home",
-            select1: "select-1",
-            selectGrid: "select-grid",
-        },
-    },
-    "select-1": {
-        scene: Select,
-        title: "Select 1 item",
-        routes: {
-            next: "debug",
-            home: "debug",
-        },
-    },
-    "select-grid": {
-        scene: Select,
-        title: "Select Grid",
-        routes: {
-            next: "debug",
-            home: "debug",
         },
     },
 };
 
-export const getDebugScreens = isDebug => (isDebug ? debugScreens : {});
+const getAllScreens = () => {
+    Object.keys(examples).map(screenKey => (launcherScreen.debug.routes[screenKey] = screenKey));
+
+    return Object.assign({}, launcherScreen, examples);
+};
+
+export const getDebugScreens = isDebug => (isDebug ? getAllScreens() : {});
