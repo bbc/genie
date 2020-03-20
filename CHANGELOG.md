@@ -2,6 +2,9 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.1.2 | |
+| | Fix crash when using debug mode layout has not been set. ||
+| | Fix crash when using debug mode and debug update is called before debug create. ||
 | 3.1.1 | |
 | | Fix crash when hitting replay button ||
 | 3.1.0 | |
