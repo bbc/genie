@@ -120,6 +120,19 @@ describe("Debug system", () => {
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("t");
         });
 
+        test("Adds no group/button toggles when no layout set (game screens during early dev)", () => {
+            delete mockScreen.layout;
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("q");
+            expect(mockScreen.input.keyboard.addKey).not.toHaveBeenCalledWith("w");
+            expect(mockScreen.input.keyboard.addKey).not.toHaveBeenCalledWith("e");
+            expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("r");
+        });
+
         test("adds text labels if present in theme", () => {
             mockScreen.context.theme.debugLabels = [{ x: -390, y: 100, text: "test-description" }];
             addEvents(mockScreen);
@@ -193,6 +206,16 @@ describe("Debug system", () => {
             const toggle1 = mockOnUpEvent.mock.calls[1][1];
             toggle1();
             toggle1();
+
+            drawCallback.call(mockScreen);
+            expect(mockGraphicsObject.fillRectShape).not.toHaveBeenCalled();
+            expect(mockScreen.layout.debug.groups).not.toHaveBeenCalled();
+            expect(mockScreen.layout.debug.buttons).not.toHaveBeenCalled();
+        });
+
+        test("does not draw to the debug layer when this.debug does not exist (update called before create)", () => {
+            addEvents(mockScreen);
+            const drawCallback = mockScreen.events.on.mock.calls[1][1];
 
             drawCallback.call(mockScreen);
             expect(mockGraphicsObject.fillRectShape).not.toHaveBeenCalled();
