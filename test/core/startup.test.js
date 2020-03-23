@@ -16,7 +16,7 @@ import { Boot } from "../../src/core/loader/boot.js";
 import { startup } from "../../src/core/startup.js";
 import { addGelButton } from "../../src/core/layout/gel-game-objects.js";
 import * as debugModeModule from "../../src/core/debug/debug-mode.js";
-import * as debugScreensModule from "../../src/core/debug/get-debug-screens.js";
+import * as debugScreensModule from "../../src/core/debug/debug-screens.js";
 
 jest.mock("../../src/core/browser.js");
 jest.mock("../../src/core/custom-styles.js");
@@ -102,7 +102,7 @@ describe("Startup", () => {
         });
 
         test("adds the scenes with the boot and loader to the Phaser game", () => {
-            debugScreensModule.getDebugScreens = () => ({
+            debugScreensModule.getLauncherScreen = () => ({
                 debug: { scene: jest.fn().mockImplementation(() => ({ debug: "debug" })) },
             });
             startup(fakeScreenConfig);

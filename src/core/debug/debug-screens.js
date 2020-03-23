@@ -5,11 +5,12 @@
  */
 import { Launcher } from "./launcher.js";
 import { examples } from "./examples.js";
+import { getConfig } from "../loader/get-config.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 /*
 TODO
-- Separate example config files into own loader - or can we use the preload method?
-- Stop auto loader from attempting to load example screen packs
+- Fix loading asset pack for debug screen
 - show path to config file (could just use labels for now? or automate?
 - Strip debug config from routes
 - test in starter pack
@@ -32,10 +33,25 @@ const launcherScreen = {
     },
 };
 
-const getAllScreens = () => {
+const getDebugScreenWithRoutes = () => {
     Object.keys(examples).map(screenKey => (launcherScreen.debug.routes[screenKey] = screenKey));
 
-    return Object.assign({}, launcherScreen, examples);
+    return launcherScreen;
 };
 
-export const getDebugScreens = isDebug => (isDebug ? getAllScreens() : {});
+const addScene = scene => key => scene.scene.add(key, examples[key].scene);
+
+const addScreens = scene => {
+    Object.keys(examples).map(addScene(scene));
+    const debugTheme = getConfig(scene, "example-files").theme;
+    const config = scene.context.config;
+    config.navigation = scene.context.navigation;
+
+    Object.assign(config.theme, debugTheme);
+    Object.assign(config.navigation, examples); //name method for this
+
+    scene.setConfig(config);
+};
+
+export const addExampleScreens = fp.once(addScreens);
+export const getLauncherScreen = isDebug => (isDebug ? getDebugScreenWithRoutes() : {});

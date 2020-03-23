@@ -7,9 +7,9 @@ import { Screen } from "../screen.js";
 import { eventBus } from "../event-bus.js";
 import { buttonsChannel } from "../layout/gel-defaults.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
-import { getDebugScreens } from "./get-debug-screens.js";
 import { gmi } from "../gmi/gmi.js";
-import { getConfig } from "../loader/get-config.js";
+import { examples } from "./examples.js";
+import { addExampleScreens } from "./debug-screens.js";
 
 const addButton = config => {
     const button = config.scene.add.gelButton(config.x, config.y, {
@@ -31,16 +31,14 @@ const addButton = config => {
     });
 };
 
-const notDebugScreen = id => id !== "debug";
-
-const getButtonConfig = (launcher, debugScreens) => (id, idx) => ({
+const getButtonConfig = (launcher, screens) => (id, idx) => ({
     scene: launcher,
     x: -240 + Math.floor(idx / 6) * 240,
     y: -180 + (idx % 6) * 80,
     id,
-    title: debugScreens[id].title,
+    title: screens[id].title,
     callback: () => {
-        launcher.transientData = debugScreens[id].transientData || {};
+        launcher.transientData = screens[id].transientData || {};
         launcher.navigation[id]();
     },
 });
@@ -59,20 +57,15 @@ export class Launcher extends Screen {
     }
 
     create() {
-        const debugTheme = getConfig(this, "example-files").theme;
-        const config = this.context.config;
-
-        Object.assign(config.theme, debugTheme);
-        this.setConfig(config);
+        addExampleScreens(this);
 
         this.add.image(0, 0, "home.background");
         this.add.text(0, -250, "EXAMPLES", titleStyle).setOrigin(0.5);
 
         this.setLayout(["home"]);
 
-        Object.keys(getDebugScreens(true))
-            .filter(notDebugScreen)
-            .map(getButtonConfig(this, getDebugScreens(true)))
+        Object.keys(examples)
+            .map(getButtonConfig(this, examples))
             .map(addButton);
     }
 }

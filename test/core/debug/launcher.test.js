@@ -19,9 +19,7 @@ describe("Examples Launcher", () => {
             },
             overlays: { set: jest.fn() },
             scene: {
-                scene: {
-                    key: "testKey",
-                },
+                scene: { key: "testKey" },
                 sys: { scale: { parent: "mockParent" }, accessibleButtons: [] },
             },
         };
@@ -35,7 +33,7 @@ describe("Examples Launcher", () => {
         };
         launcher.setLayout = jest.fn();
         launcher.navigation = { next: jest.fn(), example1: jest.fn(), example2: jest.fn() };
-        launcher.scene = { key: "launcher" };
+        launcher.scene = { key: "launcher", add: jest.fn() };
         launcher.cache = {
             json: {
                 get: jest.fn(() => ({ config: { files: [] } })),
@@ -43,6 +41,7 @@ describe("Examples Launcher", () => {
         };
         launcher._data = {
             transient: {},
+            navigation: {},
             config: {
                 theme: {},
             },
