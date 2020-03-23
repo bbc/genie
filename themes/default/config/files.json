@@ -36,31 +36,6 @@
                 "type": "json5",
                 "key": "debug",
                 "url": "config/debug.json5"
-            },
-            {
-                "type": "json5",
-                "key": "select-1",
-                "url": "config/examples/select-1.json5"
-            },
-            {
-                "type": "json5",
-                "key": "select-grid",
-                "url": "config/examples/select-grid.json5"
-            },
-            {
-                "type": "json5",
-                "key": "results-1-sec",
-                "url": "config/examples/results-1-sec.json5"
-            },
-            {
-                "type": "json5",
-                "key": "results-10-sec",
-                "url": "config/examples/results-10-sec.json5"
-            },
-            {
-                "type": "json5",
-                "key": "background-animations",
-                "url": "config/examples/background-animations.json5"
             }
         ]
     }

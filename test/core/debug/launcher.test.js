@@ -35,11 +35,23 @@ describe("Examples Launcher", () => {
         };
         launcher.setLayout = jest.fn();
         launcher.navigation = { next: jest.fn(), example1: jest.fn(), example2: jest.fn() };
-        launcher.scene = {
-            key: "launcher",
+        launcher.scene = { key: "launcher" };
+        launcher.cache = {
+            json: {
+                get: jest.fn(() => ({ config: { files: [] } })),
+            },
         };
         launcher._data = {
             transient: {},
+            config: {
+                theme: {},
+            },
+        };
+
+        launcher.load = {
+            setBaseURL: jest.fn(),
+            setPath: jest.fn(),
+            pack: jest.fn(),
         };
 
         examplesModule.examples = {
@@ -81,6 +93,18 @@ describe("Examples Launcher", () => {
         test("Does not set transientData if absent from example config", () => {
             eventBus.subscribe.mock.calls[3][0].callback();
             expect(launcher._data.transient.testKey).not.toBeDefined();
+        });
+    });
+
+    describe("preload method", () => {
+        beforeEach(() => {
+            launcher.preload();
+        });
+
+        test("Preloads example files so they aren't part of standard loader", () => {
+            expect(launcher.load.setBaseURL).toHaveBeenCalled();
+            expect(launcher.load.setPath).toHaveBeenCalled();
+            expect(launcher.load.pack).toHaveBeenCalledWith("example-files");
         });
     });
 });

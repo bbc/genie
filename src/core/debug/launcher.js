@@ -8,6 +8,8 @@ import { eventBus } from "../event-bus.js";
 import { buttonsChannel } from "../layout/gel-defaults.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
 import { getDebugScreens } from "./get-debug-screens.js";
+import { gmi } from "../gmi/gmi.js";
+import { getConfig } from "../loader/get-config.js";
 
 const addButton = config => {
     const button = config.scene.add.gelButton(config.x, config.y, {
@@ -50,7 +52,19 @@ const titleStyle = {
 };
 
 export class Launcher extends Screen {
+    preload() {
+        this.load.setBaseURL(gmi.gameDir);
+        this.load.setPath("src/core/debug/examples/");
+        this.load.pack("example-files");
+    }
+
     create() {
+        const debugTheme = getConfig(this, "example-files").theme;
+        const config = this.context.config;
+
+        Object.assign(config.theme, debugTheme);
+        this.setConfig(config);
+
         this.add.image(0, 0, "home.background");
         this.add.text(0, -250, "EXAMPLES", titleStyle).setOrigin(0.5);
 
