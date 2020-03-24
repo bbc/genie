@@ -10,7 +10,6 @@ import fp from "../../../lib/lodash/fp/fp.js";
 
 /*
 TODO
-- Finish labels for all screens
 - test in starter pack (may need routing in local web server)
 - button to launcher on home page
 - doc or auto strip from build example theme files (may need a tidy here)

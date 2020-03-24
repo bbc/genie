@@ -5,11 +5,10 @@
                 {
                     x: -390,
                     y: -190,
-                    text: "With 1 item selected tabbing behaves differently:\n\
-Tabbing will automatically advance the display\n\
-standard behaviour of the accessible DOM is not altered\n\
-\n\
-Press T to return to examples launcher",
+                    text: "Named sprite or spine animations which have been pre-loaded a file manifest\n\
+in the theme directories can be set to run on any screen.\n\
+They will appear over the background image but underneath anything else added to the scene.\n\
+See the \"animations\" block in this scene's config",
                 },
             ],
             assetPrefix: "home",

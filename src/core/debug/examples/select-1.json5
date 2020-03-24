@@ -5,11 +5,23 @@
                 {
                     x: -390,
                     y: -190,
-                    text: "With 1 item selected tabbing behaves differently:\n\
-Tabbing will automatically advance the display\n\
-standard behaviour of the accessible DOM is not altered\n\
-\n\
-Press T to return to examples launcher",
+                    text: "With 1 item visible tabbing automatically advances the display\n\
+Standard behaviour of the accessible DOM is not altered.",
+                },
+                {
+                    x: 190,
+                    y: 150,
+                    text: "The system resets\n\
+when the last item\n\
+is tabbed off.",
+                },
+                {
+                    x: -320,
+                    y: 210,
+                    text: "A continue button is\n\
+added automatically\n\
+and linked to item\n\
+to signal clickability.",
                 },
             ],
             assetPrefix: "character-select",
