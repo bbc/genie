@@ -1,6 +1,6 @@
 {
     theme: {
-        "results1Sec": {
+        "results-1-sec": {
             debugLabels: [
                 {
                     x: -390,

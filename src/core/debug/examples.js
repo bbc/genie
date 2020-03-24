@@ -8,7 +8,7 @@ import { Results } from "../../components/results/results-screen.js";
 import { Home } from "../../components/home.js";
 
 export const examples = {
-    select1: {
+    "select-1": {
         scene: Select,
         title: "Select 1 item",
         routes: {
@@ -16,7 +16,7 @@ export const examples = {
             home: "debug",
         },
     },
-    selectGrid: {
+    "select-grid": {
         scene: Select,
         title: "Select Grid",
         routes: {
@@ -24,11 +24,11 @@ export const examples = {
             home: "debug",
         },
     },
-    results1Sec: {
+    "results-1-sec": {
         scene: Results,
         title: "Results: 1s countup",
         transientData: {
-            results1Sec: {
+            "results-1-sec": {
                 stars: 100,
                 gems: 50,
                 keys: 5,
@@ -40,11 +40,11 @@ export const examples = {
             home: "debug",
         },
     },
-    results10Sec: {
+    "results-10-sec": {
         scene: Results,
         title: "Results: 10s countup",
         transientData: {
-            results10Sec: {
+            "results-10-sec": {
                 stars: 100,
                 gems: 50,
                 keys: 5,
@@ -56,7 +56,7 @@ export const examples = {
             home: "debug",
         },
     },
-    backgroundAnimations: {
+    "background-animations": {
         scene: Home,
         title: "Background Animations",
         routes: {

@@ -31,14 +31,14 @@ const addButton = config => {
     });
 };
 
-const getButtonConfig = (launcher, screens) => (id, idx) => ({
+const getButtonConfig = launcher => (id, idx) => ({
     scene: launcher,
     x: -240 + Math.floor(idx / 6) * 240,
     y: -180 + (idx % 6) * 80,
     id,
-    title: screens[id].title,
+    title: examples[id].title,
     callback: () => {
-        launcher.transientData = screens[id].transientData || {};
+        launcher.transientData = examples[id].transientData || {};
         launcher.navigation[id]();
     },
 });
@@ -65,7 +65,7 @@ export class Launcher extends Screen {
         this.setLayout(["home"]);
 
         Object.keys(examples)
-            .map(getButtonConfig(this, examples))
+            .map(getButtonConfig(this))
             .map(addButton);
     }
 }

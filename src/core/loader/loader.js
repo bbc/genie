@@ -15,7 +15,7 @@ import { getConfig } from "./get-config.js";
 
 const getMissingPacks = (masterPack, keys) =>
     Object.keys(keys)
-        .filter(key => ["default", "boot", "loader"].indexOf(key) === -1)
+        .filter(key => ["default", "boot", "loader", "debug"].indexOf(key) === -1)
         .filter(key => !masterPack.hasOwnProperty(key))
         .map(key => `asset-packs/${key}`);
 

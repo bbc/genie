@@ -1,6 +1,6 @@
 {
     theme: {
-        "results10Sec": {
+        "results-10-sec": {
             debugLabels: [
                 {
                     x: -390,

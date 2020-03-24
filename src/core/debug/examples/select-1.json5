@@ -1,6 +1,6 @@
 {
     theme: {
-        "select1": {
+        "select-1": {
             debugLabels: [
                 {
                     x: -390,

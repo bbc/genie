@@ -48,6 +48,11 @@ describe("Debug system", () => {
             context: {
                 theme: { debugLabels: [] },
             },
+            cache: {
+                json: {
+                    get: jest.fn(),
+                },
+            },
             input: {
                 keyboard: {
                     addKey: jest.fn(() => ({ on: mockOnUpEvent })),
@@ -141,6 +146,35 @@ describe("Debug system", () => {
             createCallback.call(mockScreen);
 
             expect(mockScreen.add.text).toHaveBeenCalledWith(-390, 100, "test-description", expect.any(Object));
+        });
+
+        test("adds no label if no config path found", () => {
+            delete mockScreen.context.theme.debugLabels;
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.add.text).not.toHaveBeenCalled();
+        });
+
+        test("adds path label if config path found", () => {
+            delete mockScreen.context.theme.debugLabels;
+            mockScreen.scene = { key: "testKey" };
+
+            mockScreen.cache.json.get.mockReturnValue({ config: { files: [{ key: "testKey", url: "testUrl" }] } });
+
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.add.text).toHaveBeenCalledWith(
+                -400,
+                -300,
+                "config: src/core/debug/examples/testUrl",
+                expect.any(Object),
+            );
         });
 
         test("sets label position defaults of 0 0 if not in theme", () => {

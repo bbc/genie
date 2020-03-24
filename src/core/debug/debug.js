@@ -31,6 +31,8 @@ const debugStyle = {
     },
 };
 
+const getConfigDefs = (cache, key, path) => fp.map(def => ({ ...def, path }), fp.get("config.files", cache.get(key)));
+
 function create() {
     this.debug = {
         graphics: this.add.graphics(),
@@ -44,7 +46,23 @@ function create() {
     this.debug.draw.layout = debugLayout.create(this.debug.container);
     this.debug.container.visible = false;
 
-    fp.map(label => this.add.text(label.x || 0, label.y || 0, label.text, debugStyle), this.context.theme.debugLabels);
+    const configDefs = [
+        ...getConfigDefs(this.cache.json, "example-files", "src/core/debug/examples/"),
+        ...getConfigDefs(this.cache.json, "config/files", "THEME/"),
+    ];
+    const fileDef = configDefs.find(def => def.key === this.scene.key);
+
+    const fileLabel = fileDef
+        ? {
+              x: -400,
+              y: -300,
+              text: `config: ${fileDef.path}${fileDef.url}`,
+          }
+        : [];
+
+    const labels = this.context.theme.debugLabels || [];
+
+    fp.map(label => this.add.text(label.x || 0, label.y || 0, label.text, debugStyle), labels.concat(fileLabel));
 
     this.input.keyboard.addKey("q").on("up", () => (this.debug.container.visible = !this.debug.container.visible));
     this.layout && this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups, this));
