@@ -11,6 +11,7 @@ import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as GameSound from "../../../src/core/game-sound.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
+import * as debugModeModule from "../../../src/core/debug/debug-mode.js";
 
 describe("Loader", () => {
     let loader;
@@ -62,8 +63,6 @@ describe("Loader", () => {
             },
         };
         const mockContext = { config: mockConfig };
-
-        //JSON is now an asset pack so has an initial key of "config"
 
         loader = new Loader();
         Object.defineProperty(loader, "context", {
@@ -205,6 +204,7 @@ describe("Loader", () => {
 
             expect(loader.load.pack).toHaveBeenCalledWith("gel/gel-pack");
             expect(loader.load.pack).toHaveBeenCalledWith("asset-packs/three");
+            expect(loader.load.pack).toHaveBeenCalledTimes(2);
         });
 
         test("does not load boot and loader screen packs", () => {
@@ -246,14 +246,23 @@ describe("Loader", () => {
 
     describe("debug mode", () => {
         beforeEach(() => {
-            jest.spyOn(console, "log").mockImplementation(() => {});
+            global.window.__debug = true;
+            debugModeModule.isDebug = () => true;
             loader.preload();
         });
 
         test("logs the progress to the console when debug is true", () => {
+            jest.spyOn(console, "log").mockImplementation(() => {});
             global.window.__debug = true;
             loader.updateLoadBar("50");
             expect(console.log.mock.calls[0]).toEqual(["Loader progress:", "50"]); // eslint-disable-line no-console
+        });
+
+        test("adds the debug asset pack", () => {
+            loader.scene.manager.keys = { one: {}, two: {}, three: {} };
+            loader.preload();
+
+            expect(loader.load.pack).toHaveBeenCalledWith("gel/debug/debug-pack");
         });
     });
 

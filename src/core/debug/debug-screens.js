@@ -11,7 +11,8 @@ import fp from "../../../lib/lodash/fp/fp.js";
 /*
 TODO
 - test in starter pack (may need routing in local web server)
-- button to launcher on home page
+- Finalise dev docs. Make notes about what scene name tags / files should match...
+- Split debug asset files into own manifest and load only if debug mode + move out of themes
 - doc or auto strip from build example theme files (may need a tidy here)
 - check if build can strip un-needed files when it copies the themes directory
 

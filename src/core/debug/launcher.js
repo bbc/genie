@@ -33,8 +33,8 @@ const addButton = config => {
 
 const getButtonConfig = launcher => (id, idx) => ({
     scene: launcher,
-    x: -240 + Math.floor(idx / 6) * 240,
-    y: -180 + (idx % 6) * 80,
+    x: -240 + Math.floor(idx / 5) * 240,
+    y: -140 + (idx % 5) * 80,
     id,
     title: examples[id].title,
     callback: () => {
