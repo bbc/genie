@@ -1,14 +1,13 @@
 # Genie Examples Launcher
 
 The examples launcher page is available when _debug=true_ is added to the url.
-Buttons are automatically added to the launcher page for any routes added to _src/core/get-debug-screens.js_
+Buttons are automatically added to the launcher page for any routes added to _src/core/debug/examples.js_
 
 ## Adding a new example
 
 1.  Add debug screen config to the file _src/core/debug/examples.js_ . The Launcher page will be generate buttons and routes based on this config _(see example config next)_
-2.  Add a named config json5 file for the screen to _themes/default/config/examples_
-3.  Add the file path to _themes/default/config/files.json_
-4.  Try to keep any required assets in the _themes/default/examples_ folder so they are easy to delete
+2.  Add a named config json5 file for the screen to _/debug_
+3.  Add the file path to _/debug/files.json_
 
 ## Example Config
 
@@ -24,7 +23,8 @@ Buttons are automatically added to the launcher page for any routes added to _sr
             //Example of custom routing function
             next: "debug",
         },
-        transientData: {  //Optional. If present replaces the entire transientData passed into the scene
+        transientData: {
+            //Optional. If present replaces the entire transientData passed into the scene
             results10Sec: {
                 stars: 100,
                 gems: 50,
@@ -66,4 +66,33 @@ e.g:
 
 ```json5
 assetPrefix: "character-select",
+```
+
+### Example Screen Routing Configuration
+
+
+Debug routes can be configured in the same way as those in `main.js` but with somme additional paremters:
+
+* **title:** used to name the button on the launcher screen and its aria label.
+* **transientData:** Any object defined here will be passed through as the screen's transient data.
+* **routes:** This is the same as before but where possible continuation routes should point back to the debug launcher screen.
+
+Example config:
+```javascript 1.8
+{
+    "results-10-sec": {
+        scene: Results,
+        title: "Results: 10s countup",
+        transientData: {
+            stars: 100,
+            gems: 50,
+            keys: 5,
+        },
+        routes: {
+            continue: "debug",
+            restart: "debug",
+            home: "debug",
+        },
+    },
+}
 ```
