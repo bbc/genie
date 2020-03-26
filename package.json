@@ -53,7 +53,7 @@
     },
     "scripts": {
         "clean": "rm -rf .cache",
-        "start": "ws --config-file dev/scripts/web-config.js",
+        "start": "cross-env genieCore=true ws --config-file dev/scripts/web-config.js",
         "start:pack": "webpack-dev-server -d --config build-scripts/webpack.config.js --env.genieCore",
         "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
         "eslint": "eslint . --ignore-pattern lib/ --ignore-path .gitignore",

@@ -5,17 +5,17 @@
             {
                 "type": "image",
                 "key": "FF0030-hatch",
-                "url": "gel/debug/FF0030-hatch.png"
+                "url": "../../debug/FF0030-hatch.png"
             },
             {
                 "type": "image",
                 "key": "FFCC00-hatch",
-                "url": "gel/debug/FFCC00-hatch.png"
+                "url": "../../debug/FFCC00-hatch.png"
             },
             {
                 "type": "spritesheet",
                 "key": "button",
-                "url": "gel/debug/button.png",
+                "url": "../../debug/button.png",
                 "frameConfig": {
                     "frameWidth": 224,
                     "frameHeight": 64,
@@ -32,7 +32,7 @@
             {
                 "type": "spritesheet",
                 "key": "debug",
-                "url": "gel/debug/debug_desktop.png",
+                "url": "../../debug/debug_desktop.png",
                 "frameConfig": {
                     "frameWidth": 114,
                     "frameHeight": 64,
@@ -49,7 +49,7 @@
             {
                 "type": "spritesheet",
                 "key": "debug",
-                "url": "gel/debug/debug_mobile.png",
+                "url": "../../debug/debug_mobile.png",
                 "frameConfig": {
                     "frameWidth": 78,
                     "frameHeight": 42,

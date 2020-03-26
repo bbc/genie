@@ -262,7 +262,7 @@ describe("Loader", () => {
             loader.scene.manager.keys = { one: {}, two: {}, three: {} };
             loader.preload();
 
-            expect(loader.load.pack).toHaveBeenCalledWith("gel/debug/debug-pack");
+            expect(loader.load.pack).toHaveBeenCalledWith("../../debug/debug-pack");
         });
     });
 

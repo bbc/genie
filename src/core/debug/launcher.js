@@ -52,7 +52,7 @@ const titleStyle = {
 export class Launcher extends Screen {
     preload() {
         this.load.setBaseURL(gmi.gameDir);
-        this.load.setPath("src/core/debug/examples/");
+        this.load.setPath("debug/examples/");
         this.load.pack("example-files");
     }
 

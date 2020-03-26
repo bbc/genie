@@ -47,7 +47,7 @@ function create() {
     this.debug.container.visible = false;
 
     const configDefs = [
-        ...getConfigDefs(this.cache.json, "example-files", "src/core/debug/examples/"),
+        ...getConfigDefs(this.cache.json, "example-files", "debug/examples/"),
         ...getConfigDefs(this.cache.json, "config/files", "THEME/"),
     ];
     const fileDef = configDefs.find(def => def.key === this.scene.key);

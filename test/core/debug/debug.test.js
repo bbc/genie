@@ -172,7 +172,7 @@ describe("Debug system", () => {
             expect(mockScreen.add.text).toHaveBeenCalledWith(
                 -400,
                 -300,
-                "config: src/core/debug/examples/testUrl",
+                "config: debug/examples/testUrl",
                 expect.any(Object),
             );
         });

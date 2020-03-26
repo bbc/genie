@@ -43,7 +43,7 @@ export class Loader extends Screen {
         }
 
         const masterPack = this.cache.json.get("asset-master-pack");
-        const debugPack = isDebug() ? ["gel/debug/debug-pack"] : [];
+        const debugPack = isDebug() ? ["../../debug/debug-pack"] : [];
         const gamePacksToLoad = ["gel/gel-pack"].concat(
             getMissingPacks(masterPack, this.scene.manager.keys),
             debugPack,

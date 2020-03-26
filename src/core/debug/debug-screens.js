@@ -12,7 +12,9 @@ import fp from "../../../lib/lodash/fp/fp.js";
 TODO
 - test in starter pack (may need routing in local web server)
 - Finalise dev docs. Make notes about what scene name tags / files should match...
-- Move debug asset pack out of themes
+- Move debug asset pack out of themes?
+- Should debug exist outside of local dev? It currently won't work as the debug config files won't be copied.
+    - could we add them to test?
 - doc or auto strip from build example theme files (may need a tidy here)
 - check if build can strip un-needed files when it copies the themes directory
 
