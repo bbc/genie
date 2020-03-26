@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.2.0 | |
+| | Adds example screen launcher. Split debug files into own folder. ||
 | 3.1.2 | |
 | | Fix crash when using debug mode layout has not been set. ||
 | | Fix crash when using debug mode and debug update is called before debug create. ||

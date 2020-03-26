@@ -86,7 +86,7 @@ describe("Examples Launcher", () => {
 
         test("Sets transientData if present in example config", () => {
             eventBus.subscribe.mock.calls[1][0].callback();
-            expect(launcher._data.transient.testKey).toBe("testValue");
+            expect(launcher._data.transient.example1.testKey).toBe("testValue");
         });
 
         test("Does not set transientData if absent from example config", () => {
