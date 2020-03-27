@@ -286,5 +286,17 @@ export const config = screen => {
                 gmi.sendStatsEvent("howtoplay", "click");
             },
         },
+        debug: {
+            group: "bottomCenter",
+            title: "Debug",
+            key: "debug",
+            ariaLabel: "Debug",
+            order: 15,
+            id: "debug",
+            channel: buttonsChannel(screen),
+            action: ({ screen }) => {
+                screen.navigation.debug();
+            },
+        },
     };
 };

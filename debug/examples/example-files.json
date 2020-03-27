@@ -1,0 +1,32 @@
+{
+    "config": {
+        "prefix": "config.",
+        "files": [
+            {
+                "type": "json5",
+                "key": "select-1",
+                "url": "select-1.json5"
+            },
+            {
+                "type": "json5",
+                "key": "select-grid",
+                "url": "select-grid.json5"
+            },
+            {
+                "type": "json5",
+                "key": "results-1-sec",
+                "url": "results-1-sec.json5"
+            },
+            {
+                "type": "json5",
+                "key": "results-10-sec",
+                "url": "results-10-sec.json5"
+            },
+            {
+                "type": "json5",
+                "key": "background-animations",
+                "url": "background-animations.json5"
+            }
+        ]
+    }
+}

@@ -9,7 +9,8 @@
 Q: Toggle GEL safe Area\n\
 W: Toggle Groups\n\
 E: Toggle Buttons\n\
-R: Toggle CSS debug",
+R: Toggle CSS debug\n\
+T: Examples Launcher",
                 },
             ],
             music: "loader.backgroundMusic",

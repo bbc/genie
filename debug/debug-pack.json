@@ -1,0 +1,63 @@
+{
+    "gelDebug": {
+        "prefix": "gelDebug.",
+        "files": [
+            {
+                "type": "image",
+                "key": "FF0030-hatch",
+                "url": "../../debug/FF0030-hatch.png"
+            },
+            {
+                "type": "image",
+                "key": "FFCC00-hatch",
+                "url": "../../debug/FFCC00-hatch.png"
+            },
+            {
+                "type": "spritesheet",
+                "key": "button",
+                "url": "../../debug/button.png",
+                "frameConfig": {
+                    "frameWidth": 224,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            }
+        ]
+    },
+    "gelDesktop": {
+        "prefix": "gelDesktop.",
+        "files": [
+            {
+                "type": "spritesheet",
+                "key": "debug",
+                "url": "../../debug/debug_desktop.png",
+                "frameConfig": {
+                    "frameWidth": 114,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            }
+        ]
+    },
+    "gelMobile": {
+        "prefix": "gelMobile.",
+        "files": [
+            {
+                "type": "spritesheet",
+                "key": "debug",
+                "url": "../../debug/debug_mobile.png",
+                "frameConfig": {
+                    "frameWidth": 78,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            }
+        ]
+    }
+}

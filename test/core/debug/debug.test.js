@@ -8,7 +8,7 @@ import { addEvents } from "../../../src/core/debug/debug.js";
 import * as debugLayoutModule from "../../../src/core/debug/layout-debug-draw.js";
 import * as Scaler from "../../../src/core/scaler.js";
 
-describe("Layout Harness", () => {
+describe("Debug system", () => {
     let mockScreen;
     let mockOnUpEvent;
     let mockGraphicsObject;
@@ -48,6 +48,11 @@ describe("Layout Harness", () => {
             context: {
                 theme: { debugLabels: [] },
             },
+            cache: {
+                json: {
+                    get: jest.fn(),
+                },
+            },
             input: {
                 keyboard: {
                     addKey: jest.fn(() => ({ on: mockOnUpEvent })),
@@ -75,6 +80,7 @@ describe("Layout Harness", () => {
                 once: jest.fn(),
                 off: jest.fn(),
             },
+            navigation: {},
         };
     });
 
@@ -109,6 +115,16 @@ describe("Layout Harness", () => {
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("r");
         });
 
+        test("sets up example key if debug mode", () => {
+            mockScreen.navigation.debug = () => {};
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("t");
+        });
+
         test("Adds no group/button toggles when no layout set (game screens during early dev)", () => {
             delete mockScreen.layout;
             addEvents(mockScreen);
@@ -130,6 +146,35 @@ describe("Layout Harness", () => {
             createCallback.call(mockScreen);
 
             expect(mockScreen.add.text).toHaveBeenCalledWith(-390, 100, "test-description", expect.any(Object));
+        });
+
+        test("adds no label if no config path found", () => {
+            delete mockScreen.context.theme.debugLabels;
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.add.text).not.toHaveBeenCalled();
+        });
+
+        test("adds path label if config path found", () => {
+            delete mockScreen.context.theme.debugLabels;
+            mockScreen.scene = { key: "testKey" };
+
+            mockScreen.cache.json.get.mockReturnValue({ config: { files: [{ key: "testKey", url: "testUrl" }] } });
+
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.add.text).toHaveBeenCalledWith(
+                -400,
+                -300,
+                "config: debug/examples/testUrl",
+                expect.any(Object),
+            );
         });
 
         test("sets label position defaults of 0 0 if not in theme", () => {

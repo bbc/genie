@@ -7,3 +7,4 @@ npm run test
 #npm run validate:themes -- default # Validates themes
 npm run build
 cp -r themes output/themes
+cp -r debug output/debug

@@ -422,7 +422,7 @@ describe("Screen", () => {
     describe("Debug", () => {
         test("Does not setup debug events if debugMode is unset", () => {
             jest.spyOn(debugModule, "addEvents");
-            debugModeModule.debugMode = jest.fn().mockImplementation(() => false);
+            debugModeModule.isDebug = jest.fn().mockImplementation(() => false);
             createAndInitScreen();
 
             expect(debugModule.addEvents).not.toHaveBeenCalled();
@@ -430,7 +430,7 @@ describe("Screen", () => {
 
         test("Does not setup debug events if scene is loader", () => {
             jest.spyOn(debugModule, "addEvents");
-            debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
+            debugModeModule.isDebug = jest.fn().mockImplementation(() => true);
             createAndInitScreen("loader");
 
             expect(debugModule.addEvents).not.toHaveBeenCalled();
@@ -438,7 +438,7 @@ describe("Screen", () => {
 
         test("Does not setup debug events if scene is boot", () => {
             jest.spyOn(debugModule, "addEvents");
-            debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
+            debugModeModule.isDebug = jest.fn().mockImplementation(() => true);
             createAndInitScreen("boot");
 
             expect(debugModule.addEvents).not.toHaveBeenCalled();
@@ -446,7 +446,7 @@ describe("Screen", () => {
 
         test("Sets up debug events when debugMode on scene is not loader or boot", () => {
             jest.spyOn(debugModule, "addEvents");
-            debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
+            debugModeModule.isDebug = jest.fn().mockImplementation(() => true);
             createAndInitScreen();
 
             expect(debugModule.addEvents).toHaveBeenCalled();

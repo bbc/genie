@@ -57,13 +57,13 @@ describe("Debug Mode", () => {
         test("is false when url does not includes parameter 'debug=true'", () => {
             jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debug: false }));
 
-            expect(debugMode.debugMode()).toEqual(false);
+            expect(debugMode.isDebug()).toEqual(false);
         });
 
         test("is true when url includes parameter 'debug=true'", () => {
             jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debug: true }));
 
-            expect(debugMode.debugMode()).toEqual(true);
+            expect(debugMode.isDebug()).toEqual(true);
         });
     });
 });
