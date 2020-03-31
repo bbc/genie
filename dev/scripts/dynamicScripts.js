@@ -22,7 +22,7 @@ const addMain = () => {
 
 const awaitGlobals = globals => globals.map(global => awaitScript(global.url));
 
-fetch("/globals.json")
+fetch("globals.json")
     .then(response => response.json())
     .then(globals => {
         const awaitingScripts = [
