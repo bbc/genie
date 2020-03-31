@@ -20,6 +20,8 @@ const addMain = () => {
     document.head.appendChild(script);
 };
 
+const awaitGlobals = globals => globals.map(global => awaitScript(global.url));
+
 fetch("/globals.json")
     .then(response => response.json())
     .then(globals => {
@@ -28,7 +30,6 @@ fetch("/globals.json")
             awaitScript("node_modules/webfontloader/webfontloader.js"),
         ];
 
-        Object.keys(globals).map(global => awaitingScripts.push(awaitScript(globals[global])));
-
-        Promise.all(awaitingScripts).then(addMain);
-    });
+        return Promise.all(awaitingScripts.concat(awaitGlobals(globals)));
+    })
+    .then(addMain);

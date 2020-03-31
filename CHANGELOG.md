@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.3.0 | |
+| | Global script load order for npm run start and npm run start:pack now matches ||
 | 3.2.0 | |
 | | Adds example screen launcher. Split debug files into own folder. ||
 | 3.1.2 | |
