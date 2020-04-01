@@ -60,7 +60,7 @@ module.exports = env => {
 
     try {
         const globals = dynamicallyExposeGlobals(path.resolve("globals.json"));
-        webPackConfig.plugins = webPackConfig.plugins.concat(globals.map(global => new webpack.ProvidePlugin(global)))
+        webPackConfig.plugins = webPackConfig.plugins.concat(globals.map(global => new webpack.ProvidePlugin(global)));
     } catch (err) {
         if (err.code !== "ENOENT") throw err;
     }
