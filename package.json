@@ -1,13 +1,13 @@
 {
     "name": "genie",
-    "version": "3.1.2",
+    "version": "3.3.0",
     "description": "Genie - A Modular Game Engine",
     "license": "Apache-2.0",
     "private": true,
     "author": "BBC",
     "repository": {
         "type": "git",
-        "url": "https://github.com/bbc/childrens-games-genie"
+        "url": "https://github.com/bbc/genie"
     },
     "dependencies": {
         "@babel/core": "^7.8.7",
