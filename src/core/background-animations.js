@@ -47,14 +47,22 @@ const addSprite = scene => animConfig => {
     }
 };
 
+const addParticles = scene => config => {
+    const particles = scene.add.particles(config.assetKey);
+    particles.createEmitter(scene.cache.json.get(config.key));
+}
+
+
 const isSpine = scene => config => scene.cache.custom.spine.exists(config.key);
 const isSprite = scene => config => scene.textures.exists(config.key);
+const isParticles = scene => config => scene.cache.json.exists(config.key); //TODO should particles use a custom cache?
 
 export const addAnimations = scene => () => {
     const configs = scene.context.theme.animations || [];
     const conditionPairs = [
         [isSpine(scene), addSpine(scene)],
         [isSprite(scene), addSprite(scene)],
+        [isParticles(scene), addParticles(scene)],
     ];
     const dispatcher = fp.cond(conditionPairs);
     configs.forEach(dispatcher);

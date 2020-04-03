@@ -57,7 +57,14 @@ export const examples = {
         title: "Background Animations",
         routes: {
             debug: "debug",
-            //Example of custom routing function
+            next: "debug",
+        },
+    },
+    "background-particles": {
+        scene: Home,
+        title: "Background Particles",
+        routes: {
+            debug: "debug",
             next: "debug",
         },
     },
