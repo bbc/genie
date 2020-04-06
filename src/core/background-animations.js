@@ -50,8 +50,7 @@ const addSprite = scene => animConfig => {
 const addParticles = scene => config => {
     const particles = scene.add.particles(config.assetKey);
     particles.createEmitter(scene.cache.json.get(config.key));
-}
-
+};
 
 const isSpine = scene => config => scene.cache.custom.spine.exists(config.key);
 const isSprite = scene => config => scene.textures.exists(config.key);

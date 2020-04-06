@@ -20,6 +20,7 @@ describe("Background Animations", () => {
     let mockSettings;
     let mockSprite;
     let mockSpine;
+    let mockParticles;
 
     beforeEach(() => {
         mockSprite = {
@@ -28,18 +29,26 @@ describe("Background Animations", () => {
         mockSpine = {
             play: jest.fn(),
         };
+        mockParticles = {
+            createEmitter: jest.fn(),
+        };
         mockTheme = {};
         mockScene = {
             context: { theme: mockTheme },
             add: {
                 sprite: jest.fn(() => mockSprite),
                 spine: jest.fn(() => mockSpine),
+                particles: jest.fn(() => mockParticles),
             },
             cache: {
                 custom: {
                     spine: {
                         exists: jest.fn(key => key === "example_spine"),
                     },
+                },
+                json: {
+                    get: jest.fn(() => "example_emitter"),
+                    exists: jest.fn(key => key === "example_spray"),
                 },
             },
             textures: {
@@ -139,6 +148,20 @@ describe("Background Animations", () => {
             );
 
             expect(mockSpine.propName).toEqual("propValue");
+        });
+
+        test("Adds a particle system if configured", () => {
+            const mockConfig = {
+                key: "example_spray",
+                assetKey: "example_sprite",
+            };
+
+            mockTheme.animations = [mockConfig];
+            addAnimationsFn();
+
+            expect(mockScene.add.particles).toHaveBeenCalledWith("example_sprite");
+
+            expect(mockParticles.createEmitter).toHaveBeenCalledWith("example_emitter");
         });
 
         test("Does not play animations if motion is disabled", () => {
