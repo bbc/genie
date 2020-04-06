@@ -52,7 +52,7 @@ const addParticles = scene => config => {
 
     const particles = scene.add.particles(config.assetKey);
     const props = config.props || {};
-    const emitterConfig = { ...scene.cache.json.get(config.key), ...props }
+    const emitterConfig = { ...scene.cache.json.get(config.key), ...props };
 
     particles.createEmitter(emitterConfig);
 };
