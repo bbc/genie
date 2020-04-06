@@ -22,7 +22,8 @@ export const hookErrors = gameDivId => {
             style.padding = padding;
             style.width = style.height = `calc(100% - 2 * ${padding})`;
         }
-        messageElement.innerText = `Something isn't working:\n\n${event.error.message || event.error}\n\n${event.error
-            .stack || ""}`;
+        messageElement.innerText = `Something isn't working:\n\n${event.error.message || event.error}\n\n${
+            event.error.stack || ""
+        }`;
     });
 };
