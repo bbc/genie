@@ -26,6 +26,21 @@
             }
         ]
     },
+    "examples": {
+        "prefix": "examples_",
+        "files": [
+            {
+                "type": "image",
+                "key": "spark",
+                "url": "examples/particles/blue.png"
+            },
+            {
+                "type": "particles",
+                "key": "spray",
+                "url": "examples/particles/spray.json"
+            }
+        ]
+    },
     "gelDesktop": {
         "prefix": "gelDesktop.",
         "files": [

@@ -16,6 +16,7 @@ import { Boot } from "./loader/boot.js";
 import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
 import { JSON5Plugin } from "./loader/json5-loader/json5-plugin.js";
+import { ParticlesPlugin } from "./loader/particles-loader/particles-plugin.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addGelButton } from "./layout/gel-game-objects.js";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./layout/metrics.js";
@@ -67,6 +68,11 @@ export function startup(screenConfig, settingsConfig = {}) {
                 {
                     key: "JSON5Loader",
                     plugin: JSON5Plugin,
+                    start: true,
+                },
+                {
+                    key: "ParticlesLoader",
+                    plugin: ParticlesPlugin,
                     start: true,
                 },
             ],

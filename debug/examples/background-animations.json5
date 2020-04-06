@@ -5,15 +5,16 @@
                 {
                     x: -390,
                     y: -190,
-                    text: "Named sprite or spine animations which have been pre-loaded a file manifest\n\
+                    text: "Using the background furniture system\n\
+named sprite or spine animations which have been pre-loaded a file manifest\n\
 in the theme directories can be set to run on any screen.\n\
 They will appear over the background image but underneath anything else added to the scene.\n\
-See the \"animations\" block in this scene's config",
+See the \"furniture\" block in this scene's config",
                 },
             ],
             assetPrefix: "home",
             music: "loader.backgroundMusic",
-            animations: [
+            furniture: [
                 {
                     key: "examples_spine_owl",
                     x: 380,
