@@ -38,7 +38,7 @@ describe("Grid Cells", () => {
             accessibleElement: {
                 update: jest.fn(),
             },
-            setDisplaySize: function(width, height) {
+            setDisplaySize: function (width, height) {
                 this.displayWidth = width;
                 this.displayHeight = height;
             },
@@ -359,7 +359,7 @@ describe("Grid Cells", () => {
                 // console.log("cell", cell);
 
                 const expectedPosition = {
-                    x: 0 + desktopCellPadding / 2 + cell.button.displayWidth / 2,
+                    x: desktopCellPadding / 2 + cell.button.displayWidth / 2,
                 };
 
                 expect(mockButton.x).toEqual(expectedPosition.x);

@@ -61,7 +61,7 @@ export class Boot extends Screen {
 
                 fp.map(
                     setImage,
-                    getAudioButtons(activeScenes).filter(x => x != undefined),
+                    getAudioButtons(activeScenes).filter(Boolean),
                 );
             },
         });

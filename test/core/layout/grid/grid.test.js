@@ -61,11 +61,11 @@ describe("Grid", () => {
                     y: 50,
                     scaleY: 1,
                     scaleX: 1,
-                    setSize: function(width, height) {
+                    setSize: function (width, height) {
                         this.width = width;
                         this.height = height;
                     },
-                    setDisplaySize: function(width, height) {
+                    setDisplaySize: function (width, height) {
                         this.displayWidth = width;
                         this.displayHeight = height;
                     },
@@ -398,8 +398,8 @@ describe("Grid", () => {
             const resultCells = grid.addGridCells(mockScene.theme);
 
             const expectedPositions = [
-                { x: 0 - resultCells[0].button.displayWidth / 2 - 12 },
-                { x: 0 + resultCells[1].button.displayWidth / 2 + 12 },
+                { x: -resultCells[0].button.displayWidth / 2 - 12 },
+                { x: resultCells[1].button.displayWidth / 2 + 12 },
             ];
 
             expect(resultCells[0].button.x).toEqual(expectedPositions[0].x);
@@ -482,11 +482,11 @@ describe("Grid", () => {
             const expectedPositions = [
                 {
                     x: 0,
-                    y: 0 - mockSprite.height / 2 - desktopCellPadding / 2,
+                    y: -mockSprite.height / 2 - desktopCellPadding / 2,
                 },
                 {
                     x: 0,
-                    y: 0 + mockSprite.height / 2 + desktopCellPadding / 2,
+                    y: mockSprite.height / 2 + desktopCellPadding / 2,
                 },
             ];
 

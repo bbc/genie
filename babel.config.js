@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-module.exports = function(api) {
+module.exports = function (api) {
     api.cache(true);
 
     const presets = [

@@ -55,7 +55,7 @@ describe("Examples Launcher", () => {
 
         examplesModule.examples = {
             example1: {
-                scene: function() {},
+                scene: function () {},
                 title: "test title",
                 transientData: {
                     testKey: "testValue",
@@ -63,7 +63,7 @@ describe("Examples Launcher", () => {
                 routes: {},
             },
             example2: {
-                scene: function() {},
+                scene: function () {},
                 title: "test title",
                 routes: {},
             },
