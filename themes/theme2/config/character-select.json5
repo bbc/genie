@@ -7,7 +7,7 @@
             duration: 500,
             align: 'left',
             music: 'loader.backgroundMusic',
-            animations: [
+            furniture: [
                 {
                     key: 'examples_sprite',
                     x: -400,

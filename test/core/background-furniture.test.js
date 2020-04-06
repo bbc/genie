@@ -10,12 +10,12 @@
  * @license Apache-2.0
  */
 import { createMockGmi } from "../mock/gmi";
-import { addAnimations } from "../../src/core/background-animations.js";
+import { furnish } from "../../src/core/background-furniture.js";
 
-describe("Background Animations", () => {
+describe("Background Furniture", () => {
     let mockTheme;
     let mockScene;
-    let addAnimationsFn;
+    let furnishFn;
     let mockGmi;
     let mockSettings;
     let mockSprite;
@@ -59,7 +59,7 @@ describe("Background Animations", () => {
                 generateFrameNumbers: jest.fn(() => [0, 1, 2, 3]),
             },
         };
-        addAnimationsFn = addAnimations(mockScene);
+        furnishFn = furnish(mockScene);
 
         mockSettings = { motion: true };
         mockGmi = {
@@ -70,17 +70,17 @@ describe("Background Animations", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    describe("addAnimations Function", () => {
-        test("does not add any animations if theme.config.animations has not been set", () => {
-            addAnimationsFn();
+    describe("Furnish", () => {
+        test("does not add any items if theme.config.furniture has not been set", () => {
+            furnishFn();
             expect(mockScene.add.spine).not.toHaveBeenCalled();
             expect(mockScene.add.sprite).not.toHaveBeenCalled();
         });
 
         test("Adds a sprite with default props if configured", () => {
-            mockTheme.animations = [{ key: "example_sprite" }];
+            mockTheme.furniture = [{ key: "example_sprite" }];
 
-            addAnimationsFn();
+            furnishFn();
             expect(mockScene.add.spine).not.toHaveBeenCalled();
             expect(mockScene.add.sprite).toHaveBeenCalledWith(0, 0, "example_sprite", 0);
         });
@@ -96,8 +96,8 @@ describe("Background Animations", () => {
                 },
             };
 
-            mockTheme.animations = [mockConfig];
-            addAnimationsFn();
+            mockTheme.furniture = [mockConfig];
+            furnishFn();
 
             expect(mockScene.add.sprite).toHaveBeenCalledWith(
                 mockConfig.x,
@@ -117,9 +117,9 @@ describe("Background Animations", () => {
         });
 
         test("Adds a spine anim with default props if configured", () => {
-            mockTheme.animations = [{ key: "example_spine" }];
+            mockTheme.furniture = [{ key: "example_spine" }];
 
-            addAnimationsFn();
+            furnishFn();
             expect(mockScene.add.sprite).not.toHaveBeenCalled();
             expect(mockScene.add.spine).toHaveBeenCalledWith(0, 0, "example_spine", "default", true);
         });
@@ -136,8 +136,8 @@ describe("Background Animations", () => {
                 },
             };
 
-            mockTheme.animations = [mockConfig];
-            addAnimationsFn();
+            mockTheme.furniture = [mockConfig];
+            furnishFn();
 
             expect(mockScene.add.spine).toHaveBeenCalledWith(
                 mockConfig.x,
@@ -156,8 +156,8 @@ describe("Background Animations", () => {
                 assetKey: "example_sprite",
             };
 
-            mockTheme.animations = [mockConfig];
-            addAnimationsFn();
+            mockTheme.furniture = [mockConfig];
+            furnishFn();
 
             expect(mockScene.add.particles).toHaveBeenCalledWith("example_sprite");
 
@@ -166,11 +166,24 @@ describe("Background Animations", () => {
 
         test("Does not play animations if motion is disabled", () => {
             mockSettings.motion = false;
-            mockTheme.animations = [{ key: "example_spine" }, { key: "example_sprite" }];
-            addAnimationsFn();
+            mockTheme.furniture = [{ key: "example_spine" }, { key: "example_sprite" }];
+            furnishFn();
 
             expect(mockSpine.active).toEqual(false);
             expect(mockSprite.play).not.toHaveBeenCalled();
+        });
+
+        test("Does not add animations if motion is disabled", () => {
+            mockSettings.motion = false;
+            const mockConfig = {
+                key: "example_spray",
+                assetKey: "example_sprite",
+            };
+
+            mockTheme.furniture = [mockConfig];
+            furnishFn();
+
+            expect(mockScene.add.particles).not.toHaveBeenCalled();
         });
     });
 });
