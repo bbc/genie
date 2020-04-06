@@ -26,7 +26,7 @@ describe("Gel Button", () => {
         GelButton.prototype.setFrame = jest.fn();
         GelButton.prototype.setSizeToFrame = jest.fn();
         GelButton.prototype.add = jest.fn();
-        GelButton.prototype.setInteractive = jest.fn(function() {
+        GelButton.prototype.setInteractive = jest.fn(function () {
             this.input = {};
         });
         eventBus.publish = jest.fn();

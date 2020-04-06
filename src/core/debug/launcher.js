@@ -64,8 +64,6 @@ export class Launcher extends Screen {
 
         this.setLayout(["home"]);
 
-        Object.keys(examples)
-            .map(getButtonConfig(this))
-            .map(addButton);
+        Object.keys(examples).map(getButtonConfig(this)).map(addButton);
     }
 }
