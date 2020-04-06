@@ -59,10 +59,7 @@ export class Boot extends Screen {
                 this.sound.mute = !audioEnabled;
                 const activeScenes = this.scene.manager.getScenes(false);
 
-                fp.map(
-                    setImage,
-                    getAudioButtons(activeScenes).filter(Boolean),
-                );
+                fp.map(setImage, getAudioButtons(activeScenes).filter(Boolean));
             },
         });
     }
