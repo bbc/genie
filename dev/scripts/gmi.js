@@ -12,7 +12,7 @@ var GMI = function(options, embedVars, gameDir) {
     var containerId = "local-game-holder";
     var url = "";
     var env = "test";
-    var qaMode = getParam("qaMode") || false;
+    var debugMode = getParam("debug") || false;
 
     Object.defineProperty(GMI.prototype, "embedVars", {
         get: function() {
@@ -85,7 +85,7 @@ var GMI = function(options, embedVars, gameDir) {
             globalSettings.subtitles = !!globalSettings.subtitles;
             globalSettings.motion = !globalSettings.hasOwnProperty("motion") || globalSettings.motion;
         }
-        
+
         globalSettings = parseLocalStorage(GMI_LOCAL_STORAGE_KEY) || getDefaultSettings();
         ensureGlobalSettingsAreBools();
         gameSettings = parseLocalStorage(GMI_GAME_STORAGE_KEY) || {};
@@ -164,13 +164,13 @@ var GMI = function(options, embedVars, gameDir) {
         return true;
     };
     GMI.prototype.setStatsScreen = function(screenName, params) {
-        if(qaMode) {
+        if(debugMode) {
             var paramsString = params ? "with params: " + JSON.stringify(params) : "";
             console.log("Stats screen set to " + screenName + " " + paramsString); // eslint-disable-line no-console
         }
     };
     GMI.prototype.sendStatsEvent = function(name, type, params) {
-        if(qaMode) {
+        if(debugMode) {
             console.log("Stat fired - name: " + name + ", type: " + type + ", params: " + JSON.stringify(params));
         }
     };
@@ -246,7 +246,7 @@ var GMI = function(options, embedVars, gameDir) {
         return false;
     }
     GMI.prototype.achievements.init = function(init, callback) {
-        if(qaMode) {
+        if(debugMode) {
             console.log("Init achievements: ", init, " callback: ", callback);
         }
         staticAchievementList = init;

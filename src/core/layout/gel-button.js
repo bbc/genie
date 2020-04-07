@@ -60,6 +60,13 @@ export class GelButton extends Phaser.GameObjects.Container {
     };
 
     onPointerUp(config, screen) {
+        // Prevents button sounds from being paused by overlays (Pause Overlay specifically)
+        GameSound.Assets.buttonClick.once(Phaser.Sound.Events.PAUSE, () => {
+            GameSound.Assets.buttonClick.resume();
+        });
+
+        GameSound.Assets.buttonClick.play();
+
         const inputManager = this.scene.sys.game.input;
         inputManager.updateInputPlugins("", inputManager.pointers);
         publish(config, { screen })();
@@ -83,12 +90,13 @@ export class GelButton extends Phaser.GameObjects.Container {
 
     getHitAreaBounds() {
         const wtm = this.getWorldTransformMatrix();
+        const parentScale = this.parentContainer ? this.parentContainer.scale : 1;
 
         return new Phaser.Geom.Rectangle(
             wtm.getX(-this.input.hitArea.width / 2, 0),
             wtm.getY(0, -this.input.hitArea.height / 2),
-            this.input.hitArea.width * this.scale * this.parentContainer.scale,
-            this.input.hitArea.height * this.scale * this.parentContainer.scale,
+            this.input.hitArea.width * this.scale * parentScale,
+            this.input.hitArea.height * this.scale * parentScale,
         );
     }
 
@@ -119,7 +127,6 @@ export class GelButton extends Phaser.GameObjects.Container {
 }
 
 const publish = (config, data) => () => {
-    GameSound.Assets.buttonClick.play();
     eventBus.publish({
         channel: config.channel,
         name: config.id,

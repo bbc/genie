@@ -11,13 +11,12 @@ import * as Scaler from "../scaler.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 import { loadPack } from "./loadpack.js";
-import fp from "../../../lib/lodash/fp/fp.js";
+import { getConfig } from "./get-config.js";
+import { isDebug } from "../debug/debug-mode.js";
 
 const getMissingPacks = (masterPack, keys) =>
     Object.keys(keys)
-        .filter(key => key !== "default")
-        .filter(key => key !== "boot")
-        .filter(key => key !== "loader")
+        .filter(key => ["default", "boot", "loader", "debug"].indexOf(key) === -1)
         .filter(key => !masterPack.hasOwnProperty(key))
         .map(key => `asset-packs/${key}`);
 
@@ -29,19 +28,11 @@ export class Loader extends Screen {
         this._progress = 0;
     }
 
-    getConfig() {
-        const configFile = this.cache.json.get("config/files").config;
-        const keys = configFile.files.map(file => configFile.prefix + file.key);
-        const entries = keys.map(key => this.cache.json.get(key));
-
-        return entries.reduce((acc, entry) => fp.merge(acc, entry), {});
-    }
-
     preload() {
         this.load.setBaseURL(gmi.gameDir);
         this.load.setPath(gmi.embedVars.configPath);
 
-        const config = this.getConfig();
+        const config = getConfig(this, "config/files");
         this.setConfig(config);
 
         if (config.theme.game && config.theme.game.achievements === true) {
@@ -52,7 +43,11 @@ export class Loader extends Screen {
         }
 
         const masterPack = this.cache.json.get("asset-master-pack");
-        const gamePacksToLoad = ["gel/gel-pack"].concat(getMissingPacks(masterPack, this.scene.manager.keys));
+        const debugPack = isDebug() ? ["../../debug/debug-pack"] : [];
+        const gamePacksToLoad = ["gel/gel-pack"].concat(
+            getMissingPacks(masterPack, this.scene.manager.keys),
+            debugPack,
+        );
 
         gamePacksToLoad.forEach(pack => this.load.pack(pack));
         this.load.addPack(masterPack);

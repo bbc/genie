@@ -43,8 +43,9 @@ describe("Layout - Gel Defaults", () => {
                 home: jest.fn(),
                 achievements: jest.fn(),
                 back: jest.fn(),
+                debug: jest.fn(),
             },
-            _navigate: jest.fn(),
+            navigate: jest.fn(),
             layout: {
                 buttons: {
                     achievements: { setIndicator: clearIndicatorSpy },
@@ -334,6 +335,16 @@ describe("Layout - Gel Defaults", () => {
 
         test("pauses the screen below", () => {
             expect(mockCurrentScreen.scene.pause).toHaveBeenCalled();
+        });
+    });
+
+    describe("Debug Button Callback", () => {
+        beforeEach(() => {
+            gel.config(mockCurrentScreen).debug.action({ screen: mockCurrentScreen });
+        });
+
+        test("Launches debug screen", () => {
+            expect(mockCurrentScreen.navigation.debug).toHaveBeenCalled();
         });
     });
 });

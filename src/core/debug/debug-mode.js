@@ -10,11 +10,11 @@ const urlParams = window => parseUrlParams(window.location.search);
 const testURL = window => window.location.hostname.includes("www.test.bbc.");
 
 const create = window => {
-    if (debugMode() || testURL(window)) {
+    if (isDebug() || testURL(window)) {
         window.__debug = { gmi };
     }
 };
 
-const debugMode = () => Boolean(urlParams(window).debug);
+const isDebug = () => Boolean(urlParams(window).debug);
 
-export { debugMode, create };
+export { isDebug, create };

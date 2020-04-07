@@ -9,7 +9,6 @@ import { createMockGmi } from "../mock/gmi";
 import * as accessibleCarouselElements from "../../src/core/accessibility/accessible-carousel-elements.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
-
 import { HowToPlay } from "../../src/components/how-to-play.js";
 
 describe("How To Play Screen", () => {
@@ -39,7 +38,6 @@ describe("How To Play Screen", () => {
                     game: {},
                 },
             },
-            qaMode: { active: false },
             popupScreens: [],
         };
         mockHowToPlayData = {
@@ -56,7 +54,6 @@ describe("How To Play Screen", () => {
                     game: {},
                 },
             },
-            qaMode: { active: false },
             popupScreens: [],
         };
 
@@ -65,8 +62,8 @@ describe("How To Play Screen", () => {
 
         mockLayout = {
             buttons: {
-                previous: { accessibleElement: { el: { focus: jest.fn() } } },
-                next: { accessibleElement: { el: { focus: jest.fn() } } },
+                previous: { accessibleElement: { el: { focus: jest.fn() }, update: jest.fn() } },
+                next: { accessibleElement: { el: { focus: jest.fn() }, update: jest.fn() } },
             },
         };
         howToPlayScreen = new HowToPlay();
@@ -76,6 +73,9 @@ describe("How To Play Screen", () => {
         howToPlayScreen.game = { canvas: { parentElement: "parent-element" } };
         howToPlayScreen.navigation = { next: jest.fn() };
         howToPlayScreen.setLayout = jest.fn(() => mockLayout);
+        Object.defineProperty(howToPlayScreen, "layout", {
+            get: jest.fn(() => mockLayout),
+        });
         howToPlayScreen.add = {
             image: jest.fn().mockImplementation((x, y, imageName) => imageName),
             sprite: jest.fn().mockImplementation((x, y, assetName) => {
@@ -106,13 +106,6 @@ describe("How To Play Screen", () => {
         });
 
         test("adds GEL buttons to layout", () => {
-            const expectedButtons = ["home", "audio", "pause", "previous", "next", "continue"];
-            expect(howToPlayScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
-
-        test("adds GEL buttons to layout when how to play", () => {
-            howToPlayScreen.setData(mockHowToPlayData);
-            howToPlayScreen.create();
             const expectedButtons = ["overlayBack", "audio", "settings", "previous", "next"];
             expect(howToPlayScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
@@ -243,7 +236,7 @@ describe("How To Play Screen", () => {
                 howToPlayScreen.currentIndex = 0;
                 howToPlayScreen.update();
 
-                expect(howToPlayScreen.buttonLayout.buttons.previous.visible).toBe(true);
+                expect(howToPlayScreen.layout.buttons.previous.visible).toBe(true);
             });
 
             test("previous button is disabled when how to play and on the first item", () => {
@@ -252,7 +245,8 @@ describe("How To Play Screen", () => {
                 howToPlayScreen.create();
                 howToPlayScreen.update();
 
-                expect(howToPlayScreen.buttonLayout.buttons.previous.visible).toBe(false);
+                expect(howToPlayScreen.layout.buttons.previous.visible).toBe(false);
+                expect(howToPlayScreen.layout.buttons.previous.accessibleElement.update).toHaveBeenCalled();
             });
 
             test("set 'aria-hidden' = true on all the choices except the current one", () => {
@@ -306,7 +300,7 @@ describe("How To Play Screen", () => {
                 howToPlayScreen.currentIndex = 2;
                 howToPlayScreen.update();
 
-                expect(howToPlayScreen.buttonLayout.buttons.next.visible).toBe(true);
+                expect(howToPlayScreen.layout.buttons.next.visible).toBe(true);
             });
 
             test("next button is disabled when how to play and on the last item", () => {
@@ -315,7 +309,8 @@ describe("How To Play Screen", () => {
                 const nextButtonClick = eventBus.subscribe.mock.calls[1][0].callback;
                 nextButtonClick();
                 nextButtonClick();
-                expect(howToPlayScreen.buttonLayout.buttons.next.visible).toBe(false);
+                expect(howToPlayScreen.layout.buttons.next.visible).toBe(false);
+                expect(howToPlayScreen.layout.buttons.next.accessibleElement.update).toHaveBeenCalled();
             });
 
             test("set 'aria-hidden' = true on all the choices except the current one", () => {
@@ -341,7 +336,7 @@ describe("How To Play Screen", () => {
                 howToPlayScreen.create();
                 eventBus.subscribe.mock.calls[1][0].callback();
                 eventBus.subscribe.mock.calls[0][0].callback();
-                expect(howToPlayScreen.buttonLayout.buttons.next.accessibleElement.el.focus).toHaveBeenCalledTimes(1);
+                expect(howToPlayScreen.layout.buttons.next.accessibleElement.el.focus).toHaveBeenCalledTimes(1);
             });
 
             test("focus moves to the previous arrow when at the end of the items on How To Play", () => {
@@ -350,9 +345,7 @@ describe("How To Play Screen", () => {
                 const nextButtonClick = eventBus.subscribe.mock.calls[1][0].callback;
                 nextButtonClick();
                 nextButtonClick();
-                expect(howToPlayScreen.buttonLayout.buttons.previous.accessibleElement.el.focus).toHaveBeenCalledTimes(
-                    1,
-                );
+                expect(howToPlayScreen.layout.buttons.previous.accessibleElement.el.focus).toHaveBeenCalledTimes(1);
             });
         });
     });

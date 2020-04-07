@@ -5,6 +5,7 @@
  */
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
+import * as debugModeModule from "../../src/core/debug/debug-mode.js";
 
 import { Home } from "../../src/components/home";
 
@@ -52,6 +53,15 @@ describe("Home Screen", () => {
             mockData.config.theme.game.achievements = true;
             homeScreen.create();
             const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "achievements"];
+            expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+    });
+
+    describe("Debug button", () => {
+        test("adds the debug button when debugMode is set", () => {
+            debugModeModule.isDebug = () => true;
+            homeScreen.create();
+            const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "debug"];
             expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
     });

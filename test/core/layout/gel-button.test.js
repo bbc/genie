@@ -26,13 +26,17 @@ describe("Gel Button", () => {
         GelButton.prototype.setFrame = jest.fn();
         GelButton.prototype.setSizeToFrame = jest.fn();
         GelButton.prototype.add = jest.fn();
-        GelButton.prototype.setInteractive = jest.fn(function() {
+        GelButton.prototype.setInteractive = jest.fn(function () {
             this.input = {};
         });
         eventBus.publish = jest.fn();
         GameSound.Assets = {
             backgroundMusic: {},
-            buttonClick: { play: jest.fn() },
+            buttonClick: {
+                play: jest.fn(),
+                once: jest.fn(),
+                resume: jest.fn(),
+            },
         };
         mockSprite = {
             width: 100,
@@ -181,6 +185,21 @@ describe("Gel Button", () => {
                 mockScene.sys.game.input.pointers,
             );
         });
+
+        test("pointerup function calls play on button click sound", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            gelButton.onPointerUp(mockConfig, mockScene);
+            expect(GameSound.Assets.buttonClick.play).toHaveBeenCalled();
+        });
+
+        test("pointerup function calls once on button click to prevent pausing", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            gelButton.onPointerUp(mockConfig, mockScene);
+            expect(GameSound.Assets.buttonClick.once).toHaveBeenCalled();
+
+            GameSound.Assets.buttonClick.once.mock.calls[0][1]();
+            expect(GameSound.Assets.buttonClick.resume).toHaveBeenCalled();
+        });
     });
 
     describe("setHitArea function", () => {
@@ -313,6 +332,27 @@ describe("Gel Button", () => {
             gelButton.getWorldTransformMatrix = () => mockWtm;
 
             expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 200, 100));
+        });
+
+        test("Uses a scale of 1 if button is not parented to a gel group (debug buttons)", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            gelButton.scale = 0.5;
+
+            gelButton.input = {
+                hitArea: {
+                    width: 200,
+                    height: 100,
+                },
+            };
+
+            const mockWtm = {
+                getX: () => 0,
+                getY: () => 0,
+            };
+
+            gelButton.getWorldTransformMatrix = () => mockWtm;
+
+            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 100, 50));
         });
     });
 

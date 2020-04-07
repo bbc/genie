@@ -1,0 +1,32 @@
+{
+    theme: {
+        "background-particles": {
+            debugLabels: [
+                {
+                    x: -390,
+                    y: -190,
+                    text: "Using the background furniture system\n\
+named particle systems which have been pre-loaded a file manifest\n\
+in the theme directories can be set to run on any screen.\n\
+They will appear over the background image but underneath anything else added to the scene.\n\
+See the \"furniture\" block in this scene's config",
+                },
+            ],
+            assetPrefix: "home",
+            music: "loader.backgroundMusic",
+            furniture: [
+                {
+                    key: "examples_spray",
+                    assetKey: "examples_spark"
+                },
+            ],
+
+            //Use to shift buttons out of the way of logos etc.
+            "button-overrides": {
+                play: {
+                    shiftY: 80,
+                },
+            },
+        },
+    },
+}

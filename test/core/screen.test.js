@@ -24,6 +24,7 @@ describe("Screen", () => {
     let mockTransientData;
     let mockNavigation;
     let mockParentScreen;
+    let mockConfig;
     const mockGfx = { test: "1234" };
 
     const createScreen = key => {
@@ -38,29 +39,9 @@ describe("Screen", () => {
             root: {},
             destroy: jest.fn(),
         };
-        mockTransientData = { key: "data" };
     };
 
-    const initScreen = () => {
-        mockNavigation = {
-            screenKey: { routes: { next: "nextscreen" } },
-            boot: { routes: { next: "loader" } },
-            loader: { routes: { next: "home" } },
-        };
-        mockParentScreen = {
-            key: "select",
-            removeAll: jest.fn(),
-            _onOverlayRemoved: jest.fn(),
-            scene: { stop: jest.fn() },
-        };
-        mockData = {
-            navigation: mockNavigation,
-            config: { theme: { loadscreen: { music: "test/music" }, screenKey: {} } },
-            parentScreens: [mockParentScreen],
-            transient: mockTransientData,
-        };
-        screen.init(mockData);
-    };
+    const initScreen = () => screen.init(mockData);
 
     const createAndInitScreen = (key = "screenKey") => {
         createScreen(key);
@@ -84,7 +65,31 @@ describe("Screen", () => {
         };
         createMockGmi(mockGmi);
 
-        delete window.__qaMode;
+        delete window.__debug;
+
+        mockConfig = { theme: { loadscreen: { music: "test/music" }, screenKey: {} } };
+
+        mockTransientData = { key: "data" };
+
+        mockNavigation = {
+            screenKey: { routes: { next: "nextscreen" } },
+            boot: { routes: { next: "loader" } },
+            loader: { routes: { next: "home" } },
+        };
+
+        mockParentScreen = {
+            key: "select",
+            removeAll: jest.fn(),
+            _onOverlayRemoved: jest.fn(),
+            scene: { stop: jest.fn() },
+        };
+
+        mockData = {
+            navigation: mockNavigation,
+            config: mockConfig,
+            parentScreens: [mockParentScreen],
+            transient: mockTransientData,
+        };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -104,6 +109,16 @@ describe("Screen", () => {
         test("sets the navigation", () => {
             createAndInitScreen();
             expect(screen.navigation).toEqual({ next: expect.any(Function) });
+        });
+
+        test("Creates a wrapped function with passed in scene for 'Function' routes", () => {
+            const routeFn = jest.fn();
+            mockNavigation.screenKey.routes.testFunctionRoute = routeFn;
+            createScreen("screenKey");
+            screen.init(mockData);
+            screen.navigation.testFunctionRoute();
+
+            expect(routeFn).toHaveBeenCalledWith(screen);
         });
 
         test("sets the navigation when on the boot screen", () => {
@@ -341,6 +356,32 @@ describe("Screen", () => {
                 data: mockSettings.audio,
             });
         });
+
+        test("sets the stats screen if the screen is not an overlay", () => {
+            createScreen("screenKey");
+            mockData.config.theme["screenKey"] = { isOverlay: false };
+            screen.init(mockData);
+
+            expect(mockGmi.setStatsScreen).toHaveBeenCalled();
+        });
+
+        test("does not set the stats screen if the screen is an overlay", () => {
+            createScreen("screenKey");
+            mockData.config.theme["screenKey"] = { isOverlay: true };
+            screen.init(mockData);
+
+            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
+        });
+
+        test("removing an overlay does not set stat screen back to an underlying overlay", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "overlay", stop: jest.fn() } };
+            createScreen("screenKey");
+            mockData.config.theme["screenKey"] = { isOverlay: true };
+            screen.init(mockData);
+            screen._onOverlayRemoved(mockOverlay);
+
+            expect(mockGmi.setStatsScreen).not.toHaveBeenCalled();
+        });
     });
 
     describe("data handling", () => {
@@ -363,10 +404,25 @@ describe("Screen", () => {
         });
     });
 
+    describe("assetPrefix", () => {
+        test("returns scene key if 'assetPrefix' is not set in theme", () => {
+            createAndInitScreen();
+
+            expect(screen.assetPrefix).toBe("screenKey");
+        });
+
+        test("returns assetPrefix if set in theme", () => {
+            mockConfig.theme.screenKey.assetPrefix = "themePrefix";
+            createAndInitScreen();
+
+            expect(screen.assetPrefix).toBe("themePrefix");
+        });
+    });
+
     describe("Debug", () => {
         test("Does not setup debug events if debugMode is unset", () => {
             jest.spyOn(debugModule, "addEvents");
-            debugModeModule.debugMode = jest.fn().mockImplementation(() => false);
+            debugModeModule.isDebug = jest.fn().mockImplementation(() => false);
             createAndInitScreen();
 
             expect(debugModule.addEvents).not.toHaveBeenCalled();
@@ -374,7 +430,7 @@ describe("Screen", () => {
 
         test("Does not setup debug events if scene is loader", () => {
             jest.spyOn(debugModule, "addEvents");
-            debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
+            debugModeModule.isDebug = jest.fn().mockImplementation(() => true);
             createAndInitScreen("loader");
 
             expect(debugModule.addEvents).not.toHaveBeenCalled();
@@ -382,7 +438,7 @@ describe("Screen", () => {
 
         test("Does not setup debug events if scene is boot", () => {
             jest.spyOn(debugModule, "addEvents");
-            debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
+            debugModeModule.isDebug = jest.fn().mockImplementation(() => true);
             createAndInitScreen("boot");
 
             expect(debugModule.addEvents).not.toHaveBeenCalled();
@@ -390,7 +446,7 @@ describe("Screen", () => {
 
         test("Sets up debug events when debugMode on scene is not loader or boot", () => {
             jest.spyOn(debugModule, "addEvents");
-            debugModeModule.debugMode = jest.fn().mockImplementation(() => true);
+            debugModeModule.isDebug = jest.fn().mockImplementation(() => true);
             createAndInitScreen();
 
             expect(debugModule.addEvents).toHaveBeenCalled();

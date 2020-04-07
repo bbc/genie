@@ -2,6 +2,10 @@
     theme: {
         "level-select": {
             music: "loader.backgroundMusic",
+            storageKey: "levels",
+            states: {
+                completed: { overlayAsset: "character-select.complete", x: 65, y: 35, suffix: "completed" },
+            },
             title: {
                 image: {
                     imageId: "title",
@@ -20,19 +24,19 @@
             },
             choices: [
                 {
-                    id: "item1",
+                    id: "1",
                     key: "carousel1",
                     ariaLabel: "Level 1",
                     title: "Test Level 1",
                 },
                 {
-                    id: "item2",
+                    id: "2",
                     key: "carousel2",
                     ariaLabel: "Level 2",
                     title: "Test Level 2",
                 },
                 {
-                    id: "item3",
+                    id: "3",
                     key: "carousel3",
                     ariaLabel: "Level 3",
                     title: "Test Level 3",

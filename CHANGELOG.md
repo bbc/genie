@@ -2,6 +2,26 @@
 
 | Version | Description |
 |---------|-------------|
+| | Update to Prettier 2.0.3 ||
+| 3.3.0 | |
+| | Global script load order for npm run start and npm run start:pack now matches ||
+| 3.2.0 | |
+| | Adds example screen launcher. Split debug files into own folder. ||
+| 3.1.2 | |
+| | Fix crash when using debug mode layout has not been set. ||
+| | Fix crash when using debug mode and debug update is called before debug create. ||
+| 3.1.1 | |
+| | Fix crash when hitting replay button ||
+| 3.1.0 | |
+| | Allow custom routing functions in navigation config ||
+| | Provision lodash-fp ES6 bundle for development (to improve loading performance on Mac) ||
+| | Add system for debug labels ||
+| | Disable Phaser window events to prevent click-through on achievements / settings ||
+| | Remove references to qa mode (now debug mode) ||
+| | Stop stats screen from being set on overlays ||
+| | Adds assetPrefix to screens with override support in themes. | |
+| 3.0.0 | |
+| | Adds V2 select and result screens. | |
 | | Bug fix: carousel buttons causing crashes. | |
 | | Update Fake GMI to no longer use areCookiesAllowed. | |
 | | Move asset pack files to own sub folder in themes.  | |

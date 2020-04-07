@@ -32,13 +32,16 @@ describe("Grid Cells", () => {
                 id: "next-button-id",
             },
             sprite: {
-                width: 200,
+                width: 184,
                 height: 100,
             },
             accessibleElement: {
                 update: jest.fn(),
             },
-            setDisplaySize: jest.fn(),
+            setDisplaySize: function (width, height) {
+                this.displayWidth = width;
+                this.displayHeight = height;
+            },
             overlays: { set: jest.fn() },
         };
 
@@ -47,7 +50,7 @@ describe("Grid Cells", () => {
         mockText = { setOrigin: jest.fn() };
 
         mockGrid = {
-            _cellSize: [200, 100],
+            _cellSize: [184, 100],
             _config: {
                 columns: 2,
                 rows: 2,
@@ -57,11 +60,10 @@ describe("Grid Cells", () => {
             getCurrentPageKey: jest.fn(() => "start-button-id"),
             cellIds: jest.fn(() => ["start-button-id", "next-button-id"]),
             showPage: jest.fn(),
-            cellsPerPage: 1,
             _cellPadding: 24,
             add: jest.fn(),
             _safeArea: {
-                width: 500,
+                width: 600,
             },
             scene: {
                 add: {
@@ -72,6 +74,7 @@ describe("Grid Cells", () => {
                 scene: {
                     key: "scene-key",
                 },
+                assetPrefix: "scene-key",
             },
         };
 
@@ -84,21 +87,24 @@ describe("Grid Cells", () => {
         test("sets correct size of button when button is same size as cell", () => {
             setSize(mockGrid, mockButton);
 
-            expect(mockButton.setDisplaySize).toHaveBeenCalledWith(200, 100);
+            expect(mockButton.displayWidth).toBe(184);
+            expect(mockButton.displayHeight).toBe(100);
         });
 
         test("sets correct size when button is wide aspect", () => {
-            mockButton.sprite.width = 400;
+            mockButton.sprite.width = 368;
             setSize(mockGrid, mockButton);
 
-            expect(mockButton.setDisplaySize).toHaveBeenCalledWith(200, 50);
+            expect(mockButton.displayWidth).toBe(184);
+            expect(mockButton.displayHeight).toBe(50);
         });
 
         test("sets correct size when button is tall aspect", () => {
             mockButton.sprite.width = 10;
             setSize(mockGrid, mockButton);
 
-            expect(mockButton.setDisplaySize).toHaveBeenCalledWith(10, 100);
+            expect(mockButton.displayWidth).toBe(10);
+            expect(mockButton.displayHeight).toBe(100);
         });
     });
 
@@ -252,6 +258,7 @@ describe("Grid Cells", () => {
             });
 
             test("moves to correct page when tabbed to button is not current button", () => {
+                mockGrid.cellsPerPage = 1;
                 mockButton.config.id = "next-button-id";
                 createCell(mockGrid, {}, 0);
                 const tabTransitionFn = mockButton.on.mock.calls[0][1];
@@ -261,6 +268,7 @@ describe("Grid Cells", () => {
             });
 
             test("does not change page when tabbed to button is current button", () => {
+                mockGrid.cellsPerPage = 1;
                 mockButton.config.id = "start-button-id";
                 createCell(mockGrid, {}, 0);
                 const tabTransitionFn = mockButton.on.mock.calls[0][1];
@@ -307,8 +315,7 @@ describe("Grid Cells", () => {
 
                 const cell = createCell(mockGrid, "testcell", 1);
                 mockCells = [{}, cell];
-
-                mockButton.displayWidth = 200;
+                mockButton.displayWidth = cell.width;
                 cell.reset();
 
                 const expectedPosition = {
@@ -327,8 +334,9 @@ describe("Grid Cells", () => {
                 const cell = createCell(mockGrid, "testcell", 1);
                 mockCells = [{}, cell];
 
-                mockButton.displayWidth = 200;
+                mockButton.displayWidth = cell.width;
                 cell.reset();
+                // console.log("mockButton", mockButton);
 
                 const expectedPosition = {
                     x: cell.button.displayWidth / 2 + desktopCellPadding + cell.button.displayWidth / 2,
@@ -346,11 +354,31 @@ describe("Grid Cells", () => {
                 const cell = createCell(mockGrid, "testcell", 1);
                 mockCells = [{}, cell];
 
-                mockButton.displayWidth = 200;
+                mockButton.displayWidth = cell.width;
+                cell.reset();
+                // console.log("cell", cell);
+
+                const expectedPosition = {
+                    x: desktopCellPadding / 2 + cell.button.displayWidth / 2,
+                };
+
+                expect(mockButton.x).toEqual(expectedPosition.x);
+            });
+
+            test("last cell on the page is centre aligned when set in config and single cell is on the row", () => {
+                mockGrid.cellsPerPage = 3;
+                mockGrid._config.align = "center";
+                mockGrid._config.columns = 3;
+                mockGrid._config.rows = 1;
+
+                const cell = createCell(mockGrid, "testcell", 0);
+                mockCells = [cell];
+
+                mockButton.displayWidth = cell.width;
                 cell.reset();
 
                 const expectedPosition = {
-                    x: 0 + desktopCellPadding / 2 + cell.button.displayWidth / 2,
+                    x: 0,
                 };
 
                 expect(mockButton.x).toEqual(expectedPosition.x);
@@ -405,7 +433,7 @@ describe("Grid Cells", () => {
                 cell.addTweens({ goForwards: true });
                 const tweenCalls = mockGrid.scene.add.tween.mock.calls;
 
-                tweenCalls.forEach(tweenCall => expect(tweenCall[0].x).toStrictEqual({ from: 0, to: -500 }));
+                tweenCalls.forEach(tweenCall => expect(tweenCall[0].x).toStrictEqual({ from: 0, to: -600 }));
             });
 
             test("sets the correct tween x when reverse transition", () => {
@@ -415,7 +443,7 @@ describe("Grid Cells", () => {
                 cell.addTweens({ goForwards: false });
                 const tweenCalls = mockGrid.scene.add.tween.mock.calls;
 
-                tweenCalls.forEach(tweenCall => expect(tweenCall[0].x).toStrictEqual({ from: 0, to: 500 }));
+                tweenCalls.forEach(tweenCall => expect(tweenCall[0].x).toStrictEqual({ from: 0, to: 600 }));
             });
         });
 

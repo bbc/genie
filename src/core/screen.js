@@ -13,10 +13,19 @@ import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
-import { addAnimations } from "./background-animations.js";
-import { debugMode } from "./debug/debug-mode.js";
+import { furnish } from "./background-furniture.js";
+import { isDebug } from "./debug/debug-mode.js";
 import * as debug from "./debug/debug.js";
 import { CAMERA_X, CAMERA_Y } from "./layout/metrics.js";
+
+const getRoutingFn = scene => route => {
+    const routeTypes = {
+        function: () => route(scene),
+        string: () => scene.navigate(route),
+    };
+
+    return routeTypes[typeof route];
+};
 
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
@@ -51,18 +60,21 @@ export class Screen extends Phaser.Scene {
         return this._data.transient;
     }
 
+    get assetPrefix() {
+        return this.context.theme.assetPrefix || this.scene.key;
+    }
+
     init(data) {
         this._data = data;
         this.cameras.main.scrollX = -CAMERA_X;
         this.cameras.main.scrollY = -CAMERA_Y;
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
-            gmi.setStatsScreen(this.scene.key);
+            this.themeScreenConfig = this._data.config.theme[this.scene.key];
+            this.setStatsScreen(this.scene.key);
+            GameSound.setupScreenMusic(this.scene.scene, this.themeScreenConfig);
 
-            const themeScreenConfig = this._data.config.theme[this.scene.key];
-            GameSound.setupScreenMusic(this.scene.scene, themeScreenConfig);
-
-            debugMode() && debug.addEvents.call(this);
+            isDebug() && debug.addEvents(this);
         }
 
         this.sys.accessibleButtons = [];
@@ -70,6 +82,12 @@ export class Screen extends Phaser.Scene {
         a11y.destroy();
 
         this._makeNavigation();
+    }
+
+    setStatsScreen(screen) {
+        if (!this.themeScreenConfig.isOverlay) {
+            gmi.setStatsScreen(screen);
+        }
     }
 
     setData(newData) {
@@ -82,15 +100,10 @@ export class Screen extends Phaser.Scene {
 
     _makeNavigation = () => {
         const routes = this.scene.key === "boot" ? { next: "loader" } : this._data.navigation[this.scene.key].routes;
-        this.navigation = fp.mapValues(
-            route => () => {
-                this._navigate(route);
-            },
-            routes,
-        );
+        this.navigation = fp.mapValues(getRoutingFn(this), routes);
     };
 
-    addAnimations = addAnimations(this);
+    addAnimations = furnish(this);
 
     addOverlay(key) {
         this._data.parentScreens.push(this);
@@ -110,7 +123,7 @@ export class Screen extends Phaser.Scene {
         this._layout.makeAccessible();
         this.sys.accessibleButtons.forEach(button => a11y.addButton(button));
         a11y.reset();
-        gmi.setStatsScreen(this.scene.key);
+        this.setStatsScreen(this.scene.key);
 
         eventBus.publish({
             channel: settingsChannel,
@@ -125,7 +138,7 @@ export class Screen extends Phaser.Scene {
         delete this._layout;
     };
 
-    _navigate = route => {
+    navigate = route => {
         this.scene.bringToTop(route);
         while (this._data.parentScreens.length > 0) {
             const parentScreen = this._data.parentScreens.pop();

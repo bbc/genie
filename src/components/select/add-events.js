@@ -18,7 +18,7 @@ export const addEvents = scene => {
     eventBus.subscribe({
         channel: buttonsChannel(scene),
         name: "continue",
-        callback: scene.next(scene.grid.getCurrentPageKey),
+        callback: scene.next(scene.grid.getCurrentSelection),
     });
     eventBus.subscribe({
         channel: buttonsChannel(scene),

@@ -2,7 +2,7 @@
     theme: {
         home: {
             music: "loader.backgroundMusic",
-            animations: [
+            furniture: [
                 {
                     key: "examples_spine_owl",
                     x: 380,

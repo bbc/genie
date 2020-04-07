@@ -2,7 +2,7 @@
     theme: {
         'level-select': {
             music: 'loader.backgroundMusic',
-            animations: [
+            furniture: [
                 {
                     key: 'examples_sprite',
                     x: -400,

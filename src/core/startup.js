@@ -16,9 +16,11 @@ import { Boot } from "./loader/boot.js";
 import { hookErrors } from "./loader/hook-errors.js";
 import FontLoaderPlugin from "./loader/font-loader/font-plugin.js";
 import { JSON5Plugin } from "./loader/json5-loader/json5-plugin.js";
+import { ParticlesPlugin } from "./loader/particles-loader/particles-plugin.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addGelButton } from "./layout/gel-game-objects.js";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./layout/metrics.js";
+import { getLauncherScreen } from "./debug/debug-screens.js";
 
 export const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key, ...conf[key].settings }));
 
@@ -33,7 +35,7 @@ export function startup(screenConfig, settingsConfig = {}) {
     Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
 
     const browser = getBrowser();
-    const scenes = getScenes(screenConfig);
+    const scenes = getScenes(Object.assign(screenConfig, getLauncherScreen(debugMode.isDebug())));
     scenes.unshift(new Loader());
     scenes.unshift(new Boot(screenConfig));
 
@@ -52,6 +54,9 @@ export function startup(screenConfig, settingsConfig = {}) {
         scale: {
             mode: Phaser.Scale.NONE,
         },
+        input: {
+            windowEvents: false,
+        },
         scene: scenes,
         plugins: {
             global: [
@@ -63,6 +68,11 @@ export function startup(screenConfig, settingsConfig = {}) {
                 {
                     key: "JSON5Loader",
                     plugin: JSON5Plugin,
+                    start: true,
+                },
+                {
+                    key: "ParticlesLoader",
+                    plugin: ParticlesPlugin,
                     start: true,
                 },
             ],

@@ -16,6 +16,7 @@ import { Boot } from "../../src/core/loader/boot.js";
 import { startup } from "../../src/core/startup.js";
 import { addGelButton } from "../../src/core/layout/gel-game-objects.js";
 import * as debugModeModule from "../../src/core/debug/debug-mode.js";
+import * as debugScreensModule from "../../src/core/debug/debug-screens.js";
 
 jest.mock("../../src/core/browser.js");
 jest.mock("../../src/core/custom-styles.js");
@@ -82,29 +83,37 @@ describe("Startup", () => {
                 settings: { scene: jest.fn().mockImplementation(() => ({ settings: "settings" })) },
                 game: { scene: jest.fn().mockImplementation(() => ({ game: "game" })) },
             };
-            startup(fakeScreenConfig);
         });
 
         test("creates an array of scenes from the screen config", () => {
+            startup(fakeScreenConfig);
             expect(fakeScreenConfig.settings.scene).toHaveBeenCalledWith({ key: "settings" });
             expect(fakeScreenConfig.game.scene).toHaveBeenCalledWith({ key: "game" });
         });
 
         test("instantiates a new loader", () => {
+            startup(fakeScreenConfig);
             expect(Loader).toHaveBeenCalled();
         });
 
         test("instantiates a new boot with correct config", () => {
+            startup(fakeScreenConfig);
             expect(Boot).toHaveBeenCalledWith(fakeScreenConfig);
         });
 
         test("adds the scenes with the boot and loader to the Phaser game", () => {
+            debugScreensModule.getLauncherScreen = () => ({
+                debug: { scene: jest.fn().mockImplementation(() => ({ debug: "debug" })) },
+            });
+            startup(fakeScreenConfig);
+
             const actualPhaserGame = Phaser.Game.mock.calls[0][0];
             expect(actualPhaserGame.scene).toEqual([
                 { boot: "boot" },
                 { loader: "loader" },
                 { settings: "settings" },
                 { game: "game" },
+                { debug: "debug" },
             ]);
         });
 
@@ -169,6 +178,13 @@ describe("Startup", () => {
             document.getElementById.mockImplementation(() => false);
             const startupNoContainer = () => startup({});
             expect(startupNoContainer).toThrowError(`Container element "#some-id" not found`); // eslint-disable-line quotes
+        });
+
+        test("disable's phaser's global window events (prevents clickthrough from achievements)", () => {
+            startup({});
+            const actualConfig = Phaser.Game.mock.calls[0][0];
+
+            expect(actualConfig.input.windowEvents).toBe(false);
         });
     });
 

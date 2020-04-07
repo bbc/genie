@@ -23,6 +23,7 @@ describe("Select Screen - Titles", () => {
                 ],
             },
             add: { image: jest.fn(() => mockImage), text: jest.fn(() => mockText) },
+            assetPrefix: "character-select",
         };
     });
 

@@ -151,7 +151,7 @@ export const config = screen => {
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 const belowScreenKey = getScreenBelow(screen).scene.key;
-                screen._navigate(screen.context.navigation[belowScreenKey].routes.restart);
+                screen.navigate(screen.context.navigation[belowScreenKey].routes.restart);
                 const params = pushLevelId(screen, ["level", "playagain"]);
                 gmi.sendStatsEvent(...params);
             },
@@ -173,7 +173,7 @@ export const config = screen => {
             title: "Play",
             key: "play",
             ariaLabel: "Play Game",
-            order: 8,
+            order: 9,
             id: "play",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
@@ -284,6 +284,18 @@ export const config = screen => {
                 screen.scene.pause();
                 screen.addOverlay("how-to-play");
                 gmi.sendStatsEvent("howtoplay", "click");
+            },
+        },
+        debug: {
+            group: "bottomCenter",
+            title: "Debug",
+            key: "debug",
+            ariaLabel: "Debug",
+            order: 15,
+            id: "debug",
+            channel: buttonsChannel(screen),
+            action: ({ screen }) => {
+                screen.navigation.debug();
             },
         },
     };

@@ -30,7 +30,7 @@ const getOnTransitionStartFn = scene => () => {
 
 export class Select extends Screen {
     create() {
-        this.add.image(0, 0, `${this.scene.key}.background`);
+        this.add.image(0, 0, `${this.assetPrefix}.background`);
         this.addAnimations();
         this.theme = this.context.theme;
         createTitles(this);
@@ -50,7 +50,7 @@ export class Select extends Screen {
         addEvents(this);
 
         const stateConfig = this.theme.choices.map(({ id, state }) => ({ id, state }));
-        this.states = state.create(this.context.theme.storageKey, stateConfig);
+        this.states = state.create("levels", stateConfig);
 
         singleItemMode.create(this);
 

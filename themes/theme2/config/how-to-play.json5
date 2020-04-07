@@ -1,7 +1,7 @@
 {
     theme: {
         "how-to-play": {
-            animations: [
+            furniture: [
                 {
                     key: "examples_sprite",
                     x: -400,
