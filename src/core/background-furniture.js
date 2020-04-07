@@ -49,8 +49,12 @@ const addSprite = scene => animConfig => {
 
 const addParticles = scene => config => {
     if (!gmi.getAllSettings().motion) return;
+
     const particles = scene.add.particles(config.assetKey);
-    particles.createEmitter(scene.cache.json.get(config.key));
+    const props = config.props || {};
+    const emitterConfig = { ...scene.cache.json.get(config.key), ...props };
+
+    particles.createEmitter(emitterConfig);
 };
 
 const isSpine = scene => config => scene.cache.custom.spine.exists(config.key);

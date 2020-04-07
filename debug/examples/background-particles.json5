@@ -17,8 +17,20 @@ See the \"furniture\" block in this scene's config",
             furniture: [
                 {
                     key: "examples_spray",
-                    assetKey: "examples_spark"
+                    assetKey: "examples_spark",
+                    //Any props defined here will be merged onto the emitter config.
+                    props: {
+                        x: -300
+                    }
                 },
+                {
+                    key: "examples_spray",
+                    assetKey: "examples_spark",
+                    //Any props defined here will be merged onto the emitter config.
+                    props: {
+                        x: 300
+                    }
+                }
             ],
 
             //Use to shift buttons out of the way of logos etc.

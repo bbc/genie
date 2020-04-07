@@ -47,7 +47,9 @@ describe("Background Furniture", () => {
                     },
                 },
                 json: {
-                    get: jest.fn(() => "example_emitter"),
+                    get: jest.fn(() => ({
+                        key: "example_emitter",
+                    })),
                     exists: jest.fn(key => key === "example_spray"),
                 },
             },
@@ -161,7 +163,22 @@ describe("Background Furniture", () => {
 
             expect(mockScene.add.particles).toHaveBeenCalledWith("example_sprite");
 
-            expect(mockParticles.createEmitter).toHaveBeenCalledWith("example_emitter");
+            expect(mockParticles.createEmitter).toHaveBeenCalledWith({ key: "example_emitter" });
+        });
+
+        test("Adds a particle system with custom props if configured", () => {
+            const mockConfig = {
+                key: "example_spray",
+                assetKey: "example_sprite",
+                props: {
+                    x: 250,
+                },
+            };
+
+            mockTheme.furniture = [mockConfig];
+            furnishFn();
+
+            expect(mockParticles.createEmitter).toHaveBeenCalledWith({ key: "example_emitter", x: 250 });
         });
 
         test("Does not play animations if motion is disabled", () => {
@@ -173,7 +190,7 @@ describe("Background Furniture", () => {
             expect(mockSprite.play).not.toHaveBeenCalled();
         });
 
-        test("Does not add animations if motion is disabled", () => {
+        test("Does not add particles if motion is disabled", () => {
             mockSettings.motion = false;
             const mockConfig = {
                 key: "example_spray",
