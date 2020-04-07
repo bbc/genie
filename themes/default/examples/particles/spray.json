@@ -1,11 +1,11 @@
 {
     "x": 0,
     "y": 0,
-    "angle": { "min": 180, "max": 360 },
+    "angle": { "min": 260, "max": 280 },
     "speed": 400,
     "gravityY": 350,
     "lifespan": 4000,
-    "quantity": 6,
-    "scale": { "start": 0.1, "end": 1 },
+    "quantity": 1,
+    "scale": { "start": 0.05, "end": 0.5 },
     "blendMode": "ADD"
 }
