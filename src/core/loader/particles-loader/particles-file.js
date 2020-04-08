@@ -31,11 +31,38 @@ export class ParticlesFile extends Phaser.Loader.File {
      * @method Phaser.Loader.FileTypes.JSONFile#onProcess
      * @since 3.7.0
      */
+
+    createPhaserGeomObject(obj) {
+        const geometryObject = {
+            rectangle: Phaser.Geom.Rectangle,
+            circle: Phaser.Geom.Circle,
+            ellipse: Phaser.Geom.Ellipse,
+            line: Phaser.Geom.Line,
+            point: Phaser.Geom.Point,
+            polygon: Phaser.Geom.Polygon,
+            triangle: Phaser.Geom.Triangle,
+        };
+        if (!geometryObject[obj.type]) {
+            throw `Incorrect geometry object type provided: ${[obj.type]}`;
+        }
+        return new geometryObject[obj.type]({ ...obj.properties });
+    }
+
+    traverse(obj) {
+        Object.keys(obj).forEach(key => {
+            if (typeof obj[key] === "object") {
+                if (obj[key].phaserGeom && obj[key].phaserGeom === true) {
+                    obj[key] = this.createPhaserGeomObject(obj[key]);
+                } else {
+                    this.traverse(obj[key]);
+                }
+            }
+        });
+    }
+
     onProcess() {
-        this.data = JSON.parse(this.xhrLoader.responseText);
-
-        //TODO parse geom here
-
+        const data = JSON.parse(this.xhrLoader.responseText);
+        this.data = this.traverse(data);
         this.onProcessComplete();
     }
 }
