@@ -34,7 +34,7 @@
                 "key": "achievements-small",
                 "url": "gel/desktop/achievements-small.png",
                 "frameConfig": {
-                    "frameWidth": 224,
+                    "frameWidth": 64,
                     "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
