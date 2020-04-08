@@ -7,5 +7,12 @@
     "lifespan": 4000,
     "quantity": 1,
     "scale": { "start": 0.05, "end": 0.5 },
-    "blendMode": "ADD"
+    "blendMode": "ADD",
+    "deathZone": {
+        "type": "onEnter",
+        "source": {
+            "type": "geom-rect",
+            "properties": [200, 350, 400, 200]
+        }
+    }
 }
