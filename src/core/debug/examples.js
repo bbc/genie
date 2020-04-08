@@ -28,9 +28,9 @@ export const examples = {
         scene: Results,
         title: "Results: 1s countup",
         transientData: {
-            stars: 100,
+            stars: 5,
             gems: 50,
-            keys: 5,
+            keys: 1000000,
         },
         routes: {
             continue: "debug",
@@ -42,9 +42,9 @@ export const examples = {
         scene: Results,
         title: "Results: 10s countup",
         transientData: {
-            stars: 100,
+            stars: 5,
             gems: 50,
-            keys: 5,
+            keys: 1000000,
         },
         routes: {
             continue: "debug",
