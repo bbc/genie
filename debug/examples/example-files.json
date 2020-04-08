@@ -24,6 +24,11 @@
             },
             {
                 "type": "json5",
+                "key": "results-spine",
+                "url": "results-spine.json5"
+            },
+            {
+                "type": "json5",
                 "key": "background-animations",
                 "url": "background-animations.json5"
             },

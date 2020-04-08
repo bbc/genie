@@ -144,6 +144,12 @@
                 "atlasURL": "examples/spine/owl/export/owl-pma.atlas"
             },
             {
+                "type": "spine",
+                "key": "spine_powerup",
+                "jsonURL": "examples/spine/powerup/export/powerup-pro.json",
+                "atlasURL": "examples/spine/powerup/export/powerup.atlas"
+            },
+            {
                 "type": "spritesheet",
                 "key": "sprite",
                 "url": "examples/sprite/sprite-anim.png",
