@@ -18,35 +18,27 @@ const wrapRange = (value, max) => ((value % max) + max) % max;
 
 export class HowToPlay extends Screen {
     create() {
-        this.add.image(0, 0, `${this.scene.key}.background`);
-        this.addAnimations();
-
-        this.theme = this.context.config.theme[this.scene.key];
+        this.addBackgroundItems();
         this.currentIndex = 0;
-        this.choiceSprites = this.createChoiceSprites(this.theme.choices);
-        this.theme.howToPlay
-            ? this.add.image(0, -230, `${this.scene.key}.title`)
-            : this.add.image(0, -170, `${this.scene.key}.title`);
-
+        this.choiceSprites = this.createChoiceSprites(this.context.theme.choices);
         this.setLayout(["overlayBack", "audio", "settings", "previous", "next"]);
-
         this.setButtonVisibility();
 
         this.accessibleCarouselElements = accessibleCarouselElements.create(
             this.scene.key,
             this.choiceSprites,
             this.game.canvas.parentElement,
-            this.theme.choices,
+            this.context.theme.choices,
         );
 
         this.addEventSubscriptions();
     }
 
     setButtonVisibility() {
-        this.layout.buttons.previous.visible = Boolean(!this.theme.howToPlay || this.currentIndex !== 0);
+        this.layout.buttons.previous.visible = Boolean(this.currentIndex !== 0);
 
         const isNotLastPage = this.currentIndex + 1 !== this.choiceSprites.length;
-        this.layout.buttons.next.visible = Boolean(!this.theme.howToPlay || isNotLastPage);
+        this.layout.buttons.next.visible = Boolean(isNotLastPage);
 
         this.layout.buttons.previous.accessibleElement.update();
         this.layout.buttons.next.accessibleElement.update();
@@ -58,10 +50,10 @@ export class HowToPlay extends Screen {
     }
 
     setButtonFocus() {
-        if (this.theme.howToPlay && this.currentIndex === 0) {
+        if (this.currentIndex === 0) {
             this.focusOnButton("next");
         }
-        if (this.theme.howToPlay && this.currentIndex === this.choiceSprites.length - 1) {
+        if (this.currentIndex === this.choiceSprites.length - 1) {
             this.focusOnButton("previous");
         }
     }
@@ -70,9 +62,7 @@ export class HowToPlay extends Screen {
         const choiceSprites = [];
         choices.forEach((item, index) => {
             const choiceAsset = `${this.scene.key}.${choices[index].asset}`;
-            const choiceSprite = this.theme.howToPlay
-                ? this.add.sprite(0, 30, choiceAsset)
-                : this.add.sprite(0, 0, choiceAsset);
+            const choiceSprite = this.add.sprite(0, 30, choiceAsset);
 
             choiceSprite.visible = index === 0;
             choiceSprites.push(choiceSprite);

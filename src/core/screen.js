@@ -5,9 +5,9 @@
  */
 import fp from "../../lib/lodash/fp/fp.js";
 
-import { gmi } from "../core/gmi/gmi.js";
-import { buttonsChannel } from "../core/layout/gel-defaults.js";
-import { eventBus } from "../core/event-bus.js";
+import { gmi } from "./gmi/gmi.js";
+import { buttonsChannel } from "./layout/gel-defaults.js";
+import { eventBus } from "./event-bus.js";
 import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as Scaler from "./scaler.js";
@@ -103,7 +103,7 @@ export class Screen extends Phaser.Scene {
         this.navigation = fp.mapValues(getRoutingFn(this), routes);
     };
 
-    addAnimations = furnish(this);
+    addBackgroundItems = furnish(this);
 
     addOverlay(key) {
         this._data.parentScreens.push(this);

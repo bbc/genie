@@ -7,6 +7,13 @@
             duration: 500, // Pagination transition duration
             align: "center", // Alignment for any remaining choices in the last row
             music: "loader.backgroundMusic",
+            furniture: [
+                {
+                    key: "character-select.background",
+                    x: 0,
+                    y: 0,
+                },
+            ],
             titles: [
                 {
                     type: "image",
@@ -33,8 +40,7 @@
                     },
                 },
             ],
-
-            storageKey: "characters", // Points to the storage directory containing the choice assets.
+            storageKey: "characters", // Which local storage key to read states from.
             states: {
                 locked: {
                     // asset: "debby", // Key of sprite to set for. Renders same scale as base sprite so should be the same size.

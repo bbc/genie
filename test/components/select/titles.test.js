@@ -15,22 +15,24 @@ describe("Select Screen - Titles", () => {
         mockText = { setOrigin: jest.fn() };
         mockScene = {
             scene: { key: "character-select" },
-            theme: {
-                titles: [
-                    { type: "image", key: "title", xOffset: 0, yOffset: -250 },
-                    { type: "text", value: "Select Your Character", xOffset: 0, yOffset: -260 },
-                    { type: "text", value: "Sub-Title", xOffset: 0, yOffset: -233 },
-                ],
-            },
             add: { image: jest.fn(() => mockImage), text: jest.fn(() => mockText) },
             assetPrefix: "character-select",
+            context: {
+                theme: {
+                    titles: [
+                        { type: "image", key: "title", xOffset: 0, yOffset: -250 },
+                        { type: "text", value: "Select Your Character", xOffset: 0, yOffset: -260 },
+                        { type: "text", value: "Sub-Title", xOffset: 0, yOffset: -233 },
+                    ],
+                },
+            },
         };
     });
 
     afterEach(jest.clearAllMocks);
 
     test("Adds an image for each each image present in the titles", () => {
-        const expectedParams = mockScene.theme.titles[0];
+        const expectedParams = mockScene.context.theme.titles[0];
         createTitles(mockScene);
         expect(mockScene.add.image).toHaveBeenCalledWith(
             expectedParams.xOffset,
@@ -45,7 +47,7 @@ describe("Select Screen - Titles", () => {
             fontFamily: "ReithSans",
             align: "center",
         };
-        const titles = mockScene.theme.titles;
+        const titles = mockScene.context.theme.titles;
         createTitles(mockScene);
         expect(mockScene.add.text).toHaveBeenCalledWith(
             titles[1].xOffset,
@@ -67,7 +69,7 @@ describe("Select Screen - Titles", () => {
             fontFamily: "Arial",
             align: "left",
         };
-        const titles = mockScene.theme.titles;
+        const titles = mockScene.context.theme.titles;
         titles[1].styles = expectedStyles;
 
         createTitles(mockScene);
@@ -80,7 +82,7 @@ describe("Select Screen - Titles", () => {
     });
 
     test("returns an empty array when no titles are provided", () => {
-        delete mockScene.theme.titles;
+        delete mockScene.context.theme.titles;
         expect(createTitles(mockScene)).toEqual([]);
     });
 });

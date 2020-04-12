@@ -37,7 +37,7 @@ export class Game extends Screen {
         let stars = 0;
 
         this.add.image(0, 0, "home.background");
-        this.addAnimations();
+        this.addBackgroundItems();
         this.add
             .text(0, -190, "Test Game: Collect Items", {
                 font: "65px ReithSans",

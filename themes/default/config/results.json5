@@ -1,6 +1,13 @@
 {
     theme: {
         results: {
+            furniture: [
+                {
+                    key: "results.background",
+                    x: 0,
+                    y: 0,
+                },
+            ],
             backdrop: { // Optional central area backdrop.
                 key: 'results.backdrop', // Asset key.
                 alpha: 1,

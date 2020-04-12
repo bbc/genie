@@ -2,7 +2,6 @@
     theme: {
         "how-to-play": {
             isOverlay: true,
-            howToPlay: true,
             choices: [
                 {
                     asset: "carousel1",
@@ -25,6 +24,20 @@
                 { accessibilityText: "More on how to play" },
                 { accessibilityText: "Final instructions on playing" },
             ],
+
+            //Add, background images / animations / particle systems. More examples in /debug/examples
+            furniture: [
+                {
+                    key: "how-to-play.background",
+                    x: 0,
+                    y: 0,
+                },
+                {
+                    key: "how-to-play.title",
+                    x: 0,
+                    y: -230,
+                },
+            ]
         },
     },
 }

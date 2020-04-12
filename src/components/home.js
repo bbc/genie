@@ -15,10 +15,7 @@ export class Home extends Screen {
     create() {
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         const debug = isDebug() ? ["debug"] : [];
-        this.add.image(0, 0, `${this.assetPrefix}.background`);
-        this.addAnimations();
-        this.add.image(0, -150, `${this.assetPrefix}.title`);
-
+        this.addBackgroundItems();
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
         this.setLayout(buttons.concat(achievements, debug));
 

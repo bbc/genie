@@ -171,7 +171,7 @@ describe("Select Screen", () => {
             screen.events = {
                 once: jest.fn(),
             };
-            screen.addAnimations = jest.fn();
+            screen.addBackgroundItems = jest.fn();
 
             screen.context = { theme: mockData.config.theme["test-select"] };
 
@@ -199,20 +199,15 @@ describe("Select Screen", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("create method", () => {
-        test("adds a background image", () => {
+        test("adds background items", () => {
             selectScreen.create();
-            expect(selectScreen.add.image).toHaveBeenCalledWith(0, 0, "test-select.background");
-        });
-
-        test("adds animations", () => {
-            selectScreen.create();
-            jest.spyOn(selectScreen, "addAnimations");
-            expect(selectScreen.addAnimations).toHaveBeenCalledTimes(1);
+            jest.spyOn(selectScreen, "addBackgroundItems");
+            expect(selectScreen.addBackgroundItems).toHaveBeenCalledTimes(1);
         });
 
         test("adds the theme", () => {
             selectScreen.create();
-            expect(selectScreen.theme).toEqual(mockData.config.theme["test-select"]);
+            expect(selectScreen.context.theme).toEqual(mockData.config.theme["test-select"]);
         });
 
         test("creates titles", () => {
@@ -262,7 +257,7 @@ describe("Select Screen", () => {
 
         test("creates grid cells", () => {
             selectScreen.create();
-            expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.theme);
+            expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.context.theme);
         });
 
         test("adds grid to layout", () => {
