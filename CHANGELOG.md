@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Select screen uses configured storage key correctly. ||
 | | Update to Prettier 2.0.3 ||
 | 3.3.0 | |
 | | Global script load order for npm run start and npm run start:pack now matches ||

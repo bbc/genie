@@ -32,16 +32,15 @@ export class Select extends Screen {
     create() {
         this.add.image(0, 0, `${this.assetPrefix}.background`);
         this.addAnimations();
-        this.theme = this.context.theme;
         createTitles(this);
         const buttons = ["home", "pause", "previous", "next"];
         singleItemMode.isEnabled(this)
             ? this.setLayout(buttons.concat("continue"), ["home", "pause"])
             : this.setLayout(buttons, ["home", "pause", "next", "previous"]);
         const onTransitionStart = getOnTransitionStartFn(this);
-        this.grid = new GelGrid(this, Object.assign(this.theme, gridDefaults, { onTransitionStart }));
+        this.grid = new GelGrid(this, Object.assign(this.context.theme, gridDefaults, { onTransitionStart }));
         this.resize();
-        this._cells = this.grid.addGridCells(this.theme);
+        this._cells = this.grid.addGridCells(this.context.theme);
         this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
@@ -49,8 +48,8 @@ export class Select extends Screen {
 
         addEvents(this);
 
-        const stateConfig = this.theme.choices.map(({ id, state }) => ({ id, state }));
-        this.states = state.create("levels", stateConfig);
+        const stateConfig = this.context.theme.choices.map(({ id, state }) => ({ id, state }));
+        this.states = state.create(this.context.theme.storageKey, stateConfig);
 
         singleItemMode.create(this);
 
