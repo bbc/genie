@@ -6,7 +6,6 @@
 import { geomParse } from "../../../../src/core/loader/particles-loader/geom-parse.js";
 
 describe("Geom Parse File", () => {
-    beforeEach(() => {});
     afterEach(() => jest.clearAllMocks());
 
     test("returns a rectangle when one is provided in config", () => {
