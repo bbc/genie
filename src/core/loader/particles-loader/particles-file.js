@@ -7,6 +7,11 @@
  * @license Apache-2.0
  */
 
+import { geomParse } from "./geom-parse.js";
+
+const parsePhaserGeom = zoneConfig =>
+    zoneConfig && zoneConfig.source && (zoneConfig.source = geomParse(zoneConfig.source));
+
 export class ParticlesFile extends Phaser.Loader.File {
     constructor(loader, fileConfig, xhrSettings, dataKey) {
         super(loader, Object.assign(fileConfig, { type: "particles" }));
@@ -33,9 +38,8 @@ export class ParticlesFile extends Phaser.Loader.File {
      */
     onProcess() {
         this.data = JSON.parse(this.xhrLoader.responseText);
-
-        //TODO parse geom here
-
+        parsePhaserGeom(this.data.emitZone);
+        parsePhaserGeom(this.data.deathZone);
         this.onProcessComplete();
     }
 }

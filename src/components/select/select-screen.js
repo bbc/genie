@@ -48,7 +48,7 @@ export class Select extends Screen {
         addEvents(this);
 
         const stateConfig = this.context.theme.choices.map(({ id, state }) => ({ id, state }));
-        this.states = state.create("levels", stateConfig);
+        this.states = state.create(this.context.theme.storageKey, stateConfig);
 
         singleItemMode.create(this);
 

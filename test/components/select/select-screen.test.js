@@ -10,6 +10,7 @@ import { Select } from "../../../src/components/select/select-screen.js";
 import { GelGrid } from "../../../src/core/layout/grid/grid.js";
 import { createTitles } from "../../../src/components/select/titles.js";
 import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
+import * as state from "../../../src/core/state.js";
 
 jest.mock("../../../src/components/select/titles.js");
 jest.mock("../../../src/components/select/single-item-mode.js");
@@ -58,6 +59,7 @@ describe("Select Screen", () => {
             config: {
                 theme: {
                     "test-select": {
+                        storageKey: "test-storage-key",
                         titles: [
                             {
                                 type: "image",
@@ -239,6 +241,7 @@ describe("Select Screen", () => {
                 duration: 500,
                 ease: "Cubic.easeInOut",
                 onTransitionStart: expect.any(Function),
+                storageKey: "test-storage-key",
                 rows: 1,
                 states: {
                     locked: { asset: "test_asset", x: 10, y: 20 },
@@ -268,6 +271,14 @@ describe("Select Screen", () => {
         test("adds listener for scaler", () => {
             selectScreen.create();
             expect(Scaler.onScaleChange.add).toHaveBeenCalled();
+        });
+
+        test("calls state.create with storage key from config", () => {
+            mockData.config.theme["test-select"].choices = [
+                { asset: "test-asset-1", state: "test-state-1", id: "test-id-1" },
+            ];
+            selectScreen.create();
+            expect(state.create).toHaveBeenCalledWith("test-storage-key", [{ id: "test-id-1", state: "test-state-1" }]);
         });
     });
 

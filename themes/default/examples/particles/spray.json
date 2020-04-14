@@ -6,6 +6,24 @@
     "gravityY": 350,
     "lifespan": 4000,
     "quantity": 1,
+    "emitZone": {
+        "type": "random",
+        "source": {
+            "type": "circle",
+            "x": 0,
+            "y": 0,
+            "radius": 180
+        }
+    },
+    "deathZone": {
+        "type": "onEnter",
+        "source": {
+            "type": "circle",
+            "x": 300,
+            "y": 0,
+            "radius": 50
+        }
+    },
     "scale": { "start": 0.05, "end": 0.5 },
     "blendMode": "ADD"
 }
