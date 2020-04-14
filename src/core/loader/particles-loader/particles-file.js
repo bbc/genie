@@ -7,7 +7,7 @@
  * @license Apache-2.0
  */
 
-import geomParse from "./geom-parse.js";
+import { geomParse } from "./geom-parse.js";
 
 export class ParticlesFile extends Phaser.Loader.File {
     constructor(loader, fileConfig, xhrSettings, dataKey) {
