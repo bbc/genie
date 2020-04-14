@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { fireGameCompleteStat } from "../../../src/components/results/results-stats.js";
-import {gmi} from '../../../src/core/gmi/gmi.js'
+import { gmi } from "../../../src/core/gmi/gmi.js";
 
 describe("Results Screen", () => {
     beforeEach(() => {
