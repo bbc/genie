@@ -22,6 +22,6 @@ export const createTitles = scene => {
         return textSprite;
     };
 
-    const configs = scene.theme.titles || [];
+    const configs = scene.context.theme.titles || [];
     return configs.map(makeElements({ image, text }));
 };
