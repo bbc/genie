@@ -53,4 +53,4 @@ The index page should not be edited to include any scripts as it is not used in 
 
 ## How can I access support?
 
-There is additional in-depth documentation in the docs folder of this respository and in the Genie Core repository. For further support contact the BBC Project Manager assigned to your game.
+There is additional in-depth documentation in the docs folder of this repository and in the Genie Core repository. For further support contact the BBC Project Manager assigned to your game.
