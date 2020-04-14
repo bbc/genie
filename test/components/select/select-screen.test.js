@@ -212,7 +212,7 @@ describe("Select Screen", () => {
 
         test("adds the theme", () => {
             selectScreen.create();
-            expect(selectScreen.theme).toEqual(mockData.config.theme["test-select"]);
+            expect(selectScreen.context.theme).toEqual(mockData.config.theme["test-select"]);
         });
 
         test("creates titles", () => {
@@ -262,7 +262,7 @@ describe("Select Screen", () => {
 
         test("creates grid cells", () => {
             selectScreen.create();
-            expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.theme);
+            expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.context.theme);
         });
 
         test("adds grid to layout", () => {
