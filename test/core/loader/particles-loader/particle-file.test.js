@@ -42,7 +42,19 @@ describe("Particles File", () => {
             expect(global.JSON.parse).toHaveBeenCalledWith(testJSON);
         });
 
-        test("calls the the Geom parser when a emitZone source is provided", () => {
+        test("does not call the Geom parser when a emitZone or deathZone source is not provided", () => {
+            const file = new ParticlesFile(mockLoader, mockFileConfig);
+            const testJSON = "{}";
+
+            file.xhrLoader = {
+                responseText: testJSON,
+            };
+            file.onProcessComplete = jest.fn();
+            file.onProcess();
+            expect(geomParse).not.toHaveBeenCalled();
+        });
+
+        test("calls the Geom parser when a emitZone source is provided", () => {
             const file = new ParticlesFile(mockLoader, mockFileConfig);
             const testJSON = '{ "emitZone": { "source": { "emitZone": "mock" } } }';
 
@@ -66,7 +78,7 @@ describe("Particles File", () => {
             expect(file.data).toEqual({ emitZone: { source: "mock emit zone" } });
         });
 
-        test("calls the the Geom parser when a deathZone source is provided", () => {
+        test("calls the Geom parser when a deathZone source is provided", () => {
             const file = new ParticlesFile(mockLoader, mockFileConfig);
             const testJSON = '{ "emitZone": { "source": { "deathZone": "mock" } } }';
 
