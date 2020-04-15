@@ -284,7 +284,7 @@ var GMI = function(options, embedVars, gameDir) {
 
         save(stored, update);
 
-        console.log("NOTIFY: ", achievedOnUpdate, update.key);
+        debugMode && console.log("NOTIFY: ", achievedOnUpdate, update.key);
         return achievedOnUpdate;
     };
     GMI.prototype.gameLoaded = function() {};
