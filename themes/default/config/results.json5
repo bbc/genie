@@ -3,18 +3,21 @@
         results: {
             furniture: [
                 {
-                    key: "results.background",
+                    key: 'results.background',
                     x: 0,
                     y: 0,
                 },
             ],
-            backdrop: { // Optional central area backdrop.
+            backdrop: {
+                // Optional central area backdrop.
                 key: 'results.backdrop', // Asset key.
                 alpha: 1,
             },
-            rows: [ // An array of rows which will be displayed on the screen.
+            rows: [
+                // An array of rows which will be displayed on the screen.
                 {
-                    format: [ // Each object in this array generates a visible object in the row.
+                    format: [
+                        // Each object in this array generates a visible object in the row.
                         {
                             type: 'text', // 'Text' shows static text which can contain template tags for transient data.
                             content: 'Results Screen',
@@ -84,7 +87,8 @@
                             },
                         },
                     ],
-                    backdrop: { // Optional row backdrop
+                    backdrop: {
+                        // Optional row backdrop
                         key: 'results.row-backdrop-1', // asset key
                         alpha: 0.5,
                         offsetY: -20,
@@ -92,6 +96,17 @@
                     alpha: 1, // Set the alpha on the whole row
                     transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 }, // Phaser tweendata config.
                     audio: { key: 'results.woosh', delay: 0 }, // Asset key and delay for audio to be played.
+                    particles: [
+                        {
+                            assetKey: 'results.yellow',
+                            emitterConfigKey: 'results.row-emitter',
+                            // Optional settings
+                            offsetX: 96,
+                            offsetY: -10,
+                            delay: 1000,
+                            duration: 1000,
+                        },
+                    ],
                 },
                 {
                     format: [
@@ -111,7 +126,8 @@
                             frame: 0, // The initial frame of the sprite to display.
                             offsetX: 20,
                             offsetY: -20,
-                            anim: { // A phaser animation configuration object.
+                            anim: {
+                                // A phaser animation configuration object.
                                 frames: {
                                     start: 0,
                                     end: 14,
@@ -180,6 +196,16 @@
                         delay: 2000,
                     },
                     audio: { key: 'results.slide', delay: 2500 },
+                    particles: [
+                        {
+                            assetKey: 'results.blue',
+                            emitterConfigKey: 'results.row-emitter',
+                            offsetX: 96,
+                            offsetY: -10,
+                            delay: 4000,
+                            duration: 1000,
+                        },
+                    ],
                 },
                 {
                     format: [
@@ -249,6 +275,16 @@
                         delay: 5500,
                     },
                     audio: { key: 'results.boing', delay: 5500 },
+                    particles: [
+                        {
+                            assetKey: 'results.red',
+                            emitterConfigKey: 'results.row-emitter',
+                            offsetX: 93,
+                            offsetY: -10,
+                            delay: 7000,
+                            duration: 1000,
+                        },
+                    ],
                 },
             ],
         },

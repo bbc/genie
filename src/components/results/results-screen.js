@@ -11,6 +11,7 @@ import { eventBus } from "../../core/event-bus.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { tweenRows } from "./results-row-tween.js";
 import { playRowAudio } from "./results-row-audio.js";
+import { addParticlesToRows } from "./results-particles.js";
 import { fireGameCompleteStat } from "./results-stats.js";
 
 export class Results extends Screen {
@@ -39,6 +40,7 @@ export class Results extends Screen {
         this.rows = Rows.create(this, () => this.resultsArea(), this.context.theme.rows, Rows.RowType.Results);
         tweenRows(this, this.rows.containers);
         playRowAudio(this, this.rows.containers);
+        addParticlesToRows(this, this.rows.containers);
     }
 
     createBackdrop() {
