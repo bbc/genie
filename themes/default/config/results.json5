@@ -64,17 +64,6 @@
                             },
                         },
                         {
-                            type: 'spine',
-                            key: 'examples_spine_dragon',
-                            animationName: "flying",
-                            offsetX: 0,
-                            offsetY: -20,
-                            loop: true,
-                            props: {
-                                scale: 0.2,
-                            },
-                        },
-                        {
                             type: 'text',
                             content: ' star<% stars !== 1 && print("s") %>', // Functional template tags will be evaluated.
                             offsetY: -20,
