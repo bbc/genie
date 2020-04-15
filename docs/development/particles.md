@@ -34,7 +34,7 @@ As there is no way to create a Phaser Geom object in JSON, you can include these
     -   Accepted parameters are x, y, width and height.
 
 -   [Phaser.Geom.Line](https://photonstorm.github.io/phaser3-docs/Phaser.Geom.Line.html)
-    -   Type is "rectangle"
+    -   Type is "line"
     -   Accepted parameters are x1, y1, x2 and y2.
 
 -   [Phaser.Geom.Point](https://photonstorm.github.io/phaser3-docs/Phaser.Geom.Point.html)
@@ -42,7 +42,7 @@ As there is no way to create a Phaser Geom object in JSON, you can include these
     -   Accepted parameters are x and y.
 
 -   [Phaser.Geom.Polygon](https://photonstorm.github.io/phaser3-docs/Phaser.Geom.Polygon.html)
-    -   Type is "rectangle"
+    -   Type is "polygon"
     -   Accepted parameter is 'points' (array).
 
 -   [Phaser.Geom.Triangle](https://photonstorm.github.io/phaser3-docs/Phaser.Geom.Triangle.html)
