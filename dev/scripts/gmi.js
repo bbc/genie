@@ -264,7 +264,7 @@ var GMI = function(options, embedVars, gameDir) {
             var stored = globalSettings.achievements.find(function(unlocked) { return unlocked.key === config.key });
             return Object.assign(config, stored, { achieved: isAchieved(config, stored) });
         });
-        console.log(output);
+        debugMode && console.log(output);
         return output;
     };
     GMI.prototype.achievements.set = function(update) {
