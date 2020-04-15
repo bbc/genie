@@ -99,9 +99,10 @@
                             type: 'text',
                             content: 'You collected: ',
                             offsetY: -20,
-                            loop: true,
-                            props: {
-                                scale: 0.2,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px',
+                                color: '#FFFFFF',
                             },
                         },
                         {
