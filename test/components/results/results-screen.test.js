@@ -9,6 +9,7 @@ import { eventBus } from "../../../src/core/event-bus.js";
 import * as Rows from "../../../src/core/layout/rows.js";
 import { playRowAudio } from "../../../src/components/results/results-row-audio.js";
 import { tweenRows } from "../../../src/components/results/results-row-tween.js";
+import { addParticlesToRows } from "../../../src/components/results/results-particles.js";
 import * as MetricsModule from "../../../src/core/layout/metrics.js";
 
 import { Results } from "../../../src/components/results/results-screen.js";
@@ -17,6 +18,7 @@ jest.mock("../../../src/core/layout/rows.js");
 jest.mock("../../../src/core/screen.js");
 jest.mock("../../../src/components/results/results-row-tween.js");
 jest.mock("../../../src/components/results/results-row-audio.js");
+jest.mock("../../../src/components/results/results-particles.js");
 
 describe("Results Screen", () => {
     let resultsScreen;
@@ -135,6 +137,11 @@ describe("Results Screen", () => {
                 resultsScreen.theme.rows,
                 Rows.RowType.Results,
             );
+        });
+
+        test("adds particles to the rows", () => {
+            resultsScreen.create();
+            expect(addParticlesToRows).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
         });
 
         test("adds tweens to the rows", () => {
