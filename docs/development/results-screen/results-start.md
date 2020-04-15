@@ -89,6 +89,10 @@ To learn more on how to configure the objects in the format array, see the "Resu
 * [Row Transitions](./results-transitions.md)
 * [Row Audio](./results-audio.md)
 
+## Row Particles
+
+* [Row Particles](./results-particles.md)
+
 ## Frequently Asked Questions
 
 #### How do I make all of the rows transition in at the same time?  
