@@ -61,6 +61,26 @@
                 "type": "audio",
                 "key": "boing",
                 "url": "results/boing.mp3"
+            },
+            {
+                "type": "particles",
+                "key": "row-emitter",
+                "url": "results/particles/emitter.json"
+            },
+            {
+                "type": "image",
+                "key": "red",
+                "url": "results/particles/red.png"
+            },
+            {
+                "type": "image",
+                "key": "blue",
+                "url": "results/particles/blue.png"
+            },
+            {
+                "type": "image",
+                "key": "yellow",
+                "url": "results/particles/yellow.png"
             }
         ]
     }

@@ -12,6 +12,7 @@ import { gmi } from "../../core/gmi/gmi.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { tweenRows } from "./results-row-tween.js";
 import { playRowAudio } from "./results-row-audio.js";
+import { addParticlesToRows } from "./results-particles.js";
 
 const getScoreMetaData = result => {
     if (Object.keys(result).length === 0) {
@@ -65,6 +66,7 @@ export class Results extends Screen {
         this.rows = Rows.create(this, () => this.resultsArea(), this.theme.rows, Rows.RowType.Results);
         tweenRows(this, this.rows.containers);
         playRowAudio(this, this.rows.containers);
+        addParticlesToRows(this, this.rows.containers);
     }
 
     createBackdrop() {
