@@ -44,7 +44,6 @@ describe("How To Play Screen", () => {
             config: {
                 theme: {
                     "test-select": {
-                        howToPlay: true,
                         choices: [
                             { asset: "character1" },
                             { asset: "character2", title: "character_2" },
@@ -97,14 +96,6 @@ describe("How To Play Screen", () => {
     describe("create method", () => {
         beforeEach(() => howToPlayScreen.create());
 
-        test("adds a background image", () => {
-            expect(howToPlayScreen.add.image).toHaveBeenCalledWith(0, 0, "test-select.background");
-        });
-
-        test("adds a title image", () => {
-            expect(howToPlayScreen.add.image).toHaveBeenCalledWith(0, -170, "test-select.title");
-        });
-
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["overlayBack", "audio", "settings", "previous", "next"];
             expect(howToPlayScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
@@ -112,33 +103,16 @@ describe("How To Play Screen", () => {
 
         test("creates sprites for each choice", () => {
             expect(howToPlayScreen.add.sprite).toHaveBeenCalledTimes(3);
-            expect(howToPlayScreen.add.sprite.mock.calls[0]).toEqual([0, 0, "test-select.character1"]);
-            expect(howToPlayScreen.add.sprite.mock.calls[1]).toEqual([0, 0, "test-select.character2"]);
-            expect(howToPlayScreen.add.sprite.mock.calls[2]).toEqual([0, 0, "test-select.character3"]);
+            expect(howToPlayScreen.add.sprite.mock.calls[0]).toEqual([0, 30, "test-select.character1"]);
+            expect(howToPlayScreen.add.sprite.mock.calls[1]).toEqual([0, 30, "test-select.character2"]);
+            expect(howToPlayScreen.add.sprite.mock.calls[2]).toEqual([0, 30, "test-select.character3"]);
         });
 
         test("adds the choices", () => {
             expect(howToPlayScreen.choiceSprites).toEqual(characterSprites);
         });
 
-        test("does not adjust page title position when on how to play", () => {
-            expect(howToPlayScreen.add.image.mock.calls[1]).toEqual([0, -170, "test-select.title"]);
-        });
-
-        test("adjusts page title position when on how to play", () => {
-            howToPlayScreen.setData(mockHowToPlayData);
-            howToPlayScreen.currentIndex = 0;
-            jest.clearAllMocks();
-            howToPlayScreen.create();
-
-            expect(howToPlayScreen.add.image.mock.calls[1]).toEqual([0, -230, "test-select.title"]);
-        });
-
-        test("does not adjust choice sprite position when on how to play", () => {
-            expect(howToPlayScreen.add.sprite.mock.calls[0]).toEqual([0, 0, "test-select.character1"]);
-        });
-
-        test("adjusts choice sprite position when on how to play", () => {
+        test("sets choice sprite position", () => {
             howToPlayScreen.setData(mockHowToPlayData);
             howToPlayScreen.currentIndex = 0;
             jest.clearAllMocks();
@@ -232,14 +206,7 @@ describe("How To Play Screen", () => {
                 expect(howToPlayScreen.choiceSprites[2].visible).toBe(false);
             });
 
-            test("previous button is not disabled when on the first item by default", () => {
-                howToPlayScreen.currentIndex = 0;
-                howToPlayScreen.update();
-
-                expect(howToPlayScreen.layout.buttons.previous.visible).toBe(true);
-            });
-
-            test("previous button is disabled when how to play and on the first item", () => {
+            test("previous button is disabled when on the first item", () => {
                 howToPlayScreen.setData(mockHowToPlayData);
                 howToPlayScreen.currentIndex = 0;
                 howToPlayScreen.create();

@@ -15,8 +15,7 @@ export class Pause extends Screen {
     }
 
     create() {
-        this.add.image(0, 0, `${this.scene.key}.pauseBackground`);
-        this.add.image(0, -170, `${this.scene.key}.title`);
+        this.addBackgroundItems();
         const buttons = ["home", "audio", "settings", "pausePlay", "howToPlay"];
 
         const parentKey = this.context.parentScreens.slice(-1)[0].scene.key;

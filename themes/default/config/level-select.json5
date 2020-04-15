@@ -3,6 +3,13 @@
         "level-select": {
             music: "loader.backgroundMusic",
             storageKey: "levels",
+            furniture: [
+                {
+                    key: "level-select.background",
+                    x: 0,
+                    y: 0,
+                },
+            ],
             states: {
                 completed: { overlayAsset: "character-select.complete", x: 65, y: 35, suffix: "completed" },
             },

@@ -13,6 +13,11 @@ const spineDefaults = {
     loop: true,
 };
 
+const imageDefaults = {
+    x: 0,
+    y: 0,
+};
+
 const spriteDefaults = {
     x: 0,
     y: 0,
@@ -30,7 +35,11 @@ const addSpine = scene => animConfig => {
 };
 
 const addSprite = scene => animConfig => {
-    const config = Object.assign({}, spriteDefaults, animConfig);
+    const config = {
+        ...spriteDefaults,
+        ...animConfig,
+        ...{ frames: { ...spriteDefaults.frames, ...animConfig.frames } },
+    };
     const animation = scene.add.sprite(config.x, config.y, config.key, config.frames.default);
 
     config.props && Object.assign(animation, config.props);
@@ -47,6 +56,13 @@ const addSprite = scene => animConfig => {
     }
 };
 
+const addImage = scene => imageConfig => {
+    const config = Object.assign({}, imageDefaults, imageConfig);
+    const image = scene.add.image(config.x, config.y, config.key);
+
+    config.props && Object.assign(image, config.props);
+};
+
 const addParticles = scene => config => {
     if (!gmi.getAllSettings().motion) return;
 
@@ -58,13 +74,15 @@ const addParticles = scene => config => {
 };
 
 const isSpine = scene => config => scene.cache.custom.spine.exists(config.key);
-const isSprite = scene => config => scene.textures.exists(config.key);
+const isImage = scene => config => scene.textures.exists(config.key) && !config.frames;
+const isSprite = scene => config => scene.textures.exists(config.key) && Boolean(config.frames);
 const isParticles = scene => config => scene.cache.json.exists(config.key); //TODO should particles use a custom cache?
 
 export const furnish = scene => () => {
     const configs = scene.context.theme.furniture || [];
     const conditionPairs = [
         [isSpine(scene), addSpine(scene)],
+        [isImage(scene), addImage(scene)],
         [isSprite(scene), addSprite(scene)],
         [isParticles(scene), addParticles(scene)],
     ];

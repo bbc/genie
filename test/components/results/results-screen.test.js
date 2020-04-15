@@ -89,11 +89,16 @@ describe("Results Screen", () => {
                     },
                 },
             },
+            root: "layout root",
             getSafeArea: jest.fn(() => mockResultsArea),
         };
-        resultsScreen.context = { config: mockConfig, transientData: mockTransientData };
+        resultsScreen.context = {
+            config: mockConfig,
+            transientData: mockTransientData,
+            theme: mockConfig.theme.results,
+        };
         resultsScreen.transientData = mockTransientData;
-        resultsScreen.addAnimations = jest.fn(() => () => {});
+        resultsScreen.addBackgroundItems = jest.fn(() => () => {});
         resultsScreen.setLayout = jest.fn();
         resultsScreen.add = {
             image: jest.fn().mockImplementation((x, y, imageName) => {
@@ -112,15 +117,17 @@ describe("Results Screen", () => {
         resultsScreen.events = {
             once: jest.fn(),
         };
+        resultsScreen.children = {
+            bringToTop: jest.fn(),
+        };
     });
 
     afterEach(() => jest.clearAllMocks());
 
     describe("Create Method", () => {
-        test("adds a background image", () => {
+        test("adds background furniture", () => {
             resultsScreen.create();
-            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "results.background");
-            expect(mockImage.setDepth).toHaveBeenCalledWith(-1);
+            expect(resultsScreen.addBackgroundItems).toHaveBeenCalled();
         });
 
         test("adds GEL buttons to layout", () => {
@@ -134,7 +141,7 @@ describe("Results Screen", () => {
             expect(Rows.create).toHaveBeenCalledWith(
                 resultsScreen,
                 expect.any(Function),
-                resultsScreen.theme.rows,
+                resultsScreen.context.theme.rows,
                 Rows.RowType.Results,
             );
         });
@@ -186,7 +193,6 @@ describe("Results Screen", () => {
             };
             resultsScreen.create();
             expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
-            expect(mockImage.setDepth).toHaveBeenCalledWith(-1);
             expect(mockImage.x).toBe(15);
             expect(mockImage.y).toEqual(15);
         });
@@ -259,7 +265,7 @@ describe("Results Screen", () => {
         });
 
         test("adds the achievement button when theme flag is set", () => {
-            resultsScreen.context.config.theme.game.achievements = true;
+            mockConfig.theme.game.achievements = true;
             resultsScreen.create();
             const expectedButtons = ["pause", "restart", "continueGame", "achievementsSmall"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
@@ -277,26 +283,9 @@ describe("Results Screen", () => {
             expect(unsubscribe).toHaveBeenCalled();
         });
 
-        describe("Stats", () => {
-            test("fires a score stat with results if given as a number", () => {
-                resultsScreen.transientData.results = { keys: 45 };
-                resultsScreen.create();
-                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", { metadata: "SCO=[keys-45]" });
-            });
-
-            test("fires a score stat with results with two results", () => {
-                resultsScreen.transientData.results = { keys: 45, gems: 30 };
-                resultsScreen.create();
-                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", {
-                    metadata: "SCO=[keys-45]::[gems-30]",
-                });
-            });
-
-            test("fires a score stat to the GMI without results if neither a string nor a number is given", () => {
-                resultsScreen.transientData.results = [];
-                resultsScreen.create();
-                expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
-            });
+        test("put layout on top (layout has to becreated first so safe area is available)", () => {
+            resultsScreen.create();
+            expect(resultsScreen.children.bringToTop).toHaveBeenCalledWith("layout root");
         });
     });
 

@@ -4,8 +4,5 @@
             music: "game.backgroundMusicTwo",
             achievements: true, //enable or disable achievements for this theme
         },
-        pause: {
-            isOverlay: true,
-        },
     },
 }

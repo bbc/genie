@@ -1,6 +1,13 @@
 {
     theme: {
         results: {
+            furniture: [
+                {
+                    key: 'results.background',
+                    x: 0,
+                    y: 0,
+                },
+            ],
             backdrop: {
                 // Optional central area backdrop.
                 key: 'results.backdrop', // Asset key.
@@ -97,8 +104,8 @@
                             offsetX: 96,
                             offsetY: -10,
                             delay: 1000,
-                            duration: 1000
-                        }
+                            duration: 1000,
+                        },
                     ],
                 },
                 {
@@ -196,8 +203,8 @@
                             offsetX: 96,
                             offsetY: -10,
                             delay: 4000,
-                            duration: 1000
-                        }
+                            duration: 1000,
+                        },
                     ],
                 },
                 {
@@ -275,8 +282,8 @@
                             offsetX: 93,
                             offsetY: -10,
                             delay: 7000,
-                            duration: 1000
-                        }
+                            duration: 1000,
+                        },
                     ],
                 },
             ],

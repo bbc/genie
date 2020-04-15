@@ -8,47 +8,22 @@ import { Screen } from "../../core/screen.js";
 import * as Rows from "../../core/layout/rows.js";
 import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 import { eventBus } from "../../core/event-bus.js";
-import { gmi } from "../../core/gmi/gmi.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { tweenRows } from "./results-row-tween.js";
 import { playRowAudio } from "./results-row-audio.js";
 import { addParticlesToRows } from "./results-particles.js";
-
-const getScoreMetaData = result => {
-    if (Object.keys(result).length === 0) {
-        return undefined;
-    }
-    let resultString = resultsToString(result);
-    return { metadata: `SCO=${resultString}` };
-};
-
-const resultsToString = obj => {
-    let resultString = "";
-    let first = true;
-    for (const x in obj) {
-        if (first === true) {
-            resultString += `[${x}-${obj[x]}]`;
-            first = false;
-        } else {
-            resultString += `::[${x}-${obj[x]}]`;
-        }
-    }
-    return resultString;
-};
-
-const fireGameCompleteStat = result => {
-    gmi.sendStatsEvent("score", "display", getScoreMetaData(result));
-};
+import { fireGameCompleteStat } from "./results-stats.js";
 
 export class Results extends Screen {
     create() {
-        this.theme = this.context.config.theme[this.scene.key];
-        this.add.image(0, 0, "results.background").setDepth(-1);
-        this.addAnimations();
+        this.addBackgroundItems();
         this.createLayout();
         this.createBackdrop();
+        this.createRows();
         this.subscribeToEventBus();
         fireGameCompleteStat(this.transientData[this.scene.key]);
+
+        this.children.bringToTop(this.layout.root);
     }
 
     resultsArea() {
@@ -59,29 +34,27 @@ export class Results extends Screen {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "restart", "continueGame"];
         this.setLayout(buttons.concat(achievements));
-        this.createRows();
     }
 
     createRows() {
-        this.rows = Rows.create(this, () => this.resultsArea(), this.theme.rows, Rows.RowType.Results);
+        this.rows = Rows.create(this, () => this.resultsArea(), this.context.theme.rows, Rows.RowType.Results);
         tweenRows(this, this.rows.containers);
         playRowAudio(this, this.rows.containers);
         addParticlesToRows(this, this.rows.containers);
     }
 
     createBackdrop() {
-        fp.get("backdrop.key", this.theme) && this.backdropFill();
+        fp.get("backdrop.key", this.context.theme) && this.backdropFill();
         this.sizeToParent(this.backdrop, this.resultsArea());
     }
 
     backdropFill() {
-        this.backdrop = this.add.image(0, 0, this.theme.backdrop.key);
-        this.backdrop.alpha = this.theme.backdrop.alpha || 1;
-        this.backdrop.setDepth(-1);
+        this.backdrop = this.add.image(0, 0, this.context.theme.backdrop.key);
+        this.backdrop.alpha = this.context.theme.backdrop.alpha || 1;
     }
 
     sizeToParent(item, safeArea) {
-        if (fp.get("backdrop.key", this.theme) && safeArea) {
+        if (fp.get("backdrop.key", this.context.theme) && safeArea) {
             item.x = safeArea.centerX;
             item.y = safeArea.centerY;
             item.scale = Math.min(safeArea.width / item.width, safeArea.height / item.height);

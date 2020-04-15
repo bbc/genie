@@ -7,6 +7,7 @@ import fp from "../../../lib/lodash/fp/fp.js";
 
 import { ResultsText } from "./results-text.js";
 import { ResultsSprite } from "./results-sprite.js";
+import { ResultsSpine } from "./results-spine.js";
 import { ResultsCountup } from "./results-countup.js";
 
 export class ResultsRow extends Phaser.GameObjects.Container {
@@ -47,6 +48,7 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         const objectType = {
             text: ResultsText,
             sprite: ResultsSprite,
+            spine: ResultsSpine,
             countup: ResultsCountup,
         };
 

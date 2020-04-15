@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| | Spine animation on results page. ||
+| | Background images and titles of default screens now configured via background items system. ||
 | | Select screen uses configured storage key correctly. ||
 | | Update to Prettier 2.0.3 ||
 | 3.3.0 | |
