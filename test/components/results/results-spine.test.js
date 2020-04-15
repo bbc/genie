@@ -17,13 +17,16 @@ describe("ResultsSprite", () => {
         mockScene = mockBaseScene();
         mockSettings = { motion: true };
         mockScene.scene = { key: "results" };
-        mockScene.add = { existing: jest.fn(), spine: jest.fn( () => {
-            return { 
-                active: true,
-                scale: 1,
-                setSize: jest.fn(),
-            }
-        })};
+        mockScene.add = {
+            existing: jest.fn(),
+            spine: jest.fn(() => {
+                return {
+                    active: true,
+                    scale: 1,
+                    setSize: jest.fn(),
+                };
+            }),
+        };
         mockConfig = {
             offsetX: 0,
             offsetY: 0,
@@ -36,7 +39,7 @@ describe("ResultsSprite", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-     test("adds spine to the update and displaylists", () => {
+    test("adds spine to the update and displaylists", () => {
         const resultsSpine = new ResultsSpine(mockScene, mockConfig);
         expect(mockScene.add.existing).toHaveBeenCalledWith(resultsSpine);
     });
