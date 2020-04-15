@@ -20,6 +20,19 @@ T: Examples Launcher",
                     shiftY: 80,
                 },
             },
+            //Add, background images / animations / particle systems. More examples in /debug/examples
+            furniture: [
+                {
+                    key: "home.background",
+                    x: 0,
+                    y: 0,
+                },
+                {
+                    key: "home.title",
+                    x: 0,
+                    y: -150,
+                },
+            ]
         },
     },
 }

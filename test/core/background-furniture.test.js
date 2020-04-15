@@ -20,6 +20,7 @@ describe("Background Furniture", () => {
     let mockSettings;
     let mockSprite;
     let mockSpine;
+    let mockImage;
     let mockParticles;
 
     beforeEach(() => {
@@ -32,11 +33,15 @@ describe("Background Furniture", () => {
         mockParticles = {
             createEmitter: jest.fn(),
         };
+        mockImage = {
+            testTag: "testTag",
+        };
         mockTheme = {};
         mockScene = {
             context: { theme: mockTheme },
             add: {
                 sprite: jest.fn(() => mockSprite),
+                image: jest.fn(() => mockImage),
                 spine: jest.fn(() => mockSpine),
                 particles: jest.fn(() => mockParticles),
             },
@@ -54,7 +59,7 @@ describe("Background Furniture", () => {
                 },
             },
             textures: {
-                exists: jest.fn(key => key === "example_sprite"),
+                exists: jest.fn(key => key === "example_sprite" || key === "example_image"),
             },
             anims: {
                 create: jest.fn(),
@@ -77,10 +82,37 @@ describe("Background Furniture", () => {
             furnishFn();
             expect(mockScene.add.spine).not.toHaveBeenCalled();
             expect(mockScene.add.sprite).not.toHaveBeenCalled();
+            expect(mockScene.add.image).not.toHaveBeenCalled();
+            expect(mockScene.add.particles).not.toHaveBeenCalled();
+        });
+
+        test("Adds an image with default props if configured", () => {
+            mockTheme.furniture = [{ key: "example_image" }];
+
+            furnishFn();
+            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "example_image");
+        });
+
+        test("Adds an image with custom props if configured", () => {
+            const mockConfig = {
+                key: "example_image",
+                x: -10,
+                y: 10,
+                props: {
+                    propName: "propValue",
+                },
+            };
+
+            mockTheme.furniture = [mockConfig];
+            furnishFn();
+
+            expect(mockScene.add.image).toHaveBeenCalledWith(mockConfig.x, mockConfig.y, mockConfig.key);
+
+            expect(mockImage.propName).toEqual("propValue");
         });
 
         test("Adds a sprite with default props if configured", () => {
-            mockTheme.furniture = [{ key: "example_sprite" }];
+            mockTheme.furniture = [{ key: "example_sprite", frames: {} }];
 
             furnishFn();
             expect(mockScene.add.spine).not.toHaveBeenCalled();
@@ -183,7 +215,10 @@ describe("Background Furniture", () => {
 
         test("Does not play animations if motion is disabled", () => {
             mockSettings.motion = false;
-            mockTheme.furniture = [{ key: "example_spine" }, { key: "example_sprite" }];
+            mockTheme.furniture = [
+                { key: "example_spine", frames: {} },
+                { key: "example_sprite", frames: {} },
+            ];
             furnishFn();
 
             expect(mockSpine.active).toEqual(false);

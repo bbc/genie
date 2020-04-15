@@ -19,7 +19,7 @@
         "files": [
             {
                 "type": "image",
-                "key": "pauseBackground",
+                "key": "background",
                 "url": "pause/pause-background.png"
             },
             {

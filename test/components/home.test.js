@@ -34,14 +34,6 @@ describe("Home Screen", () => {
             homeScreen.create();
         });
 
-        test("adds a background image", () => {
-            expect(homeScreen.add.image).toHaveBeenCalledWith(0, 0, "home.background");
-        });
-
-        test("adds a title image", () => {
-            expect(homeScreen.add.image).toHaveBeenCalledWith(0, -150, "home.title");
-        });
-
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings"];
             expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
