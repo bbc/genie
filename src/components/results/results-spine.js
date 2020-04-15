@@ -12,7 +12,7 @@ export class ResultsSpine {
         let animation;
         animation = scene.add.spine(config.offsetX, config.offsetY, config.key, config.animationName, config.loop);
         scene.add.existing(animation);
-        config.props && Object.assign(animation, config.props);
+        Object.assign(animation, config.props);
         animation.setSize(animation.width * animation.scale, animation.height * animation.scale);
         animation.active = gmi.getAllSettings().motion;
 
