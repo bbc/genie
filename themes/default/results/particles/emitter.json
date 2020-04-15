@@ -1,0 +1,7 @@
+{
+    "speed": { "min": -100, "max": 500 },
+    "gravityY": 350,
+    "scale": { "start": 0.2, "end": 0.05 },
+    "lifespan": 800,
+    "blendMode": "SCREEN"
+}
