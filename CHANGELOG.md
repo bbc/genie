@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Fix example backdrops ||
 | 3.4.1 | |
 | | Remove npm resolutions ||
 | | Particle Effects available in results screen rows. ||
