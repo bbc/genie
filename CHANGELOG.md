@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.4.0 | |
 | | Spine animation on results page. ||
 | | Background images and titles of default screens now configured via background items system. ||
 | | Select screen uses configured storage key correctly. ||
