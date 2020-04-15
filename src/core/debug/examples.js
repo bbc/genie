@@ -52,6 +52,20 @@ export const examples = {
             home: "debug",
         },
     },
+    "results-spine": {
+        scene: Results,
+        title: "Results:\nSpine animations",
+        transientData: {
+            powerups: 10,
+            gems: 50,
+            keys: 5,
+        },
+        routes: {
+            continue: "debug",
+            restart: "debug",
+            home: "debug",
+        },
+    },
     "background-animations": {
         scene: Home,
         title: "Background Animations",
