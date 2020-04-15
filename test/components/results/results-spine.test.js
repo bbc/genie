@@ -62,4 +62,10 @@ describe("ResultsSprite", () => {
         const resultsSpine = new ResultsSpine(mockScene, mockConfig);
         expect(resultsSpine.active).toBe(false);
     });
+
+    test("adds scale from config props", () => {
+        mockConfig.props = { scale: 0.5 };
+        const resultsSpine = new ResultsSpine(mockScene, mockConfig);
+        expect(resultsSpine.scale).toBe(0.5);
+    });
 });
