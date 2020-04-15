@@ -2,7 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
-| | Fix example backdrops ||
+| | Fix example backdrops. ||
 | 3.4.1 | |
 | | Remove npm resolutions ||
 | | Particle Effects available in results screen rows. ||
@@ -10,7 +10,7 @@
 | | Spine animation on results page. ||
 | | Background images and titles of default screens now configured via background items system. ||
 | | Select screen uses configured storage key correctly. ||
-| | Update to Prettier 2.0.3 ||
+| | Update to Prettier 2.0.3. ||
 | 3.3.0 | |
 | | Global script load order for npm run start and npm run start:pack now matches ||
 | 3.2.0 | |
