@@ -173,7 +173,7 @@ describe("Select Screen", () => {
             screen.events = {
                 once: jest.fn(),
             };
-            screen.addAnimations = jest.fn();
+            screen.addBackgroundItems = jest.fn();
 
             screen.context = { theme: mockData.config.theme["test-select"] };
 
@@ -201,15 +201,10 @@ describe("Select Screen", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("create method", () => {
-        test("adds a background image", () => {
+        test("adds background items", () => {
             selectScreen.create();
-            expect(selectScreen.add.image).toHaveBeenCalledWith(0, 0, "test-select.background");
-        });
-
-        test("adds animations", () => {
-            selectScreen.create();
-            jest.spyOn(selectScreen, "addAnimations");
-            expect(selectScreen.addAnimations).toHaveBeenCalledTimes(1);
+            jest.spyOn(selectScreen, "addBackgroundItems");
+            expect(selectScreen.addBackgroundItems).toHaveBeenCalledTimes(1);
         });
 
         test("adds the theme", () => {

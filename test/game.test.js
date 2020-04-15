@@ -96,10 +96,10 @@ describe("Game", () => {
             expect(game.add.image).toHaveBeenCalledWith(0, 0, "home.background");
         });
 
-        test("adds animations", () => {
-            game.addAnimations = jest.fn();
+        test("adds background items", () => {
+            game.addBackgroundItems = jest.fn();
             game.create();
-            expect(game.addAnimations).toHaveBeenCalled();
+            expect(game.addBackgroundItems).toHaveBeenCalled();
         });
 
         test("adds title text", () => {

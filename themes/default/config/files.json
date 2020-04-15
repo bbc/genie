@@ -29,6 +29,11 @@
             },
             {
                 "type": "json5",
+                "key": "pause",
+                "url": "config/pause.json5"
+            },
+            {
+                "type": "json5",
                 "key": "config",
                 "url": "config/config.json5"
             },

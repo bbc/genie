@@ -30,8 +30,7 @@ const getOnTransitionStartFn = scene => () => {
 
 export class Select extends Screen {
     create() {
-        this.add.image(0, 0, `${this.assetPrefix}.background`);
-        this.addAnimations();
+        this.addBackgroundItems();
         createTitles(this);
         const buttons = ["home", "pause", "previous", "next"];
         singleItemMode.isEnabled(this)
