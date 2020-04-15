@@ -7,15 +7,15 @@ import { gmi } from "../../core/gmi/gmi.js";
 
 const startEmitter = (scene, config, emitter) => {
     const delay = config.delay || 0;
-    const duration = config.duration || Infinity;
     scene.time.addEvent({
         delay,
         callback: () => emitter.start(),
     });
-    scene.time.addEvent({
-        delay: delay + duration,
-        callback: () => emitter.stop(),
-    });
+    config.duration &&
+        scene.time.addEvent({
+            delay: delay + config.duration,
+            callback: () => emitter.stop(),
+        });
 };
 
 const addParticlesToRow = (scene, container) => {
