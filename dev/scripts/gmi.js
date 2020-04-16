@@ -192,10 +192,10 @@ var GMI = function(options, embedVars, gameDir) {
     var save = function(stored, update) {
         if (!stored) {
             globalSettings.achievements.push(update);
-            console.log("CREATE LOCAL DATA:", update);
+            debugMode && console.log("CREATE LOCAL DATA:", update);
         } else {
             Object.assign(stored, update);
-            console.log("UPDATE LOCAL DATA: ", stored, " -- TO: ", update);
+            debugMode && console.log("UPDATE LOCAL DATA: ", stored, " -- TO: ", update);
         }
         GMI.prototype.setGameData("achievements", globalSettings.achievements);
     };
