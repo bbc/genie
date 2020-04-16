@@ -19,6 +19,7 @@ jest.mock("../../../src/core/screen.js");
 jest.mock("../../../src/components/results/results-row-tween.js");
 jest.mock("../../../src/components/results/results-row-audio.js");
 jest.mock("../../../src/components/results/results-particles.js");
+jest.mock("../../../src/components/results/results-row-backdrop.js");
 
 describe("Results Screen", () => {
     let resultsScreen;
@@ -163,6 +164,7 @@ describe("Results Screen", () => {
 
         test("results screen area returned has 5% width padding correctly applied to it", () => {
             Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
+            resultsScreen.backdrop = { height: 600 };
             const expectedArea = mockResultsArea;
             expectedArea.y -= 5;
             expectedArea.height -= 10;
@@ -197,36 +199,6 @@ describe("Results Screen", () => {
             expect(mockImage.y).toEqual(15);
         });
 
-        test("backdrop image is scaled to the width of the safe area to preserve aspect ratio", () => {
-            mockResultsArea = {
-                centerX: 15,
-                centerY: 15,
-                width: 10,
-                height: 10,
-            };
-            mockImage = {
-                width: 8,
-                height: 5,
-                setDepth: () => {},
-            };
-            resultsScreen.create();
-            expect(mockImage.scale).toEqual(1.25);
-        });
-
-        test("backdrop image is scaled to the height of the safe area to preserve aspect ratio", () => {
-            mockResultsArea = {
-                width: 10,
-                height: 10,
-            };
-            mockImage = {
-                width: 4,
-                height: 5,
-                setDepth: () => {},
-            };
-            resultsScreen.create();
-            expect(mockImage.scale).toEqual(2);
-        });
-
         test("backdrop image resizes on a scale event", () => {
             mockImage = {
                 height: 5,
@@ -241,13 +213,14 @@ describe("Results Screen", () => {
             };
 
             resultsScreen.create();
-            expect(mockImage.scale).toEqual(2);
 
-            mockResultsArea.width = 5;
+            mockResultsArea.centerX = 10;
+            mockResultsArea.centerY = 20;
             Scaler.onScaleChange.add.mock.calls[0][0]();
 
             expect(Scaler.onScaleChange.add).toHaveBeenCalled();
-            expect(mockImage.scale).toEqual(1);
+            expect(mockImage.x).toEqual(mockResultsArea.centerX);
+            expect(mockImage.y).toEqual(mockResultsArea.centerY);
         });
 
         test("does not render image when no key is provided on the backdrop object", () => {

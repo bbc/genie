@@ -30,7 +30,7 @@ export class Results extends Screen {
     resultsArea() {
         const safeArea = this.layout.getSafeArea({ top: false });
         const center = Phaser.Geom.Rectangle.GetCenter(safeArea);
-        safeArea.height = this.backdrop.height;
+        this.backdrop && (safeArea.height = this.backdrop.height);
         return Phaser.Geom.Rectangle.CenterOn(safeArea, center.x, center.y);
     }
 
