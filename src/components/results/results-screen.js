@@ -9,7 +9,7 @@ import * as Rows from "../../core/layout/rows.js";
 import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 import { eventBus } from "../../core/event-bus.js";
 import { onScaleChange } from "../../core/scaler.js";
-import { tweenRows } from "./results-row-tween.js";
+import { tweenRows, tweenRowBackdrops } from "./results-row-tween.js";
 import { playRowAudio } from "./results-row-audio.js";
 import { addParticlesToRows } from "./results-particles.js";
 import { fireGameCompleteStat } from "./results-stats.js";
@@ -44,6 +44,7 @@ export class Results extends Screen {
         this.rows = Rows.create(this, () => this.resultsArea(), this.context.theme.rows, Rows.RowType.Results);
         this.rowBackdrops = createRowBackdrops(this, this.rows.containers);
         tweenRows(this, this.rows.containers);
+        tweenRowBackdrops(this, this.rowBackdrops, this.rows.containers);
         playRowAudio(this, this.rows.containers);
         addParticlesToRows(this, this.rows.containers);
     }
@@ -55,7 +56,7 @@ export class Results extends Screen {
 
     centralBackdropFill() {
         this.backdrop = this.add.image(0, 0, this.context.theme.backdrop.key);
-        this.backdrop.alpha = this.context.theme.backdrop.alpha || 1;
+        this.backdrop.alpha = this.context.theme.backdrop.alpha === undefined ? 1 : this.context.theme.backdrop.alpha;
     }
 
     resizeCentralBackdrop() {

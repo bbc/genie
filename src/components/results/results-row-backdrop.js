@@ -1,5 +1,5 @@
 /**
- * @copyright BBC 2018
+ * @copyright BBC 2020
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
@@ -16,7 +16,7 @@ export const createRowBackdrops = (scene, containers) =>
                     getRowPositionY(container, container.rowConfig.backdrop.offsetY),
                     container.rowConfig.backdrop.key,
                 )
-                .setAlpha(container.rowConfig.backdrop.alpha || 1),
+                .setAlpha(container.rowConfig.backdrop.alpha === undefined ? 1 : container.rowConfig.backdrop.alpha),
     );
 
 export const scaleRowBackdrops = (backdrops, containers) =>
