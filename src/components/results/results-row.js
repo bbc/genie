@@ -19,7 +19,6 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.setContainerPosition();
         this.align();
         this.setAlpha(rowConfig.alpha);
-        this.createBackdrop();
     }
 
     setTextFromTemplate(templateString, transientData) {
@@ -74,19 +73,6 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         const { centerX, centerY } = this.getDrawArea();
         this.x = centerX;
         this.y = centerY;
-    }
-
-    createBackdrop() {
-        fp.get("backdrop.key", this.rowConfig) && this.backdropFill();
-    }
-
-    backdropFill() {
-        const config = this.rowConfig.backdrop;
-        const backdrop = this.scene.add.image(config.offsetX || 0, config.offsetY || 0, config.key);
-        backdrop.alpha = config.alpha || 1;
-        backdrop.height = this.displayHeight;
-        this.add(backdrop);
-        this.sendToBack(backdrop);
     }
 
     reset() {
