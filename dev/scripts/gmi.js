@@ -192,10 +192,10 @@ var GMI = function(options, embedVars, gameDir) {
     var save = function(stored, update) {
         if (!stored) {
             globalSettings.achievements.push(update);
-            console.log("CREATE LOCAL DATA:", update);
+            debugMode && console.log("CREATE LOCAL DATA:", update);
         } else {
             Object.assign(stored, update);
-            console.log("UPDATE LOCAL DATA: ", stored, " -- TO: ", update);
+            debugMode && console.log("UPDATE LOCAL DATA: ", stored, " -- TO: ", update);
         }
         GMI.prototype.setGameData("achievements", globalSettings.achievements);
     };
@@ -264,7 +264,7 @@ var GMI = function(options, embedVars, gameDir) {
             var stored = globalSettings.achievements.find(function(unlocked) { return unlocked.key === config.key });
             return Object.assign(config, stored, { achieved: isAchieved(config, stored) });
         });
-        console.log(output);
+        debugMode && console.log(output);
         return output;
     };
     GMI.prototype.achievements.set = function(update) {
@@ -284,7 +284,7 @@ var GMI = function(options, embedVars, gameDir) {
 
         save(stored, update);
 
-        console.log("NOTIFY: ", achievedOnUpdate, update.key);
+        debugMode && console.log("NOTIFY: ", achievedOnUpdate, update.key);
         return achievedOnUpdate;
     };
     GMI.prototype.gameLoaded = function() {};
