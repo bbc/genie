@@ -82,3 +82,6 @@ The following theme files should not be edited. It is a requirement that they re
 * _themes/#####/gel/mobile/notification.png_
 * _themes/#####/gel/desktop/achievements.png_
 * _themes/#####/gel/mobile/achievements.png_
+
+##Debugging
+Adding the flag `&debug=true` to the end of the url when developing locally will make the fake dev gmi console log calls to `gmi.achievements init/get/set`.

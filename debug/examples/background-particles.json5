@@ -16,6 +16,11 @@ See the \"furniture\" block in this scene's config",
             music: "loader.backgroundMusic",
             furniture: [
                 {
+                    key: "home.background",
+                    x: 0,
+                    y: 0,
+                },
+                {
                     key: "examples_spray",
                     assetKey: "examples_spark",
                     //Any props defined here will be merged onto the emitter config.
