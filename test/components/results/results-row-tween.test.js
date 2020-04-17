@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { gmi } from "../../../src/core/gmi/gmi.js";
-import { tweenRows } from "../../../src/components/results/results-row-tween.js";
+import { tweenRows, tweenRowBackdrops } from "../../../src/components/results/results-row-tween.js";
 
 jest.mock("../../../src/core/gmi/gmi.js");
 
@@ -53,5 +53,11 @@ describe("ResultsRow - Tween Rows", () => {
         mockSettings.motion = false;
         tweenRows(mockScene, mockContainers);
         expect(mockScene.add.tween.mock.calls[0][0].duration).toBe(0);
+    });
+
+    test("tweenRowBackdrops function sets the correct target to tween", () => {
+        const mockTargets = [{ mock: "target" }];
+        tweenRowBackdrops(mockScene, mockTargets, mockContainers);
+        expect(mockScene.add.tween).toHaveBeenCalledWith({ targets: mockTargets[0], ...mockTweenConfig });
     });
 });
