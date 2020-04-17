@@ -186,6 +186,14 @@ describe("Results Screen", () => {
             expect(mockImage.alpha).toEqual(1);
         });
 
+        test("adds an image with an alpha of 0 when specified in config", () => {
+            mockConfig.theme.results.backdrop.alpha = 0;
+
+            resultsScreen.create();
+            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+            expect(mockImage.alpha).toEqual(0);
+        });
+
         test("adds a backdrop image centred within the results area", () => {
             mockResultsArea = {
                 centerX: 15,
