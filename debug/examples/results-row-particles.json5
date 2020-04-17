@@ -1,6 +1,6 @@
 {
     theme: {
-        results: {
+        "results-row-particles": {
             furniture: [
                 {
                     key: 'results.background',
@@ -98,8 +98,8 @@
                     audio: { key: 'results.woosh', delay: 0 }, // Asset key and delay for audio to be played.
                     particles: [
                         {
-                            assetKey: 'game.star',
-                            emitterConfigKey: 'results.row-emitter',
+                            assetKey: 'examples_yellow_spark',
+                            emitterConfigKey: 'examples_spray',
                             // Optional settings
                             offsetX: 40,
                             offsetY: -15,
@@ -198,8 +198,8 @@
                     audio: { key: 'results.slide', delay: 2500 },
                     particles: [
                         {
-                            assetKey: 'game.diamond',
-                            emitterConfigKey: 'results.row-emitter',
+                            assetKey: 'examples_spark',
+                            emitterConfigKey: 'examples_spray',
                             offsetX: 40,
                             offsetY: -15,
                             delay: 4000,
@@ -277,8 +277,8 @@
                     audio: { key: 'results.boing', delay: 5500 },
                     particles: [
                         {
-                            assetKey: 'game.key',
-                            emitterConfigKey: 'results.row-emitter',
+                            assetKey: 'examples_red_spark',
+                            emitterConfigKey: 'examples_spray',
                             offsetX: 35,
                             offsetY: -15,
                             delay: 7000,

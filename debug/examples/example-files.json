@@ -29,6 +29,11 @@
             },
             {
                 "type": "json5",
+                "key": "results-row-particles",
+                "url": "results-row-particles.json5"
+            },
+            {
+                "type": "json5",
                 "key": "background-animations",
                 "url": "background-animations.json5"
             },

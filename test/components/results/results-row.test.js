@@ -143,51 +143,6 @@ describe("Results Row", () => {
         expect(resultsRow.y).toBe(mockDrawArea.centerY);
     });
 
-    describe("Backdrop Image", () => {
-        test("creates a backdrop image for the row at 0, 0 by default", () => {
-            mockRowConfig.backdrop = { key: "results.row-backdrop-1", alpha: 0.5 };
-            new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, mockRowConfig.backdrop.key);
-        });
-
-        test("creates a backdrop image with correct x and y offsets", () => {
-            mockRowConfig.backdrop = { key: "results.row-backdrop-1", offsetX: 20, offsetY: 40 };
-            new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-            expect(mockScene.add.image).toHaveBeenCalledWith(20, 40, mockRowConfig.backdrop.key);
-        });
-
-        test("does not create a backdrop if not set in the config", () => {
-            delete mockRowConfig.backdrop;
-            new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-            expect(mockScene.add.image).not.toHaveBeenCalled();
-        });
-
-        test("sets the correct alpha and height for the backdrop image", () => {
-            mockRowConfig.backdrop = { key: "results.row-backdrop-1", alpha: 0.5 };
-            new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-            expect(mockImage.alpha).toBe(0.5);
-            expect(mockImage.height).toBe(0);
-        });
-
-        test("sets the backdrop alpha to 1 when none is provided in the config", () => {
-            mockRowConfig.backdrop = { key: "results.row-backdrop-1" };
-            new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-            expect(mockImage.alpha).toBe(1);
-        });
-
-        test("adds the backdrop to the row container", () => {
-            mockRowConfig.backdrop = { key: "results.row-backdrop-1" };
-            new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-            expect(ResultsRow.prototype.add).toHaveBeenCalledWith(mockImage);
-        });
-
-        test("moves the backdrop image to the back", () => {
-            mockRowConfig.backdrop = { key: "results.row-backdrop-1" };
-            new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-            expect(ResultsRow.prototype.sendToBack).toHaveBeenCalledWith(mockImage);
-        });
-    });
-
     test("reset updates container position", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         mockDrawArea.centerX = 43;
