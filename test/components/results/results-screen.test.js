@@ -162,12 +162,23 @@ describe("Results Screen", () => {
             expect(playRowAudio).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
         });
 
-        test("results screen area returned has 5% width padding correctly applied to it", () => {
+        test("results screen area has the same height as the backdrop when one is provided", () => {
             Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
             resultsScreen.backdrop = { height: 600 };
-            const expectedArea = mockResultsArea;
-            expectedArea.y -= 5;
-            expectedArea.height -= 10;
+            expect(resultsScreen.resultsArea().height).toBe(resultsScreen.backdrop.height);
+        });
+
+        test("results screen area is centered in the safe area when a backdrop is provided", () => {
+            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
+            resultsScreen.backdrop = { height: 600 };
+            expect(resultsScreen.resultsArea().centerX).toBe(mockResultsArea.centerX);
+            expect(resultsScreen.resultsArea().centerY).toBe(mockResultsArea.centerY);
+        });
+
+        test("results screen area is the safe area when no backdrop is provided", () => {
+            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
+            delete resultsScreen.backdrop;
+            expect(resultsScreen.resultsArea()).toBe(mockResultsArea);
             expect(resultsScreen.resultsArea()).toBe(mockResultsArea);
         });
 
