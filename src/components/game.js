@@ -47,7 +47,7 @@ export class Game extends Screen {
             .setOrigin(0.5);
         this.setLayout(["pause"]);
 
-        const buttonKey = `${this.scene.key}.basicButton`;
+        const buttonKey = `${this.assetPrefix}.basicButton`;
         const buttonTextStyle = {
             font: "35px ReithSans",
             fill: "#fff",
@@ -58,9 +58,9 @@ export class Game extends Screen {
 
         const buttonNames = ["Star", "Gem", "Key"];
 
-        const starImage = this.add.image(0, -70, `${this.scene.key}.star`);
-        const gemImage = this.add.image(0, 20, `${this.scene.key}.gem`);
-        const keyImage = this.add.image(0, 110, `${this.scene.key}.key`);
+        const starImage = this.add.image(0, -70, `${this.assetPrefix}.star`);
+        const gemImage = this.add.image(0, 20, `${this.assetPrefix}.gem`);
+        const keyImage = this.add.image(0, 110, `${this.assetPrefix}.key`);
         const starScore = this.add.text(-50, -70, "0", buttonTextStyle).setOrigin(0.5);
         const gemScore = this.add.text(-50, 20, "0", buttonTextStyle).setOrigin(0.5);
         const keyScore = this.add.text(-50, 110, "0", buttonTextStyle).setOrigin(0.5);
