@@ -3,27 +3,28 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-const getRowPositionX = (container, offsetX = 0) => container.x + offsetX;
-const getRowPositionY = (container, offsetY = 0) => container.y + offsetY;
-
-export const createRowBackdrops = (scene, containers) =>
-    containers.map(
+export const createRowBackdrops = (scene, containers) => {
+    const images = containers.map(
         container =>
             container.rowConfig.backdrop &&
             scene.add
-                .image(
-                    getRowPositionX(container, container.rowConfig.backdrop.offsetX),
-                    getRowPositionY(container, container.rowConfig.backdrop.offsetY),
-                    container.rowConfig.backdrop.key,
-                )
+                .image(container.x, container.y, container.rowConfig.backdrop.key)
                 .setAlpha(container.rowConfig.backdrop.alpha === undefined ? 1 : container.rowConfig.backdrop.alpha),
     );
+    images.forEach((image, index) => {
+        if (image) {
+            image.displayOriginX -= containers[index].rowConfig.backdrop.offsetX || 0;
+            image.displayOriginY -= containers[index].rowConfig.backdrop.offsetY || 0;
+        }
+    });
+    return images;
+};
 
 export const scaleRowBackdrops = (backdrops, containers) =>
     containers.forEach((container, index) => {
         if (!container.rowConfig.backdrop) {
             return;
         }
-        backdrops[index].x = getRowPositionX(container, container.rowConfig.backdrop.offsetX);
-        backdrops[index].y = getRowPositionY(container, container.rowConfig.backdrop.offsetY);
+        backdrops[index].x = container.x;
+        backdrops[index].y = container.y;
     });

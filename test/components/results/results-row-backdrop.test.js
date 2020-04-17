@@ -12,7 +12,7 @@ describe("ResultsRow - Row Backdrops", () => {
     let mockBackdropConfig;
 
     beforeEach(() => {
-        mockImage = { setAlpha: jest.fn(() => mockImage) };
+        mockImage = { setAlpha: jest.fn(() => mockImage), displayOriginX: 50, displayOriginY: 20 };
         mockScene = { add: { image: jest.fn(() => mockImage) } };
         mockBackdropConfig = { key: "test", alpha: 0.5, offsetX: 0, offsetY: 0 };
         mockContainers = [{ rowConfig: { backdrop: mockBackdropConfig }, x: 10, y: 20 }];
@@ -23,21 +23,26 @@ describe("ResultsRow - Row Backdrops", () => {
     test("sets up backdrop images as specified in config", () => {
         createRowBackdrops(mockScene, mockContainers);
         expect(mockScene.add.image).toHaveBeenCalledWith(
-            mockContainers[0].x + mockBackdropConfig.offsetX,
-            mockContainers[0].y + mockBackdropConfig.offsetY,
-            mockBackdropConfig.key,
-        );
-    });
-
-    test("sets up backdrop images as specified in config when no offsets are provided", () => {
-        delete mockBackdropConfig.offsetX;
-        delete mockBackdropConfig.offsetY;
-        createRowBackdrops(mockScene, mockContainers);
-        expect(mockScene.add.image).toHaveBeenCalledWith(
             mockContainers[0].x,
             mockContainers[0].y,
             mockBackdropConfig.key,
         );
+    });
+
+    test("sets the correct display origins when the backdrop is not offset", () => {
+        delete mockBackdropConfig.offsetX;
+        delete mockBackdropConfig.offsetY;
+        createRowBackdrops(mockScene, mockContainers);
+        expect(mockImage.displayOriginX).toBe(50);
+        expect(mockImage.displayOriginY).toBe(20);
+    });
+
+    test("sets the correct display origins when the backdrop is offset", () => {
+        mockBackdropConfig.offsetX = 100;
+        mockBackdropConfig.offsetY = 200;
+        createRowBackdrops(mockScene, mockContainers);
+        expect(mockImage.displayOriginX).toBe(-50);
+        expect(mockImage.displayOriginY).toBe(-180);
     });
 
     test("does not setup a backdrop image if not specified in config", () => {
@@ -73,22 +78,11 @@ describe("ResultsRow - Row Backdrops", () => {
             expect(() => scaleRowBackdrops(mockBackdrops, mockContainers)).not.toThrow();
         });
 
-        test("correctly scales backdrops if the container is moved and does not have an offset", () => {
-            delete mockBackdropConfig.offsetX;
-            delete mockBackdropConfig.offsetY;
+        test("correctly scales backdrops if the container is moved", () => {
             mockContainers[0].x = 20;
             mockContainers[0].y = 40;
             scaleRowBackdrops(mockBackdrops, mockContainers);
             expect(mockBackdrops[0]).toEqual({ x: 20, y: 40 });
-        });
-
-        test("correctly scales backdrops if the container is moved and has an offset", () => {
-            mockBackdropConfig.offsetX = 25;
-            mockBackdropConfig.offsetY = 50;
-            mockContainers[0].x = 20;
-            mockContainers[0].y = 40;
-            scaleRowBackdrops(mockBackdrops, mockContainers);
-            expect(mockBackdrops[0]).toEqual({ x: 45, y: 90 });
         });
     });
 });
