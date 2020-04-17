@@ -98,7 +98,7 @@
                     backdrop: {
                         // Optional row backdrop
                         key: "results.row-backdrop-1", // asset key
-                        alpha: 0.5,
+                        alpha: 0,
                         offsetY: -20,
                     },
                     alpha: 1, // Set the alpha on the whole row
@@ -176,7 +176,7 @@
                     ],
                     backdrop: {
                         key: "results.row-backdrop-2",
-                        alpha: 0.5,
+                        alpha: 0,
                         offsetY: -20,
                     },
                     alpha: 0,
@@ -250,7 +250,7 @@
                     ],
                     backdrop: {
                         key: "results.row-backdrop-3",
-                        alpha: 0.5,
+                        alpha: 0,
                         offsetY: -20,
                     },
                     alpha: 0,

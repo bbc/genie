@@ -66,6 +66,20 @@ export const examples = {
             home: "debug",
         },
     },
+    "results-row-particles": {
+        scene: Results,
+        title: "Results:\nRow Particles",
+        transientData: {
+            stars: 16,
+            gems: 50,
+            keys: 122,
+        },
+        routes: {
+            continue: "debug",
+            restart: "debug",
+            home: "debug",
+        },
+    },
     "background-animations": {
         scene: Home,
         title: "Background Animations",

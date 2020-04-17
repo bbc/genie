@@ -35,6 +35,16 @@
                 "url": "examples/particles/blue.png"
             },
             {
+                "type": "image",
+                "key": "red_spark",
+                "url": "examples/particles/red.png"
+            },
+            {
+                "type": "image",
+                "key": "yellow_spark",
+                "url": "examples/particles/yellow.png"
+            },
+            {
                 "type": "particles",
                 "key": "spray",
                 "url": "examples/particles/spray.json"
