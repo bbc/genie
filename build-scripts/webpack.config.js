@@ -37,10 +37,7 @@ module.exports = env => {
                     include: [
                         path.resolve("src"),
                         path.resolve("lib"),
-                        path.resolve("node_modules/genie/src"),
-                        path.resolve("node_modules/genie/lib"),
-                        path.resolve("node_modules/bowser/src"),
-                        path.resolve("node_modules/json5/dist/"),
+                        path.resolve("node_modules"),
                     ],
                 },
                 { test: /webfontloader\.js/, use: ["expose-loader?WebFont"] },
