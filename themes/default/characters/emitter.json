@@ -1,0 +1,21 @@
+{
+    "x": 400,
+    "y": 300,
+    "blendMode": "SCREEN",
+    "scale": { "start": 0.2, "end": 0 },
+    "speed": { "min": -100, "max": 100 },
+    "quantity": 25,
+    "lifespan": 1000,
+    "alpha": 0.6,
+    "frequency": 100,
+    "emitZone": {
+        "type": "random",
+        "quantity": 25,
+        "source": {
+            "type": "circle",
+            "x": 0,
+            "y": 0,
+            "radius": 100
+        }
+    }
+}

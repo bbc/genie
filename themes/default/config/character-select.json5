@@ -7,6 +7,11 @@
             duration: 500, // Pagination transition duration
             align: "center", // Alignment for any remaining choices in the last row
             music: "loader.backgroundMusic",
+            onHoverParticles: {
+                assetKey: 'game.star',
+                emitterConfigKey: 'character-select.hover-emitter',
+                onTop: false,
+            },
             furniture: [
                 {
                     key: "character-select.background",
