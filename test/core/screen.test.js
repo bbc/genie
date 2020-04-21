@@ -137,8 +137,7 @@ describe("Screen", () => {
 
         test("sets the background music using the theme config", () => {
             createAndInitScreen();
-            const expectedThemeConfig = mockData.config.theme.screenKey;
-            expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen.scene.scene, expectedThemeConfig);
+            expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen);
         });
 
         test("clears the accessible buttons array", () => {
