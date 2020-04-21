@@ -34,11 +34,7 @@ module.exports = env => {
                             configFile: path.resolve("node_modules/genie/babel.config.js"),
                         },
                     },
-                    include: [
-                        path.resolve("src"),
-                        path.resolve("lib"),
-                        path.resolve("node_modules"),
-                    ],
+                    include: [path.resolve("src"), path.resolve("lib"), path.resolve("node_modules")],
                 },
                 { test: /webfontloader\.js/, use: ["expose-loader?WebFont"] },
             ],
