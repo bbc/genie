@@ -23,6 +23,7 @@ describe("ResultsRow - Particles", () => {
         };
         mockParticles = {
             createEmitter: jest.fn(() => mockEmitter),
+            setDepth: jest.fn(() => mockParticles),
         };
         mockEmitter = {
             setPosition: jest.fn(() => mockEmitter),
@@ -45,6 +46,23 @@ describe("ResultsRow - Particles", () => {
     test("sets up particles as specified in config", () => {
         addParticlesToRows(mockScene, mockContainers);
         expect(mockScene.add.particles).toHaveBeenCalledWith(mockParticlesConfig[0].assetKey);
+    });
+
+    test("sets up particles with a depth of 0 by default", () => {
+        addParticlesToRows(mockScene, mockContainers);
+        expect(mockParticles.setDepth).toHaveBeenCalledWith(0);
+    });
+
+    test("sets up particles with a depth of 1 when placeAboveContent is true", () => {
+        mockParticlesConfig[0].placeAboveContent = true;
+        addParticlesToRows(mockScene, mockContainers);
+        expect(mockParticles.setDepth).toHaveBeenCalledWith(1);
+    });
+
+    test("sets up particles with a depth of 0 when placeAboveContent is false", () => {
+        mockParticlesConfig[0].placeAboveContent = false;
+        addParticlesToRows(mockScene, mockContainers);
+        expect(mockParticles.setDepth).toHaveBeenCalledWith(0);
     });
 
     test("gets the emitter config using the emitterConfigKey", () => {
