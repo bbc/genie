@@ -23,6 +23,11 @@
                 "url": "characters/complete.png"
             },
             {
+                "type": "particles",
+                "key": "hover-emitter",
+                "url": "characters/emitter.json"
+            },
+            {
                 "type": "spritesheet",
                 "key": "char1",
                 "url": "characters/char_1_anim.png",

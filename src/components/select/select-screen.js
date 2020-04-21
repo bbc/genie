@@ -15,6 +15,7 @@ import { createTitles } from "./titles.js";
 import * as singleItemMode from "./single-item-mode.js";
 import { addEvents } from "./add-events.js";
 import { gmi } from "../../core/gmi/gmi.js";
+import { addHoverParticlesToCells } from "./select-particles.js";
 
 const gridDefaults = {
     tabIndex: 6,
@@ -54,6 +55,7 @@ export class Select extends Screen {
 
         this.updateStates();
         onTransitionStart();
+        addHoverParticlesToCells(this, this._cells, this.context.theme.onHoverParticles);
     }
 
     updateStates() {
