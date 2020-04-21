@@ -9,11 +9,13 @@ import * as Scaler from "../../../src/core/scaler.js";
 import { Select } from "../../../src/components/select/select-screen.js";
 import { GelGrid } from "../../../src/core/layout/grid/grid.js";
 import { createTitles } from "../../../src/components/select/titles.js";
+import { addHoverParticlesToCells } from "../../../src/components/select/select-particles.js";
 import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
 import * as state from "../../../src/core/state.js";
 
 jest.mock("../../../src/components/select/titles.js");
 jest.mock("../../../src/components/select/single-item-mode.js");
+jest.mock("../../../src/components/select/select-particles.js");
 jest.mock("../../../src/core/screen.js");
 jest.mock("../../../src/core/layout/grid/grid.js");
 jest.mock("../../../src/core/layout/layout.js", () => ({
@@ -59,6 +61,7 @@ describe("Select Screen", () => {
             config: {
                 theme: {
                     "test-select": {
+                        onHoverParticles: ["mock"],
                         storageKey: "test-storage-key",
                         titles: [
                             {
@@ -125,6 +128,7 @@ describe("Select Screen", () => {
                     on: jest.fn(),
                 },
             },
+            root: "mock root",
             addCustomGroup: jest.fn(),
             getSafeArea: jest.fn(() => "layout safe area"),
         };
@@ -240,6 +244,7 @@ describe("Select Screen", () => {
                 columns: 1,
                 duration: 500,
                 ease: "Cubic.easeInOut",
+                onHoverParticles: ["mock"],
                 onTransitionStart: expect.any(Function),
                 storageKey: "test-storage-key",
                 rows: 1,
@@ -266,6 +271,16 @@ describe("Select Screen", () => {
         test("adds grid to layout", () => {
             selectScreen.create();
             expect(selectScreen.layout.addCustomGroup).toHaveBeenCalledWith("grid", mockGelGrid, 6);
+        });
+
+        test("adds hover particles to select items", () => {
+            selectScreen.create();
+            expect(addHoverParticlesToCells).toHaveBeenCalledWith(
+                selectScreen,
+                selectScreen._cells,
+                mockData.config.theme["test-select"].onHoverParticles,
+                mockLayout.root,
+            );
         });
 
         test("adds listener for scaler", () => {
