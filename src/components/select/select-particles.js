@@ -16,9 +16,7 @@ const createEmitter = (scene, button, config) => {
 };
 
 export const addHoverParticlesToCells = (scene, cells, config, layoutRoot) => {
-    if (!config) {
-        return;
-    }
+    if (!config) return;
     gmi.getAllSettings().motion &&
         cells
             .map(cell => cell.button)
