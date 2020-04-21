@@ -15,13 +15,13 @@ const createEmitter = (scene, button, config) => {
     onPointerOut(emitter, button);
 };
 
-const createEmitters = (scene, button, configs) => configs.forEach(config => createEmitter(scene, button, config));
-
-export const addHoverParticlesToCells = (scene, cells, configs) => {
+export const addHoverParticlesToCells = (scene, cells, config, layoutRoot) => {
+    if (!config) {
+        return;
+    }
     gmi.getAllSettings().motion &&
         cells
             .map(cell => cell.button)
-            .forEach(button =>
-                button.on(Phaser.Input.Events.POINTER_OVER, () => createEmitters(scene, button, configs)),
-            );
+            .forEach(button => button.on(Phaser.Input.Events.POINTER_OVER, () => createEmitter(scene, button, config)));
+    onfig.onTop ? layoutRoot.setDepth(0) : layoutRoot.setDepth(1);
 };

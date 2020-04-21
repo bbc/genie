@@ -42,6 +42,7 @@ export class Select extends Screen {
         this.resize();
         this._cells = this.grid.addGridCells(this.context.theme);
         this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
+        this.layout.root.setDepth(1);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
         this.scene.scene.events.on("shutdown", this._scaleEvent.unsubscribe, this);
@@ -55,7 +56,7 @@ export class Select extends Screen {
 
         this.updateStates();
         onTransitionStart();
-        addHoverParticlesToCells(this, this._cells, this.context.theme.onHoverParticles);
+        addHoverParticlesToCells(this, this._cells, this.context.theme.onHoverParticles, this.layout.root);
     }
 
     updateStates() {
