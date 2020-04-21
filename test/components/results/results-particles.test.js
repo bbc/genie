@@ -53,14 +53,14 @@ describe("ResultsRow - Particles", () => {
         expect(mockParticles.setDepth).toHaveBeenCalledWith(0);
     });
 
-    test("sets up particles with a depth of 1 when placeAboveContent is true", () => {
-        mockParticlesConfig[0].placeAboveContent = true;
+    test("sets up particles with a depth of 1 when onTop is true", () => {
+        mockParticlesConfig[0].onTop = true;
         addParticlesToRows(mockScene, mockContainers);
         expect(mockParticles.setDepth).toHaveBeenCalledWith(1);
     });
 
-    test("sets up particles with a depth of 0 when placeAboveContent is false", () => {
-        mockParticlesConfig[0].placeAboveContent = false;
+    test("sets up particles with a depth of 0 when onTop is false", () => {
+        mockParticlesConfig[0].onTop = false;
         addParticlesToRows(mockScene, mockContainers);
         expect(mockParticles.setDepth).toHaveBeenCalledWith(0);
     });

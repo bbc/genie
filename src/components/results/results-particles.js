@@ -27,7 +27,7 @@ const addParticlesToRow = (scene, container) => {
                 config,
                 scene.add
                     .particles(config.assetKey)
-                    .setDepth(config.placeAboveContent ? 1 : 0)
+                    .setDepth(config.onTop ? 1 : 0)
                     .createEmitter(scene.cache.json.get(config.emitterConfigKey))
                     .setPosition(container.x + (config.offsetX || 0), container.y + (config.offsetY || 0))
                     .stop(),
