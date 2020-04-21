@@ -23,5 +23,5 @@ export const addHoverParticlesToCells = (scene, cells, config, layoutRoot) => {
         cells
             .map(cell => cell.button)
             .forEach(button => button.on(Phaser.Input.Events.POINTER_OVER, () => createEmitter(scene, button, config)));
-    onfig.onTop ? layoutRoot.setDepth(0) : layoutRoot.setDepth(1);
+    config.onTop ? layoutRoot.setDepth(0) : layoutRoot.setDepth(1);
 };
