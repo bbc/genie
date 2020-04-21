@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| | 3.4.2. ||
+| | Update webpack config to support multi-game components. ||
 | | Fix example backdrops. ||
 | 3.4.1 | |
 | | Remove npm resolutions ||

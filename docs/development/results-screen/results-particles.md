@@ -12,6 +12,7 @@ Each row can have numerous emitters attached to it.
 | offsetY | integer | 0 | The y offset for this emitter. |
 | delay | integer | 0 | The delay before the particle emitter starts. |
 | duration | integer | Infinity | The duration that the emitter should emit particles for. |
+| onTop | boolean | false | By default places the emitter behind the row content (text, sprites, etc) and in front of the row backdrop. To place the emitter above everything, set this to true. |
 
 ## Example config
 
