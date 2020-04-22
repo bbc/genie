@@ -14,22 +14,22 @@ const setButtonClickSound = (scene, audioKey) => {
     Assets.buttonClick = scene.sound.add(audioKey);
 };
 
-const setupScreenMusic = (scene, themeScreenConfig = {}) => {
-    if (isAlreadyPlaying(themeScreenConfig.music) || themeScreenConfig.isOverlay) return;
-    stopCurrentAndStartNextMusic(scene, themeScreenConfig);
+const setupScreenMusic = scene => {
+    if (isAlreadyPlaying(scene.context.theme.music) || scene.context.theme.isOverlay) return;
+    stopCurrentAndStartNextMusic(scene);
 };
 
 const isAlreadyPlaying = audioKey => {
     return audioKey && Assets.backgroundMusic && audioKey === Assets.backgroundMusic.key;
 };
 
-const onFadeComplete = (scene, themeScreenConfig) => {
+const onFadeComplete = scene => {
     Assets.backgroundMusic.destroy();
-    startNextMusic(scene, themeScreenConfig);
+    startNextMusic(scene);
 };
 
-const startNextMusic = (scene, themeScreenConfig) => {
-    Assets.backgroundMusic = startMusic(scene, themeScreenConfig.music);
+const startNextMusic = scene => {
+    Assets.backgroundMusic = startMusic(scene, scene.context.theme.music);
 };
 
 const startMusic = (scene, audioKey) => {
@@ -49,16 +49,16 @@ const startMusic = (scene, audioKey) => {
     return music;
 };
 
-const stopCurrentAndStartNextMusic = (scene, themeScreenConfig) => {
+const stopCurrentAndStartNextMusic = scene => {
     if (Assets.backgroundMusic) {
         scene.tweens.add({
             targets: Assets.backgroundMusic,
             volume: 0,
             duration: fadeDuration / 2,
-            onComplete: onFadeComplete.bind(this, scene, themeScreenConfig),
+            onComplete: onFadeComplete.bind(this, scene),
         });
     } else {
-        startNextMusic(scene, themeScreenConfig);
+        startNextMusic(scene);
     }
 };
 
