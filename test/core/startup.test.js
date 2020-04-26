@@ -175,12 +175,6 @@ describe("Startup", () => {
             expect(actualConfig.renderer).toBe(1);
         });
 
-        test("throws an error if the game container element cannot be found", () => {
-            document.getElementById.mockImplementation(() => false);
-            const startupNoContainer = () => startup({ screens: {} });
-            expect(startupNoContainer).toThrowError(`Container element "#some-id" not found`); // eslint-disable-line quotes
-        });
-
         test("disable's phaser's global window events (prevents clickthrough from achievements)", () => {
             startup({ screens: {} });
             const actualConfig = Phaser.Game.mock.calls[0][0];
