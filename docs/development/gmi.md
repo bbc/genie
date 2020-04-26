@@ -49,10 +49,10 @@ See here for more information on [sending stats](stats.md).
 
 
 
-Audio and Motion are already configured in Genie by default, if you want to add Subtitles you will need to pass it into the `settingsConfig` in `main.js` like so:
+Audio and Motion are already configured in Genie by default, if you want to add Subtitles you will need to pass it into the `settings` in `main.js` like so:
 
 ```javascript
-const settingsConfig = {
+const settings = {
     pages: [
         {
             title: "Global Settings",

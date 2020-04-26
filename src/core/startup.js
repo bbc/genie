@@ -15,13 +15,8 @@ import * as a11y from "./accessibility/accessibility-layer.js";
 import { addGelButton } from "./layout/gel-game-objects.js";
 import { getPhaserDefaults } from "./loader/phaserDefaults.js";
 
-
-/**
- * @param {Object=} settingsConfig - Additional state that is added to the inState context.
- * @param {Object=} screenConfig -
- */
 export function startup(config) {
-    setGmi(config.settings, window);
+    setGmi(config.settings || {}, window);
     hookErrors(gmi.gameContainerId);
     Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
     addCustomStyles();

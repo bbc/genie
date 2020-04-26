@@ -28,13 +28,13 @@ describe("Main", () => {
 
     test("makes a call to startup with the correct screens", () => {
         const expectedScreens = ["home", "character-select", "level-select", "game", "results", "how-to-play", "pause"];
-        const actualScreenConfig = startup.mock.calls[0][0];
+        const config = startup.mock.calls[0][0];
 
-        expect(Object.keys(actualScreenConfig)).toStrictEqual(expectedScreens);
+        expect(Object.keys(config.screens)).toStrictEqual(expectedScreens);
     });
 
     test("makes a call to startup with the correct settings config", () => {
-        const expectedSettingsConfig = {
+        const expectedSettings = {
             pages: [
                 {
                     title: "Custom Settings",
@@ -49,7 +49,7 @@ describe("Main", () => {
                 },
             ],
         };
-        const actualSettingsConfig = startup.mock.calls[0][1];
-        expect(actualSettingsConfig).toStrictEqual(expectedSettingsConfig);
+        const config = startup.mock.calls[0][0];
+        expect(config.settings).toStrictEqual(expectedSettings);
     });
 });

@@ -55,57 +55,58 @@ describe("Startup", () => {
     });
 
     test("instantiates the GMI with correct params", () => {
-        const fakeSettings = { settings: "some settings" };
-        startup({}, fakeSettings);
-        expect(gmiModule.setGmi).toHaveBeenCalledWith(fakeSettings, global.window);
+        const config = { screens: {}, settings: "some settings" };
+
+        startup(config);
+        expect(gmiModule.setGmi).toHaveBeenCalledWith(config.settings, global.window);
     });
 
     test("instantiates the GMI with an empty object if settings config not provided", () => {
-        startup({});
+        startup({ screens: {} });
         expect(gmiModule.setGmi).toHaveBeenCalledWith({}, global.window);
     });
 
     test("injects custom styles to the game container element", () => {
-        startup({});
+        startup({ screens: {} });
         expect(styles.addCustomStyles).toHaveBeenCalled();
     });
 
     test("sets up the accessibility layer", () => {
-        startup({});
-        expect(a11y.create).toHaveBeenCalledWith(containerDiv);
+        startup({ screens: {} });
+        expect(a11y.create).toHaveBeenCalled();
     });
 
     describe("Scenes", () => {
-        let fakeScreenConfig;
+        let screens;
 
         beforeEach(() => {
-            fakeScreenConfig = {
+            screens = {
                 settings: { scene: jest.fn().mockImplementation(() => ({ settings: "settings" })) },
                 game: { scene: jest.fn().mockImplementation(() => ({ game: "game" })) },
             };
         });
 
         test("creates an array of scenes from the screen config", () => {
-            startup(fakeScreenConfig);
-            expect(fakeScreenConfig.settings.scene).toHaveBeenCalledWith({ key: "settings" });
-            expect(fakeScreenConfig.game.scene).toHaveBeenCalledWith({ key: "game" });
+            startup({ screens });
+            expect(screens.settings.scene).toHaveBeenCalledWith({ key: "settings" });
+            expect(screens.game.scene).toHaveBeenCalledWith({ key: "game" });
         });
 
         test("instantiates a new loader", () => {
-            startup(fakeScreenConfig);
+            startup({ screens });
             expect(Loader).toHaveBeenCalled();
         });
 
         test("instantiates a new boot with correct config", () => {
-            startup(fakeScreenConfig);
-            expect(Boot).toHaveBeenCalledWith(fakeScreenConfig);
+            startup({ screens });
+            expect(Boot).toHaveBeenCalledWith(screens);
         });
 
         test("adds the scenes with the boot and loader to the Phaser game", () => {
             debugScreensModule.getLauncherScreen = () => ({
                 debug: { scene: jest.fn().mockImplementation(() => ({ debug: "debug" })) },
             });
-            startup(fakeScreenConfig);
+            startup({ screens });
 
             const actualPhaserGame = Phaser.Game.mock.calls[0][0];
             expect(actualPhaserGame.scene).toEqual([
@@ -118,9 +119,9 @@ describe("Startup", () => {
         });
 
         test("creates scene with settings object from screenConfig", () => {
-            fakeScreenConfig.game.settings = { physics: { default: "arcade", arcade: {} } };
-            startup(fakeScreenConfig);
-            expect(fakeScreenConfig.game.scene).toHaveBeenCalledWith({
+            screens.game.settings = { physics: { default: "arcade", arcade: {} } };
+            startup({ screens });
+            expect(screens.game.scene).toHaveBeenCalledWith({
                 key: "game",
                 physics: { default: "arcade", arcade: {} },
             });
@@ -129,7 +130,7 @@ describe("Startup", () => {
 
     describe("Phaser Game Config", () => {
         test("creates a new Phaser game with correct config", () => {
-            startup({});
+            startup({ screens: {} });
 
             const expectedConfig = {
                 width: 1400,
@@ -161,7 +162,7 @@ describe("Startup", () => {
             const mockSilkBrowser = { name: "Amazon Silk", isSilk: true, version: "1.1.1" };
             getBrowser.mockImplementation(() => mockSilkBrowser);
 
-            startup({});
+            startup({ screens: {} });
             const actualConfig = Phaser.Game.mock.calls[0][0];
             expect(actualConfig.transparent).toBe(true);
         });
@@ -169,19 +170,19 @@ describe("Startup", () => {
         test("sets renderer to canvas when browser returns forceCanvas", () => {
             const mockSafari9 = { name: "Safari", forceCanvas: true };
             getBrowser.mockImplementation(() => mockSafari9);
-            startup({});
+            startup({ screens: {} });
             const actualConfig = Phaser.Game.mock.calls[0][0];
             expect(actualConfig.renderer).toBe(1);
         });
 
         test("throws an error if the game container element cannot be found", () => {
             document.getElementById.mockImplementation(() => false);
-            const startupNoContainer = () => startup({});
+            const startupNoContainer = () => startup({ screens: {} });
             expect(startupNoContainer).toThrowError(`Container element "#some-id" not found`); // eslint-disable-line quotes
         });
 
         test("disable's phaser's global window events (prevents clickthrough from achievements)", () => {
-            startup({});
+            startup({ screens: {} });
             const actualConfig = Phaser.Game.mock.calls[0][0];
 
             expect(actualConfig.input.windowEvents).toBe(false);
@@ -190,12 +191,12 @@ describe("Startup", () => {
 
     describe("Hook errors", () => {
         test("adds an event listener to listen for errors", () => {
-            startup({});
+            startup({ screens: {} });
             expect(global.window.addEventListener.mock.calls[0][0]).toBe("error");
         });
 
         test("finds the container div to display errors", () => {
-            startup({});
+            startup({ screens: {} });
             expect(global.document.getElementById).toHaveBeenCalledWith("some-id");
         });
 
@@ -213,7 +214,7 @@ describe("Startup", () => {
                     domEle.name = tagName;
                     return domEle;
                 });
-                startup({});
+                startup({ screens: {} });
                 const errorEvent = { error: { message: "There has been an error" } };
                 const errorThrown = global.window.addEventListener.mock.calls[0][1];
                 errorThrown(errorEvent);
@@ -248,7 +249,7 @@ describe("Startup", () => {
         test("registers addGelButton gameobject factory with Phaser", () => {
             const regSpy = jest.fn();
             global.Phaser.GameObjects.GameObjectFactory.register = regSpy;
-            startup({});
+            startup({ screens: {} });
             expect(regSpy).toHaveBeenCalledWith("gelButton", addGelButton);
         });
     });
@@ -256,7 +257,7 @@ describe("Startup", () => {
     describe("DebugMode", () => {
         test("initilialises debug mode", () => {
             const debugCreateSpy = jest.spyOn(debugModeModule, "create");
-            startup({});
+            startup({ screens: {} });
             expect(debugCreateSpy).toHaveBeenCalledWith(window, {});
         });
     });

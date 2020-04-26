@@ -8,10 +8,10 @@ The GMI has the concept of Global Settings - these are settings that persist acr
 
 Audio and Motion are already configured in Genie by default, so you will be required to implement these in your game.
 
-If you also want to add Subtitles you will need to pass it into the `settingsConfig` in `main.js` like so:
+If you also want to add Subtitles you will need to pass it into the `settings` in `main.js` like so:
 
 ```javascript
-const settingsConfig = {
+const settings = {
     pages: [
         {
             title: "Global Settings",
@@ -32,10 +32,10 @@ Please note that the `title` on this object must be `"Global Settings"` for it t
 
 ## Custom Settings
 
-Custom settings can be added by adding them to the `settingsConfig` in `main.js`. For example, this adds a colourblind mode setting:
+Custom settings can be added by adding them to the `settings` in `main.js`. For example, this adds a colourblind mode setting:
 
 ```javascript
-const settingsConfig = {
+const settings = {
     pages: [
         {
             title: "Custom Settings",

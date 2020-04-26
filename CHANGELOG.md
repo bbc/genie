@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| | 3.4.3. ||
+| | main.js now passes a single config file to startup. Basic game options can now be passed to phaser. ||
 | | 3.4.2. ||
 | | Update webpack config to support multi-game components. ||
 | | Fix example backdrops. ||

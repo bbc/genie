@@ -11,10 +11,10 @@
 import { Select } from "../node_modules/genie/src/components/select.js";
 ```
 
-- Then, in `src/main.js` add the select screen to the `screenConfig object`.
+- Then, in `src/main.js` add the select screen to the `screens` object.
 
 ```javascript
-const screenConfig = {
+const screens = {
     ...
     home: {
         scene: Home,

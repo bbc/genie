@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2020
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../layout/metrics.js";
 import FontLoaderPlugin from "./font-loader/font-plugin.js";
 import { JSON5Plugin } from "./json5-loader/json5-plugin.js";
