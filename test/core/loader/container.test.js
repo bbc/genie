@@ -18,20 +18,20 @@ describe("getParentContainer Method", () => {
 
         containerDiv = domElement();
 
-        jest.spyOn(global.document, "getElementById").mockImplementation(argument => {
-            if (argument === mockGmi.gameContainerId) {
+        jest.spyOn(global.document, "getElementById").mockImplementation(id => {
+            if (id === "correct-id") {
                 return containerDiv;
             }
         });
     });
 
     test("returns the gameContainer for gmi.gameContainerId", () => {
-        gmi.gameContainerId = "some-id";
+        gmi.gameContainerId = "correct-id";
         expect(getContainerDiv()).toBe(containerDiv);
     });
 
     test("throws an error if the game container element cannot be found", () => {
-        document.getElementById.mockImplementation(() => false);
-        expect(getContainerDiv).toThrowError(`Container element "#some-id" not found`); // eslint-disable-line quotes
+        gmi.gameContainerId = "wrong-id";
+        expect(getContainerDiv).toThrowError(`Container element "#wrong-id" not found`); // eslint-disable-line quotes
     });
 });
