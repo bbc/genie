@@ -16,7 +16,8 @@ import { startup } from "./core/startup.js";
 //import "/node_modules/phaser/plugins/spine/dist/SpineWebGLPlugin.js";
 import "../lib/SpinePlugin.js"; //CAN BE REMOVED IF NOT USING SPINE
 
-const settingsConfig = {
+// Setup for BBC settings control
+const settings = {
     pages: [
         {
             title: "Custom Settings",
@@ -32,6 +33,7 @@ const settingsConfig = {
     ],
 };
 
+//Example of responding to custom game settings
 eventBus.subscribe({
     channel: settingsChannel,
     name: "custom1",
@@ -40,7 +42,12 @@ eventBus.subscribe({
     },
 });
 
-const screenConfig = {
+// Additional game options passed to phaser setup
+const gameOptions = {
+    //pixelArt: true,
+};
+
+const screens = {
     home: {
         scene: Home,
         routes: {
@@ -102,4 +109,4 @@ const screenConfig = {
     },
 };
 
-startup(screenConfig, settingsConfig);
+startup({ screens, settings, gameOptions });
