@@ -1,13 +1,13 @@
-import { createMockGmi } from "../../mock/gmi.js";
-import { domElement } from "../../mock/dom-element.js";
-import { getContainerDiv } from "../../../src/core/loader/container.js";
-import { gmi } from "../../../src/core/gmi/gmi.js";
-
 /**
  * @copyright BBC 2020
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import { createMockGmi } from "../../mock/gmi.js";
+import { domElement } from "../../mock/dom-element.js";
+import { getContainerDiv } from "../../../src/core/loader/container.js";
+import { gmi } from "../../../src/core/gmi/gmi.js";
+
 describe("getParentContainer Method", () => {
     let mockGmi;
     let containerDiv;
