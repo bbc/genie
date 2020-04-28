@@ -12,15 +12,16 @@ describe("Accessibility Layer", () => {
     let element;
 
     beforeEach(() => {
-        jest.spyOn(global.document, "createElement").mockImplementation(() => element);
         gameParentElement = domElement();
+        jest.spyOn(global.document, "createElement").mockImplementation(() => element);
+        jest.spyOn(global.document, "getElementById").mockImplementation(() => gameParentElement);
         a11y.destroy();
     });
     afterEach(() => jest.clearAllMocks());
 
     describe("create Method", () => {
         beforeEach(() => {
-            a11y.create(gameParentElement);
+            a11y.create();
         });
 
         test("Appends the root DOM element", () => {
@@ -40,7 +41,7 @@ describe("Accessibility Layer", () => {
             element = domElement();
             jest.spyOn(global.document, "createElement").mockImplementation(() => element);
 
-            a11y.create(gameParentElement);
+            a11y.create();
         });
 
         test("Creates a new group element with correct id", () => {
@@ -56,7 +57,7 @@ describe("Accessibility Layer", () => {
 
     describe("addButton Method", () => {
         beforeEach(() => {
-            a11y.create(gameParentElement);
+            a11y.create();
         });
 
         test("Add items to the domButtons array", () => {
@@ -67,7 +68,7 @@ describe("Accessibility Layer", () => {
 
     describe("removeButton Method", () => {
         beforeEach(() => {
-            a11y.create(gameParentElement);
+            a11y.create();
         });
 
         test("Removes items from the domButtons array", () => {
@@ -81,7 +82,7 @@ describe("Accessibility Layer", () => {
 
     describe("reset Method", () => {
         beforeEach(() => {
-            a11y.create(gameParentElement);
+            a11y.create();
             global.document.createElement.mockImplementation(() => domElement());
         });
 

@@ -5,6 +5,7 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import crel from "../../../lib/crel.es.js";
+import { getContainerDiv } from "../loader/container.js";
 
 let domButtons = [];
 let domGroups = [];
@@ -53,7 +54,7 @@ export const addGroupAt = (id, pos) => {
     domGroups.splice(pos, 0, { el, id });
 };
 
-export const create = gameParentElement => gameParentElement.appendChild(root);
+export const create = () => getContainerDiv().appendChild(root);
 export const addButton = button => domButtons.push(button);
 export const removeButton = buttonToRemove => (domButtons = domButtons.filter(button => button !== buttonToRemove));
 export const destroy = fp.flow([clear, clearButtons]);
