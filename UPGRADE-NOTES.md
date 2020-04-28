@@ -1,6 +1,6 @@
 # Upgrade Notes
 
-#NEXT
+#3.4.3
 main.js now passes setup data through as a single object:
 `startup({ screens, settings, gameOptions })`
 See main.js in the Genie src folder for the format.
