@@ -12,9 +12,9 @@ import { Pause } from "./components/overlays/pause.js";
 import { settingsChannel } from "./core/settings.js";
 import { eventBus } from "./core/event-bus.js";
 import { startup } from "./core/startup.js";
-//TODO Re-enable if we can get our PR merged. NT:06:12:19
-//import "/node_modules/phaser/plugins/spine/dist/SpineWebGLPlugin.js";
-import "../lib/SpinePlugin.js"; //CAN BE REMOVED IF NOT USING SPINE
+//TODO Re-enable once Phaser plugins are built (should be in 3.24)
+//import "/node_modules/phaser/plugins/spine/dist/SpinePlugin.min.js";
+import "../lib/SpinePlugin.min.js"; //CAN BE REMOVED IF NOT USING SPINE
 
 // Setup for BBC settings control
 const settings = {
