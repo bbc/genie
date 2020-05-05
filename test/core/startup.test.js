@@ -35,6 +35,8 @@ describe("Startup", () => {
         global.window.getGMI = jest.fn().mockImplementation(() => mockGmi);
         global.window.addEventListener = jest.fn();
         global.Phaser.Loader.FileTypesManager.register = jest.fn();
+
+        global.__GENIE__ = { version: "test version" };
     });
 
     afterEach(() => {
