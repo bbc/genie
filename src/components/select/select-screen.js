@@ -72,7 +72,7 @@ export class Select extends Screen {
             config.properties && Object.assign(button.sprite, config.properties);
 
             config.suffix && (button.config.ariaLabel = [button.config.ariaLabel, config.suffix].join(" "));
-            button.input.enabled = Boolean(config.enabled !== false);
+            config.enabled === false && button.off(Phaser.Input.Events.POINTER_UP);
             button.accessibleElement.update();
         }, this);
     }
