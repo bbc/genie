@@ -28,7 +28,7 @@ describe("Layout - Calculate Metrics", () => {
     });
 
     describe("borderPad metric", () => {
-        test("sets a vertical border padding of 2% of the longest edge when not an iPhone 5 (568x320)", () => {
+        test("sets a vertical border padding of 2% of the longest edge", () => {
             expect(getMetrics({ width: 600, height: 600 }).verticalBorderPad).toBe(16);
             expect(getMetrics({ width: 800, height: 600 }).verticalBorderPad).toBe(16);
             expect(getMetrics({ width: 1000, height: 600 }).verticalBorderPad).toBe(20);
