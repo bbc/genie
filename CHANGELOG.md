@@ -2,83 +2,83 @@
 
 | Version | Description |
 |---------|-------------|
-| | Add genie version info to Phaser banner. ||
-| | Use minified spine plugin. ||
-| | 3.4.4. ||
-| | Fix build issue for globals. ||
-| | 3.4.3. ||
-| | main.js now passes a single config file to startup. Basic game options can now be passed to phaser. ||
-| | 3.4.2. ||
-| | Update webpack config to support multi-game components. ||
-| | Fix example backdrops. ||
-| 3.4.1 | |
-| | Remove npm resolutions ||
-| | Particle Effects available in results screen rows. ||
-| 3.4.0 | |
-| | Spine animation on results page. ||
-| | Background images and titles of default screens now configured via background items system. ||
-| | Select screen uses configured storage key correctly. ||
-| | Update to Prettier 2.0.3. ||
-| 3.3.0 | |
-| | Global script load order for npm run start and npm run start:pack now matches ||
-| 3.2.0 | |
-| | Adds example screen launcher. Split debug files into own folder. ||
-| 3.1.2 | |
-| | Fix crash when using debug mode layout has not been set. ||
-| | Fix crash when using debug mode and debug update is called before debug create. ||
-| 3.1.1 | |
-| | Fix crash when hitting replay button ||
-| 3.1.0 | |
-| | Allow custom routing functions in navigation config ||
-| | Provision lodash-fp ES6 bundle for development (to improve loading performance on Mac) ||
-| | Add system for debug labels ||
-| | Disable Phaser window events to prevent click-through on achievements / settings ||
-| | Remove references to qa mode (now debug mode) ||
-| | Stop stats screen from being set on overlays ||
-| | Adds assetPrefix to screens with override support in themes. | |
-| 3.0.0 | |
-| | Adds V2 select and result screens. | |
-| | Bug fix: carousel buttons causing crashes. | |
-| | Update Fake GMI to no longer use areCookiesAllowed. | |
-| | Move asset pack files to own sub folder in themes.  | |
-| | Spine loader and Background animation system.  | |
-| 3.0.0 Epsilon | |
-| | Use root path for JSON5 lib so it works as a dependency in starter pack.  | |
-| 3.0.0 Delta | |
-| | Add JSON5 loader plugin.  | |
-| | Split config into multiple files.  | |
-| 3.0.0 Gamma | |
-| | Upgrade to Phaser 3. | |
-| 2.0.7 | |
-| | Remove fullscreen api usage | |
-| | Remove disable of background elements on modals as now handled automatically in cage. | |
-| 2.0.6 | |
-| | Reports title from character-select assets rather than the asset key | |
-| 2.0.5 | |
+| | Add genie version info to Phaser banner. |
+| | Use minified spine plugin. |
+| 3.4.4. ||
+| | Fix build issue for globals. |
+| 3.4.3. ||
+| | main.js now passes a single config file to startup. Basic game options can now be passed to phaser. |
+| 3.4.2. ||
+| | Update webpack config to support multi-game components. |
+| | Fix example backdrops. |
+| 3.4.1 ||
+| | Remove npm resolutions |
+| | Particle Effects available in results screen rows. |
+| 3.4.0 ||
+| | Spine animation on results page. |
+| | Background images and titles of default screens now configured via background items system. |
+| | Select screen uses configured storage key correctly. |
+| | Update to Prettier 2.0.3. |
+| 3.3.0 ||
+| | Global script load order for npm run start and npm run start:pack now matches |
+| 3.2.0 ||
+| | Adds example screen launcher. Split debug files into own folder. |
+| 3.1.2 ||
+| | Fix crash when using debug mode layout has not been set. |
+| | Fix crash when using debug mode and debug update is called before debug create. |
+| 3.1.1 ||
+| | Fix crash when hitting replay button |
+| 3.1.0 ||
+| | Allow custom routing functions in navigation config |
+| | Provision lodash-fp ES6 bundle for development (to improve loading performance on Mac) |
+| | Add system for debug labels |
+| | Disable Phaser window events to prevent click-through on achievements / settings |
+| | Remove references to qa mode (now debug mode) |
+| | Stop stats screen from being set on overlays |
+| | Adds assetPrefix to screens with override support in themes. |
+| 3.0.0 ||
+| | Adds V2 select and result screens. |
+| | Bug fix: carousel buttons causing crashes. |
+| | Update Fake GMI to no longer use areCookiesAllowed. |
+| | Move asset pack files to own sub folder in themes.  |
+| | Spine loader and Background animation system.  |
+| 3.0.0 Epsilon ||
+| | Use root path for JSON5 lib so it works as a dependency in starter pack.  |
+| 3.0.0 Delta ||
+| | Add JSON5 loader plugin.  |
+| | Split config into multiple files.  |
+| 3.0.0 Gamma ||
+| | Upgrade to Phaser 3. |
+| 2.0.7 ||
+| | Remove fullscreen api usage |
+| | Remove disable of background elements on modals as now handled automatically in cage. |
+| 2.0.6 ||
+| | Reports title from character-select assets rather than the asset key |
+| 2.0.5 ||
 | | Calls to 'visible' on accessible dom elements now reliable after creation. (CGPROD-1585) |
-| 2.0.4 | |
+| 2.0.4 ||
 | | Button accessibility hot fix. (CGPROD-1577) |
-| 2.0.3 | |
+| 2.0.3 ||
 | | Select screen index zero based to match config array. |
 | | Remove achievement audio. |
-| 2.0.2 | |
+| 2.0.2 ||
 | | transientData automatically passed between screens. |
 | | Fix Chrome race condition with removed DOM elements triggering blur event with accessible elements.. |
 | | Add level id to stats if present. |
 | | Adds validation tool for achievement config files. |
-| 2.0.1 | |
+| 2.0.1 ||
 | | Remove achievement close callback. |
-| 2.0.0 | |
+| 2.0.0 ||
 | | Achievements stats amendments. |
 | | Add achievement button config for results screen. |
 | | Add per screen button overrides. |
 | | Update webpack config so bowser package is run through babel. |
 | | Add achievement notification to achievement button. |
-| 1.0.14 | |
+| 1.0.14 ||
 | | Initialise achievement notification sound. |
 | | Force babel config to be loaded from Genie core. |
 | | Fix relative path to Bowser with babel module-resolver plugin. |
-| 1.0.13 | |
+| 1.0.13 ||
 | | Update version of Phaser-CE to 2.13.2. |
 | | Add achievements show/get/set/init functionality to local GMI. |
 | | Add dummy achievement files. |
@@ -87,11 +87,11 @@
 | | Add Genie version to build output. |
 | | Embedvars configPath is now just the path, not path + filename |
 | | Add Genie version to build output |
-| 1.0.12 | |
+| 1.0.12 ||
 | | Prune scripts list |
 | | Update webpack config so we can provide sourcemaps when needed. |
 | | Adds stats to the mock GMI for use in the starterpack. |
-| 1.0.11 | |
+| 1.0.11 ||
 | | Fixes some stats bugs. |
 | | Adds select screen stat. |
 | | Removes settings open stat. |
@@ -99,15 +99,15 @@
 | | Ensures click and page stats are firing in the correct order. |
 | | Improves stats logging for results/score screen. |
 | | Fix bug with overlays. |
-| 1.0.10 | |
+| 1.0.10 ||
 | | Upgrade to Babel 7. |
 | | Updates stats calls for ATI. |
 | | Move babel dev dependencies back to dependencies so they are installed when Genie is pulled into games. |
 | | Migrates unit tests from Mocha/Chai/Sinon/Rewire to Jest. |
-| 1.0.7 | |
+| 1.0.7 ||
 | | Configure webpack-dev-server to store server output on disk. |
 | | Changes fullscreen target for Phaser to ensure the settings screen and Brim appear above the fullscreen game, adds mock GMI for local testing. |
-| 1.0.6 | |
+| 1.0.6 ||
 | | Add lib folder to babel load in webpack config. |
 | | Lock Prettier to version in package.json. |
 | | Npm Audit fixes. |
@@ -117,29 +117,29 @@
 | | Set transparent canvas (Kindle flicker fix) only if Amazon Silk browser. |
 | | QAMode now occurs when on a test URL. |
 | | Add removeFromAccessibleButtons and getAccessibleButtons to accessible layer. |
-| 1.0.5 | |
+| 1.0.5 ||
 | | Remove const and let from lodash wrapper for IOS 9 support. |
 | | Adds theme configurability for achievement button. |
 | | Set hitArea to null for fx and audio icons. |
 | | Workaround for audio issue when tabbing away and pausing after music has finished. |
-| 1.0.4 | |
+| 1.0.4 ||
 | | Load global scripts synchronously in dev build. |
-| 1.0.3 | |
+| 1.0.3 ||
 | | Lock to canvas only pending assessment of best practice for webgl performance. |
 | | Fix ios voiceover reading out zombie element . |
 | | Prevent double tap zoom in developer pages. |
-| 1.0.2 | |
+| 1.0.2 ||
 | | Enables dynamic scripts to work in IE11 for local dev. |
 | | Fixed bug where game crashes on startup on iOS 9 safari. |
 | | Fixed issue where button focus outline was hidden on the results screen. |
 | | Added bbc header doc tags to file headers. | |
-| 1.0.1 | |
+| 1.0.1 ||
 | | Accessibility cleardown fix (moves lingering buttons to the back). |
 | | Use fullscreen api on android. |
-| 1.0.0| |
+| 1.0.0||
 | | Fixed module resolution when using `npm link`. |
 | | Fixed a bug where multiple audio tracks would play at the same time. |
-| 1.0.0 | |
+| 1.0.0 ||
 | | Prevents long press on gel buttons for iOS.  |
 | | Add local eslint rule loader and Genie specific rules file with lockdown for Phaser Timer requirements. |
 | | Fixed IE11 and Edge bug where tabbing out of game then back again pauses game and does not unpause. |
@@ -150,7 +150,7 @@
 | | Disable audio / home buttons based on GMI flags. |
 | | Fixes an issue with NVDA and Firefox where accessible buttons would not properly gain focus when tabbing. |
 | | Fixes 404s for globals and favicon. |
-| 0.6.0 | |
+| 0.6.0 ||
 | | Fixes an issue on iPhone X where voice-over tabbing would begin at the end of the how-to-play and select screens. |
 | | Adds mandatory stats using the GMI. |
 | | Enable audio toggle button. |
@@ -162,16 +162,16 @@
 | | Fixes incorrect stats label. |
 | | Ensures audio and motion icons appear in the correct order. |
 | | Stops screenreader on book from reading out the hidden carousel arrows at either end on How To Play. |
-| 0.5.0 | |
+| 0.5.0 ||
 | | Fixes unannounced selections in carousel on IOS and IE11/Firefox with NVDA. |
 | | Removes GMI from `context`, moves default settings into GMI module. |
 | | Update to Phaser 2.11.0 and fix spritesheet spacing to match new Phaser requirements. |
 | | Added theme configuration to allow the use of different background tracks on different game screens. |
 | | Adds basic stats using the GMI. |
 | | Adds console.log message to show when game data is saved. |
-| 0.4.1 | |
+| 0.4.1 ||
 | | Fix for loading the webfontloader module in the starter pack. |
-| 0.4.0 | |
+| 0.4.0 ||
 | | Fix for Chrome 66 resuming of webAudioContext. |
 | | Changed DOM elements to follow "bem" like naming system. |
 | | Added Reith font loading. |
@@ -181,7 +181,7 @@
 | | Fix for audio still playing on loss of focus. |
 | | Makes carousels screenreader accessible. |
 | | Added Motion Fx and Audio Icon support. |
-| 0.3.0 | |
+| 0.3.0 ||
 | | Layout aspect ratio capped to 7:3. |
 | | Carousel next/previous buttons are now locked to the 4:3 game area. |
 | | Mobile performance optimisation. |
@@ -191,7 +191,7 @@
 | | Removed replay button from character select screen. |
 | | Fixed bugs relating to carousel next/previous button z-index. |
 | | Focus on canvas when changing screen to fix keyboard navigation issues. |
-| 0.2.0 | |
+| 0.2.0 ||
 | | Disable skipped tests in ESLint. |
 | | "Replay" button removed on pause screen when pausing before the game has started. |
 | | "Next" carousel button aligned for mobile. |
@@ -202,12 +202,12 @@
 | | Move libs out of source. |
 | | Sequencer replaced with new game flow based around navigation module. |
 | | layout/factory renamed to scene. New scene groups added. New debug helper. Debug sprite moved to top of display list. |
-| 0.1.0 | |
+| 0.1.0 ||
 | | Audio implementation - button clicks and music. |
 | | Implement accessible buttons which support overlays. |
 | | Sort assets into correct asset packs. |
 | | Cage settings added. |
 | | Fixed bug with pause screen resizing. |
 | | DOM elements now reposition on resize.  |
-| 0.0.4 | |
+| 0.0.4 ||
 | | Select screen update, adds signals, fix for pause screen. |
