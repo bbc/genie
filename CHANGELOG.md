@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Use minified spine plugin. ||
 | | 3.4.4. ||
 | | Fix build issue for globals. ||
 | | 3.4.3. ||
