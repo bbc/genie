@@ -28,15 +28,30 @@ describe("Layout - Calculate Metrics", () => {
     });
 
     describe("borderPad metric", () => {
-        test("sets a border padding of 2% of the longest edge", () => {
-            expect(getMetrics({ width: 600, height: 600 }).borderPad).toBe(16);
-            expect(getMetrics({ width: 800, height: 600 }).borderPad).toBe(16);
-            expect(getMetrics({ width: 1000, height: 600 }).borderPad).toBe(20);
-            expect(getMetrics({ width: 1500, height: 600 }).borderPad).toBe(28);
+        test("sets a vertical border padding of 2% of the longest edge when not an iPhone 5 (568x320)", () => {
+            expect(getMetrics({ width: 600, height: 600 }).verticalBorderPad).toBe(16);
+            expect(getMetrics({ width: 800, height: 600 }).verticalBorderPad).toBe(16);
+            expect(getMetrics({ width: 1000, height: 600 }).verticalBorderPad).toBe(20);
+            expect(getMetrics({ width: 1500, height: 600 }).verticalBorderPad).toBe(28);
 
-            expect(getMetrics({ width: 200, height: 600 }).borderPad).toBe(16);
-            expect(getMetrics({ width: 200, height: 800 }).borderPad).toBe(16);
-            expect(getMetrics({ width: 200, height: 1000 }).borderPad).toBe(16);
+            expect(getMetrics({ width: 200, height: 600 }).verticalBorderPad).toBe(16);
+            expect(getMetrics({ width: 200, height: 800 }).verticalBorderPad).toBe(16);
+            expect(getMetrics({ width: 200, height: 1000 }).verticalBorderPad).toBe(16);
+        });
+
+        test("sets a vertical border padding of 32 when it is a iPhone 5 (568x320)", () => {
+            expect(getMetrics({ width: 568, height: 320 }).verticalBorderPad).toBe(32);
+        });
+
+        test("sets a horizontal border padding of 2% of the longest edge", () => {
+            expect(getMetrics({ width: 600, height: 600 }).horizontalBorderPad).toBe(16);
+            expect(getMetrics({ width: 800, height: 600 }).horizontalBorderPad).toBe(16);
+            expect(getMetrics({ width: 1000, height: 600 }).horizontalBorderPad).toBe(20);
+            expect(getMetrics({ width: 1500, height: 600 }).horizontalBorderPad).toBe(28);
+
+            expect(getMetrics({ width: 200, height: 600 }).horizontalBorderPad).toBe(16);
+            expect(getMetrics({ width: 200, height: 800 }).horizontalBorderPad).toBe(16);
+            expect(getMetrics({ width: 200, height: 1000 }).horizontalBorderPad).toBe(16);
         });
     });
 

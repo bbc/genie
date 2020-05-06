@@ -151,7 +151,8 @@ describe("Loader", () => {
     describe("createBrandLogo method", () => {
         test("adds logo image at correct position", () => {
             const mockMetrics = {
-                borderPad: 10,
+                horizontalBorderPad: 10,
+                verticalBorderPad: 10,
                 scale: 1,
                 horizontals: {
                     right: 100,

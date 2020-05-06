@@ -80,8 +80,8 @@ export class Loader extends Screen {
 
     createBrandLogo() {
         const metrics = Scaler.getMetrics();
-        const x = metrics.horizontals.right - metrics.borderPad / metrics.scale;
-        const y = metrics.verticals.bottom - metrics.borderPad / metrics.scale;
+        const x = metrics.horizontals.right - metrics.horizontalBorderPad / metrics.scale;
+        const y = metrics.verticals.bottom - metrics.verticalBorderPad / metrics.scale;
         this.brandLogo = this.add.image(x, y, "loader.brandLogo");
         this.brandLogo.setOrigin(1, 1);
     }
