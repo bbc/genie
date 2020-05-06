@@ -1,7 +1,7 @@
 {
     "name": "genie",
     "version": "3.4.4",
-    "description": "Genie - A Modular Game Engine",
+    "description": "BBC Games Genie - A Modular Game Engine",
     "license": "Apache-2.0",
     "private": true,
     "author": "BBC",

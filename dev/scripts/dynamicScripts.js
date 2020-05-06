@@ -22,10 +22,26 @@ const addMain = () => {
 
 const awaitGlobals = globals => globals.map(global => awaitScript(global.url));
 
+const setGenieInfo = pkg => (window.__GENIE__ = { version: pkg.version });
+
+const getLocalGenieInfo = () =>
+    fetch("../package.json")
+        .then(response => response.json())
+        .then(pkg => {
+            if (pkg.name !== "genie") {
+                return fetch("/node_modules/genie/package.json")
+                    .then(response => response.json())
+                    .then(setGenieInfo);
+            } else {
+                setGenieInfo(pkg);
+            }
+        });
+
 fetch("globals.json")
     .then(response => response.json())
     .then(globals => {
         const awaitingScripts = [
+            getLocalGenieInfo(),
             awaitScript("node_modules/phaser/dist/phaser.js"),
             awaitScript("node_modules/webfontloader/webfontloader.js"),
         ];

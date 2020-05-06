@@ -30,6 +30,8 @@ describe("Phaser Defaults", () => {
 
         containerDiv = domElement();
 
+        global.__GENIE__ = { version: "test version" };
+
         getContainerDiv.mockImplementation(() => containerDiv);
     });
 
@@ -57,8 +59,8 @@ describe("Phaser Defaults", () => {
                 expect(actualConfig.antialias).toBe(expectedConfig.antialias);
                 expect(actualConfig.multiTexture).toBe(expectedConfig.multiTexture);
                 expect(actualConfig.parent).toEqual(expectedConfig.parent);
-                expect(actualConfig.title).toEqual("Game Title Here");
-                expect(actualConfig.version).toEqual("Version Info here");
+                expect(actualConfig.title).toEqual("BBC Games Genie");
+                expect(actualConfig.version).toEqual("test version");
                 expect(actualConfig.transparent).toBe(expectedConfig.transparent);
                 expect(actualConfig.clearBeforeRender).toBe(expectedConfig.clearBeforeRender);
                 expect(actualConfig.scale).toEqual({ mode: Phaser.Scale.NONE });

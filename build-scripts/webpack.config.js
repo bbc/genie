@@ -62,6 +62,7 @@ module.exports = env => {
 
     const genieVersion = require("../package.json").version;
     webPackConfig.plugins.push(new webpack.BannerPlugin(`\nBBC GAMES GENIE: ${genieVersion}\n`));
+    webPackConfig.plugins.push(new webpack.DefinePlugin({ __GENIE__: { version: `"${genieVersion}"` } }));
 
     if (genieCore) {
         const Visualizer = require("webpack-visualizer-plugin");

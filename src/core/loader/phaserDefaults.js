@@ -31,8 +31,8 @@ export const getPhaserDefaults = config => {
             multiTexture: true,
             parent: getContainerDiv(),
             banner: true,
-            title: "Game Title Here", //TODO P3 these could be useful [NT]
-            version: "Version Info here", //TODO P3 these could be useful [NT]
+            title: "BBC Games Genie",
+            version: __GENIE__.version, //TODO add game name / build version possible?
             transparent: browser.isSilk, // Fixes silk browser flickering
             clearBeforeRender: false,
             scale: {
