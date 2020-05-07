@@ -2,14 +2,15 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.4.5 ||
 | | Use one alpha value for results rows. |
 | | Add genie version info to Phaser banner. |
 | | Use minified spine plugin. |
-| 3.4.4. ||
+| 3.4.4 ||
 | | Fix build issue for globals. |
-| 3.4.3. ||
+| 3.4.3 ||
 | | main.js now passes a single config file to startup. Basic game options can now be passed to phaser. |
-| 3.4.2. ||
+| 3.4.2 ||
 | | Update webpack config to support multi-game components. |
 | | Fix example backdrops. |
 | 3.4.1 ||
