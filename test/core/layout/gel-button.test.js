@@ -84,7 +84,8 @@ describe("Gel Button", () => {
         mockX = 7;
         mockY = 42;
         mockMetrics = {
-            borderPad: 24,
+            horizontalBorderPad: 24,
+            verticalBorderPad: 24,
             buttonMin: 64,
             buttonPad: 24,
             height: 600,

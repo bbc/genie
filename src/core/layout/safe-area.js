@@ -26,7 +26,9 @@ export const getSafeAreaFn = groups => (groupOverrides = {}) => {
     const getLeftSide = group => groups[group.id].x - getWidth(group) + groups[group.id].width;
 
     const left = Math.max(...safe.left.map(getRightSide)) + pad.x;
-    const top = safe.top ? groups[safe.top].y + groups[safe.top].height : metrics.borderPad - metrics.stageHeight / 2;
+    const top = safe.top
+        ? groups[safe.top].y + groups[safe.top].height
+        : metrics.verticalBorderPad - metrics.stageHeight / 2;
     const width = Math.min(...safe.right.map(getLeftSide)) - pad.x - left;
     const height = Math.min(groups[safe.bottom].y - pad.y, -top) - top;
 
