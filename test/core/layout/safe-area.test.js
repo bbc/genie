@@ -32,7 +32,7 @@ describe("getSafeArea", () => {
             isMobile: true,
             screenToCanvas: jest.fn(x => x),
             stageHeight: 800,
-            borderPad: 16,
+            verticalBorderPad: 16,
         };
 
         ScalerModule.getMetrics = jest.fn(() => mockMetrics);

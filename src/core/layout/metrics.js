@@ -26,8 +26,10 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
     const aspectRatio = fp.clamp(GEL_MIN_ASPECT_RATIO, GEL_MAX_ASPECT_RATIO, width / height);
     const stageWidth = aspectRatio * stageHeight;
     const isMobile = width < MOBILE_BREAK_WIDTH;
+    const isIphone5 = width === 568 && height === 320;
     const safeWidth = stageHeight * GEL_MIN_ASPECT_RATIO;
     const screenToCanvas = x => x / scale;
+    const borderPad = fp.floor(fp.max([stageWidth, stageHeight]) * BORDER_PAD_RATIO);
 
     return {
         width,
@@ -36,7 +38,8 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
         screenToCanvas,
         stageWidth,
         stageHeight,
-        borderPad: fp.floor(fp.max([stageWidth, stageHeight]) * BORDER_PAD_RATIO),
+        verticalBorderPad: isIphone5 ? 32 : borderPad,
+        horizontalBorderPad: borderPad,
         isMobile,
         buttonPad: isMobile ? 22 : 24,
         buttonMin: isMobile ? 42 : 64,
