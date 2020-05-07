@@ -10,9 +10,7 @@ export const createRowBackdrops = (scene, containers) =>
                 container.rowConfig.backdrop &&
                 scene.add
                     .image(container.x, container.y, container.rowConfig.backdrop.key)
-                    .setAlpha(
-                        container.rowConfig.backdrop.alpha === undefined ? 1 : container.rowConfig.backdrop.alpha,
-                    ),
+                    .setAlpha(container.rowConfig.alpha === undefined ? 1 : container.rowConfig.alpha),
         )
         .map((image, index) => {
             if (image) {
