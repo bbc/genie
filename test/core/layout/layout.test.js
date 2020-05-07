@@ -70,7 +70,8 @@ describe("Layout", () => {
             isMobile: true,
             screenToCanvas: jest.fn(x => x),
             stageHeight: 800,
-            borderPad: 16,
+            horizontalBorderPad: 16,
+            verticalBorderPad: 16,
         };
 
         mockHitAreaBounds = { left: 0, top: 0, width: 200, height: 100 };
