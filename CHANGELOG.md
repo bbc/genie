@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.4.6 ||
+| | Fix issue with Terser aggressively optimising short functions. |
 | 3.4.5 ||
 | | Use one alpha value for results rows. |
 | | Add genie version info to Phaser banner. |

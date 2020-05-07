@@ -7,6 +7,7 @@ const path = require("path");
 const dynamicallyExposeGlobals = require("../dev/scripts/dynamicExpose.js");
 
 const webpack = require("webpack");
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = env => {
     const development = env && env.development;
@@ -37,6 +38,15 @@ module.exports = env => {
                     include: [path.resolve("src"), path.resolve("lib"), path.resolve("node_modules")],
                 },
                 { test: /webfontloader\.js/, use: ["expose-loader?WebFont"] },
+            ],
+        },
+        optimization: {
+            minimizer: [
+              new TerserPlugin({
+                terserOptions: {
+                    keep_fnames: /./,
+                }
+              }),
             ],
         },
         devServer: {
