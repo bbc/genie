@@ -75,7 +75,6 @@
                     ],
                     backdrop: { // Optional row backdrop
                         key: 'results.row-backdrop-1', // asset key
-                        alpha: 0,
                         offsetY: -20,
                     },
                     transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 }, // Phaser tweendata config.
@@ -152,7 +151,6 @@
                     ],
                     backdrop: {
                         key: "results.row-backdrop-2",
-                        alpha: 0,
                         offsetY: -20,
                     },
                     alpha: 0,
@@ -226,7 +224,6 @@
                     ],
                     backdrop: {
                         key: "results.row-backdrop-3",
-                        alpha: 0,
                         offsetY: -20,
                     },
                     alpha: 0,

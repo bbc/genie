@@ -14,8 +14,8 @@ describe("ResultsRow - Row Backdrops", () => {
     beforeEach(() => {
         mockImage = { setAlpha: jest.fn(() => mockImage), displayOriginX: 50, displayOriginY: 20 };
         mockScene = { add: { image: jest.fn(() => mockImage) } };
-        mockBackdropConfig = { key: "test", alpha: 0.5, offsetX: 0, offsetY: 0 };
-        mockContainers = [{ rowConfig: { backdrop: mockBackdropConfig }, x: 10, y: 20 }];
+        mockBackdropConfig = { key: "test", offsetX: 0, offsetY: 0 };
+        mockContainers = [{ rowConfig: { backdrop: mockBackdropConfig, alpha: 0.5 }, x: 10, y: 20 }];
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -53,11 +53,11 @@ describe("ResultsRow - Row Backdrops", () => {
 
     test("sets the alpha on the backdrop image", () => {
         createRowBackdrops(mockScene, mockContainers);
-        expect(mockImage.setAlpha).toHaveBeenCalledWith(mockBackdropConfig.alpha);
+        expect(mockImage.setAlpha).toHaveBeenCalledWith(0.5);
     });
 
     test("sets the alpha on the backdrop image to 1 if not specified in config", () => {
-        delete mockBackdropConfig.alpha;
+        delete mockContainers[0].rowConfig.alpha;
         createRowBackdrops(mockScene, mockContainers);
         expect(mockImage.setAlpha).toHaveBeenCalledWith(1);
     });

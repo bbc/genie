@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Use one alpha value for results rows. |
 | | Add genie version info to Phaser banner. |
 | | Use minified spine plugin. |
 | 3.4.4. ||
