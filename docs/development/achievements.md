@@ -46,7 +46,7 @@ will add: "**hint:** You can find these items on your travels" to the descriptio
 
 Further examples can be found in the [starter pack achievements config](../../themes/default/achievements/config.json)
 
-####String Lengths
+#### String Lengths
 Achievement names and descriptions should be an appropriate length so as not to be cut off, or for the text to overflow out of the notification box that appears in-game when a user earns an achievement.
 Manual quality checks will be needed to satisfy this requirement.
 
@@ -83,5 +83,5 @@ The following theme files should not be edited. It is a requirement that they re
 * _themes/#####/gel/desktop/achievements.png_
 * _themes/#####/gel/mobile/achievements.png_
 
-##Debugging
+## Debugging
 Adding the flag `&debug=true` to the end of the url when developing locally will make the fake dev gmi console log calls to `gmi.achievements init/get/set`.
