@@ -18,9 +18,8 @@ Genie is a modular framework which provides a set of reusable components (known 
 The current screens are:
 
 - Home
-- How to Play
-- Pause
-- Loader
+- How to Play (overlay)
+- Pause (overlay)
 - Select
 - Results
 
@@ -33,10 +32,6 @@ The `routes` object for each gives a list of possible onward journeys.
 ## How do I use the core engines?
 
 Full API documentation for the engines can be found within the Genie core repository. **Any files in Genie core should be used as provided, and must not be copied or modified in any way.** A short overview of their functionality follows.
-
-### Scaling Engine
-
-The scaling engine is already set up to adapt the game to all ratios and screen sizes used by our target devices. The game will automatically scale up and down without any additional input from you. Our coordinate system is set up with the origin point at the centre, so `(0,0)` refers to the centre of the screen.
 
 ### Screen
 

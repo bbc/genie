@@ -64,9 +64,8 @@ You may also add an optional backdrop object, set an alpha on the whole row, add
 ```json5
 {
     format: [ResultsText/Sprite/Countup object],
-    backdrop: { //optional backdrop
+    backdrop: { //optional row backdrop
         key: 'results.row-backdrop-1',
-        alpha: 0.5,
         offsetY: -20,
         offsetX: 0
     },
