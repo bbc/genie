@@ -182,6 +182,18 @@ export const config = screen => {
                 screen.removeOverlay();
             },
         },
+        skip: {
+            group: "bottomRight",
+            title: "Skip",
+            key: "skip",
+            ariaLabel: "Skip",
+            order: 6,
+            id: "pause",
+            channel: buttonsChannel(screen),
+            action: ({ screen }) => {
+                screen.navigation.next();
+            },
+        },
         next: {
             group: "middleRightSafe",
             title: "Next",

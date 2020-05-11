@@ -156,6 +156,18 @@
             },
             {
                 "type": "spritesheet",
+                "key": "skip",
+                "url": "gel/desktop/skip.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
                 "key": "continue",
                 "url": "gel/desktop/continue.png",
                 "frameConfig": {
@@ -358,6 +370,18 @@
                 "type": "spritesheet",
                 "key": "pause",
                 "url": "gel/mobile/pause.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "skip",
+                "url": "gel/mobile/skip.png",
                 "frameConfig": {
                     "frameWidth": 42,
                     "frameHeight": 42,
