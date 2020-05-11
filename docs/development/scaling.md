@@ -4,6 +4,8 @@ Scaling has been setup in genie so that:
 - The gameplay safe area is visible at all resolutions - this is the central 4:3 area (800x600).
 - The full stage area is 1400x600.
 
+The scaling engine is already set up to adapt the game to all ratios and screen sizes used by our target devices. The game will automatically scale up and down without any additional input from you. Our coordinate system is set up with the origin point at the centre, so `(0,0)` refers to the centre of the screen.
+
 ## Phaser Bounds
 Phaser bounds should be kept within these areas:
 
