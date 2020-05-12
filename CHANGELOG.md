@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Add text to background items system. |
 | 3.4.6 ||
 | | Fix issue with Terser aggressively optimising short functions. |
 | 3.4.5 ||
