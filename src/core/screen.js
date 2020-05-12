@@ -13,7 +13,7 @@ import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
 import { settingsChannel } from "./settings.js";
-import { furnish } from "./background-furniture.js";
+import { furnish } from "./background/furniture.js";
 import { isDebug } from "./debug/debug-mode.js";
 import * as debug from "./debug/debug.js";
 import { CAMERA_X, CAMERA_Y } from "./layout/metrics.js";
