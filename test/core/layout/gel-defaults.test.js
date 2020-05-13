@@ -44,6 +44,7 @@ describe("Layout - Gel Defaults", () => {
                 achievements: jest.fn(),
                 back: jest.fn(),
                 debug: jest.fn(),
+                next: jest.fn(),
             },
             navigate: jest.fn(),
             layout: {
@@ -239,6 +240,20 @@ describe("Layout - Gel Defaults", () => {
 
         test("sends a stat to the GMI", () => {
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("play", "click");
+        });
+    });
+
+    describe("Skip Button Callback", () => {
+        beforeEach(() => {
+            gel.config(mockCurrentScreen).skip.action({ screen: mockCurrentScreen });
+        });
+
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("skip", "click");
+        });
+
+        test("navigates next", () => {
+            expect(mockCurrentScreen.navigation.next).toHaveBeenCalled();
         });
     });
 

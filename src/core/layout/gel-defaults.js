@@ -191,6 +191,7 @@ export const config = screen => {
             id: "pause",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
+                gmi.sendStatsEvent("skip", "click");
                 screen.navigation.next();
             },
         },
