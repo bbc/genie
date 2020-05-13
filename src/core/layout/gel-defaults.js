@@ -263,6 +263,19 @@ export const config = screen => {
                 gmi.sendStatsEvent(...params);
             },
         },
+        playAgain: {
+            group: "bottomCenter",
+            title: "Play Again",
+            key: "restart",
+            ariaLabel: "Play Again",
+            order: 12,
+            id: "restart",
+            channel: buttonsChannel(screen),
+            action: ({ screen }) => {
+                const params = pushLevelId(screen, ["level", "playagain"]);
+                gmi.sendStatsEvent(...params);
+            },
+        },
         continue: {
             group: "bottomCenter",
             title: "Continue",
