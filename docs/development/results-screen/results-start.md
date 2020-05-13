@@ -92,6 +92,15 @@ To learn more on how to configure the objects in the format array, see the "Resu
 
 * [Row Particles](./results-particles.md)
 
+## 'Restart' button for a complete game
+
+When a game is determined to be in a complete state,the restart button should be replaced with a 'Play again' button.
+This is done by setting the data in your game component:  
+ 
+`this.transientData.results.gameComplete = true;`
+
+The user can be sent to the appropriate screen for a complete game using the routes API.
+
 ## Frequently Asked Questions
 
 #### How do I make all of the rows transition in at the same time?  
