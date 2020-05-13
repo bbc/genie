@@ -6,7 +6,6 @@
 
 import { isImage, addImage } from "../../../src/core/background/image.js";
 import * as gmiModule from "../../../src/core/gmi/gmi.js";
-import { isSprite } from "../../../src/core/background/sprite.js";
 
 describe("Background Image", () => {
     let mockScene;
