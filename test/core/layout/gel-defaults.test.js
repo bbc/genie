@@ -46,6 +46,7 @@ describe("Layout - Gel Defaults", () => {
                 back: jest.fn(),
                 debug: jest.fn(),
                 select: jest.fn(),
+                next: jest.fn(),
             },
             navigate: jest.fn(),
             layout: {
@@ -251,6 +252,20 @@ describe("Layout - Gel Defaults", () => {
         });
     });
 
+    describe("Skip Button Callback", () => {
+        beforeEach(() => {
+            gel.config(mockCurrentScreen).skip.action({ screen: mockCurrentScreen });
+        });
+
+        test("sends a stat to the GMI", () => {
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("skip", "click");
+        });
+
+        test("navigates next", () => {
+            expect(mockCurrentScreen.navigation.next).toHaveBeenCalled();
+        });
+    });
+
     describe("Pause Play Button Callback", () => {
         beforeEach(() => {
             gel.config(mockCurrentScreen).pausePlay.action({ screen: mockCurrentScreen });
@@ -311,6 +326,20 @@ describe("Layout - Gel Defaults", () => {
             const testLevelId = "test level id";
             mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
             gel.config(mockCurrentScreen).restart.action({ screen: mockCurrentScreen });
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
+        });
+    });
+
+    describe("Play Again Button Callback", () => {
+        test("sends a stat to the GMI", () => {
+            gel.config(mockCurrentScreen).playAgain.action({ screen: mockCurrentScreen });
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain");
+        });
+
+        test("appends level id to stats if it exists", () => {
+            const testLevelId = "test level id";
+            mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
+            gel.config(mockCurrentScreen).playAgain.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
         });
     });

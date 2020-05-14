@@ -1,34 +1,4 @@
 {
-    "home": {
-        "prefix": "home.",
-        "files": [
-            {
-                "type": "image",
-                "key": "title",
-                "url": "shared/title.png"
-            },
-            {
-                "type": "image",
-                "key": "background",
-                "url": "shared/background.png"
-            }
-        ]
-    },
-    "pause": {
-        "prefix": "pause.",
-        "files": [
-            {
-                "type": "image",
-                "key": "background",
-                "url": "pause/pause-background.png"
-            },
-            {
-                "type": "image",
-                "key": "title",
-                "url": "pause/title.png"
-            }
-        ]
-    },
     "howToPlay": {
         "prefix": "how-to-play.",
         "files": [

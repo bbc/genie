@@ -27,7 +27,16 @@ describe("Main", () => {
     });
 
     test("makes a call to startup with the correct screens", () => {
-        const expectedScreens = ["home", "character-select", "level-select", "game", "results", "how-to-play", "pause"];
+        const expectedScreens = [
+            "home",
+            "narrative",
+            "character-select",
+            "level-select",
+            "game",
+            "results",
+            "how-to-play",
+            "pause",
+        ];
         const config = startup.mock.calls[0][0];
 
         expect(Object.keys(config.screens)).toStrictEqual(expectedScreens);

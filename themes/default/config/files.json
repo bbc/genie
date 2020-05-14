@@ -41,6 +41,11 @@
                 "type": "json5",
                 "key": "debug",
                 "url": "config/debug.json5"
+            },
+            {
+                "type": "json5",
+                "key": "narrative",
+                "url": "config/narrative.json5"
             }
         ]
     }

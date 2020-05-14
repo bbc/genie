@@ -9,13 +9,8 @@ import { isText, addText } from "../../../src/core/background/text.js";
 describe("Background Text", () => {
     let mockScene;
     let mockSettings;
-    let mockText;
 
     beforeEach(() => {
-        mockText = {
-            testTag: "testTag",
-        };
-
         mockScene = {
             add: {
                 text: jest.fn(),
