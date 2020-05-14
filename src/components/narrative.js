@@ -48,12 +48,14 @@ import { Screen } from "../core/screen.js";
 export class Narrative extends Screen {
     create() {
         this.addBackgroundItems();
-        this.setLayout(["continue", "skip", "audio", "settings"]);
+        this.setLayout(["continue", "skip", "audio", "pause"]);
 
         //eventBus.subscribe({
         //    channel: buttonsChannel(this),
         //    name: "continue",
         //    callback: continueNarrative,
         //});
+
+        window.nrt = this
     }
 }
