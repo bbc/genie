@@ -16,13 +16,17 @@ export class Pause extends Screen {
 
     create() {
         this.addBackgroundItems();
-        const buttons = ["home", "audio", "settings", "pausePlay", "howToPlay"];
+        let buttons = ["home", "audio", "settings", "pausePlay", "howToPlay"];
 
         const parentKey = this.context.parentScreens.slice(-1)[0].scene.key;
         const showReplay = Boolean(this.context.navigation[parentKey].routes.restart);
+        const showSelect = Boolean(this.context.navigation["pause"].routes.select);
 
-        const replayButton = showReplay ? ["pauseReplay"] : [];
+        const selectButton = ["levelSelect"];
+        const replayButton = ["pauseReplay"];
 
-        this.setLayout(buttons.concat(replayButton));
+        showSelect && (buttons = buttons.concat(selectButton));
+        showReplay && (buttons = buttons.concat(replayButton));
+        this.setLayout(buttons);
     }
 }

@@ -18,6 +18,7 @@ describe("Pause Overlay", () => {
             parentScreens: [{ scene: { key: "level-select" } }],
             navigation: {
                 "level-select": { routes: { restart: "home" } },
+                pause: { routes: { select: "level-select" } },
             },
             config: {
                 theme: {
@@ -58,6 +59,7 @@ describe("Pause Overlay", () => {
 
     describe("create method", () => {
         test("adds correct gel layout buttons when replay button should be shown", () => {
+            mockData.navigation["pause"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith([
                 "home",
@@ -69,8 +71,35 @@ describe("Pause Overlay", () => {
             ]);
         });
 
+        test("adds correct gel layout buttons when select button should be shown", () => {
+            mockData.navigation["level-select"] = { routes: {} };
+            pauseScreen.create();
+            expect(pauseScreen.setLayout).toHaveBeenCalledWith([
+                "home",
+                "audio",
+                "settings",
+                "pausePlay",
+                "howToPlay",
+                "levelSelect",
+            ]);
+        });
+
+        test("adds correct gel layout buttons when select and replay button should be shown", () => {
+            pauseScreen.create();
+            expect(pauseScreen.setLayout).toHaveBeenCalledWith([
+                "home",
+                "audio",
+                "settings",
+                "pausePlay",
+                "howToPlay",
+                "levelSelect",
+                "pauseReplay",
+            ]);
+        });
+
         test("adds correct gel layout buttons when replay button should be hidden", () => {
             mockData.navigation["level-select"] = { routes: {} };
+            mockData.navigation["pause"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
         });
