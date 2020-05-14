@@ -239,6 +239,18 @@
                 }
             },
             {
+                "type": "spritesheet",
+                "key": "levels",
+                "url": "gel/desktop/levels.png",
+                "frameConfig": {
+                    "frameWidth": 120,
+                    "frameHeight": 120,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
                 "type": "image",
                 "key": "audio-off-icon",
                 "url": "gel/desktop/audio-off-icon.png"
@@ -466,6 +478,18 @@
                 "type": "spritesheet",
                 "key": "replay",
                 "url": "gel/mobile/replay.png",
+                "frameConfig": {
+                    "frameWidth": 55,
+                    "frameHeight": 55,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "levels",
+                "url": "gel/mobile/levels.png",
                 "frameConfig": {
                     "frameWidth": 55,
                     "frameHeight": 55,

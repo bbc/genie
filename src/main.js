@@ -112,6 +112,7 @@ const screens = {
         scene: Pause,
         routes: {
             home: "home",
+            select: "character-select",
         },
     },
 };

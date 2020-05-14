@@ -156,6 +156,19 @@ export const config = screen => {
                 gmi.sendStatsEvent(...params);
             },
         },
+        levelSelect: {
+            group: "middleCenter",
+            title: "Level Select",
+            key: "levels",
+            ariaLabel: "Level Select",
+            order: 16,
+            id: "levelselect",
+            channel: buttonsChannel(screen),
+            action: ({ screen }) => {
+                screen.navigate(screen.context.navigation["pause"].routes.select);
+                gmi.sendStatsEvent("pauseLevelSelect", "click");
+            },
+        },
         play: {
             group: "middleCenter",
             title: "Play",

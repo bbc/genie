@@ -28,6 +28,7 @@ describe("Layout - Gel Defaults", () => {
                             restart: "home",
                         },
                     },
+                    pause: { routes: { select: "level-select" } },
                 },
                 transientData: [],
             },
@@ -44,6 +45,7 @@ describe("Layout - Gel Defaults", () => {
                 achievements: jest.fn(),
                 back: jest.fn(),
                 debug: jest.fn(),
+                select: jest.fn(),
                 next: jest.fn(),
             },
             navigate: jest.fn(),
@@ -230,6 +232,13 @@ describe("Layout - Gel Defaults", () => {
             mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
             gel.config(mockCurrentScreen).pauseReplay.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
+        });
+    });
+
+    describe("Pause Level Select Button Callback", () => {
+        test("sends a stat to the GMI", () => {
+            gel.config(mockCurrentScreen).levelSelect.action({ screen: mockCurrentScreen });
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("pauseLevelSelect", "click");
         });
     });
 
