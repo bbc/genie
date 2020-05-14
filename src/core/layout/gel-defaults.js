@@ -279,7 +279,7 @@ export const config = screen => {
         playAgain: {
             group: "bottomCenter",
             title: "Play Again",
-            key: "restart",
+            key: "play-again",
             ariaLabel: "Play Again",
             order: 12,
             id: "restart",
