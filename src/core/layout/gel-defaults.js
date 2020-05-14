@@ -188,7 +188,7 @@ export const config = screen => {
             key: "skip",
             ariaLabel: "Skip",
             order: 6,
-            id: "pause",
+            id: "skip",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 gmi.sendStatsEvent("skip", "click");

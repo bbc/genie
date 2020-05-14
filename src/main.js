@@ -63,8 +63,6 @@ const screens = {
         scene: Narrative,
         routes: {
             next: "character-select",
-            home: "home",
-            restart: "narrative",
         },
     },
     "character-select": {

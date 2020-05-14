@@ -55,7 +55,5 @@ export class Narrative extends Screen {
         //    name: "continue",
         //    callback: continueNarrative,
         //});
-
-        window.nrt = this
     }
 }
