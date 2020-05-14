@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 import { Home } from "./components/home.js";
+import { Narrative } from "./components/narrative.js";
 import { Results } from "./components/results/results-screen.js";
 import { Select } from "./components/select/select-screen.js";
 import { HowToPlay } from "./components/how-to-play.js";
@@ -52,6 +53,12 @@ const screens = {
         scene: Home,
         routes: {
             debug: "debug",
+            next: "narrative",
+        },
+    },
+    narrative: {
+        scene: Narrative,
+        routes: {
             //Example of custom routing function
             next: scene => {
                 scene.navigate("character-select");

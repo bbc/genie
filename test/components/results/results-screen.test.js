@@ -58,7 +58,7 @@ describe("Results Screen", () => {
             },
         };
         mockTransientData = {
-            results: 22,
+            results: {},
             characterSelected: 1,
         };
         mockResultsArea = {
@@ -133,7 +133,14 @@ describe("Results Screen", () => {
 
         test("adds GEL buttons to layout", () => {
             resultsScreen.create();
-            const expectedButtons = ["pause", "restart", "continueGame"];
+            const expectedButtons = ["pause", "continueGame", "restart"];
+            expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+
+        test("adds 'Play again' button when game complete is sent in transient data", () => {
+            mockTransientData.results.gameComplete = true;
+            resultsScreen.create();
+            const expectedButtons = ["pause", "continueGame", "playAgain"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
@@ -259,7 +266,7 @@ describe("Results Screen", () => {
         test("adds the achievement button when theme flag is set", () => {
             mockConfig.theme.game.achievements = true;
             resultsScreen.create();
-            const expectedButtons = ["pause", "restart", "continueGame", "achievementsSmall"];
+            const expectedButtons = ["pause", "continueGame", "achievementsSmall", "restart"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 

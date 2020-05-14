@@ -195,6 +195,19 @@ export const config = screen => {
                 screen.removeOverlay();
             },
         },
+        skip: {
+            group: "bottomRight",
+            title: "Skip",
+            key: "skip",
+            ariaLabel: "Skip",
+            order: 6,
+            id: "pause",
+            channel: buttonsChannel(screen),
+            action: ({ screen }) => {
+                gmi.sendStatsEvent("skip", "click");
+                screen.navigation.next();
+            },
+        },
         next: {
             group: "middleRightSafe",
             title: "Next",
@@ -255,6 +268,19 @@ export const config = screen => {
             title: "Restart",
             key: "restart",
             ariaLabel: "Restart Game",
+            order: 12,
+            id: "restart",
+            channel: buttonsChannel(screen),
+            action: ({ screen }) => {
+                const params = pushLevelId(screen, ["level", "playagain"]);
+                gmi.sendStatsEvent(...params);
+            },
+        },
+        playAgain: {
+            group: "bottomCenter",
+            title: "Play Again",
+            key: "restart",
+            ariaLabel: "Play Again",
             order: 12,
             id: "restart",
             channel: buttonsChannel(screen),
