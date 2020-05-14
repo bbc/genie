@@ -105,6 +105,7 @@ const screens = {
         scene: Pause,
         routes: {
             home: "home",
+            select: "level-select",
         },
     },
 };
