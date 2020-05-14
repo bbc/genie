@@ -15,6 +15,7 @@ describe("Debug system", () => {
     let mockContainer;
 
     beforeEach(() => {
+        window.__debug = {};
         debugLayoutModule.debugLayout = jest.fn();
 
         mockOnUpEvent = jest.fn();
@@ -185,6 +186,14 @@ describe("Debug system", () => {
             createCallback.call(mockScreen);
 
             expect(mockScreen.add.text).toHaveBeenCalledWith(0, 0, "test-description", expect.any(Object));
+        });
+
+        test("adds screen to debug object", () => {
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+            expect(window.__debug.screen).toBe(mockScreen);
         });
     });
 

@@ -69,6 +69,7 @@ function create() {
     this.layout && this.input.keyboard.addKey("e").on("up", makeToggle("buttons", this.layout.debug.buttons, this));
     this.input.keyboard.addKey("r").on("up", toggleCSS);
     this.navigation.debug && this.input.keyboard.addKey("t").on("up", this.navigation.debug.bind(this));
+    window.__debug.screen = this;
 }
 
 const shutdown = scene => {
