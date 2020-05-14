@@ -1,0 +1,56 @@
+{
+    theme: {
+        narrative: {
+            debugLabels: [
+                {
+                    x: -390,
+                    y: -40,
+                    text: "Narrative label TODO",
+                },
+            ],
+            music: "loader.backgroundMusic",
+            //Use to shift buttons out of the way of logos etc.
+            "button-overridesXX": {
+                continue: {
+                    shiftY: -200,
+                },
+            },
+            //Add, background images / animations / particle systems. More examples in /debug/examples
+            furniture: [
+                {
+                    key: "home.background",
+                    x: 0,
+                    y: 0,
+                },
+                {
+                    key: "examples_spine_owl",
+                    x: 180,
+                    y: 0,
+                    animationName: "idle",
+                    //Any props defined here will be set on the Spine object.
+                    props: {
+                        scale: 0.4,
+                    },
+                },
+                {
+                    text: "Hallo! I am an owl!\n Twit twoo!",
+                    x: -110,
+                    y: -190,
+                    //Any props defined here will be set on the Spine object.
+                    style: {
+                        fontFamily: '"ReithSans"',
+                        fontSize: 24,
+                        resolution: 2,
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                        padding: {
+                            left: 6,
+                            right: 6,
+                            top: 4,
+                            bottom: 4,
+                        },
+                    },
+                },
+            ],
+        },
+    },
+}
