@@ -69,12 +69,12 @@ export class Game extends Screen {
             .image(300, 20, buttonKey)
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true })
-            .on("pointerup", () => onGameComplete());
+            .on("pointerup", () => onLevelComplete());
         this.add
             .text(300, 20, "Continue", buttonTextStyle)
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true })
-            .on("pointerup", () => onGameComplete());
+            .on("pointerup", () => onLevelComplete());
 
         [-70, 20, 110].forEach((buttonYPosition, index) => {
             const buttonNumber = index + 1;
@@ -93,13 +93,16 @@ export class Game extends Screen {
             accessibilify(button);
         }, this);
 
-        const onGameComplete = () => {
+        const onLevelComplete = () => {
             markLevelAsComplete(this.transientData["level-select"].choice.id);
-            this.transientData.results = {
-                keys,
-                gems,
-                stars,
-            };
+            this.transientData.results = Object.assign(
+                {
+                    keys,
+                    gems,
+                    stars,
+                },
+                this.transientData.results,
+            );
             this.navigation.next();
         };
 
