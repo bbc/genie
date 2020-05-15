@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | expose current screen in debug mode as window.__debug.screen. |
 | | Add optional level select button to pause screen. |
 | | Narrative screen component. |
 | | Add text to background items system. |
