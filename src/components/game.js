@@ -101,7 +101,7 @@ export class Game extends Screen {
                     gems,
                     stars,
                 },
-                this.transientData ? this.transientData.results : {},
+                this.transientData.results,
             );
             this.navigation.next();
         };
