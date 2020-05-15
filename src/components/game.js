@@ -95,11 +95,14 @@ export class Game extends Screen {
 
         const onGameComplete = () => {
             markLevelAsComplete(this.transientData["level-select"].choice.id);
-            this.transientData.results = {
-                keys,
-                gems,
-                stars,
-            };
+            this.transientData.results = Object.assign(
+                {
+                    keys,
+                    gems,
+                    stars,
+                },
+                this.transientData ? this.transientData.results : {},
+            );
             this.navigation.next();
         };
 

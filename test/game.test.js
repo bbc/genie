@@ -467,6 +467,12 @@ describe("Game", () => {
                 expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0 });
             });
 
+            test("saves gameComplete status from the game when the continue button is clicked", () => {
+                game.transientData = { results: { gameComplete: true } };
+                continueButtonClickedOn.mock.calls[0][1]();
+                expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0, gameComplete: true });
+            });
+
             test("navigates to the next screen when the continue button image is clicked", () => {
                 continueButtonClickedOn.mock.calls[0][1]();
                 expect(game.navigation.next).toHaveBeenCalled();
