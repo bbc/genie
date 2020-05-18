@@ -15,4 +15,6 @@ export const addImage = scene => imageConfig => {
     const image = scene.add.image(config.x, config.y, config.key);
 
     config.props && Object.assign(image, config.props);
+
+    return image;
 };

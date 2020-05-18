@@ -16,7 +16,7 @@ const defaults = {
 export const addText = scene => textConfig => {
     const config = { ...defaults, ...textConfig };
     config.style = { ...defaultStyle, ...textConfig.style };
-    scene.add.text(config.x, config.y, config.text, config.style);
+    return scene.add.text(config.x, config.y, config.text, config.style);
 };
 
 export const isText = config => Boolean(config.text);

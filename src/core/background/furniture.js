@@ -10,6 +10,11 @@ import { isSpine, addSpine } from "./spine.js";
 import { isText, addText } from "./text.js";
 import { isParticles, addParticles } from "./particles.js";
 
+const setName = createFn => config => {
+    const item = createFn(config);
+    config.name && item.setName(config.name);
+};
+
 export const furnish = scene => () => {
     const configs = scene.context.theme.furniture || [];
     const conditionPairs = [
@@ -19,6 +24,6 @@ export const furnish = scene => () => {
         [isParticles(scene), addParticles(scene)],
         [isText, addText(scene)],
     ];
-    const dispatcher = fp.cond(conditionPairs);
-    configs.forEach(dispatcher);
+
+    configs.forEach(setName(fp.cond(conditionPairs)));
 };

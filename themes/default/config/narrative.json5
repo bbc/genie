@@ -23,6 +23,7 @@
                     y: 0,
                 },
                 {
+                    name: "owl",
                     key: "examples_spine_owl",
                     x: 180,
                     y: 0,
@@ -33,10 +34,11 @@
                     },
                 },
                 {
+                    name: "text1",
                     text: "Hallo! I am an owl!\n Twit twoo!",
                     x: -110,
                     y: -190,
-                    //Any props defined here will be set on the Spine object.
+                    //Use the following style for this text
                     style: {
                         fontFamily: '"ReithSans"',
                         fontSize: 24,

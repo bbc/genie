@@ -79,5 +79,16 @@ describe("Background Furniture", () => {
             expect(isParticlesSpy).toHaveBeenCalledTimes(3);
             expect(textModule.isText).toHaveBeenCalledTimes(3);
         });
+
+        test("Adds name to items if present in config", () => {
+            const mockSprite = { setName: jest.fn() };
+            spriteModule.isSprite = jest.fn(() => () => true);
+            spriteModule.addSprite = jest.fn(() => () => mockSprite);
+
+            mockTheme.furniture = [{ name: "test_name" }];
+
+            furnish(mockScene)();
+            expect(mockSprite.setName).toHaveBeenCalledWith("test_name");
+        });
     });
 });
