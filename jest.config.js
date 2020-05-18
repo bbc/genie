@@ -13,6 +13,7 @@ module.exports = {
             functions: 100,
         },
     },
+    //coverageProvider: "v8",
     testEnvironment: "jsdom",
     modulePathIgnorePatterns: ["/.node_modules.+/"],
     testPathIgnorePatterns: ["/node_modules/", "/.node_modules.+/", ".node_modules_production"],
