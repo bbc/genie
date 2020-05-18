@@ -16,7 +16,8 @@ const setName = createFn => config => {
 };
 
 export const furnish = scene => () => {
-    const configs = scene.context.theme.furniture || [];
+    const configs = fp.get("background.items", scene.context.theme) || [];
+
     const conditionPairs = [
         [isSpine(scene), addSpine(scene)],
         [isImage(scene), addImage(scene)],

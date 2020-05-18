@@ -1,38 +1,21 @@
 {
     theme: {
         home: {
-            debugLabels: [
-                {
-                    x: -390,
-                    y: -40,
-                    text: "DEBUG DRAW OPTIONS:\n\
-Q: Toggle GEL safe Area\n\
-W: Toggle Groups\n\
-E: Toggle Buttons\n\
-R: Toggle CSS debug\n\
-T: Examples Launcher",
-                },
-            ],
             music: "loader.backgroundMusic",
-            //Use to shift buttons out of the way of logos etc.
-            "button-overrides": {
-                play: {
-                    shiftY: 80,
-                },
+            "button-overrides": { play: { shiftY: 80 } }, //Use to shift buttons out of the way of logos etc.
+            background: { //Add, background images / animations / particle systems. More examples in /debug/examples
+                items: [
+                    { key: "home.background", x: 0, y: 0 },
+                    { key: "home.title", x: 0, y: -150 },
+                ],
             },
-            //Add, background images / animations / particle systems. More examples in /debug/examples
-            furniture: [
-                {
-                    key: "home.background",
-                    x: 0,
-                    y: 0,
-                },
-                {
-                    key: "home.title",
-                    x: 0,
-                    y: -150,
-                },
-            ]
         },
+        debugLabels: [
+            {
+                x: -390,
+                y: -40,
+                text: "DEBUG DRAW OPTIONS:\nQ: Toggle GEL safe Area\nW: Toggle Groups\nE: Toggle Buttons\nR: Toggle CSS debug\nT: Examples Launcher",
+            },
+        ],
     },
 }

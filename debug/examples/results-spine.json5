@@ -5,13 +5,9 @@
                 key: 'results.backdrop', // Asset key.
                 alpha: 1,
             },
-            furniture: [
-                {
-                    key: "home.background",
-                    x: 0,
-                    y: 0,
-                },
-            ],
+            background: {
+                items: [{ key: "home.background", x: 0, y: 0 }],
+            },
             rows: [ // An array of rows which will be displayed on the screen.
                 {
                     format: [ // Each object in this array generates a visible object in the row.
