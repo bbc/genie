@@ -21,4 +21,6 @@ export const addSpine = scene => animConfig => {
     config.props && Object.assign(animation, config.props);
 
     animation.active = gmi.getAllSettings().motion;
+
+    return animation;
 };

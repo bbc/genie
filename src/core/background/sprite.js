@@ -20,9 +20,9 @@ export const addSprite = scene => animConfig => {
         ...animConfig,
         ...{ frames: { ...spriteDefaults.frames, ...animConfig.frames } },
     };
-    const animation = scene.add.sprite(config.x, config.y, config.key, config.frames.default);
+    const sprite = scene.add.sprite(config.x, config.y, config.key, config.frames.default);
 
-    config.props && Object.assign(animation, config.props);
+    config.props && Object.assign(sprite, config.props);
 
     scene.anims.create({
         key: config.frames.key,
@@ -32,6 +32,8 @@ export const addSprite = scene => animConfig => {
     });
 
     if (gmi.getAllSettings().motion) {
-        animation.play(config.frames.key);
+        sprite.play(config.frames.key);
     }
+
+    return sprite;
 };
