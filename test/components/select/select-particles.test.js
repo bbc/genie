@@ -25,7 +25,7 @@ describe("Select Screen - Particles", () => {
             emitterConfigKey: "mock emitter config key",
         };
         mockLayoutRoot = { setDepth: jest.fn() };
-        mockButton = { on: jest.fn(), x: 23, y: 132 };
+        mockButton = { on: jest.fn(), x: 23, y: 132, listeners: jest.fn(() => ["mock listener"]) };
         mockCells = [{ button: mockButton }];
         mockEmitterConfig = {
             lifespan: 800,
@@ -79,6 +79,14 @@ describe("Select Screen - Particles", () => {
         expect(mockParticles.createEmitter).toHaveBeenCalledWith(mockEmitterConfig);
     });
 
+    test("does not create an emitter when pointer over event is fired and button is disabled", () => {
+        mockButton.listeners = jest.fn(() => []);
+        addHoverParticlesToCells(mockScene, mockCells, mockConfig, mockLayoutRoot);
+        mockButton.on.mock.calls[0][1]();
+        expect(mockButton.on.mock.calls[0][0]).toBe(Phaser.Input.Events.POINTER_OVER);
+        expect(mockParticles.createEmitter).not.toHaveBeenCalledWith(mockEmitterConfig);
+    });
+
     test("sets the position of the emitter to the position of the button when pointer over event is fired", () => {
         addHoverParticlesToCells(mockScene, mockCells, mockConfig, mockLayoutRoot);
         mockButton.on.mock.calls[0][1]();
@@ -93,6 +101,14 @@ describe("Select Screen - Particles", () => {
         expect(mockButton.on.mock.calls[1][0]).toBe(Phaser.Input.Events.POINTER_OUT);
         mockButton.on.mock.calls[1][1]();
         expect(mockEmitter.stop).toHaveBeenCalled();
+    });
+
+    test("does not add a pointer out event to the button when pointer over event is fired and button is disabled", () => {
+        mockButton.listeners = jest.fn(() => []);
+        addHoverParticlesToCells(mockScene, mockCells, mockConfig, mockLayoutRoot);
+        mockButton.on.mock.calls[0][1]();
+        expect(mockButton.on.mock.calls[0][0]).toBe(Phaser.Input.Events.POINTER_OVER);
+        expect(mockButton.on).toHaveBeenCalledTimes(1);
     });
 
     test("sets layoutRoot depth to 1 when config.onTop is undefined", () => {

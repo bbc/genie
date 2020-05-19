@@ -2,7 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
-| | expose current screen in debug mode as window.__debug.screen. |
+| | Remove particle emitters on disabled select screen buttons. |
+| | Expose current screen in debug mode as window.__debug.screen. |
 | | Add optional level select button to pause screen. |
 | | Narrative screen component. |
 | | Add text to background items system. |
