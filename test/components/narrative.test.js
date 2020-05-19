@@ -34,7 +34,7 @@ describe("Narrative Screen", () => {
         });
 
         test("adds GEL buttons to layout", () => {
-            const expectedButtons = ["continue", "skip", "audio", "pause"];
+            const expectedButtons = ["continue", "skip", "pause"];
             expect(narrativeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
     });

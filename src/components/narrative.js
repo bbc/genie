@@ -48,7 +48,7 @@ import { Screen } from "../core/screen.js";
 export class Narrative extends Screen {
     create() {
         this.addBackgroundItems();
-        this.setLayout(["continue", "skip", "audio", "pause"]);
+        this.setLayout(["continue", "skip", "pause"]);
 
         //eventBus.subscribe({
         //    channel: buttonsChannel(this),

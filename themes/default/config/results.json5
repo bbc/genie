@@ -1,16 +1,12 @@
 {
     theme: {
         results: {
-            furniture: [
-                {
-                    key: 'results.background',
-                    x: 0,
-                    y: 0,
-                },
-            ],
+            background: {
+                items: [{ key: "results.background", x: 0, y: 0 }],
+            },
             backdrop: {
                 // Optional central area backdrop.
-                key: 'results.backdrop', // Asset key.
+                key: "results.backdrop", // Asset key.
                 alpha: 1,
             },
             rows: [
@@ -19,14 +15,14 @@
                     format: [
                         // Each object in this array generates a visible object in the row.
                         {
-                            type: 'text', // 'Text' shows static text which can contain template tags for transient data.
-                            content: 'Results Screen',
+                            type: "text", // 'Text' shows static text which can contain template tags for transient data.
+                            content: "Results Screen",
                             offsetX: 0, // Offset the x position of this text object.
                             offsetY: -15, // Offset the y position of this text object.
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px', // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
-                                color: '#FFFFFF', // This should meet the colour contrast requirement as per GEL guidelines.
+                                fontFamily: "ReithSans",
+                                fontSize: "24px", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
+                                color: "#FFFFFF", // This should meet the colour contrast requirement as per GEL guidelines.
                             },
                         },
                     ],
@@ -34,24 +30,24 @@
                 {
                     format: [
                         {
-                            type: 'text',
-                            content: 'You collected: ',
+                            type: "text",
+                            content: "You collected: ",
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#FFFFFF',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#FFFFFF",
                             },
                         },
-                        { type: 'sprite', key: 'game.star', offsetX: 20, offsetY: -15 },
+                        { type: "sprite", key: "game.star", offsetX: 20, offsetY: -15 },
                         {
-                            type: 'countup', // Check the documentation for more detailed information on count ups. https://github.com/bbc/genie-starter-pack/tree/master/docs/development/results-screen/results-countup.md
+                            type: "countup", // Check the documentation for more detailed information on count ups. https://github.com/bbc/genie-starter-pack/tree/master/docs/development/results-screen/results-countup.md
                             startCount: 0, // The number to start counting from. This can be passed in by transient data.
-                            endCount: '<%= stars %>', // The number to count up to. Can use transient data variable. Object dot notation is valid.
+                            endCount: "<%= stars %>", // The number to count up to. Can use transient data variable. Object dot notation is valid.
                             startDelay: 1000, // Delay before the countup starts (in ms).
                             countupDuration: 1000, // How long the countup should last (in ms).
                             audio: {
-                                key: 'results.coin-sfx',
+                                key: "results.coin-sfx",
                                 singleTicksRange: 10, // Plays audio every text update, for scores that are x above startCount, otherwise will play x ticksPerSecond.
                                 ticksPerSecond: 6, // Fire x times in a second - if this is not defined, everything will play every text update instead.
                                 startPlayRate: 0.8, // Initial play rate - used for pitch shifting.
@@ -60,45 +56,45 @@
                             offsetX: 15,
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#FFFF00',
-                                align: 'center',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#FFFF00",
+                                align: "center",
                             },
                         },
                         {
-                            type: 'text',
+                            type: "text",
                             content: ' star<% stars !== 1 && print("s") %>', // Functional template tags will be evaluated.
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#FFFF00',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#FFFF00",
                             },
                         },
                         {
-                            type: 'text',
-                            content: '!',
+                            type: "text",
+                            content: "!",
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#FFFFFF',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#FFFFFF",
                             },
                         },
                     ],
                     backdrop: {
                         // Optional row backdrop
-                        key: 'results.row-backdrop-1', // asset key
+                        key: "results.row-backdrop-1", // asset key
                         offsetY: -15,
                     },
                     alpha: 1, // Set the alpha on the whole row
                     transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 }, // Phaser tweendata config.
-                    audio: { key: 'results.woosh', delay: 0 }, // Asset key and delay for audio to be played.
+                    audio: { key: "results.woosh", delay: 0 }, // Asset key and delay for audio to be played.
                     particles: [
                         {
-                            assetKey: 'game.star',
-                            emitterConfigKey: 'results.row-emitter',
+                            assetKey: "game.star",
+                            emitterConfigKey: "results.row-emitter",
                             // Optional settings
                             offsetX: 40,
                             offsetY: -15,
@@ -111,18 +107,18 @@
                 {
                     format: [
                         {
-                            type: 'text',
-                            content: 'You collected: ',
+                            type: "text",
+                            content: "You collected: ",
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#FFFFFF',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#FFFFFF",
                             },
                         },
                         {
-                            type: 'sprite',
-                            key: 'game.diamond', // Asset key of spritesheet.
+                            type: "sprite",
+                            key: "game.diamond", // Asset key of spritesheet.
                             frame: 0, // The initial frame of the sprite to display.
                             offsetX: 20,
                             offsetY: -15,
@@ -137,48 +133,48 @@
                             },
                         },
                         {
-                            type: 'countup',
+                            type: "countup",
                             startCount: 0,
-                            endCount: '<%= gems %>',
+                            endCount: "<%= gems %>",
                             startDelay: 4000,
                             countupDuration: 1000,
                             audio: {
-                                key: 'results.gem-sfx',
+                                key: "results.gem-sfx",
                                 singleTicksRange: 10,
                                 ticksPerSecond: 6,
                             },
                             offsetX: 15,
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#00FF00',
-                                align: 'center',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#00FF00",
+                                align: "center",
                             },
                         },
                         {
-                            type: 'text',
+                            type: "text",
                             content: ' gem<% gems !== 1 && print("s") %>',
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#00FF00',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#00FF00",
                             },
                         },
                         {
-                            type: 'text',
-                            content: '!',
+                            type: "text",
+                            content: "!",
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#FFFFFF',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#FFFFFF",
                             },
                         },
                     ],
                     backdrop: {
-                        key: 'results.row-backdrop-2',
+                        key: "results.row-backdrop-2",
                         offsetY: -15,
                     },
                     alpha: 0,
@@ -194,11 +190,11 @@
                         duration: 2000,
                         delay: 2000,
                     },
-                    audio: { key: 'results.slide', delay: 2500 },
+                    audio: { key: "results.slide", delay: 2500 },
                     particles: [
                         {
-                            assetKey: 'game.diamond',
-                            emitterConfigKey: 'results.row-emitter',
+                            assetKey: "game.diamond",
+                            emitterConfigKey: "results.row-emitter",
                             offsetX: 40,
                             offsetY: -15,
                             delay: 4000,
@@ -210,59 +206,59 @@
                 {
                     format: [
                         {
-                            type: 'text',
-                            content: 'You collected: ',
+                            type: "text",
+                            content: "You collected: ",
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#FFFFFF',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#FFFFFF",
                             },
                         },
-                        { type: 'sprite', key: 'game.key', offsetX: 0, offsetY: -15 },
+                        { type: "sprite", key: "game.key", offsetX: 0, offsetY: -15 },
                         {
-                            type: 'countup',
+                            type: "countup",
                             startCount: 0,
-                            endCount: '<%= keys %>',
+                            endCount: "<%= keys %>",
                             startDelay: 7000,
                             countupDuration: 1000,
                             audio: {
-                                key: 'results.key-sfx',
+                                key: "results.key-sfx",
                                 singleTicksRange: 10,
                                 ticksPerSecond: 6,
                             },
                             offsetX: 15,
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#FFA500',
-                                align: 'center',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#FFA500",
+                                align: "center",
                             },
                         },
                         {
-                            type: 'text',
+                            type: "text",
                             content: ' key<% keys !== 1 && print("s") %>',
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#FFA500',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#FFA500",
                             },
                         },
                         {
-                            type: 'text',
-                            content: '!',
+                            type: "text",
+                            content: "!",
                             offsetY: -15,
                             textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px',
-                                color: '#FFFFFF',
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#FFFFFF",
                             },
                         },
                     ],
                     backdrop: {
-                        key: 'results.row-backdrop-3',
+                        key: "results.row-backdrop-3",
                         offsetY: -15,
                     },
                     alpha: 0,
@@ -270,14 +266,14 @@
                         scale: { from: 0, to: 1 },
                         alpha: 1,
                         duration: 2000,
-                        ease: 'Elastic.Out',
+                        ease: "Elastic.Out",
                         delay: 5500,
                     },
-                    audio: { key: 'results.boing', delay: 5500 },
+                    audio: { key: "results.boing", delay: 5500 },
                     particles: [
                         {
-                            assetKey: 'game.key',
-                            emitterConfigKey: 'results.row-emitter',
+                            assetKey: "game.key",
+                            emitterConfigKey: "results.row-emitter",
                             offsetX: 35,
                             offsetY: -15,
                             delay: 7000,

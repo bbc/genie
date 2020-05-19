@@ -26,18 +26,12 @@
             ],
 
             //Add, background images / animations / particle systems. More examples in /debug/examples
-            furniture: [
-                {
-                    key: "how-to-play.background",
-                    x: 0,
-                    y: 0,
-                },
-                {
-                    key: "how-to-play.title",
-                    x: 0,
-                    y: -230,
-                },
-            ]
+            background: {
+                items: [
+                    { key: "how-to-play.background", x: 0, y: 0 },
+                    { key: "how-to-play.title", x: 0, y: -230 },
+                ],
+            },
         },
     },
 }

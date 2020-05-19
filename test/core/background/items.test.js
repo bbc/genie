@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { createMockGmi } from "../../mock/gmi.js";
-import { furnish } from "../../../src/core/background/furniture.js";
+import { furnish } from "../../../src/core/background/items.js";
 
 import * as spriteModule from "../../../src/core/background/sprite.js";
 import * as particlesModule from "../../../src/core/background/particles.js";
@@ -35,7 +35,7 @@ describe("Background Furniture", () => {
         textModule.isText = jest.fn();
         imageModule.isImage = jest.fn(() => isImageSpy);
 
-        mockTheme = {};
+        mockTheme = { background: {} };
         mockScene = {
             context: { theme: mockTheme },
             add: {
@@ -58,7 +58,7 @@ describe("Background Furniture", () => {
 
     describe("Furnish", () => {
         test("does not add any items if theme.config.furniture has not been set", () => {
-            delete mockTheme.furniture;
+            delete mockTheme.background.items;
 
             furnish(mockScene)();
             expect(mockScene.add.spine).not.toHaveBeenCalled();
@@ -69,7 +69,7 @@ describe("Background Furniture", () => {
         });
 
         test("Tests each item in background furniture config array", () => {
-            mockTheme.furniture = [1, 2, 3];
+            mockTheme.background.items = [1, 2, 3];
 
             furnish(mockScene)();
 
@@ -85,7 +85,7 @@ describe("Background Furniture", () => {
             spriteModule.isSprite = jest.fn(() => () => true);
             spriteModule.addSprite = jest.fn(() => () => mockSprite);
 
-            mockTheme.furniture = [{ name: "test_name" }];
+            mockTheme.background.items = [{ name: "test_name" }];
 
             furnish(mockScene)();
             expect(mockSprite.setName).toHaveBeenCalledWith("test_name");
