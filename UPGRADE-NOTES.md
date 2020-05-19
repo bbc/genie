@@ -1,5 +1,8 @@
 # Upgrade Notes
 
+#3.5.0
+Theme config background furniture arrays are now added via `theme.background.items`
+
 #3.4.3
 main.js now passes setup data through as a single object:
 `startup({ screens, settings, gameOptions })`

@@ -5,11 +5,11 @@
                 {
                     x: -390,
                     y: -190,
-                    text: 'Using the background furniture system\n\
+                    text: 'Using the background items system\n\
 named particle systems which have been pre-loaded a file manifest\n\
 in the theme directories can be set to run on any screen.\n\
 They will appear over the background image but underneath anything else added to the scene.\n\
-See the "furniture" block in this scene\'s config',
+See the "background.items" block in this scene\'s config',
                 },
             ],
             assetPrefix: "home",
