@@ -7,7 +7,10 @@ import { gmi } from "../../core/gmi/gmi.js";
 
 const onPointerOut = (emitter, button) => button.on(Phaser.Input.Events.POINTER_OUT, () => emitter.stop());
 
+const isButtonEnabled = button => button.listeners(Phaser.Input.Events.POINTER_UP).length === 0;
+
 const createEmitter = (scene, button, config) => {
+    if (isButtonEnabled(button)) return;
     const emitter = scene.add
         .particles(config.assetKey)
         .createEmitter(scene.cache.json.get(config.emitterConfigKey))
