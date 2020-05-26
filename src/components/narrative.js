@@ -73,12 +73,8 @@ import { eventBus } from "../core/event-bus.js";
 
 const nextPage = scene => () => {
     scene.currentPage++;
-
-    if (scene.currentPage >= scene.context.theme.background.pages.length) {
-        scene.navigation.next()
-    }
-
-    startPage(scene);
+    const lastPage = scene.currentPage >= scene.context.theme.background.pages.length
+    lastPage? scene.navigation.next() : startPage(scene);
 };
 
 const isAudio = scene => name => Boolean(scene.context.theme.background.audio.find(a => a.name === name));
