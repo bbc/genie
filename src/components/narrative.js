@@ -10,41 +10,21 @@ import fp from "../../lib/lodash/fp/fp.js";
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
-//import { accessibilify } from "../core/accessibility/accessibilify.js";
 
 /*
-    TODO - just leaving this here in case the continue button needs setting to a specific x y - might be useful.
-        This is how the example page works although it might not worj with breakpoints.
+
+    audio conf
+
+    const conf = {
+        mute: false,
+        volume: 1,
+        rate: 1,
+        detune: 0,
+        seek: 0,
+        loop: false,
+        delay: 0
+    }
  */
-//const addContinueButton = scene => {
-//    const button = scene.add.gelButton(0, 0, {
-//        scene: "gelDebug",
-//        key: "button",
-//        id: "Config",
-//        channel: buttonsChannel(scene),
-//        gameButton: true,
-//        ariaLabel: "Continue",
-//    });
-//    const text = scene.add.text(0, 0, "Continue").setOrigin(0.5, 0.5);
-//    button.overlays.set("text", text);
-//    accessibilify(button, true);
-//
-//    eventBus.subscribe({
-//        channel: buttonsChannel(config.scene),
-//        name: config.id,
-//        callback: config.callback,
-//    });
-//};
-
-//const continueNarrative = () => {
-//console.log("NEXT PAGE")
-
-/*
-        TODO
-            * Is there always a continue button?
-            * need access to next page button (Phaser gameobject names?)
-     */
-//}
 
 /*
     TODO
@@ -59,101 +39,67 @@ import { eventBus } from "../core/event-bus.js";
         * speech Bubbles: https://phaser.io/examples/v3/view/game-objects/text/static/speech-bubble
         * play named spine anims
         * Initial state for tweens or start tween?
+        * Is Continue ok where it is?
+        * Is there always a continue button?
 */
 
-/*
-    tweens: [{
-        name: "fadeIn",
-        targets: ["text1"],
-        alpha: { from: 0, to: 1 },
-        ease: 'Linear',       // 'Cubic', 'Elastic', 'Bounce', 'Back'
-        duration: 1000,
-    }],
-*/
+const endAnims = pageItems => {
+    pageItems.forEach(item => {
+        item.stop(1)
+        //if (item instanceof Phaser.Sound.WebAudioSound) {
+        //    item.stop();
+        //} else if (item instanceof Phaser.Tweens.Tween) {
+        //    item.stop(1);
+        //}
+    });
+};
 
 const nextPage = scene => () => {
+    endAnims(scene.pageItems);
     scene.currentPage++;
-    const lastPage = scene.currentPage >= scene.context.theme.background.pages.length
-    lastPage? scene.navigation.next() : startPage(scene);
+    const lastPage = scene.currentPage >= scene.context.theme.background.pages.length;
+    lastPage ? scene.navigation.next() : (scene.pageItems = startPage(scene));
 };
 
 const isAudio = scene => name => Boolean(scene.context.theme.background.audio.find(a => a.name === name));
-const playAudio = scene => name => {
+const createAudio = scene => name => {
     const config = scene.context.theme.background.audio.find(a => a.name === name);
-    scene.sound.play(config.key);
+    const sound = scene.sound.add(config.key, config);
+    sound.play();
+
+    return sound;
 };
 
 const isTween = scene => name => Boolean(scene.context.theme.background.tweens.find(a => a.name === name));
 
-const createTween = scene => name => {
-    const config = scene.context.theme.background.tweens.find(a => a.name === name);
 
+const createTween = scene => name => {
+    const config = { ...scene.context.theme.background.tweens.find(a => a.name === name)};
+    delete config.name; //if name is present tween will mangle it on the gameObject
     config.targets = config.targets.map(scene.children.getByName, scene.children);
 
-    //TODO HACK - circumvents Phaser bug
-    const names = config.targets.map(n => n.name)
-    config.onComplete = () => {
-        config.targets.forEach((target, idx) => {
-            target.name = names[idx]
-        })
-    }
-
-
-    scene.tweens.add(config);
-
-    setTimeout(() => {console.log("delayed", config.targets[0].name)}, 100)
+    return scene.tweens.add(config);
 };
 
 const startPage = scene => {
     const pages = scene.context.theme.background.pages;
 
-
     //TODO maybe this can be moved to the background items system?
     //TODO should audio be in its own block or part of items?
     const conditionPairs = [
-        [isAudio(scene), playAudio(scene)],
+        [isAudio(scene), createAudio(scene)],
         [isTween(scene), createTween(scene)],
     ];
 
-    pages[scene.currentPage].forEach(fp.cond(conditionPairs));
+    return pages[scene.currentPage].map(fp.cond(conditionPairs));
 };
-
-
 
 export class Narrative extends Screen {
     create() {
         this.currentPage = 0;
         this.addBackgroundItems();
         this.setLayout(["continue", "skip", "pause"]);
-        //const tweens = this.context.theme.background.tweens.map(addTargets(this));
-        //
-        //tweens.forEach(this.tweens.add, this.tweens);
-
-        startPage(this);
-
-        //go through pages. If pages aren't present do what?
-        //pages.forEach(names => {
-        //
-        //    //debugger
-        //
-        //    const x = this.cache
-        //
-        //    console.log(names)
-        //
-        //    //this.sound.play("narrative.dialogue1")
-        //
-        //    const conf = {
-        //        mute: false,
-        //        volume: 1,
-        //        rate: 1,
-        //        detune: 0,
-        //        seek: 0,
-        //        loop: false,
-        //        delay: 0
-        //    }
-        //
-        //
-        //}, this)
+        this.pageItems = startPage(this);
 
         window.nrtv = this;
 
