@@ -147,6 +147,13 @@
 
                 tweens: [
                     {
+                        name: "showOwl",
+                        targets: ["owl"],
+                        alpha: { from: 0, to: 1 },
+                        ease: "Linear", // 'Cubic', 'Elastic', 'Bounce', 'Back'
+                        duration: 1000,
+                    },
+                    {
                         name: "show1",
                         targets: ["text1"],
                         alpha: { from: 0, to: 1 },
@@ -210,7 +217,7 @@
                     },
                     {
                         name: "hideAll",
-                        targets: ["text1", "text2", "text2b", "text3", "text4", "text5"],
+                        targets: ["text1", "text2", "text2b", "text3", "text4", "text5", "owl"],
                         alpha: { from: 0, to: 0 },
                         duration: 1,
                     },
@@ -277,7 +284,7 @@
                     { name: "pump", key: "narrative.pump", type: "sfx", delay: 12, volume: 0.15},
                 ],
                 pages: [
-                    ["hideAll", "dialogue1", "show1", "littleCrabOn", "bigCrabOn"],
+                    ["hideAll", "showOwl", "dialogue1", "show1", "littleCrabOn", "bigCrabOn"],
                     ["hide1", "dialogue2", "show2", "show2b"],
                     ["hide2", "dialogue3", "show3"],
                     ["hide3", "dialogue4", "show4"],
