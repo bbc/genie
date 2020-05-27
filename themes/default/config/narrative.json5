@@ -7,8 +7,20 @@
             background: {
                 items: [
                     { key: "narrative.background", x: 0, y: 0 },
-                    { key: "narrative.little-crab", x: -120, y: 140 },
-                    { key: "narrative.big-crab", x: 100, y: 100 },
+                    {
+                        name: "bubbles",
+                        key: "narrative.bubbles",
+                        assetKey: "narrative.bubble",
+                        props: { y: 90 },
+                    },
+                    {
+                        name: "bubbleBurst",
+                        key: "narrative.bubbleBurst",
+                        assetKey: "narrative.bubble",
+                        props: { y: 90 },
+                    },
+                    { key: "narrative.little-crab", x: -400, y: 130, name: "littleCrab" },
+                    { key: "narrative.big-crab", x: 600, y: 60, name: "bigCrab" },
                     {
                         name: "owl",
                         key: "examples_spine_owl",
@@ -57,7 +69,7 @@
                     },
                     {
                         name: "text2b",
-                        text: "\"This is going to be so great!\n\" - says Little Crab.",
+                        text: '"This is going to be so great!\n" - says Little Crab.',
                         x: -80,
                         y: -200,
                         //Use the following style for this text
@@ -133,7 +145,6 @@
                     },
                 ],
 
-
                 tweens: [
                     {
                         name: "show1",
@@ -142,6 +153,24 @@
                         ease: "Linear", // 'Cubic', 'Elastic', 'Bounce', 'Back'
                         duration: 500,
                         delay: 1000,
+                    },
+                    {
+                        name: "littleCrabOn",
+                        targets: ["littleCrab"],
+                        x: { from: -400, to: -120 },
+                        y: { from: 130, to: 140 },
+                        ease: "Cubic",
+                        duration: 1000,
+                        delay: 500,
+                    },
+                    {
+                        name: "bigCrabOn",
+                        targets: ["bigCrab"],
+                        x: { from: 600, to: 100 },
+                        y: { from: 60, to: 100 },
+                        ease: "Cubic",
+                        duration: 1000,
+                        delay: 2600,
                     },
                     {
                         name: "show2",
@@ -156,7 +185,7 @@
                         alpha: { from: 0, to: 1 },
                         ease: "Linear",
                         duration: 500,
-                        delay: 3000
+                        delay: 3000,
                     },
                     {
                         name: "show3",
@@ -208,24 +237,54 @@
                         targets: ["text4"],
                         alpha: { from: 1, to: 0 },
                         duration: 200,
+                    },
+                    {
+                        name: "bubblesOff",
+                        targets: ["bubbleBurst"],
+                        on: { from: 0, to: 0 },
+                        delay: 12200,
+                    },
+                    {
+                        name: "bubblesOn",
+                        targets: ["bubbleBurst"],
+                        on: { from: 1, to: 1 },
+                        delay: 12000,
+                    },
+                    {
+                        name: "littleCrabBack",
+                        targets: ["littleCrab"],
+                        x: { from: -120, to: -180 },
+                        ease: "Linear",
+                        duration: 500,
+                        delay: 12200,
+                    },
+                    {
+                        name: "bigCrabPump",
+                        targets: ["bigCrab"],
+                        angle: { from: 0, to: 10 },
+                        ease: "Bounce.easeInOut",
+                        duration: 200,
+                        delay: 12000,
                     }
                 ],
                 audio: [
-                    { name: "dialogue1", key: "narrative.dialogue1", type: "dialogue", delay: 1000 },
-                    { name: "dialogue2", key: "narrative.dialogue2", type: "dialogue"},
-                    { name: "dialogue3", key: "narrative.dialogue3", type: "dialogue"},
-                    { name: "dialogue4", key: "narrative.dialogue4", type: "dialogue"},
-                    { name: "dialogue5", key: "narrative.dialogue5", type: "dialogue"},
+                    { name: "dialogue1", key: "narrative.dialogue1", type: "dialogue", delay: 1 },
+                    { name: "dialogue2", key: "narrative.dialogue2", type: "dialogue" },
+                    { name: "dialogue3", key: "narrative.dialogue3", type: "dialogue" },
+                    { name: "dialogue4", key: "narrative.dialogue4", type: "dialogue" },
+                    { name: "dialogue5", key: "narrative.dialogue5", type: "dialogue" },
+                    { name: "bubbleBurstSFX", key: "narrative.bubbleBurstSFX", type: "sfx", delay: 12.5 },
+                    { name: "pump", key: "narrative.pump", type: "sfx", delay: 12, volume: 0.15},
                 ],
                 pages: [
-                    ["hideAll", "dialogue1", "show1"],
+                    ["hideAll", "dialogue1", "show1", "littleCrabOn", "bigCrabOn"],
                     ["hide1", "dialogue2", "show2", "show2b"],
                     ["hide2", "dialogue3", "show3"],
                     ["hide3", "dialogue4", "show4"],
-                    ["hide4", "dialogue5", "show5"],
+                    ["hide4", "dialogue5", "show5", "bubblesOn", "bubblesOff", "bubbleBurstSFX", "pump", "littleCrabBack", "bigCrabPump"],
                 ],
             },
-            debugLabels: [{ x: -390, y: -40, text: "Narrative label TODO" }],
+            debugLabels: [{ x: -390, y: -40, text: "Narrative Debug label TODO" }],
         },
     },
 }

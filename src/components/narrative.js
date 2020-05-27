@@ -41,11 +41,13 @@ import { eventBus } from "../core/event-bus.js";
         * Initial state for tweens or start tween?
         * Is Continue ok where it is?
         * Is there always a continue button?
+        * Do we need a restart button on the pause page
+        * Debug needs a reload key to speed up dev
 */
 
 const endAnims = pageItems => {
     pageItems.forEach(item => {
-        item.stop(1)
+        item.stop(1);
         //if (item instanceof Phaser.Sound.WebAudioSound) {
         //    item.stop();
         //} else if (item instanceof Phaser.Tweens.Tween) {
@@ -62,21 +64,36 @@ const nextPage = scene => () => {
 };
 
 const isAudio = scene => name => Boolean(scene.context.theme.background.audio.find(a => a.name === name));
+
 const createAudio = scene => name => {
     const config = scene.context.theme.background.audio.find(a => a.name === name);
     const sound = scene.sound.add(config.key, config);
-    sound.play();
+    sound.play(config);
 
     return sound;
 };
 
 const isTween = scene => name => Boolean(scene.context.theme.background.tweens.find(a => a.name === name));
 
+const getByName = scene => name => {
+    return scene.children.list.reduce((found, child) => {
+        if (child.name === name) {
+            return child;
+        }
+
+        if (child instanceof Phaser.GameObjects.Particles.ParticleEmitterManager) {
+            const emitter = child.emitters.getByName(name);
+            if (emitter) return emitter;
+        }
+
+        return found;
+    }, false);
+};
 
 const createTween = scene => name => {
-    const config = { ...scene.context.theme.background.tweens.find(a => a.name === name)};
+    const config = { ...scene.context.theme.background.tweens.find(a => a.name === name) };
     delete config.name; //if name is present tween will mangle it on the gameObject
-    config.targets = config.targets.map(scene.children.getByName, scene.children);
+    config.targets = config.targets.map(getByName(scene), scene.children);
 
     return scene.tweens.add(config);
 };
@@ -101,7 +118,13 @@ export class Narrative extends Screen {
         this.setLayout(["continue", "skip", "pause"]);
         this.pageItems = startPage(this);
 
-        window.nrtv = this;
+        //TODO set up weird route restart thing
+        //const restart = function () {
+        //    this.navigate(this.scene.key);
+        //}.bind(this);
+        //this.navigation.restart = restart;
+        //
+        //window.nrtv = this;
 
         eventBus.subscribe({
             channel: buttonsChannel(this),

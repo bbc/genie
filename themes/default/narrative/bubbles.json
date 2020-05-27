@@ -1,0 +1,32 @@
+{
+    "x": 0,
+    "y": 0,
+    "angle": { "min": 260, "max": 280 },
+    "speedX": { "min": -20, "max": 20 },
+    "speedY": { "min": -25, "max": -10 },
+    "lifespan": 8000,
+    "quantity": 1,
+    "frequency": 100,
+    "gravityY": -2,
+    "emitZone": {
+        "type": "random",
+        "source": {
+            "type": "rectangle",
+            "x": -350,
+            "y": -30,
+            "width": 700,
+            "height": 150
+        }
+    },
+    "deathZone": {
+        "type": "onEnter",
+        "source": {
+            "type": "rectangle",
+            "x": -500,
+            "y": -430,
+            "width": 1000,
+            "height": 400
+        }
+    },
+    "scale": { "start": 0.05, "end": 0.2 }
+}

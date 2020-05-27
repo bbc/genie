@@ -41,6 +41,31 @@
                 "type": "audio",
                 "key": "dialogue5",
                 "url": "narrative/dialogue_5.mp3"
+            },
+            {
+                "type": "particles",
+                "key": "bubbles",
+                "url": "narrative/bubbles.json"
+            },
+            {
+                "type": "particles",
+                "key": "bubbleBurst",
+                "url": "narrative/bubble-burst.json"
+            },
+            {
+                "type": "image",
+                "key": "bubble",
+                "url": "narrative/bubble.png"
+            },
+            {
+                "type": "audio",
+                "key": "bubbleBurstSFX",
+                "url": "narrative/bubble-burst.mp3"
+            },
+            {
+                "type": "audio",
+                "key": "pump",
+                "url": "narrative/pump.mp3"
             }
         ]
     }
