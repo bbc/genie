@@ -7,6 +7,7 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import * as a11y from "../accessibility/accessibility-layer.js";
 import * as ButtonFactory from "./button-factory.js";
 
+const sum = (a, b) => a + b;
 const horizontal = {
     left: (metrics, group, horizontalsType) => {
         let hitAreaOffset = 0;
@@ -134,22 +135,17 @@ export class GelGroup extends Phaser.GameObjects.Container {
 
     alignChildren() {
         const pos = { x: 0, y: 0 };
-
-        const childList = this.list.map(x => x);
-        childList.sort((a, b) => {
-            return b.height - a.height;
-        });
-
-        this.iterate(child => {
-            child.y = pos.y + childList[0].height / 2;
-
-            if (this._isVertical) {
-                child.x = 0;
-                pos.y += child.height + Math.max(0, this._metrics.buttonPad - child.height + child.sprite.height);
-            } else {
-                child.x = pos.x + child.width / 2;
-                pos.x += child.width + Math.max(0, this._metrics.buttonPad - child.width + child.sprite.width);
-            }
+        const groupHeight = Math.max(...this.list.map(i => i.height));
+        const pads = this.list.map(child => Math.max(0, this._metrics.buttonPad - child.width + child.sprite.width));
+        const widths = this.list.map(child => child.width);
+        this.list.forEach((child, idx) => {
+            child.y = pos.y + groupHeight / 2;
+            this._isVertical &&
+                (pos.y += child.height + Math.max(0, this._metrics.buttonPad - child.height + child.sprite.height));
+            child.x = this._isVertical
+                ? 0
+                : widths.slice(0, idx).reduce(sum, widths[idx] / 2) +
+                  pads.slice(0, idx).reduce(sum, pads[idx] / 2 - pads[0] / 2);
         }, this);
     }
 
