@@ -21,7 +21,6 @@ describe("getNamed", () => {
 
     test("returns current emitter matching name if Particle Manager", () => {
         const found = { name: "test_found" };
-        const mockEmitter = { name: "test_emitter" };
         const child = { emitters: { getByName: jest.fn(() => false) } };
         expect(getNamed("test_emitter_wrong")(found, child)).toBe(found);
     });
