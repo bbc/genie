@@ -6,10 +6,10 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { buttonsChannel } from "../../core/layout/gel-defaults.js";
-import { Screen } from "../../core/screen.js";
-import { eventBus } from "../../core/event-bus.js";
-import { nextPage } from "./pagination.js";
+import { buttonsChannel } from "../core/layout/gel-defaults.js";
+import { Screen } from "../core/screen.js";
+import { eventBus } from "../core/event-bus.js";
+import { nextPage } from "../core/background/pages.js";
 
 export class Narrative extends Screen {
     create() {

@@ -6,7 +6,7 @@
 //import { eventBus } from "../../src/core/event-bus.js";
 //import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 
-import { Narrative } from "../../src/components/narrative/narrative.js";
+import { Narrative } from "../../src/components/narrative.js";
 
 describe("Narrative Screen", () => {
     let narrativeScreen;

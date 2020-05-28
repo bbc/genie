@@ -17,7 +17,7 @@ import { furnish } from "./background/items.js";
 import { isDebug } from "./debug/debug-mode.js";
 import * as debug from "./debug/debug.js";
 import { CAMERA_X, CAMERA_Y } from "./layout/metrics.js";
-import { nextPage } from "../components/narrative/pagination.js";
+import { nextPage } from "./background/pages.js";
 
 const getRoutingFn = scene => route => {
     const routeTypes = {
