@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { Home } from "./components/home.js";
-import { Narrative } from "./components/narrative.js";
+import { Narrative } from "./components/narrative/narrative.js";
 import { Results } from "./components/results/results-screen.js";
 import { Select } from "./components/select/select-screen.js";
 import { HowToPlay } from "./components/how-to-play.js";
