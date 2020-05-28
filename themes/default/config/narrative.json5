@@ -291,7 +291,7 @@
                     ["hide4", "dialogue5", "show5", "bubblesOn", "bubblesOff", "bubbleBurstSFX", "pump", "littleCrabBack", "bigCrabPump"],
                 ],
             },
-            debugLabels: [{ x: -390, y: -40, text: "Narrative Debug label TODO" }],
+            debugLabels: [{ x: -390, y: -40, text: "Configure pages of audio and tween animations with this module" }],
         },
     },
 }
