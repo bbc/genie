@@ -1,7 +1,7 @@
 {
     theme: {
         "level-select": {
-            music: "loader.backgroundMusic",
+            music: "home.backgroundMusic",
             storageKey: "levels",
             background: {
                 items: [{ key: "level-select.background", x: 0, y: 0 }],
