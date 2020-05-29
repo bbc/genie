@@ -1,7 +1,7 @@
 {
     theme: {
         narrative: {
-            //music: "loader.backgroundMusic",
+            //music: "home.backgroundMusic",
             "button-overridesXX": { continue: { shiftY: -200 } }, //Use to shift buttons out of the way of logos etc.
             //Add, background images / animations / particle systems. More examples in /debug/examples
             background: {

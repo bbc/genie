@@ -6,7 +6,7 @@
             ease: "Cubic.easeInOut", // Pagination transition type
             duration: 500, // Pagination transition duration
             align: "center", // Alignment for any remaining choices in the last row
-            music: "loader.backgroundMusic",
+            music: "home.backgroundMusic",
             onHoverParticles: {
                 assetKey: "game.star",
                 emitterConfigKey: "character-select.hover-emitter",

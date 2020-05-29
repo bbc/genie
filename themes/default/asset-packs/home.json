@@ -11,6 +11,11 @@
                 "type": "image",
                 "key": "background",
                 "url": "shared/background.png"
+            },
+            {
+                "type": "audio",
+                "key": "backgroundMusic",
+                "url": "shared/background-music.mp3"
             }
         ]
     }

@@ -33,11 +33,6 @@ export const loadPack = {
         },
         {
             type: "audio",
-            key: "backgroundMusic",
-            url: "shared/background-music.mp3",
-        },
-        {
-            type: "audio",
             key: "buttonClick",
             url: "shared/button-click.mp3",
         },
