@@ -42,7 +42,7 @@ export class Results extends Screen {
     }
 
     createRows() {
-        this.rows = Rows.create(this, () => this.resultsArea(), this.context.theme.rows, Rows.RowType.Results);
+        this.rows = Rows.create(this, () => this.resultsArea(), this.config.rows, Rows.RowType.Results);
         this.rowBackdrops = createRowBackdrops(this, this.rows.containers);
         tweenRows(this, this.rows.containers);
         tweenRowBackdrops(this, this.rowBackdrops, this.rows.containers);
@@ -51,18 +51,18 @@ export class Results extends Screen {
     }
 
     createCentralBackdrop() {
-        fp.get("backdrop.key", this.context.theme) && this.centralBackdropFill();
+        fp.get("backdrop.key", this.config) && this.centralBackdropFill();
         this.resizeCentralBackdrop();
     }
 
     centralBackdropFill() {
-        this.backdrop = this.add.image(0, 0, this.context.theme.backdrop.key);
-        this.backdrop.alpha = this.context.theme.backdrop.alpha === undefined ? 1 : this.context.theme.backdrop.alpha;
+        this.backdrop = this.add.image(0, 0, this.config.backdrop.key);
+        this.backdrop.alpha = this.config.backdrop.alpha === undefined ? 1 : this.config.backdrop.alpha;
     }
 
     resizeCentralBackdrop() {
         const safeArea = this.resultsArea();
-        if (fp.get("backdrop.key", this.context.theme) && safeArea) {
+        if (fp.get("backdrop.key", this.config) && safeArea) {
             this.backdrop.x = safeArea.centerX;
             this.backdrop.y = safeArea.centerY;
         }

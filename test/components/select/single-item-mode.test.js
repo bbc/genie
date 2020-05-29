@@ -108,12 +108,12 @@ describe("Select Screen Single Item Mode", () => {
 
     describe("isEnabled method", () => {
         test("returns true if 1 row and 1 column", () => {
-            const returnValue = singleItemMode.isEnabled({ context: { theme: { rows: 1, columns: 1 } } });
+            const returnValue = singleItemMode.isEnabled({ config: { rows: 1, columns: 1 } });
             expect(returnValue).toBe(true);
         });
 
         test("returns false if more than 1 row and 1 column", () => {
-            const returnValue = singleItemMode.isEnabled({ context: { theme: { rows: 2, columns: 3 } } });
+            const returnValue = singleItemMode.isEnabled({ config: { rows: 2, columns: 3 } });
             expect(returnValue).toBe(false);
         });
     });

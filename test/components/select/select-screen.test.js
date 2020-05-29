@@ -180,6 +180,7 @@ describe("Select Screen", () => {
             screen.addBackgroundItems = jest.fn();
 
             screen.context = { theme: mockData.config.theme["test-select"] };
+            screen.config = mockData.config.theme["test-select"];
 
             Object.defineProperty(screen, "layout", {
                 get: jest.fn(() => mockLayout),
