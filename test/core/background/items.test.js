@@ -81,14 +81,14 @@ describe("Background Furniture", () => {
         });
 
         test("Adds name to items if present in config", () => {
-            const mockSprite = { setName: jest.fn() };
+            const mockSprite = {};
             spriteModule.isSprite = jest.fn(() => () => true);
             spriteModule.addSprite = jest.fn(() => () => mockSprite);
 
             mockTheme.background.items = [{ name: "test_name" }];
 
             furnish(mockScene)();
-            expect(mockSprite.setName).toHaveBeenCalledWith("test_name");
+            expect(mockSprite.name).toBe("test_name");
         });
     });
 });

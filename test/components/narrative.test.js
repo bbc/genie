@@ -3,9 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-//import { eventBus } from "../../src/core/event-bus.js";
-//import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
-
+import { eventBus } from "../../src/core/event-bus.js";
 import { Narrative } from "../../src/components/narrative.js";
 
 describe("Narrative Screen", () => {
@@ -24,6 +22,7 @@ describe("Narrative Screen", () => {
         narrativeScreen.add = { image: jest.fn() };
         narrativeScreen.setLayout = jest.fn();
         narrativeScreen.navigation = { next: jest.fn() };
+        narrativeScreen.addBackgroundItems = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -37,18 +36,22 @@ describe("Narrative Screen", () => {
             const expectedButtons = ["continue", "skip", "pause"];
             expect(narrativeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
+
+        test("adds background items", () => {
+            expect(narrativeScreen.addBackgroundItems).toHaveBeenCalled();
+        });
     });
 
-    // TODO leaving here for when the continue button is wired up NT:13:05:2020
-    //describe("Events", () => {
-    //    beforeEach(() => {
-    //        jest.spyOn(eventBus, "subscribe");
-    //        narrativeScreen.create();
-    //    });
-    //
-    //    test("adds a callback for the play button", () => {
-    //        eventBus.subscribe.mock.calls[0][0].callback();
-    //        expect(narrativeScreen.navigation.next).toHaveBeenCalledTimes(1);
-    //    });
-    //});
+    describe("Events", () => {
+        beforeEach(() => {
+            jest.spyOn(eventBus, "subscribe");
+            narrativeScreen.create();
+        });
+
+        test("adds a callback for the continue button", () => {
+            expect(eventBus.subscribe.mock.calls[0][0].channel).toBe("gel-buttons-narrative");
+            expect(eventBus.subscribe.mock.calls[0][0].name).toBe("continue");
+            expect(eventBus.subscribe.mock.calls[0][0].callback).toEqual(expect.any(Function));
+        });
+    });
 });
