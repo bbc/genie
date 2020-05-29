@@ -39,13 +39,13 @@ const shallowMergeOverrides = (config, overrides) => assignProperties(copyFirstC
  * @param {Phaser.Scene} scene - Phaser Scene Instance
  * @param {Object} metrics - viewport metrics
  * @param {Array.<string>} buttonIds
- * @param {Array.<string>} accessible buttonIds
+ * @param {Array.<string>} accessibleButtonIds
  */
 export function create(scene, metrics, buttonIds, accessibleButtonIds) {
     buttonIds = buttonIds.filter(checkGMIFlags);
     accessibleButtonIds = accessibleButtonIds ? accessibleButtonIds.filter(id => buttonIds.includes(id)) : buttonIds;
 
-    const overrides = scene.context.config.theme[scene.scene.key]["button-overrides"];
+    const overrides = scene.config["button-overrides"];
 
     const config = shallowMergeOverrides(gel.config(scene), overrides);
     const root = new Phaser.GameObjects.Container(scene, 0, 0);

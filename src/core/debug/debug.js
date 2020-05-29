@@ -60,7 +60,7 @@ function create() {
           }
         : [];
 
-    const labels = this.context.theme.debugLabels || [];
+    const labels = this.config.debugLabels || [];
 
     fp.map(label => this.add.text(label.x || 0, label.y || 0, label.text, debugStyle), labels.concat(fileLabel));
 

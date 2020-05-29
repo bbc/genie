@@ -40,7 +40,6 @@ export class Screen extends Phaser.Scene {
     get context() {
         return {
             config: this._data.config,
-            theme: this._data.config.theme[this.scene.key],
             parentScreens: this._data.parentScreens,
             navigation: this._data.navigation,
             transientData: this._data.transient || {},
@@ -57,12 +56,16 @@ export class Screen extends Phaser.Scene {
         this._data.transient = fp.merge(this._data.transient, newData, {});
     }
 
+    get config() {
+        return this._data.config.theme[this.scene.key];
+    }
+
     get transientData() {
         return this._data.transient;
     }
 
     get assetPrefix() {
-        return this.context.theme.assetPrefix || this.scene.key;
+        return this.config.assetPrefix || this.scene.key;
     }
 
     init(data) {
@@ -88,7 +91,7 @@ export class Screen extends Phaser.Scene {
     }
 
     setStatsScreen(screen) {
-        if (!this.context.theme.isOverlay) {
+        if (!this.config.isOverlay) {
             gmi.setStatsScreen(screen);
         }
     }

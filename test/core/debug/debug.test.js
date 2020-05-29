@@ -46,9 +46,7 @@ describe("Debug system", () => {
         Scaler.getMetrics = jest.fn(() => mockMetrics);
 
         mockScreen = {
-            context: {
-                theme: { debugLabels: [] },
-            },
+            config: { debugLabels: [] },
             cache: {
                 json: {
                     get: jest.fn(),
@@ -140,7 +138,7 @@ describe("Debug system", () => {
         });
 
         test("adds text labels if present in theme", () => {
-            mockScreen.context.theme.debugLabels = [{ x: -390, y: 100, text: "test-description" }];
+            mockScreen.config.debugLabels = [{ x: -390, y: 100, text: "test-description" }];
             addEvents(mockScreen);
             const createCallback = mockScreen.events.on.mock.calls[0][1];
 
@@ -150,7 +148,7 @@ describe("Debug system", () => {
         });
 
         test("adds no label if no config path found", () => {
-            delete mockScreen.context.theme.debugLabels;
+            delete mockScreen.config.debugLabels;
             addEvents(mockScreen);
             const createCallback = mockScreen.events.on.mock.calls[0][1];
 
@@ -160,7 +158,7 @@ describe("Debug system", () => {
         });
 
         test("adds path label if config path found", () => {
-            delete mockScreen.context.theme.debugLabels;
+            delete mockScreen.config.debugLabels;
             mockScreen.scene = { key: "testKey" };
 
             mockScreen.cache.json.get.mockReturnValue({ config: { files: [{ key: "testKey", url: "testUrl" }] } });
@@ -179,7 +177,7 @@ describe("Debug system", () => {
         });
 
         test("sets label position defaults of 0 0 if not in theme", () => {
-            mockScreen.context.theme.debugLabels = [{ text: "test-description" }];
+            mockScreen.config.debugLabels = [{ text: "test-description" }];
             addEvents(mockScreen);
             const createCallback = mockScreen.events.on.mock.calls[0][1];
 

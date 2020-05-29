@@ -96,8 +96,8 @@ describe("Results Screen", () => {
         resultsScreen.context = {
             config: mockConfig,
             transientData: mockTransientData,
-            theme: mockConfig.theme.results,
         };
+        resultsScreen.config = mockConfig.theme.results;
         resultsScreen.transientData = mockTransientData;
         resultsScreen.addBackgroundItems = jest.fn(() => () => {});
         resultsScreen.setLayout = jest.fn();
@@ -149,7 +149,7 @@ describe("Results Screen", () => {
             expect(Rows.create).toHaveBeenCalledWith(
                 resultsScreen,
                 expect.any(Function),
-                resultsScreen.context.theme.rows,
+                resultsScreen.config.rows,
                 Rows.RowType.Results,
             );
         });

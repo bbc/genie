@@ -20,7 +20,7 @@ export class HowToPlay extends Screen {
     create() {
         this.addBackgroundItems();
         this.currentIndex = 0;
-        this.choiceSprites = this.createChoiceSprites(this.context.theme.choices);
+        this.choiceSprites = this.createChoiceSprites(this.config.choices);
         this.setLayout(["overlayBack", "audio", "settings", "previous", "next"]);
         this.setButtonVisibility();
 
@@ -28,7 +28,7 @@ export class HowToPlay extends Screen {
             this.scene.key,
             this.choiceSprites,
             this.game.canvas.parentElement,
-            this.context.theme.choices,
+            this.config.choices,
         );
 
         this.addEventSubscriptions();
@@ -95,12 +95,11 @@ export class HowToPlay extends Screen {
     }
 
     startGame() {
-        const theme = this.context.config.theme[this.scene.key];
-        const metaData = { metadata: `ELE=[${theme.choices[this.currentIndex].title}]` };
+        const metaData = { metadata: `ELE=[${this.config.choices[this.currentIndex].title}]` };
         const screenType = this.scene.key.split("-")[0];
         gmi.sendStatsEvent(screenType, "select", metaData);
 
-        const choice = this.context.config.theme[this.scene.key].choices[this.currentIndex];
+        const choice = this.config.choices[this.currentIndex];
         this.transientData[this.scene.key] = { choice, index: this.currentIndex };
         this.navigation.next();
     }

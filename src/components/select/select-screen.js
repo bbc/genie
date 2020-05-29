@@ -38,9 +38,9 @@ export class Select extends Screen {
             ? this.setLayout(buttons.concat("continue"), ["home", "pause"])
             : this.setLayout(buttons, ["home", "pause", "next", "previous"]);
         const onTransitionStart = getOnTransitionStartFn(this);
-        this.grid = new GelGrid(this, Object.assign(this.context.theme, gridDefaults, { onTransitionStart }));
+        this.grid = new GelGrid(this, Object.assign(this.config, gridDefaults, { onTransitionStart }));
         this.resize();
-        this._cells = this.grid.addGridCells(this.context.theme);
+        this._cells = this.grid.addGridCells(this.config);
         this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
@@ -48,14 +48,14 @@ export class Select extends Screen {
 
         addEvents(this);
 
-        const stateConfig = this.context.theme.choices.map(({ id, state }) => ({ id, state }));
-        this.states = state.create(this.context.theme.storageKey, stateConfig);
+        const stateConfig = this.config.choices.map(({ id, state }) => ({ id, state }));
+        this.states = state.create(this.config.storageKey, stateConfig);
 
         singleItemMode.create(this);
 
         this.updateStates();
         onTransitionStart();
-        addHoverParticlesToCells(this, this._cells, this.context.theme.onHoverParticles, this.layout.root);
+        addHoverParticlesToCells(this, this._cells, this.config.onHoverParticles, this.layout.root);
     }
 
     updateStates() {
@@ -63,7 +63,7 @@ export class Select extends Screen {
         const cells = fp.keyBy(cell => cell.button.config.id, this._cells);
 
         storedStates.forEach(stored => {
-            const config = this.context.theme.states[stored.state];
+            const config = this.config.states[stored.state];
             const button = cells[stored.id].button;
 
             button.overlays.set("state", this.add.sprite(config.x, config.y, config.overlayAsset));
@@ -83,7 +83,7 @@ export class Select extends Screen {
 
     currentEnabled() {
         const currentState = this.states.get(this.grid.getCurrentPageKey()).state;
-        const stateDefinition = this.context.theme.states[currentState];
+        const stateDefinition = this.config.states[currentState];
         return stateDefinition === undefined || stateDefinition.enabled !== false;
     }
 

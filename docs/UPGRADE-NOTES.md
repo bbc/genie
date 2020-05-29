@@ -1,4 +1,8 @@
 # Upgrade Notes
+All breaking changes between Genie versions will be listed here
+
+#3.6.0
+Current screen config has moved from `this.context.theme` to `this.config`
 
 #3.5.0
 Theme config background furniture arrays are now added via `theme.background.items`

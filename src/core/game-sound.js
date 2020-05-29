@@ -15,7 +15,7 @@ const setButtonClickSound = (scene, audioKey) => {
 };
 
 const setupScreenMusic = scene => {
-    if (isAlreadyPlaying(scene.context.theme.music) || scene.context.theme.isOverlay) return;
+    if (isAlreadyPlaying(scene.config.music) || scene.config.isOverlay) return;
     stopCurrentAndStartNextMusic(scene);
 };
 
@@ -29,7 +29,7 @@ const onFadeComplete = scene => {
 };
 
 const startNextMusic = scene => {
-    Assets.backgroundMusic = startMusic(scene, scene.context.theme.music);
+    Assets.backgroundMusic = startMusic(scene, scene.config.music);
 };
 
 const startMusic = (scene, audioKey) => {

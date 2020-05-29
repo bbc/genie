@@ -99,7 +99,6 @@ describe("Screen", () => {
             createAndInitScreen();
             expect(screen.context).toEqual({
                 config: mockData.config,
-                theme: mockData.config.theme.screenKey,
                 navigation: mockNavigation,
                 parentScreens: mockData.parentScreens,
                 transientData: mockTransientData,
@@ -400,6 +399,14 @@ describe("Screen", () => {
             screen.setData(testData);
 
             expect(screen.transientData).toEqual(testTransientData);
+        });
+
+        test("config getter returns current scene's config", () => {
+            createAndInitScreen();
+            const testData = { config: { theme: { screenKey: { test: "test config" } } } };
+            screen.setData(testData);
+
+            expect(screen.config).toEqual(testData.config.theme.screenKey);
         });
     });
 

@@ -48,4 +48,4 @@ export const create = scene => {
     scene.events.once(Phaser.Scenes.Events.SHUTDOWN, shutdown);
 };
 
-export const isEnabled = scene => (scene.context.theme.rows * scene.context.theme.columns === 1 ? true : false);
+export const isEnabled = scene => scene.config.rows * scene.config.columns === 1;
