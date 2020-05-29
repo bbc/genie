@@ -7,17 +7,17 @@ import { nextPage } from "../../../src/core/background/pages.js";
 
 describe("Background Pages", () => {
     let mockScene;
-    let mockPageItem;
+    let mockTimedItem;
     let mockSound;
     let mockTween;
 
     beforeEach(() => {
-        mockPageItem = { stop: jest.fn() };
+        mockTimedItem = { stop: jest.fn() };
         mockSound = { play: jest.fn(), testKey: "mockSound" };
         mockTween = { play: jest.fn(), testKey: "mockTween" };
         mockScene = {
             pageIdx: -1,
-            pageItems: [mockPageItem],
+            timedItems: [mockTimedItem],
             context: { theme: { background: { pages: [] } } },
             navigation: { next: jest.fn() },
             sound: {
@@ -38,9 +38,9 @@ describe("Background Pages", () => {
             expect(mockScene.pageIdx).toBe(3);
         });
 
-        test("calls stop with value of 1 on pageItems", () => {
+        test("calls stop with value of 1 on timedItems", () => {
             nextPage(mockScene)();
-            expect(mockPageItem.stop).toHaveBeenCalledWith(1);
+            expect(mockTimedItem.stop).toHaveBeenCalledWith(1);
         });
 
         test("calls navigation.next if last page", () => {
@@ -50,18 +50,18 @@ describe("Background Pages", () => {
             expect(mockScene.navigation.next).toHaveBeenCalled();
         });
 
-        test("adds a Phaser sound to pageItems if configured in page", () => {
+        test("adds a Phaser sound to timedItems if configured in page", () => {
             mockScene.context.theme.background.pages = [["testAudio"]];
             mockScene.context.theme.background.audio = [{ name: "testAudio" }];
             nextPage(mockScene)();
-            expect(mockScene.pageItems[0]).toBe(mockSound);
+            expect(mockScene.timedItems[0]).toBe(mockSound);
         });
 
-        test("adds a Phaser tween to pageItems if configured in page", () => {
+        test("adds a Phaser tween to timedItems if configured in page", () => {
             mockScene.context.theme.background.pages = [["testTween"]];
             mockScene.context.theme.background.tweens = [{ name: "testTween", targets: [] }];
             nextPage(mockScene)();
-            expect(mockScene.pageItems[0]).toBe(mockTween);
+            expect(mockScene.timedItems[0]).toBe(mockTween);
         });
 
         describe("Non Narrative screen usage", () => {
@@ -72,19 +72,19 @@ describe("Background Pages", () => {
                 mockScene.context.theme.background.tweens = [{ name: "testTween", targets: [] }];
                 mockScene.context.theme.background.audio = [{ name: "testAudio" }];
                 nextPage(mockScene)();
-                expect(mockScene.pageItems).toEqual([mockTween, mockSound]);
+                expect(mockScene.timedItems).toEqual([mockTween, mockSound]);
             });
 
             test("adds all tweens if no pages and no audio configured", () => {
                 mockScene.context.theme.background.tweens = [{ name: "testTween", targets: [] }];
                 nextPage(mockScene)();
-                expect(mockScene.pageItems).toEqual([mockTween]);
+                expect(mockScene.timedItems).toEqual([mockTween]);
             });
 
             test("adds all audio if no pages configured and no tweens configured", () => {
                 mockScene.context.theme.background.audio = [{ name: "testAudio" }];
                 nextPage(mockScene)();
-                expect(mockScene.pageItems).toEqual([mockSound]);
+                expect(mockScene.timedItems).toEqual([mockSound]);
             });
         });
     });

@@ -17,18 +17,18 @@ const createItems = scene => {
 
 const getAllItems = background => [...(background.tweens || []), ...(background.audio || [])].map(i => i.name);
 
-const getPageItems = scene => {
+const getTimedItems = scene => {
     const pages = scene.context.theme.background.pages;
-    const currentPageItems = pages ? pages[scene.pageIdx] : getAllItems(scene.context.theme.background);
-    return currentPageItems.map(createItems(scene));
+    const timedItems = pages ? pages[scene.pageIdx] : getAllItems(scene.context.theme.background);
+    return timedItems.map(createItems(scene));
 };
 
-const skip = pageItems => pageItems.forEach(item => item.stop(1));
+const skip = timedItems => timedItems.forEach(item => item.stop(1));
 
 export const nextPage = scene => () => {
-    skip(scene.pageItems);
+    skip(scene.timedItems);
     scene.pageIdx++;
     const pages = scene.context.theme.background.pages;
     const lastPage = pages ? scene.pageIdx >= pages.length : false;
-    lastPage ? scene.navigation.next() : (scene.pageItems = getPageItems(scene));
+    lastPage ? scene.navigation.next() : (scene.timedItems = getTimedItems(scene));
 };

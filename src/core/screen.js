@@ -70,7 +70,7 @@ export class Screen extends Phaser.Scene {
         this.cameras.main.scrollX = -CAMERA_X;
         this.cameras.main.scrollY = -CAMERA_Y;
         this.pageIdx = -1;
-        this.pageItems = [];
+        this.timedItems = [];
         data.config && this.events.once("create", nextPage(this));
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
