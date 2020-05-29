@@ -13,7 +13,7 @@ describe("Background Tweens", () => {
         mockScene = {
             tweens: { add: jest.fn(() => "mockTween") },
             children: { list: [] },
-            context: { theme: { background: { tweens: [mockTween] } } },
+            config: { background: { tweens: [mockTween] } },
         };
     });
 

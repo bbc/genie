@@ -57,7 +57,7 @@ describe("Background Furniture", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("Furnish", () => {
-        test("does not add any items if theme.config.furniture has not been set", () => {
+        test("does not add any items if config.furniture has not been set", () => {
             delete mockTheme.background.items;
 
             furnish(mockScene)();

@@ -11,10 +11,10 @@ describe("Background Audio", () => {
     beforeEach(() => {
         mockSound = { play: jest.fn() };
         mockScene = {
+            config: { background: { audio: [{ name: "test_audio", key: "test_key" }] } },
             sound: {
                 add: jest.fn(() => mockSound),
             },
-            context: { theme: { background: { audio: [{ name: "test_audio", key: "test_key" }] } } },
         };
     });
 
