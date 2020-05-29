@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | screen.context.theme now screen.config. |
 | | Remove particle emitters on disabled select screen buttons. |
 | | Expose current screen in debug mode as window.__debug.screen. |
 | | Add optional level select button to pause screen. |

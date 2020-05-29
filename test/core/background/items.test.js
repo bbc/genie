@@ -37,7 +37,7 @@ describe("Background Furniture", () => {
 
         mockTheme = { background: {} };
         mockScene = {
-            context: { theme: mockTheme },
+            config: mockTheme,
             add: {
                 sprite: jest.fn(),
                 image: jest.fn(),
