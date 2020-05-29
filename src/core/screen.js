@@ -17,6 +17,7 @@ import { furnish } from "./background/items.js";
 import { isDebug } from "./debug/debug-mode.js";
 import * as debug from "./debug/debug.js";
 import { CAMERA_X, CAMERA_Y } from "./layout/metrics.js";
+import { nextPage } from "./background/pages.js";
 
 const getRoutingFn = scene => route => {
     const routeTypes = {
@@ -71,6 +72,9 @@ export class Screen extends Phaser.Scene {
         this._data = data;
         this.cameras.main.scrollX = -CAMERA_X;
         this.cameras.main.scrollY = -CAMERA_Y;
+        this.pageIdx = -1;
+        this.timedItems = [];
+        data.config && this.events.once("create", nextPage(this));
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
             this.setStatsScreen(this.scene.key);

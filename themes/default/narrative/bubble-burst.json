@@ -1,0 +1,21 @@
+{
+    "x": 0,
+    "y": 0,
+    "speedX": { "min": -25, "max": 25 },
+    "speedY": { "min": -50, "max": -20 },
+    "lifespan": 8000,
+    "quantity": 6,
+    "gravityY": -20,
+    "deathZone": {
+        "type": "onEnter",
+        "source": {
+            "type": "rectangle",
+            "x": -400,
+            "y": -430,
+            "width": 800,
+            "height": 400
+        }
+    },
+    "on": 0,
+    "scale": { "start": 0.15, "end": 0.6 }
+}
