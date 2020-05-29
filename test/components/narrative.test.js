@@ -22,6 +22,7 @@ describe("Narrative Screen", () => {
         narrativeScreen.add = { image: jest.fn() };
         narrativeScreen.setLayout = jest.fn();
         narrativeScreen.navigation = { next: jest.fn() };
+        narrativeScreen.addBackgroundItems = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -34,6 +35,10 @@ describe("Narrative Screen", () => {
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["continue", "skip", "pause"];
             expect(narrativeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+
+        test("adds background items", () => {
+            expect(narrativeScreen.addBackgroundItems).toHaveBeenCalled();
         });
     });
 
