@@ -289,7 +289,7 @@
                     ["hide4", "dialogue5", "show5", "bubblesOn", "bubblesOff", "bubbleBurstSFX", "pump", "littleCrabBack", "bigCrabPump"],
                 ],
             },
-            debugLabels: [{ x: -390, y: -40, text: "Configure pages of audio and tween animations with this module" }],
+            debugLabels: [{ x: -390, y: -40, text: "Configure pages of audio\nand tweens with this module.\nParticle Emitters can be\nturned on and off by tweening\ntheir \"on\" parameter between\n0 and 1" }],
         },
     },
 }
