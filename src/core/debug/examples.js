@@ -6,7 +6,7 @@
 import { Select } from "../../components/select/select-screen.js";
 import { Results } from "../../components/results/results-screen.js";
 import { Home } from "../../components/home.js";
-import { Narrative } from "../../components/narrative.js"
+import { Narrative } from "../../components/narrative.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const prependDebug = key => `debug-${key}`;
@@ -100,7 +100,7 @@ const exampleScreens = {
             next: "debug",
         },
     },
-    "narrative": {
+    narrative: {
         scene: Narrative,
         title: "Narrative",
         routes: {
@@ -109,4 +109,4 @@ const exampleScreens = {
     },
 };
 
-export const examples = fp.mapKeys(prependDebug, exampleScreens)
+export const examples = fp.mapKeys(prependDebug, exampleScreens);
