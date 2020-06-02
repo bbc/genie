@@ -8,7 +8,7 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 import { createCell, setSize } from "../../../../src/core/layout/grid/cell.js";
 import * as gmiModule from "../../../../src/core/gmi/gmi.js";
 import { accessibilify } from "../../../../src/core/accessibility/accessibilify.js";
-import * as state from "../../../../src/core/state.js";
+import * as states from "../../../../src/core/states.js";
 
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
 
@@ -158,7 +158,7 @@ describe("Grid Cells", () => {
 
             beforeEach(() => {
                 mockStates = { get: jest.fn() };
-                jest.spyOn(state, "create").mockImplementation(() => mockStates);
+                jest.spyOn(states, "initState").mockImplementation(() => mockStates);
                 mockTheme = {
                     choices: [{ id: "mary", key: "mary", ariaLabel: "Mary", title: "Mary", subtitle: "Is very tall" }],
                     choicesStyling: {

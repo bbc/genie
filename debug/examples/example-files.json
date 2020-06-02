@@ -41,6 +41,11 @@
                 "type": "json5",
                 "key": "background-particles",
                 "url": "background-particles.json5"
+            },
+            {
+                "type": "json5",
+                "key": "example-narrative",
+                "url": "narrative.json5"
             }
         ]
     }

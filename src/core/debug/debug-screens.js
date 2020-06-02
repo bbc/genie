@@ -18,21 +18,22 @@ const launcherScreen = {
 };
 
 const getDebugScreenWithRoutes = () => {
-    Object.keys(examples).map(screenKey => (launcherScreen.debug.routes[screenKey] = screenKey));
-
+    Object.keys(examples).map(key => (launcherScreen.debug.routes[key] = key));
     return launcherScreen;
 };
 
-const addScene = scene => key => scene.scene.add(key, examples[key].scene);
+const prependDebug = key => `debug-${key}`;
+
+const addScene = (scene, examples) => key => scene.scene.add(key, examples[key].scene);
 
 const addScreens = scene => {
-    Object.keys(examples).map(addScene(scene));
-    const debugTheme = getConfig(scene, "example-files").theme;
+    Object.keys(examples).map(addScene(scene, examples));
+    const debugTheme = fp.mapKeys(prependDebug, getConfig(scene, "example-files").theme);
     const config = scene.context.config;
     config.navigation = scene.context.navigation;
 
     Object.assign(config.theme, debugTheme);
-    Object.assign(config.navigation, examples); //name method for this
+    Object.assign(config.navigation, examples);
 
     scene.setConfig(config);
 };

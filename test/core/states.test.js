@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { states, create } from "../../src/core/state.js";
+import { states, initState } from "../../src/core/states.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 
 describe("State", () => {
@@ -26,13 +26,13 @@ describe("State", () => {
 
     describe("Create", () => {
         test("adds an entry to the states map", () => {
-            create("stateKey", {});
+            initState("stateKey", {});
 
             expect(states.get("stateKey")).toBeDefined();
         });
 
         test("returns an object with get, getAll and set access functions", () => {
-            const stateSet = create("stateKey", []);
+            const stateSet = initState("stateKey", []);
 
             expect(stateSet.get).toEqual(expect.any(Function));
             expect(stateSet.getAll).toEqual(expect.any(Function));
@@ -42,7 +42,7 @@ describe("State", () => {
 
     describe("Returned set method", () => {
         test("calls gmiSetGameData with correct data", () => {
-            const stateSet = create("stateKey", []);
+            const stateSet = initState("stateKey", []);
             stateSet.set("test_choice", "locked");
 
             expect(mockGmi.setGameData).toHaveBeenCalledWith("genie", {
@@ -51,7 +51,7 @@ describe("State", () => {
         });
 
         test("deletes state when called with no config", () => {
-            const stateSet = create("stateKey", []);
+            const stateSet = initState("stateKey", []);
             stateSet.set("test_choice", "locked");
             stateSet.set("test_choice");
 
@@ -64,7 +64,7 @@ describe("State", () => {
     describe("Returned get method", () => {
         test("does not fail if gameData.genie is blank", () => {
             delete mockSettings.gameData.genie;
-            const stateSet = create("stateKey", []);
+            const stateSet = initState("stateKey", []);
 
             expect(() => stateSet.get("test_choice")).not.toThrow();
         });
@@ -72,14 +72,14 @@ describe("State", () => {
         test("Returns current state for given key", () => {
             const expectedData = { test: "data" };
             mockSettings.gameData.genie = { stateKey: { test_choice: expectedData } };
-            const stateSet = create("stateKey", []);
+            const stateSet = initState("stateKey", []);
 
             expect(stateSet.get("test_choice")).toEqual(expectedData);
         });
 
         test("overrides config with local storage for a given key", () => {
             mockSettings.gameData.genie = { stateKey: { test_choice: { state: "complete" } } };
-            const stateSet = create("stateKey", [{ id: "test_choice", state: "locked" }]);
+            const stateSet = initState("stateKey", [{ id: "test_choice", state: "locked" }]);
             expect(stateSet.get("test_choice").state).toEqual("complete");
         });
     });
@@ -102,14 +102,14 @@ describe("State", () => {
                 { id: "test_choice3", state: "locked" },
             ];
 
-            const stateSet = create("stateKey", testConfig);
+            const stateSet = initState("stateKey", testConfig);
             expect(stateSet.getAll()).toEqual(expected);
         });
 
         test("Returns an empty array when there is no config and no local storage", () => {
             mockSettings.gameData.genie = {};
 
-            const stateSet = create("stateKey", []);
+            const stateSet = initState("stateKey", []);
             expect(stateSet.getAll()).toEqual([]);
         });
     });
@@ -117,7 +117,7 @@ describe("State", () => {
     describe("Debug", () => {
         test("adds states to __debug if present", () => {
             global.window.__debug = {};
-            create("localStorageKey", {});
+            initState("localStorageKey", {});
 
             expect(window.__debug.states).toEqual(states);
         });

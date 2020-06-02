@@ -16,7 +16,7 @@ To create a state pass the storage key and a config array to initState.
 This will both return and add the new state to the states map so you can access it from anywhere using `states.get(###)`.
 
 ```javascript
-import { initState } from "../core/state.js";
+import { initState } from "../core/states.js";
 
 const levelStates = initState("levels", [
     { id: "donutPlains", state: "complete" },
@@ -29,14 +29,14 @@ const levelStates = initState("levels", [
 ## Using States
 
 ```javascript
-import { states } from "../core/state.js";
+import { states } from "../core/states.js";
 
 const levelStates = states.get("levels");
 
-// Set rainbowRoad level to the default:
+// Set rainbowRoad level to the default and save to local storage:
 levelStates.set("rainbowRoad")
 
-// Set ghostValley level to complete
+// Set ghostValley level to complete and save to local storage:
 levelStates.set("ghostValley", "complete")
 ```
 
@@ -48,7 +48,9 @@ levelStates.set("ghostValley", "complete")
 * **state.set(`id`, `state`) sets the item with `id` to `state`
 
 ## Usage with Select Screen
-The Genie [Select](select-screen.md) screen provides automatic integration with states. 
+The Genie [Select](select-screen.md) screen provides automatic integration with states when setting the `storageKey` property to the state required.
+The look of individual states can be configured in the `states` block of the select screen's config.
+See the [select docs](select-screen.md) for more info or visit the debug page for some working examples. 
 
 
 ## Debug

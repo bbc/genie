@@ -11,7 +11,7 @@ import { GelGrid } from "../../../src/core/layout/grid/grid.js";
 import { createTitles } from "../../../src/components/select/titles.js";
 import { addHoverParticlesToCells } from "../../../src/components/select/select-particles.js";
 import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
-import * as state from "../../../src/core/state.js";
+import * as state from "../../../src/core/states.js";
 
 jest.mock("../../../src/components/select/titles.js");
 jest.mock("../../../src/components/select/single-item-mode.js");
@@ -22,8 +22,8 @@ jest.mock("../../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
 }));
 
-jest.mock("../../../src/core/state.js", () => ({
-    create: jest.fn(() => ({
+jest.mock("../../../src/core/states.js", () => ({
+    initState: jest.fn(() => ({
         getAll: jest.fn(() => []),
         get: jest.fn(() => ({ state: "locked" })),
     })),
@@ -294,7 +294,9 @@ describe("Select Screen", () => {
                 { asset: "test-asset-1", state: "test-state-1", id: "test-id-1" },
             ];
             selectScreen.create();
-            expect(state.create).toHaveBeenCalledWith("test-storage-key", [{ id: "test-id-1", state: "test-state-1" }]);
+            expect(state.initState).toHaveBeenCalledWith("test-storage-key", [
+                { id: "test-id-1", state: "test-state-1" },
+            ]);
         });
     });
 
