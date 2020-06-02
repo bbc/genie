@@ -13,7 +13,7 @@ See the "background.items" block in this scene\'s config',
                 },
             ],
             assetPrefix: "home",
-            music: "loader.backgroundMusic",
+            music: "home.backgroundMusic",
             background: {
                 items: [
                     { key: "home.background", x: 0, y: 0 },
