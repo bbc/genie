@@ -10,13 +10,13 @@
                     { key: "home.title", x: 0, y: -150, name: "title" },
                 ],
             },
+            debugLabels: [
+                {
+                    x: -390,
+                    y: -40,
+                    text: "DEBUG DRAW OPTIONS:\nQ: Toggle GEL safe Area\nW: Toggle Groups\nE: Toggle Buttons\nR: Toggle CSS debug\nT: Examples Launcher",
+                },
+            ],
         },
-        debugLabels: [
-            {
-                x: -390,
-                y: -40,
-                text: "DEBUG DRAW OPTIONS:\nQ: Toggle GEL safe Area\nW: Toggle Groups\nE: Toggle Buttons\nR: Toggle CSS debug\nT: Examples Launcher",
-            },
-        ],
     },
 }

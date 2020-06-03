@@ -7,7 +7,7 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 
 import { accessibilify } from "../../accessibility/accessibilify.js";
 import { gmi } from "../../gmi/gmi.js";
-import * as state from "../../state.js";
+import * as state from "../../states.js";
 
 const alignmentFactor = { left: 0, center: 1, right: 2 };
 
@@ -64,7 +64,7 @@ const setPosition = (grid, button, idx) => {
 
 const getStates = theme => {
     const stateConfig = theme.choices.map(({ id, state }) => ({ id, state }));
-    return state.create(theme.storageKey, stateConfig);
+    return state.initState(theme.storageKey, stateConfig);
 };
 
 const getStylingForState = (btn, states, styling) => styling[fp.get("state", states.get(btn.key))] || {};

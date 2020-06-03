@@ -1,0 +1,295 @@
+{
+    theme: {
+        narrative: {
+            //Add, background images / animations / particle systems. More examples in /debug/examples
+            background: {
+                items: [
+                    { key: "examples_rockpool", x: 0, y: 0 },
+                    {
+                        name: "bubbles",
+                        key: "examples_bubbles",
+                        assetKey: "examples_bubble",
+                        props: { y: 90 },
+                    },
+                    {
+                        name: "bubbleBurst",
+                        key: "examples_bubbleBurst",
+                        assetKey: "examples_bubble",
+                        props: { y: 90 },
+                    },
+                    { key: "examples_little-crab", x: -400, y: 130, name: "littleCrab" },
+                    { key: "examples_big-crab", x: 600, y: 60, name: "bigCrab" },
+                    {
+                        name: "owl",
+                        key: "examples_spine_owl",
+                        x: -200,
+                        y: -100,
+                        animationName: "idle",
+                        props: { scale: 0.3 }, //Any props defined here will be set on the Spine object.
+                    },
+                    {
+                        name: "text1",
+                        text: "Little Crab\nand Very Big Crab\nLive in a tiny rock pool.",
+                        x: -110,
+                        y: -240,
+                        //Use the following style for this text
+                        style: {
+                            fontFamily: '"ReithSans"',
+                            fontSize: 24,
+                            resolution: 2,
+                            backgroundColor: "rgba(0,0,0,0.5)",
+                            padding: {
+                                left: 6,
+                                right: 6,
+                                top: 4,
+                                bottom: 4,
+                            },
+                        },
+                    },
+                    {
+                        name: "text2",
+                        text: "Today they are off to the sea.",
+                        x: -110,
+                        y: -240,
+                        //Use the following style for this text
+                        style: {
+                            fontFamily: '"ReithSans"',
+                            fontSize: 24,
+                            resolution: 2,
+                            backgroundColor: "rgba(0,0,0,0.5)",
+                            padding: {
+                                left: 6,
+                                right: 6,
+                                top: 4,
+                                bottom: 4,
+                            },
+                        },
+                    },
+                    {
+                        name: "text2b",
+                        text: '"This is going to be so great!\n" - says Little Crab.',
+                        x: -80,
+                        y: -200,
+                        //Use the following style for this text
+                        style: {
+                            fontFamily: '"ReithSans"',
+                            fontSize: 24,
+                            resolution: 2,
+                            backgroundColor: "rgba(0,0,0,0.5)",
+                            padding: {
+                                left: 6,
+                                right: 6,
+                                top: 4,
+                                bottom: 4,
+                            },
+                        },
+                    },
+                    {
+                        name: "text3",
+                        text: "They go tik-a-tik, tik-a-tik\nover the rocks.",
+                        x: -110,
+                        y: -190,
+                        //Use the following style for this text
+                        style: {
+                            fontFamily: '"ReithSans"',
+                            fontSize: 24,
+                            resolution: 2,
+                            backgroundColor: "rgba(0,0,0,0.5)",
+                            padding: {
+                                left: 6,
+                                right: 6,
+                                top: 4,
+                                bottom: 4,
+                            },
+                        },
+                    },
+                    {
+                        name: "text4",
+                        text: "splish splash, splish splash\nacross the pools.",
+                        x: -110,
+                        y: -240,
+                        //Use the following style for this text
+                        style: {
+                            fontFamily: '"ReithSans"',
+                            fontSize: 24,
+                            resolution: 2,
+                            backgroundColor: "rgba(0,0,0,0.5)",
+                            padding: {
+                                left: 6,
+                                right: 6,
+                                top: 4,
+                                bottom: 4,
+                            },
+                        },
+                    },
+                    {
+                        name: "text5",
+                        text: "Squelch squelch squelch\nthrough the slimy, slippery, seaweed.",
+                        x: -110,
+                        y: -240,
+                        //Use the following style for this text
+                        style: {
+                            fontFamily: '"ReithSans"',
+                            fontSize: 24,
+                            resolution: 2,
+                            backgroundColor: "rgba(0,0,0,0.5)",
+                            padding: {
+                                left: 6,
+                                right: 6,
+                                top: 4,
+                                bottom: 4,
+                            },
+                        },
+                    },
+                ],
+
+                tweens: [
+                    {
+                        name: "showOwl",
+                        targets: ["owl"],
+                        alpha: { from: 0, to: 1 },
+                        ease: "Linear", // 'Cubic', 'Elastic', 'Bounce', 'Back'
+                        duration: 1000,
+                    },
+                    {
+                        name: "show1",
+                        targets: ["text1"],
+                        alpha: { from: 0, to: 1 },
+                        ease: "Linear", // 'Cubic', 'Elastic', 'Bounce', 'Back'
+                        duration: 500,
+                        delay: 1000,
+                    },
+                    {
+                        name: "littleCrabOn",
+                        targets: ["littleCrab"],
+                        x: { from: -400, to: -120 },
+                        y: { from: 130, to: 140 },
+                        ease: "Cubic",
+                        duration: 1000,
+                        delay: 500,
+                    },
+                    {
+                        name: "bigCrabOn",
+                        targets: ["bigCrab"],
+                        x: { from: 600, to: 100 },
+                        y: { from: 60, to: 100 },
+                        ease: "Cubic",
+                        duration: 1000,
+                        delay: 2600,
+                    },
+                    {
+                        name: "show2",
+                        targets: ["text2"],
+                        alpha: { from: 0, to: 1 },
+                        ease: "Linear",
+                        duration: 500,
+                    },
+                    {
+                        name: "show2b",
+                        targets: ["text2b"],
+                        alpha: { from: 0, to: 1 },
+                        ease: "Linear",
+                        duration: 500,
+                        delay: 3000,
+                    },
+                    {
+                        name: "show3",
+                        targets: ["text3"],
+                        alpha: { from: 0, to: 1 },
+                        ease: "Linear",
+                        duration: 500,
+                    },
+                    {
+                        name: "show4",
+                        targets: ["text4"],
+                        alpha: { from: 0, to: 1 },
+                        ease: "Linear",
+                        duration: 500,
+                    },
+                    {
+                        name: "show5",
+                        targets: ["text5"],
+                        alpha: { from: 0, to: 1 },
+                        ease: "Linear",
+                        duration: 500,
+                    },
+                    {
+                        name: "hideAll",
+                        targets: ["text1", "text2", "text2b", "text3", "text4", "text5", "owl"],
+                        alpha: { from: 0, to: 0 },
+                        duration: 1,
+                    },
+                    {
+                        name: "hide1",
+                        targets: ["text1"],
+                        alpha: { from: 1, to: 0 },
+                        duration: 200,
+                    },
+                    {
+                        name: "hide2",
+                        targets: ["text2", "text2b"],
+                        alpha: { from: 1, to: 0 },
+                        duration: 200,
+                    },
+                    {
+                        name: "hide3",
+                        targets: ["text3"],
+                        alpha: { from: 1, to: 0 },
+                        duration: 200,
+                    },
+                    {
+                        name: "hide4",
+                        targets: ["text4"],
+                        alpha: { from: 1, to: 0 },
+                        duration: 200,
+                    },
+                    {
+                        name: "bubblesOff",
+                        targets: ["bubbleBurst"],
+                        on: { from: 0, to: 0 },
+                        delay: 12200,
+                    },
+                    {
+                        name: "bubblesOn",
+                        targets: ["bubbleBurst"],
+                        on: { from: 1, to: 1 },
+                        delay: 12000,
+                    },
+                    {
+                        name: "littleCrabBack",
+                        targets: ["littleCrab"],
+                        x: { from: -120, to: -180 },
+                        ease: "Linear",
+                        duration: 500,
+                        delay: 12200,
+                    },
+                    {
+                        name: "bigCrabPump",
+                        targets: ["bigCrab"],
+                        angle: { from: 0, to: 10 },
+                        ease: "Bounce.easeInOut",
+                        duration: 200,
+                        delay: 12000,
+                    }
+                ],
+                audio: [
+                    { name: "dialogue1", key: "examples_dialogue1", type: "dialogue", delay: 1 },
+                    { name: "dialogue2", key: "examples_dialogue2", type: "dialogue" },
+                    { name: "dialogue3", key: "examples_dialogue3", type: "dialogue" },
+                    { name: "dialogue4", key: "examples_dialogue4", type: "dialogue" },
+                    { name: "dialogue5", key: "examples_dialogue5", type: "dialogue" },
+                    { name: "bubbleBurstSFX", key: "examples_bubbleBurstSFX", type: "sfx", delay: 12.5 },
+                    { name: "pump", key: "examples_pump", type: "sfx", delay: 12, volume: 0.15},
+                ],
+                pages: [
+                    ["hideAll", "showOwl", "dialogue1", "show1", "littleCrabOn", "bigCrabOn"],
+                    ["hide1", "dialogue2", "show2", "show2b"],
+                    ["hide2", "dialogue3", "show3"],
+                    ["hide3", "dialogue4", "show4"],
+                    ["hide4", "dialogue5", "show5", "bubblesOn", "bubblesOff", "bubbleBurstSFX", "pump", "littleCrabBack", "bigCrabPump"],
+                ],
+            },
+            debugLabels: [{ x: -390, y: -40, text: "Configure pages of audio\nand tweens with this module.\nParticle Emitters can be\nturned on and off by tweening\ntheir \"on\" parameter between\n0 and 1" }],
+        },
+    },
+}

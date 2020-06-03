@@ -9,7 +9,7 @@
 import { Screen } from "../../core/screen.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { GelGrid } from "../../core/layout/grid/grid.js";
-import * as state from "../../core/state.js";
+import * as state from "../../core/states.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import { createTitles } from "./titles.js";
 import * as singleItemMode from "./single-item-mode.js";
@@ -49,7 +49,7 @@ export class Select extends Screen {
         addEvents(this);
 
         const stateConfig = this.config.choices.map(({ id, state }) => ({ id, state }));
-        this.states = state.create(this.config.storageKey, stateConfig);
+        this.states = state.initState(this.config.storageKey, stateConfig);
 
         singleItemMode.create(this);
 

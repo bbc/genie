@@ -6,8 +6,12 @@
 import { Select } from "../../components/select/select-screen.js";
 import { Results } from "../../components/results/results-screen.js";
 import { Home } from "../../components/home.js";
+import { Narrative } from "../../components/narrative.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
-export const examples = {
+const prependDebug = key => `debug-${key}`;
+
+const exampleScreens = {
     "select-1": {
         scene: Select,
         title: "Select 1 item",
@@ -96,4 +100,13 @@ export const examples = {
             next: "debug",
         },
     },
+    narrative: {
+        scene: Narrative,
+        title: "Narrative",
+        routes: {
+            next: "debug",
+        },
+    },
 };
+
+export const examples = fp.mapKeys(prependDebug, exampleScreens);

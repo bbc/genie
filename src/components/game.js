@@ -6,7 +6,7 @@
 import { Screen } from "../core/screen.js";
 import { accessibilify } from "../core/accessibility/accessibilify.js";
 import { gmi } from "../core/gmi/gmi.js";
-import * as state from "../core/state.js";
+import * as state from "../core/states.js";
 
 export class Game extends Screen {
     calculateAchievements(item, amount, keys) {
@@ -111,7 +111,7 @@ export class Game extends Screen {
                 id,
                 state,
             }));
-            this.states = state.create(this.context.config.theme["level-select"].storageKey, stateConfig);
+            this.states = state.initState(this.context.config.theme["level-select"].storageKey, stateConfig);
             this.states.set(levelTitle, "completed");
         };
 

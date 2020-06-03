@@ -4,43 +4,48 @@
         "files": [
             {
                 "type": "json5",
-                "key": "select-1",
+                "key": "debug-select-1",
                 "url": "select-1.json5"
             },
             {
                 "type": "json5",
-                "key": "select-grid",
+                "key": "debug-select-grid",
                 "url": "select-grid.json5"
             },
             {
                 "type": "json5",
-                "key": "results-1-sec",
+                "key": "debug-results-1-sec",
                 "url": "results-1-sec.json5"
             },
             {
                 "type": "json5",
-                "key": "results-10-sec",
+                "key": "debug-results-10-sec",
                 "url": "results-10-sec.json5"
             },
             {
                 "type": "json5",
-                "key": "results-spine",
+                "key": "debug-results-spine",
                 "url": "results-spine.json5"
             },
             {
                 "type": "json5",
-                "key": "results-row-particles",
+                "key": "debug-results-row-particles",
                 "url": "results-row-particles.json5"
             },
             {
                 "type": "json5",
-                "key": "background-animations",
+                "key": "debug-background-animations",
                 "url": "background-animations.json5"
             },
             {
                 "type": "json5",
-                "key": "background-particles",
+                "key": "debug-background-particles",
                 "url": "background-particles.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-narrative",
+                "url": "narrative.json5"
             }
         ]
     }

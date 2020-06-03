@@ -6,13 +6,6 @@
 import { getLauncherScreen, addExampleScreens } from "../../../src/core/debug/debug-screens.js";
 
 describe("getDebugScreens", () => {
-    beforeEach(() => {});
-
-    afterEach(() => {
-        jest.clearAllMocks();
-        jest.restoreAllMocks();
-    });
-
     describe("getLauncherScreen", () => {
         test("Returns empty object if not debug mode", () => {
             expect(getLauncherScreen(false)).toEqual({});
@@ -24,20 +17,24 @@ describe("getDebugScreens", () => {
     });
 
     describe("addExampleScreens", () => {
-        test("Returns debug screen if debug mode", () => {
+        let mockScreen;
+
+        beforeEach(() => {
             const mockConfig = {
                 config: {
                     prefix: "mockPrefix.",
-                    files: [{ key: "mockKey1" }, { key: "mockKey2" }, { key: "mockKey3" }],
+                    files: [{ key: "mockKey1" }],
                 },
             };
 
             const json = {
                 "example-files": mockConfig,
-                "mockPrefix.mockKey1": { theme: {} },
+                "mockPrefix.mockKey1": { theme: { themeKey: "theme data" } },
+                "mockPrefix.mockKey2": { theme: {} },
+                "mockPrefix.mockKey3": { theme: {} },
             };
 
-            const mockScreen = {
+            mockScreen = {
                 setConfig: jest.fn(),
                 context: {
                     config: { theme: {} },
@@ -52,11 +49,22 @@ describe("getDebugScreens", () => {
                     },
                 },
             };
+        });
 
+        afterEach(jest.clearAllMocks);
+
+        test("Returns debug screen if debug mode", () => {
             addExampleScreens(mockScreen);
-
             expect(mockScreen.scene.add).toHaveBeenCalled();
             expect(Object.keys(mockScreen.setConfig.mock.calls[0][0])).toEqual(["theme", "navigation"]);
+
+            // Prepends 'debug-' to themes
+            expect(Object.keys(mockScreen.setConfig.mock.calls[0][0].theme)[0]).toBe("debug-themeKey");
+        });
+
+        test("Does not call a second time (fp.once)", () => {
+            addExampleScreens(mockScreen);
+            expect(mockScreen.setConfig).not.toHaveBeenCalled();
         });
     });
 });

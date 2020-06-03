@@ -43,7 +43,7 @@ The sending of stats is done entirely through the GMI. A simple call can be used
 gmi.sendStatsEvent(actionName, actionType, additionalLabels);
 ```
 
-See here for more information on [sending stats](stats.md).
+See here for more information on [sending stats](docs/development/stats.md).
 
 #### Global Game Settings
 
