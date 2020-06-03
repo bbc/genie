@@ -886,6 +886,12 @@ describe("Grid", () => {
                 expect(tweenCalls[0][0].x).toEqual({ from: 600, to: 0 });
                 expect(tweenCalls[1][0].x).toEqual({ from: 0, to: -600 });
             });
+
+            test("Does nothing if only one page exists", () => {
+                grid.page = 0;
+                grid.showPage(0);
+                expect(mockScene.add.tween).not.toHaveBeenCalled();
+            });
         });
 
         describe("looping behaviour when multiple items are showing", () => {
