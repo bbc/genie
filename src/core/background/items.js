@@ -12,7 +12,7 @@ import { isParticles, addParticles } from "./particles.js";
 
 const setName = createFn => config => {
     const item = createFn(config);
-    config.name && (item.name = config.name);
+    item && config.name && (item.name = config.name);
 };
 
 export const furnish = scene => () => {

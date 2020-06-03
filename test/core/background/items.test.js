@@ -90,5 +90,17 @@ describe("Background Furniture", () => {
             furnish(mockScene)();
             expect(mockSprite.name).toBe("test_name");
         });
+
+        test("Does not add name if no item created (e.g: MotionFx disabled particles)", () => {
+            mockSettings.motion = false;
+            const mockSprite = {};
+            spriteModule.isSprite = jest.fn(() => () => true);
+            spriteModule.addSprite = jest.fn(() => () => undefined);
+
+            mockTheme.background.items = [{ name: "test_name" }];
+
+            furnish(mockScene)();
+            expect(mockSprite.name).toBeUndefined();
+        });
     });
 });
