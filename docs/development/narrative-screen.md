@@ -72,7 +72,7 @@ the `name` tag on each bit of config is what ties everything together:
 
 For a comprehensive example start your game in debug mode by adding `?debug=true` to the url and visit the debug examples launcher page.
 
-##Notes
+## Notes
 
 * `audio.delay` is specified in seconds (unlike most things in Phaser which are specified in milliseconds)
 * `audio.type` must be present and set to one of either `music | sfx | dialogue`. This property will be utilised by future audio settings.
