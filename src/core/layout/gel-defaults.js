@@ -4,9 +4,9 @@
  * @license Apache-2.0
  */
 import { settings, settingsChannel } from "../../core/settings.js";
-// import * as GameSound from "../../core/game-sound.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { eventBus } from "../event-bus.js";
+import { skip } from "../background/pages.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const pushLevelId = (screen, params) => {
@@ -205,6 +205,7 @@ export const config = screen => {
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 gmi.sendStatsEvent("skip", "click");
+                skip(screen.timedItems);
                 screen.navigation.next();
             },
         },

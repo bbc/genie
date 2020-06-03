@@ -7,6 +7,7 @@ import { createMockGmi } from "../../mock/gmi";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
 import { settings, settingsChannel } from "../../../src/core/settings.js";
 import { eventBus } from "../../../src/core/event-bus.js";
+import * as pagesModule from "../../../src/core/background/pages.js";
 
 describe("Layout - Gel Defaults", () => {
     let mockPausedScreen;
@@ -76,6 +77,8 @@ describe("Layout - Gel Defaults", () => {
         createMockGmi(mockGmi);
 
         jest.spyOn(settings, "show").mockImplementation(() => {});
+
+        pagesModule.skip = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -254,11 +257,16 @@ describe("Layout - Gel Defaults", () => {
 
     describe("Skip Button Callback", () => {
         beforeEach(() => {
+            mockCurrentScreen.timedItems = "timedItems";
             gel.config(mockCurrentScreen).skip.action({ screen: mockCurrentScreen });
         });
 
         test("sends a stat to the GMI", () => {
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("skip", "click");
+        });
+
+        test("Skips timed items", () => {
+            expect(pagesModule.skip).toHaveBeenCalledWith("timedItems");
         });
 
         test("navigates next", () => {
