@@ -33,8 +33,8 @@ export class Select extends Screen {
     create() {
         this.addBackgroundItems();
         createTitles(this);
-        const onePage = this.config.choices.length > this.config.columns * this.config.rows;
-        const pagingButtons = onePage ? ["previous", "next"] : [];
+        const paginate = this.config.choices.length > this.config.columns * this.config.rows;
+        const pagingButtons = paginate ? ["previous", "next"] : [];
         const buttons = ["home", "pause", ...pagingButtons];
         singleItemMode.isEnabled(this)
             ? this.setLayout([...buttons, "continue"], ["home", "pause"])
