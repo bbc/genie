@@ -107,14 +107,14 @@ export class GelGrid extends Phaser.GameObjects.Container {
         return nextPageNum > currentPage;
     }
 
-    showPage(nextPageNum) {
-        if (this.page === nextPageNum) {
-            return;
-        }
-        const currentPage = this.page;
+    showPage(pageNum) {
         const pageCount = this.getPageCount();
-        const goForwards = this.shouldGoForwards(nextPageNum, currentPage, pageCount);
-        this.page = (nextPageNum + pageCount) % pageCount;
+        const nextPageNum = (pageNum + pageCount) % pageCount;
+        if (this.page === nextPageNum) return;
+
+        const currentPage = this.page;
+        const goForwards = this.shouldGoForwards(pageNum, currentPage, pageCount);
+        this.page = nextPageNum;
 
         this.reset();
         this.setPageVisibility(currentPage, true);

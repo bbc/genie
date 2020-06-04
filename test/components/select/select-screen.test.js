@@ -222,7 +222,7 @@ describe("Select Screen", () => {
             expect(createTitles).toHaveBeenCalledTimes(1);
         });
 
-        test("adds GEL buttons to layout when singleItemMode is true", () => {
+        test("adds GEL buttons plus continue button to layout when singleItemMode is true", () => {
             singleItemMode.isEnabled = jest.fn(() => true);
             selectScreen.create();
             const expectedButtons = ["home", "pause", "previous", "next", "continue"];
@@ -234,7 +234,18 @@ describe("Select Screen", () => {
             singleItemMode.isEnabled = jest.fn(() => false);
             selectScreen.create();
             const expectedButtons = ["home", "pause", "previous", "next"];
-            const expectedAccessibleButtons = ["home", "pause", "next", "previous"];
+            const expectedAccessibleButtons = ["home", "pause", "previous", "next"];
+            expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons, expectedAccessibleButtons);
+        });
+
+        test("Does not add next and previous buttons when only one page", () => {
+            singleItemMode.isEnabled = jest.fn(() => false);
+            mockData.config.theme["test-select"].rows = 2;
+            mockData.config.theme["test-select"].columns = 3;
+
+            selectScreen.create();
+            const expectedButtons = ["home", "pause"];
+            const expectedAccessibleButtons = ["home", "pause"];
             expect(selectScreen.setLayout).toHaveBeenCalledWith(expectedButtons, expectedAccessibleButtons);
         });
 

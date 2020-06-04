@@ -33,15 +33,18 @@ export class Select extends Screen {
     create() {
         this.addBackgroundItems();
         createTitles(this);
-        const buttons = ["home", "pause", "previous", "next"];
+        const paginate = this.config.choices.length > this.config.columns * this.config.rows;
+        const pagingButtons = paginate ? ["previous", "next"] : [];
+        const buttons = ["home", "pause", ...pagingButtons];
         singleItemMode.isEnabled(this)
-            ? this.setLayout(buttons.concat("continue"), ["home", "pause"])
-            : this.setLayout(buttons, ["home", "pause", "next", "previous"]);
+            ? this.setLayout([...buttons, "continue"], ["home", "pause"])
+            : this.setLayout(buttons, buttons);
+
         const onTransitionStart = getOnTransitionStartFn(this);
         this.grid = new GelGrid(this, Object.assign(this.config, gridDefaults, { onTransitionStart }));
+        this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
         this.resize();
         this._cells = this.grid.addGridCells(this.config);
-        this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
         this.scene.scene.events.on("shutdown", this._scaleEvent.unsubscribe, this);
