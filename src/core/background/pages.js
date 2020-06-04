@@ -24,7 +24,7 @@ const getTimedItems = scene => {
     return timedItems.map(createItems(scene));
 };
 
-const skip = timedItems => timedItems.forEach(item => item.stop(1));
+export const skip = timedItems => timedItems.forEach(item => item.stop(1));
 
 export const nextPage = scene => () => {
     skip(scene.timedItems);
