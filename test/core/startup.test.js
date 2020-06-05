@@ -24,7 +24,7 @@ describe("Startup", () => {
         mockGmi = { setGmi: jest.fn(), gameContainerId: "some-id", embedVars: { configPath: "test-config-path" } };
         createMockGmi(mockGmi);
 
-        mockGame = { device: { audio: {} }};
+        mockGame = { device: { audio: {} } };
         containerDiv = domElement();
         jest.spyOn(global.document, "getElementById").mockImplementation(argument => {
             if (argument === mockGmi.gameContainerId) {
