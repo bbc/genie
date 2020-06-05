@@ -34,7 +34,7 @@ export const loadPack = {
         {
             type: "audio",
             key: "buttonClick",
-            url: "shared/button-click.mp3",
+            url: "shared/button-click.mp4",
         },
     ],
 };

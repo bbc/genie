@@ -21,6 +21,7 @@ export function startup(config) {
     Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
     addCustomStyles();
     const game = new Phaser.Game(getPhaserDefaults(config));
+    game.device.audio.mp4 = true;
     debugMode.create(window, game);
     a11y.create();
 }

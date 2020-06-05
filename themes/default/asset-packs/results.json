@@ -35,32 +35,32 @@
             {
                 "type": "audio",
                 "key": "coin-sfx",
-                "url": "results/coin-sfx.mp3"
+                "url": "results/coin-sfx.mp4"
             },
             {
                 "type": "audio",
                 "key": "gem-sfx",
-                "url": "results/gem-sfx.mp3"
+                "url": "results/gem-sfx.mp4"
             },
             {
                 "type": "audio",
                 "key": "key-sfx",
-                "url": "results/key-sfx.mp3"
+                "url": "results/key-sfx.mp4"
             },
             {
                 "type": "audio",
                 "key": "woosh",
-                "url": "results/woosh.mp3"
+                "url": "results/woosh.mp4"
             },
             {
                 "type": "audio",
                 "key": "slide",
-                "url": "results/slide.mp3"
+                "url": "results/slide.mp4"
             },
             {
                 "type": "audio",
                 "key": "boing",
-                "url": "results/boing.mp3"
+                "url": "results/boing.mp4"
             },
             {
                 "type": "particles",
