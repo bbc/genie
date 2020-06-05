@@ -43,7 +43,12 @@ The assets for GEL buttons can be found in the folder: `themes/default/gel/`. Th
 
 A reference file for the [Sketch](https://sketchapp.com/) application is also provided in this folder and named *"GEL_UI_EXAMPLE.sketch".*
 
-Audio will need to be provided in two formats to in order to support all devices: MP3 and OGG.
+### Audio Requirements
+
+Audio should use the AAC codec and MP4 (MPEG-4) container format.
+
+You can convert audio to this format using the following ffmpeg command ([requires ffmpeg](https://ffmpeg.org/download.html)):  
+`ffmpeg -i some-audio.mp3 -c:a aac some-audio.mp4`
 
 ## How do I get my theme onto Children’s platforms?
 
