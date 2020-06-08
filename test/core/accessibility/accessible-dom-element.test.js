@@ -156,6 +156,7 @@ describe("Accessible DOM Element", () => {
 
         test("Adds noop touchstart function so ios voiceover double tap works.", () => {
             accessibleDomElement(options);
+            expect(mockElement.addEventListener.mock.calls[6][1]()).not.toBeDefined();
             expect(mockElement.addEventListener).toHaveBeenCalledWith("touchstart", expect.any(Function));
         });
 
