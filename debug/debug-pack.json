@@ -114,6 +114,12 @@
                 "type": "audio",
                 "key": "pump",
                 "url": "examples/narrative/pump.mp4"
+            },
+            {
+                "type": "spine",
+                "key": "spine_owl",
+                "jsonURL": "examples/spine/owl/export/owl-pro.json",
+                "atlasURL": "examples/spine/owl/export/owl.atlas"
             }
         ]
     },

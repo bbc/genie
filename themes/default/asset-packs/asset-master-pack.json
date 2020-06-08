@@ -109,12 +109,6 @@
         "files": [
             {
                 "type": "spine",
-                "key": "spine_owl",
-                "jsonURL": "examples/spine/owl/export/owl-pro.json",
-                "atlasURL": "examples/spine/owl/export/owl-pma.atlas"
-            },
-            {
-                "type": "spine",
                 "key": "spine_powerup",
                 "jsonURL": "examples/spine/powerup/export/powerup-pro.json",
                 "atlasURL": "examples/spine/powerup/export/powerup.atlas"
