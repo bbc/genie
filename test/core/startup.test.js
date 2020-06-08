@@ -17,12 +17,14 @@ jest.mock("../../src/core/custom-styles.js");
 
 describe("Startup", () => {
     let mockGmi;
+    let mockGame;
     let containerDiv;
 
     beforeEach(() => {
         mockGmi = { setGmi: jest.fn(), gameContainerId: "some-id", embedVars: { configPath: "test-config-path" } };
         createMockGmi(mockGmi);
 
+        mockGame = { device: { audio: {} } };
         containerDiv = domElement();
         jest.spyOn(global.document, "getElementById").mockImplementation(argument => {
             if (argument === mockGmi.gameContainerId) {
@@ -30,7 +32,7 @@ describe("Startup", () => {
             }
         });
         jest.spyOn(styles, "addCustomStyles");
-        jest.spyOn(Phaser, "Game").mockImplementation(() => {});
+        jest.spyOn(Phaser, "Game").mockImplementation(() => mockGame);
         jest.spyOn(a11y, "create").mockImplementation(() => {});
         global.window.getGMI = jest.fn().mockImplementation(() => mockGmi);
         global.window.addEventListener = jest.fn();
@@ -49,6 +51,13 @@ describe("Startup", () => {
 
         startup(config);
         expect(gmiModule.setGmi).toHaveBeenCalledWith(config.settings, global.window);
+    });
+
+    test("enables mp4 audio support for all devices", () => {
+        const config = { screens: {} };
+
+        startup(config);
+        expect(mockGame.device.audio.mp4).toBe(true);
     });
 
     test("instantiates the GMI with an empty object if settings config not provided", () => {
@@ -135,7 +144,7 @@ describe("Startup", () => {
         test("initilialises debug mode", () => {
             const debugCreateSpy = jest.spyOn(debugModeModule, "create");
             startup({ screens: {} });
-            expect(debugCreateSpy).toHaveBeenCalledWith(window, {});
+            expect(debugCreateSpy).toHaveBeenCalledWith(window, mockGame);
         });
     });
 });
