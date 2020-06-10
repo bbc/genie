@@ -33,6 +33,8 @@ const screens = {
 };
 ```
 
+Please note that the select screen should be given a descriptive name (here it is called `character-select`), as it will be used for stats purposes.
+
 - When running the game, progressing from the home screen should now take the player to the character select screen.
 
 ## How do I add items to the select screen carousel?
@@ -74,7 +76,7 @@ Configured choices may have text labels drawn with them. These are populated by 
             "subtitle": "The world's greatest secret agent",
         },
     ]
-}          
+}
 ```
 
 #### Choice text styling
@@ -127,7 +129,7 @@ Styles for different button states can override the default styles for each of t
 ```json5
 {
     ...
-    "default": { 
+    "default": {
         ...
     },
     "locked": {
