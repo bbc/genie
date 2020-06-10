@@ -70,7 +70,15 @@ export const create = parent => {
 
     const shutdown = () => eventBus.removeSubscription({ channel: "scaler", name: "sizeChange", callback: resize });
 
-    return {
-        shutdown,
+    parent.scene.events.once("shutdown", shutdown);
+
+    const toggle = () => {
+        const visible = !safeAreaDebugElements[0].visible;
+        safeAreaDebugElements.forEach(el => (el.visible = visible));
+        return visible;
     };
+
+    toggle();
+
+    return toggle;
 };

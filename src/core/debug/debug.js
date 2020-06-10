@@ -5,6 +5,7 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as debugLayout from "./layout-debug-draw.js";
+import { createMeasure } from "./measure/measure.js";
 
 const makeToggle = (val, fn, scene) => () =>
     (scene.debug.draw[val] = scene.debug.draw[val] === fp.identity ? fn : fp.identity);
@@ -44,7 +45,9 @@ function create() {
     };
 
     this.debug.draw.layout = debugLayout.create(this.debug.container);
-    this.debug.container.visible = false;
+    this.debug.draw.measure = createMeasure(this.debug.container)
+
+    //this.debug.container.visible = false;
 
     const configDefs = [
         ...getConfigDefs(this.cache.json, "example-files", "debug/examples/"),
@@ -64,23 +67,17 @@ function create() {
 
     fp.map(label => this.add.text(label.x || 0, label.y || 0, label.text, debugStyle), labels.concat(fileLabel));
 
-    this.input.keyboard.addKey("q").on("up", () => (this.debug.container.visible = !this.debug.container.visible));
+    //this.input.keyboard.addKey("q").on("up", () => (this.debug.container.visible = !this.debug.container.visible));
+    this.input.keyboard.addKey("q").on("up", this.debug.draw.layout);
     this.layout && this.input.keyboard.addKey("w").on("up", makeToggle("groups", this.layout.debug.groups, this));
     this.layout && this.input.keyboard.addKey("e").on("up", makeToggle("buttons", this.layout.debug.buttons, this));
     this.input.keyboard.addKey("r").on("up", toggleCSS);
-    this.navigation.debug && this.input.keyboard.addKey("t").on("up", this.navigation.debug.bind(this));
+    this.input.keyboard.addKey("t").on("up", this.debug.draw.measure);
+    this.navigation.debug && this.input.keyboard.addKey("y").on("up", this.navigation.debug.bind(this));
     window.__debug.screen = this;
 }
 
-const shutdown = scene => {
-    scene.input.keyboard.removeKey("q");
-    scene.input.keyboard.removeKey("w");
-    scene.input.keyboard.removeKey("e");
-    scene.input.keyboard.removeKey("r");
-    scene.input.keyboard.removeKey("t");
-
-    scene.debug.draw.layout.shutdown();
-};
+const shutdown = scene => ["q", "w", "e", "r", "t", "y"].forEach(scene.input.keyboard.removeKey, scene.input.keyboard);
 
 export const addEvents = scene => {
     scene.events.on("create", create, scene);
