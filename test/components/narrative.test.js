@@ -3,8 +3,12 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import { gmi } from "../../src/core/gmi/gmi.js";
+import { nextPage } from "../../src/core/background/pages.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { Narrative } from "../../src/components/narrative.js";
+
+jest.mock("../../src/core/background/pages.js");
 
 describe("Narrative Screen", () => {
     let narrativeScreen;
@@ -12,13 +16,13 @@ describe("Narrative Screen", () => {
 
     beforeEach(() => {
         narrativeScreen = new Narrative();
-
         mockData = {
             config: { theme: { narrative: { achievements: undefined }, home: {}, furniture: [] } },
         };
 
         narrativeScreen.setData(mockData);
         narrativeScreen.scene = { key: "narrative" };
+        narrativeScreen.pageIdx = 0;
         narrativeScreen.add = { image: jest.fn() };
         narrativeScreen.setLayout = jest.fn();
         narrativeScreen.navigation = { next: jest.fn() };
@@ -44,14 +48,41 @@ describe("Narrative Screen", () => {
 
     describe("Events", () => {
         beforeEach(() => {
+            gmi.sendStatsEvent = jest.fn();
+            nextPage.mockImplementation(() => () => {});
             jest.spyOn(eventBus, "subscribe");
             narrativeScreen.create();
         });
 
-        test("adds a callback for the continue button", () => {
-            expect(eventBus.subscribe.mock.calls[0][0].channel).toBe("gel-buttons-narrative");
-            expect(eventBus.subscribe.mock.calls[0][0].name).toBe("continue");
-            expect(eventBus.subscribe.mock.calls[0][0].callback).toEqual(expect.any(Function));
+        describe("Continue button", () => {
+            test("has a callback on the event bus", () => {
+                expect(eventBus.subscribe.mock.calls[0][0].channel).toBe("gel-buttons-narrative");
+                expect(eventBus.subscribe.mock.calls[0][0].name).toBe("continue");
+                expect(eventBus.subscribe.mock.calls[0][0].callback).toEqual(expect.any(Function));
+            });
+
+            test("navigates to the next page when clicked", () => {
+                eventBus.subscribe.mock.calls[0][0].callback({ screen: narrativeScreen });
+                expect(nextPage).toHaveBeenCalledWith(narrativeScreen);
+            });
+
+            test("fires a stat when clicked", () => {
+                eventBus.subscribe.mock.calls[0][0].callback({ screen: narrativeScreen });
+                expect(gmi.sendStatsEvent).toHaveBeenCalledWith("narrative", "continue", {
+                    metadata: `PAG=[${narrativeScreen.pageIdx}]`,
+                    source: `narrative-${narrativeScreen.scene.key}`,
+                });
+            });
+        });
+
+        describe("Skip button", () => {
+            test("fires a stat when clicked", () => {
+                eventBus.subscribe.mock.calls[1][0].callback({ screen: narrativeScreen });
+                expect(gmi.sendStatsEvent).toHaveBeenCalledWith("narrative", "skip", {
+                    metadata: `PAG=[${narrativeScreen.pageIdx}]`,
+                    source: `narrative-${narrativeScreen.scene.key}`,
+                });
+            });
         });
     });
 });
