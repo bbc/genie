@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Stats for narrative screen buttons. |
 | | Background music now configured via asset pack. |
 | | screen.context.theme now screen.config. |
 | | Remove particle emitters on disabled select screen buttons. |
