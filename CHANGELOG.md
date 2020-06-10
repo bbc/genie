@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | | Stats for narrative screen buttons. |
+| | Add source to pause screen level select button. |
 | | Background music now configured via asset pack. |
 | | screen.context.theme now screen.config. |
 | | Remove particle emitters on disabled select screen buttons. |
