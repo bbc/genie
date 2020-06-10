@@ -165,8 +165,9 @@ export const config = screen => {
             id: "levelselect",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
+                const params = pushLevelId(screen, ["levelselect", "click"]);
                 screen.navigate(screen.context.navigation["pause"].routes.select);
-                gmi.sendStatsEvent("pauseLevelSelect", "click");
+                gmi.sendStatsEvent(...params);
             },
         },
         play: {
