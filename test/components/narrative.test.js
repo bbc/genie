@@ -9,6 +9,7 @@ import { eventBus } from "../../src/core/event-bus.js";
 import { Narrative } from "../../src/components/narrative.js";
 
 jest.mock("../../src/core/background/pages.js");
+import * as pagesModule from "../../src/core/background/pages.js";
 
 describe("Narrative Screen", () => {
     let narrativeScreen;
@@ -27,6 +28,9 @@ describe("Narrative Screen", () => {
         narrativeScreen.setLayout = jest.fn();
         narrativeScreen.navigation = { next: jest.fn() };
         narrativeScreen.addBackgroundItems = jest.fn();
+        narrativeScreen.events = {
+            once: jest.fn(),
+        };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -44,14 +48,27 @@ describe("Narrative Screen", () => {
         test("adds background items", () => {
             expect(narrativeScreen.addBackgroundItems).toHaveBeenCalled();
         });
+
+        test("Add a shutdown event for skipping audio", () => {
+            expect(narrativeScreen.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
+        });
     });
 
     describe("Events", () => {
         beforeEach(() => {
+            pagesModule.skip = jest.fn();
             gmi.sendStatsEvent = jest.fn();
             nextPage.mockImplementation(() => () => {});
             jest.spyOn(eventBus, "subscribe");
             narrativeScreen.create();
+        });
+
+        describe("Shutdown", () => {
+            test("Calls Skip to clear events", () => {
+                narrativeScreen.timedItems = "test-string";
+                narrativeScreen.events.once.mock.calls[0][1]();
+                expect(pagesModule.skip).toHaveBeenCalledWith("test-string");
+            });
         });
 
         describe("Continue button", () => {
