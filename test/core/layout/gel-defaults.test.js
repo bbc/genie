@@ -241,7 +241,13 @@ describe("Layout - Gel Defaults", () => {
     describe("Pause Level Select Button Callback", () => {
         test("sends a stat to the GMI", () => {
             gel.config(mockCurrentScreen).levelSelect.action({ screen: mockCurrentScreen });
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("pauseLevelSelect", "click");
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("levelselect", "click");
+        });
+        test("appends level id to stats if it exists", () => {
+            const testLevelId = "test level id";
+            mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
+            gel.config(mockCurrentScreen).levelSelect.action({ screen: mockCurrentScreen });
+            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("levelselect", "click", { source: testLevelId });
         });
     });
 
