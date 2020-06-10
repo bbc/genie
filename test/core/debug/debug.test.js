@@ -321,17 +321,6 @@ describe("Debug system", () => {
             expect(mockScreen.layout.debug.buttons).not.toHaveBeenCalled();
         });
 
-        //test("sets debug container to visible when toggled on", () => {
-        //    addEvents(mockScreen);
-        //    const createCallback = mockScreen.events.on.mock.calls[0][1];
-        //    createCallback.call(mockScreen);
-        //
-        //    const toggle1 = mockOnUpEvent.mock.calls[0][1];
-        //    toggle1();
-        //
-        //    expect(mockContainer.visible).toBe(true);
-        //});
-
         test("debugs draws groups when enabled", () => {
             addEvents(mockScreen);
             const createCallback = mockScreen.events.on.mock.calls[0][1];
