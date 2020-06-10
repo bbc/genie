@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Fix issue with buttons not being clickable when ios voice enabled. |
 | | Add source to pause screen level select button. |
 | | Background music now configured via asset pack. |
 | | screen.context.theme now screen.config. |
