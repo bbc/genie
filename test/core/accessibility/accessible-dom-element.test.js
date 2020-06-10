@@ -154,6 +154,12 @@ describe("Accessible DOM Element", () => {
             expect(touchMoveEvent.preventDefault).toHaveBeenCalled();
         });
 
+        test("Adds noop touchstart function so ios voiceover double tap works.", () => {
+            accessibleDomElement(options);
+            expect(mockElement.addEventListener.mock.calls[6][1]()).not.toBeDefined();
+            expect(mockElement.addEventListener).toHaveBeenCalledWith("touchstart", expect.any(Function));
+        });
+
         test("returns a keyup function", () => {
             const mockElement = accessibleDomElement(options);
             const keyUpEvent = { key: "Enter" };

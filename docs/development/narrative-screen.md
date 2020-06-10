@@ -14,17 +14,19 @@ const screens = {
         scene: Home,
         routes: {
             debug: "debug",
-            next: "cutScene1"
+            next: "level1Intro"
         },
     },
-    cutScene1: {
+    level1Intro: {
         scene: Narrative,
         routes: {
             next: "characterSelect",
         },
     }
 }
-``` 
+```
+
+Please note that the screen should be given a descriptive name (here it is called `level1Intro`), as it will be used for stats purposes.
 
 ## Configuring a narrative screen
 

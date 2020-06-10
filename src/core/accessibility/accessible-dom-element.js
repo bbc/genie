@@ -29,6 +29,7 @@ const assignEvents = (el, options) => {
     el.addEventListener("blur", options.onMouseOut);
 
     el.addEventListener("touchmove", e => e.preventDefault());
+    el.addEventListener("touchstart", () => {});
 
     if (options.interactive === false) {
         el.setAttribute("tabindex", "-1");
