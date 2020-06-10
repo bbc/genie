@@ -28,6 +28,9 @@ describe("Layout debug draw", () => {
             add: {
                 tileSprite: jest.fn(() => mockTileSprite),
             },
+            events: {
+                once: jest.fn(),
+            },
         };
 
         mockContainer = {

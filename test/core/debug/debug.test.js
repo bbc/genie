@@ -34,10 +34,41 @@ describe("Debug system", () => {
             setTileScale: jest.fn(),
         };
 
+        const mockRect = {
+            setStrokeStyle: jest.fn(() => mockRect),
+            setInteractive: jest.fn(() => mockRect),
+            on: jest.fn(),
+            geom: {
+                width: 100,
+                height: 100,
+            },
+            updateDisplayOrigin: jest.fn(),
+            updateData: jest.fn(),
+            input: {
+                hitArea: {},
+            },
+        };
+
+        const mockText = {
+            setOrigin: jest.fn(() => mockText),
+        };
+
         mockContainer = {
             scene: {
-                add: { tileSprite: jest.fn(() => mockTileSprite) },
+                add: {
+                    tileSprite: jest.fn(() => mockTileSprite),
+                    rectangle: jest.fn(() => mockRect),
+                    text: jest.fn(() => mockText),
+                },
                 game: { scale: { parent: {} }, canvas: { height: 10, width: 10 } },
+                events: {
+                    once: jest.fn(),
+                },
+                input: {
+                    keyboard: {
+                        addKeys: jest.fn(),
+                    },
+                },
             },
             add: jest.fn(),
         };
