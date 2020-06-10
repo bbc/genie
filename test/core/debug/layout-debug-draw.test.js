@@ -5,6 +5,7 @@
  */
 import * as debugLayout from "../../../src/core/debug/layout-debug-draw.js";
 import * as Scaler from "../../../src/core/scaler.js";
+import { eventBus } from "../../../src/core/event-bus.js";
 
 describe("Layout debug draw", () => {
     let mockScreen;
@@ -37,6 +38,8 @@ describe("Layout debug draw", () => {
             scene: mockScreen,
             add: jest.fn(),
         };
+
+        eventBus.removeSubscription = jest.fn();
     });
 
     afterEach(() => {
@@ -77,6 +80,19 @@ describe("Layout debug draw", () => {
             expect(mockTileSprite.setSize.mock.calls[2]).toEqual([1200, 24]);
             expect(mockTileSprite.setSize.mock.calls[3]).toEqual([24, 600]);
             expect(mockTileSprite.setSize.mock.calls[4]).toEqual([24, 600]);
+        });
+
+        test("removes scale subscription on scene shutdown", () => {
+            debugLayout.create(mockContainer);
+            expect(mockScreen.events.once).toHaveBeenLastCalledWith("shutdown", expect.any(Function));
+
+            mockScreen.events.once.mock.calls[0][1]();
+
+            const removeSubCall = eventBus.removeSubscription.mock.calls[0][0];
+
+            expect(removeSubCall.channel).toBe("scaler");
+            expect(removeSubCall.name).toBe("sizeChange");
+            expect(removeSubCall.callback).toStrictEqual(expect.any(Function));
         });
     });
 });

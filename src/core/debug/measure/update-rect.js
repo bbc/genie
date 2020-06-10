@@ -5,7 +5,7 @@
  */
 const limit = val => (val < 1 ? 1 : val);
 
-export const rectUpdateFn = (rect, keys, updateCoords) => size => {
+export const rectUpdateFn = (rect, updateCoords) => size => {
     rect.x += size.x;
     rect.y += size.y;
     rect.width = limit(rect.width + size.width);

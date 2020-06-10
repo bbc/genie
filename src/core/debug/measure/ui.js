@@ -5,7 +5,7 @@
  */
 import { rectUpdateFn } from "./update-rect.js";
 import { createElements } from "./elements.js";
-import { getInput } from "./get-input.js";
+import { getInputFn } from "./get-input-fn.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 export const createMeasureUi = parent => {
@@ -32,12 +32,12 @@ export const createMeasureUi = parent => {
     handle.on("drag", sizeDrag);
 
     const keys = parent.scene.input.keyboard.addKeys("shift,ctrl,up,down,left,right");
-    const updateRect = rectUpdateFn(rect, keys, updateCoords);
+    const updateRect = rectUpdateFn(rect, updateCoords);
     updateRect({ x: 0, y: 0, width: 0, height: 0 });
 
     [rect, coords, legend, handle].forEach(parent.add, parent);
 
-    const update = fp.flow(getInput(keys), updateRect);
+    const update = fp.flow(getInputFn(keys), updateRect);
 
     return { update, toggleUi };
 };

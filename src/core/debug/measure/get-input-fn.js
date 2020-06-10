@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-export const getInput = keys => () => {
+export const getInputFn = keys => () => {
     const ctrl = keys.ctrl.isDown;
     const val = keys.shift.isDown ? 10 : 1;
 

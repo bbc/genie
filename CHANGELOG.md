@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Added a measure tool to debug mode. |
 | | Background music now configured via asset pack. |
 | | screen.context.theme now screen.config. |
 | | Remove particle emitters on disabled select screen buttons. |
