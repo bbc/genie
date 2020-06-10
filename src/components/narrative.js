@@ -10,6 +10,15 @@ import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
 import { nextPage } from "../core/background/pages.js";
+import { gmi } from "../core/gmi/gmi.js";
+
+const fireStatsEvent = (eventName, eventType, screen) => {
+    const params = {
+        metadata: `PAG=[${screen.pageIdx}]`,
+        source: `narrative-${screen.scene.key}`,
+    };
+    gmi.sendStatsEvent(eventName, eventType, params);
+};
 
 export class Narrative extends Screen {
     create() {
@@ -19,7 +28,18 @@ export class Narrative extends Screen {
         eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "continue",
-            callback: nextPage(this),
+            callback: ({ screen }) => {
+                fireStatsEvent("narrative", "continue", screen);
+                nextPage(screen)();
+            },
+        });
+
+        eventBus.subscribe({
+            channel: buttonsChannel(this),
+            name: "skip",
+            callback: ({ screen }) => {
+                fireStatsEvent("narrative", "skip", screen);
+            },
         });
     }
 }
