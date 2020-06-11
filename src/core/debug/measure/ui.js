@@ -5,6 +5,7 @@
  */
 import { rectUpdateFn } from "./update-rect.js";
 import { createElements } from "./elements.js";
+import { cycleMode } from "./mode.test.js";
 import { getInputFn } from "./get-input-fn.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
@@ -23,15 +24,17 @@ export const createMeasureUi = parent => {
         updateRect({
             x: 0,
             y: 0,
-            width: parseInt(5 + dragX - rect.x - rect.width / 2),
-            height: parseInt(5 + dragY - rect.y - rect.height / 2),
+            width: parseInt(5 + dragX - rect.x - rect.width),
+            height: parseInt(5 + dragY - rect.y - rect.height),
         });
         updateCoords(rect);
     };
 
     handle.on("drag", sizeDrag);
 
-    const keys = parent.scene.input.keyboard.addKeys("shift,ctrl,up,down,left,right");
+    const keys = parent.scene.input.keyboard.addKeys("z,x,c,up,down,left,right");
+    keys.c.on("up", cycleMode);
+
     const updateRect = rectUpdateFn(rect, updateCoords);
     updateRect({ x: 0, y: 0, width: 0, height: 0 });
 
