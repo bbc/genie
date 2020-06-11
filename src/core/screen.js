@@ -91,9 +91,7 @@ export class Screen extends Phaser.Scene {
     }
 
     setStatsScreen(screen) {
-        if (!this.config.isOverlay) {
-            gmi.setStatsScreen(screen);
-        }
+        gmi.setStatsScreen(screen);
     }
 
     setData(newData) {
