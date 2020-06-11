@@ -15,8 +15,9 @@ describe("Pause Overlay", () => {
             some: "mock",
         };
         mockData = {
-            parentScreens: [{ scene: { key: "level-select" } }],
+            parentScreens: [{ scene: { key: "game" } }],
             navigation: {
+                game: { routes: { restart: "home" } },
                 "level-select": { routes: { restart: "home" } },
                 pause: { routes: { select: "level-select" } },
             },
@@ -88,6 +89,7 @@ describe("Pause Overlay", () => {
         });
 
         test("adds correct gel layout buttons when select button should be shown", () => {
+            mockData.parentScreens = [{ scene: { key: "pause" } }];
             mockData.navigation["level-select"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith([
@@ -98,6 +100,13 @@ describe("Pause Overlay", () => {
                 "howToPlay",
                 "levelSelect",
             ]);
+        });
+
+        test("level select should not be shown on a select screen", () => {
+            mockData.parentScreens = [{ scene: { key: "level-select" } }];
+            mockData.navigation["level-select"] = { routes: {} };
+            pauseScreen.create();
+            expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
         });
 
         test("adds correct gel layout buttons when select and replay button should be shown", () => {
@@ -114,6 +123,7 @@ describe("Pause Overlay", () => {
         });
 
         test("adds correct gel layout buttons when replay button should be hidden", () => {
+            mockData.parentScreens = [{ scene: { key: "level-select" } }];
             mockData.navigation["level-select"] = { routes: {} };
             mockData.navigation["pause"] = { routes: {} };
             pauseScreen.create();
