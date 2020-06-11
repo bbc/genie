@@ -5,7 +5,7 @@
  */
 import { rectUpdateFn } from "./update-rect.js";
 import { createElements } from "./elements.js";
-import { cycleMode } from "./mode.test.js";
+import { cycleMode } from "./mode.js";
 import { getInputFn } from "./get-input-fn.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 

@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { getMode } from "./mode.test.js";
+import { getMode } from "./mode.js";
 
 const style = {
     color: "#FFF",

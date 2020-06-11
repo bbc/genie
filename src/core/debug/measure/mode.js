@@ -7,7 +7,7 @@ import { getMetrics } from "../../scaler.js";
 
 let mode = 0;
 
-export const modes = [
+const modes = [
     {
         type: "ABS",
         x: rect => parseInt(rect.x + Math.min(700, window.innerWidth / 2 / getMetrics().scale)),

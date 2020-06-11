@@ -52,4 +52,13 @@ describe("Measure Tool Get input", () => {
 
         expect(getInputFn(keys)()).toEqual({ height: 0, width: 0, x: 1, y: -1 });
     });
+
+    test("Returns 0,0,0,0 if x pressed and less than 100 ms since last call", () => {
+        mockTime = 99;
+        keys.z.isDown = true;
+        keys.down.isDown = true;
+        keys.right.isDown = true;
+
+        expect(getInputFn(keys)()).toEqual({ height: 0, width: 0, x: 0, y: 0 });
+    });
 });
