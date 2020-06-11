@@ -34,10 +34,41 @@ describe("Debug system", () => {
             setTileScale: jest.fn(),
         };
 
+        const mockRect = {
+            setStrokeStyle: jest.fn(() => mockRect),
+            setInteractive: jest.fn(() => mockRect),
+            on: jest.fn(),
+            geom: {
+                width: 100,
+                height: 100,
+            },
+            updateDisplayOrigin: jest.fn(),
+            updateData: jest.fn(),
+            input: {
+                hitArea: {},
+            },
+        };
+
+        const mockText = {
+            setOrigin: jest.fn(() => mockText),
+        };
+
         mockContainer = {
             scene: {
-                add: { tileSprite: jest.fn(() => mockTileSprite) },
+                add: {
+                    tileSprite: jest.fn(() => mockTileSprite),
+                    rectangle: jest.fn(() => mockRect),
+                    text: jest.fn(() => mockText),
+                },
                 game: { scale: { parent: {} }, canvas: { height: 10, width: 10 } },
+                events: {
+                    once: jest.fn(),
+                },
+                input: {
+                    keyboard: {
+                        addKeys: jest.fn(),
+                    },
+                },
             },
             add: jest.fn(),
         };
@@ -219,10 +250,36 @@ describe("Debug system", () => {
             createCallback.call(mockScreen);
             destroyCallback.call(mockScreen);
 
-            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith("q");
-            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith("w");
-            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith("e");
-            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith("r");
+            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith(
+                "q",
+                expect.any(Number),
+                expect.any(Array),
+            );
+            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith(
+                "w",
+                expect.any(Number),
+                expect.any(Array),
+            );
+            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith(
+                "e",
+                expect.any(Number),
+                expect.any(Array),
+            );
+            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith(
+                "r",
+                expect.any(Number),
+                expect.any(Array),
+            );
+            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith(
+                "t",
+                expect.any(Number),
+                expect.any(Array),
+            );
+            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith(
+                "y",
+                expect.any(Number),
+                expect.any(Array),
+            );
         });
     });
 
@@ -262,17 +319,6 @@ describe("Debug system", () => {
             expect(mockGraphicsObject.fillRectShape).not.toHaveBeenCalled();
             expect(mockScreen.layout.debug.groups).not.toHaveBeenCalled();
             expect(mockScreen.layout.debug.buttons).not.toHaveBeenCalled();
-        });
-
-        test("sets debug container to visible when toggled on", () => {
-            addEvents(mockScreen);
-            const createCallback = mockScreen.events.on.mock.calls[0][1];
-            createCallback.call(mockScreen);
-
-            const toggle1 = mockOnUpEvent.mock.calls[0][1];
-            toggle1();
-
-            expect(mockContainer.visible).toBe(true);
         });
 
         test("debugs draws groups when enabled", () => {
