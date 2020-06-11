@@ -102,6 +102,13 @@ describe("Pause Overlay", () => {
             ]);
         });
 
+        test("level select should not be shown on a select screen", () => {
+            mockData.parentScreens = [{ scene: { key: "level-select" } }];
+            mockData.navigation["level-select"] = { routes: {} };
+            pauseScreen.create();
+            expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
+        });
+
         test("adds correct gel layout buttons when select and replay button should be shown", () => {
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith([
