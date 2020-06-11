@@ -71,6 +71,7 @@ describe("Debug system", () => {
                     },
                 },
             },
+            setDepth: jest.fn(),
             add: jest.fn(),
         };
 
