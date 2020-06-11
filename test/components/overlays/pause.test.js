@@ -23,6 +23,7 @@ describe("Pause Overlay", () => {
             config: {
                 theme: {
                     pause: {},
+                    game: {},
                 },
             },
         };
@@ -59,6 +60,21 @@ describe("Pause Overlay", () => {
 
     describe("create method", () => {
         test("adds correct gel layout buttons when replay button should be shown", () => {
+            mockData.config.theme.game.achievements = true;
+            pauseScreen.create();
+            expect(pauseScreen.setLayout).toHaveBeenCalledWith([
+                "home",
+                "audio",
+                "settings",
+                "pausePlay",
+                "howToPlay",
+                "achievements",
+                "levelSelect",
+                "pauseReplay",
+            ]);
+        });
+
+        test("adds correct gel layout buttons when achievement  button should be shown", () => {
             mockData.navigation["pause"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith([

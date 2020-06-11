@@ -271,10 +271,6 @@ describe("Layout - Gel Defaults", () => {
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("skip", "click");
         });
 
-        test("Skips timed items", () => {
-            expect(pagesModule.skip).toHaveBeenCalledWith("timedItems");
-        });
-
         test("navigates next", () => {
             expect(mockCurrentScreen.navigation.next).toHaveBeenCalled();
         });

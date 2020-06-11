@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| | Add achievements button to pause screen. |
+| | Skip audio exiting pause when over narrative screen. |
 | | Added a measure tool to debug mode. |
 | | Stats for narrative screen buttons. |
 | | Fix issue with buttons not being clickable when ios voice enabled. |

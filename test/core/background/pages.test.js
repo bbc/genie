@@ -26,6 +26,9 @@ describe("Background Pages", () => {
             tweens: {
                 add: jest.fn(() => mockTween),
             },
+            events: {
+                once: jest.fn(),
+            },
         };
     });
 

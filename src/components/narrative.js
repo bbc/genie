@@ -9,7 +9,7 @@
 import { buttonsChannel } from "../core/layout/gel-defaults.js";
 import { Screen } from "../core/screen.js";
 import { eventBus } from "../core/event-bus.js";
-import { nextPage } from "../core/background/pages.js";
+import { nextPage, skip } from "../core/background/pages.js";
 import { gmi } from "../core/gmi/gmi.js";
 
 const fireStatsEvent = (eventName, eventType, screen) => {
@@ -24,6 +24,7 @@ export class Narrative extends Screen {
     create() {
         this.addBackgroundItems();
         this.setLayout(["continue", "skip", "pause"]);
+        this.events.once("shutdown", () => skip(this.timedItems));
 
         eventBus.subscribe({
             channel: buttonsChannel(this),
