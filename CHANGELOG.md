@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | setStatsScreen now triggered for overlays. |
 | | Dont show level select button on pause screen when already on select screen. |
 | | Add achievements button to pause screen. |
 | | Skip audio exiting pause when over narrative screen. |
