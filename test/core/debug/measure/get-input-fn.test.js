@@ -7,16 +7,20 @@ import { getInputFn } from "../../../../src/core/debug/measure/get-input-fn.js";
 
 describe("Measure Tool Get input", () => {
     let keys;
+    let mockTime;
 
     beforeEach(() => {
         keys = {
-            ctrl: { isDown: false },
-            shift: { isDown: false },
+            x: { isDown: false },
+            z: { isDown: false },
             up: { isDown: false },
             down: { isDown: false },
             left: { isDown: false },
             right: { isDown: false },
         };
+
+        mockTime = 0;
+        global.Date.now = jest.fn(() => mockTime);
     });
 
     afterEach(jest.clearAllMocks);
@@ -25,26 +29,36 @@ describe("Measure Tool Get input", () => {
         expect(getInputFn(keys)()).toEqual({ height: 0, width: 0, x: 0, y: 0 });
     });
 
-    test("Returns position delta if cursors pressed", () => {
+    test("Returns 10 * position delta if cursors pressed", () => {
+        keys.up.isDown = true;
+        keys.right.isDown = true;
+
+        expect(getInputFn(keys)()).toEqual({ height: 0, width: 0, x: 10, y: -10 });
+    });
+
+    test("Returns size delta * 10 if x and cursors pressed", () => {
+        keys.x.isDown = true;
+        keys.up.isDown = true;
+        keys.right.isDown = true;
+
+        expect(getInputFn(keys)()).toEqual({ height: -10, width: 10, x: 0, y: 0 });
+    });
+
+    test("Returns position delta if z and cursors pressed", () => {
+        mockTime = 1000;
+        keys.z.isDown = true;
         keys.up.isDown = true;
         keys.right.isDown = true;
 
         expect(getInputFn(keys)()).toEqual({ height: 0, width: 0, x: 1, y: -1 });
     });
 
-    test("Returns size delta if ctrl and cursors pressed", () => {
-        keys.ctrl.isDown = true;
-        keys.up.isDown = true;
+    test("Returns 0,0,0,0 if x pressed and less than 100 ms since last call", () => {
+        mockTime = 99;
+        keys.z.isDown = true;
+        keys.down.isDown = true;
         keys.right.isDown = true;
 
-        expect(getInputFn(keys)()).toEqual({ height: -1, width: 1, x: 0, y: 0 });
-    });
-
-    test("Returns 10 * position delta if shift and cursors pressed", () => {
-        keys.shift.isDown = true;
-        keys.up.isDown = true;
-        keys.right.isDown = true;
-
-        expect(getInputFn(keys)()).toEqual({ height: 0, width: 0, x: 10, y: -10 });
+        expect(getInputFn(keys)()).toEqual({ height: 0, width: 0, x: 0, y: 0 });
     });
 });

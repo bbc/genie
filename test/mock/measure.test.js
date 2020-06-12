@@ -46,7 +46,7 @@ describe("Measure Tool", () => {
         createMeasure(mockParent)();
 
         expect(mockParent.scene.events.on).toHaveBeenCalledWith("update", expect.any(Function), mockParent.scene);
-        expect(mockParent.scene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
+        expect(mockParent.scene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function), mockParent.scene);
     });
 
     test("Removes update event to the current scene if toggled invisible", () => {
