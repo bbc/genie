@@ -37,7 +37,7 @@ export class Results extends Screen {
     createLayout() {
         const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
         const buttons = ["pause", "continueGame"];
-        const onwardButton = fp.get("results.gameComplete", this.transientData) ? "playAgain" : "restart";
+        const onwardButton = fp.get(`${this.scene.key}.gameComplete`, this.transientData) ? "playAgain" : "restart";
         this.setLayout([...buttons, ...achievements, onwardButton]);
     }
 
