@@ -4,20 +4,20 @@
  * @license Apache-2.0
  */
 
-import { getPhaserDefaults } from "../../../src/core/loader/phaserDefaults.js";
-import { Loader } from "../../../src/core/loader/loader.js";
-import { Boot } from "../../../src/core/loader/boot.js";
-import * as debugScreensModule from "../../../src/core/debug/debug-screens.js";
-import { createMockGmi } from "../../mock/gmi.js";
-import { domElement } from "../../mock/dom-element.js";
+import { getPhaserDefaults } from "../../../../src/core/loader/phaser-defaults/get-phaser-defaults.js";
+import { Loader } from "../../../../src/core/loader/loader.js";
+import { Boot } from "../../../../src/core/loader/boot.js";
+import * as debugScreensModule from "../../../../src/core/debug/debug-screens.js";
+import { createMockGmi } from "../../../mock/gmi.js";
+import { domElement } from "../../../mock/dom-element.js";
 
-import { getContainerDiv } from "../../../src/core/loader/container.js";
-import { getBrowser } from "../../../src/core/browser.js";
+import { getContainerDiv } from "../../../../src/core/loader/container.js";
+import { getBrowser } from "../../../../src/core/browser.js";
 
-jest.mock("../../../src/core/loader/container.js");
-jest.mock("../../../src/core/loader/loader.js");
-jest.mock("../../../src/core/loader/boot.js");
-jest.mock("../../../src/core/browser.js");
+jest.mock("../../../../src/core/loader/container.js");
+jest.mock("../../../../src/core/loader/loader.js");
+jest.mock("../../../../src/core/loader/boot.js");
+jest.mock("../../../../src/core/browser.js");
 
 describe("Phaser Defaults", () => {
     let mockGmi;
@@ -39,31 +39,17 @@ describe("Phaser Defaults", () => {
 
     describe("getPhaserDefaults Method", () => {
         describe("Returned Config", () => {
-            test("Returns correct config", () => {
+            test("Returns additional config over base defaults", () => {
                 const expectedConfig = {
-                    width: 1400,
-                    height: 600,
                     type: 0,
-                    antialias: true,
-                    multiTexture: true,
                     parent: containerDiv,
                     transparent: false,
-                    clearBeforeRender: false,
                 };
 
                 const actualConfig = getPhaserDefaults({ screens: {} });
-
-                expect(actualConfig.width).toBe(expectedConfig.width);
-                expect(actualConfig.height).toBe(expectedConfig.height);
                 expect(actualConfig.type).toBe(expectedConfig.type);
-                expect(actualConfig.antialias).toBe(expectedConfig.antialias);
-                expect(actualConfig.multiTexture).toBe(expectedConfig.multiTexture);
                 expect(actualConfig.parent).toEqual(expectedConfig.parent);
-                expect(actualConfig.title).toEqual("BBC Games Genie");
-                expect(actualConfig.version).toEqual("test version");
                 expect(actualConfig.transparent).toBe(expectedConfig.transparent);
-                expect(actualConfig.clearBeforeRender).toBe(expectedConfig.clearBeforeRender);
-                expect(actualConfig.scale).toEqual({ mode: Phaser.Scale.NONE });
             });
 
             test("sets transparent config flag to false when Amazon Silk Browser", () => {
