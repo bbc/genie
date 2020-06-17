@@ -27,13 +27,13 @@ const audio = entry => {
     return entry;
 };
 
-const isDefined = value => value !== undefined
+const isDefined = value => value !== undefined;
 const spriteParams = ["frameWidth", "frameHeight", "margin", "spacing", "startFrame", "endFrame"];
 
 const spritesheet = entry => {
-    const entries = spriteParams.map(param => [param, entry[param]]).filter(a => isDefined(a[1]))
+    const entries = spriteParams.map(param => [param, entry[param]]).filter(a => isDefined(a[1]));
     entry.frameConfig = Object.fromEntries(entries);
-    [...spriteParams, "frameMax" ].forEach(param => delete entry[param])
+    [...spriteParams, "frameMax"].forEach(param => delete entry[param]);
     return entry;
 };
 
