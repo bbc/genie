@@ -65,11 +65,13 @@ export class Game extends Screen {
         const gemScore = this.add.text(-50, 20, "0", buttonTextStyle).setOrigin(0.5);
         const keyScore = this.add.text(-50, 110, "0", buttonTextStyle).setOrigin(0.5);
 
-        this.add
+        const continueButton = this.add
             .image(300, 20, buttonKey)
             .setOrigin(0.5)
             .setInteractive({ useHandCursor: true })
             .on("pointerup", () => onLevelComplete());
+        continueButton.config = { id: 4, ariaLabel: "Continue" };
+        accessibilify(continueButton);
         this.add
             .text(300, 20, "Continue", buttonTextStyle)
             .setOrigin(0.5)
@@ -96,15 +98,12 @@ export class Game extends Screen {
         const onLevelComplete = () => {
             const { id, title } = this.transientData["level-select"].choice;
             markLevelAsComplete(id);
-            this.transientData.results = Object.assign(
-                {
-                    keys,
-                    gems,
-                    stars,
-                    levelId: title, // levelId is included in Results screen score stat
-                },
-                this.transientData.results,
-            );
+            this.transientData.results = {
+                keys,
+                gems,
+                stars,
+                levelId: title, // levelId is included in Results screen score stat
+            };
             this.navigation.next();
         };
 
