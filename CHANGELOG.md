@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Prevents duplicate stat firing on Narrative screen "skip" button. |
 | 3.7.0 ||
 | | Improved merging of global and scene plugins added via gameOptions in main.js. |
 | | setStatsScreen now triggered for overlays. |
