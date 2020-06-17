@@ -65,19 +65,6 @@ export class Game extends Screen {
         const gemScore = this.add.text(-50, 20, "0", buttonTextStyle).setOrigin(0.5);
         const keyScore = this.add.text(-50, 110, "0", buttonTextStyle).setOrigin(0.5);
 
-        const continueButton = this.add
-            .image(300, 20, buttonKey)
-            .setOrigin(0.5)
-            .setInteractive({ useHandCursor: true })
-            .on("pointerup", () => onLevelComplete());
-        continueButton.config = { id: 4, ariaLabel: "Continue" };
-        accessibilify(continueButton);
-        this.add
-            .text(300, 20, "Continue", buttonTextStyle)
-            .setOrigin(0.5)
-            .setInteractive({ useHandCursor: true })
-            .on("pointerup", () => onLevelComplete());
-
         [-70, 20, 110].forEach((buttonYPosition, index) => {
             const buttonNumber = index + 1;
             const buttonText = "Collect " + buttonNames[index];
@@ -94,6 +81,19 @@ export class Game extends Screen {
             button.config = { id: buttonNumber, ariaLabel: buttonText };
             accessibilify(button);
         }, this);
+
+        const continueButton = this.add
+            .image(300, 20, buttonKey)
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true })
+            .on("pointerup", () => onLevelComplete());
+        continueButton.config = { id: 4, ariaLabel: "Continue" };
+        accessibilify(continueButton);
+        this.add
+            .text(300, 20, "Continue", buttonTextStyle)
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true })
+            .on("pointerup", () => onLevelComplete());
 
         const onLevelComplete = () => {
             const { id, title } = this.transientData["level-select"].choice;
