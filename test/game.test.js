@@ -5,6 +5,7 @@
  */
 import { gmi } from "../src/core/gmi/gmi.js";
 import { Game } from "../src/components/game";
+import { accessibilify } from "../src/core/accessibility/accessibilify.js";
 
 jest.mock("../src/core/accessibility/accessibilify.js");
 jest.mock("../src/core/gmi/gmi.js");
@@ -480,6 +481,10 @@ describe("Game", () => {
             test("navigates to the next screen when the continue text is clicked", () => {
                 continueTextClickedOn.mock.calls[0][1]();
                 expect(game.navigation.next).toHaveBeenCalled();
+            });
+
+            test("the button made accessible with accessibilify", () => {
+                expect(accessibilify).toHaveBeenCalledWith({ config: { id: 4, ariaLabel: "Continue" } });
             });
         });
     });
