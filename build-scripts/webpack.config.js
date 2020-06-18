@@ -74,7 +74,7 @@ module.exports = env => {
     const buildNumber = process.env.BUILD_NUMBER;
     webPackConfig.plugins.push(new webpack.BannerPlugin(`\nBBC GAMES GENIE: ${genieVersion}\n`));
     webPackConfig.plugins.push(
-        new webpack.DefinePlugin({ __GENIE__: { version: `"${genieVersion}"`, build: `"${buildNumber}"` } }),
+        new webpack.DefinePlugin({ __GENIE__: { version: `"${genieVersion}"`, build: `"${buildNumber || 'PRODUCTION'}"` } }),
     );
 
     if (genieCore) {
