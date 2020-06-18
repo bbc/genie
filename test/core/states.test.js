@@ -50,13 +50,13 @@ describe("State", () => {
             });
         });
 
-        test("deletes state when called with no config", () => {
+        test("Sets state to null (undefined cannot be serialised) when called with no config", () => {
             const stateSet = initState("stateKey", []);
             stateSet.set("test_choice", "locked");
             stateSet.set("test_choice");
 
             expect(mockGmi.setGameData).toHaveBeenCalledWith("genie", {
-                stateKey: { test_choice: { state: undefined } },
+                stateKey: { test_choice: { state: null } },
             });
         });
     });
