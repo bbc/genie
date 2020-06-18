@@ -45,5 +45,5 @@ export function init(stageHeight, game) {
     const resize = fp.flow(getMetrics, setSize);
 
     resize();
-    window.onresize = fp.debounce(500, resize);
+    window.onresize = fp.debounce(750, resize);
 }
