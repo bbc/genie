@@ -22,7 +22,7 @@ const addMain = () => {
 
 const awaitGlobals = globals => globals.map(global => awaitScript(global.url));
 
-const setGenieInfo = pkg => (window.__GENIE__ = { version: pkg.version });
+const setGenieInfo = pkg => (window.__GENIE__ = { version: pkg.version, build: "LOCAL" });
 
 const getLocalGenieInfo = () =>
     fetch("../package.json")

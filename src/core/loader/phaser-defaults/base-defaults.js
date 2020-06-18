@@ -5,6 +5,8 @@
  */
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../layout/metrics.js";
 
+const genie = __GENIE__
+
 export const getBaseDefaults = () => ({
     width: CANVAS_WIDTH,
     height: CANVAS_HEIGHT,
@@ -12,7 +14,7 @@ export const getBaseDefaults = () => ({
     multiTexture: true,
     banner: true,
     title: "BBC Games Genie",
-    version: __GENIE__.version, //TODO add game name / build version possible?
+    version: `${genie.version} / Build: ${genie.build}`, //TODO add JEnkins JOB_NAME ?
     clearBeforeRender: false,
     scale: { mode: Phaser.Scale.NONE },
     input: { windowEvents: false },
