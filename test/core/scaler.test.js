@@ -69,12 +69,6 @@ describe("Scaler", () => {
         expect(window.onresize).toEqual(expect.any(Function));
     });
 
-    test("assigns a callback to window.onorientationchange", () => {
-        window.onorientationchange = undefined;
-        Scaler.init(600, mockGame);
-        expect(window.onorientationchange).toEqual(expect.any(Function));
-    });
-
     test("returns correct metrics when calculateMetrics is called", () => {
         jest.spyOn(MetricsModule, "calculateMetrics").mockImplementation(() => jest.fn(() => "metrics"));
         Scaler.init(600, mockGame);
