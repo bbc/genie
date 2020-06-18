@@ -267,10 +267,6 @@ describe("Layout - Gel Defaults", () => {
             gel.config(mockCurrentScreen).skip.action({ screen: mockCurrentScreen });
         });
 
-        test("sends a stat to the GMI", () => {
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("skip", "click");
-        });
-
         test("navigates next", () => {
             expect(mockCurrentScreen.navigation.next).toHaveBeenCalled();
         });

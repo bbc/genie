@@ -8,11 +8,12 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 
 export const createMeasure = parent => {
     const { update, toggleUi } = createMeasureUi(parent);
-    const shutdown = () => parent.scene.events.off("update", update, parent.scene);
+    const scene = parent.scene;
+    const shutdown = () => scene.events.off("update", update, scene);
 
     const addEvents = () => {
-        parent.scene.events.on("update", update, parent.scene);
-        parent.scene.events.once("shutdown", shutdown);
+        scene.events.on("update", update, scene);
+        scene.events.once("shutdown", shutdown, scene);
     };
 
     const toggleEvents = visible => (visible ? addEvents() : shutdown());

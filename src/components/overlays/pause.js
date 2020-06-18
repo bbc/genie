@@ -17,9 +17,11 @@ export class Pause extends Screen {
     create() {
         this.addBackgroundItems();
         const parentKey = this.context.parentScreens.slice(-1)[0].scene.key;
+        const isAboveSelectScreen = parentKey.includes("select");
         const achievements = this.context.config.theme.game.achievements ? ["achievements"] : [];
         const pauseReplay = this.context.navigation[parentKey].routes.restart ? ["pauseReplay"] : [];
-        const levelSelect = this.context.navigation["pause"].routes.select ? ["levelSelect"] : [];
+        let levelSelect = this.context.navigation["pause"].routes.select ? ["levelSelect"] : [];
+        levelSelect = isAboveSelectScreen ? [] : levelSelect;
         const buttons = ["home", "audio", "settings", "pausePlay", "howToPlay"];
 
         this.setLayout([...buttons, ...achievements, ...levelSelect, ...pauseReplay]);

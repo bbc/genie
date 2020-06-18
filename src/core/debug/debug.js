@@ -44,6 +44,8 @@ function create() {
         },
     };
 
+    this.debug.container.setDepth(1000);
+
     this.debug.draw.layout = debugLayout.create(this.debug.container);
     this.debug.draw.measure = createMeasure(this.debug.container);
 

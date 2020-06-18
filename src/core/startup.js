@@ -13,7 +13,7 @@ import * as debugMode from "./debug/debug-mode.js";
 import { hookErrors } from "./loader/hook-errors.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addGelButton } from "./layout/gel-game-objects.js";
-import { getPhaserDefaults } from "./loader/phaserDefaults.js";
+import { getPhaserDefaults } from "./loader/phaser-defaults/get-phaser-defaults.js";
 
 export function startup(config) {
     setGmi(config.settings || {}, window);

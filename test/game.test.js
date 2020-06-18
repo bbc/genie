@@ -5,6 +5,7 @@
  */
 import { gmi } from "../src/core/gmi/gmi.js";
 import { Game } from "../src/components/game";
+import { accessibilify } from "../src/core/accessibility/accessibilify.js";
 
 jest.mock("../src/core/accessibility/accessibilify.js");
 jest.mock("../src/core/gmi/gmi.js");
@@ -459,18 +460,17 @@ describe("Game", () => {
 
             test("saves data from the game when the continue button image is clicked", () => {
                 continueButtonClickedOn.mock.calls[0][1]();
-                expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0 });
+                expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0, levelId: "Hard level" });
             });
 
             test("saves data from the game when the continue text is clicked", () => {
                 continueTextClickedOn.mock.calls[0][1]();
-                expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0 });
+                expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0, levelId: "Hard level" });
             });
 
-            test("saves gameComplete status from the game when the continue button is clicked", () => {
-                game.transientData = { results: { gameComplete: true } };
+            test("saves levelId from the game when the continue button is clicked", () => {
                 continueButtonClickedOn.mock.calls[0][1]();
-                expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0, gameComplete: true });
+                expect(game.transientData.results.levelId).toEqual("Hard level");
             });
 
             test("navigates to the next screen when the continue button image is clicked", () => {
@@ -481,6 +481,10 @@ describe("Game", () => {
             test("navigates to the next screen when the continue text is clicked", () => {
                 continueTextClickedOn.mock.calls[0][1]();
                 expect(game.navigation.next).toHaveBeenCalled();
+            });
+
+            test("the button made accessible with accessibilify", () => {
+                expect(accessibilify).toHaveBeenCalledWith({ config: { id: 4, ariaLabel: "Continue" } });
             });
         });
     });

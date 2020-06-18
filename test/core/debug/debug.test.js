@@ -37,6 +37,7 @@ describe("Debug system", () => {
         const mockRect = {
             setStrokeStyle: jest.fn(() => mockRect),
             setInteractive: jest.fn(() => mockRect),
+            setOrigin: jest.fn(() => mockRect),
             on: jest.fn(),
             geom: {
                 width: 100,
@@ -66,10 +67,11 @@ describe("Debug system", () => {
                 },
                 input: {
                     keyboard: {
-                        addKeys: jest.fn(),
+                        addKeys: jest.fn(() => ({ c: { on: jest.fn() } })),
                     },
                 },
             },
+            setDepth: jest.fn(),
             add: jest.fn(),
         };
 

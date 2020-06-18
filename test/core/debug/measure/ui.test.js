@@ -40,10 +40,14 @@ describe("createMeasureUi Method", () => {
             toggleUi: jest.fn(),
         }));
 
+        const mockKeys = {
+            c: { on: jest.fn() },
+        };
+
         const mockScene = {
             input: {
                 keyboard: {
-                    addKeys: jest.fn(),
+                    addKeys: jest.fn(() => mockKeys),
                 },
             },
         };

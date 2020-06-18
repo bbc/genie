@@ -3,14 +3,15 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import fp from "../../../lib/lodash/fp/fp.js";
 import { gmi } from "../../core/gmi/gmi.js";
 
-const getScoreMetaData = result => {
-    if (Object.keys(result).length === 0) {
+const getScoreMetaData = transientData => {
+    const results = fp.omit(["levelId", "gameComplete"], transientData);
+    if (Object.keys(results).length === 0) {
         return undefined;
     }
-    let resultString = resultsToString(result);
-    return { metadata: `SCO=${resultString}` };
+    return { metadata: `SCO=${resultsToString(results)}` };
 };
 
 const resultsToString = obj => {
@@ -27,6 +28,6 @@ const resultsToString = obj => {
     return resultString;
 };
 
-export const fireGameCompleteStat = result => {
-    gmi.sendStatsEvent("score", "display", getScoreMetaData(result));
+export const fireGameCompleteStat = transientData => {
+    gmi.sendStatsEvent("score", "display", { source: transientData.levelId, ...getScoreMetaData(transientData) });
 };

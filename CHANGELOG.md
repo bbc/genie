@@ -2,6 +2,11 @@
 
 | Version | Description |
 |---------|-------------|
+| | Prevents duplicate stat firing on Narrative screen "skip" button. |
+| 3.7.0 ||
+| | Improved merging of global and scene plugins added via gameOptions in main.js. |
+| | setStatsScreen now triggered for overlays. |
+| | Dont show level select button on pause screen when already on select screen. |
 | | Add achievements button to pause screen. |
 | | Skip audio exiting pause when over narrative screen. |
 | | Added a measure tool to debug mode. |
