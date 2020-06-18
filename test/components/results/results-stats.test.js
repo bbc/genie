@@ -27,9 +27,22 @@ describe("Results Screen", () => {
             });
         });
 
+        test("fires the correct stat when gameComplete is passed through", () => {
+            fireGameCompleteStat({ keys: 45, gems: 30, gameComplete: true });
+
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", {
+                metadata: "SCO=[keys-45]::[gems-30]",
+            });
+        });
+
         test("fires a score stat to the GMI without results if neither a string nor a number is given", () => {
-            fireGameCompleteStat([]);
-            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", undefined);
+            fireGameCompleteStat({});
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", { source: undefined });
+        });
+
+        test("fires a score stat to the GMI with the levelId from transientData", () => {
+            fireGameCompleteStat({ levelId: "Level Zero" });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("score", "display", { source: "Level Zero" });
         });
     });
 });
