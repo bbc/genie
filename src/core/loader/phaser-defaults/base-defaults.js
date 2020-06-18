@@ -15,7 +15,7 @@ export const getBaseDefaults = () => {
         multiTexture: true,
         banner: true,
         title: "BBC Games Genie",
-        version: `${genie.version} / Build: ${genie.build}`, //TODO add Jenkins JOB_NAME ?
+        version: `${genie.version}${genie.build ? " / Build: " + genie.build : ""}`, //TODO add Jenkins JOB_NAME ?
         clearBeforeRender: false,
         scale: { mode: Phaser.Scale.NONE },
         input: { windowEvents: false },

@@ -25,4 +25,11 @@ describe("Base Phaser Defaults", () => {
         expect(baseDefaults.scale).toEqual({ mode: Phaser.Scale.NONE });
         expect(baseDefaults.input).toEqual({ windowEvents: false });
     });
+
+    test("Returns build number if present", () => {
+        global.__GENIE__.build = 99;
+
+        const baseDefaults = getBaseDefaults();
+        expect(baseDefaults.version).toEqual("test version / Build: 99");
+    });
 });
