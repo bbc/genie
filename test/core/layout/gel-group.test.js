@@ -36,6 +36,7 @@ describe("Group", () => {
         metrics = {
             horizontalBorderPad: 100,
             verticalBorderPad: 100,
+            bottomBorderPad: 100,
             buttonPad: 50,
             horizontals: { left: -1000, center: 0, right: 1000 },
             safeHorizontals: { left: -300, center: 0, right: 300 },
