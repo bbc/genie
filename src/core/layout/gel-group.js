@@ -54,7 +54,7 @@ const vertical = {
                 (child.y + child.input.hitArea.height / 2) / metrics.scale - group.height,
             ]);
         }, group.list);
-        group.y = metrics.verticals.bottom - metrics.verticalBorderPad - hitAreaOffset - group.height;
+        group.y = metrics.verticals.bottom - metrics.bottomBorderPad - hitAreaOffset - group.height;
     },
 };
 
