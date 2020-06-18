@@ -39,6 +39,7 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
         stageWidth,
         stageHeight,
         verticalBorderPad: isIphone5 ? 32 : borderPad,
+        bottomBorderPad: isIphone5 ? 43 : borderPad,
         horizontalBorderPad: borderPad,
         isMobile,
         buttonPad: isMobile ? 22 : 24,
