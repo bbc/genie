@@ -13,6 +13,8 @@ import { gmi } from "../gmi/gmi.js";
 import { loadPack } from "./loadpack.js";
 import { getConfig } from "./get-config.js";
 import { isDebug } from "../debug/debug-mode.js";
+import * as Assets from "./assets.js";
+import JSON5 from "/node_modules/json5/dist/index.mjs";
 
 const getMissingPacks = (masterPack, keys) =>
     Object.keys(keys)
@@ -35,13 +37,6 @@ export class Loader extends Screen {
         const config = getConfig(this, "config/files");
         this.setConfig(config);
 
-        if (config.theme.game && config.theme.game.achievements === true) {
-            this.load.json5({
-                key: "achievements-data",
-                url: "achievements/config.json5",
-            });
-        }
-
         const masterPack = this.cache.json.get("asset-master-pack");
         const debugPack = isDebug() ? ["../../debug/debug-pack"] : [];
         const gamePacksToLoad = ["gel/gel-pack"].concat(
@@ -58,7 +53,18 @@ export class Loader extends Screen {
         this.createLoadBar();
         this.createBrandLogo();
 
-        this.load.on("progress", this.updateLoadBar.bind(this));
+        Assets.download().then(assets => {
+            const achievementConfig = assets
+                .filter(asset => asset.name === "./achievements/config.json5")[0]
+                .readAsString();
+            GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
+            if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
+                gmi.achievements.init(JSON5.parse(achievementConfig));
+            }
+            gmi.sendStatsEvent("gameloaded", "true");
+            gmi.gameLoaded();
+            this.navigation.next();
+        });
     }
 
     createLoadBar() {
@@ -84,15 +90,5 @@ export class Loader extends Screen {
         const y = metrics.verticals.bottom - metrics.verticalBorderPad / metrics.scale;
         this.brandLogo = this.add.image(x, y, "loader.brandLogo");
         this.brandLogo.setOrigin(1, 1);
-    }
-
-    create() {
-        GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
-        if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
-            gmi.achievements.init(this.cache.json.get("achievements-data"));
-        }
-        this.navigation.next();
-        gmi.sendStatsEvent("gameloaded", "true");
-        gmi.gameLoaded();
     }
 }
