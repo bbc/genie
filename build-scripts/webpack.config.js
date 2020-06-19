@@ -75,7 +75,7 @@ module.exports = env => {
     const jobName = process.env.JOB_BASE_NAME;
 
     console.log("JOB_BASE_NAME", jobName);
-    console.log(process.env);
+    console.log(JSON.stringify(process.env, null, 4));
 
     webPackConfig.plugins.push(new webpack.BannerPlugin(`\nBBC GAMES GENIE: ${genieVersion}\n`));
     webPackConfig.plugins.push(
