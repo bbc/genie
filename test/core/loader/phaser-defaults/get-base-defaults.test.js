@@ -7,7 +7,7 @@ import { getBaseDefaults } from "../../../../src/core/loader/phaser-defaults/bas
 
 describe("Base Phaser Defaults", () => {
     beforeEach(() => {
-        global.__GENIE__ = { version: "test version" };
+        global.__BUILD_INFO__ = { version: "test version" };
     });
 
     afterEach(jest.clearAllMocks);
@@ -27,9 +27,17 @@ describe("Base Phaser Defaults", () => {
     });
 
     test("Returns build number if present", () => {
-        global.__GENIE__.build = 99;
+        global.__BUILD_INFO__.build = 99;
 
         const baseDefaults = getBaseDefaults();
         expect(baseDefaults.version).toEqual("test version / Build: 99");
+    });
+
+    test("Returns cleaned Jenkins job name if present", () => {
+        global.__BUILD_INFO__.build = 99;
+        global.__BUILD_INFO__.jobName = "test_job-example";
+
+        const baseDefaults = getBaseDefaults();
+        expect(baseDefaults.version).toEqual("test version / test job example build: 99");
     });
 });

@@ -6,7 +6,8 @@
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../../layout/metrics.js";
 
 export const getBaseDefaults = () => {
-    const genie = __GENIE__;
+    const { version, build, jobName } = __BUILD_INFO__;
+    const cleanJobName = jobName ? " " + jobName.replace(/[-_]/g, " ") + " b" : " B";
 
     return {
         width: CANVAS_WIDTH,
@@ -15,7 +16,7 @@ export const getBaseDefaults = () => {
         multiTexture: true,
         banner: true,
         title: "BBC Games Genie",
-        version: `${genie.version}${genie.build ? " / Build: " + genie.build : ""}`, //TODO add Jenkins JOB_NAME ?
+        version: `${version}${build ? " /" + cleanJobName + "uild: " + build : ""}`,
         clearBeforeRender: false,
         scale: { mode: Phaser.Scale.NONE },
         input: { windowEvents: false },

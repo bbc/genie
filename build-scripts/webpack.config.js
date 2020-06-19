@@ -72,10 +72,15 @@ module.exports = env => {
 
     const genieVersion = require("../package.json").version;
     const buildNumber = process.env.BUILD_NUMBER;
+    const jobName = process.env.JOB_NAME;
     webPackConfig.plugins.push(new webpack.BannerPlugin(`\nBBC GAMES GENIE: ${genieVersion}\n`));
     webPackConfig.plugins.push(
         new webpack.DefinePlugin({
-            __GENIE__: { version: `"${genieVersion}"`, build: `"${buildNumber || "PRODUCTION"}"` },
+            __BUILD_INFO__: {
+                version: `"${genieVersion}"`,
+                job: `"${jobName || ""}"`,
+                build: `"${buildNumber || "PRODUCTION"}"`,
+            },
         }),
     );
 
