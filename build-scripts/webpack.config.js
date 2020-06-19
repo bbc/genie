@@ -71,8 +71,19 @@ module.exports = env => {
     webPackConfig.entry.push(path.resolve("src/main.js"));
 
     const genieVersion = require("../package.json").version;
+    const buildNumber = process.env.BUILD_NUMBER;
+    const jobName = process.env.JOB_NAME;
+
     webPackConfig.plugins.push(new webpack.BannerPlugin(`\nBBC GAMES GENIE: ${genieVersion}\n`));
-    webPackConfig.plugins.push(new webpack.DefinePlugin({ __GENIE__: { version: `"${genieVersion}"` } }));
+    webPackConfig.plugins.push(
+        new webpack.DefinePlugin({
+            __BUILD_INFO__: {
+                version: `"${genieVersion}"`,
+                job: `"${jobName || ""}"`,
+                build: `"${buildNumber || "PRODUCTION"}"`,
+            },
+        }),
+    );
 
     if (genieCore) {
         const Visualizer = require("webpack-visualizer-plugin");

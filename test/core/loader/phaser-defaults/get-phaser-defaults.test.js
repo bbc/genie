@@ -30,7 +30,7 @@ describe("Phaser Defaults", () => {
 
         containerDiv = domElement();
 
-        global.__GENIE__ = { version: "test version" };
+        global.__BUILD_INFO__ = { version: "test version" };
 
         getContainerDiv.mockImplementation(() => containerDiv);
     });
