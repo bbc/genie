@@ -35,7 +35,7 @@ describe("Base Phaser Defaults", () => {
 
     test("Returns cleaned Jenkins job name if present", () => {
         global.__BUILD_INFO__.build = 99;
-        global.__BUILD_INFO__.jobName = "test_job-example";
+        global.__BUILD_INFO__.job = "test_job-example";
 
         const baseDefaults = getBaseDefaults();
         expect(baseDefaults.version).toEqual("test version / test job example build: 99");
