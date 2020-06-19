@@ -74,6 +74,9 @@ module.exports = env => {
     const buildNumber = process.env.BUILD_NUMBER;
     const jobName = process.env.JOB_BASE_NAME;
 
+    console.log("JOB_BASE_NAME", jobName)
+    console.log(process.env)
+
     webPackConfig.plugins.push(new webpack.BannerPlugin(`\nBBC GAMES GENIE: ${genieVersion}\n`));
     webPackConfig.plugins.push(
         new webpack.DefinePlugin({
