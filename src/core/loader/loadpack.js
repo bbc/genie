@@ -40,7 +40,7 @@ export const loadPack = assets => ({
         {
             type: "audio",
             key: "buttonClick",
-            url: getAsset("./shared/button-click.mp4", assets),
+            url: { url: getAsset("./shared/button-click.mp4" , assets), type: "mp4" },
         },
     ],
 });
