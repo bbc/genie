@@ -13,7 +13,6 @@ import { gmi } from "../gmi/gmi.js";
 import { loadPack } from "./loadpack.js";
 import { getConfig } from "./get-config.js";
 import { isDebug } from "../debug/debug-mode.js";
-import * as Assets from "./assets.js";
 import JSON5 from "/node_modules/json5/dist/index.mjs";
 
 const getMissingPacks = (masterPack, keys) =>
@@ -23,49 +22,85 @@ const getMissingPacks = (masterPack, keys) =>
         .map(key => `asset-packs/${key}`);
 
 export class Loader extends Screen {
-    constructor() {
-        loadPack.path = gmi.gameDir + gmi.embedVars.configPath;
-        super({ key: "loader", pack: loadPack });
+    constructor(assets) {
+        super({ key: "loader", pack: loadPack(assets) });
         this._loadbar = undefined;
         this._progress = 0;
+        this.assets = assets;
     }
 
     preload() {
         this.load.setBaseURL(gmi.gameDir);
         this.load.setPath(gmi.embedVars.configPath);
 
-        const config = getConfig(this, "config/files");
+        const config = getConfig(this.assets, "config/files");
         this.setConfig(config);
+        this.getAssets();
+    }
 
-        const masterPack = this.cache.json.get("asset-master-pack");
+    parsePack(pack, assets) {
+        for (const key in pack) {
+            pack[key].files &&
+                (pack[key].files = pack[key].files.map(file => {
+                    file.url &&
+                        (file.url = assets
+                            .filter(asset => asset.name === `./${file.url}`)
+                            .pop()
+                            .getBlobUrl());
+                    file.jsonURL &&
+                        (file.jsonURL = assets
+                            .filter(asset => asset.name === `./${file.jsonURL}`)
+                            .pop()
+                            .getBlobUrl());
+                    file.atlasURL &&
+                        (file.atlasURL = assets
+                            .filter(asset => asset.name === `./${file.atlasURL}`)
+                            .pop()
+                            .getBlobUrl());
+                    return file;
+                }));
+        }
+    }
+
+    getAsset(path) {
+        return this.assets.filter(asset => asset.name === `./${path}`).pop();
+    }
+
+    getAssets() {
+        const getAsset = path => this.assets.filter(asset => asset.name === path).pop();
+        const achievementConfig = getAsset("./achievements/config.json5").readAsString();
+        if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
+            gmi.achievements.init(JSON5.parse(achievementConfig));
+        }
+
+        const masterPack = JSON.parse(getAsset("./asset-packs/asset-master-pack.json").readAsString());
         const debugPack = isDebug() ? ["../../debug/debug-pack"] : [];
-        const gamePacksToLoad = ["gel/gel-pack"].concat(
-            getMissingPacks(masterPack, this.scene.manager.keys),
-            debugPack,
-        );
+        const gamePacksToLoad = ["gel/gel-pack"].concat(getMissingPacks(masterPack, this.scene.manager.keys));
 
-        gamePacksToLoad.forEach(pack => this.load.pack(pack));
+        this.load.setBaseURL();
+        this.load.setPath();
+
+        const gamePacks = gamePacksToLoad.map(packName => JSON.parse(getAsset(`./${packName}.json`).readAsString()));
+        gamePacks.forEach(pack => {
+            this.parsePack(pack, this.assets);
+            this.load.addPack(pack);
+        });
+        this.parsePack(masterPack, this.assets);
         this.load.addPack(masterPack);
+        this.load.pack(debugPack);
 
         this.add.image(0, 0, "loader.background");
         this.add.image(0, -120, "loader.title");
 
         this.createLoadBar();
         this.createBrandLogo();
+    }
 
-        Assets.download().then(assets => {
-            const achievementConfig = assets
-                .filter(asset => asset.name === "./achievements/config.json5")[0]
-                .readAsString();
-            GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
-            if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
-                gmi.achievements.init(JSON5.parse(achievementConfig));
-            }
-            gmi.sendStatsEvent("gameloaded", "true");
-            gmi.gameLoaded();
-            this.transientData.getAsset = path => assets.filter(asset => asset.name === path).pop();
-            this.navigation.next();
-        });
+    create() {
+        GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
+        gmi.sendStatsEvent("gameloaded", "true");
+        gmi.gameLoaded();
+        this.navigation.next();
     }
 
     createLoadBar() {

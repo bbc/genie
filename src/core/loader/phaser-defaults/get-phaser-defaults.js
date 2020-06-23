@@ -17,7 +17,7 @@ const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key
 export const getPhaserDefaults = config => {
     const browser = getBrowser();
     const scene = getScenes(Object.assign(config.screens, getLauncherScreen(debugMode.isDebug())));
-    scene.unshift(new Loader());
+    scene.unshift(new Loader(config.assets));
     scene.unshift(new Boot(config.screens));
 
     const plugins = getDefaultPlugins(config.gameOptions);

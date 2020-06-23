@@ -33,6 +33,7 @@ const startNextMusic = scene => {
 };
 
 const startMusic = (scene, audioKey) => {
+    return;
     if (!audioKey) return;
 
     let music = scene.sound.add(audioKey);

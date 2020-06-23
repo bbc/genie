@@ -3,38 +3,44 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-export const loadPack = {
+const getAsset = (path, assets) =>
+    assets
+        .filter(asset => asset.name === path)
+        .pop()
+        .getBlobUrl();
+
+export const loadPack = assets => ({
     prefix: "loader.",
     files: [
         {
             type: "image",
             key: "title",
-            url: "loader/title.png",
+            url: getAsset("./loader/title.png", assets),
         },
         {
             type: "image",
             key: "background",
-            url: "loader/background.png",
+            url: getAsset("./loader/background.png", assets),
         },
         {
             type: "image",
             key: "brandLogo",
-            url: "loader/brand-logo.png",
+            url: getAsset("./loader/brand-logo.png", assets),
         },
         {
             type: "image",
             key: "loadbarBackground",
-            url: "loader/load-bar-bg.png",
+            url: getAsset("./loader/load-bar-bg.png", assets),
         },
         {
             type: "image",
             key: "loadbar",
-            url: "loader/load-bar-fill.png",
+            url: getAsset("./loader/load-bar-fill.png", assets),
         },
         {
             type: "audio",
             key: "buttonClick",
-            url: "shared/button-click.mp4",
+            url: getAsset("./shared/button-click.mp4", assets),
         },
     ],
-};
+});

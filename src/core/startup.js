@@ -14,10 +14,15 @@ import { hookErrors } from "./loader/hook-errors.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addGelButton } from "./layout/gel-game-objects.js";
 import { getPhaserDefaults } from "./loader/phaser-defaults/get-phaser-defaults.js";
+import * as Assets from "./loader/assets.js";
 
 export function startup(config) {
     setGmi(config.settings || {}, window);
     hookErrors(gmi.gameContainerId);
+    Assets.download().then(assets => startGame({ ...config, assets }));
+}
+
+function startGame(config) {
     Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
     addCustomStyles();
     const game = new Phaser.Game(getPhaserDefaults(config));
