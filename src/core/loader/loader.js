@@ -70,7 +70,8 @@ export class Loader extends Screen {
         const getAsset = path => this.assets.filter(asset => asset.name === path).pop();
         const achievementConfig = getAsset("./achievements/config.json5").readAsString();
         if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
-            gmi.achievements.init(JSON5.parse(achievementConfig));
+            gmi.achievements.config = JSON5.parse(achievementConfig);
+            gmi.achievements.init(gmi.achievements.config);
         }
 
         const masterPack = JSON.parse(getAsset("./asset-packs/asset-master-pack.json").readAsString());

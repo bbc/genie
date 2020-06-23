@@ -25,7 +25,7 @@ export class Game extends Screen {
     }
 
     getAchievements() {
-        const achievements = this.cache.json.get("achievements-data").map(achievement => achievement.key);
+        const achievements = gmi.achievements.config.map(achievement => achievement.key);
         return { star: achievements.slice(0, 3), gem: achievements.slice(3, 7), key: achievements.slice(7, 10) };
     }
 
