@@ -63,6 +63,7 @@ export class Loader extends Screen {
             }
             gmi.sendStatsEvent("gameloaded", "true");
             gmi.gameLoaded();
+            this.transientData.getAsset = path => assets.filter(asset => asset.name === path).pop();
             this.navigation.next();
         });
     }
