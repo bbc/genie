@@ -27,7 +27,7 @@ The config.json should be an array of achievement description objects:
 }
 ```
 **Required Parameters:**
-* **key** [string a-z0-9_] a unique (per game) identifier, lowercase alphanumeric with underscore
+* **key** [string a-z0-9_] a unique (per game) identifier, lowercase alphanumeric with underscore. The key is used for the asset, which will convert underscores to dashes when loading (e.g `this_key` will become `this-key.png`).
 * **name** [string] This is the human readable name that will be displayed in the achievements list.
 * **description** [string] Description that will be displayed in the achievements list.
 * **points** [integer] Currently unused but required for future use. Should add up to 1000 points per game but otherwise can be weighted for difficulty or designer preference.

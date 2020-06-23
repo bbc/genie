@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Update achievements docs. |
 | | Add build number to console banner. |
 | | Fix issue when clearing state value was not set in local storage. |
 | | Prevents duplicate stat firing on Narrative screen "skip" button. |
