@@ -65,11 +65,13 @@ module.exports = env => {
                 asset: "[path].br[query]",
                 algorithm: "brotli",
                 test: /\.(js|css|html|svg|json|json5)$/,
+                minRatio: Infinity,
             }),
             new BrotliGzipPlugin({
                 asset: "[path].gz[query]",
                 algorithm: "gzip",
                 test: /\.(js|css|html|svg|json|json5)$/,
+                minRatio: Infinity,
             }),
             new CopyWebpackPlugin({
                 patterns: [
