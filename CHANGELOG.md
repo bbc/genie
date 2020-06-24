@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Make accessibility listener active to fix pause bug. |
 | | Update achievements docs. |
 | | Add build number to console banner. |
 | | Fix issue when clearing state value was not set in local storage. |
