@@ -35,7 +35,7 @@
             {
                 "type": "spine",
                 "key": "spine_owl",
-                "jsonURL": "examples/spine/owl/export/owl-pro.json",
+                "jsonURL": "examples/spine/owl/export/owl-pro.json.br",
                 "atlasURL": "examples/spine/owl/export/owl-pma.atlas"
             },
             {

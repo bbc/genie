@@ -86,8 +86,8 @@ module.exports = env => {
     );
 
     if (genieCore) {
-        const Visualizer = require("webpack-visualizer-plugin");
-        webPackConfig.plugins.push(new Visualizer());
+        // const Visualizer = require("webpack-visualizer-plugin");
+        // webPackConfig.plugins.push(new Visualizer());
 
         delete webPackConfig.module.rules[0].use.options;
 

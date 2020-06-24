@@ -81,7 +81,7 @@ describe("Boot", () => {
             bootScreen.preload();
             expect(bootScreen.load.json).toHaveBeenCalledWith(
                 "asset-master-pack",
-                "asset-packs/asset-master-pack.json",
+                "asset-packs/asset-master-pack.json.br",
             );
         });
 

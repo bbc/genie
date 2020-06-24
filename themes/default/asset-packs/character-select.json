@@ -25,7 +25,7 @@
             {
                 "type": "particles",
                 "key": "hover-emitter",
-                "url": "characters/emitter.json"
+                "url": "characters/emitter.json.br"
             },
             {
                 "type": "spritesheet",

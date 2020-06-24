@@ -65,7 +65,7 @@
             {
                 "type": "particles",
                 "key": "row-emitter",
-                "url": "results/emitter.json"
+                "url": "results/emitter.json.br"
             }
         ]
     }

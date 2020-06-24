@@ -38,7 +38,7 @@ export class Loader extends Screen {
         if (config.theme.game && config.theme.game.achievements === true) {
             this.load.json5({
                 key: "achievements-data",
-                url: "achievements/config.json5",
+                url: "achievements/config.json5.br",
             });
         }
 

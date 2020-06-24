@@ -8,3 +8,4 @@ npm run test
 npm run build
 cp -r themes output/themes
 cp -r debug output/debug
+node --experimental-modules build-scripts/compress.mjs

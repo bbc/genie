@@ -110,7 +110,7 @@
             {
                 "type": "spine",
                 "key": "spine_powerup",
-                "jsonURL": "examples/spine/powerup/export/powerup-pro.json",
+                "jsonURL": "examples/spine/powerup/export/powerup-pro.json.br",
                 "atlasURL": "examples/spine/powerup/export/powerup.atlas"
             },
             {

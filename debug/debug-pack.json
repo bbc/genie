@@ -47,7 +47,7 @@
             {
                 "type": "particles",
                 "key": "spray",
-                "url": "examples/particles/spray.json"
+                "url": "examples/particles/spray.json.br"
             },
 
             {
@@ -93,12 +93,12 @@
             {
                 "type": "particles",
                 "key": "bubbles",
-                "url": "examples/narrative/bubbles.json"
+                "url": "examples/narrative/bubbles.json.br"
             },
             {
                 "type": "particles",
                 "key": "bubbleBurst",
-                "url": "examples/narrative/bubble-burst.json"
+                "url": "examples/narrative/bubble-burst.json.br"
             },
             {
                 "type": "image",
@@ -118,7 +118,7 @@
             {
                 "type": "spine",
                 "key": "spine_owl",
-                "jsonURL": "examples/spine/owl/export/owl-pro.json",
+                "jsonURL": "examples/spine/owl/export/owl-pro.json.br",
                 "atlasURL": "examples/spine/owl/export/owl.atlas"
             }
         ]

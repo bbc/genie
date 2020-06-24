@@ -5,47 +5,47 @@
             {
                 "type": "json5",
                 "key": "debug-select-1",
-                "url": "select-1.json5"
+                "url": "select-1.json5.br"
             },
             {
                 "type": "json5",
                 "key": "debug-select-grid",
-                "url": "select-grid.json5"
+                "url": "select-grid.json5.br"
             },
             {
                 "type": "json5",
                 "key": "debug-results-1-sec",
-                "url": "results-1-sec.json5"
+                "url": "results-1-sec.json5.br"
             },
             {
                 "type": "json5",
                 "key": "debug-results-10-sec",
-                "url": "results-10-sec.json5"
+                "url": "results-10-sec.json5.br"
             },
             {
                 "type": "json5",
                 "key": "debug-results-spine",
-                "url": "results-spine.json5"
+                "url": "results-spine.json5.br"
             },
             {
                 "type": "json5",
                 "key": "debug-results-row-particles",
-                "url": "results-row-particles.json5"
+                "url": "results-row-particles.json5.br"
             },
             {
                 "type": "json5",
                 "key": "debug-background-animations",
-                "url": "background-animations.json5"
+                "url": "background-animations.json5.br"
             },
             {
                 "type": "json5",
                 "key": "debug-background-particles",
-                "url": "background-particles.json5"
+                "url": "background-particles.json5.br"
             },
             {
                 "type": "json5",
                 "key": "debug-narrative",
-                "url": "narrative.json5"
+                "url": "narrative.json5.br"
             }
         ]
     }
