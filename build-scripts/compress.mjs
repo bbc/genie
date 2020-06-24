@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import brotli from "brotli";
 import zlib from "zlib"; // for gzip
 import fs from "fs";
 
