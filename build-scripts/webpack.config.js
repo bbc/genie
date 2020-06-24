@@ -8,6 +8,8 @@ const dynamicallyExposeGlobals = require("../dev/scripts/dynamicExpose.js");
 
 const webpack = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
+const BrotliGzipPlugin = require('brotli-gzip-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = env => {
     const development = env && env.development;
@@ -58,7 +60,22 @@ module.exports = env => {
                 index: "node_modules/genie/dev/index.main.html",
             },
         },
-        plugins: [],
+        plugins: [
+            new BrotliGzipPlugin({
+                asset: '[path].br[query]',
+                algorithm: 'brotli',
+                test: /\.(js|css|html|svg|json|json5)$/,
+            }),
+            new BrotliGzipPlugin({
+                asset: '[path].gz[query]',
+                algorithm: 'gzip',
+                test: /\.(js|css|html|svg|json|json5)$/,
+            }),
+            new CopyWebpackPlugin({ patterns: [
+                { from: 'themes', to: 'themes' },
+                { from: 'debug', to: 'debug' }
+              ]}),
+        ],
     };
 
     try {
