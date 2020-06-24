@@ -3,6 +3,9 @@
 | Version | Description |
 |---------|-------------|
 | | Make accessibility listener active to fix pause bug. |
+| | Update achievements docs. |
+| | Add build number to console banner. |
+| | Fix issue when clearing state value was not set in local storage. |
 | | Prevents duplicate stat firing on Narrative screen "skip" button. |
 | 3.7.0 ||
 | | Improved merging of global and scene plugins added via gameOptions in main.js. |

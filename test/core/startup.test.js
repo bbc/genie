@@ -38,7 +38,7 @@ describe("Startup", () => {
         global.window.addEventListener = jest.fn();
         global.Phaser.Loader.FileTypesManager.register = jest.fn();
 
-        global.__GENIE__ = { version: "test version" };
+        global.__BUILD_INFO__ = { version: "test version" };
     });
 
     afterEach(() => {
