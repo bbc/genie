@@ -25,9 +25,15 @@ describe("Examples Launcher", () => {
             };
 
             expect(getConfig(mockScreen, mockKeys)).toEqual({
-                key0: "mockConfig0",
-                key1: "mockConfig1",
-                key2: "mockConfig2",
+                home: {
+                    key0: "mockConfig0",
+                },
+                results: {
+                    key2: "mockConfig2",
+                },
+                select: {
+                    key1: "mockConfig1",
+                },
             });
         });
     });
