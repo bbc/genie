@@ -7,6 +7,7 @@
  * @license Apache-2.0
  */
 import { Screen } from "../../core/screen.js";
+import { gmi } from "../../core/gmi/gmi.js";
 
 export class Pause extends Screen {
     preload() {
@@ -18,7 +19,7 @@ export class Pause extends Screen {
         this.addBackgroundItems();
         const parentKey = this.context.parentScreens.slice(-1)[0].scene.key;
         const isAboveSelectScreen = parentKey.includes("select");
-        const achievements = this.context.config.game.achievements ? ["achievements"] : [];
+        const achievements = gmi.achievements.get().length ? ["achievements"] : [];
         const pauseReplay = this.context.navigation[parentKey].routes.restart ? ["pauseReplay"] : [];
         let levelSelect = this.context.navigation["pause"].routes.select ? ["levelSelect"] : [];
         levelSelect = isAboveSelectScreen ? [] : levelSelect;
