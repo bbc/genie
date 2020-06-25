@@ -170,6 +170,23 @@
                 "key": "spine_owl",
                 "jsonURL": "../../debug/assets/spine/owl/export/owl-pro.json",
                 "atlasURL": "../../debug/assets/spine/owl/export/owl.atlas"
+            },
+            {
+                "type": "spine",
+                "key": "spine_powerup",
+                "jsonURL": "../../debug/assets/spine/powerup/export/powerup-pro.json",
+                "atlasURL": "../../debug/assets/spine/powerup/export/powerup.atlas"
+            },
+            {
+                "type": "spritesheet",
+                "key": "sprite",
+                "url": "../../debug/assets/sprite/sprite-anim.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 66,
+                    "margin": 0,
+                    "spacing": 8
+                }
             }
         ]
     },

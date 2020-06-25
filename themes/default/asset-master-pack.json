@@ -63,27 +63,5 @@
                 "url": "game/basic-sprite.png"
             }
         ]
-    },
-    "examples": {
-        "prefix": "examples_",
-        "files": [
-            {
-                "type": "spine",
-                "key": "spine_powerup",
-                "jsonURL": "examples/spine/powerup/export/powerup-pro.json",
-                "atlasURL": "examples/spine/powerup/export/powerup.atlas"
-            },
-            {
-                "type": "spritesheet",
-                "key": "sprite",
-                "url": "examples/sprite/sprite-anim.png",
-                "frameConfig": {
-                    "frameWidth": 42,
-                    "frameHeight": 66,
-                    "margin": 0,
-                    "spacing": 8
-                }
-            }
-        ]
     }
 }
