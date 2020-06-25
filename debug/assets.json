@@ -82,94 +82,94 @@
             {
                 "type": "image",
                 "key": "spark",
-                "url": "examples/particles/blue.png"
+                "url": "../../debug/assets/particles/blue.png"
             },
             {
                 "type": "image",
                 "key": "red_spark",
-                "url": "examples/particles/red.png"
+                "url": "../../debug/assets/particles/red.png"
             },
             {
                 "type": "image",
                 "key": "yellow_spark",
-                "url": "examples/particles/yellow.png"
+                "url": "../../debug/assets/particles/yellow.png"
             },
             {
                 "type": "particles",
                 "key": "spray",
-                "url": "examples/particles/spray.json"
+                "url": "../../debug/assets/particles/spray.json"
             },
 
             {
                 "type": "image",
                 "key": "rockpool",
-                "url": "examples/narrative/background.jpg"
+                "url": "../../debug/assets/narrative/background.jpg"
             },
             {
                 "type": "image",
                 "key": "little-crab",
-                "url": "examples/narrative/little-crab.png"
+                "url": "../../debug/assets/narrative/little-crab.png"
             },
             {
                 "type": "image",
                 "key": "big-crab",
-                "url": "examples/narrative/big-crab.png"
+                "url": "../../debug/assets/narrative/big-crab.png"
             },
             {
                 "type": "audio",
                 "key": "dialogue1",
-                "url": "examples/narrative/dialogue_1.mp4"
+                "url": "../../debug/assets/narrative/dialogue_1.mp4"
             },
             {
                 "type": "audio",
                 "key": "dialogue2",
-                "url": "examples/narrative/dialogue_2.mp4"
+                "url": "../../debug/assets/narrative/dialogue_2.mp4"
             },
             {
                 "type": "audio",
                 "key": "dialogue3",
-                "url": "examples/narrative/dialogue_3.mp4"
+                "url": "../../debug/assets/narrative/dialogue_3.mp4"
             },
             {
                 "type": "audio",
                 "key": "dialogue4",
-                "url": "examples/narrative/dialogue_4.mp4"
+                "url": "../../debug/assets/narrative/dialogue_4.mp4"
             },
             {
                 "type": "audio",
                 "key": "dialogue5",
-                "url": "examples/narrative/dialogue_5.mp4"
+                "url": "../../debug/assets/narrative/dialogue_5.mp4"
             },
             {
                 "type": "particles",
                 "key": "bubbles",
-                "url": "examples/narrative/bubbles.json"
+                "url": "../../debug/assets/narrative/bubbles.json"
             },
             {
                 "type": "particles",
                 "key": "bubbleBurst",
-                "url": "examples/narrative/bubble-burst.json"
+                "url": "../../debug/assets/narrative/bubble-burst.json"
             },
             {
                 "type": "image",
                 "key": "bubble",
-                "url": "examples/narrative/bubble.png"
+                "url": "../../debug/assets/narrative/bubble.png"
             },
             {
                 "type": "audio",
                 "key": "bubbleBurstSFX",
-                "url": "examples/narrative/bubble-burst.mp4"
+                "url": "../../debug/assets/narrative/bubble-burst.mp4"
             },
             {
                 "type": "audio",
                 "key": "pump",
-                "url": "examples/narrative/pump.mp4"
+                "url": "../../debug/assets/narrative/pump.mp4"
             },
             {
                 "type": "spine",
                 "key": "spine_owl",
-                "jsonURL": "examples/spine/owl/export/owl-pro.json",
-                "atlasURL": "examples/spine/owl/export/owl.atlas"
+                "jsonURL": "../../debug/assets/spine/owl/export/owl-pro.json",
+                "atlasURL": "../../debug/assets/spine/owl/export/owl.atlas"
             }
         ]
     },
