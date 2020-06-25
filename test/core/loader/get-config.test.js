@@ -8,18 +8,12 @@ import { getConfig } from "../../../src/core/loader/get-config.js";
 describe("Examples Launcher", () => {
     describe("getConfig method", () => {
         test("Gets merged, preloaded configs from file path", () => {
-            const mockConfig = {
-                config: {
-                    prefix: "mockPrefix.",
-                    files: [{ key: "mockKey1" }, { key: "mockKey2" }, { key: "mockKey3" }],
-                },
-            };
+            const mockKeys = ["home", "select", "results"];
 
             const json = {
-                "config/path": mockConfig,
-                "mockPrefix.mockKey1": { key1: "mockConfig1" },
-                "mockPrefix.mockKey2": { key2: "mockConfig2" },
-                "mockPrefix.mockKey3": { key3: "mockConfig3" },
+                "config-home": { key0: "mockConfig0" },
+                "config-select": { key1: "mockConfig1" },
+                "config-results": { key2: "mockConfig2" },
             };
 
             const mockScreen = {
@@ -30,10 +24,10 @@ describe("Examples Launcher", () => {
                 },
             };
 
-            expect(getConfig(mockScreen, "config/path")).toEqual({
+            expect(getConfig(mockScreen, mockKeys)).toEqual({
+                key0: "mockConfig0",
                 key1: "mockConfig1",
                 key2: "mockConfig2",
-                key3: "mockConfig3",
             });
         });
     });

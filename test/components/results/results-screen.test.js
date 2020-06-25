@@ -68,7 +68,7 @@ describe("Results Screen", () => {
             height: 0,
         };
 
-        mockGmi = { sendStatsEvent: jest.fn() };
+        mockGmi = { sendStatsEvent: jest.fn(), achievements: { get: () => [] } };
         createMockGmi(mockGmi);
 
         mockTextAdd = {
@@ -263,8 +263,8 @@ describe("Results Screen", () => {
             expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ top: false });
         });
 
-        test("adds the achievement button when theme flag is set", () => {
-            mockConfig.theme.game.achievements = true;
+        test("adds the achievement button when there are achievements", () => {
+            mockGmi.achievements = { get: () => [""] };
             resultsScreen.create();
             const expectedButtons = ["pause", "continueGame", "achievementsSmall", "restart"];
             expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);

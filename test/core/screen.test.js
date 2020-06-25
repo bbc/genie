@@ -67,7 +67,7 @@ describe("Screen", () => {
 
         delete window.__debug;
 
-        mockConfig = { theme: { loadscreen: { music: "test/music" }, screenKey: {} } };
+        mockConfig = { loadscreen: { music: "test/music" }, screenKey: {} };
 
         mockTransientData = { key: "data" };
 
@@ -357,7 +357,7 @@ describe("Screen", () => {
 
         test("sets the stats screen if the screen is not an overlay", () => {
             createScreen("screenKey");
-            mockData.config.theme["screenKey"] = { isOverlay: false };
+            mockData.config["screenKey"] = { isOverlay: false };
             screen.init(mockData);
 
             expect(mockGmi.setStatsScreen).toHaveBeenCalled();
@@ -365,7 +365,7 @@ describe("Screen", () => {
 
         test("Set the stats screen if the screen is an overlay", () => {
             createScreen("screenKey");
-            mockData.config.theme["screenKey"] = { isOverlay: true };
+            mockData.config["screenKey"] = { isOverlay: true };
             screen.init(mockData);
 
             expect(mockGmi.setStatsScreen).toHaveBeenCalledWith("screenKey");
@@ -374,7 +374,7 @@ describe("Screen", () => {
         test("removing an overlay set stat screen back to an underlying overlay", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "overlay", stop: jest.fn() } };
             createScreen("screenKey");
-            mockData.config.theme["screenKey"] = { isOverlay: true };
+            mockData.config["screenKey"] = { isOverlay: true };
             screen.init(mockData);
             screen._onOverlayRemoved(mockOverlay);
 
@@ -403,10 +403,10 @@ describe("Screen", () => {
 
         test("config getter returns current scene's config", () => {
             createAndInitScreen();
-            const testData = { config: { theme: { screenKey: { test: "test config" } } } };
+            const testData = { config: { screenKey: { test: "test config" } } };
             screen.setData(testData);
 
-            expect(screen.config).toEqual(testData.config.theme.screenKey);
+            expect(screen.config).toEqual(testData.config.screenKey);
         });
     });
 
@@ -418,7 +418,7 @@ describe("Screen", () => {
         });
 
         test("returns assetPrefix if set in theme", () => {
-            mockConfig.theme.screenKey.assetPrefix = "themePrefix";
+            mockConfig.screenKey.assetPrefix = "themePrefix";
             createAndInitScreen();
 
             expect(screen.assetPrefix).toBe("themePrefix");

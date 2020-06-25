@@ -4,6 +4,9 @@
  * @license Apache-2.0
  */
 import { Pause } from "../../../src/components/overlays/pause";
+import { gmi } from "../../../src/core/gmi/gmi";
+
+jest.mock("../../../src/core/gmi/gmi");
 
 describe("Pause Overlay", () => {
     let pauseScreen;
@@ -11,6 +14,7 @@ describe("Pause Overlay", () => {
     let mockData;
 
     beforeEach(() => {
+        gmi.achievements = { get: () => [] };
         mockBoundResumeAllFunction = {
             some: "mock",
         };
@@ -60,8 +64,8 @@ describe("Pause Overlay", () => {
     });
 
     describe("create method", () => {
-        test("adds correct gel layout buttons when replay button should be shown", () => {
-            mockData.config.theme.game.achievements = true;
+        test("adds correct gel layout buttons when achievements button should be shown", () => {
+            gmi.achievements = { get: () => [""] };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith([
                 "home",
@@ -75,7 +79,7 @@ describe("Pause Overlay", () => {
             ]);
         });
 
-        test("adds correct gel layout buttons when achievement  button should be shown", () => {
+        test("adds correct gel layout buttons when select button should not be shown", () => {
             mockData.navigation["pause"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith([

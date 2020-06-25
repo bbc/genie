@@ -181,11 +181,6 @@ describe("Loader", () => {
     });
 
     describe("preload method", () => {
-        test("Sets the config part of screen#data", () => {
-            loader.preload();
-            expect(loader.setConfig).toHaveBeenCalledWith(mockConfig);
-        });
-
         test("Sets up loader paths correctly", () => {
             loader.preload();
 
@@ -199,23 +194,25 @@ describe("Loader", () => {
             expect(loader.load.addPack).toHaveBeenCalledWith(mockMasterPack);
         });
 
-        test("calls load.pack with the gel pack and missing pack names", () => {
+        test("calls load.pack with the gel pack and screen packs", () => {
             loader.scene.manager.keys = { one: {}, two: {}, three: {} };
             loader.preload();
 
-            expect(loader.load.pack).toHaveBeenCalledWith("gel/gel-pack");
-            expect(loader.load.pack).toHaveBeenCalledWith("asset-packs/three");
-            expect(loader.load.pack).toHaveBeenCalledTimes(2);
+            expect(loader.load.pack).toHaveBeenCalledWith("gel/assets");
+            expect(loader.load.pack).toHaveBeenCalledWith("one/assets");
+            expect(loader.load.pack).toHaveBeenCalledWith("two/assets");
+            expect(loader.load.pack).toHaveBeenCalledWith("three/assets");
+            expect(loader.load.pack).toHaveBeenCalledTimes(4);
         });
 
         test("does not load boot and loader screen packs", () => {
             loader.scene.manager.keys = { boot: {}, loader: {}, three: {} };
             loader.preload();
 
-            expect(loader.load.pack).toHaveBeenCalledWith("gel/gel-pack");
+            expect(loader.load.pack).toHaveBeenCalledWith("gel/assets");
             expect(loader.load.pack).not.toHaveBeenCalledWith("boot");
             expect(loader.load.pack).not.toHaveBeenCalledWith("loader");
-            expect(loader.load.pack).toHaveBeenCalledWith("asset-packs/three");
+            expect(loader.load.pack).toHaveBeenCalledWith("three/assets");
         });
 
         test("adds background and title images", () => {
@@ -228,17 +225,20 @@ describe("Loader", () => {
 
     describe("create method", () => {
         test("calls GameSounds setButtonClickSound", () => {
+            loader.screenKeys = [];
             loader.create();
             expect(GameSound.setButtonClickSound).toHaveBeenCalled();
         });
 
         test("calls this.navigation.next", () => {
+            loader.screenKeys = [];
             loader.navigation = { next: jest.fn() };
             loader.create();
             expect(loader.navigation.next).toHaveBeenCalled();
         });
 
         test("sends gmi game loaded stats", () => {
+            loader.screenKeys = [];
             loader.create();
             expect(gmi.sendStatsEvent).toHaveBeenCalledWith("gameloaded", "true");
             expect(gmi.gameLoaded).toHaveBeenCalled();
@@ -263,44 +263,20 @@ describe("Loader", () => {
             loader.scene.manager.keys = { one: {}, two: {}, three: {} };
             loader.preload();
 
-            expect(loader.load.pack).toHaveBeenCalledWith("../../debug/debug-pack");
+            expect(loader.load.pack).toHaveBeenCalledWith("../../debug/assets");
         });
     });
 
     describe("achievements", () => {
-        test("calls achievements init when achievements config flag is set to true", () => {
+        test("calls achievements init", () => {
+            loader.screenKeys = [];
             loader.create();
             expect(mockGmi.achievements.init).toHaveBeenCalled();
         });
 
-        test("does not call achievements init when achievements config flag is falsy", () => {
-            mockConfig.theme.game.achievements = false;
-
-            loader.create();
-            expect(mockGmi.achievements.init).not.toHaveBeenCalled();
-        });
-
-        test("does not call achievements init when there is no theme.game entry", () => {
-            delete mockConfig.theme.game;
-
-            loader.preload();
-            loader.create();
-            expect(mockGmi.achievements.init).not.toHaveBeenCalled();
-        });
-
-        test("loads the achievements config if enabled in config", () => {
+        test("loads the achievements config", () => {
             loader.preload();
             expect(loader.load.json5).toHaveBeenCalledWith({
-                key: "achievements-data",
-                url: "achievements/config.json5",
-            });
-        });
-
-        test("does not load the achievements config if disabled in config", () => {
-            delete mockConfig.theme.game.achievements;
-
-            loader.preload();
-            expect(loader.load.json5).not.toHaveBeenCalledWith({
                 key: "achievements-data",
                 url: "achievements/config.json5",
             });

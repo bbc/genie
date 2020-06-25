@@ -34,7 +34,7 @@ const debugStyle = {
 
 const getUrlForKey = key =>
     key === "debug"
-        ? "debug/config.json"
+        ? "debug/config.json5"
         : key.startsWith("debug-")
         ? `debug/examples/${key.substr(6)}.json5`
         : `THEME/${key}/config.json5`;
