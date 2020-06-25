@@ -28,7 +28,7 @@ const assignEvents = (el, options) => {
     el.addEventListener("focus", options.onMouseOver);
     el.addEventListener("blur", options.onMouseOut);
 
-    el.addEventListener("touchmove", e => e.preventDefault());
+    el.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
     el.addEventListener("touchstart", () => {});
 
     if (options.interactive === false) {
