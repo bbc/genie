@@ -22,13 +22,11 @@ const getDebugScreenWithRoutes = () => {
     return launcherScreen;
 };
 
-const prependDebug = key => `debug-${key}`;
-
 const addScene = (scene, examples) => key => scene.scene.add(key, examples[key].scene);
 
 const addScreens = scene => {
     Object.keys(examples).map(addScene(scene, examples));
-    const debugTheme = fp.mapKeys(prependDebug, getConfig(scene, Object.keys(examples)));
+    const debugTheme = getConfig(scene, Object.keys(examples));
     const config = scene.context.config;
     config.navigation = scene.context.navigation;
 

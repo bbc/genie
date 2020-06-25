@@ -17,6 +17,8 @@ export const loadConfig = (screen, keys) => {
 };
 
 export const getConfig = (screen, keys) => {
-    const entries = keys.map(key => screen.cache.json.get(`config-${getKey(key)}`));
+    const entries = keys.map(key => ({
+        [getKey(key)]: screen.cache.json.get(`config-${getKey(key)}`),
+    }));
     return entries.reduce((acc, entry) => fp.merge(acc, entry), {});
 };
