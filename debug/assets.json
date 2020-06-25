@@ -1,4 +1,54 @@
 {
+    "debugConfig": {
+        "prefix": "debugConfig.",
+        "files": [
+            {
+                "type": "json5",
+                "key": "debug-select-1",
+                "url": "../../debug/examples/select-1.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-select-grid",
+                "url": "../../debug/examples/select-grid.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-results-1-sec",
+                "url": "../../debug/examples/results-1-sec.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-results-10-sec",
+                "url": "../../debug/examples/results-10-sec.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-results-spine",
+                "url": "../../debug/examples/results-spine.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-results-row-particles",
+                "url": "../../debug/examples/results-row-particles.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-background-animations",
+                "url": "../../debug/examples/background-animations.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-background-particles",
+                "url": "../../debug/examples/background-particles.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-narrative",
+                "url": "../../debug/examples/narrative.json5"
+            }
+        ]
+    },
     "gelDebug": {
         "prefix": "gelDebug.",
         "files": [

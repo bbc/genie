@@ -30,9 +30,9 @@ export class Loader extends Screen {
         this.load.setPath(gmi.embedVars.configPath);
 
         const masterPack = this.cache.json.get("asset-master-pack");
-        const debugPack = isDebug() ? ["../../examples"] : [];
-        this.screenKeys = getScreenKeys(this.scene.manager.keys);
-        const gamePacksToLoad = ["gel"].concat(this.screenKeys, debugPack);
+        const debugPack = isDebug() ? ["../../debug"] : [];
+        this.screenKeys = getScreenKeys(this.scene.manager.keys).concat(debugPack);
+        const gamePacksToLoad = ["gel"].concat(this.screenKeys);
 
         loadConfig(this, this.screenKeys);
         this.load.json5({

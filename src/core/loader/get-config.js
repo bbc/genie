@@ -16,6 +16,10 @@ export const loadConfig = (screen, paths) => {
 
 export const getConfig = (screen, paths) => {
     const entries = paths.map(path => screen.cache.json.get(`${path}/config`));
-    console.log(entries, entries.reduce((acc, entry) => fp.merge(acc, entry), {}));
+    return entries.reduce((acc, entry) => fp.merge(acc, entry), {});
+};
+
+export const getDebugConfig = (screen, paths) => {
+    const entries = paths.map(path => screen.cache.json.get(`../../${path}`));
     return entries.reduce((acc, entry) => fp.merge(acc, entry), {});
 };

@@ -5,7 +5,7 @@
  */
 import { Launcher } from "./launcher.js";
 import { examples } from "./examples.js";
-import { getConfig } from "../loader/get-config.js";
+import { getDebugConfig } from "../loader/get-config.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const launcherScreen = {
@@ -28,7 +28,7 @@ const addScene = (scene, examples) => key => scene.scene.add(key, examples[key].
 
 const addScreens = scene => {
     Object.keys(examples).map(addScene(scene, examples));
-    const debugTheme = fp.mapKeys(prependDebug, getConfig(scene, "example-files"));
+    const debugTheme = fp.mapKeys(prependDebug, getDebugConfig(scene, Object.keys(examples)));
     const config = scene.context.config;
     config.navigation = scene.context.navigation;
 
