@@ -26,7 +26,7 @@ export const initState = (stateKey, config) => {
     const getAll = fp.flow(getStored, getMerged);
 
     const set = (id, state = null) => {
-        gmi.setGameData("genie", fp.set([stateKey, id], { state }, getGenieStore()));
+        gmi.setGameData("genie", fp.setWith(Object, [stateKey, id], { state }, getGenieStore()));
     };
 
     const state = {

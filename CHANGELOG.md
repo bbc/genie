@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Force state to be serialised to an object and not an array when keys are numeric. |
 | | Make accessibility listener active to fix pause bug. |
 | | Update achievements docs. |
 | | Add build number to console banner. |
