@@ -1,5 +1,4 @@
 {
-        "select-1": {
             debugLabels: [
                 {
                     x: -390,
@@ -214,5 +213,4 @@ to signal clickability.",
                     state: "locked",
                 },
             ],
-        },
 }

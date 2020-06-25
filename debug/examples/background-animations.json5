@@ -1,5 +1,4 @@
 {
-        "background-animations": {
             debugLabels: [
                 {
                     x: -390,
@@ -48,5 +47,4 @@ See the "background.items" block in this scene\'s config',
                     shiftY: 80,
                 },
             },
-        },
 }
