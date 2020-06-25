@@ -1,11 +1,6 @@
 #!/usr/bin/env node
-/* eslint-disable */
 /**
- * @copyright BBC 2020
- * @author BBC Children's D+E
- * @license Apache-2.0
- *
- * Coverts Phaser 2 asset packs to Phaser 3
+ * Covert Phaser 2 asset packs to Phaser 3
  *
  * Usage: node repack path-to-file
  */
@@ -14,10 +9,10 @@ const brightRed = "\x1b[1m\x1b[31m";
 const brightGreen = "\x1b[1m\x1b[32m";
 const resetCli = "\x1b[0m";
 const fs = require("fs");
-//const path = require("path");
+const path = require("path");
 
 // functions
-//const getNewPath = ({ dir, ext, name }) => ({ dir, ext, name: name + "_new" });
+const getNewPath = ({ dir, ext, name }) => ({ dir, ext, name: name + "_new" });
 const isP3Format = json => Object.keys(json).some(key => Boolean(json[key].prefix) || Boolean(json[key].files));
 const exitWithMessage = (color, text, code) => {
     console.log(color, text);
@@ -42,11 +37,19 @@ const spritesheet = entry => {
     return entry;
 };
 
+const bitmapFont = entry => {
+    entry.fontDataURL = entry.atlasURL;
+    delete entry.atlasURL;
+
+    return entry;
+};
+
 const defaultFile = entry => entry;
 
 const dispatcher = {
     audio,
     spritesheet,
+    bitmapFont,
     defaultFile,
 };
 
