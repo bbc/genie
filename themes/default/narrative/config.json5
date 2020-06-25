@@ -1,5 +1,4 @@
 {
-    theme: {
         narrative: {
             //Add, background images / animations / particle systems. More examples in /debug/examples
             background: {
@@ -119,5 +118,4 @@
             },
             debugLabels: [{ x: -390, y: -40, text: "Configure pages of audio and tween animations with this module" }],
         },
-    },
 }

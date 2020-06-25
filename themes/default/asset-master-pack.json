@@ -1,44 +1,4 @@
 {
-    "howToPlay": {
-        "prefix": "how-to-play.",
-        "files": [
-            {
-                "type": "image",
-                "key": "background",
-                "url": "how-to-play/background.png"
-            },
-            {
-                "type": "image",
-                "key": "title",
-                "url": "how-to-play/title.png"
-            },
-            {
-                "type": "image",
-                "key": "panel1",
-                "url": "how-to-play/how_to_play_1.png"
-            },
-            {
-                "type": "image",
-                "key": "panel2",
-                "url": "how-to-play/how_to_play_2.png"
-            },
-            {
-                "type": "image",
-                "key": "panel3",
-                "url": "how-to-play/how_to_play_3.png"
-            },
-            {
-                "type": "image",
-                "key": "pipOn",
-                "url": "how-to-play/pip_on.png"
-            },
-            {
-                "type": "image",
-                "key": "pipOff",
-                "url": "how-to-play/pip_off.png"
-            }
-        ]
-    },
     "rotation": {
         "prefix": "rotation.",
         "files": [
@@ -125,6 +85,5 @@
                 }
             }
         ]
-    },
-    "select-1": {}
+    }
 }

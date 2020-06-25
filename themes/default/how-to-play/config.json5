@@ -1,5 +1,4 @@
 {
-    theme: {
         "how-to-play": {
             isOverlay: true,
             choices: [
@@ -33,5 +32,4 @@
                 ],
             },
         },
-    },
 }

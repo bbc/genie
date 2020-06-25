@@ -11,14 +11,11 @@ import * as Scaler from "../scaler.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 import { loadPack } from "./loadpack.js";
-import { getConfig } from "./get-config.js";
+import { getConfig, loadConfig } from "./get-config.js";
 import { isDebug } from "../debug/debug-mode.js";
 
-const getMissingPacks = (masterPack, keys) =>
-    Object.keys(keys)
-        .filter(key => ["default", "boot", "loader", "debug"].indexOf(key) === -1)
-        .filter(key => !masterPack.hasOwnProperty(key))
-        .map(key => `asset-packs/${key}`);
+const getScreenKeys = keys =>
+    Object.keys(keys).filter(key => ["default", "boot", "loader", "debug"].indexOf(key) === -1);
 
 export class Loader extends Screen {
     constructor() {
@@ -32,24 +29,18 @@ export class Loader extends Screen {
         this.load.setBaseURL(gmi.gameDir);
         this.load.setPath(gmi.embedVars.configPath);
 
-        const config = getConfig(this, "config/files");
-        this.setConfig(config);
-
-        if (config.theme.game && config.theme.game.achievements === true) {
-            this.load.json5({
-                key: "achievements-data",
-                url: "achievements/config.json5",
-            });
-        }
-
         const masterPack = this.cache.json.get("asset-master-pack");
-        const debugPack = isDebug() ? ["../../debug/debug-pack"] : [];
-        const gamePacksToLoad = ["gel/gel-pack"].concat(
-            getMissingPacks(masterPack, this.scene.manager.keys),
-            debugPack,
-        );
+        const debugPack = isDebug() ? ["../../examples"] : [];
+        this.screenKeys = getScreenKeys(this.scene.manager.keys);
+        const gamePacksToLoad = ["gel"].concat(this.screenKeys, debugPack);
 
-        gamePacksToLoad.forEach(pack => this.load.pack(pack));
+        loadConfig(this, this.screenKeys);
+        this.load.json5({
+            key: "achievements-data",
+            url: "achievements/config.json5",
+        });
+
+        gamePacksToLoad.forEach(pack => this.load.pack(`${pack}/assets`));
         this.load.addPack(masterPack);
 
         this.add.image(0, 0, "loader.background");
@@ -87,10 +78,10 @@ export class Loader extends Screen {
     }
 
     create() {
+        const config = getConfig(this, this.screenKeys);
+        this.setConfig(config);
         GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
-        if (this.context.config.theme.game && this.context.config.theme.game.achievements === true) {
-            gmi.achievements.init(this.cache.json.get("achievements-data"));
-        }
+        gmi.achievements.init(this.cache.json.get("achievements-data"));
         this.navigation.next();
         gmi.sendStatsEvent("gameloaded", "true");
         gmi.gameLoaded();

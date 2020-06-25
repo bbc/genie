@@ -1,5 +1,4 @@
 {
-    theme: {
         results: {
             background: {
                 items: [{ key: "results.background", x: 0, y: 0 }],
@@ -284,5 +283,4 @@
                 },
             ],
         },
-    },
 }

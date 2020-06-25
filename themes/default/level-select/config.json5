@@ -1,5 +1,4 @@
 {
-    theme: {
         "level-select": {
             music: "home.backgroundMusic",
             storageKey: "levels",
@@ -50,5 +49,4 @@
             ease: "Cubic.easeInOut",
             duration: 500,
         },
-    },
 }

@@ -1,5 +1,4 @@
 {
-    theme: {
         home: {
             music: "home.backgroundMusic",
             "button-overrides": { play: { shiftY: 80 } }, //Use to shift buttons out of the way of logos etc.
@@ -18,5 +17,4 @@
                 },
             ],
         },
-    },
 }

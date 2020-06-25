@@ -1,5 +1,4 @@
 {
-    theme: {
         pause: {
             isOverlay: true,
             background: {
@@ -9,5 +8,4 @@
                 ],
             },
         },
-    },
 }

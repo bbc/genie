@@ -5,7 +5,7 @@
             {
                 "type": "image",
                 "key": "title",
-                "url": "characters/title_drop.png"
+                "url": "character-select/title_drop.png"
             },
             {
                 "type": "image",
@@ -15,22 +15,22 @@
             {
                 "type": "image",
                 "key": "lock",
-                "url": "characters/lock.png"
+                "url": "character-select/lock.png"
             },
             {
                 "type": "image",
                 "key": "complete",
-                "url": "characters/complete.png"
+                "url": "character-select/complete.png"
             },
             {
                 "type": "particles",
                 "key": "hover-emitter",
-                "url": "characters/emitter.json"
+                "url": "character-select/emitter.json"
             },
             {
                 "type": "spritesheet",
                 "key": "char1",
-                "url": "characters/char_1_anim.png",
+                "url": "character-select/char_1_anim.png",
                 "frameConfig": {
                     "frameWidth": 37,
                     "frameHeight": 45,
@@ -40,7 +40,7 @@
             {
                 "type": "spritesheet",
                 "key": "mary",
-                "url": "characters/1.png",
+                "url": "character-select/1.png",
                 "frameConfig": {
                     "frameWidth": 208,
                     "frameHeight": 180,
@@ -52,7 +52,7 @@
             {
                 "type": "spritesheet",
                 "key": "kyle",
-                "url": "characters/2.png",
+                "url": "character-select/2.png",
                 "frameConfig": {
                     "frameWidth": 208,
                     "frameHeight": 180,
@@ -64,7 +64,7 @@
             {
                 "type": "spritesheet",
                 "key": "suzy",
-                "url": "characters/3.png",
+                "url": "character-select/3.png",
                 "frameConfig": {
                     "frameWidth": 208,
                     "frameHeight": 180,
@@ -76,7 +76,7 @@
             {
                 "type": "spritesheet",
                 "key": "greg",
-                "url": "characters/4.png",
+                "url": "character-select/4.png",
                 "frameConfig": {
                     "frameWidth": 208,
                     "frameHeight": 180,
@@ -88,7 +88,7 @@
             {
                 "type": "spritesheet",
                 "key": "ezinma",
-                "url": "characters/5.png",
+                "url": "character-select/5.png",
                 "frameConfig": {
                     "frameWidth": 208,
                     "frameHeight": 180,
@@ -100,7 +100,7 @@
             {
                 "type": "spritesheet",
                 "key": "phil",
-                "url": "characters/6.png",
+                "url": "character-select/6.png",
                 "frameConfig": {
                     "frameWidth": 208,
                     "frameHeight": 180,
@@ -112,7 +112,7 @@
             {
                 "type": "spritesheet",
                 "key": "mike",
-                "url": "characters/7.png",
+                "url": "character-select/7.png",
                 "frameConfig": {
                     "frameWidth": 208,
                     "frameHeight": 180,
@@ -124,7 +124,7 @@
             {
                 "type": "spritesheet",
                 "key": "debby",
-                "url": "characters/8.png",
+                "url": "character-select/8.png",
                 "frameConfig": {
                     "frameWidth": 208,
                     "frameHeight": 180,
@@ -136,7 +136,7 @@
             {
                 "type": "spritesheet",
                 "key": "timmy",
-                "url": "characters/9.png",
+                "url": "character-select/9.png",
                 "frameConfig": {
                     "frameWidth": 208,
                     "frameHeight": 180,
@@ -148,7 +148,7 @@
             {
                 "type": "spritesheet",
                 "key": "elliot",
-                "url": "characters/10.png",
+                "url": "character-select/10.png",
                 "frameConfig": {
                     "frameWidth": 208,
                     "frameHeight": 180,

@@ -1,31 +1,31 @@
 {
-    "how-to-play": {
-        "prefix": "how-to-play.",
+    "level-select": {
+        "prefix": "level-select.",
         "files": [
             {
                 "type": "image",
                 "key": "title",
-                "url": "shared/title.png"
+                "url": "shared/small-title.png"
             },
             {
                 "type": "image",
                 "key": "background",
-                "url": "how-to-play/background.png"
+                "url": "shared/background.png"
             },
             {
                 "type": "image",
                 "key": "carousel1",
-                "url": "how-to-play/how_to_play_1.png"
+                "url": "level-select/secondcarousel_1.png"
             },
             {
                 "type": "image",
                 "key": "carousel2",
-                "url": "how-to-play/how_to_play_2.png"
+                "url": "level-select/secondcarousel_2.png"
             },
             {
                 "type": "image",
                 "key": "carousel3",
-                "url": "how-to-play/how_to_play_3.png"
+                "url": "level-select/secondcarousel_3.png"
             }
         ]
     }
