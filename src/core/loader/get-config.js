@@ -5,21 +5,18 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 
-export const loadConfig = (screen, paths) => {
-    paths.forEach(path =>
+const getKey = key => (key === "../../debug" ? "debug" : key);
+
+export const loadConfig = (screen, keys) => {
+    keys.forEach(key =>
         screen.load.json5({
-            key: `${path}/config`,
-            url: `${path}/config.json5`,
+            key: `config-${getKey(key)}`,
+            url: `${key}/config.json5`,
         }),
     );
 };
 
-export const getConfig = (screen, paths) => {
-    const entries = paths.map(path => screen.cache.json.get(`${path}/config`));
-    return entries.reduce((acc, entry) => fp.merge(acc, entry), {});
-};
-
-export const getDebugConfig = (screen, paths) => {
-    const entries = paths.map(path => screen.cache.json.get(`../../${path}`));
+export const getConfig = (screen, keys) => {
+    const entries = keys.map(key => screen.cache.json.get(`config-${getKey(key)}`));
     return entries.reduce((acc, entry) => fp.merge(acc, entry), {});
 };

@@ -1,5 +1,4 @@
 {
-    theme: {
         "results-spine": {
             backdrop: { // Optional central area backdrop.
                 key: 'results.backdrop', // Asset key.
@@ -234,5 +233,4 @@
                 },
             ],
         },
-    },
 }

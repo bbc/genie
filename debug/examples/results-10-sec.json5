@@ -1,5 +1,4 @@
 {
-    theme: {
         "results-10-sec": {
             debugLabels: [
                 {
@@ -258,5 +257,4 @@
                 },
             ],
         },
-    },
 }

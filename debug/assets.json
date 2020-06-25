@@ -1,6 +1,6 @@
 {
     "debugConfig": {
-        "prefix": "debugConfig.",
+        "prefix": "config-",
         "files": [
             {
                 "type": "json5",

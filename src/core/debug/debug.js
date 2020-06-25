@@ -32,7 +32,12 @@ const debugStyle = {
     },
 };
 
-const getConfigDefs = (cache, key, path) => fp.map(def => ({ ...def, path }), fp.get("config.files", cache.get(key)));
+const getUrlForKey = key =>
+    key === "debug"
+        ? "debug/config.json"
+        : key.startsWith("debug-")
+        ? `debug/examples/${key.substr(6)}.json5`
+        : `THEME/${key}/config.json5`;
 
 function create() {
     this.debug = {
@@ -49,19 +54,11 @@ function create() {
     this.debug.draw.layout = debugLayout.create(this.debug.container);
     this.debug.draw.measure = createMeasure(this.debug.container);
 
-    const configDefs = [
-        ...getConfigDefs(this.cache.json, "example-files", "debug/examples/"),
-        ...getConfigDefs(this.cache.json, "config/files", "THEME/"),
-    ];
-    const fileDef = configDefs.find(def => def.key === this.scene.key);
-
-    const fileLabel = fileDef
-        ? {
-              x: -400,
-              y: -300,
-              text: `config: ${fileDef.path}${fileDef.url}`,
-          }
-        : [];
+    const fileLabel = {
+        x: -400,
+        y: -300,
+        text: `config: ${getUrlForKey(this.scene.key)}`,
+    };
 
     const labels = this.config.debugLabels || [];
 

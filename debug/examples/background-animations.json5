@@ -1,5 +1,4 @@
 {
-    theme: {
         "background-animations": {
             debugLabels: [
                 {
@@ -50,5 +49,4 @@ See the "background.items" block in this scene\'s config',
                 },
             },
         },
-    },
 }
