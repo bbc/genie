@@ -4,9 +4,11 @@
  * @license Apache-2.0
  */
 import { getLauncherScreen, addExampleScreens } from "../../../src/core/debug/debug-screens.js";
+import * as Examples from "../../../src/core/debug/examples.js";
 import * as Config from "../../../src/core/loader/get-config.js";
 
 jest.mock("../../../src/core/loader/get-config.js");
+jest.mock("../../../src/core/debug/examples.js");
 
 describe("getDebugScreens", () => {
     describe("getLauncherScreen", () => {
@@ -23,18 +25,13 @@ describe("getDebugScreens", () => {
         let mockScreen;
 
         beforeEach(() => {
-            const json = {
-                "mockPrefix.mockKey1": "mock1",
-                "mockPrefix.mockKey2": "mock2",
-                "mockPrefix.mockKey3": "mock3",
-            };
-
-            Config.getConfig = jest.fn(path => json[path]);
+            Config.getConfig = jest.fn(() => ({ screen: "mockConfig" }));
+            Examples.examples = { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" };
 
             mockScreen = {
                 setConfig: jest.fn(),
                 context: {
-                    config: { theme: {} },
+                    config: {},
                     navigation: {},
                 },
                 scene: {
@@ -45,10 +42,14 @@ describe("getDebugScreens", () => {
 
         afterEach(jest.clearAllMocks);
 
-        test("Returns debug screen if debug mode", () => {
+        test("gets and sets config for all example screens", () => {
             addExampleScreens(mockScreen);
             expect(mockScreen.scene.add).toHaveBeenCalled();
-            expect(Object.keys(mockScreen.setConfig.mock.calls[0][0])).toEqual(["theme", "navigation"]);
+            expect(Config.getConfig).toHaveBeenCalledWith(mockScreen, Object.keys(Examples.examples));
+            expect(mockScreen.setConfig.mock.calls[0][0]).toEqual({
+                navigation: { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" },
+                screen: "mockConfig",
+            });
         });
 
         test("Does not call a second time (fp.once)", () => {

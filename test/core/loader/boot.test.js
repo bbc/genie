@@ -82,7 +82,7 @@ describe("Boot", () => {
             expect(bootScreen.load.json).toHaveBeenCalledWith("asset-master-pack", "asset-master-pack.json");
         });
 
-        test("Calls this.SetData with correct navigation and empty popupScreens array", () => {
+        test("Calls this.SetData with correct navigation and empty parentScreens array", () => {
             bootScreen.setData = jest.fn();
             bootScreen.preload();
 
