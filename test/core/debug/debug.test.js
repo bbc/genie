@@ -171,7 +171,7 @@ describe("Debug system", () => {
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("r");
         });
 
-        test("adds text labels if present in theme", () => {
+        test("adds text labels if present in config", () => {
             mockScreen.config.debugLabels = [{ x: -390, y: 100, text: "test-description" }];
             addEvents(mockScreen);
             const createCallback = mockScreen.events.on.mock.calls[0][1];
@@ -179,6 +179,21 @@ describe("Debug system", () => {
             createCallback.call(mockScreen);
 
             expect(mockScreen.add.text).toHaveBeenCalledWith(-390, 100, "test-description", expect.any(Object));
+        });
+
+        test("adds text labels when not present in config", () => {
+            delete mockScreen.config.debugLabels;
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.add.text).toHaveBeenCalledWith(
+                -400,
+                -300,
+                "config: THEME/sceneKey/config.json5",
+                expect.any(Object),
+            );
         });
 
         test("adds correct path label when scene key begins with debug-", () => {
