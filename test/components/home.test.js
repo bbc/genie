@@ -20,7 +20,7 @@ describe("Home Screen", () => {
         homeScreen = new Home();
 
         mockData = {
-            config: { theme: { game: { achievements: undefined }, home: {} } },
+            config: { home: {} },
         };
 
         homeScreen.setData(mockData);
@@ -44,7 +44,7 @@ describe("Home Screen", () => {
     });
 
     describe("Achievements button", () => {
-        test("adds the achievement button when theme flag is set", () => {
+        test("shows an achievement button when there are achievements", () => {
             gmi.achievements = { get: () => [""] };
             homeScreen.create();
             const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "achievements"];

@@ -18,7 +18,7 @@ describe("Narrative Screen", () => {
     beforeEach(() => {
         narrativeScreen = new Narrative();
         mockData = {
-            config: { theme: { narrative: { achievements: undefined }, home: {}, furniture: [] } },
+            config: { narrative: { achievements: undefined }, home: {}, furniture: [] },
         };
 
         narrativeScreen.setData(mockData);
