@@ -46,16 +46,14 @@ describe("Results Screen", () => {
             setDepth: jest.fn(),
         };
         mockConfig = {
-            theme: {
-                results: {
-                    backdrop: { key: "mockKey", alpha: 1 },
-                    resultText: {
-                        style: { font: "36px ReithSans" },
-                    },
-                    rows: [],
+            results: {
+                backdrop: { key: "mockKey", alpha: 1 },
+                resultText: {
+                    style: { font: "36px ReithSans" },
                 },
-                game: {},
+                rows: [],
             },
+            game: {},
         };
         mockTransientData = {
             results: {},
@@ -97,7 +95,7 @@ describe("Results Screen", () => {
             config: mockConfig,
             transientData: mockTransientData,
         };
-        resultsScreen.config = mockConfig.theme.results;
+        resultsScreen.config = mockConfig.results;
         resultsScreen.transientData = mockTransientData;
         resultsScreen.addBackgroundItems = jest.fn(() => () => {});
         resultsScreen.setLayout = jest.fn();
@@ -190,14 +188,14 @@ describe("Results Screen", () => {
         });
 
         test("adds a backdrop image with specified properties when one is specified in config", () => {
-            mockConfig.theme.results.backdrop.alpha = 0.5;
+            mockConfig.results.backdrop.alpha = 0.5;
             resultsScreen.create();
             expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
             expect(mockImage.alpha).toEqual(0.5);
         });
 
         test("adds an image with a default alpha of 1 when no alpha is specified", () => {
-            mockConfig.theme.results.backdrop.alpha = undefined;
+            mockConfig.results.backdrop.alpha = undefined;
 
             resultsScreen.create();
             expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
@@ -205,7 +203,7 @@ describe("Results Screen", () => {
         });
 
         test("adds an image with an alpha of 0 when specified in config", () => {
-            mockConfig.theme.results.backdrop.alpha = 0;
+            mockConfig.results.backdrop.alpha = 0;
 
             resultsScreen.create();
             expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
@@ -250,7 +248,7 @@ describe("Results Screen", () => {
         });
 
         test("does not render image when no key is provided on the backdrop object", () => {
-            mockConfig.theme.results.backdrop.key = undefined;
+            mockConfig.results.backdrop.key = undefined;
             resultsScreen.create();
             expect(resultsScreen.add.image).not.toHaveBeenCalledWith(0, 0, "mockKey");
         });
