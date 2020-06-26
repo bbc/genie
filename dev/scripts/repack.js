@@ -1,6 +1,11 @@
 #!/usr/bin/env node
+/* eslint-disable */
 /**
- * Covert Phaser 2 asset packs to Phaser 3
+ * @copyright BBC 2020
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ *
+ * Coverts Phaser 2 asset packs to Phaser 3
  *
  * Usage: node repack path-to-file
  */
