@@ -12,6 +12,9 @@ import * as Scaler from "../../../src/core/scaler.js";
 import * as GameSound from "../../../src/core/game-sound.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
 import * as debugModeModule from "../../../src/core/debug/debug-mode.js";
+import * as Config from "../../../src/core/loader/get-config.js";
+
+jest.mock("../../../src/core/loader/get-config.js");
 
 describe("Loader", () => {
     let loader;
@@ -34,6 +37,7 @@ describe("Loader", () => {
         };
         createMockGmi(mockGmi);
 
+        Config.getConfig = () => "mocked getConfig return value";
         mockImage = {
             width: 1,
             frame: {
@@ -55,13 +59,7 @@ describe("Loader", () => {
             prefix: "testPrefix.",
         };
 
-        mockConfig = {
-            theme: {
-                game: {
-                    achievements: true,
-                },
-            },
-        };
+        mockConfig = {};
         const mockContext = { config: mockConfig };
 
         loader = new Loader();
@@ -224,6 +222,12 @@ describe("Loader", () => {
     });
 
     describe("create method", () => {
+        test("sets config to the return value of getConfig", () => {
+            loader.screenKeys = [];
+            loader.create();
+            expect(loader.setConfig).toHaveBeenCalledWith("mocked getConfig return value");
+        });
+
         test("calls GameSounds setButtonClickSound", () => {
             loader.screenKeys = [];
             loader.create();
