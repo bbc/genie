@@ -21,7 +21,7 @@ export class Pause extends Screen {
         const isAboveSelectScreen = parentKey.includes("select");
         const achievements = gmi.achievements.get().length ? ["achievements"] : [];
         const pauseReplay = this.context.navigation[parentKey].routes.restart ? ["pauseReplay"] : [];
-        let levelSelect = this.context.navigation["pause"].routes.select ? ["levelSelect"] : [];
+        let levelSelect = this.context.navigation[this.scene.key].routes.select ? ["levelSelect"] : [];
         levelSelect = isAboveSelectScreen ? [] : levelSelect;
         const buttons = ["home", "audio", "settings", "pausePlay", "howToPlay"];
 

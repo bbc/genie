@@ -111,6 +111,19 @@ describe("Pause Overlay", () => {
             expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
         });
 
+        test("does not show a select button when no select route defined", () => {
+            delete mockData.navigation.pause.routes.select;
+            pauseScreen.create();
+            expect(pauseScreen.setLayout).toHaveBeenCalledWith([
+                "home",
+                "audio",
+                "settings",
+                "pausePlay",
+                "howToPlay",
+                "pauseReplay",
+            ]);
+        });
+
         test("shows a replay button when the parent screen has a restart route", () => {
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith([
