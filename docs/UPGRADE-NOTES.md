@@ -3,6 +3,7 @@ All breaking changes between Genie versions will be listed here
 
 # 3.7.0
 * Asset packs and screen config have been moved into a folder for each screen.
+* Screen config is no longer contained within a theme and sceneKey object.
 * Achievements enabled flag in game config has been removed. Disable achievements by providing no achievements.
 * There is no longer a file to specify extra configs to load, add these to an asset pack instead and load through the Phaser Cache.
 
