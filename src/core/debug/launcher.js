@@ -7,7 +7,6 @@ import { Screen } from "../screen.js";
 import { eventBus } from "../event-bus.js";
 import { buttonsChannel } from "../layout/gel-defaults.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
-import { gmi } from "../gmi/gmi.js";
 import { examples } from "./examples.js";
 import { addExampleScreens } from "./debug-screens.js";
 
