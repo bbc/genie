@@ -1,6 +1,4 @@
 {
-    theme: {
-        "select-grid": {
             debugLabels: [
                 {
                     x: -205,
@@ -199,6 +197,4 @@
                     subtitle: "Likes astrophysics", // optional - for text overlay only
                 },
             ],
-        },
-    },
 }

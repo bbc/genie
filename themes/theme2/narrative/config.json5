@@ -1,0 +1,119 @@
+{
+    //Add, background images / animations / particle systems. More examples in /debug/examples
+    background: {
+        items: [
+            { key: "home.background", x: 0, y: 0 },
+            {
+                name: "text1",
+                text: "Narrative Page Example\n Press Continue for next page",
+                x: -200,
+                y: -240,
+                //Use the following style for this text
+                style: {
+                    fontFamily: '"ReithSans"',
+                    fontSize: 24,
+                    resolution: 2,
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                    padding: {
+                        left: 6,
+                        right: 6,
+                        top: 4,
+                        bottom: 4,
+                    },
+                },
+            },
+            {
+                name: "text2",
+                text: "You can press skip\nto go to the next screen",
+                x: -160,
+                y: -200,
+                //Use the following style for this text
+                style: {
+                    fontFamily: '"ReithSans"',
+                    fontSize: 24,
+                    resolution: 2,
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                    padding: {
+                        left: 6,
+                        right: 6,
+                        top: 4,
+                        bottom: 4,
+                    },
+                },
+            },
+            {
+                name: "text3",
+                text: "See debug page for\na more comprehensive example",
+                x: -120,
+                y: -160,
+                //Use the following style for this text
+                style: {
+                    fontFamily: '"ReithSans"',
+                    fontSize: 24,
+                    resolution: 2,
+                    backgroundColor: "rgba(0,0,0,0.5)",
+                    padding: {
+                        left: 6,
+                        right: 6,
+                        top: 4,
+                        bottom: 4,
+                    },
+                },
+            },
+        ],
+
+        tweens: [
+            {
+                name: "show1",
+                targets: ["text1"],
+                alpha: { from: 0, to: 1 },
+                ease: "Linear", // 'Cubic', 'Elastic', 'Bounce', 'Back'
+                duration: 500,
+            },
+            {
+                name: "show2",
+                targets: ["text2"],
+                alpha: { from: 0, to: 1 },
+                ease: "Linear",
+                duration: 500,
+            },
+            {
+                name: "show3",
+                targets: ["text3"],
+                alpha: { from: 0, to: 1 },
+                ease: "Linear",
+                duration: 500,
+            },
+            {
+                name: "hideAll",
+                targets: ["text1", "text2", "text2b", "text3"],
+                alpha: { from: 0, to: 0 },
+                duration: 1,
+            },
+            {
+                name: "hide1",
+                targets: ["text1"],
+                alpha: { from: 1, to: 0 },
+                duration: 200,
+            },
+            {
+                name: "hide2",
+                targets: ["text2", "text2b"],
+                alpha: { from: 1, to: 0 },
+                duration: 200,
+            },
+            {
+                name: "hide3",
+                targets: ["text3"],
+                alpha: { from: 1, to: 0 },
+                duration: 200,
+            },
+        ],
+        pages: [
+            ["hideAll", "show1"],
+            ["hide1", "show2"],
+            ["hide2", "show3"],
+        ],
+    },
+    debugLabels: [{ x: -390, y: -40, text: "Configure pages of audio and tween animations with this module" }],
+}

@@ -1,6 +1,4 @@
 {
-    theme: {
-        "background-particles": {
             debugLabels: [
                 {
                     x: -390,
@@ -32,6 +30,4 @@ See the "background.items" block in this scene\'s config',
 
             //Use to shift buttons out of the way of logos etc.
             "button-overrides": { play: { shiftY: 80 } },
-        },
-    },
 }

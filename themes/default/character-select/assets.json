@@ -1,0 +1,162 @@
+{
+    "character-select": {
+        "prefix": "character-select.",
+        "files": [
+            {
+                "type": "image",
+                "key": "title",
+                "url": "character-select/title_drop.png"
+            },
+            {
+                "type": "image",
+                "key": "background",
+                "url": "shared/background.png"
+            },
+            {
+                "type": "image",
+                "key": "lock",
+                "url": "character-select/lock.png"
+            },
+            {
+                "type": "image",
+                "key": "complete",
+                "url": "character-select/complete.png"
+            },
+            {
+                "type": "particles",
+                "key": "hover-emitter",
+                "url": "character-select/emitter.json"
+            },
+            {
+                "type": "spritesheet",
+                "key": "char1",
+                "url": "character-select/char_1_anim.png",
+                "frameConfig": {
+                    "frameWidth": 37,
+                    "frameHeight": 45,
+                    "frameMax": 10
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "mary",
+                "url": "character-select/1.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "kyle",
+                "url": "character-select/2.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "suzy",
+                "url": "character-select/3.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "greg",
+                "url": "character-select/4.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "ezinma",
+                "url": "character-select/5.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "phil",
+                "url": "character-select/6.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "mike",
+                "url": "character-select/7.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "debby",
+                "url": "character-select/8.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "timmy",
+                "url": "character-select/9.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "elliot",
+                "url": "character-select/10.png",
+                "frameConfig": {
+                    "frameWidth": 208,
+                    "frameHeight": 180,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            }
+        ]
+    }
+}

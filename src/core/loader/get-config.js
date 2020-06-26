@@ -5,10 +5,20 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 
-export const getConfig = (screen, path) => {
-    const configFile = screen.cache.json.get(path).config;
-    const keys = configFile.files.map(file => configFile.prefix + file.key);
-    const entries = keys.map(key => screen.cache.json.get(key));
+const getKey = key => (key === "../../debug" ? "debug" : key);
 
+export const loadConfig = (screen, keys) => {
+    keys.forEach(key =>
+        screen.load.json5({
+            key: `config-${getKey(key)}`,
+            url: `${key}/config.json5`,
+        }),
+    );
+};
+
+export const getConfig = (screen, keys) => {
+    const entries = keys.map(key => ({
+        [getKey(key)]: screen.cache.json.get(`config-${getKey(key)}`),
+    }));
     return entries.reduce((acc, entry) => fp.merge(acc, entry), {});
 };

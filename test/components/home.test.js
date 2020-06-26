@@ -6,18 +6,21 @@
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults.js";
 import * as debugModeModule from "../../src/core/debug/debug-mode.js";
-
+import { gmi } from "../../src/core/gmi/gmi";
 import { Home } from "../../src/components/home";
+
+jest.mock("../../src/core/gmi/gmi");
 
 describe("Home Screen", () => {
     let homeScreen;
     let mockData;
 
     beforeEach(() => {
+        gmi.achievements = { get: () => [] };
         homeScreen = new Home();
 
         mockData = {
-            config: { theme: { game: { achievements: undefined }, home: {} } },
+            config: { home: {} },
         };
 
         homeScreen.setData(mockData);
@@ -41,8 +44,8 @@ describe("Home Screen", () => {
     });
 
     describe("Achievements button", () => {
-        test("adds the achievement button when theme flag is set", () => {
-            mockData.config.theme.game.achievements = true;
+        test("shows an achievement button when there are achievements", () => {
+            gmi.achievements = { get: () => [""] };
             homeScreen.create();
             const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "achievements"];
             expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);

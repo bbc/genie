@@ -4,6 +4,11 @@
  * @license Apache-2.0
  */
 import { getLauncherScreen, addExampleScreens } from "../../../src/core/debug/debug-screens.js";
+import * as Examples from "../../../src/core/debug/examples.js";
+import * as Config from "../../../src/core/loader/get-config.js";
+
+jest.mock("../../../src/core/loader/get-config.js");
+jest.mock("../../../src/core/debug/examples.js");
 
 describe("getDebugScreens", () => {
     describe("getLauncherScreen", () => {
@@ -20,46 +25,31 @@ describe("getDebugScreens", () => {
         let mockScreen;
 
         beforeEach(() => {
-            const mockConfig = {
-                config: {
-                    prefix: "mockPrefix.",
-                    files: [{ key: "mockKey1" }],
-                },
-            };
-
-            const json = {
-                "example-files": mockConfig,
-                "mockPrefix.mockKey1": { theme: { themeKey: "theme data" } },
-                "mockPrefix.mockKey2": { theme: {} },
-                "mockPrefix.mockKey3": { theme: {} },
-            };
+            Config.getConfig = jest.fn(() => ({ screen: "mockConfig" }));
+            Examples.examples = { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" };
 
             mockScreen = {
                 setConfig: jest.fn(),
                 context: {
-                    config: { theme: {} },
+                    config: {},
                     navigation: {},
                 },
                 scene: {
                     add: jest.fn(),
-                },
-                cache: {
-                    json: {
-                        get: jest.fn(path => json[path]),
-                    },
                 },
             };
         });
 
         afterEach(jest.clearAllMocks);
 
-        test("Returns debug screen if debug mode", () => {
+        test("gets and sets config for all example screens", () => {
             addExampleScreens(mockScreen);
             expect(mockScreen.scene.add).toHaveBeenCalled();
-            expect(Object.keys(mockScreen.setConfig.mock.calls[0][0])).toEqual(["theme", "navigation"]);
-
-            // Prepends 'debug-' to themes
-            expect(Object.keys(mockScreen.setConfig.mock.calls[0][0].theme)[0]).toBe("debug-themeKey");
+            expect(Config.getConfig).toHaveBeenCalledWith(mockScreen, Object.keys(Examples.examples));
+            expect(mockScreen.setConfig.mock.calls[0][0]).toEqual({
+                navigation: { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" },
+                screen: "mockConfig",
+            });
         });
 
         test("Does not call a second time (fp.once)", () => {

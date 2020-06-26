@@ -63,7 +63,7 @@ describe("Game", () => {
         mockImage = { setOrigin: jest.fn(() => mockImageSetOrigin) };
 
         mockData = {
-            config: { theme: { game: { achievements: undefined }, home: {}, "level-select": { choices: [1, 2, 3] } } },
+            config: { game: {}, home: {}, "level-select": { choices: [1, 2, 3] } },
         };
         game.setData(mockData);
         game.scene = {

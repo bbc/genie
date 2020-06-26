@@ -1,6 +1,4 @@
 {
-    theme: {
-        "results-row-particles": {
             background: {
                 items: [{ key: "results.background", x: 0, y: 0 }],
             },
@@ -280,6 +278,4 @@
                     ],
                 },
             ],
-        },
-    },
 }

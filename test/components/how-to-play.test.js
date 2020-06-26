@@ -27,31 +27,27 @@ describe("How To Play Screen", () => {
         jest.spyOn(accessibleCarouselElements, "create").mockReturnValue(mockAccessibleElements);
         mockData = {
             config: {
-                theme: {
-                    "test-select": {
-                        choices: [
-                            { asset: "character1" },
-                            { asset: "character2", title: "character_2" },
-                            { asset: "character3" },
-                        ],
-                    },
-                    game: {},
+                "test-select": {
+                    choices: [
+                        { asset: "character1" },
+                        { asset: "character2", title: "character_2" },
+                        { asset: "character3" },
+                    ],
                 },
+                game: {},
             },
             popupScreens: [],
         };
         mockHowToPlayData = {
             config: {
-                theme: {
-                    "test-select": {
-                        choices: [
-                            { asset: "character1" },
-                            { asset: "character2", title: "character_2" },
-                            { asset: "character3" },
-                        ],
-                    },
-                    game: {},
+                "test-select": {
+                    choices: [
+                        { asset: "character1" },
+                        { asset: "character2", title: "character_2" },
+                        { asset: "character3" },
+                    ],
                 },
+                game: {},
             },
             popupScreens: [],
         };
@@ -126,7 +122,7 @@ describe("How To Play Screen", () => {
                 howToPlayScreen.scene.key,
                 howToPlayScreen.choiceSprites,
                 howToPlayScreen.game.canvas.parentElement,
-                mockData.config.theme["test-select"].choices,
+                mockData.config["test-select"].choices,
             );
         });
     });

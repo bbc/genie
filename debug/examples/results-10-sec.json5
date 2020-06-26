@@ -1,6 +1,4 @@
 {
-    theme: {
-        "results-10-sec": {
             debugLabels: [
                 {
                     x: -390,
@@ -257,6 +255,4 @@
                     audio: { key: "results.boing", delay: 5500 },
                 },
             ],
-        },
-    },
 }

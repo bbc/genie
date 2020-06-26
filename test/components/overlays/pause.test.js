@@ -4,6 +4,9 @@
  * @license Apache-2.0
  */
 import { Pause } from "../../../src/components/overlays/pause";
+import { gmi } from "../../../src/core/gmi/gmi";
+
+jest.mock("../../../src/core/gmi/gmi");
 
 describe("Pause Overlay", () => {
     let pauseScreen;
@@ -11,6 +14,7 @@ describe("Pause Overlay", () => {
     let mockData;
 
     beforeEach(() => {
+        gmi.achievements = { get: () => [] };
         mockBoundResumeAllFunction = {
             some: "mock",
         };
@@ -22,10 +26,8 @@ describe("Pause Overlay", () => {
                 pause: { routes: { select: "level-select" } },
             },
             config: {
-                theme: {
-                    pause: {},
-                    game: {},
-                },
+                pause: {},
+                game: {},
             },
         };
 
@@ -60,8 +62,8 @@ describe("Pause Overlay", () => {
     });
 
     describe("create method", () => {
-        test("adds correct gel layout buttons when replay button should be shown", () => {
-            mockData.config.theme.game.achievements = true;
+        test("shows an achievements button when there are achievements", () => {
+            gmi.achievements = { get: () => [""] };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith([
                 "home",
@@ -75,8 +77,7 @@ describe("Pause Overlay", () => {
             ]);
         });
 
-        test("adds correct gel layout buttons when achievement  button should be shown", () => {
-            mockData.navigation["pause"] = { routes: {} };
+        test("does not show a achievements button when there are no achievements", () => {
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith([
                 "home",
@@ -84,11 +85,12 @@ describe("Pause Overlay", () => {
                 "settings",
                 "pausePlay",
                 "howToPlay",
+                "levelSelect",
                 "pauseReplay",
             ]);
         });
 
-        test("adds correct gel layout buttons when select button should be shown", () => {
+        test("shows select button when not above a select screen", () => {
             mockData.parentScreens = [{ scene: { key: "pause" } }];
             mockData.navigation["level-select"] = { routes: {} };
             pauseScreen.create();
@@ -102,14 +104,27 @@ describe("Pause Overlay", () => {
             ]);
         });
 
-        test("level select should not be shown on a select screen", () => {
+        test("does not show a select button when above a select screen", () => {
             mockData.parentScreens = [{ scene: { key: "level-select" } }];
             mockData.navigation["level-select"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
         });
 
-        test("adds correct gel layout buttons when select and replay button should be shown", () => {
+        test("does not show a select button when no select route defined", () => {
+            delete mockData.navigation.pause.routes.select;
+            pauseScreen.create();
+            expect(pauseScreen.setLayout).toHaveBeenCalledWith([
+                "home",
+                "audio",
+                "settings",
+                "pausePlay",
+                "howToPlay",
+                "pauseReplay",
+            ]);
+        });
+
+        test("shows a replay button when the parent screen has a restart route", () => {
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith([
                 "home",
@@ -122,10 +137,9 @@ describe("Pause Overlay", () => {
             ]);
         });
 
-        test("adds correct gel layout buttons when replay button should be hidden", () => {
+        test("does not show a replay button when the parent screen has no restart route", () => {
             mockData.parentScreens = [{ scene: { key: "level-select" } }];
             mockData.navigation["level-select"] = { routes: {} };
-            mockData.navigation["pause"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
         });

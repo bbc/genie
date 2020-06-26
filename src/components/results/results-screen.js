@@ -14,6 +14,7 @@ import { playRowAudio } from "./results-row-audio.js";
 import { addParticlesToRows } from "./results-particles.js";
 import { fireGameCompleteStat } from "./results-stats.js";
 import { createRowBackdrops, scaleRowBackdrops } from "./results-row-backdrop.js";
+import { gmi } from "../../core/gmi/gmi.js";
 
 export class Results extends Screen {
     create() {
@@ -35,7 +36,7 @@ export class Results extends Screen {
     }
 
     createLayout() {
-        const achievements = this.context.config.theme.game.achievements ? ["achievementsSmall"] : [];
+        const achievements = gmi.achievements.get().length ? ["achievementsSmall"] : [];
         const buttons = ["pause", "continueGame"];
         const onwardButton = fp.get(`${this.scene.key}.gameComplete`, this.transientData) ? "playAgain" : "restart";
         this.setLayout([...buttons, ...achievements, onwardButton]);

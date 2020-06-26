@@ -94,16 +94,4 @@ describe("Examples Launcher", () => {
             expect(launcher._data.transient.testKey).not.toBeDefined();
         });
     });
-
-    describe("preload method", () => {
-        beforeEach(() => {
-            launcher.preload();
-        });
-
-        test("Preloads example files so they aren't part of standard loader", () => {
-            expect(launcher.load.setBaseURL).toHaveBeenCalled();
-            expect(launcher.load.setPath).toHaveBeenCalled();
-            expect(launcher.load.pack).toHaveBeenCalledWith("example-files");
-        });
-    });
 });

@@ -1,0 +1,22 @@
+{
+    "home": {
+        "prefix": "home.",
+        "files": [
+            {
+                "type": "image",
+                "key": "title",
+                "url": "shared/title.png"
+            },
+            {
+                "type": "image",
+                "key": "background",
+                "url": "shared/background.png"
+            },
+            {
+                "type": "audio",
+                "key": "backgroundMusic",
+                "url": "shared/background-music.mp4"
+            }
+        ]
+    }
+}
