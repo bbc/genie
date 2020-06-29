@@ -59,44 +59,42 @@ describe("Select Screen", () => {
         singleItemMode.isEnabled = jest.fn();
         mockData = {
             config: {
-                theme: {
-                    "test-select": {
-                        onHoverParticles: ["mock"],
-                        storageKey: "test-storage-key",
-                        titles: [
-                            {
-                                type: "image",
-                                key: "title",
-                            },
-                            {
-                                type: "text",
-                                value: "",
-                            },
-                            {
-                                type: "image",
-                                key: "subtitle",
-                            },
-                            {
-                                type: "text",
-                                value: "",
-                                visible: false,
-                            },
-                        ],
-                        states: {
-                            locked: { x: 10, y: 20, asset: "test_asset" },
+                "test-select": {
+                    onHoverParticles: ["mock"],
+                    storageKey: "test-storage-key",
+                    titles: [
+                        {
+                            type: "image",
+                            key: "title",
                         },
-                        choices: [
-                            { asset: "character1" },
-                            { asset: "character2", title: "character_2" },
-                            { asset: "character3" },
-                        ],
-                        rows: 1,
-                        columns: 1,
-                        ease: "Cubic.easeInOut",
-                        duration: 500,
+                        {
+                            type: "text",
+                            value: "",
+                        },
+                        {
+                            type: "image",
+                            key: "subtitle",
+                        },
+                        {
+                            type: "text",
+                            value: "",
+                            visible: false,
+                        },
+                    ],
+                    states: {
+                        locked: { x: 10, y: 20, asset: "test_asset" },
                     },
-                    game: {},
+                    choices: [
+                        { asset: "character1" },
+                        { asset: "character2", title: "character_2" },
+                        { asset: "character3" },
+                    ],
+                    rows: 1,
+                    columns: 1,
+                    ease: "Cubic.easeInOut",
+                    duration: 500,
                 },
+                game: {},
             },
             popupScreens: [],
         };
@@ -179,8 +177,8 @@ describe("Select Screen", () => {
             };
             screen.addBackgroundItems = jest.fn();
 
-            screen.context = { theme: mockData.config.theme["test-select"] };
-            screen.config = mockData.config.theme["test-select"];
+            screen.context = mockData.config["test-select"];
+            screen.config = mockData.config["test-select"];
 
             Object.defineProperty(screen, "layout", {
                 get: jest.fn(() => mockLayout),
@@ -212,9 +210,9 @@ describe("Select Screen", () => {
             expect(selectScreen.addBackgroundItems).toHaveBeenCalledTimes(1);
         });
 
-        test("adds the theme", () => {
+        test("adds the theme config", () => {
             selectScreen.create();
-            expect(selectScreen.context.theme).toEqual(mockData.config.theme["test-select"]);
+            expect(selectScreen.context).toEqual(mockData.config["test-select"]);
         });
 
         test("creates titles", () => {
@@ -240,8 +238,8 @@ describe("Select Screen", () => {
 
         test("Does not add next and previous buttons when only one page", () => {
             singleItemMode.isEnabled = jest.fn(() => false);
-            mockData.config.theme["test-select"].rows = 2;
-            mockData.config.theme["test-select"].columns = 3;
+            mockData.config["test-select"].rows = 2;
+            mockData.config["test-select"].columns = 3;
 
             selectScreen.create();
             const expectedButtons = ["home", "pause"];
@@ -250,7 +248,7 @@ describe("Select Screen", () => {
         });
 
         test("creates a GEL grid", () => {
-            const theme = mockData.config.theme["test-select"];
+            const theme = mockData.config["test-select"];
             const expectedGridConfig = {
                 choices: theme.choices,
                 columns: 1,
@@ -277,7 +275,7 @@ describe("Select Screen", () => {
 
         test("creates grid cells", () => {
             selectScreen.create();
-            expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.context.theme);
+            expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.context);
         });
 
         test("adds grid to layout", () => {
@@ -290,7 +288,7 @@ describe("Select Screen", () => {
             expect(addHoverParticlesToCells).toHaveBeenCalledWith(
                 selectScreen,
                 selectScreen._cells,
-                mockData.config.theme["test-select"].onHoverParticles,
+                mockData.config["test-select"].onHoverParticles,
                 mockLayout.root,
             );
         });
@@ -301,7 +299,7 @@ describe("Select Screen", () => {
         });
 
         test("calls state.create with storage key from config", () => {
-            mockData.config.theme["test-select"].choices = [
+            mockData.config["test-select"].choices = [
                 { asset: "test-asset-1", state: "test-state-1", id: "test-id-1" },
             ];
             selectScreen.create();
@@ -345,7 +343,7 @@ describe("Select Screen", () => {
             selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
             selectScreen.states.get = () => ({ id: "id_one", state: "locked" });
 
-            selectScreen.context.theme.states = {
+            selectScreen.context.states = {
                 locked: { x: 10, y: 20, overlayAsset: "test_asset" },
             };
 
@@ -373,7 +371,7 @@ describe("Select Screen", () => {
             selectScreen._cells = [mockCell];
             selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
 
-            selectScreen.context.theme.states = {
+            selectScreen.context.states = {
                 locked: { x: 10, y: 20, properties: { testProp: "testValue" } },
             };
 
@@ -401,7 +399,7 @@ describe("Select Screen", () => {
             selectScreen._cells = [mockCell];
             selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
 
-            selectScreen.context.theme.states = {
+            selectScreen.context.states = {
                 locked: { x: 10, y: 20, suffix: "testSuffix" },
             };
 
@@ -429,7 +427,7 @@ describe("Select Screen", () => {
             selectScreen._cells = [mockCell];
             selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
 
-            selectScreen.context.theme.states = {
+            selectScreen.context.states = {
                 locked: { x: 10, y: 20, asset: "test_asset", enabled: false },
             };
 
@@ -457,7 +455,7 @@ describe("Select Screen", () => {
             selectScreen._cells = [mockCell];
             selectScreen.states.getAll = () => [{ id: "id_one", state: "unlocked" }];
 
-            selectScreen.context.theme.states = {
+            selectScreen.context.states = {
                 unlocked: { x: 10, y: 20, asset: "test_asset", enabled: true },
             };
 
@@ -484,7 +482,7 @@ describe("Select Screen", () => {
             selectScreen._cells = [mockCell];
             selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
 
-            selectScreen.context.theme.states = {
+            selectScreen.context.states = {
                 locked: { x: 10, y: 20, asset: "test_asset" },
             };
 

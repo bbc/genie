@@ -1,0 +1,227 @@
+{
+    "debugConfig": {
+        "prefix": "config-",
+        "files": [
+            {
+                "type": "json5",
+                "key": "debug-select-1",
+                "url": "../../debug/examples/select-1.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-select-grid",
+                "url": "../../debug/examples/select-grid.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-results-1-sec",
+                "url": "../../debug/examples/results-1-sec.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-results-10-sec",
+                "url": "../../debug/examples/results-10-sec.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-results-spine",
+                "url": "../../debug/examples/results-spine.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-results-row-particles",
+                "url": "../../debug/examples/results-row-particles.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-background-animations",
+                "url": "../../debug/examples/background-animations.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-background-particles",
+                "url": "../../debug/examples/background-particles.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-narrative",
+                "url": "../../debug/examples/narrative.json5"
+            }
+        ]
+    },
+    "gelDebug": {
+        "prefix": "gelDebug.",
+        "files": [
+            {
+                "type": "image",
+                "key": "FF0030-hatch",
+                "url": "../../debug/FF0030-hatch.png"
+            },
+            {
+                "type": "image",
+                "key": "FFCC00-hatch",
+                "url": "../../debug/FFCC00-hatch.png"
+            },
+            {
+                "type": "spritesheet",
+                "key": "button",
+                "url": "../../debug/button.png",
+                "frameConfig": {
+                    "frameWidth": 224,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            }
+        ]
+    },
+    "examples": {
+        "prefix": "examples_",
+        "files": [
+            {
+                "type": "image",
+                "key": "spark",
+                "url": "../../debug/assets/particles/blue.png"
+            },
+            {
+                "type": "image",
+                "key": "red_spark",
+                "url": "../../debug/assets/particles/red.png"
+            },
+            {
+                "type": "image",
+                "key": "yellow_spark",
+                "url": "../../debug/assets/particles/yellow.png"
+            },
+            {
+                "type": "particles",
+                "key": "spray",
+                "url": "../../debug/assets/particles/spray.json"
+            },
+
+            {
+                "type": "image",
+                "key": "rockpool",
+                "url": "../../debug/assets/narrative/background.jpg"
+            },
+            {
+                "type": "image",
+                "key": "little-crab",
+                "url": "../../debug/assets/narrative/little-crab.png"
+            },
+            {
+                "type": "image",
+                "key": "big-crab",
+                "url": "../../debug/assets/narrative/big-crab.png"
+            },
+            {
+                "type": "audio",
+                "key": "dialogue1",
+                "url": "../../debug/assets/narrative/dialogue_1.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "dialogue2",
+                "url": "../../debug/assets/narrative/dialogue_2.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "dialogue3",
+                "url": "../../debug/assets/narrative/dialogue_3.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "dialogue4",
+                "url": "../../debug/assets/narrative/dialogue_4.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "dialogue5",
+                "url": "../../debug/assets/narrative/dialogue_5.mp4"
+            },
+            {
+                "type": "particles",
+                "key": "bubbles",
+                "url": "../../debug/assets/narrative/bubbles.json"
+            },
+            {
+                "type": "particles",
+                "key": "bubbleBurst",
+                "url": "../../debug/assets/narrative/bubble-burst.json"
+            },
+            {
+                "type": "image",
+                "key": "bubble",
+                "url": "../../debug/assets/narrative/bubble.png"
+            },
+            {
+                "type": "audio",
+                "key": "bubbleBurstSFX",
+                "url": "../../debug/assets/narrative/bubble-burst.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "pump",
+                "url": "../../debug/assets/narrative/pump.mp4"
+            },
+            {
+                "type": "spine",
+                "key": "spine_owl",
+                "jsonURL": "../../debug/assets/spine/owl/export/owl-pro.json",
+                "atlasURL": "../../debug/assets/spine/owl/export/owl.atlas"
+            },
+            {
+                "type": "spine",
+                "key": "spine_powerup",
+                "jsonURL": "../../debug/assets/spine/powerup/export/powerup-pro.json",
+                "atlasURL": "../../debug/assets/spine/powerup/export/powerup.atlas"
+            },
+            {
+                "type": "spritesheet",
+                "key": "sprite",
+                "url": "../../debug/assets/sprite/sprite-anim.png",
+                "frameConfig": {
+                    "frameWidth": 42,
+                    "frameHeight": 66,
+                    "margin": 0,
+                    "spacing": 8
+                }
+            }
+        ]
+    },
+    "gelDesktop": {
+        "prefix": "gelDesktop.",
+        "files": [
+            {
+                "type": "spritesheet",
+                "key": "debug",
+                "url": "../../debug/debug_desktop.png",
+                "frameConfig": {
+                    "frameWidth": 114,
+                    "frameHeight": 64,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            }
+        ]
+    },
+    "gelMobile": {
+        "prefix": "gelMobile.",
+        "files": [
+            {
+                "type": "spritesheet",
+                "key": "debug",
+                "url": "../../debug/debug_mobile.png",
+                "frameConfig": {
+                    "frameWidth": 78,
+                    "frameHeight": 42,
+                    "frameMax": 2,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            }
+        ]
+    }
+}

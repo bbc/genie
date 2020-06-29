@@ -59,6 +59,14 @@ describe("State", () => {
                 stateKey: { test_choice: { state: null } },
             });
         });
+
+        test("Always serialises to an object and not an array when numeric keys are used", () => {
+            const stateSet = initState("stateKey", []);
+            stateSet.set(2, "complete");
+
+            expect(mockGmi.setGameData.mock.calls[0][1].stateKey).toStrictEqual(expect.any(Object));
+            expect(mockGmi.setGameData.mock.calls[0][1].stateKey).not.toStrictEqual(expect.any(Array));
+        });
     });
 
     describe("Returned get method", () => {

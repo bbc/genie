@@ -39,12 +39,12 @@ describe("Layout - Calculate Metrics", () => {
             expect(getMetrics({ width: 200, height: 1000 }).verticalBorderPad).toBe(16);
         });
 
-        test("sets a vertical border padding of 32 when it is a iPhone 5 (568x320)", () => {
-            expect(getMetrics({ width: 568, height: 320 }).verticalBorderPad).toBe(32);
+        test("sets a vertical border padding of 21 when it is a iPhone 5 (568x320)", () => {
+            expect(getMetrics({ width: 568, height: 320 }).verticalBorderPad).toBe(21);
         });
 
-        test("sets a bottom border padding of 43 when it is a iPhone 5 (568x320)", () => {
-            expect(getMetrics({ width: 568, height: 320 }).bottomBorderPad).toBe(43);
+        test("sets a bottom border padding of 58 when it is a iPhone 5 (568x320)", () => {
+            expect(getMetrics({ width: 568, height: 320 }).bottomBorderPad).toBe(58);
         });
 
         test("sets a horizontal border padding of 2% of the longest edge", () => {

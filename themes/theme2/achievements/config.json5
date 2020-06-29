@@ -1,11 +1,4 @@
-/**
- * Loadscreen loads in the game's assets.
- *keykey
- * @modunameponents/loadscreen
- * @copyright BBC 2019
- * @author BBC Children's D+E
- * @license Apache-2.0
- */
+// To disable achievements, remove all the achievements in the array.
 [
     {
         key: "just_started",

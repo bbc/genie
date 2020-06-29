@@ -1,0 +1,45 @@
+{
+    music: "home.backgroundMusic",
+    background: {
+        items: [
+            { key: "home.background", x: 0, y: 0 },
+            {
+                key: "examples_spine_owl",
+                x: 380,
+                y: 190,
+                animationName: "idle",
+                //Any props defined here will be set on the Spine object.
+                props: {
+                    scale: 0.5,
+                },
+            },
+            {
+                key: "examples_sprite",
+                x: -400,
+                y: -200,
+                frames: {
+                    key: "example_sprite_animation",
+                    start: 0,
+                    end: 7,
+                    default: 0,
+                    repeat: -1,
+                    rate: 10,
+                },
+                //Any props defined here will be set on the Sprite object.
+                props: {
+                    alpha: 0.75,
+                    angle: 20,
+                    flipX: true,
+                    scale: 2,
+                },
+            },
+        ],
+    },
+
+    //Use to shift buttons out of the way of logos etc.
+    "button-overrides": {
+        play: {
+            shiftY: 80,
+        },
+    },
+}

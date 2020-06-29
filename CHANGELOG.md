@@ -2,6 +2,12 @@
 
 | Version | Description |
 |---------|-------------|
+| | The rest of the debug mode assets have been moved out of the themes folder and into the debug one. |
+| | The asset pack for each screen is now located in each screen's folder. |
+| | Achievements flag in game config has been removed. Disable achievements by not defining any achievements. |
+| | Theme config is now loaded through a config.json5 in each screen's folder. |
+| | Theme config no longer needs the config to have a theme and screen object encasing it. |
+| | Force state to be serialised to an object and not an array when keys are numeric. |
 | | Make accessibility listener active to fix pause bug. |
 | | Update achievements docs. |
 | | Add build number to console banner. |

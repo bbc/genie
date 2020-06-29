@@ -1,195 +1,195 @@
 
-owl-pma.png
-size: 1024,512
+owl.png
+size:512,256
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
 L_eye-closed
   rotate: false
-  xy: 508, 115
-  size: 90, 86
-  orig: 90, 86
+  xy:254,57.5
+  size:45,43
+  orig:45,43
   offset: 0, 0
   index: -1
 L_eye-iris
   rotate: false
-  xy: 826, 183
-  size: 90, 86
-  orig: 90, 86
+  xy:413,91.5
+  size:45,43
+  orig:45,43
   offset: 0, 0
   index: -1
 L_eye-light
   rotate: false
-  xy: 1001, 488
-  size: 21, 20
-  orig: 21, 20
+  xy:500.5,244
+  size:10.5,10
+  orig:10.5,10
   offset: 0, 0
   index: -1
 L_eye-pupil
   rotate: false
-  xy: 752, 154
-  size: 63, 60
-  orig: 63, 60
+  xy:376,77
+  size:31.5,30
+  orig:31.5,30
   offset: 0, 0
   index: -1
 L_foot
   rotate: false
-  xy: 817, 133
-  size: 64, 48
-  orig: 64, 48
+  xy:408.5,66.5
+  size:32,24
+  orig:32,24
   offset: 0, 0
   index: -1
 L_wing
   rotate: false
-  xy: 342, 91
-  size: 81, 110
-  orig: 81, 110
+  xy:171,45.5
+  size:40.5,55
+  orig:40.5,55
   offset: 0, 0
   index: -1
 R_eye-closed
   rotate: false
-  xy: 508, 27
-  size: 90, 86
-  orig: 90, 86
+  xy:254,13.5
+  size:45,43
+  orig:45,43
   offset: 0, 0
   index: -1
 R_eye-iris
   rotate: true
-  xy: 600, 111
-  size: 90, 86
-  orig: 90, 86
+  xy:300,55.5
+  size:45,43
+  orig:45,43
   offset: 0, 0
   index: -1
 R_eye-light
   rotate: false
-  xy: 1001, 466
-  size: 21, 20
-  orig: 21, 20
+  xy:500.5,233
+  size:10.5,10
+  orig:10.5,10
   offset: 0, 0
   index: -1
 R_eye-pupil
   rotate: true
-  xy: 691, 72
-  size: 63, 60
-  orig: 63, 60
+  xy:345.5,36
+  size:31.5,30
+  orig:31.5,30
   offset: 0, 0
   index: -1
 R_foot
   rotate: false
-  xy: 814, 83
-  size: 64, 48
-  orig: 64, 48
+  xy:407,41.5
+  size:32,24
+  orig:32,24
   offset: 0, 0
   index: -1
 R_wing
   rotate: false
-  xy: 425, 91
-  size: 81, 110
-  orig: 81, 110
+  xy:212.5,45.5
+  size:40.5,55
+  orig:40.5,55
   offset: 0, 0
   index: -1
 beak
   rotate: false
-  xy: 883, 140
-  size: 39, 41
-  orig: 39, 41
+  xy:441.5,70
+  size:19.5,20.5
+  orig:19.5,20.5
   offset: 0, 0
   index: -1
 beak-down
   rotate: true
-  xy: 753, 53
-  size: 37, 40
-  orig: 37, 40
+  xy:376.5,26.5
+  size:18.5,20
+  orig:18.5,20
   offset: 0, 0
   index: -1
 body
   rotate: false
-  xy: 2, 5
-  size: 248, 196
-  orig: 248, 196
+  xy:1,2.5
+  size:124,98
+  orig:124,98
   offset: 0, 0
   index: -1
 feather-1
   rotate: false
-  xy: 753, 92
-  size: 59, 60
-  orig: 59, 60
+  xy:376.5,46
+  size:29.5,30
+  orig:29.5,30
   offset: 0, 0
   index: -1
 feather-2
   rotate: false
-  xy: 688, 137
-  size: 62, 65
-  orig: 62, 65
+  xy:344,68.5
+  size:31,32.5
+  orig:31,32.5
   offset: 0, 0
   index: -1
 feather-3
   rotate: true
-  xy: 600, 2
-  size: 56, 76
-  orig: 56, 76
+  xy:300,1
+  size:28,38
+  orig:28,38
   offset: 0, 0
   index: -1
 head-base
   rotate: false
-  xy: 621, 271
-  size: 299, 237
-  orig: 299, 237
+  xy:310.5,135.5
+  size:149.5,118.5
+  orig:149.5,118.5
   offset: 0, 0
   index: -1
 leaf-1
   rotate: false
-  xy: 922, 273
-  size: 76, 101
-  orig: 76, 101
+  xy:461,136.5
+  size:38,50.5
+  orig:38,50.5
   offset: 0, 0
   index: -1
 leaf-2
   rotate: true
-  xy: 621, 204
-  size: 65, 95
-  orig: 65, 95
+  xy:310.5,102
+  size:32.5,47.5
+  orig:32.5,47.5
   offset: 0, 0
   index: -1
 leaf-3
   rotate: true
-  xy: 922, 376
-  size: 132, 77
-  orig: 132, 77
+  xy:461,188
+  size:66,38.5
+  orig:66,38.5
   offset: 0, 0
   index: -1
 leaf-4
   rotate: false
-  xy: 600, 60
-  size: 89, 49
-  orig: 89, 49
+  xy:300,30
+  size:44.5,24.5
+  orig:44.5,24.5
   offset: 0, 0
   index: -1
 leaf-5
   rotate: true
-  xy: 718, 216
-  size: 53, 106
-  orig: 53, 106
+  xy:359,108
+  size:26.5,53
+  orig:26.5,53
   offset: 0, 0
   index: -1
 leaf-6
   rotate: false
-  xy: 252, 85
-  size: 88, 116
-  orig: 88, 116
+  xy:126,42.5
+  size:44,58
+  orig:44,58
   offset: 0, 0
   index: -1
 leaf-7
   rotate: true
-  xy: 252, 29
-  size: 54, 86
-  orig: 54, 86
+  xy:126,14.5
+  size:27,43
+  orig:27,43
   offset: 0, 0
   index: -1
 wood
   rotate: false
-  xy: 2, 203
-  size: 617, 305
-  orig: 617, 305
+  xy:1,101.5
+  size:308.5,152.5
+  orig:308.5,152.5
   offset: 0, 0
   index: -1

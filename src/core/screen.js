@@ -59,7 +59,7 @@ export class Screen extends Phaser.Scene {
     }
 
     get config() {
-        return this._data.config.theme[this.scene.key];
+        return this._data.config[this.scene.key];
     }
 
     get transientData() {

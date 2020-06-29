@@ -1,0 +1,67 @@
+{
+    "rotation": {
+        "prefix": "rotation.",
+        "files": [
+            {
+                "type": "image",
+                "key": "basicSprite",
+                "url": "game/basic-sprite.png"
+            }
+        ]
+    },
+    "collision": {
+        "prefix": "collision.",
+        "files": [
+            {
+                "type": "image",
+                "key": "basicSprite",
+                "url": "game/basic-sprite.png"
+            }
+        ]
+    },
+    "fps": {
+        "prefix": "fps.",
+        "files": [
+            {
+                "type": "image",
+                "key": "basicSprite",
+                "url": "game/basic-sprite.png"
+            }
+        ]
+    },
+    "tweening": {
+        "prefix": "tweening.",
+        "files": [
+            {
+                "type": "image",
+                "key": "basicSprite",
+                "url": "game/basic-sprite.png"
+            }
+        ]
+    },
+    "tiled": {
+        "prefix": "tiled.",
+        "files": [
+            {
+                "type": "image",
+                "key": "basicSprite",
+                "url": "game/basic-sprite.png"
+            },
+            {
+                "type": "image",
+                "key": "grassTile",
+                "url": "game/grass-tile.png"
+            }
+        ]
+    },
+    "spriteGroup": {
+        "prefix": "sprite-group.",
+        "files": [
+            {
+                "type": "image",
+                "key": "basicSprite",
+                "url": "game/basic-sprite.png"
+            }
+        ]
+    }
+}
