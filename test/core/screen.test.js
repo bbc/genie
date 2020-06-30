@@ -95,7 +95,6 @@ describe("Screen", () => {
             addedBy: undefined,
             navigation: mockNavigation,
             config: mockConfig,
-            activeScreens: [],
             transient: mockTransientData,
         };
     });
@@ -108,7 +107,7 @@ describe("Screen", () => {
             expect(screen.context).toEqual({
                 config: mockData.config,
                 navigation: mockNavigation,
-                activeScreens: mockData.activeScreens.concat([{ screen, addedBy: undefined }]),
+                activeScreens: [{ screen, addedBy: undefined }],
                 transientData: mockTransientData,
             });
         });
