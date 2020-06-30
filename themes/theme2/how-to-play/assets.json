@@ -1,0 +1,32 @@
+{
+    "how-to-play": {
+        "prefix": "how-to-play.",
+        "files": [
+            {
+                "type": "image",
+                "key": "title",
+                "url": "shared/title.png"
+            },
+            {
+                "type": "image",
+                "key": "background",
+                "url": "how-to-play/background.png"
+            },
+            {
+                "type": "image",
+                "key": "carousel1",
+                "url": "how-to-play/how_to_play_1.png"
+            },
+            {
+                "type": "image",
+                "key": "carousel2",
+                "url": "how-to-play/how_to_play_2.png"
+            },
+            {
+                "type": "image",
+                "key": "carousel3",
+                "url": "how-to-play/how_to_play_3.png"
+            }
+        ]
+    }
+}

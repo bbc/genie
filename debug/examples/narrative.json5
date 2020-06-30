@@ -1,6 +1,4 @@
 {
-    theme: {
-        narrative: {
             //Add, background images / animations / particle systems. More examples in /debug/examples
             background: {
                 items: [
@@ -290,6 +288,4 @@
                 ],
             },
             debugLabels: [{ x: -390, y: -40, text: "Configure pages of audio\nand tweens with this module.\nParticle Emitters can be\nturned on and off by tweening\ntheir \"on\" parameter between\n0 and 1" }],
-        },
-    },
 }

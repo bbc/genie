@@ -1,0 +1,32 @@
+{
+    "level-select": {
+        "prefix": "level-select.",
+        "files": [
+            {
+                "type": "image",
+                "key": "title",
+                "url": "shared/small-title.png"
+            },
+            {
+                "type": "image",
+                "key": "background",
+                "url": "shared/background.png"
+            },
+            {
+                "type": "image",
+                "key": "carousel1",
+                "url": "level-select/secondcarousel_1.png"
+            },
+            {
+                "type": "image",
+                "key": "carousel2",
+                "url": "level-select/secondcarousel_2.png"
+            },
+            {
+                "type": "image",
+                "key": "carousel3",
+                "url": "level-select/secondcarousel_3.png"
+            }
+        ]
+    }
+}

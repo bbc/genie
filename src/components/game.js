@@ -108,11 +108,11 @@ export class Game extends Screen {
         };
 
         const markLevelAsComplete = levelTitle => {
-            const stateConfig = this.context.config.theme["level-select"].choices.map(({ id, state }) => ({
+            const stateConfig = this.context.config["level-select"].choices.map(({ id, state }) => ({
                 id,
                 state,
             }));
-            this.states = state.initState(this.context.config.theme["level-select"].storageKey, stateConfig);
+            this.states = state.initState(this.context.config["level-select"].storageKey, stateConfig);
             this.states.set(levelTitle, "completed");
         };
 

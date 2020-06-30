@@ -1,8 +1,0 @@
-{
-    theme: {
-        game: {
-            music: "game.backgroundMusicTwo",
-            achievements: true, //enable or disable achievements for this theme
-        },
-    },
-}

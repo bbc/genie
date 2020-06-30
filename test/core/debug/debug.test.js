@@ -113,6 +113,7 @@ describe("Debug system", () => {
                 off: jest.fn(),
             },
             navigation: {},
+            scene: { key: "sceneKey" },
         };
     });
 
@@ -170,7 +171,7 @@ describe("Debug system", () => {
             expect(mockScreen.input.keyboard.addKey).toHaveBeenCalledWith("r");
         });
 
-        test("adds text labels if present in theme", () => {
+        test("adds text labels if present in config", () => {
             mockScreen.config.debugLabels = [{ x: -390, y: 100, text: "test-description" }];
             addEvents(mockScreen);
             const createCallback = mockScreen.events.on.mock.calls[0][1];
@@ -180,19 +181,53 @@ describe("Debug system", () => {
             expect(mockScreen.add.text).toHaveBeenCalledWith(-390, 100, "test-description", expect.any(Object));
         });
 
-        test("adds no label if no config path found", () => {
+        test("adds text labels when not present in config", () => {
             delete mockScreen.config.debugLabels;
             addEvents(mockScreen);
             const createCallback = mockScreen.events.on.mock.calls[0][1];
 
             createCallback.call(mockScreen);
 
-            expect(mockScreen.add.text).not.toHaveBeenCalled();
+            expect(mockScreen.add.text).toHaveBeenCalledWith(
+                -400,
+                -300,
+                "config: THEME/sceneKey/config.json5",
+                expect.any(Object),
+            );
         });
 
-        test("adds path label if config path found", () => {
-            delete mockScreen.config.debugLabels;
-            mockScreen.scene = { key: "testKey" };
+        test("adds correct path label when scene key begins with debug-", () => {
+            mockScreen.scene.key = "debug-test";
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.add.text).toHaveBeenCalledWith(
+                -400,
+                -300,
+                "config: debug/examples/test.json5",
+                expect.any(Object),
+            );
+        });
+
+        test("adds correct path label when scene key is debug", () => {
+            mockScreen.scene.key = "debug";
+            addEvents(mockScreen);
+            const createCallback = mockScreen.events.on.mock.calls[0][1];
+
+            createCallback.call(mockScreen);
+
+            expect(mockScreen.add.text).toHaveBeenCalledWith(
+                -400,
+                -300,
+                "config: debug/config.json5",
+                expect.any(Object),
+            );
+        });
+
+        test("adds correct path label if config path found when scene key is not a debug key", () => {
+            mockScreen.scene.key = "testKey";
 
             mockScreen.cache.json.get.mockReturnValue({ config: { files: [{ key: "testKey", url: "testUrl" }] } });
 
@@ -204,7 +239,7 @@ describe("Debug system", () => {
             expect(mockScreen.add.text).toHaveBeenCalledWith(
                 -400,
                 -300,
-                "config: debug/examples/testUrl",
+                "config: THEME/testKey/config.json5",
                 expect.any(Object),
             );
         });

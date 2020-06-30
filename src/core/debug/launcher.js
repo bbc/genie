@@ -7,7 +7,6 @@ import { Screen } from "../screen.js";
 import { eventBus } from "../event-bus.js";
 import { buttonsChannel } from "../layout/gel-defaults.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
-import { gmi } from "../gmi/gmi.js";
 import { examples } from "./examples.js";
 import { addExampleScreens } from "./debug-screens.js";
 
@@ -50,12 +49,6 @@ const titleStyle = {
 };
 
 export class Launcher extends Screen {
-    preload() {
-        this.load.setBaseURL(gmi.gameDir);
-        this.load.setPath("debug/examples/");
-        this.load.pack("example-files");
-    }
-
     create() {
         addExampleScreens(this);
 
