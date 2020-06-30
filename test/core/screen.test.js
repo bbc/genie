@@ -31,7 +31,14 @@ describe("Screen", () => {
         screen = new Screen();
         screen.sys = { accessibleButtons: [] };
         screen.events = { emit: jest.fn(), on: jest.fn(), once: jest.fn() };
-        screen.scene = { key, bringToTop: jest.fn(), start: jest.fn(), run: jest.fn(), scene: { mock: "scene" } };
+        screen.scene = {
+            key,
+            bringToTop: jest.fn(),
+            start: jest.fn(),
+            stop: jest.fn(),
+            run: jest.fn(),
+            scene: { mock: "scene" },
+        };
         screen.cameras = { main: { scrollX: 0, scrollY: 0 } };
         screen.add = { container: () => "root", existing: jest.fn(), graphics: jest.fn(() => mockGfx) };
         screen._layout = {
@@ -85,9 +92,10 @@ describe("Screen", () => {
         };
 
         mockData = {
+            addedBy: undefined,
             navigation: mockNavigation,
             config: mockConfig,
-            parentScreens: [mockParentScreen],
+            activeScreens: [],
             transient: mockTransientData,
         };
     });
@@ -100,7 +108,7 @@ describe("Screen", () => {
             expect(screen.context).toEqual({
                 config: mockData.config,
                 navigation: mockNavigation,
-                parentScreens: mockData.parentScreens,
+                activeScreens: mockData.activeScreens.concat([{ screen, addedBy: undefined }]),
                 transientData: mockTransientData,
             });
         });
@@ -218,14 +226,16 @@ describe("Screen", () => {
             expect(screen.removeAll).toHaveBeenCalled();
         });
 
-        test("calls removeAll on parent screens on navigation", () => {
+        test("calls removeAll on active screens on navigation", () => {
             createAndInitScreen();
+            screen.context.activeScreens.push({ screen: mockParentScreen });
             screen.navigation.next();
             expect(mockParentScreen.removeAll).toHaveBeenCalled();
         });
 
-        test("stops the parent screens scenes on navigation", () => {
+        test("stops the active screens scenes on navigation", () => {
             createAndInitScreen();
+            screen.context.activeScreens.push({ screen: mockParentScreen });
             screen.navigation.next();
             expect(mockParentScreen.scene.stop).toHaveBeenCalled();
         });
@@ -276,21 +286,16 @@ describe("Screen", () => {
     });
 
     describe("Overlays", () => {
-        test("adding an overlay, adds the scene to the list of parent screens", () => {
-            createAndInitScreen();
-            screen.addOverlay("overlay");
-            expect(screen.context.parentScreens).toEqual([mockData.parentScreens[0], screen]);
-        });
-
         test("adding an overlay, tells the scene manager to run it", () => {
             createAndInitScreen();
             screen.addOverlay("overlay");
-            expect(screen.scene.run).toHaveBeenCalledWith("overlay", mockData);
+            expect(screen.scene.run).toHaveBeenCalledWith("overlay", { ...mockData, addedBy: screen });
             expect(screen.scene.bringToTop).toHaveBeenCalled();
         });
 
         test("removing an overlay, calls onOverlayRemoved on the parent screen", () => {
             createAndInitScreen();
+            screen._data.addedBy = mockParentScreen;
             screen.removeOverlay();
             expect(mockParentScreen._onOverlayRemoved).toHaveBeenCalledWith(screen);
         });
