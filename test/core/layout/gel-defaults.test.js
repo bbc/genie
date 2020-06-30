@@ -21,8 +21,10 @@ describe("Layout - Gel Defaults", () => {
         mockPausedScreen = { scene: { key: "belowScreenKey", resume: jest.fn(), isPaused: () => true } };
         mockCurrentScreen = {
             key: "current-screen",
+            _data: {
+                addedBy: mockPausedScreen,
+            },
             context: {
-                parentScreens: [mockPausedScreen],
                 navigation: {
                     belowScreenKey: {
                         routes: {
@@ -32,11 +34,6 @@ describe("Layout - Gel Defaults", () => {
                     pause: { routes: { select: "level-select" } },
                 },
                 transientData: [],
-            },
-            game: {
-                scene: {
-                    getScenes: () => [mockPausedScreen],
-                },
             },
             scene: {
                 pause: jest.fn(),

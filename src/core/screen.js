@@ -28,6 +28,8 @@ const getRoutingFn = scene => route => {
     return routeTypes[typeof route];
 };
 
+let activeScreens = [];
+
 /**
  * The `Screen` class extends `Phaser.State`, providing the `Context` to objects that extend from it.
  * All the game screens will extend from this class.
@@ -40,7 +42,7 @@ export class Screen extends Phaser.Scene {
     get context() {
         return {
             config: this._data.config,
-            parentScreens: this._data.parentScreens,
+            activeScreens,
             navigation: this._data.navigation,
             transientData: this._data.transient || {},
         };
@@ -70,6 +72,7 @@ export class Screen extends Phaser.Scene {
 
     init(data) {
         this._data = data;
+        activeScreens.push({ screen: this, addedBy: data.addedBy });
         this.cameras.main.scrollX = -CAMERA_X;
         this.cameras.main.scrollY = -CAMERA_Y;
         this.pageIdx = -1;
@@ -110,14 +113,13 @@ export class Screen extends Phaser.Scene {
     addBackgroundItems = furnish(this);
 
     addOverlay(key) {
-        this._data.parentScreens.push(this);
-        this.scene.run(key, this._data);
+        this.scene.run(key, { ...this._data, addedBy: this });
         this.scene.bringToTop(key);
     }
 
     removeOverlay = () => {
-        const parentScreen = this._data.parentScreens.pop();
-        parentScreen._onOverlayRemoved(this);
+        activeScreens = activeScreens.filter(active => active.screen !== this);
+        this._data.addedBy._onOverlayRemoved(this);
     };
 
     _onOverlayRemoved = overlay => {
@@ -144,12 +146,11 @@ export class Screen extends Phaser.Scene {
 
     navigate = route => {
         this.scene.bringToTop(route);
-        while (this._data.parentScreens.length > 0) {
-            const parentScreen = this._data.parentScreens.pop();
-            parentScreen.removeAll();
-            parentScreen.scene.stop();
-        }
-        this.removeAll();
+        activeScreens.forEach(active => {
+            active.screen.removeAll();
+            active.screen.scene.stop();
+        });
+        activeScreens = [];
         this.scene.start(route, this._data);
     };
 
