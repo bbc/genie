@@ -19,7 +19,7 @@ describe("Pause Overlay", () => {
             some: "mock",
         };
         mockData = {
-            parentScreens: [{ scene: { key: "game" } }],
+            addedBy: { scene: { key: "game" } },
             navigation: {
                 game: { routes: { restart: "home" } },
                 "level-select": { routes: { restart: "home" } },
@@ -91,7 +91,7 @@ describe("Pause Overlay", () => {
         });
 
         test("shows select button when not above a select screen", () => {
-            mockData.parentScreens = [{ scene: { key: "pause" } }];
+            mockData.addedBy = { scene: { key: "pause" } };
             mockData.navigation["level-select"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith([
@@ -105,7 +105,7 @@ describe("Pause Overlay", () => {
         });
 
         test("does not show a select button when above a select screen", () => {
-            mockData.parentScreens = [{ scene: { key: "level-select" } }];
+            mockData.addedBy = { scene: { key: "level-select" } };
             mockData.navigation["level-select"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);
@@ -138,7 +138,7 @@ describe("Pause Overlay", () => {
         });
 
         test("does not show a replay button when the parent screen has no restart route", () => {
-            mockData.parentScreens = [{ scene: { key: "level-select" } }];
+            mockData.addedBy = { scene: { key: "level-select" } };
             mockData.navigation["level-select"] = { routes: {} };
             pauseScreen.create();
             expect(pauseScreen.setLayout).toHaveBeenCalledWith(["home", "audio", "settings", "pausePlay", "howToPlay"]);

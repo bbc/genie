@@ -96,10 +96,16 @@ describe("Loader", () => {
             image: jest.fn(() => mockImage),
         };
 
-        const mockData = { navigation: { loader: { routes: { next: "test" } } }, parentScreens: [] };
+        const mockData = { navigation: { loader: { routes: { next: "test" } } } };
 
         loader.events = { emit: jest.fn() };
-        loader.scene = { key: "loader", manager: { keys: [] }, start: jest.fn(), bringToTop: jest.fn() };
+        loader.scene = {
+            key: "loader",
+            manager: { keys: [] },
+            start: jest.fn(),
+            stop: () => {},
+            bringToTop: jest.fn(),
+        };
         loader.cameras = { main: {} };
         loader.setConfig = jest.fn();
         loader.init(mockData);
