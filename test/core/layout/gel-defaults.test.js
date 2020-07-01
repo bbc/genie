@@ -18,7 +18,18 @@ describe("Layout - Gel Defaults", () => {
 
     beforeEach(() => {
         clearIndicatorSpy = jest.fn();
-        mockPausedScreen = { scene: { key: "belowScreenKey", resume: jest.fn(), isPaused: () => true } };
+        mockPausedScreen = {
+            scene: {
+                key: "belowScreenKey",
+                resume: jest.fn(),
+                isPaused: () => true,
+            },
+            _layout: {
+                buttons: {
+                    achievementsSmall: { setIndicator: jest.fn() },
+                },
+            },
+        };
         mockCurrentScreen = {
             key: "current-screen",
             _data: {
@@ -274,12 +285,20 @@ describe("Layout - Gel Defaults", () => {
             gel.config(mockCurrentScreen).pausePlay.action({ screen: mockCurrentScreen });
         });
 
+        test("resumes the paused screen below", () => {
+            expect(mockPausedScreen.scene.resume).toHaveBeenCalled();
+        });
+
+        test("resets the small achievements indicator on the screen below if present", () => {
+            expect(mockPausedScreen._layout.buttons.achievementsSmall.setIndicator).toHaveBeenCalled();
+        });
+
         test("sends a stat to the GMI", () => {
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("play", "click");
         });
 
-        test("resumes the screen", () => {
-            expect(mockPausedScreen.scene.resume).toHaveBeenCalled();
+        test("removes the overlay", () => {
+            expect(mockCurrentScreen.removeOverlay).toHaveBeenCalled();
         });
     });
 

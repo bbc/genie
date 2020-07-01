@@ -190,7 +190,11 @@ export const config = screen => {
             id: "play",
             channel: buttonsChannel(screen),
             action: ({ screen }) => {
-                getScreenBelow(screen).scene.resume();
+                const screenBelow = getScreenBelow(screen);
+                screenBelow.scene.resume();
+                if (screenBelow._layout.buttons.achievementsSmall) {
+                    screenBelow._layout.buttons.achievementsSmall.setIndicator();
+                }
                 gmi.sendStatsEvent("play", "click");
                 screen.removeOverlay();
             },
