@@ -293,7 +293,8 @@ describe("Layout - Gel Defaults", () => {
 
         test("does not error when there is no small achievements indicator on the screen below", () => {
             delete mockPausedScreen._layout.buttons.achievementsSmall;
-            const pausePlayButtonAction = () => gel.config(mockCurrentScreen).pausePlay.action({ screen: mockCurrentScreen });
+            const pausePlayButtonAction = () =>
+                gel.config(mockCurrentScreen).pausePlay.action({ screen: mockCurrentScreen });
             expect(pausePlayButtonAction).not.toThrow();
         });
 
