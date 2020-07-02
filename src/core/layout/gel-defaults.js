@@ -192,9 +192,7 @@ export const config = screen => {
             action: ({ screen }) => {
                 const screenBelow = getScreenBelow(screen);
                 screenBelow.scene.resume();
-                if (screenBelow._layout.buttons.achievementsSmall) {
-                    screenBelow._layout.buttons.achievementsSmall.setIndicator();
-                }
+                screenBelow._layout.buttons.achievementsSmall?.setIndicator();
                 gmi.sendStatsEvent("play", "click");
                 screen.removeOverlay();
             },
