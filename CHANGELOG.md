@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Updates the small achievements indicator when the game is unpaused from the results screen. |
 | | The rest of the debug mode assets have been moved out of the themes folder and into the debug one. |
 | | The asset pack for each screen is now located in each screen's folder. |
 | | Achievements flag in game config has been removed. Disable achievements by not defining any achievements. |

@@ -18,7 +18,18 @@ describe("Layout - Gel Defaults", () => {
 
     beforeEach(() => {
         clearIndicatorSpy = jest.fn();
-        mockPausedScreen = { scene: { key: "belowScreenKey", resume: jest.fn(), isPaused: () => true } };
+        mockPausedScreen = {
+            scene: {
+                key: "belowScreenKey",
+                resume: jest.fn(),
+                isPaused: () => true,
+            },
+            _layout: {
+                buttons: {
+                    achievementsSmall: { setIndicator: jest.fn() },
+                },
+            },
+        };
         mockCurrentScreen = {
             key: "current-screen",
             _data: {
@@ -270,16 +281,31 @@ describe("Layout - Gel Defaults", () => {
     });
 
     describe("Pause Play Button Callback", () => {
-        beforeEach(() => {
+        test("resumes the paused screen below", () => {
             gel.config(mockCurrentScreen).pausePlay.action({ screen: mockCurrentScreen });
+            expect(mockPausedScreen.scene.resume).toHaveBeenCalled();
+        });
+
+        test("resets the small achievements indicator on the screen below if present", () => {
+            gel.config(mockCurrentScreen).pausePlay.action({ screen: mockCurrentScreen });
+            expect(mockPausedScreen._layout.buttons.achievementsSmall.setIndicator).toHaveBeenCalled();
+        });
+
+        test("does not error when there is no small achievements indicator on the screen below", () => {
+            delete mockPausedScreen._layout.buttons.achievementsSmall;
+            const pausePlayButtonAction = () =>
+                gel.config(mockCurrentScreen).pausePlay.action({ screen: mockCurrentScreen });
+            expect(pausePlayButtonAction).not.toThrow();
         });
 
         test("sends a stat to the GMI", () => {
+            gel.config(mockCurrentScreen).pausePlay.action({ screen: mockCurrentScreen });
             expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("play", "click");
         });
 
-        test("resumes the screen", () => {
-            expect(mockPausedScreen.scene.resume).toHaveBeenCalled();
+        test("removes the overlay", () => {
+            gel.config(mockCurrentScreen).pausePlay.action({ screen: mockCurrentScreen });
+            expect(mockCurrentScreen.removeOverlay).toHaveBeenCalled();
         });
     });
 
