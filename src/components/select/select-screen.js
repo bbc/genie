@@ -41,7 +41,8 @@ export class Select extends Screen {
             : this.setLayout(buttons, buttons);
 
         const onTransitionStart = getOnTransitionStartFn(this);
-        this.grid = new GelGrid(this, Object.assign(this.config, gridDefaults, { onTransitionStart }));
+        const showChoice = this.transientData.showChoice ? this.transientData.showChoice[this.scene.key] : undefined;
+        this.grid = new GelGrid(this, Object.assign(this.config, gridDefaults, { onTransitionStart }, { showChoice }));
         this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
         this.resize();
         this._cells = this.grid.addGridCells(this.config);

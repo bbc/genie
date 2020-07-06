@@ -41,6 +41,7 @@ describe("Select Screen", () => {
     let mockChoices;
     let mockGelGrid;
     let mockGmi;
+    let mockTransientData;
 
     beforeEach(() => {
         mockGmi = { sendStatsEvent: jest.fn() };
@@ -85,9 +86,9 @@ describe("Select Screen", () => {
                         locked: { x: 10, y: 20, asset: "test_asset" },
                     },
                     choices: [
-                        { asset: "character1" },
-                        { asset: "character2", title: "character_2" },
-                        { asset: "character3" },
+                        { id: "char1", asset: "character1" },
+                        { id: "char2", asset: "character2", title: "character_2" },
+                        { id: "char3", asset: "character3" },
                     ],
                     rows: 1,
                     columns: 1,
@@ -136,12 +137,13 @@ describe("Select Screen", () => {
             screenToCanvas: jest.fn(x => x),
         };
         mockChoices = [];
+        mockTransientData = {};
         fillRectShapeSpy = jest.fn();
         selectScreen = new Select();
 
         const addMocks = screen => {
             screen.setData(mockData);
-            screen.transientData = {};
+            screen.transientData = mockTransientData;
             screen.scene = { key: "test-select", scene: { events: { on: jest.fn() } } };
             screen.game = { canvas: { parentElement: "parent-element" } };
             screen.navigation = { next: jest.fn() };
@@ -276,6 +278,15 @@ describe("Select Screen", () => {
         test("creates grid cells", () => {
             selectScreen.create();
             expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.context);
+        });
+
+        test("passes selection id from transient data to grid", () => {
+            mockTransientData.showChoice = { "test-select": "char2" };
+            const expectedGridConfig = {
+                showChoice: "char2",
+            };
+            selectScreen.create();
+            expect(GelGrid).toHaveBeenCalledWith(selectScreen, expect.objectContaining(expectedGridConfig));
         });
 
         test("adds grid to layout", () => {

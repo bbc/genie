@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Adds gelGrid param for showing the page of a choice on load. Used on select-screen via transientData. |
 | 3.7.0 ||
 | | Updates the small achievements indicator when the game is unpaused from the results screen. |
 | | The rest of the debug mode assets have been moved out of the themes folder and into the debug one. |
