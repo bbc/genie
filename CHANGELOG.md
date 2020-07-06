@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.7.0 ||
 | | Updates the small achievements indicator when the game is unpaused from the results screen. |
 | | The rest of the debug mode assets have been moved out of the themes folder and into the debug one. |
 | | The asset pack for each screen is now located in each screen's folder. |
@@ -14,7 +15,6 @@
 | | Add build number to console banner. |
 | | Fix issue when clearing state value was not set in local storage. |
 | | Prevents duplicate stat firing on Narrative screen "skip" button. |
-| 3.7.0 ||
 | | Improved merging of global and scene plugins added via gameOptions in main.js. |
 | | setStatsScreen now triggered for overlays. |
 | | Dont show level select button on pause screen when already on select screen. |
