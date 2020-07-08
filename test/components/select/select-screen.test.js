@@ -137,9 +137,9 @@ describe("Select Screen", () => {
             screenToCanvas: jest.fn(x => x),
         };
         mockChoices = [];
-        mockTransientData = {};
         fillRectShapeSpy = jest.fn();
         selectScreen = new Select();
+        mockTransientData = {};
 
         const addMocks = screen => {
             screen.setData(mockData);
@@ -281,9 +281,9 @@ describe("Select Screen", () => {
         });
 
         test("passes selection id from transient data to grid", () => {
-            mockTransientData.showChoice = { "test-select": "char2" };
+            mockTransientData["test-select"] = { choice: { id: "char2" } };
             const expectedGridConfig = {
-                showChoice: "char2",
+                choice: "char2",
             };
             selectScreen.create();
             expect(GelGrid).toHaveBeenCalledWith(selectScreen, expect.objectContaining(expectedGridConfig));
