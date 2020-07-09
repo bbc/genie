@@ -110,6 +110,6 @@ export class ResultsTextCountup extends ResultsCountup(Phaser.GameObjects.Text) 
 
 export class ResultsBitmapTextCountup extends ResultsCountup(Phaser.GameObjects.BitmapText) {
     constructor(scene, config) {
-        super(scene, config, scene, 0, 0, config.font, undefined, config.size);
+        super(scene, config, scene, 0, 0, config.bitmapFont, undefined, config.size);
     }
 }

@@ -47,7 +47,7 @@
                         },
                         { type: "sprite", key: "game.star", offsetX: 20, offsetY: -20 },
                         {
-                            type: "bitmapcountup", // Check the documentation for more detailed information on count ups. https://github.com/bbc/genie-starter-pack/tree/master/docs/development/results-screen/results-countup.md
+                            type: "countup", // Check the documentation for more detailed information on count ups. https://github.com/bbc/genie-starter-pack/tree/master/docs/development/results-screen/results-countup.md
                             startCount: 0, // The number to start counting from. This can be passed in by transient data.
                             endCount: "<%= stars %>", // The number to count up to. Can use transient data variable. Object dot notation is valid.
                             startDelay: 1000, // Delay before the countup starts (in ms).
@@ -61,7 +61,7 @@
                             },
                             offsetX: 15,
                             offsetY: -20,
-                            font: "examples_uiFont",
+                            bitmapFont: "examples_uiFont",
                             size: 32,
                         },
                         {
@@ -123,7 +123,7 @@
                             },
                         },
                         {
-                            type: "bitmapcountup",
+                            type: "countup",
                             startCount: 0,
                             endCount: "<%= gems %>",
                             startDelay: 4000,
@@ -135,7 +135,7 @@
                             },
                             offsetX: 15,
                             offsetY: -20,
-                            font: "examples_uiFont",
+                            bitmapFont: "examples_uiFont",
                             size: 32,
                         },
                         {
@@ -192,7 +192,7 @@
                         },
                         { type: "sprite", key: "game.key", offsetX: 0, offsetY: -20 },
                         {
-                            type: "bitmapcountup",
+                            type: "countup",
                             startCount: 0,
                             endCount: "<%= keys %>",
                             startDelay: 7000,
@@ -204,7 +204,7 @@
                             },
                             offsetX: 15,
                             offsetY: -20,
-                            font: "examples_uiFont",
+                            bitmapFont: "examples_uiFont",
                             size: 32,
                         },
                         {

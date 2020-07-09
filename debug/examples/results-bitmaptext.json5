@@ -25,7 +25,7 @@
                             content: "Results Screen",
                             offsetX: 0,
                             offsetY: -18,
-                            font: "examples_uiFont",
+                            bitmapFont: "examples_uiFont",
                             size: 50,
                         },
                     ],
