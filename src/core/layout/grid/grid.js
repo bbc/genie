@@ -33,6 +33,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     }
 
     addGridCells(theme) {
+        this.page = this.getCellPage(theme, this._config.choice);
         this._cells = theme.choices.map((cell, idx) => createCell(this, cell, idx, theme));
         this.makeAccessible();
         return this._cells;
@@ -155,6 +156,14 @@ export class GelGrid extends Phaser.GameObjects.Container {
         const pageMax = this.cellsPerPage * (pageNum + 1);
         const pageMin = this.cellsPerPage * pageNum;
         return this._cells.filter((cell, idx) => idx >= pageMin && idx < pageMax);
+    }
+
+    getCellPage(theme, cellId = 0) {
+        const cellIdx = Math.max(
+            theme.choices.findIndex(cell => cell.id === cellId),
+            0,
+        );
+        return Math.floor(cellIdx / this.cellsPerPage);
     }
 
     reset() {

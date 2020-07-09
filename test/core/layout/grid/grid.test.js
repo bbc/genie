@@ -860,6 +860,42 @@ describe("Grid", () => {
             });
         });
 
+        test("get page for a given cell", () => {
+            mockScene.theme.choices = [
+                { id: "asset_name_1", title: "Asset Ttile 1" },
+                { id: "asset_name_2", title: "Asset Ttile 2" },
+            ];
+            const expectedPage = 0;
+            grid = new GelGrid(mockScene, mockScene.theme);
+            grid.addGridCells(mockScene.theme);
+            expect(grid.getCellPage(mockScene.theme, "asset_name_1")).toEqual(expectedPage);
+        });
+
+        test("get page for a given cell on the second page", () => {
+            mockScene.theme.choices = [
+                { id: "asset_name_1", title: "Asset Ttile 1" },
+                { id: "asset_name_2", title: "Asset Ttile 2" },
+            ];
+            const expectedPage = 1;
+            grid = new GelGrid(mockScene, mockScene.theme);
+            grid.addGridCells(mockScene.theme);
+            expect(grid.getCellPage(mockScene.theme, "asset_name_2")).toEqual(expectedPage);
+        });
+
+        test("get page for a given cell when multiple cells per page", () => {
+            mockScene.theme.choices = [
+                { id: "asset_name_1", title: "Asset Ttile 1" },
+                { id: "asset_name_2", title: "Asset Ttile 2" },
+                { id: "asset_name_3", title: "Asset Ttile 3" },
+                { id: "asset_name_4", title: "Asset Ttile 4" },
+            ];
+            const expectedPage = 1;
+            mockScene.theme.rows = 2;
+            grid = new GelGrid(mockScene, mockScene.theme);
+            grid.addGridCells(mockScene.theme);
+            expect(grid.getCellPage(mockScene.theme, "asset_name_3")).toEqual(expectedPage);
+        });
+
         describe("looping behaviour when single item is showing", () => {
             beforeEach(() => {
                 mockScene.theme.choices = [
