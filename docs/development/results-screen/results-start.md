@@ -80,6 +80,7 @@ To learn more on how to configure the objects in the format array, see the "Resu
 ## Results Object Types
 
 * [Text](./results-text.md)
+* [BitmapText](./results-bitmaptext.md)
 * [Sprite](./results-sprite.md)
 * [Countup](./results-countup.md)
 

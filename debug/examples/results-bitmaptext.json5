@@ -21,13 +21,12 @@
                     format: [
                         // Each object in this array generates a visible object in the row.
                         {
-                            type: "bitmaptext", // 'Text' shows static text which can contain template tags for transient data.
+                            type: "bitmaptext",
                             content: "Results Screen",
-                            offsetX: 0, // Offset the x position of this text object.
-                            offsetY: -18, // Offset the y position of this text object.
+                            offsetX: 0,
+                            offsetY: -18,
                             font: "examples_titleFont",
                             size: 50,
-                            align: 0,
                         },
                     ],
                 },
