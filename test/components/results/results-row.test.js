@@ -4,11 +4,13 @@
  * @license Apache-2.0
  */
 import { ResultsRow } from "../../../src/components/results/results-row.js";
+import { ResultsBitmapText } from "../../../src/components/results/results-bitmaptext.js";
 import { ResultsText } from "../../../src/components/results/results-text.js";
 import { ResultsSprite } from "../../../src/components/results/results-sprite.js";
 import { ResultsCountup } from "../../../src/components/results/results-countup.js";
 import { mockBaseScene } from "../../mock/mock-scene.js";
 
+jest.mock("../../../src/components/results/results-bitmaptext.js");
 jest.mock("../../../src/components/results/results-text.js");
 jest.mock("../../../src/components/results/results-sprite.js");
 jest.mock("../../../src/components/results/results-countup.js");
@@ -108,6 +110,14 @@ describe("Results Row", () => {
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
         resultsRow.addSection(mockGameObject);
         expect(mockGameObject.y).toBe(-50);
+    });
+
+    test("drawRow adds a ResultsBitmapText object to the container when defined in rowConfig", () => {
+        mockRowConfig = {
+            format: [{ type: "bitmaptext", content: "" }],
+        };
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        expect(resultsRow.add).toHaveBeenCalledWith(expect.any(ResultsBitmapText));
     });
 
     test("drawRow adds a ResultsText object to the container when defined in rowConfig", () => {

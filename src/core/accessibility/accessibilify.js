@@ -45,13 +45,12 @@ const assignEvents = (accessibleElement, button) => {
 
 const defaults = {
     class: "gel-button",
-    onClick: () => {},
-    onMouseOver: () => {},
-    onMouseOut: () => {},
-    interactive: false,
+    onClick: fp.noop,
+    onMouseOver: fp.noop,
+    onMouseOut: fp.noop,
 };
 
-export function accessibilify(button, gameButton = true, interactive = true) {
+export function accessibilify(button, gameButton = true) {
     const sys = button.scene.sys;
     const scene = button.scene;
     const id = [scene.scene.key, button.config.id].join("__");
@@ -62,25 +61,22 @@ export function accessibilify(button, gameButton = true, interactive = true) {
         "aria-label": button.config.ariaLabel,
     };
 
-    if (interactive === true) {
-        const buttonAction = () => {
-            if (!button.input.enabled) return;
-            button.emit(Phaser.Input.Events.POINTER_UP, button, sys.input.activePointer, false);
-        };
-        const onMouseOver = () => button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false);
-        const onMouseOut = () => button.emit(Phaser.Input.Events.POINTER_OUT, button, sys.input.activePointer, false);
+    const buttonAction = () => {
+        if (!button.input.enabled) return;
+        button.emit(Phaser.Input.Events.POINTER_UP, button, sys.input.activePointer, false);
+    };
+    const onMouseOver = () => button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false);
+    const onMouseOut = () => button.emit(Phaser.Input.Events.POINTER_OUT, button, sys.input.activePointer, false);
 
-        options = {
-            ...options,
-            ...{
-                parent: sys.scale.parent,
-                onClick: buttonAction,
-                onMouseOver,
-                onMouseOut: onMouseOut,
-                interactive: true,
-            },
-        };
-    }
+    options = {
+        ...options,
+        ...{
+            parent: sys.scale.parent,
+            onClick: buttonAction,
+            onMouseOver,
+            onMouseOut: onMouseOut,
+        },
+    };
 
     options = { ...defaults, ...options };
 

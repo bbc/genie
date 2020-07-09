@@ -5,6 +5,7 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 
+import { ResultsBitmapText } from "./results-bitmaptext.js";
 import { ResultsText } from "./results-text.js";
 import { ResultsSprite } from "./results-sprite.js";
 import { ResultsSpine } from "./results-spine.js";
@@ -45,6 +46,7 @@ export class ResultsRow extends Phaser.GameObjects.Container {
     drawRow(scene) {
         let rowText = "";
         const objectType = {
+            bitmaptext: ResultsBitmapText,
             text: ResultsText,
             sprite: ResultsSprite,
             spine: ResultsSpine,
@@ -59,8 +61,6 @@ export class ResultsRow extends Phaser.GameObjects.Container {
                 if (object.type === "countup") {
                     rowText = rowText + this.setTextFromTemplate(object.endCount, scene.transientData);
                 }
-                this.config = {};
-                this.config.ariaLabel = rowText;
                 this.addSection(new objectType[object.type](this.scene, object), object.offsetX, object.offsetY);
             });
     }

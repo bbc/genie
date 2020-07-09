@@ -31,11 +31,6 @@ const assignEvents = (el, options) => {
     el.addEventListener("touchmove", e => e.preventDefault(), { passive: true });
     el.addEventListener("touchstart", () => {});
 
-    if (options.interactive === false) {
-        el.setAttribute("tabindex", "-1");
-        defaultAttributes.role = "label";
-    }
-
     return { keyup, click: options.onClick };
 };
 
