@@ -22,12 +22,6 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.setAlpha(rowConfig.alpha);
     }
 
-    setTextFromTemplate(templateString, transientData) {
-        const template = fp.template(templateString);
-        this.text = template(transientData[this.scene.scene.key]);
-        return this.text;
-    }
-
     align() {
         const lastGameObject = this.list.slice(-1)[0];
         const rowWidth = lastGameObject ? lastGameObject.x + lastGameObject.width : 0;

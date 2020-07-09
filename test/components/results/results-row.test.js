@@ -7,7 +7,7 @@ import { ResultsRow } from "../../../src/components/results/results-row.js";
 import { ResultsBitmapText } from "../../../src/components/results/results-bitmaptext.js";
 import { ResultsText } from "../../../src/components/results/results-text.js";
 import { ResultsSprite } from "../../../src/components/results/results-sprite.js";
-import { ResultsCountup } from "../../../src/components/results/results-countup.js";
+import { ResultsTextCountup, ResultsBitmapTextCountup } from "../../../src/components/results/results-countup.js";
 import { mockBaseScene } from "../../mock/mock-scene.js";
 
 jest.mock("../../../src/components/results/results-bitmaptext.js");
@@ -133,12 +133,20 @@ describe("Results Row", () => {
         expect(resultsRow.add).toHaveBeenCalledWith(expect.any(ResultsSprite));
     });
 
-    test("drawRow adds a ResultsCountup object to the container when defined in rowConfig", () => {
+    test("drawRow adds a ResultsTextCountup object to the container when defined in rowConfig", () => {
         mockRowConfig = {
             format: [{ type: "countup", content: "test" }],
         };
         const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
-        expect(resultsRow.add).toHaveBeenCalledWith(expect.any(ResultsCountup));
+        expect(resultsRow.add).toHaveBeenCalledWith(expect.any(ResultsTextCountup));
+    });
+
+    test("drawRow adds a ResultsBitmapTextCountup object to the container when defined in rowConfig", () => {
+        mockRowConfig = {
+            format: [{ type: "bitmapcountup", content: "test" }],
+        };
+        const resultsRow = new ResultsRow(mockScene, mockRowConfig, mockGetDrawArea);
+        expect(resultsRow.add).toHaveBeenCalledWith(expect.any(ResultsBitmapTextCountup));
     });
 
     test("getBoundingRect returns getDrawArea function", () => {

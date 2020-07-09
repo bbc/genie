@@ -46,14 +46,6 @@ const ResultsCountup = gameObjectType =>
             });
         }
 
-        getFinalWidth(finalText) {
-            const text = this.text;
-            this.text = finalText;
-            const width = this.width;
-            this.text = text;
-            return width;
-        }
-
         textFromTemplate(templateString, transientData) {
             const template = fp.template(templateString);
             return template(transientData[this.scene.scene.key]);
