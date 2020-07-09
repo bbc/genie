@@ -3,29 +3,21 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import fp from "../../../lib/lodash/fp/fp.js";
-
 import { ResultsBitmapText } from "./results-bitmaptext.js";
 import { ResultsText } from "./results-text.js";
 import { ResultsSprite } from "./results-sprite.js";
 import { ResultsSpine } from "./results-spine.js";
-import { ResultsCountup } from "./results-countup.js";
+import { ResultsTextCountup, ResultsBitmapTextCountup } from "./results-countup.js";
 
 export class ResultsRow extends Phaser.GameObjects.Container {
     constructor(scene, rowConfig, getDrawArea) {
         super(scene);
         this.rowConfig = rowConfig;
         this.getDrawArea = getDrawArea;
-        this.drawRow(scene);
+        this.drawRow();
         this.setContainerPosition();
         this.align();
         this.setAlpha(rowConfig.alpha);
-    }
-
-    setTextFromTemplate(templateString, transientData) {
-        const template = fp.template(templateString);
-        this.text = template(transientData[this.scene.scene.key]);
-        return this.text;
     }
 
     align() {
@@ -43,26 +35,23 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.add(gameObject);
     }
 
-    drawRow(scene) {
-        let rowText = "";
+    drawRow() {
         const objectType = {
-            bitmaptext: ResultsBitmapText,
-            text: ResultsText,
-            sprite: ResultsSprite,
-            spine: ResultsSpine,
-            countup: ResultsCountup,
+            bitmaptext: () => ResultsBitmapText,
+            text: () => ResultsText,
+            sprite: () => ResultsSprite,
+            spine: () => ResultsSpine,
+            countup: object => (object.bitmapFont ? ResultsBitmapTextCountup : ResultsTextCountup),
         };
 
         this.rowConfig.format &&
-            this.rowConfig.format.forEach(object => {
-                if (object.type === "text") {
-                    rowText = rowText + this.setTextFromTemplate(object.content, scene.transientData);
-                }
-                if (object.type === "countup") {
-                    rowText = rowText + this.setTextFromTemplate(object.endCount, scene.transientData);
-                }
-                this.addSection(new objectType[object.type](this.scene, object), object.offsetX, object.offsetY);
-            });
+            this.rowConfig.format.forEach(object =>
+                this.addSection(
+                    new (objectType[object.type](object))(this.scene, object),
+                    object.offsetX,
+                    object.offsetY,
+                ),
+            );
     }
 
     getBoundingRect() {

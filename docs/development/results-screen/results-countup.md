@@ -17,7 +17,9 @@ Set the objects type to "countup" to create a results countup object.
 | audio.endPlayRate | integer | | The final playrate of the count audio - used for pitch shifting. |
 | offsetX | integer | 0 | The x offset for this object. |
 | offsetY | integer | 0 | The y offset for this object. |
-| textStyle | [Phaser TextStyle](https://photonstorm.github.io/phaser3-docs/Phaser.Types.GameObjects.Text.html#.TextStyle) | optional | The text style config object. |
+| textStyle | [Phaser TextStyle](https://photonstorm.github.io/phaser3-docs/Phaser.Types.GameObjects.Text.html#.TextStyle) | optional | The text style config object. (if not using bitmap font/text) |
+| bitmapFont | string | | The key of the font to use from the Bitmap Font cache. (if using bitmap font/text) |
+| size | integer | | The font size of this Bitmap Text. (if using bitmap font/text) |
 
 This object supports [templates](https://lodash.com/docs/4.17.15#template).
 

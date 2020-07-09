@@ -3,10 +3,10 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { ResultsCountup } from "../../../src/components/results/results-countup.js";
+import { ResultsTextCountup, ResultsBitmapTextCountup } from "../../../src/components/results/results-countup.js";
 import { mockBaseScene } from "../../mock/mock-scene.js";
 
-describe("ResultsCountup", () => {
+describe("ResultsTextCountup", () => {
     let mockScene;
     let mockConfig;
 
@@ -30,196 +30,197 @@ describe("ResultsCountup", () => {
                 endPlayRate: 1.2,
             },
         };
+        ResultsBitmapTextCountup.prototype.updateDisplayOrigin = () => {};
     });
 
     afterEach(() => jest.clearAllMocks());
 
-    test("sets text to startCount when initialised", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.text).toBe(mockConfig.startCount.toString());
+    test("allows creation of a ResultsCountup using a Phaser BitmapText object", () => {
+        const resultsBitmapTextCountup = new ResultsBitmapTextCountup(mockScene, mockConfig);
+        expect(resultsBitmapTextCountup.type).toBe("BitmapText");
+    });
+
+    test("sets text to the end count when initialised", () => {
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(resultsTextCountup.text).toBe("10");
     });
 
     test("sets endCount properly when a string template is provided", () => {
-        const resultsText = new ResultsCountup(mockScene, mockConfig);
+        const resultsText = new ResultsTextCountup(mockScene, mockConfig);
         expect(resultsText.endCount).toBe(mockScene.transientData.results.stars.toString());
     });
 
     test("sets delayProgress to 0 when initialised", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.delayProgress).toBe(0);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(resultsTextCountup.delayProgress).toBe(0);
     });
 
     test("sets numberOfTicks to 0 when initialised", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.numberOfTicks).toBe(0);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(resultsTextCountup.numberOfTicks).toBe(0);
     });
 
     test("sets currentValue to startCount when initialised", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.currentValue).toBe(mockConfig.startCount);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(resultsTextCountup.currentValue).toBe(mockConfig.startCount);
     });
 
     test("sets countupRange to the correct value when initialised", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.countupRange).toBe(10);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(resultsTextCountup.countupRange).toBe(10);
     });
 
     test("sets shouldSingleTick to true when countupRange is less than singleTicksRange", () => {
         mockConfig.audio.singleTicksRange = Infinity;
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.shouldSingleTick).toBe(true);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(resultsTextCountup.shouldSingleTick).toBe(true);
     });
 
     test("sets shouldSingleTick to false when countupRange is more than singleTicksRange", () => {
         mockConfig.audio.singleTicksRange = -Infinity;
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.shouldSingleTick).toBe(false);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(resultsTextCountup.shouldSingleTick).toBe(false);
     });
 
     test("sets shouldSingleTick to false when audio is not defined in config", () => {
         delete mockConfig.audio;
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.shouldSingleTick).toBe(false);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(resultsTextCountup.shouldSingleTick).toBe(false);
     });
 
     test("sets countupState to DELAYED (0) when initialised", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.countupState).toBe(0);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(resultsTextCountup.countupState).toBe(0);
     });
 
     test("sets a function on boundUpdateFn when initialised", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.boundUpdateFn).toEqual(expect.any(Function));
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(resultsTextCountup.boundUpdateFn).toEqual(expect.any(Function));
     });
 
     test("adds update function to the update event", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(mockScene.events.on).toHaveBeenCalledWith("update", resultsCountup.boundUpdateFn);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(mockScene.events.on).toHaveBeenCalledWith("update", resultsTextCountup.boundUpdateFn);
     });
 
     test("adds cleanup function to the shutdown event", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
         expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
         mockScene.events.once.mock.calls[0][1]();
-        expect(mockScene.events.off).toHaveBeenCalledWith("update", resultsCountup.boundUpdateFn);
+        expect(mockScene.events.off).toHaveBeenCalledWith("update", resultsTextCountup.boundUpdateFn);
     });
 
-    test("update function increases delay when state is DELAYED (0)", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.countupState).toBe(0);
-        resultsCountup.update(undefined, 16);
-        expect(resultsCountup.delayProgress).toBe(16);
+    test("update function sets text to start count when state is INITIALISED (0)", () => {
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        expect(resultsTextCountup.countupState).toBe(0);
+        resultsTextCountup.update(undefined, 16);
+        expect(resultsTextCountup.text).toBe(mockConfig.startCount.toString());
     });
 
-    test("update function changes states from DELAYED (0) to COUNTING (1) when delay is complete", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.countupState).toBe(0);
-        resultsCountup.currentValue = -Infinity;
-        resultsCountup.update(undefined, 1001);
-        expect(resultsCountup.countupState).toBe(1);
+    test("update function increases delay when state is DELAYED (1)", () => {
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.countupState = 1;
+        resultsTextCountup.update(undefined, 16);
+        expect(resultsTextCountup.delayProgress).toBe(16);
     });
 
-    test("update function increases currentValue when state is COUNTING (1)", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.countupState = 1;
-        resultsCountup.update(undefined, 16);
-        expect(resultsCountup.currentValue).toBe(0.16);
+    test("update function changes states from DELAYED (1) to COUNTING (2) when delay is complete", () => {
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.countupState = 1;
+        resultsTextCountup.currentValue = -Infinity;
+        resultsTextCountup.update(undefined, 1001);
+        expect(resultsTextCountup.countupState).toBe(2);
     });
 
-    test("sets fixedWidth to the final width when initialised", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        expect(resultsCountup.style.fixedWidth).toBe(resultsCountup.getFinalWidth(resultsCountup.endCount));
-        expect(resultsCountup.style.fixedHeight).toBe(0);
-    });
-
-    test("getFinalWidth returns the size of the text while preserving text value", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.getFinalWidth("test");
-        expect(resultsCountup.text).toBe(mockConfig.startCount.toString());
+    test("update function increases currentValue when state is COUNTING (2)", () => {
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.countupState = 2;
+        resultsTextCountup.update(undefined, 16);
+        expect(resultsTextCountup.currentValue).toBe(0.16);
     });
 
     test("canPlaySound returns true when singleTicksRange is false and ticks need firing", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.shouldSingleTick = false;
-        resultsCountup.numberOfTicks = 0;
-        expect(resultsCountup.canPlaySound(1, 30, 1000)).toBe(true);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.shouldSingleTick = false;
+        resultsTextCountup.numberOfTicks = 0;
+        expect(resultsTextCountup.canPlaySound(1, 30, 1000)).toBe(true);
     });
 
     test("canPlaySound returns false when singleTicksRange is false and ticks do not need firing", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.shouldSingleTick = false;
-        resultsCountup.numberOfTicks = Infinity;
-        expect(resultsCountup.canPlaySound(0, 30, 2000)).toBe(false);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.shouldSingleTick = false;
+        resultsTextCountup.numberOfTicks = Infinity;
+        expect(resultsTextCountup.canPlaySound(0, 30, 2000)).toBe(false);
     });
 
     test("canPlaySound returns true when singleTicksRange is true and the text has been updated", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.shouldSingleTick = true;
-        resultsCountup.text = "21";
-        resultsCountup.previousText = "20";
-        expect(resultsCountup.canPlaySound(1, 30, 1000)).toBe(true);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.shouldSingleTick = true;
+        resultsTextCountup.text = "21";
+        resultsTextCountup.previousText = "20";
+        expect(resultsTextCountup.canPlaySound(1, 30, 1000)).toBe(true);
     });
 
     test("canPlaySound returns true when ticksPerSecond is undefined and the text has been updated", () => {
         delete mockConfig.audio.ticksPerSecond;
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.text = "21";
-        resultsCountup.previousText = "20";
-        expect(resultsCountup.canPlaySound(1, undefined, 1000)).toBe(true);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.text = "21";
+        resultsTextCountup.previousText = "20";
+        expect(resultsTextCountup.canPlaySound(1, undefined, 1000)).toBe(true);
     });
 
     test("canPlaySound returns false when ticksPerSecond is undefined and the text has not been updated", () => {
         delete mockConfig.audio.ticksPerSecond;
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.text = "21";
-        resultsCountup.previousText = "21";
-        expect(resultsCountup.canPlaySound(1, undefined, 1000)).toBe(false);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.text = "21";
+        resultsTextCountup.previousText = "21";
+        expect(resultsTextCountup.canPlaySound(1, undefined, 1000)).toBe(false);
     });
 
     test("canPlaySound returns false when singleTicksRange is true and the text has not been updated", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.shouldSingleTick = true;
-        resultsCountup.text = "21";
-        resultsCountup.previousText = "21";
-        expect(resultsCountup.canPlaySound(1, 30, 1000)).toBe(false);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.shouldSingleTick = true;
+        resultsTextCountup.text = "21";
+        resultsTextCountup.previousText = "21";
+        expect(resultsTextCountup.canPlaySound(1, 30, 1000)).toBe(false);
     });
 
     test("incrementCount does not play audio when it is not defined in config", () => {
         delete mockConfig.audio;
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.incrementCount(0, mockConfig);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.incrementCount(0, mockConfig);
         expect(mockScene.sound.play).not.toHaveBeenCalled();
     });
 
     test("incrementCount plays audio when canPlaySound is true", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.canPlaySound = () => true;
-        resultsCountup.incrementCount(0, mockConfig);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.canPlaySound = () => true;
+        resultsTextCountup.incrementCount(0, mockConfig);
         expect(mockScene.sound.play).toHaveBeenCalledWith(mockConfig.audio.key, { rate: 0.8 });
     });
 
     test("incrementCount increases current value by range / duration * dt", () => {
         const dt = 31;
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.incrementCount(dt, mockConfig);
-        expect(resultsCountup.currentValue).toBe(0.0 + (10 / 1000) * dt);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.incrementCount(dt, mockConfig);
+        expect(resultsTextCountup.currentValue).toBe(0.0 + (10 / 1000) * dt);
     });
 
-    test("incrementCount sets state to ENDED (2) and text to end count when current value is above end count", () => {
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.currentValue = 5;
-        resultsCountup.endCount = 4;
-        resultsCountup.incrementCount(0, mockConfig);
-        expect(resultsCountup.countupState).toBe(2);
-        expect(resultsCountup.text).toBe("4");
+    test("incrementCount sets state to ENDED (3) and text to end count when current value is above end count", () => {
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.currentValue = 5;
+        resultsTextCountup.endCount = 4;
+        resultsTextCountup.incrementCount(0, mockConfig);
+        expect(resultsTextCountup.countupState).toBe(3);
+        expect(resultsTextCountup.text).toBe("4");
     });
 
     test("playAudio defaults starting and ending play rate to 1", () => {
         delete mockConfig.audio.startPlayRate;
         delete mockConfig.audio.endPlayRate;
-        const resultsCountup = new ResultsCountup(mockScene, mockConfig);
-        resultsCountup.canPlaySound = () => true;
-        resultsCountup.incrementCount(0, mockConfig);
+        const resultsTextCountup = new ResultsTextCountup(mockScene, mockConfig);
+        resultsTextCountup.canPlaySound = () => true;
+        resultsTextCountup.incrementCount(0, mockConfig);
         expect(mockScene.sound.play).toHaveBeenCalledWith(mockConfig.audio.key, { rate: 1 });
     });
 });

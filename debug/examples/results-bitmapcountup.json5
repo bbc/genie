@@ -21,12 +21,15 @@
                     format: [
                         // Each object in this array generates a visible object in the row.
                         {
-                            type: "bitmaptext",
+                            type: "text",
                             content: "Results Screen",
                             offsetX: 0,
                             offsetY: -18,
-                            bitmapFont: "examples_uiFont",
-                            size: 50,
+                            textStyle: {
+                                fontFamily: 'ReithSans',
+                                fontSize: '24px', // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
+                                color: '#FFFFFF', // This should meet the colour contrast requirement as per GEL guidelines.
+                            },
                         },
                     ],
                 },
@@ -58,12 +61,8 @@
                             },
                             offsetX: 15,
                             offsetY: -20,
-                            textStyle: {
-                                fontFamily: "ReithSans",
-                                fontSize: "24px",
-                                color: "#FFFF00",
-                                align: "center",
-                            },
+                            bitmapFont: "examples_uiFont",
+                            size: 32,
                         },
                         {
                             type: "text",
@@ -136,12 +135,8 @@
                             },
                             offsetX: 15,
                             offsetY: -20,
-                            textStyle: {
-                                fontFamily: "ReithSans",
-                                fontSize: "24px",
-                                color: "#00FF00",
-                                align: "center",
-                            },
+                            bitmapFont: "examples_uiFont",
+                            size: 32,
                         },
                         {
                             type: "text",
@@ -209,12 +204,8 @@
                             },
                             offsetX: 15,
                             offsetY: -20,
-                            textStyle: {
-                                fontFamily: "ReithSans",
-                                fontSize: "24px",
-                                color: "#FFA500",
-                                align: "center",
-                            },
+                            bitmapFont: "examples_uiFont",
+                            size: 32,
                         },
                         {
                             type: "text",

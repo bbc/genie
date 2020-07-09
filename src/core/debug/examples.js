@@ -42,6 +42,20 @@ const exampleScreens = {
             home: "debug",
         },
     },
+    "results-bitmapcountup": {
+        scene: Results,
+        title: "Results: BitmapCountup",
+        transientData: {
+            stars: 5,
+            gems: 50,
+            keys: 1000000,
+        },
+        routes: {
+            continue: "debug",
+            restart: "debug",
+            home: "debug",
+        },
+    },
     "results-1-sec": {
         scene: Results,
         title: "Results: 1s countup",

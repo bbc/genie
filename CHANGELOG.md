@@ -3,7 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | 3.8.0 ||
-| | Adds BitmapText objects to the Results screen. |
+| | Adds BitmapText object to the Results screen and allows countups to use bitmap fonts. |
 | | Adds gelGrid param for showing the page of a choice on load. Used on select-screen via transientData. |
 | 3.7.0 ||
 | | Updates the small achievements indicator when the game is unpaused from the results screen. |
