@@ -9,14 +9,14 @@ import { ResultsBitmapText } from "./results-bitmaptext.js";
 import { ResultsText } from "./results-text.js";
 import { ResultsSprite } from "./results-sprite.js";
 import { ResultsSpine } from "./results-spine.js";
-import { ResultsCountup } from "./results-countup.js";
+import { ResultsTextCountup, ResultsBitmapTextCountup } from "./results-countup.js";
 
 export class ResultsRow extends Phaser.GameObjects.Container {
     constructor(scene, rowConfig, getDrawArea) {
         super(scene);
         this.rowConfig = rowConfig;
         this.getDrawArea = getDrawArea;
-        this.drawRow(scene);
+        this.drawRow();
         this.setContainerPosition();
         this.align();
         this.setAlpha(rowConfig.alpha);
@@ -43,26 +43,20 @@ export class ResultsRow extends Phaser.GameObjects.Container {
         this.add(gameObject);
     }
 
-    drawRow(scene) {
-        let rowText = "";
+    drawRow() {
         const objectType = {
             bitmaptext: ResultsBitmapText,
             text: ResultsText,
             sprite: ResultsSprite,
             spine: ResultsSpine,
-            countup: ResultsCountup,
+            countup: ResultsTextCountup,
+            bitmapcountup: ResultsBitmapTextCountup,
         };
 
         this.rowConfig.format &&
-            this.rowConfig.format.forEach(object => {
-                if (object.type === "text") {
-                    rowText = rowText + this.setTextFromTemplate(object.content, scene.transientData);
-                }
-                if (object.type === "countup") {
-                    rowText = rowText + this.setTextFromTemplate(object.endCount, scene.transientData);
-                }
-                this.addSection(new objectType[object.type](this.scene, object), object.offsetX, object.offsetY);
-            });
+            this.rowConfig.format.forEach(object =>
+                this.addSection(new objectType[object.type](this.scene, object), object.offsetX, object.offsetY),
+            );
     }
 
     getBoundingRect() {

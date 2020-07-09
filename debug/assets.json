@@ -9,6 +9,11 @@
             },
             {
                 "type": "json5",
+                "key": "debug-results-bitmapcountup",
+                "url": "../../debug/examples/results-bitmapcountup.json5"
+            },
+            {
+                "type": "json5",
                 "key": "debug-select-1",
                 "url": "../../debug/examples/select-1.json5"
             },
@@ -194,7 +199,7 @@
                 }
             },
             {
-                "key": "titleFont",
+                "key": "uiFont",
                 "type": "bitmapFont",
                 "textureURL": "../../debug/assets/bitmaptext/uifont.png",
                 "fontDataURL": "../../debug/assets/bitmaptext/uifont.fnt"
