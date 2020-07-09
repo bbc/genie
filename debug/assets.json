@@ -4,6 +4,11 @@
         "files": [
             {
                 "type": "json5",
+                "key": "debug-results-bitmaptext",
+                "url": "../../debug/examples/results-bitmaptext.json5"
+            },
+            {
+                "type": "json5",
                 "key": "debug-select-1",
                 "url": "../../debug/examples/select-1.json5"
             },
@@ -187,6 +192,12 @@
                     "margin": 0,
                     "spacing": 8
                 }
+            },
+            {
+                "key": "titleFont",
+                "type": "bitmapFont",
+                "textureURL": "../../debug/assets/bitmaptext/uifont.png",
+                "fontDataURL": "../../debug/assets/bitmaptext/uifont.fnt"
             }
         ]
     },

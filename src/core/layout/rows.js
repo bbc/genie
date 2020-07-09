@@ -5,7 +5,6 @@
  */
 
 import { ResultsRow } from "../../components/results/results-row.js";
-import { accessibilify } from "../accessibility/accessibilify.js";
 
 export const RowType = {
     Results: ResultsRow,
@@ -16,9 +15,7 @@ export function create(scene, getArea, rowsConfig, rowType) {
 
     const createRow = (rowConfig, index) => {
         const container = new rowType(scene, rowConfig, getRectForRow(index));
-        container.config.id = `row-${index}`;
         containers.push(container);
-        accessibilify(container, false, false);
         scene.layout.addCustomGroup(`row-${index}`, container);
     };
 

@@ -351,14 +351,6 @@ describe("Accessibilify", () => {
             );
         });
 
-        test("events not called when element is not interactive", () => {
-            accessibilify(mockButton, false, false);
-            accessibleDomElement.mock.calls[0][0].onClick();
-            accessibleDomElement.mock.calls[0][0].onMouseOver();
-            accessibleDomElement.mock.calls[0][0].onMouseOut();
-            expect(mockButton.emit).not.toHaveBeenCalled();
-        });
-
         test("does not dispatches event if input disabled", () => {
             mockButton.input.enabled = false;
             accessibilify(mockButton);
