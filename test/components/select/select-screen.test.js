@@ -41,6 +41,7 @@ describe("Select Screen", () => {
     let mockChoices;
     let mockGelGrid;
     let mockGmi;
+    let mockTransientData;
 
     beforeEach(() => {
         mockGmi = { sendStatsEvent: jest.fn() };
@@ -85,9 +86,9 @@ describe("Select Screen", () => {
                         locked: { x: 10, y: 20, asset: "test_asset" },
                     },
                     choices: [
-                        { asset: "character1" },
-                        { asset: "character2", title: "character_2" },
-                        { asset: "character3" },
+                        { id: "char1", asset: "character1" },
+                        { id: "char2", asset: "character2", title: "character_2" },
+                        { id: "char3", asset: "character3" },
                     ],
                     rows: 1,
                     columns: 1,
@@ -138,10 +139,11 @@ describe("Select Screen", () => {
         mockChoices = [];
         fillRectShapeSpy = jest.fn();
         selectScreen = new Select();
+        mockTransientData = {};
 
         const addMocks = screen => {
             screen.setData(mockData);
-            screen.transientData = {};
+            screen.transientData = mockTransientData;
             screen.scene = { key: "test-select", scene: { events: { on: jest.fn() } } };
             screen.game = { canvas: { parentElement: "parent-element" } };
             screen.navigation = { next: jest.fn() };
@@ -276,6 +278,15 @@ describe("Select Screen", () => {
         test("creates grid cells", () => {
             selectScreen.create();
             expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.context);
+        });
+
+        test("passes selection id from transient data to grid", () => {
+            mockTransientData["test-select"] = { choice: { id: "char2" } };
+            const expectedGridConfig = {
+                choice: "char2",
+            };
+            selectScreen.create();
+            expect(GelGrid).toHaveBeenCalledWith(selectScreen, expect.objectContaining(expectedGridConfig));
         });
 
         test("adds grid to layout", () => {

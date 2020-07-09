@@ -38,27 +38,23 @@ Please note that the select screen should be given a descriptive name (here it i
 - When running the game, progressing from the home screen should now take the player to the character select screen.
 
 ## How do I add items to the select screen carousel?
-- Create a suitable config file, e.g: `character-select-json5.json` inside `themes/your-theme/config` (where `your-theme` is the name of your theme).
-- Add a `"choices"` array to your select options and fill it with objects containing the keys `main` and `name`. These must be named the same as the key in your `asset-pack-master.json` file (see [below](#how-does-it-find-the-location-of-my-sprite-assets)).
-    - `main`: This refers to the image of the thing the player is selecting. For example in a character select screen, this will be the character itself.
-    - `name`: This refers to the image of the name of the thing the player is selecting. For example in a character select screen, it will simply be an image of the character's name.
+- Create a config file `config.json5` inside `themes/your-theme/character-select` (where `your-theme` is the name of your theme and `character-select` is the name of your select screen).
+- Add a `"choices"` array and fill it with objects containing the keys `id` and `key`. The `key` must be named the same as the key in your `asset-pack-master.json` file (see [below](#how-does-it-find-the-location-of-my-sprite-assets)).
+    - `id`: A uinque id for the choice
+    - `key`: This refers to the image of the thing the player is selecting. For example in a character select screen, this will be the character itself.
 
 ```json5
 {
-    "theme": {
-        "character-select": {
-            "choices": [
-                {
-                    "main": "dangermouse",
-                    "name": "dangermouseName"
-                },
-                {
-                    "main": "barney",
-                    "name": "barneyName"
-                }
-            ]
+    "choices": [
+        {
+            "id": "dangermouse",
+            "key": "danger-mouse",
+        },
+        {
+            "id": "dennis",
+            "key": "dennis-the-menace",
         }
-    }
+    ]
 }
 ```
 ### Choice titles
@@ -70,14 +66,50 @@ Configured choices may have text labels drawn with them. These are populated by 
     ...
     "choices": [
         {
-            "main": "dangermouse",
-            "name": "dangermouseName",
+            "id": "dangermouse",
             "title": "Danger Mouse",
             "subtitle": "The world's greatest secret agent",
+            "key": "danger-mouse",
         },
     ]
 }
 ```
+
+### Choice states
+
+Choices can have states, see [states](states.md). 
+
+```json5
+{
+    ...
+    "choices": [
+        {
+            "id": "dangermouse",
+            "key": "danger-mouse",
+            "state": "unlocked",
+        },
+    ]
+}
+```
+
+## Pagination
+
+The select screen will paginate the choices based on the `rows` and `cols` parameters definied in the select screen config.
+
+```json5
+{
+    "rows": 2,
+    "cols" : 3,
+}
+```
+
+The page displayed when first loaded can be changed by setting `choice` in transient data, under the key for the screen, e.g:
+
+```javascript
+this.transientData["level-select"].choice = { id: "dennis" }
+```
+
+The select screen will then display the appropriate page for this choice when navigated.
 
 #### Choice text styling
 
