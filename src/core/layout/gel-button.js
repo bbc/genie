@@ -91,12 +91,12 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     getHitAreaBounds() {
-        const scale = this.scale * (this.parentContainer?.scale ?? 1);
+        const scale = this.parentContainer?.scale ?? 1;
         const x = this.parentContainer?.x ?? 0;
         const y = this.parentContainer?.y ?? 0;
 
-        const width = this.input.hitArea.width * scale;
-        const height = this.input.hitArea.height * scale;
+        const width = this.input.hitArea.width * scale * this.scale;
+        const height = this.input.hitArea.height * scale * this.scale;
 
         return new Phaser.Geom.Rectangle(
             x + this.x * scale - width / 2,
