@@ -29,6 +29,7 @@ describe("Gel Button", () => {
         GelButton.prototype.setInteractive = jest.fn(function () {
             this.input = {};
         });
+        GelButton.prototype.setScrollFactor = jest.fn();
         eventBus.publish = jest.fn();
         GameSound.Assets = {
             backgroundMusic: {},
@@ -45,6 +46,7 @@ describe("Gel Button", () => {
             setFrame: jest.fn(),
             play: jest.fn(),
             setDisplaySize: jest.fn(),
+            setScrollFactor: jest.fn(),
         };
         mockScene = {
             add: {
@@ -119,6 +121,8 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
             expect(gelButton.config).toEqual(mockConfig);
             expect(gelButton.isMobile).toBe(mockMetrics.isMobile);
+            expect(mockSprite.setScrollFactor).toHaveBeenCalledWith(0);
+            expect(gelButton.setScrollFactor).toHaveBeenCalledWith(0);
         });
 
         test("correctly sets shift defaults if not provided in config", () => {
@@ -287,7 +291,7 @@ describe("Gel Button", () => {
 
     describe("getHitAreaBounds method", () => {
         test("returns the hit Area as a Phaser rectangle in world space", () => {
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            const gelButton = new GelButton(mockScene, 50, 25, mockConfig);
 
             gelButton.input = {
                 hitArea: {
@@ -307,11 +311,11 @@ describe("Gel Button", () => {
 
             gelButton.getWorldTransformMatrix = () => mockWtm;
 
-            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 400, 200));
+            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(-100, -50, 400, 200));
         });
 
         test("Takes button scale into account", () => {
-            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            const gelButton = new GelButton(mockScene, 50, 25, mockConfig);
             gelButton.scale = 0.5;
 
             gelButton.input = {
@@ -324,15 +328,7 @@ describe("Gel Button", () => {
             gelButton.parentContainer = {
                 scale: 2,
             };
-
-            const mockWtm = {
-                getX: () => 0,
-                getY: () => 0,
-            };
-
-            gelButton.getWorldTransformMatrix = () => mockWtm;
-
-            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 200, 100));
+            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(-50, -25, 200, 100));
         });
 
         test("Uses a scale of 1 if button is not parented to a gel group (debug buttons)", () => {
@@ -346,20 +342,12 @@ describe("Gel Button", () => {
                 },
             };
 
-            const mockWtm = {
-                getX: () => 0,
-                getY: () => 0,
-            };
-
-            gelButton.getWorldTransformMatrix = () => mockWtm;
-
-            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 100, 50));
+            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(-46.5, -4, 100, 50));
         });
     });
 
     describe("overlays", () => {
         test("set adds sprite to overlays list", () => {
-            mockScene.add.sprite = jest.fn((x, y, asset) => ({ x, y, asset }));
             const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
 
             gelButton.overlays.set("test_key", "test_asset");

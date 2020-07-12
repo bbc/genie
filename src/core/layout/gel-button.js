@@ -21,6 +21,8 @@ export class GelButton extends Phaser.GameObjects.Container {
         super(scene, x, y);
 
         this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
+        this.setScrollFactor(0);
+        this.sprite.setScrollFactor(0);
         this.add(this.sprite);
 
         this.config = { ...defaults, ...config };
@@ -89,14 +91,18 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     getHitAreaBounds() {
-        const wtm = this.getWorldTransformMatrix();
-        const parentScale = this.parentContainer ? this.parentContainer.scale : 1;
+        const scale = this.scale * (this.parentContainer?.scale ?? 1);
+        const x = this.parentContainer?.x ?? 0;
+        const y = this.parentContainer?.y ?? 0;
+
+        const width = this.input.hitArea.width * scale;
+        const height = this.input.hitArea.height * scale;
 
         return new Phaser.Geom.Rectangle(
-            wtm.getX(-this.input.hitArea.width / 2, 0),
-            wtm.getY(0, -this.input.hitArea.height / 2),
-            this.input.hitArea.width * this.scale * parentScale,
-            this.input.hitArea.height * this.scale * parentScale,
+            x + this.x * scale - width / 2,
+            y + this.y * scale - height / 2,
+            width,
+            height,
         );
     }
 

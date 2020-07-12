@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | 3.8.0 ||
+| | Sets scroll factor to zero for all gel layout items so camera movements is ignored. |
 | | Adds BitmapText object to the Results screen and allows countups to use bitmap fonts. |
 | | Adds gelGrid param for showing the page of a choice on load. Used on select-screen via transientData. |
 | 3.7.0 ||

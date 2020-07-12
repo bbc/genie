@@ -14,6 +14,7 @@ import { groupLayouts } from "./group-layouts.js";
 import { GelGroup } from "./gel-group.js";
 import { gmi } from "../gmi/gmi.js";
 import { getSafeAreaFn } from "./safe-area.js";
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./metrics.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
 const tabSort = fp.sortBy(getOrder(gel.config()));
@@ -48,7 +49,8 @@ export function create(scene, metrics, buttonIds, accessibleButtonIds) {
     const overrides = scene.config["button-overrides"];
 
     const config = shallowMergeOverrides(gel.config(scene), overrides);
-    const root = new Phaser.GameObjects.Container(scene, 0, 0);
+    const root = scene.add.container(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
+    root.setScrollFactor(0);
 
     const addCustomGroup = (key, group, pos = 0) => {
         root.addAt(group, pos);

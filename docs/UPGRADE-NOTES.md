@@ -1,6 +1,10 @@
 # Upgrade Notes
 All breaking changes between Genie versions will be listed here
 
+# 3.8.0
+* Gel layout now sets scrollFactor zero on all items so camera movement is ignored.
+If creating custom items and adding them to layout `setScrollFactor(0)` should be used.
+
 # 3.7.0
 * Asset packs and screen config have been moved into a folder for each screen.
 * Screen config is no longer contained within a theme and sceneKey object.
