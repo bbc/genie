@@ -31,6 +31,7 @@ const getOnTransitionStartFn = scene => () => {
 
 export class Select extends Screen {
     create() {
+        let choice;
         this.addBackgroundItems();
         createTitles(this);
         const paginate = this.config.choices.length > this.config.columns * this.config.rows;
@@ -41,7 +42,11 @@ export class Select extends Screen {
             : this.setLayout(buttons, buttons);
 
         const onTransitionStart = getOnTransitionStartFn(this);
-        const choice = this.transientData[this.scene.key] ? this.transientData[this.scene.key].choice.id : undefined;
+        if (this.transientData[this.scene.key] && this.transientData[this.scene.key].choice) {
+            choice = this.transientData[this.scene.key].choice.id;
+        } else {
+            choice = undefined;
+        }
         this.grid = new GelGrid(this, Object.assign(this.config, gridDefaults, { onTransitionStart }, { choice }));
         this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
         this.resize();
