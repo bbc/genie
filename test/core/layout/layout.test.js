@@ -39,6 +39,7 @@ describe("Layout", () => {
             add: jest.fn(),
             addAt: jest.fn(),
             destroy: jest.fn(),
+            setScrollFactor: jest.fn(),
         };
 
         mockJson = {
@@ -48,6 +49,9 @@ describe("Layout", () => {
         };
 
         mockScene = {
+            add: {
+                container: jest.fn(() => mockRoot),
+            },
             cache: {
                 json: {
                     get: () => {
@@ -99,7 +103,6 @@ describe("Layout", () => {
             list: [mockButton],
         };
         GelGroup.mockImplementation(() => mockGelGroup);
-        global.Phaser.GameObjects.Container = jest.fn(() => mockRoot);
 
         settingsIconsUnsubscribeSpy = jest.fn();
         jest.spyOn(settingsIcons, "create").mockImplementation(() => ({ unsubscribe: settingsIconsUnsubscribeSpy }));
@@ -111,6 +114,10 @@ describe("Layout", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("Creation", () => {
+        test("sets root scrollFactor to zero so camera movement is ignored", () => {
+            Layout.create(mockScene, mockMetrics, ["achievements"]);
+            expect(mockRoot.setScrollFactor).toHaveBeenCalledWith(0);
+        });
         test("adds the correct number of GEL buttons for a given config", () => {
             const layout1 = Layout.create(mockScene, mockMetrics, ["achievements"]);
             expect(Object.keys(layout1.buttons).length).toBe(1);

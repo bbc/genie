@@ -61,6 +61,7 @@ const vertical = {
 export class GelGroup extends Phaser.GameObjects.Container {
     constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical = false) {
         super(scene, 0, 0);
+        this.setScrollFactor(0);
         //TODO P3 we used to name the groups - useful for debugging. Might be useful as a property? [NT]
         //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
         this._vPos = vPos;

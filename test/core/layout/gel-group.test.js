@@ -81,10 +81,17 @@ describe("Group", () => {
         GelGroup.prototype.addAt = jest.fn(child => {
             group.list.push(child);
         });
+        GelGroup.prototype.setScrollFactor = jest.fn();
         group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false);
     });
 
     afterEach(() => jest.clearAllMocks());
+
+    describe("constructor", () => {
+        test("sets scrollFactor to zero to ignore camera movement", () => {
+            expect(group.setScrollFactor).toHaveBeenCalledWith(0);
+        });
+    });
 
     describe("addButton method", () => {
         test("creates and returns new button", () => {
