@@ -13,6 +13,8 @@ describe("FontFile", () => {
         mockLoader = {
             nextFile: jest.fn(),
             emit: jest.fn(),
+            baseURL: "",
+            path: "path/",
         };
         mockFileConfig = {
             type: "webfont",
@@ -24,6 +26,7 @@ describe("FontFile", () => {
                 },
             },
         };
+        Phaser.Loader.GetURL = jest.fn(file => file.url);
     });
     afterEach(() => jest.clearAllMocks());
 
@@ -33,6 +36,10 @@ describe("FontFile", () => {
         };
         const fontFile = new FontFile(mockLoader, mockFileConfig);
         fontFile.load();
+        expect(Phaser.Loader.GetURL).toHaveBeenCalledWith(
+            { url: mockFileConfig.config.custom.urls[0] },
+            mockLoader.path,
+        );
         expect(global.WebFont.load).toHaveBeenCalledWith(
             expect.objectContaining({
                 ...mockFileConfig.config,
@@ -43,6 +50,25 @@ describe("FontFile", () => {
         expect(Object.create(fontFile.onError.prototype) instanceof args.inactive).toBeTruthy();
         expect(Object.create(fontFile.onFontActive.prototype) instanceof args.fontactive).toBeTruthy();
         expect(Object.create(fontFile.onFontInactive.prototype) instanceof args.fontinactive).toBeTruthy();
+    });
+
+    test("calls webfontloader with the correct url when the url provided is relative to the theme directory", () => {
+        mockFileConfig.config.custom.urls = ["bbc-reith.css"];
+        Phaser.Loader.GetURL = jest.fn((file, path) => path + file.url);
+        global.WebFont = {
+            load: jest.fn(),
+        };
+        const fontFile = new FontFile(mockLoader, mockFileConfig);
+        fontFile.load();
+        expect(Phaser.Loader.GetURL).toHaveBeenCalledWith({ url: "bbc-reith.css" }, mockLoader.path);
+        expect(global.WebFont.load).toHaveBeenCalledWith(
+            expect.objectContaining({
+                custom: {
+                    families: ["ReithSans"],
+                    urls: ["path/bbc-reith.css"],
+                },
+            }),
+        );
     });
 
     test("onLoad calls the phaser loader with the correct arguments", () => {

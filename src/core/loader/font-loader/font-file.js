@@ -12,6 +12,10 @@ class FontFile extends Phaser.Loader.File {
     }
 
     load() {
+        this.config.custom &&
+            (this.config.custom.urls = this.config.custom.urls.map(url =>
+                Phaser.Loader.GetURL({ url }, this.loader.baseURL.concat(this.loader.path)),
+            ));
         WebFont.load({
             ...this.config,
             active: this.onLoad.bind(this),
