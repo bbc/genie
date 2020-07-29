@@ -4,6 +4,7 @@
 |---------|-------------|
 | 3.8.1 ||
 | | Fixed webfontloader loading from paths not relative to the theme directory. |
+| | Fixed exit stat firing twice. |
 | 3.8.0 ||
 | | Bump to Phaser 3.24.1. |
 | | Sets scroll factor to zero for all gel layout items so camera movements is ignored. |

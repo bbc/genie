@@ -97,10 +97,6 @@ describe("Layout - Gel Defaults", () => {
         test("exits the game using the GMI", () => {
             expect(mockGmi.exit).toHaveBeenCalled();
         });
-
-        test("sends a stat to the GMI", () => {
-            expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("exit", "click");
-        });
     });
 
     describe("Home Button Callback", () => {

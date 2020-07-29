@@ -30,7 +30,6 @@ export const config = screen => {
             channel: buttonsChannel(screen),
             action: () => {
                 gmi.exit();
-                gmi.sendStatsEvent("exit", "click");
             },
         },
         home: {
