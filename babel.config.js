@@ -10,6 +10,8 @@ module.exports = function (api) {
         [
             "@babel/preset-env",
             {
+                useBuiltIns: "entry",
+                corejs: { version: 3, proposals: true },
                 debug: false,
                 targets: {
                     ie: "11",

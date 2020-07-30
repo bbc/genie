@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.8.2 ||
+| | Replaced @babel/polyfill with core-js. |
 | 3.8.1 ||
 | | Fixed webfontloader loading from paths not relative to the theme directory. |
 | | Fixed exit stat firing twice. |
