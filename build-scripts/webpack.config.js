@@ -16,7 +16,7 @@ module.exports = env => {
         mode: development ? "development" : "production",
         devtool: development ? "cheap-module-eval-source-map" : false,
         performance: { hints: false },
-        entry: ["core-js/stable", "regenerator-runtime/runtime", "phaser", "webfontloader"],
+        entry: ["core-js/stable", "regenerator-runtime/runtime", "phaser/dist/phaser.min", "webfontloader"],
         output: {
             path: path.resolve("output"),
             publicPath: "output",
@@ -29,13 +29,13 @@ module.exports = env => {
             rules: [
                 {
                     test: /\.m?js$/,
+                    exclude: [/@babel(?:\/|\\{1,2})runtime|core-js/],
                     use: {
                         loader: "babel-loader",
                         options: {
                             configFile: path.resolve("node_modules/genie/babel.config.js"),
                         },
                     },
-                    include: [path.resolve("src"), path.resolve("lib"), path.resolve("node_modules")],
                 },
                 { test: /webfontloader\.js/, use: ["expose-loader?WebFont"] },
             ],
