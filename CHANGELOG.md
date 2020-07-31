@@ -2,8 +2,6 @@
 
 | Version | Description |
 |---------|-------------|
-| 3.8.3 ||
-| | IE11 Babel build fix. |
 | 3.8.2 ||
 | | Replaced @babel/polyfill with core-js. |
 | 3.8.1 ||
