@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Separated fonts out into its own fonts.json file. |
 | 3.8.2 ||
 | | Replaced @babel/polyfill with core-js. |
 | 3.8.1 ||

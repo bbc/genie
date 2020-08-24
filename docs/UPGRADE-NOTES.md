@@ -1,6 +1,9 @@
 # Upgrade Notes
 All breaking changes between Genie versions will be listed here
 
+# 3.9.0
+* Fonts have been moved into a fonts.json file.
+
 # 3.8.0
 * Gel layout now sets scrollFactor zero on all items so camera movement is ignored.
 If creating custom items and adding them to layout `setScrollFactor(0)` should be used.
