@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Update package due to security alert (serialize-javascript). |
 | 3.8.2 ||
 | | Replaced @babel/polyfill with core-js. |
 | 3.8.1 ||
