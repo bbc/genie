@@ -30,6 +30,7 @@ export class Boot extends Screen {
         this.load.setPath(gmi.embedVars.configPath);
         //TODO P3 this is loaded now so we can check its keys for missing files. It is also loaded again later so perhaps could be done then? NT
         this.load.json("asset-master-pack", "asset-master-pack.json");
+        this.load.json("font-pack", "fonts.json");
 
         this.setData({
             parentScreens: [],
