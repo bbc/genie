@@ -31,7 +31,4 @@ The digital experiences produced by BBC Children's have a unique audience. Child
 
 The game should provide the best possible experience for users across the identified range of devices.
 
-The device list is regularly updated to reflect the changing market and will be reviewed and finalised on receipt of Alpha delivery.
-
-[BBC Children's Supported Device List](./resources/supporteddevices.pdf)
-
+The device list is regularly updated to reflect the changing market and will be reviewed and finalised on receipt of Alpha delivery. The list can be found in the RFP and the work order.
