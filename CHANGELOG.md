@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Separated fonts out into its own fonts.json file. |
 | | Update package due to security alert (serialize-javascript). |
 | 3.8.2 ||
 | | Replaced @babel/polyfill with core-js. |

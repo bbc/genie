@@ -29,6 +29,12 @@ export class Loader extends Screen {
         this.load.setBaseURL(gmi.gameDir);
         this.load.setPath(gmi.embedVars.configPath);
 
+        const webFontConfig = {
+            key: "font-pack",
+            config: this.cache.json.get("font-pack"),
+        };
+        this.load.webfont(webFontConfig);
+
         const masterPack = this.cache.json.get("asset-master-pack");
         const debugPack = isDebug() ? ["../../debug"] : [];
         this.screenKeys = getScreenKeys(this.scene.manager.keys).concat(debugPack);

@@ -22,6 +22,7 @@ describe("Loader", () => {
     let mockImage;
     let mockConfig;
     let mockMasterPack;
+    let mockFontConfig;
 
     beforeEach(() => {
         global.window.__debug = undefined;
@@ -54,6 +55,13 @@ describe("Loader", () => {
             two: {},
         };
 
+        mockFontConfig = {
+            custom: {
+                families: "mock",
+                urls: ["mock urls"],
+            },
+        };
+
         const mockConfigFiles = {
             files: [{ key: "testOne" }],
             prefix: "testPrefix.",
@@ -75,6 +83,7 @@ describe("Loader", () => {
             pack: jest.fn(),
             on: jest.fn(),
             json5: jest.fn(),
+            webfont: jest.fn(),
         };
         loader.cache = {
             json: {
@@ -87,6 +96,8 @@ describe("Loader", () => {
                         };
                     } else if (packName === "testPrefix.testOne") {
                         return mockConfig;
+                    } else if (packName === "font-pack") {
+                        return mockFontConfig;
                     }
                 }),
             },
@@ -196,6 +207,15 @@ describe("Loader", () => {
             loader.preload();
 
             expect(loader.load.addPack).toHaveBeenCalledWith(mockMasterPack);
+        });
+
+        test("loads the font pack using the fonts.json file config", () => {
+            loader.preload();
+
+            expect(loader.load.webfont).toHaveBeenCalledWith({
+                key: "font-pack",
+                config: mockFontConfig,
+            });
         });
 
         test("calls load.pack with the gel pack and screen packs", () => {

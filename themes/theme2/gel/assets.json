@@ -1,19 +1,4 @@
 {
-    "gelFonts": {
-        "prefix": "gelFonts.",
-        "files": [
-            {
-                "type": "webfont",
-                "key": "reithsans",
-                "config": {
-                    "custom": {
-                        "families": ["ReithSans"],
-                        "urls": ["https://gel.files.bbci.co.uk/r2.302/bbc-reith.css"]
-                    }
-                }
-            }
-        ]
-    },
     "gelDesktop": {
         "prefix": "gelDesktop.",
         "files": [
