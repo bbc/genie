@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.8.3 ||
 | | Separated fonts out into its own fonts.json file. |
 | | Update package due to security alert (serialize-javascript). |
 | 3.8.2 ||
