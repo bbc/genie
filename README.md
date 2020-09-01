@@ -28,19 +28,6 @@ Alternatively load http://localhost:8080/index.html as a file URL (requires `--a
 
 `npm run jest` runs the unit tests only.
 
-
-## Creating a new version for release:
-
-To automatically bump the package version and create a corresponding Github release tag, use the following command (please replace `patch` with `minor` or `major` as required):
-
-```
-npm version patch -m "Write your release notes here"
-```
-
-Then push to Github to see the new version appear.
-
-(Please note you will need to create a branch, rather than doing this directly on master, as master is currently protected.)
-
 ## Code linting:
 
 `npm run eslint` runs [ESLint](https://eslint.org/).
@@ -57,8 +44,8 @@ This will output game loading progress and asset keylookups to the console. Pres
 
 ## Documentation:
 
-*   [Notes on Genie Core](https://github.com/bbc/childrens-games-genie/blob/master/docs/notes-on-genie-core.md)
-*   [Coding Guidelines](https://github.com/bbc/childrens-games-genie/blob/master/docs/coding-guidelines.md)
+*   [Getting Started](https://github.com/bbc/genie/blob/master/docs/getting-started.md)
+*   [Coding Guidelines](https://github.com/bbc/genie/blob/master/dev/docs/coding-guidelines.md)
 
 ## License and Copyright
 
