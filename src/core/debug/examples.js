@@ -117,11 +117,11 @@ const exampleScreens = {
         title: "Results:\nConditional Sprites",
         prompt: {
             title: "Enter transient data",
-            default: '{ "stars": 10, "keys": 5, "gems": 50 }',
+            default: '{ "stars": 3, "keys": 5, "gems": 50 }',
         },
         transientData: {
-            stars: 5,
-            gems: 50,
+            stars: 0,
+            gems: 0,
             keys: 1000000,
         },
         routes: {
