@@ -37,7 +37,7 @@
                         color: "#FFFFFF",
                     },
                 },
-                { type: "sprite", key: "results.stars_<%= Math.min(stars, 3) %>", offsetX: 20, offsetY: -15 },
+                { type: "sprite", key: "game.star", offsetX: 20, offsetY: -15 },
                 {
                     type: "countup", // Check the documentation for more detailed information on count ups. https://github.com/bbc/genie-starter-pack/tree/master/docs/development/results-screen/results-countup.md
                     startCount: 0, // The number to start counting from. This can be passed in by transient data.
