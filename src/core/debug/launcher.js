@@ -38,7 +38,9 @@ const getButtonConfig = launcher => (id, idx) => ({
     id,
     title: examples[id].title,
     callback: () => {
-        launcher.transientData[id] = examples[id].transientData || {};
+        launcher.transientData[id] = examples[id].prompt
+            ? JSON.parse(prompt(examples[id].prompt))
+            : examples[id].transientData || {};
         launcher.navigation[id]();
     },
 });

@@ -59,6 +59,7 @@ const exampleScreens = {
     "results-1-sec": {
         scene: Results,
         title: "Results: 1s countup",
+        prompt: '{ "stars": 10, "keys": 5, "gems": 50 }',
         transientData: {
             stars: 5,
             gems: 50,
