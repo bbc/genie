@@ -70,8 +70,7 @@ describe("Examples Launcher", () => {
             example3: {
                 scene: function () {},
                 title: "test title",
-                transientData: {},
-                prompt: { title: "test prompt", default: "defaultTestValue" },
+                prompt: { title: "foo", default: "bar" },
             },
         };
 
@@ -106,7 +105,7 @@ describe("Examples Launcher", () => {
             expect(launcher._data.transient.example3.testKey).toBe("testValue");
         });
 
-        test("defaults transientData to an empty object if the prompt input is empty and there is no default", () => {
+        test("defaults transientData to an empty object if no value is returned from the prompt and no transientData was provided", () => {
             window.prompt = () => null;
             eventBus.subscribe.mock.calls[5][0].callback();
             expect(launcher._data.transient.example3).toStrictEqual({});
