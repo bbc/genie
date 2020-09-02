@@ -112,9 +112,9 @@ const exampleScreens = {
             home: "debug",
         },
     },
-    "results-with-prompt": {
+    "results-conditional-sprites": {
         scene: Results,
-        title: "Results: with prompt",
+        title: "Results:\nConditional Sprites",
         prompt: {
             title: 'Enter transient data',
             default: '{ "stars": 10, "keys": 5, "gems": 50 }'

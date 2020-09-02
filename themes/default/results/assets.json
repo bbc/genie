@@ -9,26 +9,6 @@
             },
             {
                 "type": "image",
-                "key": "stars_0",
-                "url": "results/stars_0.png"
-            },
-            {
-                "type": "image",
-                "key": "stars_1",
-                "url": "results/stars_1.png"
-            },
-            {
-                "type": "image",
-                "key": "stars_2",
-                "url": "results/stars_2.png"
-            },
-            {
-                "type": "image",
-                "key": "stars_3",
-                "url": "results/stars_3.png"
-            },
-            {
-                "type": "image",
                 "key": "title",
                 "url": "shared/title.png"
             },
