@@ -59,7 +59,6 @@ const exampleScreens = {
     "results-1-sec": {
         scene: Results,
         title: "Results: 1s countup",
-        prompt: '{ "stars": 10, "keys": 5, "gems": 50 }',
         transientData: {
             stars: 5,
             gems: 50,
@@ -106,6 +105,24 @@ const exampleScreens = {
             stars: 16,
             gems: 50,
             keys: 122,
+        },
+        routes: {
+            continue: "debug",
+            restart: "debug",
+            home: "debug",
+        },
+    },
+    "results-with-prompt": {
+        scene: Results,
+        title: "Results: with prompt",
+        prompt: {
+            title: 'Enter transient data',
+            default: '{ "stars": 10, "keys": 5, "gems": 50 }'
+        },
+        transientData: {
+            stars: 5,
+            gems: 50,
+            keys: 1000000,
         },
         routes: {
             continue: "debug",

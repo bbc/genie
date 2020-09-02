@@ -29,6 +29,11 @@
             },
             {
                 "type": "json5",
+                "key": "debug-results-with-prompt",
+                "url": "../../debug/examples/results-with-prompt.json5"
+            },
+            {
+                "type": "json5",
                 "key": "debug-results-10-sec",
                 "url": "../../debug/examples/results-10-sec.json5"
             },
