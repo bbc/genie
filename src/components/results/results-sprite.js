@@ -9,7 +9,6 @@ import fp from "../../../lib/lodash/fp/fp.js";
 
 export class ResultsSprite extends Phaser.GameObjects.Sprite {
     constructor(scene, config) {
-        debugger;
         const template = fp.template(config.key);
         const templateKey = template(scene.transientData[scene.scene.key]);
         super(scene, 0, 0, templateKey, config.frame);
