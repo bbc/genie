@@ -17,7 +17,7 @@ Achievement description objects look like this:
 }
 ```
 
-`name` and `description` should be changed from default values so that your achievements have text that fits the look and feel of your game. These objects also create the achievements list and should be ordered to reflect progression in your game.
+`name` and `description` should be changed from default values so that your achievements have text that fits the look and feel of your game. These objects should also be ordered sensibly to reflect progression in your game.
 
 **Required Parameters:**
 * **key** [string a-z0-9_] a unique (per game) identifier, lowercase alphanumeric with underscore. The key is used for the asset, which will convert underscores to dashes when loading (e.g `this_key` will become `this-key.png`).
