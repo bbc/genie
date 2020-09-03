@@ -1,9 +1,9 @@
 // To disable achievements, remove all the achievements in the array.
 [
     {
-        key: "just_started",
-        name: "Just Getting Star-ted",
-        description: "You collected your first star.",
+        key: "just_started", // i.e. do gmi.achievements.set({ key: "just_started" }) to mark this achievement complete
+        name: "CHANGE_THESE_STRINGS_Just Getting Star-ted", // update name strings to reflect your game's look and feel
+        description: "CHANGE_THESE_STRINGS_You collected your first star.", // update description strings to reflect your game's look and feel
         points: 100, // the total points for all achievements should equal 1000
     },
     {
