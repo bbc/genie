@@ -25,7 +25,7 @@ Achievement description objects look like this:
 * **description** [string] Description that will be displayed in the achievements list.
 * **points** [integer] Currently unused but required for future use. Should add up to 1000 points per game but otherwise can be weighted for difficulty or designer preference.
 
-## Optional Parameters
+**Optional Parameters:**
 * **maxProgress** [integer] Enables the progress bar and sets its limit.
 * **position** [string] This is the position that specifies where the achievements notification should show. Can be either "top" or "bottom" - defaults to "bottom".
 * **additional** {prefix [string], text [string]} Add a secondary text element to the description.
