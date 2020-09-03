@@ -32,7 +32,7 @@ describe("Examples Launcher", () => {
             gelButton: jest.fn(() => mockButton),
         };
         launcher.setLayout = jest.fn();
-        launcher.navigation = { next: jest.fn(), example1: jest.fn(), example2: jest.fn() };
+        launcher.navigation = { next: jest.fn(), example1: jest.fn(), example2: jest.fn(), example3: jest.fn() };
         launcher.scene = { key: "launcher", add: jest.fn() };
         launcher.cache = {
             json: {
@@ -67,6 +67,11 @@ describe("Examples Launcher", () => {
                 title: "test title",
                 routes: {},
             },
+            example3: {
+                scene: function () {},
+                title: "test title",
+                prompt: { title: "foo", default: "bar" },
+            },
         };
 
         eventBus.subscribe = jest.fn();
@@ -92,6 +97,18 @@ describe("Examples Launcher", () => {
         test("Does not set transientData if absent from example config", () => {
             eventBus.subscribe.mock.calls[3][0].callback();
             expect(launcher._data.transient.testKey).not.toBeDefined();
+        });
+
+        test("sets transientData from a prompt if present in example config", () => {
+            window.prompt = () => '{ "testKey": "testValue" }';
+            eventBus.subscribe.mock.calls[5][0].callback();
+            expect(launcher._data.transient.example3.testKey).toBe("testValue");
+        });
+
+        test("defaults transientData to an empty object if no value is returned from the prompt and no transientData was provided", () => {
+            window.prompt = () => null;
+            eventBus.subscribe.mock.calls[5][0].callback();
+            expect(launcher._data.transient.example3).toStrictEqual({});
         });
     });
 });

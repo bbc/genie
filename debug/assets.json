@@ -29,6 +29,11 @@
             },
             {
                 "type": "json5",
+                "key": "debug-results-conditional-sprites",
+                "url": "../../debug/examples/results-conditional-sprites.json5"
+            },
+            {
+                "type": "json5",
                 "key": "debug-results-10-sec",
                 "url": "../../debug/examples/results-10-sec.json5"
             },
@@ -109,7 +114,6 @@
                 "key": "spray",
                 "url": "../../debug/assets/particles/spray.json"
             },
-
             {
                 "type": "image",
                 "key": "rockpool",
@@ -207,6 +211,26 @@
                     "margin": 0,
                     "spacing": 8
                 }
+            },
+            {
+                "type": "image",
+                "key": "stars_0",
+                "url": "../../debug/assets/sprite/stars_0.png"
+            },
+            {
+                "type": "image",
+                "key": "stars_1",
+                "url": "../../debug/assets/sprite/stars_1.png"
+            },            
+            {
+                "type": "image",
+                "key": "stars_2",
+                "url": "../../debug/assets/sprite/stars_2.png"
+            },            
+            {
+                "type": "image",
+                "key": "stars_3",
+                "url": "../../debug/assets/sprite/stars_3.png"
             },
             {
                 "key": "uiFont",

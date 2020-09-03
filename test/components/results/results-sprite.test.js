@@ -17,6 +17,7 @@ describe("ResultsSprite", () => {
         mockScene = mockBaseScene();
         mockSettings = { motion: true };
         mockScene.scene = { key: "results" };
+        mockScene.transientData = { results: {} };
         mockScene.add = { existing: jest.fn() };
         mockScene.anims = { create: jest.fn(), generateFrameNumbers: jest.fn() };
         mockConfig = {
@@ -40,6 +41,13 @@ describe("ResultsSprite", () => {
     test("sets key to spriteConfig.key and frame to spriteConfig.frame", () => {
         const resultsSprite = new ResultsSprite(mockScene, mockConfig);
         expect(resultsSprite.setTexture).toHaveBeenCalledWith(mockConfig.key, mockConfig.frame);
+    });
+
+    test("sets correct key when string template provided", () => {
+        mockConfig.key = "stars_<%= stars %>";
+        mockScene.transientData.results.stars = 5;
+        const resultsSprite = new ResultsSprite(mockScene, mockConfig);
+        expect(resultsSprite.setTexture).toHaveBeenCalledWith("stars_5", mockConfig.frame);
     });
 
     test("adds itself to the update and displaylists when animation is defined", () => {

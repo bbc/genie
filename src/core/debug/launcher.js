@@ -38,10 +38,17 @@ const getButtonConfig = launcher => (id, idx) => ({
     id,
     title: examples[id].title,
     callback: () => {
-        launcher.transientData[id] = examples[id].transientData || {};
+        launcher.transientData[id] = getTransientData(examples[id]);
         launcher.navigation[id]();
     },
 });
+
+const getTransientData = example => {
+    const transientData = example.transientData || {};
+    if (!example.prompt) return transientData;
+    const response = JSON.parse(prompt(example.prompt.title, example.prompt.default));
+    return response || transientData;
+};
 
 const titleStyle = {
     font: "32px ReithSans",
