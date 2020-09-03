@@ -18,6 +18,16 @@ describe("ResultsRow - Row Audio", () => {
 
     afterEach(() => jest.clearAllMocks());
 
+    test.only("sets asset key from string template when one is used", () => {
+        mockAudioConfig = { key: "results_<%= result %>"}
+        mockContainers = [{rowConfig: { audio: mockAudioConfig } }];
+        mockScene.transientData = { results: { result: 0 } };
+        playRowAudio(mockScene, mockContainers);
+        const callback = mockScene.time.addEvent.mock.calls[0][0].callback;
+        callback();
+        expect(mockScene.sound.play).toHaveBeenCalledWith("results_0");
+    });
+
     test("sets up a time event for audio when specified in config", () => {
         playRowAudio(mockScene, mockContainers);
         expect(mockScene.time.addEvent.mock.calls[0][0]).toEqual(
