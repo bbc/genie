@@ -3,7 +3,7 @@
                 {
                     x: -390,
                     y: -190,
-                    text: "Sprite swap conditionally on transient data",
+                    text: "Asset swap conditionally on transient data",
                 },
             ],
             assetPrefix: "results",

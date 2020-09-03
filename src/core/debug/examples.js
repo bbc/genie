@@ -112,7 +112,7 @@ const exampleScreens = {
             home: "debug",
         },
     },
-    "results-conditional-sprites": {
+    "results-conditional-assets": {
         scene: Results,
         title: "Results:\nConditional Assets",
         prompt: {

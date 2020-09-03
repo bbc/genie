@@ -29,8 +29,8 @@
             },
             {
                 "type": "json5",
-                "key": "debug-results-conditional-sprites",
-                "url": "../../debug/examples/results-conditional-sprites.json5"
+                "key": "debug-results-conditional-assets",
+                "url": "../../debug/examples/results-conditional-assets.json5"
             },
             {
                 "type": "json5",
