@@ -17,7 +17,6 @@ describe("ResultsRow - Row Audio", () => {
             scene: { key: "results" },
             transientData: { results: { keys: 0 } },
         };
-
         mockAudioConfig = { key: "mockAudioKey", delay: 1000 };
         mockContainers = [{ rowConfig: { audio: mockAudioConfig } }];
     });

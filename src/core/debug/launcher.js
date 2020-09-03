@@ -46,7 +46,7 @@ const getButtonConfig = launcher => (id, idx) => ({
 const getTransientData = example => {
     const transientData = example.transientData || {};
     if (!example.prompt) return transientData;
-    const response = JSON.parse(prompt(example.prompt.title, example.prompt.default));
+    const response = JSON.parse(prompt(example.prompt.title, example.prompt.default) || null);
     return response || transientData;
 };
 
