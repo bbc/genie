@@ -151,6 +151,16 @@
                 "url": "../../debug/assets/narrative/dialogue_5.mp4"
             },
             {
+                "type": "audio",
+                "key": "results_0",
+                "url": "../../debug/assets/audio/results_0.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "results_1",
+                "url": "../../debug/assets/audio/results_1.mp4"
+            },
+            {
                 "type": "particles",
                 "key": "bubbles",
                 "url": "../../debug/assets/narrative/bubbles.json"
