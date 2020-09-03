@@ -3,7 +3,7 @@
                 {
                     x: -390,
                     y: -190,
-                    text: "Sprite swap conditionally on transient data",
+                    text: "Asset swap conditionally on transient data",
                 },
             ],
             assetPrefix: "results",
@@ -45,7 +45,7 @@
                                 color: "#FFFFFF",
                             },
                         },
-                        { type: "sprite", key: "examples_stars_<%= Math.min(stars, 3) %>", offsetX: 20, offsetY: -20 },
+                        { type: "sprite", key: "examples_stars_<%= Math.min(stars, 3) %>", offsetX: 20, offsetY: -20 }, // image selected via transient data value
                         {
                             type: "countup", // Check the documentation for more detailed information on count ups. https://github.com/bbc/genie-starter-pack/tree/master/docs/development/results-screen/results-countup.md
                             startCount: 0, // The number to start counting from. This can be passed in by transient data.
@@ -202,7 +202,7 @@
                         {
                             type: "countup",
                             startCount: 0,
-                            endCount: "<%= keys %>",
+                            endCount: "<%= Math.min(keys, 1) %>",
                             startDelay: 7000,
                             countupDuration: 1000,
                             audio: {
@@ -252,7 +252,7 @@
                         ease: "Elastic.Out",
                         delay: 5500,
                     },
-                    audio: { key: "results.boing", delay: 5500 },
+                    audio: { key: "examples_results_<%= Math.min(keys, 1) %>", delay: 5500 }, // audio selected via transient data value
                 },
             ],
 }

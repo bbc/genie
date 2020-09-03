@@ -29,8 +29,8 @@
             },
             {
                 "type": "json5",
-                "key": "debug-results-conditional-sprites",
-                "url": "../../debug/examples/results-conditional-sprites.json5"
+                "key": "debug-results-conditional-assets",
+                "url": "../../debug/examples/results-conditional-assets.json5"
             },
             {
                 "type": "json5",
@@ -153,6 +153,16 @@
                 "type": "audio",
                 "key": "dialogue5",
                 "url": "../../debug/assets/narrative/dialogue_5.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "results_0",
+                "url": "../../debug/assets/audio/results_0.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "results_1",
+                "url": "../../debug/assets/audio/results_1.mp4"
             },
             {
                 "type": "particles",

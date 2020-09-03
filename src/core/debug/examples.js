@@ -112,17 +112,17 @@ const exampleScreens = {
             home: "debug",
         },
     },
-    "results-conditional-sprites": {
+    "results-conditional-assets": {
         scene: Results,
-        title: "Results:\nConditional Sprites",
+        title: "Results:\nConditional Assets",
         prompt: {
-            title: "Enter transient data",
-            default: '{ "stars": 3, "keys": 5, "gems": 50 }',
+            title: "Enter transient data (use 0 to 3 stars, 0 or 1 keys)",
+            default: '{ "stars": 3, "keys": 1, "gems": 50 }',
         },
         transientData: {
             stars: 0,
             gems: 0,
-            keys: 1000000,
+            keys: 0,
         },
         routes: {
             continue: "debug",
