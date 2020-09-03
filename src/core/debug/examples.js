@@ -112,6 +112,24 @@ const exampleScreens = {
             home: "debug",
         },
     },
+    "results-conditional-sprites": {
+        scene: Results,
+        title: "Results:\nConditional Sprites",
+        prompt: {
+            title: "Enter transient data",
+            default: '{ "stars": 3, "keys": 5, "gems": 50 }',
+        },
+        transientData: {
+            stars: 0,
+            gems: 0,
+            keys: 1000000,
+        },
+        routes: {
+            continue: "debug",
+            restart: "debug",
+            home: "debug",
+        },
+    },
     "background-animations": {
         scene: Home,
         title: "Background Animations",
