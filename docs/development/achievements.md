@@ -1,22 +1,12 @@
 # Achievements System
 
-## How To Enable
-Achievements are enabled and configured per theme.
-To enable the achievements system add `"achievements": true` to the game block of the theme config `themes/#####/config/config.json5`. e.g:
+Achievements are enabled and configured in the theme.
 
-```json5
-{
-  "game": {
-      "music": "loadscreen.backgroundMusicTwo",
-      "achievements": true
-    }
- }       
-```
+The game will attempt to load achievements from `themes/#####/achievements/config.json5`.
 
-## Configuration
-Once the above flag is set to true the game will attempt to load an achievements config file from `themes/#####/achievements/config.json`.
+This `config.json5` should contain an array of achievement description objects. To disable achievements, make this array empty. 
 
-The config.json should be an array of achievement description objects:
+Achievement description objects look like this:
 
 ```json
 {
@@ -26,13 +16,16 @@ The config.json should be an array of achievement description objects:
     "points": 100
 }
 ```
+
+`name` and `description` should be changed from their defaults to values that fit the look and feel of your game. These objects should also be ordered sensibly to reflect progression in your game.
+
 **Required Parameters:**
 * **key** [string a-z0-9_] a unique (per game) identifier, lowercase alphanumeric with underscore. The key is used for the asset, which will convert underscores to dashes when loading (e.g `this_key` will become `this-key.png`).
 * **name** [string] This is the human readable name that will be displayed in the achievements list.
 * **description** [string] Description that will be displayed in the achievements list.
 * **points** [integer] Currently unused but required for future use. Should add up to 1000 points per game but otherwise can be weighted for difficulty or designer preference.
 
-## Optional Parameters
+**Optional Parameters:**
 * **maxProgress** [integer] Enables the progress bar and sets its limit.
 * **position** [string] This is the position that specifies where the achievements notification should show. Can be either "top" or "bottom" - defaults to "bottom".
 * **additional** {prefix [string], text [string]} Add a secondary text element to the description.
