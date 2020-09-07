@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.8.4 ||
+| | Added the ability to specify sprite and audio keys in the results screen with string templates. |
 | 3.8.3 ||
 | | Separated fonts out into its own fonts.json file. |
 | | Update package due to security alert (serialize-javascript). |
