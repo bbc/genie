@@ -45,11 +45,11 @@
                                 color: "#FFFFFF",
                             },
                         },
-                        { type: "sprite", key: "examples_stars_<%= Math.min(stars, 3) %>", offsetX: 20, offsetY: -20 }, // image selected via transient data value
+                        { type: "sprite", key: "examples_stars_<%= Math.max(0, Math.min(stars, 3)) %>", offsetX: 20, offsetY: -20 }, // image selected via transient data value
                         {
                             type: "countup", // Check the documentation for more detailed information on count ups. https://github.com/bbc/genie-starter-pack/tree/master/docs/development/results-screen/results-countup.md
                             startCount: 0, // The number to start counting from. This can be passed in by transient data.
-                            endCount: "<%= Math.min(stars, 3) %>", // The number to count up to. Can use transient data variable. Object dot notation is valid.
+                            endCount: "<%= Math.max(0, Math.min(stars, 3)) %>", // The number to count up to. Can use transient data variable. Object dot notation is valid.
                             startDelay: 1000, // Delay before the countup starts (in ms).
                             countupDuration: 1000, // How long the countup should last (in ms).
                             audio: {
@@ -202,7 +202,7 @@
                         {
                             type: "countup",
                             startCount: 0,
-                            endCount: "<%= Math.min(keys, 1) %>",
+                            endCount: "<%= Math.max(0, Math.min(keys, 1)) %>",
                             startDelay: 7000,
                             countupDuration: 1000,
                             audio: {
@@ -252,7 +252,7 @@
                         ease: "Elastic.Out",
                         delay: 5500,
                     },
-                    audio: { key: "examples_results_<%= Math.min(keys, 1) %>", delay: 5500 }, // audio selected via transient data value
+                    audio: { key: "examples_results_<%= Math.max(0, Math.min(keys, 1)) %>", delay: 5500 }, // audio selected via transient data value
                 },
             ],
 }
