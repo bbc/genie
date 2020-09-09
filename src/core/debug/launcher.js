@@ -65,6 +65,8 @@ export class Launcher extends Screen {
 
         this.setLayout(["home"]);
 
+        this.sound.pauseOnBlur = false;
+
         Object.keys(examples).map(getButtonConfig(this)).map(addButton);
     }
 }
