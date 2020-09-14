@@ -47,6 +47,12 @@ describe("Gel Button", () => {
             play: jest.fn(),
             setDisplaySize: jest.fn(),
             setScrollFactor: jest.fn(),
+            texture: {
+                frames: {
+                    0: "foo",
+                    1: "bar",
+                },
+            },
         };
         mockScene = {
             add: {
@@ -163,6 +169,16 @@ describe("Gel Button", () => {
             });
             new GelButton(mockScene, mockX, mockY, mockConfig);
             expect(mockSprite.setFrame).toHaveBeenCalledWith(1);
+        });
+        test("pointerover event does not set frame to 1 if no frame 1 exists", () => {
+            mockSprite.texture.frames = { 0: "foo" };
+            GelButton.prototype.on = jest.fn((event, callback) => {
+                if (event === Phaser.Input.Events.POINTER_OVER) {
+                    callback();
+                }
+            });
+            new GelButton(mockScene, mockX, mockY, mockConfig);
+            expect(mockSprite.setFrame).not.toHaveBeenCalled();
         });
         test("callback is added to the POINTER_UP event emitter", () => {
             GelButton.prototype.on = jest.fn((event, callback) => {

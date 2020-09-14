@@ -78,7 +78,7 @@ export class GelButton extends Phaser.GameObjects.Container {
         this.on("pointerup", () => this.onPointerUp(config, screen));
         this.on("pointerout", () => this.sprite.setFrame(0));
         this.on("pointerover", () => {
-            if (this.sprite.texture.frames['1']) {
+            if (this.sprite.texture.frames["1"]) {
                 this.sprite.setFrame(1);
             }
         });
