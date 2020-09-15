@@ -116,7 +116,7 @@ const exampleScreens = {
         scene: Results,
         title: "Results:\nConditional Assets",
         prompt: {
-            title: "Enter transient data (use 0 to 3 stars, 0 or 1 keys)",
+            title: "Enter a valid JSON string as transientData (sprite picking: use 0 to 3 stars; audio picking: 0 or 1 keys.)",
             default: '{ "stars": 3, "keys": 1, "gems": 50 }',
         },
         transientData: {

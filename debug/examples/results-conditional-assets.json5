@@ -129,7 +129,7 @@
                         {
                             type: "countup",
                             startCount: 0,
-                            endCount: "<%= gems %>",
+                            endCount: "<%= Math.max(0, gems) %>",
                             startDelay: 4000,
                             countupDuration: 1000,
                             audio: {
