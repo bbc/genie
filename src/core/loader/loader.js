@@ -35,17 +35,28 @@ export class Loader extends Screen {
         };
         this.load.webfont(webFontConfig);
 
+        
         const masterPack = this.cache.json.get("asset-master-pack");
         const debugPack = isDebug() ? ["../../debug"] : [];
-        this.screenKeys = getScreenKeys(this.scene.manager.keys).concat(debugPack);
-        const gamePacksToLoad = ["gel"].concat(this.screenKeys);
 
+
+        this.screenKeys = getScreenKeys(this.scene.manager.keys).concat(debugPack);
+
+        if (this.screenKeys.includes("shop")) {
+            this.load.json5({
+                key: "item-registry-data",
+                url: "shop/registry.json5"
+            });
+        };
+
+        const gamePacksToLoad = ["gel"].concat(this.screenKeys);
+        
         loadConfig(this, this.screenKeys);
         this.load.json5({
             key: "achievements-data",
             url: "achievements/config.json5",
         });
-
+        
         gamePacksToLoad.forEach(pack => this.load.pack(`${pack}/assets`));
         this.load.addPack(masterPack);
 
@@ -56,6 +67,8 @@ export class Loader extends Screen {
         this.createBrandLogo();
 
         this.load.on("progress", this.updateLoadBar.bind(this));
+
+        console.log('BEEBUG: this.cache.json.entries', this.cache.json.entries);
     }
 
     createLoadBar() {

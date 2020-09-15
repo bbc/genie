@@ -115,6 +115,12 @@ const screens = {
             select: "character-select",
         },
     },
+    shop: {
+        scene: Home, // PH
+        routes: {
+            home: "home",
+        },
+    },
 };
 
 startup({ screens, settings, gameOptions });
