@@ -101,6 +101,12 @@ const screens = {
             home: "home",
         },
     },
+    shop: {
+        scene: Home, // PH
+        routes: {
+            home: "home",
+        },
+    },
     // Overlays
     "how-to-play": {
         scene: HowToPlay,
@@ -113,12 +119,6 @@ const screens = {
         routes: {
             home: "home",
             select: "character-select",
-        },
-    },
-    shop: {
-        scene: Home, // PH
-        routes: {
-            home: "home",
         },
     },
 };
