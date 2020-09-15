@@ -1,5 +1,14 @@
 # Achievements System
 
+## Requirements for Genie components:
+
+- Genie components should be made with a pool of **at least 20** achievements.  
+- Every theme should have some achievements.
+- A theming agency can pick a **maximum of 10** of these achievements from the pool to use in any one theme.  
+- The whole pool of achievements should be made available so that they can be tested.
+
+## Using Achievements
+
 Achievements are enabled and configured in the theme.
 
 The game will attempt to load achievements from `themes/#####/achievements/config.json5`.
