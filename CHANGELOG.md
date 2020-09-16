@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Set active tracked pointers to 4 to support virtual joysticks. |
 | 3.8.5 ||
 | | Fixed a bug where if a select screen item did not have a hover state, a console warning would be thrown. |
 | | Documentation updated around the use of achievements in Genie components. |

@@ -23,7 +23,7 @@ describe("Base Phaser Defaults", () => {
         expect(baseDefaults.version).toEqual("test version");
         expect(baseDefaults.clearBeforeRender).toBe(false);
         expect(baseDefaults.scale).toEqual({ mode: Phaser.Scale.NONE });
-        expect(baseDefaults.input).toEqual({ windowEvents: false });
+        expect(baseDefaults.input).toEqual({ windowEvents: false, activePointers: 4 });
     });
 
     test("Returns build number if present", () => {
