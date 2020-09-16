@@ -48,6 +48,7 @@ describe("Boot", () => {
 
         bootScreen.game = mockGame;
         bootScreen.load = {
+            setCORS: jest.fn(),
             setBaseURL: jest.fn(),
             setPath: jest.fn(),
             json: jest.fn(),
@@ -75,6 +76,11 @@ describe("Boot", () => {
 
             expect(bootScreen.load.setBaseURL).toHaveBeenCalledWith(mockGmi.gameDir);
             expect(bootScreen.load.setPath).toHaveBeenCalledWith(mockGmi.embedVars.configPath);
+        });
+
+        test("sets CORS crossorigin attribute to anonymous", () => {
+            bootScreen.preload();
+            expect(bootScreen.load.setCORS).toHaveBeenCalledWith("anonymous");
         });
 
         test("Loads the asset master pack as json", () => {

@@ -77,7 +77,7 @@ export class GelButton extends Phaser.GameObjects.Container {
     setupMouseEvents(config, screen) {
         this.on("pointerup", () => this.onPointerUp(config, screen));
         this.on("pointerout", () => this.sprite.setFrame(0));
-        this.on("pointerover", () => this.sprite.setFrame(1));
+        this.on("pointerover", () => this.sprite.texture.frames["1"] && this.sprite.setFrame(1));
     }
 
     setHitArea(metrics) {

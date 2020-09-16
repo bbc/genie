@@ -6,7 +6,7 @@ Set the objects type to "sprite" to create a results sprite object. These sprite
 
 | Name | Type | Default | Description |
 |------|------|----------|-------------|
-| key | string | "" | The asset key of the image file to be used. |
+| key | string \| template | "" | The asset key of the image file to be used - can be a string template. |
 | frame | string \| integer | optional | The initial frame to show. |
 | offsetX | integer | 0 | The x offset for this object. |
 | offsetY | integer | 0 | The y offset for this object. |

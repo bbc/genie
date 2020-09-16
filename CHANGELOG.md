@@ -3,6 +3,11 @@
 | Version | Description |
 |---------|-------------|
 | | Set active tracked pointers to 4 to support virtual joysticks. |
+| 3.8.5 ||
+| | Fixed a bug where if a select screen item did not have a hover state, a console warning would be thrown. |
+| | Documentation updated around the use of achievements in Genie components. |
+| 3.8.4 ||
+| | Added the ability to specify sprite and audio keys in the results screen with string templates. |
 | 3.8.3 ||
 | | Separated fonts out into its own fonts.json file. |
 | | Update package due to security alert (serialize-javascript). |
