@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Set active tracked pointers to 4 to support virtual joysticks. |
 | 3.8.3 ||
 | | Separated fonts out into its own fonts.json file. |
 | | Update package due to security alert (serialize-javascript). |
