@@ -9,9 +9,7 @@ import fp from "../../../lib/lodash/fp/fp.js";
 export const initRegistry = itemsArray => {
     const items = fp.clone(itemsArray);
 
-    const getResult = result => {
-        return result ? Object.assign({}, result) : undefined;
-    };
+    const getResult = result => (result ? Object.assign({}, result) : undefined);
 
     const get = (id, categories = []) => {
         if (!id) return fp.clone(items);
