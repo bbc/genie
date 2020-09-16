@@ -239,26 +239,6 @@ describe("Loader", () => {
             expect(loader.load.pack).toHaveBeenCalledWith("three/assets");
         });
 
-        test("creates an item registry if a shop is configured", () => {
-            loader.scene.manager.keys = { shop: {} };
-            loader.preload();
-
-            expect(loader.load.json5).toHaveBeenCalledWith({
-                key: "item-registry-data",
-                url: "shop/registry.json5"
-            });
-        });
-
-        test("does not create an item registry if there is no shop", () => {
-            loader.scene.manager.keys = { one: {}, two: {} };
-            loader.preload();
-
-            expect(loader.load.json5).not.toHaveBeenCalledWith({
-                key: "item-registry-data",
-                url: "shop/registry.json5"
-            });
-        });
-
         test("adds background and title images", () => {
             loader.preload();
 

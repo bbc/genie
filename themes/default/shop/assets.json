@@ -1,8 +1,6 @@
 {
-  "shop": {
-    "prefix": "shop.",
-    "files": [
-      
-    ]
-  }
+    "results": {
+        "prefix": "shop.",
+        "files": []
+    }
 }

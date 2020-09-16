@@ -14,6 +14,9 @@ import { initItems } from "../core/item-registry.js";
 const registry = initItems(['array' , 'of', 'items'])); // tbd
 ```
 
+Keep a reference to this registry to work with items in the flow of your game.
+
+
 ## Accessing the registry
 
 The registry object returned by initItems provides getters and setters:
