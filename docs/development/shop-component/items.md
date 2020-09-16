@@ -14,3 +14,6 @@ import { initItems } from "../core/item-registry.js";
 const items = initItems(['array' , 'of', 'items'])); // tbd
 ```
 
+## Accessing the registry
+
+Once initItems has been called the item registry provides getters and setters to access items.

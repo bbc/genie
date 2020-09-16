@@ -42,7 +42,7 @@ export class Loader extends Screen {
 
         this.screenKeys = getScreenKeys(this.scene.manager.keys).concat(debugPack);
 
-        if (this.screenKeys.includes("shop")) {
+        if (this.screenKeys.includes("shop")) { // this should be refactored to roll the item registry into the general shop config? 
             this.load.json5({
                 key: "item-registry-data",
                 url: "shop/registry.json5"
@@ -67,8 +67,6 @@ export class Loader extends Screen {
         this.createBrandLogo();
 
         this.load.on("progress", this.updateLoadBar.bind(this));
-
-        console.log('BEEBUG: this.cache.json.entries', this.cache.json.entries);
     }
 
     createLoadBar() {
