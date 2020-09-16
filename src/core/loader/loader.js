@@ -37,9 +37,7 @@ export class Loader extends Screen {
 
         const masterPack = this.cache.json.get("asset-master-pack");
         const debugPack = isDebug() ? ["../../debug"] : [];
-
         this.screenKeys = getScreenKeys(this.scene.manager.keys).concat(debugPack);
-
         const gamePacksToLoad = ["gel"].concat(this.screenKeys);
 
         loadConfig(this, this.screenKeys);
