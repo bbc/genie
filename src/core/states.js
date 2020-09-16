@@ -38,5 +38,6 @@ export const initState = (stateKey, config) => {
 
     states.set(stateKey, state);
 
+    console.log('BEEBUG: state', state);
     return state;
 };

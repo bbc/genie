@@ -11,9 +11,17 @@ The item registry is set up like this:
 ```javascript
 import { initItems } from "../core/item-registry.js";
 
-const items = initItems(['array' , 'of', 'items'])); // tbd
+const registry = initItems(['array' , 'of', 'items'])); // tbd
 ```
 
 ## Accessing the registry
 
-Once initItems has been called the item registry provides getters and setters to access items.
+The registry object returned by initItems provides getters and setters:
+
+`get("item-id")` returns a single item by ID, if it exists.
+
+`get("item-id", ["array", "of", "categories"])` returns a single item by ID, if it is in one of the provided categories.
+
+`getCategory("category")` returns all items in the provided category.
+
+`set(item)` replaces the item with a matching ID in the registry; returns `true` if successful or `false` if the item did not exist (adding items to the registry in mid-game is not permitted.)
