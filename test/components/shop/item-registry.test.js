@@ -32,7 +32,7 @@ describe("Item registry", () => {
 
     describe("initRegistry", () => {
         test("returns a registry object with getters and setters", () => {
-            expect(registry.items).toBeInstanceOf(Array);
+            expect(registry.itemsArray).toBeInstanceOf(Array);
             expect(typeof registry.get).toBe("function");
             expect(typeof registry.getCategory).toBe("function");
             expect(typeof registry.set).toBe("function");

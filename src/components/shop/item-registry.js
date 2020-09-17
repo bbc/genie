@@ -7,36 +7,34 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 
 export const initRegistry = itemsArray => {
-    const items = fp.clone(itemsArray);
-
     const getResult = result => (result ? Object.assign({}, result) : undefined);
 
     const get = (id, categories = []) => {
-        if (!id) return fp.clone(items);
+        if (id === undefined) return fp.clone(itemsArray);
         let result;
         if (!categories.length) {
-            result = items.find(item => id === item.id);
+            result = itemsArray.find(item => id === item.id);
             return getResult(result);
         }
         categories.forEach(category => {
-            result = items.find(item => id === item.id && item.category.includes(category));
+            result = itemsArray.find(item => id === item.id && item.category.includes(category));
         });
         return getResult(result);
     };
 
-    const getCategory = category => items.filter(item => item.category.includes(category));
+    const getCategory = category => itemsArray.filter(item => item.category.includes(category));
 
     const set = item => {
-        const itemIndex = items.findIndex(storedItem => item.id === storedItem.id);
-        if (itemIndex >= 0) {
-            items[itemIndex] = item;
+        const itemIndex = itemsArray.findIndex(storedItem => item.id === storedItem.id);
+        if (itemIndex !== -1) {
+            itemsArray[itemIndex] = item;
             return true;
         }
         return false;
     };
 
     const registry = {
-        items,
+        itemsArray,
         get,
         getCategory,
         set,
