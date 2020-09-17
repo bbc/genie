@@ -3,6 +3,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import fp from "../../../lib/lodash/fp/fp.js";
+
 export let itemsRegistry = new Map();
 
 export const initRegistry = (key, items) => {
@@ -14,10 +16,11 @@ export const initRegistry = (key, items) => {
 
     const getCategory = category => items.filter(item => item.category.includes(category));
 
-    const set = item => {
-        const itemIndex = items.findIndex(storedItem => item.id === storedItem.id);
+    const set = (id, diff) => {
+        const itemIndex = items.findIndex(storedItem => id === storedItem.id);
+
         if (itemIndex !== -1) {
-            items[itemIndex] = item;
+            items[itemIndex] = fp.merge(items[itemIndex], diff);
             return true;
         }
         return false;

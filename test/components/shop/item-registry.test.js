@@ -21,16 +21,20 @@ const registryData = {
             id: "item-3",
             category: ["category-2"],
         },
-    ]
+    ],
 };
 
 describe("Item registry", () => {
     let registry;
 
-    beforeEach(() => {
+    function init() {
         const { registryKey, registryItems } = registryData;
         initRegistry(registryKey, registryItems);
         registry = itemsRegistry.get(registryKey);
+    }
+
+    beforeEach(() => {
+        init();
     });
 
     describe("initRegistry", () => {
@@ -40,10 +44,15 @@ describe("Item registry", () => {
             expect(typeof registry.getCategory).toBe("function");
             expect(typeof registry.set).toBe("function");
         });
+
+        test("exposes itemsRegistry to window.__debug when it exists", () => {
+            window.__debug = {};
+            init();
+            expect(typeof window.__debug.items).toBe("object");
+        });
     });
 
     describe("getters", () => {
-
         test("get with returns a single item with a matching id", () => {
             const itemOne = registry.get("item-1");
             const expectedItem = registryData.registryItems[0];
@@ -61,15 +70,13 @@ describe("Item registry", () => {
     });
 
     describe("setter", () => {
-        test("replaces the item with a matching id in the registry with the provided item", () => {
-            const itemToSet = { id: "item-1", someKey: "someValue" };
-            registry.set(itemToSet);
+        test("merges the provided object into the matching item", () => {
+            registry.set("item-1", { someKey: "someValue" });
             expect(registry.get("item-1").someKey).toEqual("someValue");
         });
 
         test("returns true if set was successful", () => {
-            const itemToSet = { id: "item-1" };
-            expect(registry.set(itemToSet)).toBe(true);
+            expect(registry.set("item-1", { someKey: "someValue" })).toBe(true);
         });
 
         test("returns false if it could not replace the item", () => {
