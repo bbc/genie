@@ -4,35 +4,38 @@
  * @license Apache-2.0
  */
 
-import * as itemRegistry from "../../../src/components/shop/item-registry.js";
+import { itemsRegistry, initRegistry } from "../../../src/components/shop/item-registry.js";
 
-const registryData = [
-    {
-        id: "item-1",
-        category: ["category-1"],
-    },
-    {
-        id: "item-2",
-        category: ["category-1", "category-2"],
-    },
-    {
-        id: "item-3",
-        category: ["category-2"],
-    },
-];
+const registryData = {
+    registryKey: "test-data",
+    registryItems: [
+        {
+            id: "item-1",
+            category: ["category-1"],
+        },
+        {
+            id: "item-2",
+            category: ["category-1", "category-2"],
+        },
+        {
+            id: "item-3",
+            category: ["category-2"],
+        },
+    ]
+};
 
 describe("Item registry", () => {
     let registry;
 
     beforeEach(() => {
-        registry = itemRegistry.initRegistry(registryData);
+        const { registryKey, registryItems } = registryData;
+        initRegistry(registryKey, registryItems);
+        registry = itemsRegistry.get(registryKey);
     });
-
-    afterEach(() => jest.clearAllMocks());
 
     describe("initRegistry", () => {
         test("returns a registry object with getters and setters", () => {
-            expect(registry.itemsArray).toBeInstanceOf(Array);
+            expect(registry.items).toBeInstanceOf(Array);
             expect(typeof registry.get).toBe("function");
             expect(typeof registry.getCategory).toBe("function");
             expect(typeof registry.set).toBe("function");
@@ -40,20 +43,10 @@ describe("Item registry", () => {
     });
 
     describe("getters", () => {
-        test("parameterless get returns all items in the registry", () => {
-            const itemsFromGet = registry.get();
-            expect(itemsFromGet.length).toEqual(3);
-        });
 
-        test("get with an id parameter returns a single item with that id", () => {
+        test("get with returns a single item with a matching id", () => {
             const itemOne = registry.get("item-1");
-            const expectedItem = registryData[0];
-            expect(itemOne).toEqual(expectedItem);
-        });
-
-        test("get with an id parameter and a category array returns the item only if it has a category match", () => {
-            const itemOne = registry.get("item-1", ["category-1"]);
-            const expectedItem = registryData[0];
+            const expectedItem = registryData.registryItems[0];
             expect(itemOne).toEqual(expectedItem);
         });
 
@@ -64,7 +57,6 @@ describe("Item registry", () => {
 
         test("get returns undefined when no matching item exists", () => {
             expect(registry.get("fish")).toBe(undefined);
-            expect(registry.get("item-1", ["category-3"])).toBe(undefined);
         });
     });
 

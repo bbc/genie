@@ -1,6 +1,6 @@
 {
-    registryKey: "registry",
-    registry: [
+    registryKey: "shop",
+    registryData: [
         {
             id: "item-1",
             category: [

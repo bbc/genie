@@ -9,22 +9,19 @@ All items that appear in the shop (and therefore the game) need to exist in an i
 The item registry is set up like this: 
 
 ```javascript
-import { initItems } from "../core/item-registry.js";
+import { initRegistry } from "../core/item-registry.js";
 
-const registry = initItems(['array' , 'of', 'items'])); // tbd
+const registry = initRegistry("registryKey", ['array' , 'of', 'items'])); // tbd
 ```
 
 Keep a reference to this registry to work with items in the flow of your game.
 
-
 ## Accessing the registry
 
-The registry object returned by initItems provides getters and setters:
+The registry object can either be acquired at initialisation time (returned by `initRegistry()`) or by doing `itemsRegistry.get("registryKey")`.
 
-`get("item-id")` returns a single item by ID, if it exists.
+The registry object provides getters and setters:
 
-`get("item-id", ["array", "of", "categories"])` returns a single item by ID, if it is in one of the provided categories.
-
-`getCategory("category")` returns all items in the provided category.
-
-`set(item)` replaces the item with a matching ID in the registry; returns `true` if successful or `false` if the item did not exist (adding items to the registry in mid-game is not permitted.)
+- `get("item-id")` returns a single item by ID
+- `getCategory("category")` returns all items in the provided category
+- `set("item-id", { foo: "bar" })` updates `foo` on the matching item with value `"bar"`

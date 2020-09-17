@@ -24,7 +24,7 @@ export const initRegistry = (key, items) => {
     };
 
     const itemList = {
-        itemsArray: items,
+        items,
         get,
         getCategory,
         set,
