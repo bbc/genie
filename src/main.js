@@ -101,12 +101,12 @@ const screens = {
             home: "home",
         },
     },
-    shop: {
-        scene: Home,
-        routes: {
-            next: "home",
-        },
-    },
+    // shop: {
+    //     scene: Home,
+    //     routes: {
+    //         next: "home",
+    //     },
+    // },
     // Overlays
     "how-to-play": {
         scene: HowToPlay,
