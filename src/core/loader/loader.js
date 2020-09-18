@@ -86,7 +86,6 @@ export class Loader extends Screen {
 
     create() {
         const config = getConfig(this, this.screenKeys);
-        console.log('BEEBUG: loading catalogue');
         loadCatalogue(this, config);
         this.setConfig(config);
         GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");

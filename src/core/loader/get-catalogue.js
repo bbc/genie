@@ -10,8 +10,6 @@ export const loadCatalogue = (screen, config) => {
     if (!catalogueKeys.length) return;
 
     catalogueKeys.forEach(loadToCache(screen));
-    
-    screen.load.start();
 
     screen.load.on("complete", () => {
         catalogueKeys.forEach(key => {
@@ -20,6 +18,7 @@ export const loadCatalogue = (screen, config) => {
         console.log("BEEBUG: catalogue", catalogue);
     });
 
+    screen.load.start();
 };
 
 const getCatalogueKeys = config => {

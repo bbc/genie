@@ -25,27 +25,27 @@ const catalogueData = {
 };
 
 describe("Item registry", () => {
-    let catalogue;
+    let testCatalogue;
 
     function init() {
         const { catalogueSectionKey, catalogueItems } = catalogueData;
         initCatalogue(catalogueSectionKey, catalogueItems);
-        catalogue = catalogue.get(catalogueSectionKey);
+        testCatalogue = catalogue.get(catalogueSectionKey);
     }
 
     beforeEach(() => {
         init();
     });
 
-    describe("initRegistry", () => {
-        test("returns a registry object with getters and setters", () => {
-            expect(catalogue.items).toBeInstanceOf(Array);
-            expect(typeof catalogue.get).toBe("function");
-            expect(typeof catalogue.getCategory).toBe("function");
-            expect(typeof catalogue.set).toBe("function");
+    describe("initCatalogue", () => {
+        test("returns a catalogue object with getters and setters", () => {
+            expect(testCatalogue.items).toBeInstanceOf(Array);
+            expect(typeof testCatalogue.get).toBe("function");
+            expect(typeof testCatalogue.getCategory).toBe("function");
+            expect(typeof testCatalogue.set).toBe("function");
         });
 
-        test("exposes itemsRegistry to window.__debug when it exists", () => {
+        test("exposes catalogue to window.__debug when it exists", () => {
             window.__debug = {};
             init();
             expect(typeof window.__debug.items).toBe("object");
@@ -54,34 +54,34 @@ describe("Item registry", () => {
 
     describe("getters", () => {
         test("get with returns a single item with a matching id", () => {
-            const itemOne = catalogue.get("item-1");
+            const itemOne = testCatalogue.get("item-1");
             const expectedItem = catalogueData.catalogueItems[0];
             expect(itemOne).toEqual(expectedItem);
         });
 
         test("getCategory returns all items in that category", () => {
-            const categoryOneItems = catalogue.getCategory("category-1");
+            const categoryOneItems = testCatalogue.getCategory("category-1");
             expect(categoryOneItems.length).toEqual(2);
         });
 
         test("get returns undefined when no matching item exists", () => {
-            expect(catalogue.get("fish")).toBe(undefined);
+            expect(testCatalogue.get("fish")).toBe(undefined);
         });
     });
 
     describe("setter", () => {
         test("merges the provided object into the matching item", () => {
-            catalogue.set("item-1", { someKey: "someValue" });
-            expect(catalogue.get("item-1").someKey).toEqual("someValue");
+            testCatalogue.set("item-1", { someKey: "someValue" });
+            expect(testCatalogue.get("item-1").someKey).toEqual("someValue");
         });
 
         test("returns true if set was successful", () => {
-            expect(catalogue.set("item-1", { someKey: "someValue" })).toBe(true);
+            expect(testCatalogue.set("item-1", { someKey: "someValue" })).toBe(true);
         });
 
         test("returns false if it could not replace the item", () => {
             const itemToSet = { id: "foo" };
-            expect(catalogue.set(itemToSet)).toBe(false);
+            expect(testCatalogue.set(itemToSet)).toBe(false);
         });
     });
 });
