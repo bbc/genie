@@ -13,6 +13,7 @@ import { gmi } from "../gmi/gmi.js";
 import { loadPack } from "./loadpack.js";
 import { getConfig, loadConfig } from "./get-config.js";
 import { isDebug } from "../debug/debug-mode.js";
+import { itemsRegistry, initRegistry } from "../../components/shop/item-registry.js"
 
 const getScreenKeys = keys =>
     Object.keys(keys).filter(key => ["default", "boot", "loader", "debug"].indexOf(key) === -1);
@@ -85,6 +86,25 @@ export class Loader extends Screen {
 
     create() {
         const config = getConfig(this, this.screenKeys);
+
+        console.log('BEEBUG: config', config);
+        // config is loaded - walk the config object and construct an array of item file keys
+        // add all the loads
+
+        this.load.json5({
+            key: "registry-load-test",
+            url: "items/shop-catalogue.json5"
+        }); // put this in a getter file for easy testing
+        
+        this.load.start();
+        
+        this.load.on("complete", () => {
+            // init registries
+            this.registry = itemsRegistry;
+            initRegistry("registry-load-test", this.cache.json['registry-load-test']);
+            console.log('BEEBUG: this', this);
+        });
+
         this.setConfig(config);
         GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
         gmi.achievements.init(this.cache.json.get("achievements-data"));

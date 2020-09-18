@@ -1,24 +1,3 @@
 {
-    registryKey: "shop",
-    registryData: [
-        {
-            id: "item-1",
-            category: [
-                "category-1"
-            ],
-        },
-        { 
-            id: "item-2",
-            category: [
-                "category-1",
-                "category-2",
-            ],
-        },
-        {
-            id: "item-3",
-            category: [
-                "category-2",
-            ],
-        },
-    ]
+    registryKey: "shop-catalogue",
 }
