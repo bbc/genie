@@ -85,7 +85,10 @@ export class Loader extends Screen {
     }
 
     getRegistryKeys(config) {
-        return ['shop-catalogue'];
+        const registryKey = item => item[1].registryKey;
+        return Object.entries(config)
+            .filter(registryKey)
+            .map(registryKey);
     }
 
     create() {
