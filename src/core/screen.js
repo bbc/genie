@@ -45,6 +45,7 @@ export class Screen extends Phaser.Scene {
             activeScreens,
             navigation: this._data.navigation,
             transientData: this._data.transient || {},
+            registry: this._data.registry,
         };
     }
 
@@ -68,6 +69,14 @@ export class Screen extends Phaser.Scene {
 
     get assetPrefix() {
         return this.config.assetPrefix || this.scene.key;
+    }
+
+    set itemRegistry(registry) {
+        this._data.registry = registry;
+    }
+
+    get itemRegistry() {
+        return this._data.registry;
     }
 
     init(data) {

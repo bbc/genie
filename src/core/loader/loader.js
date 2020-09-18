@@ -94,12 +94,13 @@ export class Loader extends Screen {
     create() {
         const config = getConfig(this, this.screenKeys);
         const registryKeys = this.getRegistryKeys(config);
-        this._data.itemRegistry = getRegistry(this, registryKeys); // should be a setter on screen?
+        this.itemRegistry = getRegistry(this, registryKeys); // should be a setter on screen?
         this.setConfig(config);
         GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
         gmi.achievements.init(this.cache.json.get("achievements-data"));
         this.navigation.next();
         gmi.sendStatsEvent("gameloaded", "true");
         gmi.gameLoaded();
+        console.log('BEEBUG: this', this);
     }
 }
