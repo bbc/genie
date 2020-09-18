@@ -48,7 +48,7 @@ describe("Catalogue", () => {
         test("exposes catalogue to window.__debug when it exists", () => {
             window.__debug = {};
             init();
-            expect(typeof window.__debug.items).toBe("object");
+            expect(typeof window.__debug.catalogue).toBe("object");
         });
     });
 

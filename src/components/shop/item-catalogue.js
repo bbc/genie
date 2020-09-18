@@ -9,7 +9,7 @@ export let catalogue = new Map();
 
 export const initCatalogue = (key, items) => {
     if (window.__debug) {
-        window.__debug.items = catalogue;
+        window.__debug.catalogue = catalogue;
     }
 
     const get = id => items.find(item => id === item.id);
