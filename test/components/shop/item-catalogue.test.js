@@ -4,11 +4,11 @@
  * @license Apache-2.0
  */
 
-import { itemsRegistry, initRegistry } from "../../../src/components/shop/item-registry.js";
+import { catalogue, initCatalogue } from "../../../src/components/shop/item-catalogue.js";
 
-const registryData = {
-    registryKey: "test-data",
-    registryItems: [
+const catalogueData = {
+    catalogueSectionKey: "test-data",
+    catalogueItems: [
         {
             id: "item-1",
             category: ["category-1"],
@@ -25,12 +25,12 @@ const registryData = {
 };
 
 describe("Item registry", () => {
-    let registry;
+    let catalogue;
 
     function init() {
-        const { registryKey, registryItems } = registryData;
-        initRegistry(registryKey, registryItems);
-        registry = itemsRegistry.get(registryKey);
+        const { catalogueSectionKey, catalogueItems } = catalogueData;
+        initCatalogue(catalogueSectionKey, catalogueItems);
+        catalogue = catalogue.get(catalogueSectionKey);
     }
 
     beforeEach(() => {
@@ -39,10 +39,10 @@ describe("Item registry", () => {
 
     describe("initRegistry", () => {
         test("returns a registry object with getters and setters", () => {
-            expect(registry.items).toBeInstanceOf(Array);
-            expect(typeof registry.get).toBe("function");
-            expect(typeof registry.getCategory).toBe("function");
-            expect(typeof registry.set).toBe("function");
+            expect(catalogue.items).toBeInstanceOf(Array);
+            expect(typeof catalogue.get).toBe("function");
+            expect(typeof catalogue.getCategory).toBe("function");
+            expect(typeof catalogue.set).toBe("function");
         });
 
         test("exposes itemsRegistry to window.__debug when it exists", () => {
@@ -54,34 +54,34 @@ describe("Item registry", () => {
 
     describe("getters", () => {
         test("get with returns a single item with a matching id", () => {
-            const itemOne = registry.get("item-1");
-            const expectedItem = registryData.registryItems[0];
+            const itemOne = catalogue.get("item-1");
+            const expectedItem = catalogueData.catalogueItems[0];
             expect(itemOne).toEqual(expectedItem);
         });
 
         test("getCategory returns all items in that category", () => {
-            const categoryOneItems = registry.getCategory("category-1");
+            const categoryOneItems = catalogue.getCategory("category-1");
             expect(categoryOneItems.length).toEqual(2);
         });
 
         test("get returns undefined when no matching item exists", () => {
-            expect(registry.get("fish")).toBe(undefined);
+            expect(catalogue.get("fish")).toBe(undefined);
         });
     });
 
     describe("setter", () => {
         test("merges the provided object into the matching item", () => {
-            registry.set("item-1", { someKey: "someValue" });
-            expect(registry.get("item-1").someKey).toEqual("someValue");
+            catalogue.set("item-1", { someKey: "someValue" });
+            expect(catalogue.get("item-1").someKey).toEqual("someValue");
         });
 
         test("returns true if set was successful", () => {
-            expect(registry.set("item-1", { someKey: "someValue" })).toBe(true);
+            expect(catalogue.set("item-1", { someKey: "someValue" })).toBe(true);
         });
 
         test("returns false if it could not replace the item", () => {
             const itemToSet = { id: "foo" };
-            expect(registry.set(itemToSet)).toBe(false);
+            expect(catalogue.set(itemToSet)).toBe(false);
         });
     });
 });

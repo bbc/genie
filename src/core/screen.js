@@ -45,7 +45,6 @@ export class Screen extends Phaser.Scene {
             activeScreens,
             navigation: this._data.navigation,
             transientData: this._data.transient || {},
-            registry: this._data.registry,
         };
     }
 
