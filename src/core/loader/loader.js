@@ -101,6 +101,5 @@ export class Loader extends Screen {
         this.navigation.next();
         gmi.sendStatsEvent("gameloaded", "true");
         gmi.gameLoaded();
-        console.log('BEEBUG: this', this);
     }
 }
