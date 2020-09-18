@@ -4,10 +4,10 @@
  * @license Apache-2.0
  */
 
-import { initRegistry } from "../../components/shop/item-registry.js"
+import { itemsRegistry, initRegistry } from "../../components/shop/item-registry.js"
 
 export const loadRegistry = (screen, config) => {
-    registryKeys = getRegistryKeys(config);
+    const registryKeys = getRegistryKeys(config);
     registryKeys.forEach(key => {
         loadToCache(screen, key);
     });
@@ -16,7 +16,9 @@ export const loadRegistry = (screen, config) => {
         registryKeys.forEach(key => {
             initRegistry(key, screen.cache.json.get(`registry-${key}`));
         });
+        console.log('BEEBUG: itemsRegistry', itemsRegistry);
     });
+
 };
 
 const getRegistryKeys = config => {
