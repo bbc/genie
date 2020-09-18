@@ -4,12 +4,12 @@
  * @license Apache-2.0
  */
 
-import { itemsRegistry, initRegistry } from "../../components/shop/item-registry.js"
+import { initRegistry } from "../../components/shop/item-registry.js"
 
-export const getRegistry = (screen, registryKeys) => {
-    screen.registry = itemsRegistry;
+export const loadRegistry = (screen, config) => {
+    registryKeys = getRegistryKeys(config);
     registryKeys.forEach(key => {
-        loadRegistry(screen, key);
+        loadToCache(screen, key);
     });
     screen.load.start();
     screen.load.on("complete", () => {
@@ -17,10 +17,16 @@ export const getRegistry = (screen, registryKeys) => {
             initRegistry(key, screen.cache.json.get(`registry-${key}`));
         });
     });
-    return itemsRegistry;
 };
 
-const loadRegistry = (screen, key) => {
+const getRegistryKeys = config => {
+    const registryKey = item => item[1].registryKey;
+    return Object.entries(config)
+    .filter(registryKey)
+    .map(registryKey);
+};
+
+const loadToCache = (screen, key) => {
     screen.load.json5({
         key: `registry-${key}`,
         url: `items/${key}.json5`,

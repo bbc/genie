@@ -84,17 +84,9 @@ export class Loader extends Screen {
         this.brandLogo.setOrigin(1, 1);
     }
 
-    getRegistryKeys(config) {
-        const registryKey = item => item[1].registryKey;
-        return Object.entries(config)
-            .filter(registryKey)
-            .map(registryKey);
-    }
-
     create() {
         const config = getConfig(this, this.screenKeys);
-        const registryKeys = this.getRegistryKeys(config);
-        this.itemRegistry = getRegistry(this, registryKeys); // should be a setter on screen?
+        loadRegistry(this, config);
         this.setConfig(config);
         GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
         gmi.achievements.init(this.cache.json.get("achievements-data"));

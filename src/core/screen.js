@@ -71,14 +71,6 @@ export class Screen extends Phaser.Scene {
         return this.config.assetPrefix || this.scene.key;
     }
 
-    set itemRegistry(registry) {
-        this._data.registry = registry;
-    }
-
-    get itemRegistry() {
-        return this._data.registry;
-    }
-
     init(data) {
         this._data = data;
         activeScreens.push({ screen: this, addedBy: data.addedBy });
