@@ -24,7 +24,7 @@ const catalogueData = {
     ],
 };
 
-describe("Item registry", () => {
+describe("Catalogue", () => {
     let testCatalogue;
 
     function init() {

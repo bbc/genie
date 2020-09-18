@@ -24,7 +24,7 @@ export const loadCatalogue = (screen, config) => {
 const getCatalogueKeys = config => {
     const catalogueKey = item => item[1].catalogueKey;
 
-    return Object.entries(config).filter(catalogueKey).map(catalogueKey);
+    return Object.entries(config).map(catalogueKey).filter(Boolean);
 };
 
 const loadToCache = screen => key => {
