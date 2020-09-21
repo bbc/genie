@@ -21,8 +21,8 @@ Your scene config should contain a `catalogueKey` which should be a string corre
 ```javascript
 import { catalogue } from "./components/shop/item-catalogue.js";
 const catalogueSection = catalogue.get(sceneConfig.catalogueKey); // corresponding to a .json5 in items/
-const macGuffins = catalogueSection.get("macGuffin"); // get a single item
-const macGuffinsAndDooHickeys = catalogueSection.getCategory(["macGuffins", "dooHickeys"]); // filter by array of categories
+const snotulonCannon = catalogueSection.get("Snotulon Cannon"); // get a single item
+const weapons = catalogueSection.getCategory(["weapons"s]); // filter by array of categories
 ```
 
 ## Modifying items
@@ -31,7 +31,7 @@ You can change properties on an item by passing its id to the catalogue section 
 
 ```javascript
 const reload = { ammo: 100 };
-macGuffins.set("Snotulon Cannon", reload); 
+catalogueSection.set("Snotulon Cannon", reload); 
 ```
 
 

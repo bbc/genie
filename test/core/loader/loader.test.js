@@ -84,6 +84,7 @@ describe("Loader", () => {
             on: jest.fn(),
             json5: jest.fn(),
             webfont: jest.fn(),
+            start: jest.fn(),
         };
         loader.cache = {
             json: {
