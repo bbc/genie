@@ -17,11 +17,10 @@ export const loadCatalogue = (screen, config) => {
     screen.load.start();
 };
 
-export const getCatalogueKeys = config => {
-    const catalogueKey = item => item[1].catalogueKey;
-
-    return Object.entries(config).map(catalogueKey).filter(Boolean);
-};
+export const getCatalogueKeys = config =>
+    Object.values(config)
+        .map(item => item.catalogueKey)
+        .filter(Boolean);
 
 export const loadToCache = screen => key => {
     screen.load.json5({

@@ -22,7 +22,7 @@ Your scene config should contain a `catalogueKey` which should be a string corre
 import { catalogue } from "./components/shop/item-catalogue.js";
 const catalogueSection = catalogue.get(sceneConfig.catalogueKey); // corresponding to a .json5 in items/
 const snotulonCannon = catalogueSection.get("Snotulon Cannon"); // get a single item
-const weapons = catalogueSection.getCategory(["weapons"s]); // filter by array of categories
+const weapons = catalogueSection.getCategory(["weapons"]); // filter by array of categories
 ```
 
 ## Modifying items
