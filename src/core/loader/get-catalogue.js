@@ -7,7 +7,6 @@ import { catalogue, initCatalogue } from "../../components/shop/item-catalogue.j
 
 export const loadCatalogue = (screen, config) => {
     const catalogueKeys = getCatalogueKeys(config);
-    if (!catalogueKeys.length) return;
 
     catalogueKeys.forEach(loadToCache(screen));
 
