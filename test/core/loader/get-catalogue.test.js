@@ -20,7 +20,7 @@ const mockScreen = {
     load: {
         json5: jest.fn(),
         start: jest.fn(),
-        on: jest.fn(),
+        once: jest.fn(),
     },
     cache: {
         json: {
@@ -37,8 +37,8 @@ describe("get-catalogue", () => {
     describe("loadCatalogue", () => {
         test("registers a callback that calls initCatalogue once per catalogue key on load complete, and starts the loader", () => {
             loadCatalogue(mockScreen, mockConfig);
-            expect(mockScreen.load.on.mock.calls[0][0]).toEqual("complete");
-            const callbackOnComplete = mockScreen.load.on.mock.calls[0][1];
+            expect(mockScreen.load.once.mock.calls[0][0]).toEqual("complete");
+            const callbackOnComplete = mockScreen.load.once.mock.calls[0][1];
             expect(mockScreen.load.start).toHaveBeenCalled();
             callbackOnComplete();
             expect(mockScreen.cache.json.get).toHaveBeenCalledWith("catalogue-bar");

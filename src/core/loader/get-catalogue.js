@@ -10,7 +10,7 @@ export const loadCatalogue = (screen, config) => {
 
     catalogueKeys.forEach(loadToCache(screen));
 
-    screen.load.on("complete", () => {
+    screen.load.once("complete", () => {
         catalogueKeys.forEach(key => {
             initCatalogue(key, screen.cache.json.get(`catalogue-${key}`));
         });

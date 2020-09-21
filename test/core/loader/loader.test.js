@@ -82,6 +82,7 @@ describe("Loader", () => {
             addPack: jest.fn(),
             pack: jest.fn(),
             on: jest.fn(),
+            once: jest.fn(),
             json5: jest.fn(),
             webfont: jest.fn(),
             start: jest.fn(),
