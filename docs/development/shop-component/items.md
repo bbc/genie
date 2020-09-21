@@ -6,7 +6,7 @@ All items that appear in the shop (and therefore the game) need to exist in the 
 
 Items require a unique id and, optionally, an array of categories the item belongs to.
 
-```json
+```
 [
     { 
         id: "Snotulon Cannon",
