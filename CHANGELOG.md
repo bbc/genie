@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Rename item registry to 'catalogue'. Configs can now have a catalogueKey which prompts the loader to load a matching json5 from theme/default/items/. |
 | | Add item registry as preparation for the shop component. | 
 | | Set active tracked pointers to 4 to support virtual joysticks. |
 | 3.8.5 ||
