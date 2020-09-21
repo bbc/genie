@@ -41,6 +41,7 @@ describe("get-catalogue", () => {
             const callbackOnComplete = mockScreen.load.once.mock.calls[0][1];
             expect(mockScreen.load.start).toHaveBeenCalled();
             callbackOnComplete();
+            expect(catalogue.initCatalogue).toHaveBeenCalledTimes(2);
             expect(mockScreen.cache.json.get).toHaveBeenCalledWith("catalogue-bar");
             expect(mockScreen.cache.json.get).toHaveBeenCalledWith("catalogue-qux");
         });
