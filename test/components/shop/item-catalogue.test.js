@@ -25,12 +25,12 @@ const catalogueData = {
 };
 
 describe("Catalogue", () => {
-    let testCatalogue;
+    let testItemList;
 
     function init() {
         const { catalogueSectionKey, catalogueItems } = catalogueData;
         initCatalogue(catalogueSectionKey, catalogueItems);
-        testCatalogue = catalogue.get(catalogueSectionKey);
+        testItemList = catalogue.get(catalogueSectionKey);
     }
 
     beforeEach(() => {
@@ -39,10 +39,10 @@ describe("Catalogue", () => {
 
     describe("initCatalogue", () => {
         test("returns a catalogue object with getters and setters", () => {
-            expect(testCatalogue.items).toBeInstanceOf(Array);
-            expect(typeof testCatalogue.get).toBe("function");
-            expect(typeof testCatalogue.getCategory).toBe("function");
-            expect(typeof testCatalogue.set).toBe("function");
+            expect(testItemList.items).toBeInstanceOf(Array);
+            expect(typeof testItemList.get).toBe("function");
+            expect(typeof testItemList.getCategory).toBe("function");
+            expect(typeof testItemList.set).toBe("function");
         });
 
         test("exposes catalogue to window.__debug when it exists", () => {
@@ -54,34 +54,34 @@ describe("Catalogue", () => {
 
     describe("getters", () => {
         test("get with returns a single item with a matching id", () => {
-            const itemOne = testCatalogue.get("item-1");
+            const itemOne = testItemList.get("item-1");
             const expectedItem = catalogueData.catalogueItems[0];
             expect(itemOne).toEqual(expectedItem);
         });
 
         test("getCategory returns all items in that category", () => {
-            const categoryOneItems = testCatalogue.getCategory("category-1");
+            const categoryOneItems = testItemList.getCategory("category-1");
             expect(categoryOneItems.length).toEqual(2);
         });
 
         test("get returns undefined when no matching item exists", () => {
-            expect(testCatalogue.get("fish")).toBe(undefined);
+            expect(testItemList.get("fish")).toBe(undefined);
         });
     });
 
     describe("setter", () => {
         test("merges the provided object into the matching item", () => {
-            testCatalogue.set("item-1", { someKey: "someValue" });
-            expect(testCatalogue.get("item-1").someKey).toEqual("someValue");
+            testItemList.set("item-1", { someKey: "someValue" });
+            expect(testItemList.get("item-1").someKey).toEqual("someValue");
         });
 
         test("returns true if set was successful", () => {
-            expect(testCatalogue.set("item-1", { someKey: "someValue" })).toBe(true);
+            expect(testItemList.set("item-1", { someKey: "someValue" })).toBe(true);
         });
 
         test("returns false if it could not replace the item", () => {
             const itemToSet = { id: "foo" };
-            expect(testCatalogue.set(itemToSet)).toBe(false);
+            expect(testItemList.set(itemToSet)).toBe(false);
         });
     });
 });

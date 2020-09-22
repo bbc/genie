@@ -26,14 +26,14 @@ export const initCatalogue = (key, items) => {
         return false;
     };
 
-    const catalogueSection = {
+    const itemList = {
         items,
         get,
         getCategory,
         set,
     };
 
-    catalogue.set(key, catalogueSection);
+    catalogue.set(key, itemList);
 
-    return catalogueSection;
+    return itemList;
 };

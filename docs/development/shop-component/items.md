@@ -15,14 +15,13 @@ Items require a unique id and, optionally, an array of categories the item belon
 ]
 ``` 
 
-Your scene config should contain a `catalogueKey` which should be a string corresponding to the name of a .json5 file in `themes/default/items`. The loader will then pick them up and make them available as a map. 
- 
+Your scene config should contain a `catalogueKey` which should be a string corresponding to the name of a .json5 file in `themes/default/items`. The loader will make these data available as a map. 
 
 ```javascript
 import { catalogue } from "./components/shop/item-catalogue.js";
-const catalogueSection = catalogue.get(sceneConfig.catalogueKey); // corresponding to a .json5 in items/
-const snotulonCannon = catalogueSection.get("Snotulon Cannon"); // get a single item
-const weapons = catalogueSection.getCategory(["weapons"]); // filter by array of categories
+const itemList = catalogue.get(sceneConfig.catalogueKey); // corresponding to a .json5 in items/
+const snotulonCannon = itemList.get("Snotulon Cannon"); // get a single item
+const weapons = itemList.getCategory(["weapons"]); // filter by array of categories
 ```
 
 ## Modifying items
@@ -31,9 +30,5 @@ You can change properties on an item by passing its id to the catalogue section 
 
 ```javascript
 const reload = { ammo: 100 };
-catalogueSection.set("Snotulon Cannon", reload); 
+itemList.set("Snotulon Cannon", reload); 
 ```
-
-
-
-
