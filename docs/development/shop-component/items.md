@@ -1,27 +1,34 @@
 # Items
 
-## Item Registry
+## The catalogue
 
-All items that appear in the shop (and therefore the game) need to exist in an item registry. Items are shaped like: 
+All items that appear in the shop (and therefore the game) need to exist in the catalogue. 
 
-`{ some: "json", goes: "here" }` (TBD)
+Items require a unique id and, optionally, an array of categories the item belongs to.
 
-The item registry is set up like this: 
+```
+[
+    { 
+        id: "Snotulon Cannon",
+        category: ["weapons"],
+    }
+]
+``` 
+
+Your scene config should contain a `catalogueKey` which should be a string corresponding to the name of a .json5 file in `themes/default/items`. The loader will make these data available as a map. 
 
 ```javascript
-import { initRegistry } from "../core/item-registry.js";
-
-const registry = initRegistry("registryKey", ['array' , 'of', 'items'])); // tbd
+import { catalogue } from "./components/shop/item-catalogue.js";
+const itemList = catalogue.get(sceneConfig.catalogueKey); // corresponding to a .json5 in items/
+const snotulonCannon = itemList.get("Snotulon Cannon"); // get a single item
+const weapons = itemList.getCategory(["weapons"]); // filter by array of categories
 ```
 
-Keep a reference to this registry to work with items in the flow of your game.
+## Modifying items
 
-## Accessing the registry
+You can change properties on an item by passing its id to the catalogue section with an updated state object:
 
-The registry object can either be acquired at initialisation time (returned by `initRegistry()`) or by doing `itemsRegistry.get("registryKey")`.
-
-The registry object provides getters and setters:
-
-- `get("item-id")` returns a single item by ID
-- `getCategory("category")` returns all items in the provided category
-- `set("item-id", { foo: "bar" })` updates `foo` on the matching item with value `"bar"`
+```javascript
+const reload = { ammo: 100 };
+itemList.set("Snotulon Cannon", reload); 
+```

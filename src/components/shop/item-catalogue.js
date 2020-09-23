@@ -5,11 +5,11 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 
-export let itemsRegistry = new Map();
+export let catalogue = new Map();
 
-export const initRegistry = (key, items) => {
+export const initCatalogue = (key, items) => {
     if (window.__debug) {
-        window.__debug.items = itemsRegistry;
+        window.__debug.catalogue = catalogue;
     }
 
     const get = id => items.find(item => id === item.id);
@@ -33,7 +33,7 @@ export const initRegistry = (key, items) => {
         set,
     };
 
-    itemsRegistry.set(key, itemList);
+    catalogue.set(key, itemList);
 
     return itemList;
 };
