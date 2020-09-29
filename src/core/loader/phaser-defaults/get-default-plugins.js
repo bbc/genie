@@ -32,6 +32,11 @@ export const getDefaultPlugins = options => {
                 plugin: window.SpinePlugin,
                 mapping: "spine",
             },
+            {
+                key: "rexUI",
+                plugin: window.rexuiplugin, 
+                mapping: "rexUI",
+            },
         ],
     };
 
