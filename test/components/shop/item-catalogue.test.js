@@ -7,8 +7,8 @@
 import { catalogue, initCatalogue } from "../../../src/components/shop/item-catalogue.js";
 
 const catalogueData = {
-    catalogueSectionKey: "test-data",
-    catalogueItems: [
+    key: "test-data",
+    items: [
         {
             id: "item-1",
             category: ["category-1"],
@@ -24,13 +24,21 @@ const catalogueData = {
     ],
 };
 
+const mockScreen = {
+    cache: {
+        json: {
+            get: () => catalogueData.items,
+        },
+    },
+};
+
 describe("Catalogue", () => {
     let testItemList;
 
     function init() {
-        const { catalogueSectionKey, catalogueItems } = catalogueData;
-        initCatalogue(catalogueSectionKey, catalogueItems);
-        testItemList = catalogue.get(catalogueSectionKey);
+        const { key, items } = catalogueData;
+        initCatalogue(mockScreen)(key);
+        testItemList = catalogue.get(key);
     }
 
     beforeEach(() => {
@@ -46,16 +54,16 @@ describe("Catalogue", () => {
         });
 
         test("exposes catalogue to window.__debug when it exists", () => {
-            window.__debug = {};
+            global.__debug = {};
             init();
-            expect(typeof window.__debug.catalogue).toBe("object");
+            expect(typeof global.__debug.catalogue).toBe("object");
         });
     });
 
     describe("getters", () => {
         test("get with returns a single item with a matching id", () => {
             const itemOne = testItemList.get("item-1");
-            const expectedItem = catalogueData.catalogueItems[0];
+            const expectedItem = catalogueData.items[0];
             expect(itemOne).toEqual(expectedItem);
         });
 
