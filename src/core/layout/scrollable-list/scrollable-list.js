@@ -122,7 +122,7 @@ export const createGelButton = (scene, item, config) => {
         scene: "shop",
     };
 
-    const gelButton = scene.add.gelButton(0, 0, gelConfig);
+    const gelButton = scene.add.gelButton(0, 0, gelConfig); // factory might be the problem?
     scaleButton(scene, gelButton, config);
 
     const callback = () => onClick(gelButton);
