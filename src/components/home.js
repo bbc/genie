@@ -19,10 +19,8 @@ export class Home extends Screen {
         const achievements = gmi.achievements.get().length ? ["achievements"] : [];
         const debug = isDebug() ? ["debug"] : [];
         this.addBackgroundItems();
-        // const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
-        const buttons = [];
-        // this.setLayout(buttons.concat(achievements, debug));
-        this.setLayout(buttons);
+        const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
+        this.setLayout(buttons.concat(achievements, debug));
 
         this.panel = scrollableList(this, {});
 

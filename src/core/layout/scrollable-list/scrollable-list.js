@@ -9,6 +9,8 @@
 import { accessibilify } from "../../accessibility/accessibilify.js";
 import { eventBus } from "../../event-bus.js"
 
+import { GelButton } from "../gel-button.js";
+
 export const scrollableList = (scene, config) => {
     const panelConfig = getConfig(scene, config);
     const panel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
@@ -123,7 +125,9 @@ export const createGelButton = (scene, item, config) => {
     };
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig); // factory might be the problem?
+    // const gelButton = new GelButton(scene, 0, 0, gelConfig); // factory might be the problem?
     scaleButton(scene, gelButton, config);
+    console.log('BEEBUG: gelButton', gelButton);
 
     const callback = () => onClick(gelButton);
     eventBus.subscribe({ callback, channel: "shop_menu", name: id });
