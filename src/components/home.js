@@ -19,16 +19,19 @@ export class Home extends Screen {
         const achievements = gmi.achievements.get().length ? ["achievements"] : [];
         const debug = isDebug() ? ["debug"] : [];
         this.addBackgroundItems();
-        const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
-        this.setLayout(buttons.concat(achievements, debug));
+        // const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
+        const buttons = [];
+        // this.setLayout(buttons.concat(achievements, debug));
+        this.setLayout(buttons);
 
-        // const panel = scrollableList(this, {});
-        // console.log('BEEBUG: panel', panel);
+        this.panel = scrollableList(this, {});
 
         eventBus.subscribe({
             channel: buttonsChannel(this),
             name: "play",
             callback: this.navigation.next,
         });
+
+        console.log('BEEBUG: this', this);
     }
 }

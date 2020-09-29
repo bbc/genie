@@ -19,30 +19,32 @@ export class GelButton extends Phaser.GameObjects.Container {
     constructor(scene, x, y, config) {
         const metrics = getMetrics();
         super(scene, x, y);
-
+        // console.log('BEEBUG: config', config);
         this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
         this.setScrollFactor(0);
         this.sprite.setScrollFactor(0);
         this.add(this.sprite);
-
+        
         this.config = { ...defaults, ...config };
         this.isMobile = metrics.isMobile;
         config.indicator && this.setIndicator();
-
+        
         if (config.anim) {
             config.anim.frames = this.scene.anims.generateFrameNumbers(config.anim.key);
             this.scene.anims.create(config.anim);
             this.sprite.play(config.anim.key);
         }
-
+        
         this.setInteractive({
             hitArea: this.sprite,
             useHandCursor: true,
             hitAreaCallback: Phaser.Geom.Rectangle.Contains,
         });
-
+        
         this.setHitArea(metrics);
         this.setupMouseEvents(config, scene);
+        console.log('BEEBUG: this', this);
+        console.log('BEEBUG: this.x, this.y', `${this.x}, ${this.y}`);
     }
 
     overlays = {

@@ -27,7 +27,7 @@
                 "key": "itemBackground",
                 "url": "shop/item_block.png",
                 "frameConfig": {
-                    "frameWidth": 64,
+                    "frameWidth": 378,
                     "frameHeight": 64,
                     "frameMax": 1,
                     "margin": 0,
@@ -51,8 +51,8 @@
                 "key": "currency",
                 "url": "shop/currency.png",
                 "frameConfig": {
-                    "frameWidth": 64,
-                    "frameHeight": 64,
+                    "frameWidth": 20,
+                    "frameHeight": 20,
                     "frameMax": 1,
                     "margin": 0,
                     "spacing": 4
