@@ -7,10 +7,13 @@ import fp from "../../../lib/lodash/fp/fp.js";
 
 export let catalogue = new Map();
 
-export const initCatalogue = (key, items) => {
+
+export const initCatalogue = screen => key => {
     if (window.__debug) {
         window.__debug.catalogue = catalogue;
     }
+
+    const items = screen.cache.json.get(`catalogue-${key}`);
 
     const get = id => items.find(item => id === item.id);
 

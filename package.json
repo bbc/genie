@@ -44,7 +44,7 @@
         "jsdom": "^16.2.2",
         "local-web-server": "^4.0.0",
         "minimist": "^1.2.5",
-        "prettier": "2.0.3",
+        "prettier": "2.1.2",
         "rollup": "^2.25.0",
         "rollup-plugin-terser": "^7.0.0",
         "webpack": "^4.42.1",

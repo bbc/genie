@@ -111,6 +111,7 @@
             },
         },
     },
+    catalogueKey: "characters",
     choices: [
         {
             id: "mary",

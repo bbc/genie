@@ -1,0 +1,7 @@
+{
+    catalogue: "game-items",
+    defaults: [         //how do filters map
+        { id: "sword", qty: 10 },
+        { id: "crossbow", qty: 5 },
+    ],
+}

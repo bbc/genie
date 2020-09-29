@@ -5,26 +5,16 @@
  */
 import { initCatalogue } from "../../components/shop/item-catalogue.js";
 
+const getKey = item => item.catalogueKey;
+const loadToCache = screen => key => screen.load.json5({ key: `catalogue-${key}`, url: `items/${key}.json5` });
+const getKeys = config => Object.values(config).map(getKey).filter(Boolean);
+
 export const loadCatalogue = (screen, config) => {
-    const catalogueKeys = getCatalogueKeys(config);
+    const keys = getKeys(config);
 
-    catalogueKeys.forEach(loadToCache(screen));
+    keys.forEach(loadToCache(screen));
 
-    screen.load.once("complete", () =>
-        catalogueKeys.forEach(key => initCatalogue(key, screen.cache.json.get(`catalogue-${key}`))),
-    );
-
+    const loadComplete = () => keys.forEach(initCatalogue(screen));
+    screen.load.once("complete", loadComplete);
     screen.load.start();
-};
-
-export const getCatalogueKeys = config =>
-    Object.values(config)
-        .map(item => item.catalogueKey)
-        .filter(Boolean);
-
-export const loadToCache = screen => key => {
-    screen.load.json5({
-        key: `catalogue-${key}`,
-        url: `items/${key}.json5`,
-    });
 };
