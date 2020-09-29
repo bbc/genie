@@ -12,6 +12,8 @@ import { eventBus } from "../core/event-bus.js";
 import { isDebug } from "../core/debug/debug-mode.js";
 import { gmi } from "../core/gmi/gmi.js";
 
+import { scrollableList } from "../core/layout/scrollable-list/scrollable-list.js";
+
 export class Home extends Screen {
     create() {
         const achievements = gmi.achievements.get().length ? ["achievements"] : [];
@@ -19,6 +21,9 @@ export class Home extends Screen {
         this.addBackgroundItems();
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
         this.setLayout(buttons.concat(achievements, debug));
+
+        // const panel = scrollableList(this, {});
+        // console.log('BEEBUG: panel', panel);
 
         eventBus.subscribe({
             channel: buttonsChannel(this),
