@@ -23,23 +23,23 @@ export class GelButton extends Phaser.GameObjects.Container {
         this.setScrollFactor(0);
         if (!config.inScrollable) this.sprite.setScrollFactor(0); // resolves glitch
         this.add(this.sprite);
-        this.inScrollable = config.inScrollable;
+
         this.config = { ...defaults, ...config };
         this.isMobile = metrics.isMobile;
         config.indicator && this.setIndicator();
-        
+
         if (config.anim) {
             config.anim.frames = this.scene.anims.generateFrameNumbers(config.anim.key);
             this.scene.anims.create(config.anim);
             this.sprite.play(config.anim.key);
         }
-        
+
         this.setInteractive({
             hitArea: this.sprite,
             useHandCursor: true,
             hitAreaCallback: Phaser.Geom.Rectangle.Contains,
         });
-        
+
         this.setHitArea(metrics);
         this.setupMouseEvents(config, scene);
     }
@@ -111,7 +111,7 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     resize(metrics) {
-        this.isMobile = metrics.isMobile; // this is messing
+        this.isMobile = metrics.isMobile;
         this.sprite.setTexture(assetPath({ key: this.config.key, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);
 

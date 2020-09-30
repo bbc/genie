@@ -16,9 +16,7 @@ export const scrollableList = (scene) => {
 
 export const getPanelConfig = scene => {
     const config = scene.config;
-
     const { assetKeys: keys } = config;
-
     const safeArea = scene.layout.getSafeArea();
 
     return {
@@ -60,12 +58,12 @@ export const createPanel = (scene, config) => {
     return sizer;
 };
 
-export const createBackground = (scene, config, safeArea) => {
-    const background = scene.add.image(-config.space, 0, config.assetKeys.panelBackground);
-    background.scaleX = (safeArea.width - config.space * 2) / background.width;
-    background.scaleY = (safeArea.height - config.space * 2) / background.height;
-    return background;
-};
+// export const createBackground = (scene, config, safeArea) => {
+//     const background = scene.add.image(-config.space, 0, config.assetKeys.panelBackground);
+//     background.scaleX = (safeArea.width - config.space * 2) / background.width;
+//     background.scaleY = (safeArea.height - config.space * 2) / background.height;
+//     return background;
+// };
 
 export const createTable = (scene, config) => {
     const table = scene.rexUI.add.gridSizer({
