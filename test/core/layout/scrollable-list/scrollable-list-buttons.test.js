@@ -1,5 +1,6 @@
-import { createGelButton, scaleButton } from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js"
-import * as overlays from "../../../../src/core/layout/scrollable-list/button-overlays.js"
+import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
+import * as overlays from "../../../../src/core/layout/scrollable-list/button-overlays.js";
+import * as helpers from "../../../../src/core/layout/scrollable-list/scrollable-list-helpers.js";
 import { eventBus } from "../../../../src/core/event-bus.js";
 
 const mockButton = {
@@ -29,7 +30,7 @@ const mockConfig = {
     }
 };
 
-describe.only("Scrollable List Buttons", () => {
+describe("Scrollable List Buttons", () => {
 
     overlays.overlays1Wide = jest.fn();
 
@@ -38,12 +39,12 @@ describe.only("Scrollable List Buttons", () => {
     describe("createGelButton", () => {
 
         test("adds a gel button", () => {
-            createGelButton(mockScene, mockItem, mockConfig);
+            buttons.createGelButton(mockScene, mockItem, mockConfig);
             expect(mockScene.add.gelButton).toHaveBeenCalled();
         });
 
-        test("provides correct config", () => {
-            const button = createGelButton(mockScene, mockItem, mockConfig);
+        test("provides it the correct config", () => {
+            buttons.createGelButton(mockScene, mockItem, mockConfig);
             const expectedConfig = {
                 accessibilityEnabled: true,
                 ariaLabel: "mockAriaLabel",
@@ -59,28 +60,23 @@ describe.only("Scrollable List Buttons", () => {
 
         test("subscribes to the event bus", () => {
             eventBus.subscribe = jest.fn();
-            createGelButton(mockScene, mockItem, mockConfig);
+            helpers.onClick = jest.fn();
+            buttons.createGelButton(mockScene, mockItem, mockConfig);
             const args = eventBus.subscribe.mock.calls[0][0];
             expect(args.channel).toEqual("mockChannel");
             expect(args.name).toEqual("shop_id_mockId");
+            args.callback();
+            expect(helpers.onClick).toHaveBeenCalledWith(mockButton);
         });
 
-        // test("scales the button", () => {
-        //     expect(false).toBe(true);
-        // });
+        test("scales the button", () => {
+            buttons.createGelButton(mockScene, mockItem, mockConfig);
+            expect(mockButton.setScale).toHaveBeenCalled();
+        });
 
-        // test("applies correct overlays", () => {
-        //     expect(false).toBe(true);
-        // });
+        test("applies correct overlays", () => {
+            buttons.createGelButton(mockScene, mockItem, mockConfig);
+            expect(overlays.overlays1Wide).toHaveBeenCalled();
+        });
     });
-
-    // describe("scaleButton", () => {
-    //     test("scales the button to leave config.space pixels each side", () => {
-    //         expect(false).toBe(true);
-    //     });
-
-    //     test("preserves the aspect ratio", () => {
-    //         expect(false).toBe(true);
-    //     });
-    // });
 });
