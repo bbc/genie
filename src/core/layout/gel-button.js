@@ -42,7 +42,6 @@ export class GelButton extends Phaser.GameObjects.Container {
         
         this.setHitArea(metrics);
         this.setupMouseEvents(config, scene);
-        console.log('BEEBUG: this', this);
     }
 
     overlays = {

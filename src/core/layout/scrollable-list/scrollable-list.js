@@ -1,37 +1,86 @@
 /**
-
  * @module core/layout/scrollable-list
  * @copyright BBC 2020
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-
-import { accessibilify } from "../../accessibility/accessibilify.js";
 import { eventBus } from "../../event-bus.js"
 
-import { GelButton } from "../gel-button.js";
-
 export const scrollableList = (scene, config) => {
-    const panelConfig = getConfig(scene, config);
+    const panelConfig = getPanelConfig(scene, config);
     const panel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
     scene.input.topOnly = false;
-
     return panel;
 };
 
-export const getConfig = (scene, config) => {
+export const getPanelConfig = (scene, config) => {
 
+    // PH
     config = {
         space: 10,
         items: [
-            { name: "itemOne" }, 
-            { name: "itemTwo" },
-            { name: "itemThree" },
-            { name: "itemFour" },
-            { name: "itemFive" },
+            { 
+                name: "Item 1 Name", 
+                // description: "Item 1 description",
+                icon: "shop.itemIcon",
+                price: 10,
+                ariaLabel: "someAriaLabel",
+            }, 
+            { 
+                name: "Item 2 Name", 
+                description: "Item 2 description",
+                icon: "shop.itemIcon",
+                price: 10,
+                ariaLabel: "someAriaLabel",
+
+            }, 
+            { 
+                name: "Item 3 Name", 
+                description: "Item 3 description",
+                icon: "shop.itemIcon",
+                price: 10,
+                ariaLabel: "someAriaLabel",
+            }, 
+            { 
+                name: "Item 4 Name", 
+                description: "Item 4 description",
+                icon: "shop.itemIcon",
+                price: 10,
+                ariaLabel: "someAriaLabel",
+            }, 
+            { 
+                name: "Item 5 Name", 
+                description: "Item 5 description",
+                icon: "shop.itemIcon",
+                price: 10,
+                ariaLabel: "someAriaLabel",
+            }, 
         ],
+        assetKeys: {
+            prefix: "shop",
+            background: "background",
+            scrollbar: "scrollbar",
+            scrollbarHandle: "scrollbarHandle",
+            panelBackground: "panelBackground",
+            currency: "currency",
+            itemBackground: "itemBackground"
+        },
+        font: {
+            fontFamily: "ReithSans",
+            resolution: 5
+        },
+        offset: {
+            itemIconX: 32, // from left edge
+            textX: 100,
+            textY: 12, // if an item has a description, name and description y will be offset -/+ this value
+            currencyIconX: 64, // from right edge
+            currencyTextX: 48,
+        },
+        eventChannel: "shop_menu",
     };
 
+
+    const { assetKeys: keys } = config;
     const safeArea = scene.layout.getSafeArea();
     return {
         x: 0, 
@@ -39,7 +88,7 @@ export const getConfig = (scene, config) => {
         width: safeArea.width,
         height: safeArea.height,
         scrollMode: 0,
-        background: scene.add.image(0, 0, "shop.background"),
+        background: scene.add.image(0, 0, assetKey(keys.background, keys)),
         panel: {
             child: createPanel(scene, config),
             mask: {
@@ -48,8 +97,8 @@ export const getConfig = (scene, config) => {
             // background: createBackground(scene, config, safeArea), // maybe only needed for debug
         },
         slider: {
-            track: scene.add.image(0, 0, "shop.scrollbar"),
-            thumb: scene.add.image(0, 0, "shop.scrollbarHandle"),
+            track: scene.add.image(0, 0, assetKey(keys.scrollbar, keys)),
+            thumb: scene.add.image(0, 0, assetKey(keys.scrollbarHandle, keys)),
         },
         space: {
             left: 0,
@@ -64,7 +113,7 @@ export const getConfig = (scene, config) => {
 export const createPanel = (scene, config) => {
     const sizer = scene.rexUI.add.sizer({
         orientation: "x",
-        space: { item: 10 },
+        space: { item: 0 },
     }).add(
         createTable(scene, config), 
         { expand: true }
@@ -72,8 +121,8 @@ export const createPanel = (scene, config) => {
     return sizer;
 };
 
-export const createBackground = (scene, config, safeArea) => { // can generalise?
-    const background = scene.add.image(-config.space, 0, "shop.panelBackground");
+export const createBackground = (scene, config, safeArea) => {
+    const background = scene.add.image(-config.space, 0, config.assetKeys.panelBackground);
     background.scaleX = (safeArea.width - config.space * 2) / background.width;
     background.scaleY = (safeArea.height - config.space * 2) / background.height;
     return background;
@@ -84,11 +133,11 @@ export const createTable = (scene, config) => {
         column: 1,
         row: config.items.length,
         space: { column: 10, row: 10 },
-        name: "someKey",
+        // name: "someKey",
     });
 
     config.items.forEach((item, idx) => {
-        table.add(createItem(scene, item, table, config), 0, idx, "top", 0, true);
+        table.add(createItem(scene, item, config), 0, idx, "top", 0, true);
     });
 
     return scene.rexUI.add.sizer({
@@ -99,7 +148,7 @@ export const createTable = (scene, config) => {
     );
 };
 
-export const createItem = (scene, item, table, config) => {
+export const createItem = (scene, item, config) => {
     const label = scene.rexUI.add.label({
         orientation: 0,
         icon: createGelButton(scene, item, config),
@@ -116,32 +165,36 @@ export const createGelButton = (scene, item, config) => {
     const gelConfig = {
         gameButton: true,
         accessibilityEnabled: true,
-        ariaLabel: "someLabel",
-        channel: "shop_menu",
+        ariaLabel: item.ariaLabel, 
+        channel: config.eventChannel,
         group: "middleCenter",
         id,
-        key: "itemBackground",
-        scene: "shop",
+        key: config.assetKeys.itemBackground,
+        scene: config.assetKeys.prefix,
     };
 
-    const gelButton = scene.add.gelButton(0, 0, gelConfig); // factory might be the problem?
-    // const gelButton = new GelButton(scene, 0, 0, gelConfig); // factory might be the problem?
-    scaleButton(scene, gelButton, config);
-    console.log('BEEBUG: gelButton', gelButton);
+    const gelButton = scene.add.gelButton(0, 0, gelConfig);
 
     const callback = () => onClick(gelButton);
-    eventBus.subscribe({ callback, channel: "shop_menu", name: id });
-
-    return addOverlays(scene, gelButton, item);
+    eventBus.subscribe({ callback, channel: gelConfig.channel, name: id });
+    
+    scaleButton(scene, gelButton, config);
+    return addOverlays(scene, gelButton, item, config);
 };
 
-export const addOverlays = (scene, gelButton, item) => {
-    gelButton.overlays.set("background", scene.add.image(0, 0, "shop.itemBackground"));
-    gelButton.overlays.set("icon", scene.add.image((-gelButton.width / 2) + 32, 0, "shop.itemIcon")); // hardcoding hacks here hrm.
-    gelButton.overlays.set("currencyIcon", scene.add.image((gelButton.width / 2) - 64, 0, "shop.currency"));
-    gelButton.overlays.set("currencyAmount", scene.add.text((gelButton.width / 2) - 48, -8, "10"));
-    gelButton.overlays.set("itemName", scene.add.text(-gelButton.width / 4, -12, "primary text"));
-    gelButton.overlays.set("itemDescription", scene.add.text(-gelButton.width / 4, 0, "secondary text"));
+export const addOverlays = (scene, gelButton, item, config) => {
+    const { offset, assetKeys: keys, font } = config;
+    const edge = gelButton.width / 2;
+    gelButton.overlays.set("background", scene.add.image(0, 0, assetKey(keys.itemBackground, keys)));
+    gelButton.overlays.set("icon", scene.add.image(-edge + offset.itemIconX, 0, item.icon));
+    gelButton.overlays.set("currencyIcon", scene.add.image(edge - offset.currencyIconX, 0, assetKey(keys.currency, keys)));
+
+    const fontStyle = { fontFamily: font.fontFamily, resolution: font.resolution };
+    gelButton.overlays.set("currencyAmount", scene.add.text(edge - offset.currencyTextX, -10, item.price, fontStyle));
+    const nameY = item.description ? offset.textY * 2 : offset.textY;
+    gelButton.overlays.set("itemName", scene.add.text(-edge + offset.textX, -nameY, item.name, { ...fontStyle, fontSize: 20 }));
+    gelButton.overlays.set("itemDescription", scene.add.text(-edge + offset.textX, 0, item.description ,fontStyle));
+
     return gelButton;
 }
 
@@ -152,5 +205,9 @@ export const scaleButton = (scene, button, config) => {
 };
 
 const onClick = gelButton => {
-    console.log(`Clicked ${gelButton.id}`);
+    console.log(`Clicked ${gelButton.config.id}`);
+}
+
+const assetKey = (key, assetKeys) => {
+    return [assetKeys.prefix, key].join(".");
 }
