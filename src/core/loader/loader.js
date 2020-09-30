@@ -13,7 +13,7 @@ import { gmi } from "../gmi/gmi.js";
 import { loadPack } from "./loadpack.js";
 import { getConfig, loadConfig } from "./get-config.js";
 import { isDebug } from "../debug/debug-mode.js";
-import { loadCatalogue } from "./get-catalogue.js";
+import { loadCatalogue } from "./load-catalogue.js";
 
 const getScreenKeys = keys =>
     Object.keys(keys).filter(key => ["default", "boot", "loader", "debug"].indexOf(key) === -1);

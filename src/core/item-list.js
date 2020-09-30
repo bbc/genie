@@ -8,35 +8,35 @@ import fp from "../../lib/lodash/fp/fp.js";
 
 const getGenieStore = () => gmi.getAllSettings().gameData.genie || {};
 
-export let states = new Map();
-export const initState = (stateKey, config) => {
-    if (window.__debug) {
-        window.__debug.states = states;
-    }
+export let itemLists = new Map();
+export const initState = (key, config) => {
+    window.__debug && (window.__debug.itemLists = itemLists);
 
     const getMerged = stored => config.map(item => Object.assign(item, stored[item.id]));
     const get = key =>
         Object.assign(
             {},
             config.find(conf => conf.id === key),
-            fp.get(`${stateKey}.${key}`, getGenieStore()),
+            fp.get(`${key}.${key}`, getGenieStore()),
         );
-    const getStored = () => getGenieStore()[stateKey] || {};
+
+
+    const getStored = () => getGenieStore()[key] || {};
 
     const getAll = fp.flow(getStored, getMerged);
 
     const set = (id, state = null) => {
-        gmi.setGameData("genie", fp.setWith(Object, [stateKey, id], { state }, getGenieStore()));
+        gmi.setGameData("genie", fp.setWith(Object, [key, id], { itemList }, getGenieStore()));
     };
 
-    const state = {
+    const itemList = {
         config,
         get,
         getAll,
         set,
     };
 
-    states.set(stateKey, state);
+    itemLists.set(key, itemList);
 
-    return state;
+    return itemList;
 };

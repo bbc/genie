@@ -13,6 +13,10 @@ import { isDebug } from "../core/debug/debug-mode.js";
 import { gmi } from "../core/gmi/gmi.js";
 
 export class Home extends Screen {
+    preload() {
+        this.load.json5({ key: "game-items", url: "themes/default/items/game-items.json5" });
+    }
+
     create() {
         const achievements = gmi.achievements.get().length ? ["achievements"] : [];
         const debug = isDebug() ? ["debug"] : [];

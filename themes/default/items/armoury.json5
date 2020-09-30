@@ -1,6 +1,6 @@
 {
     catalogue: "game-items",
-    defaults: [         //how do filters map
+    defaults: [
         { id: "sword", qty: 10 },
         { id: "crossbow", qty: 5 },
     ],
