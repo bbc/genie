@@ -21,9 +21,9 @@ export class GelButton extends Phaser.GameObjects.Container {
         super(scene, x, y);
         this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
         this.setScrollFactor(0);
-        // this.sprite.setScrollFactor(0);
+        if (!config.inScrollable) this.sprite.setScrollFactor(0); // resolves glitch
         this.add(this.sprite);
-        
+        this.inScrollable = config.inScrollable;
         this.config = { ...defaults, ...config };
         this.isMobile = metrics.isMobile;
         config.indicator && this.setIndicator();
@@ -111,7 +111,7 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     resize(metrics) {
-        this.isMobile = metrics.isMobile;
+        this.isMobile = metrics.isMobile; // this is messing
         this.sprite.setTexture(assetPath({ key: this.config.key, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);
 

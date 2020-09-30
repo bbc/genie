@@ -14,7 +14,6 @@ export class Shop extends Screen {
         this.addBackgroundItems();
         const buttons = ["exit", "audio"];
         this.setLayout(buttons);
-
         this.panel = scrollableList(this);
     }
 }
