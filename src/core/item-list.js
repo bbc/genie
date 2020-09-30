@@ -9,7 +9,7 @@ import fp from "../../lib/lodash/fp/fp.js";
 const getGenieStore = () => gmi.getAllSettings().gameData.genie || {};
 
 export let itemLists = new Map();
-export const initState = (key, config) => {
+export const initList = (key, config) => {
     window.__debug && (window.__debug.itemLists = itemLists);
 
     const getMerged = stored => config.map(item => Object.assign(item, stored[item.id]));
@@ -25,7 +25,11 @@ export const initState = (key, config) => {
 
     const getAll = fp.flow(getStored, getMerged);
 
-    const set = (id, state = null) => {
+    const set = (id, itemList = null) => {
+
+        //TODO needs a merge here - previously "state" was being stored as a key and was only ever one string.
+
+
         gmi.setGameData("genie", fp.setWith(Object, [key, id], { itemList }, getGenieStore()));
     };
 
