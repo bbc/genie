@@ -13,75 +13,13 @@ export const scrollableList = (scene, config) => {
     return panel;
 };
 
-export const getPanelConfig = (scene, config) => {
-
-    // PH
-    config = {
-        space: 10,
-        items: [
-            { 
-                name: "Item 1 Name", 
-                // description: "Item 1 description",
-                icon: "shop.itemIcon",
-                price: 10,
-                ariaLabel: "someAriaLabel",
-            }, 
-            { 
-                name: "Item 2 Name", 
-                description: "Item 2 description",
-                icon: "shop.itemIcon",
-                price: 10,
-                ariaLabel: "someAriaLabel",
-
-            }, 
-            { 
-                name: "Item 3 Name", 
-                description: "Item 3 description",
-                icon: "shop.itemIcon",
-                price: 10,
-                ariaLabel: "someAriaLabel",
-            }, 
-            { 
-                name: "Item 4 Name", 
-                description: "Item 4 description",
-                icon: "shop.itemIcon",
-                price: 10,
-                ariaLabel: "someAriaLabel",
-            }, 
-            { 
-                name: "Item 5 Name", 
-                description: "Item 5 description",
-                icon: "shop.itemIcon",
-                price: 10,
-                ariaLabel: "someAriaLabel",
-            }, 
-        ],
-        assetKeys: {
-            prefix: "shop",
-            background: "background",
-            scrollbar: "scrollbar",
-            scrollbarHandle: "scrollbarHandle",
-            panelBackground: "panelBackground",
-            currency: "currency",
-            itemBackground: "itemBackground"
-        },
-        font: {
-            fontFamily: "ReithSans",
-            resolution: 5
-        },
-        offset: {
-            itemIconX: 32, // from left edge
-            textX: 100,
-            textY: 12, // if an item has a description, name and description y will be offset -/+ this value
-            currencyIconX: 64, // from right edge
-            currencyTextX: 48,
-        },
-        eventChannel: "shop_menu",
-    };
-
+export const getPanelConfig = scene => {
+    const config = scene.config;
 
     const { assetKeys: keys } = config;
+
     const safeArea = scene.layout.getSafeArea();
+
     return {
         x: 0, 
         y: 0,
@@ -133,7 +71,6 @@ export const createTable = (scene, config) => {
         column: 1,
         row: config.items.length,
         space: { column: 10, row: 10 },
-        // name: "someKey",
     });
 
     config.items.forEach((item, idx) => {
@@ -160,7 +97,7 @@ export const createItem = (scene, item, config) => {
 
 export const createGelButton = (scene, item, config) => {
 
-    const id = `shop_id_${item.name}`;
+    const id = `shop_id_${item.id}`;
 
     const gelConfig = {
         gameButton: true,

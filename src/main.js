@@ -9,6 +9,7 @@ import { Results } from "./components/results/results-screen.js";
 import { Select } from "./components/select/select-screen.js";
 import { HowToPlay } from "./components/how-to-play.js";
 import { Game } from "./components/game.js";
+import { Shop } from "./components/shop/shop.js";
 import { Pause } from "./components/overlays/pause.js";
 import { settingsChannel } from "./core/settings.js";
 import { eventBus } from "./core/event-bus.js";
@@ -57,7 +58,8 @@ const screens = {
             debug: "debug",
             //Example of custom routing function
             next: scene => {
-                scene.navigate("narrative");
+                // scene.navigate("narrative");
+                scene.navigate("shop");
             },
         },
     },
@@ -104,7 +106,7 @@ const screens = {
         },
     },
     shop: {
-        scene: Home,
+        scene: Shop,
         routes: {
             next: "home"
         },
