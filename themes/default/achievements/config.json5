@@ -14,13 +14,13 @@
         key: "rock_star",
         name: "Rock Star",
         description: "You collected five stars.",
-        points: 100,
+        points: 25,
     },
     {
         key: "stellar",
         name: "Stellar Achievement",
         description: "You collected ten stars.",
-        points: 100,
+        points: 50,
     },
     {
         key: "diamond_in_the_rough",
@@ -32,19 +32,19 @@
         key: "pyrites_of_the_carribean",
         name: "Pyrites of The Carribean",
         description: "You collected five gems.",
-        points: 100,
+        points: 150,
     },
     {
         key: "sapphire_so_good",
         name: "Sapphire So Good",
         description: "You collected ten gems.",
-        points: 100,
+        points: 50,
     },
     {
         key: "diamonds_are_forever",
         name: "Diamonds Are Forever",
         description: "You collected twenty gems.",
-        points: 100,
+        points: 50,
     },
     {
         key: "got_the_key",
@@ -56,12 +56,12 @@
         key: "lock_around_the_clock",
         name: "Lock Around The Clock",
         description: "You collected five keys.",
-        points: 100,
+        points: 175,
     },
     {
         key: "super_size_key",
         name: "Super Size Key",
         description: "You collected ten keys.",
-        points: 100,
+        points: 200,
     },
 ]
