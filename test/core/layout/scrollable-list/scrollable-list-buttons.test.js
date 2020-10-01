@@ -36,7 +36,7 @@ describe("Scrollable List Buttons", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    describe("createGelButton", () => {
+    describe("createGelButton()", () => {
 
         test("adds a gel button", () => {
             buttons.createGelButton(mockScene, mockItem, mockConfig);
@@ -53,7 +53,8 @@ describe("Scrollable List Buttons", () => {
                 group: "middleCenter",
                 id: "shop_id_mockId",
                 key: "itemBackground",
-                scene: "mockScene"
+                scene: "mockScene",
+                inScrollable: true,
             };
             expect(mockScene.add.gelButton).toHaveBeenCalledWith(0, 0, expectedConfig);
         });

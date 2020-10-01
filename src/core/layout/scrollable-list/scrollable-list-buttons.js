@@ -15,6 +15,7 @@ export const createGelButton = (scene, item, config) => {
         id,
         key: config.assetKeys.itemBackground,
         scene: config.assetKeys.prefix,
+        inScrollable: true,
     };
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);

@@ -4,7 +4,7 @@ describe("Scrollable List helpers", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    describe("onClick", () => {
+    describe("onClick()", () => {
         test("calls console.log", () => {
             console.log = jest.fn();
             const mockGelButton = { config: { id: "foo"}};
@@ -12,7 +12,7 @@ describe("Scrollable List helpers", () => {
             expect(console.log).toHaveBeenCalledWith("Clicked foo");
         });
     });
-    describe("assetKey", () => {
+    describe("assetKey()", () => {
         test("concatenates the asset prefix with the asset key", () => {
             const assetKeys = { prefix: "foo" };
             const concatenatedKey = helpers.assetKey("bar", assetKeys)
