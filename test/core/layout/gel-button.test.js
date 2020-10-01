@@ -123,6 +123,7 @@ describe("Gel Button", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("Constructor", () => {
+
         test("correctly sets class properties", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
             expect(gelButton.config).toEqual(mockConfig);
@@ -149,6 +150,13 @@ describe("Gel Button", () => {
             expect(gelButton.on).toHaveBeenCalledWith("pointerout", expect.any(Function));
             expect(gelButton.on).toHaveBeenCalledWith("pointerover", expect.any(Function));
         });
+        
+        test("does not call setScrollFactor if configured inScrollable", () => {
+            const inScrollableMockConfig = { ...mockConfig, inScrollable: true };
+            const gelButton = new GelButton(mockScene, mockX, mockY, inScrollableMockConfig);
+            expect(mockSprite.setScrollFactor).not.toHaveBeenCalled();
+        });
+
     });
 
     describe("Pointer events", () => {

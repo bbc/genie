@@ -2,9 +2,11 @@ import { onClick } from "./scrollable-list-helpers.js";
 import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
 
-export const createGelButton = (scene, item, config) => {
+export const createGelButton = (scene, item) => {
 
     const id = `shop_id_${item.id}`;
+
+    const config = scene.config;
 
     const gelConfig = {
         gameButton: true,

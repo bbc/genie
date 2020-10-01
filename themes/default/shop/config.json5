@@ -67,6 +67,7 @@
         textY: 12, // if an item has a description, name and description y will be offset -/+ this value
         currencyIconX: 64, // from right edge
         currencyTextX: 48,
+        currencyTextY: 10,
     },
     eventChannel: "shop_menu",
 }

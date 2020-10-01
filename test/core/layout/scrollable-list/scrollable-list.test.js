@@ -153,7 +153,7 @@ describe.only("Scrollable List", () => {
 
         test("creates a rexUI label using a gel button as an icon", () => {
             const item = createItem(mockScene, mockItem);
-            expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem, mockScene.config);
+            expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem);
             expect(mockScene.rexUI.add.label).toHaveBeenCalledWith({
                 orientation: 0,
                 icon: mockButton,

@@ -8,10 +8,10 @@ export const overlays1Wide = (scene, gelButton, item, config) => {
     gelButton.overlays.set("currencyIcon", scene.add.image(edge - offset.currencyIconX, 0, assetKey(keys.currency, keys)));
 
     const fontStyle = { fontFamily: font.fontFamily, resolution: font.resolution };
-    gelButton.overlays.set("currencyAmount", scene.add.text(edge - offset.currencyTextX, -10, item.price, fontStyle));
+    gelButton.overlays.set("currencyAmount", scene.add.text(edge - offset.currencyTextX, -offset.currencyTextY, item.price, fontStyle));
     const nameY = item.description ? offset.textY * 2 : offset.textY;
     gelButton.overlays.set("itemName", scene.add.text(-edge + offset.textX, -nameY, item.name, { ...fontStyle, fontSize: 20 }));
     gelButton.overlays.set("itemDescription", scene.add.text(-edge + offset.textX, 0, item.description ,fontStyle));
 
     return gelButton;
-}
+};

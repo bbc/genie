@@ -87,7 +87,7 @@ export const createTable = (scene) => {
 export const createItem = (scene, item) => {
     const label = scene.rexUI.add.label({
         orientation: 0,
-        icon: createGelButton(scene, item, scene.config),
+        icon: createGelButton(scene, item),
         name: item.name,
         space: { icon: 3 }
     });
