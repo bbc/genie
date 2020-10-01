@@ -32,21 +32,13 @@ Achievement description objects look like this:
 * **key** [string a-z0-9_] a unique (per game) identifier, lowercase alphanumeric with underscore. The key is used for the asset, which will convert underscores to dashes when loading (e.g `this_key` will become `this-key.png`).
 * **name** [string] This is the human readable name that will be displayed in the achievements list.
 * **description** [string] Description that will be displayed in the achievements list.
-* **points** [integer] Currently unused but required for future use. Should add up to 1000 points per game but otherwise can be weighted for difficulty or designer preference.
+* **points** [integer] Currently unused but required for future use. The total of all points should add up to 1000 points. Points per achievement are not required to be divided equally, they can be distributed based on difficulty / designer preference. The total should still meet 1000 points.
 
 **Optional Parameters:**
 * **maxProgress** [integer] Enables the progress bar and sets its limit.
 * **position** [string] This is the position that specifies where the achievements notification should show. Can be either "top" or "bottom" - defaults to "bottom".
-* **additional** {prefix [string], text [string]} Add a secondary text element to the description.
-The prefix of this will be in bold. e.g:
-```json
-{
-  "additional": {"prefix": "hint", "text": "You can find these items on your travels."}
-}
-```
-will add: "**hint:** You can find these items on your travels" to the description text.
 
-Further examples can be found in the [starter pack achievements config](../../themes/default/achievements/config.json)
+Further examples can be found in the [starter pack achievements config](../../themes/default/achievements/config.json5)
 
 #### String Lengths
 Achievement names and descriptions should be an appropriate length so as not to be cut off, or for the text to overflow out of the notification box that appears in-game when a user earns an achievement.
