@@ -1,3 +1,9 @@
+/**
+ * @module core/layout/scrollable-list
+ * @copyright BBC 2020
+ * @author BBC Children's D+E
+ * @license Apache-2.0 Apache-2.0
+ */
 import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
 import * as overlays from "../../../../src/core/layout/scrollable-list/button-overlays.js";
 import * as helpers from "../../../../src/core/layout/scrollable-list/scrollable-list-helpers.js";
@@ -19,8 +25,8 @@ const mockScene = {
         eventChannel: "mockChannel",
         assetKeys: {
             prefix: "mockScene",
-            itemBackground: "itemBackground"
-        }
+            itemBackground: "itemBackground",
+        },
     },
 };
 
@@ -30,17 +36,15 @@ const mockItem = {
 };
 
 // const mockConfig = {
-   
+
 // };
 
 describe("Scrollable List Buttons", () => {
-
     overlays.overlays1Wide = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
 
     describe("createGelButton()", () => {
-
         test("adds a gel button", () => {
             buttons.createGelButton(mockScene, mockItem);
             expect(mockScene.add.gelButton).toHaveBeenCalled();

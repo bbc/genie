@@ -5,9 +5,9 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { assetKey } from "./scrollable-list-helpers.js";
-import { createGelButton } from "./scrollable-list-buttons.js"
+import { createGelButton } from "./scrollable-list-buttons.js";
 
-export const scrollableList = (scene) => {
+export const scrollableList = scene => {
     const panelConfig = lib.getPanelConfig(scene);
     const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
     scene.input.topOnly = false;
@@ -20,7 +20,7 @@ export const getPanelConfig = scene => {
     const safeArea = scene.layout.getSafeArea();
 
     return {
-        x: 0, 
+        x: 0,
         y: 0,
         width: safeArea.width,
         height: safeArea.height,
@@ -42,19 +42,18 @@ export const getPanelConfig = scene => {
             right: config.space,
             top: config.space,
             bottom: config.space,
-            panel: 0
-        }
-    }
+            panel: 0,
+        },
+    };
 };
 
-export const createPanel = (scene) => {
-    const sizer = scene.rexUI.add.sizer({
-        orientation: "x",
-        space: { item: 0 },
-    }).add(
-        lib.createTable(scene), 
-        { expand: true }
-    );
+export const createPanel = scene => {
+    const sizer = scene.rexUI.add
+        .sizer({
+            orientation: "x",
+            space: { item: 0 },
+        })
+        .add(lib.createTable(scene), { expand: true });
     return sizer;
 };
 
@@ -65,7 +64,7 @@ export const createPanel = (scene) => {
 //     return background;
 // };
 
-export const createTable = (scene) => {
+export const createTable = scene => {
     const table = scene.rexUI.add.gridSizer({
         column: 1,
         row: scene.config.items.length,
@@ -76,12 +75,12 @@ export const createTable = (scene) => {
         table.add(lib.createItem(scene, item), 0, idx, "top", 0, true);
     });
 
-    return scene.rexUI.add.sizer({
-        orientation: "y",
-        space: { left: 10, right: 10, top: 0, bottom: 10, item: 10 }
-    }).add(
-        table, 1, "center", 0, true
-    );
+    return scene.rexUI.add
+        .sizer({
+            orientation: "y",
+            space: { left: 10, right: 10, top: 0, bottom: 10, item: 10 },
+        })
+        .add(table, 1, "center", 0, true);
 };
 
 export const createItem = (scene, item) => {
@@ -89,7 +88,7 @@ export const createItem = (scene, item) => {
         orientation: 0,
         icon: createGelButton(scene, item),
         name: item.name,
-        space: { icon: 3 }
+        space: { icon: 3 },
     });
     return label;
 };
@@ -99,5 +98,5 @@ export const lib = {
     getPanelConfig,
     createPanel,
     createTable,
-    createItem
+    createItem,
 };

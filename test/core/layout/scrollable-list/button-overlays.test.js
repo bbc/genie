@@ -1,3 +1,9 @@
+/**
+ * @module core/layout/scrollable-list
+ * @copyright BBC 2020
+ * @author BBC Children's D+E
+ * @license Apache-2.0 Apache-2.0
+ */
 import { overlays1Wide } from "../../../../src/core/layout/scrollable-list/button-overlays.js";
 
 const mockScene = {
@@ -35,22 +41,19 @@ const mockConfig = {
         itemBackground: "itemBackground",
         currency: "currency",
         icon: "icon",
-
     },
     font: {
         fontFamily: "fontFamily",
         resolution: 13,
-    }
+    },
 };
 
 describe("Button overlays", () => {
-
     afterEach(() => jest.clearAllMocks());
 
     describe("overlays1Wide", () => {
-        
         test("sets background, icon, and currency icon image overlays", () => {
-            const withOverlays = overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
+            overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
             const edge = mockGelButton.width / 2;
             const offset = mockConfig.offset;
 
@@ -65,29 +68,44 @@ describe("Button overlays", () => {
         });
 
         test("sets currencyAmount, itemName, and itemDescription overlays", () => {
-            const withOverlays = overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
+            overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
             const edge = mockGelButton.width / 2;
             const offset = mockConfig.offset;
 
             expect(mockGelButton.overlays.set).toHaveBeenCalledWith("currencyAmount", "mockText");
-            expect(mockScene.add.text).toHaveBeenCalledWith(edge - offset.currencyTextX, -offset.currencyTextY, mockItem.price, mockConfig.font);
-            
+            expect(mockScene.add.text).toHaveBeenCalledWith(
+                edge - offset.currencyTextX,
+                -offset.currencyTextY,
+                mockItem.price,
+                mockConfig.font,
+            );
+
             expect(mockGelButton.overlays.set).toHaveBeenCalledWith("itemName", "mockText");
-            expect(mockScene.add.text).toHaveBeenCalledWith(-edge + offset.textX, -offset.textY * 2, mockItem.name, { ...mockConfig.font, fontSize: 20 });
-            
+            expect(mockScene.add.text).toHaveBeenCalledWith(-edge + offset.textX, -offset.textY * 2, mockItem.name, {
+                ...mockConfig.font,
+                fontSize: 20,
+            });
+
             expect(mockGelButton.overlays.set).toHaveBeenCalledWith("itemDescription", "mockText");
-            expect(mockScene.add.text).toHaveBeenCalledWith(-edge + offset.textX, 0, mockItem.description, mockConfig.font);
+            expect(mockScene.add.text).toHaveBeenCalledWith(
+                -edge + offset.textX,
+                0,
+                mockItem.description,
+                mockConfig.font,
+            );
         });
 
         test("offsets the item name less if there is no item description", () => {
             mockItem.description = undefined;
-            const withOverlays = overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
+            overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
             const edge = mockGelButton.width / 2;
             const offset = mockConfig.offset;
 
             expect(mockGelButton.overlays.set).toHaveBeenCalledWith("itemName", "mockText");
-            expect(mockScene.add.text).toHaveBeenCalledWith(-edge + offset.textX, -offset.textY, mockItem.name, { ...mockConfig.font, fontSize: 20 });
-
+            expect(mockScene.add.text).toHaveBeenCalledWith(-edge + offset.textX, -offset.textY, mockItem.name, {
+                ...mockConfig.font,
+                fontSize: 20,
+            });
         });
     });
 });
