@@ -31,7 +31,6 @@ export const getPanelConfig = scene => {
             mask: {
                 padding: 0,
             },
-            // background: createBackground(scene, config, safeArea), // maybe only needed for debug
         },
         slider: {
             track: scene.add.image(0, 0, assetKey(keys.scrollbar, keys)),
@@ -56,13 +55,6 @@ export const createPanel = scene => {
         .add(lib.createTable(scene), { expand: true });
     return sizer;
 };
-
-// export const createBackground = (scene, config, safeArea) => {
-//     const background = scene.add.image(-config.space, 0, config.assetKeys.panelBackground);
-//     background.scaleX = (safeArea.width - config.space * 2) / background.width;
-//     background.scaleY = (safeArea.height - config.space * 2) / background.height;
-//     return background;
-// };
 
 export const createTable = scene => {
     const table = scene.rexUI.add.gridSizer({
