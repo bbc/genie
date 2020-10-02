@@ -167,6 +167,12 @@ describe("Accessible DOM Element", () => {
             expect(options.onClick).toHaveBeenCalled();
         });
 
+        test("does not call onClick if options does not have an onClick method", () => {
+            delete options.onClick;
+            const mockElement = accessibleDomElement(options);
+            expect(() => mockElement.events.keyup({ key: "Enter" })).not.toThrow();
+        });
+
         test("does not call onClick when a key that isn't space or escape fires the event", () => {
             const mockElement = accessibleDomElement(options);
             const keyUpEvent = { key: "mockKey" };
