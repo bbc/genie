@@ -22,7 +22,7 @@ const mockGridSizer = { add: jest.fn() };
 
 const mockItem = { id: "someItem", name: "someItemName" };
 
-const mockButton = { foo: "bar " };
+const mockButton = { foo: "bar" };
 
 const mockScene = {
     rexUI: {

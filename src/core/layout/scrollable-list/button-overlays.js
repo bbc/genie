@@ -5,28 +5,24 @@
  * @license Apache-2.0 Apache-2.0
  */
 
+import fp from "../../../../lib/lodash/fp/fp.js"
+
 export const overlays1Wide = (scene, gelButton, item, config) => {
-    setImageOverlays(scene, gelButton, item, config);
-    setTextOverlays(scene, gelButton, item, config);
+    const { overlay } = config;
+    overlay.items.forEach(over => addOverlay({ scene, gelButton, item, config, over })); 
     return gelButton;
 };
 
-const setImageOverlays = (scene, gelButton, item, config) => {
-    const { overlay } = config;
-    overlay.image.forEach(image => {
-        const key = image.isDynamic ? item[image.assetKey] : `${overlay.defaultPrefix}.${image.assetKey}`;
-        const offset = getOffset(image.position, gelButton);
-        gelButton.overlays.set(image.name, scene.add.image(offset.x, offset.y, key));
-    });
+const setImageOverlay = ({ scene, gelButton, item, config, over }) => {
+    const key = over.isDynamic ? item[over.assetKey] : `${config.overlay.defaultPrefix}.${over.assetKey}`;
+    const offset = getOffset(over.position, gelButton);
+    gelButton.overlays.set(over.name, scene.add.image(offset.x, offset.y, key));
 };
 
-const setTextOverlays = (scene, gelButton, item, config) => {
-    const { overlay } = config;
-    overlay.text.forEach(text => {
-        const textValue = text.isDynamic ? item[text.value] : text.value;
-        const offset = getOffset(text.position, gelButton);
-        gelButton.overlays.set(text.name, scene.add.text(offset.x, offset.y, textValue, text.font));
-    });
+const setTextOverlay = ({ scene, gelButton, item, over }) => {
+    const textValue = over.isDynamic ? item[over.value] : over.value;
+    const offset = getOffset(over.position, gelButton);
+    gelButton.overlays.set(over.name, scene.add.text(offset.x, offset.y, textValue, over.font));
 };
 
 const getOffset = (position, gelButton) => {
@@ -36,3 +32,10 @@ const getOffset = (position, gelButton) => {
     return { x: edge + position.offsetX, y: position.offsetY };
 };
 
+const isImage = args => args.over.type === "image";
+const isText = args => args.over.type === "text";
+
+const addOverlay = fp.cond([
+    [isImage, setImageOverlay],
+    [isText, setTextOverlay]
+]);

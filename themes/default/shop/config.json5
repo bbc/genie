@@ -54,31 +54,33 @@
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
         panelBackground: "panelBackground",
-        itemBackground: "itemBackground",
+        itemBackground: "itemBackground", // implicitly sets the menu item aspect ratio
     },
     overlay: {
         defaultPrefix: "shop",
-        image: [
+        items: [
             {
+                type: "image",
                 name: "background",
                 assetKey: "itemBackground",
                 isDynamic: false, // uses defaultPrefix to find the asset key
             },
             {
+                type: "image",
                 name: "currency",
                 assetKey: "currency",
                 isDynamic: false,
-                position: { align: "right", offsetX: -64, offsetY: 0 },
+                position: { align: "right", offsetX: -64, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
             },
             {
+                type: "image",
                 name: "itemIcon",
                 assetKey: "icon",
                 isDynamic: true, // assumes the asset key is item[assetKey]
                 position: { align: "left", offsetX: 32, offsetY: 0 },
             },
-        ],
-        text: [
             {
+                type: "text",
                 name: "currencyAmount",
                 value: "price",
                 isDynamic: true, // uses the field id'd in 'value' on the item
@@ -86,6 +88,7 @@
                 font: { fontFamily: "ReithSans", resolution: 5},
             },
             {
+                type: "text",
                 name: "itemName",
                 value: "name",
                 isDynamic: true, // false would use the literal value of 'value'
@@ -93,6 +96,7 @@
                 font: { fontFamily: "ReithSans", resolution: 5, fontSize: 20 },
             },
             {
+                type: "text",
                 name: "itemDescription",
                 value: "description",
                 isDynamic: true,
