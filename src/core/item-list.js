@@ -26,11 +26,7 @@ export const initList = (key, config) => {
     const getAll = fp.flow(getStored, getMerged);
 
     const set = (id, itemList = null) => {
-
-        //TODO needs a merge here - previously "state" was being stored as a key and was only ever one string.
-
-
-        gmi.setGameData("genie", fp.setWith(Object, [key, id], { itemList }, getGenieStore()));
+        gmi.setGameData("genie", fp.setWith(Object, [key, id], itemList, getGenieStore()));
     };
 
     const itemList = {

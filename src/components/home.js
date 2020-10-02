@@ -26,7 +26,7 @@ export class Home extends Screen {
 
         const gameItems = itemLists.get("game-items");
 
-        gameItems.set("sword", {state: "liquid", qty: 9})
+        gameItems.set("sword", {state: null, qty: 5})
         debugger;
 
         const achievements = gmi.achievements.get().length ? ["achievements"] : [];
