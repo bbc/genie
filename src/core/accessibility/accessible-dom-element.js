@@ -11,7 +11,7 @@ const keyUp = options => event => {
     const spaceKey = event.key === " ";
 
     if (enterKey || spaceKey) {
-        options.onClick();
+        options.onClick && options.onClick();
     }
 };
 
