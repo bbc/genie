@@ -4,25 +4,24 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-
 import fp from "../../../../lib/lodash/fp/fp.js"
 
 export const overlays1Wide = (scene, gelButton, item, config) => {
-    const { overlay } = config;
-    overlay.items.forEach(over => addOverlay({ scene, gelButton, item, config, over })); 
+    config.overlay.items.forEach(overlay => {
+        const offset = getOffset(overlay.position, gelButton);
+        addOverlay({ scene, gelButton, item, config, overlay, offset });
+    }); 
     return gelButton;
 };
 
-const setImageOverlay = ({ scene, gelButton, item, config, over }) => {
-    const key = over.isDynamic ? item[over.assetKey] : `${config.overlay.defaultPrefix}.${over.assetKey}`;
-    const offset = getOffset(over.position, gelButton);
-    gelButton.overlays.set(over.name, scene.add.image(offset.x, offset.y, key));
+const setImageOverlay = ({ scene, gelButton, item, config, overlay, offset }) => {
+    const key = overlay.isDynamic ? item[overlay.assetKey] : `${config.overlay.defaultPrefix}.${overlay.assetKey}`;
+    gelButton.overlays.set(overlay.name, scene.add.image(offset.x, offset.y, key));
 };
 
-const setTextOverlay = ({ scene, gelButton, item, over }) => {
-    const textValue = over.isDynamic ? item[over.value] : over.value;
-    const offset = getOffset(over.position, gelButton);
-    gelButton.overlays.set(over.name, scene.add.text(offset.x, offset.y, textValue, over.font));
+const setTextOverlay = ({ scene, gelButton, item, overlay, offset }) => {
+    const textValue = overlay.isDynamic ? item[overlay.value] : overlay.value;
+    gelButton.overlays.set(overlay.name, scene.add.text(offset.x, offset.y, textValue, overlay.font));
 };
 
 const getOffset = (position, gelButton) => {
@@ -32,10 +31,7 @@ const getOffset = (position, gelButton) => {
     return { x: edge + position.offsetX, y: position.offsetY };
 };
 
-const isImage = args => args.over.type === "image";
-const isText = args => args.over.type === "text";
-
 const addOverlay = fp.cond([
-    [isImage, setImageOverlay],
-    [isText, setTextOverlay]
+    [args => args.overlay.type === "image", setImageOverlay],
+    [args => args.overlay.type === "text", setTextOverlay]
 ]);
