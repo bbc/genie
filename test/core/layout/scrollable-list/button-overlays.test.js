@@ -28,24 +28,43 @@ const mockItem = {
 };
 
 const mockConfig = {
-    offset: {
-        itemIconX: 1,
-        currencyIconX: 2,
-        currencyTextX: 3,
-        currencyTextY: 5,
-        textX: 7,
-        textY: 11,
+    overlay: {
+        defaultPrefix: "test",
+        image: [
+            { 
+                name: "someImage",
+                assetKey: "someAssetKey",
+                isDynamic: true,
+                position: { align: "left", offsetX: 1, offsetY: 2 },
+            },
+        ],
+        text: [
+            {
+                name: "someText",
+                value: "someTextValue",
+                isDynamic: true,
+                position: { align: "right", offsetX: 3, offsetY: 5 },
+            },
+        ],
     },
-    assetKeys: {
-        prefix: "test",
-        itemBackground: "itemBackground",
-        currency: "currency",
-        icon: "icon",
-    },
-    font: {
-        fontFamily: "fontFamily",
-        resolution: 13,
-    },
+    // offset: {
+    //     itemIconX: 1,
+    //     currencyIconX: 2,
+    //     currencyTextX: 3,
+    //     currencyTextY: 5,
+    //     textX: 7,
+    //     textY: 11,
+    // },
+    // assetKeys: {
+    //     prefix: "test",
+    //     itemBackground: "itemBackground",
+    //     currency: "currency",
+    //     icon: "icon",
+    // },
+    // font: {
+    //     fontFamily: "fontFamily",
+    //     resolution: 13,
+    // },
 };
 
 describe("Button overlays", () => {

@@ -54,20 +54,52 @@
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
         panelBackground: "panelBackground",
-        currency: "currency",
         itemBackground: "itemBackground",
     },
-    font: {
-        fontFamily: "ReithSans",
-        resolution: 5
-    },
-    offset: {
-        itemIconX: 32, // from left edge
-        textX: 100,
-        textY: 12, // if an item has a description, name and description y will be offset -/+ this value
-        currencyIconX: 64, // from right edge
-        currencyTextX: 48,
-        currencyTextY: 10,
+    overlay: {
+        defaultPrefix: "shop",
+        image: [
+            {
+                name: "background",
+                assetKey: "itemBackground",
+                isDynamic: false, // uses defaultPrefix to find the asset key
+            },
+            {
+                name: "currency",
+                assetKey: "currency",
+                isDynamic: false,
+                position: { align: "right", offsetX: -64, offsetY: 0 },
+            },
+            {
+                name: "itemIcon",
+                assetKey: "icon",
+                isDynamic: true, // assumes the asset key is item[assetKey]
+                position: { align: "left", offsetX: 32, offsetY: 0 },
+            },
+        ],
+        text: [
+            {
+                name: "currencyAmount",
+                value: "price",
+                isDynamic: true, // uses the field id'd in 'value' on the item
+                position: { align: "right", offsetX: -48, offsetY: -10 },
+                font: { fontFamily: "ReithSans", resolution: 5},
+            },
+            {
+                name: "itemName",
+                value: "name",
+                isDynamic: true, // false would use the literal value of 'value'
+                position: { align: "left", offsetX: 100, offsetY: -24 },
+                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 20 },
+            },
+            {
+                name: "itemDescription",
+                value: "description",
+                isDynamic: true,
+                position: { align: "left", offsetX: 100, offsetY: 0 },
+                font: { fontFamily: "ReithSans", resolution: 5 },
+            },
+        ]
     },
     eventChannel: "shop_menu",
 }
