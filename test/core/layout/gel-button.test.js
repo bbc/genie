@@ -148,9 +148,9 @@ describe("Gel Button", () => {
             expect(gelButton.on).toHaveBeenCalledWith("pointerout", expect.any(Function));
             expect(gelButton.on).toHaveBeenCalledWith("pointerover", expect.any(Function));
         });
-        test("does not call setScrollFactor if configured inScrollable", () => {
-            const inScrollableMockConfig = { ...mockConfig, inScrollable: true };
-            new GelButton(mockScene, mockX, mockY, inScrollableMockConfig);
+        test("does not call setScrollFactor if configured scrollable", () => {
+            const scrollableMockConfig = { ...mockConfig, scrollable: true };
+            new GelButton(mockScene, mockX, mockY, scrollableMockConfig);
             expect(mockSprite.setScrollFactor).not.toHaveBeenCalled();
         });
     });
