@@ -21,13 +21,12 @@ const setImageOverlay = ({ scene, gelButton, item, config, overlay, offset }) =>
 
 const setTextOverlay = ({ scene, gelButton, item, overlay, offset }) => {
     const textValue = overlay.isDynamic ? item[overlay.value] : overlay.value;
-    gelButton.overlays.set(overlay.name, scene.add.text(offset.x, offset.y, textValue, overlay.font));
+    gelButton.overlays.set(overlay.name, scene.add.text(offset.x, offset.y, textValue.toString(), overlay.font));
 };
 
 const getOffset = (position, gelButton) => {
     if (!position) return { x: 0, y: 0 };
-    const absEdge = gelButton.width / 2;
-    const edge = position.align === "left" ? -absEdge : absEdge;
+    const edge = position.align === "left" ? -gelButton.width / 2 : gelButton.width / 2;
     return { x: edge + position.offsetX, y: position.offsetY };
 };
 
