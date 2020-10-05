@@ -4,44 +4,21 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import {
-    scrollableList,
-    // getPanelConfig,
-    // createPanel,
-    // createTable,
-    // createItem,
-    // lib,
-} from "../../../../src/core/layout/scrollable-list/scrollable-list.js";
+import { scrollableList } from "../../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
 
-const mockScrollablePanel = { layout: jest.fn() };
-
-const mockSizer = { add: jest.fn() };
-
-const mockGridSizer = { add: jest.fn() };
-
 const mockItem = { id: "someItem", name: "someItemName" };
-
-const mockOverlay = {};
-
-const mockButton = { width: 100, setScale: jest.fn() };
-
 const mockScene = {
     rexUI: {
         add: {
             scrollablePanel: jest.fn().mockReturnValue(mockScrollablePanel),
-            sizer: jest.fn().mockReturnValue(mockSizer),
+            sizer: jest.fn().mockReturnValueOnce(mockSizer).mockReturnValue(mockSizer),
             gridSizer: jest.fn().mockReturnValue(mockGridSizer),
-            label: jest.fn(),
+            label: jest.fn().mockReturnValue(mockLabel),
         },
     },
-    input: {
-        topOnly: true,
-    },
-    add: {
-        image: jest.fn(),
-        gelButton: jest.fn().mockReturnValue(mockButton),
-    },
+    input: { topOnly: true },
+    add: { image: jest.fn() },
     config: {
         assetKeys: {
             prefix: "test",
@@ -59,14 +36,17 @@ const mockScene = {
         getSafeArea: jest.fn().mockReturnValue({ width: 100, height: 100 }),
     },
 };
-
-const mockPanelConfig = { foo: "bar" };
-
-const mockTable = { baz: "qux" };
+buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
+const mockScrollablePanel = { layout: jest.fn() };
+const mockSizer = { add: jest.fn() };
+const mockGridSizer = { add: jest.fn() };
+const mockLabel = {};
+const mockGelButton = { width: 100, setScale: jest.fn() };
+const mockOverlay = {};
 
 describe("Scrollable List", () => {
     beforeEach(() => {
-        // set up and call scrollableList here?
+        scrollableList(mockScene);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -74,7 +54,6 @@ describe("Scrollable List", () => {
     describe("adds a rexUI scrollable panel", () => {
         describe("with appropriate panel config", () => {
             test("x and y are zero, width and height are given by layout safe area", () => {
-                scrollableList(mockScene);
                 const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
                 expect(config.x).toBe(0);
                 expect(config.y).toBe(0);
@@ -82,138 +61,54 @@ describe("Scrollable List", () => {
                 expect(config.width).toBe(100);
             });
             test("adds background, scrollbar and scrollbar handle images from config", () => {
-                scrollableList(mockScene);
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.background");
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbar");
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbarHandle");
             });
             test("with spacing from config at bottom, top, and right", () => {
-                scrollableList(mockScene);
                 const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
                 const expectedSpacing = { left: 0, right: 10, top: 10, bottom: 10, panel: 0 };
                 expect(config.space).toEqual(expectedSpacing);
             });
             test("with scroll mode 0", () => {
-                scrollableList(mockScene);
                 const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
                 expect(config.scrollMode).toBe(0);
             });
         });
 
-        describe("with nested rexUI elements", () => {});
+        describe("with nested rexUI elements", () => {
+            test("a label is created with a gel button per item", () => {
+                expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem);
+                expect(mockScene.rexUI.add.label).toHaveBeenCalledWith({
+                    orientation: 0,
+                    icon: mockGelButton,
+                    name: mockItem.name,
+                    space: { icon: 3 },
+                });
+            });
+            test("labels are added to a grid sizer", () => {
+                expect(mockScene.rexUI.add.gridSizer).toHaveBeenCalledWith({
+                    column: 1,
+                    row: 1,
+                    space: { column: 10, row: 10 },
+                });
+                expect(mockGridSizer.add).toHaveBeenCalledWith(mockLabel, 0, 0, "top", 0, true);
+            });
+            test("the grid sizer is added to a sizer", () => {
+                expect(mockScene.rexUI.add.sizer).toHaveBeenCalledWith({
+                    orientation: "y",
+                    space: { left: 10, right: 10, top: 0, bottom: 10, item: 10 },
+                });
+                expect(mockSizer.add).toHaveBeenCalledWith(mockGridSizer, 1, "center", 0, true);
+            });
+        });
     });
-
     test("sets scene.input.topOnly to false", () => {
         scrollableList(mockScene);
         expect(mockScene.input.topOnly).toBe(false);
     });
+    test("calls layout() on the returned panel", () => {
+        scrollableList(mockScene);
+        expect(mockScrollablePanel.layout).toHaveBeenCalled();
+    });
 });
-
-// describe("Scrollable List", () => {
-//     afterEach(() => jest.clearAllMocks());
-
-//     describe("scrollableList()", () => {
-//         beforeEach(() => {
-//             // lib.getPanelConfig = jest.fn().mockReturnValue(mockPanelConfig);
-//         });
-
-//         test("gets the panel config", () => {
-//             scrollableList(mockScene);
-//             // expect(lib.getPanelConfig).toHaveBeenCalledWith(mockScene);
-//         });
-
-//         test("calls rexUI to add a scrollable panel and calls its layout()", () => {
-//             scrollableList(mockScene);
-//             expect(mockScene.rexUI.add.scrollablePanel).toHaveBeenCalledWith(mockPanelConfig);
-//             expect(mockScrollablePanel.layout).toHaveBeenCalled();
-//         });
-
-//         test("sets scene.input.topOnly to false", () => {
-//             scrollableList(mockScene);
-//             expect(mockScene.input.topOnly).toBe(false);
-//         });
-//     });
-
-//     describe("getPanelConfig()", () => {
-//         beforeEach(() => {
-//             // lib.createPanel = jest.fn();
-//         });
-
-//         test("adds images for panel background, scrollbar, and handle", () => {
-//             // getPanelConfig(mockScene);
-//             expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.background");
-//             expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbar");
-//             expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbarHandle");
-//         });
-
-//         test("gets a panel from createPanel", () => {
-//             // getPanelConfig(mockScene);
-//             expect(lib.createPanel).toHaveBeenCalledWith(mockScene);
-//         });
-//     });
-
-//     describe("createPanel()", () => {
-//         beforeEach(() => {
-//             // lib.createTable = jest.fn().mockReturnValue(mockTable);
-//         });
-
-//         test("creates a rexUI sizer", () => {
-//             // createPanel(mockScene);
-//             expect(mockScene.rexUI.add.sizer).toHaveBeenCalledWith({ orientation: "x", space: { item: 0 } });
-//         });
-
-//         test("calls createTable and adds that object to its sizer", () => {
-//             // createPanel(mockScene);
-//             // expect(lib.createTable).toHaveBeenCalledWith(mockScene);
-//             expect(mockSizer.add).toHaveBeenCalledWith(mockTable, { expand: true });
-//         });
-//     });
-
-//     describe("createTable()", () => {
-//         beforeEach(() => {
-//             // lib.createItem = jest.fn();
-//         });
-
-//         test("creates a rexUI grid sizer", () => {
-//             // createTable(mockScene);
-//             expect(mockScene.rexUI.add.gridSizer).toHaveBeenCalledWith({
-//                 column: 1,
-//                 row: 2,
-//                 space: { column: 10, row: 10 },
-//             });
-//         });
-
-//         test("calls createItem per item and adds it to the grid sizer", () => {
-//             // createTable(mockScene);
-//             // expect(lib.createItem).toHaveBeenCalledWith(mockScene, mockItem);
-//             // expect(lib.createItem).toHaveBeenCalledWith(mockScene, { id: "someOtherItem" });
-//             expect(mockGridSizer.add).toHaveBeenCalledTimes(2);
-//         });
-
-//         test("wraps the grid sizer in a regular sizer", () => {
-//             // createTable(mockScene);
-//             expect(mockScene.rexUI.add.sizer).toHaveBeenCalledWith({
-//                 orientation: "y",
-//                 space: { left: 10, right: 10, top: 0, bottom: 10, item: 10 },
-//             });
-//             expect(mockSizer.add).toHaveBeenCalledWith(mockGridSizer, 1, "center", 0, true);
-//         });
-//     });
-
-//     describe("createItem()", () => {
-//         beforeEach(() => {
-//             buttons.createGelButton = jest.fn().mockReturnValue(mockButton);
-//         });
-
-//         test("creates a rexUI label using a gel button as an icon", () => {
-//             createItem(mockScene, mockItem);
-//             expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem);
-//             expect(mockScene.rexUI.add.label).toHaveBeenCalledWith({
-//                 orientation: 0,
-//                 icon: mockButton,
-//                 name: mockItem.name,
-//                 space: { icon: 3 },
-//             });
-//         });
-//     });
-// });

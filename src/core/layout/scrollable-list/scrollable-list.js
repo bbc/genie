@@ -44,12 +44,12 @@ const getPanelConfig = scene => {
 };
 
 const createPanel = scene => {
-    const sizer = scene.rexUI.add
-        .sizer({
-            orientation: "x",
-            space: { item: 0 },
-        })
-        .add(createTable(scene), { expand: true });
+    const sizer = scene.rexUI.add.sizer({
+        orientation: "x",
+        space: { item: 0 },
+    });
+
+    sizer.add(createTable(scene), { expand: true });
     return sizer;
 };
 
@@ -81,11 +81,3 @@ const createItem = (scene, item) => {
     });
     return label;
 };
-
-// export const lib = {
-//     scrollableList,
-//     getPanelConfig,
-//     createPanel,
-//     createTable,
-//     createItem,
-// };
