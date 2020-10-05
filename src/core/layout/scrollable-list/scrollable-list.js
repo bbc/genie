@@ -8,13 +8,13 @@ import { assetKey } from "./scrollable-list-helpers.js";
 import { createGelButton } from "./scrollable-list-buttons.js";
 
 export const scrollableList = scene => {
-    const panelConfig = lib.getPanelConfig(scene);
+    const panelConfig = getPanelConfig(scene);
     const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
     scene.input.topOnly = false;
     return scrollableListPanel;
 };
 
-export const getPanelConfig = scene => {
+const getPanelConfig = scene => {
     const config = scene.config;
     const { assetKeys: keys } = config;
     const safeArea = scene.layout.getSafeArea();
@@ -27,10 +27,7 @@ export const getPanelConfig = scene => {
         scrollMode: 0,
         background: scene.add.image(0, 0, assetKey(keys.background, keys)),
         panel: {
-            child: lib.createPanel(scene),
-            mask: {
-                padding: 0,
-            },
+            child: createPanel(scene),
         },
         slider: {
             track: scene.add.image(0, 0, assetKey(keys.scrollbar, keys)),
@@ -46,17 +43,17 @@ export const getPanelConfig = scene => {
     };
 };
 
-export const createPanel = scene => {
+const createPanel = scene => {
     const sizer = scene.rexUI.add
         .sizer({
             orientation: "x",
             space: { item: 0 },
         })
-        .add(lib.createTable(scene), { expand: true });
+        .add(createTable(scene), { expand: true });
     return sizer;
 };
 
-export const createTable = scene => {
+const createTable = scene => {
     const table = scene.rexUI.add.gridSizer({
         column: 1,
         row: scene.config.items.length,
@@ -64,7 +61,7 @@ export const createTable = scene => {
     });
 
     scene.config.items.forEach((item, idx) => {
-        table.add(lib.createItem(scene, item), 0, idx, "top", 0, true);
+        table.add(createItem(scene, item), 0, idx, "top", 0, true);
     });
 
     return scene.rexUI.add
@@ -75,7 +72,7 @@ export const createTable = scene => {
         .add(table, 1, "center", 0, true);
 };
 
-export const createItem = (scene, item) => {
+const createItem = (scene, item) => {
     const label = scene.rexUI.add.label({
         orientation: 0,
         icon: createGelButton(scene, item),
@@ -85,10 +82,10 @@ export const createItem = (scene, item) => {
     return label;
 };
 
-export const lib = {
-    scrollableList,
-    getPanelConfig,
-    createPanel,
-    createTable,
-    createItem,
-};
+// export const lib = {
+//     scrollableList,
+//     getPanelConfig,
+//     createPanel,
+//     createTable,
+//     createItem,
+// };
