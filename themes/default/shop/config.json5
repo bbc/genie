@@ -83,7 +83,7 @@
                 type: "text",
                 name: "currencyAmount",
                 value: "price",
-                isDynamic: true, // uses the field id'd in 'value' on the item
+                isDynamic: true, // uses item[value]
                 position: { align: "right", offsetX: -48, offsetY: -10 },
                 font: { fontFamily: "ReithSans", resolution: 5},
             },
