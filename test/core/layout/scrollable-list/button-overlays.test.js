@@ -27,7 +27,7 @@ const mockItem = {
     icon: "test.icon",
 };
 
-let mockOverlay; 
+let mockOverlay;
 let mockConfig;
 
 describe("Button overlays", () => {
@@ -55,13 +55,13 @@ describe("Button overlays", () => {
                 overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
                 expect(mockGelButton.overlays.set).toHaveBeenCalledTimes(3);
             });
-            
+
             test("adds an image if overlay is of type image", () => {
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.someImageAssetKey");
             });
-            
+
             test("adds a text to the scene and the button if overlay is of type button", () => {
                 mockOverlay.type = "text";
                 mockOverlay.value = "someTextValue";
@@ -71,8 +71,7 @@ describe("Button overlays", () => {
             });
 
             test("text elements pass font information from the overlay if present", () => {
-                mockOverlay.type = "text",
-                mockOverlay.value = "someTextValue";
+                (mockOverlay.type = "text"), (mockOverlay.value = "someTextValue");
                 mockOverlay.font = { foo: "bar" };
                 mockConfig.overlay.items.push(mockOverlay);
                 const expectedFont = mockOverlay.font;
@@ -94,7 +93,7 @@ describe("Button overlays", () => {
                 mockOverlay.isDynamic = false;
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
-                const expectedKey = `${mockConfig.overlay.defaultPrefix}.${mockOverlay.assetKey}`
+                const expectedKey = `${mockConfig.overlay.defaultPrefix}.${mockOverlay.assetKey}`;
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, expectedKey);
             });
 
@@ -123,31 +122,46 @@ describe("Button overlays", () => {
             test("no offset is applied if there is no offset object", () => {
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
-                const expectedOffset ={ x: 0, y: 0 };
-                expect(mockScene.add.image).toHaveBeenCalledWith(expectedOffset.x, expectedOffset.y, "test.someImageAssetKey");
+                const expectedOffset = { x: 0, y: 0 };
+                expect(mockScene.add.image).toHaveBeenCalledWith(
+                    expectedOffset.x,
+                    expectedOffset.y,
+                    "test.someImageAssetKey",
+                );
             });
             test("align left sets a negative x offset plus the offset x", () => {
                 mockOverlay.position = { align: "left", offsetX: 1, offsetY: 0 };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
-                const expectedOffset ={ x: -99, y: 0 };
-                expect(mockScene.add.image).toHaveBeenCalledWith(expectedOffset.x, expectedOffset.y, "test.someImageAssetKey");
+                const expectedOffset = { x: -99, y: 0 };
+                expect(mockScene.add.image).toHaveBeenCalledWith(
+                    expectedOffset.x,
+                    expectedOffset.y,
+                    "test.someImageAssetKey",
+                );
             });
 
             test("align right sets a positive x offset plus the offset x", () => {
                 mockOverlay.position = { align: "right", offsetX: -1, offsetY: 0 };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
-                const expectedOffset ={ x: 99, y: 0 };
-                expect(mockScene.add.image).toHaveBeenCalledWith(expectedOffset.x, expectedOffset.y, "test.someImageAssetKey");
-
+                const expectedOffset = { x: 99, y: 0 };
+                expect(mockScene.add.image).toHaveBeenCalledWith(
+                    expectedOffset.x,
+                    expectedOffset.y,
+                    "test.someImageAssetKey",
+                );
             });
             test("the y offset is applied unconditionally", () => {
                 mockOverlay.position = { align: "left", offsetX: 0, offsetY: 10 };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockScene, mockGelButton, mockItem, mockConfig);
-                const expectedOffset ={ x: -100, y: 10 };
-                expect(mockScene.add.image).toHaveBeenCalledWith(expectedOffset.x, expectedOffset.y, "test.someImageAssetKey");
+                const expectedOffset = { x: -100, y: 10 };
+                expect(mockScene.add.image).toHaveBeenCalledWith(
+                    expectedOffset.x,
+                    expectedOffset.y,
+                    "test.someImageAssetKey",
+                );
             });
         });
     });
