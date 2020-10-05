@@ -10,10 +10,6 @@ const getGenieStore = () => gmi.getAllSettings().gameData.genie || {};
 
 export let states = new Map();
 export const initState = (stateKey, config) => {
-    if (window.__debug) {
-        window.__debug.states = states;
-    }
-
     const getMerged = stored => config.map(item => Object.assign(item, stored[item.id]));
     const get = key =>
         Object.assign(

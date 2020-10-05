@@ -86,12 +86,15 @@ export class Loader extends Screen {
 
     create() {
         const config = getConfig(this, this.screenKeys);
-        loadCatalogue(this, config);
         this.setConfig(config);
         GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
         gmi.achievements.init(this.cache.json.get("achievements-data"));
-        this.navigation.next();
-        gmi.sendStatsEvent("gameloaded", "true");
-        gmi.gameLoaded();
+        loadCatalogue(this, config).then(loaderComplete(this));
     }
 }
+
+const loaderComplete = scene => () => {
+    scene.navigation.next();
+    gmi.sendStatsEvent("gameloaded", "true");
+    gmi.gameLoaded();
+};

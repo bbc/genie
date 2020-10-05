@@ -1,5 +1,11 @@
 # Item system plan
 
+TODO
+* Update loader to handle collections
+* Decide on namespaces
+* Remove catalogue
+* Expose catalogue from items list?
+
 
 ## Open Questions
 
@@ -7,6 +13,7 @@
 * How do we namespace these under the genie localstorage tag?
 * How do filters and so on map to shops? Do all items need to be defined in an item list's default? Could we just use a filter?
 * Do we actually need a collection config or is it a function parameter?
+
 
 ### Potential user journeys (might help)
 
