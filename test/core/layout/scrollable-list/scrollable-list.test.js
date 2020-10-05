@@ -44,7 +44,6 @@ const mockScene = {
 const mockGelButton = { width: 100, setScale: jest.fn() };
 buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
 
-
 describe("Scrollable List", () => {
     beforeEach(() => {
         scrollableList(mockScene);

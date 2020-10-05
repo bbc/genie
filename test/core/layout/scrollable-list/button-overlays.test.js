@@ -47,10 +47,10 @@ describe("Button overlays", () => {
             assetKey: "someImageAssetKey",
             isDynamic: false,
         };
-        mockArgs = { 
+        mockArgs = {
             scene: mockScene,
-            gelButton: mockGelButton, 
-            item: mockItem, 
+            gelButton: mockGelButton,
+            item: mockItem,
             config: mockConfig,
         };
     });

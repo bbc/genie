@@ -42,7 +42,7 @@ const getPanelConfig = scene => {
 };
 
 const createPanel = scene => {
-    const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 } })
+    const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 } });
     sizer.add(createTable(scene), { expand: true });
     return sizer;
 };

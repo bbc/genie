@@ -12,7 +12,7 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 export const createGelButton = (scene, item) => {
     const id = `shop_id_${item.id}`;
     const config = scene.config;
-    
+
     const gelConfig = {
         gameButton: true,
         accessibilityEnabled: true,
