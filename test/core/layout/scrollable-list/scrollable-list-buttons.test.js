@@ -35,10 +35,6 @@ const mockItem = {
     ariaLabel: "mockAriaLabel",
 };
 
-// const mockConfig = {
-
-// };
-
 describe("Scrollable List Buttons", () => {
     overlays.overlays1Wide = jest.fn();
 
@@ -61,7 +57,7 @@ describe("Scrollable List Buttons", () => {
                 id: "shop_id_mockId",
                 key: "itemBackground",
                 scene: "mockScene",
-                inScrollable: true,
+                scrollable: true,
             };
             expect(mockScene.add.gelButton).toHaveBeenCalledWith(0, 0, expectedConfig);
         });
@@ -82,7 +78,7 @@ describe("Scrollable List Buttons", () => {
             expect(mockButton.setScale).toHaveBeenCalled();
         });
 
-        test("applies correct overlays", () => {
+        test("applies overlays", () => {
             buttons.createGelButton(mockScene, mockItem);
             expect(overlays.overlays1Wide).toHaveBeenCalled();
         });
