@@ -10,14 +10,14 @@ const getGenieStore = () => gmi.getAllSettings().gameData.genie || {};
 
 export let collections = new Map();
 
-const mergeDefaults = itemDefaults => item => ({ ...item, ...itemDefaults.find(def => def.id === item.id) });
-const getFilterParams = config => ({ ids: config.defaults.map(x => x.id), tags: config.include });
+const mergeDefaults = itemDefaults => item => ({ ...item, ...itemDefaults?.find(def => def.id === item.id) });
+const getFilterParams = config => ({ ids: config.defaults?.map(x => x.id) ?? [], tags: config.include ?? [] });
 const filterItems = config => item => config.ids.includes(item.id) || item.tags.some(tag => config.tags.includes(tag));
 const addQty = qty => item => ({ ...item, qty });
 const getStored = key => getGenieStore()[key] || {};
 const addStored = stored => item => ({ ...item, ...stored[item.id] });
 
-export const initCollection = (key, screen) => {
+export const initCollection = screen => key => {
     const config = screen.cache.json.get(key);
     const catalogue = screen.cache.json.get(config.catalogue);
 
@@ -30,8 +30,8 @@ export const initCollection = (key, screen) => {
 
     const get = key => getAll().find(item => item.id === key);
 
-    const set = (id, itemList = null) => {
-        gmi.setGameData("genie", fp.setWith(Object, [key, id], itemList, getGenieStore()));
+    const set = (id, config = null) => {
+        gmi.setGameData("genie", fp.setWith(Object, [key, id], config, getGenieStore()));
     };
 
     const collection = {

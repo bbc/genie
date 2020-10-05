@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 import { loadCollections } from "../../../src/core/loader/load-collections.js";
+import * as initCollectionModule from "../../../src/core/collection.js";
 
 const mockConfig = {
     screen1: {
@@ -56,6 +57,22 @@ describe("loadCollections", () => {
 
             expect(mockScreen.load.json5.mock.calls[2][0].url).toEqual("items/catalogue1.json5");
             expect(mockScreen.load.json5.mock.calls[3][0].url).toEqual("items/catalogue2.json5");
+        });
+
+        test("Initialises collections", () => {
+            const initSpy = jest.fn();
+            initCollectionModule.initCollection = () => initSpy;
+
+            loadCollections(mockScreen, mockConfig);
+
+            const collectionsLoaded = mockScreen.load.once.mock.calls[0][1];
+            collectionsLoaded();
+
+            const cataloguesLoaded = mockScreen.load.once.mock.calls[1][1];
+            cataloguesLoaded();
+
+            expect(initSpy.mock.calls[0][0]).toBe("collection1");
+            expect(initSpy.mock.calls[1][0]).toBe("collection2");
         });
     });
 });
