@@ -12,13 +12,15 @@ import { eventBus } from "../core/event-bus.js";
 import { isDebug } from "../core/debug/debug-mode.js";
 import { gmi } from "../core/gmi/gmi.js";
 
-import { initCollection, collections } from "../core/collection.js";
+//import { collections } from "../core/collection.js";
 
 export class Home extends Screen {
     create() {
-        initCollection("armoury", this);
 
-        const armoury = collections.get("armoury");
+        //TODO init these collections on auto?
+        //initCollection("armoury", this);
+
+        //const armoury = collections.get("armoury");
 
 
         const achievements = gmi.achievements.get().length ? ["achievements"] : [];

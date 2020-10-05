@@ -121,13 +121,4 @@ describe("State", () => {
             expect(stateSet.getAll()).toEqual([]);
         });
     });
-
-    describe("Debug", () => {
-        test("adds states to __debug if present", () => {
-            global.window.__debug = {};
-            initState("localStorageKey", {});
-
-            expect(window.__debug.states).toEqual(states);
-        });
-    });
 });
