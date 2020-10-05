@@ -8,13 +8,10 @@ const loadToCache = screen => key => screen.load.json5({ key, url: `items/${key}
 const getKeys = config => Object.values(config).map(getKey).filter(Boolean);
 import fp from "../../../lib/lodash/fp/fp.js";
 
-export const loadCatalogue = (screen, config) => {
+export const loadCollections = (screen, config) => {
     const keys = getKeys(config);
+    keys.forEach(loadToCache(screen)); //TODO we need to add this in a way that resolves conflicts. /items the key?
 
-    //TODO we need to add this in a way that resolves conflicts. /items the key?
-    keys.forEach(loadToCache(screen));
-
-    //this load happens after the game has loaded. So home.js fails. Is it needed?
     return new Promise(resolve => {
         const collectionsLoaded = () => {
             const catalogueKeys = keys.map(key => screen.cache.json.get(key).catalogue);

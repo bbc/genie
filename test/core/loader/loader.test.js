@@ -13,8 +13,10 @@ import * as GameSound from "../../../src/core/game-sound.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
 import * as debugModeModule from "../../../src/core/debug/debug-mode.js";
 import * as Config from "../../../src/core/loader/get-config.js";
+import * as LoadCollectionsModule from "../../../src/core/loader/load-collections.js";
 
 jest.mock("../../../src/core/loader/get-config.js");
+jest.mock("../../../src/core/loader/load-collections.js");
 
 describe("Loader", () => {
     let loader;
@@ -22,6 +24,7 @@ describe("Loader", () => {
     let mockImage;
     let mockConfig;
     let mockMasterPack;
+    let loadComplete;
     let mockFontConfig;
 
     beforeEach(() => {
@@ -39,6 +42,9 @@ describe("Loader", () => {
         createMockGmi(mockGmi);
 
         Config.getConfig = () => "mocked getConfig return value";
+
+        loadComplete = new Promise(resolve => resolve());
+        LoadCollectionsModule.loadCollections = jest.fn(() => loadComplete);
         mockImage = {
             width: 1,
             frame: {
@@ -266,14 +272,19 @@ describe("Loader", () => {
             loader.screenKeys = [];
             loader.navigation = { next: jest.fn() };
             loader.create();
-            expect(loader.navigation.next).toHaveBeenCalled();
+
+            loadComplete.then(() => {
+                expect(loader.navigation.next).toHaveBeenCalled();
+            });
         });
 
         test("sends gmi game loaded stats", () => {
             loader.screenKeys = [];
             loader.create();
-            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("gameloaded", "true");
-            expect(gmi.gameLoaded).toHaveBeenCalled();
+            loadComplete.then(() => {
+                expect(gmi.sendStatsEvent).toHaveBeenCalledWith("gameloaded", "true");
+                expect(gmi.gameLoaded).toHaveBeenCalled();
+            });
         });
     });
 

@@ -28,7 +28,7 @@ export const initCollection = (key, screen) => {
             .map(mergeDefaults(config.defaults))
             .map(addStored(getStored(key)));
 
-    const get = getAll().find(item => item.id === key);
+    const get = key => getAll().find(item => item.id === key);
 
     const set = (id, itemList = null) => {
         gmi.setGameData("genie", fp.setWith(Object, [key, id], itemList, getGenieStore()));
