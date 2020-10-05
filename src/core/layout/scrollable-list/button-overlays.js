@@ -6,7 +6,7 @@
  */
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-export const overlays1Wide = (scene, gelButton, item, config) => {
+export const overlays1Wide = ({ scene, gelButton, item, config }) => {
     config.overlay.items.forEach(overlay => {
         const offset = getOffset(overlay.position, gelButton);
         addOverlay({ scene, gelButton, item, config, overlay, offset });

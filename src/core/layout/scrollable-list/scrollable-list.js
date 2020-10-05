@@ -26,9 +26,7 @@ const getPanelConfig = scene => {
         height: safeArea.height,
         scrollMode: 0,
         background: scene.add.image(0, 0, assetKey(keys.background, keys)),
-        panel: {
-            child: createPanel(scene),
-        },
+        panel: { child: createPanel(scene) },
         slider: {
             track: scene.add.image(0, 0, assetKey(keys.scrollbar, keys)),
             thumb: scene.add.image(0, 0, assetKey(keys.scrollbarHandle, keys)),
@@ -44,11 +42,7 @@ const getPanelConfig = scene => {
 };
 
 const createPanel = scene => {
-    const sizer = scene.rexUI.add.sizer({
-        orientation: "x",
-        space: { item: 0 },
-    });
-
+    const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 } })
     sizer.add(createTable(scene), { expand: true });
     return sizer;
 };
@@ -73,11 +67,10 @@ const createTable = scene => {
 };
 
 const createItem = (scene, item) => {
-    const label = scene.rexUI.add.label({
+    return scene.rexUI.add.label({
         orientation: 0,
         icon: createGelButton(scene, item),
         name: item.name,
         space: { icon: 3 },
     });
-    return label;
 };

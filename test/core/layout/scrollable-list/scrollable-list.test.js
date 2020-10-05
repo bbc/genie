@@ -8,11 +8,16 @@ import { scrollableList } from "../../../../src/core/layout/scrollable-list/scro
 import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
 
 const mockItem = { id: "someItem", name: "someItemName" };
+const mockScrollablePanel = { layout: jest.fn() };
+const mockSizer = { add: jest.fn() };
+const mockGridSizer = { add: jest.fn() };
+const mockLabel = {};
+const mockOverlay = {};
 const mockScene = {
     rexUI: {
         add: {
             scrollablePanel: jest.fn().mockReturnValue(mockScrollablePanel),
-            sizer: jest.fn().mockReturnValueOnce(mockSizer).mockReturnValue(mockSizer),
+            sizer: jest.fn().mockReturnValue(mockSizer),
             gridSizer: jest.fn().mockReturnValue(mockGridSizer),
             label: jest.fn().mockReturnValue(mockLabel),
         },
@@ -36,13 +41,9 @@ const mockScene = {
         getSafeArea: jest.fn().mockReturnValue({ width: 100, height: 100 }),
     },
 };
-buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
-const mockScrollablePanel = { layout: jest.fn() };
-const mockSizer = { add: jest.fn() };
-const mockGridSizer = { add: jest.fn() };
-const mockLabel = {};
 const mockGelButton = { width: 100, setScale: jest.fn() };
-const mockOverlay = {};
+buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
+
 
 describe("Scrollable List", () => {
     beforeEach(() => {
