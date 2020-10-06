@@ -19,10 +19,9 @@ export class GelButton extends Phaser.GameObjects.Container {
     constructor(scene, x, y, config) {
         const metrics = getMetrics();
         super(scene, x, y);
-
         this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
         this.setScrollFactor(0);
-        this.sprite.setScrollFactor(0);
+        !config.scrollable && this.sprite.setScrollFactor(0);
         this.add(this.sprite);
 
         this.config = { ...defaults, ...config };
