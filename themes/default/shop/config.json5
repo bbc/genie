@@ -1,0 +1,109 @@
+{
+    space: 10,
+    background: {
+        items: [
+            { key: "home.background", x: 0, y: 0 },
+        ],
+    },
+    items: [ // PH, will load from the catalogue when done
+        {
+            id: "itemOne",
+            name: "Item 1 Name", 
+            description: "Item 1 description",
+            icon: "shop.itemIcon",
+            price: 10,
+            ariaLabel: "someAriaLabel",
+        }, 
+        { 
+            id: "itemTwo",
+            name: "Item 2 Name", 
+            description: "Item 2 description",
+            icon: "shop.itemIcon",
+            price: 10,
+            ariaLabel: "someAriaLabel",
+        }, 
+        { 
+            id: "itemThree",
+            name: "Item 3 Name", 
+            description: "Item 3 description",
+            icon: "shop.itemIcon",
+            price: 10,
+            ariaLabel: "someAriaLabel",
+        }, 
+        { 
+            id: "itemFour",
+            name: "Item 4 Name", 
+            description: "Item 4 description",
+            icon: "shop.itemIcon",
+            price: 10,
+            ariaLabel: "someAriaLabel",
+        }, 
+        { 
+            id: "itemFive",
+            name: "Item 5 Name", 
+            description: "Item 5 description",
+            icon: "shop.itemIcon",
+            price: 10,
+            ariaLabel: "someAriaLabel",
+        }, 
+    ],
+    columns: 1,
+    assetKeys: {
+        prefix: "shop",
+        background: "background",
+        scrollbar: "scrollbar",
+        scrollbarHandle: "scrollbarHandle",
+        panelBackground: "panelBackground",
+        itemBackground: "itemBackground", // implicitly sets the menu item aspect ratio
+    },
+    overlay: {
+        defaultPrefix: "shop",
+        items: [
+            {
+                type: "image",
+                name: "background",
+                assetKey: "itemBackground",
+                isDynamic: false, // uses defaultPrefix to find the asset key
+            },
+            {
+                type: "image",
+                name: "currency",
+                assetKey: "currency",
+                isDynamic: false,
+                position: { align: "right", offsetX: -64, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+            },
+            {
+                type: "image",
+                name: "itemIcon",
+                assetKey: "icon",
+                isDynamic: true, // assumes the asset key is item[assetKey]
+                position: { align: "left", offsetX: 32, offsetY: 0 },
+            },
+            {
+                type: "text",
+                name: "currencyAmount",
+                value: "price",
+                isDynamic: true, // uses item[value]
+                position: { align: "right", offsetX: -48, offsetY: -10 },
+                font: { fontFamily: "ReithSans", resolution: 5},
+            },
+            {
+                type: "text",
+                name: "itemName",
+                value: "name",
+                isDynamic: true, // false would use the literal value of 'value'
+                position: { align: "left", offsetX: 100, offsetY: -24 },
+                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 20 },
+            },
+            {
+                type: "text",
+                name: "itemDescription",
+                value: "description",
+                isDynamic: true,
+                position: { align: "left", offsetX: 100, offsetY: 0 },
+                font: { fontFamily: "ReithSans", resolution: 5 },
+            },
+        ]
+    },
+    eventChannel: "shop_menu",
+}

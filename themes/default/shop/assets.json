@@ -1,0 +1,63 @@
+{
+    "shop": {
+        "prefix": "shop.",
+        "files": [
+            {
+                "type": "image",
+                "key": "background",
+                "url": "shop/safe_area.png"
+            },
+            {
+                "type": "image",
+                "key": "panelBackground",
+                "url": "shop/scroll_area.png"
+            },
+            {
+                "type": "image",
+                "key": "scrollbar",
+                "url": "shop/scrollbar.png"
+            },
+            {
+                "type": "image",
+                "key": "scrollbarHandle",
+                "url": "shop/handle.png"
+            },
+            {
+                "type": "spritesheet",
+                "key": "itemBackground",
+                "url": "shop/item_block.png",
+                "frameConfig": {
+                    "frameWidth": 378,
+                    "frameHeight": 64,
+                    "frameMax": 1,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "itemIcon",
+                "url": "shop/icon.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "frameMax": 1,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "currency",
+                "url": "shop/currency.png",
+                "frameConfig": {
+                    "frameWidth": 20,
+                    "frameHeight": 20,
+                    "frameMax": 1,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            }
+        ]
+    }
+}
