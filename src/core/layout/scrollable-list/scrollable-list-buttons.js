@@ -9,8 +9,8 @@ import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-export const createGelButton = (scene, item) => {
-    const id = `shop_id_${item.id}`;
+const createGelButton = (scene, item) => {
+    const id = `scroll_button_${item.id}`;
     const config = scene.config;
 
     const gelConfig = {
@@ -36,10 +36,12 @@ export const createGelButton = (scene, item) => {
     return fp.flow(scaleButton, overlays1Wide)({ scene, gelButton, config, item });
 };
 
-export const scaleButton = args => {
+const scaleButton = args => {
     const { scene, config, gelButton } = args;
     const safeArea = scene.layout.getSafeArea();
     const scaleFactor = (safeArea.width - config.space * 2) / gelButton.width;
     gelButton.setScale(scaleFactor);
     return args;
 };
+
+export { createGelButton };

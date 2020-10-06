@@ -54,7 +54,7 @@ describe("Scrollable List Buttons", () => {
                 channel: "mockChannel",
                 gameButton: true,
                 group: "middleCenter",
-                id: "shop_id_mockId",
+                id: "scroll_button_mockId",
                 key: "itemBackground",
                 scene: "mockScene",
                 scrollable: true,
@@ -68,7 +68,7 @@ describe("Scrollable List Buttons", () => {
             buttons.createGelButton(mockScene, mockItem);
             const args = eventBus.subscribe.mock.calls[0][0];
             expect(args.channel).toEqual("mockChannel");
-            expect(args.name).toEqual("shop_id_mockId");
+            expect(args.name).toEqual("scroll_button_mockId");
             args.callback();
             expect(helpers.onClick).toHaveBeenCalledWith(mockButton);
         });
