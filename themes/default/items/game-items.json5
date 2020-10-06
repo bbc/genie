@@ -1,0 +1,23 @@
+[
+    {
+        id: "sword",    //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
+        title: "Sword",
+        description: "A sturdy iron sword.",
+        tags: ["weapon"],
+        userData: {
+            //.. keep this namespaced out in case agencies want to put object stats in here
+        }
+    },
+    {
+        id: "crossbow",    //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
+        title: "Crossbow",
+        description: "Basic wooden crossbow with standard range.",
+        tags: ["weapon"],
+    },
+    {
+        id: "bread",    //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
+        title: "Bread",
+        description: "A loaf of bread.",
+        tags: ["food"],
+    },
+]

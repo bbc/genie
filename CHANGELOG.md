@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Adds collections. |
 | | Add a scrollable list component in core/layout/scrollable-list.
 | | Fixes bug when pressing the Enter or Space key on the how to play screen. |
 | | Rename item registry to 'catalogue'. Configs can now have a catalogueKey which prompts the loader to load a matching json5 from theme/default/items/. |

@@ -13,10 +13,16 @@ import { gmi } from "../gmi/gmi.js";
 import { loadPack } from "./loadpack.js";
 import { getConfig, loadConfig } from "./get-config.js";
 import { isDebug } from "../debug/debug-mode.js";
-import { loadCatalogue } from "./get-catalogue.js";
+import { loadCollections } from "./load-collections.js";
 
 const getScreenKeys = keys =>
     Object.keys(keys).filter(key => ["default", "boot", "loader", "debug"].indexOf(key) === -1);
+
+const loaderComplete = scene => () => {
+    scene.navigation.next();
+    gmi.sendStatsEvent("gameloaded", "true");
+    gmi.gameLoaded();
+};
 
 export class Loader extends Screen {
     constructor() {
@@ -86,12 +92,9 @@ export class Loader extends Screen {
 
     create() {
         const config = getConfig(this, this.screenKeys);
-        loadCatalogue(this, config);
         this.setConfig(config);
         GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
         gmi.achievements.init(this.cache.json.get("achievements-data"));
-        this.navigation.next();
-        gmi.sendStatsEvent("gameloaded", "true");
-        gmi.gameLoaded();
+        loadCollections(this, config).then(loaderComplete(this));
     }
 }

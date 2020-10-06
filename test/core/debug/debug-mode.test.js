@@ -8,9 +8,7 @@ import * as parseUrlParams from "../../../src/core/parseUrlParams.js";
 
 describe("Debug Mode", () => {
     const game = {};
-    const debugWindow = {
-        gmi: {},
-    };
+    const debugWindowKeys = ["gmi", "collections", "states"];
 
     let testWindow = {
         location: {
@@ -32,7 +30,7 @@ describe("Debug Mode", () => {
     test("adds __debug object to window when parseUrlParams returns true", () => {
         jest.spyOn(parseUrlParams, "parseUrlParams").mockImplementation(() => ({ debug: true }));
         debugMode.create(testWindow, game);
-        expect(testWindow.__debug).toEqual(debugWindow);
+        expect(Object.keys(testWindow.__debug)).toEqual(debugWindowKeys);
     });
 
     test("adds __debug object to window when URL includes www.test.bbc.", () => {
@@ -44,7 +42,7 @@ describe("Debug Mode", () => {
             },
         };
         debugMode.create(testWindow, game);
-        expect(testWindow.__debug).toEqual(debugWindow);
+        expect(Object.keys(testWindow.__debug)).toEqual(debugWindowKeys);
     });
 
     test("does not add __debug object to window when not correct params or URL", () => {

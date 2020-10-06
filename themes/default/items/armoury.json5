@@ -1,0 +1,9 @@
+{
+    catalogue: "game-items",
+    include: ["weapon"],    //include all items with this tag in this collection
+    defaultQty: 1,          //default quantity unless specified
+    defaults: [             //additional config
+        { id: "crossbow", qty: 5 },
+        { id: "bread", qty: 1 },
+    ],
+}
