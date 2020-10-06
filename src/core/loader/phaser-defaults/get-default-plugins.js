@@ -34,7 +34,7 @@ export const getDefaultPlugins = options => {
             },
             {
                 key: "rexUI",
-                plugin: window.rexuiplugin,
+                plugin: window.rexuiplugin || window.RexPlugins,
                 mapping: "rexUI",
             },
         ],

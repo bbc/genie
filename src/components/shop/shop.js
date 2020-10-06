@@ -8,7 +8,7 @@
  */
 import { Screen } from "../../core/screen.js";
 import { scrollableList } from "../../core/layout/scrollable-list/scrollable-list.js";
-// import "../../../lib/rexuiplugin.min.js";
+import "../../../lib/rexuiplugin.min.js";
 
 export class Shop extends Screen {
     create() {

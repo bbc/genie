@@ -18,7 +18,7 @@ import { startup } from "./core/startup.js";
 //TODO Re-enable once Phaser plugins are built (should be in 3.24)
 //import "/node_modules/phaser/plugins/spine/dist/SpinePlugin.min.js";
 import "../lib/SpinePlugin.min.js"; //CAN BE REMOVED IF NOT USING SPINE
-import "../lib/rexuiplugin.min.js"; // CAN BE REMOVED IF NOT USING SHOP
+// import "../lib/rexuiplugin.min.js"; // CAN BE REMOVED IF NOT USING SHOP
 
 // Setup for BBC settings control
 const settings = {
