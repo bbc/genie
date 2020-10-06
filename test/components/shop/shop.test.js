@@ -18,7 +18,7 @@ describe("Shop", () => {
         shopScreen.scene = { key: "shop" };
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();
-        shopScreen.load = { scenePlugin: jest.fn() };
+        shopScreen.plugins = { installScenePlugin: jest.fn() };
         scroller.scrollableList = jest.fn().mockReturnValue("foo");
     });
 
@@ -28,7 +28,7 @@ describe("Shop", () => {
         beforeEach(() => shopScreen.preload());
 
         test("loads the rexUI plugin", () => {
-            expect(shopScreen.load.scenePlugin).toHaveBeenCalled();
+            expect(shopScreen.plugins.installScenePlugin).toHaveBeenCalled();
         });
     });
 

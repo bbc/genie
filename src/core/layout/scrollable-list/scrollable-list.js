@@ -7,7 +7,7 @@
 import { assetKey } from "./scrollable-list-helpers.js";
 import { createGelButton } from "./scrollable-list-buttons.js";
 
-export const scrollableList = scene => {
+const scrollableList = scene => {
     const panelConfig = getPanelConfig(scene);
     const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
     scene.input.topOnly = false;
@@ -73,3 +73,5 @@ const createItem = (scene, item) =>
         name: item.name,
         space: { icon: 3 },
     });
+
+export { scrollableList };

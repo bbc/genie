@@ -12,11 +12,7 @@ import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 
 export class Shop extends Screen {
     preload() {
-        this.load.scenePlugin({
-            key: "rexuiplugin",
-            url: RexUIPlugin,
-            sceneKey: "rexUI",
-        });
+        this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this);
     }
 
     create() {
