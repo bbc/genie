@@ -11,7 +11,6 @@ import { scrollableList } from "../../core/layout/scrollable-list/scrollable-lis
 // import "../../../lib/rexuiplugin.min.js";
 
 export class Shop extends Screen {
-
     preload() {
         this.load.scenePlugin({
             key: "rexuiplugin",
@@ -19,7 +18,7 @@ export class Shop extends Screen {
             sceneKey: "rexUI",
         });
     }
-    
+
     create() {
         this.addBackgroundItems();
         const buttons = ["exit", "audio"];
