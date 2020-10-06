@@ -7,12 +7,12 @@ import { initCollection } from "../collection.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const getKey = item => item.collection;
-const loadToCache = screen => key => screen.load.json5({ key, url: `items/${key}.json5` });
+const loadToCache = screen => key => screen.load.json5({ key: `items/${key}`, url: `items/${key}.json5` });
 const getKeys = config => Object.values(config).map(getKey).filter(Boolean);
 
 export const loadCollections = (screen, config) => {
     const keys = getKeys(config);
-    keys.forEach(loadToCache(screen)); //TODO we need to add this in a way that resolves conflicts. /items the key?
+    keys.forEach(loadToCache(screen));
 
     return new Promise(resolve => {
         const cataloguesLoaded = () => {
@@ -21,7 +21,7 @@ export const loadCollections = (screen, config) => {
         };
 
         const collectionsLoaded = () => {
-            const catalogueKeys = fp.uniq(keys.map(key => screen.cache.json.get(key).catalogue));
+            const catalogueKeys = fp.uniq(keys.map(key => screen.cache.json.get(`items/${key}`).catalogue));
             catalogueKeys.forEach(loadToCache(screen));
             screen.load.once("complete", cataloguesLoaded);
             screen.load.start();

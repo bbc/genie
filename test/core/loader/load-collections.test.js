@@ -16,8 +16,8 @@ const mockConfig = {
 };
 
 const mockCache = {
-    collection1: { catalogue: "catalogue1" },
-    collection2: { catalogue: "catalogue2" },
+    "items/collection1": { catalogue: "catalogue1" },
+    "items/collection2": { catalogue: "catalogue2" },
 };
 
 const mockScreen = {
@@ -39,8 +39,8 @@ describe("loadCollections", () => {
     describe("loadCollections", () => {
         test("Adds the correct collection file urls to the loader ", () => {
             loadCollections(mockScreen, mockConfig);
-            expect(mockScreen.load.json5.mock.calls[0][0].key).toEqual("collection1");
-            expect(mockScreen.load.json5.mock.calls[1][0].key).toEqual("collection2");
+            expect(mockScreen.load.json5.mock.calls[0][0].key).toEqual("items/collection1");
+            expect(mockScreen.load.json5.mock.calls[1][0].key).toEqual("items/collection2");
 
             expect(mockScreen.load.json5.mock.calls[0][0].url).toEqual("items/collection1.json5");
             expect(mockScreen.load.json5.mock.calls[1][0].url).toEqual("items/collection2.json5");
@@ -52,8 +52,8 @@ describe("loadCollections", () => {
             const collectionsLoaded = mockScreen.load.once.mock.calls[0][1];
             collectionsLoaded();
 
-            expect(mockScreen.load.json5.mock.calls[0][0].key).toEqual("collection1");
-            expect(mockScreen.load.json5.mock.calls[1][0].key).toEqual("collection2");
+            expect(mockScreen.load.json5.mock.calls[0][0].key).toEqual("items/collection1");
+            expect(mockScreen.load.json5.mock.calls[1][0].key).toEqual("items/collection2");
 
             expect(mockScreen.load.json5.mock.calls[2][0].url).toEqual("items/catalogue1.json5");
             expect(mockScreen.load.json5.mock.calls[3][0].url).toEqual("items/catalogue2.json5");

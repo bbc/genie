@@ -6,7 +6,7 @@
 import { collections, initCollection } from "../../src/core/collection.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 
-describe("Collection", () => {
+describe("Collections", () => {
     let mockSettings;
     let mockGmi;
     let testCollection;
@@ -47,8 +47,8 @@ describe("Collection", () => {
         ];
 
         mockCache = {
-            testCollection,
-            testCatalogue,
+            "items/testCollection": testCollection,
+            "items/testCatalogue": testCatalogue,
         };
 
         mockScreen = {
@@ -86,7 +86,7 @@ describe("Collection", () => {
         test("Returns all catalogue items with tags listed in 'include' property and default qty of 1", () => {
             testCollection.include = ["tag1", "tag2"];
 
-            const expected = mockCache.testCatalogue.map(item => ({ ...item, qty: 1 }));
+            const expected = testCatalogue.map(item => ({ ...item, qty: 1 }));
 
             const collection = initCollection(mockScreen)("testCollection");
             expect(collection.getAll()).toEqual(expected);
