@@ -8,17 +8,8 @@
  */
 import { Screen } from "../../core/screen.js";
 import { scrollableList } from "../../core/layout/scrollable-list/scrollable-list.js";
-// import "../../../lib/rexuiplugin.min.js";
 
 export class Shop extends Screen {
-    preload() {
-        this.load.scenePlugin({
-            key: "rexuiplugin",
-            url: "../../../lib/rexuiplugin.min.js",
-            sceneKey: "rexUI",
-        });
-    }
-
     create() {
         this.addBackgroundItems();
         const buttons = ["exit", "audio"];
