@@ -6,7 +6,6 @@
 import FontLoaderPlugin from "../font-loader/font-plugin.js";
 import { JSON5Plugin } from "../json5-loader/json5-plugin.js";
 import { ParticlesPlugin } from "../particles-loader/particles-plugin.js";
-import RexUIPlugin from "../../../../lib/rexuiplugin.min.js";
 
 export const getDefaultPlugins = options => {
     const defaultPlugins = {
@@ -32,11 +31,6 @@ export const getDefaultPlugins = options => {
                 key: "SpinePlugin",
                 plugin: window.SpinePlugin,
                 mapping: "spine",
-            },
-            {
-                key: "rexUI",
-                plugin: RexUIPlugin,
-                mapping: "rexUI",
             },
         ],
     };

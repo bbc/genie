@@ -17,7 +17,7 @@ describe("Default Plugins", () => {
 
         expect(Object.keys(defaults)).toEqual(["global", "scene"]);
         expect(getPluginKeys(defaults.global)).toEqual(["FontLoader", "JSON5Loader", "ParticlesLoader"]);
-        expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin", "rexUI"]);
+        expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin"]);
     });
 
     test("Returns additional merged plugins if passed in as options", () => {
@@ -36,6 +36,6 @@ describe("Default Plugins", () => {
             "ParticlesLoader",
             "testGlobalPlugin",
         ]);
-        expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin", "rexUI", "testScenePlugin"]);
+        expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin", "testScenePlugin"]);
     });
 });
