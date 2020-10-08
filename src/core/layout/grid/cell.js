@@ -7,7 +7,7 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 
 import { accessibilify } from "../../accessibility/accessibilify.js";
 import { gmi } from "../../gmi/gmi.js";
-import * as state from "../../states.js";
+import { collections } from "../../collection.js";
 
 const alignmentFactor = { left: 0, center: 1, right: 2 };
 
@@ -56,17 +56,13 @@ const setPosition = (grid, button, idx) => {
     button.y = button.displayHeight * positionFactorY + grid._cellPadding * positionFactorY;
 };
 
-const getStates = theme => {
-    const stateConfig = theme.choices.map(({ id, state }) => ({ id, state }));
-    return state.initState(theme.storageKey, stateConfig);
-};
 
-const getStylingForState = (btn, states, styling) => styling[fp.get("state", states.get(btn.key))] || {};
+const getStylingForState = (btn, collection, styling) => styling[fp.get("state", collection.get(btn.key))] || {};
 
 const getStyles = (btn, theme) => {
-    const states = getStates(theme);
+    const collection = collections.get(theme.collection)
     const defaultStyles = theme.choicesStyling.default;
-    const stylesOverride = getStylingForState(btn, states, theme.choicesStyling);
+    const stylesOverride = getStylingForState(btn, collection, theme.choicesStyling);
     return fp.merge(defaultStyles, stylesOverride);
 };
 
@@ -98,14 +94,9 @@ export const createCell = (grid, choice, idx, theme) => {
     grid.cellsPerPage > 1 && (button.visible = Boolean(!idx));
     button.key = config.key;
 
-    if (fp.get("choicesStyling.default", theme)) {
-        addTextToButton(grid.scene, config, button, theme);
-    }
-    grid.add(button);
+    fp.get("choicesStyling.default", theme) && addTextToButton(grid.scene, config, button, theme);
 
-    const makeAccessible = () => {
-        accessibilify(button, true);
-    };
+    const makeAccessible = () => accessibilify(button, true);
 
     const reset = () => {
         setSize(grid, button);

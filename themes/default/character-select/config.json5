@@ -39,7 +39,6 @@
             },
         },
     ],
-    storageKey: "characters", // Which local storage key to read states from.
     states: {
         locked: {
             // asset: "debby", // Key of sprite to set for. Renders same scale as base sprite so should be the same size.

@@ -9,14 +9,12 @@
 import { Screen } from "../../core/screen.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { GelGrid } from "../../core/layout/grid/grid.js";
-import * as state from "../../core/states.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import { createTitles } from "./titles.js";
 import * as singleItemMode from "./single-item-mode.js";
 import { addEvents } from "./add-events.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { addHoverParticlesToCells } from "./select-particles.js";
-
 import { collections } from "../../core/collection.js";
 
 const gridDefaults = {
@@ -35,8 +33,8 @@ export class Select extends Screen {
     create() {
         this.addBackgroundItems();
         createTitles(this);
-        const choices = collections.get(this.config.collection).getAll();
-        const paginate = choices.length > this.config.columns * this.config.rows;
+        this.collection = collections.get(this.config.collection)
+        const paginate = this.collection.getAll().length > this.config.columns * this.config.rows;
         const pagingButtons = paginate ? ["previous", "next"] : [];
         const buttons = ["home", "pause", ...pagingButtons];
         singleItemMode.isEnabled(this)
@@ -49,15 +47,12 @@ export class Select extends Screen {
         this.grid = new GelGrid(this, Object.assign(this.config, gridDefaults, { onTransitionStart }, { choice }));
         this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
         this.resize();
-        this._cells = this.grid.addGridCells(choices);
+        this._cells = this.grid.addGridCells(this.collection.getAll());
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
         this.scene.scene.events.on("shutdown", this._scaleEvent.unsubscribe, this);
 
         addEvents(this);
-
-        //const stateConfig = this.config.choices.map(({ id, state }) => ({ id, state }));
-        //this.states = state.initState(this.config.storageKey, stateConfig);
 
         singleItemMode.create(this);
 
@@ -67,7 +62,10 @@ export class Select extends Screen {
     }
 
     updateStates() {
-        const storedStates = this.states.getAll().filter(config => Boolean(config.state));
+        const storedStates = this.collection
+            .getAll()
+            .filter(config => Boolean(config.state));
+
         const cells = fp.keyBy(cell => cell.button.config.id, this._cells);
 
         storedStates.forEach(stored => {
@@ -90,7 +88,7 @@ export class Select extends Screen {
     }
 
     currentEnabled() {
-        const currentState = this.states.get(this.grid.getCurrentPageKey()).state;
+        const currentState = this.collection.get(this.grid.getCurrentPageKey()).state;
         const stateDefinition = this.config.states[currentState];
         return stateDefinition === undefined || stateDefinition.enabled !== false;
     }

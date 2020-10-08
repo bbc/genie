@@ -6,14 +6,13 @@
 import { parseUrlParams } from "../parseUrlParams.js";
 import { gmi } from "../gmi/gmi.js";
 import { collections } from "../collection.js";
-import { states } from "../states.js";
 
 const urlParams = window => parseUrlParams(window.location.search);
 const testURL = window => window.location.hostname.includes("www.test.bbc.");
 
 const create = window => {
     if (isDebug() || testURL(window)) {
-        window.__debug = { gmi, collections, states };
+        window.__debug = { gmi, collections };
     }
 };
 
