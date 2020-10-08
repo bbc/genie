@@ -70,7 +70,7 @@ describe("Scrollable List Buttons", () => {
             expect(args.channel).toEqual("mockChannel");
             expect(args.name).toEqual("scroll_button_mockId");
             args.callback();
-            expect(helpers.onClick).toHaveBeenCalledWith(mockButton);
+            expect(helpers.onClick).toHaveBeenCalledWith(mockButton, mockScene);
         });
 
         test("scales the button", () => {

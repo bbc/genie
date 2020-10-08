@@ -13,8 +13,11 @@ const scrollableList = scene => {
     const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig);
     scrollableListPanel.layout();
     scene.input.topOnly = false;
-    const resizeFn = fp.debounce(100, () => resizePanel(scene, scrollableListPanel));
-    scene.scale.on("resize", resizeFn, scene);
+    scene.scale.on(
+        "resize",
+        fp.debounce(100, () => resizePanel(scene, scrollableListPanel)),
+        scene,
+    );
     return scrollableListPanel;
 };
 

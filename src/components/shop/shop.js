@@ -20,7 +20,7 @@ export class Shop extends Screen {
         const buttons = ["exit", "audio"];
         this.setLayout(buttons);
         this.panel = scrollableList(this);
-
+        // this.input.on("pointerdown", () => console.log('BEEBUG: x, y', this.input.x, this.input.y), this);
         // this.cursors = this.input.keyboard.createCursorKeys();
         // this.inputReady = true;
     }

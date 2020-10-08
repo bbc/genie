@@ -27,7 +27,7 @@ const createGelButton = (scene, item) => {
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
     eventBus.subscribe({
-        callback: () => onClick(gelButton),
+        callback: () => onClick(gelButton, scene),
         channel: gelConfig.channel,
         name: id,
     });
