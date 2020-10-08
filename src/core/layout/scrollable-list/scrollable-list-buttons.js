@@ -26,7 +26,7 @@ const createGelButton = (scene, item) => {
     };
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
-    // console.log('BEEBUG: gelButton', gelButton);
+
     eventBus.subscribe({
         callback: () => handleIfVisible(gelButton, scene),
         channel: gelConfig.channel,

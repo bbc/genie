@@ -26,7 +26,7 @@ const getPanelConfig = scene => {
     const { assetKeys: keys } = config;
     const safeArea = scene.layout.getSafeArea();
     return {
-        height: safeArea.height, // or is this my aspect ratio issue? We can parameterise this. also the x, y. or pass safe area at top?
+        height: safeArea.height,
         scrollMode: 0,
         background: scene.add.image(0, 0, assetKey(keys.background, keys)),
         panel: { child: createPanel(scene) },
@@ -36,7 +36,7 @@ const getPanelConfig = scene => {
             width: config.space,
         },
         space: {
-            left: config.space, // functionally plz
+            left: config.space,
             right: config.space,
             top: config.space,
             bottom: config.space,
