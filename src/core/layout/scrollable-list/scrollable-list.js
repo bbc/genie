@@ -6,13 +6,14 @@
  */
 import { assetKey } from "./scrollable-list-helpers.js";
 import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
+import fp from "../../../../lib/lodash/fp/fp.js";
 
 const scrollableList = scene => {
     const panelConfig = getPanelConfig(scene);
     const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig);
     scrollableListPanel.layout();
     scene.input.topOnly = false;
-    const resizeFn = () => resizePanel(scene, scrollableListPanel);
+    const resizeFn = fp.debounce(100, () => resizePanel(scene, scrollableListPanel));
     scene.scale.on("resize", resizeFn, scene);
     return scrollableListPanel;
 };
@@ -79,7 +80,7 @@ const resizePanel = (scene, panel) => {
     const grid = panel.getByName("grid", true);
     const gridItems = grid.getElement("items");
     gridItems.forEach(label => scaleButton({ scene, config: scene.config, gelButton: label.children[0] }));
-    panel.height = scene.layout.getSafeArea().height;
+    panel.minHeight = scene.layout.getSafeArea().height;
     panel.layout();
 };
 

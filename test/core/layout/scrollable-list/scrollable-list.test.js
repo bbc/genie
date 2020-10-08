@@ -6,6 +6,7 @@
  */
 import { scrollableList } from "../../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
+import fp from "../../../../lib/lodash/fp/fp.js";
 
 const mockItem = { id: "someItem", name: "someItemName" };
 const mockLabel = { children: ["foo"] };
@@ -53,13 +54,12 @@ buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
 
 describe("Scrollable List", () => {
-    beforeEach(() => {
-        scrollableList(mockScene);
-    });
-
     afterEach(() => jest.clearAllMocks());
 
     describe("instantiation", () => {
+        beforeEach(() => {
+            scrollableList(mockScene);
+        });
         describe("adds a rexUI scrollable panel", () => {
             describe("with appropriate panel config", () => {
                 test("height is given by layout safe area", () => {
@@ -123,17 +123,18 @@ describe("Scrollable List", () => {
 
     describe("on resize callback", () => {
         beforeEach(() => {
-            const callback = mockScene.scale.on.mock.calls[0][1];
-            callback();
-        });
-        test("calls scaleButton on each gel button", () => {
-            expect(buttons.scaleButton).toHaveBeenCalled();
-        });
-        test("sets the panel height to the safe area height", () => {
-            expect(mockScrollablePanel.height).toBe(100);
+            jest.spyOn(fp, "debounce").mockImplementation((value, callback) => callback);
+            scrollableList(mockScene);
+            mockScene.scale.on.mock.calls[0][1]();
         });
         test("calls layout on the panel", () => {
             expect(mockScrollablePanel.layout).toHaveBeenCalledTimes(2);
+        });
+        test("sets the panel minHeight to the safe area height", () => {
+            expect(mockScrollablePanel.minHeight).toBe(100);
+        });
+        test("calls scaleButton on each gel button", () => {
+            expect(buttons.scaleButton).toHaveBeenCalled();
         });
     });
 });
