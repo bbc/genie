@@ -26,7 +26,6 @@ const createGelButton = (scene, item) => {
     };
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
-
     eventBus.subscribe({
         callback: () => onClick(gelButton),
         channel: gelConfig.channel,
@@ -39,9 +38,9 @@ const createGelButton = (scene, item) => {
 const scaleButton = args => {
     const { scene, config, gelButton } = args;
     const safeArea = scene.layout.getSafeArea();
-    const scaleFactor = (safeArea.width - config.space * 2) / gelButton.width;
+    const scaleFactor = (safeArea.width - config.space * 4) / gelButton.width;
     gelButton.setScale(scaleFactor);
     return args;
 };
 
-export { createGelButton };
+export { createGelButton, scaleButton };

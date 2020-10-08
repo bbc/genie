@@ -42,7 +42,8 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
         bottomBorderPad: isIphone5 ? 58 : borderPad,
         horizontalBorderPad: borderPad,
         isMobile,
-        buttonPad: isMobile ? 22 : 24,
+        // buttonPad: isMobile ? 22 : 24, // this makes scrollable list styling inconsistent
+        buttonPad: 22, // temp fix,
         buttonMin: isMobile ? 42 : 64,
         hitMin: isMobile ? 64 : 70,
         horizontals: {

@@ -83,10 +83,4 @@ describe("Scrollable List Buttons", () => {
             expect(overlays.overlays1Wide).toHaveBeenCalled();
         });
     });
-
-    describe("scaling", () => {
-        test("fails", () => {
-            expect(false).toBe(true);
-        });
-    });
 });
