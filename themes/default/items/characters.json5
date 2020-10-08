@@ -1,13 +1,8 @@
-[
-    {
-        id: "bobsonDugnut",    //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
-        title: "Bobson Dugnut",
-        description: "The greatest baseball player to ever live."
-    },
-    {
-        id: "sleveMcDichael",    //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
-        title: "Sleve McDichael",
-        description: "He could have been the greatest if it wasn't for his bad luck with injuries."
-    },
-
-]
+{
+    catalogue: "character-catalogue",
+    defaultQty: 1,          //default quantity unless specified
+    defaults: [             //additional config
+        { id: "crossbow", qty: 5 },
+        { id: "bread", qty: 1 },
+    ],
+}

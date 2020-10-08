@@ -32,12 +32,6 @@ export const setSize = (grid, button) => {
 
     size[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
     button.setDisplaySize(...size);
-
-    // TODO This calculation should be retained for possible inclusion of hit area adjustment,
-    // currently being skipped due to unexplained behaviour with the scaling calculations.
-    //
-    // const hitSize = this.calculateCellSize(1 / this._cells[cellIndex].scaleX, 1 / this._cells[cellIndex].scaleY);
-    // this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
 };
 
 const getBlankCellCount = (grid, row, page) => {

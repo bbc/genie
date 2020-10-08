@@ -17,6 +17,8 @@ import { addEvents } from "./add-events.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { addHoverParticlesToCells } from "./select-particles.js";
 
+import { collections } from "../../core/collection.js";
+
 const gridDefaults = {
     tabIndex: 6,
 };
@@ -33,7 +35,8 @@ export class Select extends Screen {
     create() {
         this.addBackgroundItems();
         createTitles(this);
-        const paginate = this.config.choices.length > this.config.columns * this.config.rows;
+        const choices = collections.get(this.config.collection).getAll();
+        const paginate = choices.length > this.config.columns * this.config.rows;
         const pagingButtons = paginate ? ["previous", "next"] : [];
         const buttons = ["home", "pause", ...pagingButtons];
         singleItemMode.isEnabled(this)
@@ -46,15 +49,15 @@ export class Select extends Screen {
         this.grid = new GelGrid(this, Object.assign(this.config, gridDefaults, { onTransitionStart }, { choice }));
         this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
         this.resize();
-        this._cells = this.grid.addGridCells(this.config);
+        this._cells = this.grid.addGridCells(choices);
 
         this._scaleEvent = onScaleChange.add(this.resize.bind(this));
         this.scene.scene.events.on("shutdown", this._scaleEvent.unsubscribe, this);
 
         addEvents(this);
 
-        const stateConfig = this.config.choices.map(({ id, state }) => ({ id, state }));
-        this.states = state.initState(this.config.storageKey, stateConfig);
+        //const stateConfig = this.config.choices.map(({ id, state }) => ({ id, state }));
+        //this.states = state.initState(this.config.storageKey, stateConfig);
 
         singleItemMode.create(this);
 
