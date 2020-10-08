@@ -26,10 +26,11 @@ const getPanelConfig = scene => {
         scrollMode: 0,
         background: scene.add.image(0, 0, assetKey(keys.background, keys)),
         panel: { child: createPanel(scene) },
-        slider: { 
-            track: scene.add.image(0, 0, assetKey(keys.scrollbar, keys)), 
+        slider: {
+            track: scene.add.image(0, 0, assetKey(keys.scrollbar, keys)),
             thumb: scene.add.image(0, 0, assetKey(keys.scrollbarHandle, keys)),
-            width: config.space },
+            width: config.space,
+        },
         space: {
             left: config.space, // functionally plz
             right: config.space,
@@ -75,7 +76,7 @@ const createItem = (scene, item) => {
 };
 
 const resizePanel = (scene, panel) => {
-    const grid = panel.getByName("grid", true)
+    const grid = panel.getByName("grid", true);
     const gridItems = grid.getElement("items");
     gridItems.forEach(label => scaleButton({ scene, config: scene.config, gelButton: label.children[0] }));
     panel.height = scene.layout.getSafeArea().height;

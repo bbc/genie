@@ -9,11 +9,11 @@ import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable
 
 const mockItem = { id: "someItem", name: "someItemName" };
 const mockLabel = { children: ["foo"] };
-const mockGridSizer = { 
+const mockGridSizer = {
     add: jest.fn(),
     getElement: jest.fn().mockReturnValue([mockLabel]),
 };
-const mockScrollablePanel = { 
+const mockScrollablePanel = {
     layout: jest.fn(),
     getByName: jest.fn().mockReturnValue(mockGridSizer),
 };
@@ -81,7 +81,7 @@ describe("Scrollable List", () => {
                     expect(config.scrollMode).toBe(0);
                 });
             });
-            
+
             describe("with nested rexUI elements", () => {
                 test("a label is created with a gel button per item", () => {
                     expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem);
