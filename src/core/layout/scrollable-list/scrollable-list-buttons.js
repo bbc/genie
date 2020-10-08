@@ -4,7 +4,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { onClick } from "./scrollable-list-helpers.js";
+import { handleIfVisible } from "./scrollable-list-helpers.js";
 import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
@@ -26,8 +26,9 @@ const createGelButton = (scene, item) => {
     };
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
+    // console.log('BEEBUG: gelButton', gelButton);
     eventBus.subscribe({
-        callback: () => onClick(gelButton, scene),
+        callback: () => handleIfVisible(gelButton, scene),
         channel: gelConfig.channel,
         name: id,
     });

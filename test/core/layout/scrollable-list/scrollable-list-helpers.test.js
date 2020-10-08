@@ -35,16 +35,16 @@ console.log = jest.fn();
 describe("Scrollable List helpers", () => {
     afterEach(() => jest.clearAllMocks());
 
-    describe("onClick()", () => {
+    describe("handleIfVisible()", () => {
         test("calls console.log if click is inside the panel's Y bounds", () => {
             mockScene.input = { y: 300 };
-            helpers.onClick(mockGelButton, mockScene);
+            helpers.handleIfVisible(mockGelButton, mockScene);
             expect(console.log).toHaveBeenCalledWith("Clicked foo");
         });
 
         test("does not call console log if click is outside the panel", () => {
             mockScene.input = { y: 0 };
-            helpers.onClick(mockGelButton, mockScene);
+            helpers.handleIfVisible(mockGelButton, mockScene);
             expect(console.log).not.toHaveBeenCalled();
         });
     });

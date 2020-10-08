@@ -20,26 +20,5 @@ export class Shop extends Screen {
         const buttons = ["exit", "audio"];
         this.setLayout(buttons);
         this.panel = scrollableList(this);
-        // this.input.on("pointerdown", () => console.log('BEEBUG: x, y', this.input.x, this.input.y), this);
-        // this.cursors = this.input.keyboard.createCursorKeys();
-        // this.inputReady = true;
     }
-
-    // update() {
-    //     if (this.cursors.space.isDown && this.inputReady) {
-    //         this.inputReady = false;
-    //         if (this.rect) {
-    //             this.rect.destroy();
-    //             this.rect = undefined;
-    //         } else {
-    //             const safeArea = this.layout.getSafeArea();
-    //             this.rect = this.add.rectangle(0, 0, safeArea.width, safeArea.height, 0xff0000);
-    //             this.rect.alpha = 0.5;
-    //         }
-    //     }
-
-    //     if (this.cursors.space.isUp && !this.inputReady) {
-    //         this.inputReady = true;
-    //     }
-    // }
 }

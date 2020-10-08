@@ -9,9 +9,13 @@ import * as overlays from "../../../../src/core/layout/scrollable-list/button-ov
 import * as helpers from "../../../../src/core/layout/scrollable-list/scrollable-list-helpers.js";
 import { eventBus } from "../../../../src/core/event-bus.js";
 
+const mockContainer = { parent: { getTopmostSizer: jest.fn().mockReturnValue({ innerHeight: 100 }) } };
+
 const mockButton = {
     width: 100,
     setScale: jest.fn(),
+    rexContainer: mockContainer,
+    config: { id: "foo" },
 };
 
 const mockScene = {
@@ -28,6 +32,8 @@ const mockScene = {
             itemBackground: "itemBackground",
         },
     },
+    input: { y: 50 },
+    scale: { displaySize: { height: 100 } },
 };
 
 const mockItem = {
@@ -64,13 +70,13 @@ describe("Scrollable List Buttons", () => {
 
         test("subscribes to the event bus", () => {
             eventBus.subscribe = jest.fn();
-            helpers.onClick = jest.fn();
+            helpers.handleIfVisible = jest.fn();
             buttons.createGelButton(mockScene, mockItem);
             const args = eventBus.subscribe.mock.calls[0][0];
             expect(args.channel).toEqual("mockChannel");
             expect(args.name).toEqual("scroll_button_mockId");
             args.callback();
-            expect(helpers.onClick).toHaveBeenCalledWith(mockButton, mockScene);
+            expect(helpers.handleIfVisible).toHaveBeenCalledWith(mockButton, mockScene);
         });
 
         test("scales the button", () => {
