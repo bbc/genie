@@ -13,7 +13,7 @@ const horizontal = {
         let hitAreaOffset = 0;
         fp.forEach(child => {
             if (!child.input.hitArea) return;
-            hitAreaOffset = fp.max([hitAreaOffset, -(child.x - child.input.hitArea.width / 2) / metrics.scale]);
+            hitAreaOffset = fp.max([hitAreaOffset, -(child.x - child.input.hitArea.width / 2)]);
         }, group.list);
         group.x = metrics[horizontalsType].left + metrics.horizontalBorderPad + hitAreaOffset;
     },
@@ -24,10 +24,7 @@ const horizontal = {
         let hitAreaOffset = 0;
         fp.forEach(child => {
             if (!child.input.hitArea) return;
-            hitAreaOffset = fp.max([
-                hitAreaOffset,
-                (child.x + child.input.hitArea.width / 2) / metrics.scale - group.width,
-            ]);
+            hitAreaOffset = fp.max([hitAreaOffset, child.x + child.input.hitArea.width / 2 - group.width]);
         }, group.list);
         group.x = metrics[horizontalsType].right - metrics.horizontalBorderPad - hitAreaOffset - group.width;
     },
@@ -38,7 +35,7 @@ const vertical = {
         let hitAreaOffset = 0;
         fp.forEach(child => {
             if (!child.input.hitArea) return;
-            hitAreaOffset = fp.max([hitAreaOffset, -(child.y - child.input.hitArea.height / 2) / metrics.scale]);
+            hitAreaOffset = fp.max([hitAreaOffset, -(child.y - child.input.hitArea.height / 2)]);
         }, group.list);
         group.y = metrics.verticals.top + metrics.verticalBorderPad + hitAreaOffset;
     },
@@ -49,10 +46,7 @@ const vertical = {
         let hitAreaOffset = 0;
         fp.forEach(child => {
             if (!child.input.hitArea) return;
-            hitAreaOffset = fp.max([
-                hitAreaOffset,
-                (child.y + child.input.hitArea.height / 2) / metrics.scale - group.height,
-            ]);
+            hitAreaOffset = fp.max([hitAreaOffset, child.y + child.input.hitArea.height / 2 - group.height]);
         }, group.list);
         group.y = metrics.verticals.bottom - metrics.bottomBorderPad - hitAreaOffset - group.height;
     },
@@ -107,31 +101,8 @@ export class GelGroup extends Phaser.GameObjects.Container {
 
     reset(metrics) {
         metrics = metrics || this._metrics;
-        this.resetButtons(metrics);
         this.alignChildren();
-
-        this._metrics = metrics;
-        const invScale = 1 / metrics.scale;
-
-        this.setScale(invScale);
-        this.updateSize();
         this._setGroupPosition(metrics);
-
-        this._buttons.forEach(button => {
-            button.x = button.x + button.config.shiftX * metrics.scale;
-            button.y = button.y + button.config.shiftY * metrics.scale;
-        });
-    }
-
-    updateSize() {
-        const childBounds = this.list.map(child => child.getHitAreaBounds());
-
-        const left = childBounds[0] ? Math.min(...childBounds.map(bounds => bounds.x)) : 0;
-        const right = childBounds[0] ? Math.max(...childBounds.map(bounds => bounds.x + bounds.width)) : 0;
-        let top = childBounds[0] ? Math.min(...childBounds.map(bounds => bounds.y)) : 0;
-        let bottom = childBounds[0] ? Math.max(...childBounds.map(bounds => bounds.y + bounds.height)) : 0;
-
-        this.setSize(right - left, bottom - top);
     }
 
     alignChildren() {
@@ -155,10 +126,5 @@ export class GelGroup extends Phaser.GameObjects.Container {
             fp.camelCase([this._vPos, this._hPos, this._isVertical ? "v" : "", this._isSafe ? "safe" : ""].join("-")),
         );
         this._buttons.forEach(a11y.addButton);
-    }
-
-    //TODO this is currently observer pattern but will eventually use pub/sub Phaser.Events
-    resetButtons(metrics) {
-        this._buttons.forEach(button => button.resize(metrics));
     }
 }

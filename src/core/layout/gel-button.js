@@ -19,7 +19,8 @@ export class GelButton extends Phaser.GameObjects.Container {
         const metrics = getMetrics();
         super(scene, x, y);
 
-        this.sprite = scene.add.sprite(0, 0, config);
+        this.sprite = scene.add.sprite(0, 0, config.gameButton ? `${config.scene}.${config.key}` : `gel.${config.key}`);
+        !config.gameButton && this.sprite.setScale(1 / 3);
         this.setScrollFactor(0);
         this.sprite.setScrollFactor(0);
         this.add(this.sprite);
@@ -79,13 +80,15 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     setHitArea(metrics) {
-        const hitPad = Math.max(metrics.hitMin - this.sprite.width, metrics.hitMin - this.sprite.height, 0);
-        const width = this.sprite.width + hitPad;
-        const height = this.sprite.height + hitPad;
+        const hitPad = Math.max(
+            metrics.hitMin - this.sprite.width * this.sprite.scale,
+            metrics.hitMin - this.sprite.height * this.sprite.scale,
+            0,
+        );
+        const width = this.sprite.width * this.sprite.scale + hitPad;
+        const height = this.sprite.height * this.sprite.scale + hitPad;
 
         this.input.hitArea = new Phaser.Geom.Rectangle(0, 0, width, height);
-
-        this.setSize(width, height);
     }
 
     getHitAreaBounds() {
@@ -101,6 +104,13 @@ export class GelButton extends Phaser.GameObjects.Container {
             y + this.y * scale - height / 2,
             width,
             height,
+        );
+    }
+
+    setImage(key) {
+        this.config.key = key;
+        this.sprite.setTexture(
+            this.config.gameButton ? `${this.config.scene}.${this.config.key}` : `gel.${this.config.key}`,
         );
     }
 
