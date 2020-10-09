@@ -1,5 +1,5 @@
 {
-    "gelDesktop": {
+    "gel": {
         "prefix": "gel.",
         "files": [
             {
@@ -7,11 +7,11 @@
                 "key": "achievements",
                 "url": "gel/achievements.png",
                 "frameConfig": {
-                    "frameWidth": 744,
-                    "frameHeight": 192,
+                    "frameWidth": 248,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -19,11 +19,11 @@
                 "key": "achievements-small",
                 "url": "gel/achievements-small.png",
                 "frameConfig": {
-                    "frameWidth": 192,
-                    "frameHeight": 192,
+                    "frameWidth": 64,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -36,11 +36,11 @@
                 "key": "play",
                 "url": "gel/play.png",
                 "frameConfig": {
-                    "frameWidth": 540,
-                    "frameHeight": 540,
+                    "frameWidth": 180,
+                    "frameHeight": 180,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -48,11 +48,11 @@
                 "key": "exit",
                 "url": "gel/exit.png",
                 "frameConfig": {
-                    "frameWidth": 192,
-                    "frameHeight": 192,
+                    "frameWidth": 64,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -60,11 +60,11 @@
                 "key": "how-to-play",
                 "url": "gel/how-to-play.png",
                 "frameConfig": {
-                    "frameWidth": 744,
-                    "frameHeight": 192,
+                    "frameWidth": 248,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -72,11 +72,11 @@
                 "key": "settings",
                 "url": "gel/settings.png",
                 "frameConfig": {
-                    "frameWidth": 192,
-                    "frameHeight": 192,
+                    "frameWidth": 64,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -84,11 +84,11 @@
                 "key": "home",
                 "url": "gel/home.png",
                 "frameConfig": {
-                    "frameWidth": 192,
-                    "frameHeight": 192,
+                    "frameWidth": 64,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -96,11 +96,11 @@
                 "key": "back",
                 "url": "gel/back.png",
                 "frameConfig": {
-                    "frameWidth": 192,
-                    "frameHeight": 192,
+                    "frameWidth": 64,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -108,11 +108,11 @@
                 "key": "audio-on",
                 "url": "gel/audio-on.png",
                 "frameConfig": {
-                    "frameWidth": 192,
-                    "frameHeight": 192,
+                    "frameWidth": 64,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -120,11 +120,11 @@
                 "key": "audio-off",
                 "url": "gel/audio-off.png",
                 "frameConfig": {
-                    "frameWidth": 192,
-                    "frameHeight": 192,
+                    "frameWidth": 64,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -132,11 +132,11 @@
                 "key": "pause",
                 "url": "gel/pause.png",
                 "frameConfig": {
-                    "frameWidth": 192,
-                    "frameHeight": 192,
+                    "frameWidth": 64,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -144,11 +144,11 @@
                 "key": "skip",
                 "url": "gel/skip.png",
                 "frameConfig": {
-                    "frameWidth": 192,
-                    "frameHeight": 192,
+                    "frameWidth": 64,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -156,11 +156,11 @@
                 "key": "continue",
                 "url": "gel/continue.png",
                 "frameConfig": {
-                    "frameWidth": 672,
-                    "frameHeight": 192,
+                    "frameWidth": 224,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -168,11 +168,11 @@
                 "key": "restart",
                 "url": "gel/restart.png",
                 "frameConfig": {
-                    "frameWidth": 672,
-                    "frameHeight": 192,
+                    "frameWidth": 224,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -192,11 +192,11 @@
                 "key": "previous",
                 "url": "gel/previous.png",
                 "frameConfig": {
-                    "frameWidth": 192,
-                    "frameHeight": 192,
+                    "frameWidth": 64,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -204,11 +204,11 @@
                 "key": "next",
                 "url": "gel/next.png",
                 "frameConfig": {
-                    "frameWidth": 192,
-                    "frameHeight": 192,
+                    "frameWidth": 64,
+                    "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -216,11 +216,11 @@
                 "key": "replay",
                 "url": "gel/replay.png",
                 "frameConfig": {
-                    "frameWidth": 360,
-                    "frameHeight": 360,
+                    "frameWidth": 120,
+                    "frameHeight": 120,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
@@ -228,11 +228,11 @@
                 "key": "levels",
                 "url": "gel/levels.png",
                 "frameConfig": {
-                    "frameWidth": 360,
-                    "frameHeight": 360,
+                    "frameWidth": 120,
+                    "frameHeight": 120,
                     "frameMax": 2,
                     "margin": 0,
-                    "spacing": 12
+                    "spacing": 4
                 }
             },
             {
