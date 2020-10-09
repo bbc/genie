@@ -6,7 +6,7 @@
 import { Screen } from "../core/screen.js";
 import { accessibilify } from "../core/accessibility/accessibilify.js";
 import { gmi } from "../core/gmi/gmi.js";
-import { collections } from "../core/collection.js";
+import { collections } from "../core/collections.js";
 
 export class Game extends Screen {
     calculateAchievements(item, amount, keys) {

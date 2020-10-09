@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { collections, initCollection } from "../../src/core/collection.js";
+import { collections, initCollection } from "../../src/core/collections.js";
 import * as gmiModule from "../../src/core/gmi/gmi.js";
 
 describe("Collections", () => {

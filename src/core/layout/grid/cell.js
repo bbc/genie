@@ -7,7 +7,7 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 
 import { accessibilify } from "../../accessibility/accessibilify.js";
 import { gmi } from "../../gmi/gmi.js";
-import { collections } from "../../collection.js";
+import { collections } from "../../collections.js";
 
 const alignmentFactor = { left: 0, center: 1, right: 2 };
 

@@ -15,7 +15,7 @@ import * as singleItemMode from "./single-item-mode.js";
 import { addEvents } from "./add-events.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { addHoverParticlesToCells } from "./select-particles.js";
-import { collections } from "../../core/collection.js";
+import { collections } from "../../core/collections.js";
 
 const gridDefaults = {
     tabIndex: 6,

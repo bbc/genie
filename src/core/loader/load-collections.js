@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { initCollection } from "../collection.js";
+import { initCollection } from "../collections.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const getKey = item => item.collection;

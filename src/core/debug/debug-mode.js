@@ -5,7 +5,7 @@
  */
 import { parseUrlParams } from "../parseUrlParams.js";
 import { gmi } from "../gmi/gmi.js";
-import { collections } from "../collection.js";
+import { collections } from "../collections.js";
 
 const urlParams = window => parseUrlParams(window.location.search);
 const testURL = window => window.location.hostname.includes("www.test.bbc.");

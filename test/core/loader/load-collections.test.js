@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { loadCollections } from "../../../src/core/loader/load-collections.js";
-import * as initCollectionModule from "../../../src/core/collection.js";
+import * as initCollectionModule from "../../../src/core/collections.js";
 
 const mockConfig = {
     screen1: {

@@ -8,7 +8,7 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 import { createCell, setSize } from "../../../../src/core/layout/grid/cell.js";
 import * as gmiModule from "../../../../src/core/gmi/gmi.js";
 import { accessibilify } from "../../../../src/core/accessibility/accessibilify.js";
-import * as states from "../../../../src/core/states.js";
+import * as collectionsModule from "../../../../src/core/collections.js";
 
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
 
@@ -147,18 +147,13 @@ describe("Grid Cells", () => {
             expect(mockButton.key).toBe(expectedKey);
         });
 
-        test("adds the button to the grid", () => {
-            createCell(mockGrid, {}, 0);
-            expect(mockGrid.add).toHaveBeenCalledWith(mockButton);
-        });
-
         describe("Button text", () => {
             let mockTheme;
-            let mockStates;
+            let mockCollections;
 
             beforeEach(() => {
-                mockStates = { get: jest.fn() };
-                jest.spyOn(states, "initState").mockImplementation(() => mockStates);
+                mockCollections = { get: jest.fn() };
+                jest.spyOn(collectionsModule, "initCollection").mockImplementation(() => mockCollections);
                 mockTheme = {
                     choices: [{ id: "mary", key: "mary", ariaLabel: "Mary", title: "Mary", subtitle: "Is very tall" }],
                     choicesStyling: {
@@ -227,7 +222,7 @@ describe("Grid Cells", () => {
 
             test("applies a style override to the default styles when the button has a different state", () => {
                 mockTheme.choices[0].state = "locked";
-                mockStates.get.mockReturnValue(mockTheme.choices[0]);
+                mockCollections.get.mockReturnValue(mockTheme.choices[0]);
                 mockTheme.choicesStyling.locked = { title: { style: { color: "#000" } } };
 
                 const expectedStyle = fp.merge(mockTheme.choicesStyling.default, mockTheme.choicesStyling.locked);

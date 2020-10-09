@@ -10,8 +10,6 @@ const getGenieStore = () => gmi.getAllSettings().gameData.genie || {};
 
 export let collections = new Map();
 
-//TODO - could you get all the items then filer away ones?
-
 const mergeDefaults = itemDefaults => item => ({ ...item, ...itemDefaults?.find(def => def.id === item.id) });
 const getFilterParams = config => ({ ids: config.defaults?.map(x => x.id) ?? [], tags: config.include ?? [] });
 const tagIn = config => tag => config.tags.includes(tag);
