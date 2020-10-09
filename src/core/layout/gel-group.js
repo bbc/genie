@@ -103,6 +103,10 @@ export class GelGroup extends Phaser.GameObjects.Container {
         metrics = metrics || this._metrics;
         this.alignChildren();
         this._setGroupPosition(metrics);
+        this._buttons.forEach(button => {
+            button.x = button.x + button.config.shiftX;
+            button.y = button.y + button.config.shiftY;
+        });
     }
 
     alignChildren() {
