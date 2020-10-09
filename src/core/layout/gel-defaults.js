@@ -3,8 +3,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { settings, settingsChannel } from "../../core/settings.js";
-import { gmi } from "../../core/gmi/gmi.js";
+import { settings, settingsChannel } from "../settings.js";
+import { gmi } from "../gmi/gmi.js";
 import { eventBus } from "../event-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
@@ -13,13 +13,13 @@ const pushLevelId = (screen, params) => {
     return levelId ? [...params, { source: levelId }] : params;
 };
 
-const getScreenBelow = screen => {
-    return screen._data.addedBy;
-};
+const getScreenBelow = screen => screen._data.addedBy;
+const addChannel = channel => entry => [entry[0], { ...entry[1], ...{ channel } }];
+const addChannelToAll = (defaults, channel) => Object.fromEntries(Object.entries(defaults).map(addChannel(channel)));
 
 export const buttonsChannel = screen => (screen ? `gel-buttons-${screen.scene.key}` : "gel-buttons");
 export const config = screen => {
-    return {
+    const gelDefaults = {
         exit: {
             group: "topLeft",
             title: "Exit",
@@ -27,7 +27,6 @@ export const config = screen => {
             ariaLabel: "Exit Game",
             order: 0,
             id: "exit",
-            channel: buttonsChannel(screen),
             action: () => {
                 gmi.exit();
             },
@@ -39,7 +38,6 @@ export const config = screen => {
             ariaLabel: "Home",
             order: 1,
             id: "home",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 gmi.sendStatsEvent("home", "click");
                 screen.navigation.home();
@@ -52,7 +50,6 @@ export const config = screen => {
             ariaLabel: "Back",
             order: 2,
             id: "back",
-            channel: buttonsChannel,
             action: ({ screen }) => {
                 gmi.sendStatsEvent("back", "click");
                 screen.navigation.back();
@@ -65,7 +62,6 @@ export const config = screen => {
             ariaLabel: "Back",
             order: 2,
             id: "back",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 getScreenBelow(screen).scene.resume();
                 gmi.sendStatsEvent("back", "click");
@@ -79,7 +75,6 @@ export const config = screen => {
             ariaLabel: "Toggle Sound",
             order: 3,
             id: "audio",
-            channel: buttonsChannel(screen),
             action: () => {
                 const audioEnabled = gmi.getAllSettings().audio;
                 gmi.setAudio(!audioEnabled);
@@ -99,7 +94,6 @@ export const config = screen => {
             ariaLabel: "Game Settings",
             order: 5,
             id: "settings",
-            channel: buttonsChannel(screen),
             action: ({ game }) => {
                 settings.show(game);
             },
@@ -111,7 +105,6 @@ export const config = screen => {
             ariaLabel: "Pause Game",
             order: 6,
             id: "pause",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 screen.scene.pause();
                 gmi.sendStatsEvent("pause", "click");
@@ -125,7 +118,6 @@ export const config = screen => {
             ariaLabel: "Previous Item",
             order: 7,
             id: "previous",
-            channel: buttonsChannel(screen),
         },
         replay: {
             group: "middleCenter",
@@ -146,7 +138,6 @@ export const config = screen => {
             ariaLabel: "Replay Game",
             order: 8,
             id: "replay",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 const belowScreenKey = getScreenBelow(screen).scene.key;
                 screen.navigate(screen.context.navigation[belowScreenKey].routes.restart);
@@ -161,7 +152,6 @@ export const config = screen => {
             ariaLabel: "Level Select",
             order: 16,
             id: "levelselect",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 const params = pushLevelId(screen, ["levelselect", "click"]);
                 screen.navigate(screen.context.navigation["pause"].routes.select);
@@ -175,7 +165,6 @@ export const config = screen => {
             ariaLabel: "Play Game",
             order: 9,
             id: "play",
-            channel: buttonsChannel(screen),
             action: () => {
                 gmi.sendStatsEvent("play", "click");
             },
@@ -187,7 +176,6 @@ export const config = screen => {
             ariaLabel: "Play Game",
             order: 9,
             id: "play",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 const screenBelow = getScreenBelow(screen);
                 screenBelow.scene.resume();
@@ -203,7 +191,6 @@ export const config = screen => {
             ariaLabel: "Skip",
             order: 6,
             id: "skip",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 screen.navigation.next();
             },
@@ -215,7 +202,6 @@ export const config = screen => {
             ariaLabel: "Next Item",
             order: 10,
             id: "next",
-            channel: buttonsChannel(screen),
         },
         achievements: {
             group: "bottomLeft",
@@ -224,7 +210,6 @@ export const config = screen => {
             ariaLabel: "Your Achievements",
             order: 11,
             id: "achievements",
-            channel: buttonsChannel(screen),
             indicator: {
                 offsets: {
                     mobile: { x: -12, y: 12 },
@@ -247,7 +232,6 @@ export const config = screen => {
             ariaLabel: "Your Achievements",
             order: 12,
             id: "achievements-small",
-            channel: buttonsChannel(screen),
             indicator: {
                 offsets: {
                     mobile: { x: -17, y: 17 },
@@ -270,7 +254,6 @@ export const config = screen => {
             ariaLabel: "Restart Game",
             order: 12,
             id: "restart",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 const params = pushLevelId(screen, ["level", "playagain"]);
                 gmi.sendStatsEvent(...params);
@@ -283,7 +266,6 @@ export const config = screen => {
             ariaLabel: "Play Again",
             order: 12,
             id: "restart",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 const params = pushLevelId(screen, ["level", "playagain"]);
                 gmi.sendStatsEvent(...params);
@@ -296,7 +278,6 @@ export const config = screen => {
             ariaLabel: "Continue",
             order: 13,
             id: "continue",
-            channel: buttonsChannel(screen),
         },
         continueGame: {
             group: "bottomCenter",
@@ -305,7 +286,6 @@ export const config = screen => {
             ariaLabel: "Continue Game",
             order: 13,
             id: "continue",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 const params = pushLevelId(screen, ["level", "continue"]);
                 gmi.sendStatsEvent(...params);
@@ -318,7 +298,6 @@ export const config = screen => {
             ariaLabel: "Game Instructions",
             order: 14,
             id: "how-to-play",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 screen.scene.pause();
                 screen.addOverlay("how-to-play");
@@ -332,10 +311,11 @@ export const config = screen => {
             ariaLabel: "Debug",
             order: 15,
             id: "debug",
-            channel: buttonsChannel(screen),
             action: ({ screen }) => {
                 screen.navigation.debug();
             },
         },
     };
+
+    return addChannelToAll(gelDefaults, buttonsChannel(screen));
 };

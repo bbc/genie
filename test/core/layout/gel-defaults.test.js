@@ -48,6 +48,7 @@ describe("Layout - Gel Defaults", () => {
             },
             scene: {
                 pause: jest.fn(),
+                key: "current-screen",
             },
             navigation: {
                 home: jest.fn(),
@@ -408,6 +409,13 @@ describe("Layout - Gel Defaults", () => {
 
         test("Launches debug screen", () => {
             expect(mockCurrentScreen.navigation.debug).toHaveBeenCalled();
+        });
+    });
+
+    describe("config", () => {
+        test("Returns a buttons Channel for ever item", () => {
+            const configChannels = Object.values(gel.config(mockCurrentScreen)).map(a => a.channel);
+            expect(configChannels.every(channel => channel === "gel-buttons-current-screen")).toBe(true);
         });
     });
 });
