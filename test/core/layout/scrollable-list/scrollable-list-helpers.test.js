@@ -42,7 +42,7 @@ describe("Scrollable List helpers", () => {
             expect(console.log).toHaveBeenCalledWith("Clicked foo");
         });
 
-        test("does not call console log if click is outside the panel", () => {
+        test("does not call console.log if click is outside the panel", () => {
             mockScene.input = { y: 0 };
             helpers.handleIfVisible(mockGelButton, mockScene);
             expect(console.log).not.toHaveBeenCalled();

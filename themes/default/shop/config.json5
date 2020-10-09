@@ -1,5 +1,5 @@
 {
-    space: 16,
+    space: 10,
     background: {
         items: [
             { key: "home.background", x: 0, y: 0 },
