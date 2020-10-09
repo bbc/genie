@@ -6,7 +6,6 @@
 import { eventBus } from "../event-bus.js";
 import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
-import { assetPath } from "./asset-paths.js";
 import { Indicator } from "./gel-indicator.js";
 import { getMetrics } from "../scaler.js";
 
@@ -20,13 +19,12 @@ export class GelButton extends Phaser.GameObjects.Container {
         const metrics = getMetrics();
         super(scene, x, y);
 
-        this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
+        this.sprite = scene.add.sprite(0, 0, config);
         this.setScrollFactor(0);
         this.sprite.setScrollFactor(0);
         this.add(this.sprite);
 
         this.config = { ...defaults, ...config };
-        this.isMobile = metrics.isMobile;
         config.indicator && this.setIndicator();
 
         if (config.anim) {
@@ -106,14 +104,7 @@ export class GelButton extends Phaser.GameObjects.Container {
         );
     }
 
-    setImage(key) {
-        this.config.key = key;
-        this.sprite.setTexture(assetPath({ ...this.config, key, isMobile: this.isMobile }));
-    }
-
     resize(metrics) {
-        this.isMobile = metrics.isMobile;
-        this.sprite.setTexture(assetPath({ key: this.config.key, isMobile: metrics.isMobile }));
         this.setHitArea(metrics);
 
         Object.values(this.overlays.list)

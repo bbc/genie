@@ -227,8 +227,8 @@ export const config = screen => {
             channel: buttonsChannel(screen),
             indicator: {
                 offsets: {
-                    mobile: { x: -12, y: 12 },
-                    desktop: { x: -4, y: 4 },
+                    x: -4,
+                    y: 4,
                 },
             },
             action: ({ screen }) => {
@@ -249,10 +249,8 @@ export const config = screen => {
             id: "achievements-small",
             channel: buttonsChannel(screen),
             indicator: {
-                offsets: {
-                    mobile: { x: -17, y: 17 },
-                    desktop: { x: -12, y: 12 },
-                },
+                x: -12,
+                y: 12,
             },
             action: ({ screen }) => {
                 if (screen.navigation.achievements) {

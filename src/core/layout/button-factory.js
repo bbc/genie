@@ -33,7 +33,6 @@ const defaultAction = config => {
  *
  * @function
  * @memberOf module:layout/button-factory
- * @param {Boolean} isMobile - Whether to use mobile or desktop sized assets
  * @param {Object} config - Gel configuration for this button
  */
 const createButton = fp.curry((scene, config, x = 0, y = 0) => {

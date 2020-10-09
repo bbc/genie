@@ -26,7 +26,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this._safeArea = scene.layout.getSafeArea(metrics);
         this._config = { ...defaults, ...config };
         this._cells = [];
-        this._cellPadding = metrics.isMobile ? 16 : 24;
+        this._cellPadding = 24;
         this.page = 0;
         this.eventChannel = `gel-buttons-${scene.scene.key}`;
         this.enforceLimits();
@@ -53,7 +53,7 @@ export class GelGrid extends Phaser.GameObjects.Container {
     resize(safeArea) {
         const metrics = getMetrics();
         this._safeArea = safeArea;
-        this._cellPadding = metrics.screenToCanvas(metrics.isMobile ? 16 : 24);
+        this._cellPadding = metrics.screenToCanvas(24);
         this.reset();
     }
 

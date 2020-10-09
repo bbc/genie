@@ -5,7 +5,6 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 
-const MOBILE_BREAK_WIDTH = 770;
 export const BORDER_PAD_RATIO = 0.02;
 export const GEL_MIN_ASPECT_RATIO = 4 / 3;
 export const GEL_MAX_ASPECT_RATIO = 7 / 3;
@@ -25,7 +24,6 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
     const scale = getScale(stageHeight, width, height);
     const aspectRatio = fp.clamp(GEL_MIN_ASPECT_RATIO, GEL_MAX_ASPECT_RATIO, width / height);
     const stageWidth = aspectRatio * stageHeight;
-    const isMobile = width < MOBILE_BREAK_WIDTH;
     const isIphone5 = width === 568 && height === 320;
     const safeWidth = stageHeight * GEL_MIN_ASPECT_RATIO;
     const screenToCanvas = x => x / scale;
@@ -41,10 +39,9 @@ export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
         verticalBorderPad: borderPad,
         bottomBorderPad: isIphone5 ? 58 : borderPad,
         horizontalBorderPad: borderPad,
-        isMobile,
-        buttonPad: isMobile ? 22 : 24,
-        buttonMin: isMobile ? 42 : 64,
-        hitMin: isMobile ? 64 : 70,
+        buttonPad: 24,
+        buttonMin: 64,
+        hitMin: 70,
         horizontals: {
             left: -stageWidth / 2,
             center: 0,

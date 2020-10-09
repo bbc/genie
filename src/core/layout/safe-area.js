@@ -19,7 +19,7 @@ const defaultSafeAreaGroups = {
 export const getSafeAreaFn = groups => (groupOverrides = {}) => {
     const metrics = getMetrics();
     const safe = { ...defaultSafeAreaGroups, ...groupOverrides };
-    const pad = metrics.isMobile ? { x: 0, y: 0 } : fp.mapValues(metrics.screenToCanvas, { x: 20, y: 10 });
+    const pad = fp.mapValues(metrics.screenToCanvas, { x: 20, y: 10 });
 
     const getWidth = group => (group.fixedWidth ? metrics.screenToCanvas(group.fixedWidth) : groups[group.id].width);
     const getRightSide = group => groups[group.id].x + getWidth(group);

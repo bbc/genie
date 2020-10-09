@@ -3,11 +3,9 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { assetPath } from "./asset-paths.js";
-
 export class Indicator extends Phaser.GameObjects.Sprite {
     constructor(gelButton) {
-        super(gelButton.scene, 0, 0, assetPath({ key: "notification", isMobile: gelButton.isMobile }));
+        super(gelButton.scene, 0, 0, "gel.notification");
         this.scene.add.existing(this);
         this.setDepth(1);
         this.gelButton = gelButton;
@@ -16,12 +14,10 @@ export class Indicator extends Phaser.GameObjects.Sprite {
     }
 
     resize() {
-        const { height, width, isMobile } = this.gelButton;
-        const mobOrDesk = isMobile ? "mobile" : "desktop";
-        const offsets = this.gelButton.config.indicator.offsets[mobOrDesk];
+        const { height, width } = this.gelButton;
+        const offsets = this.gelButton.config.indicator.offsets;
 
         this.x = width / 2 + offsets.x;
         this.y = -height / 2 + offsets.y;
-        this.setTexture(assetPath({ key: "notification", isMobile }));
     }
 }
