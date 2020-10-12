@@ -25,9 +25,5 @@ export class Home extends Screen {
             name: "play",
             callback: this.navigation.next,
         });
-
-        // console.log('BEEBUG: this.layout.getSafeArea()', this.layout.getSafeArea());
-        // const { width, height } = this.layout.getSafeArea();
-        // const safeRect = this.add.rectangle(0, 0, width, height, 0xff0000, 0.5);
     }
 }

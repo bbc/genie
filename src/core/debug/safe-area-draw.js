@@ -16,8 +16,10 @@ export const create = parent => {
     const safeAreaDebugElement = [...createSafeArea(parent)];
 
     const resize = () => {
-        const { width, height } = parent.scene.layout.getSafeArea();
+        const mirrorY = false;
+        const { top, width, height } = parent.scene.layout.getSafeArea({}, mirrorY);
         safeAreaDebugElement[0].setSize(width, height);
+        safeAreaDebugElement[0].setPosition(0, (height - Math.abs(top) * 2) / 2);
     };
 
     onScaleChange.add(resize);
