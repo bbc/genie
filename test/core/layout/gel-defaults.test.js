@@ -413,7 +413,7 @@ describe("Layout - Gel Defaults", () => {
     });
 
     describe("config", () => {
-        test("Returns a buttons Channel for ever item", () => {
+        test("Returns a buttons channel for every item", () => {
             const configChannels = Object.values(gel.config(mockCurrentScreen)).map(a => a.channel);
             expect(configChannels.every(channel => channel === "gel-buttons-current-screen")).toBe(true);
         });
