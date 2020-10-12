@@ -16,7 +16,13 @@ module.exports = env => {
         mode: development ? "development" : "production",
         devtool: development ? "cheap-module-eval-source-map" : false,
         performance: { hints: false },
-        entry: ["core-js/stable", "regenerator-runtime/runtime", "phaser/dist/phaser.min", "webfontloader"],
+        entry: [
+            "core-js/stable",
+            "core-js/modules/es.object.from-entries",
+            "regenerator-runtime/runtime",
+            "phaser/dist/phaser.min",
+            "webfontloader",
+        ],
         output: {
             path: path.resolve("output"),
             publicPath: "output",

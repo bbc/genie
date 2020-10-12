@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.8.6 ||
+| | Ensure all gel buttons have a valid event channel. |
 | | Adds collections. |
 | | Add a scrollable list component in core/layout/scrollable-list.
 | | Fixes bug when pressing the Enter or Space key on the how to play screen. |
