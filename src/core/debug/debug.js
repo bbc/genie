@@ -5,6 +5,7 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as debugLayout from "./layout-debug-draw.js";
+import * as safeAreaLayout from "./safe-area-draw.js";
 import { createMeasure } from "./measure/measure.js";
 
 const makeToggle = (val, fn, scene) => () =>
@@ -53,6 +54,7 @@ function create() {
 
     this.debug.draw.layout = debugLayout.create(this.debug.container);
     this.debug.draw.measure = createMeasure(this.debug.container);
+    this.debug.draw.safeArea = safeAreaLayout.create(this.debug.container);
 
     const fileLabel = {
         x: -400,
@@ -70,10 +72,11 @@ function create() {
     this.input.keyboard.addKey("r").on("up", toggleCSS);
     this.input.keyboard.addKey("t").on("up", this.debug.draw.measure);
     this.navigation.debug && this.input.keyboard.addKey("y").on("up", this.navigation.debug.bind(this));
+    this.input.keyboard.addKey("u").on("up", this.debug.draw.safeArea)
     window.__debug.screen = this;
 }
 
-const shutdown = scene => ["q", "w", "e", "r", "t", "y"].forEach(scene.input.keyboard.removeKey, scene.input.keyboard);
+const shutdown = scene => ["q", "w", "e", "r", "t", "y", "u"].forEach(scene.input.keyboard.removeKey, scene.input.keyboard);
 
 export const addEvents = scene => {
     scene.events.on("create", create, scene);

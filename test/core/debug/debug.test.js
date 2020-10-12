@@ -317,6 +317,11 @@ describe("Debug system", () => {
                 expect.any(Number),
                 expect.any(Array),
             );
+            expect(mockScreen.input.keyboard.removeKey).toHaveBeenCalledWith(
+                "u",
+                expect.any(Number),
+                expect.any(Array),
+            );
         });
     });
 
