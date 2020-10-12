@@ -1,6 +1,6 @@
 {
     "name": "genie",
-    "version": "3.8.5",
+    "version": "3.8.6",
     "description": "BBC Games Genie - A Modular Game Engine",
     "license": "Apache-2.0",
     "private": true,
@@ -10,16 +10,16 @@
         "url": "https://github.com/bbc/genie"
     },
     "dependencies": {
-        "@babel/core": "^7.10.5",
-        "@babel/preset-env": "^7.10.4",
+        "@babel/core": "^7.11.6",
         "@babel/plugin-proposal-class-properties": "^7.10.4",
         "@babel/plugin-proposal-private-methods": "^7.10.4",
+        "@babel/preset-env": "^7.11.5",
         "ajv": "^6.12.0",
         "babel-eslint": "^10.1.0",
-        "babel-jest": "^26.2.1",
+        "babel-jest": "^26.5.2",
         "babel-loader": "^8.1.0",
         "babel-plugin-module-resolver": "^4.0.0",
-        "bowser": "2.9.0",
+        "bowser": "2.11.0",
         "core-js": "^3.6.5",
         "expose-loader": "^0.7.5",
         "json5": "^2.1.3",
