@@ -63,7 +63,7 @@ describe("Collections", () => {
     afterEach(jest.clearAllMocks);
 
     describe("initCollection", () => {
-        test("adds an entry to the states map", () => {
+        test("adds an entry to the collections map", () => {
             initCollection(mockScreen)("testCollection");
             expect(collections.get("testCollection")).toBeDefined();
         });
@@ -78,9 +78,11 @@ describe("Collections", () => {
     });
 
     describe("Returned getAll method", () => {
-        test("Returns an empty array when there no include or defaults properties are set", () => {
+        test("Returns all catalogue items with default qty of 1 when includes are blank", () => {
             const collection = initCollection(mockScreen)("testCollection");
-            expect(collection.getAll()).toEqual([]);
+            const expected = testCatalogue.map(item => ({ ...item, qty: 1 }));
+
+            expect(collection.getAll()).toEqual(expected);
         });
 
         test("Returns all catalogue items with tags listed in 'include' property and default qty of 1", () => {
@@ -96,14 +98,19 @@ describe("Collections", () => {
             testCollection.defaults = [{ id: "id1" }];
 
             const collection = initCollection(mockScreen)("testCollection");
-            expect(collection.getAll()).toEqual([{ ...testCatalogue[0], qty: 1 }]);
+            const expected = testCatalogue.map(item => ({ ...item, qty: 1 }));
+
+            expect(collection.getAll()).toEqual(expected);
         });
 
         test("Returns all catalogue items specified by 'defaults' config and any specified overrides", () => {
             testCollection.defaults = [{ id: "id1", qty: 5, state: "testState" }];
 
             const collection = initCollection(mockScreen)("testCollection");
-            expect(collection.getAll()).toEqual([{ ...testCatalogue[0], qty: 5, state: "testState" }]);
+            expect(collection.getAll()).toEqual([
+                { ...testCatalogue[0], qty: 5, state: "testState" },
+                { ...testCatalogue[1], qty: 1 },
+            ]);
         });
 
         test("Returns tagged items with 'defaults' overrides", () => {

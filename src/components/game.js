@@ -108,8 +108,8 @@ export class Game extends Screen {
         };
 
         const markLevelAsComplete = levelTitle => {
-            const collection = collections.get(this.config.collection)
-            collection.set(levelTitle, { state: "completed"});
+            const collection = collections.get(this.config.collection);
+            collection.set(levelTitle, { state: "completed" });
         };
 
         const tweenItem = target => {

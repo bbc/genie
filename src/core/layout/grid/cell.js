@@ -56,11 +56,10 @@ const setPosition = (grid, button, idx) => {
     button.y = button.displayHeight * positionFactorY + grid._cellPadding * positionFactorY;
 };
 
-
 const getStylingForState = (btn, collection, styling) => styling[fp.get("state", collection.get(btn.key))] || {};
 
 const getStyles = (btn, theme) => {
-    const collection = collections.get(theme.collection)
+    const collection = collections.get(theme.collection);
     const defaultStyles = theme.choicesStyling.default;
     const stylesOverride = getStylingForState(btn, collection, theme.choicesStyling);
     return fp.merge(defaultStyles, stylesOverride);
