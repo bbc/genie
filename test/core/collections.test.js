@@ -78,9 +78,31 @@ describe("Collections", () => {
     });
 
     describe("Returned getAll method", () => {
-        test("Returns all catalogue items with default qty of 1 when includes are blank", () => {
+        test("Returns all catalogue fromn json cache if string specified", () => {
             const collection = initCollection(mockScreen)("testCollection");
             const expected = testCatalogue.map(item => ({ ...item, qty: 1 }));
+
+            expect(collection.getAll()).toEqual(expected);
+        });
+
+        test("uses inline array as cataogue iof specified", () => {
+            testCollection.catalogue = [
+                {
+                    id: "Xid1",
+                    title: "XTitle 1 ",
+                    description: "XCatalogue Item 1.",
+                    tags: ["Xtag1"],
+                },
+                {
+                    id: "Xid2",
+                    title: "XTitle 2",
+                    description: "XCatalogue Item 2.",
+                    tags: ["Xtag2"],
+                },
+            ];
+
+            const collection = initCollection(mockScreen)("testCollection");
+            const expected = testCollection.catalogue.map(item => ({ ...item, qty: 1 }));
 
             expect(collection.getAll()).toEqual(expected);
         });

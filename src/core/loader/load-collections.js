@@ -21,7 +21,9 @@ export const loadCollections = (screen, config) => {
         };
 
         const collectionsLoaded = () => {
-            const catalogueKeys = fp.uniq(keys.map(key => screen.cache.json.get(`items/${key}`).catalogue));
+            const catalogueKeys = fp
+                .uniq(keys.map(key => screen.cache.json.get(`items/${key}`).catalogue))
+                .filter(fp.isString);
             catalogueKeys.forEach(loadToCache(screen));
             screen.load.once("complete", cataloguesLoaded);
             screen.load.start();

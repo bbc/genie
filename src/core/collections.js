@@ -20,7 +20,9 @@ const addStored = stored => item => ({ ...item, ...stored[item.id] });
 
 export const initCollection = screen => key => {
     const config = screen.cache.json.get(`items/${key}`);
-    const catalogue = screen.cache.json.get(`items/${config.catalogue}`);
+    const catalogue = fp.isString(config.catalogue)
+        ? screen.cache.json.get(`items/${config.catalogue}`)
+        : config.catalogue;
 
     const getAll = () =>
         catalogue
