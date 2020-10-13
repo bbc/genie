@@ -48,3 +48,5 @@ const scaleButton = args => {
 const makeAccessible = args => { return { ...args, gelButton: accessibilify(args.gelButton, true) } };
 
 export { createGelButton };
+
+// <div id="container" style="overflow:hidden; height:40px; width: 60px"></div> // css for the gel-group
