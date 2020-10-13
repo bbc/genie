@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Remove states system in favour of collections. |
 | 3.8.6 ||
 | | Ensure all gel buttons have a valid event channel. |
 | | Adds collections. |
