@@ -22,10 +22,5 @@ export class Shop extends Screen {
         this.setLayout(buttons);
         a11y.addGroupAt("shop", 0);
         this.panel = scrollableList(this);
-
-        const gelGroupElem = document.getElementById("accessible-group-shop");
-
-        console.log('BEEBUG: gelGroupElem', gelGroupElem);
-        gelGroupElem.style.outline = "green dotted 2px";
     }
 }

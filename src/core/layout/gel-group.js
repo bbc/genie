@@ -136,12 +136,12 @@ export class GelGroup extends Phaser.GameObjects.Container {
     alignChildren() {
         const pos = { x: 0, y: 0 };
         const groupHeight = Math.max(...this.list.map(i => i.height));
-        const pads = this.list.map(child => Math.max(0, this._metrics.buttonPad - child.width + child.sprite?.width ?? 0));
+        const pads = this.list.map(child => Math.max(0, this._metrics.buttonPad - child.width + child.sprite.width));
         const widths = this.list.map(child => child.width);
         this.list.forEach((child, idx) => {
             child.y = pos.y + groupHeight / 2;
             this._isVertical &&
-                (pos.y += child.height + Math.max(0, this._metrics.buttonPad - child.height + child.sprite?.height ?? 0));
+                (pos.y += child.height + Math.max(0, this._metrics.buttonPad - child.height + child.sprite.height));
             child.x = this._isVertical
                 ? 0
                 : widths.slice(0, idx).reduce(sum, widths[idx] / 2) +

@@ -10,7 +10,7 @@ import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as a11y from "./accessibility-layer.js";
 import { CAMERA_X, CAMERA_Y } from "../layout/metrics.js";
 
-export const getHitAreaBounds = button => {
+const getHitAreaBounds = button => {
     const sys = button.scene.sys;
     const marginLeft = parseInt(sys.game.canvas.style.marginLeft, 10);
     const marginTop = parseInt(sys.game.canvas.style.marginTop, 10);
