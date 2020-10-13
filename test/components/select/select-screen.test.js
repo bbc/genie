@@ -256,7 +256,6 @@ describe("Select Screen", () => {
         });
 
         test("creates a GEL grid", () => {
-            const theme = mockData.config["test-select"];
             const expectedGridConfig = {
                 choice: undefined,
                 collection: "characters",
