@@ -7,6 +7,7 @@
 import { onClick } from "./scrollable-list-helpers.js";
 import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
+import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const createGelButton = (scene, item) => {
@@ -33,7 +34,7 @@ const createGelButton = (scene, item) => {
         name: id,
     });
 
-    return fp.flow(scaleButton, overlays1Wide)({ scene, gelButton, config, item });
+    return fp.flow(scaleButton, makeAccessible, overlays1Wide)({ scene, gelButton, config, item });
 };
 
 const scaleButton = args => {
@@ -43,5 +44,7 @@ const scaleButton = args => {
     gelButton.setScale(scaleFactor);
     return args;
 };
+
+const makeAccessible = args => { return { ...args, gelButton: accessibilify(args.gelButton, true) } };
 
 export { createGelButton };
