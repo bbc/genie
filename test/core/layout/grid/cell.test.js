@@ -79,6 +79,10 @@ describe("Grid Cells", () => {
         };
 
         desktopCellPadding = 24;
+
+        collectionsModule.collections = {
+            get: jest.fn(() => ({ get: jest.fn() })),
+        };
     });
 
     afterEach(jest.clearAllMocks);
@@ -149,13 +153,21 @@ describe("Grid Cells", () => {
 
         describe("Button text", () => {
             let mockTheme;
-            let mockCollections;
+            let mockCollection;
+            let mockCellConfig = {
+                id: "mary",
+                key: "mary",
+                ariaLabel: "Mary",
+                title: "Mary",
+                subtitle: "Is very tall",
+                state: "locked",
+            };
 
             beforeEach(() => {
-                mockCollections = { get: jest.fn() };
-                jest.spyOn(collectionsModule, "initCollection").mockImplementation(() => mockCollections);
+                mockCollection = { get: jest.fn(() => mockCellConfig) };
+                jest.spyOn(collectionsModule, "initCollection").mockImplementation(() => mockCollection);
+                collectionsModule.collections = { get: jest.fn(() => ({ get: jest.fn(() => mockCellConfig) })) };
                 mockTheme = {
-                    choices: [{ id: "mary", key: "mary", ariaLabel: "Mary", title: "Mary", subtitle: "Is very tall" }],
                     choicesStyling: {
                         default: {
                             title: {
@@ -172,12 +184,12 @@ describe("Grid Cells", () => {
             });
 
             test("adds title text when default styling is provided", () => {
-                createCell(mockGrid, mockTheme.choices[0], 0, mockTheme);
+                createCell(mockGrid, mockCellConfig, 0, mockTheme);
                 const styles = mockTheme.choicesStyling.default.title;
                 expect(mockGrid.scene.add.text).toHaveBeenCalledWith(
                     styles.position.x,
                     styles.position.y,
-                    mockTheme.choices[0].title,
+                    mockCellConfig.title,
                     styles.style,
                 );
                 expect(mockText.setOrigin).toHaveBeenCalledWith(0.5, 0.5);
@@ -185,24 +197,24 @@ describe("Grid Cells", () => {
 
             test("does not add title text when no default styling is provided", () => {
                 delete mockTheme.choicesStyling;
-                createCell(mockGrid, mockTheme.choices[0], 0, mockTheme);
+                createCell(mockGrid, mockCellConfig, 0, mockTheme);
                 expect(mockGrid.scene.add.text).not.toHaveBeenCalled();
                 expect(mockText.setOrigin).not.toHaveBeenCalled();
             });
 
             test("adds title text to the button overlay", () => {
-                createCell(mockGrid, mockTheme.choices[0], 0, mockTheme);
+                createCell(mockGrid, mockCellConfig, 0, mockTheme);
                 expect(mockButton.overlays.set).toHaveBeenCalledWith("titleText", mockText);
             });
 
             test("adds subtitle text when default styling is provided", () => {
-                createCell(mockGrid, mockTheme.choices[0], 0, mockTheme);
+                createCell(mockGrid, mockCellConfig, 0, mockTheme);
                 const styles = mockTheme.choicesStyling.default.subtitle;
                 expect(mockGrid.scene.add.text).toHaveBeenCalledTimes(2);
                 expect(mockGrid.scene.add.text).toHaveBeenCalledWith(
                     styles.position.x,
                     styles.position.y,
-                    mockTheme.choices[0].subtitle,
+                    mockCellConfig.subtitle,
                     styles.style,
                 );
                 expect(mockText.setOrigin).toHaveBeenCalledTimes(2);
@@ -210,28 +222,28 @@ describe("Grid Cells", () => {
 
             test("does not add subtitle text when no default styling is provided", () => {
                 delete mockTheme.choicesStyling.default.subtitle;
-                createCell(mockGrid, mockTheme.choices[0], 0, mockTheme);
+                createCell(mockGrid, mockCellConfig, 0, mockTheme);
                 expect(mockGrid.scene.add.text).toHaveBeenCalledTimes(1);
                 expect(mockText.setOrigin).toHaveBeenCalledTimes(1);
             });
 
             test("adds subtitle text to the button overlay", () => {
-                createCell(mockGrid, mockTheme.choices[0], 0, mockTheme);
+                createCell(mockGrid, mockCellConfig, 0, mockTheme);
                 expect(mockButton.overlays.set).toHaveBeenCalledWith("subtitleText", mockText);
             });
 
             test("applies a style override to the default styles when the button has a different state", () => {
-                mockTheme.choices[0].state = "locked";
-                mockCollections.get.mockReturnValue(mockTheme.choices[0]);
+                const choice = { state: "locked", title: "Mary" };
+                mockCollection.get.mockReturnValue(choice);
                 mockTheme.choicesStyling.locked = { title: { style: { color: "#000" } } };
 
                 const expectedStyle = fp.merge(mockTheme.choicesStyling.default, mockTheme.choicesStyling.locked);
-                createCell(mockGrid, mockTheme.choices[0], 0, mockTheme);
+                createCell(mockGrid, choice, 0, mockTheme);
                 const styles = mockTheme.choicesStyling.default.title;
                 expect(mockGrid.scene.add.text).toHaveBeenCalledWith(
                     styles.position.x,
                     styles.position.y,
-                    mockTheme.choices[0].title,
+                    choice.title,
                     expectedStyle.title.style,
                 );
             });
