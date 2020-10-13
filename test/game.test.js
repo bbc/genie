@@ -6,6 +6,7 @@
 import { gmi } from "../src/core/gmi/gmi.js";
 import { Game } from "../src/components/game";
 import { accessibilify } from "../src/core/accessibility/accessibilify.js";
+import * as collectionsModule from "../src/core/collections.js";
 
 jest.mock("../src/core/accessibility/accessibilify.js");
 jest.mock("../src/core/gmi/gmi.js");
@@ -86,6 +87,10 @@ describe("Game", () => {
             "level-select": { choice: { title: "Hard level" }, choices: [1, 2, 3] },
         };
         game.cache = { json: { get: jest.fn(() => mockAchievements) } };
+
+        collectionsModule.collections = {
+            get: jest.fn(() => ({ get: jest.fn(), set: jest.fn() })),
+        };
     });
 
     afterEach(() => jest.clearAllMocks());
