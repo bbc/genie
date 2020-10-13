@@ -6,34 +6,40 @@
 import { loadCollections } from "../../../src/core/loader/load-collections.js";
 import * as initCollectionModule from "../../../src/core/collections.js";
 
-const mockConfig = {
-    screen1: {
-        collection: "collection1",
-    },
-    screen2: {
-        collection: "collection2",
-    },
-};
-
-const mockCache = {
-    "items/collection1": { catalogue: "catalogue1" },
-    "items/collection2": { catalogue: "catalogue2" },
-};
-
-const mockScreen = {
-    load: {
-        json5: jest.fn(),
-        start: jest.fn(),
-        once: jest.fn(),
-    },
-    cache: {
-        json: {
-            get: jest.fn(key => mockCache[key]),
-        },
-    },
-};
-
 describe("loadCollections", () => {
+    let mockConfig;
+    let mockCache;
+    let mockScreen;
+
+    beforeEach(() => {
+        mockConfig = {
+            screen1: {
+                collection: "collection1",
+            },
+            screen2: {
+                collection: "collection2",
+            },
+        };
+
+        mockCache = {
+            "items/collection1": { catalogue: "catalogue1" },
+            "items/collection2": { catalogue: "catalogue2" },
+        };
+
+        mockScreen = {
+            load: {
+                json5: jest.fn(),
+                start: jest.fn(),
+                once: jest.fn(),
+            },
+            cache: {
+                json: {
+                    get: jest.fn(key => mockCache[key]),
+                },
+            },
+        };
+    });
+
     afterEach(() => jest.clearAllMocks());
 
     describe("loadCollections", () => {
@@ -57,6 +63,19 @@ describe("loadCollections", () => {
 
             expect(mockScreen.load.json5.mock.calls[2][0].url).toEqual("items/catalogue1.json5");
             expect(mockScreen.load.json5.mock.calls[3][0].url).toEqual("items/catalogue2.json5");
+        });
+
+        test("Does not add catalogue file urls if inline catalogue used", () => {
+            mockCache["items/collection1"].catalogue = ["test-array"];
+            loadCollections(mockScreen, mockConfig);
+
+            const collectionsLoaded = mockScreen.load.once.mock.calls[0][1];
+            collectionsLoaded();
+
+            expect(mockScreen.load.json5).not.toHaveBeenCalledWith({
+                key: "items/catalogue1",
+                url: "items/catalogue1.json5",
+            });
         });
 
         test("Initialises collections", () => {
