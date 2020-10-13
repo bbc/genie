@@ -34,7 +34,7 @@ const createGelButton = (scene, item) => {
         name: id,
     });
 
-    return fp.flow(scaleButton, makeAccessible, overlays1Wide)({ scene, gelButton, config, item });
+    return fp.flow(scaleButton, overlays1Wide)({ scene, gelButton, config, item });
 };
 
 const scaleButton = args => {
@@ -44,8 +44,6 @@ const scaleButton = args => {
     gelButton.setScale(scaleFactor);
     return args;
 };
-
-const makeAccessible = args => { return { ...args, gelButton: accessibilify(args.gelButton, true) } };
 
 export { createGelButton };
 
