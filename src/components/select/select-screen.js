@@ -33,7 +33,7 @@ export class Select extends Screen {
     create() {
         this.addBackgroundItems();
         createTitles(this);
-        this.collection = collections.get(this.config.collection)
+        this.collection = collections.get(this.config.collection);
         const paginate = this.collection.getAll().length > this.config.columns * this.config.rows;
         const pagingButtons = paginate ? ["previous", "next"] : [];
         const buttons = ["home", "pause", ...pagingButtons];
@@ -62,16 +62,13 @@ export class Select extends Screen {
     }
 
     updateStates() {
-        const storedStates = this.collection
-            .getAll()
-            .filter(config => Boolean(config.state));
+        const storedStates = this.collection.getAll().filter(config => Boolean(config.state));
 
         const cells = fp.keyBy(cell => cell.button.config.id, this._cells);
 
         storedStates.forEach(stored => {
             const config = this.config.states[stored.state];
             const button = cells[stored.id].button;
-
             button.overlays.set("state", this.add.sprite(config.x, config.y, config.overlayAsset));
 
             config.asset && button.setImage(config.asset);

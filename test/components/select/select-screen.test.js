@@ -11,7 +11,7 @@ import { GelGrid } from "../../../src/core/layout/grid/grid.js";
 import { createTitles } from "../../../src/components/select/titles.js";
 import { addHoverParticlesToCells } from "../../../src/components/select/select-particles.js";
 import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
-import * as state from "../../../src/core/states.js";
+import * as collectionsModule from "../../../src/core/collections.js";
 
 jest.mock("../../../src/components/select/titles.js");
 jest.mock("../../../src/components/select/single-item-mode.js");
@@ -20,13 +20,6 @@ jest.mock("../../../src/core/screen.js");
 jest.mock("../../../src/core/layout/grid/grid.js");
 jest.mock("../../../src/core/layout/layout.js", () => ({
     addCustomGroup: jest.fn(),
-}));
-
-jest.mock("../../../src/core/states.js", () => ({
-    initState: jest.fn(() => ({
-        getAll: jest.fn(() => []),
-        get: jest.fn(() => ({ state: "locked" })),
-    })),
 }));
 
 describe("Select Screen", () => {
@@ -42,6 +35,8 @@ describe("Select Screen", () => {
     let mockGelGrid;
     let mockGmi;
     let mockTransientData;
+    let mockCollection;
+    let mockCatalogue;
 
     beforeEach(() => {
         mockGmi = { sendStatsEvent: jest.fn() };
@@ -83,13 +78,9 @@ describe("Select Screen", () => {
                         },
                     ],
                     states: {
-                        locked: { x: 10, y: 20, asset: "test_asset" },
+                        locked: { x: 10, y: 20, overlayAsset: "test_asset" },
                     },
-                    choices: [
-                        { id: "char1", asset: "character1" },
-                        { id: "char2", asset: "character2", title: "character_2" },
-                        { id: "char3", asset: "character3" },
-                    ],
+                    collection: "characters",
                     rows: 1,
                     columns: 1,
                     ease: "Cubic.easeInOut",
@@ -201,6 +192,21 @@ describe("Select Screen", () => {
         Scaler.onScaleChange = {
             add: jest.fn(() => ({ unsubscribe: jest.fn() })),
         };
+
+        mockCatalogue = [
+            { id: "char1", asset: "character1" },
+            { id: "char2", asset: "character2", title: "character_2" },
+            { id: "char3", asset: "character3" },
+        ];
+
+        mockCollection = {
+            getAll: jest.fn(() => mockCatalogue),
+            get: jest.fn(() => ({ state: "locked" })),
+        };
+
+        collectionsModule.collections = {
+            get: jest.fn(() => mockCollection),
+        };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -252,7 +258,8 @@ describe("Select Screen", () => {
         test("creates a GEL grid", () => {
             const theme = mockData.config["test-select"];
             const expectedGridConfig = {
-                choices: theme.choices,
+                choice: undefined,
+                collection: "characters",
                 columns: 1,
                 duration: 500,
                 ease: "Cubic.easeInOut",
@@ -261,7 +268,7 @@ describe("Select Screen", () => {
                 storageKey: "test-storage-key",
                 rows: 1,
                 states: {
-                    locked: { asset: "test_asset", x: 10, y: 20 },
+                    locked: { overlayAsset: "test_asset", x: 10, y: 20 },
                 },
                 tabIndex: 6,
                 titles: [
@@ -277,7 +284,7 @@ describe("Select Screen", () => {
 
         test("creates grid cells", () => {
             selectScreen.create();
-            expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(selectScreen.context);
+            expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(mockCatalogue);
         });
 
         test("passes selection id from transient data to grid", () => {
@@ -309,14 +316,10 @@ describe("Select Screen", () => {
             expect(Scaler.onScaleChange.add).toHaveBeenCalled();
         });
 
-        test("calls state.create with storage key from config", () => {
-            mockData.config["test-select"].choices = [
-                { asset: "test-asset-1", state: "test-state-1", id: "test-id-1" },
-            ];
+        test("calls collections.get with collection key from config", () => {
+            mockData.config["test-select"].collection = "test-storage-key";
             selectScreen.create();
-            expect(state.initState).toHaveBeenCalledWith("test-storage-key", [
-                { id: "test-id-1", state: "test-state-1" },
-            ]);
+            expect(collectionsModule.collections.get).toHaveBeenCalledWith("test-storage-key");
         });
     });
 
@@ -349,13 +352,11 @@ describe("Select Screen", () => {
             };
 
             selectScreen.create();
-
             selectScreen._cells = [mockCell];
-            selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
-            selectScreen.states.get = () => ({ id: "id_one", state: "locked" });
 
-            selectScreen.context.states = {
-                locked: { x: 10, y: 20, overlayAsset: "test_asset" },
+            selectScreen.collection = {
+                getAll: () => [{ id: "id_one", state: "locked" }],
+                get: () => ({ id: "id_one", state: "locked" }),
             };
 
             selectScreen.updateStates();
@@ -378,9 +379,11 @@ describe("Select Screen", () => {
             };
 
             selectScreen.create();
-
             selectScreen._cells = [mockCell];
-            selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
+
+            selectScreen.collection = {
+                getAll: () => [{ id: "id_one", state: "locked" }],
+            };
 
             selectScreen.context.states = {
                 locked: { x: 10, y: 20, properties: { testProp: "testValue" } },
@@ -408,7 +411,7 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             selectScreen._cells = [mockCell];
-            selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
+            selectScreen.collection = { getAll: () => [{ id: "id_one", state: "locked" }] };
 
             selectScreen.context.states = {
                 locked: { x: 10, y: 20, suffix: "testSuffix" },
@@ -436,7 +439,7 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             selectScreen._cells = [mockCell];
-            selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
+            selectScreen.collection = { getAll: () => [{ id: "id_one", state: "locked" }] };
 
             selectScreen.context.states = {
                 locked: { x: 10, y: 20, asset: "test_asset", enabled: false },
@@ -464,7 +467,7 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             selectScreen._cells = [mockCell];
-            selectScreen.states.getAll = () => [{ id: "id_one", state: "unlocked" }];
+            selectScreen.collection = { getAll: () => [{ id: "id_one", state: "unlocked" }] };
 
             selectScreen.context.states = {
                 unlocked: { x: 10, y: 20, asset: "test_asset", enabled: true },
@@ -491,11 +494,8 @@ describe("Select Screen", () => {
             selectScreen.create();
 
             selectScreen._cells = [mockCell];
-            selectScreen.states.getAll = () => [{ id: "id_one", state: "locked" }];
-
-            selectScreen.context.states = {
-                locked: { x: 10, y: 20, asset: "test_asset" },
-            };
+            selectScreen.collection = { getAll: () => [{ id: "id_one", state: "locked" }] };
+            selectScreen.context.states = { locked: { x: 10, y: 20, asset: "test_asset" } };
 
             selectScreen.updateStates();
 
