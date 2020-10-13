@@ -72,11 +72,12 @@ function create() {
     this.input.keyboard.addKey("r").on("up", toggleCSS);
     this.input.keyboard.addKey("t").on("up", this.debug.draw.measure);
     this.navigation.debug && this.input.keyboard.addKey("y").on("up", this.navigation.debug.bind(this));
-    this.input.keyboard.addKey("u").on("up", this.debug.draw.safeArea)
+    this.input.keyboard.addKey("u").on("up", this.debug.draw.safeArea);
     window.__debug.screen = this;
 }
 
-const shutdown = scene => ["q", "w", "e", "r", "t", "y", "u"].forEach(scene.input.keyboard.removeKey, scene.input.keyboard);
+const shutdown = scene =>
+    ["q", "w", "e", "r", "t", "y", "u"].forEach(scene.input.keyboard.removeKey, scene.input.keyboard);
 
 export const addEvents = scene => {
     scene.events.on("create", create, scene);

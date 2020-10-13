@@ -70,6 +70,7 @@ describe("Debug system", () => {
                         addKeys: jest.fn(() => ({ c: { on: jest.fn() } })),
                     },
                 },
+                layout: { getSafeArea: jest.fn().mockReturnValue({ top: 1, width: 2, height: 3 }) },
             },
             setDepth: jest.fn(),
             add: jest.fn(),

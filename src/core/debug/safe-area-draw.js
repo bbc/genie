@@ -7,10 +7,10 @@ import { onScaleChange } from "../scaler.js";
 import { eventBus } from "../event-bus.js";
 
 const createSafeArea = parent => {
-    const safeArea = [parent.scene.add.tileSprite(0,0,0,0, "gelDebug.FF0030-hatch")];
+    const safeArea = [parent.scene.add.tileSprite(0, 0, 0, 0, "gelDebug.FF0030-hatch")];
     safeArea.map(area => parent.add(area));
     return safeArea;
-}
+};
 
 export const create = parent => {
     const safeAreaDebugElement = [...createSafeArea(parent)];
