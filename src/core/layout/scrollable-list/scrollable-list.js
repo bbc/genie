@@ -52,6 +52,7 @@ const createTable = scene => {
         column: 1,
         row: scene.config.items.length,
         space: { column: 10, row: 10 },
+        name: "menu_table"
     });
 
     scene.config.items.forEach((item, idx) => {
@@ -70,7 +71,7 @@ const createItem = (scene, item) =>
     scene.rexUI.add.label({
         orientation: 0,
         icon: createGelButton(scene, item),
-        name: item.name,
+        name: item.id,
         space: { icon: 3 },
     });
 

@@ -8,6 +8,8 @@ import { onClick } from "./scrollable-list-helpers.js";
 import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
 import { accessibilify } from "../../../core/accessibility/accessibilify.js";
+import * as a11y from "../../../core/accessibility/accessibility-layer.js";
+
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const createGelButton = (scene, item) => {
@@ -19,7 +21,7 @@ const createGelButton = (scene, item) => {
         accessibilityEnabled: true,
         ariaLabel: item.ariaLabel,
         channel: config.eventChannel,
-        group: "middleCenter",
+        group: "shop",
         id,
         key: config.assetKeys.itemBackground,
         scene: config.assetKeys.prefix,
@@ -33,7 +35,6 @@ const createGelButton = (scene, item) => {
         channel: gelConfig.channel,
         name: id,
     });
-
     return fp.flow(scaleButton, makeAccessible, overlays1Wide)({ scene, gelButton, config, item });
 };
 
@@ -45,8 +46,9 @@ const scaleButton = args => {
     return args;
 };
 
-const makeAccessible = args => { return { ...args, gelButton: accessibilify(args.gelButton, true) } };
+const makeAccessible = args => { 
+    accessibilify(args.gelButton);
+    return args;
+};
 
 export { createGelButton };
-
-// <div id="container" style="overflow:hidden; height:40px; width: 60px"></div> // css for the gel-group
