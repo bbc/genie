@@ -10,6 +10,7 @@ import { createGelButton } from "./scrollable-list-buttons.js";
 const scrollableList = scene => {
     const panelConfig = getPanelConfig(scene);
     const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
+    scrollableListPanel.updateA11y = () => updateA11y(scrollableListPanel);
     scene.input.topOnly = false;
     return scrollableListPanel;
 };
@@ -74,5 +75,16 @@ const createItem = (scene, item) =>
         name: item.id,
         space: { icon: 3 },
     });
+
+const updateA11y = panel => {
+    if (!panel.a11yWrapper) return;
+
+    if (!panel.a11yWrapper.style.cssText) {
+        panel.a11yWrapper.style.position = "absolute";
+        panel.a11yWrapper.style.top = "0px";
+    }
+
+    console.log('BEEBUG: panel.t', panel.t);
+}
 
 export { scrollableList };

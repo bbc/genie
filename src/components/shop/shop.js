@@ -22,5 +22,9 @@ export class Shop extends Screen {
         this.setLayout(buttons);
         a11y.addGroupAt("shop", 0);
         this.panel = scrollableList(this);
+        this.panel.a11yWrapper = document.getElementById("accessible-group-shop");
+        this.panel.updateA11y(); // prob want to hook this to resize
+        
+        // gelGroupElem.style.top = "-100px";
     }
 }
