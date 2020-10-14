@@ -6,19 +6,21 @@
  */
 import { assetKey } from "./scrollable-list-helpers.js";
 import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
+import { getMetrics } from "../../scaler.js"
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const scrollableList = scene => {
     const panelConfig = getPanelConfig(scene);
     const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
-    scrollableListPanel.on("scroll", () => console.log("BEEBUG: scrolling"));
-    scrollableListPanel.updateA11y = () => updateA11y(scrollableListPanel);
+    scrollableListPanel.updatePanelOnScroll = updatePanelOnScroll(scrollableListPanel); // idk if both needed
+    scrollableListPanel.updatePanelOnFocus = updatePanelOnFocus(scrollableListPanel);
     scene.input.topOnly = false;
     scene.scale.on(
         "resize",
         fp.debounce(100, () => resizePanel(scene, scrollableListPanel)),
         scene,
     );
+    setupEvents(scrollableListPanel);
     return scrollableListPanel;
 };
 
@@ -76,25 +78,8 @@ const createItem = (scene, item) =>
         orientation: 0,
         icon: createGelButton(scene, item),
         name: item.id,
-        space: { icon: 3 },
+        // space: { item: scene.config.space },
     });
-
-const updateA11y = panel => {
-    if (!panel.a11yWrapper) return;
-
-    if (!panel.a11yWrapper.style.cssText) {
-        panel.a11yWrapper.style.position = "absolute";
-        panel.a11yWrapper.style.top = "0px";
-    }
-
-    // console.log('BEEBUG: panel.t', panel.t);
-    // calculate an offset based on the panel.t and the overall pixel size of the list
-    // apply it as style.top    
-};
-
-const updateRex = panel => {
-    // the opposite of updateA11y- when getting focus input call this and update rexUI.
-};
 
 const resizePanel = (scene, panel) => {
     const grid = panel.getByName("grid", true);
@@ -103,5 +88,40 @@ const resizePanel = (scene, panel) => {
     panel.minHeight = scene.layout.getSafeArea({}, false).height;
     panel.layout();
 };
+
+const setupEvents = panel => {
+    panel.on("scroll", panel.updatePanelOnScroll);
+
+    const items = panel.getByName("grid", true).getElement("items");
+    items.map(item => {
+        const gelButton = item.children[0];
+        const a11yElem = gelButton.accessibleElement.el;
+        a11yElem.addEventListener("focus", e => panel.updatePanelOnFocus(gelButton));
+    });
+};
+
+const updatePanelOnScroll = panel => t => {
+    if (!panel.a11yWrapper) return;
+
+    if (!panel.a11yWrapper.style.cssText) {
+        panel.a11yWrapper.style.position = "absolute";
+        panel.a11yWrapper.style.top = "0px";
+    }
+
+    const items = getPanelItems(panel);
+    const itemHeight = items[0].height;
+    const space = panel.space.top;
+    const totalItemsHeight = (itemHeight * items.length) + (space * items.length);
+    const panelInnerHeight = panel.height - space;
+    const yOffset = - (totalItemsHeight - panelInnerHeight) * panel.t * getMetrics().scale;
+    panel.a11yWrapper.style.top = yOffset + "px";
+};
+
+const updatePanelOnFocus = panel => focusedButton => {
+    console.log("BEEBUG: update on focus; ", focusedButton);
+    // the opposite of updateA11y- when getting focus input call this and update rexUI.
+};
+
+const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
 
 export { scrollableList, resizePanel };

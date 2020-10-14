@@ -39,17 +39,14 @@ const createGelButton = (scene, item) => {
 
 const scaleButton = args => {
     const { scene, config, gelButton } = args;
-    const safeArea = scene.layout.getSafeArea();
+    const safeArea = scene.layout.getSafeArea({}, false);
     const scaleFactor = (safeArea.width - config.space * 4) / gelButton.width;
     gelButton.setScale(scaleFactor);
     return args;
 };
 
 const makeAccessible = args => { 
-    const { gelButton } = args;
-    accessibilify(gelButton);
-    const a11yElem = gelButton.accessibleElement.el;
-    a11yElem.addEventListener("focus", () => console.log('BEEBUG: focused'));
+    accessibilify(args.gelButton);
     return args;
 };
 
