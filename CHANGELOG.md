@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Remove states system in favour of collections. |
 | | Add debug key to visualise safe interactable area
 | 3.8.6 ||
 | | Ensure all gel buttons have a valid event channel. |

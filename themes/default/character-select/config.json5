@@ -39,7 +39,6 @@
             },
         },
     ],
-    storageKey: "characters", // Which local storage key to read states from.
     states: {
         locked: {
             // asset: "debby", // Key of sprite to set for. Renders same scale as base sprite so should be the same size.
@@ -111,96 +110,5 @@
             },
         },
     },
-    catalogueKey: "characters",
-    choices: [
-        {
-            id: "mary",
-            key: "mary",
-            ariaLabel: "Mary",
-            title: "Mary",
-            subtitle: "Is very tall", // optional - for text overlay only
-            state: "complete",
-        },
-        {
-            id: "kyle",
-            key: "kyle",
-            ariaLabel: "Kyle",
-            title: "Kyle",
-            subtitle: "Has a mohawk", // optional - for text overlay only
-            state: "complete",
-        },
-        {
-            id: "suzy",
-            key: "suzy",
-            ariaLabel: "Suzy",
-            title: "Suzy",
-            subtitle: "Can tapdance", // optional - for text overlay only
-        },
-        {
-            id: "greg",
-            key: "greg",
-            ariaLabel: "Greg",
-            title: "Greg",
-            subtitle: "Is a geography teacher", // optional - for text overlay only
-        },
-        {
-            id: "ezinma",
-            key: "ezinma",
-            ariaLabel: "Ezinma",
-            title: "Ezinma",
-            subtitle: "Likes snowboarding", // optional - for text overlay only
-        },
-        {
-            id: "phil",
-            key: "phil",
-            ariaLabel: "Phil",
-            title: "Phil",
-            subtitle: "Wears a baseball cap", // optional - for text overlay only
-        },
-        {
-            id: "mike",
-            key: "mike",
-            ariaLabel: "Mike",
-            title: "Mike",
-            subtitle: "Also known as Ant", // optional - for text overlay only
-        },
-        {
-            id: "debby",
-            key: "debby",
-            ariaLabel: "Debbeh",
-            title: "Debbeh",
-            state: "locked",
-            subtitle: "Has a twin called Suzy", // optional - for text overlay only
-        },
-        {
-            id: "timmy",
-            key: "timmy",
-            ariaLabel: "Timmy",
-            title: "Timmy",
-            state: "locked",
-            subtitle: "Is the youngest", // optional - for text overlay only
-        },
-        {
-            id: "elliot",
-            key: "elliot",
-            ariaLabel: "Elliot",
-            title: "Elliot",
-            state: "locked",
-            subtitle: "Likes astrophysics", // optional - for text overlay only
-        },
-        //                {
-        //                    id: "char1",                        //Must be unique
-        //                    asset: "char1",                     //Phaser asset key
-        //                    accessibilityText: "Character 1",
-        //                    title: "Liron Man",
-        //                    anim: {
-        //                        key: "character-select.char1",
-        //                        frames: 18,
-        //                        frameRate: 6,
-        //                        yoyo: true,
-        //                        repeat: -1,
-        //                    },
-        //                    state: "locked",
-        //                },
-    ],
+    collection: "characters",
 }
