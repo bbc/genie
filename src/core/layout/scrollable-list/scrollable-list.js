@@ -98,10 +98,6 @@ const setupEvents = panel => {
     });
 };
 
-const updateA11yOffset = (panel, yOffset) => (panel.a11yWrapper.style.top = yOffset + "px");
-const updateT = (panel, tDelta) => panel.t += tDelta;
-
-
 const updatePanelOnScroll = panel => t => {
     if (!panel.a11yWrapper) return;
 
@@ -109,59 +105,56 @@ const updatePanelOnScroll = panel => t => {
         panel.a11yWrapper.style.position = "absolute";
         panel.a11yWrapper.style.top = "0px";
     }
-
-    const items = getPanelItems(panel);
-    const itemHeight = items[0].height;
     const space = panel.space.top;
-    const totalItemsHeight = itemHeight * items.length + space * items.length;
+    const totalItemsHeight = getItemsHeight(panel);
     const panelInnerHeight = panel.height - space;
     const yOffset = -(totalItemsHeight - panelInnerHeight) * panel.t * getMetrics().scale;
-    updateA11yOffset(panel, yOffset);
+    panel.a11yWrapper.style.top = yOffset + "px";
 };
 
 const updatePanelOnFocus = panel => rexLabel => {
     const visibleBounds = getVisibleRangeBounds(panel);
     const itemBounds = getItemBounds(panel, rexLabel);
-    // const offsetFn = (visible, item) => fp.cond([
-    //     [(visible, item) => item.lower < visible.lower, () => item.lower - visible.lower],
-    //     [(visible, item) => item.upper > visible.upper, () => item.upper - visible.upper], 
-    //     [() => true, () => 0],
-    // ]);
-    // const offset = offsetFn(visibleBounds, itemBounds);
-    let offset;
-    if (itemBounds.lower < visibleBounds.lower) {
-        offset = itemBounds.lower - visibleBounds.lower;
-    } else if (itemBounds.upper > visibleBounds.upper) {
-        offset = itemBounds.upper - visibleBounds.upper;
-    } else {
-        offset = 0;
-    }
-    offset && updatePanelOffset(panel, offset);
+    fp.cond([
+        [
+            (visible, item) => item.lower < visible.lower,
+            (visible, item) => updatePanelOffset(panel, item.lower - visible.lower),
+        ],
+        [
+            (visible, item) => item.upper > visible.upper,
+            (visible, item) => updatePanelOffset(panel, item.upper - visible.upper),
+        ],
+        [() => true, () => {}],
+    ])(visibleBounds, itemBounds);
 };
 
 const updatePanelOffset = (panel, offset) => {
-    const visibleWindowHeight = panel.minHeight - panel.space.top * 2;
-    const items = getPanelItems(panel);
-    const itemsHeight = items.length * (items[0].height + panel.space.top) - panel.space.top;
-    const maxOffset = itemsHeight - visibleWindowHeight;
+    const maxOffset = getMaxOffset(panel);
     const tDelta = offset / maxOffset;
-    updateT(panel, tDelta);
+    panel.t += tDelta;
 };
 
 const getVisibleRangeBounds = panel => {
-    const items = getPanelItems(panel);
-    const itemsHeight = items.length * (items[0].height + panel.space.top);
-    const visibleWindowHeight = panel.minHeight - panel.space.top * 2;
-    const maxOffset = itemsHeight - visibleWindowHeight;
-    const offset = maxOffset * panel.t;
-    const lower = offset;
-    const upper = itemsHeight - (maxOffset - offset);
+    const itemsHeight = getItemsHeight(panel);
+    const maxOffset = getMaxOffset(panel);
+    const lower = maxOffset * panel.t;
+    const upper = itemsHeight - (maxOffset - lower);
     return { lower, upper };
 };
 
-const getItemBounds = (panel, rexLabel) => {
+const getMaxOffset = panel => {
+    const visibleWindowHeight = panel.minHeight - panel.space.top * 2;
+    const itemsHeight = getItemsHeight(panel);
+    return itemsHeight - visibleWindowHeight;
+};
+
+const getItemsHeight = panel => {
     const items = getPanelItems(panel);
-    const idx = items.findIndex(item => item === rexLabel);
+    return items.length * (items[0].height + panel.space.top);
+};
+
+const getItemBounds = (panel, rexLabel) => {
+    const idx = getPanelItems(panel).findIndex(item => item === rexLabel);
     const lower = idx * rexLabel.height + idx * panel.space.top;
     const upper = lower + rexLabel.height;
     return { lower, upper };
