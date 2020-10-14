@@ -13,7 +13,7 @@
         {
             x: -390,
             y: -40,
-            text: "DEBUG DRAW OPTIONS:\nQ: Toggle GEL safe Area\nW: Toggle Groups\nE: Toggle Buttons\nR: Toggle CSS debug\nT: Toggle Measuring Tool\nY: Examples Launcher",
+            text: "DEBUG DRAW OPTIONS:\nQ: Toggle GEL safe Area\nW: Toggle Groups\nE: Toggle Buttons\nR: Toggle CSS debug\nT: Toggle Measuring Tool\nY: Examples Launcher\nU: View Safe Area",
         },
     ],
 }

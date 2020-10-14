@@ -5,14 +5,22 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { assetKey } from "./scrollable-list-helpers.js";
-import { createGelButton } from "./scrollable-list-buttons.js";
+import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
+import fp from "../../../../lib/lodash/fp/fp.js";
 
 const scrollableList = scene => {
     const panelConfig = getPanelConfig(scene);
     const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
     scrollableListPanel.on("scroll", () => console.log("scrolling"));
     scrollableListPanel.updateA11y = () => updateA11y(scrollableListPanel);
+    // const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig);
+    // scrollableListPanel.layout();
     scene.input.topOnly = false;
+    scene.scale.on(
+        "resize",
+        fp.debounce(100, () => resizePanel(scene, scrollableListPanel)),
+        scene,
+    );
     return scrollableListPanel;
 };
 
@@ -20,11 +28,7 @@ const getPanelConfig = scene => {
     const config = scene.config;
     const { assetKeys: keys } = config;
     const safeArea = scene.layout.getSafeArea();
-
     return {
-        x: 0,
-        y: 0,
-        width: safeArea.width,
         height: safeArea.height,
         scrollMode: 0,
         background: scene.add.image(0, 0, assetKey(keys.background, keys)),
@@ -32,13 +36,14 @@ const getPanelConfig = scene => {
         slider: {
             track: scene.add.image(0, 0, assetKey(keys.scrollbar, keys)),
             thumb: scene.add.image(0, 0, assetKey(keys.scrollbarHandle, keys)),
+            width: config.space,
         },
         space: {
-            left: 0,
+            left: config.space,
             right: config.space,
             top: config.space,
             bottom: config.space,
-            panel: 0,
+            panel: config.space,
         },
     };
 };
@@ -53,8 +58,8 @@ const createTable = scene => {
     const table = scene.rexUI.add.gridSizer({
         column: 1,
         row: scene.config.items.length,
-        space: { column: 10, row: 10 },
-        name: "menu_table"
+        space: { row: scene.config.space },
+        name: "grid",
     });
 
     scene.config.items.forEach((item, idx) => {
@@ -64,7 +69,6 @@ const createTable = scene => {
     return scene.rexUI.add
         .sizer({
             orientation: "y",
-            space: { left: 10, right: 10, top: 0, bottom: 10, item: 10 },
         })
         .add(table, 1, "center", 0, true);
 };
@@ -94,4 +98,12 @@ const updateRex = panel => {
     // the opposite of updateA11y- when getting focus input call this and update rexUI.
 };
 
-export { scrollableList };
+const resizePanel = (scene, panel) => {
+    const grid = panel.getByName("grid", true);
+    const gridItems = grid.getElement("items");
+    gridItems.forEach(label => scaleButton({ scene, config: scene.config, gelButton: label.children[0] }));
+    panel.minHeight = scene.layout.getSafeArea().height;
+    panel.layout();
+};
+
+export { scrollableList, resizePanel };
