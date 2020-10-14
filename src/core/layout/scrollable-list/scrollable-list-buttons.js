@@ -7,7 +7,6 @@
 import { handleIfVisible } from "./scrollable-list-helpers.js";
 import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
-import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const createGelButton = (scene, item) => {

@@ -70,14 +70,12 @@ const createTable = scene => {
         .add(table, 1, "center", 0, true);
 };
 
-const createItem = (scene, item) => {
-    const label = scene.rexUI.add.label({
+const createItem = (scene, item) =>
+    scene.rexUI.add.label({
         orientation: 0,
         icon: createGelButton(scene, item),
         name: item.id,
     });
-    return label;
-};
 
 const resizePanel = (scene, panel) => {
     const grid = panel.getByName("grid", true);
