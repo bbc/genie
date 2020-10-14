@@ -53,7 +53,6 @@ export function create(scene, metrics, buttonIds, accessibleButtonIds) {
     root.setScrollFactor(0);
 
     const addCustomGroup = (key, group, pos = 0) => {
-        debugger;
         root.addAt(group, pos);
         groups[key] = group;
         return group;
