@@ -64,6 +64,13 @@ describe("getSafeArea", () => {
         expect(safeAreaFn({ top: false })).toEqual(new Phaser.Geom.Rectangle(-130, -384, 360, 768));
     });
 
+    test("does not conform the bottom pad value if mirrorY is passed as false", () => {
+        mockMetrics.isMobile = false;
+        mockGroups.bottomCenter.y = 1000;
+        const safeAreaFn = getSafeAreaFn(mockGroups);
+        expect(safeAreaFn({}, false)).toEqual(new Phaser.Geom.Rectangle(-130, -100, 360, 1090));
+    });
+
     test("topLeft and topRight values have a fixed width of 64 ", () => {
         mockGroups.topLeft.width = 0;
         mockGroups.topRight.width = 0;

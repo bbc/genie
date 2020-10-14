@@ -16,7 +16,7 @@ const defaultSafeAreaGroups = {
     right: [{ id: "middleRightSafe" }, { id: "topRight", fixedWidth: 64 }],
 };
 
-export const getSafeAreaFn = groups => (groupOverrides = {}) => {
+export const getSafeAreaFn = groups => (groupOverrides = {}, mirrorY = true) => {
     const metrics = getMetrics();
     const safe = { ...defaultSafeAreaGroups, ...groupOverrides };
     const pad = metrics.isMobile ? { x: 0, y: 0 } : fp.mapValues(metrics.screenToCanvas, { x: 20, y: 10 });
@@ -30,7 +30,6 @@ export const getSafeAreaFn = groups => (groupOverrides = {}) => {
         ? groups[safe.top].y + groups[safe.top].height
         : metrics.verticalBorderPad - metrics.stageHeight / 2;
     const width = Math.min(...safe.right.map(getLeftSide)) - pad.x - left;
-    const height = Math.min(groups[safe.bottom].y - pad.y, -top) - top;
-
+    const height = mirrorY ? Math.min(groups[safe.bottom].y - pad.y, -top) - top : groups[safe.bottom].y - pad.y - top;
     return new Phaser.Geom.Rectangle(left, top, width, height);
 };
