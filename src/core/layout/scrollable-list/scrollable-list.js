@@ -6,13 +6,13 @@
  */
 import { assetKey } from "./scrollable-list-helpers.js";
 import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
-import { getMetrics } from "../../scaler.js"
+import { getMetrics } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const scrollableList = scene => {
     const panelConfig = getPanelConfig(scene);
     const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
-    scrollableListPanel.updatePanelOnScroll = updatePanelOnScroll(scrollableListPanel); // idk if both needed
+    scrollableListPanel.updatePanelOnScroll = updatePanelOnScroll(scrollableListPanel);
     scrollableListPanel.updatePanelOnFocus = updatePanelOnFocus(scrollableListPanel);
     scene.input.topOnly = false;
     scene.scale.on(
@@ -78,7 +78,6 @@ const createItem = (scene, item) =>
         orientation: 0,
         icon: createGelButton(scene, item),
         name: item.id,
-        // space: { item: scene.config.space },
     });
 
 const resizePanel = (scene, panel) => {
@@ -94,11 +93,14 @@ const setupEvents = panel => {
 
     const items = panel.getByName("grid", true).getElement("items");
     items.map(item => {
-        const gelButton = item.children[0];
-        const a11yElem = gelButton.accessibleElement.el;
-        a11yElem.addEventListener("focus", e => panel.updatePanelOnFocus(gelButton));
+        const a11yElem = item.children[0].accessibleElement.el;
+        a11yElem.addEventListener("focus", e => panel.updatePanelOnFocus(item));
     });
 };
+
+const updateA11yOffset = (panel, yOffset) => (panel.a11yWrapper.style.top = yOffset + "px");
+const updateT = (panel, tDelta) => panel.t += tDelta;
+
 
 const updatePanelOnScroll = panel => t => {
     if (!panel.a11yWrapper) return;
@@ -111,15 +113,58 @@ const updatePanelOnScroll = panel => t => {
     const items = getPanelItems(panel);
     const itemHeight = items[0].height;
     const space = panel.space.top;
-    const totalItemsHeight = (itemHeight * items.length) + (space * items.length);
+    const totalItemsHeight = itemHeight * items.length + space * items.length;
     const panelInnerHeight = panel.height - space;
-    const yOffset = - (totalItemsHeight - panelInnerHeight) * panel.t * getMetrics().scale;
-    panel.a11yWrapper.style.top = yOffset + "px";
+    const yOffset = -(totalItemsHeight - panelInnerHeight) * panel.t * getMetrics().scale;
+    updateA11yOffset(panel, yOffset);
 };
 
-const updatePanelOnFocus = panel => focusedButton => {
-    console.log("BEEBUG: update on focus; ", focusedButton);
-    // the opposite of updateA11y- when getting focus input call this and update rexUI.
+const updatePanelOnFocus = panel => rexLabel => {
+    const visibleBounds = getVisibleRangeBounds(panel);
+    const itemBounds = getItemBounds(panel, rexLabel);
+    // const offsetFn = (visible, item) => fp.cond([
+    //     [(visible, item) => item.lower < visible.lower, () => item.lower - visible.lower],
+    //     [(visible, item) => item.upper > visible.upper, () => item.upper - visible.upper], 
+    //     [() => true, () => 0],
+    // ]);
+    // const offset = offsetFn(visibleBounds, itemBounds);
+    let offset;
+    if (itemBounds.lower < visibleBounds.lower) {
+        offset = itemBounds.lower - visibleBounds.lower;
+    } else if (itemBounds.upper > visibleBounds.upper) {
+        offset = itemBounds.upper - visibleBounds.upper;
+    } else {
+        offset = 0;
+    }
+    offset && updatePanelOffset(panel, offset);
+};
+
+const updatePanelOffset = (panel, offset) => {
+    const visibleWindowHeight = panel.minHeight - panel.space.top * 2;
+    const items = getPanelItems(panel);
+    const itemsHeight = items.length * (items[0].height + panel.space.top) - panel.space.top;
+    const maxOffset = itemsHeight - visibleWindowHeight;
+    const tDelta = offset / maxOffset;
+    updateT(panel, tDelta);
+};
+
+const getVisibleRangeBounds = panel => {
+    const items = getPanelItems(panel);
+    const itemsHeight = items.length * (items[0].height + panel.space.top);
+    const visibleWindowHeight = panel.minHeight - panel.space.top * 2;
+    const maxOffset = itemsHeight - visibleWindowHeight;
+    const offset = maxOffset * panel.t;
+    const lower = offset;
+    const upper = itemsHeight - (maxOffset - offset);
+    return { lower, upper };
+};
+
+const getItemBounds = (panel, rexLabel) => {
+    const items = getPanelItems(panel);
+    const idx = items.findIndex(item => item === rexLabel);
+    const lower = idx * rexLabel.height + idx * panel.space.top;
+    const upper = lower + rexLabel.height;
+    return { lower, upper };
 };
 
 const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
