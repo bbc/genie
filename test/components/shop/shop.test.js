@@ -10,6 +10,9 @@ import * as scroller from "../../../src/core/layout/scrollable-list/scrollable-l
 describe("Shop", () => {
     let shopScreen;
     let mockData;
+    let mockScrollableList = {
+        updatePanelOnScroll: jest.fn(),
+    };
 
     beforeEach(() => {
         shopScreen = new Shop();
@@ -19,7 +22,7 @@ describe("Shop", () => {
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();
         shopScreen.plugins = { installScenePlugin: jest.fn() };
-        scroller.scrollableList = jest.fn().mockReturnValue("foo");
+        scroller.scrollableList = jest.fn().mockReturnValue(mockScrollableList);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -46,7 +49,7 @@ describe("Shop", () => {
 
         test("adds a scrollable list panel", () => {
             expect(scroller.scrollableList).toHaveBeenCalled();
-            expect(shopScreen.panel).toBe("foo");
+            expect(shopScreen.panel).toBe(mockScrollableList);
         });
     });
 });

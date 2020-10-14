@@ -8,6 +8,7 @@ import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable
 import * as overlays from "../../../../src/core/layout/scrollable-list/button-overlays.js";
 import * as helpers from "../../../../src/core/layout/scrollable-list/scrollable-list-helpers.js";
 import { eventBus } from "../../../../src/core/event-bus.js";
+import * as a11y from "../../../../src/core/accessibility/accessibilify.js";
 
 const mockContainer = { parent: { getTopmostSizer: jest.fn().mockReturnValue({ innerHeight: 100 }) } };
 
@@ -44,6 +45,10 @@ const mockItem = {
 describe("Scrollable List Buttons", () => {
     overlays.overlays1Wide = jest.fn();
 
+    beforeEach(() => {
+        a11y.accessibilify = jest.fn();
+    });
+
     afterEach(() => jest.clearAllMocks());
 
     describe("createGelButton()", () => {
@@ -59,7 +64,7 @@ describe("Scrollable List Buttons", () => {
                 ariaLabel: "mockAriaLabel",
                 channel: "mockChannel",
                 gameButton: true,
-                group: "middleCenter",
+                group: "shop",
                 id: "scroll_button_mockId",
                 key: "itemBackground",
                 scene: "mockScene",

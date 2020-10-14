@@ -9,7 +9,10 @@ import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const mockItem = { id: "someItem", name: "someItemName" };
-const mockLabel = { children: ["foo"] };
+const mockA11yElem = {
+    addEventListener: jest.fn(),
+};
+const mockLabel = { children: [{ accessibleElement: { el: mockA11yElem } }] };
 const mockGridSizer = {
     add: jest.fn(),
     getElement: jest.fn().mockReturnValue([mockLabel]),
@@ -17,6 +20,7 @@ const mockGridSizer = {
 const mockScrollablePanel = {
     layout: jest.fn(),
     getByName: jest.fn().mockReturnValue(mockGridSizer),
+    on: jest.fn(),
 };
 const mockSizer = { add: jest.fn() };
 const mockOverlay = {};

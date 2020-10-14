@@ -10,10 +10,7 @@ import { getMetrics } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const scrollableList = scene => {
-    const panelConfig = getPanelConfig(scene);
-    const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
-    scrollableListPanel.updatePanelOnScroll = updatePanelOnScroll(scrollableListPanel);
-    scrollableListPanel.updatePanelOnFocus = updatePanelOnFocus(scrollableListPanel);
+    const scrollableListPanel = createScrollableListPanel(scene);
     scene.input.topOnly = false;
     scene.scale.on(
         "resize",
@@ -21,6 +18,15 @@ const scrollableList = scene => {
         scene,
     );
     setupEvents(scrollableListPanel);
+    return scrollableListPanel;
+};
+
+const createScrollableListPanel = scene => {
+    const panelConfig = getPanelConfig(scene);
+    const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig);
+    scrollableListPanel.updatePanelOnScroll = updatePanelOnScroll(scrollableListPanel);
+    scrollableListPanel.updatePanelOnFocus = updatePanelOnFocus(scrollableListPanel);
+    scrollableListPanel.layout();
     return scrollableListPanel;
 };
 
