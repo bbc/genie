@@ -7,7 +7,7 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 
 import { accessibilify } from "../../accessibility/accessibilify.js";
 import { gmi } from "../../gmi/gmi.js";
-import * as state from "../../states.js";
+import { collections } from "../../collections.js";
 
 const alignmentFactor = { left: 0, center: 1, right: 2 };
 
@@ -32,12 +32,6 @@ export const setSize = (grid, button) => {
 
     size[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
     button.setDisplaySize(...size);
-
-    // TODO This calculation should be retained for possible inclusion of hit area adjustment,
-    // currently being skipped due to unexplained behaviour with the scaling calculations.
-    //
-    // const hitSize = this.calculateCellSize(1 / this._cells[cellIndex].scaleX, 1 / this._cells[cellIndex].scaleY);
-    // this._cells[cellIndex].input.hitArea = new Phaser.Geom.Rectangle(0, 0, hitSize[0], hitSize[1]);
 };
 
 const getBlankCellCount = (grid, row, page) => {
@@ -62,17 +56,12 @@ const setPosition = (grid, button, idx) => {
     button.y = button.displayHeight * positionFactorY + grid._cellPadding * positionFactorY;
 };
 
-const getStates = theme => {
-    const stateConfig = theme.choices.map(({ id, state }) => ({ id, state }));
-    return state.initState(theme.storageKey, stateConfig);
-};
-
-const getStylingForState = (btn, states, styling) => styling[fp.get("state", states.get(btn.key))] || {};
+const getStylingForState = (btn, collection, styling) => styling[fp.get("state", collection.get(btn.key))] || {};
 
 const getStyles = (btn, theme) => {
-    const states = getStates(theme);
+    const collection = collections.get(theme.collection);
     const defaultStyles = theme.choicesStyling.default;
-    const stylesOverride = getStylingForState(btn, states, theme.choicesStyling);
+    const stylesOverride = getStylingForState(btn, collection, theme.choicesStyling);
     return fp.merge(defaultStyles, stylesOverride);
 };
 
@@ -104,14 +93,9 @@ export const createCell = (grid, choice, idx, theme) => {
     grid.cellsPerPage > 1 && (button.visible = Boolean(!idx));
     button.key = config.key;
 
-    if (fp.get("choicesStyling.default", theme)) {
-        addTextToButton(grid.scene, config, button, theme);
-    }
-    grid.add(button);
+    fp.get("choicesStyling.default", theme) && addTextToButton(grid.scene, config, button, theme);
 
-    const makeAccessible = () => {
-        accessibilify(button, true);
-    };
+    const makeAccessible = () => accessibilify(button, true);
 
     const reset = () => {
         setSize(grid, button);

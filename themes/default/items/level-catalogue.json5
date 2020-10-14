@@ -1,0 +1,20 @@
+[
+    {
+        id: "1",
+        key: "carousel1",
+        ariaLabel: "Level 1",
+        title: "Test Level 1",
+    },
+    {
+        id: "2",
+        key: "carousel2",
+        ariaLabel: "Level 2",
+        title: "Test Level 2",
+    },
+    {
+        id: "3",
+        key: "carousel3",
+        ariaLabel: "Level 3",
+        title: "Test Level 3",
+    },
+]

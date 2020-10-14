@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { initCollection } from "../collection.js";
+import { initCollection } from "../collections.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const getKey = item => item.collection;
@@ -21,7 +21,9 @@ export const loadCollections = (screen, config) => {
         };
 
         const collectionsLoaded = () => {
-            const catalogueKeys = fp.uniq(keys.map(key => screen.cache.json.get(`items/${key}`).catalogue));
+            const catalogueKeys = fp
+                .uniq(keys.map(key => screen.cache.json.get(`items/${key}`).catalogue))
+                .filter(fp.isString);
             catalogueKeys.forEach(loadToCache(screen));
             screen.load.once("complete", cataloguesLoaded);
             screen.load.start();

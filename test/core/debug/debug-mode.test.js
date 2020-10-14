@@ -8,7 +8,7 @@ import * as parseUrlParams from "../../../src/core/parseUrlParams.js";
 
 describe("Debug Mode", () => {
     const game = {};
-    const debugWindowKeys = ["gmi", "collections", "states"];
+    const debugWindowKeys = ["gmi", "collections"];
 
     let testWindow = {
         location: {
