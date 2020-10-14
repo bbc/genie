@@ -66,7 +66,6 @@ export function accessibilify(button, gameButton = true) {
         button.emit(Phaser.Input.Events.POINTER_UP, button, sys.input.activePointer, false);
     };
     const onMouseOver = () => {
-        console.log('BEEBUG: focus');
         button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false)};
     const onMouseOut = () => button.emit(Phaser.Input.Events.POINTER_OUT, button, sys.input.activePointer, false);
 

@@ -11,10 +11,8 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 const scrollableList = scene => {
     const panelConfig = getPanelConfig(scene);
     const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
-    scrollableListPanel.on("scroll", () => console.log("scrolling"));
+    scrollableListPanel.on("scroll", () => console.log("BEEBUG: scrolling"));
     scrollableListPanel.updateA11y = () => updateA11y(scrollableListPanel);
-    // const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig);
-    // scrollableListPanel.layout();
     scene.input.topOnly = false;
     scene.scale.on(
         "resize",
@@ -27,7 +25,7 @@ const scrollableList = scene => {
 const getPanelConfig = scene => {
     const config = scene.config;
     const { assetKeys: keys } = config;
-    const safeArea = scene.layout.getSafeArea();
+    const safeArea = scene.layout.getSafeArea({}, false);
     return {
         height: safeArea.height,
         scrollMode: 0,
@@ -102,7 +100,7 @@ const resizePanel = (scene, panel) => {
     const grid = panel.getByName("grid", true);
     const gridItems = grid.getElement("items");
     gridItems.forEach(label => scaleButton({ scene, config: scene.config, gelButton: label.children[0] }));
-    panel.minHeight = scene.layout.getSafeArea().height;
+    panel.minHeight = scene.layout.getSafeArea({}, false).height;
     panel.layout();
 };
 

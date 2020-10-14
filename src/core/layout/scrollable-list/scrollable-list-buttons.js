@@ -29,7 +29,6 @@ const createGelButton = (scene, item) => {
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
 
-    gelButton.on("focus", () => console.log("focused"));
     eventBus.subscribe({
         callback: () => handleIfVisible(gelButton, scene),
         channel: gelConfig.channel,
@@ -47,7 +46,10 @@ const scaleButton = args => {
 };
 
 const makeAccessible = args => { 
-    accessibilify(args.gelButton);
+    const { gelButton } = args;
+    accessibilify(gelButton);
+    const a11yElem = gelButton.accessibleElement.el;
+    a11yElem.addEventListener("focus", () => console.log('BEEBUG: focused'));
     return args;
 };
 
