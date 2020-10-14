@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Add debug key to visualise safe interactable area
 | 3.8.6 ||
 | | Ensure all gel buttons have a valid event channel. |
 | | Adds collections. |
