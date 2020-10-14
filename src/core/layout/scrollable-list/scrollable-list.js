@@ -10,6 +10,7 @@ import { createGelButton } from "./scrollable-list-buttons.js";
 const scrollableList = scene => {
     const panelConfig = getPanelConfig(scene);
     const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig).layout();
+    scrollableListPanel.on("scroll", () => console.log("scrolling"));
     scrollableListPanel.updateA11y = () => updateA11y(scrollableListPanel);
     scene.input.topOnly = false;
     return scrollableListPanel;
@@ -84,7 +85,13 @@ const updateA11y = panel => {
         panel.a11yWrapper.style.top = "0px";
     }
 
-    console.log('BEEBUG: panel.t', panel.t);
-}
+    // console.log('BEEBUG: panel.t', panel.t);
+    // calculate an offset based on the panel.t and the overall pixel size of the list
+    // apply it as style.top    
+};
+
+const updateRex = panel => {
+    // the opposite of updateA11y- when getting focus input call this and update rexUI.
+};
 
 export { scrollableList };

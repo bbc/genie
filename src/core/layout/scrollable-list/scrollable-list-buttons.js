@@ -29,6 +29,7 @@ const createGelButton = (scene, item) => {
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
 
+    gelButton.on("focus", () => console.log("focused"));
     eventBus.subscribe({
         callback: () => onClick(gelButton),
         channel: gelConfig.channel,
