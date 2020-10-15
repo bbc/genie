@@ -9,6 +9,7 @@ import { onScaleChange, getMetrics } from "../scaler.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as a11y from "./accessibility-layer.js";
 import { CAMERA_X, CAMERA_Y } from "../layout/metrics.js";
+import { buttonsChannel } from "../layout/gel-defaults.js";
 
 const getHitAreaBounds = button => {
     const sys = button.scene.sys;
@@ -30,9 +31,8 @@ const assignEvents = (accessibleElement, button) => {
         if (!button.active) return;
         accessibleElement.position(getHitAreaBounds(button));
     };
-
+    button.setElementSizeAndPosition = setElementSizeAndPosition;
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
-
     let event = onScaleChange.add(resizeAndRepositionElement);
     const _destroy = button.destroy;
     button.destroy = () => {
@@ -66,7 +66,8 @@ export function accessibilify(button, gameButton = true) {
         button.emit(Phaser.Input.Events.POINTER_UP, button, sys.input.activePointer, false);
     };
     const onMouseOver = () => {
-        button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false)};
+        button.emit(Phaser.Input.Events.POINTER_OVER, button, sys.input.activePointer, false);
+    };
     const onMouseOut = () => button.emit(Phaser.Input.Events.POINTER_OUT, button, sys.input.activePointer, false);
 
     options = {

@@ -6,7 +6,6 @@
  */
 /* eslint-disable no-console */
 
-import { getMetrics } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const GRID_NAME = "grid";
@@ -24,17 +23,8 @@ const handleIfVisible = (gelButton, scene) => {
 const onClickPlaceholder = gelButton => console.log(`Clicked ${gelButton.config.id}`);
 
 const updatePanelOnScroll = panel => () => {
-    if (!panel.a11yWrapper) return;
-
-    if (!panel.a11yWrapper.style.cssText) {
-        panel.a11yWrapper.style.position = "absolute";
-        panel.a11yWrapper.style.top = "0px";
-    }
-    const space = panel.space.top;
-    const totalItemsHeight = getItemsHeight(panel);
-    const panelInnerHeight = panel.height - space;
-    const yOffset = -(totalItemsHeight - panelInnerHeight) * panel.t * getMetrics().scale;
-    panel.a11yWrapper.style.top = yOffset + "px";
+    const items = getPanelItems(panel);
+    items.map(item => item.children[0].setElementSizeAndPosition());
 };
 
 const getItemsHeight = panel => {
@@ -44,17 +34,17 @@ const getItemsHeight = panel => {
 
 const getPanelItems = panel => panel.getByName(GRID_NAME, true).getElement("items");
 
-const updatePanelOnFocus = panel => rexLabel => {
+const updatePanelOnFocus = panel => rexLabel => { 
     const visibleBounds = getVisibleRangeBounds(panel);
     const itemBounds = getItemBounds(panel, rexLabel);
     fp.cond([
         [
             (visible, item) => item.lower < visible.lower,
-            (visible, item) => updatePanelOffset(panel, item.lower - visible.lower),
+            (visible, item) => updatePanelT(panel, item.lower - visible.lower),
         ],
         [
             (visible, item) => item.upper > visible.upper,
-            (visible, item) => updatePanelOffset(panel, item.upper - visible.upper),
+            (visible, item) => updatePanelT(panel, item.upper - visible.upper),
         ],
         [() => true, () => {}],
     ])(visibleBounds, itemBounds);
@@ -75,10 +65,16 @@ const getItemBounds = (panel, rexLabel) => {
     return { lower, upper };
 };
 
-const updatePanelOffset = (panel, offset) => {
+const updatePanelT = (panel, offset) => {
     const maxOffset = getMaxOffset(panel);
     const tDelta = offset / maxOffset;
-    panel.t += tDelta;
+    const newT = panel.t + tDelta;
+    const fractionalT = 1 / getPanelItems(panel).length;
+    fp.cond([
+        [t => t < fractionalT, () => panel.setT(0)],
+        [t => t > 1 - fractionalT, () => panel.setT(1)],
+        [t => true, t => panel.setT(t)],
+    ])(newT);
 };
 
 const getMaxOffset = panel => {

@@ -7,7 +7,6 @@
 import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
-import * as a11y from "../../accessibility/accessibility-layer.js";
 
 const GRID_NAME = "grid";
 
@@ -16,7 +15,7 @@ const scrollableList = scene => {
     scene.input.topOnly = false;
     scene.scale.on(
         "resize",
-        fp.debounce(100, () => resizePanel(scene, scrollableListPanel)),
+        fp.debounce(10, () => resizePanel(scene, scrollableListPanel)),
         scene,
     );
     setupEvents(scrollableListPanel);
@@ -24,13 +23,10 @@ const scrollableList = scene => {
 };
 
 const createScrollableListPanel = scene => {
-    a11y.addGroupAt("shop", 0); // param this
     const panelConfig = getPanelConfig(scene);
     const panel = scene.rexUI.add.scrollablePanel(panelConfig);
-    panel.a11yWrapper = document.getElementById("accessible-group-shop"); // and this
     panel.updateOnFocus = updatePanelOnFocus(panel);
     panel.updateOnScroll = updatePanelOnScroll(panel);
-    panel.updateOnScroll(0);
     panel.layout();
     return panel;
 };
@@ -38,9 +34,9 @@ const createScrollableListPanel = scene => {
 const getPanelConfig = scene => {
     const config = scene.config;
     const { assetKeys: keys } = config;
-    const safeArea = scene.layout.getSafeArea({}, false);
+    const safeArea = getPanelY(scene);
     return {
-        y: safeArea.height / 2 + safeArea.y,
+        y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
         background: scene.add.image(0, 0, assetKey(keys.background, keys)),
@@ -58,6 +54,11 @@ const getPanelConfig = scene => {
             panel: config.space,
         },
     };
+};
+
+const getPanelY = scene => {
+    const safeArea = scene.layout.getSafeArea({}, false);
+    return { y: safeArea.height / 2 + safeArea.y, height: safeArea.height };
 };
 
 const createInnerPanel = scene => {
@@ -93,11 +94,15 @@ const createItem = (scene, item) =>
     });
 
 const resizePanel = (scene, panel) => {
+    const t = panel.t;
     const grid = panel.getByName(GRID_NAME, true);
     const gridItems = grid.getElement("items");
     gridItems.forEach(label => scaleButton({ scene, config: scene.config, gelButton: label.children[0] }));
-    panel.minHeight = scene.layout.getSafeArea({}, false).height;
+    const safeArea = getPanelY(scene);
+    panel.minHeight = safeArea.height;
+    panel.y = safeArea.y;
     panel.layout();
+    panel.setT(t);
 };
 
 const setupEvents = panel => {

@@ -44,7 +44,7 @@ const scaleButton = args => {
     return args;
 };
 
-const makeAccessible = args => { 
+const makeAccessible = args => {
     accessibilify(args.gelButton);
     return args;
 };
