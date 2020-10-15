@@ -15,7 +15,6 @@ const mockItem = { id: "someItem", name: "someItemName" };
 const mockA11yElem = {
     addEventListener: jest.fn(),
 };
-// const mockA11yWrapper = { style: {} };
 const mockLabel = {
     children: [{ accessibleElement: { el: mockA11yElem } }],
     height: 50,
@@ -61,7 +60,7 @@ const mockScene = {
         },
     },
     layout: {
-        getSafeArea: jest.fn().mockReturnValue({ width: 100, height: 100 }),
+        getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
     },
     scale: { on: jest.fn() },
 };
@@ -147,11 +146,15 @@ describe("Scrollable List", () => {
             test("calls layout on the panel", () => {
                 expect(mockScrollablePanel.layout).toHaveBeenCalledTimes(2);
             });
-            test("sets the panel minHeight to the safe area height", () => {
+            test("sets the panel minHeight and y from the safe area", () => {
                 expect(mockScrollablePanel.minHeight).toBe(100);
+                expect(mockScrollablePanel.y).toBe(50);
             });
             test("calls scaleButton on each gel button", () => {
                 expect(buttons.scaleButton).toHaveBeenCalled();
+            });
+            test("sets T to resolve an edge case where an aspect ratio change creates an illegal T value", () => {
+                expect(mockScrollablePanel.setT).toHaveBeenCalled();
             });
         });
         describe("scrolling", () => {

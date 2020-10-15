@@ -48,4 +48,22 @@ describe("Scrollable List handlers", () => {
             expect(console.log).not.toHaveBeenCalled();
         });
     });
+
+    describe("updatePanelOnScroll", () => {
+        test("calls setElementSizeAndPosition on each GEL button", () => {
+            expect(false).toBe(true);
+        });
+    });
+
+    describe("updatePanelOnFocus", () => {
+        test("sets a lower t if the item is off the top edge", () => {
+            expect(false).toBe(true);
+        });
+        test("sets a higher t if the item is off the bottom edge", () => {
+            expect(false).toBe(true);
+        });
+        test("does not set t if the item is visible", () => {
+            expect(false).toBe(true);
+        });
+    });
 });
