@@ -13,27 +13,20 @@ const GRID_NAME = "grid";
 const scrollableList = scene => {
     const scrollableListPanel = createScrollableListPanel(scene);
     scene.input.topOnly = false;
-    scene.scale.on(
-        "resize",
-        fp.debounce(10, () => resizePanel(scene, scrollableListPanel)),
-        scene,
-    );
-    setupEvents(scrollableListPanel);
+    setupEvents(scene, scrollableListPanel);
     return scrollableListPanel;
 };
 
 const createScrollableListPanel = scene => {
     const panelConfig = getPanelConfig(scene);
     const panel = scene.rexUI.add.scrollablePanel(panelConfig);
-    panel.updateOnFocus = updatePanelOnFocus(panel);
-    panel.updateOnScroll = updatePanelOnScroll(panel);
     panel.layout();
     return panel;
 };
 
 const getPanelConfig = scene => {
-    const config = scene.config;
-    const { assetKeys: keys } = config;
+    const { space, assetKeys: keys } = scene.config;
+    const assetKey = (key, assetKeys) => [assetKeys.prefix, key].join(".");
     const safeArea = getPanelY(scene);
     return {
         y: safeArea.y,
@@ -44,15 +37,9 @@ const getPanelConfig = scene => {
         slider: {
             track: scene.add.image(0, 0, assetKey(keys.scrollbar, keys)),
             thumb: scene.add.image(0, 0, assetKey(keys.scrollbarHandle, keys)),
-            width: config.space,
+            width: space,
         },
-        space: {
-            left: config.space,
-            right: config.space,
-            top: config.space,
-            bottom: config.space,
-            panel: config.space,
-        },
+        space: { left: space, right: space, top: space, bottom: space, panel: space },
     };
 };
 
@@ -72,7 +59,7 @@ const createTable = scene => {
         column: 1,
         row: scene.config.items.length,
         space: { row: scene.config.space },
-        name: "grid",
+        name: GRID_NAME,
     });
 
     scene.config.items.forEach((item, idx) => {
@@ -105,16 +92,22 @@ const resizePanel = (scene, panel) => {
     panel.setT(t);
 };
 
-const setupEvents = panel => {
+const setupEvents = (scene, panel) => {
+    scene.scale.on(
+        "resize",
+        fp.debounce(10, () => resizePanel(scene, scrollableListPanel)),
+        scene,
+    );
+
+    panel.updateOnScroll = updatePanelOnScroll(panel);
     panel.on("scroll", panel.updateOnScroll);
 
+    panel.updateOnFocus = updatePanelOnFocus(panel);
     const items = panel.getByName(GRID_NAME, true).getElement("items");
     items.map(item => {
         const a11yElem = item.children[0].accessibleElement.el;
         a11yElem.addEventListener("focus", e => panel.updateOnFocus(item));
     });
 };
-
-const assetKey = (key, assetKeys) => [assetKeys.prefix, key].join(".");
 
 export { scrollableList, resizePanel };

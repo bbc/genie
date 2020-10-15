@@ -19,7 +19,7 @@ const createGelButton = (scene, item) => {
         accessibilityEnabled: true,
         ariaLabel: item.ariaLabel,
         channel: config.eventChannel,
-        group: "shop",
+        group: scene.scene.key,
         id,
         key: config.assetKeys.itemBackground,
         scene: config.assetKeys.prefix,

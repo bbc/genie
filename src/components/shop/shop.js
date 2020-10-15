@@ -30,7 +30,7 @@ export class Shop extends Screen {
         a11yGroup.reset = () => resizePanel(this, this.panel);
         a11yGroup.add(this.panel);
 
-        this.layout.addCustomGroup("shop", a11yGroup, 0);
-        a11y.addGroupAt("shop", 0);
+        this.layout.addCustomGroup(this.scene.key, a11yGroup, 0);
+        a11y.addGroupAt(this.scene.key, 0);
     }
 }
