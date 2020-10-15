@@ -4,11 +4,12 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { assetKey } from "./scrollable-list-handlers.js";
+import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
-import { getMetrics } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
+
+const GRID_NAME = "grid";
 
 const scrollableList = scene => {
     const scrollableListPanel = createScrollableListPanel(scene);
@@ -23,16 +24,13 @@ const scrollableList = scene => {
 };
 
 const createScrollableListPanel = scene => {
-    a11y.addGroupAt("shop", 0);
+    a11y.addGroupAt("shop", 0); // param this
     const panelConfig = getPanelConfig(scene);
     const panel = scene.rexUI.add.scrollablePanel(panelConfig);
-    panel.a11yWrapper = document.getElementById("accessible-group-shop")
-
-    // import these
+    panel.a11yWrapper = document.getElementById("accessible-group-shop"); // and this
     panel.updateOnFocus = updatePanelOnFocus(panel);
     panel.updateOnScroll = updatePanelOnScroll(panel);
     panel.updateOnScroll(0);
-
     panel.layout();
     return panel;
 };
@@ -41,7 +39,10 @@ const getPanelConfig = scene => {
     const config = scene.config;
     const { assetKeys: keys } = config;
     const safeArea = scene.layout.getSafeArea({}, false);
+    console.log('BEEBUG: safeArea', safeArea);
+    const y = safeArea.height / 2 + safeArea.y;
     return {
+        y,
         height: safeArea.height,
         scrollMode: 0,
         background: scene.add.image(0, 0, assetKey(keys.background, keys)),
@@ -94,7 +95,7 @@ const createItem = (scene, item) =>
     });
 
 const resizePanel = (scene, panel) => {
-    const grid = panel.getByName("grid", true);
+    const grid = panel.getByName(GRID_NAME, true);
     const gridItems = grid.getElement("items");
     gridItems.forEach(label => scaleButton({ scene, config: scene.config, gelButton: label.children[0] }));
     panel.minHeight = scene.layout.getSafeArea({}, false).height;
@@ -104,78 +105,13 @@ const resizePanel = (scene, panel) => {
 const setupEvents = panel => {
     panel.on("scroll", panel.updateOnScroll);
 
-    const items = panel.getByName("grid", true).getElement("items");
+    const items = panel.getByName(GRID_NAME, true).getElement("items");
     items.map(item => {
         const a11yElem = item.children[0].accessibleElement.el;
         a11yElem.addEventListener("focus", e => panel.updateOnFocus(item));
     });
 };
 
-
-/* split here */
-
-const updatePanelOnScroll = panel => () => {
-    if (!panel.a11yWrapper) return;
-
-    if (!panel.a11yWrapper.style.cssText) {
-        panel.a11yWrapper.style.position = "absolute";
-        panel.a11yWrapper.style.top = "0px";
-    }
-    const space = panel.space.top;
-    const totalItemsHeight = getItemsHeight(panel);
-    const panelInnerHeight = panel.height - space;
-    const yOffset = -(totalItemsHeight - panelInnerHeight) * panel.t * getMetrics().scale;
-    panel.a11yWrapper.style.top = yOffset + "px";
-};
-
-const updatePanelOnFocus = panel => rexLabel => {
-    const visibleBounds = getVisibleRangeBounds(panel);
-    const itemBounds = getItemBounds(panel, rexLabel);
-    fp.cond([
-        [
-            (visible, item) => item.lower < visible.lower,
-            (visible, item) => updatePanelOffset(panel, item.lower - visible.lower),
-        ],
-        [
-            (visible, item) => item.upper > visible.upper,
-            (visible, item) => updatePanelOffset(panel, item.upper - visible.upper),
-        ],
-        [() => true, () => {}],
-    ])(visibleBounds, itemBounds);
-};
-
-const updatePanelOffset = (panel, offset) => {
-    const maxOffset = getMaxOffset(panel);
-    const tDelta = offset / maxOffset;
-    panel.t += tDelta;
-};
-
-const getVisibleRangeBounds = panel => {
-    const itemsHeight = getItemsHeight(panel);
-    const maxOffset = getMaxOffset(panel);
-    const lower = maxOffset * panel.t;
-    const upper = itemsHeight - (maxOffset - lower);
-    return { lower, upper };
-};
-
-const getMaxOffset = panel => {
-    const visibleWindowHeight = panel.minHeight - panel.space.top * 2;
-    const itemsHeight = getItemsHeight(panel);
-    return itemsHeight - visibleWindowHeight;
-};
-
-const getItemsHeight = panel => {
-    const items = getPanelItems(panel);
-    return items.length * (items[0].height + panel.space.top);
-};
-
-const getItemBounds = (panel, rexLabel) => {
-    const idx = getPanelItems(panel).findIndex(item => item === rexLabel);
-    const lower = idx * rexLabel.height + idx * panel.space.top;
-    const upper = lower + rexLabel.height;
-    return { lower, upper };
-};
-
-const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
+const assetKey = (key, assetKeys) => [assetKeys.prefix, key].join(".");
 
 export { scrollableList, resizePanel };
