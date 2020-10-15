@@ -39,10 +39,8 @@ const getPanelConfig = scene => {
     const config = scene.config;
     const { assetKeys: keys } = config;
     const safeArea = scene.layout.getSafeArea({}, false);
-    console.log('BEEBUG: safeArea', safeArea);
-    const y = safeArea.height / 2 + safeArea.y;
     return {
-        y,
+        y: safeArea.height / 2 + safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
         background: scene.add.image(0, 0, assetKey(keys.background, keys)),

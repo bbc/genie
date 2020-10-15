@@ -6,6 +6,7 @@
  */
 import { scrollableList } from "../../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
+import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
@@ -75,6 +76,8 @@ describe("Scrollable List", () => {
             a11y.addGroupAt = jest.fn();
             document.getElementById = jest.fn().mockReturnValue(mockA11yWrapper);
             scaler.getMetrics = jest.fn().mockReturnValue({ scale: 1 });
+            handlers.updatePanelOnFocus = jest.fn().mockReturnValue(jest.fn());
+            handlers.updatePanelOnScroll = jest.fn().mockReturnValue(jest.fn());
             scrollableList(mockScene);
         });
         describe("adds a rexUI scrollable panel", () => {
@@ -140,8 +143,8 @@ describe("Scrollable List", () => {
             expect(mockScrollablePanel.layout).toHaveBeenCalled();
         });
         test("decorates the panel with update functions", () => {
-            expect(typeof mockScrollablePanel.updatePanelOnFocus).toBe("function")
-            expect(typeof mockScrollablePanel.updatePanelOnScroll).toBe("function")
+            expect(typeof mockScrollablePanel.updateOnFocus).toBe("function")
+            expect(typeof mockScrollablePanel.updateOnScroll).toBe("function")
         });
     });
 
@@ -159,16 +162,6 @@ describe("Scrollable List", () => {
         });
         test("calls scaleButton on each gel button", () => {
             expect(buttons.scaleButton).toHaveBeenCalled();
-        });
-    });
-
-    describe("accessibility layer", () => {
-        test("sets top on the a11y wrapper when scrolling", () => {
-            expect(false).toBe(true);
-        });
-
-        test("sets the panel t when focusing on an item that is at least partly invisible", () => {
-            expect(false).toBe(true);
         });
     });
 });
