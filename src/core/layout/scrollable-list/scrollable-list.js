@@ -4,10 +4,11 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { assetKey } from "./scrollable-list-helpers.js";
+import { assetKey } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
 import { getMetrics } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
+import * as a11y from "../../accessibility/accessibility-layer.js";
 
 const scrollableList = scene => {
     const scrollableListPanel = createScrollableListPanel(scene);
@@ -22,12 +23,18 @@ const scrollableList = scene => {
 };
 
 const createScrollableListPanel = scene => {
+    a11y.addGroupAt("shop", 0);
     const panelConfig = getPanelConfig(scene);
-    const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig);
-    scrollableListPanel.updatePanelOnScroll = updatePanelOnScroll(scrollableListPanel);
-    scrollableListPanel.updatePanelOnFocus = updatePanelOnFocus(scrollableListPanel);
-    scrollableListPanel.layout();
-    return scrollableListPanel;
+    const panel = scene.rexUI.add.scrollablePanel(panelConfig);
+    panel.a11yWrapper = document.getElementById("accessible-group-shop")
+
+    // import these
+    panel.updateOnFocus = updatePanelOnFocus(panel);
+    panel.updateOnScroll = updatePanelOnScroll(panel);
+    panel.updateOnScroll(0);
+
+    panel.layout();
+    return panel;
 };
 
 const getPanelConfig = scene => {
@@ -38,7 +45,7 @@ const getPanelConfig = scene => {
         height: safeArea.height,
         scrollMode: 0,
         background: scene.add.image(0, 0, assetKey(keys.background, keys)),
-        panel: { child: createPanel(scene) },
+        panel: { child: createInnerPanel(scene) },
         slider: {
             track: scene.add.image(0, 0, assetKey(keys.scrollbar, keys)),
             thumb: scene.add.image(0, 0, assetKey(keys.scrollbarHandle, keys)),
@@ -54,7 +61,7 @@ const getPanelConfig = scene => {
     };
 };
 
-const createPanel = scene => {
+const createInnerPanel = scene => {
     const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 } });
     sizer.add(createTable(scene), { expand: true });
     return sizer;
@@ -95,16 +102,19 @@ const resizePanel = (scene, panel) => {
 };
 
 const setupEvents = panel => {
-    panel.on("scroll", panel.updatePanelOnScroll);
+    panel.on("scroll", panel.updateOnScroll);
 
     const items = panel.getByName("grid", true).getElement("items");
     items.map(item => {
         const a11yElem = item.children[0].accessibleElement.el;
-        a11yElem.addEventListener("focus", e => panel.updatePanelOnFocus(item));
+        a11yElem.addEventListener("focus", e => panel.updateOnFocus(item));
     });
 };
 
-const updatePanelOnScroll = panel => t => {
+
+/* split here */
+
+const updatePanelOnScroll = panel => () => {
     if (!panel.a11yWrapper) return;
 
     if (!panel.a11yWrapper.style.cssText) {

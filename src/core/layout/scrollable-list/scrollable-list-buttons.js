@@ -4,11 +4,10 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { handleIfVisible } from "./scrollable-list-helpers.js";
+import { handleIfVisible } from "./scrollable-list-handlers.js";
 import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
 import { accessibilify } from "../../../core/accessibility/accessibilify.js";
-
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const createGelButton = (scene, item) => {

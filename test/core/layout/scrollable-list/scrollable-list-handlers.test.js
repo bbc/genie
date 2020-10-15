@@ -6,7 +6,7 @@
  */
 
 /* eslint-disable no-console */
-import * as helpers from "../../../../src/core/layout/scrollable-list/scrollable-list-helpers.js";
+import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 
 const mockScene = {
     input: {},
@@ -38,20 +38,20 @@ describe("Scrollable List helpers", () => {
     describe("handleIfVisible()", () => {
         test("calls console.log if click is inside the panel's Y bounds", () => {
             mockScene.input = { y: 300 };
-            helpers.handleIfVisible(mockGelButton, mockScene);
+            handlers.handleIfVisible(mockGelButton, mockScene);
             expect(console.log).toHaveBeenCalledWith("Clicked foo");
         });
 
         test("does not call console.log if click is outside the panel", () => {
             mockScene.input = { y: 0 };
-            helpers.handleIfVisible(mockGelButton, mockScene);
+            handlers.handleIfVisible(mockGelButton, mockScene);
             expect(console.log).not.toHaveBeenCalled();
         });
     });
     describe("assetKey()", () => {
         test("concatenates the asset prefix with the asset key", () => {
             const assetKeys = { prefix: "foo" };
-            const concatenatedKey = helpers.assetKey("bar", assetKeys);
+            const concatenatedKey = handlers.assetKey("bar", assetKeys);
             expect(concatenatedKey).toEqual("foo.bar");
         });
     });

@@ -6,7 +6,7 @@
  */
 import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
 import * as overlays from "../../../../src/core/layout/scrollable-list/button-overlays.js";
-import * as helpers from "../../../../src/core/layout/scrollable-list/scrollable-list-helpers.js";
+import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 import { eventBus } from "../../../../src/core/event-bus.js";
 import * as a11y from "../../../../src/core/accessibility/accessibilify.js";
 
@@ -75,13 +75,13 @@ describe("Scrollable List Buttons", () => {
 
         test("subscribes to the event bus", () => {
             eventBus.subscribe = jest.fn();
-            helpers.handleIfVisible = jest.fn();
+            handlers.handleIfVisible = jest.fn();
             buttons.createGelButton(mockScene, mockItem);
             const args = eventBus.subscribe.mock.calls[0][0];
             expect(args.channel).toEqual("mockChannel");
             expect(args.name).toEqual("scroll_button_mockId");
             args.callback();
-            expect(helpers.handleIfVisible).toHaveBeenCalledWith(mockButton, mockScene);
+            expect(handlers.handleIfVisible).toHaveBeenCalledWith(mockButton, mockScene);
         });
 
         test("scales the button", () => {
