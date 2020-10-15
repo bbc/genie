@@ -15,8 +15,8 @@ const mockItem = { id: "someItem", name: "someItemName" };
 const mockA11yElem = {
     addEventListener: jest.fn(),
 };
-const mockA11yWrapper = { style: {} };
-const mockLabel = { 
+// const mockA11yWrapper = { style: {} };
+const mockLabel = {
     children: [{ accessibleElement: { el: mockA11yElem } }],
     height: 50,
 };
@@ -32,6 +32,7 @@ const mockScrollablePanel = {
     t: 0,
     height: 100,
     minHeight: 100,
+    setT: jest.fn(),
 };
 const mockSizer = { add: jest.fn() };
 const mockOverlay = {};
@@ -74,10 +75,7 @@ describe("Scrollable List", () => {
     describe("instantiation", () => {
         beforeEach(() => {
             a11y.addGroupAt = jest.fn();
-            document.getElementById = jest.fn().mockReturnValue(mockA11yWrapper);
             scaler.getMetrics = jest.fn().mockReturnValue({ scale: 1 });
-            handlers.updatePanelOnFocus = jest.fn().mockReturnValue(jest.fn());
-            handlers.updatePanelOnScroll = jest.fn().mockReturnValue(jest.fn());
             scrollableList(mockScene);
         });
         describe("adds a rexUI scrollable panel", () => {
@@ -134,34 +132,44 @@ describe("Scrollable List", () => {
         test("sets scene.input.topOnly to false", () => {
             expect(mockScene.input.topOnly).toBe(false);
         });
-        test("sets up an a11y group and adds it as a11yWrapper", () => {
-            expect(a11y.addGroupAt).toHaveBeenCalledWith("shop", 0);
-            expect(mockScrollablePanel.a11yWrapper.style.position).toBe("absolute");
-            expect(mockScrollablePanel.a11yWrapper.style.top).toBe("0px");
-        });
         test("calls layout() on the returned panel", () => {
             expect(mockScrollablePanel.layout).toHaveBeenCalled();
         });
-        test("decorates the panel with update functions", () => {
-            expect(typeof mockScrollablePanel.updateOnFocus).toBe("function")
-            expect(typeof mockScrollablePanel.updateOnScroll).toBe("function")
-        });
     });
 
-    describe("on resize callback", () => {
-        beforeEach(() => {
-            jest.spyOn(fp, "debounce").mockImplementation((value, callback) => callback);
-            scrollableList(mockScene);
-            mockScene.scale.on.mock.calls[0][1]();
+    describe("event setup", () => {
+        describe("resizing", () => {
+            beforeEach(() => {
+                jest.spyOn(fp, "debounce").mockImplementation((value, callback) => callback);
+                scrollableList(mockScene);
+                mockScene.scale.on.mock.calls[0][1]();
+            });
+            test("calls layout on the panel", () => {
+                expect(mockScrollablePanel.layout).toHaveBeenCalledTimes(2);
+            });
+            test("sets the panel minHeight to the safe area height", () => {
+                expect(mockScrollablePanel.minHeight).toBe(100);
+            });
+            test("calls scaleButton on each gel button", () => {
+                expect(buttons.scaleButton).toHaveBeenCalled();
+            });
         });
-        test("calls layout on the panel", () => {
-            expect(mockScrollablePanel.layout).toHaveBeenCalledTimes(2);
-        });
-        test("sets the panel minHeight to the safe area height", () => {
-            expect(mockScrollablePanel.minHeight).toBe(100);
-        });
-        test("calls scaleButton on each gel button", () => {
-            expect(buttons.scaleButton).toHaveBeenCalled();
+        describe("scrolling", () => {
+            beforeEach(() => {
+                handlers.updatePanelOnFocus = jest.fn().mockReturnValue(jest.fn());
+                handlers.updatePanelOnScroll = jest.fn().mockReturnValue(jest.fn());
+                scrollableList(mockScene);
+            });
+            test("adds an updatePanelOnScroll", () => {
+                expect(typeof mockScrollablePanel.updateOnScroll).toBe("function");
+                expect(mockScrollablePanel.on).toHaveBeenCalledWith("scroll", mockScrollablePanel.updateOnScroll);
+            });
+            test("adds an updatePanelOnFocus", () => {
+                expect(typeof mockScrollablePanel.updateOnFocus).toBe("function");
+            });
+            test("adds a focus event listener to each a11y elem", () => {
+                expect(mockA11yElem.addEventListener.mock.calls[0][0]).toBe("focus");
+            });
         });
     });
 });

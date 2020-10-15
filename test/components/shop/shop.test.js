@@ -10,17 +10,17 @@ import * as scroller from "../../../src/core/layout/scrollable-list/scrollable-l
 describe("Shop", () => {
     let shopScreen;
     let mockData;
-    let mockScrollableList = {
-        updatePanelOnScroll: jest.fn(),
-    };
+    const mockScrollableList = {};
 
     beforeEach(() => {
         shopScreen = new Shop();
         mockData = { config: { shop: {}, home: {}, furniture: [] } };
         shopScreen.setData(mockData);
-        shopScreen.scene = { key: "shop" };
+        shopScreen.scene = { key: "shop", layout: { getSafeArea: jest.fn() } };
+        shopScreen.add = { container: jest.fn().mockReturnValue({ add: jest.fn() }) };
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();
+        shopScreen._layout = { addCustomGroup: jest.fn() };
         shopScreen.plugins = { installScenePlugin: jest.fn() };
         scroller.scrollableList = jest.fn().mockReturnValue(mockScrollableList);
     });
@@ -51,5 +51,30 @@ describe("Shop", () => {
             expect(scroller.scrollableList).toHaveBeenCalled();
             expect(shopScreen.panel).toBe(mockScrollableList);
         });
+
+        // describe("sets up accessibility", () => {
+        //     test("adds a container", () => {
+        //         expect(false).toBe(true);
+        //     });
+        //     test("gives it a reset function", () => {
+        //         expect(false).toBe(true);
+        //     });
+        //     test("adds the panel", () => {
+        //         expect(false).toBe(true);
+        //     });
+        //     test("adds it as a custom layout group", () => {
+        //         expect(false).toBe(true);
+        //     });
+        //     test("adds it to the a11y layer", () => {
+        //         expect(false).toBe(true);
+        //     });
+        // });
+
+        // test("sets up an a11y group and adds it as a11yWrapper", () => {
+        //     expect(a11y.addGroupAt).toHaveBeenCalledWith("shop", 0);
+        //     expect(mockScrollablePanel.a11yWrapper.style.position).toBe("absolute");
+        //     expect(mockScrollablePanel.a11yWrapper.style.top).toBe("0px");
+        // });
+
     });
 });

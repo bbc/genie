@@ -32,7 +32,7 @@ const mockGelButton = {
 
 console.log = jest.fn();
 
-describe("Scrollable List helpers", () => {
+describe("Scrollable List handlers", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("handleIfVisible()", () => {
@@ -46,13 +46,6 @@ describe("Scrollable List helpers", () => {
             mockScene.input = { y: 0 };
             handlers.handleIfVisible(mockGelButton, mockScene);
             expect(console.log).not.toHaveBeenCalled();
-        });
-    });
-    describe("assetKey()", () => {
-        test("concatenates the asset prefix with the asset key", () => {
-            const assetKeys = { prefix: "foo" };
-            const concatenatedKey = handlers.assetKey("bar", assetKeys);
-            expect(concatenatedKey).toEqual("foo.bar");
         });
     });
 });

@@ -95,7 +95,7 @@ const resizePanel = (scene, panel) => {
 const setupEvents = (scene, panel) => {
     scene.scale.on(
         "resize",
-        fp.debounce(10, () => resizePanel(scene, scrollableListPanel)),
+        fp.debounce(10, () => resizePanel(scene, panel)),
         scene,
     );
 

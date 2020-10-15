@@ -35,6 +35,7 @@ const mockScene = {
     },
     input: { y: 50 },
     scale: { displaySize: { height: 100 } },
+    scene: { key: "shop" },
 };
 
 const mockItem = {
