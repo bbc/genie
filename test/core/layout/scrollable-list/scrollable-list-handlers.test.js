@@ -15,20 +15,17 @@ let mockPanel;
 
 const mockScene = {
     input: {},
-    scale: {
-        displaySize: {
-            height: 600,
-        },
-    },
+    scale: { displaySize: { height: 600 } },
+    layout: { getSafeArea: jest.fn().mockReturnValue({ y: -100 }) },
 };
-const mockSizer = { innerHeight: 300 };
+const mockSizer = { innerHeight: 300, space: { top: 10 } };
 const mockExtraRexLabel = { children: [{}], height: 100 };
 
 console.log = jest.fn();
 
 describe("Scrollable List handlers", () => {
     afterEach(() => {
-        jest.resetAllMocks();
+        jest.clearAllMocks();
     });
 
     beforeEach(() => {

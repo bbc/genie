@@ -130,6 +130,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
         const right = childBounds[0] ? Math.max(...childBounds.map(bounds => bounds.x + bounds.width)) : 0;
         let top = childBounds[0] ? Math.min(...childBounds.map(bounds => bounds.y)) : 0;
         let bottom = childBounds[0] ? Math.max(...childBounds.map(bounds => bounds.y + bounds.height)) : 0;
+
         this.setSize(right - left, bottom - top);
     }
 

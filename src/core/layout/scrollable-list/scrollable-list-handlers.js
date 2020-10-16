@@ -11,12 +11,12 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 const GRID_NAME = "grid";
 
 const handleIfVisible = (gelButton, scene) => {
-    const outerContainer = gelButton.rexContainer.parent.getTopmostSizer();
+    const panel = gelButton.rexContainer.parent.getTopmostSizer();
+    const safeArea = scene.layout.getSafeArea({}, false);
+    const height = scene.scale.displaySize.height;
+    const topY = height / 2 + safeArea.y + panel.space.top;
+    const bottomY = topY + panel.innerHeight;
     const mouseY = scene.input.y;
-    const centreY = scene.scale.displaySize.height / 2;
-    const halfInnerHeight = outerContainer.innerHeight / 2;
-    const topY = centreY - halfInnerHeight;
-    const bottomY = centreY + halfInnerHeight;
     if (mouseY >= topY && mouseY <= bottomY) onClickPlaceholder(gelButton);
 };
 
