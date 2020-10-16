@@ -36,6 +36,8 @@ describe("Scrollable List handlers", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("handleIfVisible()", () => {
+
+        beforeEach(() => console.log = jest.fn());
         test("calls console.log if click is inside the panel's Y bounds", () => {
             mockScene.input = { y: 300 };
             handlers.handleIfVisible(mockGelButton, mockScene);
