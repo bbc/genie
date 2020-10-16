@@ -73,7 +73,7 @@ const updatePanelT = (panel, offset) => {
     fp.cond([
         [t => t < fractionalT, () => panel.setT(0)],
         [t => t > 1 - fractionalT, () => panel.setT(1)],
-        [t => true, t => panel.setT(t)],
+        [() => true, t => panel.setT(t)],
     ])(newT);
 };
 

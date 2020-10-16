@@ -79,16 +79,17 @@ describe("Scrollable List", () => {
         });
         describe("adds a rexUI scrollable panel", () => {
             describe("with appropriate panel config", () => {
-                test("height is given by layout safe area", () => {
+                test("height and y are given by layout safe area", () => {
                     const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
                     expect(config.height).toBe(100);
+                    expect(config.y).toBe(50);
                 });
                 test("adds background, scrollbar and scrollbar handle images from config", () => {
                     expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.background");
                     expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbar");
                     expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbarHandle");
                 });
-                test("with spacing from config at bottom, top, and right", () => {
+                test("with spacing from config", () => {
                     const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
                     const expectedSpacing = { left: 10, right: 10, top: 10, bottom: 10, panel: 10 };
                     expect(config.space).toEqual(expectedSpacing);
@@ -170,8 +171,10 @@ describe("Scrollable List", () => {
             test("adds an updatePanelOnFocus", () => {
                 expect(typeof mockScrollablePanel.updateOnFocus).toBe("function");
             });
-            test("adds a focus event listener to each a11y elem", () => {
+            test("adds a focus event listener to each a11y elem that calls updateOnFocus", () => {
                 expect(mockA11yElem.addEventListener.mock.calls[0][0]).toBe("focus");
+                mockA11yElem.addEventListener.mock.calls[0][1]();
+                expect(mockScrollablePanel.updateOnFocus).toHaveBeenCalled();
             });
         });
     });

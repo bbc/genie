@@ -26,17 +26,16 @@ const createScrollableListPanel = scene => {
 
 const getPanelConfig = scene => {
     const { space, assetKeys: keys } = scene.config;
-    const assetKey = (key, assetKeys) => [assetKeys.prefix, key].join(".");
     const safeArea = getPanelY(scene);
     return {
         y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        background: scene.add.image(0, 0, assetKey(keys.background, keys)),
+        background: scene.add.image(0, 0, `${keys.prefix}.${keys.background}`),
         panel: { child: createInnerPanel(scene) },
         slider: {
-            track: scene.add.image(0, 0, assetKey(keys.scrollbar, keys)),
-            thumb: scene.add.image(0, 0, assetKey(keys.scrollbarHandle, keys)),
+            track: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbar}`),
+            thumb: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbarHandle}`),
             width: space,
         },
         space: { left: space, right: space, top: space, bottom: space, panel: space },
@@ -82,9 +81,8 @@ const createItem = (scene, item) =>
 
 const resizePanel = (scene, panel) => {
     const t = panel.t;
-    const grid = panel.getByName(GRID_NAME, true);
-    const gridItems = grid.getElement("items");
-    gridItems.forEach(label => scaleButton({ scene, config: scene.config, gelButton: label.children[0] }));
+    const items = panel.getByName(GRID_NAME, true).getElement("items");
+    items.forEach(label => scaleButton({ scene, config: scene.config, gelButton: label.children[0] }));
     const safeArea = getPanelY(scene);
     panel.minHeight = safeArea.height;
     panel.y = safeArea.y;
@@ -106,7 +104,7 @@ const setupEvents = (scene, panel) => {
     const items = panel.getByName(GRID_NAME, true).getElement("items");
     items.map(item => {
         const a11yElem = item.children[0].accessibleElement.el;
-        a11yElem.addEventListener("focus", e => panel.updateOnFocus(item));
+        a11yElem.addEventListener("focus", () => panel.updateOnFocus(item));
     });
 };
 

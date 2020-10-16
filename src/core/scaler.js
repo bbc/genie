@@ -25,7 +25,7 @@ export let getMetrics;
 export function init(stageHeight, game) {
     getMetrics = fp.flow(getBounds(game), fp.pick(["width", "height"]), calculateMetrics(stageHeight));
 
-    const setSize = metrics => {            
+    const setSize = metrics => {
         const under4by3 = game.scale.parent.offsetWidth / game.scale.parent.offsetHeight < 4 / 3;
 
         const viewHeight = under4by3 ? game.scale.parent.offsetWidth * (3 / 4) : game.scale.parent.offsetHeight;

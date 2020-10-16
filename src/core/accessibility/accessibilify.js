@@ -9,7 +9,6 @@ import { onScaleChange, getMetrics } from "../scaler.js";
 import { accessibleDomElement } from "./accessible-dom-element.js";
 import * as a11y from "./accessibility-layer.js";
 import { CAMERA_X, CAMERA_Y } from "../layout/metrics.js";
-import { buttonsChannel } from "../layout/gel-defaults.js";
 
 const getHitAreaBounds = button => {
     const sys = button.scene.sys;

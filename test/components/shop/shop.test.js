@@ -6,23 +6,26 @@
  */
 import { Shop } from "../../../src/components/shop/shop.js";
 import * as scroller from "../../../src/core/layout/scrollable-list/scrollable-list.js";
+import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 
 describe("Shop", () => {
     let shopScreen;
     let mockData;
     const mockScrollableList = {};
-
+    const mockContainer = { add: jest.fn() };
     beforeEach(() => {
         shopScreen = new Shop();
         mockData = { config: { shop: {}, home: {}, furniture: [] } };
         shopScreen.setData(mockData);
         shopScreen.scene = { key: "shop", layout: { getSafeArea: jest.fn() } };
-        shopScreen.add = { container: jest.fn().mockReturnValue({ add: jest.fn() }) };
+        shopScreen.add = { container: jest.fn().mockReturnValue(mockContainer) };
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();
         shopScreen._layout = { addCustomGroup: jest.fn() };
         shopScreen.plugins = { installScenePlugin: jest.fn() };
         scroller.scrollableList = jest.fn().mockReturnValue(mockScrollableList);
+        scroller.resizePanel = jest.fn();
+        a11y.addGroupAt = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -47,34 +50,28 @@ describe("Shop", () => {
             expect(shopScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        test("adds a scrollable list panel", () => {
-            expect(scroller.scrollableList).toHaveBeenCalled();
-            expect(shopScreen.panel).toBe(mockScrollableList);
+        describe("calls setupScrollableList", () => {
+            test("adds a scrollable list panel", () => {
+                expect(scroller.scrollableList).toHaveBeenCalled();
+                expect(shopScreen.panel).toBe(mockScrollableList);
+            });
+            test("adds a container", () => {
+                expect(shopScreen.add.container).toHaveBeenCalled();
+            });
+            test("gives it a reset function that calls resizePanel", () => {
+                expect(typeof mockContainer.reset).toBe("function");
+                mockContainer.reset();
+                expect(scroller.resizePanel).toHaveBeenCalled();
+            });
+            test("adds the panel to the container", () => {
+                expect(mockContainer.add).toHaveBeenCalledWith(mockScrollableList);
+            });
+            test("adds the container as a custom group by scene key", () => {
+                expect(shopScreen._layout.addCustomGroup).toHaveBeenCalledWith("shop", mockContainer, 0);
+            });
+            test("adds a matching group to the accessibility layer", () => {
+                expect(a11y.addGroupAt).toHaveBeenCalledWith("shop", 0);
+            });
         });
-
-        // describe("sets up accessibility", () => {
-        //     test("adds a container", () => {
-        //         expect(false).toBe(true);
-        //     });
-        //     test("gives it a reset function", () => {
-        //         expect(false).toBe(true);
-        //     });
-        //     test("adds the panel", () => {
-        //         expect(false).toBe(true);
-        //     });
-        //     test("adds it as a custom layout group", () => {
-        //         expect(false).toBe(true);
-        //     });
-        //     test("adds it to the a11y layer", () => {
-        //         expect(false).toBe(true);
-        //     });
-        // });
-
-        // test("sets up an a11y group and adds it as a11yWrapper", () => {
-        //     expect(a11y.addGroupAt).toHaveBeenCalledWith("shop", 0);
-        //     expect(mockScrollablePanel.a11yWrapper.style.position).toBe("absolute");
-        //     expect(mockScrollablePanel.a11yWrapper.style.top).toBe("0px");
-        // });
-
     });
 });
