@@ -34,7 +34,7 @@ const getItemsHeight = panel => {
 
 const getPanelItems = panel => panel.getByName(GRID_NAME, true).getElement("items");
 
-const updatePanelOnFocus = panel => rexLabel => { 
+const updatePanelOnFocus = panel => rexLabel => {
     const visibleBounds = getVisibleRangeBounds(panel);
     const itemBounds = getItemBounds(panel, rexLabel);
     fp.cond([

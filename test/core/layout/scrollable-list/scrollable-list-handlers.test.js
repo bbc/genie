@@ -8,6 +8,11 @@
 /* eslint-disable no-console */
 import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 
+let mockGelButton;
+let mockRexLabel;
+let mockGridSizer;
+let mockPanel;
+
 const mockScene = {
     input: {},
     scale: {
@@ -16,28 +21,38 @@ const mockScene = {
         },
     },
 };
-
-const mockSizer = {
-    innerHeight: 300,
-};
-
-const mockGelButton = {
-    config: { id: "foo" },
-    rexContainer: {
-        parent: {
-            getTopmostSizer: jest.fn().mockReturnValue(mockSizer),
-        },
-    },
-};
+const mockSizer = { innerHeight: 300 };
+const mockExtraRexLabel = { children: [{}], height: 100 };
 
 console.log = jest.fn();
 
 describe("Scrollable List handlers", () => {
-    afterEach(() => jest.clearAllMocks());
+    afterEach(() => {
+        jest.resetAllMocks();
+    });
+
+    beforeEach(() => {
+        mockGelButton = {
+            config: { id: "foo" },
+            rexContainer: {
+                parent: {
+                    getTopmostSizer: jest.fn().mockReturnValue(mockSizer),
+                },
+            },
+            setElementSizeAndPosition: jest.fn(),
+        };
+        mockRexLabel = { children: [mockGelButton], height: 100 };
+        mockGridSizer = { getElement: jest.fn().mockReturnValue([mockRexLabel]) };
+        mockPanel = {
+            getByName: jest.fn().mockReturnValue(mockGridSizer),
+            space: { top: 10 },
+            setT: jest.fn(),
+            minHeight: 120,
+            t: 0,
+        };
+    });
 
     describe("handleIfVisible()", () => {
-
-        beforeEach(() => console.log = jest.fn());
         test("calls console.log if click is inside the panel's Y bounds", () => {
             mockScene.input = { y: 300 };
             handlers.handleIfVisible(mockGelButton, mockScene);
@@ -52,20 +67,84 @@ describe("Scrollable List handlers", () => {
     });
 
     describe("updatePanelOnScroll", () => {
+        beforeEach(() => {});
         test("calls setElementSizeAndPosition on each GEL button", () => {
-            expect(false).toBe(true);
+            const instance = handlers.updatePanelOnScroll(mockPanel);
+            instance();
+            expect(mockGelButton.setElementSizeAndPosition).toHaveBeenCalled();
         });
     });
 
     describe("updatePanelOnFocus", () => {
-        test("sets a lower t if the item is off the top edge", () => {
-            expect(false).toBe(true);
+        test("sets a t to 0 if focused on the top item & item is off the top edge", () => {
+            mockGridSizer = {
+                getElement: jest.fn().mockReturnValue([mockRexLabel, mockExtraRexLabel, mockExtraRexLabel]),
+            };
+            mockPanel = {
+                getByName: jest.fn().mockReturnValue(mockGridSizer),
+                space: { top: 10 },
+                setT: jest.fn(),
+                minHeight: 150,
+                t: 1,
+            };
+            const instance = handlers.updatePanelOnFocus(mockPanel);
+            instance(mockRexLabel);
+            expect(mockPanel.setT.mock.calls[0][0]).toBe(0);
         });
-        test("sets a higher t if the item is off the bottom edge", () => {
-            expect(false).toBe(true);
+        test("sets t to one if focused on the bottom item & item is off the bottom edge", () => {
+            mockGridSizer = {
+                getElement: jest.fn().mockReturnValue([mockExtraRexLabel, mockExtraRexLabel, mockRexLabel]),
+            };
+            mockPanel = {
+                getByName: jest.fn().mockReturnValue(mockGridSizer),
+                space: { top: 10 },
+                setT: jest.fn(),
+                minHeight: 150,
+                t: 0,
+            };
+            const instance = handlers.updatePanelOnFocus(mockPanel);
+            instance(mockRexLabel);
+            expect(mockPanel.setT.mock.calls[0][0]).toBe(1);
         });
         test("does not set t if the item is visible", () => {
-            expect(false).toBe(true);
+            mockGridSizer = {
+                getElement: jest.fn().mockReturnValue([mockExtraRexLabel, mockRexLabel, mockExtraRexLabel]),
+            };
+            mockPanel = {
+                getByName: jest.fn().mockReturnValue(mockGridSizer),
+                space: { top: 10 },
+                setT: jest.fn(),
+                minHeight: 150,
+                t: 0.5,
+            };
+            const instance = handlers.updatePanelOnFocus(mockPanel);
+            instance(mockRexLabel);
+            expect(mockPanel.setT).not.toHaveBeenCalled();
+        });
+        test("sets t appropriately to bring the focused item into the visible area", () => {
+            mockGridSizer = {
+                getElement: jest
+                    .fn()
+                    .mockReturnValue([
+                        mockExtraRexLabel,
+                        mockExtraRexLabel,
+                        mockExtraRexLabel,
+                        mockRexLabel,
+                        mockExtraRexLabel,
+                    ]),
+            };
+            mockPanel = {
+                getByName: jest.fn().mockReturnValue(mockGridSizer),
+                space: { top: 10 },
+                setT: jest.fn(),
+                minHeight: 150,
+                t: 0.2,
+            };
+            const instance = handlers.updatePanelOnFocus(mockPanel);
+            instance(mockRexLabel);
+            const t = mockPanel.setT.mock.calls[0][0];
+            expect(t).toBeLessThan(1);
+            expect(t).toBeGreaterThan(0);
         });
     });
 });
