@@ -14,7 +14,7 @@ const mockButton = {
     width: 100,
     setScale: jest.fn(),
     config: { id: "foo" },
-    rexContainer: { parent: { getTopmostSizer: jest.fn().mockReturnValue({ space: { top: 10 }}) } },
+    rexContainer: { parent: { getTopmostSizer: jest.fn().mockReturnValue({ space: { top: 10 } }) } },
 };
 
 const mockScene = {

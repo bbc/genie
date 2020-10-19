@@ -54,7 +54,7 @@ describe("Scrollable List handlers", () => {
             mockScene.input = { y: 300 };
             const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
             handler();
-            expect(mockClickHandler).toHaveBeenCalled()
+            expect(mockClickHandler).toHaveBeenCalled();
         });
 
         test("returns a fn that does not call clickHandler if click is outside the panel", () => {

@@ -53,14 +53,16 @@ const getItemBounds = (panel, rexLabel) => {
 
 const updateScrollPosition = (panel, offset) => {
     const maxOffset = getMaxOffset(panel);
+    const currentT = panel.t; // 0 <= t <= 1
     const tDelta = offset / maxOffset;
-    const newT = panel.t + tDelta;
-    const tThreshold = 1 / getPanelItems(panel).length;
-    fp.cond([
-        [t => t < tThreshold, () => panel.setT(0)],
-        [t => t > 1 - tThreshold, () => panel.setT(1)],
-        [() => true, t => panel.setT(t)],
-    ])(newT);
+    const newT = currentT + tDelta;
+    const clampThreshold = 1 / getPanelItems(panel).length;
+    const clampToRangeEndOrSetT = fp.cond([
+        [t => t < clampThreshold, () => panel.setT(0)],
+        [t => t > 1 - clampThreshold, () => panel.setT(1)],
+        [fp.stubTrue, t => panel.setT(t)],
+    ]);
+    clampToRangeEndOrSetT(newT);
 };
 
 const getMaxOffset = panel => {
@@ -68,4 +70,4 @@ const getMaxOffset = panel => {
     return getItemsHeight(panel) - visibleWindowHeight;
 };
 
-export { handleClickIfVisible as handleClickIfVisible, updatePanelOnFocus, updatePanelOnScroll };
+export { handleClickIfVisible, updatePanelOnFocus, updatePanelOnScroll };
