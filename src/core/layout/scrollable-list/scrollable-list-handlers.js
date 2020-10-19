@@ -22,15 +22,8 @@ const handleIfVisible = (gelButton, scene) => {
 
 const onClickPlaceholder = gelButton => console.log(`Clicked ${gelButton.config.id}`);
 
-const updatePanelOnScroll = panel => () => {
-    const items = getPanelItems(panel);
-    items.map(item => item.children[0].setElementSizeAndPosition());
-};
-
-const getItemsHeight = panel => {
-    const items = getPanelItems(panel);
-    return items.length * (items[0].height + panel.space.top);
-};
+const updatePanelOnScroll = panel => () =>
+    getPanelItems(panel).map(item => item.children[0].setElementSizeAndPosition());
 
 const getPanelItems = panel => panel.getByName(GRID_NAME, true).getElement("items");
 
@@ -38,14 +31,8 @@ const updatePanelOnFocus = panel => rexLabel => {
     const visibleBounds = getVisibleRangeBounds(panel);
     const itemBounds = getItemBounds(panel, rexLabel);
     fp.cond([
-        [
-            (visible, item) => item.lower < visible.lower,
-            (visible, item) => updatePanelT(panel, item.lower - visible.lower),
-        ],
-        [
-            (visible, item) => item.upper > visible.upper,
-            (visible, item) => updatePanelT(panel, item.upper - visible.upper),
-        ],
+        [(vb, ib) => ib.lower < vb.lower, (vb, ib) => updatePanelT(panel, ib.lower - vb.lower)],
+        [(vb, ib) => ib.upper > vb.upper, (vb, ib) => updatePanelT(panel, ib.upper - vb.upper)],
         [() => true, () => {}],
     ])(visibleBounds, itemBounds);
 };
@@ -54,15 +41,18 @@ const getVisibleRangeBounds = panel => {
     const itemsHeight = getItemsHeight(panel);
     const maxOffset = getMaxOffset(panel);
     const lower = maxOffset * panel.t;
-    const upper = itemsHeight - (maxOffset - lower);
-    return { lower, upper };
+    return { lower, upper: itemsHeight - (maxOffset - lower) };
+};
+
+const getItemsHeight = panel => {
+    const items = getPanelItems(panel);
+    return items.length * (items[0].height + panel.space.top);
 };
 
 const getItemBounds = (panel, rexLabel) => {
     const idx = getPanelItems(panel).findIndex(item => item === rexLabel);
     const lower = idx * rexLabel.height + idx * panel.space.top;
-    const upper = lower + rexLabel.height;
-    return { lower, upper };
+    return { lower, upper: lower + rexLabel.height };
 };
 
 const updatePanelT = (panel, offset) => {
@@ -79,8 +69,7 @@ const updatePanelT = (panel, offset) => {
 
 const getMaxOffset = panel => {
     const visibleWindowHeight = panel.minHeight - panel.space.top * 2;
-    const itemsHeight = getItemsHeight(panel);
-    return itemsHeight - visibleWindowHeight;
+    return getItemsHeight(panel) - visibleWindowHeight;
 };
 
 export { handleIfVisible, updatePanelOnFocus, updatePanelOnScroll };

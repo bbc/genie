@@ -11,20 +11,15 @@ describe("Shop", () => {
     let shopScreen;
     let mockData;
     const mockScrollableList = {};
-    // const mockContainer = { add: jest.fn() };
     beforeEach(() => {
         shopScreen = new Shop();
         mockData = { config: { shop: {}, home: {}, furniture: [] } };
         shopScreen.setData(mockData);
         shopScreen.scene = { key: "shop", layout: { getSafeArea: jest.fn() } };
-        // shopScreen.add = { container: jest.fn().mockReturnValue(mockContainer) };
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();
-        // shopScreen._layout = { addCustomGroup: jest.fn() };
         shopScreen.plugins = { installScenePlugin: jest.fn() };
         scroller.scrollableList = jest.fn().mockReturnValue(mockScrollableList);
-        // scroller.resizePanel = jest.fn();
-        // a11y.addGroupAt = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());

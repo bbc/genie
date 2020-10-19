@@ -183,6 +183,7 @@ describe("Scrollable List", () => {
     });
     describe("accessibility setup", () => {
         beforeEach(() => scrollableList(mockScene));
+
         test("adds a container", () => {
             expect(mockScene.add.container).toHaveBeenCalled();
         });
