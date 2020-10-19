@@ -140,10 +140,8 @@ describe("Scrollable List handlers", () => {
             const instance = handlers.updatePanelOnFocus(mockPanel);
             instance(mockRexLabel);
             const t = mockPanel.setT.mock.calls[0][0];
-            console.log('BEEBUG: t', t);
             expect(t).toBeLessThan(1);
-            expect(t).toBeGreaterThan(0.5
-                );
+            expect(t).toBeGreaterThan(0.5);
         });
     });
 });

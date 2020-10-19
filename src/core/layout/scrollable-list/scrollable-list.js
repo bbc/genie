@@ -9,8 +9,6 @@ import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const GRID_NAME = "grid";
-
 const scrollableList = scene => {
     const scrollableListPanel = createScrollableListPanel(scene);
     scene.panel = scrollableListPanel;
@@ -62,7 +60,7 @@ const createTable = scene => {
         column: 1,
         row: scene.config.items.length,
         space: { row: scene.config.space },
-        name: GRID_NAME,
+        name: "grid",
     });
 
     scene.config.items.forEach((item, idx) => {
@@ -85,7 +83,7 @@ const createItem = (scene, item) =>
 
 const resizePanel = (scene, panel) => {
     const t = panel.t;
-    const items = panel.getByName(GRID_NAME, true).getElement("items");
+    const items = panel.getByName("grid", true).getElement("items");
     items.forEach(label => scaleButton({ layout: scene.layout, config: scene.config, gelButton: label.children[0] }));
     const safeArea = getPanelY(scene);
     panel.minHeight = safeArea.height;
@@ -105,7 +103,7 @@ const setupEvents = (scene, panel) => {
     panel.on("scroll", panel.updateOnScroll);
 
     panel.updateOnFocus = updatePanelOnFocus(panel);
-    const items = panel.getByName(GRID_NAME, true).getElement("items");
+    const items = panel.getByName("grid", true).getElement("items");
     items.forEach(item => {
         const a11yElem = item.children[0].accessibleElement.el;
         a11yElem.addEventListener("focus", () => panel.updateOnFocus(item));

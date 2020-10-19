@@ -8,8 +8,6 @@
 
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const GRID_NAME = "grid";
-
 const handleIfVisible = (gelButton, scene) => {
     const panel = gelButton.rexContainer.parent.getTopmostSizer();
     const safeArea = scene.layout.getSafeArea({}, false);
@@ -25,7 +23,7 @@ const onClickPlaceholder = gelButton => console.log(`Clicked ${gelButton.config.
 const updatePanelOnScroll = panel => () =>
     getPanelItems(panel).map(item => item.children[0].setElementSizeAndPosition());
 
-const getPanelItems = panel => panel.getByName(GRID_NAME, true).getElement("items");
+const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
 
 const updatePanelOnFocus = panel => rexLabel => {
     const visibleBounds = getVisibleRangeBounds(panel);
