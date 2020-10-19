@@ -9,17 +9,16 @@ import * as scroller from "../../../src/core/layout/scrollable-list/scrollable-l
 
 describe("Shop", () => {
     let shopScreen;
-    let mockData;
+    const mockScrollableList = { foo: "bar" };
 
     beforeEach(() => {
         shopScreen = new Shop();
-        mockData = { config: { shop: {}, home: {}, furniture: [] } };
-        shopScreen.setData(mockData);
-        shopScreen.scene = { key: "shop" };
+        shopScreen.setData({ config: { shop: {}, home: {}, furniture: [] } });
+        shopScreen.scene = { key: "shop", layout: { getSafeArea: jest.fn() } };
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();
         shopScreen.plugins = { installScenePlugin: jest.fn() };
-        scroller.scrollableList = jest.fn().mockReturnValue("foo");
+        scroller.scrollableList = jest.fn().mockReturnValue(mockScrollableList);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -46,7 +45,7 @@ describe("Shop", () => {
 
         test("adds a scrollable list panel", () => {
             expect(scroller.scrollableList).toHaveBeenCalled();
-            expect(shopScreen.panel).toBe("foo");
+            expect(shopScreen.panel).toBe(mockScrollableList);
         });
     });
 });
