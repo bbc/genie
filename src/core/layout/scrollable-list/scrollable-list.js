@@ -106,7 +106,7 @@ const setupEvents = (scene, panel) => {
 
     panel.updateOnFocus = updatePanelOnFocus(panel);
     const items = panel.getByName(GRID_NAME, true).getElement("items");
-    items.map(item => {
+    items.forEach(item => {
         const a11yElem = item.children[0].accessibleElement.el;
         a11yElem.addEventListener("focus", () => panel.updateOnFocus(item));
     });

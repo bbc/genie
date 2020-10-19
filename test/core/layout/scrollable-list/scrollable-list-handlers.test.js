@@ -19,7 +19,7 @@ const mockScene = {
     layout: { getSafeArea: jest.fn().mockReturnValue({ y: -100 }) },
 };
 const mockSizer = { innerHeight: 300, space: { top: 10 } };
-const mockExtraRexLabel = { children: [{}], height: 100 };
+const mockOtherRexLabel = { children: [{}], height: 100 };
 
 console.log = jest.fn();
 
@@ -75,7 +75,7 @@ describe("Scrollable List handlers", () => {
     describe("updatePanelOnFocus", () => {
         test("sets a t to 0 if focused on the top item & item is off the top edge", () => {
             mockGridSizer = {
-                getElement: jest.fn().mockReturnValue([mockRexLabel, mockExtraRexLabel, mockExtraRexLabel]),
+                getElement: jest.fn().mockReturnValue([mockRexLabel, mockOtherRexLabel, mockOtherRexLabel]),
             };
             mockPanel = {
                 getByName: jest.fn().mockReturnValue(mockGridSizer),
@@ -90,7 +90,7 @@ describe("Scrollable List handlers", () => {
         });
         test("sets t to one if focused on the bottom item & item is off the bottom edge", () => {
             mockGridSizer = {
-                getElement: jest.fn().mockReturnValue([mockExtraRexLabel, mockExtraRexLabel, mockRexLabel]),
+                getElement: jest.fn().mockReturnValue([mockOtherRexLabel, mockOtherRexLabel, mockRexLabel]),
             };
             mockPanel = {
                 getByName: jest.fn().mockReturnValue(mockGridSizer),
@@ -105,7 +105,7 @@ describe("Scrollable List handlers", () => {
         });
         test("does not set t if the item is visible", () => {
             mockGridSizer = {
-                getElement: jest.fn().mockReturnValue([mockExtraRexLabel, mockRexLabel, mockExtraRexLabel]),
+                getElement: jest.fn().mockReturnValue([mockOtherRexLabel, mockRexLabel, mockOtherRexLabel]),
             };
             mockPanel = {
                 getByName: jest.fn().mockReturnValue(mockGridSizer),
@@ -123,11 +123,11 @@ describe("Scrollable List handlers", () => {
                 getElement: jest
                     .fn()
                     .mockReturnValue([
-                        mockExtraRexLabel,
-                        mockExtraRexLabel,
-                        mockExtraRexLabel,
+                        mockOtherRexLabel,
+                        mockOtherRexLabel,
+                        mockOtherRexLabel,
                         mockRexLabel,
-                        mockExtraRexLabel,
+                        mockOtherRexLabel,
                     ]),
             };
             mockPanel = {
@@ -140,8 +140,10 @@ describe("Scrollable List handlers", () => {
             const instance = handlers.updatePanelOnFocus(mockPanel);
             instance(mockRexLabel);
             const t = mockPanel.setT.mock.calls[0][0];
+            console.log('BEEBUG: t', t);
             expect(t).toBeLessThan(1);
-            expect(t).toBeGreaterThan(0);
+            expect(t).toBeGreaterThan(0.5
+                );
         });
     });
 });

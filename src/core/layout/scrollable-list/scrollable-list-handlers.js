@@ -31,8 +31,8 @@ const updatePanelOnFocus = panel => rexLabel => {
     const visibleBounds = getVisibleRangeBounds(panel);
     const itemBounds = getItemBounds(panel, rexLabel);
     fp.cond([
-        [(vb, ib) => ib.lower < vb.lower, (vb, ib) => updatePanelT(panel, ib.lower - vb.lower)],
-        [(vb, ib) => ib.upper > vb.upper, (vb, ib) => updatePanelT(panel, ib.upper - vb.upper)],
+        [(vb, ib) => ib.lower < vb.lower, (vb, ib) => updateScrollPosition(panel, ib.lower - vb.lower)],
+        [(vb, ib) => ib.upper > vb.upper, (vb, ib) => updateScrollPosition(panel, ib.upper - vb.upper)],
         [() => true, () => {}],
     ])(visibleBounds, itemBounds);
 };
@@ -55,14 +55,14 @@ const getItemBounds = (panel, rexLabel) => {
     return { lower, upper: lower + rexLabel.height };
 };
 
-const updatePanelT = (panel, offset) => {
+const updateScrollPosition = (panel, offset) => {
     const maxOffset = getMaxOffset(panel);
     const tDelta = offset / maxOffset;
     const newT = panel.t + tDelta;
-    const fractionalT = 1 / getPanelItems(panel).length;
+    const tThreshold = 1 / getPanelItems(panel).length;
     fp.cond([
-        [t => t < fractionalT, () => panel.setT(0)],
-        [t => t > 1 - fractionalT, () => panel.setT(1)],
+        [t => t < tThreshold, () => panel.setT(0)],
+        [t => t > 1 - tThreshold, () => panel.setT(1)],
         [() => true, t => panel.setT(t)],
     ])(newT);
 };

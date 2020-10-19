@@ -9,12 +9,11 @@ import * as scroller from "../../../src/core/layout/scrollable-list/scrollable-l
 
 describe("Shop", () => {
     let shopScreen;
-    let mockData;
-    const mockScrollableList = {};
+    const mockScrollableList = { foo: "bar" };
+
     beforeEach(() => {
         shopScreen = new Shop();
-        mockData = { config: { shop: {}, home: {}, furniture: [] } };
-        shopScreen.setData(mockData);
+        shopScreen.setData({ config: { shop: {}, home: {}, furniture: [] } });
         shopScreen.scene = { key: "shop", layout: { getSafeArea: jest.fn() } };
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();

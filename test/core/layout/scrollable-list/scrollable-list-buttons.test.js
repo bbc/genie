@@ -10,12 +10,9 @@ import * as handlers from "../../../../src/core/layout/scrollable-list/scrollabl
 import { eventBus } from "../../../../src/core/event-bus.js";
 import * as a11y from "../../../../src/core/accessibility/accessibilify.js";
 
-const mockContainer = { parent: { getTopmostSizer: jest.fn().mockReturnValue({ innerHeight: 100 }) } };
-
 const mockButton = {
     width: 100,
     setScale: jest.fn(),
-    rexContainer: mockContainer,
     config: { id: "foo" },
 };
 
@@ -45,10 +42,7 @@ const mockItem = {
 
 describe("Scrollable List Buttons", () => {
     overlays.overlays1Wide = jest.fn();
-
-    beforeEach(() => {
-        a11y.accessibilify = jest.fn();
-    });
+    a11y.accessibilify = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
 
