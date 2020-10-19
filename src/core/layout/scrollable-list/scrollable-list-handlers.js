@@ -8,17 +8,15 @@
 
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const handleIfVisible = (gelButton, scene) => {
+const handleClickIfVisible = (gelButton, scene, handler) => () => {
     const panel = gelButton.rexContainer.parent.getTopmostSizer();
     const safeArea = scene.layout.getSafeArea({}, false);
     const height = scene.scale.displaySize.height;
     const topY = height / 2 + safeArea.y + panel.space.top;
     const bottomY = topY + panel.innerHeight;
     const mouseY = scene.input.y;
-    if (mouseY >= topY && mouseY <= bottomY) onClickPlaceholder(gelButton);
+    if (mouseY >= topY && mouseY <= bottomY) handler(gelButton);
 };
-
-const onClickPlaceholder = gelButton => console.log(`Clicked ${gelButton.config.id}`);
 
 const updatePanelOnScroll = panel => () =>
     getPanelItems(panel).map(item => item.children[0].setElementSizeAndPosition());
@@ -70,4 +68,4 @@ const getMaxOffset = panel => {
     return getItemsHeight(panel) - visibleWindowHeight;
 };
 
-export { handleIfVisible, updatePanelOnFocus, updatePanelOnScroll };
+export { handleClickIfVisible as handleClickIfVisible, updatePanelOnFocus, updatePanelOnScroll };

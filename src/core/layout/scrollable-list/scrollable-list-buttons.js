@@ -4,10 +4,11 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { handleIfVisible } from "./scrollable-list-handlers.js";
+import { handleClickIfVisible } from "./scrollable-list-handlers.js";
 import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
 import { accessibilify } from "../../../core/accessibility/accessibilify.js";
+import fp from "../../../../lib/lodash/fp/fp.js"
 
 const createGelButton = (scene, item) => {
     const id = `scroll_button_${item.id}`;
@@ -27,8 +28,10 @@ const createGelButton = (scene, item) => {
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
 
+    const callback = fp.identity; // placeholder
+
     eventBus.subscribe({
-        callback: () => handleIfVisible(gelButton, scene),
+        callback: handleClickIfVisible(gelButton, scene, callback),
         channel: gelConfig.channel,
         name: id,
     });

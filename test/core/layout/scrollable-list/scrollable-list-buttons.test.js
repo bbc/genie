@@ -14,6 +14,7 @@ const mockButton = {
     width: 100,
     setScale: jest.fn(),
     config: { id: "foo" },
+    rexContainer: { parent: { getTopmostSizer: jest.fn().mockReturnValue({ space: { top: 10 }}) } },
 };
 
 const mockScene = {
@@ -70,13 +71,12 @@ describe("Scrollable List Buttons", () => {
 
         test("subscribes to the event bus", () => {
             eventBus.subscribe = jest.fn();
-            handlers.handleIfVisible = jest.fn();
+            handlers.handleClickIfVisible = jest.fn();
             buttons.createGelButton(mockScene, mockItem);
             const args = eventBus.subscribe.mock.calls[0][0];
             expect(args.channel).toEqual("mockChannel");
             expect(args.name).toEqual("scroll_button_mockId");
-            args.callback();
-            expect(handlers.handleIfVisible).toHaveBeenCalledWith(mockButton, mockScene);
+            expect(handlers.handleClickIfVisible).toHaveBeenCalled();
         });
 
         test("scales the button", () => {

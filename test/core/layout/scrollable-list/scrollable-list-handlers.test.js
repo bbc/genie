@@ -21,8 +21,6 @@ const mockScene = {
 const mockSizer = { innerHeight: 300, space: { top: 10 } };
 const mockOtherRexLabel = { children: [{}], height: 100 };
 
-console.log = jest.fn();
-
 describe("Scrollable List handlers", () => {
     afterEach(() => {
         jest.clearAllMocks();
@@ -49,17 +47,21 @@ describe("Scrollable List handlers", () => {
         };
     });
 
-    describe("handleIfVisible()", () => {
-        test("calls console.log if click is inside the panel's Y bounds", () => {
+    describe("handleClickIfVisible()", () => {
+        let mockClickHandler = jest.fn();
+
+        test("returns a fn that calls clickHandler if click is inside the panel's Y bounds", () => {
             mockScene.input = { y: 300 };
-            handlers.handleIfVisible(mockGelButton, mockScene);
-            expect(console.log).toHaveBeenCalledWith("Clicked foo");
+            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
+            handler();
+            expect(mockClickHandler).toHaveBeenCalled()
         });
 
-        test("does not call console.log if click is outside the panel", () => {
+        test("returns a fn that does not call clickHandler if click is outside the panel", () => {
             mockScene.input = { y: 0 };
-            handlers.handleIfVisible(mockGelButton, mockScene);
-            expect(console.log).not.toHaveBeenCalled();
+            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
+            handler();
+            expect(mockClickHandler).not.toHaveBeenCalled();
         });
     });
 
