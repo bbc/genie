@@ -26,11 +26,12 @@ const getPanelItems = panel => panel.getByName("grid", true).getElement("items")
 const updatePanelOnFocus = panel => rexLabel => {
     const visibleBounds = getVisibleRangeBounds(panel);
     const itemBounds = getItemBounds(panel, rexLabel);
-    fp.cond([
+    const updateScrollPositionIfItemNotVisible = fp.cond([
         [(vb, ib) => ib.lower < vb.lower, (vb, ib) => updateScrollPosition(panel, ib.lower - vb.lower)],
         [(vb, ib) => ib.upper > vb.upper, (vb, ib) => updateScrollPosition(panel, ib.upper - vb.upper)],
         [() => true, () => {}],
-    ])(visibleBounds, itemBounds);
+    ]);
+    updateScrollPositionIfItemNotVisible(visibleBounds, itemBounds);
 };
 
 const getVisibleRangeBounds = panel => {
@@ -53,7 +54,7 @@ const getItemBounds = (panel, rexLabel) => {
 
 const updateScrollPosition = (panel, offset) => {
     const maxOffset = getMaxOffset(panel);
-    const currentT = panel.t; // 0 <= t <= 1
+    const currentT = panel.t; // 0 <= t <= 1; scrollbar position
     const tDelta = offset / maxOffset;
     const newT = currentT + tDelta;
     const clampThreshold = 1 / getPanelItems(panel).length;
