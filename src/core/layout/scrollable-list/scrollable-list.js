@@ -6,14 +6,18 @@
  */
 import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
+import * as a11y from "../../accessibility/accessibility-layer.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const GRID_NAME = "grid";
 
 const scrollableList = scene => {
     const scrollableListPanel = createScrollableListPanel(scene);
+    scene.panel = scrollableListPanel;
     scene.input.topOnly = false;
     setupEvents(scene, scrollableListPanel);
+    setupAccessibility(scene, scrollableListPanel);
+
     return scrollableListPanel;
 };
 
@@ -106,6 +110,15 @@ const setupEvents = (scene, panel) => {
         const a11yElem = item.children[0].accessibleElement.el;
         a11yElem.addEventListener("focus", () => panel.updateOnFocus(item));
     });
+};
+
+const setupAccessibility = (scene, panel) => {
+    const a11yGroup = scene.add.container();
+    a11yGroup.reset = () => resizePanel(scene, panel);
+    a11yGroup.add(panel);
+
+    scene.layout.addCustomGroup(scene.scene.key, a11yGroup, 0);
+    a11y.addGroupAt(scene.scene.key, 0);
 };
 
 export { scrollableList, resizePanel };

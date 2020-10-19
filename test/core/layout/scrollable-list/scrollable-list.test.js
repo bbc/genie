@@ -35,6 +35,7 @@ const mockScrollablePanel = {
 };
 const mockSizer = { add: jest.fn() };
 const mockOverlay = {};
+const mockContainer = { reset: jest.fn(), add: jest.fn() };
 const mockScene = {
     rexUI: {
         add: {
@@ -45,7 +46,7 @@ const mockScene = {
         },
     },
     input: { topOnly: true },
-    add: { image: jest.fn() },
+    add: { image: jest.fn(), container: jest.fn().mockReturnValue(mockContainer) },
     config: {
         assetKeys: {
             prefix: "test",
@@ -61,8 +62,10 @@ const mockScene = {
     },
     layout: {
         getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
+        addCustomGroup: jest.fn(),
     },
     scale: { on: jest.fn() },
+    scene: { key: "shop" },
 };
 const mockGelButton = { width: 100, setScale: jest.fn() };
 buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
@@ -176,6 +179,26 @@ describe("Scrollable List", () => {
                 mockA11yElem.addEventListener.mock.calls[0][1]();
                 expect(mockScrollablePanel.updateOnFocus).toHaveBeenCalled();
             });
+        });
+    });
+    describe("accessibility setup", () => {
+        beforeEach(() => scrollableList(mockScene));
+        test("adds a container", () => {
+            expect(mockScene.add.container).toHaveBeenCalled();
+        });
+        test("gives it a reset function that calls resizePanel", () => {
+            expect(typeof mockContainer.reset).toBe("function");
+            mockContainer.reset();
+            expect(buttons.scaleButton).toHaveBeenCalled();
+        });
+        test("adds the panel to the container", () => {
+            expect(mockContainer.add).toHaveBeenCalledWith(mockScrollablePanel);
+        });
+        test("adds the container as a custom group by scene key", () => {
+            expect(mockScene.layout.addCustomGroup).toHaveBeenCalledWith("shop", mockContainer, 0);
+        });
+        test("adds a matching group to the accessibility layer", () => {
+            expect(a11y.addGroupAt).toHaveBeenCalledWith("shop", 0);
         });
     });
 });
