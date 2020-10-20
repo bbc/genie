@@ -9,7 +9,7 @@
 import { Screen } from "../../core/screen.js";
 import { scrollableList } from "../../core/layout/scrollable-list/scrollable-list.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
-import { getMetrics } from "../../core/scaler.js";
+import { getMetrics, onScaleChange } from "../../core/scaler.js";
 
 export class Shop extends Screen {
     preload() {
@@ -24,15 +24,22 @@ export class Shop extends Screen {
         this.title = this.createTitle(metrics);
         this.wallet = this.createWallet(metrics);
         this.panel = scrollableList(this);
+        this.setupEvents();
     }
 
     createTitle(metrics) {
         const { title } = this.config;
 
+        const titleBackground = this.add.image(0, 0, title.background);
+        const titleText = this.add.text(0, 0, title.text, title.font).setOrigin(0.5);
         const titleContainer = this.add.container();
-        titleContainer.add(this.add.image(0, 0, title.background));
-        titleContainer.add(this.add.text(0, 0, title.text, title.font).setOrigin(0.5));
 
+        const titleWidth = titleText.getBounds().width + title.titlePadding * 2;
+        const titleBackgroundWidth = titleBackground.getBounds().width;
+        titleBackground.setScale(titleWidth / titleBackgroundWidth); // scales the background by x axis so it accommodates elements
+        titleContainer.add([titleBackground, titleText]);
+
+        titleContainer.setScale(this.getScaleFactor(metrics, titleContainer));
         titleContainer.setPosition(0, this.getYPos(metrics, titleContainer));
 
         return titleContainer;
@@ -41,23 +48,49 @@ export class Shop extends Screen {
     createWallet(metrics) {
         const { wallet } = this.config;
 
+        const walletBackground = this.add.image(0, 0, wallet.background);
+        const walletIcon = this.add.image(0, 0, wallet.icon);
+        const walletBalance = this.add.text(0, 0, wallet.defaultBalance, wallet.font).setOrigin(1, 0.5);
         const walletContainer = this.add.container();
-        walletContainer.add(this.add.image(0, 0, wallet.background));
-        walletContainer.add(this.add.image(0, 0, wallet.icon));
-        walletContainer.add(this.add.text(0, 0, wallet.defaultBalance, wallet.font).setOrigin(0.5));
+        
+        const walletWidth = walletBalance.getBounds().width + walletIcon.getBounds().width + wallet.iconPadding * 3;
+        walletBalance.setPosition(walletWidth / 4 + wallet.iconPadding, 0);
+        walletIcon.setPosition(-walletWidth / 4, 0);
+        walletBackground.setScale(walletWidth / walletBackground.getBounds().width);
+        walletContainer.add([walletBackground, walletIcon, walletBalance]);
 
+        walletContainer.setScale(this.getScaleFactor(metrics, walletContainer));
         walletContainer.setPosition(this.getXPos(metrics, walletContainer), this.getYPos(metrics, walletContainer));
 
         return walletContainer;
     }
 
+    getScaleFactor(metrics, container) {
+        const { verticals, verticalBorderPad } = metrics;
+        const topEdge = verticals.top;
+        const safeAreaTopEdge = this.layout.getSafeArea({}, false).y;
+        const availableSpace = safeAreaTopEdge - topEdge - verticalBorderPad;
+        const scaleFactorY = availableSpace / container.getBounds().height;
+        console.log('BEEBUG: scaleFactor', scaleFactorY);
+        return scaleFactorY;
+    }
+
     getYPos(metrics, container) {
         const { verticalBorderPad, verticals } = metrics;
-        return verticals.top + verticalBorderPad + container.getBounds().height / 2;
+        return verticals.top + verticalBorderPad / 2 + container.getBounds().height / 2;
     }
 
     getXPos(metrics, container) {
-        const { safeHorizontals, buttonMin, horizontalBorderPad } = metrics;
-        return safeHorizontals.right - container.getBounds().width / 2 - buttonMin - horizontalBorderPad;
+        const { horizontals, buttonMin, buttonPad } = metrics;
+        return horizontals.right - container.getBounds().width - buttonMin - buttonPad;
+    }
+
+    setupEvents() {
+        const scaleEvent = onScaleChange.add(() => this.resize());
+        this.events.once("shutdown", scaleEvent.unsubscribe);
+    }
+
+    resize() {
+        console.log('BEEBUG: doing resize');
     }
 }

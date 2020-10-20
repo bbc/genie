@@ -23,6 +23,21 @@
                 "url": "shop/handle.png"
             },
             {
+                "type": "image",
+                "key": "walletBackground",
+                "url": "shop/wallet_background.png"
+            },
+            {
+                "type": "image",
+                "key": "walletIcon",
+                "url": "shop/wallet_icon.png"
+            },
+            {
+                "type": "image",
+                "key": "titleBackground",
+                "url": "shop/title_background.png"
+            },
+            {
                 "type": "spritesheet",
                 "key": "itemBackground",
                 "url": "shop/item_block.png",

@@ -1,8 +1,9 @@
 {
     title: {
-        text: "Genie Shop",
-        font: { fontFamily: "ReithSans", resolution: 5, fontSize: "24px"},
-        background: "home.title",
+        text: "Shop",
+        font: { fontFamily: "ReithSans", resolution: 2, fontSize: "24px"},
+        background: "shop.titleBackground",
+        titlePadding: 10,
     },
     space: 10,
     background: {
@@ -11,12 +12,12 @@
         ],
     },
     wallet: {
-        background: "some.key",
-        icon: "some.otherKey",
+        background: "shop.walletBackground",
+        icon: "shop.walletIcon",
         font: { fontFamily: "ReithSans", resolution: 5, fontSize: "24px"},
         defaultBalance: 1000, // ph
+        iconPadding: 15,
     },
-
     // music: "home.backgroundMusic",
     items: [ // PH, will load from the catalogue when done
         {
