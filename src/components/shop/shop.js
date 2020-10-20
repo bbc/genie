@@ -36,7 +36,7 @@ export class Shop extends Screen {
 
         const titleWidth = titleText.getBounds().width + title.titlePadding * 2;
         const titleBackgroundWidth = titleBackground.getBounds().width;
-        titleBackground.setScale(titleWidth / titleBackgroundWidth); // scales the background by x axis so it accommodates elements
+        titleBackground.setScale(titleWidth / titleBackgroundWidth);
         titleContainer.add([titleBackground, titleText]);
 
         titleContainer.setScale(this.getScaleFactor(metrics, titleContainer));
@@ -60,37 +60,45 @@ export class Shop extends Screen {
         walletContainer.add([walletBackground, walletIcon, walletBalance]);
 
         walletContainer.setScale(this.getScaleFactor(metrics, walletContainer));
-        walletContainer.setPosition(this.getXPos(metrics, walletContainer), this.getYPos(metrics, walletContainer));
+        walletContainer.setPosition(this.getXPos(walletContainer), this.getYPos(metrics));
 
         return walletContainer;
     }
 
     getScaleFactor(metrics, container) {
         const { verticals, verticalBorderPad } = metrics;
+        container.setScale(1);
         const topEdge = verticals.top;
-        const safeAreaTopEdge = this.layout.getSafeArea({}, false).y;
-        const availableSpace = safeAreaTopEdge - topEdge - verticalBorderPad;
+        const safeArea = this.layout.getSafeArea({}, false);
+        const availableSpace = safeArea.y - topEdge - verticalBorderPad;
         const scaleFactorY = availableSpace / container.getBounds().height;
-        console.log('BEEBUG: scaleFactor', scaleFactorY);
-        return scaleFactorY;
+        const scaleFactorX = safeArea.width / 4 / container.getBounds().width;
+        return Math.min(scaleFactorY, scaleFactorX);
     }
-
-    getYPos(metrics, container) {
-        const { verticalBorderPad, verticals } = metrics;
-        return verticals.top + verticalBorderPad / 2 + container.getBounds().height / 2;
+    
+    getYPos(metrics) {
+        const { verticals } = metrics;
+        const safeArea = this.layout.getSafeArea({}, false);
+        const padding = (safeArea.y - verticals.top) / 2;
+        return verticals.top + padding;
     }
-
-    getXPos(metrics, container) {
-        const { horizontals, buttonMin, buttonPad } = metrics;
-        return horizontals.right - container.getBounds().width - buttonMin - buttonPad;
+    
+    getXPos(container) {
+        const safeArea = this.layout.getSafeArea({}, false);
+        return safeArea.width / 2 - container.getBounds().width / 2 - this.config.space;    
     }
 
     setupEvents() {
-        const scaleEvent = onScaleChange.add(() => this.resize());
+        const resize = this.resize.bind(this);
+        const scaleEvent = onScaleChange.add(() => resize());
         this.events.once("shutdown", scaleEvent.unsubscribe);
     }
 
     resize() {
-        console.log('BEEBUG: doing resize');
+        const metrics = getMetrics();
+        this.title.setScale(this.getScaleFactor(metrics, this.title));
+        this.title.setPosition(0, this.getYPos(metrics));
+        this.wallet.setScale(this.getScaleFactor(metrics, this.wallet));
+        this.wallet.setPosition(this.getXPos(this.wallet), this.getYPos(metrics));
     }
 }
