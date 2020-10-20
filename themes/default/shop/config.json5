@@ -1,10 +1,23 @@
 {
+    title: {
+        text: "Genie Shop",
+        font: { fontFamily: "ReithSans", resolution: 5, fontSize: "24px"},
+        background: "home.title",
+    },
     space: 10,
     background: {
         items: [
             { key: "home.background", x: 0, y: 0 },
         ],
     },
+    wallet: {
+        background: "some.key",
+        icon: "some.otherKey",
+        font: { fontFamily: "ReithSans", resolution: 5, fontSize: "24px"},
+        defaultBalance: 1000, // ph
+    },
+
+    // music: "home.backgroundMusic",
     items: [ // PH, will load from the catalogue when done
         {
             id: "itemOne",

@@ -57,7 +57,7 @@ const screens = {
             debug: "debug",
             //Example of custom routing function
             next: scene => {
-                scene.navigate("narrative");
+                scene.navigate("shop");
             },
         },
     },
@@ -107,6 +107,7 @@ const screens = {
         scene: Shop,
         routes: {
             next: "home",
+            home: "home",
         },
     },
     // Overlays
