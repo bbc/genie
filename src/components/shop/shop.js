@@ -66,20 +66,20 @@ export class Shop extends Screen {
     }
 
     getScaleFactor(metrics, container) {
-        const { verticals, verticalBorderPad } = metrics;
+        const { verticals, verticalBorderPad, buttonPad } = metrics;
         container.setScale(1);
         const topEdge = verticals.top;
         const safeArea = this.layout.getSafeArea({}, false);
-        const availableSpace = safeArea.y - topEdge - verticalBorderPad;
+        const availableSpace = safeArea.y - topEdge - buttonPad;
         const scaleFactorY = availableSpace / container.getBounds().height;
         const scaleFactorX = safeArea.width / 4 / container.getBounds().width;
         return Math.min(scaleFactorY, scaleFactorX);
     }
     
     getYPos(metrics) {
-        const { verticals } = metrics;
+        const { verticals, buttonPad, verticalBorderPad } = metrics;
         const safeArea = this.layout.getSafeArea({}, false);
-        const padding = (safeArea.y - verticals.top) / 2;
+        const padding = (safeArea.y - verticals.top) / 2 + verticalBorderPad / 2;
         return verticals.top + padding;
     }
     
