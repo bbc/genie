@@ -5,7 +5,10 @@
         background: "shop.titleBackground",
         titlePadding: 10,
     },
-    space: 18.86,
+    listPadding: {
+        x: 18.86, 
+        y: 15.09    
+    },
     background: {
         items: [
             { key: "home.background", x: 0, y: 0 },
@@ -18,7 +21,6 @@
         defaultBalance: 1000, // ph
         iconPadding: 15,
     },
-    // music: "home.backgroundMusic",
     items: [ // PH, will load from the catalogue when done
         {
             id: "itemOne",

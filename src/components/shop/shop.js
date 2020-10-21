@@ -85,7 +85,7 @@ export class Shop extends Screen {
 
     getXPos(container) {
         const safeArea = this.layout.getSafeArea({}, false);
-        return safeArea.width / 2 - container.getBounds().width / 2 - this.config.space;
+        return safeArea.width / 2 - container.getBounds().width / 2 - this.config.listPadding.x;
     }
 
     setupEvents() {

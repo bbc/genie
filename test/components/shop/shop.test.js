@@ -29,6 +29,7 @@ describe("Shop", () => {
                 prefix: "shop",
                 background: "background",
             },
+            listPadding: { x: 10, y: 8 },
         },
         home: {},
         furniture: [],

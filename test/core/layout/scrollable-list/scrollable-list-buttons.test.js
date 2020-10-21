@@ -30,6 +30,7 @@ const mockScene = {
             prefix: "mockScene",
             itemBackground: "itemBackground",
         },
+        listPadding: { x: 10, y: 8 },
     },
     input: { y: 50 },
     scale: { displaySize: { height: 100 } },

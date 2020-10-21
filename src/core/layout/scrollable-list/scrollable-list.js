@@ -27,7 +27,7 @@ const createScrollableListPanel = scene => {
 };
 
 const getPanelConfig = scene => {
-    const { space, assetKeys: keys } = scene.config;
+    const { listPadding: space, assetKeys: keys } = scene.config;
     const safeArea = getPanelY(scene);
     return {
         y: safeArea.y,
@@ -38,9 +38,9 @@ const getPanelConfig = scene => {
         slider: {
             track: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbar}`),
             thumb: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbarHandle}`),
-            width: space,
+            width: space.x,
         },
-        space: { left: space, right: space, top: space, bottom: space, panel: space },
+        space: { left: space.x, right: space.x, top: space.y, bottom: space.y, panel: space.x },
     };
 };
 
@@ -59,7 +59,7 @@ const createTable = scene => {
     const table = scene.rexUI.add.gridSizer({
         column: 1,
         row: scene.config.items.length,
-        space: { row: scene.config.space },
+        space: { row: scene.config.listPadding.y },
         name: "grid",
     });
 
