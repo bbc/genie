@@ -1,7 +1,7 @@
 {
     title: {
-        text: "Shop",
-        font: { fontFamily: "ReithSans", resolution: 4, fontSize: "24px"},
+        text: "My Shop",
+        font: { fontFamily: "ReithSans", resolution: 4, fontSize: "16px"},
         background: "shop.titleBackground",
         titlePadding: 10,
     },

@@ -34,12 +34,14 @@ export class Shop extends Screen {
         const titleText = this.add.text(0, 0, title.text, title.font).setOrigin(0.5);
         const titleContainer = this.add.container();
 
-        const titleWidth = titleText.getBounds().width + title.titlePadding * 2;
-        const titleBackgroundWidth = titleBackground.getBounds().width;
-        titleBackground.setScale(titleWidth / titleBackgroundWidth);
+        const titleTextBounds = titleText.getBounds();
+        const titleWidth = titleTextBounds.width + title.titlePadding;
+        const titleHeight = titleTextBounds.height + title.titlePadding;
+        const titleBackgroundBounds = titleBackground.getBounds();
+        titleBackground.setScale(titleWidth / titleBackgroundBounds.width, titleHeight / titleBackgroundBounds.height);
         titleContainer.add([titleBackground, titleText]);
 
-        titleContainer.setScale(this.getScaleFactor(metrics, titleContainer));
+        titleContainer.setScale(this.getScaleFactor(metrics, titleContainer, true));
         titleContainer.setPosition(0, this.getYPos(metrics, titleContainer));
 
         return titleContainer;
@@ -65,15 +67,17 @@ export class Shop extends Screen {
         return walletContainer;
     }
 
-    getScaleFactor(metrics, container) {
-        const { verticals, buttonPad } = metrics;
+    getScaleFactor(metrics, container, fixedWidth = false) {
+        const { verticals, verticalBorderPad } = metrics;
         container.setScale(1);
         const topEdge = verticals.top;
         const safeArea = this.layout.getSafeArea({}, false);
-        const availableSpace = safeArea.y - topEdge - buttonPad;
-        const scaleFactorY = availableSpace / container.getBounds().height;
+        const availableSpace = safeArea.y - topEdge - verticalBorderPad;
+        const containerBounds = container.getBounds();
+        const padding = this.config.title.titlePadding / 2;
+        const scaleFactorY = (availableSpace - padding) / containerBounds.height;
         const scaleFactorX = safeArea.width / 4 / container.getBounds().width;
-        return Math.min(scaleFactorY, scaleFactorX);
+        return fixedWidth ? scaleFactorY : Math.min(scaleFactorY, scaleFactorX);
     }
 
     getYPos(metrics) {
@@ -96,7 +100,7 @@ export class Shop extends Screen {
 
     resize() {
         const metrics = getMetrics();
-        this.title.setScale(this.getScaleFactor(metrics, this.title));
+        this.title.setScale(this.getScaleFactor(metrics, this.title, true));
         this.title.setPosition(0, this.getYPos(metrics));
         this.wallet.setScale(this.getScaleFactor(metrics, this.wallet));
         this.wallet.setPosition(this.getXPos(this.wallet), this.getYPos(metrics));
