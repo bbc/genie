@@ -14,10 +14,17 @@ describe("Shop", () => {
     const config = {
         shop: {
             title: {
-                background: "foo",
+                text: "Shop",
+                background: "shop.titleBackground",
                 titlePadding: 10,
+                font: { foo: "bar" },
             },
-            wallet: {},
+            wallet: {
+                background: "shop.walletBackground",
+                icon: "shop.walletIcon",
+                defaultBalance: 1000,
+                font: { baz: "qux" },
+            },
             assetKeys: {
                 prefix: "shop",
                 background: "background",
@@ -32,6 +39,7 @@ describe("Shop", () => {
         verticalBorderPad: 100,
         buttonPad: 100,
     });
+    scaler.onScaleChange = { add: jest.fn().mockReturnValue({ unsubscribe: "foo" }) };
     const mockText = {
         getBounds: jest.fn().mockReturnValue({ width: 100 }),
         setScale: jest.fn(),
@@ -91,6 +99,43 @@ describe("Shop", () => {
         test("adds a scrollable list panel", () => {
             expect(scroller.scrollableList).toHaveBeenCalled();
             expect(shopScreen.panel).toBe(mockScrollableList);
+        });
+
+        describe("creates the title UI component", () => {
+            test("with a container", () => {
+                expect(shopScreen.title).toBe(mockContainer);
+            });
+
+            test("containing an image and a text element", () => {
+                expect(shopScreen.add.image).toHaveBeenCalledWith(0, 0, "shop.titleBackground");
+                expect(shopScreen.add.text).toHaveBeenCalledWith(0, 0, "Shop", { foo: "bar" });
+            });
+        });
+
+        describe("creates the wallet UI component", () => {
+            test("with a container", () => {
+                expect(shopScreen.wallet).toBe(mockContainer);
+            });
+
+            test("containing a background image, an icon image, and a text element", () => {
+                expect(shopScreen.add.image).toHaveBeenCalledWith(0, 0, "shop.walletBackground");
+                expect(shopScreen.add.image).toHaveBeenCalledWith(0, 0, "shop.walletIcon");
+                expect(shopScreen.add.text).toHaveBeenCalledWith(0, 0, 1000, { baz: "qux" });
+            });
+        });
+
+        describe("sets up resize", () => {
+            test("adds a callback to onScaleChange that updates scale and position for UI elems", () => {
+                const onScaleChangeCallback = scaler.onScaleChange.add.mock.calls[0][0];
+                onScaleChangeCallback();
+                expect(shopScreen.title.setScale).toHaveBeenCalled();
+                expect(shopScreen.title.setPosition).toHaveBeenCalled();
+                expect(shopScreen.wallet.setScale).toHaveBeenCalled();
+                expect(shopScreen.wallet.setPosition).toHaveBeenCalled();
+            });
+            test("unsubscribes on shutdown", () => {
+                expect(shopScreen.events.once).toHaveBeenCalledWith("shutdown", "foo");
+            });
         });
     });
 });

@@ -5,7 +5,7 @@
         background: "shop.titleBackground",
         titlePadding: 10,
     },
-    space: 10,
+    space: 18.86,
     background: {
         items: [
             { key: "home.background", x: 0, y: 0 },

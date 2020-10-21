@@ -52,7 +52,7 @@ export class Shop extends Screen {
         const walletIcon = this.add.image(0, 0, wallet.icon);
         const walletBalance = this.add.text(0, 0, wallet.defaultBalance, wallet.font).setOrigin(1, 0.5);
         const walletContainer = this.add.container();
-        
+
         const walletWidth = walletBalance.getBounds().width + walletIcon.getBounds().width + wallet.iconPadding * 3;
         walletBalance.setPosition(walletWidth / 4 + wallet.iconPadding, 0);
         walletIcon.setPosition(-walletWidth / 4, 0);
@@ -66,7 +66,7 @@ export class Shop extends Screen {
     }
 
     getScaleFactor(metrics, container) {
-        const { verticals, verticalBorderPad, buttonPad } = metrics;
+        const { verticals, buttonPad } = metrics;
         container.setScale(1);
         const topEdge = verticals.top;
         const safeArea = this.layout.getSafeArea({}, false);
@@ -75,17 +75,17 @@ export class Shop extends Screen {
         const scaleFactorX = safeArea.width / 4 / container.getBounds().width;
         return Math.min(scaleFactorY, scaleFactorX);
     }
-    
+
     getYPos(metrics) {
-        const { verticals, buttonPad, verticalBorderPad } = metrics;
+        const { verticals, verticalBorderPad } = metrics;
         const safeArea = this.layout.getSafeArea({}, false);
         const padding = (safeArea.y - verticals.top) / 2 + verticalBorderPad / 2;
         return verticals.top + padding;
     }
-    
+
     getXPos(container) {
         const safeArea = this.layout.getSafeArea({}, false);
-        return safeArea.width / 2 - container.getBounds().width / 2 - this.config.space;    
+        return safeArea.width / 2 - container.getBounds().width / 2 - this.config.space;
     }
 
     setupEvents() {
