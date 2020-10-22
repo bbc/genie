@@ -9,6 +9,7 @@ import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrolla
 import * as scaler from "../../../src/core/scaler.js";
 import * as wallet from "../../../src/components/shop/wallet-ui.js";
 import * as titles from "../../../src/components/select/titles.js";
+import * as uiScaler from "../../../src/components/shop/shop-scaling.js";
 
 jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
 
@@ -53,12 +54,13 @@ describe("Shop", () => {
         setPosition: jest.fn(),
         getBounds: jest.fn().mockReturnValue({ height: 100 }),
     };
+    const mockSafeArea = { foo: "bar " };
 
     beforeEach(() => {
         shopScreen = new Shop();
         shopScreen.setData({ config });
-        shopScreen.scene = { key: "shop", layout: { getSafeArea: jest.fn() } }; // yagni?
-        shopScreen._layout = { getSafeArea: jest.fn().mockReturnValue({ y: 100 }) };
+        shopScreen.scene = { key: "shop" }; 
+        shopScreen._layout = { getSafeArea: jest.fn().mockReturnValue(mockSafeArea) };
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();
         shopScreen.plugins = { installScenePlugin: jest.fn() };
@@ -71,6 +73,8 @@ describe("Shop", () => {
         ScrollableList.mockImplementation(() => ({ panel: mockScrollableList }));
         wallet.createWallet = jest.fn().mockReturnValue(mockContainer);
         titles.createTitles = jest.fn();
+        uiScaler.getScaleFactor = jest.fn();
+        uiScaler.getYPos = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -103,6 +107,19 @@ describe("Shop", () => {
         describe("creates the title UI component", () => {
             test("with a container", () => {
                 expect(shopScreen.title).toBe(mockContainer);
+            });
+
+            test("containing the result of createTitles", () => {
+                expect(titles.createTitles).toHaveBeenCalledWith(shopScreen);
+            });
+
+            test("appropriately scaled and positioned", () => {
+                expect(uiScaler.getScaleFactor).toHaveBeenCalledWith({
+                    metrics: mockMetrics,
+                    container: mockContainer,
+                    fixedWidth: true,
+                    safeArea: mockSafeArea
+                });
             });
         });
 
