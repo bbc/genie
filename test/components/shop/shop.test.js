@@ -7,24 +7,16 @@
 import { Shop } from "../../../src/components/shop/shop.js";
 import * as scroller from "../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as scaler from "../../../src/core/scaler.js";
+import * as wallet from "../../../src/components/shop/wallet-ui.js";
+import * as titles from "../../../src/components/select/titles.js";
 
 describe("Shop", () => {
     let shopScreen;
     const mockScrollableList = { foo: "bar" };
     const config = {
         shop: {
-            title: {
-                text: "Shop",
-                background: "shop.titleBackground",
-                titlePadding: 10,
-                font: { foo: "bar" },
-            },
-            wallet: {
-                background: "shop.walletBackground",
-                icon: "shop.walletIcon",
-                defaultBalance: 1000,
-                font: { baz: "qux" },
-            },
+            title: [],
+            wallet: [],
             assetKeys: {
                 prefix: "shop",
                 background: "background",
@@ -34,12 +26,13 @@ describe("Shop", () => {
         home: {},
         furniture: [],
     };
-    scaler.getMetrics = jest.fn().mockReturnValue({
+    const mockMetrics = {
         verticals: { top: 100 },
         horizontals: { right: 100 },
         verticalBorderPad: 100,
         buttonPad: 100,
-    });
+    }
+    scaler.getMetrics = jest.fn().mockReturnValue(mockMetrics);
     scaler.onScaleChange = { add: jest.fn().mockReturnValue({ unsubscribe: "foo" }) };
     const mockText = {
         getBounds: jest.fn().mockReturnValue({ width: 100 }),
@@ -73,6 +66,8 @@ describe("Shop", () => {
         };
         shopScreen.events = { once: jest.fn() };
         scroller.scrollableList = jest.fn().mockReturnValue(mockScrollableList);
+        wallet.createWallet = jest.fn().mockReturnValue(mockContainer);
+        titles.createTitles = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -102,26 +97,13 @@ describe("Shop", () => {
             expect(shopScreen.panel).toBe(mockScrollableList);
         });
 
+        test("adds a wallet UI component", () => {
+            expect(wallet.createWallet).toHaveBeenCalledWith(shopScreen, mockMetrics);
+        });
+
         describe("creates the title UI component", () => {
             test("with a container", () => {
                 expect(shopScreen.title).toBe(mockContainer);
-            });
-
-            test("containing an image and a text element", () => {
-                expect(shopScreen.add.image).toHaveBeenCalledWith(0, 0, "shop.titleBackground");
-                expect(shopScreen.add.text).toHaveBeenCalledWith(0, 0, "Shop", { foo: "bar" });
-            });
-        });
-
-        describe("creates the wallet UI component", () => {
-            test("with a container", () => {
-                expect(shopScreen.wallet).toBe(mockContainer);
-            });
-
-            test("containing a background image, an icon image, and a text element", () => {
-                expect(shopScreen.add.image).toHaveBeenCalledWith(0, 0, "shop.walletBackground");
-                expect(shopScreen.add.image).toHaveBeenCalledWith(0, 0, "shop.walletIcon");
-                expect(shopScreen.add.text).toHaveBeenCalledWith(0, 0, 1000, { baz: "qux" });
             });
         });
 
