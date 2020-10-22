@@ -6,55 +6,43 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as a11y from "../accessibility/accessibility-layer.js";
 import * as ButtonFactory from "./button-factory.js";
+import { CANVAS_HEIGHT, GEL_MIN_ASPECT_RATIO } from "./metrics.js";
 
+const canvasSafeWidth = CANVAS_HEIGHT * GEL_MIN_ASPECT_RATIO;
+const dim = { x: "width", y: "height" };
+
+const is43Btn = (group, metrics) => group.isSafe && metrics.isMobile;
+const getOverlap = metrics => Math.max(0, metrics.horizontalBorderPad - (metrics.stageWidth - canvasSafeWidth) / 2);
+const getPad = (group, metrics) => (is43Btn(group, metrics) ? getOverlap(metrics) : metrics.horizontalBorderPad);
+const getType = group => (group.isSafe ? "safeHorizontals" : "horizontals");
 const sum = (a, b) => a + b;
+
+const hasHitArea = gameObject => Boolean(gameObject.input.hitArea);
+const sumArea = (group, getHitArea) => group.list.filter(hasHitArea).reduce(getHitArea, 0);
+const hitAreaFn = (metrics, size, sign, axis) => (acc, cur) =>
+    Math.max(acc, sign * (cur[axis] + sign * (cur.input.hitArea[dim[axis]] / 2 / metrics.scale - size)));
+
 const horizontal = {
-    left: (metrics, group, horizontalsType) => {
-        let hitAreaOffset = 0;
-        fp.forEach(child => {
-            if (!child.input.hitArea) return;
-            hitAreaOffset = fp.max([hitAreaOffset, -(child.x - child.input.hitArea.width / 2) / metrics.scale]);
-        }, group.list);
-        group.x = metrics[horizontalsType].left + metrics.horizontalBorderPad + hitAreaOffset;
+    left: (metrics, group) => {
+        const getHitArea = hitAreaFn(metrics, 0, -1, "x");
+        return metrics[getType(group)].left + getPad(group, metrics) + sumArea(group, getHitArea);
     },
-    center: (metrics, group, horizontalsType) => {
-        group.x = metrics[horizontalsType].center - group.width / 2;
-    },
-    right: (metrics, group, horizontalsType) => {
-        let hitAreaOffset = 0;
-        fp.forEach(child => {
-            if (!child.input.hitArea) return;
-            hitAreaOffset = fp.max([
-                hitAreaOffset,
-                (child.x + child.input.hitArea.width / 2) / metrics.scale - group.width,
-            ]);
-        }, group.list);
-        group.x = metrics[horizontalsType].right - metrics.horizontalBorderPad - hitAreaOffset - group.width;
+    center: (metrics, group) => metrics[getType(group)].center - group.width / 2,
+    right: (metrics, group) => {
+        const getHitArea = hitAreaFn(metrics, group.width, 1, "x");
+        return metrics[getType(group)].right - getPad(group, metrics) - sumArea(group, getHitArea) - group.width;
     },
 };
 
 const vertical = {
     top: (metrics, group) => {
-        let hitAreaOffset = 0;
-        fp.forEach(child => {
-            if (!child.input.hitArea) return;
-            hitAreaOffset = fp.max([hitAreaOffset, -(child.y - child.input.hitArea.height / 2) / metrics.scale]);
-        }, group.list);
-        group.y = metrics.verticals.top + metrics.verticalBorderPad + hitAreaOffset;
+        const getHitArea = hitAreaFn(metrics, 0, -1, "y");
+        return metrics.verticals.top + metrics.verticalBorderPad + sumArea(group, getHitArea);
     },
-    middle: (metrics, group) => {
-        group.y = metrics.verticals.middle - group.height / 2;
-    },
+    middle: (metrics, group) => metrics.verticals.middle - group.height / 2,
     bottom: (metrics, group) => {
-        let hitAreaOffset = 0;
-        fp.forEach(child => {
-            if (!child.input.hitArea) return;
-            hitAreaOffset = fp.max([
-                hitAreaOffset,
-                (child.y + child.input.hitArea.height / 2) / metrics.scale - group.height,
-            ]);
-        }, group.list);
-        group.y = metrics.verticals.bottom - metrics.bottomBorderPad - hitAreaOffset - group.height;
+        const getHitArea = hitAreaFn(metrics, group.height, 1, "y");
+        return metrics.verticals.bottom - metrics.bottomBorderPad - sumArea(group, getHitArea) - group.height;
     },
 };
 
@@ -62,19 +50,16 @@ export class GelGroup extends Phaser.GameObjects.Container {
     constructor(scene, parent, vPos, hPos, metrics, isSafe, isVertical = false) {
         super(scene, 0, 0);
         this.setScrollFactor(0);
-        //TODO P3 we used to name the groups - useful for debugging. Might be useful as a property? [NT]
-        //super(game, parent, fp.camelCase([vPos, hPos, isVertical ? "v" : ""].join(" ")));
         this._vPos = vPos;
         this._hPos = hPos;
         this._metrics = metrics;
-        this._isSafe = isSafe;
+        this.isSafe = isSafe;
         this._isVertical = isVertical;
         this._buttons = [];
         this._buttonFactory = ButtonFactory.create(scene);
         this._setGroupPosition = metrics => {
-            //TODO change this to returns e.g: this.y = vertical[vPos](metrics, this);
-            horizontal[hPos](metrics, this, isSafe ? "safeHorizontals" : "horizontals");
-            vertical[vPos](metrics, this);
+            this.x = horizontal[hPos](metrics, this);
+            this.y = vertical[vPos](metrics, this);
         };
 
         this.makeAccessible();
@@ -85,7 +70,6 @@ export class GelGroup extends Phaser.GameObjects.Container {
 
         this.addAt(newButton, position);
         this._buttons.push(newButton);
-
         this.reset(this._metrics);
 
         return newButton;
@@ -152,7 +136,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
 
     makeAccessible() {
         a11y.addGroupAt(
-            fp.camelCase([this._vPos, this._hPos, this._isVertical ? "v" : "", this._isSafe ? "safe" : ""].join("-")),
+            fp.camelCase([this._vPos, this._hPos, this._isVertical ? "v" : "", this.isSafe ? "safe" : ""].join("-")),
         );
         this._buttons.forEach(a11y.addButton);
     }
