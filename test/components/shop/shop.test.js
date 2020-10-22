@@ -7,11 +7,10 @@
 import { Shop } from "../../../src/components/shop/shop.js";
 import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as scaler from "../../../src/core/scaler.js";
-
-jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
-import * as scaler from "../../../src/core/scaler.js";
 import * as wallet from "../../../src/components/shop/wallet-ui.js";
 import * as titles from "../../../src/components/select/titles.js";
+
+jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
 
 describe("Shop", () => {
     let shopScreen;
@@ -35,7 +34,7 @@ describe("Shop", () => {
         horizontals: { right: 100 },
         verticalBorderPad: 100,
         buttonPad: 100,
-    }
+    };
     scaler.getMetrics = jest.fn().mockReturnValue(mockMetrics);
     scaler.onScaleChange = { add: jest.fn().mockReturnValue({ unsubscribe: "foo" }) };
     const mockText = {
@@ -104,9 +103,6 @@ describe("Shop", () => {
         describe("creates the title UI component", () => {
             test("with a container", () => {
                 expect(shopScreen.title).toBe(mockContainer);
-            });
-
-
             });
         });
 
