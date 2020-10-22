@@ -129,7 +129,7 @@ describe("Shop", () => {
             test("adds a callback to onScaleChange that updates scale and position for UI elems", () => {
                 const onScaleChangeCallback = scaler.onScaleChange.add.mock.calls[0][0];
                 onScaleChangeCallback();
-                expect(shopScreen.title.setScale).toHaveBeenCalled();
+                expect(shopScreen.title.setScale).toHaveBeenCalled(); // can you show that these weren't called by setup?
                 expect(shopScreen.title.setPosition).toHaveBeenCalled();
                 expect(shopScreen.wallet.setScale).toHaveBeenCalled();
                 expect(shopScreen.wallet.setPosition).toHaveBeenCalled();
