@@ -11,6 +11,7 @@ import { scrollableList } from "../../core/layout/scrollable-list/scrollable-lis
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
 import { createWallet } from "./wallet-ui.js";
+import { createTitles } from "./../select/titles.js";
 
 export const getSafeArea = layout => layout.getSafeArea({}, false);
 export const getXPos = (container, safeArea, padding) => safeArea.width / 2 - container.getBounds().width / 2 - padding;
@@ -31,6 +32,8 @@ export class Shop extends Screen {
         this.setLayout(buttons);
         const metrics = getMetrics();
         this.title = this.createTitle(metrics);
+        // const thing = createTitles(this);
+        // console.log('BEEBUG: thing', thing);
         this.wallet = createWallet(this, metrics);
         this.panel = scrollableList(this);
         this.setupEvents();
@@ -39,16 +42,17 @@ export class Shop extends Screen {
     createTitle(metrics) {
         const { title } = this.config;
 
-        const titleBackground = this.add.image(0, 0, title.background);
-        const titleText = this.add.text(0, 0, title.text, title.font).setOrigin(0.5);
+        // const titleBackground = this.add.image(0, 0, title.background);
+        // const titleText = this.add.text(0, 0, title.text, title.font).setOrigin(0.5);
         const titleContainer = this.add.container();
 
-        const titleTextBounds = titleText.getBounds();
-        const titleWidth = titleTextBounds.width + title.titlePadding;
-        const titleHeight = titleTextBounds.height + title.titlePadding;
-        const titleBackgroundBounds = titleBackground.getBounds();
-        titleBackground.setScale(titleWidth / titleBackgroundBounds.width, titleHeight / titleBackgroundBounds.height);
-        titleContainer.add([titleBackground, titleText]);
+        // const titleTextBounds = titleText.getBounds();
+        // const titleWidth = titleTextBounds.width + title.titlePadding;
+        // const titleHeight = titleTextBounds.height + title.titlePadding;
+        // const titleBackgroundBounds = titleBackground.getBounds();
+        // titleBackground.setScale(titleWidth / titleBackgroundBounds.width, titleHeight / titleBackgroundBounds.height);
+        // titleContainer.add([titleBackground, titleText]);
+        titleContainer.add(createTitles(this));
 
         titleContainer.setScale(this.getScaleFactor(metrics, titleContainer, true));
         titleContainer.setPosition(0, getYPos(metrics, getSafeArea(this.layout)));
@@ -63,7 +67,7 @@ export class Shop extends Screen {
         const safeArea = this.layout.getSafeArea({}, false);
         const availableSpace = safeArea.y - topEdge - verticalBorderPad;
         const containerBounds = container.getBounds();
-        const padding = this.config.title.titlePadding / 2;
+        const padding = this.config.titlePadding / 2;
         const scaleFactorY = (availableSpace - padding) / containerBounds.height;
         const scaleFactorX = safeArea.width / 4 / container.getBounds().width;
         return fixedWidth ? scaleFactorY : Math.min(scaleFactorY, scaleFactorX);

@@ -1,14 +1,27 @@
 {
-    title: {
-        text: "My Shop",
-        font: { fontFamily: "ReithSans", resolution: 4, fontSize: "16px"},
-        background: "shop.titleBackground",
-        titlePadding: 10,
-    },
+    titles: [
+        {
+            type: "image",
+            key: "titleBackground",
+            xOffset: 0,
+            yOffset: 0,
+        },
+        {
+            type: "text",
+            value: "Shop",
+            xOffset: 0,
+            yOffset: 0,
+            styles: {
+                fontSize: "24px",
+                resolution: 4,
+            },
+        },
+    ],
     listPadding: {
         x: 18.86, 
         y: 15.09    
     },
+    titlePadding: 10,
     background: {
         items: [
             { key: "home.background", x: 0, y: 0 },
