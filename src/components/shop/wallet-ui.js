@@ -29,8 +29,8 @@ export const createWallet = (scene, metrics) => {
 
     const container = scene.add.container();
 
-    const width = elems[2].getBounds().width + elems[1].getBounds().width + padding * 3;
-    elems[2].setPosition(width / 4 - padding, 0);
+    const width = elems[2].getBounds().width + elems[1].getBounds().width + padding * 3; // hardcoded indices are a problem here. Can we get named objects?
+    elems[2].setPosition(width / 4 - padding, 0); 
     elems[1].setPosition(-width / 4, 0);
     elems[0].setScale(width / elems[0].getBounds().width);
 
