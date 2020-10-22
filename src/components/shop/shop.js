@@ -10,10 +10,11 @@ import { Screen } from "../../core/screen.js";
 import { scrollableList } from "../../core/layout/scrollable-list/scrollable-list.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
+import { createWallet } from "./wallet-ui.js";
 
-const getSafeArea = layout => layout.getSafeArea({}, false);
-const getXPos = (container, safeArea, padding) => safeArea.width / 2 - container.getBounds().width / 2 - padding;
-const getYPos = (metrics, safeArea) => {
+export const getSafeArea = layout => layout.getSafeArea({}, false);
+export const getXPos = (container, safeArea, padding) => safeArea.width / 2 - container.getBounds().width / 2 - padding;
+export const getYPos = (metrics, safeArea) => {
     const { verticals, verticalBorderPad } = metrics;
     const padding = (safeArea.y - verticals.top) / 2 + verticalBorderPad / 2;
     return verticals.top + padding;
@@ -30,7 +31,7 @@ export class Shop extends Screen {
         this.setLayout(buttons);
         const metrics = getMetrics();
         this.title = this.createTitle(metrics);
-        this.wallet = this.createWallet(metrics);
+        this.wallet = createWallet(this, metrics);
         this.panel = scrollableList(this);
         this.setupEvents();
     }
@@ -53,30 +54,6 @@ export class Shop extends Screen {
         titleContainer.setPosition(0, getYPos(metrics, getSafeArea(this.layout)));
 
         return titleContainer;
-    }
-
-    createWallet(metrics) {
-        const { wallet } = this.config;
-
-        const walletBackground = this.add.image(0, 0, wallet.background);
-        const walletIcon = this.add.image(0, 0, wallet.icon);
-        const walletBalance = this.add.text(0, 0, wallet.defaultBalance, wallet.font).setOrigin(1, 0.5);
-        const walletContainer = this.add.container();
-
-        const walletWidth = walletBalance.getBounds().width + walletIcon.getBounds().width + wallet.iconPadding * 3;
-        walletBalance.setPosition(walletWidth / 4 + wallet.iconPadding, 0);
-        walletIcon.setPosition(-walletWidth / 4, 0);
-        walletBackground.setScale(walletWidth / walletBackground.getBounds().width);
-        walletContainer.add([walletBackground, walletIcon, walletBalance]);
-
-        const safeArea = getSafeArea(this.layout);
-        walletContainer.setScale(this.getScaleFactor(metrics, walletContainer));
-        walletContainer.setPosition(
-            getXPos(walletContainer, safeArea, this.config.listPadding.x),
-            getYPos(metrics, getSafeArea(this.layout)),
-        );
-
-        return walletContainer;
     }
 
     getScaleFactor(metrics, container, fixedWidth = false) {
