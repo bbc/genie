@@ -9,17 +9,7 @@ import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const scrollableList = scene => {
-    const scrollableListPanel = createScrollableListPanel(scene);
-    scene.panel = scrollableListPanel;
-    scene.input.topOnly = false;
-    setupEvents(scene, scrollableListPanel);
-    setupAccessibility(scene, scrollableListPanel);
-
-    return scrollableListPanel;
-};
-
-const createScrollableListPanel = scene => {
+const createPanel = scene => {
     const panelConfig = getPanelConfig(scene);
     const panel = scene.rexUI.add.scrollablePanel(panelConfig);
     panel.layout();
@@ -67,11 +57,7 @@ const createTable = scene => {
         table.add(createItem(scene, item), 0, idx, "top", 0, true);
     });
 
-    return scene.rexUI.add
-        .sizer({
-            orientation: "y",
-        })
-        .add(table, 1, "center", 0, true);
+    return scene.rexUI.add.sizer({ orientation: "y" }).add(table, 1, "center", 0, true);
 };
 
 const createItem = (scene, item) =>
@@ -110,13 +96,24 @@ const setupEvents = (scene, panel) => {
     });
 };
 
-const setupAccessibility = (scene, panel) => {
-    const a11yGroup = scene.add.container();
-    a11yGroup.reset = () => resizePanel(scene, panel);
-    a11yGroup.add(panel);
+export class ScrollableList extends Phaser.GameObjects.Container {
+    constructor(scene) {
+        super(scene, 0, 0);
+        this.panel = createPanel(scene);
 
-    scene.layout.addCustomGroup(scene.scene.key, a11yGroup, 0);
-    a11y.addGroupAt(scene.scene.key, 0);
-};
+        this.add(this.panel);
+        scene.layout.addCustomGroup(scene.scene.key, this, 0);
+        a11y.addGroupAt(scene.scene.key, 0);
 
-export { scrollableList, resizePanel };
+        scene.input.topOnly = false;
+        setupEvents(scene, this.panel);
+    }
+
+    reset() {
+        resizePanel(this.scene, this.panel);
+    }
+
+    getBoundingRect() {
+        return this.scene.layout.getSafeArea({}, false);
+    }
+}

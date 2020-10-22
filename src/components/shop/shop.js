@@ -7,7 +7,7 @@
  * @license Apache-2.0
  */
 import { Screen } from "../../core/screen.js";
-import { scrollableList } from "../../core/layout/scrollable-list/scrollable-list.js";
+import { ScrollableList } from "../../core/layout/scrollable-list/scrollable-list.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
 
@@ -23,7 +23,7 @@ export class Shop extends Screen {
         const metrics = getMetrics();
         this.title = this.createTitle(metrics);
         this.wallet = this.createWallet(metrics);
-        this.panel = scrollableList(this);
+        this.panel = new ScrollableList(this).panel;
         this.setupEvents();
     }
 

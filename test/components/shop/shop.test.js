@@ -72,7 +72,7 @@ describe("Shop", () => {
             container: jest.fn().mockReturnValue(mockContainer),
         };
         shopScreen.events = { once: jest.fn() };
-        scroller.scrollableList = jest.fn().mockReturnValue(mockScrollableList);
+        scroller.ScrollableList = jest.fn().mockReturnValue(mockScrollableList);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -98,7 +98,7 @@ describe("Shop", () => {
         });
 
         test("adds a scrollable list panel", () => {
-            expect(scroller.scrollableList).toHaveBeenCalled();
+            expect(scroller.ScrollableList).toHaveBeenCalled();
             expect(shopScreen.panel).toBe(mockScrollableList);
         });
 

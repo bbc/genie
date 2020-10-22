@@ -4,7 +4,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { scrollableList } from "../../../../src/core/layout/scrollable-list/scrollable-list.js";
+import { ScrollableList } from "../../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
 import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
@@ -66,6 +66,9 @@ const mockScene = {
     },
     scale: { on: jest.fn() },
     scene: { key: "shop" },
+    sys: {
+        queueDepthSort: jest.fn(),
+    },
 };
 const mockGelButton = { width: 100, setScale: jest.fn() };
 buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
@@ -78,7 +81,7 @@ describe("Scrollable List", () => {
         beforeEach(() => {
             a11y.addGroupAt = jest.fn();
             scaler.getMetrics = jest.fn().mockReturnValue({ scale: 1 });
-            scrollableList(mockScene);
+            ScrollableList(mockScene);
         });
         describe("adds a rexUI scrollable panel", () => {
             describe("with appropriate panel config", () => {
@@ -144,7 +147,7 @@ describe("Scrollable List", () => {
         describe("resizing", () => {
             beforeEach(() => {
                 jest.spyOn(fp, "debounce").mockImplementation((value, callback) => callback);
-                scrollableList(mockScene);
+                ScrollableList(mockScene);
                 mockScene.scale.on.mock.calls[0][1]();
             });
             test("calls layout on the panel", () => {
@@ -165,7 +168,7 @@ describe("Scrollable List", () => {
             beforeEach(() => {
                 handlers.updatePanelOnFocus = jest.fn().mockReturnValue(jest.fn());
                 handlers.updatePanelOnScroll = jest.fn().mockReturnValue(jest.fn());
-                scrollableList(mockScene);
+                ScrollableList(mockScene);
             });
             test("adds an updatePanelOnScroll", () => {
                 expect(typeof mockScrollablePanel.updateOnScroll).toBe("function");
@@ -182,7 +185,7 @@ describe("Scrollable List", () => {
         });
     });
     describe("accessibility setup", () => {
-        beforeEach(() => scrollableList(mockScene));
+        beforeEach(() => new ScrollableList(mockScene));
 
         test("adds a container", () => {
             expect(mockScene.add.container).toHaveBeenCalled();
