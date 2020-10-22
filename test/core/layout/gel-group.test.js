@@ -191,6 +191,56 @@ describe("Group", () => {
                 expect(group.x).toBe(0);
                 expect(group.y).toBe(-50);
             });
+
+            test("Aligns to the edges of the 4/3 area in mobile mode", () => {
+                const testMetrics = {
+                    isMobile: true,
+                    horizontalBorderPad: 10,
+                    stageWidth: 1400,
+                    scale: 1,
+                    safeHorizontals: {
+                        left: -400,
+                        right: 400,
+                    },
+                    verticals: {},
+                };
+
+                const leftGroup = new GelGroup(mockScene, parentGroup, "middle", "left", testMetrics, true, false);
+                leftGroup.addButton(config);
+                leftGroup.reset(testMetrics);
+
+                const rightGroup = new GelGroup(mockScene, parentGroup, "middle", "right", testMetrics, true, false);
+                rightGroup.addButton(config);
+                rightGroup.reset(testMetrics);
+
+                expect(leftGroup.x).toBe(-400);
+                expect(rightGroup.x).toBe(400);
+            });
+
+            test("Aligns to the border pad if screen width overlaps the 4/3 area in mobile mode", () => {
+                const testMetrics = {
+                    isMobile: true,
+                    horizontalBorderPad: 10,
+                    stageWidth: 790,
+                    scale: 1,
+                    safeHorizontals: {
+                        left: -400,
+                        right: 400,
+                    },
+                    verticals: {},
+                };
+
+                const leftGroup = new GelGroup(mockScene, parentGroup, "middle", "left", testMetrics, true, false);
+                leftGroup.addButton(config);
+                leftGroup.reset(testMetrics);
+
+                const rightGroup = new GelGroup(mockScene, parentGroup, "middle", "right", testMetrics, true, false);
+                rightGroup.addButton(config);
+                rightGroup.reset(testMetrics);
+
+                expect(leftGroup.x).toBe(-385);
+                expect(rightGroup.x).toBe(385);
+            });
         });
 
         describe("when vPos is top and hPos is right", () => {
@@ -257,6 +307,8 @@ describe("Group", () => {
                         hitArea: {
                             left: 0,
                             top: 0,
+                            width: 50,
+                            height: 50,
                         },
                     },
                     config: {
@@ -267,8 +319,9 @@ describe("Group", () => {
                     updateTransform: () => {},
                     resize: buttonResizeStub,
                     getHitAreaBounds: mockGetHitAreaBounds,
-                    sprite: { width: 200, height: 100 },
+                    sprite: { width: 100, height: 100 },
                 }));
+
                 group.addButton(config);
 
                 createButtonStub.mockImplementation(() => ({
@@ -280,6 +333,8 @@ describe("Group", () => {
                         hitArea: {
                             left: -1000,
                             top: -1000,
+                            width: 50,
+                            height: 50,
                         },
                     },
                     config: {
@@ -290,8 +345,9 @@ describe("Group", () => {
                     updateTransform: () => {},
                     resize: buttonResizeStub,
                     getHitAreaBounds: mockGetHitAreaBounds,
-                    sprite: { width: 200, height: 100 },
+                    sprite: { width: 100, height: 100 },
                 }));
+
                 group.addButton(config);
                 group.reset(metrics);
 
