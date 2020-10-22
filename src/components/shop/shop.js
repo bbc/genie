@@ -12,28 +12,7 @@ import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
 import { createWallet } from "./wallet-ui.js";
 import { createTitles } from "./../select/titles.js";
-
-export const getSafeArea = layout => layout.getSafeArea({}, false);
-
-export const getXPos = (container, safeArea, padding) => safeArea.width / 2 - container.getBounds().width / 2 - padding;
-
-export const getYPos = (metrics, safeArea) => {
-    const { verticals, verticalBorderPad } = metrics;
-    const padding = (safeArea.y - verticals.top) / 2 + verticalBorderPad / 2;
-    return verticals.top + padding;
-};
-
-export const getScaleFactor = args => {
-    container.setScale(1);
-    const { metrics, container, fixedWidth, safeArea } = args;
-    const { verticals, verticalBorderPad } = metrics;
-    const availableSpace = safeArea.y - verticals.top - verticalBorderPad;
-    const containerBounds = container.getBounds();
-    const padding = verticalBorderPad / 2;
-    const scaleFactorY = (availableSpace - padding) / containerBounds.height;
-    const scaleFactorX = safeArea.width / 4 / containerBounds.width;
-    return fixedWidth ? scaleFactorY : Math.min(scaleFactorY, scaleFactorX);
-};
+import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-scaling.js";
 
 export class Shop extends Screen {
     preload() {
