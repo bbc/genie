@@ -14,11 +14,25 @@ import { createWallet } from "./wallet-ui.js";
 import { createTitles } from "./../select/titles.js";
 
 export const getSafeArea = layout => layout.getSafeArea({}, false);
+
 export const getXPos = (container, safeArea, padding) => safeArea.width / 2 - container.getBounds().width / 2 - padding;
+
 export const getYPos = (metrics, safeArea) => {
     const { verticals, verticalBorderPad } = metrics;
     const padding = (safeArea.y - verticals.top) / 2 + verticalBorderPad / 2;
     return verticals.top + padding;
+};
+
+export const getScaleFactor = args => {
+    container.setScale(1);
+    const { metrics, container, fixedWidth, safeArea } = args;
+    const { verticals, verticalBorderPad } = metrics;
+    const availableSpace = safeArea.y - verticals.top - verticalBorderPad;
+    const containerBounds = container.getBounds();
+    const padding = verticalBorderPad / 2;
+    const scaleFactorY = (availableSpace - padding) / containerBounds.height;
+    const scaleFactorX = safeArea.width / 4 / containerBounds.width;
+    return fixedWidth ? scaleFactorY : Math.min(scaleFactorY, scaleFactorX);
 };
 
 export class Shop extends Screen {
@@ -32,45 +46,26 @@ export class Shop extends Screen {
         this.setLayout(buttons);
         const metrics = getMetrics();
         this.title = this.createTitle(metrics);
-        // const thing = createTitles(this);
-        // console.log('BEEBUG: thing', thing);
         this.wallet = createWallet(this, metrics);
         this.panel = scrollableList(this);
         this.setupEvents();
     }
 
     createTitle(metrics) {
-        const { title } = this.config;
-
-        // const titleBackground = this.add.image(0, 0, title.background);
-        // const titleText = this.add.text(0, 0, title.text, title.font).setOrigin(0.5);
         const titleContainer = this.add.container();
-
-        // const titleTextBounds = titleText.getBounds();
-        // const titleWidth = titleTextBounds.width + title.titlePadding;
-        // const titleHeight = titleTextBounds.height + title.titlePadding;
-        // const titleBackgroundBounds = titleBackground.getBounds();
-        // titleBackground.setScale(titleWidth / titleBackgroundBounds.width, titleHeight / titleBackgroundBounds.height);
-        // titleContainer.add([titleBackground, titleText]);
         titleContainer.add(createTitles(this));
 
-        titleContainer.setScale(this.getScaleFactor(metrics, titleContainer, true));
+        titleContainer.setScale(
+            getScaleFactor({
+                metrics,
+                container: titleContainer,
+                fixedWidth: true,
+                safeArea: getSafeArea(this.layout),
+            }),
+        );
         titleContainer.setPosition(0, getYPos(metrics, getSafeArea(this.layout)));
 
         return titleContainer;
-    }
-
-    getScaleFactor(metrics, container, fixedWidth = false) {
-        const { verticals, verticalBorderPad } = metrics;
-        container.setScale(1);
-        const topEdge = verticals.top;
-        const safeArea = this.layout.getSafeArea({}, false);
-        const availableSpace = safeArea.y - topEdge - verticalBorderPad;
-        const containerBounds = container.getBounds();
-        const padding = this.config.titlePadding / 2;
-        const scaleFactorY = (availableSpace - padding) / containerBounds.height;
-        const scaleFactorX = safeArea.width / 4 / container.getBounds().width;
-        return fixedWidth ? scaleFactorY : Math.min(scaleFactorY, scaleFactorX);
     }
 
     setupEvents() {
@@ -82,9 +77,9 @@ export class Shop extends Screen {
     resize() {
         const metrics = getMetrics();
         const safeArea = getSafeArea(this.layout);
-        this.title.setScale(this.getScaleFactor(metrics, this.title, true));
+        this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));
         this.title.setPosition(0, getYPos(metrics, safeArea));
-        this.wallet.setScale(this.getScaleFactor(metrics, this.wallet));
+        this.wallet.setScale(getScaleFactor({ metrics, container: this.wallet, safeArea }));
         this.wallet.setPosition(getXPos(this.wallet, safeArea, this.config.listPadding.x), getYPos(metrics, safeArea));
     }
 }

@@ -6,7 +6,7 @@
  * @license Apache-2.0
  */
 
-import { getSafeArea, getXPos, getYPos } from "./shop.js";
+import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -17,13 +17,12 @@ const styleDefaults = {
 const makeElements = makerFns => conf => makerFns[conf.type](conf).setOrigin(0.5);
 
 export const createWallet = (scene, metrics) => {
-    
     const image = conf => scene.add.image(0, 0, `${scene.assetPrefix}.${conf.key}`);
     const text = conf => {
         const textStyle = { ...styleDefaults, ...conf.styles };
         return scene.add.text(0, 0, conf.value, textStyle);
     };
-    
+
     const configs = scene.config.wallet || [];
     const padding = scene.config.walletPadding;
     const elems = configs.map(makeElements({ image, text }));
@@ -38,10 +37,10 @@ export const createWallet = (scene, metrics) => {
     container.add(elems);
 
     const safeArea = getSafeArea(scene.layout);
-    container.setScale(scene.getScaleFactor(metrics, container));
+    container.setScale(getScaleFactor({ metrics, container, safeArea }));
     container.setPosition(
         getXPos(container, safeArea, scene.config.listPadding.x),
-        getYPos(metrics, getSafeArea(scene.layout)),
+        getYPos(metrics, safeArea),
     );
 
     return container;
