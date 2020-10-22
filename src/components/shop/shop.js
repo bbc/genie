@@ -46,6 +46,12 @@ export class Shop extends Screen {
         return titleContainer;
     }
 
+    setupEvents() {
+        const resize = this.resize.bind(this);
+        const scaleEvent = onScaleChange.add(() => resize());
+        this.events.once("shutdown", scaleEvent.unsubscribe);
+    }
+
     resize() {
         const metrics = getMetrics();
         const safeArea = getSafeArea(this.layout);
