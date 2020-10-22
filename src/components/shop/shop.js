@@ -18,8 +18,7 @@ export class Shop extends Screen {
 
     create() {
         this.addBackgroundItems();
-        const buttons = ["home", "pause"];
-        this.setLayout(buttons);
+        this.setLayout(["home", "pause"]);
         const metrics = getMetrics();
         this.title = this.createTitle(metrics);
         this.wallet = this.createWallet(metrics);

@@ -5,8 +5,10 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { Shop } from "../../../src/components/shop/shop.js";
-import * as scroller from "../../../src/core/layout/scrollable-list/scrollable-list.js";
+import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as scaler from "../../../src/core/scaler.js";
+
+jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
 
 describe("Shop", () => {
     let shopScreen;
@@ -72,7 +74,8 @@ describe("Shop", () => {
             container: jest.fn().mockReturnValue(mockContainer),
         };
         shopScreen.events = { once: jest.fn() };
-        scroller.ScrollableList = jest.fn().mockReturnValue(mockScrollableList);
+
+        ScrollableList.mockImplementation(() => ({ panel: mockScrollableList }));
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -98,7 +101,7 @@ describe("Shop", () => {
         });
 
         test("adds a scrollable list panel", () => {
-            expect(scroller.ScrollableList).toHaveBeenCalled();
+            expect(ScrollableList).toHaveBeenCalled();
             expect(shopScreen.panel).toBe(mockScrollableList);
         });
 
