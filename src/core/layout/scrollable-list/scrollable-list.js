@@ -4,48 +4,52 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { assetKey } from "./scrollable-list-helpers.js";
+import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
+import * as a11y from "../../accessibility/accessibility-layer.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const scrollableList = scene => {
-    const panelConfig = getPanelConfig(scene);
-    const scrollableListPanel = scene.rexUI.add.scrollablePanel(panelConfig);
-    scrollableListPanel.layout();
+    const scrollableListPanel = createScrollableListPanel(scene);
+    scene.panel = scrollableListPanel;
     scene.input.topOnly = false;
-    scene.scale.on(
-        "resize",
-        fp.debounce(100, () => resizePanel(scene, scrollableListPanel)),
-        scene,
-    );
+    setupEvents(scene, scrollableListPanel);
+    setupAccessibility(scene, scrollableListPanel);
+
     return scrollableListPanel;
 };
 
+const createScrollableListPanel = scene => {
+    const panelConfig = getPanelConfig(scene);
+    const panel = scene.rexUI.add.scrollablePanel(panelConfig);
+    panel.layout();
+    return panel;
+};
+
 const getPanelConfig = scene => {
-    const config = scene.config;
-    const { assetKeys: keys } = config;
-    const safeArea = scene.layout.getSafeArea();
+    const { space, assetKeys: keys } = scene.config;
+    const safeArea = getPanelY(scene);
     return {
+        y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        background: scene.add.image(0, 0, assetKey(keys.background, keys)),
-        panel: { child: createPanel(scene) },
+        background: scene.add.image(0, 0, `${keys.prefix}.${keys.background}`),
+        panel: { child: createInnerPanel(scene) },
         slider: {
-            track: scene.add.image(0, 0, assetKey(keys.scrollbar, keys)),
-            thumb: scene.add.image(0, 0, assetKey(keys.scrollbarHandle, keys)),
-            width: config.space,
+            track: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbar}`),
+            thumb: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbarHandle}`),
+            width: space,
         },
-        space: {
-            left: config.space,
-            right: config.space,
-            top: config.space,
-            bottom: config.space,
-            panel: config.space,
-        },
+        space: { left: space, right: space, top: space, bottom: space, panel: space },
     };
 };
 
-const createPanel = scene => {
+const getPanelY = scene => {
+    const safeArea = scene.layout.getSafeArea({}, false);
+    return { y: safeArea.height / 2 + safeArea.y, height: safeArea.height };
+};
+
+const createInnerPanel = scene => {
     const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 } });
     sizer.add(createTable(scene), { expand: true });
     return sizer;
@@ -78,11 +82,41 @@ const createItem = (scene, item) =>
     });
 
 const resizePanel = (scene, panel) => {
-    const grid = panel.getByName("grid", true);
-    const gridItems = grid.getElement("items");
-    gridItems.forEach(label => scaleButton({ scene, config: scene.config, gelButton: label.children[0] }));
-    panel.minHeight = scene.layout.getSafeArea().height;
+    const t = panel.t;
+    const items = panel.getByName("grid", true).getElement("items");
+    items.forEach(label => scaleButton(label.children[0], scene.layout, panel.space.top));
+    const safeArea = getPanelY(scene);
+    panel.minHeight = safeArea.height;
+    panel.y = safeArea.y;
     panel.layout();
+    panel.setT(t);
+};
+
+const setupEvents = (scene, panel) => {
+    scene.scale.on(
+        "resize",
+        fp.debounce(10, () => resizePanel(scene, panel)),
+        scene,
+    );
+
+    panel.updateOnScroll = updatePanelOnScroll(panel);
+    panel.on("scroll", panel.updateOnScroll);
+
+    panel.updateOnFocus = updatePanelOnFocus(panel);
+    const items = panel.getByName("grid", true).getElement("items");
+    items.forEach(item => {
+        const a11yElem = item.children[0].accessibleElement.el;
+        a11yElem.addEventListener("focus", () => panel.updateOnFocus(item));
+    });
+};
+
+const setupAccessibility = (scene, panel) => {
+    const a11yGroup = scene.add.container();
+    a11yGroup.reset = () => resizePanel(scene, panel);
+    a11yGroup.add(panel);
+
+    scene.layout.addCustomGroup(scene.scene.key, a11yGroup, 0);
+    a11y.addGroupAt(scene.scene.key, 0);
 };
 
 export { scrollableList, resizePanel };

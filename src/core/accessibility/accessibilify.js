@@ -31,6 +31,8 @@ const assignEvents = (accessibleElement, button) => {
         accessibleElement.position(getHitAreaBounds(button));
     };
 
+    button.setElementSizeAndPosition = setElementSizeAndPosition;
+
     const resizeAndRepositionElement = fp.debounce(200, setElementSizeAndPosition);
 
     let event = onScaleChange.add(resizeAndRepositionElement);

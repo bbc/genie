@@ -8,7 +8,7 @@
         key: "just_started", // i.e. do gmi.achievements.set({ key: "just_started" }) to mark this achievement complete
         name: "Just Getting Star-ted", // update name strings to reflect your game's look and feel
         description: "You collected your first star.", // update description strings to reflect your game's look and feel
-        points: 100, // the total points for all achievements should equal 1000
+        points: 100, // points should be rounded up (e.g. 10, 50, 100 not 11, 53, 101). the total points for all achievements should equal 1000
     },
     {
         key: "rock_star",

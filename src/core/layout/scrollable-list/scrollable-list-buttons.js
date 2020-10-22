@@ -4,9 +4,10 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { handleIfVisible } from "./scrollable-list-helpers.js";
+import { handleClickIfVisible } from "./scrollable-list-handlers.js";
 import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
+import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const createGelButton = (scene, item) => {
@@ -18,7 +19,7 @@ const createGelButton = (scene, item) => {
         accessibilityEnabled: true,
         ariaLabel: item.ariaLabel,
         channel: config.eventChannel,
-        group: "middleCenter",
+        group: scene.scene.key,
         id,
         key: config.assetKeys.itemBackground,
         scene: config.assetKeys.prefix,
@@ -27,21 +28,25 @@ const createGelButton = (scene, item) => {
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
 
+    const callback = fp.identity; // placeholder
+
     eventBus.subscribe({
-        callback: () => handleIfVisible(gelButton, scene),
+        callback: handleClickIfVisible(gelButton, scene, callback),
         channel: gelConfig.channel,
         name: id,
     });
 
-    return fp.flow(scaleButton, overlays1Wide)({ scene, gelButton, config, item });
+    scaleButton(gelButton, scene.layout, config.space);
+    makeAccessible(gelButton);
+    return overlays1Wide({ scene, gelButton, item, config });
 };
 
-const scaleButton = args => {
-    const { scene, config, gelButton } = args;
-    const safeArea = scene.layout.getSafeArea();
-    const scaleFactor = (safeArea.width - config.space * 4) / gelButton.width;
+const scaleButton = (gelButton, layout, space) => {
+    const safeArea = layout.getSafeArea({}, false);
+    const scaleFactor = (safeArea.width - space * 4) / gelButton.width;
     gelButton.setScale(scaleFactor);
-    return args;
 };
+
+const makeAccessible = gelButton => accessibilify(gelButton);
 
 export { createGelButton, scaleButton };

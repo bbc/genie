@@ -6,16 +6,15 @@
  */
 import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
 import * as overlays from "../../../../src/core/layout/scrollable-list/button-overlays.js";
-import * as helpers from "../../../../src/core/layout/scrollable-list/scrollable-list-helpers.js";
+import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 import { eventBus } from "../../../../src/core/event-bus.js";
-
-const mockContainer = { parent: { getTopmostSizer: jest.fn().mockReturnValue({ innerHeight: 100 }) } };
+import * as a11y from "../../../../src/core/accessibility/accessibilify.js";
 
 const mockButton = {
     width: 100,
     setScale: jest.fn(),
-    rexContainer: mockContainer,
     config: { id: "foo" },
+    rexContainer: { parent: { getTopmostSizer: jest.fn().mockReturnValue({ space: { top: 10 } }) } },
 };
 
 const mockScene = {
@@ -34,6 +33,7 @@ const mockScene = {
     },
     input: { y: 50 },
     scale: { displaySize: { height: 100 } },
+    scene: { key: "shop" },
 };
 
 const mockItem = {
@@ -43,6 +43,7 @@ const mockItem = {
 
 describe("Scrollable List Buttons", () => {
     overlays.overlays1Wide = jest.fn();
+    a11y.accessibilify = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
 
@@ -59,7 +60,7 @@ describe("Scrollable List Buttons", () => {
                 ariaLabel: "mockAriaLabel",
                 channel: "mockChannel",
                 gameButton: true,
-                group: "middleCenter",
+                group: "shop",
                 id: "scroll_button_mockId",
                 key: "itemBackground",
                 scene: "mockScene",
@@ -70,13 +71,12 @@ describe("Scrollable List Buttons", () => {
 
         test("subscribes to the event bus", () => {
             eventBus.subscribe = jest.fn();
-            helpers.handleIfVisible = jest.fn();
+            handlers.handleClickIfVisible = jest.fn();
             buttons.createGelButton(mockScene, mockItem);
             const args = eventBus.subscribe.mock.calls[0][0];
             expect(args.channel).toEqual("mockChannel");
             expect(args.name).toEqual("scroll_button_mockId");
-            args.callback();
-            expect(helpers.handleIfVisible).toHaveBeenCalledWith(mockButton, mockScene);
+            expect(handlers.handleClickIfVisible).toHaveBeenCalled();
         });
 
         test("scales the button", () => {
