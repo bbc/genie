@@ -4,7 +4,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { scrollableList } from "../../../../src/core/layout/scrollable-list/scrollable-list.js";
+import { ScrollableList } from "../../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
 import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
@@ -27,6 +27,8 @@ const mockScrollablePanel = {
     layout: jest.fn(),
     getByName: jest.fn().mockReturnValue(mockGridSizer),
     on: jest.fn(),
+    once: jest.fn(),
+    off: jest.fn(),
     space: { top: 10 },
     t: 0,
     height: 100,
@@ -35,7 +37,6 @@ const mockScrollablePanel = {
 };
 const mockSizer = { add: jest.fn() };
 const mockOverlay = {};
-const mockContainer = { reset: jest.fn(), add: jest.fn() };
 const mockScene = {
     rexUI: {
         add: {
@@ -46,7 +47,7 @@ const mockScene = {
         },
     },
     input: { topOnly: true },
-    add: { image: jest.fn(), container: jest.fn().mockReturnValue(mockContainer) },
+    add: { image: jest.fn() },
     config: {
         assetKeys: {
             prefix: "test",
@@ -66,19 +67,27 @@ const mockScene = {
     },
     scale: { on: jest.fn() },
     scene: { key: "shop" },
+    sys: {
+        queueDepthSort: jest.fn(),
+        displayList: {
+            remove: jest.fn(),
+        },
+    },
 };
 const mockGelButton = { width: 100, setScale: jest.fn() };
 buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
 
 describe("Scrollable List", () => {
-    afterEach(() => jest.clearAllMocks());
+    afterEach(jest.clearAllMocks);
+    beforeEach(() => {
+        a11y.addGroupAt = jest.fn();
+    });
 
     describe("instantiation", () => {
         beforeEach(() => {
-            a11y.addGroupAt = jest.fn();
             scaler.getMetrics = jest.fn().mockReturnValue({ scale: 1 });
-            scrollableList(mockScene);
+            new ScrollableList(mockScene);
         });
         describe("adds a rexUI scrollable panel", () => {
             describe("with appropriate panel config", () => {
@@ -144,7 +153,7 @@ describe("Scrollable List", () => {
         describe("resizing", () => {
             beforeEach(() => {
                 jest.spyOn(fp, "debounce").mockImplementation((value, callback) => callback);
-                scrollableList(mockScene);
+                new ScrollableList(mockScene);
                 mockScene.scale.on.mock.calls[0][1]();
             });
             test("calls layout on the panel", () => {
@@ -165,7 +174,7 @@ describe("Scrollable List", () => {
             beforeEach(() => {
                 handlers.updatePanelOnFocus = jest.fn().mockReturnValue(jest.fn());
                 handlers.updatePanelOnScroll = jest.fn().mockReturnValue(jest.fn());
-                scrollableList(mockScene);
+                new ScrollableList(mockScene);
             });
             test("adds an updatePanelOnScroll", () => {
                 expect(typeof mockScrollablePanel.updateOnScroll).toBe("function");
@@ -181,25 +190,40 @@ describe("Scrollable List", () => {
             });
         });
     });
-    describe("accessibility setup", () => {
-        beforeEach(() => scrollableList(mockScene));
+    describe("Accessibility setup", () => {
+        let list;
 
-        test("adds a container", () => {
-            expect(mockScene.add.container).toHaveBeenCalled();
+        beforeEach(() => {
+            list = new ScrollableList(mockScene);
         });
-        test("gives it a reset function that calls resizePanel", () => {
-            expect(typeof mockContainer.reset).toBe("function");
-            mockContainer.reset();
-            expect(buttons.scaleButton).toHaveBeenCalled();
-        });
-        test("adds the panel to the container", () => {
-            expect(mockContainer.add).toHaveBeenCalledWith(mockScrollablePanel);
-        });
-        test("adds the container as a custom group by scene key", () => {
-            expect(mockScene.layout.addCustomGroup).toHaveBeenCalledWith("shop", mockContainer, 0);
+
+        test("adds the list as a custom group by scene key", () => {
+            expect(mockScene.layout.addCustomGroup).toHaveBeenCalledWith("shop", list, 0);
         });
         test("adds a matching group to the accessibility layer", () => {
             expect(a11y.addGroupAt).toHaveBeenCalledWith("shop", 0);
+        });
+    });
+
+    describe("Class methods", () => {
+        let list;
+
+        beforeEach(() => {
+            list = new ScrollableList(mockScene);
+        });
+
+        test("reset method that calls resizePanel", () => {
+            list.reset();
+            expect(buttons.scaleButton).toHaveBeenCalled();
+        });
+
+        test("getBoundingRect method returns current safe area", () => {
+            expect(list.getBoundingRect()).toEqual({
+                height: 100,
+                width: 100,
+                x: 0,
+                y: 0,
+            });
         });
     });
 });

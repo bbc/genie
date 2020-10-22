@@ -5,7 +5,10 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { Shop } from "../../../src/components/shop/shop.js";
-import * as scroller from "../../../src/core/layout/scrollable-list/scrollable-list.js";
+import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrollable-list.js";
+import * as scaler from "../../../src/core/scaler.js";
+
+jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
 import * as scaler from "../../../src/core/scaler.js";
 import * as wallet from "../../../src/components/shop/wallet-ui.js";
 import * as titles from "../../../src/components/select/titles.js";
@@ -26,6 +29,7 @@ describe("Shop", () => {
         home: {},
         furniture: [],
     };
+
     const mockMetrics = {
         verticals: { top: 100 },
         horizontals: { right: 100 },
@@ -65,7 +69,7 @@ describe("Shop", () => {
             container: jest.fn().mockReturnValue(mockContainer),
         };
         shopScreen.events = { once: jest.fn() };
-        scroller.scrollableList = jest.fn().mockReturnValue(mockScrollableList);
+        ScrollableList.mockImplementation(() => ({ panel: mockScrollableList }));
         wallet.createWallet = jest.fn().mockReturnValue(mockContainer);
         titles.createTitles = jest.fn();
     });
@@ -93,24 +97,28 @@ describe("Shop", () => {
         });
 
         test("adds a scrollable list panel", () => {
-            expect(scroller.scrollableList).toHaveBeenCalled();
+            expect(ScrollableList).toHaveBeenCalled();
             expect(shopScreen.panel).toBe(mockScrollableList);
-        });
-
-        test("adds a wallet UI component", () => {
-            expect(wallet.createWallet).toHaveBeenCalledWith(shopScreen, mockMetrics);
         });
 
         describe("creates the title UI component", () => {
             test("with a container", () => {
                 expect(shopScreen.title).toBe(mockContainer);
             });
+
+
+            });
+        });
+
+        test("adds a wallet UI component", () => {
+            expect(wallet.createWallet).toHaveBeenCalledWith(shopScreen, mockMetrics);
         });
 
         describe("sets up resize", () => {
             test("adds a callback to onScaleChange that updates scale and position for UI elems", () => {
                 const onScaleChangeCallback = scaler.onScaleChange.add.mock.calls[0][0];
                 onScaleChangeCallback();
+
                 expect(shopScreen.title.setScale).toHaveBeenCalled(); // can you show that these weren't called by setup?
                 expect(shopScreen.title.setPosition).toHaveBeenCalled();
                 expect(shopScreen.wallet.setScale).toHaveBeenCalled();

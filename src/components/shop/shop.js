@@ -7,7 +7,7 @@
  * @license Apache-2.0
  */
 import { Screen } from "../../core/screen.js";
-import { scrollableList } from "../../core/layout/scrollable-list/scrollable-list.js";
+import { ScrollableList } from "../../core/layout/scrollable-list/scrollable-list.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
 import { createWallet } from "./wallet-ui.js";
@@ -21,12 +21,11 @@ export class Shop extends Screen {
 
     create() {
         this.addBackgroundItems();
-        const buttons = ["home", "pause"];
-        this.setLayout(buttons);
+        this.setLayout(["home", "pause"]);
         const metrics = getMetrics();
         this.title = this.createTitle(metrics);
         this.wallet = createWallet(this, metrics);
-        this.panel = scrollableList(this);
+        this.panel = new ScrollableList(this).panel;
         this.setupEvents();
     }
 
@@ -45,12 +44,6 @@ export class Shop extends Screen {
         titleContainer.setPosition(0, getYPos(metrics, getSafeArea(this.layout)));
 
         return titleContainer;
-    }
-
-    setupEvents() {
-        const resize = this.resize.bind(this);
-        const scaleEvent = onScaleChange.add(() => resize());
-        this.events.once("shutdown", scaleEvent.unsubscribe);
     }
 
     resize() {
