@@ -14,7 +14,7 @@ const styleDefaults = {
     resolution: 4,
 };
 
-const makeElements = makerFns => conf => makerFns[conf.type](conf).setOrigin(0.5);
+const makeElement = makerFns => conf => makerFns[conf.type](conf).setOrigin(0.5);
 
 export const createWallet = (scene, metrics) => {
     const image = conf => scene.add.image(0, 0, `${scene.assetPrefix}.${conf.key}`);
@@ -22,26 +22,25 @@ export const createWallet = (scene, metrics) => {
         const textStyle = { ...styleDefaults, ...conf.styles };
         return scene.add.text(0, 0, conf.value, textStyle);
     };
-
-    const configs = scene.config.wallet || [];
-    const padding = scene.config.walletPadding;
-    const elems = configs.map(makeElements({ image, text }));
-
     const container = scene.add.container();
+    const configs = scene.config.wallet || [];
+    const padding = scene.config.walletPadding || 0;
 
-    const width = elems[2].getBounds().width + elems[1].getBounds().width + padding * 3; // hardcoded indices are a problem here. Can we get named objects?
-    elems[2].setPosition(width / 4 - padding, 0); 
-    elems[1].setPosition(-width / 4, 0);
-    elems[0].setScale(width / elems[0].getBounds().width);
+    const { background, icon, value } = Object.entries(configs).reduce(
+        (els, [key, config]) => ({ ...els, [key]: makeElement({ image, text })(config)}),
+        {},
+    );
 
-    container.add(elems);
+    const width = value.getBounds().width + icon.getBounds().width + padding * 3;
+    value.setPosition(width / 4 - padding, 0);
+    icon.setPosition(-width / 4, 0);
+    background.setScale(width / background.getBounds().width);
+
+    container.add([background, icon, value]);
 
     const safeArea = getSafeArea(scene.layout);
     container.setScale(getScaleFactor({ metrics, container, safeArea }));
-    container.setPosition(
-        getXPos(container, safeArea, scene.config.listPadding.x),
-        getYPos(metrics, safeArea),
-    );
+    container.setPosition(getXPos(container, safeArea, scene.config.listPadding.x), getYPos(metrics, safeArea));
 
     return container;
 };

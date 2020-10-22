@@ -21,21 +21,22 @@
         },
     ],
     titlePadding: 20,
-    wallet: [
-        {
+    wallet: {
+        background: {
             type: "image",
             key: "walletBackground",
         },
-        {
+        icon: {
             type: "image",
             key: "walletIcon",
         },
-        {
+        value: {
             type: "text",
             value: 1000, // PH
             styles: {},
         },
-    ],
+    }
+    ,
     walletPadding: 15,
     listPadding: {
         x: 18.86,
