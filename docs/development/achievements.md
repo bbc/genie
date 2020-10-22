@@ -32,7 +32,7 @@ Achievement description objects look like this:
 * **key** [string a-z0-9_] a unique (per game) identifier, lowercase alphanumeric with underscore. The key is used for the asset, which will convert underscores to dashes when loading (e.g `this_key` will become `this-key.png`).
 * **name** [string] This is the human readable name that will be displayed in the achievements list.
 * **description** [string] Description that will be displayed in the achievements list.
-* **points** [integer] Currently unused but required for future use. The total of all points should add up to 1000 points. Points per achievement are not required to be divided equally, they can be distributed based on difficulty / designer preference. The total should still meet 1000 points.
+* **points** [integer] Currently unused but required for future use. The total of all points should add up to 1000 points. Points per achievement are not required to be divided equally, they can be distributed based on difficulty / designer preference. Points should be rounded up (e.g. 10, 50, 100 not 11, 53, 101). The total should still meet 1000 points.
 
 **Optional Parameters:**
 * **maxProgress** [integer] Enables the progress bar and sets its limit.
