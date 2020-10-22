@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| | Buttons within the 4/3 area now sit exactly on the edge in mobile breakpoint. |
+| | Buttons will move inwards if the screen width causes the border pad to overlap the 4/3 area. |
 | | Add accessibility for scrollable list component. |
 | | Remove states system in favour of collections. |
 | | Add debug key to visualise safe interactable area. | 
