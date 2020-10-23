@@ -27,7 +27,7 @@ export const createWallet = (scene, metrics) => {
     const padding = scene.config.walletPadding || 0;
 
     const { background, icon, value } = Object.entries(configs).reduce(
-        (els, [key, config]) => ({ ...els, [key]: makeElement({ image, text })(config)}),
+        (elems, [key, config]) => ({ ...elems, [key]: makeElement({ image, text })(config)}),
         {},
     );
 
