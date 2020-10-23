@@ -16,11 +16,10 @@ const getOverlap = metrics => Math.max(0, metrics.horizontalBorderPad - (metrics
 const getPad = (group, metrics) => (is43Btn(group, metrics) ? getOverlap(metrics) : metrics.horizontalBorderPad);
 const getType = group => (group.isSafe ? "safeHorizontals" : "horizontals");
 const sum = (a, b) => a + b;
-
 const hasHitArea = gameObject => Boolean(gameObject.input.hitArea);
 const sumArea = (group, getHitArea) => group.list.filter(hasHitArea).reduce(getHitArea, 0);
 const hitAreaFn = (metrics, size, sign, axis) => (acc, cur) =>
-    Math.max(acc, sign * (cur[axis] + sign * (cur.input.hitArea[dim[axis]] / 2 / metrics.scale - size)));
+    Math.max(acc, sign * ((cur[axis] + (sign * cur.input.hitArea[dim[axis]]) / 2) / metrics.scale - size));
 
 const horizontal = {
     left: (metrics, group) => {
