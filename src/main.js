@@ -107,6 +107,7 @@ const screens = {
         scene: Shop,
         routes: {
             next: "home",
+            home: "home",
         },
     },
     // Overlays

@@ -23,6 +23,21 @@
                 "url": "shop/handle.png"
             },
             {
+                "type": "image",
+                "key": "balanceBackground",
+                "url": "shop/balance_background.png"
+            },
+            {
+                "type": "image",
+                "key": "balanceIcon",
+                "url": "shop/balance_icon.png"
+            },
+            {
+                "type": "image",
+                "key": "titleBackground",
+                "url": "shop/title_background.png"
+            },
+            {
                 "type": "spritesheet",
                 "key": "itemBackground",
                 "url": "shop/item_block.png",

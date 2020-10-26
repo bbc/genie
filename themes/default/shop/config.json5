@@ -1,51 +1,88 @@
 {
-    space: 10,
     background: {
-        items: [
-            { key: "home.background", x: 0, y: 0 },
-        ],
+        items: [{ key: "home.background", x: 0, y: 0 }],
     },
-    items: [ // PH, will load from the catalogue when done
+    titles: [
+        {
+            type: "image",
+            key: "titleBackground",
+            xOffset: 0,
+            yOffset: 0,
+        },
+        {
+            type: "text",
+            value: "Shop",
+            xOffset: 0,
+            yOffset: 0,
+            styles: {
+                fontSize: "24px",
+                resolution: 4,
+            },
+        },
+    ],
+    titlePadding: 20,
+    balance: {
+        background: {
+            type: "image",
+            key: "balanceBackground",
+        },
+        icon: {
+            type: "image",
+            key: "balanceIcon",
+        },
+        value: {
+            type: "text",
+            value: 1000, // PH
+            styles: {},
+        },
+    },
+    balancePadding: 15,
+    listPadding: {
+        x: 18.86,
+        y: 15.09,
+    },
+    items: [
+        // PH, will load from the catalogue when done
         {
             id: "itemOne",
-            name: "Item 1 Name", 
+            name: "Item 1 Name",
             description: "Item 1 description",
             icon: "shop.itemIcon",
             price: 10,
             ariaLabel: "someAriaLabel",
-        }, 
-        { 
+        },
+        {
             id: "itemTwo",
-            name: "Item 2 Name", 
+            name: "Item 2 Name",
             description: "Item 2 description",
             icon: "shop.itemIcon",
             price: 10,
             ariaLabel: "someAriaLabel",
-        }, 
-        { 
+        },
+        {
             id: "itemThree",
-            name: "Item 3 Name", 
+            name: "Item 3 Name",
             description: "Item 3 description",
             icon: "shop.itemIcon",
             price: 10,
             ariaLabel: "someAriaLabel",
-        }, 
-        { 
+        },
+        {
             id: "itemFour",
-            name: "Item 4 Name", 
+            name: "Item 4 Name",
             description: "Item 4 description",
             icon: "shop.itemIcon",
             price: 10,
             ariaLabel: "someAriaLabel",
-        }, 
-        { 
+        },
+        {
             id: "itemFive",
-            name: "Item 5 Name", 
+            name: "Item 5 Name",
             description: "Item 5 description",
             icon: "shop.itemIcon",
             price: 10,
             ariaLabel: "someAriaLabel",
-        }, 
+        },
     ],
     columns: 1,
     assetKeys: {
@@ -85,7 +122,7 @@
                 value: "price",
                 isDynamic: true, // uses item[value]
                 position: { align: "right", offsetX: -48, offsetY: -10 },
-                font: { fontFamily: "ReithSans", resolution: 5},
+                font: { fontFamily: "ReithSans", resolution: 5 },
             },
             {
                 type: "text",
@@ -103,7 +140,7 @@
                 position: { align: "left", offsetX: 100, offsetY: 0 },
                 font: { fontFamily: "ReithSans", resolution: 5 },
             },
-        ]
+        ],
     },
     eventChannel: "shop_menu",
 }
