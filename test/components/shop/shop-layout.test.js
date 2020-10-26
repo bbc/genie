@@ -20,8 +20,8 @@ describe("shop element scaling functions", () => {
     beforeEach(() => {
         mockLayout = { getSafeArea: jest.fn() };
         mockContainer = {
-            setScale: jest.fn(),
             getBounds: jest.fn().mockReturnValue({ height: 100, width: 300 }),
+            scale: 1,
         };
     });
 
@@ -60,11 +60,6 @@ describe("shop element scaling functions", () => {
                     safeArea: mockSafeArea,
                 }),
         );
-        test("sets container scale to 1 before calculating the scale factor", () => {
-            shopLayout.getScaleFactor(args);
-            expect(mockContainer.setScale).toHaveBeenCalledWith(1);
-        });
-
         describe("when called with fixedWidth: true", () => {
             test("returns a scale factor that will have the element fill the available vertical space", () => {
                 args.fixedWidth = true;

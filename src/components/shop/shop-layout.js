@@ -19,12 +19,12 @@ export const getYPos = (metrics, safeArea) => {
 
 export const getScaleFactor = args => {
     const { metrics, container, fixedWidth, safeArea } = args;
-    container.setScale(1);
+    const oldScale = container.scale;
     const { verticals, verticalBorderPad } = metrics;
     const availableSpace = safeArea.y - verticals.top - verticalBorderPad;
     const containerBounds = container.getBounds();
     const padding = verticalBorderPad / 2;
-    const scaleFactorY = (availableSpace - padding) / containerBounds.height;
-    const scaleFactorX = safeArea.width / 4 / containerBounds.width;
+    const scaleFactorY = ((availableSpace - padding) / containerBounds.height) * oldScale;
+    const scaleFactorX = (safeArea.width / 4 / containerBounds.width) * oldScale;
     return fixedWidth ? scaleFactorY : Math.min(scaleFactorY, scaleFactorX);
 };
