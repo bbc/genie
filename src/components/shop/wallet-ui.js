@@ -23,8 +23,8 @@ export const createWallet = (scene, metrics) => {
         return scene.add.text(0, 0, conf.value, textStyle);
     };
     const container = scene.add.container();
-    const configs = scene.config.wallet || [];
-    const padding = scene.config.walletPadding || 0;
+    const configs = scene.config.wallet;
+    const padding = scene.config.walletPadding;
 
     const { background, icon, value } = Object.entries(configs).reduce(
         (elems, [key, config]) => ({ ...elems, [key]: makeElement({ image, text })(config) }),

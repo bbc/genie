@@ -9,7 +9,6 @@ import * as shopLayout from "../../../src/components/shop/shop-layout.js";
 import { createWallet } from "../../../src/components/shop/wallet-ui.js";
 
 describe("createWallet()", () => {
-    let wallet;
     const mockContainer = { getBounds: jest.fn(), setScale: jest.fn(), setPosition: jest.fn(), add: jest.fn() };
     const mockReturnedIcon = {
         getBounds: jest.fn().mockReturnValue({ width: 13 }),
@@ -25,7 +24,7 @@ describe("createWallet()", () => {
     const mockReturnedText = {
         setPosition: jest.fn(),
         getBounds: jest.fn().mockReturnValue({ width: 17 }),
-    }
+    };
     const mockText = { setOrigin: jest.fn().mockReturnValue(mockReturnedText) };
     const mockScene = {
         add: {
@@ -100,12 +99,12 @@ describe("createWallet()", () => {
             metrics: mockMetrics,
             container: mockContainer,
             safeArea: mockSafeArea,
-        }
-        expect(shopLayout.getScaleFactor).toHaveBeenCalledWith(expectedArgs)
+        };
+        expect(shopLayout.getScaleFactor).toHaveBeenCalledWith(expectedArgs);
         expect(mockContainer.setScale).toHaveBeenCalledWith(3.14);
     });
     test("positions the container based on getXPos and getYPos", () => {
-        expect(shopLayout.getXPos).toHaveBeenCalledWith(mockContainer, mockSafeArea, mockScene.config.listPadding.x)
+        expect(shopLayout.getXPos).toHaveBeenCalledWith(mockContainer, mockSafeArea, mockScene.config.listPadding.x);
         expect(shopLayout.getYPos).toHaveBeenCalledWith(mockMetrics, mockSafeArea);
         expect(mockContainer.setPosition).toHaveBeenCalledWith(42, 69);
     });

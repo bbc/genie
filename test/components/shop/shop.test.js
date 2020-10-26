@@ -59,7 +59,7 @@ describe("Shop", () => {
     beforeEach(() => {
         shopScreen = new Shop();
         shopScreen.setData({ config });
-        shopScreen.scene = { key: "shop" }; 
+        shopScreen.scene = { key: "shop" };
         shopScreen._layout = { getSafeArea: jest.fn().mockReturnValue(mockSafeArea) };
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();
@@ -118,7 +118,7 @@ describe("Shop", () => {
                     metrics: mockMetrics,
                     container: mockContainer,
                     fixedWidth: true,
-                    safeArea: mockSafeArea
+                    safeArea: mockSafeArea,
                 });
             });
         });

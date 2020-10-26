@@ -35,8 +35,7 @@
             value: 1000, // PH
             styles: {},
         },
-    }
-    ,
+    },
     walletPadding: 15,
     listPadding: {
         x: 18.86,
