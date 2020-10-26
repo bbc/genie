@@ -64,7 +64,7 @@ describe("createWallet()", () => {
         shopLayout.getXPos = jest.fn().mockReturnValue(42);
         shopLayout.getYPos = jest.fn().mockReturnValue(69);
         shopLayout.getScaleFactor = jest.fn().mockReturnValue(3.14);
-        wallet = createWallet(mockScene, mockMetrics);
+        createWallet(mockScene, mockMetrics);
     });
 
     afterEach(() => jest.clearAllMocks());
