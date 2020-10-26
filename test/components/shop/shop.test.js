@@ -7,7 +7,7 @@
 import { Shop } from "../../../src/components/shop/shop.js";
 import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as scaler from "../../../src/core/scaler.js";
-import * as wallet from "../../../src/components/shop/wallet-ui.js";
+import * as balance from "../../../src/components/shop/balance-ui.js";
 import * as titles from "../../../src/components/select/titles.js";
 import * as uiScaler from "../../../src/components/shop/shop-layout.js";
 
@@ -19,7 +19,7 @@ describe("Shop", () => {
     const config = {
         shop: {
             title: [],
-            wallet: [],
+            balance: [],
             assetKeys: {
                 prefix: "shop",
                 background: "background",
@@ -71,7 +71,7 @@ describe("Shop", () => {
         };
         shopScreen.events = { once: jest.fn() };
         ScrollableList.mockImplementation(() => ({ panel: mockScrollableList }));
-        wallet.createWallet = jest.fn().mockReturnValue(mockContainer);
+        balance.createBalance = jest.fn().mockReturnValue(mockContainer);
         titles.createTitles = jest.fn();
         uiScaler.getScaleFactor = jest.fn();
         uiScaler.getYPos = jest.fn();
@@ -123,8 +123,8 @@ describe("Shop", () => {
             });
         });
 
-        test("adds a wallet UI component", () => {
-            expect(wallet.createWallet).toHaveBeenCalledWith(shopScreen, mockMetrics);
+        test("adds a balance UI component", () => {
+            expect(balance.createBalance).toHaveBeenCalledWith(shopScreen, mockMetrics);
         });
 
         describe("sets up resize", () => {
@@ -134,8 +134,8 @@ describe("Shop", () => {
 
                 expect(shopScreen.title.setScale).toHaveBeenCalled(); // can you show that these weren't called by setup?
                 expect(shopScreen.title.setPosition).toHaveBeenCalled();
-                expect(shopScreen.wallet.setScale).toHaveBeenCalled();
-                expect(shopScreen.wallet.setPosition).toHaveBeenCalled();
+                expect(shopScreen.balance.setScale).toHaveBeenCalled();
+                expect(shopScreen.balance.setPosition).toHaveBeenCalled();
             });
             test("unsubscribes on shutdown", () => {
                 expect(shopScreen.events.once).toHaveBeenCalledWith("shutdown", "foo");

@@ -1,5 +1,5 @@
 /**
- * Wallet UI component
+ * Balance UI component
  * @module components/shop
  * @copyright BBC 2020
  * @author BBC Children's D+E
@@ -16,15 +16,15 @@ const styleDefaults = {
 
 const makeElement = makerFns => conf => makerFns[conf.type](conf).setOrigin(0.5);
 
-export const createWallet = (scene, metrics) => {
+export const createBalance = (scene, metrics) => {
     const image = conf => scene.add.image(0, 0, `${scene.assetPrefix}.${conf.key}`);
     const text = conf => {
         const textStyle = { ...styleDefaults, ...conf.styles };
         return scene.add.text(0, 0, conf.value, textStyle);
     };
     const container = scene.add.container();
-    const configs = scene.config.wallet;
-    const padding = scene.config.walletPadding;
+    const configs = scene.config.balance;
+    const padding = scene.config.balancePadding;
 
     const { background, icon, value } = Object.entries(configs).reduce(
         (elems, [key, config]) => ({ ...elems, [key]: makeElement({ image, text })(config) }),

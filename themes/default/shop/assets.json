@@ -24,13 +24,13 @@
             },
             {
                 "type": "image",
-                "key": "walletBackground",
-                "url": "shop/wallet_background.png"
+                "key": "balanceBackground",
+                "url": "shop/balance_background.png"
             },
             {
                 "type": "image",
-                "key": "walletIcon",
-                "url": "shop/wallet_icon.png"
+                "key": "balanceIcon",
+                "url": "shop/balance_icon.png"
             },
             {
                 "type": "image",

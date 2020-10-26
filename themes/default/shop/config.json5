@@ -21,14 +21,14 @@
         },
     ],
     titlePadding: 20,
-    wallet: {
+    balance: {
         background: {
             type: "image",
-            key: "walletBackground",
+            key: "balanceBackground",
         },
         icon: {
             type: "image",
-            key: "walletIcon",
+            key: "balanceIcon",
         },
         value: {
             type: "text",
@@ -36,7 +36,7 @@
             styles: {},
         },
     },
-    walletPadding: 15,
+    balancePadding: 15,
     listPadding: {
         x: 18.86,
         y: 15.09,

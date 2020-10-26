@@ -6,9 +6,9 @@
  */
 
 import * as shopLayout from "../../../src/components/shop/shop-layout.js";
-import { createWallet } from "../../../src/components/shop/wallet-ui.js";
+import { createBalance } from "../../../src/components/shop/balance-ui.js";
 
-describe("createWallet()", () => {
+describe("createBalance()", () => {
     const mockContainer = { getBounds: jest.fn(), setScale: jest.fn(), setPosition: jest.fn(), add: jest.fn() };
     const mockReturnedIcon = {
         getBounds: jest.fn().mockReturnValue({ width: 13 }),
@@ -30,20 +30,20 @@ describe("createWallet()", () => {
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
             image: jest.fn().mockImplementation((x, y, key) => {
-                if (key === "shop.walletIcon") return mockIcon;
+                if (key === "shop.balanceIcon") return mockIcon;
                 return mockBackground;
             }),
             text: jest.fn().mockReturnValue(mockText),
         },
         config: {
-            wallet: {
+            balance: {
                 background: {
                     type: "image",
-                    key: "walletBackground",
+                    key: "balanceBackground",
                 },
                 icon: {
                     type: "image",
-                    key: "walletIcon",
+                    key: "balanceIcon",
                 },
                 value: {
                     type: "text",
@@ -51,7 +51,7 @@ describe("createWallet()", () => {
                     styles: { foo: "bar" },
                 },
             },
-            walletPadding: 6,
+            balancePadding: 6,
             listPadding: { x: 1 },
         },
         assetPrefix: "shop",
@@ -64,7 +64,7 @@ describe("createWallet()", () => {
         shopLayout.getXPos = jest.fn().mockReturnValue(42);
         shopLayout.getYPos = jest.fn().mockReturnValue(69);
         shopLayout.getScaleFactor = jest.fn().mockReturnValue(3.14);
-        createWallet(mockScene, mockMetrics);
+        createBalance(mockScene, mockMetrics);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -73,8 +73,8 @@ describe("createWallet()", () => {
         expect(mockScene.add.container).toHaveBeenCalled();
     });
     test("adds elements for background & icon", () => {
-        expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "shop.walletBackground");
-        expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "shop.walletIcon");
+        expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "shop.balanceBackground");
+        expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "shop.balanceIcon");
     });
     test("adds a text element, merging the provided styles with defaults", () => {
         const expectedStyles = {
