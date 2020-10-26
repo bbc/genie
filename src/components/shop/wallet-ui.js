@@ -6,7 +6,7 @@
  * @license Apache-2.0
  */
 
-import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-scaling.js";
+import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",

@@ -9,7 +9,7 @@ import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrolla
 import * as scaler from "../../../src/core/scaler.js";
 import * as wallet from "../../../src/components/shop/wallet-ui.js";
 import * as titles from "../../../src/components/select/titles.js";
-import * as uiScaler from "../../../src/components/shop/shop-scaling.js";
+import * as uiScaler from "../../../src/components/shop/shop-layout.js";
 
 jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
 

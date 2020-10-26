@@ -12,7 +12,7 @@ import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
 import { createWallet } from "./wallet-ui.js";
 import { createTitles } from "./../select/titles.js";
-import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-scaling.js";
+import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 
 export class Shop extends Screen {
     preload() {
