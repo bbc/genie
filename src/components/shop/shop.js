@@ -27,6 +27,7 @@ export class Shop extends Screen {
         this.balance = createBalance(this, metrics);
         this.panel = new ScrollableList(this).panel;
         this.setupEvents();
+        console.log('BEEBUG: this', this);
     }
 
     createTitle(metrics) {
