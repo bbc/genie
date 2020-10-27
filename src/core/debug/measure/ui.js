@@ -42,5 +42,10 @@ export const createMeasureUi = parent => {
 
     const update = fp.flow(getInputFn(keys), updateRect);
 
-    return { update, toggleUi };
+    const toggleUiFn = scene => () => {
+        toggleUi(); 
+        scene.input.topOnly = !scene.input.topOnly;
+    }
+
+    return { update, toggleUi: toggleUiFn(parent.scene) };
 };
