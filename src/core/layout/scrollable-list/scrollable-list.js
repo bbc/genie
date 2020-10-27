@@ -70,7 +70,7 @@ const createItem = (scene, item) =>
 const resizePanel = (scene, panel) => {
     const t = panel.t;
     const items = panel.getByName("grid", true).getElement("items");
-    items.forEach(label => scaleButton(label.children[0], scene.layout, panel.space.top));
+    items.forEach(label => scaleButton(label.children[0], scene.layout, panel.space.left));
     const safeArea = getPanelY(scene);
     panel.minHeight = safeArea.height;
     panel.y = safeArea.y;
