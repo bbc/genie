@@ -44,7 +44,7 @@ export const createMeasureUi = parent => {
 
     const toggleUiFn = scene => () => {
         toggleUi(); 
-        scene.input.topOnly = !scene.input.topOnly;
+        // scene.input.topOnly = !scene.input.topOnly;
     }
 
     return { update, toggleUi: toggleUiFn(parent.scene) };
