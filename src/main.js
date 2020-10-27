@@ -8,6 +8,7 @@ import { Narrative } from "./components/narrative.js";
 import { Results } from "./components/results/results-screen.js";
 import { Select } from "./components/select/select-screen.js";
 import { HowToPlay } from "./components/how-to-play.js";
+import { Shop } from "./components/shop/shop.js";
 import { Game } from "./components/game.js";
 import { Pause } from "./components/overlays/pause.js";
 import { settingsChannel } from "./core/settings.js";
@@ -99,6 +100,12 @@ const screens = {
         routes: {
             continue: "level-select",
             restart: "game",
+            home: "home",
+        },
+    },
+    shop: {
+        scene: Shop,
+        routes: {
             home: "home",
         },
     },
