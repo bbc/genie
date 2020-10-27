@@ -3,7 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | | Add shop demo screen in debug mode |
-| | Buttons within the 4/3 area now sit exactly on the edge in mobile breakpoint. |
+| | Buttons within the 4/3 area now sit exactly on the edge. |
 | | Buttons will move inwards if the screen width causes the border pad to overlap the 4/3 area. |
 | | Add accessibility for scrollable list component. |
 | | Remove states system in favour of collections. |

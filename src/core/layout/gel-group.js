@@ -11,9 +11,8 @@ import { CANVAS_HEIGHT, GEL_MIN_ASPECT_RATIO } from "./metrics.js";
 const canvasSafeWidth = CANVAS_HEIGHT * GEL_MIN_ASPECT_RATIO;
 const dim = { x: "width", y: "height" };
 
-const is43Btn = (group, metrics) => group.isSafe && metrics.isMobile;
 const getOverlap = metrics => Math.max(0, metrics.horizontalBorderPad - (metrics.stageWidth - canvasSafeWidth) / 2);
-const getPad = (group, metrics) => (is43Btn(group, metrics) ? getOverlap(metrics) : metrics.horizontalBorderPad);
+const getPad = (group, metrics) => (group.isSafe ? getOverlap(metrics) : metrics.horizontalBorderPad);
 const getType = group => (group.isSafe ? "safeHorizontals" : "horizontals");
 const sum = (a, b) => a + b;
 const hasHitArea = gameObject => Boolean(gameObject.input.hitArea);
