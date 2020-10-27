@@ -34,6 +34,7 @@ describe("Main", () => {
             "level-select",
             "game",
             "results",
+            "shop",
             "how-to-play",
             "pause",
         ];
