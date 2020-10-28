@@ -26,12 +26,13 @@ export class Shop extends Screen {
         const metrics = getMetrics();
         this.title = createTitle(this, metrics); // title needs a fn to set the title text... later.
         this.balance = createBalance(this, metrics);
-        this.menu = createMenu(this, metrics, { buttonsRight: true });
+        this.menu = createMenu(this, { buttonsRight: true });
         this.shopList = new ScrollableList(this);
         this.shopList.toggleVisible();
         this.inventoryList = new ScrollableList(this);
         this.inventoryList.toggleVisible();
         this.setupEvents();
+        console.log('BEEBUG: this', this);
     }
 
     setupEvents() {
