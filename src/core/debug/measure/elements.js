@@ -53,6 +53,7 @@ export const createElements = scene => {
 
     const toggleUi = () => {
         const visible = !rect.visible;
+        scene.input.topOnly = visible;
         [rect, coords, legend, handle].forEach(o => (o.visible = visible));
         return visible;
     };
