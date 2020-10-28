@@ -33,6 +33,7 @@ describe("Group", () => {
             children: [],
         };
         config = {};
+
         metrics = {
             horizontalBorderPad: 100,
             verticalBorderPad: 100,
@@ -42,6 +43,7 @@ describe("Group", () => {
             safeHorizontals: { left: -300, center: 0, right: 300 },
             verticals: { top: -1500, middle: 0, bottom: 1500 },
             scale: 1,
+            stageWidth: 1400,
         };
         buttonResizeStub = jest.fn();
         const hitAreaBounds = {
@@ -176,7 +178,7 @@ describe("Group", () => {
                 group.addButton(config);
                 group.reset();
 
-                expect(group.x).toBe(-200);
+                expect(group.x).toBe(-300);
                 expect(group.y).toBe(-50);
             });
 
@@ -188,13 +190,12 @@ describe("Group", () => {
                 group.addButton(config);
                 group.reset();
 
-                expect(group.x).toBe(0);
+                expect(group.x).toBe(100);
                 expect(group.y).toBe(-50);
             });
 
-            test("Aligns to the edges of the 4/3 area in mobile mode", () => {
+            test("Aligns to the edges of the 4/3 area", () => {
                 const testMetrics = {
-                    isMobile: true,
                     horizontalBorderPad: 10,
                     stageWidth: 1400,
                     scale: 1,
@@ -217,9 +218,8 @@ describe("Group", () => {
                 expect(rightGroup.x).toBe(400);
             });
 
-            test("Aligns to the border pad if screen width overlaps the 4/3 area in mobile mode", () => {
+            test("Aligns to the border pad if screen width overlaps the 4/3 area", () => {
                 const testMetrics = {
-                    isMobile: true,
                     horizontalBorderPad: 10,
                     stageWidth: 790,
                     scale: 1,
@@ -280,7 +280,7 @@ describe("Group", () => {
                 group.addButton(config);
                 group.reset(metrics);
 
-                expect(group.x).toBe(-200);
+                expect(group.x).toBe(-300);
                 expect(group.y).toBe(1300);
             });
         });
