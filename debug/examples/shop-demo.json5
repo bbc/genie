@@ -50,6 +50,10 @@
         x: 18.86,
         y: 15.09,
     },
+    menu: {
+        buttonsRight: true, // set as false to X-flip the menu layout
+        buttonBackgroundKey: "menuButtonBackground",
+    },
     items: [
         // PH, will load from the catalogue when done
         {

@@ -6,6 +6,7 @@
  */
 
 import { getSafeArea } from "./shop-layout.js";
+import { createGelButtons } from "./menu-buttons.js";
 
 export const createMenu = (scene, config) => {
     const bounds = getSafeArea(scene.layout);
@@ -36,12 +37,10 @@ const createInnerContainer = (scene, outerContainer, config) => {
         height: outerBounds.height * 0.6,
     };
     innerContainer.add(scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, 0x0000ff, 0.3));
-    innerContainer.add(createButtons(scene, innerContainer, config));
+    const gelButtons = createGelButtons(scene, innerContainer, config);
+    console.log('BEEBUG: gelButtons', gelButtons);
+    innerContainer.add(gelButtons);
     return innerContainer;
-};
-
-const createButtons = (scene, innerContainer, config) => {
-    return scene.add.rectangle(0, 0, 0, 0);
 };
 
 const createNonButtonRect = (scene, menuBounds, isOnLeft) => {

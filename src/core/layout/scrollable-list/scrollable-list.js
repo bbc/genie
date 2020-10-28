@@ -104,7 +104,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         this.panel = createPanel(scene);
 
         this.add(this.panel);
-        scene.layout.addCustomGroup(scene.scene.key, this, 0);
+        scene.layout.addCustomGroup(scene.scene.key, this, 0); // problem once we've got more than one?
         a11y.addGroupAt(scene.scene.key, 0);
 
         scene.input.topOnly = false;
