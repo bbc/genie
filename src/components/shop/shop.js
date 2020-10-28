@@ -10,8 +10,9 @@ import { Screen } from "../../core/screen.js";
 import { ScrollableList } from "../../core/layout/scrollable-list/scrollable-list.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
+import { createTitle } from "./shop-titles.js";
 import { createBalance } from "./balance-ui.js";
-import { createTitles } from "./../select/titles.js";
+import { createMenu } from "./menu.js";
 import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 
 export class Shop extends Screen {
@@ -23,30 +24,14 @@ export class Shop extends Screen {
         this.addBackgroundItems();
         this.setLayout(["home", "pause"]);
         const metrics = getMetrics();
-        this.title = this.createTitle(metrics);
+        this.title = createTitle(this, metrics); // title needs a fn to set the title text... later.
         this.balance = createBalance(this, metrics);
+        this.menu = createMenu(this, metrics, { buttonsRight: true });
         this.shopList = new ScrollableList(this);
         this.shopList.toggleVisible();
         this.inventoryList = new ScrollableList(this);
         this.inventoryList.toggleVisible();
         this.setupEvents();
-    }
-
-    createTitle(metrics) {
-        const titleContainer = this.add.container();
-        titleContainer.add(createTitles(this));
-
-        titleContainer.setScale(
-            getScaleFactor({
-                metrics,
-                container: titleContainer,
-                fixedWidth: true,
-                safeArea: getSafeArea(this.layout),
-            }),
-        );
-        titleContainer.setPosition(0, getYPos(metrics, getSafeArea(this.layout)));
-
-        return titleContainer;
     }
 
     setupEvents() {
