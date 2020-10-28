@@ -25,7 +25,10 @@ export class Shop extends Screen {
         const metrics = getMetrics();
         this.title = this.createTitle(metrics);
         this.balance = createBalance(this, metrics);
-        this.panel = new ScrollableList(this).panel;
+        this.shopList = new ScrollableList(this);
+        this.shopList.toggleVisible();
+        this.inventoryList = new ScrollableList(this);
+        this.inventoryList.toggleVisible();
         this.setupEvents();
     }
 

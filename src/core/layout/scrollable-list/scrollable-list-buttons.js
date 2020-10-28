@@ -28,7 +28,8 @@ const createGelButton = (scene, item) => {
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
 
-    const callback = fp.identity; // placeholder
+    // const callback = fp.identity; // placeholder
+    const callback = () => console.log("clicky"); // placeholder
 
     eventBus.subscribe({
         callback: handleClickIfVisible(gelButton, scene, callback),

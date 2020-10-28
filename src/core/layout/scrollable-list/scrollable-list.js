@@ -69,7 +69,7 @@ const createItem = (scene, item) =>
 
 const resizePanel = (scene, panel) => {
     const t = panel.t;
-    const items = panel.getByName("grid", true).getElement("items");
+    const items = getPanelItems(panel);
     items.forEach(label => scaleButton(label.children[0], scene.layout, panel.space.left));
     const safeArea = getPanelY(scene);
     panel.minHeight = safeArea.height;
@@ -89,12 +89,14 @@ const setupEvents = (scene, panel) => {
     panel.on("scroll", panel.updateOnScroll);
 
     panel.updateOnFocus = updatePanelOnFocus(panel);
-    const items = panel.getByName("grid", true).getElement("items");
+    const items = getPanelItems(panel);
     items.forEach(item => {
         const a11yElem = item.children[0].accessibleElement.el;
         a11yElem.addEventListener("focus", () => panel.updateOnFocus(item));
     });
 };
+
+const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
 
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene) {
@@ -115,5 +117,15 @@ export class ScrollableList extends Phaser.GameObjects.Container {
 
     getBoundingRect() {
         return this.scene.layout.getSafeArea({}, false);
+    }
+
+    toggleVisible() {
+        this.panel.visible = !this.panel.visible;
+        const items = getPanelItems(this.panel);
+        items.forEach(item => {
+            const button = item.children[0];
+            button.input.enabled = !button.input.enabled;
+            button.accessibleElement.update();
+        });
     }
 }
