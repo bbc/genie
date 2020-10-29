@@ -11,7 +11,7 @@ import { getMetrics } from "../../core/scaler.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
-    fontSize: "24px",
+    fontSize: "16px",
     resolution: 5,
 };
 
@@ -35,16 +35,20 @@ export const createGelButtons = (scene, container, config) => {
         const { x, y } = getPosition(bounds, idx);
         const button = scene.add.gelButton(0, 0, buttonConfig);
         container.add(button);
+
         const callback = () => console.log(`BEEBUG: ${buttonConfig.title} button clicked`);
         eventBus.subscribe({
             callback,
             channel: buttonConfig.channel,
             name: buttonConfig.id,
         });
-        setButtonOverlays(scene, button, buttonConfig.title);
+
+        setButtonOverlays(scene, button, buttonConfig.title, config);
         accessibilify(button);
+
         button.setPosition(x + 700, y + 300); // hacky fix for now b/c coord problem
         button.setScale(getScale(bounds, button));
+
         return button;
     });
 
@@ -59,11 +63,10 @@ const getPosition = (containerBounds, idx) => {
     };
 };
 
-const getScale = (containerBounds, button) => {
-    console.log('BEEBUG: containerBounds', containerBounds);
-    const scaleFactor = containerBounds.width / button.width;
-    return scaleFactor;
-}
+const getScale = (containerBounds, button) => containerBounds.width / button.width;
 
-const setButtonOverlays = (scene, button, title) =>
-    button.overlays.set("caption", scene.add.text(0, 0, title, { ...styleDefaults }).setOrigin(0.5));
+const setButtonOverlays = (scene, button, title, config) => {
+    const offset = button.width / 4;
+    button.overlays.set("caption", scene.add.text(-offset / 2, 0, title, { ...styleDefaults }).setOrigin(0, 0.5));
+    button.overlays.set("icon", scene.add.image(-offset, 0, `shop.${config.buttonIconKey}`));
+};
