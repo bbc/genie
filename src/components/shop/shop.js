@@ -32,7 +32,7 @@ export class Shop extends Screen {
         this.inventoryList = new ScrollableList(this);
         this.inventoryList.toggleVisible();
         this.setupEvents();
-        // console.log('BEEBUG: this', this);
+        console.log('BEEBUG: this', this);
     }
 
     setupEvents() {

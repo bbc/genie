@@ -37,7 +37,7 @@ const createInnerContainer = (scene, outerContainer, config) => {
         height: outerBounds.height * 0.6,
     };
     innerContainer.add(scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, 0x0000ff, 0.3));
-    createGelButtons(scene, innerContainer, config);
+    const gelButtons = createGelButtons(scene, innerContainer, config);
     // innerContainer.add(gelButtons);
     return innerContainer;
 };
