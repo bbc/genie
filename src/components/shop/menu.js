@@ -28,7 +28,7 @@ const createButtonContainer = (scene, menuBounds, isOnLeft, config) => {
 };
 
 const createInnerContainer = (scene, outerContainer, config) => {
-    const innerContainer = outerContainer.add(scene.add.container());
+    const innerContainer = scene.add.container();
     const outerBounds = outerContainer.getBounds();
     const bounds = {
         x: outerBounds.x + outerBounds.width / 2,
@@ -37,9 +37,8 @@ const createInnerContainer = (scene, outerContainer, config) => {
         height: outerBounds.height * 0.6,
     };
     innerContainer.add(scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, 0x0000ff, 0.3));
-    const gelButtons = createGelButtons(scene, innerContainer, config);
-    console.log('BEEBUG: gelButtons', gelButtons);
-    innerContainer.add(gelButtons);
+    createGelButtons(scene, innerContainer, config);
+    // innerContainer.add(gelButtons);
     return innerContainer;
 };
 
