@@ -19,9 +19,7 @@ export class GelButton extends Phaser.GameObjects.Container {
     constructor(scene, x, y, config) {
         const metrics = getMetrics();
         super(scene, x, y);
-        // console.log(assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
         this.sprite = scene.add.sprite(0, 0, assetPath(Object.assign({}, config, { isMobile: metrics.isMobile })));
-        // if (config.id === "shop_menu_button") console.log(this.sprite);
         this.setScrollFactor(0);
         !config.scrollable && this.sprite.setScrollFactor(0);
         this.add(this.sprite);
@@ -134,6 +132,7 @@ export class GelButton extends Phaser.GameObjects.Container {
 }
 
 const publish = (config, data) => () => {
+    console.log('BEEBUG: data', data);
     eventBus.publish({
         channel: config.channel,
         name: config.id,

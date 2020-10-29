@@ -152,7 +152,7 @@ const exampleScreens = {
         scene: Shop,
         title: "Shop Demo",
         routes: {
-            home: "debug",
+            back: "debug",
         },
     },
     narrative: {

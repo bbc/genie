@@ -22,15 +22,15 @@ export class Shop extends Screen {
 
     create() {
         this.addBackgroundItems();
-        this.setLayout(["home", "pause"]);
+        const {buttons} = this.setLayout(["back", "pause"]);
         const metrics = getMetrics();
         this.title = createTitle(this, metrics); // title needs a fn to set the title text... later.
         this.balance = createBalance(this, metrics);
-        this.menu = createMenu(this, this.config.menu);
         this.shopList = new ScrollableList(this);
         this.shopList.toggleVisible();
         this.inventoryList = new ScrollableList(this);
         this.inventoryList.toggleVisible();
+        this.menu = createMenu(this, this.config.menu, {shop: this.shopList, manage: this.inventoryList}, buttons.back);
         this.setupEvents();
         // console.log('BEEBUG: this', this);
     }
