@@ -35,7 +35,7 @@ shop [{key: "shield"}]
 inventory []
 
 **Command**
-`collections.moveItem({key: "shield", from: "shop", to: "player", fromState: "owned"])`
+`collections.moveItem({key: "shield", from: "shop", to: "inventory", fromState: "owned"])`
 
 **end collection state:**
 shop [{key: "shield", state: "owned"}]
@@ -52,7 +52,7 @@ shop [{key: "banana", qty: 5}]
 inventory []
 
 **Command**
-`collections.moveItem({key: "banana", from: "shop", to: "player"})`
+`collections.moveItem({key: "banana", from: "shop", to: "inventory"})`
 
 **end collection states:**
 shop [{key: "banana", qty: 4}]
@@ -70,7 +70,7 @@ shop [{key: "banana", qty: 1}]
 inventory []
 
 **Command**
-`collections.moveItem({key: "banana", from: "shop", to: "player")`
+`collections.moveItem({key: "banana", from: "shop", to: "inventory")`
 
 **end collection states:**
 shop [{key: "banana", qty: 0}]
