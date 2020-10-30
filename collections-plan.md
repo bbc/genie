@@ -4,23 +4,6 @@ A list of requirements to support transactions from one collection to another.
 ### Requirements
 * Change defaults code to allow any defaults and not to force quantity
 * Update local storage to support items being added and removed from collections
-* Implement `moveItem` method 
-
-### Move command description
-
-`moveItem(object: transaction)`
-
-```
-transaction:
-{
-    from: String, //required
-    to: String, //required
-    key:  String, //required
-    decrement: Integer, //default 1
-    fromState: String, //optional
-    toState: String, //optional
-}
-```
 
 ## Example Scenarios
 
@@ -31,15 +14,19 @@ transaction:
 * Shield shows in shop as “owned”
 
 **start collection states:**
-shop [{key: "shield"}]
+shop [{key: "shield", qty: 0}]
 inventory []
 
 **Command**
-`collections.moveItem({key: "shield", from: "shop", to: "inventory", fromState: "owned"])`
+
+```
+shop.set({key: "shield", state: "owned", qty: -1})
+inventory.set({key: "shield", qty: +1})
+```
 
 **end collection state:**
-shop [{key: "shield", state: "owned"}]
-inventory [{key: "shield"}]
+shop [{key: "shield", state: "owned", qty: 0}]
+inventory [{key: "shield", qty: 1}]
 
 #### Scenario 2
 * Shop has 5 bananas
@@ -52,12 +39,14 @@ shop [{key: "banana", qty: 5}]
 inventory []
 
 **Command**
-`collections.moveItem({key: "banana", from: "shop", to: "inventory"})`
+```
+shop.set({key: "banana", qty: -1})
+inventory.set({key: "banana",  qty: +1})
+```
 
 **end collection states:**
 shop [{key: "banana", qty: 4}]
 inventory [{key: "banana", qty: 1}]
-
 
 #### Scenario 3
 * Shop has 1 banana
@@ -70,7 +59,10 @@ shop [{key: "banana", qty: 1}]
 inventory []
 
 **Command**
-`collections.moveItem({key: "banana", from: "shop", to: "inventory")`
+```
+shop.set({key: "banana", qty: -1}) //Shop uses value of zero to label "out of stock"
+inventory.set({key: "banana",  qty: +1})
+```
 
 **end collection states:**
 shop [{key: "banana", qty: 0}]
@@ -83,14 +75,14 @@ inventory [{key: "banana", qty: 1}]
 
 **start collection states:**
 inventory [{key: "helmet", qty: 1}]
-player []
 
 **Command**
-`collections.moveItem({ key: "helmet", from: "inventory", to: "player", fromState: "equipped")`
+```
+inventory.set({key: "helmet",  state: "equipped"})
+```
 
 **end collection states:**
-inventory [{key: "helmet", qty: 0, state: "equipped"}]
-player [{key: "helmet", qty: 1}]
+inventory [{key: "helmet", qty: 1, state: "equipped"}]
 
 
 ### Questions:
