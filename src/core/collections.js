@@ -20,7 +20,7 @@ const keyById = arr => Object.fromEntries(arr.map(x => [x.id, x]));
 const mergeItems = (stored, item) => Object.values(fp.merge(keyById(stored), keyById(item)));
 
 const warn = message => {
-    console.warn(message);
+    console.warn(message); // eslint-disable-line no-console
     return false;
 };
 
