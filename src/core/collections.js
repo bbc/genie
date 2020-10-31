@@ -36,14 +36,14 @@ const validateFn = catalogue =>
 
 export const initCollection = screen => key => {
     const getStored = getStoredFn(key);
-    const valid = validateFn(catalogue);
-
     const config = screen.cache.json.get(`items/${key}`);
-    const storagePath = ["collections", key];
 
+    const storagePath = ["collections", key];
     const catalogue = fp.isString(config.catalogue)
         ? screen.cache.json.get(`items/${config.catalogue}`)
         : config.catalogue;
+
+    const valid = validateFn(catalogue);
 
     const getAll = () => {
         const base = catalogue
