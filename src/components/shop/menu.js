@@ -14,8 +14,9 @@ export const createMenu = (scene, config) => {
     const bounds = getSafeArea(scene.layout);
     const { buttonsRight } = config;
     const menuContainer = scene.add.container();
-    menuContainer.toggleVisible = toggleVisible(menuContainer);
     menuContainer.setVisible = setVisible(menuContainer);
+    menuContainer.getScaleFactor = getScaleFactor(menuContainer);
+    menuContainer.memoisedBounds = bounds;
     menuContainer.add(createNonButtonRect(scene, bounds, buttonsRight));
     menuContainer.add(createButtonContainer(scene, bounds, !buttonsRight, config));
 
@@ -61,9 +62,9 @@ const getSubContainerPosition = (menuBounds, isOnLeft) => {
     };
 };
 
-const toggleVisible = container => () => {
-    setVisible(container, !container.visible);
-};
+// const toggleVisible = container => () => {
+//     setVisible(container, !container.visible);
+// };
 
 const setVisible = container => isVisible => {
     container.visible = isVisible;
@@ -84,4 +85,11 @@ const getGelButtons = container => {
         ])(child);
     });
     return buttons;
+};
+
+const getScaleFactor = container => bounds => {
+    const { memoisedBounds } = container;
+    container.memoisedBounds = bounds;
+    return [bounds.width / memoisedBounds.width, bounds.height / memoisedBounds.height];
+    // needs to reposition the buttons
 };

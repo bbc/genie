@@ -105,7 +105,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         this.makeAccessible = () => {};
 
         this.add(this.panel);
-        scene.layout.addCustomGroup(scene.scene.key, this, 0); // problem once we've got more than one?
+        scene.layout.addCustomGroup(scene.scene.key, this, 0);
         a11y.addGroupAt(scene.scene.key, 0);
 
         scene.input.topOnly = false;
@@ -119,10 +119,6 @@ export class ScrollableList extends Phaser.GameObjects.Container {
     getBoundingRect() {
         return this.scene.layout.getSafeArea({}, false);
     }
-
-    // toggleVisible() {
-    //     this.setVisible(!this.panel.visible);
-    // }
 
     setVisible(isVisible) {
         this.panel.visible = isVisible;

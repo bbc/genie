@@ -35,7 +35,7 @@ export class Shop extends Screen {
         };
 
         const metrics = getMetrics();
-        this.title = createTitle(this, metrics); // title needs a fn to set the title text... later.
+        this.title = createTitle(this, metrics);
         this.balance = createBalance(this, metrics);
 
         const topMenu = createMenu(this, this.config.menu);
@@ -90,6 +90,9 @@ export class Shop extends Screen {
     resize() {
         const metrics = getMetrics();
         const safeArea = getSafeArea(this.layout);
+        const scaleFactor = this.menus.top.getScaleFactor(safeArea);
+        console.log('BEEBUG: scaleFactor', scaleFactor);
+        this.menus.top.setScale(...scaleFactor);
         this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));
         this.title.setPosition(0, getYPos(metrics, safeArea));
         this.balance.setScale(getScaleFactor({ metrics, container: this.balance, safeArea }));
