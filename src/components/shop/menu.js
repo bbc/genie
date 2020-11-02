@@ -15,6 +15,7 @@ export const createMenu = (scene, config) => {
     const { buttonsRight } = config;
     const menuContainer = scene.add.container();
     menuContainer.toggleVisible = toggleVisible(menuContainer);
+    menuContainer.setVisible = setVisible(menuContainer);
     menuContainer.add(createNonButtonRect(scene, bounds, buttonsRight));
     menuContainer.add(createButtonContainer(scene, bounds, !buttonsRight, config));
 
@@ -61,22 +62,26 @@ const getSubContainerPosition = (menuBounds, isOnLeft) => {
 };
 
 const toggleVisible = container => () => {
-    container.visible = !container.visible;
+    setVisible(container, !container.visible);
+};
+
+const setVisible = container => isVisible => {
+    container.visible = isVisible;
     const buttons = getGelButtons(container);
     buttons.forEach(button => {
         button.input.enabled = container.visible;
         button.accessibleElement.update();
     });
-}; 
+};
 
 const getGelButtons = container => {
-    const buttons = []
+    const buttons = [];
     if (container.list.length === 0) return buttons;
     container.list.forEach(child => {
         fp.cond([
-            [c => c.constructor.name === GelButton.name, c => buttons.push(c)], // will constructor.name work minified?
+            [c => c.constructor.name === GelButton.name, c => buttons.push(c)],
             [c => c.constructor.name === Phaser.GameObjects.Container.name, c => buttons.push(...getGelButtons(c))],
         ])(child);
     });
     return buttons;
-}
+};

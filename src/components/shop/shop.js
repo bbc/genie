@@ -24,27 +24,33 @@ export class Shop extends Screen {
 
     create() {
         this.addBackgroundItems();
-        const { buttons } = this.setLayout(["back", "pause"]);
+        this.setLayout(["back", "pause"]);
 
-        this.defaultBackButtonAction = this.memoizeBackButton();
+        this.backMessage = this.memoizeBackButton();
+
+        this.customMessage = {
+            channel: this.backMessage.channel,
+            name: this.backMessage.name,
+            callback: () => this.setVisible("top"),
+        };
 
         const metrics = getMetrics();
         this.title = createTitle(this, metrics); // title needs a fn to set the title text... later.
         this.balance = createBalance(this, metrics);
 
+        const topMenu = createMenu(this, this.config.menu);
         const shopList = new ScrollableList(this);
         const inventoryList = new ScrollableList(this);
-        const topMenu = createMenu(
-            this,
-            this.config.menu,
-        );
+
         this.menus = {
             top: topMenu,
             shop: shopList,
             inventory: inventoryList,
         };
-        this.menus.shop.toggleVisible();
-        this.menus.inventory.toggleVisible();
+        this.menus.top.setVisible(true);
+        this.menus.shop.setVisible(false);
+        this.menus.inventory.setVisible(false);
+
         this.setupEvents();
     }
 
@@ -65,8 +71,20 @@ export class Shop extends Screen {
     }
 
     setVisible(menu) {
-        this.menus.top.toggleVisible();
-        console.log('BEEBUG: menu', menu);
+        if (menu === "top") {
+            this.menus.top.setVisible(true);
+            this.menus.shop.setVisible(false);
+            this.menus.inventory.setVisible(false);
+            eventBus.removeSubscription(this.customMessage);
+            eventBus.subscribe(this.backMessage);
+            return;
+        }
+        
+        eventBus.removeSubscription(this.backMessage);
+        this.menus.top.setVisible(false);
+        menu === "shop" && this.menus.shop.setVisible(true);
+        menu === "manage" && this.menus.inventory.setVisible(true);
+        eventBus.subscribe(this.customMessage);
     }
 
     resize() {

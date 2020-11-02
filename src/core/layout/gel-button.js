@@ -132,7 +132,6 @@ export class GelButton extends Phaser.GameObjects.Container {
 }
 
 const publish = (config, data) => () => {
-    console.log('BEEBUG: data', data);
     eventBus.publish({
         channel: config.channel,
         name: config.id,
