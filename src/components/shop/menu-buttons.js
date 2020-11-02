@@ -7,7 +7,6 @@
 
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
-import { getMetrics } from "../../core/scaler.js";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../../core/layout/metrics.js";
 
 const styleDefaults = {
@@ -16,8 +15,8 @@ const styleDefaults = {
     resolution: 5,
 };
 
-export const createGelButtons = (scene, container, config, menus) => {
-    const metrics = getMetrics();
+export const createGelButtons = (scene, container, config) => {
+
     const buttonConfigs = ["Shop", "Manage"].map(button => ({
         title: button,
         gameButton: true,
@@ -36,10 +35,7 @@ export const createGelButtons = (scene, container, config, menus) => {
         const { x, y } = getPosition(bounds, idx);
         const button = scene.add.gelButton(x + CANVAS_WIDTH / 2, y + CANVAS_HEIGHT / 2, buttonConfig);
 
-        const callback = () =>{ 
-            // set the target menu visible
-            setVisibility(menus, buttonConfig.title.toLowerCase());
-        };
+        const callback = () => scene.setVisible(buttonConfig.title.toLowerCase());
         eventBus.subscribe({
             callback,
             channel: buttonConfig.channel,
@@ -71,10 +67,4 @@ const setButtonOverlays = (scene, button, title, config) => {
     const offset = button.width / 4;
     button.overlays.set("caption", scene.add.text(-offset / 2, 0, title, { ...styleDefaults }).setOrigin(0, 0.5));
     button.overlays.set("icon", scene.add.image(-offset, 0, `shop.${config.buttonIconKey}`));
-};
-
-const setVisibility = (menus, buttonTitle) => {
-    console.log('BEEBUG: clicked', buttonTitle);
-    menus["menu"].toggleVisible(); // we're not disabling the ally elems on the top menu
-    menus[buttonTitle].toggleVisible();
 };

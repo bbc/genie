@@ -15,6 +15,8 @@ import { createBalance } from "./balance-ui.js";
 import { createMenu } from "./menu.js";
 import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 
+import { eventBus } from "../../core/event-bus.js";
+
 export class Shop extends Screen {
     preload() {
         this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this);
@@ -22,23 +24,49 @@ export class Shop extends Screen {
 
     create() {
         this.addBackgroundItems();
-        const {buttons} = this.setLayout(["back", "pause"]);
+        const { buttons } = this.setLayout(["back", "pause"]);
+
+        this.defaultBackButtonAction = this.memoizeBackButton();
+
         const metrics = getMetrics();
         this.title = createTitle(this, metrics); // title needs a fn to set the title text... later.
         this.balance = createBalance(this, metrics);
-        this.shopList = new ScrollableList(this);
-        this.shopList.toggleVisible();
-        this.inventoryList = new ScrollableList(this);
-        this.inventoryList.toggleVisible();
-        this.menu = createMenu(this, this.config.menu, {shop: this.shopList, manage: this.inventoryList}, buttons.back);
+
+        const shopList = new ScrollableList(this);
+        const inventoryList = new ScrollableList(this);
+        const topMenu = createMenu(
+            this,
+            this.config.menu,
+        );
+        this.menus = {
+            top: topMenu,
+            shop: shopList,
+            inventory: inventoryList,
+        };
+        this.menus.shop.toggleVisible();
+        this.menus.inventory.toggleVisible();
         this.setupEvents();
-        // console.log('BEEBUG: this', this);
+    }
+
+    memoizeBackButton() {
+        const backButtonConfig = this.layout.buttons.back.config;
+        const message = {
+            channel: backButtonConfig.channel,
+            name: backButtonConfig.key,
+            callback: backButtonConfig.action,
+        };
+        return message;
     }
 
     setupEvents() {
         const resize = this.resize.bind(this);
         const scaleEvent = onScaleChange.add(() => resize());
         this.events.once("shutdown", scaleEvent.unsubscribe);
+    }
+
+    setVisible(menu) {
+        this.menus.top.toggleVisible();
+        console.log('BEEBUG: menu', menu);
     }
 
     resize() {

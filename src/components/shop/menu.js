@@ -7,28 +7,29 @@
 
 import { getSafeArea } from "./shop-layout.js";
 import { createGelButtons } from "./menu-buttons.js";
+import { GelButton } from "../../core/layout/gel-button.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
-export const createMenu = (scene, config, containers, backButton) => {
+export const createMenu = (scene, config) => {
     const bounds = getSafeArea(scene.layout);
     const { buttonsRight } = config;
-    const callbackMemo = backButton.onPointerUp;
     const menuContainer = scene.add.container();
     menuContainer.toggleVisible = toggleVisible(menuContainer);
     menuContainer.add(createNonButtonRect(scene, bounds, buttonsRight));
-    menuContainer.add(createButtonContainer(scene, bounds, !buttonsRight, config, {...containers, menu: menuContainer}));
+    menuContainer.add(createButtonContainer(scene, bounds, !buttonsRight, config));
 
     return menuContainer;
 };
 
-const createButtonContainer = (scene, menuBounds, isOnLeft, config, menus) => {
+const createButtonContainer = (scene, menuBounds, isOnLeft, config) => {
     const { x, y, width, height } = getSubContainerPosition(menuBounds, isOnLeft);
     const buttonContainer = scene.add.container();
     buttonContainer.add(scene.add.rectangle(x, y, width, height, 0xff00ff, 0.3));
-    buttonContainer.add(createInnerContainer(scene, buttonContainer, config, menus));
+    buttonContainer.add(createInnerContainer(scene, buttonContainer, config));
     return buttonContainer;
 };
 
-const createInnerContainer = (scene, outerContainer, config, menus) => {
+const createInnerContainer = (scene, outerContainer, config) => {
     const innerContainer = scene.add.container();
     const outerBounds = outerContainer.getBounds();
     const bounds = {
@@ -38,7 +39,7 @@ const createInnerContainer = (scene, outerContainer, config, menus) => {
         height: outerBounds.height * 0.6,
     };
     innerContainer.add(scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, 0x0000ff, 0.3));
-    const gelButtons = createGelButtons(scene, innerContainer, config, menus);
+    const gelButtons = createGelButtons(scene, innerContainer, config);
     innerContainer.add(gelButtons);
     return innerContainer;
 };
@@ -59,4 +60,23 @@ const getSubContainerPosition = (menuBounds, isOnLeft) => {
     };
 };
 
-const toggleVisible = container => () => container.visible = !container.visible; 
+const toggleVisible = container => () => {
+    container.visible = !container.visible;
+    const buttons = getGelButtons(container);
+    buttons.forEach(button => {
+        button.input.enabled = container.visible;
+        button.accessibleElement.update();
+    });
+}; 
+
+const getGelButtons = container => {
+    const buttons = []
+    if (container.list.length === 0) return buttons;
+    container.list.forEach(child => {
+        fp.cond([
+            [c => c.constructor.name === GelButton.name, c => buttons.push(c)], // will constructor.name work minified?
+            [c => c.constructor.name === Phaser.GameObjects.Container.name, c => buttons.push(...getGelButtons(c))],
+        ])(child);
+    });
+    return buttons;
+}
