@@ -15,7 +15,7 @@ const styleDefaults = {
     resolution: 5,
 };
 
-export const createGelButtons = (scene, container, config) => {
+export const createGelButtons = (scene, bounds, config) => {
 
     const buttonConfigs = ["Shop", "Manage"].map(button => ({
         title: button,
@@ -23,13 +23,11 @@ export const createGelButtons = (scene, container, config) => {
         accessibilityEnabled: true,
         ariaLabel: button,
         channel: "shop",
-        group: scene.scene.key + "_menu",
+        group: scene.scene.key,
         id: `${button.toLowerCase()}_menu_button`,
         key: `${config.buttonBackgroundKey}`,
         scene: "shop",
     }));
-
-    const bounds = container.getBounds();
 
     const buttons = buttonConfigs.map((buttonConfig, idx) => {
         const { x, y } = getPosition(bounds, idx);
@@ -56,8 +54,8 @@ export const createGelButtons = (scene, container, config) => {
 const getPosition = (containerBounds, idx) => {
     const { x, y, height, width } = containerBounds;
     return {
-        x: x + width / 2,
-        y: y + height / 4 + (idx * height) / 2,
+        x: x,
+        y: y - height / 4 + (idx * height) / 2,
     };
 };
 

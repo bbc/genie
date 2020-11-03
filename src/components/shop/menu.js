@@ -4,49 +4,50 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 import { getSafeArea } from "./shop-layout.js";
 import { createGelButtons } from "./menu-buttons.js";
 import { GelButton } from "../../core/layout/gel-button.js";
-import fp from "../../../lib/lodash/fp/fp.js";
 
 export const createMenu = (scene, config) => {
     const bounds = getSafeArea(scene.layout);
     const { buttonsRight } = config;
+
     const menuContainer = scene.add.container();
+    menuContainer.config = config;
     menuContainer.setVisible = setVisible(menuContainer);
-    menuContainer.getScaleFactor = getScaleFactor(menuContainer);
-    menuContainer.memoisedBounds = bounds;
-    menuContainer.add(createNonButtonRect(scene, bounds, buttonsRight));
-    menuContainer.add(createButtonContainer(scene, bounds, !buttonsRight, config));
+    menuContainer.resize = resize(menuContainer);
+    menuContainer.memoisedBounds = bounds; // gel button offset bug means we can't rely on getBounds() for now
+
+    menuContainer.add(createRect(scene, bounds, buttonsRight));
+    menuContainer.add(createButtonRect(scene, bounds, !buttonsRight));
+    menuContainer.add(createInnerRect(scene, bounds, buttonsRight));
+    // menuContainer.add(createGelButtons(scene, getInnerRectBounds(bounds, buttonsRight), config));
 
     return menuContainer;
 };
 
-const createButtonContainer = (scene, menuBounds, isOnLeft, config) => {
+const createButtonRect = (scene, menuBounds, isOnLeft) => {
     const { x, y, width, height } = getSubContainerPosition(menuBounds, isOnLeft);
-    const buttonContainer = scene.add.container();
-    buttonContainer.add(scene.add.rectangle(x, y, width, height, 0xff00ff, 0.3));
-    buttonContainer.add(createInnerContainer(scene, buttonContainer, config));
-    return buttonContainer;
+    return scene.add.rectangle(x, y, width, height, 0xff00ff, 0.3);
 };
 
-const createInnerContainer = (scene, outerContainer, config) => {
-    const innerContainer = scene.add.container();
-    const outerBounds = outerContainer.getBounds();
-    const bounds = {
-        x: outerBounds.x + outerBounds.width / 2,
-        y: outerBounds.y + outerBounds.height / 2,
-        width: outerBounds.width * 0.65,
-        height: outerBounds.height * 0.6,
+const createInnerRect = (scene, outerBounds, buttonsRight) => {
+    const isOnLeft = !buttonsRight;
+    const bounds = getInnerRectBounds(outerBounds, isOnLeft);
+    return scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, 0x0000ff, 0.3);
+};
+
+const getInnerRectBounds = (outerBounds, isOnLeft) => {
+    const innerBounds = getSubContainerPosition(outerBounds, isOnLeft);
+    return {
+        x: innerBounds.width / 2,
+        y: innerBounds.y,
+        width: innerBounds.width * 0.65,
+        height: innerBounds.height * 0.6,
     };
-    innerContainer.add(scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, 0x0000ff, 0.3));
-    const gelButtons = createGelButtons(scene, innerContainer, config);
-    innerContainer.add(gelButtons);
-    return innerContainer;
 };
 
-const createNonButtonRect = (scene, menuBounds, isOnLeft) => {
+const createRect = (scene, menuBounds, isOnLeft) => {
     const { x, y, width, height } = getSubContainerPosition(menuBounds, isOnLeft);
     return scene.add.rectangle(x, y, width, height, 0xff0000, 0.3);
 };
@@ -62,10 +63,6 @@ const getSubContainerPosition = (menuBounds, isOnLeft) => {
     };
 };
 
-// const toggleVisible = container => () => {
-//     setVisible(container, !container.visible);
-// };
-
 const setVisible = container => isVisible => {
     container.visible = isVisible;
     const buttons = getGelButtons(container);
@@ -75,21 +72,24 @@ const setVisible = container => isVisible => {
     });
 };
 
-const getGelButtons = container => {
-    const buttons = [];
-    if (container.list.length === 0) return buttons;
-    container.list.forEach(child => {
-        fp.cond([
-            [c => c.constructor.name === GelButton.name, c => buttons.push(c)],
-            [c => c.constructor.name === Phaser.GameObjects.Container.name, c => buttons.push(...getGelButtons(c))],
-        ])(child);
-    });
-    return buttons;
-};
+const getGelButtons = container => container.list.filter(child => child.constructor.name === GelButton.name);
 
-const getScaleFactor = container => bounds => {
+const resize = container => bounds => {
     const { memoisedBounds } = container;
     container.memoisedBounds = bounds;
-    return [bounds.width / memoisedBounds.width, bounds.height / memoisedBounds.height];
-    // needs to reposition the buttons
+
+    // console.log("BEEBUG: container", container);
+    console.log("BEEBUG: memoisedBounds, bounds", memoisedBounds, bounds);
+    container.setScale(
+        (bounds.width / memoisedBounds.width) * container.scaleX,
+        (bounds.height / memoisedBounds.height) * container.scaleY,
+    );
+    // const { y } = container.getBounds();
+    // const yOffset = bounds.y - y;
+    // console.log("BEEBUG: yOffset", yOffset);
+    // container.setPosition(0, Math.abs(yOffset));
+    container.setY(bounds.centreY)
+
+    console.log("BEEBUG: container.getBounds()", container.getBounds());
+    // still needs buttons scaling.
 };
