@@ -26,10 +26,8 @@ export class Shop extends Screen {
         this.addBackgroundItems();
         this.setLayout(["back", "pause"]);
 
-        this.backMessage = this.memoizeBackButton(); // if we need to go more than one level, let's do a stack.
-        // that might not be a bad thing to implement anyway
-        // that way the back button will keep working however many further screens we impl.
-
+        this.backMessage = this.memoizeBackButton(); 
+    
         this.customMessage = {
             channel: this.backMessage.channel,
             name: this.backMessage.name,
@@ -91,7 +89,6 @@ export class Shop extends Screen {
 
     resize() {
         const metrics = getMetrics();
-        // console.log('BEEBUG: metrics', metrics);
         const safeArea = getSafeArea(this.layout);
         this.menus.top.resize(safeArea);
         this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));

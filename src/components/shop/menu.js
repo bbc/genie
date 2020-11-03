@@ -29,7 +29,7 @@ export const createMenu = (scene, config) => {
 };
 
 const createButtonRect = (scene, menuBounds, isOnLeft) => {
-    const { x, y, width, height } = getSubContainerPosition(menuBounds, isOnLeft);
+    const { x, y, width, height } = getHalfRectBounds(menuBounds, isOnLeft);
     return scene.add.rectangle(x, y, width, height, 0xff00ff, 0.3);
 };
 
@@ -40,9 +40,9 @@ const createInnerRect = (scene, outerBounds, buttonsRight) => {
 };
 
 const getInnerRectBounds = (outerBounds, isOnLeft) => {
-    const innerBounds = getSubContainerPosition(outerBounds, isOnLeft);
+    const innerBounds = getHalfRectBounds(outerBounds, isOnLeft);
     return {
-        x: innerBounds.width / 2,
+        x: isOnLeft? -innerBounds.width / 2 : innerBounds.width / 2,
         y: innerBounds.y,
         width: innerBounds.width * 0.65,
         height: innerBounds.height * 0.6,
@@ -50,11 +50,11 @@ const getInnerRectBounds = (outerBounds, isOnLeft) => {
 };
 
 const createRect = (scene, menuBounds, isOnLeft) => {
-    const { x, y, width, height } = getSubContainerPosition(menuBounds, isOnLeft);
+    const { x, y, width, height } = getHalfRectBounds(menuBounds, isOnLeft);
     return scene.add.rectangle(x, y, width, height, 0xff0000, 0.3);
 };
 
-const getSubContainerPosition = (menuBounds, isOnLeft) => {
+const getHalfRectBounds = (menuBounds, isOnLeft) => {
     const halfWidth = menuBounds.width / 2;
     return {
         x: isOnLeft ? -halfWidth / 2 : halfWidth / 2,
@@ -85,5 +85,5 @@ const resize = container => bounds => {
     );
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
-    resizeGelButtons(container.buttons, bounds, getInnerRectBounds(bounds, false), yOffset);
+    resizeGelButtons(container.buttons, bounds, getInnerRectBounds(bounds, false), container.config.buttonsRight);
 };

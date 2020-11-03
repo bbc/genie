@@ -50,11 +50,11 @@ export const createGelButtons = (scene, bounds, config, yOffset) => {
     return buttons;
 };
 
-export const resizeGelButtons = (buttons, bounds, innerBounds, yOffset) => {
+export const resizeGelButtons = (buttons, bounds, innerBounds, buttonsRight) => {
     buttons.forEach((button, idx) => {
         const { y } = getPosition(innerBounds, idx, 0);
         button.setY(CANVAS_HEIGHT / 2 + (bounds.height / 2 + bounds.y) + y);
-        button.setX(innerBounds.x + CANVAS_WIDTH / 2);
+        button.setX(buttonsRight ? innerBounds.x + CANVAS_WIDTH / 2 : -innerBounds.x + CANVAS_WIDTH / 2);
         button.setScale(getScale(innerBounds, button));
     });
 };
@@ -62,7 +62,7 @@ export const resizeGelButtons = (buttons, bounds, innerBounds, yOffset) => {
 const getPosition = (containerBounds, idx, yOffset) => {
     const { x, y, height } = containerBounds;
     return {
-        x: x,
+        x: -x,
         y: y - height / 4 + (idx * height) / 2 + yOffset,
     };
 };
