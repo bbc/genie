@@ -5,7 +5,7 @@
  * @license Apache-2.0
  */
 import { getSafeArea } from "./shop-layout.js";
-import { createGelButtons } from "./menu-buttons.js";
+import { createGelButtons, resizeGelButtons } from "./menu-buttons.js";
 import { GelButton } from "../../core/layout/gel-button.js";
 
 export const createMenu = (scene, config) => {
@@ -21,9 +21,9 @@ export const createMenu = (scene, config) => {
     menuContainer.add(createRect(scene, bounds, buttonsRight));
     menuContainer.add(createButtonRect(scene, bounds, !buttonsRight));
     menuContainer.add(createInnerRect(scene, bounds, buttonsRight));
-    menuContainer.add(createGelButtons(scene, getInnerRectBounds(bounds, buttonsRight), config));
-
     const yOffset = bounds.height / 2 + bounds.y;
+    menuContainer.buttons = createGelButtons(scene, getInnerRectBounds(bounds, buttonsRight), config, yOffset);
+
     menuContainer.setY(yOffset);
     return menuContainer;
 };
@@ -68,12 +68,13 @@ const setVisible = container => isVisible => {
     container.visible = isVisible;
     const buttons = getGelButtons(container);
     buttons.forEach(button => {
+        button.visible = isVisible;
         button.input.enabled = container.visible;
         button.accessibleElement.update();
     });
 };
 
-const getGelButtons = container => container.list.filter(child => child.constructor.name === GelButton.name);
+const getGelButtons = container => container.buttons;
 
 const resize = container => bounds => {
     const { memoisedBounds } = container;
@@ -84,4 +85,5 @@ const resize = container => bounds => {
     );
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
+    resizeGelButtons(container.buttons, bounds, getInnerRectBounds(bounds, false), yOffset);
 };

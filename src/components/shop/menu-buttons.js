@@ -15,8 +15,7 @@ const styleDefaults = {
     resolution: 5,
 };
 
-export const createGelButtons = (scene, bounds, config) => {
-
+export const createGelButtons = (scene, bounds, config, yOffset) => {
     const buttonConfigs = ["Shop", "Manage"].map(button => ({
         title: button,
         gameButton: true,
@@ -30,7 +29,7 @@ export const createGelButtons = (scene, bounds, config) => {
     }));
 
     const buttons = buttonConfigs.map((buttonConfig, idx) => {
-        const { x, y } = getPosition(bounds, idx);
+        const { x, y } = getPosition(bounds, idx, yOffset);
         const button = scene.add.gelButton(x + CANVAS_WIDTH / 2, y + CANVAS_HEIGHT / 2, buttonConfig);
 
         const callback = () => scene.setVisible(buttonConfig.title.toLowerCase());
@@ -51,11 +50,20 @@ export const createGelButtons = (scene, bounds, config) => {
     return buttons;
 };
 
-const getPosition = (containerBounds, idx) => {
-    const { x, y, height, width } = containerBounds;
+export const resizeGelButtons = (buttons, bounds, innerBounds, yOffset) => {
+    buttons.forEach((button, idx) => {
+        const { y } = getPosition(innerBounds, idx, 0);
+        button.setY(CANVAS_HEIGHT / 2 + (bounds.height / 2 + bounds.y) + y);
+        button.setX(innerBounds.x + CANVAS_WIDTH / 2);
+        button.setScale(getScale(innerBounds, button));
+    });
+};
+
+const getPosition = (containerBounds, idx, yOffset) => {
+    const { x, y, height } = containerBounds;
     return {
         x: x,
-        y: y - height / 4 + (idx * height) / 2,
+        y: y - height / 4 + (idx * height) / 2 + yOffset,
     };
 };
 

@@ -54,8 +54,6 @@ export class Shop extends Screen {
         this.menus.inventory.setVisible(false);
 
         this.setupEvents();
-
-        console.log('BEEBUG: this', this);
     }
 
     memoizeBackButton() {
@@ -93,6 +91,7 @@ export class Shop extends Screen {
 
     resize() {
         const metrics = getMetrics();
+        // console.log('BEEBUG: metrics', metrics);
         const safeArea = getSafeArea(this.layout);
         this.menus.top.resize(safeArea);
         this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));
