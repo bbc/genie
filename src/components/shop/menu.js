@@ -21,8 +21,10 @@ export const createMenu = (scene, config) => {
     menuContainer.add(createRect(scene, bounds, buttonsRight));
     menuContainer.add(createButtonRect(scene, bounds, !buttonsRight));
     menuContainer.add(createInnerRect(scene, bounds, buttonsRight));
-    // menuContainer.add(createGelButtons(scene, getInnerRectBounds(bounds, buttonsRight), config));
+    menuContainer.add(createGelButtons(scene, getInnerRectBounds(bounds, buttonsRight), config));
 
+    const yOffset = bounds.height / 2 + bounds.y;
+    menuContainer.setY(yOffset);
     return menuContainer;
 };
 
@@ -53,11 +55,10 @@ const createRect = (scene, menuBounds, isOnLeft) => {
 };
 
 const getSubContainerPosition = (menuBounds, isOnLeft) => {
-    const yOffset = menuBounds.height / 2 + menuBounds.y;
     const halfWidth = menuBounds.width / 2;
     return {
         x: isOnLeft ? -halfWidth / 2 : halfWidth / 2,
-        y: yOffset,
+        y: 0,
         width: halfWidth,
         height: menuBounds.height,
     };
@@ -77,19 +78,10 @@ const getGelButtons = container => container.list.filter(child => child.construc
 const resize = container => bounds => {
     const { memoisedBounds } = container;
     container.memoisedBounds = bounds;
-
-    // console.log("BEEBUG: container", container);
-    console.log("BEEBUG: memoisedBounds, bounds", memoisedBounds, bounds);
     container.setScale(
         (bounds.width / memoisedBounds.width) * container.scaleX,
         (bounds.height / memoisedBounds.height) * container.scaleY,
     );
-    // const { y } = container.getBounds();
-    // const yOffset = bounds.y - y;
-    // console.log("BEEBUG: yOffset", yOffset);
-    // container.setPosition(0, Math.abs(yOffset));
-    container.setY(bounds.centreY)
-
-    console.log("BEEBUG: container.getBounds()", container.getBounds());
-    // still needs buttons scaling.
+    const yOffset = container.getBounds().y - bounds.y;
+    container.setY(container.y - yOffset);
 };

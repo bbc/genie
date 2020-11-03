@@ -54,6 +54,8 @@ export class Shop extends Screen {
         this.menus.inventory.setVisible(false);
 
         this.setupEvents();
+
+        console.log('BEEBUG: this', this);
     }
 
     memoizeBackButton() {
