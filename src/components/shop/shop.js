@@ -25,8 +25,8 @@ export class Shop extends Screen {
         this.addBackgroundItems();
         this.setLayout(["back", "pause"]);
 
-        this.backMessage = this.memoizeBackButton(); 
-    
+        this.backMessage = this.memoizeBackButton();
+
         this.customMessage = {
             channel: this.backMessage.channel,
             name: this.backMessage.name,
@@ -74,7 +74,7 @@ export class Shop extends Screen {
             eventBus.subscribe(this.backMessage);
             return;
         }
-        
+
         eventBus.removeSubscription(this.backMessage);
         this.menus.top.setVisible(false);
         menu === "shop" && this.menus.shop.setVisible(true);
