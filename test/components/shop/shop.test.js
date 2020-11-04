@@ -11,6 +11,7 @@ import * as balance from "../../../src/components/shop/balance-ui.js";
 import * as titles from "../../../src/components/select/titles.js";
 import * as uiScaler from "../../../src/components/shop/shop-layout.js";
 import * as menu from "../../../src/components/shop/menu.js";
+import { eventBus } from "../../../src/core/event-bus.js";
 
 jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
 
@@ -82,6 +83,8 @@ describe("Shop", () => {
         uiScaler.getScaleFactor = jest.fn();
         uiScaler.getYPos = jest.fn();
         menu.createMenu = jest.fn().mockReturnValue(mockMenu);
+        eventBus.subscribe = jest.fn();
+        eventBus.removeSubscription = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -172,34 +175,52 @@ describe("Shop", () => {
             });
         });
     });
-    // describe("setVisible()", () => {
-    //     describe("when called with either 'shop' or 'manage'", () => {
-    //         test("unsubscribes the default back button message", () => {
-    //             expect(false).toBe(true);
-    //         });
-    //         test("resubscribes with a custom message", () => {
-    //             expect(false).toBe(true);
-    //         });
-    //         test("calls setVisible(true) on the appropriate list", () => {
-    //             expect(false).toBe(true);
-    //         });
-    //         test("calls setVisible(false) on the top menu", () => {
-    //             expect(false).toBe(true);
-    //         });
-    //     });
-    //     describe("when called with 'top'", () => {
-    //         test("unsubscribes the back button from the event bus", () => {
-    //             expect(false).toBe(true);
-    //         });
-    //         test("resubscribes with its original message", () => {
-    //             expect(false).toBe(true);
-    //         });
-    //         test("calls setVisible(false) on both scrollable lists", () => {
-    //             expect(false).toBe(true);
-    //         });
-    //         test("calls setVisible(true) on the top menu", () => {
-    //             expect(false).toBe(true);
-    //         });
-    //     });
-    // });
+    describe("setVisible()", () => {
+        beforeEach(() => shopScreen.create());
+
+        describe("when called with 'shop'", () => {
+            beforeEach(() => shopScreen.setVisible("shop"));
+
+            test("unsubscribes the default back button message", () => {
+                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.backMessage);
+            });
+            test("resubscribes with a custom message", () => {
+                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.customMessage);
+            });
+            test("that sets the top menu visible", () => {
+                shopScreen.customMessage.callback();
+                expect(shopScreen.menus.top.setVisible).toHaveBeenCalledWith(true);
+            });
+            test("calls setVisible(true) on the shop list", () => {
+                expect(shopScreen.menus.shop.setVisible).toHaveBeenCalledWith(true);
+            });
+            test("calls setVisible(false) on the top menu", () => {
+                expect(shopScreen.menus.top.setVisible).toHaveBeenCalledWith(false);
+            });
+        });
+        describe("when called with 'manage'", () => {
+            beforeEach(() => shopScreen.setVisible("manage"));
+
+            test("sets the inventory list visible instead", () => {
+                expect(shopScreen.menus.inventory.setVisible).toHaveBeenCalledWith(true);
+            });
+        });
+
+        describe("when called with 'top'", () => {
+            beforeEach(() => shopScreen.setVisible("top"));
+            test("unsubscribes the back button custom message", () => {
+                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
+            });
+            test("resubscribes with its original message", () => {
+                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
+            });
+            test("calls setVisible(false) on both scrollable lists", () => {
+                expect(shopScreen.menus.shop.setVisible).toHaveBeenCalledWith(false);
+                expect(shopScreen.menus.inventory.setVisible).toHaveBeenCalledWith(false);
+            });
+            test("calls setVisible(true) on the top menu", () => {
+                expect(shopScreen.menus.top.setVisible).toHaveBeenCalledWith(true);
+            });
+        });
+    });
 });
