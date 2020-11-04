@@ -28,38 +28,32 @@ export const createGelButtons = (scene, bounds, config, yOffset) => {
         scene: "shop",
     }));
 
-    const buttons = buttonConfigs.map((buttonConfig, idx) => {
-        const { x, y } = getPosition(bounds, idx, yOffset);
+    return buttonConfigs.map((buttonConfig, idx) => {
+        const { x, y } = getButtonPosition(bounds, idx, yOffset);
         const button = scene.add.gelButton(x + CANVAS_WIDTH / 2, y + CANVAS_HEIGHT / 2, buttonConfig);
-
         const callback = () => scene.setVisible(buttonConfig.title.toLowerCase());
         eventBus.subscribe({
             callback,
             channel: buttonConfig.channel,
             name: buttonConfig.id,
         });
-
         setButtonOverlays(scene, button, buttonConfig.title, config);
         accessibilify(button);
-
         button.setScale(getScale(bounds, button));
-
         return button;
     });
-
-    return buttons;
 };
 
 export const resizeGelButtons = (buttons, bounds, innerBounds, buttonsRight) => {
     buttons.forEach((button, idx) => {
-        const { y } = getPosition(innerBounds, idx, 0);
+        const { y } = getButtonPosition(innerBounds, idx, 0);
         button.setY(CANVAS_HEIGHT / 2 + (bounds.height / 2 + bounds.y) + y);
         button.setX(buttonsRight ? innerBounds.x + CANVAS_WIDTH / 2 : -innerBounds.x + CANVAS_WIDTH / 2);
         button.setScale(getScale(innerBounds, button));
     });
 };
 
-const getPosition = (containerBounds, idx, yOffset) => {
+const getButtonPosition = (containerBounds, idx, yOffset) => {
     const { x, y, height } = containerBounds;
     return {
         x: -x,

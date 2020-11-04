@@ -6,7 +6,6 @@
  */
 import { getSafeArea } from "./shop-layout.js";
 import { createGelButtons, resizeGelButtons } from "./menu-buttons.js";
-import { GelButton } from "../../core/layout/gel-button.js";
 
 export const createMenu = (scene, config) => {
     const bounds = getSafeArea(scene.layout);
@@ -42,7 +41,7 @@ const createInnerRect = (scene, outerBounds, buttonsRight) => {
 const getInnerRectBounds = (outerBounds, isOnLeft) => {
     const innerBounds = getHalfRectBounds(outerBounds, isOnLeft);
     return {
-        x: isOnLeft? -innerBounds.width / 2 : innerBounds.width / 2,
+        x: isOnLeft ? -innerBounds.width / 2 : innerBounds.width / 2,
         y: innerBounds.y,
         width: innerBounds.width * 0.65,
         height: innerBounds.height * 0.6,

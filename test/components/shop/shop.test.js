@@ -10,12 +10,13 @@ import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance-ui.js";
 import * as titles from "../../../src/components/select/titles.js";
 import * as uiScaler from "../../../src/components/shop/shop-layout.js";
+import * as menu from "../../../src/components/shop/menu.js";
 
 jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
 
 describe("Shop", () => {
     let shopScreen;
-    const mockScrollableList = { foo: "bar" };
+    const mockScrollableList = { setVisible: jest.fn() };
     const config = {
         shop: {
             title: [],
@@ -55,12 +56,17 @@ describe("Shop", () => {
         getBounds: jest.fn().mockReturnValue({ height: 100 }),
     };
     const mockSafeArea = { foo: "bar " };
+    const mockButtonConfig = {};
+    const mockMenu = { setVisible: jest.fn(), resize: jest.fn() };
 
     beforeEach(() => {
         shopScreen = new Shop();
         shopScreen.setData({ config });
         shopScreen.scene = { key: "shop" };
-        shopScreen._layout = { getSafeArea: jest.fn().mockReturnValue(mockSafeArea) };
+        shopScreen._layout = {
+            getSafeArea: jest.fn().mockReturnValue(mockSafeArea),
+            buttons: { back: { config: mockButtonConfig } },
+        };
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();
         shopScreen.plugins = { installScenePlugin: jest.fn() };
@@ -70,11 +76,12 @@ describe("Shop", () => {
             container: jest.fn().mockReturnValue(mockContainer),
         };
         shopScreen.events = { once: jest.fn() };
-        ScrollableList.mockImplementation(() => ({ panel: mockScrollableList }));
+        ScrollableList.mockImplementation(() => mockScrollableList);
         balance.createBalance = jest.fn().mockReturnValue(mockContainer);
         titles.createTitles = jest.fn();
         uiScaler.getScaleFactor = jest.fn();
         uiScaler.getYPos = jest.fn();
+        menu.createMenu = jest.fn().mockReturnValue(mockMenu);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -95,13 +102,14 @@ describe("Shop", () => {
         });
 
         test("adds GEL buttons to layout", () => {
-            const expectedButtons = ["home", "pause"];
+            const expectedButtons = ["back", "pause"];
             expect(shopScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        test("adds a scrollable list panel", () => {
+        test("adds scrollable list panels", () => {
             expect(ScrollableList).toHaveBeenCalled();
-            expect(shopScreen.panel).toBe(mockScrollableList);
+            expect(shopScreen.menus.shop).toBe(mockScrollableList);
+            expect(shopScreen.menus.inventory).toBe(mockScrollableList);
         });
 
         describe("creates the title UI component", () => {
