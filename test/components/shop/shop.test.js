@@ -56,7 +56,7 @@ describe("Shop", () => {
         getBounds: jest.fn().mockReturnValue({ height: 100 }),
     };
     const mockSafeArea = { foo: "bar " };
-    const mockButtonConfig = {};
+    const mockButtonConfig = { channel: "foo", key: "bar", action: "baz" };
     const mockMenu = { setVisible: jest.fn(), resize: jest.fn() };
 
     beforeEach(() => {
@@ -106,6 +106,11 @@ describe("Shop", () => {
             expect(shopScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
+        test("adds a top menu panel", () => {
+            expect(menu.createMenu).toHaveBeenCalled();
+            expect(shopScreen.menus.top).toBe(mockMenu);
+        });
+
         test("adds scrollable list panels", () => {
             expect(ScrollableList).toHaveBeenCalled();
             expect(shopScreen.menus.shop).toBe(mockScrollableList);
@@ -135,6 +140,23 @@ describe("Shop", () => {
             expect(balance.createBalance).toHaveBeenCalledWith(shopScreen, mockMetrics);
         });
 
+        test("stores the back button event bus message", () => {
+            const message = shopScreen.backMessage;
+            expect(message.channel).toBe(mockButtonConfig.channel);
+            expect(message.name).toBe(mockButtonConfig.key);
+            expect(message.callback).toBe(mockButtonConfig.action);
+        });
+        test("makes a custom event bus message", () => {
+            const message = shopScreen.customMessage;
+            expect(message.channel).toBe(mockButtonConfig.channel);
+            expect(message.name).toBe(mockButtonConfig.key);
+            expect(typeof message.callback).toBe("function");
+        });
+        test("sets visibility of its menus", () => {
+            expect(mockMenu.setVisible).toHaveBeenCalledWith(true);
+            expect(mockScrollableList.setVisible).toHaveBeenCalledTimes(2);
+        });
+
         describe("sets up resize", () => {
             test("adds a callback to onScaleChange that updates scale and position for UI elems", () => {
                 const onScaleChangeCallback = scaler.onScaleChange.add.mock.calls[0][0];
@@ -150,4 +172,34 @@ describe("Shop", () => {
             });
         });
     });
+    // describe("setVisible()", () => {
+    //     describe("when called with either 'shop' or 'manage'", () => {
+    //         test("unsubscribes the default back button message", () => {
+    //             expect(false).toBe(true);
+    //         });
+    //         test("resubscribes with a custom message", () => {
+    //             expect(false).toBe(true);
+    //         });
+    //         test("calls setVisible(true) on the appropriate list", () => {
+    //             expect(false).toBe(true);
+    //         });
+    //         test("calls setVisible(false) on the top menu", () => {
+    //             expect(false).toBe(true);
+    //         });
+    //     });
+    //     describe("when called with 'top'", () => {
+    //         test("unsubscribes the back button from the event bus", () => {
+    //             expect(false).toBe(true);
+    //         });
+    //         test("resubscribes with its original message", () => {
+    //             expect(false).toBe(true);
+    //         });
+    //         test("calls setVisible(false) on both scrollable lists", () => {
+    //             expect(false).toBe(true);
+    //         });
+    //         test("calls setVisible(true) on the top menu", () => {
+    //             expect(false).toBe(true);
+    //         });
+    //     });
+    // });
 });

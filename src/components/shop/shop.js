@@ -14,7 +14,6 @@ import { createTitle } from "./shop-titles.js";
 import { createBalance } from "./balance-ui.js";
 import { createMenu } from "./menu.js";
 import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
-
 import { eventBus } from "../../core/event-bus.js";
 
 export class Shop extends Screen {
@@ -38,14 +37,10 @@ export class Shop extends Screen {
         this.title = createTitle(this, metrics);
         this.balance = createBalance(this, metrics);
 
-        const topMenu = createMenu(this, this.config.menu);
-        const shopList = new ScrollableList(this);
-        const inventoryList = new ScrollableList(this);
-
         this.menus = {
-            top: topMenu,
-            shop: shopList,
-            inventory: inventoryList,
+            top: createMenu(this, this.config.menu),
+            shop: new ScrollableList(this),
+            inventory: new ScrollableList(this),
         };
         this.menus.top.setVisible(true);
         this.menus.shop.setVisible(false);
