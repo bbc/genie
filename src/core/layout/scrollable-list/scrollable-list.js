@@ -102,7 +102,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene) {
         super(scene, 0, 0);
         this.panel = createPanel(scene);
-        this.makeAccessible = () => {};
+        this.makeAccessible = fp.noop;
 
         this.add(this.panel);
         scene.layout.addCustomGroup(scene.scene.key, this, 0);
