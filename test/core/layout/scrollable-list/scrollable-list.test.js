@@ -207,10 +207,6 @@ describe("Scrollable List", () => {
         test("adds a matching group to the accessibility layer", () => {
             expect(a11y.addGroupAt).toHaveBeenCalledWith("shop", 0);
         });
-        // test("adds a noop makeAccessible method", () => {
-        //     expect(typeof list.makeAccessible).toBe("function");
-        //     list.makeAccessible();
-        // });
     });
 
     describe("Class methods", () => {
