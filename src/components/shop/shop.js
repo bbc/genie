@@ -30,7 +30,7 @@ export class Shop extends Screen {
         this.customMessage = {
             channel: this.backMessage.channel,
             name: this.backMessage.name,
-            callback: () => this.setVisible("top"),
+            callback: () => this.setVisiblePane("top"),
         };
 
         const metrics = getMetrics();
@@ -42,9 +42,7 @@ export class Shop extends Screen {
             shop: new ScrollableList(this),
             manage: new ScrollableList(this),
         };
-        this.panes.top.setVisible(true);
-        this.panes.shop.setVisible(false);
-        this.panes.manage.setVisible(false);
+        this.setVisiblePane("top");
 
         this.setupEvents();
     }
@@ -65,11 +63,11 @@ export class Shop extends Screen {
         this.events.once("shutdown", scaleEvent.unsubscribe);
     }
 
-    setVisible(visiblePane) {
-        eventBus.removeSubscription(visiblePane === "top" ? this.customMessage : this.backMessage);
-        eventBus.subscribe(visiblePane === "top" ? this.backMessage : this.customMessage);
+    setVisiblePane(pane) {
+        eventBus.removeSubscription(pane === "top" ? this.customMessage : this.backMessage);
+        eventBus.subscribe(pane === "top" ? this.backMessage : this.customMessage);
         Object.keys(this.panes).forEach(key =>
-            visiblePane === key ? this.panes[key].setVisible(true) : this.panes[key].setVisible(false),
+            pane === key ? this.panes[key].setVisible(true) : this.panes[key].setVisible(false),
         );
     }
 

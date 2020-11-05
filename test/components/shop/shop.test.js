@@ -175,11 +175,11 @@ describe("Shop", () => {
             });
         });
     });
-    describe("setVisible()", () => {
+    describe("setVisiblePane()", () => {
         beforeEach(() => shopScreen.create());
 
         describe("when called with 'shop'", () => {
-            beforeEach(() => shopScreen.setVisible("shop"));
+            beforeEach(() => shopScreen.setVisiblePane("shop"));
 
             test("unsubscribes the default back button message", () => {
                 expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.backMessage);
@@ -199,7 +199,7 @@ describe("Shop", () => {
             });
         });
         describe("when called with 'manage'", () => {
-            beforeEach(() => shopScreen.setVisible("manage"));
+            beforeEach(() => shopScreen.setVisiblePane("manage"));
 
             test("sets the inventory list visible instead", () => {
                 expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(true);
@@ -207,7 +207,7 @@ describe("Shop", () => {
         });
 
         describe("when called with 'top'", () => {
-            beforeEach(() => shopScreen.setVisible("top"));
+            beforeEach(() => shopScreen.setVisiblePane("top"));
             test("unsubscribes the back button custom message", () => {
                 expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
             });

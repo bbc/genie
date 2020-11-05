@@ -26,7 +26,7 @@ describe("shop menu buttons", () => {
             text: jest.fn().mockReturnValue(mockText),
         },
         scene: { key: "mockSceneKey" },
-        setVisible: jest.fn(),
+        setVisiblePane: jest.fn(),
     };
     const mockConfig = { buttonBackgroundKey: "mockBackgroundKey" };
     const mockOuterBounds = { y: 50, height: 400 };
@@ -71,7 +71,7 @@ describe("shop menu buttons", () => {
             expect(message.channel).toBe("shop");
             expect(message.name).toBe("shop_menu_button");
             message.callback();
-            expect(mockScene.setVisible).toHaveBeenCalledWith("shop");
+            expect(mockScene.setVisiblePane).toHaveBeenCalledWith("shop");
         });
         test("sets overlays for text and button icon", () => {
             expect(mockButton.overlays.set).toHaveBeenCalledTimes(4);

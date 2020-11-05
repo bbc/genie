@@ -30,7 +30,7 @@ export const createGelButtons = (scene, bounds, config, yOffset) =>
         };
         const { x, y } = getButtonPosition(bounds, idx, yOffset);
         const gelButton = scene.add.gelButton(x + CANVAS_WIDTH / 2, y + CANVAS_HEIGHT / 2, buttonConfig);
-        const callback = () => scene.setVisible(buttonConfig.title.toLowerCase());
+        const callback = () => scene.setVisiblePane(buttonConfig.title.toLowerCase());
         eventBus.subscribe({
             callback,
             channel: buttonConfig.channel,

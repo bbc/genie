@@ -17,9 +17,11 @@ export const createMenu = (scene, config) => {
     menuContainer.resize = resize(menuContainer);
     menuContainer.memoisedBounds = bounds; // gel button offset bug means we can't rely on getBounds() for now
 
-    menuContainer.add(createRect(scene, bounds, buttonsRight));
-    menuContainer.add(createButtonRect(scene, bounds, !buttonsRight));
-    menuContainer.add(createInnerRect(scene, bounds, buttonsRight));
+    menuContainer.add([
+        createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff0000),
+        createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff00ff),
+        createRect(scene, getInnerRectBounds(bounds, !buttonsRight), 0x0000ff),
+    ]);
     const yOffset = bounds.height / 2 + bounds.y;
     menuContainer.buttons = createGelButtons(scene, getInnerRectBounds(bounds, buttonsRight), config, yOffset);
 
@@ -27,15 +29,14 @@ export const createMenu = (scene, config) => {
     return menuContainer;
 };
 
-const createButtonRect = (scene, menuBounds, isOnLeft) => {
-    const { x, y, width, height } = getHalfRectBounds(menuBounds, isOnLeft);
-    return scene.add.rectangle(x, y, width, height, 0xff00ff, 0.3);
-};
-
-const createInnerRect = (scene, outerBounds, buttonsRight) => {
-    const isOnLeft = !buttonsRight;
-    const bounds = getInnerRectBounds(outerBounds, isOnLeft);
-    return scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, 0x0000ff, 0.3);
+const getHalfRectBounds = (menuBounds, isOnLeft) => {
+    const halfWidth = menuBounds.width / 2;
+    return {
+        x: isOnLeft ? -halfWidth / 2 : halfWidth / 2,
+        y: 0,
+        width: halfWidth,
+        height: menuBounds.height,
+    };
 };
 
 const getInnerRectBounds = (outerBounds, isOnLeft) => {
@@ -48,20 +49,8 @@ const getInnerRectBounds = (outerBounds, isOnLeft) => {
     };
 };
 
-const createRect = (scene, menuBounds, isOnLeft) => {
-    const { x, y, width, height } = getHalfRectBounds(menuBounds, isOnLeft);
-    return scene.add.rectangle(x, y, width, height, 0xff0000, 0.3);
-};
-
-const getHalfRectBounds = (menuBounds, isOnLeft) => {
-    const halfWidth = menuBounds.width / 2;
-    return {
-        x: isOnLeft ? -halfWidth / 2 : halfWidth / 2,
-        y: 0,
-        width: halfWidth,
-        height: menuBounds.height,
-    };
-};
+const createRect = (scene, bounds, colour) =>
+    scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, colour, 0.3);
 
 const setVisible = container => isVisible => {
     container.visible = isVisible;
