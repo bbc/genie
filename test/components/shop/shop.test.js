@@ -140,7 +140,7 @@ describe("Shop", () => {
         });
 
         test("adds a balance UI component", () => {
-            expect(balance.createBalance).toHaveBeenCalledWith(shopScreen, mockMetrics);
+            expect(balance.createBalance).toHaveBeenCalledWith(shopScreen, mockMetrics, mockSafeArea);
         });
 
         test("stores the back button event bus message", () => {
@@ -165,7 +165,7 @@ describe("Shop", () => {
                 const onScaleChangeCallback = scaler.onScaleChange.add.mock.calls[0][0];
                 onScaleChangeCallback();
 
-                expect(shopScreen.title.setScale).toHaveBeenCalled(); // can you show that these weren't called by setup?
+                expect(shopScreen.title.setScale).toHaveBeenCalled();
                 expect(shopScreen.title.setPosition).toHaveBeenCalled();
                 expect(shopScreen.balance.setScale).toHaveBeenCalled();
                 expect(shopScreen.balance.setPosition).toHaveBeenCalled();

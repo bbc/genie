@@ -8,11 +8,11 @@
 import { createTitles } from "../select/titles.js";
 import { getSafeArea, getYPos, getScaleFactor } from "./shop-layout.js";
 
-export const createTitle = (scene, metrics) => {
+export const createTitle = (scene, metrics, safeArea) => {
     const titleContainer = scene.add.container();
     titleContainer.add(createTitles(scene));
 
-    const safeArea = getSafeArea(scene.layout);
+    // const safeArea = getSafeArea(scene.layout);
 
     titleContainer.setScale(
         getScaleFactor({

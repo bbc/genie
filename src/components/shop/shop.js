@@ -34,11 +34,13 @@ export class Shop extends Screen {
         };
 
         const metrics = getMetrics();
-        this.title = createTitle(this, metrics);
-        this.balance = createBalance(this, metrics);
+        const safeArea = getSafeArea(this.layout);
+
+        this.title = createTitle(this, metrics, safeArea);
+        this.balance = createBalance(this, metrics, safeArea);
 
         this.panes = {
-            top: createMenu(this, this.config.menu),
+            top: createMenu(this, this.config.menu, safeArea),
             shop: new ScrollableList(this),
             manage: new ScrollableList(this),
         };

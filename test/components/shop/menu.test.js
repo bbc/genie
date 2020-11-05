@@ -31,14 +31,13 @@ describe("shop menu", () => {
         },
     };
     const mockConfig = { buttonsRight: true };
-    const mockSafeAreaBounds = { width: 800, height: 600, x: 0, y: -100 };
+    const mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
     const mockGelButton = { input: { enabled: true }, visible: true, accessibleElement: { update: jest.fn() } };
     const mockGelButtons = [mockGelButton, mockGelButton];
-    layout.getSafeArea = jest.fn().mockReturnValue(mockSafeAreaBounds);
     buttons.createGelButtons = jest.fn().mockReturnValue(mockGelButtons);
     buttons.resizeGelButtons = jest.fn();
 
-    beforeEach(() => (menu = createMenu(mockScene, mockConfig)));
+    beforeEach(() => (menu = createMenu(mockScene, mockConfig, mockSafeArea)));
     afterEach(() => jest.clearAllMocks());
 
     describe("createMenu()", () => {
@@ -56,7 +55,7 @@ describe("shop menu", () => {
             expect(typeof menu.resize).toBe("function");
         });
         test("with memoised safe area bounds", () => {
-            expect(menu.memoisedBounds).toBe(mockSafeAreaBounds);
+            expect(menu.memoisedBounds).toBe(mockSafeArea);
         });
         test("with three rects added", () => {
             expect(mockScene.add.rectangle).toHaveBeenCalledTimes(3);

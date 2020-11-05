@@ -7,8 +7,8 @@
 import { getSafeArea } from "./shop-layout.js";
 import { createGelButtons, resizeGelButtons } from "./menu-buttons.js";
 
-export const createMenu = (scene, config) => {
-    const bounds = getSafeArea(scene.layout);
+export const createMenu = (scene, config, bounds) => {
+    // const bounds = getSafeArea(scene.layout);
     const { buttonsRight } = config;
 
     const menuContainer = scene.add.container();
