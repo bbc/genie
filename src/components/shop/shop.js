@@ -37,14 +37,14 @@ export class Shop extends Screen {
         this.title = createTitle(this, metrics);
         this.balance = createBalance(this, metrics);
 
-        this.menus = {
+        this.panes = {
             top: createMenu(this, this.config.menu),
             shop: new ScrollableList(this),
-            inventory: new ScrollableList(this),
+            manage: new ScrollableList(this),
         };
-        this.menus.top.setVisible(true);
-        this.menus.shop.setVisible(false);
-        this.menus.inventory.setVisible(false);
+        this.panes.top.setVisible(true);
+        this.panes.shop.setVisible(false);
+        this.panes.manage.setVisible(false);
 
         this.setupEvents();
     }
@@ -65,27 +65,18 @@ export class Shop extends Screen {
         this.events.once("shutdown", scaleEvent.unsubscribe);
     }
 
-    setVisible(menu) {
-        if (menu === "top") {
-            this.menus.top.setVisible(true);
-            this.menus.shop.setVisible(false);
-            this.menus.inventory.setVisible(false);
-            eventBus.removeSubscription(this.customMessage);
-            eventBus.subscribe(this.backMessage);
-            return;
-        }
-
-        eventBus.removeSubscription(this.backMessage);
-        this.menus.top.setVisible(false);
-        menu === "shop" && this.menus.shop.setVisible(true);
-        menu === "manage" && this.menus.inventory.setVisible(true);
-        eventBus.subscribe(this.customMessage);
+    setVisible(visiblePane) {
+        eventBus.removeSubscription(visiblePane === "top" ? this.customMessage : this.backMessage);
+        eventBus.subscribe(visiblePane === "top" ? this.backMessage : this.customMessage);
+        Object.keys(this.panes).forEach(key =>
+            visiblePane === key ? this.panes[key].setVisible(true) : this.panes[key].setVisible(false),
+        );
     }
 
     resize() {
         const metrics = getMetrics();
         const safeArea = getSafeArea(this.layout);
-        this.menus.top.resize(safeArea);
+        this.panes.top.resize(safeArea);
         this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));
         this.title.setPosition(0, getYPos(metrics, safeArea));
         this.balance.setScale(getScaleFactor({ metrics, container: this.balance, safeArea }));

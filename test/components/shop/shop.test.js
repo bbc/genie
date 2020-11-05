@@ -109,15 +109,15 @@ describe("Shop", () => {
             expect(shopScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        test("adds a top menu panel", () => {
+        test("adds a top menu pane", () => {
             expect(menu.createMenu).toHaveBeenCalled();
-            expect(shopScreen.menus.top).toBe(mockMenu);
+            expect(shopScreen.panes.top).toBe(mockMenu);
         });
 
-        test("adds scrollable list panels", () => {
+        test("adds scrollable list panes", () => {
             expect(ScrollableList).toHaveBeenCalled();
-            expect(shopScreen.menus.shop).toBe(mockScrollableList);
-            expect(shopScreen.menus.inventory).toBe(mockScrollableList);
+            expect(shopScreen.panes.shop).toBe(mockScrollableList);
+            expect(shopScreen.panes.manage).toBe(mockScrollableList);
         });
 
         describe("creates the title UI component", () => {
@@ -155,7 +155,7 @@ describe("Shop", () => {
             expect(message.name).toBe(mockButtonConfig.key);
             expect(typeof message.callback).toBe("function");
         });
-        test("sets visibility of its menus", () => {
+        test("sets visibility of its panes", () => {
             expect(mockMenu.setVisible).toHaveBeenCalledWith(true);
             expect(mockScrollableList.setVisible).toHaveBeenCalledTimes(2);
         });
@@ -189,20 +189,20 @@ describe("Shop", () => {
             });
             test("that sets the top menu visible", () => {
                 shopScreen.customMessage.callback();
-                expect(shopScreen.menus.top.setVisible).toHaveBeenCalledWith(true);
+                expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
             });
             test("calls setVisible(true) on the shop list", () => {
-                expect(shopScreen.menus.shop.setVisible).toHaveBeenCalledWith(true);
+                expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(true);
             });
             test("calls setVisible(false) on the top menu", () => {
-                expect(shopScreen.menus.top.setVisible).toHaveBeenCalledWith(false);
+                expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(false);
             });
         });
         describe("when called with 'manage'", () => {
             beforeEach(() => shopScreen.setVisible("manage"));
 
             test("sets the inventory list visible instead", () => {
-                expect(shopScreen.menus.inventory.setVisible).toHaveBeenCalledWith(true);
+                expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(true);
             });
         });
 
@@ -215,11 +215,11 @@ describe("Shop", () => {
                 expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
             });
             test("calls setVisible(false) on both scrollable lists", () => {
-                expect(shopScreen.menus.shop.setVisible).toHaveBeenCalledWith(false);
-                expect(shopScreen.menus.inventory.setVisible).toHaveBeenCalledWith(false);
+                expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(false);
+                expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(false);
             });
             test("calls setVisible(true) on the top menu", () => {
-                expect(shopScreen.menus.top.setVisible).toHaveBeenCalledWith(true);
+                expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
             });
         });
     });

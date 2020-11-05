@@ -15,8 +15,8 @@ const styleDefaults = {
     resolution: 5,
 };
 
-export const createGelButtons = (scene, bounds, config, yOffset) => {
-    return ["Shop", "Manage"].map((button, idx) => {
+export const createGelButtons = (scene, bounds, config, yOffset) =>
+    ["Shop", "Manage"].map((button, idx) => {
         const buttonConfig = {
             title: button,
             gameButton: true,
@@ -41,7 +41,6 @@ export const createGelButtons = (scene, bounds, config, yOffset) => {
         gelButton.setScale(getScale(bounds, gelButton));
         return gelButton;
     });
-};
 
 export const resizeGelButtons = (buttons, bounds, innerBounds, buttonsRight) => {
     buttons.forEach((button, idx) => {
