@@ -6,7 +6,7 @@
  * @license Apache-2.0
  */
 
-import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
+import { getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -38,7 +38,6 @@ export const createBalance = (scene, metrics, safeArea) => {
 
     container.add([background, icon, value]);
 
-    // const safeArea = getSafeArea(scene.layout);
     container.setScale(getScaleFactor({ metrics, container, safeArea }));
     container.setPosition(getXPos(container, safeArea, scene.config.listPadding.x), getYPos(metrics, safeArea));
 

@@ -1,6 +1,4 @@
 /**
- * Placeholder for shop screen.
- *
  * @module components/shop
  * @copyright BBC 2020
  * @author BBC Children's D+E

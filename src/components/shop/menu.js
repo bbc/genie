@@ -4,11 +4,9 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { getSafeArea } from "./shop-layout.js";
 import { createGelButtons, resizeGelButtons } from "./menu-buttons.js";
 
 export const createMenu = (scene, config, bounds) => {
-    // const bounds = getSafeArea(scene.layout);
     const { buttonsRight } = config;
 
     const menuContainer = scene.add.container();

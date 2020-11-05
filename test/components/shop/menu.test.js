@@ -5,7 +5,6 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { createMenu } from "../../../src/components/shop/menu.js";
-import * as layout from "../../../src/components/shop/shop-layout.js";
 import * as buttons from "../../../src/components/shop/menu-buttons.js";
 
 describe("shop menu", () => {
