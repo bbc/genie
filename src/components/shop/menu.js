@@ -12,10 +12,10 @@ export const createMenu = (scene, config) => {
     const { buttonsRight } = config;
 
     const menuContainer = scene.add.container();
-    menuContainer.config = config;
+    menuContainer.config = { ...config, assetKeys: scene.config.assetKeys };
     menuContainer.setVisible = setVisible(menuContainer);
     menuContainer.resize = resize(menuContainer);
-    menuContainer.memoisedBounds = bounds; // gel button offset bug means we can't rely on getBounds() for now
+    menuContainer.memoisedBounds = bounds; // workaround, pending CGPROD-2887
 
     menuContainer.add([
         createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff0000),
@@ -23,7 +23,12 @@ export const createMenu = (scene, config) => {
         createRect(scene, getInnerRectBounds(bounds, !buttonsRight), 0x0000ff),
     ]);
     const yOffset = bounds.height / 2 + bounds.y;
-    menuContainer.buttons = createGelButtons(scene, getInnerRectBounds(bounds, buttonsRight), config, yOffset);
+    menuContainer.buttons = createGelButtons(
+        scene,
+        getInnerRectBounds(bounds, buttonsRight),
+        menuContainer.config,
+        yOffset,
+    );
 
     menuContainer.setY(yOffset);
     return menuContainer;

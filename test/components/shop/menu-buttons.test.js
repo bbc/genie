@@ -28,7 +28,9 @@ describe("shop menu buttons", () => {
         scene: { key: "mockSceneKey" },
         setVisiblePane: jest.fn(),
     };
-    const mockConfig = { buttonBackgroundKey: "mockBackgroundKey" };
+    const mockConfig = {
+        assetKeys: { prefix: "shop", buttonIcon: "mockIconKey", buttonBackground: "mockBackgroundKey" },
+    };
     const mockOuterBounds = { y: 50, height: 400 };
     const mockInnerBounds = { x: 200, y: 50, height: 300, width: 100 };
     const yOffset = 47;
@@ -75,8 +77,10 @@ describe("shop menu buttons", () => {
         });
         test("sets overlays for text and button icon", () => {
             expect(mockButton.overlays.set).toHaveBeenCalledTimes(4);
-            expect(mockScene.add.image).toHaveBeenCalledTimes(2);
-            expect(mockScene.add.text).toHaveBeenCalledTimes(2);
+            expect(mockScene.add.image.mock.calls[0][2]).toBe("shop.mockIconKey");
+            expect(mockScene.add.image.mock.calls[1][2]).toBe("shop.mockIconKey");
+            expect(mockScene.add.text.mock.calls[0][2]).toBe("Shop");
+            expect(mockScene.add.text.mock.calls[1][2]).toBe("Manage");
         });
         test("accesibilifies", () => {
             expect(a11y.accessibilify).toHaveBeenCalledTimes(2);

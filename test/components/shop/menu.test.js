@@ -24,6 +24,11 @@ describe("shop menu", () => {
             container: jest.fn().mockReturnValue(mockContainer),
             rectangle: jest.fn(),
         },
+        config: {
+            assetKeys: {
+                foo: "bar",
+            },
+        },
     };
     const mockConfig = { buttonsRight: true };
     const mockSafeAreaBounds = { width: 800, height: 600, x: 0, y: -100 };
@@ -41,7 +46,8 @@ describe("shop menu", () => {
             expect(menu).toBe(mockContainer);
         });
         test("with stored config", () => {
-            expect(menu.config).toBe(mockConfig);
+            const expectedConfig = { ...mockConfig, assetKeys: mockScene.config.assetKeys };
+            expect(menu.config).toStrictEqual(expectedConfig);
         });
         test("with a setVisible() function", () => {
             expect(typeof menu.setVisible).toBe("function");

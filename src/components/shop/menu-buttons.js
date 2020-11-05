@@ -25,7 +25,7 @@ export const createGelButtons = (scene, bounds, config, yOffset) =>
             channel: "shop",
             group: scene.scene.key,
             id: `${button.toLowerCase()}_menu_button`,
-            key: `${config.buttonBackgroundKey}`,
+            key: config.assetKeys.buttonBackground,
             scene: "shop",
         };
         const { x, y } = getButtonPosition(bounds, idx, yOffset);
@@ -59,10 +59,12 @@ const getButtonPosition = (containerBounds, idx, yOffset) => {
     };
 };
 
+const assetKey = (key, config) => `${config.assetKeys.prefix}.${config.assetKeys[key]}`;
+
 const getScale = (containerBounds, button) => containerBounds.width / button.width;
 
 const setButtonOverlays = (scene, button, title, config) => {
     const offset = button.width / 4;
     button.overlays.set("caption", scene.add.text(-offset / 2, 0, title, { ...styleDefaults }).setOrigin(0, 0.5));
-    button.overlays.set("icon", scene.add.image(-offset, 0, `shop.${config.buttonIconKey}`));
+    button.overlays.set("icon", scene.add.image(-offset, 0, assetKey("buttonIcon", config)));
 };
