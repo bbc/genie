@@ -16,31 +16,30 @@ const styleDefaults = {
 };
 
 export const createGelButtons = (scene, bounds, config, yOffset) => {
-    const buttonConfigs = ["Shop", "Manage"].map(button => ({
-        title: button,
-        gameButton: true,
-        accessibilityEnabled: true,
-        ariaLabel: button,
-        channel: "shop",
-        group: scene.scene.key,
-        id: `${button.toLowerCase()}_menu_button`,
-        key: `${config.buttonBackgroundKey}`,
-        scene: "shop",
-    }));
-
-    return buttonConfigs.map((buttonConfig, idx) => {
+    return ["Shop", "Manage"].map((button, idx) => {
+        const buttonConfig = {
+            title: button,
+            gameButton: true,
+            accessibilityEnabled: true,
+            ariaLabel: button,
+            channel: "shop",
+            group: scene.scene.key,
+            id: `${button.toLowerCase()}_menu_button`,
+            key: `${config.buttonBackgroundKey}`,
+            scene: "shop",
+        };
         const { x, y } = getButtonPosition(bounds, idx, yOffset);
-        const button = scene.add.gelButton(x + CANVAS_WIDTH / 2, y + CANVAS_HEIGHT / 2, buttonConfig);
+        const gelButton = scene.add.gelButton(x + CANVAS_WIDTH / 2, y + CANVAS_HEIGHT / 2, buttonConfig);
         const callback = () => scene.setVisible(buttonConfig.title.toLowerCase());
         eventBus.subscribe({
             callback,
             channel: buttonConfig.channel,
             name: buttonConfig.id,
         });
-        setButtonOverlays(scene, button, buttonConfig.title, config);
-        accessibilify(button);
-        button.setScale(getScale(bounds, button));
-        return button;
+        setButtonOverlays(scene, gelButton, buttonConfig.title, config);
+        accessibilify(gelButton);
+        gelButton.setScale(getScale(bounds, gelButton));
+        return gelButton;
     });
 };
 
