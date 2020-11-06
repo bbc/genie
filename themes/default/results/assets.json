@@ -15,7 +15,7 @@
             {
                 "type": "image",
                 "key": "backdrop",
-                "url": "results/backdrop-overlay.png"
+                "url": "results/backdrop-fill.png"
             },
             {
                 "type": "image",
