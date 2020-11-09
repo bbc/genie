@@ -91,7 +91,7 @@
                 "url": "items/bomb.png",
                 "frameConfig": {
                     "frameWidth": 97,
-                    "frameHeight": 87,
+                    "frameHeight": 97,
                     "frameMax": 1,
                     "margin": 0,
                     "spacing": 4
@@ -103,7 +103,7 @@
                 "url": "items/box.png",
                 "frameConfig": {
                     "frameWidth": 94,
-                    "frameHeight": 89,
+                    "frameHeight": 94,
                     "frameMax": 1,
                     "margin": 0,
                     "spacing": 4

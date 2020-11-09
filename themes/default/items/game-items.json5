@@ -1,6 +1,6 @@
 [
     {
-        id: "sword", //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
+        id: "shield", //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
         title: "Armagog's Shield",
         description: "Prevents 99% of impalings",
         tags: ["weapon"],
@@ -11,7 +11,7 @@
         },
     },
     {
-        id: "crossbow", //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
+        id: "bomb", //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
         title: "Skull Bomb",
         description: "It'll blow your mind",
         price: 50,
@@ -19,7 +19,7 @@
         tags: ["weapon"],
     },
     {
-        id: "bread", //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
+        id: "box", //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
         title: "Mystery Box",
         description: "What lies inside?",
         price: 10,

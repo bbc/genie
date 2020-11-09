@@ -82,6 +82,7 @@
                 assetKey: "icon",
                 isDynamic: true, // assumes the asset key is item[assetKey]
                 position: { align: "left", offsetX: 32, offsetY: 0 },
+                size: 76, // square
             },
             {
                 type: "text",
@@ -96,7 +97,7 @@
                 name: "itemName",
                 value: "title",
                 isDynamic: true, // false would use the literal value of 'value'
-                position: { align: "left", offsetX: 100, offsetY: -24 },
+                position: { align: "left", offsetX: 80, offsetY: -24 },
                 font: { fontFamily: "ReithSans", resolution: 5, fontSize: 20 },
             },
             {
@@ -104,7 +105,7 @@
                 name: "itemDescription",
                 value: "description",
                 isDynamic: true,
-                position: { align: "left", offsetX: 100, offsetY: 0 },
+                position: { align: "left", offsetX: 80, offsetY: 0 },
                 font: { fontFamily: "ReithSans", resolution: 5 },
             },
         ],
