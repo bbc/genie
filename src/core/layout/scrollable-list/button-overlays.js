@@ -15,13 +15,18 @@ export const overlays1Wide = ({ scene, gelButton, item, config }) => {
 };
 
 const setImageOverlay = ({ scene, gelButton, item, config, overlay, offset }) => {
-    const key = overlay.isDynamic ? item[overlay.assetKey] : `${config.overlay.defaultPrefix}.${overlay.assetKey}`;
+    console.log('BEEBUG: item', item);
+    console.log('BEEBUG: overlay', overlay);
+    const prefix = config.overlay.defaultPrefix;
+    const key = overlay.isDynamic ? `${prefix}.${item[overlay.assetKey]}` : `${prefix}.${overlay.assetKey}`;
+    // console.log('BEEBUG: key', key);
     gelButton.overlays.set(overlay.name, scene.add.image(offset.x, offset.y, key));
 };
 
 const setTextOverlay = ({ scene, gelButton, item, overlay, offset }) => {
-    const textValue = overlay.isDynamic ? item[overlay.value] : overlay.value;
-    gelButton.overlays.set(overlay.name, scene.add.text(offset.x, offset.y, textValue.toString(), overlay.font));
+    // const textValue = overlay.isDynamic ? item[overlay.value] : overlay.value;
+    // gelButton.overlays.set(overlay.name, scene.add.text(offset.x, offset.y, textValue.toString(), overlay.font));
+    gelButton.overlays.set(overlay.name, scene.add.text(offset.x, offset.y, item[overlay.value] && item[overlay.value].toString(), overlay.font));
 };
 
 const getOffset = (position, gelButton) => {

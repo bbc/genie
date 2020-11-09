@@ -1,23 +1,29 @@
 [
     {
-        id: "sword",    //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
-        title: "Sword",
-        description: "A sturdy iron sword.",
+        id: "sword", //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
+        title: "Armagog's Shield",
+        description: "Prevents 99% of impalings",
         tags: ["weapon"],
+        price: 100,
+        icon: "armagogIcon",
         userData: {
             //.. keep this namespaced out in case agencies want to put object stats in here
-        }
+        },
     },
     {
-        id: "crossbow",    //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
-        title: "Crossbow",
-        description: "Basic wooden crossbow with standard range.",
+        id: "crossbow", //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
+        title: "Skull Bomb",
+        description: "It'll blow your mind",
+        price: 50,
+        icon: "bombIcon",
         tags: ["weapon"],
     },
     {
-        id: "bread",    //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
-        title: "Bread",
-        description: "A loaf of bread.",
+        id: "bread", //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
+        title: "Mystery Box",
+        description: "What lies inside?",
+        price: 10,
+        icon: "mysteryBoxIcon",
         tags: ["food"],
     },
 ]

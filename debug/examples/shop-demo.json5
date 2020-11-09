@@ -50,49 +50,7 @@
         x: 18.86,
         y: 15.09,
     },
-    items: [
-        // PH, will load from the catalogue when done
-        {
-            id: "itemOne",
-            name: "Item 1 Name",
-            description: "Item 1 description",
-            icon: "shop.itemIcon",
-            price: 10,
-            ariaLabel: "someAriaLabel",
-        },
-        {
-            id: "itemTwo",
-            name: "Item 2 Name",
-            description: "Item 2 description",
-            icon: "shop.itemIcon",
-            price: 10,
-            ariaLabel: "someAriaLabel",
-        },
-        {
-            id: "itemThree",
-            name: "Item 3 Name",
-            description: "Item 3 description",
-            icon: "shop.itemIcon",
-            price: 10,
-            ariaLabel: "someAriaLabel",
-        },
-        {
-            id: "itemFour",
-            name: "Item 4 Name",
-            description: "Item 4 description",
-            icon: "shop.itemIcon",
-            price: 10,
-            ariaLabel: "someAriaLabel",
-        },
-        {
-            id: "itemFive",
-            name: "Item 5 Name",
-            description: "Item 5 description",
-            icon: "shop.itemIcon",
-            price: 10,
-            ariaLabel: "someAriaLabel",
-        },
-    ],
+    itemsCatalogueSection: "armoury",
     columns: 1,
     assetKeys: {
         prefix: "shop",
@@ -136,7 +94,7 @@
             {
                 type: "text",
                 name: "itemName",
-                value: "name",
+                value: "title",
                 isDynamic: true, // false would use the literal value of 'value'
                 position: { align: "left", offsetX: 100, offsetY: -24 },
                 font: { fontFamily: "ReithSans", resolution: 5, fontSize: 20 },
