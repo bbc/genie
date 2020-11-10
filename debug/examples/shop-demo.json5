@@ -116,13 +116,7 @@
                 assetKey: "itemBackground",
                 isDynamic: false, // uses defaultPrefix to find the asset key
             },
-            {
-                type: "image",
-                name: "currency",
-                assetKey: "currency",
-                isDynamic: false,
-                position: { align: "right", offsetX: -64, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
-            },
+
             {
                 type: "image",
                 name: "itemIcon",
@@ -130,14 +124,7 @@
                 isDynamic: true, // assumes the asset key is item[assetKey]
                 position: { align: "left", offsetX: 32, offsetY: 0 },
             },
-            {
-                type: "text",
-                name: "currencyAmount",
-                value: "price",
-                isDynamic: true, // uses item[value]
-                position: { align: "right", offsetX: -48, offsetY: -10 },
-                font: { fontFamily: "ReithSans", resolution: 5 },
-            },
+
             {
                 type: "text",
                 name: "itemName",
@@ -155,6 +142,59 @@
                 font: { fontFamily: "ReithSans", resolution: 5 },
             },
         ],
+        options: {
+            shop: {
+                callToAction: [
+                    {
+                        type: "text",
+                        name: "currencyAmount",
+                        value: "price",
+                        isDynamic: true, // uses item[value]
+                        position: { align: "right", offsetX: -48, offsetY: -10 },
+                        font: { fontFamily: "ReithSans", resolution: 5 },
+                    },
+                    {
+                        type: "image",
+                        name: "currency",
+                        assetKey: "currency",
+                        isDynamic: false,
+                        position: { align: "right", offsetX: -64, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                    },
+                ],
+                actioned: [
+                    {
+                        type: "text",
+                        name: "owned",
+                        value: "Owned",
+                        isDynamic: false,
+                        position: { align: "right", offsetX: -48, offsetY: -10 },
+                        font: { fontFamily: "ReithSans", resolution: 5 },
+                    },
+                ],
+            },
+            manage: {
+                callToAction: [
+                    {
+                        type: "text",
+                        name: "equip",
+                        value: "Equip",
+                        isDynamic: false,
+                        position: { align: "right", offsetX: -48, offsetY: -10 },
+                        font: { fontFamily: "ReithSans", resolution: 5 },
+                    },
+                ],
+                actioned: [
+                    {
+                        type: "text",
+                        name: "equipped",
+                        value: "Equipped",
+                        isDynamic: false,
+                        position: { align: "right", offsetX: -48, offsetY: -10 },
+                        font: { fontFamily: "ReithSans", resolution: 5 },
+                    },
+                ],
+            },
+        },
     },
     eventChannel: "shop_menu",
 }

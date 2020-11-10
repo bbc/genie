@@ -38,6 +38,7 @@ const createGelButton = (scene, item) => {
 
     scaleButton(gelButton, scene.layout, config.listPadding.x);
     makeAccessible(gelButton);
+
     return overlays1Wide({ scene, gelButton, item, config });
 };
 
