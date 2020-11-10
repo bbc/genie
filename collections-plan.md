@@ -1,11 +1,12 @@
 # Transactions plan
 A list of requirements to support transactions from one collection to another.
 
-### Requirements
+### TODO
 * Change defaults code to allow any defaults and not to force quantity
 * Update local storage to support items being added and removed from collections [DONE]
 * Investigate ++ -- system
 * Do we need a delete / unset method?
+* Remove this file / create docs
 
 ## Example Scenarios
 
