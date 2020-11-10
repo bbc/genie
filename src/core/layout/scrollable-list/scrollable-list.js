@@ -105,7 +105,6 @@ const getPanelItems = panel => panel.getByName("grid", true).getElement("items")
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene) {
         super(scene, 0, 0);
-        // this.collectionKey = "armoury";
         this.panel = createPanel(scene);
         this.makeAccessible = fp.noop;
 
