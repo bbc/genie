@@ -10,12 +10,14 @@ import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance-ui.js";
 import * as titles from "../../../src/components/select/titles.js";
 import * as uiScaler from "../../../src/components/shop/shop-layout.js";
+import * as menu from "../../../src/components/shop/menu.js";
+import { eventBus } from "../../../src/core/event-bus.js";
 
 jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
 
 describe("Shop", () => {
     let shopScreen;
-    const mockScrollableList = { foo: "bar" };
+    const mockScrollableList = { setVisible: jest.fn() };
     const config = {
         shop: {
             title: [],
@@ -55,12 +57,17 @@ describe("Shop", () => {
         getBounds: jest.fn().mockReturnValue({ height: 100 }),
     };
     const mockSafeArea = { foo: "bar " };
+    const mockButtonConfig = { channel: "foo", key: "bar", action: "baz" };
+    const mockMenu = { setVisible: jest.fn(), resize: jest.fn() };
 
     beforeEach(() => {
         shopScreen = new Shop();
         shopScreen.setData({ config });
         shopScreen.scene = { key: "shop" };
-        shopScreen._layout = { getSafeArea: jest.fn().mockReturnValue(mockSafeArea) };
+        shopScreen._layout = {
+            getSafeArea: jest.fn().mockReturnValue(mockSafeArea),
+            buttons: { back: { config: mockButtonConfig } },
+        };
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();
         shopScreen.plugins = { installScenePlugin: jest.fn() };
@@ -70,11 +77,14 @@ describe("Shop", () => {
             container: jest.fn().mockReturnValue(mockContainer),
         };
         shopScreen.events = { once: jest.fn() };
-        ScrollableList.mockImplementation(() => ({ panel: mockScrollableList }));
+        ScrollableList.mockImplementation(() => mockScrollableList);
         balance.createBalance = jest.fn().mockReturnValue(mockContainer);
         titles.createTitles = jest.fn();
         uiScaler.getScaleFactor = jest.fn();
         uiScaler.getYPos = jest.fn();
+        menu.createMenu = jest.fn().mockReturnValue(mockMenu);
+        eventBus.subscribe = jest.fn();
+        eventBus.removeSubscription = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -95,13 +105,19 @@ describe("Shop", () => {
         });
 
         test("adds GEL buttons to layout", () => {
-            const expectedButtons = ["home", "pause"];
+            const expectedButtons = ["back", "pause"];
             expect(shopScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
-        test("adds a scrollable list panel", () => {
+        test("adds a top menu pane", () => {
+            expect(menu.createMenu).toHaveBeenCalled();
+            expect(shopScreen.panes.top).toBe(mockMenu);
+        });
+
+        test("adds scrollable list panes", () => {
             expect(ScrollableList).toHaveBeenCalled();
-            expect(shopScreen.panel).toBe(mockScrollableList);
+            expect(shopScreen.panes.shop).toBe(mockScrollableList);
+            expect(shopScreen.panes.manage).toBe(mockScrollableList);
         });
 
         describe("creates the title UI component", () => {
@@ -124,7 +140,24 @@ describe("Shop", () => {
         });
 
         test("adds a balance UI component", () => {
-            expect(balance.createBalance).toHaveBeenCalledWith(shopScreen, mockMetrics);
+            expect(balance.createBalance).toHaveBeenCalledWith(shopScreen, mockMetrics, mockSafeArea);
+        });
+
+        test("stores the back button event bus message", () => {
+            const message = shopScreen.backMessage;
+            expect(message.channel).toBe(mockButtonConfig.channel);
+            expect(message.name).toBe(mockButtonConfig.key);
+            expect(message.callback).toBe(mockButtonConfig.action);
+        });
+        test("makes a custom event bus message", () => {
+            const message = shopScreen.customMessage;
+            expect(message.channel).toBe(mockButtonConfig.channel);
+            expect(message.name).toBe(mockButtonConfig.key);
+            expect(typeof message.callback).toBe("function");
+        });
+        test("sets visibility of its panes", () => {
+            expect(mockMenu.setVisible).toHaveBeenCalledWith(true);
+            expect(mockScrollableList.setVisible).toHaveBeenCalledTimes(2);
         });
 
         describe("sets up resize", () => {
@@ -132,13 +165,61 @@ describe("Shop", () => {
                 const onScaleChangeCallback = scaler.onScaleChange.add.mock.calls[0][0];
                 onScaleChangeCallback();
 
-                expect(shopScreen.title.setScale).toHaveBeenCalled(); // can you show that these weren't called by setup?
+                expect(shopScreen.title.setScale).toHaveBeenCalled();
                 expect(shopScreen.title.setPosition).toHaveBeenCalled();
                 expect(shopScreen.balance.setScale).toHaveBeenCalled();
                 expect(shopScreen.balance.setPosition).toHaveBeenCalled();
             });
             test("unsubscribes on shutdown", () => {
                 expect(shopScreen.events.once).toHaveBeenCalledWith("shutdown", "foo");
+            });
+        });
+    });
+    describe("setVisiblePane()", () => {
+        beforeEach(() => shopScreen.create());
+
+        describe("when called with 'shop'", () => {
+            beforeEach(() => shopScreen.setVisiblePane("shop"));
+
+            test("unsubscribes the default back button message", () => {
+                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.backMessage);
+            });
+            test("resubscribes with a custom message", () => {
+                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.customMessage);
+            });
+            test("that sets the top menu visible", () => {
+                shopScreen.customMessage.callback();
+                expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
+            });
+            test("calls setVisible(true) on the shop list", () => {
+                expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(true);
+            });
+            test("calls setVisible(false) on the top menu", () => {
+                expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(false);
+            });
+        });
+        describe("when called with 'manage'", () => {
+            beforeEach(() => shopScreen.setVisiblePane("manage"));
+
+            test("sets the inventory list visible instead", () => {
+                expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(true);
+            });
+        });
+
+        describe("when called with 'top'", () => {
+            beforeEach(() => shopScreen.setVisiblePane("top"));
+            test("unsubscribes the back button custom message", () => {
+                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
+            });
+            test("resubscribes with its original message", () => {
+                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
+            });
+            test("calls setVisible(false) on both scrollable lists", () => {
+                expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(false);
+                expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(false);
+            });
+            test("calls setVisible(true) on the top menu", () => {
+                expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
             });
         });
     });

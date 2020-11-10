@@ -6,9 +6,10 @@
  */
 import { overlays1Wide } from "../../../../src/core/layout/scrollable-list/button-overlays.js";
 
+const mockImage = { setScale: jest.fn(), width: 100 };
 const mockScene = {
     add: {
-        image: jest.fn().mockReturnValue("mockImage"),
+        image: jest.fn().mockReturnValue(mockImage),
         text: jest.fn().mockReturnValue("mockText"),
     },
 };
@@ -67,6 +68,13 @@ describe("Button overlays", () => {
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockArgs);
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.someImageAssetKey");
+            });
+
+            test("scales the image overlay if a size is provided", () => {
+                mockOverlay = { ...mockOverlay, size: 50 };
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockArgs);
+                expect(mockImage.setScale).toHaveBeenCalledWith(0.5);
             });
 
             test("adds a text to the scene and the button if overlay is of type text", () => {
