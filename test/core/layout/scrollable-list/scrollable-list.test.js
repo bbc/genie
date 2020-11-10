@@ -60,6 +60,7 @@ const mockScene = {
         overlay: {
             items: [mockOverlay],
         },
+        itemsCatalogueSection: "testCatalogue",
     },
     layout: {
         getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
@@ -117,7 +118,7 @@ describe("Scrollable List", () => {
                     expect(config.scrollMode).toBe(0);
                 });
                 test("with items from a collection in the catalogue", () => {
-                    expect(catalogue.collections.get).toHaveBeenCalledWith("armoury");
+                    expect(catalogue.collections.get).toHaveBeenCalledWith("testCatalogue");
                     expect(mockCollection.getAll).toHaveBeenCalled();
                 });
             });

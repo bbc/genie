@@ -10,15 +10,14 @@ import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../../core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const createPanel = (scene, collectionKey) => {
-    const collection = collections.get(collectionKey).getAll();
-    const panelConfig = getPanelConfig(scene, collection);
+const createPanel = scene => {
+    const panelConfig = getPanelConfig(scene);
     const panel = scene.rexUI.add.scrollablePanel(panelConfig);
     panel.layout();
     return panel;
 };
 
-const getPanelConfig = (scene, collection) => {
+const getPanelConfig = scene => {
     const { listPadding: space, assetKeys: keys } = scene.config;
     const safeArea = getPanelY(scene);
     return {
@@ -26,7 +25,7 @@ const getPanelConfig = (scene, collection) => {
         height: safeArea.height,
         scrollMode: 0,
         background: scene.add.image(0, 0, `${keys.prefix}.${keys.background}`),
-        panel: { child: createInnerPanel(scene, collection) },
+        panel: { child: createInnerPanel(scene) },
         slider: {
             track: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbar}`),
             thumb: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbarHandle}`),
@@ -41,13 +40,16 @@ const getPanelY = scene => {
     return { y: safeArea.height / 2 + safeArea.y, height: safeArea.height };
 };
 
-const createInnerPanel = (scene, collection) => {
+const createInnerPanel = scene => {
     const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 } });
-    sizer.add(createTable(scene, collection), { expand: true });
+    sizer.add(createTable(scene), { expand: true });
     return sizer;
 };
 
-const createTable = (scene, collection) => {
+const createTable = scene => {
+    const key = scene.config.itemsCatalogueSection;
+    const collection = collections.get(key).getAll();
+
     const table = scene.rexUI.add.gridSizer({
         column: 1,
         row: collection.length,
@@ -103,8 +105,8 @@ const getPanelItems = panel => panel.getByName("grid", true).getElement("items")
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene) {
         super(scene, 0, 0);
-        this.collectionKey = "armoury";
-        this.panel = createPanel(scene, this.collectionKey);
+        // this.collectionKey = "armoury";
+        this.panel = createPanel(scene);
         this.makeAccessible = fp.noop;
 
         this.add(this.panel);
