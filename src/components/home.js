@@ -12,8 +12,6 @@ import { eventBus } from "../core/event-bus.js";
 import { isDebug } from "../core/debug/debug-mode.js";
 import { gmi } from "../core/gmi/gmi.js";
 
-import { collections } from "../core/collections.js";
-
 export class Home extends Screen {
     create() {
         const achievements = gmi.achievements.get().length ? ["achievements"] : [];
@@ -27,11 +25,5 @@ export class Home extends Screen {
             name: "play",
             callback: this.navigation.next,
         });
-
-        console.log('BEEBUG: collections', collections);
-        const armoury = collections.get("armoury");
-        console.log('BEEBUG: armoury', armoury);
-        const armouryItems = armoury.getAll();
-        console.log('BEEBUG: armouryItems', armouryItems);
     }
 }

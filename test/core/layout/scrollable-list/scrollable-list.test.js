@@ -9,6 +9,7 @@ import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable
 import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
+import * as catalogue from "../../../../src/core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const mockItem = { id: "someItem", name: "someItemName" };
@@ -56,7 +57,6 @@ const mockScene = {
             scrollbarHandle: "scrollbarHandle",
         },
         listPadding: { x: 10, y: 8 },
-        items: [mockItem],
         overlay: {
             items: [mockOverlay],
         },
@@ -74,6 +74,7 @@ const mockScene = {
         },
     },
 };
+catalogue.collections = { get: jest.fn().mockReturnValue({ getAll: jest.fn().mockReturnValue([mockItem]) }) };
 const mockGelButton = { width: 100, setScale: jest.fn() };
 buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();

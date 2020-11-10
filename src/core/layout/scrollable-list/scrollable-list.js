@@ -55,7 +55,6 @@ const createTable = (scene, collection) => {
         name: "grid",
     });
 
-    // scene.config.items.forEach((item, idx) => {
     collection.forEach((item, idx) => {
         table.add(createItem(scene, item), 0, idx, "top", 0, true);
     });

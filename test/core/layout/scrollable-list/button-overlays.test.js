@@ -24,7 +24,7 @@ const mockItem = {
     name: "someItemName",
     description: "someItemDescription",
     price: 42,
-    icon: "test.icon",
+    icon: "itemIcon",
 };
 
 let mockOverlay;
@@ -69,31 +69,28 @@ describe("Button overlays", () => {
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.someImageAssetKey");
             });
 
-            test("adds a text to the scene and the button if overlay is of type button", () => {
-                mockOverlay.type = "text";
-                mockOverlay.value = "someTextValue";
+            test("adds a text to the scene and the button if overlay is of type text", () => {
+                mockOverlay = { ...mockOverlay, type: "text", value: "name" };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockArgs);
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someTextValue", undefined);
+                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someItemName", undefined);
             });
 
             test("text elements pass font information from the overlay if present", () => {
-                (mockOverlay.type = "text"), (mockOverlay.value = "someTextValue");
-                mockOverlay.font = { foo: "bar" };
+                mockOverlay = { ...mockOverlay, type: "text", value: "name", font: { foo: "bar" } };
                 mockConfig.overlay.items.push(mockOverlay);
                 const expectedFont = mockOverlay.font;
                 overlays1Wide(mockArgs);
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someTextValue", expectedFont);
+                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someItemName", expectedFont);
             });
         });
 
         describe("dynamic and static overlays", () => {
             test("dynamic image overlays use an asset key from the item", () => {
-                mockOverlay.isDynamic = true;
-                mockOverlay.assetKey = "icon";
+                mockOverlay = { ...mockOverlay, isDynamic: true, assetKey: "icon" };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockArgs);
-                expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, mockItem.icon);
+                expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.itemIcon");
             });
 
             test("static image overlays use literal values from config with a default prefix", () => {
@@ -105,23 +102,11 @@ describe("Button overlays", () => {
             });
 
             test("dynamic text overlays use the item value given by 'value'", () => {
-                mockOverlay.isDynamic = true;
-                mockOverlay.type = "text";
-                mockOverlay.value = "price";
+                mockOverlay = { ...mockOverlay, type: "text", value: "price", isDynamic: true };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockArgs);
                 const expectedValue = "42";
                 expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, expectedValue, undefined);
-            });
-
-            test("non-dynamic text overlays use the literal string value from overlay", () => {
-                mockOverlay.isDynamic = false;
-                mockOverlay.type = "text";
-                mockOverlay.value = "someTextValue";
-                mockConfig.overlay.items.push(mockOverlay);
-                const expectedKey = mockOverlay.value;
-                overlays1Wide(mockArgs);
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, expectedKey, undefined);
             });
         });
 

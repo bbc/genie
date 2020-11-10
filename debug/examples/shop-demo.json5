@@ -81,7 +81,7 @@
                 name: "itemIcon",
                 assetKey: "icon",
                 isDynamic: true, // assumes the asset key is item[assetKey]
-                position: { align: "left", offsetX: 32, offsetY: 0 },
+                position: { align: "left", offsetX: 35, offsetY: 0 },
                 size: 76, // square
             },
             {
