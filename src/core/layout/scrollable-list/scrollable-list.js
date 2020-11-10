@@ -11,7 +11,7 @@ import { collections } from "../../../core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const createPanel = (scene, collectionKey) => {
-    const collection = collections.get(collectionKey).getAll(); // later we might need to retain a ref to the collection obj
+    const collection = collections.get(collectionKey).getAll();
     const panelConfig = getPanelConfig(scene, collection);
     const panel = scene.rexUI.add.scrollablePanel(panelConfig);
     panel.layout();
@@ -104,7 +104,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene) {
         super(scene, 0, 0);
         this.collectionKey = "armoury";
-        this.panel = createPanel(scene, this.collectionKey); // insert point is here for now, but let's push it into the shop merge of 2765
+        this.panel = createPanel(scene, this.collectionKey);
         this.makeAccessible = fp.noop;
 
         this.add(this.panel);

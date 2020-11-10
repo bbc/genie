@@ -72,7 +72,7 @@
                 type: "image",
                 name: "background",
                 assetKey: "itemBackground",
-                isDynamic: false, // asset key is assetKey
+                isDynamic: false, // asset key is the value of assetKey
             },
             {
                 type: "image",
@@ -80,6 +80,7 @@
                 assetKey: "currency",
                 isDynamic: false,
                 position: { align: "right", offsetX: -64, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                size: 16, // px square
             },
             {
                 type: "image",
@@ -87,7 +88,7 @@
                 assetKey: "icon",
                 isDynamic: true, // asset key is item[assetKey]
                 position: { align: "left", offsetX: 35, offsetY: 0 },
-                size: 76, // square
+                size: 76,
             },
             {
                 type: "text",

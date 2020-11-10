@@ -74,7 +74,8 @@ const mockScene = {
         },
     },
 };
-catalogue.collections = { get: jest.fn().mockReturnValue({ getAll: jest.fn().mockReturnValue([mockItem]) }) };
+const mockCollection = { getAll: jest.fn().mockReturnValue([mockItem]) };
+catalogue.collections = { get: jest.fn().mockReturnValue(mockCollection) };
 const mockGelButton = {
     width: 100,
     setScale: jest.fn(),
@@ -114,6 +115,10 @@ describe("Scrollable List", () => {
                 test("with scroll mode 0", () => {
                     const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
                     expect(config.scrollMode).toBe(0);
+                });
+                test("with items from a collection in the catalogue", () => {
+                    expect(catalogue.collections.get).toHaveBeenCalledWith("armoury");
+                    expect(mockCollection.getAll).toHaveBeenCalled();
                 });
             });
 
