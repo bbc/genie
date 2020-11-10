@@ -17,7 +17,7 @@ const styleDefaults = {
 const makeElement = makerFns => conf => makerFns[conf.type](conf).setOrigin(0.5);
 
 export const createBalance = (scene, metrics, safeArea) => {
-    const image = conf => scene.add.image(0, 0, `${scene.assetPrefix}.${conf.key}`);
+    const image = conf => scene.add.image(0, 0, `${scene.config.assetKeys.prefix}.${conf.key}`);
     const text = conf => {
         const textStyle = { ...styleDefaults, ...conf.styles };
         return scene.add.text(0, 0, conf.value, textStyle);

@@ -38,8 +38,11 @@ describe("Button overlays", () => {
     beforeEach(() => {
         mockConfig = {
             overlay: {
-                defaultPrefix: "test",
+                // defaultPrefix: "test",
                 items: [],
+            },
+            assetKeys: {
+                prefix: "test",
             },
         };
         mockOverlay = {
@@ -105,7 +108,7 @@ describe("Button overlays", () => {
                 mockOverlay.isDynamic = false;
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockArgs);
-                const expectedKey = `${mockConfig.overlay.defaultPrefix}.${mockOverlay.assetKey}`;
+                const expectedKey = `${mockConfig.assetKeys.prefix}.${mockOverlay.assetKey}`;
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, expectedKey);
             });
 
