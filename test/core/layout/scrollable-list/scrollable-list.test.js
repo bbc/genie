@@ -16,7 +16,7 @@ const mockA11yElem = {
     addEventListener: jest.fn(),
 };
 const mockLabel = {
-    children: [{ accessibleElement: { el: mockA11yElem } }],
+    children: [{ input: { enabled: true }, accessibleElement: { el: mockA11yElem, update: jest.fn() } }],
     height: 50,
 };
 const mockGridSizer = {
@@ -74,7 +74,11 @@ const mockScene = {
         },
     },
 };
-const mockGelButton = { width: 100, setScale: jest.fn() };
+const mockGelButton = {
+    width: 100,
+    setScale: jest.fn(),
+    accessibleElement: { update: jest.fn() },
+};
 buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
 
@@ -224,6 +228,13 @@ describe("Scrollable List", () => {
                 x: 0,
                 y: 0,
             });
+        });
+
+        test("setVisible method that sets visibility", () => {
+            list.setVisible(false);
+            expect(list.panel.visible).toBe(false);
+            expect(mockLabel.children[0].input.enabled).toBe(false);
+            expect(mockLabel.children[0].accessibleElement.update).toHaveBeenCalled();
         });
     });
 });

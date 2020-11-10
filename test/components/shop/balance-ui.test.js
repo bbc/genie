@@ -60,11 +60,10 @@ describe("createBalance()", () => {
     const mockSafeArea = { baz: "qux" };
 
     beforeEach(() => {
-        shopLayout.getSafeArea = jest.fn().mockReturnValue(mockSafeArea);
         shopLayout.getXPos = jest.fn().mockReturnValue(42);
         shopLayout.getYPos = jest.fn().mockReturnValue(69);
         shopLayout.getScaleFactor = jest.fn().mockReturnValue(3.14);
-        createBalance(mockScene, mockMetrics);
+        createBalance(mockScene, mockMetrics, mockSafeArea);
     });
 
     afterEach(() => jest.clearAllMocks());

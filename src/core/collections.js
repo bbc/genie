@@ -33,9 +33,7 @@ export const initCollection = screen => key => {
 
     const get = key => getAll().find(item => item.id === key);
 
-    const set = (id, config = null) => {
-        gmi.setGameData("genie", fp.setWith(Object, [key, id], config, getGenieStore()));
-    };
+    const set = (id, config = null) => gmi.setGameData("genie", fp.setWith(Object, [key, id], config, getGenieStore()));
 
     const collection = {
         config,
