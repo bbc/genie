@@ -85,7 +85,7 @@ describe("Collections", () => {
             expect(collection.getAll()).toEqual(expected);
         });
 
-        test("uses inline array as cataogue iof specified", () => {
+        test("uses inline array as catalogue if specified", () => {
             testCollection.catalogue = [
                 {
                     id: "Xid1",
@@ -163,7 +163,9 @@ describe("Collections", () => {
 
         test("Returns tagged items with 'defaults' overrides and local storage overrides", () => {
             mockSettings.gameData.genie = {
-                testCollection: { id2: { qty: 10 } },
+                collections: {
+                    testCollection: [{ id: "id2", qty: 10 }],
+                },
             };
 
             testCollection.include = ["tag1", "tag2"];
@@ -190,6 +192,45 @@ describe("Collections", () => {
             const collection = initCollection(mockScreen)("testCollection");
             expect(collection.getAll()).toEqual(expected);
         });
+
+        test("Correctly unions local storage data with defaults if items are not in base set", () => {
+            mockSettings.gameData.genie = {
+                collections: {
+                    testCollection: [
+                        { id: "id2", qty: 10 },
+                        { id: "ItemOutsideSet", qty: 5 },
+                    ],
+                },
+            };
+
+            testCollection.include = ["tag1", "tag2"];
+            testCollection.defaults = [{ id: "id1", qty: 5, state: "testState" }];
+
+            const expected = [
+                {
+                    description: "Catalogue Item 1.",
+                    id: "id1",
+                    qty: 5,
+                    state: "testState",
+                    tags: ["tag1"],
+                    title: "Title 1 ",
+                },
+                {
+                    description: "Catalogue Item 2.",
+                    id: "id2",
+                    qty: 10,
+                    tags: ["tag2"],
+                    title: "Title 2",
+                },
+                {
+                    id: "ItemOutsideSet",
+                    qty: 5,
+                },
+            ];
+
+            const collection = initCollection(mockScreen)("testCollection");
+            expect(collection.getAll()).toEqual(expected);
+        });
     });
 
     describe("Returned get method", () => {
@@ -208,7 +249,7 @@ describe("Collections", () => {
             };
 
             testCollection.include = ["tag1", "tag2"];
-            mockSettings.gameData.genie = { testCollection: { id1: { qty: 5 } } };
+            mockSettings.gameData.genie = { collections: { testCollection: [{ id: "id1", qty: 5 }] } };
 
             const collection = initCollection(mockScreen)("testCollection");
             expect(collection.get("id1")).toEqual(expectedData);
@@ -218,28 +259,48 @@ describe("Collections", () => {
     describe("Returned set method", () => {
         test("calls gmiSetGameData with correct data", () => {
             const collection = initCollection(mockScreen)("testCollection");
-            collection.set("id1", { qty: 5, state: "testState" });
+            collection.set({ id: "id1", qty: 5, state: "testState" });
 
-            const expected = { testCollection: { id1: { qty: 5, state: "testState" } } };
+            const expected = { collections: { testCollection: [{ id: "id1", qty: 5, state: "testState" }] } };
 
             expect(mockGmi.setGameData).toHaveBeenCalledWith("genie", expected);
         });
 
         test("Sets Collection to null (undefined cannot be serialised) when called with no config", () => {
             const collection = initCollection(mockScreen)("testCollection");
-            collection.set("id1");
+            collection.set({ id: "id1" });
 
-            const expected = { testCollection: { id1: null } };
+            const expected = { collections: { testCollection: [{ id: "id1" }] } };
 
             expect(mockGmi.setGameData).toHaveBeenCalledWith("genie", expected);
         });
 
-        test("Always serialises to an object and not an array when numeric keys are used", () => {
+        test("Always serialises to an array ", () => {
             const collection = initCollection(mockScreen)("testCollection");
-            collection.set(2, { qty: 5, state: "testState" });
+            collection.set({ id: "id1", qty: 5, state: "testState" });
 
-            expect(mockGmi.setGameData.mock.calls[0][1].testCollection).toStrictEqual(expect.any(Object));
-            expect(mockGmi.setGameData.mock.calls[0][1].testCollection).not.toStrictEqual(expect.any(Array));
+            expect(mockGmi.setGameData.mock.calls[0][1].collections.testCollection).toStrictEqual(expect.any(Array));
+        });
+
+        test("Fires a warning if item not in catalogue / does not save", () => {
+            const spy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+            const collection = initCollection(mockScreen)("testCollection");
+            collection.set({ id: "NotInCatalogue", qty: 5, state: "testState" });
+
+            expect(spy).toHaveBeenCalled();
+            expect(mockGmi.setGameData).not.toHaveBeenCalled();
+        });
+
+        test("Fires a warning if config is not an object", () => {
+            const spy = jest.spyOn(console, "warn").mockImplementation(() => {});
+
+            const collection = initCollection(mockScreen)("testCollection");
+            collection.set(100);
+            collection.set("string");
+
+            expect(spy).toHaveBeenCalledTimes(2);
+            expect(mockGmi.setGameData).not.toHaveBeenCalled();
         });
     });
 });
