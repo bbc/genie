@@ -86,6 +86,7 @@
                 type: "text",
                 name: "itemName",
                 value: "title",
+                isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: -24 },
                 font: { fontFamily: "ReithSans", resolution: 5, fontSize: 20 },
             },
@@ -93,65 +94,60 @@
                 type: "text",
                 name: "itemDescription",
                 value: "description",
+                isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: 0 },
                 font: { fontFamily: "ReithSans", resolution: 5 },
             },
         ],
         options: {
-            shop: {
-                callToAction: [
-                    {
-                        type: "text",
-                        name: "currencyAmount",
-                        value: "price",
-                        isDynamic: true, // uses item[value]
-                        position: { align: "right", offsetX: -48, offsetY: -10 },
-                        font: { fontFamily: "ReithSans", resolution: 5 },
-                        activeStates: ["cta"],
-                    },
-                    {
-                        type: "image",
-                        name: "currency",
-                        assetKey: "currency",
-                        isDynamic: false,
-                        position: { align: "right", offsetX: -64, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
-                        activeStates: ["cta"],
-                    },
-                ],
-                actioned: [
-                    {
-                        type: "text",
-                        name: "owned",
-                        value: "Owned",
-                        isDynamic: false,
-                        position: { align: "right", offsetX: -48, offsetY: -10 },
-                        font: { fontFamily: "ReithSans", resolution: 5 },
-                        activeStates: ["actioned"],
-                    },
-                ],
-            },
-            manage: {
-                callToAction: [
-                    {
-                        type: "text",
-                        name: "equip",
-                        value: "Equip",
-                        isDynamic: false,
-                        position: { align: "right", offsetX: -64, offsetY: -10 },
-                        font: { fontFamily: "ReithSans", resolution: 5 },
-                    },
-                ],
-                actioned: [
-                    {
-                        type: "text",
-                        name: "equipped",
-                        value: "Equipped",
-                        isDynamic: false,
-                        position: { align: "right", offsetX: -48, offsetY: -10 },
-                        font: { fontFamily: "ReithSans", resolution: 5 },
-                    },
-                ],
-            },
+            shop: [
+                {
+                    type: "text",
+                    name: "currencyAmount",
+                    value: "price",
+                    isDynamic: true,
+                    position: { align: "right", offsetX: -48, offsetY: -10 },
+                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    activeStates: ["cta"],
+                },
+                {
+                    type: "image",
+                    name: "currency",
+                    assetKey: "currency",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -64, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                    activeStates: ["cta"],
+                },
+                {
+                    type: "text",
+                    name: "owned",
+                    value: "Owned",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -64, offsetY: -10 },
+                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    activeStates: ["actioned"],
+                },
+            ],
+            manage: [
+                {
+                    type: "text",
+                    name: "equip",
+                    value: "Equip",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -64, offsetY: -10 },
+                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    activeStates: ["cta"],
+                },
+                {
+                    type: "text",
+                    name: "equipped",
+                    value: "Equipped",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -88, offsetY: -10 },
+                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    activeStates: ["actioned"],
+                },
+            ],
         },
     },
     eventChannel: "shop_menu",
