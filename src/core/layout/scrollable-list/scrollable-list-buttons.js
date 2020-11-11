@@ -12,11 +12,9 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 
 const STATES = ["cta", "actioned"];
 
-const createGelButton = (scene, item, context) => {
+const createGelButton = (scene, item, context, state) => {
     const id = `scroll_button_${item.id}`;
     const config = scene.config;
-
-    const state = "cta"; // pass in initial state later
 
     const gelConfig = {
         gameButton: true,
@@ -31,18 +29,22 @@ const createGelButton = (scene, item, context) => {
     };
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
-    gelButton.overlayConfigs = {
-        items: config.overlay.items,
-        options: config.overlay.options[context],
-    };
-    gelButton.item = item;
-    gelButton.setOverlays = setOverlays(gelButton);
-    gelButton.unsetOverlays = unsetOverlays(gelButton);
-    gelButton.state = STATES.find(st => st === state);
-    gelButton.toggleState = toggleState(gelButton);
-    gelButton.handle = handle(gelButton);
 
-    const callback = () => gelButton.handle();
+    // console.log('BEEBUG: gelButton', gelButton);
+    gelButton.overlays = {
+        ...gelButton.overlays,
+        configs: {
+            items: config.overlay.items,
+            options: config.overlay.options[context],
+        },
+        setAll: setOverlays(gelButton, item),
+        unsetAll: unsetOverlays(gelButton),
+        state: STATES.find(st => st === state),
+        toggleState: toggleState(gelButton),
+        handle: handle(gelButton),
+    };
+
+    const callback = () => gelButton.overlays.handle();
 
     eventBus.subscribe({
         callback: handleClickIfVisible(gelButton, scene, callback),
@@ -52,7 +54,7 @@ const createGelButton = (scene, item, context) => {
 
     scaleButton(gelButton, scene.layout, config.listPadding.x);
     makeAccessible(gelButton);
-    gelButton.setOverlays();
+    gelButton.overlays.setAll();
     return gelButton;
 };
 
@@ -63,25 +65,25 @@ const scaleButton = (gelButton, layout, space) => {
 };
 
 const handle = button => () => {
-    button.unsetOverlays();
-    button.toggleState();
-    button.setOverlays();
+    button.overlays.unsetAll();
+    button.overlays.toggleState();
+    button.overlays.setAll();
 };
 
 const toggleState = button => () =>
     fp.cond([
-        [btn => btn.state === "cta", btn => (btn.state = "actioned")],
-        [btn => btn.state === "actioned", btn => (btn.state = "cta")],
+        [btn => btn.overlays.state === "cta", btn => (btn.overlays.state = "actioned")],
+        [btn => btn.overlays.state === "actioned", btn => (btn.overlays.state = "cta")],
     ])(button);
 
-const setOverlays = button => () => {
+const setOverlays = (button, item) => () => {
     const configs = getConfigs(button);
-    overlays1Wide({ scene: button.scene, gelButton: button, item: button.item, configs }); // this can be simpler now half this lives on the button
+    overlays1Wide({ scene: button.scene, gelButton: button, item, configs }); // this can be simpler now half this lives on the button
 };
 
 const getConfigs = button =>
-    button.overlayConfigs.items.concat(
-        button.overlayConfigs.options.filter(overlay => overlay.activeStates.includes(button.state)),
+    button.overlays.configs.items.concat(
+        button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)),
     );
 
 const unsetOverlays = button => () => {

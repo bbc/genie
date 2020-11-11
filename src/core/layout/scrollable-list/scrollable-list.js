@@ -57,15 +57,17 @@ const createTable = (scene, context) => {
         name: "grid",
     });
 
-    collection.forEach((item, idx) => table.add(createItem(scene, item, context), 0, idx, "top", 0, true));
+    const initState = "cta"; // PH
+
+    collection.forEach((item, idx) => table.add(createItem(scene, item, context, initState), 0, idx, "top", 0, true));
 
     return scene.rexUI.add.sizer({ orientation: "y" }).add(table, 1, "center", 0, true);
 };
 
-const createItem = (scene, item, context) =>
+const createItem = (scene, item, context, initState) =>
     scene.rexUI.add.label({
         orientation: 0,
-        icon: createGelButton(scene, item, context),
+        icon: createGelButton(scene, item, context, initState),
         name: item.id,
     });
 
