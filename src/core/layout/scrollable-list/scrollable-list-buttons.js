@@ -30,7 +30,6 @@ const createGelButton = (scene, item, context, state) => {
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
 
-    // console.log('BEEBUG: gelButton', gelButton);
     gelButton.overlays = {
         ...gelButton.overlays,
         configs: {

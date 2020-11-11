@@ -31,6 +31,10 @@ const mockScene = {
             itemBackground: "itemBackground",
         },
         listPadding: { x: 10, y: 8 },
+        overlay: {
+            items: [],
+            options: { shop: [] },
+        },
     },
     input: { y: 50 },
     scale: { displaySize: { height: 100 } },
@@ -50,12 +54,12 @@ describe("Scrollable List Buttons", () => {
 
     describe("createGelButton()", () => {
         test("adds a gel button", () => {
-            buttons.createGelButton(mockScene, mockItem);
+            buttons.createGelButton(mockScene, mockItem, "shop", "cta"); // DRY this test file
             expect(mockScene.add.gelButton).toHaveBeenCalled();
         });
 
         test("provides it the correct config", () => {
-            buttons.createGelButton(mockScene, mockItem);
+            buttons.createGelButton(mockScene, mockItem, "shop", "cta");
             const expectedConfig = {
                 accessibilityEnabled: true,
                 ariaLabel: "mockAriaLabel",
@@ -73,7 +77,7 @@ describe("Scrollable List Buttons", () => {
         test("subscribes to the event bus", () => {
             eventBus.subscribe = jest.fn();
             handlers.handleClickIfVisible = jest.fn();
-            buttons.createGelButton(mockScene, mockItem);
+            buttons.createGelButton(mockScene, mockItem, "shop", "cta");
             const args = eventBus.subscribe.mock.calls[0][0];
             expect(args.channel).toEqual("mockChannel");
             expect(args.name).toEqual("scroll_button_mockId");
@@ -81,12 +85,12 @@ describe("Scrollable List Buttons", () => {
         });
 
         test("scales the button", () => {
-            buttons.createGelButton(mockScene, mockItem);
+            buttons.createGelButton(mockScene, mockItem, "shop", "cta");
             expect(mockButton.setScale).toHaveBeenCalled();
         });
 
         test("applies overlays", () => {
-            buttons.createGelButton(mockScene, mockItem);
+            buttons.createGelButton(mockScene, mockItem, "shop", "cta");
             expect(overlays.overlays1Wide).toHaveBeenCalled();
         });
     });

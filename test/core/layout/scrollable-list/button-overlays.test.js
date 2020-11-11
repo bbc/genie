@@ -12,6 +12,11 @@ const mockScene = {
         image: jest.fn().mockReturnValue(mockImage),
         text: jest.fn().mockReturnValue("mockText"),
     },
+    config: {
+        assetKeys: {
+            prefix: "test",
+        },
+    },
 };
 
 const mockGelButton = {
@@ -41,9 +46,6 @@ describe("Button overlays", () => {
                 // defaultPrefix: "test",
                 items: [],
             },
-            assetKeys: {
-                prefix: "test",
-            },
         };
         mockOverlay = {
             type: "image",
@@ -55,7 +57,7 @@ describe("Button overlays", () => {
             scene: mockScene,
             gelButton: mockGelButton,
             item: mockItem,
-            config: mockConfig,
+            configs: mockConfig.overlay.items,
         };
     });
 
@@ -81,18 +83,18 @@ describe("Button overlays", () => {
             });
 
             test("adds a text to the scene and the button if overlay is of type text", () => {
-                mockOverlay = { ...mockOverlay, type: "text", value: "name" };
+                mockOverlay = { ...mockOverlay, type: "text", value: "someText" };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockArgs);
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someItemName", undefined);
+                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someText", undefined);
             });
 
             test("text elements pass font information from the overlay if present", () => {
-                mockOverlay = { ...mockOverlay, type: "text", value: "name", font: { foo: "bar" } };
+                mockOverlay = { ...mockOverlay, type: "text", value: "someText", font: { foo: "bar" } };
                 mockConfig.overlay.items.push(mockOverlay);
                 const expectedFont = mockOverlay.font;
                 overlays1Wide(mockArgs);
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someItemName", expectedFont);
+                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someText", expectedFont);
             });
         });
 
@@ -108,7 +110,7 @@ describe("Button overlays", () => {
                 mockOverlay.isDynamic = false;
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockArgs);
-                const expectedKey = `${mockConfig.assetKeys.prefix}.${mockOverlay.assetKey}`;
+                const expectedKey = `${mockScene.config.assetKeys.prefix}.${mockOverlay.assetKey}`;
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, expectedKey);
             });
 

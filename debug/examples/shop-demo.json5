@@ -6,7 +6,7 @@
             text: "Shop Screen Demo",
         },
     ],
-    assetPrefix: "shop",
+    assetPrefix: "shop", // ugh proliferation
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "home.background", x: 0, y: 0 }],
@@ -66,7 +66,7 @@
         buttonIcon: "menuButtonIcon",
     },
     overlay: {
-        defaultPrefix: "shop",
+        defaultPrefix: "shop", // proliferation
         items: [
             {
                 type: "image",
