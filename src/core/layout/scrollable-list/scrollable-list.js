@@ -47,7 +47,7 @@ const createInnerPanel = scene => {
 };
 
 const createTable = scene => {
-    const key = scene.config.itemsCatalogueSection;
+    const key = scene.config.shopCollection;
     const collection = collections.get(key).getAll();
 
     const table = scene.rexUI.add.gridSizer({
@@ -57,9 +57,7 @@ const createTable = scene => {
         name: "grid",
     });
 
-    collection.forEach((item, idx) => {
-        table.add(createItem(scene, item), 0, idx, "top", 0, true);
-    });
+    collection.forEach((item, idx) => table.add(createItem(scene, item), 0, idx, "top", 0, true));
 
     return scene.rexUI.add.sizer({ orientation: "y" }).add(table, 1, "center", 0, true);
 };
