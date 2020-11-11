@@ -39,8 +39,8 @@ export class Shop extends Screen {
 
         this.panes = {
             top: createMenu(this, this.config.menu, safeArea),
-            shop: new ScrollableList(this),
-            manage: new ScrollableList(this),
+            shop: new ScrollableList(this, "shop"),
+            manage: new ScrollableList(this, "manage"),
         };
         this.setVisiblePane("top");
 

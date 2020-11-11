@@ -6,16 +6,16 @@
  */
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-export const overlays1Wide = ({ scene, gelButton, item, config }) => {
-    config.overlay.items.forEach(overlay => {
+export const overlays1Wide = ({ scene, gelButton, item, configs }) => {
+    configs.forEach(overlay => {
         const offset = getOffset(overlay.position, gelButton);
-        addOverlay({ scene, gelButton, item, config, overlay, offset });
+        addOverlay({ scene, gelButton, item, overlay, offset });
     });
     return gelButton;
 };
 
-const setImageOverlay = ({ scene, gelButton, item, config, overlay, offset }) => {
-    const key = overlay.isDynamic ? item[overlay.assetKey] : `${config.overlay.defaultPrefix}.${overlay.assetKey}`;
+const setImageOverlay = ({ scene, gelButton, item, overlay, offset }) => {
+    const key = overlay.isDynamic ? item[overlay.assetKey] : `${scene.config.assetKeys.prefix}.${overlay.assetKey}`;
     gelButton.overlays.set(overlay.name, scene.add.image(offset.x, offset.y, key));
 };
 

@@ -1,0 +1,6 @@
+{
+    catalogue: "game-items",
+    include: [],
+    defaultQty: 1,
+    defaults: [],
+}

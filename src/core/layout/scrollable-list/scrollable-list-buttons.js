@@ -10,7 +10,7 @@ import { overlays1Wide } from "./button-overlays.js";
 import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const createGelButton = (scene, item) => {
+const createGelButton = (scene, item, context) => {
     const id = `scroll_button_${item.id}`;
     const config = scene.config;
 
@@ -27,8 +27,14 @@ const createGelButton = (scene, item) => {
     };
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
+    gelButton.overlayConfigs = {
+        items: config.overlay.items,
+        options: config.overlay.options[context],
+    };
+    gelButton.updateOverlays = updateOverlays(gelButton);
+    gelButton.actioned = false; // ph
 
-    const callback = fp.identity; // placeholder
+    const callback = fp.noop; // placeholder
 
     eventBus.subscribe({
         callback: handleClickIfVisible(gelButton, scene, callback),
@@ -39,7 +45,9 @@ const createGelButton = (scene, item) => {
     scaleButton(gelButton, scene.layout, config.listPadding.x);
     makeAccessible(gelButton);
 
-    return overlays1Wide({ scene, gelButton, item, config });
+    const configs = gelButton.overlayConfigs.items.concat(gelButton.overlayConfigs.options.callToAction)
+
+    return overlays1Wide({ scene, gelButton, item, configs });
 };
 
 const scaleButton = (gelButton, layout, space) => {
@@ -47,6 +55,8 @@ const scaleButton = (gelButton, layout, space) => {
     const scaleFactor = (safeArea.width - space * 4) / gelButton.width;
     gelButton.setScale(scaleFactor);
 };
+
+const updateOverlays = button => state => {};
 
 const makeAccessible = gelButton => accessibilify(gelButton);
 
