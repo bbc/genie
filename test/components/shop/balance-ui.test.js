@@ -53,8 +53,8 @@ describe("createBalance()", () => {
             },
             balancePadding: 6,
             listPadding: { x: 1 },
+            assetKeys: { prefix: "shop" },
         },
-        assetPrefix: "shop",
     };
     const mockMetrics = { foo: "bar" };
     const mockSafeArea = { baz: "qux" };

@@ -7,6 +7,7 @@
 import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
+import { collections } from "../../../core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const createPanel = scene => {
@@ -46,16 +47,17 @@ const createInnerPanel = scene => {
 };
 
 const createTable = scene => {
+    const key = scene.config.shopCollection;
+    const collection = collections.get(key).getAll();
+
     const table = scene.rexUI.add.gridSizer({
         column: 1,
-        row: scene.config.items.length,
+        row: collection.length,
         space: { row: scene.config.listPadding.y },
         name: "grid",
     });
 
-    scene.config.items.forEach((item, idx) => {
-        table.add(createItem(scene, item), 0, idx, "top", 0, true);
-    });
+    collection.forEach((item, idx) => table.add(createItem(scene, item), 0, idx, "top", 0, true));
 
     return scene.rexUI.add.sizer({ orientation: "y" }).add(table, 1, "center", 0, true);
 };

@@ -9,6 +9,7 @@ import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable
 import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
+import * as catalogue from "../../../../src/core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const mockItem = { id: "someItem", name: "someItemName" };
@@ -56,10 +57,10 @@ const mockScene = {
             scrollbarHandle: "scrollbarHandle",
         },
         listPadding: { x: 10, y: 8 },
-        items: [mockItem],
         overlay: {
             items: [mockOverlay],
         },
+        shopCollection: "testCatalogue",
     },
     layout: {
         getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
@@ -74,6 +75,8 @@ const mockScene = {
         },
     },
 };
+const mockCollection = { getAll: jest.fn().mockReturnValue([mockItem]) };
+catalogue.collections = { get: jest.fn().mockReturnValue(mockCollection) };
 const mockGelButton = {
     width: 100,
     setScale: jest.fn(),
@@ -113,6 +116,10 @@ describe("Scrollable List", () => {
                 test("with scroll mode 0", () => {
                     const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
                     expect(config.scrollMode).toBe(0);
+                });
+                test("with items from a collection in the catalogue", () => {
+                    expect(catalogue.collections.get).toHaveBeenCalledWith("testCatalogue");
+                    expect(mockCollection.getAll).toHaveBeenCalled();
                 });
             });
 

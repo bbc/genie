@@ -15,14 +15,18 @@ export const overlays1Wide = ({ scene, gelButton, item, config }) => {
 };
 
 const setImageOverlay = ({ scene, gelButton, item, config, overlay, offset }) => {
-    const key = overlay.isDynamic ? item[overlay.assetKey] : `${config.overlay.defaultPrefix}.${overlay.assetKey}`;
-    gelButton.overlays.set(overlay.name, scene.add.image(offset.x, offset.y, key));
+    const prefix = config.assetKeys.prefix;
+    const key = overlay.isDynamic ? `${prefix}.${item[overlay.assetKey]}` : `${prefix}.${overlay.assetKey}`;
+    const image = scene.add.image(offset.x, offset.y, key);
+    overlay.size && image.setScale(overlay.size / image.width);
+    gelButton.overlays.set(overlay.name, image);
 };
 
-const setTextOverlay = ({ scene, gelButton, item, overlay, offset }) => {
-    const textValue = overlay.isDynamic ? item[overlay.value] : overlay.value;
-    gelButton.overlays.set(overlay.name, scene.add.text(offset.x, offset.y, textValue.toString(), overlay.font));
-};
+const setTextOverlay = ({ scene, gelButton, item, overlay, offset }) =>
+    gelButton.overlays.set(
+        overlay.name,
+        scene.add.text(offset.x, offset.y, item[overlay.value] && item[overlay.value].toString(), overlay.font),
+    );
 
 const getOffset = (position, gelButton) => {
     if (!position) return { x: 0, y: 0 };
