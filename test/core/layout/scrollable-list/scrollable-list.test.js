@@ -60,7 +60,8 @@ const mockScene = {
         overlay: {
             items: [mockOverlay],
         },
-        shopCollection: "testCatalogue",
+        // shopCollection: "testCatalogue",
+        collections: { shop: "testCatalogue" },
     },
     layout: {
         getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),

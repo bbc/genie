@@ -47,8 +47,11 @@ const createInnerPanel = (scene, context) => {
 };
 
 const createTable = (scene, context) => {
-    const key = scene.config.shopCollection;
+    const key = scene.config.collections[context];
+    console.log('BEEBUG: key', key);
+    // console.log('BEEBUG: collections', collections);
     const collection = collections.get(key).getAll();
+    console.log('BEEBUG: collection', collection);
 
     const table = scene.rexUI.add.gridSizer({
         column: 1,

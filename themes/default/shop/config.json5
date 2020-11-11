@@ -43,6 +43,7 @@
         x: 18.86,
         y: 15.09,
     },
+    collection: "inventory",
     shopCollection: "armoury",
     menu: {
         buttonsRight: true, // set as false to X-flip the menu layout

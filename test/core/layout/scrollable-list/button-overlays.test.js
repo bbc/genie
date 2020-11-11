@@ -121,6 +121,8 @@ describe("Button overlays", () => {
                 const expectedValue = "42";
                 expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, expectedValue, undefined);
             });
+
+            // needs a test for static values probably
         });
 
         describe("offsets", () => {

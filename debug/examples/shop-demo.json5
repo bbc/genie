@@ -50,7 +50,11 @@
         x: 18.86,
         y: 15.09,
     },
-    shopCollection: "armoury",
+    collection: "inventory", // is a problem
+    collections: {
+        shop: "armoury",
+        manage: "inventory",
+    },
     menu: {
         buttonsRight: true, // set as false to X-flip the menu layout
     },

@@ -40,10 +40,10 @@ const createGelButton = (scene, item, context, state) => {
         unsetAll: unsetOverlays(gelButton),
         state: STATES.find(st => st === state),
         toggleState: toggleState(gelButton),
-        handle: handle(gelButton),
+        toggle: toggle(gelButton),
     };
 
-    const callback = () => gelButton.overlays.handle();
+    const callback = () => gelButton.overlays.toggle();
 
     eventBus.subscribe({
         callback: handleClickIfVisible(gelButton, scene, callback),
@@ -63,13 +63,13 @@ const scaleButton = (gelButton, layout, space) => {
     gelButton.setScale(scaleFactor);
 };
 
-const handle = button => () => {
+const toggle = button => () => { // test
     button.overlays.unsetAll();
     button.overlays.toggleState();
     button.overlays.setAll();
 };
 
-const toggleState = button => () =>
+const toggleState = button => () => // test
     fp.cond([
         [btn => btn.overlays.state === "cta", btn => (btn.overlays.state = "actioned")],
         [btn => btn.overlays.state === "actioned", btn => (btn.overlays.state = "cta")],
@@ -82,10 +82,10 @@ const setOverlays = (button, item) => () => {
 
 const getConfigs = button =>
     button.overlays.configs.items.concat(
-        button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)),
+        button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)), // test w/diff states
     );
 
-const unsetOverlays = button => () => {
+const unsetOverlays = button => () => { // test
     Object.keys(button.overlays.list).forEach(key => button.overlays.remove(key));
 };
 
