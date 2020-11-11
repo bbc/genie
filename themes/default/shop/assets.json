@@ -89,6 +89,42 @@
                     "margin": 0,
                     "spacing": 4
                 }
+            },
+            {
+                "type": "spritesheet",
+                "key": "armagogIcon",
+                "url": "items/armagog.png",
+                "frameConfig": {
+                    "frameWidth": 76,
+                    "frameHeight": 76,
+                    "frameMax": 1,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "bombIcon",
+                "url": "items/bomb.png",
+                "frameConfig": {
+                    "frameWidth": 97,
+                    "frameHeight": 97,
+                    "frameMax": 1,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "mysteryBoxIcon",
+                "url": "items/box.png",
+                "frameConfig": {
+                    "frameWidth": 94,
+                    "frameHeight": 94,
+                    "frameMax": 1,
+                    "margin": 0,
+                    "spacing": 4
+                }
             }
         ]
     }
