@@ -21,6 +21,12 @@ export const createTitle = (scene, metrics, safeArea) => {
         }),
     );
     titleContainer.setPosition(0, getYPos(metrics, safeArea));
+    titleContainer.setTitleText = setTitleText(titleContainer);
 
     return titleContainer;
+};
+
+const setTitleText = titleContainer => text => {
+    const titleTextSprite = titleContainer.list.find(item => item.type === "Text");
+    titleTextSprite.setText(text.charAt(0).toUpperCase() + text.slice(1).toLowerCase());
 };

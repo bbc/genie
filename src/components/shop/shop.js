@@ -69,12 +69,7 @@ export class Shop extends Screen {
         Object.keys(this.panes).forEach(key =>
             pane === key ? this.panes[key].setVisible(true) : this.panes[key].setVisible(false),
         );
-        this.setTitle(pane === "top" ? "Shop" : pane); // prolly param this?
-    }
-
-    setTitle(newTitleText) { // push this into shop-titles
-        // const titleTextSprite = this.title.list.find(item => item.type === "Text");
-        // titleTextSprite.setText(newTitleText.charAt(0).toUpperCase() + newTitleText.slice(1));
+        this.title.setTitleText(pane === "top" ? "Shop" : pane); // prolly param this?
     }
 
     resize() {

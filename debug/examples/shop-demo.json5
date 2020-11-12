@@ -50,7 +50,7 @@
         x: 18.86,
         y: 15.09,
     },
-    collection: "inventory", // is a problem
+    collection: "armoury", // is a problem
     collections: {
         shop: "armoury",
         manage: "inventory",
