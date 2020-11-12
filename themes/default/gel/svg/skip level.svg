@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="224px" height="132px" viewBox="0 0 224 132" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>skip level</title>
+    <g id="skip-level" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Skip-level">
+            <polygon id="Fill-45" fill="#027802" points="0 64 224 64 224 0 0 0"></polygon>
+            <text font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+                <tspan x="58" y="41">Skip le</tspan>
+                <tspan x="134.896" y="41" letter-spacing="-0.3576">v</tspan>
+                <tspan x="147.5704" y="41">el</tspan>
+            </text>
+            <g id="Group-4" transform="translate(185.000000, 24.000000)" fill="#FFFFFF">
+                <polygon id="Fill-48" points="0.9841 0.5633 13.4841 8.5633 0.9841 16.5633 0.9841 12.5633 7.6241 8.5633 0.9841 4.5633"></polygon>
+                <polygon id="Fill-50" points="13.484 16.563 14.984 16.563 14.984 0.563 13.484 0.563"></polygon>
+            </g>
+        </g>
+        <g id="Skip-level" transform="translate(0.000000, 68.000000)">
+            <polygon id="Fill-45" fill="#004600" points="0 64 224 64 224 0 0 0"></polygon>
+            <text font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+                <tspan x="58" y="41">Skip le</tspan>
+                <tspan x="134.896" y="41" letter-spacing="-0.3576">v</tspan>
+                <tspan x="147.5704" y="41">el</tspan>
+            </text>
+            <g id="Group-4" transform="translate(185.000000, 24.000000)" fill="#FFFFFF">
+                <polygon id="Fill-48" points="0.9841 0.5633 13.4841 8.5633 0.9841 16.5633 0.9841 12.5633 7.6241 8.5633 0.9841 4.5633"></polygon>
+                <polygon id="Fill-50" points="13.484 16.563 14.984 16.563 14.984 0.563 13.484 0.563"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -166,9 +166,29 @@ export class Screen extends Phaser.Scene {
      * @returns {Object}
      */
     setLayout(buttons, accessibleButtons) {
-        this._layout = Layout.create(this, Scaler.getMetrics(), buttons, accessibleButtons);
-        this.add.existing(this._layout.root);
+        buttons.forEach(button => this.createButton(button.toLowerCase()));
+    }
 
-        return this._layout;
+    createButton(buttonName) {
+        const path = gmi.gameDir + gmi.embedVars.configPath;
+        const accessiblilityDiv = document.getElementById("accessibility");
+        const newSvg = document.createElement("img");
+        newSvg.src = `${path}gel/svg/${buttonName}.svg`;
+        newSvg.onmouseover = () => (newSvg.src = `${path}gel/svg/${buttonName}-hover.svg`);
+        newSvg.onmouseout = () => (newSvg.src = `${path}gel/svg/${buttonName}.svg`);
+        newSvg.setAttribute("style", "position: fixed;" + this.getButtonPosition(buttonName));
+        accessiblilityDiv.appendChild(newSvg);
+    }
+
+    getButtonPosition(buttonName) {
+        const positions = {
+            exit: "top: 25px; left: 25px;",
+            audio: "top: 25px; right: 105px;",
+            settings: "top: 25px; right: 25px;",
+            play: "top: 50%; left: 50%; transform: translate(-50%, 0%);",
+            achievements: "bottom: 25px; left: 25px;",
+            howtoplay: "bottom: 25px; right: 25px;",
+        };
+        return positions[buttonName];
     }
 }

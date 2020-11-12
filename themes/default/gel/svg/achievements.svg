@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="248px" height="66px" viewBox="0 0 248 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Achievements</title>
+    <g id="Achievements" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <polygon id="Fill-52" fill="#027802" points="0 64 248 64 248 0 0 0"></polygon>
+            <text font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+                <tspan x="72" y="41">Achie</tspan>
+                <tspan x="136.32" y="41" letter-spacing="-0.36">v</tspan>
+                <tspan x="148.992" y="41">eme</tspan>
+                <tspan x="197.088" y="41" letter-spacing="-0.1176">n</tspan>
+                <tspan x="211.2744" y="41">ts</tspan>
+            </text>
+            <polygon id="Fill-54" fill="#FFFFFF" points="30.0062857 42.0106667 30 44 41 44 40.9937143 42"></polygon>
+            <path d="M45.4666667,28.0533333 L42.5318667,30.8888889 L41.6333333,30.8888889 L41.6333333,24.962963 L45.4666667,24.962963 L45.4666667,28.0533333 Z M29.3666667,30.8888889 L28.4681333,30.8888889 L25.5333333,28.0533333 L25.5333333,24.962963 L29.3666667,24.962963 L29.3666667,30.8888889 Z M41.6333333,23.4814815 L41.6333333,22 L29.3666667,22 L29.3666667,23.4814815 L24,23.4814815 L24,28.6666667 L27.8333333,32.3703704 L29.3666667,32.3703704 L29.3666667,33.8518519 L33.2,37.5555556 L33.6416,40.105679 L31.6666667,42 L39.3333333,42 L37.3614667,40.0967901 L37.8,37.5555556 L41.6333333,33.8518519 L41.6333333,32.3703704 L43.1666667,32.3703704 L47,28.6666667 L47,23.4814815 L41.6333333,23.4814815 Z" id="Fill-56" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>

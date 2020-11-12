@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28px" height="21px" viewBox="0 0 28 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>sound-off</title>
+    <g id="sound-off" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Audio_off" transform="translate(2.000000, 1.000000)" fill="#000000">
+            <polygon id="Fill-70" points="12.527 0.8719 8.007 5.3919 0.476 5.3919 0.476 14.4299 8.007 14.4299 12.527 18.9479"></polygon>
+            <polygon id="Fill-72" points="23.3561 14.4305 15.4381 6.5125 16.5571 5.3925 24.4761 13.3115"></polygon>
+            <polygon id="Fill-74" points="16.5573 14.4305 15.4383 13.3115 23.3563 5.3925 24.4763 6.5125"></polygon>
+        </g>
+    </g>
+</svg>

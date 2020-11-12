@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="224px" height="132px" viewBox="0 0 224 132" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>restart</title>
+    <g id="restart" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Restart">
+            <polygon id="Fill-32" fill="#027802" points="0 64 224 64 224 0 0 0"></polygon>
+            <text font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+                <tspan x="71" y="41">Resta</tspan>
+                <tspan x="135.224" y="41" letter-spacing="0.3576">r</tspan>
+                <tspan x="145.9256" y="41">t</tspan>
+            </text>
+            <g id="Group" transform="translate(25.000000, 20.000000)" fill="#FFFFFF">
+                <path d="M17.7331,14.16 C17.7331,14.034 17.7401,13.911 17.7331,13.785 L20.7331,13.785 C20.7381,13.911 20.7331,14.034 20.7331,14.16 C20.7331,19.753 16.2011,24.285 10.6081,24.285 C5.0161,24.285 0.4831,19.753 0.4831,14.16 C0.4831,8.568 5.0161,4.035 10.6081,4.035 C10.7341,4.035 10.8571,4.031 10.9831,4.035 L10.9831,7.035 C10.8581,7.029 10.7341,7.035 10.6081,7.035 C6.6801,7.035 3.4831,10.232 3.4831,14.16 C3.4831,18.09 6.6801,21.285 10.6081,21.285 C14.5371,21.285 17.7331,18.09 17.7331,14.16 Z" id="Fill-34"></path>
+                <polygon id="Fill-36" points="12.4831 0.285 12.4831 10.785 21.4831 5.535"></polygon>
+            </g>
+        </g>
+        <g id="Restart" transform="translate(0.000000, 68.000000)">
+            <polygon id="Fill-32" fill="#004600" points="0 64 224 64 224 0 0 0"></polygon>
+            <text font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+                <tspan x="71" y="41">Resta</tspan>
+                <tspan x="135.224" y="41" letter-spacing="0.3576">r</tspan>
+                <tspan x="145.9256" y="41">t</tspan>
+            </text>
+            <g id="Group" transform="translate(25.000000, 20.000000)" fill="#FFFFFF">
+                <path d="M17.7331,14.16 C17.7331,14.034 17.7401,13.911 17.7331,13.785 L20.7331,13.785 C20.7381,13.911 20.7331,14.034 20.7331,14.16 C20.7331,19.753 16.2011,24.285 10.6081,24.285 C5.0161,24.285 0.4831,19.753 0.4831,14.16 C0.4831,8.568 5.0161,4.035 10.6081,4.035 C10.7341,4.035 10.8571,4.031 10.9831,4.035 L10.9831,7.035 C10.8581,7.029 10.7341,7.035 10.6081,7.035 C6.6801,7.035 3.4831,10.232 3.4831,14.16 C3.4831,18.09 6.6801,21.285 10.6081,21.285 C14.5371,21.285 17.7331,18.09 17.7331,14.16 Z" id="Fill-34"></path>
+                <polygon id="Fill-36" points="12.4831 0.285 12.4831 10.785 21.4831 5.535"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

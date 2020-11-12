@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="224px" height="132px" viewBox="0 0 224 132" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>play again</title>
+    <g id="play-again" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-5">
+            <polygon id="Fill-38" fill="#027802" points="0 64 224 64 224 0 0 0"></polygon>
+            <text id="Play-again" font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+                <tspan x="71" y="41">Pl</tspan>
+                <tspan x="94.592" y="41" letter-spacing="-0.24">a</tspan>
+                <tspan x="107.36" y="41">y again</tspan>
+            </text>
+            <g id="Group-2" transform="translate(25.000000, 20.000000)" fill="#FFFFFF">
+                <path d="M17.7331,14.8397 C17.7331,14.7127 17.7401,14.5897 17.7331,14.4647 L20.7331,14.4647 C20.7381,14.5907 20.7331,14.7127 20.7331,14.8397 C20.7331,20.4317 16.2011,24.9647 10.6081,24.9647 C5.0161,24.9647 0.4831,20.4317 0.4831,14.8397 C0.4831,9.2467 5.0161,4.7147 10.6081,4.7147 C10.7341,4.7147 10.8571,4.7097 10.9831,4.7147 L10.9831,7.7147 C10.8581,7.7077 10.7341,7.7147 10.6081,7.7147 C6.6801,7.7147 3.4831,10.9107 3.4831,14.8397 C3.4831,18.7687 6.6801,21.9647 10.6081,21.9647 C14.5371,21.9647 17.7331,18.7687 17.7331,14.8397 Z" id="Fill-41"></path>
+                <polygon id="Fill-43" points="12.4831 0.9647 12.4831 11.4647 21.4831 6.2147"></polygon>
+            </g>
+        </g>
+        <g id="Group-5" transform="translate(0.000000, 68.000000)">
+            <polygon id="Fill-38" fill="#004600" points="0 64 224 64 224 0 0 0"></polygon>
+            <text id="Play-again" font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+                <tspan x="71" y="41">Pl</tspan>
+                <tspan x="94.592" y="41" letter-spacing="-0.24">a</tspan>
+                <tspan x="107.36" y="41">y again</tspan>
+            </text>
+            <g id="Group-2" transform="translate(25.000000, 20.000000)" fill="#FFFFFF">
+                <path d="M17.7331,14.8397 C17.7331,14.7127 17.7401,14.5897 17.7331,14.4647 L20.7331,14.4647 C20.7381,14.5907 20.7331,14.7127 20.7331,14.8397 C20.7331,20.4317 16.2011,24.9647 10.6081,24.9647 C5.0161,24.9647 0.4831,20.4317 0.4831,14.8397 C0.4831,9.2467 5.0161,4.7147 10.6081,4.7147 C10.7341,4.7147 10.8571,4.7097 10.9831,4.7147 L10.9831,7.7147 C10.8581,7.7077 10.7341,7.7147 10.6081,7.7147 C6.6801,7.7147 3.4831,10.9107 3.4831,14.8397 C3.4831,18.7687 6.6801,21.9647 10.6081,21.9647 C14.5371,21.9647 17.7331,18.7687 17.7331,14.8397 Z" id="Fill-41"></path>
+                <polygon id="Fill-43" points="12.4831 0.9647 12.4831 11.4647 21.4831 6.2147"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

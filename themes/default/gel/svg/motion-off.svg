@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="37px" height="22px" viewBox="0 0 37 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>motion-off</title>
+    <g id="motion-off" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="FX_off" transform="translate(2.000000, 4.000000)" fill="#000000">
+            <polygon id="Fill-94" points="14.659 6.216 10.386 0 14.401 0 16.601 4.07 18.93 0 22.816 0 18.582 6.216 23.203 13.091 19.057 13.091 16.601 8.728 13.925 13.091 10 13.091"></polygon>
+            <polygon id="Fill-96" points="32.728 4.081 31.647 3 28.365 6.282 25.082 3 24 4.081 27.284 7.364 24 10.646 25.082 11.727 28.365 8.444 31.647 11.727 32.728 10.646 29.445 7.364"></polygon>
+            <polygon id="Fill-92" points="0 0 9.645 0 9.645 2.732 3.41 2.732 3.41 5.409 8.801 5.409 8.801 8.049 3.41 8.049 3.41 13.091 0 13.091"></polygon>
+        </g>
+    </g>
+</svg>
