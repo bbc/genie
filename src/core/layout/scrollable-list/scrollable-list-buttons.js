@@ -81,7 +81,9 @@ const getConfigs = button =>
     );
 
 const setOverlays = (button, item) => () => overlays1Wide({ gelButton: button, item, configs: getConfigs(button) });
+
 const unsetOverlays = button => () => Object.keys(button.overlays.list).forEach(key => button.overlays.remove(key));
+
 const makeAccessible = gelButton => accessibilify(gelButton);
 
 export { createGelButton, scaleButton };
