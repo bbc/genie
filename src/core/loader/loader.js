@@ -94,7 +94,7 @@ export class Loader extends Screen {
         const config = getConfig(this, this.screenKeys);
         this.setConfig(config);
         GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
-        gmi.achievements.init(this.cache.json.get("achievements-data"));
+        gmi.achievements && gmi.achievements.init && gmi.achievements.init(this.cache.json.get("achievements-data"));
         loadCollections(this, config).then(loaderComplete(this));
     }
 }

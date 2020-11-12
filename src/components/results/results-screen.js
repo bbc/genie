@@ -36,7 +36,8 @@ export class Results extends Screen {
     }
 
     createLayout() {
-        const achievements = gmi.achievements.get().length ? ["achievementsSmall"] : [];
+        const achievements =
+            gmi.achievements && gmi.achievements.get && gmi.achievements.get().length ? ["achievementsSmall"] : [];
         const buttons = ["pause", "continueGame"];
         const onwardButton = fp.get(`${this.scene.key}.gameComplete`, this.transientData) ? "playAgain" : "restart";
         this.setLayout([...buttons, ...achievements, onwardButton]);

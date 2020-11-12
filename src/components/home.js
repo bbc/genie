@@ -14,7 +14,8 @@ import { gmi } from "../core/gmi/gmi.js";
 
 export class Home extends Screen {
     create() {
-        const achievements = gmi.achievements.get().length ? ["achievements"] : [];
+        const achievements =
+            gmi.achievements && gmi.achievements.get && gmi.achievements.get().length ? ["achievements"] : [];
         const debug = isDebug() ? ["debug"] : [];
         this.addBackgroundItems();
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];

@@ -19,7 +19,8 @@ export class Pause extends Screen {
         this.addBackgroundItems();
         const parentKey = this._data.addedBy.scene.key;
         const isAboveSelectScreen = parentKey.includes("select");
-        const achievements = gmi.achievements.get().length ? ["achievements"] : [];
+        const achievements =
+            gmi.achievements && gmi.achievements.get && gmi.achievements.get().length ? ["achievements"] : [];
         const pauseReplay = this.context.navigation[parentKey].routes.restart ? ["pauseReplay"] : [];
         let levelSelect = this.context.navigation[this.scene.key].routes.select ? ["levelSelect"] : [];
         levelSelect = isAboveSelectScreen ? [] : levelSelect;
