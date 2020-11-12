@@ -13,12 +13,12 @@ describe("createTitle", () => {
     let title;
     const mockMetrics = { foo: "bar" };
     const mockSafeArea = { baz: "qux" };
-    const mockText = { setText: jest.fn() };
+    const mockText = { setText: jest.fn(), type: "Text" };
     const mockContainer = {
         add: jest.fn(),
         setScale: jest.fn(),
         setPosition: jest.fn(),
-        list: { find: jest.fn().mockReturnValue(mockText) },
+        list: [mockText],
     };
     const mockScene = {
         add: {
