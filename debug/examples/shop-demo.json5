@@ -51,7 +51,7 @@
         y: 15.09,
     },
     collection: "armoury", // is a problem
-    collections: {
+    paneCollections: {
         shop: "armoury",
         manage: "inventory",
     },

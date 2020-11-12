@@ -47,7 +47,7 @@ const createInnerPanel = (scene, context) => {
 };
 
 const createTable = (scene, context) => {
-    const key = scene.config.collections[context];
+    const key = scene.config.paneCollections[context];
     const collection = collections.get(key).getAll();
 
     const table = scene.rexUI.add.gridSizer({
