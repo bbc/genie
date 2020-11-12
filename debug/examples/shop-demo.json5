@@ -6,7 +6,7 @@
             text: "Shop Screen Demo",
         },
     ],
-    assetPrefix: "shop", // ugh proliferation
+    assetPrefix: "shop",
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "home.background", x: 0, y: 0 }],
@@ -60,7 +60,6 @@
     },
     columns: 1,
     assetKeys: {
-        prefix: "shop",
         background: "background",
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
@@ -70,7 +69,6 @@
         buttonIcon: "menuButtonIcon",
     },
     overlay: {
-        defaultPrefix: "shop", // proliferation
         items: [
             {
                 type: "image",
@@ -83,7 +81,7 @@
                 name: "itemIcon",
                 assetKey: "icon",
                 isDynamic: true, // asset key is item[assetKey]
-                position: { align: "left", offsetX: 35, offsetY: 0 },
+                position: { align: "left", offsetX: 35, offsetY: 0 },  // x offsets are from an edge, y offsets are from the centre
                 size: 76,
             },
             {
@@ -119,7 +117,7 @@
                     name: "currency",
                     assetKey: "currency",
                     isDynamic: false,
-                    position: { align: "right", offsetX: -64, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                    position: { align: "right", offsetX: -64, offsetY: 0 }, 
                     activeStates: ["cta"],
                 },
                 {

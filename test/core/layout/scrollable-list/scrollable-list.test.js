@@ -50,8 +50,8 @@ const mockScene = {
     input: { topOnly: true },
     add: { image: jest.fn() },
     config: {
+        assetPrefix: "test",
         assetKeys: {
-            prefix: "test",
             background: "background",
             scrollbar: "scrollbar",
             scrollbarHandle: "scrollbarHandle",
@@ -60,7 +60,6 @@ const mockScene = {
         overlay: {
             items: [mockOverlay],
         },
-        // shopCollection: "testCatalogue",
         collections: { shop: "testCatalogue" },
     },
     layout: {

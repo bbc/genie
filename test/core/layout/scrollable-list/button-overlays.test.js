@@ -13,9 +13,7 @@ const mockScene = {
         text: jest.fn().mockReturnValue("mockText"),
     },
     config: {
-        assetKeys: {
-            prefix: "test",
-        },
+        assetPrefix: "test",
     },
 };
 
@@ -110,7 +108,7 @@ describe("Button overlays", () => {
                 mockOverlay.isDynamic = false;
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockArgs);
-                const expectedKey = `${mockScene.config.assetKeys.prefix}.${mockOverlay.assetKey}`;
+                const expectedKey = `${mockScene.config.assetPrefix}.${mockOverlay.assetKey}`;
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, expectedKey);
             });
 

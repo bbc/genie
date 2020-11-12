@@ -24,7 +24,7 @@ const createGelButton = (scene, item, context, state) => {
         group: scene.scene.key,
         id,
         key: config.assetKeys.itemBackground,
-        scene: config.assetKeys.prefix,
+        scene: config.assetPrefix,
         scrollable: true,
     };
 
@@ -63,13 +63,15 @@ const scaleButton = (gelButton, layout, space) => {
     gelButton.setScale(scaleFactor);
 };
 
-const toggle = button => () => { // test
+const toggle = button => () => {
+    // test
     button.overlays.unsetAll();
     button.overlays.toggleState();
     button.overlays.setAll();
 };
 
-const toggleState = button => () => // test
+const toggleState = button => () =>
+    // test
     fp.cond([
         [btn => btn.overlays.state === "cta", btn => (btn.overlays.state = "actioned")],
         [btn => btn.overlays.state === "actioned", btn => (btn.overlays.state = "cta")],
@@ -85,7 +87,8 @@ const getConfigs = button =>
         button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)), // test w/diff states
     );
 
-const unsetOverlays = button => () => { // test
+const unsetOverlays = button => () => {
+    // test
     Object.keys(button.overlays.list).forEach(key => button.overlays.remove(key));
 };
 

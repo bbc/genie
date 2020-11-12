@@ -69,7 +69,7 @@ export class Shop extends Screen {
         Object.keys(this.panes).forEach(key =>
             pane === key ? this.panes[key].setVisible(true) : this.panes[key].setVisible(false),
         );
-        this.title.setTitleText(pane === "top" ? "Shop" : pane); // prolly param this?
+        this.title.setTitleText(pane === "top" ? "Shop" : pane);
     }
 
     resize() {

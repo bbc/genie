@@ -27,9 +27,10 @@ describe("shop menu buttons", () => {
         },
         scene: { key: "mockSceneKey" },
         setVisiblePane: jest.fn(),
+        config: { assetPrefix: "shop" },
     };
     const mockConfig = {
-        assetKeys: { prefix: "shop", buttonIcon: "mockIconKey", buttonBackground: "mockBackgroundKey" },
+        assetKeys: { buttonIcon: "mockIconKey", buttonBackground: "mockBackgroundKey" },
     };
     const mockOuterBounds = { y: 50, height: 400 };
     const mockInnerBounds = { x: 200, y: 50, height: 300, width: 100 };

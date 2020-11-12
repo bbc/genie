@@ -59,12 +59,12 @@ const getButtonPosition = (containerBounds, idx, yOffset) => {
     };
 };
 
-const assetKey = (key, config) => `${config.assetKeys.prefix}.${config.assetKeys[key]}`;
+const assetKey = (sceneConfig, key, config) => `${sceneConfig.assetPrefix}.${config.assetKeys[key]}`;
 
 const getScale = (containerBounds, button) => containerBounds.width / button.width;
 
 const setButtonOverlays = (scene, button, title, config) => {
     const offset = button.width / 4;
     button.overlays.set("caption", scene.add.text(-offset / 2, 0, title, { ...styleDefaults }).setOrigin(0, 0.5));
-    button.overlays.set("icon", scene.add.image(-offset, 0, assetKey("buttonIcon", config)));
+    button.overlays.set("icon", scene.add.image(-offset, 0, assetKey(scene.config, "buttonIcon", config)));
 };

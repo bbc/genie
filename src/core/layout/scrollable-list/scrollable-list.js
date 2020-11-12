@@ -18,17 +18,17 @@ const createPanel = (scene, context) => {
 };
 
 const getPanelConfig = (scene, context) => {
-    const { listPadding: space, assetKeys: keys } = scene.config;
+    const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
     const safeArea = getPanelY(scene);
     return {
         y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        background: scene.add.image(0, 0, `${keys.prefix}.${keys.background}`),
+        background: scene.add.image(0, 0, `${assetPrefix}.${keys.background}`),
         panel: { child: createInnerPanel(scene, context) },
         slider: {
-            track: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbar}`),
-            thumb: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbarHandle}`),
+            track: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbar}`),
+            thumb: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbarHandle}`),
             width: space.x,
         },
         space: { left: space.x, right: space.x, top: space.y, bottom: space.y, panel: space.x },

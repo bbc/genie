@@ -6,7 +6,7 @@
  */
 
 import { createTitle } from "../../../src/components/shop/shop-titles.js";
-import * as titles from "../../../src/components/select/titles.js"
+import * as titles from "../../../src/components/select/titles.js";
 import * as layout from "../../../src/components/shop/shop-layout.js";
 
 describe("createTitle", () => {

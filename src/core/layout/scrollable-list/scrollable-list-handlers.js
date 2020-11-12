@@ -8,7 +8,8 @@
 
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const handleClickIfVisible = (gelButton, scene, handler) => () => { // needs to check which menu is up
+const handleClickIfVisible = (gelButton, scene, handler) => () => {
+    // needs to check which menu is up
     const panel = gelButton.rexContainer.parent.getTopmostSizer();
     const safeArea = scene.layout.getSafeArea({}, false);
     const height = scene.scale.displaySize.height;

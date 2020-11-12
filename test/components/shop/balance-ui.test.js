@@ -36,6 +36,7 @@ describe("createBalance()", () => {
             text: jest.fn().mockReturnValue(mockText),
         },
         config: {
+            assetPrefix: "shop",
             balance: {
                 background: {
                     type: "image",
@@ -53,7 +54,6 @@ describe("createBalance()", () => {
             },
             balancePadding: 6,
             listPadding: { x: 1 },
-            assetKeys: { prefix: "shop" },
         },
     };
     const mockMetrics = { foo: "bar" };
