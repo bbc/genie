@@ -64,34 +64,24 @@ const scaleButton = (gelButton, layout, space) => {
 };
 
 const toggle = button => () => {
-    // test
     button.overlays.unsetAll();
     button.overlays.toggleState();
     button.overlays.setAll();
 };
 
 const toggleState = button => () =>
-    // test
     fp.cond([
         [btn => btn.overlays.state === "cta", btn => (btn.overlays.state = "actioned")],
         [btn => btn.overlays.state === "actioned", btn => (btn.overlays.state = "cta")],
     ])(button);
 
-const setOverlays = (button, item) => () => {
-    const configs = getConfigs(button);
-    overlays1Wide({ scene: button.scene, gelButton: button, item, configs }); // this can be simpler now half this lives on the button
-};
-
 const getConfigs = button =>
     button.overlays.configs.items.concat(
-        button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)), // test w/diff states
+        button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)),
     );
 
-const unsetOverlays = button => () => {
-    // test
-    Object.keys(button.overlays.list).forEach(key => button.overlays.remove(key));
-};
-
+const setOverlays = (button, item) => () => overlays1Wide({ gelButton: button, item, configs: getConfigs(button) });
+const unsetOverlays = button => () => Object.keys(button.overlays.list).forEach(key => button.overlays.remove(key));
 const makeAccessible = gelButton => accessibilify(gelButton);
 
 export { createGelButton, scaleButton };

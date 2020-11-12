@@ -22,6 +22,7 @@ const mockGelButton = {
         set: jest.fn(),
     },
     width: 200,
+    scene: mockScene,
 };
 
 const mockItem = {
@@ -52,7 +53,6 @@ describe("Button overlays", () => {
             isDynamic: false,
         };
         mockArgs = {
-            scene: mockScene,
             gelButton: mockGelButton,
             item: mockItem,
             configs: mockConfig.overlay.items,
