@@ -84,7 +84,7 @@ const mockGelButton = {
 };
 buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
-const context = "shop";
+const title = "shop";
 const initState = "cta";
 
 describe("Scrollable List", () => {
@@ -96,7 +96,7 @@ describe("Scrollable List", () => {
     describe("instantiation", () => {
         beforeEach(() => {
             scaler.getMetrics = jest.fn().mockReturnValue({ scale: 1 });
-            new ScrollableList(mockScene, context);
+            new ScrollableList(mockScene, title);
         });
         describe("adds a rexUI scrollable panel", () => {
             describe("with appropriate panel config", () => {
@@ -127,7 +127,7 @@ describe("Scrollable List", () => {
 
             describe("with nested rexUI elements", () => {
                 test("a label is created with a gel button per item", () => {
-                    expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem, context, initState);
+                    expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem, title, initState);
                     expect(mockScene.rexUI.add.label).toHaveBeenCalledWith({
                         orientation: 0,
                         icon: mockGelButton,
