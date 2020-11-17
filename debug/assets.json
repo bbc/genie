@@ -64,8 +64,8 @@
             },
             {
                 "type": "json5",
-                "key": "debug-shop-demo",
-                "url": "../../debug/examples/shop-demo.json5"
+                "key": "debug-shop",
+                "url": "../../debug/examples/shop.json5"
             }
         ]
     },
@@ -226,12 +226,12 @@
                 "type": "image",
                 "key": "stars_1",
                 "url": "../../debug/assets/sprite/stars_1.png"
-            },            
+            },
             {
                 "type": "image",
                 "key": "stars_2",
                 "url": "../../debug/assets/sprite/stars_2.png"
-            },            
+            },
             {
                 "type": "image",
                 "key": "stars_3",

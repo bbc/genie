@@ -3,7 +3,7 @@
         {
             x: -390,
             y: -190,
-            text: "Shop Screen Demo",
+            text: "Shop Screen",
         },
     ],
     assetPrefix: "shop",
@@ -117,7 +117,7 @@
                     name: "currency",
                     assetKey: "currency",
                     isDynamic: false,
-                    position: { align: "right", offsetX: -64, offsetY: 0 }, 
+                    position: { align: "right", offsetX: -64, offsetY: 0 },
                     activeStates: ["cta"],
                 },
                 {

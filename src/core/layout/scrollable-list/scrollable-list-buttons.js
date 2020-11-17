@@ -7,7 +7,7 @@
 import { handleClickIfVisible } from "./scrollable-list-handlers.js";
 import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
-import { accessibilify } from "../../../core/accessibility/accessibilify.js";
+import { accessibilify } from "../../accessibility/accessibilify.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const STATES = ["cta", "actioned"];
@@ -24,7 +24,7 @@ const createGelButton = (scene, item, context, state) => {
         group: scene.scene.key,
         id,
         key: config.assetKeys.itemBackground,
-        scene: config.assetPrefix,
+        scene: scene.assetPrefix,
         scrollable: true,
     };
 
@@ -43,7 +43,7 @@ const createGelButton = (scene, item, context, state) => {
         toggle: toggle(gelButton),
     };
 
-    const callback = () => gelButton.overlays.toggle();
+    const callback = gelButton.overlays.toggle;
 
     eventBus.subscribe({
         callback: handleClickIfVisible(gelButton, scene, callback),

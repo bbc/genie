@@ -20,6 +20,7 @@ describe("Scrollable List Buttons", () => {
     };
 
     const mockScene = {
+        assetPrefix: "mockScene",
         add: {
             gelButton: jest.fn().mockReturnValue(mockButton),
         },
@@ -28,7 +29,6 @@ describe("Scrollable List Buttons", () => {
         },
         config: {
             eventChannel: "mockChannel",
-            assetPrefix: "mockScene",
             assetKeys: {
                 itemBackground: "itemBackground",
             },

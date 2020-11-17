@@ -148,9 +148,9 @@ const exampleScreens = {
             next: "debug",
         },
     },
-    "shop-demo": {
+    shop: {
         scene: Shop,
-        title: "Shop Demo",
+        title: "Shop",
         routes: {
             back: "debug",
         },
