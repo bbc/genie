@@ -39,8 +39,8 @@ export class Shop extends Screen {
 
         this.panes = {
             top: createMenu(this, this.config.menu, safeArea),
-            shop: new ScrollableList(this),
-            manage: new ScrollableList(this),
+            shop: new ScrollableList(this, "shop"),
+            manage: new ScrollableList(this, "manage"),
         };
         this.setVisiblePane("top");
 
@@ -69,6 +69,7 @@ export class Shop extends Screen {
         Object.keys(this.panes).forEach(key =>
             pane === key ? this.panes[key].setVisible(true) : this.panes[key].setVisible(false),
         );
+        this.title.setTitleText(pane === "top" ? "Shop" : pane);
     }
 
     resize() {

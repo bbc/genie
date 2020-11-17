@@ -8,7 +8,8 @@ import { Shop } from "../../../src/components/shop/shop.js";
 import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance-ui.js";
-import * as titles from "../../../src/components/select/titles.js";
+// import * as titles from "../../../src/components/select/titles.js";
+import * as titles from "../../../src/components/shop/shop-titles.js";
 import * as uiScaler from "../../../src/components/shop/shop-layout.js";
 import * as menu from "../../../src/components/shop/menu.js";
 import { eventBus } from "../../../src/core/event-bus.js";
@@ -59,6 +60,7 @@ describe("Shop", () => {
     const mockSafeArea = { foo: "bar " };
     const mockButtonConfig = { channel: "foo", key: "bar", action: "baz" };
     const mockMenu = { setVisible: jest.fn(), resize: jest.fn() };
+    const mockTitles = { setTitleText: jest.fn(), setScale: jest.fn(), setPosition: jest.fn() };
 
     beforeEach(() => {
         shopScreen = new Shop();
@@ -79,7 +81,7 @@ describe("Shop", () => {
         shopScreen.events = { once: jest.fn() };
         ScrollableList.mockImplementation(() => mockScrollableList);
         balance.createBalance = jest.fn().mockReturnValue(mockContainer);
-        titles.createTitles = jest.fn();
+        titles.createTitle = jest.fn().mockReturnValue(mockTitles);
         uiScaler.getScaleFactor = jest.fn();
         uiScaler.getYPos = jest.fn();
         menu.createMenu = jest.fn().mockReturnValue(mockMenu);
@@ -120,26 +122,12 @@ describe("Shop", () => {
             expect(shopScreen.panes.manage).toBe(mockScrollableList);
         });
 
-        describe("creates the title UI component", () => {
-            test("with a container", () => {
-                expect(shopScreen.title).toBe(mockContainer);
-            });
-
-            test("containing the result of createTitles", () => {
-                expect(titles.createTitles).toHaveBeenCalledWith(shopScreen);
-            });
-
-            test("appropriately scaled and positioned", () => {
-                expect(uiScaler.getScaleFactor).toHaveBeenCalledWith({
-                    metrics: mockMetrics,
-                    container: mockContainer,
-                    fixedWidth: true,
-                    safeArea: mockSafeArea,
-                });
-            });
+        test("calls createTitle to create the title UI component", () => {
+            expect(titles.createTitle).toHaveBeenCalledWith(shopScreen, mockMetrics, mockSafeArea);
+            expect(shopScreen.title).toBe(mockTitles);
         });
 
-        test("adds a balance UI component", () => {
+        test("calls createBalance to create the balance UI component", () => {
             expect(balance.createBalance).toHaveBeenCalledWith(shopScreen, mockMetrics, mockSafeArea);
         });
 

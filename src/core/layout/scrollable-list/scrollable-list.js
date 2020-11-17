@@ -7,28 +7,27 @@
 import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
-import { collections } from "../../../core/collections.js";
+import { collections } from "../../collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const createPanel = scene => {
-    const panelConfig = getPanelConfig(scene);
-    const panel = scene.rexUI.add.scrollablePanel(panelConfig);
+const createPanel = (scene, title) => {
+    const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title));
     panel.layout();
     return panel;
 };
 
-const getPanelConfig = scene => {
-    const { listPadding: space, assetKeys: keys } = scene.config;
+const getConfig = (scene, title) => {
+    const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
     const safeArea = getPanelY(scene);
     return {
         y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        background: scene.add.image(0, 0, `${keys.prefix}.${keys.background}`),
-        panel: { child: createInnerPanel(scene) },
+        background: scene.add.image(0, 0, `${assetPrefix}.${keys.background}`),
+        panel: { child: createInnerPanel(scene, title) },
         slider: {
-            track: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbar}`),
-            thumb: scene.add.image(0, 0, `${keys.prefix}.${keys.scrollbarHandle}`),
+            track: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbar}`),
+            thumb: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbarHandle}`),
             width: space.x,
         },
         space: { left: space.x, right: space.x, top: space.y, bottom: space.y, panel: space.x },
@@ -40,14 +39,14 @@ const getPanelY = scene => {
     return { y: safeArea.height / 2 + safeArea.y, height: safeArea.height };
 };
 
-const createInnerPanel = scene => {
+const createInnerPanel = (scene, title) => {
     const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 } });
-    sizer.add(createTable(scene), { expand: true });
+    sizer.add(createTable(scene, title), { expand: true });
     return sizer;
 };
 
-const createTable = scene => {
-    const key = scene.config.shopCollection;
+const createTable = (scene, title) => {
+    const key = scene.config.paneCollections[title];
     const collection = collections.get(key).getAll();
 
     const table = scene.rexUI.add.gridSizer({
@@ -57,15 +56,15 @@ const createTable = scene => {
         name: "grid",
     });
 
-    collection.forEach((item, idx) => table.add(createItem(scene, item), 0, idx, "top", 0, true));
+    collection.forEach((item, idx) => table.add(createItem(scene, item, title), 0, idx, "top", 0, true));
 
     return scene.rexUI.add.sizer({ orientation: "y" }).add(table, 1, "center", 0, true);
 };
 
-const createItem = (scene, item) =>
+const createItem = (scene, item, title) =>
     scene.rexUI.add.label({
         orientation: 0,
-        icon: createGelButton(scene, item),
+        icon: createGelButton(scene, item, title, "cta"),
         name: item.id,
     });
 
@@ -101,9 +100,9 @@ const setupEvents = (scene, panel) => {
 const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
 
 export class ScrollableList extends Phaser.GameObjects.Container {
-    constructor(scene) {
+    constructor(scene, title) {
         super(scene, 0, 0);
-        this.panel = createPanel(scene);
+        this.panel = createPanel(scene, title);
         this.makeAccessible = fp.noop;
 
         this.add(this.panel);

@@ -20,6 +20,7 @@ describe("shop menu buttons", () => {
     };
     const mockText = { setOrigin: jest.fn() };
     const mockScene = {
+        assetPrefix: "shop",
         add: {
             gelButton: jest.fn().mockReturnValue(mockButton),
             image: jest.fn(),
@@ -29,7 +30,7 @@ describe("shop menu buttons", () => {
         setVisiblePane: jest.fn(),
     };
     const mockConfig = {
-        assetKeys: { prefix: "shop", buttonIcon: "mockIconKey", buttonBackground: "mockBackgroundKey" },
+        assetKeys: { buttonIcon: "mockIconKey", buttonBackground: "mockBackgroundKey" },
     };
     const mockOuterBounds = { y: 50, height: 400 };
     const mockInnerBounds = { x: 200, y: 50, height: 300, width: 100 };

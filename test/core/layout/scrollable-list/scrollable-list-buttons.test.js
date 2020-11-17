@@ -10,52 +10,66 @@ import * as handlers from "../../../../src/core/layout/scrollable-list/scrollabl
 import { eventBus } from "../../../../src/core/event-bus.js";
 import * as a11y from "../../../../src/core/accessibility/accessibilify.js";
 
-const mockButton = {
-    width: 100,
-    setScale: jest.fn(),
-    config: { id: "foo" },
-    rexContainer: { parent: { getTopmostSizer: jest.fn().mockReturnValue({ space: { top: 10 } }) } },
-};
-
-const mockScene = {
-    add: {
-        gelButton: jest.fn().mockReturnValue(mockButton),
-    },
-    layout: {
-        getSafeArea: jest.fn().mockReturnValue({ width: 100 }),
-    },
-    config: {
-        eventChannel: "mockChannel",
-        assetKeys: {
-            prefix: "mockScene",
-            itemBackground: "itemBackground",
-        },
-        listPadding: { x: 10, y: 8 },
-    },
-    input: { y: 50 },
-    scale: { displaySize: { height: 100 } },
-    scene: { key: "shop" },
-};
-
-const mockItem = {
-    id: "mockId",
-    ariaLabel: "mockAriaLabel",
-};
-
 describe("Scrollable List Buttons", () => {
+    const mockButton = {
+        width: 100,
+        setScale: jest.fn(),
+        config: { id: "foo" },
+        rexContainer: { parent: { getTopmostSizer: jest.fn().mockReturnValue({ space: { top: 10 } }) } },
+        overlays: { remove: jest.fn(), list: { a: "foo", b: "bar" } },
+    };
+
+    const mockScene = {
+        assetPrefix: "mockScene",
+        add: {
+            gelButton: jest.fn().mockReturnValue(mockButton),
+        },
+        layout: {
+            getSafeArea: jest.fn().mockReturnValue({ width: 100 }),
+        },
+        config: {
+            eventChannel: "mockChannel",
+            assetKeys: {
+                itemBackground: "itemBackground",
+            },
+            listPadding: { x: 10, y: 8 },
+            overlay: {
+                items: [{ foo: "bar" }],
+                options: {
+                    shop: [
+                        { baz: "qux", activeStates: ["cta"] },
+                        { wiz: "bang", activeStates: ["actioned"] },
+                    ],
+                },
+            },
+        },
+        input: { y: 50 },
+        scale: { displaySize: { height: 100 } },
+        scene: { key: "shop" },
+    };
+
+    const mockItem = {
+        id: "mockId",
+        ariaLabel: "mockAriaLabel",
+    };
+
     overlays.overlays1Wide = jest.fn();
     a11y.accessibilify = jest.fn();
+    eventBus.subscribe = jest.fn();
+    handlers.handleClickIfVisible = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
 
+    beforeEach(() => buttons.createGelButton(mockScene, mockItem, "shop", "cta"));
+
     describe("createGelButton()", () => {
         test("adds a gel button", () => {
-            buttons.createGelButton(mockScene, mockItem);
+            // buttons.createGelButton(mockScene, mockItem, "shop", "cta"); // DRY this test file
             expect(mockScene.add.gelButton).toHaveBeenCalled();
         });
 
         test("provides it the correct config", () => {
-            buttons.createGelButton(mockScene, mockItem);
+            // buttons.createGelButton(mockScene, mockItem, "shop", "cta");
             const expectedConfig = {
                 accessibilityEnabled: true,
                 ariaLabel: "mockAriaLabel",
@@ -71,23 +85,70 @@ describe("Scrollable List Buttons", () => {
         });
 
         test("subscribes to the event bus", () => {
-            eventBus.subscribe = jest.fn();
-            handlers.handleClickIfVisible = jest.fn();
-            buttons.createGelButton(mockScene, mockItem);
+            // buttons.createGelButton(mockScene, mockItem, "shop", "cta");
             const args = eventBus.subscribe.mock.calls[0][0];
             expect(args.channel).toEqual("mockChannel");
             expect(args.name).toEqual("scroll_button_mockId");
-            expect(handlers.handleClickIfVisible).toHaveBeenCalled();
+            const callback = handlers.handleClickIfVisible.mock.calls[0][2];
+            expect(mockButton.overlays.state).toBe("cta");
+            callback();
+            expect(mockButton.overlays.state).toBe("actioned");
         });
 
         test("scales the button", () => {
-            buttons.createGelButton(mockScene, mockItem);
+            buttons.createGelButton(mockScene, mockItem, "shop", "cta");
             expect(mockButton.setScale).toHaveBeenCalled();
         });
 
         test("applies overlays", () => {
-            buttons.createGelButton(mockScene, mockItem);
+            buttons.createGelButton(mockScene, mockItem, "shop", "cta");
             expect(overlays.overlays1Wide).toHaveBeenCalled();
+        });
+
+        describe("overlay handling", () => {
+            test("decorates the button's .overlays with additional functions", () => {
+                expect(typeof mockButton.overlays.setAll).toBe("function");
+                expect(typeof mockButton.overlays.unsetAll).toBe("function");
+                expect(typeof mockButton.overlays.toggleState).toBe("function");
+                expect(typeof mockButton.overlays.toggle).toBe("function");
+            });
+            test("plus all the overlay configs", () => {
+                const expected = {
+                    items: mockScene.config.overlay.items,
+                    options: mockScene.config.overlay.options.shop,
+                };
+                expect(mockButton.overlays.configs).toStrictEqual(expected);
+            });
+            test("and a string to indicate state", () => {
+                expect(mockButton.overlays.state).toBe("cta");
+            });
+            test("unsetAll() unsets all overlays", () => {
+                mockButton.overlays.unsetAll();
+                expect(mockButton.overlays.remove.mock.calls[0][0]).toBe("a");
+                expect(mockButton.overlays.remove.mock.calls[1][0]).toBe("b");
+            });
+            test("toggleState() toggles state", () => {
+                mockButton.overlays.toggleState();
+                expect(mockButton.overlays.state).toBe("actioned");
+                mockButton.overlays.toggleState();
+                expect(mockButton.overlays.state).toBe("cta");
+            });
+            test("setAll() sets all overlays for the current state", () => {
+                jest.clearAllMocks();
+                mockButton.overlays.setAll();
+                const expected = [{ foo: "bar" }, { baz: "qux", activeStates: ["cta"] }];
+                const { configs } = overlays.overlays1Wide.mock.calls[0][0];
+                expect(configs).toStrictEqual(expected);
+            });
+            test("toggle() flows them together to switch between button overlay states", () => {
+                mockButton.overlays.toggle();
+                expect(mockButton.overlays.remove.mock.calls[0][0]).toBe("a");
+                expect(mockButton.overlays.remove.mock.calls[1][0]).toBe("b");
+                expect(mockButton.overlays.state).toBe("actioned");
+                const expected = [{ foo: "bar" }, { wiz: "bang", activeStates: ["actioned"] }];
+                const { configs } = overlays.overlays1Wide.mock.calls[1][0];
+                expect(configs).toStrictEqual(expected);
+            });
         });
     });
 });

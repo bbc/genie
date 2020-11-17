@@ -27,6 +27,7 @@ describe("createBalance()", () => {
     };
     const mockText = { setOrigin: jest.fn().mockReturnValue(mockReturnedText) };
     const mockScene = {
+        assetPrefix: "shop",
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
             image: jest.fn().mockImplementation((x, y, key) => {
@@ -53,7 +54,6 @@ describe("createBalance()", () => {
             },
             balancePadding: 6,
             listPadding: { x: 1 },
-            assetKeys: { prefix: "shop" },
         },
     };
     const mockMetrics = { foo: "bar" };
