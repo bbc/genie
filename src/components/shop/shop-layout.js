@@ -7,6 +7,8 @@
  * @license Apache-2.0
  */
 
+import { resizeGelButtons } from "./menu-buttons.js";
+
 export const getSafeArea = layout => layout.getSafeArea({}, false);
 
 export const getXPos = (container, safeArea, padding) => safeArea.width / 2 - container.getBounds().width / 2 - padding;
@@ -27,4 +29,46 @@ export const getScaleFactor = args => {
     const scaleFactorY = ((availableSpace - padding) / containerBounds.height) * oldScale;
     const scaleFactorX = (safeArea.width / 4 / containerBounds.width) * oldScale;
     return fixedWidth ? scaleFactorY : Math.min(scaleFactorY, scaleFactorX);
+};
+
+export const setVisible = container => isVisible => {
+    container.visible = isVisible;
+    const buttons = container.buttons;
+    buttons.forEach(button => {
+        button.visible = isVisible;
+        button.input.enabled = container.visible;
+        button.accessibleElement.update();
+    });
+};
+
+export const resize = container => bounds => {
+    const { memoisedBounds } = container;
+    container.memoisedBounds = bounds;
+    container.setScale(
+        (bounds.width / memoisedBounds.width) * container.scaleX,
+        (bounds.height / memoisedBounds.height) * container.scaleY,
+    );
+    const yOffset = container.getBounds().y - bounds.y;
+    container.setY(container.y - yOffset);
+    resizeGelButtons(container.buttons, bounds, getInnerRectBounds(bounds, false), container.config.buttonsRight);
+};
+
+export const getHalfRectBounds = (menuBounds, isOnLeft) => { // a bunch of these can be reused
+    const halfWidth = menuBounds.width / 2;
+    return {
+        x: isOnLeft ? -halfWidth / 2 : halfWidth / 2,
+        y: 0,
+        width: halfWidth,
+        height: menuBounds.height,
+    };
+};
+
+export const getInnerRectBounds = (outerBounds, isOnLeft) => {
+    const innerBounds = getHalfRectBounds(outerBounds, isOnLeft);
+    return {
+        x: isOnLeft ? -innerBounds.width / 2 : innerBounds.width / 2,
+        y: innerBounds.y,
+        width: innerBounds.width * 0.65,
+        height: innerBounds.height * 0.6,
+    };
 };

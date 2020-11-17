@@ -4,7 +4,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createGelButtons, resizeGelButtons } from "./menu-buttons.js";
+import { createGelButtons } from "./menu-buttons.js";
+import { setVisible, resize, getHalfRectBounds, getInnerRectBounds } from "./shop-layout.js";
 
 export const createMenu = (scene, config, bounds) => {
     const { buttonsRight } = config;
@@ -32,49 +33,49 @@ export const createMenu = (scene, config, bounds) => {
     return menuContainer;
 };
 
-const getHalfRectBounds = (menuBounds, isOnLeft) => {
-    const halfWidth = menuBounds.width / 2;
-    return {
-        x: isOnLeft ? -halfWidth / 2 : halfWidth / 2,
-        y: 0,
-        width: halfWidth,
-        height: menuBounds.height,
-    };
-};
+// const getHalfRectBounds = (menuBounds, isOnLeft) => { // a bunch of these can be reused
+//     const halfWidth = menuBounds.width / 2;
+//     return {
+//         x: isOnLeft ? -halfWidth / 2 : halfWidth / 2,
+//         y: 0,
+//         width: halfWidth,
+//         height: menuBounds.height,
+//     };
+// };
 
-const getInnerRectBounds = (outerBounds, isOnLeft) => {
-    const innerBounds = getHalfRectBounds(outerBounds, isOnLeft);
-    return {
-        x: isOnLeft ? -innerBounds.width / 2 : innerBounds.width / 2,
-        y: innerBounds.y,
-        width: innerBounds.width * 0.65,
-        height: innerBounds.height * 0.6,
-    };
-};
+// const getInnerRectBounds = (outerBounds, isOnLeft) => {
+//     const innerBounds = getHalfRectBounds(outerBounds, isOnLeft);
+//     return {
+//         x: isOnLeft ? -innerBounds.width / 2 : innerBounds.width / 2,
+//         y: innerBounds.y,
+//         width: innerBounds.width * 0.65,
+//         height: innerBounds.height * 0.6,
+//     };
+// };
 
 const createRect = (scene, bounds, colour) =>
     scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, colour, 0.3);
 
-const setVisible = container => isVisible => {
-    container.visible = isVisible;
-    const buttons = getGelButtons(container);
-    buttons.forEach(button => {
-        button.visible = isVisible;
-        button.input.enabled = container.visible;
-        button.accessibleElement.update();
-    });
-};
+// const setVisible = container => isVisible => { // can be used by confirm, too
+//     container.visible = isVisible;
+//     const buttons = getGelButtons(container);
+//     buttons.forEach(button => {
+//         button.visible = isVisible;
+//         button.input.enabled = container.visible;
+//         button.accessibleElement.update();
+//     });
+// };
 
-const getGelButtons = container => container.buttons;
+// const getGelButtons = container => container.buttons;
 
-const resize = container => bounds => {
-    const { memoisedBounds } = container;
-    container.memoisedBounds = bounds;
-    container.setScale(
-        (bounds.width / memoisedBounds.width) * container.scaleX,
-        (bounds.height / memoisedBounds.height) * container.scaleY,
-    );
-    const yOffset = container.getBounds().y - bounds.y;
-    container.setY(container.y - yOffset);
-    resizeGelButtons(container.buttons, bounds, getInnerRectBounds(bounds, false), container.config.buttonsRight);
-};
+// const resize = container => bounds => { // can be reused by confirm?
+//     const { memoisedBounds } = container;
+//     container.memoisedBounds = bounds;
+//     container.setScale(
+//         (bounds.width / memoisedBounds.width) * container.scaleX,
+//         (bounds.height / memoisedBounds.height) * container.scaleY,
+//     );
+//     const yOffset = container.getBounds().y - bounds.y;
+//     container.setY(container.y - yOffset);
+//     resizeGelButtons(container.buttons, bounds, getInnerRectBounds(bounds, false), container.config.buttonsRight);
+// };
