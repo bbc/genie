@@ -43,7 +43,7 @@ const createGelButton = (scene, item, context, state) => {
         toggle: toggle(gelButton),
     };
 
-    const callback = gelButton.overlays.toggle; // is gonna be more complex, is not going to be toggle.
+    const callback = gelButton.overlays.toggle;
 
     eventBus.subscribe({
         callback: handleClickIfVisible(gelButton, scene, callback),
