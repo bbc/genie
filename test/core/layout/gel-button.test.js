@@ -324,7 +324,7 @@ describe("Gel Button", () => {
                 scale: 2,
             };
 
-            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(-100, -50, 400, 200));
+            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(-800, -350, 400, 200));
         });
 
         test("Takes button scale into account", () => {
@@ -341,7 +341,7 @@ describe("Gel Button", () => {
             gelButton.parentContainer = {
                 scale: 2,
             };
-            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(0, 0, 200, 100));
+            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(-700, -300, 200, 100));
         });
 
         test("Uses a scale of 1 if button is not parented to a gel group (debug buttons)", () => {
@@ -355,7 +355,7 @@ describe("Gel Button", () => {
                 },
             };
 
-            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(-43, 17, 100, 50));
+            expect(gelButton.getHitAreaBounds()).toEqual(new Phaser.Geom.Rectangle(-743, -283, 100, 50));
         });
     });
 
