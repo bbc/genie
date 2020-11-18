@@ -55,8 +55,20 @@
         shop: "armoury",
         manage: "inventory",
     },
+    confirm: {
+        detailView: true, // true yields a smaller image and more text
+        prompts: {
+            buy: "Purchase this item?",
+            equip: "Do you want to equip this item?",
+        },
+    },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 5,
+    },
     menu: {
-        buttonsRight: true, // set as false to X-flip the menu layout
+        buttonsRight: false, // set as false to X-flip the menu layout
     },
     columns: 1,
     assetKeys: {
@@ -81,7 +93,7 @@
                 name: "itemIcon",
                 assetKey: "icon",
                 isDynamic: true, // asset key is item[assetKey]
-                position: { align: "left", offsetX: 35, offsetY: 0 },  // x offsets are from an edge, y offsets are from the centre
+                position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
                 size: 76,
             },
             {

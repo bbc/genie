@@ -53,22 +53,25 @@ export const resize = container => bounds => {
     resizeGelButtons(container.buttons, bounds, getInnerRectBounds(bounds, false), container.config.buttonsRight);
 };
 
-export const getHalfRectBounds = (menuBounds, isOnLeft) => { // a bunch of these can be reused
+export const getHalfRectBounds = (menuBounds, isOnRight) => {
     const halfWidth = menuBounds.width / 2;
     return {
-        x: isOnLeft ? -halfWidth / 2 : halfWidth / 2,
+        x: isOnRight ? halfWidth / 2 : -halfWidth / 2,
         y: 0,
         width: halfWidth,
         height: menuBounds.height,
     };
 };
 
-export const getInnerRectBounds = (outerBounds, isOnLeft) => {
-    const innerBounds = getHalfRectBounds(outerBounds, isOnLeft);
+export const getInnerRectBounds = (outerBounds, isOnRight) => {
+    const innerBounds = getHalfRectBounds(outerBounds, isOnRight);
     return {
-        x: isOnLeft ? -innerBounds.width / 2 : innerBounds.width / 2,
+        x: isOnRight ? innerBounds.width / 2 : -innerBounds.width / 2,
         y: innerBounds.y,
         width: innerBounds.width * 0.65,
         height: innerBounds.height * 0.6,
     };
 };
+
+export const createRect = (scene, bounds, colour) =>
+    scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, colour, 0.3);

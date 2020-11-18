@@ -4,8 +4,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createGelButtons } from "./menu-buttons.js";
-import { setVisible, resize, getHalfRectBounds, getInnerRectBounds } from "./shop-layout.js";
+import { createMenuButtons } from "./menu-buttons.js";
+import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect } from "./shop-layout.js";
 
 export const createMenu = (scene, config, bounds) => {
     const { buttonsRight } = config;
@@ -17,12 +17,12 @@ export const createMenu = (scene, config, bounds) => {
     menuContainer.memoisedBounds = bounds; // workaround, pending CGPROD-2887
 
     menuContainer.add([
-        createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff0000),
-        createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff00ff),
-        createRect(scene, getInnerRectBounds(bounds, !buttonsRight), 0x0000ff),
+        createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
+        createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
+        createRect(scene, getInnerRectBounds(bounds, buttonsRight), 0x0000ff),
     ]);
     const yOffset = bounds.height / 2 + bounds.y;
-    menuContainer.buttons = createGelButtons(
+    menuContainer.buttons = createMenuButtons(
         scene,
         getInnerRectBounds(bounds, buttonsRight),
         menuContainer.config,
@@ -53,8 +53,8 @@ export const createMenu = (scene, config, bounds) => {
 //     };
 // };
 
-const createRect = (scene, bounds, colour) =>
-    scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, colour, 0.3);
+// const createRect = (scene, bounds, colour) =>
+//     scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, colour, 0.3);
 
 // const setVisible = container => isVisible => { // can be used by confirm, too
 //     container.visible = isVisible;

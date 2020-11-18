@@ -9,13 +9,13 @@ import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../../core/layout/metrics.js";
 
-const styleDefaults = {
+const styleDefaults = { // can drop this in config?
     fontFamily: "ReithSans",
     fontSize: "16px",
     resolution: 5,
 };
 
-export const createGelButtons = (scene, bounds, config, yOffset) =>
+export const createMenuButtons = (scene, bounds, config, yOffset) =>
     ["Shop", "Manage"].map((button, idx) => {
         const buttonConfig = {
             title: button,
@@ -42,6 +42,33 @@ export const createGelButtons = (scene, bounds, config, yOffset) =>
         return gelButton;
     });
 
+export const createConfirmButtons = (scene, bounds, config, yOffset) => // needs a refactor to DRY re the above fn
+    ["Confirm", "Cancel"].map((button, idx) => {
+        const buttonConfig = {
+            title: button,
+            gameButton: true,
+            accessibilityEnabled: true,
+            ariaLabel: button,
+            channel: "shop",
+            group: scene.scene.key,
+            id: `tx_${button.toLowerCase()}_button`,
+            key: config.assetKeys.buttonBackground,
+            scene: "shop",
+        };
+        const { x, y } = getButtonPosition(bounds, idx, yOffset);
+        const gelButton = scene.add.gelButton(x + CANVAS_WIDTH / 2, y + CANVAS_HEIGHT / 2, buttonConfig);
+        const callback = () => console.log("callback");
+        eventBus.subscribe({
+            callback, 
+            channel: buttonConfig.channel, 
+            name: buttonConfig.id,
+        })
+        gelButton.overlays.set("caption", scene.add.text(0, 0, button, styleDefaults).setOrigin(0.5));
+        accessibilify(gelButton);
+        gelButton.setScale(getScale(bounds, gelButton));
+        return gelButton;
+    });
+
 export const resizeGelButtons = (buttons, bounds, innerBounds, buttonsRight) => {
     buttons.forEach((button, idx) => {
         const { y } = getButtonPosition(innerBounds, idx, 0);
@@ -54,7 +81,7 @@ export const resizeGelButtons = (buttons, bounds, innerBounds, buttonsRight) => 
 const getButtonPosition = (containerBounds, idx, yOffset) => {
     const { x, y, height } = containerBounds;
     return {
-        x: -x,
+        x, 
         y: y - height / 4 + (idx * height) / 2 + yOffset,
     };
 };
