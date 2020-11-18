@@ -8,18 +8,6 @@
 import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect } from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 
-const assetKey = item => (item ? `${config.assetPrefix}.${item.icon}` : "shop.itemIcon");
-const imageY = bounds => -bounds.height / 4;
-const promptY = outerBounds => -outerBounds.height / 2 + outerBounds.height / 8;
-const currencyY = outerBounds => -outerBounds.height / 2 + outerBounds.height / 4;
-const descriptionY = bounds => bounds.height / 5;
-const getOffsetBounds = (outerBounds, innerBounds) => ({
-    ...innerBounds,
-    y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
-});
-const imageX = (config, bounds) =>
-    config.menu.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
-
 export const createConfirm = (scene, config, bounds) => {
     const { buttonsRight } = config.menu;
     const { styleDefaults } = config;
@@ -75,3 +63,15 @@ const itemDetailView = (scene, item, config, bounds) => {
         .setOrigin(0.5);
     return [itemImage, itemTitle, itemDescription];
 };
+
+const assetKey = item => (item ? `${config.assetPrefix}.${item.icon}` : "shop.itemIcon");
+const imageY = bounds => -bounds.height / 4;
+const promptY = outerBounds => -outerBounds.height / 2 + outerBounds.height / 8;
+const currencyY = outerBounds => -outerBounds.height / 2 + outerBounds.height / 4;
+const descriptionY = bounds => bounds.height / 5;
+const getOffsetBounds = (outerBounds, innerBounds) => ({
+    ...innerBounds,
+    y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
+});
+const imageX = (config, bounds) =>
+    config.menu.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
