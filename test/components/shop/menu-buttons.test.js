@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 
-import { createMenuButtons, resizeGelButtons } from "../../../src/components/shop/menu-buttons.js";
+import { createMenuButtons, createConfirmButtons, resizeGelButtons } from "../../../src/components/shop/menu-buttons.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as a11y from "../../../src/core/accessibility/accessibilify.js";
 
@@ -39,9 +39,9 @@ describe("shop menu buttons", () => {
     a11y.accessibilify = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
-    beforeEach(() => (buttons = createMenuButtons(mockScene, mockInnerBounds, mockConfig, yOffset)));
-
-    describe("createGelButtons()", () => {
+    
+    describe("createMenuButtons()", () => {
+        beforeEach(() => (buttons = createMenuButtons(mockScene, mockInnerBounds, mockConfig, yOffset)));
         test("adds two gel buttons", () => {
             expect(buttons.length).toBe(2);
             expect(mockScene.add.gelButton).toHaveBeenCalledTimes(2);
@@ -88,6 +88,27 @@ describe("shop menu buttons", () => {
         });
         test("scales the buttons", () => {
             expect(mockButton.setScale).toHaveBeenCalledTimes(2);
+        });
+    });
+
+    describe("createConfirmButtons", () => {
+        beforeEach(() => (buttons = createConfirmButtons(mockScene, mockInnerBounds, mockConfig, yOffset)));
+
+        test("provides a slightly different config", () => {
+            const expectedConfig = {
+                title: "Confirm",
+                gameButton: true,
+                accessibilityEnabled: true,
+                ariaLabel: "Confirm",
+                channel: "shop",
+                group: "mockSceneKey",
+                id: "tx_confirm_button",
+                key: "mockBackgroundKey",
+                scene: "shop",
+            };
+            expect(mockScene.add.gelButton.mock.calls[0][2]).toStrictEqual(expectedConfig);
+            const otherConfig = { ...expectedConfig, title: "Cancel", id: "tx_cancel_button", ariaLabel: "Cancel" };
+            expect(mockScene.add.gelButton.mock.calls[1][2]).toStrictEqual(otherConfig);
         });
     });
 

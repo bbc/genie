@@ -68,7 +68,7 @@
         resolution: 5,
     },
     menu: {
-        buttonsRight: false, // set as false to X-flip the menu layout
+        buttonsRight: true, // set as false to X-flip the menu layout
     },
     columns: 1,
     assetKeys: {
