@@ -48,8 +48,8 @@ export class Shop extends Screen {
             manage: new ScrollableList(this, "manage"),
             confirm,
         };
-        // this.setVisiblePane("top");
-        this.setVisiblePane("confirm");
+        this.setVisiblePane("top");
+        // this.setVisiblePane("confirm");
 
         this.setupEvents();
     }

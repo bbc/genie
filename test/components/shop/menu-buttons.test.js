@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 
-import { createGelButtons, resizeGelButtons } from "../../../src/components/shop/menu-buttons.js";
+import { createMenuButtons, resizeGelButtons } from "../../../src/components/shop/menu-buttons.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as a11y from "../../../src/core/accessibility/accessibilify.js";
 
@@ -39,7 +39,7 @@ describe("shop menu buttons", () => {
     a11y.accessibilify = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
-    beforeEach(() => (buttons = createGelButtons(mockScene, mockInnerBounds, mockConfig, yOffset)));
+    beforeEach(() => (buttons = createMenuButtons(mockScene, mockInnerBounds, mockConfig, yOffset)));
 
     describe("createGelButtons()", () => {
         test("adds two gel buttons", () => {
@@ -47,9 +47,9 @@ describe("shop menu buttons", () => {
             expect(mockScene.add.gelButton).toHaveBeenCalledTimes(2);
         });
         test("distributes them along the Y of bounds", () => {
-            expect(mockScene.add.gelButton.mock.calls[0][0]).toBe(500);
+            expect(mockScene.add.gelButton.mock.calls[0][0]).toBe(900);
             expect(mockScene.add.gelButton.mock.calls[0][1]).toBe(322);
-            expect(mockScene.add.gelButton.mock.calls[1][0]).toBe(500);
+            expect(mockScene.add.gelButton.mock.calls[1][0]).toBe(900);
             expect(mockScene.add.gelButton.mock.calls[1][1]).toBe(472);
         });
         test("gives them appropriate config", () => {
