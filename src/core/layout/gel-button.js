@@ -9,6 +9,7 @@ import { gmi } from "../gmi/gmi.js";
 import { assetPath } from "./asset-paths.js";
 import { Indicator } from "./gel-indicator.js";
 import { getMetrics } from "../scaler.js";
+import { CAMERA_X, CAMERA_Y } from "./metrics.js";
 
 const defaults = {
     shiftX: 0,
@@ -91,8 +92,8 @@ export class GelButton extends Phaser.GameObjects.Container {
 
     getHitAreaBounds() {
         const scale = this.parentContainer?.scale ?? 1;
-        const x = this.parentContainer?.x ?? 0;
-        const y = this.parentContainer?.y ?? 0;
+        const x = this.parentContainer?.x ?? -CAMERA_X;
+        const y = this.parentContainer?.y ?? -CAMERA_Y;
 
         const width = this.input.hitArea.width * scale * this.scale;
         const height = this.input.hitArea.height * scale * this.scale;
