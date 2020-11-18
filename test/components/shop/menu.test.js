@@ -6,7 +6,6 @@
  */
 import { createMenu } from "../../../src/components/shop/menu.js";
 import * as buttons from "../../../src/components/shop/menu-buttons.js";
-import * as layout from "../../../src/components/shop/shop-layout.js";
 
 describe("shop menu", () => {
     let menu;
@@ -37,7 +36,7 @@ describe("shop menu", () => {
     buttons.createMenuButtons = jest.fn().mockReturnValue(mockGelButtons);
     buttons.resizeGelButtons = jest.fn();
 
-    beforeEach(() => menu = createMenu(mockScene, mockConfig, mockSafeArea));
+    beforeEach(() => (menu = createMenu(mockScene, mockConfig, mockSafeArea)));
     afterEach(() => jest.clearAllMocks());
 
     describe("createMenu()", () => {

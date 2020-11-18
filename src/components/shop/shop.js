@@ -37,10 +37,10 @@ export class Shop extends Screen {
 
         this.title = createTitle(this, metrics, safeArea);
         this.balance = createBalance(this, metrics, safeArea);
-        
+
         const confirm = createConfirm(this, this.config, safeArea);
 
-        this.confirmTransaction = confirm.transact
+        this.confirmTransaction = confirm.transact;
 
         this.panes = {
             top: createMenu(this, this.config.menu, safeArea),
@@ -49,7 +49,7 @@ export class Shop extends Screen {
             confirm,
         };
         this.setVisiblePane("top");
-        // this.setVisiblePane("confirm");
+        // this.setVisiblePane("confirm"); // ph
 
         this.setupEvents();
     }

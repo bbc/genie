@@ -5,7 +5,11 @@
  * @license Apache-2.0 Apache-2.0
  */
 
-import { createMenuButtons, createConfirmButtons, resizeGelButtons } from "../../../src/components/shop/menu-buttons.js";
+import {
+    createMenuButtons,
+    createConfirmButtons,
+    resizeGelButtons,
+} from "../../../src/components/shop/menu-buttons.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as a11y from "../../../src/core/accessibility/accessibilify.js";
 
@@ -39,7 +43,7 @@ describe("shop menu buttons", () => {
     a11y.accessibilify = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
-    
+
     describe("createMenuButtons()", () => {
         beforeEach(() => (buttons = createMenuButtons(mockScene, mockInnerBounds, mockConfig, yOffset)));
         test("adds two gel buttons", () => {
