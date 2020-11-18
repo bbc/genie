@@ -42,7 +42,7 @@ const createEvents = (group, config) => {
     return eventBus.subscribe({
         channel: settingsChannel,
         name: config.eventName,
-        callback,
+        callback: () => callback,
     });
 };
 
