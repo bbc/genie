@@ -75,7 +75,7 @@ describe("Scrollable List Buttons", () => {
                 channel: "mockChannel",
                 gameButton: true,
                 group: "shop",
-                id: "scroll_button_mockId",
+                id: "scroll_button_mockId_shop",
                 key: "itemBackground",
                 scene: "mockScene",
                 scrollable: true,
@@ -86,7 +86,7 @@ describe("Scrollable List Buttons", () => {
         test("subscribes to the event bus", () => {
             const args = eventBus.subscribe.mock.calls[0][0];
             expect(args.channel).toEqual("mockChannel");
-            expect(args.name).toEqual("scroll_button_mockId");
+            expect(args.name).toEqual("scroll_button_mockId_shop");
             const callback = handlers.handleClickIfVisible.mock.calls[0][2];
             callback();
             expect(mockCallback).toHaveBeenCalled();
