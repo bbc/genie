@@ -13,6 +13,7 @@ import { createBalance } from "./balance-ui.js";
 import { createMenu } from "./menu.js";
 import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 import { eventBus } from "../../core/event-bus.js";
+import { createConfirm } from "./confirm.js";
 
 export class Shop extends Screen {
     preload() {
@@ -37,10 +38,13 @@ export class Shop extends Screen {
         this.title = createTitle(this, metrics, safeArea);
         this.balance = createBalance(this, metrics, safeArea);
 
+        const confirm = createConfirm(this, this.config, safeArea);
+
         this.panes = {
             top: createMenu(this, this.config.menu, safeArea),
             shop: new ScrollableList(this, "shop"),
             manage: new ScrollableList(this, "manage"),
+            confirm,
         };
         this.setVisiblePane("top");
 
