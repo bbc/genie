@@ -7,7 +7,7 @@
 
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
-import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../../core/layout/metrics.js";
+import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -29,7 +29,7 @@ export const createGelButtons = (scene, bounds, config, yOffset) =>
             scene: "shop",
         };
         const { x, y } = getButtonPosition(bounds, idx, yOffset);
-        const gelButton = scene.add.gelButton(x + CANVAS_WIDTH / 2, y + CANVAS_HEIGHT / 2, buttonConfig);
+        const gelButton = scene.add.gelButton(x + CAMERA_X, y + CAMERA_Y, buttonConfig);
         const callback = () => scene.setVisiblePane(buttonConfig.title.toLowerCase());
         eventBus.subscribe({
             callback,
@@ -45,8 +45,8 @@ export const createGelButtons = (scene, bounds, config, yOffset) =>
 export const resizeGelButtons = (buttons, bounds, innerBounds, buttonsRight) => {
     buttons.forEach((button, idx) => {
         const { y } = getButtonPosition(innerBounds, idx, 0);
-        button.setY(CANVAS_HEIGHT / 2 + (bounds.height / 2 + bounds.y) + y);
-        button.setX(buttonsRight ? innerBounds.x + CANVAS_WIDTH / 2 : -innerBounds.x + CANVAS_WIDTH / 2);
+        button.setY(CAMERA_Y + (bounds.height / 2 + bounds.y) + y);
+        button.setX(buttonsRight ? innerBounds.x + CAMERA_X : -innerBounds.x + CAMERA_X);
         button.setScale(getScale(innerBounds, button));
     });
 };
