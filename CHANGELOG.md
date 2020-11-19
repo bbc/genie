@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Fixes bug with accessible elements appearing in the wrong place with gel buttons on the debug screens. |
 | | Collections now merge properties and union with local storage.  |
 | | Add shop demo screen in debug mode |
 | | Buttons within the 4/3 area now sit exactly on the edge. |
