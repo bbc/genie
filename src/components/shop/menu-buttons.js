@@ -7,8 +7,9 @@
 
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
-import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../../core/layout/metrics.js";
+import { CANVAS_WIDTH, CANVAS_HEIGHT, CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import fp from "../../../lib/lodash/fp/fp.js";
+// import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -47,8 +48,8 @@ const makeButton = (scene, config, buttonConfig, bounds, idx, offset, callback) 
 export const resizeGelButtons = (buttons, bounds, innerBounds, buttonsRight) => {
     buttons.forEach((button, idx) => {
         const { y } = getButtonPosition(innerBounds, idx, 0);
-        button.setY(CANVAS_HEIGHT / 2 + (bounds.height / 2 + bounds.y) + y);
-        button.setX(buttonsRight ? innerBounds.x + CANVAS_WIDTH / 2 : -innerBounds.x + CANVAS_WIDTH / 2);
+        button.setY(CAMERA_Y + (bounds.height / 2 + bounds.y) + y);
+        button.setX(buttonsRight ? innerBounds.x + CAMERA_X : -innerBounds.x + CAMERA_X);
         button.setScale(getScale(innerBounds, button));
     });
 };
