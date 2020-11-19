@@ -7,9 +7,8 @@
 
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
-import { CANVAS_WIDTH, CANVAS_HEIGHT, CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
+import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import fp from "../../../lib/lodash/fp/fp.js";
-// import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -33,7 +32,7 @@ export const createConfirmButtons = (scene, bounds, config, yOffset) =>
 
 const makeButton = (scene, config, buttonConfig, bounds, idx, offset, callback) => {
     const { x, y } = getButtonPosition(bounds, idx, offset);
-    const gelButton = scene.add.gelButton(x + CANVAS_WIDTH / 2, y + CANVAS_HEIGHT / 2, buttonConfig);
+    const gelButton = scene.add.gelButton(x + CAMERA_X, y + CAMERA_Y, buttonConfig);
     eventBus.subscribe({
         callback,
         channel: buttonConfig.channel,
