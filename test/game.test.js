@@ -468,11 +468,6 @@ describe("Game", () => {
                 expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0, levelId: "Hard level" });
             });
 
-            test("saves data from the game when the continue text is clicked", () => {
-                continueTextClickedOn.mock.calls[0][1]();
-                expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0, levelId: "Hard level" });
-            });
-
             test("saves levelId from the game when the continue button is clicked", () => {
                 continueButtonClickedOn.mock.calls[0][1]();
                 expect(game.transientData.results.levelId).toEqual("Hard level");
@@ -480,11 +475,6 @@ describe("Game", () => {
 
             test("navigates to the next screen when the continue button image is clicked", () => {
                 continueButtonClickedOn.mock.calls[0][1]();
-                expect(game.navigation.next).toHaveBeenCalled();
-            });
-
-            test("navigates to the next screen when the continue text is clicked", () => {
-                continueTextClickedOn.mock.calls[0][1]();
                 expect(game.navigation.next).toHaveBeenCalled();
             });
 

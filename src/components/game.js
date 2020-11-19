@@ -89,11 +89,7 @@ export class Game extends Screen {
             .on("pointerup", () => onLevelComplete());
         continueButton.config = { id: 4, ariaLabel: "Continue" };
         accessibilify(continueButton);
-        this.add
-            .text(300, 20, "Continue", buttonTextStyle)
-            .setOrigin(0.5)
-            .setInteractive({ useHandCursor: true })
-            .on("pointerup", () => onLevelComplete());
+        this.add.text(300, 20, "Continue", buttonTextStyle).setOrigin(0.5);
 
         const onLevelComplete = () => {
             const { id, title } = this.transientData["level-select"].choice;
