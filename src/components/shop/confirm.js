@@ -16,7 +16,7 @@ export const createConfirm = (scene, config, bounds) => {
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(bounds, buttonsRight));
     const yOffset = bounds.height / 2 + bounds.y;
 
-    confirmContainer.buttons = createConfirmButtons(scene, innerBounds, config, yOffset); // hard coded value nono
+    confirmContainer.buttons = createConfirmButtons(scene, innerBounds, config, yOffset);
 
     confirmContainer.add([
         createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
@@ -24,7 +24,7 @@ export const createConfirm = (scene, config, bounds) => {
         createRect(scene, innerBounds, 0x0000ff),
         scene.add.text(innerBounds.x, promptY(bounds), config.confirm.prompts.buy, styleDefaults).setOrigin(0.5),
         scene.add.text(innerBounds.x + 20, currencyY(bounds), "1000", styleDefaults).setOrigin(0.5),
-        scene.add.image(innerBounds.x - 20, currencyY(bounds), "shop.balanceIcon"),
+        scene.add.image(innerBounds.x - 20, currencyY(bounds), `${config.assetPrefix}.${config.balance.icon.key}`),
         ...itemView(scene, undefined, config, bounds),
     ]);
 

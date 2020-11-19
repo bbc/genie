@@ -11,7 +11,6 @@ import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../../core/layout/metrics.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const styleDefaults = {
-    // can drop this in config?
     fontFamily: "ReithSans",
     fontSize: "16px",
     resolution: 5,

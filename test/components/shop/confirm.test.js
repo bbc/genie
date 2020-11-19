@@ -31,6 +31,7 @@ describe("createConfirm()", () => {
             },
             detailView: false,
         },
+        balance: { icon: { key: "balanceIcon" } },
     };
     const mockBounds = { height: 100, y: 5 };
     buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
