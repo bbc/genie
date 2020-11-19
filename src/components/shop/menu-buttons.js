@@ -18,7 +18,8 @@ const styleDefaults = {
 export const createMenuButtons = (scene, bounds, config, yOffset) =>
     ["Shop", "Manage"].map((button, idx) => {
         const buttonConfig = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, scene, config);
-        const callback = () => scene.setVisiblePane(button.toLowerCase());
+        // const callback = () => scene.setVisiblePane(button.toLowerCase());
+        const callback = () => scene.stack(button.toLowerCase());
         return makeButton(scene, config, buttonConfig, bounds, idx, yOffset, callback);
     });
 

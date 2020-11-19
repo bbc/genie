@@ -8,7 +8,6 @@
 import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect } from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
-import fp from "../../../lib/lodash/fp/fp.js";
 
 export const createConfirm = (scene, config, bounds) => {
     const { buttonsRight } = config.menu;
@@ -22,7 +21,7 @@ export const createConfirm = (scene, config, bounds) => {
     const yOffset = bounds.height / 2 + bounds.y;
 
     confirmContainer.setY(yOffset);
-    confirmContainer.handleClick = handleClick(confirmContainer);
+    confirmContainer.handleClick = handleClick(scene, confirmContainer);
     confirmContainer.buttons = createConfirmButtons(scene, innerBounds, config, yOffset, confirmContainer.handleClick);
 
     confirmContainer.elems = {
@@ -53,20 +52,12 @@ export const createConfirm = (scene, config, bounds) => {
     return confirmContainer;
 };
 
-const handleClick = container => button => {
-    transact(button, container);
+const handleClick = (scene, container) => button => {
+    button === "Confirm" && confirm(container);
+    scene.back();
 };
-
-const transact = fp.cond([
-    [(b, _) => b === "Confirm", (_, c) => confirm(c)],
-    [(b, _) => b === "Cancel", (_, c) => cancel(c)],
-]);
 
 const confirm = container => container.transaction && doTransaction(container.transaction);
-
-const cancel = container => {
-    console.log("cancel");
-};
 
 const update = (scene, container) => (item, title) => {
     container.removeAll(false);
@@ -88,8 +79,9 @@ const populate = container =>
     ]);
 
 const prepTransaction = (scene, container) => (item, title) => {
+    console.log('BEEBUG: prepTx with item, title', item, title);
     container.update(item, title);
-    scene.setVisiblePane("confirm");
+    scene.stack("confirm");
 };
 
 const itemView = (scene, item, config, bounds) =>
