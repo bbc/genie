@@ -7,6 +7,8 @@
 
 import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect } from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
+import { doTransaction } from "./transact.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 export const createConfirm = (scene, config, bounds) => {
     const { buttonsRight } = config.menu;
@@ -20,7 +22,8 @@ export const createConfirm = (scene, config, bounds) => {
     const yOffset = bounds.height / 2 + bounds.y;
 
     confirmContainer.setY(yOffset);
-    confirmContainer.buttons = createConfirmButtons(scene, innerBounds, config, yOffset);
+    confirmContainer.handleClick = handleClick(confirmContainer);
+    confirmContainer.buttons = createConfirmButtons(scene, innerBounds, config, yOffset, confirmContainer.handleClick);
 
     confirmContainer.elems = {
         background: [
@@ -29,7 +32,7 @@ export const createConfirm = (scene, config, bounds) => {
             createRect(scene, innerBounds, 0x0000ff),
         ],
         prompt: scene.add
-            .text(innerBounds.x, promptY(bounds), config.confirm.prompts.buy, styleDefaults)
+            .text(innerBounds.x, promptY(bounds), config.confirm.prompts.shop, styleDefaults)
             .setOrigin(0.5),
         price: scene.add.text(innerBounds.x + 20, currencyY(bounds), "1000", styleDefaults).setOrigin(0.5),
         priceIcon: scene.add.image(
@@ -50,12 +53,28 @@ export const createConfirm = (scene, config, bounds) => {
     return confirmContainer;
 };
 
-const update = (scene, container) => item => {
-    // console.log("updating with ", item);
-    // needs the prompt too
+const handleClick = container => button => {
+    transact(button, container);
+};
+
+const transact = fp.cond([
+    [(b, _) => b === "Confirm", (_, c) => confirm(c)],
+    [(b, _) => b === "Cancel", (_, c) => cancel(c)],
+]);
+
+const confirm = container => container.transaction && doTransaction(container.transaction);
+
+const cancel = container => {
+    console.log("cancel");
+};
+
+const update = (scene, container) => (item, title) => {
     container.removeAll(false);
-    container.elems.price.setText(item.price);
+    container.elems.prompt.setText(container.config.confirm.prompts[title]);
+    container.elems.priceIcon.setVisible(title === "shop");
+    container.elems.price.setText(title === "shop" ? item.price : "");
     container.elems.item = itemView(scene, item, container.config, container.memoisedBounds);
+    container.transaction = { item, title };
     populate(container);
 };
 
@@ -68,8 +87,8 @@ const populate = container =>
         ...container.elems.item,
     ]);
 
-const prepTransaction = (scene, container) => item => {
-    container.update(item);
+const prepTransaction = (scene, container) => (item, title) => {
+    container.update(item, title);
     scene.setVisiblePane("confirm");
 };
 
