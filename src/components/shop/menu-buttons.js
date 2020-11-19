@@ -8,6 +8,7 @@
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
+import fp from "../../../lib/lodash/fp/fp.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -15,32 +16,33 @@ const styleDefaults = {
     resolution: 5,
 };
 
-export const createGelButtons = (scene, bounds, config, yOffset) =>
+export const createMenuButtons = (scene, bounds, config, yOffset) =>
     ["Shop", "Manage"].map((button, idx) => {
-        const buttonConfig = {
-            title: button,
-            gameButton: true,
-            accessibilityEnabled: true,
-            ariaLabel: button,
-            channel: "shop",
-            group: scene.scene.key,
-            id: `${button.toLowerCase()}_menu_button`,
-            key: config.assetKeys.buttonBackground,
-            scene: "shop",
-        };
-        const { x, y } = getButtonPosition(bounds, idx, yOffset);
-        const gelButton = scene.add.gelButton(x + CAMERA_X, y + CAMERA_Y, buttonConfig);
-        const callback = () => scene.setVisiblePane(buttonConfig.title.toLowerCase());
-        eventBus.subscribe({
-            callback,
-            channel: buttonConfig.channel,
-            name: buttonConfig.id,
-        });
-        setButtonOverlays(scene, gelButton, buttonConfig.title, config);
-        accessibilify(gelButton);
-        gelButton.setScale(getScale(bounds, gelButton));
-        return gelButton;
+        const buttonConfig = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, scene, config);
+        const callback = () => scene.setVisiblePane(button.toLowerCase());
+        return makeButton(scene, config, buttonConfig, bounds, idx, yOffset, callback);
     });
+
+export const createConfirmButtons = (scene, bounds, config, yOffset) =>
+    ["Confirm", "Cancel"].map((button, idx) => {
+        const buttonConfig = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, scene, config);
+        const callback = fp.noop; // PH
+        return makeButton(scene, config, buttonConfig, bounds, idx, yOffset, callback);
+    });
+
+const makeButton = (scene, config, buttonConfig, bounds, idx, offset, callback) => {
+    const { x, y } = getButtonPosition(bounds, idx, offset);
+    const gelButton = scene.add.gelButton(x + CAMERA_X, y + CAMERA_Y, buttonConfig);
+    eventBus.subscribe({
+        callback,
+        channel: buttonConfig.channel,
+        name: buttonConfig.id,
+    });
+    setButtonOverlays(scene, gelButton, buttonConfig.title, config);
+    accessibilify(gelButton);
+    gelButton.setScale(getScale(bounds, gelButton));
+    return gelButton;
+};
 
 export const resizeGelButtons = (buttons, bounds, innerBounds, buttonsRight) => {
     buttons.forEach((button, idx) => {
@@ -51,10 +53,22 @@ export const resizeGelButtons = (buttons, bounds, innerBounds, buttonsRight) => 
     });
 };
 
+const getButtonConfig = (button, id, scene, config) => ({
+    title: button,
+    gameButton: true,
+    accessibilityEnabled: true,
+    ariaLabel: button,
+    channel: "shop",
+    group: scene.scene.key,
+    id,
+    key: config.assetKeys.buttonBackground,
+    scene: "shop",
+});
+
 const getButtonPosition = (containerBounds, idx, yOffset) => {
     const { x, y, height } = containerBounds;
     return {
-        x: -x,
+        x,
         y: y - height / 4 + (idx * height) / 2 + yOffset,
     };
 };

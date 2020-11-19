@@ -8,10 +8,10 @@ import { Shop } from "../../../src/components/shop/shop.js";
 import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance-ui.js";
-// import * as titles from "../../../src/components/select/titles.js";
 import * as titles from "../../../src/components/shop/shop-titles.js";
 import * as uiScaler from "../../../src/components/shop/shop-layout.js";
 import * as menu from "../../../src/components/shop/menu.js";
+import * as confirm from "../../../src/components/shop/confirm.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 
 jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
@@ -60,6 +60,7 @@ describe("Shop", () => {
     const mockSafeArea = { foo: "bar " };
     const mockButtonConfig = { channel: "foo", key: "bar", action: "baz" };
     const mockMenu = { setVisible: jest.fn(), resize: jest.fn() };
+    const mockConfirm = { setVisible: jest.fn(), resize: jest.fn() };
     const mockTitles = { setTitleText: jest.fn(), setScale: jest.fn(), setPosition: jest.fn() };
 
     beforeEach(() => {
@@ -82,6 +83,7 @@ describe("Shop", () => {
         ScrollableList.mockImplementation(() => mockScrollableList);
         balance.createBalance = jest.fn().mockReturnValue(mockContainer);
         titles.createTitle = jest.fn().mockReturnValue(mockTitles);
+        confirm.createConfirm = jest.fn().mockReturnValue(mockConfirm);
         uiScaler.getScaleFactor = jest.fn();
         uiScaler.getYPos = jest.fn();
         menu.createMenu = jest.fn().mockReturnValue(mockMenu);
@@ -145,6 +147,7 @@ describe("Shop", () => {
         });
         test("sets visibility of its panes", () => {
             expect(mockMenu.setVisible).toHaveBeenCalledWith(true);
+            expect(mockConfirm.setVisible).toHaveBeenCalledWith(false);
             expect(mockScrollableList.setVisible).toHaveBeenCalledTimes(2);
         });
 

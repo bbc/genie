@@ -33,7 +33,7 @@ describe("shop menu", () => {
     const mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
     const mockGelButton = { input: { enabled: true }, visible: true, accessibleElement: { update: jest.fn() } };
     const mockGelButtons = [mockGelButton, mockGelButton];
-    buttons.createGelButtons = jest.fn().mockReturnValue(mockGelButtons);
+    buttons.createMenuButtons = jest.fn().mockReturnValue(mockGelButtons);
     buttons.resizeGelButtons = jest.fn();
 
     beforeEach(() => (menu = createMenu(mockScene, mockConfig, mockSafeArea)));
