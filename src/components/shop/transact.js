@@ -10,9 +10,9 @@ import fp from "../../../lib/lodash/fp/fp.js";
 export const doTransaction = transaction =>
     fp.cond([
         [tx => tx.title === "shop", tx => buy(tx)],
-        [tx => tx.title === "manage", tx => equip(tx)],
+        // [tx => tx.title === "manage", tx => equip(tx)],
     ])(transaction);
 
 export const buy = () => console.log("buying");
 
-export const equip = () => console.log("equipping");
+// export const equip = () => console.log("equipping");
