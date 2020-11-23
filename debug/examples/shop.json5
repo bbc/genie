@@ -59,7 +59,7 @@
         detailView: true, // true yields a smaller image and more text
         prompts: {
             shop: "Purchase this item?",
-            manage: "Do you want to equip this item?",
+            manage: "Do you want to \nequip this item?",
         },
     },
     styleDefaults: {

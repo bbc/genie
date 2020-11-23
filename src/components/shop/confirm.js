@@ -102,15 +102,11 @@ const itemDetailView = (scene, item, config, bounds) => {
     const x = imageX(config, bounds);
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(config, item));
     itemImage.setScale(bounds.height / 3 / itemImage.height);
-    const itemTitle = scene.add
-        .text(x, 0, getItemTitle(item), config.styleDefaults)
-        .setOrigin(0.5);
+    const itemTitle = scene.add.text(x, 0, getItemTitle(item), config.styleDefaults).setOrigin(0.5);
     const itemDescription = scene.add
         .text(x, descriptionY(bounds), getItemDescription(item), config.styleDefaults)
         .setOrigin(0.5);
-    const itemBlurb = scene.add
-        .text(x, blurbY(bounds), getItemBlurb(item), config.styleDefaults, 0)
-        .setOrigin(0.5);
+    const itemBlurb = scene.add.text(x, blurbY(bounds), getItemBlurb(item), config.styleDefaults, 0).setOrigin(0.5);
     return [itemImage, itemTitle, itemDescription, itemBlurb];
 };
 
