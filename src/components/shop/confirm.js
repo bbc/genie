@@ -99,18 +99,18 @@ const itemImageView = (scene, item, config, bounds) => {
 };
 
 const itemDetailView = (scene, item, config, bounds) => {
-    const itemImage = scene.add.image(imageX(config, bounds), imageY(bounds), assetKey(config, item));
+    const x = imageX(config, bounds);
+    const itemImage = scene.add.image(x, imageY(bounds), assetKey(config, item));
     itemImage.setScale(bounds.height / 3 / itemImage.height);
     const itemTitle = scene.add
-        .text(imageX(config, bounds), 0, getItemTitle(item), config.styleDefaults)
+        .text(x, 0, getItemTitle(item), config.styleDefaults)
         .setOrigin(0.5);
     const itemDescription = scene.add
-        .text(imageX(config, bounds), descriptionY(bounds), getItemDescription(item), config.styleDefaults)
+        .text(x, descriptionY(bounds), getItemDescription(item), config.styleDefaults)
         .setOrigin(0.5);
     const itemBlurb = scene.add
-        .text(imageX(config, bounds), blurbY(bounds), getItemBlurb(item), config.styleDefaults, 0)
+        .text(x, blurbY(bounds), getItemBlurb(item), config.styleDefaults, 0)
         .setOrigin(0.5);
-    // return [itemImage, itemTitle, itemDescription];
     return [itemImage, itemTitle, itemDescription, itemBlurb];
 };
 
