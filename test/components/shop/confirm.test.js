@@ -106,9 +106,9 @@ describe("createConfirm()", () => {
             confirmPane = createConfirm(mockScene, mockConfig, mockBounds);
         });
         test("adds extra placeholder text objects", () => {
-            expect(mockScene.add.text).toHaveBeenCalledTimes(4);
+            expect(mockScene.add.text).toHaveBeenCalledTimes(5);
             const containerContents = mockContainer.add.mock.calls[0][0];
-            expect(containerContents.slice(-3)).toStrictEqual([mockImage, mockText, mockText]);
+            expect(containerContents.slice(-4)).toStrictEqual([mockImage, mockText, mockText, mockText]);
         });
     });
 

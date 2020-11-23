@@ -66,6 +66,7 @@
         fontFamily: "ReithSans",
         fontSize: "24px",
         resolution: 5,
+        align: "center",
     },
     menu: {
         buttonsRight: true, // set as false to X-flip the menu layout

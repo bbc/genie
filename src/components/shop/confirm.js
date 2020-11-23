@@ -107,16 +107,22 @@ const itemDetailView = (scene, item, config, bounds) => {
     const itemDescription = scene.add
         .text(imageX(config, bounds), descriptionY(bounds), getItemDescription(item), config.styleDefaults)
         .setOrigin(0.5);
-    return [itemImage, itemTitle, itemDescription];
+    const itemBlurb = scene.add
+        .text(imageX(config, bounds), blurbY(bounds), getItemBlurb(item), config.styleDefaults, 0)
+        .setOrigin(0.5);
+    // return [itemImage, itemTitle, itemDescription];
+    return [itemImage, itemTitle, itemDescription, itemBlurb];
 };
 
 const getItemTitle = item => (item ? item.title : "Item Default Title");
 const getItemDescription = item => (item ? item.description : "Item Default Description");
+const getItemBlurb = item => (item ? item.longDescription : "");
 const assetKey = (config, item) => (item ? `${config.assetPrefix}.${item.icon}` : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
 const promptY = outerBounds => -outerBounds.height / 2 + outerBounds.height / 8;
 const currencyY = outerBounds => -outerBounds.height / 2 + outerBounds.height / 4;
-const descriptionY = bounds => bounds.height / 5;
+const descriptionY = bounds => bounds.height / 8;
+const blurbY = bounds => bounds.height / 3;
 const getOffsetBounds = (outerBounds, innerBounds) => ({
     ...innerBounds,
     y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
