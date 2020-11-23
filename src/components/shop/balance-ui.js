@@ -40,6 +40,8 @@ export const createBalance = (scene, metrics, safeArea) => {
 
     container.setScale(getScaleFactor({ metrics, container, safeArea }));
     container.setPosition(getXPos(container, safeArea, scene.config.listPadding.x), getYPos(metrics, safeArea));
+    container.setText = bal => value.setText(bal);
+    container.getValue = () => parseInt(value.text, 10);
 
     return container;
 };

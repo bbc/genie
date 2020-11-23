@@ -9,7 +9,7 @@ import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect }
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
 
-export const createConfirm = (scene, config, bounds) => {
+export const createConfirm = (scene, config, bounds, balance) => {
     const { buttonsRight } = config.menu;
     const { styleDefaults } = config;
 
@@ -49,18 +49,19 @@ export const createConfirm = (scene, config, bounds) => {
     confirmContainer.update = update(scene, confirmContainer);
     confirmContainer.prepTransaction = prepTransaction(scene, confirmContainer);
     confirmContainer.doTransaction = doTransaction(scene);
+    confirmContainer.setBalance = bal => balance.setText(bal);
+    confirmContainer.getBalance = () => balance.getValue();
 
     return confirmContainer;
 };
 
 const handleClick = (scene, container) => button => {
-    button === "Confirm" && confirm(container);
+    const cost = button === "Confirm" && confirm(container);
+    cost && container.setBalance(container.getBalance() - cost);
     scene.back();
 };
 
-const confirm = container => {
-    container.transaction && container.doTransaction(container.transaction);
-};
+const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
 const update = (scene, container) => (item, title) => {
     container.removeAll(false);

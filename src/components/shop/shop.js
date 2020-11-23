@@ -39,7 +39,7 @@ export class Shop extends Screen {
         this.title = createTitle(this, metrics, safeArea);
         this.balance = createBalance(this, metrics, safeArea);
 
-        const confirm = createConfirm(this, this.config, safeArea);
+        const confirm = createConfirm(this, this.config, safeArea, this.balance);
 
         this.panes = {
             top: createMenu(this, this.config.menu, safeArea),

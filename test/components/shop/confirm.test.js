@@ -37,6 +37,7 @@ describe("createConfirm()", () => {
         },
         balance: { icon: { key: "balanceIcon" } },
     };
+    const mockBalance = { setText: jest.fn(), getValue: jest.fn() };
     const mockBounds = { height: 100, y: 5 };
     buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
     const setVisibleFn = jest.fn();
@@ -45,10 +46,10 @@ describe("createConfirm()", () => {
     layout.resize = jest.fn().mockReturnValue(resizeFn);
     layout.createRect = jest.fn().mockReturnValue(mockRect);
     layout.getInnerRectBounds = jest.fn().mockReturnValue({ x: 0, y: 0, width: 100, height: 100 });
-    const mockDoTransactionFn = jest.fn();
+    let mockDoTransactionFn = jest.fn().mockReturnValueOnce(37).mockReturnValue(undefined);
     transact.doTransaction = jest.fn().mockReturnValue(mockDoTransactionFn);
 
-    beforeEach(() => (confirmPane = createConfirm(mockScene, mockConfig, mockBounds)));
+    beforeEach(() => (confirmPane = createConfirm(mockScene, mockConfig, mockBounds, mockBalance)));
 
     afterEach(() => jest.clearAllMocks());
 
@@ -60,6 +61,12 @@ describe("createConfirm()", () => {
         expect(setVisibleFn).toHaveBeenCalled();
         confirmPane.resize();
         expect(resizeFn).toHaveBeenCalled();
+    });
+    test("with setBalance and getBalance functions", () => {
+        confirmPane.getBalance();
+        expect(mockBalance.getValue).toHaveBeenCalled();
+        confirmPane.setBalance(37);
+        expect(mockBalance.setText).toHaveBeenCalledWith(37);
     });
     test("with background rects derived from layout functions", () => {
         expect(layout.createRect).toHaveBeenCalledTimes(3);
@@ -142,15 +149,21 @@ describe("createConfirm()", () => {
 
     describe(".handleClick()", () => {
         beforeEach(() => (confirmPane.transaction = { foo: "bar" }));
-        test("when called with 'Confirm', performs the transaction and calls back()", () => {
+        test("when called with 'Confirm', performs the transaction, sets balance, and calls back()", () => {
             confirmPane.handleClick("Confirm");
             expect(mockDoTransactionFn).toHaveBeenCalledWith(confirmPane.transaction);
+            expect(mockBalance.setText).toHaveBeenCalled();
             expect(mockScene.back).toHaveBeenCalled();
         });
-        test("otherwise, just calls back()", () => {
+        test("does not set the balance if the tx fails", () => {
+            confirmPane.handleClick("Confirm");
+            expect(mockDoTransactionFn).toHaveBeenCalledWith(confirmPane.transaction);
+            expect(mockBalance.setText).not.toHaveBeenCalled();
+            expect(mockScene.back).toHaveBeenCalled();
+        });
+        test("just calls back() otherwise", () => {
             confirmPane.handleClick("whatevs");
             expect(mockDoTransactionFn).not.toHaveBeenCalled();
-
             expect(mockScene.back).toHaveBeenCalled();
         });
     });
