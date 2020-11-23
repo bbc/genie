@@ -45,7 +45,8 @@ describe("createConfirm()", () => {
     layout.resize = jest.fn().mockReturnValue(resizeFn);
     layout.createRect = jest.fn().mockReturnValue(mockRect);
     layout.getInnerRectBounds = jest.fn().mockReturnValue({ x: 0, y: 0, width: 100, height: 100 });
-    transact.doTransaction = jest.fn();
+    const mockDoTransactionFn = jest.fn();
+    transact.doTransaction = jest.fn().mockReturnValue(mockDoTransactionFn);
 
     beforeEach(() => (confirmPane = createConfirm(mockScene, mockConfig, mockBounds)));
 
@@ -143,11 +144,13 @@ describe("createConfirm()", () => {
         beforeEach(() => (confirmPane.transaction = { foo: "bar" }));
         test("when called with 'Confirm', performs the transaction and calls back()", () => {
             confirmPane.handleClick("Confirm");
-            expect(transact.doTransaction).toHaveBeenCalledWith(confirmPane.transaction);
+            expect(mockDoTransactionFn).toHaveBeenCalledWith(confirmPane.transaction);
             expect(mockScene.back).toHaveBeenCalled();
         });
         test("otherwise, just calls back()", () => {
             confirmPane.handleClick("whatevs");
+            expect(mockDoTransactionFn).not.toHaveBeenCalled();
+
             expect(mockScene.back).toHaveBeenCalled();
         });
     });

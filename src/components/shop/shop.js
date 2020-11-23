@@ -95,7 +95,7 @@ export class Shop extends Screen {
         eventBus.removeSubscription(this.backMessage);
         eventBus.subscribe(this.customMessage);
     }
-    
+
     useOriginalMessage() {
         eventBus.removeSubscription(this.customMessage);
         eventBus.subscribe(this.backMessage);

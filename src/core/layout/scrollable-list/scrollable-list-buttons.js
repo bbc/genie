@@ -44,7 +44,7 @@ const createGelButton = (scene, item, title, state, prepTx) => {
     };
 
     const callback = () => prepTx(item, title);
-    
+
     eventBus.subscribe({
         callback: handleClickIfVisible(gelButton, scene, callback),
         channel: gelConfig.channel,

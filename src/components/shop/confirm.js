@@ -48,6 +48,7 @@ export const createConfirm = (scene, config, bounds) => {
     confirmContainer.resize = resize(confirmContainer);
     confirmContainer.update = update(scene, confirmContainer);
     confirmContainer.prepTransaction = prepTransaction(scene, confirmContainer);
+    confirmContainer.doTransaction = doTransaction(scene);
 
     return confirmContainer;
 };
@@ -57,7 +58,9 @@ const handleClick = (scene, container) => button => {
     scene.back();
 };
 
-const confirm = container => container.transaction && doTransaction(container.transaction);
+const confirm = container => {
+    container.transaction && container.doTransaction(container.transaction);
+};
 
 const update = (scene, container) => (item, title) => {
     container.removeAll(false);

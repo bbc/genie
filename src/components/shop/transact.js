@@ -5,14 +5,16 @@
  * @license Apache-2.0
  */
 
-import fp from "../../../lib/lodash/fp/fp.js";
+import { collections } from "../../core/collections.js";
 
-export const doTransaction = transaction =>
-    fp.cond([
-        [tx => tx.title === "shop", tx => buy(tx)],
-        // [tx => tx.title === "manage", tx => equip(tx)],
-    ])(transaction);
+export const doTransaction = scene => transaction => {
+    const { shop, manage } = scene.config.paneCollections;
+    const shopCol = collections.get(shop);
+    const invCol = collections.get(manage);
+    buy(transaction, shopCol, invCol);
+};
 
-export const buy = () => console.log("buying");
-
-// export const equip = () => console.log("equipping");
+const buy = (tx, shopCol, invCol) => {
+    shopCol.set({ id: tx.item.id, state: "owned", qty: -1 });
+    invCol.set({ id: tx.item.id, qty: +1 });
+};
