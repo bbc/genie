@@ -168,49 +168,60 @@ describe("Shop", () => {
     });
     describe("setVisiblePane()", () => {
         beforeEach(() => shopScreen.create());
+        test("sets one pane visible and sets the others invisible", () => {
+            jest.clearAllMocks();
+            shopScreen.setVisiblePane("top");
+            expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
+            expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(false);
+            expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(false);
+            expect(shopScreen.panes.confirm.setVisible).toHaveBeenCalledWith(false);
+        });
+    });
+    describe("pane stacking", () => {
+        beforeEach(() => shopScreen.create());
 
-        describe("when called with 'shop'", () => {
-            beforeEach(() => shopScreen.setVisiblePane("shop"));
+        describe("stack()", () => {
+            beforeEach(() => {
+                jest.clearAllMocks();
+                shopScreen.stack("shop");
+            });
 
-            test("unsubscribes the default back button message", () => {
-                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.backMessage);
+            test("pushes a pane name onto the stack", () => {
+                expect(shopScreen.paneStack).toStrictEqual(["shop"]);
             });
-            test("resubscribes with a custom message", () => {
-                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.customMessage);
-            });
-            test("that sets the top menu visible", () => {
-                shopScreen.customMessage.callback();
-                expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
-            });
-            test("calls setVisible(true) on the shop list", () => {
+            test("sets that pane visible", () => {
                 expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(true);
             });
-            test("calls setVisible(false) on the top menu", () => {
-                expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(false);
+            test("on starting the stack, changes the event subscription", () => {
+                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.customMessage);
+                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.backMessage);
+            });
+            test("the new event sub calls back()", () => {
+                const message = eventBus.subscribe.mock.calls[0][0];
+                shopScreen.paneStack = ["foo"];
+                message.callback();
+                expect(shopScreen.paneStack).toStrictEqual([]);
             });
         });
-        describe("when called with 'manage'", () => {
-            beforeEach(() => shopScreen.setVisiblePane("manage"));
 
-            test("sets the inventory list visible instead", () => {
-                expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(true);
+        describe("back()", () => {
+            test("pops a pane name off the stack and sets the new top pane visible", () => {
+                shopScreen.paneStack = ["shop", "confirm"];
+                shopScreen.back();
+                expect(shopScreen.paneStack).toStrictEqual(["shop"]);
+                expect(shopScreen.panes.top.setVisible).toHaveBeenCalled();
             });
         });
-
-        describe("when called with 'top'", () => {
-            beforeEach(() => shopScreen.setVisiblePane("top"));
-            test("unsubscribes the back button custom message", () => {
-                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
+        describe("back() on last item in pane stack", () => {
+            beforeEach(() => {
+                shopScreen.stack("shop");
+                jest.clearAllMocks();
+                shopScreen.back();
             });
-            test("resubscribes with its original message", () => {
-                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
-            });
-            test("calls setVisible(false) on both scrollable lists", () => {
-                expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(false);
-                expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(false);
-            });
-            test("calls setVisible(true) on the top menu", () => {
+            test("on stack empty, sets top visible and change event subscription", () => {
                 expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
+                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
+                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
             });
         });
     });

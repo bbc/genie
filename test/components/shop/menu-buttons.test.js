@@ -32,6 +32,7 @@ describe("shop menu buttons", () => {
         },
         scene: { key: "mockSceneKey" },
         setVisiblePane: jest.fn(),
+        stack: jest.fn(),
     };
     const mockConfig = {
         assetKeys: { buttonIcon: "mockIconKey", buttonBackground: "mockBackgroundKey" },
@@ -78,7 +79,7 @@ describe("shop menu buttons", () => {
             expect(message.channel).toBe("shop");
             expect(message.name).toBe("shop_menu_button");
             message.callback();
-            expect(mockScene.setVisiblePane).toHaveBeenCalledWith("shop");
+            expect(mockScene.stack).toHaveBeenCalledWith("shop");
         });
         test("sets overlays for text and button icon", () => {
             expect(mockButton.overlays.set).toHaveBeenCalledTimes(4);
@@ -96,7 +97,10 @@ describe("shop menu buttons", () => {
     });
 
     describe("createConfirmButtons", () => {
-        beforeEach(() => (buttons = createConfirmButtons(mockScene, mockInnerBounds, mockConfig, yOffset)));
+        const callback = jest.fn();
+        beforeEach(() => {
+            buttons = createConfirmButtons(mockScene, mockInnerBounds, mockConfig, yOffset, callback);
+        });
 
         test("provides a slightly different config", () => {
             const expectedConfig = {
@@ -113,6 +117,11 @@ describe("shop menu buttons", () => {
             expect(mockScene.add.gelButton.mock.calls[0][2]).toStrictEqual(expectedConfig);
             const otherConfig = { ...expectedConfig, title: "Cancel", id: "tx_cancel_button", ariaLabel: "Cancel" };
             expect(mockScene.add.gelButton.mock.calls[1][2]).toStrictEqual(otherConfig);
+        });
+        test("uses the callback it was passed", () => {
+            const message = eventBus.subscribe.mock.calls[0][0];
+            message.callback();
+            expect(callback).toHaveBeenCalled();
         });
     });
 

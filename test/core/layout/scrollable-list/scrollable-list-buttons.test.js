@@ -57,26 +57,25 @@ describe("Scrollable List Buttons", () => {
     a11y.accessibilify = jest.fn();
     eventBus.subscribe = jest.fn();
     handlers.handleClickIfVisible = jest.fn();
+    const mockCallback = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
 
-    beforeEach(() => buttons.createGelButton(mockScene, mockItem, "shop", "cta"));
+    beforeEach(() => buttons.createGelButton(mockScene, mockItem, "shop", "cta", mockCallback));
 
     describe("createGelButton()", () => {
         test("adds a gel button", () => {
-            // buttons.createGelButton(mockScene, mockItem, "shop", "cta"); // DRY this test file
             expect(mockScene.add.gelButton).toHaveBeenCalled();
         });
 
         test("provides it the correct config", () => {
-            // buttons.createGelButton(mockScene, mockItem, "shop", "cta");
             const expectedConfig = {
                 accessibilityEnabled: true,
                 ariaLabel: "mockAriaLabel",
                 channel: "mockChannel",
                 gameButton: true,
                 group: "shop",
-                id: "scroll_button_mockId",
+                id: "scroll_button_mockId_shop",
                 key: "itemBackground",
                 scene: "mockScene",
                 scrollable: true,
@@ -85,14 +84,12 @@ describe("Scrollable List Buttons", () => {
         });
 
         test("subscribes to the event bus", () => {
-            // buttons.createGelButton(mockScene, mockItem, "shop", "cta");
             const args = eventBus.subscribe.mock.calls[0][0];
             expect(args.channel).toEqual("mockChannel");
-            expect(args.name).toEqual("scroll_button_mockId");
+            expect(args.name).toEqual("scroll_button_mockId_shop");
             const callback = handlers.handleClickIfVisible.mock.calls[0][2];
-            expect(mockButton.overlays.state).toBe("cta");
             callback();
-            expect(mockButton.overlays.state).toBe("actioned");
+            expect(mockCallback).toHaveBeenCalled();
         });
 
         test("scales the button", () => {

@@ -9,6 +9,7 @@ import * as shopLayout from "../../../src/components/shop/shop-layout.js";
 import { createBalance } from "../../../src/components/shop/balance-ui.js";
 
 describe("createBalance()", () => {
+    let balanceElem;
     const mockContainer = { getBounds: jest.fn(), setScale: jest.fn(), setPosition: jest.fn(), add: jest.fn() };
     const mockReturnedIcon = {
         getBounds: jest.fn().mockReturnValue({ width: 13 }),
@@ -24,6 +25,8 @@ describe("createBalance()", () => {
     const mockReturnedText = {
         setPosition: jest.fn(),
         getBounds: jest.fn().mockReturnValue({ width: 17 }),
+        setText: jest.fn(),
+        text: "43",
     };
     const mockText = { setOrigin: jest.fn().mockReturnValue(mockReturnedText) };
     const mockScene = {
@@ -63,7 +66,7 @@ describe("createBalance()", () => {
         shopLayout.getXPos = jest.fn().mockReturnValue(42);
         shopLayout.getYPos = jest.fn().mockReturnValue(69);
         shopLayout.getScaleFactor = jest.fn().mockReturnValue(3.14);
-        createBalance(mockScene, mockMetrics, mockSafeArea);
+        balanceElem = createBalance(mockScene, mockMetrics, mockSafeArea);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -106,5 +109,13 @@ describe("createBalance()", () => {
         expect(shopLayout.getXPos).toHaveBeenCalledWith(mockContainer, mockSafeArea, mockScene.config.listPadding.x);
         expect(shopLayout.getYPos).toHaveBeenCalledWith(mockMetrics, mockSafeArea);
         expect(mockContainer.setPosition).toHaveBeenCalledWith(42, 69);
+    });
+    test("exposes a setText fn that sets the text of the value text elem", () => {
+        balanceElem.setText("foo");
+        expect(mockReturnedText.setText).toHaveBeenCalledWith("foo");
+    });
+    test("exposes a getValue fn that gets the value of the value text elem as an int", () => {
+        const value = balanceElem.getValue();
+        expect(value).toBe(43);
     });
 });

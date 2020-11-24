@@ -8,7 +8,6 @@
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import fp from "../../../lib/lodash/fp/fp.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -19,14 +18,14 @@ const styleDefaults = {
 export const createMenuButtons = (scene, bounds, config, yOffset) =>
     ["Shop", "Manage"].map((button, idx) => {
         const buttonConfig = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, scene, config);
-        const callback = () => scene.setVisiblePane(button.toLowerCase());
+        const callback = () => scene.stack(button.toLowerCase());
         return makeButton(scene, config, buttonConfig, bounds, idx, yOffset, callback);
     });
 
-export const createConfirmButtons = (scene, bounds, config, yOffset) =>
+export const createConfirmButtons = (scene, bounds, config, yOffset, callbackFn) =>
     ["Confirm", "Cancel"].map((button, idx) => {
         const buttonConfig = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, scene, config);
-        const callback = fp.noop; // PH
+        const callback = () => callbackFn(button);
         return makeButton(scene, config, buttonConfig, bounds, idx, yOffset, callback);
     });
 

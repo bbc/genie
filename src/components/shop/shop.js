@@ -25,11 +25,12 @@ export class Shop extends Screen {
         this.setLayout(["back", "pause"]);
 
         this.backMessage = this.memoizeBackButton();
+        this.paneStack = [];
 
         this.customMessage = {
             channel: this.backMessage.channel,
             name: this.backMessage.name,
-            callback: () => this.setVisiblePane("top"),
+            callback: () => this.back(),
         };
 
         const metrics = getMetrics();
@@ -38,17 +39,35 @@ export class Shop extends Screen {
         this.title = createTitle(this, metrics, safeArea);
         this.balance = createBalance(this, metrics, safeArea);
 
-        const confirm = createConfirm(this, this.config, safeArea);
+        const confirm = createConfirm(this, this.config, safeArea, this.balance);
+
+        const callback = confirm.prepTransaction;
 
         this.panes = {
             top: createMenu(this, this.config.menu, safeArea),
-            shop: new ScrollableList(this, "shop"),
-            manage: new ScrollableList(this, "manage"),
+            shop: new ScrollableList(this, "shop", callback),
+            manage: new ScrollableList(this, "manage", callback),
             confirm,
         };
         this.setVisiblePane("top");
 
         this.setupEvents();
+    }
+
+    stack(pane) {
+        this.paneStack.push(pane);
+        this.setVisiblePane(pane);
+        this.paneStack.length === 1 && this.useCustomMessage();
+    }
+
+    back() {
+        this.paneStack.pop();
+        if (!this.paneStack.length) {
+            this.setVisiblePane("top");
+            this.useOriginalMessage();
+            return;
+        }
+        this.setVisiblePane(this.paneStack[this.paneStack.length - 1]);
     }
 
     memoizeBackButton() {
@@ -68,12 +87,20 @@ export class Shop extends Screen {
     }
 
     setVisiblePane(pane) {
-        eventBus.removeSubscription(pane === "top" ? this.customMessage : this.backMessage);
-        eventBus.subscribe(pane === "top" ? this.backMessage : this.customMessage);
         Object.keys(this.panes).forEach(key =>
             pane === key ? this.panes[key].setVisible(true) : this.panes[key].setVisible(false),
         );
         this.title.setTitleText(pane === "top" ? "Shop" : pane);
+    }
+
+    useCustomMessage() {
+        eventBus.removeSubscription(this.backMessage);
+        eventBus.subscribe(this.customMessage);
+    }
+
+    useOriginalMessage() {
+        eventBus.removeSubscription(this.customMessage);
+        eventBus.subscribe(this.backMessage);
     }
 
     resize() {

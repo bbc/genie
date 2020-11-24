@@ -12,8 +12,8 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 
 const STATES = ["cta", "actioned"];
 
-const createGelButton = (scene, item, context, state) => {
-    const id = `scroll_button_${item.id}`;
+const createGelButton = (scene, item, title, state, prepTx) => {
+    const id = `scroll_button_${item.id}_${title}`;
     const config = scene.config;
 
     const gelConfig = {
@@ -34,7 +34,7 @@ const createGelButton = (scene, item, context, state) => {
         ...gelButton.overlays,
         configs: {
             items: config.overlay.items,
-            options: config.overlay.options[context],
+            options: config.overlay.options[title],
         },
         setAll: setOverlays(gelButton, item),
         unsetAll: unsetOverlays(gelButton),
@@ -43,7 +43,7 @@ const createGelButton = (scene, item, context, state) => {
         toggle: toggle(gelButton),
     };
 
-    const callback = gelButton.overlays.toggle;
+    const callback = () => prepTx(item, title);
 
     eventBus.subscribe({
         callback: handleClickIfVisible(gelButton, scene, callback),

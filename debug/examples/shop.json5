@@ -58,14 +58,15 @@
     confirm: {
         detailView: true, // true yields a smaller image and more text
         prompts: {
-            buy: "Purchase this item?",
-            equip: "Do you want to equip this item?",
+            shop: "Purchase this item?",
+            manage: "Do you want to \nequip this item?",
         },
     },
     styleDefaults: {
         fontFamily: "ReithSans",
         fontSize: "24px",
         resolution: 5,
+        align: "center",
     },
     menu: {
         buttonsRight: true, // set as false to X-flip the menu layout
