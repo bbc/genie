@@ -115,8 +115,8 @@ const getItemDescription = item => (item ? item.description : "Item Default Desc
 const getItemBlurb = item => (item ? item.longDescription : "");
 const assetKey = (config, item) => (item ? `${config.assetPrefix}.${item.icon}` : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
-const promptY = outerBounds => -outerBounds.height / 2 + outerBounds.height / 8;
-const currencyY = outerBounds => -outerBounds.height / 2 + outerBounds.height / 4;
+const promptY = outerBounds => -outerBounds.height * (3 / 8);
+const currencyY = outerBounds => -outerBounds.height / 4;
 const descriptionY = bounds => bounds.height / 8;
 const blurbY = bounds => bounds.height / 3;
 const getOffsetBounds = (outerBounds, innerBounds) => ({
