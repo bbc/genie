@@ -8,6 +8,7 @@ import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handl
 import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
+import { onScaleChange } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const createPanel = (scene, title, prepTx) => {
@@ -80,6 +81,9 @@ const resizePanel = (scene, panel) => {
 };
 
 const setupEvents = (scene, panel) => {
+    const scaleEvent = onScaleChange.add(() => resizePanel(scene, panel));
+    scene.events.once("shutdown", scaleEvent.unsubscribe);
+
     scene.scale.on(
         "resize",
         fp.debounce(10, () => resizePanel(scene, panel)),

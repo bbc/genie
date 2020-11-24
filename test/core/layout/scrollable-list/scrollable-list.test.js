@@ -47,6 +47,7 @@ const mockScene = {
             label: jest.fn().mockReturnValue(mockLabel),
         },
     },
+    events: { once: jest.fn() },
     input: { topOnly: true },
     add: { image: jest.fn() },
     config: {
@@ -84,6 +85,7 @@ const mockGelButton = {
 };
 buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
+scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
 const title = "shop";
 const initState = "cta";
 const mockPrepTransaction = jest.fn();
@@ -157,6 +159,11 @@ describe("Scrollable List", () => {
                     expect(mockSizer.add).toHaveBeenCalledWith(mockGridSizer, 1, "center", 0, true);
                 });
             });
+        });
+        test("adds a resize fn to the scaler's onScaleChange", () => {
+            const callback = scaler.onScaleChange.add.mock.calls[0][0];
+            callback();
+            expect(mockScrollablePanel.layout).toHaveBeenCalled();
         });
         test("assigns a callback to scene on resize", () => {
             expect(mockScene.scale.on.mock.calls[0][0]).toBe("resize");
