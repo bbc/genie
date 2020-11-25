@@ -103,9 +103,9 @@ export class Game extends Screen {
             this.navigation.next();
         };
 
-        const markLevelAsComplete = levelTitle => {
+        const markLevelAsComplete = id => {
             const collection = collections.get(this.config.collection);
-            collection.set(levelTitle, { state: "completed" });
+            collection.set({ id, state: "completed" });
         };
 
         const tweenItem = target => {
@@ -124,21 +124,21 @@ export class Game extends Screen {
         };
 
         const increaseScores = item => {
-            if (item == "star") {
+            if (item === "star") {
                 stars++;
                 starScore.text = stars;
                 tweenItem(starImage);
                 this.sound.play("results.coin-sfx");
                 this.calculateAchievements(item, stars, achievementNames[item]);
             }
-            if (item == "gem") {
+            if (item === "gem") {
                 gems++;
                 gemScore.text = gems;
                 tweenItem(gemImage);
                 this.sound.play("results.gem-sfx");
                 this.calculateAchievements(item, gems, achievementNames[item]);
             }
-            if (item == "key") {
+            if (item === "key") {
                 keys++;
                 keyScore.text = keys;
                 tweenItem(keyImage);
