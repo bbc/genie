@@ -76,8 +76,7 @@ export class Game extends Screen {
             this.add
                 .text(-200, buttonYPosition, buttonText, buttonTextStyle)
                 .setOrigin(0.5)
-                .setInteractive({ useHandCursor: true })
-                .on("pointerup", () => increaseScores(buttonNames[index].toLowerCase()));
+                .setInteractive({ useHandCursor: true });
             button.config = { id: buttonNumber, ariaLabel: buttonText };
             accessibilify(button);
         }, this);
