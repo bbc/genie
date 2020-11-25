@@ -14,7 +14,7 @@ describe("doTransaction", () => {
     let doTransaction;
 
     const mockScene = {
-        config: { paneCollections: { shop: "foo", manage: "bar" } },
+        config: { paneCollections: { shop: "shop", manage: "manage" } },
     };
     const mockShopCol = { set: jest.fn(), get: jest.fn().mockReturnValue("baz") };
     const mockInvCol = { set: jest.fn() };
@@ -22,7 +22,7 @@ describe("doTransaction", () => {
 
     beforeEach(() => {
         doTransaction = transact.doTransaction(mockScene);
-        collections.get = jest.fn().mockReturnValueOnce(mockShopCol).mockReturnValue(mockInvCol);
+        collections.get = jest.fn().mockImplementation(type => (type === "shop" && mockShopCol) || mockInvCol);
     });
     afterEach(() => jest.clearAllMocks());
 
@@ -32,8 +32,8 @@ describe("doTransaction", () => {
             result = doTransaction(mockTx);
         });
         test("gets both collections", () => {
-            expect(collections.get).toHaveBeenCalledWith("foo");
-            expect(collections.get).toHaveBeenCalledWith("bar");
+            expect(collections.get).toHaveBeenCalledWith("shop");
+            expect(collections.get).toHaveBeenCalledWith("manage");
         });
         test("processes a buy transaction", () => {
             const expectedShopSet = { ...mockItem, state: "owned", qty: -1 };
@@ -43,6 +43,20 @@ describe("doTransaction", () => {
         });
         test("returns the price that was charged", () => {
             expect(result).toBe(50);
+        });
+    });
+    describe("when called from manage", () => {
+        beforeEach(() => {
+            mockTx = { title: "manage", item: mockItem };
+            result = doTransaction(mockTx);
+        });
+        test("only gets the inv collection", () => {
+            expect(collections.get).toHaveBeenCalledWith("manage");
+            expect(collections.get).not.toHaveBeenCalledWith("shop");
+        });
+        test("sets an 'equipped' state on the item", () => {
+            const expectedInvSet = { ...mockItem, state: "equipped" };
+            expect(mockInvCol.set.mock.calls[0][0]).toStrictEqual(expectedInvSet);
         });
     });
 });
