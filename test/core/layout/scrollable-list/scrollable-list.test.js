@@ -76,8 +76,7 @@ const mockScene = {
         },
     },
 };
-const mockCollection = { getAll: jest.fn().mockReturnValue([mockItem]) };
-catalogue.collections = { get: jest.fn().mockReturnValue(mockCollection) };
+
 const mockGelButton = {
     width: 100,
     setScale: jest.fn(),
@@ -91,8 +90,15 @@ const initState = "cta";
 const mockPrepTransaction = jest.fn();
 
 describe("Scrollable List", () => {
+    let collectionGetAll;
+    let mockCollection;
+
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
+        collectionGetAll = [mockItem];
+        mockCollection = { getAll: jest.fn(() => collectionGetAll) };
+        catalogue.collections = { get: jest.fn(() => mockCollection) };
+
         a11y.addGroupAt = jest.fn();
     });
 
@@ -125,6 +131,15 @@ describe("Scrollable List", () => {
                 test("with items from a collection in the catalogue", () => {
                     expect(catalogue.collections.get).toHaveBeenCalledWith("testCatalogue");
                     expect(mockCollection.getAll).toHaveBeenCalled();
+                });
+
+                test("no items table added if the catalogue collection is empty", () => {
+                    jest.clearAllMocks();
+                    collectionGetAll = [];
+
+                    new ScrollableList(mockScene, title, mockPrepTransaction);
+
+                    expect(mockScene.rexUI.add.gridSizer).not.toHaveBeenCalled();
                 });
             });
 
