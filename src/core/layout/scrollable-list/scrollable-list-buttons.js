@@ -8,6 +8,7 @@ import { handleClickIfVisible } from "./scrollable-list-handlers.js";
 import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
 import { accessibilify } from "../../accessibility/accessibilify.js";
+import { collections } from "../../collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const STATES = ["cta", "actioned"];
@@ -30,13 +31,15 @@ const createGelButton = (scene, item, title, state, prepTx) => {
 
     const gelButton = scene.add.gelButton(0, 0, gelConfig);
 
+    gelButton.data = item;
+
     gelButton.overlays = {
         ...gelButton.overlays,
         configs: {
             items: config.overlay.items,
             options: config.overlay.options[title],
         },
-        setAll: setOverlays(gelButton, item),
+        setAll: setOverlays(gelButton, item), // modify to 
         unsetAll: unsetOverlays(gelButton),
         state: STATES.find(st => st === state),
         toggleState: toggleState(gelButton),
@@ -63,12 +66,34 @@ const scaleButton = (gelButton, layout, space) => {
     gelButton.setScale(scaleFactor);
 };
 
+const updateButton = button => {
+    updateButtonData(button) && updateOverlays(button);
+};
+
+const updateButtonData = button => {
+    const [itemKey, title] = button.config.id.split('_').slice(-2);
+    const item = collections.get(button.scene.config.paneCollections[title]).get(itemKey);
+
+    const doUpdate = (button, data) => {
+        button.data = data;
+        return true;
+    };
+
+    return fp.isEqual(button.data, item) ? false : doUpdate(button, item);
+}
+
+const updateOverlays = button => {
+    console.log('BEEBUG: updating overlays');
+};
+
+// not sure if this is needed
 const toggle = button => () => {
     button.overlays.unsetAll();
     button.overlays.toggleState();
     button.overlays.setAll();
 };
 
+// not sure if needed
 const toggleState = button => () =>
     fp.cond([
         [btn => btn.overlays.state === "cta", btn => (btn.overlays.state = "actioned")],
@@ -86,4 +111,4 @@ const unsetOverlays = button => () => Object.keys(button.overlays.list).forEach(
 
 const makeAccessible = gelButton => accessibilify(gelButton);
 
-export { createGelButton, scaleButton };
+export { createGelButton, scaleButton, updateButton };

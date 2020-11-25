@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
-import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
+import { createGelButton, scaleButton, updateButton } from "./scrollable-list-buttons.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
@@ -65,7 +65,7 @@ const createTable = (scene, title, prepTx) => {
 const createItem = (scene, item, title, prepTx) =>
     scene.rexUI.add.label({
         orientation: 0,
-        icon: createGelButton(scene, item, title, "cta", prepTx),
+        icon: createGelButton(scene, item, title, "cta", prepTx), // here's where we need to provide the launch state.
         name: item.id,
     });
 
@@ -101,6 +101,8 @@ const setupEvents = (scene, panel) => {
     });
 };
 
+const updatePanel = panel => getPanelItems(panel).forEach(item => updateButton(item.children[0]));
+
 const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
 
 export class ScrollableList extends Phaser.GameObjects.Container {
@@ -133,5 +135,6 @@ export class ScrollableList extends Phaser.GameObjects.Container {
             button.input.enabled = isVisible;
             button.accessibleElement.update();
         });
+        isVisible && updatePanel(this.panel);
     }
 }

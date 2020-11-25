@@ -56,7 +56,7 @@
         manage: "inventory",
     },
     confirm: {
-        detailView: true, // true yields a smaller image and more text
+        detailView: true, // true === smaller image and more text. false === large image only.
         prompts: {
             shop: "Purchase this item?",
             manage: "Do you want to \nequip this item?",
