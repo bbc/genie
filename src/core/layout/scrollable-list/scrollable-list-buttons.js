@@ -39,11 +39,10 @@ const createGelButton = (scene, item, title, state, prepTx) => {
             items: config.overlay.items,
             options: config.overlay.options[title],
         },
-        setAll: setOverlays(gelButton, item), // modify to 
+        setAll: setOverlays(gelButton, item), // modify to use data
         unsetAll: unsetOverlays(gelButton),
         state: STATES.find(st => st === state),
-        toggleState: toggleState(gelButton),
-        toggle: toggle(gelButton),
+        // toggleState: toggleState(gelButton),
     };
 
     const callback = () => prepTx(item, title);
@@ -71,7 +70,7 @@ const updateButton = button => {
 };
 
 const updateButtonData = button => {
-    const [itemKey, title] = button.config.id.split('_').slice(-2);
+    const [itemKey, title] = getItemKeyAndTitle(button);
     const item = collections.get(button.scene.config.paneCollections[title]).get(itemKey);
 
     const doUpdate = (button, data) => {
@@ -82,33 +81,33 @@ const updateButtonData = button => {
     return fp.isEqual(button.data, item) ? false : doUpdate(button, item);
 }
 
-const updateOverlays = button => {
-    console.log('BEEBUG: updating overlays');
+const getState = (item, title) => {
+    const isShop = title => title === "shop" ? true : false;
+    const isOwned = item => item.state && item.state === "owned";
+    const isEquipped = item => item.state && item.state === "equipped";
+    return fp.cond([
+        [(i, t) => isShop(t) && !isOwned(i), () => "cta"],
+        [(i, t) => isShop(t) && isOwned(i), () => "actioned"],
+        [(i, t) => !isShop(t) && !isEquipped(i), () => "cta"],
+        [(i, t) => !isShop(t) && isEquipped(i), () => "actioned"],
+    ])(item, title);
 };
 
-// not sure if this is needed
-const toggle = button => () => {
+const updateOverlays = button => {
     button.overlays.unsetAll();
-    button.overlays.toggleState();
+    button.overlays.state = getState(button.data, getPaneTitle(button));
     button.overlays.setAll();
 };
-
-// not sure if needed
-const toggleState = button => () =>
-    fp.cond([
-        [btn => btn.overlays.state === "cta", btn => (btn.overlays.state = "actioned")],
-        [btn => btn.overlays.state === "actioned", btn => (btn.overlays.state = "cta")],
-    ])(button);
 
 const getConfigs = button =>
     button.overlays.configs.items.concat(
         button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)),
     );
 
-const setOverlays = (button, item) => () => overlays1Wide({ gelButton: button, item, configs: getConfigs(button) });
-
+const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);
+const getPaneTitle = button => getItemKeyAndTitle(button).pop(); 
+const setOverlays = (button, item) => () => overlays1Wide({ gelButton: button, item, configs: getConfigs(button) }); // rf overlays1Wide also
 const unsetOverlays = button => () => Object.keys(button.overlays.list).forEach(key => button.overlays.remove(key));
-
 const makeAccessible = gelButton => accessibilify(gelButton);
 
-export { createGelButton, scaleButton, updateButton };
+export { createGelButton, scaleButton, updateButton, getState };
