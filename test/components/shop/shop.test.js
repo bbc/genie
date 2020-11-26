@@ -125,12 +125,12 @@ describe("Shop", () => {
         });
 
         test("calls createTitle to create the title UI component", () => {
-            expect(titles.createTitle).toHaveBeenCalledWith(shopScreen, mockMetrics, mockSafeArea);
+            expect(titles.createTitle).toHaveBeenCalledWith(shopScreen);
             expect(shopScreen.title).toBe(mockTitles);
         });
 
         test("calls createBalance to create the balance UI component", () => {
-            expect(balance.createBalance).toHaveBeenCalledWith(shopScreen, mockMetrics, mockSafeArea);
+            expect(balance.createBalance).toHaveBeenCalledWith(shopScreen);
         });
 
         test("stores the back button event bus message", () => {
