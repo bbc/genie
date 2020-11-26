@@ -227,27 +227,22 @@ describe("Game", () => {
                 expect(starScore.text).toBe(1);
             });
 
-            test("adds a star when 'collect star' text is clicked", () => {
-                starTextClickedOn.mock.calls[0][1]();
-                expect(starScore.text).toBe(1);
-            });
-
             test("fires an achievement when 1 star is collected", () => {
-                starTextClickedOn.mock.calls[0][1]();
+                starButtonClickedOn.mock.calls[0][1]();
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "just_started" });
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "rock_star" });
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "stellar" });
             });
 
             test("fires an achievement when 5 stars are collected", () => {
-                [...Array(5)].forEach(() => starTextClickedOn.mock.calls[0][1]());
+                [...Array(5)].forEach(() => starButtonClickedOn.mock.calls[0][1]());
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "just_started" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "rock_star" });
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "stellar" });
             });
 
             test("fires an achievement when 10 stars are collected", () => {
-                [...Array(10)].forEach(() => starTextClickedOn.mock.calls[0][1]());
+                [...Array(10)].forEach(() => starButtonClickedOn.mock.calls[0][1]());
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "just_started" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "rock_star" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "stellar" });
@@ -309,13 +304,8 @@ describe("Game", () => {
                 expect(gemScore.text).toBe(1);
             });
 
-            test("adds a gem when 'collect gem' text is clicked", () => {
-                gemTextClickedOn.mock.calls[0][1]();
-                expect(gemScore.text).toBe(1);
-            });
-
             test("fires an achievement when 1 gem is collected", () => {
-                gemTextClickedOn.mock.calls[0][1]();
+                gemButtonClickedOn.mock.calls[0][1]();
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "sapphire_so_good" });
@@ -323,7 +313,7 @@ describe("Game", () => {
             });
 
             test("fires an achievement when 5 gems are collected", () => {
-                [...Array(5)].forEach(() => gemTextClickedOn.mock.calls[0][1]());
+                [...Array(5)].forEach(() => gemButtonClickedOn.mock.calls[0][1]());
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "sapphire_so_good" });
@@ -331,7 +321,7 @@ describe("Game", () => {
             });
 
             test("fires an achievement when 10 gems are collected", () => {
-                [...Array(10)].forEach(() => gemTextClickedOn.mock.calls[0][1]());
+                [...Array(10)].forEach(() => gemButtonClickedOn.mock.calls[0][1]());
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "sapphire_so_good" });
@@ -339,7 +329,7 @@ describe("Game", () => {
             });
 
             test("fires an achievement when 20 gems are collected", () => {
-                [...Array(20)].forEach(() => gemTextClickedOn.mock.calls[0][1]());
+                [...Array(20)].forEach(() => gemButtonClickedOn.mock.calls[0][1]());
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamond_in_the_rough" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "sapphire_so_good" });
@@ -402,27 +392,22 @@ describe("Game", () => {
                 expect(keyScore.text).toBe(1);
             });
 
-            test("adds a key when 'collect key' text is clicked", () => {
-                keyTextClickedOn.mock.calls[0][1]();
-                expect(keyScore.text).toBe(1);
-            });
-
             test("fires an achievement when 1 key is collected", () => {
-                keyTextClickedOn.mock.calls[0][1]();
+                keyButtonClickedOn.mock.calls[0][1]();
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "got_the_key" });
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "lock_around_the_clock" });
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "super_size_key" });
             });
 
             test("fires an achievement when 5 keys are collected", () => {
-                [...Array(5)].forEach(() => keyTextClickedOn.mock.calls[0][1]());
+                [...Array(5)].forEach(() => keyButtonClickedOn.mock.calls[0][1]());
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "got_the_key" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "lock_around_the_clock" });
                 expect(gmi.achievements.set).not.toHaveBeenCalledWith({ key: "super_size_key" });
             });
 
             test("fires an achievement when 10 keys are collected", () => {
-                [...Array(10)].forEach(() => keyTextClickedOn.mock.calls[0][1]());
+                [...Array(10)].forEach(() => keyButtonClickedOn.mock.calls[0][1]());
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "got_the_key" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "lock_around_the_clock" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "super_size_key" });
