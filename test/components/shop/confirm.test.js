@@ -17,15 +17,6 @@ describe("createConfirm()", () => {
     const mockRect = { foo: "bar" };
     const mockButton = { baz: "qux" };
     const mockText = { setText: jest.fn() };
-    const mockScene = {
-        add: {
-            container: jest.fn().mockReturnValue(mockContainer),
-            image: jest.fn().mockReturnValue(mockImage),
-            text: jest.fn().mockReturnValue({ setOrigin: jest.fn().mockReturnValue(mockText) }),
-        },
-        stack: jest.fn(),
-        back: jest.fn(),
-    };
     let mockConfig = {
         menu: { buttonsRight: true },
         confirm: {
@@ -37,8 +28,26 @@ describe("createConfirm()", () => {
         },
         balance: { icon: { key: "balanceIcon" } },
     };
-    const mockBalance = { setText: jest.fn(), getValue: jest.fn() };
+
     const mockBounds = { height: 100, y: 5 };
+
+    const mockBalance = { setText: jest.fn(), getValue: jest.fn() };
+
+    const mockScene = {
+        add: {
+            container: jest.fn().mockReturnValue(mockContainer),
+            image: jest.fn().mockReturnValue(mockImage),
+            text: jest.fn().mockReturnValue({ setOrigin: jest.fn().mockReturnValue(mockText) }),
+        },
+        stack: jest.fn(),
+        back: jest.fn(),
+        layout: {
+            getSafeArea: jest.fn(() => mockBounds),
+        },
+        config: mockConfig,
+        balance: mockBalance,
+    };
+
     buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
     const setVisibleFn = jest.fn();
     const resizeFn = jest.fn();
@@ -49,7 +58,7 @@ describe("createConfirm()", () => {
     let mockDoTransactionFn = jest.fn().mockReturnValueOnce(37).mockReturnValue(undefined);
     transact.doTransaction = jest.fn().mockReturnValue(mockDoTransactionFn);
 
-    beforeEach(() => (confirmPane = createConfirm(mockScene, mockConfig, mockBounds, mockBalance)));
+    beforeEach(() => (confirmPane = createConfirm(mockScene)));
 
     afterEach(() => jest.clearAllMocks());
 
@@ -86,8 +95,8 @@ describe("createConfirm()", () => {
         expect(layout.getInnerRectBounds.mock.calls[0][0]).toBe(mockBounds);
         expect(layout.getInnerRectBounds.mock.calls[0][1]).toBe(true);
         jest.clearAllMocks();
-        const flippedConfig = { ...mockConfig, menu: { buttonsRight: false } };
-        createConfirm(mockScene, flippedConfig, mockBounds);
+        mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
+        createConfirm(mockScene);
         expect(layout.getInnerRectBounds.mock.calls[0][1]).toBe(false);
     });
     test("that is displayed with an appropriate Y offset", () => {
@@ -95,7 +104,7 @@ describe("createConfirm()", () => {
     });
     describe("Item detail view", () => {
         beforeEach(() => {
-            mockConfig = {
+            mockScene.config = {
                 ...mockConfig,
                 confirm: {
                     ...mockConfig.confirm,
@@ -103,7 +112,7 @@ describe("createConfirm()", () => {
                 },
             };
             jest.clearAllMocks();
-            confirmPane = createConfirm(mockScene, mockConfig, mockBounds);
+            confirmPane = createConfirm(mockScene);
         });
         test("adds extra placeholder text objects", () => {
             expect(mockScene.add.text).toHaveBeenCalledTimes(5);
