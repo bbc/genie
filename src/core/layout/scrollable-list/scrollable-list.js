@@ -70,9 +70,6 @@ const createTable = (scene, title, prepTx) => {
     return sizer;
 };
 
-// const populate = ({ table, scene, title, prepTx, collection }) =>
-//     collection.forEach((item, idx) => table.add(createItem(scene, item, title, prepTx), 0, idx, "top", 0, true));
-
 const createItem = (scene, item, title, prepTx) =>
     scene.rexUI.add.label({
         orientation: 0,
@@ -127,9 +124,6 @@ const updatePanelList = panel => {
     tableContainer.add(createTable(panel.scene, panel.name, panel.callback));
     resizePanel(panel.scene, panel)();
 };
-
-// const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
-// };
 
 const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items") ?? [];
 

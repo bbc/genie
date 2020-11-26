@@ -20,9 +20,18 @@ export const createConfirm = (scene, config, bounds, balance) => {
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(bounds, buttonsRight));
     const yOffset = bounds.height / 2 + bounds.y;
 
+    const isLegal = isTransactionLegal(confirmContainer);
+
     confirmContainer.setY(yOffset);
     confirmContainer.handleClick = handleClick(scene, confirmContainer);
-    confirmContainer.buttons = createConfirmButtons(scene, innerBounds, config, yOffset, confirmContainer.handleClick);
+    confirmContainer.buttons = createConfirmButtons(
+        scene,
+        innerBounds,
+        config,
+        yOffset,
+        confirmContainer.handleClick,
+        isLegal,
+        );
 
     confirmContainer.elems = {
         background: [
@@ -56,20 +65,25 @@ export const createConfirm = (scene, config, bounds, balance) => {
 };
 
 const handleClick = (scene, container) => button => {
+    if (button === "Confirm" && !container.transaction.isLegal) return; 
     const cost = button === "Confirm" && confirm(container);
     cost && container.setBalance(container.getBalance() - cost);
     scene.back();
 };
 
+const isTransactionLegal = container => false;
+
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
 const update = (scene, container) => (item, title) => {
+    // this would be a good place to check for legality
+    const isLegal = isTransactionLegal(container);
     container.removeAll(false);
-    container.elems.prompt.setText(container.config.confirm.prompts[title]);
+    container.elems.prompt.setText(container.config.confirm.prompts[title]); // conditionally set prompt
     container.elems.priceIcon.setVisible(title === "shop");
     container.elems.price.setText(title === "shop" ? item.price : "");
     container.elems.item = itemView(scene, item, container.config, container.memoisedBounds);
-    container.transaction = { item, title };
+    container.transaction = { item, title, isLegal }; // stash legality here
     populate(container);
 };
 

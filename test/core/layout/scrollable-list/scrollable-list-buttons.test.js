@@ -109,8 +109,6 @@ describe("Scrollable List Buttons", () => {
             test("decorates the button's .overlays with additional functions", () => {
                 expect(typeof mockButton.overlays.setAll).toBe("function");
                 expect(typeof mockButton.overlays.unsetAll).toBe("function");
-                expect(typeof mockButton.overlays.toggleState).toBe("function");
-                expect(typeof mockButton.overlays.toggle).toBe("function");
             });
             test("plus all the overlay configs", () => {
                 const expected = {
@@ -127,26 +125,11 @@ describe("Scrollable List Buttons", () => {
                 expect(mockButton.overlays.remove.mock.calls[0][0]).toBe("a");
                 expect(mockButton.overlays.remove.mock.calls[1][0]).toBe("b");
             });
-            test("toggleState() toggles state", () => {
-                mockButton.overlays.toggleState();
-                expect(mockButton.overlays.state).toBe("actioned");
-                mockButton.overlays.toggleState();
-                expect(mockButton.overlays.state).toBe("cta");
-            });
             test("setAll() sets all overlays for the current state", () => {
                 jest.clearAllMocks();
                 mockButton.overlays.setAll();
                 const expected = [{ foo: "bar" }, { baz: "qux", activeStates: ["cta"] }];
                 const { configs } = overlays.overlays1Wide.mock.calls[0][0];
-                expect(configs).toStrictEqual(expected);
-            });
-            test("toggle() flows them together to switch between button overlay states", () => {
-                mockButton.overlays.toggle();
-                expect(mockButton.overlays.remove.mock.calls[0][0]).toBe("a");
-                expect(mockButton.overlays.remove.mock.calls[1][0]).toBe("b");
-                expect(mockButton.overlays.state).toBe("actioned");
-                const expected = [{ foo: "bar" }, { wiz: "bang", activeStates: ["actioned"] }];
-                const { configs } = overlays.overlays1Wide.mock.calls[1][0];
                 expect(configs).toStrictEqual(expected);
             });
         });

@@ -29,7 +29,7 @@ const createGelButton = (scene, item, title, state, prepTx) => {
         scrollable: true,
     };
 
-    const gelButton = scene.add.gelButton(100, 0, gelConfig); // this needs correct x, y.
+    const gelButton = scene.add.gelButton(0, 0, gelConfig);
 
     gelButton.item = item;
 
