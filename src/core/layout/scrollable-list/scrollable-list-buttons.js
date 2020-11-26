@@ -29,9 +29,9 @@ const createGelButton = (scene, item, title, state, prepTx) => {
         scrollable: true,
     };
 
-    const gelButton = scene.add.gelButton(0, 0, gelConfig);
+    const gelButton = scene.add.gelButton(100, 0, gelConfig); // this needs correct x, y.
 
-    gelButton.data = item;
+    gelButton.item = item;
 
     gelButton.overlays = {
         ...gelButton.overlays,
@@ -42,7 +42,6 @@ const createGelButton = (scene, item, title, state, prepTx) => {
         setAll: setOverlays(gelButton, item), // modify to use data
         unsetAll: unsetOverlays(gelButton),
         state: STATES.find(st => st === state),
-        // toggleState: toggleState(gelButton),
     };
 
     const callback = () => prepTx(item, title);
@@ -74,11 +73,11 @@ const updateButtonData = button => {
     const item = collections.get(button.scene.config.paneCollections[title]).get(itemKey);
 
     const doUpdate = (button, data) => {
-        button.data = data;
+        button.item = data;
         return true;
     };
 
-    return fp.isEqual(button.data, item) ? false : doUpdate(button, item);
+    return fp.isEqual(button.item, item) ? false : doUpdate(button, item);
 }
 
 const getState = (item, title) => {
@@ -95,7 +94,7 @@ const getState = (item, title) => {
 
 const updateOverlays = button => {
     button.overlays.unsetAll();
-    button.overlays.state = getState(button.data, getPaneTitle(button));
+    button.overlays.state = getState(button.item, getPaneTitle(button));
     button.overlays.setAll();
 };
 
