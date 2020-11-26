@@ -62,7 +62,7 @@ const createTable = (scene, title, prepTx) => {
             name: "grid",
         });
 
-        populate({ table, scene, title, prepTx, collection });
+        collection.forEach((item, idx) => table.add(createItem(scene, item, title, prepTx), 0, idx, "top", 0, true));
 
         sizer.add(table, 1, "center", 0, true);
     }
@@ -70,8 +70,8 @@ const createTable = (scene, title, prepTx) => {
     return sizer;
 };
 
-const populate = ({ table, scene, title, prepTx, collection }) =>
-    collection.forEach((item, idx) => table.add(createItem(scene, item, title, prepTx), 0, idx, "top", 0, true));
+// const populate = ({ table, scene, title, prepTx, collection }) =>
+//     collection.forEach((item, idx) => table.add(createItem(scene, item, title, prepTx), 0, idx, "top", 0, true));
 
 const createItem = (scene, item, title, prepTx) =>
     scene.rexUI.add.label({
@@ -129,6 +129,8 @@ const updatePanelList = panel => {
 };
 
 // const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
+// };
+
 const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items") ?? [];
 
 export class ScrollableList extends Phaser.GameObjects.Container {
