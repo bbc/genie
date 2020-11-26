@@ -34,7 +34,9 @@ describe("shop menu", () => {
     const mockGelButton = { input: { enabled: true }, visible: true, accessibleElement: { update: jest.fn() } };
     const mockGelButtons = [mockGelButton, mockGelButton];
     buttons.createMenuButtons = jest.fn().mockReturnValue(mockGelButtons);
-    buttons.resizeGelButtons = jest.fn();
+
+    const resizeGelButtonsSpy = jest.fn();
+    buttons.resizeGelButtons = resizeGelButtonsSpy;
 
     beforeEach(() => (menu = createMenu(mockScene, mockConfig, mockSafeArea)));
     afterEach(() => jest.clearAllMocks());
@@ -99,7 +101,7 @@ describe("shop menu", () => {
             expect(mockContainer.setY.mock.calls[1][0]).toBe(100);
         });
         test("resizes the gel buttons", () => {
-            expect(buttons.resizeGelButtons).toHaveBeenCalled();
+            expect(resizeGelButtonsSpy).toHaveBeenCalled();
         });
     });
 });

@@ -43,14 +43,14 @@ const makeButton = (scene, config, buttonConfig, bounds, idx, offset, callback) 
     return gelButton;
 };
 
-export const resizeGelButtons = (buttons, bounds, innerBounds, buttonsRight) => {
-    buttons.forEach((button, idx) => {
-        const { y } = getButtonPosition(innerBounds, idx, 0);
-        button.setY(CAMERA_Y + (bounds.height / 2 + bounds.y) + y);
-        button.setX(buttonsRight ? innerBounds.x + CAMERA_X : -innerBounds.x + CAMERA_X);
-        button.setScale(getScale(innerBounds, button));
-    });
+const resizeButton = (bounds, inner, right) => (button, idx) => {
+    const { y } = getButtonPosition(inner, idx, 0);
+    button.setY(CAMERA_Y + (bounds.height / 2 + bounds.y) + y);
+    button.setX(right ? -inner.x + CAMERA_X : inner.x + CAMERA_X);
+    button.setScale(getScale(inner, button));
 };
+
+export const resizeGelButtons = (buttons, bounds, inner, right) => buttons.forEach(resizeButton(bounds, inner, right));
 
 const getButtonConfig = (button, id, scene, config) => ({
     title: button,
