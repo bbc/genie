@@ -33,6 +33,7 @@ describe("shop menu buttons", () => {
         scene: { key: "mockSceneKey" },
         setVisiblePane: jest.fn(),
         stack: jest.fn(),
+        events: { once: jest.fn() },
     };
     const mockConfig = {
         assetKeys: { buttonIcon: "mockIconKey", buttonBackground: "mockBackgroundKey" },
@@ -40,7 +41,8 @@ describe("shop menu buttons", () => {
     const mockOuterBounds = { y: 50, height: 400 };
     const mockInnerBounds = { x: 200, y: 50, height: 300, width: 100 };
     const yOffset = 47;
-    eventBus.subscribe = jest.fn();
+    const mockEvent = { unsubscribe: "foo" };
+    eventBus.subscribe = jest.fn().mockReturnValue(mockEvent);
     a11y.accessibilify = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
@@ -80,6 +82,7 @@ describe("shop menu buttons", () => {
             expect(message.name).toBe("shop_menu_button");
             message.callback();
             expect(mockScene.stack).toHaveBeenCalledWith("shop");
+            expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", "foo");
         });
         test("sets overlays for text and button icon", () => {
             expect(mockButton.overlays.set).toHaveBeenCalledTimes(4);

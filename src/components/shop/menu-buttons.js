@@ -32,11 +32,12 @@ export const createConfirmButtons = (scene, bounds, config, yOffset, callbackFn)
 const makeButton = (scene, config, buttonConfig, bounds, idx, offset, callback) => {
     const { x, y } = getButtonPosition(bounds, idx, offset);
     const gelButton = scene.add.gelButton(x + CAMERA_X, y + CAMERA_Y, buttonConfig);
-    eventBus.subscribe({
+    const event = eventBus.subscribe({
         callback,
         channel: buttonConfig.channel,
         name: buttonConfig.id,
     });
+    scene.events.once("shutdown", event.unsubscribe);
     setButtonOverlays(scene, gelButton, buttonConfig.title, config);
     accessibilify(gelButton);
     gelButton.setScale(getScale(bounds, gelButton));
