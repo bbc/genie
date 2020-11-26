@@ -46,11 +46,12 @@ const createGelButton = (scene, item, title, state, prepTx) => {
 
     const callback = () => prepTx(item, title);
 
-    eventBus.subscribe({
+    const clickEvent = eventBus.subscribe({
         callback: handleClickIfVisible(gelButton, scene, callback),
         channel: gelConfig.channel,
         name: id,
     });
+    scene.events.once("shutdown", clickEvent.unsubscribe);
 
     scaleButton(gelButton, scene.layout, config.listPadding.x);
     makeAccessible(gelButton);

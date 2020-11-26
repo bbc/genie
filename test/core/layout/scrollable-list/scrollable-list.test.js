@@ -20,64 +20,10 @@ const mockLabel = {
     children: [{ input: { enabled: true }, accessibleElement: { el: mockA11yElem, update: jest.fn() } }],
     height: 50,
 };
-const mockGridSizer = {
-    add: jest.fn(),
-    getElement: jest.fn().mockReturnValue([mockLabel]),
-};
-const mockScrollablePanel = {
-    layout: jest.fn(),
-    getByName: jest.fn().mockReturnValue(mockGridSizer),
-    on: jest.fn(),
-    once: jest.fn(),
-    off: jest.fn(),
-    space: { top: 10 },
-    t: 0,
-    height: 100,
-    minHeight: 100,
-    setT: jest.fn(),
-};
+
 const mockSizer = { add: jest.fn() };
 const mockOverlay = {};
-const mockScene = {
-    rexUI: {
-        add: {
-            scrollablePanel: jest.fn().mockReturnValue(mockScrollablePanel),
-            sizer: jest.fn().mockReturnValue(mockSizer),
-            gridSizer: jest.fn().mockReturnValue(mockGridSizer),
-            label: jest.fn().mockReturnValue(mockLabel),
-        },
-    },
-    events: { once: jest.fn() },
-    input: { topOnly: true },
-    add: { image: jest.fn() },
-    config: {
-        assetPrefix: "test",
-        assetKeys: {
-            background: "background",
-            scrollbar: "scrollbar",
-            scrollbarHandle: "scrollbarHandle",
-        },
-        listPadding: { x: 10, y: 8 },
-        overlay: {
-            items: [mockOverlay],
-        },
-        paneCollections: { shop: "testCatalogue" },
-    },
-    layout: {
-        getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
-        addCustomGroup: jest.fn(),
-    },
-    scale: { on: jest.fn() },
-    scene: { key: "shop" },
-    sys: {
-        queueDepthSort: jest.fn(),
-        displayList: {
-            remove: jest.fn(),
-        },
-    },
-};
-const mockCollection = { getAll: jest.fn().mockReturnValue([mockItem]) };
-catalogue.collections = { get: jest.fn().mockReturnValue(mockCollection) };
+
 const mockGelButton = {
     width: 100,
     setScale: jest.fn(),
@@ -91,8 +37,75 @@ const initState = "cta";
 const mockPrepTransaction = jest.fn();
 
 describe("Scrollable List", () => {
+    let collectionGetAll;
+    let mockCollection;
+    let mockGridSizer;
+    let mockScrollablePanel;
+    let mockScene;
+
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
+        collectionGetAll = [mockItem];
+        mockCollection = { getAll: jest.fn(() => collectionGetAll) };
+        catalogue.collections = { get: jest.fn(() => mockCollection) };
+
+        mockGridSizer = {
+            add: jest.fn(),
+            getElement: jest.fn().mockReturnValue([mockLabel]),
+        };
+
+        mockScrollablePanel = {
+            layout: jest.fn(),
+            getByName: jest.fn(() => mockGridSizer),
+            on: jest.fn(),
+            once: jest.fn(),
+            off: jest.fn(),
+            space: { top: 10 },
+            t: 0,
+            height: 100,
+            minHeight: 100,
+            setT: jest.fn(),
+        };
+
+        mockScene = {
+            rexUI: {
+                add: {
+                    scrollablePanel: jest.fn(() => mockScrollablePanel),
+                    sizer: jest.fn(() => mockSizer),
+                    gridSizer: jest.fn(() => mockGridSizer),
+                    label: jest.fn(() => mockLabel),
+                },
+            },
+            events: { once: jest.fn() },
+            input: { topOnly: true },
+            add: { image: jest.fn() },
+            config: {
+                assetPrefix: "test",
+                assetKeys: {
+                    background: "background",
+                    scrollbar: "scrollbar",
+                    scrollbarHandle: "scrollbarHandle",
+                },
+                listPadding: { x: 10, y: 8 },
+                overlay: {
+                    items: [mockOverlay],
+                },
+                paneCollections: { shop: "testCatalogue" },
+            },
+            layout: {
+                getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
+                addCustomGroup: jest.fn(),
+            },
+            scale: { on: jest.fn() },
+            scene: { key: "shop" },
+            sys: {
+                queueDepthSort: jest.fn(),
+                displayList: {
+                    remove: jest.fn(),
+                },
+            },
+        };
+
         a11y.addGroupAt = jest.fn();
     });
 
@@ -125,6 +138,16 @@ describe("Scrollable List", () => {
                 test("with items from a collection in the catalogue", () => {
                     expect(catalogue.collections.get).toHaveBeenCalledWith("testCatalogue");
                     expect(mockCollection.getAll).toHaveBeenCalled();
+                });
+
+                test("no items table added if the catalogue collection is empty", () => {
+                    jest.clearAllMocks();
+                    mockGridSizer = undefined;
+                    collectionGetAll = [];
+
+                    new ScrollableList(mockScene, title, mockPrepTransaction);
+
+                    expect(mockScene.rexUI.add.gridSizer).not.toHaveBeenCalled();
                 });
             });
 

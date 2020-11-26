@@ -52,16 +52,22 @@ const createTable = (scene, title, prepTx) => {
     const key = scene.config.paneCollections[title];
     const collection = collections.get(key).getAll();
 
-    const table = scene.rexUI.add.gridSizer({
-        column: 1,
-        row: collection.length,
-        space: { row: scene.config.listPadding.y },
-        name: "grid",
-    });
+    const sizer = scene.rexUI.add.sizer({ orientation: "y" });
 
-    populate({ table, scene, title, prepTx, collection });
+    if (collection.length) {
+        const table = scene.rexUI.add.gridSizer({
+            column: 1,
+            row: collection.length,
+            space: { row: scene.config.listPadding.y },
+            name: "grid",
+        });
 
-    return scene.rexUI.add.sizer({ orientation: "y" }).add(table, 1, "center", 0, true);
+        populate({ table, scene, title, prepTx, collection });
+
+        sizer.add(table, 1, "center", 0, true);
+    }
+
+    return sizer;
 };
 
 const populate = ({ table, scene, title, prepTx, collection }) =>
@@ -74,7 +80,7 @@ const createItem = (scene, item, title, prepTx) =>
         name: item.id,
     });
 
-const resizePanel = (scene, panel) => {
+const resizePanel = (scene, panel) => () => {
     const t = panel.t;
     const items = getPanelItems(panel);
     items.forEach(label => scaleButton(label.children[0], scene.layout, panel.space.left));
@@ -85,25 +91,21 @@ const resizePanel = (scene, panel) => {
     panel.setT(t);
 };
 
+const getFirstElement = item => item.children[0].accessibleElement.el;
+
 const setupEvents = (scene, panel) => {
-    const scaleEvent = onScaleChange.add(() => resizePanel(scene, panel));
+    const scaleEvent = onScaleChange.add(resizePanel(scene, panel));
     scene.events.once("shutdown", scaleEvent.unsubscribe);
 
-    scene.scale.on(
-        "resize",
-        fp.debounce(10, () => resizePanel(scene, panel)),
-        scene,
-    );
+    scene.scale.on("resize", fp.debounce(10, resizePanel(scene, panel)), scene);
 
     panel.updateOnScroll = updatePanelOnScroll(panel);
     panel.on("scroll", panel.updateOnScroll);
 
     panel.updateOnFocus = updatePanelOnFocus(panel);
     const items = getPanelItems(panel);
-    items.forEach(item => {
-        const a11yElem = item.children[0].accessibleElement.el;
-        a11yElem.addEventListener("focus", () => panel.updateOnFocus(item));
-    });
+
+    items.forEach(item => getFirstElement(item).addEventListener("focus", () => panel.updateOnFocus(item)));
 };
 
 const updatePanel = panel => {
@@ -123,10 +125,11 @@ const updatePanelList = panel => {
     const tableContainer = panel.getByName("gridContainer", true);
     tableContainer.clear(true);
     tableContainer.add(createTable(panel.scene, panel.name, panel.callback));
-    resizePanel(panel.scene, panel);
+    resizePanel(panel.scene, panel)();
 };
 
-const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
+// const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
+const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items") ?? [];
 
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, title, callback) {
@@ -140,10 +143,8 @@ export class ScrollableList extends Phaser.GameObjects.Container {
 
         scene.input.topOnly = false;
         setupEvents(scene, this.panel);
-    }
 
-    reset() {
-        resizePanel(this.scene, this.panel);
+        this.reset = resizePanel(this.scene, this.panel);
     }
 
     getBoundingRect() {
