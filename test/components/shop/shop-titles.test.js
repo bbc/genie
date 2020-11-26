@@ -8,11 +8,13 @@
 import { createTitle } from "../../../src/components/shop/shop-titles.js";
 import * as titles from "../../../src/components/select/titles.js";
 import * as layout from "../../../src/components/shop/shop-layout.js";
+import * as scalerModule from "../../../src/core/scaler.js";
 
 describe("createTitle", () => {
     let title;
     const mockMetrics = { foo: "bar" };
     const mockSafeArea = { baz: "qux" };
+    scalerModule.getMetrics = jest.fn(() => mockMetrics);
     const mockText = { setText: jest.fn(), type: "Text" };
     const mockContainer = {
         add: jest.fn(),
@@ -22,14 +24,18 @@ describe("createTitle", () => {
     };
     const mockScene = {
         add: {
-            container: jest.fn().mockReturnValue(mockContainer),
+            container: jest.fn(() => mockContainer),
         },
+        layout: {
+            getSafeArea: jest.fn(() => mockSafeArea)
+        }
     };
     layout.getYPos = jest.fn().mockReturnValue(13);
     layout.getScaleFactor = jest.fn().mockReturnValue(17);
     titles.createTitles = jest.fn().mockReturnValue("fakeTitle");
 
-    beforeEach(() => (title = createTitle(mockScene, mockMetrics, mockSafeArea)));
+
+    beforeEach(() => (title = createTitle(mockScene)));
 
     afterEach(() => jest.clearAllMocks());
 
