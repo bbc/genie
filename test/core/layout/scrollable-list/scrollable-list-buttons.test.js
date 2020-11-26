@@ -46,6 +46,7 @@ describe("Scrollable List Buttons", () => {
         input: { y: 50 },
         scale: { displaySize: { height: 100 } },
         scene: { key: "shop" },
+        events: { once: jest.fn() },
     };
 
     const mockItem = {
@@ -55,7 +56,8 @@ describe("Scrollable List Buttons", () => {
 
     overlays.overlays1Wide = jest.fn();
     a11y.accessibilify = jest.fn();
-    eventBus.subscribe = jest.fn();
+    const mockEvent = { unsubscribe: "foo" };
+    eventBus.subscribe = jest.fn().mockReturnValue(mockEvent);
     handlers.handleClickIfVisible = jest.fn();
     const mockCallback = jest.fn();
 
@@ -90,6 +92,7 @@ describe("Scrollable List Buttons", () => {
             const callback = handlers.handleClickIfVisible.mock.calls[0][2];
             callback();
             expect(mockCallback).toHaveBeenCalled();
+            expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", "foo");
         });
 
         test("scales the button", () => {
