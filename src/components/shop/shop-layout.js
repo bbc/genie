@@ -6,7 +6,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 import { resizeGelButtons } from "./menu-buttons.js";
 
 export const getSafeArea = layout => layout.getSafeArea({}, false);
@@ -50,7 +49,7 @@ export const resize = container => bounds => {
     );
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
-    resizeGelButtons(container.buttons, bounds, getInnerRectBounds(bounds, false), container.config.buttonsRight);
+    resizeGelButtons(container, bounds, getInnerRectBounds(bounds, container.config.menu.buttonsRight));
 };
 
 export const getHalfRectBounds = (menuBounds, isOnRight) => {

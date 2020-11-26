@@ -137,7 +137,7 @@ describe("shop menu buttons", () => {
         test("sets the position of each button", () => {
             expect(mockButton.setY).toHaveBeenCalledTimes(2);
             expect(mockButton.setX).toHaveBeenCalledTimes(2);
-            expect(mockButton.setX.mock.calls[0][0]).toBe(500);
+            expect(mockButton.setX.mock.calls[0][0]).toBe(900);
             expect(mockButton.setY.mock.calls[0][0]).toBe(525);
             expect(mockButton.setY.mock.calls[1][0]).toBe(675);
         });
@@ -151,7 +151,7 @@ describe("shop menu buttons", () => {
                 resizeGelButtons(buttons, mockOuterBounds, mockInnerBounds, false);
             });
             test("the x position is further left", () => {
-                expect(mockButton.setX.mock.calls[0][0]).toBe(900);
+                expect(mockButton.setX.mock.calls[0][0]).toBe(500);
             });
         });
     });

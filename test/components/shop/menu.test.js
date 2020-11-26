@@ -29,7 +29,7 @@ describe("shop menu", () => {
             },
         },
     };
-    const mockConfig = { buttonsRight: true };
+    const mockConfig = { menu: { buttonsRight: true } };
     const mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
     const mockGelButton = { input: { enabled: true }, visible: true, accessibleElement: { update: jest.fn() } };
     const mockGelButtons = [mockGelButton, mockGelButton];

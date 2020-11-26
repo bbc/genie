@@ -5,30 +5,26 @@
  * @license Apache-2.0
  */
 import { createMenuButtons } from "./menu-buttons.js";
-import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect } from "./shop-layout.js";
+import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect, getSafeArea } from "./shop-layout.js";
 
-export const createMenu = (scene, config, bounds) => {
-    const { buttonsRight } = config;
+export const createMenu = scene => {
+    const bounds = getSafeArea(scene.layout);
+    const { buttonsRight } = scene.config.menu;
 
-    const menuContainer = scene.add.container();
-    menuContainer.config = { ...config, assetKeys: scene.config.assetKeys };
-    menuContainer.setVisible = setVisible(menuContainer);
-    menuContainer.resize = resize(menuContainer);
-    menuContainer.memoisedBounds = bounds; // workaround, pending CGPROD-2887
+    const container = scene.add.container();
+    container.config = scene.config;
+    container.setVisible = setVisible(container);
+    container.resize = resize(container);
+    container.memoisedBounds = bounds; // workaround, pending CGPROD-2887
 
-    menuContainer.add([
+    container.add([
         createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
         createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
         createRect(scene, getInnerRectBounds(bounds, buttonsRight), 0x0000ff),
     ]);
     const yOffset = bounds.height / 2 + bounds.y;
-    menuContainer.buttons = createMenuButtons(
-        scene,
-        getInnerRectBounds(bounds, buttonsRight),
-        menuContainer.config,
-        yOffset,
-    );
+    container.buttons = createMenuButtons(scene, getInnerRectBounds(bounds, buttonsRight), yOffset);
 
-    menuContainer.setY(yOffset);
-    return menuContainer;
+    container.setY(yOffset);
+    return container;
 };

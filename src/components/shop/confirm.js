@@ -5,26 +5,30 @@
  * @license Apache-2.0
  */
 
-import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect } from "./shop-layout.js";
+import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect, getSafeArea } from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
 
-export const createConfirm = (scene, config, bounds, balance) => {
+export const createConfirm = scene => {
+    const config = scene.config;
+    const balance = scene.balance
+    const bounds = getSafeArea(scene.layout);
+
     const { buttonsRight } = config.menu;
     const { styleDefaults } = config;
 
-    const confirmContainer = scene.add.container();
-    confirmContainer.config = config;
-    confirmContainer.memoisedBounds = bounds;
+    const container = scene.add.container();
+    container.config = config;
+    container.memoisedBounds = bounds;
 
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(bounds, buttonsRight));
     const yOffset = bounds.height / 2 + bounds.y;
 
-    confirmContainer.setY(yOffset);
-    confirmContainer.handleClick = handleClick(scene, confirmContainer);
-    confirmContainer.buttons = createConfirmButtons(scene, innerBounds, config, yOffset, confirmContainer.handleClick);
+    container.setY(yOffset);
+    container.handleClick = handleClick(scene, container);
+    container.buttons = createConfirmButtons(scene, innerBounds, config, yOffset, container.handleClick);
 
-    confirmContainer.elems = {
+    container.elems = {
         background: [
             createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
             createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
@@ -42,17 +46,17 @@ export const createConfirm = (scene, config, bounds, balance) => {
         item: itemView(scene, undefined, config, bounds),
     };
 
-    populate(confirmContainer);
+    populate(container);
 
-    confirmContainer.setVisible = setVisible(confirmContainer);
-    confirmContainer.resize = resize(confirmContainer);
-    confirmContainer.update = update(scene, confirmContainer);
-    confirmContainer.prepTransaction = prepTransaction(scene, confirmContainer);
-    confirmContainer.doTransaction = doTransaction(scene);
-    confirmContainer.setBalance = bal => balance.setText(bal);
-    confirmContainer.getBalance = () => balance.getValue();
+    container.setVisible = setVisible(container);
+    container.resize = resize(container);
+    container.update = update(scene, container);
+    container.prepTransaction = prepTransaction(scene, container);
+    container.doTransaction = doTransaction(scene);
+    container.setBalance = bal => balance.setText(bal);
+    container.getBalance = () => balance.getValue();
 
-    return confirmContainer;
+    return container;
 };
 
 const handleClick = (scene, container) => button => {
