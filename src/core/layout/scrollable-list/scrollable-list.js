@@ -43,7 +43,7 @@ const getPanelY = scene => {
 };
 
 const createInnerPanel = (scene, title, prepTx) => {
-    const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 } });
+    const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" });
     sizer.add(createTable(scene, title, prepTx), { expand: true });
     return sizer;
 };
@@ -61,7 +61,7 @@ const createTable = (scene, title, prepTx) => {
 
     populate({ table, scene, title, prepTx, collection });
 
-    return scene.rexUI.add.sizer({ orientation: "y", name: "gridContainer" }).add(table, 1, "center", 0, true);
+    return scene.rexUI.add.sizer({ orientation: "y" }).add(table, 1, "center", 0, true);
 };
 
 const populate = ({ table, scene, title, prepTx, collection }) =>
