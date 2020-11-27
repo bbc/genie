@@ -8,7 +8,6 @@
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import { getInnerRectBounds, getSafeArea } from "./shop-layout.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -26,76 +25,42 @@ export const createMenuButtons = container =>
 export const createConfirmButtons = (container, callbackFn) =>
     ["Confirm", "Cancel"].map((button, idx) => {
         const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, container.scene);
-
-        //console.log(container)
-        //
-        //debugger
         const callback = () => callbackFn(button);
         return makeButton(container, config, idx, callback);
     });
 
-const getOffsetBounds = (outerBounds, innerBounds) => ({
-    ...innerBounds,
-    y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
-});
-
-
 const makeButton = (container, config, idx, callback) => {
     const scene = container.scene;
-    const innerBounds = getInnerRectBounds(scene);
-    const bounds = innerBounds;//getOffsetBounds(safeArea, innerBounds);
-
     const gelButton = scene.add.gelButton(0, 0, config);
-    const event = eventBus.subscribe({
-        callback,
-        channel: config.channel,
-        name: config.id,
-    });
+    const event = eventBus.subscribe({ callback, channel: config.channel, name: config.id });
     scene.events.once("shutdown", event.unsubscribe);
     setButtonOverlays(scene, gelButton, config.title);
-    accessibilify(gelButton);
-    gelButton.setScale(getScale(bounds, gelButton));
-    return gelButton;
-};
-
-const getButtonPosition = (containerBounds, idx, yOffset) => {
-    const { x, y, height } = containerBounds;
-    return {
-        x,
-        y: y - height / 4 + (idx * height) / 2 + yOffset,
-    };
+    return accessibilify(gelButton);
 };
 
 const resizeButton = container => (button, idx) => {
-    const inner = getInnerRectBounds(container.scene);
-    const right = Boolean(container.scene.config.menu.buttonsRight)
-    const { y } = getButtonPosition(inner, idx, 0);
-
-    const bounds = container.getBounds()
-    button.setY(CAMERA_Y + (bounds.height / 2 + bounds.y) + y);
-    button.setX(right ? inner.x + CAMERA_X : -inner.x + CAMERA_X);
-    button.setScale(getScale(inner, button));
+    const right = Boolean(container.scene.config.menu.buttonsRight);
+    const bounds = container.list[2].getBounds(); //TODO this is arbitrarily picked from the background list and should probably be defined somehow
+    button.setY(CAMERA_Y + bounds.y + bounds.height / 4 + (idx * bounds.height) / 2);
+    button.setX(CAMERA_X + (right ? bounds.x + bounds.width / 2 : -bounds.x));
+    button.setScale(bounds.width / button.width);
 };
 
 export const resizeGelButtons = container => container.buttons.forEach(resizeButton(container));
 
-const getButtonConfig = (button, id, scene) => {
-    return {
-        title: button,
-        gameButton: true,
-        accessibilityEnabled: true,
-        ariaLabel: button,
-        channel: "shop",
-        group: scene.scene.key,
-        id,
-        key: scene.config.assetKeys.buttonBackground,
-        scene: "shop",
-    };
-};
+const getButtonConfig = (button, id, scene) => ({
+    title: button,
+    gameButton: true,
+    accessibilityEnabled: true,
+    ariaLabel: button,
+    channel: "shop",
+    group: scene.scene.key,
+    id,
+    key: scene.config.assetKeys.buttonBackground,
+    scene: "shop",
+});
 
 const assetKey = (scene, key) => `${scene.assetPrefix}.${scene.config.assetKeys[key]}`;
-
-const getScale = (containerBounds, button) => containerBounds.width / button.width;
 
 const setButtonOverlays = (scene, button, title) => {
     const offset = button.width / 4;
