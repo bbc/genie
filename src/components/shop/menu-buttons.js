@@ -8,7 +8,6 @@
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import fp from "../../../lib/lodash/fp/fp.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -23,14 +22,20 @@ export const createMenuButtons = (scene, bounds, config, yOffset) =>
         return makeButton(scene, config, buttonConfig, bounds, idx, yOffset, callback);
     });
 
-export const createConfirmButtons = (scene, bounds, config, yOffset, callbackFn, isTransactionLegal) =>
+export const createConfirmButtons = (scene, bounds, config, yOffset, callbackFn) =>
     ["Confirm", "Cancel"].map((button, idx) => {
         const buttonConfig = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, scene, config);
         const callback = () => callbackFn(button);
         const gelButton = makeButton(scene, config, buttonConfig, bounds, idx, yOffset, callback);
-        if (button === "Confirm" && !isTransactionLegal) Object.assign(gelButton, { alpha: 0.25, tint: 0xff0000 });
+        if (button === "Confirm") gelButton.setLegal = setLegal(gelButton);
         return gelButton;
     });
+
+const setLegal = button => isLegal => {
+    const makeLegal = btn => Object.assign(btn, { alpha: 1, tint: 0xffffff });
+    const makeIllegal = btn => Object.assign(btn, { alpha: 0.25, tint: 0xff0000 });
+    isLegal ? makeLegal(button) : makeIllegal(button);
+};
 
 const makeButton = (scene, config, buttonConfig, bounds, idx, offset, callback) => {
     const { x, y } = getButtonPosition(bounds, idx, offset);

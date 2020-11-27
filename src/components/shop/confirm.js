@@ -20,8 +20,6 @@ export const createConfirm = (scene, config, bounds, balance) => {
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(bounds, buttonsRight));
     const yOffset = bounds.height / 2 + bounds.y;
 
-    const isLegal = isTransactionLegal(confirmContainer);
-
     confirmContainer.setY(yOffset);
     confirmContainer.handleClick = handleClick(scene, confirmContainer);
     confirmContainer.buttons = createConfirmButtons(
@@ -30,8 +28,7 @@ export const createConfirm = (scene, config, bounds, balance) => {
         config,
         yOffset,
         confirmContainer.handleClick,
-        isLegal,
-        );
+    );
 
     confirmContainer.elems = {
         background: [
@@ -42,7 +39,7 @@ export const createConfirm = (scene, config, bounds, balance) => {
         prompt: scene.add
             .text(innerBounds.x, promptY(bounds), config.confirm.prompts.shop, styleDefaults)
             .setOrigin(0.5),
-        price: scene.add.text(innerBounds.x + 20, currencyY(bounds), "1000", styleDefaults).setOrigin(0.5),
+        price: scene.add.text(innerBounds.x + 20, currencyY(bounds), "PH", styleDefaults).setOrigin(0.5),
         priceIcon: scene.add.image(
             innerBounds.x - 20,
             currencyY(bounds),
@@ -60,31 +57,42 @@ export const createConfirm = (scene, config, bounds, balance) => {
     confirmContainer.doTransaction = doTransaction(scene);
     confirmContainer.setBalance = bal => balance.setText(bal);
     confirmContainer.getBalance = () => balance.getValue();
+    confirmContainer.setLegal = setLegal(confirmContainer);
 
     return confirmContainer;
 };
 
 const handleClick = (scene, container) => button => {
-    if (button === "Confirm" && !container.transaction.isLegal) return; 
+    if (button === "Confirm" && !container.transaction.isLegal) return;
     const cost = button === "Confirm" && confirm(container);
     cost && container.setBalance(container.getBalance() - cost);
     scene.back();
 };
 
-const isTransactionLegal = container => false;
+const isTransactionLegal = (container, item, title) => {
+    const isShop = container.transaction && title === "shop";
+    return isShop ? container.getBalance() >= parseInt(item.price) : true;
+};
 
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
 const update = (scene, container) => (item, title) => {
-    // this would be a good place to check for legality
-    const isLegal = isTransactionLegal(container);
+    const isLegal = isTransactionLegal(container, item, title);
     container.removeAll(false);
-    container.elems.prompt.setText(container.config.confirm.prompts[title]); // conditionally set prompt
     container.elems.priceIcon.setVisible(title === "shop");
     container.elems.price.setText(title === "shop" ? item.price : "");
     container.elems.item = itemView(scene, item, container.config, container.memoisedBounds);
-    container.transaction = { item, title, isLegal }; // stash legality here
+    container.transaction = { item, title, isLegal };
+    container.setLegal(title, isLegal);
     populate(container);
+};
+
+const setLegal = container => (title, isLegal) => {
+    const prompt = isLegal
+        ? container.config.confirm.prompts[title].legal
+        : container.config.confirm.prompts[title].illegal;
+    container.elems.prompt.setText(prompt);
+    container.buttons[0].setLegal(isLegal);
 };
 
 const populate = container =>

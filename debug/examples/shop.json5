@@ -41,7 +41,7 @@
         },
         value: {
             type: "text",
-            value: 1000, // PH
+            value: 100, // PH
             styles: {},
         },
     },
@@ -58,8 +58,8 @@
     confirm: {
         detailView: true, // true === smaller image and more text. false === large image only.
         prompts: {
-            shop: "Purchase this item?",
-            manage: "Do you want to \nequip this item?",
+            shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
+            manage: { legal: "Do you want to \nequip this item?" },
         },
     },
     styleDefaults: {
