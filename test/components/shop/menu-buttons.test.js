@@ -23,7 +23,7 @@ describe("shop menu buttons", () => {
         width: 53,
     };
     const mockText = { setOrigin: jest.fn() };
-    const mockOuterBounds = { y: 0, height: 300, width: 800 };
+    const mockOuterBounds = { x: 0, y: 0, height: 300, width: 800 };
 
     const mockScene = {
         assetPrefix: "shop",
@@ -44,6 +44,17 @@ describe("shop menu buttons", () => {
             getSafeArea: jest.fn(() => mockOuterBounds),
         },
     };
+
+    const mockContainer = {
+        scene: mockScene,
+        list: [
+            0,
+            1,
+            {
+                getBounds: () => mockOuterBounds,
+            },
+        ],
+    };
     const mockEvent = { unsubscribe: "foo" };
     eventBus.subscribe = jest.fn(() => mockEvent);
     a11y.accessibilify = jest.fn();
@@ -51,17 +62,12 @@ describe("shop menu buttons", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("createMenuButtons()", () => {
-        beforeEach(() => (buttons = createMenuButtons(mockScene)));
+        beforeEach(() => (buttons = createMenuButtons(mockContainer)));
         test("adds two gel buttons", () => {
             expect(buttons.length).toBe(2);
             expect(mockScene.add.gelButton).toHaveBeenCalledTimes(2);
         });
-        test("distributes them along the Y of bounds", () => {
-            expect(mockScene.add.gelButton.mock.calls[0][0]).toBe(900);
-            expect(mockScene.add.gelButton.mock.calls[0][1]).toBe(405);
-            expect(mockScene.add.gelButton.mock.calls[1][0]).toBe(900);
-            expect(mockScene.add.gelButton.mock.calls[1][1]).toBe(495);
-        });
+
         test("gives them appropriate config", () => {
             const expectedConfig = {
                 title: "Shop",
@@ -97,15 +103,12 @@ describe("shop menu buttons", () => {
         test("accesibilifies", () => {
             expect(a11y.accessibilify).toHaveBeenCalledTimes(2);
         });
-        test("scales the buttons", () => {
-            expect(mockButton.setScale).toHaveBeenCalledTimes(2);
-        });
     });
 
     describe("createConfirmButtons", () => {
         const callback = jest.fn();
         beforeEach(() => {
-            createConfirmButtons(mockScene, callback);
+            createConfirmButtons(mockContainer, callback);
         });
 
         test("provides a slightly different config", () => {
@@ -132,40 +135,42 @@ describe("shop menu buttons", () => {
     });
 
     describe("resizeGelButtons()", () => {
-        const callback = jest.fn();
+        const mockButton = {
+            setY: jest.fn(),
+            setX: jest.fn(),
+            setScale: jest.fn(),
+            width: 200,
+        };
         let container;
         beforeEach(() => {
-            buttons = createConfirmButtons(mockScene, callback);
             container = {
-                buttons,
+                buttons: [mockButton],
                 config: {
                     menu: {
                         buttonsRight: true,
                     },
                 },
                 scene: mockScene,
+                list: [0, 1, { getBounds: () => mockOuterBounds }],
             };
             jest.clearAllMocks();
-            resizeGelButtons(container, mockOuterBounds);
+            resizeGelButtons(container);
         });
 
         test("sets the position of each button", () => {
-            expect(mockButton.setY).toHaveBeenCalledTimes(2);
-            expect(mockButton.setX).toHaveBeenCalledTimes(2);
-            expect(mockButton.setX.mock.calls[0][0]).toBe(900);
-            expect(mockButton.setY.mock.calls[0][0]).toBe(405);
-            expect(mockButton.setY.mock.calls[1][0]).toBe(495);
+            expect(mockButton.setX.mock.calls[0][0]).toBe(1100);
+            expect(mockButton.setY.mock.calls[0][0]).toBe(375);
         });
         test("sets the scale of each button", () => {
-            expect(mockButton.setScale).toHaveBeenCalledTimes(2);
-            expect(buttons[0].setScale).toHaveBeenCalledWith(4.90566037735849);
+            expect(mockButton.setScale).toHaveBeenCalledTimes(1);
+            expect(mockButton.setScale).toHaveBeenCalledWith(4);
         });
         describe("when buttonsRight is false", () => {
             test("the x position is further left", () => {
                 jest.clearAllMocks();
-                container.config.menu.buttonsRight = false;
+                container.scene.config.menu.buttonsRight = false;
                 resizeGelButtons(container, mockOuterBounds);
-                expect(mockButton.setX.mock.calls[0][0]).toBe(500);
+                expect(mockButton.setX.mock.calls[0][0]).toBe(700);
             });
         });
     });

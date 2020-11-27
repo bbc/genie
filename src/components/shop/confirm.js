@@ -25,9 +25,6 @@ export const createConfirm = scene => {
     const yOffset = bounds.height / 2 + bounds.y;
 
     container.setY(yOffset);
-    container.height =
-
-    //TODO offset of container is currently not taken into account.
     container.buttons = createConfirmButtons(container, handleClick(scene, container));
 
     container.elems = {
