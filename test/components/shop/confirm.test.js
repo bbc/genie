@@ -165,7 +165,15 @@ describe("createConfirm()", () => {
             expect(mockBalance.setText).not.toHaveBeenCalled();
             expect(mockScene.back).toHaveBeenCalled();
         });
-        test("just calls back() otherwise", () => {
+        test("does nothing at all if the tx is not legal", () => {
+            confirmPane.transaction = { isLegal: false };
+            confirmPane.handleClick("Confirm");
+            expect(mockDoTransactionFn).not.toHaveBeenCalled();
+            expect(mockBalance.setText).not.toHaveBeenCalled();
+            expect(mockScene.back).not.toHaveBeenCalled();
+
+        });
+        test("just calls back() if not called with 'Confirm'", () => {
             confirmPane.handleClick("whatevs");
             expect(mockDoTransactionFn).not.toHaveBeenCalled();
             expect(mockScene.back).toHaveBeenCalled();
