@@ -8,6 +8,7 @@
 import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect } from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
+import { collections } from "../../core/collections.js";
 
 export const createConfirm = (scene, config, bounds, balance) => {
     const { buttonsRight } = config.menu;
@@ -71,7 +72,9 @@ const handleClick = (scene, container) => button => {
 
 const isTransactionLegal = (container, item, title) => {
     const isShop = container.transaction && title === "shop";
-    return isShop ? container.getBalance() >= parseInt(item.price) : true;
+    const itemState = getItemState(container, item, title);
+    console.log('BEEBUG: itemState', itemState);
+    return isShop ? container.getBalance() >= parseInt(item.price) : itemState !== "equipped"; 
 };
 
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
@@ -132,6 +135,8 @@ const itemDetailView = (scene, item, config, bounds) => {
     return [itemImage, itemTitle, itemDescription, itemBlurb];
 };
 
+const getItemState = (container, item, title) => collections.get(getCollectionsKey(container, title)).get(item.id).state;
+const getCollectionsKey = (container, title) => container.config.paneCollections[title];
 const getItemTitle = item => (item ? item.title : "Item Default Title");
 const getItemDescription = item => (item ? item.description : "Item Default Description");
 const getItemBlurb = item => (item ? item.longDescription : "");

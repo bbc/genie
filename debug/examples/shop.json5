@@ -59,7 +59,7 @@
         detailView: true, // true === smaller image and more text. false === large image only.
         prompts: {
             shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
-            manage: { legal: "Do you want to \nequip this item?" },
+            manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
         },
     },
     styleDefaults: {
