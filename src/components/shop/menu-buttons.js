@@ -16,18 +16,20 @@ const styleDefaults = {
     resolution: 5,
 };
 
-export const createMenuButtons = (scene, bounds) =>
+export const createMenuButtons = scene =>
     ["Shop", "Manage"].map((button, idx) => {
         const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, scene);
         const callback = () => scene.stack(button.toLowerCase());
-        return makeButton(scene, config, bounds, idx, callback);
+        const innerBounds = getInnerRectBounds(scene)
+        return makeButton(scene, config, innerBounds, idx, callback);
     });
 
-export const createConfirmButtons = (scene, bounds, callbackFn) =>
+export const createConfirmButtons = (scene, callbackFn) =>
     ["Confirm", "Cancel"].map((button, idx) => {
         const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, scene);
         const callback = () => callbackFn(button);
-        return makeButton(scene, config, bounds, idx, callback);
+        const innerBounds = getInnerRectBounds(scene)
+        return makeButton(scene, config, innerBounds, idx, callback);
     });
 
 const makeButton = (scene, config, bounds, idx, callback) => {
@@ -47,11 +49,9 @@ const makeButton = (scene, config, bounds, idx, callback) => {
     return gelButton;
 };
 
-const resizeButton = (bounds, inner, right) => (button, idx) => {
-    //const safeArea = getSafeArea(scene.layout);
-    //const offset = safeArea.height / 2 + safeArea.y;
-
-
+const resizeButton = (bounds, inner, right, scene) => (button, idx) => {
+    const safeArea = getSafeArea(scene.layout);
+    const offset = safeArea.height / 2 + safeArea.y;
     const { y } = getButtonPosition(inner, idx, 0);
     button.setY(CAMERA_Y + (bounds.height / 2 + bounds.y) + y);
     button.setX(right ? inner.x + CAMERA_X : -inner.x + CAMERA_X);
@@ -60,8 +60,8 @@ const resizeButton = (bounds, inner, right) => (button, idx) => {
 
 export const resizeGelButtons = (container, bounds) => {
     const right = container.config.menu.buttonsRight;
-    const inner = getInnerRectBounds(bounds, right);
-    container.buttons.forEach(resizeButton(bounds, inner, right));
+    const inner = getInnerRectBounds(container.scene);
+    container.buttons.forEach(resizeButton(bounds, inner, right, container.scene));
 };
 
 const getButtonConfig = (button, id, scene) => {

@@ -21,12 +21,11 @@ export const createConfirm = scene => {
     container.config = config;
     container.memoisedBounds = bounds;
 
-    const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(bounds, buttonsRight));
+    const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
     const yOffset = bounds.height / 2 + bounds.y;
 
     container.setY(yOffset);
-    container.handleClick = handleClick(scene, container);
-    container.buttons = createConfirmButtons(scene, innerBounds, config, yOffset, container.handleClick);
+    container.buttons = createConfirmButtons(scene, handleClick(scene, container));
 
     container.elems = {
         background: [

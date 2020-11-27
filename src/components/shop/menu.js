@@ -20,10 +20,10 @@ export const createMenu = scene => {
     container.add([
         createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
         createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
-        createRect(scene, getInnerRectBounds(bounds, buttonsRight), 0x0000ff),
+        createRect(scene, getInnerRectBounds(scene), 0x0000ff),
     ]);
 
-    container.buttons = createMenuButtons(scene, getInnerRectBounds(bounds, buttonsRight));
+    container.buttons = createMenuButtons(scene);
 
     container.setY(bounds.height / 2 + bounds.y);
     return container;

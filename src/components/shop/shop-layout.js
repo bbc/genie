@@ -49,7 +49,7 @@ export const resize = container => bounds => {
     );
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
-    resizeGelButtons(container, bounds, getInnerRectBounds(bounds, container.config.menu.buttonsRight));
+    resizeGelButtons(container, bounds, getInnerRectBounds(container.scene));
 };
 
 export const getHalfRectBounds = (menuBounds, isOnRight) => {
@@ -62,8 +62,10 @@ export const getHalfRectBounds = (menuBounds, isOnRight) => {
     };
 };
 
-export const getInnerRectBounds = (outerBounds, isOnRight) => {
-    const innerBounds = getHalfRectBounds(outerBounds, isOnRight);
+export const getInnerRectBounds = scene => {
+    const outerBounds = getSafeArea(scene.layout);
+    const right = scene.config.menu.buttonsRight
+    const innerBounds = getHalfRectBounds(outerBounds, right);
     return {
         x: innerBounds.width / 2,
         y: innerBounds.y,
