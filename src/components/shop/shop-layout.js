@@ -64,7 +64,7 @@ export const getHalfRectBounds = (menuBounds, isOnRight) => {
 
 export const getInnerRectBounds = scene => {
     const outerBounds = getSafeArea(scene.layout);
-    const right = scene.config.menu.buttonsRight
+    const right = scene.config.menu.buttonsRight;
     const innerBounds = getHalfRectBounds(outerBounds, right);
     return {
         x: innerBounds.width / 2,

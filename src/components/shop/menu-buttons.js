@@ -20,19 +20,18 @@ export const createMenuButtons = scene =>
     ["Shop", "Manage"].map((button, idx) => {
         const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, scene);
         const callback = () => scene.stack(button.toLowerCase());
-        const innerBounds = getInnerRectBounds(scene)
-        return makeButton(scene, config, innerBounds, idx, callback);
+        return makeButton(scene, config, idx, callback);
     });
 
 export const createConfirmButtons = (scene, callbackFn) =>
     ["Confirm", "Cancel"].map((button, idx) => {
         const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, scene);
         const callback = () => callbackFn(button);
-        const innerBounds = getInnerRectBounds(scene)
-        return makeButton(scene, config, innerBounds, idx, callback);
+        return makeButton(scene, config, idx, callback);
     });
 
-const makeButton = (scene, config, bounds, idx, callback) => {
+const makeButton = (scene, config, idx, callback) => {
+    const bounds = getInnerRectBounds(scene);
     const safeArea = getSafeArea(scene.layout);
     const offset = safeArea.height / 2 + safeArea.y;
     const { x, y } = getButtonPosition(bounds, idx, offset);
@@ -49,9 +48,9 @@ const makeButton = (scene, config, bounds, idx, callback) => {
     return gelButton;
 };
 
-const resizeButton = (bounds, inner, right, scene) => (button, idx) => {
-    const safeArea = getSafeArea(scene.layout);
-    const offset = safeArea.height / 2 + safeArea.y;
+const resizeButton = (bounds, inner, right) => (button, idx) => {
+    //const safeArea = getSafeArea(scene.layout);
+    //const offset = safeArea.height / 2 + safeArea.y;
     const { y } = getButtonPosition(inner, idx, 0);
     button.setY(CAMERA_Y + (bounds.height / 2 + bounds.y) + y);
     button.setX(right ? inner.x + CAMERA_X : -inner.x + CAMERA_X);

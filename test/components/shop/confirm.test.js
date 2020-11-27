@@ -27,6 +27,7 @@ describe("createConfirm()", () => {
             detailView: false,
         },
         balance: { icon: { key: "balanceIcon" } },
+        styleDefaults: {},
     };
 
     const mockBounds = { height: 100, y: 5 };
@@ -92,12 +93,11 @@ describe("createConfirm()", () => {
         expect(containerContents.slice(-1)).toStrictEqual([mockImage]);
     });
     test("in a layout that can be flipped L-R in config", () => {
-        expect(layout.getInnerRectBounds.mock.calls[0][0]).toBe(mockBounds);
-        expect(layout.getInnerRectBounds.mock.calls[0][1]).toBe(true);
+        expect(layout.getInnerRectBounds.mock.calls[0][0]).toBe(mockScene);
         jest.clearAllMocks();
         mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
         createConfirm(mockScene);
-        expect(layout.getInnerRectBounds.mock.calls[0][1]).toBe(false);
+        expect(mockScene.add.text).toHaveBeenCalledWith(0, -37.5, "buyPrompt", {});
     });
     test("that is displayed with an appropriate Y offset", () => {
         expect(mockContainer.setY).toHaveBeenCalledWith(55);
@@ -159,19 +159,22 @@ describe("createConfirm()", () => {
     describe(".handleClick()", () => {
         beforeEach(() => (confirmPane.transaction = { foo: "bar" }));
         test("when called with 'Confirm', performs the transaction, sets balance, and calls back()", () => {
-            confirmPane.handleClick("Confirm");
+            const handleClick = buttons.createConfirmButtons.mock.calls[0][1];
+            handleClick("Confirm");
             expect(mockDoTransactionFn).toHaveBeenCalledWith(confirmPane.transaction);
             expect(mockBalance.setText).toHaveBeenCalled();
             expect(mockScene.back).toHaveBeenCalled();
         });
         test("does not set the balance if the tx fails", () => {
-            confirmPane.handleClick("Confirm");
+            const handleClick = buttons.createConfirmButtons.mock.calls[0][1];
+            handleClick("Confirm");
             expect(mockDoTransactionFn).toHaveBeenCalledWith(confirmPane.transaction);
             expect(mockBalance.setText).not.toHaveBeenCalled();
             expect(mockScene.back).toHaveBeenCalled();
         });
         test("just calls back() otherwise", () => {
-            confirmPane.handleClick("whatevs");
+            const handleClick = buttons.createConfirmButtons.mock.calls[0][1];
+            handleClick("whatevs");
             expect(mockDoTransactionFn).not.toHaveBeenCalled();
             expect(mockScene.back).toHaveBeenCalled();
         });
