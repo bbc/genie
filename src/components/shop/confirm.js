@@ -73,7 +73,6 @@ const handleClick = (scene, container) => button => {
 const isTransactionLegal = (container, item, title) => {
     const isShop = container.transaction && title === "shop";
     const itemState = getItemState(container, item, title);
-    console.log('BEEBUG: itemState', itemState);
     return isShop ? container.getBalance() >= parseInt(item.price) : itemState !== "equipped"; 
 };
 
