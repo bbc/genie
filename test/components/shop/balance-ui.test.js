@@ -69,7 +69,6 @@ describe("createBalance()", () => {
     const mockMetrics = { foo: "bar" };
     scalerModule.getMetrics = jest.fn(() => mockMetrics);
 
-
     beforeEach(() => {
         shopLayout.getXPos = jest.fn().mockReturnValue(42);
         shopLayout.getYPos = jest.fn().mockReturnValue(69);

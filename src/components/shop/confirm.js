@@ -11,7 +11,7 @@ import { doTransaction } from "./transact.js";
 
 export const createConfirm = scene => {
     const config = scene.config;
-    const balance = scene.balance
+    const balance = scene.balance;
     const bounds = getSafeArea(scene.layout);
 
     const { buttonsRight } = config.menu;

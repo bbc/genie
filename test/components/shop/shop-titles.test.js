@@ -27,13 +27,12 @@ describe("createTitle", () => {
             container: jest.fn(() => mockContainer),
         },
         layout: {
-            getSafeArea: jest.fn(() => mockSafeArea)
-        }
+            getSafeArea: jest.fn(() => mockSafeArea),
+        },
     };
     layout.getYPos = jest.fn().mockReturnValue(13);
     layout.getScaleFactor = jest.fn().mockReturnValue(17);
     titles.createTitles = jest.fn().mockReturnValue("fakeTitle");
-
 
     beforeEach(() => (title = createTitle(mockScene)));
 

@@ -31,10 +31,6 @@ export const createConfirmButtons = (scene, bounds, yOffset, callbackFn) =>
     });
 
 const makeButton = (scene, config, bounds, idx, offset, callback) => {
-    console.log("offset", offset);
-
-    //debugger;
-
     const { x, y } = getButtonPosition(bounds, idx, offset);
     const gelButton = scene.add.gelButton(x + CAMERA_X, y + CAMERA_Y, config);
     const event = eventBus.subscribe({
@@ -50,8 +46,6 @@ const makeButton = (scene, config, bounds, idx, offset, callback) => {
 };
 
 const resizeButton = (bounds, inner, right) => (button, idx) => {
-    console.log([bounds, inner, right]);
-
     const { y } = getButtonPosition(inner, idx, 0);
     button.setY(CAMERA_Y + (bounds.height / 2 + bounds.y) + y);
     button.setX(right ? inner.x + CAMERA_X : -inner.x + CAMERA_X);

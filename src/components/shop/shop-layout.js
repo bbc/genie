@@ -65,7 +65,7 @@ export const getHalfRectBounds = (menuBounds, isOnRight) => {
 export const getInnerRectBounds = (outerBounds, isOnRight) => {
     const innerBounds = getHalfRectBounds(outerBounds, isOnRight);
     return {
-        x: isOnRight ? innerBounds.width / 2 : -innerBounds.width / 2,
+        x: innerBounds.width / 2,
         y: innerBounds.y,
         width: innerBounds.width * 0.65,
         height: innerBounds.height * 0.6,
