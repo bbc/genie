@@ -50,6 +50,8 @@ export class Shop extends Screen {
         this.setVisiblePane("top");
 
         this.setupEvents();
+
+        this.resize();
     }
 
     stack(pane) {

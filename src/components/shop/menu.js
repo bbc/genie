@@ -23,7 +23,7 @@ export const createMenu = scene => {
         createRect(scene, getInnerRectBounds(scene), 0x0000ff),
     ]);
 
-    container.buttons = createMenuButtons(scene);
+    container.buttons = createMenuButtons(container);
 
     container.setY(bounds.height / 2 + bounds.y);
     return container;

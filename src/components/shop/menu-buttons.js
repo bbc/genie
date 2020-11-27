@@ -16,26 +16,36 @@ const styleDefaults = {
     resolution: 5,
 };
 
-export const createMenuButtons = scene =>
+export const createMenuButtons = container =>
     ["Shop", "Manage"].map((button, idx) => {
-        const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, scene);
-        const callback = () => scene.stack(button.toLowerCase());
-        return makeButton(scene, config, idx, callback);
+        const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, container.scene);
+        const callback = () => container.scene.stack(button.toLowerCase());
+        return makeButton(container, config, idx, callback);
     });
 
-export const createConfirmButtons = (scene, callbackFn) =>
+export const createConfirmButtons = (container, callbackFn) =>
     ["Confirm", "Cancel"].map((button, idx) => {
-        const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, scene);
+        const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, container.scene);
+
+        //console.log(container)
+        //
+        //debugger
         const callback = () => callbackFn(button);
-        return makeButton(scene, config, idx, callback);
+        return makeButton(container, config, idx, callback);
     });
 
-const makeButton = (scene, config, idx, callback) => {
-    const bounds = getInnerRectBounds(scene);
-    const safeArea = getSafeArea(scene.layout);
-    const offset = safeArea.height / 2 + safeArea.y;
-    const { x, y } = getButtonPosition(bounds, idx, offset);
-    const gelButton = scene.add.gelButton(x + CAMERA_X, y + CAMERA_Y, config);
+const getOffsetBounds = (outerBounds, innerBounds) => ({
+    ...innerBounds,
+    y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
+});
+
+
+const makeButton = (container, config, idx, callback) => {
+    const scene = container.scene;
+    const innerBounds = getInnerRectBounds(scene);
+    const bounds = innerBounds;//getOffsetBounds(safeArea, innerBounds);
+
+    const gelButton = scene.add.gelButton(0, 0, config);
     const event = eventBus.subscribe({
         callback,
         channel: config.channel,
@@ -48,20 +58,26 @@ const makeButton = (scene, config, idx, callback) => {
     return gelButton;
 };
 
-const resizeButton = (bounds, inner, right) => (button, idx) => {
-    //const safeArea = getSafeArea(scene.layout);
-    //const offset = safeArea.height / 2 + safeArea.y;
+const getButtonPosition = (containerBounds, idx, yOffset) => {
+    const { x, y, height } = containerBounds;
+    return {
+        x,
+        y: y - height / 4 + (idx * height) / 2 + yOffset,
+    };
+};
+
+const resizeButton = container => (button, idx) => {
+    const inner = getInnerRectBounds(container.scene);
+    const right = Boolean(container.scene.config.menu.buttonsRight)
     const { y } = getButtonPosition(inner, idx, 0);
+
+    const bounds = container.getBounds()
     button.setY(CAMERA_Y + (bounds.height / 2 + bounds.y) + y);
     button.setX(right ? inner.x + CAMERA_X : -inner.x + CAMERA_X);
     button.setScale(getScale(inner, button));
 };
 
-export const resizeGelButtons = (container, bounds) => {
-    const right = container.config.menu.buttonsRight;
-    const inner = getInnerRectBounds(container.scene);
-    container.buttons.forEach(resizeButton(bounds, inner, right, container.scene));
-};
+export const resizeGelButtons = container => container.buttons.forEach(resizeButton(container));
 
 const getButtonConfig = (button, id, scene) => {
     return {
@@ -74,14 +90,6 @@ const getButtonConfig = (button, id, scene) => {
         id,
         key: scene.config.assetKeys.buttonBackground,
         scene: "shop",
-    };
-};
-
-const getButtonPosition = (containerBounds, idx, yOffset) => {
-    const { x, y, height } = containerBounds;
-    return {
-        x,
-        y: y - height / 4 + (idx * height) / 2 + yOffset,
     };
 };
 

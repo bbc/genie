@@ -49,7 +49,7 @@ export const resize = container => bounds => {
     );
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
-    resizeGelButtons(container, bounds);
+    resizeGelButtons(container);
 };
 
 export const getHalfRectBounds = (menuBounds, isOnRight) => {
