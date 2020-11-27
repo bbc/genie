@@ -8,7 +8,7 @@
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import { getInnerRectBounds } from "./shop-layout.js";
+import { getInnerRectBounds, getSafeArea } from "./shop-layout.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -16,21 +16,23 @@ const styleDefaults = {
     resolution: 5,
 };
 
-export const createMenuButtons = (scene, bounds, yOffset) =>
+export const createMenuButtons = (scene, bounds) =>
     ["Shop", "Manage"].map((button, idx) => {
         const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, scene);
         const callback = () => scene.stack(button.toLowerCase());
-        return makeButton(scene, config, bounds, idx, yOffset, callback);
+        return makeButton(scene, config, bounds, idx, callback);
     });
 
-export const createConfirmButtons = (scene, bounds, yOffset, callbackFn) =>
+export const createConfirmButtons = (scene, bounds, callbackFn) =>
     ["Confirm", "Cancel"].map((button, idx) => {
         const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, scene);
         const callback = () => callbackFn(button);
-        return makeButton(scene, config, bounds, idx, yOffset, callback);
+        return makeButton(scene, config, bounds, idx, callback);
     });
 
-const makeButton = (scene, config, bounds, idx, offset, callback) => {
+const makeButton = (scene, config, bounds, idx, callback) => {
+    const safeArea = getSafeArea(scene.layout);
+    const offset = safeArea.height / 2 + safeArea.y;
     const { x, y } = getButtonPosition(bounds, idx, offset);
     const gelButton = scene.add.gelButton(x + CAMERA_X, y + CAMERA_Y, config);
     const event = eventBus.subscribe({
@@ -46,6 +48,10 @@ const makeButton = (scene, config, bounds, idx, offset, callback) => {
 };
 
 const resizeButton = (bounds, inner, right) => (button, idx) => {
+    //const safeArea = getSafeArea(scene.layout);
+    //const offset = safeArea.height / 2 + safeArea.y;
+
+
     const { y } = getButtonPosition(inner, idx, 0);
     button.setY(CAMERA_Y + (bounds.height / 2 + bounds.y) + y);
     button.setX(right ? inner.x + CAMERA_X : -inner.x + CAMERA_X);

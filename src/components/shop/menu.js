@@ -22,9 +22,9 @@ export const createMenu = scene => {
         createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
         createRect(scene, getInnerRectBounds(bounds, buttonsRight), 0x0000ff),
     ]);
-    const yOffset = bounds.height / 2 + bounds.y;
-    container.buttons = createMenuButtons(scene, getInnerRectBounds(bounds, buttonsRight), yOffset);
 
-    container.setY(yOffset);
+    container.buttons = createMenuButtons(scene, getInnerRectBounds(bounds, buttonsRight));
+
+    container.setY(bounds.height / 2 + bounds.y);
     return container;
 };
