@@ -171,7 +171,6 @@ describe("createConfirm()", () => {
             expect(mockDoTransactionFn).not.toHaveBeenCalled();
             expect(mockBalance.setText).not.toHaveBeenCalled();
             expect(mockScene.back).not.toHaveBeenCalled();
-
         });
         test("just calls back() if not called with 'Confirm'", () => {
             confirmPane.handleClick("whatevs");

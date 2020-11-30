@@ -79,10 +79,10 @@ const updateButtonData = button => {
     };
 
     return fp.isEqual(button.item, item) ? false : doUpdate(button, item);
-}
+};
 
 const getState = (item, title) => {
-    const isShop = title => title === "shop" ? true : false;
+    const isShop = title => (title === "shop" ? true : false);
     const isOwned = item => item.state && item.state === "owned";
     const isEquipped = item => item.state && item.state === "equipped";
     return fp.cond([
@@ -105,9 +105,10 @@ const getConfigs = button =>
     );
 
 const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);
-const getPaneTitle = button => getItemKeyAndTitle(button).pop(); 
+const getPaneTitle = button => getItemKeyAndTitle(button).pop();
 const setOverlays = (button, item) => () => overlays1Wide({ gelButton: button, item, configs: getConfigs(button) }); // rf overlays1Wide also
 const unsetOverlays = button => () => Object.keys(button.overlays.list).forEach(key => button.overlays.remove(key));
+
 const makeAccessible = gelButton => accessibilify(gelButton);
 
 export { createGelButton, scaleButton, updateButton, getState };

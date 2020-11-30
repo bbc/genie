@@ -9,19 +9,12 @@ import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable
 import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
-import * as catalogue from "../../../../src/core/collections.js";
+import { collections } from "../../../../src/core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const mockItem = { id: "someItem", name: "someItemName" };
 const mockA11yElem = {
     addEventListener: jest.fn(),
 };
-const mockLabel = {
-    children: [{ input: { enabled: true }, accessibleElement: { el: mockA11yElem, update: jest.fn() } }],
-    height: 50,
-};
-
-const mockSizer = { add: jest.fn() };
 const mockOverlay = {};
 
 const mockGelButton = {
@@ -31,6 +24,7 @@ const mockGelButton = {
 };
 buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
+buttons.updateButton = jest.fn();
 scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
 const title = "shop";
 const initState = "cta";
@@ -42,21 +36,38 @@ describe("Scrollable List", () => {
     let mockGridSizer;
     let mockScrollablePanel;
     let mockScene;
+    let mockSizer;
+    let mockItem;
+    let mockLabel;
 
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
+        mockItem = { id: "someItem", name: "someItemName" };
         collectionGetAll = [mockItem];
         mockCollection = { getAll: jest.fn(() => collectionGetAll) };
-        catalogue.collections = { get: jest.fn(() => mockCollection) };
+        collections.get = jest.fn().mockReturnValue(mockCollection);
 
+        mockLabel = {
+            children: [
+                {
+                    input: { enabled: true },
+                    accessibleElement: { el: mockA11yElem, update: jest.fn() },
+                    item: mockItem,
+                },
+            ],
+            height: 50,
+        };
         mockGridSizer = {
             add: jest.fn(),
             getElement: jest.fn().mockReturnValue([mockLabel]),
         };
-
+        mockSizer = {
+            clear: jest.fn(),
+            add: jest.fn(),
+        };
         mockScrollablePanel = {
             layout: jest.fn(),
-            getByName: jest.fn(() => mockGridSizer),
+            getByName: jest.fn(name => (name === "grid" ? mockGridSizer : mockSizer)),
             on: jest.fn(),
             once: jest.fn(),
             off: jest.fn(),
@@ -135,8 +146,8 @@ describe("Scrollable List", () => {
                     const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
                     expect(config.scrollMode).toBe(0);
                 });
-                test("with items from a collection in the catalogue", () => {
-                    expect(catalogue.collections.get).toHaveBeenCalledWith("testCatalogue");
+                test("with items from a collection", () => {
+                    expect(collections.get).toHaveBeenCalledWith("testCatalogue");
                     expect(mockCollection.getAll).toHaveBeenCalled();
                 });
 
@@ -281,6 +292,46 @@ describe("Scrollable List", () => {
             expect(list.panel.visible).toBe(false);
             expect(mockLabel.children[0].input.enabled).toBe(false);
             expect(mockLabel.children[0].accessibleElement.update).toHaveBeenCalled();
+        });
+    });
+    describe("panel update on setVisible(true)", () => {
+        let list;
+        const otherItem = { id: "someOtherItem", name: "someOtherItemName" };
+
+        beforeEach(() => {
+            list = new ScrollableList(mockScene, "shop");
+        });
+
+        test("gets the collection", () => {
+            list.setVisible(true);
+            expect(collections.get).toHaveBeenCalledWith("testCatalogue");
+            expect(mockCollection.getAll).toHaveBeenCalled();
+        });
+        test("and rebuilds the inner panel if the collection length has changed", () => {
+            collectionGetAll = [mockItem, otherItem];
+            mockCollection = { getAll: jest.fn(() => collectionGetAll) };
+            list.setVisible(true);
+            expect(mockSizer.clear).toHaveBeenCalled();
+            expect(mockSizer.add).toHaveBeenCalled();
+        });
+        test("or if the IDs have changed", () => {
+            mockItem = { ...mockItem, id: "someAlteredId" };
+            collectionGetAll = [mockItem];
+            mockCollection = { getAll: jest.fn(() => collectionGetAll) };
+            list.setVisible(true);
+            expect(mockSizer.clear).toHaveBeenCalled();
+            expect(mockSizer.add).toHaveBeenCalled();
+        });
+        test("if not rebuilding, we update all the buttons to catch changes to item states", () => {
+            collectionGetAll = [mockItem];
+            mockCollection = { getAll: jest.fn(() => collectionGetAll) };
+            list.setVisible(true);
+            expect(buttons.updateButton).toHaveBeenCalledTimes(1);
+        });
+        test("no changes are made on setVisible(false)", () => {
+            jest.clearAllMocks();
+            list.setVisible(false);
+            expect(collections.get).not.toHaveBeenCalled();
         });
     });
 });

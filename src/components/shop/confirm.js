@@ -23,13 +23,7 @@ export const createConfirm = (scene, config, bounds, balance) => {
 
     confirmContainer.setY(yOffset);
     confirmContainer.handleClick = handleClick(scene, confirmContainer);
-    confirmContainer.buttons = createConfirmButtons(
-        scene,
-        innerBounds,
-        config,
-        yOffset,
-        confirmContainer.handleClick,
-    );
+    confirmContainer.buttons = createConfirmButtons(scene, innerBounds, config, yOffset, confirmContainer.handleClick);
 
     confirmContainer.elems = {
         background: [
@@ -73,7 +67,7 @@ const handleClick = (scene, container) => button => {
 const isTransactionLegal = (container, item, title) => {
     const isShop = container.transaction && title === "shop";
     const itemState = getItemState(container, item, title);
-    return isShop ? container.getBalance() >= parseInt(item.price) : itemState !== "equipped"; 
+    return isShop ? container.getBalance() >= parseInt(item.price) : itemState !== "equipped";
 };
 
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
@@ -134,7 +128,8 @@ const itemDetailView = (scene, item, config, bounds) => {
     return [itemImage, itemTitle, itemDescription, itemBlurb];
 };
 
-const getItemState = (container, item, title) => collections.get(getCollectionsKey(container, title)).get(item.id).state;
+const getItemState = (container, item, title) =>
+    collections.get(getCollectionsKey(container, title)).get(item.id).state;
 const getCollectionsKey = (container, title) => container.config.paneCollections[title];
 const getItemTitle = item => (item ? item.title : "Item Default Title");
 const getItemDescription = item => (item ? item.description : "Item Default Description");

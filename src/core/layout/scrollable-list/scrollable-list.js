@@ -106,7 +106,7 @@ const setupEvents = (scene, panel) => {
 };
 
 const updatePanel = panel => {
-    const key = panel.scene.config.paneCollections[panel.name];
+    const key = panel.parentContainer.scene.config.paneCollections[panel.name];
     const collection = collections.get(key).getAll();
     const items = getPanelItems(panel);
 
@@ -120,9 +120,10 @@ const shouldPanelListUpdate = (collection, items) =>
 
 const updatePanelList = panel => {
     const tableContainer = panel.getByName("gridContainer", true);
+    const scene = panel.parentContainer.scene;
     tableContainer.clear(true);
-    tableContainer.add(createTable(panel.scene, panel.name, panel.callback));
-    resizePanel(panel.scene, panel)();
+    tableContainer.add(createTable(scene, panel.name, panel.callback));
+    resizePanel(scene, panel)();
 };
 
 const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items") ?? [];

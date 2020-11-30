@@ -128,7 +128,7 @@ describe("shop menu buttons", () => {
         });
         describe("setLegal()", () => {
             let confirmButton;
-            beforeEach(() => confirmButton = buttons[0]);
+            beforeEach(() => (confirmButton = buttons[0]));
 
             test("is applied to the 'Confirm' button", () => {
                 expect(typeof confirmButton.setLegal).toBe("function");
