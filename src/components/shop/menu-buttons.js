@@ -32,9 +32,9 @@ export const createConfirmButtons = (scene, bounds, config, yOffset, callbackFn)
     });
 
 const setLegal = button => isLegal => {
-    const makeLegal = btn => Object.assign(btn, { alpha: 1, tint: 0xffffff });
-    const makeIllegal = btn => Object.assign(btn, { alpha: 0.25, tint: 0xff0000 });
-    isLegal ? makeLegal(button) : makeIllegal(button);
+    const clearTintAndAlpha = btn => Object.assign(btn, { alpha: 1, tint: 0xffffff });
+    const setTintAndAlpha = btn => Object.assign(btn, { alpha: 0.25, tint: 0xff0000 });
+    isLegal ? clearTintAndAlpha(button) : setTintAndAlpha(button);
 };
 
 const makeButton = (scene, config, buttonConfig, bounds, idx, offset, callback) => {
