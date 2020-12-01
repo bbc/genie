@@ -138,7 +138,7 @@ describe("Scrollable List Buttons", () => {
                 jest.clearAllMocks();
                 mockButton.overlays.setAll();
                 const expected = [{ foo: "bar" }, { baz: "qux", activeStates: ["cta"] }];
-                const { configs } = overlays.overlays1Wide.mock.calls[0][0];
+                const configs = overlays.overlays1Wide.mock.calls[0][1];
                 expect(configs).toStrictEqual(expected);
             });
         });
