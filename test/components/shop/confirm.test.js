@@ -9,25 +9,27 @@ import { createConfirm } from "../../../src/components/shop/confirm.js";
 import * as layout from "../../../src/components/shop/shop-layout.js";
 import * as buttons from "../../../src/components/shop/menu-buttons.js";
 import * as transact from "../../../src/components/shop/transact.js";
+import { collections } from "../../../src/core/collections.js";
 
 describe("createConfirm()", () => {
     let confirmPane;
     const mockContainer = { add: jest.fn(), setY: jest.fn(), removeAll: jest.fn() };
     const mockImage = { setScale: jest.fn(), setVisible: jest.fn() };
     const mockRect = { foo: "bar" };
-    const mockButton = { baz: "qux" };
+    const mockButton = { baz: "qux", setLegal: jest.fn() };
     const mockText = { setText: jest.fn() };
     let mockConfig = {
         menu: { buttonsRight: true },
         confirm: {
             prompts: {
-                shop: "buyPrompt",
-                manage: "equipPrompt",
+                shop: { legal: "legalBuyPrompt", illegal: "illegalBuyPrompt" },
+                manage: { legal: "legalEquipPrompt", illegal: "illegalEquipPrompt" },
             },
             detailView: false,
         },
         balance: { icon: { key: "balanceIcon" } },
         styleDefaults: {},
+        paneCollections: { shop: "armoury", manage: "inventory" },
     };
 
     const mockBounds = { height: 100, y: 5 };
@@ -58,6 +60,8 @@ describe("createConfirm()", () => {
     layout.getInnerRectBounds = jest.fn().mockReturnValue({ x: 0, y: 0, width: 100, height: 100 });
     let mockDoTransactionFn = jest.fn().mockReturnValueOnce(37).mockReturnValue(undefined);
     transact.doTransaction = jest.fn().mockReturnValue(mockDoTransactionFn);
+    const mockCollection = { get: jest.fn().mockReturnValue({ state: "foo" }) };
+    collections.get = jest.fn().mockReturnValue(mockCollection);
 
     beforeEach(() => (confirmPane = createConfirm(mockScene)));
 
@@ -131,14 +135,14 @@ describe("createConfirm()", () => {
                 expect(mockContainer.removeAll).toHaveBeenCalled();
             });
             test("sets the prompt", () => {
-                expect(mockText.setText.mock.calls[0][0]).toBe("buyPrompt");
+                expect(mockText.setText.mock.calls[1][0]).toBe("illegalBuyPrompt");
             });
             test("sets the currency icon visible and sets price text to the item price", () => {
                 expect(mockImage.setVisible).toHaveBeenCalledWith(true);
-                expect(mockText.setText.mock.calls[1][0]).toBe(37);
+                expect(mockText.setText.mock.calls[0][0]).toBe(37);
             });
             test("sets transaction", () => {
-                const expected = { item: mockItem, title: mockTitle };
+                const expected = { item: mockItem, title: mockTitle, isLegal: false };
                 expect(mockContainer.transaction).toStrictEqual(expected);
             });
         });
@@ -152,12 +156,12 @@ describe("createConfirm()", () => {
         const mockTitle = "manage";
         beforeEach(() => confirmPane.prepTransaction(mockItem, mockTitle));
         test("sets the price to an empty string", () => {
-            expect(mockText.setText.mock.calls[1][0]).toBe("");
+            expect(mockText.setText.mock.calls[0][0]).toBe("");
         });
     });
 
     describe(".handleClick()", () => {
-        beforeEach(() => (confirmPane.transaction = { foo: "bar" }));
+        beforeEach(() => (confirmPane.transaction = { isLegal: true }));
         test("when called with 'Confirm', performs the transaction, sets balance, and calls back()", () => {
             const handleClick = buttons.createConfirmButtons.mock.calls[0][1];
             handleClick("Confirm");
@@ -172,7 +176,15 @@ describe("createConfirm()", () => {
             expect(mockBalance.setText).not.toHaveBeenCalled();
             expect(mockScene.back).toHaveBeenCalled();
         });
-        test("just calls back() otherwise", () => {
+        test("does nothing at all if the tx is not legal", () => {
+            const handleClick = buttons.createConfirmButtons.mock.calls[0][1];
+            confirmPane.transaction = { isLegal: false };
+            handleClick("Confirm");
+            expect(mockDoTransactionFn).not.toHaveBeenCalled();
+            expect(mockBalance.setText).not.toHaveBeenCalled();
+            expect(mockScene.back).not.toHaveBeenCalled();
+        });
+        test("just calls back() if not called with 'Confirm'", () => {
             const handleClick = buttons.createConfirmButtons.mock.calls[0][1];
             handleClick("whatevs");
             expect(mockDoTransactionFn).not.toHaveBeenCalled();

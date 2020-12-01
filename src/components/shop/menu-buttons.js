@@ -26,8 +26,16 @@ export const createConfirmButtons = (container, callbackFn) =>
     ["Confirm", "Cancel"].map((button, idx) => {
         const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, container.scene);
         const callback = () => callbackFn(button);
-        return makeButton(container, config, idx, callback);
+        const gelButton = makeButton(container, config, idx, callback);
+        button === "Confirm" && (gelButton.setLegal = setLegal(gelButton));
+        return gelButton;
     });
+
+const setLegal = button => isLegal => {
+    const clearTintAndAlpha = btn => Object.assign(btn, { alpha: 1, tint: 0xffffff });
+    const setTintAndAlpha = btn => Object.assign(btn, { alpha: 0.25, tint: 0xff0000 });
+    isLegal ? clearTintAndAlpha(button) : setTintAndAlpha(button);
+};
 
 const makeButton = (container, config, idx, callback) => {
     const scene = container.scene;
