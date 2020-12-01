@@ -51,11 +51,6 @@ describe("Button overlays", () => {
             assetKey: "someImageAssetKey",
             isDynamic: false,
         };
-        // mockArgs = {
-        //     gelButton: mockGelButton,
-        //     item: mockItem,
-        //     configs: mockConfig.overlay.items,
-        // };
     });
 
     describe("overlays1Wide", () => {
