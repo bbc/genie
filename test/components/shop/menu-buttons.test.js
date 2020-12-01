@@ -21,6 +21,7 @@ describe("shop menu buttons", () => {
         setY: jest.fn(),
         setX: jest.fn(),
         width: 53,
+        setLegal: jest.fn(),
     };
     const mockText = { setOrigin: jest.fn() };
     const mockOuterBounds = { x: 0, y: 0, height: 300, width: 800 };
@@ -57,7 +58,7 @@ describe("shop menu buttons", () => {
     };
     const mockEvent = { unsubscribe: "foo" };
     eventBus.subscribe = jest.fn(() => mockEvent);
-    a11y.accessibilify = jest.fn();
+    a11y.accessibilify = jest.fn(x => x);
 
     afterEach(() => jest.clearAllMocks());
 
