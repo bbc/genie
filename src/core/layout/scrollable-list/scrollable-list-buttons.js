@@ -65,9 +65,7 @@ const scaleButton = (gelButton, layout, space) => {
     gelButton.setScale(scaleFactor);
 };
 
-const updateButton = button => {
-    updateButtonData(button) && updateOverlays(button);
-};
+const updateButton = button => updateButtonData(button) && updateOverlays(button);
 
 const updateButtonData = button => {
     const [itemKey, title] = getItemKeyAndTitle(button);
@@ -81,21 +79,16 @@ const updateButtonData = button => {
     return fp.isEqual(button.item, item) ? false : doUpdate(button, item);
 };
 
-const getState = (item, title) => {
-    const isShop = title => (title === "shop" ? true : false);
-    const isOwned = item => item.state && item.state === "owned";
-    const isEquipped = item => item.state && item.state === "equipped";
-    return fp.cond([
-        [(i, t) => isShop(t) && !isOwned(i), () => "cta"],
-        [(i, t) => isShop(t) && isOwned(i), () => "actioned"],
-        [(i, t) => !isShop(t) && !isEquipped(i), () => "cta"],
-        [(i, t) => !isShop(t) && isEquipped(i), () => "actioned"],
-    ])(item, title);
+const getButtonState = (item, title) => {
+    const isOwned = item => item?.state === "owned";
+    const isEquipped = item => item?.state === "equipped";
+    const isButtonCta = title === "shop" ? isOwned : isEquipped;
+    return isButtonCta(item) ? "actioned" : "cta";
 };
 
 const updateOverlays = button => {
     button.overlays.unsetAll();
-    button.overlays.state = getState(button.item, getPaneTitle(button));
+    button.overlays.state = getButtonState(button.item, getPaneTitle(button));
     button.overlays.setAll();
 };
 
@@ -111,4 +104,4 @@ const unsetOverlays = button => () => Object.keys(button.overlays.list).forEach(
 
 const makeAccessible = gelButton => accessibilify(gelButton);
 
-export { createGelButton, scaleButton, updateButton, getState };
+export { createGelButton, scaleButton, updateButton, getButtonState };

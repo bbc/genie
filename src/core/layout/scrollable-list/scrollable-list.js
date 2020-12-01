@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
-import { createGelButton, scaleButton, updateButton, getState } from "./scrollable-list-buttons.js";
+import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
@@ -73,7 +73,7 @@ const createTable = (scene, title, prepTx) => {
 const createItem = (scene, item, title, prepTx) =>
     scene.rexUI.add.label({
         orientation: 0,
-        icon: createGelButton(scene, item, title, getState(item, title), prepTx),
+        icon: createGelButton(scene, item, title, getButtonState(item, title), prepTx),
         name: item.id,
     });
 

@@ -32,7 +32,7 @@ describe("createConfirm()", () => {
         confirm: {
             prompts: {
                 shop: { legal: "legalBuyPrompt", illegal: "illegalBuyPrompt" },
-                manage: { legal: "legalEquipPrompt", ilegal: "illegalEquipPrompt" },
+                manage: { legal: "legalEquipPrompt", illegal: "illegalEquipPrompt" },
             },
             detailView: false,
         },

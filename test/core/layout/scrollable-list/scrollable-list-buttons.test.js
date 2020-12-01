@@ -166,18 +166,18 @@ describe("Scrollable List Buttons", () => {
         });
     });
 
-    describe("getState() returns a string describing the button state", () => {
+    describe("getButtonState() returns a string describing the button state", () => {
         test("with shop items, look for an 'owned' state", () => {
             const item = { id: "foo", state: "" };
-            expect(buttons.getState(item, "shop")).toBe("cta");
+            expect(buttons.getButtonState(item, "shop")).toBe("cta");
             item.state = "owned";
-            expect(buttons.getState(item, "shop")).toBe("actioned");
+            expect(buttons.getButtonState(item, "shop")).toBe("actioned");
         });
         test("with manage items, look for an 'equipped' state", () => {
             const item = { id: "foo", state: "" };
-            expect(buttons.getState(item, "manage")).toBe("cta");
+            expect(buttons.getButtonState(item, "manage")).toBe("cta");
             item.state = "equipped";
-            expect(buttons.getState(item, "manage")).toBe("actioned");
+            expect(buttons.getButtonState(item, "manage")).toBe("actioned");
         });
     });
 });
