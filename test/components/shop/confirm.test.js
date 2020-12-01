@@ -18,15 +18,6 @@ describe("createConfirm()", () => {
     const mockRect = { foo: "bar" };
     const mockButton = { baz: "qux", setLegal: jest.fn() };
     const mockText = { setText: jest.fn() };
-    const mockScene = {
-        add: {
-            container: jest.fn().mockReturnValue(mockContainer),
-            image: jest.fn().mockReturnValue(mockImage),
-            text: jest.fn().mockReturnValue({ setOrigin: jest.fn().mockReturnValue(mockText) }),
-        },
-        stack: jest.fn(),
-        back: jest.fn(),
-    };
     let mockConfig = {
         menu: { buttonsRight: true },
         confirm: {
@@ -37,10 +28,29 @@ describe("createConfirm()", () => {
             detailView: false,
         },
         balance: { icon: { key: "balanceIcon" } },
+        styleDefaults: {},
         paneCollections: { shop: "armoury", manage: "inventory" },
     };
-    const mockBalance = { setText: jest.fn(), getValue: jest.fn() };
+
     const mockBounds = { height: 100, y: 5 };
+
+    const mockBalance = { setText: jest.fn(), getValue: jest.fn() };
+
+    const mockScene = {
+        add: {
+            container: jest.fn().mockReturnValue(mockContainer),
+            image: jest.fn().mockReturnValue(mockImage),
+            text: jest.fn().mockReturnValue({ setOrigin: jest.fn().mockReturnValue(mockText) }),
+        },
+        stack: jest.fn(),
+        back: jest.fn(),
+        layout: {
+            getSafeArea: jest.fn(() => mockBounds),
+        },
+        config: mockConfig,
+        balance: mockBalance,
+    };
+
     buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
     const setVisibleFn = jest.fn();
     const resizeFn = jest.fn();
@@ -53,7 +63,7 @@ describe("createConfirm()", () => {
     const mockCollection = { get: jest.fn().mockReturnValue({ state: "foo" }) };
     collections.get = jest.fn().mockReturnValue(mockCollection);
 
-    beforeEach(() => (confirmPane = createConfirm(mockScene, mockConfig, mockBounds, mockBalance)));
+    beforeEach(() => (confirmPane = createConfirm(mockScene)));
 
     afterEach(() => jest.clearAllMocks());
 
@@ -87,19 +97,18 @@ describe("createConfirm()", () => {
         expect(containerContents.slice(-1)).toStrictEqual([mockImage]);
     });
     test("in a layout that can be flipped L-R in config", () => {
-        expect(layout.getInnerRectBounds.mock.calls[0][0]).toBe(mockBounds);
-        expect(layout.getInnerRectBounds.mock.calls[0][1]).toBe(true);
+        expect(layout.getInnerRectBounds.mock.calls[0][0]).toBe(mockScene);
         jest.clearAllMocks();
-        const flippedConfig = { ...mockConfig, menu: { buttonsRight: false } };
-        createConfirm(mockScene, flippedConfig, mockBounds);
-        expect(layout.getInnerRectBounds.mock.calls[0][1]).toBe(false);
+        mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
+        createConfirm(mockScene);
+        expect(mockScene.add.text).toHaveBeenCalledWith(20, -25, "PH", {});
     });
     test("that is displayed with an appropriate Y offset", () => {
         expect(mockContainer.setY).toHaveBeenCalledWith(55);
     });
     describe("Item detail view", () => {
         beforeEach(() => {
-            mockConfig = {
+            mockScene.config = {
                 ...mockConfig,
                 confirm: {
                     ...mockConfig.confirm,
@@ -107,7 +116,7 @@ describe("createConfirm()", () => {
                 },
             };
             jest.clearAllMocks();
-            confirmPane = createConfirm(mockScene, mockConfig, mockBounds);
+            confirmPane = createConfirm(mockScene);
         });
         test("adds extra placeholder text objects", () => {
             expect(mockScene.add.text).toHaveBeenCalledTimes(5);
@@ -154,26 +163,30 @@ describe("createConfirm()", () => {
     describe(".handleClick()", () => {
         beforeEach(() => (confirmPane.transaction = { isLegal: true }));
         test("when called with 'Confirm', performs the transaction, sets balance, and calls back()", () => {
-            confirmPane.handleClick("Confirm");
+            const handleClick = buttons.createConfirmButtons.mock.calls[0][1];
+            handleClick("Confirm");
             expect(mockDoTransactionFn).toHaveBeenCalledWith(confirmPane.transaction);
             expect(mockBalance.setText).toHaveBeenCalled();
             expect(mockScene.back).toHaveBeenCalled();
         });
         test("does not set the balance if the tx fails", () => {
-            confirmPane.handleClick("Confirm");
+            const handleClick = buttons.createConfirmButtons.mock.calls[0][1];
+            handleClick("Confirm");
             expect(mockDoTransactionFn).toHaveBeenCalledWith(confirmPane.transaction);
             expect(mockBalance.setText).not.toHaveBeenCalled();
             expect(mockScene.back).toHaveBeenCalled();
         });
         test("does nothing at all if the tx is not legal", () => {
+            const handleClick = buttons.createConfirmButtons.mock.calls[0][1];
             confirmPane.transaction = { isLegal: false };
-            confirmPane.handleClick("Confirm");
+            handleClick("Confirm");
             expect(mockDoTransactionFn).not.toHaveBeenCalled();
             expect(mockBalance.setText).not.toHaveBeenCalled();
             expect(mockScene.back).not.toHaveBeenCalled();
         });
         test("just calls back() if not called with 'Confirm'", () => {
-            confirmPane.handleClick("whatevs");
+            const handleClick = buttons.createConfirmButtons.mock.calls[0][1];
+            handleClick("whatevs");
             expect(mockDoTransactionFn).not.toHaveBeenCalled();
             expect(mockScene.back).toHaveBeenCalled();
         });

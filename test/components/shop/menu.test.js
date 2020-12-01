@@ -18,25 +18,30 @@ describe("shop menu", () => {
         scaleY: 1,
         y: 200,
     };
+    const mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
     const mockScene = {
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
             rectangle: jest.fn(),
         },
         config: {
+            menu: { buttonsRight: true },
             assetKeys: {
                 foo: "bar",
             },
         },
+        layout: {
+            getSafeArea: jest.fn(() => mockSafeArea),
+        },
     };
-    const mockConfig = { buttonsRight: true };
-    const mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
     const mockGelButton = { input: { enabled: true }, visible: true, accessibleElement: { update: jest.fn() } };
     const mockGelButtons = [mockGelButton, mockGelButton];
     buttons.createMenuButtons = jest.fn().mockReturnValue(mockGelButtons);
-    buttons.resizeGelButtons = jest.fn();
 
-    beforeEach(() => (menu = createMenu(mockScene, mockConfig, mockSafeArea)));
+    const resizeGelButtonsSpy = jest.fn();
+    buttons.resizeGelButtons = resizeGelButtonsSpy;
+
+    beforeEach(() => (menu = createMenu(mockScene)));
     afterEach(() => jest.clearAllMocks());
 
     describe("createMenu()", () => {
@@ -44,8 +49,7 @@ describe("shop menu", () => {
             expect(menu).toBe(mockContainer);
         });
         test("with stored config", () => {
-            const expectedConfig = { ...mockConfig, assetKeys: mockScene.config.assetKeys };
-            expect(menu.config).toStrictEqual(expectedConfig);
+            expect(menu.config).toStrictEqual(mockScene.config);
         });
         test("with a setVisible() function", () => {
             expect(typeof menu.setVisible).toBe("function");
@@ -99,7 +103,7 @@ describe("shop menu", () => {
             expect(mockContainer.setY.mock.calls[1][0]).toBe(100);
         });
         test("resizes the gel buttons", () => {
-            expect(buttons.resizeGelButtons).toHaveBeenCalled();
+            expect(resizeGelButtonsSpy).toHaveBeenCalled();
         });
     });
 });

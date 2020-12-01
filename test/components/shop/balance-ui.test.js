@@ -7,6 +7,7 @@
 
 import * as shopLayout from "../../../src/components/shop/shop-layout.js";
 import { createBalance } from "../../../src/components/shop/balance-ui.js";
+import * as scalerModule from "../../../src/core/scaler.js";
 
 describe("createBalance()", () => {
     let balanceElem;
@@ -29,6 +30,9 @@ describe("createBalance()", () => {
         text: "43",
     };
     const mockText = { setOrigin: jest.fn().mockReturnValue(mockReturnedText) };
+
+    const mockSafeArea = { baz: "qux" };
+
     const mockScene = {
         assetPrefix: "shop",
         add: {
@@ -58,9 +62,12 @@ describe("createBalance()", () => {
             balancePadding: 6,
             listPadding: { x: 1 },
         },
+        layout: {
+            getSafeArea: jest.fn(() => mockSafeArea),
+        },
     };
     const mockMetrics = { foo: "bar" };
-    const mockSafeArea = { baz: "qux" };
+    scalerModule.getMetrics = jest.fn(() => mockMetrics);
 
     beforeEach(() => {
         shopLayout.getXPos = jest.fn().mockReturnValue(42);

@@ -15,13 +15,23 @@ const mockMetrics = {
     verticals: { top: -300 },
     verticalBorderPad: 15,
 };
+let mockBounds;
 
 describe("shop element scaling functions", () => {
     beforeEach(() => {
+        mockBounds = { width: 100, height: 100, y: 0, x: 0 };
+
         mockLayout = { getSafeArea: jest.fn() };
         mockContainer = {
             getBounds: jest.fn().mockReturnValue({ height: 100, width: 300 }),
             scale: 1,
+            scaleX: 1,
+            scaleY: 1,
+            setScale: jest.fn(),
+            setY: jest.fn(),
+            setX: jest.fn(),
+            buttons: [],
+            memoisedBounds: mockBounds,
         };
     });
 
@@ -73,6 +83,36 @@ describe("shop element scaling functions", () => {
                 const scaleFactor = shopLayout.getScaleFactor(args);
                 expect(scaleFactor).toBe(0.5);
             });
+        });
+    });
+
+    describe("resize()", () => {
+        test("returns a scale factor that will have the element fill the available vertical space", () => {
+            const textSpy = jest.fn();
+            const imageSpy = jest.fn();
+
+            mockContainer.scaleX = 0.5;
+            mockContainer.scaleY = 2;
+            mockContainer.elems = {
+                item: [
+                    {
+                        set scaleX(val) {
+                            textSpy(val);
+                        },
+                        type: "Text",
+                    },
+                    {
+                        set scaleX(val) {
+                            imageSpy(val);
+                        },
+                        type: "Image",
+                    },
+                ],
+            };
+
+            shopLayout.resize(mockContainer)(mockBounds);
+            expect(imageSpy).not.toHaveBeenCalled();
+            expect(textSpy).toHaveBeenCalledWith(0.25);
         });
     });
 });
