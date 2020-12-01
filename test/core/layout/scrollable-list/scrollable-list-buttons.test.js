@@ -9,16 +9,22 @@ import * as overlays from "../../../../src/core/layout/scrollable-list/button-ov
 import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 import { eventBus } from "../../../../src/core/event-bus.js";
 import * as a11y from "../../../../src/core/accessibility/accessibilify.js";
+import { collections } from "../../../../src/core/collections.js";
 
 describe("Scrollable List Buttons", () => {
+    let button;
+    const mockItem = {
+        id: "mockId",
+        ariaLabel: "mockAriaLabel",
+        state: "foo",
+    };
     const mockButton = {
         width: 100,
         setScale: jest.fn(),
-        config: { id: "foo" },
+        config: { id: "foo_bar_itemKey_shop" },
         rexContainer: { parent: { getTopmostSizer: jest.fn().mockReturnValue({ space: { top: 10 } }) } },
-        overlays: { remove: jest.fn(), list: { a: "foo", b: "bar" } },
+        overlays: { remove: jest.fn(), list: { foo: "bar", baz: "qux" } },
     };
-
     const mockScene = {
         assetPrefix: "mockScene",
         add: {
@@ -40,20 +46,23 @@ describe("Scrollable List Buttons", () => {
                         { baz: "qux", activeStates: ["cta"] },
                         { wiz: "bang", activeStates: ["actioned"] },
                     ],
+                    manage: [
+                        { baz: "qux", activeStates: ["cta"] },
+                        { wiz: "bang", activeStates: ["actioned"] },
+                    ],
                 },
             },
+            paneCollections: { shop: "armoury", manage: "inventory" },
         },
         input: { y: 50 },
         scale: { displaySize: { height: 100 } },
         scene: { key: "shop" },
         events: { once: jest.fn() },
     };
+    mockButton.scene = mockScene;
 
-    const mockItem = {
-        id: "mockId",
-        ariaLabel: "mockAriaLabel",
-    };
-
+    const mockCollection = { get: jest.fn().mockReturnValue(mockItem) };
+    collections.get = jest.fn().mockReturnValue(mockCollection);
     overlays.overlays1Wide = jest.fn();
     a11y.accessibilify = jest.fn();
     const mockEvent = { unsubscribe: "foo" };
@@ -63,7 +72,7 @@ describe("Scrollable List Buttons", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    beforeEach(() => buttons.createGelButton(mockScene, mockItem, "shop", "cta", mockCallback));
+    beforeEach(() => (button = buttons.createGelButton(mockScene, mockItem, "shop", "cta", mockCallback)));
 
     describe("createGelButton()", () => {
         test("adds a gel button", () => {
@@ -101,7 +110,7 @@ describe("Scrollable List Buttons", () => {
         });
 
         test("applies overlays", () => {
-            buttons.createGelButton(mockScene, mockItem, "shop", "cta");
+            buttons.createGelButton(mockScene, mockItem, "manage", "actioned");
             expect(overlays.overlays1Wide).toHaveBeenCalled();
         });
 
@@ -109,8 +118,6 @@ describe("Scrollable List Buttons", () => {
             test("decorates the button's .overlays with additional functions", () => {
                 expect(typeof mockButton.overlays.setAll).toBe("function");
                 expect(typeof mockButton.overlays.unsetAll).toBe("function");
-                expect(typeof mockButton.overlays.toggleState).toBe("function");
-                expect(typeof mockButton.overlays.toggle).toBe("function");
             });
             test("plus all the overlay configs", () => {
                 const expected = {
@@ -124,31 +131,53 @@ describe("Scrollable List Buttons", () => {
             });
             test("unsetAll() unsets all overlays", () => {
                 mockButton.overlays.unsetAll();
-                expect(mockButton.overlays.remove.mock.calls[0][0]).toBe("a");
-                expect(mockButton.overlays.remove.mock.calls[1][0]).toBe("b");
-            });
-            test("toggleState() toggles state", () => {
-                mockButton.overlays.toggleState();
-                expect(mockButton.overlays.state).toBe("actioned");
-                mockButton.overlays.toggleState();
-                expect(mockButton.overlays.state).toBe("cta");
+                expect(mockButton.overlays.remove.mock.calls[0][0]).toBe("foo");
+                expect(mockButton.overlays.remove.mock.calls[1][0]).toBe("baz");
             });
             test("setAll() sets all overlays for the current state", () => {
                 jest.clearAllMocks();
                 mockButton.overlays.setAll();
                 const expected = [{ foo: "bar" }, { baz: "qux", activeStates: ["cta"] }];
-                const { configs } = overlays.overlays1Wide.mock.calls[0][0];
+                const configs = overlays.overlays1Wide.mock.calls[0][1];
                 expect(configs).toStrictEqual(expected);
             });
-            test("toggle() flows them together to switch between button overlay states", () => {
-                mockButton.overlays.toggle();
-                expect(mockButton.overlays.remove.mock.calls[0][0]).toBe("a");
-                expect(mockButton.overlays.remove.mock.calls[1][0]).toBe("b");
-                expect(mockButton.overlays.state).toBe("actioned");
-                const expected = [{ foo: "bar" }, { wiz: "bang", activeStates: ["actioned"] }];
-                const { configs } = overlays.overlays1Wide.mock.calls[1][0];
-                expect(configs).toStrictEqual(expected);
-            });
+        });
+    });
+    describe("updateButton()", () => {
+        test("gets the item from the appropriate collection", () => {
+            buttons.updateButton(button);
+            expect(collections.get).toHaveBeenCalledWith("armoury");
+            expect(mockCollection.get).toHaveBeenCalledWith("itemKey");
+        });
+        test("updates the overlays if the data was updated", () => {
+            jest.clearAllMocks();
+            button.item = { ...button.item, state: "equipped" };
+            buttons.updateButton(button);
+            expect(button.overlays.remove).toHaveBeenCalledWith("foo");
+            expect(button.overlays.remove).toHaveBeenCalledWith("baz");
+            expect(overlays.overlays1Wide).toHaveBeenCalled();
+        });
+        test("does not update if the data has not changed", () => {
+            jest.clearAllMocks();
+            buttons.updateButton(button);
+            expect(button.overlays.remove).not.toHaveBeenCalled();
+            expect(button.overlays.remove).not.toHaveBeenCalled();
+            expect(overlays.overlays1Wide).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("getButtonState() returns a string describing the button state", () => {
+        test("with shop items, look for an 'owned' state", () => {
+            const item = { id: "foo", state: "" };
+            expect(buttons.getButtonState(item, "shop")).toBe("cta");
+            item.state = "owned";
+            expect(buttons.getButtonState(item, "shop")).toBe("actioned");
+        });
+        test("with manage items, look for an 'equipped' state", () => {
+            const item = { id: "foo", state: "" };
+            expect(buttons.getButtonState(item, "manage")).toBe("cta");
+            item.state = "equipped";
+            expect(buttons.getButtonState(item, "manage")).toBe("actioned");
         });
     });
 });

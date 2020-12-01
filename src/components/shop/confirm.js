@@ -8,6 +8,7 @@
 import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect } from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
+import { collections } from "../../core/collections.js";
 
 export const createConfirm = (scene, config, bounds, balance) => {
     const { buttonsRight } = config.menu;
@@ -33,7 +34,7 @@ export const createConfirm = (scene, config, bounds, balance) => {
         prompt: scene.add
             .text(innerBounds.x, promptY(bounds), config.confirm.prompts.shop, styleDefaults)
             .setOrigin(0.5),
-        price: scene.add.text(innerBounds.x + 20, currencyY(bounds), "1000", styleDefaults).setOrigin(0.5),
+        price: scene.add.text(innerBounds.x + 20, currencyY(bounds), "PH", styleDefaults).setOrigin(0.5),
         priceIcon: scene.add.image(
             innerBounds.x - 20,
             currencyY(bounds),
@@ -51,26 +52,43 @@ export const createConfirm = (scene, config, bounds, balance) => {
     confirmContainer.doTransaction = doTransaction(scene);
     confirmContainer.setBalance = bal => balance.setText(bal);
     confirmContainer.getBalance = () => balance.getValue();
+    confirmContainer.setLegal = setLegal(confirmContainer);
 
     return confirmContainer;
 };
 
 const handleClick = (scene, container) => button => {
+    if (button === "Confirm" && !container.transaction.isLegal) return;
     const cost = button === "Confirm" && confirm(container);
     cost && container.setBalance(container.getBalance() - cost);
     scene.back();
 };
 
+const isTransactionLegal = (container, item, title) => {
+    const isShop = container.transaction && title === "shop";
+    const itemState = getItemState(container, item, title);
+    return isShop ? container.getBalance() >= parseInt(item.price) : itemState !== "equipped";
+};
+
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
 const update = (scene, container) => (item, title) => {
+    const isLegal = isTransactionLegal(container, item, title);
     container.removeAll(false);
-    container.elems.prompt.setText(container.config.confirm.prompts[title]);
     container.elems.priceIcon.setVisible(title === "shop");
     container.elems.price.setText(title === "shop" ? item.price : "");
     container.elems.item = itemView(scene, item, container.config, container.memoisedBounds);
-    container.transaction = { item, title };
+    container.transaction = { item, title, isLegal };
+    container.setLegal(title, isLegal);
     populate(container);
+};
+
+const setLegal = container => (title, isLegal) => {
+    const prompt = isLegal
+        ? container.config.confirm.prompts[title].legal
+        : container.config.confirm.prompts[title].illegal;
+    container.elems.prompt.setText(prompt);
+    container.buttons[0].setLegal(isLegal);
 };
 
 const populate = container =>
@@ -110,6 +128,9 @@ const itemDetailView = (scene, item, config, bounds) => {
     return [itemImage, itemTitle, itemDescription, itemBlurb];
 };
 
+const getItemState = (container, item, title) =>
+    collections.get(getCollectionsKey(container, title)).get(item.id).state;
+const getCollectionsKey = (container, title) => container.config.paneCollections[title];
 const getItemTitle = item => (item ? item.title : "Item Default Title");
 const getItemDescription = item => (item ? item.description : "Item Default Description");
 const getItemBlurb = item => (item ? item.longDescription : "");

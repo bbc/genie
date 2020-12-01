@@ -126,6 +126,24 @@ describe("shop menu buttons", () => {
             message.callback();
             expect(callback).toHaveBeenCalled();
         });
+        describe("setLegal()", () => {
+            let confirmButton;
+            beforeEach(() => (confirmButton = buttons[0]));
+
+            test("is applied to the 'Confirm' button", () => {
+                expect(typeof confirmButton.setLegal).toBe("function");
+            });
+            test("when called with true, sets tint and alpha", () => {
+                confirmButton.setLegal(true);
+                expect(confirmButton.alpha).toBe(1);
+                expect(confirmButton.tint).toBe(0xffffff);
+            });
+            test("when called with false, sets tint and alpha", () => {
+                confirmButton.setLegal(false);
+                expect(confirmButton.alpha).toBe(0.25);
+                expect(confirmButton.tint).toBe(0xff0000);
+            });
+        });
     });
 
     describe("resizeGelButtons()", () => {
