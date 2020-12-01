@@ -10,6 +10,7 @@ import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
+import { accessibilify } from "../../accessibility/accessibilify.js";
 
 const createPanel = (scene, title, prepTx) => {
     const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, prepTx));
@@ -68,12 +69,19 @@ const createTable = (scene, title, prepTx) => {
     return sizer;
 };
 
-const createItem = (scene, item, title, prepTx) =>
-    scene.rexUI.add.label({
+const createItem = (scene, item, title, prepTx) => {
+    const label = scene.rexUI.add.label({
         orientation: 0,
         icon: createGelButton(scene, item, title, "cta", prepTx),
         name: item.id,
     });
+    label.config = {
+        id: `scroll_button_${item.id}_${title}`,
+        ariaLabel: `${item.title} - ${item.description}`, // TODO: label needs action
+    };
+    accessibilify(label);
+    return label;
+};
 
 const resizePanel = (scene, panel) => () => {
     const t = panel.t;
@@ -86,7 +94,7 @@ const resizePanel = (scene, panel) => () => {
     panel.setT(t);
 };
 
-const getFirstElement = item => item.children[0].accessibleElement.el;
+const getFirstElement = item => item.accessibleElement.el;
 
 const setupEvents = (scene, panel) => {
     const scaleEvent = onScaleChange.add(resizePanel(scene, panel));
@@ -131,7 +139,8 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         items.forEach(item => {
             const button = item.children[0];
             button.input.enabled = isVisible;
-            button.accessibleElement.update();
+            item.config.tabbable = isVisible;
+            item.accessibleElement.update();
         });
     }
 }
