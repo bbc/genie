@@ -40,6 +40,8 @@ export const setVisible = container => isVisible => {
     });
 };
 
+const isText = item => item.type === "Text";
+
 export const resize = container => bounds => {
     const { memoisedBounds } = container;
     container.memoisedBounds = bounds;
@@ -50,6 +52,8 @@ export const resize = container => bounds => {
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
     resizeGelButtons(container);
+
+    container.elems?.item.filter(isText).forEach(item => (item.scaleX = container.scaleX / container.scaleY));
 };
 
 export const getHalfRectBounds = (menuBounds, isOnRight) => {
