@@ -5,26 +5,30 @@
  * @license Apache-2.0
  */
 
-import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect } from "./shop-layout.js";
+import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect, getSafeArea } from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
+import { collections } from "../../core/collections.js";
 
-export const createConfirm = (scene, config, bounds, balance) => {
+export const createConfirm = scene => {
+    const config = scene.config;
+    const balance = scene.balance;
+    const bounds = getSafeArea(scene.layout);
+
     const { buttonsRight } = config.menu;
     const { styleDefaults } = config;
 
-    const confirmContainer = scene.add.container();
-    confirmContainer.config = config;
-    confirmContainer.memoisedBounds = bounds;
+    const container = scene.add.container();
+    container.config = config;
+    container.memoisedBounds = bounds;
 
-    const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(bounds, buttonsRight));
+    const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
     const yOffset = bounds.height / 2 + bounds.y;
 
-    confirmContainer.setY(yOffset);
-    confirmContainer.handleClick = handleClick(scene, confirmContainer);
-    confirmContainer.buttons = createConfirmButtons(scene, innerBounds, config, yOffset, confirmContainer.handleClick);
+    container.setY(yOffset);
+    container.buttons = createConfirmButtons(container, handleClick(scene, container));
 
-    confirmContainer.elems = {
+    container.elems = {
         background: [
             createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
             createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
@@ -33,7 +37,7 @@ export const createConfirm = (scene, config, bounds, balance) => {
         prompt: scene.add
             .text(innerBounds.x, promptY(bounds), config.confirm.prompts.shop, styleDefaults)
             .setOrigin(0.5),
-        price: scene.add.text(innerBounds.x + 20, currencyY(bounds), "1000", styleDefaults).setOrigin(0.5),
+        price: scene.add.text(innerBounds.x + 20, currencyY(bounds), "PH", styleDefaults).setOrigin(0.5),
         priceIcon: scene.add.image(
             innerBounds.x - 20,
             currencyY(bounds),
@@ -42,35 +46,51 @@ export const createConfirm = (scene, config, bounds, balance) => {
         item: itemView(scene, undefined, config, bounds),
     };
 
-    populate(confirmContainer);
+    populate(container);
 
-    confirmContainer.setVisible = setVisible(confirmContainer);
-    confirmContainer.resize = resize(confirmContainer);
-    confirmContainer.update = update(scene, confirmContainer);
-    confirmContainer.prepTransaction = prepTransaction(scene, confirmContainer);
-    confirmContainer.doTransaction = doTransaction(scene);
-    confirmContainer.setBalance = bal => balance.setText(bal);
-    confirmContainer.getBalance = () => balance.getValue();
-
-    return confirmContainer;
+    container.setVisible = setVisible(container);
+    container.resize = resize(container);
+    container.update = update(scene, container);
+    container.prepTransaction = prepTransaction(scene, container);
+    container.doTransaction = doTransaction(scene);
+    container.setBalance = bal => balance.setText(bal);
+    container.getBalance = () => balance.getValue();
+    container.setLegal = setLegal(container);
+    return container;
 };
 
 const handleClick = (scene, container) => button => {
+    if (button === "Confirm" && !container.transaction.isLegal) return;
     const cost = button === "Confirm" && confirm(container);
     cost && container.setBalance(container.getBalance() - cost);
     scene.back();
 };
 
+const isTransactionLegal = (container, item, title) => {
+    const isShop = container.transaction && title === "shop";
+    const itemState = getItemState(container, item, title);
+    return isShop ? container.getBalance() >= parseInt(item.price) : itemState !== "equipped";
+};
+
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
 const update = (scene, container) => (item, title) => {
+    const isLegal = isTransactionLegal(container, item, title);
     container.removeAll(false);
-    container.elems.prompt.setText(container.config.confirm.prompts[title]);
     container.elems.priceIcon.setVisible(title === "shop");
     container.elems.price.setText(title === "shop" ? item.price : "");
     container.elems.item = itemView(scene, item, container.config, container.memoisedBounds);
-    container.transaction = { item, title };
+    container.transaction = { item, title, isLegal };
+    container.setLegal(title, isLegal);
     populate(container);
+};
+
+const setLegal = container => (title, isLegal) => {
+    const prompt = isLegal
+        ? container.config.confirm.prompts[title].legal
+        : container.config.confirm.prompts[title].illegal;
+    container.elems.prompt.setText(prompt);
+    container.buttons[0].setLegal(isLegal);
 };
 
 const populate = container =>
@@ -110,6 +130,9 @@ const itemDetailView = (scene, item, config, bounds) => {
     return [itemImage, itemTitle, itemDescription, itemBlurb];
 };
 
+const getItemState = (container, item, title) =>
+    collections.get(getCollectionsKey(container, title)).get(item.id).state;
+const getCollectionsKey = (container, title) => container.config.paneCollections[title];
 const getItemTitle = item => (item ? item.title : "Item Default Title");
 const getItemDescription = item => (item ? item.description : "Item Default Description");
 const getItemBlurb = item => (item ? item.longDescription : "");

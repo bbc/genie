@@ -6,9 +6,12 @@
  */
 
 import { createTitles } from "../select/titles.js";
-import { getYPos, getScaleFactor } from "./shop-layout.js";
+import { getYPos, getScaleFactor, getSafeArea } from "./shop-layout.js";
+import { getMetrics } from "../../core/scaler.js";
 
-export const createTitle = (scene, metrics, safeArea) => {
+export const createTitle = scene => {
+    const safeArea = getSafeArea(scene.layout);
+    const metrics = getMetrics();
     const titleContainer = scene.add.container();
     titleContainer.add(createTitles(scene));
 

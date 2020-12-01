@@ -41,7 +41,7 @@
         },
         value: {
             type: "text",
-            value: 1000, // PH
+            value: 100, // PH
             styles: {},
         },
     },
@@ -56,10 +56,10 @@
         manage: "inventory",
     },
     confirm: {
-        detailView: true, // true yields a smaller image and more text
+        detailView: true, // true === smaller image and more text. false === large image only.
         prompts: {
-            shop: "Purchase this item?",
-            manage: "Do you want to \nequip this item?",
+            shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
+            manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
         },
     },
     styleDefaults: {

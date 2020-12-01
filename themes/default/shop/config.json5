@@ -49,7 +49,7 @@
         manage: "inventory",
     },
     menu: {
-        buttonsRight: true, // set as false to X-flip the menu layout
+        buttonsRight: false, // set as false to X-flip the menu layout
     },
     columns: 1,
     assetKeys: {

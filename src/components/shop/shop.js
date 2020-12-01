@@ -15,6 +15,8 @@ import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js"
 import { eventBus } from "../../core/event-bus.js";
 import { createConfirm } from "./confirm.js";
 
+const memoizeBackButton = config => (({ channel, key, action }) => ({ channel, name: key, callback: action }))(config);
+
 export class Shop extends Screen {
     preload() {
         this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this);
@@ -24,27 +26,23 @@ export class Shop extends Screen {
         this.addBackgroundItems();
         this.setLayout(["back", "pause"]);
 
-        this.backMessage = this.memoizeBackButton();
+        this.backMessage = memoizeBackButton(this.layout.buttons.back.config);
         this.paneStack = [];
 
         this.customMessage = {
             channel: this.backMessage.channel,
             name: this.backMessage.name,
-            callback: () => this.back(),
+            callback: this.back.bind(this),
         };
 
-        const metrics = getMetrics();
-        const safeArea = getSafeArea(this.layout);
+        this.title = createTitle(this);
+        this.balance = createBalance(this);
 
-        this.title = createTitle(this, metrics, safeArea);
-        this.balance = createBalance(this, metrics, safeArea);
-
-        const confirm = createConfirm(this, this.config, safeArea, this.balance);
-
+        const confirm = createConfirm(this);
         const callback = confirm.prepTransaction;
 
         this.panes = {
-            top: createMenu(this, this.config.menu, safeArea),
+            top: createMenu(this),
             shop: new ScrollableList(this, "shop", callback),
             manage: new ScrollableList(this, "manage", callback),
             confirm,
@@ -52,6 +50,8 @@ export class Shop extends Screen {
         this.setVisiblePane("top");
 
         this.setupEvents();
+
+        this.resize();
     }
 
     stack(pane) {
@@ -70,16 +70,6 @@ export class Shop extends Screen {
         this.setVisiblePane(this.paneStack[this.paneStack.length - 1]);
     }
 
-    memoizeBackButton() {
-        const backButtonConfig = this.layout.buttons.back.config;
-        const message = {
-            channel: backButtonConfig.channel,
-            name: backButtonConfig.key,
-            callback: backButtonConfig.action,
-        };
-        return message;
-    }
-
     setupEvents() {
         const resize = this.resize.bind(this);
         const scaleEvent = onScaleChange.add(() => resize());
@@ -87,9 +77,7 @@ export class Shop extends Screen {
     }
 
     setVisiblePane(pane) {
-        Object.keys(this.panes).forEach(key =>
-            pane === key ? this.panes[key].setVisible(true) : this.panes[key].setVisible(false),
-        );
+        Object.keys(this.panes).forEach(key => this.panes[key].setVisible(pane === key));
         this.title.setTitleText(pane === "top" ? "Shop" : pane);
     }
 

@@ -6,7 +6,8 @@
  * @license Apache-2.0
  */
 
-import { getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
+import { getXPos, getYPos, getScaleFactor, getSafeArea } from "./shop-layout.js";
+import { getMetrics } from "../../core/scaler.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -16,7 +17,9 @@ const styleDefaults = {
 
 const makeElement = makerFns => conf => makerFns[conf.type](conf).setOrigin(0.5);
 
-export const createBalance = (scene, metrics, safeArea) => {
+export const createBalance = scene => {
+    const safeArea = getSafeArea(scene.layout);
+    const metrics = getMetrics();
     const image = conf => scene.add.image(0, 0, `${scene.assetPrefix}.${conf.key}`);
     const text = conf => {
         const textStyle = { ...styleDefaults, ...conf.styles };

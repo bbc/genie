@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
-import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
+import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
@@ -14,6 +14,8 @@ import { accessibilify } from "../../accessibility/accessibilify.js";
 
 const createPanel = (scene, title, prepTx) => {
     const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, prepTx));
+    panel.name = title;
+    panel.callback = prepTx;
     panel.layout();
     return panel;
 };
@@ -42,7 +44,7 @@ const getPanelY = scene => {
 };
 
 const createInnerPanel = (scene, title, prepTx) => {
-    const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 } });
+    const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" });
     sizer.add(createTable(scene, title, prepTx), { expand: true });
     return sizer;
 };
@@ -111,12 +113,33 @@ const setupEvents = (scene, panel) => {
     items.forEach(item => getFirstElement(item).addEventListener("focus", () => panel.updateOnFocus(item)));
 };
 
+const updatePanel = panel => {
+    const key = panel.parentContainer.scene.config.paneCollections[panel.name];
+    const collection = collections.get(key).getAll();
+    const items = getPanelItems(panel);
+
+    shouldPanelListUpdate(collection, items)
+        ? updatePanelList(panel)
+        : items.forEach(item => updateButton(item.children[0]));
+};
+
+const shouldPanelListUpdate = (collection, items) =>
+    collection.length !== items.length || items.some((item, idx) => item.children[0].item.id !== collection[idx].id);
+
+const updatePanelList = panel => {
+    const tableContainer = panel.getByName("gridContainer", true);
+    const scene = panel.parentContainer.scene;
+    tableContainer.clear(true);
+    tableContainer.add(createTable(scene, panel.name, panel.callback));
+    resizePanel(scene, panel)();
+};
+
 const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items") ?? [];
 
 export class ScrollableList extends Phaser.GameObjects.Container {
-    constructor(scene, title, prepTransaction) {
+    constructor(scene, title, callback) {
         super(scene, 0, 0);
-        this.panel = createPanel(scene, title, prepTransaction);
+        this.panel = createPanel(scene, title, callback);
         this.makeAccessible = fp.noop;
 
         this.add(this.panel);
@@ -142,5 +165,6 @@ export class ScrollableList extends Phaser.GameObjects.Container {
             item.config.tabbable = isVisible;
             item.accessibleElement.update();
         });
+        isVisible && updatePanel(this.panel);
     }
 }

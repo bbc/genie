@@ -6,7 +6,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 import { resizeGelButtons } from "./menu-buttons.js";
 
 export const getSafeArea = layout => layout.getSafeArea({}, false);
@@ -41,6 +40,8 @@ export const setVisible = container => isVisible => {
     });
 };
 
+const isText = item => item.type === "Text";
+
 export const resize = container => bounds => {
     const { memoisedBounds } = container;
     container.memoisedBounds = bounds;
@@ -50,7 +51,9 @@ export const resize = container => bounds => {
     );
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
-    resizeGelButtons(container.buttons, bounds, getInnerRectBounds(bounds, false), container.config.buttonsRight);
+    resizeGelButtons(container);
+
+    container.elems?.item.filter(isText).forEach(item => (item.scaleX = container.scaleX / container.scaleY));
 };
 
 export const getHalfRectBounds = (menuBounds, isOnRight) => {
@@ -63,10 +66,12 @@ export const getHalfRectBounds = (menuBounds, isOnRight) => {
     };
 };
 
-export const getInnerRectBounds = (outerBounds, isOnRight) => {
-    const innerBounds = getHalfRectBounds(outerBounds, isOnRight);
+export const getInnerRectBounds = scene => {
+    const outerBounds = getSafeArea(scene.layout);
+    const right = scene.config.menu.buttonsRight;
+    const innerBounds = getHalfRectBounds(outerBounds, right);
     return {
-        x: isOnRight ? innerBounds.width / 2 : -innerBounds.width / 2,
+        x: innerBounds.width / 2,
         y: innerBounds.y,
         width: innerBounds.width * 0.65,
         height: innerBounds.height * 0.6,
