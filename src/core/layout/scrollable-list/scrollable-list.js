@@ -71,16 +71,25 @@ const createTable = (scene, title, prepTx) => {
     return sizer;
 };
 
+const forwardEventsToButton = (label, button) => {
+    label.setInteractive();
+    [Phaser.Input.Events.POINTER_UP, Phaser.Input.Events.POINTER_OVER, Phaser.Input.Events.POINTER_OUT].forEach(event =>
+        label.on(event, () => button.emit(event, button, button.scene.sys.input.activePointer, false)),
+    );
+};
+
 const createItem = (scene, item, title, prepTx) => {
+    const icon = createGelButton(scene, item, title, "cta", prepTx);
     const label = scene.rexUI.add.label({
         orientation: 0,
-        icon: createGelButton(scene, item, title, "cta", prepTx),
+        icon,
         name: item.id,
     });
     label.config = {
         id: `scroll_button_${item.id}_${title}`,
-        ariaLabel: `${item.title} - ${item.description}`, // TODO: label needs action
+        ariaLabel: `${item.title} - ${item.description}`,
     };
+    forwardEventsToButton(label, icon);
     accessibilify(label);
     return label;
 };
