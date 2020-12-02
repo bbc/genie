@@ -11,6 +11,9 @@ import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
 import { collections } from "../../../../src/core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
+import { accessibilify } from "../../../../src/core/accessibility/accessibilify.js";
+
+jest.mock("../../../../src/core/accessibility/accessibilify.js");
 
 const mockA11yElem = {
     addEventListener: jest.fn(),
@@ -48,14 +51,11 @@ describe("Scrollable List", () => {
         collections.get = jest.fn().mockReturnValue(mockCollection);
 
         mockLabel = {
-            children: [
-                {
-                    input: { enabled: true },
-                    accessibleElement: { el: mockA11yElem, update: jest.fn() },
-                    item: mockItem,
-                },
-            ],
+            children: [{ input: { enabled: true }, item: mockItem }],
             height: 50,
+            setInteractive: jest.fn(),
+            on: jest.fn(),
+            accessibleElement: { el: mockA11yElem, update: jest.fn() },
         };
         mockGridSizer = {
             add: jest.fn(),
@@ -291,7 +291,7 @@ describe("Scrollable List", () => {
             list.setVisible(false);
             expect(list.panel.visible).toBe(false);
             expect(mockLabel.children[0].input.enabled).toBe(false);
-            expect(mockLabel.children[0].accessibleElement.update).toHaveBeenCalled();
+            expect(mockLabel.accessibleElement.update).toHaveBeenCalled();
         });
     });
     describe("panel update on setVisible(true)", () => {
