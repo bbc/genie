@@ -9,9 +9,11 @@ import { collections } from "../../core/collections.js";
 
 export const doTransaction = scene => tx => {
     const { shop, manage } = scene.config.paneCollections;
-    const currencyKey = scene.config.balance.value.key;
     const invCol = collections.get(manage);
-    return (tx.title === "shop" && buy(tx, shop, invCol, currencyKey)) || (tx.title === "manage" && equip(tx, invCol));
+    return (
+        (tx.title === "shop" && buy(tx, shop, invCol, scene.config.balance.value.key)) ||
+        (tx.title === "manage" && equip(tx, invCol))
+    );
 };
 
 const buy = (tx, shop, invCol, currencyKey) => {
