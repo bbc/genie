@@ -56,6 +56,8 @@ const titleStyle = {
     align: "center",
 };
 
+const excludeHidden = key => !examples[key].hidden;
+
 export class Launcher extends Screen {
     create() {
         addExampleScreens(this);
@@ -67,6 +69,6 @@ export class Launcher extends Screen {
 
         this.sound.pauseOnBlur = false;
 
-        Object.keys(examples).map(getButtonConfig(this)).map(addButton);
+        Object.keys(examples).filter(excludeHidden).map(getButtonConfig(this)).map(addButton);
     }
 }
