@@ -41,7 +41,7 @@
         },
         value: {
             type: "text",
-            key: "coin", // the item in the inventory collection used for currency
+            key: "coin", // the id of the currency item, which must exist in the inventory collection
             styles: {},
         },
     },
