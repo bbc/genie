@@ -71,7 +71,7 @@ describe("createBalance()", () => {
     const mockMetrics = { foo: "bar" };
     scalerModule.getMetrics = jest.fn(() => mockMetrics);
     const mockCurrencyItem = { id: "someId", qty: 100 };
-    const mockCollection = { getAll: jest.fn().mockReturnValue([mockCurrencyItem]) };
+    const mockCollection = { get: jest.fn().mockReturnValue(mockCurrencyItem) };
     collections.get = jest.fn().mockReturnValue(mockCollection);
 
     beforeEach(() => {
@@ -97,7 +97,12 @@ describe("createBalance()", () => {
             resolution: 4,
             foo: "bar",
         };
-        expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, 100, expectedStyles);
+        expect(mockScene.add.text.mock.calls[0][3]).toStrictEqual(expectedStyles);
+    });
+    test("uses the quantity of the currency item from inventory as its value", () => {
+        expect(collections.get).toHaveBeenCalledWith("inventory");
+        expect(mockCollection.get).toHaveBeenCalledWith("someId");
+        expect(mockScene.add.text.mock.calls[0][2]).toStrictEqual(mockCurrencyItem.qty);
     });
     test("positions the icon to the left", () => {
         expect(mockReturnedIcon.setPosition).toHaveBeenCalledWith(-12, 0);

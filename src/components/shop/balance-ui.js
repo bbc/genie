@@ -18,11 +18,8 @@ const styleDefaults = {
 
 const makeElement = makerFns => conf => makerFns[conf.type](conf).setOrigin(0.5);
 
-const getBalanceValue = scene => {
-    const inventory = collections.get(scene.config.paneCollections.manage).getAll();
-    const currency = inventory.find(item => item.id === scene.config.balance.value.key);
-    return currency.qty;
-};
+const getBalanceValue = scene =>
+    collections.get(scene.config.paneCollections.manage).get(scene.config.balance.value.key).qty;
 
 export const createBalance = scene => {
     const safeArea = getSafeArea(scene.layout);

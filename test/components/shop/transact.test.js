@@ -13,7 +13,6 @@ describe("doTransaction", () => {
     let result;
     let doTransaction;
 
-    
     const mockCurrencyItem = { id: "someId", qty: 100 };
     const mockScene = {
         config: { paneCollections: { shop: "shop", manage: "manage" }, balance: { value: { key: "currencyKey" } } },
@@ -40,8 +39,10 @@ describe("doTransaction", () => {
         test("processes a buy transaction", () => {
             const expectedShopSet = { ...mockItem, state: "owned", qty: -1 };
             expect(mockShopCol.set.mock.calls[0][0]).toStrictEqual(expectedShopSet);
-            const expectedInvSet = { ...mockItem, qty: +1 };
-            expect(mockInvCol.set.mock.calls[0][0]).toStrictEqual(expectedInvSet);
+            const expectedBoughtItemSet = { ...mockItem, qty: 1 };
+            expect(mockInvCol.set.mock.calls[0][0]).toStrictEqual(expectedBoughtItemSet);
+            const expectedCurrencySet = { ...mockCurrencyItem, qty: 50 };
+            expect(mockInvCol.set.mock.calls[1][0]).toStrictEqual(expectedCurrencySet);
         });
         test("returns the price that was charged", () => {
             expect(result).toBe(50);
