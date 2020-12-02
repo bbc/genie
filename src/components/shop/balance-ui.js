@@ -8,6 +8,7 @@
 
 import { getXPos, getYPos, getScaleFactor, getSafeArea } from "./shop-layout.js";
 import { getMetrics } from "../../core/scaler.js";
+import { collections } from "../../core/collections.js";
 
 const styleDefaults = {
     fontFamily: "ReithSans",
@@ -17,13 +18,19 @@ const styleDefaults = {
 
 const makeElement = makerFns => conf => makerFns[conf.type](conf).setOrigin(0.5);
 
+const getBalanceValue = scene => {
+    const inventory = collections.get(scene.config.paneCollections.manage).getAll();
+    const currency = inventory.find(item => item.id === scene.config.balance.value.key);
+    return currency.qty;
+};
+
 export const createBalance = scene => {
     const safeArea = getSafeArea(scene.layout);
     const metrics = getMetrics();
     const image = conf => scene.add.image(0, 0, `${scene.assetPrefix}.${conf.key}`);
     const text = conf => {
         const textStyle = { ...styleDefaults, ...conf.styles };
-        return scene.add.text(0, 0, conf.value, textStyle);
+        return scene.add.text(0, 0, getBalanceValue(scene), textStyle);
     };
     const container = scene.add.container();
     const configs = scene.config.balance;

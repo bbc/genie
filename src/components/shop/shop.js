@@ -41,7 +41,7 @@ export class Shop extends Screen {
         const confirm = createConfirm(this);
         const callback = confirm.prepTransaction;
 
-        const inventoryFilter = item => item.id !== this.config.currencyItemKey;
+        const inventoryFilter = item => item.id !== this.config.balance.value.key;
 
         this.panes = {
             top: createMenu(this),

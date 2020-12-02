@@ -41,7 +41,7 @@
         },
         value: {
             type: "text",
-            value: 100, // PH
+            key: "coin", // the item in the inventory collection used for currency
             styles: {},
         },
     },
@@ -55,7 +55,6 @@
         shop: "armoury",
         manage: "inventory",
     },
-    currencyItemKey: "coin",
     confirm: {
         detailView: true, // true === smaller image and more text. false === large image only.
         prompts: {
