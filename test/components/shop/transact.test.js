@@ -13,11 +13,13 @@ describe("doTransaction", () => {
     let result;
     let doTransaction;
 
+    
+    const mockCurrencyItem = { id: "someId", qty: 100 };
     const mockScene = {
-        config: { paneCollections: { shop: "shop", manage: "manage" } },
+        config: { paneCollections: { shop: "shop", manage: "manage" }, balance: { value: { key: "currencyKey" } } },
     };
     const mockShopCol = { set: jest.fn(), get: jest.fn().mockReturnValue("baz") };
-    const mockInvCol = { set: jest.fn() };
+    const mockInvCol = { set: jest.fn(), get: jest.fn().mockReturnValue(mockCurrencyItem) };
     const mockItem = { id: "someItem", price: 50 };
 
     beforeEach(() => {

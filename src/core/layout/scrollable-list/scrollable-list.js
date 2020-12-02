@@ -62,9 +62,7 @@ const createTable = (scene, title, prepTx, parent) => {
             name: "grid",
         });
 
-        collection.forEach((item, idx) =>
-            table.add(createItem(scene, item, title, prepTx), 0, idx, "top", 0, true),
-        );
+        collection.forEach((item, idx) => table.add(createItem(scene, item, title, prepTx), 0, idx, "top", 0, true));
 
         sizer.add(table, 1, "center", 0, true);
     }
@@ -131,7 +129,7 @@ const updatePanelList = panel => {
 
 const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items") ?? [];
 
-const getFilteredCollection = (collection, filter) => filter ? collection.filter(filter) : collection;
+const getFilteredCollection = (collection, filter) => (filter ? collection.filter(filter) : collection);
 
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, title, callback, filter) {
