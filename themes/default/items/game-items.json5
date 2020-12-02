@@ -34,5 +34,13 @@
         title: "Banana",
         description: "A ripe banana",
         tags: ["food"],
-    }
+    },
+    {
+        id: "coin",
+        title: "Coins",
+        description: "Money",
+        longDescription: "AKA cash, moolah, \nscratch, dough, bread...",
+        icon: "balanceIcon",
+        tags: ["currency"],
+    },
 ]

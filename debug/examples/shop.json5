@@ -55,6 +55,7 @@
         shop: "armoury",
         manage: "inventory",
     },
+    currencyItemKey: "coin",
     confirm: {
         detailView: true, // true === smaller image and more text. false === large image only.
         prompts: {

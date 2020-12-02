@@ -11,15 +11,15 @@ import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const createPanel = (scene, title, prepTx) => {
-    const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, prepTx));
+const createPanel = (scene, title, prepTx, parent) => {
+    const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, prepTx, parent));
     panel.name = title;
     panel.callback = prepTx;
     panel.layout();
     return panel;
 };
 
-const getConfig = (scene, title, prepTx) => {
+const getConfig = (scene, title, prepTx, parent) => {
     const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
     const safeArea = getPanelY(scene);
     return {
@@ -27,7 +27,7 @@ const getConfig = (scene, title, prepTx) => {
         height: safeArea.height,
         scrollMode: 0,
         background: scene.add.image(0, 0, `${assetPrefix}.${keys.background}`),
-        panel: { child: createInnerPanel(scene, title, prepTx) },
+        panel: { child: createInnerPanel(scene, title, prepTx, parent) },
         slider: {
             track: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbar}`),
             thumb: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbarHandle}`),
@@ -42,15 +42,15 @@ const getPanelY = scene => {
     return { y: safeArea.height / 2 + safeArea.y, height: safeArea.height };
 };
 
-const createInnerPanel = (scene, title, prepTx) => {
+const createInnerPanel = (scene, title, prepTx, parent) => {
     const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" });
-    sizer.add(createTable(scene, title, prepTx), { expand: true });
+    sizer.add(createTable(scene, title, prepTx, parent), { expand: true });
     return sizer;
 };
 
-const createTable = (scene, title, prepTx) => {
+const createTable = (scene, title, prepTx, parent) => {
     const key = scene.config.paneCollections[title];
-    const collection = collections.get(key).getAll();
+    const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
 
     const sizer = scene.rexUI.add.sizer({ orientation: "y" });
 
@@ -62,7 +62,9 @@ const createTable = (scene, title, prepTx) => {
             name: "grid",
         });
 
-        collection.forEach((item, idx) => table.add(createItem(scene, item, title, prepTx), 0, idx, "top", 0, true));
+        collection.forEach((item, idx) =>
+            table.add(createItem(scene, item, title, prepTx), 0, idx, "top", 0, true),
+        );
 
         sizer.add(table, 1, "center", 0, true);
     }
@@ -106,8 +108,9 @@ const setupEvents = (scene, panel) => {
 };
 
 const updatePanel = panel => {
-    const key = panel.parentContainer.scene.config.paneCollections[panel.name];
-    const collection = collections.get(key).getAll();
+    const parent = panel.parentContainer;
+    const key = parent.scene.config.paneCollections[panel.name];
+    const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
     const items = getPanelItems(panel);
 
     shouldPanelListUpdate(collection, items)
@@ -122,16 +125,19 @@ const updatePanelList = panel => {
     const tableContainer = panel.getByName("gridContainer", true);
     const scene = panel.parentContainer.scene;
     tableContainer.clear(true);
-    tableContainer.add(createTable(scene, panel.name, panel.callback));
+    tableContainer.add(createTable(scene, panel.name, panel.callback, panel.parentContainer));
     resizePanel(scene, panel)();
 };
 
 const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items") ?? [];
 
+const getFilteredCollection = (collection, filter) => filter ? collection.filter(filter) : collection;
+
 export class ScrollableList extends Phaser.GameObjects.Container {
-    constructor(scene, title, callback) {
+    constructor(scene, title, callback, filter) {
         super(scene, 0, 0);
-        this.panel = createPanel(scene, title, callback);
+        this.collectionFilter = filter;
+        this.panel = createPanel(scene, title, callback, this);
         this.makeAccessible = fp.noop;
 
         this.add(this.panel);
