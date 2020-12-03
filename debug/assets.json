@@ -71,6 +71,16 @@
                 "type": "json5",
                 "key": "debug-shop-demo",
                 "url": "../../debug/examples/shop-demo.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-shop-demo-game",
+                "url": "../../debug/examples/shop-demo-game.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-shop-demo-shop",
+                "url": "../../debug/examples/shop-demo-shop.json5"
             }
         ]
     },

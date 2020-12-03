@@ -3,5 +3,5 @@
     background: {
         items: [{ key: "home.background", x: 0, y: 0 }],
     },
-    eventChannel: "shop_demo_top",
+    eventChannel: "shop_demo_game",
 }
