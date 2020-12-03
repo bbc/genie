@@ -334,4 +334,13 @@ describe("Scrollable List", () => {
             expect(collections.get).not.toHaveBeenCalled();
         });
     });
+    describe("collection filtering", () => {
+        const filterFn = jest.fn().mockReturnValue(true);
+
+        beforeEach(() => new ScrollableList(mockScene, "title", fp.noop, filterFn));
+
+        test("if a filter function is passed to the list, it is run against the collection", () => {
+            expect(filterFn).toHaveBeenCalledTimes(1);
+        });
+    });
 });

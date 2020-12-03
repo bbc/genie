@@ -41,7 +41,7 @@
         },
         value: {
             type: "text",
-            value: 100, // PH
+            key: "coin", // the id of the currency item, which must exist in the inventory collection
             styles: {},
         },
     },

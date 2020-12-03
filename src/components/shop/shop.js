@@ -41,10 +41,12 @@ export class Shop extends Screen {
         const confirm = createConfirm(this);
         const callback = confirm.prepTransaction;
 
+        const inventoryFilter = item => item.id !== this.config.balance.value.key;
+
         this.panes = {
             top: createMenu(this),
             shop: new ScrollableList(this, "shop", callback),
-            manage: new ScrollableList(this, "manage", callback),
+            manage: new ScrollableList(this, "manage", callback, inventoryFilter),
             confirm,
         };
         this.setVisiblePane("top");
