@@ -66,6 +66,11 @@
                 "type": "json5",
                 "key": "debug-shop",
                 "url": "../../debug/examples/shop.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-shop-demo",
+                "url": "../../debug/examples/shop-demo.json5"
             }
         ]
     },

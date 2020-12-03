@@ -8,6 +8,7 @@ import { Results } from "../../components/results/results-screen.js";
 import { Home } from "../../components/home.js";
 import { Narrative } from "../../components/narrative.js";
 import { Shop } from "../../components/shop/shop.js";
+import { ShopDemo } from "./shop-demo.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const prependDebug = key => `debug-${key}`;
@@ -155,11 +156,18 @@ const exampleScreens = {
             back: "debug",
         },
     },
+    "shop-demo": {
+        scene: ShopDemo,
+        title: "Shop Demo Game",
+        routes: {
+            back: "debug",
+        },
+    },
     narrative: {
         scene: Narrative,
         title: "Narrative",
         routes: {
-            next: "debug",
+            back: "debug",
         },
     },
 };
