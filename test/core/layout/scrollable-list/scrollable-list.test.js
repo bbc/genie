@@ -11,6 +11,9 @@ import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
 import { collections } from "../../../../src/core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
+import { accessibilify } from "../../../../src/core/accessibility/accessibilify.js";
+
+jest.mock("../../../../src/core/accessibility/accessibilify.js");
 
 const mockA11yElem = {
     addEventListener: jest.fn(),
@@ -21,6 +24,8 @@ const mockGelButton = {
     width: 100,
     setScale: jest.fn(),
     accessibleElement: { update: jest.fn() },
+    emit: jest.fn(),
+    scene: { sys: { input: { activePointer: "mock" } } },
 };
 buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
@@ -42,20 +47,17 @@ describe("Scrollable List", () => {
 
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
-        mockItem = { id: "someItem", name: "someItemName" };
+        mockItem = { id: "someItem", name: "someItemName", title: "title", description: "description" };
         collectionGetAll = [mockItem];
         mockCollection = { getAll: jest.fn(() => collectionGetAll) };
         collections.get = jest.fn().mockReturnValue(mockCollection);
 
         mockLabel = {
-            children: [
-                {
-                    input: { enabled: true },
-                    accessibleElement: { el: mockA11yElem, update: jest.fn() },
-                    item: mockItem,
-                },
-            ],
+            children: [{ input: { enabled: true }, item: mockItem }],
             height: 50,
+            setInteractive: jest.fn(),
+            on: jest.fn(),
+            accessibleElement: { el: mockA11yElem, update: jest.fn() },
         };
         mockGridSizer = {
             add: jest.fn(),
@@ -177,6 +179,32 @@ describe("Scrollable List", () => {
                         name: mockItem.id,
                     });
                 });
+                test("label has the correct accessibilify config attached to it", () => {
+                    expect(mockLabel.config).toEqual({
+                        id: `scroll_button_${mockItem.id}_${title}`,
+                        ariaLabel: `${mockItem.title} - ${mockItem.description}`,
+                    });
+                });
+                test("labels input events are forwarded to the gel button", () => {
+                    expect(mockLabel.setInteractive).toHaveBeenCalled();
+                    [
+                        Phaser.Input.Events.POINTER_UP,
+                        Phaser.Input.Events.POINTER_OVER,
+                        Phaser.Input.Events.POINTER_OUT,
+                    ].forEach((event, index) => {
+                        expect(mockLabel.on).toHaveBeenCalledWith(event, expect.any(Function));
+                        mockLabel.on.mock.calls[index][1]();
+                        expect(mockGelButton.emit).toHaveBeenCalledWith(
+                            event,
+                            mockGelButton,
+                            mockGelButton.scene.sys.input.activePointer,
+                            false,
+                        );
+                    });
+                });
+                test("label is accessibilified", () => {
+                    expect(accessibilify).toHaveBeenCalledWith(mockLabel);
+                });
                 test("labels are added to a grid sizer", () => {
                     expect(mockScene.rexUI.add.gridSizer).toHaveBeenCalledWith({
                         column: 1,
@@ -291,7 +319,8 @@ describe("Scrollable List", () => {
             list.setVisible(false);
             expect(list.panel.visible).toBe(false);
             expect(mockLabel.children[0].input.enabled).toBe(false);
-            expect(mockLabel.children[0].accessibleElement.update).toHaveBeenCalled();
+            expect(mockLabel.config.tabbable).toBe(false);
+            expect(mockLabel.accessibleElement.update).toHaveBeenCalled();
         });
     });
     describe("panel update on setVisible(true)", () => {

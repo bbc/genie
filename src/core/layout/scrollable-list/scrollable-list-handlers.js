@@ -18,8 +18,7 @@ const handleClickIfVisible = (gelButton, scene, handler) => () => {
     if (mouseY >= topY && mouseY <= bottomY) handler(gelButton);
 };
 
-const updatePanelOnScroll = panel => () =>
-    getPanelItems(panel).map(item => item.children[0].setElementSizeAndPosition());
+const updatePanelOnScroll = panel => () => getPanelItems(panel).map(item => item.setElementSizeAndPosition());
 
 const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
 

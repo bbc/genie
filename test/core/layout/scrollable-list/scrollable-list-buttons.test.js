@@ -81,8 +81,6 @@ describe("Scrollable List Buttons", () => {
 
         test("provides it the correct config", () => {
             const expectedConfig = {
-                accessibilityEnabled: true,
-                ariaLabel: "mockAriaLabel",
                 channel: "mockChannel",
                 gameButton: true,
                 group: "shop",
