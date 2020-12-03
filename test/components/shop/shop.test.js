@@ -21,8 +21,7 @@ describe("Shop", () => {
     const mockScrollableList = { setVisible: jest.fn() };
     const config = {
         shop: {
-            title: [],
-            balance: [],
+            balance: { value: { key: "currencyItemKey" } },
             assetKeys: {
                 prefix: "shop",
                 background: "background",
@@ -119,9 +118,15 @@ describe("Shop", () => {
         });
 
         test("adds scrollable list panes", () => {
-            expect(ScrollableList).toHaveBeenCalled();
+            expect(ScrollableList).toHaveBeenCalledTimes(2);
             expect(shopScreen.panes.shop).toBe(mockScrollableList);
             expect(shopScreen.panes.manage).toBe(mockScrollableList);
+        });
+
+        test("passes a filter function to the inventory pane", () => {
+            const filterFn = ScrollableList.mock.calls[1][3];
+            const mockCollection = [{ id: "currencyItemKey" }, { id: "someOtherId" }];
+            expect(mockCollection.filter(filterFn)).toStrictEqual([{ id: "someOtherId" }]);
         });
 
         test("calls createTitle to create the title UI component", () => {
