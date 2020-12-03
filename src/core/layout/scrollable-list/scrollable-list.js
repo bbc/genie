@@ -10,6 +10,7 @@ import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
+import { accessibilify } from "../../accessibility/accessibilify.js";
 
 const createPanel = (scene, title, prepTx, parent) => {
     const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, prepTx, parent));
@@ -70,12 +71,28 @@ const createTable = (scene, title, prepTx, parent) => {
     return sizer;
 };
 
-const createItem = (scene, item, title, prepTx) =>
-    scene.rexUI.add.label({
+const forwardEventsToButton = (label, button) => {
+    label.setInteractive();
+    [Phaser.Input.Events.POINTER_UP, Phaser.Input.Events.POINTER_OVER, Phaser.Input.Events.POINTER_OUT].forEach(event =>
+        label.on(event, () => button.emit(event, button, button.scene.sys.input.activePointer, false)),
+    );
+};
+
+const createItem = (scene, item, title, prepTx) => {
+    const icon = createGelButton(scene, item, title, getButtonState(item, title), prepTx);
+    const label = scene.rexUI.add.label({
         orientation: 0,
-        icon: createGelButton(scene, item, title, getButtonState(item, title), prepTx),
+        icon,
         name: item.id,
     });
+    label.config = {
+        id: `scroll_button_${item.id}_${title}`,
+        ariaLabel: `${item.title} - ${item.description}`,
+    };
+    forwardEventsToButton(label, icon);
+    accessibilify(label);
+    return label;
+};
 
 const resizePanel = (scene, panel) => () => {
     const t = panel.t;
@@ -88,7 +105,7 @@ const resizePanel = (scene, panel) => () => {
     panel.setT(t);
 };
 
-const getFirstElement = item => item.children[0].accessibleElement.el;
+const getFirstElement = item => item.accessibleElement.el;
 
 const setupEvents = (scene, panel) => {
     const scaleEvent = onScaleChange.add(resizePanel(scene, panel));
@@ -158,7 +175,8 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         items.forEach(item => {
             const button = item.children[0];
             button.input.enabled = isVisible;
-            button.accessibleElement.update();
+            item.config.tabbable = isVisible;
+            item.accessibleElement.update();
         });
         isVisible && updatePanel(this.panel);
     }

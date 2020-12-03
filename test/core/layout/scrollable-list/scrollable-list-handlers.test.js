@@ -34,9 +34,8 @@ describe("Scrollable List handlers", () => {
                     getTopmostSizer: jest.fn().mockReturnValue(mockSizer),
                 },
             },
-            setElementSizeAndPosition: jest.fn(),
         };
-        mockRexLabel = { children: [mockGelButton], height: 100 };
+        mockRexLabel = { children: [mockGelButton], height: 100, setElementSizeAndPosition: jest.fn() };
         mockGridSizer = { getElement: jest.fn().mockReturnValue([mockRexLabel]) };
         mockPanel = {
             getByName: jest.fn().mockReturnValue(mockGridSizer),
@@ -70,7 +69,7 @@ describe("Scrollable List handlers", () => {
         test("calls setElementSizeAndPosition on each GEL button", () => {
             const instance = handlers.updatePanelOnScroll(mockPanel);
             instance();
-            expect(mockGelButton.setElementSizeAndPosition).toHaveBeenCalled();
+            expect(mockRexLabel.setElementSizeAndPosition).toHaveBeenCalled();
         });
     });
 

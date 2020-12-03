@@ -7,7 +7,6 @@
 import { handleClickIfVisible } from "./scrollable-list-handlers.js";
 import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
-import { accessibilify } from "../../accessibility/accessibilify.js";
 import { collections } from "../../collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
@@ -19,8 +18,6 @@ const createGelButton = (scene, item, title, state, prepTx) => {
 
     const gelConfig = {
         gameButton: true,
-        accessibilityEnabled: true,
-        ariaLabel: item.ariaLabel,
         channel: config.eventChannel,
         group: scene.scene.key,
         id,
@@ -54,7 +51,6 @@ const createGelButton = (scene, item, title, state, prepTx) => {
     scene.events.once("shutdown", clickEvent.unsubscribe);
 
     scaleButton(gelButton, scene.layout, config.listPadding.x);
-    makeAccessible(gelButton);
     gelButton.overlays.setAll();
     return gelButton;
 };
@@ -101,7 +97,5 @@ const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);
 const getPaneTitle = button => getItemKeyAndTitle(button).pop();
 const setOverlays = button => () => overlays1Wide(button, getConfigs(button));
 const unsetOverlays = button => () => Object.keys(button.overlays.list).forEach(key => button.overlays.remove(key));
-
-const makeAccessible = gelButton => accessibilify(gelButton);
 
 export { createGelButton, scaleButton, updateButton, getButtonState };
