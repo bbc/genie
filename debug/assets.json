@@ -293,5 +293,49 @@
                 }
             }
         ]
+    },
+    "shopDemo": {
+        "prefix": "shopDemo.",
+        "files": [
+            {
+                "type": "image",
+                "key": "background",
+                "url": "../../debug/assets/shop-demo/background.jpg"
+            },
+            {
+                "type": "image",
+                "key": "tree1",
+                "url": "../../debug/assets/shop-demo/tree1.png"
+            },
+            {
+                "type": "image",
+                "key": "tree2",
+                "url": "../../debug/assets/shop-demo/tree2.png"
+            },
+            {
+                "type": "spritesheet",
+                "key": "dwarf",
+                "url": "../../debug/assets/shop-demo/dwarf_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 32,
+                    "frameHeight": 32,
+                    "frameMax": 24,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "coin",
+                "url": "../../debug/assets/shop-demo/coin.png",
+                "frameConfig": {
+                    "frameWidth": 16,
+                    "frameHeight": 16,
+                    "frameMax": 7,
+                    "margin": 0,
+                    "spacing": 4
+                }
+            }
+        ]
     }
 }

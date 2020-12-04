@@ -40,7 +40,38 @@ class ShopDemoGame extends Screen {
     create() {
         this.addBackgroundItems();
         this.setLayout(["back"]);
+        
+        addFixtures(this);
+
+        this.entities = {
+            coins: addCoins(this),
+            player: addPlayer(this),
+        }
+
+        console.log("BEEBUG: this", this);
     }
 }
+
+const addFixtures = scene =>
+    scene.config.fixtures.forEach(fixture =>
+        scene.add
+            .image(fixture.x, fixture.y, scene.config.assets[fixture.key].key)
+            .setFlipX(fixture.flip)
+            .setScale(scene.config.assets[fixture.key].scale),
+    );
+
+const addCoins = scene => scene.config.coinSpawns.map(spawnPoint => addCoinSpawnPoint(scene, spawnPoint));
+const addCoinSpawnPoint = (scene, point) => {
+    const { assets } = scene.config;
+    return {
+        sprite: scene.add.sprite(point.x, point.y, assets.coin.key).setScale(assets.coin.scale),
+    };
+};
+
+const addPlayer = scene => {
+    const { player, groundY, assets } = scene.config;
+    const sprite = scene.add.sprite(player.spawn.x, groundY, assets.dwarf.key).setScale(assets.dwarf.scale);
+    return { sprite };
+};
 
 export { ShopDemo, ShopDemoGame };

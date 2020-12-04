@@ -1,7 +1,38 @@
 {
     music: "home.backgroundMusic",
     background: {
-        items: [{ key: "home.background", x: 0, y: 0 }],
+        items: [{ key: "shopDemo.background", x: 0, y: 0 }],
     },
     eventChannel: "shop_demo_game",
+    assets: {
+        tree1: { key: "shopDemo.tree1", scale: 1 },
+        tree2: { key: "shopDemo.tree2", scale: 1 },
+        dwarf: { key: "shopDemo.dwarf", scale: 2 },
+        coin: { key: "shopDemo.coin", scale: 2 },
+    },
+    fixtures: [
+        { key: "tree2", x: -380, y: -18, flip: true },
+        { key: "tree1", x: 50, y: -31 },
+        { key: "tree2", x: 350, y: -18 },
+    ],
+    coinSpawns: [
+        { x: -400, y: 0 },
+        { x: -300, y: 0 },
+        { x: -200, y: 0 },
+        { x: -100, y: 0 },
+        { x: 0, y: 0 },
+        { x: 100, y: 0 },
+        { x: 200, y: 0 },
+        { x: 300, y: 0 },
+        { x: 400, y: 0 },
+    ],
+    player: {
+        spawn: { x: -150 },
+        anims: {
+            idle: {},
+            walk: {},
+            chop: {},
+        }
+    },
+    groundY: 100
 }
