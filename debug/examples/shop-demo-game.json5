@@ -7,32 +7,30 @@
     assets: {
         tree1: { key: "shopDemo.tree1", scale: 1 },
         tree2: { key: "shopDemo.tree2", scale: 1 },
-        dwarf: { key: "shopDemo.dwarf", scale: 2 },
+        player: { key: "shopDemo.dwarf", scale: 3 },
         coin: { key: "shopDemo.coin", scale: 2 },
+        coinPop: { key: "shopDemo.coinPop", scale: 2 },
     },
-    fixtures: [
+    treeSpawns: [
         { key: "tree2", x: -380, y: -18, flip: true },
         { key: "tree1", x: 50, y: -31 },
         { key: "tree2", x: 350, y: -18 },
     ],
     coinSpawns: [
-        { x: -400, y: 0 },
-        { x: -300, y: 0 },
-        { x: -200, y: 0 },
-        { x: -100, y: 0 },
-        { x: 0, y: 0 },
-        { x: 100, y: 0 },
-        { x: 200, y: 0 },
-        { x: 300, y: 0 },
-        { x: 400, y: 0 },
+        { x: -60, y: -30 },
+        { x: 0, y: -80 },
+        { x: 60, y: -30 },
+
     ],
     player: {
         spawn: { x: -150 },
-        anims: {
-            idle: {},
-            walk: {},
-            chop: {},
-        }
+        speed: 3,
+        xLimit: 425,
     },
-    groundY: 100
+    groundY: 96,
+    colliderZoneSize: 10,
+    timers: {
+        coinSpawn: 5,
+        chopDebounce: 1,
+    },
 }

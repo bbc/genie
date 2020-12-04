@@ -1,7 +1,7 @@
 {
     music: "home.backgroundMusic",
     background: {
-        items: [{ key: "home.background", x: 0, y: 0 }],
+        items: [{ key: "shopDemo.background", x: 0, y: 0 }],
     },
     eventChannel: "shop_demo_top",
 }

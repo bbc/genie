@@ -321,7 +321,7 @@
                     "frameHeight": 32,
                     "frameMax": 24,
                     "margin": 0,
-                    "spacing": 4
+                    "spacing": 0
                 }
             },
             {
@@ -331,9 +331,21 @@
                 "frameConfig": {
                     "frameWidth": 16,
                     "frameHeight": 16,
-                    "frameMax": 7,
+                    "frameMax": 8,
                     "margin": 0,
-                    "spacing": 4
+                    "spacing": 0
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "coinPop",
+                "url": "../../debug/assets/shop-demo/pop.png",
+                "frameConfig": {
+                    "frameWidth": 16,
+                    "frameHeight": 16,
+                    "frameMax": 5,
+                    "margin": 0,
+                    "spacing": 0
                 }
             }
         ]
