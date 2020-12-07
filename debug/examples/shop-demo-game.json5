@@ -20,7 +20,6 @@
         { x: -60, y: -30 },
         { x: 0, y: -80 },
         { x: 60, y: -30 },
-
     ],
     player: {
         spawn: { x: -150 },
@@ -28,9 +27,17 @@
         xLimit: 425,
     },
     groundY: 96,
-    colliderZoneSize: 10,
+    colliderSize: 30,
     timers: {
-        coinSpawn: 5,
-        chopDebounce: 1,
+        coinSpawn: 2500,
+        chopDebounce: 350,
+    },
+    gravity: 300,
+    paneCollections: { manage: "inventory" },
+    balance: {
+        value: { key: "coin" },
+        x: 300,
+        y: -200,
+        style: { backgroundColor: "#000", fontSize: "20px", fontFamily: "ReithSans" },
     },
 }

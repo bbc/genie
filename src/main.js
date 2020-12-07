@@ -48,6 +48,7 @@ eventBus.subscribe({
 // Additional game options passed to phaser setup
 const gameOptions = {
     //pixelArt: true,
+    physics: { default: "arcade", arcade: {} }, // wrong place, but let's fix later.
 };
 
 const screens = {

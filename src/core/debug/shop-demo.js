@@ -43,15 +43,18 @@ class ShopDemoGame extends Screen {
         this.setLayout(["back", "pause"]);
 
         createAnims(this);
-        
+
+        this.balanceUI = createBalance(this);
+        this.getCoin = getCoin(this);
+
         const trees = addTrees(this);
-        
+
         this.entities = {
             trees,
             coins: addCoins(this, trees),
             player: addPlayer(this),
         };
-        
+
         this.woodChop = chopWood(this);
 
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -60,23 +63,166 @@ class ShopDemoGame extends Screen {
     }
     update() {
         this.entities.player.update();
+
         if (this.cursors.space.isDown) {
             this.entities.player.chopWood();
         }
+        updateCoins(this);
     }
 }
 
+const createBalance = scene => {
+    const { balance } = scene.config;
+    const currency = getCurrencyItem(scene);
+    const text = scene.add.text(balance.x, balance.y, `Coins: ${currency.qty}`, balance.style);
+    return {
+        text,
+        setBalance: bal => text.setText(`Coins: ${bal}`),
+    };
+};
+
+const getCoin = scene => () => {
+    const currency = getCurrencyItem(scene);
+    const balance = currency.qty + 1;
+    scene.balanceUI.setBalance(balance);
+    getInventory(scene).set({ ...currency, qty: balance });
+};
+
+const getCurrencyItem = scene => getInventory(scene).get(scene.config.balance.value.key);
+const getInventory = scene => collections.get(scene.config.paneCollections.manage);
+
 const addTrees = scene =>
-    scene.config.treeSpawns.map(fixture =>
-        scene.add
+    scene.config.treeSpawns.map(fixture => {
+        const sprite = scene.add
             .image(fixture.x, fixture.y, scene.config.assets[fixture.key].key)
             .setFlipX(fixture.flip)
-            .setScale(scene.config.assets[fixture.key].scale),
-    );
+            .setScale(scene.config.assets[fixture.key].scale);
+        const coins = [];
+        return {
+            sprite,
+            coins,
+            wasChopped: () => coins.forEach(coin => coin.fall()),
+        };
+    });
+
+const addCoins = (scene, trees) =>
+    trees
+        .map(tree =>
+            scene.config.coinSpawns.map(spawnPoint => {
+                const coin = addCoin(scene, tree, spawnPoint);
+                tree.coins.push(coin);
+                return coin;
+            }),
+        )
+        .flat();
+
+const addCoin = (scene, tree, point) => {
+    const { assets, gravity } = scene.config;
+    const spawnPoint = { x: tree.sprite.x + point.x, y: tree.sprite.y + point.y };
+    const sprite = scene.physics.add.sprite(spawnPoint.x, spawnPoint.y).setScale(assets.coin.scale).setGravityY(0);
+    sprite.play("coinSpin");
+    return {
+        sprite,
+        spawnPoint,
+        isDespawned: false,
+        despawnedAt: 0,
+        fall: () => {
+            if (sprite.y === spawnPoint.y) sprite.setGravityY(gravity);
+        },
+    };
+};
+
+const updateCoins = scene => {
+    const {
+        entities: { coins },
+        config: { groundY },
+    } = scene;
+    doCoinsLanding(coins, groundY);
+    doCoinsCollected(scene);
+    doCoinsRespawned(scene);
+};
+
+const doCoinsLanding = (coins, groundY) =>
+    coins
+        .filter(coin => coin.sprite.body.gravity.y !== 0)
+        .filter(coin => coin.sprite.y >= groundY)
+        .forEach(coin => coin.sprite.setGravityY(0).setVelocityY(0).setY(groundY));
+
+const doCoinsCollected = scene => {
+    const {
+        entities: { coins, player },
+        config: { groundY, colliderSize },
+    } = scene;
+    coins
+        .filter(coin => !coin.isDespawned)
+        .filter(coin => Math.abs(coin.sprite.y - groundY) <= colliderSize)
+        .filter(coin => Math.abs(coin.sprite.x - player.sprite.x) <= colliderSize)
+        .forEach(coin => {
+            despawnCoin(scene, coin);
+            scene.getCoin();
+        });
+};
+
+const despawnCoin = (scene, coin) => {
+    coin.sprite.play("coinPop");
+    coin.isDespawned = true;
+    coin.despawnedAt = scene.time.now;
+};
+
+const doCoinsRespawned = scene => {
+    const {
+        entities: { coins },
+        config: { timers },
+    } = scene;
+    coins
+        .filter(coin => coin.isDespawned)
+        .filter(coin => coin.despawnedAt + timers.coinSpawn < scene.time.now)
+        .forEach(coin => respawnCoin(coin));
+};
+
+const respawnCoin = coin => {
+    coin.sprite.play("coinSpin");
+    coin.sprite.setPosition(coin.spawnPoint.x, coin.spawnPoint.y);
+    coin.isDespawned = false;
+};
+
+const chopWood = scene => sprite => {
+    const range = { low: sprite.x - scene.config.colliderSize, high: sprite.x + scene.config.colliderSize }; // could do with an offset in the facing dir
+    scene.entities.trees
+        .filter(tree => tree.sprite.x >= range.low && tree.sprite.x <= range.high)
+        .map(tree => tree.wasChopped());
+};
+
+const addPlayer = scene => {
+    const { player, groundY, assets, timers } = scene.config;
+    const sprite = scene.add.sprite(player.spawn.x, groundY).setScale(assets.player.scale);
+    sprite.walkRight = true;
+    sprite.play("walk");
+    return {
+        sprite,
+        chopWood: () => {
+            if (!sprite.lastChopTime || sprite.lastChopTime + timers.chopDebounce < scene.time.now) {
+                sprite.lastChopTime = scene.time.now;
+                sprite.play("chop");
+                sprite.anims.chain("walk");
+                scene.woodChop(sprite);
+            }
+        },
+        update: () => {
+            const { x, y } = sprite;
+            if (Math.abs(x) > player.xLimit) {
+                sprite.walkRight = !sprite.walkRight;
+                sprite.setFlipX(!sprite.flipX);
+            }
+            sprite.setX(x + player.speed * (sprite.walkRight ? 1 : -1));
+        },
+        getCoin: () => console.log("coin get"),
+    };
+};
 
 const createAnims = scene => {
     const coinSheet = scene.config.assets.coin.key;
-    const coinPopSheet = scene.config.assets.coin.key;
+    const coinPopSheet = scene.config.assets.coinPop.key;
     const playerSheet = scene.config.assets.player.key;
     scene.anims.create({
         key: "coinSpin",
@@ -86,9 +232,9 @@ const createAnims = scene => {
     });
     scene.anims.create({
         key: "coinPop",
-        frames: scene.anims.generateFrameNumbers(coinPopSheet, { start: 0, end: 5 }),
+        frames: scene.anims.generateFrameNumbers(coinPopSheet, { start: 0, end: 6 }),
         frameRate: 12,
-        repeat: -1,
+        repeat: 0,
     });
     scene.anims.create({
         key: "walk",
@@ -102,54 +248,6 @@ const createAnims = scene => {
         frameRate: 15,
         repeat: 0,
     });
-};
-
-const addCoins = (scene, trees) => {
-    trees.map(tree => scene.config.coinSpawns.map(spawnPoint => addCoinSpawnPoint(scene, tree, spawnPoint)))
-    ;
-};
-
-const addCoinSpawnPoint = (scene, tree, point) => {
-    const { assets } = scene.config;
-    const sprite = scene.add.sprite(tree.x + point.x, tree.y + point.y).setScale(assets.coin.scale);
-    sprite.play("coinSpin");
-    return {
-        sprite,
-        pickUp: () => console.log("pickup"),
-        respawn: () => console.log("respawn"),
-        fall: () => console.log("falling"),
-        update: () => {},
-    };
-};
-
-const chopWood = scene => sprite => {
-    console.log("chop x, y", sprite.x, sprite.y);
-    // get the timer
-    // get the player x, y and make a range
-    // filter trees to ones in range
-};
-
-const addPlayer = scene => {
-    const { player, groundY, assets } = scene.config;
-    const sprite = scene.add.sprite(player.spawn.x, groundY).setScale(assets.player.scale);
-    sprite.walkRight = true;
-    sprite.play("walk");
-    return {
-        sprite,
-        chopWood: () => {
-            sprite.play("chop");
-            sprite.anims.chain("walk");
-            scene.woodChop(sprite);
-        },
-        update: () => {
-            const { x, y } = sprite;
-            if (Math.abs(x) > player.xLimit) {
-                sprite.walkRight = !sprite.walkRight;
-                sprite.setFlipX(!sprite.flipX);
-            }
-            sprite.setX(x + player.speed * (sprite.walkRight ? 1 : -1));
-        },
-    };
 };
 
 export { ShopDemo, ShopDemoGame };

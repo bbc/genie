@@ -343,7 +343,7 @@
                 "frameConfig": {
                     "frameWidth": 16,
                     "frameHeight": 16,
-                    "frameMax": 5,
+                    "frameMax": 6,
                     "margin": 0,
                     "spacing": 0
                 }
