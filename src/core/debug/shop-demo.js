@@ -58,7 +58,6 @@ class ShopDemoGame extends Screen {
         this.woodChop = chopWood(this);
         this.cursors = this.input.keyboard.createCursorKeys();
 
-        console.log("BEEBUG: this", this);
         // make a reset button
     }
     update() {
@@ -72,7 +71,6 @@ class ShopDemoGame extends Screen {
 }
 
 const chopWood = scene => player => {
-    console.log("BEEBUG: player", player);
     const range = { low: player.x - scene.config.colliderSize, high: player.x + scene.config.colliderSize }; // could do with an offset in the facing dir
     scene.entities.trees
         .filter(tree => tree.sprite.x >= range.low && tree.sprite.x <= range.high)

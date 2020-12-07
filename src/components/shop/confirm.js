@@ -103,7 +103,6 @@ const populate = container =>
     ]);
 
 const prepTransaction = (scene, container) => (item, title) => {
-    console.log('BEEBUG: item, title', item, title);
     container.update(item, title);
     scene.stack("confirm");
 };
