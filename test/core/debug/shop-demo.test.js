@@ -69,10 +69,12 @@ describe("ShopDemoGame", () => {
                         coin: { key: "foo", scale: 1 },
                         coinPop: { key: "bar", scale: 1 },
                         player: { key: "baz", scale: 1 },
+                        tree: { key: "qaz", scale: 1 },
                     },
                     paneCollections: { manage: "inventory" },
                     balance: { value: { key: "qux" } },
-                    treeSpawns: [],
+                    treeSpawns: [{ key: "tree", x: 0, y: 0, flip: true }],
+                    coinSpawns: [{ x: 0, y: 0 }],
                     player: { spawn: { x: 0, y: 0 }, hat: { scale: 1 } },
                 },
             },
@@ -88,6 +90,18 @@ describe("ShopDemoGame", () => {
             text: jest.fn(),
             container: jest.fn().mockReturnValue({ setPosition: jest.fn().mockReturnValue({ add: jest.fn() }) }),
             sprite: jest.fn().mockReturnValue({ setScale: jest.fn().mockReturnValue({ play: jest.fn() }) }),
+            image: jest.fn().mockReturnValue({
+                setFlipX: jest.fn().mockReturnValue({ setScale: jest.fn().mockReturnValue("foo") }),
+            }),
+        };
+        shopDemoGame.physics = {
+            add: {
+                sprite: jest.fn().mockReturnValue({
+                    setScale: jest
+                        .fn()
+                        .mockReturnValue({ setGravityY: jest.fn().mockReturnValue({ play: jest.fn() }) }),
+                }),
+            },
         };
     });
 
