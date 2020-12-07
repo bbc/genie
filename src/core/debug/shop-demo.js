@@ -56,10 +56,10 @@ class ShopDemoGame extends Screen {
         };
 
         this.woodChop = chopWood(this);
-
         this.cursors = this.input.keyboard.createCursorKeys();
 
         console.log("BEEBUG: this", this);
+        // make a reset button
     }
     update() {
         this.entities.player.update();
@@ -70,6 +70,14 @@ class ShopDemoGame extends Screen {
         updateCoins(this);
     }
 }
+
+const chopWood = scene => player => {
+    console.log("BEEBUG: player", player);
+    const range = { low: player.x - scene.config.colliderSize, high: player.x + scene.config.colliderSize }; // could do with an offset in the facing dir
+    scene.entities.trees
+        .filter(tree => tree.sprite.x >= range.low && tree.sprite.x <= range.high)
+        .map(tree => tree.wasChopped());
+};
 
 const createBalance = scene => {
     const { balance } = scene.config;
@@ -156,7 +164,7 @@ const doCoinsCollected = scene => {
     coins
         .filter(coin => !coin.isDespawned)
         .filter(coin => Math.abs(coin.sprite.y - groundY) <= colliderSize)
-        .filter(coin => Math.abs(coin.sprite.x - player.sprite.x) <= colliderSize)
+        .filter(coin => Math.abs(coin.sprite.x - player.container.x) <= colliderSize)
         .forEach(coin => {
             despawnCoin(scene, coin);
             scene.getCoin();
@@ -186,39 +194,43 @@ const respawnCoin = coin => {
     coin.isDespawned = false;
 };
 
-const chopWood = scene => sprite => {
-    const range = { low: sprite.x - scene.config.colliderSize, high: sprite.x + scene.config.colliderSize }; // could do with an offset in the facing dir
-    scene.entities.trees
-        .filter(tree => tree.sprite.x >= range.low && tree.sprite.x <= range.high)
-        .map(tree => tree.wasChopped());
-};
-
 const addPlayer = scene => {
     const { player, groundY, assets, timers } = scene.config;
-    const sprite = scene.add.sprite(player.spawn.x, groundY).setScale(assets.player.scale);
+    const container = scene.add.container().setPosition(player.spawn.x, groundY);
+    const sprite = scene.add.sprite(0, 0).setScale(assets.player.scale);
+    const hat = scene.add.sprite(0, player.hat.yOffset, getBestEquippedHat(scene)).setScale(player.hat.scale);
     sprite.walkRight = true;
     sprite.play("walk");
+    container.add([sprite, hat]);
     return {
         sprite,
+        container,
         chopWood: () => {
             if (!sprite.lastChopTime || sprite.lastChopTime + timers.chopDebounce < scene.time.now) {
                 sprite.lastChopTime = scene.time.now;
                 sprite.play("chop");
                 sprite.anims.chain("walk");
-                scene.woodChop(sprite);
+                scene.woodChop(container);
             }
         },
         update: () => {
-            const { x, y } = sprite;
+            const { x, y } = container;
             if (Math.abs(x) > player.xLimit) {
                 sprite.walkRight = !sprite.walkRight;
                 sprite.setFlipX(!sprite.flipX);
             }
-            sprite.setX(x + player.speed * (sprite.walkRight ? 1 : -1));
+            container.setX(x + player.speed * (sprite.walkRight ? 1 : -1));
         },
         getCoin: () => console.log("coin get"),
     };
 };
+
+const getBestEquippedHat = scene =>
+    getInventory(scene)
+        .getAll()
+        .filter(item => item.tags.includes("demo-hat"))
+        .filter(item => item.state === "equipped")
+        .sort((a, b) => (a.price < b.price ? 1 : -1))[0]?.userData.key ?? "shopDemo.noHat";
 
 const createAnims = scene => {
     const coinSheet = scene.config.assets.coin.key;

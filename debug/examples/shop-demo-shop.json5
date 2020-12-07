@@ -6,7 +6,7 @@
             text: "Shop Screen",
         },
     ],
-    assetPrefix: "shop",
+    assetPrefix: "shopDemo",
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "shopDemo.background", x: 0, y: 0 }],
@@ -50,9 +50,9 @@
         x: 18.86,
         y: 15.09,
     },
-    collection: "armoury",
+    collection: "hats",
     paneCollections: {
-        shop: "armoury",
+        shop: "hats",
         manage: "inventory",
     },
     confirm: {
@@ -73,7 +73,7 @@
     },
     columns: 1,
     assetKeys: {
-        background: "background",
+        background: "shopBackground",
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
         panelBackground: "panelBackground",

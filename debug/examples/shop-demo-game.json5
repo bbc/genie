@@ -25,6 +25,7 @@
         spawn: { x: -150 },
         speed: 3,
         xLimit: 425,
+        hat: { scale: 2, yOffset: -36 },
     },
     groundY: 96,
     colliderSize: 30,

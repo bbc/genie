@@ -50,7 +50,9 @@ const createInnerPanel = (scene, title, prepTx, parent) => {
 };
 
 const createTable = (scene, title, prepTx, parent) => {
+    console.log('BEEBUG: scene', scene);
     const key = scene.config.paneCollections[title];
+    console.log('BEEBUG: key', key);
     const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
 
     const sizer = scene.rexUI.add.sizer({ orientation: "y" });

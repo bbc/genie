@@ -67,7 +67,7 @@ const handleClick = (scene, container) => button => {
 };
 
 const isTransactionLegal = (container, item, title) => {
-    const isShop = container.transaction && title === "shop";
+    const isShop = title === "shop";
     const itemState = getItemState(container, item, title);
     return isShop ? container.getBalance() >= parseInt(item.price) : itemState !== "equipped";
 };
@@ -103,6 +103,7 @@ const populate = container =>
     ]);
 
 const prepTransaction = (scene, container) => (item, title) => {
+    console.log('BEEBUG: item, title', item, title);
     container.update(item, title);
     scene.stack("confirm");
 };
