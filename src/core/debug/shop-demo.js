@@ -59,6 +59,7 @@ class ShopDemoGame extends Screen {
         this.cursors = this.input.keyboard.createCursorKeys();
 
         // make a reset button
+        // add sounds
     }
     update() {
         this.entities.player.update();
@@ -72,6 +73,7 @@ class ShopDemoGame extends Screen {
 
 const chopWood = scene => player => {
     const range = { low: player.x - scene.config.colliderSize, high: player.x + scene.config.colliderSize }; // could do with an offset in the facing dir
+    console.log("BEEBUG: trees, range", scene.entities.trees, range);
     scene.entities.trees
         .filter(tree => tree.sprite.x >= range.low && tree.sprite.x <= range.high)
         .map(tree => tree.wasChopped());
@@ -148,11 +150,12 @@ const updateCoins = scene => {
     doCoinsRespawned(scene);
 };
 
-const doCoinsLanding = (coins, groundY) =>
+const doCoinsLanding = (coins, groundY) => {
     coins
         .filter(coin => coin.sprite.body.gravity.y !== 0)
         .filter(coin => coin.sprite.y >= groundY)
         .forEach(coin => coin.sprite.setGravityY(0).setVelocityY(0).setY(groundY));
+};
 
 const doCoinsCollected = scene => {
     const {
@@ -212,14 +215,13 @@ const addPlayer = scene => {
             }
         },
         update: () => {
-            const { x, y } = container;
+            const { x } = container;
             if (Math.abs(x) > player.xLimit) {
                 sprite.walkRight = !sprite.walkRight;
                 sprite.setFlipX(!sprite.flipX);
             }
             container.setX(x + player.speed * (sprite.walkRight ? 1 : -1));
         },
-        getCoin: () => console.log("coin get"),
     };
 };
 

@@ -57,11 +57,16 @@ describe("ShopDemo", () => {
 describe("ShopDemoGame", () => {
     let shopDemoGame;
     let mockCursors;
+    let mockContainer;
+    let mockSprite;
+    let mockArcadeSprite;
+    let mockImage;
 
     beforeEach(() => {
         shopDemoGame = new ShopDemoGame();
 
         shopDemoGame.scene = { key: "shopDemoGame" };
+        shopDemoGame.time = { now: 1000 };
         shopDemoGame._data = {
             config: {
                 shopDemoGame: {
@@ -75,31 +80,41 @@ describe("ShopDemoGame", () => {
                     balance: { value: { key: "qux" } },
                     treeSpawns: [{ key: "tree", x: 0, y: 0, flip: true }],
                     coinSpawns: [{ x: 0, y: 0 }],
-                    player: { spawn: { x: 0, y: 0 }, hat: { scale: 1 } },
+                    player: { spawn: { x: 0, y: 0 }, hat: { scale: 1 }, xLimit: 50 },
+                    timers: { chopDebounce: 100 },
+                    colliderSize: 10,
+                    gravity: 100,
                 },
             },
         };
         shopDemoGame.anims = { create: jest.fn(), generateFrameNumbers: jest.fn() };
         shopDemoGame.setLayout = jest.fn();
-        mockCursors = { space: { isDown: true } };
+        mockCursors = { space: { isDown: false } };
         shopDemoGame.input = { keyboard: { createCursorKeys: jest.fn().mockReturnValue(mockCursors) } };
         const mockCurrency = { qty: 1 };
         const mockInventory = { get: jest.fn().mockReturnValue(mockCurrency), getAll: jest.fn().mockReturnValue([]) };
         collections.get = jest.fn().mockReturnValue(mockInventory);
+        mockContainer = { add: jest.fn(), x: 0, setX: jest.fn() };
+        mockSprite = { play: jest.fn(), setFlipX: jest.fn(), anims: { chain: jest.fn() }, lastChopTime: 1 };
+        mockImage = { x: 0, y: 0 };
         shopDemoGame.add = {
             text: jest.fn(),
-            container: jest.fn().mockReturnValue({ setPosition: jest.fn().mockReturnValue({ add: jest.fn() }) }),
-            sprite: jest.fn().mockReturnValue({ setScale: jest.fn().mockReturnValue({ play: jest.fn() }) }),
+            container: jest.fn().mockReturnValue({ setPosition: jest.fn().mockReturnValue(mockContainer) }),
+            sprite: jest.fn().mockReturnValue({ setScale: jest.fn().mockReturnValue(mockSprite) }),
             image: jest.fn().mockReturnValue({
-                setFlipX: jest.fn().mockReturnValue({ setScale: jest.fn().mockReturnValue("foo") }),
+                setFlipX: jest.fn().mockReturnValue({ setScale: jest.fn().mockReturnValue(mockImage) }),
             }),
+        };
+        mockArcadeSprite = {
+            play: jest.fn(),
+            body: { gravity: { y: 100 } },
+            setGravityY: jest.fn().mockReturnValue({ setVelocityY: jest.fn().mockReturnValue({ setY: jest.fn() }) }),
+            y: 0,
         };
         shopDemoGame.physics = {
             add: {
                 sprite: jest.fn().mockReturnValue({
-                    setScale: jest
-                        .fn()
-                        .mockReturnValue({ setGravityY: jest.fn().mockReturnValue({ play: jest.fn() }) }),
+                    setScale: jest.fn().mockReturnValue({ setGravityY: jest.fn().mockReturnValue(mockArcadeSprite) }),
                 }),
             },
         };
@@ -110,6 +125,34 @@ describe("ShopDemoGame", () => {
 
         test("creates cursors", () => {
             expect(shopDemoGame.cursors).toBe(mockCursors);
+        });
+    });
+
+    describe("update", () => {
+        beforeEach(() => shopDemoGame.create());
+
+        describe("updates the player", () => {
+            test("by setting X", () => {
+                shopDemoGame.update();
+                expect(mockContainer.setX).toHaveBeenCalled();
+            });
+            test("x-flipping the player once past limits", () => {
+                shopDemoGame.entities.player.container.x = 100;
+                shopDemoGame.update();
+                expect(mockSprite.setFlipX).toHaveBeenCalled();
+            });
+            test("and trying a chop action if space is down", () => {
+                mockCursors.space.isDown = true;
+                shopDemoGame.update();
+                expect(mockSprite.play).toHaveBeenCalledWith("chop");
+            });
+        });
+    });
+    describe("woodChop()", () => {
+        beforeEach(() => shopDemoGame.create());
+        test("when called when player is within range of tree, drops coins", () => {
+            shopDemoGame.woodChop(mockContainer);
+            expect(mockArcadeSprite.setGravityY).toHaveBeenCalledWith(100);
         });
     });
 });
