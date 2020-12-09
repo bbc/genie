@@ -45,6 +45,7 @@ class ShopDemoGame extends Screen {
         createAnims(this);
 
         this.balanceUI = createBalance(this);
+        this.sounds = createSounds(this);
         this.getCoin = getCoin(this);
 
         const trees = addTrees(this);
@@ -73,6 +74,7 @@ class ShopDemoGame extends Screen {
 
 const chopWood = scene => player => {
     const range = { low: player.x - scene.config.colliderSize, high: player.x + scene.config.colliderSize }; // could do with an offset in the facing dir
+    scene.sounds.whiff.play();
     scene.entities.trees
         .filter(tree => tree.sprite.x >= range.low && tree.sprite.x <= range.high)
         .map(tree => tree.wasChopped());
@@ -88,9 +90,19 @@ const createBalance = scene => {
     };
 };
 
+const createSounds = scene => {
+    const { assets } = scene.config;
+    return {
+        coinGet: scene.sound.add(assets.coinGet.key),
+        hit: scene.sound.add(assets.hit.key),
+        whiff: scene.sound.add(assets.whiff.key),
+    };
+};
+
 const getCoin = scene => () => {
     const currency = getCurrencyItem(scene);
     const balance = currency.qty + 1;
+    scene.sounds.coinGet.play();
     scene.balanceUI.setBalance(balance);
     getInventory(scene).set({ ...currency, qty: balance });
 };
@@ -108,7 +120,10 @@ const addTrees = scene =>
         return {
             sprite,
             coins,
-            wasChopped: () => coins.forEach(coin => coin.fall()),
+            wasChopped: () => {
+                scene.sounds.hit.play();
+                coins.forEach(coin => coin.fall());
+            },
         };
     });
 

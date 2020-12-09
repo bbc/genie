@@ -298,6 +298,21 @@
         "prefix": "shopDemo.",
         "files": [
             {
+                "type": "audio",
+                "key": "coinGet",
+                "url": "../../debug/assets/shop-demo/coin_get.wav"
+            },
+            {
+                "type": "audio",
+                "key": "whiff",
+                "url": "../../debug/assets/shop-demo/whiff.wav"
+            },
+            {
+                "type": "audio",
+                "key": "hit",
+                "url": "../../debug/assets/shop-demo/hit.wav"
+            },
+            {
                 "type": "image",
                 "key": "background",
                 "url": "../../debug/assets/shop-demo/background.jpg"

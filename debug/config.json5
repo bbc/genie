@@ -1,4 +1,4 @@
 {
     collection: "hats",
-    physics: { default: "arcade", arcade: {} },
+    // physics: { default: "arcade", arcade: {} }, // why doesn't this work?
 }

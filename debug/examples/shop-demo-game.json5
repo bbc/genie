@@ -10,6 +10,9 @@
         player: { key: "shopDemo.dwarf", scale: 3 },
         coin: { key: "shopDemo.coin", scale: 2 },
         coinPop: { key: "shopDemo.coinPop", scale: 2 },
+        hit: { key: "shopDemo.hit" },
+        whiff: { key: "shopDemo.whiff" },
+        coinGet: { key: "shopDemo.coinGet" },
     },
     treeSpawns: [
         { key: "tree2", x: -270, y: -18, flip: true },
@@ -28,7 +31,7 @@
         hat: { scale: 2, yOffset: -36 },
     },
     groundY: 96,
-    colliderSize: 30,
+    colliderSize: 50,
     timers: {
         coinSpawn: 2500,
         chopDebounce: 350,

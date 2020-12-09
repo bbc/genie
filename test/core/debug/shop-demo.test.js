@@ -106,6 +106,9 @@ describe("ShopDemoGame", () => {
                         coinPop: { key: "bar", scale: 1 },
                         player: { key: "baz", scale: 1 },
                         tree: { key: "qaz", scale: 1 },
+                        hit: { key: "wix" },
+                        whiff: { key: "sop" },
+                        coinGet: { key: "bap" },
                     },
                     paneCollections: { manage: "inventory" },
                     balance: { value: { key: "qux" } },
@@ -136,6 +139,7 @@ describe("ShopDemoGame", () => {
                 }),
             },
         };
+        shopDemoGame.sound = { add: jest.fn().mockReturnValue({ play: jest.fn() }) };
         shopDemoGame.input = { keyboard: { createCursorKeys: jest.fn().mockReturnValue(mockCursors) } };
     });
 
