@@ -113,14 +113,14 @@ const itemView = (scene, item, config, bounds) =>
         : itemImageView(scene, item, config, bounds);
 
 const itemImageView = (scene, item, config, bounds) => {
-    const image = scene.add.image(imageX(config, bounds), 0, assetKey(config, item));
+    const image = scene.add.image(imageX(config, bounds), 0, assetKey(item));
     image.setScale((bounds.width / 2 / image.width) * 0.9);
     return [image];
 };
 
 const itemDetailView = (scene, item, config, bounds) => {
     const x = imageX(config, bounds);
-    const itemImage = scene.add.image(x, imageY(bounds), assetKey(config, item));
+    const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
     itemImage.setScale(bounds.height / 3 / itemImage.height);
     const itemTitle = scene.add.text(x, 0, getItemTitle(item), config.styleDefaults).setOrigin(0.5);
     const itemDescription = scene.add
@@ -136,7 +136,7 @@ const getCollectionsKey = (container, title) => container.config.paneCollections
 const getItemTitle = item => (item ? item.title : "Item Default Title");
 const getItemDescription = item => (item ? item.description : "Item Default Description");
 const getItemBlurb = item => (item ? item.longDescription : "");
-const assetKey = (config, item) => (item ? `${config.assetPrefix}.${item.icon}` : "shop.itemIcon");
+const assetKey = item => (item ? item.icon : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
 const promptY = outerBounds => -outerBounds.height * (3 / 8);
 const currencyY = outerBounds => -outerBounds.height / 4;

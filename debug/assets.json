@@ -299,70 +299,6 @@
         "files": [
             {
                 "type": "image",
-                "key": "shopBackground",
-                "url": "../../../themes/default/shop/safe_area.png"
-            },
-            {
-                "type": "image",
-                "key": "balanceIcon",
-                "url": "../../../themes/default/shop/currency.png"
-            },
-            {
-                "type": "image",
-                "key": "scrollbar",
-                "url": "../../../themes/default/shop/scrollbar.png"
-            },
-            {
-                "type": "image",
-                "key": "scrollbarHandle",
-                "url": "../../../themes/default/shop/handle.png"
-            },
-            {
-                "type": "image",
-                "key": "balanceBackground",
-                "url": "../../../themes/default/shop/balance_background.png"
-            },
-            {
-                "type": "image",
-                "key": "balanceIcon",
-                "url": "../../../themes/default/shop/balance_icon.png"
-            },
-            {
-                "type": "image",
-                "key": "titleBackground",
-                "url": "../../../themes/default/shop/title_background.png"
-            },
-            {
-                "type": "image",
-                "key": "menuButtonIcon",
-                "url": "../../../themes/default/shop/menu_button_icon.png"
-            },
-            {
-                "type": "spritesheet",
-                "key": "menuButtonBackground",
-                "url": "../../../themes/default/shop/menu_button.png",
-                "frameConfig": {
-                    "frameWidth": 113,
-                    "frameHeight": 42,
-                    "frameMax": 1,
-                    "margin": 0,
-                    "spacing": 4
-                }
-            },
-            {
-                "type": "spritesheet",
-                "key": "itemBackground",
-                "url": "../../../themes/default/shop/item_block.png",
-                "frameConfig": {
-                    "frameWidth": 378,
-                    "frameHeight": 64,
-                    "frameMax": 1,
-                    "margin": 0,
-                    "spacing": 4
-                }
-            },
-            {
-                "type": "image",
                 "key": "background",
                 "url": "../../debug/assets/shop-demo/background.jpg"
             },
@@ -395,18 +331,6 @@
                 "type": "image",
                 "key": "greenHat",
                 "url": "../../debug/assets/shop-demo/greenHat.png"
-            },
-            {
-                "type": "spritesheet",
-                "key": "currency",
-                "url": "../../../themes/default/shop/currency.png",
-                "frameConfig": {
-                    "frameWidth": 20,
-                    "frameHeight": 20,
-                    "frameMax": 1,
-                    "margin": 0,
-                    "spacing": 4
-                }
             },
             {
                 "type": "spritesheet",

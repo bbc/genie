@@ -6,7 +6,7 @@
             text: "Shop Screen",
         },
     ],
-    assetPrefix: "shopDemo",
+    assetPrefix: "shop",
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "shopDemo.background", x: 0, y: 0 }],
@@ -73,7 +73,7 @@
     },
     columns: 1,
     assetKeys: {
-        background: "shopBackground",
+        background: "background",
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
         panelBackground: "panelBackground",

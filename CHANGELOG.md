@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Add demo game to debug mode to show the shop component in action. | 
 | | Fixes bug with accessible elements appearing in the wrong place with gel buttons on the debug screens. |
 | | Collections now merge properties and union with local storage.  |
 | | Add shop demo screen in debug mode |
