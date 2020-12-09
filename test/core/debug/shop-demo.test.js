@@ -17,7 +17,7 @@ describe("ShopDemo", () => {
         mockButton = { overlays: { set: jest.fn() }, config: { callback: jest.fn() } };
         mockText = { setOrigin: jest.fn() };
         mockInventory = { get: jest.fn(), getAll: jest.fn() };
-        
+
         collections.get = jest.fn().mockReturnValue(mockInventory);
 
         shopDemo = new ShopDemo();
@@ -67,16 +67,18 @@ describe("ShopDemoGame", () => {
     let mockText;
     let mockInventory;
     let mockCurrency;
+    let mockHatCollection;
 
     beforeEach(() => {
         shopDemoGame = new ShopDemoGame();
 
-        
+        // mockHatCollection = [{ userData: { key: "some.key" }, price: 100, tags: ["demo-hat"], state: "equipped"}]
+        mockHatCollection = [];
         mockCursors = { space: { isDown: false } };
         mockCurrency = { qty: 1 };
         mockInventory = {
             get: jest.fn().mockReturnValue(mockCurrency),
-            getAll: jest.fn().mockReturnValue([]),
+            getAll: jest.fn().mockReturnValue(mockHatCollection),
             set: jest.fn(),
         };
         mockContainer = { add: jest.fn(), x: 0, setX: jest.fn() };
@@ -87,11 +89,13 @@ describe("ShopDemoGame", () => {
             play: jest.fn(),
             body: { gravity: { y: 100 } },
             setGravityY: jest.fn().mockReturnValue({ setVelocityY: jest.fn().mockReturnValue({ setY: jest.fn() }) }),
+            setPosition: jest.fn(),
+            x: 0,
             y: 0,
         };
-        
+
         collections.get = jest.fn().mockReturnValue(mockInventory);
-        
+
         shopDemoGame.scene = { key: "shopDemoGame" };
         shopDemoGame.time = { now: 1000 };
         shopDemoGame._data = {
@@ -107,10 +111,11 @@ describe("ShopDemoGame", () => {
                     balance: { value: { key: "qux" } },
                     treeSpawns: [{ key: "tree", x: 0, y: 0, flip: true }],
                     coinSpawns: [{ x: 0, y: 0 }],
-                    player: { spawn: { x: 0, y: 0 }, hat: { scale: 1 }, xLimit: 50 },
-                    timers: { chopDebounce: 100 },
+                    player: { spawn: { x: 0, y: 0 }, hat: { scale: 1, yOffset: 3 }, xLimit: 50 },
+                    timers: { chopDebounce: 100, coinSpawn: -1 },
                     colliderSize: 10,
                     gravity: 100,
+                    groundY: 0,
                 },
             },
         };
@@ -149,6 +154,17 @@ describe("ShopDemoGame", () => {
             expect(mockInventory.set).toHaveBeenCalled();
             expect(mockText.setText).toHaveBeenCalledWith("Coins: 2");
         });
+        test("adds an image for the best equipped hat", () => {
+            expect(shopDemoGame.add.sprite).toHaveBeenCalledWith(0, 3, "shopDemo.noHat");
+            mockHatCollection = [
+                { userData: { key: "someOther.key" }, price: 10, tags: ["demo-hat"], state: "equipped" },
+                { userData: { key: "some.key" }, price: 100, tags: ["demo-hat"], state: "equipped" },
+                { userData: { key: "yetAnother.key" }, price: 30, tags: ["demo-hat"], state: "equipped" },
+            ];
+            mockInventory.getAll = jest.fn().mockReturnValue(mockHatCollection);
+            shopDemoGame.create();
+            expect(shopDemoGame.add.sprite).toHaveBeenCalledWith(0, 3, "some.key");
+        });
     });
 
     describe("update", () => {
@@ -170,12 +186,37 @@ describe("ShopDemoGame", () => {
                 expect(mockSprite.play).toHaveBeenCalledWith("chop");
             });
         });
+        describe("updates coins", () => {
+            test("falling coins that have landed have their fall stopped", () => {
+                shopDemoGame.update();
+                expect(mockArcadeSprite.setGravityY).toHaveBeenCalled();
+            });
+            test("coins that are to be collected are despawned", () => {
+                shopDemoGame.update();
+                expect(mockArcadeSprite.play).toHaveBeenCalledWith("coinPop");
+            });
+            test("coins that have despawned are checked for respawn", () => {
+                shopDemoGame.update();
+                expect(mockArcadeSprite.play).toHaveBeenCalledWith("coinSpin");
+            });
+        });
     });
     describe("woodChop()", () => {
         beforeEach(() => shopDemoGame.create());
         test("when called when player is within range of tree, drops coins", () => {
             shopDemoGame.woodChop(mockContainer);
             expect(mockArcadeSprite.setGravityY).toHaveBeenCalledWith(100);
+        });
+        test("when called during debounce timer, nothing happens", () => {
+            jest.clearAllMocks();
+            shopDemoGame.entities.player.sprite.lastChopTime = 999;
+            shopDemoGame.entities.player.chopWood();
+            expect(shopDemoGame.entities.player.sprite.play).not.toHaveBeenCalled();
+        });
+        test("coins don't fall if off their spawn points", () => {
+            shopDemoGame.entities.coins[0].sprite.y = 100;
+            shopDemoGame.woodChop(mockContainer);
+            expect(mockArcadeSprite.setGravityY).not.toHaveBeenCalledWith(100);
         });
     });
 });
