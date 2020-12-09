@@ -142,7 +142,10 @@ describe("ShopDemoGame", () => {
             },
         };
         shopDemoGame.sound = { add: jest.fn().mockReturnValue({ play: jest.fn() }) };
-        shopDemoGame.input = { keyboard: { createCursorKeys: jest.fn().mockReturnValue(mockCursors) } };
+        shopDemoGame.input = {
+            keyboard: { createCursorKeys: jest.fn().mockReturnValue(mockCursors) },
+            activePointer: { isDown: false },
+        };
         shopDemoGame.events = { once: jest.fn() };
     });
 

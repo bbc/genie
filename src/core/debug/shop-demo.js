@@ -43,8 +43,7 @@ class ShopDemoGame extends Screen {
     }
     update() {
         this.entities.player.update();
-
-        if (this.cursors.space.isDown) {
+        if (this.cursors.space.isDown || this.input.activePointer.isDown) {
             this.entities.player.chopWood();
         }
         updateCoins(this);
