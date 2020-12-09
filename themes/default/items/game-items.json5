@@ -56,7 +56,7 @@
     {
         id: "blueHat",
         title: "Blue Hat",
-        description: "A red hat.",
+        description: "A blue hat.",
         longDescription: "",
         price: 10,
         icon: "shopDemo.blueHat",
