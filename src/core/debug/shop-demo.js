@@ -73,7 +73,6 @@ class ShopDemoGame extends Screen {
 
 const chopWood = scene => player => {
     const range = { low: player.x - scene.config.colliderSize, high: player.x + scene.config.colliderSize }; // could do with an offset in the facing dir
-    console.log("BEEBUG: trees, range", scene.entities.trees, range);
     scene.entities.trees
         .filter(tree => tree.sprite.x >= range.low && tree.sprite.x <= range.high)
         .map(tree => tree.wasChopped());

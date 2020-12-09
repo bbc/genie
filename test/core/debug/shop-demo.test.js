@@ -9,10 +9,17 @@ import { collections } from "../../../src/core/collections.js";
 
 describe("ShopDemo", () => {
     let shopDemo;
+    let mockInventory;
+    let mockButton;
+    let mockText;
 
     beforeEach(() => {
-        const mockButton = { overlays: { set: jest.fn() }, config: { callback: jest.fn() } };
-        const mockText = { setOrigin: jest.fn() };
+        mockButton = { overlays: { set: jest.fn() }, config: { callback: jest.fn() } };
+        mockText = { setOrigin: jest.fn() };
+        mockInventory = { get: jest.fn(), getAll: jest.fn() };
+        
+        collections.get = jest.fn().mockReturnValue(mockInventory);
+
         shopDemo = new ShopDemo();
         shopDemo.add = {
             gelButton: jest.fn().mockReturnValue(mockButton),
@@ -25,14 +32,10 @@ describe("ShopDemo", () => {
                 },
             },
         };
-
         shopDemo.navigation = { game: jest.fn(), shop: jest.fn() };
-
         shopDemo.scene = { key: "shopDemo" };
         shopDemo.setLayout = jest.fn();
         shopDemo.events = { once: jest.fn() };
-        const mockInventory = { get: jest.fn(), getAll: jest.fn() };
-        collections.get = jest.fn().mockReturnValue(mockInventory);
     });
 
     describe("create()", () => {
@@ -61,10 +64,34 @@ describe("ShopDemoGame", () => {
     let mockSprite;
     let mockArcadeSprite;
     let mockImage;
+    let mockText;
+    let mockInventory;
+    let mockCurrency;
 
     beforeEach(() => {
         shopDemoGame = new ShopDemoGame();
 
+        
+        mockCursors = { space: { isDown: false } };
+        mockCurrency = { qty: 1 };
+        mockInventory = {
+            get: jest.fn().mockReturnValue(mockCurrency),
+            getAll: jest.fn().mockReturnValue([]),
+            set: jest.fn(),
+        };
+        mockContainer = { add: jest.fn(), x: 0, setX: jest.fn() };
+        mockSprite = { play: jest.fn(), setFlipX: jest.fn(), anims: { chain: jest.fn() }, lastChopTime: 1 };
+        mockImage = { x: 0, y: 0 };
+        mockText = { setText: jest.fn() };
+        mockArcadeSprite = {
+            play: jest.fn(),
+            body: { gravity: { y: 100 } },
+            setGravityY: jest.fn().mockReturnValue({ setVelocityY: jest.fn().mockReturnValue({ setY: jest.fn() }) }),
+            y: 0,
+        };
+        
+        collections.get = jest.fn().mockReturnValue(mockInventory);
+        
         shopDemoGame.scene = { key: "shopDemoGame" };
         shopDemoGame.time = { now: 1000 };
         shopDemoGame._data = {
@@ -89,27 +116,13 @@ describe("ShopDemoGame", () => {
         };
         shopDemoGame.anims = { create: jest.fn(), generateFrameNumbers: jest.fn() };
         shopDemoGame.setLayout = jest.fn();
-        mockCursors = { space: { isDown: false } };
-        shopDemoGame.input = { keyboard: { createCursorKeys: jest.fn().mockReturnValue(mockCursors) } };
-        const mockCurrency = { qty: 1 };
-        const mockInventory = { get: jest.fn().mockReturnValue(mockCurrency), getAll: jest.fn().mockReturnValue([]) };
-        collections.get = jest.fn().mockReturnValue(mockInventory);
-        mockContainer = { add: jest.fn(), x: 0, setX: jest.fn() };
-        mockSprite = { play: jest.fn(), setFlipX: jest.fn(), anims: { chain: jest.fn() }, lastChopTime: 1 };
-        mockImage = { x: 0, y: 0 };
         shopDemoGame.add = {
-            text: jest.fn(),
+            text: jest.fn().mockReturnValue(mockText),
             container: jest.fn().mockReturnValue({ setPosition: jest.fn().mockReturnValue(mockContainer) }),
             sprite: jest.fn().mockReturnValue({ setScale: jest.fn().mockReturnValue(mockSprite) }),
             image: jest.fn().mockReturnValue({
                 setFlipX: jest.fn().mockReturnValue({ setScale: jest.fn().mockReturnValue(mockImage) }),
             }),
-        };
-        mockArcadeSprite = {
-            play: jest.fn(),
-            body: { gravity: { y: 100 } },
-            setGravityY: jest.fn().mockReturnValue({ setVelocityY: jest.fn().mockReturnValue({ setY: jest.fn() }) }),
-            y: 0,
         };
         shopDemoGame.physics = {
             add: {
@@ -118,6 +131,7 @@ describe("ShopDemoGame", () => {
                 }),
             },
         };
+        shopDemoGame.input = { keyboard: { createCursorKeys: jest.fn().mockReturnValue(mockCursors) } };
     });
 
     describe("create", () => {
@@ -125,6 +139,15 @@ describe("ShopDemoGame", () => {
 
         test("creates cursors", () => {
             expect(shopDemoGame.cursors).toBe(mockCursors);
+        });
+        test("creates a balance UI component with a setBalance fn", () => {
+            shopDemoGame.balanceUI.setBalance("foo");
+            expect(mockText.setText).toHaveBeenCalledWith("Coins: foo");
+        });
+        test("adds a getCoin fn that updates the balance and UI", () => {
+            shopDemoGame.getCoin();
+            expect(mockInventory.set).toHaveBeenCalled();
+            expect(mockText.setText).toHaveBeenCalledWith("Coins: 2");
         });
     });
 
