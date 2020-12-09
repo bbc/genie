@@ -68,11 +68,11 @@ describe("ShopDemoGame", () => {
     let mockInventory;
     let mockCurrency;
     let mockHatCollection;
+    let mockButton;
 
     beforeEach(() => {
         shopDemoGame = new ShopDemoGame();
 
-        // mockHatCollection = [{ userData: { key: "some.key" }, price: 100, tags: ["demo-hat"], state: "equipped"}]
         mockHatCollection = [];
         mockCursors = { space: { isDown: false } };
         mockCurrency = { qty: 1 };
@@ -84,7 +84,7 @@ describe("ShopDemoGame", () => {
         mockContainer = { add: jest.fn(), x: 0, setX: jest.fn() };
         mockSprite = { play: jest.fn(), setFlipX: jest.fn(), anims: { chain: jest.fn() }, lastChopTime: 1 };
         mockImage = { x: 0, y: 0 };
-        mockText = { setText: jest.fn() };
+        mockText = { setText: jest.fn(), setOrigin: jest.fn() };
         mockArcadeSprite = {
             play: jest.fn(),
             body: { gravity: { y: 100 } },
@@ -93,6 +93,7 @@ describe("ShopDemoGame", () => {
             x: 0,
             y: 0,
         };
+        mockButton = { overlays: { set: jest.fn() }, config: { callback: jest.fn() } };
 
         collections.get = jest.fn().mockReturnValue(mockInventory);
 
@@ -131,6 +132,7 @@ describe("ShopDemoGame", () => {
             image: jest.fn().mockReturnValue({
                 setFlipX: jest.fn().mockReturnValue({ setScale: jest.fn().mockReturnValue(mockImage) }),
             }),
+            gelButton: jest.fn().mockReturnValue(mockButton),
         };
         shopDemoGame.physics = {
             add: {
@@ -141,6 +143,7 @@ describe("ShopDemoGame", () => {
         };
         shopDemoGame.sound = { add: jest.fn().mockReturnValue({ play: jest.fn() }) };
         shopDemoGame.input = { keyboard: { createCursorKeys: jest.fn().mockReturnValue(mockCursors) } };
+        shopDemoGame.events = { once: jest.fn() };
     });
 
     describe("create", () => {
@@ -168,6 +171,17 @@ describe("ShopDemoGame", () => {
             mockInventory.getAll = jest.fn().mockReturnValue(mockHatCollection);
             shopDemoGame.create();
             expect(shopDemoGame.add.sprite).toHaveBeenCalledWith(0, 3, "some.key");
+        });
+        test("makes some cheat buttons that reset the inventory and add coins", () => {
+            const addCoinCallback = shopDemoGame.add.gelButton.mock.calls[1][2].callback;
+            const resetCallback = shopDemoGame.add.gelButton.mock.calls[0][2].callback;
+            addCoinCallback();
+            expect(mockInventory.set).toHaveBeenCalledTimes(1);
+            jest.clearAllMocks();
+            mockHatCollection = [{ userData: { key: "some.key" }, price: 100, tags: ["demo-hat"], state: "equipped" }];
+            mockInventory.getAll = jest.fn().mockReturnValue(mockHatCollection);
+            resetCallback();
+            expect(mockInventory.set).toHaveBeenCalledTimes(2);
         });
     });
 

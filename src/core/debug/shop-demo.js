@@ -12,30 +12,11 @@ class ShopDemo extends Screen {
         this.addBackgroundItems();
         this.setLayout(["back"]);
 
-        this.buttons = createButtons(["Game", "Shop"], this);
+        this.buttons = ["Game", "Shop"].map((id, idx) =>
+            createButton(this, id, idx, () => this.navigation[id.toLowerCase()]()),
+        );
     }
 }
-
-const createButtons = (ids, scene) =>
-    ids.map((id, idx) => {
-        const button = scene.add.gelButton(500 + 400 * idx, 500, {
-            gameButton: true,
-            channel: scene.config.eventChannel,
-            group: scene.scene.key,
-            id,
-            key: "button",
-            scene: "gelDebug",
-            callback: () => scene.navigation[id.toLowerCase()](),
-        });
-        button.overlays.set("label", scene.add.text(0, 0, id).setOrigin(0.5));
-
-        const buttonSub = eventBus.subscribe({
-            channel: scene.config.eventChannel,
-            name: id,
-            callback: button.config.callback,
-        });
-        scene.events.once("shutdown", buttonSub.unsubscribe);
-    });
 
 class ShopDemoGame extends Screen {
     create() {
@@ -46,7 +27,7 @@ class ShopDemoGame extends Screen {
 
         this.balanceUI = createBalance(this);
         this.sounds = createSounds(this);
-        this.getCoin = getCoin(this);
+        this.cursors = this.input.keyboard.createCursorKeys();
 
         const trees = addTrees(this);
 
@@ -56,11 +37,9 @@ class ShopDemoGame extends Screen {
             player: addPlayer(this),
         };
 
+        this.getCoin = getCoin(this);
         this.woodChop = chopWood(this);
-        this.cursors = this.input.keyboard.createCursorKeys();
-
-        // make a reset button
-        // add sounds
+        this.buttons = createCheatButtons(this);
     }
     update() {
         this.entities.player.update();
@@ -71,14 +50,6 @@ class ShopDemoGame extends Screen {
         updateCoins(this);
     }
 }
-
-const chopWood = scene => player => {
-    const range = { low: player.x - scene.config.colliderSize, high: player.x + scene.config.colliderSize }; // could do with an offset in the facing dir
-    scene.sounds.whiff.play();
-    scene.entities.trees
-        .filter(tree => tree.sprite.x >= range.low && tree.sprite.x <= range.high)
-        .map(tree => tree.wasChopped());
-};
 
 const createBalance = scene => {
     const { balance } = scene.config;
@@ -97,6 +68,42 @@ const createSounds = scene => {
         hit: scene.sound.add(assets.hit.key),
         whiff: scene.sound.add(assets.whiff.key),
     };
+};
+
+const createCheatButtons = scene => {
+    return [
+        createButton(scene, "Reset", 0, () => resetInventory(scene)),
+        createButton(scene, "AddCoin", 1, () => scene.getCoin()),
+    ];
+};
+
+const createButton = (scene, id, idx, callback) => {
+    const button = scene.add.gelButton(500 + 400 * idx, 500, {
+        gameButton: true,
+        channel: scene.config.eventChannel,
+        group: scene.scene.key,
+        id,
+        key: "button",
+        scene: "gelDebug",
+        callback,
+    });
+    button.overlays.set("label", scene.add.text(0, 0, id).setOrigin(0.5));
+
+    const buttonSub = eventBus.subscribe({
+        channel: scene.config.eventChannel,
+        name: id,
+        callback: button.config.callback,
+    });
+    scene.events.once("shutdown", buttonSub.unsubscribe);
+    return button;
+};
+
+const resetInventory = scene => {
+    const inventory = getInventory(scene);
+    inventory.getAll().forEach(item => inventory.set({ ...item, state: "" }));
+    const currency = getCurrencyItem(scene);
+    inventory.set({ ...currency, qty: 0 });
+    scene.balanceUI.setBalance(0);
 };
 
 const getCoin = scene => () => {
@@ -237,6 +244,13 @@ const addPlayer = scene => {
             container.setX(x + player.speed * (sprite.walkRight ? 1 : -1));
         },
     };
+};
+const chopWood = scene => player => {
+    const range = { low: player.x - scene.config.colliderSize, high: player.x + scene.config.colliderSize };
+    scene.sounds.whiff.play();
+    scene.entities.trees
+        .filter(tree => tree.sprite.x >= range.low && tree.sprite.x <= range.high)
+        .map(tree => tree.wasChopped());
 };
 
 const getBestEquippedHat = scene =>
