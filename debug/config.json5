@@ -1,3 +1,4 @@
 {
     collection: "hats",
+    physics: { default: "arcade", arcade: {} },
 }

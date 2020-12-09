@@ -249,13 +249,13 @@ const createAnims = scene => {
     });
     scene.anims.create({
         key: "walk",
-        frames: scene.anims.generateFrameNumbers(playerSheet, { frames: [8, 9, 10, 11, 12, 13, 14, 15] }),
+        frames: scene.anims.generateFrameNumbers(playerSheet, { start: 0, end: 7 }),
         frameRate: 12,
         repeat: -1,
     });
     scene.anims.create({
         key: "chop",
-        frames: scene.anims.generateFrameNumbers(playerSheet, { frames: [16, 17, 18, 19, 20, 21, 22] }),
+        frames: scene.anims.generateFrameNumbers(playerSheet, { start: 8, end: 14 }),
         frameRate: 15,
         repeat: 0,
     });
