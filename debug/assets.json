@@ -328,29 +328,57 @@
                 "url": "../../debug/assets/shop-demo/tree2.png"
             },
             {
-                "type": "image",
-                "key": "noHat",
-                "url": "../../debug/assets/shop-demo/noHat.png"
-            },
-            {
-                "type": "image",
-                "key": "redHat",
-                "url": "../../debug/assets/shop-demo/redHat.png"
-            },
-            {
-                "type": "image",
-                "key": "blueHat",
-                "url": "../../debug/assets/shop-demo/blueHat.png"
-            },
-            {
-                "type": "image",
-                "key": "greenHat",
-                "url": "../../debug/assets/shop-demo/greenHat.png"
+                "type": "spritesheet",
+                "key": "ironHat",
+                "url": "../../debug/assets/shop-demo/dwarf_sprite.png",
+                "frameConfig": {
+                    "frameWidth": 32,
+                    "frameHeight": 32,
+                    "frameMax": 24,
+                    "margin": 0,
+                    "spacing": 0
+                }
             },
             {
                 "type": "spritesheet",
-                "key": "dwarf",
-                "url": "../../debug/assets/shop-demo/dwarf_sprite.png",
+                "key": "redHat",
+                "url": "../../debug/assets/shop-demo/dwarf_sprite_red.png",
+                "frameConfig": {
+                    "frameWidth": 32,
+                    "frameHeight": 32,
+                    "frameMax": 24,
+                    "margin": 0,
+                    "spacing": 0
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "greenHat",
+                "url": "../../debug/assets/shop-demo/dwarf_sprite_green.png",
+                "frameConfig": {
+                    "frameWidth": 32,
+                    "frameHeight": 32,
+                    "frameMax": 24,
+                    "margin": 0,
+                    "spacing": 0
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "purpleHat",
+                "url": "../../debug/assets/shop-demo/dwarf_sprite_purple.png",
+                "frameConfig": {
+                    "frameWidth": 32,
+                    "frameHeight": 32,
+                    "frameMax": 24,
+                    "margin": 0,
+                    "spacing": 0
+                }
+            },
+            {
+                "type": "spritesheet",
+                "key": "goldHat",
+                "url": "../../debug/assets/shop-demo/dwarf_sprite_gold.png",
                 "frameConfig": {
                     "frameWidth": 32,
                     "frameHeight": 32,

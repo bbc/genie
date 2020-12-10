@@ -7,7 +7,7 @@
     assets: {
         tree1: { key: "shopDemo.tree1", scale: 0.9 },
         tree2: { key: "shopDemo.tree2", scale: 1 },
-        player: { key: "shopDemo.dwarf", scale: 3 },
+        player: { scale: 3 },
         coin: { key: "shopDemo.coin", scale: 2 },
         coinPop: { key: "shopDemo.coinPop", scale: 2 },
         hit: { key: "shopDemo.hit" },
@@ -37,7 +37,7 @@
         chopDebounce: 350,
     },
     gravity: 300,
-    paneCollections: { manage: "inventory" },
+    paneCollections: { shop: "hats", manage: "inventory" },
     balance: {
         value: { key: "coin" },
         x: 300,

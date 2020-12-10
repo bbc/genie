@@ -71,7 +71,7 @@ const createSounds = scene => {
 
 const createCheatButtons = scene => {
     return [
-        createButton(scene, "Reset", 0, () => resetInventory(scene)),
+        createButton(scene, "Reset", 0, () => resetEconomy(scene)),
         createButton(scene, "AddCoin", 1, () => scene.getCoin()),
     ];
 };
@@ -97,12 +97,19 @@ const createButton = (scene, id, idx, callback) => {
     return button;
 };
 
-const resetInventory = scene => {
-    const inventory = getInventory(scene);
-    inventory.getAll().forEach(item => inventory.set({ ...item, state: "" }));
+const resetEconomy = scene => {
+    const cleanCollectionStates = (scene, getCollectionFn) => {
+        const collection = getCollectionFn(scene);
+        collection.getAll().forEach(item => collection.set({ ...item, state: "" }));
+    };
+    [getInventory, getShopCollection].forEach(fn => cleanCollectionStates(scene, fn));
     const currency = getCurrencyItem(scene);
-    inventory.set({ ...currency, qty: 0 });
+    getInventory(scene).set({ ...currency, qty: 0 });
     scene.balanceUI.setBalance(0);
+    scene.entities.player.sprite.destroy();
+    scene.entities.player.container.destroy();
+    createAnims(scene);
+    scene.entities.player = addPlayer(scene);
 };
 
 const getCoin = scene => () => {
@@ -115,6 +122,7 @@ const getCoin = scene => () => {
 
 const getCurrencyItem = scene => getInventory(scene).get(scene.config.balance.value.key);
 const getInventory = scene => collections.get(scene.config.paneCollections.manage);
+const getShopCollection = scene => collections.get(scene.config.paneCollections.shop);
 
 const addTrees = scene =>
     scene.config.treeSpawns.map(fixture => {
@@ -219,10 +227,10 @@ const addPlayer = scene => {
     const { player, groundY, assets, timers } = scene.config;
     const container = scene.add.container().setPosition(player.spawn.x, groundY);
     const sprite = scene.add.sprite(0, 0).setScale(assets.player.scale);
-    const hat = scene.add.sprite(0, player.hat.yOffset, getBestEquippedHat(scene)).setScale(player.hat.scale);
+    // const hat = scene.add.sprite(0, player.hat.yOffset, getBestEquippedHat(scene)).setScale(player.hat.scale);
     sprite.walkRight = true;
     sprite.play("walk");
-    container.add([sprite, hat]);
+    container.add(sprite);
     return {
         sprite,
         container,
@@ -252,29 +260,29 @@ const chopWood = scene => player => {
         .map(tree => tree.wasChopped());
 };
 
-const getBestEquippedHat = scene =>
+const getSpritesheetForBestHat = scene =>
     getInventory(scene)
         .getAll()
         .filter(item => item.tags.includes("demo-hat"))
         .filter(item => item.state === "equipped")
-        .sort((a, b) => (a.price < b.price ? 1 : -1))[0]?.userData.key ?? "shopDemo.noHat";
+        .sort((a, b) => (a.price < b.price ? 1 : -1))[0]?.userData.key ?? "shopDemo.ironHat";
 
 const createAnims = scene => {
-    const coinSheet = scene.config.assets.coin.key;
-    const coinPopSheet = scene.config.assets.coinPop.key;
-    const playerSheet = scene.config.assets.player.key;
     scene.anims.create({
         key: "coinSpin",
-        frames: scene.anims.generateFrameNumbers(coinSheet, { start: 0, end: 8 }),
+        frames: scene.anims.generateFrameNumbers(scene.config.assets.coin.key, { start: 0, end: 8 }),
         frameRate: 12,
         repeat: -1,
     });
     scene.anims.create({
         key: "coinPop",
-        frames: scene.anims.generateFrameNumbers(coinPopSheet, { start: 0, end: 6 }),
-        frameRate: 12,
+        frames: scene.anims.generateFrameNumbers(scene.config.assets.coinPop.key, { start: 0, end: 6 }),
+        frameRate: 10,
         repeat: 0,
     });
+
+    const playerSheet = getSpritesheetForBestHat(scene);
+    ["walk", "chop"].forEach(animKey => scene.anims.remove(animKey));
     scene.anims.create({
         key: "walk",
         frames: scene.anims.generateFrameNumbers(playerSheet, { start: 0, end: 7 }),

@@ -81,8 +81,14 @@ describe("ShopDemoGame", () => {
             getAll: jest.fn().mockReturnValue(mockHatCollection),
             set: jest.fn(),
         };
-        mockContainer = { add: jest.fn(), x: 0, setX: jest.fn() };
-        mockSprite = { play: jest.fn(), setFlipX: jest.fn(), anims: { chain: jest.fn() }, lastChopTime: 1 };
+        mockContainer = { add: jest.fn(), x: 0, setX: jest.fn(), destroy: jest.fn() };
+        mockSprite = {
+            play: jest.fn(),
+            setFlipX: jest.fn(),
+            anims: { chain: jest.fn() },
+            destroy: jest.fn(),
+            lastChopTime: 1,
+        };
         mockImage = { x: 0, y: 0 };
         mockText = { setText: jest.fn(), setOrigin: jest.fn() };
         mockArcadeSprite = {
@@ -123,7 +129,7 @@ describe("ShopDemoGame", () => {
                 },
             },
         };
-        shopDemoGame.anims = { create: jest.fn(), generateFrameNumbers: jest.fn() };
+        shopDemoGame.anims = { create: jest.fn(), generateFrameNumbers: jest.fn(), remove: jest.fn() };
         shopDemoGame.setLayout = jest.fn();
         shopDemoGame.add = {
             text: jest.fn().mockReturnValue(mockText),
@@ -164,8 +170,12 @@ describe("ShopDemoGame", () => {
             expect(mockInventory.set).toHaveBeenCalled();
             expect(mockText.setText).toHaveBeenCalledWith("Coins: 2");
         });
-        test("adds an image for the best equipped hat", () => {
-            expect(shopDemoGame.add.sprite).toHaveBeenCalledWith(0, 3, "shopDemo.noHat");
+        test("picks the spritesheet for the best equipped hat", () => {
+            const expectedFrameNumbers = { start: 0, end: 7 };
+            expect(shopDemoGame.anims.generateFrameNumbers).toHaveBeenCalledWith(
+                "shopDemo.ironHat",
+                expectedFrameNumbers,
+            );
             mockHatCollection = [
                 { userData: { key: "someOther.key" }, price: 10, tags: ["demo-hat"], state: "equipped" },
                 { userData: { key: "some.key" }, price: 100, tags: ["demo-hat"], state: "equipped" },
@@ -173,7 +183,7 @@ describe("ShopDemoGame", () => {
             ];
             mockInventory.getAll = jest.fn().mockReturnValue(mockHatCollection);
             shopDemoGame.create();
-            expect(shopDemoGame.add.sprite).toHaveBeenCalledWith(0, 3, "some.key");
+            expect(shopDemoGame.anims.generateFrameNumbers).toHaveBeenCalledWith("some.key", expectedFrameNumbers);
         });
         test("makes some cheat buttons that reset the inventory and add coins", () => {
             const addCoinCallback = shopDemoGame.add.gelButton.mock.calls[1][2].callback;
@@ -184,7 +194,7 @@ describe("ShopDemoGame", () => {
             mockHatCollection = [{ userData: { key: "some.key" }, price: 100, tags: ["demo-hat"], state: "equipped" }];
             mockInventory.getAll = jest.fn().mockReturnValue(mockHatCollection);
             resetCallback();
-            expect(mockInventory.set).toHaveBeenCalledTimes(2);
+            expect(mockInventory.set).toHaveBeenCalledTimes(3);
         });
     });
 
