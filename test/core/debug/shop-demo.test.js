@@ -69,6 +69,7 @@ describe("ShopDemoGame", () => {
     let mockCurrency;
     let mockHatCollection;
     let mockButton;
+    let mockEventHandler;
 
     beforeEach(() => {
         shopDemoGame = new ShopDemoGame();
@@ -89,7 +90,9 @@ describe("ShopDemoGame", () => {
             destroy: jest.fn(),
             lastChopTime: 1,
         };
-        mockImage = { x: 0, y: 0 };
+        // mockEvent = jest.fn();
+        mockEventHandler = { on: jest.fn() };
+        mockImage = { x: 0, y: 0, setInteractive: jest.fn().mockReturnValue(mockEventHandler) };
         mockText = { setText: jest.fn(), setOrigin: jest.fn() };
         mockArcadeSprite = {
             play: jest.fn(),
@@ -152,6 +155,7 @@ describe("ShopDemoGame", () => {
             keyboard: { createCursorKeys: jest.fn().mockReturnValue(mockCursors) },
             activePointer: { isDown: false },
         };
+        shopDemoGame.children = { list: [mockImage] };
         shopDemoGame.events = { once: jest.fn() };
     });
 
@@ -169,6 +173,10 @@ describe("ShopDemoGame", () => {
             shopDemoGame.getCoin();
             expect(mockInventory.set).toHaveBeenCalled();
             expect(mockText.setText).toHaveBeenCalledWith("Coins: 2");
+        });
+        test("makes the background interactive", () => {
+            const callback = mockEventHandler.on.mock.calls[0][1];
+            callback();
         });
         test("picks the spritesheet for the best equipped hat", () => {
             const expectedFrameNumbers = { start: 0, end: 7 };

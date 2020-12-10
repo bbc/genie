@@ -24,6 +24,7 @@ class ShopDemoGame extends Screen {
         this.setLayout(["back", "pause"]);
 
         createAnims(this);
+        setupInput(this);
 
         this.balanceUI = createBalance(this);
         this.sounds = createSounds(this);
@@ -43,12 +44,15 @@ class ShopDemoGame extends Screen {
     }
     update() {
         this.entities.player.update();
-        if (this.cursors.space.isDown || this.input.activePointer.isDown) {
+        if (this.cursors.space.isDown) {
             this.entities.player.chopWood();
         }
         updateCoins(this);
     }
 }
+
+const setupInput = scene =>
+    scene.children.list[0].setInteractive().on("pointerup", () => scene.entities.player.chopWood());
 
 const createBalance = scene => {
     const { balance } = scene.config;
@@ -227,7 +231,6 @@ const addPlayer = scene => {
     const { player, groundY, assets, timers } = scene.config;
     const container = scene.add.container().setPosition(player.spawn.x, groundY);
     const sprite = scene.add.sprite(0, 0).setScale(assets.player.scale);
-    // const hat = scene.add.sprite(0, player.hat.yOffset, getBestEquippedHat(scene)).setScale(player.hat.scale);
     sprite.walkRight = true;
     sprite.play("walk");
     container.add(sprite);
