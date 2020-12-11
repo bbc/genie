@@ -25,12 +25,13 @@ export const createMenu = scene => {
     container.resize = resize(container);
     container.memoisedBounds = bounds; // workaround, pending CGPROD-2887
 
-    container.add([
+    const contents = [
         createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
         createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
         createRect(scene, getInnerRectBounds(scene), 0x0000ff),
-        createPaneBackground(scene, bounds, "menu"),
-    ]);
+    ].concat([createPaneBackground(scene, bounds, "menu")]);
+
+    container.add(contents);
 
     container.buttons = createMenuButtons(container);
 

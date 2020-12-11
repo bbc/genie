@@ -74,11 +74,17 @@
     },
     columns: 1,
     assetKeys: {
-        background: "background", // modify to be a string or an object. Document that here
+        // background: "background", // if a string is passed, that asset is used for all panes
+        background: {
+            menu: "background",
+            shop: "background",
+            manage: "background",
+            confirm: "halfViewBackground",
+        },
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
-        itemBackground: "itemBackground", // implicitly sets the menu item aspect ratio
-        buttonBackground: "menuButtonBackground", // subject to implicit change, similar to background
+        itemBackground: "itemBackground",
+        buttonBackground: "menuButtonBackground",
         buttonIcon: "menuButtonIcon",
     },
     overlay: {

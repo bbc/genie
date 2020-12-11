@@ -6,6 +6,7 @@
  */
 import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
+import { getPaneBackgroundKey } from "../../../components/shop/shop-layout.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
@@ -28,7 +29,7 @@ const getConfig = (scene, title, prepTx, parent) => {
         y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        background: scene.add.image(0, 0, `${assetPrefix}.${keys.background}`),
+        background: scene.add.image(0, 0, getPaneBackgroundKey(scene, title)),
         panel: { child: createInnerPanel(scene, title, prepTx, parent) },
         slider: {
             track: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbar}`),

@@ -27,6 +27,7 @@ describe("createConfirm()", () => {
             },
             detailView: false,
         },
+        assetKeys: { background: { confirm: "background" } },
         balance: { icon: { key: "balanceIcon" } },
         styleDefaults: {},
         paneCollections: { shop: "armoury", manage: "inventory" },

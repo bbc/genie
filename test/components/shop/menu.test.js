@@ -29,7 +29,7 @@ describe("shop menu", () => {
         config: {
             menu: { buttonsRight: true },
             assetKeys: {
-                foo: "bar",
+                background: "background",
             },
         },
         layout: {
