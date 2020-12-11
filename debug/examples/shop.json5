@@ -9,7 +9,7 @@
     assetPrefix: "shop",
     music: "home.backgroundMusic",
     background: {
-        items: [{ key: "home.background", x: 0, y: 0 }],
+        items: [{ key: "shop.magicShop", x: 0, y: 0 }],
     },
     titles: [
         {
@@ -49,6 +49,7 @@
     listPadding: {
         x: 18.86,
         y: 15.09,
+        larger: 1.8,
     },
     collection: "armoury",
     paneCollections: {
@@ -73,12 +74,11 @@
     },
     columns: 1,
     assetKeys: {
-        background: "background",
+        background: "background", // modify to be a string or an object. Document that here
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
-        panelBackground: "panelBackground",
         itemBackground: "itemBackground", // implicitly sets the menu item aspect ratio
-        buttonBackground: "menuButtonBackground",
+        buttonBackground: "menuButtonBackground", // subject to implicit change, similar to background
         buttonIcon: "menuButtonIcon",
     },
     overlay: {
@@ -102,16 +102,16 @@
                 name: "itemName",
                 value: "title",
                 isDynamic: true,
-                position: { align: "left", offsetX: 80, offsetY: -24 },
-                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 20 },
+                position: { align: "left", offsetX: 80, offsetY: -18 },
+                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 18 },
             },
             {
                 type: "text",
                 name: "itemDescription",
                 value: "description",
                 isDynamic: true,
-                position: { align: "left", offsetX: 80, offsetY: 0 },
-                font: { fontFamily: "ReithSans", resolution: 5 },
+                position: { align: "left", offsetX: 80, offsetY: 4 },
+                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 12 },
             },
         ],
         options: {
@@ -121,8 +121,8 @@
                     name: "currencyAmount",
                     value: "price",
                     isDynamic: true,
-                    position: { align: "right", offsetX: -48, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    position: { align: "right", offsetX: -44, offsetY: -10 },
+                    font: { fontFamily: "ReithSans", resolution: 5, fontSize: 14 },
                     activeStates: ["cta"],
                 },
                 {

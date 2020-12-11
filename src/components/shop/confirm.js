@@ -5,7 +5,15 @@
  * @license Apache-2.0
  */
 
-import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect, getSafeArea } from "./shop-layout.js";
+import {
+    setVisible,
+    resize,
+    getHalfRectBounds,
+    getInnerRectBounds,
+    createRect,
+    getSafeArea,
+    createPaneBackground,
+} from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
 import { collections } from "../../core/collections.js";
@@ -33,6 +41,7 @@ export const createConfirm = scene => {
             createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
             createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
             createRect(scene, innerBounds, 0x0000ff),
+            createPaneBackground(scene, bounds, "confirm"),
         ],
         prompt: scene.add
             .text(innerBounds.x, promptY(bounds), config.confirm.prompts.shop, styleDefaults)

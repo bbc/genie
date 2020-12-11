@@ -23,6 +23,7 @@ const createPanel = (scene, title, prepTx, parent) => {
 const getConfig = (scene, title, prepTx, parent) => {
     const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
     const safeArea = getPanelY(scene);
+    const outer = { x: space.x * space.larger, y: space.y * space.larger };
     return {
         y: safeArea.y,
         height: safeArea.height,
@@ -34,7 +35,7 @@ const getConfig = (scene, title, prepTx, parent) => {
             thumb: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbarHandle}`),
             width: space.x,
         },
-        space: { left: space.x, right: space.x, top: space.y, bottom: space.y, panel: space.x },
+        space: { left: outer.x, right: outer.x, top: outer.y, bottom: outer.y, panel: space.x },
     };
 };
 

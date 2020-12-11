@@ -99,7 +99,7 @@ describe("Scrollable List", () => {
                     scrollbar: "scrollbar",
                     scrollbarHandle: "scrollbarHandle",
                 },
-                listPadding: { x: 10, y: 8 },
+                listPadding: { x: 10, y: 8, larger: 1 },
                 overlay: {
                     items: [mockOverlay],
                 },

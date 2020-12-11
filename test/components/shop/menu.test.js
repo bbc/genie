@@ -19,10 +19,12 @@ describe("shop menu", () => {
         y: 200,
     };
     const mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
+    const mockImage = { setScale: jest.fn() };
     const mockScene = {
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
             rectangle: jest.fn(),
+            image: jest.fn().mockReturnValue(mockImage),
         },
         config: {
             menu: { buttonsRight: true },

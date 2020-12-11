@@ -79,4 +79,12 @@ export const getInnerRectBounds = scene => {
 };
 
 export const createRect = (scene, bounds, colour) =>
-    scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, colour, 0.3);
+    scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, colour, 0);
+
+export const createPaneBackground = (scene, bounds, pane) => {
+    const image = scene.add.image(0, 0, getPaneBackgroundKey(scene, pane));
+    image.setScale(bounds.width / image.width, bounds.height / image.height);
+    return image;
+};
+
+const getPaneBackgroundKey = () => "shop.background";

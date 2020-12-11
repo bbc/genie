@@ -5,6 +5,7 @@
  * @license Apache-2.0
  */
 
+// import { getInnerRectBounds } from "../../components/shop/shop-layout.js";
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
@@ -49,6 +50,7 @@ const makeButton = (container, config, idx, callback) => {
 const resizeButton = container => (button, idx) => {
     const right = Boolean(container.scene.config.menu.buttonsRight);
     const bounds = container.list[2].getBounds(); //TODO this is arbitrarily picked from the background list and should probably be defined somehow
+    // const bounds = getInnerRectBounds(container.scene); // is wrong
     button.setY(CAMERA_Y + bounds.y + bounds.height / 4 + (idx * bounds.height) / 2);
     button.setX(CAMERA_X + (right ? bounds.x + bounds.width / 2 : -bounds.x));
     button.setScale(bounds.width / button.width);

@@ -4,13 +4,18 @@
         "files": [
             {
                 "type": "image",
-                "key": "background",
-                "url": "shop/safe_area.png"
+                "key": "magicShop",
+                "url": "shop/magic_shop_bg.png"
             },
             {
                 "type": "image",
-                "key": "panelBackground",
-                "url": "shop/scroll_area.png"
+                "key": "background",
+                "url": "shop/wood_panel.png"
+            },
+            {
+                "type": "image",
+                "key": "background",
+                "url": "shop/wood_panel.png"
             },
             {
                 "type": "image",
@@ -45,7 +50,7 @@
             {
                 "type": "spritesheet",
                 "key": "menuButtonBackground",
-                "url": "shop/menu_button.png",
+                "url": "shop/green_button.png",
                 "frameConfig": {
                     "frameWidth": 113,
                     "frameHeight": 42,
@@ -54,6 +59,7 @@
                     "spacing": 4
                 }
             },
+
             {
                 "type": "spritesheet",
                 "key": "itemBackground",
@@ -83,8 +89,8 @@
                 "key": "currency",
                 "url": "shop/currency.png",
                 "frameConfig": {
-                    "frameWidth": 20,
-                    "frameHeight": 20,
+                    "frameWidth": 31,
+                    "frameHeight": 24,
                     "frameMax": 1,
                     "margin": 0,
                     "spacing": 4

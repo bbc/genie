@@ -92,7 +92,7 @@ describe("createConfirm()", () => {
         expect(confirmPane.buttons).toStrictEqual([mockButton, mockButton]);
     });
     test("with a placeholder for the item view", () => {
-        expect(mockScene.add.image.mock.calls[1][2]).toBe("shop.itemIcon");
+        expect(mockScene.add.image.mock.calls[2][2]).toBe("shop.itemIcon");
         const containerContents = mockContainer.add.mock.calls[0][0];
         expect(containerContents.slice(-1)).toStrictEqual([mockImage]);
     });

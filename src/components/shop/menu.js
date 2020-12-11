@@ -5,7 +5,15 @@
  * @license Apache-2.0
  */
 import { createMenuButtons } from "./menu-buttons.js";
-import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect, getSafeArea } from "./shop-layout.js";
+import {
+    setVisible,
+    resize,
+    getHalfRectBounds,
+    getInnerRectBounds,
+    createRect,
+    getSafeArea,
+    createPaneBackground,
+} from "./shop-layout.js";
 
 export const createMenu = scene => {
     const bounds = getSafeArea(scene.layout);
@@ -21,6 +29,7 @@ export const createMenu = scene => {
         createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
         createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
         createRect(scene, getInnerRectBounds(scene), 0x0000ff),
+        createPaneBackground(scene, bounds, "menu"),
     ]);
 
     container.buttons = createMenuButtons(container);
