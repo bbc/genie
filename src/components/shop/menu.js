@@ -21,7 +21,7 @@ export const createMenu = scene => {
     container.config = scene.config;
     container.setVisible = setVisible(container);
     container.resize = resize(container);
-    container.memoisedBounds = bounds; // workaround, pending CGPROD-2887
+    container.memoisedBounds = bounds;
 
     const contents = [
         createRect(scene, getInnerRectBounds(scene), 0x0000ff),

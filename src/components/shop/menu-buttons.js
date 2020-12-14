@@ -5,7 +5,6 @@
  * @license Apache-2.0
  */
 
-// import { getInnerRectBounds } from "../../components/shop/shop-layout.js";
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";

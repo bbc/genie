@@ -43,7 +43,7 @@ export const createConfirm = scene => {
         priceIcon: scene.add.image(
             innerBounds.x - 20,
             currencyY(bounds),
-            `${config.assetPrefix}.${config.balance.icon.key}`,
+            `${config.assetPrefix}.${config.assetKeys.currency}`,
         ),
         item: itemView(scene, undefined, config, bounds),
     };
@@ -124,17 +124,15 @@ const itemDetailView = (scene, item, config, bounds) => {
     const x = imageX(config, bounds);
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(config, item));
     itemImage.setScale(bounds.height / 3 / itemImage.height);
-    const itemTitle = scene.add.text(x, 0, getItemTitle(item), config.styleDefaults).setOrigin(0.5);
-    const itemDescription = scene.add
-        .text(x, descriptionY(bounds), getItemDescription(item), config.styleDefaults)
-        .setOrigin(0.5);
+    const itemTitle = scene.add.text(x, 0, getItemDetail(item), config.styleDefaults).setOrigin(0.5);
     const itemBlurb = scene.add.text(x, blurbY(bounds), getItemBlurb(item), config.styleDefaults, 0).setOrigin(0.5);
-    return [itemImage, itemTitle, itemDescription, itemBlurb];
+    return [itemImage, itemTitle, itemBlurb];
 };
 
 const getItemState = (container, item, title) =>
     collections.get(getCollectionsKey(container, title)).get(item.id).state;
 const getCollectionsKey = (container, title) => container.config.paneCollections[title];
+const getItemDetail = item => getItemTitle(item) + "\n" + getItemDescription(item);
 const getItemTitle = item => (item ? item.title : "Item Default Title");
 const getItemDescription = item => (item ? item.description : "Item Default Description");
 const getItemBlurb = item => (item ? item.longDescription : "");
@@ -142,8 +140,7 @@ const assetKey = (config, item) => (item ? `${config.assetPrefix}.${item.icon}` 
 const imageY = bounds => -bounds.height / 4;
 const promptY = outerBounds => -outerBounds.height * (3 / 8);
 const currencyY = outerBounds => -outerBounds.height / 4;
-const descriptionY = bounds => bounds.height / 8;
-const blurbY = bounds => bounds.height / 3;
+const blurbY = bounds => bounds.height / 4;
 const getOffsetBounds = (outerBounds, innerBounds) => ({
     ...innerBounds,
     y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,

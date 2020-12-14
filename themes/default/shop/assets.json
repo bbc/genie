@@ -54,6 +54,11 @@
             },
             {
                 "type": "image",
+                "key": "currencyIcon",
+                "url": "shop/currency.png"
+            },
+            {
+                "type": "image",
                 "key": "titleBackground",
                 "url": "shop/title_background.png"
             },
@@ -102,7 +107,7 @@
             {
                 "type": "spritesheet",
                 "key": "currency",
-                "url": "shop/currency.png",
+                "url": "shop/currency_small.png",
                 "frameConfig": {
                     "frameWidth": 31,
                     "frameHeight": 24,

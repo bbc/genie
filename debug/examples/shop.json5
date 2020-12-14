@@ -56,7 +56,8 @@
         shop: "armoury",
         manage: "inventory",
     },
-    confirm: { // make this two views, i.e. move shop and manage up the tree
+    confirm: {
+        // make this two views, i.e. move shop and manage up the tree
         detailView: true, // true === smaller image and more text. false === large image only.
         prompts: {
             shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
@@ -86,6 +87,7 @@
         itemBackground: "itemBackground",
         buttonBackground: "menuButtonBackground",
         buttonIcon: "menuButtonIcon",
+        currency: "currencyIcon",
     },
     overlay: {
         items: [
