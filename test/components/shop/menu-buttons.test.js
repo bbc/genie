@@ -49,8 +49,6 @@ describe("shop menu buttons", () => {
     const mockContainer = {
         scene: mockScene,
         list: [
-            0,
-            1,
             {
                 getBounds: () => mockOuterBounds,
             },
@@ -170,7 +168,7 @@ describe("shop menu buttons", () => {
                     },
                 },
                 scene: mockScene,
-                list: [0, 1, { getBounds: () => mockOuterBounds }],
+                list: [{ getBounds: () => mockOuterBounds }],
             };
             jest.clearAllMocks();
             resizeGelButtons(container);

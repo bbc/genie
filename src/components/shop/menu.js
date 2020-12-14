@@ -8,7 +8,6 @@ import { createMenuButtons } from "./menu-buttons.js";
 import {
     setVisible,
     resize,
-    getHalfRectBounds,
     getInnerRectBounds,
     createRect,
     getSafeArea,
@@ -17,7 +16,6 @@ import {
 
 export const createMenu = scene => {
     const bounds = getSafeArea(scene.layout);
-    const { buttonsRight } = scene.config.menu;
 
     const container = scene.add.container();
     container.config = scene.config;
@@ -26,10 +24,9 @@ export const createMenu = scene => {
     container.memoisedBounds = bounds; // workaround, pending CGPROD-2887
 
     const contents = [
-        createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
-        createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
         createRect(scene, getInnerRectBounds(scene), 0x0000ff),
-    ].concat([createPaneBackground(scene, bounds, "menu")]);
+        createPaneBackground(scene, bounds, "menu"),
+    ];
 
     container.add(contents);
 

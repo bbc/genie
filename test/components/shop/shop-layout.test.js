@@ -86,6 +86,30 @@ describe("shop element scaling functions", () => {
         });
     });
 
+    describe("getHalfRectBounds", () => {
+        const safeAreaBounds = { width: 200, height: 100 };
+        test("returns a object describing half the area passed in", () => {
+            const result = shopLayout.getHalfRectBounds(safeAreaBounds, false);
+            const expected = {
+                x: -50,
+                y: 0,
+                width: 100,
+                height: 100,
+            };
+            expect(result).toStrictEqual(expected);
+        });
+        test("is isOnRight is true, it's the right-hand half", () => {
+            const result = shopLayout.getHalfRectBounds(safeAreaBounds, true);
+            const expected = {
+                x: 50,
+                y: 0,
+                width: 100,
+                height: 100,
+            };
+            expect(result).toStrictEqual(expected);
+        });
+    });
+
     describe("resize()", () => {
         test("returns a scale factor that will have the element fill the available vertical space", () => {
             const textSpy = jest.fn();
@@ -113,6 +137,37 @@ describe("shop element scaling functions", () => {
             shopLayout.resize(mockContainer)(mockBounds);
             expect(imageSpy).not.toHaveBeenCalled();
             expect(textSpy).toHaveBeenCalledWith(0.25);
+        });
+    });
+
+    describe("getPaneBackgroundKey()", () => {
+        let mockScene;
+        const { getPaneBackgroundKey } = shopLayout;
+
+        beforeEach(() => {
+            mockScene = {
+                config: {
+                    assetPrefix: "prefix",
+                    assetKeys: {
+                        background: "someBackground",
+                    },
+                },
+            };
+        });
+        test("if a string is passed in config, concatenates with assetPrefix", () => {
+            expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.someBackground");
+        });
+        test("if an empty string is passed, points to a transparent asset", () => {
+            mockScene.config.assetKeys.background = "";
+            expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.noBackground");
+        });
+        test("if an object is passed in config, asset key is contextual", () => {
+            mockScene.config.assetKeys.background = { shop: "shopBackground" };
+            expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.shopBackground");
+        });
+        test("empty strings can be passed to get the transparent BG", () => {
+            mockScene.config.assetKeys.background = { shop: "" };
+            expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.noBackground");
         });
     });
 });

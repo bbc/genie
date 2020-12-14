@@ -8,7 +8,6 @@
 import {
     setVisible,
     resize,
-    getHalfRectBounds,
     getInnerRectBounds,
     createRect,
     getSafeArea,
@@ -23,7 +22,6 @@ export const createConfirm = scene => {
     const balance = scene.balance;
     const bounds = getSafeArea(scene.layout);
 
-    const { buttonsRight } = config.menu;
     const { styleDefaults } = config;
 
     const container = scene.add.container();
@@ -37,16 +35,11 @@ export const createConfirm = scene => {
     container.buttons = createConfirmButtons(container, handleClick(scene, container));
 
     container.elems = {
-        background: [
-            createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
-            createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
-            createRect(scene, innerBounds, 0x0000ff),
-            createPaneBackground(scene, bounds, "confirm"),
-        ],
+        background: [createRect(scene, innerBounds, 0x0000ff), createPaneBackground(scene, bounds, "confirm")],
         prompt: scene.add
             .text(innerBounds.x, promptY(bounds), config.confirm.prompts.shop, styleDefaults)
             .setOrigin(0.5),
-        price: scene.add.text(innerBounds.x + 20, currencyY(bounds), "PH", styleDefaults).setOrigin(0.5),
+        price: scene.add.text(innerBounds.x + 28, currencyY(bounds), "PH", styleDefaults).setOrigin(0.5),
         priceIcon: scene.add.image(
             innerBounds.x - 20,
             currencyY(bounds),
@@ -76,7 +69,7 @@ const handleClick = (scene, container) => button => {
 };
 
 const isTransactionLegal = (container, item, title) => {
-    const isShop = container.transaction && title === "shop";
+    const isShop = title === "shop";
     const itemState = getItemState(container, item, title);
     return isShop ? container.getBalance() >= parseInt(item.price) : itemState !== "equipped";
 };

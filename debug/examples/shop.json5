@@ -56,7 +56,7 @@
         shop: "armoury",
         manage: "inventory",
     },
-    confirm: {
+    confirm: { // make this two views, i.e. move shop and manage up the tree
         detailView: true, // true === smaller image and more text. false === large image only.
         prompts: {
             shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
@@ -76,7 +76,7 @@
     assetKeys: {
         // background: "background", // if a string is passed, that asset is used for all panes
         background: {
-            menu: "background",
+            menu: "", // leave blank for a transparent BG
             shop: "background",
             manage: "background",
             confirm: "halfViewBackground",

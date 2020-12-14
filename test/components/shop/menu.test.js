@@ -62,8 +62,8 @@ describe("shop menu", () => {
         test("with memoised safe area bounds", () => {
             expect(menu.memoisedBounds).toBe(mockSafeArea);
         });
-        test("with three rects added", () => {
-            expect(mockScene.add.rectangle).toHaveBeenCalledTimes(3);
+        test("with a rect added", () => {
+            expect(mockScene.add.rectangle).toHaveBeenCalledTimes(1);
         });
         test("with a buttons property from createGelButtons()", () => {
             expect(menu.buttons).toBe(mockGelButtons);

@@ -94,5 +94,7 @@ export const getPaneBackgroundKey = (scene, pane) => {
         assetKeys: { background },
     } = scene.config;
 
-    return typeof background === "string" ? `${assetPrefix}.${background}` : `${assetPrefix}.${background[pane]}`;
+    if (typeof background === "string")
+        return background ? `${assetPrefix}.${background}` : `${assetPrefix}.noBackground`;
+    return background[pane] ? `${assetPrefix}.${background[pane]}` : `${assetPrefix}.noBackground`;
 };
