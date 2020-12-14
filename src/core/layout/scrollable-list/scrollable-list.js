@@ -24,7 +24,7 @@ const createPanel = (scene, title, prepTx, parent) => {
 const getConfig = (scene, title, prepTx, parent) => {
     const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
     const safeArea = getPanelY(scene);
-    const outer = { x: space.x * space.larger, y: space.y * space.larger };
+    const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
     return {
         y: safeArea.y,
         height: safeArea.height,

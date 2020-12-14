@@ -49,7 +49,7 @@
     listPadding: {
         x: 18.86,
         y: 15.09,
-        larger: 1.8,
+        outerPadFactor: 1.8,
     },
     collection: "armoury",
     paneCollections: {
@@ -76,7 +76,7 @@
     assetKeys: {
         // background: "background", // if a string is passed, that asset is used for all panes
         background: {
-            menu: "", // leave blank for a transparent BG
+            // menu: "", // pass empty string, or omit the key entirely, for a transparent BG
             shop: "background",
             manage: "background",
             confirm: "halfViewBackground",
