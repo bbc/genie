@@ -69,10 +69,5 @@ const getButtonConfig = (button, id, scene) => ({
     scene: "shop",
 });
 
-const assetKey = (scene, key) => `${scene.assetPrefix}.${scene.config.assetKeys[key]}`;
-
-const setButtonOverlays = (scene, button, title) => {
-    const offset = button.width / 4;
-    button.overlays.set("caption", scene.add.text(-offset / 2, 0, title, { ...styleDefaults }).setOrigin(0, 0.5));
-    button.overlays.set("icon", scene.add.image(-offset, 0, assetKey(scene, "buttonIcon")));
-};
+const setButtonOverlays = (scene, button, title) =>
+    button.overlays.set("caption", scene.add.text(0, 0, title, { ...styleDefaults }).setOrigin(0.5));
