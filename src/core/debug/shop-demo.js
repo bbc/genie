@@ -103,7 +103,7 @@ const createButton = (scene, id, idx, callback) => {
 };
 
 const resetEconomy = scene => {
-    gmi.setGameData("genie", {});
+    gmi.setGameData("genie", { collections: {} });
     scene.balanceUI.setBalance(0);
     scene.entities.player.sprite.destroy();
     scene.entities.player.container.destroy();

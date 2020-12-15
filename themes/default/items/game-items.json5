@@ -56,7 +56,7 @@
     },
     {
         id: "greenHat",
-        title: "Green Helm",
+        title: "Copper Helm",
         description: "It's seen better days.",
         longDescription: "It's lighter, but what \nis this green stuff? \nRust? Eww.",
         price: 5,
@@ -66,7 +66,7 @@
     },
     {
         id: "redHat",
-        title: "Red Helm",
+        title: "Crimson Helm",
         description: "Enamelled and shiny.",
         longDescription: "Hey! Someone's \ndone this themselves \n with nail varnish.",
         price: 10,
@@ -76,9 +76,9 @@
     },
     {
         id: "purpleHat",
-        title: "Mirthil Helm",
+        title: "Mirthril Helm",
         description: "Superior protection.",
-        longDescription: "While very, very valuable, \n mirthil is most prized \nas the funniest metal.",
+        longDescription: "Whilst it is valuable, \n mirthril is most prized \nas the funniest metal.",
         price: 15,
         icon: "shopDemo.purpleHatIcon",
         tags: ["demo-hat"],
@@ -88,7 +88,7 @@
         id: "goldHat",
         title: "Gold Helm",
         description: "Valuable, heavy.",
-        longDescription: "Totally useless \n for protection, \n all about the bling.",
+        longDescription: "Totally useless \n for protection, \nall about the bling.",
         price: 20,
         icon: "shopDemo.goldHatIcon",
         tags: ["demo-hat"],
