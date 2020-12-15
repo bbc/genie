@@ -2,7 +2,7 @@
     assetPrefix: "shop",
     music: "home.backgroundMusic",
     background: {
-        items: [{ key: "home.background", x: 0, y: 0 }],
+        items: [{ key: "shop.magicShop", x: 0, y: 0 }],
     },
     titles: [
         {
@@ -34,7 +34,7 @@
         },
         value: {
             type: "text",
-            value: 1000, // PH
+            key: "coin", // the id of the currency item, which must exist in the inventory collection
             styles: {},
         },
     },
@@ -42,28 +42,46 @@
     listPadding: {
         x: 18.86,
         y: 15.09,
+        outerPadFactor: 1.8,
     },
     collection: "armoury",
-    collections: {
+    paneCollections: {
         shop: "armoury",
         manage: "inventory",
     },
+    confirm: {
+        detailView: true, // true === smaller image and more text. false === large image only.
+        prompts: {
+            shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
+            manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
+        },
+    },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 5,
+        align: "center",
+    },
     menu: {
-        buttonsRight: false, // set as false to X-flip the menu layout
+        buttonsRight: true, // set as false to X-flip the menu layout
     },
     columns: 1,
     assetKeys: {
-        prefix: "shop",
-        background: "background",
+        // background: "background", // if a string is passed, that asset is used for all panes
+        background: {
+            // menu: "", // pass empty string, or omit the key entirely, for a transparent BG
+            shop: "background",
+            manage: "background",
+            confirm: "halfViewBackground",
+        },
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
-        panelBackground: "panelBackground",
-        itemBackground: "itemBackground", // implicitly sets the menu item aspect ratio
+        itemBackground: "itemBackground",
         buttonBackground: "menuButtonBackground",
         buttonIcon: "menuButtonIcon",
+        currency: "currencyIcon",
     },
     overlay: {
-        defaultPrefix: "shop",
         items: [
             {
                 type: "image",
@@ -73,42 +91,79 @@
             },
             {
                 type: "image",
-                name: "currency",
-                assetKey: "currency",
-                isDynamic: false,
-                position: { align: "right", offsetX: -64, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
-                size: 16, // px square
-            },
-            {
-                type: "image",
                 name: "itemIcon",
                 assetKey: "icon",
                 isDynamic: true, // asset key is item[assetKey]
-                position: { align: "left", offsetX: 35, offsetY: 0 },
+                position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
                 size: 76,
-            },
-            {
-                type: "text",
-                name: "currencyAmount",
-                value: "price",
-                position: { align: "right", offsetX: -48, offsetY: -10 },
-                font: { fontFamily: "ReithSans", resolution: 5 },
             },
             {
                 type: "text",
                 name: "itemName",
                 value: "title",
-                position: { align: "left", offsetX: 80, offsetY: -24 },
-                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 20 },
+                isDynamic: true,
+                position: { align: "left", offsetX: 80, offsetY: -18 },
+                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 18 },
             },
             {
                 type: "text",
                 name: "itemDescription",
                 value: "description",
-                position: { align: "left", offsetX: 80, offsetY: 0 },
-                font: { fontFamily: "ReithSans", resolution: 5 },
+                isDynamic: true,
+                position: { align: "left", offsetX: 80, offsetY: 4 },
+                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 12 },
             },
         ],
+        options: {
+            shop: [
+                {
+                    type: "text",
+                    name: "currencyAmount",
+                    value: "price",
+                    isDynamic: true,
+                    position: { align: "right", offsetX: -44, offsetY: -10 },
+                    font: { fontFamily: "ReithSans", resolution: 5, fontSize: 14 },
+                    activeStates: ["cta"],
+                },
+                {
+                    type: "image",
+                    name: "currency",
+                    assetKey: "currency",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -64, offsetY: 0 },
+                    activeStates: ["cta"],
+                },
+                {
+                    type: "text",
+                    name: "owned",
+                    value: "Owned",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -76, offsetY: -10 },
+                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    activeStates: ["actioned"],
+                },
+            ],
+            manage: [
+                {
+                    type: "text",
+                    name: "equip",
+                    value: "Equip",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -76, offsetY: -10 },
+                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    activeStates: ["cta"],
+                },
+                {
+                    type: "text",
+                    name: "equipped",
+                    value: "Equipped",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -88, offsetY: -10 },
+                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    activeStates: ["actioned"],
+                },
+            ],
+        },
     },
     eventChannel: "shop_menu",
 }

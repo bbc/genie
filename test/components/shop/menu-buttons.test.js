@@ -49,8 +49,6 @@ describe("shop menu buttons", () => {
     const mockContainer = {
         scene: mockScene,
         list: [
-            0,
-            1,
             {
                 getBounds: () => mockOuterBounds,
             },
@@ -94,10 +92,8 @@ describe("shop menu buttons", () => {
             expect(mockScene.stack).toHaveBeenCalledWith("shop");
             expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", "foo");
         });
-        test("sets overlays for text and button icon", () => {
-            expect(mockButton.overlays.set).toHaveBeenCalledTimes(4);
-            expect(mockScene.add.image.mock.calls[0][2]).toBe("shop.mockIconKey");
-            expect(mockScene.add.image.mock.calls[1][2]).toBe("shop.mockIconKey");
+        test("sets text overlays", () => {
+            expect(mockButton.overlays.set).toHaveBeenCalledTimes(2);
             expect(mockScene.add.text.mock.calls[0][2]).toBe("Shop");
             expect(mockScene.add.text.mock.calls[1][2]).toBe("Manage");
         });
@@ -170,7 +166,7 @@ describe("shop menu buttons", () => {
                     },
                 },
                 scene: mockScene,
-                list: [0, 1, { getBounds: () => mockOuterBounds }],
+                list: [{ getBounds: () => mockOuterBounds }],
             };
             jest.clearAllMocks();
             resizeGelButtons(container);

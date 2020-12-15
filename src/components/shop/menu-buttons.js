@@ -48,7 +48,7 @@ const makeButton = (container, config, idx, callback) => {
 
 const resizeButton = container => (button, idx) => {
     const right = Boolean(container.scene.config.menu.buttonsRight);
-    const bounds = container.list[2].getBounds(); //TODO this is arbitrarily picked from the background list and should probably be defined somehow
+    const bounds = container.list[0].getBounds();
     button.setY(CAMERA_Y + bounds.y + bounds.height / 4 + (idx * bounds.height) / 2);
     button.setX(CAMERA_X + (right ? bounds.x + bounds.width / 2 : -bounds.x));
     button.setScale(bounds.width / button.width);
@@ -68,10 +68,5 @@ const getButtonConfig = (button, id, scene) => ({
     scene: "shop",
 });
 
-const assetKey = (scene, key) => `${scene.assetPrefix}.${scene.config.assetKeys[key]}`;
-
-const setButtonOverlays = (scene, button, title) => {
-    const offset = button.width / 4;
-    button.overlays.set("caption", scene.add.text(-offset / 2, 0, title, { ...styleDefaults }).setOrigin(0, 0.5));
-    button.overlays.set("icon", scene.add.image(-offset, 0, assetKey(scene, "buttonIcon")));
-};
+const setButtonOverlays = (scene, button, title) =>
+    button.overlays.set("caption", scene.add.text(0, 0, title, { ...styleDefaults }).setOrigin(0.5));

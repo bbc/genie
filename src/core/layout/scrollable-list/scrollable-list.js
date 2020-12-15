@@ -6,6 +6,7 @@
  */
 import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
+import { getPaneBackgroundKey } from "../../../components/shop/shop-layout.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
@@ -23,18 +24,19 @@ const createPanel = (scene, title, prepTx, parent) => {
 const getConfig = (scene, title, prepTx, parent) => {
     const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
     const safeArea = getPanelY(scene);
+    const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
     return {
         y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        background: scene.add.image(0, 0, `${assetPrefix}.${keys.background}`),
+        background: scene.add.image(0, 0, getPaneBackgroundKey(scene, title)),
         panel: { child: createInnerPanel(scene, title, prepTx, parent) },
         slider: {
             track: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbar}`),
             thumb: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbarHandle}`),
             width: space.x,
         },
-        space: { left: space.x, right: space.x, top: space.y, bottom: space.y, panel: space.x },
+        space: { left: outer.x, right: outer.x, top: outer.y, bottom: outer.y, panel: space.x },
     };
 };
 
