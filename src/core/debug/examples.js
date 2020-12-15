@@ -171,9 +171,6 @@ const exampleScreens = {
         routes: {
             back: "debug-shop-demo",
         },
-        // settings: {
-        //     physics: { default: "arcade", arcade: {} },
-        // },
         hidden: true,
     },
     "shop-demo-shop": {
