@@ -25,7 +25,6 @@ export const createMenu = scene => {
 
     const contents = [
         createRect(scene, getInnerRectBounds(scene), 0x0000ff),
-        // createRect(scene, bounds, 0x000000),
         createPaneBackground(scene, bounds, "menu"),
     ];
 
