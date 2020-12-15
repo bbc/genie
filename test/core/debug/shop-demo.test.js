@@ -6,6 +6,7 @@
 
 import { ShopDemo, ShopDemoGame } from "../../../src/core/debug/shop-demo.js";
 import { collections } from "../../../src/core/collections.js";
+import { gmi } from "../../../src/core/gmi/gmi.js";
 
 describe("ShopDemo", () => {
     let shopDemo;
@@ -90,7 +91,6 @@ describe("ShopDemoGame", () => {
             destroy: jest.fn(),
             lastChopTime: 1,
         };
-        // mockEvent = jest.fn();
         mockEventHandler = { on: jest.fn() };
         mockImage = { x: 0, y: 0, setInteractive: jest.fn().mockReturnValue(mockEventHandler) };
         mockText = { setText: jest.fn(), setOrigin: jest.fn() };
@@ -105,6 +105,7 @@ describe("ShopDemoGame", () => {
         mockButton = { overlays: { set: jest.fn() }, config: { callback: jest.fn() } };
 
         collections.get = jest.fn().mockReturnValue(mockInventory);
+        gmi.setGameData = jest.fn();
 
         shopDemoGame.scene = { key: "shopDemoGame" };
         shopDemoGame.time = { now: 1000 };
@@ -198,11 +199,8 @@ describe("ShopDemoGame", () => {
             const resetCallback = shopDemoGame.add.gelButton.mock.calls[0][2].callback;
             addCoinCallback();
             expect(mockInventory.set).toHaveBeenCalledTimes(1);
-            jest.clearAllMocks();
-            mockHatCollection = [{ userData: { key: "some.key" }, price: 100, tags: ["demo-hat"], state: "equipped" }];
-            mockInventory.getAll = jest.fn().mockReturnValue(mockHatCollection);
             resetCallback();
-            expect(mockInventory.set).toHaveBeenCalledTimes(3);
+            expect(gmi.setGameData).toHaveBeenCalled();
         });
     });
 

@@ -6,6 +6,7 @@
 import { Screen } from "../screen.js";
 import { eventBus } from "../event-bus.js";
 import { collections } from "../collections.js";
+import { gmi } from "../gmi/gmi.js";
 
 class ShopDemo extends Screen {
     create() {
@@ -102,13 +103,7 @@ const createButton = (scene, id, idx, callback) => {
 };
 
 const resetEconomy = scene => {
-    const cleanCollectionStates = (scene, getCollectionFn) => {
-        const collection = getCollectionFn(scene);
-        collection.getAll().forEach(item => collection.set({ ...item, state: "" }));
-    };
-    [getInventory, getShopCollection].forEach(fn => cleanCollectionStates(scene, fn));
-    const currency = getCurrencyItem(scene);
-    getInventory(scene).set({ ...currency, qty: 0 });
+    gmi.setGameData("genie", {});
     scene.balanceUI.setBalance(0);
     scene.entities.player.sprite.destroy();
     scene.entities.player.container.destroy();
@@ -126,7 +121,6 @@ const getCoin = scene => () => {
 
 const getCurrencyItem = scene => getInventory(scene).get(scene.config.balance.value.key);
 const getInventory = scene => collections.get(scene.config.paneCollections.manage);
-const getShopCollection = scene => collections.get(scene.config.paneCollections.shop);
 
 const addTrees = scene =>
     scene.config.treeSpawns.map(fixture => {

@@ -1,11 +1,4 @@
 {
-    debugLabels: [
-        {
-            x: -390,
-            y: -190,
-            text: "Shop Screen",
-        },
-    ],
     assetPrefix: "shop",
     music: "home.backgroundMusic",
     background: {
