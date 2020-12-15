@@ -157,17 +157,47 @@ describe("shop element scaling functions", () => {
         test("if a string is passed in config, concatenates with assetPrefix", () => {
             expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.someBackground");
         });
-        test("if an empty string is passed, points to a transparent asset", () => {
+        test("if an empty string is passed, returns null", () => {
             mockScene.config.assetKeys.background = "";
-            expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.noBackground");
+            expect(getPaneBackgroundKey(mockScene, "shop")).toBe(null);
         });
         test("if an object is passed in config, asset key is contextual", () => {
             mockScene.config.assetKeys.background = { shop: "shopBackground" };
             expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.shopBackground");
         });
-        test("empty strings can be passed to get the transparent BG", () => {
+        test("empty strings can be passed here too", () => {
             mockScene.config.assetKeys.background = { shop: "" };
-            expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.noBackground");
+            expect(getPaneBackgroundKey(mockScene, "shop")).toBe(null);
+        });
+    });
+
+    describe("createPaneBackground()", () => {
+        let mockScene;
+        const mockBounds = { width: 1, height: 1 };
+
+        beforeEach(() => {
+            mockScene = {
+                add: {
+                    image: jest.fn().mockReturnValue({ setScale: jest.fn() }),
+                    rectangle: jest.fn().mockReturnValue({ setScale: jest.fn() }),
+                },
+                config: {
+                    assetPrefix: "some",
+                    assetKeys: {
+                        background: { shop: "asset" },
+                    },
+                },
+            };
+        });
+
+        test("if it finds an asset key, returns an image", () => {
+            shopLayout.createPaneBackground(mockScene, mockBounds, "shop");
+            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "some.asset");
+        });
+        test("if it finds no asset key, returns a rectangle", () => {
+            mockScene.config.assetKeys.background = {};
+            shopLayout.createPaneBackground(mockScene, mockBounds, "shop");
+            expect(mockScene.add.rectangle).toHaveBeenCalled();
         });
     });
 });

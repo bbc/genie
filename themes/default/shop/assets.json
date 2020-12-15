@@ -14,11 +14,6 @@
             },
             {
                 "type": "image",
-                "key": "noBackground",
-                "url": "shop/transparent_bg.png"
-            },
-            {
-                "type": "image",
                 "key": "itemViewBackground",
                 "url": "shop/item_panel.png"
             },

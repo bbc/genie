@@ -83,6 +83,8 @@ export const createRect = (scene, bounds, colour) =>
 
 export const createPaneBackground = (scene, bounds, pane) => {
     const key = getPaneBackgroundKey(scene, pane);
+    if (!key) return scene.add.rectangle(0, 0, 1, 1).setScale(bounds.width, bounds.height);
+
     const image = scene.add.image(0, 0, key);
     image.setScale(bounds.width / image.width, bounds.height / image.height);
     return image;
@@ -94,7 +96,7 @@ export const getPaneBackgroundKey = (scene, pane) => {
         assetKeys: { background },
     } = scene.config;
 
-    if (typeof background === "string")
-        return background ? `${assetPrefix}.${background}` : `${assetPrefix}.noBackground`;
-    return background[pane] ? `${assetPrefix}.${background[pane]}` : `${assetPrefix}.noBackground`;
+    if (typeof background === "string") return background ? `${assetPrefix}.${background}` : null;
+
+    return background[pane] ? `${assetPrefix}.${background[pane]}` : null;
 };
