@@ -19,15 +19,17 @@ describe("shop menu", () => {
         y: 200,
     };
     const mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
+    const mockImage = { setScale: jest.fn() };
     const mockScene = {
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
             rectangle: jest.fn(),
+            image: jest.fn().mockReturnValue(mockImage),
         },
         config: {
             menu: { buttonsRight: true },
             assetKeys: {
-                foo: "bar",
+                background: "background",
             },
         },
         layout: {
@@ -60,8 +62,8 @@ describe("shop menu", () => {
         test("with memoised safe area bounds", () => {
             expect(menu.memoisedBounds).toBe(mockSafeArea);
         });
-        test("with three rects added", () => {
-            expect(mockScene.add.rectangle).toHaveBeenCalledTimes(3);
+        test("with a rect added", () => {
+            expect(mockScene.add.rectangle).toHaveBeenCalledTimes(1);
         });
         test("with a buttons property from createGelButtons()", () => {
             expect(menu.buttons).toBe(mockGelButtons);

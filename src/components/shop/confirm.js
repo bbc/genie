@@ -5,7 +5,14 @@
  * @license Apache-2.0
  */
 
-import { setVisible, resize, getHalfRectBounds, getInnerRectBounds, createRect, getSafeArea } from "./shop-layout.js";
+import {
+    setVisible,
+    resize,
+    getInnerRectBounds,
+    createRect,
+    getSafeArea,
+    createPaneBackground,
+} from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
 import { collections } from "../../core/collections.js";
@@ -15,7 +22,6 @@ export const createConfirm = scene => {
     const balance = scene.balance;
     const bounds = getSafeArea(scene.layout);
 
-    const { buttonsRight } = config.menu;
     const { styleDefaults } = config;
 
     const container = scene.add.container();
@@ -29,19 +35,15 @@ export const createConfirm = scene => {
     container.buttons = createConfirmButtons(container, handleClick(scene, container));
 
     container.elems = {
-        background: [
-            createRect(scene, getHalfRectBounds(bounds, !buttonsRight), 0xff0000),
-            createRect(scene, getHalfRectBounds(bounds, buttonsRight), 0xff00ff),
-            createRect(scene, innerBounds, 0x0000ff),
-        ],
+        background: [createRect(scene, innerBounds, 0x0000ff), createPaneBackground(scene, bounds, "confirm")],
         prompt: scene.add
             .text(innerBounds.x, promptY(bounds), config.confirm.prompts.shop, styleDefaults)
             .setOrigin(0.5),
-        price: scene.add.text(innerBounds.x + 20, currencyY(bounds), "PH", styleDefaults).setOrigin(0.5),
+        price: scene.add.text(innerBounds.x + 28, currencyY(bounds), "PH", styleDefaults).setOrigin(0.5),
         priceIcon: scene.add.image(
             innerBounds.x - 20,
             currencyY(bounds),
-            `${config.assetPrefix}.${config.balance.icon.key}`,
+            `${config.assetPrefix}.${config.assetKeys.currency}`,
         ),
         item: itemView(scene, undefined, config, bounds),
     };
@@ -122,17 +124,15 @@ const itemDetailView = (scene, item, config, bounds) => {
     const x = imageX(config, bounds);
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
     itemImage.setScale(bounds.height / 3 / itemImage.height);
-    const itemTitle = scene.add.text(x, 0, getItemTitle(item), config.styleDefaults).setOrigin(0.5);
-    const itemDescription = scene.add
-        .text(x, descriptionY(bounds), getItemDescription(item), config.styleDefaults)
-        .setOrigin(0.5);
+    const itemTitle = scene.add.text(x, 0, getItemDetail(item), config.styleDefaults).setOrigin(0.5);
     const itemBlurb = scene.add.text(x, blurbY(bounds), getItemBlurb(item), config.styleDefaults, 0).setOrigin(0.5);
-    return [itemImage, itemTitle, itemDescription, itemBlurb];
+    return [itemImage, itemTitle, itemBlurb];
 };
 
 const getItemState = (container, item, title) =>
     collections.get(getCollectionsKey(container, title)).get(item.id).state;
 const getCollectionsKey = (container, title) => container.config.paneCollections[title];
+const getItemDetail = item => getItemTitle(item) + "\n" + getItemDescription(item);
 const getItemTitle = item => (item ? item.title : "Item Default Title");
 const getItemDescription = item => (item ? item.description : "Item Default Description");
 const getItemBlurb = item => (item ? item.longDescription : "");
@@ -140,8 +140,7 @@ const assetKey = item => (item ? item.icon : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
 const promptY = outerBounds => -outerBounds.height * (3 / 8);
 const currencyY = outerBounds => -outerBounds.height / 4;
-const descriptionY = bounds => bounds.height / 8;
-const blurbY = bounds => bounds.height / 3;
+const blurbY = bounds => bounds.height / 4;
 const getOffsetBounds = (outerBounds, innerBounds) => ({
     ...innerBounds,
     y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,

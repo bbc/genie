@@ -27,6 +27,7 @@ describe("createConfirm()", () => {
             },
             detailView: false,
         },
+        assetKeys: { background: { confirm: "background" } },
         balance: { icon: { key: "balanceIcon" } },
         styleDefaults: {},
         paneCollections: { shop: "armoury", manage: "inventory" },
@@ -82,17 +83,17 @@ describe("createConfirm()", () => {
         confirmPane.setBalance(37);
         expect(mockBalance.setText).toHaveBeenCalledWith(37);
     });
-    test("with background rects derived from layout functions", () => {
-        expect(layout.createRect).toHaveBeenCalledTimes(3);
+    test("with a rect derived from layout functions used to memoize button positions", () => {
+        expect(layout.createRect).toHaveBeenCalledTimes(1);
         const containerContents = mockContainer.add.mock.calls[0][0];
-        expect(containerContents.slice(0, 3)).toStrictEqual([mockRect, mockRect, mockRect]);
+        expect(containerContents.slice(0, 1)).toStrictEqual([mockRect]);
     });
     test("with gel buttons for confirm and cancel", () => {
         expect(buttons.createConfirmButtons).toHaveBeenCalled();
         expect(confirmPane.buttons).toStrictEqual([mockButton, mockButton]);
     });
     test("with a placeholder for the item view", () => {
-        expect(mockScene.add.image.mock.calls[1][2]).toBe("shop.itemIcon");
+        expect(mockScene.add.image.mock.calls[2][2]).toBe("shop.itemIcon");
         const containerContents = mockContainer.add.mock.calls[0][0];
         expect(containerContents.slice(-1)).toStrictEqual([mockImage]);
     });
@@ -101,7 +102,7 @@ describe("createConfirm()", () => {
         jest.clearAllMocks();
         mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
         createConfirm(mockScene);
-        expect(mockScene.add.text).toHaveBeenCalledWith(20, -25, "PH", {});
+        expect(mockScene.add.text).toHaveBeenCalledWith(28, -25, "PH", {});
     });
     test("that is displayed with an appropriate Y offset", () => {
         expect(mockContainer.setY).toHaveBeenCalledWith(55);
@@ -119,9 +120,9 @@ describe("createConfirm()", () => {
             confirmPane = createConfirm(mockScene);
         });
         test("adds extra placeholder text objects", () => {
-            expect(mockScene.add.text).toHaveBeenCalledTimes(5);
+            expect(mockScene.add.text).toHaveBeenCalledTimes(4);
             const containerContents = mockContainer.add.mock.calls[0][0];
-            expect(containerContents.slice(-4)).toStrictEqual([mockImage, mockText, mockText, mockText]);
+            expect(containerContents.slice(-3)).toStrictEqual([mockImage, mockText, mockText]);
         });
     });
 
