@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { parseUrlParams } from "../parseUrlParams.js";
+import { parseUrlParams } from "../parse-url-params.js";
 import { gmi } from "../gmi/gmi.js";
 import { collections } from "../collections.js";
 
