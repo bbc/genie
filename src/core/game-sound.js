@@ -24,9 +24,7 @@ const isAlreadyPlaying = audioKey => {
 };
 
 const startNextMusic = scene => {
-    if (Assets.backgroundMusic) {
-        Assets.backgroundMusic.destroy();
-    }
+    Assets.backgroundMusic?.destroy();
     Assets.backgroundMusic = startMusic(scene, scene.config.music);
 };
 
