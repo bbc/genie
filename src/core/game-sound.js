@@ -23,12 +23,10 @@ const isAlreadyPlaying = audioKey => {
     return audioKey && Assets.backgroundMusic && audioKey === Assets.backgroundMusic.key;
 };
 
-const onFadeComplete = scene => {
-    Assets.backgroundMusic.destroy();
-    startNextMusic(scene);
-};
-
 const startNextMusic = scene => {
+    if (Assets.backgroundMusic) {
+        Assets.backgroundMusic.destroy();
+    }
     Assets.backgroundMusic = startMusic(scene, scene.config.music);
 };
 
@@ -49,16 +47,20 @@ const startMusic = (scene, audioKey) => {
     return music;
 };
 
+const fadeMusic = scene => {
+    scene.tweens.add({
+        targets: Assets.backgroundMusic,
+        volume: 0,
+        duration: fadeDuration / 2,
+        onComplete: startNextMusic.bind(this, scene),
+    });
+};
+
 const stopCurrentAndStartNextMusic = scene => {
-    if (Assets.backgroundMusic) {
-        scene.tweens.add({
-            targets: Assets.backgroundMusic,
-            volume: 0,
-            duration: fadeDuration / 2,
-            onComplete: onFadeComplete.bind(this, scene),
-        });
-    } else {
+    if (!Assets.backgroundMusic || scene.scene.key === "home") {
         startNextMusic(scene);
+    } else {
+        fadeMusic(scene);
     }
 };
 
