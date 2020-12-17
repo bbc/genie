@@ -21,7 +21,7 @@ describe("Core - Get Theme", () => {
 
     test("gets the theme from the URL params for preference", () => {
         mockUrlParams.theme = "url-params-theme";
-        expect(getTheme()).toEqual(mockUrlParams.theme);
+        expect(getTheme()).toEqual("themes/url-params-theme/");
     });
 
     test("gets the theme from the embedVars config path when there is no URL param set", () => {
