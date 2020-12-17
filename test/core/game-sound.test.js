@@ -140,8 +140,8 @@ describe("Game Sound", () => {
             });
 
             test("stops but doesn't fade current music playing if going to the Home screen", () => {
-                // this logic is for when pausing in-game, then going to the home screen:
-                // we want the previous music to abruptly end rather than fade out.
+                // This logic means that when we pause in-game then return to the home screen,
+                // the game music does not fade out before playing the Home screen music.
                 mockScene.scene.key = "home";
                 GameSound.setupScreenMusic(mockScene);
                 expect(mockCurrentMusic.destroy).toHaveBeenCalled();
