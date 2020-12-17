@@ -12,6 +12,7 @@ import { settings, settingsChannel } from "../../core/settings.js";
 import { eventBus } from "../../core/event-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as Scaler from "../scaler.js";
+import { getTheme } from "../get-theme.js";
 
 //const triggeredByGame = arg => arg instanceof Phaser.Game;
 const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
@@ -27,7 +28,7 @@ export class Boot extends Screen {
 
     preload() {
         this.load.setBaseURL(gmi.gameDir);
-        this.load.setPath(gmi.embedVars.configPath);
+        this.load.setPath(getTheme());
         this.load.setCORS("anonymous");
 
         //TODO P3 this is loaded now so we can check its keys for missing files. It is also loaded again later so perhaps could be done then? NT
