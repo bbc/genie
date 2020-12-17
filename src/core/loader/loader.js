@@ -14,6 +14,7 @@ import { loadPack } from "./loadpack.js";
 import { getConfig, loadConfig } from "./get-config.js";
 import { isDebug } from "../debug/debug-mode.js";
 import { loadCollections } from "./load-collections.js";
+import { getTheme } from "../get-theme.js";
 
 const getScreenKeys = keys =>
     Object.keys(keys).filter(key => ["default", "boot", "loader", "debug"].indexOf(key) === -1);
@@ -26,7 +27,7 @@ const loaderComplete = scene => () => {
 
 export class Loader extends Screen {
     constructor() {
-        loadPack.path = gmi.gameDir + gmi.embedVars.configPath;
+        loadPack.path = gmi.gameDir + getTheme();
         super({ key: "loader", pack: loadPack });
         this._loadbar = undefined;
         this._progress = 0;
@@ -34,7 +35,7 @@ export class Loader extends Screen {
 
     preload() {
         this.load.setBaseURL(gmi.gameDir);
-        this.load.setPath(gmi.embedVars.configPath);
+        this.load.setPath(getTheme());
 
         const webFontConfig = {
             key: "font-pack",
