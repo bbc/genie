@@ -12,6 +12,7 @@ describe("Game Sound", () => {
 
     beforeEach(() => {
         mockScene = {
+            scene: { key: "select" },
             sound: {
                 add: jest.fn(() => mockMusic),
                 remove: jest.fn(),
@@ -112,7 +113,10 @@ describe("Game Sound", () => {
         });
 
         describe("when the new music differs from the currently playing music", () => {
+            const addTween = { volume: 1, duration: 1000 };
+            const fadeTween = { volume: 0, duration: 1000 / 2 };
             let mockCurrentMusic;
+
             beforeEach(() => {
                 mockCurrentMusic = {
                     destroy: jest.fn(),
@@ -120,31 +124,35 @@ describe("Game Sound", () => {
                     key: "something-else",
                 };
                 GameSound.Assets.backgroundMusic = mockCurrentMusic;
+                mockScene.config.music = "test/music";
             });
 
             test("sets the background music to the asset that matches the provided key", () => {
-                mockScene.config.music = "test/music";
                 GameSound.setupScreenMusic(mockScene);
                 expect(mockScene.sound.add).toHaveBeenCalled();
                 expect(mockScene.sound.add).toHaveBeenCalledWith("test/music");
             });
 
-            test("fades and stops current music playing", () => {
-                mockScene.config.music = "test/music";
+            test("fades and stops current music playing if not going to the Home screen", () => {
                 GameSound.setupScreenMusic(mockScene);
-                expect(mockScene.tweens.add).toHaveBeenCalled();
+                expect(mockScene.tweens.add).toHaveBeenCalledWith(expect.objectContaining(fadeTween));
                 expect(mockCurrentMusic.destroy).toHaveBeenCalled();
             });
 
+            test("stops but doesn't fade current music playing if going to the Home screen", () => {
+                // This logic means that when we pause in-game then return to the home screen,
+                // the game music does not fade out before playing the Home screen music.
+                mockScene.scene.key = "home";
+                GameSound.setupScreenMusic(mockScene);
+                expect(mockCurrentMusic.destroy).toHaveBeenCalled();
+                expect(mockScene.tweens.add).not.toHaveBeenCalledWith(expect.objectContaining(fadeTween));
+            });
+
             test("starts and fades in the next music track", () => {
-                mockScene.config.music = "test/music";
                 GameSound.setupScreenMusic(mockScene);
                 expect(mockScene.tweens.add).toHaveBeenCalledTimes(2);
-                expect(mockScene.tweens.add).toHaveBeenCalledWith({
-                    targets: mockMusic,
-                    volume: 1,
-                    duration: 1000,
-                });
+                expect(mockScene.tweens.add).toHaveBeenCalledWith(expect.objectContaining(fadeTween));
+                expect(mockScene.tweens.add).toHaveBeenCalledWith(expect.objectContaining(addTween));
             });
 
             describe("if there is no music config for the screen", () => {
@@ -164,7 +172,6 @@ describe("Game Sound", () => {
                         destroy: jest.fn(),
                         isPlaying: false,
                     };
-                    mockScene.config.music = "test/music";
                     GameSound.setupScreenMusic(mockScene);
                 });
 
