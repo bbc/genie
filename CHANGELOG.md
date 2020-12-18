@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Allows theme to be passed through as a URL parameter for preference over `embedVars.configPath`. |
 | | Ensures previous screen's audio does not fade out when returning to the Home screen. |
 | | Fixes bug with accessible elements appearing in the wrong place with gel buttons on the debug screens. |
 | | Collections now merge properties and union with local storage.  |

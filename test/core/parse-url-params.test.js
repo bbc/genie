@@ -4,9 +4,9 @@
  * @license Apache-2.0
  */
 
-import { parseUrlParams } from "../../src/core/parseUrlParams";
+import { parseUrlParams } from "../../src/core/parse-url-params";
 
-describe("parseUrlParams", () => {
+describe("Core - Parse Url Params", () => {
     test("converts params into object", () => {
         const paramsString = "?debug=true&theme=worst-witch&audio=false";
         const expectedOutcome = { debug: true, theme: "worst-witch", audio: false };
