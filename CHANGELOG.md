@@ -3,6 +3,8 @@
 | Version | Description |
 |---------|-------------|
 | | Add demo game to debug mode to show the shop component in action. | 
+| | Allows theme to be passed through as a URL parameter for preference over `embedVars.configPath`. |
+| | Ensures previous screen's audio does not fade out when returning to the Home screen. |
 | | Fixes bug with accessible elements appearing in the wrong place with gel buttons on the debug screens. |
 | | Collections now merge properties and union with local storage.  |
 | | Add shop demo screen in debug mode |
@@ -10,14 +12,14 @@
 | | Buttons will move inwards if the screen width causes the border pad to overlap the 4/3 area. |
 | | Add accessibility for scrollable list component. |
 | | Remove states system in favour of collections. |
-| | Add debug key to visualise safe interactable area. | 
+| | Add debug key to visualise safe interactable area. |
 | 3.8.6 ||
 | | Ensure all gel buttons have a valid event channel. |
 | | Adds collections. |
 | | Add a scrollable list component in core/layout/scrollable-list.
 | | Fixes bug when pressing the Enter or Space key on the how to play screen. |
 | | Rename item registry to 'catalogue'. Configs can now have a catalogueKey which prompts the loader to load a matching json5 from theme/default/items/. |
-| | Add item registry as preparation for the shop component. | 
+| | Add item registry as preparation for the shop component. |
 | | Set active tracked pointers to 4 to support virtual joysticks. |
 | 3.8.5 ||
 | | Fixed a bug where if a select screen item did not have a hover state, a console warning would be thrown. |
