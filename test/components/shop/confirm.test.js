@@ -102,7 +102,7 @@ describe("createConfirm()", () => {
         jest.clearAllMocks();
         mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
         createConfirm(mockScene);
-        expect(mockScene.add.text).toHaveBeenCalledWith(28, -25, "PH", {});
+        expect(mockScene.add.text).toHaveBeenCalledWith(-28, -25, "PH", {});
     });
     test("that is displayed with an appropriate Y offset", () => {
         expect(mockContainer.setY).toHaveBeenCalledWith(55);

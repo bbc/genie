@@ -37,11 +37,11 @@ export const createConfirm = scene => {
     container.elems = {
         background: [createRect(scene, innerBounds, 0x0000ff), createPaneBackground(scene, bounds, "confirm")],
         prompt: scene.add
-            .text(innerBounds.x, promptY(bounds), config.confirm.prompts.shop, styleDefaults)
+            .text(getX(innerBounds.x, config), promptY(bounds), config.confirm.prompts.shop, styleDefaults)
             .setOrigin(0.5),
-        price: scene.add.text(innerBounds.x + 28, currencyY(bounds), "PH", styleDefaults).setOrigin(0.5),
+        price: scene.add.text(getX(innerBounds.x + 28, config), currencyY(bounds), "PH", styleDefaults).setOrigin(0.5),
         priceIcon: scene.add.image(
-            innerBounds.x - 20,
+            getX(innerBounds.x - 20, config),
             currencyY(bounds),
             `${config.assetPrefix}.${config.assetKeys.currency}`,
         ),
@@ -138,6 +138,7 @@ const getItemDescription = item => (item ? item.description : "Item Default Desc
 const getItemBlurb = item => (item ? item.longDescription : "");
 const assetKey = (config, item) => (item ? `${config.assetPrefix}.${item.icon}` : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
+const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
 const promptY = outerBounds => -outerBounds.height * (3 / 8);
 const currencyY = outerBounds => -outerBounds.height / 4;
 const blurbY = bounds => bounds.height / 4;
