@@ -21,6 +21,7 @@ class ShopDemo extends Screen {
 
 class ShopDemoGame extends Screen {
     create() {
+        this.plugins.addToScene(this.sys, [], [["ArcadePhysics"]]);
         this.addBackgroundItems();
         this.setLayout(["back", "pause"]);
 

@@ -75,6 +75,10 @@ describe("ShopDemoGame", () => {
     beforeEach(() => {
         shopDemoGame = new ShopDemoGame();
 
+        shopDemoGame.plugins = {
+            addToScene: jest.fn(),
+        };
+
         mockHatCollection = [];
         mockCursors = { space: { isDown: false } };
         mockCurrency = { qty: 1 };

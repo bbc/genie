@@ -48,7 +48,6 @@ eventBus.subscribe({
 // Additional game options passed to phaser setup
 const gameOptions = {
     //pixelArt: true,
-    physics: { default: "arcade", arcade: {} }, // currently, the only way to enable physics in debug screens
 };
 
 const screens = {
