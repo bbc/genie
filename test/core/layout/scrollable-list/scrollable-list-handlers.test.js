@@ -62,6 +62,12 @@ describe("Scrollable List handlers", () => {
             handler();
             expect(mockClickHandler).not.toHaveBeenCalled();
         });
+        test("when both x and y are zero, we assume an a11y click and return a fn that calls clickHandler", () => {
+            mockScene.input = { x: 0, y: 0 };
+            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
+            handler();
+            expect(mockClickHandler).toHaveBeenCalled();
+        });
     });
 
     describe("updatePanelOnScroll", () => {

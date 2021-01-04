@@ -15,7 +15,8 @@ const handleClickIfVisible = (gelButton, scene, handler) => () => {
     const topY = height / 2 + safeArea.y + panel.space.top;
     const bottomY = topY + panel.innerHeight;
     const mouseY = scene.input.y;
-    if (mouseY >= topY && mouseY <= bottomY) handler(gelButton);
+    const mouseX = scene.input.x;
+    if ((mouseY >= topY && mouseY <= bottomY) || (mouseY === 0 && mouseX === 0)) handler(gelButton);
 };
 
 const updatePanelOnScroll = panel => () => getPanelItems(panel).map(item => item.setElementSizeAndPosition());
