@@ -1,4 +1,11 @@
 {
+    debugLabels: [
+        {
+            x: -390,
+            y: -190,
+            text: "Shop Screen",
+        },
+    ],
     assetPrefix: "shop",
     music: "home.backgroundMusic",
     background: {
@@ -44,9 +51,9 @@
         y: 15.09,
         outerPadFactor: 1.8,
     },
-    collection: "armoury",
+    collection: "hats",
     paneCollections: {
-        shop: "armoury",
+        shop: "hats",
         manage: "inventory",
     },
     confirm: {
@@ -165,5 +172,5 @@
             ],
         },
     },
-    eventChannel: "shop_menu",
+    eventChannel: "shop_demo_shop",
 }

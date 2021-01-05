@@ -17,7 +17,7 @@ export const overlays1Wide = (gelButton, configs) => {
 const setImageOverlay = ({ gelButton, overlay, offset }) => {
     const { scene, item } = gelButton;
     const { assetPrefix } = scene.config;
-    const key = overlay.isDynamic ? `${assetPrefix}.${item[overlay.assetKey]}` : `${assetPrefix}.${overlay.assetKey}`;
+    const key = overlay.isDynamic ? `${item[overlay.assetKey]}` : `${assetPrefix}.${overlay.assetKey}`;
     const image = scene.add.image(offset.x, offset.y, key);
     overlay.size && image.setScale(overlay.size / image.width);
     gelButton.overlays.set(overlay.name, image);

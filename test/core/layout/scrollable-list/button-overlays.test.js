@@ -21,7 +21,7 @@ const mockItem = {
     name: "someItemName",
     description: "someItemDescription",
     price: 42,
-    icon: "itemIcon",
+    icon: "test.itemIcon",
 };
 
 const mockGelButton = {

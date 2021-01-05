@@ -19,7 +19,7 @@ const memoizeBackButton = config => (({ channel, key, action }) => ({ channel, n
 
 export class Shop extends Screen {
     preload() {
-        this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this);
+        this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
     }
 
     create() {
