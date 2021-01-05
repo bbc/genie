@@ -105,8 +105,8 @@ const populate = container =>
     ]);
 
 const prepTransaction = (scene, container) => (item, title) => {
-    container.update(item, title);
     scene.stack("confirm");
+    container.update(item, title);
 };
 
 const itemView = (scene, item, config, bounds) =>
