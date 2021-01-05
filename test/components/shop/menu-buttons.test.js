@@ -22,6 +22,8 @@ describe("shop menu buttons", () => {
         setX: jest.fn(),
         width: 53,
         setLegal: jest.fn(),
+        input: {},
+        accessibleElement: { update: jest.fn() },
     };
     const mockText = { setOrigin: jest.fn() };
     const mockOuterBounds = { x: 0, y: 0, height: 300, width: 800 };
@@ -136,15 +138,19 @@ describe("shop menu buttons", () => {
             test("is applied to the 'Confirm' button", () => {
                 expect(typeof confirmButton.setLegal).toBe("function");
             });
-            test("when called with true, sets tint and alpha", () => {
+            test("when called with true, sets tint and alpha and enables the a11y elem", () => {
                 confirmButton.setLegal(true);
                 expect(confirmButton.alpha).toBe(1);
                 expect(confirmButton.tint).toBe(0xffffff);
+                expect(confirmButton.input.enabled).toBe(true);
+                expect(confirmButton.accessibleElement.update).toHaveBeenCalled();
             });
-            test("when called with false, sets tint and alpha", () => {
+            test("when called with false, sets tint and alpha and disables the a11y elem", () => {
                 confirmButton.setLegal(false);
                 expect(confirmButton.alpha).toBe(0.25);
                 expect(confirmButton.tint).toBe(0xff0000);
+                expect(confirmButton.input.enabled).toBe(false);
+                expect(confirmButton.accessibleElement.update).toHaveBeenCalled();
             });
         });
     });
