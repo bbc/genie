@@ -50,7 +50,8 @@ const resizeButton = container => (button, idx) => {
     const right = Boolean(container.scene.config.menu.buttonsRight);
     const bounds = container.list[0].getBounds();
     button.setY(CAMERA_Y + bounds.y + bounds.height / 4 + (idx * bounds.height) / 2);
-    button.setX(CAMERA_X + (right ? bounds.x + bounds.width / 2 : -bounds.x));
+    const xPos = bounds.x + bounds.width / 2;
+    button.setX(CAMERA_X + (right ? xPos : -xPos));
     button.setScale(bounds.width / button.width);
 };
 

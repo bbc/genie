@@ -181,11 +181,11 @@ describe("shop menu buttons", () => {
             expect(mockButton.setScale).toHaveBeenCalledWith(4);
         });
         describe("when buttonsRight is false", () => {
-            test("the x position is further left", () => {
+            test("the x position is mirrored", () => {
                 jest.clearAllMocks();
                 container.scene.config.menu.buttonsRight = false;
                 resizeGelButtons(container, mockOuterBounds);
-                expect(mockButton.setX.mock.calls[0][0]).toBe(700);
+                expect(mockButton.setX.mock.calls[0][0]).toBe(300);
             });
         });
     });
