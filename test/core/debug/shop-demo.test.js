@@ -154,6 +154,7 @@ describe("ShopDemoGame", () => {
                     setScale: jest.fn().mockReturnValue({ setGravityY: jest.fn().mockReturnValue(mockArcadeSprite) }),
                 }),
             },
+            start: jest.fn(),
         };
         shopDemoGame.sound = { add: jest.fn().mockReturnValue({ play: jest.fn() }) };
         shopDemoGame.input = {
@@ -162,6 +163,15 @@ describe("ShopDemoGame", () => {
         };
         shopDemoGame.children = { list: [mockImage] };
         shopDemoGame.events = { once: jest.fn() };
+    });
+
+    describe("preload", () => {
+        beforeEach(() => shopDemoGame.preload());
+
+        test("loads and starts arcade physics ", () => {
+            expect(shopDemoGame.plugins.addToScene).toHaveBeenCalled();
+            expect(shopDemoGame.physics.start).toHaveBeenCalled();
+        });
     });
 
     describe("create", () => {

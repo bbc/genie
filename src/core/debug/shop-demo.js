@@ -20,8 +20,12 @@ class ShopDemo extends Screen {
 }
 
 class ShopDemoGame extends Screen {
-    create() {
+    preload() {
         this.plugins.addToScene(this.sys, [], [["ArcadePhysics"]]);
+        this.physics.start();
+    }
+
+    create() {
         this.addBackgroundItems();
         this.setLayout(["back", "pause"]);
 
@@ -44,6 +48,7 @@ class ShopDemoGame extends Screen {
         this.woodChop = chopWood(this);
         this.buttons = createCheatButtons(this);
     }
+
     update() {
         this.entities.player.update();
         if (this.cursors.space.isDown) {
