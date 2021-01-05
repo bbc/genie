@@ -14,9 +14,10 @@ let mockGridSizer;
 let mockPanel;
 
 const mockScene = {
-    input: {},
+    input: { activePointer: { id: 1, upTime: 999 } },
     scale: { displaySize: { height: 600 } },
     layout: { getSafeArea: jest.fn().mockReturnValue({ y: -100 }) },
+    sys: { time: { now: 1000 } },
 };
 const mockSizer = { innerHeight: 300, space: { top: 10 } };
 const mockOtherRexLabel = { children: [{}], height: 100 };
@@ -50,17 +51,29 @@ describe("Scrollable List handlers", () => {
         let mockClickHandler = jest.fn();
 
         test("returns a fn that calls clickHandler if click is inside the panel's Y bounds", () => {
-            mockScene.input = { y: 300 };
+            mockScene.input.y = 300;
             const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
             handler();
             expect(mockClickHandler).toHaveBeenCalled();
         });
 
         test("returns a fn that does not call clickHandler if click is outside the panel", () => {
-            mockScene.input = { y: 0 };
+            mockScene.input.y = 0;
             const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
             handler();
             expect(mockClickHandler).not.toHaveBeenCalled();
+        });
+        test("if the activePointer id is 0, we have an a11y click, so we return a fn that calls clickHandler", () => {
+            mockScene.input = { y: 0, activePointer: { id: 0 } };
+            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
+            handler();
+            expect(mockClickHandler).toHaveBeenCalled();
+        });
+        test("if the activePointer id is not 0, but the activePointer upTime is old, we have an a11y click", () => {
+            mockScene.input = { y: 0, activePointer: { id: 1, upTime: 500 } };
+            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
+            handler();
+            expect(mockClickHandler).toHaveBeenCalled();
         });
     });
 
