@@ -14,6 +14,7 @@ import { createMenu } from "./menu.js";
 import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 import { eventBus } from "../../core/event-bus.js";
 import { createConfirm } from "./confirm.js";
+import * as a11y from "../../core/accessibility/accessibility-layer.js";
 
 const memoizeBackButton = config => (({ channel, key, action }) => ({ channel, name: key, callback: action }))(config);
 
@@ -60,6 +61,7 @@ export class Shop extends Screen {
         this.paneStack.push(pane);
         this.setVisiblePane(pane);
         this.paneStack.length === 1 && this.useCustomMessage();
+        a11y.reset();
     }
 
     back() {
