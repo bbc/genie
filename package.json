@@ -54,9 +54,10 @@
     },
     "scripts": {
         "clean": "rm -rf .cache",
+        "create-theme2": "bash build-scripts/theme2creator/create.sh",
         "start": "cross-env genieCore=true ws --config-file dev/scripts/web-config.js",
         "start:pack": "webpack-dev-server -d --config build-scripts/webpack.config.js --env.genieCore",
-        "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
+        "build": "npm run create-theme2 && webpack --config build-scripts/webpack.config.js --env.genieCore",
         "eslint": "eslint . --ignore-pattern lib/ --ignore-path .gitignore",
         "jest": "jest --coverage",
         "jest:no-coverage": "jest",
