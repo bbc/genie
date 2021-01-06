@@ -2,6 +2,7 @@ node_modules
 output
 coverage
 docs/api/
+themes/theme2/
 
 npm-debug.log
 *.DS_Store
