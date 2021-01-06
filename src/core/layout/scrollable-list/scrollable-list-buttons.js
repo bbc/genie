@@ -58,7 +58,7 @@ const createGelButton = (scene, item, title, state, prepTx) => {
 const scaleButton = (gelButton, layout, padding) => {
     const safeArea = layout.getSafeArea({}, false);
     const horizontalPadding = padding.x * 2 + padding.outerPadFactor * padding.x * 2;
-    const scaleFactor = (safeArea.width - horizontalPadding) / gelButton.width; // needs to take account of outer pad factor. pass in the whole obj when calling, fix the maths here.
+    const scaleFactor = (safeArea.width - horizontalPadding) / gelButton.width;
     gelButton.setScale(scaleFactor);
 };
 
