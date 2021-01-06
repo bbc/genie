@@ -38,7 +38,7 @@ describe("Scrollable List Buttons", () => {
             assetKeys: {
                 itemBackground: "itemBackground",
             },
-            listPadding: { x: 10, y: 8 },
+            listPadding: { x: 10, y: 8, outerPadFactor: 2 },
             overlay: {
                 items: [{ foo: "bar" }],
                 options: {

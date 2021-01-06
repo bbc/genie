@@ -99,7 +99,7 @@ describe("Scrollable List", () => {
                     scrollbar: "scrollbar",
                     scrollbarHandle: "scrollbarHandle",
                 },
-                listPadding: { x: 10, y: 8, outerPadFactor: 1 },
+                listPadding: { x: 10, y: 8, outerPadFactor: 2 },
                 overlay: {
                     items: [mockOverlay],
                 },
@@ -141,7 +141,7 @@ describe("Scrollable List", () => {
                 });
                 test("with spacing from config", () => {
                     const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
-                    const expectedSpacing = { left: 10, right: 10, top: 8, bottom: 8, panel: 10 };
+                    const expectedSpacing = { left: 20, right: 20, top: 16, bottom: 16, panel: 10 };
                     expect(config.space).toEqual(expectedSpacing);
                 });
                 test("with scroll mode 0", () => {
