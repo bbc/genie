@@ -99,7 +99,7 @@ const createItem = (scene, item, title, prepTx) => {
 const resizePanel = (scene, panel) => () => {
     const t = panel.t;
     const items = getPanelItems(panel);
-    items.forEach(label => scaleButton(label.children[0], scene.layout, panel.space.left));
+    items.forEach(label => scaleButton(label.children[0], scene.layout, scene.config.listPadding));
     const safeArea = getPanelY(scene);
     panel.minHeight = safeArea.height;
     panel.y = safeArea.y;
