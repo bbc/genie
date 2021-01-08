@@ -51,10 +51,10 @@
         y: 15.09,
         outerPadFactor: 1.8,
     },
-    collection: "hats",
+    collection: "debug-demo-armoury",
     paneCollections: {
-        shop: "hats",
-        manage: "inventory",
+        shop: "debug-demo-armoury",
+        manage: "debug-demo-inventory",
     },
     confirm: {
         detailView: true, // true === smaller image and more text. false === large image only.
