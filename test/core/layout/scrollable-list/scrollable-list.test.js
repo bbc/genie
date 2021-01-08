@@ -109,7 +109,7 @@ describe("Scrollable List", () => {
                 getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
                 addCustomGroup: jest.fn(),
             },
-            scale: { on: jest.fn() },
+            scale: { on: jest.fn(), removeListener: jest.fn() },
             scene: { key: "shop" },
             sys: {
                 queueDepthSort: jest.fn(),
@@ -276,6 +276,14 @@ describe("Scrollable List", () => {
                 expect(mockA11yElem.addEventListener.mock.calls[0][0]).toBe("focus");
                 mockA11yElem.addEventListener.mock.calls[0][1]();
                 expect(mockScrollablePanel.updateOnFocus).toHaveBeenCalled();
+            });
+        });
+        describe("shutdown", () => {
+            test("calls removeListener with the debounced resize listener", () => {
+                new ScrollableList(mockScene);
+                const shutdownListener = mockScene.events.once.mock.calls[1][1];
+                shutdownListener();
+                expect(mockScene.scale.removeListener).toHaveBeenCalled();
             });
         });
     });
