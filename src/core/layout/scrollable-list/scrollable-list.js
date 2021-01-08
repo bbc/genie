@@ -97,7 +97,7 @@ const createItem = (scene, item, title, prepTx) => {
 };
 
 const resizePanel = (scene, panel) => () => {
-    const t = panel.t; // here's our crash root cause- crash is thrown from inside rexUI tho.
+    const t = panel.t;
     const items = getPanelItems(panel);
     items.forEach(label => scaleButton(label.children[0], scene.layout, scene.config.listPadding));
     const safeArea = getPanelY(scene);
