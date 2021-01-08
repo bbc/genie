@@ -51,9 +51,9 @@
         y: 15.09,
         outerPadFactor: 1.8,
     },
-    collection: "debug-demo-armoury",
+    collection: "debug-demo-hats",
     paneCollections: {
-        shop: "debug-demo-armoury",
+        shop: "debug-demo-hats",
         manage: "debug-demo-inventory",
     },
     confirm: {

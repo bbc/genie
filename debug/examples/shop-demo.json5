@@ -3,6 +3,6 @@
     background: {
         items: [{ key: "shopDemo.background", x: 0, y: 0 }],
     },
-    collection: ["debug-demo-inventory", "debug-demo-armoury"],
+    collection: "debug-demo-inventory",
     eventChannel: "shop_demo_top",
 }
