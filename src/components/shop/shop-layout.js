@@ -53,7 +53,10 @@ export const resize = container => bounds => {
     container.setY(container.y - yOffset);
     resizeGelButtons(container);
 
-    container.elems?.item.filter(isText).forEach(item => (item.scaleX = container.scaleX / container.scaleY));
+    container.elems?.item.filter(isText).forEach(item => {
+        item.scaleX = 1 / container.scaleX;
+        item.scaleY = 1 / container.scaleY;
+    });
 };
 
 export const getHalfRectBounds = (menuBounds, isOnRight) => {
