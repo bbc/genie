@@ -4,11 +4,13 @@
  * @license Apache-2.0
  */
 import { getLauncherScreen, addExampleScreens } from "../../../src/core/debug/debug-screens.js";
+import * as Load from "../../../src/core/loader/load-collections.js";
 import * as Examples from "../../../src/core/debug/examples.js";
 import * as Config from "../../../src/core/loader/get-config.js";
 
 jest.mock("../../../src/core/loader/get-config.js");
 jest.mock("../../../src/core/debug/examples.js");
+jest.mock("../../../src/core/loader/load-collections.js");
 
 describe("getDebugScreens", () => {
     describe("getLauncherScreen", () => {
@@ -55,6 +57,11 @@ describe("getDebugScreens", () => {
         test("Does not call a second time (fp.once)", () => {
             addExampleScreens(mockScreen);
             expect(mockScreen.setConfig).not.toHaveBeenCalled();
+        });
+
+        test("calls loadCollections correctly", () => {
+            addExampleScreens(mockScreen);
+            expect(Load.loadCollections).toHaveBeenCalledWith(mockScreen, mockScreen.context.config, "debug/");
         });
     });
 });
