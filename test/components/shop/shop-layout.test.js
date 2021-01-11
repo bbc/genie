@@ -16,14 +16,16 @@ const mockMetrics = {
     verticalBorderPad: 15,
 };
 let mockBounds;
+let mockTextElem;
+let mockImageElem;
 
 describe("shop element scaling functions", () => {
     beforeEach(() => {
         mockBounds = { width: 100, height: 100, y: 0, x: 0 };
-
+        mockTextElem = {};
         mockLayout = { getSafeArea: jest.fn() };
         mockContainer = {
-            getBounds: jest.fn().mockReturnValue({ height: 100, width: 300 }),
+            getBounds: jest.fn().mockReturnValue({ height: 100, width: 300, x: 0, y: 0 }),
             scale: 1,
             scaleX: 1,
             scaleY: 1,
@@ -32,6 +34,9 @@ describe("shop element scaling functions", () => {
             setX: jest.fn(),
             buttons: [],
             memoisedBounds: mockBounds,
+            getTextElems: jest.fn().mockReturnValue([]),
+            getImageElems: jest.fn().mockReturnValue([]),
+            y: 0,
         };
     });
 
@@ -111,33 +116,20 @@ describe("shop element scaling functions", () => {
     });
 
     describe("resize()", () => {
-        test("returns a scale factor that will have the element fill the available vertical space", () => {
-            const textSpy = jest.fn();
-            const imageSpy = jest.fn();
-
-            mockContainer.scaleX = 0.5;
-            mockContainer.scaleY = 2;
-            mockContainer.elems = {
-                item: [
-                    {
-                        set scaleX(val) {
-                            textSpy(val);
-                        },
-                        type: "Text",
-                    },
-                    {
-                        set scaleX(val) {
-                            imageSpy(val);
-                        },
-                        type: "Image",
-                    },
-                ],
-            };
-
-            shopLayout.resize(mockContainer)(mockBounds);
-            expect(imageSpy).not.toHaveBeenCalled();
-            expect(textSpy).toHaveBeenCalledWith(0.25);
+        test("sets an appropriate scale and offset on the container", () => {
+            const newBounds = { width: 200, height: 100, x: 0, y: 10 };
+            shopLayout.resize(mockContainer)(newBounds);
+            expect(mockContainer.setScale).toHaveBeenCalledWith(2, 1);
+            expect(mockContainer.setY).toHaveBeenCalledWith(10);
         });
+
+        test("if the container has elems, inverse-scale them to preserve aspect ratio", () => {
+            expect(false).toBe(true);
+        });
+
+        // test("if the container has elems, inverse-scale them to preserve aspect ratio and preserve the overall scale", () => {
+        //     expect(false).toBe(true);
+        // });
     });
 
     describe("getPaneBackgroundKey()", () => {

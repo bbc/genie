@@ -43,10 +43,11 @@ export const setVisible = container => isVisible => {
 export const resize = container => bounds => {
     const { memoisedBounds } = container;
     container.memoisedBounds = bounds;
+
     const scaleX = (bounds.width / memoisedBounds.width) * container.scaleX;
     const scaleY = (bounds.height / memoisedBounds.height) * container.scaleY;
-
     container.setScale(scaleX, scaleY);
+
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
     resizeGelButtons(container);
