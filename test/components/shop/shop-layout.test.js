@@ -18,14 +18,39 @@ const mockMetrics = {
 let mockBounds;
 let mockTextElem;
 let mockImageElem;
+let imageScaleXSpy;
+let imageScaleYSpy;
+let textScaleXSpy;
+let textScaleYSpy;
 
 describe("shop element scaling functions", () => {
     beforeEach(() => {
+        imageScaleXSpy = jest.fn();
+        imageScaleYSpy = jest.fn();
+        textScaleXSpy = jest.fn();
+        textScaleYSpy = jest.fn();
         mockBounds = { width: 100, height: 100, y: 0, x: 0 };
-        mockTextElem = {};
+        mockTextElem = {
+            set scaleX(val) {
+                textScaleXSpy(val);
+            },
+            set scaleY(val) {
+                textScaleYSpy(val);
+            },
+        };
+        mockImageElem = {
+            scale: 2,
+            set scaleX(val) {
+                imageScaleXSpy(val);
+            },
+            set scaleY(val) {
+                imageScaleYSpy(val);
+            },
+        };
         mockLayout = { getSafeArea: jest.fn() };
         mockContainer = {
             getBounds: jest.fn().mockReturnValue({ height: 100, width: 300, x: 0, y: 0 }),
+            elems: {},
             scale: 1,
             scaleX: 1,
             scaleY: 1,
@@ -34,8 +59,8 @@ describe("shop element scaling functions", () => {
             setX: jest.fn(),
             buttons: [],
             memoisedBounds: mockBounds,
-            getTextElems: jest.fn().mockReturnValue([]),
-            getImageElems: jest.fn().mockReturnValue([]),
+            getTextElems: jest.fn().mockReturnValue([mockTextElem]),
+            getImageElems: jest.fn().mockReturnValue([mockImageElem]),
             y: 0,
         };
     });
@@ -116,20 +141,25 @@ describe("shop element scaling functions", () => {
     });
 
     describe("resize()", () => {
-        test("sets an appropriate scale and offset on the container", () => {
-            const newBounds = { width: 200, height: 100, x: 0, y: 10 };
+        beforeEach(() => {
+            const newBounds = { width: 200, height: 50, x: 0, y: 10 };
             shopLayout.resize(mockContainer)(newBounds);
-            expect(mockContainer.setScale).toHaveBeenCalledWith(2, 1);
+        });
+
+        test("sets an appropriate scale and offset on the container", () => {
+            expect(mockContainer.setScale).toHaveBeenCalledWith(2, 0.5);
             expect(mockContainer.setY).toHaveBeenCalledWith(10);
         });
 
         test("if the container has elems, inverse-scale them to preserve aspect ratio", () => {
-            expect(false).toBe(true);
+            expect(textScaleXSpy).toHaveBeenCalledWith(0.5);
+            expect(textScaleYSpy).toHaveBeenCalledWith(2);
         });
 
-        // test("if the container has elems, inverse-scale them to preserve aspect ratio and preserve the overall scale", () => {
-        //     expect(false).toBe(true);
-        // });
+        test("if the container has elems, inverse-scale them to preserve aspect ratio and preserve the overall scale", () => {
+            expect(imageScaleXSpy).toHaveBeenCalledWith(1);
+            expect(imageScaleYSpy).toHaveBeenCalledWith(4);
+        });
     });
 
     describe("getPaneBackgroundKey()", () => {
