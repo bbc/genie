@@ -52,16 +52,12 @@ describe("getDebugScreens", () => {
                 navigation: { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" },
                 screen: "mockConfig",
             });
+            expect(Load.loadCollections).toHaveBeenCalledWith(mockScreen, mockScreen.context.config, "debug/");
         });
 
         test("Does not call a second time (fp.once)", () => {
             addExampleScreens(mockScreen);
             expect(mockScreen.setConfig).not.toHaveBeenCalled();
-        });
-
-        test("calls loadCollections correctly", () => {
-            addExampleScreens(mockScreen);
-            expect(Load.loadCollections).toHaveBeenCalledWith(mockScreen, mockScreen.context.config, "debug/");
         });
     });
 });
