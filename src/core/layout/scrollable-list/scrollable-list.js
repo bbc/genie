@@ -113,7 +113,9 @@ const setupEvents = (scene, panel) => {
     const scaleEvent = onScaleChange.add(resizePanel(scene, panel));
     scene.events.once("shutdown", scaleEvent.unsubscribe);
 
-    scene.scale.on("resize", fp.debounce(10, resizePanel(scene, panel)), scene);
+    const debouncedResize = fp.debounce(10, resizePanel(scene, panel));
+    scene.scale.on("resize", debouncedResize, scene);
+    scene.events.once("shutdown", () => scene.scale.removeListener("resize", debouncedResize));
 
     panel.updateOnScroll = updatePanelOnScroll(panel);
     panel.on("scroll", panel.updateOnScroll);
