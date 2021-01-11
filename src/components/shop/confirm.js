@@ -58,8 +58,14 @@ export const createConfirm = scene => {
     container.setBalance = bal => balance.setText(bal);
     container.getBalance = () => balance.getValue();
     container.setLegal = setLegal(container);
+    container.getTextElems = () =>
+        [container.elems.prompt, container.elems.price, ...container.elems.item].filter(isText);
+    container.getImageElems = () => [container.elems.priceIcon, ...container.elems.item].filter(isImage);
     return container;
 };
+
+const isText = item => item.type === "Text";
+const isImage = item => item.type === "Image";
 
 const handleClick = (scene, container) => button => {
     if (button === "Confirm" && !container.transaction.isLegal) return;
