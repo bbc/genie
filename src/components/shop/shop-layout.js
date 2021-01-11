@@ -45,17 +45,17 @@ const isText = item => item.type === "Text";
 export const resize = container => bounds => {
     const { memoisedBounds } = container;
     container.memoisedBounds = bounds;
-    container.setScale(
-        (bounds.width / memoisedBounds.width) * container.scaleX,
-        (bounds.height / memoisedBounds.height) * container.scaleY,
-    );
+    const scaleX = (bounds.width / memoisedBounds.width) * container.scaleX;
+    const scaleY = (bounds.height / memoisedBounds.height) * container.scaleY;
+
+    container.setScale(scaleX, scaleY);
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
     resizeGelButtons(container);
 
-    container.elems?.item.filter(isText).forEach(item => {
-        item.scaleX = 1 / container.scaleX;
-        item.scaleY = 1 / container.scaleY;
+    container.elems?.item.filter(isText).forEach(itemElem => {
+        itemElem.scaleX = 1 / scaleX;
+        itemElem.scaleY = 1 / scaleY;
     });
 };
 
