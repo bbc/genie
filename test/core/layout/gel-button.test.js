@@ -65,6 +65,7 @@ describe("Gel Button", () => {
                 anims: {
                     once: jest.fn(),
                     generateFrameNumbers: jest.fn(),
+                    on: jest.fn(),
                 },
                 textures: {
                     get: jest.fn(() => ({
