@@ -44,10 +44,10 @@
         y: 15.09,
         outerPadFactor: 1.8,
     },
-    collection: "armoury",
+    collection: ["debug-inventory", "debug-armoury"],
     paneCollections: {
-        shop: "armoury",
-        manage: "inventory",
+        shop: "debug-armoury",
+        manage: "debug-inventory",
     },
     confirm: {
         detailView: true, // true === smaller image and more text. false === large image only.
