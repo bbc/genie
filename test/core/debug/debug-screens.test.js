@@ -52,7 +52,7 @@ describe("getDebugScreens", () => {
                 navigation: { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" },
                 screen: "mockConfig",
             });
-            expect(Load.loadCollections).toHaveBeenCalledWith(mockScreen, mockScreen.context.config, "debug/");
+            expect(Load.loadCollections).toHaveBeenCalledWith(mockScreen, { screen: "mockConfig" }, "debug/");
         });
 
         test("Does not call a second time (fp.once)", () => {
