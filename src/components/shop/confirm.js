@@ -58,6 +58,13 @@ export const createConfirm = scene => {
     container.setBalance = bal => balance.setText(bal);
     container.getBalance = () => balance.getValue();
     container.setLegal = setLegal(container);
+
+    container.getElems = () => [
+        container.elems.prompt,
+        container.elems.price,
+        container.elems.priceIcon,
+        ...container.elems.item,
+    ];
     return container;
 };
 
