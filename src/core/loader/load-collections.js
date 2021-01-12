@@ -10,7 +10,6 @@ const getKey = item => item.collection;
 const loadToCache = screen => key => screen.load.json5({ key: `items/${key}`, url: `items/${key}.json5` });
 const getKeys = config => Object.values(config).map(getKey).filter(Boolean);
 
-/* istanbul ignore next */
 export const loadCollections = (screen, config) => {
     const keys = getKeys(config).flat();
     keys.forEach(loadToCache(screen));
