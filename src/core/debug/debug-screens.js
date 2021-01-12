@@ -8,6 +8,8 @@ import { examples } from "./examples.js";
 import { getConfig } from "../loader/get-config.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import { loadCollections } from "../loader/load-collections.js";
+import { gmi } from "../gmi/gmi.js";
+import { getTheme } from "../get-theme.js";
 
 const launcherScreen = {
     debug: {
@@ -35,7 +37,11 @@ const addScreens = async scene => {
     Object.assign(config.navigation, examples);
 
     scene.setConfig(config);
-    await loadCollections(scene, debugTheme, "debug/");
+
+    this.load.setBaseURL(gmi.gameDir);
+    this.load.setPath("debug/");
+
+    await loadCollections(scene, debugTheme);
 };
 
 export const addExampleScreens = fp.once(addScreens);
