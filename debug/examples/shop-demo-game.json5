@@ -37,7 +37,7 @@
         chopDebounce: 350,
     },
     gravity: 300,
-    paneCollections: { shop: "hats", manage: "inventory" },
+    paneCollections: { shop: "debug-demo-hats", manage: "debug-demo-inventory" },
     balance: {
         value: { key: "coin" },
         x: 300,
