@@ -68,12 +68,6 @@ describe("Collections", () => {
             expect(collections.get("testCollection")).toBeDefined();
         });
 
-        test("adds an entry to the collections map when a path is provided", () => {
-            mockCache["debug/items/testCollection2"] = testCollection;
-            initCollection(mockScreen, "debug/")("testCollection2");
-            expect(collections.get("testCollection2")).toBeDefined();
-        });
-
         test("returns an object with get, getAll and set access functions", () => {
             const collection = initCollection(mockScreen)("testCollection");
 
@@ -84,7 +78,7 @@ describe("Collections", () => {
     });
 
     describe("Returned getAll method", () => {
-        test("Returns all catalogue fromn json cache if string specified", () => {
+        test("Returns all catalogues from json cache if string specified", () => {
             const collection = initCollection(mockScreen)("testCollection");
             const expected = testCatalogue.map(item => ({ ...item, qty: 1 }));
 

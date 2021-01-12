@@ -12,7 +12,7 @@ const testURL = window => window.location.hostname.includes("www.test.bbc.");
 
 export const create = window => {
     if (isDebug() || testURL(window)) {
-        const debugParam = urlParams(window).debug
+        const debugParam = urlParams(window).debug;
         window.__debug = { gmi, collections, debugParam };
     }
 };

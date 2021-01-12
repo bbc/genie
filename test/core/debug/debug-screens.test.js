@@ -36,6 +36,10 @@ describe("getDebugScreens", () => {
                     config: {},
                     navigation: {},
                 },
+                load: {
+                    setBaseURL: jest.fn(),
+                    setPath: jest.fn(),
+                },
                 scene: {
                     add: jest.fn(),
                 },
@@ -44,20 +48,21 @@ describe("getDebugScreens", () => {
 
         afterEach(jest.clearAllMocks);
 
-        //test("gets and sets config for all example screens", () => {
-        //    addExampleScreens(mockScreen);
-        //    expect(mockScreen.scene.add).toHaveBeenCalled();
-        //    expect(Config.getConfig).toHaveBeenCalledWith(mockScreen, Object.keys(Examples.examples));
-        //    expect(mockScreen.setConfig.mock.calls[0][0]).toEqual({
-        //        navigation: { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" },
-        //        screen: "mockConfig",
-        //    });
-        //    expect(Load.loadCollections).toHaveBeenCalledWith(mockScreen, { screen: "mockConfig" }, "debug/");
-        //});
+        test("gets and sets config for all example screens", () => {
+            addExampleScreens(mockScreen);
+            expect(mockScreen.scene.add).toHaveBeenCalled();
+            expect(Config.getConfig).toHaveBeenCalledWith(mockScreen, Object.keys(Examples.examples));
+            expect(mockScreen.setConfig.mock.calls[0][0]).toEqual({
+                navigation: { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" },
+                screen: "mockConfig",
+            });
 
-        //test("Does not call a second time (fp.once)", () => {
-        //    addExampleScreens(mockScreen);
-        //    expect(mockScreen.setConfig).not.toHaveBeenCalled();
-        //});
+            expect(Load.loadCollections).toHaveBeenCalledWith(mockScreen, { screen: "mockConfig" }, "debug/");
+        });
+
+        test("Does not call a second time (fp.once)", () => {
+            addExampleScreens(mockScreen);
+            expect(mockScreen.setConfig).not.toHaveBeenCalled();
+        });
     });
 });

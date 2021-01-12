@@ -40,7 +40,7 @@ export const initCollection = screen => key => {
 
     const storagePath = ["collections", key];
     const catalogue = fp.isString(config.catalogue)
-        ? screen.cache.json.get(`$items/${config.catalogue}`)
+        ? screen.cache.json.get(`items/${config.catalogue}`)
         : config.catalogue;
 
     const valid = validateFn(catalogue);
