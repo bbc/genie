@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.8.7 ||
 | | Add bbcode plugin. |
 | | Update rexui plugin. | 
 | | Use Phaser's version of Spine plugin. | 
