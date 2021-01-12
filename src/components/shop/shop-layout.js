@@ -52,24 +52,19 @@ export const resize = container => bounds => {
     container.setY(container.y - yOffset);
     resizeGelButtons(container);
 
-    if (!container.elems) return;
+    container.elems && scaleElements(container.getElems(), scaleX, scaleY);
+};
 
-    container
-        .getElems()
-        .filter(isText)
-        .forEach(textElem => {
-            textElem.scaleX = 1 / scaleX;
-            textElem.scaleY = 1 / scaleY;
-        });
-
-    container
-        .getElems()
-        .filter(isImage)
-        .forEach(imageElem => {
-            const scale = imageElem.scale;
-            imageElem.scaleX = (1 / scaleX) * scale;
-            imageElem.scaleY = (1 / scaleY) * scale;
-        });
+const scaleElements = (elems, scaleX, scaleY) => {
+    elems.filter(isText).forEach(textElem => {
+        textElem.scaleX = 1 / scaleX;
+        textElem.scaleY = 1 / scaleY;
+    });
+    elems.filter(isImage).forEach(imageElem => {
+        const scale = imageElem.scale;
+        imageElem.scaleX = (1 / scaleX) * scale;
+        imageElem.scaleY = (1 / scaleY) * scale;
+    });
 };
 
 const isText = item => item.type === "Text";
