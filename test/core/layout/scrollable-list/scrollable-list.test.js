@@ -78,6 +78,7 @@ describe("Scrollable List", () => {
             height: 100,
             minHeight: 100,
             setT: jest.fn(),
+            emit: jest.fn(),
         };
 
         mockScene = {
@@ -115,6 +116,7 @@ describe("Scrollable List", () => {
                 queueDepthSort: jest.fn(),
                 displayList: {
                     remove: jest.fn(),
+                    exists: jest.fn(),
                 },
             },
         };
