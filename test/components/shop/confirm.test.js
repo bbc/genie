@@ -83,11 +83,9 @@ describe("createConfirm()", () => {
         confirmPane.setBalance(37);
         expect(mockBalance.setText).toHaveBeenCalledWith(37);
     });
-    test("with getters for its image and text elements", () => {
-        const textElems = confirmPane.getTextElems();
-        expect(textElems).toStrictEqual([mockText, mockText]);
-        const imageElems = confirmPane.getImageElems();
-        expect(imageElems).toStrictEqual([mockImage, mockImage]);
+    test("with a getter for its image and text elements", () => {
+        const elems = confirmPane.getElems();
+        expect(elems).toStrictEqual([mockText, mockText, mockImage, mockImage]);
     });
     test("with a rect derived from layout functions used to memoize button positions", () => {
         expect(layout.createRect).toHaveBeenCalledTimes(1);

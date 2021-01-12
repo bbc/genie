@@ -52,19 +52,28 @@ export const resize = container => bounds => {
     container.setY(container.y - yOffset);
     resizeGelButtons(container);
 
-    container.elems &&
-        container.getTextElems().forEach(textElem => {
+    if (!container.elems) return;
+
+    container
+        .getElems()
+        .filter(isText)
+        .forEach(textElem => {
             textElem.scaleX = 1 / scaleX;
             textElem.scaleY = 1 / scaleY;
         });
 
-    container.elems &&
-        container.getImageElems().forEach(imageElem => {
+    container
+        .getElems()
+        .filter(isImage)
+        .forEach(imageElem => {
             const scale = imageElem.scale;
             imageElem.scaleX = (1 / scaleX) * scale;
             imageElem.scaleY = (1 / scaleY) * scale;
         });
 };
+
+const isText = item => item.type === "Text";
+const isImage = item => item.type === "Image";
 
 export const getHalfRectBounds = (menuBounds, isOnRight) => {
     const halfWidth = menuBounds.width / 2;

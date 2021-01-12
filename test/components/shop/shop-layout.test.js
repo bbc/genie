@@ -37,6 +37,7 @@ describe("shop element scaling functions", () => {
             set scaleY(val) {
                 textScaleYSpy(val);
             },
+            type: "Text",
         };
         mockImageElem = {
             scale: 2,
@@ -46,6 +47,7 @@ describe("shop element scaling functions", () => {
             set scaleY(val) {
                 imageScaleYSpy(val);
             },
+            type: "Image",
         };
         mockLayout = { getSafeArea: jest.fn() };
         mockContainer = {
@@ -59,8 +61,7 @@ describe("shop element scaling functions", () => {
             setX: jest.fn(),
             buttons: [],
             memoisedBounds: mockBounds,
-            getTextElems: jest.fn().mockReturnValue([mockTextElem]),
-            getImageElems: jest.fn().mockReturnValue([mockImageElem]),
+            getElems: jest.fn().mockReturnValue([mockTextElem, mockImageElem]),
             y: 0,
         };
     });
