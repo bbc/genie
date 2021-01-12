@@ -35,7 +35,7 @@ const addScreens = async scene => {
     Object.assign(config.navigation, examples);
 
     scene.setConfig(config);
-    await loadCollections(scene, config, "debug/");
+    await loadCollections(scene, debugTheme, "debug/");
 };
 
 export const addExampleScreens = fp.once(addScreens);

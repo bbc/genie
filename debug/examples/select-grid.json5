@@ -55,7 +55,7 @@
         },
     ],
 
-    collection: "characters", // Points to the storage directory containing the choice assets.
+    collection: "debug-characters", // Points to the storage directory containing the choice assets.
     states: {
         locked: {
             // asset: "debby", // Key of sprite to set for. Renders same scale as base sprite so should be the same size.
