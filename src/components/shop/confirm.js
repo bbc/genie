@@ -58,9 +58,12 @@ export const createConfirm = scene => {
     container.setBalance = bal => balance.setText(bal);
     container.getBalance = () => balance.getValue();
     container.setLegal = setLegal(container);
-    container.getTextElems = () =>
-        [container.elems.prompt, container.elems.price, ...container.elems.item].filter(isText);
-    container.getImageElems = () => [container.elems.priceIcon, ...container.elems.item].filter(isImage);
+    container.getTextElems = () => [
+        container.elems.prompt,
+        container.elems.price,
+        ...container.elems.item.filter(isText),
+    ];
+    container.getImageElems = () => [container.elems.priceIcon, ...container.elems.item.filter(isImage)];
     return container;
 };
 

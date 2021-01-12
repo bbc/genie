@@ -50,7 +50,7 @@ describe("shop element scaling functions", () => {
         mockLayout = { getSafeArea: jest.fn() };
         mockContainer = {
             getBounds: jest.fn().mockReturnValue({ height: 100, width: 300, x: 0, y: 0 }),
-            elems: {},
+            elems: { foo: "bar" },
             scale: 1,
             scaleX: 1,
             scaleY: 1,
@@ -151,12 +151,12 @@ describe("shop element scaling functions", () => {
             expect(mockContainer.setY).toHaveBeenCalledWith(10);
         });
 
-        test("if the container has elems, inverse-scale them to preserve aspect ratio", () => {
+        test("inverse-scale text elems on both axes to preserve aspect ratio", () => {
             expect(textScaleXSpy).toHaveBeenCalledWith(0.5);
             expect(textScaleYSpy).toHaveBeenCalledWith(2);
         });
 
-        test("if the container has elems, inverse-scale them to preserve aspect ratio and preserve the overall scale", () => {
+        test("inverse-scale image elems on both axes and preserve the overall scale", () => {
             expect(imageScaleXSpy).toHaveBeenCalledWith(1);
             expect(imageScaleYSpy).toHaveBeenCalledWith(4);
         });
