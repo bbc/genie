@@ -27,6 +27,7 @@ const getDebugScreenWithRoutes = () => {
 
 const addScene = (scene, examples) => key => scene.scene.add(key, examples[key].scene);
 
+/* istanbul ignore next */
 const addScreens = async scene => {
     Object.keys(examples).map(addScene(scene, examples));
     const debugTheme = getConfig(scene, Object.keys(examples));
