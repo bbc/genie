@@ -7,12 +7,13 @@ import { initCollection } from "../collections.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const getKey = item => item.collection;
-const loadToCache = screen => key => screen.load.json5({ key: `items/${key}`, url: `items/${key}.json5` });
+const loadToCache = (screen, path = "") => key =>
+    screen.load.json5({ key: `items/${key}`, url: `${path}items/${key}.json5` });
 const getKeys = config => Object.values(config).map(getKey).filter(Boolean);
 
-export const loadCollections = (screen, config) => {
-    const keys = getKeys(config);
-    keys.forEach(loadToCache(screen));
+export const loadCollections = (screen, config, path) => {
+    const keys = getKeys(config).flat();
+    keys.forEach(loadToCache(screen, path));
 
     return new Promise(resolve => {
         const cataloguesLoaded = () => {
@@ -24,7 +25,7 @@ export const loadCollections = (screen, config) => {
             const catalogueKeys = fp
                 .uniq(keys.map(key => screen.cache.json.get(`items/${key}`).catalogue))
                 .filter(fp.isString);
-            catalogueKeys.forEach(loadToCache(screen));
+            catalogueKeys.forEach(loadToCache(screen, path));
             screen.load.once("complete", cataloguesLoaded);
             screen.load.start();
         };
