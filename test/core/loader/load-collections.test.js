@@ -52,15 +52,6 @@ describe("loadCollections", () => {
             expect(mockScreen.load.json5.mock.calls[1][0].url).toEqual("items/collection2.json5");
         });
 
-        test("Adds the correct collection file urls to the loader when custom path given", () => {
-            loadCollections(mockScreen, mockConfig);
-            expect(mockScreen.load.json5.mock.calls[0][0].key).toEqual("items/collection1");
-            expect(mockScreen.load.json5.mock.calls[1][0].key).toEqual("items/collection2");
-
-            expect(mockScreen.load.json5.mock.calls[0][0].url).toEqual("items/collection1.json5");
-            expect(mockScreen.load.json5.mock.calls[1][0].url).toEqual("items/collection2.json5");
-        });
-
         test("a screen can initialise an array of collections", () => {
             mockConfig.screen2.collection = ["collection2", "collection3"];
             loadCollections(mockScreen, mockConfig);
