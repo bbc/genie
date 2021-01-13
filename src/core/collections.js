@@ -34,13 +34,13 @@ const validateFn = catalogue =>
         [fp.stubTrue, fp.stubTrue],
     ]);
 
-export const initCollection = (screen, path = "") => key => {
+export const initCollection = screen => key => {
     const getStored = getStoredFn(key);
-    const config = screen.cache.json.get(`${path}items/${key}`);
+    const config = screen.cache.json.get(`items/${key}`);
 
     const storagePath = ["collections", key];
     const catalogue = fp.isString(config.catalogue)
-        ? screen.cache.json.get(`${path}items/${config.catalogue}`)
+        ? screen.cache.json.get(`items/${config.catalogue}`)
         : config.catalogue;
 
     const valid = validateFn(catalogue);

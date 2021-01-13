@@ -36,6 +36,10 @@ describe("getDebugScreens", () => {
                     config: {},
                     navigation: {},
                 },
+                load: {
+                    setBaseURL: jest.fn(),
+                    setPath: jest.fn(),
+                },
                 scene: {
                     add: jest.fn(),
                 },
@@ -52,6 +56,7 @@ describe("getDebugScreens", () => {
                 navigation: { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" },
                 screen: "mockConfig",
             });
+
             expect(Load.loadCollections).toHaveBeenCalledWith(mockScreen, { screen: "mockConfig" }, "debug/");
         });
 

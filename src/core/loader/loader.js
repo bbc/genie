@@ -78,7 +78,7 @@ export class Loader extends Screen {
             this._loadbar.frame.cutWidth = this._loadbar.width * progress;
             this._loadbar.frame.updateUVs();
         }
-        if (window.__debug) {
+        if (window.__debug && window.__debug.debugParam !== "nolog") {
             console.log("Loader progress:", progress); // eslint-disable-line no-console
         }
     };

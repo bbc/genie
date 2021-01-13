@@ -53,24 +53,24 @@ describe("loadCollections", () => {
         });
 
         test("Adds the correct collection file urls to the loader when custom path given", () => {
-            loadCollections(mockScreen, mockConfig, "somepath/");
-            expect(mockScreen.load.json5.mock.calls[0][0].key).toEqual("somepath/items/collection1");
-            expect(mockScreen.load.json5.mock.calls[1][0].key).toEqual("somepath/items/collection2");
+            loadCollections(mockScreen, mockConfig);
+            expect(mockScreen.load.json5.mock.calls[0][0].key).toEqual("items/collection1");
+            expect(mockScreen.load.json5.mock.calls[1][0].key).toEqual("items/collection2");
 
-            expect(mockScreen.load.json5.mock.calls[0][0].url).toEqual("somepath/items/collection1.json5");
-            expect(mockScreen.load.json5.mock.calls[1][0].url).toEqual("somepath/items/collection2.json5");
+            expect(mockScreen.load.json5.mock.calls[0][0].url).toEqual("items/collection1.json5");
+            expect(mockScreen.load.json5.mock.calls[1][0].url).toEqual("items/collection2.json5");
         });
 
         test("a screen can initialise an array of collections", () => {
             mockConfig.screen2.collection = ["collection2", "collection3"];
-            loadCollections(mockScreen, mockConfig, "somepath/");
-            expect(mockScreen.load.json5.mock.calls[0][0].key).toEqual("somepath/items/collection1");
-            expect(mockScreen.load.json5.mock.calls[1][0].key).toEqual("somepath/items/collection2");
-            expect(mockScreen.load.json5.mock.calls[2][0].key).toEqual("somepath/items/collection3");
+            loadCollections(mockScreen, mockConfig);
+            expect(mockScreen.load.json5.mock.calls[0][0].key).toEqual("items/collection1");
+            expect(mockScreen.load.json5.mock.calls[1][0].key).toEqual("items/collection2");
+            expect(mockScreen.load.json5.mock.calls[2][0].key).toEqual("items/collection3");
 
-            expect(mockScreen.load.json5.mock.calls[0][0].url).toEqual("somepath/items/collection1.json5");
-            expect(mockScreen.load.json5.mock.calls[1][0].url).toEqual("somepath/items/collection2.json5");
-            expect(mockScreen.load.json5.mock.calls[2][0].url).toEqual("somepath/items/collection3.json5");
+            expect(mockScreen.load.json5.mock.calls[0][0].url).toEqual("items/collection1.json5");
+            expect(mockScreen.load.json5.mock.calls[1][0].url).toEqual("items/collection2.json5");
+            expect(mockScreen.load.json5.mock.calls[2][0].url).toEqual("items/collection3.json5");
         });
 
         test("Adds the correct catalogue file urls to the loader", () => {
