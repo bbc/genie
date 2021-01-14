@@ -57,12 +57,12 @@ describe("createBalance()", () => {
                 value: {
                     type: "text",
                     key: "someId",
-                    styles: { foo: "bar" },
                 },
             },
             balancePadding: 6,
             listPadding: { x: 1 },
             paneCollections: { manage: "inventory" },
+            styleDefaults: { some: "default" },
         },
         layout: {
             getSafeArea: jest.fn(() => mockSafeArea),
@@ -90,14 +90,8 @@ describe("createBalance()", () => {
         expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "shop.balanceBackground");
         expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "shop.balanceIcon");
     });
-    test("adds a text element, merging the provided styles with defaults", () => {
-        const expectedStyles = {
-            fontFamily: "ReithSans",
-            fontSize: "24px",
-            resolution: 4,
-            foo: "bar",
-        };
-        expect(mockScene.add.text.mock.calls[0][3]).toStrictEqual(expectedStyles);
+    test("adds a text element with the value of the balance", () => {
+        expect(mockScene.add.text.mock.calls[0][2]).toBe(100);
     });
     test("uses the quantity of the currency item from inventory as its value", () => {
         expect(collections.get).toHaveBeenCalledWith("inventory");

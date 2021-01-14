@@ -26,7 +26,7 @@ const setImageOverlay = ({ gelButton, overlay, offset }) => {
 const setTextOverlay = ({ gelButton, overlay, offset }) => {
     const { scene, item } = gelButton;
     const textContent = overlay.isDynamic ? item[overlay.value].toString() : overlay.value.toString();
-    gelButton.overlays.set(overlay.name, scene.add.text(offset.x, offset.y, textContent, overlay.font));
+    gelButton.overlays.set(overlay.name, scene.add.text(offset.x, offset.y, textContent, overlay.font)); // needs to account for styling in same way as others
 };
 
 const getOffset = (position, gelButton) => {

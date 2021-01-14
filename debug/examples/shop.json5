@@ -35,7 +35,6 @@
         value: {
             type: "text",
             key: "coin", // the id of the currency item, which must exist in the inventory collection
-            styles: {},
         },
     },
     balancePadding: 15,
@@ -55,6 +54,7 @@
             shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
             manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
         },
+        // needs updating with styling objects
     },
     styleDefaults: {
         fontFamily: "ReithSans",
@@ -103,7 +103,7 @@
                 value: "title",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: -18 },
-                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 18 },
+                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 18 }, // update these to conform
             },
             {
                 type: "text",

@@ -37,7 +37,7 @@ export const createConfirm = scene => {
     container.elems = {
         background: [createRect(scene, innerBounds, 0x0000ff), createPaneBackground(scene, bounds, "confirm")],
         prompt: scene.add
-            .text(getX(innerBounds.x, config), promptY(bounds), config.confirm.prompts.shop, styleDefaults)
+            .text(getX(innerBounds.x, config), promptY(bounds), config.confirm.prompts.shop, styleDefaults) // all needs updating to merge in changes to the defaults
             .setOrigin(0.5),
         price: scene.add.text(getX(innerBounds.x + 28, config), currencyY(bounds), "PH", styleDefaults).setOrigin(0.5),
         priceIcon: scene.add.image(
