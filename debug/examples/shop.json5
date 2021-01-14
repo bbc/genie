@@ -24,7 +24,7 @@
             xOffset: 0,
             yOffset: 0,
             styles: {
-                // modifies styleDefaults
+                // any text config can include styles, which modifies styleDefaults
                 fontSize: "30px",
             },
         },
@@ -104,7 +104,7 @@
                 value: "title",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: -18 },
-                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 18 }, // update these to conform
+                styles: { fontSize: 18 },
             },
             {
                 type: "text",
@@ -112,7 +112,7 @@
                 value: "description",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: 4 },
-                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 12 },
+                styles: { fontSize: 12 },
             },
         ],
         options: {
@@ -123,7 +123,7 @@
                     value: "price",
                     isDynamic: true,
                     position: { align: "right", offsetX: -44, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5, fontSize: 14 },
+                    styles: { fontSize: 14 },
                     activeStates: ["cta"],
                 },
                 {
@@ -140,7 +140,6 @@
                     value: "Owned",
                     isDynamic: false,
                     position: { align: "right", offsetX: -76, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5 },
                     activeStates: ["actioned"],
                 },
             ],
@@ -151,7 +150,6 @@
                     value: "Equip",
                     isDynamic: false,
                     position: { align: "right", offsetX: -76, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5 },
                     activeStates: ["cta"],
                 },
                 {
@@ -160,7 +158,6 @@
                     value: "Equipped",
                     isDynamic: false,
                     position: { align: "right", offsetX: -88, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5 },
                     activeStates: ["actioned"],
                 },
             ],
