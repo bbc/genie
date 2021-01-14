@@ -14,7 +14,7 @@
     styleDefaults: {
         fontFamily: "ReithSans",
         fontSize: "24px",
-        resolution: 5,
+        resolution: 10,
         align: "center",
     },
     titles: [

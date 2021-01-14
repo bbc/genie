@@ -31,7 +31,7 @@ const setTextOverlay = ({ gelButton, config, offset }) => {
     gelButton.overlays.set(
         config.name,
         scene.add.text(offset.x, offset.y, textContent, textStyle(styleDefaults, config)),
-    ); // needs to account for styling in same way as others
+    );
 };
 
 const getOffset = (position, gelButton) => {
