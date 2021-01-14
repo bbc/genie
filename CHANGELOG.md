@@ -8,7 +8,7 @@
 | | Add bbcode plugin. |
 | | Update rexui plugin. | 
 | | Use Phaser's version of Spine plugin. | 
-| | Update Phaser to 3.5.0. | 
+| | Update Phaser to 3.52.0. | 
 | | Add demo game to debug mode to show the shop component in action. | 
 | | Allows theme to be passed through as a URL parameter for preference over `embedVars.configPath`. |
 | | Ensures previous screen's audio does not fade out when returning to the Home screen. |

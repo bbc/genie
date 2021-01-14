@@ -7,6 +7,7 @@ import { Screen } from "../screen.js";
 import { eventBus } from "../event-bus.js";
 import { collections } from "../collections.js";
 import { gmi } from "../gmi/gmi.js";
+import { accessibilify } from "../accessibility/accessibilify.js";
 
 class ShopDemo extends Screen {
     create() {
@@ -105,12 +106,12 @@ const createButton = (scene, id, idx, callback) => {
         callback: button.config.callback,
     });
     scene.events.once("shutdown", buttonSub.unsubscribe);
-    return button;
+    return accessibilify(button);
 };
 
 const resetEconomy = scene => {
     gmi.setGameData("genie", { collections: {} });
-    scene.balanceUI.setBalance(0);
+    scene.balanceUI.setBalance(1000);
     scene.entities.player.sprite.destroy();
     scene.entities.player.container.destroy();
     createAnims(scene);
