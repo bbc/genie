@@ -39,6 +39,7 @@
         value: {
             type: "text",
             key: "coin", // the id of the currency item, which must exist in the inventory collection
+            // styles: {},
         },
     },
     balancePadding: 15,

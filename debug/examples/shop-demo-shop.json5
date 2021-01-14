@@ -1,3 +1,4 @@
+// see debug/examples/shop.json5 for explanation of config
 {
     debugLabels: [
         {
@@ -44,7 +45,7 @@
         },
         value: {
             type: "text",
-            key: "coin", // the id of the currency item, which must exist in the inventory collection
+            key: "coin",
         },
     },
     balancePadding: 15,
@@ -59,25 +60,19 @@
         manage: "debug-demo-inventory",
     },
     confirm: {
-        detailView: true, // true === smaller image and more text. false === large image only.
+        detailView: true,
         prompt: {
             shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
             manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
-            // styles: {},
         },
-        // title: { styles: {} }, // optionally configure styles on item text
         detail: { styles: { color: "#2b2", fontStyle: "italic" } },
-        // description: { styles: {} },
-        // price: { styles: {} },
     },
     menu: {
-        buttonsRight: true, // set as false to X-flip the menu layout
+        buttonsRight: true,
     },
     columns: 1,
     assetKeys: {
-        // background: "background", // if a string is passed, that asset is used for all panes
         background: {
-            // menu: "", // pass empty string, or omit the key entirely, for a transparent BG
             shop: "background",
             manage: "background",
             confirm: "halfViewBackground",
@@ -95,14 +90,14 @@
                 type: "image",
                 name: "background",
                 assetKey: "itemBackground",
-                isDynamic: false, // asset key is the value of assetKey
+                isDynamic: false,
             },
             {
                 type: "image",
                 name: "itemIcon",
                 assetKey: "icon",
-                isDynamic: true, // asset key is item[assetKey]
-                position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                isDynamic: true,
+                position: { align: "left", offsetX: 35, offsetY: 0 },
                 size: 76,
             },
             {
