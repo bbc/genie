@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.8.8 ||
+| | Fix absolute plugin path. |
 | 3.8.7 ||
 | | Add bbcode plugin. |
 | | Update rexui plugin. | 
