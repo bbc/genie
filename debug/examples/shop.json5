@@ -4,6 +4,13 @@
     background: {
         items: [{ key: "shop.magicShop", x: 0, y: 0 }],
     },
+    styleDefaults: {
+        // menu button text uses styleDefaults
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 5,
+        align: "center",
+    },
     titles: [
         {
             type: "image",
@@ -17,8 +24,8 @@
             xOffset: 0,
             yOffset: 0,
             styles: {
-                fontSize: "24px",
-                resolution: 4,
+                // modifies styleDefaults
+                fontSize: "30px",
             },
         },
     ],
@@ -55,12 +62,6 @@
             manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
         },
         // needs updating with styling objects
-    },
-    styleDefaults: {
-        fontFamily: "ReithSans",
-        fontSize: "24px",
-        resolution: 5,
-        align: "center",
     },
     menu: {
         buttonsRight: true, // set as false to X-flip the menu layout

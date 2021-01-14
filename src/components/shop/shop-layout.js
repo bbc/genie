@@ -115,6 +115,4 @@ export const getPaneBackgroundKey = (scene, pane) => {
     return background[pane] ? `${assetPrefix}.${background[pane]}` : null;
 };
 
-export const textStyle = (styleDefaults, config) => {
-    return config.styles ? { ...styleDefaults, ...config.styles } : styleDefaults;
-};
+export const textStyle = (styleDefaults, config) => ({ ...styleDefaults, ...config.styles });

@@ -236,7 +236,7 @@ describe("shop element scaling functions", () => {
         test("if there's no element config, returns the default style", () => {
             elementConfig = { some: "config" };
             const expectedStyle = defaultStyle;
-            expect(shopLayout.textStyle(defaultStyle, elementConfig)).toBe(expectedStyle);
+            expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
         });
     });
 });

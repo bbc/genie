@@ -13,7 +13,7 @@ export const createTitle = scene => {
     const safeArea = getSafeArea(scene.layout);
     const metrics = getMetrics();
     const titleContainer = scene.add.container();
-    titleContainer.add(createTitles(scene)); // do we need to look at select/titles in order to shape the config object?
+    titleContainer.add(createTitles(scene));
 
     titleContainer.setScale(
         getScaleFactor({
