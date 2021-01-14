@@ -142,7 +142,6 @@
                     isDynamic: false,
                     position: { align: "right", offsetX: -76, offsetY: -10 },
                     styles: { fontSize: 18 },
-
                     activeStates: ["actioned"],
                 },
             ],
