@@ -4,7 +4,7 @@
     <g id="skip-level" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Skip-level">
             <polygon id="Fill-45" fill="#027802" points="0 64 224 64 224 0 0 0"></polygon>
-            <text font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+            <text font-family="BBCReithSans-Bold, BBC Reith Sans, Arial" font-size="24" font-weight="bold" fill="#FFFFFF">
                 <tspan x="58" y="41">Skip le</tspan>
                 <tspan x="134.896" y="41" letter-spacing="-0.3576">v</tspan>
                 <tspan x="147.5704" y="41">el</tspan>
@@ -16,7 +16,7 @@
         </g>
         <g id="Skip-level" transform="translate(0.000000, 68.000000)">
             <polygon id="Fill-45" fill="#004600" points="0 64 224 64 224 0 0 0"></polygon>
-            <text font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+            <text font-family="BBCReithSans-Bold, BBC Reith Sans, Arial" font-size="24" font-weight="bold" fill="#FFFFFF">
                 <tspan x="58" y="41">Skip le</tspan>
                 <tspan x="134.896" y="41" letter-spacing="-0.3576">v</tspan>
                 <tspan x="147.5704" y="41">el</tspan>

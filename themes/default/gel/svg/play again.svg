@@ -4,7 +4,7 @@
     <g id="play-again" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Group-5">
             <polygon id="Fill-38" fill="#027802" points="0 64 224 64 224 0 0 0"></polygon>
-            <text id="Play-again" font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+            <text id="Play-again" font-family="BBCReithSans-Bold, BBC Reith Sans, Arial" font-size="24" font-weight="bold" fill="#FFFFFF">
                 <tspan x="71" y="41">Pl</tspan>
                 <tspan x="94.592" y="41" letter-spacing="-0.24">a</tspan>
                 <tspan x="107.36" y="41">y again</tspan>
@@ -16,7 +16,7 @@
         </g>
         <g id="Group-5" transform="translate(0.000000, 68.000000)">
             <polygon id="Fill-38" fill="#004600" points="0 64 224 64 224 0 0 0"></polygon>
-            <text id="Play-again" font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+            <text id="Play-again" font-family="BBCReithSans-Bold, BBC Reith Sans, Arial" font-size="24" font-weight="bold" fill="#FFFFFF">
                 <tspan x="71" y="41">Pl</tspan>
                 <tspan x="94.592" y="41" letter-spacing="-0.24">a</tspan>
                 <tspan x="107.36" y="41">y again</tspan>

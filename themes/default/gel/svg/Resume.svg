@@ -4,14 +4,14 @@
     <g id="Resume" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g>
             <polygon id="Fill-12" fill="#027802" points="0 64 248 64 248 0 0 0"></polygon>
-            <text font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+            <text font-family="BBCReithSans-Bold, BBC Reith Sans, Arial" font-size="24" font-weight="bold" fill="#FFFFFF">
                 <tspan x="77" y="41">Resume</tspan>
             </text>
             <polygon id="Fill-14" fill="#FFFFFF" points="224 32.668 213.334 22 209.779 25.556 214.555 30 200 30 200 35.335 214.555 35.335 209.779 39.777 213.334 43.333"></polygon>
         </g>
         <g transform="translate(0.000000, 68.000000)">
             <polygon id="Fill-12" fill="#004600" points="0 64 248 64 248 0 0 0"></polygon>
-            <text font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+            <text font-family="BBCReithSans-Bold, BBC Reith Sans, Arial" font-size="24" font-weight="bold" fill="#FFFFFF">
                 <tspan x="77" y="41">Resume</tspan>
             </text>
             <polygon id="Fill-14" fill="#FFFFFF" points="224 32.668 213.334 22 209.779 25.556 214.555 30 200 30 200 35.335 214.555 35.335 209.779 39.777 213.334 43.333"></polygon>

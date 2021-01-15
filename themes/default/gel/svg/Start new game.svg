@@ -4,7 +4,7 @@
     <g id="Start-new-game" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g>
             <polygon id="Fill-58" fill="#027802" points="0 64 248 64 248 0 0 0"></polygon>
-            <text id="or-Start-New-Game" font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+            <text id="or-Start-New-Game" font-family="BBCReithSans-Bold, BBC Reith Sans, Arial" font-size="24" font-weight="bold" fill="#FFFFFF">
                 <tspan x="18" y="41">or </tspan>
                 <tspan x="47.976" y="41" letter-spacing="-0.2376">S</tspan>
                 <tspan x="62.2584" y="41">ta</tspan>
@@ -14,7 +14,7 @@
         </g>
         <g transform="translate(0.000000, 68.000000)">
             <polygon id="Fill-58" fill="#004600" points="0 64 248 64 248 0 0 0"></polygon>
-            <text id="or-Start-New-Game" font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+            <text id="or-Start-New-Game" font-family="BBCReithSans-Bold, BBC Reith Sans, Arial" font-size="24" font-weight="bold" fill="#FFFFFF">
                 <tspan x="18" y="41">or </tspan>
                 <tspan x="47.976" y="41" letter-spacing="-0.2376">S</tspan>
                 <tspan x="62.2584" y="41">ta</tspan>

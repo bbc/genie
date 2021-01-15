@@ -4,7 +4,7 @@
     <g id="Achievements" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g>
             <polygon id="Fill-52" fill="#027802" points="0 64 248 64 248 0 0 0"></polygon>
-            <text font-family="BBCReithSans-Bold, BBC Reith Sans" font-size="24" font-weight="bold" fill="#FFFFFF">
+            <text font-family="BBCReithSans-Bold, BBC Reith Sans, Arial" font-size="24" font-weight="bold" fill="#FFFFFF">
                 <tspan x="72" y="41">Achie</tspan>
                 <tspan x="136.32" y="41" letter-spacing="-0.36">v</tspan>
                 <tspan x="148.992" y="41">eme</tspan>
