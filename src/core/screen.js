@@ -188,6 +188,7 @@ export class Screen extends Phaser.Scene {
                 name: config.id,
                 data: { screen: this },
             });
+        newSvg.tabIndex = 0;
         newSvg.setAttribute("style", "position: fixed;" + this.getButtonPosition(buttonName));
         accessiblilityDiv.appendChild(newSvg);
     }
