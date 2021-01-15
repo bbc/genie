@@ -211,6 +211,6 @@ export class Screen extends Phaser.Scene {
             skip: "bottom: 25px; right: 25px;",
             pause: "top: 25px; right: 25px;",
         };
-        return positions[buttonName];
+        return positions[buttonName].concat(" cursor: pointer;");
     }
 }
