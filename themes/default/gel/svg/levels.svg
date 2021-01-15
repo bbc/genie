@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="124px" height="250px" viewBox="0 0 124 250" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Levels</title>
+    <g id="Levels" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <path d="M120,60 C120,93.137 93.137,120 60,120 C26.863,120 0,93.137 0,60 C0,26.862 26.863,0 60,0 C93.137,0 120,26.862 120,60" id="Fill-34" fill="#027802"></path>
+            <g id="Group" transform="translate(36.000000, 36.000000)" fill="#FFFFFF">
+                <polygon id="Fill-35" points="0 12.167 12 12.167 12 0.167 0 0.167"></polygon>
+                <polygon id="Fill-36" points="0 30.167 12 30.167 12 18.167 0 18.167"></polygon>
+                <polygon id="Fill-37" points="0 48.167 12 48.167 12 36.167 0 36.167"></polygon>
+                <polygon id="Fill-38" points="18 12.167 30 12.167 30 0.167 18 0.167"></polygon>
+                <polygon id="Fill-39" points="18 30.167 30 30.167 30 18.167 18 18.167"></polygon>
+                <polygon id="Fill-40" points="18 48.167 30 48.167 30 36.167 18 36.167"></polygon>
+                <polygon id="Fill-41" points="36 12.167 48 12.167 48 0.167 36 0.167"></polygon>
+                <polygon id="Fill-42" points="36 30.167 48 30.167 48 18.167 36 18.167"></polygon>
+                <polygon id="Fill-43" points="36 48.167 48 48.167 48 36.167 36 36.167"></polygon>
+            </g>
+        </g>
+        <g transform="translate(0.000000, 124.000000)">
+            <path d="M120,60 C120,93.137 93.137,120 60,120 C26.863,120 0,93.137 0,60 C0,26.862 26.863,0 60,0 C93.137,0 120,26.862 120,60" id="Fill-34" fill="#004600"></path>
+            <g id="Group" transform="translate(36.000000, 36.000000)" fill="#FFFFFF">
+                <polygon id="Fill-35" points="0 12.167 12 12.167 12 0.167 0 0.167"></polygon>
+                <polygon id="Fill-36" points="0 30.167 12 30.167 12 18.167 0 18.167"></polygon>
+                <polygon id="Fill-37" points="0 48.167 12 48.167 12 36.167 0 36.167"></polygon>
+                <polygon id="Fill-38" points="18 12.167 30 12.167 30 0.167 18 0.167"></polygon>
+                <polygon id="Fill-39" points="18 30.167 30 30.167 30 18.167 18 18.167"></polygon>
+                <polygon id="Fill-40" points="18 48.167 30 48.167 30 36.167 18 36.167"></polygon>
+                <polygon id="Fill-41" points="36 12.167 48 12.167 48 0.167 36 0.167"></polygon>
+                <polygon id="Fill-42" points="36 30.167 48 30.167 48 18.167 36 18.167"></polygon>
+                <polygon id="Fill-43" points="36 48.167 48 48.167 48 36.167 36 36.167"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

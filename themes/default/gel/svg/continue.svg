@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="224px" height="66px" viewBox="0 0 224 66" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Continue</title>
+    <g id="Continue" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <polygon id="Fill-16" fill="#027802" points="0 64 224 64 224 0 0 0"></polygon>
+            <text font-family="BBCReithSans-Bold, BBC Reith Sans, Arial" font-size="24" font-weight="bold" fill="#FFFFFF">
+                <tspan x="46" y="41">Co</tspan>
+                <tspan x="76.456" y="41" letter-spacing="-0.12">n</tspan>
+                <tspan x="90.64" y="41">tinue</tspan>
+            </text>
+            <polygon id="Fill-19" fill="#FFFFFF" points="200 32.668 189.334 22 185.779 25.556 190.555 30 176 30 176 35.335 190.555 35.335 185.779 39.777 189.334 43.333"></polygon>
+        </g>
+    </g>
+</svg>
