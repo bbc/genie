@@ -14,11 +14,12 @@ import { gmi } from "../core/gmi/gmi.js";
 
 export class Home extends Screen {
     create() {
-        const achievements = gmi.achievements.get().length ? ["achievements"] : [];
         const debug = isDebug() ? ["debug"] : [];
         this.addBackgroundItems();
-        const buttons = ["exit", "audio", "settings", "play", "achievements", "howToPlay"];
-        this.setLayout(buttons.concat(achievements, debug));
+        const buttons = gmi.achievements.get().length
+            ? ["exit", "audio", "settings", "play", "achievements", "howToPlay"]
+            : ["exit", "audio", "settings", "play", "howToPlay"];
+        this.setLayout(buttons.concat(debug));
 
         eventBus.subscribe({
             channel: buttonsChannel(this),
