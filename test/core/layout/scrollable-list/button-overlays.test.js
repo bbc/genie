@@ -12,6 +12,16 @@ const mockScene = {
         image: jest.fn().mockReturnValue(mockImage),
         text: jest.fn().mockReturnValue("mockText"),
     },
+    config: {
+        assetPrefix: "test",
+    },
+};
+
+const mockItem = {
+    name: "someItemName",
+    description: "someItemDescription",
+    price: 42,
+    icon: "test.itemIcon",
 };
 
 const mockGelButton = {
@@ -19,18 +29,12 @@ const mockGelButton = {
         set: jest.fn(),
     },
     width: 200,
-};
-
-const mockItem = {
-    name: "someItemName",
-    description: "someItemDescription",
-    price: 42,
-    icon: "itemIcon",
+    scene: mockScene,
+    item: mockItem,
 };
 
 let mockOverlay;
 let mockConfig;
-let mockArgs;
 
 describe("Button overlays", () => {
     afterEach(() => jest.clearAllMocks());
@@ -38,11 +42,7 @@ describe("Button overlays", () => {
     beforeEach(() => {
         mockConfig = {
             overlay: {
-                // defaultPrefix: "test",
                 items: [],
-            },
-            assetKeys: {
-                prefix: "test",
             },
         };
         mockOverlay = {
@@ -51,48 +51,42 @@ describe("Button overlays", () => {
             assetKey: "someImageAssetKey",
             isDynamic: false,
         };
-        mockArgs = {
-            scene: mockScene,
-            gelButton: mockGelButton,
-            item: mockItem,
-            config: mockConfig,
-        };
     });
 
     describe("overlays1Wide", () => {
         describe("overlays", () => {
             test("sets an overlay on gelButton for every item in config.overlay.items", () => {
                 mockConfig.overlay.items.push(mockOverlay, mockOverlay, mockOverlay);
-                overlays1Wide(mockArgs);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 expect(mockGelButton.overlays.set).toHaveBeenCalledTimes(3);
             });
 
             test("adds an image if overlay is of type image", () => {
                 mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockArgs);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.someImageAssetKey");
             });
 
             test("scales the image overlay if a size is provided", () => {
                 mockOverlay = { ...mockOverlay, size: 50 };
                 mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockArgs);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 expect(mockImage.setScale).toHaveBeenCalledWith(0.5);
             });
 
             test("adds a text to the scene and the button if overlay is of type text", () => {
-                mockOverlay = { ...mockOverlay, type: "text", value: "name" };
+                mockOverlay = { ...mockOverlay, type: "text", value: "someText" };
                 mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockArgs);
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someItemName", undefined);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someText", undefined);
             });
 
             test("text elements pass font information from the overlay if present", () => {
-                mockOverlay = { ...mockOverlay, type: "text", value: "name", font: { foo: "bar" } };
+                mockOverlay = { ...mockOverlay, type: "text", value: "someText", font: { foo: "bar" } };
                 mockConfig.overlay.items.push(mockOverlay);
                 const expectedFont = mockOverlay.font;
-                overlays1Wide(mockArgs);
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someItemName", expectedFont);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someText", expectedFont);
             });
         });
 
@@ -100,22 +94,22 @@ describe("Button overlays", () => {
             test("dynamic image overlays use an asset key from the item", () => {
                 mockOverlay = { ...mockOverlay, isDynamic: true, assetKey: "icon" };
                 mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockArgs);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.itemIcon");
             });
 
             test("static image overlays use literal values from config with a default prefix", () => {
                 mockOverlay.isDynamic = false;
                 mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockArgs);
-                const expectedKey = `${mockConfig.assetKeys.prefix}.${mockOverlay.assetKey}`;
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                const expectedKey = `${mockScene.config.assetPrefix}.${mockOverlay.assetKey}`;
                 expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, expectedKey);
             });
 
             test("dynamic text overlays use the item value given by 'value'", () => {
                 mockOverlay = { ...mockOverlay, type: "text", value: "price", isDynamic: true };
                 mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockArgs);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 const expectedValue = "42";
                 expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, expectedValue, undefined);
             });
@@ -124,7 +118,7 @@ describe("Button overlays", () => {
         describe("offsets", () => {
             test("no offset is applied if there is no offset object", () => {
                 mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockArgs);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 const expectedOffset = { x: 0, y: 0 };
                 expect(mockScene.add.image).toHaveBeenCalledWith(
                     expectedOffset.x,
@@ -135,7 +129,7 @@ describe("Button overlays", () => {
             test("align left sets a negative x offset plus the offset x", () => {
                 mockOverlay.position = { align: "left", offsetX: 1, offsetY: 0 };
                 mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockArgs);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 const expectedOffset = { x: -99, y: 0 };
                 expect(mockScene.add.image).toHaveBeenCalledWith(
                     expectedOffset.x,
@@ -147,7 +141,7 @@ describe("Button overlays", () => {
             test("align right sets a positive x offset plus the offset x", () => {
                 mockOverlay.position = { align: "right", offsetX: -1, offsetY: 0 };
                 mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockArgs);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 const expectedOffset = { x: 99, y: 0 };
                 expect(mockScene.add.image).toHaveBeenCalledWith(
                     expectedOffset.x,
@@ -158,7 +152,7 @@ describe("Button overlays", () => {
             test("the y offset is applied unconditionally", () => {
                 mockOverlay.position = { align: "left", offsetX: 0, offsetY: 10 };
                 mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockArgs);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 const expectedOffset = { x: -100, y: 10 };
                 expect(mockScene.add.image).toHaveBeenCalledWith(
                     expectedOffset.x,

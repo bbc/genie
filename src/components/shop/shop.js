@@ -13,48 +13,65 @@ import { createBalance } from "./balance-ui.js";
 import { createMenu } from "./menu.js";
 import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 import { eventBus } from "../../core/event-bus.js";
+import { createConfirm } from "./confirm.js";
+import * as a11y from "../../core/accessibility/accessibility-layer.js";
+
+const memoizeBackButton = config => (({ channel, key, action }) => ({ channel, name: key, callback: action }))(config);
 
 export class Shop extends Screen {
     preload() {
-        this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this);
+        this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
     }
 
     create() {
         this.addBackgroundItems();
         this.setLayout(["back", "pause"]);
 
-        this.backMessage = this.memoizeBackButton();
+        this.backMessage = memoizeBackButton(this.layout.buttons.back.config);
+        this.paneStack = [];
 
         this.customMessage = {
             channel: this.backMessage.channel,
             name: this.backMessage.name,
-            callback: () => this.setVisiblePane("top"),
+            callback: this.back.bind(this),
         };
 
-        const metrics = getMetrics();
-        const safeArea = getSafeArea(this.layout);
+        this.title = createTitle(this);
+        this.balance = createBalance(this);
 
-        this.title = createTitle(this, metrics, safeArea);
-        this.balance = createBalance(this, metrics, safeArea);
+        const confirm = createConfirm(this);
+        const callback = confirm.prepTransaction;
+
+        const inventoryFilter = item => item.id !== this.config.balance.value.key;
 
         this.panes = {
-            top: createMenu(this, this.config.menu, safeArea),
-            shop: new ScrollableList(this),
-            manage: new ScrollableList(this),
+            top: createMenu(this),
+            shop: new ScrollableList(this, "shop", callback),
+            manage: new ScrollableList(this, "manage", callback, inventoryFilter),
+            confirm,
         };
         this.setVisiblePane("top");
 
         this.setupEvents();
+
+        this.resize();
     }
 
-    memoizeBackButton() {
-        const backButtonConfig = this.layout.buttons.back.config;
-        const message = {
-            channel: backButtonConfig.channel,
-            name: backButtonConfig.key,
-            callback: backButtonConfig.action,
-        };
-        return message;
+    stack(pane) {
+        this.paneStack.push(pane);
+        this.setVisiblePane(pane);
+        this.paneStack.length === 1 && this.useCustomMessage();
+        a11y.reset();
+    }
+
+    back() {
+        this.paneStack.pop();
+        if (!this.paneStack.length) {
+            this.setVisiblePane("top");
+            this.useOriginalMessage();
+            return;
+        }
+        this.setVisiblePane(this.paneStack[this.paneStack.length - 1]);
     }
 
     setupEvents() {
@@ -64,17 +81,25 @@ export class Shop extends Screen {
     }
 
     setVisiblePane(pane) {
-        eventBus.removeSubscription(pane === "top" ? this.customMessage : this.backMessage);
-        eventBus.subscribe(pane === "top" ? this.backMessage : this.customMessage);
-        Object.keys(this.panes).forEach(key =>
-            pane === key ? this.panes[key].setVisible(true) : this.panes[key].setVisible(false),
-        );
+        Object.keys(this.panes).forEach(key => this.panes[key].setVisible(pane === key));
+        this.title.setTitleText(pane === "top" ? "Shop" : pane);
+    }
+
+    useCustomMessage() {
+        eventBus.removeSubscription(this.backMessage);
+        eventBus.subscribe(this.customMessage);
+    }
+
+    useOriginalMessage() {
+        eventBus.removeSubscription(this.customMessage);
+        eventBus.subscribe(this.backMessage);
     }
 
     resize() {
         const metrics = getMetrics();
         const safeArea = getSafeArea(this.layout);
         this.panes.top.resize(safeArea);
+        this.panes.confirm.resize(safeArea);
         this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));
         this.title.setPosition(0, getYPos(metrics, safeArea));
         this.balance.setScale(getScaleFactor({ metrics, container: this.balance, safeArea }));

@@ -6,27 +6,28 @@
  */
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-export const overlays1Wide = ({ scene, gelButton, item, config }) => {
-    config.overlay.items.forEach(overlay => {
+export const overlays1Wide = (gelButton, configs) => {
+    configs.forEach(overlay => {
         const offset = getOffset(overlay.position, gelButton);
-        addOverlay({ scene, gelButton, item, config, overlay, offset });
+        addOverlay({ gelButton, overlay, offset });
     });
     return gelButton;
 };
 
-const setImageOverlay = ({ scene, gelButton, item, config, overlay, offset }) => {
-    const prefix = config.assetKeys.prefix;
-    const key = overlay.isDynamic ? `${prefix}.${item[overlay.assetKey]}` : `${prefix}.${overlay.assetKey}`;
+const setImageOverlay = ({ gelButton, overlay, offset }) => {
+    const { scene, item } = gelButton;
+    const { assetPrefix } = scene.config;
+    const key = overlay.isDynamic ? `${item[overlay.assetKey]}` : `${assetPrefix}.${overlay.assetKey}`;
     const image = scene.add.image(offset.x, offset.y, key);
     overlay.size && image.setScale(overlay.size / image.width);
     gelButton.overlays.set(overlay.name, image);
 };
 
-const setTextOverlay = ({ scene, gelButton, item, overlay, offset }) =>
-    gelButton.overlays.set(
-        overlay.name,
-        scene.add.text(offset.x, offset.y, item[overlay.value] && item[overlay.value].toString(), overlay.font),
-    );
+const setTextOverlay = ({ gelButton, overlay, offset }) => {
+    const { scene, item } = gelButton;
+    const textContent = overlay.isDynamic ? item[overlay.value].toString() : overlay.value.toString();
+    gelButton.overlays.set(overlay.name, scene.add.text(offset.x, offset.y, textContent, overlay.font));
+};
 
 const getOffset = (position, gelButton) => {
     if (!position) return { x: 0, y: 0 };

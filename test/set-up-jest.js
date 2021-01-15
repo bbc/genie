@@ -5,6 +5,7 @@
  */
 
 import "jest-canvas-mock";
+import "regenerator-runtime/runtime";
 
 const phaser = require("../node_modules/phaser/dist/phaser.js");
 global.Phaser = phaser;

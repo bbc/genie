@@ -10,6 +10,7 @@ import { Boot } from "../../../src/core/loader/boot.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import { eventBus } from "../../../src/core/event-bus.js";
+import * as getThemeString from "../../../src/core/get-theme.js";
 
 describe("Boot", () => {
     let bootScreen;
@@ -19,9 +20,10 @@ describe("Boot", () => {
     let mockSettings;
 
     beforeEach(() => {
+        jest.spyOn(getThemeString, "getTheme").mockImplementation(() => "theme-name");
+
         mockSettings = { audio: true };
         mockGmi = {
-            embedVars: { configPath: "test-config-path" },
             gameLoaded: jest.fn(),
             sendStatsEvent: jest.fn(),
             achievements: { init: jest.fn() },
@@ -75,7 +77,7 @@ describe("Boot", () => {
             bootScreen.preload();
 
             expect(bootScreen.load.setBaseURL).toHaveBeenCalledWith(mockGmi.gameDir);
-            expect(bootScreen.load.setPath).toHaveBeenCalledWith(mockGmi.embedVars.configPath);
+            expect(bootScreen.load.setPath).toHaveBeenCalledWith("theme-name");
         });
 
         test("sets CORS crossorigin attribute to anonymous", () => {

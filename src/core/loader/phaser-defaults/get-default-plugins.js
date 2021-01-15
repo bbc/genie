@@ -6,6 +6,8 @@
 import FontLoaderPlugin from "../font-loader/font-plugin.js";
 import { JSON5Plugin } from "../json5-loader/json5-plugin.js";
 import { ParticlesPlugin } from "../particles-loader/particles-plugin.js";
+import BBCodeTextPlugin from "../../../../lib/rexbbcodetextplugin.min.js";
+import "/node_modules/phaser/plugins/spine/dist/SpinePlugin.min.js";
 
 export const getDefaultPlugins = options => {
     const defaultPlugins = {
@@ -23,6 +25,11 @@ export const getDefaultPlugins = options => {
             {
                 key: "ParticlesLoader",
                 plugin: ParticlesPlugin,
+                start: true,
+            },
+            {
+                key: "rexBBCodeTextPlugin",
+                plugin: BBCodeTextPlugin,
                 start: true,
             },
         ],

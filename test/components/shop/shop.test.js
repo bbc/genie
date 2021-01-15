@@ -8,9 +8,11 @@ import { Shop } from "../../../src/components/shop/shop.js";
 import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance-ui.js";
-import * as titles from "../../../src/components/select/titles.js";
+import * as titles from "../../../src/components/shop/shop-titles.js";
 import * as uiScaler from "../../../src/components/shop/shop-layout.js";
 import * as menu from "../../../src/components/shop/menu.js";
+import * as confirm from "../../../src/components/shop/confirm.js";
+import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 
 jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
@@ -20,8 +22,7 @@ describe("Shop", () => {
     const mockScrollableList = { setVisible: jest.fn() };
     const config = {
         shop: {
-            title: [],
-            balance: [],
+            balance: { value: { key: "currencyItemKey" } },
             assetKeys: {
                 prefix: "shop",
                 background: "background",
@@ -59,6 +60,8 @@ describe("Shop", () => {
     const mockSafeArea = { foo: "bar " };
     const mockButtonConfig = { channel: "foo", key: "bar", action: "baz" };
     const mockMenu = { setVisible: jest.fn(), resize: jest.fn() };
+    const mockConfirm = { setVisible: jest.fn(), resize: jest.fn() };
+    const mockTitles = { setTitleText: jest.fn(), setScale: jest.fn(), setPosition: jest.fn() };
 
     beforeEach(() => {
         shopScreen = new Shop();
@@ -79,12 +82,14 @@ describe("Shop", () => {
         shopScreen.events = { once: jest.fn() };
         ScrollableList.mockImplementation(() => mockScrollableList);
         balance.createBalance = jest.fn().mockReturnValue(mockContainer);
-        titles.createTitles = jest.fn();
+        titles.createTitle = jest.fn().mockReturnValue(mockTitles);
+        confirm.createConfirm = jest.fn().mockReturnValue(mockConfirm);
         uiScaler.getScaleFactor = jest.fn();
         uiScaler.getYPos = jest.fn();
         menu.createMenu = jest.fn().mockReturnValue(mockMenu);
         eventBus.subscribe = jest.fn();
         eventBus.removeSubscription = jest.fn();
+        a11y.reset = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -115,32 +120,24 @@ describe("Shop", () => {
         });
 
         test("adds scrollable list panes", () => {
-            expect(ScrollableList).toHaveBeenCalled();
+            expect(ScrollableList).toHaveBeenCalledTimes(2);
             expect(shopScreen.panes.shop).toBe(mockScrollableList);
             expect(shopScreen.panes.manage).toBe(mockScrollableList);
         });
 
-        describe("creates the title UI component", () => {
-            test("with a container", () => {
-                expect(shopScreen.title).toBe(mockContainer);
-            });
-
-            test("containing the result of createTitles", () => {
-                expect(titles.createTitles).toHaveBeenCalledWith(shopScreen);
-            });
-
-            test("appropriately scaled and positioned", () => {
-                expect(uiScaler.getScaleFactor).toHaveBeenCalledWith({
-                    metrics: mockMetrics,
-                    container: mockContainer,
-                    fixedWidth: true,
-                    safeArea: mockSafeArea,
-                });
-            });
+        test("passes a filter function to the inventory pane", () => {
+            const filterFn = ScrollableList.mock.calls[1][3];
+            const mockCollection = [{ id: "currencyItemKey" }, { id: "someOtherId" }];
+            expect(mockCollection.filter(filterFn)).toStrictEqual([{ id: "someOtherId" }]);
         });
 
-        test("adds a balance UI component", () => {
-            expect(balance.createBalance).toHaveBeenCalledWith(shopScreen, mockMetrics, mockSafeArea);
+        test("calls createTitle to create the title UI component", () => {
+            expect(titles.createTitle).toHaveBeenCalledWith(shopScreen);
+            expect(shopScreen.title).toBe(mockTitles);
+        });
+
+        test("calls createBalance to create the balance UI component", () => {
+            expect(balance.createBalance).toHaveBeenCalledWith(shopScreen);
         });
 
         test("stores the back button event bus message", () => {
@@ -157,6 +154,7 @@ describe("Shop", () => {
         });
         test("sets visibility of its panes", () => {
             expect(mockMenu.setVisible).toHaveBeenCalledWith(true);
+            expect(mockConfirm.setVisible).toHaveBeenCalledWith(false);
             expect(mockScrollableList.setVisible).toHaveBeenCalledTimes(2);
         });
 
@@ -177,49 +175,63 @@ describe("Shop", () => {
     });
     describe("setVisiblePane()", () => {
         beforeEach(() => shopScreen.create());
+        test("sets one pane visible and sets the others invisible", () => {
+            jest.clearAllMocks();
+            shopScreen.setVisiblePane("top");
+            expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
+            expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(false);
+            expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(false);
+            expect(shopScreen.panes.confirm.setVisible).toHaveBeenCalledWith(false);
+        });
+    });
+    describe("pane stacking", () => {
+        beforeEach(() => shopScreen.create());
 
-        describe("when called with 'shop'", () => {
-            beforeEach(() => shopScreen.setVisiblePane("shop"));
+        describe("stack()", () => {
+            beforeEach(() => {
+                jest.clearAllMocks();
+                shopScreen.stack("shop");
+            });
 
-            test("unsubscribes the default back button message", () => {
-                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.backMessage);
+            test("pushes a pane name onto the stack", () => {
+                expect(shopScreen.paneStack).toStrictEqual(["shop"]);
             });
-            test("resubscribes with a custom message", () => {
-                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.customMessage);
-            });
-            test("that sets the top menu visible", () => {
-                shopScreen.customMessage.callback();
-                expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
-            });
-            test("calls setVisible(true) on the shop list", () => {
+            test("sets that pane visible", () => {
                 expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(true);
             });
-            test("calls setVisible(false) on the top menu", () => {
-                expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(false);
+            test("resets a11y", () => {
+                expect(a11y.reset).toHaveBeenCalled();
+            });
+            test("on starting the stack, changes the event subscription", () => {
+                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.customMessage);
+                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.backMessage);
+            });
+            test("the new event sub calls back()", () => {
+                const message = eventBus.subscribe.mock.calls[0][0];
+                shopScreen.paneStack = ["foo"];
+                message.callback();
+                expect(shopScreen.paneStack).toStrictEqual([]);
             });
         });
-        describe("when called with 'manage'", () => {
-            beforeEach(() => shopScreen.setVisiblePane("manage"));
 
-            test("sets the inventory list visible instead", () => {
-                expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(true);
+        describe("back()", () => {
+            test("pops a pane name off the stack and sets the new top pane visible", () => {
+                shopScreen.paneStack = ["shop", "confirm"];
+                shopScreen.back();
+                expect(shopScreen.paneStack).toStrictEqual(["shop"]);
+                expect(shopScreen.panes.top.setVisible).toHaveBeenCalled();
             });
         });
-
-        describe("when called with 'top'", () => {
-            beforeEach(() => shopScreen.setVisiblePane("top"));
-            test("unsubscribes the back button custom message", () => {
-                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
+        describe("back() on last item in pane stack", () => {
+            beforeEach(() => {
+                shopScreen.stack("shop");
+                jest.clearAllMocks();
+                shopScreen.back();
             });
-            test("resubscribes with its original message", () => {
-                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
-            });
-            test("calls setVisible(false) on both scrollable lists", () => {
-                expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(false);
-                expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(false);
-            });
-            test("calls setVisible(true) on the top menu", () => {
+            test("on stack empty, sets top visible and change event subscription", () => {
                 expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
+                expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
+                expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
             });
         });
     });

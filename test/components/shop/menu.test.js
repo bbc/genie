@@ -18,25 +18,32 @@ describe("shop menu", () => {
         scaleY: 1,
         y: 200,
     };
+    const mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
+    const mockImage = { setScale: jest.fn() };
     const mockScene = {
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
             rectangle: jest.fn(),
+            image: jest.fn().mockReturnValue(mockImage),
         },
         config: {
+            menu: { buttonsRight: true },
             assetKeys: {
-                foo: "bar",
+                background: "background",
             },
         },
+        layout: {
+            getSafeArea: jest.fn(() => mockSafeArea),
+        },
     };
-    const mockConfig = { buttonsRight: true };
-    const mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
     const mockGelButton = { input: { enabled: true }, visible: true, accessibleElement: { update: jest.fn() } };
     const mockGelButtons = [mockGelButton, mockGelButton];
-    buttons.createGelButtons = jest.fn().mockReturnValue(mockGelButtons);
-    buttons.resizeGelButtons = jest.fn();
+    buttons.createMenuButtons = jest.fn().mockReturnValue(mockGelButtons);
 
-    beforeEach(() => (menu = createMenu(mockScene, mockConfig, mockSafeArea)));
+    const resizeGelButtonsSpy = jest.fn();
+    buttons.resizeGelButtons = resizeGelButtonsSpy;
+
+    beforeEach(() => (menu = createMenu(mockScene)));
     afterEach(() => jest.clearAllMocks());
 
     describe("createMenu()", () => {
@@ -44,8 +51,7 @@ describe("shop menu", () => {
             expect(menu).toBe(mockContainer);
         });
         test("with stored config", () => {
-            const expectedConfig = { ...mockConfig, assetKeys: mockScene.config.assetKeys };
-            expect(menu.config).toStrictEqual(expectedConfig);
+            expect(menu.config).toStrictEqual(mockScene.config);
         });
         test("with a setVisible() function", () => {
             expect(typeof menu.setVisible).toBe("function");
@@ -56,8 +62,8 @@ describe("shop menu", () => {
         test("with memoised safe area bounds", () => {
             expect(menu.memoisedBounds).toBe(mockSafeArea);
         });
-        test("with three rects added", () => {
-            expect(mockScene.add.rectangle).toHaveBeenCalledTimes(3);
+        test("with a rect added", () => {
+            expect(mockScene.add.rectangle).toHaveBeenCalledTimes(1);
         });
         test("with a buttons property from createGelButtons()", () => {
             expect(menu.buttons).toBe(mockGelButtons);
@@ -99,7 +105,7 @@ describe("shop menu", () => {
             expect(mockContainer.setY.mock.calls[1][0]).toBe(100);
         });
         test("resizes the gel buttons", () => {
-            expect(buttons.resizeGelButtons).toHaveBeenCalled();
+            expect(resizeGelButtonsSpy).toHaveBeenCalled();
         });
     });
 });

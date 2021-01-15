@@ -9,6 +9,10 @@
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const handleClickIfVisible = (gelButton, scene, handler) => () => {
+    if (isA11yClick(scene)) {
+        handler(gelButton);
+        return;
+    }
     const panel = gelButton.rexContainer.parent.getTopmostSizer();
     const safeArea = scene.layout.getSafeArea({}, false);
     const height = scene.scale.displaySize.height;
@@ -18,8 +22,10 @@ const handleClickIfVisible = (gelButton, scene, handler) => () => {
     if (mouseY >= topY && mouseY <= bottomY) handler(gelButton);
 };
 
-const updatePanelOnScroll = panel => () =>
-    getPanelItems(panel).map(item => item.children[0].setElementSizeAndPosition());
+const isA11yClick = scene =>
+    scene.input.activePointer.id === 0 || scene.sys.time.now - scene.input.activePointer.upTime > 50;
+
+const updatePanelOnScroll = panel => () => getPanelItems(panel).map(item => item.setElementSizeAndPosition());
 
 const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
 

@@ -14,6 +14,7 @@ import { gmi } from "../../../src/core/gmi/gmi.js";
 import * as debugModeModule from "../../../src/core/debug/debug-mode.js";
 import * as Config from "../../../src/core/loader/get-config.js";
 import * as LoadCollectionsModule from "../../../src/core/loader/load-collections.js";
+import * as getThemeString from "../../../src/core/get-theme.js";
 
 jest.mock("../../../src/core/loader/get-config.js");
 jest.mock("../../../src/core/loader/load-collections.js");
@@ -31,9 +32,9 @@ describe("Loader", () => {
         global.window.__debug = undefined;
         jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {});
         jest.spyOn(a11y, "destroy").mockImplementation(() => {});
+        jest.spyOn(getThemeString, "getTheme").mockImplementation(() => "theme-name");
 
         mockGmi = {
-            embedVars: { configPath: "test-config-path" },
             gameLoaded: jest.fn(),
             sendStatsEvent: jest.fn(),
             achievements: { init: jest.fn() },
@@ -208,7 +209,7 @@ describe("Loader", () => {
             loader.preload();
 
             expect(loader.load.setBaseURL).toHaveBeenCalledWith(mockGmi.gameDir);
-            expect(loader.load.setPath).toHaveBeenCalledWith(mockGmi.embedVars.configPath);
+            expect(loader.load.setPath).toHaveBeenCalledWith("theme-name");
         });
 
         test("Adds the master asset pack to the load", () => {

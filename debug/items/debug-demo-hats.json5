@@ -1,0 +1,4 @@
+{
+    catalogue: "debug-game-items", //catalogue array or string filename of json5 catalogue
+    include: ["demo-hat"], //include all items with this tag in this collection
+}

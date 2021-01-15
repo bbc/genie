@@ -1,216 +1,135 @@
 {
-            debugLabels: [
-                {
-                    x: -390,
-                    y: -190,
-                    text: "With 1 item visible tabbing automatically advances the display\n\
+    debugLabels: [
+        {
+            x: -390,
+            y: -190,
+            text: "With 1 item visible tabbing automatically advances the display\n\
 Standard behaviour of the accessible DOM is not altered.",
-                },
-                {
-                    x: 190,
-                    y: 150,
-                    text: "The system resets\n\
+        },
+        {
+            x: 190,
+            y: 150,
+            text: "The system resets\n\
 when the last item\n\
 is tabbed off.",
-                },
-                {
-                    x: -320,
-                    y: 210,
-                    text: "A continue button is\n\
+        },
+        {
+            x: -320,
+            y: 210,
+            text: "A continue button is\n\
 added automatically\n\
 and linked to item\n\
 to signal clickability.",
-                },
-            ],
-            background: {
-                items: [{ key: "home.background", x: 0, y: 0 }],
+        },
+    ],
+    background: {
+        items: [{ key: "home.background", x: 0, y: 0 }],
+    },
+    collection: "debug-characters",
+    assetPrefix: "character-select",
+    columns: 1, // Number of choices to show horizontally per page. Can be 1 - 4.
+    rows: 1, // Number of choice rows to show per page. Can be either 1 or 2. When columns is 4 this is fixed to 1 row.
+    ease: "Cubic.easeInOut", // Pagination transition type
+    duration: 500, // Pagination transition duration
+    align: "center", // Alignment for any remaining choices in the last row
+    music: "home.backgroundMusic",
+    titles: [
+        {
+            type: "image",
+            key: "title",
+            xOffset: 0,
+            yOffset: -250,
+        },
+        {
+            type: "text",
+            value: "Select Your Character",
+            xOffset: 0,
+            yOffset: -260,
+            styles: {
+                fontSize: "24px", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
             },
-            assetPrefix: "character-select",
-            columns: 1, // Number of choices to show horizontally per page. Can be 1 - 4.
-            rows: 1, // Number of choice rows to show per page. Can be either 1 or 2. When columns is 4 this is fixed to 1 row.
-            ease: "Cubic.easeInOut", // Pagination transition type
-            duration: 500, // Pagination transition duration
-            align: "center", // Alignment for any remaining choices in the last row
-            music: "home.backgroundMusic",
-            titles: [
-                {
-                    type: "image",
-                    key: "title",
-                    xOffset: 0,
-                    yOffset: -250,
-                },
-                {
-                    type: "text",
-                    value: "Select Your Character",
-                    xOffset: 0,
-                    yOffset: -260,
-                    styles: {
-                        fontSize: "24px", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
-                    },
-                },
-                {
-                    type: "text",
-                    value: "Sub-Title",
-                    xOffset: 0,
-                    yOffset: -233,
-                    styles: {
-                        fontSize: "18px",
-                    },
-                },
-            ],
+        },
+        {
+            type: "text",
+            value: "Sub-Title",
+            xOffset: 0,
+            yOffset: -233,
+            styles: {
+                fontSize: "18px",
+            },
+        },
+    ],
 
-            storageKey: "characters", // Points to the storage directory containing the choice assets.
-            states: {
-                locked: {
-                    // asset: "debby", // Key of sprite to set for. Renders same scale as base sprite so should be the same size.
-                    overlayAsset: "character-select.lock", // Render this over the top of the choice asset for this state.
-                    suffix: "locked", // Appended to aria label of accessibility div.
-                    x: 65, // 0 is centre of the asset.
-                    y: 35, // These values scale with and are positioned with the asset so should be calculated based off the asset pixels.
-                    properties: {
-                        // Phaser properties assigned to the base sprite
-                        alpha: 0.25,
-                        tint: 0xff0000,
-                    },
-                    enabled: false, // Enable or disable touch input on this state - default true
-                },
-                complete: { overlayAsset: "character-select.complete", x: 65, y: 35, suffix: "completed" },
+    // storageKey: "characters", // Points to the storage directory containing the choice assets.
+    states: {
+        locked: {
+            // asset: "debby", // Key of sprite to set for. Renders same scale as base sprite so should be the same size.
+            overlayAsset: "character-select.lock", // Render this over the top of the choice asset for this state.
+            suffix: "locked", // Appended to aria label of accessibility div.
+            x: 65, // 0 is centre of the asset.
+            y: 35, // These values scale with and are positioned with the asset so should be calculated based off the asset pixels.
+            properties: {
+                // Phaser properties assigned to the base sprite
+                alpha: 0.25,
+                tint: 0xff0000,
             },
-            // Optional - provide if you want title/subtitle text to appear over each choice
-            choicesStyling: {
-                default: {
-                    title: {
-                        // Styling for choice title, required to show title on choices.
-                        style: {
-                            fontFamily: "ReithSans",
-                            fontSize: "19px",
-                            color: "#424242",
-                            backgroundColor: "#fff",
-                            fixedWidth: 75, // Text will be clipped inside this width.
-                            align: "center", // Aligns the text within the fixed width.
-                            padding: {
-                                // Padding around the text will show a 'block' when combined with background colour.
-                                left: 6,
-                                right: 6,
-                                top: 2,
-                                bottom: 2,
-                            },
-                        },
-                        position: {
-                            // Required if title is being shown.
-                            x: 0, // 0 is centre of asset. These values scale with and are positioned with the asset so should be calculated based off the asset pixels.
-                            y: 53,
-                        },
-                    },
-                    subtitle: {
-                        style: {
-                            fontFamily: "ReithSans",
-                            fontSize: "16px",
-                            color: "#fff",
-                            backgroundColor: "rgba(0,0,0,0.15)",
-                            padding: {
-                                left: 4,
-                                right: 4,
-                                top: 2,
-                                bottom: 2,
-                            },
-                        },
-                        position: {
-                            x: 0,
-                            y: 80,
-                        },
+            enabled: false, // Enable or disable touch input on this state - default true
+        },
+        complete: { overlayAsset: "character-select.complete", x: 65, y: 35, suffix: "completed" },
+    },
+    // Optional - provide if you want title/subtitle text to appear over each choice
+    choicesStyling: {
+        default: {
+            title: {
+                // Styling for choice title, required to show title on choices.
+                style: {
+                    fontFamily: "ReithSans",
+                    fontSize: "19px",
+                    color: "#424242",
+                    backgroundColor: "#fff",
+                    fixedWidth: 75, // Text will be clipped inside this width.
+                    align: "center", // Aligns the text within the fixed width.
+                    padding: {
+                        // Padding around the text will show a 'block' when combined with background colour.
+                        left: 6,
+                        right: 6,
+                        top: 2,
+                        bottom: 2,
                     },
                 },
-                // optional styling for extra button states (will override default styles above)
-                locked: {
-                    title: {
-                        style: {
-                            color: "#fff",
-                            backgroundColor: "#7d4b4b",
-                        },
-                    },
+                position: {
+                    // Required if title is being shown.
+                    x: 0, // 0 is centre of asset. These values scale with and are positioned with the asset so should be calculated based off the asset pixels.
+                    y: 53,
                 },
             },
-            choices: [
-                {
-                    id: "mary",
-                    key: "mary",
-                    ariaLabel: "Mary",
-                    title: "Mary",
-                    subtitle: "Is very tall", // optional - for text overlay only
-                    state: "complete",
+            subtitle: {
+                style: {
+                    fontFamily: "ReithSans",
+                    fontSize: "16px",
+                    color: "#fff",
+                    backgroundColor: "rgba(0,0,0,0.15)",
+                    padding: {
+                        left: 4,
+                        right: 4,
+                        top: 2,
+                        bottom: 2,
+                    },
                 },
-                {
-                    id: "kyle",
-                    key: "kyle",
-                    ariaLabel: "Kyle",
-                    title: "Kyle",
-                    subtitle: "Has a mohawk", // optional - for text overlay only
-                    state: "locked",
+                position: {
+                    x: 0,
+                    y: 80,
                 },
-                {
-                    id: "suzy",
-                    key: "suzy",
-                    ariaLabel: "Suzy",
-                    title: "Suzy",
-                    subtitle: "Can tapdance", // optional - for text overlay only
-                    state: "locked",
+            },
+        },
+        // optional styling for extra button states (will override default styles above)
+        locked: {
+            title: {
+                style: {
+                    color: "#fff",
+                    backgroundColor: "#7d4b4b",
                 },
-                {
-                    id: "greg",
-                    key: "greg",
-                    ariaLabel: "Greg",
-                    title: "Greg",
-                    subtitle: "Is a geography teacher", // optional - for text overlay only
-                    state: "locked",
-                },
-                {
-                    id: "ezinma",
-                    key: "ezinma",
-                    ariaLabel: "Ezinma",
-                    title: "Ezinma",
-                    subtitle: "Likes snowboarding", // optional - for text overlay only
-                    state: "locked",
-                },
-                {
-                    id: "phil",
-                    key: "phil",
-                    ariaLabel: "Phil",
-                    title: "Phil",
-                    subtitle: "Wears a baseball cap", // optional - for text overlay only
-                    state: "locked",
-                },
-                {
-                    id: "mike",
-                    key: "mike",
-                    ariaLabel: "Mike",
-                    title: "Mike",
-                    subtitle: "Also known as Ant", // optional - for text overlay only
-                    state: "locked",
-                },
-                {
-                    id: "debby",
-                    key: "debby",
-                    ariaLabel: "Debbeh",
-                    title: "Debbeh",
-                    subtitle: "Has a twin called Suzy", // optional - for text overlay only
-                    state: "locked",
-                },
-                {
-                    id: "timmy",
-                    key: "timmy",
-                    ariaLabel: "Timmy",
-                    title: "Timmy",
-                    subtitle: "Is the youngest", // optional - for text overlay only
-                    state: "locked",
-                },
-                {
-                    id: "elliot",
-                    key: "elliot",
-                    ariaLabel: "Elliot",
-                    title: "Elliot",
-                    subtitle: "Likes astrophysics", // optional - for text overlay only
-                    state: "locked",
-                },
-            ],
+            },
+        },
+    },
 }

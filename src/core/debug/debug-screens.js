@@ -7,6 +7,8 @@ import { Launcher } from "./launcher.js";
 import { examples } from "./examples.js";
 import { getConfig } from "../loader/get-config.js";
 import fp from "../../../lib/lodash/fp/fp.js";
+import { loadCollections } from "../loader/load-collections.js";
+import { gmi } from "../gmi/gmi.js";
 
 const launcherScreen = {
     debug: {
@@ -24,7 +26,7 @@ const getDebugScreenWithRoutes = () => {
 
 const addScene = (scene, examples) => key => scene.scene.add(key, examples[key].scene);
 
-const addScreens = scene => {
+const addScreens = async scene => {
     Object.keys(examples).map(addScene(scene, examples));
     const debugTheme = getConfig(scene, Object.keys(examples));
     const config = scene.context.config;
@@ -34,6 +36,11 @@ const addScreens = scene => {
     Object.assign(config.navigation, examples);
 
     scene.setConfig(config);
+
+    scene.load.setBaseURL(gmi.gameDir);
+    scene.load.setPath("debug/");
+
+    await loadCollections(scene, debugTheme, "debug/");
 };
 
 export const addExampleScreens = fp.once(addScreens);

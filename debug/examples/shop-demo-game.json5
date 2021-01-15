@@ -1,0 +1,47 @@
+{
+    music: "home.backgroundMusic",
+    background: {
+        items: [{ key: "shopDemo.background", x: 0, y: 0 }],
+    },
+    eventChannel: "shop_demo_game",
+    assets: {
+        tree1: { key: "shopDemo.tree1", scale: 0.9 },
+        tree2: { key: "shopDemo.tree2", scale: 1 },
+        player: { scale: 3 },
+        coin: { key: "shopDemo.coin", scale: 2 },
+        coinPop: { key: "shopDemo.coinPop", scale: 2 },
+        hit: { key: "shopDemo.hit" },
+        whiff: { key: "shopDemo.whiff" },
+        coinGet: { key: "shopDemo.coinGet" },
+    },
+    treeSpawns: [
+        { key: "tree2", x: -270, y: -18, flip: true },
+        { key: "tree1", x: 10, y: -18 },
+        { key: "tree2", x: 300, y: -18 },
+    ],
+    coinSpawns: [
+        { x: -60, y: -30 },
+        { x: 0, y: -80 },
+        { x: 60, y: -30 },
+    ],
+    player: {
+        spawn: { x: -150 },
+        speed: 3,
+        xLimit: 350,
+        hat: { scale: 2, yOffset: -36 },
+    },
+    groundY: 96,
+    colliderSize: 50,
+    timers: {
+        coinSpawn: 2500,
+        chopDebounce: 350,
+    },
+    gravity: 300,
+    paneCollections: { shop: "debug-demo-hats", manage: "debug-demo-inventory" },
+    balance: {
+        value: { key: "coin" },
+        x: 300,
+        y: -200,
+        style: { backgroundColor: "#000", fontSize: "20px", fontFamily: "ReithSans" },
+    },
+}

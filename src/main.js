@@ -15,10 +15,6 @@ import { settingsChannel } from "./core/settings.js";
 import { eventBus } from "./core/event-bus.js";
 import { startup } from "./core/startup.js";
 
-//TODO Re-enable once Phaser plugins are built (should be in 3.24)
-//import "/node_modules/phaser/plugins/spine/dist/SpinePlugin.min.js";
-import "../lib/SpinePlugin.min.js"; //CAN BE REMOVED IF NOT USING SPINE
-
 // Setup for BBC settings control
 const settings = {
     pages: [

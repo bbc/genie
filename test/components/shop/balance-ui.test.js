@@ -7,8 +7,11 @@
 
 import * as shopLayout from "../../../src/components/shop/shop-layout.js";
 import { createBalance } from "../../../src/components/shop/balance-ui.js";
+import * as scalerModule from "../../../src/core/scaler.js";
+import { collections } from "../../../src/core/collections.js";
 
 describe("createBalance()", () => {
+    let balanceElem;
     const mockContainer = { getBounds: jest.fn(), setScale: jest.fn(), setPosition: jest.fn(), add: jest.fn() };
     const mockReturnedIcon = {
         getBounds: jest.fn().mockReturnValue({ width: 13 }),
@@ -24,9 +27,15 @@ describe("createBalance()", () => {
     const mockReturnedText = {
         setPosition: jest.fn(),
         getBounds: jest.fn().mockReturnValue({ width: 17 }),
+        setText: jest.fn(),
+        text: "43",
     };
     const mockText = { setOrigin: jest.fn().mockReturnValue(mockReturnedText) };
+
+    const mockSafeArea = { baz: "qux" };
+
     const mockScene = {
+        assetPrefix: "shop",
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
             image: jest.fn().mockImplementation((x, y, key) => {
@@ -47,23 +56,29 @@ describe("createBalance()", () => {
                 },
                 value: {
                     type: "text",
-                    value: 1000,
+                    key: "someId",
                     styles: { foo: "bar" },
                 },
             },
             balancePadding: 6,
             listPadding: { x: 1 },
-            assetKeys: { prefix: "shop" },
+            paneCollections: { manage: "inventory" },
+        },
+        layout: {
+            getSafeArea: jest.fn(() => mockSafeArea),
         },
     };
     const mockMetrics = { foo: "bar" };
-    const mockSafeArea = { baz: "qux" };
+    scalerModule.getMetrics = jest.fn(() => mockMetrics);
+    const mockCurrencyItem = { id: "someId", qty: 100 };
+    const mockCollection = { get: jest.fn().mockReturnValue(mockCurrencyItem) };
+    collections.get = jest.fn().mockReturnValue(mockCollection);
 
     beforeEach(() => {
         shopLayout.getXPos = jest.fn().mockReturnValue(42);
         shopLayout.getYPos = jest.fn().mockReturnValue(69);
         shopLayout.getScaleFactor = jest.fn().mockReturnValue(3.14);
-        createBalance(mockScene, mockMetrics, mockSafeArea);
+        balanceElem = createBalance(mockScene, mockMetrics, mockSafeArea);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -82,7 +97,12 @@ describe("createBalance()", () => {
             resolution: 4,
             foo: "bar",
         };
-        expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, 1000, expectedStyles);
+        expect(mockScene.add.text.mock.calls[0][3]).toStrictEqual(expectedStyles);
+    });
+    test("uses the quantity of the currency item from inventory as its value", () => {
+        expect(collections.get).toHaveBeenCalledWith("inventory");
+        expect(mockCollection.get).toHaveBeenCalledWith("someId");
+        expect(mockScene.add.text.mock.calls[0][2]).toStrictEqual(mockCurrencyItem.qty);
     });
     test("positions the icon to the left", () => {
         expect(mockReturnedIcon.setPosition).toHaveBeenCalledWith(-12, 0);
@@ -106,5 +126,13 @@ describe("createBalance()", () => {
         expect(shopLayout.getXPos).toHaveBeenCalledWith(mockContainer, mockSafeArea, mockScene.config.listPadding.x);
         expect(shopLayout.getYPos).toHaveBeenCalledWith(mockMetrics, mockSafeArea);
         expect(mockContainer.setPosition).toHaveBeenCalledWith(42, 69);
+    });
+    test("exposes a setText fn that sets the text of the value text elem", () => {
+        balanceElem.setText("foo");
+        expect(mockReturnedText.setText).toHaveBeenCalledWith("foo");
+    });
+    test("exposes a getValue fn that gets the value of the value text elem as an int", () => {
+        const value = balanceElem.getValue();
+        expect(value).toBe(43);
     });
 });

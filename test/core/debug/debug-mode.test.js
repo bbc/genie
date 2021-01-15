@@ -4,11 +4,11 @@
  * @license Apache-2.0
  */
 import * as debugMode from "../../../src/core/debug/debug-mode.js";
-import * as parseUrlParams from "../../../src/core/parseUrlParams.js";
+import * as parseUrlParams from "../../../src/core/parse-url-params.js";
 
 describe("Debug Mode", () => {
     const game = {};
-    const debugWindowKeys = ["gmi", "collections"];
+    const debugWindowKeys = ["gmi", "collections", "debugParam"];
 
     let testWindow = {
         location: {

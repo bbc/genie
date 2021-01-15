@@ -63,7 +63,7 @@ The `debug=true` query string may be added to the end to view the game in QA Mod
 
 To build your game using Webpack, use `npm run build`.
 
-To quickly view a specific theme, you can access it using the querystring 'theme': http://localhost:8080/?theme=<themeName>.
+To quickly view a specific theme, you can access it using the query string 'theme': http://localhost:8080/?theme=<themeName>.
 
 **Please note that an `index.html` file has been provided for local development. This will not be used in production.**
 
@@ -111,4 +111,3 @@ Please see the [Genie Testing Guide](../testing.md)
 ## What documentation do I need to supply?
 
 You will need to provide us with documentation outlining how to re-theme your gameplay component, how to replace the assets with new ones, and how to build and run your component from source code.
-

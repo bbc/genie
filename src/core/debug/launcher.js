@@ -9,10 +9,10 @@ import { buttonsChannel } from "../layout/gel-defaults.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
 import { examples } from "./examples.js";
 import { addExampleScreens } from "./debug-screens.js";
-import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../layout/metrics.js";
+import { CAMERA_X, CAMERA_Y } from "../layout/metrics.js";
 
 const addButton = config => {
-    const button = config.scene.add.gelButton(config.x + CANVAS_WIDTH / 2, config.y + CANVAS_HEIGHT / 2, {
+    const button = config.scene.add.gelButton(config.x + CAMERA_X, config.y + CAMERA_Y, {
         scene: "gelDebug",
         key: "button",
         id: config.id,
@@ -56,6 +56,8 @@ const titleStyle = {
     align: "center",
 };
 
+const excludeHidden = key => !examples[key].hidden;
+
 export class Launcher extends Screen {
     create() {
         addExampleScreens(this);
@@ -67,6 +69,6 @@ export class Launcher extends Screen {
 
         this.sound.pauseOnBlur = false;
 
-        Object.keys(examples).map(getButtonConfig(this)).map(addButton);
+        Object.keys(examples).filter(excludeHidden).map(getButtonConfig(this)).map(addButton);
     }
 }

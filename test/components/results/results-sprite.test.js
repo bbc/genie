@@ -17,6 +17,7 @@ describe("ResultsSprite", () => {
         mockScene = mockBaseScene();
         mockSettings = { motion: true };
         mockScene.scene = { key: "results" };
+        mockScene.sys = { anims: { on: jest.fn() }, queueDepthSort: jest.fn() };
         mockScene.transientData = { results: {} };
         mockScene.add = { existing: jest.fn() };
         mockScene.anims = { create: jest.fn(), generateFrameNumbers: jest.fn() };
@@ -28,6 +29,7 @@ describe("ResultsSprite", () => {
         ResultsSprite.prototype.setOrigin = jest.fn();
         ResultsSprite.prototype.setTexture = jest.fn();
         ResultsSprite.prototype.setSizeToFrame = () => {};
+        ResultsSprite.prototype.animationManager = { on: () => {} };
         gmi.getAllSettings = jest.fn(() => mockSettings);
     });
 

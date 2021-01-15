@@ -9,92 +9,125 @@ import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable
 import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
-import * as catalogue from "../../../../src/core/collections.js";
+import { collections } from "../../../../src/core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
+import { accessibilify } from "../../../../src/core/accessibility/accessibilify.js";
 
-const mockItem = { id: "someItem", name: "someItemName" };
+jest.mock("../../../../src/core/accessibility/accessibilify.js");
+
 const mockA11yElem = {
     addEventListener: jest.fn(),
 };
-const mockLabel = {
-    children: [{ input: { enabled: true }, accessibleElement: { el: mockA11yElem, update: jest.fn() } }],
-    height: 50,
-};
-const mockGridSizer = {
-    add: jest.fn(),
-    getElement: jest.fn().mockReturnValue([mockLabel]),
-};
-const mockScrollablePanel = {
-    layout: jest.fn(),
-    getByName: jest.fn().mockReturnValue(mockGridSizer),
-    on: jest.fn(),
-    once: jest.fn(),
-    off: jest.fn(),
-    space: { top: 10 },
-    t: 0,
-    height: 100,
-    minHeight: 100,
-    setT: jest.fn(),
-};
-const mockSizer = { add: jest.fn() };
 const mockOverlay = {};
-const mockScene = {
-    rexUI: {
-        add: {
-            scrollablePanel: jest.fn().mockReturnValue(mockScrollablePanel),
-            sizer: jest.fn().mockReturnValue(mockSizer),
-            gridSizer: jest.fn().mockReturnValue(mockGridSizer),
-            label: jest.fn().mockReturnValue(mockLabel),
-        },
-    },
-    input: { topOnly: true },
-    add: { image: jest.fn() },
-    config: {
-        assetKeys: {
-            prefix: "test",
-            background: "background",
-            scrollbar: "scrollbar",
-            scrollbarHandle: "scrollbarHandle",
-        },
-        listPadding: { x: 10, y: 8 },
-        overlay: {
-            items: [mockOverlay],
-        },
-        shopCollection: "testCatalogue",
-    },
-    layout: {
-        getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
-        addCustomGroup: jest.fn(),
-    },
-    scale: { on: jest.fn() },
-    scene: { key: "shop" },
-    sys: {
-        queueDepthSort: jest.fn(),
-        displayList: {
-            remove: jest.fn(),
-        },
-    },
-};
-const mockCollection = { getAll: jest.fn().mockReturnValue([mockItem]) };
-catalogue.collections = { get: jest.fn().mockReturnValue(mockCollection) };
+
 const mockGelButton = {
     width: 100,
     setScale: jest.fn(),
     accessibleElement: { update: jest.fn() },
+    emit: jest.fn(),
+    scene: { sys: { input: { activePointer: "mock" } } },
 };
 buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
+buttons.updateButton = jest.fn();
+scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
+const title = "shop";
+const initState = "cta";
+const mockPrepTransaction = jest.fn();
 
 describe("Scrollable List", () => {
+    let collectionGetAll;
+    let mockCollection;
+    let mockGridSizer;
+    let mockScrollablePanel;
+    let mockScene;
+    let mockSizer;
+    let mockItem;
+    let mockLabel;
+
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
+        mockItem = { id: "someItem", name: "someItemName", title: "title", description: "description" };
+        collectionGetAll = [mockItem];
+        mockCollection = { getAll: jest.fn(() => collectionGetAll) };
+        collections.get = jest.fn().mockReturnValue(mockCollection);
+
+        mockLabel = {
+            children: [{ input: { enabled: true }, item: mockItem }],
+            height: 50,
+            setInteractive: jest.fn(),
+            on: jest.fn(),
+            accessibleElement: { el: mockA11yElem, update: jest.fn() },
+        };
+        mockGridSizer = {
+            add: jest.fn(),
+            getElement: jest.fn().mockReturnValue([mockLabel]),
+        };
+        mockSizer = {
+            clear: jest.fn(),
+            add: jest.fn(),
+        };
+        mockScrollablePanel = {
+            layout: jest.fn(),
+            getByName: jest.fn(name => (name === "grid" ? mockGridSizer : mockSizer)),
+            on: jest.fn(),
+            once: jest.fn(),
+            off: jest.fn(),
+            space: { top: 10 },
+            t: 0,
+            height: 100,
+            minHeight: 100,
+            setT: jest.fn(),
+            emit: jest.fn(),
+        };
+
+        mockScene = {
+            rexUI: {
+                add: {
+                    scrollablePanel: jest.fn(() => mockScrollablePanel),
+                    sizer: jest.fn(() => mockSizer),
+                    gridSizer: jest.fn(() => mockGridSizer),
+                    label: jest.fn(() => mockLabel),
+                },
+            },
+            events: { once: jest.fn() },
+            input: { topOnly: true },
+            add: { image: jest.fn() },
+            config: {
+                assetPrefix: "test",
+                assetKeys: {
+                    background: "background",
+                    scrollbar: "scrollbar",
+                    scrollbarHandle: "scrollbarHandle",
+                },
+                listPadding: { x: 10, y: 8, outerPadFactor: 2 },
+                overlay: {
+                    items: [mockOverlay],
+                },
+                paneCollections: { shop: "testCatalogue" },
+            },
+            layout: {
+                getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
+                addCustomGroup: jest.fn(),
+            },
+            scale: { on: jest.fn(), removeListener: jest.fn() },
+            scene: { key: "shop" },
+            sys: {
+                queueDepthSort: jest.fn(),
+                displayList: {
+                    remove: jest.fn(),
+                    exists: jest.fn(),
+                },
+            },
+        };
+
         a11y.addGroupAt = jest.fn();
     });
 
     describe("instantiation", () => {
         beforeEach(() => {
             scaler.getMetrics = jest.fn().mockReturnValue({ scale: 1 });
-            new ScrollableList(mockScene);
+            new ScrollableList(mockScene, title, mockPrepTransaction);
         });
         describe("adds a rexUI scrollable panel", () => {
             describe("with appropriate panel config", () => {
@@ -110,27 +143,69 @@ describe("Scrollable List", () => {
                 });
                 test("with spacing from config", () => {
                     const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
-                    const expectedSpacing = { left: 10, right: 10, top: 8, bottom: 8, panel: 10 };
+                    const expectedSpacing = { left: 20, right: 20, top: 16, bottom: 16, panel: 10 };
                     expect(config.space).toEqual(expectedSpacing);
                 });
                 test("with scroll mode 0", () => {
                     const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
                     expect(config.scrollMode).toBe(0);
                 });
-                test("with items from a collection in the catalogue", () => {
-                    expect(catalogue.collections.get).toHaveBeenCalledWith("testCatalogue");
+                test("with items from a collection", () => {
+                    expect(collections.get).toHaveBeenCalledWith("testCatalogue");
                     expect(mockCollection.getAll).toHaveBeenCalled();
+                });
+
+                test("no items table added if the catalogue collection is empty", () => {
+                    jest.clearAllMocks();
+                    mockGridSizer = undefined;
+                    collectionGetAll = [];
+
+                    new ScrollableList(mockScene, title, mockPrepTransaction);
+
+                    expect(mockScene.rexUI.add.gridSizer).not.toHaveBeenCalled();
                 });
             });
 
             describe("with nested rexUI elements", () => {
                 test("a label is created with a gel button per item", () => {
-                    expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem);
+                    expect(buttons.createGelButton).toHaveBeenCalledWith(
+                        mockScene,
+                        mockItem,
+                        title,
+                        initState,
+                        mockPrepTransaction,
+                    );
                     expect(mockScene.rexUI.add.label).toHaveBeenCalledWith({
                         orientation: 0,
                         icon: mockGelButton,
                         name: mockItem.id,
                     });
+                });
+                test("label has the correct accessibilify config attached to it", () => {
+                    expect(mockLabel.config).toEqual({
+                        id: `scroll_button_${mockItem.id}_${title}`,
+                        ariaLabel: `${mockItem.title} - ${mockItem.description}`,
+                    });
+                });
+                test("labels input events are forwarded to the gel button", () => {
+                    expect(mockLabel.setInteractive).toHaveBeenCalled();
+                    [
+                        Phaser.Input.Events.POINTER_UP,
+                        Phaser.Input.Events.POINTER_OVER,
+                        Phaser.Input.Events.POINTER_OUT,
+                    ].forEach((event, index) => {
+                        expect(mockLabel.on).toHaveBeenCalledWith(event, expect.any(Function));
+                        mockLabel.on.mock.calls[index][1]();
+                        expect(mockGelButton.emit).toHaveBeenCalledWith(
+                            event,
+                            mockGelButton,
+                            mockGelButton.scene.sys.input.activePointer,
+                            false,
+                        );
+                    });
+                });
+                test("label is accessibilified", () => {
+                    expect(accessibilify).toHaveBeenCalledWith(mockLabel);
                 });
                 test("labels are added to a grid sizer", () => {
                     expect(mockScene.rexUI.add.gridSizer).toHaveBeenCalledWith({
@@ -148,6 +223,11 @@ describe("Scrollable List", () => {
                     expect(mockSizer.add).toHaveBeenCalledWith(mockGridSizer, 1, "center", 0, true);
                 });
             });
+        });
+        test("adds a resize fn to the scaler's onScaleChange", () => {
+            const callback = scaler.onScaleChange.add.mock.calls[0][0];
+            callback();
+            expect(mockScrollablePanel.layout).toHaveBeenCalled();
         });
         test("assigns a callback to scene on resize", () => {
             expect(mockScene.scale.on.mock.calls[0][0]).toBe("resize");
@@ -200,6 +280,14 @@ describe("Scrollable List", () => {
                 expect(mockScrollablePanel.updateOnFocus).toHaveBeenCalled();
             });
         });
+        describe("shutdown", () => {
+            test("calls removeListener with the debounced resize listener", () => {
+                new ScrollableList(mockScene);
+                const shutdownListener = mockScene.events.once.mock.calls[1][1];
+                shutdownListener();
+                expect(mockScene.scale.removeListener).toHaveBeenCalled();
+            });
+        });
     });
     describe("Accessibility setup", () => {
         let list;
@@ -241,7 +329,57 @@ describe("Scrollable List", () => {
             list.setVisible(false);
             expect(list.panel.visible).toBe(false);
             expect(mockLabel.children[0].input.enabled).toBe(false);
-            expect(mockLabel.children[0].accessibleElement.update).toHaveBeenCalled();
+            expect(mockLabel.config.tabbable).toBe(false);
+            expect(mockLabel.accessibleElement.update).toHaveBeenCalled();
+        });
+    });
+    describe("panel update on setVisible(true)", () => {
+        let list;
+        const otherItem = { id: "someOtherItem", name: "someOtherItemName" };
+
+        beforeEach(() => {
+            list = new ScrollableList(mockScene, "shop");
+        });
+
+        test("gets the collection", () => {
+            list.setVisible(true);
+            expect(collections.get).toHaveBeenCalledWith("testCatalogue");
+            expect(mockCollection.getAll).toHaveBeenCalled();
+        });
+        test("and rebuilds the inner panel if the collection length has changed", () => {
+            collectionGetAll = [mockItem, otherItem];
+            mockCollection = { getAll: jest.fn(() => collectionGetAll) };
+            list.setVisible(true);
+            expect(mockSizer.clear).toHaveBeenCalled();
+            expect(mockSizer.add).toHaveBeenCalled();
+        });
+        test("or if the IDs have changed", () => {
+            mockItem = { ...mockItem, id: "someAlteredId" };
+            collectionGetAll = [mockItem];
+            mockCollection = { getAll: jest.fn(() => collectionGetAll) };
+            list.setVisible(true);
+            expect(mockSizer.clear).toHaveBeenCalled();
+            expect(mockSizer.add).toHaveBeenCalled();
+        });
+        test("if not rebuilding, we update all the buttons to catch changes to item states", () => {
+            collectionGetAll = [mockItem];
+            mockCollection = { getAll: jest.fn(() => collectionGetAll) };
+            list.setVisible(true);
+            expect(buttons.updateButton).toHaveBeenCalledTimes(1);
+        });
+        test("no changes are made on setVisible(false)", () => {
+            jest.clearAllMocks();
+            list.setVisible(false);
+            expect(collections.get).not.toHaveBeenCalled();
+        });
+    });
+    describe("collection filtering", () => {
+        const filterFn = jest.fn().mockReturnValue(true);
+
+        beforeEach(() => new ScrollableList(mockScene, "title", fp.noop, filterFn));
+
+        test("if a filter function is passed to the list, it is run against the collection", () => {
+            expect(filterFn).toHaveBeenCalledTimes(1);
         });
     });
 });
