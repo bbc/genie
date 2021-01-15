@@ -10,8 +10,7 @@ import { buttonsChannel } from "./layout/gel-defaults.js";
 import { eventBus } from "./event-bus.js";
 import * as GameSound from "../core/game-sound.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
-import * as Scaler from "./scaler.js";
-import * as Layout from "./layout/layout.js";
+import { config } from "../core/layout/gel-defaults.js";
 import { settingsChannel } from "./settings.js";
 import { furnish } from "./background/items.js";
 import { isDebug } from "./debug/debug-mode.js";
@@ -166,16 +165,29 @@ export class Screen extends Phaser.Scene {
      * @returns {Object}
      */
     setLayout(buttons, accessibleButtons) {
-        buttons.forEach(button => this.createButton(button.toLowerCase()));
+        const buttonConfigs = config(this);
+        buttons.forEach(button => this.createButton(button.toLowerCase(), buttonConfigs[button]));
     }
 
-    createButton(buttonName) {
+    createButton(buttonName, config) {
+        config.action &&
+            eventBus.subscribe({
+                channel: config.channel,
+                name: config.id,
+                callback: config.action,
+            });
         const path = gmi.gameDir + gmi.embedVars.configPath;
         const accessiblilityDiv = document.getElementById("accessibility");
         const newSvg = document.createElement("img");
         newSvg.src = `${path}gel/svg/${buttonName}.svg`;
         newSvg.onmouseover = () => (newSvg.src = `${path}gel/svg/${buttonName}-hover.svg`);
         newSvg.onmouseout = () => (newSvg.src = `${path}gel/svg/${buttonName}.svg`);
+        newSvg.onclick = () =>
+            eventBus.publish({
+                channel: config.channel,
+                name: config.id,
+                data: { screen: this },
+            });
         newSvg.setAttribute("style", "position: fixed;" + this.getButtonPosition(buttonName));
         accessiblilityDiv.appendChild(newSvg);
     }
@@ -188,6 +200,9 @@ export class Screen extends Phaser.Scene {
             play: "top: 50%; left: 50%; transform: translate(-50%, 0%);",
             achievements: "bottom: 25px; left: 25px;",
             howtoplay: "bottom: 25px; right: 25px;",
+            continue: "bottom: 25px; left: 50%; transform: translate(-50%, 0%);",
+            skip: "bottom: 25px; right: 25px;",
+            pause: "top: 25px; right: 25px;",
         };
         return positions[buttonName];
     }

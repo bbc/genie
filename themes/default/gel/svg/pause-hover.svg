@@ -2,8 +2,8 @@
 <svg width="68px" height="68px" viewBox="0 0 68 68" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>pause</title>
     <g id="pause" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Back">
-            <path d="M0,32 C0,14.326 14.327,0 32,0 C49.673,0 64,14.326 64,32 C64,49.673 49.673,64 32,64 C14.327,64 0,49.673 0,32 Z" id="Fill-27" fill="#027802"></path>
+        <g>
+            <path d="M32,64 L32,64 C14.327,64 0,49.673 0,32 C0,14.326 14.327,0 32,0 C49.673,0 64,14.326 64,32 C64,49.673 49.673,64 32,64" id="Fill-27" fill="#004600"></path>
             <g id="Group" transform="translate(26.000000, 24.000000)" fill="#FFFFFF">
                 <polygon id="Fill-9" points="0 15.5114793 4.36260355 15.5114793 4.36260355 0 0 0"></polygon>
                 <polygon id="Fill-11" points="8.24047337 15.5114793 12.6030769 15.5114793 12.6030769 0 8.24047337 0"></polygon>

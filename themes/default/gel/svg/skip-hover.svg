@@ -3,7 +3,7 @@
     <title>Skip</title>
     <g id="Skip" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g>
-            <path d="M32,64 L32,64 C14.327,64 0,49.673 0,32 C0,14.327 14.327,0 32,0 C49.673,0 64,14.327 64,32 C64,49.673 49.673,64 32,64" id="Fill-21" fill="#027802"></path>
+            <path d="M32,64 L32,64 C14.327,64 0,49.673 0,32 C0,14.327 14.327,0 32,0 C49.673,0 64,14.327 64,32 C64,49.673 49.673,64 32,64" id="Fill-21" fill="#004600"></path>
             <g id="Group" transform="translate(24.000000, 24.000000)" fill="#FFFFFF">
                 <polygon id="Fill-23" points="0.6483 0.5167 13.1483 8.5167 0.6483 16.5167 0.6483 12.5167 7.2883 8.5167 0.6483 4.5167"></polygon>
                 <polygon id="Fill-25" points="13.148 16.517 14.648 16.517 14.648 0.517 13.148 0.517"></polygon>
