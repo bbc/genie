@@ -180,14 +180,20 @@ export class Screen extends Phaser.Scene {
         const accessiblilityDiv = document.getElementById("accessibility");
         const newSvg = document.createElement("img");
         newSvg.src = `${path}gel/svg/${buttonName}.svg`;
-        newSvg.onmouseover = () => (newSvg.src = `${path}gel/svg/${buttonName}-hover.svg`);
-        newSvg.onmouseout = () => (newSvg.src = `${path}gel/svg/${buttonName}.svg`);
-        newSvg.onclick = () =>
+        const onHover = () => (newSvg.src = `${path}gel/svg/${buttonName}-hover.svg`);
+        const hoverOff = () => (newSvg.src = `${path}gel/svg/${buttonName}.svg`);
+        newSvg.onmouseover = onHover;
+        newSvg.onfocus = onHover;
+        newSvg.onmouseout = hoverOff;
+        newSvg.onblur = hoverOff;
+        const onClick = () =>
             eventBus.publish({
                 channel: config.channel,
                 name: config.id,
                 data: { screen: this },
             });
+        newSvg.onkeyup = event => (event.key === "Enter" || event.key === " ") && onClick();
+        newSvg.onclick = onClick;
         newSvg.tabIndex = 0;
         newSvg.setAttribute("style", "position: fixed;" + this.getButtonPosition(buttonName));
         accessiblilityDiv.appendChild(newSvg);
