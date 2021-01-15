@@ -7,6 +7,7 @@
 import { ShopDemo, ShopDemoGame } from "../../../src/core/debug/shop-demo.js";
 import { collections } from "../../../src/core/collections.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
+import * as a11y from "../../../src/core/accessibility/accessibilify.js";
 
 describe("ShopDemo", () => {
     let shopDemo;
@@ -37,6 +38,7 @@ describe("ShopDemo", () => {
         shopDemo.scene = { key: "shopDemo" };
         shopDemo.setLayout = jest.fn();
         shopDemo.events = { once: jest.fn() };
+        a11y.accessibilify = jest.fn();
     });
 
     describe("create()", () => {
