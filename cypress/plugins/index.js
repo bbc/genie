@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 /// <reference types="cypress" />
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
@@ -11,14 +16,14 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-const { renameSync } = require('fs');
+const { renameSync } = require("fs");
 /**
  * @type {Cypress.PluginConfig}
  */
 module.exports = (on, config) => {
-  on('after:screenshot', ({ path }) => {
-    renameSync(path, path.replace(/ \(\d*\)/i, ''));
-  });
+    on("after:screenshot", ({ path }) => {
+        renameSync(path, path.replace(/ \(\d*\)/i, ""));
+    });
 
-  return config;
-}
+    return config;
+};

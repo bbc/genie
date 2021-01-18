@@ -1,3 +1,8 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 // ***********************************************************
 // This example support/index.js is processed and
 // loaded automatically before your test files.
@@ -14,8 +19,8 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-require('cypress-plugin-tab')
-import './commands'
+require("cypress-plugin-tab");
+import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

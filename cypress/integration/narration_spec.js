@@ -1,39 +1,45 @@
+/**
+ * @copyright BBC 2018
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
 describe("The Genie narration page", () => {
     beforeEach(() => {
-      cy.visit("https://www.test.bbc.co.uk/games/embed/genie?versionOverride=latest&viewNonPublished=true&cageEnv=test&debug=true")
-      cy.get("#home__play", { timeout: 40000 }).should("exist")
-      cy.get(".data-notice").click()
+        cy.visit(
+            "https://www.test.bbc.co.uk/games/embed/genie?versionOverride=latest&viewNonPublished=true&cageEnv=test&debug=true",
+        );
+        cy.get("#home__play", { timeout: 40000 }).should("exist");
+        cy.get(".data-notice").click();
     });
 
     it("can skip the narration page", () => {
-      cy.genieClick("#home__debug")
-      cy.genieClick("#debug__debug-narrative")
-      cy.genieClick("#debug-narrative__skip")
-      cy.get("#debug__debug-narrative", { timeout: 20000 }).should("exist")
+        cy.genieClick("#home__debug");
+        cy.genieClick("#debug__debug-narrative");
+        cy.genieClick("#debug-narrative__skip");
+        cy.get("#debug__debug-narrative", { timeout: 20000 }).should("exist");
     });
-    
+
     it("can proceed through each narration page", () => {
-      cy.genieClick("#home__debug")
-      cy.genieClick("#debug__debug-narrative")
-      cy.genieClick("#debug-narrative__continue")
-      cy.genieClick("#debug-narrative__continue")
-      cy.genieClick("#debug-narrative__continue")
-      cy.genieClick("#debug-narrative__continue")
-      cy.genieClick("#debug-narrative__continue")
-      cy.get("#debug__debug-narrative", { timeout: 20000 }).should("exist")
+        cy.genieClick("#home__debug");
+        cy.genieClick("#debug__debug-narrative");
+        cy.genieClick("#debug-narrative__continue");
+        cy.genieClick("#debug-narrative__continue");
+        cy.genieClick("#debug-narrative__continue");
+        cy.genieClick("#debug-narrative__continue");
+        cy.genieClick("#debug-narrative__continue");
+        cy.get("#debug__debug-narrative", { timeout: 20000 }).should("exist");
     });
 
     it("can pause the game on the narration page", () => {
-      cy.genieClick("#home__debug")
-      cy.genieClick("#debug__debug-narrative")
-      cy.genieClick("#debug-narrative__pause")
-      cy.genieClick("#pause__play")
-      cy.get("#debug-narrative__continue").should("exist")
-      cy.get("#debug-narrative__skip").should("exist")
-      cy.get("#debug-narrative__pause").should("exist")
+        cy.genieClick("#home__debug");
+        cy.genieClick("#debug__debug-narrative");
+        cy.genieClick("#debug-narrative__pause");
+        cy.genieClick("#pause__play");
+        cy.get("#debug-narrative__continue").should("exist");
+        cy.get("#debug-narrative__skip").should("exist");
+        cy.get("#debug-narrative__pause").should("exist");
     });
 });
-
 
 /* 
 Use stats to confirm each page has navigated
