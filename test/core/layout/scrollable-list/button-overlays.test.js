@@ -5,6 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { overlays1Wide } from "../../../../src/core/layout/scrollable-list/button-overlays.js";
+import * as shopLayout from "../../../../src/components/shop/shop-layout.js";
 
 const mockImage = { setScale: jest.fn(), width: 100 };
 const mockScene = {
@@ -15,6 +16,7 @@ const mockScene = {
     config: {
         assetPrefix: "test",
     },
+    styleDefaults: { some: "default" },
 };
 
 const mockItem = {
@@ -35,6 +37,8 @@ const mockGelButton = {
 
 let mockOverlay;
 let mockConfig;
+
+shopLayout.textStyle = jest.fn().mockReturnValue({ foo: "bar" });
 
 describe("Button overlays", () => {
     afterEach(() => jest.clearAllMocks());
@@ -74,19 +78,12 @@ describe("Button overlays", () => {
                 expect(mockImage.setScale).toHaveBeenCalledWith(0.5);
             });
 
-            test("adds a text to the scene and the button if overlay is of type text", () => {
+            test("adds a text to the scene and the button if overlay is of type text, merging default styles with any provided.", () => {
                 mockOverlay = { ...mockOverlay, type: "text", value: "someText" };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someText", undefined);
-            });
-
-            test("text elements pass font information from the overlay if present", () => {
-                mockOverlay = { ...mockOverlay, type: "text", value: "someText", font: { foo: "bar" } };
-                mockConfig.overlay.items.push(mockOverlay);
-                const expectedFont = mockOverlay.font;
-                overlays1Wide(mockGelButton, mockConfig.overlay.items);
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someText", expectedFont);
+                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someText", { foo: "bar" });
+                expect(shopLayout.textStyle).toHaveBeenCalled();
             });
         });
 
@@ -111,7 +108,7 @@ describe("Button overlays", () => {
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 const expectedValue = "42";
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, expectedValue, undefined);
+                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, expectedValue, { foo: "bar" });
             });
         });
 

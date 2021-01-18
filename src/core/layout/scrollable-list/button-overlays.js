@@ -5,28 +5,33 @@
  * @license Apache-2.0 Apache-2.0
  */
 import fp from "../../../../lib/lodash/fp/fp.js";
+import { textStyle } from "../../../components/shop/shop-layout.js";
 
 export const overlays1Wide = (gelButton, configs) => {
-    configs.forEach(overlay => {
-        const offset = getOffset(overlay.position, gelButton);
-        addOverlay({ gelButton, overlay, offset });
+    configs.forEach(config => {
+        const offset = getOffset(config.position, gelButton);
+        addOverlay({ gelButton, config, offset });
     });
     return gelButton;
 };
 
-const setImageOverlay = ({ gelButton, overlay, offset }) => {
+const setImageOverlay = ({ gelButton, config, offset }) => {
     const { scene, item } = gelButton;
     const { assetPrefix } = scene.config;
-    const key = overlay.isDynamic ? `${item[overlay.assetKey]}` : `${assetPrefix}.${overlay.assetKey}`;
+    const key = config.isDynamic ? `${item[config.assetKey]}` : `${assetPrefix}.${config.assetKey}`;
     const image = scene.add.image(offset.x, offset.y, key);
-    overlay.size && image.setScale(overlay.size / image.width);
-    gelButton.overlays.set(overlay.name, image);
+    config.size && image.setScale(config.size / image.width);
+    gelButton.overlays.set(config.name, image);
 };
 
-const setTextOverlay = ({ gelButton, overlay, offset }) => {
+const setTextOverlay = ({ gelButton, config, offset }) => {
     const { scene, item } = gelButton;
-    const textContent = overlay.isDynamic ? item[overlay.value].toString() : overlay.value.toString();
-    gelButton.overlays.set(overlay.name, scene.add.text(offset.x, offset.y, textContent, overlay.font));
+    const { styleDefaults } = scene.config;
+    const textContent = config.isDynamic ? item[config.value].toString() : config.value.toString();
+    gelButton.overlays.set(
+        config.name,
+        scene.add.text(offset.x, offset.y, textContent, textStyle(styleDefaults, config)),
+    );
 };
 
 const getOffset = (position, gelButton) => {
@@ -36,6 +41,6 @@ const getOffset = (position, gelButton) => {
 };
 
 const addOverlay = fp.cond([
-    [args => args.overlay.type === "image", setImageOverlay],
-    [args => args.overlay.type === "text", setTextOverlay],
+    [args => args.config.type === "image", setImageOverlay],
+    [args => args.config.type === "text", setTextOverlay],
 ]);

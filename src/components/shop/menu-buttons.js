@@ -81,4 +81,4 @@ const resizeButton = container => (button, idx) => {
 export const resizeGelButtons = container => container.buttons.forEach(resizeButton(container));
 
 const setButtonOverlays = (scene, button, title) =>
-    button.overlays.set("caption", scene.add.text(0, 0, title, { ...styleDefaults }).setOrigin(0.5));
+    button.overlays.set("caption", scene.add.text(0, 0, title, styleDefaults).setOrigin(0.5));
