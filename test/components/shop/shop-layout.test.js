@@ -238,5 +238,14 @@ describe("shop element scaling functions", () => {
             const expectedStyle = defaultStyle;
             expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
         });
+        test("if there's no default style, use a fallback style", () => {
+            const fallbackStyle = {
+                fontFamily: "ReithSans",
+                fontSize: "24px",
+                resolution: 10,
+                align: "center",
+            };
+            expect(shopLayout.textStyle(undefined, undefined)).toStrictEqual(fallbackStyle);
+        });
     });
 });
