@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.8.9 ||
+| | Force Canvas for Silk to enable texture unloading. |
 | 3.8.8 ||
 | | Fix absolute plugin path. |
 | 3.8.7 ||
@@ -14,7 +16,7 @@
 | | Ensures previous screen's audio does not fade out when returning to the Home screen. |
 | | Fixes bug with accessible elements appearing in the wrong place with gel buttons on the debug screens. |
 | | Collections now merge properties and union with local storage.  |
-| | Add shop demo screen in debug mode |
+| | Add shop demo screen in debug mode. |
 | | Buttons within the 4/3 area now sit exactly on the edge. |
 | | Buttons will move inwards if the screen width causes the border pad to overlap the 4/3 area. |
 | | Add accessibility for scrollable list component. |
