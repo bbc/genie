@@ -186,6 +186,7 @@ const exampleScreens = {
         title: "Narrative",
         routes: {
             back: "debug",
+            next: "debug",
         },
     },
 };
