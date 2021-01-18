@@ -16,7 +16,12 @@ describe("Default Plugins", () => {
         const defaults = getDefaultPlugins(options);
 
         expect(Object.keys(defaults)).toEqual(["global", "scene"]);
-        expect(getPluginKeys(defaults.global)).toEqual(["FontLoader", "JSON5Loader", "ParticlesLoader"]);
+        expect(getPluginKeys(defaults.global)).toEqual([
+            "FontLoader",
+            "JSON5Loader",
+            "ParticlesLoader",
+            "rexBBCodeTextPlugin",
+        ]);
         expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin"]);
     });
 
@@ -34,6 +39,7 @@ describe("Default Plugins", () => {
             "FontLoader",
             "JSON5Loader",
             "ParticlesLoader",
+            "rexBBCodeTextPlugin",
             "testGlobalPlugin",
         ]);
         expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin", "testScenePlugin"]);

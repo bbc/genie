@@ -78,7 +78,7 @@ describe("Collections", () => {
     });
 
     describe("Returned getAll method", () => {
-        test("Returns all catalogue fromn json cache if string specified", () => {
+        test("Returns all catalogues from json cache if string specified", () => {
             const collection = initCollection(mockScreen)("testCollection");
             const expected = testCatalogue.map(item => ({ ...item, qty: 1 }));
 

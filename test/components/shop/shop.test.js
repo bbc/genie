@@ -12,6 +12,7 @@ import * as titles from "../../../src/components/shop/shop-titles.js";
 import * as uiScaler from "../../../src/components/shop/shop-layout.js";
 import * as menu from "../../../src/components/shop/menu.js";
 import * as confirm from "../../../src/components/shop/confirm.js";
+import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 
 jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
@@ -88,6 +89,7 @@ describe("Shop", () => {
         menu.createMenu = jest.fn().mockReturnValue(mockMenu);
         eventBus.subscribe = jest.fn();
         eventBus.removeSubscription = jest.fn();
+        a11y.reset = jest.fn();
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -196,6 +198,9 @@ describe("Shop", () => {
             });
             test("sets that pane visible", () => {
                 expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(true);
+            });
+            test("resets a11y", () => {
+                expect(a11y.reset).toHaveBeenCalled();
             });
             test("on starting the stack, changes the event subscription", () => {
                 expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.customMessage);

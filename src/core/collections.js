@@ -58,6 +58,7 @@ export const initCollection = screen => key => {
 
     const set = config => {
         if (!valid(config)) return;
+
         gmi.setGameData("genie", fp.setWith(Object, storagePath, mergeItems(getStored(), [config]), getGenieStore()));
     };
 

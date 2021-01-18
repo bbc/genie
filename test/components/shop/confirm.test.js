@@ -14,14 +14,14 @@ import { collections } from "../../../src/core/collections.js";
 describe("createConfirm()", () => {
     let confirmPane;
     const mockContainer = { add: jest.fn(), setY: jest.fn(), removeAll: jest.fn() };
-    const mockImage = { setScale: jest.fn(), setVisible: jest.fn() };
+    const mockImage = { setScale: jest.fn(), setVisible: jest.fn(), type: "Image" };
     const mockRect = { foo: "bar" };
     const mockButton = { baz: "qux", setLegal: jest.fn() };
-    const mockText = { setText: jest.fn() };
+    const mockText = { setText: jest.fn(), type: "Text" };
     let mockConfig = {
         menu: { buttonsRight: true },
         confirm: {
-            prompts: {
+            prompt: {
                 shop: { legal: "legalBuyPrompt", illegal: "illegalBuyPrompt" },
                 manage: { legal: "legalEquipPrompt", illegal: "illegalEquipPrompt" },
             },
@@ -59,6 +59,7 @@ describe("createConfirm()", () => {
     layout.resize = jest.fn().mockReturnValue(resizeFn);
     layout.createRect = jest.fn().mockReturnValue(mockRect);
     layout.getInnerRectBounds = jest.fn().mockReturnValue({ x: 0, y: 0, width: 100, height: 100 });
+    layout.textStyle = jest.fn().mockReturnValue({ some: "textStyle" });
     let mockDoTransactionFn = jest.fn().mockReturnValueOnce(37).mockReturnValue(undefined);
     transact.doTransaction = jest.fn().mockReturnValue(mockDoTransactionFn);
     const mockCollection = { get: jest.fn().mockReturnValue({ state: "foo" }) };
@@ -83,6 +84,10 @@ describe("createConfirm()", () => {
         confirmPane.setBalance(37);
         expect(mockBalance.setText).toHaveBeenCalledWith(37);
     });
+    test("with a getter for its image and text elements", () => {
+        const elems = confirmPane.getElems();
+        expect(elems).toStrictEqual([mockText, mockText, mockImage, mockImage]);
+    });
     test("with a rect derived from layout functions used to memoize button positions", () => {
         expect(layout.createRect).toHaveBeenCalledTimes(1);
         const containerContents = mockContainer.add.mock.calls[0][0];
@@ -102,7 +107,7 @@ describe("createConfirm()", () => {
         jest.clearAllMocks();
         mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
         createConfirm(mockScene);
-        expect(mockScene.add.text).toHaveBeenCalledWith(28, -25, "PH", {});
+        expect(mockScene.add.text).toHaveBeenCalledWith(-28, -25, "PH", { some: "textStyle" });
     });
     test("that is displayed with an appropriate Y offset", () => {
         expect(mockContainer.setY).toHaveBeenCalledWith(55);
@@ -120,9 +125,9 @@ describe("createConfirm()", () => {
             confirmPane = createConfirm(mockScene);
         });
         test("adds extra placeholder text objects", () => {
-            expect(mockScene.add.text).toHaveBeenCalledTimes(4);
+            expect(mockScene.add.text).toHaveBeenCalledTimes(5);
             const containerContents = mockContainer.add.mock.calls[0][0];
-            expect(containerContents.slice(-3)).toStrictEqual([mockImage, mockText, mockText]);
+            expect(containerContents.slice(-4)).toStrictEqual([mockImage, mockText, mockText, mockText]);
         });
     });
 

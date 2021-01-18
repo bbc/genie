@@ -3,19 +3,18 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { parseUrlParams } from "../parseUrlParams.js";
+import { parseUrlParams } from "../parse-url-params.js";
 import { gmi } from "../gmi/gmi.js";
 import { collections } from "../collections.js";
 
 const urlParams = window => parseUrlParams(window.location.search);
 const testURL = window => window.location.hostname.includes("www.test.bbc.");
 
-const create = window => {
+export const create = window => {
     if (isDebug() || testURL(window)) {
-        window.__debug = { gmi, collections };
+        const debugParam = urlParams(window).debug;
+        window.__debug = { gmi, collections, debugParam };
     }
 };
 
-const isDebug = () => Boolean(urlParams(window).debug);
-
-export { isDebug, create };
+export const isDebug = () => Boolean(urlParams(window).debug);

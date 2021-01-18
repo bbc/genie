@@ -1,0 +1,172 @@
+// see debug/examples/shop.json5 for explanation of config
+{
+    debugLabels: [
+        {
+            x: -390,
+            y: -190,
+            text: "Shop Screen",
+        },
+    ],
+    assetPrefix: "shop",
+    music: "home.backgroundMusic",
+    background: {
+        items: [{ key: "shop.magicShop", x: 0, y: 0 }],
+    },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 10,
+        align: "center",
+    },
+    titles: [
+        {
+            type: "image",
+            key: "titleBackground",
+            xOffset: 0,
+            yOffset: 0,
+        },
+        {
+            type: "text",
+            value: "Shop",
+            xOffset: 0,
+            yOffset: 0,
+            styles: { fontSize: 24 },
+        },
+    ],
+    titlePadding: 20,
+    balance: {
+        background: {
+            type: "image",
+            key: "balanceBackground",
+        },
+        icon: {
+            type: "image",
+            key: "balanceIcon",
+        },
+        value: {
+            type: "text",
+            key: "coin",
+        },
+    },
+    balancePadding: 15,
+    listPadding: {
+        x: 18.86,
+        y: 15.09,
+        outerPadFactor: 1.8,
+    },
+    collection: "debug-demo-hats",
+    paneCollections: {
+        shop: "debug-demo-hats",
+        manage: "debug-demo-inventory",
+    },
+    confirm: {
+        detailView: true,
+        prompt: {
+            shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
+            manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
+        },
+        detail: { styles: { color: "#2b2", fontStyle: "italic" } },
+    },
+    menu: {
+        buttonsRight: true,
+    },
+    columns: 1,
+    assetKeys: {
+        background: {
+            shop: "background",
+            manage: "background",
+            confirm: "halfViewBackground",
+        },
+        scrollbar: "scrollbar",
+        scrollbarHandle: "scrollbarHandle",
+        itemBackground: "itemBackground",
+        buttonBackground: "menuButtonBackground",
+        buttonIcon: "menuButtonIcon",
+        currency: "currencyIcon",
+    },
+    overlay: {
+        items: [
+            {
+                type: "image",
+                name: "background",
+                assetKey: "itemBackground",
+                isDynamic: false,
+            },
+            {
+                type: "image",
+                name: "itemIcon",
+                assetKey: "icon",
+                isDynamic: true,
+                position: { align: "left", offsetX: 35, offsetY: 0 },
+                size: 76,
+            },
+            {
+                type: "text",
+                name: "itemName",
+                value: "title",
+                isDynamic: true,
+                position: { align: "left", offsetX: 80, offsetY: -18 },
+                styles: { fontSize: 18 },
+            },
+            {
+                type: "text",
+                name: "itemDescription",
+                value: "description",
+                isDynamic: true,
+                position: { align: "left", offsetX: 80, offsetY: 4 },
+                styles: { fontSize: 12 },
+            },
+        ],
+        options: {
+            shop: [
+                {
+                    type: "text",
+                    name: "currencyAmount",
+                    value: "price",
+                    isDynamic: true,
+                    position: { align: "right", offsetX: -44, offsetY: -10 },
+                    styles: { fontSize: 14 },
+                    activeStates: ["cta"],
+                },
+                {
+                    type: "image",
+                    name: "currency",
+                    assetKey: "currency",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -64, offsetY: 0 },
+                    activeStates: ["cta"],
+                },
+                {
+                    type: "text",
+                    name: "owned",
+                    value: "Owned",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -76, offsetY: -10 },
+                    styles: { fontSize: 18 },
+                    activeStates: ["actioned"],
+                },
+            ],
+            manage: [
+                {
+                    type: "text",
+                    name: "equip",
+                    value: "Equip",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -76, offsetY: -10 },
+                    styles: { fontSize: 18 },
+                    activeStates: ["cta"],
+                },
+                {
+                    type: "text",
+                    name: "equipped",
+                    value: "Equipped",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -88, offsetY: -10 },
+                    styles: { fontSize: 18 },
+                    activeStates: ["actioned"],
+                },
+            ],
+        },
+    },
+    eventChannel: "shop_demo_shop",
+}

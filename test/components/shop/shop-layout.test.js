@@ -16,14 +16,43 @@ const mockMetrics = {
     verticalBorderPad: 15,
 };
 let mockBounds;
+let mockTextElem;
+let mockImageElem;
+let imageScaleXSpy;
+let imageScaleYSpy;
+let textScaleXSpy;
+let textScaleYSpy;
 
 describe("shop element scaling functions", () => {
     beforeEach(() => {
+        imageScaleXSpy = jest.fn();
+        imageScaleYSpy = jest.fn();
+        textScaleXSpy = jest.fn();
+        textScaleYSpy = jest.fn();
         mockBounds = { width: 100, height: 100, y: 0, x: 0 };
-
+        mockTextElem = {
+            set scaleX(val) {
+                textScaleXSpy(val);
+            },
+            set scaleY(val) {
+                textScaleYSpy(val);
+            },
+            type: "Text",
+        };
+        mockImageElem = {
+            scale: 2,
+            set scaleX(val) {
+                imageScaleXSpy(val);
+            },
+            set scaleY(val) {
+                imageScaleYSpy(val);
+            },
+            type: "Image",
+        };
         mockLayout = { getSafeArea: jest.fn() };
         mockContainer = {
-            getBounds: jest.fn().mockReturnValue({ height: 100, width: 300 }),
+            getBounds: jest.fn().mockReturnValue({ height: 100, width: 300, x: 0, y: 0 }),
+            elems: { foo: "bar" },
             scale: 1,
             scaleX: 1,
             scaleY: 1,
@@ -32,6 +61,8 @@ describe("shop element scaling functions", () => {
             setX: jest.fn(),
             buttons: [],
             memoisedBounds: mockBounds,
+            getElems: jest.fn().mockReturnValue([mockTextElem, mockImageElem]),
+            y: 0,
         };
     });
 
@@ -111,32 +142,24 @@ describe("shop element scaling functions", () => {
     });
 
     describe("resize()", () => {
-        test("returns a scale factor that will have the element fill the available vertical space", () => {
-            const textSpy = jest.fn();
-            const imageSpy = jest.fn();
+        beforeEach(() => {
+            const newBounds = { width: 200, height: 50, x: 0, y: 10 };
+            shopLayout.resize(mockContainer)(newBounds);
+        });
 
-            mockContainer.scaleX = 0.5;
-            mockContainer.scaleY = 2;
-            mockContainer.elems = {
-                item: [
-                    {
-                        set scaleX(val) {
-                            textSpy(val);
-                        },
-                        type: "Text",
-                    },
-                    {
-                        set scaleX(val) {
-                            imageSpy(val);
-                        },
-                        type: "Image",
-                    },
-                ],
-            };
+        test("sets an appropriate scale and offset on the container", () => {
+            expect(mockContainer.setScale).toHaveBeenCalledWith(2, 0.5);
+            expect(mockContainer.setY).toHaveBeenCalledWith(10);
+        });
 
-            shopLayout.resize(mockContainer)(mockBounds);
-            expect(imageSpy).not.toHaveBeenCalled();
-            expect(textSpy).toHaveBeenCalledWith(0.25);
+        test("inverse-scale text elems on both axes to preserve aspect ratio", () => {
+            expect(textScaleXSpy).toHaveBeenCalledWith(0.5);
+            expect(textScaleYSpy).toHaveBeenCalledWith(2);
+        });
+
+        test("inverse-scale image elems on both axes and preserve the overall scale", () => {
+            expect(imageScaleXSpy).toHaveBeenCalledWith(1);
+            expect(imageScaleYSpy).toHaveBeenCalledWith(4);
         });
     });
 
@@ -198,6 +221,31 @@ describe("shop element scaling functions", () => {
             mockScene.config.assetKeys.background = {};
             shopLayout.createPaneBackground(mockScene, mockBounds, "shop");
             expect(mockScene.add.rectangle).toHaveBeenCalled();
+        });
+    });
+
+    describe("textStyle()", () => {
+        const defaultStyle = { some: "default", foo: "bar" };
+        let elementConfig;
+
+        test("merges default style with style from element config", () => {
+            elementConfig = { some: "config", styles: { foo: "baz" } };
+            const expectedStyle = { some: "default", foo: "baz" };
+            expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
+        });
+        test("if there's no element config, returns the default style", () => {
+            elementConfig = undefined;
+            const expectedStyle = defaultStyle;
+            expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
+        });
+        test("if there's no default style, use a fallback style", () => {
+            const fallbackStyle = {
+                fontFamily: "ReithSans",
+                fontSize: "24px",
+                resolution: 10,
+                align: "center",
+            };
+            expect(shopLayout.textStyle(undefined, undefined)).toStrictEqual(fallbackStyle);
         });
     });
 });

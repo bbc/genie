@@ -50,14 +50,15 @@ const createGelButton = (scene, item, title, state, prepTx) => {
     });
     scene.events.once("shutdown", clickEvent.unsubscribe);
 
-    scaleButton(gelButton, scene.layout, config.listPadding.x);
+    scaleButton(gelButton, scene.layout, config.listPadding);
     gelButton.overlays.setAll();
     return gelButton;
 };
 
-const scaleButton = (gelButton, layout, space) => {
+const scaleButton = (gelButton, layout, padding) => {
     const safeArea = layout.getSafeArea({}, false);
-    const scaleFactor = (safeArea.width - space * 4) / gelButton.width;
+    const horizontalPadding = padding.x * 2 + padding.outerPadFactor * padding.x * 2;
+    const scaleFactor = (safeArea.width - horizontalPadding) / gelButton.width;
     gelButton.setScale(scaleFactor);
 };
 

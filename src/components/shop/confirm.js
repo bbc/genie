@@ -12,6 +12,7 @@ import {
     createRect,
     getSafeArea,
     createPaneBackground,
+    textStyle,
 } from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
@@ -37,11 +38,23 @@ export const createConfirm = scene => {
     container.elems = {
         background: [createRect(scene, innerBounds, 0x0000ff), createPaneBackground(scene, bounds, "confirm")],
         prompt: scene.add
-            .text(innerBounds.x, promptY(bounds), config.confirm.prompts.shop, styleDefaults)
+            .text(
+                getX(innerBounds.x, config),
+                promptY(bounds),
+                config.confirm.prompt.shop,
+                textStyle(styleDefaults, config.confirm.prompt),
+            )
             .setOrigin(0.5),
-        price: scene.add.text(innerBounds.x + 28, currencyY(bounds), "PH", styleDefaults).setOrigin(0.5),
+        price: scene.add
+            .text(
+                getX(innerBounds.x + 28, config),
+                currencyY(bounds),
+                "PH",
+                textStyle(styleDefaults, config.confirm.price),
+            )
+            .setOrigin(0.5),
         priceIcon: scene.add.image(
-            innerBounds.x - 20,
+            getX(innerBounds.x - 20, config),
             currencyY(bounds),
             `${config.assetPrefix}.${config.assetKeys.currency}`,
         ),
@@ -58,6 +71,13 @@ export const createConfirm = scene => {
     container.setBalance = bal => balance.setText(bal);
     container.getBalance = () => balance.getValue();
     container.setLegal = setLegal(container);
+
+    container.getElems = () => [
+        container.elems.prompt,
+        container.elems.price,
+        container.elems.priceIcon,
+        ...container.elems.item,
+    ];
     return container;
 };
 
@@ -89,8 +109,8 @@ const update = (scene, container) => (item, title) => {
 
 const setLegal = container => (title, isLegal) => {
     const prompt = isLegal
-        ? container.config.confirm.prompts[title].legal
-        : container.config.confirm.prompts[title].illegal;
+        ? container.config.confirm.prompt[title].legal
+        : container.config.confirm.prompt[title].illegal;
     container.elems.prompt.setText(prompt);
     container.buttons[0].setLegal(isLegal);
 };
@@ -105,8 +125,8 @@ const populate = container =>
     ]);
 
 const prepTransaction = (scene, container) => (item, title) => {
-    container.update(item, title);
     scene.stack("confirm");
+    container.update(item, title);
 };
 
 const itemView = (scene, item, config, bounds) =>
@@ -115,31 +135,39 @@ const itemView = (scene, item, config, bounds) =>
         : itemImageView(scene, item, config, bounds);
 
 const itemImageView = (scene, item, config, bounds) => {
-    const image = scene.add.image(imageX(config, bounds), 0, assetKey(config, item));
+    const image = scene.add.image(imageX(config, bounds), 0, assetKey(item));
     image.setScale((bounds.width / 2 / image.width) * 0.9);
     return [image];
 };
 
 const itemDetailView = (scene, item, config, bounds) => {
     const x = imageX(config, bounds);
-    const itemImage = scene.add.image(x, imageY(bounds), assetKey(config, item));
+    const { styleDefaults } = config;
+    const { title, detail, description } = config.confirm;
+    const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
     itemImage.setScale(bounds.height / 3 / itemImage.height);
-    const itemTitle = scene.add.text(x, 0, getItemDetail(item), config.styleDefaults).setOrigin(0.5);
-    const itemBlurb = scene.add.text(x, blurbY(bounds), getItemBlurb(item), config.styleDefaults, 0).setOrigin(0.5);
-    return [itemImage, itemTitle, itemBlurb];
+    const itemTitle = scene.add.text(x, 0, getItemTitle(item), textStyle(styleDefaults, title)).setOrigin(0.5);
+    const itemDetail = scene.add
+        .text(x, detailY(bounds), getItemDetail(item), textStyle(styleDefaults, detail))
+        .setOrigin(0.5);
+    const itemBlurb = scene.add
+        .text(x, blurbY(bounds), getItemBlurb(item), textStyle(styleDefaults, description), 0)
+        .setOrigin(0.5);
+    return [itemImage, itemTitle, itemDetail, itemBlurb];
 };
 
 const getItemState = (container, item, title) =>
     collections.get(getCollectionsKey(container, title)).get(item.id).state;
 const getCollectionsKey = (container, title) => container.config.paneCollections[title];
-const getItemDetail = item => getItemTitle(item) + "\n" + getItemDescription(item);
 const getItemTitle = item => (item ? item.title : "Item Default Title");
-const getItemDescription = item => (item ? item.description : "Item Default Description");
+const getItemDetail = item => (item ? item.description : "");
 const getItemBlurb = item => (item ? item.longDescription : "");
-const assetKey = (config, item) => (item ? `${config.assetPrefix}.${item.icon}` : "shop.itemIcon");
+const assetKey = item => (item ? item.icon : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
+const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
 const promptY = outerBounds => -outerBounds.height * (3 / 8);
 const currencyY = outerBounds => -outerBounds.height / 4;
+const detailY = bounds => bounds.height / 12;
 const blurbY = bounds => bounds.height / 4;
 const getOffsetBounds = (outerBounds, innerBounds) => ({
     ...innerBounds,

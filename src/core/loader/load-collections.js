@@ -11,7 +11,7 @@ const loadToCache = screen => key => screen.load.json5({ key: `items/${key}`, ur
 const getKeys = config => Object.values(config).map(getKey).filter(Boolean);
 
 export const loadCollections = (screen, config) => {
-    const keys = getKeys(config);
+    const keys = getKeys(config).flat();
     keys.forEach(loadToCache(screen));
 
     return new Promise(resolve => {

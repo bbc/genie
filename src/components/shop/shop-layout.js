@@ -40,21 +40,35 @@ export const setVisible = container => isVisible => {
     });
 };
 
-const isText = item => item.type === "Text";
-
 export const resize = container => bounds => {
     const { memoisedBounds } = container;
     container.memoisedBounds = bounds;
-    container.setScale(
-        (bounds.width / memoisedBounds.width) * container.scaleX,
-        (bounds.height / memoisedBounds.height) * container.scaleY,
-    );
+
+    const scaleX = (bounds.width / memoisedBounds.width) * container.scaleX;
+    const scaleY = (bounds.height / memoisedBounds.height) * container.scaleY;
+    container.setScale(scaleX, scaleY);
+
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
     resizeGelButtons(container);
 
-    container.elems?.item.filter(isText).forEach(item => (item.scaleX = container.scaleX / container.scaleY));
+    container.elems && scaleElements(container.getElems(), scaleX, scaleY);
 };
+
+const scaleElements = (elems, scaleX, scaleY) => {
+    elems.filter(isText).forEach(textElem => {
+        textElem.scaleX = 1 / scaleX;
+        textElem.scaleY = 1 / scaleY;
+    });
+    elems.filter(isImage).forEach(imageElem => {
+        const scale = imageElem.scale;
+        imageElem.scaleX = (1 / scaleX) * scale;
+        imageElem.scaleY = (1 / scaleY) * scale;
+    });
+};
+
+const isText = item => item.type === "Text";
+const isImage = item => item.type === "Image";
 
 export const getHalfRectBounds = (menuBounds, isOnRight) => {
     const halfWidth = menuBounds.width / 2;
@@ -99,4 +113,16 @@ export const getPaneBackgroundKey = (scene, pane) => {
     if (typeof background === "string") return background ? `${assetPrefix}.${background}` : null;
 
     return background[pane] ? `${assetPrefix}.${background[pane]}` : null;
+};
+
+const fallbackStyle = {
+    fontFamily: "ReithSans",
+    fontSize: "24px",
+    resolution: 10,
+    align: "center",
+};
+
+export const textStyle = (styleDefaults, config) => {
+    const defaults = styleDefaults ? styleDefaults : fallbackStyle;
+    return config ? { ...defaults, ...config.styles } : defaults;
 };

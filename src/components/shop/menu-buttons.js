@@ -31,31 +31,6 @@ export const createConfirmButtons = (container, callbackFn) =>
         return gelButton;
     });
 
-const setLegal = button => isLegal => {
-    const clearTintAndAlpha = btn => Object.assign(btn, { alpha: 1, tint: 0xffffff });
-    const setTintAndAlpha = btn => Object.assign(btn, { alpha: 0.25, tint: 0xff0000 });
-    isLegal ? clearTintAndAlpha(button) : setTintAndAlpha(button);
-};
-
-const makeButton = (container, config, idx, callback) => {
-    const scene = container.scene;
-    const gelButton = scene.add.gelButton(0, 0, config);
-    const event = eventBus.subscribe({ callback, channel: config.channel, name: config.id });
-    scene.events.once("shutdown", event.unsubscribe);
-    setButtonOverlays(scene, gelButton, config.title);
-    return accessibilify(gelButton);
-};
-
-const resizeButton = container => (button, idx) => {
-    const right = Boolean(container.scene.config.menu.buttonsRight);
-    const bounds = container.list[0].getBounds();
-    button.setY(CAMERA_Y + bounds.y + bounds.height / 4 + (idx * bounds.height) / 2);
-    button.setX(CAMERA_X + (right ? bounds.x + bounds.width / 2 : -bounds.x));
-    button.setScale(bounds.width / button.width);
-};
-
-export const resizeGelButtons = container => container.buttons.forEach(resizeButton(container));
-
 const getButtonConfig = (button, id, scene) => ({
     title: button,
     gameButton: true,
@@ -68,5 +43,42 @@ const getButtonConfig = (button, id, scene) => ({
     scene: "shop",
 });
 
+const makeButton = (container, config, idx, callback) => {
+    const scene = container.scene;
+    const gelButton = scene.add.gelButton(0, 0, config);
+    const event = eventBus.subscribe({ callback, channel: config.channel, name: config.id });
+    scene.events.once("shutdown", event.unsubscribe);
+    setButtonOverlays(scene, gelButton, config.title);
+    return accessibilify(gelButton);
+};
+
+const setLegal = button => isLegal => (isLegal ? setEnabled(button) : setDisabled(button));
+
+const setEnabled = btn => {
+    Object.assign(btn, { alpha: 1, tint: 0xffffff });
+    setA11yEnabled(btn, true);
+};
+
+const setDisabled = btn => {
+    Object.assign(btn, { alpha: 0.25, tint: 0xff0000 });
+    setA11yEnabled(btn, false);
+};
+
+const setA11yEnabled = (btn, isEnabled) => {
+    btn.input.enabled = isEnabled;
+    btn.accessibleElement.update();
+};
+
+const resizeButton = container => (button, idx) => {
+    const right = Boolean(container.scene.config.menu.buttonsRight);
+    const bounds = container.list[0].getBounds();
+    button.setY(CAMERA_Y + bounds.y + bounds.height / 4 + (idx * bounds.height) / 2);
+    const xPos = bounds.x + bounds.width / 2;
+    button.setX(CAMERA_X + (right ? xPos : -xPos));
+    button.setScale(bounds.width / button.width);
+};
+
+export const resizeGelButtons = container => container.buttons.forEach(resizeButton(container));
+
 const setButtonOverlays = (scene, button, title) =>
-    button.overlays.set("caption", scene.add.text(0, 0, title, { ...styleDefaults }).setOrigin(0.5));
+    button.overlays.set("caption", scene.add.text(0, 0, title, styleDefaults).setOrigin(0.5));
