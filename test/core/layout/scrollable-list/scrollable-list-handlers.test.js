@@ -56,9 +56,14 @@ describe("Scrollable List handlers", () => {
             handler();
             expect(mockClickHandler).toHaveBeenCalled();
         });
-
         test("returns a fn that does not call clickHandler if click is outside the panel", () => {
             mockScene.input.y = 0;
+            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
+            handler();
+            expect(mockClickHandler).not.toHaveBeenCalled();
+        });
+        test("if the panel does not exist yet, guard vs race condition", () => {
+            mockGelButton.rexContainer.parent = undefined;
             const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
             handler();
             expect(mockClickHandler).not.toHaveBeenCalled();
