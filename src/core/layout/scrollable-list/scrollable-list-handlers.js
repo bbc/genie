@@ -9,10 +9,13 @@
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const handleClickIfVisible = (gelButton, scene, handler) => () => {
+    if (!gelButton.rexContainer.parent) return;
+
     if (isA11yClick(scene)) {
         handler(gelButton);
         return;
     }
+
     const panel = gelButton.rexContainer.parent.getTopmostSizer();
     const safeArea = scene.layout.getSafeArea({}, false);
     const height = scene.scale.displaySize.height;
