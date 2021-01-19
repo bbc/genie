@@ -4,7 +4,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
+import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
 import { getPaneBackgroundKey } from "../../../components/shop/shop-layout.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
@@ -119,7 +119,7 @@ const setupEvents = (scene, panel) => {
     panel.updateOnScroll = updatePanelOnScroll(panel);
     panel.on("scroll", panel.updateOnScroll);
 
-    const onMouseWheelListener = onMouseWheel(panel);
+    const onMouseWheelListener = updatePanelOnWheel(panel);
     scene.input.on("wheel", onMouseWheelListener);
 
     scene.events.once("shutdown", () => {
@@ -132,8 +132,6 @@ const setupEvents = (scene, panel) => {
 
     items.forEach(item => getFirstElement(item).addEventListener("focus", () => panel.updateOnFocus(item)));
 };
-
-const onMouseWheel = panel => e => console.log("BEEBUG: e.deltaY, panel", e.deltaY, panel);
 
 const updatePanel = panel => {
     const parent = panel.parentContainer;
