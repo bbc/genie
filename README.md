@@ -13,7 +13,7 @@ This is the the build script that will be used by CI. It will also automatically
 
 ## To automatically generate theme 2
 
-`npm run create-theme2` will copy the `default` theme to the `theme2` folder, and make all the images greyscale so you can easily see the difference between the themes. You can then access it on http://localhost:8080/?theme=theme2
+`npm run create-theme2` will copy the `default` theme to the `theme2` folder, and make all the images greyscale so you can easily see the difference between the themes. You can then access it on http://localhost:9000/?theme=theme2
 
 ### Visualizer
 
@@ -24,13 +24,21 @@ This is the the build script that will be used by CI. It will also automatically
 
 To see this simply open `output/stats.html` in a browser.
 
-Alternatively load http://localhost:8080/index.html as a file URL (requires `--allow-file-access-from-files` in Chrome.)
+Alternatively load http://localhost:9000/index.html as a file URL (requires `--allow-file-access-from-files` in Chrome.)
 
 ## To test:
 
 `npm test` will run tests using [Jest](https://jestjs.io/) and check them with ESLint.
 
 `npm run jest` runs the unit tests only.
+
+## To test using Cypress
+
+`npm run start` will create a locally hosted build. In a new terminal running `npm run cy:local` will run the cypress tests against the locally hosted build
+
+`npm run cy:headless` will run the cypress tests against a deployed Test url.
+
+`npm run cy` will launch the cypress terminal. From here you can pick which suites execute. Useful for developing cypress tests.
 
 ## Code linting:
 
@@ -42,7 +50,7 @@ Alternatively load http://localhost:8080/index.html as a file URL (requires `--a
 
 ## Debug Mode:
 
-To access debug mode, add the `debug=true` query string to the URL: http://localhost:8080/?debug=true
+To access debug mode, add the `debug=true` query string to the URL: http://localhost:9000/?debug=true
 
 This will output game loading progress and asset keylookups to the console. Pressing "q" will show the layout overlay, to show the game bounds.
 

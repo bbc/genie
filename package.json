@@ -68,6 +68,7 @@
         "validate": "node build-scripts/schemavalidator/validator.js achievement",
         "roll-lodash": "rollup -c lib/lodash/rollup.config.js",
         "cy": "cypress open",
-        "cy:headless": "cypress run --headless --browser chrome --config video=false --spec '**/*spec.js'"
+        "cy:headless": "cypress run --headless --browser chrome --config video=false --spec '**/*spec.js'",
+        "cy:local": "export LOCAL_DEV=true && cypress run --headless --browser chrome --config video=false --spec '**/*spec.js'"
     }
 }

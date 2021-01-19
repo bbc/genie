@@ -3,11 +3,14 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+
+import {
+    getUrl
+  } from "../support/functions";
+
 describe("The Genie narration page", () => {
     beforeEach(() => {
-        cy.visit(
-            "https://www.test.bbc.co.uk/games/embed/genie?versionOverride=latest&viewNonPublished=true&cageEnv=test&debug=true",
-        );
+        cy.visit(getUrl());
         cy.get("#home__play", { timeout: 40000 }).should("exist");
         cy.get(".data-notice").click();
     });
