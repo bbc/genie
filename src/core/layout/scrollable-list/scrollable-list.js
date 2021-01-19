@@ -115,16 +115,25 @@ const setupEvents = (scene, panel) => {
 
     const debouncedResize = fp.debounce(10, resizePanel(scene, panel));
     scene.scale.on("resize", debouncedResize, scene);
-    scene.events.once("shutdown", () => scene.scale.removeListener("resize", debouncedResize));
 
     panel.updateOnScroll = updatePanelOnScroll(panel);
     panel.on("scroll", panel.updateOnScroll);
+
+    const onMouseWheelListener = onMouseWheel(panel);
+    scene.input.on("wheel", onMouseWheelListener);
+
+    scene.events.once("shutdown", () => {
+        scene.scale.removeListener("resize", debouncedResize);
+        scene.input.removeListener("wheel", onMouseWheelListener);
+    });
 
     panel.updateOnFocus = updatePanelOnFocus(panel);
     const items = getPanelItems(panel);
 
     items.forEach(item => getFirstElement(item).addEventListener("focus", () => panel.updateOnFocus(item)));
 };
+
+const onMouseWheel = panel => e => console.log("BEEBUG: e.deltaY, panel", e.deltaY, panel);
 
 const updatePanel = panel => {
     const parent = panel.parentContainer;
