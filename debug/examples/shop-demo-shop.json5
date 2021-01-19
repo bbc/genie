@@ -1,3 +1,4 @@
+// see debug/examples/shop.json5 for explanation of config
 {
     debugLabels: [
         {
@@ -11,6 +12,12 @@
     background: {
         items: [{ key: "shop.magicShop", x: 0, y: 0 }],
     },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 10,
+        align: "center",
+    },
     titles: [
         {
             type: "image",
@@ -23,10 +30,7 @@
             value: "Shop",
             xOffset: 0,
             yOffset: 0,
-            styles: {
-                fontSize: "24px",
-                resolution: 4,
-            },
+            styles: { fontSize: 24 },
         },
     ],
     titlePadding: 20,
@@ -41,8 +45,7 @@
         },
         value: {
             type: "text",
-            key: "coin", // the id of the currency item, which must exist in the inventory collection
-            styles: {},
+            key: "coin",
         },
     },
     balancePadding: 15,
@@ -57,26 +60,19 @@
         manage: "debug-demo-inventory",
     },
     confirm: {
-        detailView: true, // true === smaller image and more text. false === large image only.
-        prompts: {
+        detailView: true,
+        prompt: {
             shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
             manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
         },
-    },
-    styleDefaults: {
-        fontFamily: "ReithSans",
-        fontSize: "24px",
-        resolution: 5,
-        align: "center",
+        detail: { styles: { color: "#2b2", fontStyle: "italic" } },
     },
     menu: {
-        buttonsRight: true, // set as false to X-flip the menu layout
+        buttonsRight: true,
     },
     columns: 1,
     assetKeys: {
-        // background: "background", // if a string is passed, that asset is used for all panes
         background: {
-            // menu: "", // pass empty string, or omit the key entirely, for a transparent BG
             shop: "background",
             manage: "background",
             confirm: "halfViewBackground",
@@ -94,14 +90,14 @@
                 type: "image",
                 name: "background",
                 assetKey: "itemBackground",
-                isDynamic: false, // asset key is the value of assetKey
+                isDynamic: false,
             },
             {
                 type: "image",
                 name: "itemIcon",
                 assetKey: "icon",
-                isDynamic: true, // asset key is item[assetKey]
-                position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                isDynamic: true,
+                position: { align: "left", offsetX: 35, offsetY: 0 },
                 size: 76,
             },
             {
@@ -110,7 +106,7 @@
                 value: "title",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: -18 },
-                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 18 },
+                styles: { fontSize: 18 },
             },
             {
                 type: "text",
@@ -118,7 +114,7 @@
                 value: "description",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: 4 },
-                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 12 },
+                styles: { fontSize: 12 },
             },
         ],
         options: {
@@ -129,7 +125,7 @@
                     value: "price",
                     isDynamic: true,
                     position: { align: "right", offsetX: -44, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5, fontSize: 14 },
+                    styles: { fontSize: 14 },
                     activeStates: ["cta"],
                 },
                 {
@@ -146,7 +142,7 @@
                     value: "Owned",
                     isDynamic: false,
                     position: { align: "right", offsetX: -76, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    styles: { fontSize: 18 },
                     activeStates: ["actioned"],
                 },
             ],
@@ -157,7 +153,7 @@
                     value: "Equip",
                     isDynamic: false,
                     position: { align: "right", offsetX: -76, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    styles: { fontSize: 18 },
                     activeStates: ["cta"],
                 },
                 {
@@ -166,7 +162,7 @@
                     value: "Equipped",
                     isDynamic: false,
                     position: { align: "right", offsetX: -88, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    styles: { fontSize: 18 },
                     activeStates: ["actioned"],
                 },
             ],
