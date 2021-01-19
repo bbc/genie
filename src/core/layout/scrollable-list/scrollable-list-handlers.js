@@ -83,7 +83,7 @@ const getMaxOffset = panel => {
 };
 
 const updatePanelOnWheel = panel => e => {
-    if (!panel.visible || !panel.isInTouching()) return;
+    if (!panel.visible || !panel.isInTouching()) return; // could I eliminate the isInTouching by listening for a different event?
     const delta = e.deltaY * WHEEL_SCROLL_FACTOR;
     const t = Math.min(Math.max(0, panel.t + delta), 1);
     panel.setT(t);

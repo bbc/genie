@@ -91,7 +91,7 @@ describe("Scrollable List", () => {
                 },
             },
             events: { once: jest.fn() },
-            input: { topOnly: true },
+            input: { topOnly: true, on: jest.fn(), removeListener: jest.fn() },
             add: { image: jest.fn() },
             config: {
                 assetPrefix: "test",
