@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.8.10 ||
+| | Roll Phaser back to 2.34.1 due to rex plugin incompatibilities. |
 | 3.8.9 ||
 | | Force Canvas for Silk to enable texture unloading. |
 | 3.8.8 ||
