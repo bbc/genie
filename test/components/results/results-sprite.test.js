@@ -17,10 +17,10 @@ describe("ResultsSprite", () => {
         mockScene = mockBaseScene();
         mockSettings = { motion: true };
         mockScene.scene = { key: "results" };
-        mockScene.sys = { anims: { on: jest.fn() }, queueDepthSort: jest.fn() };
+        mockScene.sys = { anims: { on: jest.fn(), once: jest.fn() }, queueDepthSort: jest.fn(), game: {} };
         mockScene.transientData = { results: {} };
         mockScene.add = { existing: jest.fn() };
-        mockScene.anims = { create: jest.fn(), generateFrameNumbers: jest.fn() };
+        mockScene.anims = { create: jest.fn(), generateFrameNumbers: jest.fn(), once: jest.fn() };
         mockConfig = {
             key: "image",
             frame: 5,
