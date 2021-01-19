@@ -4,12 +4,9 @@
  * @license Apache-2.0
  */
 
-import {
-    getUrl
-  } from "../support/functions";
+import { getUrl } from "../support/functions";
 
 describe("The Genie Shop component", () => {
-
     beforeEach(() => {
         cy.visit(getUrl());
         cy.get("#home__play", { timeout: 40000 }).should("exist");

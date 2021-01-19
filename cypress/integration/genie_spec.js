@@ -3,9 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import {
-    getUrl
-  } from "../support/functions";
+import { getUrl } from "../support/functions";
 
 describe("Tests the core flow of Genie", () => {
     const checkHomeScreen = () => {
