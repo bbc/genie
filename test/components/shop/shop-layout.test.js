@@ -178,7 +178,8 @@ describe("shop element scaling functions", () => {
             };
         });
         test("if a string is passed in config, concatenates with assetPrefix", () => {
-            expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.someBackground");
+            mockScene.config.assetKeys.background = { shop: "shopBackground" };
+            expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.shopBackground");
         });
         test("if an empty string is passed, returns null", () => {
             mockScene.config.assetKeys.background = "";

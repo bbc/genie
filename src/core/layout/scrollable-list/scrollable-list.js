@@ -25,11 +25,19 @@ const getConfig = (scene, title, prepTx, parent) => {
     const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
     const safeArea = getPanelY(scene);
     const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
+    const key = getPaneBackgroundKey(scene, title);
+    let backgroundValue;
+    if (key == null) {
+        const rectangle = scene.add.rectangle(0, 0, 1, 1, 0, 0);
+        backgroundValue = rectangle;
+    } else {
+        backgroundValue = scene.add.image(0, 0, getPaneBackgroundKey(scene, title));
+    }
     return {
         y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        background: scene.add.image(0, 0, getPaneBackgroundKey(scene, title)),
+        background: backgroundValue,
         panel: { child: createInnerPanel(scene, title, prepTx, parent) },
         slider: {
             track: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbar}`),
