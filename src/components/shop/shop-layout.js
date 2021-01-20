@@ -38,9 +38,16 @@ export const setVisible = container => isVisible => {
         button.input.enabled = container.visible;
         button.accessibleElement.update();
     });
+    // if (container.visible) {
+    //     // console.log("BEEBUG: resizing on setVisible");
+    //     container.resize(getSafeArea(container.scene.layout));
+    // }
 };
 
 export const resize = container => bounds => {
+    // if (!container.visible) return;
+    // console.log("BEEBUG: resizing a visible container");
+
     const { memoisedBounds } = container;
     container.memoisedBounds = bounds;
 
