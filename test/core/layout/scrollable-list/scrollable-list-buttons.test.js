@@ -19,6 +19,7 @@ describe("Scrollable List Buttons", () => {
         state: "foo",
     };
     const mockButton = {
+        input: { enabled: true },
         on: jest.fn(),
         off: jest.fn(),
         width: 100,
@@ -99,6 +100,13 @@ describe("Scrollable List Buttons", () => {
             const callback = mockButton.on.mock.calls[0][1];
             callback();
             expect(mockCallback).toHaveBeenCalled();
+        });
+
+        test("does not fire callback when button is clicked and button input is disabled", () => {
+            mockButton.input.enabled = false;
+            const callback = mockButton.on.mock.calls[0][1];
+            callback();
+            expect(mockCallback).not.toHaveBeenCalled();
         });
 
         test("adds callback to eventemitter for when scene is shutdown", () => {

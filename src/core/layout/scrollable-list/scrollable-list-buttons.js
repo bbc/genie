@@ -39,7 +39,7 @@ const createGelButton = (scene, item, title, state, prepTx) => {
         state: STATES.find(st => st === state),
     };
 
-    const callback = () => prepTx(item, title);
+    const callback = () => gelButton.input.enabled && prepTx(item, title);
     gelButton.on("pointerup", callback);
     scene.events.once("shutdown", () => gelButton.off("pointerup", callback));
     scaleButton(gelButton, scene.layout, config.listPadding);
