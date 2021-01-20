@@ -4,7 +4,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { updatePanelOnFocus, updatePanelOnScroll } from "./scrollable-list-handlers.js";
+import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
 import { getPaneBackgroundKey } from "../../../components/shop/shop-layout.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
@@ -123,10 +123,17 @@ const setupEvents = (scene, panel) => {
 
     const debouncedResize = fp.debounce(10, resizePanel(scene, panel));
     scene.scale.on("resize", debouncedResize, scene);
-    scene.events.once("shutdown", () => scene.scale.removeListener("resize", debouncedResize));
 
     panel.updateOnScroll = updatePanelOnScroll(panel);
     panel.on("scroll", panel.updateOnScroll);
+
+    const onMouseWheelListener = updatePanelOnWheel(panel);
+    scene.input.on("wheel", onMouseWheelListener);
+
+    scene.events.once("shutdown", () => {
+        scene.scale.removeListener("resize", debouncedResize);
+        scene.input.removeListener("wheel", onMouseWheelListener);
+    });
 
     panel.updateOnFocus = updatePanelOnFocus(panel);
     const items = getPanelItems(panel);
