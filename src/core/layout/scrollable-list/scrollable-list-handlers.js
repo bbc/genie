@@ -8,6 +8,8 @@
 
 import fp from "../../../../lib/lodash/fp/fp.js";
 
+const WHEEL_SCROLL_FACTOR = 0.005;
+
 const updatePanelOnScroll = panel => () =>
     getPanelItems(panel).map(item => enableOrDisableButton(panel, item).setElementSizeAndPosition());
 
@@ -70,4 +72,11 @@ const getMaxOffset = panel => {
     return getItemsHeight(panel) - visibleWindowHeight;
 };
 
-export { updatePanelOnFocus, updatePanelOnScroll };
+const updatePanelOnWheel = panel => e => {
+    if (!panel.visible || !panel.isInTouching()) return;
+    const delta = e.deltaY * WHEEL_SCROLL_FACTOR;
+    const t = Math.min(Math.max(0, panel.t + delta), 1);
+    panel.setT(t);
+};
+
+export { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel };

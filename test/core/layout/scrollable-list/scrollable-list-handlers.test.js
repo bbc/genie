@@ -44,6 +44,8 @@ describe("Scrollable List handlers", () => {
             setT: jest.fn(),
             minHeight: 120,
             t: 0,
+            visible: true,
+            isInTouching: jest.fn().mockReturnValue(true),
         };
     });
 
@@ -139,6 +141,26 @@ describe("Scrollable List handlers", () => {
             const t = mockPanel.setT.mock.calls[0][0];
             expect(t).toBeLessThan(1);
             expect(t).toBeGreaterThan(0.5);
+        });
+    });
+
+    describe("updatePanelOnWheel", () => {
+        test("is a curried fn that sets t (scroll position) on the panel if visible and touching the pointer", () => {
+            const onWheelFn = handlers.updatePanelOnWheel(mockPanel);
+            onWheelFn({ deltaY: 1 });
+            expect(mockPanel.setT).toHaveBeenCalled();
+        });
+        test("does not set t if not visible", () => {
+            mockPanel.visible = false;
+            const onWheelFn = handlers.updatePanelOnWheel(mockPanel);
+            onWheelFn({ deltaY: 1 });
+            expect(mockPanel.setT).not.toHaveBeenCalled();
+        });
+        test("does not set t if not touching pointer", () => {
+            mockPanel.isInTouching = jest.fn().mockReturnValue(false);
+            const onWheelFn = handlers.updatePanelOnWheel(mockPanel);
+            onWheelFn({ deltaY: 1 });
+            expect(mockPanel.setT).not.toHaveBeenCalled();
         });
     });
 });
