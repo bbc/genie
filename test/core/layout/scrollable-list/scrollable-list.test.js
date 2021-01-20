@@ -279,13 +279,19 @@ describe("Scrollable List", () => {
                 mockA11yElem.addEventListener.mock.calls[0][1]();
                 expect(mockScrollablePanel.updateOnFocus).toHaveBeenCalled();
             });
+            test("adds a mousewheel listener to pick up mousewheel and touch scroll events", () => {
+                expect(false).toBe(true);
+            });
         });
         describe("shutdown", () => {
-            test("calls removeListener with the debounced resize listener", () => {
+            test("removes the debounced resize listener", () => {
                 new ScrollableList(mockScene);
                 const shutdownListener = mockScene.events.once.mock.calls[1][1];
                 shutdownListener();
                 expect(mockScene.scale.removeListener).toHaveBeenCalled();
+            });
+            test("removes the mousewheel listener", () => {
+                expect(false).toBe(true);
             });
         });
     });

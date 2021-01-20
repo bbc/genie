@@ -163,4 +163,13 @@ describe("Scrollable List handlers", () => {
             expect(t).toBeGreaterThan(0.5);
         });
     });
+
+    describe("updatePanelOnWheel", () => {
+        test("provides a curried function that accepts a panel and mousewheel event", () => {
+            expect(false).toBe(true);
+        });
+        test("sets t (scroll position) on the panel if it is visible and touching the pointer", () => {
+            expect(false).toBe(true);
+        });
+    });
 });
