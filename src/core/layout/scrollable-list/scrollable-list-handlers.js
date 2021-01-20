@@ -8,6 +8,8 @@
 
 import fp from "../../../../lib/lodash/fp/fp.js";
 
+const WHEEL_SCROLL_FACTOR = 0.005;
+
 const handleClickIfVisible = (gelButton, scene, handler) => () => {
     if (!gelButton.rexContainer.parent) return;
 
@@ -80,4 +82,11 @@ const getMaxOffset = panel => {
     return getItemsHeight(panel) - visibleWindowHeight;
 };
 
-export { handleClickIfVisible, updatePanelOnFocus, updatePanelOnScroll };
+const updatePanelOnWheel = panel => e => {
+    if (!panel.visible || !panel.isInTouching()) return;
+    const delta = e.deltaY * WHEEL_SCROLL_FACTOR;
+    const t = Math.min(Math.max(0, panel.t + delta), 1);
+    panel.setT(t);
+};
+
+export { handleClickIfVisible, updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel };

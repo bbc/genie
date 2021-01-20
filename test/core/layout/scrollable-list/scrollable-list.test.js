@@ -91,7 +91,7 @@ describe("Scrollable List", () => {
                 },
             },
             events: { once: jest.fn() },
-            input: { topOnly: true },
+            input: { topOnly: true, on: jest.fn(), removeListener: jest.fn() },
             add: { image: jest.fn(), rectangle: jest.fn() },
             config: {
                 assetPrefix: "test",
@@ -262,9 +262,12 @@ describe("Scrollable List", () => {
             });
         });
         describe("scrolling", () => {
+            const onWheelSpy = jest.fn();
+            const onFocusSpy = jest.fn();
             beforeEach(() => {
-                handlers.updatePanelOnFocus = jest.fn().mockReturnValue(jest.fn());
+                handlers.updatePanelOnFocus = jest.fn().mockReturnValue(onFocusSpy);
                 handlers.updatePanelOnScroll = jest.fn().mockReturnValue(jest.fn());
+                handlers.updatePanelOnWheel = jest.fn().mockReturnValue(onWheelSpy);
                 new ScrollableList(mockScene);
             });
             test("adds an updatePanelOnScroll", () => {
@@ -278,14 +281,25 @@ describe("Scrollable List", () => {
                 expect(mockA11yElem.addEventListener.mock.calls[0][0]).toBe("focus");
                 mockA11yElem.addEventListener.mock.calls[0][1]();
                 expect(mockScrollablePanel.updateOnFocus).toHaveBeenCalled();
+                expect(onFocusSpy).toHaveBeenCalled();
+            });
+            test("adds a mousewheel listener to pick up mousewheel and touch scroll events", () => {
+                expect(mockScene.input.on.mock.calls[0][0]).toBe("wheel");
+                mockScene.input.on.mock.calls[0][1]();
+                expect(onWheelSpy).toHaveBeenCalled();
             });
         });
         describe("shutdown", () => {
-            test("calls removeListener with the debounced resize listener", () => {
+            beforeEach(() => {
                 new ScrollableList(mockScene);
                 const shutdownListener = mockScene.events.once.mock.calls[1][1];
                 shutdownListener();
+            });
+            test("removes the debounced resize listener", () => {
                 expect(mockScene.scale.removeListener).toHaveBeenCalled();
+            });
+            test("removes the mousewheel listener", () => {
+                expect(mockScene.input.removeListener).toHaveBeenCalled();
             });
         });
     });
