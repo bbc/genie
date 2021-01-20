@@ -13,12 +13,6 @@ let mockRexLabel;
 let mockGridSizer;
 let mockPanel;
 
-const mockScene = {
-    input: { activePointer: { id: 1, upTime: 999 } },
-    scale: { displaySize: { height: 600 } },
-    layout: { getSafeArea: jest.fn().mockReturnValue({ y: -100 }) },
-    sys: { time: { now: 1000 } },
-};
 const mockSizer = { innerHeight: 300, space: { top: 10 } };
 const mockOtherRexLabel = { children: [{}], height: 100 };
 
@@ -36,7 +30,13 @@ describe("Scrollable List handlers", () => {
                 },
             },
         };
-        mockRexLabel = { children: [mockGelButton], height: 100, setElementSizeAndPosition: jest.fn() };
+        mockRexLabel = {
+            children: [mockGelButton],
+            height: 100,
+            setElementSizeAndPosition: jest.fn(),
+            setInteractive: jest.fn(() => mockRexLabel),
+            disableInteractive: jest.fn(() => mockRexLabel),
+        };
         mockGridSizer = { getElement: jest.fn().mockReturnValue([mockRexLabel]) };
         mockPanel = {
             getByName: jest.fn().mockReturnValue(mockGridSizer),
@@ -47,47 +47,25 @@ describe("Scrollable List handlers", () => {
         };
     });
 
-    describe("handleClickIfVisible()", () => {
-        let mockClickHandler = jest.fn();
-
-        test("returns a fn that calls clickHandler if click is inside the panel's Y bounds", () => {
-            mockScene.input.y = 300;
-            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
-            handler();
-            expect(mockClickHandler).toHaveBeenCalled();
-        });
-        test("returns a fn that does not call clickHandler if click is outside the panel", () => {
-            mockScene.input.y = 0;
-            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
-            handler();
-            expect(mockClickHandler).not.toHaveBeenCalled();
-        });
-        test("if the panel does not exist yet, guard vs race condition", () => {
-            mockGelButton.rexContainer.parent = undefined;
-            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
-            handler();
-            expect(mockClickHandler).not.toHaveBeenCalled();
-        });
-        test("if the activePointer id is 0, we have an a11y click, so we return a fn that calls clickHandler", () => {
-            mockScene.input = { y: 0, activePointer: { id: 0 } };
-            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
-            handler();
-            expect(mockClickHandler).toHaveBeenCalled();
-        });
-        test("if the activePointer id is not 0, but the activePointer upTime is old, we have an a11y click", () => {
-            mockScene.input = { y: 0, activePointer: { id: 1, upTime: 500 } };
-            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
-            handler();
-            expect(mockClickHandler).toHaveBeenCalled();
-        });
-    });
-
     describe("updatePanelOnScroll", () => {
         beforeEach(() => {});
         test("calls setElementSizeAndPosition on each GEL button", () => {
             const instance = handlers.updatePanelOnScroll(mockPanel);
             instance();
             expect(mockRexLabel.setElementSizeAndPosition).toHaveBeenCalled();
+        });
+
+        test("calls setInteractive on each GEL button that is visible", () => {
+            const instance = handlers.updatePanelOnScroll(mockPanel);
+            instance();
+            expect(mockRexLabel.setInteractive).toHaveBeenCalled();
+        });
+
+        test("calls disableInteractive on each GEL button that is not visible", () => {
+            mockRexLabel.height = 500;
+            const instance = handlers.updatePanelOnScroll(mockPanel);
+            instance();
+            expect(mockRexLabel.disableInteractive).toHaveBeenCalled();
         });
     });
 

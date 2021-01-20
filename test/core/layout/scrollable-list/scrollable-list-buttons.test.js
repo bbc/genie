@@ -19,6 +19,8 @@ describe("Scrollable List Buttons", () => {
         state: "foo",
     };
     const mockButton = {
+        on: jest.fn(),
+        off: jest.fn(),
         width: 100,
         setScale: jest.fn(),
         config: { id: "foo_bar_itemKey_shop" },
@@ -92,14 +94,18 @@ describe("Scrollable List Buttons", () => {
             expect(mockScene.add.gelButton).toHaveBeenCalledWith(0, 0, expectedConfig);
         });
 
-        test("subscribes to the event bus", () => {
-            const args = eventBus.subscribe.mock.calls[0][0];
-            expect(args.channel).toEqual("mockChannel");
-            expect(args.name).toEqual("scroll_button_mockId_shop");
-            const callback = handlers.handleClickIfVisible.mock.calls[0][2];
+        test("adds callback to eventemitter for when button is clicked", () => {
+            expect(mockButton.on).toHaveBeenCalledWith("pointerup", expect.any(Function));
+            const callback = mockButton.on.mock.calls[0][1];
             callback();
             expect(mockCallback).toHaveBeenCalled();
-            expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", "foo");
+        });
+
+        test("adds callback to eventemitter for when scene is shutdown", () => {
+            expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
+            const unsubscribeCallback = mockScene.events.once.mock.calls[0][1];
+            unsubscribeCallback();
+            expect(mockButton.off).toHaveBeenCalledWith("pointerup", expect.any(Function));
         });
 
         test("scales the button", () => {
