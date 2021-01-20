@@ -3,6 +3,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import { getUrl } from "../support/functions";
+
 describe("Tests the core flow of Genie", () => {
     const checkHomeScreen = () => {
         cy.get("#home__play").should("exist");
@@ -60,12 +62,9 @@ describe("Tests the core flow of Genie", () => {
         cy.get("#results__continue").should("exist");
         cy.get("#results__restart");
     };
-
     beforeEach(() => {
         cy.viewport(1106, 800);
-        cy.visit(
-            "https://www.test.bbc.co.uk/games/embed/genie?versionOverride=latest&viewNonPublished=true&cageEnv=test&debug=true",
-        );
+        cy.visit(getUrl());
         cy.get("#home__play", { timeout: 40000 }).should("exist");
         cy.get(".data-notice").click();
     });
