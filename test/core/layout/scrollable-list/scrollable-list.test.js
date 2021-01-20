@@ -92,11 +92,11 @@ describe("Scrollable List", () => {
             },
             events: { once: jest.fn() },
             input: { topOnly: true, on: jest.fn(), removeListener: jest.fn() },
-            add: { image: jest.fn() },
+            add: { image: jest.fn(), rectangle: jest.fn() },
             config: {
                 assetPrefix: "test",
                 assetKeys: {
-                    background: "background",
+                    background: { shop: "background" },
                     scrollbar: "scrollbar",
                     scrollbarHandle: "scrollbarHandle",
                 },
@@ -136,7 +136,7 @@ describe("Scrollable List", () => {
                     expect(config.height).toBe(100);
                     expect(config.y).toBe(50);
                 });
-                test("adds background, scrollbar and scrollbar handle images from config", () => {
+                test("adds scrollbar and scrollbar handle images from config", () => {
                     expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.background");
                     expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbar");
                     expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbarHandle");

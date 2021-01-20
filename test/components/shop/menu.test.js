@@ -20,10 +20,11 @@ describe("shop menu", () => {
     };
     const mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
     const mockImage = { setScale: jest.fn() };
+    const mockRectangle = { setScale: jest.fn() };
     const mockScene = {
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
-            rectangle: jest.fn(),
+            rectangle: jest.fn().mockReturnValue(mockRectangle),
             image: jest.fn().mockReturnValue(mockImage),
         },
         config: {
@@ -63,7 +64,7 @@ describe("shop menu", () => {
             expect(menu.memoisedBounds).toBe(mockSafeArea);
         });
         test("with a rect added", () => {
-            expect(mockScene.add.rectangle).toHaveBeenCalledTimes(1);
+            expect(mockScene.add.rectangle).toHaveBeenCalledTimes(2);
         });
         test("with a buttons property from createGelButtons()", () => {
             expect(menu.buttons).toBe(mockGelButtons);
