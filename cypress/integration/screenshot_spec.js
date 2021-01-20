@@ -3,6 +3,9 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+
+import { getUrl } from "../support/functions";
+
 const sizes = ["iphone-5", "iphone-7", [1400, 600]];
 
 describe("Takes screenshots on multiple viewports", () => {
@@ -13,9 +16,7 @@ describe("Takes screenshots on multiple viewports", () => {
             } else {
                 cy.viewport(size, "landscape");
             }
-            cy.visit(
-                "https://www.test.bbc.co.uk/games/embed/genie?versionOverride=latest&viewNonPublished=true&cageEnv=test&debug=true",
-            );
+            cy.visit(getUrl());
             cy.get("#home__play", { timeout: 40000 }).should("exist");
             cy.get(".data-notice").click();
             cy.safeArea("#home__play");
@@ -49,9 +50,7 @@ describe("Takes screenshots on multiple viewports", () => {
             } else {
                 cy.viewport(size, "landscape");
             }
-            cy.visit(
-                "https://www.test.bbc.co.uk/games/embed/genie?versionOverride=latest&viewNonPublished=true&cageEnv=test&debug=true",
-            );
+            cy.visit(getUrl());
             cy.get("#home__play", { timeout: 40000 }).should("exist");
             cy.genieClick("#home__debug");
             cy.genieClick("#debug__debug-select-1");
@@ -66,9 +65,7 @@ describe("Takes screenshots on multiple viewports", () => {
             } else {
                 cy.viewport(size, "landscape");
             }
-            cy.visit(
-                "https://www.test.bbc.co.uk/games/embed/genie?versionOverride=latest&viewNonPublished=true&cageEnv=test&debug=true",
-            );
+            cy.visit(getUrl());
             cy.get("#home__play", { timeout: 40000 }).should("exist");
             cy.genieClick("#home__debug");
             cy.genieClick("#debug__debug-shop-demo");
