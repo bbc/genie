@@ -98,6 +98,7 @@ const confirm = container => container.transaction && container.doTransaction(co
 
 const update = (scene, container) => (item, title) => {
     const isLegal = isTransactionLegal(container, item, title);
+    // const safeArea = getSafeArea(container.scene.layout);
     container.removeAll(false);
     container.elems.priceIcon.setVisible(title === "shop");
     container.elems.price.setText(title === "shop" ? item.price : "");
@@ -105,6 +106,8 @@ const update = (scene, container) => (item, title) => {
     container.transaction = { item, title, isLegal };
     container.setLegal(title, isLegal);
     populate(container);
+    // try adding a resize:
+    container.resize(getSafeArea(container.scene.layout)); // crashes on an unpopulated container, so has to be last
 };
 
 const setLegal = container => (title, isLegal) => {
@@ -141,7 +144,7 @@ const itemImageView = (scene, item, config, bounds) => {
 };
 
 const itemDetailView = (scene, item, config, bounds) => {
-    const x = imageX(config, bounds);
+    const x = imageX(config, bounds); // is this x incorrect under some circumstances?
     const { styleDefaults } = config;
     const { title, detail, description } = config.confirm;
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
@@ -160,8 +163,8 @@ const getItemState = (container, item, title) =>
     collections.get(getCollectionsKey(container, title)).get(item.id).state;
 const getCollectionsKey = (container, title) => container.config.paneCollections[title];
 const getItemTitle = item => (item ? item.title : "Item Default Title");
-const getItemDetail = item => (item ? item.description : "");
-const getItemBlurb = item => (item ? item.longDescription : "");
+const getItemDetail = item => (item ? item.description : "Item Default Detail");
+const getItemBlurb = item => (item ? item.longDescription : "Item Default Description");
 const assetKey = item => (item ? item.icon : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);

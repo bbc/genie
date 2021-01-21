@@ -48,6 +48,7 @@ export const resize = container => bounds => {
     // if (!container.visible) return;
     // console.log("BEEBUG: resizing a visible container");
 
+    // debugger;
     const { memoisedBounds } = container;
     container.memoisedBounds = bounds;
 
@@ -64,8 +65,15 @@ export const resize = container => bounds => {
 
 const scaleElements = (elems, scaleX, scaleY) => {
     elems.filter(isText).forEach(textElem => {
+        // console.log(
+        //     "BEEBUG: textElem scaling: ",
+        //     `elemScaleX: ${textElem.scaleX}, newScaleX: ${1 / scaleX} elemScaleY: ${textElem.scaleY}, newScaleY: ${
+        //         1 / scaleY
+        //     }`,
+        // );
         textElem.scaleX = 1 / scaleX;
         textElem.scaleY = 1 / scaleY;
+        // textElem.setText("someText");
     });
     elems.filter(isImage).forEach(imageElem => {
         const scale = imageElem.scale;
