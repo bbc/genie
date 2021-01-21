@@ -81,10 +81,13 @@ const getMaxOffset = panel => {
     return getItemsHeight(panel) - visibleWindowHeight;
 };
 
-/* eslint-disable-next-line no-unused-vars */
-const updatePanelOnWheel = panel => (pointer, elem, deltaX, deltaY, deltaZ, event) => {
+const updatePanelOnWheel = panel => (...args) => {
+    const event = args[5];
     event.stopPropagation();
+
     if (!panel.visible) return;
+
+    const pointer = args[0];
     const delta = pointer.deltaY * WHEEL_SCROLL_FACTOR;
     const t = Math.min(Math.max(0, panel.t + delta), 1);
     panel.setT(t);
