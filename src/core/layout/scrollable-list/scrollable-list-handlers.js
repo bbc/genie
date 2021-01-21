@@ -4,7 +4,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-/* eslint-disable no-console */
 
 import fp from "../../../../lib/lodash/fp/fp.js";
 
@@ -82,9 +81,11 @@ const getMaxOffset = panel => {
     return getItemsHeight(panel) - visibleWindowHeight;
 };
 
-const updatePanelOnWheel = panel => e => {
-    if (!panel.visible || !panel.isInTouching()) return;
-    const delta = e.deltaY * WHEEL_SCROLL_FACTOR;
+/* eslint-disable-next-line no-unused-vars */
+const updatePanelOnWheel = panel => (pointer, elem, deltaX, deltaY, deltaZ, event) => {
+    event.stopPropagation();
+    if (!panel.visible) return;
+    const delta = pointer.deltaY * WHEEL_SCROLL_FACTOR;
     const t = Math.min(Math.max(0, panel.t + delta), 1);
     panel.setT(t);
 };

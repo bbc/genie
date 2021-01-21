@@ -167,22 +167,24 @@ describe("Scrollable List handlers", () => {
     });
 
     describe("updatePanelOnWheel", () => {
-        test("is a curried fn that sets t (scroll position) on the panel if visible and touching the pointer", () => {
+        let mockEvent;
+        let args;
+        beforeEach(() => {
+            mockEvent = { stopPropagation: jest.fn() };
+            args = [{ deltaY: 1 }, undefined, undefined, undefined, undefined, mockEvent];
+        });
+        test("is a curried fn that sets t (scroll position) on the panel and stops propagation.", () => {
             const onWheelFn = handlers.updatePanelOnWheel(mockPanel);
-            onWheelFn({ deltaY: 1 });
+            onWheelFn(...args);
             expect(mockPanel.setT).toHaveBeenCalled();
+            expect(mockEvent.stopPropagation).toHaveBeenCalled();
         });
         test("does not set t if not visible", () => {
             mockPanel.visible = false;
             const onWheelFn = handlers.updatePanelOnWheel(mockPanel);
-            onWheelFn({ deltaY: 1 });
+            onWheelFn(...args);
             expect(mockPanel.setT).not.toHaveBeenCalled();
-        });
-        test("does not set t if not touching pointer", () => {
-            mockPanel.isInTouching = jest.fn().mockReturnValue(false);
-            const onWheelFn = handlers.updatePanelOnWheel(mockPanel);
-            onWheelFn({ deltaY: 1 });
-            expect(mockPanel.setT).not.toHaveBeenCalled();
+            expect(mockEvent.stopPropagation).toHaveBeenCalled();
         });
     });
 });
