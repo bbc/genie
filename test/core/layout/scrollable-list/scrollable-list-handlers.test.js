@@ -186,5 +186,12 @@ describe("Scrollable List handlers", () => {
             expect(mockPanel.setT).not.toHaveBeenCalled();
             expect(mockEvent.stopPropagation).toHaveBeenCalled();
         });
+        test("does not set T if scrolling is not possible (i.e. list is shorter than pane)", () => {
+            mockPanel.minHeight = 200;
+            const onWheelFn = handlers.updatePanelOnWheel(mockPanel);
+            onWheelFn(...args);
+            expect(mockPanel.setT).not.toHaveBeenCalled();
+            expect(mockEvent.stopPropagation).toHaveBeenCalled();
+        });
     });
 });
