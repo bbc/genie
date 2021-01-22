@@ -41,7 +41,7 @@ export const setVisible = container => isVisible => {
 };
 
 export const resize = container => bounds => {
-    if (!container.visible) return;
+    // if (!container.visible) return;
 
     const { memoisedBounds } = container;
     container.memoisedBounds = bounds;
