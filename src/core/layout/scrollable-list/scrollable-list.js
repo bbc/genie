@@ -124,11 +124,11 @@ const setupEvents = (scene, panel) => {
     panel.on("scroll", panel.updateOnScroll);
 
     const onMouseWheelListener = updatePanelOnWheel(panel);
-    scene.input.on("wheel", onMouseWheelListener);
+    scene.input.on("gameobjectwheel", onMouseWheelListener);
 
     scene.events.once("shutdown", () => {
         scene.scale.removeListener("resize", debouncedResize);
-        scene.input.removeListener("wheel", onMouseWheelListener);
+        scene.input.removeListener("gameobjectwheel", onMouseWheelListener);
     });
 
     panel.updateOnFocus = updatePanelOnFocus(panel);
