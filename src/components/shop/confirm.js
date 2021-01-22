@@ -97,7 +97,7 @@ const isTransactionLegal = (container, item, title) => {
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
 const update = (scene, container) => (item, title) => {
-    console.log("BEEBUG: update confirm", container);
+    // console.log("BEEBUG: update confirm", container);
     const isLegal = isTransactionLegal(container, item, title);
     container.removeAll(false);
     container.elems.priceIcon.setVisible(title === "shop");

@@ -49,7 +49,7 @@ export const resize = container => bounds => {
     const scaleX = (bounds.width / memoisedBounds.width) * container.scaleX;
     const scaleY = (bounds.height / memoisedBounds.height) * container.scaleY;
     container.setScale(scaleX, scaleY);
-    if (container.elems) console.log(`BEEBUG: resizing the confirm container with ${scaleX}, ${scaleY}`);
+    // if (container.elems) console.log(`BEEBUG: resizing the confirm container with ${scaleX}, ${scaleY}`);
 
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
@@ -59,7 +59,7 @@ export const resize = container => bounds => {
 };
 
 const scaleElements = (elems, scaleX, scaleY) => {
-    console.log("BEEBUG: scaling elements");
+    // console.log("BEEBUG: scaling elements");
     elems.filter(isText).forEach(textElem => {
         textElem.scaleX = 1 / scaleX;
         textElem.scaleY = 1 / scaleY;

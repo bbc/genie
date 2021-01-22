@@ -94,7 +94,10 @@ describe("shop menu", () => {
     });
     describe("resize", () => {
         const newBounds = { width: 400, height: 300, x: 0, y: -100 };
-        beforeEach(() => menu.resize(newBounds));
+        beforeEach(() => {
+            menu.visible = true;
+            menu.resize(newBounds);
+        });
 
         test("sets memoisedBounds to the value of the bounds argument", () => {
             expect(menu.memoisedBounds).toBe(newBounds);

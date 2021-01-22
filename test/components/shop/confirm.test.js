@@ -65,7 +65,10 @@ describe("createConfirm()", () => {
     const mockCollection = { get: jest.fn().mockReturnValue({ state: "foo" }) };
     collections.get = jest.fn().mockReturnValue(mockCollection);
 
-    beforeEach(() => (confirmPane = createConfirm(mockScene)));
+    beforeEach(() => {
+        confirmPane = createConfirm(mockScene);
+        confirmPane.scene = mockScene;
+    });
 
     afterEach(() => jest.clearAllMocks());
 

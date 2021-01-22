@@ -63,6 +63,7 @@ describe("shop element scaling functions", () => {
             memoisedBounds: mockBounds,
             getElems: jest.fn().mockReturnValue([mockTextElem, mockImageElem]),
             y: 0,
+            visible: true,
         };
     });
 
@@ -142,8 +143,8 @@ describe("shop element scaling functions", () => {
     });
 
     describe("resize()", () => {
+        const newBounds = { width: 200, height: 50, x: 0, y: 10 };
         beforeEach(() => {
-            const newBounds = { width: 200, height: 50, x: 0, y: 10 };
             shopLayout.resize(mockContainer)(newBounds);
         });
 
@@ -160,6 +161,13 @@ describe("shop element scaling functions", () => {
         test("inverse-scale image elems on both axes and preserve the overall scale", () => {
             expect(imageScaleXSpy).toHaveBeenCalledWith(1);
             expect(imageScaleYSpy).toHaveBeenCalledWith(4);
+        });
+
+        test("does nothing if the container isn't visible", () => {
+            jest.clearAllMocks();
+            mockContainer.visible = false;
+            shopLayout.resize(mockContainer)(newBounds);
+            expect(mockContainer.setScale).not.toHaveBeenCalled();
         });
     });
 
