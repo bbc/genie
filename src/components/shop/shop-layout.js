@@ -64,7 +64,6 @@ const scaleElements = (elems, scaleX, scaleY) => {
     });
     elems.filter(isImage).forEach(imageElem => {
         const { memoisedScale } = imageElem;
-        // console.log("BEEBUG: imageElem, scaleX, scaleY", imageElem, scaleX, scaleY);
         const newScaleX = memoisedScale ? (1 / scaleX) * memoisedScale : 1 / scaleX;
         const newScaleY = memoisedScale ? (1 / scaleY) * memoisedScale : 1 / scaleY;
         imageElem.scaleX = newScaleX;

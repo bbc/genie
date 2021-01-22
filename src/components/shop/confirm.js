@@ -164,9 +164,9 @@ const itemDetailView = (scene, item, config, bounds) => {
 const getItemState = (container, item, title) =>
     collections.get(getCollectionsKey(container, title)).get(item.id).state;
 const getCollectionsKey = (container, title) => container.config.paneCollections[title];
-const getItemTitle = item => (item ? item.title : "Item Default Title");
-const getItemDetail = item => (item ? item.description : "Item Default Detail");
-const getItemBlurb = item => (item ? item.longDescription : "Item Default Description");
+const getItemTitle = item => (item ? item.title : "");
+const getItemDetail = item => (item ? item.description : "");
+const getItemBlurb = item => (item ? item.longDescription : "");
 const getItemImageScale = (bounds, image) => bounds.height / 3 / image.height;
 const assetKey = item => (item ? item.icon : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
