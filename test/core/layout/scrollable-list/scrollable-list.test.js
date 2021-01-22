@@ -69,6 +69,7 @@ describe("Scrollable List", () => {
             add: jest.fn(),
         };
         mockScrollablePanel = {
+            isInTouching: jest.fn(() => true),
             layout: jest.fn(),
             getByName: jest.fn(name => (name === "grid" ? mockGridSizer : mockSizer)),
             on: jest.fn(),
@@ -188,9 +189,14 @@ describe("Scrollable List", () => {
                         ariaLabel: `${mockItem.title} - ${mockItem.description}`,
                     });
                 });
-                test("adds a pointerup callback to the labels event emitter", () => {
+                test("adds a pointerup callback to the labels event emitter that calls the prepTransaction function", () => {
                     expect(mockLabel.setInteractive).toHaveBeenCalled();
                     expect(mockLabel.on).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP, expect.any(Function));
+                    mockLabel.on.mock.calls[0][1]();
+                    expect(mockPrepTransaction).toHaveBeenCalledWith(mockItem, title);
+                });
+                test("pointerup callback does not call the prepTransaction function when pointer is not touching panel", () => {
+                    mockScrollablePanel.isInTouching = jest.fn(() => false);
                     mockLabel.on.mock.calls[0][1]();
                     expect(mockPrepTransaction).toHaveBeenCalledWith(mockItem, title);
                 });

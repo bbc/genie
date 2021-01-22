@@ -73,7 +73,9 @@ const createTable = (scene, title, prepTx, parent) => {
             name: "grid",
         });
 
-        collection.forEach((item, idx) => table.add(createItem(scene, item, title, prepTx), 0, idx, "top", 0, true));
+        collection.forEach((item, idx) =>
+            table.add(createItem(scene, item, title, prepTx, parent), 0, idx, "top", 0, true),
+        );
 
         sizer.add(table, 1, "center", 0, true);
     }
@@ -81,7 +83,7 @@ const createTable = (scene, title, prepTx, parent) => {
     return sizer;
 };
 
-const createItem = (scene, item, title, prepTx) => {
+const createItem = (scene, item, title, prepTx, parent) => {
     const icon = createGelButton(scene, item, title, getButtonState(item, title), prepTx);
     const label = scene.rexUI.add.label({
         orientation: 0,
@@ -92,7 +94,7 @@ const createItem = (scene, item, title, prepTx) => {
         id: `scroll_button_${item.id}_${title}`,
         ariaLabel: `${item.title} - ${item.description}`,
     };
-    const callback = () => prepTx(item, title);
+    const callback = pointer => (parent.panel.isInTouching() || !pointer) && prepTx(item, title);
     label.setInteractive();
     label.on(Phaser.Input.Events.POINTER_UP, callback);
     scene.events.once("shutdown", () => label.off(Phaser.Input.Events.POINTER_UP, callback));

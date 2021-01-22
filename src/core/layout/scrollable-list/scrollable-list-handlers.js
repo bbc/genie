@@ -7,19 +7,7 @@
 
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const updatePanelOnScroll = panel => () =>
-    getPanelItems(panel).map(item => enableOrDisableButton(panel, item).setElementSizeAndPosition());
-
-const isItemVisibleInPanel = (panel, item) => {
-    const visibleBounds = getVisibleRangeBounds(panel);
-    const itemBounds = getItemBounds(panel, item);
-    return !(
-        itemBounds.lower + item.height < visibleBounds.lower || itemBounds.upper - item.height > visibleBounds.upper
-    );
-};
-
-const enableOrDisableButton = (panel, item) =>
-    isItemVisibleInPanel(panel, item) ? item.setInteractive() : item.disableInteractive();
+const updatePanelOnScroll = panel => () => getPanelItems(panel).map(item => item.setElementSizeAndPosition());
 
 const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
 

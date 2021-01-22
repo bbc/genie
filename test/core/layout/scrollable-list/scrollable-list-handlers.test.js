@@ -56,19 +56,6 @@ describe("Scrollable List handlers", () => {
             instance();
             expect(mockRexLabel.setElementSizeAndPosition).toHaveBeenCalled();
         });
-
-        test("calls setInteractive on each GEL button that is visible", () => {
-            const instance = handlers.updatePanelOnScroll(mockPanel);
-            instance();
-            expect(mockRexLabel.setInteractive).toHaveBeenCalled();
-        });
-
-        test("calls disableInteractive on each GEL button that is not visible", () => {
-            mockRexLabel.height = -100;
-            const instance = handlers.updatePanelOnScroll(mockPanel);
-            instance();
-            expect(mockRexLabel.disableInteractive).toHaveBeenCalled();
-        });
     });
 
     describe("updatePanelOnFocus", () => {
