@@ -49,7 +49,6 @@ export const resize = container => bounds => {
     const scaleX = (bounds.width / memoisedBounds.width) * container.scaleX;
     const scaleY = (bounds.height / memoisedBounds.height) * container.scaleY;
     container.setScale(scaleX, scaleY);
-    // if (container.elems) console.log(`BEEBUG: resizing the confirm container with ${scaleX}, ${scaleY}`);
 
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
@@ -59,15 +58,17 @@ export const resize = container => bounds => {
 };
 
 const scaleElements = (elems, scaleX, scaleY) => {
-    // console.log("BEEBUG: scaling elements");
     elems.filter(isText).forEach(textElem => {
         textElem.scaleX = 1 / scaleX;
         textElem.scaleY = 1 / scaleY;
     });
     elems.filter(isImage).forEach(imageElem => {
-        const scale = imageElem.scale; // seeing some floating point issue here perhaps?
-        imageElem.scaleX = (1 / scaleX) * scale;
-        imageElem.scaleY = (1 / scaleY) * scale;
+        const { memoisedScale } = imageElem;
+        // console.log("BEEBUG: imageElem, scaleX, scaleY", imageElem, scaleX, scaleY);
+        const newScaleX = memoisedScale ? (1 / scaleX) * memoisedScale : 1 / scaleX;
+        const newScaleY = memoisedScale ? (1 / scaleY) * memoisedScale : 1 / scaleY;
+        imageElem.scaleX = newScaleX;
+        imageElem.scaleY = newScaleY;
     });
 };
 

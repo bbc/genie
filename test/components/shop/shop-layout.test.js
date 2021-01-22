@@ -40,7 +40,7 @@ describe("shop element scaling functions", () => {
             type: "Text",
         };
         mockImageElem = {
-            scale: 2,
+            memoisedScale: 2,
             set scaleX(val) {
                 imageScaleXSpy(val);
             },
@@ -158,9 +158,18 @@ describe("shop element scaling functions", () => {
             expect(textScaleYSpy).toHaveBeenCalledWith(2);
         });
 
-        test("inverse-scale image elems on both axes and preserve the overall scale", () => {
+        test("inverse-scale image elems on both axes and preserve the overall scale if a memoisedScale is provided", () => {
             expect(imageScaleXSpy).toHaveBeenCalledWith(1);
             expect(imageScaleYSpy).toHaveBeenCalledWith(4);
+        });
+
+        test("when an image elem has no memoisedScale, assume a scale of 1", () => {
+            jest.clearAllMocks();
+            mockImageElem.memoisedScale = undefined;
+            mockContainer.getElems = jest.fn().mockReturnValue([mockTextElem, mockImageElem]);
+            shopLayout.resize(mockContainer)(newBounds);
+            expect(imageScaleXSpy).toHaveBeenCalledWith(1);
+            expect(imageScaleYSpy).toHaveBeenCalledWith(1);
         });
 
         test("does nothing if the container isn't visible", () => {

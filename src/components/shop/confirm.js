@@ -97,7 +97,6 @@ const isTransactionLegal = (container, item, title) => {
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
 const update = (scene, container) => (item, title) => {
-    // console.log("BEEBUG: update confirm", container);
     const isLegal = isTransactionLegal(container, item, title);
     container.removeAll(false);
     container.elems.priceIcon.setVisible(title === "shop");
@@ -138,16 +137,20 @@ const itemView = (scene, item, config, bounds) =>
 
 const itemImageView = (scene, item, config, bounds) => {
     const image = scene.add.image(imageX(config, bounds), 0, assetKey(item));
-    image.setScale((bounds.width / 2 / image.width) * 0.9);
+    const imageScale = (bounds.width / 2 / image.width) * 0.9;
+    image.setScale(imageScale);
+    image.memoisedScale = imageScale;
     return [image];
 };
 
 const itemDetailView = (scene, item, config, bounds) => {
-    const x = imageX(config, bounds); // is this x incorrect under some circumstances?
+    const x = imageX(config, bounds);
     const { styleDefaults } = config;
     const { title, detail, description } = config.confirm;
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
-    itemImage.setScale(bounds.height / 3 / itemImage.height);
+    const itemImageScale = getItemImageScale(bounds, itemImage);
+    itemImage.setScale(itemImageScale);
+    itemImage.memoisedScale = itemImageScale;
     const itemTitle = scene.add.text(x, 0, getItemTitle(item), textStyle(styleDefaults, title)).setOrigin(0.5);
     const itemDetail = scene.add
         .text(x, detailY(bounds), getItemDetail(item), textStyle(styleDefaults, detail))
@@ -164,6 +167,7 @@ const getCollectionsKey = (container, title) => container.config.paneCollections
 const getItemTitle = item => (item ? item.title : "Item Default Title");
 const getItemDetail = item => (item ? item.description : "Item Default Detail");
 const getItemBlurb = item => (item ? item.longDescription : "Item Default Description");
+const getItemImageScale = (bounds, image) => bounds.height / 3 / image.height;
 const assetKey = item => (item ? item.icon : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
