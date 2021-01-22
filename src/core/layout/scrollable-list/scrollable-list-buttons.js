@@ -4,21 +4,18 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { handleClickIfVisible } from "./scrollable-list-handlers.js";
-import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
 import { collections } from "../../collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const STATES = ["cta", "actioned"];
 
-const createGelButton = (scene, item, title, state, prepTx) => {
+const createGelButton = (scene, item, title, state) => {
     const id = `scroll_button_${item.id}_${title}`;
     const config = scene.config;
 
     const gelConfig = {
         gameButton: true,
-        channel: config.eventChannel,
         group: scene.scene.key,
         id,
         key: config.assetKeys.itemBackground,
@@ -40,15 +37,6 @@ const createGelButton = (scene, item, title, state, prepTx) => {
         unsetAll: unsetOverlays(gelButton),
         state: STATES.find(st => st === state),
     };
-
-    const callback = () => prepTx(item, title);
-
-    const clickEvent = eventBus.subscribe({
-        callback: handleClickIfVisible(gelButton, scene, callback),
-        channel: gelConfig.channel,
-        name: id,
-    });
-    scene.events.once("shutdown", clickEvent.unsubscribe);
 
     scaleButton(gelButton, scene.layout, config.listPadding);
     gelButton.overlays.setAll();

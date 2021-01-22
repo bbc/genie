@@ -343,12 +343,7 @@ describe("Accessibilify", () => {
         test("dispatches the button's onInputUp event", () => {
             accessibilify(mockButton);
             accessibleDomElement.mock.calls[0][0].onClick();
-            expect(mockButton.emit).toHaveBeenCalledWith(
-                Phaser.Input.Events.POINTER_UP,
-                mockButton,
-                mockScene.sys.input.activePointer,
-                false,
-            );
+            expect(mockButton.emit).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP);
         });
 
         test("does not dispatches event if input disabled", () => {
@@ -364,12 +359,7 @@ describe("Accessibilify", () => {
             test("dispatches button onInputOver event", () => {
                 accessibilify(mockButton);
                 accessibleDomElement.mock.calls[0][0].onMouseOver();
-                expect(mockButton.emit).toHaveBeenCalledWith(
-                    Phaser.Input.Events.POINTER_OVER,
-                    mockButton,
-                    mockScene.sys.input.activePointer,
-                    false,
-                );
+                expect(mockButton.emit).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_OVER);
             });
         });
 
@@ -377,12 +367,7 @@ describe("Accessibilify", () => {
             test("dispatches button onInputOut event", () => {
                 accessibilify(mockButton);
                 accessibleDomElement.mock.calls[0][0].onMouseOut();
-                expect(mockButton.emit).toHaveBeenCalledWith(
-                    Phaser.Input.Events.POINTER_OUT,
-                    mockButton,
-                    mockScene.sys.input.activePointer,
-                    false,
-                );
+                expect(mockButton.emit).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_OUT);
             });
         });
     });
