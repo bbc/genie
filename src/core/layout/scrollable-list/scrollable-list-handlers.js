@@ -16,7 +16,9 @@ const updatePanelOnScroll = panel => () =>
 const isItemVisibleInPanel = (panel, item) => {
     const visibleBounds = getVisibleRangeBounds(panel);
     const itemBounds = getItemBounds(panel, item);
-    return !(itemBounds.lower < visibleBounds.lower || itemBounds.upper > visibleBounds.upper);
+    return !(
+        itemBounds.lower + item.height < visibleBounds.lower || itemBounds.upper - item.height > visibleBounds.upper
+    );
 };
 
 const enableOrDisableButton = (panel, item) =>

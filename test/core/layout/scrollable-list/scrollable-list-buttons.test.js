@@ -84,7 +84,6 @@ describe("Scrollable List Buttons", () => {
 
         test("provides it the correct config", () => {
             const expectedConfig = {
-                channel: "mockChannel",
                 gameButton: true,
                 group: "shop",
                 id: "scroll_button_mockId_shop",
@@ -93,27 +92,6 @@ describe("Scrollable List Buttons", () => {
                 scrollable: true,
             };
             expect(mockScene.add.gelButton).toHaveBeenCalledWith(0, 0, expectedConfig);
-        });
-
-        test("adds callback to eventemitter for when button is clicked", () => {
-            expect(mockButton.on).toHaveBeenCalledWith("pointerup", expect.any(Function));
-            const callback = mockButton.on.mock.calls[0][1];
-            callback();
-            expect(mockCallback).toHaveBeenCalled();
-        });
-
-        test("does not fire callback when button is clicked and button input is disabled", () => {
-            mockButton.input.enabled = false;
-            const callback = mockButton.on.mock.calls[0][1];
-            callback();
-            expect(mockCallback).not.toHaveBeenCalled();
-        });
-
-        test("adds callback to eventemitter for when scene is shutdown", () => {
-            expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
-            const unsubscribeCallback = mockScene.events.once.mock.calls[0][1];
-            unsubscribeCallback();
-            expect(mockButton.off).toHaveBeenCalledWith("pointerup", expect.any(Function));
         });
 
         test("scales the button", () => {

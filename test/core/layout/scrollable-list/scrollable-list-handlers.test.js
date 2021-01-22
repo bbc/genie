@@ -64,7 +64,7 @@ describe("Scrollable List handlers", () => {
         });
 
         test("calls disableInteractive on each GEL button that is not visible", () => {
-            mockRexLabel.height = 500;
+            mockRexLabel.height = -100;
             const instance = handlers.updatePanelOnScroll(mockPanel);
             instance();
             expect(mockRexLabel.disableInteractive).toHaveBeenCalled();

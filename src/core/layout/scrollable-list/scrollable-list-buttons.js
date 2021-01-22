@@ -10,13 +10,12 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 
 const STATES = ["cta", "actioned"];
 
-const createGelButton = (scene, item, title, state, prepTx) => {
+const createGelButton = (scene, item, title, state) => {
     const id = `scroll_button_${item.id}_${title}`;
     const config = scene.config;
 
     const gelConfig = {
         gameButton: true,
-        channel: config.eventChannel,
         group: scene.scene.key,
         id,
         key: config.assetKeys.itemBackground,
@@ -39,9 +38,6 @@ const createGelButton = (scene, item, title, state, prepTx) => {
         state: STATES.find(st => st === state),
     };
 
-    const callback = () => gelButton.input.enabled && prepTx(item, title);
-    gelButton.on("pointerup", callback);
-    scene.events.once("shutdown", () => gelButton.off("pointerup", callback));
     scaleButton(gelButton, scene.layout, config.listPadding);
     gelButton.overlays.setAll();
     return gelButton;
