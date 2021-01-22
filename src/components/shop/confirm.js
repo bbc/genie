@@ -112,9 +112,10 @@ const updateItemView = (container, item) =>
 const updateItemDetailView = (container, item) => {
     const [itemImage, itemTitle, itemDetail, itemBlurb] = container.elems.item;
     itemImage.setTexture(assetKey(item));
+
     const imageScale = getItemDetailImageScale(container.memoisedBounds, itemImage);
-    itemImage.setScale(imageScale / container.scaleX, imageScale / container.scaleY);
-    itemImage.memoisedScale = imageScale;
+    setImageScaleXY(itemImage, imageScale, container.scaleX, container.scaleY);
+
     itemTitle.setText(getItemTitle(item));
     itemDetail.setText(getItemDetail(item));
     itemBlurb.setText(getItemBlurb(item));
@@ -154,9 +155,8 @@ const itemView = (scene, item, config, bounds) =>
 
 const itemImageView = (scene, item, config, bounds) => {
     const image = scene.add.image(imageX(config, bounds), 0, assetKey(item));
-    const imageScale = (bounds.width / 2 / image.width) * 0.9;
-    image.setScale(imageScale);
-    image.memoisedScale = imageScale;
+    const absScale = (bounds.width / 2 / image.width) * 0.9;
+    setImageScaleXY(image, absScale);
     return [image];
 };
 
@@ -164,11 +164,10 @@ const itemDetailView = (scene, item, config, bounds) => {
     const x = imageX(config, bounds);
     const { styleDefaults } = config;
     const { title, detail, description } = config.confirm;
+
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
-    // scaleDetailViewImage(itemImage, bounds)
-    const itemImageScale = getItemDetailImageScale(bounds, itemImage);
-    itemImage.setScale(itemImageScale); // added to the update fn, so can probably be busted out
-    itemImage.memoisedScale = itemImageScale;
+    setImageScaleXY(itemImage, getItemDetailImageScale(bounds, itemImage));
+
     const itemTitle = scene.add.text(x, 0, getItemTitle(item), textStyle(styleDefaults, title)).setOrigin(0.5);
     const itemDetail = scene.add
         .text(x, detailY(bounds), getItemDetail(item), textStyle(styleDefaults, detail))
@@ -179,11 +178,9 @@ const itemDetailView = (scene, item, config, bounds) => {
     return [itemImage, itemTitle, itemDetail, itemBlurb];
 };
 
-const scaleDetailViewImage = (image, bounds) => {
-    // working on this- needed to keep DRY
-    const imageScale = getItemDetailImageScale(bounds, image);
-    image.setScale(imageScale / container.scaleX, imageScale / container.scaleY);
-    image.memoisedScale = imageScale;
+const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY = 1) => {
+    image.setScale(absScale / containerScaleX, absScale / containerScaleY);
+    image.memoisedScale = absScale;
 };
 
 const getItemState = (container, item, title) =>
