@@ -57,6 +57,7 @@ describe("Scrollable List", () => {
             height: 50,
             setInteractive: jest.fn(),
             on: jest.fn(),
+            off: jest.fn(),
             accessibleElement: { el: mockA11yElem, update: jest.fn() },
         };
         mockGridSizer = {
@@ -68,6 +69,7 @@ describe("Scrollable List", () => {
             add: jest.fn(),
         };
         mockScrollablePanel = {
+            isInTouching: jest.fn(() => true),
             layout: jest.fn(),
             getByName: jest.fn(name => (name === "grid" ? mockGridSizer : mockSizer)),
             on: jest.fn(),
@@ -187,22 +189,21 @@ describe("Scrollable List", () => {
                         ariaLabel: `${mockItem.title} - ${mockItem.description}`,
                     });
                 });
-                test("labels input events are forwarded to the gel button", () => {
+                test("adds a pointerup callback to the labels event emitter that calls the prepTransaction function", () => {
                     expect(mockLabel.setInteractive).toHaveBeenCalled();
-                    [
-                        Phaser.Input.Events.POINTER_UP,
-                        Phaser.Input.Events.POINTER_OVER,
-                        Phaser.Input.Events.POINTER_OUT,
-                    ].forEach((event, index) => {
-                        expect(mockLabel.on).toHaveBeenCalledWith(event, expect.any(Function));
-                        mockLabel.on.mock.calls[index][1]();
-                        expect(mockGelButton.emit).toHaveBeenCalledWith(
-                            event,
-                            mockGelButton,
-                            mockGelButton.scene.sys.input.activePointer,
-                            false,
-                        );
-                    });
+                    expect(mockLabel.on).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP, expect.any(Function));
+                    mockLabel.on.mock.calls[0][1]();
+                    expect(mockPrepTransaction).toHaveBeenCalledWith(mockItem, title);
+                });
+                test("pointerup callback does not call the prepTransaction function when pointer is not touching panel", () => {
+                    mockScrollablePanel.isInTouching = jest.fn(() => false);
+                    mockLabel.on.mock.calls[0][1]();
+                    expect(mockPrepTransaction).toHaveBeenCalledWith(mockItem, title);
+                });
+                test("removes pointerup callback from the labels event emitter when scene is shutdown", () => {
+                    expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
+                    mockScene.events.once.mock.calls[0][1]();
+                    expect(mockLabel.off).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP, expect.any(Function));
                 });
                 test("label is accessibilified", () => {
                     expect(accessibilify).toHaveBeenCalledWith(mockLabel);
@@ -292,7 +293,7 @@ describe("Scrollable List", () => {
         describe("shutdown", () => {
             beforeEach(() => {
                 new ScrollableList(mockScene);
-                const shutdownListener = mockScene.events.once.mock.calls[1][1];
+                const shutdownListener = mockScene.events.once.mock.calls[2][1];
                 shutdownListener();
             });
             test("removes the debounced resize listener", () => {
