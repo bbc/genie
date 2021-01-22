@@ -284,7 +284,7 @@ describe("Scrollable List", () => {
                 expect(onFocusSpy).toHaveBeenCalled();
             });
             test("adds a mousewheel listener to pick up mousewheel and touch scroll events", () => {
-                expect(mockScene.input.on.mock.calls[0][0]).toBe("wheel");
+                expect(mockScene.input.on.mock.calls[0][0]).toBe("gameobjectwheel");
                 mockScene.input.on.mock.calls[0][1]();
                 expect(onWheelSpy).toHaveBeenCalled();
             });
