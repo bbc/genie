@@ -97,8 +97,8 @@ const isTransactionLegal = (container, item, title) => {
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
 const update = (scene, container) => (item, title) => {
+    console.log("BEEBUG: update confirm", container);
     const isLegal = isTransactionLegal(container, item, title);
-    // const safeArea = getSafeArea(container.scene.layout);
     container.removeAll(false);
     container.elems.priceIcon.setVisible(title === "shop");
     container.elems.price.setText(title === "shop" ? item.price : "");
@@ -106,8 +106,7 @@ const update = (scene, container) => (item, title) => {
     container.transaction = { item, title, isLegal };
     container.setLegal(title, isLegal);
     populate(container);
-    // try adding a resize:
-    container.resize(getSafeArea(container.scene.layout)); // crashes on an unpopulated container, so has to be last
+    container.resize(getSafeArea(container.scene.layout));
 };
 
 const setLegal = container => (title, isLegal) => {

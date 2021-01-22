@@ -38,23 +38,18 @@ export const setVisible = container => isVisible => {
         button.input.enabled = container.visible;
         button.accessibleElement.update();
     });
-    // if (container.visible) {
-    //     // console.log("BEEBUG: resizing on setVisible");
-    //     container.resize(getSafeArea(container.scene.layout));
-    // }
 };
 
 export const resize = container => bounds => {
-    // if (!container.visible) return;
-    // console.log("BEEBUG: resizing a visible container");
+    if (!container.visible) return;
 
-    // debugger;
     const { memoisedBounds } = container;
     container.memoisedBounds = bounds;
 
     const scaleX = (bounds.width / memoisedBounds.width) * container.scaleX;
     const scaleY = (bounds.height / memoisedBounds.height) * container.scaleY;
     container.setScale(scaleX, scaleY);
+    if (container.elems) console.log(`BEEBUG: resizing the confirm container with ${scaleX}, ${scaleY}`);
 
     const yOffset = container.getBounds().y - bounds.y;
     container.setY(container.y - yOffset);
@@ -64,19 +59,13 @@ export const resize = container => bounds => {
 };
 
 const scaleElements = (elems, scaleX, scaleY) => {
+    console.log("BEEBUG: scaling elements");
     elems.filter(isText).forEach(textElem => {
-        // console.log(
-        //     "BEEBUG: textElem scaling: ",
-        //     `elemScaleX: ${textElem.scaleX}, newScaleX: ${1 / scaleX} elemScaleY: ${textElem.scaleY}, newScaleY: ${
-        //         1 / scaleY
-        //     }`,
-        // );
         textElem.scaleX = 1 / scaleX;
         textElem.scaleY = 1 / scaleY;
-        // textElem.setText("someText");
     });
     elems.filter(isImage).forEach(imageElem => {
-        const scale = imageElem.scale;
+        const scale = imageElem.scale; // seeing some floating point issue here perhaps?
         imageElem.scaleX = (1 / scaleX) * scale;
         imageElem.scaleY = (1 / scaleY) * scale;
     });
