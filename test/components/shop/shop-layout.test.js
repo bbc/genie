@@ -171,13 +171,6 @@ describe("shop element scaling functions", () => {
             expect(imageScaleXSpy).toHaveBeenCalledWith(1);
             expect(imageScaleYSpy).toHaveBeenCalledWith(1);
         });
-
-        test("does nothing if the container isn't visible", () => {
-            jest.clearAllMocks();
-            mockContainer.visible = false;
-            shopLayout.resize(mockContainer)(newBounds);
-            expect(mockContainer.setScale).not.toHaveBeenCalled();
-        });
     });
 
     describe("getPaneBackgroundKey()", () => {
