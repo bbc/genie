@@ -123,6 +123,8 @@ const updateItemDetailView = (container, item) => {
 const updateItemImageView = (container, item) => {
     const [image] = container.elems.item;
     image.setTexture(assetKey(item));
+    const imageScale = getItemImageScale(container.memoisedBounds, image);
+    setImageScaleXY(image, imageScale, container.scaleX, container.scaleY);
 };
 
 const setLegal = container => (title, isLegal) => {
@@ -154,7 +156,7 @@ const itemView = (scene, item, config, bounds) =>
 
 const itemImageView = (scene, item, config, bounds) => {
     const image = scene.add.image(imageX(config, bounds), 0, assetKey(item));
-    const absScale = (bounds.width / 2 / image.width) * 0.9;
+    const absScale = getItemImageScale(bounds, image);
     setImageScaleXY(image, absScale);
     return [image];
 };
@@ -189,6 +191,7 @@ const getItemTitle = item => (item ? item.title : "PH");
 const getItemDetail = item => (item ? item.description : "PH");
 const getItemBlurb = item => (item ? item.longDescription : "PH");
 const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
+const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
 const assetKey = item => (item ? item.icon : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
