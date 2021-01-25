@@ -110,10 +110,8 @@ const updateItemView = (container, item) =>
 
 const updateItemDetailView = (container, item) => {
     const [itemImage, itemTitle, itemDetail, itemBlurb] = container.elems.item;
-    itemImage.setTexture(assetKey(item));
 
-    const imageScale = getItemDetailImageScale(container.memoisedBounds, itemImage);
-    setImageScaleXY(itemImage, imageScale, container.scaleX, container.scaleY);
+    setImageTextureAndScale(container, item, itemImage, getItemDetailImageScale);
 
     itemTitle.setText(getItemTitle(item));
     itemDetail.setText(getItemDetail(item));
@@ -122,9 +120,13 @@ const updateItemDetailView = (container, item) => {
 
 const updateItemImageView = (container, item) => {
     const [image] = container.elems.item;
+    setImageTextureAndScale(container, item, image, getItemImageScale);
+};
+
+const setImageTextureAndScale = (container, item, image, getScaleFn) => {
     image.setTexture(assetKey(item));
-    const imageScale = getItemImageScale(container.memoisedBounds, image);
-    setImageScaleXY(image, imageScale, container.scaleX, container.scaleY);
+    const scale = getScaleFn(container.memoisedBounds, image);
+    setImageScaleXY(image, scale, container.scaleX, container.scaleY);
 };
 
 const setLegal = container => (title, isLegal) => {
