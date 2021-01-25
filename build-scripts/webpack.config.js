@@ -59,7 +59,7 @@ module.exports = env => {
             writeToDisk: true,
             useLocalIp: true,
             host: "0.0.0.0",
-            port: 9000,
+            port: 9001,
             historyApiFallback: {
                 index: "node_modules/genie/dev/index.main.html",
             },
