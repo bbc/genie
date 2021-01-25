@@ -103,7 +103,6 @@ const update = container => (item, title) => {
     updateItemView(container, item);
     container.transaction = { item, title, isLegal };
     container.setLegal(title, isLegal);
-    // container.resize(getSafeArea(container.scene.layout)); // trying taking this out, as top menu buttons weren't right.
 };
 
 const updateItemView = (container, item) =>
