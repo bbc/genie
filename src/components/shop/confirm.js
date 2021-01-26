@@ -65,7 +65,7 @@ export const createConfirm = scene => {
 
     container.setVisible = setVisible(container);
     container.resize = resize(container);
-    container.update = update(scene, container);
+    container.update = update(container);
     container.prepTransaction = prepTransaction(scene, container);
     container.doTransaction = doTransaction(scene);
     container.setBalance = bal => balance.setText(bal);
@@ -96,15 +96,37 @@ const isTransactionLegal = (container, item, title) => {
 
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
-const update = (scene, container) => (item, title) => {
+const update = container => (item, title) => {
     const isLegal = isTransactionLegal(container, item, title);
-    container.removeAll(false);
     container.elems.priceIcon.setVisible(title === "shop");
     container.elems.price.setText(title === "shop" ? item.price : "");
-    container.elems.item = itemView(scene, item, container.config, container.memoisedBounds);
+    updateItemView(container, item);
     container.transaction = { item, title, isLegal };
     container.setLegal(title, isLegal);
-    populate(container);
+};
+
+const updateItemView = (container, item) =>
+    container.config.confirm.detailView ? updateItemDetailView(container, item) : updateItemImageView(container, item);
+
+const updateItemDetailView = (container, item) => {
+    const [itemImage, itemTitle, itemDetail, itemBlurb] = container.elems.item;
+
+    setImageTextureAndScale(container, item, itemImage, getItemDetailImageScale);
+
+    itemTitle.setText(getItemTitle(item));
+    itemDetail.setText(getItemDetail(item));
+    itemBlurb.setText(getItemBlurb(item));
+};
+
+const updateItemImageView = (container, item) => {
+    const [image] = container.elems.item;
+    setImageTextureAndScale(container, item, image, getItemImageScale);
+};
+
+const setImageTextureAndScale = (container, item, image, getScaleFn) => {
+    image.setTexture(assetKey(item));
+    const scale = getScaleFn(container.memoisedBounds, image);
+    setImageScaleXY(image, scale, container.scaleX, container.scaleY);
 };
 
 const setLegal = container => (title, isLegal) => {
@@ -136,7 +158,8 @@ const itemView = (scene, item, config, bounds) =>
 
 const itemImageView = (scene, item, config, bounds) => {
     const image = scene.add.image(imageX(config, bounds), 0, assetKey(item));
-    image.setScale((bounds.width / 2 / image.width) * 0.9);
+    const absScale = getItemImageScale(bounds, image);
+    setImageScaleXY(image, absScale);
     return [image];
 };
 
@@ -144,8 +167,10 @@ const itemDetailView = (scene, item, config, bounds) => {
     const x = imageX(config, bounds);
     const { styleDefaults } = config;
     const { title, detail, description } = config.confirm;
+
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
-    itemImage.setScale(bounds.height / 3 / itemImage.height);
+    setImageScaleXY(itemImage, getItemDetailImageScale(bounds, itemImage));
+
     const itemTitle = scene.add.text(x, 0, getItemTitle(item), textStyle(styleDefaults, title)).setOrigin(0.5);
     const itemDetail = scene.add
         .text(x, detailY(bounds), getItemDetail(item), textStyle(styleDefaults, detail))
@@ -156,12 +181,19 @@ const itemDetailView = (scene, item, config, bounds) => {
     return [itemImage, itemTitle, itemDetail, itemBlurb];
 };
 
+const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY = 1) => {
+    image.setScale(absScale / containerScaleX, absScale / containerScaleY);
+    image.memoisedScale = absScale;
+};
+
 const getItemState = (container, item, title) =>
     collections.get(getCollectionsKey(container, title)).get(item.id).state;
 const getCollectionsKey = (container, title) => container.config.paneCollections[title];
-const getItemTitle = item => (item ? item.title : "Item Default Title");
-const getItemDetail = item => (item ? item.description : "");
-const getItemBlurb = item => (item ? item.longDescription : "");
+const getItemTitle = item => (item ? item.title : "PH");
+const getItemDetail = item => (item ? item.description : "PH");
+const getItemBlurb = item => (item ? item.longDescription : "PH");
+const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
+const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
 const assetKey = item => (item ? item.icon : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);

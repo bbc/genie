@@ -14,7 +14,7 @@ import { collections } from "../../../src/core/collections.js";
 describe("createConfirm()", () => {
     let confirmPane;
     const mockContainer = { add: jest.fn(), setY: jest.fn(), removeAll: jest.fn() };
-    const mockImage = { setScale: jest.fn(), setVisible: jest.fn(), type: "Image" };
+    const mockImage = { setScale: jest.fn(), setVisible: jest.fn(), setTexture: jest.fn(), type: "Image" };
     const mockRect = { foo: "bar" };
     const mockButton = { baz: "qux", setLegal: jest.fn() };
     const mockText = { setText: jest.fn(), type: "Text" };
@@ -65,7 +65,10 @@ describe("createConfirm()", () => {
     const mockCollection = { get: jest.fn().mockReturnValue({ state: "foo" }) };
     collections.get = jest.fn().mockReturnValue(mockCollection);
 
-    beforeEach(() => (confirmPane = createConfirm(mockScene)));
+    beforeEach(() => {
+        confirmPane = createConfirm(mockScene);
+        confirmPane.scene = mockScene;
+    });
 
     afterEach(() => jest.clearAllMocks());
 
@@ -132,16 +135,19 @@ describe("createConfirm()", () => {
     });
 
     describe("prepTransaction() for buying", () => {
-        const mockItem = { price: 37 };
+        const mockItem = {
+            price: 37,
+            icon: "some.icon",
+            title: "someTitle",
+            description: "someDetail",
+            longDescription: "someBlurb",
+        };
         const mockTitle = "shop";
         beforeEach(() => confirmPane.prepTransaction(mockItem, mockTitle));
 
         describe("updates the container", () => {
-            test("calls removeAll() on the container", () => {
-                expect(mockContainer.removeAll).toHaveBeenCalled();
-            });
             test("sets the prompt", () => {
-                expect(mockText.setText.mock.calls[1][0]).toBe("illegalBuyPrompt");
+                expect(mockText.setText.mock.calls[4][0]).toBe("illegalBuyPrompt");
             });
             test("sets the currency icon visible and sets price text to the item price", () => {
                 expect(mockImage.setVisible).toHaveBeenCalledWith(true);
@@ -150,6 +156,21 @@ describe("createConfirm()", () => {
             test("sets transaction", () => {
                 const expected = { item: mockItem, title: mockTitle, isLegal: false };
                 expect(mockContainer.transaction).toStrictEqual(expected);
+            });
+            test("sets texts and textures from the item", () => {
+                expect(mockImage.setTexture).toHaveBeenCalledWith("some.icon");
+                expect(mockText.setText).toHaveBeenCalledWith("someTitle");
+                expect(mockText.setText).toHaveBeenCalledWith("someDetail");
+                expect(mockText.setText).toHaveBeenCalledWith("someBlurb");
+            });
+            test("when not using detail view, just updates the image", () => {
+                jest.clearAllMocks();
+                confirmPane.config.confirm.detailView = false;
+                confirmPane.prepTransaction(mockItem, mockTitle);
+                expect(mockImage.setTexture).toHaveBeenCalledWith("some.icon");
+                expect(mockText.setText).not.toHaveBeenCalledWith("someTitle");
+                expect(mockText.setText).not.toHaveBeenCalledWith("someDetail");
+                expect(mockText.setText).not.toHaveBeenCalledWith("someBlurb");
             });
         });
         test("stacks the confirm pane", () => {

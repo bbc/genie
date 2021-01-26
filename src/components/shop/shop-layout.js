@@ -61,9 +61,11 @@ const scaleElements = (elems, scaleX, scaleY) => {
         textElem.scaleY = 1 / scaleY;
     });
     elems.filter(isImage).forEach(imageElem => {
-        const scale = imageElem.scale;
-        imageElem.scaleX = (1 / scaleX) * scale;
-        imageElem.scaleY = (1 / scaleY) * scale;
+        const { memoisedScale } = imageElem;
+        const newScaleX = memoisedScale ? (1 / scaleX) * memoisedScale : 1 / scaleX;
+        const newScaleY = memoisedScale ? (1 / scaleY) * memoisedScale : 1 / scaleY;
+        imageElem.scaleX = newScaleX;
+        imageElem.scaleY = newScaleY;
     });
 };
 
