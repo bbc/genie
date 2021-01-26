@@ -5,10 +5,7 @@
 * [Individual component theme specification](#individual-component-theme-specification)
 * [What are the asset requirements?](#what-are-the-asset-requirements)
 * [How do I test my theme?](#how-do-i-test-my-theme)
-* [What are the applicable Children’s Games Standards that need to be followed?](#what-are-the-applicable-children’s-games-standards-that-need-to-be-followed)
-* [How do I get my game onto Children’s platforms?](#how-do-i-get-my-game-onto-children’s-platforms)
-* [How do I get my theme onto Children’s platforms?](#how-do-i-get-my-theme-onto-children’s-platforms)
-* [What acceptance tests will the BBC carry out?](#what-acceptance-tests-will-the-bbc-carry-out)
+* [How do I get my game onto Children’s platforms?](#how-do-i-get-my-theme-onto-childrens-platforms)
 
 ## What is a theme?
 
@@ -22,8 +19,8 @@ Audio, Animations, Sprites, Graphics and Fonts are in scope for theming. Alterat
 
 There is a `default` theme for components in the `themes` folder that can be copied and renamed with the name of your skin to use as a template. There is also a `theme2` theme to use for comparison. The links to view them locally are here (you will first need to `cd` to the folder and run `npm install` and `npm start` in a terminal):
 
-http://localhost:8000/?theme=default  
-http://localhost:8000/?theme=theme2
+http://localhost:9000/?theme=default  
+http://localhost:9000/?theme=theme2
 
 Theming is currently undertaken mainly by performing a straight swap on assets, replacing images / audio / sprites like for like in order to create the desired theme. There are several JSON files that contain the asset packs. The common ones may be found in `themes/[name of theme]/asset-packs/assets-master-pack.json`. Inside this file, the assets are divided up by screen (the screen names are determined in `main.js`). Any screen names not listed here will have their own JSON asset files. For example, in the `default` theme, the `game.json` and `game-button-select.json` config files are set, as the `game` and `game-button-select` keys are not listed in `assets-master-pack.json`.
 
@@ -31,7 +28,7 @@ Additional configuration not related to assets (for things like font size and co
 
 ## How do I test my theme?
 
-To quickly view a specific theme, you can launch it using the query string 'theme': http://localhost:8000/?theme=themeName, replacing themeName with the name of your theme. If none is specified, it will load the `default` theme.
+To quickly view a specific theme, you can launch it using the query string 'theme': http://localhost:9000/?theme=themeName, replacing themeName with the name of your theme. If none is specified, it will load the `default` theme.
 
 ## Individual component theme specification
 

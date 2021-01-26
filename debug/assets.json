@@ -300,17 +300,17 @@
             {
                 "type": "audio",
                 "key": "coinGet",
-                "url": "../../debug/assets/shop-demo/coin_get.wav"
+                "url": "../../debug/assets/shop-demo/coin_get.mp4"
             },
             {
                 "type": "audio",
                 "key": "whiff",
-                "url": "../../debug/assets/shop-demo/whiff.wav"
+                "url": "../../debug/assets/shop-demo/whiff.mp4"
             },
             {
                 "type": "audio",
                 "key": "hit",
-                "url": "../../debug/assets/shop-demo/hit.wav"
+                "url": "../../debug/assets/shop-demo/hit.mp4"
             },
             {
                 "type": "image",
