@@ -35,15 +35,11 @@ export const createConfirm = scene => {
     container.setY(yOffset);
     container.buttons = createConfirmButtons(container, handleClick(scene, container));
 
+    const promptStyle = textStyle(styleDefaults, config.confirm.prompt);
     container.elems = {
         background: [createRect(scene, innerBounds, 0x0000ff), createPaneBackground(scene, bounds, "confirm")],
         prompt: scene.add
-            .text(
-                getX(innerBounds.x, config),
-                promptY(bounds),
-                config.confirm.prompt.shop,
-                textStyle(styleDefaults, config.confirm.prompt),
-            )
+            .text(getX(innerBounds.x, config), promptY(bounds), config.confirm.prompt.shop, promptStyle)
             .setOrigin(0.5),
         price: scene.add
             .text(

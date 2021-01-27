@@ -32,4 +32,5 @@ export const createTitle = scene => {
 const setTitleText = titleContainer => text => {
     const titleTextSprite = titleContainer.list.find(item => item.type === "Text");
     titleTextSprite.setText(text.charAt(0).toUpperCase() + text.slice(1).toLowerCase());
+    // setTimeout(() => titleTextSprite.style.update(true), 50); // this is
 };

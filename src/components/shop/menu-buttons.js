@@ -8,10 +8,13 @@
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
+import { textStyle } from "../../components/shop/shop-layout.js";
 
 const styleDefaults = {
+    // should NOT be using these!
     fontFamily: "ReithSans",
     fontSize: "16px",
+    // fontStyle: "bold", // breaks it anyway
     resolution: 5,
 };
 
@@ -81,4 +84,9 @@ const resizeButton = container => (button, idx) => {
 export const resizeGelButtons = container => container.buttons.forEach(resizeButton(container));
 
 const setButtonOverlays = (scene, button, title) =>
-    button.overlays.set("caption", scene.add.text(0, 0, title, styleDefaults).setOrigin(0.5));
+    button.overlays.set(
+        "caption",
+        scene.add
+            .text(0, 0, title, textStyle(scene.config.styleDefaults)) // breaks
+            .setOrigin(0.5),
+    );
