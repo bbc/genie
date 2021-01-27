@@ -56,7 +56,7 @@ export class Shop extends Screen {
 
         this.resize();
 
-        console.log("BEEBUG: this", this);
+        // console.log("BEEBUG: this", this);
     }
 
     stack(pane) {

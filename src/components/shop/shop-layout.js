@@ -133,6 +133,5 @@ const fallbackStyle = {
 export const textStyle = (styleDefaults, config) => {
     const defaults = styleDefaults ? styleDefaults : fallbackStyle;
     const result = config ? { ...defaults, ...config.styles } : defaults;
-    // console.log("BEEBUG: config?.styles, result", config?.styles, result);
     return result;
 };

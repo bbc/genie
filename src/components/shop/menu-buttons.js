@@ -10,13 +10,13 @@ import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { textStyle } from "../../components/shop/shop-layout.js";
 
-const styleDefaults = {
-    // should NOT be using these!
-    fontFamily: "ReithSans",
-    fontSize: "16px",
-    // fontStyle: "bold", // breaks it anyway
-    resolution: 5,
-};
+// const styleDefaults = {
+//     // should NOT be using these!
+//     fontFamily: "ReithSans",
+//     fontSize: "16px",
+//     // fontStyle: "bold", // breaks it anyway
+//     resolution: 5,
+// };
 
 export const createMenuButtons = container =>
     ["Shop", "Manage"].map((button, idx) => {
