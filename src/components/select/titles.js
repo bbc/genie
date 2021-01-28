@@ -4,6 +4,8 @@
  * @license Apache-2.0
  */
 
+import { updateStyleOnFontLoad } from "../../core/layout/text-utils.js";
+
 const styleDefaults = {
     fontSize: "24px",
     fontFamily: "ReithSans",
@@ -19,6 +21,7 @@ export const createTitles = scene => {
         const textStyle = { ...styleDefaults, ...conf.styles };
         const textSprite = scene.add.text(pos.x, pos.y, conf.value, textStyle);
         textSprite.defaultStyle = textStyle;
+        updateStyleOnFontLoad(textSprite);
         return textSprite;
     };
 

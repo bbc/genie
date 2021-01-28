@@ -7,6 +7,7 @@
  * @license Apache-2.0
  */
 import { resizeGelButtons } from "./menu-buttons.js";
+import { updateStyleOnFontLoad } from "../../core/layout/text-utils.js";
 
 export const getSafeArea = layout => layout.getSafeArea({}, false);
 
@@ -132,6 +133,11 @@ const fallbackStyle = {
 
 export const textStyle = (styleDefaults, config) => {
     const defaults = styleDefaults ? styleDefaults : fallbackStyle;
-    const result = config ? { ...defaults, ...config.styles } : defaults;
-    return result;
+    return config ? { ...defaults, ...config.styles } : defaults;
+};
+
+export const addText = (scene, x, y, text, config) => {
+    const textElem = scene.add.text(x, y, text, textStyle(scene.config.styleDefaults, config));
+    updateStyleOnFontLoad(textElem);
+    return textElem;
 };

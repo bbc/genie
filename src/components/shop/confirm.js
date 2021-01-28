@@ -13,6 +13,7 @@ import {
     getSafeArea,
     createPaneBackground,
     textStyle,
+    addText,
 } from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
@@ -35,11 +36,15 @@ export const createConfirm = scene => {
     container.setY(yOffset);
     container.buttons = createConfirmButtons(container, handleClick(scene, container));
 
-    const promptStyle = textStyle(styleDefaults, config.confirm.prompt);
     container.elems = {
         background: [createRect(scene, innerBounds, 0x0000ff), createPaneBackground(scene, bounds, "confirm")],
         prompt: scene.add
-            .text(getX(innerBounds.x, config), promptY(bounds), config.confirm.prompt.shop, promptStyle)
+            .text(
+                getX(innerBounds.x, config),
+                promptY(bounds),
+                config.confirm.prompt.shop,
+                textStyle(styleDefaults, config.confirm.prompt),
+            )
             .setOrigin(0.5),
         price: scene.add
             .text(
@@ -167,6 +172,7 @@ const itemDetailView = (scene, item, config, bounds) => {
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
     setImageScaleXY(itemImage, getItemDetailImageScale(bounds, itemImage));
 
+    // const itemTitle = scene.add.text(x, 0, getItemTitle(item), textStyle(styleDefaults, title)).setOrigin(0.5);
     const itemTitle = scene.add.text(x, 0, getItemTitle(item), textStyle(styleDefaults, title)).setOrigin(0.5);
     const itemDetail = scene.add
         .text(x, detailY(bounds), getItemDetail(item), textStyle(styleDefaults, detail))
