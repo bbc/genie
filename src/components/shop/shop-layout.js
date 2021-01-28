@@ -127,7 +127,7 @@ export const getPaneBackgroundKey = (scene, pane) => {
 const fallbackStyle = {
     fontFamily: "ReithSans",
     fontSize: "24px",
-    resolution: 10,
+    resolution: 2,
     align: "center",
 };
 

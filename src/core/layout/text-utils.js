@@ -5,6 +5,7 @@
  */
 
 export const updateStyleOnFontLoad = textElem => {
+    // ie11?
     if (!document.fonts.check(textElem.style._font)) {
         document.fonts.ready.then(() => textElem.style.update());
     }

@@ -15,9 +15,11 @@
     styleDefaults: {
         fontFamily: "ReithSans",
         fontSize: "24px",
-        fontStyle: "bold",
-        resolution: 10,
+        resolution: 2,
         align: "center",
+    },
+    menuButtons: {
+        styles: { fontStyle: "bold", fontSize: "16px" },
     },
     titles: [
         {
@@ -31,7 +33,7 @@
             value: "Shop",
             xOffset: 0,
             yOffset: 0,
-            styles: { fontSize: 24 },
+            styles: { fontStyle: "bold", fontSize: "24px" },
         },
     ],
     titlePadding: 20,
@@ -47,6 +49,7 @@
         value: {
             type: "text",
             key: "coin",
+            styles: { fontSize: "16px" },
         },
     },
     balancePadding: 15,
@@ -67,7 +70,9 @@
             manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
             styles: { fontStyle: "bold" },
         },
-        detail: { styles: { color: "#2b2", fontStyle: "italic" } },
+        title: { styles: { fontStyle: "bold" } },
+        detail: { styles: { color: "#bd6", fontStyle: "bold" } },
+        description: { styles: { fontStyle: "italic", lineSpacing: 5 } },
     },
     menu: {
         buttonsRight: true,
@@ -108,7 +113,7 @@
                 value: "title",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: -18 },
-                styles: { fontSize: 18 },
+                styles: { fontSize: "16px", fontStyle: "bold" },
             },
             {
                 type: "text",
@@ -116,7 +121,7 @@
                 value: "description",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: 4 },
-                styles: { fontSize: 12 },
+                styles: { fontSize: "12px" },
             },
         ],
         options: {
@@ -127,7 +132,7 @@
                     value: "price",
                     isDynamic: true,
                     position: { align: "right", offsetX: -44, offsetY: -10 },
-                    styles: { fontSize: 14 },
+                    styles: { fontSize: "14px" },
                     activeStates: ["cta"],
                 },
                 {
@@ -141,10 +146,10 @@
                 {
                     type: "text",
                     name: "owned",
-                    value: "Owned",
+                    value: "Purchased",
                     isDynamic: false,
-                    position: { align: "right", offsetX: -76, offsetY: -10 },
-                    styles: { fontSize: 18 },
+                    position: { align: "right", offsetX: -108, offsetY: -10 },
+                    styles: { fontSize: "16px", align: "right" },
                     activeStates: ["actioned"],
                 },
             ],
@@ -155,7 +160,7 @@
                     value: "Equip",
                     isDynamic: false,
                     position: { align: "right", offsetX: -76, offsetY: -10 },
-                    styles: { fontSize: 18 },
+                    styles: { fontSize: "16px", align: "right" },
                     activeStates: ["cta"],
                 },
                 {
@@ -163,8 +168,8 @@
                     name: "equipped",
                     value: "Equipped",
                     isDynamic: false,
-                    position: { align: "right", offsetX: -88, offsetY: -10 },
-                    styles: { fontSize: 18 },
+                    position: { align: "right", offsetX: -104, offsetY: -10 },
+                    styles: { fontSize: "16px", align: "right" },
                     activeStates: ["actioned"],
                 },
             ],

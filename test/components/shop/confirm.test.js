@@ -113,7 +113,7 @@ describe("createConfirm()", () => {
         mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
         createConfirm(mockScene);
         expect(layout.addText.mock.calls[1][1]).toBe(-28);
-        expect(layout.addText.mock.calls[1][2]).toBe(-25);
+        expect(layout.addText.mock.calls[1][2]).toBe(-22.5);
     });
     test("that is displayed with an appropriate Y offset", () => {
         expect(mockContainer.setY).toHaveBeenCalledWith(55);

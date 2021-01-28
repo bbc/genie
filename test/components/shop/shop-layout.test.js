@@ -260,7 +260,7 @@ describe("shop element scaling functions", () => {
             const fallbackStyle = {
                 fontFamily: "ReithSans",
                 fontSize: "24px",
-                resolution: 10,
+                resolution: 2,
                 align: "center",
             };
             shopLayout.addText(mockScene, 0, 0, "someText", undefined);

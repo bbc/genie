@@ -40,7 +40,7 @@ export const createConfirm = scene => {
         prompt: addText(scene, getX(innerBounds.x, config), promptY(bounds), prompt.shop, prompt).setOrigin(0.5),
         price: addText(scene, getX(innerBounds.x + 28, config), currencyY(bounds), "PH", price).setOrigin(0.5),
         priceIcon: scene.add.image(
-            getX(innerBounds.x - 20, config),
+            getX(innerBounds.x - 28, config),
             currencyY(bounds),
             `${config.assetPrefix}.${config.assetKeys.currency}`,
         ),
@@ -156,7 +156,7 @@ const itemDetailView = (scene, item, config, bounds) => {
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
     setImageScaleXY(itemImage, getItemDetailImageScale(bounds, itemImage));
 
-    const itemTitle = addText(scene, x, 0, getItemTitle(item), title).setOrigin(0.5);
+    const itemTitle = addText(scene, x, titleY(bounds), getItemTitle(item), title).setOrigin(0.5);
     const itemDetail = addText(scene, x, detailY(bounds), getItemDetail(item), detail).setOrigin(0.5);
     const itemBlurb = addText(scene, x, blurbY(bounds), getItemBlurb(item), description).setOrigin(0.5);
 
@@ -177,12 +177,16 @@ const getItemBlurb = item => (item ? item.longDescription : "PH");
 const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
 const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
 const assetKey = item => (item ? item.icon : "shop.itemIcon");
-const imageY = bounds => -bounds.height / 4;
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
-const promptY = outerBounds => -outerBounds.height * (3 / 8);
-const currencyY = outerBounds => -outerBounds.height / 4;
-const detailY = bounds => bounds.height / 12;
-const blurbY = bounds => bounds.height / 4;
+
+const imageY = bounds => -percentOfHeight(bounds, 25);
+const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
+const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
+const titleY = bounds => -percentOfHeight(bounds, 4);
+const detailY = bounds => percentOfHeight(bounds, 5);
+const blurbY = bounds => percentOfHeight(bounds, 25);
+const percentOfHeight = (bounds, percent) => (bounds.height / 100) * percent;
+
 const getOffsetBounds = (outerBounds, innerBounds) => ({
     ...innerBounds,
     y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
