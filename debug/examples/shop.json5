@@ -7,8 +7,8 @@
     styleDefaults: {
         // menu button text uses styleDefaults, everything else can be modified.
         fontFamily: "ReithSans",
-        fontSize: "16px",
-        fontStyle: "bold",
+        fontSize: "24px",
+        // fontStyle: "bold",
         // font: "bold 24px ReithSans",
         // resolution: 10,
         align: "center",
@@ -108,7 +108,7 @@
                 value: "title",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: -18 },
-                styles: { fontSize: "18px" },
+                styles: { fontSize: "18px", fontStyle: "bold" },
             },
             {
                 type: "text",

@@ -12,7 +12,6 @@ import {
     createRect,
     getSafeArea,
     createPaneBackground,
-    textStyle,
     addText,
 } from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
@@ -24,8 +23,6 @@ export const createConfirm = scene => {
     const balance = scene.balance;
     const bounds = getSafeArea(scene.layout);
 
-    const { styleDefaults } = config;
-
     const container = scene.add.container();
     container.config = config;
     container.memoisedBounds = bounds;
@@ -36,24 +33,12 @@ export const createConfirm = scene => {
     container.setY(yOffset);
     container.buttons = createConfirmButtons(container, handleClick(scene, container));
 
+    const { prompt, price } = config.confirm;
+
     container.elems = {
         background: [createRect(scene, innerBounds, 0x0000ff), createPaneBackground(scene, bounds, "confirm")],
-        prompt: scene.add
-            .text(
-                getX(innerBounds.x, config),
-                promptY(bounds),
-                config.confirm.prompt.shop,
-                textStyle(styleDefaults, config.confirm.prompt),
-            )
-            .setOrigin(0.5),
-        price: scene.add
-            .text(
-                getX(innerBounds.x + 28, config),
-                currencyY(bounds),
-                "PH",
-                textStyle(styleDefaults, config.confirm.price),
-            )
-            .setOrigin(0.5),
+        prompt: addText(scene, getX(innerBounds.x, config), promptY(bounds), prompt.shop, prompt).setOrigin(0.5),
+        price: addText(scene, getX(innerBounds.x + 28, config), currencyY(bounds), "PH", price).setOrigin(0.5),
         priceIcon: scene.add.image(
             getX(innerBounds.x - 20, config),
             currencyY(bounds),
@@ -166,20 +151,15 @@ const itemImageView = (scene, item, config, bounds) => {
 
 const itemDetailView = (scene, item, config, bounds) => {
     const x = imageX(config, bounds);
-    const { styleDefaults } = config;
     const { title, detail, description } = config.confirm;
 
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
     setImageScaleXY(itemImage, getItemDetailImageScale(bounds, itemImage));
 
-    // const itemTitle = scene.add.text(x, 0, getItemTitle(item), textStyle(styleDefaults, title)).setOrigin(0.5);
-    const itemTitle = scene.add.text(x, 0, getItemTitle(item), textStyle(styleDefaults, title)).setOrigin(0.5);
-    const itemDetail = scene.add
-        .text(x, detailY(bounds), getItemDetail(item), textStyle(styleDefaults, detail))
-        .setOrigin(0.5);
-    const itemBlurb = scene.add
-        .text(x, blurbY(bounds), getItemBlurb(item), textStyle(styleDefaults, description), 0)
-        .setOrigin(0.5);
+    const itemTitle = addText(scene, x, 0, getItemTitle(item), title).setOrigin(0.5);
+    const itemDetail = addText(scene, x, detailY(bounds), getItemDetail(item), detail).setOrigin(0.5);
+    const itemBlurb = addText(scene, x, blurbY(bounds), getItemBlurb(item), description).setOrigin(0.5);
+
     return [itemImage, itemTitle, itemDetail, itemBlurb];
 };
 

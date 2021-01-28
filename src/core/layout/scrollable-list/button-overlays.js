@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import fp from "../../../../lib/lodash/fp/fp.js";
-import { textStyle } from "../../../components/shop/shop-layout.js";
+import { addText } from "../../../components/shop/shop-layout.js";
 
 export const overlays1Wide = (gelButton, configs) => {
     configs.forEach(config => {
@@ -26,12 +26,8 @@ const setImageOverlay = ({ gelButton, config, offset }) => {
 
 const setTextOverlay = ({ gelButton, config, offset }) => {
     const { scene, item } = gelButton;
-    const { styleDefaults } = scene.config;
     const textContent = config.isDynamic ? item[config.value].toString() : config.value.toString();
-    gelButton.overlays.set(
-        config.name,
-        scene.add.text(offset.x, offset.y, textContent, textStyle(styleDefaults, config)),
-    );
+    gelButton.overlays.set(config.name, addText(scene, offset.x, offset.y, textContent, config));
 };
 
 const getOffset = (position, gelButton) => {
