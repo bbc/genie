@@ -13,6 +13,9 @@
         // resolution: 10,
         align: "center",
     },
+    menuButtons: {
+        styles: { fontStyle: "bold" },
+    },
     titles: [
         {
             type: "image",

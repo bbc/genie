@@ -131,7 +131,7 @@ const fallbackStyle = {
     align: "center",
 };
 
-export const textStyle = (styleDefaults, config) => {
+const textStyle = (styleDefaults, config) => {
     const defaults = styleDefaults ? styleDefaults : fallbackStyle;
     return config ? { ...defaults, ...config.styles } : defaults;
 };
