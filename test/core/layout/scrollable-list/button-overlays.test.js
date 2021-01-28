@@ -11,7 +11,7 @@ const mockImage = { setScale: jest.fn(), width: 100 };
 const mockScene = {
     add: {
         image: jest.fn().mockReturnValue(mockImage),
-        text: jest.fn().mockReturnValue("mockText"),
+        // text: jest.fn().mockReturnValue("mockText"),
     },
     config: {
         assetPrefix: "test",
@@ -38,7 +38,7 @@ const mockGelButton = {
 let mockOverlay;
 let mockConfig;
 
-shopLayout.textStyle = jest.fn().mockReturnValue({ foo: "bar" });
+shopLayout.addText = jest.fn().mockReturnValue("mockText");
 
 describe("Button overlays", () => {
     afterEach(() => jest.clearAllMocks());
@@ -78,12 +78,11 @@ describe("Button overlays", () => {
                 expect(mockImage.setScale).toHaveBeenCalledWith(0.5);
             });
 
-            test("adds a text to the scene and the button if overlay is of type text, merging default styles with any provided.", () => {
+            test("adds a text to the scene and the button if overlay is of type text", () => {
                 mockOverlay = { ...mockOverlay, type: "text", value: "someText" };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "someText", { foo: "bar" });
-                expect(shopLayout.textStyle).toHaveBeenCalled();
+                expect(shopLayout.addText.mock.calls[0][3]).toBe("someText");
             });
         });
 
@@ -108,7 +107,7 @@ describe("Button overlays", () => {
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 const expectedValue = "42";
-                expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, expectedValue, { foo: "bar" });
+                expect(shopLayout.addText.mock.calls[0][3]).toBe(expectedValue);
             });
         });
 

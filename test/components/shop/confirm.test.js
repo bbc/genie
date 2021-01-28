@@ -41,7 +41,7 @@ describe("createConfirm()", () => {
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
             image: jest.fn().mockReturnValue(mockImage),
-            text: jest.fn().mockReturnValue({ setOrigin: jest.fn().mockReturnValue(mockText) }),
+            // text: jest.fn().mockReturnValue({ setOrigin: jest.fn().mockReturnValue(mockText) }),
         },
         stack: jest.fn(),
         back: jest.fn(),
@@ -55,11 +55,13 @@ describe("createConfirm()", () => {
     buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
     const setVisibleFn = jest.fn();
     const resizeFn = jest.fn();
+
     layout.setVisible = jest.fn().mockReturnValue(setVisibleFn);
     layout.resize = jest.fn().mockReturnValue(resizeFn);
     layout.createRect = jest.fn().mockReturnValue(mockRect);
     layout.getInnerRectBounds = jest.fn().mockReturnValue({ x: 0, y: 0, width: 100, height: 100 });
     layout.textStyle = jest.fn().mockReturnValue({ some: "textStyle" });
+    layout.addText = jest.fn().mockReturnValue({ setOrigin: jest.fn().mockReturnValue(mockText) });
     let mockDoTransactionFn = jest.fn().mockReturnValueOnce(37).mockReturnValue(undefined);
     transact.doTransaction = jest.fn().mockReturnValue(mockDoTransactionFn);
     const mockCollection = { get: jest.fn().mockReturnValue({ state: "foo" }) };
@@ -110,7 +112,8 @@ describe("createConfirm()", () => {
         jest.clearAllMocks();
         mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
         createConfirm(mockScene);
-        expect(mockScene.add.text).toHaveBeenCalledWith(-28, -25, "PH", { some: "textStyle" });
+        expect(layout.addText.mock.calls[1][1]).toBe(-28);
+        expect(layout.addText.mock.calls[1][2]).toBe(-25);
     });
     test("that is displayed with an appropriate Y offset", () => {
         expect(mockContainer.setY).toHaveBeenCalledWith(55);
@@ -128,7 +131,7 @@ describe("createConfirm()", () => {
             confirmPane = createConfirm(mockScene);
         });
         test("adds extra placeholder text objects", () => {
-            expect(mockScene.add.text).toHaveBeenCalledTimes(5);
+            expect(layout.addText).toHaveBeenCalledTimes(5);
             const containerContents = mockContainer.add.mock.calls[0][0];
             expect(containerContents.slice(-4)).toStrictEqual([mockImage, mockText, mockText, mockText]);
         });

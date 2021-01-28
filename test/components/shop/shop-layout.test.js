@@ -235,28 +235,28 @@ describe("shop element scaling functions", () => {
         });
     });
 
-    describe("textStyle()", () => {
-        const defaultStyle = { some: "default", foo: "bar" };
-        let elementConfig;
+    // describe("textStyle()", () => {
+    //     const defaultStyle = { some: "default", foo: "bar" };
+    //     let elementConfig;
 
-        test("merges default style with style from element config", () => {
-            elementConfig = { some: "config", styles: { foo: "baz" } };
-            const expectedStyle = { some: "default", foo: "baz" };
-            expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
-        });
-        test("if there's no element config, returns the default style", () => {
-            elementConfig = undefined;
-            const expectedStyle = defaultStyle;
-            expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
-        });
-        test("if there's no default style, use a fallback style", () => {
-            const fallbackStyle = {
-                fontFamily: "ReithSans",
-                fontSize: "24px",
-                resolution: 10,
-                align: "center",
-            };
-            expect(shopLayout.textStyle(undefined, undefined)).toStrictEqual(fallbackStyle);
-        });
-    });
+    //     test("merges default style with style from element config", () => {
+    //         elementConfig = { some: "config", styles: { foo: "baz" } };
+    //         const expectedStyle = { some: "default", foo: "baz" };
+    //         expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
+    //     });
+    //     test("if there's no element config, returns the default style", () => {
+    //         elementConfig = undefined;
+    //         const expectedStyle = defaultStyle;
+    //         expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
+    //     });
+    //     test("if there's no default style, use a fallback style", () => {
+    //         const fallbackStyle = {
+    //             fontFamily: "ReithSans",
+    //             fontSize: "24px",
+    //             resolution: 10,
+    //             align: "center",
+    //         };
+    //         expect(shopLayout.textStyle(undefined, undefined)).toStrictEqual(fallbackStyle);
+    //     });
+    // });
 });

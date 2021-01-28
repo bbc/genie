@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 import { createTitles } from "../../../src/components/select/titles.js";
+import * as textUtils from "../../../src/core/layout/text-utils.js";
 
 describe("Select Screen - Titles", () => {
     let mockScene;
@@ -25,6 +26,7 @@ describe("Select Screen - Titles", () => {
                 ],
             },
         };
+        textUtils.updateStyleOnFontLoad = jest.fn();
     });
 
     afterEach(jest.clearAllMocks);

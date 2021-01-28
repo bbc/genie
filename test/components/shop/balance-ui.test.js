@@ -42,7 +42,6 @@ describe("createBalance()", () => {
                 if (key === "shop.balanceIcon") return mockIcon;
                 return mockBackground;
             }),
-            text: jest.fn().mockReturnValue(mockText),
         },
         config: {
             balance: {
@@ -74,10 +73,12 @@ describe("createBalance()", () => {
     const mockCollection = { get: jest.fn().mockReturnValue(mockCurrencyItem) };
     collections.get = jest.fn().mockReturnValue(mockCollection);
 
+    shopLayout.getXPos = jest.fn().mockReturnValue(42);
+    shopLayout.getYPos = jest.fn().mockReturnValue(69);
+    shopLayout.getScaleFactor = jest.fn().mockReturnValue(3.14);
+    shopLayout.addText = jest.fn().mockReturnValue(mockText);
+
     beforeEach(() => {
-        shopLayout.getXPos = jest.fn().mockReturnValue(42);
-        shopLayout.getYPos = jest.fn().mockReturnValue(69);
-        shopLayout.getScaleFactor = jest.fn().mockReturnValue(3.14);
         balanceElem = createBalance(mockScene, mockMetrics, mockSafeArea);
     });
 
@@ -91,12 +92,12 @@ describe("createBalance()", () => {
         expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "shop.balanceIcon");
     });
     test("adds a text element with the value of the balance", () => {
-        expect(mockScene.add.text.mock.calls[0][2]).toBe(100);
+        expect(shopLayout.addText.mock.calls[0][3]).toBe(100);
     });
     test("uses the quantity of the currency item from inventory as its value", () => {
         expect(collections.get).toHaveBeenCalledWith("inventory");
         expect(mockCollection.get).toHaveBeenCalledWith("someId");
-        expect(mockScene.add.text.mock.calls[0][2]).toStrictEqual(mockCurrencyItem.qty);
+        expect(shopLayout.addText.mock.calls[0][3]).toStrictEqual(mockCurrencyItem.qty);
     });
     test("positions the icon to the left", () => {
         expect(mockReturnedIcon.setPosition).toHaveBeenCalledWith(-12, 0);
