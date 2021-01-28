@@ -6,6 +6,7 @@
  */
 
 import * as shopLayout from "../../../src/components/shop/shop-layout.js";
+import * as textUtils from "../../../src/core/layout/text-utils.js";
 
 let mockLayout;
 let mockContainer;
@@ -235,28 +236,38 @@ describe("shop element scaling functions", () => {
         });
     });
 
-    // describe("textStyle()", () => {
-    //     const defaultStyle = { some: "default", foo: "bar" };
-    //     let elementConfig;
+    describe("addText()", () => {
+        let elemConfig = { styles: { baz: "qux" } };
 
-    //     test("merges default style with style from element config", () => {
-    //         elementConfig = { some: "config", styles: { foo: "baz" } };
-    //         const expectedStyle = { some: "default", foo: "baz" };
-    //         expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
-    //     });
-    //     test("if there's no element config, returns the default style", () => {
-    //         elementConfig = undefined;
-    //         const expectedStyle = defaultStyle;
-    //         expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
-    //     });
-    //     test("if there's no default style, use a fallback style", () => {
-    //         const fallbackStyle = {
-    //             fontFamily: "ReithSans",
-    //             fontSize: "24px",
-    //             resolution: 10,
-    //             align: "center",
-    //         };
-    //         expect(shopLayout.textStyle(undefined, undefined)).toStrictEqual(fallbackStyle);
-    //     });
-    // });
+        const mockScene = {
+            config: { styleDefaults: { foo: "bar" } },
+            add: { text: jest.fn().mockReturnValue("textElem") },
+        };
+        textUtils.updateStyleOnFontLoad = jest.fn();
+
+        beforeEach(() => shopLayout.addText(mockScene, 0, 0, "someText", elemConfig));
+
+        test("creates a text element", () => {
+            expect(mockScene.add.text).toHaveBeenCalled();
+        });
+        test("merges element styles with defaults", () => {
+            const expectedStyle = { foo: "bar", baz: "qux" };
+            expect(mockScene.add.text.mock.calls[0][3]).toStrictEqual(expectedStyle);
+        });
+        test("provides a fallback style", () => {
+            jest.clearAllMocks();
+            mockScene.config = {};
+            const fallbackStyle = {
+                fontFamily: "ReithSans",
+                fontSize: "24px",
+                resolution: 10,
+                align: "center",
+            };
+            shopLayout.addText(mockScene, 0, 0, "someText", undefined);
+            expect(mockScene.add.text.mock.calls[0][3]).toStrictEqual(fallbackStyle);
+        });
+        test("passes the text elem to updateStyleOnFontLoad", () => {
+            expect(textUtils.updateStyleOnFontLoad).toHaveBeenCalledWith("textElem");
+        });
+    });
 });
