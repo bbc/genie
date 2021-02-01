@@ -23,13 +23,7 @@ export const addText = (scene, x, y, text, config) => {
 };
 
 export const updateStyleOnFontLoad = textElem => {
-    if (!document.fonts) {
-        // eslint-disable-next-line local-rules/disallow-timers
-        setTimeout(() => textElem.style.update(), 500);
-        return;
-    }
-
-    if (!document.fonts.check(textElem.style._font)) {
+    if (!document.fonts?.check(textElem.style._font)) {
         document.fonts.ready.then(() => textElem.style.update());
     }
 };

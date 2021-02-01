@@ -60,11 +60,5 @@ describe("text element functions", () => {
             callback();
             expect(mockTextElem.style.update).toHaveBeenCalled();
         });
-        test("if no document.fonts, callback is via setTimeout", () => {
-            document.fonts = undefined;
-            text.updateStyleOnFontLoad(mockTextElem);
-            setTimeout.mock.calls[0][0]();
-            expect(mockTextElem.style.update).toHaveBeenCalled();
-        });
     });
 });

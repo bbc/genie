@@ -5,8 +5,9 @@
  * @license Apache-2.0 Apache-2.0
  */
 
-import * as shopLayout from "../../../src/components/shop/shop-layout.js";
 import { createBalance } from "../../../src/components/shop/balance-ui.js";
+import * as shopLayout from "../../../src/components/shop/shop-layout.js";
+import * as text from "../../../src/core/layout/text-elem.js";
 import * as scalerModule from "../../../src/core/scaler.js";
 import { collections } from "../../../src/core/collections.js";
 
@@ -76,7 +77,7 @@ describe("createBalance()", () => {
     shopLayout.getXPos = jest.fn().mockReturnValue(42);
     shopLayout.getYPos = jest.fn().mockReturnValue(69);
     shopLayout.getScaleFactor = jest.fn().mockReturnValue(3.14);
-    shopLayout.addText = jest.fn().mockReturnValue(mockText);
+    text.addText = jest.fn().mockReturnValue(mockText);
 
     beforeEach(() => {
         balanceElem = createBalance(mockScene, mockMetrics, mockSafeArea);
@@ -92,12 +93,12 @@ describe("createBalance()", () => {
         expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "shop.balanceIcon");
     });
     test("adds a text element with the value of the balance", () => {
-        expect(shopLayout.addText.mock.calls[0][3]).toBe(100);
+        expect(text.addText.mock.calls[0][3]).toBe(100);
     });
     test("uses the quantity of the currency item from inventory as its value", () => {
         expect(collections.get).toHaveBeenCalledWith("inventory");
         expect(mockCollection.get).toHaveBeenCalledWith("someId");
-        expect(shopLayout.addText.mock.calls[0][3]).toStrictEqual(mockCurrencyItem.qty);
+        expect(text.addText.mock.calls[0][3]).toStrictEqual(mockCurrencyItem.qty);
     });
     test("positions the icon to the left", () => {
         expect(mockReturnedIcon.setPosition).toHaveBeenCalledWith(-12, 0);

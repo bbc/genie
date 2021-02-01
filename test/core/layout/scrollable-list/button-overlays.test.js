@@ -5,13 +5,12 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { overlays1Wide } from "../../../../src/core/layout/scrollable-list/button-overlays.js";
-import * as shopLayout from "../../../../src/components/shop/shop-layout.js";
+import * as text from "../../../../src/core/layout/text-elem.js";
 
 const mockImage = { setScale: jest.fn(), width: 100 };
 const mockScene = {
     add: {
         image: jest.fn().mockReturnValue(mockImage),
-        // text: jest.fn().mockReturnValue("mockText"),
     },
     config: {
         assetPrefix: "test",
@@ -38,7 +37,7 @@ const mockGelButton = {
 let mockOverlay;
 let mockConfig;
 
-shopLayout.addText = jest.fn().mockReturnValue("mockText");
+text.addText = jest.fn().mockReturnValue("mockText");
 
 describe("Button overlays", () => {
     afterEach(() => jest.clearAllMocks());
@@ -82,7 +81,7 @@ describe("Button overlays", () => {
                 mockOverlay = { ...mockOverlay, type: "text", value: "someText" };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
-                expect(shopLayout.addText.mock.calls[0][3]).toBe("someText");
+                expect(text.addText.mock.calls[0][3]).toBe("someText");
             });
         });
 
@@ -107,7 +106,7 @@ describe("Button overlays", () => {
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 const expectedValue = "42";
-                expect(shopLayout.addText.mock.calls[0][3]).toBe(expectedValue);
+                expect(text.addText.mock.calls[0][3]).toBe(expectedValue);
             });
         });
 
