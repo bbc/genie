@@ -26,6 +26,13 @@ export class Shop extends Screen {
     create() {
         this.addBackgroundItems();
         this.setLayout(["back", "pause"]);
+        //window.xxx = this.add.rexNinePatch({
+        //    x: -200, y: -300,
+        //    width: 250, height: 200,
+        //    key: 'shop.background',
+        //    columns: [20, undefined, 20],
+        //    rows: [20, undefined, 20],
+        //})
 
         this.backMessage = memoizeBackButton(this.layout.buttons.back.config);
         this.paneStack = [];
