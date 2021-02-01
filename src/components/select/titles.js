@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { updateStyleOnFontLoad } from "../../core/layout/text-utils.js";
+import { updateStyleOnFontLoad } from "../../core/layout/text-elem.js";
 
 const styleDefaults = {
     fontSize: "24px",

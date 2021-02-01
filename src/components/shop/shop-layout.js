@@ -7,7 +7,7 @@
  * @license Apache-2.0
  */
 import { resizeGelButtons } from "./menu-buttons.js";
-import { updateStyleOnFontLoad } from "../../core/layout/text-utils.js";
+// import { updateStyleOnFontLoad } from "../../core/layout/text-elem.js";
 
 export const getSafeArea = layout => layout.getSafeArea({}, false);
 
@@ -124,20 +124,20 @@ export const getPaneBackgroundKey = (scene, pane) => {
     }
 };
 
-const fallbackStyle = {
-    fontFamily: "ReithSans",
-    fontSize: "24px",
-    resolution: 2,
-    align: "center",
-};
+// const fallbackStyle = {
+//     fontFamily: "ReithSans",
+//     fontSize: "24px",
+//     resolution: 2,
+//     align: "center",
+// };
 
-const textStyle = (styleDefaults, config) => {
-    const defaults = styleDefaults ? styleDefaults : fallbackStyle;
-    return config ? { ...defaults, ...config.styles } : defaults;
-};
+// const textStyle = (styleDefaults, config) => {
+//     const defaults = styleDefaults ? styleDefaults : fallbackStyle;
+//     return config ? { ...defaults, ...config.styles } : defaults;
+// };
 
-export const addText = (scene, x, y, text, config) => {
-    const textElem = scene.add.text(x, y, text, textStyle(scene.config.styleDefaults, config));
-    updateStyleOnFontLoad(textElem);
-    return textElem;
-};
+// export const addText = (scene, x, y, text, config) => {
+//     const textElem = scene.add.text(x, y, text, textStyle(scene.config.styleDefaults, config));
+//     updateStyleOnFontLoad(textElem);
+//     return textElem;
+// };

@@ -6,7 +6,8 @@
  * @license Apache-2.0
  */
 
-import { getXPos, getYPos, getScaleFactor, getSafeArea, addText } from "./shop-layout.js";
+import { getXPos, getYPos, getScaleFactor, getSafeArea } from "./shop-layout.js";
+import { addText } from "../../core/layout/text-elem.js";
 import { getMetrics } from "../../core/scaler.js";
 import { collections } from "../../core/collections.js";
 

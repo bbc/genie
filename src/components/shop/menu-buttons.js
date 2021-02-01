@@ -8,7 +8,7 @@
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import { addText } from "../../components/shop/shop-layout.js";
+import { addText } from "../../core/layout/text-elem.js";
 
 export const createMenuButtons = container =>
     ["Shop", "Manage"].map((button, idx) => {
