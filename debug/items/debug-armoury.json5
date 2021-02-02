@@ -6,4 +6,7 @@
         { id: "bomb", qty: 5 },
         { id: "box", qty: 1 },
     ],
+    equipSlots: {
+        weapon: { max: 1 },
+    }
 }
