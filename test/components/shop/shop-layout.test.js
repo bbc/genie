@@ -227,7 +227,7 @@ describe("shop element scaling functions", () => {
             expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "some.asset");
         });
         test("if it finds no asset key, returns a rectangle", () => {
-            mockScene.config.assetKeys.background = {};
+            mockScene.config.backgrounds = {};
             shopLayout.createPaneBackground(mockScene, mockBounds, "shop");
             expect(mockScene.add.rectangle).toHaveBeenCalled();
         });
