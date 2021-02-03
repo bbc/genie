@@ -1,4 +1,9 @@
-const nullToUndefined = val => val === null? undefined : val;
+/**
+ * @copyright BBC 2021
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
+const nullToUndefined = val => (val === null ? undefined : val);
 
 export const createBackground = {
     string: (scene, config) => {
@@ -23,16 +28,13 @@ export const createBackground = {
 };
 
 export const resizeBackground = {
-    Image: (background, scene) => {
+    Image: (scene, background) => {
         const safeArea = scene.layout.getSafeArea({}, false);
         background.setScale(safeArea.width / background.width, safeArea.height / background.height);
     },
     Object: () => {},
-    NinePatch: (background, scene) => {
+    NinePatch: (scene, background) => {
         const { width, height, x, y } = scene.layout.getSafeArea({}, false);
-
-        console.log([width, height, x, y])
-
         background.x = width / 2 + x;
         background.y = height / 2 + y;
         background.resize(width, height);

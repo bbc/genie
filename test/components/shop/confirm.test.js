@@ -42,7 +42,7 @@ describe("createConfirm()", () => {
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
             image: jest.fn().mockReturnValue(mockImage),
-            rectangle: jest.fn(() => ({setScale: jest.fn()})),
+            rectangle: jest.fn(() => ({ setScale: jest.fn() })),
         },
         stack: jest.fn(),
         back: jest.fn(),

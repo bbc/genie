@@ -11,7 +11,7 @@ import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../../accessibility/accessibilify.js";
-import {createBackground, resizeBackground } from "./backgrounds.js";
+import { createBackground, resizeBackground } from "./backgrounds.js";
 
 const createPanel = (scene, title, prepTx, parent) => {
     const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, prepTx, parent));
@@ -180,7 +180,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
 
         this.reset = () => {
             resizePanel(scene, this.panel)();
-            resizeBackground[this.background.constructor.name](this.background, scene);
+            resizeBackground[this.background.constructor.name](scene, this.background);
         };
     }
 
