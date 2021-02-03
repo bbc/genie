@@ -110,14 +110,6 @@
                 position: { align: "left", offsetX: 80, offsetY: -18 },
                 styles: { fontSize: "16px", fontStyle: "bold" },
             },
-            {
-                type: "text",
-                name: "itemDescription",
-                value: "description",
-                isDynamic: true,
-                position: { align: "left", offsetX: 80, offsetY: 4 },
-                styles: { fontSize: "12px" }, // moves to options, add another option
-            },
         ],
         options: {
             shop: [
@@ -145,7 +137,25 @@
                     isDynamic: false,
                     position: { align: "right", offsetX: -120, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned", "unique"], // match on all
+                    activeStates: ["actioned"], // match on all
+                },
+                {
+                    type: "text",
+                    name: "itemDescription",
+                    value: "description",
+                    isDynamic: true,
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    activeStates: ["cta", "unique"], // match on all
+                },
+                {
+                    type: "text",
+                    name: "itemStockLevel",
+                    value: "${qty} in stock",
+                    isDynamic: false, // true
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    activeStates: ["cta", "nonUnique"], // match on all
                 },
             ],
             manage: [

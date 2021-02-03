@@ -35,7 +35,7 @@ const createGelButton = (scene, item, title, state) => {
         },
         setAll: setOverlays(gelButton),
         unsetAll: unsetOverlays(gelButton),
-        state: STATES.find(st => st === state),
+        state,
     };
 
     scaleButton(gelButton, scene.layout, config.listPadding);
@@ -65,11 +65,16 @@ const updateButtonData = button => {
 };
 
 const getButtonState = (item, title) => {
+    const states = [];
     const isOwned = item => item?.state === "owned";
     const isEquipped = item => item?.state === "equipped";
     const isButtonCta = title === "shop" ? isOwned : isEquipped;
-    return isButtonCta(item) ? "actioned" : "cta"; // return array of state labels
+    states.push(isButtonCta(item) ? "actioned" : "cta");
+    states.push(isItemUnique(item) ? "unique" : "nonUnique");
+    return states;
 };
+
+const isItemUnique = item => item.qty === 1;
 
 const updateOverlays = button => {
     button.overlays.unsetAll();
@@ -77,10 +82,21 @@ const updateOverlays = button => {
     button.overlays.setAll();
 };
 
-const getConfigs = button =>
-    button.overlays.configs.items.concat(
-        button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)), // adapt filtering to match on all the labels an overlay option needs
-    );
+const getConfigs = button => button.overlays.configs.items.concat(filterOptionalConfigs(button.overlays)); // filter this
+
+const filterOptionalConfigs = overlays => {
+    const states = overlays.state;
+    const options = overlays.configs.options;
+
+    const filteredOptions = options.filter(overlay => {
+        let result = true;
+        overlay.activeStates.forEach(stateLabel => {
+            if (!states.includes(stateLabel)) result = false;
+        });
+        return result;
+    });
+    return filteredOptions;
+};
 
 const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);
 const getPaneTitle = button => getItemKeyAndTitle(button).pop();
