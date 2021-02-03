@@ -116,7 +116,7 @@
                 value: "description",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: 4 },
-                styles: { fontSize: "12px" },
+                styles: { fontSize: "12px" }, // moves to options, add another option
             },
         ],
         options: {
@@ -136,7 +136,7 @@
                     assetKey: "currency",
                     isDynamic: false,
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["cta"],
+                    activeStates: ["cta"], // match on one
                 },
                 {
                     type: "text",
@@ -145,7 +145,7 @@
                     isDynamic: false,
                     position: { align: "right", offsetX: -120, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned"],
+                    activeStates: ["actioned", "unique"], // match on all
                 },
             ],
             manage: [

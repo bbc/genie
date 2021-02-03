@@ -68,7 +68,7 @@ const getButtonState = (item, title) => {
     const isOwned = item => item?.state === "owned";
     const isEquipped = item => item?.state === "equipped";
     const isButtonCta = title === "shop" ? isOwned : isEquipped;
-    return isButtonCta(item) ? "actioned" : "cta";
+    return isButtonCta(item) ? "actioned" : "cta"; // return array of state labels
 };
 
 const updateOverlays = button => {
@@ -79,7 +79,7 @@ const updateOverlays = button => {
 
 const getConfigs = button =>
     button.overlays.configs.items.concat(
-        button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)),
+        button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)), // adapt filtering to match on all the labels an overlay option needs
     );
 
 const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);
