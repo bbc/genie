@@ -8,12 +8,7 @@
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-
-const styleDefaults = {
-    fontFamily: "ReithSans",
-    fontSize: "16px",
-    resolution: 5,
-};
+import { addText } from "../../core/layout/text-elem.js";
 
 export const createMenuButtons = container =>
     ["Shop", "Manage"].map((button, idx) => {
@@ -81,4 +76,4 @@ const resizeButton = container => (button, idx) => {
 export const resizeGelButtons = container => container.buttons.forEach(resizeButton(container));
 
 const setButtonOverlays = (scene, button, title) =>
-    button.overlays.set("caption", scene.add.text(0, 0, title, styleDefaults).setOrigin(0.5));
+    button.overlays.set("caption", addText(scene, 0, 0, title, scene.config.menuButtons).setOrigin(0.5));

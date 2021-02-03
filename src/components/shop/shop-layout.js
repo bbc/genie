@@ -122,15 +122,3 @@ export const getPaneBackgroundKey = (scene, pane) => {
         return null;
     }
 };
-
-const fallbackStyle = {
-    fontFamily: "ReithSans",
-    fontSize: "24px",
-    resolution: 10,
-    align: "center",
-};
-
-export const textStyle = (styleDefaults, config) => {
-    const defaults = styleDefaults ? styleDefaults : fallbackStyle;
-    return config ? { ...defaults, ...config.styles } : defaults;
-};
