@@ -6,7 +6,6 @@
  */
 import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
-import { getPaneBackgroundKey } from "../../../components/shop/shop-layout.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
@@ -18,26 +17,64 @@ const createPanel = (scene, title, prepTx, parent) => {
     panel.name = title;
     panel.callback = prepTx;
     panel.layout();
+
     return panel;
+};
+
+export const getType = value => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
+const nullToUndefined = val => val === null? undefined : val;
+
+
+export const createBackground = {
+    string: (scene, config) => {
+        const background = scene.add.image(0, 0, `${scene.assetPrefix}.${config}`);
+        const safeArea = scene.layout.getSafeArea({}, false);
+
+        debugger
+        background.setScale(safeArea.width / background.width, safeArea.height / background.height);
+        return background;
+    },
+    null: () => {},
+    object: (scene, config) => {
+        const { width, height, x, y } = scene.layout.getSafeArea({}, false);
+        return scene.add.rexNinePatch({
+            x: width / 2 + x,
+            y: height / 2 + y,
+            width,
+            height,
+            key: `${scene.assetPrefix}.${config.key}`,
+            columns: config.columns.map(nullToUndefined),
+            rows: config.rows.map(nullToUndefined),
+        });
+    },
+};
+
+export const resizeBackground = {
+    Image: (background, scene) => {
+        const safeArea = getPanelY(scene);
+        background.setScale(safeArea.width / background.width, safeArea.height / background.height);
+    },
+    null: () => {},
+    NinePatch: (background, scene) => {
+        const { width, height, x, y } = scene.layout.getSafeArea({}, false);
+
+        console.log([width, height, x, y])
+
+        background.x = width / 2 + x;
+        background.y = height / 2 + y;
+        background.resize(width, height);
+    },
 };
 
 const getConfig = (scene, title, prepTx, parent) => {
     const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
     const safeArea = getPanelY(scene);
     const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
-    const key = getPaneBackgroundKey(scene, title);
-    let backgroundValue;
-    if (key == null) {
-        const rectangle = scene.add.rectangle(0, 0, 1, 1, 0, 0);
-        backgroundValue = rectangle;
-    } else {
-        backgroundValue = scene.add.image(0, 0, getPaneBackgroundKey(scene, title));
-    }
+
     return {
         y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        background: backgroundValue,
         panel: { child: createInnerPanel(scene, title, prepTx, parent) },
         slider: {
             track: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbar}`),
@@ -169,6 +206,10 @@ export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, title, callback, filter) {
         super(scene, 0, 0);
         this.collectionFilter = filter;
+
+        const config = scene.config.backgrounds?.[title] ?? null;
+        this.background = createBackground[getType(config)](scene, config);
+        this.title = title; //TODO remove, used during debug
         this.panel = createPanel(scene, title, callback, this);
         this.makeAccessible = fp.noop;
 
@@ -179,7 +220,12 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         scene.input.topOnly = false;
         setupEvents(scene, this.panel);
 
-        this.reset = resizePanel(this.scene, this.panel);
+        this.reset = () => {
+            resizePanel(scene, this.panel);
+            console.log(this.background.constructor.name);
+
+            resizeBackground[this.background.constructor.name](this.background, scene);
+        };
     }
 
     getBoundingRect() {
@@ -188,6 +234,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
 
     setVisible(isVisible) {
         this.panel.visible = isVisible;
+        this.background.visible = isVisible;
         const items = getPanelItems(this.panel);
         items.forEach(item => {
             const button = item.children[0];

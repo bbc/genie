@@ -9,11 +9,11 @@ import {
     setVisible,
     resize,
     getInnerRectBounds,
-    createRect,
     getSafeArea,
     createPaneBackground,
     textStyle,
 } from "./shop-layout.js";
+//import { createPaneBackground } from "./background.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
 import { collections } from "../../core/collections.js";
@@ -36,7 +36,8 @@ export const createConfirm = scene => {
     container.buttons = createConfirmButtons(container, handleClick(scene, container));
 
     container.elems = {
-        background: [createRect(scene, innerBounds, 0x0000ff), createPaneBackground(scene, bounds, "confirm")],
+        //background: createPaneBackground(scene, scene.config.backgrounds.confirm),
+        background: createPaneBackground(scene, bounds, "confirm"),
         prompt: scene.add
             .text(
                 getX(innerBounds.x, config),
@@ -49,7 +50,7 @@ export const createConfirm = scene => {
             .text(
                 getX(innerBounds.x + 28, config),
                 currencyY(bounds),
-                "PH",
+                "PH",   //TODO ??
                 textStyle(styleDefaults, config.confirm.price),
             )
             .setOrigin(0.5),
@@ -72,12 +73,15 @@ export const createConfirm = scene => {
     container.getBalance = () => balance.getValue();
     container.setLegal = setLegal(container);
 
+    //TODO .elems vs .getElems? Ambiguous
     container.getElems = () => [
         container.elems.prompt,
         container.elems.price,
         container.elems.priceIcon,
         ...container.elems.item,
     ];
+
+    debugger
     return container;
 };
 
@@ -139,7 +143,7 @@ const setLegal = container => (title, isLegal) => {
 
 const populate = container =>
     container.add([
-        ...container.elems.background,
+        container.elems.background,
         container.elems.prompt,
         container.elems.price,
         container.elems.priceIcon,
@@ -194,7 +198,7 @@ const getItemDetail = item => (item ? item.description : "PH");
 const getItemBlurb = item => (item ? item.longDescription : "PH");
 const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
 const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
-const assetKey = item => (item ? item.icon : "shop.itemIcon");
+const assetKey = item => (item ? item.icon : "shop.itemIcon");  //TODO shouldn't use "shop" key as may be different
 const imageY = bounds => -bounds.height / 4;
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
 const promptY = outerBounds => -outerBounds.height * (3 / 8);
