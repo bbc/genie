@@ -139,7 +139,6 @@ describe("Scrollable List", () => {
                     expect(config.y).toBe(50);
                 });
                 test("adds scrollbar and scrollbar handle images from config", () => {
-                    expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.background");
                     expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbar");
                     expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbarHandle");
                 });

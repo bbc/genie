@@ -73,9 +73,9 @@
     columns: 1,
     backgrounds: {
         // menu: "", // string asset key, blank for no background. Object with columns and row definitions to use ninepatch scaling
+        menu: "",
         shop: {key: "background", columns: [20, null, 20], rows: [20, null, 20]},
-        //menu: {key: "background", columns: [20, null, 20], rows: [20, null, 20]},
-        manage: "background",
+        manage: {key: "background", columns: [20, null, 20], rows: [20, null, 20]},
         confirm: "halfViewBackground",
     },
     assetKeys: {

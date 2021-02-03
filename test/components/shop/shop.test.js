@@ -19,7 +19,7 @@ jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
 
 describe("Shop", () => {
     let shopScreen;
-    const mockScrollableList = { setVisible: jest.fn() };
+    const mockScrollableList = { setVisible: jest.fn(), reset: jest.fn() };
     const config = {
         shop: {
             balance: { value: { key: "currencyItemKey" } },

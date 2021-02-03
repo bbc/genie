@@ -21,6 +21,7 @@ describe("Default Plugins", () => {
             "JSON5Loader",
             "ParticlesLoader",
             "rexBBCodeTextPlugin",
+            "rexNinePatchPlugin",
         ]);
         expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin"]);
     });
@@ -40,6 +41,7 @@ describe("Default Plugins", () => {
             "JSON5Loader",
             "ParticlesLoader",
             "rexBBCodeTextPlugin",
+            "rexNinePatchPlugin",
             "testGlobalPlugin",
         ]);
         expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin", "testScenePlugin"]);
