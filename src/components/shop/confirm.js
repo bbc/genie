@@ -14,7 +14,6 @@ import {
     createPaneBackground,
 } from "./shop-layout.js";
 import { addText } from "../../core/layout/text-elem.js";
-//import { createPaneBackground } from "./background.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
 import { collections } from "../../core/collections.js";
