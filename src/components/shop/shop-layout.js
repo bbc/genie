@@ -110,15 +110,5 @@ export const createPaneBackground = (scene, bounds, pane) => {
     }
 };
 
-export const getPaneBackgroundKey = (scene, pane) => {
-    const {
-        assetPrefix,
-        assetKeys: { background },
-    } = scene.config;
-
-    if (background && background[pane]) {
-        return `${assetPrefix}.${background[pane]}`;
-    } else {
-        return null;
-    }
-};
+export const getPaneBackgroundKey = (scene, pane) =>
+    scene.config.backgrounds?.[pane] ? `${scene.assetPrefix}.${scene.config.backgrounds[pane]}` : null;
