@@ -113,6 +113,7 @@ export class Screen extends Phaser.Scene {
     addBackgroundItems = furnish(this);
 
     addOverlay(key) {
+        console.log("BEEBUG: adding overlay", key);
         this.scene.run(key, { ...this._data, addedBy: this });
         this.scene.bringToTop(key);
     }
@@ -123,6 +124,7 @@ export class Screen extends Phaser.Scene {
     };
 
     _onOverlayRemoved = overlay => {
+        console.log("BEEBUG: destroying overlay");
         a11y.destroy();
         overlay.removeAll();
         overlay.scene.stop();
