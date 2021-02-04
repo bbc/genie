@@ -111,6 +111,20 @@ export const config = screen => {
                 screen.addOverlay("pause");
             },
         },
+        shopOverlay: {
+            // can lose this once done
+            group: "bottomLeft",
+            title: "Shop",
+            key: "pause",
+            ariaLabel: "Visit Shop",
+            order: 6,
+            id: "shop",
+            action: ({ screen }) => {
+                screen.scene.pause();
+                gmi.sendStatsEvent("shop", "click");
+                screen.addOverlay("shop");
+            },
+        },
         previous: {
             group: "middleLeftSafe",
             title: "Previous",

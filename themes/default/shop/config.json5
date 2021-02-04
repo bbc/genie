@@ -1,4 +1,5 @@
 {
+    overlay: true,
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "shop.magicShop", x: 0, y: 0 }],
@@ -49,11 +50,15 @@
         manage: "inventory",
     },
     confirm: {
-        detailView: true, // true === smaller image and more text. false === large image only.
-        prompts: {
+        detailView: true,
+        prompt: {
             shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
             manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
+            styles: { fontStyle: "bold" },
         },
+        title: { styles: { fontStyle: "bold" } },
+        detail: { styles: { color: "#bd6", fontStyle: "bold" } },
+        description: { styles: { fontStyle: "italic", lineSpacing: 5 } },
     },
     styleDefaults: {
         fontFamily: "ReithSans",

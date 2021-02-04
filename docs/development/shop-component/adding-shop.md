@@ -2,7 +2,7 @@
 
 ## Adding a Shop screen
 
-As with other Genie components you can simply add a Shop entry in main.js, with navigation routes. The config and assets in `themes/default/shop` are provided as a starting point.
+As with other Genie components you must add a Shop entry to your `screens` array in main.js. The config and assets in `themes/default/shop` are provided as a starting point. You only need to specify a `back` route.
 
 ```
     home: {
@@ -15,11 +15,26 @@ As with other Genie components you can simply add a Shop entry in main.js, with 
     shop: {
         scene: Shop,
         routes: {
-            home: "home",
+            back: "home",
         },
     },
 ```
 
-## Accessing the Shop from in-game
+The above code creates a Home screen with a 'next' button that points to Shop, and a 'back' button in Shop that points to Home.
 
-You can use the Shop as an overlay. Add `overlay: true` to the Shop config. Visit the Shop by calling `this.addOverlay("shop")` from within your gameplay component.
+## Launching the Shop from in-game
+
+You can use the Shop as an overlay. This means you can pop it up from anywhere in your game and then return to that point once done.
+
+To do this:
+
+```
+import { shopOverlay } from "/node_modules/genie/src/components/shop/shop.js";
+```
+
+Then, to launch the shop, do `shopOverlay(screen, "shop")`. Note that:
+
+-   `screen` is the scene you're in (so you would pass `this` if you're calling from inside a class),
+-   `"shop"` is the screen name you configured for the Shop in main.js, as a string.
+
+Finally, add `overlay: true` to your Shop's `config.json5`. This will tell Shop to use its back button to return the player to where they came from.
