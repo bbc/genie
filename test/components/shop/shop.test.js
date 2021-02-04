@@ -118,7 +118,7 @@ describe("Shop", () => {
 
         test("if config'd as an overlay, sets alternative GEL buttons", () => {
             jest.clearAllMocks();
-            config.shop.overlay = true;
+            config.shop.isOverlay = true;
             shopScreen.setData({ config });
             shopScreen.create();
             const expectedButtons = ["overlayBack", "pause"];

@@ -1,4 +1,5 @@
 {
+    isOverlay: true,
     assetPrefix: "shop",
     music: "home.backgroundMusic",
     background: {

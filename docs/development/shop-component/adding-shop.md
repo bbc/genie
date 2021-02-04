@@ -37,7 +37,7 @@ Then, to launch the shop, do `shopOverlay(screen, "shop")`. Note that:
 -   `screen` is the scene you're in (so you would pass `this` if you're calling from inside a class),
 -   `"shop"` is the screen name you configured for the Shop in main.js, as a string.
 
-Finally, add `overlay: true` to your Shop's `config.json5`. This will tell Shop to use its back button to return the player to where they came from.
+Finally, add `isOverlay: true` to your Shop's `config.json5`. This will tell Shop to use its back button to return the player to where they came from (and you no longer need a `back` route for the Shop in main.js.)
 
 These approaches can be combined by using custom routing functions in `screens` in main.js, like this:
 
