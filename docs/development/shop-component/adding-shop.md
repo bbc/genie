@@ -38,3 +38,18 @@ Then, to launch the shop, do `shopOverlay(screen, "shop")`. Note that:
 -   `"shop"` is the screen name you configured for the Shop in main.js, as a string.
 
 Finally, add `overlay: true` to your Shop's `config.json5`. This will tell Shop to use its back button to return the player to where they came from.
+
+These approaches can be combined by using custom routing functions in `screens` in main.js, like this:
+
+```
+    home: {
+        scene: Home,
+        routes: {
+            next: scene => {
+                shopOverlay(scene, "shop");
+            },
+        },
+    },
+```
+
+In this way you can visit the Shop from multiple screens and automatically get the correct 'back' function.
