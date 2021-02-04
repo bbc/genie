@@ -167,7 +167,6 @@ export class ScrollableList extends Phaser.GameObjects.Container {
 
         const config = scene.config.backgrounds?.[title] ?? null;
         this.background = createBackground[getType(config)](scene, config);
-        this.title = title; //TODO remove, used during debug
         this.panel = createPanel(scene, title, callback, this);
         this.makeAccessible = fp.noop;
 
