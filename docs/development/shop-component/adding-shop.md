@@ -24,22 +24,24 @@ The above code creates a Home screen with a 'next' button that points to Shop, a
 
 ## Launching the Shop from in-game
 
-You can use the Shop as an overlay. This means you can pop it up from anywhere in your game and then return to that point once done.
+You can use the Shop as an overlay. This means you can pop it up from anywhere in your game and then return to that screen once done.
 
-To do this:
+First, add `isOverlay: true` to your Shop's `config.json5`.
+
+In your game code:
 
 ```
 import { shopOverlay } from "/node_modules/genie/src/components/shop/shop.js";
 ```
 
-Then, to launch the shop, do `shopOverlay(screen, "shop")`. Note that:
+To launch the shop, do `shopOverlay(screen, "shop");`
 
 -   `screen` is the scene you're in (so you would pass `this` if you're calling from inside a class),
--   `"shop"` is the screen name you configured for the Shop in main.js, as a string.
+-   `"shop"` is the name you configured for the Shop in main.js, as a string.
 
-Finally, add `isOverlay: true` to your Shop's `config.json5`. This will tell Shop to use its back button to return the player to where they came from (and you no longer need a `back` route for the Shop in main.js.)
+You no longer need a `back` route for the Shop in main.js. The back button will return the user to whichever scene called `shopOverlay`.
 
-These approaches can be combined by using custom routing functions in `screens` in main.js, like this:
+This can all be done in a routing function in main.js, like this:
 
 ```
     home: {
@@ -50,6 +52,5 @@ These approaches can be combined by using custom routing functions in `screens` 
             },
         },
     },
+    shop: { ... }, // etc.
 ```
-
-In this way you can visit the Shop from multiple screens and automatically get the correct 'back' function.

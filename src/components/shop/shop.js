@@ -26,7 +26,7 @@ export class Shop extends Screen {
 
     create() {
         this.addBackgroundItems();
-        const backNav = this.config.isOverlay ? "overlayBack" : "back"; // name clash
+        const backNav = this.config.isOverlay ? "overlayBack" : "back";
         this.setLayout([backNav, "pause"]);
 
         this.backMessage = memoizeBackButton(this.layout.buttons[backNav].config);
