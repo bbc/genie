@@ -14,7 +14,10 @@ import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
     container.add(
         [
-            addText(scene, getX(innerBounds.x, scene.config), promptY(bounds), promptText, scene.config),
+            addText(scene, getX(innerBounds.x, scene.config), promptY(bounds), promptText, scene.config).setOrigin(
+                0.5,
+                0.5,
+            ),
             createRect(scene, innerBounds, 0x0000ff),
             createPaneBackground(scene, bounds, "confirm"),
         ].concat(itemView(scene, item, scene.config, bounds)),
@@ -22,7 +25,10 @@ const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
 
 const createBuyElems = (scene, container, item, innerBounds, bounds) =>
     container.add([
-        addText(scene, getX(innerBounds.x + 28, scene.config), currencyY(bounds), item.price, scene.config),
+        addText(scene, getX(innerBounds.x + 28, scene.config), currencyY(bounds), item.price, scene.config).setOrigin(
+            0.5,
+            0.5,
+        ),
         scene.add.image(
             getX(innerBounds.x - 20, scene.config),
             currencyY(bounds),
