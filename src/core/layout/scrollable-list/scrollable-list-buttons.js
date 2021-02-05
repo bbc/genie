@@ -66,9 +66,9 @@ const updateButtonData = button => {
 
 const getButtonState = (scene, item, title) => {
     const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item.id);
-    const isOwned = inventoryItem => inventoryItem?.qty > 0;
+    const isPurchased = inventoryItem => inventoryItem?.qty > 0;
     const isEquipped = inventoryItem => inventoryItem?.state === "equipped";
-    const isButtonCta = title === "shop" ? isOwned : isEquipped;
+    const isButtonCta = title === "shop" ? isPurchased : isEquipped;
     return isButtonCta(inventoryItem) ? "actioned" : "cta";
 };
 

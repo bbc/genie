@@ -14,12 +14,20 @@ export const buy = (scene, item) => {
     const shopCol = collections.get(shop);
     const inventoryItem = invCol.get(item.id);
     shopCol.set({ ...item, qty: shopCol.get(item.id).qty - 1 });
-    invCol.set({ ...item, state: "owned", qty: inventoryItem ? inventoryItem.qty + 1 : 1 });
+    invCol.set({ ...item, state: "purchased", qty: inventoryItem ? inventoryItem.qty + 1 : 1 });
     updateBalance(scene, invCol, scene.config.balance.value.key, item.price);
 };
 
-const equip = (tx, invCol) => {
-    invCol.set({ ...tx.item, state: "equipped" });
+export const equip = (scene, item) => {
+    const { manage } = scene.config.paneCollections;
+    const invCol = collections.get(manage);
+    invCol.set({ ...item, state: "equipped" });
+};
+
+export const unequip = (scene, item) => {
+    const { manage } = scene.config.paneCollections;
+    const invCol = collections.get(manage);
+    invCol.set({ ...item, state: "purchased" });
 };
 
 const updateBalance = (scene, invCol, currencyKey, price) => {

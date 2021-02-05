@@ -141,7 +141,7 @@
                 },
                 {
                     type: "text",
-                    name: "owned",
+                    name: "purchased",
                     value: "Purchased",
                     isDynamic: false,
                     position: { align: "right", offsetX: -120, offsetY: -10 },

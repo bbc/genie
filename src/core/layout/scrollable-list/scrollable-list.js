@@ -77,7 +77,8 @@ const createTable = (scene, title, parent) => {
 };
 
 const showConfirmation = (scene, title, item) => {
-    const action = title === "shop" ? "buy" : item.state === "equipped" ? "unequip" : "equip";
+    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item.id);
+    const action = title === "shop" ? "buy" : inventoryItem?.state === "equipped" ? "unequip" : "equip";
     scene.panes[title].setVisible(false);
     scene.paneStack.push("confirm");
     scene.panes.confirm = createConfirm(scene, title, action, item);
@@ -140,25 +141,11 @@ const setupEvents = (scene, panel) => {
     items.forEach(item => getFirstElement(item).addEventListener("focus", () => panel.updateOnFocus(item)));
 };
 
-const updatePanel = panel => {
-    const parent = panel.parentContainer;
-    const key = parent.scene.config.paneCollections[panel.name];
-    const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
-    const items = getPanelItems(panel);
-
-    shouldPanelListUpdate(collection, items)
-        ? updatePanelList(panel)
-        : items.forEach(item => updateButton(item.children[0]));
-};
-
-const shouldPanelListUpdate = (collection, items) =>
-    collection.length !== items.length || items.some((item, idx) => item.children[0].item.id !== collection[idx].id);
-
 const updatePanelList = panel => {
     const tableContainer = panel.getByName("gridContainer", true);
     const scene = panel.parentContainer.scene;
     tableContainer.clear(true);
-    tableContainer.add(createTable(scene, panel.name, panel.callback, panel.parentContainer));
+    tableContainer.add(createTable(scene, panel.name, panel.parentContainer));
     resizePanel(scene, panel)();
 };
 
@@ -203,6 +190,6 @@ export class ScrollableList extends Phaser.GameObjects.Container {
             item.config.tabbable = isVisible;
             item.accessibleElement.update();
         });
-        isVisible && updatePanel(this.panel);
+        isVisible && updatePanelList(this.panel);
     }
 }

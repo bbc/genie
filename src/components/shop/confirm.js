@@ -9,7 +9,7 @@ import { getInnerRectBounds, createRect, getSafeArea, createPaneBackground } fro
 import { addText } from "../../core/layout/text-elem.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import { buy } from "./transact.js";
+import { buy, equip, unequip } from "./transact.js";
 
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
     container.add(
@@ -78,6 +78,8 @@ const destroyContainer = container => {
 
 const handleClick = (scene, container, title, action, item, cancelButton = false) => {
     !cancelButton && action === "buy" && buy(scene, item);
+    !cancelButton && action === "equip" && equip(scene, item);
+    !cancelButton && action === "unequip" && unequip(scene, item);
     destroyContainer(container);
     scene.panes[title].setVisible(true);
     scene.paneStack.pop();
