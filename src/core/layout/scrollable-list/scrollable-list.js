@@ -76,8 +76,8 @@ const createTable = (scene, title, parent) => {
     return sizer;
 };
 
-const showConfirmation = (scene, item) => {
-    const action = item.state === "equipped" ? "unequip" : item.state === "owned" ? "equip" : "buy";
+const showConfirmation = (scene, title, item) => {
+    const action = title === "shop" ? "buy" : item.state === "equippped" ? "equip" : "unequip";
     scene.panes.shop.setVisible(false);
     scene.paneStack.push("confirm");
     scene.panes.confirm = createConfirm(scene, action, item);
@@ -85,7 +85,7 @@ const showConfirmation = (scene, item) => {
 };
 
 const createItem = (scene, item, title, parent) => {
-    const icon = createGelButton(scene, item, title, getButtonState(item, title));
+    const icon = createGelButton(scene, item, title, getButtonState(scene, item, title));
     const label = scene.rexUI.add.label({
         orientation: 0,
         icon,
@@ -95,7 +95,7 @@ const createItem = (scene, item, title, parent) => {
         id: `scroll_button_${item.id}_${title}`,
         ariaLabel: `${item.title} - ${item.description}`,
     };
-    const callback = pointer => (parent.panel.isInTouching() || !pointer) && showConfirmation(scene, item);
+    const callback = pointer => (parent.panel.isInTouching() || !pointer) && showConfirmation(scene, title, item);
     label.setInteractive();
     label.on(Phaser.Input.Events.POINTER_UP, callback);
     scene.events.once("shutdown", () => label.off(Phaser.Input.Events.POINTER_UP, callback));
@@ -167,7 +167,7 @@ const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items"
 const getFilteredCollection = (collection, filter) => (filter ? collection.filter(filter) : collection);
 
 export class ScrollableList extends Phaser.GameObjects.Container {
-    constructor(scene, title, callback, filter) {
+    constructor(scene, title, filter) {
         super(scene, 0, 0);
         this.collectionFilter = filter;
 

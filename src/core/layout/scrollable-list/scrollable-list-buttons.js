@@ -64,16 +64,17 @@ const updateButtonData = button => {
     return fp.isEqual(button.item, item) ? false : doUpdate(button, item);
 };
 
-const getButtonState = (item, title) => {
-    const isOwned = item => item?.state === "owned";
-    const isEquipped = item => item?.state === "equipped";
+const getButtonState = (scene, item, title) => {
+    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item.id);
+    const isOwned = inventoryItem => inventoryItem?.qty > 0;
+    const isEquipped = inventoryItem => inventoryItem?.state === "equipped";
     const isButtonCta = title === "shop" ? isOwned : isEquipped;
-    return isButtonCta(item) ? "actioned" : "cta";
+    return isButtonCta(inventoryItem) ? "actioned" : "cta";
 };
 
 const updateOverlays = button => {
     button.overlays.unsetAll();
-    button.overlays.state = getButtonState(button.item, getPaneTitle(button));
+    button.overlays.state = getButtonState(button.scene, button.item, getPaneTitle(button));
     button.overlays.setAll();
 };
 

@@ -16,6 +16,8 @@ const makeElement = makerFns => conf => makerFns[conf.type](conf).setOrigin(0.5)
 const getBalanceValue = scene =>
     collections.get(scene.config.paneCollections.manage).get(scene.config.balance.value.key).qty;
 
+export const updateBalanceText = scene => scene.balance.setText(getBalanceValue(scene));
+
 export const createBalance = scene => {
     const safeArea = getSafeArea(scene.layout);
     const metrics = getMetrics();

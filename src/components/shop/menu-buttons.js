@@ -16,10 +16,10 @@ export const createMenuButtons = container =>
         return makeButton(container, config, callback);
     });
 
-export const createConfirmButtons = (container, buttons, callback) =>
-    buttons.map(button => {
+export const createConfirmButtons = (container, actionText, callback) =>
+    [actionText, "Cancel"].map(button => {
         const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, container.scene);
-        const gelButton = makeButton(container, config, callback);
+        const gelButton = makeButton(container, config, () => callback(button === "Cancel"));
         return gelButton;
     });
 

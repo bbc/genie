@@ -6,30 +6,25 @@
  */
 
 import { collections } from "../../core/collections.js";
+import { updateBalanceText } from "./balance-ui.js";
 
-export const doTransaction = scene => tx => {
+export const buy = (scene, item) => {
     const { shop, manage } = scene.config.paneCollections;
     const invCol = collections.get(manage);
-    return (
-        (tx.title === "shop" && buy(tx, shop, invCol, scene.config.balance.value.key)) ||
-        (tx.title === "manage" && equip(tx, invCol))
-    );
-};
-
-const buy = (tx, shop, invCol, currencyKey) => {
     const shopCol = collections.get(shop);
-    shopCol.set({ ...tx.item, state: "owned", qty: -1 });
-    invCol.set({ ...tx.item, qty: +1 });
-    updateBalance(invCol, currencyKey, tx.item.price);
-    return tx.item.price;
+    const inventoryItem = invCol.get(item.id);
+    shopCol.set({ ...item, qty: shopCol.get(item.id).qty - 1 });
+    invCol.set({ ...item, state: "owned", qty: inventoryItem ? inventoryItem.qty + 1 : 1 });
+    updateBalance(scene, invCol, scene.config.balance.value.key, item.price);
 };
 
 const equip = (tx, invCol) => {
     invCol.set({ ...tx.item, state: "equipped" });
 };
 
-const updateBalance = (invCol, currencyKey, price) => {
+const updateBalance = (scene, invCol, currencyKey, price) => {
     const currency = invCol.get(currencyKey);
     const newBalance = currency.qty - price;
     invCol.set({ ...currency, qty: newBalance });
+    updateBalanceText(scene);
 };

@@ -8,8 +8,8 @@ import fp from "../../../lib/lodash/fp/fp.js";
 import { getInnerRectBounds, createRect, getSafeArea, createPaneBackground } from "./shop-layout.js";
 import { addText } from "../../core/layout/text-elem.js";
 import { createConfirmButtons } from "./menu-buttons.js";
-import { collections } from "../../core/collections.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
+import { buy } from "./transact.js";
 
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
     container.add(
@@ -36,20 +36,27 @@ const createBuyElems = (scene, container, item, innerBounds, bounds) =>
         ),
     ]);
 
-const resizeConfirmButton = (button, idx, bounds) => {
+const resizeConfirmButton = (scene, button, idx, bounds) => {
     button.setY(CAMERA_Y + (idx * bounds.height) / 2);
-    button.setX(CAMERA_X + bounds.x);
+    button.setX(CAMERA_X + confirmButtonX(scene.config, bounds));
     button.setScale(bounds.width / button.width);
 };
 
-const resizeConfirmButtons = (confirmButtons, bounds) =>
-    confirmButtons.forEach((button, idx) => resizeConfirmButton(button, idx, bounds));
+const resizeConfirmButtons = (scene, confirmButtons, bounds) =>
+    confirmButtons.forEach((button, idx) => resizeConfirmButton(scene, button, idx, bounds));
 
-const addConfirmButtons = (scene, container, innerBounds, action) => {
-    const confirmButtonCallback = () => handleClick(scene, container, action);
-    const confirmButtons = createConfirmButtons(container, [fp.startCase(action), "Cancel"], confirmButtonCallback);
+const disableConfirmButton = button => {
+    Object.assign(button, { alpha: 0.25, tint: 0xff0000 });
+    button.input.enabled = false;
+    button.accessibleElement.update();
+};
+
+const addConfirmButtons = (scene, container, innerBounds, item, action) => {
+    const confirmButtonCallback = cancelButton => handleClick(scene, container, item, action, cancelButton);
+    const confirmButtons = createConfirmButtons(container, fp.startCase(action), confirmButtonCallback);
     container.add(confirmButtons);
-    resizeConfirmButtons(confirmButtons, innerBounds);
+    action === "buy" && !canAffordItem(scene, item) && disableConfirmButton(confirmButtons[0]);
+    resizeConfirmButtons(scene, confirmButtons, innerBounds);
 };
 
 export const createConfirm = (scene, action, item) => {
@@ -60,7 +67,7 @@ export const createConfirm = (scene, action, item) => {
     container.setY(yOffset);
     createElems(scene, container, getPromptText(scene, action, item), item, innerBounds, bounds);
     action === "buy" && createBuyElems(scene, container, item, innerBounds, bounds);
-    addConfirmButtons(scene, container, innerBounds, action);
+    addConfirmButtons(scene, container, innerBounds, item, action);
     return container;
 };
 
@@ -69,17 +76,14 @@ const destroyContainer = container => {
     container.destroy();
 };
 
-const handleClick = (scene, container, action) => {
-    // const cost = button === "Confirm" && confirm(container);
-    // cost && container.setBalance(container.getBalance() - cost);
+const handleClick = (scene, container, item, action, cancelButton = false) => {
+    !cancelButton && action === "buy" && buy(scene, item);
     destroyContainer(container);
     scene.panes.shop.setVisible(true);
     scene.paneStack.pop();
     const paneToShow = scene.paneStack.slice(-1)[0];
     scene.title.setTitleText(paneToShow ? paneToShow : "Shop");
 };
-
-const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
 const itemView = (scene, item, config, bounds) =>
     config.confirm.detailView
@@ -112,9 +116,6 @@ const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY =
     image.memoisedScale = absScale;
 };
 
-const getItemState = (container, item, title) =>
-    collections.get(getCollectionsKey(container, title)).get(item.id).state;
-const getCollectionsKey = (container, title) => container.config.paneCollections[title];
 const getItemTitle = item => (item ? item.title : "PH");
 const getItemDetail = item => (item ? item.description : "PH");
 const getItemBlurb = item => (item ? item.longDescription : "PH");
@@ -123,9 +124,10 @@ const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 
 const assetKey = item => (item ? item.icon : "shop.itemIcon"); //TODO shouldn't use "shop" key as may be different
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
 const imageY = bounds => -percentOfHeight(bounds, 25);
+const canAffordItem = (scene, item) => scene.balance.getValue() >= item.price;
 const getPromptText = (scene, action, item) =>
     action === "buy"
-        ? scene.balance.getValue() >= item.price
+        ? canAffordItem(scene, item)
             ? scene.config.confirm.prompt[action].legal
             : scene.config.confirm.prompt[action].illegal
         : scene.config.confirm.prompt[action];
@@ -142,3 +144,5 @@ const getOffsetBounds = (outerBounds, innerBounds) => ({
 });
 const imageX = (config, bounds) =>
     config.menu.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
+
+const confirmButtonX = (config, bounds) => (config.menu.buttonsRight ? bounds.x : -bounds.x);
