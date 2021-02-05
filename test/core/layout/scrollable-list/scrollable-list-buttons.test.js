@@ -159,15 +159,15 @@ describe("Scrollable List Buttons", () => {
     describe("getButtonState() returns a string describing the button state", () => {
         test("with shop items, look for an 'owned' state", () => {
             const item = { id: "foo", state: "" };
-            expect(buttons.getButtonState(item, "shop")).toBe("cta");
+            expect(buttons.getButtonState(item, "shop")).toEqual(["cta", "nonUnique"]);
             item.state = "owned";
-            expect(buttons.getButtonState(item, "shop")).toBe("actioned");
+            expect(buttons.getButtonState(item, "shop")).toEqual(["actioned", "nonUnique"]);
         });
         test("with manage items, look for an 'equipped' state", () => {
             const item = { id: "foo", state: "" };
-            expect(buttons.getButtonState(item, "manage")).toBe("cta");
+            expect(buttons.getButtonState(item, "manage")).toEqual(["cta", "nonUnique"]);
             item.state = "equipped";
-            expect(buttons.getButtonState(item, "manage")).toBe("actioned");
+            expect(buttons.getButtonState(item, "manage")).toEqual(["actioned", "nonUnique"]);
         });
     });
 });
