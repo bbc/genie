@@ -13,7 +13,6 @@ import { createBalance } from "./balance-ui.js";
 import { createMenu } from "./menu.js";
 import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 import { eventBus } from "../../core/event-bus.js";
-import { createConfirm } from "./confirm.js";
 import * as a11y from "../../core/accessibility/accessibility-layer.js";
 
 const memoizeBackButton = config => (({ channel, key, action }) => ({ channel, name: key, callback: action }))(config);
@@ -39,7 +38,6 @@ export class Shop extends Screen {
         this.title = createTitle(this);
         this.balance = createBalance(this);
 
-        const confirm = createConfirm(this);
         const callback = confirm.prepTransaction;
 
         const inventoryFilter = item => item.id !== this.config.balance.value.key;
@@ -48,13 +46,18 @@ export class Shop extends Screen {
             top: createMenu(this),
             shop: new ScrollableList(this, "shop", callback),
             manage: new ScrollableList(this, "manage", callback, inventoryFilter),
-            confirm,
         };
         this.setVisiblePane("top");
 
         this.setupEvents();
 
         this.resize();
+    }
+
+    destroyConfirm() {
+        this.panes.confirm.removeAll(true);
+        this.panes.confirm.destroy();
+        delete this.panes.confirm;
     }
 
     stack(pane) {
@@ -65,6 +68,7 @@ export class Shop extends Screen {
     }
 
     back() {
+        this.panes.confirm && this.destroyConfirm();
         this.paneStack.pop();
         if (!this.paneStack.length) {
             this.setVisiblePane("top");
@@ -99,7 +103,6 @@ export class Shop extends Screen {
         const metrics = getMetrics();
         const safeArea = getSafeArea(this.layout);
         this.panes.top.resize(safeArea);
-        this.panes.confirm.resize(safeArea);
         this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));
         this.title.setPosition(0, getYPos(metrics, safeArea));
         this.balance.setScale(getScaleFactor({ metrics, container: this.balance, safeArea }));

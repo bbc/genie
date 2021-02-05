@@ -6,6 +6,7 @@
  */
 import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
+import { createConfirm } from "../../../components/shop/confirm.js";
 import { getPaneBackgroundKey } from "../../../components/shop/shop-layout.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
@@ -13,15 +14,14 @@ import { onScaleChange } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../../accessibility/accessibilify.js";
 
-const createPanel = (scene, title, prepTx, parent) => {
-    const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, prepTx, parent));
+const createPanel = (scene, title, parent) => {
+    const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, parent));
     panel.name = title;
-    panel.callback = prepTx;
     panel.layout();
     return panel;
 };
 
-const getConfig = (scene, title, prepTx, parent) => {
+const getConfig = (scene, title, parent) => {
     const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
     const safeArea = getPanelY(scene);
     const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
@@ -38,7 +38,7 @@ const getConfig = (scene, title, prepTx, parent) => {
         height: safeArea.height,
         scrollMode: 0,
         background: backgroundValue,
-        panel: { child: createInnerPanel(scene, title, prepTx, parent) },
+        panel: { child: createInnerPanel(scene, title, parent) },
         slider: {
             track: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbar}`),
             thumb: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbarHandle}`),
@@ -53,13 +53,13 @@ const getPanelY = scene => {
     return { y: safeArea.height / 2 + safeArea.y, height: safeArea.height };
 };
 
-const createInnerPanel = (scene, title, prepTx, parent) => {
+const createInnerPanel = (scene, title, parent) => {
     const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" });
-    sizer.add(createTable(scene, title, prepTx, parent), { expand: true });
+    sizer.add(createTable(scene, title, parent), { expand: true });
     return sizer;
 };
 
-const createTable = (scene, title, prepTx, parent) => {
+const createTable = (scene, title, parent) => {
     const key = scene.config.paneCollections[title];
     const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
 
@@ -73,9 +73,7 @@ const createTable = (scene, title, prepTx, parent) => {
             name: "grid",
         });
 
-        collection.forEach((item, idx) =>
-            table.add(createItem(scene, item, title, prepTx, parent), 0, idx, "top", 0, true),
-        );
+        collection.forEach((item, idx) => table.add(createItem(scene, item, title, parent), 0, idx, "top", 0, true));
 
         sizer.add(table, 1, "center", 0, true);
     }
@@ -83,8 +81,16 @@ const createTable = (scene, title, prepTx, parent) => {
     return sizer;
 };
 
-const createItem = (scene, item, title, prepTx, parent) => {
-    const icon = createGelButton(scene, item, title, getButtonState(item, title), prepTx);
+const showConfirmation = (scene, item) => {
+    const action = item.state === "equipped" ? "unequip" : item.state === "owned" ? "equip" : "buy";
+    scene.panes.shop.setVisible(false);
+    scene.paneStack.push("confirm");
+    scene.panes.confirm = createConfirm(scene, action, item);
+    scene.title.setTitleText(fp.startCase(action));
+};
+
+const createItem = (scene, item, title, parent) => {
+    const icon = createGelButton(scene, item, title, getButtonState(item, title));
     const label = scene.rexUI.add.label({
         orientation: 0,
         icon,
@@ -94,7 +100,7 @@ const createItem = (scene, item, title, prepTx, parent) => {
         id: `scroll_button_${item.id}_${title}`,
         ariaLabel: `${item.title} - ${item.description}`,
     };
-    const callback = pointer => (parent.panel.isInTouching() || !pointer) && prepTx(item, title);
+    const callback = pointer => (parent.panel.isInTouching() || !pointer) && showConfirmation(scene, item);
     label.setInteractive();
     label.on(Phaser.Input.Events.POINTER_UP, callback);
     scene.events.once("shutdown", () => label.off(Phaser.Input.Events.POINTER_UP, callback));
@@ -169,7 +175,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, title, callback, filter) {
         super(scene, 0, 0);
         this.collectionFilter = filter;
-        this.panel = createPanel(scene, title, callback, this);
+        this.panel = createPanel(scene, title, this);
         this.makeAccessible = fp.noop;
 
         this.add(this.panel);

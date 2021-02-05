@@ -6,7 +6,6 @@
  */
 
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
-import { eventBus } from "../../core/event-bus.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 
 const styleDefaults = {
@@ -16,18 +15,16 @@ const styleDefaults = {
 };
 
 export const createMenuButtons = container =>
-    ["Shop", "Manage"].map((button, idx) => {
+    ["Shop", "Manage"].map(button => {
         const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, container.scene);
         const callback = () => container.scene.stack(button.toLowerCase());
-        return makeButton(container, config, idx, callback);
+        return makeButton(container, config, callback);
     });
 
-export const createConfirmButtons = (container, callbackFn) =>
-    ["Confirm", "Cancel"].map((button, idx) => {
+export const createConfirmButtons = (container, buttons, callback) =>
+    buttons.map(button => {
         const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, container.scene);
-        const callback = () => callbackFn(button);
-        const gelButton = makeButton(container, config, idx, callback);
-        button === "Confirm" && (gelButton.setLegal = setLegal(gelButton));
+        const gelButton = makeButton(container, config, callback);
         return gelButton;
     });
 
@@ -43,30 +40,12 @@ const getButtonConfig = (button, id, scene) => ({
     scene: "shop",
 });
 
-const makeButton = (container, config, idx, callback) => {
+const makeButton = (container, config, callback) => {
     const scene = container.scene;
     const gelButton = scene.add.gelButton(0, 0, config);
-    const event = eventBus.subscribe({ callback, channel: config.channel, name: config.id });
-    scene.events.once("shutdown", event.unsubscribe);
+    gelButton.on(Phaser.Input.Events.POINTER_UP, callback);
     setButtonOverlays(scene, gelButton, config.title);
     return accessibilify(gelButton);
-};
-
-const setLegal = button => isLegal => (isLegal ? setEnabled(button) : setDisabled(button));
-
-const setEnabled = btn => {
-    Object.assign(btn, { alpha: 1, tint: 0xffffff });
-    setA11yEnabled(btn, true);
-};
-
-const setDisabled = btn => {
-    Object.assign(btn, { alpha: 0.25, tint: 0xff0000 });
-    setA11yEnabled(btn, false);
-};
-
-const setA11yEnabled = (btn, isEnabled) => {
-    btn.input.enabled = isEnabled;
-    btn.accessibleElement.update();
 };
 
 const resizeButton = container => (button, idx) => {

@@ -62,8 +62,9 @@
     confirm: {
         detailView: true,
         prompt: {
-            shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
-            manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
+            buy: { legal: "Purchase this item?", illegal: "You can't afford this." },
+            equip: "Do you want to \nequip this item?",
+            unequip: "Do you want to \nunequip this item?",
         },
         detail: { styles: { color: "#2b2", fontStyle: "italic" } },
     },

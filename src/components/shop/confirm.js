@@ -4,152 +4,89 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
-import {
-    setVisible,
-    resize,
-    getInnerRectBounds,
-    createRect,
-    getSafeArea,
-    createPaneBackground,
-    textStyle,
-} from "./shop-layout.js";
+import fp from "../../../lib/lodash/fp/fp.js";
+import { getInnerRectBounds, createRect, getSafeArea, createPaneBackground, textStyle } from "./shop-layout.js";
 import { createConfirmButtons } from "./menu-buttons.js";
-import { doTransaction } from "./transact.js";
 import { collections } from "../../core/collections.js";
+import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 
-export const createConfirm = scene => {
-    const config = scene.config;
-    const balance = scene.balance;
+const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
+    container.add(
+        [
+            scene.add
+                .text(
+                    getX(innerBounds.x, scene.config),
+                    promptY(bounds),
+                    promptText,
+                    textStyle(scene.config.styleDefaults, scene.config.confirm.prompt),
+                )
+                .setOrigin(0.5),
+            createRect(scene, innerBounds, 0x0000ff),
+            createPaneBackground(scene, bounds, "confirm"),
+        ].concat(itemView(scene, item, scene.config, bounds)),
+    );
+
+const createBuyElems = (scene, container, item, innerBounds, bounds) =>
+    container.add([
+        scene.add
+            .text(
+                getX(innerBounds.x + 28, scene.config),
+                currencyY(bounds),
+                item.price,
+                textStyle(scene.config.styleDefaults, scene.config.confirm.price),
+            )
+            .setOrigin(0.5),
+        scene.add.image(
+            getX(innerBounds.x - 20, scene.config),
+            currencyY(bounds),
+            `${scene.config.assetPrefix}.${scene.config.assetKeys.currency}`,
+        ),
+    ]);
+
+const resizeConfirmButton = (button, idx, bounds) => {
+    button.setY(CAMERA_Y + (idx * bounds.height) / 2);
+    button.setX(CAMERA_X + bounds.x);
+    button.setScale(bounds.width / button.width);
+};
+
+const resizeConfirmButtons = (confirmButtons, bounds) =>
+    confirmButtons.forEach((button, idx) => resizeConfirmButton(button, idx, bounds));
+
+const addConfirmButtons = (scene, container, innerBounds, action) => {
+    const confirmButtonCallback = () => handleClick(scene, container, action);
+    const confirmButtons = createConfirmButtons(container, [fp.startCase(action), "Cancel"], confirmButtonCallback);
+    container.add(confirmButtons);
+    resizeConfirmButtons(confirmButtons, innerBounds);
+};
+
+export const createConfirm = (scene, action, item) => {
     const bounds = getSafeArea(scene.layout);
-
-    const { styleDefaults } = config;
-
     const container = scene.add.container();
-    container.config = config;
-    container.memoisedBounds = bounds;
-
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
     const yOffset = bounds.height / 2 + bounds.y;
-
     container.setY(yOffset);
-    container.buttons = createConfirmButtons(container, handleClick(scene, container));
-
-    container.elems = {
-        background: [createRect(scene, innerBounds, 0x0000ff), createPaneBackground(scene, bounds, "confirm")],
-        prompt: scene.add
-            .text(
-                getX(innerBounds.x, config),
-                promptY(bounds),
-                config.confirm.prompt.shop,
-                textStyle(styleDefaults, config.confirm.prompt),
-            )
-            .setOrigin(0.5),
-        price: scene.add
-            .text(
-                getX(innerBounds.x + 28, config),
-                currencyY(bounds),
-                "PH",
-                textStyle(styleDefaults, config.confirm.price),
-            )
-            .setOrigin(0.5),
-        priceIcon: scene.add.image(
-            getX(innerBounds.x - 20, config),
-            currencyY(bounds),
-            `${config.assetPrefix}.${config.assetKeys.currency}`,
-        ),
-        item: itemView(scene, undefined, config, bounds),
-    };
-
-    populate(container);
-
-    container.setVisible = setVisible(container);
-    container.resize = resize(container);
-    container.update = update(container);
-    container.prepTransaction = prepTransaction(scene, container);
-    container.doTransaction = doTransaction(scene);
-    container.setBalance = bal => balance.setText(bal);
-    container.getBalance = () => balance.getValue();
-    container.setLegal = setLegal(container);
-
-    container.getElems = () => [
-        container.elems.prompt,
-        container.elems.price,
-        container.elems.priceIcon,
-        ...container.elems.item,
-    ];
+    createElems(scene, container, getPromptText(scene, action, item), item, innerBounds, bounds);
+    action === "buy" && createBuyElems(scene, container, item, innerBounds, bounds);
+    addConfirmButtons(scene, container, innerBounds, action);
     return container;
 };
 
-const handleClick = (scene, container) => button => {
-    if (button === "Confirm" && !container.transaction.isLegal) return;
-    const cost = button === "Confirm" && confirm(container);
-    cost && container.setBalance(container.getBalance() - cost);
-    scene.back();
+const destroyContainer = container => {
+    container.removeAll(true);
+    container.destroy();
 };
 
-const isTransactionLegal = (container, item, title) => {
-    const isShop = title === "shop";
-    const itemState = getItemState(container, item, title);
-    return isShop ? container.getBalance() >= parseInt(item.price) : itemState !== "equipped";
+const handleClick = (scene, container, action) => {
+    // const cost = button === "Confirm" && confirm(container);
+    // cost && container.setBalance(container.getBalance() - cost);
+    destroyContainer(container);
+    scene.panes.shop.setVisible(true);
+    scene.paneStack.pop();
+    const paneToShow = scene.paneStack.slice(-1)[0];
+    scene.title.setTitleText(paneToShow ? paneToShow : "Shop");
 };
 
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
-
-const update = container => (item, title) => {
-    const isLegal = isTransactionLegal(container, item, title);
-    container.elems.priceIcon.setVisible(title === "shop");
-    container.elems.price.setText(title === "shop" ? item.price : "");
-    updateItemView(container, item);
-    container.transaction = { item, title, isLegal };
-    container.setLegal(title, isLegal);
-};
-
-const updateItemView = (container, item) =>
-    container.config.confirm.detailView ? updateItemDetailView(container, item) : updateItemImageView(container, item);
-
-const updateItemDetailView = (container, item) => {
-    const [itemImage, itemTitle, itemDetail, itemBlurb] = container.elems.item;
-
-    setImageTextureAndScale(container, item, itemImage, getItemDetailImageScale);
-
-    itemTitle.setText(getItemTitle(item));
-    itemDetail.setText(getItemDetail(item));
-    itemBlurb.setText(getItemBlurb(item));
-};
-
-const updateItemImageView = (container, item) => {
-    const [image] = container.elems.item;
-    setImageTextureAndScale(container, item, image, getItemImageScale);
-};
-
-const setImageTextureAndScale = (container, item, image, getScaleFn) => {
-    image.setTexture(assetKey(item));
-    const scale = getScaleFn(container.memoisedBounds, image);
-    setImageScaleXY(image, scale, container.scaleX, container.scaleY);
-};
-
-const setLegal = container => (title, isLegal) => {
-    const prompt = isLegal
-        ? container.config.confirm.prompt[title].legal
-        : container.config.confirm.prompt[title].illegal;
-    container.elems.prompt.setText(prompt);
-    container.buttons[0].setLegal(isLegal);
-};
-
-const populate = container =>
-    container.add([
-        ...container.elems.background,
-        container.elems.prompt,
-        container.elems.price,
-        container.elems.priceIcon,
-        ...container.elems.item,
-    ]);
-
-const prepTransaction = (scene, container) => (item, title) => {
-    scene.stack("confirm");
-    container.update(item, title);
-};
 
 const itemView = (scene, item, config, bounds) =>
     config.confirm.detailView
@@ -197,6 +134,12 @@ const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 
 const assetKey = item => (item ? item.icon : "shop.itemIcon");
 const imageY = bounds => -bounds.height / 4;
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
+const getPromptText = (scene, action, item) =>
+    action === "buy"
+        ? scene.balance.getValue() >= item.price
+            ? scene.config.confirm.prompt[action].legal
+            : scene.config.confirm.prompt[action].illegal
+        : scene.config.confirm.prompt[action];
 const promptY = outerBounds => -outerBounds.height * (3 / 8);
 const currencyY = outerBounds => -outerBounds.height / 4;
 const detailY = bounds => bounds.height / 12;
