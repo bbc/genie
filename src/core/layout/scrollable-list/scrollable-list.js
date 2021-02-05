@@ -77,10 +77,10 @@ const createTable = (scene, title, parent) => {
 };
 
 const showConfirmation = (scene, title, item) => {
-    const action = title === "shop" ? "buy" : item.state === "equippped" ? "equip" : "unequip";
-    scene.panes.shop.setVisible(false);
+    const action = title === "shop" ? "buy" : item.state === "equipped" ? "unequip" : "equip";
+    scene.panes[title].setVisible(false);
     scene.paneStack.push("confirm");
-    scene.panes.confirm = createConfirm(scene, action, item);
+    scene.panes.confirm = createConfirm(scene, title, action, item);
     scene.title.setTitleText(fp.startCase(action));
 };
 

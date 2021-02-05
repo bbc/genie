@@ -51,15 +51,15 @@ const disableActionButton = button => {
     button.accessibleElement.update();
 };
 
-const addConfirmButtons = (scene, container, innerBounds, item, action) => {
-    const confirmButtonCallback = cancelButton => handleClick(scene, container, item, action, cancelButton);
+const addConfirmButtons = (scene, container, innerBounds, title, action, item) => {
+    const confirmButtonCallback = cancelButton => handleClick(scene, container, title, action, item, cancelButton);
     const confirmButtons = createConfirmButtons(container, fp.startCase(action), confirmButtonCallback);
     container.add(confirmButtons);
     action === "buy" && !canAffordItem(scene, item) && disableActionButton(confirmButtons[0]);
     resizeConfirmButtons(scene, confirmButtons, innerBounds);
 };
 
-export const createConfirm = (scene, action, item) => {
+export const createConfirm = (scene, title, action, item) => {
     const bounds = getSafeArea(scene.layout);
     const container = scene.add.container();
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
@@ -67,7 +67,7 @@ export const createConfirm = (scene, action, item) => {
     container.setY(yOffset);
     createElems(scene, container, getPromptText(scene, action, item), item, innerBounds, bounds);
     action === "buy" && createBuyElems(scene, container, item, innerBounds, bounds);
-    addConfirmButtons(scene, container, innerBounds, item, action);
+    addConfirmButtons(scene, container, innerBounds, title, action, item);
     return container;
 };
 
@@ -76,10 +76,10 @@ const destroyContainer = container => {
     container.destroy();
 };
 
-const handleClick = (scene, container, item, action, cancelButton = false) => {
+const handleClick = (scene, container, title, action, item, cancelButton = false) => {
     !cancelButton && action === "buy" && buy(scene, item);
     destroyContainer(container);
-    scene.panes.shop.setVisible(true);
+    scene.panes[title].setVisible(true);
     scene.paneStack.pop();
     const paneToShow = scene.paneStack.slice(-1)[0];
     scene.title.setTitleText(paneToShow ? paneToShow : "Shop");
