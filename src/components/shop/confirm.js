@@ -45,7 +45,7 @@ const resizeConfirmButton = (scene, button, idx, bounds) => {
 const resizeConfirmButtons = (scene, confirmButtons, bounds) =>
     confirmButtons.forEach((button, idx) => resizeConfirmButton(scene, button, idx, bounds));
 
-const disableConfirmButton = button => {
+const disableActionButton = button => {
     Object.assign(button, { alpha: 0.25, tint: 0xff0000 });
     button.input.enabled = false;
     button.accessibleElement.update();
@@ -55,7 +55,7 @@ const addConfirmButtons = (scene, container, innerBounds, item, action) => {
     const confirmButtonCallback = cancelButton => handleClick(scene, container, item, action, cancelButton);
     const confirmButtons = createConfirmButtons(container, fp.startCase(action), confirmButtonCallback);
     container.add(confirmButtons);
-    action === "buy" && !canAffordItem(scene, item) && disableConfirmButton(confirmButtons[0]);
+    action === "buy" && !canAffordItem(scene, item) && disableActionButton(confirmButtons[0]);
     resizeConfirmButtons(scene, confirmButtons, innerBounds);
 };
 
