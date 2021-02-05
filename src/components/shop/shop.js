@@ -103,6 +103,7 @@ export class Shop extends Screen {
         const metrics = getMetrics();
         const safeArea = getSafeArea(this.layout);
         this.panes.top.resize(safeArea);
+        this.panes.shop.reset();
         this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));
         this.title.setPosition(0, getYPos(metrics, safeArea));
         this.balance.setScale(getScaleFactor({ metrics, container: this.balance, safeArea }));

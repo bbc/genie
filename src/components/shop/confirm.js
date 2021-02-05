@@ -5,7 +5,8 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import { getInnerRectBounds, createRect, getSafeArea, createPaneBackground, textStyle } from "./shop-layout.js";
+import { getInnerRectBounds, createRect, getSafeArea, createPaneBackground } from "./shop-layout.js";
+import { addText } from "../../core/layout/text-elem.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { collections } from "../../core/collections.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
@@ -13,14 +14,7 @@ import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
     container.add(
         [
-            scene.add
-                .text(
-                    getX(innerBounds.x, scene.config),
-                    promptY(bounds),
-                    promptText,
-                    textStyle(scene.config.styleDefaults, scene.config.confirm.prompt),
-                )
-                .setOrigin(0.5),
+            addText(scene, getX(innerBounds.x, scene.config), promptY(bounds), promptText, scene.config),
             createRect(scene, innerBounds, 0x0000ff),
             createPaneBackground(scene, bounds, "confirm"),
         ].concat(itemView(scene, item, scene.config, bounds)),
@@ -28,14 +22,7 @@ const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
 
 const createBuyElems = (scene, container, item, innerBounds, bounds) =>
     container.add([
-        scene.add
-            .text(
-                getX(innerBounds.x + 28, scene.config),
-                currencyY(bounds),
-                item.price,
-                textStyle(scene.config.styleDefaults, scene.config.confirm.price),
-            )
-            .setOrigin(0.5),
+        addText(scene, getX(innerBounds.x + 28, scene.config), currencyY(bounds), item.price, scene.config),
         scene.add.image(
             getX(innerBounds.x - 20, scene.config),
             currencyY(bounds),
@@ -102,19 +89,15 @@ const itemImageView = (scene, item, config, bounds) => {
 
 const itemDetailView = (scene, item, config, bounds) => {
     const x = imageX(config, bounds);
-    const { styleDefaults } = config;
     const { title, detail, description } = config.confirm;
 
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
     setImageScaleXY(itemImage, getItemDetailImageScale(bounds, itemImage));
 
-    const itemTitle = scene.add.text(x, 0, getItemTitle(item), textStyle(styleDefaults, title)).setOrigin(0.5);
-    const itemDetail = scene.add
-        .text(x, detailY(bounds), getItemDetail(item), textStyle(styleDefaults, detail))
-        .setOrigin(0.5);
-    const itemBlurb = scene.add
-        .text(x, blurbY(bounds), getItemBlurb(item), textStyle(styleDefaults, description), 0)
-        .setOrigin(0.5);
+    const itemTitle = addText(scene, x, titleY(bounds), getItemTitle(item), title).setOrigin(0.5);
+    const itemDetail = addText(scene, x, detailY(bounds), getItemDetail(item), detail).setOrigin(0.5);
+    const itemBlurb = addText(scene, x, blurbY(bounds), getItemBlurb(item), description).setOrigin(0.5);
+
     return [itemImage, itemTitle, itemDetail, itemBlurb];
 };
 
@@ -131,19 +114,22 @@ const getItemDetail = item => (item ? item.description : "PH");
 const getItemBlurb = item => (item ? item.longDescription : "PH");
 const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
 const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
-const assetKey = item => (item ? item.icon : "shop.itemIcon");
-const imageY = bounds => -bounds.height / 4;
+const assetKey = item => (item ? item.icon : "shop.itemIcon"); //TODO shouldn't use "shop" key as may be different
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
+const imageY = bounds => -percentOfHeight(bounds, 25);
 const getPromptText = (scene, action, item) =>
     action === "buy"
         ? scene.balance.getValue() >= item.price
             ? scene.config.confirm.prompt[action].legal
             : scene.config.confirm.prompt[action].illegal
         : scene.config.confirm.prompt[action];
-const promptY = outerBounds => -outerBounds.height * (3 / 8);
-const currencyY = outerBounds => -outerBounds.height / 4;
-const detailY = bounds => bounds.height / 12;
-const blurbY = bounds => bounds.height / 4;
+const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
+const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
+const titleY = bounds => -percentOfHeight(bounds, 4);
+const detailY = bounds => percentOfHeight(bounds, 5);
+const blurbY = bounds => percentOfHeight(bounds, 25);
+const percentOfHeight = (bounds, percent) => (bounds.height / 100) * percent;
+
 const getOffsetBounds = (outerBounds, innerBounds) => ({
     ...innerBounds,
     y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,

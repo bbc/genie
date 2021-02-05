@@ -110,27 +110,5 @@ export const createPaneBackground = (scene, bounds, pane) => {
     }
 };
 
-export const getPaneBackgroundKey = (scene, pane) => {
-    const {
-        assetPrefix,
-        assetKeys: { background },
-    } = scene.config;
-
-    if (background && background[pane]) {
-        return `${assetPrefix}.${background[pane]}`;
-    } else {
-        return null;
-    }
-};
-
-const fallbackStyle = {
-    fontFamily: "ReithSans",
-    fontSize: "24px",
-    resolution: 10,
-    align: "center",
-};
-
-export const textStyle = (styleDefaults, config) => {
-    const defaults = styleDefaults ? styleDefaults : fallbackStyle;
-    return config ? { ...defaults, ...config.styles } : defaults;
-};
+export const getPaneBackgroundKey = (scene, pane) =>
+    scene.config.backgrounds?.[pane] ? `${scene.assetPrefix}.${scene.config.backgrounds[pane]}` : null;

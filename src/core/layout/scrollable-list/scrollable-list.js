@@ -7,37 +7,32 @@
 import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
 import { createConfirm } from "../../../components/shop/confirm.js";
-import { getPaneBackgroundKey } from "../../../components/shop/shop-layout.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../../accessibility/accessibilify.js";
+import { createBackground, resizeBackground } from "./backgrounds.js";
 
 const createPanel = (scene, title, parent) => {
     const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, parent));
     panel.name = title;
     panel.layout();
+
     return panel;
 };
+
+export const getType = value => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
 
 const getConfig = (scene, title, parent) => {
     const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
     const safeArea = getPanelY(scene);
     const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
-    const key = getPaneBackgroundKey(scene, title);
-    let backgroundValue;
-    if (key == null) {
-        const rectangle = scene.add.rectangle(0, 0, 1, 1, 0, 0);
-        backgroundValue = rectangle;
-    } else {
-        backgroundValue = scene.add.image(0, 0, getPaneBackgroundKey(scene, title));
-    }
+
     return {
         y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        background: backgroundValue,
         panel: { child: createInnerPanel(scene, title, parent) },
         slider: {
             track: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbar}`),
@@ -175,6 +170,9 @@ export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, title, callback, filter) {
         super(scene, 0, 0);
         this.collectionFilter = filter;
+
+        const config = scene.config.backgrounds?.[title] ?? null;
+        this.background = createBackground[getType(config)](scene, config);
         this.panel = createPanel(scene, title, this);
         this.makeAccessible = fp.noop;
 
@@ -185,7 +183,10 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         scene.input.topOnly = false;
         setupEvents(scene, this.panel);
 
-        this.reset = resizePanel(this.scene, this.panel);
+        this.reset = () => {
+            resizePanel(scene, this.panel)();
+            resizeBackground[this.background.constructor.name](scene, this.background);
+        };
     }
 
     getBoundingRect() {
@@ -194,6 +195,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
 
     setVisible(isVisible) {
         this.panel.visible = isVisible;
+        this.background.visible = isVisible;
         const items = getPanelItems(this.panel);
         items.forEach(item => {
             const button = item.children[0];

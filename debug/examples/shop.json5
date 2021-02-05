@@ -1,15 +1,17 @@
 {
-    assetPrefix: "shop",
+    assetPrefix: "shop",    //override generally only used for debug screens. Remove for production screens TODO can we switch the debug shop to use "shop-debug." ?
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "shop.magicShop", x: 0, y: 0 }],
     },
     styleDefaults: {
-        // menu button text uses styleDefaults, everything else can be modified.
         fontFamily: "ReithSans",
         fontSize: "24px",
-        resolution: 10,
+        resolution: 2,
         align: "center",
+    },
+    menuButtons: {
+        styles: { fontStyle: "bold", fontSize: "16px" },
     },
     titles: [
         {
@@ -23,7 +25,7 @@
             value: "Shop",
             xOffset: 0,
             yOffset: 0,
-            styles: { fontSize: 30 },
+            styles: { fontStyle: "bold", fontSize: "24px" },
         },
     ],
     titlePadding: 20,
@@ -39,7 +41,7 @@
         value: {
             type: "text",
             key: "coin", // the id of the currency item, which must exist in the inventory collection
-            // styles: {},
+            styles: { fontSize: "16px" },
         },
     },
     balancePadding: 15,
@@ -58,25 +60,25 @@
         prompt: {
             shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
             manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
-            // styles: {},
+            styles: { fontStyle: "bold" },
         },
-        // title: { styles: {} }, // optionally configure styles on item text
-        detail: { styles: { color: "#2b2", fontStyle: "italic" } },
-        // description: { styles: {} },
+        title: { styles: { fontStyle: "bold" } }, // optionally configure styles on item text
+        detail: { styles: { color: "#bd6", fontStyle: "bold" } },
+        description: { styles: { fontStyle: "italic", lineSpacing: 5 } },
         // price: { styles: {} },
     },
     menu: {
         buttonsRight: true, // set as false to X-flip the menu layout
     },
     columns: 1,
+    backgrounds: {
+        // menu: "", // string asset key, blank for no background. Object with columns and row definitions to use ninepatch scaling
+        menu: "",
+        shop: {key: "background", columns: [20, null, 20], rows: [20, null, 20]},
+        manage: {key: "background", columns: [20, null, 20], rows: [20, null, 20]},
+        confirm: "halfViewBackground",
+    },
     assetKeys: {
-        // background: "background", // if a string is passed, that asset is used for all panes
-        background: {
-            // menu: "", // pass empty string, or omit the key entirely, for a transparent BG
-            shop: "background",
-            manage: "background",
-            confirm: "halfViewBackground",
-        },
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
         itemBackground: "itemBackground",
@@ -106,7 +108,7 @@
                 value: "title",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: -18 },
-                styles: { fontSize: 18 },
+                styles: { fontSize: "16px", fontStyle: "bold" },
             },
             {
                 type: "text",
@@ -114,7 +116,7 @@
                 value: "description",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: 4 },
-                styles: { fontSize: 12 },
+                styles: { fontSize: "12px" },
             },
         ],
         options: {
@@ -125,7 +127,7 @@
                     value: "price",
                     isDynamic: true,
                     position: { align: "right", offsetX: -44, offsetY: -10 },
-                    styles: { fontSize: 14 },
+                    styles: { fontSize: "14px" },
                     activeStates: ["cta"],
                 },
                 {
@@ -139,10 +141,10 @@
                 {
                     type: "text",
                     name: "owned",
-                    value: "Owned",
+                    value: "Purchased",
                     isDynamic: false,
-                    position: { align: "right", offsetX: -76, offsetY: -10 },
-                    styles: { fontSize: 18 },
+                    position: { align: "right", offsetX: -120, offsetY: -10 },
+                    styles: { fontSize: "16px", align: "right" },
                     activeStates: ["actioned"],
                 },
             ],
@@ -153,7 +155,7 @@
                     value: "Equip",
                     isDynamic: false,
                     position: { align: "right", offsetX: -76, offsetY: -10 },
-                    styles: { fontSize: 18 },
+                    styles: { fontSize: "16px", align: "right" },
                     activeStates: ["cta"],
                 },
                 {
@@ -162,7 +164,7 @@
                     value: "Equipped",
                     isDynamic: false,
                     position: { align: "right", offsetX: -96, offsetY: -10 },
-                    styles: { fontSize: 18 },
+                    styles: { fontSize: "16px", align: "right" },
                     activeStates: ["actioned"],
                 },
             ],

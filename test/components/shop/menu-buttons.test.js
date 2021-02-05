@@ -12,6 +12,7 @@ import {
 } from "../../../src/components/shop/menu-buttons.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as a11y from "../../../src/core/accessibility/accessibilify.js";
+import * as text from "../../../src/core/layout/text-elem.js";
 
 describe("shop menu buttons", () => {
     let buttons;
@@ -25,7 +26,10 @@ describe("shop menu buttons", () => {
         input: {},
         accessibleElement: { update: jest.fn() },
     };
+
     const mockText = { setOrigin: jest.fn() };
+    text.addText = jest.fn().mockReturnValue(mockText);
+
     const mockOuterBounds = { x: 0, y: 0, height: 300, width: 800 };
 
     const mockScene = {
@@ -33,7 +37,6 @@ describe("shop menu buttons", () => {
         add: {
             gelButton: jest.fn(() => mockButton),
             image: jest.fn(),
-            text: jest.fn(() => mockText),
         },
         scene: { key: "mockSceneKey" },
         setVisiblePane: jest.fn(),
@@ -96,8 +99,8 @@ describe("shop menu buttons", () => {
         });
         test("sets text overlays", () => {
             expect(mockButton.overlays.set).toHaveBeenCalledTimes(2);
-            expect(mockScene.add.text.mock.calls[0][2]).toBe("Shop");
-            expect(mockScene.add.text.mock.calls[1][2]).toBe("Manage");
+            expect(text.addText.mock.calls[0][3]).toBe("Shop");
+            expect(text.addText.mock.calls[1][3]).toBe("Manage");
         });
         test("accesibilifies", () => {
             expect(a11y.accessibilify).toHaveBeenCalledTimes(2);
