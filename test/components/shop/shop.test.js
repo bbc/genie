@@ -4,7 +4,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { Shop, shopOverlay } from "../../../src/components/shop/shop.js";
+import { Shop, launchShopOverlay } from "../../../src/components/shop/shop.js";
 import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance-ui.js";
@@ -248,11 +248,11 @@ describe("Shop", () => {
     });
 });
 
-describe("shopOverlay()", () => {
+describe("launchShopOverlay()", () => {
     const mockScene = { scene: { pause: jest.fn() }, addOverlay: jest.fn() };
     gmi.sendStatsEvent = jest.fn();
 
-    beforeEach(() => shopOverlay(mockScene, "shopNavKey"));
+    beforeEach(() => launchShopOverlay(mockScene, "shopNavKey"));
 
     test("pauses the scene it's called on", () => {
         expect(mockScene.scene.pause).toHaveBeenCalled();

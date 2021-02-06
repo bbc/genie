@@ -113,7 +113,7 @@ export class Shop extends Screen {
     }
 }
 
-export const shopOverlay = (screen, shopKey) => {
+export const launchShopOverlay = (screen, shopKey) => {
     screen.scene.pause();
     gmi.sendStatsEvent("shop", "click");
     screen.addOverlay(shopKey);

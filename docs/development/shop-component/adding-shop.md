@@ -31,10 +31,10 @@ First, add `isOverlay: true` to your Shop's `config.json5`.
 In your game code:
 
 ```
-import { shopOverlay } from "/node_modules/genie/src/components/shop/shop.js";
+import { launchShopOverlay } from "/node_modules/genie/src/components/shop/shop.js";
 ```
 
-To launch the shop, do `shopOverlay(screen, "shop");`
+To launch the shop, do `launchShopOverlay(screen, "shop");`
 
 -   `screen` is the scene you're in (so you would pass `this` if you're calling from inside a class),
 -   `"shop"` is the name you configured for the Shop in main.js, as a string.
