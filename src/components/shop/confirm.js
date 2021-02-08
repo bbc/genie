@@ -72,7 +72,7 @@ export const createConfirm = (scene, title, action, item) => {
     const yOffset = bounds.height / 2 + bounds.y;
     container.setY(yOffset);
     createElems(scene, container, getPromptText(scene, action, item), item, innerBounds, bounds);
-    action === "buy" && createBuyElems(scene, container, item, innerBounds, bounds);
+    action === "buy" && itemIsInStock(item) && createBuyElems(scene, container, item, innerBounds, bounds);
     addConfirmButtons(scene, container, innerBounds, title, action, item);
     return container;
 };

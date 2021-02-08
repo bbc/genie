@@ -61,7 +61,7 @@
     confirm: {
         detailView: true, // true === smaller image and more text. false === large image only.
         prompt: {
-            buy: { legal: "Purchase this item?", illegal: "You can't afford this." },
+            buy: { legal: "Purchase this item?", illegal: "You can't afford this.", unavailable: "You cannot purchase\nanymore of these." },
             equip: "Do you want to \nequip this item?",
             unequip: "Do you want to \nunequip this item?",
             styles: { fontStyle: "bold" },
