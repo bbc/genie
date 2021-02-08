@@ -17,6 +17,7 @@ import {
 export const createMenu = scene => {
     const bounds = getSafeArea(scene.layout);
 
+    //TODO remove these decorations in favour of a container object
     const container = scene.add.container();
     container.config = scene.config;
     container.setVisible = setVisible(container);

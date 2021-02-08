@@ -1,5 +1,4 @@
 {
-    assetPrefix: "shop",
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "shop.magicShop", x: 0, y: 0 }],

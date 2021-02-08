@@ -58,6 +58,7 @@ export const createConfirm = scene => {
     container.getBalance = () => balance.getValue();
     container.setLegal = setLegal(container);
 
+    //TODO .elems vs .getElems? Ambiguous
     container.getElems = () => [
         container.elems.prompt,
         container.elems.price,
@@ -176,7 +177,7 @@ const getItemDetail = item => (item ? item.description : "PH");
 const getItemBlurb = item => (item ? item.longDescription : "PH");
 const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
 const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
-const assetKey = item => (item ? item.icon : "shop.itemIcon");
+const assetKey = item => (item ? item.icon : "shop.itemIcon"); //TODO shouldn't use "shop" key as may be different
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
 
 const imageY = bounds => -percentOfHeight(bounds, 25);

@@ -1,5 +1,5 @@
 {
-    assetPrefix: "shop",
+    assetPrefix: "shop",    //override generally only used for debug screens. Remove for production screens TODO can we switch the debug shop to use "shop-debug." ?
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "shop.magicShop", x: 0, y: 0 }],
@@ -71,14 +71,14 @@
         buttonsRight: true, // set as false to X-flip the menu layout
     },
     columns: 1,
+    backgrounds: {
+        // menu: "", // string asset key, blank for no background. Object with columns and row definitions to use ninepatch scaling
+        menu: "",
+        shop: {key: "background", columns: [20, null, 20], rows: [20, null, 20]},
+        manage: {key: "background", columns: [20, null, 20], rows: [20, null, 20]},
+        confirm: "halfViewBackground",
+    },
     assetKeys: {
-        // background: "background", // if a string is passed, that asset is used for all panes
-        background: {
-            // menu: "", // pass empty string, or omit the key entirely, for a transparent BG
-            shop: "background",
-            manage: "background",
-            confirm: "halfViewBackground",
-        },
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
         itemBackground: "itemBackground",

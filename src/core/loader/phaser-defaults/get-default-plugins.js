@@ -8,7 +8,8 @@ import { JSON5Plugin } from "../json5-loader/json5-plugin.js";
 import { ParticlesPlugin } from "../particles-loader/particles-plugin.js";
 import BBCodeTextPlugin from "../../../../lib/rexbbcodetextplugin.min.js";
 import "../../../../lib/SpinePlugin.min.js";
-//import "/node_modules/phaser/plugins/spine/dist/SpinePlugin.min.js"; //TODO re-enable once relative paths work (not working asof Phaser 3.52.0)
+//import "/node_modules/phaser/plugins/spine/dist/SpinePlugin.min.js"; //TODO re-enable once relative paths work (not working as of Phaser 3.52.0)
+import NinePatchPlugin from "../../../../lib/rexninepatchplugin.min.js";
 
 export const getDefaultPlugins = options => {
     const defaultPlugins = {
@@ -31,6 +32,11 @@ export const getDefaultPlugins = options => {
             {
                 key: "rexBBCodeTextPlugin",
                 plugin: BBCodeTextPlugin,
+                start: true,
+            },
+            {
+                key: "rexNinePatchPlugin",
+                plugin: NinePatchPlugin,
                 start: true,
             },
         ],
