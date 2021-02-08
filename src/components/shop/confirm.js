@@ -141,8 +141,9 @@ const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(
 const canAffordItem = (scene, item) => getBalanceItem(scene).qty >= item.price;
 const isEquippable = item => item.slot;
 const itemIsInStock = item => item.qty > 0;
-const getEquipPromptText = item => isEquippable(item);
-const getBuyPromptText = (scene, item) =>
+const getEquipPromptText = (scene, action, item) =>
+    isEquippable(item) ? scene.config.confirm.prompt[action].legal : scene.config.confirm.prompt[action].illegal;
+const getBuyPromptText = (scene, action, item) =>
     canAffordItem(scene, item)
         ? itemIsInStock(item)
             ? scene.config.confirm.prompt[action].legal
@@ -150,11 +151,9 @@ const getBuyPromptText = (scene, item) =>
         : scene.config.confirm.prompt[action].illegal;
 const getPromptText = (scene, action, item) =>
     action === "buy"
-        ? getBuyPromptText(scene, item)
+        ? getBuyPromptText(scene, action, item)
         : action === "equip"
-        ? getEquipPromptText(item)
-            ? scene.config.confirm.prompt[action].legal
-            : scene.config.confirm.prompt[action].illegal
+        ? getEquipPromptText(scene, action, item)
         : scene.config.confirm.prompt[action];
 const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
 const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);

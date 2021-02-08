@@ -125,7 +125,7 @@
                     isDynamic: true,
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeStates: ["cta", "inStock"],
+                    activeStates: ["cta", "available"],
                 },
                 {
                     type: "text",
@@ -134,7 +134,7 @@
                     isDynamic: true,
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeStates: ["actioned", "consumable", "inStock"],
+                    activeStates: ["actioned", "consumable", "available"],
                 },
                 {
                     type: "image",
@@ -142,7 +142,7 @@
                     assetKey: "currency",
                     isDynamic: false,
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["cta", "inStock"], // match on one
+                    activeStates: ["cta", "available"], // match on one
                 },
                 {
                     type: "image",
@@ -150,7 +150,7 @@
                     assetKey: "currency",
                     isDynamic: false,
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["actioned", "consumable", "inStock"], // match on one
+                    activeStates: ["actioned", "consumable", "available"], // match on one
                 },
                 {
                     type: "text",
@@ -159,7 +159,7 @@
                     isDynamic: false,
                     position: { align: "right", offsetX: -120, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned", "notInStock"], // match on all
+                    activeStates: ["actioned", "unavailable"], // match on all
                 },
                 {
                     type: "text",
@@ -177,7 +177,7 @@
                     isDynamic: false, // true
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" }, // moves to options, add another option
-                    activeStates: ["consumable", "inStock"], // match on all
+                    activeStates: ["consumable", "available"], // match on all
                 },
             ],
             manage: [

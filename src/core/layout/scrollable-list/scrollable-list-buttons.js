@@ -70,7 +70,7 @@ const getButtonState = (scene, item, title) => {
     const isButtonCta = title === "shop" ? isPurchased(inventoryItem) : isEquipped(inventoryItem);
     states.push(isButtonCta ? "actioned" : "cta");
     states.push(isItemEquippable(item) ? "equippable" : "consumable");
-    states.push(isItemInStock(item) ? "inStock" : "notInStock");
+    states.push(isItemInStock(item) ? "available" : "unavailable");
     return states;
 };
 
