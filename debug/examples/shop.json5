@@ -120,7 +120,16 @@
                     isDynamic: true,
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeStates: ["cta"],
+                    activeStates: ["cta", "inStock"],
+                },
+                {
+                    type: "text",
+                    name: "currencyAmount",
+                    value: "price",
+                    isDynamic: true,
+                    position: { align: "right", offsetX: -44, offsetY: -10 },
+                    styles: { fontSize: "14px" },
+                    activeStates: ["actioned", "nonUnique", "inStock"],
                 },
                 {
                     type: "image",
@@ -128,7 +137,15 @@
                     assetKey: "currency",
                     isDynamic: false,
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["cta"], // match on one
+                    activeStates: ["cta", "inStock"], // match on one
+                },
+                {
+                    type: "image",
+                    name: "currency",
+                    assetKey: "currency",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -64, offsetY: 0 },
+                    activeStates: ["actioned", "nonUnique", "inStock"], // match on one
                 },
                 {
                     type: "text",
@@ -137,7 +154,7 @@
                     isDynamic: false,
                     position: { align: "right", offsetX: -120, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned"], // match on all
+                    activeStates: ["actioned", "notInStock"], // match on all
                 },
                 {
                     type: "text",
@@ -155,7 +172,7 @@
                     isDynamic: false, // true
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" }, // moves to options, add another option
-                    activeStates: ["cta", "nonUnique"], // match on all
+                    activeStates: ["nonUnique", "inStock"], // match on all
                 },
             ],
             manage: [

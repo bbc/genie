@@ -8,7 +8,7 @@ import { overlays1Wide } from "./button-overlays.js";
 import { collections } from "../../collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const STATES = ["cta", "actioned"];
+const STATES = ["cta", "actioned", "inStock"];
 
 const createGelButton = (scene, item, title, state) => {
     const id = `scroll_button_${item.id}_${title}`;
@@ -71,10 +71,12 @@ const getButtonState = (item, title) => {
     const isButtonCta = title === "shop" ? isOwned : isEquipped;
     states.push(isButtonCta(item) ? "actioned" : "cta");
     states.push(isItemUnique(item) ? "unique" : "nonUnique");
+    states.push(isItemInStock(item) ? "notInStock" : "inStock");
     return states;
 };
 
-const isItemUnique = item => item.qty === 1;
+const isItemUnique = item => item.qty === 1 && !item.isConsumable;
+const isItemInStock = item => item.qty === 0;
 
 const updateOverlays = button => {
     button.overlays.unsetAll();
