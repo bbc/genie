@@ -55,6 +55,9 @@
         shop: "debug-armoury",
         manage: "debug-inventory",
     },
+    slots: {
+        helmet: { max: Infinity },
+    },
     confirm: {
         detailView: true, // true === smaller image and more text. false === large image only.
         prompt: {
