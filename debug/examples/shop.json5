@@ -57,12 +57,13 @@
     },
     slots: {
         helmet: { max: Infinity },
+        shield: { max: 1 },
     },
     confirm: {
         detailView: true, // true === smaller image and more text. false === large image only.
         prompt: {
             buy: { legal: "Purchase this item?", illegal: "You can't afford this.", unavailable: "You cannot purchase\nanymore of these." },
-            equip: "Do you want to \nequip this item?",
+            equip: { legal: "Do you want to \nequip this item?", illegal: "You cannot equip\nthis item." },
             unequip: "Do you want to \nunequip this item?",
             styles: { fontStyle: "bold" },
         },
@@ -133,7 +134,7 @@
                     isDynamic: true,
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeStates: ["actioned", "nonUnique", "inStock"],
+                    activeStates: ["actioned", "consumable", "inStock"],
                 },
                 {
                     type: "image",
@@ -149,7 +150,7 @@
                     assetKey: "currency",
                     isDynamic: false,
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["actioned", "nonUnique", "inStock"], // match on one
+                    activeStates: ["actioned", "consumable", "inStock"], // match on one
                 },
                 {
                     type: "text",
@@ -167,7 +168,7 @@
                     isDynamic: true,
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" }, // moves to options, add another option
-                    activeStates: ["cta", "unique"], // match on all
+                    activeStates: ["cta", "equippable"], // match on all
                 },
                 {
                     type: "text",
@@ -176,7 +177,7 @@
                     isDynamic: false, // true
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" }, // moves to options, add another option
-                    activeStates: ["nonUnique", "inStock"], // match on all
+                    activeStates: ["consumable", "inStock"], // match on all
                 },
             ],
             manage: [
@@ -187,7 +188,7 @@
                     isDynamic: false,
                     position: { align: "right", offsetX: -76, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["cta"],
+                    activeStates: ["cta", "equippable"],
                 },
                 {
                     type: "text",
@@ -196,7 +197,16 @@
                     isDynamic: false,
                     position: { align: "right", offsetX: -96, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned"],
+                    activeStates: ["actioned", "equippable"],
+                },
+                {
+                    type: "text",
+                    name: "itemStockLevel",
+                    value: "${qty} in inventory",
+                    isDynamic: false, // true
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    activeStates: ["consumable"], // match on all
                 },
             ],
         },

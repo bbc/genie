@@ -61,7 +61,8 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
         cancelButtonCallback,
     );
     container.add(confirmButtons);
-    action === "buy" && !canBuyItem(scene, item) && disableActionButton(confirmButtons[0]);
+    ((action === "buy" && !canBuyItem(scene, item)) || (action === "equip" && !isEquippable(item))) &&
+        disableActionButton(confirmButtons[0]);
     resizeConfirmButtons(scene, confirmButtons, innerBounds);
 };
 
@@ -138,13 +139,21 @@ const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
 const imageY = bounds => -percentOfHeight(bounds, 25);
 const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(item);
 const canAffordItem = (scene, item) => getBalanceItem(scene).qty >= item.price;
+const isEquippable = item => item.slot;
 const itemIsInStock = item => item.qty > 0;
+const getEquipPromptText = item => isEquippable(item);
+const getBuyPromptText = (scene, item) =>
+    canAffordItem(scene, item)
+        ? itemIsInStock(item)
+            ? scene.config.confirm.prompt[action].legal
+            : scene.config.confirm.prompt[action].unavailable
+        : scene.config.confirm.prompt[action].illegal;
 const getPromptText = (scene, action, item) =>
     action === "buy"
-        ? canAffordItem(scene, item)
-            ? itemIsInStock(item)
-                ? scene.config.confirm.prompt[action].legal
-                : scene.config.confirm.prompt[action].unavailable
+        ? getBuyPromptText(scene, item)
+        : action === "equip"
+        ? getEquipPromptText(item)
+            ? scene.config.confirm.prompt[action].legal
             : scene.config.confirm.prompt[action].illegal
         : scene.config.confirm.prompt[action];
 const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);

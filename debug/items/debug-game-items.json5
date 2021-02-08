@@ -10,7 +10,7 @@
         userData: {
             //.. keep this namespaced out in case agencies want to put object stats in here
         },
-        slot: "weapon", // if omitted, item is a consumable
+        slot: "shield", // if omitted, item is a consumable
     },
     {
         id: "bomb",
@@ -20,7 +20,6 @@
         longDescription: "The skull icon is now a health \n& safety requirement for \n all explody things. Sigh.",
         icon: "shop.bombIcon",
         tags: ["weapon"],
-        slot: "weapon",
     },
     {
         id: "box",
