@@ -7,6 +7,7 @@
 
 import * as transact from "../../../src/components/shop/transact.js";
 import { collections } from "../../../src/core/collections.js";
+import { catchClause } from "@babel/types";
 
 describe("doTransaction", () => {
     let mockTx;
@@ -37,12 +38,12 @@ describe("doTransaction", () => {
             expect(collections.get).toHaveBeenCalledWith("manage");
         });
         test("processes a buy transaction", () => {
-            const expectedShopSet = { ...mockItem, state: "owned", qty: -1 };
-            expect(mockShopCol.set.mock.calls[0][0]).toStrictEqual(expectedShopSet);
-            const expectedBoughtItemSet = { ...mockItem, qty: 1 };
-            expect(mockInvCol.set.mock.calls[0][0]).toStrictEqual(expectedBoughtItemSet);
+            const expectedShopSet = { ...mockItem, state: "owned", qty: 0 };
+            expect(mockShopCol.set.mock.calls[0][0]).toEqual(expectedShopSet);
+            const expectedBoughtItemSet = { ...mockItem, qty: 101 };
+            expect(mockInvCol.set.mock.calls[0][0]).toEqual(expectedBoughtItemSet);
             const expectedCurrencySet = { ...mockCurrencyItem, qty: 50 };
-            expect(mockInvCol.set.mock.calls[1][0]).toStrictEqual(expectedCurrencySet);
+            expect(mockInvCol.set.mock.calls[1][0]).toEqual(expectedCurrencySet);
         });
         test("returns the price that was charged", () => {
             expect(result).toBe(50);

@@ -8,7 +8,7 @@ import { overlays1Wide } from "./button-overlays.js";
 import { collections } from "../../collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const STATES = ["cta", "actioned"];
+const STATES = ["cta", "actioned", "inStock"];
 
 const createGelButton = (scene, item, title, state) => {
     const id = `scroll_button_${item.id}_${title}`;
@@ -35,7 +35,7 @@ const createGelButton = (scene, item, title, state) => {
         },
         setAll: setOverlays(gelButton),
         unsetAll: unsetOverlays(gelButton),
-        state: STATES.find(st => st === state),
+        state,
     };
 
     scaleButton(gelButton, scene.layout, config.listPadding);
@@ -65,12 +65,19 @@ const updateButtonData = button => {
 };
 
 const getButtonState = (scene, item, title) => {
+    const states = [];
     const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item.id);
     const isPurchased = inventoryItem => inventoryItem?.qty > 0;
     const isEquipped = inventoryItem => inventoryItem?.state === "equipped";
-    const isButtonCta = title === "shop" ? isPurchased : isEquipped;
-    return isButtonCta(inventoryItem) ? "actioned" : "cta";
+    const isButtonCta = title === "shop" ? isPurchased(inventoryItem) : isEquipped(inventoryItem);
+    states.push(isButtonCta ? "actioned" : "cta");
+    states.push(isItemUnique(item) ? "unique" : "nonUnique");
+    states.push(isItemInStock(item) ? "notInStock" : "inStock");
+    return states;
 };
+
+const isItemUnique = item => item.qty === 1 && !item.isConsumable;
+const isItemInStock = item => item.qty === 0;
 
 const updateOverlays = button => {
     button.overlays.unsetAll();
@@ -78,10 +85,21 @@ const updateOverlays = button => {
     button.overlays.setAll();
 };
 
-const getConfigs = button =>
-    button.overlays.configs.items.concat(
-        button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)),
-    );
+const getConfigs = button => button.overlays.configs.items.concat(filterOptionalConfigs(button.overlays)); // filter this
+
+const filterOptionalConfigs = overlays => {
+    const states = overlays.state;
+    const options = overlays.configs.options;
+
+    const filteredOptions = options.filter(overlay => {
+        let result = true;
+        overlay.activeStates.forEach(stateLabel => {
+            if (!states.includes(stateLabel)) result = false;
+        });
+        return result;
+    });
+    return filteredOptions;
+};
 
 const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);
 const getPaneTitle = button => getItemKeyAndTitle(button).pop();
