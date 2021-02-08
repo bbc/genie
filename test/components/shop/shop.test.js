@@ -4,7 +4,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { Shop } from "../../../src/components/shop/shop.js";
+import { Shop, launchShopOverlay } from "../../../src/components/shop/shop.js";
 import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrollable-list.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance-ui.js";
@@ -14,24 +14,14 @@ import * as menu from "../../../src/components/shop/menu.js";
 import * as confirm from "../../../src/components/shop/confirm.js";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import { eventBus } from "../../../src/core/event-bus.js";
+import { gmi } from "../../../src/core/gmi/gmi.js";
 
 jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
 
 describe("Shop", () => {
     let shopScreen;
+    let config;
     const mockScrollableList = { setVisible: jest.fn(), reset: jest.fn() };
-    const config = {
-        shop: {
-            balance: { value: { key: "currencyItemKey" } },
-            assetKeys: {
-                prefix: "shop",
-                background: "background",
-            },
-            listPadding: { x: 10, y: 8 },
-        },
-        home: {},
-        furniture: [],
-    };
 
     const mockMetrics = {
         verticals: { top: 100 },
@@ -64,12 +54,24 @@ describe("Shop", () => {
     const mockTitles = { setTitleText: jest.fn(), setScale: jest.fn(), setPosition: jest.fn() };
 
     beforeEach(() => {
+        config = {
+            shop: {
+                balance: { value: { key: "currencyItemKey" } },
+                assetKeys: {
+                    prefix: "shop",
+                    background: "background",
+                },
+                listPadding: { x: 10, y: 8 },
+            },
+            home: {},
+            furniture: [],
+        };
         shopScreen = new Shop();
         shopScreen.setData({ config });
         shopScreen.scene = { key: "shop" };
         shopScreen._layout = {
             getSafeArea: jest.fn().mockReturnValue(mockSafeArea),
-            buttons: { back: { config: mockButtonConfig } },
+            buttons: { back: { config: mockButtonConfig }, overlayBack: { config: mockButtonConfig } },
         };
         shopScreen.addBackgroundItems = jest.fn();
         shopScreen.setLayout = jest.fn();
@@ -111,6 +113,15 @@ describe("Shop", () => {
 
         test("adds GEL buttons to layout", () => {
             const expectedButtons = ["back", "pause"];
+            expect(shopScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+        });
+
+        test("if config'd as an overlay, sets alternative GEL buttons", () => {
+            jest.clearAllMocks();
+            config.shop.isOverlay = true;
+            shopScreen.setData({ config });
+            shopScreen.create();
+            const expectedButtons = ["overlayBack", "pause"];
             expect(shopScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
         });
 
@@ -234,5 +245,24 @@ describe("Shop", () => {
                 expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
             });
         });
+    });
+});
+
+describe("launchShopOverlay()", () => {
+    const mockScene = { scene: { pause: jest.fn() }, addOverlay: jest.fn() };
+    gmi.sendStatsEvent = jest.fn();
+
+    beforeEach(() => launchShopOverlay(mockScene, "shopNavKey"));
+
+    test("pauses the scene it's called on", () => {
+        expect(mockScene.scene.pause).toHaveBeenCalled();
+    });
+
+    test("sends a stats event via gmi", () => {
+        expect(gmi.sendStatsEvent).toHaveBeenCalledWith("shop", "click");
+    });
+
+    test("adds an overlay", () => {
+        expect(mockScene.addOverlay).toHaveBeenCalledWith("shopNavKey");
     });
 });
