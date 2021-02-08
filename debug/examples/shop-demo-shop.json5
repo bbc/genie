@@ -63,10 +63,14 @@
         shop: "debug-demo-hats",
         manage: "debug-demo-inventory",
     },
+    slots: {
+        helmet: { max: 1 },
+        weapon: { max: 1 },
+    },
     confirm: {
         detailView: true,
         prompt: {
-            buy: { legal: "Purchase this item?", illegal: "You can't afford this." },
+            buy: { legal: "Purchase this item?", illegal: "You can't afford this.", unavailable: "You have already purchased this." },
             equip: "Do you want to \nequip this item?",
             unequip: "Do you want to \nunequip this item?",
             styles: { fontStyle: "bold" },

@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
-import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
+import { createGelButton, scaleButton, getButtonState } from "./scrollable-list-buttons.js";
 import { createConfirm } from "../../../components/shop/confirm.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";

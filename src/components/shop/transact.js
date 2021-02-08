@@ -21,6 +21,11 @@ export const buy = (scene, item) => {
 export const equip = (scene, item) => {
     const { manage } = scene.config.paneCollections;
     const invCol = collections.get(manage);
+    const itemsEquippedInSlot = invCol
+        .getAll()
+        .filter(invItem => invItem.slot === item.slot && invItem.state === "equipped");
+    const maxItemsInSlot = scene.config.slots[item.slot].max;
+    maxItemsInSlot === 1 && itemsEquippedInSlot.length === 1 && unequip(scene, itemsEquippedInSlot[0]);
     invCol.set({ ...item, state: "equipped" });
 };
 

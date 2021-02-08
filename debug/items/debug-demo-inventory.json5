@@ -6,8 +6,4 @@
         { id: "coin", qty: 1000 },
         { id: "ironHat", state: "equipped", qty: 1 }
     ],
-    slots: {
-        helmet: { max: 1 },
-        weapon: { max: 2 },
-    }
 }

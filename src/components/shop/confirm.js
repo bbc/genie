@@ -55,7 +55,7 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
     const confirmButtonCallback = cancelButton => handleClick(scene, container, title, action, item, cancelButton);
     const confirmButtons = createConfirmButtons(container, fp.startCase(action), confirmButtonCallback);
     container.add(confirmButtons);
-    action === "buy" && !canAffordItem(scene, item) && disableActionButton(confirmButtons[0]);
+    action === "buy" && !canBuyItem(scene, item) && disableActionButton(confirmButtons[0]);
     resizeConfirmButtons(scene, confirmButtons, innerBounds);
 };
 
@@ -126,11 +126,15 @@ const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 
 const assetKey = item => (item ? item.icon : "shop.itemIcon"); //TODO shouldn't use "shop" key as may be different
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
 const imageY = bounds => -percentOfHeight(bounds, 25);
+const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(item);
 const canAffordItem = (scene, item) => scene.balance.getValue() >= item.price;
+const itemIsInStock = item => item.qty > 0;
 const getPromptText = (scene, action, item) =>
     action === "buy"
         ? canAffordItem(scene, item)
-            ? scene.config.confirm.prompt[action].legal
+            ? itemIsInStock(item)
+                ? scene.config.confirm.prompt[action].legal
+                : scene.config.confirm.prompt[action].unavailable
             : scene.config.confirm.prompt[action].illegal
         : scene.config.confirm.prompt[action];
 const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
