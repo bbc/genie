@@ -18,8 +18,10 @@ export const doTransaction = scene => tx => {
 
 const buy = (tx, shop, invCol, currencyKey) => {
     const shopCol = collections.get(shop);
-    shopCol.set({ ...tx.item, state: "owned", qty: -1 });
-    invCol.set({ ...tx.item, qty: +1 });
+    const qtyInStock = shopCol.get(tx.item.id).qty || 1;
+    shopCol.set({ ...tx.item, state: "owned", qty: qtyInStock - 1 });
+    const qtyOwned = invCol.get(tx.item.id)?.qty || 0;
+    invCol.set({ ...tx.item, qty: qtyOwned + 1 });
     updateBalance(invCol, currencyKey, tx.item.price);
     return tx.item.price;
 };

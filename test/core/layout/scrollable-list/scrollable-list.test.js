@@ -32,7 +32,7 @@ buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
 scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
 const title = "shop";
-const initState = "cta";
+const initState = ["cta", "nonUnique", "inStock"];
 const mockPrepTransaction = jest.fn();
 
 describe("Scrollable List", () => {

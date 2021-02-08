@@ -79,7 +79,7 @@ const createTable = (scene, title, prepTx, parent) => {
 };
 
 const createItem = (scene, item, title, prepTx, parent) => {
-    const icon = createGelButton(scene, item, title, getButtonState(item, title), prepTx);
+    const icon = createGelButton(scene, item, title, getButtonState(item, title), prepTx); // ooh errr
     const label = scene.rexUI.add.label({
         orientation: 0,
         icon,
