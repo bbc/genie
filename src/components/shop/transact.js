@@ -6,7 +6,6 @@
  */
 
 import { collections } from "../../core/collections.js";
-import { updateBalanceText } from "./balance-ui.js";
 
 export const buy = (scene, item) => {
     const { shop, manage } = scene.config.paneCollections;
@@ -15,7 +14,7 @@ export const buy = (scene, item) => {
     const inventoryItem = invCol.get(item.id);
     shopCol.set({ ...item, qty: shopCol.get(item.id).qty - 1 });
     invCol.set({ ...item, state: "purchased", qty: inventoryItem ? inventoryItem.qty + 1 : 1 });
-    updateBalance(scene, invCol, scene.config.balance.value.key, item.price);
+    updateBalance(scene, invCol, item.price);
 };
 
 export const equip = (scene, item) => {
@@ -35,9 +34,9 @@ export const unequip = (scene, item) => {
     invCol.set({ ...item, state: "purchased" });
 };
 
-const updateBalance = (scene, invCol, currencyKey, price) => {
-    const currency = invCol.get(currencyKey);
-    const newBalance = currency.qty - price;
-    invCol.set({ ...currency, qty: newBalance });
-    updateBalanceText(scene);
-};
+const updateBalance = (scene, invCol, price) =>
+    invCol.set({ ...getBalanceItem(scene), qty: getBalanceItem(scene).qty - price }) ||
+    scene.events.emit("updatebalance");
+
+export const getBalanceItem = scene =>
+    collections.get(scene.config.paneCollections.manage).get(scene.config.balance.value.key);

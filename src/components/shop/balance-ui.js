@@ -16,8 +16,6 @@ const makeElement = makerFns => conf => makerFns[conf.type](conf).setOrigin(0.5)
 const getBalanceValue = scene =>
     collections.get(scene.config.paneCollections.manage).get(scene.config.balance.value.key).qty;
 
-export const updateBalanceText = scene => scene.balance.setText(getBalanceValue(scene));
-
 export const createBalance = scene => {
     const safeArea = getSafeArea(scene.layout);
     const metrics = getMetrics();
@@ -34,6 +32,7 @@ export const createBalance = scene => {
 
     const width = value.getBounds().width + icon.getBounds().width + padding * 3;
     value.setPosition(width / 4 - padding, 0);
+    scene.events.on("updatebalance", () => value.setText(getBalanceValue(scene)));
     icon.setPosition(-width / 4, 0);
     background.setScale(width / background.getBounds().width);
 
@@ -41,8 +40,6 @@ export const createBalance = scene => {
 
     container.setScale(getScaleFactor({ metrics, container, safeArea }));
     container.setPosition(getXPos(container, safeArea, scene.config.listPadding.x), getYPos(metrics, safeArea));
-    container.setText = bal => value.setText(bal);
-    container.getValue = () => parseInt(value.text, 10);
 
     return container;
 };

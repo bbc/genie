@@ -9,7 +9,7 @@ import { getInnerRectBounds, createRect, getSafeArea, createPaneBackground } fro
 import { addText } from "../../core/layout/text-elem.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import { buy, equip, unequip } from "./transact.js";
+import { buy, equip, unequip, getBalanceItem } from "./transact.js";
 
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
     container.add(
@@ -127,7 +127,7 @@ const assetKey = item => (item ? item.icon : "shop.itemIcon"); //TODO shouldn't 
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
 const imageY = bounds => -percentOfHeight(bounds, 25);
 const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(item);
-const canAffordItem = (scene, item) => scene.balance.getValue() >= item.price;
+const canAffordItem = (scene, item) => getBalanceItem(scene).qty >= item.price;
 const itemIsInStock = item => item.qty > 0;
 const getPromptText = (scene, action, item) =>
     action === "buy"
