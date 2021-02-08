@@ -78,12 +78,13 @@
         buttonsRight: true,
     },
     columns: 1,
+    backgrounds: {
+        menu: "",
+        shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
+        manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
+        confirm: "halfViewBackground",
+    },
     assetKeys: {
-        background: {
-            shop: "background",
-            manage: "background",
-            confirm: "halfViewBackground",
-        },
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
         itemBackground: "itemBackground",
