@@ -52,8 +52,14 @@ const disableActionButton = button => {
 };
 
 const addConfirmButtons = (scene, container, innerBounds, title, action, item) => {
-    const confirmButtonCallback = cancelButton => handleClick(scene, container, title, action, item, cancelButton);
-    const confirmButtons = createConfirmButtons(container, fp.startCase(action), confirmButtonCallback);
+    const confirmButtonCallback = () => handleActionClick(scene, container, title, action, item);
+    const cancelButtonCallback = () => closeConfirm(scene, container, title);
+    const confirmButtons = createConfirmButtons(
+        container,
+        fp.startCase(action),
+        confirmButtonCallback,
+        cancelButtonCallback,
+    );
     container.add(confirmButtons);
     action === "buy" && !canBuyItem(scene, item) && disableActionButton(confirmButtons[0]);
     resizeConfirmButtons(scene, confirmButtons, innerBounds);
@@ -76,15 +82,19 @@ const destroyContainer = container => {
     container.destroy();
 };
 
-const handleClick = (scene, container, title, action, item, cancelButton = false) => {
-    !cancelButton && action === "buy" && buy(scene, item);
-    !cancelButton && action === "equip" && equip(scene, item);
-    !cancelButton && action === "unequip" && unequip(scene, item);
+const closeConfirm = (scene, container, title) => {
     destroyContainer(container);
     scene.panes[title].setVisible(true);
     scene.paneStack.pop();
     const paneToShow = scene.paneStack.slice(-1)[0];
     scene.title.setTitleText(paneToShow ? paneToShow : "Shop");
+};
+
+const handleActionClick = (scene, container, title, action, item) => {
+    action === "buy" && buy(scene, item);
+    action === "equip" && equip(scene, item);
+    action === "unequip" && unequip(scene, item);
+    closeConfirm(scene, container, title);
 };
 
 const itemView = (scene, item, config, bounds) =>
