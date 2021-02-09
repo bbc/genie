@@ -7,7 +7,6 @@
 
 import * as transact from "../../../src/components/shop/transact.js";
 import { collections } from "../../../src/core/collections.js";
-import { catchClause } from "@babel/types";
 
 describe("doTransaction", () => {
     let mockTx;
