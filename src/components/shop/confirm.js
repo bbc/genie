@@ -51,7 +51,7 @@ export const createConfirm = scene => {
 
     container.setVisible = setVisible(container);
     container.resize = resize(container);
-    container.updateItem = updateItem(container);
+    container.update = update(container);
     container.prepTransaction = prepTransaction(scene, container);
     container.doTransaction = doTransaction(scene);
     container.setBalance = bal => balance.setText(bal);
@@ -83,7 +83,7 @@ const isTransactionLegal = (container, item, title) => {
 
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
-const updateItem = container => (item, title) => {
+const update = container => (item, title) => {
     const isLegal = isTransactionLegal(container, item, title);
     container.elems.priceIcon.setVisible(title === "shop");
     container.elems.price.setText(title === "shop" ? item.price : "");
@@ -135,7 +135,7 @@ const populate = container =>
 
 const prepTransaction = (scene, container) => (item, title) => {
     scene.stack("confirm");
-    container.updateItem(item, title);
+    container.update(item, title);
 };
 
 const itemView = (scene, item, config, bounds) =>

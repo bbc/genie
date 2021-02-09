@@ -26,8 +26,9 @@ const setImageOverlay = ({ gelButton, config, offset }) => {
 
 const setTextOverlay = ({ gelButton, config, offset }) => {
     const { scene, item } = gelButton;
-    const textContent = config.isDynamic ? item[config.value].toString() : config.value.toString();
-    const template = fp.template(textContent);
+    // const textContent = config.isDynamic ? item[config.value].toString() : config.value.toString();
+    // const textContent = config.value.toString();
+    const template = fp.template(config.value.toString());
     gelButton.overlays.set(config.name, addText(scene, offset.x, offset.y, template(item), config));
 };
 

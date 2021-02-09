@@ -105,8 +105,7 @@
             {
                 type: "text",
                 name: "itemName",
-                value: "title",
-                isDynamic: true,
+                value: "${title}",
                 position: { align: "left", offsetX: 80, offsetY: -18 },
                 styles: { fontSize: "16px", fontStyle: "bold" },
             },
@@ -114,10 +113,9 @@
         options: {
             shop: [
                 {
-                    type: "text",
+                    type: "text", // why the duplication here?
                     name: "currencyAmount",
-                    value: "price",
-                    isDynamic: true,
+                    value: "${price}",
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
                     activeStates: ["cta", "inStock"],
@@ -125,19 +123,18 @@
                 {
                     type: "text",
                     name: "currencyAmount",
-                    value: "price",
-                    isDynamic: true,
+                    value: "${price}",
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
                     activeStates: ["actioned", "nonUnique", "inStock"],
                 },
                 {
-                    type: "image",
+                    type: "image", // again, duplication not needed
                     name: "currency",
                     assetKey: "currency",
                     isDynamic: false,
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["cta", "inStock"], // match on one
+                    activeStates: ["cta", "inStock"],
                 },
                 {
                     type: "image",
@@ -145,34 +142,31 @@
                     assetKey: "currency",
                     isDynamic: false,
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["actioned", "nonUnique", "inStock"], // match on one
+                    activeStates: ["actioned", "nonUnique", "inStock"],
                 },
                 {
                     type: "text",
                     name: "owned",
                     value: "Purchased",
-                    isDynamic: false,
                     position: { align: "right", offsetX: -120, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned", "notInStock"], // match on all
+                    activeStates: ["actioned", "notInStock"],
                 },
                 {
                     type: "text",
                     name: "itemDescription",
-                    value: "description",
-                    isDynamic: true,
+                    value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "12px" }, // moves to options, add another option
-                    activeStates: ["cta", "unique"], // match on all
+                    styles: { fontSize: "12px" },
+                    activeStates: ["cta", "unique"], 
                 },
                 {
                     type: "text",
                     name: "itemStockLevel",
                     value: "${qty} in stock",
-                    isDynamic: false, // true
                     position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "12px" }, // moves to options, add another option
-                    activeStates: ["nonUnique", "inStock"], // match on all
+                    styles: { fontSize: "12px" },
+                    activeStates: ["nonUnique", "inStock"],
                 },
             ],
             manage: [
@@ -180,7 +174,6 @@
                     type: "text",
                     name: "equip",
                     value: "Equip",
-                    isDynamic: false,
                     position: { align: "right", offsetX: -76, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
                     activeStates: ["cta"],
@@ -189,7 +182,6 @@
                     type: "text",
                     name: "equipped",
                     value: "Equipped",
-                    isDynamic: false,
                     position: { align: "right", offsetX: -96, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
                     activeStates: ["actioned"],

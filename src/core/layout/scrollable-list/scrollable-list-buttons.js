@@ -8,8 +8,6 @@ import { overlays1Wide } from "./button-overlays.js";
 import { collections } from "../../collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-// const STATES = ["cta", "actioned", "inStock"];
-
 const createGelButton = (scene, item, title, state) => {
     const id = `scroll_button_${item.id}_${title}`;
     const config = scene.config;
@@ -84,7 +82,7 @@ const updateOverlays = button => {
     button.overlays.setAll();
 };
 
-const getConfigs = button => button.overlays.configs.items.concat(filterOptionalConfigs(button.overlays)); // filter this
+const getConfigs = button => button.overlays.configs.items.concat(filterOptionalConfigs(button.overlays));
 
 const filterOptionalConfigs = overlays => {
     const states = overlays.state;
