@@ -92,7 +92,6 @@
                 type: "image",
                 name: "itemIcon",
                 assetKey: "${icon}",
-                // isDynamic: true, // asset key is item[assetKey]
                 position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
                 size: 76,
             },

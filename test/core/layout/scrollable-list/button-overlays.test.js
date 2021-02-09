@@ -52,7 +52,7 @@ describe("Button overlays", () => {
             type: "image",
             name: "someImage",
             assetKey: "test.someImageAssetKey",
-            isDynamic: false,
+            // isDynamic: false,
         };
     });
 
@@ -82,31 +82,6 @@ describe("Button overlays", () => {
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 expect(text.addText.mock.calls[0][3]).toBe("someText");
-            });
-        });
-
-        describe("dynamic and static overlays", () => {
-            test("dynamic image overlays use an asset key from the item", () => {
-                mockOverlay = { ...mockOverlay, assetKey: "icon" }; // here
-                mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockGelButton, mockConfig.overlay.items);
-                expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.itemIcon");
-            });
-
-            // test("static image overlays use literal values from config with a default prefix", () => {
-            //     mockOverlay.isDynamic = false;
-            //     mockConfig.overlay.items.push(mockOverlay);
-            //     overlays1Wide(mockGelButton, mockConfig.overlay.items);
-            //     const expectedKey = `${mockScene.config.assetPrefix}.${mockOverlay.assetKey}`;
-            //     expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, expectedKey);
-            // });
-
-            test("text overlays use string templating to merge in item information", () => {
-                mockOverlay = { ...mockOverlay, type: "text", value: "${price} Earth pounds"};
-                mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockGelButton, mockConfig.overlay.items);
-                const expectedValue = "42 Earth pounds";
-                expect(text.addText.mock.calls[0][3]).toBe(expectedValue);
             });
         });
 
