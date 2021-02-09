@@ -1,5 +1,5 @@
 {
-    assetPrefix: "shop", //override generally only used for debug screens. Remove for production screens TODO can we switch the debug shop to use "shop-debug." ?
+    assetPrefix: "shop", // override generally only used for debug screens (though also used by titles.) Remove for production screens TODO can we switch the debug shop to use "shop-debug." ?
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "shop.magicShop", x: 0, y: 0 }],
@@ -90,15 +90,9 @@
         items: [
             {
                 type: "image",
-                name: "background",
-                assetKey: "itemBackground",
-                isDynamic: false, // asset key is the value of assetKey
-            },
-            {
-                type: "image",
                 name: "itemIcon",
-                assetKey: "icon",
-                isDynamic: true, // asset key is item[assetKey]
+                assetKey: "${icon}",
+                // isDynamic: true, // asset key is item[assetKey]
                 position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
                 size: 76,
             },
@@ -131,16 +125,14 @@
                 {
                     type: "image", // again, duplication not needed
                     name: "currency",
-                    assetKey: "currency",
-                    isDynamic: false,
+                    assetKey: "shop.currency",
                     position: { align: "right", offsetX: -64, offsetY: 0 },
                     activeStates: ["cta", "inStock"],
                 },
                 {
                     type: "image",
                     name: "currency",
-                    assetKey: "currency",
-                    isDynamic: false,
+                    assetKey: "shop.currency",
                     position: { align: "right", offsetX: -64, offsetY: 0 },
                     activeStates: ["actioned", "nonUnique", "inStock"],
                 },
