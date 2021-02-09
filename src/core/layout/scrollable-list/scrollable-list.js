@@ -6,38 +6,33 @@
  */
 import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
-import { getPaneBackgroundKey } from "../../../components/shop/shop-layout.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { collections } from "../../collections.js";
 import { onScaleChange } from "../../scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../../accessibility/accessibilify.js";
+import { createBackground, resizeBackground } from "./backgrounds.js";
 
 const createPanel = (scene, title, prepTx, parent) => {
     const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, prepTx, parent));
     panel.name = title;
     panel.callback = prepTx;
     panel.layout();
+
     return panel;
 };
+
+export const getType = value => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
 
 const getConfig = (scene, title, prepTx, parent) => {
     const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
     const safeArea = getPanelY(scene);
     const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
-    const key = getPaneBackgroundKey(scene, title);
-    let backgroundValue;
-    if (key == null) {
-        const rectangle = scene.add.rectangle(0, 0, 1, 1, 0, 0);
-        backgroundValue = rectangle;
-    } else {
-        backgroundValue = scene.add.image(0, 0, getPaneBackgroundKey(scene, title));
-    }
+
     return {
         y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        background: backgroundValue,
         panel: { child: createInnerPanel(scene, title, prepTx, parent) },
         slider: {
             track: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbar}`),
@@ -73,7 +68,9 @@ const createTable = (scene, title, prepTx, parent) => {
             name: "grid",
         });
 
-        collection.forEach((item, idx) => table.add(createItem(scene, item, title, prepTx), 0, idx, "top", 0, true));
+        collection.forEach((item, idx) =>
+            table.add(createItem(scene, item, title, prepTx, parent), 0, idx, "top", 0, true),
+        );
 
         sizer.add(table, 1, "center", 0, true);
     }
@@ -81,15 +78,8 @@ const createTable = (scene, title, prepTx, parent) => {
     return sizer;
 };
 
-const forwardEventsToButton = (label, button) => {
-    label.setInteractive();
-    [Phaser.Input.Events.POINTER_UP, Phaser.Input.Events.POINTER_OVER, Phaser.Input.Events.POINTER_OUT].forEach(event =>
-        label.on(event, () => button.emit(event, button, button.scene.sys.input.activePointer, false)),
-    );
-};
-
-const createItem = (scene, item, title, prepTx) => {
-    const icon = createGelButton(scene, item, title, getButtonState(item, title), prepTx);
+const createItem = (scene, item, title, prepTx, parent) => {
+    const icon = createGelButton(scene, item, title, getButtonState(item, title), prepTx); // ooh errr
     const label = scene.rexUI.add.label({
         orientation: 0,
         icon,
@@ -99,7 +89,10 @@ const createItem = (scene, item, title, prepTx) => {
         id: `scroll_button_${item.id}_${title}`,
         ariaLabel: `${item.title} - ${item.description}`,
     };
-    forwardEventsToButton(label, icon);
+    const callback = pointer => (parent.panel.isInTouching() || !pointer) && prepTx(item, title);
+    label.setInteractive();
+    label.on(Phaser.Input.Events.POINTER_UP, callback);
+    scene.events.once("shutdown", () => label.off(Phaser.Input.Events.POINTER_UP, callback));
     accessibilify(label);
     return label;
 };
@@ -128,11 +121,11 @@ const setupEvents = (scene, panel) => {
     panel.on("scroll", panel.updateOnScroll);
 
     const onMouseWheelListener = updatePanelOnWheel(panel);
-    scene.input.on("wheel", onMouseWheelListener);
+    scene.input.on("gameobjectwheel", onMouseWheelListener);
 
     scene.events.once("shutdown", () => {
         scene.scale.removeListener("resize", debouncedResize);
-        scene.input.removeListener("wheel", onMouseWheelListener);
+        scene.input.removeListener("gameobjectwheel", onMouseWheelListener);
     });
 
     panel.updateOnFocus = updatePanelOnFocus(panel);
@@ -171,6 +164,9 @@ export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, title, callback, filter) {
         super(scene, 0, 0);
         this.collectionFilter = filter;
+
+        const config = scene.config.backgrounds?.[title] ?? null;
+        this.background = createBackground[getType(config)](scene, config);
         this.panel = createPanel(scene, title, callback, this);
         this.makeAccessible = fp.noop;
 
@@ -181,7 +177,10 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         scene.input.topOnly = false;
         setupEvents(scene, this.panel);
 
-        this.reset = resizePanel(this.scene, this.panel);
+        this.reset = () => {
+            resizePanel(scene, this.panel)();
+            resizeBackground[this.background.constructor.name](scene, this.background);
+        };
     }
 
     getBoundingRect() {
@@ -190,6 +189,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
 
     setVisible(isVisible) {
         this.panel.visible = isVisible;
+        this.background.visible = isVisible;
         const items = getPanelItems(this.panel);
         items.forEach(item => {
             const button = item.children[0];

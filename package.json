@@ -20,7 +20,7 @@
         "babel-loader": "^8.2.2",
         "babel-plugin-module-resolver": "^4.1.0",
         "bowser": "2.11.0",
-        "core-js": "^3.8.2",
+        "core-js": "^3.8.3",
         "expose-loader": "^0.7.5",
         "json5": "^2.1.3",
         "mochawesome": "^6.2.1",

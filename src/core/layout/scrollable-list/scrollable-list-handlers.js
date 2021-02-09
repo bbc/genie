@@ -4,31 +4,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-/* eslint-disable no-console */
 
 import fp from "../../../../lib/lodash/fp/fp.js";
-
-const WHEEL_SCROLL_FACTOR = 0.005;
-
-const handleClickIfVisible = (gelButton, scene, handler) => () => {
-    if (!gelButton.rexContainer.parent) return;
-
-    if (isA11yClick(scene)) {
-        handler(gelButton);
-        return;
-    }
-
-    const panel = gelButton.rexContainer.parent.getTopmostSizer();
-    const safeArea = scene.layout.getSafeArea({}, false);
-    const height = scene.scale.displaySize.height;
-    const topY = height / 2 + safeArea.y + panel.space.top;
-    const bottomY = topY + panel.innerHeight;
-    const mouseY = scene.input.y;
-    if (mouseY >= topY && mouseY <= bottomY) handler(gelButton);
-};
-
-const isA11yClick = scene =>
-    scene.input.activePointer.id === 0 || scene.sys.time.now - scene.input.activePointer.upTime > 50;
 
 const updatePanelOnScroll = panel => () => getPanelItems(panel).map(item => item.setElementSizeAndPosition());
 
@@ -79,14 +56,25 @@ const updateScrollPosition = (panel, offset) => {
 
 const getMaxOffset = panel => {
     const visibleWindowHeight = panel.minHeight - panel.space.top * 2;
-    return getItemsHeight(panel) - visibleWindowHeight;
+    return Math.max(getItemsHeight(panel) - visibleWindowHeight, 0);
 };
 
-const updatePanelOnWheel = panel => e => {
-    if (!panel.visible || !panel.isInTouching()) return;
-    const delta = e.deltaY * WHEEL_SCROLL_FACTOR;
+const updatePanelOnWheel = panel => (...args) => {
+    const event = args[5];
+    event.stopPropagation();
+
+    if (!panel.visible) return;
+
+    const { deltaY } = args[0];
+    const delta = deltaY * wheelScrollFactor(panel);
     const t = Math.min(Math.max(0, panel.t + delta), 1);
-    panel.setT(t);
+    panel.t !== t && panel.setT(t);
 };
 
-export { handleClickIfVisible, updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel };
+const wheelScrollFactor = panel => {
+    const maxOffset = getMaxOffset(panel);
+    if (maxOffset === 0) return maxOffset;
+    return 1 / maxOffset;
+};
+
+export { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel };

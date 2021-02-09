@@ -40,7 +40,7 @@ describe("shop element scaling functions", () => {
             type: "Text",
         };
         mockImageElem = {
-            scale: 2,
+            memoisedScale: 2,
             set scaleX(val) {
                 imageScaleXSpy(val);
             },
@@ -63,6 +63,7 @@ describe("shop element scaling functions", () => {
             memoisedBounds: mockBounds,
             getElems: jest.fn().mockReturnValue([mockTextElem, mockImageElem]),
             y: 0,
+            visible: true,
         };
     });
 
@@ -142,8 +143,8 @@ describe("shop element scaling functions", () => {
     });
 
     describe("resize()", () => {
+        const newBounds = { width: 200, height: 50, x: 0, y: 10 };
         beforeEach(() => {
-            const newBounds = { width: 200, height: 50, x: 0, y: 10 };
             shopLayout.resize(mockContainer)(newBounds);
         });
 
@@ -157,9 +158,18 @@ describe("shop element scaling functions", () => {
             expect(textScaleYSpy).toHaveBeenCalledWith(2);
         });
 
-        test("inverse-scale image elems on both axes and preserve the overall scale", () => {
+        test("inverse-scale image elems on both axes and preserve the overall scale if a memoisedScale is provided", () => {
             expect(imageScaleXSpy).toHaveBeenCalledWith(1);
             expect(imageScaleYSpy).toHaveBeenCalledWith(4);
+        });
+
+        test("when an image elem has no memoisedScale, assume a scale of 1", () => {
+            jest.clearAllMocks();
+            mockImageElem.memoisedScale = undefined;
+            mockContainer.getElems = jest.fn().mockReturnValue([mockTextElem, mockImageElem]);
+            shopLayout.resize(mockContainer)(newBounds);
+            expect(imageScaleXSpy).toHaveBeenCalledWith(1);
+            expect(imageScaleYSpy).toHaveBeenCalledWith(1);
         });
     });
 
@@ -169,8 +179,8 @@ describe("shop element scaling functions", () => {
 
         beforeEach(() => {
             mockScene = {
+                assetPrefix: "prefix",
                 config: {
-                    assetPrefix: "prefix",
                     assetKeys: {
                         background: "someBackground",
                     },
@@ -178,7 +188,7 @@ describe("shop element scaling functions", () => {
             };
         });
         test("if a string is passed in config, concatenates with assetPrefix", () => {
-            mockScene.config.assetKeys.background = { shop: "shopBackground" };
+            mockScene.config.backgrounds = { shop: "shopBackground" };
             expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.shopBackground");
         });
         test("if an empty string is passed, returns null", () => {
@@ -186,11 +196,11 @@ describe("shop element scaling functions", () => {
             expect(getPaneBackgroundKey(mockScene, "shop")).toBe(null);
         });
         test("if an object is passed in config, asset key is contextual", () => {
-            mockScene.config.assetKeys.background = { shop: "shopBackground" };
+            mockScene.config.backgrounds = { shop: "shopBackground" };
             expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.shopBackground");
         });
         test("empty strings can be passed here too", () => {
-            mockScene.config.assetKeys.background = { shop: "" };
+            mockScene.config.backgrounds = { shop: "" };
             expect(getPaneBackgroundKey(mockScene, "shop")).toBe(null);
         });
     });
@@ -201,15 +211,13 @@ describe("shop element scaling functions", () => {
 
         beforeEach(() => {
             mockScene = {
+                assetPrefix: "some",
                 add: {
                     image: jest.fn().mockReturnValue({ setScale: jest.fn() }),
                     rectangle: jest.fn().mockReturnValue({ setScale: jest.fn() }),
                 },
                 config: {
-                    assetPrefix: "some",
-                    assetKeys: {
-                        background: { shop: "asset" },
-                    },
+                    backgrounds: { shop: "asset" },
                 },
             };
         });
@@ -219,34 +227,9 @@ describe("shop element scaling functions", () => {
             expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "some.asset");
         });
         test("if it finds no asset key, returns a rectangle", () => {
-            mockScene.config.assetKeys.background = {};
+            mockScene.config.backgrounds = {};
             shopLayout.createPaneBackground(mockScene, mockBounds, "shop");
             expect(mockScene.add.rectangle).toHaveBeenCalled();
-        });
-    });
-
-    describe("textStyle()", () => {
-        const defaultStyle = { some: "default", foo: "bar" };
-        let elementConfig;
-
-        test("merges default style with style from element config", () => {
-            elementConfig = { some: "config", styles: { foo: "baz" } };
-            const expectedStyle = { some: "default", foo: "baz" };
-            expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
-        });
-        test("if there's no element config, returns the default style", () => {
-            elementConfig = undefined;
-            const expectedStyle = defaultStyle;
-            expect(shopLayout.textStyle(defaultStyle, elementConfig)).toStrictEqual(expectedStyle);
-        });
-        test("if there's no default style, use a fallback style", () => {
-            const fallbackStyle = {
-                fontFamily: "ReithSans",
-                fontSize: "24px",
-                resolution: 10,
-                align: "center",
-            };
-            expect(shopLayout.textStyle(undefined, undefined)).toStrictEqual(fallbackStyle);
         });
     });
 });

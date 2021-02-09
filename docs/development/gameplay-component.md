@@ -5,8 +5,8 @@
 * [What coding and test standards do I need to apply?](#what-coding-and-test-standards-do-i-need-to-apply)
 * [How does my component plug into Genie?](#how-does-my-component-plug-into-genie)
 * [How do I test my component in the Genie framework?](#how-do-i-test-my-component-in-the-genie-framework)
-* [Are there any areas of existing Children’s game delivery standards I need to apply?](#user-content-are-there-any-areas-of-existing-childrens-game-delivery-standards-i-need-to-apply)
-* [How do I get my build onto Children’s platforms?](#how-do-i-get-my-build-onto-children’s-platforms)
+* [Are there any areas of existing Children’s game delivery standards I need to apply?](#are-there-any-areas-of-existing-childrens-game-delivery-standards-i-need-to-apply)
+* [How do I get my build onto Children’s platforms?](#how-do-i-get-my-build-onto-childrens-platforms)
 * [What acceptance tests will the BBC carry out?](#what-acceptance-tests-will-the-bbc-carry-out)
 * [What documentation do I need to supply?](#what-documentation-do-i-need-to-supply)
 
@@ -57,7 +57,7 @@ All components extend the Genie "Screen" class. The `Screen` class extends `Phas
 
 ## How do I test my component in the Genie framework?
 
-You can preview your game without bundling it through Webpack by running it in a live server using `npm start`, and viewing it in a browser at http://localhost:8080/.
+You can preview your game without bundling it through Webpack by running it in a live server using `npm start`, and viewing it in a browser at http://localhost:9000/.
 
 The `debug=true` query string may be added to the end to view the game in QA Mode. This gives additional console output, and if you press "q", you can see the layout overlay. http://localhost:8000/?debug=true.
 

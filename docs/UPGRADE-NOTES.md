@@ -1,6 +1,9 @@
 # Upgrade Notes
 All breaking changes between Genie versions will be listed here
 
+# -.-.-
+* Local is now on ports `9000` for `npm run start` and `9001` for `npm run start:pack` for compatibility with Cypress tests.
+
 # 3.9.0
 * Fonts have been moved into a fonts.json file.
 

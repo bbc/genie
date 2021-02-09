@@ -12,8 +12,8 @@ import {
     createRect,
     getSafeArea,
     createPaneBackground,
-    textStyle,
 } from "./shop-layout.js";
+import { addText } from "../../core/layout/text-elem.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { doTransaction } from "./transact.js";
 import { collections } from "../../core/collections.js";
@@ -22,8 +22,6 @@ export const createConfirm = scene => {
     const config = scene.config;
     const balance = scene.balance;
     const bounds = getSafeArea(scene.layout);
-
-    const { styleDefaults } = config;
 
     const container = scene.add.container();
     container.config = config;
@@ -35,26 +33,14 @@ export const createConfirm = scene => {
     container.setY(yOffset);
     container.buttons = createConfirmButtons(container, handleClick(scene, container));
 
+    const { prompt, price } = config.confirm;
+
     container.elems = {
         background: [createRect(scene, innerBounds, 0x0000ff), createPaneBackground(scene, bounds, "confirm")],
-        prompt: scene.add
-            .text(
-                getX(innerBounds.x, config),
-                promptY(bounds),
-                config.confirm.prompt.shop,
-                textStyle(styleDefaults, config.confirm.prompt),
-            )
-            .setOrigin(0.5),
-        price: scene.add
-            .text(
-                getX(innerBounds.x + 28, config),
-                currencyY(bounds),
-                "PH",
-                textStyle(styleDefaults, config.confirm.price),
-            )
-            .setOrigin(0.5),
+        prompt: addText(scene, getX(innerBounds.x, config), promptY(bounds), prompt.shop, prompt).setOrigin(0.5),
+        price: addText(scene, getX(innerBounds.x + 28, config), currencyY(bounds), "PH", price).setOrigin(0.5),
         priceIcon: scene.add.image(
-            getX(innerBounds.x - 20, config),
+            getX(innerBounds.x - 28, config),
             currencyY(bounds),
             `${config.assetPrefix}.${config.assetKeys.currency}`,
         ),
@@ -65,13 +51,14 @@ export const createConfirm = scene => {
 
     container.setVisible = setVisible(container);
     container.resize = resize(container);
-    container.update = update(scene, container);
+    container.update = update(container);
     container.prepTransaction = prepTransaction(scene, container);
     container.doTransaction = doTransaction(scene);
     container.setBalance = bal => balance.setText(bal);
     container.getBalance = () => balance.getValue();
     container.setLegal = setLegal(container);
 
+    //TODO .elems vs .getElems? Ambiguous
     container.getElems = () => [
         container.elems.prompt,
         container.elems.price,
@@ -96,15 +83,37 @@ const isTransactionLegal = (container, item, title) => {
 
 const confirm = container => container.transaction && container.doTransaction(container.transaction);
 
-const update = (scene, container) => (item, title) => {
+const update = container => (item, title) => {
     const isLegal = isTransactionLegal(container, item, title);
-    container.removeAll(false);
     container.elems.priceIcon.setVisible(title === "shop");
     container.elems.price.setText(title === "shop" ? item.price : "");
-    container.elems.item = itemView(scene, item, container.config, container.memoisedBounds);
+    updateItemView(container, item);
     container.transaction = { item, title, isLegal };
     container.setLegal(title, isLegal);
-    populate(container);
+};
+
+const updateItemView = (container, item) =>
+    container.config.confirm.detailView ? updateItemDetailView(container, item) : updateItemImageView(container, item);
+
+const updateItemDetailView = (container, item) => {
+    const [itemImage, itemTitle, itemDetail, itemBlurb] = container.elems.item;
+
+    setImageTextureAndScale(container, item, itemImage, getItemDetailImageScale);
+
+    itemTitle.setText(getItemTitle(item));
+    itemDetail.setText(getItemDetail(item));
+    itemBlurb.setText(getItemBlurb(item));
+};
+
+const updateItemImageView = (container, item) => {
+    const [image] = container.elems.item;
+    setImageTextureAndScale(container, item, image, getItemImageScale);
+};
+
+const setImageTextureAndScale = (container, item, image, getScaleFn) => {
+    image.setTexture(assetKey(item));
+    const scale = getScaleFn(container.memoisedBounds, image);
+    setImageScaleXY(image, scale, container.scaleX, container.scaleY);
 };
 
 const setLegal = container => (title, isLegal) => {
@@ -126,7 +135,7 @@ const populate = container =>
 
 const prepTransaction = (scene, container) => (item, title) => {
     scene.stack("confirm");
-    container.update(item, title);
+    container.update(item, title); // change name of method
 };
 
 const itemView = (scene, item, config, bounds) =>
@@ -136,39 +145,49 @@ const itemView = (scene, item, config, bounds) =>
 
 const itemImageView = (scene, item, config, bounds) => {
     const image = scene.add.image(imageX(config, bounds), 0, assetKey(item));
-    image.setScale((bounds.width / 2 / image.width) * 0.9);
+    const absScale = getItemImageScale(bounds, image);
+    setImageScaleXY(image, absScale);
     return [image];
 };
 
 const itemDetailView = (scene, item, config, bounds) => {
     const x = imageX(config, bounds);
-    const { styleDefaults } = config;
     const { title, detail, description } = config.confirm;
+
     const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
-    itemImage.setScale(bounds.height / 3 / itemImage.height);
-    const itemTitle = scene.add.text(x, 0, getItemTitle(item), textStyle(styleDefaults, title)).setOrigin(0.5);
-    const itemDetail = scene.add
-        .text(x, detailY(bounds), getItemDetail(item), textStyle(styleDefaults, detail))
-        .setOrigin(0.5);
-    const itemBlurb = scene.add
-        .text(x, blurbY(bounds), getItemBlurb(item), textStyle(styleDefaults, description), 0)
-        .setOrigin(0.5);
+    setImageScaleXY(itemImage, getItemDetailImageScale(bounds, itemImage));
+
+    const itemTitle = addText(scene, x, titleY(bounds), getItemTitle(item), title).setOrigin(0.5);
+    const itemDetail = addText(scene, x, detailY(bounds), getItemDetail(item), detail).setOrigin(0.5);
+    const itemBlurb = addText(scene, x, blurbY(bounds), getItemBlurb(item), description).setOrigin(0.5);
+
     return [itemImage, itemTitle, itemDetail, itemBlurb];
+};
+
+const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY = 1) => {
+    image.setScale(absScale / containerScaleX, absScale / containerScaleY);
+    image.memoisedScale = absScale;
 };
 
 const getItemState = (container, item, title) =>
     collections.get(getCollectionsKey(container, title)).get(item.id).state;
 const getCollectionsKey = (container, title) => container.config.paneCollections[title];
-const getItemTitle = item => (item ? item.title : "Item Default Title");
-const getItemDetail = item => (item ? item.description : "");
-const getItemBlurb = item => (item ? item.longDescription : "");
-const assetKey = item => (item ? item.icon : "shop.itemIcon");
-const imageY = bounds => -bounds.height / 4;
+const getItemTitle = item => (item ? item.title : "PH");
+const getItemDetail = item => (item ? item.description : "PH");
+const getItemBlurb = item => (item ? item.longDescription : "PH");
+const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
+const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
+const assetKey = item => (item ? item.icon : "shop.itemIcon"); //TODO shouldn't use "shop" key as may be different
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
-const promptY = outerBounds => -outerBounds.height * (3 / 8);
-const currencyY = outerBounds => -outerBounds.height / 4;
-const detailY = bounds => bounds.height / 12;
-const blurbY = bounds => bounds.height / 4;
+
+const imageY = bounds => -percentOfHeight(bounds, 25);
+const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
+const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
+const titleY = bounds => -percentOfHeight(bounds, 4);
+const detailY = bounds => percentOfHeight(bounds, 5);
+const blurbY = bounds => percentOfHeight(bounds, 25);
+const percentOfHeight = (bounds, percent) => (bounds.height / 100) * percent;
+
 const getOffsetBounds = (outerBounds, innerBounds) => ({
     ...innerBounds,
     y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,

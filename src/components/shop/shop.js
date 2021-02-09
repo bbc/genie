@@ -15,6 +15,7 @@ import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js"
 import { eventBus } from "../../core/event-bus.js";
 import { createConfirm } from "./confirm.js";
 import * as a11y from "../../core/accessibility/accessibility-layer.js";
+import { gmi } from "../../core/gmi/gmi.js";
 
 const memoizeBackButton = config => (({ channel, key, action }) => ({ channel, name: key, callback: action }))(config);
 
@@ -25,9 +26,10 @@ export class Shop extends Screen {
 
     create() {
         this.addBackgroundItems();
-        this.setLayout(["back", "pause"]);
+        const backNav = this.config.isOverlay ? "overlayBack" : "back";
+        this.setLayout([backNav, "pause"]);
 
-        this.backMessage = memoizeBackButton(this.layout.buttons.back.config);
+        this.backMessage = memoizeBackButton(this.layout.buttons[backNav].config);
         this.paneStack = [];
 
         this.customMessage = {
@@ -100,6 +102,7 @@ export class Shop extends Screen {
         const safeArea = getSafeArea(this.layout);
         this.panes.top.resize(safeArea);
         this.panes.confirm.resize(safeArea);
+        this.panes.shop.reset();
         this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));
         this.title.setPosition(0, getYPos(metrics, safeArea));
         this.balance.setScale(getScaleFactor({ metrics, container: this.balance, safeArea }));
@@ -109,3 +112,9 @@ export class Shop extends Screen {
         );
     }
 }
+
+export const launchShopOverlay = (screen, shopKey) => {
+    screen.scene.pause();
+    gmi.sendStatsEvent("shop", "click");
+    screen.addOverlay(shopKey);
+};

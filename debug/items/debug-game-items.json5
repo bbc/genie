@@ -19,6 +19,7 @@
         longDescription: "The skull icon is now a health \n& safety requirement for \n all explody things. Sigh.",
         icon: "shop.bombIcon",
         tags: ["weapon"],
+        isConsumable: true,
     },
     {
         id: "box",

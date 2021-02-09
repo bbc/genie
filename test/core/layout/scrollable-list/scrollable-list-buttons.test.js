@@ -16,9 +16,12 @@ describe("Scrollable List Buttons", () => {
     const mockItem = {
         id: "mockId",
         ariaLabel: "mockAriaLabel",
-        state: "foo",
+        state: "",
     };
     const mockButton = {
+        input: { enabled: true },
+        on: jest.fn(),
+        off: jest.fn(),
         width: 100,
         setScale: jest.fn(),
         config: { id: "foo_bar_itemKey_shop" },
@@ -45,6 +48,8 @@ describe("Scrollable List Buttons", () => {
                     shop: [
                         { baz: "qux", activeStates: ["cta"] },
                         { wiz: "bang", activeStates: ["actioned"] },
+                        { wiz: "bang", activeStates: ["unique"] },
+                        { wiz: "bang", activeStates: ["notInStock"] },
                     ],
                     manage: [
                         { baz: "qux", activeStates: ["cta"] },
@@ -81,7 +86,6 @@ describe("Scrollable List Buttons", () => {
 
         test("provides it the correct config", () => {
             const expectedConfig = {
-                channel: "mockChannel",
                 gameButton: true,
                 group: "shop",
                 id: "scroll_button_mockId_shop",
@@ -90,16 +94,6 @@ describe("Scrollable List Buttons", () => {
                 scrollable: true,
             };
             expect(mockScene.add.gelButton).toHaveBeenCalledWith(0, 0, expectedConfig);
-        });
-
-        test("subscribes to the event bus", () => {
-            const args = eventBus.subscribe.mock.calls[0][0];
-            expect(args.channel).toEqual("mockChannel");
-            expect(args.name).toEqual("scroll_button_mockId_shop");
-            const callback = handlers.handleClickIfVisible.mock.calls[0][2];
-            callback();
-            expect(mockCallback).toHaveBeenCalled();
-            expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", "foo");
         });
 
         test("scales the button", () => {
@@ -137,7 +131,7 @@ describe("Scrollable List Buttons", () => {
                 mockButton.overlays.setAll();
                 const expected = [{ foo: "bar" }, { baz: "qux", activeStates: ["cta"] }];
                 const configs = overlays.overlays1Wide.mock.calls[0][1];
-                expect(configs).toStrictEqual(expected);
+                expect(configs).toEqual(expected);
             });
         });
     });
@@ -166,16 +160,16 @@ describe("Scrollable List Buttons", () => {
 
     describe("getButtonState() returns a string describing the button state", () => {
         test("with shop items, look for an 'owned' state", () => {
-            const item = { id: "foo", state: "" };
-            expect(buttons.getButtonState(item, "shop")).toBe("cta");
+            const item = { id: "foo", state: "unique", qty: 1 };
+            expect(buttons.getButtonState(item, "shop")).toEqual(["cta", "unique", "inStock"]);
             item.state = "owned";
-            expect(buttons.getButtonState(item, "shop")).toBe("actioned");
+            expect(buttons.getButtonState(item, "shop")).toEqual(["actioned", "unique", "inStock"]);
         });
         test("with manage items, look for an 'equipped' state", () => {
-            const item = { id: "foo", state: "" };
-            expect(buttons.getButtonState(item, "manage")).toBe("cta");
+            const item = { id: "foo", state: "", qty: 0 };
+            expect(buttons.getButtonState(item, "manage")).toEqual(["cta", "nonUnique", "notInStock"]);
             item.state = "equipped";
-            expect(buttons.getButtonState(item, "manage")).toBe("actioned");
+            expect(buttons.getButtonState(item, "manage")).toEqual(["actioned", "nonUnique", "notInStock"]);
         });
     });
 });

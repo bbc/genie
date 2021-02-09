@@ -1,8 +1,18 @@
 {
+    isOverlay: true,
     assetPrefix: "shop",
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "shop.magicShop", x: 0, y: 0 }],
+    },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 2,
+        align: "center",
+    },
+    menuButtons: {
+        styles: { fontStyle: "bold", fontSize: "16px" },
     },
     titles: [
         {
@@ -16,10 +26,7 @@
             value: "Shop",
             xOffset: 0,
             yOffset: 0,
-            styles: {
-                fontSize: "24px",
-                resolution: 4,
-            },
+            styles: { fontStyle: "bold", fontSize: "24px" },
         },
     ],
     titlePadding: 20,
@@ -35,7 +42,7 @@
         value: {
             type: "text",
             key: "coin", // the id of the currency item, which must exist in the inventory collection
-            styles: {},
+            styles: { fontSize: "16px" },
         },
     },
     balancePadding: 15,
@@ -50,30 +57,27 @@
         manage: "inventory",
     },
     confirm: {
-        detailView: true, // true === smaller image and more text. false === large image only.
-        prompts: {
+        detailView: true,
+        prompt: {
             shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
             manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
+            styles: { fontStyle: "bold" },
         },
-    },
-    styleDefaults: {
-        fontFamily: "ReithSans",
-        fontSize: "24px",
-        resolution: 5,
-        align: "center",
+        title: { styles: { fontStyle: "bold" } },
+        detail: { styles: { color: "#bd6", fontStyle: "bold" } },
+        description: { styles: { fontStyle: "italic", lineSpacing: 5 } },
     },
     menu: {
         buttonsRight: true, // set as false to X-flip the menu layout
     },
     columns: 1,
+    backgrounds: {
+        menu: "",
+        shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
+        manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
+        confirm: "halfViewBackground",
+    },
     assetKeys: {
-        // background: "background", // if a string is passed, that asset is used for all panes
-        background: {
-            // menu: "", // pass empty string, or omit the key entirely, for a transparent BG
-            shop: "background",
-            manage: "background",
-            confirm: "halfViewBackground",
-        },
         scrollbar: "scrollbar",
         scrollbarHandle: "scrollbarHandle",
         itemBackground: "itemBackground",
@@ -87,14 +91,14 @@
                 type: "image",
                 name: "background",
                 assetKey: "itemBackground",
-                isDynamic: false, // asset key is the value of assetKey
+                isDynamic: false,
             },
             {
                 type: "image",
                 name: "itemIcon",
                 assetKey: "icon",
-                isDynamic: true, // asset key is item[assetKey]
-                position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                isDynamic: true,
+                position: { align: "left", offsetX: 35, offsetY: 0 },
                 size: 76,
             },
             {
@@ -103,7 +107,7 @@
                 value: "title",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: -18 },
-                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 18 },
+                styles: { fontSize: "16px", fontStyle: "bold" },
             },
             {
                 type: "text",
@@ -111,7 +115,7 @@
                 value: "description",
                 isDynamic: true,
                 position: { align: "left", offsetX: 80, offsetY: 4 },
-                font: { fontFamily: "ReithSans", resolution: 5, fontSize: 12 },
+                styles: { fontSize: "12px" },
             },
         ],
         options: {
@@ -122,7 +126,7 @@
                     value: "price",
                     isDynamic: true,
                     position: { align: "right", offsetX: -44, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5, fontSize: 14 },
+                    styles: { fontSize: "14px" },
                     activeStates: ["cta"],
                 },
                 {
@@ -136,10 +140,10 @@
                 {
                     type: "text",
                     name: "owned",
-                    value: "Owned",
+                    value: "Purchased",
                     isDynamic: false,
-                    position: { align: "right", offsetX: -76, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    position: { align: "right", offsetX: -108, offsetY: -10 },
+                    styles: { fontSize: "16px", align: "right" },
                     activeStates: ["actioned"],
                 },
             ],
@@ -150,7 +154,7 @@
                     value: "Equip",
                     isDynamic: false,
                     position: { align: "right", offsetX: -76, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    styles: { fontSize: "16px", align: "right" },
                     activeStates: ["cta"],
                 },
                 {
@@ -158,8 +162,8 @@
                     name: "equipped",
                     value: "Equipped",
                     isDynamic: false,
-                    position: { align: "right", offsetX: -88, offsetY: -10 },
-                    font: { fontFamily: "ReithSans", resolution: 5 },
+                    position: { align: "right", offsetX: -104, offsetY: -10 },
+                    styles: { fontSize: "16px", align: "right" },
                     activeStates: ["actioned"],
                 },
             ],

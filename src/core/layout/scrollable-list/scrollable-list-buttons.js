@@ -4,21 +4,18 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { handleClickIfVisible } from "./scrollable-list-handlers.js";
-import { eventBus } from "../../event-bus.js";
 import { overlays1Wide } from "./button-overlays.js";
 import { collections } from "../../collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const STATES = ["cta", "actioned"];
+const STATES = ["cta", "actioned", "inStock"];
 
-const createGelButton = (scene, item, title, state, prepTx) => {
+const createGelButton = (scene, item, title, state) => {
     const id = `scroll_button_${item.id}_${title}`;
     const config = scene.config;
 
     const gelConfig = {
         gameButton: true,
-        channel: config.eventChannel,
         group: scene.scene.key,
         id,
         key: config.assetKeys.itemBackground,
@@ -38,17 +35,8 @@ const createGelButton = (scene, item, title, state, prepTx) => {
         },
         setAll: setOverlays(gelButton),
         unsetAll: unsetOverlays(gelButton),
-        state: STATES.find(st => st === state),
+        state,
     };
-
-    const callback = () => prepTx(item, title);
-
-    const clickEvent = eventBus.subscribe({
-        callback: handleClickIfVisible(gelButton, scene, callback),
-        channel: gelConfig.channel,
-        name: id,
-    });
-    scene.events.once("shutdown", clickEvent.unsubscribe);
 
     scaleButton(gelButton, scene.layout, config.listPadding);
     gelButton.overlays.setAll();
@@ -77,11 +65,18 @@ const updateButtonData = button => {
 };
 
 const getButtonState = (item, title) => {
+    const states = [];
     const isOwned = item => item?.state === "owned";
     const isEquipped = item => item?.state === "equipped";
     const isButtonCta = title === "shop" ? isOwned : isEquipped;
-    return isButtonCta(item) ? "actioned" : "cta";
+    states.push(isButtonCta(item) ? "actioned" : "cta");
+    states.push(isItemUnique(item) ? "unique" : "nonUnique");
+    states.push(isItemInStock(item) ? "notInStock" : "inStock");
+    return states;
 };
+
+const isItemUnique = item => item.qty === 1 && !item.isConsumable;
+const isItemInStock = item => item.qty === 0;
 
 const updateOverlays = button => {
     button.overlays.unsetAll();
@@ -89,10 +84,21 @@ const updateOverlays = button => {
     button.overlays.setAll();
 };
 
-const getConfigs = button =>
-    button.overlays.configs.items.concat(
-        button.overlays.configs.options.filter(overlay => overlay.activeStates.includes(button.overlays.state)),
-    );
+const getConfigs = button => button.overlays.configs.items.concat(filterOptionalConfigs(button.overlays)); // filter this
+
+const filterOptionalConfigs = overlays => {
+    const states = overlays.state;
+    const options = overlays.configs.options;
+
+    const filteredOptions = options.filter(overlay => {
+        let result = true;
+        overlay.activeStates.forEach(stateLabel => {
+            if (!states.includes(stateLabel)) result = false;
+        });
+        return result;
+    });
+    return filteredOptions;
+};
 
 const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);
 const getPaneTitle = button => getItemKeyAndTitle(button).pop();

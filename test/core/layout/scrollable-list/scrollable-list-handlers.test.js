@@ -13,12 +13,6 @@ let mockRexLabel;
 let mockGridSizer;
 let mockPanel;
 
-const mockScene = {
-    input: { activePointer: { id: 1, upTime: 999 } },
-    scale: { displaySize: { height: 600 } },
-    layout: { getSafeArea: jest.fn().mockReturnValue({ y: -100 }) },
-    sys: { time: { now: 1000 } },
-};
 const mockSizer = { innerHeight: 300, space: { top: 10 } };
 const mockOtherRexLabel = { children: [{}], height: 100 };
 
@@ -36,7 +30,13 @@ describe("Scrollable List handlers", () => {
                 },
             },
         };
-        mockRexLabel = { children: [mockGelButton], height: 100, setElementSizeAndPosition: jest.fn() };
+        mockRexLabel = {
+            children: [mockGelButton],
+            height: 100,
+            setElementSizeAndPosition: jest.fn(),
+            setInteractive: jest.fn(() => mockRexLabel),
+            disableInteractive: jest.fn(() => mockRexLabel),
+        };
         mockGridSizer = { getElement: jest.fn().mockReturnValue([mockRexLabel]) };
         mockPanel = {
             getByName: jest.fn().mockReturnValue(mockGridSizer),
@@ -47,41 +47,6 @@ describe("Scrollable List handlers", () => {
             visible: true,
             isInTouching: jest.fn().mockReturnValue(true),
         };
-    });
-
-    describe("handleClickIfVisible()", () => {
-        let mockClickHandler = jest.fn();
-
-        test("returns a fn that calls clickHandler if click is inside the panel's Y bounds", () => {
-            mockScene.input.y = 300;
-            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
-            handler();
-            expect(mockClickHandler).toHaveBeenCalled();
-        });
-        test("returns a fn that does not call clickHandler if click is outside the panel", () => {
-            mockScene.input.y = 0;
-            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
-            handler();
-            expect(mockClickHandler).not.toHaveBeenCalled();
-        });
-        test("if the panel does not exist yet, guard vs race condition", () => {
-            mockGelButton.rexContainer.parent = undefined;
-            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
-            handler();
-            expect(mockClickHandler).not.toHaveBeenCalled();
-        });
-        test("if the activePointer id is 0, we have an a11y click, so we return a fn that calls clickHandler", () => {
-            mockScene.input = { y: 0, activePointer: { id: 0 } };
-            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
-            handler();
-            expect(mockClickHandler).toHaveBeenCalled();
-        });
-        test("if the activePointer id is not 0, but the activePointer upTime is old, we have an a11y click", () => {
-            mockScene.input = { y: 0, activePointer: { id: 1, upTime: 500 } };
-            const handler = handlers.handleClickIfVisible(mockGelButton, mockScene, mockClickHandler);
-            handler();
-            expect(mockClickHandler).toHaveBeenCalled();
-        });
     });
 
     describe("updatePanelOnScroll", () => {
@@ -167,22 +132,31 @@ describe("Scrollable List handlers", () => {
     });
 
     describe("updatePanelOnWheel", () => {
-        test("is a curried fn that sets t (scroll position) on the panel if visible and touching the pointer", () => {
+        let mockEvent;
+        let args;
+        beforeEach(() => {
+            mockEvent = { stopPropagation: jest.fn() };
+            args = [{ deltaY: 1 }, undefined, undefined, undefined, undefined, mockEvent];
+        });
+        test("is a curried fn that sets t (scroll position) on the panel and stops propagation.", () => {
             const onWheelFn = handlers.updatePanelOnWheel(mockPanel);
-            onWheelFn({ deltaY: 1 });
+            onWheelFn(...args);
             expect(mockPanel.setT).toHaveBeenCalled();
+            expect(mockEvent.stopPropagation).toHaveBeenCalled();
         });
         test("does not set t if not visible", () => {
             mockPanel.visible = false;
             const onWheelFn = handlers.updatePanelOnWheel(mockPanel);
-            onWheelFn({ deltaY: 1 });
+            onWheelFn(...args);
             expect(mockPanel.setT).not.toHaveBeenCalled();
+            expect(mockEvent.stopPropagation).toHaveBeenCalled();
         });
-        test("does not set t if not touching pointer", () => {
-            mockPanel.isInTouching = jest.fn().mockReturnValue(false);
+        test("does not set T if scrolling is not possible (i.e. list is shorter than pane)", () => {
+            mockPanel.minHeight = 200;
             const onWheelFn = handlers.updatePanelOnWheel(mockPanel);
-            onWheelFn({ deltaY: 1 });
+            onWheelFn(...args);
             expect(mockPanel.setT).not.toHaveBeenCalled();
+            expect(mockEvent.stopPropagation).toHaveBeenCalled();
         });
     });
 });

@@ -61,9 +61,11 @@ const scaleElements = (elems, scaleX, scaleY) => {
         textElem.scaleY = 1 / scaleY;
     });
     elems.filter(isImage).forEach(imageElem => {
-        const scale = imageElem.scale;
-        imageElem.scaleX = (1 / scaleX) * scale;
-        imageElem.scaleY = (1 / scaleY) * scale;
+        const { memoisedScale } = imageElem;
+        const newScaleX = memoisedScale ? (1 / scaleX) * memoisedScale : 1 / scaleX;
+        const newScaleY = memoisedScale ? (1 / scaleY) * memoisedScale : 1 / scaleY;
+        imageElem.scaleX = newScaleX;
+        imageElem.scaleY = newScaleY;
     });
 };
 
@@ -108,27 +110,5 @@ export const createPaneBackground = (scene, bounds, pane) => {
     }
 };
 
-export const getPaneBackgroundKey = (scene, pane) => {
-    const {
-        assetPrefix,
-        assetKeys: { background },
-    } = scene.config;
-
-    if (background && background[pane]) {
-        return `${assetPrefix}.${background[pane]}`;
-    } else {
-        return null;
-    }
-};
-
-const fallbackStyle = {
-    fontFamily: "ReithSans",
-    fontSize: "24px",
-    resolution: 10,
-    align: "center",
-};
-
-export const textStyle = (styleDefaults, config) => {
-    const defaults = styleDefaults ? styleDefaults : fallbackStyle;
-    return config ? { ...defaults, ...config.styles } : defaults;
-};
+export const getPaneBackgroundKey = (scene, pane) =>
+    scene.config.backgrounds?.[pane] ? `${scene.assetPrefix}.${scene.config.backgrounds[pane]}` : null;
