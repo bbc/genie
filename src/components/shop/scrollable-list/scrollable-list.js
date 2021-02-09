@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
-import { createGelButton, scaleButton, getButtonState } from "./scrollable-list-buttons.js";
+import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
 import { createConfirm } from "../confirm.js";
 import * as a11y from "../../../core/accessibility/accessibility-layer.js";
 import { collections } from "../../../core/collections.js";
@@ -141,6 +141,20 @@ const setupEvents = (scene, panel) => {
     items.forEach(item => getFirstElement(item).addEventListener("focus", () => panel.updateOnFocus(item)));
 };
 
+const updatePanel = panel => {
+    const parent = panel.parentContainer;
+    const key = parent.scene.config.paneCollections[panel.name];
+    const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
+    const items = getPanelItems(panel);
+
+    shouldPanelListUpdate(collection, items)
+        ? updatePanelList(panel)
+        : items.forEach(item => updateButton(item.children[0]));
+};
+
+const shouldPanelListUpdate = (collection, items) =>
+    collection.length !== items.length || items.some((item, idx) => item.children[0].item.id !== collection[idx].id);
+
 const updatePanelList = panel => {
     const tableContainer = panel.getByName("gridContainer", true);
     const scene = panel.parentContainer.scene;
@@ -190,6 +204,6 @@ export class ScrollableList extends Phaser.GameObjects.Container {
             item.config.tabbable = isVisible;
             item.accessibleElement.update();
         });
-        isVisible && updatePanelList(this.panel);
+        isVisible && updatePanel(this.panel);
     }
 }
