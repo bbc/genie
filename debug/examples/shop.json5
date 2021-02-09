@@ -106,40 +106,25 @@
         options: {
             shop: [
                 {
-                    type: "text", // why the duplication here?
-                    name: "currencyAmount",
-                    value: "${price}",
-                    position: { align: "right", offsetX: -44, offsetY: -10 },
-                    styles: { fontSize: "14px" },
-                    activeStates: ["cta", "inStock"],
-                },
-                {
                     type: "text",
                     name: "currencyAmount",
                     value: "${price}",
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeStates: ["actioned", "nonUnique", "inStock"],
-                },
-                {
-                    type: "image", // again, duplication not needed
-                    name: "currency",
-                    assetKey: "shop.currency",
-                    position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["cta", "inStock"],
+                    activeStates: ["inStock"],
                 },
                 {
                     type: "image",
                     name: "currency",
                     assetKey: "shop.currency",
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["actioned", "nonUnique", "inStock"],
+                    activeStates: ["inStock"],
                 },
                 {
                     type: "text",
                     name: "owned",
                     value: "Purchased",
-                    position: { align: "right", offsetX: -120, offsetY: -10 },
+                    position: { align: "right", offsetX: -108, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
                     activeStates: ["actioned", "notInStock"],
                 },
