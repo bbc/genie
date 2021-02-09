@@ -5,7 +5,7 @@
  * @license Apache-2.0
  */
 import { Screen } from "../../core/screen.js";
-import { ScrollableList } from "../../core/layout/scrollable-list/scrollable-list.js";
+import { ScrollableList } from "./scrollable-list/scrollable-list.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
 import { createTitle } from "./shop-titles.js";

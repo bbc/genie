@@ -6,12 +6,12 @@
  */
 import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton, getButtonState } from "./scrollable-list-buttons.js";
-import { createConfirm } from "../../../components/shop/confirm.js";
-import * as a11y from "../../accessibility/accessibility-layer.js";
-import { collections } from "../../collections.js";
-import { onScaleChange } from "../../scaler.js";
+import { createConfirm } from "../confirm.js";
+import * as a11y from "../../../core/accessibility/accessibility-layer.js";
+import { collections } from "../../../core/collections.js";
+import { onScaleChange } from "../../../core/scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
-import { accessibilify } from "../../accessibility/accessibilify.js";
+import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 import { createBackground, resizeBackground } from "./backgrounds.js";
 
 const createPanel = (scene, title, parent) => {

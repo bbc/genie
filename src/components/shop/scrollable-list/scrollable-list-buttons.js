@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { overlays1Wide } from "./button-overlays.js";
-import { collections } from "../../collections.js";
+import { collections } from "../../../core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const createGelButton = (scene, item, title, state) => {
