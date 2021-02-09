@@ -24,7 +24,7 @@ export const equip = (scene, item) => {
         .getAll()
         .filter(invItem => invItem.slot === item.slot && invItem.state === "equipped");
     const maxItemsInSlot = scene.config.slots[item.slot].max;
-    maxItemsInSlot === 1 && itemsEquippedInSlot.length === 1 && unequip(scene, itemsEquippedInSlot[0]);
+    itemsEquippedInSlot.length === maxItemsInSlot && unequip(scene, itemsEquippedInSlot[0]);
     invCol.set({ ...item, state: "equipped" });
 };
 
