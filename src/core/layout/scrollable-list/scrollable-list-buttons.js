@@ -85,17 +85,8 @@ const updateOverlays = button => {
 const getConfigs = button => button.overlays.configs.items.concat(filterOptionalConfigs(button.overlays));
 
 const filterOptionalConfigs = overlays => {
-    const states = overlays.state;
-    const options = overlays.configs.options;
-
-    const filteredOptions = options.filter(overlay => {
-        let result = true;
-        overlay.activeStates.forEach(stateLabel => {
-            if (!states.includes(stateLabel)) result = false;
-        });
-        return result;
-    });
-    return filteredOptions;
+    const overlayStateIsInItemState = state => overlays.state.includes(state);
+    return overlays.configs.options.filter(overlay => fp.every(overlayStateIsInItemState, overlay.activeStates));
 };
 
 const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);
