@@ -50,7 +50,7 @@ describe("Shop", () => {
     const mockSafeArea = { foo: "bar " };
     const mockButtonConfig = { channel: "foo", key: "bar", action: "baz" };
     const mockMenu = { setVisible: jest.fn(), resize: jest.fn() };
-    const mockConfirm = { setVisible: jest.fn(), resize: jest.fn() };
+    const mockConfirm = { setVisible: jest.fn(), resize: jest.fn(), removeAll: jest.fn(), destroy: jest.fn() };
     const mockTitles = { setTitleText: jest.fn(), setScale: jest.fn(), setPosition: jest.fn() };
 
     beforeEach(() => {
@@ -230,6 +230,11 @@ describe("Shop", () => {
                 expect(shopScreen.paneStack).toStrictEqual(["shop"]);
                 expect(shopScreen.panes.top.setVisible).toHaveBeenCalled();
             });
+            test("destroys the confirm pane, if present", () => {
+                shopScreen.panes.confirm = mockConfirm;
+                shopScreen.back();
+                expect(mockConfirm.destroy).toHaveBeenCalled();
+            });
         });
         describe("back() on last item in pane stack", () => {
             beforeEach(() => {
@@ -242,6 +247,24 @@ describe("Shop", () => {
                 expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
                 expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
             });
+        });
+    });
+
+    describe("destroyConfirm()", () => {
+        beforeEach(() => {
+            shopScreen.create();
+            shopScreen.panes.confirm = mockConfirm;
+            shopScreen.panes.confirm = shopScreen.destroyConfirm();
+        });
+
+        test("removes and destroys all objects from the confirm container", () => {
+            expect(mockConfirm.removeAll).toHaveBeenCalled();
+        });
+        test("destroys the container", () => {
+            expect(mockConfirm.destroy).toHaveBeenCalled();
+        });
+        test("dumps the confirm key from .panes", () => {
+            expect(shopScreen.panes.confirm).toBe(undefined);
         });
     });
 });
