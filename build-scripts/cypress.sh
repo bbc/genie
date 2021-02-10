@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-npm install --force
+npm install
 #python build-scripts/licensechecker/licensechecker.py
 DEBUG=cypress:*
 node cypress/support/clearReports.js
