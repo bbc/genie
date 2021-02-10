@@ -69,7 +69,6 @@ const createTable = (scene, title, parent) => {
         });
 
         collection.forEach((item, idx) => table.add(createItem(scene, item, title, parent), 0, idx, "top", 0, true));
-
         sizer.add(table, 1, "center", 0, true);
     }
 

@@ -4,9 +4,9 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { ScrollableList } from "../../../../src/core/layout/scrollable-list/scrollable-list.js";
-import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
-import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
+import { ScrollableList } from "../../../../src/components/shop/scrollable-list/scrollable-list.js";
+import * as buttons from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
+import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
 import { collections } from "../../../../src/core/collections.js";
@@ -49,7 +49,7 @@ describe("Scrollable List", () => {
     beforeEach(() => {
         mockItem = { id: "someItem", name: "someItemName", title: "title", description: "description" };
         collectionGetAll = [mockItem];
-        mockCollection = { getAll: jest.fn(() => collectionGetAll) };
+        mockCollection = { getAll: jest.fn(() => collectionGetAll), get: () => mockCollection };
         collections.get = jest.fn().mockReturnValue(mockCollection);
 
         mockLabel = {
@@ -129,7 +129,7 @@ describe("Scrollable List", () => {
     describe("instantiation", () => {
         beforeEach(() => {
             scaler.getMetrics = jest.fn().mockReturnValue({ scale: 1 });
-            new ScrollableList(mockScene, title, mockPrepTransaction);
+            new ScrollableList(mockScene, title);
         });
         describe("adds a rexUI scrollable panel", () => {
             describe("with appropriate panel config", () => {
@@ -161,7 +161,7 @@ describe("Scrollable List", () => {
                     mockGridSizer = undefined;
                     collectionGetAll = [];
 
-                    new ScrollableList(mockScene, title, mockPrepTransaction);
+                    new ScrollableList(mockScene, title);
 
                     expect(mockScene.rexUI.add.gridSizer).not.toHaveBeenCalled();
                 });
@@ -220,6 +220,7 @@ describe("Scrollable List", () => {
                     expect(mockScene.rexUI.add.sizer).toHaveBeenCalledWith({
                         orientation: "y",
                     });
+                    expect(mockScene.rexUI.add.gridSizer).toHaveBeenCalled();
                     expect(mockSizer.add).toHaveBeenCalledWith(mockGridSizer, 1, "center", 0, true);
                 });
             });
@@ -390,7 +391,7 @@ describe("Scrollable List", () => {
     describe("collection filtering", () => {
         const filterFn = jest.fn().mockReturnValue(true);
 
-        beforeEach(() => new ScrollableList(mockScene, "title", fp.noop, filterFn));
+        beforeEach(() => new ScrollableList(mockScene, "title", filterFn));
 
         test("if a filter function is passed to the list, it is run against the collection", () => {
             expect(filterFn).toHaveBeenCalledTimes(1);

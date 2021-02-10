@@ -4,7 +4,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { overlays1Wide } from "../../../../src/core/layout/scrollable-list/button-overlays.js";
+import { overlays1Wide } from "../../../../src/components/shop/scrollable-list/button-overlays.js";
 import * as text from "../../../../src/core/layout/text-elem.js";
 
 const mockImage = { setScale: jest.fn(), width: 100 };

@@ -4,9 +4,9 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
-import * as overlays from "../../../../src/core/layout/scrollable-list/button-overlays.js";
-import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
+import * as buttons from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
+import * as overlays from "../../../../src/components/shop/scrollable-list/button-overlays.js";
+import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 import { eventBus } from "../../../../src/core/event-bus.js";
 import * as a11y from "../../../../src/core/accessibility/accessibilify.js";
 import { collections } from "../../../../src/core/collections.js";
