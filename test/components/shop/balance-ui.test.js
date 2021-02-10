@@ -44,6 +44,7 @@ describe("createBalance()", () => {
                 return mockBackground;
             }),
         },
+        events: { on: jest.fn() },
         config: {
             balance: {
                 background: {
@@ -122,13 +123,5 @@ describe("createBalance()", () => {
         expect(shopLayout.getXPos).toHaveBeenCalledWith(mockContainer, mockSafeArea, mockScene.config.listPadding.x);
         expect(shopLayout.getYPos).toHaveBeenCalledWith(mockMetrics, mockSafeArea);
         expect(mockContainer.setPosition).toHaveBeenCalledWith(42, 69);
-    });
-    test("exposes a setText fn that sets the text of the value text elem", () => {
-        balanceElem.setText("foo");
-        expect(mockReturnedText.setText).toHaveBeenCalledWith("foo");
-    });
-    test("exposes a getValue fn that gets the value of the value text elem as an int", () => {
-        const value = balanceElem.getValue();
-        expect(value).toBe(43);
     });
 });
