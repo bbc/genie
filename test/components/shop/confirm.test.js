@@ -142,14 +142,14 @@ describe("createConfirm()", () => {
             expect(transact.buy).toHaveBeenCalledWith(mockScene, { mock: "item" });
         });
 
-        test("when action is 'equip', calls transact.buy correctly", () => {
+        test("when action is 'equip', calls transact.equip correctly", () => {
             confirmPane = createConfirm(mockScene, "manage", "equip", { mock: "item" });
             const handleClick = buttons.createConfirmButtons.mock.calls[0][2];
             handleClick();
             expect(transact.equip).toHaveBeenCalledWith(mockScene, { mock: "item" });
         });
 
-        test("when action is 'unequip', calls transact.buy correctly", () => {
+        test("when action is 'unequip', calls transact.unequip correctly", () => {
             confirmPane = createConfirm(mockScene, "manage", "unequip", { mock: "item" });
             const handleClick = buttons.createConfirmButtons.mock.calls[0][2];
             handleClick();
