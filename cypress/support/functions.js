@@ -3,6 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import { appendToken } from "../support/appendToken.js";
 
 let localTesting = "http://localhost:9000/?debug=true";
 let localTheme2 = "http://localhost:9000/?debug=true&theme=theme2";
@@ -15,18 +16,18 @@ export const getUrl = () => {
     if (Cypress.env("LOCAL_DEV") == "true") {
         if (Cypress.env("THEME_2") == "true") {
             cy.log("match");
-            return localTheme2;
+            return appendToken(localTheme2);
         } else {
             cy.log("Not theme 2");
-            return localTesting;
+            return appendToken(localTesting);
         }
     } else {
         if (Cypress.env("THEME_2") == "true") {
             cy.log("match");
-            return testTheme2;
+            return appendToken(testTheme2);
         } else {
             cy.log("Not theme 2");
-            return test;
+            return appendToken(test);
         }
     }
 };

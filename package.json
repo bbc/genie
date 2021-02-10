@@ -24,6 +24,7 @@
         "expose-loader": "^0.7.5",
         "json5": "^2.1.3",
         "mochawesome": "^6.2.1",
+        "notp": "^2.0.3",
         "phaser": "3.24.1",
         "webfontloader": "^1.6.28"
     },
