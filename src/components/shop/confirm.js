@@ -145,9 +145,9 @@ const getPromptText = (scene, action, item) =>
         : scene.config.confirm.prompt[action];
 
 const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(item);
-const canAffordItem = (scene, item) => getBalanceItem(scene).qty >= item.price;
-const isEquippable = item => item.slot;
-const itemIsInStock = item => item.qty > 0;
+const canAffordItem = (scene, item) => item && getBalanceItem(scene).qty >= item.price;
+const isEquippable = item => item && item.slot;
+const itemIsInStock = item => item && item.qty > 0;
 
 const getItemTitle = item => (item ? item.title : "PH");
 const getItemDetail = item => (item ? item.description : "PH");

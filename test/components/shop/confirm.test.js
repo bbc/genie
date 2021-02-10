@@ -14,7 +14,7 @@ import { collections } from "../../../src/core/collections.js";
 
 jest.mock("../../../src/components/shop/transact.js");
 
-describe("createConfirm()", () => {
+describe("Confirm pane", () => {
     let confirmPane;
 
     let mockBalanceItem;
@@ -96,32 +96,36 @@ describe("createConfirm()", () => {
 
     collections.get = jest.fn(() => mockCollection);
 
-    beforeEach(() => {
-        mockBalanceItem = { qty: 500 };
-        transact.getBalanceItem = jest.fn(() => mockBalanceItem);
-        confirmPane = createConfirm(mockScene);
-        confirmPane.scene = mockScene;
-    });
+    mockBalanceItem = { qty: 500 };
+    transact.getBalanceItem = jest.fn(() => mockBalanceItem);
 
     afterEach(() => jest.clearAllMocks());
 
-    test("returns a container", () => {
-        expect(confirmPane).toBe(mockContainer);
+    describe("createConfirm()", () => {
+        beforeEach(() => {
+            confirmPane = createConfirm(mockScene);
+            confirmPane.scene = mockScene; // this
+        });
+
+        test("returns a container", () => {
+            expect(confirmPane).toBe(mockContainer);
+        });
+        test("with gel buttons for confirm and cancel", () => {
+            expect(buttons.createConfirmButtons).toHaveBeenCalled();
+        });
+        test("in a layout that can be flipped L-R in config", () => {
+            expect(layout.getInnerRectBounds.mock.calls[0][0]).toBe(mockScene);
+            jest.clearAllMocks();
+            mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
+            createConfirm(mockScene);
+            expect(text.addText.mock.calls[0][1]).toBe(-50);
+            expect(text.addText.mock.calls[0][2]).toBe(-75);
+        });
+        test("that is displayed with an appropriate Y offset", () => {
+            expect(mockContainer.setY).toHaveBeenCalledWith(105);
+        });
     });
-    test("with gel buttons for confirm and cancel", () => {
-        expect(buttons.createConfirmButtons).toHaveBeenCalled();
-    });
-    test("in a layout that can be flipped L-R in config", () => {
-        expect(layout.getInnerRectBounds.mock.calls[0][0]).toBe(mockScene);
-        jest.clearAllMocks();
-        mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
-        createConfirm(mockScene);
-        expect(text.addText.mock.calls[0][1]).toBe(-50);
-        expect(text.addText.mock.calls[0][2]).toBe(-75);
-    });
-    test("that is displayed with an appropriate Y offset", () => {
-        expect(mockContainer.setY).toHaveBeenCalledWith(105);
-    });
+
     describe("Item detail view", () => {
         beforeEach(() => {
             mockScene.config = {
@@ -142,17 +146,23 @@ describe("createConfirm()", () => {
                 icon: "itemIcon",
             });
         });
-        test("adds text objects and an image", () => {
+        test("adds text objects and an image for the item", () => {
             expect(text.addText.mock.calls[1][3]).toBe("itemTitle");
             expect(text.addText.mock.calls[2][3]).toBe("itemDescription");
             expect(text.addText.mock.calls[3][3]).toBe("itemBlurb");
             expect(mockScene.add.image).toHaveBeenCalledWith(50, -50, "itemIcon");
         });
+        test("uses placeholders if item is undefined", () => {
+            jest.clearAllMocks();
+            confirmPane = createConfirm(mockScene, "shop", "buy", undefined);
+            expect(text.addText.mock.calls[1][3]).toBe("PH");
+            expect(text.addText.mock.calls[2][3]).toBe("PH");
+            expect(text.addText.mock.calls[3][3]).toBe("PH");
+            expect(mockScene.add.image).toHaveBeenCalledWith(50, -50, "shop.itemIcon");
+        });
     });
 
     describe("prompt text", () => {
-        let mockItem;
-
         beforeEach(
             () =>
                 (mockScene.config = {
@@ -167,29 +177,29 @@ describe("createConfirm()", () => {
         describe("for the shop", () => {
             test("when item is out of stock, is the 'item unavailable' prompt", () => {
                 confirmPane = createConfirm(mockScene, "shop", "buy", { mock: "item", qty: 0, price: 99 });
-                expect(text.addText.mock.calls[4][3]).toBe("unavailableBuyPrompt");
+                expect(text.addText.mock.calls[0][3]).toBe("unavailableBuyPrompt");
             });
 
             test("when item is in stock and not affordable, is the 'can't afford' prompt", () => {
                 confirmPane = createConfirm(mockScene, "shop", "buy", { mock: "item", qty: 1, price: 9999 });
-                expect(text.addText.mock.calls[4][3]).toBe("illegalBuyPrompt");
+                expect(text.addText.mock.calls[0][3]).toBe("illegalBuyPrompt");
             });
 
             test("when item is in stock and affordable, is the 'confirm transaction' prompt", () => {
                 confirmPane = createConfirm(mockScene, "shop", "buy", { mock: "item", qty: 1, price: 99 });
-                expect(text.addText.mock.calls[4][3]).toBe("legalBuyPrompt");
+                expect(text.addText.mock.calls[0][3]).toBe("legalBuyPrompt");
             });
         });
 
         describe("for the inventory", () => {
             test("when item is equipped, is the 'unequip' text", () => {
                 confirmPane = createConfirm(mockScene, "manage", "unequip", { mock: "item" });
-                expect(text.addText.mock.calls[4][3]).toBe("unequipPrompt");
+                expect(text.addText.mock.calls[0][3]).toBe("unequipPrompt");
             });
 
             test("when item is not equipped, is the 'equip' text", () => {
                 confirmPane = createConfirm(mockScene, "manage", "equip", { mock: "item", slot: "someSlot" });
-                expect(text.addText.mock.calls[4][3]).toBe("equipPrompt");
+                expect(text.addText.mock.calls[0][3]).toBe("equipPrompt");
             });
         });
     });
@@ -220,9 +230,23 @@ describe("createConfirm()", () => {
         });
     });
     describe("cancel button", () => {
+        let cancelCallback;
+
+        beforeEach(() => {
+            confirmPane = createConfirm(mockScene, "shop", "buy", { mock: "item" });
+            cancelCallback = buttons.createConfirmButtons.mock.calls[0][3];
+        });
         test("closes the container", () => {
-            // fire the callback and assert on the effects
-            expect(false).toBe(true);
+            cancelCallback();
+            expect(mockContainer.removeAll).toHaveBeenCalled();
+            expect(mockContainer.destroy).toHaveBeenCalled();
+        });
+        test("sets the previous pane visible", () => {
+            confirmPane = createConfirm(mockScene, "shop", "buy", { mock: "item" });
+            mockScene.paneStack = ["prevPane", "confirm"];
+            cancelCallback();
+            expect(mockScene.panes.shop.setVisible).toHaveBeenCalledWith(true);
+            expect(mockScene.title.setTitleText).toHaveBeenCalledWith("prevPane");
         });
     });
 });
