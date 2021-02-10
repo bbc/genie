@@ -6,6 +6,7 @@
  */
 import { ScrollableList } from "../../../../src/components/shop/scrollable-list/scrollable-list.js";
 import * as buttons from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
+import * as confirm from "../../../../src/components/shop/confirm.js";
 import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
@@ -120,6 +121,7 @@ describe("Scrollable List", () => {
             },
             scale: { on: jest.fn(), removeListener: jest.fn() },
             scene: { key: "shop" },
+            stack: jest.fn(),
             sys: {
                 queueDepthSort: jest.fn(),
                 displayList: {
@@ -212,6 +214,37 @@ describe("Scrollable List", () => {
                     });
                     expect(mockScene.rexUI.add.gridSizer).toHaveBeenCalled();
                     expect(mockSizer.add).toHaveBeenCalledWith(mockGridSizer, 1, "center", 0, true);
+                });
+            });
+
+            describe("callbacks on labels", () => {
+                let callback;
+
+                confirm.createConfirm = jest.fn();
+
+                beforeEach(() => {
+                    callback = mockLabel.on.mock.calls[0][1];
+                });
+
+                test("are set on pointerup", () => {
+                    expect(mockLabel.on.mock.calls[0][0]).toBe("pointerup");
+                });
+                test("creates a confirm pane and puts it on shop's stack", () => {
+                    callback();
+                    const expectedItem = {
+                        description: "description",
+                        id: "someItem",
+                        name: "someItemName",
+                        title: "title",
+                    };
+                    expect(confirm.createConfirm).toHaveBeenCalledWith(mockScene, "shop", "buy", expectedItem);
+                    expect(mockScene.stack).toHaveBeenCalledWith("confirm");
+                });
+                test("don't fire if the label is scrolled off the panel", () => {
+                    jest.clearAllMocks();
+                    mockScrollablePanel.isInTouching = jest.fn(() => false);
+                    callback("mockPointer");
+                    expect(confirm.createConfirm).not.toHaveBeenCalled();
                 });
             });
         });
