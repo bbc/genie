@@ -7,6 +7,7 @@ import { gmi } from "../src/core/gmi/gmi.js";
 import { Game } from "../src/components/game";
 import { accessibilify } from "../src/core/accessibility/accessibilify.js";
 import * as collectionsModule from "../src/core/collections.js";
+import * as shop from "../src/components/shop/shop.js";
 
 jest.mock("../src/core/accessibility/accessibilify.js");
 jest.mock("../src/core/gmi/gmi.js");
@@ -93,7 +94,7 @@ describe("Game", () => {
         };
     });
 
-    afterEach(() => jest.clearAllMocks());
+    afterEach(() => jest.resetAllMocks());
 
     describe("Layout", () => {
         beforeEach(() => game.create());
@@ -154,7 +155,7 @@ describe("Game", () => {
 
         test("displays the character selected", () => {
             const expectedCharacter = `Character Selected: ${game.transientData["character-select"].choice.title}`;
-            expect(game.add.text).toHaveBeenCalledWith(0, 200, expectedCharacter, {
+            expect(game.add.text).toHaveBeenCalledWith(150, 200, expectedCharacter, {
                 font: "32px ReithSans",
                 fill: "#f6931e",
                 align: "center",
@@ -163,7 +164,7 @@ describe("Game", () => {
 
         test("displays the level selected", () => {
             const expectedLevel = `Level Selected: ${game.transientData["level-select"].choice.title}`;
-            expect(game.add.text).toHaveBeenCalledWith(0, 250, expectedLevel, {
+            expect(game.add.text).toHaveBeenCalledWith(150, 250, expectedLevel, {
                 font: "32px ReithSans",
                 fill: "#f6931e",
                 align: "center",
@@ -465,6 +466,16 @@ describe("Game", () => {
 
             test("the button made accessible with accessibilify", () => {
                 expect(accessibilify).toHaveBeenCalledWith({ config: { id: 4, ariaLabel: "Continue" } });
+            });
+        });
+        describe("shop button", () => {
+            shop.launchShopOverlay = jest.fn();
+
+            test("launches the shop as an overlay", () => {
+                game.create();
+                const callback = mockImageSetInteractive.on.mock.calls[4][1];
+                callback();
+                expect(shop.launchShopOverlay).toHaveBeenCalled();
             });
         });
     });
