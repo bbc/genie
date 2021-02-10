@@ -16,11 +16,23 @@ jest.mock("../../../src/components/shop/transact.js");
 
 describe("createConfirm()", () => {
     let confirmPane;
+
     let mockBalanceItem;
-    const mockContainer = { add: jest.fn(), setY: jest.fn(), removeAll: jest.fn(), destroy: jest.fn() };
-    const mockImage = { setScale: jest.fn(), setVisible: jest.fn(), setTexture: jest.fn(), type: "Image" };
-    const mockRect = { foo: "bar" };
-    const mockButton = {
+    let mockContainer;
+    let mockImage;
+    let mockRect;
+    let mockButton;
+    let mockText;
+    let mockConfig;
+    let mockBounds;
+    let mockBalance;
+    let mockScene;
+    let mockCollection;
+
+    mockContainer = { add: jest.fn(), setY: jest.fn(), removeAll: jest.fn(), destroy: jest.fn() };
+    mockImage = { setScale: jest.fn(), setVisible: jest.fn(), setTexture: jest.fn(), type: "Image" };
+    mockRect = { foo: "bar" };
+    mockButton = {
         baz: "qux",
         setLegal: jest.fn(),
         setY: jest.fn(),
@@ -29,13 +41,13 @@ describe("createConfirm()", () => {
         input: { enabled: true },
         accessibleElement: { update: jest.fn() },
     };
-    const mockText = { setText: jest.fn(), type: "Text" };
-    let mockConfig = {
+    mockText = { setText: jest.fn(), type: "Text" };
+    mockConfig = {
         menu: { buttonsRight: true },
         confirm: {
             prompt: {
                 buy: { legal: "legalBuyPrompt", illegal: "illegalBuyPrompt", unavailable: "unavailableBuyPrompt" },
-                equip: "equipPrompt",
+                equip: { legal: "equipPrompt", illegal: "illegalEquipPrompt" },
                 unequip: "unequipPrompt",
             },
             detailView: false,
@@ -45,12 +57,9 @@ describe("createConfirm()", () => {
         styleDefaults: {},
         paneCollections: { shop: "armoury", manage: "inventory" },
     };
-
-    const mockBounds = { height: 100, y: 5 };
-
-    const mockBalance = { setText: jest.fn(), getValue: jest.fn() };
-
-    const mockScene = {
+    mockBounds = { height: 200, width: 200, x: 0, y: 5 };
+    mockBalance = { setText: jest.fn(), getValue: jest.fn() };
+    mockScene = {
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
             image: jest.fn().mockReturnValue(mockImage),
@@ -70,21 +79,22 @@ describe("createConfirm()", () => {
         paneStack: [],
         title: { setTitleText: jest.fn() },
     };
+    mockCollection = { get: jest.fn().mockReturnValue({ state: "foo", qty: 1, price: 99 }) }; // ugh, might need to return the currency item conditionally.
 
-    buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
     const setVisibleFn = jest.fn();
     const resizeFn = jest.fn();
 
     layout.setVisible = jest.fn().mockReturnValue(setVisibleFn);
     layout.resize = jest.fn().mockReturnValue(resizeFn);
     layout.createRect = jest.fn().mockReturnValue(mockRect);
-    layout.getInnerRectBounds = jest.fn().mockReturnValue({ x: 28, y: 0, width: 100, height: 100 });
+    layout.getInnerRectBounds = jest.fn().mockReturnValue({ x: 50, y: 0, width: 100, height: 100 });
     layout.textStyle = jest.fn().mockReturnValue({ some: "textStyle" });
+
+    buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
 
     text.addText = jest.fn().mockReturnValue({ setOrigin: jest.fn().mockReturnValue(mockText) });
 
-    const mockCollection = { get: jest.fn().mockReturnValue({ state: "foo" }) };
-    collections.get = jest.fn().mockReturnValue(mockCollection);
+    collections.get = jest.fn(() => mockCollection);
 
     beforeEach(() => {
         mockBalanceItem = { qty: 500 };
@@ -106,11 +116,11 @@ describe("createConfirm()", () => {
         jest.clearAllMocks();
         mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
         createConfirm(mockScene);
-        expect(text.addText.mock.calls[0][1]).toBe(-28);
-        expect(text.addText.mock.calls[0][2]).toBe(-37.5);
+        expect(text.addText.mock.calls[0][1]).toBe(-50);
+        expect(text.addText.mock.calls[0][2]).toBe(-75);
     });
     test("that is displayed with an appropriate Y offset", () => {
-        expect(mockContainer.setY).toHaveBeenCalledWith(55);
+        expect(mockContainer.setY).toHaveBeenCalledWith(105);
     });
     describe("Item detail view", () => {
         beforeEach(() => {
@@ -122,12 +132,65 @@ describe("createConfirm()", () => {
                 },
             };
             jest.clearAllMocks();
-            confirmPane = createConfirm(mockScene);
+            confirmPane = createConfirm(mockScene, "shop", "buy", {
+                id: "someItem",
+                qty: 1,
+                price: 99,
+                title: "itemTitle",
+                description: "itemDescription",
+                longDescription: "itemBlurb",
+                icon: "itemIcon",
+            });
         });
-        test("adds extra placeholder text objects", () => {
-            expect(text.addText).toHaveBeenCalledTimes(4);
-            const containerContents = mockContainer.add.mock.calls[0][0];
-            expect(containerContents.slice(-4)).toStrictEqual([mockImage, mockText, mockText, mockText]);
+        test("adds text objects and an image", () => {
+            expect(text.addText.mock.calls[1][3]).toBe("itemTitle");
+            expect(text.addText.mock.calls[2][3]).toBe("itemDescription");
+            expect(text.addText.mock.calls[3][3]).toBe("itemBlurb");
+            expect(mockScene.add.image).toHaveBeenCalledWith(50, -50, "itemIcon");
+        });
+    });
+
+    describe("prompt text", () => {
+        let mockItem;
+
+        beforeEach(
+            () =>
+                (mockScene.config = {
+                    ...mockConfig,
+                    confirm: {
+                        ...mockConfig.confirm,
+                        detailView: true,
+                    },
+                }),
+        );
+
+        describe("for the shop", () => {
+            test("when item is out of stock, is the 'item unavailable' prompt", () => {
+                confirmPane = createConfirm(mockScene, "shop", "buy", { mock: "item", qty: 0, price: 99 });
+                expect(text.addText.mock.calls[4][3]).toBe("unavailableBuyPrompt");
+            });
+
+            test("when item is in stock and not affordable, is the 'can't afford' prompt", () => {
+                confirmPane = createConfirm(mockScene, "shop", "buy", { mock: "item", qty: 1, price: 9999 });
+                expect(text.addText.mock.calls[4][3]).toBe("illegalBuyPrompt");
+            });
+
+            test("when item is in stock and affordable, is the 'confirm transaction' prompt", () => {
+                confirmPane = createConfirm(mockScene, "shop", "buy", { mock: "item", qty: 1, price: 99 });
+                expect(text.addText.mock.calls[4][3]).toBe("legalBuyPrompt");
+            });
+        });
+
+        describe("for the inventory", () => {
+            test("when item is equipped, is the 'unequip' text", () => {
+                confirmPane = createConfirm(mockScene, "manage", "unequip", { mock: "item" });
+                expect(text.addText.mock.calls[4][3]).toBe("unequipPrompt");
+            });
+
+            test("when item is not equipped, is the 'equip' text", () => {
+                confirmPane = createConfirm(mockScene, "manage", "equip", { mock: "item", slot: "someSlot" });
+                expect(text.addText.mock.calls[4][3]).toBe("equipPrompt");
+            });
         });
     });
 
@@ -154,6 +217,12 @@ describe("createConfirm()", () => {
             const handleClick = buttons.createConfirmButtons.mock.calls[0][2];
             handleClick();
             expect(transact.unequip).toHaveBeenCalledWith(mockScene, { mock: "item" });
+        });
+    });
+    describe("cancel button", () => {
+        test("closes the container", () => {
+            // fire the callback and assert on the effects
+            expect(false).toBe(true);
         });
     });
 });
