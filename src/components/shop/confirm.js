@@ -5,7 +5,7 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import { getInnerRectBounds, createRect, getSafeArea, createPaneBackground } from "./shop-layout.js";
+import { getInnerRectBounds, getSafeArea, createPaneBackground } from "./shop-layout.js";
 import { addText } from "../../core/layout/text-elem.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
@@ -18,7 +18,6 @@ const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
                 0.5,
                 0.5,
             ),
-            createRect(scene, innerBounds, 0x0000ff),
             createPaneBackground(scene, bounds, "confirm"),
         ].concat(itemView(scene, item, scene.config, bounds)),
     );

@@ -14,6 +14,7 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 import { accessibilify } from "../../../../src/core/accessibility/accessibilify.js";
 
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
+jest.mock("../../../../src/components/shop/confirm.js");
 
 const mockA11yElem = {
     addEventListener: jest.fn(),
@@ -32,8 +33,7 @@ buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
 scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
 const title = "shop";
-const initState = ["cta", "nonUnique", "inStock"];
-const mockPrepTransaction = jest.fn();
+const initState = ["cta", "consumable", "unavailable"];
 
 describe("Scrollable List", () => {
     let collectionGetAll;
@@ -84,6 +84,11 @@ describe("Scrollable List", () => {
         };
 
         mockScene = {
+            paneStack: { push: jest.fn() },
+            panes: {
+                shop: { setVisible: jest.fn() },
+                manage: { setVisible: jest.fn() },
+            },
             rexUI: {
                 add: {
                     scrollablePanel: jest.fn(() => mockScrollablePanel),
@@ -107,6 +112,7 @@ describe("Scrollable List", () => {
                     items: [mockOverlay],
                 },
                 paneCollections: { shop: "testCatalogue" },
+                menu: { buttonsRight: true },
             },
             layout: {
                 getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
@@ -121,6 +127,7 @@ describe("Scrollable List", () => {
                     exists: jest.fn(),
                 },
             },
+            title: { setTitleText: jest.fn() },
         };
 
         a11y.addGroupAt = jest.fn();
@@ -169,13 +176,7 @@ describe("Scrollable List", () => {
 
             describe("with nested rexUI elements", () => {
                 test("a label is created with a gel button per item", () => {
-                    expect(buttons.createGelButton).toHaveBeenCalledWith(
-                        mockScene,
-                        mockItem,
-                        title,
-                        initState,
-                        mockPrepTransaction,
-                    );
+                    expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem, title, initState);
                     expect(mockScene.rexUI.add.label).toHaveBeenCalledWith({
                         orientation: 0,
                         icon: mockGelButton,
@@ -187,17 +188,6 @@ describe("Scrollable List", () => {
                         id: `scroll_button_${mockItem.id}_${title}`,
                         ariaLabel: `${mockItem.title} - ${mockItem.description}`,
                     });
-                });
-                test("adds a pointerup callback to the labels event emitter that calls the prepTransaction function", () => {
-                    expect(mockLabel.setInteractive).toHaveBeenCalled();
-                    expect(mockLabel.on).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP, expect.any(Function));
-                    mockLabel.on.mock.calls[0][1]();
-                    expect(mockPrepTransaction).toHaveBeenCalledWith(mockItem, title);
-                });
-                test("pointerup callback does not call the prepTransaction function when pointer is not touching panel", () => {
-                    mockScrollablePanel.isInTouching = jest.fn(() => false);
-                    mockLabel.on.mock.calls[0][1]();
-                    expect(mockPrepTransaction).toHaveBeenCalledWith(mockItem, title);
                 });
                 test("removes pointerup callback from the labels event emitter when scene is shutdown", () => {
                     expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
