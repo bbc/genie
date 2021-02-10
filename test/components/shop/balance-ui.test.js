@@ -12,7 +12,6 @@ import * as scalerModule from "../../../src/core/scaler.js";
 import { collections } from "../../../src/core/collections.js";
 
 describe("createBalance()", () => {
-    let balanceElem;
     const mockContainer = { getBounds: jest.fn(), setScale: jest.fn(), setPosition: jest.fn(), add: jest.fn() };
     const mockReturnedIcon = {
         getBounds: jest.fn().mockReturnValue({ width: 13 }),
@@ -81,7 +80,7 @@ describe("createBalance()", () => {
     text.addText = jest.fn().mockReturnValue(mockText);
 
     beforeEach(() => {
-        balanceElem = createBalance(mockScene, mockMetrics, mockSafeArea);
+        createBalance(mockScene, mockMetrics, mockSafeArea);
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -123,5 +122,13 @@ describe("createBalance()", () => {
         expect(shopLayout.getXPos).toHaveBeenCalledWith(mockContainer, mockSafeArea, mockScene.config.listPadding.x);
         expect(shopLayout.getYPos).toHaveBeenCalledWith(mockMetrics, mockSafeArea);
         expect(mockContainer.setPosition).toHaveBeenCalledWith(42, 69);
+    });
+
+    test("sets text with the latest balance when updatebalance event is fired", () => {
+        expect(mockScene.events.on).toHaveBeenCalledWith("updatebalance", expect.any(Function));
+        const callback = mockScene.events.on.mock.calls[0][1];
+        mockCurrencyItem.qty = 50;
+        callback();
+        expect(mockReturnedText.setText).toHaveBeenCalledWith(50);
     });
 });
