@@ -72,7 +72,7 @@
         "validate": "node build-scripts/schemavalidator/validator.js achievement",
         "roll-lodash": "rollup -c lib/lodash/rollup.config.js",
         "cy": "cypress open",
-        "cy:headless": "cypress run --browser chrome --config video=false --spec 'cypress/integration/genie_spec.js'",
+        "cy:headless": "cypress run --headless --browser chrome --config video=false --spec 'cypress/integration/genie_spec.js'",
         "cy:headless-theme2": "export THEME_2=true && cypress run --headless --browser chrome --config video=false --spec 'cypress/integration/genie_spec.js'",
         "cy:local": "export LOCAL_DEV=true && npm run cy:headless",
         "cy:local-theme2": "export THEME_2=true && LOCAL_DEV=true && npm run cy:headless"
