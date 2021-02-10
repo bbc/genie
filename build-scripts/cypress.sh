@@ -3,7 +3,6 @@ set -e
 
 npm install
 #python build-scripts/licensechecker/licensechecker.py
-DEBUG=cypress:*
 node cypress/support/clearReports.js
-npm run cy:headless
+DEBUG=cypress:* npm run cy:headless
 node cypress/support/createReports.js
