@@ -9,7 +9,7 @@ import { getUrl } from "../support/functions";
 describe("The Genie Shop component", () => {
     beforeEach(() => {
         cy.visit(getUrl());
-        cy.get("#home__play", { timeout: 40000 }).should("exist");
+        cy.get("#home__play", { timeout: 60000 }).should("exist");
         cy.get(".data-notice").click();
         cy.genieClick("#home__debug");
         cy.genieClick("#debug__debug-shop-demo");

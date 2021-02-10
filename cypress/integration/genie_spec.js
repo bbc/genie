@@ -65,7 +65,7 @@ describe("Tests the core flow of Genie", () => {
     beforeEach(() => {
         cy.viewport(1106, 800);
         cy.visit(getUrl());
-        cy.get("#home__play", { timeout: 40000 }).should("exist");
+        cy.get("#home__play", { timeout: 60000 }).should("exist");
         cy.get(".data-notice").click();
     });
 
