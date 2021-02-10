@@ -471,9 +471,8 @@ describe("Game", () => {
         describe("shop button", () => {
             shop.launchShopOverlay = jest.fn();
 
-            beforeEach(() => game.create());
-
             test("launches the shop as an overlay", () => {
+                game.create();
                 const callback = mockImageSetInteractive.on.mock.calls[4][1];
                 callback();
                 expect(shop.launchShopOverlay).toHaveBeenCalled();
