@@ -16,6 +16,7 @@ describe("Shop Transactions", () => {
     let mockItem;
     let mockShopItem;
     let mockInventoryItem;
+    let mockInventoryItemList;
     let mockShopCollection;
     let mockManageCollection;
 
@@ -31,6 +32,9 @@ describe("Shop Transactions", () => {
                     shop: "shop",
                     manage: "manage",
                 },
+                slots: {
+                    helmet: { max: 1 },
+                },
             },
             events: {
                 emit: jest.fn(),
@@ -42,6 +46,7 @@ describe("Shop Transactions", () => {
         mockItem = {
             id: "item",
             price: 50,
+            slot: "helmet",
         };
         mockShopItem = {
             qty: 1,
@@ -49,6 +54,7 @@ describe("Shop Transactions", () => {
         mockInventoryItem = {
             qty: 5,
         };
+        mockInventoryItemList = [];
         collections.get = jest.fn(collectionName =>
             collectionName === "shop" ? mockShopCollection : mockManageCollection,
         );
@@ -57,6 +63,7 @@ describe("Shop Transactions", () => {
             set: jest.fn(),
         };
         mockManageCollection = {
+            getAll: jest.fn(() => mockInventoryItemList),
             get: jest.fn(itemId => (itemId === "currency" ? mockCurrencyItem : mockInventoryItem)),
             set: jest.fn(),
         };
@@ -92,6 +99,39 @@ describe("Shop Transactions", () => {
         test("emits an updatebalance event", () => {
             transact.buy(mockScene, mockItem);
             expect(mockScene.events.emit).toHaveBeenCalledWith("updatebalance");
+        });
+    });
+
+    describe("Equipping an item", () => {
+        test("items state is set to equipped in the inventory collection", () => {
+            const expectedItem = { ...mockItem, state: "equipped" };
+            transact.equip(mockScene, mockItem);
+            expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
+        });
+
+        test("currently equipped item is unequipped when destination slot is full", () => {
+            mockInventoryItemList = [
+                { id: "alreadyEquippedItem", slot: "helmet", state: "equipped" },
+                { id: "itemBeingEquipped", slot: "helmet", state: "purchased" },
+            ];
+            const expectedItem = { id: "alreadyEquippedItem", slot: "helmet", state: "purchased" };
+            transact.equip(mockScene, mockItem);
+            expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
+        });
+    });
+
+    describe("Unequipping an item", () => {
+        test("items state is set to purchased in the inventory collection", () => {
+            mockItem.state = "equipped";
+            const expectedItem = { ...mockItem, state: "purchased" };
+            transact.unequip(mockScene, mockItem);
+            expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
+        });
+    });
+
+    describe("getBalanceItem", () => {
+        test("returns the currency item", () => {
+            expect(transact.getBalanceItem(mockScene)).toBe(mockCurrencyItem);
         });
     });
 });
