@@ -3,7 +3,8 @@
     "reporterOptions": {
         "overwrite": false,
         "html": false,
-        "json": true
+        "json": true,
+        "reportDir": "output/reports/"
     },
     "screenshotOnRunFailure": true,
     "retries": {
