@@ -25,6 +25,7 @@ describe("shop menu buttons", () => {
         setLegal: jest.fn(),
         input: {},
         accessibleElement: { update: jest.fn() },
+        on: jest.fn(),
     };
 
     const mockText = { setOrigin: jest.fn() };
@@ -89,13 +90,10 @@ describe("shop menu buttons", () => {
             expect(mockScene.add.gelButton.mock.calls[1][2]).toStrictEqual(otherConfig);
         });
         test("subscribes them to the event bus", () => {
-            expect(eventBus.subscribe).toHaveBeenCalledTimes(2);
-            const message = eventBus.subscribe.mock.calls[0][0];
-            expect(message.channel).toBe("shop");
-            expect(message.name).toBe("shop_menu_button");
-            message.callback();
+            expect(mockButton.on).toHaveBeenCalledTimes(2);
+            const callback = mockButton.on.mock.calls[0][1];
+            callback();
             expect(mockScene.stack).toHaveBeenCalledWith("shop");
-            expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", "foo");
         });
         test("sets text overlays", () => {
             expect(mockButton.overlays.set).toHaveBeenCalledTimes(2);
@@ -108,20 +106,22 @@ describe("shop menu buttons", () => {
     });
 
     describe("createConfirmButtons", () => {
-        const callback = jest.fn();
+        const cancelCallback = jest.fn();
+        const confirmCallback = jest.fn();
+
         beforeEach(() => {
-            createConfirmButtons(mockContainer, callback);
+            createConfirmButtons(mockContainer, "Buy", confirmCallback, cancelCallback);
         });
 
         test("provides a slightly different config", () => {
             const expectedConfig = {
-                title: "Confirm",
+                title: "Buy",
                 gameButton: true,
                 accessibilityEnabled: true,
-                ariaLabel: "Confirm",
+                ariaLabel: "Buy",
                 channel: "shop",
                 group: "mockSceneKey",
-                id: "tx_confirm_button",
+                id: "tx_buy_button",
                 key: "mockBackgroundKey",
                 scene: "shop",
             };
@@ -130,31 +130,12 @@ describe("shop menu buttons", () => {
             expect(mockScene.add.gelButton.mock.calls[1][2]).toStrictEqual(otherConfig);
         });
         test("uses the callback it was passed", () => {
-            const message = eventBus.subscribe.mock.calls[0][0];
-            message.callback();
-            expect(callback).toHaveBeenCalled();
-        });
-        describe("setLegal()", () => {
-            let confirmButton;
-            beforeEach(() => (confirmButton = buttons[0]));
-
-            test("is applied to the 'Confirm' button", () => {
-                expect(typeof confirmButton.setLegal).toBe("function");
-            });
-            test("when called with true, sets tint and alpha and enables the a11y elem", () => {
-                confirmButton.setLegal(true);
-                expect(confirmButton.alpha).toBe(1);
-                expect(confirmButton.tint).toBe(0xffffff);
-                expect(confirmButton.input.enabled).toBe(true);
-                expect(confirmButton.accessibleElement.update).toHaveBeenCalled();
-            });
-            test("when called with false, sets tint and alpha and disables the a11y elem", () => {
-                confirmButton.setLegal(false);
-                expect(confirmButton.alpha).toBe(0.25);
-                expect(confirmButton.tint).toBe(0xff0000);
-                expect(confirmButton.input.enabled).toBe(false);
-                expect(confirmButton.accessibleElement.update).toHaveBeenCalled();
-            });
+            const firstCallback = mockButton.on.mock.calls[0][1];
+            firstCallback();
+            expect(confirmCallback).toHaveBeenCalled();
+            const secondCallback = mockButton.on.mock.calls[1][1];
+            secondCallback();
+            expect(cancelCallback).toHaveBeenCalled();
         });
     });
 

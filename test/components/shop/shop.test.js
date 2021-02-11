@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { Shop, launchShopOverlay } from "../../../src/components/shop/shop.js";
-import { ScrollableList } from "../../../src/core/layout/scrollable-list/scrollable-list.js";
+import { ScrollableList } from "../../../src/components/shop/scrollable-list/scrollable-list.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance-ui.js";
 import * as titles from "../../../src/components/shop/shop-titles.js";
@@ -16,7 +16,7 @@ import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
 
-jest.mock("../../../src/core/layout/scrollable-list/scrollable-list.js");
+jest.mock("../../../src/components/shop/scrollable-list/scrollable-list.js");
 
 describe("Shop", () => {
     let shopScreen;
@@ -50,7 +50,7 @@ describe("Shop", () => {
     const mockSafeArea = { foo: "bar " };
     const mockButtonConfig = { channel: "foo", key: "bar", action: "baz" };
     const mockMenu = { setVisible: jest.fn(), resize: jest.fn() };
-    const mockConfirm = { setVisible: jest.fn(), resize: jest.fn() };
+    const mockConfirm = { setVisible: jest.fn(), resize: jest.fn(), removeAll: jest.fn(), destroy: jest.fn() };
     const mockTitles = { setTitleText: jest.fn(), setScale: jest.fn(), setPosition: jest.fn() };
 
     beforeEach(() => {
@@ -137,7 +137,7 @@ describe("Shop", () => {
         });
 
         test("passes a filter function to the inventory pane", () => {
-            const filterFn = ScrollableList.mock.calls[1][3];
+            const filterFn = ScrollableList.mock.calls[1][2];
             const mockCollection = [{ id: "currencyItemKey" }, { id: "someOtherId" }];
             expect(mockCollection.filter(filterFn)).toStrictEqual([{ id: "someOtherId" }]);
         });
@@ -165,7 +165,6 @@ describe("Shop", () => {
         });
         test("sets visibility of its panes", () => {
             expect(mockMenu.setVisible).toHaveBeenCalledWith(true);
-            expect(mockConfirm.setVisible).toHaveBeenCalledWith(false);
             expect(mockScrollableList.setVisible).toHaveBeenCalledTimes(2);
         });
 
@@ -192,7 +191,6 @@ describe("Shop", () => {
             expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
             expect(shopScreen.panes.shop.setVisible).toHaveBeenCalledWith(false);
             expect(shopScreen.panes.manage.setVisible).toHaveBeenCalledWith(false);
-            expect(shopScreen.panes.confirm.setVisible).toHaveBeenCalledWith(false);
         });
     });
     describe("pane stacking", () => {
@@ -232,6 +230,11 @@ describe("Shop", () => {
                 expect(shopScreen.paneStack).toStrictEqual(["shop"]);
                 expect(shopScreen.panes.top.setVisible).toHaveBeenCalled();
             });
+            test("destroys the confirm pane, if present", () => {
+                shopScreen.panes.confirm = mockConfirm;
+                shopScreen.back();
+                expect(mockConfirm.destroy).toHaveBeenCalled();
+            });
         });
         describe("back() on last item in pane stack", () => {
             beforeEach(() => {
@@ -244,6 +247,24 @@ describe("Shop", () => {
                 expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
                 expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
             });
+        });
+    });
+
+    describe("destroyConfirm()", () => {
+        beforeEach(() => {
+            shopScreen.create();
+            shopScreen.panes.confirm = mockConfirm;
+            shopScreen.panes.confirm = shopScreen.destroyConfirm();
+        });
+
+        test("removes and destroys all objects from the confirm container", () => {
+            expect(mockConfirm.removeAll).toHaveBeenCalled();
+        });
+        test("destroys the container", () => {
+            expect(mockConfirm.destroy).toHaveBeenCalled();
+        });
+        test("dumps the confirm key from .panes", () => {
+            expect(shopScreen.panes.confirm).toBe(undefined);
         });
     });
 });

@@ -6,7 +6,7 @@
  */
 
 /* eslint-disable no-console */
-import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
+import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 
 let mockGelButton;
 let mockRexLabel;
