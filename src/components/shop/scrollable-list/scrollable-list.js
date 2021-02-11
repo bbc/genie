@@ -76,11 +76,8 @@ const createTable = (scene, title, parent) => {
 };
 
 const showConfirmation = (scene, title, item) => {
-    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item.id);
-    const action = title === "shop" ? "buy" : inventoryItem?.state === "equipped" ? "unequip" : "equip"; // push this into confirm
-    scene.panes.confirm = createConfirm(scene, title, action, item);
+    scene.panes.confirm = createConfirm(scene, title, item);
     scene.stack("confirm");
-    scene.title.setTitleText(fp.startCase(action)); // push into stack()?
 };
 
 const createItem = (scene, item, title, parent) => {
@@ -144,6 +141,7 @@ const updatePanel = panel => {
     const key = parent.scene.config.paneCollections[panel.name];
     const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
     const items = getPanelItems(panel);
+    parent.scene.title.setTitleText(panel.name);
 
     shouldPanelListUpdate(collection, items)
         ? updatePanelList(panel)

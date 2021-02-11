@@ -237,7 +237,7 @@ describe("Scrollable List", () => {
                         name: "someItemName",
                         title: "title",
                     };
-                    expect(confirm.createConfirm).toHaveBeenCalledWith(mockScene, "shop", "buy", expectedItem);
+                    expect(confirm.createConfirm).toHaveBeenCalledWith(mockScene, "shop", expectedItem);
                     expect(mockScene.stack).toHaveBeenCalledWith("confirm");
                 });
                 test("don't fire if the label is scrolled off the panel", () => {

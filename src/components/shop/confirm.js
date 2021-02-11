@@ -10,6 +10,7 @@ import { addText } from "../../core/layout/text-elem.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { buy, equip, unequip, getBalanceItem } from "./transact.js";
+import { collections } from "../../core/collections.js";
 
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
     container.add(
@@ -64,7 +65,9 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
     resizeConfirmButtons(scene, confirmButtons, innerBounds);
 };
 
-export const createConfirm = (scene, title, action, item) => {
+export const createConfirm = (scene, title, item) => {
+    const action = getAction(scene, title, item);
+    scene.title.setTitleText(fp.startCase(action));
     const bounds = getSafeArea(scene.layout);
     const container = scene.add.container();
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
@@ -74,6 +77,11 @@ export const createConfirm = (scene, title, action, item) => {
     action === "buy" && itemIsInStock(item) && createBuyElems(scene, container, item, innerBounds, bounds);
     addConfirmButtons(scene, container, innerBounds, title, action, item);
     return container;
+};
+
+const getAction = (scene, title, item) => {
+    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item?.id);
+    return title === "shop" ? "buy" : inventoryItem?.state === "equipped" ? "unequip" : "equip";
 };
 
 const destroyContainer = container => {
@@ -149,7 +157,7 @@ const canAffordItem = (scene, item) => item && getBalanceItem(scene).qty >= item
 const isEquippable = item => item && item.slot;
 const itemIsInStock = item => item && item.qty > 0;
 
-const getItemTitle = item => (item ? item.title : "PH");
+const getItemTitle = item => (item ? item.title : "PH"); // can refactor out the PHs?
 const getItemDetail = item => (item ? item.description : "PH");
 const getItemBlurb = item => (item ? item.longDescription : "PH");
 const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
