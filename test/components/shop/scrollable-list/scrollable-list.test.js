@@ -34,7 +34,7 @@ buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
 scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
 const title = "shop";
-const initState = ["cta", "consumable", "unavailable"];
+const initState = ["cta", "equippable", "unavailable"];
 
 describe("Scrollable List", () => {
     let collectionGetAll;
@@ -48,7 +48,13 @@ describe("Scrollable List", () => {
 
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
-        mockItem = { id: "someItem", name: "someItemName", title: "title", description: "description" };
+        mockItem = {
+            id: "someItem",
+            name: "someItemName",
+            title: "title",
+            description: "description",
+            slot: "someSlot",
+        };
         collectionGetAll = [mockItem];
         mockCollection = { getAll: jest.fn(() => collectionGetAll), get: () => mockCollection };
         collections.get = jest.fn().mockReturnValue(mockCollection);
@@ -168,7 +174,7 @@ describe("Scrollable List", () => {
                 });
                 test("with zero-quantity items filtered out", () => {
                     jest.clearAllMocks();
-                    collectionGetAll = [mockItem, mockItem, { ...mockItem, qty: 0 }];
+                    collectionGetAll = [mockItem, mockItem, { mock: "otherItem", qty: 0 }];
                     new ScrollableList(mockScene, title);
                     expect(buttons.createGelButton).toHaveBeenCalledTimes(2);
                 });
@@ -239,13 +245,7 @@ describe("Scrollable List", () => {
                 });
                 test("creates a confirm pane and puts it on shop's stack", () => {
                     callback();
-                    const expectedItem = {
-                        description: "description",
-                        id: "someItem",
-                        name: "someItemName",
-                        title: "title",
-                    };
-                    expect(confirm.createConfirm).toHaveBeenCalledWith(mockScene, "shop", expectedItem);
+                    expect(confirm.createConfirm).toHaveBeenCalledWith(mockScene, "shop", mockItem);
                     expect(mockScene.stack).toHaveBeenCalledWith("confirm");
                 });
                 test("don't fire if the label is scrolled off the panel", () => {
@@ -381,7 +381,7 @@ describe("Scrollable List", () => {
     });
     describe("panel update on setVisible(true)", () => {
         let list;
-        const otherItem = { id: "someOtherItem", name: "someOtherItemName" };
+        const otherItem = { id: "someOtherItem", name: "someOtherItemName", slot: "someSlot" };
 
         beforeEach(() => {
             list = new ScrollableList(mockScene, "shop");
