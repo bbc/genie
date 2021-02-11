@@ -66,7 +66,6 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
 };
 
 export const createConfirm = (scene, title, item) => {
-    // const item = collections.get(scene.config.paneCollections[title]).get(_item.id);
     const action = getAction(scene, title, item);
     scene.title.setTitleText(fp.startCase(action));
     const bounds = getSafeArea(scene.layout);

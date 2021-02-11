@@ -68,7 +68,7 @@
         weapon: { max: 1 },
     },
     confirm: {
-        detailView: true, // true === smaller image and more text. false === large image only.
+        detailView: true,
         prompt: {
             buy: {
                 legal: "Purchase this item?",
@@ -79,10 +79,9 @@
             unequip: "Do you want to \nunequip this item?",
             styles: { fontStyle: "bold" },
         },
-        title: { styles: { fontStyle: "bold" } }, // optionally configure styles on item text
+        title: { styles: { fontStyle: "bold" } },
         detail: { styles: { color: "#bd6", fontStyle: "bold" } },
         description: { styles: { fontStyle: "italic", lineSpacing: 5 } },
-        // price: { styles: {} },
     },
     menu: {
         buttonsRight: true,
@@ -108,7 +107,7 @@
                 type: "image",
                 name: "itemIcon",
                 assetKey: "${icon}",
-                position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                position: { align: "left", offsetX: 35, offsetY: 0 },
                 size: 76,
             },
             {
@@ -149,7 +148,7 @@
                     name: "itemDescription",
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    styles: { fontSize: "12px" },
                     activeStates: ["equippable"],
                 },
                 {
@@ -157,7 +156,7 @@
                     name: "itemStockLevel",
                     value: "${qty} in stock",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    styles: { fontSize: "12px" },
                     activeStates: ["consumable"],
                 },
             ],
@@ -172,6 +171,14 @@
                 },
                 {
                     type: "text",
+                    name: "itemDescription",
+                    value: "${description}",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" },
+                    activeStates: ["equippable"],
+                },
+                {
+                    type: "text",
                     name: "equipped",
                     value: "Equipped",
                     position: { align: "right", offsetX: -96, offsetY: -10 },
@@ -183,8 +190,8 @@
                     name: "itemStockLevel",
                     value: "${qty} in inventory",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "12px" }, // moves to options, add another option
-                    activeStates: ["consumable"], // match on all
+                    styles: { fontSize: "12px" },
+                    activeStates: ["consumable"],
                 },
             ],
         },
