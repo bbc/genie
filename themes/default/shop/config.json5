@@ -66,6 +66,7 @@
             },
             equip: { legal: "Do you want to \nequip this item?", illegal: "You cannot equip\nthis item." },
             unequip: "Do you want to \nunequip this item?",
+            use: "Do you want to use\nthis item?",
             styles: { fontStyle: "bold" },
         },
         title: { styles: { fontStyle: "bold" } },

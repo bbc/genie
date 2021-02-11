@@ -108,12 +108,16 @@ const closeConfirm = (scene, container, title) => {
 };
 
 const handleActionClick = (scene, container, title, action, item) => {
-    action === "buy" && buy(scene, item);
-    action === "equip" && equip(scene, item);
-    action === "unequip" && unequip(scene, item);
-    action === "use" && use(scene, item);
+    doAction({ scene, action, item });
     closeConfirm(scene, container, title);
 };
+
+const doAction = fp.cond([
+    [args => args.action === "buy", args => buy(args.scene, args.item)],
+    [args => args.action === "equip", args => equip(args.scene, args.item)],
+    [args => args.action === "unequip", args => unequip(args.scene, args.item)],
+    [args => args.action === "use", args => use(args.scene, args.item)],
+]);
 
 const itemView = (scene, item, config, bounds) =>
     config.confirm.detailView
@@ -161,7 +165,7 @@ const getBuyPromptText = (scene, action, item) =>
         : scene.config.confirm.prompt[action].illegal;
 
 const getPromptText = (scene, action, item) => {
-    let promptText; // fp.cond this badboy
+    let promptText;
     action === "buy" && (promptText = getBuyPromptText(scene, action, item));
     action === "equip" && (promptText = getEquipPromptText(scene, action, item));
     action === "unequip" && (promptText = getUnequipPromptText(scene));
@@ -174,7 +178,7 @@ const canAffordItem = (scene, item) => item && getBalanceItem(scene).qty >= item
 const isEquippable = item => item && item.slot;
 const itemIsInStock = (scene, item) => item && collections.get(scene.config.paneCollections.shop).get(item.id).qty > 0;
 
-const getItemTitle = item => (item ? item.title : "PH"); // can refactor out the PHs?
+const getItemTitle = item => (item ? item.title : "PH");
 const getItemDetail = item => (item ? item.description : "PH");
 const getItemBlurb = item => (item ? item.longDescription : "PH");
 const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;

@@ -29,10 +29,8 @@ export const equip = (scene, item) => {
 };
 
 export const unequip = (scene, item) => {
-    // both need to get before they set
     const { manage } = scene.config.paneCollections;
     const invCol = collections.get(manage);
-    // const invItem = invCol.get(item.id);
     invCol.set({ ...item, state: "purchased" });
 };
 
