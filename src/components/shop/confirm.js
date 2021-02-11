@@ -9,7 +9,7 @@ import { getInnerRectBounds, getSafeArea, createPaneBackground } from "./shop-la
 import { addText } from "../../core/layout/text-elem.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import { buy, equip, unequip, getBalanceItem } from "./transact.js";
+import { buy, equip, unequip, use, getBalanceItem } from "./transact.js";
 import { collections } from "../../core/collections.js";
 
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
@@ -66,6 +66,7 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
 };
 
 export const createConfirm = (scene, title, item) => {
+    // const item = collections.get(scene.config.paneCollections[title]).get(_item.id);
     const action = getAction(scene, title, item);
     scene.title.setTitleText(fp.startCase(action));
     const bounds = getSafeArea(scene.layout);
@@ -80,9 +81,19 @@ export const createConfirm = (scene, title, item) => {
 };
 
 const getAction = (scene, title, item) => {
-    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item?.id);
-    return title === "shop" ? "buy" : inventoryItem?.state === "equipped" ? "unequip" : "equip";
+    return title === "shop" ? "buy" : getInventoryAction(scene, item);
 };
+
+const getInventoryAction = (scene, item) => {
+    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item?.id);
+    return inferAction(inventoryItem);
+};
+
+const inferAction = fp.cond([
+    [i => Boolean(!i.slot), () => "use"],
+    [i => i.state === "equipped", () => "unequip"],
+    [i => i.state === "purchased", () => "equip"],
+]);
 
 const destroyContainer = container => {
     container.removeAll(true);
@@ -101,6 +112,7 @@ const handleActionClick = (scene, container, title, action, item) => {
     action === "buy" && buy(scene, item);
     action === "equip" && equip(scene, item);
     action === "unequip" && unequip(scene, item);
+    action === "use" && use(scene, item);
     closeConfirm(scene, container, title);
 };
 
@@ -138,6 +150,10 @@ const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY =
 const getEquipPromptText = (scene, action, item) =>
     isEquippable(item) ? scene.config.confirm.prompt[action].legal : scene.config.confirm.prompt[action].illegal;
 
+const getUnequipPromptText = scene => scene.config.confirm.prompt.unequip;
+
+const getUsePromptText = scene => scene.config.confirm.prompt.use;
+
 const getBuyPromptText = (scene, action, item) =>
     canAffordItem(scene, item)
         ? itemIsInStock(scene, item)
@@ -145,12 +161,14 @@ const getBuyPromptText = (scene, action, item) =>
             : scene.config.confirm.prompt[action].unavailable
         : scene.config.confirm.prompt[action].illegal;
 
-const getPromptText = (scene, action, item) =>
-    action === "buy"
-        ? getBuyPromptText(scene, action, item)
-        : action === "equip"
-        ? getEquipPromptText(scene, action, item)
-        : scene.config.confirm.prompt[action];
+const getPromptText = (scene, action, item) => {
+    let promptText; // fp.cond this badboy
+    action === "buy" && (promptText = getBuyPromptText(scene, action, item));
+    action === "equip" && (promptText = getEquipPromptText(scene, action, item));
+    action === "unequip" && (promptText = getUnequipPromptText(scene));
+    action === "use" && (promptText = getUsePromptText(scene));
+    return promptText;
+};
 
 const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(scene, item);
 const canAffordItem = (scene, item) => item && getBalanceItem(scene).qty >= item.price;

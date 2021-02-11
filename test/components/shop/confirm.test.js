@@ -50,6 +50,7 @@ describe("Confirm pane", () => {
                     buy: { legal: "legalBuyPrompt", illegal: "illegalBuyPrompt", unavailable: "unavailableBuyPrompt" },
                     equip: { legal: "equipPrompt", illegal: "illegalEquipPrompt" },
                     unequip: "unequipPrompt",
+                    use: "usePrompt",
                 },
                 detailView: false,
             },
@@ -195,14 +196,22 @@ describe("Confirm pane", () => {
 
         describe("for the inventory", () => {
             test("when item is equipped, is the 'unequip' text", () => {
-                confirmPane = createConfirm(mockScene, "manage", { mock: "item", id: "foo", slot: "someSlot" });
+                mockCollection = { get: jest.fn().mockReturnValue({ state: "equipped", slot: "someSlot" }) };
+                confirmPane = createConfirm(mockScene, "manage", { mock: "item", id: "foo" });
                 expect(text.addText.mock.calls[0][3]).toBe("unequipPrompt");
             });
 
             test("when item is not equipped, is the 'equip' text", () => {
-                mockCollection = { get: jest.fn().mockReturnValue({ state: "purchased", qty: 1, price: 99 }) };
-                confirmPane = createConfirm(mockScene, "manage", { mock: "item", slot: "someSlot" });
+                mockCollection = { get: jest.fn().mockReturnValue({ state: "purchased", slot: "someSlot" }) };
+                confirmPane = createConfirm(mockScene, "manage", { mock: "item", id: "foo", slot: "someSlot" });
                 expect(text.addText.mock.calls[0][3]).toBe("equipPrompt");
+            });
+            test("when the item is consumable, is the 'use' text", () => {
+                mockCollection = {
+                    get: jest.fn().mockReturnValue({ foo: "bar", state: "purchased", qty: 1, price: 99 }),
+                };
+                confirmPane = createConfirm(mockScene, "manage", { mock: "item" });
+                expect(text.addText.mock.calls[0][3]).toBe("usePrompt");
             });
         });
     });
@@ -219,7 +228,7 @@ describe("Confirm pane", () => {
         });
 
         test("when action is 'equip', calls transact.equip correctly", () => {
-            mockCollection = { get: jest.fn().mockReturnValue({ state: "purchased", qty: 1, price: 99 }) };
+            mockCollection = { get: jest.fn().mockReturnValue({ state: "purchased", slot: "someSlot" }) };
             confirmPane = createConfirm(mockScene, "manage", { mock: "item" });
             const handleClick = buttons.createConfirmButtons.mock.calls[0][2];
             handleClick();
@@ -227,11 +236,18 @@ describe("Confirm pane", () => {
         });
 
         test("when action is 'unequip', calls transact.unequip correctly", () => {
-            mockCollection = { get: jest.fn().mockReturnValue({ state: "equipped", qty: 1, price: 99 }) };
+            mockCollection = { get: jest.fn().mockReturnValue({ state: "equipped", slot: "someSlot" }) };
             confirmPane = createConfirm(mockScene, "manage", { mock: "item" });
             const handleClick = buttons.createConfirmButtons.mock.calls[0][2];
             handleClick();
             expect(transact.unequip).toHaveBeenCalledWith(mockScene, { mock: "item" });
+        });
+        test("when action is 'use', calls transact.use correctly", () => {
+            mockCollection = { get: jest.fn().mockReturnValue({ state: "purchased", qty: 1 }) };
+            confirmPane = createConfirm(mockScene, "manage", { mock: "item" });
+            const handleClick = buttons.createConfirmButtons.mock.calls[0][2];
+            handleClick();
+            expect(transact.use).toHaveBeenCalledWith(mockScene, { mock: "item" });
         });
     });
     describe("cancel button", () => {

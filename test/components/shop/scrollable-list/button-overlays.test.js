@@ -52,7 +52,6 @@ describe("Button overlays", () => {
             type: "image",
             name: "someImage",
             assetKey: "test.someImageAssetKey",
-            // isDynamic: false,
         };
     });
 
