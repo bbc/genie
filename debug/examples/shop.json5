@@ -55,11 +55,20 @@
         shop: "debug-armoury",
         manage: "debug-inventory",
     },
+    slots: {
+        helmet: { max: Infinity },
+        shield: { max: 1 },
+    },
     confirm: {
         detailView: true, // true === smaller image and more text. false === large image only.
         prompt: {
-            shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
-            manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
+            buy: {
+                legal: "Purchase this item?",
+                illegal: "You can't afford this.",
+                unavailable: "You cannot purchase\nanymore of these.",
+            },
+            equip: { legal: "Do you want to \nequip this item?", illegal: "You cannot equip\nthis item." },
+            unequip: "Do you want to \nunequip this item?",
             styles: { fontStyle: "bold" },
         },
         title: { styles: { fontStyle: "bold" } }, // optionally configure styles on item text
@@ -108,41 +117,59 @@
                 {
                     type: "text",
                     name: "currencyAmount",
-                    value: "${price}",
+                    value: "price",
+                    isDynamic: true,
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeStates: ["inStock"],
+                    activeStates: ["cta", "available"],
+                },
+                {
+                    type: "text",
+                    name: "currencyAmount",
+                    value: "price",
+                    isDynamic: true,
+                    position: { align: "right", offsetX: -44, offsetY: -10 },
+                    styles: { fontSize: "14px" },
+                    activeStates: ["actioned", "consumable", "available"],
+                },
+                {
+                    type: "image",
+                    name: "currency",
+                    assetKey: "currency",
+                    isDynamic: false,
+                    position: { align: "right", offsetX: -64, offsetY: 0 },
+                    activeStates: ["cta", "available"], // match on one
                 },
                 {
                     type: "image",
                     name: "currency",
                     assetKey: "shop.currency",
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["inStock"],
+                    activeStates: ["actioned", "consumable", "available"], // match on one
                 },
                 {
                     type: "text",
-                    name: "owned",
+                    name: "purchased",
                     value: "Purchased",
                     position: { align: "right", offsetX: -108, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned", "notInStock"],
+                    activeStates: ["actioned", "unavailable"], // match on all
                 },
                 {
                     type: "text",
                     name: "itemDescription",
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "12px" },
-                    activeStates: ["cta", "unique"], 
+                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    activeStates: ["cta", "equippable"], // match on all
                 },
                 {
                     type: "text",
                     name: "itemStockLevel",
                     value: "${qty} in stock",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "12px" },
-                    activeStates: ["nonUnique", "inStock"],
+                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    activeStates: ["consumable", "available"], // match on all
                 },
             ],
             manage: [
@@ -152,7 +179,7 @@
                     value: "Equip",
                     position: { align: "right", offsetX: -76, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["cta"],
+                    activeStates: ["cta", "equippable"],
                 },
                 {
                     type: "text",
@@ -160,7 +187,16 @@
                     value: "Equipped",
                     position: { align: "right", offsetX: -96, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned"],
+                    activeStates: ["actioned", "equippable"],
+                },
+                {
+                    type: "text",
+                    name: "itemStockLevel",
+                    value: "${qty} in inventory",
+                    isDynamic: false, // true
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    activeStates: ["consumable"], // match on all
                 },
             ],
         },

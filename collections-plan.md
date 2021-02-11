@@ -14,7 +14,7 @@ A list of requirements to support transactions from one collection to another.
 * Shop has 1 shield
 * Player buys shield
 * Shield is added to inventory
-* Shield shows in shop as “owned”
+* Shield shows in shop as “purchased”
 
 **start collection states:**
 shop [{id: "shield", qty: 0}]
@@ -23,12 +23,12 @@ inventory []
 **Command**
 
 ```
-shop.set({id: "shield", state: "owned", qty: -1})
+shop.set({id: "shield", state: "purchased", qty: -1})
 inventory.set({id: "shield", qty: +1})
 ```
 
 **end collection state:**
-shop [{id: "shield", state: "owned", qty: 0}]
+shop [{id: "shield", state: "purchased", qty: 0}]
 inventory [{id: "shield", qty: 1}]
 
 #### Scenario 2
@@ -89,7 +89,7 @@ inventory [{id: "helmet", qty: 1, state: "equipped"}]
 
 
 ### Questions:
-* Do the `equipped` and `owned` tags need to be configurable? 
+* Do the `equipped` and `purchased` tags need to be configurable? 
 
 #### Notes
 __debug.collections.get("armoury").getAll()

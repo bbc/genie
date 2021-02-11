@@ -10,6 +10,7 @@
         userData: {
             //.. keep this namespaced out in case agencies want to put object stats in here
         },
+        slot: "shield", // if omitted, item is a consumable
     },
     {
         id: "bomb",
@@ -19,7 +20,6 @@
         longDescription: "The skull icon is now a health \n& safety requirement for \n all explody things. Sigh.",
         icon: "shop.bombIcon",
         tags: ["weapon"],
-        isConsumable: true,
     },
     {
         id: "box",
@@ -52,8 +52,8 @@
         price: 0,
         icon: "shopDemo.ironHatIcon",
         tags: ["demo-hat"],
-        state: "owned",
         userData: { key: "shopDemo.ironHat" },
+        slot: "helmet",
     },
     {
         id: "greenHat",
@@ -64,6 +64,7 @@
         icon: "shopDemo.greenHatIcon",
         tags: ["demo-hat"],
         userData: { key: "shopDemo.greenHat" },
+        slot: "helmet",
     },
     {
         id: "redHat",
@@ -74,6 +75,7 @@
         icon: "shopDemo.redHatIcon",
         tags: ["demo-hat"],
         userData: { key: "shopDemo.redHat" },
+        slot: "helmet",
     },
     {
         id: "purpleHat",
@@ -84,6 +86,7 @@
         icon: "shopDemo.purpleHatIcon",
         tags: ["demo-hat"],
         userData: { key: "shopDemo.purpleHat" },
+        slot: "helmet",
     },
     {
         id: "goldHat",
@@ -94,5 +97,6 @@
         icon: "shopDemo.goldHatIcon",
         tags: ["demo-hat"],
         userData: { key: "shopDemo.goldHat" },
+        slot: "helmet",
     },
 ]
