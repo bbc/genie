@@ -73,7 +73,7 @@ export const createConfirm = (scene, title, item) => {
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
     const yOffset = bounds.height / 2 + bounds.y;
     container.setY(yOffset);
-    createElems(scene, container, getPromptText(scene, action, item), item, innerBounds, bounds);
+    createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
     action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
     addConfirmButtons(scene, container, innerBounds, title, action, item);
     return container;
@@ -164,14 +164,12 @@ const getBuyPromptText = (scene, action, item) =>
             : scene.config.confirm.prompt[action].unavailable
         : scene.config.confirm.prompt[action].illegal;
 
-const getPromptText = (scene, action, item) => {
-    let promptText;
-    action === "buy" && (promptText = getBuyPromptText(scene, action, item));
-    action === "equip" && (promptText = getEquipPromptText(scene, action, item));
-    action === "unequip" && (promptText = getUnequipPromptText(scene));
-    action === "use" && (promptText = getUsePromptText(scene));
-    return promptText;
-};
+const getPromptText = fp.cond([
+    [args => args.action === "buy", args => getBuyPromptText(args.scene, args.action, args.item)],
+    [args => args.action === "equip", args => getEquipPromptText(args.scene, args.action, args.item)],
+    [args => args.action === "unequip", args => getUnequipPromptText(args.scene)],
+    [args => args.action === "use", args => getUsePromptText(args.scene)],
+]);
 
 const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(scene, item);
 const canAffordItem = (scene, item) => item && getBalanceItem(scene).qty >= item.price;
