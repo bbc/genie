@@ -163,9 +163,10 @@ const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items"
 
 const getFilteredCollection = (collection, filter) => {
     const baseCollection = filter ? collection.filter(filter) : collection;
-    const removeZeroQty = item => item.slot || item.qty > 0;
     return baseCollection.filter(removeZeroQty);
 };
+
+const removeZeroQty = item => item.slot || item.qty > 0;
 
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, title, filter) {

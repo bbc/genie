@@ -104,7 +104,7 @@ describe("Confirm pane", () => {
     describe("createConfirm()", () => {
         beforeEach(() => {
             confirmPane = createConfirm(mockScene, "shop", { mock: "item", id: "foo" });
-            confirmPane.scene = mockScene; // this
+            confirmPane.scene = mockScene;
         });
 
         test("returns a container", () => {
