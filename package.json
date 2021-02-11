@@ -51,7 +51,6 @@
         "mochawesome-merge": "^4.2.0",
         "mochawesome-report-generator": "^5.1.0",
         "prettier": "2.1.2",
-        "puppeteer": "^7.0.4",
         "rollup": "^2.35.1",
         "rollup-plugin-terser": "^7.0.2",
         "webpack": "^4.44.2",
@@ -73,8 +72,8 @@
         "validate": "node build-scripts/schemavalidator/validator.js achievement",
         "roll-lodash": "rollup -c lib/lodash/rollup.config.js",
         "cy": "cypress open",
-        "cy:headless": "cypress run --headless --browser chrome --config video=false --spec 'cypress/integration/genie_spec.js'",
-        "cy:headless-theme2": "export THEME_2=true && cypress run --headless --browser chrome --config video=false --spec 'cypress/integration/genie_spec.js'",
+        "cy:headless": "cypress run --headless --browser chrome --config video=false --spec '**/*spec.js'",
+        "cy:headless-theme2": "export THEME_2=true && cypress run --headless --browser chrome --config video=false --spec '**/*spec.js'",
         "cy:local": "export LOCAL_DEV=true && npm run cy:headless",
         "cy:local-theme2": "export THEME_2=true && LOCAL_DEV=true && npm run cy:headless"
     }

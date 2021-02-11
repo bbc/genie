@@ -5,5 +5,9 @@
         "html": false,
         "json": true
     },
-    "screenshotOnRunFailure": true
+    "screenshotOnRunFailure": true,
+    "retries": {
+        "runMode": 2,
+        "openMode": 0
+    }
 }
