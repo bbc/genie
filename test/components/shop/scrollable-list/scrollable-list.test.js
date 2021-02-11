@@ -163,6 +163,14 @@ describe("Scrollable List", () => {
                 test("with items from a collection", () => {
                     expect(collections.get).toHaveBeenCalledWith("testCatalogue");
                     expect(mockCollection.getAll).toHaveBeenCalled();
+                    expect(collectionGetAll.length).toBe(1);
+                    expect(buttons.createGelButton).toHaveBeenCalledTimes(1);
+                });
+                test("with zero-quantity items filtered out", () => {
+                    jest.clearAllMocks();
+                    collectionGetAll = [mockItem, mockItem, { ...mockItem, qty: 0 }];
+                    new ScrollableList(mockScene, title);
+                    expect(buttons.createGelButton).toHaveBeenCalledTimes(2);
                 });
 
                 test("no items table added if the catalogue collection is empty", () => {

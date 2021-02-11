@@ -56,6 +56,7 @@ const createInnerPanel = (scene, title, parent) => {
 
 const createTable = (scene, title, parent) => {
     const key = scene.config.paneCollections[title];
+    // const removeZeroQty = item => !(item.qty && item.qty === 0);
     const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
 
     const sizer = scene.rexUI.add.sizer({ orientation: "y" });
@@ -161,7 +162,11 @@ const updatePanelList = panel => {
 
 const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items") ?? [];
 
-const getFilteredCollection = (collection, filter) => (filter ? collection.filter(filter) : collection);
+const getFilteredCollection = (collection, filter) => {
+    const baseCollection = filter ? collection.filter(filter) : collection;
+    const removeZeroQty = item => item.qty === undefined || item.qty > 0;
+    return baseCollection.filter(removeZeroQty);
+};
 
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, title, filter) {
