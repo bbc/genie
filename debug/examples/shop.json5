@@ -65,7 +65,7 @@
             buy: {
                 legal: "Purchase this item?",
                 illegal: "You can't afford this.",
-                unavailable: "You cannot purchase\nanymore of these.",
+                unavailable: "You already own this.",
             },
             equip: { legal: "Do you want to \nequip this item?", illegal: "You cannot equip\nthis item." },
             unequip: "Do you want to \nunequip this item?",
@@ -117,35 +117,17 @@
                 {
                     type: "text",
                     name: "currencyAmount",
-                    value: "price",
-                    isDynamic: true,
+                    value: "${price}",
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeStates: ["cta", "available"],
-                },
-                {
-                    type: "text",
-                    name: "currencyAmount",
-                    value: "price",
-                    isDynamic: true,
-                    position: { align: "right", offsetX: -44, offsetY: -10 },
-                    styles: { fontSize: "14px" },
-                    activeStates: ["actioned", "consumable", "available"],
-                },
-                {
-                    type: "image",
-                    name: "currency",
-                    assetKey: "currency",
-                    isDynamic: false,
-                    position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["cta", "available"], // match on one
+                    activeStates: ["available"],
                 },
                 {
                     type: "image",
                     name: "currency",
                     assetKey: "shop.currency",
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["actioned", "consumable", "available"], // match on one
+                    activeStates: ["available"],
                 },
                 {
                     type: "text",
@@ -153,7 +135,7 @@
                     value: "Purchased",
                     position: { align: "right", offsetX: -108, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned", "unavailable"], // match on all
+                    activeStates: ["unavailable"],
                 },
                 {
                     type: "text",
@@ -161,7 +143,7 @@
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" }, // moves to options, add another option
-                    activeStates: ["cta", "equippable"], // match on all
+                    activeStates: ["equippable"],
                 },
                 {
                     type: "text",
@@ -169,7 +151,7 @@
                     value: "${qty} in stock",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" }, // moves to options, add another option
-                    activeStates: ["consumable", "available"], // match on all
+                    activeStates: ["consumable"],
                 },
             ],
             manage: [
@@ -193,7 +175,6 @@
                     type: "text",
                     name: "itemStockLevel",
                     value: "${qty} in inventory",
-                    isDynamic: false, // true
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" }, // moves to options, add another option
                     activeStates: ["consumable"], // match on all

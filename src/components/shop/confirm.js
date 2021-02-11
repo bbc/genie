@@ -74,7 +74,7 @@ export const createConfirm = (scene, title, item) => {
     const yOffset = bounds.height / 2 + bounds.y;
     container.setY(yOffset);
     createElems(scene, container, getPromptText(scene, action, item), item, innerBounds, bounds);
-    action === "buy" && itemIsInStock(item) && createBuyElems(scene, container, item, innerBounds, bounds);
+    action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
     addConfirmButtons(scene, container, innerBounds, title, action, item);
     return container;
 };
@@ -140,7 +140,7 @@ const getEquipPromptText = (scene, action, item) =>
 
 const getBuyPromptText = (scene, action, item) =>
     canAffordItem(scene, item)
-        ? itemIsInStock(item)
+        ? itemIsInStock(scene, item)
             ? scene.config.confirm.prompt[action].legal
             : scene.config.confirm.prompt[action].unavailable
         : scene.config.confirm.prompt[action].illegal;
@@ -152,10 +152,10 @@ const getPromptText = (scene, action, item) =>
         ? getEquipPromptText(scene, action, item)
         : scene.config.confirm.prompt[action];
 
-const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(item);
+const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(scene, item);
 const canAffordItem = (scene, item) => item && getBalanceItem(scene).qty >= item.price;
 const isEquippable = item => item && item.slot;
-const itemIsInStock = item => item && item.qty > 0;
+const itemIsInStock = (scene, item) => item && collections.get(scene.config.paneCollections.shop).get(item.id).qty > 0;
 
 const getItemTitle = item => (item ? item.title : "PH"); // can refactor out the PHs?
 const getItemDetail = item => (item ? item.description : "PH");
