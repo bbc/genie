@@ -4,7 +4,8 @@
         "overwrite": false,
         "html": false,
         "json": true,
-        "reportDir": "output/reports/"
+        "reportDir": "output/reports/",
+        "assetsDir": "output/reports/"
     },
     "screenshotOnRunFailure": true,
     "retries": {
