@@ -15,24 +15,19 @@ import {
 } from "./shop-layout.js";
 
 export const createMenu = scene => {
+    const menu = { config: scene.config, container: scene.add.container() };
+
     const bounds = getSafeArea(scene.layout);
-
-    //TODO remove these decorations in favour of a container object
-    const container = scene.add.container();
-    container.config = scene.config;
-    container.setVisible = setVisible(container);
-    container.resize = resize(container);
-    container.memoisedBounds = bounds;
-
     const contents = [
         createRect(scene, getInnerRectBounds(scene), 0x0000ff),
         createPaneBackground(scene, bounds, "menu"),
     ];
+    menu.container.add(contents);
+    menu.container.setY(bounds.height / 2 + bounds.y);
 
-    container.add(contents);
+    menu.buttons = createMenuButtons(menu.container);
+    menu.setVisible = setVisible(menu);
+    menu.resize = resize(menu);
 
-    container.buttons = createMenuButtons(container);
-
-    container.setY(bounds.height / 2 + bounds.y);
-    return container;
+    return menu;
 };

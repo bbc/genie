@@ -40,37 +40,40 @@ export const setVisible = container => isVisible => {
     });
 };
 
-export const resize = container => bounds => {
-    const { memoisedBounds } = container;
-    container.memoisedBounds = bounds;
+export const resize = pane => bounds => {
+    // any of this stuff still used?
+    console.log("BEEBUG: resize: ", pane);
+    // const { memoisedBounds } = container;
+    // container.memoisedBounds = bounds;
+    const containerBounds = pane.container.getBounds();
 
-    const scaleX = (bounds.width / memoisedBounds.width) * container.scaleX;
-    const scaleY = (bounds.height / memoisedBounds.height) * container.scaleY;
-    container.setScale(scaleX, scaleY);
+    const scaleX = (bounds.width / containerBounds.width) * pane.container.scaleX;
+    const scaleY = (bounds.height / containerBounds.height) * pane.container.scaleY;
+    pane.container.setScale(scaleX, scaleY);
 
-    const yOffset = container.getBounds().y - bounds.y;
-    container.setY(container.y - yOffset);
-    resizeGelButtons(container);
+    const yOffset = pane.container.getBounds().y - bounds.y;
+    pane.container.setY(pane.container.y - yOffset);
+    resizeGelButtons(pane);
 
-    container.elems && scaleElements(container.getElems(), scaleX, scaleY);
+    // container.elems && scaleElements(container.getElems(), scaleX, scaleY);
 };
 
-const scaleElements = (elems, scaleX, scaleY) => {
-    elems.filter(isText).forEach(textElem => {
-        textElem.scaleX = 1 / scaleX;
-        textElem.scaleY = 1 / scaleY;
-    });
-    elems.filter(isImage).forEach(imageElem => {
-        const { memoisedScale } = imageElem;
-        const newScaleX = memoisedScale ? (1 / scaleX) * memoisedScale : 1 / scaleX;
-        const newScaleY = memoisedScale ? (1 / scaleY) * memoisedScale : 1 / scaleY;
-        imageElem.scaleX = newScaleX;
-        imageElem.scaleY = newScaleY;
-    });
-};
+// const scaleElements = (elems, scaleX, scaleY) => {
+//     elems.filter(isText).forEach(textElem => {
+//         textElem.scaleX = 1 / scaleX;
+//         textElem.scaleY = 1 / scaleY;
+//     });
+//     elems.filter(isImage).forEach(imageElem => {
+//         const { memoisedScale } = imageElem;
+//         const newScaleX = memoisedScale ? (1 / scaleX) * memoisedScale : 1 / scaleX;
+//         const newScaleY = memoisedScale ? (1 / scaleY) * memoisedScale : 1 / scaleY;
+//         imageElem.scaleX = newScaleX;
+//         imageElem.scaleY = newScaleY;
+//     });
+// };
 
-const isText = item => item.type === "Text";
-const isImage = item => item.type === "Image";
+// const isText = item => item.type === "Text";
+// const isImage = item => item.type === "Image";
 
 export const getHalfRectBounds = (menuBounds, isOnRight) => {
     const halfWidth = menuBounds.width / 2;
