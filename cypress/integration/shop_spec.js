@@ -23,7 +23,7 @@ describe("The Genie Shop component", () => {
         cy.genieClick("#debug-shop-demo-shop__back");
         cy.genieClick("#debug-shop-demo-shop__manage_menu_button");
         cy.genieClick("#debug-shop-demo-shop__scroll_button_redHat_manage");
-        cy.genieClick("#debug-shop-demo-shop__tx_equip_button"); 
+        cy.genieClick("#debug-shop-demo-shop__tx_equip_button");
     });
 
     it("Can pause the game throughout the shop", () => {
