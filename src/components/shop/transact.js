@@ -34,6 +34,13 @@ export const unequip = (scene, item) => {
     invCol.set({ ...item, state: "purchased" });
 };
 
+export const use = (scene, item) => {
+    const { manage } = scene.config.paneCollections;
+    const invCol = collections.get(manage);
+    const invItem = invCol.get(item.id);
+    invCol.set({ ...invItem, qty: invItem.qty - 1 });
+};
+
 const updateBalance = (scene, invCol, price) =>
     invCol.set({ ...getBalanceItem(scene), qty: getBalanceItem(scene).qty - price }) ||
     scene.events.emit("updatebalance");
