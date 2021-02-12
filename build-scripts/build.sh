@@ -8,5 +8,5 @@ npm run test
 npm run build
 cp -r themes output/themes
 cp -r debug output/debug
-npm run cy:headless
+npm run cy:headless || exit
 node cypress/support/createReports.js
