@@ -8,6 +8,7 @@
 import * as shopLayout from "../../../src/components/shop/shop-layout.js";
 
 let mockLayout;
+let mockPane;
 let mockContainer;
 const mockSafeArea = { y: -150, width: 600 };
 const mockPadding = 10;
@@ -15,9 +16,9 @@ const mockMetrics = {
     verticals: { top: -300 },
     verticalBorderPad: 15,
 };
-let mockBounds;
-let mockTextElem;
-let mockImageElem;
+// let mockBounds;
+// let mockTextElem;
+// let mockImageElem;
 let imageScaleXSpy;
 let imageScaleYSpy;
 let textScaleXSpy;
@@ -52,19 +53,20 @@ describe("shop element scaling functions", () => {
         mockLayout = { getSafeArea: jest.fn() };
         mockContainer = {
             getBounds: jest.fn().mockReturnValue({ height: 100, width: 300, x: 0, y: 0 }),
-            elems: { foo: "bar" },
+            // elems: { foo: "bar" },
             scale: 1,
             scaleX: 1,
             scaleY: 1,
             setScale: jest.fn(),
             setY: jest.fn(),
             setX: jest.fn(),
-            buttons: [],
-            memoisedBounds: mockBounds,
-            getElems: jest.fn().mockReturnValue([mockTextElem, mockImageElem]),
+            // buttons: [],
+            // memoisedBounds: mockBounds,
+            // getElems: jest.fn().mockReturnValue([mockTextElem, mockImageElem]),
             y: 0,
             visible: true,
         };
+        mockPane = { container: mockContainer, buttons: [] };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -143,9 +145,9 @@ describe("shop element scaling functions", () => {
     });
 
     describe("resize()", () => {
-        const newBounds = { width: 200, height: 50, x: 0, y: 10 };
+        const newBounds = { width: 600, height: 50, x: 0, y: 10 };
         beforeEach(() => {
-            shopLayout.resize(mockContainer)(newBounds);
+            shopLayout.resize(mockPane)(newBounds);
         });
 
         test("sets an appropriate scale and offset on the container", () => {
@@ -153,23 +155,43 @@ describe("shop element scaling functions", () => {
             expect(mockContainer.setY).toHaveBeenCalledWith(10);
         });
 
-        test("inverse-scale text elems on both axes to preserve aspect ratio", () => {
-            expect(textScaleXSpy).toHaveBeenCalledWith(0.5);
-            expect(textScaleYSpy).toHaveBeenCalledWith(2);
+        // test("inverse-scale text elems on both axes to preserve aspect ratio", () => {
+        //     expect(textScaleXSpy).toHaveBeenCalledWith(0.5);
+        //     expect(textScaleYSpy).toHaveBeenCalledWith(2);
+        // });
+
+        // test("inverse-scale image elems on both axes and preserve the overall scale if a memoisedScale is provided", () => {
+        //     expect(imageScaleXSpy).toHaveBeenCalledWith(1);
+        //     expect(imageScaleYSpy).toHaveBeenCalledWith(4);
+        // });
+
+        // test("when an image elem has no memoisedScale, assume a scale of 1", () => {
+        //     jest.clearAllMocks();
+        //     mockImageElem.memoisedScale = undefined;
+        //     mockContainer.getElems = jest.fn().mockReturnValue([mockTextElem, mockImageElem]);
+        //     shopLayout.resize(mockPane)(newBounds);
+        //     expect(imageScaleXSpy).toHaveBeenCalledWith(1);
+        //     expect(imageScaleYSpy).toHaveBeenCalledWith(1);
+        // });
+    });
+
+    describe("setVisible", () => {
+        let mockButton;
+        beforeEach(() => {
+            mockButton = { visible: false, input: { enabled: false }, accessibleElement: { update: jest.fn() } };
+            mockPane.buttons.push(mockButton, mockButton);
+            shopLayout.setVisible(mockPane)(true);
         });
 
-        test("inverse-scale image elems on both axes and preserve the overall scale if a memoisedScale is provided", () => {
-            expect(imageScaleXSpy).toHaveBeenCalledWith(1);
-            expect(imageScaleYSpy).toHaveBeenCalledWith(4);
+        test("sets pane's visibility flag", () => {
+            expect(mockPane.visible).toBe(true);
         });
-
-        test("when an image elem has no memoisedScale, assume a scale of 1", () => {
-            jest.clearAllMocks();
-            mockImageElem.memoisedScale = undefined;
-            mockContainer.getElems = jest.fn().mockReturnValue([mockTextElem, mockImageElem]);
-            shopLayout.resize(mockContainer)(newBounds);
-            expect(imageScaleXSpy).toHaveBeenCalledWith(1);
-            expect(imageScaleYSpy).toHaveBeenCalledWith(1);
+        test("sets each button's visibility and input.enabled flags", () => {
+            expect(mockButton.visible).toBe(true);
+            expect(mockButton.input.enabled).toBe(true);
+        });
+        test("updates each button's accessible element", () => {
+            expect(mockButton.accessibleElement.update).toHaveBeenCalledTimes(2);
         });
     });
 
