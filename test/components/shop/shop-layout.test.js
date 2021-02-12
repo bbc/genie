@@ -19,37 +19,37 @@ const mockMetrics = {
 // let mockBounds;
 // let mockTextElem;
 // let mockImageElem;
-let imageScaleXSpy;
-let imageScaleYSpy;
-let textScaleXSpy;
-let textScaleYSpy;
+// let imageScaleXSpy;
+// let imageScaleYSpy;
+// let textScaleXSpy;
+// let textScaleYSpy;
 
 describe("shop element scaling functions", () => {
     beforeEach(() => {
-        imageScaleXSpy = jest.fn();
-        imageScaleYSpy = jest.fn();
-        textScaleXSpy = jest.fn();
-        textScaleYSpy = jest.fn();
-        mockBounds = { width: 100, height: 100, y: 0, x: 0 };
-        mockTextElem = {
-            set scaleX(val) {
-                textScaleXSpy(val);
-            },
-            set scaleY(val) {
-                textScaleYSpy(val);
-            },
-            type: "Text",
-        };
-        mockImageElem = {
-            memoisedScale: 2,
-            set scaleX(val) {
-                imageScaleXSpy(val);
-            },
-            set scaleY(val) {
-                imageScaleYSpy(val);
-            },
-            type: "Image",
-        };
+        // imageScaleXSpy = jest.fn();
+        // imageScaleYSpy = jest.fn();
+        // textScaleXSpy = jest.fn();
+        // textScaleYSpy = jest.fn();
+        // mockBounds = { width: 100, height: 100, y: 0, x: 0 };
+        // mockTextElem = {
+        //     set scaleX(val) {
+        //         textScaleXSpy(val);
+        //     },
+        //     set scaleY(val) {
+        //         textScaleYSpy(val);
+        //     },
+        //     type: "Text",
+        // };
+        // mockImageElem = {
+        //     memoisedScale: 2,
+        //     set scaleX(val) {
+        //         imageScaleXSpy(val);
+        //     },
+        //     set scaleY(val) {
+        //         imageScaleYSpy(val);
+        //     },
+        //     type: "Image",
+        // };
         mockLayout = { getSafeArea: jest.fn() };
         mockContainer = {
             getBounds: jest.fn().mockReturnValue({ height: 100, width: 300, x: 0, y: 0 }),
