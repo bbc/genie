@@ -55,8 +55,8 @@ export class Shop extends Screen {
     }
 
     destroyConfirm() {
-        this.panes.confirm.removeAll(true);
-        this.panes.confirm.destroy();
+        this.panes.confirm.container.removeAll(true);
+        this.panes.confirm.container.destroy();
         delete this.panes.confirm;
     }
 

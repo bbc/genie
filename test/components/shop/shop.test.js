@@ -50,7 +50,8 @@ describe("Shop", () => {
     const mockSafeArea = { foo: "bar " };
     const mockButtonConfig = { channel: "foo", key: "bar", action: "baz" };
     const mockMenu = { setVisible: jest.fn(), resize: jest.fn() };
-    const mockConfirm = { setVisible: jest.fn(), resize: jest.fn(), removeAll: jest.fn(), destroy: jest.fn() };
+    const mockConfirmContainer = { removeAll: jest.fn(), destroy: jest.fn() };
+    const mockConfirm = { container: mockConfirmContainer, setVisible: jest.fn(), resize: jest.fn() }; // need these?
     const mockTitles = { setTitleText: jest.fn(), setScale: jest.fn(), setPosition: jest.fn() };
 
     beforeEach(() => {
@@ -233,7 +234,7 @@ describe("Shop", () => {
             test("destroys the confirm pane, if present", () => {
                 shopScreen.panes.confirm = mockConfirm;
                 shopScreen.back();
-                expect(mockConfirm.destroy).toHaveBeenCalled();
+                expect(mockConfirm.container.destroy).toHaveBeenCalled();
             });
         });
         describe("back() on last item in pane stack", () => {
@@ -254,14 +255,14 @@ describe("Shop", () => {
         beforeEach(() => {
             shopScreen.create();
             shopScreen.panes.confirm = mockConfirm;
-            shopScreen.panes.confirm = shopScreen.destroyConfirm();
+            shopScreen.destroyConfirm();
         });
 
         test("removes and destroys all objects from the confirm container", () => {
-            expect(mockConfirm.removeAll).toHaveBeenCalled();
+            expect(mockConfirmContainer.removeAll).toHaveBeenCalled();
         });
         test("destroys the container", () => {
-            expect(mockConfirm.destroy).toHaveBeenCalled();
+            expect(mockConfirmContainer.destroy).toHaveBeenCalled();
         });
         test("dumps the confirm key from .panes", () => {
             expect(shopScreen.panes.confirm).toBe(undefined);

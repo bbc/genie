@@ -109,8 +109,8 @@ describe("Confirm pane", () => {
             confirmPane.scene = mockScene;
         });
 
-        test("returns a container", () => {
-            expect(confirmPane).toBe(mockContainer);
+        test("returns a object with a container", () => {
+            expect(confirmPane.container).toBe(mockContainer);
         });
         test("with gel buttons for confirm and cancel", () => {
             expect(buttons.createConfirmButtons).toHaveBeenCalled();

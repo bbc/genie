@@ -76,7 +76,7 @@ export const createConfirm = (scene, title, item) => {
     createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
     action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
     addConfirmButtons(scene, container, innerBounds, title, action, item);
-    return container;
+    return { container, setVisible: fp.noop };
 };
 
 const getAction = (scene, title, item) => {
