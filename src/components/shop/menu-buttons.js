@@ -52,7 +52,7 @@ const resizeButton = pane => (button, idx) => {
     button.setScale(bounds.width / button.width);
 };
 
-export const resizeGelButtons = pane => pane.buttons.forEach(resizeButton(pane));
+export const resizeGelButtons = pane => pane.buttons?.forEach(resizeButton(pane));
 
 const setButtonOverlays = (scene, button, title) =>
     button.overlays.set("caption", addText(scene, 0, 0, title, scene.config.menuButtons).setOrigin(0.5));

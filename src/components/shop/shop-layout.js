@@ -50,26 +50,7 @@ export const resize = pane => bounds => {
     const yOffset = pane.container.getBounds().y - bounds.y;
     pane.container.setY(pane.container.y - yOffset);
     resizeGelButtons(pane);
-
-    // container.elems && scaleElements(container.getElems(), scaleX, scaleY);
 };
-
-// const scaleElements = (elems, scaleX, scaleY) => {
-//     elems.filter(isText).forEach(textElem => {
-//         textElem.scaleX = 1 / scaleX;
-//         textElem.scaleY = 1 / scaleY;
-//     });
-//     elems.filter(isImage).forEach(imageElem => {
-//         const { memoisedScale } = imageElem;
-//         const newScaleX = memoisedScale ? (1 / scaleX) * memoisedScale : 1 / scaleX;
-//         const newScaleY = memoisedScale ? (1 / scaleY) * memoisedScale : 1 / scaleY;
-//         imageElem.scaleX = newScaleX;
-//         imageElem.scaleY = newScaleY;
-//     });
-// };
-
-// const isText = item => item.type === "Text";
-// const isImage = item => item.type === "Image";
 
 export const getHalfRectBounds = (menuBounds, isOnRight) => {
     const halfWidth = menuBounds.width / 2;

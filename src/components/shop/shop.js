@@ -11,6 +11,7 @@ import { getMetrics, onScaleChange } from "../../core/scaler.js";
 import { createTitle } from "./shop-titles.js";
 import { createBalance } from "./balance-ui.js";
 import { createMenu } from "./menu.js";
+import { createConfirm } from "./confirm.js";
 import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 import { eventBus } from "../../core/event-bus.js";
 import * as a11y from "../../core/accessibility/accessibility-layer.js";
@@ -60,6 +61,12 @@ export class Shop extends Screen {
         delete this.panes.confirm;
     }
 
+    resizeConfirm() {
+        const { title, item } = this.panes.confirm.params;
+        this.destroyConfirm();
+        this.panes.confirm = createConfirm(this, title, item);
+    }
+
     stack(pane) {
         this.paneStack.push(pane);
         this.setVisiblePane(pane);
@@ -104,6 +111,7 @@ export class Shop extends Screen {
         const safeArea = getSafeArea(this.layout);
         this.panes.top.resize(safeArea);
         this.panes.shop.reset();
+        this.panes.confirm && this.resizeConfirm();
         this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));
         this.title.setPosition(0, getYPos(metrics, safeArea));
         this.balance.setScale(getScaleFactor({ metrics, container: this.balance, safeArea }));

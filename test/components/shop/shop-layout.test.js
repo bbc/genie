@@ -16,53 +16,18 @@ const mockMetrics = {
     verticals: { top: -300 },
     verticalBorderPad: 15,
 };
-// let mockBounds;
-// let mockTextElem;
-// let mockImageElem;
-// let imageScaleXSpy;
-// let imageScaleYSpy;
-// let textScaleXSpy;
-// let textScaleYSpy;
 
 describe("shop element scaling functions", () => {
     beforeEach(() => {
-        // imageScaleXSpy = jest.fn();
-        // imageScaleYSpy = jest.fn();
-        // textScaleXSpy = jest.fn();
-        // textScaleYSpy = jest.fn();
-        // mockBounds = { width: 100, height: 100, y: 0, x: 0 };
-        // mockTextElem = {
-        //     set scaleX(val) {
-        //         textScaleXSpy(val);
-        //     },
-        //     set scaleY(val) {
-        //         textScaleYSpy(val);
-        //     },
-        //     type: "Text",
-        // };
-        // mockImageElem = {
-        //     memoisedScale: 2,
-        //     set scaleX(val) {
-        //         imageScaleXSpy(val);
-        //     },
-        //     set scaleY(val) {
-        //         imageScaleYSpy(val);
-        //     },
-        //     type: "Image",
-        // };
         mockLayout = { getSafeArea: jest.fn() };
         mockContainer = {
             getBounds: jest.fn().mockReturnValue({ height: 100, width: 300, x: 0, y: 0 }),
-            // elems: { foo: "bar" },
             scale: 1,
             scaleX: 1,
             scaleY: 1,
             setScale: jest.fn(),
             setY: jest.fn(),
             setX: jest.fn(),
-            // buttons: [],
-            // memoisedBounds: mockBounds,
-            // getElems: jest.fn().mockReturnValue([mockTextElem, mockImageElem]),
             y: 0,
             visible: true,
         };
@@ -154,25 +119,6 @@ describe("shop element scaling functions", () => {
             expect(mockContainer.setScale).toHaveBeenCalledWith(2, 0.5);
             expect(mockContainer.setY).toHaveBeenCalledWith(10);
         });
-
-        // test("inverse-scale text elems on both axes to preserve aspect ratio", () => {
-        //     expect(textScaleXSpy).toHaveBeenCalledWith(0.5);
-        //     expect(textScaleYSpy).toHaveBeenCalledWith(2);
-        // });
-
-        // test("inverse-scale image elems on both axes and preserve the overall scale if a memoisedScale is provided", () => {
-        //     expect(imageScaleXSpy).toHaveBeenCalledWith(1);
-        //     expect(imageScaleYSpy).toHaveBeenCalledWith(4);
-        // });
-
-        // test("when an image elem has no memoisedScale, assume a scale of 1", () => {
-        //     jest.clearAllMocks();
-        //     mockImageElem.memoisedScale = undefined;
-        //     mockContainer.getElems = jest.fn().mockReturnValue([mockTextElem, mockImageElem]);
-        //     shopLayout.resize(mockPane)(newBounds);
-        //     expect(imageScaleXSpy).toHaveBeenCalledWith(1);
-        //     expect(imageScaleYSpy).toHaveBeenCalledWith(1);
-        // });
     });
 
     describe("setVisible", () => {

@@ -67,7 +67,7 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
 
 export const createConfirm = (scene, title, item) => {
     const action = getAction(scene, title, item);
-    scene.title.setTitleText(fp.startCase(action));
+    scene.title.setTitleText(fp.startCase(action)); // feels like it's in wrong place
     const bounds = getSafeArea(scene.layout);
     const container = scene.add.container();
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
@@ -76,7 +76,13 @@ export const createConfirm = (scene, title, item) => {
     createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
     action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
     addConfirmButtons(scene, container, innerBounds, title, action, item);
-    return { container, setVisible: fp.noop };
+    const confirmPane = {
+        container,
+        setVisible: fp.noop,
+        buttons: addConfirmButtons(scene, container, innerBounds, title, action, item),
+        params: { title, item },
+    };
+    return confirmPane;
 };
 
 const getAction = (scene, title, item) => {
