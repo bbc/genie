@@ -56,7 +56,7 @@
         manage: "debug-inventory",
     },
     slots: {
-        helmet: { max: Infinity },
+        helmet: { max: 1 },
         shield: { max: 1 },
     },
     confirm: {

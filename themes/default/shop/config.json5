@@ -41,7 +41,7 @@
         },
         value: {
             type: "text",
-            key: "coin", // the id of the currency item, which must exist in the inventory collection
+            key: "coin",
             styles: { fontSize: "16px" },
         },
     },
@@ -55,6 +55,10 @@
     paneCollections: {
         shop: "armoury",
         manage: "inventory",
+    },
+    slots: {
+        helmet: { max: 1 },
+        shield: { max: 1 },
     },
     confirm: {
         detailView: true,
@@ -97,7 +101,7 @@
                 type: "image",
                 name: "itemIcon",
                 assetKey: "${icon}",
-                position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                position: { align: "left", offsetX: 35, offsetY: 0 },
                 size: 76,
             },
             {
@@ -138,7 +142,7 @@
                     name: "itemDescription",
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    styles: { fontSize: "12px" },
                     activeStates: ["equippable"],
                 },
                 {
@@ -146,7 +150,7 @@
                     name: "itemStockLevel",
                     value: "${qty} in stock",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    styles: { fontSize: "12px" },
                     activeStates: ["consumable"],
                 },
             ],

@@ -32,7 +32,7 @@ export const createBalance = scene => {
 
     const width = value.getBounds().width + icon.getBounds().width + padding * 3;
     value.setPosition(width / 4 - padding, 0);
-    scene.events.on("updatebalance", () => value.setText(getBalanceValue(scene)));
+    scene.events.on("updatebalance", () => value.setText(getBalanceValue(scene))); // sometimes this is causing an exception thrown inside Phaser. Race cond?
     icon.setPosition(-width / 4, 0);
     background.setScale(width / background.getBounds().width);
 
