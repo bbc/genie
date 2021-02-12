@@ -6,6 +6,7 @@
  */
 import { createMenu } from "../../../src/components/shop/menu.js";
 import * as buttons from "../../../src/components/shop/menu-buttons.js";
+import * as layout from "../../../src/components/shop/shop-layout.js";
 
 describe("shop menu", () => {
     let menu;
@@ -44,24 +45,27 @@ describe("shop menu", () => {
     const resizeGelButtonsSpy = jest.fn();
     buttons.resizeGelButtons = resizeGelButtonsSpy;
 
+    const mockSetVisible = jest.fn();
+    layout.setVisible = jest.fn(() => mockSetVisible);
+
+    const mockResize = jest.fn();
+    layout.resize = jest.fn(() => mockResize);
+
     beforeEach(() => (menu = createMenu(mockScene)));
     afterEach(() => jest.clearAllMocks());
 
     describe("createMenu()", () => {
-        test("returns a container", () => {
-            expect(menu).toBe(mockContainer);
+        test("returns an object with a container", () => {
+            expect(menu.container).toBe(mockContainer);
         });
         test("with stored config", () => {
             expect(menu.config).toStrictEqual(mockScene.config);
         });
-        test("with a setVisible() function", () => {
-            expect(typeof menu.setVisible).toBe("function");
+        test("with a setVisible() from setVisible layout fn", () => {
+            expect(menu.setVisible).toBe(mockSetVisible);
         });
-        test("with a resize()", () => {
-            expect(typeof menu.resize).toBe("function");
-        });
-        test("with memoised safe area bounds", () => {
-            expect(menu.memoisedBounds).toBe(mockSafeArea);
+        test("with a resize() from resize layout function", () => {
+            expect(menu.resize).toBe(mockResize);
         });
         test("with a rect added", () => {
             expect(mockScene.add.rectangle).toHaveBeenCalledTimes(2);
@@ -70,46 +74,7 @@ describe("shop menu", () => {
             expect(menu.buttons).toBe(mockGelButtons);
         });
         test("calls setY on the container with an appropriate Y offset", () => {
-            expect(menu.setY).toHaveBeenCalledWith(200);
-        });
-    });
-    describe("setVisible", () => {
-        beforeEach(() => menu.setVisible(false));
-
-        test("sets the menu visibility", () => {
-            expect(menu.visible).toBe(false);
-        });
-        test("sets button visibility", () => {
-            expect(menu.buttons[0].visible).toBe(false);
-            expect(menu.buttons[1].visible).toBe(false);
-        });
-        test("sets button input.enabled", () => {
-            expect(menu.buttons[0].input.enabled).toBe(false);
-            expect(menu.buttons[1].input.enabled).toBe(false);
-        });
-        test("updates the accessible element", () => {
-            expect(menu.buttons[0].accessibleElement.update).toHaveBeenCalled();
-            expect(menu.buttons[1].accessibleElement.update).toHaveBeenCalled();
-        });
-    });
-    describe("resize", () => {
-        const newBounds = { width: 400, height: 300, x: 0, y: -100 };
-        beforeEach(() => {
-            menu.visible = true;
-            menu.resize(newBounds);
-        });
-
-        test("sets memoisedBounds to the value of the bounds argument", () => {
-            expect(menu.memoisedBounds).toBe(newBounds);
-        });
-        test("sets container scale", () => {
-            expect(mockContainer.setScale).toHaveBeenCalledWith(0.5, 0.5);
-        });
-        test("sets container y", () => {
-            expect(mockContainer.setY.mock.calls[1][0]).toBe(100);
-        });
-        test("resizes the gel buttons", () => {
-            expect(resizeGelButtonsSpy).toHaveBeenCalled();
+            expect(menu.container.setY).toHaveBeenCalledWith(200);
         });
     });
 });
