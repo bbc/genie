@@ -29,25 +29,14 @@ export const getScaleFactor = args => {
     return fixedWidth ? scaleFactorY : Math.min(scaleFactorY, scaleFactorX);
 };
 
-export const getHalfRectBounds = (menuBounds, isOnRight) => {
-    const halfWidth = menuBounds.width / 2;
-    return {
-        x: isOnRight ? halfWidth / 2 : -halfWidth / 2,
-        y: 0,
-        width: halfWidth,
-        height: menuBounds.height,
-    };
-};
-
 export const getInnerRectBounds = scene => {
     const outerBounds = getSafeArea(scene.layout);
-    const right = scene.config.menu.buttonsRight;
-    const innerBounds = getHalfRectBounds(outerBounds, right);
+    const halfWidth = outerBounds.width / 2;
     return {
-        x: innerBounds.width / 2,
-        y: innerBounds.y,
-        width: innerBounds.width * 0.65,
-        height: innerBounds.height * 0.6,
+        x: halfWidth / 2,
+        y: 0,
+        width: halfWidth * 0.65,
+        height: outerBounds.height * 0.6,
     };
 };
 
@@ -64,5 +53,5 @@ export const createPaneBackground = (scene, bounds, pane) => {
     }
 };
 
-export const getPaneBackgroundKey = (scene, pane) =>
+const getPaneBackgroundKey = (scene, pane) =>
     scene.config.backgrounds?.[pane] ? `${scene.assetPrefix}.${scene.config.backgrounds[pane]}` : null;

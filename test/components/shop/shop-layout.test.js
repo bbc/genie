@@ -8,8 +8,9 @@
 import * as shopLayout from "../../../src/components/shop/shop-layout.js";
 
 let mockLayout;
+let mockScene;
 let mockContainer;
-const mockSafeArea = { y: -150, width: 600 };
+const mockSafeArea = { x: 0, y: -50, height: 450, width: 600 };
 const mockPadding = 10;
 const mockMetrics = {
     verticals: { top: -300 },
@@ -18,18 +19,14 @@ const mockMetrics = {
 
 describe("shop element scaling functions", () => {
     beforeEach(() => {
-        mockLayout = { getSafeArea: jest.fn() };
+        mockLayout = { getSafeArea: jest.fn(() => mockSafeArea) };
         mockContainer = {
-            getBounds: jest.fn().mockReturnValue({ height: 100, width: 300, x: 0, y: 0 }),
+            getBounds: jest.fn().mockReturnValue({ height: 450, width: 600, x: 0, y: -150 }),
             scale: 1,
-            scaleX: 1,
-            scaleY: 1,
-            setScale: jest.fn(),
-            setY: jest.fn(),
-            setX: jest.fn(),
             y: 0,
             visible: true,
         };
+        mockScene = { layout: mockLayout, config: { menu: { buttonsRight: true } } };
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -42,17 +39,17 @@ describe("shop element scaling functions", () => {
     });
 
     describe("getXPos()", () => {
-        test("returns an X value that is just inside the horizontal bounds of the safe area", () => {
+        test("returns an X value inside the safe area, accounting for padding", () => {
             const xPos = shopLayout.getXPos(mockContainer, mockSafeArea, mockPadding);
             expect(mockContainer.getBounds).toHaveBeenCalled();
-            expect(xPos).toBe(140);
+            expect(xPos).toBe(-10);
         });
     });
 
     describe("getYPos()", () => {
         test("returns a Y position that is centered between the screen top and the safe area top", () => {
             const yPos = shopLayout.getYPos(mockMetrics, mockSafeArea);
-            expect(yPos).toBe(-217.5);
+            expect(yPos).toBe(-167.5);
         });
     });
 
@@ -71,71 +68,28 @@ describe("shop element scaling functions", () => {
             test("returns a scale factor that will have the element fill the available vertical space", () => {
                 args.fixedWidth = true;
                 const scaleFactor = shopLayout.getScaleFactor(args);
-                expect(scaleFactor).toBe(1.275);
+                expect(scaleFactor).toBeCloseTo(0.5, 1);
             });
         });
         describe("when called with fixedWidth: false", () => {
             test("returns a scale factor that may constrain the element horizontally", () => {
                 args.fixedWidth = false;
                 const scaleFactor = shopLayout.getScaleFactor(args);
-                expect(scaleFactor).toBe(0.5);
+                expect(scaleFactor).toBe(0.25);
             });
         });
     });
 
-    describe("getHalfRectBounds", () => {
-        const safeAreaBounds = { width: 200, height: 100 };
-        test("returns a object describing half the area passed in", () => {
-            const result = shopLayout.getHalfRectBounds(safeAreaBounds, false);
+    describe("getInnerRectBounds", () => {
+        test("returns a bounds object, to one side of the safe area, with nice proportions", () => {
+            const result = shopLayout.getInnerRectBounds(mockScene);
             const expected = {
-                x: -50,
+                x: 150,
                 y: 0,
-                width: 100,
-                height: 100,
+                width: 195,
+                height: 270,
             };
             expect(result).toStrictEqual(expected);
-        });
-        test("is isOnRight is true, it's the right-hand half", () => {
-            const result = shopLayout.getHalfRectBounds(safeAreaBounds, true);
-            const expected = {
-                x: 50,
-                y: 0,
-                width: 100,
-                height: 100,
-            };
-            expect(result).toStrictEqual(expected);
-        });
-    });
-
-    describe("getPaneBackgroundKey()", () => {
-        let mockScene;
-        const { getPaneBackgroundKey } = shopLayout;
-
-        beforeEach(() => {
-            mockScene = {
-                assetPrefix: "prefix",
-                config: {
-                    assetKeys: {
-                        background: "someBackground",
-                    },
-                },
-            };
-        });
-        test("if a string is passed in config, concatenates with assetPrefix", () => {
-            mockScene.config.backgrounds = { shop: "shopBackground" };
-            expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.shopBackground");
-        });
-        test("if an empty string is passed, returns null", () => {
-            mockScene.config.assetKeys.background = "";
-            expect(getPaneBackgroundKey(mockScene, "shop")).toBe(null);
-        });
-        test("if an object is passed in config, asset key is contextual", () => {
-            mockScene.config.backgrounds = { shop: "shopBackground" };
-            expect(getPaneBackgroundKey(mockScene, "shop")).toBe("prefix.shopBackground");
-        });
-        test("empty strings can be passed here too", () => {
-            mockScene.config.backgrounds = { shop: "" };
-            expect(getPaneBackgroundKey(mockScene, "shop")).toBe(null);
         });
     });
 
@@ -156,11 +110,11 @@ describe("shop element scaling functions", () => {
             };
         });
 
-        test("if it finds an asset key, returns an image", () => {
+        test("if configured with an asset key, returns an image", () => {
             shopLayout.createPaneBackground(mockScene, mockBounds, "shop");
             expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "some.asset");
         });
-        test("if it finds no asset key, returns a rectangle", () => {
+        test("if configured without an asset key, returns a rectangle", () => {
             mockScene.config.backgrounds = {};
             shopLayout.createPaneBackground(mockScene, mockBounds, "shop");
             expect(mockScene.add.rectangle).toHaveBeenCalled();

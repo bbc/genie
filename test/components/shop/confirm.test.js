@@ -20,11 +20,8 @@ describe("Confirm pane", () => {
     let mockBalanceItem;
     let mockContainer;
     let mockImage;
-    let mockRect;
     let mockButton;
-    let mockText;
     let mockConfig;
-    let mockBounds;
     let mockBalance;
     let mockScene;
     let mockCollection;
@@ -32,9 +29,7 @@ describe("Confirm pane", () => {
     beforeEach(() => {
         mockContainer = { add: jest.fn(), setY: jest.fn(), removeAll: jest.fn(), destroy: jest.fn() };
         mockImage = { setScale: jest.fn(), setVisible: jest.fn(), setTexture: jest.fn(), type: "Image" };
-        mockRect = { foo: "bar" };
         mockButton = {
-            baz: "qux",
             setLegal: jest.fn(),
             setY: jest.fn(),
             setX: jest.fn(),
@@ -42,7 +37,6 @@ describe("Confirm pane", () => {
             input: { enabled: true },
             accessibleElement: { update: jest.fn() },
         };
-        mockText = { setText: jest.fn(), type: "Text" };
         mockConfig = {
             menu: { buttonsRight: true },
             confirm: {
@@ -59,7 +53,6 @@ describe("Confirm pane", () => {
             styleDefaults: {},
             paneCollections: { shop: "armoury", manage: "inventory" },
         };
-        mockBounds = { height: 200, width: 200, x: 0, y: 5 };
         mockBalance = { setText: jest.fn(), getValue: jest.fn() };
         mockScene = {
             add: {
@@ -70,7 +63,7 @@ describe("Confirm pane", () => {
             stack: jest.fn(),
             back: jest.fn(),
             layout: {
-                getSafeArea: jest.fn(() => mockBounds),
+                getSafeArea: jest.fn(() => ({ height: 200, width: 200, x: 0, y: 5 })),
             },
             config: mockConfig,
             balance: mockBalance,
@@ -82,21 +75,19 @@ describe("Confirm pane", () => {
             title: { setTitleText: jest.fn() },
         };
         mockCollection = { get: jest.fn().mockReturnValue({ state: "equipped", qty: 1, price: 99 }) };
+        collections.get = jest.fn(() => mockCollection);
 
         const setVisibleFn = jest.fn();
         const resizeFn = jest.fn();
 
         layout.setVisible = jest.fn().mockReturnValue(setVisibleFn);
         layout.resize = jest.fn().mockReturnValue(resizeFn);
-        layout.createRect = jest.fn().mockReturnValue(mockRect);
         layout.getInnerRectBounds = jest.fn().mockReturnValue({ x: 50, y: 0, width: 100, height: 100 });
         layout.textStyle = jest.fn().mockReturnValue({ some: "textStyle" });
 
         buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
 
-        text.addText = jest.fn().mockReturnValue({ setOrigin: jest.fn().mockReturnValue(mockText) });
-
-        collections.get = jest.fn(() => mockCollection);
+        text.addText = jest.fn(() => ({ setOrigin: jest.fn(() => ({ setText: jest.fn(), type: "Text" })) }));
 
         mockBalanceItem = { qty: 500 };
         transact.getBalanceItem = jest.fn(() => mockBalanceItem);

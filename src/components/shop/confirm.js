@@ -76,7 +76,6 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
 export const createConfirm = (scene, title, item) => {
     const action = getAction(scene, title, item);
     scene.title.setTitleText(fp.startCase(action));
-
     const confirmPane = {
         setVisible: fp.noop,
         action,
