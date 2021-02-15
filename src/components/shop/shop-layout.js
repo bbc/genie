@@ -6,7 +6,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { resizeGelButtons } from "./menu-buttons.js";
 
 export const getSafeArea = layout => layout.getSafeArea({}, false);
 
@@ -30,28 +29,6 @@ export const getScaleFactor = args => {
     return fixedWidth ? scaleFactorY : Math.min(scaleFactorY, scaleFactorX);
 };
 
-// export const setVisible = container => isVisible => {
-//     container.visible = isVisible;
-//     const buttons = container.buttons;
-//     buttons.forEach(button => {
-//         button.visible = isVisible;
-//         button.input.enabled = container.visible;
-//         button.accessibleElement.update();
-//     });
-// };
-
-// export const resize = pane => bounds => {
-//     const containerBounds = pane.container.getBounds();
-
-//     const scaleX = (bounds.width / containerBounds.width) * pane.container.scaleX;
-//     const scaleY = (bounds.height / containerBounds.height) * pane.container.scaleY;
-//     pane.container.setScale(scaleX, scaleY);
-
-//     const yOffset = pane.container.getBounds().y - bounds.y;
-//     pane.container.setY(pane.container.y - yOffset);
-//     resizeGelButtons(pane);
-// };
-
 export const getHalfRectBounds = (menuBounds, isOnRight) => {
     const halfWidth = menuBounds.width / 2;
     return {
@@ -73,9 +50,6 @@ export const getInnerRectBounds = scene => {
         height: innerBounds.height * 0.6,
     };
 };
-
-export const createRect = (scene, bounds, colour) =>
-    scene.add.rectangle(bounds.x, bounds.y, bounds.width, bounds.height, colour, 0);
 
 export const createPaneBackground = (scene, bounds, pane) => {
     const key = getPaneBackgroundKey(scene, pane);

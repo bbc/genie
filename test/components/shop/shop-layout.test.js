@@ -168,12 +168,4 @@ describe("shop element scaling functions", () => {
             expect(mockScene.add.rectangle).toHaveBeenCalled();
         });
     });
-
-    describe("createRect", () => {
-        test("creates a transparent rect with the supplied bounds", () => {
-            const mockScene = { add: { rectangle: jest.fn() } };
-            shopLayout.createRect(mockScene, { x: 0, y: 0, width: 100, height: 100 }, 0x000000);
-            expect(mockScene.add.rectangle).toHaveBeenCalledWith(0, 0, 100, 100, 0x00000, 0);
-        });
-    });
 });

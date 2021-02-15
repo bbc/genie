@@ -21,8 +21,10 @@ export const createMenu = scene => {
 const populateMenu = (scene, menu) => {
     const bounds = getSafeArea(scene.layout);
 
+    const innerBounds = getInnerRectBounds(scene);
+
     const contents = [
-        createRect(scene, getInnerRectBounds(scene), 0x0000ff),
+        scene.add.rectangle(innerBounds.x, innerBounds.y, innerBounds.width, innerBounds.height, 0x000000, 0),
         createPaneBackground(scene, bounds, "menu"),
     ];
     menu.container.add(contents);

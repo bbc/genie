@@ -60,7 +60,7 @@ describe("shop menu", () => {
     const mockResize = jest.fn();
     layout.resize = jest.fn(() => mockResize);
 
-    layout.createRect = jest.fn();
+    // layout.createRect = jest.fn();
     layout.createPaneBackground = jest.fn();
 
     beforeEach(() => (menu = createMenu(mockScene)));
@@ -74,7 +74,7 @@ describe("shop menu", () => {
             expect(menu.config).toStrictEqual(mockScene.config);
         });
         test("with a rect added", () => {
-            expect(layout.createRect).toHaveBeenCalledTimes(1);
+            expect(mockScene.add.rectangle).toHaveBeenCalledTimes(1);
         });
         test("with a buttons property from createGelButtons()", () => {
             expect(menu.buttons).toBe(mockGelButtons);
@@ -114,7 +114,7 @@ describe("shop menu", () => {
         });
         test("creates a new container and repopulates it", () => {
             expect(mockScene.add.container).toHaveBeenCalled();
-            expect(layout.createRect).toHaveBeenCalled();
+            expect(mockScene.add.rectangle).toHaveBeenCalled();
             expect(layout.createPaneBackground).toHaveBeenCalled();
             expect(buttons.createMenuButtons).toHaveBeenCalled();
         });
