@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+source /etc/profile
 npm install --force
 #python build-scripts/licensechecker/licensechecker.py
 npm run test
