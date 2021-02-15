@@ -44,7 +44,6 @@ describe("shop menu buttons", () => {
         stack: jest.fn(),
         events: { once: jest.fn() },
         config: {
-            assetKeys: { buttonIcon: "mockIconKey", buttonBackground: "mockBackgroundKey" },
             menu: { buttonsRight: true },
         },
         layout: {
@@ -82,7 +81,7 @@ describe("shop menu buttons", () => {
                 channel: "shop",
                 group: "mockSceneKey",
                 id: "shop_menu_button",
-                key: "mockBackgroundKey",
+                key: "menuButtonBackground",
                 scene: "shop",
             };
             expect(mockScene.add.gelButton.mock.calls[0][2]).toStrictEqual(expectedConfig);
@@ -122,7 +121,7 @@ describe("shop menu buttons", () => {
                 channel: "shop",
                 group: "mockSceneKey",
                 id: "tx_buy_button",
-                key: "mockBackgroundKey",
+                key: "menuButtonBackground",
                 scene: "shop",
             };
             expect(mockScene.add.gelButton.mock.calls[0][2]).toStrictEqual(expectedConfig);
