@@ -7,7 +7,7 @@
             text: "Shop Screen",
         },
     ],
-    assetPrefix: "debug-shop",
+    assetPrefix: "debug-shop", // override generally only used for debug screens. Remove for production screens.
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "debug-shop.magicShop", x: 0, y: 0 }],
