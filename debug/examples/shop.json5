@@ -1,8 +1,8 @@
 {
-    assetPrefix: "shop", //override generally only used for debug screens. Remove for production screens TODO can we switch the debug shop to use "shop-debug." ?
+    assetPrefix: "debug-shop", //override generally only used for debug screens. Remove for production screens TODO can we switch the debug shop to use "shop-debug." ?
     music: "home.backgroundMusic",
     background: {
-        items: [{ key: "shop.magicShop", x: 0, y: 0 }],
+        items: [{ key: "debug-shop.magicShop", x: 0, y: 0 }],
     },
     styleDefaults: {
         fontFamily: "ReithSans",
@@ -84,11 +84,6 @@
         confirm: "halfViewBackground",
     },
     assetKeys: {
-        scrollbar: "scrollbar",
-        scrollbarHandle: "scrollbarHandle",
-        itemBackground: "itemBackground",
-        buttonBackground: "menuButtonBackground",
-        buttonIcon: "menuButtonIcon",
         currency: "currencyIcon",
     },
     overlay: {

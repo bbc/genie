@@ -16,7 +16,7 @@ const createGelButton = (scene, item, title, state) => {
         gameButton: true,
         group: scene.scene.key,
         id,
-        key: config.assetKeys.itemBackground,
+        key: "itemBackground",
         scene: scene.assetPrefix,
         scrollable: true,
     };

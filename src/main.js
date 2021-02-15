@@ -99,12 +99,6 @@ const screens = {
             home: "home",
         },
     },
-    shop: {
-        scene: Shop,
-        routes: {
-            home: "home",
-        },
-    },
     // Overlays
     "how-to-play": {
         scene: HowToPlay,
