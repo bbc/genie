@@ -8,7 +8,6 @@
 import * as shopLayout from "../../../src/components/shop/shop-layout.js";
 
 let mockLayout;
-let mockPane;
 let mockContainer;
 const mockSafeArea = { y: -150, width: 600 };
 const mockPadding = 10;
@@ -31,7 +30,6 @@ describe("shop element scaling functions", () => {
             y: 0,
             visible: true,
         };
-        mockPane = { container: mockContainer, buttons: [] };
     });
 
     afterEach(() => jest.clearAllMocks());

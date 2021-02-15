@@ -5,7 +5,7 @@
  * @license Apache-2.0
  */
 import { createMenuButtons, resizeGelButtons } from "./menu-buttons.js";
-import { getInnerRectBounds, createRect, getSafeArea, createPaneBackground } from "./shop-layout.js";
+import { getInnerRectBounds, getSafeArea, createPaneBackground } from "./shop-layout.js";
 
 export const createMenu = scene => {
     const menu = { config: scene.config, container: scene.add.container() };

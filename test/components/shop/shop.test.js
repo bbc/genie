@@ -50,8 +50,7 @@ describe("Shop", () => {
     const mockSafeArea = { foo: "bar " };
     const mockButtonConfig = { channel: "foo", key: "bar", action: "baz" };
     const mockMenu = { setVisible: jest.fn(), resize: jest.fn() };
-    const mockConfirmContainer = { removeAll: jest.fn(), destroy: jest.fn() };
-    const mockConfirm = { container: mockConfirmContainer, setVisible: jest.fn(), resize: jest.fn() }; // need these?
+    const mockConfirm = { container: { foo: "bar" }, setVisible: jest.fn(), resize: jest.fn(), destroy: jest.fn() };
     const mockTitles = { setTitleText: jest.fn(), setScale: jest.fn(), setPosition: jest.fn() };
 
     beforeEach(() => {
@@ -169,15 +168,21 @@ describe("Shop", () => {
             expect(mockScrollableList.setVisible).toHaveBeenCalledTimes(2);
         });
 
-        describe("sets up resize", () => {
-            test("adds a callback to onScaleChange that updates scale and position for UI elems", () => {
+        describe("adds a callback to onScaleChange ", () => {
+            beforeEach(() => {
+                shopScreen.panes.confirm = { container: { visible: true }, resize: jest.fn() };
                 const onScaleChangeCallback = scaler.onScaleChange.add.mock.calls[0][0];
                 onScaleChangeCallback();
+            });
 
+            test("that updates scale and position for UI elems", () => {
                 expect(shopScreen.title.setScale).toHaveBeenCalled();
                 expect(shopScreen.title.setPosition).toHaveBeenCalled();
                 expect(shopScreen.balance.setScale).toHaveBeenCalled();
                 expect(shopScreen.balance.setPosition).toHaveBeenCalled();
+            });
+            test("resizes the confirm pane, if visible", () => {
+                expect(shopScreen.panes.confirm.resize).toHaveBeenCalled();
             });
             test("unsubscribes on shutdown", () => {
                 expect(shopScreen.events.once).toHaveBeenCalledWith("shutdown", "foo");
@@ -231,10 +236,10 @@ describe("Shop", () => {
                 expect(shopScreen.paneStack).toStrictEqual(["shop"]);
                 expect(shopScreen.panes.top.setVisible).toHaveBeenCalled();
             });
-            test("destroys the confirm pane, if present", () => {
+            test("calls destroy on the confirm pane if it is present", () => {
                 shopScreen.panes.confirm = mockConfirm;
                 shopScreen.back();
-                expect(mockConfirm.container.destroy).toHaveBeenCalled();
+                expect(mockConfirm.destroy).toHaveBeenCalled();
             });
         });
         describe("back() on last item in pane stack", () => {
@@ -248,24 +253,6 @@ describe("Shop", () => {
                 expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
                 expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
             });
-        });
-    });
-
-    describe("destroyConfirm()", () => {
-        beforeEach(() => {
-            shopScreen.create();
-            shopScreen.panes.confirm = mockConfirm;
-            shopScreen.destroyConfirm();
-        });
-
-        test("removes and destroys all objects from the confirm container", () => {
-            expect(mockConfirmContainer.removeAll).toHaveBeenCalled();
-        });
-        test("destroys the container", () => {
-            expect(mockConfirmContainer.destroy).toHaveBeenCalled();
-        });
-        test("dumps the confirm key from .panes", () => {
-            expect(shopScreen.panes.confirm).toBe(undefined);
         });
     });
 });

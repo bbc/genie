@@ -11,7 +11,6 @@ import { getMetrics, onScaleChange } from "../../core/scaler.js";
 import { createTitle } from "./shop-titles.js";
 import { createBalance } from "./balance-ui.js";
 import { createMenu } from "./menu.js";
-import { createConfirm } from "./confirm.js";
 import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 import { eventBus } from "../../core/event-bus.js";
 import * as a11y from "../../core/accessibility/accessibility-layer.js";
@@ -55,18 +54,6 @@ export class Shop extends Screen {
         this.resize();
     }
 
-    destroyConfirm() {
-        this.panes.confirm.container.removeAll(true);
-        this.panes.confirm.container.destroy();
-        delete this.panes.confirm;
-    }
-
-    resizeConfirm() {
-        const { title, item } = this.panes.confirm.params;
-        this.destroyConfirm();
-        this.panes.confirm = createConfirm(this, title, item);
-    }
-
     stack(pane) {
         this.paneStack.push(pane);
         this.setVisiblePane(pane);
@@ -75,7 +62,7 @@ export class Shop extends Screen {
     }
 
     back() {
-        this.panes.confirm && this.destroyConfirm();
+        this.panes.confirm?.container && this.panes.confirm.destroy();
         this.paneStack.pop();
         if (!this.paneStack.length) {
             this.setVisiblePane("top");
@@ -110,7 +97,7 @@ export class Shop extends Screen {
         const metrics = getMetrics();
         this.panes.top.resize();
         this.panes.shop.reset();
-        this.panes.confirm && this.resizeConfirm();
+        this.panes.confirm?.container?.visible && this.panes.confirm.resize();
         const safeArea = getSafeArea(this.layout);
         this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));
         this.title.setPosition(0, getYPos(metrics, safeArea));
