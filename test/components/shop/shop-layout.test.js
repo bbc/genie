@@ -109,38 +109,6 @@ describe("shop element scaling functions", () => {
         });
     });
 
-    describe("resize()", () => {
-        const newBounds = { width: 600, height: 50, x: 0, y: 10 };
-        beforeEach(() => {
-            shopLayout.resize(mockPane)(newBounds);
-        });
-
-        test("sets an appropriate scale and offset on the container", () => {
-            expect(mockContainer.setScale).toHaveBeenCalledWith(2, 0.5);
-            expect(mockContainer.setY).toHaveBeenCalledWith(10);
-        });
-    });
-
-    describe("setVisible", () => {
-        let mockButton;
-        beforeEach(() => {
-            mockButton = { visible: false, input: { enabled: false }, accessibleElement: { update: jest.fn() } };
-            mockPane.buttons.push(mockButton, mockButton);
-            shopLayout.setVisible(mockPane)(true);
-        });
-
-        test("sets pane's visibility flag", () => {
-            expect(mockPane.visible).toBe(true);
-        });
-        test("sets each button's visibility and input.enabled flags", () => {
-            expect(mockButton.visible).toBe(true);
-            expect(mockButton.input.enabled).toBe(true);
-        });
-        test("updates each button's accessible element", () => {
-            expect(mockButton.accessibleElement.update).toHaveBeenCalledTimes(2);
-        });
-    });
-
     describe("getPaneBackgroundKey()", () => {
         let mockScene;
         const { getPaneBackgroundKey } = shopLayout;
@@ -198,6 +166,14 @@ describe("shop element scaling functions", () => {
             mockScene.config.backgrounds = {};
             shopLayout.createPaneBackground(mockScene, mockBounds, "shop");
             expect(mockScene.add.rectangle).toHaveBeenCalled();
+        });
+    });
+
+    describe("createRect", () => {
+        test("creates a transparent rect with the supplied bounds", () => {
+            const mockScene = { add: { rectangle: jest.fn() } };
+            shopLayout.createRect(mockScene, { x: 0, y: 0, width: 100, height: 100 }, 0x000000);
+            expect(mockScene.add.rectangle).toHaveBeenCalledWith(0, 0, 100, 100, 0x00000, 0);
         });
     });
 });

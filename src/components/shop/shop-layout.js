@@ -30,27 +30,27 @@ export const getScaleFactor = args => {
     return fixedWidth ? scaleFactorY : Math.min(scaleFactorY, scaleFactorX);
 };
 
-export const setVisible = container => isVisible => {
-    container.visible = isVisible;
-    const buttons = container.buttons;
-    buttons.forEach(button => {
-        button.visible = isVisible;
-        button.input.enabled = container.visible;
-        button.accessibleElement.update();
-    });
-};
+// export const setVisible = container => isVisible => {
+//     container.visible = isVisible;
+//     const buttons = container.buttons;
+//     buttons.forEach(button => {
+//         button.visible = isVisible;
+//         button.input.enabled = container.visible;
+//         button.accessibleElement.update();
+//     });
+// };
 
-export const resize = pane => bounds => {
-    const containerBounds = pane.container.getBounds();
+// export const resize = pane => bounds => {
+//     const containerBounds = pane.container.getBounds();
 
-    const scaleX = (bounds.width / containerBounds.width) * pane.container.scaleX;
-    const scaleY = (bounds.height / containerBounds.height) * pane.container.scaleY;
-    pane.container.setScale(scaleX, scaleY);
+//     const scaleX = (bounds.width / containerBounds.width) * pane.container.scaleX;
+//     const scaleY = (bounds.height / containerBounds.height) * pane.container.scaleY;
+//     pane.container.setScale(scaleX, scaleY);
 
-    const yOffset = pane.container.getBounds().y - bounds.y;
-    pane.container.setY(pane.container.y - yOffset);
-    resizeGelButtons(pane);
-};
+//     const yOffset = pane.container.getBounds().y - bounds.y;
+//     pane.container.setY(pane.container.y - yOffset);
+//     resizeGelButtons(pane);
+// };
 
 export const getHalfRectBounds = (menuBounds, isOnRight) => {
     const halfWidth = menuBounds.width / 2;

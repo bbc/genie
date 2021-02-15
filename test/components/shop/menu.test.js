@@ -15,9 +15,12 @@ describe("shop menu", () => {
         setY: jest.fn(),
         setScale: jest.fn(),
         getBounds: jest.fn().mockReturnValue({ y: 0 }),
+        removeAll: jest.fn(),
+        destroy: jest.fn(),
         scaleX: 1,
         scaleY: 1,
         y: 200,
+        visible: true,
     };
     const mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
     const mockImage = { setScale: jest.fn() };
@@ -38,7 +41,13 @@ describe("shop menu", () => {
             getSafeArea: jest.fn(() => mockSafeArea),
         },
     };
-    const mockGelButton = { input: { enabled: true }, visible: true, accessibleElement: { update: jest.fn() } };
+    const mockGelButton = {
+        input: { enabled: true },
+        visible: true,
+        accessibleElement: { update: jest.fn() },
+        removeAll: jest.fn(),
+        destroy: jest.fn(),
+    };
     const mockGelButtons = [mockGelButton, mockGelButton];
     buttons.createMenuButtons = jest.fn().mockReturnValue(mockGelButtons);
 
@@ -51,6 +60,9 @@ describe("shop menu", () => {
     const mockResize = jest.fn();
     layout.resize = jest.fn(() => mockResize);
 
+    layout.createRect = jest.fn();
+    layout.createPaneBackground = jest.fn();
+
     beforeEach(() => (menu = createMenu(mockScene)));
     afterEach(() => jest.clearAllMocks());
 
@@ -61,20 +73,50 @@ describe("shop menu", () => {
         test("with stored config", () => {
             expect(menu.config).toStrictEqual(mockScene.config);
         });
-        test("with a setVisible() from setVisible layout fn", () => {
-            expect(menu.setVisible).toBe(mockSetVisible);
-        });
-        test("with a resize() from resize layout function", () => {
-            expect(menu.resize).toBe(mockResize);
-        });
         test("with a rect added", () => {
-            expect(mockScene.add.rectangle).toHaveBeenCalledTimes(2);
+            expect(layout.createRect).toHaveBeenCalledTimes(1);
         });
         test("with a buttons property from createGelButtons()", () => {
             expect(menu.buttons).toBe(mockGelButtons);
         });
         test("calls setY on the container with an appropriate Y offset", () => {
             expect(menu.container.setY).toHaveBeenCalledWith(200);
+        });
+    });
+
+    describe("setVisible", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+            menu.setVisible(false);
+        });
+
+        test("sets visibility on the container", () => {
+            expect(mockContainer.visible).toBe(false);
+        });
+
+        test("sets visibility on each gel button", () => {
+            expect(mockGelButton.visible).toBe(false);
+        });
+        test("sets input.enabled on each gel button and updates the a11y elem", () => {
+            expect(mockGelButton.input.enabled).toBe(false);
+            expect(mockGelButton.accessibleElement.update).toHaveBeenCalledTimes(2);
+        });
+    });
+    describe("resize", () => {
+        beforeEach(() => {
+            jest.clearAllMocks();
+            menu.resize();
+        });
+
+        test("removes the container contents and destroys the container", () => {
+            expect(mockContainer.removeAll).toHaveBeenCalledWith(true);
+            expect(mockContainer.destroy).toHaveBeenCalled();
+        });
+        test("creates a new container and repopulates it", () => {
+            expect(mockScene.add.container).toHaveBeenCalled();
+            expect(layout.createRect).toHaveBeenCalled();
+            expect(layout.createPaneBackground).toHaveBeenCalled();
+            expect(buttons.createMenuButtons).toHaveBeenCalled();
         });
     });
 });

@@ -15,34 +15,41 @@ import { collections } from "../../core/collections.js";
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
     container.add(
         [
-            addText(scene, getX(innerBounds.x, scene.config), promptY(bounds), promptText, scene.config).setOrigin(
-                0.5,
-                0.5,
-            ),
+            addText(
+                scene,
+                getButtonX(innerBounds.x, scene.config),
+                promptY(bounds),
+                promptText,
+                scene.config,
+            ).setOrigin(0.5, 0.5),
             createPaneBackground(scene, bounds, "confirm"),
         ].concat(itemView(scene, item, scene.config, bounds)),
     );
 
 const createBuyElems = (scene, container, item, innerBounds, bounds) =>
     container.add([
-        addText(scene, getX(innerBounds.x + 28, scene.config), currencyY(bounds), item.price, scene.config).setOrigin(
-            0.5,
-        ),
+        addText(
+            scene,
+            getButtonX(innerBounds.x + 28, scene.config),
+            currencyY(bounds),
+            item.price,
+            scene.config,
+        ).setOrigin(0.5),
         scene.add.image(
-            getX(innerBounds.x - 20, scene.config),
+            getButtonX(innerBounds.x - 20, scene.config),
             currencyY(bounds),
             `${scene.config.assetPrefix}.${scene.config.assetKeys.currency}`,
         ),
     ]);
 
-const resizeConfirmButton = (scene, button, idx, bounds) => {
+const sizeConfirmButton = (scene, button, idx, bounds) => {
     button.setY(CAMERA_Y + (idx * bounds.height) / 2);
-    button.setX(CAMERA_X + confirmButtonX(scene.config, bounds));
+    button.setX(CAMERA_X + getButtonX(bounds.x, scene.config));
     button.setScale(bounds.width / button.width);
 };
 
-const resizeConfirmButtons = (scene, confirmButtons, bounds) =>
-    confirmButtons.forEach((button, idx) => resizeConfirmButton(scene, button, idx, bounds));
+const sizeConfirmButtons = (scene, confirmButtons, bounds) =>
+    confirmButtons.forEach((button, idx) => sizeConfirmButton(scene, button, idx, bounds));
 
 const disableActionButton = button => {
     Object.assign(button, { alpha: 0.25, tint: 0xff0000 });
@@ -62,7 +69,7 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
     container.add(confirmButtons);
     ((action === "buy" && !canBuyItem(scene, item)) || (action === "equip" && !isEquippable(item))) &&
         disableActionButton(confirmButtons[0]);
-    resizeConfirmButtons(scene, confirmButtons, innerBounds);
+    sizeConfirmButtons(scene, confirmButtons, innerBounds);
 };
 
 export const createConfirm = (scene, title, item) => {
@@ -188,7 +195,7 @@ const getItemBlurb = item => (item ? item.longDescription : "PH");
 const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
 const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
 const assetKey = item => (item ? item.icon : "shop.itemIcon"); //TODO shouldn't use "shop" key as may be different
-const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
+const getButtonX = (x, config) => (config.menu.buttonsRight ? x : -x);
 const imageY = bounds => -percentOfHeight(bounds, 25);
 const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
 const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
@@ -203,4 +210,3 @@ const getOffsetBounds = (outerBounds, innerBounds) => ({
 });
 const imageX = (config, bounds) =>
     config.menu.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
-const confirmButtonX = (config, bounds) => (config.menu.buttonsRight ? bounds.x : -bounds.x);
