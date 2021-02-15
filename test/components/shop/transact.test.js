@@ -129,6 +129,14 @@ describe("Shop Transactions", () => {
         });
     });
 
+    describe("using an item", () => {
+        test("item's quantity is reduced by one in the inventory collection", () => {
+            const expectedItem = { ...mockInventoryItem, qty: mockInventoryItem.qty - 1 };
+            transact.use(mockScene, mockInventoryItem);
+            expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
+        });
+    });
+
     describe("getBalanceItem", () => {
         test("returns the currency item", () => {
             expect(transact.getBalanceItem(mockScene)).toBe(mockCurrencyItem);

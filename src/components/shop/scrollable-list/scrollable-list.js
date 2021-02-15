@@ -76,12 +76,8 @@ const createTable = (scene, title, parent) => {
 };
 
 const showConfirmation = (scene, title, item) => {
-    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item.id);
-    const action = title === "shop" ? "buy" : inventoryItem?.state === "equipped" ? "unequip" : "equip";
-    scene.panes[title].setVisible(false);
-    scene.paneStack.push("confirm");
-    scene.panes.confirm = createConfirm(scene, title, action, item);
-    scene.title.setTitleText(fp.startCase(action));
+    scene.panes.confirm = createConfirm(scene, title, item);
+    scene.stack("confirm");
 };
 
 const createItem = (scene, item, title, parent) => {
@@ -145,6 +141,7 @@ const updatePanel = panel => {
     const key = parent.scene.config.paneCollections[panel.name];
     const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
     const items = getPanelItems(panel);
+    parent.scene.title.setTitleText(panel.name);
 
     shouldPanelListUpdate(collection, items)
         ? updatePanelList(panel)
@@ -164,7 +161,12 @@ const updatePanelList = panel => {
 
 const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items") ?? [];
 
-const getFilteredCollection = (collection, filter) => (filter ? collection.filter(filter) : collection);
+const getFilteredCollection = (collection, filter) => {
+    const baseCollection = filter ? collection.filter(filter) : collection;
+    return baseCollection.filter(removeZeroQty);
+};
+
+const removeZeroQty = item => item.slot || item.qty > 0;
 
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, title, filter) {

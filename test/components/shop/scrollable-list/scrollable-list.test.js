@@ -6,6 +6,7 @@
  */
 import { ScrollableList } from "../../../../src/components/shop/scrollable-list/scrollable-list.js";
 import * as buttons from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
+import * as confirm from "../../../../src/components/shop/confirm.js";
 import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
@@ -33,7 +34,7 @@ buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
 scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
 const title = "shop";
-const initState = ["cta", "consumable", "unavailable"];
+const initState = ["cta", "equippable", "unavailable"];
 
 describe("Scrollable List", () => {
     let collectionGetAll;
@@ -47,7 +48,13 @@ describe("Scrollable List", () => {
 
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
-        mockItem = { id: "someItem", name: "someItemName", title: "title", description: "description" };
+        mockItem = {
+            id: "someItem",
+            name: "someItemName",
+            title: "title",
+            description: "description",
+            slot: "someSlot",
+        };
         collectionGetAll = [mockItem];
         mockCollection = { getAll: jest.fn(() => collectionGetAll), get: () => mockCollection };
         collections.get = jest.fn().mockReturnValue(mockCollection);
@@ -120,6 +127,7 @@ describe("Scrollable List", () => {
             },
             scale: { on: jest.fn(), removeListener: jest.fn() },
             scene: { key: "shop" },
+            stack: jest.fn(),
             sys: {
                 queueDepthSort: jest.fn(),
                 displayList: {
@@ -161,6 +169,14 @@ describe("Scrollable List", () => {
                 test("with items from a collection", () => {
                     expect(collections.get).toHaveBeenCalledWith("testCatalogue");
                     expect(mockCollection.getAll).toHaveBeenCalled();
+                    expect(collectionGetAll.length).toBe(1);
+                    expect(buttons.createGelButton).toHaveBeenCalledTimes(1);
+                });
+                test("with zero-quantity items filtered out", () => {
+                    jest.clearAllMocks();
+                    collectionGetAll = [mockItem, mockItem, { mock: "otherItem", qty: 0 }];
+                    new ScrollableList(mockScene, title);
+                    expect(buttons.createGelButton).toHaveBeenCalledTimes(2);
                 });
 
                 test("no items table added if the catalogue collection is empty", () => {
@@ -212,6 +228,31 @@ describe("Scrollable List", () => {
                     });
                     expect(mockScene.rexUI.add.gridSizer).toHaveBeenCalled();
                     expect(mockSizer.add).toHaveBeenCalledWith(mockGridSizer, 1, "center", 0, true);
+                });
+            });
+
+            describe("callbacks on labels", () => {
+                let callback;
+
+                confirm.createConfirm = jest.fn();
+
+                beforeEach(() => {
+                    callback = mockLabel.on.mock.calls[0][1];
+                });
+
+                test("are set on pointerup", () => {
+                    expect(mockLabel.on.mock.calls[0][0]).toBe("pointerup");
+                });
+                test("creates a confirm pane and puts it on shop's stack", () => {
+                    callback();
+                    expect(confirm.createConfirm).toHaveBeenCalledWith(mockScene, "shop", mockItem);
+                    expect(mockScene.stack).toHaveBeenCalledWith("confirm");
+                });
+                test("don't fire if the label is scrolled off the panel", () => {
+                    jest.clearAllMocks();
+                    mockScrollablePanel.isInTouching = jest.fn(() => false);
+                    callback("mockPointer");
+                    expect(confirm.createConfirm).not.toHaveBeenCalled();
                 });
             });
         });
@@ -340,7 +381,7 @@ describe("Scrollable List", () => {
     });
     describe("panel update on setVisible(true)", () => {
         let list;
-        const otherItem = { id: "someOtherItem", name: "someOtherItemName" };
+        const otherItem = { id: "someOtherItem", name: "someOtherItemName", slot: "someSlot" };
 
         beforeEach(() => {
             list = new ScrollableList(mockScene, "shop");

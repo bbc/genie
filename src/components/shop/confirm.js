@@ -9,7 +9,8 @@ import { getInnerRectBounds, getSafeArea, createPaneBackground } from "./shop-la
 import { addText } from "../../core/layout/text-elem.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import { buy, equip, unequip, getBalanceItem } from "./transact.js";
+import { buy, equip, unequip, use, getBalanceItem } from "./transact.js";
+import { collections } from "../../core/collections.js";
 
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
     container.add(
@@ -25,7 +26,6 @@ const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
 const createBuyElems = (scene, container, item, innerBounds, bounds) =>
     container.add([
         addText(scene, getX(innerBounds.x + 28, scene.config), currencyY(bounds), item.price, scene.config).setOrigin(
-            0.5,
             0.5,
         ),
         scene.add.image(
@@ -65,17 +65,34 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
     resizeConfirmButtons(scene, confirmButtons, innerBounds);
 };
 
-export const createConfirm = (scene, title, action, item) => {
+export const createConfirm = (scene, title, item) => {
+    const action = getAction(scene, title, item);
+    scene.title.setTitleText(fp.startCase(action));
     const bounds = getSafeArea(scene.layout);
     const container = scene.add.container();
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
     const yOffset = bounds.height / 2 + bounds.y;
     container.setY(yOffset);
-    createElems(scene, container, getPromptText(scene, action, item), item, innerBounds, bounds);
-    action === "buy" && itemIsInStock(item) && createBuyElems(scene, container, item, innerBounds, bounds);
+    createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
+    action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
     addConfirmButtons(scene, container, innerBounds, title, action, item);
     return container;
 };
+
+const getAction = (scene, title, item) => {
+    return title === "shop" ? "buy" : getInventoryAction(scene, item);
+};
+
+const getInventoryAction = (scene, item) => {
+    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item?.id);
+    return inferAction(inventoryItem);
+};
+
+const inferAction = fp.cond([
+    [i => Boolean(!i.slot), () => "use"],
+    [i => i.state === "equipped", () => "unequip"],
+    [i => i.state === "purchased", () => "equip"],
+]);
 
 const destroyContainer = container => {
     container.removeAll(true);
@@ -91,11 +108,16 @@ const closeConfirm = (scene, container, title) => {
 };
 
 const handleActionClick = (scene, container, title, action, item) => {
-    action === "buy" && buy(scene, item);
-    action === "equip" && equip(scene, item);
-    action === "unequip" && unequip(scene, item);
+    doAction({ scene, action, item });
     closeConfirm(scene, container, title);
 };
+
+const doAction = fp.cond([
+    [args => args.action === "buy", args => buy(args.scene, args.item)],
+    [args => args.action === "equip", args => equip(args.scene, args.item)],
+    [args => args.action === "unequip", args => unequip(args.scene, args.item)],
+    [args => args.action === "use", args => use(args.scene, args.item)],
+]);
 
 const itemView = (scene, item, config, bounds) =>
     config.confirm.detailView
@@ -128,6 +150,32 @@ const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY =
     image.memoisedScale = absScale;
 };
 
+const getEquipPromptText = (scene, action, item) =>
+    isEquippable(item) ? scene.config.confirm.prompt[action].legal : scene.config.confirm.prompt[action].illegal;
+
+const getUnequipPromptText = scene => scene.config.confirm.prompt.unequip;
+
+const getUsePromptText = scene => scene.config.confirm.prompt.use;
+
+const getBuyPromptText = (scene, action, item) =>
+    canAffordItem(scene, item)
+        ? itemIsInStock(scene, item)
+            ? scene.config.confirm.prompt[action].legal
+            : scene.config.confirm.prompt[action].unavailable
+        : scene.config.confirm.prompt[action].illegal;
+
+const getPromptText = fp.cond([
+    [args => args.action === "buy", args => getBuyPromptText(args.scene, args.action, args.item)],
+    [args => args.action === "equip", args => getEquipPromptText(args.scene, args.action, args.item)],
+    [args => args.action === "unequip", args => getUnequipPromptText(args.scene)],
+    [args => args.action === "use", args => getUsePromptText(args.scene)],
+]);
+
+const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(scene, item);
+const canAffordItem = (scene, item) => item && getBalanceItem(scene).qty >= item.price;
+const isEquippable = item => item && item.slot;
+const itemIsInStock = (scene, item) => item && collections.get(scene.config.paneCollections.shop).get(item.id).qty > 0;
+
 const getItemTitle = item => (item ? item.title : "PH");
 const getItemDetail = item => (item ? item.description : "PH");
 const getItemBlurb = item => (item ? item.longDescription : "PH");
@@ -136,24 +184,6 @@ const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 
 const assetKey = item => (item ? item.icon : "shop.itemIcon"); //TODO shouldn't use "shop" key as may be different
 const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
 const imageY = bounds => -percentOfHeight(bounds, 25);
-const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(item);
-const canAffordItem = (scene, item) => getBalanceItem(scene).qty >= item.price;
-const isEquippable = item => item.slot;
-const itemIsInStock = item => item.qty > 0;
-const getEquipPromptText = (scene, action, item) =>
-    isEquippable(item) ? scene.config.confirm.prompt[action].legal : scene.config.confirm.prompt[action].illegal;
-const getBuyPromptText = (scene, action, item) =>
-    canAffordItem(scene, item)
-        ? itemIsInStock(item)
-            ? scene.config.confirm.prompt[action].legal
-            : scene.config.confirm.prompt[action].unavailable
-        : scene.config.confirm.prompt[action].illegal;
-const getPromptText = (scene, action, item) =>
-    action === "buy"
-        ? getBuyPromptText(scene, action, item)
-        : action === "equip"
-        ? getEquipPromptText(scene, action, item)
-        : scene.config.confirm.prompt[action];
 const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
 const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
 const titleY = bounds => -percentOfHeight(bounds, 4);
@@ -167,5 +197,4 @@ const getOffsetBounds = (outerBounds, innerBounds) => ({
 });
 const imageX = (config, bounds) =>
     config.menu.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
-
 const confirmButtonX = (config, bounds) => (config.menu.buttonsRight ? bounds.x : -bounds.x);
