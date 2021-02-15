@@ -21,7 +21,7 @@ const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
                 promptY(bounds),
                 promptText,
                 scene.config,
-            ).setOrigin(0.5, 0.5),
+            ).setOrigin(0.5),
             createPaneBackground(scene, bounds, "confirm"),
         ].concat(itemView(scene, item, scene.config, bounds)),
     );
