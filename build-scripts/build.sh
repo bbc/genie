@@ -21,6 +21,6 @@ if [ $? -eq 0 ]
     else
         echo "The script failed" >&2
         node cypress/support/createReports.js
-        $UPLOADTOS3 --noLatest
+        /usr/libexec/s3uploadtest nolatest
         exit 1
 fi
