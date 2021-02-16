@@ -5,7 +5,7 @@
  */
 import { addResumeSafariAudioContextEvent } from "../../src/core/safari-audio.js";
 
-describe("Startup", () => {
+describe("Safari Audio Context", () => {
     let mockGame;
 
     beforeEach(() => {
