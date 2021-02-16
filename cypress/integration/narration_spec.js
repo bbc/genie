@@ -14,7 +14,7 @@ describe("The Genie narration page", () => {
     });
 
     it("can skip the narration page", () => {
-        cy.genieClick("#home__BROKE"); /* "home__debug" -> intentionally fail */
+        cy.genieClick("#home__debug"); /* "home__debug" -> intentionally fail */
         cy.genieClick("#debug__debug-narrative");
         cy.genieClick("#debug-narrative__skip");
         cy.get("#debug__debug-narrative", { timeout: 20000 }).should("exist");

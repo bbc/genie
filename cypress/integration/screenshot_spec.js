@@ -20,20 +20,20 @@ describe("Takes screenshots on multiple viewports", () => {
             cy.get("#home__play", { timeout: 40000 }).should("exist");
             cy.get(".data-notice").click();
             cy.safeArea("#home__play");
-            cy.get("#game-holder").screenshot(`[${size}] Home Screen`, { capture: "viewport", timeout: "60000" });
+            cy.get("#game-holder").screenshot(`[${size}] Home Screen`, { capture: "viewport", timeout: "20000" });
             cy.genieClick("#home__how-to-play");
             cy.safeArea("#how-to-play__back");
             cy.get("#game-holder").screenshot(`[${size}] How To Play Screen`, {
                 capture: "viewport",
-                timeout: "60000",
+                timeout: "20000",
             });
             cy.genieClick("#how-to-play__back");
             cy.genieClick("#home__play");
             cy.safeArea("#narrative__continue");
-            cy.get("#game-holder").screenshot(`[${size}] Narrative Screen`, { capture: "viewport", timeout: "60000" });
+            cy.get("#game-holder").screenshot(`[${size}] Narrative Screen`, { capture: "viewport", timeout: "20000" });
             cy.genieClick("#narrative__pause");
             cy.safeArea("#pause__play");
-            cy.get("#game-holder").screenshot(`[${size}] Pause Screen`, { capture: "viewport", timeout: "60000" });
+            cy.get("#game-holder").screenshot(`[${size}] Pause Screen`, { capture: "viewport", timeout: "20000" });
             cy.genieClick("#pause__play");
             cy.genieClick("#narrative__continue");
             cy.genieClick("#narrative__continue");
@@ -42,12 +42,12 @@ describe("Takes screenshots on multiple viewports", () => {
             cy.safeArea("#level-select__1");
             cy.get("#game-holder").screenshot(`[${size}] Level Select Screen`, {
                 capture: "viewport",
-                timeout: "60000",
+                timeout: "20000",
             });
             cy.genieClick("#level-select__1");
             cy.genieClick("#game__4");
             cy.safeArea("#results__continue");
-            cy.get("#game-holder").screenshot(`[${size}] Results Screen`, { capture: "viewport", timeout: "60000" });
+            cy.get("#game-holder").screenshot(`[${size}] Results Screen`, { capture: "viewport", timeout: "20000" });
         });
 
         it(`screenshots the single item select screen on a ${size} viewport`, () => {
@@ -64,7 +64,7 @@ describe("Takes screenshots on multiple viewports", () => {
             cy.safeArea("#debug-select-1__mary");
             cy.get("#game-holder").screenshot(`[${size}] Select Screen Single Item`, {
                 capture: "viewport",
-                timeout: "60000",
+                timeout: "20000",
             });
         });
 
@@ -82,20 +82,20 @@ describe("Takes screenshots on multiple viewports", () => {
             cy.safeArea("#debug-shop-demo-shop__shop_menu_button");
             cy.get("#game-holder").screenshot(`[${size}] Shop front Screen `, {
                 capture: "viewport",
-                timeout: "60000",
+                timeout: "20000",
             });
             cy.genieClick("#debug-shop-demo-shop__shop_menu_button");
             cy.safeArea("#debug-shop-demo-shop__back");
             cy.get("#game-holder").screenshot(`[${size}] Shop management Screen `, {
                 capture: "viewport",
-                timeout: "60000",
+                timeout: "20000",
             });
             cy.genieClick("#debug-shop-demo-shop__back");
             cy.genieClick("#debug-shop-demo-shop__shop_menu_button");
             cy.safeArea("#debug-shop-demo-shop__back");
             cy.get("#game-holder").screenshot(`[${size}] Shop store Screen `, {
                 capture: "viewport",
-                timeout: "60000",
+                timeout: "20000",
             });
         });
     });
