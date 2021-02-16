@@ -71,11 +71,14 @@ const getButtonState = (scene, item, title) => {
     states.push(isButtonCta ? "actioned" : "cta");
     states.push(isItemEquippable(item) ? "equippable" : "consumable");
     states.push(isItemInStock(item) ? "available" : "unavailable");
+    states.push(isItemLocked(item) ? "locked" : "unlocked");
+    console.log("BEEBUG: item, states:", item, states);
     return states;
 };
 
 const isItemEquippable = item => item.slot;
 const isItemInStock = item => item?.qty > 0;
+const isItemLocked = item => Boolean(item.state === "locked");
 
 const updateOverlays = button => {
     button.overlays.unsetAll();

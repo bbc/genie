@@ -130,6 +130,22 @@
                     activeStates: ["available"],
                 },
                 {
+                    type: "text", // change this to be padlock
+                    name: "locked",
+                    value: "LOCKED",
+                    position: { align: "right", offsetX: 44, offsetY: -10 },
+                    styles: { fontSize: "14px" },
+                    activeStates: ["locked"],
+                },
+                {
+                    type: "text",
+                    name: "unlockHint",
+                    value: "${hint}",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "14px" },
+                    activeStates: ["locked"],
+                },
+                {
                     type: "image",
                     name: "currency",
                     assetKey: "shop.currency",
@@ -150,7 +166,7 @@
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeStates: ["equippable"],
+                    activeStates: ["equippable", "unlocked"],
                 },
                 {
                     type: "text",
@@ -158,7 +174,7 @@
                     value: "${qty} in stock",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeStates: ["consumable"],
+                    activeStates: ["consumable", "unlocked"],
                 },
             ],
             manage: [
