@@ -7,33 +7,28 @@
 import { overlays1Wide } from "../../../../src/components/shop/scrollable-list/button-overlays.js";
 import * as text from "../../../../src/core/layout/text-elem.js";
 
-const mockImage = { setScale: jest.fn(), width: 100 };
-const mockScene = {
-    add: {
-        image: jest.fn().mockReturnValue(mockImage),
-    },
-    config: {
-        assetPrefix: "test",
-    },
-    styleDefaults: { some: "default" },
-};
+let mockScene;
+let mockGelButton;
+let mockItem;
 
-const mockItem = {
-    name: "someItemName",
-    description: "someItemDescription",
-    price: 42,
-    icon: "test.itemIcon",
-};
+// const mockItem = {
+//     name: "someItemName",
+//     description: "someItemDescription",
+//     price: 42,
+//     icon: "test.itemIcon",
+//     state: "locked",
+// };
 
-const mockGelButton = {
-    overlays: {
-        set: jest.fn(),
-    },
-    width: 200,
-    scene: mockScene,
-    item: mockItem,
-};
+// const mockGelButton = {
+//     overlays: {
+//         set: jest.fn(),
+//     },
+//     width: 200,
+//     scene: mockScene,
+//     item: mockItem,
+// };
 
+let mockImage;
 let mockOverlay;
 let mockConfig;
 
@@ -52,6 +47,32 @@ describe("Button overlays", () => {
             type: "image",
             name: "someImage",
             assetKey: "test.someImageAssetKey",
+            takeStateProperties: true,
+        };
+        mockImage = { setScale: jest.fn(), width: 100 };
+        mockScene = {
+            add: {
+                image: jest.fn().mockReturnValue(mockImage),
+            },
+            config: {
+                assetPrefix: "test",
+                states: { locked: { properties: { foo: "bar" } } },
+            },
+        };
+        mockItem = {
+            name: "someItemName",
+            description: "someItemDescription",
+            price: 42,
+            icon: "test.itemIcon",
+            state: "locked",
+        };
+        mockGelButton = {
+            overlays: {
+                set: jest.fn(),
+            },
+            width: 200,
+            scene: mockScene,
+            item: mockItem,
         };
     });
 
@@ -74,6 +95,19 @@ describe("Button overlays", () => {
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 expect(mockImage.setScale).toHaveBeenCalledWith(0.5);
+            });
+
+            test("merges in state properties if takeStateProperties is set on the overlay config", () => {
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                expect(mockImage.foo).toBe("bar");
+            });
+
+            test("does not merge state properties if takeStateProperties is unset", () => {
+                const mockOverlayWithoutStateProperties = { ...mockOverlay, takeStateProperties: false };
+                mockConfig.overlay.items.push(mockOverlayWithoutStateProperties);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                expect(mockImage.foo).not.toBeTruthy();
             });
 
             test("adds a text to the scene and the button if overlay is of type text", () => {

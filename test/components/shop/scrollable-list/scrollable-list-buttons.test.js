@@ -41,6 +41,7 @@ describe("Scrollable List Buttons", () => {
                 itemBackground: "itemBackground",
             },
             listPadding: { x: 10, y: 8, outerPadFactor: 2 },
+            states: { locked: { properties: { someProperty: "someValue" } } },
             overlay: {
                 items: [{ foo: "bar" }],
                 options: {
@@ -70,7 +71,6 @@ describe("Scrollable List Buttons", () => {
     const mockEvent = { unsubscribe: "foo" };
     eventBus.subscribe = jest.fn().mockReturnValue(mockEvent);
     handlers.handleClickIfVisible = jest.fn();
-    const mockCallback = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
 
@@ -82,7 +82,7 @@ describe("Scrollable List Buttons", () => {
         };
         mockCollection = { get: jest.fn().mockReturnValue(mockItem) };
         collections.get = jest.fn().mockReturnValue(mockCollection);
-        button = buttons.createGelButton(mockScene, mockItem, "shop", "cta", mockCallback);
+        button = buttons.createGelButton(mockScene, mockItem, "shop", "cta");
     });
 
     describe("createGelButton()", () => {
@@ -105,6 +105,12 @@ describe("Scrollable List Buttons", () => {
         test("scales the button", () => {
             buttons.createGelButton(mockScene, mockItem, "shop", "cta");
             expect(mockButton.setScale).toHaveBeenCalled();
+        });
+
+        test("merges any properties specified for the item's state into the gel button sprite", () => {
+            mockItem.state = "locked";
+            buttons.createGelButton(mockScene, mockItem, "shop", "cta");
+            expect(mockButton.sprite.someProperty).toBe("someValue");
         });
 
         test("applies overlays", () => {
