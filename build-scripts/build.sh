@@ -15,12 +15,11 @@ set +e
 npm run cy:headless
 if [ $? -eq 0 ]
     then
-        echo "The script ran ok"
         node cypress/support/createReports.js
         exit 0
     else
-        echo "The script failed" >&2
+        echo "The Cypress tests failed - Uploading report to S3 with no latest" >&2
         node cypress/support/createReports.js
-        /usr/libexec/s3uploadtest nolatest
+        $UPLOADTOS3 nolatest
         exit 1
 fi
