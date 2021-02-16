@@ -38,7 +38,7 @@ const createBuyElems = (scene, container, item, innerBounds, bounds) =>
         scene.add.image(
             getButtonX(innerBounds.x - 20, scene.config),
             currencyY(bounds),
-            `${scene.config.assetPrefix}.${scene.config.assetKeys.currency}`,
+            `${scene.assetPrefix}.currencyIcon`,
         ),
     ]);
 
