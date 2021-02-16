@@ -31,8 +31,8 @@ const getButtonConfig = (button, id, scene) => ({
     channel: "shop",
     group: scene.scene.key,
     id,
-    key: scene.config.assetKeys.buttonBackground,
-    scene: "shop",
+    key: "menuButtonBackground",
+    scene: scene.assetPrefix,
 });
 
 const makeButton = (container, config, callback) => {

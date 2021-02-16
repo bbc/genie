@@ -28,11 +28,7 @@ const createBuyElems = (scene, container, item, innerBounds, bounds) =>
         addText(scene, getX(innerBounds.x + 28, scene.config), currencyY(bounds), item.price, scene.config).setOrigin(
             0.5,
         ),
-        scene.add.image(
-            getX(innerBounds.x - 20, scene.config),
-            currencyY(bounds),
-            `${scene.config.assetPrefix}.${scene.config.assetKeys.currency}`,
-        ),
+        scene.add.image(getX(innerBounds.x - 20, scene.config), currencyY(bounds), `${scene.assetPrefix}.currencyIcon`),
     ]);
 
 const resizeConfirmButton = (scene, button, idx, bounds) => {
