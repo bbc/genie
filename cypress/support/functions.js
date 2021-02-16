@@ -15,18 +15,14 @@ let test =
 export const getUrl = () => {
     if (Cypress.env("LOCAL_DEV") == "true") {
         if (Cypress.env("THEME_2") == "true") {
-            cy.log("match");
             return appendToken(localTheme2);
         } else {
-            cy.log("Not theme 2");
             return appendToken(localTesting);
         }
     } else {
         if (Cypress.env("THEME_2") == "true") {
-            cy.log("match");
             return appendToken(testTheme2);
         } else {
-            cy.log("Not theme 2");
             return appendToken(test);
         }
     }

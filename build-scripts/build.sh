@@ -16,10 +16,12 @@ npm run cy:headless
 if [ $? -eq 0 ]
     then
         node cypress/support/createReports.js
+        zip -r output/reports/screenshots.zip cypress/screenshots
         exit 0
     else
         echo "The Cypress tests failed - Uploading report to S3 with no latest" >&2
         node cypress/support/createReports.js
+        zip -r output/reports/screenshots.zip cypress/screenshots
         $UPLOADTOS3 nolatest
         exit 1
 fi
