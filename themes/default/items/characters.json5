@@ -1,5 +1,6 @@
 {
-    catalogue: [    //catalogue array or string filename of json5 catalogue
+    catalogue: [
+        //catalogue array or string filename of json5 catalogue
         {
             id: "mary",
             key: "mary",
@@ -56,7 +57,7 @@
             key: "debby",
             ariaLabel: "Debbeh",
             title: "Debbeh",
-            state: "locked",
+            // state: "locked",
             subtitle: "Has a twin called Suzy", // optional - for text overlay only
         },
         {

@@ -17,7 +17,13 @@ export const overlays1Wide = (gelButton, configs) => {
 
 const setImageOverlay = ({ gelButton, config, offset }) => {
     const { scene, item } = gelButton;
+    const { config: sceneConfig } = scene;
     const image = scene.add.image(offset.x, offset.y, fp.template(config.assetKey)(item));
+    const properties =
+        config.takeStateProperties && item.state && sceneConfig.states[item.state]
+            ? sceneConfig.states[item.state].properties
+            : {};
+    Object.assign(image, properties);
     config.size && image.setScale(config.size / image.width);
     gelButton.overlays.set(config.name, image);
 };

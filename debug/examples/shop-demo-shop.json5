@@ -122,22 +122,6 @@
                     activeStates: ["available"],
                 },
                 {
-                    type: "text", // change this to be padlock
-                    name: "locked",
-                    value: "LOCKED",
-                    position: { align: "right", offsetX: 44, offsetY: -10 },
-                    styles: { fontSize: "14px" },
-                    activeStates: ["locked"],
-                },
-                {
-                    type: "text",
-                    name: "unlockHint",
-                    value: "${hint}",
-                    position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "14px" },
-                    activeStates: ["locked"],
-                },
-                {
                     type: "image",
                     name: "currency",
                     assetKey: "debug-shop.currency",

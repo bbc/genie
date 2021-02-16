@@ -2,8 +2,5 @@
     catalogue: "debug-game-items", //catalogue array or string filename of json5 catalogue
     include: ["demo-hat"], //include all items with this tag in this collection
     defaultQty: 1, //default quantity unless specified
-    defaults: [
-        { id: "ironHat", qty: 1 },
-        { id: "goldHat", state: "locked", hint: "Must be level 12" },
-    ],
+    defaults: [{ id: "ironHat", qty: 1 }],
 }

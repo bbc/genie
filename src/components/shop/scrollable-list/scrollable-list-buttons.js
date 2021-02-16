@@ -25,6 +25,9 @@ const createGelButton = (scene, item, title, state) => {
 
     gelButton.item = item;
 
+    const properties = item.state && config.states[item.state] ? config.states[item.state].properties : {};
+    Object.assign(gelButton.sprite, properties);
+
     gelButton.overlays = {
         ...gelButton.overlays,
         configs: {
@@ -72,12 +75,12 @@ const getButtonState = (scene, item, title) => {
     states.push(isItemEquippable(item) ? "equippable" : "consumable");
     states.push(isItemInStock(item) ? "available" : "unavailable");
     states.push(isItemLocked(item) ? "locked" : "unlocked");
-    console.log("BEEBUG: item, states:", item, states);
+    // console.log("BEEBUG: item, states:", item, states);
     return states;
 };
 
-const isItemEquippable = item => item.slot;
-const isItemInStock = item => item?.qty > 0;
+const isItemEquippable = item => Boolean(item.slot);
+const isItemInStock = item => Boolean(item?.qty > 0);
 const isItemLocked = item => Boolean(item.state === "locked");
 
 const updateOverlays = button => {
