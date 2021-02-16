@@ -25,7 +25,7 @@ const createPanel = (scene, title, parent) => {
 export const getType = value => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
 
 const getConfig = (scene, title, parent) => {
-    const { listPadding: space, assetKeys: keys, assetPrefix } = scene.config;
+    const { listPadding: space } = scene.config;
     const safeArea = getPanelY(scene);
     const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
 
@@ -35,8 +35,8 @@ const getConfig = (scene, title, parent) => {
         scrollMode: 0,
         panel: { child: createInnerPanel(scene, title, parent) },
         slider: {
-            track: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbar}`),
-            thumb: scene.add.image(0, 0, `${assetPrefix}.${keys.scrollbarHandle}`),
+            track: scene.add.image(0, 0, `${scene.assetPrefix}.scrollbar`),
+            thumb: scene.add.image(0, 0, `${scene.assetPrefix}.scrollbarHandle`),
             width: space.x,
         },
         space: { left: outer.x, right: outer.x, top: outer.y, bottom: outer.y, panel: space.x },
