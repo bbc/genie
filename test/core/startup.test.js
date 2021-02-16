@@ -12,8 +12,10 @@ import * as styles from "../../src/core/custom-styles.js";
 import { startup } from "../../src/core/startup.js";
 import { addGelButton } from "../../src/core/layout/gel-game-objects.js";
 import * as debugModeModule from "../../src/core/debug/debug-mode.js";
+import * as SafariAudio from "../../src/core/safari-audio.js";
 
 jest.mock("../../src/core/custom-styles.js");
+jest.mock("../../src/core/safari-audio.js");
 
 describe("Startup", () => {
     let mockGmi;
@@ -51,6 +53,11 @@ describe("Startup", () => {
 
         startup(config);
         expect(gmiModule.setGmi).toHaveBeenCalledWith(config.settings, global.window);
+    });
+
+    test("adds the resume safari audio context event", () => {
+        startup({ screens: {} });
+        expect(SafariAudio.addResumeSafariAudioContextEvent).toHaveBeenCalledWith(mockGame);
     });
 
     test("enables mp4 audio support for all devices", () => {
