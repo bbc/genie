@@ -82,6 +82,7 @@ const showConfirmation = (scene, title, item) => {
 
 const createItem = (scene, item, title, parent) => {
     const icon = createGelButton(scene, item, title, getButtonState(scene, item, title));
+    const isLocked = isItemLocked(item);
     const label = scene.rexUI.add.label({
         orientation: 0,
         icon,
@@ -91,13 +92,16 @@ const createItem = (scene, item, title, parent) => {
         id: `scroll_button_${item.id}_${title}`,
         ariaLabel: `${item.title} - ${item.description}`,
     };
-    const callback = pointer => (parent.panel.isInTouching() || !pointer) && showConfirmation(scene, title, item);
+    const callback = pointer =>
+        (parent.panel.isInTouching() || !pointer) && !isLocked && showConfirmation(scene, title, item);
     label.setInteractive();
     label.on(Phaser.Input.Events.POINTER_UP, callback);
     scene.events.once("shutdown", () => label.off(Phaser.Input.Events.POINTER_UP, callback));
     accessibilify(label);
     return label;
 };
+
+const isItemLocked = item => item.state === "locked";
 
 const resizePanel = (scene, panel) => () => {
     const t = panel.t;
@@ -110,7 +114,7 @@ const resizePanel = (scene, panel) => () => {
     panel.setT(t);
 };
 
-const getFirstElement = item => item.accessibleElement.el;
+const getFirstElement = item => item.accessibleElement?.el;
 
 const setupEvents = (scene, panel) => {
     const scaleEvent = onScaleChange.add(resizePanel(scene, panel));
@@ -203,7 +207,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
             const button = item.children[0];
             button.input.enabled = isVisible;
             item.config.tabbable = isVisible;
-            item.accessibleElement.update();
+            item.accessibleElement?.update();
         });
         isVisible && updatePanel(this.panel);
     }
