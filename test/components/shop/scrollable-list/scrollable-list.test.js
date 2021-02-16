@@ -91,6 +91,7 @@ describe("Scrollable List", () => {
         };
 
         mockScene = {
+            assetPrefix: "test",
             paneStack: { push: jest.fn() },
             panes: {
                 shop: { setVisible: jest.fn() },
@@ -108,7 +109,6 @@ describe("Scrollable List", () => {
             input: { topOnly: true, on: jest.fn(), removeListener: jest.fn() },
             add: { image: jest.fn(), rectangle: jest.fn() },
             config: {
-                assetPrefix: "test",
                 assetKeys: {
                     background: { shop: "background" },
                     scrollbar: "scrollbar",

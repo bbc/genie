@@ -1,6 +1,5 @@
 {
     isOverlay: true,
-    assetPrefix: "shop",
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "shop.magicShop", x: 0, y: 0 }],
@@ -51,10 +50,10 @@
         y: 15.09,
         outerPadFactor: 1.8,
     },
-    collection: "armoury",
+    collection: ["shop-items", "shop-inventory"],
     paneCollections: {
-        shop: "armoury",
-        manage: "inventory",
+        shop: "shop-items",
+        manage: "shop-inventory",
     },
     slots: {
         helmet: { max: 1 },
@@ -86,14 +85,6 @@
         shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
         manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
         confirm: "halfViewBackground",
-    },
-    assetKeys: {
-        scrollbar: "scrollbar",
-        scrollbarHandle: "scrollbarHandle",
-        itemBackground: "itemBackground",
-        buttonBackground: "menuButtonBackground",
-        buttonIcon: "menuButtonIcon",
-        currency: "currencyIcon",
     },
     overlay: {
         items: [
@@ -190,5 +181,4 @@
             ],
         },
     },
-    eventChannel: "shop_menu",
 }

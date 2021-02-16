@@ -6,7 +6,7 @@
         longDescription: "Owned by the famed pixie \nberserker, Armagog, who \nalas couldn't lift it.",
         tags: ["weapon"],
         price: 100,
-        icon: "shop.armagogIcon",
+        icon: "debug-shop.armagogIcon",
         userData: {
             //.. keep this namespaced out in case agencies want to put object stats in here
         },
@@ -18,7 +18,7 @@
         description: "It'll blow your mind",
         price: 50,
         longDescription: "The skull icon is now a health \n& safety requirement for \n all explody things. Sigh.",
-        icon: "shop.bombIcon",
+        icon: "debug-shop.bombIcon",
         tags: ["weapon"],
     },
     {
@@ -27,7 +27,7 @@
         description: "What lies inside?",
         longDescription: "May (or may not) contain \nimportant physics experiments. \n Also cats.",
         price: 10,
-        icon: "shop.mysteryBoxIcon",
+        icon: "debug-shop.mysteryBoxIcon",
         tags: ["food"],
     },
     {
@@ -41,7 +41,7 @@
         title: "Coins",
         description: "Money",
         longDescription: "AKA cash, moolah, \nscratch, dough, bread...",
-        icon: "shop.balanceIcon",
+        icon: "debug-shop.balanceIcon",
         tags: ["currency"],
     },
     {
