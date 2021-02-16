@@ -1,10 +1,4 @@
 {
-    defaultQty: 1, //default quantity unless specified
-    defaults: [
-        //additional config
-        { id: "crossbow", qty: 5 },
-        { id: "bread", qty: 1 },
-    ],
     catalogue: [    //catalogue array or string filename of json5 catalogue
         {
             id: "mary",
