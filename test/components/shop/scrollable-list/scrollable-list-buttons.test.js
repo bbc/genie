@@ -25,6 +25,7 @@ describe("Scrollable List Buttons", () => {
         config: { id: "foo_bar_itemKey_shop" },
         rexContainer: { parent: { getTopmostSizer: jest.fn().mockReturnValue({ space: { top: 10 } }) } },
         overlays: { remove: jest.fn(), list: { foo: "bar", baz: "qux" } },
+        sprite: {},
     };
     const mockScene = {
         assetPrefix: "mockScene",
@@ -163,25 +164,44 @@ describe("Scrollable List Buttons", () => {
         });
     });
 
-    describe("getButtonState() returns a string describing the button state", () => {
-        test("state is actioned when in the shop and items no longer available", () => {
+    describe("getButtonState() returns an array of strings describing the button state", () => {
+        test("state changes based on item quantity", () => {
             mockItem.qty = 0;
-            expect(buttons.getButtonState(mockScene, { qty: 1 }, "shop")).toEqual(["cta", "consumable", "available"]);
+            expect(buttons.getButtonState(mockScene, { qty: 1 }, "shop")).toEqual([
+                "cta",
+                "consumable",
+                "available",
+                "unlocked",
+            ]);
             mockItem.qty = 1;
             expect(buttons.getButtonState(mockScene, { qty: 0 }, "shop")).toEqual([
                 "actioned",
                 "consumable",
                 "unavailable",
+                "unlocked",
             ]);
         });
-        test("state is actioned when in the manage section and item is equipped", () => {
+        test("state changes based on item slot and state", () => {
             const item = { slot: "helmet" };
-            expect(buttons.getButtonState(mockScene, item, "manage")).toEqual(["cta", "equippable", "unavailable"]);
+            expect(buttons.getButtonState(mockScene, item, "manage")).toEqual([
+                "cta",
+                "equippable",
+                "unavailable",
+                "unlocked",
+            ]);
             mockItem.state = "equipped";
             expect(buttons.getButtonState(mockScene, item, "manage")).toEqual([
                 "actioned",
                 "equippable",
                 "unavailable",
+                "unlocked",
+            ]);
+            item.state = "locked";
+            expect(buttons.getButtonState(mockScene, item, "manage")).toEqual([
+                "actioned",
+                "equippable",
+                "unavailable",
+                "locked",
             ]);
         });
     });

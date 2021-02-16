@@ -75,7 +75,6 @@ const getButtonState = (scene, item, title) => {
     states.push(isItemEquippable(item) ? "equippable" : "consumable");
     states.push(isItemInStock(item) ? "available" : "unavailable");
     states.push(isItemLocked(item) ? "locked" : "unlocked");
-    // console.log("BEEBUG: item, states:", item, states);
     return states;
 };
 

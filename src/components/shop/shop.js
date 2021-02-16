@@ -52,8 +52,6 @@ export class Shop extends Screen {
         this.setupEvents();
 
         this.resize();
-
-        console.log("BEEBUG: this:", this);
     }
 
     destroyConfirm() {
