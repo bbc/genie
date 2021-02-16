@@ -1,0 +1,180 @@
+{
+    isOverlay: true,
+    music: "home.backgroundMusic",
+    background: {
+        items: [{ key: "shop.magicShop", x: 0, y: 0 }],
+    },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 2,
+        align: "center",
+    },
+    menuButtons: {
+        styles: { fontStyle: "bold", fontSize: "16px" },
+    },
+    titles: [
+        {
+            type: "image",
+            key: "titleBackground",
+            xOffset: 0,
+            yOffset: 0,
+        },
+        {
+            type: "text",
+            value: "Shop",
+            xOffset: 0,
+            yOffset: 0,
+            styles: { fontStyle: "bold", fontSize: "24px" },
+        },
+    ],
+    titlePadding: 20,
+    balance: {
+        background: {
+            type: "image",
+            key: "balanceBackground",
+        },
+        icon: {
+            type: "image",
+            key: "balanceIcon",
+        },
+        value: {
+            type: "text",
+            key: "coin", // the id of the currency item, which must exist in the inventory collection
+            styles: { fontSize: "16px" },
+        },
+    },
+    balancePadding: 15,
+    listPadding: {
+        x: 18.86,
+        y: 15.09,
+        outerPadFactor: 1.8,
+    },
+    collection: ["shop-items", "shop-inventory"],
+    paneCollections: {
+        shop: "shop-items",
+        manage: "shop-inventory",
+    },
+    confirm: {
+        detailView: true,
+        prompt: {
+            buy: {
+                legal: "Purchase this item?",
+                illegal: "You can't afford this.",
+                unavailable: "You already own this.",
+            },
+            equip: { legal: "Do you want to \nequip this item?", illegal: "You cannot equip\nthis item." },
+            unequip: "Do you want to \nunequip this item?",
+            use: "Do you want to use\nthis item?",
+            styles: { fontStyle: "bold" },
+        },
+        title: { styles: { fontStyle: "bold" } },
+        detail: { styles: { color: "#bd6", fontStyle: "bold" } },
+        description: { styles: { fontStyle: "italic", lineSpacing: 5 } },
+    },
+    menu: {
+        buttonsRight: true,
+    },
+    columns: 1,
+    backgrounds: {
+        menu: "",
+        shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
+        manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
+        confirm: "halfViewBackground",
+    },
+    overlay: {
+        items: [
+            {
+                type: "image",
+                name: "itemIcon",
+                assetKey: "${icon}",
+                position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                size: 76,
+            },
+            {
+                type: "text",
+                name: "itemName",
+                value: "${title}",
+                position: { align: "left", offsetX: 80, offsetY: -18 },
+                styles: { fontSize: "16px", fontStyle: "bold" },
+            },
+        ],
+        options: {
+            shop: [
+                {
+                    type: "text",
+                    name: "currencyAmount",
+                    value: "${price}",
+                    position: { align: "right", offsetX: -44, offsetY: -10 },
+                    styles: { fontSize: "14px" },
+                    activeStates: ["available"],
+                },
+                {
+                    type: "image",
+                    name: "currency",
+                    assetKey: "shop.currency",
+                    position: { align: "right", offsetX: -64, offsetY: 0 },
+                    activeStates: ["available"],
+                },
+                {
+                    type: "text",
+                    name: "purchased",
+                    value: "Purchased",
+                    position: { align: "right", offsetX: -108, offsetY: -10 },
+                    styles: { fontSize: "16px", align: "right" },
+                    activeStates: ["unavailable"],
+                },
+                {
+                    type: "text",
+                    name: "itemDescription",
+                    value: "${description}",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    activeStates: ["equippable"],
+                },
+                {
+                    type: "text",
+                    name: "itemStockLevel",
+                    value: "${qty} in stock",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" }, // moves to options, add another option
+                    activeStates: ["consumable"],
+                },
+            ],
+            manage: [
+                {
+                    type: "text",
+                    name: "equip",
+                    value: "Equip",
+                    position: { align: "right", offsetX: -76, offsetY: -10 },
+                    styles: { fontSize: "16px", align: "right" },
+                    activeStates: ["cta", "equippable"],
+                },
+                {
+                    type: "text",
+                    name: "itemDescription",
+                    value: "${description}",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" },
+                    activeStates: ["equippable"],
+                },
+                {
+                    type: "text",
+                    name: "equipped",
+                    value: "Equipped",
+                    position: { align: "right", offsetX: -96, offsetY: -10 },
+                    styles: { fontSize: "16px", align: "right" },
+                    activeStates: ["actioned", "equippable"],
+                },
+                {
+                    type: "text",
+                    name: "itemStockLevel",
+                    value: "${qty} in inventory",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" },
+                    activeStates: ["consumable"],
+                },
+            ],
+        },
+    },
+}

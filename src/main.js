@@ -7,6 +7,7 @@ import { Home } from "./components/home.js";
 import { Narrative } from "./components/narrative.js";
 import { Results } from "./components/results/results-screen.js";
 import { Select } from "./components/select/select-screen.js";
+import { Shop } from "./components/shop/shop.js";
 import { HowToPlay } from "./components/how-to-play.js";
 import { Game } from "./components/game.js";
 import { Pause } from "./components/overlays/pause.js";
@@ -99,6 +100,9 @@ const screens = {
         },
     },
     // Overlays
+    shop: {
+        scene: Shop,
+    },
     "how-to-play": {
         scene: HowToPlay,
         routes: {
