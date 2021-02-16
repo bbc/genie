@@ -88,6 +88,7 @@
         manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
         confirm: "halfViewBackground",
     },
+    states: { locked: { properties: { alpha: 0.5, tint: 0xaaaaaa } } },
     overlay: {
         items: [
             {
@@ -96,6 +97,7 @@
                 assetKey: "${icon}",
                 position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
                 size: 76,
+                takeStateProperties: true,
             },
             {
                 type: "text",
@@ -121,6 +123,21 @@
                     assetKey: "debug-shop.currency",
                     position: { align: "right", offsetX: -64, offsetY: 0 },
                     activeStates: ["available"],
+                },
+                {
+                    type: "image",
+                    name: "lock",
+                    assetKey: "shop.lockIcon",
+                    position: { align: "left", offsetX: 56, offsetY: 20 },
+                    activeStates: ["locked"],
+                },
+                {
+                    type: "text",
+                    name: "unlockHint",
+                    value: "${hint}",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "14px" },
+                    activeStates: ["locked"],
                 },
                 {
                     type: "text",

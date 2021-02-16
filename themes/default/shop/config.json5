@@ -89,7 +89,7 @@
                 type: "image",
                 name: "itemIcon",
                 assetKey: "${icon}",
-                position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                position: { align: "left", offsetX: 35, offsetY: 0 },
                 size: 76,
                 takeStateProperties: true,
             },
@@ -163,7 +163,7 @@
                     type: "image",
                     name: "itemIcon",
                     assetKey: "${icon}",
-                    position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                    position: { align: "left", offsetX: 35, offsetY: 0 },
                     size: 76,
                 },
                 {
