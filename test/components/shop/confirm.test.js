@@ -103,8 +103,8 @@ describe("Confirm pane", () => {
         test("returns a object with a container", () => {
             expect(confirmPane.container).toBe(mockContainer);
         });
-        test("an action, item and title", () => {
-            expect(confirmPane.action).toBe("buy");
+        test("an item and a title", () => {
+            // expect(confirmPane.action).toBe("buy");
             expect(confirmPane.item).toBe(mockItem);
             expect(confirmPane.title).toBe("shop");
         });
@@ -122,21 +122,21 @@ describe("Confirm pane", () => {
         test("that is displayed with an appropriate Y offset", () => {
             expect(mockContainer.setY).toHaveBeenCalledWith(105);
         });
-        describe("returns an object with a resize fn", () => {
-            beforeEach(() => {
-                jest.clearAllMocks();
-                confirmPane.resize();
-            });
-            test("which destroys the container", () => {
-                expect(mockContainer.removeAll).toHaveBeenCalled();
-                expect(mockContainer.destroy).toHaveBeenCalled();
-            });
-            test("and creates and populates a new container", () => {
-                expect(mockScene.add.container).toHaveBeenCalled();
-                expect(buttons.createConfirmButtons).toHaveBeenCalled();
-                expect(text.addText).toHaveBeenCalledTimes(2);
-            });
-        });
+        // describe("returns an object with a resize fn", () => {
+        //     beforeEach(() => {
+        //         jest.clearAllMocks();
+        //         confirmPane.resize();
+        //     });
+        //     test("which destroys the container", () => {
+        //         expect(mockContainer.removeAll).toHaveBeenCalled();
+        //         expect(mockContainer.destroy).toHaveBeenCalled();
+        //     });
+        //     test("and creates and populates a new container", () => {
+        //         expect(mockScene.add.container).toHaveBeenCalled();
+        //         expect(buttons.createConfirmButtons).toHaveBeenCalled();
+        //         expect(text.addText).toHaveBeenCalledTimes(2);
+        //     });
+        // });
         describe("returns an object with a destroy fn", () => {
             beforeEach(() => {
                 jest.clearAllMocks();

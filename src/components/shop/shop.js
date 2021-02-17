@@ -75,7 +75,7 @@ export class Shop extends Screen {
 
     setupEvents() {
         const resize = this.resize.bind(this);
-        const scaleEvent = onScaleChange.add(() => resize());
+        const scaleEvent = onScaleChange.add(resize);
         this.events.once("shutdown", scaleEvent.unsubscribe);
     }
 

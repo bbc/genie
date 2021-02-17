@@ -168,21 +168,9 @@ describe("Shop", () => {
             expect(mockScrollableList.setVisible).toHaveBeenCalledTimes(2);
         });
 
-        describe("adds a callback to onScaleChange ", () => {
-            beforeEach(() => {
-                shopScreen.panes.confirm = { container: { visible: true }, resize: jest.fn() };
-                const onScaleChangeCallback = scaler.onScaleChange.add.mock.calls[0][0];
-                onScaleChangeCallback();
-            });
-
-            test("that updates scale and position for UI elems", () => {
-                expect(shopScreen.title.setScale).toHaveBeenCalled();
-                expect(shopScreen.title.setPosition).toHaveBeenCalled();
-                expect(shopScreen.balance.setScale).toHaveBeenCalled();
-                expect(shopScreen.balance.setPosition).toHaveBeenCalled();
-            });
-            test("resizes the confirm pane, if visible", () => {
-                expect(shopScreen.panes.confirm.resize).toHaveBeenCalled();
+        describe("registers with the scaler", () => {
+            test("subscribes to onScaleChange", () => {
+                expect(scaler.onScaleChange.add).toHaveBeenCalled();
             });
             test("unsubscribes on shutdown", () => {
                 expect(shopScreen.events.once).toHaveBeenCalledWith("shutdown", "foo");
@@ -252,6 +240,45 @@ describe("Shop", () => {
                 expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
                 expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
                 expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
+            });
+        });
+    });
+    describe("resize()", () => {
+        beforeEach(() => {
+            shopScreen.create();
+            jest.clearAllMocks();
+            shopScreen.resize();
+        });
+
+        test("scales and positions title elements", () => {
+            expect(shopScreen.title.setScale).toHaveBeenCalled();
+            expect(shopScreen.title.setPosition).toHaveBeenCalled();
+        });
+        test("scales and positions balance elements", () => {
+            expect(shopScreen.balance.setScale).toHaveBeenCalled();
+            expect(shopScreen.balance.setPosition).toHaveBeenCalled();
+        });
+        test("calls resize on the top menu", () => {
+            expect(shopScreen.panes.top.resize).toHaveBeenCalled();
+        });
+        describe("if the confirm pane is visible,", () => {
+            let confirmPane;
+
+            beforeEach(() => {
+                confirmPane = {
+                    container: { visible: true },
+                    destroy: jest.fn(),
+                };
+                shopScreen.panes.confirm = confirmPane;
+                jest.clearAllMocks();
+                shopScreen.resize();
+            });
+
+            test("calls destroy on the confirm pane", () => {
+                expect(confirmPane.destroy).toHaveBeenCalled();
+            });
+            test("creates a new confirm pane", () => {
+                expect(confirm.createConfirm).toHaveBeenCalled();
             });
         });
     });
