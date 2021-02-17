@@ -46,14 +46,14 @@ describe("Scrollable List Buttons", () => {
                 items: [{ foo: "bar" }],
                 options: {
                     shop: [
-                        { baz: "qux", activeStates: ["cta"] },
-                        { wiz: "bang", activeStates: ["actioned"] },
-                        { wiz: "bang", activeStates: ["unique"] },
-                        { wiz: "bang", activeStates: ["notInStock"] },
+                        { baz: "qux", activeInStates: ["cta"] },
+                        { wiz: "bang", activeInStates: ["actioned"] },
+                        { wiz: "bang", activeInStates: ["unique"] },
+                        { wiz: "bang", activeInStates: ["notInStock"] },
                     ],
                     manage: [
-                        { baz: "qux", activeStates: ["cta"] },
-                        { wiz: "bang", activeStates: ["actioned"] },
+                        { baz: "qux", activeInStates: ["cta"] },
+                        { wiz: "bang", activeInStates: ["actioned"] },
                     ],
                 },
             },
@@ -141,7 +141,7 @@ describe("Scrollable List Buttons", () => {
             test("setAll() sets all overlays for the current state", () => {
                 jest.clearAllMocks();
                 mockButton.overlays.setAll();
-                const expected = [{ foo: "bar" }, { baz: "qux", activeStates: ["cta"] }];
+                const expected = [{ foo: "bar" }, { baz: "qux", activeInStates: ["cta"] }];
                 const configs = overlays.overlays1Wide.mock.calls[0][1];
                 expect(configs).toEqual(expected);
             });

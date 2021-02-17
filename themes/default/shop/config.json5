@@ -109,21 +109,21 @@
                     value: "${price}",
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeStates: ["available"],
+                    activeInStates: ["available"],
                 },
                 {
                     type: "image",
                     name: "currency",
                     assetKey: "shop.currency",
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["available"],
+                    activeInStates: ["available"],
                 },
                 {
                     type: "image",
                     name: "lock",
                     assetKey: "shop.lockIcon",
                     position: { align: "left", offsetX: 56, offsetY: 20 },
-                    activeStates: ["locked"],
+                    activeInStates: ["locked"],
                 },
                 {
                     type: "text",
@@ -131,7 +131,7 @@
                     value: "${hint}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "14px" },
-                    activeStates: ["locked"],
+                    activeInStates: ["locked"],
                 },
                 {
                     type: "text",
@@ -139,7 +139,7 @@
                     value: "Purchased",
                     position: { align: "right", offsetX: -108, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["unavailable"],
+                    activeInStates: ["unavailable"],
                 },
                 {
                     type: "text",
@@ -147,7 +147,7 @@
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeStates: ["equippable", "unlocked"],
+                    activeInStates: ["equippable", "unlocked"],
                 },
                 {
                     type: "text",
@@ -155,7 +155,7 @@
                     value: "${qty} in stock",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeStates: ["consumable"],
+                    activeInStates: ["consumable"],
                 },
             ],
             manage: [
@@ -172,7 +172,7 @@
                     value: "Equip",
                     position: { align: "right", offsetX: -76, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["cta", "equippable"],
+                    activeInStates: ["cta", "equippable"],
                 },
                 {
                     type: "text",
@@ -180,7 +180,7 @@
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeStates: ["equippable"],
+                    activeInStates: ["equippable"],
                 },
                 {
                     type: "text",
@@ -188,7 +188,7 @@
                     value: "Equipped",
                     position: { align: "right", offsetX: -96, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned", "equippable"],
+                    activeInStates: ["actioned", "equippable"],
                 },
                 {
                     type: "text",
@@ -196,7 +196,7 @@
                     value: "${qty} in inventory",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeStates: ["consumable"],
+                    activeInStates: ["consumable"],
                 },
             ],
         },
