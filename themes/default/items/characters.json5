@@ -1,5 +1,6 @@
 {
-    catalogue: [    //catalogue array or string filename of json5 catalogue
+    catalogue: [
+        //catalogue array or string filename of json5 catalogue
         {
             id: "mary",
             key: "mary",

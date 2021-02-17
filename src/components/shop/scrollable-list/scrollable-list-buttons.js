@@ -8,7 +8,7 @@ import { overlays1Wide } from "./button-overlays.js";
 import { collections } from "../../../core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const createGelButton = (scene, item, title, state) => {
+const createGelButton = (scene, item, title) => {
     const id = `scroll_button_${item.id}_${title}`;
     const config = scene.config;
 
@@ -25,6 +25,9 @@ const createGelButton = (scene, item, title, state) => {
 
     gelButton.item = item;
 
+    const properties = item.state && config.states[item.state] ? config.states[item.state].properties : {};
+    Object.assign(gelButton.sprite, properties);
+
     gelButton.overlays = {
         ...gelButton.overlays,
         configs: {
@@ -33,7 +36,7 @@ const createGelButton = (scene, item, title, state) => {
         },
         setAll: setOverlays(gelButton),
         unsetAll: unsetOverlays(gelButton),
-        state,
+        state: getButtonState(scene, item, title),
     };
 
     scaleButton(gelButton, scene.layout, config.listPadding);
@@ -71,11 +74,13 @@ const getButtonState = (scene, item, title) => {
     states.push(isButtonCta ? "actioned" : "cta");
     states.push(isItemEquippable(item) ? "equippable" : "consumable");
     states.push(isItemInStock(item) ? "available" : "unavailable");
+    states.push(isItemLocked(item, scene.config) ? "locked" : "unlocked");
     return states;
 };
 
-const isItemEquippable = item => item.slot;
-const isItemInStock = item => item?.qty > 0;
+const isItemEquippable = item => Boolean(item.slot);
+const isItemInStock = item => Boolean(item?.qty > 0);
+const isItemLocked = (item, config) => item.state && config.states[item.state] && config.states[item.state].disabled;
 
 const updateOverlays = button => {
     button.overlays.unsetAll();
@@ -87,7 +92,7 @@ const getConfigs = button => button.overlays.configs.items.concat(filterOptional
 
 const filterOptionalConfigs = overlays => {
     const overlayStateIsInItemState = state => overlays.state.includes(state);
-    return overlays.configs.options.filter(overlay => fp.every(overlayStateIsInItemState, overlay.activeStates));
+    return overlays.configs.options.filter(overlay => fp.every(overlayStateIsInItemState, overlay.activeInStates));
 };
 
 const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);
@@ -95,4 +100,4 @@ const getPaneTitle = button => getItemKeyAndTitle(button).pop();
 const setOverlays = button => () => overlays1Wide(button, getConfigs(button));
 const unsetOverlays = button => () => Object.keys(button.overlays.list).forEach(key => button.overlays.remove(key));
 
-export { createGelButton, scaleButton, updateButton, getButtonState };
+export { createGelButton, scaleButton, updateButton };

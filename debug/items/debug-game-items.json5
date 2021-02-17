@@ -98,5 +98,7 @@
         tags: ["demo-hat"],
         userData: { key: "shopDemo.goldHat" },
         slot: "helmet",
+        state: "locked",
+        hint: "You're not having this.",
     },
 ]

@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
-import { createGelButton, scaleButton, updateButton, getButtonState } from "./scrollable-list-buttons.js";
+import { createGelButton, scaleButton, updateButton } from "./scrollable-list-buttons.js";
 import { createConfirm } from "../confirm.js";
 import * as a11y from "../../../core/accessibility/accessibility-layer.js";
 import { collections } from "../../../core/collections.js";
@@ -81,7 +81,8 @@ const showConfirmation = (scene, title, item) => {
 };
 
 const createItem = (scene, item, title, parent) => {
-    const icon = createGelButton(scene, item, title, getButtonState(scene, item, title));
+    const icon = createGelButton(scene, item, title);
+    const isLocked = isItemLocked(item);
     const label = scene.rexUI.add.label({
         orientation: 0,
         icon,
@@ -91,13 +92,16 @@ const createItem = (scene, item, title, parent) => {
         id: `scroll_button_${item.id}_${title}`,
         ariaLabel: `${item.title} - ${item.description}`,
     };
-    const callback = pointer => (parent.panel.isInTouching() || !pointer) && showConfirmation(scene, title, item);
+    const callback = pointer =>
+        (parent.panel.isInTouching() || !pointer) && !isLocked && showConfirmation(scene, title, item);
     label.setInteractive();
     label.on(Phaser.Input.Events.POINTER_UP, callback);
     scene.events.once("shutdown", () => label.off(Phaser.Input.Events.POINTER_UP, callback));
     accessibilify(label);
     return label;
 };
+
+const isItemLocked = item => item.state === "locked";
 
 const resizePanel = (scene, panel) => () => {
     const t = panel.t;
@@ -110,7 +114,7 @@ const resizePanel = (scene, panel) => () => {
     panel.setT(t);
 };
 
-const getFirstElement = item => item.accessibleElement.el;
+const getFirstElement = item => item.accessibleElement?.el;
 
 const setupEvents = (scene, panel) => {
     const scaleEvent = onScaleChange.add(resizePanel(scene, panel));

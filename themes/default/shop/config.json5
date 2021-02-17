@@ -86,6 +86,7 @@
         manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
         confirm: "halfViewBackground",
     },
+    states: { locked: { properties: { alpha: 0.5, tint: 0xaaaaaa }, disabled: true } },
     overlay: {
         items: [
             {
@@ -94,6 +95,7 @@
                 assetKey: "${icon}",
                 position: { align: "left", offsetX: 35, offsetY: 0 },
                 size: 76,
+                takeStateProperties: true,
             },
             {
                 type: "text",
@@ -111,14 +113,29 @@
                     value: "${price}",
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeStates: ["available"],
+                    activeInStates: ["available"],
                 },
                 {
                     type: "image",
                     name: "currency",
                     assetKey: "shop.currency",
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["available"],
+                    activeInStates: ["available"],
+                },
+                {
+                    type: "image",
+                    name: "lock",
+                    assetKey: "shop.lockIcon",
+                    position: { align: "left", offsetX: 56, offsetY: 20 },
+                    activeInStates: ["locked"],
+                },
+                {
+                    type: "text",
+                    name: "unlockHint",
+                    value: "${hint}",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "14px" },
+                    activeInStates: ["locked"],
                 },
                 {
                     type: "text",
@@ -126,7 +143,7 @@
                     value: "Purchased",
                     position: { align: "right", offsetX: -108, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["unavailable"],
+                    activeInStates: ["unavailable"],
                 },
                 {
                     type: "text",
@@ -134,7 +151,7 @@
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeStates: ["equippable"],
+                    activeInStates: ["equippable", "unlocked"],
                 },
                 {
                     type: "text",
@@ -142,17 +159,24 @@
                     value: "${qty} in stock",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeStates: ["consumable"],
+                    activeInStates: ["consumable"],
                 },
             ],
             manage: [
+                {
+                    type: "image",
+                    name: "itemIcon",
+                    assetKey: "${icon}",
+                    position: { align: "left", offsetX: 35, offsetY: 0 },
+                    size: 76,
+                },
                 {
                     type: "text",
                     name: "equip",
                     value: "Equip",
                     position: { align: "right", offsetX: -76, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["cta", "equippable"],
+                    activeInStates: ["cta", "equippable"],
                 },
                 {
                     type: "text",
@@ -160,7 +184,7 @@
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeStates: ["equippable"],
+                    activeInStates: ["equippable"],
                 },
                 {
                     type: "text",
@@ -168,7 +192,7 @@
                     value: "Equipped",
                     position: { align: "right", offsetX: -96, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned", "equippable"],
+                    activeInStates: ["actioned", "equippable"],
                 },
                 {
                     type: "text",
@@ -176,7 +200,7 @@
                     value: "${qty} in inventory",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeStates: ["consumable"],
+                    activeInStates: ["consumable"],
                 },
             ],
         },

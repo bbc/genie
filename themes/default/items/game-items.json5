@@ -11,6 +11,8 @@
             //.. keep this namespaced out in case agencies want to put object stats in here
         },
         slot: "shield",
+        state: "locked",
+        hint: "Collect 5 gems to unlock",
     },
     {
         id: "bomb",

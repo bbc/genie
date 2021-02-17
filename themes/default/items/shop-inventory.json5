@@ -4,6 +4,6 @@
     defaultQty: 0, //default quantity unless specified
     defaults: [
         { id: "coin", qty: 100 },
-        { id: "shield", state: "purchased" },
+        { id: "box", qty: 1 },
     ],
 }

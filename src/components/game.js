@@ -129,6 +129,12 @@ export class Game extends Screen {
             });
         };
 
+        const unlockShopItem = () => {
+            const shopCollection = collections.get("shop-items");
+            const shieldItem = shopCollection.get("shield");
+            shopCollection.set({ ...shieldItem, state: "" });
+        };
+
         const increaseScores = item => {
             if (item === "star") {
                 stars++;
@@ -143,6 +149,7 @@ export class Game extends Screen {
                 tweenItem(gemImage);
                 this.sound.play("results.gem-sfx");
                 this.calculateAchievements(item, gems, achievementNames[item]);
+                gems === 5 && unlockShopItem();
             }
             if (item === "key") {
                 keys++;
