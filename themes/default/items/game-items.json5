@@ -33,12 +33,6 @@
         tags: ["food"],
     },
     {
-        id: "banana",
-        title: "Banana",
-        description: "A ripe banana",
-        tags: ["food"],
-    },
-    {
         id: "coin",
         title: "Coins",
         description: "Money",

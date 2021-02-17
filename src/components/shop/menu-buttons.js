@@ -43,16 +43,16 @@ const makeButton = (container, config, callback) => {
     return accessibilify(gelButton);
 };
 
-const resizeButton = container => (button, idx) => {
-    const right = Boolean(container.scene.config.menu.buttonsRight);
-    const bounds = container.list[0].getBounds();
+const resizeButton = pane => (button, idx) => {
+    const right = Boolean(pane.container.scene.config.menu.buttonsRight);
+    const bounds = pane.container.list[0].getBounds();
     button.setY(CAMERA_Y + bounds.y + bounds.height / 4 + (idx * bounds.height) / 2);
     const xPos = bounds.x + bounds.width / 2;
     button.setX(CAMERA_X + (right ? xPos : -xPos));
     button.setScale(bounds.width / button.width);
 };
 
-export const resizeGelButtons = container => container.buttons.forEach(resizeButton(container));
+export const resizeGelButtons = pane => pane.buttons?.forEach(resizeButton(pane));
 
 const setButtonOverlays = (scene, button, title) =>
     button.overlays.set("caption", addText(scene, 0, 0, title, scene.config.menuButtons).setOrigin(0.5));

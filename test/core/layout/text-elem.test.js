@@ -9,8 +9,7 @@ import * as text from "../../../src/core/layout/text-elem.js";
 
 describe("text element functions", () => {
     document.fonts = { ready: { then: jest.fn() }, check: jest.fn().mockReturnValue(true) };
-    const mockTextElem = { style: { _font: "foo", update: jest.fn() } };
-    jest.spyOn(window, "setTimeout");
+    const mockTextElem = { style: { _font: "foo", update: jest.fn() }, scene: "foo" };
 
     describe("addText()", () => {
         let elemConfig = { styles: { baz: "qux" } };
