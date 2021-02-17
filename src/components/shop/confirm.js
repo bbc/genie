@@ -76,13 +76,14 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
 export const createConfirm = (scene, title, item) => {
     const action = getAction(scene, title, item);
     scene.title.setTitleText(fp.startCase(action));
-    const confirmPane = {
-        setVisible: fp.noop,
+    const stubPane = {
         action,
         item,
         title,
+        setVisible: fp.noop,
     };
-    populatePane(scene, confirmPane);
+    const { container, buttons, destroy } = populatePane(scene, stubPane);
+    const confirmPane = { ...stubPane, container, buttons, destroy };
     confirmPane.resize = resizeConfirm(scene, confirmPane);
     return confirmPane;
 };
@@ -96,9 +97,9 @@ const populatePane = (scene, confirmPane) => {
     container.setY(yOffset);
     createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
     action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
-    confirmPane.buttons = addConfirmButtons(scene, container, innerBounds, title, action, item);
-    confirmPane.container = container;
-    confirmPane.destroy = destroyContainer(container);
+    const buttons = addConfirmButtons(scene, container, innerBounds, title, action, item);
+    const destroy = destroyContainer(container);
+    return { container, buttons, destroy };
 };
 
 const getAction = (scene, title, item) => {
@@ -118,7 +119,10 @@ const inferAction = fp.cond([
 
 const resizeConfirm = (scene, confirmPane) => () => {
     confirmPane.destroy();
-    populatePane(scene, confirmPane);
+    const { container, buttons, destroy } = populatePane(scene, confirmPane);
+    confirmPane.destroy = destroy;
+    confirmPane.container = container;
+    confirmPane.buttons = buttons;
 };
 
 const destroyContainer = container => () => {
