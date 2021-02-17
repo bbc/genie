@@ -29,7 +29,7 @@
     },
     "devDependencies": {
         "cross-env": "^7.0.2",
-        "cypress": "^6.1.0",
+        "cypress": "^6.5.0",
         "cypress-plugin-tab": "^1.0.5",
         "eslint": "^6.8.0",
         "eslint-config-prettier": "^6.15.0",
@@ -71,10 +71,10 @@
         "docs": "jsdoc -c ./build-scripts/docs/.jsdoc.js",
         "validate": "node build-scripts/schemavalidator/validator.js achievement",
         "roll-lodash": "rollup -c lib/lodash/rollup.config.js",
-        "cy": "cypress open",
-        "cy:headless": "cypress run --headless --config video=false --spec '**/*spec.js'",
-        "cy:headless-theme2": "export THEME_2=true && cypress run --headless --config video=false --spec '**/*spec.js'",
-        "cy:local": "export LOCAL_DEV=true && npm run cy:headless",
-        "cy:local-theme2": "export THEME_2=true && LOCAL_DEV=true && npm run cy:headless"
+        "cy": "export THEME=theme_1 && export LOCAL_DEV=true && cypress open",
+        "cy:headless": "export THEME=theme_1 && cypress run --headless --config video=false --spec '**/*spec.js'",
+        "cy:headless-theme2": "export THEME=theme_2 && cypress run --headless --config video=false --spec '**/*spec.js'",
+        "cy:local": "export THEME=theme_1 && export LOCAL_DEV=true && cypress run --headless --browser chrome --config video=false --spec '**/*spec.js'",
+        "cy:local-theme2": "export THEME=theme_2 && export LOCAL_DEV=true && cypress run --headless --browser chrome --config video=false --spec '**/*spec.js'"
     }
 }

@@ -12,7 +12,8 @@ cp -r themes output/themes
 cp -r debug output/debug
 
 set +e
-npm run cy:headless
+npm run start:pack
+npm run cy:local
 if [ $? -eq 0 ]
     then
         node cypress/support/createReports.js

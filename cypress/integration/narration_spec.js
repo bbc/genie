@@ -6,15 +6,17 @@
 
 import { getUrl } from "../support/functions";
 
-describe("The Genie narration page", () => {
+describe(`The Genie narration page ${Cypress.env("THEME")}`, () => {
     beforeEach(() => {
         cy.visit(getUrl());
         cy.get("#home__play", { timeout: 60000 }).should("exist");
-        cy.get(".data-notice").click();
+        if(!Cypress.env("DEV_LOCAL") == "true") {
+            cy.get(".data-notice").click();
+        }  
     });
 
     it("can skip the narration page", () => {
-        cy.genieClick("#home__debug"); /* "home__debug" -> intentionally fail */
+        cy.genieClick("#home__debug");
         cy.genieClick("#debug__debug-narrative");
         cy.genieClick("#debug-narrative__skip");
         cy.get("#debug__debug-narrative", { timeout: 20000 }).should("exist");
