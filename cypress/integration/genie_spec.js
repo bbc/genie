@@ -68,6 +68,7 @@ describe(`Tests the core flow of Genie ${Cypress.env("THEME")}`, () => {
         cy.get("#home__play", { timeout: 1200000 }).should("exist");
         if (!Cypress.env("DEV_LOCAL") == "true") {
             cy.get(".data-notice").click();
+        }
     });
 
     it("Navigates through the core flow and loads the next level select after completion", () => {
