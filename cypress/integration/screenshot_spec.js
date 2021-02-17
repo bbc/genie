@@ -9,8 +9,8 @@ import { getUrl } from "../support/functions";
 const sizes = ["iphone-5", "iphone-7", [1400, 600]];
 const theme = Cypress.env("THEME");
 const screenshotData = (size, text) => {
-    return `[${size} ${theme} ${text}]`
-}
+    return `[${size} ${theme} ${text}]`;
+};
 
 describe(`Takes screenshots on multiple viewports ${Cypress.env("THEME")}`, () => {
     sizes.forEach(size => {
@@ -36,10 +36,16 @@ describe(`Takes screenshots on multiple viewports ${Cypress.env("THEME")}`, () =
             cy.genieClick("#how-to-play__back");
             cy.genieClick("#home__play");
             cy.safeArea("#narrative__continue");
-            cy.get("canvas").screenshot(screenshotData(size, "Narrative Screen"), { capture: "viewport", timeout: "20000" });
+            cy.get("canvas").screenshot(screenshotData(size, "Narrative Screen"), {
+                capture: "viewport",
+                timeout: "20000",
+            });
             cy.genieClick("#narrative__pause");
             cy.safeArea("#pause__play");
-            cy.get("canvas").screenshot(screenshotData(size, "Pause Screen"), { capture: "viewport", timeout: "20000" });
+            cy.get("canvas").screenshot(screenshotData(size, "Pause Screen"), {
+                capture: "viewport",
+                timeout: "20000",
+            });
             cy.genieClick("#pause__play");
             cy.genieClick("#narrative__continue");
             cy.genieClick("#narrative__continue");
@@ -53,7 +59,10 @@ describe(`Takes screenshots on multiple viewports ${Cypress.env("THEME")}`, () =
             cy.genieClick("#level-select__1");
             cy.genieClick("#game__4");
             cy.safeArea("#results__continue");
-            cy.get("canvas").screenshot(screenshotData(size, "Results Screen"), { capture: "viewport", timeout: "20000" });
+            cy.get("canvas").screenshot(screenshotData(size, "Results Screen"), {
+                capture: "viewport",
+                timeout: "20000",
+            });
         });
 
         it(`screenshots the single item select screen on a ${size} viewport`, () => {
