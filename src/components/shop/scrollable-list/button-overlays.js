@@ -17,17 +17,14 @@ export const overlays1Wide = (gelButton, configs) => {
 
 const setImageOverlay = ({ gelButton, config, offset }) => {
     const { scene, item } = gelButton;
-    const { assetPrefix } = scene.config;
-    const key = config.isDynamic ? `${item[config.assetKey]}` : `${assetPrefix}.${config.assetKey}`;
-    const image = scene.add.image(offset.x, offset.y, key);
+    const image = scene.add.image(offset.x, offset.y, fp.template(config.assetKey)(item));
     config.size && image.setScale(config.size / image.width);
     gelButton.overlays.set(config.name, image);
 };
 
 const setTextOverlay = ({ gelButton, config, offset }) => {
     const { scene, item } = gelButton;
-    const textContent = config.isDynamic ? item[config.value].toString() : config.value.toString();
-    const template = fp.template(textContent);
+    const template = fp.template(config.value.toString());
     gelButton.overlays.set(config.name, addText(scene, offset.x, offset.y, template(item), config));
 };
 

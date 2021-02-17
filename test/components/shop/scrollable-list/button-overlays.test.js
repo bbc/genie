@@ -4,7 +4,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { overlays1Wide } from "../../../../src/core/layout/scrollable-list/button-overlays.js";
+import { overlays1Wide } from "../../../../src/components/shop/scrollable-list/button-overlays.js";
 import * as text from "../../../../src/core/layout/text-elem.js";
 
 const mockImage = { setScale: jest.fn(), width: 100 };
@@ -51,8 +51,7 @@ describe("Button overlays", () => {
         mockOverlay = {
             type: "image",
             name: "someImage",
-            assetKey: "someImageAssetKey",
-            isDynamic: false,
+            assetKey: "test.someImageAssetKey",
         };
     });
 
@@ -82,31 +81,6 @@ describe("Button overlays", () => {
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 expect(text.addText.mock.calls[0][3]).toBe("someText");
-            });
-        });
-
-        describe("dynamic and static overlays", () => {
-            test("dynamic image overlays use an asset key from the item", () => {
-                mockOverlay = { ...mockOverlay, isDynamic: true, assetKey: "icon" };
-                mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockGelButton, mockConfig.overlay.items);
-                expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.itemIcon");
-            });
-
-            test("static image overlays use literal values from config with a default prefix", () => {
-                mockOverlay.isDynamic = false;
-                mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockGelButton, mockConfig.overlay.items);
-                const expectedKey = `${mockScene.config.assetPrefix}.${mockOverlay.assetKey}`;
-                expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, expectedKey);
-            });
-
-            test("dynamic text overlays use the item value given by 'value'", () => {
-                mockOverlay = { ...mockOverlay, type: "text", value: "price", isDynamic: true };
-                mockConfig.overlay.items.push(mockOverlay);
-                overlays1Wide(mockGelButton, mockConfig.overlay.items);
-                const expectedValue = "42";
-                expect(text.addText.mock.calls[0][3]).toBe(expectedValue);
             });
         });
 

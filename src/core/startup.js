@@ -14,14 +14,16 @@ import { hookErrors } from "./loader/hook-errors.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addGelButton } from "./layout/gel-game-objects.js";
 import { getPhaserDefaults } from "./loader/phaser-defaults/get-phaser-defaults.js";
+import { addResumeSafariAudioContextEvent } from "./safari-audio.js";
 
-export function startup(config) {
+export const startup = config => {
     setGmi(config.settings || {}, window);
     hookErrors(gmi.gameContainerId);
     Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
     addCustomStyles();
     const game = new Phaser.Game(getPhaserDefaults(config));
+    addResumeSafariAudioContextEvent(game);
     game.device.audio.mp4 = true;
     debugMode.create(window, game);
     a11y.create();
-}
+};

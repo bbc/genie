@@ -7,31 +7,43 @@
 
 import { collections } from "../../core/collections.js";
 
-export const doTransaction = scene => tx => {
+export const buy = (scene, item) => {
     const { shop, manage } = scene.config.paneCollections;
     const invCol = collections.get(manage);
-    return (
-        (tx.title === "shop" && buy(tx, shop, invCol, scene.config.balance.value.key)) ||
-        (tx.title === "manage" && equip(tx, invCol))
-    );
-};
-
-const buy = (tx, shop, invCol, currencyKey) => {
     const shopCol = collections.get(shop);
-    const qtyInStock = shopCol.get(tx.item.id).qty || 1;
-    shopCol.set({ ...tx.item, state: "owned", qty: qtyInStock - 1 });
-    const qtyOwned = invCol.get(tx.item.id)?.qty || 0;
-    invCol.set({ ...tx.item, qty: qtyOwned + 1 });
-    updateBalance(invCol, currencyKey, tx.item.price);
-    return tx.item.price;
+    const inventoryItem = invCol.get(item.id);
+    shopCol.set({ ...item, qty: shopCol.get(item.id).qty - 1 });
+    invCol.set({ ...item, state: "purchased", qty: inventoryItem ? inventoryItem.qty + 1 : 1 });
+    updateBalance(scene, invCol, item.price);
 };
 
-const equip = (tx, invCol) => {
-    invCol.set({ ...tx.item, state: "equipped" });
+export const equip = (scene, item) => {
+    const { manage } = scene.config.paneCollections;
+    const invCol = collections.get(manage);
+    const itemsEquippedInSlot = invCol
+        .getAll()
+        .filter(invItem => invItem.slot === item.slot && invItem.state === "equipped");
+    const maxItemsInSlot = scene.config.slots[item.slot].max;
+    itemsEquippedInSlot.length === maxItemsInSlot && unequip(scene, itemsEquippedInSlot[0]);
+    invCol.set({ ...item, state: "equipped" });
 };
 
-const updateBalance = (invCol, currencyKey, price) => {
-    const currency = invCol.get(currencyKey);
-    const newBalance = currency.qty - price;
-    invCol.set({ ...currency, qty: newBalance });
+export const unequip = (scene, item) => {
+    const { manage } = scene.config.paneCollections;
+    const invCol = collections.get(manage);
+    invCol.set({ ...item, state: "purchased" });
 };
+
+export const use = (scene, item) => {
+    const { manage } = scene.config.paneCollections;
+    const invCol = collections.get(manage);
+    const invItem = invCol.get(item.id);
+    invCol.set({ ...invItem, qty: invItem.qty - 1 });
+};
+
+const updateBalance = (scene, invCol, price) =>
+    invCol.set({ ...getBalanceItem(scene), qty: getBalanceItem(scene).qty - price }) ||
+    scene.events.emit("updatebalance");
+
+export const getBalanceItem = scene =>
+    collections.get(scene.config.paneCollections.manage).get(scene.config.balance.value.key);

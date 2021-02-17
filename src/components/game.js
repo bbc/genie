@@ -7,6 +7,7 @@ import { Screen } from "../core/screen.js";
 import { accessibilify } from "../core/accessibility/accessibilify.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { collections } from "../core/collections.js";
+import { launchShopOverlay } from "../components/shop/shop.js";
 
 export class Game extends Screen {
     calculateAchievements(item, amount, keys) {
@@ -87,6 +88,15 @@ export class Game extends Screen {
         accessibilify(continueButton);
         this.add.text(300, 20, "Continue", buttonTextStyle).setOrigin(0.5);
 
+        const shopButton = this.add
+            .image(-200, 220, buttonKey)
+            .setOrigin(0.5)
+            .setInteractive({ useHandCursor: true })
+            .on("pointerup", () => launchShopOverlay(this, "shop"));
+        shopButton.config = { id: 5, ariaLabel: "Shop" };
+        accessibilify(shopButton);
+        this.add.text(-200, 220, "Shop", buttonTextStyle).setOrigin(0.5);
+
         const onLevelComplete = () => {
             const { id, title } = this.transientData["level-select"].choice;
             markLevelAsComplete(id);
@@ -144,14 +154,14 @@ export class Game extends Screen {
         };
 
         this.add
-            .text(0, 200, `Character Selected: ${this.transientData["character-select"].choice.title}`, {
+            .text(150, 200, `Character Selected: ${this.transientData["character-select"].choice.title}`, {
                 font: "32px ReithSans",
                 fill: "#f6931e",
                 align: "center",
             })
             .setOrigin(0.5);
         this.add
-            .text(0, 250, `Level Selected: ${this.transientData["level-select"].choice.title}`, {
+            .text(150, 250, `Level Selected: ${this.transientData["level-select"].choice.title}`, {
                 font: "32px ReithSans",
                 fill: "#f6931e",
                 align: "center",

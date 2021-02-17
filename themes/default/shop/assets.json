@@ -5,67 +5,67 @@
             {
                 "type": "image",
                 "key": "magicShop",
-                "url": "shop/magic_shop_bg.png"
+                "url": "shop/assets/magic_shop_bg.png"
             },
             {
                 "type": "image",
                 "key": "background",
-                "url": "shop/wood_panel.png"
+                "url": "shop/assets/wood_panel.png"
             },
             {
                 "type": "image",
                 "key": "itemViewBackground",
-                "url": "shop/item_panel.png"
+                "url": "shop/assets/item_panel.png"
             },
             {
                 "type": "image",
                 "key": "halfViewBackground",
-                "url": "shop/half_panel.png"
+                "url": "shop/assets/half_panel.png"
             },
             {
                 "type": "image",
                 "key": "background",
-                "url": "shop/wood_panel.png"
+                "url": "shop/assets/wood_panel.png"
             },
             {
                 "type": "image",
                 "key": "scrollbar",
-                "url": "shop/scrollbar.png"
+                "url": "shop/assets/scrollbar.png"
             },
             {
                 "type": "image",
                 "key": "scrollbarHandle",
-                "url": "shop/handle.png"
+                "url": "shop/assets/handle.png"
             },
             {
                 "type": "image",
                 "key": "balanceBackground",
-                "url": "shop/balance_background.png"
+                "url": "shop/assets/balance_background.png"
             },
             {
                 "type": "image",
                 "key": "balanceIcon",
-                "url": "shop/balance_icon.png"
+                "url": "shop/assets/balance_icon.png"
             },
             {
                 "type": "image",
                 "key": "currencyIcon",
-                "url": "shop/currency.png"
+                "url": "shop/assets/currency.png"
             },
             {
                 "type": "image",
                 "key": "titleBackground",
-                "url": "shop/title_background.png"
+                "url": "shop/assets/title_background.png"
             },
             {
                 "type": "image",
                 "key": "menuButtonIcon",
-                "url": "shop/menu_button_icon.png"
+                "url": "shop/assets/menu_button_icon.png"
             },
             {
                 "type": "spritesheet",
                 "key": "menuButtonBackground",
-                "url": "shop/green_button.png",
+                "url": "shop/assets/green_button.png",
                 "frameConfig": {
                     "frameWidth": 113,
                     "frameHeight": 42,
@@ -78,7 +78,7 @@
             {
                 "type": "spritesheet",
                 "key": "itemBackground",
-                "url": "shop/item_block.png",
+                "url": "shop/assets/item_block.png",
                 "frameConfig": {
                     "frameWidth": 378,
                     "frameHeight": 64,
@@ -90,7 +90,7 @@
             {
                 "type": "spritesheet",
                 "key": "itemIcon",
-                "url": "shop/icon.png",
+                "url": "shop/assets/icon.png",
                 "frameConfig": {
                     "frameWidth": 64,
                     "frameHeight": 64,
@@ -102,7 +102,7 @@
             {
                 "type": "spritesheet",
                 "key": "currency",
-                "url": "shop/currency_small.png",
+                "url": "shop/assets/currency_small.png",
                 "frameConfig": {
                     "frameWidth": 31,
                     "frameHeight": 24,
@@ -114,7 +114,7 @@
             {
                 "type": "spritesheet",
                 "key": "armagogIcon",
-                "url": "items/armagog.png",
+                "url": "shop/assets/armagog.png",
                 "frameConfig": {
                     "frameWidth": 76,
                     "frameHeight": 76,
@@ -126,7 +126,7 @@
             {
                 "type": "spritesheet",
                 "key": "bombIcon",
-                "url": "items/bomb.png",
+                "url": "shop/assets/bomb.png",
                 "frameConfig": {
                     "frameWidth": 97,
                     "frameHeight": 97,
@@ -138,7 +138,7 @@
             {
                 "type": "spritesheet",
                 "key": "mysteryBoxIcon",
-                "url": "items/box.png",
+                "url": "shop/assets/box.png",
                 "frameConfig": {
                     "frameWidth": 94,
                     "frameHeight": 94,

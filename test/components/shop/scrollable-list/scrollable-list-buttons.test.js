@@ -4,20 +4,18 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import * as buttons from "../../../../src/core/layout/scrollable-list/scrollable-list-buttons.js";
-import * as overlays from "../../../../src/core/layout/scrollable-list/button-overlays.js";
-import * as handlers from "../../../../src/core/layout/scrollable-list/scrollable-list-handlers.js";
+import * as buttons from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
+import * as overlays from "../../../../src/components/shop/scrollable-list/button-overlays.js";
+import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 import { eventBus } from "../../../../src/core/event-bus.js";
 import * as a11y from "../../../../src/core/accessibility/accessibilify.js";
 import { collections } from "../../../../src/core/collections.js";
 
 describe("Scrollable List Buttons", () => {
     let button;
-    const mockItem = {
-        id: "mockId",
-        ariaLabel: "mockAriaLabel",
-        state: "",
-    };
+    let mockItem;
+    let mockCollection;
+
     const mockButton = {
         input: { enabled: true },
         on: jest.fn(),
@@ -66,8 +64,6 @@ describe("Scrollable List Buttons", () => {
     };
     mockButton.scene = mockScene;
 
-    const mockCollection = { get: jest.fn().mockReturnValue(mockItem) };
-    collections.get = jest.fn().mockReturnValue(mockCollection);
     overlays.overlays1Wide = jest.fn();
     a11y.accessibilify = jest.fn();
     const mockEvent = { unsubscribe: "foo" };
@@ -77,7 +73,16 @@ describe("Scrollable List Buttons", () => {
 
     afterEach(() => jest.clearAllMocks());
 
-    beforeEach(() => (button = buttons.createGelButton(mockScene, mockItem, "shop", "cta", mockCallback)));
+    beforeEach(() => {
+        mockItem = {
+            id: "mockId",
+            ariaLabel: "mockAriaLabel",
+            state: "",
+        };
+        mockCollection = { get: jest.fn().mockReturnValue(mockItem) };
+        collections.get = jest.fn().mockReturnValue(mockCollection);
+        button = buttons.createGelButton(mockScene, mockItem, "shop", "cta", mockCallback);
+    });
 
     describe("createGelButton()", () => {
         test("adds a gel button", () => {
@@ -159,17 +164,25 @@ describe("Scrollable List Buttons", () => {
     });
 
     describe("getButtonState() returns a string describing the button state", () => {
-        test("with shop items, look for an 'owned' state", () => {
-            const item = { id: "foo", state: "unique", qty: 1 };
-            expect(buttons.getButtonState(item, "shop")).toEqual(["cta", "unique", "inStock"]);
-            item.state = "owned";
-            expect(buttons.getButtonState(item, "shop")).toEqual(["actioned", "unique", "inStock"]);
+        test("state is actioned when in the shop and items no longer available", () => {
+            mockItem.qty = 0;
+            expect(buttons.getButtonState(mockScene, { qty: 1 }, "shop")).toEqual(["cta", "consumable", "available"]);
+            mockItem.qty = 1;
+            expect(buttons.getButtonState(mockScene, { qty: 0 }, "shop")).toEqual([
+                "actioned",
+                "consumable",
+                "unavailable",
+            ]);
         });
-        test("with manage items, look for an 'equipped' state", () => {
-            const item = { id: "foo", state: "", qty: 0 };
-            expect(buttons.getButtonState(item, "manage")).toEqual(["cta", "nonUnique", "notInStock"]);
-            item.state = "equipped";
-            expect(buttons.getButtonState(item, "manage")).toEqual(["actioned", "nonUnique", "notInStock"]);
+        test("state is actioned when in the manage section and item is equipped", () => {
+            const item = { slot: "helmet" };
+            expect(buttons.getButtonState(mockScene, item, "manage")).toEqual(["cta", "equippable", "unavailable"]);
+            mockItem.state = "equipped";
+            expect(buttons.getButtonState(mockScene, item, "manage")).toEqual([
+                "actioned",
+                "equippable",
+                "unavailable",
+            ]);
         });
     });
 });

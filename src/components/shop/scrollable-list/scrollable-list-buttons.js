@@ -5,10 +5,8 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { overlays1Wide } from "./button-overlays.js";
-import { collections } from "../../collections.js";
+import { collections } from "../../../core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
-
-const STATES = ["cta", "actioned", "inStock"];
 
 const createGelButton = (scene, item, title, state) => {
     const id = `scroll_button_${item.id}_${title}`;
@@ -18,7 +16,7 @@ const createGelButton = (scene, item, title, state) => {
         gameButton: true,
         group: scene.scene.key,
         id,
-        key: config.assetKeys.itemBackground,
+        key: "itemBackground",
         scene: scene.assetPrefix,
         scrollable: true,
     };
@@ -64,40 +62,32 @@ const updateButtonData = button => {
     return fp.isEqual(button.item, item) ? false : doUpdate(button, item);
 };
 
-const getButtonState = (item, title) => {
+const getButtonState = (scene, item, title) => {
     const states = [];
-    const isOwned = item => item?.state === "owned";
-    const isEquipped = item => item?.state === "equipped";
-    const isButtonCta = title === "shop" ? isOwned : isEquipped;
-    states.push(isButtonCta(item) ? "actioned" : "cta");
-    states.push(isItemUnique(item) ? "unique" : "nonUnique");
-    states.push(isItemInStock(item) ? "notInStock" : "inStock");
+    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item.id);
+    const isPurchased = inventoryItem => isItemInStock(inventoryItem);
+    const isEquipped = inventoryItem => inventoryItem?.state === "equipped";
+    const isButtonCta = title === "shop" ? isPurchased(inventoryItem) : isEquipped(inventoryItem);
+    states.push(isButtonCta ? "actioned" : "cta");
+    states.push(isItemEquippable(item) ? "equippable" : "consumable");
+    states.push(isItemInStock(item) ? "available" : "unavailable");
     return states;
 };
 
-const isItemUnique = item => item.qty === 1 && !item.isConsumable;
-const isItemInStock = item => item.qty === 0;
+const isItemEquippable = item => item.slot;
+const isItemInStock = item => item?.qty > 0;
 
 const updateOverlays = button => {
     button.overlays.unsetAll();
-    button.overlays.state = getButtonState(button.item, getPaneTitle(button));
+    button.overlays.state = getButtonState(button.scene, button.item, getPaneTitle(button));
     button.overlays.setAll();
 };
 
-const getConfigs = button => button.overlays.configs.items.concat(filterOptionalConfigs(button.overlays)); // filter this
+const getConfigs = button => button.overlays.configs.items.concat(filterOptionalConfigs(button.overlays));
 
 const filterOptionalConfigs = overlays => {
-    const states = overlays.state;
-    const options = overlays.configs.options;
-
-    const filteredOptions = options.filter(overlay => {
-        let result = true;
-        overlay.activeStates.forEach(stateLabel => {
-            if (!states.includes(stateLabel)) result = false;
-        });
-        return result;
-    });
-    return filteredOptions;
+    const overlayStateIsInItemState = state => overlays.state.includes(state);
+    return overlays.configs.options.filter(overlay => fp.every(overlayStateIsInItemState, overlay.activeStates));
 };
 
 const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);

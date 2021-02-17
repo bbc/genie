@@ -1,8 +1,8 @@
 {
-    assetPrefix: "shop", //override generally only used for debug screens. Remove for production screens TODO can we switch the debug shop to use "shop-debug." ?
+    assetPrefix: "debug-shop", // override generally only used for debug screens. Remove for production screens.
     music: "home.backgroundMusic",
     background: {
-        items: [{ key: "shop.magicShop", x: 0, y: 0 }],
+        items: [{ key: "debug-shop.magicShop", x: 0, y: 0 }],
     },
     styleDefaults: {
         fontFamily: "ReithSans",
@@ -55,11 +55,21 @@
         shop: "debug-armoury",
         manage: "debug-inventory",
     },
+    slots: {
+        helmet: { max: Infinity },
+        shield: { max: 1 },
+    },
     confirm: {
         detailView: true, // true === smaller image and more text. false === large image only.
         prompt: {
-            shop: { legal: "Purchase this item?", illegal: "You can't afford this." },
-            manage: { legal: "Do you want to \nequip this item?", illegal: "You've already \nequipped this." },
+            buy: {
+                legal: "Purchase this item?",
+                illegal: "You can't afford this.",
+                unavailable: "You already own this.",
+            },
+            equip: { legal: "Do you want to \nequip this item?", illegal: "You cannot equip\nthis item." },
+            unequip: "Do you want to \nunequip this item?",
+            use: "Do you want to\nuse this item?",
             styles: { fontStyle: "bold" },
         },
         title: { styles: { fontStyle: "bold" } }, // optionally configure styles on item text
@@ -78,35 +88,19 @@
         manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
         confirm: "halfViewBackground",
     },
-    assetKeys: {
-        scrollbar: "scrollbar",
-        scrollbarHandle: "scrollbarHandle",
-        itemBackground: "itemBackground",
-        buttonBackground: "menuButtonBackground",
-        buttonIcon: "menuButtonIcon",
-        currency: "currencyIcon",
-    },
     overlay: {
         items: [
             {
                 type: "image",
-                name: "background",
-                assetKey: "itemBackground",
-                isDynamic: false, // asset key is the value of assetKey
-            },
-            {
-                type: "image",
                 name: "itemIcon",
-                assetKey: "icon",
-                isDynamic: true, // asset key is item[assetKey]
+                assetKey: "${icon}",
                 position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
                 size: 76,
             },
             {
                 type: "text",
                 name: "itemName",
-                value: "title",
-                isDynamic: true,
+                value: "${title}",
                 position: { align: "left", offsetX: 80, offsetY: -18 },
                 styles: { fontSize: "16px", fontStyle: "bold" },
             },
@@ -116,63 +110,41 @@
                 {
                     type: "text",
                     name: "currencyAmount",
-                    value: "price",
-                    isDynamic: true,
+                    value: "${price}",
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeStates: ["cta", "inStock"],
-                },
-                {
-                    type: "text",
-                    name: "currencyAmount",
-                    value: "price",
-                    isDynamic: true,
-                    position: { align: "right", offsetX: -44, offsetY: -10 },
-                    styles: { fontSize: "14px" },
-                    activeStates: ["actioned", "nonUnique", "inStock"],
+                    activeStates: ["available"],
                 },
                 {
                     type: "image",
                     name: "currency",
-                    assetKey: "currency",
-                    isDynamic: false,
+                    assetKey: "debug-shop.currency",
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["cta", "inStock"], // match on one
-                },
-                {
-                    type: "image",
-                    name: "currency",
-                    assetKey: "currency",
-                    isDynamic: false,
-                    position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeStates: ["actioned", "nonUnique", "inStock"], // match on one
+                    activeStates: ["available"],
                 },
                 {
                     type: "text",
-                    name: "owned",
+                    name: "purchased",
                     value: "Purchased",
-                    isDynamic: false,
-                    position: { align: "right", offsetX: -120, offsetY: -10 },
+                    position: { align: "right", offsetX: -108, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned", "notInStock"], // match on all
+                    activeStates: ["unavailable"],
                 },
                 {
                     type: "text",
                     name: "itemDescription",
-                    value: "description",
-                    isDynamic: true,
+                    value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "12px" }, // moves to options, add another option
-                    activeStates: ["cta", "unique"], // match on all
+                    styles: { fontSize: "12px" },
+                    activeStates: ["equippable"],
                 },
                 {
                     type: "text",
                     name: "itemStockLevel",
                     value: "${qty} in stock",
-                    isDynamic: false, // true
                     position: { align: "left", offsetX: 80, offsetY: 4 },
-                    styles: { fontSize: "12px" }, // moves to options, add another option
-                    activeStates: ["nonUnique", "inStock"], // match on all
+                    styles: { fontSize: "12px" },
+                    activeStates: ["consumable"],
                 },
             ],
             manage: [
@@ -180,19 +152,33 @@
                     type: "text",
                     name: "equip",
                     value: "Equip",
-                    isDynamic: false,
                     position: { align: "right", offsetX: -76, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["cta"],
+                    activeStates: ["cta", "equippable"],
+                },
+                {
+                    type: "text",
+                    name: "itemDescription",
+                    value: "${description}",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" },
+                    activeStates: ["equippable"],
                 },
                 {
                     type: "text",
                     name: "equipped",
                     value: "Equipped",
-                    isDynamic: false,
                     position: { align: "right", offsetX: -96, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeStates: ["actioned"],
+                    activeStates: ["actioned", "equippable"],
+                },
+                {
+                    type: "text",
+                    name: "itemStockLevel",
+                    value: "${qty} in inventory",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" },
+                    activeStates: ["consumable"],
                 },
             ],
         },

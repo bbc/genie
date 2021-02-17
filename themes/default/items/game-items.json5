@@ -42,5 +42,5 @@
         longDescription: "AKA cash, moolah, \nscratch, dough, bread...",
         icon: "shop.balanceIcon",
         tags: ["currency"],
-    }
+    },
 ]

@@ -4,6 +4,6 @@
  * @license Apache-2.0
  */
 
-import { createBackground, getType } from "../../core/layout/scrollable-list/scrollable-list.js";
+import { createBackground, getType } from "../../components/shop/scrollable-list/scrollable-list.js";
 
 export const createPaneBackground = (scene, config) => createBackground[getType(config)](scene, config);

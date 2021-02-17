@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { createPaneBackground } from "../../../src/components/shop/background.js";
-import * as scrollableListModule from "../../../src/core/layout/scrollable-list/scrollable-list.js";
+import * as scrollableListModule from "../../../src/components/shop/scrollable-list/scrollable-list.js";
 
 const mockScene = { tag: "mockScene" };
 

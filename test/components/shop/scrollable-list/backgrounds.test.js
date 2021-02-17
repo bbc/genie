@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createBackground, resizeBackground } from "../../../../src/core/layout/scrollable-list/backgrounds.js";
+import { createBackground, resizeBackground } from "../../../../src/components/shop/scrollable-list/backgrounds.js";
 
 describe("createBackground", () => {
     test("null config returns an empty object", () => {
