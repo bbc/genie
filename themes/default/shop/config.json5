@@ -82,7 +82,7 @@
         manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
         confirm: "halfViewBackground",
     },
-    states: { locked: { properties: { alpha: 0.5, tint: 0xaaaaaa } } },
+    states: { locked: { properties: { alpha: 0.5, tint: 0xaaaaaa }, disabled: true } },
     overlay: {
         items: [
             {

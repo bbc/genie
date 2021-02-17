@@ -74,13 +74,13 @@ const getButtonState = (scene, item, title) => {
     states.push(isButtonCta ? "actioned" : "cta");
     states.push(isItemEquippable(item) ? "equippable" : "consumable");
     states.push(isItemInStock(item) ? "available" : "unavailable");
-    states.push(isItemLocked(item) ? "locked" : "unlocked");
+    states.push(isItemLocked(item, scene.config) ? "locked" : "unlocked");
     return states;
 };
 
 const isItemEquippable = item => Boolean(item.slot);
 const isItemInStock = item => Boolean(item?.qty > 0);
-const isItemLocked = item => Boolean(item.state === "locked");
+const isItemLocked = (item, config) => item.state && config.states[item.state] && config.states[item.state].disabled;
 
 const updateOverlays = button => {
     button.overlays.unsetAll();

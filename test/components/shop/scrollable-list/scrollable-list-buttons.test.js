@@ -41,7 +41,7 @@ describe("Scrollable List Buttons", () => {
                 itemBackground: "itemBackground",
             },
             listPadding: { x: 10, y: 8, outerPadFactor: 2 },
-            states: { locked: { properties: { someProperty: "someValue" } } },
+            states: { locked: { properties: { someProperty: "someValue" }, disabled: true } },
             overlay: {
                 items: [{ foo: "bar" }],
                 options: {
