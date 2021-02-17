@@ -8,6 +8,7 @@ import { Screen } from "../../core/screen.js";
 import { ScrollableList } from "./scrollable-list/scrollable-list.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { getMetrics, onScaleChange } from "../../core/scaler.js";
+import { createConfirm } from "./confirm.js";
 import { createTitle } from "./shop-titles.js";
 import { createBalance } from "./balance-ui.js";
 import { createMenu } from "./menu.js";
@@ -97,7 +98,10 @@ export class Shop extends Screen {
         const metrics = getMetrics();
         this.panes.top.resize();
         this.panes.shop.reset();
-        this.panes.confirm?.container?.visible && this.panes.confirm.resize();
+        if (this.panes.confirm?.container?.visible) {
+            this.panes.confirm.destroy();
+            this.panes.confirm = createConfirm(this, this.panes.confirm.title, this.panes.confirm.item);
+        }
         const safeArea = getSafeArea(this.layout);
         this.title.setScale(getScaleFactor({ metrics, container: this.title, fixedWidth: true, safeArea }));
         this.title.setPosition(0, getYPos(metrics, safeArea));

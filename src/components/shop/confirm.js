@@ -12,6 +12,27 @@ import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { buy, equip, unequip, use, getBalanceItem } from "./transact.js";
 import { collections } from "../../core/collections.js";
 
+export const createConfirm = (scene, title, item) => {
+    const action = getAction(scene, title, item);
+    scene.title.setTitleText(fp.startCase(action));
+    const bounds = getSafeArea(scene.layout);
+    const container = scene.add.container();
+    const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
+    const yOffset = bounds.height / 2 + bounds.y;
+    container.setY(yOffset);
+    createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
+    action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
+
+    return {
+        item,
+        title,
+        setVisible: fp.noop,
+        container,
+        buttons: addConfirmButtons(scene, container, innerBounds, title, action, item),
+        destroy: destroyContainer(container),
+    };
+};
+
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
     container.add(
         [
@@ -73,35 +94,6 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
     return confirmButtons;
 };
 
-export const createConfirm = (scene, title, item) => {
-    const action = getAction(scene, title, item);
-    scene.title.setTitleText(fp.startCase(action));
-    const stubPane = {
-        action,
-        item,
-        title,
-        setVisible: fp.noop,
-    };
-    const { container, buttons, destroy } = populatePane(scene, stubPane);
-    const confirmPane = { ...stubPane, container, buttons, destroy };
-    confirmPane.resize = resizeConfirm(scene, confirmPane);
-    return confirmPane;
-};
-
-const populatePane = (scene, confirmPane) => {
-    const { action, item, title } = confirmPane;
-    const bounds = getSafeArea(scene.layout);
-    const container = scene.add.container();
-    const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
-    const yOffset = bounds.height / 2 + bounds.y;
-    container.setY(yOffset);
-    createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
-    action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
-    const buttons = addConfirmButtons(scene, container, innerBounds, title, action, item);
-    const destroy = destroyContainer(container);
-    return { container, buttons, destroy };
-};
-
 const getAction = (scene, title, item) => {
     return title === "shop" ? "buy" : getInventoryAction(scene, item);
 };
@@ -116,14 +108,6 @@ const inferAction = fp.cond([
     [i => i.state === "equipped", () => "unequip"],
     [i => i.state === "purchased", () => "equip"],
 ]);
-
-const resizeConfirm = (scene, confirmPane) => () => {
-    confirmPane.destroy();
-    const { container, buttons, destroy } = populatePane(scene, confirmPane);
-    confirmPane.destroy = destroy;
-    confirmPane.container = container;
-    confirmPane.buttons = buttons;
-};
 
 const destroyContainer = container => () => {
     container.removeAll(true);
