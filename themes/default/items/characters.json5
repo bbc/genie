@@ -57,7 +57,7 @@
             key: "debby",
             ariaLabel: "Debbeh",
             title: "Debbeh",
-            // state: "locked",
+            state: "locked",
             subtitle: "Has a twin called Suzy", // optional - for text overlay only
         },
         {

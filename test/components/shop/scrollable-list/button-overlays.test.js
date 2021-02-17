@@ -10,24 +10,6 @@ import * as text from "../../../../src/core/layout/text-elem.js";
 let mockScene;
 let mockGelButton;
 let mockItem;
-
-// const mockItem = {
-//     name: "someItemName",
-//     description: "someItemDescription",
-//     price: 42,
-//     icon: "test.itemIcon",
-//     state: "locked",
-// };
-
-// const mockGelButton = {
-//     overlays: {
-//         set: jest.fn(),
-//     },
-//     width: 200,
-//     scene: mockScene,
-//     item: mockItem,
-// };
-
 let mockImage;
 let mockOverlay;
 let mockConfig;
@@ -103,7 +85,7 @@ describe("Button overlays", () => {
                 expect(mockImage.foo).toBe("bar");
             });
 
-            test("does not merge state properties if takeStateProperties is unset", () => {
+            test("otherwise, does not merge state properties", () => {
                 const mockOverlayWithoutStateProperties = { ...mockOverlay, takeStateProperties: false };
                 mockConfig.overlay.items.push(mockOverlayWithoutStateProperties);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
