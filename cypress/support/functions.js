@@ -15,10 +15,10 @@ let test =
 export const getUrl = () => {
     if (Cypress.env("LOCAL_DEV") == "true") {
         if (Cypress.env("THEME") == "theme_2") {
-            cy.log("theme 2 dev")
+            cy.log("theme 2 dev");
             return appendToken(localTheme2);
         } else {
-            cy.log("theme 1 dev")
+            cy.log("theme 1 dev");
             return appendToken(localTesting);
         }
     } else {

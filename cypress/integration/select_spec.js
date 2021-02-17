@@ -10,9 +10,9 @@ describe(`The Select screens ${Cypress.env("THEME")}`, () => {
     beforeEach(() => {
         cy.visit(getUrl());
         cy.get("#home__play", { timeout: 60000 }).should("exist");
-        if(!Cypress.env("DEV_LOCAL") == "true") {
+        if (!Cypress.env("DEV_LOCAL") == "true") {
             cy.get(".data-notice").click();
-        }  
+        }
     });
 
     it("Continuously scrolls through the character select on single item", () => {
