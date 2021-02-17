@@ -24,6 +24,6 @@ export const addText = (scene, x, y, text, config) => {
 
 export const updateStyleOnFontLoad = textElem => {
     if (document.fonts && !document.fonts.check(textElem.style._font)) {
-        document.fonts.ready.then(() => textElem.style.update());
+        document.fonts.ready.then(() => textElem.scene && textElem.style.update());
     }
 };

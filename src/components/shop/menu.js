@@ -4,35 +4,55 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createMenuButtons } from "./menu-buttons.js";
-import {
-    setVisible,
-    resize,
-    getInnerRectBounds,
-    createRect,
-    getSafeArea,
-    createPaneBackground,
-} from "./shop-layout.js";
+import { createMenuButtons, resizeGelButtons } from "./menu-buttons.js";
+import { getInnerRectBounds, getSafeArea, createPaneBackground } from "./shop-layout.js";
 
 export const createMenu = scene => {
+    const menu = { config: scene.config, container: scene.add.container() };
+
+    populateMenu(scene, menu);
+
+    menu.setVisible = setVisible(menu);
+    menu.resize = resizeMenu(scene, menu);
+
+    return menu;
+};
+
+const populateMenu = (scene, menu) => {
     const bounds = getSafeArea(scene.layout);
 
-    //TODO remove these decorations in favour of a container object
-    const container = scene.add.container();
-    container.config = scene.config;
-    container.setVisible = setVisible(container);
-    container.resize = resize(container);
-    container.memoisedBounds = bounds;
+    const innerBounds = getInnerRectBounds(scene);
 
     const contents = [
-        createRect(scene, getInnerRectBounds(scene), 0x0000ff),
+        scene.add.rectangle(innerBounds.x, innerBounds.y, innerBounds.width, innerBounds.height, 0x000000, 0),
         createPaneBackground(scene, bounds, "menu"),
     ];
+    menu.container.add(contents);
+    menu.container.setY(bounds.height / 2 + bounds.y);
 
-    container.add(contents);
+    menu.buttons = createMenuButtons(menu.container);
+    resizeGelButtons(menu);
+};
 
-    container.buttons = createMenuButtons(container);
+const resizeMenu = (scene, menu) => () => {
+    const isVisible = menu.container.visible;
+    menu.buttons.forEach(button => {
+        button.removeAll(true);
+        button.destroy();
+    });
+    menu.container.removeAll(true);
+    menu.container.destroy();
+    menu.container = scene.add.container();
+    populateMenu(scene, menu);
+    menu.setVisible(isVisible);
+};
 
-    container.setY(bounds.height / 2 + bounds.y);
-    return container;
+const setVisible = menu => isVisible => {
+    menu.container.visible = isVisible;
+    const buttons = menu.buttons;
+    buttons.forEach(button => {
+        button.visible = isVisible;
+        button.input.enabled = isVisible;
+        button.accessibleElement.update();
+    });
 };

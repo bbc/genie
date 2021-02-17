@@ -145,20 +145,22 @@ describe("shop menu buttons", () => {
             setScale: jest.fn(),
             width: 200,
         };
-        let container;
+        let pane;
         beforeEach(() => {
-            container = {
+            pane = {
                 buttons: [mockButton],
                 config: {
                     menu: {
                         buttonsRight: true,
                     },
                 },
-                scene: mockScene,
-                list: [{ getBounds: () => mockOuterBounds }],
+                container: {
+                    scene: mockScene,
+                    list: [{ getBounds: () => mockOuterBounds }],
+                },
             };
             jest.clearAllMocks();
-            resizeGelButtons(container);
+            resizeGelButtons(pane);
         });
 
         test("sets the position of each button", () => {
@@ -172,8 +174,8 @@ describe("shop menu buttons", () => {
         describe("when buttonsRight is false", () => {
             test("the x position is mirrored", () => {
                 jest.clearAllMocks();
-                container.scene.config.menu.buttonsRight = false;
-                resizeGelButtons(container, mockOuterBounds);
+                pane.container.scene.config.menu.buttonsRight = false;
+                resizeGelButtons(pane);
                 expect(mockButton.setX.mock.calls[0][0]).toBe(300);
             });
         });
