@@ -8,7 +8,7 @@ import { overlays1Wide } from "./button-overlays.js";
 import { collections } from "../../../core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const createGelButton = (scene, item, title, state) => {
+const createGelButton = (scene, item, title) => {
     const id = `scroll_button_${item.id}_${title}`;
     const config = scene.config;
 
@@ -36,7 +36,7 @@ const createGelButton = (scene, item, title, state) => {
         },
         setAll: setOverlays(gelButton),
         unsetAll: unsetOverlays(gelButton),
-        state,
+        state: getButtonState(scene, item, title),
     };
 
     scaleButton(gelButton, scene.layout, config.listPadding);
@@ -100,4 +100,4 @@ const getPaneTitle = button => getItemKeyAndTitle(button).pop();
 const setOverlays = button => () => overlays1Wide(button, getConfigs(button));
 const unsetOverlays = button => () => Object.keys(button.overlays.list).forEach(key => button.overlays.remove(key));
 
-export { createGelButton, scaleButton, updateButton, getButtonState };
+export { createGelButton, scaleButton, updateButton };

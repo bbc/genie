@@ -6,9 +6,6 @@
  */
 import * as buttons from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
 import * as overlays from "../../../../src/components/shop/scrollable-list/button-overlays.js";
-import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
-import { eventBus } from "../../../../src/core/event-bus.js";
-import * as a11y from "../../../../src/core/accessibility/accessibilify.js";
 import { collections } from "../../../../src/core/collections.js";
 
 describe("Scrollable List Buttons", () => {
@@ -17,13 +14,9 @@ describe("Scrollable List Buttons", () => {
     let mockCollection;
 
     const mockButton = {
-        input: { enabled: true },
-        on: jest.fn(),
-        off: jest.fn(),
         width: 100,
         setScale: jest.fn(),
         config: { id: "foo_bar_itemKey_shop" },
-        rexContainer: { parent: { getTopmostSizer: jest.fn().mockReturnValue({ space: { top: 10 } }) } },
         overlays: { remove: jest.fn(), list: { foo: "bar", baz: "qux" } },
         sprite: {},
     };
@@ -36,10 +29,6 @@ describe("Scrollable List Buttons", () => {
             getSafeArea: jest.fn().mockReturnValue({ width: 100 }),
         },
         config: {
-            eventChannel: "mockChannel",
-            assetKeys: {
-                itemBackground: "itemBackground",
-            },
             listPadding: { x: 10, y: 8, outerPadFactor: 2 },
             states: { locked: { properties: { someProperty: "someValue" }, disabled: true } },
             overlay: {
@@ -60,17 +49,11 @@ describe("Scrollable List Buttons", () => {
             paneCollections: { shop: "armoury", manage: "inventory" },
         },
         input: { y: 50 },
-        scale: { displaySize: { height: 100 } },
         scene: { key: "shop" },
-        events: { once: jest.fn() },
     };
     mockButton.scene = mockScene;
 
     overlays.overlays1Wide = jest.fn();
-    a11y.accessibilify = jest.fn();
-    const mockEvent = { unsubscribe: "foo" };
-    eventBus.subscribe = jest.fn().mockReturnValue(mockEvent);
-    handlers.handleClickIfVisible = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
 
@@ -82,7 +65,7 @@ describe("Scrollable List Buttons", () => {
         };
         mockCollection = { get: jest.fn().mockReturnValue(mockItem) };
         collections.get = jest.fn().mockReturnValue(mockCollection);
-        button = buttons.createGelButton(mockScene, mockItem, "shop", "cta");
+        button = buttons.createGelButton(mockScene, mockItem, "shop");
     });
 
     describe("createGelButton()", () => {
@@ -103,18 +86,18 @@ describe("Scrollable List Buttons", () => {
         });
 
         test("scales the button", () => {
-            buttons.createGelButton(mockScene, mockItem, "shop", "cta");
+            buttons.createGelButton(mockScene, mockItem, "shop");
             expect(mockButton.setScale).toHaveBeenCalled();
         });
 
         test("merges any properties specified for the item's state into the gel button sprite", () => {
             mockItem.state = "locked";
-            buttons.createGelButton(mockScene, mockItem, "shop", "cta");
+            buttons.createGelButton(mockScene, mockItem, "shop");
             expect(mockButton.sprite.someProperty).toBe("someValue");
         });
 
         test("applies overlays", () => {
-            buttons.createGelButton(mockScene, mockItem, "manage", "actioned");
+            buttons.createGelButton(mockScene, mockItem, "manage");
             expect(overlays.overlays1Wide).toHaveBeenCalled();
         });
 
@@ -130,8 +113,18 @@ describe("Scrollable List Buttons", () => {
                 };
                 expect(mockButton.overlays.configs).toStrictEqual(expected);
             });
-            test("and a string to indicate state", () => {
-                expect(mockButton.overlays.state).toBe("cta");
+            test("and an array of strings used as state labels", () => {
+                const expectedStates = ["cta", "consumable", "unavailable", "unlocked"];
+                expect(mockButton.overlays.state).toStrictEqual(expectedStates);
+            });
+            test("which switch based on the item state, slot, and quantity", () => {
+                jest.clearAllMocks();
+                mockItem.slot = "someSlot";
+                mockItem.state = "purchased";
+                mockItem.qty = 1;
+                buttons.createGelButton(mockScene, mockItem, "shop");
+                const expectedStates = ["actioned", "equippable", "available", "unlocked"];
+                expect(mockButton.overlays.state).toStrictEqual(expectedStates);
             });
             test("unsetAll() unsets all overlays", () => {
                 mockButton.overlays.unsetAll();
@@ -167,48 +160,6 @@ describe("Scrollable List Buttons", () => {
             expect(button.overlays.remove).not.toHaveBeenCalled();
             expect(button.overlays.remove).not.toHaveBeenCalled();
             expect(overlays.overlays1Wide).not.toHaveBeenCalled();
-        });
-    });
-
-    describe("getButtonState() returns an array of strings describing the button state", () => {
-        test("state changes based on item quantity", () => {
-            mockItem.qty = 0;
-            expect(buttons.getButtonState(mockScene, { qty: 1 }, "shop")).toEqual([
-                "cta",
-                "consumable",
-                "available",
-                "unlocked",
-            ]);
-            mockItem.qty = 1;
-            expect(buttons.getButtonState(mockScene, { qty: 0 }, "shop")).toEqual([
-                "actioned",
-                "consumable",
-                "unavailable",
-                "unlocked",
-            ]);
-        });
-        test("state changes based on item slot and state", () => {
-            const item = { slot: "helmet" };
-            expect(buttons.getButtonState(mockScene, item, "manage")).toEqual([
-                "cta",
-                "equippable",
-                "unavailable",
-                "unlocked",
-            ]);
-            mockItem.state = "equipped";
-            expect(buttons.getButtonState(mockScene, item, "manage")).toEqual([
-                "actioned",
-                "equippable",
-                "unavailable",
-                "unlocked",
-            ]);
-            item.state = "locked";
-            expect(buttons.getButtonState(mockScene, item, "manage")).toEqual([
-                "actioned",
-                "equippable",
-                "unavailable",
-                "locked",
-            ]);
         });
     });
 });

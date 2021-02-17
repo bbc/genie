@@ -34,7 +34,7 @@ buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
 scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
 const title = "shop";
-const initState = ["cta", "equippable", "unavailable", "unlocked"];
+// const initState = ["cta", "equippable", "unavailable", "unlocked"];
 
 describe("Scrollable List", () => {
     let collectionGetAll;
@@ -192,7 +192,7 @@ describe("Scrollable List", () => {
 
             describe("with nested rexUI elements", () => {
                 test("a label is created with a gel button per item", () => {
-                    expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem, title, initState);
+                    expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem, title);
                     expect(mockScene.rexUI.add.label).toHaveBeenCalledWith({
                         orientation: 0,
                         icon: mockGelButton,
