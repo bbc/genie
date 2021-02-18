@@ -9,7 +9,6 @@
     },
     "screenshotOnRunFailure": true,
     "retries": {
-        "runMode": 2,
-        "openMode": 0
+        "runMode": 2
     }
 }

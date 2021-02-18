@@ -28,7 +28,7 @@ describe(`The Genie Shop component ${Cypress.env("THEME")}`, () => {
         cy.genieClick("#debug-shop-demo-shop__tx_equip_button");
     });
 
-    it("Can pause the game throughout the shop", () => {
+    it("Can pause the game throughout the shop", () => { 
         cy.genieClick("#debug-shop-demo-shop__pause");
         cy.genieClick("#pause__play");
         cy.genieClick("#debug-shop-demo-shop__shop_menu_button");
