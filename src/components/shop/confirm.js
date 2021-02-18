@@ -12,33 +12,65 @@ import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { buy, equip, unequip, use, getBalanceItem } from "./transact.js";
 import { collections } from "../../core/collections.js";
 
+export const createConfirm = (scene, title, item) => {
+    const action = getAction(scene, title, item);
+    scene.title.setTitleText(fp.startCase(action));
+    const bounds = getSafeArea(scene.layout);
+    const container = scene.add.container();
+    const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
+    const yOffset = bounds.height / 2 + bounds.y;
+    container.setY(yOffset);
+    createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
+    action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
+
+    return {
+        item,
+        title,
+        setVisible: fp.noop,
+        container,
+        buttons: addConfirmButtons(scene, container, innerBounds, title, action, item),
+        destroy: destroyContainer(container),
+    };
+};
+
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
     container.add(
         [
-            addText(scene, getX(innerBounds.x, scene.config), promptY(bounds), promptText, scene.config).setOrigin(
-                0.5,
-                0.5,
-            ),
+            addText(
+                scene,
+                getButtonX(innerBounds.x, scene.config),
+                promptY(bounds),
+                promptText,
+                scene.config,
+            ).setOrigin(0.5),
             createPaneBackground(scene, bounds, "confirm"),
         ].concat(itemView(scene, item, scene.config, bounds)),
     );
 
 const createBuyElems = (scene, container, item, innerBounds, bounds) =>
     container.add([
-        addText(scene, getX(innerBounds.x + 28, scene.config), currencyY(bounds), item.price, scene.config).setOrigin(
-            0.5,
+        addText(
+            scene,
+            getButtonX(innerBounds.x + 28, scene.config),
+            currencyY(bounds),
+            item.price,
+            scene.config,
+        ).setOrigin(0.5),
+        scene.add.image(
+            getButtonX(innerBounds.x - 20, scene.config),
+            currencyY(bounds),
+            `${scene.assetPrefix}.currencyIcon`,
         ),
-        scene.add.image(getX(innerBounds.x - 20, scene.config), currencyY(bounds), `${scene.assetPrefix}.currencyIcon`),
     ]);
 
-const resizeConfirmButton = (scene, button, idx, bounds) => {
+const sizeConfirmButton = (scene, button, idx, bounds) => {
     button.setY(CAMERA_Y + (idx * bounds.height) / 2);
-    button.setX(CAMERA_X + confirmButtonX(scene.config, bounds));
+    button.setX(CAMERA_X + getButtonX(bounds.x, scene.config));
     button.setScale(bounds.width / button.width);
 };
 
-const resizeConfirmButtons = (scene, confirmButtons, bounds) =>
-    confirmButtons.forEach((button, idx) => resizeConfirmButton(scene, button, idx, bounds));
+const sizeConfirmButtons = (scene, confirmButtons, bounds) =>
+    confirmButtons.forEach((button, idx) => sizeConfirmButton(scene, button, idx, bounds));
 
 const disableActionButton = button => {
     Object.assign(button, { alpha: 0.25, tint: 0xff0000 });
@@ -58,21 +90,8 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
     container.add(confirmButtons);
     ((action === "buy" && !canBuyItem(scene, item)) || (action === "equip" && !isEquippable(item))) &&
         disableActionButton(confirmButtons[0]);
-    resizeConfirmButtons(scene, confirmButtons, innerBounds);
-};
-
-export const createConfirm = (scene, title, item) => {
-    const action = getAction(scene, title, item);
-    scene.title.setTitleText(fp.startCase(action));
-    const bounds = getSafeArea(scene.layout);
-    const container = scene.add.container();
-    const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
-    const yOffset = bounds.height / 2 + bounds.y;
-    container.setY(yOffset);
-    createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
-    action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
-    addConfirmButtons(scene, container, innerBounds, title, action, item);
-    return container;
+    sizeConfirmButtons(scene, confirmButtons, innerBounds);
+    return confirmButtons;
 };
 
 const getAction = (scene, title, item) => {
@@ -90,13 +109,13 @@ const inferAction = fp.cond([
     [i => i.state === "purchased", () => "equip"],
 ]);
 
-const destroyContainer = container => {
+const destroyContainer = container => () => {
     container.removeAll(true);
     container.destroy();
 };
 
 const closeConfirm = (scene, container, title) => {
-    destroyContainer(container);
+    destroyContainer(container)();
     scene.panes[title].setVisible(true);
     scene.paneStack.pop();
     const paneToShow = scene.paneStack.slice(-1)[0];
@@ -178,7 +197,7 @@ const getItemBlurb = item => (item ? item.longDescription : "PH");
 const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
 const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
 const assetKey = item => (item ? item.icon : "shop.itemIcon"); //TODO shouldn't use "shop" key as may be different
-const getX = (x, config) => (config.menu.buttonsRight ? x : -x);
+const getButtonX = (x, config) => (config.menu.buttonsRight ? x : -x);
 const imageY = bounds => -percentOfHeight(bounds, 25);
 const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
 const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
@@ -193,4 +212,3 @@ const getOffsetBounds = (outerBounds, innerBounds) => ({
 });
 const imageX = (config, bounds) =>
     config.menu.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
-const confirmButtonX = (config, bounds) => (config.menu.buttonsRight ? bounds.x : -bounds.x);

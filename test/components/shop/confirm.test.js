@@ -20,11 +20,8 @@ describe("Confirm pane", () => {
     let mockBalanceItem;
     let mockContainer;
     let mockImage;
-    let mockRect;
     let mockButton;
-    let mockText;
     let mockConfig;
-    let mockBounds;
     let mockBalance;
     let mockScene;
     let mockCollection;
@@ -32,9 +29,7 @@ describe("Confirm pane", () => {
     beforeEach(() => {
         mockContainer = { add: jest.fn(), setY: jest.fn(), removeAll: jest.fn(), destroy: jest.fn() };
         mockImage = { setScale: jest.fn(), setVisible: jest.fn(), setTexture: jest.fn(), type: "Image" };
-        mockRect = { foo: "bar" };
         mockButton = {
-            baz: "qux",
             setLegal: jest.fn(),
             setY: jest.fn(),
             setX: jest.fn(),
@@ -42,7 +37,6 @@ describe("Confirm pane", () => {
             input: { enabled: true },
             accessibleElement: { update: jest.fn() },
         };
-        mockText = { setText: jest.fn(), type: "Text" };
         mockConfig = {
             menu: { buttonsRight: true },
             confirm: {
@@ -59,7 +53,6 @@ describe("Confirm pane", () => {
             styleDefaults: {},
             paneCollections: { shop: "armoury", manage: "inventory" },
         };
-        mockBounds = { height: 200, width: 200, x: 0, y: 5 };
         mockBalance = { setText: jest.fn(), getValue: jest.fn() };
         mockScene = {
             add: {
@@ -70,7 +63,7 @@ describe("Confirm pane", () => {
             stack: jest.fn(),
             back: jest.fn(),
             layout: {
-                getSafeArea: jest.fn(() => mockBounds),
+                getSafeArea: jest.fn(() => ({ height: 200, width: 200, x: 0, y: 5 })),
             },
             config: mockConfig,
             balance: mockBalance,
@@ -82,21 +75,19 @@ describe("Confirm pane", () => {
             title: { setTitleText: jest.fn() },
         };
         mockCollection = { get: jest.fn().mockReturnValue({ state: "equipped", qty: 1, price: 99 }) };
+        collections.get = jest.fn(() => mockCollection);
 
         const setVisibleFn = jest.fn();
         const resizeFn = jest.fn();
 
         layout.setVisible = jest.fn().mockReturnValue(setVisibleFn);
         layout.resize = jest.fn().mockReturnValue(resizeFn);
-        layout.createRect = jest.fn().mockReturnValue(mockRect);
         layout.getInnerRectBounds = jest.fn().mockReturnValue({ x: 50, y: 0, width: 100, height: 100 });
         layout.textStyle = jest.fn().mockReturnValue({ some: "textStyle" });
 
         buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
 
-        text.addText = jest.fn().mockReturnValue({ setOrigin: jest.fn().mockReturnValue(mockText) });
-
-        collections.get = jest.fn(() => mockCollection);
+        text.addText = jest.fn(() => ({ setOrigin: jest.fn(() => ({ setText: jest.fn(), type: "Text" })) }));
 
         mockBalanceItem = { qty: 500 };
         transact.getBalanceItem = jest.fn(() => mockBalanceItem);
@@ -104,13 +95,18 @@ describe("Confirm pane", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("createConfirm()", () => {
+        const mockItem = { mock: "item", id: "foo" };
         beforeEach(() => {
-            confirmPane = createConfirm(mockScene, "shop", { mock: "item", id: "foo" });
+            confirmPane = createConfirm(mockScene, "shop", mockItem);
             confirmPane.scene = mockScene;
         });
-
-        test("returns a container", () => {
-            expect(confirmPane).toBe(mockContainer);
+        test("returns a object with a container", () => {
+            expect(confirmPane.container).toBe(mockContainer);
+        });
+        test("an item and a title", () => {
+            // expect(confirmPane.action).toBe("buy");
+            expect(confirmPane.item).toBe(mockItem);
+            expect(confirmPane.title).toBe("shop");
         });
         test("with gel buttons for confirm and cancel", () => {
             expect(buttons.createConfirmButtons).toHaveBeenCalled();
@@ -125,6 +121,32 @@ describe("Confirm pane", () => {
         });
         test("that is displayed with an appropriate Y offset", () => {
             expect(mockContainer.setY).toHaveBeenCalledWith(105);
+        });
+        // describe("returns an object with a resize fn", () => {
+        //     beforeEach(() => {
+        //         jest.clearAllMocks();
+        //         confirmPane.resize();
+        //     });
+        //     test("which destroys the container", () => {
+        //         expect(mockContainer.removeAll).toHaveBeenCalled();
+        //         expect(mockContainer.destroy).toHaveBeenCalled();
+        //     });
+        //     test("and creates and populates a new container", () => {
+        //         expect(mockScene.add.container).toHaveBeenCalled();
+        //         expect(buttons.createConfirmButtons).toHaveBeenCalled();
+        //         expect(text.addText).toHaveBeenCalledTimes(2);
+        //     });
+        // });
+        describe("returns an object with a destroy fn", () => {
+            beforeEach(() => {
+                jest.clearAllMocks();
+                confirmPane.destroy();
+            });
+
+            test("which empties and destroys the container", () => {
+                expect(mockContainer.removeAll).toHaveBeenCalled();
+                expect(mockContainer.destroy).toHaveBeenCalled();
+            });
         });
     });
 

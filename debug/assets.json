@@ -502,6 +502,11 @@
                 "url": "../../debug/assets/shop/menu_button_icon.png"
             },
             {
+                "type": "image",
+                "key": "lockIcon",
+                "url": "../../debug/assets/shop/lock_icon.png"
+            },
+            {
                 "type": "spritesheet",
                 "key": "menuButtonBackground",
                 "url": "../../debug/assets/shop/green_button.png",
