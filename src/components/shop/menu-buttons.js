@@ -13,7 +13,7 @@ export const createMenuButtons = container =>
     ["Shop", "Manage"].map(button => {
         const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, container.scene);
         const callback = () => container.scene.stack(button.toLowerCase());
-        return makeButton(container, config, callback);
+        return makeButton(container, config, callback); // these buttons need to fire events anyway: they can also fire the screen stat.
     });
 
 export const createConfirmButtons = (container, actionText, confirmCallback, cancelCallback) =>

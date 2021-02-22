@@ -94,6 +94,12 @@ describe("shop menu buttons", () => {
             callback();
             expect(mockScene.stack).toHaveBeenCalledWith("shop");
         });
+        test("with a callback that calls scene.stack with the pane title", () => {
+            expect(false).toBe(true);
+        });
+        test("and fires a screen view stat", () => {
+            expect(false).toBe(true);
+        });
         test("sets text overlays", () => {
             expect(mockButton.overlays.set).toHaveBeenCalledTimes(2);
             expect(text.addText.mock.calls[0][3]).toBe("Shop");

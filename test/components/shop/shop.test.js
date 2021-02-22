@@ -241,6 +241,9 @@ describe("Shop", () => {
                 expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
                 expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
             });
+            test("fires a menu view stat", () => {
+                expect(false).toBe(true);
+            });
         });
     });
     describe("resize()", () => {

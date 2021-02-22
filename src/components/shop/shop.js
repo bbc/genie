@@ -67,7 +67,7 @@ export class Shop extends Screen {
         this.paneStack.pop();
         if (!this.paneStack.length) {
             this.setVisiblePane("top");
-            this.useOriginalMessage();
+            this.useOriginalMessage(); // shop screen fires here
             return;
         }
         this.setVisiblePane(this.paneStack[this.paneStack.length - 1]);
