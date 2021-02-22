@@ -35,6 +35,7 @@ export const equip = (scene, item) => {
 export const unequip = (scene, item) => {
     const { manage } = scene.config.paneCollections;
     const invCol = collections.get(manage);
+    gmi.sendStatsEvent("unequip", "click", { id: item.id, qty: 1 });
     invCol.set({ ...item, state: "purchased" });
 };
 
@@ -42,7 +43,9 @@ export const use = (scene, item) => {
     const { manage } = scene.config.paneCollections;
     const invCol = collections.get(manage);
     const invItem = invCol.get(item.id);
-    invCol.set({ ...invItem, qty: invItem.qty - 1 });
+    const qtyLeft = invItem.qty - 1;
+    gmi.sendStatsEvent("use", "click", { id: item.id, qty: qtyLeft });
+    invCol.set({ ...invItem, qty: qtyLeft });
 };
 
 const updateBalance = (scene, invCol, price) =>

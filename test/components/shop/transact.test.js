@@ -147,11 +147,11 @@ describe("Shop Transactions", () => {
             const expectedItem = { ...mockItem, state: "purchased" };
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
-        // test("fires a stats event", () => {
-        //     expect(gmi.sendStatsEvent.mock.calls[0][0]).toBe("unequip");
-        //     expect(gmi.sendStatsEvent.mock.calls[0][1]).toBe("click");
-        //     expect(gmi.sendStatsEvent.mock.calls[0][2]).toStrictEqual({ id: "someId", qty: 1 });
-        // });
+        test("fires a stats event", () => {
+            expect(gmi.sendStatsEvent.mock.calls[0][0]).toBe("unequip");
+            expect(gmi.sendStatsEvent.mock.calls[0][1]).toBe("click");
+            expect(gmi.sendStatsEvent.mock.calls[0][2]).toStrictEqual({ id: "item", qty: 1 });
+        });
     });
 
     describe("using an item", () => {
@@ -161,11 +161,11 @@ describe("Shop Transactions", () => {
             const expectedItem = { ...mockInventoryItem, qty: mockInventoryItem.qty - 1 };
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
-        // test("fires a stats event", () => {
-        //     expect(gmi.sendStatsEvent.mock.calls[0][0]).toBe("use");
-        //     expect(gmi.sendStatsEvent.mock.calls[0][1]).toBe("click");
-        //     expect(gmi.sendStatsEvent.mock.calls[0][2]).toStrictEqual({ id: "inventoryItem", qty: 4 });
-        // });
+        test("fires a stats event", () => {
+            expect(gmi.sendStatsEvent.mock.calls[0][0]).toBe("use");
+            expect(gmi.sendStatsEvent.mock.calls[0][1]).toBe("click");
+            expect(gmi.sendStatsEvent.mock.calls[0][2]).toStrictEqual({ id: "inventoryItem", qty: 4 });
+        });
     });
 
     describe("getBalanceItem", () => {
