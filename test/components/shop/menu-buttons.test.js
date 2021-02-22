@@ -13,7 +13,7 @@ import {
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as a11y from "../../../src/core/accessibility/accessibilify.js";
 import * as text from "../../../src/core/layout/text-elem.js";
-import * as gmi from "../../../src/core/gmi/gmi.js";
+import { gmi } from "../../../src/core/gmi/gmi.js";
 
 describe("shop menu buttons", () => {
     let buttons;

@@ -8,12 +8,16 @@
 import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { addText } from "../../core/layout/text-elem.js";
+import { gmi } from "../../core/gmi/gmi.js";
 
 export const createMenuButtons = container =>
     ["Shop", "Manage"].map(button => {
         const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, container.scene);
-        const callback = () => container.scene.stack(button.toLowerCase());
-        return makeButton(container, config, callback); // these buttons need to fire events anyway: they can also fire the screen stat.
+        const callback = () => {
+            container.scene.stack(button.toLowerCase());
+            gmi.setStatsScreen(button === "Shop" ? "shopbuy" : "shopmanage");
+        };
+        return makeButton(container, config, callback);
     });
 
 export const createConfirmButtons = (container, actionText, confirmCallback, cancelCallback) =>
