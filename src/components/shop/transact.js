@@ -13,8 +13,10 @@ export const buy = (scene, item) => {
     const invCol = collections.get(manage);
     const shopCol = collections.get(shop);
     const inventoryItem = invCol.get(item.id);
-    shopCol.set({ ...item, qty: shopCol.get(item.id).qty - 1 });
+    const remainingStock = shopCol.get(item.id).qty - 1;
+    shopCol.set({ ...item, qty: remainingStock });
     invCol.set({ ...item, state: "purchased", qty: inventoryItem ? inventoryItem.qty + 1 : 1 });
+    gmi.sendStatsEvent("buy", "click", { id: item.id, qty: remainingStock });
     updateBalance(scene, invCol, item.price);
 };
 
@@ -26,6 +28,7 @@ export const equip = (scene, item) => {
         .filter(invItem => invItem.slot === item.slot && invItem.state === "equipped");
     const maxItemsInSlot = scene.config.slots[item.slot].max;
     itemsEquippedInSlot.length === maxItemsInSlot && unequip(scene, itemsEquippedInSlot[0]);
+    gmi.sendStatsEvent("equip", "click", { id: item.id, qty: 1 });
     invCol.set({ ...item, state: "equipped" });
 };
 
