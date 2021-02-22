@@ -81,7 +81,10 @@ export class Shop extends Screen {
 
     setVisiblePane(pane) {
         Object.keys(this.panes).forEach(key => this.panes[key] && this.panes[key].setVisible(pane === key));
-        pane === "top" && this.title.setTitleText("Shop");
+        if (pane === "top") {
+            gmi.setStatsScreen("shopmenu");
+            this.title.setTitleText("Shop");
+        }
     }
 
     useCustomMessage() {
