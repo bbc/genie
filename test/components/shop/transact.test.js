@@ -97,9 +97,7 @@ describe("Shop Transactions", () => {
         });
 
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent.mock.calls[0][0]).toBe("buy");
-            expect(gmi.sendStatsEvent.mock.calls[0][1]).toBe("click");
-            expect(gmi.sendStatsEvent.mock.calls[0][2]).toStrictEqual({ id: "item", qty: 0 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("buy", "click", { id: "item", qty: 0 });
         });
 
         test("item is added to the inventory collection with qty set to 1 when the item does not exist in the inventory yet", () => {
@@ -120,9 +118,7 @@ describe("Shop Transactions", () => {
         });
 
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent.mock.calls[0][0]).toBe("equip");
-            expect(gmi.sendStatsEvent.mock.calls[0][1]).toBe("click");
-            expect(gmi.sendStatsEvent.mock.calls[0][2]).toStrictEqual({ id: "item", qty: 1 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("equip", "click", { id: "item", qty: 1 });
         });
 
         test("currently equipped item is unequipped when destination slot is full", () => {
@@ -148,9 +144,7 @@ describe("Shop Transactions", () => {
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent.mock.calls[0][0]).toBe("unequip");
-            expect(gmi.sendStatsEvent.mock.calls[0][1]).toBe("click");
-            expect(gmi.sendStatsEvent.mock.calls[0][2]).toStrictEqual({ id: "item", qty: 1 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("unequip", "click", { id: "item", qty: 1 });
         });
     });
 
@@ -162,9 +156,7 @@ describe("Shop Transactions", () => {
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent.mock.calls[0][0]).toBe("use");
-            expect(gmi.sendStatsEvent.mock.calls[0][1]).toBe("click");
-            expect(gmi.sendStatsEvent.mock.calls[0][2]).toStrictEqual({ id: "inventoryItem", qty: 4 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("use", "click", { id: "inventoryItem", qty: 4 });
         });
     });
 
