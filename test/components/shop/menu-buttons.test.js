@@ -69,6 +69,7 @@ describe("shop menu buttons", () => {
 
     describe("createMenuButtons()", () => {
         beforeEach(() => (buttons = createMenuButtons(mockContainer)));
+
         test("adds two gel buttons", () => {
             expect(buttons.length).toBe(2);
             expect(mockScene.add.gelButton).toHaveBeenCalledTimes(2);
