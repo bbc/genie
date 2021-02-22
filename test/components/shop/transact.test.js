@@ -7,8 +7,10 @@
 
 import * as transact from "../../../src/components/shop/transact.js";
 import { collections } from "../../../src/core/collections.js";
+import { gmi } from "../../../src/core/gmi/gmi.js";
 
 jest.mock("../../../src/core/collections.js");
+jest.mock("../../../src/core/gmi/gmi.js");
 
 describe("Shop Transactions", () => {
     let mockScene;
@@ -67,6 +69,7 @@ describe("Shop Transactions", () => {
             get: jest.fn(itemId => (itemId === "currency" ? mockCurrencyItem : mockInventoryItem)),
             set: jest.fn(),
         };
+        gmi.sendStatsEvent = jest.fn();
     });
     afterEach(() => jest.clearAllMocks());
 
@@ -100,6 +103,10 @@ describe("Shop Transactions", () => {
             transact.buy(mockScene, mockItem);
             expect(mockScene.events.emit).toHaveBeenCalledWith("updatebalance");
         });
+
+        test("fires a stats event", () => {
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("foo", "bar");
+        });
     });
 
     describe("Equipping an item", () => {
@@ -118,6 +125,9 @@ describe("Shop Transactions", () => {
             transact.equip(mockScene, mockItem);
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
+        test("fires a stats event", () => {
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("foo", "bar");
+        });
     });
 
     describe("Unequipping an item", () => {
@@ -127,6 +137,9 @@ describe("Shop Transactions", () => {
             transact.unequip(mockScene, mockItem);
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
+        test("fires a stats event", () => {
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("foo", "bar");
+        });
     });
 
     describe("using an item", () => {
@@ -134,6 +147,9 @@ describe("Shop Transactions", () => {
             const expectedItem = { ...mockInventoryItem, qty: mockInventoryItem.qty - 1 };
             transact.use(mockScene, mockInventoryItem);
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
+        });
+        test("fires a stats event", () => {
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("foo", "bar");
         });
     });
 

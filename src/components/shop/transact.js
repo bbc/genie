@@ -6,6 +6,7 @@
  */
 
 import { collections } from "../../core/collections.js";
+import { gmi } from "../../core/gmi/gmi.js";
 
 export const buy = (scene, item) => {
     const { shop, manage } = scene.config.paneCollections;
