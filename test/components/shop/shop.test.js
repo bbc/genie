@@ -53,6 +53,7 @@ describe("Shop", () => {
     const mockConfirm = { container: { foo: "bar" }, setVisible: jest.fn(), resize: jest.fn(), destroy: jest.fn() };
     const mockTitles = { setTitleText: jest.fn(), setScale: jest.fn(), setPosition: jest.fn() };
 
+    gmi.setStatsScreen = jest.fn();
     beforeEach(() => {
         config = {
             shop: {
@@ -167,6 +168,9 @@ describe("Shop", () => {
             expect(mockMenu.setVisible).toHaveBeenCalledWith(true);
             expect(mockScrollableList.setVisible).toHaveBeenCalledTimes(2);
         });
+        test("fires a screen view stat with hardcoded 'shopmenu'", () => {
+            expect(gmi.setStatsScreen).toHaveBeenCalledWith("shopmenu");
+        });
 
         describe("registers with the scaler", () => {
             test("subscribes to onScaleChange", () => {
@@ -240,6 +244,9 @@ describe("Shop", () => {
                 expect(shopScreen.panes.top.setVisible).toHaveBeenCalledWith(true);
                 expect(eventBus.subscribe).toHaveBeenCalledWith(shopScreen.backMessage);
                 expect(eventBus.removeSubscription).toHaveBeenCalledWith(shopScreen.customMessage);
+            });
+            test("fires a screen view stat with hardcoded 'shopmenu'", () => {
+                expect(gmi.setStatsScreen).toHaveBeenCalledWith("shopmenu");
             });
         });
     });
