@@ -8,7 +8,6 @@ import { Shop, launchShopOverlay } from "../../../src/components/shop/shop.js";
 import { ScrollableList } from "../../../src/components/shop/scrollable-list/scrollable-list.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance-ui.js";
-import * as titles from "../../../src/components/shop/shop-titles.js";
 import * as uiScaler from "../../../src/components/shop/shop-layout.js";
 import * as menu from "../../../src/components/shop/menu.js";
 import * as confirm from "../../../src/components/shop/confirm.js";
@@ -51,7 +50,6 @@ describe("Shop", () => {
     const mockButtonConfig = { channel: "foo", key: "bar", action: "baz" };
     const mockMenu = { setVisible: jest.fn(), resize: jest.fn() };
     const mockConfirm = { container: { foo: "bar" }, setVisible: jest.fn(), resize: jest.fn(), destroy: jest.fn() };
-    const mockTitles = { setTitleText: jest.fn(), setScale: jest.fn(), setPosition: jest.fn() };
 
     beforeEach(() => {
         config = {
@@ -84,7 +82,6 @@ describe("Shop", () => {
         shopScreen.events = { once: jest.fn() };
         ScrollableList.mockImplementation(() => mockScrollableList);
         balance.createBalance = jest.fn().mockReturnValue(mockContainer);
-        titles.createTitle = jest.fn().mockReturnValue(mockTitles);
         confirm.createConfirm = jest.fn().mockReturnValue(mockConfirm);
         uiScaler.getScaleFactor = jest.fn();
         uiScaler.getYPos = jest.fn();
@@ -140,11 +137,6 @@ describe("Shop", () => {
             const filterFn = ScrollableList.mock.calls[1][2];
             const mockCollection = [{ id: "currencyItemKey" }, { id: "someOtherId" }];
             expect(mockCollection.filter(filterFn)).toStrictEqual([{ id: "someOtherId" }]);
-        });
-
-        test("calls createTitle to create the title UI component", () => {
-            expect(titles.createTitle).toHaveBeenCalledWith(shopScreen);
-            expect(shopScreen.title).toBe(mockTitles);
         });
 
         test("calls createBalance to create the balance UI component", () => {
@@ -250,10 +242,6 @@ describe("Shop", () => {
             shopScreen.resize();
         });
 
-        test("scales and positions title elements", () => {
-            expect(shopScreen.title.setScale).toHaveBeenCalled();
-            expect(shopScreen.title.setPosition).toHaveBeenCalled();
-        });
         test("scales and positions balance elements", () => {
             expect(shopScreen.balance.setScale).toHaveBeenCalled();
             expect(shopScreen.balance.setPosition).toHaveBeenCalled();

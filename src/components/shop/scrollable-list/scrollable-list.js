@@ -145,7 +145,6 @@ const updatePanel = panel => {
     const key = parent.scene.config.paneCollections[panel.name];
     const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
     const items = getPanelItems(panel);
-    parent.scene.title.setTitleText(panel.name);
 
     shouldPanelListUpdate(collection, items)
         ? updatePanelList(panel)

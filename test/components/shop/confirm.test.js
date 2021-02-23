@@ -72,7 +72,6 @@ describe("Confirm pane", () => {
                 shop: { setVisible: jest.fn() },
             },
             paneStack: [],
-            title: { setTitleText: jest.fn() },
         };
         mockCollection = { get: jest.fn().mockReturnValue({ state: "equipped", qty: 1, price: 99 }) };
         collections.get = jest.fn(() => mockCollection);
@@ -289,7 +288,6 @@ describe("Confirm pane", () => {
             mockScene.paneStack = ["prevPane", "confirm"];
             cancelCallback();
             expect(mockScene.panes.shop.setVisible).toHaveBeenCalledWith(true);
-            expect(mockScene.title.setTitleText).toHaveBeenCalledWith("prevPane");
         });
     });
 });

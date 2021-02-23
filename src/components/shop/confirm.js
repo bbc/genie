@@ -14,7 +14,6 @@ import { collections } from "../../core/collections.js";
 
 export const createConfirm = (scene, title, item) => {
     const action = getAction(scene, title, item);
-    scene.title.setTitleText(fp.startCase(action));
     const bounds = getSafeArea(scene.layout);
     const container = scene.add.container();
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
@@ -118,8 +117,6 @@ const closeConfirm = (scene, container, title) => {
     destroyContainer(container)();
     scene.panes[title].setVisible(true);
     scene.paneStack.pop();
-    const paneToShow = scene.paneStack.slice(-1)[0];
-    scene.title.setTitleText(paneToShow ? paneToShow : "Shop");
 };
 
 const handleActionClick = (scene, container, title, action, item) => {

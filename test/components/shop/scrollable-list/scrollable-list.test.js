@@ -134,7 +134,6 @@ describe("Scrollable List", () => {
                     exists: jest.fn(),
                 },
             },
-            title: { setTitleText: jest.fn() },
         };
 
         a11y.addGroupAt = jest.fn();
