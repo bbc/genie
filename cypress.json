@@ -8,6 +8,7 @@
         "assetsDir": "output/reports/"
     },
     "defaultCommandTimeout": 6000,
+    "pageLoadTimeout": 40000,
     "screenshotOnRunFailure": true,
     "retries": {
         "runMode": 2
