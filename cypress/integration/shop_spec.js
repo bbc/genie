@@ -6,7 +6,6 @@
 
 import { getUrl } from "../support/functions";
 
-
 /* Temporarily removed until bug fix is introduced */
 
 // describe(`The Genie Shop component ${Cypress.env("THEME")}`, () => {
