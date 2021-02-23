@@ -15,3 +15,4 @@ childrens-games-genie.iml
 **/*.swp
 *.iml
 */screenshots
+mochawesome-report/
