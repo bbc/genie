@@ -65,7 +65,7 @@ describe(`Tests the core flow of Genie ${Cypress.env("THEME")}`, () => {
     beforeEach(() => {
         cy.viewport(1106, 800);
         cy.visit(getUrl());
-        cy.get("#home__play", { timeout: 1200000 }).should("exist");
+        cy.get("#home__play", { timeout: 60000 }).should("exist");
         if (!Cypress.env("DEV_LOCAL") == "true") {
             cy.get(".data-notice").click();
         }
