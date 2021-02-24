@@ -28,7 +28,7 @@ export class ShopConfirm extends Screen {
         this.titles = createTitles(this);
         this.balance = createBalance(this);
 
-        createConfirm(this, this.transientData["shop-menu"].title, this.transientData["shop-menu"].item);
+        createConfirm(this, this.transientData["shop-list"].title, this.transientData["shop-list"].item);
     }
 }
 
@@ -48,7 +48,6 @@ const createConfirm = (scene, title, item) => {
         setVisible: fp.noop,
         container,
         buttons: addConfirmButtons(scene, container, innerBounds, title, action, item),
-        destroy: destroyContainer(container),
     };
 };
 
@@ -99,7 +98,7 @@ const disableActionButton = button => {
 
 const addConfirmButtons = (scene, container, innerBounds, title, action, item) => {
     const confirmButtonCallback = () => handleActionClick(scene, container, title, action, item);
-    const cancelButtonCallback = () => closeConfirm(scene, container, title);
+    const cancelButtonCallback = () => scene.navigation.back();
     const confirmButtons = createConfirmButtons(
         container,
         fp.startCase(action),

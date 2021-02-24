@@ -10,6 +10,7 @@
         align: "center",
     },
     menuButtons: {
+        key: "shop-menu.menuButtonBackground",
         styles: { fontStyle: "bold", fontSize: "16px" },
     },
     titles: [
@@ -31,11 +32,11 @@
     balance: {
         background: {
             type: "image",
-            key: "balanceBackground",
+            key: "shop-menu.balanceBackground",
         },
         icon: {
             type: "image",
-            key: "balanceIcon",
+            key: "shop-menu.balanceIcon",
         },
         value: {
             type: "text",

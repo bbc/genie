@@ -19,7 +19,7 @@ const getBalanceValue = scene =>
 export const createBalance = scene => {
     const safeArea = getSafeArea(scene.layout);
     const metrics = getMetrics();
-    const image = conf => scene.add.image(0, 0, `${scene.assetPrefix}.${conf.key}`);
+    const image = conf => scene.add.image(0, 0, conf.key);
     const text = conf => addText(scene, 0, 0, getBalanceValue(scene), conf);
     const container = scene.add.container();
     const configs = scene.config.balance;

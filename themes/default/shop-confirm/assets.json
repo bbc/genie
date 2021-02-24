@@ -11,6 +11,23 @@
                 "type": "image",
                 "key": "titleBackground",
                 "url": "shop-confirm/assets/title_background.png"
+            },
+            {
+                "type": "image",
+                "key": "currencyIcon",
+                "url": "shop-list/assets/currency.png"
+            },
+            {
+                "type": "spritesheet",
+                "key": "menuButtonBackground",
+                "url": "shop-menu/assets/green_button.png",
+                "frameConfig": {
+                    "frameWidth": 113,
+                    "frameHeight": 42,
+                    "frameMax": 1,
+                    "margin": 0,
+                    "spacing": 4
+                }
             }
         ]
     }

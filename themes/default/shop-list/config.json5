@@ -31,11 +31,11 @@
     balance: {
         background: {
             type: "image",
-            key: "balanceBackground",
+            key: "shop-menu.balanceBackground",
         },
         icon: {
             type: "image",
-            key: "balanceIcon",
+            key: "shop-menu.balanceIcon",
         },
         value: {
             type: "text",
