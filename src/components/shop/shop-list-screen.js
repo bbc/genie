@@ -10,6 +10,7 @@ import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { createTitles } from "../../core/titles.js";
 import { createBalance } from "./balance-ui.js";
+import { gmi } from "../../core/gmi/gmi.js";
 
 export class ShopList extends Screen {
     preload() {
