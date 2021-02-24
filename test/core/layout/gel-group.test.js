@@ -4,11 +4,11 @@
  * @license Apache-2.0
  */
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
-import * as ButtonFactory from "../../../src/core/layout/button-factory";
+import * as CreateButton from "../../../src/core/layout/create-button.js";
 import { GelGroup } from "../../../src/core/layout/gel-group.js";
 
 describe("Group", () => {
-    let buttonFactory;
+    let mockCreateButton;
     let mockScene;
     let parentGroup;
     let metrics;
@@ -55,34 +55,31 @@ describe("Group", () => {
 
         mockGetHitAreaBounds = jest.fn(() => hitAreaBounds);
 
-        buttonFactory = {
-            createButton: (config = {}) => ({
-                x: config.x || 50,
-                y: config.y || 50,
-                width: config.width || 200,
-                height: config.height || 100,
-                input: {},
-                updateIndicatorPosition: jest.fn(),
-                updateTransform: () => {},
-                resize: buttonResizeStub,
-                config: {
-                    shiftX: 0,
-                    shiftY: 0,
-                },
-                getHitAreaBounds: mockGetHitAreaBounds,
-                sprite: {
-                    width: 200,
-                    height: 100,
-                },
-            }),
-        };
+        mockCreateButton = (scene, config = {}) => ({
+            x: config.x || 50,
+            y: config.y || 50,
+            width: config.width || 200,
+            height: config.height || 100,
+            input: {},
+            updateIndicatorPosition: jest.fn(),
+            updateTransform: () => {},
+            resize: buttonResizeStub,
+            config: {
+                shiftX: 0,
+                shiftY: 0,
+            },
+            getHitAreaBounds: mockGetHitAreaBounds,
+            sprite: {
+                width: 200,
+                height: 100,
+            },
+        });
+
         vPos = "middle";
         hPos = "center";
-        jest.spyOn(ButtonFactory, "create").mockImplementation(() => buttonFactory);
+        jest.spyOn(CreateButton, "createButton").mockImplementation(mockCreateButton);
         jest.spyOn(a11y, "addButton").mockImplementation(() => {});
-        GelGroup.prototype.addAt = jest.fn(child => {
-            group.list.push(child);
-        });
+        GelGroup.prototype.addAt = jest.fn(child => group.list.push(child));
         GelGroup.prototype.setScrollFactor = jest.fn();
         group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false);
     });
@@ -97,15 +94,15 @@ describe("Group", () => {
 
     describe("addButton method", () => {
         test("creates and returns new button", () => {
-            const newButton = buttonFactory.createButton();
-            jest.spyOn(buttonFactory, "createButton").mockImplementation(() => newButton);
+            const newButton = mockCreateButton(mockScene);
+            jest.spyOn(CreateButton, "createButton").mockImplementation(() => newButton);
 
             expect(group.addButton(config)).toBe(newButton);
         });
 
         test("adds newly created button to the group", () => {
-            const newButton = buttonFactory.createButton();
-            jest.spyOn(buttonFactory, "createButton").mockImplementation(() => newButton);
+            const newButton = mockCreateButton(mockScene);
+            jest.spyOn(CreateButton, "createButton").mockImplementation(() => newButton);
 
             group.addButton(config);
             expect(group.addAt).toHaveBeenCalledWith(newButton, 0);
@@ -289,7 +286,7 @@ describe("Group", () => {
             it("correctly takes hitArea into account", () => {
                 const leftSpy = jest.fn();
                 const topSpy = jest.fn();
-                const createButtonStub = jest.spyOn(buttonFactory, "createButton");
+                const createButtonStub = jest.spyOn(CreateButton, "createButton");
 
                 vPos = "top";
                 hPos = "left";
@@ -358,7 +355,7 @@ describe("Group", () => {
 
         describe("when vPos is bottom and hPos is right", () => {
             test("correctly takes hitArea into account", () => {
-                const createButtonStub = jest.spyOn(buttonFactory, "createButton");
+                const createButtonStub = jest.spyOn(CreateButton, "createButton");
                 group = new GelGroup(mockScene, parentGroup, "bottom", "right", metrics);
 
                 createButtonStub.mockImplementation(() => ({
