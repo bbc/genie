@@ -199,17 +199,4 @@ export class ScrollableList extends Phaser.GameObjects.Container {
     getBoundingRect() {
         return this.scene.layout.getSafeArea({}, false);
     }
-
-    setVisible(isVisible) {
-        this.panel.visible = isVisible;
-        this.background.visible = isVisible;
-        const items = getPanelItems(this.panel);
-        items.forEach(item => {
-            const button = item.children[0];
-            button.input.enabled = isVisible;
-            item.config.tabbable = isVisible;
-            item.accessibleElement.update();
-        });
-        isVisible && updatePanel(this.panel);
-    }
 }
