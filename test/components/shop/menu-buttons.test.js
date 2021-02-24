@@ -129,7 +129,7 @@ describe("shop menu buttons", () => {
         const confirmCallback = jest.fn();
 
         beforeEach(() => {
-            createConfirmButtons(mockContainer, "Buy", confirmCallback, cancelCallback);
+            createConfirmButtons(mockScene, "Buy", confirmCallback, cancelCallback);
         });
 
         test("provides a slightly different config", () => {
