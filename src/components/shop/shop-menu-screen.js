@@ -18,7 +18,7 @@ export class ShopMenu extends Screen {
 
     create() {
         this.addBackgroundItems();
-        const backNav = this.config.isOverlay ? "overlayBack" : "back";
+        const backNav = this._data.addedBy ? "overlayBack" : "back";
         this.setLayout([backNav, "pause"]);
 
         this.titles = createTitles(this);

@@ -1,5 +1,4 @@
 {
-    isOverlay: true,
     choices: [
         {
             asset: "carousel1",

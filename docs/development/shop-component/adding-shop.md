@@ -26,8 +26,6 @@ The above code creates a Home screen with a 'next' button that points to Shop, a
 
 You can use the Shop as an overlay. This means you can pop it up from anywhere in your game and then return to that screen once done.
 
-First, add `isOverlay: true` to your Shop's `config.json5`.
-
 In your game code:
 
 ```
@@ -39,7 +37,7 @@ To launch the shop, do `launchShopOverlay(screen, "shop");`
 -   `screen` is the scene you're in (so you would pass `this` if you're calling from inside a class),
 -   `"shop"` is the name you configured for the Shop in main.js, as a string.
 
-You no longer need a `back` route for the Shop in main.js. The back button will return the user to whichever scene called `shopOverlay`.
+You do not need a `back` route for the Shop in main.js. The back button will return the user to whichever scene called `shopOverlay`.
 
 This can all be done in a routing function in main.js, like this:
 

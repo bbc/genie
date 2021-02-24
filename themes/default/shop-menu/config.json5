@@ -1,5 +1,4 @@
 {
-    isOverlay: true,
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "shop-menu.magicShop", x: 0, y: 0 }],
