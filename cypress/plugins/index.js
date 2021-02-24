@@ -25,7 +25,7 @@ module.exports = (on, config) => {
         renameSync(path, path.replace(/ \(\d*\)/i, ""));
     });
 
-    config.env.THEME_2 = process.env.THEME_2;
+    config.env.THEME = process.env.THEME;
     config.env.LOCAL_DEV = process.env.LOCAL_DEV;
     return config;
 };
