@@ -50,5 +50,5 @@ This can all be done in a routing function in main.js, like this:
             },
         },
     },
-    shop: { ... }, // etc.
+    ...Shop("shop")
 ```

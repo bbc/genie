@@ -25,7 +25,6 @@ export const createConfirm = (scene, title, item) => {
     return {
         item,
         title,
-        setVisible: fp.noop,
         container,
         buttons: addConfirmButtons(scene, container, innerBounds, title, action, item),
     };
@@ -78,7 +77,10 @@ const disableActionButton = button => {
 
 const addConfirmButtons = (scene, container, innerBounds, title, action, item) => {
     const confirmButtonCallback = () => handleActionClick(scene, container, title, action, item);
-    const cancelButtonCallback = () => scene.navigation.back();
+    const cancelButtonCallback = () => {
+        scene._data.addedBy.scene.resume();
+        scene.removeOverlay();
+    };
     const confirmButtons = createConfirmButtons(
         scene,
         fp.startCase(action),

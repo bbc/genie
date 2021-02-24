@@ -79,7 +79,8 @@ const showConfirmation = (scene, title, item) => {
         title,
         item,
     };
-    scene.navigation.next();
+    scene.scene.pause();
+    scene.addOverlay(scene.scene.key.replace("-list", "-confirm"));
 };
 
 const createItem = (scene, item, title, parent) => {

@@ -18,7 +18,7 @@ export class ShopConfirm extends Screen {
 
     create() {
         this.addBackgroundItems();
-        this.setLayout(["back", "pause"]);
+        this.setLayout(["overlayBack", "pause"]);
 
         this.titles = createTitles(this);
         this.balance = createBalance(this);

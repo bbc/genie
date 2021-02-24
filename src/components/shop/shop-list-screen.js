@@ -15,12 +15,11 @@ import { gmi } from "../../core/gmi/gmi.js";
 export class ShopList extends Screen {
     preload() {
         this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
-        gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
     }
 
     create() {
         this.addBackgroundItems();
-        this.setLayout(["back", "pause"]);
+        this.setLayout(["overlayBack", "pause"]);
 
         this.titles = createTitles(this);
         this.balance = createBalance(this);
@@ -35,10 +34,17 @@ export class ShopList extends Screen {
         const resize = this.resize.bind(this);
         const scaleEvent = onScaleChange.add(resize);
         this.events.once("shutdown", scaleEvent.unsubscribe);
+        const setStatsScreen = this.setStatsScreen.bind(this);
+        this.events.on(Phaser.Scenes.Events.RESUME, setStatsScreen);
+        this.events.once("shutdown", () => this.events.off(Phaser.Scenes.Events.RESUME, setStatsScreen));
     }
 
     resize() {
         this.list.reset();
         this.balance.resize();
+    }
+
+    setStatsScreen() {
+        gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
     }
 }

@@ -14,7 +14,8 @@ export const createMenuButtons = container =>
         const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, container.scene);
         const callback = () => {
             container.scene.transientData.shop = { title: button.toLowerCase() };
-            container.scene.navigation.next();
+            container.scene.scene.pause();
+            container.scene.addOverlay(container.scene.scene.key.replace("-menu", "-list"));
         };
         return makeButton(container.scene, config, callback);
     });
