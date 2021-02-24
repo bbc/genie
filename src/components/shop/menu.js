@@ -9,13 +9,13 @@ import { getInnerRectBounds, getSafeArea, createPaneBackground } from "./shop-la
 
 export const createMenu = scene => {
     const menu = { config: scene.config, container: scene.add.container() };
-
     populateMenu(scene, menu);
+    const resize = () => resizeGelButtons(menu);
 
-    menu.setVisible = setVisible(menu);
-    menu.resize = resizeMenu(scene, menu);
-
-    return menu;
+    return {
+        menu,
+        resize,
+    };
 };
 
 const populateMenu = (scene, menu) => {
@@ -32,27 +32,4 @@ const populateMenu = (scene, menu) => {
 
     menu.buttons = createMenuButtons(menu.container);
     resizeGelButtons(menu);
-};
-
-const resizeMenu = (scene, menu) => () => {
-    const isVisible = menu.container.visible;
-    menu.buttons.forEach(button => {
-        button.removeAll(true);
-        button.destroy();
-    });
-    menu.container.removeAll(true);
-    menu.container.destroy();
-    menu.container = scene.add.container();
-    populateMenu(scene, menu);
-    menu.setVisible(isVisible);
-};
-
-const setVisible = menu => isVisible => {
-    menu.container.visible = isVisible;
-    const buttons = menu.buttons;
-    buttons.forEach(button => {
-        button.visible = isVisible;
-        button.input.enabled = isVisible;
-        button.accessibleElement.update();
-    });
 };

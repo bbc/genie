@@ -23,7 +23,7 @@ export class ShopConfirm extends Screen {
         this.titles = createTitles(this);
         this.balance = createBalance(this);
 
-        this.confirm = createConfirm(this, this.transientData["shop-list"].title, this.transientData["shop-list"].item);
+        this.confirm = createConfirm(this, this.transientData.shop.title, this.transientData.shop.item);
 
         this.setupEvents();
         this.resize();

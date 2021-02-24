@@ -75,7 +75,7 @@ const createTable = (scene, title, parent) => {
 };
 
 const showConfirmation = (scene, title, item) => {
-    scene.transientData["shop-list"] = {
+    scene.transientData.shop = {
         title,
         item,
     };
