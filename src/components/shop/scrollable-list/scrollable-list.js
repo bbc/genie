@@ -6,7 +6,6 @@
  */
 import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
 import { createGelButton, scaleButton, updateButton } from "./scrollable-list-buttons.js";
-import { createConfirm } from "../confirm.js";
 import * as a11y from "../../../core/accessibility/accessibility-layer.js";
 import { collections } from "../../../core/collections.js";
 import { onScaleChange } from "../../../core/scaler.js";
@@ -76,8 +75,11 @@ const createTable = (scene, title, parent) => {
 };
 
 const showConfirmation = (scene, title, item) => {
-    scene.panes.confirm = createConfirm(scene, title, item);
-    scene.stack("confirm");
+    scene.transientData["shop-list"] = {
+        title,
+        item,
+    };
+    scene.navigation.next();
 };
 
 const createItem = (scene, item, title, parent) => {

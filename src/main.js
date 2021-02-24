@@ -91,6 +91,7 @@ const screens = {
             restart: "game",
         },
     },
+    ...Shop("shop"),
     results: {
         scene: Results,
         routes: {
@@ -100,9 +101,6 @@ const screens = {
         },
     },
     // Overlays
-    shop: {
-        scene: Shop,
-    },
     "how-to-play": {
         scene: HowToPlay,
         routes: {

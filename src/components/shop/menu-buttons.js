@@ -12,7 +12,10 @@ import { addText } from "../../core/layout/text-elem.js";
 export const createMenuButtons = container =>
     ["Shop", "Manage"].map(button => {
         const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, container.scene);
-        const callback = () => container.scene.stack(button.toLowerCase());
+        const callback = () => {
+            container.scene.transientData[container.scene.scene.key] = { list: button.toLowerCase() };
+            container.scene.navigation.next();
+        };
         return makeButton(container, config, callback);
     });
 

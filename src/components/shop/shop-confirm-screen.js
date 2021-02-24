@@ -5,6 +5,10 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
+import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
+import { Screen } from "../../core/screen.js";
+import { createTitles } from "../../core/titles.js";
+import { createBalance } from "./balance-ui.js";
 import { getInnerRectBounds, getSafeArea, createPaneBackground } from "./shop-layout.js";
 import { addText } from "../../core/layout/text-elem.js";
 import { createConfirmButtons } from "./menu-buttons.js";
@@ -12,7 +16,23 @@ import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { buy, equip, unequip, use, getBalanceItem } from "./transact.js";
 import { collections } from "../../core/collections.js";
 
-export const createConfirm = (scene, title, item) => {
+export class ShopConfirm extends Screen {
+    preload() {
+        this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
+    }
+
+    create() {
+        this.addBackgroundItems();
+        this.setLayout(["back", "pause"]);
+
+        this.titles = createTitles(this);
+        this.balance = createBalance(this);
+
+        createConfirm(this, this.transientData["shop-menu"].title, this.transientData["shop-menu"].item);
+    }
+}
+
+const createConfirm = (scene, title, item) => {
     const action = getAction(scene, title, item);
     const bounds = getSafeArea(scene.layout);
     const container = scene.add.container();
@@ -108,20 +128,9 @@ const inferAction = fp.cond([
     [i => i.state === "purchased", () => "equip"],
 ]);
 
-const destroyContainer = container => () => {
-    container.removeAll(true);
-    container.destroy();
-};
-
-const closeConfirm = (scene, container, title) => {
-    destroyContainer(container)();
-    scene.panes[title].setVisible(true);
-    scene.paneStack.pop();
-};
-
 const handleActionClick = (scene, container, title, action, item) => {
     doAction({ scene, action, item });
-    closeConfirm(scene, container, title);
+    scene.navigation.back();
 };
 
 const doAction = fp.cond([

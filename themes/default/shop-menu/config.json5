@@ -2,7 +2,7 @@
     isOverlay: true,
     music: "home.backgroundMusic",
     background: {
-        items: [{ key: "shop.magicShop", x: 0, y: 0 }],
+        items: [{ key: "shop-menu.magicShop", x: 0, y: 0 }],
     },
     styleDefaults: {
         fontFamily: "ReithSans",
@@ -18,13 +18,13 @@
             type: "image",
             key: "titleBackground",
             xOffset: 0,
-            yOffset: 0,
+            yOffset: -250,
         },
         {
             type: "text",
             value: "Shop",
             xOffset: 0,
-            yOffset: 0,
+            yOffset: -250,
             styles: { fontStyle: "bold", fontSize: "24px" },
         },
     ],

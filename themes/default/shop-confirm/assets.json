@@ -1,0 +1,17 @@
+{
+    "shop": {
+        "prefix": "shop-confirm.",
+        "files": [
+            {
+                "type": "image",
+                "key": "halfViewBackground",
+                "url": "shop-confirm/assets/half_panel.png"
+            },
+            {
+                "type": "image",
+                "key": "titleBackground",
+                "url": "shop-confirm/assets/title_background.png"
+            }
+        ]
+    }
+}
