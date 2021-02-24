@@ -91,7 +91,7 @@ const screens = {
             restart: "game",
         },
     },
-    ...Shop("shop"),
+    ...Shop({ key: "shop", back: "game" }),
     results: {
         scene: Results,
         routes: {

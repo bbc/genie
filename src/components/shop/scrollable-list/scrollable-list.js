@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
-import { createGelButton, scaleButton, updateButton } from "./scrollable-list-buttons.js";
+import { createGelButton, scaleButton } from "./scrollable-list-buttons.js";
 import * as a11y from "../../../core/accessibility/accessibility-layer.js";
 import { collections } from "../../../core/collections.js";
 import { onScaleChange } from "../../../core/scaler.js";
@@ -140,28 +140,6 @@ const setupEvents = (scene, panel) => {
     const items = getPanelItems(panel);
 
     items.forEach(item => getFirstElement(item).addEventListener("focus", () => panel.updateOnFocus(item)));
-};
-
-const updatePanel = panel => {
-    const parent = panel.parentContainer;
-    const key = parent.scene.config.paneCollections[panel.name];
-    const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
-    const items = getPanelItems(panel);
-
-    shouldPanelListUpdate(collection, items)
-        ? updatePanelList(panel)
-        : items.forEach(item => updateButton(item.children[0]));
-};
-
-const shouldPanelListUpdate = (collection, items) =>
-    collection.length !== items.length || items.some((item, idx) => item.children[0].item.id !== collection[idx].id);
-
-const updatePanelList = panel => {
-    const tableContainer = panel.getByName("gridContainer", true);
-    const scene = panel.parentContainer.scene;
-    tableContainer.clear(true);
-    tableContainer.add(createTable(scene, panel.name, panel.parentContainer));
-    resizePanel(scene, panel)();
 };
 
 const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items") ?? [];
