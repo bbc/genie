@@ -13,6 +13,7 @@ import {
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as a11y from "../../../src/core/accessibility/accessibilify.js";
 import * as text from "../../../src/core/layout/text-elem.js";
+import { gmi } from "../../../src/core/gmi/gmi.js";
 
 describe("shop menu buttons", () => {
     let buttons;
@@ -62,11 +63,13 @@ describe("shop menu buttons", () => {
     const mockEvent = { unsubscribe: "foo" };
     eventBus.subscribe = jest.fn(() => mockEvent);
     a11y.accessibilify = jest.fn(x => x);
+    gmi.setStatsScreen = jest.fn();
 
     afterEach(() => jest.clearAllMocks());
 
     describe("createMenuButtons()", () => {
         beforeEach(() => (buttons = createMenuButtons(mockContainer)));
+
         test("adds two gel buttons", () => {
             expect(buttons.length).toBe(2);
             expect(mockScene.add.gelButton).toHaveBeenCalledTimes(2);
@@ -88,11 +91,28 @@ describe("shop menu buttons", () => {
             const otherConfig = { ...expectedConfig, title: "Manage", id: "manage_menu_button", ariaLabel: "Manage" };
             expect(mockScene.add.gelButton.mock.calls[1][2]).toStrictEqual(otherConfig);
         });
-        test("subscribes them to the event bus", () => {
-            expect(mockButton.on).toHaveBeenCalledTimes(2);
-            const callback = mockButton.on.mock.calls[0][1];
-            callback();
-            expect(mockScene.stack).toHaveBeenCalledWith("shop");
+        describe("callback", () => {
+            let callback;
+            beforeEach(() => {
+                callback = mockButton.on.mock.calls[0][1];
+            });
+            test("is subscribed to the event bus", () => {
+                expect(mockButton.on).toHaveBeenCalledTimes(2);
+                expect(typeof callback).toBe("function");
+            });
+            test("calls scene.stack with the pane title", () => {
+                callback();
+                expect(mockScene.stack).toHaveBeenCalledWith("shop");
+            });
+            test("and fires a screen view stat with hardcoded 'shopbuy' value", () => {
+                callback();
+                expect(gmi.setStatsScreen).toHaveBeenCalledWith("shopbuy");
+            });
+            test("the other button fires a hardcoded 'shopmanage' value", () => {
+                const otherCallback = mockButton.on.mock.calls[1][1];
+                otherCallback();
+                expect(gmi.setStatsScreen).toHaveBeenCalledWith("shopmanage");
+            });
         });
         test("sets text overlays", () => {
             expect(mockButton.overlays.set).toHaveBeenCalledTimes(2);
@@ -109,7 +129,7 @@ describe("shop menu buttons", () => {
         const confirmCallback = jest.fn();
 
         beforeEach(() => {
-            createConfirmButtons(mockContainer, "Buy", confirmCallback, cancelCallback);
+            createConfirmButtons(mockScene, "Buy", confirmCallback, cancelCallback);
         });
 
         test("provides a slightly different config", () => {

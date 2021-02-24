@@ -16,13 +16,13 @@ export const createMenuButtons = container =>
             container.scene.transientData.shop = { title: button.toLowerCase() };
             container.scene.navigation.next();
         };
-        return makeButton(container, config, callback);
+        return makeButton(container.scene, config, callback);
     });
 
-export const createConfirmButtons = (container, actionText, confirmCallback, cancelCallback) =>
+export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
     [actionText, "Cancel"].map(button => {
-        const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, container.scene);
-        const gelButton = makeButton(container, config, button === "Cancel" ? cancelCallback : confirmCallback);
+        const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, scene);
+        const gelButton = makeButton(scene, config, button === "Cancel" ? cancelCallback : confirmCallback);
         return gelButton;
     });
 
@@ -38,8 +38,7 @@ const getButtonConfig = (button, id, scene) => ({
     scene: scene.assetPrefix,
 });
 
-const makeButton = (container, config, callback) => {
-    const scene = container.scene;
+const makeButton = (scene, config, callback) => {
     const gelButton = scene.add.gelButton(0, 0, config);
     gelButton.on(Phaser.Input.Events.POINTER_UP, callback);
     setButtonOverlays(scene, gelButton, config.title);

@@ -14,6 +14,7 @@ import { createBalance } from "./balance-ui.js";
 export class ShopList extends Screen {
     preload() {
         this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
+        gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
     }
 
     create() {

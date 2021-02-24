@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Added routes for shop navigation, fixes pause bug. |
 | | Local dev ports have been changed to `9000` for `npm run start` and `9001` for `npm run start:pack` for compatibility with Cypress tests. |
 | 3.8.11 ||
 | | Roll Phaser back to 2.34.1 due to rex plugin incompatibilities. |

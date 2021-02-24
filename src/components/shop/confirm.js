@@ -80,7 +80,7 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
     const confirmButtonCallback = () => handleActionClick(scene, container, title, action, item);
     const cancelButtonCallback = () => scene.navigation.back();
     const confirmButtons = createConfirmButtons(
-        container,
+        scene,
         fp.startCase(action),
         confirmButtonCallback,
         cancelButtonCallback,
