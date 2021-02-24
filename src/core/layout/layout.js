@@ -75,7 +75,7 @@ export function create(scene, metrics, buttonIds, accessibleButtonIds) {
         tabSort(buttonIds),
         tabSort(buttonIds).map(name => {
             const buttonConfig = config[name];
-            buttonConfig.accessibilityEnabled = accessibleButtonIds.includes(name);
+            buttonConfig.accessible = accessibleButtonIds.includes(name);
             return groups[buttonConfig.group].addButton(buttonConfig);
         }),
     );

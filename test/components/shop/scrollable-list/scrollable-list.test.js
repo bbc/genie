@@ -29,7 +29,7 @@ const mockGelButton = {
     emit: jest.fn(),
     scene: { sys: { input: { activePointer: "mock" } } },
 };
-buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
+buttons.createListButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
 scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
@@ -169,13 +169,13 @@ describe("Scrollable List", () => {
                     expect(collections.get).toHaveBeenCalledWith("testCatalogue");
                     expect(mockCollection.getAll).toHaveBeenCalled();
                     expect(collectionGetAll.length).toBe(1);
-                    expect(buttons.createGelButton).toHaveBeenCalledTimes(1);
+                    expect(buttons.createListButton).toHaveBeenCalledTimes(1);
                 });
                 test("with zero-quantity items filtered out", () => {
                     jest.clearAllMocks();
                     collectionGetAll = [mockItem, mockItem, { mock: "otherItem", qty: 0 }];
                     new ScrollableList(mockScene, title);
-                    expect(buttons.createGelButton).toHaveBeenCalledTimes(2);
+                    expect(buttons.createListButton).toHaveBeenCalledTimes(2);
                 });
 
                 test("no items table added if the catalogue collection is empty", () => {
@@ -191,7 +191,7 @@ describe("Scrollable List", () => {
 
             describe("with nested rexUI elements", () => {
                 test("a label is created with a gel button per item", () => {
-                    expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem, title);
+                    expect(buttons.createListButton).toHaveBeenCalledWith(mockScene, mockItem, title);
                     expect(mockScene.rexUI.add.label).toHaveBeenCalledWith({
                         orientation: 0,
                         icon: mockGelButton,

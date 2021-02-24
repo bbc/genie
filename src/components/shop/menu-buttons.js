@@ -8,39 +8,43 @@ import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { addText } from "../../core/layout/text-elem.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { createButton } from "../../core/layout/create-button.js";
+import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 
 const defaults = {
     gameButton: true,
-    accessibilityEnabled: true,
-    channel: "shop",
+    accessible: true,
     key: "menuButtonBackground",
 };
 
-export const createMenuButtons = scene =>
-    ["Shop", "Manage"].map(title => {
-        const id = `${title.toLowerCase()}_menu_button`;
-        const ariaLabel = title;
-        const action = () => {
-            scene.stack(title.toLowerCase());
-            gmi.setStatsScreen(title === "Shop" ? "shopbuy" : "shopmanage");
-        };
+const createMenuButton = scene => title => {
+    const id = `${title.toLowerCase()}_menu_button`;
+    const ariaLabel = title;
+    const action = () => {
+        scene.stack(title.toLowerCase());
+        gmi.setStatsScreen(title === "Shop" ? "shopbuy" : "shopmanage");
+    };
 
-        const config = { ...defaults, title, id, ariaLabel, scene: scene.assetPrefix, group: scene.scene.key, action };
-        return makeButton(scene, config);
-    });
+    const config = { ...defaults, title, id, ariaLabel, action };
+
+    return makeButton(scene, config);
+};
+
+export const createMenuButtons = scene => ["Shop", "Manage"].map(createMenuButton(scene));
 
 export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
     [actionText, "Cancel"].map(title => {
         const id = `tx_${title.toLowerCase()}_button`;
         const ariaLabel = title;
         const action = title === "Cancel" ? cancelCallback : confirmCallback;
-
-        const config = { ...defaults, title, id, ariaLabel, scene: scene.assetPrefix, group: scene.scene.key, action };
-        return makeButton(scene, { ...config, action });
+        const config = { ...defaults, title, id, ariaLabel, action };
+        return makeButton(scene, config);
     });
 
 const makeButton = (scene, config) => {
-    const button = createButton(scene, config);
+    const channel = buttonsChannel(scene);
+    const group = scene.scene.key;
+
+    const button = createButton(scene, {...config, channel, group, scene: scene.assetPrefix});
     setButtonOverlays(scene, button, config.title);
     return button;
 };

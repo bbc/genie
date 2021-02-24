@@ -71,7 +71,7 @@ describe("shop menu buttons", () => {
             const expectedConfig = {
                 title: "Shop",
                 gameButton: true,
-                accessibilityEnabled: true,
+                accessible: true,
                 ariaLabel: "Shop",
                 channel: "shop",
                 group: "mockSceneKey",
@@ -130,7 +130,7 @@ describe("shop menu buttons", () => {
             const expectedConfig = {
                 title: "Buy",
                 gameButton: true,
-                accessibilityEnabled: true,
+                accessible: true,
                 ariaLabel: "Buy",
                 channel: "shop",
                 group: "mockSceneKey",
