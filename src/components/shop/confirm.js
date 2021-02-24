@@ -111,7 +111,8 @@ const inferAction = fp.cond([
 
 const handleActionClick = (scene, container, title, action, item) => {
     doAction({ scene, action, item });
-    scene.navigation.back();
+    scene._data.addedBy.scene.resume();
+    scene.removeOverlay();
 };
 
 const doAction = fp.cond([
