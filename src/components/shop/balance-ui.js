@@ -41,5 +41,17 @@ export const createBalance = scene => {
     container.setScale(getScaleFactor({ metrics, container, safeArea }));
     container.setPosition(getXPos(container, safeArea, scene.config.listPadding.x), getYPos(metrics, safeArea));
 
-    return container;
+    const resize = () => {
+        const newSafeArea = getSafeArea(scene.layout);
+        container.setScale(getScaleFactor({ metrics, container, safeArea: newSafeArea }));
+        container.setPosition(
+            getXPos(container, newSafeArea, scene.config.listPadding.x),
+            getYPos(metrics, newSafeArea),
+        );
+    };
+
+    return {
+        container,
+        resize,
+    };
 };

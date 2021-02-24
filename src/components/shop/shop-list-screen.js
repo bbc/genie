@@ -7,10 +7,9 @@
 import { Screen } from "../../core/screen.js";
 import { ScrollableList } from "./scrollable-list/scrollable-list.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
-import { getMetrics, onScaleChange } from "../../core/scaler.js";
+import { onScaleChange } from "../../core/scaler.js";
 import { createTitles } from "../../core/titles.js";
 import { createBalance } from "./balance-ui.js";
-import { getSafeArea, getXPos, getYPos, getScaleFactor } from "./shop-layout.js";
 
 export class ShopList extends Screen {
     preload() {
@@ -37,13 +36,7 @@ export class ShopList extends Screen {
     }
 
     resize() {
-        const metrics = getMetrics();
         this.list.reset();
-        const safeArea = getSafeArea(this.layout);
-        this.balance.setScale(getScaleFactor({ metrics, container: this.balance, safeArea }));
-        this.balance.setPosition(
-            getXPos(this.balance, safeArea, this.config.listPadding.x),
-            getYPos(metrics, safeArea),
-        );
+        this.balance.resize();
     }
 }
