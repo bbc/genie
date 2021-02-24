@@ -68,7 +68,7 @@ describe("shop menu buttons", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("createMenuButtons()", () => {
-        beforeEach(() => (buttons = createMenuButtons(mockContainer)));
+        beforeEach(() => (buttons = createMenuButtons(mockScene)));
 
         test("adds two gel buttons", () => {
             expect(buttons.length).toBe(2);
@@ -86,15 +86,23 @@ describe("shop menu buttons", () => {
                 id: "shop_menu_button",
                 key: "menuButtonBackground",
                 scene: "shop",
+                action: expect.any(Function),
             };
+
             expect(mockScene.add.gelButton.mock.calls[0][2]).toStrictEqual(expectedConfig);
             const otherConfig = { ...expectedConfig, title: "Manage", id: "manage_menu_button", ariaLabel: "Manage" };
-            expect(mockScene.add.gelButton.mock.calls[1][2]).toStrictEqual(otherConfig);
+            expect(mockScene.add.gelButton.mock.calls[1][2]).toEqual(otherConfig);
         });
         describe("callback", () => {
             let callback;
             beforeEach(() => {
-                callback = mockButton.on.mock.calls[0][1];
+
+                //console.log(mockButton.on.mock.calls[0])
+                //callback = mockButton.on.mock.calls[0][1];
+
+                callback = mockScene.add.gelButton.mock.calls[0][0].action
+
+                console.log(callback)
             });
             test("is subscribed to the event bus", () => {
                 expect(mockButton.on).toHaveBeenCalledTimes(2);
@@ -143,6 +151,7 @@ describe("shop menu buttons", () => {
                 id: "tx_buy_button",
                 key: "menuButtonBackground",
                 scene: "shop",
+                action: expect.any(Function)
             };
             expect(mockScene.add.gelButton.mock.calls[0][2]).toStrictEqual(expectedConfig);
             const otherConfig = { ...expectedConfig, title: "Cancel", id: "tx_cancel_button", ariaLabel: "Cancel" };

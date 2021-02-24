@@ -7,56 +7,43 @@
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { addText } from "../../core/layout/text-elem.js";
 import { gmi } from "../../core/gmi/gmi.js";
-import { createButton } from "../../core/layout/button-factory.js";
+import { createButton } from "../../core/layout/create-button.js";
+
+const defaults = {
+    gameButton: true,
+    accessibilityEnabled: true,
+    channel: "shop",
+    key: "menuButtonBackground",
+};
 
 export const createMenuButtons = scene =>
-    ["Shop", "Manage"].map(button => {
-        const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, scene);
+    ["Shop", "Manage"].map(title => {
+        const id = `${title.toLowerCase()}_menu_button`;
+        const ariaLabel = title;
         const action = () => {
-            scene.stack(button.toLowerCase());
-            gmi.setStatsScreen(button === "Shop" ? "shopbuy" : "shopmanage");
+            scene.stack(title.toLowerCase());
+            gmi.setStatsScreen(title === "Shop" ? "shopbuy" : "shopmanage");
         };
-        console.log(1)
-        const btn =  makeButton(scene, {...config, action});
-        return btn
+
+        const config = { ...defaults, title, id, ariaLabel, scene: scene.assetPrefix, group: scene.scene.key, action };
+        return makeButton(scene, config);
     });
 
 export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
-    [actionText, "Cancel"].map(button => {
-        const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, scene);
-        const action = button === "Cancel" ? cancelCallback : confirmCallback;
-        console.log(2)
-        return makeButton(scene, {...config, action})
-    });
+    [actionText, "Cancel"].map(title => {
+        const id = `tx_${title.toLowerCase()}_button`;
+        const ariaLabel = title;
+        const action = title === "Cancel" ? cancelCallback : confirmCallback;
 
-const getButtonConfig = (button, id, scene) => ({
-    title: button,
-    gameButton: true,
-    accessibilityEnabled: true,
-    ariaLabel: button,
-    channel: "shop",
-    group: scene.scene.key,
-    id,
-    key: "menuButtonBackground",
-    scene: scene.assetPrefix,
-});
+        const config = { ...defaults, title, id, ariaLabel, scene: scene.assetPrefix, group: scene.scene.key, action };
+        return makeButton(scene, { ...config, action });
+    });
 
 const makeButton = (scene, config) => {
     const button = createButton(scene, config);
     setButtonOverlays(scene, button, config.title);
-    return button
+    return button;
 };
-
-
-
-/*
-action: ({ screen }) => {
-                const belowScreenKey = getScreenBelow(screen).scene.key;
-                screen.navigate(screen.context.navigation[belowScreenKey].routes.restart);
-                const params = pushLevelId(screen, ["level", "playagain"]);
-                gmi.sendStatsEvent(...params);
-            },
- */
 
 const resizeButton = pane => (button, idx) => {
     const right = Boolean(pane.container.scene.config.menu.buttonsRight);

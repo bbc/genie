@@ -1,14 +1,13 @@
 /**
- * A Gel Button Factory exists on each layout group. It has one method {@link module:layout/button-factory.createButtonFn createButton}
+ * A Gel Button Factory exists on each layout group. It has one method {@link module:layout/create-button.createButtonFn createButton}
  *
- * @module core/layout/button-factory
+ * @module core/layout/create-button
  * @copyright BBC 2018
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { eventBus } from "../../core/event-bus.js";
+import { eventBus } from "../event-bus.js";
 import { accessibilify } from "../accessibility/accessibilify.js";
-import { GelButton } from "./gel-button.js";
 import { settings } from "../settings.js";
 
 const defaultAction = config => {
@@ -26,7 +25,7 @@ export const createButton = (scene, config, x = 0, y = 0) => {
         config.key = settings.getAllSettings().audio ? "audio-on" : "audio-off";
     }
 
-    const btn = new GelButton(scene, x, y, config);
+    const btn = scene.add.gelButton(x, y, config);
 
     if (config.icon) {
         btn.disableInteractive();
@@ -37,5 +36,4 @@ export const createButton = (scene, config, x = 0, y = 0) => {
     defaultAction(config);
 
     return config.accessibilityEnabled? accessibilify(btn, false) : btn;
-
 };

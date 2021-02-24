@@ -5,7 +5,7 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as a11y from "../accessibility/accessibility-layer.js";
-import { createButton } from "./button-factory.js";
+import { createButton } from "./create-button.js";
 import { CANVAS_HEIGHT, GEL_MIN_ASPECT_RATIO } from "./metrics.js";
 
 const canvasSafeWidth = CANVAS_HEIGHT * GEL_MIN_ASPECT_RATIO;
