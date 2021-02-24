@@ -73,7 +73,7 @@ describe("Group", () => {
                 width: 200,
                 height: 100,
             },
-        })
+        });
 
         vPos = "middle";
         hPos = "center";

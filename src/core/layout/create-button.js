@@ -1,6 +1,4 @@
 /**
- * A Gel Button Factory exists on each layout group. It has one method {@link module:layout/create-button.createButtonFn createButton}
- *
  * @module core/layout/create-button
  * @copyright BBC 2018
  * @author BBC Children's D+E
@@ -35,5 +33,5 @@ export const createButton = (scene, config, x = 0, y = 0) => {
 
     defaultAction(config);
 
-    return config.accessibilityEnabled? accessibilify(btn, false) : btn;
+    return config.accessibilityEnabled ? accessibilify(btn, false) : btn;
 };
