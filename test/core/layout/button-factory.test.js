@@ -26,7 +26,7 @@ describe("Layout - Button Factory", () => {
         jest.spyOn(GelButton, "GelButton").mockImplementation(() => mockButton);
 
         mockGame = { canvas: () => {}, mockGame: "game" };
-        buttonFactory = ButtonFactory.create(mockGame);
+        buttonFactory = ButtonFactory.createButton(mockGame);
     });
 
     afterEach(() => jest.clearAllMocks());

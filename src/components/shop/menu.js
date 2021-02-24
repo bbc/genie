@@ -30,7 +30,8 @@ const populateMenu = (scene, menu) => {
     menu.container.add(contents);
     menu.container.setY(bounds.height / 2 + bounds.y);
 
-    menu.buttons = createMenuButtons(menu.container);
+    menu.buttons = createMenuButtons(scene);
+    menu.container.add(menu.buttons)
     resizeGelButtons(menu);
 };
 

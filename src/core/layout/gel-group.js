@@ -5,7 +5,7 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as a11y from "../accessibility/accessibility-layer.js";
-import * as ButtonFactory from "./button-factory.js";
+import { createButton } from "./button-factory.js";
 import { CANVAS_HEIGHT, GEL_MIN_ASPECT_RATIO } from "./metrics.js";
 
 const canvasSafeWidth = CANVAS_HEIGHT * GEL_MIN_ASPECT_RATIO;
@@ -54,7 +54,6 @@ export class GelGroup extends Phaser.GameObjects.Container {
         this.isSafe = isSafe;
         this._isVertical = isVertical;
         this._buttons = [];
-        this._buttonFactory = ButtonFactory.create(scene);
         this._setGroupPosition = metrics => {
             this.x = horizontal[hPos](metrics, this);
             this.y = vertical[vPos](metrics, this);
@@ -64,7 +63,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
     }
 
     addButton(config, position = this._buttons.length) {
-        const newButton = this._buttonFactory.createButton(config, this.width / 2, this.height / 2);
+        const newButton = createButton(this.scene, config, this.width / 2, this.height / 2);
 
         this.addAt(newButton, position);
         this._buttons.push(newButton);

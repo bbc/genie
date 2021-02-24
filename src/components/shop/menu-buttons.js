@@ -4,27 +4,29 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
-import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { addText } from "../../core/layout/text-elem.js";
 import { gmi } from "../../core/gmi/gmi.js";
+import { createButton } from "../../core/layout/button-factory.js";
 
-export const createMenuButtons = container =>
+export const createMenuButtons = scene =>
     ["Shop", "Manage"].map(button => {
-        const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, container.scene);
-        const callback = () => {
-            container.scene.stack(button.toLowerCase());
+        const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, scene);
+        const action = () => {
+            scene.stack(button.toLowerCase());
             gmi.setStatsScreen(button === "Shop" ? "shopbuy" : "shopmanage");
         };
-        return makeButton(container.scene, config, callback);
+        console.log(1)
+        const btn =  makeButton(scene, {...config, action});
+        return btn
     });
 
 export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
     [actionText, "Cancel"].map(button => {
         const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, scene);
-        const gelButton = makeButton(scene, config, button === "Cancel" ? cancelCallback : confirmCallback);
-        return gelButton;
+        const action = button === "Cancel" ? cancelCallback : confirmCallback;
+        console.log(2)
+        return makeButton(scene, {...config, action})
     });
 
 const getButtonConfig = (button, id, scene) => ({
@@ -39,12 +41,22 @@ const getButtonConfig = (button, id, scene) => ({
     scene: scene.assetPrefix,
 });
 
-const makeButton = (scene, config, callback) => {
-    const gelButton = scene.add.gelButton(0, 0, config);
-    gelButton.on(Phaser.Input.Events.POINTER_UP, callback);
-    setButtonOverlays(scene, gelButton, config.title);
-    return accessibilify(gelButton);
+const makeButton = (scene, config) => {
+    const button = createButton(scene, config);
+    setButtonOverlays(scene, button, config.title);
+    return button
 };
+
+
+
+/*
+action: ({ screen }) => {
+                const belowScreenKey = getScreenBelow(screen).scene.key;
+                screen.navigate(screen.context.navigation[belowScreenKey].routes.restart);
+                const params = pushLevelId(screen, ["level", "playagain"]);
+                gmi.sendStatsEvent(...params);
+            },
+ */
 
 const resizeButton = pane => (button, idx) => {
     const right = Boolean(pane.container.scene.config.menu.buttonsRight);
