@@ -34,9 +34,9 @@ export class ShopList extends Screen {
         const resize = this.resize.bind(this);
         const scaleEvent = onScaleChange.add(resize);
         this.events.once("shutdown", scaleEvent.unsubscribe);
-        const setStatsScreen = this.setStatsScreen.bind(this);
-        this.events.on(Phaser.Scenes.Events.RESUME, setStatsScreen);
-        this.events.once("shutdown", () => this.events.off(Phaser.Scenes.Events.RESUME, setStatsScreen));
+        const onResume = this.onResume.bind(this);
+        this.events.on(Phaser.Scenes.Events.RESUME, onResume);
+        this.events.once("shutdown", () => this.events.off(Phaser.Scenes.Events.RESUME, onResume));
     }
 
     resize() {
@@ -44,7 +44,8 @@ export class ShopList extends Screen {
         this.balance.resize();
     }
 
-    setStatsScreen() {
+    onResume() {
+        // TODO update this scrollable list
         gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
     }
 }
