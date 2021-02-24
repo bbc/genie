@@ -52,7 +52,9 @@ const screens = {
         routes: {
             debug: "debug",
             //Example of custom routing function
-            next: "shop",
+            next: scene => {
+                scene.navigate("narrative");
+            },
         },
     },
     narrative: {
