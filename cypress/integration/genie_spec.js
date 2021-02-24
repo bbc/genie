@@ -5,7 +5,7 @@
  */
 import { getUrl } from "../support/functions";
 
-describe("Tests the core flow of Genie", () => {
+describe(`Tests the core flow of Genie ${Cypress.env("THEME")}`, () => {
     const checkHomeScreen = () => {
         cy.get("#home__play").should("exist");
         cy.get("#home__exit").should("exist");
@@ -65,8 +65,10 @@ describe("Tests the core flow of Genie", () => {
     beforeEach(() => {
         cy.viewport(1106, 800);
         cy.visit(getUrl());
-        cy.get("#home__play", { timeout: 40000 }).should("exist");
-        cy.get(".data-notice").click();
+        cy.get("#home__play", { timeout: 60000 }).should("exist");
+        if (!Cypress.env("DEV_LOCAL") == "true") {
+            cy.get(".data-notice").click();
+        }
     });
 
     it("Navigates through the core flow and loads the next level select after completion", () => {

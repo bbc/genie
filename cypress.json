@@ -1,1 +1,16 @@
-{}
+{
+    "reporter": "mochawesome",
+    "reporterOptions": {
+        "overwrite": false,
+        "html": false,
+        "json": true,
+        "reportDir": "output/reports/",
+        "assetsDir": "output/reports/"
+    },
+    "defaultCommandTimeout": 6000,
+    "pageLoadTimeout": 40000,
+    "screenshotOnRunFailure": true,
+    "retries": {
+        "runMode": 2
+    }
+}
