@@ -44,7 +44,7 @@ const makeButton = (scene, config) => {
     const channel = buttonsChannel(scene);
     const group = scene.scene.key;
 
-    const button = createButton(scene, {...config, channel, group, scene: scene.assetPrefix});
+    const button = createButton(scene, { ...config, channel, group, scene: scene.assetPrefix });
     setButtonOverlays(scene, button, config.title);
     return button;
 };

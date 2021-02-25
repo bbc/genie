@@ -9,6 +9,7 @@ import { collections } from "../../../core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { createButton } from "../../../core/layout/create-button.js";
 import { buttonsChannel } from "../../../core/layout/gel-defaults.js";
+import { getButtonState } from "./get-button-state.js";
 
 const defaults = {
     gameButton: true,
@@ -20,7 +21,7 @@ const defaults = {
 const getOverlayConfigs = (scene, title) => ({
     items: scene.config.overlay.items,
     options: scene.config.overlay.options[title],
-})
+});
 
 const updateButtonData = button => {
     const [itemKey, title] = getItemKeyAndTitle(button);
@@ -34,29 +35,13 @@ const updateButtonData = button => {
     return fp.isEqual(button.item, item) ? false : doUpdate(button, item);
 };
 
-const getButtonState = (scene, item, title) => {
-    const states = [];
-    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item.id);
-    const isPurchased = inventoryItem => inStock(inventoryItem);
-    const isEquipped = inventoryItem => inventoryItem?.state === "equipped";
-    const isButtonCta = title === "shop" ? isPurchased(inventoryItem) : isEquipped(inventoryItem);
-    states.push(isButtonCta ? "actioned" : "cta");
-    states.push(equippable(item) ? "equippable" : "consumable");
-    states.push(inStock(item) ? "available" : "unavailable");
-    states.push(locked(item, scene.config) ? "locked" : "unlocked");
-    return states;
-};
-
-const equippable = item => Boolean(item.slot);
-const inStock = item => item?.qty > 0;
-const locked = (item, config) => item.state && config.states[item.state] && config.states[item.state].disabled;
-
 const updateOverlays = button => {
     unsetOverlays(button);
     setOverlays(button);
 };
 
-const getConfigs = button => getOverlayConfigs(button.scene, button.config.title).items.concat(filterOptionalConfigs(button));
+const getConfigs = button =>
+    getOverlayConfigs(button.scene, button.config.title).items.concat(filterOptionalConfigs(button));
 
 const filterOptionalConfigs = button => {
     const overlayStates = getButtonState(button.scene, button.item, getPaneTitle(button));
@@ -73,11 +58,11 @@ const unsetOverlays = button => Object.keys(button.overlays.list).forEach(key =>
 
 export const createListButton = (scene, item, title, action) => {
     const id = `scroll_button_${item.id}_${title}`;
-    const ariaLabel = `${item.title} - ${item.description}`
+    const ariaLabel = `${item.title} - ${item.description}`;
     const channel = buttonsChannel(scene);
     const group = scene.scene.key;
     const config = { ...defaults, title, id, ariaLabel, scene: scene.assetPrefix, group, channel, action };
-    const gelButton = createButton(scene, config)
+    const gelButton = createButton(scene, config);
 
     gelButton.item = item;
 
@@ -85,7 +70,7 @@ export const createListButton = (scene, item, title, action) => {
     Object.assign(gelButton.sprite, properties);
 
     scaleButton(gelButton, scene.layout, scene.config.listPadding);
-    setOverlays(gelButton)
+    setOverlays(gelButton);
     return gelButton;
 };
 

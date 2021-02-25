@@ -17,7 +17,7 @@ describe("Scrollable List Buttons", () => {
     let mockCollection;
     const dummyCallback = () => {};
 
-    const mockButton = {
+    let mockButton = {
         width: 100,
         setScale: jest.fn(),
         config: { id: "foo_bar_itemKey_shop", title: "shop" },

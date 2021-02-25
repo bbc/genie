@@ -127,7 +127,6 @@ const setupEvents = (scene, panel) => {
 
     panel.updateOnFocus = updatePanelOnFocus(panel);
     const items = getPanelItems(panel);
-
     items.forEach(item => getFirstElement(item).addEventListener("focus", () => panel.updateOnFocus(item)));
 };
 
