@@ -5,13 +5,12 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
-import { createGelButton, scaleButton, updateButton } from "./scrollable-list-buttons.js";
+import { createListButton, scaleButton, updateButton } from "./scrollable-list-buttons.js";
 import { createConfirm } from "../confirm.js";
 import * as a11y from "../../../core/accessibility/accessibility-layer.js";
 import { collections } from "../../../core/collections.js";
 import { onScaleChange } from "../../../core/scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
-import { accessibilify } from "../../../core/accessibility/accessibilify.js";
 import { createBackground, resizeBackground } from "./backgrounds.js";
 
 const createPanel = (scene, title, parent) => {
@@ -81,27 +80,19 @@ const showConfirmation = (scene, title, item) => {
 };
 
 const createItem = (scene, item, title, parent) => {
-    const icon = createGelButton(scene, item, title);
-    const isLocked = isItemLocked(item);
-    const label = scene.rexUI.add.label({
+    const action = pointer =>
+        (parent.panel.isInTouching() || !pointer) && !isLocked(item) && showConfirmation(scene, title, item);
+
+    const icon = createListButton(scene, item, title, action);
+
+    return scene.rexUI.add.label({
         orientation: 0,
         icon,
         name: item.id,
     });
-    label.config = {
-        id: `scroll_button_${item.id}_${title}`,
-        ariaLabel: `${item.title} - ${item.description}`,
-    };
-    const callback = pointer =>
-        (parent.panel.isInTouching() || !pointer) && !isLocked && showConfirmation(scene, title, item);
-    label.setInteractive();
-    label.on(Phaser.Input.Events.POINTER_UP, callback);
-    scene.events.once("shutdown", () => label.off(Phaser.Input.Events.POINTER_UP, callback));
-    accessibilify(label);
-    return label;
 };
 
-const isItemLocked = item => item.state === "locked";
+const isLocked = item => item.state === "locked";
 
 const resizePanel = (scene, panel) => () => {
     const t = panel.t;
@@ -114,7 +105,7 @@ const resizePanel = (scene, panel) => () => {
     panel.setT(t);
 };
 
-const getFirstElement = item => item.accessibleElement?.el;
+const getFirstElement = item => item.children[0]?.accessibleElement?.el;
 
 const setupEvents = (scene, panel) => {
     const scaleEvent = onScaleChange.add(resizePanel(scene, panel));
@@ -136,7 +127,6 @@ const setupEvents = (scene, panel) => {
 
     panel.updateOnFocus = updatePanelOnFocus(panel);
     const items = getPanelItems(panel);
-
     items.forEach(item => getFirstElement(item).addEventListener("focus", () => panel.updateOnFocus(item)));
 };
 
@@ -206,8 +196,8 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         items.forEach(item => {
             const button = item.children[0];
             button.input.enabled = isVisible;
-            item.config.tabbable = isVisible;
-            item.accessibleElement.update();
+            button.config.tabbable = isVisible;
+            button.accessibleElement.update();
         });
         isVisible && updatePanel(this.panel);
     }

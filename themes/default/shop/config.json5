@@ -79,7 +79,7 @@
     menu: {
         buttonsRight: true,
     },
-    columns: 1,
+    columns: 2,
     backgrounds: {
         menu: "",
         shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },

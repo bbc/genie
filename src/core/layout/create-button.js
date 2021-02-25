@@ -33,5 +33,5 @@ export const createButton = (scene, config, x = 0, y = 0) => {
 
     defaultAction(config);
 
-    return config.accessibilityEnabled ? accessibilify(btn, false) : btn;
+    return config.accessible ? accessibilify(btn, false) : btn;
 };

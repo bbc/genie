@@ -71,9 +71,9 @@ describe("shop menu buttons", () => {
             const expectedConfig = {
                 title: "Shop",
                 gameButton: true,
-                accessibilityEnabled: true,
+                accessible: true,
                 ariaLabel: "Shop",
-                channel: "shop",
+                channel: "gel-buttons-mockSceneKey",
                 group: "mockSceneKey",
                 id: "shop_menu_button",
                 key: "menuButtonBackground",
@@ -130,9 +130,9 @@ describe("shop menu buttons", () => {
             const expectedConfig = {
                 title: "Buy",
                 gameButton: true,
-                accessibilityEnabled: true,
+                accessible: true,
                 ariaLabel: "Buy",
-                channel: "shop",
+                channel: "gel-buttons-mockSceneKey",
                 group: "mockSceneKey",
                 id: "tx_buy_button",
                 key: "menuButtonBackground",
