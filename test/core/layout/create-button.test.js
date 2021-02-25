@@ -79,11 +79,11 @@ describe("Layout - Button Factory", () => {
             expect(btn.disableInteractive).toHaveBeenCalledTimes(1);
         });
 
-        test("accessibilifies button when accessibilityEnabled is true and icon is false", () => {
+        test("accessibilifies button when accessible is true and icon is false", () => {
             const config = {
                 title: "button",
                 icon: false,
-                accessibilityEnabled: true,
+                accessible: true,
             };
 
             createButton(mockScene, config);
@@ -91,11 +91,11 @@ describe("Layout - Button Factory", () => {
             expect(accessibilify.accessibilify).toHaveBeenCalledWith(mockButton, false);
         });
 
-        test("does not accessibilify button when accessibilityEnabled is false and icon is false", () => {
+        test("does not accessibilify button when accessible is false and icon is false", () => {
             const config = {
                 title: "button",
                 icon: false,
-                accessibilityEnabled: false,
+                accessible: false,
             };
 
             createButton(mockScene, config);

@@ -256,11 +256,11 @@ describe("Layout", () => {
                 ["exit", "blah"],
             );
             expect(layout.buttons.achievements).toBeDefined();
-            expect(layout.buttons.achievements.config.accessibilityEnabled).toBe(false);
+            expect(layout.buttons.achievements.config.accessible).toBe(false);
             expect(layout.buttons.exit).toBeDefined();
-            expect(layout.buttons.exit.config.accessibilityEnabled).toBe(true);
+            expect(layout.buttons.exit.config.accessible).toBe(true);
             expect(layout.buttons.settings).toBeDefined();
-            expect(layout.buttons.settings.config.accessibilityEnabled).toBe(false);
+            expect(layout.buttons.settings.config.accessible).toBe(false);
         });
     });
 

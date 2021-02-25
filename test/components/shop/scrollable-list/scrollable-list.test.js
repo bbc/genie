@@ -12,7 +12,6 @@ import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
 import { collections } from "../../../../src/core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
-import { accessibilify } from "../../../../src/core/accessibility/accessibilify.js";
 
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
 jest.mock("../../../../src/components/shop/confirm.js");
@@ -29,7 +28,7 @@ const mockGelButton = {
     emit: jest.fn(),
     scene: { sys: { input: { activePointer: "mock" } } },
 };
-buttons.createGelButton = jest.fn().mockReturnValue(mockGelButton);
+buttons.createListButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
 scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
@@ -59,12 +58,18 @@ describe("Scrollable List", () => {
         collections.get = jest.fn().mockReturnValue(mockCollection);
 
         mockLabel = {
-            children: [{ input: { enabled: true }, item: mockItem }],
+            children: [
+                {
+                    input: { enabled: true },
+                    item: mockItem,
+                    accessibleElement: { el: mockA11yElem, update: jest.fn() },
+                    config: { tabbable: true },
+                },
+            ],
             height: 50,
             setInteractive: jest.fn(),
             on: jest.fn(),
             off: jest.fn(),
-            accessibleElement: { el: mockA11yElem, update: jest.fn() },
         };
         mockGridSizer = {
             add: jest.fn(),
@@ -169,13 +174,13 @@ describe("Scrollable List", () => {
                     expect(collections.get).toHaveBeenCalledWith("testCatalogue");
                     expect(mockCollection.getAll).toHaveBeenCalled();
                     expect(collectionGetAll.length).toBe(1);
-                    expect(buttons.createGelButton).toHaveBeenCalledTimes(1);
+                    expect(buttons.createListButton).toHaveBeenCalledTimes(1);
                 });
                 test("with zero-quantity items filtered out", () => {
                     jest.clearAllMocks();
                     collectionGetAll = [mockItem, mockItem, { mock: "otherItem", qty: 0 }];
                     new ScrollableList(mockScene, title);
-                    expect(buttons.createGelButton).toHaveBeenCalledTimes(2);
+                    expect(buttons.createListButton).toHaveBeenCalledTimes(2);
                 });
 
                 test("no items table added if the catalogue collection is empty", () => {
@@ -191,26 +196,17 @@ describe("Scrollable List", () => {
 
             describe("with nested rexUI elements", () => {
                 test("a label is created with a gel button per item", () => {
-                    expect(buttons.createGelButton).toHaveBeenCalledWith(mockScene, mockItem, title);
+                    expect(buttons.createListButton).toHaveBeenCalledWith(
+                        mockScene,
+                        mockItem,
+                        title,
+                        expect.any(Function),
+                    );
                     expect(mockScene.rexUI.add.label).toHaveBeenCalledWith({
                         orientation: 0,
                         icon: mockGelButton,
                         name: mockItem.id,
                     });
-                });
-                test("label has the correct accessibilify config attached to it", () => {
-                    expect(mockLabel.config).toEqual({
-                        id: `scroll_button_${mockItem.id}_${title}`,
-                        ariaLabel: `${mockItem.title} - ${mockItem.description}`,
-                    });
-                });
-                test("removes pointerup callback from the labels event emitter when scene is shutdown", () => {
-                    expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
-                    mockScene.events.once.mock.calls[0][1]();
-                    expect(mockLabel.off).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP, expect.any(Function));
-                });
-                test("label is accessibilified", () => {
-                    expect(accessibilify).toHaveBeenCalledWith(mockLabel);
                 });
                 test("labels are added to a grid sizer", () => {
                     expect(mockScene.rexUI.add.gridSizer).toHaveBeenCalledWith({
@@ -236,12 +232,9 @@ describe("Scrollable List", () => {
                 confirm.createConfirm = jest.fn();
 
                 beforeEach(() => {
-                    callback = mockLabel.on.mock.calls[0][1];
+                    callback = buttons.createListButton.mock.calls[0][3];
                 });
 
-                test("are set on pointerup", () => {
-                    expect(mockLabel.on.mock.calls[0][0]).toBe("pointerup");
-                });
                 test("creates a confirm pane and puts it on shop's stack", () => {
                     callback();
                     expect(confirm.createConfirm).toHaveBeenCalledWith(mockScene, "shop", mockItem);
@@ -323,7 +316,7 @@ describe("Scrollable List", () => {
         describe("shutdown", () => {
             beforeEach(() => {
                 new ScrollableList(mockScene);
-                const shutdownListener = mockScene.events.once.mock.calls[2][1];
+                const shutdownListener = mockScene.events.once.mock.calls[1][1];
                 shutdownListener();
             });
             test("removes the debounced resize listener", () => {
@@ -374,8 +367,8 @@ describe("Scrollable List", () => {
             list.setVisible(false);
             expect(list.panel.visible).toBe(false);
             expect(mockLabel.children[0].input.enabled).toBe(false);
-            expect(mockLabel.config.tabbable).toBe(false);
-            expect(mockLabel.accessibleElement.update).toHaveBeenCalled();
+            expect(mockLabel.children[0].config.tabbable).toBe(false);
+            expect(mockLabel.children[0].accessibleElement.update).toHaveBeenCalled();
         });
     });
     describe("panel update on setVisible(true)", () => {
