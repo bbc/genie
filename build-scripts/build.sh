@@ -52,13 +52,13 @@ cp -r themes output/themes
 cp -r debug output/debug
 
 set +e
-#npm run start:pack & npm run cy:local
-#if [ $? -eq 0 ]
-#    then
-#        npm run cy:local-theme2
-#        postTheme2Actions
-#    else
-#        npm run cy:local-theme2
-#        postTheme1Actions
-#fi
+npm run start:pack & npm run cy:local
+if [ $? -eq 0 ]
+   then
+       npm run cy:local-theme2
+       postTheme2Actions
+   else
+       npm run cy:local-theme2
+       postTheme1Actions
+fi
 

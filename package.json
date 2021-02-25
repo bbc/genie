@@ -25,6 +25,7 @@
         "json5": "^2.1.3",
         "notp": "^2.0.3",
         "phaser": "3.24.1",
+        "portfinder-sync": "0.0.2",
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {
@@ -71,7 +72,7 @@
         "docs": "jsdoc -c ./build-scripts/docs/.jsdoc.js",
         "validate": "node build-scripts/schemavalidator/validator.js achievement",
         "roll-lodash": "rollup -c lib/lodash/rollup.config.js",
-        "cy": "export THEME=theme_1 && cypress open",
+        "cy": "export THEME=theme_1 && LOCAL_DEV=true && cypress open",
         "cy:headless": "export THEME=theme_1 && cypress run --headless --config video=false --spec '**/*spec.js'",
         "cy:headless-theme2": "export THEME=theme_2 && cypress run --headless --config video=false --spec '**/*spec.js'",
         "cy:local": "export THEME=theme_1 && export LOCAL_DEV=true && cypress run --headless --config video=false --spec '**/*spec.js'",

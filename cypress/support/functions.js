@@ -5,14 +5,17 @@
  */
 import { appendToken } from "../support/appendToken.js";
 
+import webpack from "../../build-scripts/webpack.config.js"
+
 let localTesting = "http://localhost:9001/?debug=true";
 let localTheme2 = "http://localhost:9001/?debug=true&theme=theme2";
 let testTheme2 =
     "https://www.test.bbc.co.uk/games/embed/genie?versionOverride=latest&viewNonPublished=true&cageEnv=test&debug=true&theme=theme2";
 let test =
     "https://www.test.bbc.co.uk/games/embed/genie?versionOverride=latest&viewNonPublished=true&cageEnv=test&debug=true";
-
 export const getUrl = () => {
+
+    cy.log(webpack({}))
     if (Cypress.env("LOCAL_DEV") == "true") {
         if (Cypress.env("THEME") == "theme_2") {
             cy.log("theme 2 dev");
