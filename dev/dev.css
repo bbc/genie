@@ -65,5 +65,5 @@ body {
 details[open] > summary { font-weight: bold; }
 
 .debug #accessibility .gel-button {
-    box-shadow: inset 0 0 10px rgba(0,0,255,0.3);
+    box-shadow: inset 0 0 10px rgba(0,128,255,0.7);
 }
