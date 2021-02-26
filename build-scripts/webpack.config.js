@@ -8,10 +8,6 @@ const dynamicallyExposeGlobals = require("../dev/scripts/dynamicExpose.js");
 
 const webpack = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
-const portFinderSync = require("portfinder-sync");
-const basePort = 9001
-const freePort = portFinderSync.getPort(basePort)
-
 
 module.exports = env => {
     const development = env && env.development;
@@ -63,7 +59,7 @@ module.exports = env => {
             writeToDisk: true,
             useLocalIp: true,
             host: "0.0.0.0",
-            port: freePort,
+            port: 9001,
             historyApiFallback: {
                 index: "node_modules/genie/dev/index.main.html",
             },
