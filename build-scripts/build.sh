@@ -54,11 +54,22 @@ cp -r debug output/debug
 set +e
 npm run start:pack & npm run cy:local
 if [ $? -eq 0 ]
-   then
-       npm run cy:local-theme2
-       postTheme2Actions
-   else
-       npm run cy:local-theme2
-       postTheme1Actions
+then
+    if [ "$GIT_BRANCH" = "master" ]
+    then 
+        npm run cy:local-theme2
+        postTheme2Actions
+    else
+        node cypress/support/createReports.js
+        zip -r output/reports/screenshots.zip cypress/screenshots
+        exit 0
+    fi  
+else
+    if [ "$GIT_BRANCH" = "master" ]
+    then 
+        npm run cy:local-theme2
+        postTheme1Actions
+    else
+        postTheme1Actions
+    fi  
 fi
-
