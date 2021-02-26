@@ -4,46 +4,51 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
-import { accessibilify } from "../../core/accessibility/accessibilify.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { addText } from "../../core/layout/text-elem.js";
+import { gmi } from "../../core/gmi/gmi.js";
+import { createButton } from "../../core/layout/create-button.js";
+import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 
-export const createMenuButtons = container =>
-    ["Shop", "Manage"].map(button => {
-        const config = getButtonConfig(button, `${button.toLowerCase()}_menu_button`, container.scene);
-        const callback = () => {
-            container.scene.transientData.shop = { title: button.toLowerCase() };
-            container.scene.scene.pause();
-            container.scene.addOverlay(container.scene.scene.key.replace("-menu", "-list"));
-        };
-        return makeButton(container.scene, config, callback);
-    });
+const defaults = {
+    gameButton: true,
+    accessible: true,
+    key: "menuButtonBackground",
+};
+
+const createMenuButton = scene => title => {
+    const id = `${title.toLowerCase()}_menu_button`;
+    const ariaLabel = title;
+    const action = () => {
+        scene.transientData.shop = { title: title.toLowerCase() };  //TODO NT Should "shop" be hardcoded here? Multiple shops a possibility
+        scene.scene.pause();
+        scene.addOverlay(scene.scene.key.replace("-menu", "-list"));
+        gmi.setStatsScreen(title === "Shop" ? "shopbuy" : "shopmanage");
+    };
+
+    const config = { ...defaults, title, id, ariaLabel, action };
+
+    return makeButton(scene, config);
+};
+
+export const createMenuButtons = scene => ["Shop", "Manage"].map(createMenuButton(scene));
 
 export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
-    [actionText, "Cancel"].map(button => {
-        const config = getButtonConfig(button, `tx_${button.toLowerCase()}_button`, scene);
-        const gelButton = makeButton(scene, config, button === "Cancel" ? cancelCallback : confirmCallback);
-        return gelButton;
+    [actionText, "Cancel"].map(title => {
+        const id = `tx_${title.toLowerCase()}_button`;
+        const ariaLabel = title;
+        const action = title === "Cancel" ? cancelCallback : confirmCallback;
+        const config = { ...defaults, title, id, ariaLabel, action };
+        return makeButton(scene, config);
     });
 
-const getButtonConfig = (button, id, scene) => ({
-    title: button,
-    gameButton: true,
-    accessibilityEnabled: true,
-    ariaLabel: button,
-    channel: "shop",
-    group: scene.scene.key,
-    id,
-    key: "menuButtonBackground",
-    scene: scene.assetPrefix,
-});
+const makeButton = (scene, config) => {
+    const channel = buttonsChannel(scene);
+    const group = scene.scene.key;
 
-const makeButton = (scene, config, callback) => {
-    const gelButton = scene.add.gelButton(0, 0, config);
-    gelButton.on(Phaser.Input.Events.POINTER_UP, callback);
-    setButtonOverlays(scene, gelButton, config.title);
-    return accessibilify(gelButton);
+    const button = createButton(scene, { ...config, channel, group, scene: scene.assetPrefix });
+    setButtonOverlays(scene, button, config.title);
+    return button;
 };
 
 const resizeButton = pane => (button, idx) => {

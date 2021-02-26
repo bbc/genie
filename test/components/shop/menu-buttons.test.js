@@ -52,14 +52,6 @@ describe("shop menu buttons", () => {
         },
     };
 
-    const mockContainer = {
-        scene: mockScene,
-        list: [
-            {
-                getBounds: () => mockOuterBounds,
-            },
-        ],
-    };
     const mockEvent = { unsubscribe: "foo" };
     eventBus.subscribe = jest.fn(() => mockEvent);
     a11y.accessibilify = jest.fn(x => x);
@@ -68,7 +60,7 @@ describe("shop menu buttons", () => {
     afterEach(() => jest.clearAllMocks());
 
     describe("createMenuButtons()", () => {
-        beforeEach(() => (buttons = createMenuButtons(mockContainer)));
+        beforeEach(() => (buttons = createMenuButtons(mockScene)));
 
         test("adds two gel buttons", () => {
             expect(buttons.length).toBe(2);
@@ -79,25 +71,27 @@ describe("shop menu buttons", () => {
             const expectedConfig = {
                 title: "Shop",
                 gameButton: true,
-                accessibilityEnabled: true,
+                accessible: true,
                 ariaLabel: "Shop",
-                channel: "shop",
+                channel: "gel-buttons-mockSceneKey",
                 group: "mockSceneKey",
                 id: "shop_menu_button",
                 key: "menuButtonBackground",
                 scene: "shop",
+                action: expect.any(Function),
             };
+
             expect(mockScene.add.gelButton.mock.calls[0][2]).toStrictEqual(expectedConfig);
             const otherConfig = { ...expectedConfig, title: "Manage", id: "manage_menu_button", ariaLabel: "Manage" };
-            expect(mockScene.add.gelButton.mock.calls[1][2]).toStrictEqual(otherConfig);
+            expect(mockScene.add.gelButton.mock.calls[1][2]).toEqual(otherConfig);
         });
         describe("callback", () => {
             let callback;
             beforeEach(() => {
-                callback = mockButton.on.mock.calls[0][1];
+                callback = mockScene.add.gelButton.mock.calls[0][2].action;
             });
             test("is subscribed to the event bus", () => {
-                expect(mockButton.on).toHaveBeenCalledTimes(2);
+                expect(eventBus.subscribe).toHaveBeenCalledTimes(2);
                 expect(typeof callback).toBe("function");
             });
             test("calls scene.stack with the pane title", () => {
@@ -108,9 +102,9 @@ describe("shop menu buttons", () => {
                 callback();
                 expect(gmi.setStatsScreen).toHaveBeenCalledWith("shopbuy");
             });
-            test("the other button fires a hardcoded 'shopmanage' value", () => {
-                const otherCallback = mockButton.on.mock.calls[1][1];
-                otherCallback();
+            test("the second button fires a hardcoded 'shopmanage' value", () => {
+                const secondCallback = mockScene.add.gelButton.mock.calls[1][2].action;
+                secondCallback();
                 expect(gmi.setStatsScreen).toHaveBeenCalledWith("shopmanage");
             });
         });
@@ -136,23 +130,24 @@ describe("shop menu buttons", () => {
             const expectedConfig = {
                 title: "Buy",
                 gameButton: true,
-                accessibilityEnabled: true,
+                accessible: true,
                 ariaLabel: "Buy",
-                channel: "shop",
+                channel: "gel-buttons-mockSceneKey",
                 group: "mockSceneKey",
                 id: "tx_buy_button",
                 key: "menuButtonBackground",
                 scene: "shop",
+                action: expect.any(Function),
             };
             expect(mockScene.add.gelButton.mock.calls[0][2]).toStrictEqual(expectedConfig);
             const otherConfig = { ...expectedConfig, title: "Cancel", id: "tx_cancel_button", ariaLabel: "Cancel" };
             expect(mockScene.add.gelButton.mock.calls[1][2]).toStrictEqual(otherConfig);
         });
         test("uses the callback it was passed", () => {
-            const firstCallback = mockButton.on.mock.calls[0][1];
+            const firstCallback = mockScene.add.gelButton.mock.calls[0][2].action;
             firstCallback();
             expect(confirmCallback).toHaveBeenCalled();
-            const secondCallback = mockButton.on.mock.calls[1][1];
+            const secondCallback = mockScene.add.gelButton.mock.calls[1][2].action;
             secondCallback();
             expect(cancelCallback).toHaveBeenCalled();
         });
