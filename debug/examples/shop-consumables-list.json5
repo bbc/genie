@@ -1,5 +1,5 @@
 {
-    assetPrefix: "debug-shop", // override generally only used for debug screens. Remove for production screens.
+    assetPrefix: "debug-shop", // used for debug screens
     music: "home.backgroundMusic",
     background: {
         items: [{ key: "debug-shop.magicShop", x: 0, y: 0 }],
@@ -10,83 +10,29 @@
         resolution: 2,
         align: "center",
     },
-    menuButtons: {
-        styles: { fontStyle: "bold", fontSize: "16px" },
-    },
     titles: [
         {
             type: "image",
             key: "titleBackground",
             xOffset: 0,
-            yOffset: 0,
+            yOffset: -250,
         },
         {
             type: "text",
-            value: "Shop",
+            value: "<%= title %>",
             xOffset: 0,
-            yOffset: 0,
+            yOffset: -250,
             styles: { fontStyle: "bold", fontSize: "24px" },
         },
     ],
-    titlePadding: 20,
-    balance: {
-        background: {
-            type: "image",
-            key: "balanceBackground",
-        },
-        icon: {
-            type: "image",
-            key: "balanceIcon",
-        },
-        value: {
-            type: "text",
-            key: "coin", // the id of the currency item, which must exist in the inventory collection
-            styles: { fontSize: "16px" },
-        },
-    },
-    balancePadding: 15,
     listPadding: {
         x: 18.86,
         y: 15.09,
         outerPadFactor: 1.8,
     },
-    collection: ["debug-inventory", "debug-armoury"],
-    paneCollections: {
-        shop: "debug-armoury",
-        manage: "debug-inventory",
-    },
-    slots: {
-        helmet: { max: 1 },
-        shield: { max: 1 },
-    },
-    confirm: {
-        detailView: true, // true === smaller image and more text. false === large image only.
-        prompt: {
-            buy: {
-                legal: "Purchase this item?",
-                illegal: "You can't afford this.",
-                unavailable: "You already own this.",
-            },
-            equip: { legal: "Do you want to \nequip this item?", illegal: "You cannot equip\nthis item." },
-            unequip: "Do you want to \nunequip this item?",
-            use: "Do you want to\nuse this item?",
-            styles: { fontStyle: "bold" },
-        },
-        title: { styles: { fontStyle: "bold" } }, // optionally configure styles on item text
-        detail: { styles: { color: "#bd6", fontStyle: "bold" } },
-        description: { styles: { fontStyle: "italic", lineSpacing: 5 } },
-        // price: { styles: {} },
-    },
-    menu: {
-        buttonsRight: true, // set as false to X-flip the menu layout
-    },
-    columns: 1,
     backgrounds: {
-        // menu: "", // string asset key, blank for no background. Object with columns and row definitions to use ninepatch scaling
-        menu: "",
         shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
         manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
-        confirm: "halfViewBackground",
     },
     states: { locked: { properties: { alpha: 0.5, tint: 0xaaaaaa }, disabled: true } },
     overlay: {
@@ -95,7 +41,7 @@
                 type: "image",
                 name: "itemIcon",
                 assetKey: "${icon}",
-                position: { align: "left", offsetX: 35, offsetY: 0 }, // x offsets are from an edge, y offsets are from the centre
+                position: { align: "left", offsetX: 35, offsetY: 0 },
                 size: 76,
                 takeStateProperties: true,
             },
@@ -127,7 +73,7 @@
                 {
                     type: "image",
                     name: "lock",
-                    assetKey: "shop.lockIcon",
+                    assetKey: "debug-shop.lockIcon",
                     position: { align: "left", offsetX: 56, offsetY: 20 },
                     activeInStates: ["locked"],
                 },
@@ -153,7 +99,7 @@
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeInStates: ["equippable"],
+                    activeInStates: ["equippable", "unlocked"],
                 },
                 {
                     type: "text",
@@ -165,6 +111,13 @@
                 },
             ],
             manage: [
+                {
+                    type: "image",
+                    name: "itemIcon",
+                    assetKey: "${icon}",
+                    position: { align: "left", offsetX: 35, offsetY: 0 },
+                    size: 76,
+                },
                 {
                     type: "text",
                     name: "equip",
@@ -200,5 +153,4 @@
             ],
         },
     },
-    eventChannel: "shop_menu",
 }

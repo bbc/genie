@@ -1,0 +1,62 @@
+{
+    assetPrefix: "debug-shop-menu", // used for debug screens
+    music: "home.backgroundMusic",
+    background: {
+        items: [{ key: "debug-shop.magicShop", x: 0, y: 0 }],
+    },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 2,
+        align: "center",
+    },
+    titles: [
+        {
+            type: "image",
+            key: "titleBackground",
+            xOffset: 0,
+            yOffset: -250,
+        },
+        {
+            type: "text",
+            value: "Shop",
+            xOffset: 0,
+            yOffset: -250,
+            styles: { fontStyle: "bold", fontSize: "24px" },
+        },
+    ],
+    collection: ["debug-shop-consumable-items", "debug-shop-inventory"],
+    shopConfig: {
+        shopCollections: {
+            shop: "debug-shop-consumable-items",
+            manage: "debug-shop-inventory",
+        },
+        balancePadding: 15,
+        balance: {
+            background: {
+                type: "image",
+                key: "debug-shop.balanceBackground",
+            },
+            icon: {
+                type: "image",
+                key: "debug-shop.balanceIcon",
+            },
+            value: {
+                type: "text",
+                key: "coin",
+                styles: { fontSize: "16px" },
+            },
+        },
+        slots: {
+            helmet: { max: 1 },
+            shield: { max: 1 },
+        },
+    },
+    menu: {
+        buttonsRight: true,
+        buttons: {
+            key: "debug-shop.menuButtonBackground",
+            styles: { fontStyle: "bold", fontSize: "16px" },
+        },
+    },
+}

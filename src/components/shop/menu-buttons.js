@@ -13,7 +13,6 @@ import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 const defaults = {
     gameButton: true,
     accessible: true,
-    key: "menuButtonBackground",
 };
 
 const createMenuButton = scene => title => {
@@ -46,7 +45,7 @@ const makeButton = (scene, style, config) => {
     const channel = buttonsChannel(scene);
     const group = scene.scene.key;
 
-    const button = createButton(scene, { ...config, channel, group, scene: scene.assetPrefix });
+    const button = createButton(scene, { ...config, channel, group, key: style.key });
     setButtonOverlays(scene, button, style, config.title);
     return button;
 };
