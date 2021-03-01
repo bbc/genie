@@ -29,8 +29,8 @@ export const createBalance = scene => {
         {},
     );
 
-    const width = value.getBounds().width + icon.getBounds().width;
-    value.setPosition(width / 4, 0);
+    const width = value.getBounds().width + icon.getBounds().width + shopConfig.balancePadding * 3;
+    value.setPosition(width / 4 - shopConfig.balancePadding, 0);
     icon.setPosition(-width / 4, 0);
     background.setScale(width / background.getBounds().width);
 

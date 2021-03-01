@@ -30,6 +30,7 @@
             shop: "shop-items",
             manage: "shop-inventory",
         },
+        balancePadding: 15,
         balance: {
             background: {
                 type: "image",
