@@ -45,10 +45,8 @@ export class ShopList extends Screen {
     }
 
     onResume() {
-        this.events.emit("updatebalance");
-        this.list.removeAll(true);
-        this.list.destroy();
-        this.list = new ScrollableList(this, this.transientData.shop.title, this.inventoryFilter);
+        this.removeOverlay();
+        this._data.addedBy.addOverlay(this.scene.key);
         gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
     }
 }
