@@ -32,11 +32,13 @@ export class ShopMenu extends Screen {
     setupEvents() {
         const scaleEvent = onScaleChange.add(() => this.resize());
         this.events.once("shutdown", scaleEvent.unsubscribe);
-        this.events.on(Phaser.Scenes.Events.RESUME, this.onResume.bind(this));
+        const onResume = this.onResume.bind(this);
+        this.events.on("resume", onResume);
+        this.events.once("shutdown", () => this.events.off(Phaser.Scenes.Events.RESUME, onResume));
     }
 
     onResume() {
-        this.events.emit("updatebalance");
+        this.balance.update();
     }
 
     resize() {

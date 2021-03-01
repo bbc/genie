@@ -32,7 +32,6 @@ export const createBalance = scene => {
 
     const width = value.getBounds().width + icon.getBounds().width + padding * 3;
     value.setPosition(width / 4 - padding, 0);
-    scene.events.on("updatebalance", () => value.setText(getBalanceValue(scene)));
     icon.setPosition(-width / 4, 0);
     background.setScale(width / background.getBounds().width);
 
@@ -50,8 +49,11 @@ export const createBalance = scene => {
         );
     };
 
+    const update = () => value.setText(getBalanceValue(scene));
+
     return {
         container,
         resize,
+        update,
     };
 };

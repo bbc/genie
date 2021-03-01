@@ -35,8 +35,8 @@ export class ShopList extends Screen {
         const scaleEvent = onScaleChange.add(resize);
         this.events.once("shutdown", scaleEvent.unsubscribe);
         const onResume = this.onResume.bind(this);
-        this.events.on(Phaser.Scenes.Events.RESUME, onResume);
-        this.events.once("shutdown", () => this.events.off(Phaser.Scenes.Events.RESUME, onResume));
+        this.events.on("resume", onResume);
+        this.events.once("shutdown", () => this.events.off("resume", onResume));
     }
 
     resize() {
