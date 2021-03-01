@@ -68,8 +68,6 @@ else
     if [ "$GIT_BRANCH" = "master" ]
     then 
         npm run cy:local-theme2
-        postTheme1Actions
-    else
-        postTheme1Actions
-    fi  
+    fi
+    postTheme1Actions
 fi
