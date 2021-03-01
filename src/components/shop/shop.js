@@ -9,12 +9,10 @@ import { ShopMenu } from "./shop-menu-screen.js";
 import { ShopList } from "./shop-list-screen.js";
 import { ShopConfirm } from "./shop-confirm-screen.js";
 
-export const Shop = ({ key, back }) => ({
+export const Shop = ({ key, routes }) => ({
     [`${key}-menu`]: {
         scene: ShopMenu,
-        routes: {
-            back,
-        },
+        routes,
     },
     [`${key}-list`]: {
         scene: ShopList,

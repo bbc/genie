@@ -57,7 +57,7 @@ const screens = {
             },
         },
     },
-    ...Shop({ key: "shop", back: "home" }),
+    ...Shop({ key: "shop", routes: { back: "home" } }),
     narrative: {
         scene: Narrative,
         routes: {
