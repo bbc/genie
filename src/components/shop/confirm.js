@@ -23,6 +23,7 @@ export const createConfirm = (scene, title, item) => {
     action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
 
     return {
+        action,
         item,
         title,
         container,

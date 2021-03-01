@@ -20,10 +20,10 @@ export class ShopConfirm extends Screen {
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
 
-        this.titles = createTitles(this);
         this.balance = createBalance(this);
-
         this.confirm = createConfirm(this, this.transientData.shop.title, this.transientData.shop.item);
+        this.transientData[this.scene.key] = { action: this.confirm.action };
+        this.titles = createTitles(this);
 
         this.setupEvents();
         this.resize();

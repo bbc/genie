@@ -12,7 +12,7 @@
         },
         {
             type: "text",
-            value: "Confirm",
+            value: "<%= action %>",
             xOffset: 0,
             yOffset: -250,
             styles: { fontStyle: "bold", fontSize: "24px" },

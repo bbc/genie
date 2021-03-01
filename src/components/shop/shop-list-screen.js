@@ -20,6 +20,7 @@ export class ShopList extends Screen {
     create() {
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
+        this.transientData[this.scene.key] = { title: this.transientData.shop.title };
 
         this.titles = createTitles(this);
         this.balance = createBalance(this);

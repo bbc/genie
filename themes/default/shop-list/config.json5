@@ -18,7 +18,7 @@
         },
         {
             type: "text",
-            value: "Shop",
+            value: "<%= title %>",
             xOffset: 0,
             yOffset: -250,
             styles: { fontStyle: "bold", fontSize: "24px" },
