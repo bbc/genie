@@ -18,9 +18,11 @@ export const Shop = ({ key, back }) => ({
     },
     [`${key}-list`]: {
         scene: ShopList,
+        routes: {},
     },
     [`${key}-confirm`]: {
         scene: ShopConfirm,
+        routes: {},
     },
 });
 
