@@ -23,8 +23,8 @@ export class ShopList extends Screen {
 
         this.titles = createTitles(this);
         this.balance = createBalance(this);
-        const inventoryFilter = item => item.id !== this.config.balance.value.key;
-        this.list = new ScrollableList(this, this.transientData.shop.title, inventoryFilter);
+        this.inventoryFilter = item => item.id !== this.config.balance.value.key;
+        this.list = new ScrollableList(this, this.transientData.shop.title, this.inventoryFilter);
 
         this.setupEvents();
         this.resize();
@@ -45,7 +45,10 @@ export class ShopList extends Screen {
     }
 
     onResume() {
-        // TODO update this scrollable list
+        this.events.emit("updatebalance");
+        this.list.removeAll(true);
+        this.list.destroy();
+        this.list = new ScrollableList(this, this.transientData.shop.title, this.inventoryFilter);
         gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
     }
 }

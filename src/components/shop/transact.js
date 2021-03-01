@@ -49,8 +49,7 @@ export const use = (scene, item) => {
 };
 
 const updateBalance = (scene, invCol, price) =>
-    invCol.set({ ...getBalanceItem(scene), qty: getBalanceItem(scene).qty - price }) ||
-    scene.events.emit("updatebalance");
+    invCol.set({ ...getBalanceItem(scene), qty: getBalanceItem(scene).qty - price });
 
 export const getBalanceItem = scene =>
     collections.get(scene.config.paneCollections.manage).get(scene.config.balance.value.key);
