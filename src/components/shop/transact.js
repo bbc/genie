@@ -26,7 +26,7 @@ export const equip = (scene, item) => {
     const itemsEquippedInSlot = invCol
         .getAll()
         .filter(invItem => invItem.slot === item.slot && invItem.state === "equipped");
-    const maxItemsInSlot = scene.config.slots[item.slot].max;
+    const maxItemsInSlot = scene.transientData.shop.config.slots[item.slot].max;
     itemsEquippedInSlot.length === maxItemsInSlot && unequip(scene, itemsEquippedInSlot[0]);
     gmi.sendStatsEvent("equip", "click", { id: item.id, qty: 1 });
     invCol.set({ ...item, state: "equipped" });
