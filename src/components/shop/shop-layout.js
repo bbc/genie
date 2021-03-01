@@ -9,7 +9,7 @@
 
 export const getSafeArea = layout => layout.getSafeArea({}, false);
 
-export const getXPos = (container, safeArea, padding) => safeArea.width / 2 - container.getBounds().width / 2 - padding;
+export const getXPos = (container, safeArea) => safeArea.width / 2 - container.getBounds().width / 2;
 
 export const getYPos = (metrics, safeArea) => {
     const { verticals, verticalBorderPad } = metrics;
@@ -53,5 +53,4 @@ export const createPaneBackground = (scene, bounds, pane) => {
     }
 };
 
-const getPaneBackgroundKey = (scene, pane) =>
-    scene.config.backgrounds?.[pane] ? `${scene.assetPrefix}.${scene.config.backgrounds[pane]}` : null;
+const getPaneBackgroundKey = scene => scene.config.confirm?.background;

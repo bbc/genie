@@ -9,9 +9,6 @@
         resolution: 2,
         align: "center",
     },
-    menuButtons: {
-        styles: { fontStyle: "bold", fontSize: "16px" },
-    },
     titles: [
         {
             type: "image",
@@ -27,63 +24,14 @@
             styles: { fontStyle: "bold", fontSize: "24px" },
         },
     ],
-    titlePadding: 20,
-    balance: {
-        background: {
-            type: "image",
-            key: "shop-menu.balanceBackground",
-        },
-        icon: {
-            type: "image",
-            key: "shop-menu.balanceIcon",
-        },
-        value: {
-            type: "text",
-            key: "coin",
-            styles: { fontSize: "16px" },
-        },
-    },
-    balancePadding: 15,
     listPadding: {
         x: 18.86,
         y: 15.09,
         outerPadFactor: 1.8,
     },
-    collection: ["shop-items", "shop-inventory"],
-    paneCollections: {
-        shop: "shop-items",
-        manage: "shop-inventory",
-    },
-    slots: {
-        helmet: { max: 1 },
-        shield: { max: 1 },
-    },
-    confirm: {
-        detailView: true,
-        prompt: {
-            buy: {
-                legal: "Purchase this item?",
-                illegal: "You can't afford this.",
-                unavailable: "You already own this.",
-            },
-            equip: { legal: "Do you want to \nequip this item?", illegal: "You cannot equip\nthis item." },
-            unequip: "Do you want to \nunequip this item?",
-            use: "Do you want to use\nthis item?",
-            styles: { fontStyle: "bold" },
-        },
-        title: { styles: { fontStyle: "bold" } },
-        detail: { styles: { color: "#bd6", fontStyle: "bold" } },
-        description: { styles: { fontStyle: "italic", lineSpacing: 5 } },
-    },
-    menu: {
-        buttonsRight: true,
-    },
-    columns: 2,
     backgrounds: {
-        menu: "",
         shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
         manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
-        confirm: "halfViewBackground",
     },
     states: { locked: { properties: { alpha: 0.5, tint: 0xaaaaaa }, disabled: true } },
     overlay: {

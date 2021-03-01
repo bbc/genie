@@ -23,7 +23,7 @@ export class ShopList extends Screen {
 
         this.titles = createTitles(this);
         this.balance = createBalance(this);
-        this.inventoryFilter = item => item.id !== this.config.balance.value.key;
+        this.inventoryFilter = item => item.id !== this.transientData.shop.config.balance.value.key;
         this.list = new ScrollableList(this, this.transientData.shop.title, this.inventoryFilter);
 
         this.setupEvents();

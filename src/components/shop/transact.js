@@ -9,7 +9,7 @@ import { collections } from "../../core/collections.js";
 import { gmi } from "../../core/gmi/gmi.js";
 
 export const buy = (scene, item) => {
-    const { shop, manage } = scene.config.paneCollections;
+    const { shop, manage } = scene.transientData.shop.config.shopCollections;
     const invCol = collections.get(manage);
     const shopCol = collections.get(shop);
     const inventoryItem = invCol.get(item.id);
@@ -21,7 +21,7 @@ export const buy = (scene, item) => {
 };
 
 export const equip = (scene, item) => {
-    const { manage } = scene.config.paneCollections;
+    const { manage } = scene.transientData.shop.config.shopCollections;
     const invCol = collections.get(manage);
     const itemsEquippedInSlot = invCol
         .getAll()
@@ -33,14 +33,14 @@ export const equip = (scene, item) => {
 };
 
 export const unequip = (scene, item) => {
-    const { manage } = scene.config.paneCollections;
+    const { manage } = scene.transientData.shop.config.shopCollections;
     const invCol = collections.get(manage);
     gmi.sendStatsEvent("unequip", "click", { id: item.id, qty: 1 });
     invCol.set({ ...item, state: "purchased" });
 };
 
 export const use = (scene, item) => {
-    const { manage } = scene.config.paneCollections;
+    const { manage } = scene.transientData.shop.config.shopCollections;
     const invCol = collections.get(manage);
     const invItem = invCol.get(item.id);
     const qtyLeft = invItem.qty - 1;
@@ -49,7 +49,10 @@ export const use = (scene, item) => {
 };
 
 const updateBalance = (scene, invCol, price) =>
-    invCol.set({ ...getBalanceItem(scene), qty: getBalanceItem(scene).qty - price });
+    invCol.set({
+        ...getBalanceItem(scene.transientData.shop.config),
+        qty: getBalanceItem(scene.transientData.shop.config).qty - price,
+    });
 
-export const getBalanceItem = scene =>
-    collections.get(scene.config.paneCollections.manage).get(scene.config.balance.value.key);
+export const getBalanceItem = shopConfig =>
+    collections.get(shopConfig.shopCollections.manage).get(shopConfig.balance.value.key);

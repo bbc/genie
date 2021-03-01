@@ -3,16 +3,6 @@
     background: {
         items: [{ key: "shop-menu.magicShop", x: 0, y: 0 }],
     },
-    styleDefaults: {
-        fontFamily: "ReithSans",
-        fontSize: "24px",
-        resolution: 2,
-        align: "center",
-    },
-    menuButtons: {
-        key: "shop-menu.menuButtonBackground",
-        styles: { fontStyle: "bold", fontSize: "16px" },
-    },
     titles: [
         {
             type: "image",
@@ -28,37 +18,19 @@
             styles: { fontStyle: "bold", fontSize: "24px" },
         },
     ],
-    titlePadding: 20,
-    balance: {
-        background: {
-            type: "image",
-            key: "shop-menu.balanceBackground",
-        },
-        icon: {
-            type: "image",
-            key: "shop-menu.balanceIcon",
-        },
-        value: {
-            type: "text",
-            key: "coin",
-            styles: { fontSize: "16px" },
-        },
-    },
-    balancePadding: 15,
-    listPadding: {
-        x: 18.86,
-        y: 15.09,
-        outerPadFactor: 1.8,
-    },
-    paneCollections: {
-        shop: "shop-items",
-        manage: "shop-inventory",
-    },
-    slots: {
-        helmet: { max: 1 },
-        shield: { max: 1 },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 2,
+        align: "center",
     },
     confirm: {
+        buttons: {
+            buttonsRight: true,
+            key: "shop-menu.menuButtonBackground",
+            styles: { fontStyle: "bold", fontSize: "16px" },
+        },
+        background: "shop-confirm.halfViewBackground",
         detailView: true,
         prompt: {
             buy: {
@@ -74,11 +46,5 @@
         title: { styles: { fontStyle: "bold" } },
         detail: { styles: { color: "#bd6", fontStyle: "bold" } },
         description: { styles: { fontStyle: "italic", lineSpacing: 5 } },
-    },
-    menu: {
-        buttonsRight: true,
-    },
-    backgrounds: {
-        confirm: "halfViewBackground",
     },
 }

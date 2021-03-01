@@ -53,7 +53,7 @@ const createInnerPanel = (scene, title, parent) => {
 };
 
 const createTable = (scene, title, parent) => {
-    const key = scene.config.paneCollections[title];
+    const key = scene.transientData.shop.config.shopCollections[title];
     const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
 
     const sizer = scene.rexUI.add.sizer({ orientation: "y" });
@@ -74,10 +74,8 @@ const createTable = (scene, title, parent) => {
 };
 
 const showConfirmation = (scene, title, item) => {
-    scene.transientData.shop = {
-        title,
-        item,
-    };
+    scene.transientData.shop.title = title;
+    scene.transientData.shop.item = item;
     scene.scene.pause();
     scene.addOverlay(scene.scene.key.replace("-list", "-confirm"));
 };

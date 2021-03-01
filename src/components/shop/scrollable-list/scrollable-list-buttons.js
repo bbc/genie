@@ -25,7 +25,7 @@ const getOverlayConfigs = (scene, title) => ({
 
 const updateButtonData = button => {
     const [itemKey, title] = getItemKeyAndTitle(button);
-    const item = collections.get(button.scene.config.paneCollections[title]).get(itemKey);
+    const item = collections.get(button.scene.transientData.shop.config.shopCollections[title]).get(itemKey);
 
     const doUpdate = (button, data) => {
         button.item = data;

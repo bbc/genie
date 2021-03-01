@@ -9,10 +9,6 @@
         resolution: 2,
         align: "center",
     },
-    menuButtons: {
-        key: "shop-menu.menuButtonBackground",
-        styles: { fontStyle: "bold", fontSize: "16px" },
-    },
     titles: [
         {
             type: "image",
@@ -28,38 +24,37 @@
             styles: { fontStyle: "bold", fontSize: "24px" },
         },
     ],
-    titlePadding: 20,
-    balance: {
-        background: {
-            type: "image",
-            key: "shop-menu.balanceBackground",
-        },
-        icon: {
-            type: "image",
-            key: "shop-menu.balanceIcon",
-        },
-        value: {
-            type: "text",
-            key: "coin",
-            styles: { fontSize: "16px" },
-        },
-    },
-    balancePadding: 15,
-    listPadding: {
-        x: 18.86,
-        y: 15.09,
-        outerPadFactor: 1.8,
-    },
     collection: ["shop-items", "shop-inventory"],
-    paneCollections: {
-        shop: "shop-items",
-        manage: "shop-inventory",
+    shopConfig: {
+        shopCollections: {
+            shop: "shop-items",
+            manage: "shop-inventory",
+        },
+        balance: {
+            background: {
+                type: "image",
+                key: "shop-menu.balanceBackground",
+            },
+            icon: {
+                type: "image",
+                key: "shop-menu.balanceIcon",
+            },
+            value: {
+                type: "text",
+                key: "coin",
+                styles: { fontSize: "16px" },
+            },
+        },
+        slots: {
+            helmet: { max: 1 },
+            shield: { max: 1 },
+        },
     },
     menu: {
         buttonsRight: true,
-    },
-    columns: 1,
-    backgrounds: {
-        menu: "",
+        buttons: {
+            key: "shop-menu.menuButtonBackground",
+            styles: { fontStyle: "bold", fontSize: "16px" },
+        },
     },
 }
