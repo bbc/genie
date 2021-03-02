@@ -15,6 +15,8 @@ const defaults = {
     accessible: true,
 };
 
+export const createMenuButtons = scene => ["Shop", "Manage"].map(createMenuButton(scene));
+
 const createMenuButton = scene => title => {
     const id = `${title.toLowerCase()}_menu_button`;
     const ariaLabel = title;
@@ -29,8 +31,6 @@ const createMenuButton = scene => title => {
 
     return makeButton(scene, scene.config.menu.buttons, config);
 };
-
-export const createMenuButtons = scene => ["Shop", "Manage"].map(createMenuButton(scene));
 
 export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
     [actionText, "Cancel"].map(title => {
@@ -50,6 +50,9 @@ const makeButton = (scene, style, config) => {
     return button;
 };
 
+const setButtonOverlays = (scene, button, style, title) =>
+    button.overlays.set("caption", addText(scene, 0, 0, title, style).setOrigin(0.5));
+
 const resizeButton = pane => (button, idx) => {
     const right = Boolean(pane.container.scene.config.menu.buttonsRight);
     const bounds = pane.container.list[0].getBounds();
@@ -60,6 +63,3 @@ const resizeButton = pane => (button, idx) => {
 };
 
 export const resizeGelButtons = pane => pane.buttons?.forEach(resizeButton(pane));
-
-const setButtonOverlays = (scene, button, style, title) =>
-    button.overlays.set("caption", addText(scene, 0, 0, title, style).setOrigin(0.5));
