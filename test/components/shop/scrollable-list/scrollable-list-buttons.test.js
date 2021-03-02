@@ -4,15 +4,11 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import {
-    createListButton,
-    updateButton,
-} from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
+import { createListButton } from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
 import * as overlays from "../../../../src/components/shop/scrollable-list/button-overlays.js";
 import { collections } from "../../../../src/core/collections.js";
 
 describe("Scrollable List Buttons", () => {
-    let button;
     let mockItem;
     let mockCollection;
     const dummyCallback = () => {};
@@ -116,28 +112,6 @@ describe("Scrollable List Buttons", () => {
         test("applies overlays", () => {
             createListButton(mockScene, mockItem, "manage");
             expect(overlays.overlays1Wide).toHaveBeenCalled();
-        });
-    });
-    describe("updateButton()", () => {
-        test("gets the item from the appropriate collection", () => {
-            updateButton(button);
-            expect(collections.get).toHaveBeenCalledWith("armoury");
-            expect(mockCollection.get).toHaveBeenCalledWith("itemKey");
-        });
-        test("updates the overlays if the data was updated", () => {
-            jest.clearAllMocks();
-            button.item = { ...button.item, state: "equipped" };
-            updateButton(button);
-            expect(button.overlays.remove).toHaveBeenCalledWith("foo");
-            expect(button.overlays.remove).toHaveBeenCalledWith("baz");
-            expect(overlays.overlays1Wide).toHaveBeenCalled();
-        });
-        test("does not update if the data has not changed", () => {
-            jest.clearAllMocks();
-            updateButton(button);
-            expect(button.overlays.remove).not.toHaveBeenCalled();
-            expect(button.overlays.remove).not.toHaveBeenCalled();
-            expect(overlays.overlays1Wide).not.toHaveBeenCalled();
         });
     });
 });
