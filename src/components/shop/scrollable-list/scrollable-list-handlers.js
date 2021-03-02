@@ -7,7 +7,8 @@
 
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const updatePanelOnScroll = panel => () => getPanelItems(panel).map(item => item.setElementSizeAndPosition());
+const updatePanelOnScroll = panel => () =>
+    getPanelItems(panel).map(item => item.children[0].setElementSizeAndPosition());
 
 const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
 

@@ -24,7 +24,7 @@ export class ShopList extends Screen {
         this.titles = createTitles(this);
         this.balance = createBalance(this);
         const inventoryFilter = item => item.id !== this.config.balance.value.key;
-        this.list = new ScrollableList(this, this.transientData.shop.title, inventoryFilter);
+        this.scrollableList = new ScrollableList(this, this.transientData.shop.title, inventoryFilter);
 
         this.setupEvents();
         this.resize();
@@ -40,7 +40,7 @@ export class ShopList extends Screen {
     }
 
     resize() {
-        this.list.reset();
+        this.scrollableList.reset();
         this.balance.resize();
     }
 

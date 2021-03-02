@@ -12,17 +12,22 @@ import { onScaleChange } from "../../../core/scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { createBackground, resizeBackground } from "./backgrounds.js";
 
-const createPanel = (scene, title, parent) => {
-    const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, parent));
-    panel.name = title;
-    panel.layout();
+const createScrollablePanel = (scene, title, parent) => {
+    const config = getConfig(scene);
+    const child = createChildPanel(scene, title, parent)
+    const panel =  { child }
 
-    return panel;
+    const scrollablePanel = scene.rexUI.add.scrollablePanel({...config, panel});
+
+    scrollablePanel.name = title;
+    scrollablePanel.layout();
+
+    return { scrollablePanel, child};
 };
 
 export const getType = value => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
 
-const getConfig = (scene, title, parent) => {
+const getConfig = scene => {
     const { listPadding: space } = scene.config;
     const safeArea = getPanelY(scene);
     const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
@@ -31,7 +36,6 @@ const getConfig = (scene, title, parent) => {
         y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        panel: { child: createInnerPanel(scene, title, parent) },
         slider: {
             track: scene.add.image(0, 0, `${scene.assetPrefix}.scrollbar`),
             thumb: scene.add.image(0, 0, `${scene.assetPrefix}.scrollbarHandle`),
@@ -46,13 +50,9 @@ const getPanelY = scene => {
     return { y: safeArea.height / 2 + safeArea.y, height: safeArea.height };
 };
 
-const createInnerPanel = (scene, title, parent) => {
-    const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" });
-    sizer.add(createTable(scene, title, parent), { expand: true });
-    return sizer;
-};
+const createChildPanel = scene => scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" })
 
-const createTable = (scene, title, parent) => {
+const createTable = (scene, title, parent,scrollablePanel) => {
     const key = scene.config.paneCollections[title];
     const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
 
@@ -66,7 +66,7 @@ const createTable = (scene, title, parent) => {
             name: "grid",
         });
 
-        collection.forEach((item, idx) => table.add(createItem(scene, item, title, parent), 0, idx, "top", 0, true));
+        collection.forEach((item, idx) => table.add(createItem(scene, item, title, parent, scrollablePanel), 0, idx, "top", 0, true));
         sizer.add(table, 1, "center", 0, true);
     }
 
@@ -82,11 +82,11 @@ const showConfirmation = (scene, title, item) => {
     scene.addOverlay(scene.scene.key.replace("-list", "-confirm"));
 };
 
-const createItem = (scene, item, title, parent) => {
+const createItem = (scene, item, title, parent, scrollablePanel) => {
     const action = pointer =>
-        (parent.panel.isInTouching() || !pointer) && !isLocked(item) && showConfirmation(scene, title, item);
+        (scrollablePanel.isInTouching() || !pointer) && !isLocked(item) && showConfirmation(scene, title, item);
 
-    const icon = createListButton(scene, item, title, action);
+    const icon = createListButton(scene, item, title, action, parent);
 
     return scene.rexUI.add.label({
         orientation: 0,
@@ -149,18 +149,20 @@ export class ScrollableList extends Phaser.GameObjects.Container {
 
         const config = scene.config.backgrounds?.[title] ?? null;
         this.background = createBackground[getType(config)](scene, config);
-        this.panel = createPanel(scene, title, this);
+        const { scrollablePanel, child } = createScrollablePanel(scene, title, this);
         this.makeAccessible = fp.noop;
-
-        this.add(this.panel);
-        scene.layout.addCustomGroup(scene.scene.key, this, 0);
+        this.add(scrollablePanel);
+        scene.layout.addCustomGroup(scene.scene.key, scrollablePanel, 0);
         a11y.addGroupAt(scene.scene.key, 0);
 
-        scene.input.topOnly = false;
-        setupEvents(scene, this.panel);
+        child.add(createTable(scene, title, this, scrollablePanel), { expand: true });
 
-        this.reset = () => {
-            resizePanel(scene, this.panel)();
+
+        scene.input.topOnly = false;
+        setupEvents(scene, scrollablePanel);
+
+        scrollablePanel.reset = this.reset = () => {
+            resizePanel(scene, scrollablePanel)();
             resizeBackground[this.background.constructor.name](scene, this.background);
         };
     }
