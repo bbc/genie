@@ -23,6 +23,7 @@ export const createConfirm = (scene, title, item) => {
     action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
 
     return {
+        action,
         item,
         title,
         container,
@@ -99,7 +100,7 @@ const getAction = (scene, title, item) => {
 };
 
 const getInventoryAction = (scene, item) => {
-    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item?.id);
+    const inventoryItem = collections.get(getShopConfig(scene).shopCollections.manage).get(item?.id);
     return inferAction(inventoryItem);
 };
 
@@ -142,7 +143,7 @@ const itemDetailView = (scene, item, config, bounds) => {
     setImageScaleXY(itemImage, getItemDetailImageScale(bounds, itemImage));
 
     const itemTitle = addText(scene, x, titleY(bounds), item.title, title).setOrigin(0.5);
-    const itemDetail = addText(scene, x, detailY(bounds), item.detail, detail).setOrigin(0.5);
+    const itemDetail = addText(scene, x, detailY(bounds), item.description, detail).setOrigin(0.5);
     const itemBlurb = addText(scene, x, blurbY(bounds), item.longDescription, description).setOrigin(0.5);
 
     return [itemImage, itemTitle, itemDetail, itemBlurb];
@@ -174,13 +175,15 @@ const getPromptText = fp.cond([
     [args => args.action === "use", args => getUsePromptText(args.scene)],
 ]);
 
+const getShopConfig = scene => scene.transientData.shop.config;
 const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(scene, item);
-const canAffordItem = (scene, item) => item && getBalanceItem(scene).qty >= item.price;
+const canAffordItem = (scene, item) => item && getBalanceItem(getShopConfig(scene)).qty >= item.price;
 const isEquippable = item => item && item.slot;
-const itemIsInStock = (scene, item) => item && collections.get(scene.config.paneCollections.shop).get(item.id).qty > 0;
+const itemIsInStock = (scene, item) =>
+    item && collections.get(getShopConfig(scene).shopCollections.shop).get(item.id).qty > 0;
 const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
 const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
-const getButtonX = (x, config) => (config.menu.buttonsRight ? x : -x);
+const getButtonX = (x, config) => (config.confirm.buttons.buttonsRight ? x : -x);
 const imageY = bounds => -percentOfHeight(bounds, 25);
 const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
 const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
@@ -194,4 +197,4 @@ const getOffsetBounds = (outerBounds, innerBounds) => ({
     y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
 });
 const imageX = (config, bounds) =>
-    config.menu.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
+    config.confirm.buttons.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;

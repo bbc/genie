@@ -1,7 +1,8 @@
 {
+    assetPrefix: "debug-shop-menu", // used for debug screens
     music: "home.backgroundMusic",
     background: {
-        items: [{ key: "shop-menu.magicShop", x: 0, y: 0 }],
+        items: [{ key: "debug-shop.magicShop", x: 0, y: 0 }],
     },
     styleDefaults: {
         fontFamily: "ReithSans",
@@ -24,21 +25,21 @@
             styles: { fontStyle: "bold", fontSize: "24px" },
         },
     ],
-    collection: ["shop-items", "shop-inventory"],
+    collection: ["debug-shop-equippable-items", "debug-shop-inventory"],
     shopConfig: {
         shopCollections: {
-            shop: "shop-items",
-            manage: "shop-inventory",
+            shop: "debug-shop-equippable-items",
+            manage: "debug-shop-inventory",
         },
         balancePadding: 15,
         balance: {
             background: {
                 type: "image",
-                key: "shop-menu.balanceBackground",
+                key: "debug-shop.balanceBackground",
             },
             icon: {
                 type: "image",
-                key: "shop-menu.balanceIcon",
+                key: "debug-shop.balanceIcon",
             },
             value: {
                 type: "text",
@@ -54,7 +55,7 @@
     menu: {
         buttonsRight: true,
         buttons: {
-            key: "shop-menu.menuButtonBackground",
+            key: "debug-shop.menuButtonBackground",
             styles: { fontStyle: "bold", fontSize: "16px" },
         },
     },

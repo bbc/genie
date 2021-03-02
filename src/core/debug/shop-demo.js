@@ -127,7 +127,7 @@ const getCoin = scene => () => {
 };
 
 const getCurrencyItem = scene => getInventory(scene).get(scene.config.balance.value.key);
-const getInventory = scene => collections.get(scene.config.paneCollections.manage);
+const getInventory = scene => collections.get(scene.transientData.shop.config.shopCollections.manage);
 
 const addTrees = scene =>
     scene.config.treeSpawns.map(fixture => {

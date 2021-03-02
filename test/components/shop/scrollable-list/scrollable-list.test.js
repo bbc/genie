@@ -95,6 +95,7 @@ describe("Scrollable List", () => {
         };
 
         mockScene = {
+            addOverlay: jest.fn(),
             assetPrefix: "test",
             paneStack: { push: jest.fn() },
             panes: {
@@ -130,13 +131,22 @@ describe("Scrollable List", () => {
                 addCustomGroup: jest.fn(),
             },
             scale: { on: jest.fn(), removeListener: jest.fn() },
-            scene: { key: "shop" },
+            scene: { key: "shop-list", pause: jest.fn() },
             stack: jest.fn(),
             sys: {
                 queueDepthSort: jest.fn(),
                 displayList: {
                     remove: jest.fn(),
                     exists: jest.fn(),
+                },
+            },
+            transientData: {
+                shop: {
+                    config: {
+                        shopCollections: {
+                            shop: "testCatalogue",
+                        },
+                    },
                 },
             },
         };
@@ -234,10 +244,12 @@ describe("Scrollable List", () => {
                     callback = buttons.createListButton.mock.calls[0][3];
                 });
 
-                test("creates a confirm pane and puts it on shop's stack", () => {
+                test("creates a confirm pane", () => {
                     callback();
-                    expect(confirm.createConfirm).toHaveBeenCalledWith(mockScene, "shop", mockItem);
-                    expect(mockScene.stack).toHaveBeenCalledWith("confirm");
+                    expect(mockScene.transientData.shop.title).toBe("shop");
+                    expect(mockScene.transientData.shop.item).toBe(mockItem);
+                    expect(mockScene.scene.pause).toHaveBeenCalled();
+                    expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-confirm");
                 });
                 test("don't fire if the label is scrolled off the panel", () => {
                     jest.clearAllMocks();
@@ -294,8 +306,7 @@ describe("Scrollable List", () => {
                 new ScrollableList(mockScene);
             });
             test("adds an updatePanelOnScroll", () => {
-                expect(typeof mockScrollablePanel.updateOnScroll).toBe("function");
-                expect(mockScrollablePanel.on).toHaveBeenCalledWith("scroll", mockScrollablePanel.updateOnScroll);
+                expect(mockScrollablePanel.on).toHaveBeenCalledWith("scroll", expect.any(Function));
             });
             test("adds an updatePanelOnFocus", () => {
                 expect(typeof mockScrollablePanel.updateOnFocus).toBe("function");
@@ -334,10 +345,10 @@ describe("Scrollable List", () => {
         });
 
         test("adds the list as a custom group by scene key", () => {
-            expect(mockScene.layout.addCustomGroup).toHaveBeenCalledWith("shop", list, 0);
+            expect(mockScene.layout.addCustomGroup).toHaveBeenCalledWith("shop-list", list, 0);
         });
         test("adds a matching group to the accessibility layer", () => {
-            expect(a11y.addGroupAt).toHaveBeenCalledWith("shop", 0);
+            expect(a11y.addGroupAt).toHaveBeenCalledWith("shop-list", 0);
         });
     });
 
@@ -360,54 +371,6 @@ describe("Scrollable List", () => {
                 x: 0,
                 y: 0,
             });
-        });
-
-        test("setVisible method that sets visibility", () => {
-            list.setVisible(false);
-            expect(list.panel.visible).toBe(false);
-            expect(mockLabel.children[0].input.enabled).toBe(false);
-            expect(mockLabel.children[0].config.tabbable).toBe(false);
-            expect(mockLabel.children[0].accessibleElement.update).toHaveBeenCalled();
-        });
-    });
-    describe("panel update on setVisible(true)", () => {
-        let list;
-        const otherItem = { id: "someOtherItem", name: "someOtherItemName", slot: "someSlot" };
-
-        beforeEach(() => {
-            list = new ScrollableList(mockScene, "shop");
-        });
-
-        test("gets the collection", () => {
-            list.setVisible(true);
-            expect(collections.get).toHaveBeenCalledWith("testCatalogue");
-            expect(mockCollection.getAll).toHaveBeenCalled();
-        });
-        test("and rebuilds the inner panel if the collection length has changed", () => {
-            collectionGetAll = [mockItem, otherItem];
-            mockCollection = { getAll: jest.fn(() => collectionGetAll) };
-            list.setVisible(true);
-            expect(mockSizer.clear).toHaveBeenCalled();
-            expect(mockSizer.add).toHaveBeenCalled();
-        });
-        test("or if the IDs have changed", () => {
-            mockItem = { ...mockItem, id: "someAlteredId" };
-            collectionGetAll = [mockItem];
-            mockCollection = { getAll: jest.fn(() => collectionGetAll) };
-            list.setVisible(true);
-            expect(mockSizer.clear).toHaveBeenCalled();
-            expect(mockSizer.add).toHaveBeenCalled();
-        });
-        test("if not rebuilding, we update all the buttons to catch changes to item states", () => {
-            collectionGetAll = [mockItem];
-            mockCollection = { getAll: jest.fn(() => collectionGetAll) };
-            list.setVisible(true);
-            expect(buttons.updateButton).toHaveBeenCalledTimes(1);
-        });
-        test("no changes are made on setVisible(false)", () => {
-            jest.clearAllMocks();
-            list.setVisible(false);
-            expect(collections.get).not.toHaveBeenCalled();
         });
     });
     describe("collection filtering", () => {

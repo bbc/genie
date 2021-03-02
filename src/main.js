@@ -57,6 +57,7 @@ const screens = {
             },
         },
     },
+    ...Shop({ key: "shop", routes: { back: "home" } }),
     narrative: {
         scene: Narrative,
         routes: {
@@ -91,7 +92,6 @@ const screens = {
             restart: "game",
         },
     },
-    ...Shop({ key: "shop" }),
     results: {
         scene: Results,
         routes: {

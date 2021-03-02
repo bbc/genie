@@ -20,4 +20,9 @@ describe("asset paths", () => {
         const path = assetPath({ key: "mockId", scene: "mockScene", gameButton: true });
         expect(path).toBe("mockScene.mockId");
     });
+
+    test("returns the correct asset path for game buttons when no scene prefix provided", () => {
+        const path = assetPath({ key: "mockScene.mockId", gameButton: true });
+        expect(path).toBe("mockScene.mockId");
+    });
 });

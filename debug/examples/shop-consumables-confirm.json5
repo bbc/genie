@@ -1,7 +1,8 @@
 {
+    assetPrefix: "debug-shop-confirm", // used for debug screens
     music: "home.backgroundMusic",
     background: {
-        items: [{ key: "shop-menu.magicShop", x: 0, y: 0 }],
+        items: [{ key: "debug-shop.magicShop", x: 0, y: 0 }],
     },
     titles: [
         {
@@ -27,10 +28,10 @@
     confirm: {
         buttons: {
             buttonsRight: true,
-            key: "shop-menu.menuButtonBackground",
+            key: "debug-shop.menuButtonBackground",
             styles: { fontStyle: "bold", fontSize: "16px" },
         },
-        background: "shop-confirm.halfViewBackground",
+        background: "debug-shop.halfViewBackground",
         detailView: true,
         prompt: {
             buy: {

@@ -13,14 +13,15 @@ import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 const defaults = {
     gameButton: true,
     accessible: true,
-    key: "menuButtonBackground",
 };
+
+export const createMenuButtons = scene => ["Shop", "Manage"].map(createMenuButton(scene));
 
 const createMenuButton = scene => title => {
     const id = `${title.toLowerCase()}_menu_button`;
     const ariaLabel = title;
     const action = () => {
-        scene.transientData.shop = { title: title.toLowerCase() };  //TODO NT Should "shop" be hardcoded here? Multiple shops a possibility
+        scene.transientData.shop.title = title.toLowerCase();
         scene.scene.pause();
         scene.addOverlay(scene.scene.key.replace("-menu", "-list"));
         gmi.setStatsScreen(title === "Shop" ? "shopbuy" : "shopmanage");
@@ -28,10 +29,8 @@ const createMenuButton = scene => title => {
 
     const config = { ...defaults, title, id, ariaLabel, action };
 
-    return makeButton(scene, config);
+    return makeButton(scene, scene.config.menu.buttons, config);
 };
-
-export const createMenuButtons = scene => ["Shop", "Manage"].map(createMenuButton(scene));
 
 export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
     [actionText, "Cancel"].map(title => {
@@ -39,17 +38,20 @@ export const createConfirmButtons = (scene, actionText, confirmCallback, cancelC
         const ariaLabel = title;
         const action = title === "Cancel" ? cancelCallback : confirmCallback;
         const config = { ...defaults, title, id, ariaLabel, action };
-        return makeButton(scene, config);
+        return makeButton(scene, scene.config.confirm.buttons, config);
     });
 
-const makeButton = (scene, config) => {
+const makeButton = (scene, style, config) => {
     const channel = buttonsChannel(scene);
     const group = scene.scene.key;
 
-    const button = createButton(scene, { ...config, channel, group, scene: scene.assetPrefix });
-    setButtonOverlays(scene, button, config.title);
+    const button = createButton(scene, { ...config, channel, group, key: style.key });
+    setButtonOverlays(scene, button, style, config.title);
     return button;
 };
+
+const setButtonOverlays = (scene, button, style, title) =>
+    button.overlays.set("caption", addText(scene, 0, 0, title, style).setOrigin(0.5));
 
 const resizeButton = pane => (button, idx) => {
     const right = Boolean(pane.container.scene.config.menu.buttonsRight);
@@ -61,6 +63,3 @@ const resizeButton = pane => (button, idx) => {
 };
 
 export const resizeGelButtons = pane => pane.buttons?.forEach(resizeButton(pane));
-
-const setButtonOverlays = (scene, button, title) =>
-    button.overlays.set("caption", addText(scene, 0, 0, title, scene.config.menuButtons).setOrigin(0.5));

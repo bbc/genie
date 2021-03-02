@@ -10,189 +10,128 @@ import {
     createConfirmButtons,
     resizeGelButtons,
 } from "../../../src/components/shop/menu-buttons.js";
-import { eventBus } from "../../../src/core/event-bus.js";
-import * as a11y from "../../../src/core/accessibility/accessibilify.js";
-import * as text from "../../../src/core/layout/text-elem.js";
-import { gmi } from "../../../src/core/gmi/gmi.js";
+import * as button from "../../../src/core/layout/create-button.js";
+import * as textElem from "../../../src/core/layout/text-elem.js";
+import * as gel from "../../../src/core/layout/gel-defaults.js";
 
-describe("shop menu buttons", () => {
-    let buttons;
-    const mockButton = {
-        overlays: { set: jest.fn() },
-        setScale: jest.fn(),
-        setY: jest.fn(),
-        setX: jest.fn(),
-        width: 53,
-        setLegal: jest.fn(),
-        input: {},
-        accessibleElement: { update: jest.fn() },
-        on: jest.fn(),
-    };
+jest.mock("../../../src/core/layout/text-elem.js");
+jest.mock("../../../src/core/layout/create-button.js");
+jest.mock("../../../src/core/layout/gel-defaults.js");
 
-    const mockText = { setOrigin: jest.fn() };
-    text.addText = jest.fn().mockReturnValue(mockText);
-
-    const mockOuterBounds = { x: 0, y: 0, height: 300, width: 800 };
-
-    const mockScene = {
-        assetPrefix: "shop",
-        add: {
-            gelButton: jest.fn(() => mockButton),
-            image: jest.fn(),
-        },
-        scene: { key: "mockSceneKey" },
-        setVisiblePane: jest.fn(),
-        stack: jest.fn(),
-        events: { once: jest.fn() },
-        config: {
-            menu: { buttonsRight: true },
-        },
-        layout: {
-            getSafeArea: jest.fn(() => mockOuterBounds),
-        },
-    };
-
-    const mockEvent = { unsubscribe: "foo" };
-    eventBus.subscribe = jest.fn(() => mockEvent);
-    a11y.accessibilify = jest.fn(x => x);
-    gmi.setStatsScreen = jest.fn();
-
+describe("createMenuButtons()", () => {
+    let mockScene;
+    let mockGelButton;
+    let mockTextElem;
+    let mockTextWithOrigin;
+    let mockChannel;
+    beforeEach(() => {
+        mockChannel = "gel-channel";
+        gel.buttonsChannel = jest.fn().mockReturnValue(mockChannel);
+        mockTextWithOrigin = { mock: "text" };
+        mockTextElem = { setOrigin: jest.fn().mockReturnValue(mockTextWithOrigin) };
+        textElem.addText = jest.fn().mockReturnValue(mockTextElem);
+        mockGelButton = { overlays: { set: jest.fn() } };
+        button.createButton = jest.fn().mockReturnValue(mockGelButton);
+        mockScene = {
+            config: {
+                menu: {
+                    buttons: {},
+                },
+            },
+            scene: {
+                key: "shop-menu",
+            },
+        };
+    });
     afterEach(() => jest.clearAllMocks());
 
-    describe("createMenuButtons()", () => {
-        beforeEach(() => (buttons = createMenuButtons(mockScene)));
+    test("returns a shop and manage menu button", () => {
+        const buttons = createMenuButtons(mockScene);
+        expect(buttons.length).toBe(2);
+    });
 
-        test("adds two gel buttons", () => {
-            expect(buttons.length).toBe(2);
-            expect(mockScene.add.gelButton).toHaveBeenCalledTimes(2);
+    test("calls createButton twice with the correct button config", () => {
+        createMenuButtons(mockScene);
+        expect(button.createButton).toHaveBeenCalledTimes(2);
+        expect(button.createButton).toHaveBeenCalledWith(mockScene, {
+            gameButton: true,
+            accessible: true,
+            channel: mockChannel,
+            group: "shop-menu",
+            title: "Shop",
+            id: "shop_menu_button",
+            ariaLabel: "Shop",
+            action: expect.any(Function),
         });
-
-        test("gives them appropriate config", () => {
-            const expectedConfig = {
-                title: "Shop",
-                gameButton: true,
-                accessible: true,
-                ariaLabel: "Shop",
-                channel: "gel-buttons-mockSceneKey",
-                group: "mockSceneKey",
-                id: "shop_menu_button",
-                key: "menuButtonBackground",
-                scene: "shop",
-                action: expect.any(Function),
-            };
-
-            expect(mockScene.add.gelButton.mock.calls[0][2]).toStrictEqual(expectedConfig);
-            const otherConfig = { ...expectedConfig, title: "Manage", id: "manage_menu_button", ariaLabel: "Manage" };
-            expect(mockScene.add.gelButton.mock.calls[1][2]).toEqual(otherConfig);
-        });
-        describe("callback", () => {
-            let callback;
-            beforeEach(() => {
-                callback = mockScene.add.gelButton.mock.calls[0][2].action;
-            });
-            test("is subscribed to the event bus", () => {
-                expect(eventBus.subscribe).toHaveBeenCalledTimes(2);
-                expect(typeof callback).toBe("function");
-            });
-            test("calls scene.stack with the pane title", () => {
-                callback();
-                expect(mockScene.stack).toHaveBeenCalledWith("shop");
-            });
-            test("and fires a screen view stat with hardcoded 'shopbuy' value", () => {
-                callback();
-                expect(gmi.setStatsScreen).toHaveBeenCalledWith("shopbuy");
-            });
-            test("the second button fires a hardcoded 'shopmanage' value", () => {
-                const secondCallback = mockScene.add.gelButton.mock.calls[1][2].action;
-                secondCallback();
-                expect(gmi.setStatsScreen).toHaveBeenCalledWith("shopmanage");
-            });
-        });
-        test("sets text overlays", () => {
-            expect(mockButton.overlays.set).toHaveBeenCalledTimes(2);
-            expect(text.addText.mock.calls[0][3]).toBe("Shop");
-            expect(text.addText.mock.calls[1][3]).toBe("Manage");
-        });
-        test("accesibilifies", () => {
-            expect(a11y.accessibilify).toHaveBeenCalledTimes(2);
+        expect(button.createButton).toHaveBeenCalledWith(mockScene, {
+            gameButton: true,
+            accessible: true,
+            channel: mockChannel,
+            group: "shop-menu",
+            title: "Manage",
+            id: "manage_menu_button",
+            ariaLabel: "Manage",
+            action: expect.any(Function),
         });
     });
 
-    describe("createConfirmButtons", () => {
-        const cancelCallback = jest.fn();
-        const confirmCallback = jest.fn();
-
-        beforeEach(() => {
-            createConfirmButtons(mockScene, "Buy", confirmCallback, cancelCallback);
-        });
-
-        test("provides a slightly different config", () => {
-            const expectedConfig = {
-                title: "Buy",
-                gameButton: true,
-                accessible: true,
-                ariaLabel: "Buy",
-                channel: "gel-buttons-mockSceneKey",
-                group: "mockSceneKey",
-                id: "tx_buy_button",
-                key: "menuButtonBackground",
-                scene: "shop",
-                action: expect.any(Function),
-            };
-            expect(mockScene.add.gelButton.mock.calls[0][2]).toStrictEqual(expectedConfig);
-            const otherConfig = { ...expectedConfig, title: "Cancel", id: "tx_cancel_button", ariaLabel: "Cancel" };
-            expect(mockScene.add.gelButton.mock.calls[1][2]).toStrictEqual(otherConfig);
-        });
-        test("uses the callback it was passed", () => {
-            const firstCallback = mockScene.add.gelButton.mock.calls[0][2].action;
-            firstCallback();
-            expect(confirmCallback).toHaveBeenCalled();
-            const secondCallback = mockScene.add.gelButton.mock.calls[1][2].action;
-            secondCallback();
-            expect(cancelCallback).toHaveBeenCalled();
-        });
+    test("sets a caption on both buttons", () => {
+        createMenuButtons(mockScene);
+        expect(mockGelButton.overlays.set).toHaveBeenCalledTimes(2);
+        expect(mockGelButton.overlays.set).toHaveBeenCalledWith("caption", mockTextWithOrigin);
     });
+});
 
-    describe("resizeGelButtons()", () => {
-        const mockButton = {
-            setY: jest.fn(),
-            setX: jest.fn(),
-            setScale: jest.fn(),
-            width: 200,
+describe("resizeGelButtons()", () => {
+    const mockButton = {
+        setY: jest.fn(),
+        setX: jest.fn(),
+        setScale: jest.fn(),
+        width: 200,
+    };
+    let pane;
+    let mockScene;
+    let mockOuterBounds;
+
+    beforeEach(() => {
+        mockOuterBounds = { x: 0, y: 0, height: 300, width: 800 };
+        mockScene = {
+            config: {
+                menu: {
+                    buttonsRight: true,
+                },
+            },
         };
-        let pane;
-        beforeEach(() => {
-            pane = {
-                buttons: [mockButton],
-                config: {
-                    menu: {
-                        buttonsRight: true,
-                    },
+        pane = {
+            buttons: [mockButton],
+            config: {
+                menu: {
+                    buttonsRight: true,
                 },
-                container: {
-                    scene: mockScene,
-                    list: [{ getBounds: () => mockOuterBounds }],
-                },
-            };
-            jest.clearAllMocks();
-            resizeGelButtons(pane);
-        });
+            },
+            container: {
+                scene: mockScene,
+                list: [{ getBounds: () => mockOuterBounds }],
+            },
+        };
+        jest.clearAllMocks();
+        resizeGelButtons(pane);
+    });
 
-        test("sets the position of each button", () => {
-            expect(mockButton.setX.mock.calls[0][0]).toBe(1100);
-            expect(mockButton.setY.mock.calls[0][0]).toBe(375);
-        });
-        test("sets the scale of each button", () => {
-            expect(mockButton.setScale).toHaveBeenCalledTimes(1);
-            expect(mockButton.setScale).toHaveBeenCalledWith(4);
-        });
-        describe("when buttonsRight is false", () => {
-            test("the x position is mirrored", () => {
-                jest.clearAllMocks();
-                pane.container.scene.config.menu.buttonsRight = false;
-                resizeGelButtons(pane);
-                expect(mockButton.setX.mock.calls[0][0]).toBe(300);
-            });
+    test("sets the position of each button", () => {
+        expect(mockButton.setX.mock.calls[0][0]).toBe(1100);
+        expect(mockButton.setY.mock.calls[0][0]).toBe(375);
+    });
+    test("sets the scale of each button", () => {
+        expect(mockButton.setScale).toHaveBeenCalledTimes(1);
+        expect(mockButton.setScale).toHaveBeenCalledWith(4);
+    });
+    describe("when buttonsRight is false", () => {
+        test("the x position is mirrored", () => {
+            jest.clearAllMocks();
+            mockScene.config.menu.buttonsRight = false;
+            resizeGelButtons(pane);
+            expect(mockButton.setX.mock.calls[0][0]).toBe(300);
         });
     });
 });

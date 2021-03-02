@@ -1,0 +1,6 @@
+{
+    catalogue: "debug-shop-game-items",    //catalogue array or string filename of json5 catalogue
+    include: ["armour"],        //include all items with this tag in this collection
+    defaultQty: 1,              //default quantity unless specified
+    defaults: [],
+}

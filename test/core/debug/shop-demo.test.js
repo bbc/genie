@@ -165,6 +165,16 @@ describe("ShopDemoGame", () => {
         };
         shopDemoGame.children = { list: [mockImage] };
         shopDemoGame.events = { once: jest.fn() };
+        shopDemoGame.transientData = {
+            shop: {
+                config: {
+                    shopCollections: {
+                        shop: "",
+                        manage: "",
+                    },
+                },
+            },
+        };
     });
 
     describe("preload", () => {

@@ -4,70 +4,74 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import {
-    createListButton,
-    updateButton,
-} from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
+import { createListButton } from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
 import * as overlays from "../../../../src/components/shop/scrollable-list/button-overlays.js";
+import * as createButton from "../../../../src/core/layout/create-button.js";
 import { collections } from "../../../../src/core/collections.js";
 
+jest.mock("../../../../src/components/shop/scrollable-list/button-overlays.js");
+jest.mock("../../../../src/core/layout/create-button.js");
+
 describe("Scrollable List Buttons", () => {
-    let button;
     let mockItem;
     let mockCollection;
     const dummyCallback = () => {};
-
-    let mockButton = {
-        width: 100,
-        setScale: jest.fn(),
-        config: { id: "foo_bar_itemKey_shop", title: "shop" },
-        overlays: { remove: jest.fn(), list: { foo: "bar", baz: "qux" } },
-        sprite: {},
-    };
-    const mockScene = {
-        assetPrefix: "shop",
-        add: {
-            gelButton: jest.fn().mockReturnValue(mockButton),
-        },
-        layout: {
-            getSafeArea: jest.fn().mockReturnValue({ width: 100 }),
-        },
-
-        config: {
-            listPadding: { x: 10, y: 8, outerPadFactor: 2 },
-            states: { locked: { properties: { someProperty: "someValue" }, disabled: true } },
-            overlay: {
-                items: [{ foo: "bar" }],
-                options: {
-                    shop: [
-                        { baz: "qux", activeInStates: ["cta"] },
-                        { wiz: "bang", activeInStates: ["actioned"] },
-                        { wiz: "bang", activeInStates: ["unique"] },
-                        { wiz: "bang", activeInStates: ["notInStock"] },
-                    ],
-                    manage: [
-                        { baz: "qux", activeInStates: ["cta"] },
-                        { wiz: "bang", activeInStates: ["actioned"] },
-                    ],
-                },
-            },
-            paneCollections: { shop: "armoury", manage: "inventory" },
-        },
-        input: { y: 50 },
-        scene: { key: "shop" },
-        sys: {
-            scale: {
-                parent: {},
-            },
-        },
-    };
-    mockButton.scene = mockScene;
-
-    overlays.overlays1Wide = jest.fn();
+    let mockGelButton;
+    let mockScene;
+    let button;
 
     afterEach(() => jest.clearAllMocks());
 
     beforeEach(() => {
+        mockScene = {
+            assetPrefix: "shop",
+            layout: {
+                getSafeArea: jest.fn().mockReturnValue({ width: 100 }),
+            },
+            config: {
+                listPadding: { x: 10, y: 8, outerPadFactor: 2 },
+                states: { locked: { properties: { someProperty: "someValue" }, disabled: true } },
+                overlay: {
+                    items: [{ foo: "bar" }],
+                    options: {
+                        shop: [
+                            { baz: "qux", activeInStates: ["cta"] },
+                            { wiz: "bang", activeInStates: ["actioned"] },
+                            { wiz: "bang", activeInStates: ["unique"] },
+                            { wiz: "bang", activeInStates: ["notInStock"] },
+                        ],
+                        manage: [
+                            { baz: "qux", activeInStates: ["cta"] },
+                            { wiz: "bang", activeInStates: ["actioned"] },
+                        ],
+                    },
+                },
+            },
+            input: { y: 50 },
+            scene: { key: "shop" },
+            sys: {
+                scale: {
+                    parent: {},
+                },
+            },
+            transientData: {
+                shop: {
+                    config: {
+                        shopCollections: {
+                            manage: "",
+                            shop: "",
+                        },
+                    },
+                },
+            },
+        };
+        mockGelButton = {
+            item: {},
+            scene: mockScene,
+            config: { id: "foo_bar_itemKey_shop", title: "shop" },
+            sprite: {},
+            setScale: jest.fn(),
+        };
         mockItem = {
             id: "mockId",
             ariaLabel: "mockAriaLabel",
@@ -77,12 +81,13 @@ describe("Scrollable List Buttons", () => {
         };
         mockCollection = { get: jest.fn().mockReturnValue(mockItem) };
         collections.get = jest.fn().mockReturnValue(mockCollection);
+        createButton.createButton = jest.fn().mockReturnValue(mockGelButton);
         button = createListButton(mockScene, mockItem, "shop", dummyCallback);
     });
 
     describe("createListButton()", () => {
         test("adds a gel button", () => {
-            expect(mockScene.add.gelButton).toHaveBeenCalled();
+            expect(createButton.createButton).toHaveBeenCalled();
         });
 
         test("provides it the correct config", () => {
@@ -99,45 +104,23 @@ describe("Scrollable List Buttons", () => {
                 scrollable: true,
                 title: "shop",
             };
-            expect(mockScene.add.gelButton).toHaveBeenCalledWith(0, 0, expectedConfig);
+            expect(createButton.createButton).toHaveBeenCalledWith(mockScene, expectedConfig);
         });
 
         test("scales the button", () => {
             createListButton(mockScene, mockItem, "shop");
-            expect(mockButton.setScale).toHaveBeenCalled();
+            expect(mockGelButton.setScale).toHaveBeenCalled();
         });
 
         test("merges any properties specified for the item's state into the gel button sprite", () => {
             mockItem.state = "locked";
             createListButton(mockScene, mockItem, "shop");
-            expect(mockButton.sprite.someProperty).toBe("someValue");
+            expect(mockGelButton.sprite.someProperty).toBe("someValue");
         });
 
         test("applies overlays", () => {
             createListButton(mockScene, mockItem, "manage");
             expect(overlays.overlays1Wide).toHaveBeenCalled();
-        });
-    });
-    describe("updateButton()", () => {
-        test("gets the item from the appropriate collection", () => {
-            updateButton(button);
-            expect(collections.get).toHaveBeenCalledWith("armoury");
-            expect(mockCollection.get).toHaveBeenCalledWith("itemKey");
-        });
-        test("updates the overlays if the data was updated", () => {
-            jest.clearAllMocks();
-            button.item = { ...button.item, state: "equipped" };
-            updateButton(button);
-            expect(button.overlays.remove).toHaveBeenCalledWith("foo");
-            expect(button.overlays.remove).toHaveBeenCalledWith("baz");
-            expect(overlays.overlays1Wide).toHaveBeenCalled();
-        });
-        test("does not update if the data has not changed", () => {
-            jest.clearAllMocks();
-            updateButton(button);
-            expect(button.overlays.remove).not.toHaveBeenCalled();
-            expect(button.overlays.remove).not.toHaveBeenCalled();
-            expect(overlays.overlays1Wide).not.toHaveBeenCalled();
         });
     });
 });

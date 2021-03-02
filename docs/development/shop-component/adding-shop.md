@@ -12,12 +12,7 @@ As with other Genie components you must add a Shop entry to your `screens` array
             },
         },
     },
-    shop: {
-        scene: Shop,
-        routes: {
-            back: "home",
-        },
-    },
+    ...Shop({ key: "shop", routes: { back: "home" }})
 ```
 
 The above code creates a Home screen with a 'next' button that points to Shop, and a 'back' button in Shop that points to Home.
@@ -37,7 +32,7 @@ To launch the shop, do `launchShopOverlay(screen, "shop");`
 -   `screen` is the scene you're in (so you would pass `this` if you're calling from inside a class),
 -   `"shop"` is the name you configured for the Shop in main.js, as a string.
 
-You do not need a `back` route for the Shop in main.js. The back button will return the user to whichever scene called `shopOverlay`.
+You do not need a `back` route for the Shop when it is being used as an overlay, the back button will close the overlay.
 
 This can all be done in a routing function in main.js, like this:
 
@@ -50,5 +45,5 @@ This can all be done in a routing function in main.js, like this:
             },
         },
     },
-    ...Shop("shop")
+    ...Shop({ key: "shop", routes: {} })
 ```

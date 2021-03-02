@@ -21,6 +21,7 @@ export class ShopMenu extends Screen {
         const backNav = this._data.addedBy ? "overlayBack" : "back";
         this.setLayout([backNav, "pause"]);
 
+        this.transientData.shop = { config: this.config.shopConfig };
         this.titles = createTitles(this);
         this.balance = createBalance(this);
         this.menu = createMenu(this);
@@ -32,6 +33,13 @@ export class ShopMenu extends Screen {
     setupEvents() {
         const scaleEvent = onScaleChange.add(() => this.resize());
         this.events.once("shutdown", scaleEvent.unsubscribe);
+        const onResume = this.onResume.bind(this);
+        this.events.on("resume", onResume);
+        this.events.once("shutdown", () => this.events.off(Phaser.Scenes.Events.RESUME, onResume));
+    }
+
+    onResume() {
+        this.balance.update();
     }
 
     resize() {

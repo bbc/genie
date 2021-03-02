@@ -24,22 +24,23 @@ describe("Shop Transactions", () => {
 
     beforeEach(() => {
         mockScene = {
-            config: {
-                balance: {
-                    value: {
-                        key: "currency",
+            transientData: {
+                shop: {
+                    config: {
+                        balance: {
+                            value: {
+                                key: "currency",
+                            },
+                        },
+                        shopCollections: {
+                            shop: "shop",
+                            manage: "manage",
+                        },
+                        slots: {
+                            helmet: { max: 1 },
+                        },
                     },
                 },
-                paneCollections: {
-                    shop: "shop",
-                    manage: "manage",
-                },
-                slots: {
-                    helmet: { max: 1 },
-                },
-            },
-            events: {
-                emit: jest.fn(),
             },
         };
         mockCurrencyItem = {
@@ -90,10 +91,6 @@ describe("Shop Transactions", () => {
         test("balance item has its quantity reduced by the price of the item", () => {
             const expectedBalanceItem = { ...mockCurrencyItem, qty: mockCurrencyItem.qty - mockItem.price };
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedBalanceItem);
-        });
-
-        test("emits an updatebalance event", () => {
-            expect(mockScene.events.emit).toHaveBeenCalledWith("updatebalance");
         });
 
         test("fires a stats event", () => {
@@ -162,7 +159,7 @@ describe("Shop Transactions", () => {
 
     describe("getBalanceItem", () => {
         test("returns the currency item", () => {
-            expect(transact.getBalanceItem(mockScene)).toBe(mockCurrencyItem);
+            expect(transact.getBalanceItem(mockScene.transientData.shop.config)).toBe(mockCurrencyItem);
         });
     });
 });

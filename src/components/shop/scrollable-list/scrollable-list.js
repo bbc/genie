@@ -52,8 +52,8 @@ const getPanelY = scene => {
 
 const createChildPanel = scene => scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" })
 
-const createTable = (scene, title, parent,scrollablePanel) => {
-    const key = scene.config.paneCollections[title];
+const createTable = (scene, title, parent, scrollablePanel) => {
+    const key = scene.transientData.shop.config.shopCollections[title];
     const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
 
     const sizer = scene.rexUI.add.sizer({ orientation: "y" });
@@ -74,10 +74,8 @@ const createTable = (scene, title, parent,scrollablePanel) => {
 };
 
 const showConfirmation = (scene, title, item) => {
-    scene.transientData.shop = {
-        title,
-        item,
-    };
+    scene.transientData.shop.title = title;
+    scene.transientData.shop.item = item;
     scene.scene.pause();
     scene.addOverlay(scene.scene.key.replace("-list", "-confirm"));
 };
@@ -117,8 +115,7 @@ const setupEvents = (scene, panel) => {
     const debouncedResize = fp.debounce(10, resizePanel(scene, panel));
     scene.scale.on("resize", debouncedResize, scene);
 
-    panel.updateOnScroll = updatePanelOnScroll(panel);
-    panel.on("scroll", panel.updateOnScroll);
+    panel.on("scroll", () => updatePanelOnScroll(panel));
 
     const onMouseWheelListener = updatePanelOnWheel(panel);
     scene.input.on("gameobjectwheel", onMouseWheelListener);

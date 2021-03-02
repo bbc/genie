@@ -18,13 +18,15 @@ export class ShopList extends Screen {
     }
 
     create() {
+        gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
+        this.transientData[this.scene.key] = { title: this.transientData.shop.title };
 
         this.titles = createTitles(this);
         this.balance = createBalance(this);
-        const inventoryFilter = item => item.id !== this.config.balance.value.key;
-        this.scrollableList = new ScrollableList(this, this.transientData.shop.title, inventoryFilter);
+        this.inventoryFilter = item => item.id !== this.transientData.shop.config.balance.value.key;
+        this.scrollableList = new ScrollableList(this, this.transientData.shop.title, this.inventoryFilter);
 
         this.setupEvents();
         this.resize();
@@ -35,8 +37,8 @@ export class ShopList extends Screen {
         const scaleEvent = onScaleChange.add(resize);
         this.events.once("shutdown", scaleEvent.unsubscribe);
         const onResume = this.onResume.bind(this);
-        this.events.on(Phaser.Scenes.Events.RESUME, onResume);
-        this.events.once("shutdown", () => this.events.off(Phaser.Scenes.Events.RESUME, onResume));
+        this.events.on("resume", onResume);
+        this.events.once("shutdown", () => this.events.off("resume", onResume));
     }
 
     resize() {
@@ -45,7 +47,7 @@ export class ShopList extends Screen {
     }
 
     onResume() {
-        // TODO update this scrollable list
-        gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
+        this.removeOverlay();
+        this._data.addedBy.addOverlay(this.scene.key);
     }
 }

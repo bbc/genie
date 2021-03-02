@@ -12,7 +12,7 @@ const updatePanelOnScroll = panel => () =>
 
 const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
 
-const updatePanelOnFocus = panel => rexLabel => {
+export const updatePanelOnFocus = panel => rexLabel => {
     const visibleBounds = getVisibleRangeBounds(panel);
     const itemBounds = getItemBounds(panel, rexLabel);
     const updateScrollPositionIfItemNotVisible = fp.cond([
@@ -60,7 +60,7 @@ const getMaxOffset = panel => {
     return Math.max(getItemsHeight(panel) - visibleWindowHeight, 0);
 };
 
-const updatePanelOnWheel = panel => (...args) => {
+export const updatePanelOnWheel = panel => (...args) => {
     const event = args[5];
     event.stopPropagation();
 
@@ -77,5 +77,3 @@ const wheelScrollFactor = panel => {
     if (maxOffset === 0) return maxOffset;
     return 1 / maxOffset;
 };
-
-export { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel };
