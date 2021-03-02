@@ -14,7 +14,7 @@ import { ShopList } from "../../../src/components/shop/shop-list-screen.js";
 
 jest.mock("../../../src/core/titles.js");
 jest.mock("../../../src/components/shop/balance-ui.js");
-jest.mock("../../../src/components/shop/menu.js");
+jest.mock("../../../src/components/shop/scrollable-list/scrollable-list.js");
 jest.mock("../../../lib/rexuiplugin.min.js");
 jest.mock("../../../src/core/scaler.js");
 jest.mock("../../../src/core/gmi/gmi.js");
