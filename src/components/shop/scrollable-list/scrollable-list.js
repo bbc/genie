@@ -115,8 +115,7 @@ const setupEvents = (scene, panel) => {
     const debouncedResize = fp.debounce(10, resizePanel(scene, panel));
     scene.scale.on("resize", debouncedResize, scene);
 
-    panel.updateOnScroll = updatePanelOnScroll(panel);
-    panel.on("scroll", panel.updateOnScroll);
+    panel.on("scroll", () => updatePanelOnScroll(panel));
 
     const onMouseWheelListener = updatePanelOnWheel(panel);
     scene.input.on("gameobjectwheel", onMouseWheelListener);
