@@ -143,7 +143,7 @@ const itemDetailView = (scene, item, config, bounds) => {
     setImageScaleXY(itemImage, getItemDetailImageScale(bounds, itemImage));
 
     const itemTitle = addText(scene, x, titleY(bounds), item.title, title).setOrigin(0.5);
-    const itemDetail = addText(scene, x, detailY(bounds), item.detail, detail).setOrigin(0.5);
+    const itemDetail = addText(scene, x, detailY(bounds), item.description, detail).setOrigin(0.5);
     const itemBlurb = addText(scene, x, blurbY(bounds), item.longDescription, description).setOrigin(0.5);
 
     return [itemImage, itemTitle, itemDetail, itemBlurb];
