@@ -18,13 +18,11 @@ export const Shop = ({ key, routes, title }) => ({
     [`${key}-list`]: {
         scene: ShopList,
         routes: {},
-        title,
         hidden: true,
     },
     [`${key}-confirm`]: {
         scene: ShopConfirm,
         routes: {},
-        title,
         hidden: true,
     },
 });

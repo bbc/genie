@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import fp from "../../../lib/lodash/fp/fp.js";
+import fp from "../../lib/lodash/fp/fp.js";
 import { updateStyleOnFontLoad } from "./layout/text-elem.js";
 
 const styleDefaults = {

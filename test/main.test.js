@@ -9,7 +9,7 @@ import { startup } from "../src/core/startup";
 import "../src/main";
 
 jest.mock("../src/core/event-bus");
-jest.mock("../src/core/startup.js");
+jest.mock("../src/core/startup");
 
 describe("Main", () => {
     test("subscribes to the setting changed event", () => {
@@ -29,12 +29,14 @@ describe("Main", () => {
     test("makes a call to startup with the correct screens", () => {
         const expectedScreens = [
             "home",
+            "shop-menu",
+            "shop-list",
+            "shop-confirm",
             "narrative",
             "character-select",
             "level-select",
             "game",
             "results",
-            "shop",
             "how-to-play",
             "pause",
         ];
