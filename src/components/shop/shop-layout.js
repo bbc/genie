@@ -40,8 +40,8 @@ export const getInnerRectBounds = scene => {
     };
 };
 
-export const createPaneBackground = (scene, bounds, pane) => {
-    const key = getPaneBackgroundKey(scene, pane);
+export const createPaneBackground = (scene, bounds) => {
+    const key = getPaneBackgroundKey(scene);
     if (!key) {
         const rectangle = scene.add.rectangle(0, 0, 1, 1, 0, 0);
         rectangle.setScale(bounds.width / rectangle.width, bounds.height / rectangle.height);
