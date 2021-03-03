@@ -21,6 +21,7 @@ const createScrollablePanel = (scene, mode, parent) => {
 
     scrollablePanel.name = mode;
     scrollablePanel.layout();
+    scrollablePanel.makeAccessible = fp.noop;
 
     return { scrollablePanel, child };
 };
@@ -148,7 +149,6 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         const config = scene.config.backgrounds?.[mode] ?? null;
         this.background = createBackground[getType(config)](scene, config);
         const { scrollablePanel, child } = createScrollablePanel(scene, mode, this);
-        this.makeAccessible = fp.noop;
         this.add(scrollablePanel);
         scene.layout.addCustomGroup(scene.scene.key, scrollablePanel, 0);
         a11y.addGroupAt(scene.scene.key, 0);
