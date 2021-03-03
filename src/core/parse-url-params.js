@@ -3,18 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-export function parseUrlParams(paramsString) {
-    if (!valid(paramsString)) {
-        return {};
-    }
-
-    const keyValues = paramsString.slice(paramsString.indexOf("?") + 1).split("&");
-    return keyValues.reduce((params, hash) => {
-        const [key, val] = hash.split("=");
-        return Object.assign(params, { [key]: parseBooleans(val) });
-    }, {});
-}
-
 const parseBooleans = val => {
     const decodedComponent = decodeURIComponent(val);
 
@@ -33,3 +21,15 @@ const valid = paramsString => {
 
     return hasQuestionMark && hasEqualsSymbol;
 };
+
+export function parseUrlParams(paramsString) {
+    if (!valid(paramsString)) {
+        return {};
+    }
+
+    const keyValues = paramsString.slice(paramsString.indexOf("?") + 1).split("&");
+    return keyValues.reduce((params, hash) => {
+        const [key, val] = hash.split("=");
+        return Object.assign(params, { [key]: parseBooleans(val) });
+    }, {});
+}

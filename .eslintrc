@@ -10,7 +10,8 @@
     },
     "plugins": [
         "jest",
-        "local-rules"
+        "local-rules",
+        "import"
     ],
     "rules": {
         "quotes": ["error", "double", {"avoidEscape": true}],
@@ -18,6 +19,7 @@
         "no-undef": [0],
         "no-console": ["warn"],
         "no-unused-vars": ["warn"],
+        "import/exports-last": ["error"],
         "local-rules/disallow-timers": 2,
         "local-rules/require-bbc-header": 2,
         "jest/no-disabled-tests": "warn",

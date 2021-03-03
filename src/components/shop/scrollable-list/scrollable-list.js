@@ -20,8 +20,6 @@ const createPanel = (scene, mode, parent) => {
     return panel;
 };
 
-export const getType = value => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
-
 const getConfig = (scene, mode, parent) => {
     const { listPadding: space } = scene.config;
     const safeArea = getPanelY(scene);
@@ -138,6 +136,8 @@ const getFilteredCollection = (collection, filter) => {
 };
 
 const removeZeroQty = item => item.slot || item.qty > 0;
+
+export const getType = value => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
 
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, mode, filter) {
