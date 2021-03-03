@@ -22,7 +22,7 @@ describe("Select Screen - Titles", () => {
                 titles: [
                     { type: "image", key: "title", xOffset: 0, yOffset: -250 },
                     { type: "text", value: "Select Your Character", xOffset: 0, yOffset: -260 },
-                    { type: "text", value: "Sub-Title", xOffset: 0, yOffset: -233 },
+                    { type: "text", value: "Sub Title", xOffset: 0, yOffset: -233 },
                 ],
             },
         };

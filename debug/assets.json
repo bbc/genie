@@ -486,6 +486,31 @@
                     "margin": 0,
                     "spacing": 4
                 }
+            },
+            {
+                "type": "image",
+                "key": "ironHatIcon",
+                "url": "../../debug/assets/shop-demo/invent-helm-default.png"
+            },
+            {
+                "type": "image",
+                "key": "greenHatIcon",
+                "url": "../../debug/assets/shop-demo/invent-helm-green.png"
+            },
+            {
+                "type": "image",
+                "key": "redHatIcon",
+                "url": "../../debug/assets/shop-demo/invent-helm-red.png"
+            },
+            {
+                "type": "image",
+                "key": "purpleHatIcon",
+                "url": "../../debug/assets/shop-demo/invent-helm-purple.png"
+            },
+            {
+                "type": "image",
+                "key": "goldHatIcon",
+                "url": "../../debug/assets/shop-demo/invent-helm-gold.png"
             }
         ]
     }

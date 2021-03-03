@@ -18,6 +18,7 @@ export class ShopList extends Screen {
     }
 
     create() {
+        gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
         this.transientData[this.scene.key] = { title: this.transientData.shop.title };
@@ -48,6 +49,5 @@ export class ShopList extends Screen {
     onResume() {
         this.removeOverlay();
         this._data.addedBy.addOverlay(this.scene.key);
-        gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
     }
 }

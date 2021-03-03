@@ -53,11 +53,10 @@ const screens = {
             debug: "debug",
             //Example of custom routing function
             next: scene => {
-                scene.navigate("shop-menu");
+                scene.navigate("narrative");
             },
         },
     },
-    ...Shop({ key: "shop", routes: { back: "home" } }),
     narrative: {
         scene: Narrative,
         routes: {
@@ -101,6 +100,7 @@ const screens = {
         },
     },
     // Overlays
+    ...Shop({ key: "shop", routes: {} }),
     "how-to-play": {
         scene: HowToPlay,
         routes: {
