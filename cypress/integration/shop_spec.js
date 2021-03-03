@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { getUrl } from "../support/functions";
+//import { getUrl } from "../support/functions";
 
 /* Temporarily removed until bug fix is introduced */
 
