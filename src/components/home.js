@@ -13,6 +13,9 @@ import { isDebug } from "../core/debug/debug-mode.js";
 import { gmi } from "../core/gmi/gmi.js";
 
 export class Home extends Screen {
+    itemUsed(data) {
+        console.log("item used!!", data);
+    }
     create() {
         const achievements = gmi.achievements.get().length ? ["achievements"] : [];
         const debug = isDebug() ? ["debug"] : [];
@@ -24,6 +27,13 @@ export class Home extends Screen {
             channel: buttonsChannel(this),
             name: "play",
             callback: this.navigation.next,
+        });
+        eventBus.subscribe({
+            channel: "shop",
+            name: "used",
+            callback: data => {
+                this.itemUsed(data);
+            },
         });
     }
 }

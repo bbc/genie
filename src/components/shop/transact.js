@@ -7,6 +7,7 @@
 
 import { collections } from "../../core/collections.js";
 import { gmi } from "../../core/gmi/gmi.js";
+import { eventBus } from "../../core/event-bus.js";
 
 export const buy = (scene, item) => {
     const { shop, manage } = scene.transientData.shop.config.shopCollections;
@@ -45,6 +46,11 @@ export const use = (scene, item) => {
     const invItem = invCol.get(item.id);
     const qtyLeft = invItem.qty - 1;
     gmi.sendStatsEvent("use", "click", { id: item.id, qty: qtyLeft });
+    eventBus.publish({
+        channel: "shop",
+        name: "used",
+        data: invItem,
+    });
     invCol.set({ ...invItem, qty: qtyLeft });
 };
 
