@@ -17,17 +17,17 @@ const defaults = {
 
 export const createMenuButtons = scene => ["Shop", "Manage"].map(createMenuButton(scene));
 
-const createMenuButton = scene => title => {
-    const id = `${title.toLowerCase()}_menu_button`;
-    const ariaLabel = title;
+const createMenuButton = scene => buttonText => {
+    const id = `${buttonText.toLowerCase()}_menu_button`;
+    const ariaLabel = buttonText;
     const action = () => {
-        scene.transientData.shop.title = title.toLowerCase();
+        scene.transientData.shop.mode = buttonText.toLowerCase();
         scene.scene.pause();
         scene.addOverlay(scene.scene.key.replace("-menu", "-list"));
-        gmi.setStatsScreen(title === "Shop" ? "shopbuy" : "shopmanage");
+        gmi.setStatsScreen(buttonText === "Shop" ? "shopbuy" : "shopmanage");
     };
 
-    const config = { ...defaults, title, id, ariaLabel, action };
+    const config = { ...defaults, title: buttonText, id, ariaLabel, action };
 
     return makeButton(scene, scene.config.menu.buttons, config);
 };

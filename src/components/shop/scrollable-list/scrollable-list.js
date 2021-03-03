@@ -12,9 +12,9 @@ import { onScaleChange } from "../../../core/scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { createBackground, resizeBackground } from "./backgrounds.js";
 
-const createPanel = (scene, title, parent) => {
-    const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, title, parent));
-    panel.name = title;
+const createPanel = (scene, mode, parent) => {
+    const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, mode, parent));
+    panel.name = mode;
     panel.layout();
 
     return panel;
@@ -22,7 +22,7 @@ const createPanel = (scene, title, parent) => {
 
 export const getType = value => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
 
-const getConfig = (scene, title, parent) => {
+const getConfig = (scene, mode, parent) => {
     const { listPadding: space } = scene.config;
     const safeArea = getPanelY(scene);
     const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
@@ -31,7 +31,7 @@ const getConfig = (scene, title, parent) => {
         y: safeArea.y,
         height: safeArea.height,
         scrollMode: 0,
-        panel: { child: createInnerPanel(scene, title, parent) },
+        panel: { child: createInnerPanel(scene, mode, parent) },
         slider: {
             track: scene.add.image(0, 0, `${scene.assetPrefix}.scrollbar`),
             thumb: scene.add.image(0, 0, `${scene.assetPrefix}.scrollbarHandle`),
@@ -46,14 +46,14 @@ const getPanelY = scene => {
     return { y: safeArea.height / 2 + safeArea.y, height: safeArea.height };
 };
 
-const createInnerPanel = (scene, title, parent) => {
+const createInnerPanel = (scene, mode, parent) => {
     const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" });
-    sizer.add(createTable(scene, title, parent), { expand: true });
+    sizer.add(createTable(scene, mode, parent), { expand: true });
     return sizer;
 };
 
-const createTable = (scene, title, parent) => {
-    const key = scene.transientData.shop.config.shopCollections[title];
+const createTable = (scene, mode, parent) => {
+    const key = scene.transientData.shop.config.shopCollections[mode];
     const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
 
     const sizer = scene.rexUI.add.sizer({ orientation: "y" });
@@ -66,25 +66,25 @@ const createTable = (scene, title, parent) => {
             name: "grid",
         });
 
-        collection.forEach((item, idx) => table.add(createItem(scene, item, title, parent), 0, idx, "top", 0, true));
+        collection.forEach((item, idx) => table.add(createItem(scene, item, mode, parent), 0, idx, "top", 0, true));
         sizer.add(table, 1, "center", 0, true);
     }
 
     return sizer;
 };
 
-const showConfirmation = (scene, title, item) => {
-    scene.transientData.shop.title = title;
+const showConfirmation = (scene, mode, item) => {
+    scene.transientData.shop.mode = mode;
     scene.transientData.shop.item = item;
     scene.scene.pause();
     scene.addOverlay(scene.scene.key.replace("-list", "-confirm"));
 };
 
-const createItem = (scene, item, title, parent) => {
+const createItem = (scene, item, mode, parent) => {
     const action = pointer =>
-        (parent.panel.isInTouching() || !pointer) && !isLocked(item) && showConfirmation(scene, title, item);
+        (parent.panel.isInTouching() || !pointer) && !isLocked(item) && showConfirmation(scene, mode, item);
 
-    const icon = createListButton(scene, item, title, action);
+    const icon = createListButton(scene, item, mode, action);
 
     return scene.rexUI.add.label({
         orientation: 0,
@@ -140,13 +140,13 @@ const getFilteredCollection = (collection, filter) => {
 const removeZeroQty = item => item.slot || item.qty > 0;
 
 export class ScrollableList extends Phaser.GameObjects.Container {
-    constructor(scene, title, filter) {
+    constructor(scene, mode, filter) {
         super(scene, 0, 0);
         this.collectionFilter = filter;
 
-        const config = scene.config.backgrounds?.[title] ?? null;
+        const config = scene.config.backgrounds?.[mode] ?? null;
         this.background = createBackground[getType(config)](scene, config);
-        this.panel = createPanel(scene, title, this);
+        this.panel = createPanel(scene, mode, this);
         this.makeAccessible = fp.noop;
 
         this.add(this.panel);
