@@ -124,4 +124,25 @@ describe("createBalance()", () => {
         expect(shopLayout.getYPos).toHaveBeenCalledWith(mockMetrics, mockSafeArea);
         expect(mockContainer.setPosition).toHaveBeenCalledWith(42, 69);
     });
+    test("resize function sets the correct scale", () => {
+        const balance = createBalance(mockScene, mockMetrics, mockSafeArea);
+        jest.clearAllMocks();
+        balance.resize();
+        expect(mockContainer.setScale).toHaveBeenCalledWith(3.14);
+    });
+    test("resize function sets the correct position", () => {
+        const balance = createBalance(mockScene, mockMetrics, mockSafeArea);
+        jest.clearAllMocks();
+        balance.resize();
+        expect(mockContainer.setPosition).toHaveBeenCalledWith(42, 69);
+    });
+    test("update function updates the balance value", () => {
+        const balance = createBalance(mockScene, mockMetrics, mockSafeArea);
+        jest.clearAllMocks();
+        const mockCurrency = { id: "someId", qty: 1000 };
+        const mockCollect = { get: jest.fn().mockReturnValue(mockCurrency) };
+        collections.get = jest.fn().mockReturnValue(mockCollect);
+        balance.update();
+        expect(mockReturnedText.setText).toHaveBeenCalledWith(1000);
+    });
 });
