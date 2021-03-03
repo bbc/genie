@@ -73,13 +73,13 @@ describe("shop menu", () => {
         test("calls setY on the container with an appropriate Y offset", () => {
             expect(mockContainer.setY).toHaveBeenCalledWith(200);
         });
-        test("adds a reference to the menu buttons", () => {
-            expect(menu.menu.buttons).toBe(mockMenuButtons);
-        });
         test("menu resize function calls resizeGelButtons", () => {
             jest.clearAllMocks();
             menu.resize();
-            expect(buttons.resizeGelButtons).toHaveBeenCalledWith(menu.menu);
+            expect(buttons.resizeGelButtons).toHaveBeenCalledWith({
+                buttons: mockMenuButtons,
+                container: mockContainer,
+            });
         });
     });
 });

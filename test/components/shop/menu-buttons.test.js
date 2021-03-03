@@ -42,11 +42,13 @@ describe("create menu/confirm buttons", () => {
             },
             config: {
                 menu: {
-                    buttons: {},
+                    buttons: {
+                        key: "menukey",
+                    },
                 },
                 confirm: {
                     buttons: {
-                        key: "key",
+                        key: "confirmkey",
                     },
                 },
             },
@@ -75,6 +77,7 @@ describe("create menu/confirm buttons", () => {
             id: "shop_menu_button",
             ariaLabel: "Shop",
             action: expect.any(Function),
+            key: mockScene.config.menu.buttons.key,
         });
         expect(button.createButton).toHaveBeenCalledWith(mockScene, {
             gameButton: true,
@@ -85,6 +88,7 @@ describe("create menu/confirm buttons", () => {
             id: "manage_menu_button",
             ariaLabel: "Manage",
             action: expect.any(Function),
+            key: mockScene.config.menu.buttons.key,
         });
     });
 
@@ -97,13 +101,13 @@ describe("create menu/confirm buttons", () => {
     test("menu button action sets transient data correctly when shop button is clicked", () => {
         createMenuButtons(mockScene);
         button.createButton.mock.calls[0][1].action();
-        expect(mockScene.transientData.shop.title).toBe("shop");
+        expect(mockScene.transientData.shop.mode).toBe("shop");
     });
 
     test("menu button action sets transient data correctly when manage button is clicked", () => {
         createMenuButtons(mockScene);
         button.createButton.mock.calls[1][1].action();
-        expect(mockScene.transientData.shop.title).toBe("manage");
+        expect(mockScene.transientData.shop.mode).toBe("manage");
     });
 
     test("menu button action sets pauses the scene", () => {

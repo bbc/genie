@@ -246,7 +246,7 @@ describe("Scrollable List", () => {
 
                 test("creates a confirm pane", () => {
                     callback();
-                    expect(mockScene.transientData.shop.title).toBe("shop");
+                    expect(mockScene.transientData.shop.mode).toBe("shop");
                     expect(mockScene.transientData.shop.item).toBe(mockItem);
                     expect(mockScene.scene.pause).toHaveBeenCalled();
                     expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-confirm");

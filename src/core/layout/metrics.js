@@ -5,6 +5,13 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 
+const getScale = fp.curry((stageHeight, width, height) =>
+    fp.cond([
+        [() => width / height >= GEL_MIN_ASPECT_RATIO, () => height / stageHeight],
+        [() => width / height < GEL_MIN_ASPECT_RATIO, () => width / (stageHeight * GEL_MIN_ASPECT_RATIO)],
+    ])(),
+);
+
 const MOBILE_BREAK_WIDTH = 770;
 export const BORDER_PAD_RATIO = 0.02;
 export const GEL_MIN_ASPECT_RATIO = 4 / 3;
@@ -13,13 +20,6 @@ export const CANVAS_WIDTH = 1400;
 export const CANVAS_HEIGHT = 600;
 export const CAMERA_X = CANVAS_WIDTH / 2;
 export const CAMERA_Y = CANVAS_HEIGHT / 2;
-
-const getScale = fp.curry((stageHeight, width, height) =>
-    fp.cond([
-        [() => width / height >= GEL_MIN_ASPECT_RATIO, () => height / stageHeight],
-        [() => width / height < GEL_MIN_ASPECT_RATIO, () => width / (stageHeight * GEL_MIN_ASPECT_RATIO)],
-    ])(),
-);
 
 export const calculateMetrics = fp.curry((stageHeight, { width, height }) => {
     const scale = getScale(stageHeight, width, height);

@@ -53,7 +53,7 @@ describe("Shop List Screen", () => {
         shopList.plugins = { installScenePlugin: jest.fn() };
         shopList._data = {
             addedBy: { addOverlay: jest.fn() },
-            transient: { shop: { title: "shop", config: { balance: { value: { key: "balance" } } } } },
+            transient: { shop: { mode: "shop", config: { balance: { value: { key: "balance" } } } } },
             config: { "shop-menu": { shopConfig: mockShopConfig } },
         };
     });
@@ -70,7 +70,7 @@ describe("Shop List Screen", () => {
     });
 
     test("sets stat screen to shopmanage on create when title is manage", () => {
-        shopList._data.transient.shop.title = "manage";
+        shopList._data.transient.shop.mode = "manage";
         shopList.create();
         expect(gmi.gmi.setStatsScreen).toHaveBeenCalledWith("shopmanage");
     });
@@ -116,7 +116,7 @@ describe("Shop List Screen", () => {
         shopList.create();
         expect(list.ScrollableList).toHaveBeenCalledWith(
             shopList,
-            shopList._data.transient.shop.title,
+            shopList._data.transient.shop.mode,
             shopList.inventoryFilter,
         );
         expect(shopList.list).toBe(mockList);
