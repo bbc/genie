@@ -53,7 +53,7 @@ describe("Shop List Screen", () => {
         shopList.plugins = { installScenePlugin: jest.fn() };
         shopList._data = {
             addedBy: { addOverlay: jest.fn() },
-            transient: { shop: { title: "shop", config: { balance: { value: { key: "balance" }}} } },
+            transient: { shop: { title: "shop", config: { balance: { value: { key: "balance" } } } } },
             config: { "shop-menu": { shopConfig: mockShopConfig } },
         };
     });

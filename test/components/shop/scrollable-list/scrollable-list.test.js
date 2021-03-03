@@ -307,6 +307,8 @@ describe("Scrollable List", () => {
             });
             test("adds an updatePanelOnScroll", () => {
                 expect(mockScrollablePanel.on).toHaveBeenCalledWith("scroll", expect.any(Function));
+                mockScrollablePanel.on.mock.calls[0][1]();
+                expect(handlers.updatePanelOnScroll).toHaveBeenCalledWith(mockScrollablePanel);
             });
             test("adds an updatePanelOnFocus", () => {
                 expect(typeof mockScrollablePanel.updateOnFocus).toBe("function");
