@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 import { gmi } from "../src/core/gmi/gmi.js";
+import { eventBus } from "../src/core/event-bus";
 import { Game } from "../src/components/game";
 import { accessibilify } from "../src/core/accessibility/accessibilify.js";
 import * as collectionsModule from "../src/core/collections.js";
@@ -335,6 +336,19 @@ describe("Game", () => {
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "pyrites_of_the_carribean" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "sapphire_so_good" });
                 expect(gmi.achievements.set).toHaveBeenCalledWith({ key: "diamonds_are_forever" });
+            });
+        });
+
+        describe("Events", () => {
+            beforeEach(() => {
+                jest.spyOn(eventBus, "subscribe");
+                game.create();
+            });
+
+            test("adds a event subscription to check for used items", () => {
+                eventBus.subscribe.mock.calls[0][0].callback();
+                expect(eventBus.subscribe.mock.calls[0][0].channel).toBe("shop");
+                expect(eventBus.subscribe.mock.calls[0][0].name).toBe("used");
             });
         });
 

@@ -8,6 +8,7 @@
 import * as transact from "../../../src/components/shop/transact.js";
 import { collections } from "../../../src/core/collections.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
+import { eventBus } from "../../../src/core/event-bus.js";
 
 jest.mock("../../../src/core/collections.js");
 jest.mock("../../../src/core/gmi/gmi.js");
@@ -21,6 +22,7 @@ describe("Shop Transactions", () => {
     let mockInventoryItemList;
     let mockShopCollection;
     let mockManageCollection;
+    let unsubscribeSpy;
 
     beforeEach(() => {
         mockScene = {
@@ -73,6 +75,9 @@ describe("Shop Transactions", () => {
         };
         gmi.sendStatsEvent = jest.fn();
     });
+    unsubscribeSpy = jest.fn();
+    jest.spyOn(eventBus, "publish").mockImplementation(() => {});
+    jest.spyOn(eventBus, "subscribe").mockImplementation(() => ({ unsubscribe: unsubscribeSpy }));
     afterEach(() => jest.clearAllMocks());
 
     describe("Buying an item", () => {
@@ -152,6 +157,14 @@ describe("Shop Transactions", () => {
             const expectedItem = { ...mockInventoryItem, qty: mockInventoryItem.qty - 1 };
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
+
+        test("publishes events for transaction", () => {
+            const eventCalls = eventBus.publish.mock.calls[0][0];
+            expect(eventCalls.channel).toBe("shop");
+            expect(eventCalls.name).toBe("used");
+            expect(eventCalls.data).toBe(mockInventoryItem);
+        });
+
         test("fires a stats event", () => {
             expect(gmi.sendStatsEvent).toHaveBeenCalledWith("use", "click", { id: "inventoryItem", qty: 4 });
         });
