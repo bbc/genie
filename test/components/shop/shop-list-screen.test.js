@@ -119,7 +119,7 @@ describe("Shop List Screen", () => {
             shopList._data.transient.shop.title,
             shopList.inventoryFilter,
         );
-        expect(shopList.list).toBe(mockList);
+        expect(shopList.scrollableList).toBe(mockList);
     });
 
     test("adds a onScaleChange event on create", () => {

@@ -205,12 +205,6 @@ describe("Scrollable List", () => {
 
             describe("with nested rexUI elements", () => {
                 test("a label is created with a gel button per item", () => {
-                    expect(buttons.createListButton).toHaveBeenCalledWith(
-                        mockScene,
-                        mockItem,
-                        title,
-                        expect.any(Function),
-                    );
                     expect(mockScene.rexUI.add.label).toHaveBeenCalledWith({
                         orientation: 0,
                         icon: mockGelButton,
@@ -345,7 +339,7 @@ describe("Scrollable List", () => {
         });
 
         test("adds the list as a custom group by scene key", () => {
-            expect(mockScene.layout.addCustomGroup).toHaveBeenCalledWith("shop-list", list, 0);
+            expect(mockScene.layout.addCustomGroup).toHaveBeenCalledWith("shop-list", mockScrollablePanel, 0);
         });
         test("adds a matching group to the accessibility layer", () => {
             expect(a11y.addGroupAt).toHaveBeenCalledWith("shop-list", 0);
