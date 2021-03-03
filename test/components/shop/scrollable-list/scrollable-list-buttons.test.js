@@ -18,7 +18,6 @@ describe("Scrollable List Buttons", () => {
     const dummyCallback = () => {};
     let mockGelButton;
     let mockScene;
-    let button;
 
     afterEach(() => jest.clearAllMocks());
 
@@ -82,7 +81,7 @@ describe("Scrollable List Buttons", () => {
         mockCollection = { get: jest.fn().mockReturnValue(mockItem) };
         collections.get = jest.fn().mockReturnValue(mockCollection);
         createButton.createButton = jest.fn().mockReturnValue(mockGelButton);
-        button = createListButton(mockScene, mockItem, "shop", dummyCallback);
+        createListButton(mockScene, mockItem, "shop", dummyCallback);
     });
 
     describe("createListButton()", () => {

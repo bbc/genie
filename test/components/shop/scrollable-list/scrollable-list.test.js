@@ -240,7 +240,7 @@ describe("Scrollable List", () => {
 
                 test("creates a confirm pane", () => {
                     callback();
-                    expect(mockScene.transientData.shop.title).toBe("shop");
+                    expect(mockScene.transientData.shop.mode).toBe("shop");
                     expect(mockScene.transientData.shop.item).toBe(mockItem);
                     expect(mockScene.scene.pause).toHaveBeenCalled();
                     expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-confirm");
@@ -301,6 +301,8 @@ describe("Scrollable List", () => {
             });
             test("adds an updatePanelOnScroll", () => {
                 expect(mockScrollablePanel.on).toHaveBeenCalledWith("scroll", expect.any(Function));
+                mockScrollablePanel.on.mock.calls[0][1]();
+                expect(handlers.updatePanelOnScroll).toHaveBeenCalledWith(mockScrollablePanel);
             });
             test("adds an updatePanelOnFocus", () => {
                 expect(typeof mockScrollablePanel.updateOnFocus).toBe("function");

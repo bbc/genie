@@ -13,18 +13,21 @@ import {
 import * as button from "../../../src/core/layout/create-button.js";
 import * as textElem from "../../../src/core/layout/text-elem.js";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
+import * as mockGmi from "../../../src/core/gmi/gmi.js";
 
 jest.mock("../../../src/core/layout/text-elem.js");
 jest.mock("../../../src/core/layout/create-button.js");
 jest.mock("../../../src/core/layout/gel-defaults.js");
+jest.mock("../../../src/core/gmi/gmi.js");
 
-describe("createMenuButtons()", () => {
+describe("create menu/confirm buttons", () => {
     let mockScene;
     let mockGelButton;
     let mockTextElem;
     let mockTextWithOrigin;
     let mockChannel;
     beforeEach(() => {
+        mockGmi.gmi.setStatsScreen = jest.fn();
         mockChannel = "gel-channel";
         gel.buttonsChannel = jest.fn().mockReturnValue(mockChannel);
         mockTextWithOrigin = { mock: "text" };
@@ -33,13 +36,25 @@ describe("createMenuButtons()", () => {
         mockGelButton = { overlays: { set: jest.fn() } };
         button.createButton = jest.fn().mockReturnValue(mockGelButton);
         mockScene = {
+            addOverlay: jest.fn(),
+            transientData: {
+                shop: {},
+            },
             config: {
                 menu: {
-                    buttons: {},
+                    buttons: {
+                        key: "menukey",
+                    },
+                },
+                confirm: {
+                    buttons: {
+                        key: "confirmkey",
+                    },
                 },
             },
             scene: {
                 key: "shop-menu",
+                pause: jest.fn(),
             },
         };
     });
@@ -50,7 +65,7 @@ describe("createMenuButtons()", () => {
         expect(buttons.length).toBe(2);
     });
 
-    test("calls createButton twice with the correct button config", () => {
+    test("creates two menu buttons with the correct button config", () => {
         createMenuButtons(mockScene);
         expect(button.createButton).toHaveBeenCalledTimes(2);
         expect(button.createButton).toHaveBeenCalledWith(mockScene, {
@@ -62,6 +77,7 @@ describe("createMenuButtons()", () => {
             id: "shop_menu_button",
             ariaLabel: "Shop",
             action: expect.any(Function),
+            key: mockScene.config.menu.buttons.key,
         });
         expect(button.createButton).toHaveBeenCalledWith(mockScene, {
             gameButton: true,
@@ -72,11 +88,98 @@ describe("createMenuButtons()", () => {
             id: "manage_menu_button",
             ariaLabel: "Manage",
             action: expect.any(Function),
+            key: mockScene.config.menu.buttons.key,
         });
     });
 
-    test("sets a caption on both buttons", () => {
+    test("sets a caption on both menu buttons", () => {
         createMenuButtons(mockScene);
+        expect(mockGelButton.overlays.set).toHaveBeenCalledTimes(2);
+        expect(mockGelButton.overlays.set).toHaveBeenCalledWith("caption", mockTextWithOrigin);
+    });
+
+    test("menu button action sets transient data correctly when shop button is clicked", () => {
+        createMenuButtons(mockScene);
+        button.createButton.mock.calls[0][1].action();
+        expect(mockScene.transientData.shop.mode).toBe("shop");
+    });
+
+    test("menu button action sets transient data correctly when manage button is clicked", () => {
+        createMenuButtons(mockScene);
+        button.createButton.mock.calls[1][1].action();
+        expect(mockScene.transientData.shop.mode).toBe("manage");
+    });
+
+    test("menu button action sets pauses the scene", () => {
+        createMenuButtons(mockScene);
+        button.createButton.mock.calls[0][1].action();
+        expect(mockScene.scene.pause).toHaveBeenCalled();
+    });
+
+    test("menu button action adds the shop list overlay", () => {
+        createMenuButtons(mockScene);
+        button.createButton.mock.calls[0][1].action();
+        expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-list");
+    });
+
+    test("menu button action sets the stat screen to shopbuy when shop button is clicked", () => {
+        createMenuButtons(mockScene);
+        button.createButton.mock.calls[0][1].action();
+        expect(mockGmi.gmi.setStatsScreen).toHaveBeenCalledWith("shopbuy");
+    });
+
+    test("menu button action sets the stat screen to shopmanage when shop button is clicked", () => {
+        createMenuButtons(mockScene);
+        button.createButton.mock.calls[1][1].action();
+        expect(mockGmi.gmi.setStatsScreen).toHaveBeenCalledWith("shopmanage");
+    });
+
+    test("returns an action button and a cancel button", () => {
+        const buttons = createConfirmButtons(
+            mockScene,
+            "action",
+            () => {},
+            () => {},
+        );
+        expect(buttons.length).toBe(2);
+    });
+
+    test("creates two confirm buttons with the correct button config", () => {
+        const confirmCallback = jest.fn();
+        const cancelCallback = jest.fn();
+        createConfirmButtons(mockScene, "Buy", confirmCallback, cancelCallback);
+        expect(button.createButton).toHaveBeenCalledTimes(2);
+        expect(button.createButton).toHaveBeenCalledWith(mockScene, {
+            gameButton: true,
+            accessible: true,
+            channel: mockChannel,
+            group: "shop-menu",
+            title: "Buy",
+            id: "tx_buy_button",
+            ariaLabel: "Buy",
+            action: confirmCallback,
+            key: mockScene.config.confirm.buttons.key,
+        });
+        expect(button.createButton).toHaveBeenCalledWith(mockScene, {
+            gameButton: true,
+            accessible: true,
+            channel: mockChannel,
+            group: "shop-menu",
+            title: "Cancel",
+            id: "tx_cancel_button",
+            ariaLabel: "Cancel",
+            action: cancelCallback,
+            key: mockScene.config.confirm.buttons.key,
+        });
+    });
+
+    test("sets a caption on both confirm buttons", () => {
+        createConfirmButtons(
+            mockScene,
+            "action",
+            () => {},
+            () => {},
+        );
         expect(mockGelButton.overlays.set).toHaveBeenCalledTimes(2);
         expect(mockGelButton.overlays.set).toHaveBeenCalledWith("caption", mockTextWithOrigin);
     });

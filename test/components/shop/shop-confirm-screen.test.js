@@ -92,7 +92,7 @@ describe("Shop Confirm Screen", () => {
         shopConfirm.create();
         expect(confirm.createConfirm).toHaveBeenCalledWith(
             shopConfirm,
-            shopConfirm.transientData.shop.title,
+            shopConfirm.transientData.shop.mode,
             shopConfirm.transientData.shop.item,
         );
         expect(shopConfirm.confirm).toBe(mockConfirm);
