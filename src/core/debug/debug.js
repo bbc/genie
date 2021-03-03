@@ -11,13 +11,6 @@ import { createMeasure } from "./measure/measure.js";
 const makeToggle = (val, fn, scene) => () =>
     (scene.debug.draw[val] = scene.debug.draw[val] === fp.identity ? fn : fp.identity);
 
-export function update() {
-    if (!this.debug) return;
-    this.debug.graphics.clear();
-    this.debug.draw.groups(this.debug.graphics);
-    this.debug.draw.buttons(this.debug.graphics);
-}
-
 const toggleCSS = () => document.body.classList.toggle("debug");
 
 const debugStyle = {
@@ -78,6 +71,13 @@ function create() {
 
 const shutdown = scene =>
     ["q", "w", "e", "r", "t", "y", "u"].forEach(scene.input.keyboard.removeKey, scene.input.keyboard);
+
+export function update() {
+    if (!this.debug) return;
+    this.debug.graphics.clear();
+    this.debug.draw.groups(this.debug.graphics);
+    this.debug.draw.buttons(this.debug.graphics);
+}
 
 export const addEvents = scene => {
     scene.events.on("create", create, scene);

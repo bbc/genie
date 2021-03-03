@@ -23,17 +23,6 @@ const transitionOnTab = (grid, button) => () => {
     grid.showPage(nextIdx);
 };
 
-export const setSize = (grid, button) => {
-    const size = [...grid._cellSize];
-    const spriteAspect = button.sprite.width / button.sprite.height;
-    const cellAspect = size[0] / size[1];
-    const axisScale = spriteAspect < cellAspect ? 0 : 1;
-    const aspectRatioRatio = spriteAspect / cellAspect;
-
-    size[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
-    button.setDisplaySize(...size);
-};
-
 const getBlankCellCount = (grid, row, page) => {
     return Math.max(grid._config.columns * (row + 1) - grid.getPageCells(page).length, 0);
 };
@@ -78,6 +67,17 @@ const addTextToButton = (scene, config, btn, theme) => {
     if (config.subtitle && styles.subtitle) {
         addTextToScene(scene, styles.subtitle, config.subtitle, btn, "subtitleText");
     }
+};
+
+export const setSize = (grid, button) => {
+    const size = [...grid._cellSize];
+    const spriteAspect = button.sprite.width / button.sprite.height;
+    const cellAspect = size[0] / size[1];
+    const axisScale = spriteAspect < cellAspect ? 0 : 1;
+    const aspectRatioRatio = spriteAspect / cellAspect;
+
+    size[axisScale] *= axisScale === 0 ? aspectRatioRatio : 1 / aspectRatioRatio;
+    button.setDisplaySize(...size);
 };
 
 export const createCell = (grid, choice, idx, theme) => {
