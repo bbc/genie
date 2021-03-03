@@ -46,8 +46,7 @@ export const createListButton = (scene, item, title, action, parent) => {
     const gelButton = createButton(scene, config);
 
     gelButton.item = item;
-    gelButton.parentContainer = parent //TODO NT hack makes gel buttons calculate correct bounds. Could it be fixed in gel button?...
-
+    gelButton.parentContainer = parent; //TODO NT hack makes gel buttons calculate correct bounds. Could it be fixed in gel button?...
 
     const properties = item.state && scene.config.states[item.state] ? scene.config.states[item.state].properties : {};
     Object.assign(gelButton.sprite, properties);

@@ -4,7 +4,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
+import { updatePanelOnFocus, updatePanelOnWheel } from "./scrollable-list-handlers.js";
 import { createListButton, scaleButton } from "./scrollable-list-buttons.js";
 import * as a11y from "../../../core/accessibility/accessibility-layer.js";
 import { collections } from "../../../core/collections.js";
@@ -14,15 +14,15 @@ import { createBackground, resizeBackground } from "./backgrounds.js";
 
 const createScrollablePanel = (scene, mode, parent) => {
     const config = getConfig(scene);
-    const child = createChildPanel(scene, mode, parent)
-    const panel =  { child }
+    const child = createChildPanel(scene, mode, parent);
+    const panel = { child };
 
-    const scrollablePanel = scene.rexUI.add.scrollablePanel({...config, panel});
+    const scrollablePanel = scene.rexUI.add.scrollablePanel({ ...config, panel });
 
     scrollablePanel.name = mode;
     scrollablePanel.layout();
 
-    return { scrollablePanel, child};
+    return { scrollablePanel, child };
 };
 
 export const getType = value => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
@@ -50,7 +50,8 @@ const getPanelY = scene => {
     return { y: safeArea.height / 2 + safeArea.y, height: safeArea.height };
 };
 
-const createChildPanel = scene => scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" })
+const createChildPanel = scene =>
+    scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" });
 
 const createTable = (scene, mode, parent, scrollablePanel) => {
     const key = scene.transientData.shop.config.shopCollections[mode];
@@ -66,7 +67,9 @@ const createTable = (scene, mode, parent, scrollablePanel) => {
             name: "grid",
         });
 
-        collection.forEach((item, idx) => table.add(createItem(scene, item, mode, parent, scrollablePanel), 0, idx, "top", 0, true));
+        collection.forEach((item, idx) =>
+            table.add(createItem(scene, item, mode, parent, scrollablePanel), 0, idx, "top", 0, true),
+        );
         sizer.add(table, 1, "center", 0, true);
     }
 
@@ -115,8 +118,6 @@ const setupEvents = (scene, panel) => {
     const debouncedResize = fp.debounce(10, resizePanel(scene, panel));
     scene.scale.on("resize", debouncedResize, scene);
 
-    panel.on("scroll", () => updatePanelOnScroll(panel));
-
     const onMouseWheelListener = updatePanelOnWheel(panel);
     scene.input.on("gameobjectwheel", onMouseWheelListener);
 
@@ -153,7 +154,6 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         a11y.addGroupAt(scene.scene.key, 0);
 
         child.add(createTable(scene, mode, this, scrollablePanel), { expand: true });
-
 
         scene.input.topOnly = false;
         setupEvents(scene, scrollablePanel);
