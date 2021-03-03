@@ -11,46 +11,7 @@ import { collections } from "../../../core/collections.js";
 import { onScaleChange } from "../../../core/scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { createBackground, resizeBackground } from "./backgrounds.js";
-
-const createScrollablePanel = (scene, mode, parent) => {
-    const config = getConfig(scene);
-    const child = createChildPanel(scene, mode, parent);
-    const panel = { child };
-
-    const scrollablePanel = scene.rexUI.add.scrollablePanel({ ...config, panel });
-
-    scrollablePanel.name = mode;
-    scrollablePanel.layout();
-    scrollablePanel.makeAccessible = fp.noop;
-
-    return { scrollablePanel, child };
-};
-
-const getConfig = scene => {
-    const { listPadding: space } = scene.config;
-    const safeArea = getPanelY(scene);
-    const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
-
-    return {
-        y: safeArea.y,
-        height: safeArea.height,
-        scrollMode: 0,
-        slider: {
-            track: scene.add.image(0, 0, `${scene.assetPrefix}.scrollbar`),
-            thumb: scene.add.image(0, 0, `${scene.assetPrefix}.scrollbarHandle`),
-            width: space.x,
-        },
-        space: { left: outer.x, right: outer.x, top: outer.y, bottom: outer.y, panel: space.x },
-    };
-};
-
-const getPanelY = scene => {
-    const safeArea = scene.layout.getSafeArea({}, false);
-    return { y: safeArea.height / 2 + safeArea.y, height: safeArea.height };
-};
-
-const createChildPanel = scene =>
-    scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" });
+import { createScrollablePanel, getPanelY } from "./scrollable-panel.js";
 
 const createTable = (scene, mode, parent, scrollablePanel) => {
     const key = scene.transientData.shop.config.shopCollections[mode];
@@ -158,7 +119,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         scene.input.topOnly = false;
         setupEvents(scene, scrollablePanel);
 
-        scrollablePanel.reset = this.reset = () => {
+        this.reset = () => {
             resizePanel(scene, scrollablePanel)();
             resizeBackground[this.background.constructor.name](scene, this.background);
         };

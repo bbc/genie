@@ -295,7 +295,6 @@ describe("Scrollable List", () => {
             const onFocusSpy = jest.fn();
             beforeEach(() => {
                 handlers.updatePanelOnFocus = jest.fn().mockReturnValue(onFocusSpy);
-                handlers.updatePanelOnScroll = jest.fn().mockReturnValue(jest.fn());
                 handlers.updatePanelOnWheel = jest.fn().mockReturnValue(onWheelSpy);
                 new ScrollableList(mockScene);
             });
