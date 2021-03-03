@@ -8,12 +8,12 @@ import { eventBus } from "../../../src/core/event-bus.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import { Select } from "../../../src/components/select/select-screen.js";
 import { GelGrid } from "../../../src/core/layout/grid/grid.js";
-import { createTitles } from "../../../src/components/select/titles.js";
+import { createTitles } from "../../../src/core/titles.js";
 import { addHoverParticlesToCells } from "../../../src/components/select/select-particles.js";
 import * as singleItemMode from "../../../src/components/select/single-item-mode.js";
 import * as collectionsModule from "../../../src/core/collections.js";
 
-jest.mock("../../../src/components/select/titles.js");
+jest.mock("../../../src/core/titles.js");
 jest.mock("../../../src/components/select/single-item-mode.js");
 jest.mock("../../../src/components/select/select-particles.js");
 jest.mock("../../../src/core/screen.js");

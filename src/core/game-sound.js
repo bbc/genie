@@ -15,7 +15,7 @@ const setButtonClickSound = (scene, audioKey) => {
 };
 
 const setupScreenMusic = scene => {
-    if (isAlreadyPlaying(scene.config.music) || scene.config.isOverlay) return;
+    if (isAlreadyPlaying(scene.config.music) || scene._data.addedBy) return;
     stopCurrentAndStartNextMusic(scene);
 };
 

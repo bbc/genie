@@ -3,26 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
-/*
-const equippable = item => Boolean(item.slot);
-const stocked = item => item?.qty > 0;
-const locked = (item, config) => item.state && config.states[item.state] && config.states[item.state].disabled;
-const equipped = item => item?.state === "equipped";
-
-export const getButtonState = (scene, item, title) => {
-    const states = [];
-    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item.id);
-    const isButtonCta = title === "shop" ? stocked(inventoryItem) : equipped(inventoryItem);
-    states.push(isButtonCta ? "actioned" : "cta");
-    states.push(equippable(item) ? "equippable" : "consumable");
-    states.push(stocked(item) ? "available" : "unavailable");
-    states.push(locked(item, scene.config) ? "locked" : "unlocked");
-    return states;
-};
-
- */
-
 import { getButtonState } from "../../../../src/components/shop/scrollable-list/get-button-state.js";
 import { collections } from "../../../../src/core/collections.js";
 
@@ -35,7 +15,13 @@ describe("getButtonState", () => {
         mockScene = {
             config: {
                 states: { equipped: "", testLockedState: { disabled: true } },
-                paneCollections: { manage: "manageKey" },
+            },
+            transientData: {
+                shop: {
+                    config: {
+                        shopCollections: { manage: "manageKey" },
+                    },
+                },
             },
         };
         mockItem = {

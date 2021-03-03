@@ -151,6 +151,7 @@ export class Screen extends Phaser.Scene {
             active.screen.scene.stop();
         });
         activeScreens = [];
+        delete this._data.addedBy;
         this.scene.start(route, this._data);
     };
 

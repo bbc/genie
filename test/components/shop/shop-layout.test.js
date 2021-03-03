@@ -21,7 +21,7 @@ describe("shop element scaling functions", () => {
     beforeEach(() => {
         mockLayout = { getSafeArea: jest.fn(() => mockSafeArea) };
         mockContainer = {
-            getBounds: jest.fn().mockReturnValue({ height: 450, width: 600, x: 0, y: -150 }),
+            getBounds: jest.fn().mockReturnValue({ height: 450, width: 400, x: 0, y: -150 }),
             scale: 1,
             y: 0,
             visible: true,
@@ -42,7 +42,7 @@ describe("shop element scaling functions", () => {
         test("returns an X value inside the safe area, accounting for padding", () => {
             const xPos = shopLayout.getXPos(mockContainer, mockSafeArea, mockPadding);
             expect(mockContainer.getBounds).toHaveBeenCalled();
-            expect(xPos).toBe(-10);
+            expect(xPos).toBe(100);
         });
     });
 
@@ -75,7 +75,7 @@ describe("shop element scaling functions", () => {
             test("returns a scale factor that may constrain the element horizontally", () => {
                 args.fixedWidth = false;
                 const scaleFactor = shopLayout.getScaleFactor(args);
-                expect(scaleFactor).toBe(0.25);
+                expect(scaleFactor).toBe(0.375);
             });
         });
     });
@@ -105,18 +105,18 @@ describe("shop element scaling functions", () => {
                     rectangle: jest.fn().mockReturnValue({ setScale: jest.fn() }),
                 },
                 config: {
-                    backgrounds: { shop: "asset" },
+                    confirm: { background: "asset" },
                 },
             };
         });
 
         test("if configured with an asset key, returns an image", () => {
-            shopLayout.createPaneBackground(mockScene, mockBounds, "shop");
-            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "some.asset");
+            shopLayout.createPaneBackground(mockScene, mockBounds);
+            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "asset");
         });
         test("if configured without an asset key, returns a rectangle", () => {
-            mockScene.config.backgrounds = {};
-            shopLayout.createPaneBackground(mockScene, mockBounds, "shop");
+            mockScene.config = {};
+            shopLayout.createPaneBackground(mockScene, mockBounds);
             expect(mockScene.add.rectangle).toHaveBeenCalled();
         });
     });

@@ -39,30 +39,31 @@ describe("createBalance()", () => {
         add: {
             container: jest.fn().mockReturnValue(mockContainer),
             image: jest.fn().mockImplementation((x, y, key) => {
-                if (key === "shop.balanceIcon") return mockIcon;
+                if (key === "balanceIcon") return mockIcon;
                 return mockBackground;
             }),
         },
-        events: { on: jest.fn() },
-        config: {
-            balance: {
-                background: {
-                    type: "image",
-                    key: "balanceBackground",
-                },
-                icon: {
-                    type: "image",
-                    key: "balanceIcon",
-                },
-                value: {
-                    type: "text",
-                    key: "someId",
+        transientData: {
+            shop: {
+                config: {
+                    balance: {
+                        background: {
+                            type: "image",
+                            key: "balanceBackground",
+                        },
+                        icon: {
+                            type: "image",
+                            key: "balanceIcon",
+                        },
+                        value: {
+                            type: "text",
+                            key: "someId",
+                        },
+                    },
+                    balancePadding: 6,
+                    shopCollections: { manage: "inventory" },
                 },
             },
-            balancePadding: 6,
-            listPadding: { x: 1 },
-            paneCollections: { manage: "inventory" },
-            styleDefaults: { some: "default" },
         },
         layout: {
             getSafeArea: jest.fn(() => mockSafeArea),
@@ -89,8 +90,8 @@ describe("createBalance()", () => {
         expect(mockScene.add.container).toHaveBeenCalled();
     });
     test("adds elements for background & icon", () => {
-        expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "shop.balanceBackground");
-        expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "shop.balanceIcon");
+        expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "balanceBackground");
+        expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "balanceIcon");
     });
     test("adds a text element with the value of the balance", () => {
         expect(text.addText.mock.calls[0][3]).toBe(100);
@@ -119,16 +120,29 @@ describe("createBalance()", () => {
         expect(mockContainer.setScale).toHaveBeenCalledWith(3.14);
     });
     test("positions the container based on getXPos and getYPos", () => {
-        expect(shopLayout.getXPos).toHaveBeenCalledWith(mockContainer, mockSafeArea, mockScene.config.listPadding.x);
+        expect(shopLayout.getXPos).toHaveBeenCalledWith(mockContainer, mockSafeArea);
         expect(shopLayout.getYPos).toHaveBeenCalledWith(mockMetrics, mockSafeArea);
         expect(mockContainer.setPosition).toHaveBeenCalledWith(42, 69);
     });
-
-    test("sets text with the latest balance when updatebalance event is fired", () => {
-        expect(mockScene.events.on).toHaveBeenCalledWith("updatebalance", expect.any(Function));
-        const callback = mockScene.events.on.mock.calls[0][1];
-        mockCurrencyItem.qty = 50;
-        callback();
-        expect(mockReturnedText.setText).toHaveBeenCalledWith(50);
+    test("resize function sets the correct scale", () => {
+        const balance = createBalance(mockScene, mockMetrics, mockSafeArea);
+        jest.clearAllMocks();
+        balance.resize();
+        expect(mockContainer.setScale).toHaveBeenCalledWith(3.14);
+    });
+    test("resize function sets the correct position", () => {
+        const balance = createBalance(mockScene, mockMetrics, mockSafeArea);
+        jest.clearAllMocks();
+        balance.resize();
+        expect(mockContainer.setPosition).toHaveBeenCalledWith(42, 69);
+    });
+    test("update function updates the balance value", () => {
+        const balance = createBalance(mockScene, mockMetrics, mockSafeArea);
+        jest.clearAllMocks();
+        const mockCurrency = { id: "someId", qty: 1000 };
+        const mockCollect = { get: jest.fn().mockReturnValue(mockCurrency) };
+        collections.get = jest.fn().mockReturnValue(mockCollect);
+        balance.update();
+        expect(mockReturnedText.setText).toHaveBeenCalledWith(1000);
     });
 });

@@ -10,7 +10,7 @@ import { Screen } from "../../core/screen.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { GelGrid } from "../../core/layout/grid/grid.js";
 import fp from "../../../lib/lodash/fp/fp.js";
-import { createTitles } from "./titles.js";
+import { createTitles } from "../../core/titles.js";
 import * as singleItemMode from "./single-item-mode.js";
 import { addEvents } from "./add-events.js";
 import { gmi } from "../../core/gmi/gmi.js";

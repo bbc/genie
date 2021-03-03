@@ -1,0 +1,61 @@
+{
+    music: "home.backgroundMusic",
+    background: {
+        items: [{ key: "shop-menu.magicShop", x: 0, y: 0 }],
+    },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 2,
+        align: "center",
+    },
+    titles: [
+        {
+            type: "image",
+            key: "titleBackground",
+            xOffset: 0,
+            yOffset: -250,
+        },
+        {
+            type: "text",
+            value: "Shop",
+            xOffset: 0,
+            yOffset: -250,
+            styles: { fontStyle: "bold", fontSize: "24px" },
+        },
+    ],
+    collection: ["shop-items", "shop-inventory"],
+    shopConfig: {
+        shopCollections: {
+            shop: "shop-items",
+            manage: "shop-inventory",
+        },
+        balancePadding: 15,
+        balance: {
+            background: {
+                type: "image",
+                key: "shop-menu.balanceBackground",
+            },
+            icon: {
+                type: "image",
+                key: "shop-menu.balanceIcon",
+            },
+            value: {
+                type: "text",
+                key: "coin",
+                styles: { fontSize: "16px" },
+            },
+        },
+        slots: {
+            helmet: { max: 1 },
+            shield: { max: 1 },
+        },
+    },
+    menu: {
+        buttonsRight: true,
+        buttons: {
+            key: "shop-menu.menuButtonBackground",
+            styles: { fontStyle: "bold", fontSize: "16px" },
+        },
+    },
+}

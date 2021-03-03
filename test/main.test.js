@@ -9,7 +9,7 @@ import { startup } from "../src/core/startup";
 import "../src/main";
 
 jest.mock("../src/core/event-bus");
-jest.mock("../src/core/startup.js");
+jest.mock("../src/core/startup");
 
 describe("Main", () => {
     test("subscribes to the setting changed event", () => {
@@ -34,7 +34,9 @@ describe("Main", () => {
             "level-select",
             "game",
             "results",
-            "shop",
+            "shop-menu",
+            "shop-list",
+            "shop-confirm",
             "how-to-play",
             "pause",
         ];

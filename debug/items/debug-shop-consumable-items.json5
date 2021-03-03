@@ -1,0 +1,9 @@
+{
+    catalogue: "debug-shop-game-items",    //catalogue array or string filename of json5 catalogue
+    include: ["consumable-shop"],        //include all items with this tag in this collection
+    defaultQty: 1,              //default quantity unless specified
+    defaults: [                 //additional config
+        { id: "bomb", qty: 5 },
+        { id: "box", qty: 1 },
+    ],
+}

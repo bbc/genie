@@ -3,8 +3,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { createTitles } from "../../../src/components/select/titles.js";
-import * as text from "../../../src/core/layout/text-elem.js";
+import { createTitles } from "../../src/core/titles.js";
+import * as text from "../../src/core/layout/text-elem.js";
 
 describe("Select Screen - Titles", () => {
     let mockScene;
@@ -22,7 +22,7 @@ describe("Select Screen - Titles", () => {
                 titles: [
                     { type: "image", key: "title", xOffset: 0, yOffset: -250 },
                     { type: "text", value: "Select Your Character", xOffset: 0, yOffset: -260 },
-                    { type: "text", value: "Sub-Title", xOffset: 0, yOffset: -233 },
+                    { type: "text", value: "Sub Title", xOffset: 0, yOffset: -233 },
                 ],
             },
         };

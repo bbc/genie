@@ -1,9 +1,0 @@
-{
-    catalogue: "debug-game-items", //catalogue array or string filename of json5 catalogue
-    include: ["starter-item"], //include all items with this tag in this collection
-    defaultQty: 1, //default quantity unless specified
-    defaults: [
-        { id: "coin", qty: 1000 },
-        { id: "ironHat", state: "equipped", qty: 1 },
-    ],
-}

@@ -1,5 +1,4 @@
 {
-    isOverlay: true,
     background: {
         items: [
             { key: "pause.background", x: 0, y: 0 },

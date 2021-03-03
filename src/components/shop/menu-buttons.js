@@ -13,23 +13,24 @@ import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 const defaults = {
     gameButton: true,
     accessible: true,
-    key: "menuButtonBackground",
-};
-
-const createMenuButton = scene => title => {
-    const id = `${title.toLowerCase()}_menu_button`;
-    const ariaLabel = title;
-    const action = () => {
-        scene.stack(title.toLowerCase());
-        gmi.setStatsScreen(title === "Shop" ? "shopbuy" : "shopmanage");
-    };
-
-    const config = { ...defaults, title, id, ariaLabel, action };
-
-    return makeButton(scene, config);
 };
 
 export const createMenuButtons = scene => ["Shop", "Manage"].map(createMenuButton(scene));
+
+const createMenuButton = scene => buttonText => {
+    const id = `${buttonText.toLowerCase()}_menu_button`;
+    const ariaLabel = buttonText;
+    const action = () => {
+        scene.transientData.shop.mode = buttonText.toLowerCase();
+        scene.scene.pause();
+        scene.addOverlay(scene.scene.key.replace("-menu", "-list"));
+        gmi.setStatsScreen(buttonText === "Shop" ? "shopbuy" : "shopmanage");
+    };
+
+    const config = { ...defaults, title: buttonText, id, ariaLabel, action };
+
+    return makeButton(scene, "menu", config);
+};
 
 export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
     [actionText, "Cancel"].map(title => {
@@ -37,17 +38,20 @@ export const createConfirmButtons = (scene, actionText, confirmCallback, cancelC
         const ariaLabel = title;
         const action = title === "Cancel" ? cancelCallback : confirmCallback;
         const config = { ...defaults, title, id, ariaLabel, action };
-        return makeButton(scene, config);
+        return makeButton(scene, "confirm", config);
     });
 
-const makeButton = (scene, config) => {
+const makeButton = (scene, buttonType, config) => {
     const channel = buttonsChannel(scene);
     const group = scene.scene.key;
 
-    const button = createButton(scene, { ...config, channel, group, scene: scene.assetPrefix });
-    setButtonOverlays(scene, button, config.title);
+    const button = createButton(scene, { ...config, channel, group, key: scene.config[buttonType].buttons.key });
+    setButtonOverlays(scene, button, scene.config[buttonType].buttons, config.title);
     return button;
 };
+
+const setButtonOverlays = (scene, button, style, title) =>
+    button.overlays.set("caption", addText(scene, 0, 0, title, style).setOrigin(0.5));
 
 const resizeButton = pane => (button, idx) => {
     const right = Boolean(pane.container.scene.config.menu.buttonsRight);
@@ -59,6 +63,3 @@ const resizeButton = pane => (button, idx) => {
 };
 
 export const resizeGelButtons = pane => pane.buttons?.forEach(resizeButton(pane));
-
-const setButtonOverlays = (scene, button, title) =>
-    button.overlays.set("caption", addText(scene, 0, 0, title, scene.config.menuButtons).setOrigin(0.5));

@@ -64,23 +64,33 @@
             },
             {
                 "type": "json5",
-                "key": "debug-shop",
-                "url": "../../debug/examples/shop.json5"
+                "key": "debug-shop-consumables-menu",
+                "url": "../../debug/examples/shop-consumables-menu.json5"
             },
             {
                 "type": "json5",
-                "key": "debug-shop-demo",
-                "url": "../../debug/examples/shop-demo.json5"
+                "key": "debug-shop-consumables-list",
+                "url": "../../debug/examples/shop-consumables-list.json5"
             },
             {
                 "type": "json5",
-                "key": "debug-shop-demo-game",
-                "url": "../../debug/examples/shop-demo-game.json5"
+                "key": "debug-shop-consumables-confirm",
+                "url": "../../debug/examples/shop-consumables-confirm.json5"
             },
             {
                 "type": "json5",
-                "key": "debug-shop-demo-shop",
-                "url": "../../debug/examples/shop-demo-shop.json5"
+                "key": "debug-shop-equippables-menu",
+                "url": "../../debug/examples/shop-equippables-menu.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-shop-equippables-list",
+                "url": "../../debug/examples/shop-equippables-list.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-shop-equippables-confirm",
+                "url": "../../debug/examples/shop-equippables-confirm.json5"
             }
         ]
     },
@@ -294,147 +304,38 @@
             }
         ]
     },
-    "shopDemo": {
-        "prefix": "shopDemo.",
+    "debug-shop-menu": {
+        "prefix": "debug-shop-menu.",
         "files": [
             {
-                "type": "audio",
-                "key": "coinGet",
-                "url": "../../debug/assets/shop-demo/coin_get.mp4"
-            },
+                "type": "image",
+                "key": "titleBackground",
+                "url": "../../debug/assets/shop/title_background.png"
+            }
+        ]
+    },
+    "debug-shop-list": {
+        "prefix": "debug-shop-list.",
+        "files": [
             {
-                "type": "audio",
-                "key": "whiff",
-                "url": "../../debug/assets/shop-demo/whiff.mp4"
-            },
+                "type": "image",
+                "key": "titleBackground",
+                "url": "../../debug/assets/shop/title_background.png"
+            }
+        ]
+    },
+    "debug-shop-confirm": {
+        "prefix": "debug-shop-confirm.",
+        "files": [
             {
-                "type": "audio",
-                "key": "hit",
-                "url": "../../debug/assets/shop-demo/hit.mp4"
+                "type": "image",
+                "key": "titleBackground",
+                "url": "../../debug/assets/shop/title_background.png"
             },
             {
                 "type": "image",
-                "key": "background",
-                "url": "../../debug/assets/shop-demo/background.jpg"
-            },
-            {
-                "type": "image",
-                "key": "tree1",
-                "url": "../../debug/assets/shop-demo/tree1.png"
-            },
-            {
-                "type": "image",
-                "key": "tree2",
-                "url": "../../debug/assets/shop-demo/tree2.png"
-            },
-            {
-                "type": "image",
-                "key": "ironHatIcon",
-                "url": "../../debug/assets/shop-demo/invent-helm-default.png"
-            },
-            {
-                "type": "image",
-                "key": "greenHatIcon",
-                "url": "../../debug/assets/shop-demo/invent-helm-green.png"
-            },
-            {
-                "type": "image",
-                "key": "redHatIcon",
-                "url": "../../debug/assets/shop-demo/invent-helm-red.png"
-            },
-            {
-                "type": "image",
-                "key": "purpleHatIcon",
-                "url": "../../debug/assets/shop-demo/invent-helm-purple.png"
-            },
-            {
-                "type": "image",
-                "key": "goldHatIcon",
-                "url": "../../debug/assets/shop-demo/invent-helm-gold.png"
-            },
-            {
-                "type": "spritesheet",
-                "key": "ironHat",
-                "url": "../../debug/assets/shop-demo/dwarf_sprite.png",
-                "frameConfig": {
-                    "frameWidth": 32,
-                    "frameHeight": 32,
-                    "frameMax": 24,
-                    "margin": 0,
-                    "spacing": 0
-                }
-            },
-            {
-                "type": "spritesheet",
-                "key": "redHat",
-                "url": "../../debug/assets/shop-demo/dwarf_sprite_red.png",
-                "frameConfig": {
-                    "frameWidth": 32,
-                    "frameHeight": 32,
-                    "frameMax": 24,
-                    "margin": 0,
-                    "spacing": 0
-                }
-            },
-            {
-                "type": "spritesheet",
-                "key": "greenHat",
-                "url": "../../debug/assets/shop-demo/dwarf_sprite_green.png",
-                "frameConfig": {
-                    "frameWidth": 32,
-                    "frameHeight": 32,
-                    "frameMax": 24,
-                    "margin": 0,
-                    "spacing": 0
-                }
-            },
-            {
-                "type": "spritesheet",
-                "key": "purpleHat",
-                "url": "../../debug/assets/shop-demo/dwarf_sprite_purple.png",
-                "frameConfig": {
-                    "frameWidth": 32,
-                    "frameHeight": 32,
-                    "frameMax": 24,
-                    "margin": 0,
-                    "spacing": 0
-                }
-            },
-            {
-                "type": "spritesheet",
-                "key": "goldHat",
-                "url": "../../debug/assets/shop-demo/dwarf_sprite_gold.png",
-                "frameConfig": {
-                    "frameWidth": 32,
-                    "frameHeight": 32,
-                    "frameMax": 24,
-                    "margin": 0,
-                    "spacing": 0
-                }
-            },
-            {
-                "type": "spritesheet",
-                "key": "coin",
-                "url": "../../debug/assets/shop-demo/coin.png",
-                "frameConfig": {
-                    "frameWidth": 16,
-                    "frameHeight": 16,
-                    "frameMax": 8,
-                    "margin": 0,
-                    "spacing": 0
-                }
-            },
-            {
-                "type": "spritesheet",
-                "key": "coinPop",
-                "url": "../../debug/assets/shop-demo/pop.png",
-                "frameConfig": {
-                    "frameWidth": 16,
-                    "frameHeight": 16,
-                    "frameMax": 6,
-                    "margin": 0,
-                    "spacing": 0
-                }
+                "key": "currencyIcon",
+                "url": "../../debug/assets/shop/currency.png"
             }
         ]
     },
@@ -485,11 +386,6 @@
                 "type": "image",
                 "key": "balanceIcon",
                 "url": "../../debug/assets/shop/balance_icon.png"
-            },
-            {
-                "type": "image",
-                "key": "currencyIcon",
-                "url": "../../debug/assets/shop/currency.png"
             },
             {
                 "type": "image",
@@ -590,6 +486,31 @@
                     "margin": 0,
                     "spacing": 4
                 }
+            },
+            {
+                "type": "image",
+                "key": "ironHatIcon",
+                "url": "../../debug/assets/shop-demo/invent-helm-default.png"
+            },
+            {
+                "type": "image",
+                "key": "greenHatIcon",
+                "url": "../../debug/assets/shop-demo/invent-helm-green.png"
+            },
+            {
+                "type": "image",
+                "key": "redHatIcon",
+                "url": "../../debug/assets/shop-demo/invent-helm-red.png"
+            },
+            {
+                "type": "image",
+                "key": "purpleHatIcon",
+                "url": "../../debug/assets/shop-demo/invent-helm-purple.png"
+            },
+            {
+                "type": "image",
+                "key": "goldHatIcon",
+                "url": "../../debug/assets/shop-demo/invent-helm-gold.png"
             }
         ]
     }

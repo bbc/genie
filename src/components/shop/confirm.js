@@ -14,7 +14,6 @@ import { collections } from "../../core/collections.js";
 
 export const createConfirm = (scene, title, item) => {
     const action = getAction(scene, title, item);
-    scene.title.setTitleText(fp.startCase(action));
     const bounds = getSafeArea(scene.layout);
     const container = scene.add.container();
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
@@ -24,12 +23,11 @@ export const createConfirm = (scene, title, item) => {
     action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
 
     return {
+        action,
         item,
         title,
-        setVisible: fp.noop,
         container,
         buttons: addConfirmButtons(scene, container, innerBounds, title, action, item),
-        destroy: destroyContainer(container),
     };
 };
 
@@ -80,7 +78,10 @@ const disableActionButton = button => {
 
 const addConfirmButtons = (scene, container, innerBounds, title, action, item) => {
     const confirmButtonCallback = () => handleActionClick(scene, container, title, action, item);
-    const cancelButtonCallback = () => closeConfirm(scene, container, title);
+    const cancelButtonCallback = () => {
+        scene._data.addedBy.scene.resume();
+        scene.removeOverlay();
+    };
     const confirmButtons = createConfirmButtons(
         scene,
         fp.startCase(action),
@@ -99,7 +100,7 @@ const getAction = (scene, title, item) => {
 };
 
 const getInventoryAction = (scene, item) => {
-    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item?.id);
+    const inventoryItem = collections.get(getShopConfig(scene).shopCollections.manage).get(item?.id);
     return inferAction(inventoryItem);
 };
 
@@ -109,22 +110,10 @@ const inferAction = fp.cond([
     [i => i.state === "purchased", () => "equip"],
 ]);
 
-const destroyContainer = container => () => {
-    container.removeAll(true);
-    container.destroy();
-};
-
-const closeConfirm = (scene, container, title) => {
-    destroyContainer(container)();
-    scene.panes[title].setVisible(true);
-    scene.paneStack.pop();
-    const paneToShow = scene.paneStack.slice(-1)[0];
-    scene.title.setTitleText(paneToShow ? paneToShow : "Shop");
-};
-
 const handleActionClick = (scene, container, title, action, item) => {
     doAction({ scene, action, item });
-    closeConfirm(scene, container, title);
+    scene._data.addedBy.scene.resume();
+    scene.removeOverlay();
 };
 
 const doAction = fp.cond([
@@ -140,7 +129,7 @@ const itemView = (scene, item, config, bounds) =>
         : itemImageView(scene, item, config, bounds);
 
 const itemImageView = (scene, item, config, bounds) => {
-    const image = scene.add.image(imageX(config, bounds), 0, assetKey(item));
+    const image = scene.add.image(imageX(config, bounds), 0, item.icon);
     const absScale = getItemImageScale(bounds, image);
     setImageScaleXY(image, absScale);
     return [image];
@@ -150,12 +139,12 @@ const itemDetailView = (scene, item, config, bounds) => {
     const x = imageX(config, bounds);
     const { title, detail, description } = config.confirm;
 
-    const itemImage = scene.add.image(x, imageY(bounds), assetKey(item));
+    const itemImage = scene.add.image(x, imageY(bounds), item.icon);
     setImageScaleXY(itemImage, getItemDetailImageScale(bounds, itemImage));
 
-    const itemTitle = addText(scene, x, titleY(bounds), getItemTitle(item), title).setOrigin(0.5);
-    const itemDetail = addText(scene, x, detailY(bounds), getItemDetail(item), detail).setOrigin(0.5);
-    const itemBlurb = addText(scene, x, blurbY(bounds), getItemBlurb(item), description).setOrigin(0.5);
+    const itemTitle = addText(scene, x, titleY(bounds), item.title, title).setOrigin(0.5);
+    const itemDetail = addText(scene, x, detailY(bounds), item.description, detail).setOrigin(0.5);
+    const itemBlurb = addText(scene, x, blurbY(bounds), item.longDescription, description).setOrigin(0.5);
 
     return [itemImage, itemTitle, itemDetail, itemBlurb];
 };
@@ -186,18 +175,15 @@ const getPromptText = fp.cond([
     [args => args.action === "use", args => getUsePromptText(args.scene)],
 ]);
 
+const getShopConfig = scene => scene.transientData.shop.config;
 const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(scene, item);
-const canAffordItem = (scene, item) => item && getBalanceItem(scene).qty >= item.price;
+const canAffordItem = (scene, item) => item && getBalanceItem(getShopConfig(scene)).qty >= item.price;
 const isEquippable = item => item && item.slot;
-const itemIsInStock = (scene, item) => item && collections.get(scene.config.paneCollections.shop).get(item.id).qty > 0;
-
-const getItemTitle = item => (item ? item.title : "PH");
-const getItemDetail = item => (item ? item.description : "PH");
-const getItemBlurb = item => (item ? item.longDescription : "PH");
+const itemIsInStock = (scene, item) =>
+    item && collections.get(getShopConfig(scene).shopCollections.shop).get(item.id).qty > 0;
 const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
 const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
-const assetKey = item => (item ? item.icon : "shop.itemIcon"); //TODO shouldn't use "shop" key as may be different
-const getButtonX = (x, config) => (config.menu.buttonsRight ? x : -x);
+const getButtonX = (x, config) => (config.confirm.buttons.buttonsRight ? x : -x);
 const imageY = bounds => -percentOfHeight(bounds, 25);
 const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
 const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
@@ -211,4 +197,4 @@ const getOffsetBounds = (outerBounds, innerBounds) => ({
     y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
 });
 const imageX = (config, bounds) =>
-    config.menu.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
+    config.confirm.buttons.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;

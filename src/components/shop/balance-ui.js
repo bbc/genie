@@ -13,33 +13,43 @@ import { collections } from "../../core/collections.js";
 
 const makeElement = makerFns => conf => makerFns[conf.type](conf).setOrigin(0.5);
 
-const getBalanceValue = scene =>
-    collections.get(scene.config.paneCollections.manage).get(scene.config.balance.value.key).qty;
+const getBalanceValue = shopConfig =>
+    collections.get(shopConfig.shopCollections.manage).get(shopConfig.balance.value.key).qty;
 
 export const createBalance = scene => {
     const safeArea = getSafeArea(scene.layout);
     const metrics = getMetrics();
-    const image = conf => scene.add.image(0, 0, `${scene.assetPrefix}.${conf.key}`);
-    const text = conf => addText(scene, 0, 0, getBalanceValue(scene), conf);
+    const image = conf => scene.add.image(0, 0, conf.key);
+    const shopConfig = scene.transientData.shop.config;
+    const text = conf => addText(scene, 0, 0, getBalanceValue(shopConfig), conf);
     const container = scene.add.container();
-    const configs = scene.config.balance;
-    const padding = scene.config.balancePadding;
 
-    const { background, icon, value } = Object.entries(configs).reduce(
+    const { background, icon, value } = Object.entries(shopConfig.balance).reduce(
         (elems, [key, config]) => ({ ...elems, [key]: makeElement({ image, text })(config) }),
         {},
     );
 
-    const width = value.getBounds().width + icon.getBounds().width + padding * 3;
-    value.setPosition(width / 4 - padding, 0);
-    scene.events.on("updatebalance", () => value.setText(getBalanceValue(scene)));
+    const width = value.getBounds().width + icon.getBounds().width + shopConfig.balancePadding * 3;
+    value.setPosition(width / 4 - shopConfig.balancePadding, 0);
     icon.setPosition(-width / 4, 0);
     background.setScale(width / background.getBounds().width);
 
     container.add([background, icon, value]);
 
     container.setScale(getScaleFactor({ metrics, container, safeArea }));
-    container.setPosition(getXPos(container, safeArea, scene.config.listPadding.x), getYPos(metrics, safeArea));
+    container.setPosition(getXPos(container, safeArea), getYPos(metrics, safeArea));
 
-    return container;
+    const resize = () => {
+        const newSafeArea = getSafeArea(scene.layout);
+        container.setScale(getScaleFactor({ metrics, container, safeArea: newSafeArea }));
+        container.setPosition(getXPos(container, newSafeArea), getYPos(metrics, newSafeArea));
+    };
+
+    const update = () => value.setText(getBalanceValue(shopConfig));
+
+    return {
+        container,
+        resize,
+        update,
+    };
 };
