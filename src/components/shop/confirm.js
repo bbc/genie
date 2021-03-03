@@ -12,24 +12,28 @@ import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { buy, equip, unequip, use, getBalanceItem } from "./transact.js";
 import { collections } from "../../core/collections.js";
 
-export const createConfirm = (scene, title, item) => {
-    const action = getAction(scene, title, item);
-    const bounds = getSafeArea(scene.layout);
-    const container = scene.add.container();
-    const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
-    const yOffset = bounds.height / 2 + bounds.y;
-    container.setY(yOffset);
-    createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
-    action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
-
-    return {
-        action,
-        item,
-        title,
-        container,
-        buttons: addConfirmButtons(scene, container, innerBounds, title, action, item),
-    };
-};
+const getShopConfig = scene => scene.transientData.shop.config;
+const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(scene, item);
+const canAffordItem = (scene, item) => item && getBalanceItem(getShopConfig(scene)).qty >= item.price;
+const isEquippable = item => item && item.slot;
+const itemIsInStock = (scene, item) =>
+    item && collections.get(getShopConfig(scene).shopCollections.shop).get(item.id).qty > 0;
+const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
+const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
+const getButtonX = (x, config) => (config.confirm.buttons.buttonsRight ? x : -x);
+const imageY = bounds => -percentOfHeight(bounds, 25);
+const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
+const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
+const titleY = bounds => -percentOfHeight(bounds, 4);
+const detailY = bounds => percentOfHeight(bounds, 5);
+const blurbY = bounds => percentOfHeight(bounds, 25);
+const percentOfHeight = (bounds, percent) => (bounds.height / 100) * percent;
+const getOffsetBounds = (outerBounds, innerBounds) => ({
+    ...innerBounds,
+    y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
+});
+const imageX = (config, bounds) =>
+    config.confirm.buttons.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
 
 const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
     container.add(
@@ -175,26 +179,21 @@ const getPromptText = fp.cond([
     [args => args.action === "use", args => getUsePromptText(args.scene)],
 ]);
 
-const getShopConfig = scene => scene.transientData.shop.config;
-const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(scene, item);
-const canAffordItem = (scene, item) => item && getBalanceItem(getShopConfig(scene)).qty >= item.price;
-const isEquippable = item => item && item.slot;
-const itemIsInStock = (scene, item) =>
-    item && collections.get(getShopConfig(scene).shopCollections.shop).get(item.id).qty > 0;
-const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
-const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
-const getButtonX = (x, config) => (config.confirm.buttons.buttonsRight ? x : -x);
-const imageY = bounds => -percentOfHeight(bounds, 25);
-const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
-const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
-const titleY = bounds => -percentOfHeight(bounds, 4);
-const detailY = bounds => percentOfHeight(bounds, 5);
-const blurbY = bounds => percentOfHeight(bounds, 25);
-const percentOfHeight = (bounds, percent) => (bounds.height / 100) * percent;
+export const createConfirm = (scene, title, item) => {
+    const action = getAction(scene, title, item);
+    const bounds = getSafeArea(scene.layout);
+    const container = scene.add.container();
+    const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
+    const yOffset = bounds.height / 2 + bounds.y;
+    container.setY(yOffset);
+    createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
+    action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
 
-const getOffsetBounds = (outerBounds, innerBounds) => ({
-    ...innerBounds,
-    y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
-});
-const imageX = (config, bounds) =>
-    config.confirm.buttons.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
+    return {
+        action,
+        item,
+        title,
+        container,
+        buttons: addConfirmButtons(scene, container, innerBounds, title, action, item),
+    };
+};

@@ -15,8 +15,6 @@ const defaults = {
     accessible: true,
 };
 
-export const createMenuButtons = scene => ["Shop", "Manage"].map(createMenuButton(scene));
-
 const createMenuButton = scene => buttonText => {
     const id = `${buttonText.toLowerCase()}_menu_button`;
     const ariaLabel = buttonText;
@@ -31,15 +29,6 @@ const createMenuButton = scene => buttonText => {
 
     return makeButton(scene, "menu", config);
 };
-
-export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
-    [actionText, "Cancel"].map(title => {
-        const id = `tx_${title.toLowerCase()}_button`;
-        const ariaLabel = title;
-        const action = title === "Cancel" ? cancelCallback : confirmCallback;
-        const config = { ...defaults, title, id, ariaLabel, action };
-        return makeButton(scene, "confirm", config);
-    });
 
 const makeButton = (scene, buttonType, config) => {
     const channel = buttonsChannel(scene);
@@ -61,5 +50,16 @@ const resizeButton = pane => (button, idx) => {
     button.setX(CAMERA_X + (right ? xPos : -xPos));
     button.setScale(bounds.width / button.width);
 };
+
+export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
+    [actionText, "Cancel"].map(title => {
+        const id = `tx_${title.toLowerCase()}_button`;
+        const ariaLabel = title;
+        const action = title === "Cancel" ? cancelCallback : confirmCallback;
+        const config = { ...defaults, title, id, ariaLabel, action };
+        return makeButton(scene, "confirm", config);
+    });
+
+export const createMenuButtons = scene => ["Shop", "Manage"].map(createMenuButton(scene));
 
 export const resizeGelButtons = pane => pane.buttons?.forEach(resizeButton(pane));

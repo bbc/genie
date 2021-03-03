@@ -7,6 +7,8 @@
  * @license Apache-2.0
  */
 
+const getPaneBackgroundKey = scene => scene.config.confirm?.background;
+
 export const getSafeArea = layout => layout.getSafeArea({}, false);
 
 export const getXPos = (container, safeArea) => safeArea.width / 2 - container.getBounds().width / 2;
@@ -52,5 +54,3 @@ export const createPaneBackground = (scene, bounds) => {
         return image;
     }
 };
-
-const getPaneBackgroundKey = scene => scene.config.confirm?.background;
