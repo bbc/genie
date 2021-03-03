@@ -29,14 +29,14 @@ describe("Main", () => {
     test("makes a call to startup with the correct screens", () => {
         const expectedScreens = [
             "home",
-            "shop-menu",
-            "shop-list",
-            "shop-confirm",
             "narrative",
             "character-select",
             "level-select",
             "game",
             "results",
+            "shop-menu",
+            "shop-list",
+            "shop-confirm",
             "how-to-play",
             "pause",
         ];
