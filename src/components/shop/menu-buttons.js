@@ -29,7 +29,7 @@ const createMenuButton = scene => buttonText => {
 
     const config = { ...defaults, title: buttonText, id, ariaLabel, action };
 
-    return makeButton(scene, scene.config.menu.buttons, config);
+    return makeButton(scene, "menu", config);
 };
 
 export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
@@ -38,15 +38,15 @@ export const createConfirmButtons = (scene, actionText, confirmCallback, cancelC
         const ariaLabel = title;
         const action = title === "Cancel" ? cancelCallback : confirmCallback;
         const config = { ...defaults, title, id, ariaLabel, action };
-        return makeButton(scene, scene.config.confirm.buttons, config);
+        return makeButton(scene, "confirm", config);
     });
 
-const makeButton = (scene, style, config) => {
+const makeButton = (scene, buttonType, config) => {
     const channel = buttonsChannel(scene);
     const group = scene.scene.key;
 
-    const button = createButton(scene, { ...config, channel, group, key: style.key });
-    setButtonOverlays(scene, button, style, config.title);
+    const button = createButton(scene, { ...config, channel, group, key: scene.config[buttonType].buttons.key });
+    setButtonOverlays(scene, button, scene.config[buttonType].buttons, config.title);
     return button;
 };
 
