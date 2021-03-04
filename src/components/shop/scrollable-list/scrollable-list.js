@@ -4,53 +4,16 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-import { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel } from "./scrollable-list-handlers.js";
+import { updatePanelOnFocus, updatePanelOnWheel } from "./scrollable-list-handlers.js";
 import { createListButton, scaleButton } from "./scrollable-list-buttons.js";
 import * as a11y from "../../../core/accessibility/accessibility-layer.js";
 import { collections } from "../../../core/collections.js";
 import { onScaleChange } from "../../../core/scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { createBackground, resizeBackground } from "./backgrounds.js";
+import { createScrollablePanel, getPanelY } from "./scrollable-panel.js";
 
-const createPanel = (scene, mode, parent) => {
-    const panel = scene.rexUI.add.scrollablePanel(getConfig(scene, mode, parent));
-    panel.name = mode;
-    panel.layout();
-
-    return panel;
-};
-
-const getConfig = (scene, mode, parent) => {
-    const { listPadding: space } = scene.config;
-    const safeArea = getPanelY(scene);
-    const outer = { x: space.x * space.outerPadFactor, y: space.y * space.outerPadFactor };
-
-    return {
-        y: safeArea.y,
-        height: safeArea.height,
-        scrollMode: 0,
-        panel: { child: createInnerPanel(scene, mode, parent) },
-        slider: {
-            track: scene.add.image(0, 0, `${scene.assetPrefix}.scrollbar`),
-            thumb: scene.add.image(0, 0, `${scene.assetPrefix}.scrollbarHandle`),
-            width: space.x,
-        },
-        space: { left: outer.x, right: outer.x, top: outer.y, bottom: outer.y, panel: space.x },
-    };
-};
-
-const getPanelY = scene => {
-    const safeArea = scene.layout.getSafeArea({}, false);
-    return { y: safeArea.height / 2 + safeArea.y, height: safeArea.height };
-};
-
-const createInnerPanel = (scene, mode, parent) => {
-    const sizer = scene.rexUI.add.sizer({ orientation: "x", space: { item: 0 }, name: "gridContainer" });
-    sizer.add(createTable(scene, mode, parent), { expand: true });
-    return sizer;
-};
-
-const createTable = (scene, mode, parent) => {
+const createTable = (scene, mode, parent, scrollablePanel) => {
     const key = scene.transientData.shop.config.shopCollections[mode];
     const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
 
@@ -64,7 +27,9 @@ const createTable = (scene, mode, parent) => {
             name: "grid",
         });
 
-        collection.forEach((item, idx) => table.add(createItem(scene, item, mode, parent), 0, idx, "top", 0, true));
+        collection.forEach((item, idx) =>
+            table.add(createItem(scene, item, mode, parent, scrollablePanel), 0, idx, "top", 0, true),
+        );
         sizer.add(table, 1, "center", 0, true);
     }
 
@@ -78,11 +43,11 @@ const showConfirmation = (scene, mode, item) => {
     scene.addOverlay(scene.scene.key.replace("-list", "-confirm"));
 };
 
-const createItem = (scene, item, mode, parent) => {
+const createItem = (scene, item, mode, parent, scrollablePanel) => {
     const action = pointer =>
-        (parent.panel.isInTouching() || !pointer) && !isLocked(item) && showConfirmation(scene, mode, item);
+        (scrollablePanel.isInTouching() || !pointer) && !isLocked(item) && showConfirmation(scene, mode, item);
 
-    const icon = createListButton(scene, item, mode, action);
+    const icon = createListButton(scene, item, mode, action, parent);
 
     return scene.rexUI.add.label({
         orientation: 0,
@@ -112,8 +77,6 @@ const setupEvents = (scene, panel) => {
 
     const debouncedResize = fp.debounce(10, resizePanel(scene, panel));
     scene.scale.on("resize", debouncedResize, scene);
-
-    panel.on("scroll", () => updatePanelOnScroll(panel));
 
     const onMouseWheelListener = updatePanelOnWheel(panel);
     scene.input.on("gameobjectwheel", onMouseWheelListener);
@@ -146,18 +109,18 @@ export class ScrollableList extends Phaser.GameObjects.Container {
 
         const config = scene.config.backgrounds?.[mode] ?? null;
         this.background = createBackground[getType(config)](scene, config);
-        this.panel = createPanel(scene, mode, this);
-        this.makeAccessible = fp.noop;
-
-        this.add(this.panel);
-        scene.layout.addCustomGroup(scene.scene.key, this, 0);
+        const { scrollablePanel, child } = createScrollablePanel(scene, mode, this);
+        this.add(scrollablePanel);
+        scene.layout.addCustomGroup(scene.scene.key, scrollablePanel, 0);
         a11y.addGroupAt(scene.scene.key, 0);
 
+        child.add(createTable(scene, mode, this, scrollablePanel), { expand: true });
+
         scene.input.topOnly = false;
-        setupEvents(scene, this.panel);
+        setupEvents(scene, scrollablePanel);
 
         this.reset = () => {
-            resizePanel(scene, this.panel)();
+            resizePanel(scene, scrollablePanel)();
             resizeBackground[this.background.constructor.name](scene, this.background);
         };
     }

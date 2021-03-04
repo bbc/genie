@@ -63,9 +63,6 @@ export const updatePanelOnFocus = panel => rexLabel => {
     updateScrollPositionIfItemNotVisible(visibleBounds, itemBounds);
 };
 
-export const updatePanelOnScroll = panel => () =>
-    getPanelItems(panel).map(item => item.children[0].setElementSizeAndPosition());
-
 export const updatePanelOnWheel = panel => (...args) => {
     const event = args[5];
     event.stopPropagation();
