@@ -92,32 +92,4 @@ describe("shop element scaling functions", () => {
             expect(result).toStrictEqual(expected);
         });
     });
-
-    describe("createPaneBackground()", () => {
-        let mockScene;
-        const mockBounds = { width: 1, height: 1 };
-
-        beforeEach(() => {
-            mockScene = {
-                assetPrefix: "some",
-                add: {
-                    image: jest.fn().mockReturnValue({ setScale: jest.fn() }),
-                    rectangle: jest.fn().mockReturnValue({ setScale: jest.fn() }),
-                },
-                config: {
-                    confirm: { background: "asset" },
-                },
-            };
-        });
-
-        test("if configured with an asset key, returns an image", () => {
-            shopLayout.createPaneBackground(mockScene, mockBounds);
-            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "asset");
-        });
-        test("if configured without an asset key, returns a rectangle", () => {
-            mockScene.config = {};
-            shopLayout.createPaneBackground(mockScene, mockBounds);
-            expect(mockScene.add.rectangle).toHaveBeenCalled();
-        });
-    });
 });

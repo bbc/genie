@@ -100,15 +100,13 @@ const getFilteredCollection = (collection, filter) => {
 
 const removeZeroQty = item => item.slot || item.qty > 0;
 
-export const getType = value => Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
-
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, mode, filter) {
         super(scene, 0, 0);
         this.collectionFilter = filter;
 
         const config = scene.config.backgrounds?.[mode] ?? null;
-        this.background = createBackground[getType(config)](scene, config);
+        this.background = createBackground(scene, config);
         const { scrollablePanel, child } = createScrollablePanel(scene, mode, this);
         this.add(scrollablePanel);
         scene.layout.addCustomGroup(scene.scene.key, scrollablePanel, 0);
