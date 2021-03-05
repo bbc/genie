@@ -9,6 +9,11 @@
             },
             {
                 "type": "image",
+                "key": "subtitle-icon",
+                "url": "character-select/subtitle-icon.png"
+            },
+            {
+                "type": "image",
                 "key": "background",
                 "url": "shared/background.png"
             },

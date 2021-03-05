@@ -14,18 +14,23 @@
         items: [{ key: "character-select.background", x: 0, y: 0 }],
     },
     title: {
-        text: "Select Your Character",
+        text: "Select",
         style: {
-            fontSize: "36px", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
+            fontFamily: "ReithSans", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
         },
-        key: "character-select.title",
+        backgroundKey: "character-select.title",
     },
     subtitle: {
-        text: "Sub-Title",
+        text: "Team A",
+        padding: 12,
         style: {
-            fontSize: "36px",
+            fontFamily: "ReithSans",
+            fontSize: "24px",
         },
-        key: "",
+        backgroundKey: "character-select.title",
+        icon : {
+            key: "character-select.subtitle-icon",
+        },
     },
     states: {
         locked: {
