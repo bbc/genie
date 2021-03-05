@@ -212,11 +212,13 @@ describe("resizeGelButtons()", () => {
                     buttonsRight: true,
                 },
             },
-            container: {
+            rect: {
+                getBounds: jest.fn(() => mockOuterBounds),
                 scene: mockScene,
                 list: [{ getBounds: () => mockOuterBounds }],
             },
         };
+        mockButton.scene = mockScene;
         jest.clearAllMocks();
         resizeGelButtons(pane);
     });

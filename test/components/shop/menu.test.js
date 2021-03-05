@@ -13,7 +13,6 @@ jest.mock("../../../src/components/shop/menu-buttons.js");
 
 describe("shop menu", () => {
     let menu;
-    let mockContainer;
     let mockInnerRectBounds;
     let mockSafeArea;
     let mockPaneBackground;
@@ -24,15 +23,10 @@ describe("shop menu", () => {
     beforeEach(() => {
         mockMenuButtons = { mock: "buttons" };
         mockPaneBackground = { mock: "background" };
-        mockRectangle = { mock: "rectangle" };
+        mockRectangle = { mock: "rectangle", setY: jest.fn() };
         mockInnerRectBounds = { width: 100, height: 100, x: 0, y: 0 };
-        mockContainer = {
-            add: jest.fn(),
-            setY: jest.fn(),
-        };
         mockScene = {
             add: {
-                container: jest.fn().mockReturnValue(mockContainer),
                 rectangle: jest.fn().mockReturnValue(mockRectangle),
                 image: jest.fn(),
             },
@@ -64,21 +58,15 @@ describe("shop menu", () => {
                 0,
             );
         });
-        test("creates a pane background", () => {
-            expect(layout.createPaneBackground).toHaveBeenCalledWith(mockScene, mockSafeArea, "menu");
-        });
-        test("adds rectangle and pane background to container", () => {
-            expect(mockContainer.add).toHaveBeenCalledWith([mockRectangle, mockPaneBackground]);
-        });
-        test("calls setY on the container with an appropriate Y offset", () => {
-            expect(mockContainer.setY).toHaveBeenCalledWith(200);
+        test("calls setY on the rect with an appropriate Y offset", () => {
+            expect(mockRectangle.setY).toHaveBeenCalledWith(200);
         });
         test("menu resize function calls resizeGelButtons", () => {
             jest.clearAllMocks();
             menu.resize();
             expect(buttons.resizeGelButtons).toHaveBeenCalledWith({
                 buttons: mockMenuButtons,
-                container: mockContainer,
+                rect: mockRectangle,
             });
         });
     });

@@ -43,8 +43,8 @@ const setButtonOverlays = (scene, button, style, title) =>
     button.overlays.set("caption", addText(scene, 0, 0, title, style).setOrigin(0.5));
 
 const resizeButton = pane => (button, idx) => {
-    const right = Boolean(pane.container.scene.config.menu.buttonsRight);
-    const bounds = pane.container.list[0].getBounds();
+    const right = Boolean(button.scene.config.menu.buttonsRight);
+    const bounds = pane.rect.getBounds();
     button.setY(CAMERA_Y + bounds.y + bounds.height / 4 + (idx * bounds.height) / 2);
     const xPos = bounds.x + bounds.width / 2;
     button.setX(CAMERA_X + (right ? xPos : -xPos));
