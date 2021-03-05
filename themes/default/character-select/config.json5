@@ -22,12 +22,11 @@
     },
     subtitle: {
         text: "Team A",
-        padding: 12,
         style: {
             fontFamily: "ReithSans",
             fontSize: "24px",
         },
-        backgroundKey: "character-select.title",
+        backgroundKey: "character-select.subtitle",
         icon : {
             key: "character-select.subtitle-icon",
         },

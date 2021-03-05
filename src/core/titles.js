@@ -15,16 +15,16 @@ const textStyle = style => ({
 
 const getSafeArea = scene => scene.layout.getTitleArea();
 
-const scaleTitle = (gameObject, area) => {
+const scaleTitle = (title, area) => {
     const safeHeight = getMetrics().isMobile ? area.height / 2 : area.height;
     const safeWidth = area.right * 2;
-    const aspectRatio = gameObject.width / gameObject.height;
-    const height = Phaser.Math.Clamp(Math.max(gameObject.height, safeHeight), 0, safeHeight);
+    const aspectRatio = title.width / title.height;
+    const height = Phaser.Math.Clamp(Math.max(title.height, safeHeight), 0, safeHeight);
     const width = Math.min(aspectRatio * height, safeWidth);
-    gameObject.setDisplaySize(width, width / aspectRatio);
+    title.setDisplaySize(width, width / aspectRatio);
 };
 
-const positionTitle = (gameObject, area) => (gameObject.y = area.centerY);
+const positionTitle = (title, area) => (title.y = area.centerY);
 
 const createTextAndImage = (scene, config) => {
     const image = scene.add.image(0, 0, config?.backgroundKey);
@@ -47,44 +47,49 @@ const createTitle = scene => {
     };
 };
 
-const scaleSubtitle = (gameObject, area) => {
+const scaleSubtitleImage = (image, area) => {
     const safeHeight = getMetrics().isMobile ? area.height / 2 : area.height;
-    const aspectRatio = gameObject.width / gameObject.height;
+    const aspectRatio = image.width / image.height;
     const width = aspectRatio * safeHeight;
-    gameObject.setDisplaySize(width, safeHeight);
+    image.setDisplaySize(width, safeHeight);
 };
 
-const positionSubtitle = (gameObject, area) => {
-    gameObject.x = area.right - getMetrics().buttonPad;
-    gameObject.y = area.centerY;
+const positionSubtitleImage = (image, area, text, icon) => {
+    image.x = area.right - (icon.width + getMetrics().buttonPad * 2 + text.width) / 2;
+    image.y = area.centerY;
+};
+
+const positionSubtitleText = (text, area) => {
+    text.x = area.right - getMetrics().buttonPad * 2 - text.width / 2;
+    text.y = area.centerY;
 };
 
 const createSubtitleIcon = scene => scene.add.image(0, 0, scene.config.subtitle?.icon?.key);
 
-const scaleSubtitleIcon = (gameObject, area, text) => {
+const scaleSubtitleIcon = (icon, area, text) => {
     const height = text.height;
-    const aspectRatio = gameObject.width / gameObject.height;
+    const aspectRatio = icon.width / icon.height;
     const width = aspectRatio * height;
-    gameObject.setDisplaySize(width, height);
+    icon.setDisplaySize(width, height);
 };
 
-const positionSubtitleIcon = (gameObject, area, text) => {
-    gameObject.x = text.x - text.displayWidth - gameObject.scene.config.subtitle?.padding;
-    gameObject.y = area.centerY;
+const positionSubtitleIcon = (icon, area, text) => {
+    icon.x = text.x - text.width / 2 - icon.width / 2;
+    icon.y = area.centerY;
 };
 
 const createSubtitle = scene => {
     const { image, text } = createTextAndImage(scene, scene.config.subtitle);
     const icon = createSubtitleIcon(scene);
-    [image, text, icon].forEach(object => object.setOrigin(1, 0.5));
+    text.setOrigin(0.5, 0.5);
     return {
         resize: () => {
             const safeArea = getSafeArea(scene);
-            scaleSubtitle(image, safeArea);
-            [text, image].forEach(object => positionSubtitle(object, safeArea));
-            text.x = text.x - scene.config.subtitle?.padding;
+            positionSubtitleText(text, safeArea);
             scaleSubtitleIcon(icon, safeArea, text);
             positionSubtitleIcon(icon, safeArea, text);
+            scaleSubtitleImage(image, safeArea);
+            positionSubtitleImage(image, safeArea, text, icon);
         },
     };
 };
