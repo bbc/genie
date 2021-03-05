@@ -6,9 +6,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
-const getPaneBackgroundKey = scene => scene.config.confirm?.background;
-
 export const getSafeArea = layout => layout.getSafeArea({}, false);
 
 export const getXPos = (container, safeArea) => safeArea.width / 2 - container.getBounds().width / 2;
@@ -40,17 +37,4 @@ export const getInnerRectBounds = scene => {
         width: halfWidth * 0.65,
         height: outerBounds.height * 0.6,
     };
-};
-
-export const createPaneBackground = (scene, bounds) => {
-    const key = getPaneBackgroundKey(scene);
-    if (!key) {
-        const rectangle = scene.add.rectangle(0, 0, 1, 1, 0, 0);
-        rectangle.setScale(bounds.width / rectangle.width, bounds.height / rectangle.height);
-        return rectangle;
-    } else {
-        const image = scene.add.image(0, 0, key);
-        image.setScale(bounds.width / image.width, bounds.height / image.height);
-        return image;
-    }
 };

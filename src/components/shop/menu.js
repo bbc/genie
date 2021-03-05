@@ -5,7 +5,7 @@
  * @license Apache-2.0
  */
 import { createMenuButtons, resizeGelButtons } from "./menu-buttons.js";
-import { getInnerRectBounds, getSafeArea, createPaneBackground } from "./shop-layout.js";
+import { getInnerRectBounds, getSafeArea } from "./shop-layout.js";
 
 export const createMenu = scene => {
     const container = scene.add.container();
@@ -14,7 +14,6 @@ export const createMenu = scene => {
 
     const contents = [
         scene.add.rectangle(innerBounds.x, innerBounds.y, innerBounds.width, innerBounds.height, 0x000000, 0),
-        createPaneBackground(scene, bounds, "menu"),
     ];
     container.add(contents);
     container.setY(bounds.height / 2 + bounds.y);
