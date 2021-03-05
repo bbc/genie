@@ -100,8 +100,6 @@ const getFilteredCollection = (collection, filter) => {
 
 const removeZeroQty = item => item.slot || item.qty > 0;
 
-
-
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, mode, filter) {
         super(scene, 0, 0);

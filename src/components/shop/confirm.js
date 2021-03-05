@@ -192,8 +192,8 @@ export const createConfirm = (scene, title, item) => {
     action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
 
     const xOffset = scene.config.confirm.buttons.buttonsRight ? -0.25 : 0.25;
-
     const bgSpec = { yOffset, aspect: 0.5, xOffset };
+
     const resize = () => resizeBackground[elems[0].constructor.name](scene, elems[0], bgSpec);
 
     return {

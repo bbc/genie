@@ -32,7 +32,7 @@ const backgrounds = {
 const defaultSpec = {
     yOffset: 0,
     aspect: 1,
-    xOffset: 0
+    xOffset: 0,
 };
 
 export const createBackground = (scene, config) => backgrounds[getType(config)](scene, config);
@@ -48,7 +48,7 @@ export const resizeBackground = {
     NinePatch: (scene, background, newSpec = {}) => {
         const spec = { ...defaultSpec, ...newSpec };
         const { width, height, x, y } = scene.layout.getSafeArea({}, false);
-        background.x = width / 2 + x + (width * spec.xOffset);
+        background.x = width / 2 + x + width * spec.xOffset;
         background.y = height / 2 + y - spec.yOffset;
         background.resize(width * spec.aspect, height - 2 * spec.yOffset);
     },
