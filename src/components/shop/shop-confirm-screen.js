@@ -37,5 +37,6 @@ export class ShopConfirm extends Screen {
 
     resize() {
         this.balance.resize();
+        this.confirm.resize();
     }
 }

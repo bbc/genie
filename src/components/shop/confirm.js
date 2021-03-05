@@ -5,12 +5,13 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import { getInnerRectBounds, getSafeArea, createPaneBackground } from "./shop-layout.js";
+import { getInnerRectBounds, getSafeArea } from "./shop-layout.js";
 import { addText } from "../../core/layout/text-elem.js";
 import { createConfirmButtons } from "./menu-buttons.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { buy, equip, unequip, use, getBalanceItem } from "./transact.js";
 import { collections } from "../../core/collections.js";
+import { createBackground, resizeBackground } from "./scrollable-list/backgrounds.js";
 
 const getShopConfig = scene => scene.transientData.shop.config;
 const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(scene, item);
@@ -35,19 +36,20 @@ const getOffsetBounds = (outerBounds, innerBounds) => ({
 const imageX = (config, bounds) =>
     config.confirm.buttons.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
 
-const createElems = (scene, container, promptText, item, innerBounds, bounds) =>
-    container.add(
-        [
-            addText(
-                scene,
-                getButtonX(innerBounds.x, scene.config),
-                promptY(bounds),
-                promptText,
-                scene.config,
-            ).setOrigin(0.5),
-            createPaneBackground(scene, bounds, "confirm"),
-        ].concat(itemView(scene, item, scene.config, bounds)),
-    );
+const createElems = (scene, container, promptText, item, innerBounds, bounds) => {
+    const bgConfig = scene.config.confirm?.background;
+
+    const elems = [
+        createBackground(scene, bgConfig),
+        addText(scene, getButtonX(innerBounds.x, scene.config), promptY(bounds), promptText, scene.config).setOrigin(
+            0.5,
+        ),
+    ].concat(itemView(scene, item, scene.config, bounds));
+
+    container.add(elems);
+
+    return elems;
+};
 
 const createBuyElems = (scene, container, item, innerBounds, bounds) =>
     container.add([
@@ -186,14 +188,20 @@ export const createConfirm = (scene, title, item) => {
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
     const yOffset = bounds.height / 2 + bounds.y;
     container.setY(yOffset);
-    createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
+    const elems = createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
     action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
+
+    const xOffset = scene.config.confirm.buttons.buttonsRight ? -0.25 : 0.25;
+
+    const bgSpec = { yOffset, aspect: 0.5, xOffset };
+    const resize = () => resizeBackground[elems[0].constructor.name](scene, elems[0], bgSpec);
 
     return {
         action,
         item,
         title,
         container,
+        resize,
         buttons: addConfirmButtons(scene, container, innerBounds, title, action, item),
     };
 };

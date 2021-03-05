@@ -37,8 +37,10 @@ describe("Confirm pane", () => {
             input: { enabled: true },
             accessibleElement: { update: jest.fn() },
         };
+
         mockConfig = {
             confirm: {
+                background: "testBackgroundKey",
                 prompt: {
                     buy: { legal: "legalBuyPrompt", illegal: "illegalBuyPrompt", unavailable: "unavailableBuyPrompt" },
                     equip: { legal: "equipPrompt", illegal: "illegalEquipPrompt" },

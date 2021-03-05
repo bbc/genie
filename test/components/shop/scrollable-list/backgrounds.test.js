@@ -7,7 +7,7 @@ import { createBackground, resizeBackground } from "../../../../src/components/s
 
 describe("createBackground", () => {
     test("null config returns an empty object", () => {
-        expect(createBackground.null()).toEqual({});
+        expect(createBackground({}, null)).toEqual({});
     });
 
     test("string config for image key", () => {
@@ -29,7 +29,7 @@ describe("createBackground", () => {
         };
         const mockConfig = "imageKey";
 
-        expect(createBackground.string(mockScene, mockConfig)).toEqual(mockImage);
+        expect(createBackground(mockScene, mockConfig)).toEqual(mockImage);
         expect(mockImage.setScale).toHaveBeenCalledWith(10, 10);
     });
 
@@ -52,7 +52,7 @@ describe("createBackground", () => {
         };
         const mockConfig = { columns: [0, 1, null, 3], rows: [0, 1, 2, 3], key: "testKey" };
 
-        expect(createBackground.object(mockScene, mockConfig)).toEqual(mockNinePatch);
+        expect(createBackground(mockScene, mockConfig)).toEqual(mockNinePatch);
 
         expect(mockScene.add.rexNinePatch).toHaveBeenCalledWith({
             columns: [0, 1, undefined, 3],
