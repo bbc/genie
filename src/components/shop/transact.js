@@ -8,18 +8,13 @@
 import { collections } from "../../core/collections.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { eventBus } from "../../core/event-bus.js";
+import { playShopSound } from "./shop-sound.js";
 
 const updateBalance = (scene, invCol, price) =>
     invCol.set({
         ...getBalanceItem(scene.transientData.shop.config),
         qty: getBalanceItem(scene.transientData.shop.config).qty - price,
     });
-
-
-const playShopSound = (scene, item, key) => {
-    const assetKey = item.audio?.[key] ?? [scene.assetPrefix, scene.config.confirm.audio[key]].join(".")
-    scene.sound.play(assetKey);
-}
 
 export const buy = (scene, item) => {
     const { shop, manage } = scene.transientData.shop.config.shopCollections;
@@ -32,7 +27,7 @@ export const buy = (scene, item) => {
     gmi.sendStatsEvent("buy", "click", { id: item.id, qty: remainingStock });
     updateBalance(scene, invCol, item.price);
 
-    playShopSound(scene, item,"buy")
+    playShopSound(scene, item, "buy");
 };
 
 export const equip = (scene, item) => {
@@ -45,7 +40,7 @@ export const equip = (scene, item) => {
     itemsEquippedInSlot.length === maxItemsInSlot && unequip(scene, itemsEquippedInSlot[0]);
     gmi.sendStatsEvent("equip", "click", { id: item.id, qty: 1 });
     invCol.set({ ...item, state: "equipped" });
-    playShopSound(scene, item, "equip")
+    playShopSound(scene, item, "equip");
 };
 
 export const unequip = (scene, item) => {
@@ -68,7 +63,7 @@ export const use = (scene, item) => {
         data: invItem,
     });
     invCol.set({ ...invItem, qty: qtyLeft });
-    playShopSound(scene, item,"use")
+    playShopSound(scene, item, "use");
 };
 
 export const getBalanceItem = shopConfig =>
