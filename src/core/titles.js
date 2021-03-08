@@ -16,15 +16,6 @@ const textStyle = style => ({
 
 const getSafeArea = scene => scene.layout.getTitleArea();
 
-const scaleTitle = (title, area) => {
-    const safeHeight = getMetrics().isMobile ? area.height / 2 : area.height;
-    const safeWidth = area.right * 2;
-    const aspectRatio = title.width / title.height;
-    const height = Phaser.Math.Clamp(Math.max(title.height, safeHeight), 0, safeHeight);
-    const width = Math.min(aspectRatio * height, safeWidth);
-    title.setDisplaySize(width, width / aspectRatio);
-};
-
 const positionTitle = (title, area) => (title.y = area.centerY);
 
 const createTextAndBackdrop = (scene, config) => {
@@ -42,7 +33,6 @@ const createTitle = scene => {
     return {
         resize: () => {
             const safeArea = getSafeArea(scene);
-            scaleTitle(backdrop, safeArea);
             positionTitle(backdrop, safeArea);
             positionTitle(text, safeArea);
         },
@@ -53,15 +43,8 @@ const createTitle = scene => {
     };
 };
 
-const scaleSubtitleBackdrop = (backdrop, area) => {
-    const safeHeight = getMetrics().isMobile ? area.height / 2 : area.height;
-    const aspectRatio = backdrop.width / backdrop.height;
-    const width = aspectRatio * safeHeight;
-    backdrop.setDisplaySize(width, safeHeight);
-};
-
 const positionSubtitleBackdrop = (backdrop, area, text, icon) => {
-    backdrop.x = area.right - (icon.width + getMetrics().buttonPad * 3 + text.width) / 2;
+    backdrop.x = area.right - (icon.width + getMetrics().buttonPad * 4.5 + text.width) / 2;
     backdrop.y = area.centerY;
 };
 
@@ -72,15 +55,8 @@ const positionSubtitleText = (text, area) => {
 
 const createSubtitleIcon = scene => scene.add.image(0, 0, scene.config.subtitle?.icon?.key);
 
-const scaleSubtitleIcon = (icon, area, text) => {
-    const height = text.height;
-    const aspectRatio = icon.width / icon.height;
-    const width = aspectRatio * height;
-    icon.setDisplaySize(width, height);
-};
-
 const positionSubtitleIcon = (icon, area, text) => {
-    icon.x = text.x - text.width / 2 - icon.width / 2;
+    icon.x = text.x - text.width / 2 - icon.width / 2 - getMetrics().buttonPad / 2;
     icon.y = area.centerY;
 };
 
@@ -92,9 +68,7 @@ const createSubtitle = scene => {
         resize: () => {
             const safeArea = getSafeArea(scene);
             positionSubtitleText(text, safeArea);
-            scaleSubtitleIcon(icon, safeArea, text);
             positionSubtitleIcon(icon, safeArea, text);
-            scaleSubtitleBackdrop(backdrop, safeArea);
             positionSubtitleBackdrop(backdrop, safeArea, text, icon);
         },
         destroy: () => {
