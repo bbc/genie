@@ -37,8 +37,6 @@ export class ShopConfirm extends Screen {
     }
 
     resize() {
-        this.titles.title.resize();
-        this.titles.subtitle.resize();
         this.confirm.resize();
     }
 }

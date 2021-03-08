@@ -231,13 +231,6 @@ describe("Select Screen", () => {
             expect(titles.createTitles).toHaveBeenCalledTimes(1);
         });
 
-        test("adds callback to resize both titles", () => {
-            selectScreen.create();
-            Scaler.onScaleChange.add.mock.calls[0][0]();
-            expect(mockTitles.title.resize).toHaveBeenCalled();
-            expect(mockTitles.subtitle.resize).toHaveBeenCalled();
-        });
-
         test("adds GEL buttons plus continue button to layout when singleItemMode is true", () => {
             singleItemMode.isEnabled = jest.fn(() => true);
             selectScreen.create();

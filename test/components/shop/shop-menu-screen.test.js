@@ -99,13 +99,11 @@ describe("Shop Menu Screen", () => {
         expect(scaler.onScaleChange.add).toHaveBeenCalledWith(expect.any(Function));
     });
 
-    test("onScaleChange callback resizes menu and titles ", () => {
+    test("onScaleChange callback resizes menu", () => {
         shopMenu.create();
         const callback = scaler.onScaleChange.add.mock.calls[0][0];
         callback();
         expect(mockMenu.resize).toHaveBeenCalled();
-        expect(mockTitle.title.resize).toHaveBeenCalled();
-        expect(mockTitle.subtitle.resize).toHaveBeenCalled();
     });
 
     test("onScaleChange callback is removed on scene shutdown", () => {
@@ -127,7 +125,6 @@ describe("Shop Menu Screen", () => {
         expect(mockTitle.title.destroy).toHaveBeenCalled();
         expect(mockTitle.subtitle.destroy).toHaveBeenCalled();
         expect(title.createTitles).toHaveBeenCalledWith(shopMenu);
-        expect(mockMenu.resize).toHaveBeenCalled();
         expect(mockTitle.title.resize).toHaveBeenCalled();
         expect(mockTitle.subtitle.resize).toHaveBeenCalled();
     });

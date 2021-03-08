@@ -82,8 +82,6 @@ export class Select extends Screen {
 
     resize() {
         this.grid.resize(this.layout.getSafeArea());
-        this.titles.title.resize();
-        this.titles.subtitle.resize();
     }
 
     currentEnabled() {

@@ -49,8 +49,6 @@ export class ShopList extends Screen {
 
     resize() {
         this.scrollableList.reset();
-        this.titles.title.resize();
-        this.titles.subtitle.resize();
     }
 
     onResume() {

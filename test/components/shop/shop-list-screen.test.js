@@ -123,13 +123,11 @@ describe("Shop List Screen", () => {
         expect(scaler.onScaleChange.add).toHaveBeenCalledWith(expect.any(Function));
     });
 
-    test("onScaleChange callback resets/resizes list and titles ", () => {
+    test("onScaleChange callback resets/resizes list", () => {
         shopList.create();
         const callback = scaler.onScaleChange.add.mock.calls[0][0];
         callback();
         expect(mockList.reset).toHaveBeenCalled();
-        expect(mockTitle.title.resize).toHaveBeenCalled();
-        expect(mockTitle.subtitle.resize).toHaveBeenCalled();
     });
 
     test("onScaleChange callback is removed on scene shutdown", () => {

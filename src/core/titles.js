@@ -5,7 +5,7 @@
  */
 import fp from "../../lib/lodash/fp/fp.js";
 import { updateStyleOnFontLoad } from "./layout/text-elem.js";
-import { getMetrics } from "./scaler.js";
+import { getMetrics, onScaleChange } from "./scaler.js";
 
 const textStyle = style => ({
     fontSize: "36px",
@@ -79,7 +79,17 @@ const createSubtitle = scene => {
     };
 };
 
-export const createTitles = scene => ({
-    title: createTitle(scene),
-    subtitle: createSubtitle(scene),
-});
+export const createTitles = scene => {
+    const titles = {
+        title: createTitle(scene),
+        subtitle: createSubtitle(scene),
+    };
+
+    const resizeAll = () => Object.values(titles).forEach(title => title.resize());
+
+    const event = onScaleChange.add(resizeAll);
+    scene.events.once("shutdown", () => event.unsubscribe());
+    resizeAll();
+
+    return titles;
+};

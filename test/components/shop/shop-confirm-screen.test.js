@@ -99,14 +99,6 @@ describe("Shop Confirm Screen", () => {
         expect(scaler.onScaleChange.add).toHaveBeenCalledWith(expect.any(Function));
     });
 
-    test("onScaleChange callback resizes titles ", () => {
-        shopConfirm.create();
-        const callback = scaler.onScaleChange.add.mock.calls[0][0];
-        callback();
-        expect(mockTitle.title.resize).toHaveBeenCalled();
-        expect(mockTitle.subtitle.resize).toHaveBeenCalled();
-    });
-
     test("onScaleChange callback is removed on scene shutdown", () => {
         shopConfirm.create();
         expect(shopConfirm.events.once).toHaveBeenCalledWith("shutdown", mockScalerEvent.unsubscribe);
