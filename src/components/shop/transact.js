@@ -23,7 +23,7 @@ export const buy = (scene, item) => {
     const remainingStock = shopCol.get(item.id).qty - 1;
     shopCol.set({ ...item, qty: remainingStock });
     invCol.set({ ...item, state: "purchased", qty: inventoryItem ? inventoryItem.qty + 1 : 1 });
-    gmi.sendStatsEvent("buy", "click", { id: item.id, qty: remainingStock });
+    gmi.sendStatsEvent("buy", "click", { metadata: `KEY=${item.id}~STATE=purchased~QTY=1`, source: item.title });
     updateBalance(scene, invCol, item.price);
 };
 
@@ -35,14 +35,14 @@ export const equip = (scene, item) => {
         .filter(invItem => invItem.slot === item.slot && invItem.state === "equipped");
     const maxItemsInSlot = scene.transientData.shop.config.slots[item.slot].max;
     itemsEquippedInSlot.length === maxItemsInSlot && unequip(scene, itemsEquippedInSlot[0]);
-    gmi.sendStatsEvent("equip", "click", { id: item.id, qty: 1 });
+    gmi.sendStatsEvent("equip", "click", { metadata: `KEY=${item.id}~STATE=equipped~QTY=1`, source: item.title });
     invCol.set({ ...item, state: "equipped" });
 };
 
 export const unequip = (scene, item) => {
     const { manage } = scene.transientData.shop.config.shopCollections;
     const invCol = collections.get(manage);
-    gmi.sendStatsEvent("unequip", "click", { id: item.id, qty: 1 });
+    gmi.sendStatsEvent("unequip", "click", { metadata: `KEY=${item.id}~STATE=unequipped~QTY=1`, source: item.title });
     invCol.set({ ...item, state: "purchased" });
 };
 
@@ -51,7 +51,7 @@ export const use = (scene, item) => {
     const invCol = collections.get(manage);
     const invItem = invCol.get(item.id);
     const qtyLeft = invItem.qty - 1;
-    gmi.sendStatsEvent("use", "click", { id: item.id, qty: qtyLeft });
+    gmi.sendStatsEvent("use", "click", { metadata: `KEY=${item.id}~STATE=used~QTY=1`, source: item.title });
     eventBus.publish({
         channel: "shop",
         name: "used",
