@@ -30,7 +30,7 @@ export class ShopList extends Screen {
 
         this.titles = createTitles(this);
         this.inventoryFilter = item => item.id !== shopConfig.balance;
-        this.list = new ScrollableList(this, this.transientData.shop.mode, this.inventoryFilter);
+        this.scrollableList = new ScrollableList(this, this.transientData.shop.mode, this.inventoryFilter);
 
         this.setupEvents();
         this.resize();
@@ -46,7 +46,7 @@ export class ShopList extends Screen {
     }
 
     resize() {
-        this.list.reset();
+        this.scrollableList.reset();
         this.titles.title.resize();
         this.titles.subtitle.resize();
     }

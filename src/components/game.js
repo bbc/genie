@@ -12,7 +12,7 @@ import { eventBus } from "../core/event-bus.js";
 
 export class Game extends Screen {
     itemUsed(data) {
-        console.log("Item used:", data);
+        console.log("Item used:", data); // eslint-disable-line no-console
     }
 
     calculateAchievements(item, amount, keys) {
