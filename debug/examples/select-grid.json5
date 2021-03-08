@@ -28,32 +28,24 @@
     duration: 500, // Pagination transition duration
     align: "center", // Alignment for any remaining choices in the last row
     music: "home.backgroundMusic",
-    titles: [
-        {
-            type: "image",
-            key: "title",
-            xOffset: 0,
-            yOffset: -250,
+    title: {
+        text: "Select",
+        style: {
+            fontFamily: "ReithSans", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
         },
-        {
-            type: "text",
-            value: "Select Your Character",
-            xOffset: 0,
-            yOffset: -260,
-            styles: {
-                fontSize: "24px", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
-            },
+        backgroundKey: "character-select.title",
+    },
+    subtitle: {
+        text: "Team A",
+        style: {
+            fontFamily: "ReithSans",
+            fontSize: "24px",
         },
-        {
-            type: "text",
-            value: "Sub-Title",
-            xOffset: 0,
-            yOffset: -233,
-            styles: {
-                fontSize: "18px",
-            },
+        backgroundKey: "character-select.subtitle",
+        icon : {
+            key: "character-select.subtitle-icon",
         },
-    ],
+    },
 
     collection: "debug-characters", // Points to the storage directory containing the choice assets.
     states: {
