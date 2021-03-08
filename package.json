@@ -53,15 +53,14 @@
         "prettier": "2.1.2",
         "rollup": "^2.35.1",
         "rollup-plugin-terser": "^7.0.2",
-        "webpack": "^4.44.2",
-        "webpack-cli": "^3.3.12",
-        "webpack-dev-server": "^3.11.1",
-        "webpack-visualizer-plugin": "^0.1.11"
+        "webpack": "^5.24.4",
+        "webpack-cli": "^4.5.0",
+        "webpack-dev-server": "^3.11.2"
     },
     "scripts": {
         "start": "cross-env genieCore=true ws --config-file dev/scripts/web-config.js",
-        "start:pack": "webpack-dev-server -d --config build-scripts/webpack.config.js --env.genieCore",
-        "build": "webpack --config build-scripts/webpack.config.js --env.genieCore",
+        "start:pack": "node_modules/.bin/webpack serve --config build-scripts/webpack.config.js --env genieCore",
+        "build": "webpack --config build-scripts/webpack.config.js --env genieCore",
         "build:theme2": "bash build-scripts/theme2creator/create.sh",
         "clean": "rm -rf .cache",
         "test": "npm run jest && npm run eslint",
