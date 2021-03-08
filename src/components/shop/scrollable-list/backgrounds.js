@@ -44,7 +44,6 @@ export const resizeBackground = {
         background.y = spec.yOffset;
         background.setScale(safeArea.width / background.width, safeArea.height / background.height);
     },
-    s: () => {},
     Object: () => {},
     NinePatch: (scene, background, newSpec = {}) => {
         const spec = { ...defaultSpec, ...newSpec };

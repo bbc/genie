@@ -92,6 +92,8 @@ describe("Scrollable List", () => {
             minHeight: 100,
             setT: jest.fn(),
             emit: jest.fn(),
+            addToDisplayList: jest.fn(),
+            removeFromDisplayList: jest.fn(),
         };
 
         mockScene = {
