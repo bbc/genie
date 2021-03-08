@@ -31,6 +31,9 @@
         price: 10,
         icon: "shop-list.mysteryBoxIcon",
         tags: ["food"],
+        audio: {
+            use: "shop-confirm.buy",
+        },
     },
     {
         id: "coin",
