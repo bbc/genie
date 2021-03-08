@@ -6,12 +6,10 @@
  */
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import * as scaler from "../../../src/core/scaler.js";
-import * as title from "../../../src/core/titles.js";
 import * as balance from "../../../src/components/shop/balance.js";
 import * as confirm from "../../../src/components/shop/confirm.js";
 import { ShopConfirm } from "../../../src/components/shop/shop-confirm-screen.js";
 
-jest.mock("../../../src/core/titles.js");
 jest.mock("../../../src/components/shop/balance.js");
 jest.mock("../../../src/components/shop/confirm.js");
 jest.mock("../../../lib/rexuiplugin.min.js");
@@ -19,13 +17,10 @@ jest.mock("../../../src/core/scaler.js");
 
 describe("Shop Confirm Screen", () => {
     let shopConfirm;
-    let mockTitle;
     let mockConfirm;
     let mockScalerEvent;
     let mockShopConfig;
     beforeEach(() => {
-        mockTitle = { title: { resize: jest.fn() }, subtitle: { resize: jest.fn() } };
-        title.createTitles = jest.fn().mockReturnValue(mockTitle);
         mockConfirm = { mock: "confirm", resize: jest.fn() };
         confirm.createConfirm = jest.fn().mockReturnValue(mockConfirm);
         mockScalerEvent = { unsubscribe: jest.fn() };
@@ -71,12 +66,6 @@ describe("Shop Confirm Screen", () => {
     test("calls setLayout on create", () => {
         shopConfirm.create();
         expect(shopConfirm.setLayout).toHaveBeenCalledWith(["overlayBack", "pause"]);
-    });
-
-    test("creates titles and adds reference to screen on create", () => {
-        shopConfirm.create();
-        expect(title.createTitles).toHaveBeenCalledWith(shopConfirm);
-        expect(shopConfirm.titles).toBe(mockTitle);
     });
 
     test("calls setBalance", () => {

@@ -6,13 +6,11 @@
  */
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import * as scaler from "../../../src/core/scaler.js";
-import * as title from "../../../src/core/titles.js";
 import * as balance from "../../../src/components/shop/balance.js";
 import * as list from "../../../src/components/shop/scrollable-list/scrollable-list.js";
 import * as gmi from "../../../src/core/gmi/gmi.js";
 import { ShopList } from "../../../src/components/shop/shop-list-screen.js";
 
-jest.mock("../../../src/core/titles.js");
 jest.mock("../../../src/components/shop/balance.js");
 jest.mock("../../../src/components/shop/scrollable-list/scrollable-list.js");
 jest.mock("../../../lib/rexuiplugin.min.js");
@@ -21,14 +19,11 @@ jest.mock("../../../src/core/gmi/gmi.js");
 
 describe("Shop List Screen", () => {
     let shopList;
-    let mockTitle;
     let mockList;
     let mockScalerEvent;
     let mockShopConfig;
     beforeEach(() => {
         gmi.gmi = { setStatsScreen: jest.fn(), sendStatsEvent: jest.fn() };
-        mockTitle = { title: { resize: jest.fn() }, subtitle: { resize: jest.fn() } };
-        title.createTitles = jest.fn().mockReturnValue(mockTitle);
         mockList = { reset: jest.fn() };
         list.ScrollableList = jest.fn().mockReturnValue(mockList);
         mockScalerEvent = { unsubscribe: jest.fn() };
@@ -85,12 +80,6 @@ describe("Shop List Screen", () => {
     test("makes shop title available as transientData", () => {
         shopList.create();
         expect(shopList.transientData["shop-list"]).toEqual({ title: "shop" });
-    });
-
-    test("creates titles and adds reference to screen on create", () => {
-        shopList.create();
-        expect(title.createTitles).toHaveBeenCalledWith(shopList);
-        expect(shopList.titles).toBe(mockTitle);
     });
 
     test("calls setBalance", () => {

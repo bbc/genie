@@ -43,6 +43,7 @@ describe("Shop Menu Screen", () => {
             off: jest.fn(),
         };
         shopMenu = new ShopMenu();
+        shopMenu.titles = mockTitle;
         shopMenu.addBackgroundItems = jest.fn();
         shopMenu.setLayout = jest.fn();
         shopMenu.scene = { key: "shop-menu" };
@@ -80,12 +81,6 @@ describe("Shop Menu Screen", () => {
     test("calls setBalance", () => {
         shopMenu.create();
         expect(balance.setBalance).toHaveBeenCalledWith(shopMenu);
-    });
-
-    test("creates titles and adds reference to screen on create", () => {
-        shopMenu.create();
-        expect(title.createTitles).toHaveBeenCalledWith(shopMenu);
-        expect(shopMenu.titles).toBe(mockTitle);
     });
 
     test("creates menu and adds reference to screen on create", () => {

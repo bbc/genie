@@ -40,9 +40,9 @@ export class ShopMenu extends Screen {
 
     onResume() {
         setBalance(this);
-        [this.titles.title, this.titles.subtitle].forEach(title => title.destroy());
+        Object.values(this.titles).forEach(title => title.destroy());
         this.titles = createTitles(this);
-        [this.titles.title, this.titles.subtitle].forEach(title => title.resize());
+        Object.values(this.titles).forEach(title => title.resize());
     }
 
     resize() {
