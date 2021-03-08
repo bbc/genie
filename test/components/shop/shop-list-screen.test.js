@@ -7,13 +7,13 @@
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as title from "../../../src/core/titles.js";
-import * as balance from "../../../src/components/shop/balance-ui.js";
+import * as balance from "../../../src/components/shop/balance.js";
 import * as list from "../../../src/components/shop/scrollable-list/scrollable-list.js";
 import * as gmi from "../../../src/core/gmi/gmi.js";
 import { ShopList } from "../../../src/components/shop/shop-list-screen.js";
 
 jest.mock("../../../src/core/titles.js");
-jest.mock("../../../src/components/shop/balance-ui.js");
+jest.mock("../../../src/components/shop/balance.js");
 jest.mock("../../../src/components/shop/scrollable-list/scrollable-list.js");
 jest.mock("../../../lib/rexuiplugin.min.js");
 jest.mock("../../../src/core/scaler.js");
@@ -22,16 +22,13 @@ jest.mock("../../../src/core/gmi/gmi.js");
 describe("Shop List Screen", () => {
     let shopList;
     let mockTitle;
-    let mockBalance;
     let mockList;
     let mockScalerEvent;
     let mockShopConfig;
     beforeEach(() => {
         gmi.gmi = { setStatsScreen: jest.fn(), sendStatsEvent: jest.fn() };
-        mockTitle = { mock: "title" };
+        mockTitle = { title: { resize: jest.fn() }, subtitle: { resize: jest.fn() } };
         title.createTitles = jest.fn().mockReturnValue(mockTitle);
-        mockBalance = { resize: jest.fn(), update: jest.fn() };
-        balance.createBalance = jest.fn().mockReturnValue(mockBalance);
         mockList = { reset: jest.fn() };
         list.ScrollableList = jest.fn().mockReturnValue(mockList);
         mockScalerEvent = { unsubscribe: jest.fn() };
@@ -53,7 +50,7 @@ describe("Shop List Screen", () => {
         shopList.plugins = { installScenePlugin: jest.fn() };
         shopList._data = {
             addedBy: { addOverlay: jest.fn() },
-            transient: { shop: { mode: "shop", config: { balance: { value: { key: "balance" } } } } },
+            transient: { shop: { mode: "shop", config: { balance: "balance" } } },
             config: { "shop-menu": { shopConfig: mockShopConfig } },
         };
     });
@@ -96,10 +93,9 @@ describe("Shop List Screen", () => {
         expect(shopList.titles).toBe(mockTitle);
     });
 
-    test("creates balance and adds reference to screen on create", () => {
+    test("calls setBalance", () => {
         shopList.create();
-        expect(balance.createBalance).toHaveBeenCalledWith(shopList);
-        expect(shopList.balance).toBe(mockBalance);
+        expect(balance.setBalance).toHaveBeenCalledWith(shopList);
     });
 
     test("attaches an inventory filter function that returns true when item id is not the balance key", () => {
@@ -109,7 +105,7 @@ describe("Shop List Screen", () => {
 
     test("attaches an inventory filter function that returns false when item id is the balance key", () => {
         shopList.create();
-        expect(shopList.inventoryFilter({ id: shopList._data.transient.shop.config.balance.value.key })).toBe(false);
+        expect(shopList.inventoryFilter({ id: shopList._data.transient.shop.config.balance })).toBe(false);
     });
 
     test("creates list and adds reference to screen on create", () => {
@@ -127,12 +123,13 @@ describe("Shop List Screen", () => {
         expect(scaler.onScaleChange.add).toHaveBeenCalledWith(expect.any(Function));
     });
 
-    test("onScaleChange callback resets/resizes list and balance ", () => {
+    test("onScaleChange callback resets/resizes list and titles ", () => {
         shopList.create();
         const callback = scaler.onScaleChange.add.mock.calls[0][0];
         callback();
         expect(mockList.reset).toHaveBeenCalled();
-        expect(mockBalance.resize).toHaveBeenCalled();
+        expect(mockTitle.title.resize).toHaveBeenCalled();
+        expect(mockTitle.subtitle.resize).toHaveBeenCalled();
     });
 
     test("onScaleChange callback is removed on scene shutdown", () => {

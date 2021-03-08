@@ -7,12 +7,12 @@
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as title from "../../../src/core/titles.js";
-import * as balance from "../../../src/components/shop/balance-ui.js";
+import * as balance from "../../../src/components/shop/balance.js";
 import * as confirm from "../../../src/components/shop/confirm.js";
 import { ShopConfirm } from "../../../src/components/shop/shop-confirm-screen.js";
 
 jest.mock("../../../src/core/titles.js");
-jest.mock("../../../src/components/shop/balance-ui.js");
+jest.mock("../../../src/components/shop/balance.js");
 jest.mock("../../../src/components/shop/confirm.js");
 jest.mock("../../../lib/rexuiplugin.min.js");
 jest.mock("../../../src/core/scaler.js");
@@ -20,15 +20,12 @@ jest.mock("../../../src/core/scaler.js");
 describe("Shop Confirm Screen", () => {
     let shopConfirm;
     let mockTitle;
-    let mockBalance;
     let mockConfirm;
     let mockScalerEvent;
     let mockShopConfig;
     beforeEach(() => {
-        mockTitle = { mock: "title" };
+        mockTitle = { title: { resize: jest.fn() }, subtitle: { resize: jest.fn() } };
         title.createTitles = jest.fn().mockReturnValue(mockTitle);
-        mockBalance = { resize: jest.fn(), update: jest.fn() };
-        balance.createBalance = jest.fn().mockReturnValue(mockBalance);
         mockConfirm = { mock: "confirm", resize: jest.fn() };
         confirm.createConfirm = jest.fn().mockReturnValue(mockConfirm);
         mockScalerEvent = { unsubscribe: jest.fn() };
@@ -82,10 +79,9 @@ describe("Shop Confirm Screen", () => {
         expect(shopConfirm.titles).toBe(mockTitle);
     });
 
-    test("creates balance and adds reference to screen on create", () => {
+    test("calls setBalance", () => {
         shopConfirm.create();
-        expect(balance.createBalance).toHaveBeenCalledWith(shopConfirm);
-        expect(shopConfirm.balance).toBe(mockBalance);
+        expect(balance.setBalance).toHaveBeenCalledWith(shopConfirm);
     });
 
     test("creates confirm and adds reference to screen on create", () => {
@@ -103,11 +99,12 @@ describe("Shop Confirm Screen", () => {
         expect(scaler.onScaleChange.add).toHaveBeenCalledWith(expect.any(Function));
     });
 
-    test("onScaleChange callback resizes balance ", () => {
+    test("onScaleChange callback resizes titles ", () => {
         shopConfirm.create();
         const callback = scaler.onScaleChange.add.mock.calls[0][0];
         callback();
-        expect(mockBalance.resize).toHaveBeenCalled();
+        expect(mockTitle.title.resize).toHaveBeenCalled();
+        expect(mockTitle.subtitle.resize).toHaveBeenCalled();
     });
 
     test("onScaleChange callback is removed on scene shutdown", () => {
