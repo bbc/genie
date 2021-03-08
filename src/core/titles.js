@@ -26,37 +26,37 @@ const scaleTitle = (title, area) => {
 
 const positionTitle = (title, area) => (title.y = area.centerY);
 
-const createTextAndImage = (scene, config) => {
-    const image = scene.add.image(0, 0, config?.backgroundKey);
+const createTextAndBackdrop = (scene, config) => {
+    const backdrop = scene.add.image(0, 0, config?.backgroundKey);
     const template = fp.template(config?.text);
     const textString = fp.startCase(template(scene.transientData?.[scene.scene.key]));
     const text = scene.add.text(0, 0, textString, textStyle(config?.style));
-    return { image, text };
+    return { backdrop, text };
 };
 
 const createTitle = scene => {
-    const { image, text } = createTextAndImage(scene, scene.config.title);
+    const { backdrop, text } = createTextAndBackdrop(scene, scene.config.title);
     text.setOrigin(0.5, 0.5);
     return {
         resize: () => {
             const safeArea = getSafeArea(scene);
-            scaleTitle(image, safeArea);
-            positionTitle(image, safeArea);
+            scaleTitle(backdrop, safeArea);
+            positionTitle(backdrop, safeArea);
             positionTitle(text, safeArea);
         },
     };
 };
 
-const scaleSubtitleImage = (image, area) => {
+const scaleSubtitleBackdrop = (backdrop, area) => {
     const safeHeight = getMetrics().isMobile ? area.height / 2 : area.height;
-    const aspectRatio = image.width / image.height;
+    const aspectRatio = backdrop.width / backdrop.height;
     const width = aspectRatio * safeHeight;
-    image.setDisplaySize(width, safeHeight);
+    backdrop.setDisplaySize(width, safeHeight);
 };
 
-const positionSubtitleImage = (image, area, text, icon) => {
-    image.x = area.right - (icon.width + getMetrics().buttonPad * 3 + text.width) / 2;
-    image.y = area.centerY;
+const positionSubtitleBackdrop = (backdrop, area, text, icon) => {
+    backdrop.x = area.right - (icon.width + getMetrics().buttonPad * 3 + text.width) / 2;
+    backdrop.y = area.centerY;
 };
 
 const positionSubtitleText = (text, area) => {
@@ -79,7 +79,7 @@ const positionSubtitleIcon = (icon, area, text) => {
 };
 
 const createSubtitle = scene => {
-    const { image, text } = createTextAndImage(scene, scene.config.subtitle);
+    const { backdrop, text } = createTextAndBackdrop(scene, scene.config.subtitle);
     const icon = createSubtitleIcon(scene);
     text.setOrigin(0.5, 0.5);
     return {
@@ -88,8 +88,8 @@ const createSubtitle = scene => {
             positionSubtitleText(text, safeArea);
             scaleSubtitleIcon(icon, safeArea, text);
             positionSubtitleIcon(icon, safeArea, text);
-            scaleSubtitleImage(image, safeArea);
-            positionSubtitleImage(image, safeArea, text, icon);
+            scaleSubtitleBackdrop(backdrop, safeArea);
+            positionSubtitleBackdrop(backdrop, safeArea, text, icon);
         },
     };
 };
