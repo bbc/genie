@@ -18,6 +18,11 @@ export class ShopList extends Screen {
     }
 
     create() {
+        if (this.transientData.shop.mode === "shop") {
+            gmi.sendStatsEvent("shopbuy", "click", {});
+        } else {
+            gmi.sendStatsEvent("shopmanage", "click", {});
+        }
         gmi.setStatsScreen(this.transientData.shop.mode === "shop" ? "shopbuy" : "shopmanage");
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
