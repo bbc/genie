@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { getSafeAreaFn } from "../../../src/core/layout/safe-area.js";
+import { getSafeAreaFn, getTitleAreaFn } from "../../../src/core/layout/safe-area.js";
 import * as ScalerModule from "../../../src/core/scaler.js";
 
 describe("getSafeArea", () => {
@@ -32,6 +32,7 @@ describe("getSafeArea", () => {
             isMobile: true,
             screenToCanvas: jest.fn(x => x),
             stageHeight: 800,
+            horizontalBorderPad: 20,
             verticalBorderPad: 16,
         };
 
@@ -76,5 +77,10 @@ describe("getSafeArea", () => {
         mockGroups.topRight.width = 0;
         const safeAreaFn = getSafeAreaFn(mockGroups);
         expect(safeAreaFn()).toEqual(new Phaser.Geom.Rectangle(-150, -100, 400, 200));
+    });
+
+    test("getTitleAreaFn returns a function that returns the correct title area", () => {
+        const titleAreaFn = getTitleAreaFn(mockGroups);
+        expect(titleAreaFn()).toEqual(new Phaser.Geom.Rectangle(-250, -380, 600, 50));
     });
 });

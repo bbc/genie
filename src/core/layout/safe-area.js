@@ -34,7 +34,7 @@ export const getSafeAreaFn = groups => (groupOverrides = {}, mirrorY = true) => 
     return new Phaser.Geom.Rectangle(left, top, width, height);
 };
 
-export const getTitleArea = groups => () => {
+export const getTitleAreaFn = groups => () => {
     const metrics = getMetrics();
     const getRightSide = group => group.x + group.width;
     const left = getRightSide(groups.topLeft);
