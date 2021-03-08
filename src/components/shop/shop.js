@@ -3,7 +3,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 import { gmi } from "../../core/gmi/gmi.js";
 import { ShopMenu } from "./shop-menu-screen.js";
 import { ShopList } from "./shop-list-screen.js";

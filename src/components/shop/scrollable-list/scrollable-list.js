@@ -10,7 +10,7 @@ import * as a11y from "../../../core/accessibility/accessibility-layer.js";
 import { collections } from "../../../core/collections.js";
 import { onScaleChange } from "../../../core/scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
-import { createBackground, resizeBackground } from "./backgrounds.js";
+import { createBackground, resizeBackground } from "../backgrounds.js";
 import { createScrollablePanel, getPanelY } from "./scrollable-panel.js";
 
 const createTable = (scene, mode, parent, scrollablePanel) => {
@@ -119,7 +119,7 @@ export class ScrollableList extends Phaser.GameObjects.Container {
 
         this.reset = () => {
             resizePanel(scene, scrollablePanel)();
-            resizeBackground[this.background.constructor.name](scene, this.background);
+            resizeBackground(this.background.constructor)(scene, this.background);
         };
     }
 
