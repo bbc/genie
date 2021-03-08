@@ -60,5 +60,4 @@ export const use = (scene, item) => {
     invCol.set({ ...invItem, qty: qtyLeft });
 };
 
-export const getBalanceItem = shopConfig =>
-    collections.get(shopConfig.shopCollections.manage).get(shopConfig.balance.value.key);
+export const getBalanceItem = shopConfig => collections.get(shopConfig.shopCollections.manage).get(shopConfig.balance);

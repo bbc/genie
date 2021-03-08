@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 import fp from "../../lib/lodash/fp/fp.js";
+import { updateStyleOnFontLoad } from "./layout/text-elem.js";
 import { getMetrics } from "./scaler.js";
 
 const textStyle = style => ({
@@ -31,6 +32,7 @@ const createTextAndBackdrop = (scene, config) => {
     const template = fp.template(config?.text);
     const textString = fp.startCase(template(scene.transientData?.[scene.scene.key]));
     const text = scene.add.text(0, 0, textString, textStyle(config?.style));
+    updateStyleOnFontLoad(text);
     return { backdrop, text };
 };
 

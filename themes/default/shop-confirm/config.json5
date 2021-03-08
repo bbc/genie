@@ -3,21 +3,25 @@
     background: {
         items: [{ key: "shop-menu.magicShop", x: 0, y: 0 }],
     },
-    titles: [
-        {
-            type: "image",
-            key: "titleBackground",
-            xOffset: 0,
-            yOffset: -250,
+    title: {
+        text: "<%= action %>",
+        style: {
+            fontStyle: "bold",
+            fontSize: "32px",
         },
-        {
-            type: "text",
-            value: "<%= action %>",
-            xOffset: 0,
-            yOffset: -250,
-            styles: { fontStyle: "bold", fontSize: "24px" },
+        backgroundKey: "shop-confirm.titleBackground",
+    },
+    subtitle: {
+        text: "<%= balance %>",
+        style: {
+            fontFamily: "ReithSans",
+            fontSize: "24px",
         },
-    ],
+        backgroundKey: "shop-menu.balanceBackground",
+        icon : {
+            key: "shop-menu.balanceIcon",
+        },
+    },
     styleDefaults: {
         fontFamily: "ReithSans",
         fontSize: "24px",
