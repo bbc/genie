@@ -52,6 +52,7 @@ describe("Shop Transactions", () => {
             id: "item",
             price: 50,
             slot: "helmet",
+            title: "amazing helmet",
         };
         mockShopItem = {
             qty: 1,
@@ -59,6 +60,7 @@ describe("Shop Transactions", () => {
         mockInventoryItem = {
             id: "inventoryItem",
             qty: 5,
+            title: "amazing helmet",
         };
         mockInventoryItemList = [];
         collections.get = jest.fn(collectionName =>
@@ -99,7 +101,10 @@ describe("Shop Transactions", () => {
         });
 
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("buy", "click", { id: "item", qty: 0 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("buy", "click", {
+                metadata: "KEY=item~STATE=purchased~QTY=1",
+                source: "amazing helmet",
+            });
         });
 
         test("item is added to the inventory collection with qty set to 1 when the item does not exist in the inventory yet", () => {
@@ -120,7 +125,10 @@ describe("Shop Transactions", () => {
         });
 
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("equip", "click", { id: "item", qty: 1 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("equip", "click", {
+                metadata: "KEY=item~STATE=equipped~QTY=1",
+                source: "amazing helmet",
+            });
         });
 
         test("currently equipped item is unequipped when destination slot is full", () => {
@@ -146,7 +154,10 @@ describe("Shop Transactions", () => {
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("unequip", "click", { id: "item", qty: 1 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("unequip", "click", {
+                metadata: "KEY=item~STATE=unequipped~QTY=1",
+                source: "amazing helmet",
+            });
         });
     });
 
@@ -166,7 +177,10 @@ describe("Shop Transactions", () => {
         });
 
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("use", "click", { id: "inventoryItem", qty: 4 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("use", "click", {
+                metadata: "KEY=inventoryItem~STATE=used~QTY=1",
+                source: "amazing helmet",
+            });
         });
     });
 

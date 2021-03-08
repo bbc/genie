@@ -27,7 +27,7 @@ describe("Shop List Screen", () => {
     let mockScalerEvent;
     let mockShopConfig;
     beforeEach(() => {
-        gmi.gmi = { setStatsScreen: jest.fn() };
+        gmi.gmi = { setStatsScreen: jest.fn(), sendStatsEvent: jest.fn() };
         mockTitle = { mock: "title" };
         title.createTitles = jest.fn().mockReturnValue(mockTitle);
         mockBalance = { resize: jest.fn(), update: jest.fn() };
