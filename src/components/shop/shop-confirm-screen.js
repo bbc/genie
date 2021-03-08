@@ -8,8 +8,8 @@ import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { Screen } from "../../core/screen.js";
 import { createTitles } from "../../core/titles.js";
+import { setBalance } from "./balance.js";
 import { createConfirm } from "./confirm.js";
-import { collections } from "../../core/collections.js";
 
 export class ShopConfirm extends Screen {
     preload() {
@@ -21,11 +21,11 @@ export class ShopConfirm extends Screen {
         this.setLayout(["overlayBack", "pause"]);
 
         this.confirm = createConfirm(this, this.transientData.shop.mode, this.transientData.shop.item);
-        const shopConfig = this.transientData.shop.config;
+
         this.transientData[this.scene.key] = {
             action: this.confirm.action,
-            balance: collections.get(shopConfig.shopCollections.manage).get(shopConfig.balance).qty,
         };
+        setBalance(this);
         this.titles = createTitles(this);
 
         this.setupEvents();

@@ -46,6 +46,10 @@ const createTitle = scene => {
             positionTitle(backdrop, safeArea);
             positionTitle(text, safeArea);
         },
+        destroy: () => {
+            backdrop.destroy();
+            text.destroy();
+        },
     };
 };
 
@@ -92,6 +96,11 @@ const createSubtitle = scene => {
             positionSubtitleIcon(icon, safeArea, text);
             scaleSubtitleBackdrop(backdrop, safeArea);
             positionSubtitleBackdrop(backdrop, safeArea, text, icon);
+        },
+        destroy: () => {
+            backdrop.destroy();
+            text.destroy();
+            icon.destroy();
         },
     };
 };

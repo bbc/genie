@@ -9,7 +9,7 @@ import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { createTitles } from "../../core/titles.js";
 import { createMenu } from "./menu.js";
-import { collections } from "../../core/collections.js";
+import { setBalance } from "./balance.js";
 
 export class ShopMenu extends Screen {
     preload() {
@@ -21,13 +21,11 @@ export class ShopMenu extends Screen {
         const backNav = this._data.addedBy ? "overlayBack" : "back";
         this.setLayout([backNav, "pause"]);
 
-        this.transientData[this.scene.key] = {
-            balance: collections.get(this.config.shopConfig.shopCollections.manage).get(this.config.shopConfig.balance)
-                .qty,
-        };
         this.transientData.shop = {
             config: this.config.shopConfig,
         };
+        setBalance(this);
+
         this.titles = createTitles(this);
         this.menu = createMenu(this);
 
@@ -44,8 +42,10 @@ export class ShopMenu extends Screen {
     }
 
     onResume() {
-        this.removeOverlay();
-        this._data.addedBy.addOverlay(this.scene.key);
+        setBalance(this);
+        [this.titles.title, this.titles.subtitle].forEach(title => title.destroy());
+        this.titles = createTitles(this);
+        this.resize();
     }
 
     resize() {
