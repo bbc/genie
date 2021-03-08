@@ -28,7 +28,7 @@ const createTextAndBackdrop = (scene, config) => {
 };
 
 const createTitle = scene => {
-    const { backdrop, text } = createTextAndBackdrop(scene, scene.config.title);
+    const { backdrop, text } = createTextAndBackdrop(scene, scene.config?.title);
     text.setOrigin(0.5, 0.5);
     return {
         resize: () => {
@@ -61,7 +61,7 @@ const positionSubtitleIcon = (icon, area, text) => {
 };
 
 const createSubtitle = scene => {
-    const { backdrop, text } = createTextAndBackdrop(scene, scene.config.subtitle);
+    const { backdrop, text } = createTextAndBackdrop(scene, scene.config?.subtitle);
     const icon = createSubtitleIcon(scene);
     text.setOrigin(0.5, 0.5);
     return {

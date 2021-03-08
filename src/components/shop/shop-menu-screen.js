@@ -24,7 +24,6 @@ export class ShopMenu extends Screen {
         this.transientData.shop = { config: this.config.shopConfig };
         setBalance(this);
 
-        this.titles = createTitles(this);
         this.menu = createMenu(this);
 
         this.setupEvents();

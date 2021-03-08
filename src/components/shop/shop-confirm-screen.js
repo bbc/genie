@@ -7,7 +7,6 @@
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { Screen } from "../../core/screen.js";
-import { createTitles } from "../../core/titles.js";
 import { setBalance } from "./balance.js";
 import { createConfirm } from "./confirm.js";
 
@@ -24,7 +23,6 @@ export class ShopConfirm extends Screen {
 
         this.transientData[this.scene.key] = { action: this.confirm.action };
         setBalance(this);
-        this.titles = createTitles(this);
 
         this.setupEvents();
         this.resize();
