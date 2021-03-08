@@ -25,6 +25,12 @@
         align: "center",
     },
     confirm: {
+        audio: {
+            buy: "buy",
+            equip: "equip",
+            unequip: "unequip",
+            use: "use"
+        },
         buttons: {
             buttonsRight: true,
             key: "shop-menu.menuButtonBackground",

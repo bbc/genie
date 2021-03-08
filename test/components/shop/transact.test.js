@@ -26,6 +26,7 @@ describe("Shop Transactions", () => {
 
     beforeEach(() => {
         mockScene = {
+            config: {},
             transientData: {
                 shop: {
                     config: {
