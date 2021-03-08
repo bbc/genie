@@ -9,6 +9,12 @@ import { collections } from "../../core/collections.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { eventBus } from "../../core/event-bus.js";
 
+const updateBalance = (scene, invCol, price) =>
+    invCol.set({
+        ...getBalanceItem(scene.transientData.shop.config),
+        qty: getBalanceItem(scene.transientData.shop.config).qty - price,
+    });
+
 export const buy = (scene, item) => {
     const { shop, manage } = scene.transientData.shop.config.shopCollections;
     const invCol = collections.get(manage);
@@ -53,12 +59,6 @@ export const use = (scene, item) => {
     });
     invCol.set({ ...invItem, qty: qtyLeft });
 };
-
-const updateBalance = (scene, invCol, price) =>
-    invCol.set({
-        ...getBalanceItem(scene.transientData.shop.config),
-        qty: getBalanceItem(scene.transientData.shop.config).qty - price,
-    });
 
 export const getBalanceItem = shopConfig =>
     collections.get(shopConfig.shopCollections.manage).get(shopConfig.balance.value.key);

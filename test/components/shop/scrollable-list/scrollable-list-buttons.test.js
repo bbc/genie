@@ -70,6 +70,7 @@ describe("Scrollable List Buttons", () => {
             config: { id: "foo_bar_itemKey_shop", title: "shop" },
             sprite: {},
             setScale: jest.fn(),
+            off: jest.fn(),
         };
         mockItem = {
             id: "mockId",
@@ -120,6 +121,17 @@ describe("Scrollable List Buttons", () => {
         test("applies overlays", () => {
             createListButton(mockScene, mockItem, "manage");
             expect(overlays.overlays1Wide).toHaveBeenCalled();
+        });
+
+        test("turns off the pointer up event on the button if the button is not enabled", () => {
+            mockItem.state = "locked";
+            createListButton(mockScene, mockItem, "shop");
+            expect(mockGelButton.off).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP);
+        });
+
+        test("does not turn off the pointer up event on the button if the button is enabled", () => {
+            createListButton(mockScene, mockItem, "shop");
+            expect(mockGelButton.off).not.toHaveBeenCalled();
         });
     });
 });

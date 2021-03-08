@@ -29,7 +29,7 @@ describe("Shop Confirm Screen", () => {
         title.createTitles = jest.fn().mockReturnValue(mockTitle);
         mockBalance = { resize: jest.fn(), update: jest.fn() };
         balance.createBalance = jest.fn().mockReturnValue(mockBalance);
-        mockConfirm = { mock: "confirm" };
+        mockConfirm = { mock: "confirm", resize: jest.fn() };
         confirm.createConfirm = jest.fn().mockReturnValue(mockConfirm);
         mockScalerEvent = { unsubscribe: jest.fn() };
         scaler.onScaleChange = { add: jest.fn().mockReturnValue(mockScalerEvent) };
@@ -92,7 +92,7 @@ describe("Shop Confirm Screen", () => {
         shopConfirm.create();
         expect(confirm.createConfirm).toHaveBeenCalledWith(
             shopConfirm,
-            shopConfirm.transientData.shop.title,
+            shopConfirm.transientData.shop.mode,
             shopConfirm.transientData.shop.item,
         );
         expect(shopConfirm.confirm).toBe(mockConfirm);

@@ -4,8 +4,6 @@
  * @license Apache-2.0
  */
 
-export let gmi = {};
-
 const dedupeGlobalSettings = customSettings => {
     return customSettings.filter(customSettings => {
         return !(customSettings.key === "audio" || customSettings.key === "motion");
@@ -40,6 +38,8 @@ const getDefaultGlobals = () => {
         ],
     };
 };
+
+export let gmi = {};
 
 export const setGmi = (customSettings, windowObj) => {
     const settingsConfig = getDefaultGlobals();

@@ -21,7 +21,7 @@ export class ShopConfirm extends Screen {
         this.setLayout(["overlayBack", "pause"]);
 
         this.balance = createBalance(this);
-        this.confirm = createConfirm(this, this.transientData.shop.title, this.transientData.shop.item);
+        this.confirm = createConfirm(this, this.transientData.shop.mode, this.transientData.shop.item);
         this.transientData[this.scene.key] = { action: this.confirm.action };
         this.titles = createTitles(this);
 
@@ -37,5 +37,6 @@ export class ShopConfirm extends Screen {
 
     resize() {
         this.balance.resize();
+        this.confirm.resize();
     }
 }

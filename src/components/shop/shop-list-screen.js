@@ -18,20 +18,20 @@ export class ShopList extends Screen {
     }
 
     create() {
-        if (this.transientData.shop.title === "shop") {
+        if (this.transientData.shop.mode === "shop") {
             gmi.sendStatsEvent("shopbuy", "click", {});
         } else {
             gmi.sendStatsEvent("shopmanage", "click", {});
         }
-        gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
+        gmi.setStatsScreen(this.transientData.shop.mode === "shop" ? "shopbuy" : "shopmanage");
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
-        this.transientData[this.scene.key] = { title: this.transientData.shop.title };
+        this.transientData[this.scene.key] = { title: this.transientData.shop.mode };
 
         this.titles = createTitles(this);
         this.balance = createBalance(this);
         this.inventoryFilter = item => item.id !== this.transientData.shop.config.balance.value.key;
-        this.list = new ScrollableList(this, this.transientData.shop.title, this.inventoryFilter);
+        this.scrollableList = new ScrollableList(this, this.transientData.shop.mode, this.inventoryFilter);
 
         this.setupEvents();
         this.resize();
@@ -47,7 +47,7 @@ export class ShopList extends Screen {
     }
 
     resize() {
-        this.list.reset();
+        this.scrollableList.reset();
         this.balance.resize();
     }
 

@@ -205,12 +205,6 @@ describe("Scrollable List", () => {
 
             describe("with nested rexUI elements", () => {
                 test("a label is created with a gel button per item", () => {
-                    expect(buttons.createListButton).toHaveBeenCalledWith(
-                        mockScene,
-                        mockItem,
-                        title,
-                        expect.any(Function),
-                    );
                     expect(mockScene.rexUI.add.label).toHaveBeenCalledWith({
                         orientation: 0,
                         icon: mockGelButton,
@@ -246,7 +240,7 @@ describe("Scrollable List", () => {
 
                 test("creates a confirm pane", () => {
                     callback();
-                    expect(mockScene.transientData.shop.title).toBe("shop");
+                    expect(mockScene.transientData.shop.mode).toBe("shop");
                     expect(mockScene.transientData.shop.item).toBe(mockItem);
                     expect(mockScene.scene.pause).toHaveBeenCalled();
                     expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-confirm");
@@ -301,14 +295,8 @@ describe("Scrollable List", () => {
             const onFocusSpy = jest.fn();
             beforeEach(() => {
                 handlers.updatePanelOnFocus = jest.fn().mockReturnValue(onFocusSpy);
-                handlers.updatePanelOnScroll = jest.fn().mockReturnValue(jest.fn());
                 handlers.updatePanelOnWheel = jest.fn().mockReturnValue(onWheelSpy);
                 new ScrollableList(mockScene);
-            });
-            test("adds an updatePanelOnScroll", () => {
-                expect(mockScrollablePanel.on).toHaveBeenCalledWith("scroll", expect.any(Function));
-                mockScrollablePanel.on.mock.calls[0][1]();
-                expect(handlers.updatePanelOnScroll).toHaveBeenCalledWith(mockScrollablePanel);
             });
             test("adds an updatePanelOnFocus", () => {
                 expect(typeof mockScrollablePanel.updateOnFocus).toBe("function");
@@ -340,14 +328,12 @@ describe("Scrollable List", () => {
         });
     });
     describe("Accessibility setup", () => {
-        let list;
-
         beforeEach(() => {
-            list = new ScrollableList(mockScene);
+            new ScrollableList(mockScene);
         });
 
         test("adds the list as a custom group by scene key", () => {
-            expect(mockScene.layout.addCustomGroup).toHaveBeenCalledWith("shop-list", list, 0);
+            expect(mockScene.layout.addCustomGroup).toHaveBeenCalledWith("shop-list", mockScrollablePanel, 0);
         });
         test("adds a matching group to the accessibility layer", () => {
             expect(a11y.addGroupAt).toHaveBeenCalledWith("shop-list", 0);
