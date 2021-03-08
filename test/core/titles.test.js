@@ -5,7 +5,7 @@
  */
 import { createTitles } from "../../src/core/titles.js";
 import * as text from "../../src/core/layout/text-elem.js";
-import * as metrics from "../../src/core/scaler.js";
+import * as scaler from "../../src/core/scaler.js";
 
 jest.mock("../../src/core/layout/text-elem.js");
 jest.mock("../../src/core/scaler.js");
@@ -18,16 +18,20 @@ describe("Titles", () => {
     let mockButtonPad;
     let mockText;
     let mockTitleArea;
+    let mockScaleEvent;
 
     beforeEach(() => {
         mockButtonPad = 10;
-        metrics.getMetrics = jest.fn().mockReturnValue({ buttonPad: mockButtonPad });
+        mockScaleEvent = { unsubscribe: jest.fn() };
+        scaler.onScaleChange = { add: jest.fn().mockReturnValue(mockScaleEvent) };
+        scaler.getMetrics = jest.fn().mockReturnValue({ buttonPad: mockButtonPad });
         mockTitleArea = { centerY: 50, right: 100 };
         mockTitleBackdrop = { setOrigin: jest.fn(), destroy: jest.fn() };
         mockSubtitleBackdrop = { setOrigin: jest.fn(), destroy: jest.fn() };
         mockSubtitleIcon = { setOrigin: jest.fn(), destroy: jest.fn(), width: 20 };
         mockText = { setOrigin: jest.fn(), destroy: jest.fn(), width: 50, x: 0 };
         mockScene = {
+            events: { once: jest.fn() },
             layout: { getTitleArea: jest.fn().mockReturnValue(mockTitleArea) },
             scene: { key: "sceneKey" },
             add: {
@@ -55,6 +59,19 @@ describe("Titles", () => {
     });
 
     afterEach(jest.clearAllMocks);
+
+    test("adds an onScaleChange event", () => {
+        createTitles(mockScene);
+        expect(scaler.onScaleChange.add).toHaveBeenCalledWith(expect.any(Function));
+    });
+
+    test("unsubscribes the onScaleChange event when scene is shutdown", () => {
+        createTitles(mockScene);
+        expect(mockScene.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
+        const callback = mockScene.events.once.mock.calls[0][1];
+        callback();
+        expect(mockScaleEvent.unsubscribe).toHaveBeenCalled();
+    });
 
     describe("Title", () => {
         test("passes title text to updateStyleOnFontLoad", () => {
