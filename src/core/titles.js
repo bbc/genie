@@ -55,7 +55,7 @@ const scaleSubtitleImage = (image, area) => {
 };
 
 const positionSubtitleImage = (image, area, text, icon) => {
-    image.x = area.right - (icon.width + getMetrics().buttonPad * 2 + text.width) / 2;
+    image.x = area.right - (icon.width + getMetrics().buttonPad * 3 + text.width) / 2;
     image.y = area.centerY;
 };
 
