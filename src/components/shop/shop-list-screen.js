@@ -26,15 +26,12 @@ export class ShopList extends Screen {
         gmi.setStatsScreen(this.transientData.shop.mode === "shop" ? "shopbuy" : "shopmanage");
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
-        const shopConfig = this.transientData.shop.config;
 
-        this.transientData[this.scene.key] = {
-            title: this.transientData.shop.mode,
-        };
+        this.transientData[this.scene.key] = { title: this.transientData.shop.mode };
         setBalance(this);
 
         this.titles = createTitles(this);
-        this.inventoryFilter = item => item.id !== shopConfig.balance;
+        this.inventoryFilter = item => item.id !== this.transientData.shop.config.balance;
         this.scrollableList = new ScrollableList(this, this.transientData.shop.mode, this.inventoryFilter);
 
         this.setupEvents();

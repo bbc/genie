@@ -22,9 +22,7 @@ export class ShopConfirm extends Screen {
 
         this.confirm = createConfirm(this, this.transientData.shop.mode, this.transientData.shop.item);
 
-        this.transientData[this.scene.key] = {
-            action: this.confirm.action,
-        };
+        this.transientData[this.scene.key] = { action: this.confirm.action };
         setBalance(this);
         this.titles = createTitles(this);
 

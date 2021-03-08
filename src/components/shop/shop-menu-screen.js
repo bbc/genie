@@ -21,9 +21,7 @@ export class ShopMenu extends Screen {
         const backNav = this._data.addedBy ? "overlayBack" : "back";
         this.setLayout([backNav, "pause"]);
 
-        this.transientData.shop = {
-            config: this.config.shopConfig,
-        };
+        this.transientData.shop = { config: this.config.shopConfig };
         setBalance(this);
 
         this.titles = createTitles(this);
