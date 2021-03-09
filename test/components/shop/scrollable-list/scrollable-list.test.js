@@ -12,6 +12,7 @@ import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
 import { collections } from "../../../../src/core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
+import { initResizers } from "../../../../src/components/shop/backgrounds.js";
 
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
 jest.mock("../../../../src/components/shop/confirm.js");
@@ -150,6 +151,12 @@ describe("Scrollable List", () => {
                 },
             },
         };
+        global.RexPlugins = {
+            GameObjects: {
+                NinePatch: jest.fn(),
+            },
+        };
+        initResizers();
 
         a11y.addGroupAt = jest.fn();
     });

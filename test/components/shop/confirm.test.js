@@ -11,7 +11,8 @@ import * as text from "../../../src/core/layout/text-elem.js";
 import * as buttons from "../../../src/components/shop/menu-buttons.js";
 import * as transact from "../../../src/components/shop/transact.js";
 import { collections } from "../../../src/core/collections.js";
-import * as bgModule from "../../../src/components/shop/scrollable-list/backgrounds.js";
+import * as bgModule from "../../../src/components/shop/backgrounds.js";
+import { initResizers } from "../../../src/components/shop/backgrounds.js";
 
 jest.mock("../../../src/components/shop/transact.js");
 
@@ -109,6 +110,13 @@ describe("Confirm pane", () => {
 
         mockBalanceItem = { qty: 500 };
         transact.getBalanceItem = jest.fn(() => mockBalanceItem);
+
+        global.RexPlugins = {
+            GameObjects: {
+                NinePatch: jest.fn(),
+            },
+        };
+        initResizers();
     });
     afterEach(() => jest.clearAllMocks());
 
@@ -270,33 +278,31 @@ describe("Confirm pane", () => {
     });
 
     describe("resize", () => {
+        let resizeSpy = jest.fn();
         beforeEach(() => {
-            bgModule.resizeBackground.Image = jest.fn();
-            bgModule.resizeBackground.Object = jest.fn();
-            bgModule.resizeBackground.NinePatch = jest.fn();
+            bgModule.resizeBackground = jest.fn(() => resizeSpy);
         });
 
         test("Calls Image resize if background is Image", () => {
-            //Image Object NinePatch
-            mockImage.constructor = { name: "Image" };
+            mockImage.constructor = Phaser.GameObjects.Image;
             createConfirm(mockScene, "shop", {}).resize(mockScene, mockImage, {});
-            expect(bgModule.resizeBackground.Image).toHaveBeenCalled();
+            expect(bgModule.resizeBackground).toHaveBeenCalledWith(Phaser.GameObjects.Image);
         });
 
         test("Calls NinePatch resize if background is NinePatch", () => {
-            mockImage.constructor = { name: "NinePatch" };
+            mockImage.constructor = RexPlugins.GameObjects.NinePatch;
             createConfirm(mockScene, "shop", {}).resize(mockScene, mockImage, {});
-            expect(bgModule.resizeBackground.NinePatch).toHaveBeenCalled();
+            expect(bgModule.resizeBackground).toHaveBeenCalledWith(RexPlugins.GameObjects.NinePatch);
         });
 
         test("Calls noop if background is Object", () => {
-            mockImage.constructor = { name: "Object" };
+            mockImage.constructor = Object;
             createConfirm(mockScene, "shop", {}).resize(mockScene, mockImage, {});
-            expect(bgModule.resizeBackground.Object).toHaveBeenCalled();
+            expect(bgModule.resizeBackground).toHaveBeenCalledWith(Object);
         });
 
         test("Passes default spec to Ninepatch resize", () => {
-            mockImage.constructor = { name: "NinePatch" };
+            mockImage.constructor = RexPlugins.GameObjects.NinePatch;
             createConfirm(mockScene, "shop", {}).resize(mockScene, mockImage, {});
 
             const expectedSpec = {
@@ -305,11 +311,11 @@ describe("Confirm pane", () => {
                 yOffset: 105,
             };
 
-            expect(bgModule.resizeBackground.NinePatch.mock.calls[0][2]).toEqual(expectedSpec);
+            expect(resizeSpy.mock.calls[0][2]).toEqual(expectedSpec);
         });
 
         test("Passes right hand offset spec to Ninepatch resize", () => {
-            mockImage.constructor = { name: "NinePatch" };
+            mockImage.constructor = RexPlugins.GameObjects.NinePatch;
             mockConfig.confirm.buttons.buttonsRight = false;
 
             createConfirm(mockScene, "shop", {}).resize(mockScene, mockImage, {});
@@ -320,7 +326,7 @@ describe("Confirm pane", () => {
                 yOffset: 105,
             };
 
-            expect(bgModule.resizeBackground.NinePatch.mock.calls[0][2]).toEqual(expectedSpec);
+            expect(resizeSpy.mock.calls[0][2]).toEqual(expectedSpec);
         });
     });
 });

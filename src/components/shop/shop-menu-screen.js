@@ -10,10 +10,12 @@ import { onScaleChange } from "../../core/scaler.js";
 import { createTitles } from "../../core/titles.js";
 import { createBalance } from "./balance-ui.js";
 import { createMenu } from "./menu.js";
+import { initResizers } from "./backgrounds.js";
 
 export class ShopMenu extends Screen {
     preload() {
         this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
+        initResizers();
     }
 
     create() {
