@@ -32,9 +32,8 @@ const createMenuButton = scene => buttonText => {
 
 const makeButton = (scene, buttonType, config) => {
     const channel = buttonsChannel(scene);
-    const group = scene.scene.key;
 
-    const button = createButton(scene, { ...config, channel, group, key: scene.config[buttonType].buttons.key });
+    const button = createButton(scene, { ...config, channel, key: scene.config[buttonType].buttons.key });
     setButtonOverlays(scene, button, scene.config[buttonType].buttons, config.title);
     return button;
 };
