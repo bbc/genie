@@ -9,21 +9,25 @@
         resolution: 2,
         align: "center",
     },
-    titles: [
-        {
-            type: "image",
-            key: "titleBackground",
-            xOffset: 0,
-            yOffset: -250,
+    title: {
+        text: "<%= title %>",
+        style: {
+            fontStyle: "bold",
+            fontSize: "32px",
         },
-        {
-            type: "text",
-            value: "<%= title %>",
-            xOffset: 0,
-            yOffset: -250,
-            styles: { fontStyle: "bold", fontSize: "24px" },
+        backgroundKey: "shop-list.titleBackground",
+    },
+    subtitle: {
+        text: "<%= balance %>",
+        style: {
+            fontFamily: "ReithSans",
+            fontSize: "24px",
         },
-    ],
+        backgroundKey: "shop-menu.balanceBackground",
+        icon : {
+            key: "shop-menu.balanceIcon",
+        },
+    },
     listPadding: {
         x: 18.86,
         y: 15.09,

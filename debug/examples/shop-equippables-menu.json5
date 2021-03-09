@@ -10,21 +10,25 @@
         resolution: 2,
         align: "center",
     },
-    titles: [
-        {
-            type: "image",
-            key: "titleBackground",
-            xOffset: 0,
-            yOffset: -250,
+    title: {
+        text: "Shop",
+        style: {
+            fontStyle: "bold",
+            fontSize: "32px",
         },
-        {
-            type: "text",
-            value: "Shop",
-            xOffset: 0,
-            yOffset: -250,
-            styles: { fontStyle: "bold", fontSize: "24px" },
+        backgroundKey: "debug-shop-menu.titleBackground",
+    },
+    subtitle: {
+        text: "<%= balance %>",
+        style: {
+            fontFamily: "ReithSans",
+            fontSize: "24px",
         },
-    ],
+        backgroundKey: "debug-shop.balanceBackground",
+        icon : {
+            key: "debug-shop.balanceIcon",
+        },
+    },
     collection: ["debug-shop-equippable-items", "debug-shop-inventory"],
     shopConfig: {
         shopCollections: {
@@ -32,21 +36,7 @@
             manage: "debug-shop-inventory",
         },
         balancePadding: 15,
-        balance: {
-            background: {
-                type: "image",
-                key: "debug-shop.balanceBackground",
-            },
-            icon: {
-                type: "image",
-                key: "debug-shop.balanceIcon",
-            },
-            value: {
-                type: "text",
-                key: "coin",
-                styles: { fontSize: "16px" },
-            },
-        },
+        balance: "coin",
         slots: {
             helmet: { max: 1 },
             shield: { max: 1 },

@@ -9,6 +9,16 @@
             },
             {
                 "type": "image",
+                "key": "subtitle",
+                "url": "character-select/subtitle_drop.png"
+            },
+            {
+                "type": "image",
+                "key": "subtitle-icon",
+                "url": "character-select/subtitle-icon.png"
+            },
+            {
+                "type": "image",
                 "key": "background",
                 "url": "shared/background.png"
             },

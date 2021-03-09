@@ -30,11 +30,7 @@ describe("Shop Transactions", () => {
             transientData: {
                 shop: {
                     config: {
-                        balance: {
-                            value: {
-                                key: "currency",
-                            },
-                        },
+                        balance: "currency",
                         shopCollections: {
                             shop: "shop",
                             manage: "manage",

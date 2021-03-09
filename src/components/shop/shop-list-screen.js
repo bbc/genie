@@ -8,9 +8,8 @@ import { Screen } from "../../core/screen.js";
 import { ScrollableList } from "./scrollable-list/scrollable-list.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { onScaleChange } from "../../core/scaler.js";
-import { createTitles } from "../../core/titles.js";
-import { createBalance } from "./balance-ui.js";
 import { gmi } from "../../core/gmi/gmi.js";
+import { setBalance } from "./balance.js";
 import { initResizers } from "./backgrounds.js";
 
 export class ShopList extends Screen {
@@ -25,11 +24,11 @@ export class ShopList extends Screen {
         gmi.setStatsScreen(shopMode ? "shopbuy" : "shopmanage");
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
-        this.transientData[this.scene.key] = { title: this.transientData.shop.mode };
 
-        this.titles = createTitles(this);
-        this.balance = createBalance(this);
-        this.inventoryFilter = item => item.id !== this.transientData.shop.config.balance.value.key;
+        this.transientData[this.scene.key] = { title: this.transientData.shop.mode };
+        setBalance(this);
+
+        this.inventoryFilter = item => item.id !== this.transientData.shop.config.balance;
         this.scrollableList = new ScrollableList(this, this.transientData.shop.mode, this.inventoryFilter);
 
         this.setupEvents();
@@ -47,7 +46,6 @@ export class ShopList extends Screen {
 
     resize() {
         this.scrollableList.reset();
-        this.balance.resize();
     }
 
     onResume() {

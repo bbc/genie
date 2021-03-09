@@ -33,3 +33,14 @@ export const getSafeAreaFn = groups => (groupOverrides = {}, mirrorY = true) => 
     const height = mirrorY ? Math.min(groups[safe.bottom].y - pad.y, -top) - top : groups[safe.bottom].y - pad.y - top;
     return new Phaser.Geom.Rectangle(left, top, width, height);
 };
+
+export const getTitleAreaFn = groups => () => {
+    const metrics = getMetrics();
+    const getRightSide = group => group.x + group.width;
+    const left = getRightSide(groups.topLeft);
+    const top = metrics.horizontalBorderPad - metrics.stageHeight / 2;
+    const width = groups.topRight.x - getRightSide(groups.topLeft);
+    const height = groups.topLeft.height;
+
+    return new Phaser.Geom.Rectangle(left, top, width, height);
+};
