@@ -21,8 +21,8 @@ export class ShopList extends Screen {
 
     create() {
         const shopMode = this.transientData.shop.mode === "shop";
-        gmi.sendStatsEvent(shopMode? "shopbuy": "shopmanage", "click", {});
-        gmi.setStatsScreen(shopMode? "shopbuy" : "shopmanage");
+        gmi.sendStatsEvent(shopMode ? "shopbuy" : "shopmanage", "click", {});
+        gmi.setStatsScreen(shopMode ? "shopbuy" : "shopmanage");
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
         this.transientData[this.scene.key] = { title: this.transientData.shop.mode };
