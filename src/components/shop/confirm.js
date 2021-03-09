@@ -67,14 +67,14 @@ const createBuyElems = (scene, container, item, innerBounds, bounds) =>
         ),
     ]);
 
-const sizeConfirmButton = (scene, button, idx, bounds) => {
-    button.setY(CAMERA_Y + (idx * bounds.height) / 2);
-    button.setX(CAMERA_X + getButtonX(bounds.x, scene.config));
-    button.setScale(bounds.width / button.width);
+const sizeConfirmButton = (scene, button, idx, bounds, innerBounds) => {
+    button.setY(CAMERA_Y + (idx * innerBounds.height) / 2 + bounds.height / 2 + bounds.y);
+    button.setX(CAMERA_X + getButtonX(innerBounds.x, scene.config));
+    button.setScale(innerBounds.width / button.width);
 };
 
-const sizeConfirmButtons = (scene, confirmButtons, bounds) =>
-    confirmButtons.forEach((button, idx) => sizeConfirmButton(scene, button, idx, bounds));
+const sizeConfirmButtons = (scene, confirmButtons, bounds, innerBounds) =>
+    confirmButtons.forEach((button, idx) => sizeConfirmButton(scene, button, idx, bounds, innerBounds));
 
 const disableActionButton = button => {
     Object.assign(button, { alpha: 0.25, tint: 0xff0000 });
@@ -82,8 +82,8 @@ const disableActionButton = button => {
     button.accessibleElement.update();
 };
 
-const addConfirmButtons = (scene, container, innerBounds, title, action, item) => {
-    const confirmButtonCallback = () => handleActionClick(scene, container, title, action, item);
+const addConfirmButtons = (scene, bounds, innerBounds, title, action, item) => {
+    const confirmButtonCallback = () => handleActionClick(scene, title, action, item);
     const cancelButtonCallback = () => {
         scene._data.addedBy.scene.resume();
         scene.removeOverlay();
@@ -94,10 +94,9 @@ const addConfirmButtons = (scene, container, innerBounds, title, action, item) =
         confirmButtonCallback,
         cancelButtonCallback,
     );
-    container.add(confirmButtons);
     ((action === "buy" && !canBuyItem(scene, item)) || (action === "equip" && !isEquippable(item))) &&
         disableActionButton(confirmButtons[0]);
-    sizeConfirmButtons(scene, confirmButtons, innerBounds);
+    sizeConfirmButtons(scene, confirmButtons, bounds, innerBounds);
     return confirmButtons;
 };
 
@@ -116,7 +115,7 @@ const inferAction = fp.cond([
     [i => i.state === "purchased", () => "equip"],
 ]);
 
-const handleActionClick = (scene, container, title, action, item) => {
+const handleActionClick = (scene, title, action, item) => {
     doAction({ scene, action, item });
     scene._data.addedBy.scene.resume();
     scene.removeOverlay();
@@ -202,6 +201,6 @@ export const createConfirm = (scene, title, item) => {
         title,
         container,
         resize,
-        buttons: addConfirmButtons(scene, container, innerBounds, title, action, item),
+        buttons: addConfirmButtons(scene, bounds, innerBounds, title, action, item),
     };
 };
