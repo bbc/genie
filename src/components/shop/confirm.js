@@ -11,7 +11,7 @@ import { createConfirmButtons } from "./menu-buttons.js";
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
 import { buy, equip, unequip, use, getBalanceItem } from "./transact.js";
 import { collections } from "../../core/collections.js";
-import { createBackground, resizeBackground } from "./scrollable-list/backgrounds.js";
+import { createBackground, resizeBackground } from "./backgrounds.js";
 
 const getShopConfig = scene => scene.transientData.shop.config;
 const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(scene, item);
@@ -194,7 +194,7 @@ export const createConfirm = (scene, title, item) => {
     const xOffset = scene.config.confirm.buttons.buttonsRight ? -0.25 : 0.25;
     const bgSpec = { yOffset, aspect: 0.5, xOffset };
 
-    const resize = () => resizeBackground[elems[0].constructor.name](scene, elems[0], bgSpec);
+    const resize = () => resizeBackground(elems[0].constructor)(scene, elems[0], bgSpec);
 
     return {
         action,

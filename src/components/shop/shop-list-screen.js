@@ -11,19 +11,18 @@ import { onScaleChange } from "../../core/scaler.js";
 import { createTitles } from "../../core/titles.js";
 import { createBalance } from "./balance-ui.js";
 import { gmi } from "../../core/gmi/gmi.js";
+import { initResizers } from "./backgrounds.js";
 
 export class ShopList extends Screen {
     preload() {
         this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
+        initResizers();
     }
 
     create() {
-        if (this.transientData.shop.mode === "shop") {
-            gmi.sendStatsEvent("shopbuy", "click", {});
-        } else {
-            gmi.sendStatsEvent("shopmanage", "click", {});
-        }
-        gmi.setStatsScreen(this.transientData.shop.mode === "shop" ? "shopbuy" : "shopmanage");
+        const shopMode = this.transientData.shop.mode === "shop";
+        gmi.sendStatsEvent(shopMode ? "shopbuy" : "shopmanage", "click", {});
+        gmi.setStatsScreen(shopMode ? "shopbuy" : "shopmanage");
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
         this.transientData[this.scene.key] = { title: this.transientData.shop.mode };

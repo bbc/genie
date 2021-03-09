@@ -10,10 +10,12 @@ import { Screen } from "../../core/screen.js";
 import { createTitles } from "../../core/titles.js";
 import { createBalance } from "./balance-ui.js";
 import { createConfirm } from "./confirm.js";
+import { initResizers } from "./backgrounds.js";
 
 export class ShopConfirm extends Screen {
     preload() {
         this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
+        initResizers();
     }
 
     create() {
