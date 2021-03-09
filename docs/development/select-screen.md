@@ -77,7 +77,7 @@ Configured choices may have text labels drawn with them. These are populated by 
 
 ### Choice states
 
-Choices can have states, see [states](states.md). 
+Choices can have states, see [states](docs/development/collections.md). 
 
 ```json5
 {
