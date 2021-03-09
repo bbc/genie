@@ -35,21 +35,27 @@ const defaultSpec = {
     xOffset: 0,
 };
 
-export const createBackground = (scene, config) => backgrounds[getType(config)](scene, config);
+const resizers = new Map();
 
-export const resizeBackground = {
-    Image: (scene, background, newSpec = {}) => {
+export const initResizers = () => {
+    resizers.set(Object, () => {});
+
+    resizers.set(Phaser.GameObjects.Image, (scene, background, newSpec = {}) => {
         const spec = { ...newSpec, ...defaultSpec };
         const safeArea = scene.layout.getSafeArea({}, false);
         background.y = spec.yOffset;
         background.setScale(safeArea.width / background.width, safeArea.height / background.height);
-    },
-    Object: () => {},
-    NinePatch: (scene, background, newSpec = {}) => {
+    });
+
+    resizers.set(RexPlugins.GameObjects.NinePatch, (scene, background, newSpec = {}) => {
         const spec = { ...defaultSpec, ...newSpec };
         const { width, height, x, y } = scene.layout.getSafeArea({}, false);
         background.x = width / 2 + x + width * spec.xOffset;
         background.y = height / 2 + y - spec.yOffset;
         background.resize(width * spec.aspect, height - 2 * spec.yOffset);
-    },
+    });
 };
+
+export const createBackground = (scene, config) => backgrounds[getType(config)](scene, config);
+
+export const resizeBackground = type => resizers.get(type);

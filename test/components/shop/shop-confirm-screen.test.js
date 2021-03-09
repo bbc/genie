@@ -9,6 +9,7 @@ import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance.js";
 import * as confirm from "../../../src/components/shop/confirm.js";
 import { ShopConfirm } from "../../../src/components/shop/shop-confirm-screen.js";
+import { initResizers } from "../../../src/components/shop/backgrounds.js";
 
 jest.mock("../../../src/components/shop/balance.js");
 jest.mock("../../../src/components/shop/confirm.js");
@@ -44,6 +45,13 @@ describe("Shop Confirm Screen", () => {
             transient: { shop: { title: "shop", item: "item" } },
             config: { "shop-confirm": { shopConfig: mockShopConfig } },
         };
+
+        global.RexPlugins = {
+            GameObjects: {
+                NinePatch: jest.fn(),
+            },
+        };
+        initResizers();
     });
     afterEach(() => jest.clearAllMocks());
 

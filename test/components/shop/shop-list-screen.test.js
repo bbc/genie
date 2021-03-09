@@ -10,6 +10,7 @@ import * as balance from "../../../src/components/shop/balance.js";
 import * as list from "../../../src/components/shop/scrollable-list/scrollable-list.js";
 import * as gmi from "../../../src/core/gmi/gmi.js";
 import { ShopList } from "../../../src/components/shop/shop-list-screen.js";
+import { initResizers } from "../../../src/components/shop/backgrounds.js";
 
 jest.mock("../../../src/components/shop/balance.js");
 jest.mock("../../../src/components/shop/scrollable-list/scrollable-list.js");
@@ -48,6 +49,13 @@ describe("Shop List Screen", () => {
             transient: { shop: { mode: "shop", config: { balance: "balance" } } },
             config: { "shop-menu": { shopConfig: mockShopConfig } },
         };
+
+        global.RexPlugins = {
+            GameObjects: {
+                NinePatch: jest.fn(),
+            },
+        };
+        initResizers();
     });
     afterEach(() => jest.clearAllMocks());
 
@@ -99,6 +107,7 @@ describe("Shop List Screen", () => {
 
     test("creates list and adds reference to screen on create", () => {
         shopList.create();
+
         expect(list.ScrollableList).toHaveBeenCalledWith(
             shopList,
             shopList._data.transient.shop.mode,

@@ -10,6 +10,7 @@ import * as title from "../../../src/core/titles.js";
 import * as balance from "../../../src/components/shop/balance.js";
 import * as menu from "../../../src/components/shop/menu.js";
 import { ShopMenu } from "../../../src/components/shop/shop-menu-screen.js";
+import { initResizers } from "../../../src/components/shop/backgrounds.js";
 
 jest.mock("../../../src/core/titles.js");
 jest.mock("../../../src/components/shop/balance.js");
@@ -49,6 +50,13 @@ describe("Shop Menu Screen", () => {
         shopMenu.scene = { key: "shop-menu" };
         shopMenu.plugins = { installScenePlugin: jest.fn() };
         shopMenu._data = { addedBy: undefined, transient: {}, config: { "shop-menu": { shopConfig: mockShopConfig } } };
+
+        global.RexPlugins = {
+            GameObjects: {
+                NinePatch: jest.fn(),
+            },
+        };
+        initResizers();
     });
     afterEach(() => jest.clearAllMocks());
 
