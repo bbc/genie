@@ -39,7 +39,7 @@ const setOverlays = button => overlays1Wide(button, getConfigs(button));
 
 export const createListButton = (scene, item, title, action, parent) => {
     const id = `scroll_button_${item.id}_${title}`;
-    const ariaLabel = `${item.title} - ${item.description}`;
+    const ariaLabel = `${item.state ? item.state + " " : ""}${item.title} - ${item.description}`;
     const channel = buttonsChannel(scene);
     const group = scene.scene.key;
     const config = { ...defaults, title, id, ariaLabel, scene: scene.assetPrefix, group, channel, action };
