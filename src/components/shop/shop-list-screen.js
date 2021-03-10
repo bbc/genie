@@ -8,7 +8,6 @@ import { Screen } from "../../core/screen.js";
 import { ScrollableList } from "./scrollable-list/scrollable-list.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { onScaleChange } from "../../core/scaler.js";
-import { gmi } from "../../core/gmi/gmi.js";
 import { setBalance } from "./balance.js";
 import { initResizers } from "./backgrounds.js";
 
@@ -19,9 +18,6 @@ export class ShopList extends Screen {
     }
 
     create() {
-        const shopMode = this.transientData.shop.mode === "shop";
-        gmi.sendStatsEvent(shopMode ? "shopbuy" : "shopmanage", "click", {});
-        gmi.setStatsScreen(shopMode ? "shopbuy" : "shopmanage");
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
 
