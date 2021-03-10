@@ -36,24 +36,24 @@ const getOffsetBounds = (outerBounds, innerBounds) => ({
 const imageX = (config, bounds) =>
     config.confirm.buttons.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
 
-const createElems = (scene, container, promptText, item, bounds) => {
-    const bgConfig = scene.config.confirm?.background;
+const createElems = (scene, container, promptText, item, bounds) => ({
+    background: createBackground(scene, scene.config.confirm?.background),
+    prompt: addText(scene, 0, 0, promptText, scene.config).setOrigin(0.5),
+    itemView: itemView(scene, item, scene.config, bounds),
+});
 
-    const elems = [
-        createBackground(scene, bgConfig),
-        addText(scene, 0, 0, promptText, scene.config).setOrigin(0.5),
-    ].concat(itemView(scene, item, scene.config, bounds));
+const scalePrompt = (scene, elems, bounds, innerBounds) =>
+    elems.prompt.setPosition(getButtonX(innerBounds.x, scene.config), promptY(bounds));
 
-    container.add(elems);
+const createBuyElems = (scene, container, item) => ({
+    text: addText(scene, 0, 0, item.price, scene.config).setOrigin(0.5),
+    currency: scene.add.image(0, 0, `${scene.assetPrefix}.currencyIcon`),
+});
 
-    return elems;
+const scaleBuyElems = (scene, buyElems, bounds, innerBounds) => {
+    buyElems.text.setPosition(getButtonX(innerBounds.x + 28, scene.config), currencyY(bounds));
+    buyElems.currency.setPosition(getButtonX(innerBounds.x - 20, scene.config), currencyY(bounds));
 };
-
-const createBuyElems = (scene, container, item) =>
-    container.add([
-        addText(scene, 0, 0, item.price, scene.config).setOrigin(0.5),
-        scene.add.image(0, 0, `${scene.assetPrefix}.currencyIcon`),
-    ]);
 
 const sizeConfirmButton = (scene, button, idx, bounds, innerBounds) => {
     button.setY(CAMERA_Y + (idx * innerBounds.height) / 2 + bounds.height / 2 + bounds.y);
@@ -118,36 +118,30 @@ const doAction = fp.cond([
 const itemView = (scene, item, config) =>
     config.confirm.detailView ? itemDetailView(scene, item, config) : itemImageView(scene, item);
 
-const itemImageView = (scene, item) => {
-    const image = scene.add.image(0, 0, item.icon);
-    return [image];
-};
-
-const scaleItemImageView = (image, config, bounds) => {
-    image.setPosition(imageX(config, bounds));
-    const absScale = getItemImageScale(bounds, image);
-    setImageScaleXY(image, absScale);
-};
+const itemImageView = (scene, item) => ({ itemImage: scene.add.image(0, 0, item.icon) });
 
 const itemDetailView = (scene, item, config) => {
     const { title, detail, description } = config.confirm;
-
-    const itemImage = scene.add.image(0, 0, item.icon);
-
-    const itemTitle = addText(scene, 0, 0, item.title, title).setOrigin(0.5);
-    const itemDetail = addText(scene, 0, 0, item.description, detail).setOrigin(0.5);
-    const itemBlurb = addText(scene, 0, 0, item.longDescription, description).setOrigin(0.5);
-
-    return [itemImage, itemTitle, itemDetail, itemBlurb];
+    return {
+        itemImage: scene.add.image(0, 0, item.icon),
+        itemTitle: addText(scene, 0, 0, item.title, title).setOrigin(0.5),
+        itemDetail: addText(scene, 0, 0, item.description, detail).setOrigin(0.5),
+        itemBlurb: addText(scene, 0, 0, item.longDescription, description).setOrigin(0.5),
+    };
 };
 
-const scaleItemDetailView = (objects, config, bounds) => {
-    setImageScaleXY(objects[0], getItemDetailImageScale(bounds, objects[0]));
+const scaleItemView = (itemView, config, bounds) => {
+    setImageScaleXY(
+        itemView.itemImage,
+        itemView.itemTitle
+            ? getItemDetailImageScale(bounds, itemView.itemImage)
+            : getItemImageScale(bounds, itemView.itemImage),
+    );
     const x = imageX(config, bounds);
-    objects[0].setPosition(x, imageY(bounds));
-    objects[1].setPosition(x, titleY(bounds));
-    objects[2].setPosition(x, detailY(bounds));
-    objects[3].setPosition(x, blurbY(bounds));
+    itemView.itemImage.setPosition(x, imageY(bounds));
+    itemView?.itemTitle.setPosition(x, titleY(bounds));
+    itemView?.itemDetail.setPosition(x, detailY(bounds));
+    itemView?.itemBlurb.setPosition(x, blurbY(bounds));
 };
 
 const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY = 1) => {
@@ -184,6 +178,10 @@ export const createConfirm = (scene, title, item) => {
     const buyElems = action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item);
     const buttons = addConfirmButtons(scene, title, action, item);
 
+    const { itemView, ...otherElems } = elems;
+    Object.values({ ...otherElems, ...itemView }).forEach(elem => container.add(elem));
+    Object.values(buyElems).forEach(elem => container.add(elem));
+
     const resize = () => {
         const bounds = getSafeArea(scene.layout);
         const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
@@ -191,12 +189,11 @@ export const createConfirm = (scene, title, item) => {
         const xOffset = scene.config.confirm.buttons.buttonsRight ? -0.25 : 0.25;
         const bgSpec = { yOffset, aspect: 0.5, xOffset };
         container.setY(yOffset);
-        resizeBackground(elems[0].constructor)(scene, elems[0], bgSpec);
-        elems[1].setPosition(getButtonX(innerBounds.x, scene.config), promptY(bounds));
-        buyElems.list[6].setPosition(getButtonX(innerBounds.x + 28, scene.config), currencyY(bounds));
-        buyElems.list[7].setPosition(getButtonX(innerBounds.x - 20, scene.config), currencyY(bounds));
+        resizeBackground(elems.background.constructor)(scene, elems.background, bgSpec);
+        scalePrompt(scene, elems, bounds, innerBounds);
+        buyElems && scaleBuyElems(scene, buyElems, bounds, innerBounds);
         sizeConfirmButtons(scene, buttons, bounds, innerBounds);
-        scaleItemDetailView(fp.takeRight(4, elems), scene.config, bounds);
+        scaleItemView(elems.itemView, scene.config, bounds);
     };
 
     return {
