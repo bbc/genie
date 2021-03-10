@@ -341,6 +341,26 @@
                 "type": "image",
                 "key": "halfViewBackground",
                 "url": "../../debug/assets/shop/half_panel.png"
+            },
+            {
+                "type": "audio",
+                "key": "buy",
+                "url": "../../debug/assets/shop/till.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "equip",
+                "url": "../../debug/assets/shop/equip.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "unequip",
+                "url": "../../debug/assets/shop/unequip.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "use",
+                "url": "../../debug/assets/shop/use.mp4"
             }
         ]
     },
