@@ -33,11 +33,11 @@ const validateFn = catalogue =>
 
 export const initCollection = screen => key => {
     const getStored = getStoredFn(key);
-    const config = screen.cache.json.get(`items/${key}`);
+    const config = screen.cache.json.get(`collections/${key}`);
 
     const storagePath = ["collections", key];
     const catalogue = fp.isString(config.catalogue)
-        ? screen.cache.json.get(`items/${config.catalogue}`)
+        ? screen.cache.json.get(`collections/${config.catalogue}`)
         : config.catalogue;
 
     const valid = validateFn(catalogue);

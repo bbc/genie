@@ -47,8 +47,8 @@ describe("Collections", () => {
         ];
 
         mockCache = {
-            "items/testCollection": testCollection,
-            "items/testCatalogue": testCatalogue,
+            "collections/testCollection": testCollection,
+            "collections/testCatalogue": testCatalogue,
         };
 
         mockScreen = {
