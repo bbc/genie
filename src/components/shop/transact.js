@@ -24,7 +24,10 @@ export const buy = (scene, item) => {
     const remainingStock = shopCol.get(item.id).qty - 1;
     shopCol.set({ id: item.id, qty: remainingStock });
     invCol.set({ id: item.id, state: "purchased", qty: inventoryItem ? inventoryItem.qty + 1 : 1 });
-    gmi.sendStatsEvent("buy", "click", { metadata: `KEY=${item.id}~STATE=purchased~QTY=${remainingStock}`, source: item.title });
+    gmi.sendStatsEvent("buy", "click", {
+        metadata: `KEY=${item.id}~STATE=purchased~QTY=${remainingStock}`,
+        source: item.title,
+    });
     updateBalance(scene, invCol, item.price);
 
     playShopSound(scene, item, "buy");
@@ -38,7 +41,10 @@ export const equip = (scene, item) => {
         .filter(invItem => invItem.slot === item.slot && invItem.state === "equipped");
     const maxItemsInSlot = scene.transientData.shop.config.slots[item.slot].max;
     itemsEquippedInSlot.length === maxItemsInSlot && unequip(scene, itemsEquippedInSlot[0]);
-    gmi.sendStatsEvent("equip", "click", { metadata: `KEY=${item.id}~STATE=equipped~QTY=${item.qty}`, source: item.title });
+    gmi.sendStatsEvent("equip", "click", {
+        metadata: `KEY=${item.id}~STATE=equipped~QTY=${item.qty}`,
+        source: item.title,
+    });
     invCol.set({ id: item.id, state: "equipped" });
     playShopSound(scene, item, "equip");
 };
@@ -46,7 +52,10 @@ export const equip = (scene, item) => {
 export const unequip = (scene, item) => {
     const { manage } = scene.transientData.shop.config.shopCollections;
     const invCol = collections.get(manage);
-    gmi.sendStatsEvent("unequip", "click", { metadata: `KEY=${item.id}~STATE=unequipped~QTY=${item.qty}`, source: item.title });
+    gmi.sendStatsEvent("unequip", "click", {
+        metadata: `KEY=${item.id}~STATE=unequipped~QTY=${item.qty}`,
+        source: item.title,
+    });
     invCol.set({ id: item.id, state: "purchased" });
     playShopSound(scene, item, "unequip");
 };

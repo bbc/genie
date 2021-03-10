@@ -42,12 +42,13 @@ const showConfirmation = (scene, mode, item) => {
     scene.transientData.shop.item = item;
     scene.scene.pause();
 
-    gmi.sendStatsEvent("list-item", "click", {item: item.id});
+    gmi.sendStatsEvent("list-item", "click", { item: item.id });
     scene.addOverlay(scene.scene.key.replace("-list", "-confirm"));
 };
 
 const createItem = (scene, item, mode, parent, scrollablePanel) => {
-    const action = pointer => (scrollablePanel.isInTouching() || !pointer) && !isLocked(item) && showConfirmation(scene, mode, item);
+    const action = pointer =>
+        (scrollablePanel.isInTouching() || !pointer) && !isLocked(item) && showConfirmation(scene, mode, item);
     const icon = createListButton(scene, item, mode, action, parent);
 
     return scene.rexUI.add.label({
