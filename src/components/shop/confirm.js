@@ -36,10 +36,10 @@ const getOffsetBounds = (outerBounds, innerBounds) => ({
 const imageX = (config, bounds) =>
     config.confirm.buttons.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
 
-const createElems = (scene, container, promptText, item, bounds) => ({
+const createElems = (scene, container, promptText, item) => ({
     background: createBackground(scene, scene.config.confirm?.background),
     prompt: addText(scene, 0, 0, promptText, scene.config).setOrigin(0.5),
-    itemView: itemView(scene, item, scene.config, bounds),
+    itemView: itemView(scene, item, scene.config),
 });
 
 const scalePrompt = (scene, elems, bounds, innerBounds) =>
@@ -172,9 +172,8 @@ const getPromptText = fp.cond([
 
 export const createConfirm = (scene, title, item) => {
     const action = getAction(scene, title, item);
-    const bounds = getSafeArea(scene.layout);
     const container = scene.add.container();
-    const elems = createElems(scene, container, getPromptText({ scene, action, item }), item, bounds);
+    const elems = createElems(scene, container, getPromptText({ scene, action, item }), item);
     const buyElems = action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item);
     const buttons = addConfirmButtons(scene, title, action, item);
 
