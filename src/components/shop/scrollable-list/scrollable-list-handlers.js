@@ -7,20 +7,7 @@
 
 import fp from "../../../../lib/lodash/fp/fp.js";
 
-const updatePanelOnScroll = panel => () => getPanelItems(panel).map(item => item.setElementSizeAndPosition());
-
 const getPanelItems = panel => panel.getByName("grid", true).getElement("items");
-
-const updatePanelOnFocus = panel => rexLabel => {
-    const visibleBounds = getVisibleRangeBounds(panel);
-    const itemBounds = getItemBounds(panel, rexLabel);
-    const updateScrollPositionIfItemNotVisible = fp.cond([
-        [(vb, ib) => ib.lower < vb.lower, (vb, ib) => updateScrollPosition(panel, ib.lower - vb.lower)],
-        [(vb, ib) => ib.upper > vb.upper, (vb, ib) => updateScrollPosition(panel, ib.upper - vb.upper)],
-        [() => true, () => {}],
-    ]);
-    updateScrollPositionIfItemNotVisible(visibleBounds, itemBounds);
-};
 
 const getVisibleRangeBounds = panel => {
     const itemsHeight = getItemsHeight(panel);
@@ -59,7 +46,24 @@ const getMaxOffset = panel => {
     return Math.max(getItemsHeight(panel) - visibleWindowHeight, 0);
 };
 
-const updatePanelOnWheel = panel => (...args) => {
+const wheelScrollFactor = panel => {
+    const maxOffset = getMaxOffset(panel);
+    if (maxOffset === 0) return maxOffset;
+    return 1 / maxOffset;
+};
+
+export const updatePanelOnFocus = panel => rexLabel => {
+    const visibleBounds = getVisibleRangeBounds(panel);
+    const itemBounds = getItemBounds(panel, rexLabel);
+    const updateScrollPositionIfItemNotVisible = fp.cond([
+        [(vb, ib) => ib.lower < vb.lower, (vb, ib) => updateScrollPosition(panel, ib.lower - vb.lower)],
+        [(vb, ib) => ib.upper > vb.upper, (vb, ib) => updateScrollPosition(panel, ib.upper - vb.upper)],
+        [() => true, () => {}],
+    ]);
+    updateScrollPositionIfItemNotVisible(visibleBounds, itemBounds);
+};
+
+export const updatePanelOnWheel = panel => (...args) => {
     const event = args[5];
     event.stopPropagation();
 
@@ -70,11 +74,3 @@ const updatePanelOnWheel = panel => (...args) => {
     const t = Math.min(Math.max(0, panel.t + delta), 1);
     panel.t !== t && panel.setT(t);
 };
-
-const wheelScrollFactor = panel => {
-    const maxOffset = getMaxOffset(panel);
-    if (maxOffset === 0) return maxOffset;
-    return 1 / maxOffset;
-};
-
-export { updatePanelOnFocus, updatePanelOnScroll, updatePanelOnWheel };

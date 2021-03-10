@@ -15,6 +15,7 @@ import { buttonsChannel } from "../../src/core/layout/gel-defaults";
 import { settingsChannel } from "../../src/core/settings.js";
 import * as debugModeModule from "../../src/core/debug/debug-mode.js";
 import * as debugModule from "../../src/core/debug/debug.js";
+import * as titles from "../../src/core/titles";
 
 describe("Screen", () => {
     let screen;
@@ -97,6 +98,8 @@ describe("Screen", () => {
             config: mockConfig,
             transient: mockTransientData,
         };
+
+        titles.createTitles = jest.fn().mockReturnValue({ mock: "titles" });
     });
 
     afterEach(() => jest.clearAllMocks());
@@ -161,6 +164,13 @@ describe("Screen", () => {
         test("sets the stats screen to the current screen, if not on the loadscreen", () => {
             createAndInitScreen();
             expect(mockGmi.setStatsScreen).toHaveBeenCalledWith(screen.scene.key);
+        });
+
+        test("creates titles, if not on the load/boot screen", () => {
+            createAndInitScreen();
+            expect(screen.events.on).toHaveBeenCalledWith(Phaser.Scenes.Events.CREATE, expect.any(Function));
+            screen.events.on.mock.calls[0][1]();
+            expect(titles.createTitles).toHaveBeenCalledWith(screen);
         });
 
         test("does not set the stats screen to the current screen, if on the loadscreen", () => {
@@ -359,26 +369,9 @@ describe("Screen", () => {
             });
         });
 
-        test("sets the stats screen if the screen is not an overlay", () => {
-            createScreen("screenKey");
-            mockData.config["screenKey"] = { isOverlay: false };
-            screen.init(mockData);
-
-            expect(mockGmi.setStatsScreen).toHaveBeenCalled();
-        });
-
-        test("Set the stats screen if the screen is an overlay", () => {
-            createScreen("screenKey");
-            mockData.config["screenKey"] = { isOverlay: true };
-            screen.init(mockData);
-
-            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith("screenKey");
-        });
-
         test("removing an overlay set stat screen back to an underlying overlay", () => {
             const mockOverlay = { removeAll: jest.fn(), scene: { key: "overlay", stop: jest.fn() } };
             createScreen("screenKey");
-            mockData.config["screenKey"] = { isOverlay: true };
             screen.init(mockData);
             screen._onOverlayRemoved(mockOverlay);
 

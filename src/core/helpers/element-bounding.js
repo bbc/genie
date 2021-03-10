@@ -7,12 +7,6 @@
  * @license Apache-2.0
  */
 
-export const positionElement = (element, position, safeArea, metrics) => {
-    element.setPosition(position.x, position.y);
-    element.setOrigin(0.5);
-    restrictBounds(element, safeArea, metrics);
-};
-
 const scaleElement = (element, bounds) => {
     const safeHeight = bounds.bottom - bounds.top;
     const safeWidth = bounds.right - bounds.left;
@@ -54,6 +48,12 @@ const restrictBounds = (element, safeArea, metrics) => {
     if (elementBounds.right > safeArea.right) {
         element.setPosition(element.x - (elementBounds.right - safeArea.right), element.y);
     }
+};
+
+export const positionElement = (element, position, safeArea, metrics) => {
+    element.setPosition(position.x, position.y);
+    element.setOrigin(0.5);
+    restrictBounds(element, safeArea, metrics);
 };
 
 export const enforceTextSize = (element, { scale }) => {

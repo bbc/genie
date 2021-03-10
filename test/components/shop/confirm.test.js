@@ -11,6 +11,8 @@ import * as text from "../../../src/core/layout/text-elem.js";
 import * as buttons from "../../../src/components/shop/menu-buttons.js";
 import * as transact from "../../../src/components/shop/transact.js";
 import { collections } from "../../../src/core/collections.js";
+import * as bgModule from "../../../src/components/shop/backgrounds.js";
+import { initResizers } from "../../../src/components/shop/backgrounds.js";
 
 jest.mock("../../../src/components/shop/transact.js");
 
@@ -37,9 +39,10 @@ describe("Confirm pane", () => {
             input: { enabled: true },
             accessibleElement: { update: jest.fn() },
         };
+
         mockConfig = {
-            menu: { buttonsRight: true },
             confirm: {
+                background: "testBackgroundKey",
                 prompt: {
                     buy: { legal: "legalBuyPrompt", illegal: "illegalBuyPrompt", unavailable: "unavailableBuyPrompt" },
                     equip: { legal: "equipPrompt", illegal: "illegalEquipPrompt" },
@@ -47,14 +50,23 @@ describe("Confirm pane", () => {
                     use: "usePrompt",
                 },
                 detailView: false,
+                buttons: {
+                    buttonsRight: true,
+                },
             },
             assetKeys: { background: { confirm: "background" } },
             balance: { icon: { key: "balanceIcon" } },
             styleDefaults: {},
-            paneCollections: { shop: "armoury", manage: "inventory" },
         };
         mockBalance = { setText: jest.fn(), getValue: jest.fn() };
         mockScene = {
+            _data: {
+                addedBy: {
+                    scene: {
+                        resume: jest.fn(),
+                    },
+                },
+            },
             add: {
                 container: jest.fn().mockReturnValue(mockContainer),
                 image: jest.fn().mockReturnValue(mockImage),
@@ -72,7 +84,14 @@ describe("Confirm pane", () => {
                 shop: { setVisible: jest.fn() },
             },
             paneStack: [],
-            title: { setTitleText: jest.fn() },
+            transientData: {
+                shop: {
+                    config: {
+                        shopCollections: { shop: "armoury", manage: "inventory" },
+                    },
+                },
+            },
+            removeOverlay: jest.fn(),
         };
         mockCollection = { get: jest.fn().mockReturnValue({ state: "equipped", qty: 1, price: 99 }) };
         collections.get = jest.fn(() => mockCollection);
@@ -91,6 +110,13 @@ describe("Confirm pane", () => {
 
         mockBalanceItem = { qty: 500 };
         transact.getBalanceItem = jest.fn(() => mockBalanceItem);
+
+        global.RexPlugins = {
+            GameObjects: {
+                NinePatch: jest.fn(),
+            },
+        };
+        initResizers();
     });
     afterEach(() => jest.clearAllMocks());
 
@@ -104,7 +130,6 @@ describe("Confirm pane", () => {
             expect(confirmPane.container).toBe(mockContainer);
         });
         test("an item and a title", () => {
-            // expect(confirmPane.action).toBe("buy");
             expect(confirmPane.item).toBe(mockItem);
             expect(confirmPane.title).toBe("shop");
         });
@@ -114,39 +139,13 @@ describe("Confirm pane", () => {
         test("in a layout that can be flipped L-R in config", () => {
             expect(layout.getInnerRectBounds.mock.calls[0][0]).toBe(mockScene);
             jest.clearAllMocks();
-            mockScene.config = { ...mockConfig, menu: { buttonsRight: false } };
+            mockScene.config.confirm.buttons.buttonsRight = false;
             createConfirm(mockScene, "shop", { id: "foo" });
             expect(text.addText.mock.calls[0][1]).toBe(-50);
             expect(text.addText.mock.calls[0][2]).toBe(-75);
         });
         test("that is displayed with an appropriate Y offset", () => {
             expect(mockContainer.setY).toHaveBeenCalledWith(105);
-        });
-        // describe("returns an object with a resize fn", () => {
-        //     beforeEach(() => {
-        //         jest.clearAllMocks();
-        //         confirmPane.resize();
-        //     });
-        //     test("which destroys the container", () => {
-        //         expect(mockContainer.removeAll).toHaveBeenCalled();
-        //         expect(mockContainer.destroy).toHaveBeenCalled();
-        //     });
-        //     test("and creates and populates a new container", () => {
-        //         expect(mockScene.add.container).toHaveBeenCalled();
-        //         expect(buttons.createConfirmButtons).toHaveBeenCalled();
-        //         expect(text.addText).toHaveBeenCalledTimes(2);
-        //     });
-        // });
-        describe("returns an object with a destroy fn", () => {
-            beforeEach(() => {
-                jest.clearAllMocks();
-                confirmPane.destroy();
-            });
-
-            test("which empties and destroys the container", () => {
-                expect(mockContainer.removeAll).toHaveBeenCalled();
-                expect(mockContainer.destroy).toHaveBeenCalled();
-            });
         });
     });
 
@@ -175,14 +174,6 @@ describe("Confirm pane", () => {
             expect(text.addText.mock.calls[2][3]).toBe("itemDescription");
             expect(text.addText.mock.calls[3][3]).toBe("itemBlurb");
             expect(mockScene.add.image).toHaveBeenCalledWith(50, -50, "itemIcon");
-        });
-        test("uses placeholders if item is undefined", () => {
-            jest.clearAllMocks();
-            confirmPane = createConfirm(mockScene, "shop", undefined);
-            expect(text.addText.mock.calls[1][3]).toBe("PH");
-            expect(text.addText.mock.calls[2][3]).toBe("PH");
-            expect(text.addText.mock.calls[3][3]).toBe("PH");
-            expect(mockScene.add.image).toHaveBeenCalledWith(50, -50, "shop.itemIcon");
         });
     });
 
@@ -279,17 +270,63 @@ describe("Confirm pane", () => {
             confirmPane = createConfirm(mockScene, "shop", { mock: "item" });
             cancelCallback = buttons.createConfirmButtons.mock.calls[0][3];
         });
-        test("closes the container", () => {
+        test("removes this overlay and resumes the scene below", () => {
             cancelCallback();
-            expect(mockContainer.removeAll).toHaveBeenCalled();
-            expect(mockContainer.destroy).toHaveBeenCalled();
+            expect(mockScene._data.addedBy.scene.resume).toHaveBeenCalled();
+            expect(mockScene.removeOverlay).toHaveBeenCalled();
         });
-        test("sets the previous pane visible", () => {
-            confirmPane = createConfirm(mockScene, "shop", { mock: "item" });
-            mockScene.paneStack = ["prevPane", "confirm"];
-            cancelCallback();
-            expect(mockScene.panes.shop.setVisible).toHaveBeenCalledWith(true);
-            expect(mockScene.title.setTitleText).toHaveBeenCalledWith("prevPane");
+    });
+
+    describe("resize", () => {
+        let resizeSpy = jest.fn();
+        beforeEach(() => {
+            bgModule.resizeBackground = jest.fn(() => resizeSpy);
+        });
+
+        test("Calls Image resize if background is Image", () => {
+            mockImage.constructor = Phaser.GameObjects.Image;
+            createConfirm(mockScene, "shop", {}).resize(mockScene, mockImage, {});
+            expect(bgModule.resizeBackground).toHaveBeenCalledWith(Phaser.GameObjects.Image);
+        });
+
+        test("Calls NinePatch resize if background is NinePatch", () => {
+            mockImage.constructor = RexPlugins.GameObjects.NinePatch;
+            createConfirm(mockScene, "shop", {}).resize(mockScene, mockImage, {});
+            expect(bgModule.resizeBackground).toHaveBeenCalledWith(RexPlugins.GameObjects.NinePatch);
+        });
+
+        test("Calls noop if background is Object", () => {
+            mockImage.constructor = Object;
+            createConfirm(mockScene, "shop", {}).resize(mockScene, mockImage, {});
+            expect(bgModule.resizeBackground).toHaveBeenCalledWith(Object);
+        });
+
+        test("Passes default spec to Ninepatch resize", () => {
+            mockImage.constructor = RexPlugins.GameObjects.NinePatch;
+            createConfirm(mockScene, "shop", {}).resize(mockScene, mockImage, {});
+
+            const expectedSpec = {
+                aspect: 0.5,
+                xOffset: -0.25,
+                yOffset: 105,
+            };
+
+            expect(resizeSpy.mock.calls[0][2]).toEqual(expectedSpec);
+        });
+
+        test("Passes right hand offset spec to Ninepatch resize", () => {
+            mockImage.constructor = RexPlugins.GameObjects.NinePatch;
+            mockConfig.confirm.buttons.buttonsRight = false;
+
+            createConfirm(mockScene, "shop", {}).resize(mockScene, mockImage, {});
+
+            const expectedSpec = {
+                aspect: 0.5,
+                xOffset: 0.25,
+                yOffset: 105,
+            };
+
+            expect(resizeSpy.mock.calls[0][2]).toEqual(expectedSpec);
         });
     });
 });

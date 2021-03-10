@@ -12,7 +12,7 @@ const equipped = item => item?.state === "equipped";
 
 export const getButtonState = (scene, item, title) => {
     const states = [];
-    const inventoryItem = collections.get(scene.config.paneCollections.manage).get(item.id);
+    const inventoryItem = collections.get(scene.transientData.shop.config.shopCollections.manage).get(item.id);
     const isButtonCta = title === "shop" ? qtyOneOrMore(inventoryItem) : equipped(inventoryItem);
 
     states.push(isButtonCta ? "actioned" : "cta");

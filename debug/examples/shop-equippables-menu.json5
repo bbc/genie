@@ -1,0 +1,52 @@
+{
+    assetPrefix: "debug-shop-menu", // used for debug screens
+    music: "home.backgroundMusic",
+    background: {
+        items: [{ key: "debug-shop.magicShop", x: 0, y: 0 }],
+    },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 2,
+        align: "center",
+    },
+    title: {
+        text: "Shop",
+        style: {
+            fontStyle: "bold",
+            fontSize: "32px",
+        },
+        backgroundKey: "debug-shop-menu.titleBackground",
+    },
+    subtitle: {
+        text: "<%= balance %>",
+        style: {
+            fontFamily: "ReithSans",
+            fontSize: "24px",
+        },
+        backgroundKey: "debug-shop.balanceBackground",
+        icon : {
+            key: "debug-shop.balanceIcon",
+        },
+    },
+    collection: ["debug-shop-equippable-items", "debug-shop-inventory"],
+    shopConfig: {
+        shopCollections: {
+            shop: "debug-shop-equippable-items",
+            manage: "debug-shop-inventory",
+        },
+        balancePadding: 15,
+        balance: "coin",
+        slots: {
+            helmet: { max: 1 },
+            shield: { max: 1 },
+        },
+    },
+    menu: {
+        buttonsRight: true,
+        buttons: {
+            key: "debug-shop.menuButtonBackground",
+            styles: { fontStyle: "bold", fontSize: "16px" },
+        },
+    },
+}

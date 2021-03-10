@@ -23,6 +23,7 @@ describe("Scrollable List handlers", () => {
 
     beforeEach(() => {
         mockGelButton = {
+            setElementSizeAndPosition: jest.fn(),
             config: { id: "foo" },
             rexContainer: {
                 parent: {
@@ -47,15 +48,6 @@ describe("Scrollable List handlers", () => {
             visible: true,
             isInTouching: jest.fn().mockReturnValue(true),
         };
-    });
-
-    describe("updatePanelOnScroll", () => {
-        beforeEach(() => {});
-        test("calls setElementSizeAndPosition on each GEL button", () => {
-            const instance = handlers.updatePanelOnScroll(mockPanel);
-            instance();
-            expect(mockRexLabel.setElementSizeAndPosition).toHaveBeenCalled();
-        });
     });
 
     describe("updatePanelOnFocus", () => {

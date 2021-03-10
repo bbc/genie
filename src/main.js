@@ -100,12 +100,7 @@ const screens = {
         },
     },
     // Overlays
-    shop: {
-        scene: Shop,
-        routes: {
-            home: "home",
-        },
-    },
+    ...Shop({ key: "shop", routes: {} }),
     "how-to-play": {
         scene: HowToPlay,
         routes: {

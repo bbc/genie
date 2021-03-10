@@ -8,8 +8,13 @@ import { accessibilify } from "../core/accessibility/accessibilify.js";
 import { gmi } from "../core/gmi/gmi.js";
 import { collections } from "../core/collections.js";
 import { launchShopOverlay } from "../components/shop/shop.js";
+import { eventBus } from "../core/event-bus.js";
 
 export class Game extends Screen {
+    itemUsed(data) {
+        console.log("Item used:", data); // eslint-disable-line no-console
+    }
+
     calculateAchievements(item, amount, keys) {
         if (amount === 1) {
             gmi.achievements.set({ key: keys[0] });
@@ -31,6 +36,13 @@ export class Game extends Screen {
     }
 
     create() {
+        eventBus.subscribe({
+            channel: "shop",
+            name: "used",
+            callback: data => {
+                this.itemUsed(data);
+            },
+        });
         const achievementNames = this.getAchievements();
 
         let keys = 0;

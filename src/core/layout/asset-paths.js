@@ -6,6 +6,7 @@
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const paths = [
+    [x => x.gameButton && !x.scene, x => x.key],
     [x => x.gameButton, x => `${x.scene}.${x.key}`],
     [x => x.isMobile, x => "gelMobile." + x.key],
     [x => !x.isMobile, x => "gelDesktop." + x.key],

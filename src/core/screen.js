@@ -18,6 +18,7 @@ import { isDebug } from "./debug/debug-mode.js";
 import * as debug from "./debug/debug.js";
 import { CAMERA_X, CAMERA_Y } from "./layout/metrics.js";
 import { nextPage } from "./background/pages.js";
+import { createTitles } from "./titles.js";
 
 const getRoutingFn = scene => route => {
     const routeTypes = {
@@ -84,6 +85,7 @@ export class Screen extends Phaser.Scene {
             GameSound.setupScreenMusic(this);
 
             isDebug() && debug.addEvents(this);
+            this.events.on(Phaser.Scenes.Events.CREATE, () => (this.titles = createTitles(this)));
         }
 
         this.sys.accessibleButtons = [];
@@ -151,6 +153,7 @@ export class Screen extends Phaser.Scene {
             active.screen.scene.stop();
         });
         activeScreens = [];
+        delete this._data.addedBy;
         this.scene.start(route, this._data);
     };
 

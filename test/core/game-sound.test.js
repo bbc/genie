@@ -12,6 +12,7 @@ describe("Game Sound", () => {
 
     beforeEach(() => {
         mockScene = {
+            _data: {},
             scene: { key: "select" },
             sound: {
                 add: jest.fn(() => mockMusic),
@@ -106,7 +107,7 @@ describe("Game Sound", () => {
             });
 
             test("does not stop current music playing if screen is an overlay", () => {
-                mockScene.config = { music: "", isOverlay: true };
+                mockScene._data.addedBy = "screen";
                 GameSound.setupScreenMusic(mockScene);
                 expect(mockCurrentMusic.destroy).not.toHaveBeenCalled();
             });

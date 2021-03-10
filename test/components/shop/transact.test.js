@@ -8,6 +8,7 @@
 import * as transact from "../../../src/components/shop/transact.js";
 import { collections } from "../../../src/core/collections.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
+import { eventBus } from "../../../src/core/event-bus.js";
 
 jest.mock("../../../src/core/collections.js");
 jest.mock("../../../src/core/gmi/gmi.js");
@@ -21,25 +22,24 @@ describe("Shop Transactions", () => {
     let mockInventoryItemList;
     let mockShopCollection;
     let mockManageCollection;
+    let unsubscribeSpy;
 
     beforeEach(() => {
         mockScene = {
-            config: {
-                balance: {
-                    value: {
-                        key: "currency",
+            config: {},
+            transientData: {
+                shop: {
+                    config: {
+                        balance: "currency",
+                        shopCollections: {
+                            shop: "shop",
+                            manage: "manage",
+                        },
+                        slots: {
+                            helmet: { max: 1 },
+                        },
                     },
                 },
-                paneCollections: {
-                    shop: "shop",
-                    manage: "manage",
-                },
-                slots: {
-                    helmet: { max: 1 },
-                },
-            },
-            events: {
-                emit: jest.fn(),
             },
         };
         mockCurrencyItem = {
@@ -49,6 +49,7 @@ describe("Shop Transactions", () => {
             id: "item",
             price: 50,
             slot: "helmet",
+            title: "amazing helmet",
         };
         mockShopItem = {
             qty: 1,
@@ -56,6 +57,7 @@ describe("Shop Transactions", () => {
         mockInventoryItem = {
             id: "inventoryItem",
             qty: 5,
+            title: "amazing helmet",
         };
         mockInventoryItemList = [];
         collections.get = jest.fn(collectionName =>
@@ -72,6 +74,9 @@ describe("Shop Transactions", () => {
         };
         gmi.sendStatsEvent = jest.fn();
     });
+    unsubscribeSpy = jest.fn();
+    jest.spyOn(eventBus, "publish").mockImplementation(() => {});
+    jest.spyOn(eventBus, "subscribe").mockImplementation(() => ({ unsubscribe: unsubscribeSpy }));
     afterEach(() => jest.clearAllMocks());
 
     describe("Buying an item", () => {
@@ -92,12 +97,11 @@ describe("Shop Transactions", () => {
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedBalanceItem);
         });
 
-        test("emits an updatebalance event", () => {
-            expect(mockScene.events.emit).toHaveBeenCalledWith("updatebalance");
-        });
-
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("buy", "click", { id: "item", qty: 0 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("buy", "click", {
+                metadata: "KEY=item~STATE=purchased~QTY=1",
+                source: "amazing helmet",
+            });
         });
 
         test("item is added to the inventory collection with qty set to 1 when the item does not exist in the inventory yet", () => {
@@ -118,7 +122,10 @@ describe("Shop Transactions", () => {
         });
 
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("equip", "click", { id: "item", qty: 1 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("equip", "click", {
+                metadata: "KEY=item~STATE=equipped~QTY=1",
+                source: "amazing helmet",
+            });
         });
 
         test("currently equipped item is unequipped when destination slot is full", () => {
@@ -144,7 +151,10 @@ describe("Shop Transactions", () => {
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("unequip", "click", { id: "item", qty: 1 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("unequip", "click", {
+                metadata: "KEY=item~STATE=unequipped~QTY=1",
+                source: "amazing helmet",
+            });
         });
     });
 
@@ -155,14 +165,25 @@ describe("Shop Transactions", () => {
             const expectedItem = { ...mockInventoryItem, qty: mockInventoryItem.qty - 1 };
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
+
+        test("publishes events for transaction", () => {
+            const eventCalls = eventBus.publish.mock.calls[0][0];
+            expect(eventCalls.channel).toBe("shop");
+            expect(eventCalls.name).toBe("used");
+            expect(eventCalls.data).toBe(mockInventoryItem);
+        });
+
         test("fires a stats event", () => {
-            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("use", "click", { id: "inventoryItem", qty: 4 });
+            expect(gmi.sendStatsEvent).toHaveBeenCalledWith("use", "click", {
+                metadata: "KEY=inventoryItem~STATE=used~QTY=1",
+                source: "amazing helmet",
+            });
         });
     });
 
     describe("getBalanceItem", () => {
         test("returns the currency item", () => {
-            expect(transact.getBalanceItem(mockScene)).toBe(mockCurrencyItem);
+            expect(transact.getBalanceItem(mockScene.transientData.shop.config)).toBe(mockCurrencyItem);
         });
     });
 });

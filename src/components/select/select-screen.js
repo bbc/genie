@@ -10,7 +10,7 @@ import { Screen } from "../../core/screen.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { GelGrid } from "../../core/layout/grid/grid.js";
 import fp from "../../../lib/lodash/fp/fp.js";
-import { createTitles } from "./titles.js";
+import { createTitles } from "../../core/titles.js";
 import * as singleItemMode from "./single-item-mode.js";
 import { addEvents } from "./add-events.js";
 import { gmi } from "../../core/gmi/gmi.js";
@@ -32,7 +32,6 @@ const getOnTransitionStartFn = scene => () => {
 export class Select extends Screen {
     create() {
         this.addBackgroundItems();
-        createTitles(this);
         this.collection = collections.get(this.config.collection);
         const paginate = this.collection.getAll().length > this.config.columns * this.config.rows;
         const pagingButtons = paginate ? ["previous", "next"] : [];
@@ -41,6 +40,7 @@ export class Select extends Screen {
             ? this.setLayout([...buttons, "continue"], ["home", "pause"])
             : this.setLayout(buttons, buttons);
 
+        this.titles = createTitles(this);
         const onTransitionStart = getOnTransitionStartFn(this);
         const choice = this.transientData[this.scene.key]?.choice?.id;
 

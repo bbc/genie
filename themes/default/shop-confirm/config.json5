@@ -1,0 +1,60 @@
+{
+    music: "home.backgroundMusic",
+    background: {
+        items: [{ key: "shop-menu.magicShop", x: 0, y: 0 }],
+    },
+    title: {
+        text: "<%= action %>",
+        style: {
+            fontStyle: "bold",
+            fontSize: "32px",
+        },
+        backgroundKey: "shop-confirm.titleBackground",
+    },
+    subtitle: {
+        text: "<%= balance %>",
+        style: {
+            fontFamily: "ReithSans",
+            fontSize: "24px",
+        },
+        backgroundKey: "shop-menu.balanceBackground",
+        icon : {
+            key: "shop-menu.balanceIcon",
+        },
+    },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 2,
+        align: "center",
+    },
+    confirm: {
+        audio: {
+            buy: "buy",
+            equip: "equip",
+            unequip: "unequip",
+            use: "use"
+        },
+        buttons: {
+            buttonsRight: true,
+            key: "shop-menu.menuButtonBackground",
+            styles: { fontStyle: "bold", fontSize: "16px" },
+        },
+        background: { key: "halfViewBackground", columns: [100, null, 100], rows: [100, null, 100] },
+        detailView: true,
+        prompt: {
+            buy: {
+                legal: "Purchase this item?",
+                illegal: "You can't afford this.",
+                unavailable: "You already own this.",
+            },
+            equip: { legal: "Do you want to \nequip this item?", illegal: "You cannot equip\nthis item." },
+            unequip: "Do you want to \nunequip this item?",
+            use: "Do you want to use\nthis item?",
+            styles: { fontStyle: "bold" },
+        },
+        title: { styles: { fontStyle: "bold" } },
+        detail: { styles: { color: "#bd6", fontStyle: "bold" } },
+        description: { styles: { fontStyle: "italic", lineSpacing: 5 } },
+    },
+}

@@ -1,0 +1,160 @@
+{
+    assetPrefix: "debug-shop", // used for debug screens
+    music: "home.backgroundMusic",
+    background: {
+        items: [{ key: "debug-shop.magicShop", x: 0, y: 0 }],
+    },
+    styleDefaults: {
+        fontFamily: "ReithSans",
+        fontSize: "24px",
+        resolution: 2,
+        align: "center",
+    },
+    title: {
+        text: "<%= title %>",
+        style: {
+            fontStyle: "bold",
+            fontSize: "32px",
+        },
+        backgroundKey: "debug-shop-list.titleBackground",
+    },
+    subtitle: {
+        text: "<%= balance %>",
+        style: {
+            fontFamily: "ReithSans",
+            fontSize: "24px",
+        },
+        backgroundKey: "debug-shop.balanceBackground",
+        icon : {
+            key: "debug-shop.balanceIcon",
+        },
+    },
+    listPadding: {
+        x: 18.86,
+        y: 15.09,
+        outerPadFactor: 1.8,
+    },
+    backgrounds: {
+        shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
+        manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
+    },
+    states: { locked: { properties: { alpha: 0.5, tint: 0xaaaaaa }, disabled: true } },
+    overlay: {
+        items: [
+            {
+                type: "image",
+                name: "itemIcon",
+                assetKey: "${icon}",
+                position: { align: "left", offsetX: 35, offsetY: 0 },
+                size: 76,
+                takeStateProperties: true,
+            },
+            {
+                type: "text",
+                name: "itemName",
+                value: "${title}",
+                position: { align: "left", offsetX: 80, offsetY: -18 },
+                styles: { fontSize: "16px", fontStyle: "bold" },
+            },
+        ],
+        options: {
+            shop: [
+                {
+                    type: "text",
+                    name: "currencyAmount",
+                    value: "${price}",
+                    position: { align: "right", offsetX: -44, offsetY: -10 },
+                    styles: { fontSize: "14px" },
+                    activeInStates: ["available"],
+                },
+                {
+                    type: "image",
+                    name: "currency",
+                    assetKey: "debug-shop.currency",
+                    position: { align: "right", offsetX: -64, offsetY: 0 },
+                    activeInStates: ["available"],
+                },
+                {
+                    type: "image",
+                    name: "lock",
+                    assetKey: "debug-shop.lockIcon",
+                    position: { align: "left", offsetX: 56, offsetY: 20 },
+                    activeInStates: ["locked"],
+                },
+                {
+                    type: "text",
+                    name: "unlockHint",
+                    value: "${hint}",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "14px" },
+                    activeInStates: ["locked"],
+                },
+                {
+                    type: "text",
+                    name: "purchased",
+                    value: "Purchased",
+                    position: { align: "right", offsetX: -108, offsetY: -10 },
+                    styles: { fontSize: "16px", align: "right" },
+                    activeInStates: ["unavailable"],
+                },
+                {
+                    type: "text",
+                    name: "itemDescription",
+                    value: "${description}",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" },
+                    activeInStates: ["equippable", "unlocked"],
+                },
+                {
+                    type: "text",
+                    name: "itemStockLevel",
+                    value: "${qty} in stock",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" },
+                    activeInStates: ["consumable"],
+                },
+            ],
+            manage: [
+                {
+                    type: "image",
+                    name: "itemIcon",
+                    assetKey: "${icon}",
+                    position: { align: "left", offsetX: 35, offsetY: 0 },
+                    size: 76,
+                },
+                {
+                    type: "text",
+                    name: "equip",
+                    value: "Equip",
+                    position: { align: "right", offsetX: -76, offsetY: -10 },
+                    styles: { fontSize: "16px", align: "right" },
+                    activeInStates: ["cta", "equippable"],
+                },
+                {
+                    type: "text",
+                    name: "itemDescription",
+                    value: "${description}",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" },
+                    activeInStates: ["equippable"],
+                },
+                {
+                    type: "text",
+                    name: "equipped",
+                    value: "Equipped",
+                    position: { align: "right", offsetX: -96, offsetY: -10 },
+                    styles: { fontSize: "16px", align: "right" },
+                    activeInStates: ["actioned", "equippable"],
+                },
+                {
+                    type: "text",
+                    name: "itemStockLevel",
+                    value: "${qty} in inventory",
+                    position: { align: "left", offsetX: 80, offsetY: 4 },
+                    styles: { fontSize: "12px" },
+                    activeInStates: ["consumable"],
+                },
+            ],
+        },
+    },
+}
