@@ -157,4 +157,16 @@
             ],
         },
     },
+    emptyList: {
+        shop: {
+            value: "Nothing to buy",
+            position: { offsetX: 0, offsetY: 0 },
+            styles: { fontSize: "24px" },
+        },
+        manage: {
+            value: "You have no equippables",
+            position: { offsetX: 0, offsetY: 0 },
+            styles: { fontSize: "24px" },
+        }
+    }
 }

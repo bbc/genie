@@ -12,27 +12,22 @@ import { onScaleChange } from "../../../core/scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { createBackground, resizeBackground } from "../backgrounds.js";
 import { createScrollablePanel, getPanelY } from "./scrollable-panel.js";
+import { addText } from "../../../core/layout/text-elem.js";
 
-const createTable = (scene, mode, parent, scrollablePanel) => {
-    const key = scene.transientData.shop.config.shopCollections[mode];
-    const collection = getFilteredCollection(collections.get(key).getAll(), parent.collectionFilter);
-
+const createTable = (scene, mode, parent, scrollablePanel, collection) => {
     const sizer = scene.rexUI.add.sizer({ orientation: "y" });
 
-    if (collection.length) {
-        const table = scene.rexUI.add.gridSizer({
-            column: 1,
-            row: collection.length,
-            space: { row: scene.config.listPadding.y },
-            name: "grid",
-        });
+    const table = scene.rexUI.add.gridSizer({
+        column: 1,
+        row: collection.length,
+        space: { row: scene.config.listPadding.y },
+        name: "grid",
+    });
 
-        collection.forEach((item, idx) =>
-            table.add(createItem(scene, item, mode, parent, scrollablePanel), 0, idx, "top", 0, true),
-        );
-        sizer.add(table, 1, "center", 0, true);
-    }
-
+    collection.forEach((item, idx) =>
+        table.add(createItem(scene, item, mode, parent, scrollablePanel), 0, idx, "top", 0, true),
+    );
+    sizer.add(table, 1, "center", 0, true);
     return sizer;
 };
 
@@ -100,27 +95,49 @@ const getFilteredCollection = (collection, filter) => {
 
 const removeZeroQty = item => item.slot || item.qty > 0;
 
+const getTextOffset = position => {
+    if (!position) return { x: 0, y: 0 };
+    return { x: position.offsetX, y: position.offsetY };
+};
+
+const createEmptyText = (scene, mode) => {
+    const config = scene.config.emptyList?.[mode];
+    const emptyText = addText(scene, 0, 0, config?.value || "No items", config);
+    const offset = getTextOffset(config?.position, emptyText);
+    emptyText.setOrigin(0.5, 0.5).setPosition(offset.x, offset.y);
+    return emptyText;
+}
+
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, mode, filter) {
         super(scene, 0, 0);
-        this.collectionFilter = filter;
 
         const config = scene.config.backgrounds?.[mode] ?? null;
         this.background = createBackground(scene, config);
-        const { scrollablePanel, child } = createScrollablePanel(scene, mode, this);
-        this.add(scrollablePanel);
-        scene.layout.addCustomGroup(scene.scene.key, scrollablePanel, 0);
+
         a11y.addGroupAt(scene.scene.key, 0);
+        const key = scene.transientData.shop.config.shopCollections[mode];
 
-        child.add(createTable(scene, mode, this, scrollablePanel), { expand: true });
-
+        const collection = getFilteredCollection(collections.get(key).getAll(), filter);
+        if (collection.length) {
+            const { scrollablePanel, child } = createScrollablePanel(scene, mode, this);
+            this.add(scrollablePanel);
+            scene.layout.addCustomGroup(scene.scene.key, scrollablePanel, 0);
+            child.add(createTable(scene, mode, this, scrollablePanel, collection), { expand: true });
+            setupEvents(scene, scrollablePanel);
+            this.reset = () => {
+                resizePanel(scene, scrollablePanel)();
+                this.resetBackground();
+            };
+        } else {
+            createEmptyText(scene, mode);
+            this.reset = () => this.resetBackground();
+        }
         scene.input.topOnly = false;
-        setupEvents(scene, scrollablePanel);
+    }
 
-        this.reset = () => {
-            resizePanel(scene, scrollablePanel)();
-            resizeBackground(this.background.constructor)(scene, this.background);
-        };
+    resetBackground() {
+        resizeBackground(this.background.constructor)(this.scene, this.background);
     }
 
     getBoundingRect() {

@@ -29,6 +29,12 @@ const mockGelButton = {
     emit: jest.fn(),
     scene: { sys: { input: { activePointer: "mock" } } },
 };
+
+const mockText = {
+    setOrigin: jest.fn(() => mockText),
+    setPosition: jest.fn(() => mockText),
+};
+
 buttons.createListButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
@@ -115,7 +121,11 @@ describe("Scrollable List", () => {
             },
             events: { once: jest.fn() },
             input: { topOnly: true, on: jest.fn(), removeListener: jest.fn() },
-            add: { image: jest.fn(), rectangle: jest.fn() },
+            add: {
+                image: jest.fn(),
+                rectangle: jest.fn(),
+                text: jest.fn(() => mockText),
+            },
             config: {
                 assetKeys: {
                     background: { shop: "background" },
@@ -200,7 +210,6 @@ describe("Scrollable List", () => {
                     new ScrollableList(mockScene, title);
                     expect(buttons.createListButton).toHaveBeenCalledTimes(2);
                 });
-
                 test("no items table added if the catalogue collection is empty", () => {
                     jest.clearAllMocks();
                     mockGridSizer = undefined;
@@ -209,6 +218,47 @@ describe("Scrollable List", () => {
                     new ScrollableList(mockScene, title);
 
                     expect(mockScene.rexUI.add.gridSizer).not.toHaveBeenCalled();
+                });
+                test("Empty collection text added if the catalogue collection is empty", () => {
+                    jest.clearAllMocks();
+                    mockGridSizer = undefined;
+                    collectionGetAll = [];
+
+                    new ScrollableList(mockScene, title);
+
+                    expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "No items", expect.anything());
+                });
+                test("Empty collection custom text is set if defined in config", () => {
+                    jest.clearAllMocks();
+                    mockGridSizer = undefined;
+                    collectionGetAll = [];
+                    const expectedEmptyText = "Your bags are empty";
+                    mockScene.config.emptyList = {
+                        shop: {
+                            value: expectedEmptyText,
+                        },
+                    };
+
+                    new ScrollableList(mockScene, title);
+
+                    expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, expectedEmptyText, expect.anything());
+                });
+                test("Empty collection text position is set if offset is defined in config", () => {
+                    jest.clearAllMocks();
+                    mockGridSizer = undefined;
+                    collectionGetAll = [];
+                    mockScene.config.emptyList = {
+                        shop: {
+                            position: {
+                                offsetX: 100,
+                                offsetY: -100,
+                            },
+                        },
+                    };
+
+                    new ScrollableList(mockScene, title);
+
+                    expect(mockText.setPosition).toHaveBeenCalledWith(100, -100);
                 });
             });
 
