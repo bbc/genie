@@ -30,7 +30,13 @@ describe("Confirm pane", () => {
 
     beforeEach(() => {
         mockContainer = { add: jest.fn(), setY: jest.fn(), removeAll: jest.fn(), destroy: jest.fn() };
-        mockImage = { setScale: jest.fn(), setVisible: jest.fn(), setTexture: jest.fn(), type: "Image" };
+        mockImage = {
+            setScale: jest.fn(),
+            setVisible: jest.fn(),
+            setTexture: jest.fn(),
+            setPosition: jest.fn(),
+            type: "Image",
+        };
         mockButton = {
             setLegal: jest.fn(),
             setY: jest.fn(),
@@ -106,7 +112,9 @@ describe("Confirm pane", () => {
 
         buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
 
-        text.addText = jest.fn(() => ({ setOrigin: jest.fn(() => ({ setText: jest.fn(), type: "Text" })) }));
+        text.addText = jest.fn(() => ({
+            setOrigin: jest.fn(() => ({ setText: jest.fn(), type: "Text", setPosition: jest.fn() })),
+        }));
 
         mockBalanceItem = { qty: 500 };
         transact.getBalanceItem = jest.fn(() => mockBalanceItem);
@@ -136,17 +144,6 @@ describe("Confirm pane", () => {
         test("with gel buttons for confirm and cancel", () => {
             expect(buttons.createConfirmButtons).toHaveBeenCalled();
         });
-        test("in a layout that can be flipped L-R in config", () => {
-            expect(layout.getInnerRectBounds.mock.calls[0][0]).toBe(mockScene);
-            jest.clearAllMocks();
-            mockScene.config.confirm.buttons.buttonsRight = false;
-            createConfirm(mockScene, "shop", { id: "foo" });
-            expect(text.addText.mock.calls[0][1]).toBe(-50);
-            expect(text.addText.mock.calls[0][2]).toBe(-75);
-        });
-        test("that is displayed with an appropriate Y offset", () => {
-            expect(mockContainer.setY).toHaveBeenCalledWith(105);
-        });
     });
 
     describe("Item detail view", () => {
@@ -173,7 +170,7 @@ describe("Confirm pane", () => {
             expect(text.addText.mock.calls[1][3]).toBe("itemTitle");
             expect(text.addText.mock.calls[2][3]).toBe("itemDescription");
             expect(text.addText.mock.calls[3][3]).toBe("itemBlurb");
-            expect(mockScene.add.image).toHaveBeenCalledWith(50, -50, "itemIcon");
+            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "itemIcon");
         });
     });
 

@@ -139,9 +139,9 @@ const scaleItemView = (itemView, config, bounds) => {
     );
     const x = imageX(config, bounds);
     itemView.itemImage.setPosition(x, imageY(bounds));
-    itemView?.itemTitle.setPosition(x, titleY(bounds));
-    itemView?.itemDetail.setPosition(x, detailY(bounds));
-    itemView?.itemBlurb.setPosition(x, blurbY(bounds));
+    itemView.itemTitle?.setPosition(x, titleY(bounds));
+    itemView.itemDetail?.setPosition(x, detailY(bounds));
+    itemView.itemBlurb?.setPosition(x, blurbY(bounds));
 };
 
 const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY = 1) => {
