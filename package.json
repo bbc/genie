@@ -74,7 +74,7 @@
         "cy": "cross-env THEME=theme_1 LOCAL_DEV=true && cypress open",
         "cy:headless": "cross-env THEME=theme_1 && cypress run --headless --config video=false --spec '**/*spec.js'",
         "cy:headless-theme2": "cross-env THEME=theme_2 && cypress run --headless --config video=false --spec '**/*spec.js'",
-        "cy:local": "cross-env THEME=theme_1 LOCAL_DEV=true && cypress run --headless --config video=false --spec '**/*spec.js'",
-        "cy:local-theme2": "cross-env THEME=theme_2 LOCAL_DEV=true && cypress run --headless --config video=false --spec '**/*spec.js'"
+        "cy:local": "cross-env THEME=theme_1 LOCAL_DEV=true && cypress run --headless --config video=false --spec '**/integration/*spec.js'",
+        "cy:local-theme2": "cross-env THEME=theme_2 LOCAL_DEV=true && cypress run --headless --config video=false --spec '**/integration/*spec.js'"
     }
 }
