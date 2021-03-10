@@ -1,16 +1,17 @@
-# States
+# Collections
 
-States are stored array of objects of the format:
+Collections are a way to store arrays of objects using the format:
 
 `{id: "mary", state: "complete"}`
 
-associated with a unique "storage key" string.
+They are associated with a unique "storage key" string.
 
-These are most commonly used with select screens to store things like locked or completed states but are not limited to any particular naming convention and games can have multiple states _(e.g: for levels and for unlockable items)_
+Commonly used with select screens to store things like locked or completed states but are not limited to any particular naming 
+convention and games can have multiple collections _(e.g: for levels and for unlockable items)_
 
-Differences to the default state are stored in local storage.
+Differences to the default config are stored in local storage.
 
-## creating a state
+## creating a collection
 
 To create a state pass the storage key and a config array to initState.
 This will both return and add the new state to the states map so you can access it from anywhere using `states.get(###)`.
@@ -26,7 +27,7 @@ const levelStates = initState("levels", [
 ]);
 ```
 
-## Using States
+## Using Collections
 
 ```javascript
 import { states } from "../core/states.js";
