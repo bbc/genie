@@ -34,11 +34,11 @@ Alternatively load http://localhost:9000/index.html as a file URL (requires `--a
 
 ## To test using Cypress
 
-`npm run start` will create a locally hosted build. In a new terminal running `npm run cy:local` will run the cypress tests against the locally hosted build
+`npm run start:pack` will create a locally hosted build. In a new terminal running `npm run cy:local` will run the cypress tests against the locally hosted build
 
 `npm run cy:headless` will run the cypress tests against a deployed Test url.
 
-`npm run cy` will launch the cypress terminal. From here you can pick which suites execute. Useful for developing cypress tests.
+`npm run cy` will launch the cypress terminal. From here you can pick which suites execute. Useful for developing cypress tests. Again this is reliant on `npm run start:pack` as it will connect to the local hosted URL.
 
 ## Code linting:
 
