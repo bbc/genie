@@ -1,8 +1,8 @@
 # Items
 
-## The catalogue
+## The collection
 
-All items that appear in the shop (and therefore the game) need to exist in the catalogue. 
+All items that appear in the shop (and therefore the game) need to exist in a collection. 
 
 Items require a unique id and, optionally, an array of categories the item belongs to.
 
@@ -15,11 +15,11 @@ Items require a unique id and, optionally, an array of categories the item belon
 ]
 ``` 
 
-Your scene config should contain a `catalogueKey` which should be a string corresponding to the name of a .json5 file in `themes/default/items`. The loader will make these data available as a map. 
+Your scene config should contain a `catalogueKey` which should be a string corresponding to the name of a .json5 file in `themes/default/collections`. The loader will automatically add this data to a js Map. 
 
 ```javascript
-import { catalogue } from "./components/shop/item-catalogue.js";
-const itemList = catalogue.get(sceneConfig.catalogueKey); // corresponding to a .json5 in items/
+import { collections } from "/node_modules/genie/src/core/collections.js";
+const itemList = collections.get(this.config.catalogueKey); // corresponding to a .json5 in items/
 const snotulonCannon = itemList.get("Snotulon Cannon"); // get a single item
 const weapons = itemList.getCategory(["weapons"]); // filter by array of categories
 ```
