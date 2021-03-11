@@ -36,36 +36,24 @@ const getOffsetBounds = (outerBounds, innerBounds) => ({
 const imageX = (config, bounds) =>
     config.confirm.buttons.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
 
-const createElems = (scene, container, promptText, item, innerBounds, bounds) => {
-    const bgConfig = scene.config.confirm?.background;
+const createElems = (scene, container, promptText, item) => ({
+    background: createBackground(scene, scene.config.confirm?.background),
+    prompt: addText(scene, 0, 0, promptText, scene.config).setOrigin(0.5),
+    itemView: itemView(scene, item, scene.config),
+});
 
-    const elems = [
-        createBackground(scene, bgConfig),
-        addText(scene, getButtonX(innerBounds.x, scene.config), promptY(bounds), promptText, scene.config).setOrigin(
-            0.5,
-        ),
-    ].concat(itemView(scene, item, scene.config, bounds));
+const scalePrompt = (scene, elems, bounds, innerBounds) =>
+    elems.prompt.setPosition(getButtonX(innerBounds.x, scene.config), promptY(bounds));
 
-    container.add(elems);
+const createBuyElems = (scene, container, item) => ({
+    text: addText(scene, 0, 0, item.price, scene.config).setOrigin(0.5),
+    currency: scene.add.image(0, 0, `${scene.assetPrefix}.currencyIcon`),
+});
 
-    return elems;
+const scaleBuyElems = (scene, buyElems, bounds, innerBounds) => {
+    buyElems.text.setPosition(getButtonX(innerBounds.x + 28, scene.config), currencyY(bounds));
+    buyElems.currency.setPosition(getButtonX(innerBounds.x - 20, scene.config), currencyY(bounds));
 };
-
-const createBuyElems = (scene, container, item, innerBounds, bounds) =>
-    container.add([
-        addText(
-            scene,
-            getButtonX(innerBounds.x + 28, scene.config),
-            currencyY(bounds),
-            item.price,
-            scene.config,
-        ).setOrigin(0.5),
-        scene.add.image(
-            getButtonX(innerBounds.x - 20, scene.config),
-            currencyY(bounds),
-            `${scene.assetPrefix}.currencyIcon`,
-        ),
-    ]);
 
 const sizeConfirmButton = (scene, button, idx, bounds, innerBounds) => {
     button.setY(CAMERA_Y + (idx * innerBounds.height) / 2 + bounds.height / 2 + bounds.y);
@@ -82,7 +70,7 @@ const disableActionButton = button => {
     button.accessibleElement.update();
 };
 
-const addConfirmButtons = (scene, bounds, innerBounds, title, action, item) => {
+const addConfirmButtons = (scene, title, action, item) => {
     const confirmButtonCallback = () => handleActionClick(scene, title, action, item);
     const cancelButtonCallback = () => {
         scene._data.addedBy.scene.resume();
@@ -96,7 +84,6 @@ const addConfirmButtons = (scene, bounds, innerBounds, title, action, item) => {
     );
     ((action === "buy" && !canBuyItem(scene, item)) || (action === "equip" && !isEquippable(item))) &&
         disableActionButton(confirmButtons[0]);
-    sizeConfirmButtons(scene, confirmButtons, bounds, innerBounds);
     return confirmButtons;
 };
 
@@ -128,30 +115,37 @@ const doAction = fp.cond([
     [args => args.action === "use", args => use(args.scene, args.item)],
 ]);
 
-const itemView = (scene, item, config, bounds) =>
-    config.confirm.detailView
-        ? itemDetailView(scene, item, config, bounds)
-        : itemImageView(scene, item, config, bounds);
+const itemView = (scene, item, config) =>
+    config.confirm.detailView ? itemDetailView(scene, item, config) : itemImageView(scene, item);
 
-const itemImageView = (scene, item, config, bounds) => {
-    const image = scene.add.image(imageX(config, bounds), 0, item.icon);
-    const absScale = getItemImageScale(bounds, image);
-    setImageScaleXY(image, absScale);
-    return [image];
+const itemImageView = (scene, item) => ({ itemImage: scene.add.image(0, 0, item.icon) });
+
+const itemDetailView = (scene, item, config) => {
+    const { title, detail, description } = config.confirm;
+    return {
+        itemImage: scene.add.image(0, 0, item.icon),
+        itemTitle: addText(scene, 0, 0, item.title, title).setOrigin(0.5),
+        itemDetail: addText(scene, 0, 0, item.description, detail).setOrigin(0.5),
+        itemBlurb: addText(scene, 0, 0, item.longDescription, description).setOrigin(0.5),
+    };
 };
 
-const itemDetailView = (scene, item, config, bounds) => {
+const scaleItemView = (itemView, config, bounds) => {
+    setImageScaleXY(
+        itemView.itemImage,
+        itemView.itemTitle
+            ? getItemDetailImageScale(bounds, itemView.itemImage)
+            : getItemImageScale(bounds, itemView.itemImage),
+    );
     const x = imageX(config, bounds);
-    const { title, detail, description } = config.confirm;
-
-    const itemImage = scene.add.image(x, imageY(bounds), item.icon);
-    setImageScaleXY(itemImage, getItemDetailImageScale(bounds, itemImage));
-
-    const itemTitle = addText(scene, x, titleY(bounds), item.title, title).setOrigin(0.5);
-    const itemDetail = addText(scene, x, detailY(bounds), item.description, detail).setOrigin(0.5);
-    const itemBlurb = addText(scene, x, blurbY(bounds), item.longDescription, description).setOrigin(0.5);
-
-    return [itemImage, itemTitle, itemDetail, itemBlurb];
+    itemView.itemImage.setPosition(x, imageY(bounds));
+    itemView.itemTitle?.setPosition(x, titleY(bounds));
+    itemView.itemDetail?.setPosition(x, detailY(bounds));
+    itemView.itemBlurb?.setPosition(x, blurbY(bounds));
+    itemView.itemBlurb?.setStyle({
+        ...itemView.itemBlurb?.style,
+        wordWrap: { width: bounds.width / (21 / 10), useAdvancedWrap: true },
+    });
 };
 
 const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY = 1) => {
@@ -182,25 +176,31 @@ const getPromptText = fp.cond([
 
 export const createConfirm = (scene, title, item) => {
     const action = getAction(scene, title, item);
-    const bounds = getSafeArea(scene.layout);
     const container = scene.add.container();
-    const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
-    const yOffset = bounds.height / 2 + bounds.y;
-    container.setY(yOffset);
-    const elems = createElems(scene, container, getPromptText({ scene, action, item }), item, innerBounds, bounds);
-    action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item, innerBounds, bounds);
+    const elems = createElems(scene, container, getPromptText({ scene, action, item }), item);
+    const buyElems = action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item);
+    const buttons = addConfirmButtons(scene, title, action, item);
 
-    const xOffset = scene.config.confirm.buttons.buttonsRight ? -0.25 : 0.25;
-    const bgSpec = { yOffset, aspect: 0.5, xOffset };
+    const { itemView, ...otherElems } = elems;
+    Object.values({ ...otherElems, ...itemView }).forEach(elem => container.add(elem));
+    Object.values(buyElems).forEach(elem => container.add(elem));
 
-    const resize = () => resizeBackground(elems[0].constructor)(scene, elems[0], bgSpec);
+    const resize = () => {
+        const bounds = getSafeArea(scene.layout);
+        const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
+        const yOffset = bounds.height / 2 + bounds.y;
+        const xOffset = scene.config.confirm.buttons.buttonsRight ? -0.25 : 0.25;
+        const bgSpec = { yOffset, aspect: 0.5, xOffset };
+        container.setY(yOffset);
+        resizeBackground(elems.background.constructor)(scene, elems.background, bgSpec);
+        scalePrompt(scene, elems, bounds, innerBounds);
+        buyElems && scaleBuyElems(scene, buyElems, bounds, innerBounds);
+        sizeConfirmButtons(scene, buttons, bounds, innerBounds);
+        scaleItemView(elems.itemView, scene.config, bounds);
+    };
 
     return {
         action,
-        item,
-        title,
-        container,
         resize,
-        buttons: addConfirmButtons(scene, bounds, innerBounds, title, action, item),
     };
 };
