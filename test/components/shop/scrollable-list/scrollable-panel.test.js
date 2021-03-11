@@ -8,7 +8,10 @@ import { createScrollablePanel } from "../../../../src/components/shop/scrollabl
 describe("Scrollable Panel", () => {
     let mockScene;
     let mockParent;
+    let mockSafeArea;
     beforeEach(() => {
+        mockSafeArea = { height: 10 };
+
         mockScene = {
             rexUI: {
                 add: {
@@ -24,7 +27,7 @@ describe("Scrollable Panel", () => {
                 space: 10,
             },
             layout: {
-                getSafeArea: jest.fn(() => ({ height: 10 })),
+                getSafeArea: jest.fn(() => mockSafeArea),
             },
         };
         mockParent = { reset: jest.fn() };
@@ -37,5 +40,10 @@ describe("Scrollable Panel", () => {
         scrollablePanel.reset();
 
         expect(mockParent.reset).toHaveBeenCalled();
+    });
+
+    test("getBoundingRect method returns the result of scene's getSafeArea", () => {
+        const { scrollablePanel } = createScrollablePanel(mockScene, "shop", mockParent);
+        expect(scrollablePanel.getBoundingRect()).toEqual(mockSafeArea);
     });
 });
