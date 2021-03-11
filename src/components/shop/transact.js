@@ -16,6 +16,7 @@ const updateBalance = (scene, invCol, price) =>
         qty: getBalanceItem(scene.transientData.shop.config).qty - price,
     });
 
+
 export const buy = (scene, item) => {
     const { shop, manage } = scene.transientData.shop.config.shopCollections;
     const invCol = collections.get(manage);
