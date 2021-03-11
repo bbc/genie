@@ -30,12 +30,18 @@
         align: "center",
     },
     confirm: {
+        audio: {
+            buy: "buy",
+            equip: "equip",
+            unequip: "unequip",
+            use: "use"
+        },
         buttons: {
             buttonsRight: true,
             key: "debug-shop.menuButtonBackground",
             styles: { fontStyle: "bold", fontSize: "16px" },
         },
-        background: "debug-shop.halfViewBackground",
+        background: "halfViewBackground",
         detailView: true,
         prompt: {
             buy: {
