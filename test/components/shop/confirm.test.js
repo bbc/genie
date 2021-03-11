@@ -27,6 +27,7 @@ describe("Confirm pane", () => {
     let mockBalance;
     let mockScene;
     let mockCollection;
+    let mockText;
 
     beforeEach(() => {
         mockContainer = { add: jest.fn(), setY: jest.fn(), removeAll: jest.fn(), destroy: jest.fn() };
@@ -111,9 +112,14 @@ describe("Confirm pane", () => {
         layout.textStyle = jest.fn().mockReturnValue({ some: "textStyle" });
 
         buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
-
+        mockText = {
+            setText: jest.fn(),
+            style: { some: "style" },
+            setPosition: jest.fn(),
+            setStyle: jest.fn(),
+        };
         text.addText = jest.fn(() => ({
-            setOrigin: jest.fn(() => ({ setText: jest.fn(), type: "Text", setPosition: jest.fn() })),
+            setOrigin: jest.fn(() => mockText),
         }));
 
         mockBalanceItem = { qty: 500 };
@@ -132,17 +138,32 @@ describe("Confirm pane", () => {
         const mockItem = { mock: "item", id: "foo" };
         beforeEach(() => {
             confirmPane = createConfirm(mockScene, "shop", mockItem);
-            confirmPane.scene = mockScene;
         });
-        test("returns a object with a container", () => {
-            expect(confirmPane.container).toBe(mockContainer);
-        });
-        test("an item and a title", () => {
-            expect(confirmPane.item).toBe(mockItem);
-            expect(confirmPane.title).toBe("shop");
+        test("returns an action", () => {
+            expect(confirmPane.action).toBe("buy");
         });
         test("with gel buttons for confirm and cancel", () => {
             expect(buttons.createConfirmButtons).toHaveBeenCalled();
+        });
+    });
+
+    describe("resize confirm", () => {
+        const mockItem = { mock: "item", id: "foo" };
+
+        test("sets y offset on container", () => {
+            confirmPane = createConfirm(mockScene, "shop", mockItem);
+            confirmPane.resize();
+            expect(mockContainer.setY).toHaveBeenCalledWith(105);
+        });
+
+        test("sets word wrap style on item blurb", () => {
+            mockScene.config.confirm.detailView = true;
+            confirmPane = createConfirm(mockScene, "shop", mockItem);
+            confirmPane.resize();
+            expect(mockText.setStyle).toHaveBeenCalledWith({
+                ...mockText.style,
+                wordWrap: { width: 200 / (21 / 10), useAdvancedWrap: true },
+            });
         });
     });
 

@@ -201,10 +201,6 @@ export const createConfirm = (scene, title, item) => {
 
     return {
         action,
-        item,
-        title,
-        container,
         resize,
-        buttons,
     };
 };
