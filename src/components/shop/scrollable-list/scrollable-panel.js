@@ -42,6 +42,7 @@ export const createScrollablePanel = (scene, mode, parent) => {
     scrollablePanel.layout();
     scrollablePanel.makeAccessible = fp.noop;
     scrollablePanel.reset = () => parent.reset();
+    scrollablePanel.getBoundingRect = () => scene.layout.getSafeArea({}, false);
 
     return { scrollablePanel, child };
 };
