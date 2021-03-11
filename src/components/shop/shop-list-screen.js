@@ -8,30 +8,28 @@ import { Screen } from "../../core/screen.js";
 import { ScrollableList } from "./scrollable-list/scrollable-list.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { onScaleChange } from "../../core/scaler.js";
-import { createTitles } from "../../core/titles.js";
-import { createBalance } from "./balance-ui.js";
 import { gmi } from "../../core/gmi/gmi.js";
+import { setBalance } from "./balance.js";
+import { initResizers } from "./backgrounds.js";
 
 export class ShopList extends Screen {
     preload() {
         this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
+        initResizers();
     }
 
     create() {
-        if (this.transientData.shop.title === "shop") {
-            gmi.sendStatsEvent("shopbuy", "click", {});
-        } else {
-            gmi.sendStatsEvent("shopmanage", "click", {});
-        }
-        gmi.setStatsScreen(this.transientData.shop.title === "shop" ? "shopbuy" : "shopmanage");
+        const shopMode = this.transientData.shop.mode === "shop";
+        gmi.sendStatsEvent(shopMode ? "shopbuy" : "shopmanage", "click", {});
+        gmi.setStatsScreen(shopMode ? "shopbuy" : "shopmanage");
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
-        this.transientData[this.scene.key] = { title: this.transientData.shop.title };
 
-        this.titles = createTitles(this);
-        this.balance = createBalance(this);
-        this.inventoryFilter = item => item.id !== this.transientData.shop.config.balance.value.key;
-        this.list = new ScrollableList(this, this.transientData.shop.title, this.inventoryFilter);
+        this.transientData[this.scene.key] = { title: this.transientData.shop.mode };
+        setBalance(this);
+
+        this.inventoryFilter = item => item.id !== this.transientData.shop.config.balance;
+        this.scrollableList = new ScrollableList(this, this.transientData.shop.mode, this.inventoryFilter);
 
         this.setupEvents();
         this.resize();
@@ -47,8 +45,7 @@ export class ShopList extends Screen {
     }
 
     resize() {
-        this.list.reset();
-        this.balance.resize();
+        this.scrollableList.reset();
     }
 
     onResume() {

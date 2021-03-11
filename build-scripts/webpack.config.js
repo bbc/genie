@@ -14,7 +14,7 @@ module.exports = env => {
     const genieCore = env && env.genieCore;
     let webPackConfig = {
         mode: development ? "development" : "production",
-        devtool: development ? "cheap-module-eval-source-map" : false,
+        devtool: development ? "eval-cheap-module-source-map" : false,
         performance: { hints: false },
         entry: [
             "core-js/stable",
@@ -30,6 +30,7 @@ module.exports = env => {
         },
         resolve: {
             symlinks: false,
+            preferRelative: true, //required for webfontloader which uses outdated paths
         },
         module: {
             rules: [
@@ -92,9 +93,6 @@ module.exports = env => {
     );
 
     if (genieCore) {
-        const Visualizer = require("webpack-visualizer-plugin");
-        webPackConfig.plugins.push(new Visualizer());
-
         delete webPackConfig.module.rules[0].use.options;
 
         webPackConfig.devServer.historyApiFallback.index = "dev/index.main.html";

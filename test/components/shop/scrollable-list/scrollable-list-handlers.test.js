@@ -50,15 +50,6 @@ describe("Scrollable List handlers", () => {
         };
     });
 
-    describe("updatePanelOnScroll", () => {
-        beforeEach(() => {});
-        test("calls setElementSizeAndPosition on each GEL button", () => {
-            const instance = handlers.updatePanelOnScroll(mockPanel);
-            instance();
-            expect(mockGelButton.setElementSizeAndPosition).toHaveBeenCalled();
-        });
-    });
-
     describe("updatePanelOnFocus", () => {
         test("sets a t to 0 if focused on the top item & item is off the top edge", () => {
             mockGridSizer = {

@@ -18,6 +18,26 @@
                 "url": "shop-list/assets/currency.png"
             },
             {
+                "type": "audio",
+                "key": "buy",
+                "url": "shop-confirm/assets/till.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "equip",
+                "url": "shop-confirm/assets/equip.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "unequip",
+                "url": "shop-confirm/assets/unequip.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "use",
+                "url": "shop-confirm/assets/use.mp4"
+            },
+            {
                 "type": "spritesheet",
                 "key": "menuButtonBackground",
                 "url": "shop-menu/assets/green_button.png",

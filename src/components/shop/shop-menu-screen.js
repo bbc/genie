@@ -8,12 +8,14 @@ import { Screen } from "../../core/screen.js";
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { createTitles } from "../../core/titles.js";
-import { createBalance } from "./balance-ui.js";
 import { createMenu } from "./menu.js";
+import { setBalance } from "./balance.js";
+import { initResizers } from "./backgrounds.js";
 
 export class ShopMenu extends Screen {
     preload() {
         this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
+        initResizers();
     }
 
     create() {
@@ -22,8 +24,8 @@ export class ShopMenu extends Screen {
         this.setLayout([backNav, "pause"]);
 
         this.transientData.shop = { config: this.config.shopConfig };
-        this.titles = createTitles(this);
-        this.balance = createBalance(this);
+        setBalance(this);
+
         this.menu = createMenu(this);
 
         this.setupEvents();
@@ -39,11 +41,13 @@ export class ShopMenu extends Screen {
     }
 
     onResume() {
-        this.balance.update();
+        setBalance(this);
+        Object.values(this.titles).forEach(title => title.destroy());
+        this.titles = createTitles(this);
+        Object.values(this.titles).forEach(title => title.resize());
     }
 
     resize() {
         this.menu.resize();
-        this.balance.resize();
     }
 }

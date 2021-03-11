@@ -37,17 +37,20 @@ const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);
 const getPaneTitle = button => getItemKeyAndTitle(button).pop();
 const setOverlays = button => overlays1Wide(button, getConfigs(button));
 
-export const createListButton = (scene, item, title, action) => {
+export const createListButton = (scene, item, title, action, parent) => {
     const id = `scroll_button_${item.id}_${title}`;
-    const ariaLabel = `${item.title} - ${item.description}`;
+    const ariaLabel = `${item.state ? item.state + " " : ""}${item.title} - ${item.description}`;
     const channel = buttonsChannel(scene);
     const group = scene.scene.key;
     const config = { ...defaults, title, id, ariaLabel, scene: scene.assetPrefix, group, channel, action };
     const gelButton = createButton(scene, config);
 
     gelButton.item = item;
+    gelButton.parentContainer = parent; //TODO NT hack makes gel buttons calculate correct bounds. Could it be fixed in gel button?...
 
     const properties = item.state && scene.config.states[item.state] ? scene.config.states[item.state].properties : {};
+    const disabled = item.state && scene.config.states[item.state] ? scene.config.states[item.state].disabled : false;
+    disabled && gelButton.off(Phaser.Input.Events.POINTER_UP);
     Object.assign(gelButton.sprite, properties);
 
     scaleButton(gelButton, scene.layout, scene.config.listPadding);

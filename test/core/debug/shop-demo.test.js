@@ -8,6 +8,7 @@ import { ShopDemo, ShopDemoGame } from "../../../src/core/debug/shop-demo.js";
 import { collections } from "../../../src/core/collections.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
 import * as a11y from "../../../src/core/accessibility/accessibilify.js";
+import { initResizers } from "../../../src/components/shop/backgrounds.js";
 
 describe("ShopDemo", () => {
     let shopDemo;
@@ -108,13 +109,14 @@ describe("ShopDemoGame", () => {
             x: 0,
             y: 0,
         };
-        mockButton = { overlays: { set: jest.fn() }, config: { callback: jest.fn() } };
+        mockButton = { overlays: { set: jest.fn() }, config: { callback: jest.fn() }, scene: shopDemoGame };
 
         collections.get = jest.fn().mockReturnValue(mockInventory);
         gmi.setGameData = jest.fn();
 
         shopDemoGame.scene = { key: "shopDemoGame" };
         shopDemoGame.time = { now: 1000 };
+        shopDemoGame.sys = { scale: {}, accessibleButtons: [] };
         shopDemoGame._data = {
             config: {
                 shopDemoGame: {
@@ -175,6 +177,9 @@ describe("ShopDemoGame", () => {
                 },
             },
         };
+
+        global.RexPlugins = { GameObjects: { NinePatch: jest.fn() } };
+        initResizers();
     });
 
     describe("preload", () => {
@@ -187,7 +192,9 @@ describe("ShopDemoGame", () => {
     });
 
     describe("create", () => {
-        beforeEach(() => shopDemoGame.create());
+        beforeEach(() => {
+            shopDemoGame.create();
+        });
 
         test("creates cursors", () => {
             expect(shopDemoGame.cursors).toBe(mockCursors);

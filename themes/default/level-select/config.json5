@@ -8,20 +8,7 @@
         completed: { overlayAsset: "character-select.complete", x: 65, y: 35, suffix: "completed" },
     },
     title: {
-        image: {
-            imageId: "title",
-            xOffset: 0,
-            yOffset: 100,
-        },
-        text: {
-            value: "",
-            xOffset: 0,
-            yOffset: 0,
-            styles: {
-                fontSize: "24px",
-            },
-        },
-        visible: true,
+        backgroundKey: "level-select.title",
     },
     rows: 1,
     columns: 2,

@@ -91,6 +91,19 @@ describe("Layout - Button Factory", () => {
             expect(accessibilify.accessibilify).toHaveBeenCalledWith(mockButton, false);
         });
 
+        test("accessibilifies button with true when accessible is true, icon is false and gameButton is true", () => {
+            const config = {
+                title: "button",
+                icon: false,
+                accessible: true,
+                gameButton: true,
+            };
+
+            createButton(mockScene, config);
+
+            expect(accessibilify.accessibilify).toHaveBeenCalledWith(mockButton, true);
+        });
+
         test("does not accessibilify button when accessible is false and icon is false", () => {
             const config = {
                 title: "button",

@@ -7,9 +7,6 @@ import { gmi } from "./gmi/gmi.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
 const getGenieStore = () => gmi.getAllSettings().gameData?.genie ?? {};
-
-export let collections = new Map();
-
 const mergeDefaults = itemDefaults => item => ({ ...item, ...itemDefaults?.find(def => def.id === item.id) });
 const getFilterParams = config => ({ ids: config.defaults?.map(x => x.id) ?? [], tags: config.include ?? [] });
 const tagIn = config => tag => config.tags.includes(tag);
@@ -36,11 +33,11 @@ const validateFn = catalogue =>
 
 export const initCollection = screen => key => {
     const getStored = getStoredFn(key);
-    const config = screen.cache.json.get(`items/${key}`);
+    const config = screen.cache.json.get(`collections/${key}`);
 
     const storagePath = ["collections", key];
     const catalogue = fp.isString(config.catalogue)
-        ? screen.cache.json.get(`items/${config.catalogue}`)
+        ? screen.cache.json.get(`collections/${config.catalogue}`)
         : config.catalogue;
 
     const valid = validateFn(catalogue);
@@ -73,3 +70,5 @@ export const initCollection = screen => key => {
 
     return collection;
 };
+
+export let collections = new Map();

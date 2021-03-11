@@ -13,7 +13,7 @@ import * as gel from "./gel-defaults.js";
 import { groupLayouts } from "./group-layouts.js";
 import { GelGroup } from "./gel-group.js";
 import { gmi } from "../gmi/gmi.js";
-import { getSafeAreaFn } from "./safe-area.js";
+import { getSafeAreaFn, getTitleAreaFn } from "./safe-area.js";
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./metrics.js";
 
 const getOrder = fp.curry((object, name) => object[name].order);
@@ -137,6 +137,7 @@ export function create(scene, metrics, buttonIds, accessibleButtonIds) {
         buttons,
         debug,
         getSafeArea: getSafeAreaFn(groups),
+        getTitleArea: getTitleAreaFn(groups),
         destroy,
         makeAccessible,
         resize,

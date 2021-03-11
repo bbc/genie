@@ -16,6 +16,14 @@ const defaults = {
     shiftY: 0,
 };
 
+const publish = (config, data) => () => {
+    eventBus.publish({
+        channel: config.channel,
+        name: config.id,
+        data,
+    });
+};
+
 export class GelButton extends Phaser.GameObjects.Container {
     constructor(scene, x, y, config) {
         const metrics = getMetrics();
@@ -131,11 +139,3 @@ export class GelButton extends Phaser.GameObjects.Container {
         this.overlays.list.indicator.resize();
     }
 }
-
-const publish = (config, data) => () => {
-    eventBus.publish({
-        channel: config.channel,
-        name: config.id,
-        data,
-    });
-};

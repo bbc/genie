@@ -7,14 +7,6 @@
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { addText } from "../../../core/layout/text-elem.js";
 
-export const overlays1Wide = (gelButton, configs) => {
-    configs.forEach(config => {
-        const offset = getOffset(config.position, gelButton);
-        addOverlay({ gelButton, config, offset });
-    });
-    return gelButton;
-};
-
 const setImageOverlay = ({ gelButton, config, offset }) => {
     const { scene, item } = gelButton;
     const { config: sceneConfig } = scene;
@@ -44,3 +36,11 @@ const addOverlay = fp.cond([
     [args => args.config.type === "image", setImageOverlay],
     [args => args.config.type === "text", setTextOverlay],
 ]);
+
+export const overlays1Wide = (gelButton, configs) => {
+    configs.forEach(config => {
+        const offset = getOffset(config.position, gelButton);
+        addOverlay({ gelButton, config, offset });
+    });
+    return gelButton;
+};
