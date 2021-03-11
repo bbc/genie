@@ -142,6 +142,10 @@ const scaleItemView = (itemView, config, bounds) => {
     itemView.itemTitle?.setPosition(x, titleY(bounds));
     itemView.itemDetail?.setPosition(x, detailY(bounds));
     itemView.itemBlurb?.setPosition(x, blurbY(bounds));
+    itemView.itemBlurb?.setStyle({
+        ...itemView.itemBlurb?.style,
+        wordWrap: { width: bounds.width / (21 / 10), useAdvancedWrap: true },
+    });
 };
 
 const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY = 1) => {
