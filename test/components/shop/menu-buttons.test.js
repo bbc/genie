@@ -121,6 +121,18 @@ describe("create menu/confirm buttons", () => {
         expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-list");
     });
 
+    test("buy button sends 'shopbuy' stat when clicked", () => {
+        createMenuButtons(mockScene);
+        button.createButton.mock.calls[0][1].action();
+        expect(mockGmi.gmi.sendStatsEvent).toHaveBeenCalledWith("shopbuy", "click", {});
+    });
+
+    test("manage button sends 'shopmanage' stat when clicked", () => {
+        createMenuButtons(mockScene);
+        button.createButton.mock.calls[1][1].action();
+        expect(mockGmi.gmi.sendStatsEvent).toHaveBeenCalledWith("shopmanage", "click", {});
+    });
+
     test("returns an action button and a cancel button", () => {
         const buttons = createConfirmButtons(
             mockScene,
