@@ -57,7 +57,7 @@ describe(`The Select screens ${Cypress.env("THEME")}`, () => {
         cy.ariaHidden("#debug-select-grid__debby", "true");
         cy.ariaHidden("#debug-select-grid__timmy", "true");
         cy.ariaHidden("#debug-select-grid__elliot", "true");
-        cy.genieClick("#debug-select-grid__next").wait(1000);
+        cy.genieClick("#debug-select-grid__next").wait(2000);
         cy.ariaHidden("#debug-select-grid__mary", "true");
         cy.ariaHidden("#debug-select-grid__kyle", "true");
         cy.ariaHidden("#debug-select-grid__suzy", "true");
@@ -72,28 +72,22 @@ describe(`The Select screens ${Cypress.env("THEME")}`, () => {
 
     it("Continuously cycles through select pages on grid view", () => {
         cy.genieClick("#home__debug");
-        cy.genieClick("#debug__debug-select-grid").wait(1500);
-        cy.log(" FORWARD 1- false ");
+        cy.genieClick("#debug__debug-select-grid").wait(2000);
         cy.ariaHidden("#debug-select-grid__mary", "false");
         cy.ariaHidden("#debug-select-grid__mike", "true");
-        cy.genieClick("#debug-select-grid__next").wait(1500);
-        cy.log(" FORWARD 2- true ");
+        cy.genieClick("#debug-select-grid__next").wait(2000);
         cy.ariaHidden("#debug-select-grid__mary", "true");
         cy.ariaHidden("#debug-select-grid__mike", "false");
-        cy.genieClick("#debug-select-grid__next").wait(1500);
-        cy.log(" FORWARD 3- false ");
+        cy.genieClick("#debug-select-grid__next").wait(2000);
         cy.ariaHidden("#debug-select-grid__mary", "false");
         cy.ariaHidden("#debug-select-grid__mike", "true");
-        cy.genieClick("#debug-select-grid__previous").wait(1500);
-        cy.log(" BACK 1- true ");
+        cy.genieClick("#debug-select-grid__previous").wait(2000);
         cy.ariaHidden("#debug-select-grid__mary", "true");
         cy.ariaHidden("#debug-select-grid__mike", "false");
-        cy.genieClick("#debug-select-grid__previous").wait(1500);
-        cy.log(" BACK 2- false ");
+        cy.genieClick("#debug-select-grid__previous").wait(2000);
         cy.ariaHidden("#debug-select-grid__mary", "false");
         cy.ariaHidden("#debug-select-grid__mike", "true");
-        cy.genieClick("#debug-select-grid__previous").wait(1500);
-        cy.log(" BACK 3 - true ");
+        cy.genieClick("#debug-select-grid__previous").wait(2000);
         cy.ariaHidden("#debug-select-grid__mary", "true");
         cy.ariaHidden("#debug-select-grid__mike", "false");
     });
