@@ -24,8 +24,5 @@ module.exports = (on, config) => {
     on("after:screenshot", ({ path }) => {
         renameSync(path, path.replace(/ \(\d*\)/i, ""));
     });
-
-    config.env.THEME = process.env.THEME;
-    config.env.LOCAL_DEV = process.env.LOCAL_DEV;
     return config;
 };
