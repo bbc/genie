@@ -13,6 +13,7 @@ import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js
 import * as backgroundsModule from "../../../../src/components/shop/backgrounds.js";
 import { collections } from "../../../../src/core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
+import * as gmiModule from "../../../../src/core/gmi/gmi.js";
 
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
 jest.mock("../../../../src/components/shop/confirm.js");
@@ -51,9 +52,12 @@ describe("Scrollable List", () => {
     let mockSizer;
     let mockItem;
     let mockLabel;
+    let mockGmi;
 
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
+        mockGmi = { sendStatsEvent: jest.fn() };
+        gmiModule.gmi = mockGmi;
         mockItem = {
             id: "someItem",
             name: "someItemName",
