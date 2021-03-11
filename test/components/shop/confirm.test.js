@@ -27,10 +27,17 @@ describe("Confirm pane", () => {
     let mockBalance;
     let mockScene;
     let mockCollection;
+    let mockText;
 
     beforeEach(() => {
         mockContainer = { add: jest.fn(), setY: jest.fn(), removeAll: jest.fn(), destroy: jest.fn() };
-        mockImage = { setScale: jest.fn(), setVisible: jest.fn(), setTexture: jest.fn(), type: "Image" };
+        mockImage = {
+            setScale: jest.fn(),
+            setVisible: jest.fn(),
+            setTexture: jest.fn(),
+            setPosition: jest.fn(),
+            type: "Image",
+        };
         mockButton = {
             setLegal: jest.fn(),
             setY: jest.fn(),
@@ -105,8 +112,15 @@ describe("Confirm pane", () => {
         layout.textStyle = jest.fn().mockReturnValue({ some: "textStyle" });
 
         buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
-
-        text.addText = jest.fn(() => ({ setOrigin: jest.fn(() => ({ setText: jest.fn(), type: "Text" })) }));
+        mockText = {
+            setText: jest.fn(),
+            style: { some: "style" },
+            setPosition: jest.fn(),
+            setStyle: jest.fn(),
+        };
+        text.addText = jest.fn(() => ({
+            setOrigin: jest.fn(() => mockText),
+        }));
 
         mockBalanceItem = { qty: 500 };
         transact.getBalanceItem = jest.fn(() => mockBalanceItem);
@@ -124,28 +138,32 @@ describe("Confirm pane", () => {
         const mockItem = { mock: "item", id: "foo" };
         beforeEach(() => {
             confirmPane = createConfirm(mockScene, "shop", mockItem);
-            confirmPane.scene = mockScene;
         });
-        test("returns a object with a container", () => {
-            expect(confirmPane.container).toBe(mockContainer);
-        });
-        test("an item and a title", () => {
-            expect(confirmPane.item).toBe(mockItem);
-            expect(confirmPane.title).toBe("shop");
+        test("returns an action", () => {
+            expect(confirmPane.action).toBe("buy");
         });
         test("with gel buttons for confirm and cancel", () => {
             expect(buttons.createConfirmButtons).toHaveBeenCalled();
         });
-        test("in a layout that can be flipped L-R in config", () => {
-            expect(layout.getInnerRectBounds.mock.calls[0][0]).toBe(mockScene);
-            jest.clearAllMocks();
-            mockScene.config.confirm.buttons.buttonsRight = false;
-            createConfirm(mockScene, "shop", { id: "foo" });
-            expect(text.addText.mock.calls[0][1]).toBe(-50);
-            expect(text.addText.mock.calls[0][2]).toBe(-75);
-        });
-        test("that is displayed with an appropriate Y offset", () => {
+    });
+
+    describe("resize confirm", () => {
+        const mockItem = { mock: "item", id: "foo" };
+
+        test("sets y offset on container", () => {
+            confirmPane = createConfirm(mockScene, "shop", mockItem);
+            confirmPane.resize();
             expect(mockContainer.setY).toHaveBeenCalledWith(105);
+        });
+
+        test("sets word wrap style on item blurb", () => {
+            mockScene.config.confirm.detailView = true;
+            confirmPane = createConfirm(mockScene, "shop", mockItem);
+            confirmPane.resize();
+            expect(mockText.setStyle).toHaveBeenCalledWith({
+                ...mockText.style,
+                wordWrap: { width: 200 / (21 / 10), useAdvancedWrap: true },
+            });
         });
     });
 
@@ -173,7 +191,7 @@ describe("Confirm pane", () => {
             expect(text.addText.mock.calls[1][3]).toBe("itemTitle");
             expect(text.addText.mock.calls[2][3]).toBe("itemDescription");
             expect(text.addText.mock.calls[3][3]).toBe("itemBlurb");
-            expect(mockScene.add.image).toHaveBeenCalledWith(50, -50, "itemIcon");
+            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "itemIcon");
         });
     });
 
