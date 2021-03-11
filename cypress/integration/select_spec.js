@@ -57,7 +57,7 @@ describe(`The Select screens ${Cypress.env("THEME")}`, () => {
         cy.ariaHidden("#debug-select-grid__debby", "true");
         cy.ariaHidden("#debug-select-grid__timmy", "true");
         cy.ariaHidden("#debug-select-grid__elliot", "true");
-        cy.genieClick("#debug-select-grid__next");
+        cy.genieClick("#debug-select-grid__next").wait(1000);
         cy.ariaHidden("#debug-select-grid__mary", "true");
         cy.ariaHidden("#debug-select-grid__kyle", "true");
         cy.ariaHidden("#debug-select-grid__suzy", "true");
