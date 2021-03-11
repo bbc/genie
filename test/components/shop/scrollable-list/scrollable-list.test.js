@@ -387,7 +387,7 @@ describe("Scrollable List", () => {
             });
         });
         describe("panel", () => {
-            test("no event listener is created when collection is empty", () => {
+            test("event listener is not created when collection is empty", () => {
                 collectionGetAll = [];
                 new ScrollableList(mockScene);
                 expect(mockA11yElem.addEventListener).not.toHaveBeenCalled();
