@@ -10,9 +10,9 @@ import * as confirm from "../../../../src/components/shop/confirm.js";
 import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
+import * as backgroundsModule from "../../../../src/components/shop/backgrounds.js";
 import { collections } from "../../../../src/core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
-import { initResizers } from "../../../../src/components/shop/backgrounds.js";
 
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
 jest.mock("../../../../src/components/shop/confirm.js");
@@ -39,6 +39,7 @@ buttons.createListButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
 scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
+backgroundsModule.resizeBackground = jest.fn(() => jest.fn());
 const title = "shop";
 
 describe("Scrollable List", () => {
@@ -168,7 +169,7 @@ describe("Scrollable List", () => {
                 NinePatch: jest.fn(),
             },
         };
-        initResizers();
+        backgroundsModule.initResizers();
 
         a11y.addGroupAt = jest.fn();
     });
@@ -385,6 +386,13 @@ describe("Scrollable List", () => {
                 expect(mockScene.input.removeListener).toHaveBeenCalled();
             });
         });
+        describe("panel", () => {
+            test("no event listener is created when collection is empty", () => {
+                collectionGetAll = [];
+                new ScrollableList(mockScene);
+                expect(mockA11yElem.addEventListener).not.toHaveBeenCalled();
+            });
+        });
     });
     describe("Accessibility setup", () => {
         beforeEach(() => {
@@ -409,6 +417,19 @@ describe("Scrollable List", () => {
         test("reset method that calls resizePanel", () => {
             list.reset();
             expect(buttons.scaleButton).toHaveBeenCalled();
+        });
+
+        test("reset method calls resizeBackground", () => {
+            list.reset();
+            expect(backgroundsModule.resizeBackground).toHaveBeenCalled();
+        });
+
+        test("reset method calls resizeBackground when collection is empty", () => {
+            jest.clearAllMocks();
+            collectionGetAll = [];
+            list = new ScrollableList(mockScene, title);
+            list.reset();
+            expect(backgroundsModule.resizeBackground).toHaveBeenCalled();
         });
 
         test("getBoundingRect method returns current safe area", () => {

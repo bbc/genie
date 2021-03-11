@@ -86,7 +86,7 @@ const setupEvents = (scene, panel) => {
     items.forEach(item => getFirstElement(item).addEventListener("focus", () => panel.updateOnFocus(item)));
 };
 
-const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items") ?? [];
+const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items");
 
 const getFilteredCollection = (collection, filter) => {
     const baseCollection = filter ? collection.filter(filter) : collection;
@@ -106,7 +106,7 @@ const createEmptyText = (scene, mode) => {
     const offset = getTextOffset(config?.position, emptyText);
     emptyText.setOrigin(0.5, 0.5).setPosition(offset.x, offset.y);
     return emptyText;
-}
+};
 
 export class ScrollableList extends Phaser.GameObjects.Container {
     constructor(scene, mode, filter) {
