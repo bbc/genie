@@ -13,8 +13,6 @@ import { eventBus } from "../../../src/core/event-bus.js";
 jest.mock("../../../src/core/collections.js");
 jest.mock("../../../src/core/gmi/gmi.js");
 
-//bump
-
 describe("Shop Transactions", () => {
     let mockScene;
     let mockCurrencyItem;
