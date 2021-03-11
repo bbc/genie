@@ -72,22 +72,22 @@ describe(`The Select screens ${Cypress.env("THEME")}`, () => {
 
     it("Continuously cycles through select pages on grid view", () => {
         cy.genieClick("#home__debug");
-        cy.genieClick("#debug__debug-select-grid").wait(500);
+        cy.genieClick("#debug__debug-select-grid").wait(3000);
         cy.ariaHidden("#debug-select-grid__mary", "false");
         cy.ariaHidden("#debug-select-grid__mike", "true");
-        cy.genieClick("#debug-select-grid__next").wait(500);
+        cy.genieClick("#debug-select-grid__next").wait(3000);
         cy.ariaHidden("#debug-select-grid__mary", "true");
         cy.ariaHidden("#debug-select-grid__mike", "false");
-        cy.genieClick("#debug-select-grid__next").wait(500);
+        cy.genieClick("#debug-select-grid__next").wait(5000);
         cy.ariaHidden("#debug-select-grid__mary", "false");
         cy.ariaHidden("#debug-select-grid__mike", "true");
-        cy.genieClick("#debug-select-grid__previous").wait(500);
+        cy.genieClick("#debug-select-grid__previous").wait(5000);
         cy.ariaHidden("#debug-select-grid__mary", "true");
         cy.ariaHidden("#debug-select-grid__mike", "false");
-        cy.genieClick("#debug-select-grid__previous").wait(500);
+        cy.genieClick("#debug-select-grid__previous").wait(5000);
         cy.ariaHidden("#debug-select-grid__mary", "false");
         cy.ariaHidden("#debug-select-grid__mike", "true");
-        cy.genieClick("#debug-select-grid__previous").wait(500);
+        cy.genieClick("#debug-select-grid__previous").wait(5000);
         cy.ariaHidden("#debug-select-grid__mary", "true");
         cy.ariaHidden("#debug-select-grid__mike", "false");
     });
