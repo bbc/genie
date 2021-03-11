@@ -22,7 +22,7 @@ const createMenuButton = scene => buttonText => {
         scene.transientData.shop.mode = buttonText.toLowerCase();
         scene.scene.pause();
         scene.addOverlay(scene.scene.key.replace("-menu", "-list"));
-        gmi.setStatsScreen(buttonText === "Shop" ? "shopbuy" : "shopmanage");
+        gmi.sendStatsEvent(buttonText === "Shop" ? "shopbuy" : "shopmanage", "click", {});
     };
 
     const config = { ...defaults, title: buttonText, id, ariaLabel, action };

@@ -4,7 +4,6 @@
  * @author BBC Children's D+E
  * @license Apache-2.0 Apache-2.0
  */
-
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const getPanelItems = panel => panel.getByName("grid", true).getElement("items");

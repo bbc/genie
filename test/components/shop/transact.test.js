@@ -50,6 +50,7 @@ describe("Shop Transactions", () => {
             price: 50,
             slot: "helmet",
             title: "amazing helmet",
+            qty: 1,
         };
         mockShopItem = {
             qty: 1,
@@ -83,12 +84,12 @@ describe("Shop Transactions", () => {
         beforeEach(() => transact.buy(mockScene, mockItem));
 
         test("item quantity is reduced by 1 in the shop collection", () => {
-            const expectedItem = { ...mockItem, qty: mockShopItem.qty - 1 };
+            const expectedItem = { id: mockItem.id, qty: mockShopItem.qty - 1 };
             expect(mockShopCollection.set).toHaveBeenCalledWith(expectedItem);
         });
 
         test("item quantity is increased by 1 and given purchased state in the inventory collection", () => {
-            const expectedItem = { ...mockItem, qty: mockInventoryItem.qty + 1, state: "purchased" };
+            const expectedItem = { id: mockItem.id, qty: mockInventoryItem.qty + 1, state: "purchased" };
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
 
@@ -99,7 +100,7 @@ describe("Shop Transactions", () => {
 
         test("fires a stats event", () => {
             expect(gmi.sendStatsEvent).toHaveBeenCalledWith("buy", "click", {
-                metadata: "KEY=item~STATE=purchased~QTY=1",
+                metadata: "KEY=item~STATE=purchased~QTY=0",
                 source: "amazing helmet",
             });
         });
@@ -107,7 +108,7 @@ describe("Shop Transactions", () => {
         test("item is added to the inventory collection with qty set to 1 when the item does not exist in the inventory yet", () => {
             jest.clearAllMocks();
             mockInventoryItem = undefined;
-            const expectedItem = { ...mockItem, qty: 1, state: "purchased" };
+            const expectedItem = { id: mockItem.id, qty: 1, state: "purchased" };
             transact.buy(mockScene, mockItem);
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
@@ -117,7 +118,7 @@ describe("Shop Transactions", () => {
         beforeEach(() => transact.equip(mockScene, mockItem));
 
         test("items state is set to equipped in the inventory collection", () => {
-            const expectedItem = { ...mockItem, state: "equipped" };
+            const expectedItem = { id: mockItem.id, state: "equipped" };
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
 
@@ -134,7 +135,7 @@ describe("Shop Transactions", () => {
                 { id: "alreadyEquippedItem", slot: "helmet", state: "equipped" },
                 { id: "itemBeingEquipped", slot: "helmet", state: "purchased" },
             ];
-            const expectedItem = { id: "alreadyEquippedItem", slot: "helmet", state: "purchased" };
+            const expectedItem = { id: "alreadyEquippedItem", state: "purchased" };
             transact.equip(mockScene, mockItem);
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
@@ -147,7 +148,7 @@ describe("Shop Transactions", () => {
         });
 
         test("items state is set to purchased in the inventory collection", () => {
-            const expectedItem = { ...mockItem, state: "purchased" };
+            const expectedItem = { id: mockItem.id, state: "purchased" };
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
         test("fires a stats event", () => {
@@ -162,7 +163,7 @@ describe("Shop Transactions", () => {
         beforeEach(() => transact.use(mockScene, mockInventoryItem));
 
         test("item's quantity is reduced by one in the inventory collection", () => {
-            const expectedItem = { ...mockInventoryItem, qty: mockInventoryItem.qty - 1 };
+            const expectedItem = { id: "inventoryItem", qty: mockInventoryItem.qty - 1 };
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
 
@@ -175,7 +176,7 @@ describe("Shop Transactions", () => {
 
         test("fires a stats event", () => {
             expect(gmi.sendStatsEvent).toHaveBeenCalledWith("use", "click", {
-                metadata: "KEY=inventoryItem~STATE=used~QTY=1",
+                metadata: "KEY=inventoryItem~STATE=used~QTY=4",
                 source: "amazing helmet",
             });
         });
