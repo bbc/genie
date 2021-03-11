@@ -41,7 +41,7 @@
             key: "debug-shop.menuButtonBackground",
             styles: { fontStyle: "bold", fontSize: "16px" },
         },
-        background: "halfViewBackground",
+        background: { key: "halfViewBackground", columns: [100, null, 100], rows: [100, null, 100] },
         detailView: true,
         prompt: {
             buy: {
