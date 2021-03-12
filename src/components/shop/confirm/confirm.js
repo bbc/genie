@@ -4,37 +4,33 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import fp from "../../../lib/lodash/fp/fp.js";
-import { getInnerRectBounds, getSafeArea } from "./shop-layout.js";
-import { addText } from "../../core/layout/text-elem.js";
-import { createConfirmButtons } from "./menu-buttons.js";
-import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import { buy, equip, unequip, use, getBalanceItem } from "./transact.js";
-import { collections } from "../../core/collections.js";
-import { createBackground, resizeBackground } from "./backgrounds.js";
+import fp from "../../../../lib/lodash/fp/fp.js";
+import { getInnerRectBounds, getSafeArea } from "../shop-layout.js";
+import { addText } from "../../../core/layout/text-elem.js";
+import { CAMERA_X, CAMERA_Y } from "../../../core/layout/metrics.js";
+import { buy, equip, unequip, use, getBalanceItem } from "../transact.js";
+import { collections } from "../../../core/collections.js";
+import { createBackground, resizeBackground } from "../backgrounds.js";
+import { itemView, scaleItemView } from "./item-view.js";
+import { addConfirmButtons } from "./confirm-buttons.js";
 
 const getShopConfig = scene => scene.transientData.shop.config;
-const canBuyItem = (scene, item) => canAffordItem(scene, item) && itemIsInStock(scene, item);
 const canAffordItem = (scene, item) => item && getBalanceItem(getShopConfig(scene)).qty >= item.price;
 const isEquippable = item => item && item.slot;
 const itemIsInStock = (scene, item) =>
     item && collections.get(getShopConfig(scene).shopCollections.shop).get(item.id).qty > 0;
-const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.height;
-const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
+
+
 const getButtonX = (x, config) => (config.confirm.buttons.buttonsRight ? x : -x);
-const imageY = bounds => -percentOfHeight(bounds, 25);
+
 const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
 const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
-const titleY = bounds => -percentOfHeight(bounds, 4);
-const detailY = bounds => percentOfHeight(bounds, 5);
-const blurbY = bounds => percentOfHeight(bounds, 25);
+
 const percentOfHeight = (bounds, percent) => (bounds.height / 100) * percent;
 const getOffsetBounds = (outerBounds, innerBounds) => ({
     ...innerBounds,
     y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
 });
-const imageX = (config, bounds) =>
-    config.confirm.buttons.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
 
 const createElems = (scene, container, promptText, item) => ({
     background: createBackground(scene, scene.config.confirm?.background),
@@ -64,29 +60,6 @@ const sizeConfirmButton = (scene, button, idx, bounds, innerBounds) => {
 const sizeConfirmButtons = (scene, confirmButtons, bounds, innerBounds) =>
     confirmButtons.forEach((button, idx) => sizeConfirmButton(scene, button, idx, bounds, innerBounds));
 
-const disableActionButton = button => {
-    Object.assign(button, { alpha: 0.25, tint: 0xff0000 });
-    button.input.enabled = false;
-    button.accessibleElement.update();
-};
-
-const addConfirmButtons = (scene, title, action, item) => {
-    const confirmButtonCallback = () => handleActionClick(scene, title, action, item);
-    const cancelButtonCallback = () => {
-        scene._data.addedBy.scene.resume();
-        scene.removeOverlay();
-    };
-    const confirmButtons = createConfirmButtons(
-        scene,
-        fp.startCase(action),
-        confirmButtonCallback,
-        cancelButtonCallback,
-    );
-    ((action === "buy" && !canBuyItem(scene, item)) || (action === "equip" && !isEquippable(item))) &&
-        disableActionButton(confirmButtons[0]);
-    return confirmButtons;
-};
-
 const getAction = (scene, title, item) => {
     return title === "shop" ? "buy" : getInventoryAction(scene, item);
 };
@@ -102,56 +75,6 @@ const inferAction = fp.cond([
     [i => i.state === "purchased", () => "equip"],
 ]);
 
-const handleActionClick = (scene, title, action, item) => {
-    doAction({ scene, action, item });
-    scene._data.addedBy.scene.resume();
-    scene.removeOverlay();
-};
-
-const doAction = fp.cond([
-    [args => args.action === "buy", args => buy(args.scene, args.item)],
-    [args => args.action === "equip", args => equip(args.scene, args.item)],
-    [args => args.action === "unequip", args => unequip(args.scene, args.item)],
-    [args => args.action === "use", args => use(args.scene, args.item)],
-]);
-
-const itemView = (scene, item, config) =>
-    config.confirm.detailView ? itemDetailView(scene, item, config) : itemImageView(scene, item);
-
-const itemImageView = (scene, item) => ({ itemImage: scene.add.image(0, 0, item.icon) });
-
-const itemDetailView = (scene, item, config) => {
-    const { title, detail, description } = config.confirm;
-    return {
-        itemImage: scene.add.image(0, 0, item.icon),
-        itemTitle: addText(scene, 0, 0, item.title, title).setOrigin(0.5),
-        itemDetail: addText(scene, 0, 0, item.description, detail).setOrigin(0.5),
-        itemBlurb: addText(scene, 0, 0, item.longDescription, description).setOrigin(0.5),
-    };
-};
-
-const scaleItemView = (itemView, config, bounds) => {
-    setImageScaleXY(
-        itemView.itemImage,
-        itemView.itemTitle
-            ? getItemDetailImageScale(bounds, itemView.itemImage)
-            : getItemImageScale(bounds, itemView.itemImage),
-    );
-    const x = imageX(config, bounds);
-    itemView.itemImage.setPosition(x, imageY(bounds));
-    itemView.itemTitle?.setPosition(x, titleY(bounds));
-    itemView.itemDetail?.setPosition(x, detailY(bounds));
-    itemView.itemBlurb?.setPosition(x, blurbY(bounds));
-    itemView.itemBlurb?.setStyle({
-        ...itemView.itemBlurb?.style,
-        wordWrap: { width: bounds.width / (21 / 10), useAdvancedWrap: true },
-    });
-};
-
-const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY = 1) => {
-    image.setScale(absScale / containerScaleX, absScale / containerScaleY);
-    image.memoisedScale = absScale;
-};
 
 const getEquipPromptText = (scene, action, item) =>
     isEquippable(item) ? scene.config.confirm.prompt[action].legal : scene.config.confirm.prompt[action].illegal;

@@ -6,7 +6,7 @@
  */
 import { ScrollableList } from "../../../../src/components/shop/scrollable-list/scrollable-list.js";
 import * as buttons from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
-import * as confirm from "../../../../src/components/shop/confirm.js";
+import * as confirm from "../../../../src/components/shop/confirm/confirm.js";
 import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";

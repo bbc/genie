@@ -7,7 +7,7 @@
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance.js";
-import * as confirm from "../../../src/components/shop/confirm.js";
+import * as confirm from "../../../src/components/shop/confirm/confirm.js";
 import { ShopConfirm } from "../../../src/components/shop/shop-confirm-screen.js";
 import { initResizers } from "../../../src/components/shop/backgrounds.js";
 
