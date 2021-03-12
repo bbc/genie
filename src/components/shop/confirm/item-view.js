@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { addText } from "../../../core/layout/text-elem.js";
+import { addText } from "../../../core/layout/text.js";
 
 const titleY = bounds => -percentOfHeight(bounds, 4);
 const detailY = bounds => percentOfHeight(bounds, 5);
@@ -12,6 +12,8 @@ const getItemDetailImageScale = (bounds, image) => bounds.height / 3 / image.hei
 const getItemImageScale = (bounds, image) => (bounds.width / 2 / image.width) * 0.9;
 const imageX = (config, bounds) =>
     config.confirm.buttons.buttonsRight ? bounds.x + bounds.width / 4 : bounds.x + (bounds.width / 4) * 3;
+const imageY = bounds => -percentOfHeight(bounds, 25);
+const percentOfHeight = (bounds, percent) => (bounds.height / 100) * percent; //TODO NT DUPE
 
 const itemImageView = (scene, item) => ({ itemImage: scene.add.image(0, 0, item.icon) });
 

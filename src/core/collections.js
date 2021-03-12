@@ -6,15 +6,17 @@
 import { gmi } from "./gmi/gmi.js";
 import fp from "../../lib/lodash/fp/fp.js";
 
+const getId = x => x.id;
 const getGenieStore = () => gmi.getAllSettings().gameData?.genie ?? {};
-const mergeDefaults = itemDefaults => item => ({ ...item, ...itemDefaults?.find(def => def.id === item.id) });
-const getFilterParams = config => ({ ids: config.defaults?.map(x => x.id) ?? [], tags: config.include ?? [] });
+const mergeItems = itemList => item => ({ ...item, ...itemList?.find(def => def.id === item.id) });
+const getFilterParams = config => ({ ids: config.defaults?.map(getId) ?? [], tags: config.include ?? [] });
 const tagIn = config => tag => config.tags.includes(tag);
-const include = config => item => !config.tags.length || config.ids.includes(item.id) || item.tags?.some(tagIn(config));
+const include = (config, keepIds = []) => item =>
+    !config.tags.length || config.ids.includes(item.id) || item.tags?.some(tagIn(config)) || keepIds.includes(item.id);
 const addQty = qty => item => ({ ...item, qty }); //TODO this should be add global defaults. qty might not even be present? needed for shop
 const getStoredFn = key => () => getGenieStore()?.collections?.[key] ?? [];
 const keyById = arr => Object.fromEntries(arr.map(x => [x.id, x]));
-const mergeItems = (stored, item) => Object.values(fp.merge(keyById(stored), keyById(item)));
+const mergeToList = (stored, item) => Object.values(fp.merge(keyById(stored), keyById(item)));
 
 const warn = message => {
     console.warn(message); // eslint-disable-line no-console
@@ -42,21 +44,19 @@ export const initCollection = screen => key => {
 
     const valid = validateFn(catalogue);
 
-    const getAll = () => {
-        const base = catalogue
-            .filter(include(getFilterParams(config)))
+    const getAll = () =>
+        catalogue
+            .filter(include(getFilterParams(config), getStored().map(getId)))
             .map(addQty(config.defaultQty ?? 1))
-            .map(mergeDefaults(config.defaults));
-
-        return mergeItems(base, getStored(key));
-    };
+            .map(mergeItems(config.defaults))
+            .map(mergeItems(getStored()));
 
     const get = key => getAll().find(item => item.id === key);
 
     const set = config => {
         if (!valid(config)) return;
 
-        gmi.setGameData("genie", fp.setWith(Object, storagePath, mergeItems(getStored(), [config]), getGenieStore()));
+        gmi.setGameData("genie", fp.setWith(Object, storagePath, mergeToList(getStored(), [config]), getGenieStore()));
     };
 
     const collection = {

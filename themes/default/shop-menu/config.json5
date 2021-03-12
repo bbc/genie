@@ -28,11 +28,11 @@
             key: "shop-menu.balanceIcon",
         },
     },
-    collection: ["shop-items", "shop-inventory"],
+    collection: ["shop-items", "inventory"],
     shopConfig: {
         shopCollections: {
             shop: "shop-items",
-            manage: "shop-inventory",
+            manage: "inventory",
         },
         balance: "coin",
         slots: {

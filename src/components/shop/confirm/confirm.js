@@ -6,7 +6,7 @@
  */
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { getInnerRectBounds, getSafeArea } from "../shop-layout.js";
-import { addText } from "../../../core/layout/text-elem.js";
+import { addText } from "../../../core/layout/text.js";
 import { CAMERA_X, CAMERA_Y } from "../../../core/layout/metrics.js";
 import { buy, equip, unequip, use, getBalanceItem } from "../transact.js";
 import { collections } from "../../../core/collections.js";

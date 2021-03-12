@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { overlays1Wide } from "../../../../src/components/shop/scrollable-list/button-overlays.js";
-import * as text from "../../../../src/core/layout/text-elem.js";
+import * as text from "../../../../src/core/layout/text.js";
 
 let mockScene;
 let mockGelButton;

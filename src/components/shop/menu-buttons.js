@@ -5,7 +5,7 @@
  * @license Apache-2.0
  */
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import { addText } from "../../core/layout/text-elem.js";
+import { addText } from "../../core/layout/text.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { createButton } from "../../core/layout/create-button.js";
 import { buttonsChannel } from "../../core/layout/gel-defaults.js";

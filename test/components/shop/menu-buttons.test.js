@@ -11,7 +11,7 @@ import {
     resizeGelButtons,
 } from "../../../src/components/shop/menu-buttons.js";
 import * as button from "../../../src/core/layout/create-button.js";
-import * as textElem from "../../../src/core/layout/text-elem.js";
+import * as textElem from "../../../src/core/layout/text.js";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
 import * as mockGmi from "../../../src/core/gmi/gmi.js";
 
