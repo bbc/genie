@@ -11,7 +11,7 @@ const getGenieStore = () => gmi.getAllSettings().gameData?.genie ?? {};
 const mergeItems = itemList => item => ({ ...item, ...itemList?.find(def => def.id === item.id) });
 const getFilterParams = config => ({ ids: config.defaults?.map(getId) ?? [], tags: config.include ?? [] });
 const tagIn = config => tag => config.tags.includes(tag);
-const include = (config, keepIds = []) => item =>
+const include = (config, keepIds) => item =>
     !config.tags.length || config.ids.includes(item.id) || item.tags?.some(tagIn(config)) || keepIds.includes(item.id);
 const addQty = qty => item => ({ ...item, qty }); //TODO this should be add global defaults. qty might not even be present? needed for shop
 const getStoredFn = key => () => getGenieStore()?.collections?.[key] ?? [];
