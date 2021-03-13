@@ -16,7 +16,7 @@ import { initResizers } from "../../../../src/components/shop/backgrounds.js";
 import * as gmiModule from "../../../../src/core/gmi/gmi.js";
 
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
-jest.mock("../../../../src/components/shop/confirm.js");
+jest.mock("../../../../src/components/shop/confirm/confirm.js");
 
 const mockA11yElem = {
     addEventListener: jest.fn(),

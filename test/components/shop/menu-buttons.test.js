@@ -15,7 +15,7 @@ import * as textElem from "../../../src/core/layout/text.js";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
 import * as mockGmi from "../../../src/core/gmi/gmi.js";
 
-jest.mock("../../../src/core/layout/text-elem.js");
+jest.mock("../../../src/core/layout/text.js");
 jest.mock("../../../src/core/layout/create-button.js");
 jest.mock("../../../src/core/layout/gel-defaults.js");
 jest.mock("../../../src/core/gmi/gmi.js");
