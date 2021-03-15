@@ -80,7 +80,11 @@ export function create(scene, metrics, buttonIds, accessibleButtonIds) {
         }),
     );
 
-    const iconEvents = settingsIcons.create(groups.topRight, buttonIds);
+    let iconEvents = {};
+
+    if (scene.config.subtitle == undefined) {
+        iconEvents = settingsIcons.create(groups.topRight, buttonIds);
+    }
 
     /**
      * Attach a callback to the onInputUp event of a given Gel button
@@ -100,7 +104,9 @@ export function create(scene, metrics, buttonIds, accessibleButtonIds) {
 
     const removeEvents = () => {
         event.unsubscribe();
-        iconEvents.unsubscribe();
+        if (scene.config.subtitle == undefined) {
+            iconEvents.unsubscribe();
+        }
     };
 
     const destroy = () => {
