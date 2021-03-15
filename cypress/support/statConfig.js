@@ -266,6 +266,34 @@ export const userActions = {
         bucket: "",
         event: "user_action",
     },
+    exitGame: {
+        campaignId: "Page",
+        creationId: "exit~click",
+        variant: "",
+        format: "",
+        generalPlacement: "keepalive.games.genie",
+        detailedPlacement: "",
+        advertiserId: "",
+        url: "unknown",
+        countername: "keepalive.games.genie",
+        screenName: "",
+        bucket: "",
+        event: "user_action",
+    },
+    achievementComplete: {
+        campaignId: "Page",
+        creationId: "achievement~complete",
+        variant: "",
+        format: "",
+        generalPlacement: "keepalive.games.genie",
+        detailedPlacement: "",
+        advertiserId: "",
+        url: "unknown",
+        countername: "keepalive.games.genie",
+        screenName: "",
+        bucket: "",
+        event: "user_action",
+    }
 };
 
 export const pageViews = {

@@ -160,7 +160,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.shopBuy, { screenName: "debug_shop_equippables_list" }).stat,
+                    formatStatConfig(userActions.shopBuy, { screenName: "debug_shop_equippables_menu" }).stat,
                 );
         });
     });
@@ -175,7 +175,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.shopManage, { screenName: "debug_shop_equippables_list" }).stat,
+                    formatStatConfig(userActions.shopManage, { screenName: "debug_shop_equippables_menu" }).stat,
                 );
         });
     });
@@ -230,6 +230,7 @@ describe("User Action stats for Genie", () => {
         cy.genieClick("#debug__debug-shop-equippables-menu");
         cy.genieClick("#debug-shop-equippables-menu__manage_menu_button");
         cy.genieClick("#debug-shop-equippables-list__scroll_button_box_manage");
+        cy.genieClick("#debug-shop-equippables-list__scroll_button_box_manage");
         cy.genieClick("#debug-shop-equippables-confirm__tx_use_button");
         cy.wait("@useItem").then(interception => {
             cy.log(interception)
@@ -243,4 +244,19 @@ describe("User Action stats for Genie", () => {
                 );
         });
     });
+
+    it.only("Fires a user action event when the achievement is completed.", () => {
+        cy.intercept(userActions.achievementComplete.creationId).as("achievementComplete");
+        cy.genieClick("#home__play");
+        cy.genieClick("#narrative__skip");
+        cy.genieClick("#character-select__mary");
+        cy.genieClick("#level-select__1");
+        cy.genieClick("#game__1");
+        cy.wait("@achievementComplete").then(interception => {
+            cy.log(interception).its("response.url").should("include", formatStatConfig(userActions.achievementComplete, { format: "ACH=1/10", advertiserId: "just_started", screenName: "game"}).stat)
+        });
+    });
+
+    /* will need a format and screenName adding e.g. formatStatConfig(stat, { format: "value", screenName: "value"}).stat */
+
 });
