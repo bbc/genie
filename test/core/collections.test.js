@@ -206,7 +206,7 @@ describe("Collections", () => {
             testCatalogue.push({
                 id: "ItemOutsideSet",
                 qty: 10,
-            })
+            });
 
             testCollection.include = ["tag1", "tag2"];
             testCollection.defaults = [{ id: "id1", qty: 5, state: "testState" }];

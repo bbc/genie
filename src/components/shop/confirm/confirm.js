@@ -6,14 +6,13 @@
  */
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { addText } from "../../../core/layout/text.js";
-import { buy, equip, unequip, use } from "../transact.js";
 import { collections } from "../../../core/collections.js";
 import { createBackground } from "../backgrounds.js";
 import { itemView } from "./item-view.js";
 import { addConfirmButtons } from "./confirm-buttons.js";
-import { itemIsInStock, getShopConfig } from "./utility-rename.js";
+import { itemIsInStock, getShopConfig } from "./item-checks.js";
 import { promptText } from "./prompt-text.js";
-import { resizeFn } from "./resize.js";
+import { resizeFn } from "./confirm-resize.js";
 
 const createElems = (scene, container, promptText, item) => ({
     background: createBackground(scene, scene.config.confirm?.background),
@@ -30,10 +29,10 @@ const getAction = (scene, title, item) => (title === "shop" ? "buy" : getInvento
 
 const getInventoryAction = (scene, item) => {
     const inventoryItem = collections.get(getShopConfig(scene).shopCollections.manage).get(item?.id);
-    return inferAction(inventoryItem);
+    return getActionName(inventoryItem);
 };
 
-const inferAction = fp.cond([
+const getActionName = fp.cond([
     [i => Boolean(!i.slot), () => "use"],
     [i => i.state === "equipped", () => "unequip"],
     [i => i.state === "purchased", () => "equip"],

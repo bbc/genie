@@ -33,14 +33,14 @@ const getOffset = (position, gelButton) => {
 };
 
 const overlays = {
-    "image": imageOverlay,
-    "text": textOverlay,
-}
+    image: imageOverlay,
+    text: textOverlay,
+};
 
 export const overlays1Wide = (gelButton, configs) => {
     configs.forEach(config => {
         const offset = getOffset(config.position, gelButton);
-        overlays[config.type]({ gelButton, config, offset })
+        overlays[config.type]({ gelButton, config, offset });
     });
     return gelButton;
 };

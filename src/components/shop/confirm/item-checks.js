@@ -11,4 +11,4 @@ export const canAffordItem = (scene, item) => item && getBalanceItem(getShopConf
 export const itemIsInStock = (scene, item) =>
     item && collections.get(getShopConfig(scene).shopCollections.shop).get(item.id).qty > 0;
 
-export const isEquippable = item => item && item.slot;
+export const isEquippable = item => Boolean(item.slot);

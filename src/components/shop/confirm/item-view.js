@@ -52,4 +52,3 @@ export const scaleItemView = (itemView, config, bounds) => {
         wordWrap: { width: bounds.width / (21 / 10), useAdvancedWrap: true },
     });
 };
-

@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { canAffordItem, isEquippable, itemIsInStock } from "./utility-rename.js";
+import { canAffordItem, isEquippable, itemIsInStock } from "./item-checks.js";
 
 const getEquipPromptText = (scene, action, item) =>
     isEquippable(item) ? scene.config.confirm.prompt[action].legal : scene.config.confirm.prompt[action].illegal;
@@ -19,8 +19,8 @@ const getBuyPromptText = (scene, action, item) =>
         : scene.config.confirm.prompt[action].illegal;
 
 export const promptText = {
-    "buy": args => getBuyPromptText(args.scene, args.action, args.item),
-    "equip": args => getEquipPromptText(args.scene, args.action, args.item),
-    "unequip": args => getUnequipPromptText(args.scene),
-    "use": args => getUsePromptText(args.scene),
-}
+    buy: args => getBuyPromptText(args.scene, args.action, args.item),
+    equip: args => getEquipPromptText(args.scene, args.action, args.item),
+    unequip: args => getUnequipPromptText(args.scene),
+    use: args => getUsePromptText(args.scene),
+};

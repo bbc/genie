@@ -6,7 +6,7 @@
 import { createConfirmButtons } from "../menu-buttons.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { buy, equip, unequip, use } from "../transact.js";
-import { canAffordItem, isEquippable, itemIsInStock } from "./utility-rename.js";
+import { canAffordItem, isEquippable, itemIsInStock } from "./item-checks.js";
 
 const disableActionButton = button => {
     Object.assign(button, { alpha: 0.25, tint: 0xff0000 });

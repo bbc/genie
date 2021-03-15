@@ -5,14 +5,14 @@
  * @license Apache-2.0
  */
 
-import { createConfirm } from "../../../src/components/shop/confirm/confirm.js";
-import * as layout from "../../../src/components/shop/shop-layout.js";
-import * as text from "../../../src/core/layout/text.js";
-import * as buttons from "../../../src/components/shop/menu-buttons.js";
-import * as transact from "../../../src/components/shop/transact.js";
-import { collections } from "../../../src/core/collections.js";
-import * as bgModule from "../../../src/components/shop/backgrounds.js";
-import { initResizers } from "../../../src/components/shop/backgrounds.js";
+import { createConfirm } from "../../../../src/components/shop/confirm/confirm.js";
+import * as layout from "../../../../src/components/shop/shop-layout.js";
+import * as text from "../../../../src/core/layout/text.js";
+import * as buttons from "../../../../src/components/shop/menu-buttons.js";
+import * as transact from "../../../../src/components/shop/transact.js";
+import { collections } from "../../../../src/core/collections.js";
+import * as bgModule from "../../../../src/components/shop/backgrounds.js";
+import { initResizers } from "../../../../src/components/shop/backgrounds.js";
 
 jest.mock("../../../src/components/shop/transact.js");
 

@@ -47,16 +47,12 @@ export const createListButton = (scene, item, title, action, parent) => {
 
     gelButton.item = item; //TODO item should not be assigned to button. In addition it is not pulling the rest of its config from the collection.
 
-
     gelButton.parentContainer = parent; //TODO NT hack makes gel buttons calculate correct bounds. Could it be fixed in gel button?...
 
     const properties = item.state && scene.config.states[item.state] ? scene.config.states[item.state].properties : {};
     const disabled = item.state && scene.config.states[item.state] ? scene.config.states[item.state].disabled : false;
     disabled && gelButton.off(Phaser.Input.Events.POINTER_UP);
     Object.assign(gelButton.sprite, properties);
-
-
-
 
     scaleButton(gelButton, scene.layout, scene.config.listPadding);
     setOverlays(gelButton);
