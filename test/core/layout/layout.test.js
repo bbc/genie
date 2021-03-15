@@ -206,8 +206,15 @@ describe("Layout", () => {
         });
 
         test("creates the settings icons", () => {
+            mockScene.config.subtitle = undefined;
             Layout.create(mockScene, mockMetrics, ["play"]);
             expect(settingsIcons.create).toHaveBeenCalledWith(mockGelGroup, ["play"]);
+        });
+
+        test("doesn't create the settings icon if there is a subtitle", () => {
+            mockScene.config.subtitle = "subtitle";
+            Layout.create(mockScene, mockMetrics, ["play"]);
+            expect(settingsIcons.create).not.toHaveBeenCalled();
         });
     });
 
@@ -297,10 +304,19 @@ describe("Layout", () => {
 
     describe("removeEvents method", () => {
         test("removes all events on this Layout instance", () => {
+            mockScene.config.subtitle = undefined;
             const layout = Layout.create(mockScene, mockMetrics, ["play"]);
             layout.removeEvents();
             expect(mockEventUnsubscribe).toHaveBeenCalled();
             expect(settingsIconsUnsubscribeSpy).toHaveBeenCalled();
+        });
+
+        test("removes all events on this Layout instance when subtitle is set", () => {
+            mockScene.config.subtitle = "subtitle";
+            const layout = Layout.create(mockScene, mockMetrics, ["play"]);
+            layout.removeEvents();
+            expect(mockEventUnsubscribe).toHaveBeenCalled();
+            expect(settingsIconsUnsubscribeSpy).not.toHaveBeenCalled();
         });
     });
 
