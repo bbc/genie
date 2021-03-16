@@ -12,7 +12,7 @@ import { onScaleChange } from "../../../core/scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { createBackground, resizeBackground } from "../backgrounds.js";
 import { createScrollablePanel, getPanelY } from "./scrollable-panel.js";
-import { addText } from "../../../core/layout/text-elem.js";
+import { addText } from "../../../core/layout/text.js";
 
 const createTable = (scene, mode, parent, scrollablePanel, collection) => {
     const sizer = scene.rexUI.add.sizer({ orientation: "y" });

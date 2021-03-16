@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 
-import * as text from "../../../src/core/layout/text-elem.js";
+import * as text from "../../../src/core/layout/text.js";
 
 describe("text element functions", () => {
     document.fonts = { ready: { then: jest.fn() }, check: jest.fn().mockReturnValue(true) };
