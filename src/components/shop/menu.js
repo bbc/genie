@@ -17,7 +17,5 @@ export const createMenu = scene => {
     const buttons = createMenuButtons(scene);
     resizeGelButtons({ buttons, rect });
 
-    return {
-        resize: () => resizeGelButtons({ buttons, rect }),
-    };
+    return () => resizeGelButtons({ buttons, rect });
 };

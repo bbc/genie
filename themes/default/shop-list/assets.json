@@ -4,11 +4,6 @@
         "files": [
             {
                 "type": "image",
-                "key": "background",
-                "url": "shop-list/assets/wood_panel.png"
-            },
-            {
-                "type": "image",
                 "key": "itemViewBackground",
                 "url": "shop-list/assets/item-panel.png"
             },

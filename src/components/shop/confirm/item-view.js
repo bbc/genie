@@ -15,40 +15,49 @@ const imageX = (config, bounds) =>
 const imageY = bounds => -percentOfHeight(bounds, 25);
 const percentOfHeight = (bounds, percent) => (bounds.height / 100) * percent; //TODO NT DUPE
 
-const itemImageView = (scene, item) => ({ itemImage: scene.add.image(0, 0, item.icon) });
+const imageView = (scene, item) => ({ itemImage: scene.add.image(0, 0, item.icon) });
 
-const itemDetailView = (scene, item) => {
+const detailView = (scene, item) => {
     const { title, detail, description } = scene.config.confirm;
     return {
-        itemImage: scene.add.image(0, 0, item.icon),
-        itemTitle: addText(scene, 0, 0, item.title, title).setOrigin(0.5),
-        itemDetail: addText(scene, 0, 0, item.description, detail).setOrigin(0.5),
-        itemBlurb: addText(scene, 0, 0, item.longDescription, description).setOrigin(0.5),
+        background: scene.add.image(0, 0, `${scene.assetPrefix}.${scene.config.confirm.itemBackground}`),
+        icon: scene.add.image(0, 0, item.icon),
+        title: addText(scene, 0, 0, item.title, title).setOrigin(0.5),
+        detail: addText(scene, 0, 0, item.description, detail).setOrigin(0.5),
+        blurb: addText(scene, 0, 0, item.longDescription, description).setOrigin(0.5),
     };
 };
 
-const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY = 1) => {
-    image.setScale(absScale / containerScaleX, absScale / containerScaleY);
-    image.memoisedScale = absScale;
+export const itemView = (scene, item) => {
+    const container = scene.add.container();
+    const view = scene.config.confirm.detailView ? detailView(scene, item) : imageView(scene, item);
+
+    Object.keys(view).forEach(x => container.add(view[x]));
+
+    view.container = container;
+    return view;
 };
 
-export const itemView = (scene, item) =>
-    scene.config.confirm.detailView ? itemDetailView(scene, item) : itemImageView(scene, item);
+export const scaleItemView = (view, config, bounds) => {
+    let newScale = view.itemTitle
+            ? getItemDetailImageScale(bounds, view.icon)
+            : getItemImageScale(bounds, view.icon)
 
-export const scaleItemView = (itemView, config, bounds) => {
-    setImageScaleXY(
-        itemView.itemImage,
-        itemView.itemTitle
-            ? getItemDetailImageScale(bounds, itemView.itemImage)
-            : getItemImageScale(bounds, itemView.itemImage),
-    );
+    newScale *= 0.5
+    view.icon.setScale(newScale, newScale);
+    view.background.setScale(newScale, newScale);
+
     const x = imageX(config, bounds);
-    itemView.itemImage.setPosition(x, imageY(bounds));
-    itemView.itemTitle?.setPosition(x, titleY(bounds));
-    itemView.itemDetail?.setPosition(x, detailY(bounds));
-    itemView.itemBlurb?.setPosition(x, blurbY(bounds));
-    itemView.itemBlurb?.setStyle({
-        ...itemView.itemBlurb?.style,
+
+    //ICON
+    view.background.setPosition(x, imageY(bounds));
+    view.icon.setPosition(x, imageY(bounds));
+
+    view.title?.setPosition(x, titleY(bounds));
+    view.detail?.setPosition(x, detailY(bounds));
+    view.blurb?.setPosition(x, blurbY(bounds));
+    view.blurb?.setStyle({
+        ...view.blurb?.style,
         wordWrap: { width: bounds.width / (21 / 10), useAdvancedWrap: true },
     });
 };

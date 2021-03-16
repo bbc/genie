@@ -41,6 +41,7 @@
             styles: { fontStyle: "bold", fontSize: "16px" },
         },
         background: { key: "halfViewBackground", columns: [100, null, 100], rows: [100, null, 25] },
+        itemBackground: "itemBackground",
         detailView: true,
         prompt: {
             buy: {

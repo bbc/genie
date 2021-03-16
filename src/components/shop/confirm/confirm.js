@@ -10,25 +10,30 @@ import { collections } from "../../../core/collections.js";
 import { createBackground } from "../backgrounds.js";
 import { itemView } from "./item-view.js";
 import { addConfirmButtons } from "./confirm-buttons.js";
-import { itemIsInStock, getShopConfig } from "./item-checks.js";
+import { itemIsInStock } from "./item-checks.js";
 import { promptText } from "./prompt-text.js";
 import { resizeFn } from "./confirm-resize.js";
 
-const createElems = (scene, container, promptText, item) => ({
+const createElements = (scene, container, promptText, item) => ({
     background: createBackground(scene, scene.config.confirm?.background),
     prompt: addText(scene, 0, 0, promptText, scene.config).setOrigin(0.5),
     itemView: itemView(scene, item),
 });
 
-const createBuyElems = (scene, container, item) => ({
+const createBuyElements = (scene, container, item) => ({
     text: addText(scene, 0, 0, item.price, scene.config).setOrigin(0.5),
     currency: scene.add.image(0, 0, `${scene.assetPrefix}.currencyIcon`),
 });
 
-const getAction = (scene, title, item) => (title === "shop" ? "buy" : getInventoryAction(scene, item));
+
+const actions = {
+    "shop": () => "buy",
+    "manage": (scene, item) => getInventoryAction(scene, item)
+}
 
 const getInventoryAction = (scene, item) => {
-    const inventoryItem = collections.get(getShopConfig(scene).shopCollections.manage).get(item?.id);
+    const inventory = collections.get(scene.transientData.shop.config.shopCollections.manage)
+    const inventoryItem = inventory.get(item?.id);
     return getActionName(inventoryItem);
 };
 
@@ -38,21 +43,21 @@ const getActionName = fp.cond([
     [i => i.state === "purchased", () => "equip"],
 ]);
 
-export const createConfirm = (scene, title, item) => {
-    const action = getAction(scene, title, item);
+export const createConfirm = scene => {
+    const title = scene.transientData.shop.mode;
+    const item = scene.transientData.shop.item;
+
+    const action = actions[title](scene, item);
+    scene.transientData[scene.scene.key] = { action };
+
     const container = scene.add.container();
-    const elems = createElems(scene, container, promptText[action]({ scene, action, item }), item);
-    const buyElems = action === "buy" && itemIsInStock(scene, item) && createBuyElems(scene, container, item);
+    const elements = createElements(scene, container, promptText[action]({ scene, action, item }), item);
+    const buyElements = action === "buy" && itemIsInStock(scene, item) && createBuyElements(scene, container, item);
     const buttons = addConfirmButtons(scene, title, action, item);
 
-    const { itemView, ...otherElems } = elems;
-    Object.values({ ...otherElems, ...itemView }).forEach(elem => container.add(elem));
-    Object.values(buyElems).forEach(elem => container.add(elem));
+    const { itemView, ...otherElements } = elements;
+    Object.values({ ...otherElements, ...itemView }).forEach(container.add.bind(container));
+    Object.values(buyElements).forEach(container.add.bind(container));
 
-    const resize = resizeFn(scene, container, buyElems, buttons, elems);
-
-    return {
-        action,
-        resize,
-    };
+    return resizeFn(scene, container, buyElements, buttons, elements);
 };

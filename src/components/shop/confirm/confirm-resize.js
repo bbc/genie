@@ -38,7 +38,7 @@ const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
 export const resizeFn = (scene, container, buyElems, buttons, elems) => () => {
     const bounds = getSafeArea(scene.layout);
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
-    const yOffset = bounds.height / 2 + bounds.y;
+    const yOffset = 0 //bounds.height / 2 + bounds.y; UX unsure why this is here so removed for now
     const xOffset = scene.config.confirm.buttons.buttonsRight ? -0.25 : 0.25;
     const bgSpec = { yOffset, aspect: 0.5, xOffset };
     container.setY(yOffset);

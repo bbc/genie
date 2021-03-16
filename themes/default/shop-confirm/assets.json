@@ -45,7 +45,7 @@
             {
                 "type": "spritesheet",
                 "key": "menuButtonBackground",
-                "url": "shop-menu/assets/green_button.png",
+                "url": "shop-menu/assets/green-button.png",
                 "frameConfig": {
                     "frameWidth": 113,
                     "frameHeight": 42,
