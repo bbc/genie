@@ -17,8 +17,8 @@ const percentOfHeight = (bounds, percent) => (bounds.height / 100) * percent; //
 
 const itemImageView = (scene, item) => ({ itemImage: scene.add.image(0, 0, item.icon) });
 
-const itemDetailView = (scene, item, config) => {
-    const { title, detail, description } = config.confirm;
+const itemDetailView = (scene, item) => {
+    const { title, detail, description } = scene.config.confirm;
     return {
         itemImage: scene.add.image(0, 0, item.icon),
         itemTitle: addText(scene, 0, 0, item.title, title).setOrigin(0.5),
@@ -32,8 +32,8 @@ const setImageScaleXY = (image, absScale, containerScaleX = 1, containerScaleY =
     image.memoisedScale = absScale;
 };
 
-export const itemView = (scene, item, config) =>
-    config.confirm.detailView ? itemDetailView(scene, item, config) : itemImageView(scene, item);
+export const itemView = (scene, item) =>
+    scene.config.confirm.detailView ? itemDetailView(scene, item) : itemImageView(scene, item);
 
 export const scaleItemView = (itemView, config, bounds) => {
     setImageScaleXY(

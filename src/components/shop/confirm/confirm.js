@@ -17,7 +17,7 @@ import { resizeFn } from "./confirm-resize.js";
 const createElems = (scene, container, promptText, item) => ({
     background: createBackground(scene, scene.config.confirm?.background),
     prompt: addText(scene, 0, 0, promptText, scene.config).setOrigin(0.5),
-    itemView: itemView(scene, item, scene.config),
+    itemView: itemView(scene, item),
 });
 
 const createBuyElems = (scene, container, item) => ({
