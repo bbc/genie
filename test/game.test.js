@@ -78,6 +78,9 @@ describe("Game", () => {
         game.sound = {
             play: jest.fn(),
         };
+        game.time = {
+            delayedCall: jest.fn(),
+        };
         game.add = {
             image: jest.fn(() => mockImage),
             text: jest.fn(() => mockText),
@@ -347,6 +350,7 @@ describe("Game", () => {
 
             test("adds a event subscription to check for used items", () => {
                 eventBus.subscribe.mock.calls[0][0].callback();
+                game.onEvent();
                 expect(eventBus.subscribe.mock.calls[0][0].channel).toBe("shop");
                 expect(eventBus.subscribe.mock.calls[0][0].name).toBe("used");
             });

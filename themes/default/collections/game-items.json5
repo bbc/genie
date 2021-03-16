@@ -19,6 +19,7 @@
         title: "Skull Bomb",
         description: "It'll blow your mind",
         price: 50,
+        duration: 5,
         longDescription: "The skull icon is now a health & safety requirement for all explody things. Sigh.",
         icon: "shop-list.bombIcon",
         tags: ["weapon"],

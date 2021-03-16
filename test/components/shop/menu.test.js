@@ -23,7 +23,7 @@ describe("shop menu", () => {
     beforeEach(() => {
         mockMenuButtons = { mock: "buttons" };
         mockPaneBackground = { mock: "background" };
-        mockRectangle = { mock: "rectangle", setY: jest.fn() };
+        mockRectangle = { mock: "rectangle", setY: jest.fn(), setSize: jest.fn() };
         mockInnerRectBounds = { width: 100, height: 100, x: 0, y: 0 };
         mockScene = {
             add: {
@@ -60,6 +60,9 @@ describe("shop menu", () => {
         });
         test("calls setY on the rect with an appropriate Y offset", () => {
             expect(mockRectangle.setY).toHaveBeenCalledWith(200);
+        });
+        test("calls setSize on the rect with the appropriate width, height", () => {
+            expect(mockRectangle.setSize).toHaveBeenCalledWith(mockInnerRectBounds.width, mockInnerRectBounds.height);
         });
         test("menu resize function calls resizeGelButtons", () => {
             jest.clearAllMocks();
