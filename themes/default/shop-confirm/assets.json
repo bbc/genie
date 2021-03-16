@@ -5,12 +5,17 @@
             {
                 "type": "image",
                 "key": "halfViewBackground",
-                "url": "shop-confirm/assets/half_panel.png"
+                "url": "shop-confirm/assets/half-panel.png"
+            },
+            {
+                "type": "image",
+                "key": "itemBackground",
+                "url": "shop-confirm/assets/item-background.png"
             },
             {
                 "type": "image",
                 "key": "titleBackground",
-                "url": "shop-confirm/assets/title_background.png"
+                "url": "shop-confirm/assets/title-background.png"
             },
             {
                 "type": "image",
