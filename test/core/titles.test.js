@@ -4,10 +4,10 @@
  * @license Apache-2.0
  */
 import { createTitles } from "../../src/core/titles.js";
-import * as text from "../../src/core/layout/text-elem.js";
+import * as text from "../../src/core/layout/text.js";
 import * as scaler from "../../src/core/scaler.js";
 
-jest.mock("../../src/core/layout/text-elem.js");
+jest.mock("../../src/core/layout/text.js");
 jest.mock("../../src/core/scaler.js");
 
 describe("Titles", () => {

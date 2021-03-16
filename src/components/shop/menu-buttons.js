@@ -5,7 +5,7 @@
  * @license Apache-2.0
  */
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import { addText } from "../../core/layout/text-elem.js";
+import { addText } from "../../core/layout/text.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { createButton } from "../../core/layout/create-button.js";
 import { buttonsChannel } from "../../core/layout/gel-defaults.js";
@@ -22,7 +22,7 @@ const createMenuButton = scene => buttonText => {
         scene.transientData.shop.mode = buttonText.toLowerCase();
         scene.scene.pause();
         scene.addOverlay(scene.scene.key.replace("-menu", "-list"));
-        gmi.setStatsScreen(buttonText === "Shop" ? "shopbuy" : "shopmanage");
+        gmi.sendStatsEvent(buttonText === "Shop" ? "shopbuy" : "shopmanage", "click", {});
     };
 
     const config = { ...defaults, title: buttonText, id, ariaLabel, action };

@@ -11,11 +11,11 @@ import {
     resizeGelButtons,
 } from "../../../src/components/shop/menu-buttons.js";
 import * as button from "../../../src/core/layout/create-button.js";
-import * as textElem from "../../../src/core/layout/text-elem.js";
+import * as textElem from "../../../src/core/layout/text.js";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
 import * as mockGmi from "../../../src/core/gmi/gmi.js";
 
-jest.mock("../../../src/core/layout/text-elem.js");
+jest.mock("../../../src/core/layout/text.js");
 jest.mock("../../../src/core/layout/create-button.js");
 jest.mock("../../../src/core/layout/gel-defaults.js");
 jest.mock("../../../src/core/gmi/gmi.js");
@@ -28,6 +28,7 @@ describe("create menu/confirm buttons", () => {
     let mockChannel;
     beforeEach(() => {
         mockGmi.gmi.setStatsScreen = jest.fn();
+        mockGmi.gmi.sendStatsEvent = jest.fn();
         mockChannel = "gel-channel";
         gel.buttonsChannel = jest.fn().mockReturnValue(mockChannel);
         mockTextWithOrigin = { mock: "text" };
@@ -120,16 +121,16 @@ describe("create menu/confirm buttons", () => {
         expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-list");
     });
 
-    test("menu button action sets the stat screen to shopbuy when shop button is clicked", () => {
+    test("buy button sends 'shopbuy' stat when clicked", () => {
         createMenuButtons(mockScene);
         button.createButton.mock.calls[0][1].action();
-        expect(mockGmi.gmi.setStatsScreen).toHaveBeenCalledWith("shopbuy");
+        expect(mockGmi.gmi.sendStatsEvent).toHaveBeenCalledWith("shopbuy", "click", {});
     });
 
-    test("menu button action sets the stat screen to shopmanage when shop button is clicked", () => {
+    test("manage button sends 'shopmanage' stat when clicked", () => {
         createMenuButtons(mockScene);
         button.createButton.mock.calls[1][1].action();
-        expect(mockGmi.gmi.setStatsScreen).toHaveBeenCalledWith("shopmanage");
+        expect(mockGmi.gmi.sendStatsEvent).toHaveBeenCalledWith("shopmanage", "click", {});
     });
 
     test("returns an action button and a cancel button", () => {
