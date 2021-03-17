@@ -13,7 +13,7 @@ import { eventBus } from "../core/event-bus.js";
 export class Game extends Screen {
     itemUsed(data = { duration: 0 }) {
         console.log("Item used:", data); // eslint-disable-line no-console
-        console.log("Item timer duration in seconds: ", data.duration); // eslint-disable-line no-console
+        console.log("Item timer duration in seconds: ", data.duration || "No duration"); // eslint-disable-line no-console
         let time = data.duration * 1000;
         let timedEvent = this.time.delayedCall(time, this.onEvent, [], this);
     }
