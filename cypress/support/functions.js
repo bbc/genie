@@ -79,11 +79,7 @@ export const formatStatConfig = (
     }
 
     const counternameString = countername(stat.counterName, stat.screenName);
-    const statString = `[${stat.campaignId}]-[${stat.creationId}]-[${stat.variant}]-[${
-        stat.format
-    }]-[${generalPlacement(stat.generalPlacement, stat.screenName)}]-[${stat.detailedPlacement}]-[${
-        stat.advertiserId
-    }]-[${stat.url}]`;
+    const statString = `[${stat.campaignId}]-[${stat.creationId}]-[${stat.variant}]-[${stat.format}]-[${generalPlacement(stat.generalPlacement, stat.screenName)}]-[${stat.detailedPlacement}]-[${stat.advertiserId}]-[${stat.url}]`;
     const newStatData = {
         bucket: bucketString,
         stat: statString,

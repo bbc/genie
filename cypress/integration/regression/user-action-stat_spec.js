@@ -181,7 +181,7 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when an item is purchased in the shop.", () => {
-        cy.intercept(userActions.shopPurchase.creationId).as("buyItem");
+        cy.intercept(`[${userActions.shopPurchase.creationId}]`).as("buyItem");
         cy.genieClick("#home__debug");
         cy.genieClick("#debug__debug-shop-equippables-menu");
         cy.genieClick("#debug-shop-equippables-menu__shop_menu_button");
@@ -194,7 +194,8 @@ describe("User Action stats for Genie", () => {
                     "include",
                     formatStatConfig(userActions.shopPurchase, {
                         screenName: "debug_shop_equippables_confirm",
-                        format: "KEY=ironHat-STATE=purchased-QTY=1",
+                        format: "KEY=ironHat~STATE=purchased~QTY=0",
+                        advertiserId: "Iron%20Helm"
                     }).stat,
                 );
         });
@@ -219,6 +220,7 @@ describe("User Action stats for Genie", () => {
                     formatStatConfig(userActions.shopEquip, {
                         screenName: "debug_shop_equippables_confirm",
                         format: "KEY=ironHat~STATE=equipped~QTY=1",
+                        advertiserId: "Iron%20Helm"
                     }).stat,
                 );
         });
@@ -230,22 +232,22 @@ describe("User Action stats for Genie", () => {
         cy.genieClick("#debug__debug-shop-equippables-menu");
         cy.genieClick("#debug-shop-equippables-menu__manage_menu_button");
         cy.genieClick("#debug-shop-equippables-list__scroll_button_box_manage");
-        cy.genieClick("#debug-shop-equippables-list__scroll_button_box_manage");
         cy.genieClick("#debug-shop-equippables-confirm__tx_use_button");
         cy.wait("@useItem").then(interception => {
             cy.log(interception)
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.useItem, {
+                    formatStatConfig(userActions.shopUse, {
                         screenName: "debug_shop_equippables_confirm",
-                        format: "KEY=box~STATE=used~QTY=1",
+                        format: "KEY=box~STATE=used~QTY=0",
+                        advertiserId: "Mystery%20Box"
                     }).stat,
                 );
         });
     });
 
-    it.only("Fires a user action event when the achievement is completed.", () => {
+    it("Fires a user action event when the achievement is completed.", () => {
         cy.intercept(userActions.achievementComplete.creationId).as("achievementComplete");
         cy.genieClick("#home__play");
         cy.genieClick("#narrative__skip");
