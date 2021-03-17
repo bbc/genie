@@ -36,7 +36,7 @@
             use: "use"
         },
         buttons: {
-            buttonsRight: true,
+            buttonsRight: false,
             key: "shop-menu.menuButtonBackground",
             styles: { fontStyle: "bold", fontSize: "16px" },
         },

@@ -4,10 +4,11 @@
  * @license Apache-2.0
  */
 import { addText } from "../../../core/layout/text.js";
-const imageView = (scene, item) => ({ itemImage: scene.add.image(0, 0, item.icon) });
+const imageView = (scene, item) => ({ image: scene.add.image(0, 0, item.icon) });
 
 const detailView = (scene, item) => {
     const { title, detail, description } = scene.config.confirm;
+
     return {
         background: scene.add.image(0, 0, `${scene.assetPrefix}.${scene.config.confirm?.background}`),
         iconBackground: scene.add.image(0, 0, `${scene.assetPrefix}.${scene.config.confirm.itemBackground}`),
@@ -28,8 +29,8 @@ export const itemView = (scene, item) => {
     container.width = 300
     container.height = 400
 
-    view.iconBackground.setPosition(0, -120);
-    view.icon.setPosition(0, -120);
+    view.iconBackground?.setPosition(0, -120);
+    view.icon?.setPosition(0, -120);
 
     view.title?.setPosition(0, -45);
     view.detail?.setPosition(0, -14);
@@ -46,7 +47,9 @@ export const itemView = (scene, item) => {
 
 export const scaleItemView = (scene, view) => {
     const bounds = scene.layout.getSafeArea({}, false);
-    bounds.width /= 2;
+    const onLeft = scene.config.confirm.buttons.buttonsRight
+    onLeft? bounds.left = 0: bounds.width /= 2;
+
     const newScale = bounds.width / view.container.width;
 
     view.container.setPosition(bounds.centerX, bounds.centerY);
