@@ -53,6 +53,7 @@ describe("Scrollable List", () => {
     let mockItem;
     let mockLabel;
     let mockGmi;
+    let mockPointer;
 
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
@@ -164,6 +165,15 @@ describe("Scrollable List", () => {
                         shopCollections: {
                             shop: "testCatalogue",
                         },
+                    },
+                },
+            },
+        };
+        mockPointer = {
+            screen: {
+                input: {
+                    keyboard: {
+                        prevType: "",
                     },
                 },
             },
@@ -301,19 +311,25 @@ describe("Scrollable List", () => {
                 beforeEach(() => {
                     callback = buttons.createListButton.mock.calls[0][3];
                 });
-
+                afterEach(() => {
+                    jest.clearAllMocks();
+                });
                 test("creates a confirm pane", () => {
-                    callback();
+                    callback(mockPointer);
                     expect(mockScene.transientData.shop.mode).toBe("shop");
                     expect(mockScene.transientData.shop.item).toBe(mockItem);
                     expect(mockScene.scene.pause).toHaveBeenCalled();
                     expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-confirm");
                 });
                 test("don't fire if the label is scrolled off the panel", () => {
-                    jest.clearAllMocks();
                     mockScrollablePanel.isInTouching = jest.fn(() => false);
-                    callback("mockPointer");
-                    expect(confirm.createConfirm).not.toHaveBeenCalled();
+                    callback(mockPointer);
+                    expect(mockScene.addOverlay).not.toHaveBeenCalledWith("shop-confirm");
+                });
+                test("show confirm if the label is fired by keydown event", () => {
+                    mockPointer.screen.input.keyboard.prevType = "keydown";
+                    callback(mockPointer);
+                    expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-confirm");
                 });
             });
         });
