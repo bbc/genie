@@ -4,7 +4,6 @@
  * @license Apache-2.0
  */
 import { getInnerRectBounds, getSafeArea } from "../shop-layout.js";
-import { resizeBackground } from "../backgrounds.js";
 import { scaleItemView } from "./item-view.js";
 import { CAMERA_X, CAMERA_Y } from "../../../core/layout/metrics.js";
 
@@ -35,16 +34,17 @@ const percentOfHeight = (bounds, percent) => (bounds.height / 100) * percent;
 const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
 const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
 
-export const resizeFn = (scene, container, buyElems, buttons, elems) => () => {
+export const resizeFn = (scene, buyElems, buttons, elems) => () => {
     const bounds = getSafeArea(scene.layout);
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
-    const yOffset = 0 //bounds.height / 2 + bounds.y; UX unsure why this is here so removed for now
-    const xOffset = scene.config.confirm.buttons.buttonsRight ? -0.25 : 0.25;
-    const bgSpec = { yOffset, aspect: 0.5, xOffset };
-    container.setY(yOffset);
-    resizeBackground(elems.background.constructor)(scene, elems.background, bgSpec);
+    innerBounds.height = innerBounds.height * bounds.width / 600
+    console.log(bounds.width / 600)
+
     scalePrompt(scene, elems, bounds, innerBounds);
     buyElems && scaleBuyElems(scene, buyElems, bounds, innerBounds);
+
+    //TODO set this to height of 400 over innerBounds.height = 400
+    //innerBounds.height = bounds.height * (bounds.width / 0.5 / 280);
     sizeConfirmButtons(scene, buttons, bounds, innerBounds);
-    scaleItemView(elems.itemView, scene.config, bounds);
+    scaleItemView(scene, elems.itemView);
 };

@@ -24,8 +24,8 @@ export class ShopConfirm extends Screen {
         const resize = createConfirm(this);
         setBalance(this);
 
-        //const scaleEvent = onScaleChange.add(resize);
-        //this.events.once("shutdown", scaleEvent.unsubscribe);
+        const scaleEvent = onScaleChange.add(resize);
+        this.events.once("shutdown", scaleEvent.unsubscribe);
 
         resize();
     }
