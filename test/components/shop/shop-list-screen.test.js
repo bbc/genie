@@ -64,17 +64,6 @@ describe("Shop List Screen", () => {
         expect(shopList.plugins.installScenePlugin).toHaveBeenCalledWith("rexUI", RexUIPlugin, "rexUI", shopList, true);
     });
 
-    test("sets stat screen to shopbuy on create when title is shop", () => {
-        shopList.create();
-        expect(gmi.gmi.setStatsScreen).toHaveBeenCalledWith("shopbuy");
-    });
-
-    test("sets stat screen to shopmanage on create when title is manage", () => {
-        shopList._data.transient.shop.mode = "manage";
-        shopList.create();
-        expect(gmi.gmi.setStatsScreen).toHaveBeenCalledWith("shopmanage");
-    });
-
     test("calls addBackgroundItems on create", () => {
         shopList.create();
         expect(shopList.addBackgroundItems).toHaveBeenCalled();

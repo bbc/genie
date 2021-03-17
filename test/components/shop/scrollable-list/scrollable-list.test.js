@@ -6,16 +6,17 @@
  */
 import { ScrollableList } from "../../../../src/components/shop/scrollable-list/scrollable-list.js";
 import * as buttons from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
-import * as confirm from "../../../../src/components/shop/confirm.js";
+import * as confirm from "../../../../src/components/shop/confirm/confirm.js";
 import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
+import * as backgroundsModule from "../../../../src/components/shop/backgrounds.js";
 import { collections } from "../../../../src/core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
-import { initResizers } from "../../../../src/components/shop/backgrounds.js";
+import * as gmiModule from "../../../../src/core/gmi/gmi.js";
 
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
-jest.mock("../../../../src/components/shop/confirm.js");
+jest.mock("../../../../src/components/shop/confirm/confirm.js");
 
 const mockA11yElem = {
     addEventListener: jest.fn(),
@@ -29,10 +30,17 @@ const mockGelButton = {
     emit: jest.fn(),
     scene: { sys: { input: { activePointer: "mock" } } },
 };
+
+const mockText = {
+    setOrigin: jest.fn(() => mockText),
+    setPosition: jest.fn(() => mockText),
+};
+
 buttons.createListButton = jest.fn().mockReturnValue(mockGelButton);
 buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
 scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
+backgroundsModule.resizeBackground = jest.fn(() => jest.fn());
 const title = "shop";
 
 describe("Scrollable List", () => {
@@ -44,9 +52,13 @@ describe("Scrollable List", () => {
     let mockSizer;
     let mockItem;
     let mockLabel;
+    let mockGmi;
+    let mockPointer;
 
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
+        mockGmi = { sendStatsEvent: jest.fn() };
+        gmiModule.gmi = mockGmi;
         mockItem = {
             id: "someItem",
             name: "someItemName",
@@ -115,7 +127,11 @@ describe("Scrollable List", () => {
             },
             events: { once: jest.fn() },
             input: { topOnly: true, on: jest.fn(), removeListener: jest.fn() },
-            add: { image: jest.fn(), rectangle: jest.fn() },
+            add: {
+                image: jest.fn(),
+                rectangle: jest.fn(),
+                text: jest.fn(() => mockText),
+            },
             config: {
                 assetKeys: {
                     background: { shop: "background" },
@@ -153,12 +169,21 @@ describe("Scrollable List", () => {
                 },
             },
         };
+        mockPointer = {
+            screen: {
+                input: {
+                    keyboard: {
+                        prevType: "",
+                    },
+                },
+            },
+        };
         global.RexPlugins = {
             GameObjects: {
                 NinePatch: jest.fn(),
             },
         };
-        initResizers();
+        backgroundsModule.initResizers();
 
         a11y.addGroupAt = jest.fn();
     });
@@ -200,7 +225,6 @@ describe("Scrollable List", () => {
                     new ScrollableList(mockScene, title);
                     expect(buttons.createListButton).toHaveBeenCalledTimes(2);
                 });
-
                 test("no items table added if the catalogue collection is empty", () => {
                     jest.clearAllMocks();
                     mockGridSizer = undefined;
@@ -209,6 +233,47 @@ describe("Scrollable List", () => {
                     new ScrollableList(mockScene, title);
 
                     expect(mockScene.rexUI.add.gridSizer).not.toHaveBeenCalled();
+                });
+                test("Empty collection text added if the catalogue collection is empty", () => {
+                    jest.clearAllMocks();
+                    mockGridSizer = undefined;
+                    collectionGetAll = [];
+
+                    new ScrollableList(mockScene, title);
+
+                    expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "No items", expect.anything());
+                });
+                test("Empty collection custom text is set if defined in config", () => {
+                    jest.clearAllMocks();
+                    mockGridSizer = undefined;
+                    collectionGetAll = [];
+                    const expectedEmptyText = "Your bags are empty";
+                    mockScene.config.emptyList = {
+                        shop: {
+                            value: expectedEmptyText,
+                        },
+                    };
+
+                    new ScrollableList(mockScene, title);
+
+                    expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, expectedEmptyText, expect.anything());
+                });
+                test("Empty collection text position is set if offset is defined in config", () => {
+                    jest.clearAllMocks();
+                    mockGridSizer = undefined;
+                    collectionGetAll = [];
+                    mockScene.config.emptyList = {
+                        shop: {
+                            position: {
+                                offsetX: 100,
+                                offsetY: -100,
+                            },
+                        },
+                    };
+
+                    new ScrollableList(mockScene, title);
+
+                    expect(mockText.setPosition).toHaveBeenCalledWith(100, -100);
                 });
             });
 
@@ -246,19 +311,25 @@ describe("Scrollable List", () => {
                 beforeEach(() => {
                     callback = buttons.createListButton.mock.calls[0][3];
                 });
-
+                afterEach(() => {
+                    jest.clearAllMocks();
+                });
                 test("creates a confirm pane", () => {
-                    callback();
+                    callback(mockPointer);
                     expect(mockScene.transientData.shop.mode).toBe("shop");
                     expect(mockScene.transientData.shop.item).toBe(mockItem);
                     expect(mockScene.scene.pause).toHaveBeenCalled();
                     expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-confirm");
                 });
                 test("don't fire if the label is scrolled off the panel", () => {
-                    jest.clearAllMocks();
                     mockScrollablePanel.isInTouching = jest.fn(() => false);
-                    callback("mockPointer");
-                    expect(confirm.createConfirm).not.toHaveBeenCalled();
+                    callback(mockPointer);
+                    expect(mockScene.addOverlay).not.toHaveBeenCalledWith("shop-confirm");
+                });
+                test("show confirm if the label is fired by keydown event", () => {
+                    mockPointer.screen.input.keyboard.prevType = "keydown";
+                    callback(mockPointer);
+                    expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-confirm");
                 });
             });
         });
@@ -335,6 +406,13 @@ describe("Scrollable List", () => {
                 expect(mockScene.input.removeListener).toHaveBeenCalled();
             });
         });
+        describe("panel", () => {
+            test("event listener is not created when collection is empty", () => {
+                collectionGetAll = [];
+                new ScrollableList(mockScene);
+                expect(mockA11yElem.addEventListener).not.toHaveBeenCalled();
+            });
+        });
     });
     describe("Accessibility setup", () => {
         beforeEach(() => {
@@ -359,6 +437,19 @@ describe("Scrollable List", () => {
         test("reset method that calls resizePanel", () => {
             list.reset();
             expect(buttons.scaleButton).toHaveBeenCalled();
+        });
+
+        test("reset method calls resizeBackground", () => {
+            list.reset();
+            expect(backgroundsModule.resizeBackground).toHaveBeenCalled();
+        });
+
+        test("reset method calls resizeBackground when collection is empty", () => {
+            jest.clearAllMocks();
+            collectionGetAll = [];
+            list = new ScrollableList(mockScene, title);
+            list.reset();
+            expect(backgroundsModule.resizeBackground).toHaveBeenCalled();
         });
 
         test("getBoundingRect method returns current safe area", () => {

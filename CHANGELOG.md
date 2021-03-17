@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| | Fix showing shop confirm on key press. |
+| | Added resize for shop menu based on re-calculated bounds. |
 | | theme/items renamed to theme/collections. |
 | | Added routes for shop navigation, fixes pause bug. |
 | | Local dev ports have been changed to `9000` for `npm run start` and `9001` for `npm run start:pack` for compatibility with Cypress tests. |

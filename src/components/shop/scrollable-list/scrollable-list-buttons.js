@@ -45,7 +45,8 @@ export const createListButton = (scene, item, title, action, parent) => {
     const config = { ...defaults, title, id, ariaLabel, scene: scene.assetPrefix, group, channel, action };
     const gelButton = createButton(scene, config);
 
-    gelButton.item = item;
+    gelButton.item = item; //TODO item should not be assigned to button. In addition it is not pulling the rest of its config from the collection.
+
     gelButton.parentContainer = parent; //TODO NT hack makes gel buttons calculate correct bounds. Could it be fixed in gel button?...
 
     const properties = item.state && scene.config.states[item.state] ? scene.config.states[item.state].properties : {};

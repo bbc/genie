@@ -157,4 +157,16 @@
             ],
         },
     },
+    emptyList: {
+        shop: {
+            value: "There is nothing to buy",
+            position: { offsetX: 0, offsetY: 0 },
+            styles: { fontSize: "24px" },
+        },
+        manage: {
+            value: "You have no consumables",
+            position: { offsetX: 0, offsetY: 0 },
+            styles: { fontSize: "24px" },
+        }
+    }
 }

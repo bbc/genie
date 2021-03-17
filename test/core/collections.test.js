@@ -193,7 +193,7 @@ describe("Collections", () => {
             expect(collection.getAll()).toEqual(expected);
         });
 
-        test("Correctly unions local storage data with defaults if items are not in base set", () => {
+        test("Correctly unions local storage data with defaults if items are not in base (filtered) set", () => {
             mockSettings.gameData.genie = {
                 collections: {
                     testCollection: [
@@ -202,6 +202,11 @@ describe("Collections", () => {
                     ],
                 },
             };
+
+            testCatalogue.push({
+                id: "ItemOutsideSet",
+                qty: 10,
+            });
 
             testCollection.include = ["tag1", "tag2"];
             testCollection.defaults = [{ id: "id1", qty: 5, state: "testState" }];

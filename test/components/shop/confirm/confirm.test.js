@@ -5,16 +5,16 @@
  * @license Apache-2.0
  */
 
-import { createConfirm } from "../../../src/components/shop/confirm.js";
-import * as layout from "../../../src/components/shop/shop-layout.js";
-import * as text from "../../../src/core/layout/text-elem.js";
-import * as buttons from "../../../src/components/shop/menu-buttons.js";
-import * as transact from "../../../src/components/shop/transact.js";
-import { collections } from "../../../src/core/collections.js";
-import * as bgModule from "../../../src/components/shop/backgrounds.js";
-import { initResizers } from "../../../src/components/shop/backgrounds.js";
+import { createConfirm } from "../../../../src/components/shop/confirm/confirm.js";
+import * as layout from "../../../../src/components/shop/shop-layout.js";
+import * as text from "../../../../src/core/layout/text.js";
+import * as buttons from "../../../../src/components/shop/menu-buttons.js";
+import * as transact from "../../../../src/components/shop/transact.js";
+import { collections } from "../../../../src/core/collections.js";
+import * as bgModule from "../../../../src/components/shop/backgrounds.js";
+import { initResizers } from "../../../../src/components/shop/backgrounds.js";
 
-jest.mock("../../../src/components/shop/transact.js");
+jest.mock("../../../../src/components/shop/transact.js");
 
 describe("Confirm pane", () => {
     let confirmPane;
@@ -27,10 +27,17 @@ describe("Confirm pane", () => {
     let mockBalance;
     let mockScene;
     let mockCollection;
+    let mockText;
 
     beforeEach(() => {
         mockContainer = { add: jest.fn(), setY: jest.fn(), removeAll: jest.fn(), destroy: jest.fn() };
-        mockImage = { setScale: jest.fn(), setVisible: jest.fn(), setTexture: jest.fn(), type: "Image" };
+        mockImage = {
+            setScale: jest.fn(),
+            setVisible: jest.fn(),
+            setTexture: jest.fn(),
+            setPosition: jest.fn(),
+            type: "Image",
+        };
         mockButton = {
             setLegal: jest.fn(),
             setY: jest.fn(),
@@ -105,8 +112,15 @@ describe("Confirm pane", () => {
         layout.textStyle = jest.fn().mockReturnValue({ some: "textStyle" });
 
         buttons.createConfirmButtons = jest.fn().mockReturnValue([mockButton, mockButton]);
-
-        text.addText = jest.fn(() => ({ setOrigin: jest.fn(() => ({ setText: jest.fn(), type: "Text" })) }));
+        mockText = {
+            setText: jest.fn(),
+            style: { some: "style" },
+            setPosition: jest.fn(),
+            setStyle: jest.fn(),
+        };
+        text.addText = jest.fn(() => ({
+            setOrigin: jest.fn(() => mockText),
+        }));
 
         mockBalanceItem = { qty: 500 };
         transact.getBalanceItem = jest.fn(() => mockBalanceItem);
@@ -124,28 +138,12 @@ describe("Confirm pane", () => {
         const mockItem = { mock: "item", id: "foo" };
         beforeEach(() => {
             confirmPane = createConfirm(mockScene, "shop", mockItem);
-            confirmPane.scene = mockScene;
         });
-        test("returns a object with a container", () => {
-            expect(confirmPane.container).toBe(mockContainer);
-        });
-        test("an item and a title", () => {
-            expect(confirmPane.item).toBe(mockItem);
-            expect(confirmPane.title).toBe("shop");
+        test("returns an action", () => {
+            expect(confirmPane.action).toBe("buy");
         });
         test("with gel buttons for confirm and cancel", () => {
             expect(buttons.createConfirmButtons).toHaveBeenCalled();
-        });
-        test("in a layout that can be flipped L-R in config", () => {
-            expect(layout.getInnerRectBounds.mock.calls[0][0]).toBe(mockScene);
-            jest.clearAllMocks();
-            mockScene.config.confirm.buttons.buttonsRight = false;
-            createConfirm(mockScene, "shop", { id: "foo" });
-            expect(text.addText.mock.calls[0][1]).toBe(-50);
-            expect(text.addText.mock.calls[0][2]).toBe(-75);
-        });
-        test("that is displayed with an appropriate Y offset", () => {
-            expect(mockContainer.setY).toHaveBeenCalledWith(105);
         });
     });
 
@@ -173,59 +171,7 @@ describe("Confirm pane", () => {
             expect(text.addText.mock.calls[1][3]).toBe("itemTitle");
             expect(text.addText.mock.calls[2][3]).toBe("itemDescription");
             expect(text.addText.mock.calls[3][3]).toBe("itemBlurb");
-            expect(mockScene.add.image).toHaveBeenCalledWith(50, -50, "itemIcon");
-        });
-    });
-
-    describe("prompt text", () => {
-        beforeEach(
-            () =>
-                (mockScene.config = {
-                    ...mockConfig,
-                    confirm: {
-                        ...mockConfig.confirm,
-                        detailView: true,
-                    },
-                }),
-        );
-
-        describe("for the shop", () => {
-            test("when item is out of stock, is the 'item unavailable' prompt", () => {
-                mockCollection = { get: jest.fn().mockReturnValue({ qty: 0, price: 99 }) };
-                confirmPane = createConfirm(mockScene, "shop", { mock: "item", qty: 0, price: 99 });
-                expect(text.addText.mock.calls[0][3]).toBe("unavailableBuyPrompt");
-            });
-
-            test("when item is in stock and not affordable, is the 'can't afford' prompt", () => {
-                confirmPane = createConfirm(mockScene, "shop", { mock: "item", qty: 1, price: 9999 });
-                expect(text.addText.mock.calls[0][3]).toBe("illegalBuyPrompt");
-            });
-
-            test("when item is in stock and affordable, is the 'confirm transaction' prompt", () => {
-                confirmPane = createConfirm(mockScene, "shop", { mock: "item", qty: 1, price: 99 });
-                expect(text.addText.mock.calls[0][3]).toBe("legalBuyPrompt");
-            });
-        });
-
-        describe("for the inventory", () => {
-            test("when item is equipped, is the 'unequip' text", () => {
-                mockCollection = { get: jest.fn().mockReturnValue({ state: "equipped", slot: "someSlot" }) };
-                confirmPane = createConfirm(mockScene, "manage", { mock: "item", id: "foo" });
-                expect(text.addText.mock.calls[0][3]).toBe("unequipPrompt");
-            });
-
-            test("when item is not equipped, is the 'equip' text", () => {
-                mockCollection = { get: jest.fn().mockReturnValue({ state: "purchased", slot: "someSlot" }) };
-                confirmPane = createConfirm(mockScene, "manage", { mock: "item", id: "foo", slot: "someSlot" });
-                expect(text.addText.mock.calls[0][3]).toBe("equipPrompt");
-            });
-            test("when the item is consumable, is the 'use' text", () => {
-                mockCollection = {
-                    get: jest.fn().mockReturnValue({ foo: "bar", state: "purchased", qty: 1, price: 99 }),
-                };
-                confirmPane = createConfirm(mockScene, "manage", { mock: "item" });
-                expect(text.addText.mock.calls[0][3]).toBe("usePrompt");
-            });
+            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "itemIcon");
         });
     });
 
