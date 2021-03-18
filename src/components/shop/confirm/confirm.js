@@ -23,14 +23,13 @@ const createBuyElements = (scene, item) => ({
     currency: scene.add.image(0, 0, `${scene.assetPrefix}.currencyIcon`),
 });
 
-
 const actions = {
-    "shop": () => "buy",
-    "manage": (scene, item) => getInventoryAction(scene, item)
-}
+    shop: () => "buy",
+    manage: (scene, item) => getInventoryAction(scene, item),
+};
 
 const getInventoryAction = (scene, item) => {
-    const inventory = collections.get(scene.transientData.shop.config.shopCollections.manage)
+    const inventory = collections.get(scene.transientData.shop.config.shopCollections.manage);
     const inventoryItem = inventory.get(item?.id);
     return getActionName(inventoryItem);
 };

@@ -27,7 +27,7 @@ describe("Scrollable List handlers", () => {
             config: { id: "foo" },
             rexContainer: {
                 parent: {
-                    getTopmostSizer: jest.fn().mockReturnValue(mockSizer),
+                    getTopmostSizer: jest.fn(() => mockSizer),
                 },
             },
         };
@@ -38,25 +38,25 @@ describe("Scrollable List handlers", () => {
             setInteractive: jest.fn(() => mockRexLabel),
             disableInteractive: jest.fn(() => mockRexLabel),
         };
-        mockGridSizer = { getElement: jest.fn().mockReturnValue([mockRexLabel]) };
+        mockGridSizer = { getElement: jest.fn(() => [mockRexLabel]) };
         mockPanel = {
-            getByName: jest.fn().mockReturnValue(mockGridSizer),
+            getByName: jest.fn(() => mockGridSizer),
             space: { top: 10 },
             setT: jest.fn(),
             minHeight: 120,
             t: 0,
             visible: true,
-            isInTouching: jest.fn().mockReturnValue(true),
+            isInTouching: jest.fn(() => true),
         };
     });
 
     describe("updatePanelOnFocus", () => {
         test("sets a t to 0 if focused on the top item & item is off the top edge", () => {
             mockGridSizer = {
-                getElement: jest.fn().mockReturnValue([mockRexLabel, mockOtherRexLabel, mockOtherRexLabel]),
+                getElement: jest.fn(() => [mockRexLabel, mockOtherRexLabel, mockOtherRexLabel]),
             };
             mockPanel = {
-                getByName: jest.fn().mockReturnValue(mockGridSizer),
+                getByName: jest.fn(() => mockGridSizer),
                 space: { top: 10 },
                 setT: jest.fn(),
                 minHeight: 150,
@@ -68,10 +68,10 @@ describe("Scrollable List handlers", () => {
         });
         test("sets t to one if focused on the bottom item & item is off the bottom edge", () => {
             mockGridSizer = {
-                getElement: jest.fn().mockReturnValue([mockOtherRexLabel, mockOtherRexLabel, mockRexLabel]),
+                getElement: jest.fn(() => [mockOtherRexLabel, mockOtherRexLabel, mockRexLabel]),
             };
             mockPanel = {
-                getByName: jest.fn().mockReturnValue(mockGridSizer),
+                getByName: jest.fn(() => mockGridSizer),
                 space: { top: 10 },
                 setT: jest.fn(),
                 minHeight: 150,
@@ -83,10 +83,10 @@ describe("Scrollable List handlers", () => {
         });
         test("does not set t if the item is visible", () => {
             mockGridSizer = {
-                getElement: jest.fn().mockReturnValue([mockOtherRexLabel, mockRexLabel, mockOtherRexLabel]),
+                getElement: jest.fn(() => [mockOtherRexLabel, mockRexLabel, mockOtherRexLabel]),
             };
             mockPanel = {
-                getByName: jest.fn().mockReturnValue(mockGridSizer),
+                getByName: jest.fn(() => mockGridSizer),
                 space: { top: 10 },
                 setT: jest.fn(),
                 minHeight: 150,
@@ -109,7 +109,7 @@ describe("Scrollable List handlers", () => {
                     ]),
             };
             mockPanel = {
-                getByName: jest.fn().mockReturnValue(mockGridSizer),
+                getByName: jest.fn(() => mockGridSizer),
                 space: { top: 10 },
                 setT: jest.fn(),
                 minHeight: 150,

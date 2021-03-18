@@ -21,7 +21,7 @@ jest.mock("../../../src/core/scaler.js");
 describe("Shop Menu Screen", () => {
     let shopMenu;
     let mockTitle;
-    let mockMenu;
+    let mockResize;
     let mockScalerEvent;
     let mockShopConfig;
     beforeEach(() => {
@@ -29,11 +29,11 @@ describe("Shop Menu Screen", () => {
             title: { resize: jest.fn(), destroy: jest.fn() },
             subtitle: { resize: jest.fn(), destroy: jest.fn() },
         };
-        title.createTitles = jest.fn().mockReturnValue(mockTitle);
-        mockMenu = { resize: jest.fn() };
-        menu.createMenu = jest.fn().mockReturnValue(mockMenu);
+        title.createTitles = jest.fn(() => mockTitle);
+        mockResize = jest.fn();
+        menu.createMenu = jest.fn(() => mockResize);
         mockScalerEvent = { unsubscribe: jest.fn() };
-        scaler.onScaleChange = { add: jest.fn().mockReturnValue(mockScalerEvent) };
+        scaler.onScaleChange = { add: jest.fn(() => mockScalerEvent) };
         mockShopConfig = { mock: "config" };
         ShopMenu.prototype.plugins = {
             installScenePlugin: jest.fn(),
@@ -91,10 +91,9 @@ describe("Shop Menu Screen", () => {
         expect(balance.setBalance).toHaveBeenCalledWith(shopMenu);
     });
 
-    test("creates menu and adds reference to screen on create", () => {
+    test("creates menu", () => {
         shopMenu.create();
         expect(menu.createMenu).toHaveBeenCalledWith(shopMenu);
-        expect(shopMenu.menu).toBe(mockMenu);
     });
 
     test("adds a onScaleChange event on create", () => {
@@ -106,12 +105,16 @@ describe("Shop Menu Screen", () => {
         shopMenu.create();
         const callback = scaler.onScaleChange.add.mock.calls[0][0];
         callback();
-        expect(mockMenu.resize).toHaveBeenCalled();
+        expect(mockResize).toHaveBeenCalled();
     });
 
     test("onScaleChange callback is removed on scene shutdown", () => {
         shopMenu.create();
-        expect(shopMenu.events.once).toHaveBeenCalledWith("shutdown", mockScalerEvent.unsubscribe);
+
+        expect(shopMenu.events.once.mock.calls[0][0]).toBe("shutdown");
+        shopMenu.events.once.mock.calls[0][1]();
+
+        expect(mockScalerEvent.unsubscribe).toHaveBeenCalled();
     });
 
     test("adds an onResume event on create", () => {
@@ -122,6 +125,7 @@ describe("Shop Menu Screen", () => {
     test("onResume callback sets balance and updates titles", () => {
         shopMenu.create();
         const callback = shopMenu.events.on.mock.calls[0][1];
+        callback(); //call once to create titles.
         jest.clearAllMocks();
         callback();
         expect(balance.setBalance).toHaveBeenCalledWith(shopMenu);
@@ -134,10 +138,8 @@ describe("Shop Menu Screen", () => {
 
     test("onResume callback is removed on scene shutdown", () => {
         shopMenu.create();
-        const resumeCallback = shopMenu.events.on.mock.calls[0][1];
-        const shutdownCallback = shopMenu.events.once.mock.calls[1][1];
-        expect(shopMenu.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
-        shutdownCallback();
-        expect(shopMenu.events.off).toHaveBeenCalledWith("resume", resumeCallback);
+        expect(shopMenu.events.once.mock.calls[0][0]).toBe("shutdown");
+        shopMenu.events.once.mock.calls[0][1]();
+        expect(shopMenu.events.off).toHaveBeenCalledWith("resume", expect.any(Function));
     });
 });

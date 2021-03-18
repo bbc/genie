@@ -37,9 +37,7 @@ const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
 export const resizeFn = (scene, buyElems, buttons, elems) => () => {
     const bounds = getSafeArea(scene.layout);
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
-    innerBounds.height = innerBounds.height * bounds.width / 600
-    console.log(bounds.width / 600)
-
+    innerBounds.height = (innerBounds.height * bounds.width) / 600;
     scalePrompt(scene, elems, bounds, innerBounds);
     buyElems && scaleBuyElems(scene, buyElems, bounds, innerBounds);
 
