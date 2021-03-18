@@ -32,8 +32,8 @@ const createMenuButton = scene => buttonText => {
 
 const makeButton = (scene, buttonType, config) => {
     const channel = buttonsChannel(scene);
-
-    const button = createButton(scene, { ...config, channel, key: scene.config[buttonType].buttons.key });
+    const key = config.title === "Cancel" ? "cancelKey" : "key";
+    const button = createButton(scene, { ...config, channel, key: scene.config[buttonType].buttons[key] });
     setButtonOverlays(scene, button, scene.config[buttonType].buttons, config.title);
     return button;
 };

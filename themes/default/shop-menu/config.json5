@@ -43,7 +43,7 @@
     menu: {
         buttonsRight: true,
         buttons: {
-            key: "shop-menu.menuButtonBackground",
+            key: "shop-menu.button",
             styles: { fontStyle: "bold", fontSize: "16px" },
         },
     },
