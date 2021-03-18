@@ -49,7 +49,8 @@ describe("create menu/confirm buttons", () => {
                 },
                 confirm: {
                     buttons: {
-                        key: "confirmkey",
+                        key: "buy-key",
+                        cancelKey: "cancel-key",
                     },
                 },
             },
@@ -156,7 +157,7 @@ describe("create menu/confirm buttons", () => {
             id: "tx_buy_button",
             ariaLabel: "Buy",
             action: confirmCallback,
-            key: mockScene.config.confirm.buttons.key,
+            key: "buy-key",
         });
         expect(button.createButton).toHaveBeenCalledWith(mockScene, {
             gameButton: true,
@@ -166,7 +167,7 @@ describe("create menu/confirm buttons", () => {
             id: "tx_cancel_button",
             ariaLabel: "Cancel",
             action: cancelCallback,
-            key: mockScene.config.confirm.buttons.key,
+            key: "cancel-key",
         });
     });
 
