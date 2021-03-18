@@ -14,7 +14,7 @@ let mockImage;
 let mockOverlay;
 let mockConfig;
 
-text.addText = jest.fn().mockReturnValue("mockText");
+text.addText = jest.fn(() => "mockText");
 
 describe("Button overlays", () => {
     afterEach(() => jest.clearAllMocks());
@@ -34,7 +34,7 @@ describe("Button overlays", () => {
         mockImage = { setScale: jest.fn(), width: 100 };
         mockScene = {
             add: {
-                image: jest.fn().mockReturnValue(mockImage),
+                image: jest.fn(() => mockImage),
             },
             config: {
                 assetPrefix: "test",

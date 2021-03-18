@@ -15,7 +15,7 @@ export class Game extends Screen {
         console.log("Item used:", data); // eslint-disable-line no-console
         console.log("Item timer duration in seconds: ", data.duration || "No duration"); // eslint-disable-line no-console
         let time = data.duration * 1000;
-        let timedEvent = this.time.delayedCall(time, this.onEvent, [], this);
+        this.time.delayedCall(time, this.onEvent, [], this);
     }
 
     onEvent() {

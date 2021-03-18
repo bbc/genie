@@ -4,27 +4,39 @@
  * @license Apache-2.0
  */
 import { itemView, scaleItemView } from "../../../../src/components/shop/confirm/item-view.js";
+import * as textModule from "../../../../src/core/layout/text.js";
 
 describe("Confirm item view", () => {
     let mockConfig;
     let mockScene;
-    let itemImage;
+    let image;
     let itemTitle;
     let itemBlurb;
+    let iconBackground;
     let mockItemView;
     let mockBounds;
+    let container;
 
     beforeEach(() => {
         const mockText = { setOrigin: jest.fn() };
-        mockScene = {
-            add: { image: jest.fn(), text: jest.fn(() => mockText) },
-            config: {
-                confirm: {},
-            },
-        };
         mockConfig = { confirm: { buttons: { buttonsRight: true } } };
 
-        itemImage = {
+        image = {
+            setPosition: jest.fn(),
+            setScale: jest.fn(),
+            height: 50,
+            width: 100,
+        };
+
+        mockScene = {
+            add: { image: jest.fn(() => image), container: jest.fn(() => container), text: jest.fn(() => mockText) },
+            config: mockConfig,
+            layout: {
+                getSafeArea: jest.fn(() => mockBounds),
+            },
+        };
+
+        iconBackground = {
             setPosition: jest.fn(),
             setScale: jest.fn(),
             height: 50,
@@ -41,57 +53,39 @@ describe("Confirm item view", () => {
             style: { a: 1, b: 2 },
         };
 
-        mockItemView = { itemImage, itemTitle, itemBlurb };
-        mockBounds = { width: 200, x: 0, height: 200 };
+        container = {
+            width: 300,
+            height: 400,
+            setPosition: jest.fn(),
+            setScale: jest.fn(),
+            add: jest.fn(),
+        };
+
+        mockItemView = { image, itemTitle, iconBackground, itemBlurb, container };
+        mockBounds = new Phaser.Geom.Rectangle(0, 0, 300, 400);
     });
 
     afterEach(jest.clearAllMocks);
 
     describe("scaleItemView", () => {
-        test("sets word wrap style if item blurb present", () => {
-            scaleItemView(mockItemView, mockConfig, mockBounds);
+        test("sets container position correctly when buttonsRight set to true", () => {
+            scaleItemView(mockScene, mockItemView);
 
-            expect(itemBlurb.setStyle).toHaveBeenCalledWith({
-                ...itemBlurb.style,
-                wordWrap: { width: 200 / (21 / 10), useAdvancedWrap: true },
-            });
+            expect(mockItemView.container.setPosition).toHaveBeenCalledWith(75, 200);
         });
 
-        test("sets image position correctly when buttonsRight set to true", () => {
-            scaleItemView(mockItemView, mockConfig, mockBounds);
-
-            expect(mockItemView.itemImage.setPosition).toHaveBeenCalledWith(50, -50);
-        });
-
-        test("sets image position correctly when buttonsRight false", () => {
+        test("sets container position correctly when buttonsRight false", () => {
             mockConfig.confirm.buttons.buttonsRight = false;
-            scaleItemView(mockItemView, mockConfig, mockBounds);
+            scaleItemView(mockScene, mockItemView);
 
-            expect(mockItemView.itemImage.setPosition).toHaveBeenCalledWith(150, -50);
+            expect(mockItemView.container.setPosition).toHaveBeenCalledWith(150, 200);
         });
 
-        test("sets image scale correctly when title is present", () => {
-            scaleItemView(mockItemView, mockConfig, mockBounds);
+        test("sets container scale correctly", () => {
+            scaleItemView(mockScene, mockItemView);
 
-            expect(mockItemView.itemImage.setScale.mock.calls[0][0].toFixed(2)).toBe("1.33");
-            expect(mockItemView.itemImage.setScale.mock.calls[0][1].toFixed(2)).toBe("1.33");
-        });
-
-        test("sets image scale correctly when title is not present", () => {
-            delete mockItemView.itemTitle;
-            scaleItemView(mockItemView, mockConfig, mockBounds);
-
-            expect(mockItemView.itemImage.setScale.mock.calls[0][0].toFixed(2)).toBe("0.90");
-            expect(mockItemView.itemImage.setScale.mock.calls[0][1].toFixed(2)).toBe("0.90");
-        });
-
-        test("sets itemDetail position if present", () => {
-            mockItemView.itemDetail = {
-                setPosition: jest.fn(),
-            };
-            scaleItemView(mockItemView, mockConfig, mockBounds);
-
-            expect(mockItemView.itemDetail.setPosition).toHaveBeenCalledWith(50, 10);
+            expect(mockItemView.container.setScale.mock.calls[0][0].toFixed(2)).toBe("0.50");
+            expect(mockItemView.container.setScale.mock.calls[0][1].toFixed(2)).toBe("0.50");
         });
     });
 
@@ -99,13 +93,37 @@ describe("Confirm item view", () => {
         test("creates standard view if detailView falsy in scene config", () => {
             mockScene.config.confirm.detailView = false;
 
-            expect(Object.keys(itemView(mockScene, {}))).toEqual(["itemImage"]);
+            expect(Object.keys(itemView(mockScene, {}))).toEqual(["image", "container"]);
         });
 
         test("creates detail view if set in scene config", () => {
             mockScene.config.confirm.detailView = true;
 
-            expect(Object.keys(itemView(mockScene, {}))).toEqual(["itemImage", "itemTitle", "itemDetail", "itemBlurb"]);
+            expect(Object.keys(itemView(mockScene, {}))).toEqual([
+                "background",
+                "iconBackground",
+                "icon",
+                "title",
+                "detail",
+                "blurb",
+                "container",
+            ]);
+        });
+
+        test("sets word wrap style if item blurb present", () => {
+            mockScene.config.confirm.detailView = true;
+            const mockText = {
+                setStyle: jest.fn(() => mockText),
+                setOrigin: jest.fn(() => mockText),
+                setPosition: jest.fn(() => mockText),
+            };
+            textModule.addText = jest.fn(() => mockText);
+
+            itemView(mockScene, {});
+
+            const expected = { wordWrap: { width: 280, useAdvancedWrap: true } };
+
+            expect(mockText.setStyle).toHaveBeenCalledWith(expected);
         });
     });
 });

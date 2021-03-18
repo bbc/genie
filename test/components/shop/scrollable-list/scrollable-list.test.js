@@ -36,10 +36,10 @@ const mockText = {
     setPosition: jest.fn(() => mockText),
 };
 
-buttons.createListButton = jest.fn().mockReturnValue(mockGelButton);
+buttons.createListButton = jest.fn(() => mockGelButton);
 buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
-scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
+scaler.onScaleChange.add = jest.fn(() => ({ unsubscribe: "foo" }));
 backgroundsModule.resizeBackground = jest.fn(() => jest.fn());
 const title = "shop";
 
@@ -68,7 +68,7 @@ describe("Scrollable List", () => {
         };
         collectionGetAll = [mockItem];
         mockCollection = { getAll: jest.fn(() => collectionGetAll), get: () => mockCollection };
-        collections.get = jest.fn().mockReturnValue(mockCollection);
+        collections.get = jest.fn(() => mockCollection);
 
         mockLabel = {
             children: [
@@ -86,7 +86,7 @@ describe("Scrollable List", () => {
         };
         mockGridSizer = {
             add: jest.fn(),
-            getElement: jest.fn().mockReturnValue([mockLabel]),
+            getElement: jest.fn(() => [mockLabel]),
         };
         mockSizer = {
             clear: jest.fn(),
@@ -146,7 +146,7 @@ describe("Scrollable List", () => {
                 menu: { buttonsRight: true },
             },
             layout: {
-                getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
+                getSafeArea: jest.fn(() => ({ y: 0, x: 0, width: 100, height: 100 })),
                 addCustomGroup: jest.fn(),
             },
             scale: { on: jest.fn(), removeListener: jest.fn() },
@@ -190,7 +190,7 @@ describe("Scrollable List", () => {
 
     describe("instantiation", () => {
         beforeEach(() => {
-            scaler.getMetrics = jest.fn().mockReturnValue({ scale: 1 });
+            scaler.getMetrics = jest.fn(() => ({ scale: 1 }));
             new ScrollableList(mockScene, title);
         });
         describe("adds a rexUI scrollable panel", () => {
@@ -374,8 +374,8 @@ describe("Scrollable List", () => {
             const onWheelSpy = jest.fn();
             const onFocusSpy = jest.fn();
             beforeEach(() => {
-                handlers.updatePanelOnFocus = jest.fn().mockReturnValue(onFocusSpy);
-                handlers.updatePanelOnWheel = jest.fn().mockReturnValue(onWheelSpy);
+                handlers.updatePanelOnFocus = jest.fn(() => onFocusSpy);
+                handlers.updatePanelOnWheel = jest.fn(() => onWheelSpy);
                 new ScrollableList(mockScene);
             });
             test("adds an updatePanelOnFocus", () => {
@@ -462,7 +462,7 @@ describe("Scrollable List", () => {
         });
     });
     describe("collection filtering", () => {
-        const filterFn = jest.fn().mockReturnValue(true);
+        const filterFn = jest.fn(() => true);
 
         beforeEach(() => new ScrollableList(mockScene, "title", filterFn));
 

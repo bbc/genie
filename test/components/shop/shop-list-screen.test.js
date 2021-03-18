@@ -26,9 +26,9 @@ describe("Shop List Screen", () => {
     beforeEach(() => {
         gmi.gmi = { setStatsScreen: jest.fn(), sendStatsEvent: jest.fn() };
         mockList = { reset: jest.fn() };
-        list.ScrollableList = jest.fn().mockReturnValue(mockList);
+        list.ScrollableList = jest.fn(() => mockList);
         mockScalerEvent = { unsubscribe: jest.fn() };
-        scaler.onScaleChange = { add: jest.fn().mockReturnValue(mockScalerEvent) };
+        scaler.onScaleChange = { add: jest.fn(() => mockScalerEvent) };
         mockShopConfig = { mock: "config" };
         ShopList.prototype.plugins = {
             installScenePlugin: jest.fn(),
