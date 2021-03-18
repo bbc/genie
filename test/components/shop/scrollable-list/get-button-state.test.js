@@ -31,8 +31,8 @@ describe("getButtonState", () => {
             title: "shop",
             description: "test description",
         };
-        mockCollection = { get: jest.fn().mockReturnValue(mockItem) };
-        collections.get = jest.fn().mockReturnValue(mockCollection);
+        mockCollection = { get: jest.fn(() => mockItem) };
+        collections.get = jest.fn(() => mockCollection);
     });
 
     afterEach(jest.clearAllMocks);

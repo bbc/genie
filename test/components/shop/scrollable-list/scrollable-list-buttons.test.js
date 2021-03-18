@@ -25,7 +25,7 @@ describe("Scrollable List Buttons", () => {
         mockScene = {
             assetPrefix: "shop",
             layout: {
-                getSafeArea: jest.fn().mockReturnValue({ width: 100 }),
+                getSafeArea: jest.fn(() => ({ width: 100 })),
             },
             config: {
                 listPadding: { x: 10, y: 8, outerPadFactor: 2 },
@@ -79,9 +79,9 @@ describe("Scrollable List Buttons", () => {
             title: "shop",
             description: "test description",
         };
-        mockCollection = { get: jest.fn().mockReturnValue(mockItem) };
-        collections.get = jest.fn().mockReturnValue(mockCollection);
-        createButton.createButton = jest.fn().mockReturnValue(mockGelButton);
+        mockCollection = { get: jest.fn(() => mockItem) };
+        collections.get = jest.fn(() => mockCollection);
+        createButton.createButton = jest.fn(() => mockGelButton);
         createListButton(mockScene, mockItem, "shop", dummyCallback);
     });
 

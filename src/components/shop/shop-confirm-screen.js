@@ -21,22 +21,12 @@ export class ShopConfirm extends Screen {
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
 
-        this.confirm = createConfirm(this, this.transientData.shop.mode, this.transientData.shop.item);
-
-        this.transientData[this.scene.key] = { action: this.confirm.action };
+        const resize = createConfirm(this);
         setBalance(this);
 
-        this.setupEvents();
-        this.resize();
-    }
-
-    setupEvents() {
-        const resize = this.resize.bind(this);
         const scaleEvent = onScaleChange.add(resize);
         this.events.once("shutdown", scaleEvent.unsubscribe);
-    }
 
-    resize() {
-        this.confirm.resize();
+        resize();
     }
 }

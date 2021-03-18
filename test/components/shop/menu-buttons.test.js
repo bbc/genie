@@ -30,12 +30,12 @@ describe("create menu/confirm buttons", () => {
         mockGmi.gmi.setStatsScreen = jest.fn();
         mockGmi.gmi.sendStatsEvent = jest.fn();
         mockChannel = "gel-channel";
-        gel.buttonsChannel = jest.fn().mockReturnValue(mockChannel);
+        gel.buttonsChannel = jest.fn(() => mockChannel);
         mockTextWithOrigin = { mock: "text" };
-        mockTextElem = { setOrigin: jest.fn().mockReturnValue(mockTextWithOrigin) };
-        textElem.addText = jest.fn().mockReturnValue(mockTextElem);
+        mockTextElem = { setOrigin: jest.fn(() => mockTextWithOrigin) };
+        textElem.addText = jest.fn(() => mockTextElem);
         mockGelButton = { overlays: { set: jest.fn() } };
-        button.createButton = jest.fn().mockReturnValue(mockGelButton);
+        button.createButton = jest.fn(() => mockGelButton);
         mockScene = {
             addOverlay: jest.fn(),
             transientData: {

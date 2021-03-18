@@ -13,7 +13,6 @@ describe("Confirm Resize Function", () => {
     let mockScene;
     let mockElements;
     let mockBuyElements;
-    let mockContainer;
     let mockText;
     let mockButton;
 
@@ -35,7 +34,6 @@ describe("Confirm Resize Function", () => {
                 confirm: { buttons: { buttonsRight: true } },
             },
         };
-        mockContainer = { setY: jest.fn() };
 
         mockElements = {
             background: {
@@ -69,11 +67,6 @@ describe("Confirm Resize Function", () => {
 
     afterEach(jest.clearAllMocks);
 
-    test("sets y offset on container", () => {
-        resizeFn(mockScene, mockContainer, mockBuyElements, [], mockElements)();
-        expect(mockContainer.setY).toHaveBeenCalledWith(100);
-    });
-
     test("resizes confirm buttons", () => {
         const mockButton = {
             setY: jest.fn(),
@@ -84,7 +77,7 @@ describe("Confirm Resize Function", () => {
 
         const mockButtons = [mockButton];
 
-        resizeFn(mockScene, mockContainer, mockBuyElements, mockButtons, mockElements)();
+        resizeFn(mockScene, mockBuyElements, mockButtons, mockElements)();
         expect(mockButton.setY).toHaveBeenCalledWith(400);
         expect(mockButton.setX).toHaveBeenCalledWith(725);
         expect(mockButton.setScale).toHaveBeenCalledWith(3.25);
@@ -93,8 +86,8 @@ describe("Confirm Resize Function", () => {
     test("positions correctly when buttons are on the left", () => {
         mockScene.config.confirm.buttons.buttonsRight = false;
         const mockButtons = [mockButton];
-        resizeFn(mockScene, mockContainer, mockBuyElements, mockButtons, mockElements)();
+        resizeFn(mockScene, mockBuyElements, mockButtons, mockElements)();
 
-        expect(mockButton.setX).toHaveBeenCalledWith(675);
+        expect(mockButton.setX).toHaveBeenCalledWith(687.5);
     });
 });

@@ -21,7 +21,7 @@ describe("shop element scaling functions", () => {
     beforeEach(() => {
         mockLayout = { getSafeArea: jest.fn(() => mockSafeArea) };
         mockContainer = {
-            getBounds: jest.fn().mockReturnValue({ height: 450, width: 400, x: 0, y: -150 }),
+            getBounds: jest.fn(() => ({ height: 450, width: 400, x: 0, y: -150 })),
             scale: 1,
             y: 0,
             visible: true,

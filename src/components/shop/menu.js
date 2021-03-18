@@ -24,13 +24,8 @@ export const createMenu = scene => {
 
     resizeGelButtons({ buttons, rect });
 
-    const resize = () => {
+    return () => {
         const rect = getRect(scene);
-
         resizeGelButtons({ buttons, rect });
-    };
-
-    return {
-        resize,
     };
 };

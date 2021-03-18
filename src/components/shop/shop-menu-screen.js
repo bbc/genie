@@ -26,28 +26,24 @@ export class ShopMenu extends Screen {
         this.transientData.shop = { config: this.config.shopConfig };
         setBalance(this);
 
-        this.menu = createMenu(this);
+        const resize = createMenu(this);
+        const scaleEvent = onScaleChange.add(resize);
 
-        this.setupEvents();
-        this.resize();
-    }
+        let titles = {};
 
-    setupEvents() {
-        const scaleEvent = onScaleChange.add(() => this.resize());
-        this.events.once("shutdown", scaleEvent.unsubscribe);
-        const onResume = this.onResume.bind(this);
-        this.events.on("resume", onResume);
-        this.events.once("shutdown", () => this.events.off(Phaser.Scenes.Events.RESUME, onResume));
-    }
+        const resume = () => {
+            setBalance(this);
+            Object.values(titles).forEach(title => title.destroy());
+            titles = createTitles(this);
+            Object.values(titles).forEach(title => title.resize());
+        };
 
-    onResume() {
-        setBalance(this);
-        Object.values(this.titles).forEach(title => title.destroy());
-        this.titles = createTitles(this);
-        Object.values(this.titles).forEach(title => title.resize());
-    }
+        this.events.on("resume", resume);
+        this.events.once("shutdown", () => {
+            this.events.off(Phaser.Scenes.Events.RESUME, resume);
+            scaleEvent.unsubscribe();
+        });
 
-    resize() {
-        this.menu.resize();
+        resize();
     }
 }
