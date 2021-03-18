@@ -34,14 +34,14 @@ describe("Scrollable List Buttons", () => {
                     items: [{ foo: "bar" }],
                     options: {
                         shop: [
-                            { baz: "qux", activeInStates: ["cta"] },
-                            { wiz: "bang", activeInStates: ["actioned"] },
-                            { wiz: "bang", activeInStates: ["unique"] },
-                            { wiz: "bang", activeInStates: ["notInStock"] },
+                            { baz: "qux", showWhen: ["cta"] },
+                            { wiz: "bang", showWhen: ["actioned"] },
+                            { wiz: "bang", showWhen: ["unique"] },
+                            { wiz: "bang", showWhen: ["notInStock"] },
                         ],
                         manage: [
-                            { baz: "qux", activeInStates: ["cta"] },
-                            { wiz: "bang", activeInStates: ["actioned"] },
+                            { baz: "qux", showWhen: ["cta"] },
+                            { wiz: "bang", showWhen: ["actioned"] },
                         ],
                     },
                 },

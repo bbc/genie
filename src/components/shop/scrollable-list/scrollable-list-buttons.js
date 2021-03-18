@@ -30,7 +30,7 @@ const filterOptionalConfigs = button => {
     const overlayStateIsInItemState = state => overlayStates.includes(state);
     const overlayConfigs = getOverlayConfigs(button.scene, button.config.title);
 
-    return overlayConfigs.options.filter(overlay => fp.every(overlayStateIsInItemState, overlay.activeInStates));
+    return overlayConfigs.options.filter(overlay => fp.every(overlayStateIsInItemState, overlay.showWhen));
 };
 
 const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);

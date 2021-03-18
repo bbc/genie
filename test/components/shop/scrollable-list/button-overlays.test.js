@@ -29,7 +29,7 @@ describe("Button overlays", () => {
             type: "image",
             name: "someImage",
             assetKey: "test.someImageAssetKey",
-            takeStateProperties: true,
+            inheritProperties: true,
         };
         mockImage = { setScale: jest.fn(), width: 100 };
         mockScene = {
@@ -79,14 +79,14 @@ describe("Button overlays", () => {
                 expect(mockImage.setScale).toHaveBeenCalledWith(0.5);
             });
 
-            test("merges in state properties if takeStateProperties is set on the overlay config", () => {
+            test("merges in state properties if inheritProperties is set on the overlay config", () => {
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 expect(mockImage.foo).toBe("bar");
             });
 
             test("otherwise, does not merge state properties", () => {
-                const mockOverlayWithoutStateProperties = { ...mockOverlay, takeStateProperties: false };
+                const mockOverlayWithoutStateProperties = { ...mockOverlay, inheritProperties: false };
                 mockConfig.overlay.items.push(mockOverlayWithoutStateProperties);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 expect(mockImage.foo).not.toBeTruthy();

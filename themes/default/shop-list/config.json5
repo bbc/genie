@@ -1,9 +1,9 @@
 {
     music: "home.backgroundMusic",
     background: {
-        items: [{ key: "shop-menu.magicShop", x: 0, y: 0 }],
+        items: [{ key: "shop-menu.magicShop", x: 0, y: 0 }], // The shop background image.
     },
-    styleDefaults: {
+    styleDefaults: { // Default font style for text.
         fontFamily: "ReithSans",
         fontSize: "24px",
         resolution: 2,
@@ -37,16 +37,16 @@
         shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
         manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
     },
-    states: { locked: { properties: { alpha: 0.5, tint: 0xaaaaaa }, disabled: true } },
+    states: { locked: { properties: { alpha: 0.5, tint: 0xaaaaaa }, disabled: true } }, // Style to be applied to items in certain states.
     overlay: {
         items: [
             {
                 type: "image",
                 name: "itemIcon",
-                assetKey: "${icon}",
+                assetKey: "${icon}", // Key of the corresponding asset.
                 position: { align: "left", offsetX: 35, offsetY: 0 },
                 size: 76,
-                takeStateProperties: true,
+                inheritProperties: true, // Take the style properties of the parent state, such as transparency for a locked item.
             },
             {
                 type: "text",
@@ -64,21 +64,21 @@
                     value: "${price}",
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeInStates: ["available"],
+                    showWhen: ["available"], // This will only be shown by the game when the button is in this state.
                 },
                 {
                     type: "image",
                     name: "currency",
                     assetKey: "shop-list.currency",
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeInStates: ["available"],
+                    showWhen: ["available"],
                 },
                 {
                     type: "image",
                     name: "lock",
                     assetKey: "shop-list.lockIcon",
                     position: { align: "left", offsetX: 56, offsetY: 20 },
-                    activeInStates: ["locked"],
+                    showWhen: ["locked"],
                 },
                 {
                     type: "text",
@@ -86,7 +86,7 @@
                     value: "${hint}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "14px" },
-                    activeInStates: ["locked"],
+                    showWhen: ["locked"],
                 },
                 {
                     type: "text",
@@ -94,7 +94,7 @@
                     value: "Purchased",
                     position: { align: "right", offsetX: -108, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeInStates: ["unavailable"],
+                    showWhen: ["unavailable"],
                 },
                 {
                     type: "text",
@@ -102,7 +102,7 @@
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeInStates: ["equippable", "unlocked"],
+                    showWhen: ["equippable", "unlocked"],
                 },
                 {
                     type: "text",
@@ -110,7 +110,7 @@
                     value: "${qty} in stock",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeInStates: ["consumable"],
+                    showWhen: ["consumable"],
                 },
             ],
             manage: [
@@ -127,7 +127,7 @@
                     value: "Equip",
                     position: { align: "right", offsetX: -76, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeInStates: ["cta", "equippable"],
+                    showWhen: ["cta", "equippable"],
                 },
                 {
                     type: "text",
@@ -135,7 +135,7 @@
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeInStates: ["equippable"],
+                    showWhen: ["equippable"],
                 },
                 {
                     type: "text",
@@ -143,7 +143,7 @@
                     value: "Equipped",
                     position: { align: "right", offsetX: -96, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeInStates: ["actioned", "equippable"],
+                    showWhen: ["actioned", "equippable"],
                 },
                 {
                     type: "text",
@@ -151,7 +151,7 @@
                     value: "${qty} in inventory",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeInStates: ["consumable"],
+                    showWhen: ["consumable"],
                 },
             ],
         },

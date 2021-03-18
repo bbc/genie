@@ -12,7 +12,7 @@ const imageOverlay = ({ gelButton, config, offset }) => {
     const { config: sceneConfig } = scene;
     const image = scene.add.image(offset.x, offset.y, fp.template(config.assetKey)(item));
     const properties =
-        config.takeStateProperties && item.state && sceneConfig.states[item.state]
+        config.inheritProperties && item.state && sceneConfig.states[item.state]
             ? sceneConfig.states[item.state].properties
             : {};
     Object.assign(image, properties);
