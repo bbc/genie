@@ -35,7 +35,7 @@
             manage: "inventory",
         },
         balance: "coin",
-        slots: {
+        slots: { // Create slots for equippable items and set the maximum amount equippable per slot.
             helmet: { max: 1 },
             shield: { max: 1 },
         },
