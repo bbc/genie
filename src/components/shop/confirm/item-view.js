@@ -48,8 +48,7 @@ export const itemView = (scene, item) => {
 export const scaleItemView = (scene, view) => {
     const bounds = scene.layout.getSafeArea({}, false);
     const onLeft = scene.config.confirm.buttons.buttonsRight;
-    onLeft ? (bounds.width /= 2) : (bounds.left = 0) ;
-
+    onLeft ? (bounds.width /= 2) : (bounds.left = 0);
     const newScale = Math.min(bounds.width / view.container.width, bounds.height / view.container.height);
 
     view.container.setPosition(bounds.centerX, bounds.centerY);

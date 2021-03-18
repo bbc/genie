@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { getInnerRectBounds, getSafeArea } from "../shop-layout.js";
+import { getInnerRectBounds } from "../shop-layout.js";
 import { scaleItemView } from "./item-view.js";
 import { CAMERA_X, CAMERA_Y } from "../../../core/layout/metrics.js";
 
@@ -12,12 +12,12 @@ const getOffsetBounds = (outerBounds, innerBounds) => ({
     y: innerBounds.y + (outerBounds.height - innerBounds.height) * 0.38,
 });
 
-const scalePrompt = (scene, elems, bounds, innerBounds) =>
-    elems.prompt.setPosition(getButtonX(innerBounds.x, scene.config), promptY(bounds));
+const scalePrompt = (scene, elems, innerBounds) =>
+    elems.prompt.setPosition(getButtonX(innerBounds.x, scene.config), promptY(innerBounds));
 
-const scaleBuyElems = (scene, buyElems, bounds, innerBounds) => {
-    buyElems.text.setPosition(getButtonX(innerBounds.x + 28, scene.config), currencyY(bounds));
-    buyElems.currency.setPosition(getButtonX(innerBounds.x - 20, scene.config), currencyY(bounds));
+const scaleBuyElems = (scene, buyElems, innerBounds) => {
+    buyElems.text.setPosition(getButtonX(innerBounds.x + 28, scene.config), currencyY(innerBounds));
+    buyElems.currency.setPosition(getButtonX(innerBounds.x - 20, scene.config), currencyY(innerBounds));
 };
 
 const sizeConfirmButton = (scene, button, idx, bounds, innerBounds) => {
@@ -35,14 +35,14 @@ const promptY = outerBounds => -percentOfHeight(outerBounds, 37.5);
 const currencyY = outerBounds => -percentOfHeight(outerBounds, 22.5);
 
 export const resizeFn = (scene, buyElems, buttons, elems) => () => {
-    const bounds = getSafeArea(scene.layout);
+    const bounds = scene.layout.getSafeArea({}, false);
+    const onRight = scene.config.confirm.buttons.buttonsRight;
+    onRight ? (bounds.left = 0) : (bounds.width /= 2);
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
-    innerBounds.height = (innerBounds.height * bounds.width) / 600;
-    scalePrompt(scene, elems, bounds, innerBounds);
-    buyElems && scaleBuyElems(scene, buyElems, bounds, innerBounds);
 
-    //TODO set this to height of 400 over innerBounds.height = 400
-    //innerBounds.height = bounds.height * (bounds.width / 0.5 / 280);
+    scalePrompt(scene, elems, innerBounds);
+    buyElems && scaleBuyElems(scene, buyElems, innerBounds);
+
     sizeConfirmButtons(scene, buttons, bounds, innerBounds);
     scaleItemView(scene, elems.itemView);
 };

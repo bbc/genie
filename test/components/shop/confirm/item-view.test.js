@@ -55,6 +55,7 @@ describe("Confirm item view", () => {
 
         container = {
             width: 300,
+            height: 400,
             setPosition: jest.fn(),
             setScale: jest.fn(),
             add: jest.fn(),
@@ -70,21 +71,21 @@ describe("Confirm item view", () => {
         test("sets container position correctly when buttonsRight set to true", () => {
             scaleItemView(mockScene, mockItemView);
 
-            expect(mockItemView.container.setPosition).toHaveBeenCalledWith(150, 200);
+            expect(mockItemView.container.setPosition).toHaveBeenCalledWith(75, 200);
         });
 
         test("sets container position correctly when buttonsRight false", () => {
             mockConfig.confirm.buttons.buttonsRight = false;
             scaleItemView(mockScene, mockItemView);
 
-            expect(mockItemView.container.setPosition).toHaveBeenCalledWith(75, 200);
+            expect(mockItemView.container.setPosition).toHaveBeenCalledWith(150, 200);
         });
 
         test("sets container scale correctly", () => {
             scaleItemView(mockScene, mockItemView);
 
-            expect(mockItemView.container.setScale.mock.calls[0][0].toFixed(2)).toBe("1.00");
-            expect(mockItemView.container.setScale.mock.calls[0][1].toFixed(2)).toBe("1.00");
+            expect(mockItemView.container.setScale.mock.calls[0][0].toFixed(2)).toBe("0.50");
+            expect(mockItemView.container.setScale.mock.calls[0][1].toFixed(2)).toBe("0.50");
         });
     });
 

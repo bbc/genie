@@ -88,6 +88,6 @@ describe("Confirm Resize Function", () => {
         const mockButtons = [mockButton];
         resizeFn(mockScene, mockBuyElements, mockButtons, mockElements)();
 
-        expect(mockButton.setX).toHaveBeenCalledWith(675);
+        expect(mockButton.setX).toHaveBeenCalledWith(687.5);
     });
 });
