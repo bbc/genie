@@ -37,7 +37,7 @@
         shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
         manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
     },
-    states: { locked: { properties: { alpha: 0.5, tint: 0xaaaaaa }, disabled: true } }, // Style to be applied to items in certain states.
+    states: { locked: { properties: { alpha: 0.5, tint: 0xaaaaaa, key: "lalalalala" }, disabled: true } }, // Style to be applied to items in certain states.,
     overlay: {
         items: [
             {
