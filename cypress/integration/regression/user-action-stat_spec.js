@@ -160,7 +160,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.shopBuy, { screenName: "debug_shop_equippables_list" }).stat,
+                    formatStatConfig(userActions.shopBuy, { screenName: "debug_shop_equippables_menu" }).stat,
                 );
         });
     });
@@ -175,13 +175,13 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.shopManage, { screenName: "debug_shop_equippables_list" }).stat,
+                    formatStatConfig(userActions.shopManage, { screenName: "debug_shop_equippables_menu" }).stat,
                 );
         });
     });
 
     it("Fires a user action event when an item is purchased in the shop.", () => {
-        cy.intercept(userActions.shopPurchase.creationId).as("buyItem");
+        cy.intercept(`[${userActions.shopPurchase.creationId}]`).as("buyItem");
         cy.genieClick("#home__debug");
         cy.genieClick("#debug__debug-shop-equippables-menu");
         cy.genieClick("#debug-shop-equippables-menu__shop_menu_button");
@@ -194,7 +194,8 @@ describe("User Action stats for Genie", () => {
                     "include",
                     formatStatConfig(userActions.shopPurchase, {
                         screenName: "debug_shop_equippables_confirm",
-                        format: "KEY=ironHat-STATE=purchased-QTY=1",
+                        format: "KEY=ironHat~STATE=purchased~QTY=0",
+                        advertiserId: "Iron%20Helm",
                     }).stat,
                 );
         });
@@ -219,6 +220,7 @@ describe("User Action stats for Genie", () => {
                     formatStatConfig(userActions.shopEquip, {
                         screenName: "debug_shop_equippables_confirm",
                         format: "KEY=ironHat~STATE=equipped~QTY=1",
+                        advertiserId: "Iron%20Helm",
                     }).stat,
                 );
         });
@@ -236,9 +238,70 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.useItem, {
+                    formatStatConfig(userActions.shopUse, {
                         screenName: "debug_shop_equippables_confirm",
-                        format: "KEY=box~STATE=used~QTY=1",
+                        format: "KEY=box~STATE=used~QTY=0",
+                        advertiserId: "Mystery%20Box",
+                    }).stat,
+                );
+        });
+    });
+
+    it("Fires a user action event when the achievement is completed.", () => {
+        cy.intercept(userActions.achievementComplete.creationId).as("achievementComplete");
+        cy.genieClick("#home__play");
+        cy.genieClick("#narrative__skip");
+        cy.genieClick("#character-select__mary");
+        cy.genieClick("#level-select__1");
+        cy.genieClick("#game__1");
+        cy.wait("@achievementComplete").then(interception => {
+            cy.log(interception)
+                .its("response.url")
+                .should(
+                    "include",
+                    formatStatConfig(userActions.achievementComplete, {
+                        format: "ACH=1/10",
+                        advertiserId: "just_started",
+                        screenName: "game",
+                    }).stat,
+                );
+        });
+    });
+
+    it("Fires a user action event when a level is selected", () => {
+        cy.intercept(userActions.levelSelect.creationId).as("levelSelect");
+        cy.genieClick("#home__play");
+        cy.genieClick("#narrative__skip");
+        cy.genieClick("#character-select__mary");
+        cy.genieClick("#level-select__1");
+        cy.wait("@levelSelect").then(interception => {
+            cy.log(interception)
+                .its("response.url")
+                .should(
+                    "include",
+                    formatStatConfig(userActions.levelSelect, {
+                        format: "ELE=Test%20Level%201",
+                        screenName: "level_select",
+                    }).stat,
+                );
+        });
+    });
+
+    it("Fires a score displayed stat when the results screen is displayed", () => {
+        cy.intercept(userActions.displayScore.creationId).as("displayScore");
+        cy.genieClick("#home__play");
+        cy.genieClick("#narrative__skip");
+        cy.genieClick("#character-select__mary");
+        cy.genieClick("#level-select__1");
+        cy.genieClick("#game__4");
+        cy.wait("@displayScore").then(interception => {
+            cy.log(interception)
+                .its("response.url")
+                .should(
+                    "include",
+                    formatStatConfig(userActions.displayScore, {
+                        format: "SCO=keys-0::gems-0::stars-0",
+                        screenName: "results",
                     }).stat,
                 );
         });
