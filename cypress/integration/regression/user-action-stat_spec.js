@@ -259,8 +259,6 @@ describe("User Action stats for Genie", () => {
         });
     });
 
-    /* will need a format and screenName adding e.g. formatStatConfig(stat, { format: "value", screenName: "value"}).stat */
-
     it("Fires a user action event when a level is selected", () => {
         cy.intercept(userActions.levelSelect.creationId).as("levelSelect");
         cy.genieClick("#home__play");
@@ -269,6 +267,18 @@ describe("User Action stats for Genie", () => {
         cy.genieClick("#level-select__1");
         cy.wait("@levelSelect").then(interception => {
             cy.log(interception).its("response.url").should("include", formatStatConfig(userActions.levelSelect, { format: "ELE=Test%20Level%201", screenName: "level_select"}).stat)
+        });
+    });
+
+    it("Fires a score displayed stat when the results screen is displayed", () => {
+        cy.intercept(userActions.displayScore.creationId).as("displayScore");
+        cy.genieClick("#home__play");
+        cy.genieClick("#narrative__skip");
+        cy.genieClick("#character-select__mary");
+        cy.genieClick("#level-select__1");
+        cy.genieClick("#game__4");
+        cy.wait("@displayScore").then(interception => {
+            cy.log(interception).its("response.url").should("include", formatStatConfig(userActions.displayScore, { format: "SCO=keys-0::gems-0::stars-0", screenName: "results"}).stat)
         });
     });
 });

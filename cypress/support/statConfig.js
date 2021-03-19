@@ -308,6 +308,20 @@ export const userActions = {
         bucket: "",
         event: "user_action",
     },
+    displayScore: {
+        campaignId: "Page",
+        creationId: "score~display",
+        variant: "",
+        format: "",
+        generalPlacement: "keepalive.games.genie",
+        detailedPlacement: "",
+        advertiserId: "Test%20Level%201",
+        url: "unknown",
+        countername: "keepalive.games.genie",
+        screenName: "",
+        bucket: "",
+        event: "user_action",
+    }
     
 };
 
