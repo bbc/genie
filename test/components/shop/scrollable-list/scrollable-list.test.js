@@ -6,7 +6,7 @@
  */
 import { ScrollableList } from "../../../../src/components/shop/scrollable-list/scrollable-list.js";
 import * as buttons from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
-import * as confirm from "../../../../src/components/shop/confirm.js";
+import * as confirm from "../../../../src/components/shop/confirm/confirm.js";
 import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
@@ -16,7 +16,7 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 import * as gmiModule from "../../../../src/core/gmi/gmi.js";
 
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
-jest.mock("../../../../src/components/shop/confirm.js");
+jest.mock("../../../../src/components/shop/confirm/confirm.js");
 
 const mockA11yElem = {
     addEventListener: jest.fn(),
@@ -36,10 +36,10 @@ const mockText = {
     setPosition: jest.fn(() => mockText),
 };
 
-buttons.createListButton = jest.fn().mockReturnValue(mockGelButton);
+buttons.createListButton = jest.fn(() => mockGelButton);
 buttons.scaleButton = jest.fn();
 buttons.updateButton = jest.fn();
-scaler.onScaleChange.add = jest.fn().mockReturnValue({ unsubscribe: "foo" });
+scaler.onScaleChange.add = jest.fn(() => ({ unsubscribe: "foo" }));
 backgroundsModule.resizeBackground = jest.fn(() => jest.fn());
 const title = "shop";
 
@@ -53,6 +53,7 @@ describe("Scrollable List", () => {
     let mockItem;
     let mockLabel;
     let mockGmi;
+    let mockPointer;
 
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
@@ -67,7 +68,7 @@ describe("Scrollable List", () => {
         };
         collectionGetAll = [mockItem];
         mockCollection = { getAll: jest.fn(() => collectionGetAll), get: () => mockCollection };
-        collections.get = jest.fn().mockReturnValue(mockCollection);
+        collections.get = jest.fn(() => mockCollection);
 
         mockLabel = {
             children: [
@@ -85,7 +86,7 @@ describe("Scrollable List", () => {
         };
         mockGridSizer = {
             add: jest.fn(),
-            getElement: jest.fn().mockReturnValue([mockLabel]),
+            getElement: jest.fn(() => [mockLabel]),
         };
         mockSizer = {
             clear: jest.fn(),
@@ -145,7 +146,7 @@ describe("Scrollable List", () => {
                 menu: { buttonsRight: true },
             },
             layout: {
-                getSafeArea: jest.fn().mockReturnValue({ y: 0, x: 0, width: 100, height: 100 }),
+                getSafeArea: jest.fn(() => ({ y: 0, x: 0, width: 100, height: 100 })),
                 addCustomGroup: jest.fn(),
             },
             scale: { on: jest.fn(), removeListener: jest.fn() },
@@ -168,6 +169,15 @@ describe("Scrollable List", () => {
                 },
             },
         };
+        mockPointer = {
+            screen: {
+                input: {
+                    keyboard: {
+                        prevType: "",
+                    },
+                },
+            },
+        };
         global.RexPlugins = {
             GameObjects: {
                 NinePatch: jest.fn(),
@@ -180,7 +190,7 @@ describe("Scrollable List", () => {
 
     describe("instantiation", () => {
         beforeEach(() => {
-            scaler.getMetrics = jest.fn().mockReturnValue({ scale: 1 });
+            scaler.getMetrics = jest.fn(() => ({ scale: 1 }));
             new ScrollableList(mockScene, title);
         });
         describe("adds a rexUI scrollable panel", () => {
@@ -301,19 +311,25 @@ describe("Scrollable List", () => {
                 beforeEach(() => {
                     callback = buttons.createListButton.mock.calls[0][3];
                 });
-
+                afterEach(() => {
+                    jest.clearAllMocks();
+                });
                 test("creates a confirm pane", () => {
-                    callback();
+                    callback(mockPointer);
                     expect(mockScene.transientData.shop.mode).toBe("shop");
                     expect(mockScene.transientData.shop.item).toBe(mockItem);
                     expect(mockScene.scene.pause).toHaveBeenCalled();
                     expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-confirm");
                 });
                 test("don't fire if the label is scrolled off the panel", () => {
-                    jest.clearAllMocks();
                     mockScrollablePanel.isInTouching = jest.fn(() => false);
-                    callback("mockPointer");
-                    expect(confirm.createConfirm).not.toHaveBeenCalled();
+                    callback(mockPointer);
+                    expect(mockScene.addOverlay).not.toHaveBeenCalledWith("shop-confirm");
+                });
+                test("show confirm if the label is fired by keydown event", () => {
+                    mockPointer.screen.input.keyboard.prevType = "keydown";
+                    callback(mockPointer);
+                    expect(mockScene.addOverlay).toHaveBeenCalledWith("shop-confirm");
                 });
             });
         });
@@ -358,8 +374,8 @@ describe("Scrollable List", () => {
             const onWheelSpy = jest.fn();
             const onFocusSpy = jest.fn();
             beforeEach(() => {
-                handlers.updatePanelOnFocus = jest.fn().mockReturnValue(onFocusSpy);
-                handlers.updatePanelOnWheel = jest.fn().mockReturnValue(onWheelSpy);
+                handlers.updatePanelOnFocus = jest.fn(() => onFocusSpy);
+                handlers.updatePanelOnWheel = jest.fn(() => onWheelSpy);
                 new ScrollableList(mockScene);
             });
             test("adds an updatePanelOnFocus", () => {
@@ -446,7 +462,7 @@ describe("Scrollable List", () => {
         });
     });
     describe("collection filtering", () => {
-        const filterFn = jest.fn().mockReturnValue(true);
+        const filterFn = jest.fn(() => true);
 
         beforeEach(() => new ScrollableList(mockScene, "title", filterFn));
 

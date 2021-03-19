@@ -4,18 +4,13 @@
         "files": [
             {
                 "type": "image",
-                "key": "background",
-                "url": "shop-list/assets/wood_panel.png"
-            },
-            {
-                "type": "image",
                 "key": "itemViewBackground",
-                "url": "shop-list/assets/item_panel.png"
+                "url": "shop-list/assets/item-panel.png"
             },
             {
                 "type": "image",
                 "key": "background",
-                "url": "shop-list/assets/wood_panel.png"
+                "url": "shop-list/assets/wood-panel.png"
             },
             {
                 "type": "image",
@@ -35,22 +30,22 @@
             {
                 "type": "image",
                 "key": "lockIcon",
-                "url": "shop-list/assets/lock_icon.png"
+                "url": "shop-list/assets/lock-icon.png"
             },
             {
                 "type": "image",
                 "key": "titleBackground",
-                "url": "shop-list/assets/title_background.png"
+                "url": "shop-list/assets/title-background.png"
             },
             {
                 "type": "image",
                 "key": "menuButtonIcon",
-                "url": "shop-list/assets/menu_button_icon.png"
+                "url": "shop-list/assets/menu-button-icon.png"
             },
             {
                 "type": "spritesheet",
                 "key": "itemBackground",
-                "url": "shop-list/assets/item_block.png",
+                "url": "shop-list/assets/item-block.png",
                 "frameConfig": {
                     "frameWidth": 378,
                     "frameHeight": 64,
@@ -62,7 +57,7 @@
             {
                 "type": "spritesheet",
                 "key": "currency",
-                "url": "shop-list/assets/currency_small.png",
+                "url": "shop-list/assets/currency-small.png",
                 "frameConfig": {
                     "frameWidth": 31,
                     "frameHeight": 24,

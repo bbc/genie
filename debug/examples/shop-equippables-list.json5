@@ -47,7 +47,7 @@
                 assetKey: "${icon}",
                 position: { align: "left", offsetX: 35, offsetY: 0 },
                 size: 76,
-                takeStateProperties: true,
+                inheritProperties: true,
             },
             {
                 type: "text",
@@ -65,21 +65,21 @@
                     value: "${price}",
                     position: { align: "right", offsetX: -44, offsetY: -10 },
                     styles: { fontSize: "14px" },
-                    activeInStates: ["available"],
+                    showWhen: ["available"],
                 },
                 {
                     type: "image",
                     name: "currency",
                     assetKey: "debug-shop.currency",
                     position: { align: "right", offsetX: -64, offsetY: 0 },
-                    activeInStates: ["available"],
+                    showWhen: ["available"],
                 },
                 {
                     type: "image",
                     name: "lock",
                     assetKey: "debug-shop.lockIcon",
                     position: { align: "left", offsetX: 56, offsetY: 20 },
-                    activeInStates: ["locked"],
+                    showWhen: ["locked"],
                 },
                 {
                     type: "text",
@@ -87,7 +87,7 @@
                     value: "${hint}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "14px" },
-                    activeInStates: ["locked"],
+                    showWhen: ["locked"],
                 },
                 {
                     type: "text",
@@ -95,7 +95,7 @@
                     value: "Purchased",
                     position: { align: "right", offsetX: -108, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeInStates: ["unavailable"],
+                    showWhen: ["unavailable"],
                 },
                 {
                     type: "text",
@@ -103,7 +103,7 @@
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeInStates: ["equippable", "unlocked"],
+                    showWhen: ["equippable", "unlocked"],
                 },
                 {
                     type: "text",
@@ -111,7 +111,7 @@
                     value: "${qty} in stock",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeInStates: ["consumable"],
+                    showWhen: ["consumable"],
                 },
             ],
             manage: [
@@ -128,7 +128,7 @@
                     value: "Equip",
                     position: { align: "right", offsetX: -76, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeInStates: ["cta", "equippable"],
+                    showWhen: ["cta", "equippable"],
                 },
                 {
                     type: "text",
@@ -136,7 +136,7 @@
                     value: "${description}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeInStates: ["equippable"],
+                    showWhen: ["equippable"],
                 },
                 {
                     type: "text",
@@ -144,7 +144,7 @@
                     value: "Equipped",
                     position: { align: "right", offsetX: -96, offsetY: -10 },
                     styles: { fontSize: "16px", align: "right" },
-                    activeInStates: ["actioned", "equippable"],
+                    showWhen: ["actioned", "equippable"],
                 },
                 {
                     type: "text",
@@ -152,7 +152,7 @@
                     value: "${qty} in inventory",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
-                    activeInStates: ["consumable"],
+                    showWhen: ["consumable"],
                 },
             ],
         },

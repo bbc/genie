@@ -25,7 +25,7 @@ describe("Scrollable List Buttons", () => {
         mockScene = {
             assetPrefix: "shop",
             layout: {
-                getSafeArea: jest.fn().mockReturnValue({ width: 100 }),
+                getSafeArea: jest.fn(() => ({ width: 100 })),
             },
             config: {
                 listPadding: { x: 10, y: 8, outerPadFactor: 2 },
@@ -34,14 +34,14 @@ describe("Scrollable List Buttons", () => {
                     items: [{ foo: "bar" }],
                     options: {
                         shop: [
-                            { baz: "qux", activeInStates: ["cta"] },
-                            { wiz: "bang", activeInStates: ["actioned"] },
-                            { wiz: "bang", activeInStates: ["unique"] },
-                            { wiz: "bang", activeInStates: ["notInStock"] },
+                            { baz: "qux", showWhen: ["cta"] },
+                            { wiz: "bang", showWhen: ["actioned"] },
+                            { wiz: "bang", showWhen: ["unique"] },
+                            { wiz: "bang", showWhen: ["notInStock"] },
                         ],
                         manage: [
-                            { baz: "qux", activeInStates: ["cta"] },
-                            { wiz: "bang", activeInStates: ["actioned"] },
+                            { baz: "qux", showWhen: ["cta"] },
+                            { wiz: "bang", showWhen: ["actioned"] },
                         ],
                     },
                 },
@@ -79,9 +79,9 @@ describe("Scrollable List Buttons", () => {
             title: "shop",
             description: "test description",
         };
-        mockCollection = { get: jest.fn().mockReturnValue(mockItem) };
-        collections.get = jest.fn().mockReturnValue(mockCollection);
-        createButton.createButton = jest.fn().mockReturnValue(mockGelButton);
+        mockCollection = { get: jest.fn(() => mockItem) };
+        collections.get = jest.fn(() => mockCollection);
+        createButton.createButton = jest.fn(() => mockGelButton);
         createListButton(mockScene, mockItem, "shop", dummyCallback);
     });
 

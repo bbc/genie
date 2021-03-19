@@ -37,10 +37,12 @@
         },
         buttons: {
             buttonsRight: true,
-            key: "shop-menu.menuButtonBackground",
+            key: "shop-menu.button",
+            cancelKey: "shop-menu.buttonCancel",
             styles: { fontStyle: "bold", fontSize: "16px" },
         },
-        background: { key: "halfViewBackground", columns: [100, null, 100], rows: [100, null, 100] },
+        background: "halfViewBackground",
+        itemBackground: "itemBackground",
         detailView: true,
         prompt: {
             buy: {

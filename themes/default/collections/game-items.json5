@@ -1,17 +1,17 @@
 [
     {
-        id: "shield", //must be unique - kebab case it? If we stick to alphanumerics it can be pulled out directly.
-        title: "Armagog's Shield",
+        id: "shield", // Must be unique.
+        title: "Armagog's Shield", // Name of the item as shown to the user.
         description: "Prevents 99% of impalings",
         longDescription: "Owned by the famed pixie berserker, Armagog, who alas couldn't lift it.",
         tags: ["weapon"],
-        price: 100,
-        icon: "shop-list.armagogIcon",
+        price: 100, // Items cost in game currency.
+        icon: "shop-list.armagogIcon", // Corresponds to the asset.
         userData: {
-            //.. keep this namespaced out in case agencies want to put object stats in here
+            // Put any custom item data the game may need here.
         },
-        slot: "shield",
-        state: "locked",
+        slot: "shield", // For equippable items only, which item slot it corresponds to.
+        state: "locked", // Lock to disallow the item from being bought until some condition is met.
         hint: "Collect 5 gems to unlock",
     },
     {
@@ -19,6 +19,7 @@
         title: "Skull Bomb",
         description: "It'll blow your mind",
         price: 50,
+        duration: 5, // For consumables which have a duration of effect. Time in seconds.
         longDescription: "The skull icon is now a health & safety requirement for all explody things. Sigh.",
         icon: "shop-list.bombIcon",
         tags: ["weapon"],

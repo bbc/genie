@@ -11,19 +11,19 @@ const fallbackStyle = {
     align: "center",
 };
 
-const textStyle = (styleDefaults, config) => {
+const style = (styleDefaults, config) => {
     const defaults = styleDefaults ? styleDefaults : fallbackStyle;
     return config ? { ...defaults, ...config.styles } : defaults;
 };
 
 export const addText = (scene, x, y, text, config) => {
-    const textElem = scene.add.text(x, y, text, textStyle(scene.config.styleDefaults, config));
-    updateStyleOnFontLoad(textElem);
-    return textElem;
+    const element = scene.add.text(x, y, text, style(scene.config.styleDefaults, config));
+    updateStyleOnFontLoad(element);
+    return element;
 };
 
-export const updateStyleOnFontLoad = textElem => {
-    if (document.fonts && !document.fonts.check(textElem.style._font)) {
-        document.fonts.ready.then(() => textElem.scene && textElem.style.update());
+export const updateStyleOnFontLoad = text => {
+    if (document.fonts && !document.fonts.check(text.style._font)) {
+        document.fonts.ready.then(() => text.scene && text.style.update());
     }
 };

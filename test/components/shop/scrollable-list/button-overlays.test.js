@@ -5,7 +5,7 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { overlays1Wide } from "../../../../src/components/shop/scrollable-list/button-overlays.js";
-import * as text from "../../../../src/core/layout/text-elem.js";
+import * as text from "../../../../src/core/layout/text.js";
 
 let mockScene;
 let mockGelButton;
@@ -14,7 +14,7 @@ let mockImage;
 let mockOverlay;
 let mockConfig;
 
-text.addText = jest.fn().mockReturnValue("mockText");
+text.addText = jest.fn(() => "mockText");
 
 describe("Button overlays", () => {
     afterEach(() => jest.clearAllMocks());
@@ -29,12 +29,12 @@ describe("Button overlays", () => {
             type: "image",
             name: "someImage",
             assetKey: "test.someImageAssetKey",
-            takeStateProperties: true,
+            inheritProperties: true,
         };
         mockImage = { setScale: jest.fn(), width: 100 };
         mockScene = {
             add: {
-                image: jest.fn().mockReturnValue(mockImage),
+                image: jest.fn(() => mockImage),
             },
             config: {
                 assetPrefix: "test",
@@ -79,14 +79,14 @@ describe("Button overlays", () => {
                 expect(mockImage.setScale).toHaveBeenCalledWith(0.5);
             });
 
-            test("merges in state properties if takeStateProperties is set on the overlay config", () => {
+            test("merges in state properties if inheritProperties is set on the overlay config", () => {
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 expect(mockImage.foo).toBe("bar");
             });
 
             test("otherwise, does not merge state properties", () => {
-                const mockOverlayWithoutStateProperties = { ...mockOverlay, takeStateProperties: false };
+                const mockOverlayWithoutStateProperties = { ...mockOverlay, inheritProperties: false };
                 mockConfig.overlay.items.push(mockOverlayWithoutStateProperties);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 expect(mockImage.foo).not.toBeTruthy();

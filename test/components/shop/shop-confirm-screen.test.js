@@ -7,12 +7,12 @@
 import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance.js";
-import * as confirm from "../../../src/components/shop/confirm.js";
+import * as confirmModule from "../../../src/components/shop/confirm/confirm.js";
 import { ShopConfirm } from "../../../src/components/shop/shop-confirm-screen.js";
 import { initResizers } from "../../../src/components/shop/backgrounds.js";
 
 jest.mock("../../../src/components/shop/balance.js");
-jest.mock("../../../src/components/shop/confirm.js");
+jest.mock("../../../src/components/shop/confirm/confirm.js");
 jest.mock("../../../lib/rexuiplugin.min.js");
 jest.mock("../../../src/core/scaler.js");
 
@@ -22,10 +22,10 @@ describe("Shop Confirm Screen", () => {
     let mockScalerEvent;
     let mockShopConfig;
     beforeEach(() => {
-        mockConfirm = { mock: "confirm", resize: jest.fn() };
-        confirm.createConfirm = jest.fn().mockReturnValue(mockConfirm);
+        mockConfirm = jest.fn();
+        confirmModule.createConfirm = jest.fn(() => mockConfirm);
         mockScalerEvent = { unsubscribe: jest.fn() };
-        scaler.onScaleChange = { add: jest.fn().mockReturnValue(mockScalerEvent) };
+        scaler.onScaleChange = { add: jest.fn(() => mockScalerEvent) };
         mockShopConfig = { mock: "config" };
         ShopConfirm.prototype.plugins = {
             installScenePlugin: jest.fn(),
@@ -81,14 +81,9 @@ describe("Shop Confirm Screen", () => {
         expect(balance.setBalance).toHaveBeenCalledWith(shopConfirm);
     });
 
-    test("creates confirm and adds reference to screen on create", () => {
+    test("creates confirm", () => {
         shopConfirm.create();
-        expect(confirm.createConfirm).toHaveBeenCalledWith(
-            shopConfirm,
-            shopConfirm.transientData.shop.mode,
-            shopConfirm.transientData.shop.item,
-        );
-        expect(shopConfirm.confirm).toBe(mockConfirm);
+        expect(confirmModule.createConfirm).toHaveBeenCalledWith(shopConfirm);
     });
 
     test("adds a onScaleChange event on create", () => {

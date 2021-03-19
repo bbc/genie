@@ -12,7 +12,7 @@ import { onScaleChange } from "../../../core/scaler.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import { createBackground, resizeBackground } from "../backgrounds.js";
 import { createScrollablePanel, getPanelY } from "./scrollable-panel.js";
-import { addText } from "../../../core/layout/text-elem.js";
+import { addText } from "../../../core/layout/text.js";
 
 const createTable = (scene, mode, parent, scrollablePanel, collection) => {
     const sizer = scene.rexUI.add.sizer({ orientation: "y" });
@@ -39,8 +39,14 @@ const showConfirmation = (scene, mode, item) => {
 };
 
 const createItem = (scene, item, mode, parent, scrollablePanel) => {
-    const action = pointer =>
-        (scrollablePanel.isInTouching() || !pointer) && !isLocked(item) && showConfirmation(scene, mode, item);
+    const action = pointer => {
+        const prevType = pointer.screen.input.keyboard.prevType;
+        return (
+            (scrollablePanel.isInTouching() || !pointer || prevType === "keydown") &&
+            !isLocked(item) &&
+            showConfirmation(scene, mode, item)
+        );
+    };
     const icon = createListButton(scene, item, mode, action, parent);
 
     return scene.rexUI.add.label({

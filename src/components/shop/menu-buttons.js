@@ -5,7 +5,7 @@
  * @license Apache-2.0
  */
 import { CAMERA_X, CAMERA_Y } from "../../core/layout/metrics.js";
-import { addText } from "../../core/layout/text-elem.js";
+import { addText } from "../../core/layout/text.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { createButton } from "../../core/layout/create-button.js";
 import { buttonsChannel } from "../../core/layout/gel-defaults.js";
@@ -32,8 +32,8 @@ const createMenuButton = scene => buttonText => {
 
 const makeButton = (scene, buttonType, config) => {
     const channel = buttonsChannel(scene);
-
-    const button = createButton(scene, { ...config, channel, key: scene.config[buttonType].buttons.key });
+    const key = config.title === "Cancel" ? "cancelKey" : "key";
+    const button = createButton(scene, { ...config, channel, key: scene.config[buttonType].buttons[key] });
     setButtonOverlays(scene, button, scene.config[buttonType].buttons, config.title);
     return button;
 };

@@ -28,14 +28,14 @@
             key: "shop-menu.balanceIcon",
         },
     },
-    collection: ["shop-items", "shop-inventory"],
+    collection: ["shop-items", "inventory"],
     shopConfig: {
         shopCollections: {
             shop: "shop-items",
-            manage: "shop-inventory",
+            manage: "inventory",
         },
         balance: "coin",
-        slots: {
+        slots: { // Create slots for equippable items and set the maximum amount equippable per slot.
             helmet: { max: 1 },
             shield: { max: 1 },
         },
@@ -43,7 +43,7 @@
     menu: {
         buttonsRight: true,
         buttons: {
-            key: "shop-menu.menuButtonBackground",
+            key: "shop-menu.button",
             styles: { fontStyle: "bold", fontSize: "16px" },
         },
     },

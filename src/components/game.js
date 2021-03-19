@@ -11,8 +11,15 @@ import { launchShopOverlay } from "../components/shop/shop.js";
 import { eventBus } from "../core/event-bus.js";
 
 export class Game extends Screen {
-    itemUsed(data) {
+    itemUsed(data = { duration: 0 }) {
         console.log("Item used:", data); // eslint-disable-line no-console
+        console.log("Item timer duration in seconds: ", data.duration || "No duration"); // eslint-disable-line no-console
+        let time = data.duration * 1000;
+        this.time.delayedCall(time, this.onEvent, [], this);
+    }
+
+    onEvent() {
+        console.log("Used item duration passed!"); // eslint-disable-line no-console
     }
 
     calculateAchievements(item, amount, keys) {

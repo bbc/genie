@@ -11,11 +11,11 @@ import {
     resizeGelButtons,
 } from "../../../src/components/shop/menu-buttons.js";
 import * as button from "../../../src/core/layout/create-button.js";
-import * as textElem from "../../../src/core/layout/text-elem.js";
+import * as textElem from "../../../src/core/layout/text.js";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
 import * as mockGmi from "../../../src/core/gmi/gmi.js";
 
-jest.mock("../../../src/core/layout/text-elem.js");
+jest.mock("../../../src/core/layout/text.js");
 jest.mock("../../../src/core/layout/create-button.js");
 jest.mock("../../../src/core/layout/gel-defaults.js");
 jest.mock("../../../src/core/gmi/gmi.js");
@@ -30,12 +30,12 @@ describe("create menu/confirm buttons", () => {
         mockGmi.gmi.setStatsScreen = jest.fn();
         mockGmi.gmi.sendStatsEvent = jest.fn();
         mockChannel = "gel-channel";
-        gel.buttonsChannel = jest.fn().mockReturnValue(mockChannel);
+        gel.buttonsChannel = jest.fn(() => mockChannel);
         mockTextWithOrigin = { mock: "text" };
-        mockTextElem = { setOrigin: jest.fn().mockReturnValue(mockTextWithOrigin) };
-        textElem.addText = jest.fn().mockReturnValue(mockTextElem);
+        mockTextElem = { setOrigin: jest.fn(() => mockTextWithOrigin) };
+        textElem.addText = jest.fn(() => mockTextElem);
         mockGelButton = { overlays: { set: jest.fn() } };
-        button.createButton = jest.fn().mockReturnValue(mockGelButton);
+        button.createButton = jest.fn(() => mockGelButton);
         mockScene = {
             addOverlay: jest.fn(),
             transientData: {
@@ -49,7 +49,8 @@ describe("create menu/confirm buttons", () => {
                 },
                 confirm: {
                     buttons: {
-                        key: "confirmkey",
+                        key: "buy-key",
+                        cancelKey: "cancel-key",
                     },
                 },
             },
@@ -156,7 +157,7 @@ describe("create menu/confirm buttons", () => {
             id: "tx_buy_button",
             ariaLabel: "Buy",
             action: confirmCallback,
-            key: mockScene.config.confirm.buttons.key,
+            key: "buy-key",
         });
         expect(button.createButton).toHaveBeenCalledWith(mockScene, {
             gameButton: true,
@@ -166,7 +167,7 @@ describe("create menu/confirm buttons", () => {
             id: "tx_cancel_button",
             ariaLabel: "Cancel",
             action: cancelCallback,
-            key: mockScene.config.confirm.buttons.key,
+            key: "cancel-key",
         });
     });
 

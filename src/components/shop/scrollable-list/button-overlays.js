@@ -5,14 +5,14 @@
  * @license Apache-2.0 Apache-2.0
  */
 import fp from "../../../../lib/lodash/fp/fp.js";
-import { addText } from "../../../core/layout/text-elem.js";
+import { addText } from "../../../core/layout/text.js";
 
-const setImageOverlay = ({ gelButton, config, offset }) => {
+const imageOverlay = ({ gelButton, config, offset }) => {
     const { scene, item } = gelButton;
     const { config: sceneConfig } = scene;
     const image = scene.add.image(offset.x, offset.y, fp.template(config.assetKey)(item));
     const properties =
-        config.takeStateProperties && item.state && sceneConfig.states[item.state]
+        config.inheritProperties && item.state && sceneConfig.states[item.state]
             ? sceneConfig.states[item.state].properties
             : {};
     Object.assign(image, properties);
@@ -20,7 +20,7 @@ const setImageOverlay = ({ gelButton, config, offset }) => {
     gelButton.overlays.set(config.name, image);
 };
 
-const setTextOverlay = ({ gelButton, config, offset }) => {
+const textOverlay = ({ gelButton, config, offset }) => {
     const { scene, item } = gelButton;
     const template = fp.template(config.value.toString());
     gelButton.overlays.set(config.name, addText(scene, offset.x, offset.y, template(item), config));
@@ -32,15 +32,15 @@ const getOffset = (position, gelButton) => {
     return { x: edge + position.offsetX, y: position.offsetY };
 };
 
-const addOverlay = fp.cond([
-    [args => args.config.type === "image", setImageOverlay],
-    [args => args.config.type === "text", setTextOverlay],
-]);
+const overlays = {
+    image: imageOverlay,
+    text: textOverlay,
+};
 
 export const overlays1Wide = (gelButton, configs) => {
     configs.forEach(config => {
         const offset = getOffset(config.position, gelButton);
-        addOverlay({ gelButton, config, offset });
+        overlays[config.type]({ gelButton, config, offset });
     });
     return gelButton;
 };

@@ -3,20 +3,22 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-const exampleSpec = {
-    campaignId: "", //container "Page" by default TODO make building the stat make this Page if left blank
-    creationId: "", //action_name~action_type
-    variant: "", // experiment
-    format: "", // metadata TODO make this is a variable which could change - pass in on buildStat. this takes a value and can by overwritten at test time.
-    generalPlacement: "", // counterName
-    detailedPlacement: "", // hid.
-    advertiserId: "", // content id / level id TODO make this as a variable as it could change.
-    url: "", // "unknown" by default TODO set this to unknown if left empty
-    counterName: "[keepalive.games.genie]", // counterName from iSite
-    screenname: "page", // Screen / page (Only used on page view stats). If this is blank, build generalPlacement without .screenName
-    bucket: "testCBBC", // bucket stats should go into e.g. testCBBC, testCbeebies, testGames, prodCBBC, prodCbeebies, prodGames
-    event: "page", // For page views, this will be view. For user actions, for user events this will be userAct.
-};
+/*
+    const exampleSpec = {
+        campaignId: "", //container "Page" by default TODO make building the stat make this Page if left blank
+        creationId: "", //action_name~action_type
+        variant: "", // experiment
+        format: "", // metadata TODO make this is a variable which could change - pass in on buildStat. this takes a value and can by overwritten at test time.
+        generalPlacement: "", // counterName
+        detailedPlacement: "", // hid.
+        advertiserId: "", // content id / level id TODO make this as a variable as it could change.
+        url: "", // "unknown" by default TODO set this to unknown if left empty
+        counterName: "[keepalive.games.genie]", // counterName from iSite
+        screenname: "page", // Screen / page (Only used on page view stats). If this is blank, build generalPlacement without .screenName
+        bucket: "testCBBC", // bucket stats should go into e.g. testCBBC, testCbeebies, testGames, prodCBBC, prodCbeebies, prodGames
+        event: "page", // For page views, this will be view. For user actions, for user events this will be userAct.
+    };
+ */
 
 export const statBuckets = {
     testCbeebies: "598264",

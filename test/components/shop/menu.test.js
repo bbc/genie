@@ -12,7 +12,7 @@ jest.mock("../../../src/components/shop/shop-layout.js");
 jest.mock("../../../src/components/shop/menu-buttons.js");
 
 describe("shop menu", () => {
-    let menu;
+    let resize;
     let mockInnerRectBounds;
     let mockSafeArea;
     let mockPaneBackground;
@@ -23,11 +23,11 @@ describe("shop menu", () => {
     beforeEach(() => {
         mockMenuButtons = { mock: "buttons" };
         mockPaneBackground = { mock: "background" };
-        mockRectangle = { mock: "rectangle", setY: jest.fn() };
+        mockRectangle = { mock: "rectangle", setY: jest.fn(), setSize: jest.fn() };
         mockInnerRectBounds = { width: 100, height: 100, x: 0, y: 0 };
         mockScene = {
             add: {
-                rectangle: jest.fn().mockReturnValue(mockRectangle),
+                rectangle: jest.fn(() => mockRectangle),
                 image: jest.fn(),
             },
             config: {
@@ -40,9 +40,9 @@ describe("shop menu", () => {
         mockSafeArea = { width: 800, height: 600, x: 0, y: -100 };
         layout.getInnerRectBounds = () => mockInnerRectBounds;
         layout.getSafeArea = () => mockSafeArea;
-        layout.createPaneBackground = jest.fn().mockReturnValue(mockPaneBackground);
-        buttons.createMenuButtons = jest.fn().mockReturnValue(mockMenuButtons);
-        menu = createMenu(mockScene);
+        layout.createPaneBackground = jest.fn(() => mockPaneBackground);
+        buttons.createMenuButtons = jest.fn(() => mockMenuButtons);
+        resize = createMenu(mockScene);
     });
     afterEach(() => jest.clearAllMocks());
 
@@ -61,9 +61,12 @@ describe("shop menu", () => {
         test("calls setY on the rect with an appropriate Y offset", () => {
             expect(mockRectangle.setY).toHaveBeenCalledWith(200);
         });
+        test("calls setSize on the rect with the appropriate width, height", () => {
+            expect(mockRectangle.setSize).toHaveBeenCalledWith(mockInnerRectBounds.width, mockInnerRectBounds.height);
+        });
         test("menu resize function calls resizeGelButtons", () => {
             jest.clearAllMocks();
-            menu.resize();
+            resize();
             expect(buttons.resizeGelButtons).toHaveBeenCalledWith({
                 buttons: mockMenuButtons,
                 rect: mockRectangle,
