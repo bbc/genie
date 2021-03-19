@@ -5,8 +5,10 @@
  */
 import { appendToken } from "../support/appendToken.js";
 
-let localTesting = "http://localhost:9001/?debug=true&exitGameUrl=https%3A%2F%2Fwww.bbc.co.uk%2Fcbbc%2Fgames%2Fdanger-mouse-game%3Fcollection%3Dcbbc-top-games";
-let localTheme2 = "http://localhost:9001/?debug=true&theme=theme2&exitGameUrl=https%3A%2F%2Fwww.bbc.co.uk%2Fcbbc%2Fgames%2Fdanger-mouse-game%3Fcollection%3Dcbbc-top-games";
+let localTesting =
+    "http://localhost:9001/?debug=true&exitGameUrl=https%3A%2F%2Fwww.bbc.co.uk%2Fcbbc%2Fgames%2Fdanger-mouse-game%3Fcollection%3Dcbbc-top-games";
+let localTheme2 =
+    "http://localhost:9001/?debug=true&theme=theme2&exitGameUrl=https%3A%2F%2Fwww.bbc.co.uk%2Fcbbc%2Fgames%2Fdanger-mouse-game%3Fcollection%3Dcbbc-top-games";
 let testTheme2 =
     "https://www.test.bbc.co.uk/games/embed/genie?versionOverride=latest&viewNonPublished=true&cageEnv=test&debug=true&theme=theme2&exitGameUrl=https%3A%2F%2Fwww.bbc.co.uk%2Fcbbc%2Fgames%2Fdanger-mouse-game%3Fcollection%3Dcbbc-top-games";
 let test =
@@ -79,7 +81,11 @@ export const formatStatConfig = (
     }
 
     const counternameString = countername(stat.counterName, stat.screenName);
-    const statString = `[${stat.campaignId}]-[${stat.creationId}]-[${stat.variant}]-[${stat.format}]-[${generalPlacement(stat.generalPlacement, stat.screenName)}]-[${stat.detailedPlacement}]-[${stat.advertiserId}]-[${stat.url}]`;
+    const statString = `[${stat.campaignId}]-[${stat.creationId}]-[${stat.variant}]-[${
+        stat.format
+    }]-[${generalPlacement(stat.generalPlacement, stat.screenName)}]-[${stat.detailedPlacement}]-[${
+        stat.advertiserId
+    }]-[${stat.url}]`;
     const newStatData = {
         bucket: bucketString,
         stat: statString,

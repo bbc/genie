@@ -323,8 +323,7 @@ export const userActions = {
         screenName: "",
         bucket: "",
         event: "user_action",
-    }
-    
+    },
 };
 
 export const pageViews = {
