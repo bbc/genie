@@ -71,4 +71,12 @@ describe("Page view stats for Genie Screens", () => {
         cy.genieClick("#debug-shop-equippables-menu__manage_menu_button");
         cy.wait("@managementScreen");
     });
+    it("Fires a page view stat for the level select screen.", () => {
+        cy.intercept(formatStatConfig(pageViews.levelSelectPage).counterName).as("selectScreenView");
+        cy.genieClick("#home__play");
+        cy.genieClick("#narrative__skip");
+        cy.genieClick("#character-select__mary");
+        cy.genieClick("#level-select__1");
+        cy.wait("@selectScreenView");
+    });
 });
