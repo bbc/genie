@@ -261,4 +261,14 @@ describe("User Action stats for Genie", () => {
 
     /* will need a format and screenName adding e.g. formatStatConfig(stat, { format: "value", screenName: "value"}).stat */
 
+    it("Fires a user action event when a level is selected", () => {
+        cy.intercept(userActions.levelSelect.creationId).as("levelSelect");
+        cy.genieClick("#home__play");
+        cy.genieClick("#narrative__skip");
+        cy.genieClick("#character-select__mary");
+        cy.genieClick("#level-select__1");
+        cy.wait("@levelSelect").then(interception => {
+            cy.log(interception).its("response.url").should("include", formatStatConfig(userActions.levelSelect, { format: "ELE=Test%20Level%201", screenName: "level_select"}).stat)
+        });
+    });
 });

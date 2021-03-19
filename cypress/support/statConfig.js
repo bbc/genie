@@ -293,7 +293,22 @@ export const userActions = {
         screenName: "",
         bucket: "",
         event: "user_action",
-    }
+    },
+    levelSelect: {
+        campaignId: "Page",
+        creationId: "level~select",
+        variant: "",
+        format: "",
+        generalPlacement: "keepalive.games.genie",
+        detailedPlacement: "",
+        advertiserId: "",
+        url: "unknown",
+        countername: "keepalive.games.genie",
+        screenName: "",
+        bucket: "",
+        event: "user_action",
+    },
+    
 };
 
 export const pageViews = {
@@ -336,6 +351,12 @@ export const pageViews = {
     shopManagement: {
         counterName: "keepalive.games.genie",
         screenName: "shopmanage",
+        bucket: "",
+        event: "page",
+    },
+    levelSelectPage: {
+        counterName: "keepalive.games.genie",
+        screenName: "level_select",
         bucket: "",
         event: "page",
     },
