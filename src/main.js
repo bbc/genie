@@ -99,8 +99,8 @@ const screens = {
             home: "home",
         },
     },
+    // ...Shop({ key: "shop", routes: {} }),
     // Overlays
-    ...Shop({ key: "shop", routes: {} }),
     "how-to-play": {
         scene: HowToPlay,
         routes: {

@@ -1,4 +1,6 @@
 /**
+ *  * Shop is a series of screens which provide item listing, purchasing and inventory management.
+ *
  * @copyright BBC 2020
  * @author BBC Children's D+E
  * @license Apache-2.0
