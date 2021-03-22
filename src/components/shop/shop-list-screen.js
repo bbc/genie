@@ -1,4 +1,6 @@
 /**
+ *  ShopList is a screen which lists a collection of items, either purchasable or from the player's inventory.
+ *
  * @module components/shop
  * @copyright BBC 2020
  * @author BBC Children's D+E

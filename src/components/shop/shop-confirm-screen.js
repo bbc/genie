@@ -1,4 +1,6 @@
 /**
+ *  ShopConfirm is a screen which prompts the player to confirm or cancel action on a selected item.
+ *
  * @module components/shop
  * @copyright BBC 2020
  * @author BBC Children's D+E
