@@ -38,10 +38,12 @@
         },
         buttons: {
             buttonsRight: true,
-            key: "debug-shop.menuButtonBackground",
+            key: "debug-shop.button",
+            cancelKey: "debug-shop.buttonCancel",
             styles: { fontStyle: "bold", fontSize: "16px" },
         },
-        background: { key: "halfViewBackground", columns: [100, null, 100], rows: [100, null, 100] },
+        background: "halfViewBackground",
+        itemBackground: "itemBackground",
         detailView: true,
         prompt: {
             buy: {

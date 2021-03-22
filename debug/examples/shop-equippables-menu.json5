@@ -45,7 +45,7 @@
     menu: {
         buttonsRight: true,
         buttons: {
-            key: "debug-shop.menuButtonBackground",
+            key: "debug-shop.button",
             styles: { fontStyle: "bold", fontSize: "16px" },
         },
     },
