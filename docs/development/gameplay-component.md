@@ -17,11 +17,12 @@ Genie is a modular framework which provides a set of reusable components (known 
 
 The current screens are:
 
-- Home
+- Home 
 - How to Play (overlay)
 - Pause (overlay)
-- Select
-- Results
+- [Select](select-screen.md)
+- [Shop](shop-component/adding-shop.md]) (multiple screens)
+- [Results](results-screen/results-start.md)
 
 These screens can be selected and used in any order, with your gameplay component sitting between the built in screens. An example flow may be a Home Screen that leads to a level Select screen, which then leads to your gameplay component, which finally outputs scores in a Results screen.
 

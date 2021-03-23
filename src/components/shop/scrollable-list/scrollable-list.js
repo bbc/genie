@@ -1,4 +1,6 @@
 /**
+ * ScrollableList provides a rexUI scrollable panel for listing collections of items, with gel-buttons, states and sizing.
+ *
  * @module core/layout/scrollable-list
  * @copyright BBC 2020
  * @author BBC Children's D+E

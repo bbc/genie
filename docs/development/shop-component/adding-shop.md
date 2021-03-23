@@ -2,7 +2,8 @@
 
 ## Adding a Shop screen
 
-As with other Genie components you must add a Shop entry to your `screens` array in main.js. The config and assets in `themes/default/shop` are provided as a starting point. You only need to specify a `back` route.
+As with other Genie components you must add a Shop entry to your `screens` array in main.js: 
+
 
 ```
     home: {
@@ -15,9 +16,16 @@ As with other Genie components you must add a Shop entry to your `screens` array
     ...Shop({ key: "shop", routes: { back: "home" }})
 ```
 
-The above code creates a Home screen with a 'next' button that points to Shop, and a 'back' button in Shop that points to Home.
+When adding to your game's `screens` array you only need to specify a `back` route.
 
-## Launching the Shop from in-game
+The Shop consists of three screens; `menu`, `list` and `confirm`.
+
+The above code creates a Home screen with a 'next' button that points to Shop Menu, and a 'back' button in the Shop screens which point to Home. 
+
+The three Shop screens will be created from here, with config and assets in `themes/default/shop-*` provided as a starting point. 
+
+
+## Launching the Shop from in-game (overlay)
 
 You can use the Shop as an overlay. This means you can pop it up from anywhere in your game and then return to that screen once done.
 
@@ -41,9 +49,43 @@ This can all be done in a routing function in main.js, like this:
         scene: Home,
         routes: {
             next: scene => {
-                shopOverlay(scene, "shop");
+                launchShopOverlay(scene, "shop");
             },
         },
     },
     ...Shop({ key: "shop", routes: {} })
 ```
+
+
+## Shop configuration
+
+Each shop requires 3 configurations, for "menu", "list" and "confirm" screens. The three screens are named by prepending to your shop key with `-menu`, `-list` and `-confirm`. 
+The default shop key is `shop`, so the three screens and configs are named `shop-menu`, `shop-list` and `shop-confirm`. 
+
+
+### Shop menu
+
+A shop entry point menu screen with 'Shop' and 'Manage' buttons to direct the player to the lists of item collections.
+
+See [shop menu](shop-menu.md)
+
+
+### Shop list
+
+This lists collections of items, i.e available items to purchase and the player's inventory.
+
+See [shop list](shop-list.md)
+
+
+### Shop confirm
+
+This screen is shown when an item is selected.
+
+See [shop confirm](shop-confirm.md)
+
+
+### Collections
+
+All items for use in game and player's inventory are initially defined by collections.
+
+See [items](items.md)

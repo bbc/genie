@@ -35,12 +35,11 @@ These debug buttons are available:
 ## ES6 Modules
 
 Code should be packaged as ES6 modules.
-See `src\click-progression-game.js` as an example starting point for a game.
+See `src\main.js` as an example starting point for a game.
 
 ## Global Script
 
 Any required global scripts (tools / libs etc) should be loaded via the `globals.json` file in the root.
-See `globals.json.example` for how this works.
 
 They can be loaded from `node_modules` folder or otherwise should be placed in a `vendor` folder.
 
