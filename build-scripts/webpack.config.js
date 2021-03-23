@@ -20,6 +20,7 @@ module.exports = env => {
             "core-js/stable",
             "core-js/modules/es.object.from-entries",
             "regenerator-runtime/runtime",
+            "event-target-polyfill",
             "phaser/dist/phaser.min",
             "webfontloader",
         ],
@@ -28,6 +29,7 @@ module.exports = env => {
             publicPath: "output",
             filename: "main.js",
         },
+        target: ['web', 'es5'],
         resolve: {
             symlinks: false,
             preferRelative: true, //required for webfontloader which uses outdated paths
