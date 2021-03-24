@@ -10,4 +10,7 @@
  */
 
 export const addResumeSafariAudioContextEvent = game =>
-    window.addEventListener("focus", () => game?.sound?.context?.state === "interrupted" && game?.sound?.context?.resume());
+    window.addEventListener(
+        "focus",
+        () => game?.sound?.context?.state === "interrupted" && game?.sound?.context?.resume(),
+    );

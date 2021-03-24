@@ -141,8 +141,8 @@ export class GelGrid extends Phaser.GameObjects.Container {
         this.scene.input.enabled = true;
     }
 
-    getCurrentPageKey() {
-        return this._cells[this.page].button.key;
+    getCurrentPageId() {
+        return this._cells[this.page].button.config.id;
     }
 
     setPageVisibility(pageNum, visibility) {

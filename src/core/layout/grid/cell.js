@@ -18,7 +18,7 @@ const defaults = {
 };
 
 const transitionOnTab = (grid, button) => () => {
-    if (grid.getCurrentPageKey() === button.config.id) return;
+    if (grid.getCurrentPageId() === button.config.id) return;
     const nextIdx = grid.cellIds().indexOf(button.config.id);
     grid.showPage(nextIdx);
 };

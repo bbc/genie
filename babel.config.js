@@ -17,7 +17,7 @@ module.exports = function (api) {
                     ie: "11",
                     safari: "9",
                 },
-                "loose": true,
+                loose: true,
             },
         ],
     ];
