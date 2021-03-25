@@ -10,6 +10,10 @@ describe("Gel Indicator", () => {
     let mockButton;
 
     beforeEach(() => {
+        const mockFrame = {};
+        const mockTexture = {
+            get: jest.fn(() => mockFrame),
+        };
         mockButton = {
             height: 100,
             width: 200,
@@ -22,21 +26,25 @@ describe("Gel Indicator", () => {
                     },
                 },
             },
+            scene: {
+                add: { existing: jest.fn(), tween: jest.fn() },
+                sys: {
+                    queueDepthSort: jest.fn(),
+                    anims: {
+                        on: jest.fn(),
+                    },
+                    textures: {
+                        get: jest.fn(() => mockTexture),
+                    },
+                },
+            },
         };
 
-        function mockSprite() {
-            this.scene = {
-                add: {
-                    existing: jest.fn(),
-                    tween: jest.fn(),
-                },
-            };
-            this.gelButton = mockButton;
-            this.setDepth = jest.fn();
-            this.setTexture = jest.fn();
-        }
-
-        Object.setPrototypeOf(Indicator, mockSprite);
+        Indicator.prototype.setDepth = jest.fn();
+        Indicator.prototype.setTexture = jest.fn();
+        Indicator.prototype.frame = {
+            realWidth: 200,
+        };
     });
 
     describe("Constructor", () => {

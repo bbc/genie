@@ -57,7 +57,7 @@ describe("Grid Cells", () => {
             },
             _metrics: { metrics: "metrics" },
             getPageCells: jest.fn(() => mockCells),
-            getCurrentPageKey: jest.fn(() => "start-button-id"),
+            getCurrentPageId: jest.fn(() => "start-button-id"),
             cellIds: jest.fn(() => ["start-button-id", "next-button-id"]),
             showPage: jest.fn(),
             _cellPadding: 24,

@@ -29,7 +29,7 @@ module.exports = env => {
             publicPath: "output",
             filename: "main.js",
         },
-        target: ['web', 'es5'],
+        target: ["web", "es5"],
         resolve: {
             symlinks: false,
             preferRelative: true, //required for webfontloader which uses outdated paths
