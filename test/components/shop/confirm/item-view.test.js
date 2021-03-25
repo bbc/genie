@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { itemView, scaleItemView } from "../../../../src/components/shop/confirm/item-view.js";
+import { itemPanel, scaleItemView } from "../../../../src/components/shop/confirm/item-panel.js";
 import * as textModule from "../../../../src/core/layout/text.js";
 
 describe("Confirm item view", () => {
@@ -93,13 +93,13 @@ describe("Confirm item view", () => {
         test("creates standard view if detailView falsy in scene config", () => {
             mockScene.config.confirm.detailView = false;
 
-            expect(Object.keys(itemView(mockScene, {}))).toEqual(["image", "container"]);
+            expect(Object.keys(itemPanel(mockScene, {}))).toEqual(["image", "container"]);
         });
 
         test("creates detail view if set in scene config", () => {
             mockScene.config.confirm.detailView = true;
 
-            expect(Object.keys(itemView(mockScene, {}))).toEqual([
+            expect(Object.keys(itemPanel(mockScene, {}))).toEqual([
                 "background",
                 "iconBackground",
                 "icon",
@@ -119,7 +119,7 @@ describe("Confirm item view", () => {
             };
             textModule.addText = jest.fn(() => mockText);
 
-            itemView(mockScene, {});
+            itemPanel(mockScene, {});
 
             const expected = { wordWrap: { width: 280, useAdvancedWrap: true } };
 

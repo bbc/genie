@@ -5,7 +5,7 @@
  */
 import { resizeFn } from "../../../../src/components/shop/confirm/confirm-resize.js";
 import * as backgroundsModule from "../../../../src/components/shop/backgrounds.js";
-import * as itemViewModule from "../../../../src/components/shop/confirm/item-view.js";
+import * as itemViewModule from "../../../../src/components/shop/confirm/item-panel.js";
 import * as text from "../../../../src/core/layout/text.js";
 
 describe("Confirm Resize Function", () => {

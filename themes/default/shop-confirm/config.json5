@@ -6,6 +6,7 @@
     title: {
         text: "<%= action %>",
         style: {
+            fontFamily: "ReithSerif",
             fontStyle: "bold",
             fontSize: "32px",
         },
@@ -14,17 +15,17 @@
     subtitle: {
         text: "<%= balance %>",
         style: {
-            fontFamily: "ReithSans",
-            fontSize: "24px",
+            fontFamily: "ReithSerif",
+            fontSize: "26px",
         },
         backgroundKey: "shop-menu.balanceBackground",
-        icon : {
+        icon: {
             key: "shop-menu.balanceIcon",
         },
     },
     styleDefaults: {
-        fontFamily: "ReithSans",
-        fontSize: "24px",
+        fontFamily: "ReithSerif",
+        fontSize: "26px",
         resolution: 2,
         align: "center",
     },
@@ -33,7 +34,7 @@
             buy: "buy",
             equip: "equip",
             unequip: "unequip",
-            use: "use"
+            use: "use",
         },
         buttons: {
             buttonsRight: true,
@@ -53,10 +54,10 @@
             equip: { legal: "Do you want to \nequip this item?", illegal: "You cannot equip\nthis item." },
             unequip: "Do you want to \nunequip this item?",
             use: "Do you want to use\nthis item?",
-            styles: { fontStyle: "bold" },
+            styles: { fontStyle: "bold", fontSize: "20px" },
         },
         title: { styles: { fontStyle: "bold" } },
-        detail: { styles: { color: "#bd6", fontStyle: "bold" } },
-        description: { styles: { fontStyle: "italic", lineSpacing: 5 } },
+        subtitle: { styles: { color: "#bd6", fontSize: "22px", fontStyle: "bold" } },
+        description: { styles: { fontStyle: "italic", lineSpacing: 5, fontSize: "20px" }, padding: 30 },
     },
 }

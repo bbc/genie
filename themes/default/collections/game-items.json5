@@ -2,8 +2,8 @@
     {
         id: "shield", // Must be unique.
         title: "Armagog's Shield", // Name of the item as shown to the user.
-        description: "Prevents 99% of impalings",
-        longDescription: "Owned by the famed pixie berserker, Armagog, who alas couldn't lift it.",
+        subtitle: "Prevents 99% of impalings",
+        description: "Owned by the famed pixie berserker, Armagog, who alas couldn't lift it.",
         tags: ["weapon"],
         price: 100, // Items cost in game currency.
         icon: "shop-list.armagogIcon", // Corresponds to the asset.
@@ -17,18 +17,18 @@
     {
         id: "bomb",
         title: "Skull Bomb",
-        description: "It'll blow your mind",
+        subtitle: "It'll blow your mind",
         price: 50,
         duration: 5, // For consumables which have a duration of effect. Time in seconds.
-        longDescription: "The skull icon is now a health & safety requirement for all explody things. Sigh.",
+        description: "The skull icon is now a health & safety requirement for all explody things. Sigh.",
         icon: "shop-list.bombIcon",
         tags: ["weapon"],
     },
     {
         id: "box",
         title: "Mystery Box",
-        description: "What lies inside?",
-        longDescription: "May (or may not) contain important physics experiments. Also cats.",
+        subtitle: "What lies inside?",
+        description: "May (or may not) contain important physics experiments. Also cats.",
         price: 10,
         icon: "shop-list.mysteryBoxIcon",
         tags: ["food"],
@@ -39,8 +39,8 @@
     {
         id: "coin",
         title: "Coins",
-        description: "Money",
-        longDescription: "AKA cash, moolah, scratch, dough, bread...",
+        subtitle: "Money",
+        description: "AKA cash, moolah, scratch, dough, bread...",
         icon: "shop-list.balanceIcon",
         tags: ["currency"],
     },

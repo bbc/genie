@@ -18,7 +18,7 @@ const getBuyPromptText = (scene, action, item) =>
             : scene.config.confirm.prompt[action].unavailable
         : scene.config.confirm.prompt[action].illegal;
 
-export const promptText = {
+export const titleText = {
     buy: args => getBuyPromptText(args.scene, args.action, args.item),
     equip: args => getEquipPromptText(args.scene, args.action, args.item),
     unequip: args => getUnequipPromptText(args.scene),
