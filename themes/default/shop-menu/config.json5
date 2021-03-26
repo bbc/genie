@@ -12,8 +12,10 @@
     title: {
         text: "Shop",
         style: {
+            fontFamily: "ReithSerif",
             fontStyle: "bold",
             fontSize: "32px",
+            color: "#4A381F"
         },
         backgroundKey: "shop-menu.titleBackground",
     },
