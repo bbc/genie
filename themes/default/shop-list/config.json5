@@ -98,8 +98,8 @@
                 },
                 {
                     type: "text",
-                    name: "itemDescription",
-                    value: "${description}",
+                    name: "subtitle",
+                    value: "${subtitle}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
                     showWhen: ["equippable", "unlocked"],
@@ -131,8 +131,8 @@
                 },
                 {
                     type: "text",
-                    name: "itemDescription",
-                    value: "${description}",
+                    name: "subtitle",
+                    value: "${subtitle}",
                     position: { align: "left", offsetX: 80, offsetY: 4 },
                     styles: { fontSize: "12px" },
                     showWhen: ["equippable"],

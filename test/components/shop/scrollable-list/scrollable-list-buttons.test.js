@@ -77,6 +77,7 @@ describe("Scrollable List Buttons", () => {
             ariaLabel: "mockAriaLabel",
             state: "",
             title: "shop",
+            subtitle: "test subtitle",
             description: "test description",
         };
         mockCollection = { get: jest.fn(() => mockItem) };
@@ -94,7 +95,7 @@ describe("Scrollable List Buttons", () => {
             const expectedConfig = {
                 accessible: true,
                 action: dummyCallback,
-                ariaLabel: "shop - test description",
+                ariaLabel: "shop - test subtitle",
                 channel: "gel-buttons-shop",
                 gameButton: true,
                 group: "shop",
@@ -111,7 +112,7 @@ describe("Scrollable List Buttons", () => {
             mockItem.state = "locked";
             jest.clearAllMocks();
             createListButton(mockScene, mockItem, "shop");
-            expect(createButton.createButton.mock.calls[0][1].ariaLabel).toBe("locked shop - test description");
+            expect(createButton.createButton.mock.calls[0][1].ariaLabel).toBe("locked shop - test subtitle");
         });
 
         test("scales the button", () => {
