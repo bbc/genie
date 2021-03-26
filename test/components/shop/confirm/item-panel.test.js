@@ -15,7 +15,7 @@ describe("Confirm item view", () => {
 
     beforeEach(() => {
         const mockText = { setOrigin: jest.fn() };
-        mockConfig = { confirm: { buttons: { buttonsRight: true } } };
+        mockConfig = { confirm: { buttons: { buttonsRight: true }, detailView: true } };
 
         image = {
             setPosition: jest.fn(),
@@ -40,6 +40,7 @@ describe("Confirm item view", () => {
             setPosition: jest.fn(),
             setScale: jest.fn(),
             add: jest.fn(),
+            list: ["background", "iconBackground", "icon"],
         };
 
         mockBounds = new Phaser.Geom.Rectangle(0, 0, 300, 400);
@@ -66,6 +67,16 @@ describe("Confirm item view", () => {
 
             expect(container.setScale.mock.calls[0][0].toFixed(2)).toBe("0.50");
             expect(container.setScale.mock.calls[0][1].toFixed(2)).toBe("0.50");
+        });
+
+        test("Centers icon images on background if basic view", () => {
+            mockScene.config.confirm.detailView = false;
+            global.Phaser.Display.Align.In.Center = jest.fn();
+
+            resizeItemPanel(mockScene, container)();
+
+            expect(Phaser.Display.Align.In.Center.mock.calls[0]).toEqual(["iconBackground", "background"]);
+            expect(Phaser.Display.Align.In.Center.mock.calls[1]).toEqual(["icon", "background"]);
         });
     });
 

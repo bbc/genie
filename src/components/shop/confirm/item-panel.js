@@ -6,12 +6,12 @@
 import { addText } from "../../../core/layout/text.js";
 
 const images = (scene, item) => {
-    const basicView = !scene.config.confirm.detailView
+    const basicView = !scene.config.confirm.detailView;
     const background = scene.add.image(0, 0, `${scene.assetPrefix}.${scene.config.confirm?.background}`);
     const iconBackground = scene.add
         .image(0, 0, `${scene.assetPrefix}.${scene.config.confirm.itemBackground}`)
-        .setOrigin(0.5, basicView? 0.5: 0);
-    const icon = scene.add.image(0, 0, item.icon).setOrigin(0.5, basicView? 0.5: 0);
+        .setOrigin(0.5, basicView ? 0.5 : 0);
+    const icon = scene.add.image(0, 0, item.icon).setOrigin(0.5, basicView ? 0.5 : 0);
 
     return { background, iconBackground, icon };
 };
