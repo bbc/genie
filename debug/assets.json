@@ -344,8 +344,18 @@
             },
             {
                 "type": "image",
+                "key": "halfViewBackgroundPlain",
+                "url": "../../debug/assets/shop/half-panel-plain.png"
+            },
+            {
+                "type": "image",
                 "key": "itemBackground",
                 "url": "../../debug/assets/shop/item-background.png"
+            },
+            {
+                "type": "image",
+                "key": "itemBackgroundLarge",
+                "url": "../../debug/assets/shop/item-background-large.png"
             },
             {
                 "type": "audio",
