@@ -3,17 +3,13 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { itemView, scaleItemView } from "../../../../src/components/shop/confirm/item-view.js";
+import { createItemPanel, resizeItemPanel } from "../../../../src/components/shop/confirm/item-panel.js";
 import * as textModule from "../../../../src/core/layout/text.js";
 
 describe("Confirm item view", () => {
     let mockConfig;
     let mockScene;
     let image;
-    let itemTitle;
-    let itemBlurb;
-    let iconBackground;
-    let mockItemView;
     let mockBounds;
     let container;
 
@@ -26,6 +22,8 @@ describe("Confirm item view", () => {
             setScale: jest.fn(),
             height: 50,
             width: 100,
+            setOrigin: jest.fn(() => image),
+            getBounds: jest.fn(() => ({ bottom: 100 })),
         };
 
         mockScene = {
@@ -36,23 +34,6 @@ describe("Confirm item view", () => {
             },
         };
 
-        iconBackground = {
-            setPosition: jest.fn(),
-            setScale: jest.fn(),
-            height: 50,
-            width: 100,
-        };
-
-        itemTitle = {
-            setPosition: jest.fn(),
-        };
-
-        itemBlurb = {
-            setStyle: jest.fn(),
-            setPosition: jest.fn(),
-            style: { a: 1, b: 2 },
-        };
-
         container = {
             width: 300,
             height: 400,
@@ -61,65 +42,59 @@ describe("Confirm item view", () => {
             add: jest.fn(),
         };
 
-        mockItemView = { image, itemTitle, iconBackground, itemBlurb, container };
         mockBounds = new Phaser.Geom.Rectangle(0, 0, 300, 400);
     });
 
     afterEach(jest.clearAllMocks);
 
-    describe("scaleItemView", () => {
+    describe("resizeItemPanel", () => {
         test("sets container position correctly when buttonsRight set to true", () => {
-            scaleItemView(mockScene, mockItemView);
+            resizeItemPanel(mockScene, container)();
 
-            expect(mockItemView.container.setPosition).toHaveBeenCalledWith(75, 200);
+            expect(container.setPosition).toHaveBeenCalledWith(75, 200);
         });
 
         test("sets container position correctly when buttonsRight false", () => {
             mockConfig.confirm.buttons.buttonsRight = false;
-            scaleItemView(mockScene, mockItemView);
+            resizeItemPanel(mockScene, container)();
 
-            expect(mockItemView.container.setPosition).toHaveBeenCalledWith(150, 200);
+            expect(container.setPosition).toHaveBeenCalledWith(150, 200);
         });
 
         test("sets container scale correctly", () => {
-            scaleItemView(mockScene, mockItemView);
+            resizeItemPanel(mockScene, container)();
 
-            expect(mockItemView.container.setScale.mock.calls[0][0].toFixed(2)).toBe("0.50");
-            expect(mockItemView.container.setScale.mock.calls[0][1].toFixed(2)).toBe("0.50");
+            expect(container.setScale.mock.calls[0][0].toFixed(2)).toBe("0.50");
+            expect(container.setScale.mock.calls[0][1].toFixed(2)).toBe("0.50");
         });
     });
 
-    describe("itemView", () => {
+    describe("createItemPanel", () => {
         test("creates standard view if detailView falsy in scene config", () => {
             mockScene.config.confirm.detailView = false;
-
-            expect(Object.keys(itemView(mockScene, {}))).toEqual(["image", "container"]);
+            createItemPanel(mockScene, {});
+            expect(container.add).toHaveBeenCalledTimes(3);
         });
 
         test("creates detail view if set in scene config", () => {
             mockScene.config.confirm.detailView = true;
 
-            expect(Object.keys(itemView(mockScene, {}))).toEqual([
-                "background",
-                "iconBackground",
-                "icon",
-                "title",
-                "detail",
-                "blurb",
-                "container",
-            ]);
+            Object.keys(createItemPanel(mockScene, {}));
+
+            expect(container.add).toHaveBeenCalledTimes(6);
         });
 
-        test("sets word wrap style if item blurb present", () => {
+        test("sets word wrap style if item description present", () => {
             mockScene.config.confirm.detailView = true;
             const mockText = {
                 setStyle: jest.fn(() => mockText),
                 setOrigin: jest.fn(() => mockText),
                 setPosition: jest.fn(() => mockText),
+                getBounds: jest.fn(() => ({ bottom: 100 })),
             };
             textModule.addText = jest.fn(() => mockText);
 
-            itemView(mockScene, {});
+            createItemPanel(mockScene, {});
 
             const expected = { wordWrap: { width: 280, useAdvancedWrap: true } };
 
