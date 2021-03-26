@@ -13,8 +13,10 @@
     title: {
         text: "<%= title %>",
         style: {
+            fontFamily: "ReithSerif",
             fontStyle: "bold",
             fontSize: "32px",
+            color: "#4A381F"
         },
         backgroundKey: "debug-shop-list.titleBackground",
     },
