@@ -30,8 +30,8 @@
     },
     listPadding: {
         x: 18.86,
-        y: 15.09,
-        outerPadFactor: 1.8,
+        y: 18.86,
+        outerPadFactor: 1,
     },
     backgrounds: {
         shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
