@@ -16,8 +16,8 @@ export const createConfirm = scene => {
     const action = actions[title](scene, item);
     scene.transientData[scene.scene.key] = { action };
 
-    const buttonPanel = createButtonPanel(scene, item)
-    const itemPanel = createItemPanel(scene, item)
+    const buttonPanel = createButtonPanel(scene, item);
+    const itemPanel = createItemPanel(scene, item);
 
-    return fp.flow(resizeItemPanel(scene, itemPanel), resizeButtonPanel(scene, buttonPanel))
+    return fp.flow(resizeItemPanel(scene, itemPanel), resizeButtonPanel(scene, buttonPanel));
 };

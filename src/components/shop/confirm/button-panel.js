@@ -30,7 +30,6 @@ const sizeButton = (scene, button, idx, bounds) => {
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
     button.setX(CAMERA_X + getButtonX(innerBounds.x, scene.config));
     button.setY(CAMERA_Y + (idx * 200) / 2 + bounds.height / 2 + bounds.y);
-
     button.setScale(innerBounds.width / button.width);
 };
 
@@ -46,7 +45,7 @@ export const resizeButtonPanel = (scene, panel) => () => {
     panel.container.setPosition(bounds.centerX, bounds.centerY);
     panel.container.setScale(newScale, newScale);
 
-    sizeButtons(scene, panel.buttons, bounds)
+    sizeButtons(scene, panel.buttons, bounds);
 };
 
 export const createButtonPanel = (scene, item) => {
@@ -72,9 +71,9 @@ export const createButtonPanel = (scene, item) => {
         ),
     };
 
-    container.add(panel.title)
-    container.add(panel.currencyText)
-    container.add(panel.currencyIcon)
+    container.add(panel.title);
+    container.add(panel.currencyText);
+    container.add(panel.currencyIcon);
 
     panel.container = container;
 

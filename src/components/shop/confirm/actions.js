@@ -7,7 +7,6 @@ import { collections } from "../../../core/collections.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 
 const getInventoryAction = (scene, item) => {
-
     const inventory = collections.get(scene.transientData.shop.config.shopCollections.manage);
     const inventoryItem = inventory.get(item?.id);
     return getActionName(inventoryItem);

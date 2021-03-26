@@ -4,9 +4,18 @@
  * @license Apache-2.0
  */
 import { addText } from "../../../core/layout/text.js";
-const imageView = (scene, item) => ({ image: scene.add.image(0, 0, item.icon) });
 
-const detailView = (scene, item) => {
+const images = (scene, item) => ({
+    background: scene.add.image(0, 0, `${scene.assetPrefix}.${scene.config.confirm?.background}`),
+    iconBackground: scene.add
+        .image(0, 0, `${scene.assetPrefix}.${scene.config.confirm.itemBackground}`)
+        .setOrigin(0.5, 0),
+    icon: scene.add.image(0, 0, item.icon).setOrigin(0.5, 0),
+});
+
+const detail = (scene, item) => {
+    if (!scene.config.confirm.detailView) return {};
+
     const { title, subtitle, description } = scene.config.confirm;
 
     return {
@@ -23,7 +32,7 @@ const detailView = (scene, item) => {
 
 export const createItemPanel = (scene, item) => {
     const panel = scene.add.container();
-    const view = scene.config.confirm.detailView ? detailView(scene, item) : imageView(scene, item);
+    const view = { ...images(scene, item), ...detail(scene, item) };
 
     const bounds = scene.layout.getSafeArea({}, false);
     bounds.width = bounds.width / 2;
