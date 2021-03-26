@@ -15,15 +15,9 @@ const images = (scene, item) => ({
 
 const detail = (scene, item) => {
     if (!scene.config.confirm.detailView) return {};
-
     const { title, subtitle, description } = scene.config.confirm;
 
     return {
-        background: scene.add.image(0, 0, `${scene.assetPrefix}.${scene.config.confirm?.background}`),
-        iconBackground: scene.add
-            .image(0, 0, `${scene.assetPrefix}.${scene.config.confirm.itemBackground}`)
-            .setOrigin(0.5, 0),
-        icon: scene.add.image(0, 0, item.icon).setOrigin(0.5, 0),
         title: addText(scene, 0, 0, item.title, title).setOrigin(0.5, 0),
         subtitle: addText(scene, 0, 0, item.subtitle, subtitle).setOrigin(0.5, 0),
         description: addText(scene, 0, 0, item.description, description).setOrigin(0.5, 0),

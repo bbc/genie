@@ -53,7 +53,7 @@ const screens = {
             debug: "debug",
             //Example of custom routing function
             next: scene => {
-                scene.navigate("shop-menu");
+                scene.navigate("narrative");
             },
         },
     },
