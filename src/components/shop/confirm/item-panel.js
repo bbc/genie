@@ -5,13 +5,16 @@
  */
 import { addText } from "../../../core/layout/text.js";
 
-const images = (scene, item) => ({
-    background: scene.add.image(0, 0, `${scene.assetPrefix}.${scene.config.confirm?.background}`),
-    iconBackground: scene.add
+const images = (scene, item) => {
+    const basicView = !scene.config.confirm.detailView;
+    const background = scene.add.image(0, 0, `${scene.assetPrefix}.${scene.config.confirm?.background}`);
+    const iconBackground = scene.add
         .image(0, 0, `${scene.assetPrefix}.${scene.config.confirm.itemBackground}`)
-        .setOrigin(0.5, 0),
-    icon: scene.add.image(0, 0, item.icon).setOrigin(0.5, 0),
-});
+        .setOrigin(0.5, basicView ? 0.5 : 0);
+    const icon = scene.add.image(0, 0, item.icon).setOrigin(0.5, basicView ? 0.5 : 0);
+
+    return { background, iconBackground, icon };
+};
 
 const detail = (scene, item) => {
     if (!scene.config.confirm.detailView) return {};
@@ -56,6 +59,11 @@ export const resizeItemPanel = (scene, container) => () => {
     const onLeft = scene.config.confirm.buttons.buttonsRight;
     onLeft ? (bounds.width /= 2) : (bounds.left = 0);
     const newScale = Math.min(bounds.width / container.width, bounds.height / container.height);
+
+    if (!scene.config.confirm.detailView) {
+        Phaser.Display.Align.In.Center(container.list[1], container.list[0]);
+        Phaser.Display.Align.In.Center(container.list[2], container.list[0]);
+    }
 
     container.setPosition(bounds.centerX, bounds.centerY);
     container.setScale(newScale, newScale);
