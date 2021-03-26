@@ -959,11 +959,11 @@ describe("Grid", () => {
         });
 
         test("page names are returned correctly", () => {
-            const mockChoices = [{ key: "asset_name_0" }, { key: "asset_name_1" }];
+            const mockChoices = [{ id: "asset_id_0", key: "asset_name_0" }, { key: "asset_name_1" }];
             grid = new GelGrid(mockScene);
             grid.addGridCells(mockChoices);
-            const result = grid.getCurrentPageKey();
-            expect(result).toEqual("asset_name_0");
+            const result = grid.getCurrentPageId();
+            expect(result).toEqual("asset_id_0");
         });
 
         test("page title and IDs are returned correctly", () => {

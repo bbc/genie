@@ -12,8 +12,7 @@ const getNextMode = () => {
 };
 
 const getModeToTest = type => {
-    const modes = [...Array(3)].map(getNextMode);
-
+    const modes = [1, 2, 3].map(getNextMode);
     return modes.find(mode => mode.type === type);
 };
 

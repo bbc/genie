@@ -10,7 +10,7 @@ jest.mock("../../../src/core/accessibility/accessibility-layer.js");
 describe("Select Screen Single Item Mode", () => {
     let mockScene;
     let mockCurrentCell;
-    let currentPageKey;
+    let currentPageId;
 
     beforeEach(() => {
         global.window.addEventListener = jest.fn();
@@ -31,7 +31,7 @@ describe("Select Screen Single Item Mode", () => {
                 page: 4,
                 showPage: jest.fn(),
                 getPageCells: jest.fn(() => [mockCurrentCell]),
-                getCurrentPageKey: jest.fn(() => currentPageKey),
+                getCurrentPageId: jest.fn(() => currentPageId),
             },
             events: {
                 once: jest.fn(),

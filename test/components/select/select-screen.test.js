@@ -48,7 +48,7 @@ describe("Select Screen", () => {
         mockGelGrid = {
             choices: jest.fn(() => mockChoices),
             addGridCells: jest.fn(() => []),
-            getCurrentPageKey: jest.fn(),
+            getCurrentPageId: jest.fn(),
             resize: jest.fn(),
         };
         GelGrid.mockImplementation(() => mockGelGrid);
