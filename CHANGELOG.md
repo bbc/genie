@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Reposition shop-list accessible elements on scroll and tab events. |
 | | Fix showing shop confirm on key press. |
 | | Added resize for shop menu based on re-calculated bounds. |
 | | theme/items renamed to theme/collections. |
