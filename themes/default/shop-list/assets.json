@@ -24,11 +24,6 @@
             },
             {
                 "type": "image",
-                "key": "currencyIcon",
-                "url": "shop-list/assets/currency.png"
-            },
-            {
-                "type": "image",
                 "key": "lockIcon",
                 "url": "shop-list/assets/lock-icon.png"
             },

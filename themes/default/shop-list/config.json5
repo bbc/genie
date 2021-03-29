@@ -64,7 +64,7 @@
                     type: "text",
                     name: "currencyAmount",
                     value: "${price}",
-                    position: { align: "right", offsetX: -44, offsetY: -10 },
+                    position: { align: "right", offsetX: -46, offsetY: -7 },
                     styles: { fontSize: "14px" },
                     showWhen: ["available"], // This will only be shown by the game when the button is in this state.
                 },
@@ -72,7 +72,7 @@
                     type: "image",
                     name: "currency",
                     assetKey: "shop-list.currency",
-                    position: { align: "right", offsetX: -64, offsetY: 0 },
+                    position: { align: "right", offsetX: -68, offsetY: 0 },
                     showWhen: ["available"],
                 },
                 {

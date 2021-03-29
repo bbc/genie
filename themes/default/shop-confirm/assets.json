@@ -20,7 +20,7 @@
             {
                 "type": "image",
                 "key": "currencyIcon",
-                "url": "shop-list/assets/currency.png"
+                "url": "shop-confirm/assets/currency.png"
             },
             {
                 "type": "audio",
