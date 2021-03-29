@@ -85,7 +85,7 @@ export class Screen extends Phaser.Scene {
             GameSound.setupScreenMusic(this);
 
             isDebug() && debug.addEvents(this);
-            this.events.on(Phaser.Scenes.Events.CREATE, () => (this.titles = createTitles(this)));
+            this.events.once(Phaser.Scenes.Events.CREATE, () => (this.titles = createTitles(this)));
         }
 
         this.sys.accessibleButtons = [];

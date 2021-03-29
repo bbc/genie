@@ -168,8 +168,8 @@ describe("Screen", () => {
 
         test("creates titles, if not on the load/boot screen", () => {
             createAndInitScreen();
-            expect(screen.events.on).toHaveBeenCalledWith(Phaser.Scenes.Events.CREATE, expect.any(Function));
-            screen.events.on.mock.calls[0][1]();
+            expect(screen.events.once).toHaveBeenCalledWith(Phaser.Scenes.Events.CREATE, expect.any(Function));
+            screen.events.once.mock.calls[1][1]();
             expect(titles.createTitles).toHaveBeenCalledWith(screen);
         });
 

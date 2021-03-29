@@ -132,8 +132,6 @@ describe("Shop Menu Screen", () => {
         expect(mockTitle.title.destroy).toHaveBeenCalled();
         expect(mockTitle.subtitle.destroy).toHaveBeenCalled();
         expect(title.createTitles).toHaveBeenCalledWith(shopMenu);
-        expect(mockTitle.title.resize).toHaveBeenCalled();
-        expect(mockTitle.subtitle.resize).toHaveBeenCalled();
     });
 
     test("onResume callback is removed on scene shutdown", () => {

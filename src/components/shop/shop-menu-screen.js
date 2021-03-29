@@ -29,13 +29,10 @@ export class ShopMenu extends Screen {
         const resize = createMenu(this);
         const scaleEvent = onScaleChange.add(resize);
 
-        let titles = {};
-
         const resume = () => {
             setBalance(this);
-            Object.values(titles).forEach(title => title.destroy());
-            titles = createTitles(this);
-            Object.values(titles).forEach(title => title.resize());
+            Object.values(this.titles).forEach(title => title.destroy());
+            this.titles = createTitles(this);
         };
 
         this.events.on("resume", resume);
