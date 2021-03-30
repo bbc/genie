@@ -17,7 +17,7 @@
     subtitle: {
         text: "<%= balance %>",
         style: {
-            fontFamily: "ReithSans",
+            fontFamily: "ReithSerif",
             fontSize: "24px",
         },
         backgroundKey: "debug-shop.balanceBackground",
