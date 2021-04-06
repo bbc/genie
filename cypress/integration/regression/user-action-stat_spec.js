@@ -160,7 +160,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.shopBuy, { screenName: "debug_shop_equippables_menu" }).stat,
+                    formatStatConfig(userActions.shopBuy, { screenName: "debug_shop_equippablesmenu" }).stat,
                 );
         });
     });
@@ -175,7 +175,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.shopManage, { screenName: "debug_shop_equippables_menu" }).stat,
+                    formatStatConfig(userActions.shopManage, { screenName: "debug_shop_equippablesmenu" }).stat,
                 );
         });
     });
@@ -193,7 +193,7 @@ describe("User Action stats for Genie", () => {
                 .should(
                     "include",
                     formatStatConfig(userActions.shopPurchase, {
-                        screenName: "debug_shop_equippables_confirm",
+                        screenName: "debug_shop_equippablesbuyconfirm",
                         format: "KEY=ironHat~STATE=purchased~QTY=0",
                         advertiserId: "Iron%20Helm",
                     }).stat,
@@ -218,7 +218,7 @@ describe("User Action stats for Genie", () => {
                 .should(
                     "include",
                     formatStatConfig(userActions.shopEquip, {
-                        screenName: "debug_shop_equippables_confirm",
+                        screenName: "debug_shop_equippablesmanageconfirm",
                         format: "KEY=ironHat~STATE=equipped~QTY=1",
                         advertiserId: "Iron%20Helm",
                     }).stat,
@@ -239,7 +239,7 @@ describe("User Action stats for Genie", () => {
                 .should(
                     "include",
                     formatStatConfig(userActions.shopUse, {
-                        screenName: "debug_shop_equippables_confirm",
+                        screenName: "debug_shop_equippablesmanageconfirm",
                         format: "KEY=box~STATE=used~QTY=0",
                         advertiserId: "Mystery%20Box",
                     }).stat,
