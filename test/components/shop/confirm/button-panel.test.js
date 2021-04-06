@@ -5,11 +5,11 @@
  */
 import { createButtonPanel, resizeButtonPanel } from "../../../../src/components/shop/confirm/button-panel.js";
 import * as Text from "../../../../src/core/layout/text.js";
-import * as TitleText from "../../../../src/components/shop/confirm/title-text.js";
+import * as PromptText from "../../../../src/components/shop/confirm/prompt-text.js";
 import * as Action from "../../../../src/components/shop/confirm/actions.js";
 import * as Buttons from "../../../../src/components/shop/confirm/confirm-buttons.js";
 
-jest.mock("../../../../src/components/shop/confirm/title-text.js");
+jest.mock("../../../../src/components/shop/confirm/prompt-text.js");
 jest.mock("../../../../src/core/layout/text.js");
 jest.mock("../../../../src/components/shop/confirm/confirm-buttons.js");
 jest.mock("../../../../src/components/shop/confirm/actions.js");
@@ -34,8 +34,8 @@ describe("button panel", () => {
         mockImage = { setOrigin: jest.fn(() => mockImage) };
         mockText = { setOrigin: jest.fn(() => mockText) };
         Text.addText = jest.fn(() => mockText);
-        TitleText.titleText = {
-            mockAction: () => "mockTitleText",
+        PromptText.titleText = {
+            mockAction: () => "mockPromptText",
         };
         const mockSafeArea = { width: 900, height: 600, centerX: -150, centerY: 0, y: 0 };
         mockScene = {
@@ -96,7 +96,7 @@ describe("button panel", () => {
 
         test("adds panel title text", () => {
             createButtonPanel(mockScene, mockItem);
-            expect(Text.addText).toHaveBeenCalledWith(mockScene, 0, -120, "mockTitleText", "mockPrompt");
+            expect(Text.addText).toHaveBeenCalledWith(mockScene, 0, -120, "mockPromptText", "mockPrompt");
             expect(mockText.setOrigin).toHaveBeenCalledWith(0.5, 0);
         });
 
