@@ -6,9 +6,9 @@
  */
 
 import { createConfirm } from "../../../../src/components/shop/confirm/confirm.js";
-import * as ShopConfirmActions from "../../../../src/components/shop/confirm/actions.js";
-import * as ItemPanel from "../../../../src/components/shop/confirm/item-panel.js";
-import * as ButtonPanel from "../../../../src/components/shop/confirm/button-panel.js";
+import * as shopConfirmActions from "../../../../src/components/shop/confirm/actions.js";
+import * as itemPanel from "../../../../src/components/shop/confirm/item-panel.js";
+import * as buttonPanel from "../../../../src/components/shop/confirm/button-panel.js";
 
 jest.mock("../../../../src/components/shop/confirm/item-panel.js");
 jest.mock("../../../../src/components/shop/confirm/button-panel.js");
@@ -28,11 +28,11 @@ describe("createConfirm", () => {
         mockItemPanel = "mockItemPanel";
         mockButtonPanel = "mockButtonPanel";
         mockAction = "mockAction";
-        ItemPanel.createItemPanel = jest.fn(() => mockItemPanel);
-        ButtonPanel.createButtonPanel = jest.fn(() => mockButtonPanel);
-        ItemPanel.resizeItemPanel = jest.fn(() => mockItemPanelResizeFn);
-        ButtonPanel.resizeButtonPanel = jest.fn(() => mockButtonPanelResizeFn);
-        ShopConfirmActions.actions = {
+        itemPanel.createItemPanel = jest.fn(() => mockItemPanel);
+        buttonPanel.createButtonPanel = jest.fn(() => mockButtonPanel);
+        itemPanel.resizeItemPanel = jest.fn(() => mockItemPanelResizeFn);
+        buttonPanel.resizeButtonPanel = jest.fn(() => mockButtonPanelResizeFn);
+        shopConfirmActions.actions = {
             mockTitle: jest.fn(
                 (scene, item) => scene === mockScene && item === mockScene.transientData.shop.item && mockAction,
             ),
@@ -57,18 +57,18 @@ describe("createConfirm", () => {
 
     test("creates a button panel", () => {
         createConfirm(mockScene);
-        expect(ButtonPanel.createButtonPanel).toHaveBeenCalledWith(mockScene, mockScene.transientData.shop.item);
+        expect(buttonPanel.createButtonPanel).toHaveBeenCalledWith(mockScene, mockScene.transientData.shop.item);
     });
 
     test("creates an item panel", () => {
         createConfirm(mockScene);
-        expect(ItemPanel.createItemPanel).toHaveBeenCalledWith(mockScene, mockScene.transientData.shop.item);
+        expect(itemPanel.createItemPanel).toHaveBeenCalledWith(mockScene, mockScene.transientData.shop.item);
     });
 
     test("returns a function that calls resize on both panels", () => {
         const returnedFn = createConfirm(mockScene);
-        expect(ButtonPanel.resizeButtonPanel).toHaveBeenCalledWith(mockScene, mockButtonPanel);
-        expect(ItemPanel.resizeItemPanel).toHaveBeenCalledWith(mockScene, mockItemPanel);
+        expect(buttonPanel.resizeButtonPanel).toHaveBeenCalledWith(mockScene, mockButtonPanel);
+        expect(itemPanel.resizeItemPanel).toHaveBeenCalledWith(mockScene, mockItemPanel);
         jest.clearAllMocks();
         returnedFn();
         expect(mockItemPanelResizeFn).toHaveBeenCalled();

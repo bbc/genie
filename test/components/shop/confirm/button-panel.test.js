@@ -4,10 +4,10 @@
  * @license Apache-2.0
  */
 import { createButtonPanel, resizeButtonPanel } from "../../../../src/components/shop/confirm/button-panel.js";
-import * as Text from "../../../../src/core/layout/text.js";
-import * as PromptText from "../../../../src/components/shop/confirm/prompt-text.js";
-import * as Action from "../../../../src/components/shop/confirm/actions.js";
-import * as Buttons from "../../../../src/components/shop/confirm/confirm-buttons.js";
+import * as text from "../../../../src/core/layout/text.js";
+import * as promptText from "../../../../src/components/shop/confirm/prompt-text.js";
+import * as action from "../../../../src/components/shop/confirm/actions.js";
+import * as confirmButtons from "../../../../src/components/shop/confirm/confirm-buttons.js";
 
 jest.mock("../../../../src/components/shop/confirm/prompt-text.js");
 jest.mock("../../../../src/core/layout/text.js");
@@ -27,14 +27,14 @@ describe("button panel", () => {
 
     beforeEach(() => {
         mockConfirmButtons = "mockConfirmButtons";
-        Buttons.addConfirmButtons = jest.fn(() => mockConfirmButtons);
-        Action.actions = {
+        confirmButtons.addConfirmButtons = jest.fn(() => mockConfirmButtons);
+        action.actions = {
             mockMode: () => "mockButtonText",
         };
         mockImage = { setOrigin: jest.fn(() => mockImage) };
         mockText = { setOrigin: jest.fn(() => mockText) };
-        Text.addText = jest.fn(() => mockText);
-        PromptText.titleText = {
+        text.addText = jest.fn(() => mockText);
+        promptText.titleText = {
             mockAction: () => "mockPromptText",
         };
         const mockSafeArea = { width: 900, height: 600, centerX: -150, centerY: 0, y: 0 };
@@ -96,13 +96,13 @@ describe("button panel", () => {
 
         test("adds panel title text", () => {
             createButtonPanel(mockScene, mockItem);
-            expect(Text.addText).toHaveBeenCalledWith(mockScene, 0, -120, "mockPromptText", "mockPrompt");
+            expect(text.addText).toHaveBeenCalledWith(mockScene, 0, -120, "mockPromptText", "mockPrompt");
             expect(mockText.setOrigin).toHaveBeenCalledWith(0.5, 0);
         });
 
         test("adds panel currency text", () => {
             createButtonPanel(mockScene, mockItem);
-            expect(Text.addText).toHaveBeenCalledWith(mockScene, 5, -70, mockItem.price, mockScene.config);
+            expect(text.addText).toHaveBeenCalledWith(mockScene, 5, -70, mockItem.price, mockScene.config);
             expect(mockText.setOrigin).toHaveBeenCalledWith(0.5, 0);
             expect(mockText.setOrigin).toHaveBeenCalledWith(0, 0.5);
         });
@@ -115,7 +115,7 @@ describe("button panel", () => {
 
         test("adds panel confirm buttons", () => {
             createButtonPanel(mockScene, mockItem);
-            expect(Buttons.addConfirmButtons).toHaveBeenCalledWith(
+            expect(confirmButtons.addConfirmButtons).toHaveBeenCalledWith(
                 mockScene,
                 mockScene.transientData.shop.mode,
                 "mockButtonText",

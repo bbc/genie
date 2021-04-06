@@ -4,9 +4,9 @@
  * @license Apache-2.0
  */
 import { addConfirmButtons } from "../../../../src/components/shop/confirm/confirm-buttons.js";
-import * as MenuButtons from "../../../../src/components/shop/menu-buttons.js";
-import * as ItemChecks from "../../../../src/components/shop/confirm/item-checks.js";
-import * as Transact from "../../../../src/components/shop/transact.js";
+import * as menuButtons from "../../../../src/components/shop/menu-buttons.js";
+import * as itemChecks from "../../../../src/components/shop/confirm/item-checks.js";
+import * as transact from "../../../../src/components/shop/transact.js";
 
 jest.mock("../../../../src/core/collections.js");
 jest.mock("../../../../src/components/shop/transact.js");
@@ -21,14 +21,14 @@ describe("Confirm Buttons", () => {
     let mockItem;
 
     beforeEach(() => {
-        ItemChecks.canAffordItem = jest.fn(() => true);
-        ItemChecks.isEquippable = jest.fn(() => true);
-        ItemChecks.itemIsInStock = jest.fn(() => true);
+        itemChecks.canAffordItem = jest.fn(() => true);
+        itemChecks.isEquippable = jest.fn(() => true);
+        itemChecks.itemIsInStock = jest.fn(() => true);
         mockConfirmButtons = [mockActionButton, mockCancelButton];
         mockItem = { price: 20 };
         mockActionButton = { accessibleElement: { update: jest.fn() }, input: { enabled: true } };
         mockCancelButton = { accessibleElement: { update: jest.fn() }, input: { enabled: true } };
-        MenuButtons.createConfirmButtons = jest.fn(() => mockConfirmButtons);
+        menuButtons.createConfirmButtons = jest.fn(() => mockConfirmButtons);
         mockScene = {
             _data: { addedBy: { scene: { resume: jest.fn() } } },
             removeOverlay: jest.fn(),
@@ -45,17 +45,17 @@ describe("Confirm Buttons", () => {
 
     test("calls createConfirmButtons correctly", () => {
         addConfirmButtons(mockScene, "mockTitle", "buy", mockItem);
-        expect(MenuButtons.createConfirmButtons).toHaveBeenCalledWith(
+        expect(menuButtons.createConfirmButtons).toHaveBeenCalledWith(
             mockScene,
             "Buy",
             expect.any(Function),
             expect.any(Function),
         );
-        const actionButtonCallback = MenuButtons.createConfirmButtons.mock.calls[0][2];
-        const cancelButtonCallback = MenuButtons.createConfirmButtons.mock.calls[0][3];
+        const actionButtonCallback = menuButtons.createConfirmButtons.mock.calls[0][2];
+        const cancelButtonCallback = menuButtons.createConfirmButtons.mock.calls[0][3];
         jest.clearAllMocks();
         actionButtonCallback();
-        expect(Transact.buy).toHaveBeenCalledWith(mockScene, mockItem);
+        expect(transact.buy).toHaveBeenCalledWith(mockScene, mockItem);
         expect(mockScene._data.addedBy.scene.resume).toHaveBeenCalled();
         expect(mockScene.removeOverlay).toHaveBeenCalled();
         jest.clearAllMocks();
@@ -66,30 +66,30 @@ describe("Confirm Buttons", () => {
 
     test("action button calls transact equip when action is equip", () => {
         addConfirmButtons(mockScene, "mockTitle", "equip", mockItem);
-        const actionButtonCallback = MenuButtons.createConfirmButtons.mock.calls[0][2];
+        const actionButtonCallback = menuButtons.createConfirmButtons.mock.calls[0][2];
         jest.clearAllMocks();
         actionButtonCallback();
-        expect(Transact.equip).toHaveBeenCalledWith(mockScene, mockItem);
+        expect(transact.equip).toHaveBeenCalledWith(mockScene, mockItem);
     });
 
     test("action button calls transact unequip when action is unequip", () => {
         addConfirmButtons(mockScene, "mockTitle", "unequip", mockItem);
-        const actionButtonCallback = MenuButtons.createConfirmButtons.mock.calls[0][2];
+        const actionButtonCallback = menuButtons.createConfirmButtons.mock.calls[0][2];
         jest.clearAllMocks();
         actionButtonCallback();
-        expect(Transact.unequip).toHaveBeenCalledWith(mockScene, mockItem);
+        expect(transact.unequip).toHaveBeenCalledWith(mockScene, mockItem);
     });
 
     test("action button calls transact use when action is use", () => {
         addConfirmButtons(mockScene, "mockTitle", "use", mockItem);
-        const actionButtonCallback = MenuButtons.createConfirmButtons.mock.calls[0][2];
+        const actionButtonCallback = menuButtons.createConfirmButtons.mock.calls[0][2];
         jest.clearAllMocks();
         actionButtonCallback();
-        expect(Transact.use).toHaveBeenCalledWith(mockScene, mockItem);
+        expect(transact.use).toHaveBeenCalledWith(mockScene, mockItem);
     });
 
     test("disables action button when action is buy but can't afford item", () => {
-        ItemChecks.canAffordItem = jest.fn(() => false);
+        itemChecks.canAffordItem = jest.fn(() => false);
         const buttons = addConfirmButtons(mockScene, "mockTitle", "buy", mockItem);
         expect(buttons[0].alpha).toBe(0.25);
         expect(buttons[0].tint).toBe(0xff0000);
@@ -98,7 +98,7 @@ describe("Confirm Buttons", () => {
     });
 
     test("disables action button when action is buy but item isn't in stock", () => {
-        ItemChecks.itemIsInStock = jest.fn(() => false);
+        itemChecks.itemIsInStock = jest.fn(() => false);
         const buttons = addConfirmButtons(mockScene, "mockTitle", "buy", mockItem);
         expect(buttons[0].alpha).toBe(0.25);
         expect(buttons[0].tint).toBe(0xff0000);
@@ -107,7 +107,7 @@ describe("Confirm Buttons", () => {
     });
 
     test("disables action button when action is equip but item isn't equippable", () => {
-        ItemChecks.isEquippable = jest.fn(() => false);
+        itemChecks.isEquippable = jest.fn(() => false);
         const buttons = addConfirmButtons(mockScene, "mockTitle", "equip", mockItem);
         expect(buttons[0].alpha).toBe(0.25);
         expect(buttons[0].tint).toBe(0xff0000);

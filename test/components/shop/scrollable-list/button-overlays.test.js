@@ -7,6 +7,8 @@
 import { overlays1Wide } from "../../../../src/components/shop/scrollable-list/button-overlays.js";
 import * as text from "../../../../src/core/layout/text.js";
 
+jest.mock("../../../../src/core/layout/text.js");
+
 let mockScene;
 let mockGelButton;
 let mockItem;
