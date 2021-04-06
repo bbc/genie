@@ -5,18 +5,26 @@
  * @license Apache-2.0 Apache-2.0
  */
 import { ScrollableList } from "../../../../src/components/shop/scrollable-list/scrollable-list.js";
+import * as panel from "../../../../src/components/shop/scrollable-list/scrollable-panel.js";
 import * as buttons from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
-import * as confirm from "../../../../src/components/shop/confirm/confirm.js";
 import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
 import * as backgroundsModule from "../../../../src/components/shop/backgrounds.js";
 import { collections } from "../../../../src/core/collections.js";
+import * as text from "../../../../src/core/layout/text.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
 import * as gmiModule from "../../../../src/core/gmi/gmi.js";
 
+jest.mock("../../../../src/core/accessibility/accessibility-layer.js");
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
-jest.mock("../../../../src/components/shop/confirm/confirm.js");
+jest.mock("../../../../src/core/collections.js");
+jest.mock("../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js");
+jest.mock("../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js");
+jest.mock("../../../../src/core/scaler.js");
+jest.mock("../../../../src/components/shop/backgrounds.js");
+jest.mock("../../../../src/components/shop/scrollable-list/scrollable-panel.js");
+jest.mock("../../../../src/core/layout/text.js");
 
 const mockA11yElem = {
     addEventListener: jest.fn(),
@@ -37,8 +45,6 @@ const mockText = {
 };
 
 buttons.createListButton = jest.fn(() => mockGelButton);
-buttons.scaleButton = jest.fn();
-buttons.updateButton = jest.fn();
 scaler.onScaleChange.add = jest.fn(() => ({ unsubscribe: "foo" }));
 backgroundsModule.resizeBackground = jest.fn(() => jest.fn());
 const title = "shop";
@@ -54,9 +60,18 @@ describe("Scrollable List", () => {
     let mockLabel;
     let mockGmi;
     let mockPointer;
+    let mockChild;
+    let mockText;
 
     afterEach(jest.clearAllMocks);
     beforeEach(() => {
+        ScrollableList.prototype.add = jest.fn();
+        backgroundsModule.createBackground = jest.fn(() => () => {});
+        mockText = { setOrigin: jest.fn(() => mockText), setPosition: jest.fn(() => mockText) };
+        text.addText = jest.fn(() => mockText);
+        panel.getPanelY = jest.fn(() => ({ height: 100, y: 50 }));
+        mockChild = { add: jest.fn() };
+        panel.createScrollablePanel = jest.fn(() => ({ scrollablePanel: mockScrollablePanel, child: mockChild }));
         mockGmi = { sendStatsEvent: jest.fn() };
         gmiModule.gmi = mockGmi;
         mockItem = {
@@ -184,8 +199,6 @@ describe("Scrollable List", () => {
             },
         };
         backgroundsModule.initResizers();
-
-        a11y.addGroupAt = jest.fn();
     });
 
     describe("instantiation", () => {
@@ -195,23 +208,11 @@ describe("Scrollable List", () => {
         });
         describe("adds a rexUI scrollable panel", () => {
             describe("with appropriate panel config", () => {
-                test("height and y are given by layout safe area", () => {
-                    const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
-                    expect(config.height).toBe(100);
-                    expect(config.y).toBe(50);
-                });
-                test("adds scrollbar and scrollbar handle images from config", () => {
-                    expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbar");
-                    expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "test.scrollbarHandle");
-                });
-                test("with spacing from config", () => {
-                    const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
-                    const expectedSpacing = { left: 20, right: 20, top: 16, bottom: 16, panel: 10 };
-                    expect(config.space).toEqual(expectedSpacing);
-                });
-                test("with scroll mode 0", () => {
-                    const config = mockScene.rexUI.add.scrollablePanel.mock.calls[0][0];
-                    expect(config.scrollMode).toBe(0);
+                test("calls create scrollable panel correctly", () => {
+                    jest.clearAllMocks();
+                    collectionGetAll = [mockItem, mockItem, { mock: "otherItem", qty: 0 }];
+                    const list = new ScrollableList(mockScene, title);
+                    expect(panel.createScrollablePanel).toHaveBeenCalledWith(mockScene, title, list);
                 });
                 test("with items from a collection", () => {
                     expect(collections.get).toHaveBeenCalledWith("testCatalogue");
@@ -241,7 +242,7 @@ describe("Scrollable List", () => {
 
                     new ScrollableList(mockScene, title);
 
-                    expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "No items", expect.anything());
+                    expect(text.addText).toHaveBeenCalledWith(mockScene, 0, 0, "No items", undefined);
                 });
                 test("Empty collection custom text is set if defined in config", () => {
                     jest.clearAllMocks();
@@ -256,7 +257,13 @@ describe("Scrollable List", () => {
 
                     new ScrollableList(mockScene, title);
 
-                    expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, expectedEmptyText, expect.anything());
+                    expect(text.addText).toHaveBeenCalledWith(
+                        mockScene,
+                        0,
+                        0,
+                        expectedEmptyText,
+                        mockScene.config.emptyList.shop,
+                    );
                 });
                 test("Empty collection text position is set if offset is defined in config", () => {
                     jest.clearAllMocks();
@@ -306,8 +313,6 @@ describe("Scrollable List", () => {
             describe("callbacks on labels", () => {
                 let callback;
 
-                confirm.createConfirm = jest.fn();
-
                 beforeEach(() => {
                     callback = buttons.createListButton.mock.calls[0][3];
                 });
@@ -344,9 +349,6 @@ describe("Scrollable List", () => {
         test("sets scene.input.topOnly to false", () => {
             expect(mockScene.input.topOnly).toBe(false);
         });
-        test("calls layout() on the returned panel", () => {
-            expect(mockScrollablePanel.layout).toHaveBeenCalled();
-        });
     });
 
     describe("event setup", () => {
@@ -357,7 +359,7 @@ describe("Scrollable List", () => {
                 mockScene.scale.on.mock.calls[0][1]();
             });
             test("calls layout on the panel", () => {
-                expect(mockScrollablePanel.layout).toHaveBeenCalledTimes(2);
+                expect(mockScrollablePanel.layout).toHaveBeenCalledTimes(1);
             });
             test("sets the panel minHeight and y from the safe area", () => {
                 expect(mockScrollablePanel.minHeight).toBe(100);
