@@ -4,115 +4,114 @@
  * @license Apache-2.0
  */
 import { addConfirmButtons } from "../../../../src/components/shop/confirm/confirm-buttons.js";
-import * as collectionsModule from "../../../../src/core/collections.js";
-import * as transactModule from "../../../../src/components/shop/transact.js";
-import * as gmiModule from "../../../../src/core/gmi/gmi.js";
+import * as MenuButtons from "../../../../src/components/shop/menu-buttons.js";
+import * as ItemChecks from "../../../../src/components/shop/confirm/item-checks.js";
+import * as Transact from "../../../../src/components/shop/transact.js";
+
+jest.mock("../../../../src/core/collections.js");
+jest.mock("../../../../src/components/shop/transact.js");
+jest.mock("../../../../src/components/shop/menu-buttons.js");
+jest.mock("../../../../src/components/shop/confirm/item-checks.js");
 
 describe("Confirm Buttons", () => {
-    let mockButton;
-    let mockText;
     let mockScene;
-    let mockShopItem;
-    let mockBalance;
-    let mockShopCollection;
+    let mockConfirmButtons;
+    let mockActionButton;
+    let mockCancelButton;
+    let mockItem;
 
     beforeEach(() => {
-        gmiModule.gmi = { sendStatsEvent: jest.fn() };
-        transactModule.getBalanceItem = jest.fn(() => mockBalance);
-        mockShopItem = { qty: 10, id: "test-id" };
-        mockBalance = { qty: 0 };
-
-        mockShopCollection = { get: jest.fn(() => mockShopItem), set: jest.fn() };
-
-        collectionsModule.collections = { get: jest.fn(() => mockShopCollection) };
-        mockButton = {
-            overlays: {
-                set: jest.fn(),
-            },
-            config: {
-                id: "test-button-id",
-            },
-            scene: {
-                sys: {
-                    scale: {
-                        parent: {},
-                    },
-                    accessibleButtons: [],
-                },
-                scene: {
-                    key: "test-scene-key",
-                },
-            },
-            input: {},
-        };
-
-        mockText = {
-            setOrigin: jest.fn(),
-        };
+        ItemChecks.canAffordItem = jest.fn(() => true);
+        ItemChecks.isEquippable = jest.fn(() => true);
+        ItemChecks.itemIsInStock = jest.fn(() => true);
+        mockConfirmButtons = [mockActionButton, mockCancelButton];
+        mockItem = { price: 20 };
+        mockActionButton = { accessibleElement: { update: jest.fn() }, input: { enabled: true } };
+        mockCancelButton = { accessibleElement: { update: jest.fn() }, input: { enabled: true } };
+        MenuButtons.createConfirmButtons = jest.fn(() => mockConfirmButtons);
         mockScene = {
             _data: { addedBy: { scene: { resume: jest.fn() } } },
             removeOverlay: jest.fn(),
-            transientData: {
-                shop: {
-                    config: {
-                        shopCollections: {
-                            manage: {},
-                        },
-                    },
-                },
-            },
-            config: {
-                confirm: {
-                    buttons: {
-                        key: "test-button-key",
-                    },
-                },
-            },
-            scene: { key: "test-key" },
-            add: {
-                gelButton: jest.fn(() => mockButton),
-                text: jest.fn(() => mockText),
-            },
         };
     });
 
     afterEach(jest.clearAllMocks);
 
-    describe("addConfirmButtons", () => {
-        test("creates 2 buttons", () => {
-            expect(addConfirmButtons(mockScene, "", "", {}).length).toBe(2);
-        });
+    test("returns 2 buttons", () => {
+        const buttons = addConfirmButtons(mockScene, "", "", {});
+        expect(buttons).toBe(mockConfirmButtons);
+        expect(buttons.length).toBe(2);
     });
 
-    test("disables action button if action is buy and you don't have enough balance", () => {
-        mockBalance.qty = 10;
-
-        const buttons = addConfirmButtons(mockScene, "", "buy", { price: 20 });
-
-        expect(buttons[0].alpha).toBe(0.25);
-    });
-
-    test("disables action button if action is buy but there is no stock", () => {
-        mockShopItem.qty = 0;
-
-        const buttons = addConfirmButtons(mockScene, "", "buy", { price: 2 });
-
-        expect(buttons[0].alpha).toBe(0.25);
-    });
-
-    test("Does not disable action button if action is buy and there is stock + balance", () => {
-        mockBalance.qty = 100;
-        const buttons = addConfirmButtons(mockScene, "", "buy", { price: 2 });
-
-        expect(buttons[0].alpha).not.toBeDefined();
-    });
-
-    test("Removes overlay when buy button has been clicked ", () => {
-        addConfirmButtons(mockScene, "", "buy", { price: 2 });
-
-        const confirmCallback = mockScene.add.gelButton.mock.calls[0][2].action;
-
-        confirmCallback();
+    test("calls createConfirmButtons correctly", () => {
+        addConfirmButtons(mockScene, "mockTitle", "buy", mockItem);
+        expect(MenuButtons.createConfirmButtons).toHaveBeenCalledWith(
+            mockScene,
+            "Buy",
+            expect.any(Function),
+            expect.any(Function),
+        );
+        const actionButtonCallback = MenuButtons.createConfirmButtons.mock.calls[0][2];
+        const cancelButtonCallback = MenuButtons.createConfirmButtons.mock.calls[0][3];
+        jest.clearAllMocks();
+        actionButtonCallback();
+        expect(Transact.buy).toHaveBeenCalledWith(mockScene, mockItem);
+        expect(mockScene._data.addedBy.scene.resume).toHaveBeenCalled();
         expect(mockScene.removeOverlay).toHaveBeenCalled();
+        jest.clearAllMocks();
+        cancelButtonCallback();
+        expect(mockScene._data.addedBy.scene.resume).toHaveBeenCalled();
+        expect(mockScene.removeOverlay).toHaveBeenCalled();
+    });
+
+    test("action button calls transact equip when action is equip", () => {
+        addConfirmButtons(mockScene, "mockTitle", "equip", mockItem);
+        const actionButtonCallback = MenuButtons.createConfirmButtons.mock.calls[0][2];
+        jest.clearAllMocks();
+        actionButtonCallback();
+        expect(Transact.equip).toHaveBeenCalledWith(mockScene, mockItem);
+    });
+
+    test("action button calls transact unequip when action is unequip", () => {
+        addConfirmButtons(mockScene, "mockTitle", "unequip", mockItem);
+        const actionButtonCallback = MenuButtons.createConfirmButtons.mock.calls[0][2];
+        jest.clearAllMocks();
+        actionButtonCallback();
+        expect(Transact.unequip).toHaveBeenCalledWith(mockScene, mockItem);
+    });
+
+    test("action button calls transact use when action is use", () => {
+        addConfirmButtons(mockScene, "mockTitle", "use", mockItem);
+        const actionButtonCallback = MenuButtons.createConfirmButtons.mock.calls[0][2];
+        jest.clearAllMocks();
+        actionButtonCallback();
+        expect(Transact.use).toHaveBeenCalledWith(mockScene, mockItem);
+    });
+
+    test("disables action button when action is buy but can't afford item", () => {
+        ItemChecks.canAffordItem = jest.fn(() => false);
+        const buttons = addConfirmButtons(mockScene, "mockTitle", "buy", mockItem);
+        expect(buttons[0].alpha).toBe(0.25);
+        expect(buttons[0].tint).toBe(0xff0000);
+        expect(buttons[0].input.enabled).toBe(false);
+        expect(buttons[0].accessibleElement.update).toHaveBeenCalled();
+    });
+
+    test("disables action button when action is buy but item isn't in stock", () => {
+        ItemChecks.itemIsInStock = jest.fn(() => false);
+        const buttons = addConfirmButtons(mockScene, "mockTitle", "buy", mockItem);
+        expect(buttons[0].alpha).toBe(0.25);
+        expect(buttons[0].tint).toBe(0xff0000);
+        expect(buttons[0].input.enabled).toBe(false);
+        expect(buttons[0].accessibleElement.update).toHaveBeenCalled();
+    });
+
+    test("disables action button when action is equip but item isn't equippable", () => {
+        ItemChecks.isEquippable = jest.fn(() => false);
+        const buttons = addConfirmButtons(mockScene, "mockTitle", "equip", mockItem);
+        expect(buttons[0].alpha).toBe(0.25);
+        expect(buttons[0].tint).toBe(0xff0000);
+        expect(buttons[0].input.enabled).toBe(false);
+        expect(buttons[0].accessibleElement.update).toHaveBeenCalled();
     });
 });
