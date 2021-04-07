@@ -8,7 +8,7 @@ import { createMockGmi } from "../mock/gmi";
 import { Screen } from "../../src/core/screen";
 import * as Layout from "../../src/core/layout/layout.js";
 import * as Scaler from "../../src/core/scaler.js";
-import * as GameSound from "../../src/core/game-music.js";
+import * as GameSound from "../../src/core/music.js";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults";

@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { setMusic } from "../../src/core/game-music.js";
+import { setMusic } from "../../src/core/music.js";
 
 describe("Game Sound", () => {
     let mockScene;

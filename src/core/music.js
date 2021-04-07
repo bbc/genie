@@ -21,7 +21,8 @@ const startNext = scene => {
 
 const start = (scene, audioKey) => {
     if (!audioKey) return;
-    let sceneMusic = scene.sound.add(audioKey, { loop: true, volume: 0 }).play();
+    let sceneMusic = scene.sound.add(audioKey, { loop: true, volume: 0 });
+    sceneMusic.play();
     scene.tweens.add({ ...defaults, targets: sceneMusic });
 
     return sceneMusic;

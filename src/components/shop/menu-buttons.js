@@ -9,6 +9,7 @@ import { addText } from "../../core/layout/text.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { createButton } from "../../core/layout/create-button.js";
 import { buttonsChannel } from "../../core/layout/gel-defaults.js";
+import { getSoundKey } from "./shop-sound.js";
 
 const defaults = {
     gameButton: true,
@@ -50,12 +51,16 @@ const resizeButton = pane => (button, idx) => {
     button.setScale(bounds.width / button.width);
 };
 
-export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback) =>
+export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback, item) =>
     [actionText, "Cancel"].map(title => {
         const id = `tx_${title.toLowerCase()}_button`;
         const ariaLabel = title;
         const action = title === "Cancel" ? cancelCallback : confirmCallback;
-        const config = { ...defaults, title, id, ariaLabel, action };
+        const actionKey = title === "Cancel" ? "cancel" : actionText.toLowerCase();
+        const clickSound = getSoundKey(scene, item, actionKey);
+        const soundConfig = clickSound ? { clickSound } : {};
+
+        const config = { ...defaults, ...soundConfig, title, id, ariaLabel, action };
         return makeButton(scene, "confirm", config);
     });
 

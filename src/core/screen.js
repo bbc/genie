@@ -8,7 +8,7 @@ import fp from "../../lib/lodash/fp/fp.js";
 import { gmi } from "./gmi/gmi.js";
 import { buttonsChannel } from "./layout/gel-defaults.js";
 import { eventBus } from "./event-bus.js";
-import { setMusic } from "./game-music.js";
+import { setMusic } from "./music.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";

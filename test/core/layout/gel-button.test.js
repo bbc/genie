@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { eventBus } from "../../../src/core/event-bus.js";
-import * as GameSound from "../../../src/core/game-music.js";
+import * as GameSound from "../../../src/core/music.js";
 import { GelButton } from "../../../src/core/layout/gel-button";
 import { Indicator } from "../../../src/core/layout/gel-indicator.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
