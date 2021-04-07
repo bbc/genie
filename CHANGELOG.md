@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Add ability to change button click sounds per button. |
 | | Reposition shop-list accessible elements on scroll and tab events. |
 | 3.9.0 | |
 | | Fix showing shop confirm on key press. |
