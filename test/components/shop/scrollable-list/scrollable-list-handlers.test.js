@@ -1,11 +1,9 @@
 /**
  * @module core/layout/scrollable-list
- * @copyright BBC 2020
+ * @copyright BBC 2021
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
-
-/* eslint-disable no-console */
 import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 
 let mockGelButton;

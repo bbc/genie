@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { titleText } from "./title-text.js";
+import { titleText } from "./prompt-text.js";
 import { addText } from "../../../core/layout/text.js";
 import { addConfirmButtons } from "./confirm-buttons.js";
 import { actions } from "./actions.js";

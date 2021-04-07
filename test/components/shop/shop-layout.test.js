@@ -2,7 +2,7 @@
  * @module components/shop
  * @copyright BBC 2020
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
 
 import * as shopLayout from "../../../src/components/shop/shop-layout.js";

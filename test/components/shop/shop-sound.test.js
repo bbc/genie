@@ -5,14 +5,6 @@
  */
 import { playShopSound } from "../../../src/components/shop/shop-sound.js";
 
-/*
- export const playShopSound = (scene, item, key) => {
-    const assetKey = item.audio?.[key] ?? [scene.assetPrefix, scene.config.confirm.audio[key]].join(".")
-    scene.sound.play(assetKey);
-}
-
-  */
-
 describe("playShopSound", () => {
     let mockScene;
     let mockItem;
@@ -42,7 +34,7 @@ describe("playShopSound", () => {
         expect(mockScene.sound.play).toHaveBeenCalledWith("test-asset-prefix.buy-audio-key");
     });
 
-    test("Overrides scene default key if sound if configured for item", () => {
+    test("Overrides scene default key if sound is configured for item", () => {
         mockScene.config.confirm.audio.buy = "buy-audio-key";
         mockItem.audio = { buy: "item-key" };
 
