@@ -8,7 +8,7 @@ import { createMockGmi } from "../mock/gmi";
 import { Screen } from "../../src/core/screen";
 import * as Layout from "../../src/core/layout/layout.js";
 import * as Scaler from "../../src/core/scaler.js";
-import * as GameSound from "../../src/core/game-sound";
+import * as GameSound from "../../src/core/game-music.js";
 import * as a11y from "../../src/core/accessibility/accessibility-layer.js";
 import { eventBus } from "../../src/core/event-bus.js";
 import { buttonsChannel } from "../../src/core/layout/gel-defaults";
@@ -61,7 +61,7 @@ describe("Screen", () => {
         jest.spyOn(eventBus, "publish");
         jest.spyOn(eventBus, "removeChannel");
         jest.spyOn(eventBus, "removeSubscription");
-        jest.spyOn(GameSound, "setupScreenMusic").mockImplementation(() => {});
+        jest.spyOn(GameSound, "setMusic").mockImplementation(() => {});
         jest.spyOn(a11y, "reset").mockImplementation(() => {});
         jest.spyOn(a11y, "destroy").mockImplementation(() => {});
         jest.spyOn(a11y, "addButton").mockImplementation(() => {});
@@ -146,7 +146,7 @@ describe("Screen", () => {
 
         test("sets the background music using the theme config", () => {
             createAndInitScreen();
-            expect(GameSound.setupScreenMusic).toHaveBeenCalledWith(screen);
+            expect(GameSound.setMusic).toHaveBeenCalledWith(screen);
         });
 
         test("clears the accessible buttons array", () => {

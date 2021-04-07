@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { eventBus } from "../../../src/core/event-bus.js";
-import * as GameSound from "../../../src/core/game-sound.js";
+import * as GameSound from "../../../src/core/game-music.js";
 import { GelButton } from "../../../src/core/layout/gel-button";
 import { Indicator } from "../../../src/core/layout/gel-indicator.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
@@ -34,9 +34,9 @@ describe("Gel Button", () => {
         GameSound.Assets = {
             backgroundMusic: {},
             buttonClick: {
-                play: jest.fn(),
-                once: jest.fn(),
-                resume: jest.fn(),
+                play: jest.fn(() => GameSound.Assets.buttonClick),
+                once: jest.fn(() => GameSound.Assets.buttonClick),
+                resume: jest.fn(() => GameSound.Assets.buttonClick),
             },
         };
         mockSprite = {
@@ -83,6 +83,9 @@ describe("Gel Button", () => {
                     enable: jest.fn(),
                 },
             },
+            sound: {
+                add: jest.fn(() => GameSound.Assets.buttonClick),
+            },
             anims: {
                 once: jest.fn(),
                 generateFrameNumbers: jest.fn(),
@@ -118,6 +121,7 @@ describe("Gel Button", () => {
             shiftY: 21,
             gameButton: false,
             name: "test name",
+            clickSound: "loader.buttonClick",
         };
     });
 
@@ -157,6 +161,20 @@ describe("Gel Button", () => {
     });
 
     describe("Pointer events", () => {
+        test("pointerup event calls button.onPointerUp with config and scene", () => {
+            let callback;
+            GelButton.prototype.on = jest.fn((event, cb) => {
+                if (event === Phaser.Input.Events.POINTER_UP) {
+                    callback = cb;
+                }
+            });
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            gelButton.onPointerUp = jest.fn();
+
+            callback();
+            expect(gelButton.onPointerUp).toHaveBeenCalledWith(mockConfig, mockScene);
+        });
+
         test("pointerout event sets frame to 0", () => {
             GelButton.prototype.on = jest.fn((event, callback) => {
                 if (event === Phaser.Input.Events.POINTER_OUT) {
@@ -186,11 +204,7 @@ describe("Gel Button", () => {
             expect(mockSprite.setFrame).not.toHaveBeenCalled();
         });
         test("callback is added to the POINTER_UP event emitter", () => {
-            GelButton.prototype.on = jest.fn((event, callback) => {
-                if (event === Phaser.Input.Events.POINTER_UP) {
-                    callback();
-                }
-            });
+            GelButton.prototype.on = jest.fn();
             const gelButton = new GelButton(mockScene, mockX, mockY, mockMetrics, mockConfig);
             expect(gelButton.on).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP, expect.any(Function));
         });
