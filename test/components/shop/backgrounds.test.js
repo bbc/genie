@@ -4,7 +4,10 @@
  * @license Apache-2.0
  */
 import { createBackground, initResizers, resizeBackground } from "../../../src/components/shop/backgrounds.js";
+
 describe("Shop backgrounds", () => {
+    afterEach(jest.clearAllMocks);
+
     describe("createBackground", () => {
         test("null config returns an empty object", () => {
             expect(createBackground({}, null)).toEqual({});
@@ -76,8 +79,6 @@ describe("Shop backgrounds", () => {
             initResizers();
         });
 
-        afterEach(jest.clearAllMocks);
-
         test("Object resize (empty object for blank backgrounds)", () => {
             expect(resizeBackground(Object)).not.toThrow();
         });
@@ -100,8 +101,9 @@ describe("Shop backgrounds", () => {
                 layout: { getSafeArea: jest.fn(() => mockSafeArea) },
             };
 
-            resizeBackground(Phaser.GameObjects.Image)(mockScene, mockImage);
+            resizeBackground(Phaser.GameObjects.Image)(mockScene, mockImage, { yOffset: 29 });
             expect(mockImage.setScale).toHaveBeenCalledWith(10, 10);
+            expect(mockImage.y).toBe(29);
         });
 
         test("Ninepatch resize", () => {
@@ -120,9 +122,9 @@ describe("Shop backgrounds", () => {
                 layout: { getSafeArea: jest.fn(() => mockSafeArea) },
             };
 
-            resizeBackground(RexPlugins.GameObjects.NinePatch)(mockScene, mockNinePatch);
+            resizeBackground(RexPlugins.GameObjects.NinePatch)(mockScene, mockNinePatch, { xOffset: 4 });
             expect(mockNinePatch.resize).toHaveBeenCalledWith(200, 100);
-            expect(mockNinePatch.x).toBe(100);
+            expect(mockNinePatch.x).toBe(900);
             expect(mockNinePatch.y).toBe(150);
         });
     });
