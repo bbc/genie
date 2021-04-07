@@ -9,54 +9,51 @@ describe("Shop backgrounds", () => {
     afterEach(jest.clearAllMocks);
 
     describe("createBackground", () => {
-        test("null config returns an empty object", () => {
-            expect(createBackground({}, null)).toEqual({});
-        });
+        let mockImage;
+        let mockNinePatch;
+        let mockSafeArea;
+        let mockScene;
+        let mockConfig;
 
-        test("string config for image key", () => {
-            const mockImage = {
+        beforeEach(() => {
+            mockImage = {
                 setScale: jest.fn(),
                 width: 20,
                 height: 10,
             };
 
-            const mockSafeArea = {
+            mockNinePatch = {
+                test: "key",
+            };
+
+            mockSafeArea = {
                 x: 0,
                 y: 0,
                 width: 200,
                 height: 100,
             };
-            const mockScene = {
-                add: { image: jest.fn(() => mockImage) },
+
+            mockScene = {
+                assetPrefix: "prefix",
+                add: { image: jest.fn(() => mockImage), rexNinePatch: jest.fn(() => mockNinePatch) },
                 layout: { getSafeArea: jest.fn(() => mockSafeArea) },
             };
-            const mockConfig = "imageKey";
+            mockConfig = {};
+        });
 
+        test("null config returns an empty object", () => {
+            expect(createBackground({}, null)).toEqual({});
+        });
+
+        test("string config for image key", () => {
+            mockConfig = "imageKey";
             expect(createBackground(mockScene, mockConfig)).toEqual(mockImage);
             expect(mockImage.setScale).toHaveBeenCalledWith(10, 10);
         });
 
         test("object config for ninepatch", () => {
-            const mockNinePatch = {
-                test: "key",
-            };
-
-            const mockSafeArea = {
-                x: 0,
-                y: 0,
-                width: 200,
-                height: 100,
-            };
-
-            const mockScene = {
-                assetPrefix: "prefix",
-                add: { rexNinePatch: jest.fn(() => mockNinePatch) },
-                layout: { getSafeArea: jest.fn(() => mockSafeArea) },
-            };
-            const mockConfig = { columns: [0, 1, null, 3], rows: [0, 1, 2, 3], key: "testKey" };
-
+            mockConfig = { columns: [0, 1, null, 3], rows: [0, 1, 2, 3], key: "testKey" };
             expect(createBackground(mockScene, mockConfig)).toEqual(mockNinePatch);
-
             expect(mockScene.add.rexNinePatch).toHaveBeenCalledWith({
                 columns: [0, 1, undefined, 3],
                 height: 100,
@@ -70,7 +67,33 @@ describe("Shop backgrounds", () => {
     });
 
     describe("resizeBackground", () => {
+        let mockNinePatch;
+        let mockImage;
+        let mockSafeArea;
+        let mockScene;
+
         beforeEach(() => {
+            mockNinePatch = {
+                resize: jest.fn(),
+            };
+
+            mockImage = {
+                setScale: jest.fn(),
+                width: 20,
+                height: 10,
+            };
+
+            mockSafeArea = {
+                x: 0,
+                y: 0,
+                width: 200,
+                height: 100,
+            };
+
+            mockScene = {
+                layout: { getSafeArea: jest.fn(() => mockSafeArea) },
+            };
+
             global.RexPlugins = {
                 GameObjects: {
                     NinePatch: jest.fn(),
@@ -83,49 +106,30 @@ describe("Shop backgrounds", () => {
             expect(resizeBackground(Object)).not.toThrow();
         });
 
-        test("Image resize", () => {
-            const mockImage = {
-                setScale: jest.fn(),
-                width: 20,
-                height: 10,
-            };
+        test("Image resizes correctly when using defaultSpec", () => {
+            resizeBackground(Phaser.GameObjects.Image)(mockScene, mockImage);
+            expect(mockImage.setScale).toHaveBeenCalledWith(10, 10);
+            expect(mockImage.y).toBe(0);
+        });
 
-            const mockSafeArea = {
-                x: 0,
-                y: 0,
-                width: 200,
-                height: 100,
-            };
-
-            const mockScene = {
-                layout: { getSafeArea: jest.fn(() => mockSafeArea) },
-            };
-
+        test("Image resizes correctly when newSpec provided", () => {
             resizeBackground(Phaser.GameObjects.Image)(mockScene, mockImage, { yOffset: 29 });
             expect(mockImage.setScale).toHaveBeenCalledWith(10, 10);
             expect(mockImage.y).toBe(29);
         });
 
-        test("Ninepatch resize", () => {
-            const mockNinePatch = {
-                resize: jest.fn(),
-            };
+        test("Ninepatch resize when using defaultSpec", () => {
+            resizeBackground(RexPlugins.GameObjects.NinePatch)(mockScene, mockNinePatch);
+            expect(mockNinePatch.resize).toHaveBeenCalledWith(200, 100);
+            expect(mockNinePatch.x).toBe(100);
+            expect(mockNinePatch.y).toBe(50);
+        });
 
-            const mockSafeArea = {
-                x: 0,
-                y: 100,
-                width: 200,
-                height: 100,
-            };
-
-            const mockScene = {
-                layout: { getSafeArea: jest.fn(() => mockSafeArea) },
-            };
-
+        test("Ninepatch resize when newSpec provided", () => {
             resizeBackground(RexPlugins.GameObjects.NinePatch)(mockScene, mockNinePatch, { xOffset: 4 });
             expect(mockNinePatch.resize).toHaveBeenCalledWith(200, 100);
             expect(mockNinePatch.x).toBe(900);
-            expect(mockNinePatch.y).toBe(150);
+            expect(mockNinePatch.y).toBe(50);
         });
     });
 });
