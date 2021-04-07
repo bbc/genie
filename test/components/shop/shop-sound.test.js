@@ -31,7 +31,7 @@ describe("getSoundKey", () => {
         expect(getSoundKey(mockScene, mockItem, "buy")).toBe("test-asset-prefix.buy-audio-key");
     });
 
-    test("Overrides scene default key if sound if configured for item", () => {
+    test("Overrides scene default key if sound is configured for item", () => {
         mockScene.config.confirm.audio.buy = "buy-audio-key";
         mockItem.audio = { buy: "item-key" };
 

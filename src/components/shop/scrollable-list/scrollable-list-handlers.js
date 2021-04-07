@@ -2,7 +2,7 @@
  * @module core/layout/scrollable-list
  * @copyright BBC 2020
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
 import fp from "../../../../lib/lodash/fp/fp.js";
 
@@ -51,6 +51,11 @@ const wheelScrollFactor = panel => {
     return 1 / maxOffset;
 };
 
+const resetElements = panel => {
+    const items = getPanelItems(panel);
+    items.forEach(label => label.children[0].setElementSizeAndPosition());
+};
+
 export const updatePanelOnFocus = panel => rexLabel => {
     const visibleBounds = getVisibleRangeBounds(panel);
     const itemBounds = getItemBounds(panel, rexLabel);
@@ -60,6 +65,7 @@ export const updatePanelOnFocus = panel => rexLabel => {
         [() => true, () => {}],
     ]);
     updateScrollPositionIfItemNotVisible(visibleBounds, itemBounds);
+    resetElements(panel);
 };
 
 export const updatePanelOnWheel = panel => (...args) => {
@@ -72,4 +78,5 @@ export const updatePanelOnWheel = panel => (...args) => {
     const delta = deltaY * wheelScrollFactor(panel);
     const t = Math.min(Math.max(0, panel.t + delta), 1);
     panel.t !== t && panel.setT(t);
+    resetElements(panel);
 };

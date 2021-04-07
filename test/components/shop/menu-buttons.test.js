@@ -2,7 +2,7 @@
  * @module components/shop
  * @copyright BBC 2020
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
 
 import {
@@ -15,6 +15,7 @@ import * as textElem from "../../../src/core/layout/text.js";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
 import * as mockGmi from "../../../src/core/gmi/gmi.js";
 
+jest.mock("../../../src/core/layout/metrics.js");
 jest.mock("../../../src/core/layout/text.js");
 jest.mock("../../../src/core/layout/create-button.js");
 jest.mock("../../../src/core/layout/gel-defaults.js");

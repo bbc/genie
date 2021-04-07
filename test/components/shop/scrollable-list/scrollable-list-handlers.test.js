@@ -1,20 +1,19 @@
 /**
  * @module core/layout/scrollable-list
- * @copyright BBC 2020
+ * @copyright BBC 2021
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
-
-/* eslint-disable no-console */
 import * as handlers from "../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js";
 
 let mockGelButton;
+let mockOtherGelButton;
 let mockRexLabel;
+let mockOtherRexLabel;
 let mockGridSizer;
 let mockPanel;
 
 const mockSizer = { innerHeight: 300, space: { top: 10 } };
-const mockOtherRexLabel = { children: [{}], height: 100 };
 
 describe("Scrollable List handlers", () => {
     afterEach(() => {
@@ -31,6 +30,9 @@ describe("Scrollable List handlers", () => {
                 },
             },
         };
+        mockOtherGelButton = {
+            setElementSizeAndPosition: jest.fn(),
+        };
         mockRexLabel = {
             children: [mockGelButton],
             height: 100,
@@ -38,6 +40,7 @@ describe("Scrollable List handlers", () => {
             setInteractive: jest.fn(() => mockRexLabel),
             disableInteractive: jest.fn(() => mockRexLabel),
         };
+        mockOtherRexLabel = { children: [mockOtherGelButton], height: 100 };
         mockGridSizer = { getElement: jest.fn(() => [mockRexLabel]) };
         mockPanel = {
             getByName: jest.fn(() => mockGridSizer),
@@ -121,6 +124,21 @@ describe("Scrollable List handlers", () => {
             expect(t).toBeLessThan(1);
             expect(t).toBeGreaterThan(0.5);
         });
+        test("updates a11y elements position on focus", () => {
+            mockGridSizer = {
+                getElement: jest.fn(() => [mockRexLabel]),
+            };
+            mockPanel = {
+                getByName: jest.fn(() => mockGridSizer),
+                space: { top: 10 },
+                setT: jest.fn(),
+                minHeight: 150,
+                t: 1,
+            };
+            const update = handlers.updatePanelOnFocus(mockPanel);
+            update(mockRexLabel);
+            expect(mockGelButton.setElementSizeAndPosition).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe("updatePanelOnWheel", () => {
@@ -149,6 +167,11 @@ describe("Scrollable List handlers", () => {
             onWheelFn(...args);
             expect(mockPanel.setT).not.toHaveBeenCalled();
             expect(mockEvent.stopPropagation).toHaveBeenCalled();
+        });
+        test("updates a11y elements position on scroll.", () => {
+            const onWheelFn = handlers.updatePanelOnWheel(mockPanel);
+            onWheelFn(...args);
+            expect(mockGelButton.setElementSizeAndPosition).toHaveBeenCalledTimes(1);
         });
     });
 });

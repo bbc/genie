@@ -3,10 +3,10 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as balance from "../../src/components/shop/balance.js";
-import { collections } from "../../src/core/collections.js";
+import * as balance from "../../../src/components/shop/balance.js";
+import { collections } from "../../../src/core/collections.js";
 
-jest.mock("../../src/core/collections.js");
+jest.mock("../../../src/core/collections.js");
 
 describe("setBalance", () => {
     let mockScene;
