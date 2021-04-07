@@ -41,7 +41,7 @@ export const initResizers = () => {
     resizers.set(Object, () => {});
 
     resizers.set(Phaser.GameObjects.Image, (scene, background, newSpec = {}) => {
-        const spec = { ...newSpec, ...defaultSpec };
+        const spec = { ...defaultSpec, ...newSpec };
         const safeArea = scene.layout.getSafeArea({}, false);
         background.y = spec.yOffset;
         background.setScale(safeArea.width / background.width, safeArea.height / background.height);

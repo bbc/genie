@@ -2,7 +2,7 @@
  * @module components/shop
  * @copyright BBC 2020
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
 import { createMenu } from "../../../src/components/shop/menu.js";
 import * as buttons from "../../../src/components/shop/menu-buttons.js";

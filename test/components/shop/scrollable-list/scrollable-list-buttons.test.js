@@ -2,15 +2,22 @@
  * @module core/layout/scrollable-list
  * @copyright BBC 2020
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
-import { createListButton } from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
+import {
+    createListButton,
+    scaleButton,
+} from "../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js";
 import * as overlays from "../../../../src/components/shop/scrollable-list/button-overlays.js";
 import * as createButton from "../../../../src/core/layout/create-button.js";
 import { collections } from "../../../../src/core/collections.js";
+import * as buttonStates from "../../../../src/components/shop/scrollable-list/get-button-state.js";
+import * as gelDefaults from "../../../../src/core/layout/gel-defaults.js";
 
 jest.mock("../../../../src/components/shop/scrollable-list/button-overlays.js");
 jest.mock("../../../../src/core/layout/create-button.js");
+jest.mock("../../../../src/core/layout/gel-defaults.js");
+jest.mock("../../../../src/components/shop/scrollable-list/get-button-state.js");
 
 describe("Scrollable List Buttons", () => {
     let mockItem;
@@ -22,6 +29,8 @@ describe("Scrollable List Buttons", () => {
     afterEach(() => jest.clearAllMocks());
 
     beforeEach(() => {
+        gelDefaults.buttonsChannel = jest.fn(() => "gel-buttons-shop");
+        buttonStates.getButtonState = jest.fn(() => []);
         mockScene = {
             assetPrefix: "shop",
             layout: {
@@ -71,6 +80,7 @@ describe("Scrollable List Buttons", () => {
             sprite: {},
             setScale: jest.fn(),
             off: jest.fn(),
+            width: 80,
         };
         mockItem = {
             id: "mockId",
@@ -140,6 +150,14 @@ describe("Scrollable List Buttons", () => {
         test("does not turn off the pointer up event on the button if the button is enabled", () => {
             createListButton(mockScene, mockItem, "shop");
             expect(mockGelButton.off).not.toHaveBeenCalled();
+        });
+    });
+
+    describe("scaleButton()", () => {
+        test("sets scale on provided button", () => {
+            jest.clearAllMocks();
+            scaleButton(mockGelButton, mockScene.layout, { x: 7, outerPadFactor: 10 });
+            expect(mockGelButton.setScale).toHaveBeenCalledWith(-0.675);
         });
     });
 });

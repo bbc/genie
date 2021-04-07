@@ -5,7 +5,7 @@
  * @module core/startup
  * @copyright BBC 2018
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
 import { gmi, setGmi } from "./gmi/gmi.js";
 import { addCustomStyles } from "./custom-styles.js";

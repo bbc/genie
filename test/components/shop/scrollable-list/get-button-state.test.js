@@ -6,6 +6,8 @@
 import { getButtonState } from "../../../../src/components/shop/scrollable-list/get-button-state.js";
 import { collections } from "../../../../src/core/collections.js";
 
+jest.mock("../../../../src/core/collections.js");
+
 describe("getButtonState", () => {
     let mockScene;
     let mockItem;

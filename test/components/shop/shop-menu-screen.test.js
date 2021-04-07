@@ -13,6 +13,7 @@ import { ShopMenu } from "../../../src/components/shop/shop-menu-screen.js";
 import { initResizers } from "../../../src/components/shop/backgrounds.js";
 
 jest.mock("../../../src/core/titles.js");
+jest.mock("../../../src/components/shop/backgrounds.js");
 jest.mock("../../../src/components/shop/balance.js");
 jest.mock("../../../src/components/shop/menu.js");
 jest.mock("../../../lib/rexuiplugin.min.js");
@@ -56,13 +57,17 @@ describe("Shop Menu Screen", () => {
                 NinePatch: jest.fn(),
             },
         };
-        initResizers();
     });
     afterEach(() => jest.clearAllMocks());
 
     test("installs rexUI plugin on preload", () => {
         shopMenu.preload();
         expect(shopMenu.plugins.installScenePlugin).toHaveBeenCalledWith("rexUI", RexUIPlugin, "rexUI", shopMenu, true);
+    });
+
+    test("inits resizers", () => {
+        shopMenu.preload();
+        expect(initResizers).toHaveBeenCalled();
     });
 
     test("calls addBackgroundItems on create", () => {

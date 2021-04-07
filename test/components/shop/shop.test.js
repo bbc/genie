@@ -2,7 +2,7 @@
  * @module components/shop
  * @copyright BBC 2020
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
 import { Shop, launchShopOverlay } from "../../../src/components/shop/shop.js";
 import { ShopMenu } from "../../../src/components/shop/shop-menu-screen.js";
@@ -11,6 +11,9 @@ import { ShopConfirm } from "../../../src/components/shop/shop-confirm-screen.js
 import { gmi } from "../../../src/core/gmi/gmi.js";
 
 jest.mock("../../../src/components/shop/scrollable-list/scrollable-list.js");
+jest.mock("../../../src/components/shop/shop-menu-screen.js");
+jest.mock("../../../src/components/shop/shop-list-screen.js");
+jest.mock("../../../src/components/shop/shop-confirm-screen.js");
 
 describe("Shop scene config", () => {
     test("returns the correct config object", () => {
