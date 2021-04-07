@@ -4,7 +4,7 @@
  * @module core/layout/scrollable-list
  * @copyright BBC 2020
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
 import { updatePanelOnFocus, updatePanelOnWheel } from "./scrollable-list-handlers.js";
 import { createListButton, scaleButton } from "./scrollable-list-buttons.js";
