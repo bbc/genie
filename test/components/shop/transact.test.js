@@ -1,8 +1,8 @@
 /**
  * @module components/shop
- * @copyright BBC 2020
+ * @copyright BBC 2021
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
 
 import * as transact from "../../../src/components/shop/transact.js";
