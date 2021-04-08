@@ -15,6 +15,7 @@ import fp from "../../../../lib/lodash/fp/fp.js";
 import { createBackground, resizeBackground } from "../backgrounds.js";
 import { createScrollablePanel, getPanelY } from "./scrollable-panel.js";
 import { addText } from "../../../core/layout/text.js";
+import { createCovers, resizeCovers } from "./scrollable-list-covers.js";
 
 const createTable = (scene, mode, parent, scrollablePanel, collection) => {
     const sizer = scene.rexUI.add.sizer({ orientation: "y" });
@@ -129,10 +130,15 @@ export class ScrollableList extends Phaser.GameObjects.Container {
         const collection = getFilteredCollection(collections.get(key).getAll(), filter);
         if (collection.length) {
             const { scrollablePanel, child } = createScrollablePanel(scene, mode, this);
+            this.panelChild = child;
             this.add(scrollablePanel);
             scene.layout.addCustomGroup(scene.scene.key, scrollablePanel, 0);
             child.add(createTable(scene, mode, this, scrollablePanel, collection), { expand: true });
             setupEvents(scene, scrollablePanel);
+
+            this.coversConfig = { ...scene.config.listCovers?.[mode], ...scene.config.listPadding };
+            this.covers = createCovers(scene, this.coversConfig);
+
             this.reset = () => {
                 resizePanel(scene, scrollablePanel)();
                 this.resetBackground();
@@ -141,11 +147,13 @@ export class ScrollableList extends Phaser.GameObjects.Container {
             createEmptyText(scene, mode);
             this.reset = () => this.resetBackground();
         }
+
         scene.input.topOnly = false;
     }
 
     resetBackground() {
         resizeBackground(this.background.constructor)(this.scene, this.background);
+        resizeCovers(this.scene, this.panelChild, this.covers, this.coversConfig);
     }
 
     getBoundingRect() {

@@ -38,6 +38,16 @@
                 "url": "shop-list/assets/menu-button-icon.png"
             },
             {
+                "type": "image",
+                "key": "listCoverTop",
+                "url": "shop-list/assets/list-cover-top.png"
+            },
+            {
+                "type": "image",
+                "key": "listCoverBottom",
+                "url": "shop-list/assets/list-cover-bottom.png"
+            },
+            {
                 "type": "spritesheet",
                 "key": "itemBackground",
                 "url": "shop-list/assets/item-block.png",

@@ -326,6 +326,16 @@
                 "type": "image",
                 "key": "titleBackground",
                 "url": "../../debug/assets/shop/title-background.png"
+            },
+            {
+                "type": "image",
+                "key": "listCoverTop",
+                "url": "../../debug/assets/shop/list-cover-top.png"
+            },
+            {
+                "type": "image",
+                "key": "listCoverBottom",
+                "url": "../../debug/assets/shop/list-cover-bottom.png"
             }
         ]
     },
