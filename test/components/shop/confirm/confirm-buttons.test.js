@@ -50,6 +50,7 @@ describe("Confirm Buttons", () => {
             "Buy",
             expect.any(Function),
             expect.any(Function),
+            { price: 20 },
         );
         const actionButtonCallback = menuButtons.createConfirmButtons.mock.calls[0][2];
         const cancelButtonCallback = menuButtons.createConfirmButtons.mock.calls[0][3];
