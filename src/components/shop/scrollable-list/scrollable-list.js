@@ -46,6 +46,7 @@ const createItem = (scene, item, mode, parent, scrollablePanel) => {
         return (
             (scrollablePanel.isInTouching() || !pointer || prevType === "keydown") &&
             !isLocked(item) &&
+            scrollablePanel.childrenMap.scroller.state !== "DRAG" &&
             showConfirmation(scene, mode, item)
         );
     };

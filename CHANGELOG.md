@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| | Prevents scrollable list buttons from being clicked while dragging the list. |
+| | Loads other variations of the Reith font upfront. |
 | | Updated Phaser to 3.54.0 |
 | | Reposition shop-list accessible elements on scroll and tab events. |
 | 3.9.0 | |
