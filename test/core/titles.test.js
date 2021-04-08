@@ -4,7 +4,6 @@
  * @license Apache-2.0
  */
 import { createTitles } from "../../src/core/titles.js";
-import * as text from "../../src/core/layout/text.js";
 import * as scaler from "../../src/core/scaler.js";
 
 jest.mock("../../src/core/layout/text.js");
@@ -74,11 +73,6 @@ describe("Titles", () => {
     });
 
     describe("Title", () => {
-        test("passes title text to updateStyleOnFontLoad", () => {
-            createTitles(mockScene);
-            expect(text.updateStyleOnFontLoad).toHaveBeenCalledWith(mockText);
-        });
-
         test("adds title backdrop", () => {
             createTitles(mockScene);
             expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, mockScene.config.title.backgroundKey);
