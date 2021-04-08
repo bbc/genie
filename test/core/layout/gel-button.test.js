@@ -217,7 +217,7 @@ describe("Gel Button", () => {
                 data: { screen: mockScene },
             });
         });
-        test("pointerup function updates pointer states", () => {
+        test("pointerup updates pointer states", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
             gelButton.onPointerUp(mockConfig, mockScene);
             expect(mockScene.sys.game.input.updateInputPlugins).toHaveBeenCalledWith(
@@ -226,10 +226,21 @@ describe("Gel Button", () => {
             );
         });
 
-        test("pointerup function calls play on button click sound", () => {
+        test("pointerup calls play on button click sound", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
             gelButton.onPointerUp(mockConfig, mockScene);
             expect(GameSound.Assets.buttonClick.play).toHaveBeenCalled();
+        });
+
+        test("pointerup calls play on button click sound after it has been changed", () => {
+            const mockSound = { play: jest.fn(), once: jest.fn(() => mockSound) };
+            mockScene.sound.add = jest.fn(() => mockSound);
+
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            gelButton.setClickSound("test-key");
+
+            gelButton.onPointerUp(mockConfig, mockScene);
+            expect(mockSound.play).toHaveBeenCalled();
         });
 
         test("pointerup function calls once on button click to prevent pausing", () => {
@@ -248,6 +259,17 @@ describe("Gel Button", () => {
             gelButton.input = { hitArea: {} };
             gelButton.setHitArea(mockMetrics);
             expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(0, 0, 120, 70));
+        });
+    });
+
+    describe("setClickSound function", () => {
+        test("sets the correct sound key in button config", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            const mockSound = { testProp: "testValue" };
+            (mockScene.sound.add = jest.fn(() => mockSound)), gelButton.setClickSound("test-key");
+
+            expect(gelButton.config.clickSound).toBe("test-key");
+            expect(gelButton._click).toBe(mockSound);
         });
     });
 
