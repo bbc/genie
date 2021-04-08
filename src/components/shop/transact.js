@@ -8,7 +8,6 @@
 import { collections } from "../../core/collections.js";
 import { gmi } from "../../core/gmi/gmi.js";
 import { eventBus } from "../../core/event-bus.js";
-import { playShopSound } from "./shop-sound.js";
 
 const updateBalance = (scene, invCol, price) =>
     invCol.set({
@@ -29,8 +28,6 @@ export const buy = (scene, item) => {
         source: item.title,
     });
     updateBalance(scene, invCol, item.price);
-
-    playShopSound(scene, item, "buy");
 };
 
 export const equip = (scene, item) => {
@@ -46,7 +43,6 @@ export const equip = (scene, item) => {
         source: item.title,
     });
     invCol.set({ id: item.id, state: "equipped" });
-    playShopSound(scene, item, "equip");
 };
 
 export const unequip = (scene, item) => {
@@ -57,7 +53,6 @@ export const unequip = (scene, item) => {
         source: item.title,
     });
     invCol.set({ id: item.id, state: "purchased" });
-    playShopSound(scene, item, "unequip");
 };
 
 export const use = (scene, item) => {
@@ -72,7 +67,6 @@ export const use = (scene, item) => {
         data: invItem,
     });
     invCol.set({ id: item.id, qty: qtyLeft });
-    playShopSound(scene, item, "use");
 };
 
 export const getBalanceItem = shopConfig => collections.get(shopConfig.shopCollections.manage).get(shopConfig.balance);

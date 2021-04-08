@@ -141,6 +141,7 @@ describe("create menu/confirm buttons", () => {
             "action",
             () => {},
             () => {},
+            {},
         );
         expect(buttons.length).toBe(2);
     });
@@ -148,7 +149,7 @@ describe("create menu/confirm buttons", () => {
     test("creates two confirm buttons with the correct button config", () => {
         const confirmCallback = jest.fn();
         const cancelCallback = jest.fn();
-        createConfirmButtons(mockScene, "Buy", confirmCallback, cancelCallback);
+        createConfirmButtons(mockScene, "Buy", confirmCallback, cancelCallback, {});
         expect(button.createButton).toHaveBeenCalledTimes(2);
         expect(button.createButton).toHaveBeenCalledWith(mockScene, {
             gameButton: true,
@@ -172,12 +173,31 @@ describe("create menu/confirm buttons", () => {
         });
     });
 
+    test("Adds 'clickSound' to config if set in item config", () => {
+        const confirmCallback = jest.fn();
+        const cancelCallback = jest.fn();
+        createConfirmButtons(mockScene, "Buy", confirmCallback, cancelCallback, { audio: { buy: "test-click" } });
+
+        expect(button.createButton).toHaveBeenCalledWith(mockScene, {
+            gameButton: true,
+            accessible: true,
+            channel: mockChannel,
+            title: "Buy",
+            id: "tx_buy_button",
+            ariaLabel: "Buy",
+            action: confirmCallback,
+            key: "buy-key",
+            clickSound: "test-click",
+        });
+    });
+
     test("sets a caption on both confirm buttons", () => {
         createConfirmButtons(
             mockScene,
             "action",
             () => {},
             () => {},
+            {},
         );
         expect(mockGelButton.overlays.set).toHaveBeenCalledTimes(2);
         expect(mockGelButton.overlays.set).toHaveBeenCalledWith("caption", mockTextWithOrigin);

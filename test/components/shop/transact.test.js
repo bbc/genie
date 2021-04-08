@@ -9,7 +9,6 @@ import * as transact from "../../../src/components/shop/transact.js";
 import { collections } from "../../../src/core/collections.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
 import { eventBus } from "../../../src/core/event-bus.js";
-import { playShopSound } from "../../../src/components/shop/shop-sound.js";
 
 jest.mock("../../../src/core/collections.js");
 jest.mock("../../../src/core/gmi/gmi.js");
@@ -116,10 +115,6 @@ describe("Shop Transactions", () => {
             transact.buy(mockScene, mockItem);
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
-
-        test("plays shop buy sound", () => {
-            expect(playShopSound).toHaveBeenCalledWith(mockScene, mockItem, "buy");
-        });
     });
 
     describe("Equipping an item", () => {
@@ -147,10 +142,6 @@ describe("Shop Transactions", () => {
             transact.equip(mockScene, mockItem);
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
-
-        test("plays shop equip sound", () => {
-            expect(playShopSound).toHaveBeenCalledWith(mockScene, mockItem, "equip");
-        });
     });
 
     describe("Unequipping an item", () => {
@@ -168,10 +159,6 @@ describe("Shop Transactions", () => {
                 metadata: "KEY=item~STATE=unequipped~QTY=1",
                 source: "amazing helmet",
             });
-        });
-
-        test("plays shop unequip sound", () => {
-            expect(playShopSound).toHaveBeenCalledWith(mockScene, mockItem, "unequip");
         });
     });
 
@@ -195,10 +182,6 @@ describe("Shop Transactions", () => {
                 metadata: "KEY=item~STATE=used~QTY=4",
                 source: "amazing helmet",
             });
-        });
-
-        test("plays shop use sound", () => {
-            expect(playShopSound).toHaveBeenCalledWith(mockScene, mockItem, "use");
         });
     });
 

@@ -8,7 +8,7 @@ import fp from "../../lib/lodash/fp/fp.js";
 import { gmi } from "./gmi/gmi.js";
 import { buttonsChannel } from "./layout/gel-defaults.js";
 import { eventBus } from "./event-bus.js";
-import * as GameSound from "../core/game-sound.js";
+import { setMusic } from "./music.js";
 import * as a11y from "../core/accessibility/accessibility-layer.js";
 import * as Scaler from "./scaler.js";
 import * as Layout from "./layout/layout.js";
@@ -82,7 +82,7 @@ export class Screen extends Phaser.Scene {
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
             this.setStatsScreen(this.scene.key);
-            GameSound.setupScreenMusic(this);
+            setMusic(this);
 
             isDebug() && debug.addEvents(this);
             this.events.once(Phaser.Scenes.Events.CREATE, () => (this.titles = createTitles(this)));
