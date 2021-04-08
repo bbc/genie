@@ -311,6 +311,11 @@
                 "type": "image",
                 "key": "titleBackground",
                 "url": "../../debug/assets/shop/title-background.png"
+            },
+            {
+                "type": "image",
+                "key": "shopKeeper",
+                "url": "../../debug/assets/shop/shopkeeper.png"
             }
         ]
     },

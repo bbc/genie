@@ -9,6 +9,11 @@
             },
             {
                 "type": "image",
+                "key": "shopKeeper",
+                "url": "shop-menu/assets/shopkeeper.png"
+            },
+            {
+                "type": "image",
                 "key": "balanceBackground",
                 "url": "shop-menu/assets/balance-background.png"
             },
