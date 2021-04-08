@@ -3,6 +3,7 @@
 | Version | Description |
 |---------|-------------|
 | | Add ability to change button click sounds per button. |
+| | Prevents scrollable list buttons from being clicked while dragging the list. |
 | | Updated Phaser to 3.54.0 |
 | | Reposition shop-list accessible elements on scroll and tab events. |
 | 3.9.0 | |

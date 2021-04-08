@@ -108,6 +108,7 @@ describe("Scrollable List", () => {
             add: jest.fn(),
         };
         mockScrollablePanel = {
+            childrenMap: { scroller: { state: "DRAGBEGIN" } },
             isInTouching: jest.fn(() => true),
             layout: jest.fn(),
             getByName: jest.fn(name => (name === "grid" ? mockGridSizer : mockSizer)),
@@ -328,6 +329,16 @@ describe("Scrollable List", () => {
                 });
                 test("don't fire if the label is scrolled off the panel", () => {
                     mockScrollablePanel.isInTouching = jest.fn(() => false);
+                    callback(mockPointer);
+                    expect(mockScene.addOverlay).not.toHaveBeenCalledWith("shop-confirm");
+                });
+                test("don't fire if the item is locked", () => {
+                    mockItem.state = "locked";
+                    callback(mockPointer);
+                    expect(mockScene.addOverlay).not.toHaveBeenCalledWith("shop-confirm");
+                });
+                test("dont fire if the panel is being dragged", () => {
+                    mockScrollablePanel.childrenMap.scroller.state = "DRAG";
                     callback(mockPointer);
                     expect(mockScene.addOverlay).not.toHaveBeenCalledWith("shop-confirm");
                 });
