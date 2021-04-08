@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Now loads other variations of the Reith font upfront.
 | | Updated Phaser to 3.54.0 |
 | | Reposition shop-list accessible elements on scroll and tab events. |
 | 3.9.0 | |

@@ -74,11 +74,6 @@ describe("Titles", () => {
     });
 
     describe("Title", () => {
-        test("passes title text to updateStyleOnFontLoad", () => {
-            createTitles(mockScene);
-            expect(text.updateStyleOnFontLoad).toHaveBeenCalledWith(mockText);
-        });
-
         test("adds title backdrop", () => {
             createTitles(mockScene);
             expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, mockScene.config.title.backgroundKey);

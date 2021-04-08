@@ -18,12 +18,5 @@ const style = (styleDefaults, config) => {
 
 export const addText = (scene, x, y, text, config) => {
     const element = scene.add.text(x, y, text, style(scene.config.styleDefaults, config));
-    updateStyleOnFontLoad(element);
     return element;
-};
-
-export const updateStyleOnFontLoad = text => {
-    if (document.fonts && !document.fonts.check(text.style._font)) {
-        document.fonts.ready.then(() => text.scene && text.style.update());
-    }
 };

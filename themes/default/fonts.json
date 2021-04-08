@@ -1,6 +1,6 @@
 {
     "custom": {
-        "families": ["ReithSans", "ReithSerif"],
+        "families": ["ReithSans:n4,i4,n7,i7,n3,i3,n5,i5,n8,i8", "ReithSerif:n4,i4,n7,i7,n3,i3,n5,i5,n8,i8"],
         "urls": ["https://gel.files.bbci.co.uk/r2.302/bbc-reith.css"]
     }
 }
