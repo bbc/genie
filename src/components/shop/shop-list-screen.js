@@ -20,11 +20,9 @@ export class ShopList extends Screen {
     }
 
     create() {
-        if (this.transientData.shop.mode == "shop") {
-            this.setStatsScreen(this.transientData.shopTitle + "buy");
-        } else {
-            this.setStatsScreen(this.transientData.shopTitle + "manage");
-        }
+        this.setStatsScreen(
+            this.transientData.shopTitle + (this.transientData.shop.mode === "shop" ? "buy" : "manage"),
+        );
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
 
