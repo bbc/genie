@@ -84,7 +84,6 @@ export class Screen extends Phaser.Scene {
             if (!this.scene.key.includes("shop")) {
                 this.setStatsScreen(this.scene.key);
             }
-            this.setStatsScreen(this.scene.key);
             setMusic(this);
 
             isDebug() && debug.addEvents(this);

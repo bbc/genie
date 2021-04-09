@@ -19,7 +19,12 @@ export class ShopMenu extends Screen {
     }
 
     create() {
-        this.transientData.shopTitle = this.config.title?.text.toLowerCase() || "shop";
+        const shopName = this.scene.key.slice(0, this.scene.key.indexOf("-"));
+        if (shopName.includes("shop")) {
+            this.transientData.shopTitle = shopName;
+        } else {
+            this.transientData.shopTitle = "shop";
+        }
         this.setStatsScreen(this.transientData.shopTitle + "menu");
         this.addBackgroundItems();
         const backNav = this._data.addedBy ? "overlayBack" : "back";

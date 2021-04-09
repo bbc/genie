@@ -104,6 +104,24 @@ describe("Shop Menu Screen", () => {
         expect(menu.createMenu).toHaveBeenCalledWith(shopMenu);
     });
 
+    test("sets page stat if scene key does contain shop", () => {
+        shopMenu.scene = { key: "shopname-menu" };
+        shopMenu._data = {
+            addedBy: undefined,
+            transient: {},
+            config: { "shopname-menu": { shopConfig: mockShopConfig } },
+        };
+        shopMenu.create();
+        expect(gmi.gmi.setStatsScreen).toHaveBeenCalledWith("shopnamemenu");
+    });
+
+    test("sets page stat if scene key doesn't contain shop", () => {
+        shopMenu.scene = { key: "test-menu" };
+        shopMenu._data = { addedBy: undefined, transient: {}, config: { "test-menu": { shopConfig: mockShopConfig } } };
+        shopMenu.create();
+        expect(gmi.gmi.setStatsScreen).toHaveBeenCalledWith("shopmenu");
+    });
+
     test("adds a onScaleChange event on create", () => {
         shopMenu.create();
         expect(scaler.onScaleChange.add).toHaveBeenCalledWith(expect.any(Function));
