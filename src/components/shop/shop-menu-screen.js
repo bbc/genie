@@ -19,6 +19,8 @@ export class ShopMenu extends Screen {
     }
 
     create() {
+        this.transientData.shopTitle = this.config.title?.text.toLowerCase() || "shop";
+        this.setStatsScreen(this.transientData.shopTitle + "menu");
         this.addBackgroundItems();
         const backNav = this._data.addedBy ? "overlayBack" : "back";
         this.setLayout([backNav, "pause"]);

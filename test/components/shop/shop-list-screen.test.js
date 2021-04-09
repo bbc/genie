@@ -29,7 +29,7 @@ describe("Shop List Screen", () => {
         list.ScrollableList = jest.fn(() => mockList);
         mockScalerEvent = { unsubscribe: jest.fn() };
         scaler.onScaleChange = { add: jest.fn(() => mockScalerEvent) };
-        mockShopConfig = { mock: "config" };
+        mockShopConfig = { mock: "config", title: { text: "shop" } };
         ShopList.prototype.plugins = {
             installScenePlugin: jest.fn(),
         };
@@ -77,6 +77,17 @@ describe("Shop List Screen", () => {
     test("makes shop title available as transientData", () => {
         shopList.create();
         expect(shopList.transientData["shop-list"]).toEqual({ title: "shop" });
+    });
+
+    test("makes shop title available as transientData in other modes", () => {
+        shopList._data = {
+            addedBy: { addOverlay: jest.fn() },
+            transient: { shop: { mode: "manage", config: { balance: "balance" } } },
+            config: { "shop-menu": { shopConfig: mockShopConfig } },
+        };
+
+        shopList.create();
+        expect(shopList.transientData["shop-list"]).toEqual({ title: "manage" });
     });
 
     test("calls setBalance", () => {

@@ -20,6 +20,7 @@ export class ShopConfirm extends Screen {
     }
 
     create() {
+        this.setStatsScreen(this.transientData.shopTitle + "confirm");
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);
 
