@@ -42,10 +42,8 @@ export const resizeCovers = (scene, panel, covers, config) => {
         .setScale(panelWidth / covers.bottom.width);
 };
 
-export const createCovers = (scene, config) => {
-    if (!scene.config.listCovers) return;
-    return {
+export const createCovers = (scene, config) =>
+    scene.config.listCovers && {
         top: config.top ? scene.add.image(0, 0, config.top.key) : null,
         bottom: config.bottom ? scene.add.image(0, 0, config.bottom.key) : null,
     };
-};
