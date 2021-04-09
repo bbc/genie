@@ -6,16 +6,38 @@
 import { createItemPanel, resizeItemPanel } from "../../../../src/components/shop/confirm/item-panel.js";
 import * as textModule from "../../../../src/core/layout/text.js";
 
+jest.mock("../../../../src/core/layout/text.js");
+
 describe("Confirm item view", () => {
     let mockConfig;
     let mockScene;
     let image;
     let mockBounds;
     let container;
+    let mockText;
 
     beforeEach(() => {
-        const mockText = { setOrigin: jest.fn() };
-        mockConfig = { confirm: { buttons: { buttonsRight: true }, detailView: true } };
+        global.Phaser.Display.Align.In.Center = jest.fn();
+        mockText = {
+            setOrigin: jest.fn(() => mockText),
+            setPosition: jest.fn(),
+            getBounds: jest.fn(() => ({
+                bottom: 10,
+            })),
+            setStyle: jest.fn(),
+        };
+        textModule.addText = jest.fn(() => mockText);
+        mockConfig = {
+            confirm: {
+                background: "backgroundKey",
+                itemBackground: "itemBackgroundKey",
+                buttons: { buttonsRight: true },
+                detailView: true,
+                title: { mock: "titleStyle" },
+                subtitle: { mock: "subtitleStyle" },
+                description: { mock: "descriptionStyle" },
+            },
+        };
 
         image = {
             setPosition: jest.fn(),
@@ -27,6 +49,7 @@ describe("Confirm item view", () => {
         };
 
         mockScene = {
+            assetPrefix: "prefix",
             add: { image: jest.fn(() => image), container: jest.fn(() => container), text: jest.fn(() => mockText) },
             config: mockConfig,
             layout: {
@@ -65,13 +88,11 @@ describe("Confirm item view", () => {
         test("sets container scale correctly", () => {
             resizeItemPanel(mockScene, container)();
 
-            expect(container.setScale.mock.calls[0][0].toFixed(2)).toBe("0.50");
-            expect(container.setScale.mock.calls[0][1].toFixed(2)).toBe("0.50");
+            expect(container.setScale).toHaveBeenCalledWith(0.5, 0.5);
         });
 
         test("Centers icon images on background if basic view", () => {
             mockScene.config.confirm.detailView = false;
-            global.Phaser.Display.Align.In.Center = jest.fn();
 
             resizeItemPanel(mockScene, container)();
 
@@ -81,34 +102,86 @@ describe("Confirm item view", () => {
     });
 
     describe("createItemPanel", () => {
-        test("creates standard view if detailView falsy in scene config", () => {
-            mockScene.config.confirm.detailView = false;
+        test("adds a container to the scene", () => {
             createItemPanel(mockScene, {});
-            expect(container.add).toHaveBeenCalledTimes(3);
+            expect(mockScene.add.container).toHaveBeenCalled();
         });
 
-        test("creates detail view if set in scene config", () => {
-            mockScene.config.confirm.detailView = true;
+        test("sets origins to 0.5, 0 when in detail view", () => {
+            createItemPanel(mockScene, {});
+            expect(mockText.setOrigin).toHaveBeenCalledWith(0.5, 0);
+            expect(image.setOrigin).toHaveBeenCalledWith(0.5, 0);
+        });
 
-            Object.keys(createItemPanel(mockScene, {}));
+        test("sets origins to 0.5, 0.5 when in basic view", () => {
+            mockScene.config.confirm.detailView = false;
+            createItemPanel(mockScene, {});
+            expect(image.setOrigin).toHaveBeenCalledWith(0.5, 0.5);
+        });
 
+        test("adds a background image", () => {
+            createItemPanel(mockScene, {});
+            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "prefix.backgroundKey");
+        });
+
+        test("adds an icon background image", () => {
+            createItemPanel(mockScene, {});
+            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "prefix.itemBackgroundKey");
+            expect(image.setPosition).toHaveBeenCalledWith(0, -130);
+        });
+
+        test("adds an icon image", () => {
+            createItemPanel(mockScene, { icon: "mockIcon" });
+            expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "mockIcon");
+            expect(global.Phaser.Display.Align.In.Center).toHaveBeenCalledWith(image, image);
+        });
+
+        test("adds item title text", () => {
+            createItemPanel(mockScene, { title: "mockTitle" });
+            expect(textModule.addText).toHaveBeenCalledWith(mockScene, 0, 0, "mockTitle", mockConfig.confirm.title);
+            expect(mockText.setPosition).toHaveBeenCalledWith(0, 16);
+        });
+
+        test("adds item subtitle text", () => {
+            createItemPanel(mockScene, { subtitle: "mockSubtitle" });
+            expect(textModule.addText).toHaveBeenCalledWith(
+                mockScene,
+                0,
+                0,
+                "mockSubtitle",
+                mockConfig.confirm.subtitle,
+            );
+            expect(mockText.setPosition).toHaveBeenCalledWith(0, 14);
+        });
+
+        test("adds item description text", () => {
+            createItemPanel(mockScene, { description: "mockDescription" });
+            expect(textModule.addText).toHaveBeenCalledWith(
+                mockScene,
+                0,
+                0,
+                "mockDescription",
+                mockConfig.confirm.description,
+            );
+            expect(mockText.setPosition).toHaveBeenCalledWith(0, 16);
+        });
+
+        test("adds 3 game objects to the container when in detail view", () => {
+            createItemPanel(mockScene, { description: "mockDescription" });
             expect(container.add).toHaveBeenCalledTimes(6);
+        });
+
+        test("adds 6 game objects to the container when in basic view", () => {
+            mockScene.config.confirm.detailView = false;
+            createItemPanel(mockScene, { description: "mockDescription" });
+            expect(container.add).toHaveBeenCalledTimes(3);
         });
 
         test("sets word wrap style if item description present", () => {
             mockScene.config.confirm.detailView = true;
-            const mockText = {
-                setStyle: jest.fn(() => mockText),
-                setOrigin: jest.fn(() => mockText),
-                setPosition: jest.fn(() => mockText),
-                getBounds: jest.fn(() => ({ bottom: 100 })),
-            };
-            textModule.addText = jest.fn(() => mockText);
-
             createItemPanel(mockScene, {});
 
             const expected = { wordWrap: { width: 280, useAdvancedWrap: true } };
-
             expect(mockText.setStyle).toHaveBeenCalledWith(expected);
         });
     });

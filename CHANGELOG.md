@@ -2,6 +2,11 @@
 
 | Version | Description |
 |---------|-------------|
+| | Loads other variations of the Reith font upfront. |
+| | Add ability to change button click sounds per button. |
+| | Prevents scrollable list buttons from being clicked while dragging the list. |
+| | Updated Phaser to 3.54.0 |
+| | Reposition shop-list accessible elements on scroll and tab events. |
 | 3.9.0 | |
 | | Fix showing shop confirm on key press. |
 | | Added resize for shop menu based on re-calculated bounds. |

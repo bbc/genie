@@ -3,14 +3,13 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { titleText } from "../../../../src/components/shop/confirm/title-text.js";
-import * as collectionsModule from "../../../../src/core/collections.js";
+import { titleText } from "../../../../src/components/shop/confirm/prompt-text.js";
 import * as itemChecksModule from "../../../../src/components/shop/confirm/item-checks.js";
+
+jest.mock("../../../../src/components/shop/confirm/item-checks.js");
 
 describe("Prompt Text", () => {
     let mockScene;
-    let mockCollection;
-    let mockItem;
 
     beforeEach(() => {
         mockScene = {
@@ -33,11 +32,6 @@ describe("Prompt Text", () => {
             },
             transientData: { shop: { config: { shopCollections: { manage: {} } } } },
         };
-
-        mockItem = { qty: 0, price: 99 };
-
-        mockCollection = { get: jest.fn(() => mockItem) };
-        collectionsModule.collections = { get: jest.fn(() => mockCollection) };
     });
 
     afterEach(jest.clearAllMocks);

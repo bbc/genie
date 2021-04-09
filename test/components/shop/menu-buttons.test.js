@@ -2,7 +2,7 @@
  * @module components/shop
  * @copyright BBC 2020
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
 
 import {
@@ -15,6 +15,7 @@ import * as textElem from "../../../src/core/layout/text.js";
 import * as gel from "../../../src/core/layout/gel-defaults.js";
 import * as mockGmi from "../../../src/core/gmi/gmi.js";
 
+jest.mock("../../../src/core/layout/metrics.js");
 jest.mock("../../../src/core/layout/text.js");
 jest.mock("../../../src/core/layout/create-button.js");
 jest.mock("../../../src/core/layout/gel-defaults.js");
@@ -140,6 +141,7 @@ describe("create menu/confirm buttons", () => {
             "action",
             () => {},
             () => {},
+            {},
         );
         expect(buttons.length).toBe(2);
     });
@@ -147,7 +149,7 @@ describe("create menu/confirm buttons", () => {
     test("creates two confirm buttons with the correct button config", () => {
         const confirmCallback = jest.fn();
         const cancelCallback = jest.fn();
-        createConfirmButtons(mockScene, "Buy", confirmCallback, cancelCallback);
+        createConfirmButtons(mockScene, "Buy", confirmCallback, cancelCallback, {});
         expect(button.createButton).toHaveBeenCalledTimes(2);
         expect(button.createButton).toHaveBeenCalledWith(mockScene, {
             gameButton: true,
@@ -171,12 +173,31 @@ describe("create menu/confirm buttons", () => {
         });
     });
 
+    test("Adds 'clickSound' to config if set in item config", () => {
+        const confirmCallback = jest.fn();
+        const cancelCallback = jest.fn();
+        createConfirmButtons(mockScene, "Buy", confirmCallback, cancelCallback, { audio: { buy: "test-click" } });
+
+        expect(button.createButton).toHaveBeenCalledWith(mockScene, {
+            gameButton: true,
+            accessible: true,
+            channel: mockChannel,
+            title: "Buy",
+            id: "tx_buy_button",
+            ariaLabel: "Buy",
+            action: confirmCallback,
+            key: "buy-key",
+            clickSound: "test-click",
+        });
+    });
+
     test("sets a caption on both confirm buttons", () => {
         createConfirmButtons(
             mockScene,
             "action",
             () => {},
             () => {},
+            {},
         );
         expect(mockGelButton.overlays.set).toHaveBeenCalledTimes(2);
         expect(mockGelButton.overlays.set).toHaveBeenCalledWith("caption", mockTextWithOrigin);

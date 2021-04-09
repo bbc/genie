@@ -12,6 +12,9 @@ import {
 import * as collectionsModule from "../../../../src/core/collections.js";
 import * as transactModule from "../../../../src/components/shop/transact.js";
 
+jest.mock("../../../../src/core/collections.js");
+jest.mock("../../../../src/components/shop/transact.js");
+
 describe("Item Checks", () => {
     beforeEach(() => {});
 
@@ -20,7 +23,6 @@ describe("Item Checks", () => {
     describe("getShopConfig", () => {
         test("gets scene.transientData.shop.config from scene", () => {
             const mockScene = { transientData: { shop: { config: "test-config" } } };
-
             expect(getShopConfig(mockScene)).toBe("test-config");
         });
     });

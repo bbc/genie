@@ -1,8 +1,8 @@
 /**
  * @module components/shop
- * @copyright BBC 2020
+ * @copyright BBC 2021
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
 
 import * as transact from "../../../src/components/shop/transact.js";
@@ -12,6 +12,8 @@ import { eventBus } from "../../../src/core/event-bus.js";
 
 jest.mock("../../../src/core/collections.js");
 jest.mock("../../../src/core/gmi/gmi.js");
+jest.mock("../../../src/core/event-bus.js");
+jest.mock("../../../src/components/shop/shop-sound.js");
 
 describe("Shop Transactions", () => {
     let mockScene;
@@ -78,6 +80,7 @@ describe("Shop Transactions", () => {
     unsubscribeSpy = jest.fn();
     jest.spyOn(eventBus, "publish").mockImplementation(() => {});
     jest.spyOn(eventBus, "subscribe").mockImplementation(() => ({ unsubscribe: unsubscribeSpy }));
+
     afterEach(() => jest.clearAllMocks());
 
     describe("Buying an item", () => {
@@ -160,10 +163,10 @@ describe("Shop Transactions", () => {
     });
 
     describe("using an item", () => {
-        beforeEach(() => transact.use(mockScene, mockInventoryItem));
+        beforeEach(() => transact.use(mockScene, mockItem));
 
         test("item's quantity is reduced by one in the inventory collection", () => {
-            const expectedItem = { id: "inventoryItem", qty: mockInventoryItem.qty - 1 };
+            const expectedItem = { id: "item", qty: mockInventoryItem.qty - 1 };
             expect(mockManageCollection.set).toHaveBeenCalledWith(expectedItem);
         });
 
@@ -176,7 +179,7 @@ describe("Shop Transactions", () => {
 
         test("fires a stats event", () => {
             expect(gmi.sendStatsEvent).toHaveBeenCalledWith("use", "click", {
-                metadata: "KEY=inventoryItem~STATE=used~QTY=4",
+                metadata: "KEY=item~STATE=used~QTY=4",
                 source: "amazing helmet",
             });
         });

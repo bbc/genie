@@ -17,6 +17,7 @@ jest.mock("../../../src/components/shop/confirm/confirm.js");
 jest.mock("../../../lib/rexuiplugin.min.js");
 jest.mock("../../../src/core/scaler.js");
 jest.mock("../../../src/core/gmi/gmi.js");
+jest.mock("../../../src/components/shop/backgrounds.js");
 
 describe("Shop Confirm Screen", () => {
     let shopConfirm;
@@ -54,7 +55,6 @@ describe("Shop Confirm Screen", () => {
                 NinePatch: jest.fn(),
             },
         };
-        initResizers();
     });
     afterEach(() => jest.clearAllMocks());
 
@@ -67,6 +67,11 @@ describe("Shop Confirm Screen", () => {
             shopConfirm,
             true,
         );
+    });
+
+    test("inits resizers", () => {
+        shopConfirm.preload();
+        expect(initResizers).toHaveBeenCalled();
     });
 
     test("calls addBackgroundItems on create", () => {

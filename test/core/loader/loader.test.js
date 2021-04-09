@@ -9,7 +9,6 @@ import { createMockGmi } from "../../mock/gmi.js";
 import { Loader } from "../../../src/core/loader/loader.js";
 import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import * as Scaler from "../../../src/core/scaler.js";
-import * as GameSound from "../../../src/core/game-sound.js";
 import { gmi } from "../../../src/core/gmi/gmi.js";
 import * as debugModeModule from "../../../src/core/debug/debug-mode.js";
 import * as Config from "../../../src/core/loader/get-config.js";
@@ -30,7 +29,6 @@ describe("Loader", () => {
 
     beforeEach(() => {
         global.window.__debug = undefined;
-        jest.spyOn(GameSound, "setButtonClickSound").mockImplementation(() => {});
         jest.spyOn(a11y, "destroy").mockImplementation(() => {});
         jest.spyOn(getThemeString, "getTheme").mockImplementation(() => "theme-name");
 
@@ -261,12 +259,6 @@ describe("Loader", () => {
             loader.screenKeys = [];
             loader.create();
             expect(loader.setConfig).toHaveBeenCalledWith("mocked getConfig return value");
-        });
-
-        test("calls GameSounds setButtonClickSound", () => {
-            loader.screenKeys = [];
-            loader.create();
-            expect(GameSound.setButtonClickSound).toHaveBeenCalled();
         });
 
         test("calls this.navigation.next", () => {

@@ -5,7 +5,7 @@
  * @module core/startup
  * @copyright BBC 2018
  * @author BBC Children's D+E
- * @license Apache-2.0 Apache-2.0
+ * @license Apache-2.0
  */
 import { gmi, setGmi } from "./gmi/gmi.js";
 import { addCustomStyles } from "./custom-styles.js";
@@ -14,7 +14,6 @@ import { hookErrors } from "./loader/hook-errors.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addGelButton } from "./layout/gel-game-objects.js";
 import { getPhaserDefaults } from "./loader/phaser-defaults/get-phaser-defaults.js";
-import { addResumeSafariAudioContextEvent } from "./safari-audio.js";
 
 export const startup = config => {
     setGmi(config.settings || {}, window);
@@ -22,7 +21,6 @@ export const startup = config => {
     Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
     addCustomStyles();
     const game = new Phaser.Game(getPhaserDefaults(config));
-    addResumeSafariAudioContextEvent(game);
     game.device.audio.mp4 = true;
     debugMode.create(window, game);
     a11y.create();

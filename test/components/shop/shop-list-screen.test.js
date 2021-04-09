@@ -17,6 +17,7 @@ jest.mock("../../../src/components/shop/scrollable-list/scrollable-list.js");
 jest.mock("../../../lib/rexuiplugin.min.js");
 jest.mock("../../../src/core/scaler.js");
 jest.mock("../../../src/core/gmi/gmi.js");
+jest.mock("../../../src/components/shop/backgrounds.js");
 
 describe("Shop List Screen", () => {
     let shopList;
@@ -55,13 +56,17 @@ describe("Shop List Screen", () => {
                 NinePatch: jest.fn(),
             },
         };
-        initResizers();
     });
     afterEach(() => jest.clearAllMocks());
 
     test("installs rexUI plugin on preload", () => {
         shopList.preload();
         expect(shopList.plugins.installScenePlugin).toHaveBeenCalledWith("rexUI", RexUIPlugin, "rexUI", shopList, true);
+    });
+
+    test("inits resizers", () => {
+        shopList.preload();
+        expect(initResizers).toHaveBeenCalled();
     });
 
     test("calls addBackgroundItems on create", () => {

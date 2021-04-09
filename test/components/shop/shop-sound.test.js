@@ -3,17 +3,9 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { playShopSound } from "../../../src/components/shop/shop-sound.js";
+import { getSoundKey } from "../../../src/components/shop/shop-sound.js";
 
-/*
- export const playShopSound = (scene, item, key) => {
-    const assetKey = item.audio?.[key] ?? [scene.assetPrefix, scene.config.confirm.audio[key]].join(".")
-    scene.sound.play(assetKey);
-}
-
-  */
-
-describe("playShopSound", () => {
+describe("getSoundKey", () => {
     let mockScene;
     let mockItem;
 
@@ -28,26 +20,21 @@ describe("playShopSound", () => {
 
     afterEach(jest.clearAllMocks);
 
-    test("plays no sound if no suitable scene audio config and no item audio config", () => {
-        playShopSound(mockScene, mockItem, "buy");
+    test("returns undefined if no suitable scene audio config and no item audio config", () => {
+        getSoundKey(mockScene, mockItem, "buy");
 
-        expect(mockScene.sound.play).not.toHaveBeenCalled();
+        expect(getSoundKey(mockScene, mockItem, "buy")).toBeUndefined();
     });
 
-    test("Plays specified sound if configured for scene", () => {
+    test("returns specified sound if configured for scene", () => {
         mockScene.config.confirm.audio.buy = "buy-audio-key";
-
-        playShopSound(mockScene, mockItem, "buy");
-
-        expect(mockScene.sound.play).toHaveBeenCalledWith("test-asset-prefix.buy-audio-key");
+        expect(getSoundKey(mockScene, mockItem, "buy")).toBe("test-asset-prefix.buy-audio-key");
     });
 
-    test("Overrides scene default key if sound if configured for item", () => {
+    test("Overrides scene default key if sound is configured for item", () => {
         mockScene.config.confirm.audio.buy = "buy-audio-key";
         mockItem.audio = { buy: "item-key" };
 
-        playShopSound(mockScene, mockItem, "buy");
-
-        expect(mockScene.sound.play).toHaveBeenCalledWith("item-key");
+        expect(getSoundKey(mockScene, mockItem, "buy")).toBe("item-key");
     });
 });

@@ -8,7 +8,6 @@
  */
 import { Screen } from "../screen.js";
 import * as Scaler from "../scaler.js";
-import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 import { loadPack } from "./loadpack.js";
 import { getConfig, loadConfig } from "./get-config.js";
@@ -94,7 +93,6 @@ export class Loader extends Screen {
     create() {
         const config = getConfig(this, this.screenKeys);
         this.setConfig(config);
-        GameSound.setButtonClickSound(this.scene.scene, "loader.buttonClick");
         gmi.achievements.init(this.cache.json.get("achievements-data"));
         loadCollections(this, config).then(loaderComplete(this));
     }

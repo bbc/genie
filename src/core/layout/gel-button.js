@@ -4,7 +4,6 @@
  * @license Apache-2.0
  */
 import { eventBus } from "../event-bus.js";
-import * as GameSound from "../game-sound.js";
 import { gmi } from "../gmi/gmi.js";
 import { assetPath } from "./asset-paths.js";
 import { Indicator } from "./gel-indicator.js";
@@ -14,6 +13,7 @@ import { CAMERA_X, CAMERA_Y } from "./metrics.js";
 const defaults = {
     shiftX: 0,
     shiftY: 0,
+    clickSound: "loader.buttonClick",
 };
 
 const publish = (config, data) => () => {
@@ -50,6 +50,7 @@ export class GelButton extends Phaser.GameObjects.Container {
         });
 
         this.setHitArea(metrics);
+        this.setClickSound(this.config.clickSound);
         this.setupMouseEvents(config, scene);
     }
 
@@ -70,13 +71,7 @@ export class GelButton extends Phaser.GameObjects.Container {
     };
 
     onPointerUp(config, screen) {
-        // Prevents button sounds from being paused by overlays (Pause Overlay specifically)
-        GameSound.Assets.buttonClick.once(Phaser.Sound.Events.PAUSE, () => {
-            GameSound.Assets.buttonClick.resume();
-        });
-
-        GameSound.Assets.buttonClick.play();
-
+        this._click.once(Phaser.Sound.Events.PAUSE, this._click.resume).play();
         const inputManager = this.scene.sys.game.input;
         inputManager.updateInputPlugins("", inputManager.pointers);
         publish(config, { screen })();
@@ -112,6 +107,11 @@ export class GelButton extends Phaser.GameObjects.Container {
             width,
             height,
         );
+    }
+
+    setClickSound(key) {
+        this.config.clickSound = key;
+        this._click = this.scene.sound.add(key);
     }
 
     setImage(key) {
