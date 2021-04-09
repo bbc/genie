@@ -28,19 +28,18 @@ const getCoverPadding = config => {
 };
 
 export const resizeCovers = (scene, panel, covers, config) => {
-    if (panel && covers) {
-        const padding = getCoverPadding(config);
-        const positions = getCoverPositions(scene, covers, padding);
-        const panelWidth = panel.getChildrenWidth();
-        covers.top
-            ?.setX(0 - padding.x)
-            .setY(positions.top.y)
-            .setScale(panelWidth / covers.top.width);
-        covers.bottom
-            ?.setX(0 - padding.x)
-            .setY(positions.bottom.y)
-            .setScale(panelWidth / covers.bottom.width);
-    }
+    if (!panel || !covers) return;
+    const padding = getCoverPadding(config);
+    const positions = getCoverPositions(scene, covers, padding);
+    const panelWidth = panel.getChildrenWidth();
+    covers.top
+        ?.setX(0 - padding.x)
+        .setY(positions.top.y)
+        .setScale(panelWidth / covers.top.width);
+    covers.bottom
+        ?.setX(0 - padding.x)
+        .setY(positions.bottom.y)
+        .setScale(panelWidth / covers.bottom.width);
 };
 
 export const createCovers = (scene, config) => {
