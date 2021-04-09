@@ -11,6 +11,7 @@ import * as handlers from "../../../../src/components/shop/scrollable-list/scrol
 import * as scaler from "../../../../src/core/scaler.js";
 import * as a11y from "../../../../src/core/accessibility/accessibility-layer.js";
 import * as backgroundsModule from "../../../../src/components/shop/backgrounds.js";
+import * as coversModule from "../../../../src/components/shop/scrollable-list/scrollable-list-covers.js";
 import { collections } from "../../../../src/core/collections.js";
 import * as text from "../../../../src/core/layout/text.js";
 import fp from "../../../../lib/lodash/fp/fp.js";
@@ -21,6 +22,7 @@ jest.mock("../../../../src/core/accessibility/accessibilify.js");
 jest.mock("../../../../src/core/collections.js");
 jest.mock("../../../../src/components/shop/scrollable-list/scrollable-list-handlers.js");
 jest.mock("../../../../src/components/shop/scrollable-list/scrollable-list-buttons.js");
+jest.mock("../../../../src/components/shop/scrollable-list/scrollable-list-covers.js");
 jest.mock("../../../../src/core/scaler.js");
 jest.mock("../../../../src/components/shop/backgrounds.js");
 jest.mock("../../../../src/components/shop/scrollable-list/scrollable-panel.js");
@@ -47,6 +49,8 @@ const mockText = {
 buttons.createListButton = jest.fn(() => mockGelButton);
 scaler.onScaleChange.add = jest.fn(() => ({ unsubscribe: "foo" }));
 backgroundsModule.resizeBackground = jest.fn(() => jest.fn());
+coversModule.createCovers = jest.fn();
+coversModule.resizeCovers = jest.fn();
 const title = "shop";
 
 describe("Scrollable List", () => {
@@ -155,6 +159,12 @@ describe("Scrollable List", () => {
                     scrollbarHandle: "scrollbarHandle",
                 },
                 listPadding: { x: 10, y: 8, outerPadFactor: 2 },
+                listCovers: {
+                    shop: {
+                        top: { key: "mockTopCover" },
+                        bottom: { key: "mockBottomCover" },
+                    },
+                },
                 overlay: {
                     items: [mockOverlay],
                 },
@@ -212,8 +222,13 @@ describe("Scrollable List", () => {
                 test("calls create scrollable panel correctly", () => {
                     jest.clearAllMocks();
                     collectionGetAll = [mockItem, mockItem, { mock: "otherItem", qty: 0 }];
+                    const expectedCoversConfig = {
+                        ...mockScene.config.listCovers.shop,
+                        ...mockScene.config.listPadding,
+                    };
                     const list = new ScrollableList(mockScene, title);
                     expect(panel.createScrollablePanel).toHaveBeenCalledWith(mockScene, title, list);
+                    expect(coversModule.createCovers).toHaveBeenCalledWith(mockScene, expectedCoversConfig);
                 });
                 test("with items from a collection", () => {
                     expect(collections.get).toHaveBeenCalledWith("testCatalogue");
@@ -455,6 +470,10 @@ describe("Scrollable List", () => {
         test("reset method calls resizeBackground", () => {
             list.reset();
             expect(backgroundsModule.resizeBackground).toHaveBeenCalled();
+        });
+        test("reset method calls resizeCovers", () => {
+            list.reset();
+            expect(coversModule.resizeCovers).toHaveBeenCalled();
         });
 
         test("reset method calls resizeBackground when collection is empty", () => {

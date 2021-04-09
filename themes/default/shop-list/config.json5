@@ -35,6 +35,16 @@
         y: 18.86,
         outerPadFactor: 1,
     },
+    listCovers: {
+        shop: {
+            top: { key: "shop-list.listCoverTop" },
+            bottom: { key: "shop-list.listCoverBottom" },
+        },
+        manage: {
+            top: { key: "shop-list.listCoverTop" },
+            bottom: { key: "shop-list.listCoverBottom" },
+        },      
+    },
     backgrounds: {
         shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
         manage: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
