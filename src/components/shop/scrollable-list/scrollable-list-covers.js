@@ -43,10 +43,9 @@ export const resizeCovers = (scene, panel, covers, config) => {
 };
 
 export const createCovers = (scene, config) => {
-    if (scene.config.listCovers) {
-        const top = config.top ? scene.add.image(0, 0, config.top.key) : null;
-        const bottom = config.bottom ? scene.add.image(0, 0, config.bottom.key) : null;
-        return { top, bottom };
-    }
-    return false;
+    if (!scene.config.listCovers) return;
+    return {
+        top: config.top ? scene.add.image(0, 0, config.top.key) : null,
+        bottom: config.bottom ? scene.add.image(0, 0, config.bottom.key) : null,
+    };
 };
