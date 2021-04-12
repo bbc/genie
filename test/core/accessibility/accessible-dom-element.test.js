@@ -123,6 +123,11 @@ describe("Accessible DOM Element", () => {
             expect(options.onClick).toHaveBeenCalled();
         });
 
+        test("adds click event so that macOS voiceover works", () => {
+            accessibleDomElement(options);
+            expect(mockElement.addEventListener).toHaveBeenCalledWith("click", options.onClick);
+        });
+
         test("mouseover events are handled", () => {
             accessibleDomElement(options);
             events.mouseover();
@@ -156,7 +161,7 @@ describe("Accessible DOM Element", () => {
 
         test("Adds noop touchstart function so ios voiceover double tap works.", () => {
             accessibleDomElement(options);
-            expect(mockElement.addEventListener.mock.calls[6][1]()).not.toBeDefined();
+            expect(mockElement.addEventListener.mock.calls[7][1]()).not.toBeDefined();
             expect(mockElement.addEventListener).toHaveBeenCalledWith("touchstart", expect.any(Function));
         });
 
