@@ -22,6 +22,7 @@ const defaultAttributes = {
 
 const assignEvents = (el, options) => {
     const keyup = keyUp(options);
+    el.addEventListener("click", options.onClick);
     el.addEventListener("keyup", keyup);
     el.addEventListener("mouseover", options.onMouseOver);
     el.addEventListener("mouseleave", options.onMouseOut);

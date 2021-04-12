@@ -24,7 +24,7 @@
         text: "<%= balance %>",
         style: {
             fontFamily: "ReithSerif",
-            fontSize: "24px",
+            fontSize: "26px",
         },
         backgroundKey: "debug-shop.balanceBackground",
         icon : {
@@ -35,6 +35,15 @@
         x: 18.86,
         y: 18.86,
         outerPadFactor: 1,
+    },
+    listCovers: {
+        shop: {
+            top: { key: "debug-shop-list.listCoverTop" },
+        },
+        manage: {
+            top: { key: "debug-shop-list.listCoverTop" },
+            bottom: { key: "debug-shop-list.listCoverBottom" },
+        },      
     },
     backgrounds: {
         shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
