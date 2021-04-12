@@ -60,7 +60,7 @@ This can all be done in a routing function in main.js, like this:
 ## Shop configuration
 
 Each shop requires 3 configurations, for "menu", "list" and "confirm" screens. The three screens are named by prepending to your shop key with `-menu`, `-list` and `-confirm`. 
-The default shop key is `shop`, so the three screens and configs are named `shop-menu`, `shop-list` and `shop-confirm`. 
+The default shop key is `shop`, so the three screens and configs are named `shop-menu`, `shop-list` and `shop-confirm`. The key should contain `shop` somewhere in the name.
 
 
 ### Shop menu
