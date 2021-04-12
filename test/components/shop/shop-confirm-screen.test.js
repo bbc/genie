@@ -46,7 +46,7 @@ describe("Shop Confirm Screen", () => {
         shopConfirm.plugins = { installScenePlugin: jest.fn() };
         shopConfirm._data = {
             addedBy: undefined,
-            transient: { shop: { title: "shop", item: "item" } },
+            transient: { shop: { title: "shop", item: "item", mode: "shop" } },
             config: { "shop-confirm": { shopConfig: mockShopConfig } },
         };
 
@@ -89,7 +89,17 @@ describe("Shop Confirm Screen", () => {
         expect(balance.setBalance).toHaveBeenCalledWith(shopConfirm);
     });
 
-    test("creates confirm", () => {
+    test("creates confirm for buy", () => {
+        shopConfirm.create();
+        expect(confirmModule.createConfirm).toHaveBeenCalledWith(shopConfirm);
+    });
+
+    test("creates confirm for manage", () => {
+        shopConfirm._data = {
+            addedBy: undefined,
+            transient: { shop: { title: "shop", item: "item", mode: "manage" } },
+            config: { "shop-confirm": { shopConfig: mockShopConfig } },
+        };
         shopConfirm.create();
         expect(confirmModule.createConfirm).toHaveBeenCalledWith(shopConfirm);
     });
