@@ -18,7 +18,7 @@
         text: "<%= balance %>",
         style: {
             fontFamily: "ReithSerif",
-            fontSize: "24px",
+            fontSize: "26px",
         },
         backgroundKey: "debug-shop.balanceBackground",
         icon : {

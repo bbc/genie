@@ -26,7 +26,7 @@
         text: "<%= balance %>",
         style: {
             fontFamily: "ReithSerif",
-            fontSize: "24px",
+            fontSize: "26px",
         },
         backgroundKey: "shop-menu.balanceBackground",
         icon: {

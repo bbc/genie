@@ -39,7 +39,7 @@
         text: "Team A",
         style: {
             fontFamily: "ReithSans",
-            fontSize: "24px",
+            fontSize: "26px",
         },
         backgroundKey: "character-select.subtitle",
         icon : {
