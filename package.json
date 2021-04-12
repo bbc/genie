@@ -29,7 +29,6 @@
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {
-        "@webpack-cli/serve": "^1.3.0",
         "cross-env": "^7.0.2",
         "cypress": "^6.5.0",
         "cypress-plugin-tab": "^1.0.5",
@@ -55,13 +54,14 @@
         "prettier": "2.1.2",
         "rollup": "^2.35.1",
         "rollup-plugin-terser": "^7.0.2",
-        "webpack": "^5.24.4",
-        "webpack-cli": "^4.5.0",
-        "webpack-dev-server": "^3.11.2"
+        "webpack": "^5.31.2",
+        "webpack-cli": "^4.6.0",
+        "webpack-dev-server": "^3.11.2",
+        "@webpack-cli/serve": "^1.3.1"
     },
     "scripts": {
         "start": "cross-env genieCore=true ws --config-file dev/scripts/web-config.js",
-        "start:pack": "node_modules/.bin/webpack serve --config build-scripts/webpack.config.js --env genieCore",
+        "start:pack": "webpack-cli serve --config build-scripts/webpack.config.js --env genieCore",
         "build": "webpack --config build-scripts/webpack.config.js --env genieCore",
         "build:theme2": "bash build-scripts/theme2creator/create.sh",
         "clean": "rm -rf .cache",
