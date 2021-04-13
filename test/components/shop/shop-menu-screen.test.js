@@ -9,6 +9,7 @@ import * as scaler from "../../../src/core/scaler.js";
 import * as title from "../../../src/core/titles.js";
 import * as balance from "../../../src/components/shop/balance.js";
 import * as menu from "../../../src/components/shop/menu.js";
+import * as gmi from "../../../src/core/gmi/gmi.js";
 import { ShopMenu } from "../../../src/components/shop/shop-menu-screen.js";
 import { initResizers } from "../../../src/components/shop/backgrounds.js";
 
@@ -18,6 +19,7 @@ jest.mock("../../../src/components/shop/balance.js");
 jest.mock("../../../src/components/shop/menu.js");
 jest.mock("../../../lib/rexuiplugin.min.js");
 jest.mock("../../../src/core/scaler.js");
+jest.mock("../../../src/core/gmi/gmi.js");
 
 describe("Shop Menu Screen", () => {
     let shopMenu;
@@ -26,6 +28,7 @@ describe("Shop Menu Screen", () => {
     let mockScalerEvent;
     let mockShopConfig;
     beforeEach(() => {
+        gmi.gmi = { setStatsScreen: jest.fn(), sendStatsEvent: jest.fn() };
         mockTitle = {
             title: { resize: jest.fn(), destroy: jest.fn() },
             subtitle: { resize: jest.fn(), destroy: jest.fn() },
@@ -99,6 +102,24 @@ describe("Shop Menu Screen", () => {
     test("creates menu", () => {
         shopMenu.create();
         expect(menu.createMenu).toHaveBeenCalledWith(shopMenu);
+    });
+
+    test("sets page stat if scene key does contain shop", () => {
+        shopMenu.scene = { key: "shopname-menu" };
+        shopMenu._data = {
+            addedBy: undefined,
+            transient: {},
+            config: { "shopname-menu": { shopConfig: mockShopConfig } },
+        };
+        shopMenu.create();
+        expect(gmi.gmi.setStatsScreen).toHaveBeenCalledWith("shopnamemenu");
+    });
+
+    test("sets page stat if scene key doesn't contain shop", () => {
+        shopMenu.scene = { key: "test-menu" };
+        shopMenu._data = { addedBy: undefined, transient: {}, config: { "test-menu": { shopConfig: mockShopConfig } } };
+        shopMenu.create();
+        expect(gmi.gmi.setStatsScreen).toHaveBeenCalledWith("shopmenu");
     });
 
     test("adds a onScaleChange event on create", () => {

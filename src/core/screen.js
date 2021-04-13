@@ -81,7 +81,9 @@ export class Screen extends Phaser.Scene {
         data.config && this.events.once("create", nextPage(this));
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
-            this.setStatsScreen(this.scene.key);
+            if (!this.scene.key.includes("shop")) {
+                this.setStatsScreen(this.scene.key);
+            }
             setMusic(this);
 
             isDebug() && debug.addEvents(this);
@@ -131,7 +133,11 @@ export class Screen extends Phaser.Scene {
         this._layout.makeAccessible();
         this.sys.accessibleButtons.forEach(button => a11y.addButton(button));
         a11y.reset();
-        this.setStatsScreen(this.scene.key);
+        if (this.scene.key.includes("shop")) {
+            this.setStatsScreen(this.transientData.shopTitle + "menu");
+        } else {
+            this.setStatsScreen(this.scene.key);
+        }
 
         eventBus.publish({
             channel: settingsChannel,

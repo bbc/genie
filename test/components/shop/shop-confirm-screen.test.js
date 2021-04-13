@@ -8,6 +8,7 @@ import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import * as scaler from "../../../src/core/scaler.js";
 import * as balance from "../../../src/components/shop/balance.js";
 import * as confirmModule from "../../../src/components/shop/confirm/confirm.js";
+import * as gmi from "../../../src/core/gmi/gmi.js";
 import { ShopConfirm } from "../../../src/components/shop/shop-confirm-screen.js";
 import { initResizers } from "../../../src/components/shop/backgrounds.js";
 
@@ -15,6 +16,7 @@ jest.mock("../../../src/components/shop/balance.js");
 jest.mock("../../../src/components/shop/confirm/confirm.js");
 jest.mock("../../../lib/rexuiplugin.min.js");
 jest.mock("../../../src/core/scaler.js");
+jest.mock("../../../src/core/gmi/gmi.js");
 jest.mock("../../../src/components/shop/backgrounds.js");
 
 describe("Shop Confirm Screen", () => {
@@ -23,6 +25,7 @@ describe("Shop Confirm Screen", () => {
     let mockScalerEvent;
     let mockShopConfig;
     beforeEach(() => {
+        gmi.gmi = { setStatsScreen: jest.fn(), sendStatsEvent: jest.fn() };
         mockConfirm = jest.fn();
         confirmModule.createConfirm = jest.fn(() => mockConfirm);
         mockScalerEvent = { unsubscribe: jest.fn() };
@@ -43,7 +46,7 @@ describe("Shop Confirm Screen", () => {
         shopConfirm.plugins = { installScenePlugin: jest.fn() };
         shopConfirm._data = {
             addedBy: undefined,
-            transient: { shop: { title: "shop", item: "item" } },
+            transient: { shop: { title: "shop", item: "item", mode: "shop" } },
             config: { "shop-confirm": { shopConfig: mockShopConfig } },
         };
 
@@ -86,7 +89,17 @@ describe("Shop Confirm Screen", () => {
         expect(balance.setBalance).toHaveBeenCalledWith(shopConfirm);
     });
 
-    test("creates confirm", () => {
+    test("creates confirm for buy", () => {
+        shopConfirm.create();
+        expect(confirmModule.createConfirm).toHaveBeenCalledWith(shopConfirm);
+    });
+
+    test("creates confirm for manage", () => {
+        shopConfirm._data = {
+            addedBy: undefined,
+            transient: { shop: { title: "shop", item: "item", mode: "manage" } },
+            config: { "shop-confirm": { shopConfig: mockShopConfig } },
+        };
         shopConfirm.create();
         expect(confirmModule.createConfirm).toHaveBeenCalledWith(shopConfirm);
     });

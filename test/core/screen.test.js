@@ -77,12 +77,13 @@ describe("Screen", () => {
 
         mockConfig = { loadscreen: { music: "test/music" }, screenKey: {} };
 
-        mockTransientData = { key: "data" };
+        mockTransientData = { key: "data", shopTitle: "shop" };
 
         mockNavigation = {
             screenKey: { routes: { next: "nextscreen" } },
             boot: { routes: { next: "loader" } },
             loader: { routes: { next: "home" } },
+            shop: { routes: { next: "home" } },
         };
 
         mockParentScreen = {
@@ -197,6 +198,7 @@ describe("Screen", () => {
             const expectedTransientData = {
                 key: "data",
                 more: "data",
+                shopTitle: "shop",
             };
             createAndInitScreen();
             screen.transientData = { more: "data" };
@@ -376,6 +378,15 @@ describe("Screen", () => {
             screen._onOverlayRemoved(mockOverlay);
 
             expect(mockGmi.setStatsScreen).toHaveBeenCalledWith("screenKey");
+        });
+
+        test("removing an overlay set stat screen back to an underlying overlay for shop", () => {
+            const mockOverlay = { removeAll: jest.fn(), scene: { key: "overlay", stop: jest.fn() } };
+            createScreen("shop");
+            screen.init(mockData);
+            screen._onOverlayRemoved(mockOverlay);
+
+            expect(mockGmi.setStatsScreen).toHaveBeenCalledWith("shopmenu");
         });
     });
 
