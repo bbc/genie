@@ -52,9 +52,6 @@ describe("Examples Launcher", () => {
             setPath: jest.fn(),
             pack: jest.fn(),
         };
-        launcher.sound = {
-            pauseOnBlur: true,
-        };
 
         examplesModule.examples = {
             example1: {
@@ -112,10 +109,6 @@ describe("Examples Launcher", () => {
             window.prompt = () => null;
             eventBus.subscribe.mock.calls[5][0].callback();
             expect(launcher._data.transient.example3).toStrictEqual({});
-        });
-
-        test("sets sound.pauseOnBlur to false", () => {
-            expect(launcher.sound.pauseOnBlur).toBe(false);
         });
     });
 });
