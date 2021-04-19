@@ -6,7 +6,7 @@
 
 import { getUrl } from "../support/functions";
 
-const sizes = ["iphone-5"];
+const sizes = ["iphone-5", "iphone-7", [1400, 600]];
 const theme = Cypress.env("THEME");
 const screenshotData = (size, text) => {
     return `[${size} ${theme} ${text}]`;
