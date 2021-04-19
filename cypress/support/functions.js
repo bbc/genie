@@ -14,23 +14,9 @@ let testTheme2 =
 let test =
     "https://www.test.bbc.co.uk/games/embed/genie?versionOverride=latest&viewNonPublished=true&cageEnv=test&debug=true&exitGameUrl=https%3A%2F%2Fwww.bbc.co.uk%2Fcbbc%2Fgames%2Fdanger-mouse-game%3Fcollection%3Dcbbc-top-games";
 
-export const getUrl = () => {
-    if (Cypress.env("LOCAL_DEV") == "true") {
-        if (Cypress.env("THEME") == "theme_2") {
-            cy.log("theme 2 dev");
-            return appendToken(localTheme2);
-        } else {
-            cy.log("theme 1 dev");
-            return appendToken(localTesting);
-        }
-    } else {
-        if (Cypress.env("THEME") == "theme_2") {
-            return appendToken(testTheme2);
-        } else {
-            return appendToken(test);
-        }
-    }
-};
+const getLocalUrl = () => (Cypress.env("THEME") === "theme_1" ? localTesting : localTheme2);
+const getTestUrl = () => (Cypress.env("THEME") === "theme_1" ? test : testTheme2);
+export const getUrl = () => appendToken(Cypress.env("LOCAL_DEV") ? getLocalUrl() : getTestUrl());
 
 export const formatStatConfig = (
     stat,
