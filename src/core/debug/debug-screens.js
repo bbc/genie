@@ -26,7 +26,7 @@ const getDebugScreenWithRoutes = () => {
 
 const addScene = (scene, examples) => key => scene.scene.add(key, examples[key].scene);
 
-const addScreens = async scene => {
+const addScreens = scene => {
     Object.keys(examples).map(addScene(scene, examples));
     const debugTheme = getConfig(scene, Object.keys(examples));
     const config = scene.context.config;
@@ -40,7 +40,7 @@ const addScreens = async scene => {
     scene.load.setBaseURL(gmi.gameDir);
     scene.load.setPath("debug/");
 
-    await loadCollections(scene, debugTheme, "debug/");
+    return loadCollections(scene, debugTheme, "debug/");
 };
 
 export const addExampleScreens = fp.once(addScreens);

@@ -74,7 +74,6 @@ describe(`Takes screenshots on multiple viewports ${Cypress.env("THEME")}`, () =
             cy.visit(getUrl());
             cy.get("#home__play", { timeout: 40000 }).should("exist");
             cy.genieClick("#home__debug");
-            cy.wait(3000);
             cy.genieClick("#debug__debug-select-1");
             cy.ariaHidden("#debug-select-1__mary", "false");
             cy.safeArea("#debug-select-1__mary");
