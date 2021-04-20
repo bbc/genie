@@ -60,13 +60,11 @@ const excludeHidden = key => !examples[key].hidden;
 
 export class Launcher extends Screen {
     create() {
-        addExampleScreens(this);
-
         this.add.image(0, 0, "home.background");
         this.add.text(0, -250, "EXAMPLES", titleStyle).setOrigin(0.5);
-
         this.setLayout(["home"]);
-
-        Object.keys(examples).filter(excludeHidden).map(getButtonConfig(this)).map(addButton);
+        addExampleScreens(this).then(() =>
+            Object.keys(examples).filter(excludeHidden).map(getButtonConfig(this)).map(addButton),
+        );
     }
 }

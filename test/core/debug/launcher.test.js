@@ -5,7 +5,10 @@
  */
 import { Launcher } from "../../../src/core/debug/launcher.js";
 import { eventBus } from "../../../src/core/event-bus.js";
+import * as debugScreens from "../../../src/core/debug/debug-screens.js";
 import * as examplesModule from "../../../src/core/debug/examples.js";
+
+jest.mock("../../../src/core/debug/debug-screens.js");
 
 describe("Examples Launcher", () => {
     let launcher;
@@ -52,7 +55,7 @@ describe("Examples Launcher", () => {
             setPath: jest.fn(),
             pack: jest.fn(),
         };
-
+        debugScreens.addExampleScreens = jest.fn(() => new Promise(resolve => resolve()));
         examplesModule.examples = {
             example1: {
                 scene: function () {},

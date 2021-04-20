@@ -22,7 +22,7 @@ describe(`Takes screenshots on multiple viewports ${Cypress.env("THEME")}`, () =
             }
             cy.visit(getUrl());
             cy.get("#home__play", { timeout: 40000 }).should("exist");
-            if (!Cypress.env("DEV_LOCAL") == "true") {
+            if (!Cypress.env("LOCAL_DEV")) {
                 cy.get(".data-notice").click();
             }
             cy.safeArea("#home__play");

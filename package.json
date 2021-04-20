@@ -73,10 +73,10 @@
         "validate": "node build-scripts/schemavalidator/validator.js achievement",
         "roll-lodash": "rollup -c lib/lodash/rollup.config.js",
         "cy:terminal": "cypress open --env THEME=theme_1",
-        "cy:terminal:local": "cypress open --env THEME=theme_1 LOCAL_DEV=true",
+        "cy:terminal:local": "cypress open --env THEME=theme_1,LOCAL_DEV=true",
         "cy:headless": "cypress run --headless --config video=false --env THEME=theme_1 --spec '**/*spec.js'",
-        "cy:headless-theme2": "cypress run --headless --config video=false --env THEME=them_2 --spec '**/*spec.js'",
-        "cy:local": "cypress run --headless --config video=false --env THEME=theme_1 LOCAL_DEV=true --spec '**/integration/*spec.js'",
-        "cy:local-theme2": "cypress run --headless --config video=false --env THEME=theme_2 LOCAL_DEV=true --spec '**/integration/*spec.js'"
+        "cy:headless-theme2": "cypress run --headless --config video=false --env THEME=theme_2 --spec '**/*spec.js'",
+        "cy:local": "cypress run --headless --config video=false --env THEME=theme_1,LOCAL_DEV=true --spec '**/integration/*spec.js'",
+        "cy:local-theme2": "cypress run --headless --config video=false --env THEME=theme_2,LOCAL_DEV=true --spec '**/integration/*spec.js'"
     }
 }
