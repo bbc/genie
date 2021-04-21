@@ -353,7 +353,7 @@ export const pageViews = {
     },
     shopPage: {
         counterName: "keepalive.games.genie",
-        screenName: "debug_shop_equippables_menu",
+        screenName: "shopmenu",
         bucket: "",
         event: "page",
     },
