@@ -412,8 +412,8 @@ describe("Scrollable List", () => {
                 expect(onFocusSpy).toHaveBeenCalled();
             });
             test("adds a mousewheel listener to pick up mousewheel and touch scroll events", () => {
-                expect(mockScene.input.on.mock.calls[0][0]).toBe("gameobjectwheel");
-                mockScene.input.on.mock.calls[0][1]();
+                expect(mockScene.input.on.mock.calls[1][0]).toBe("gameobjectwheel");
+                mockScene.input.on.mock.calls[1][1]();
                 expect(onWheelSpy).toHaveBeenCalled();
             });
             test("adds a scroll listener", () => {
@@ -427,6 +427,18 @@ describe("Scrollable List", () => {
             test("scroll listener enables icons while panel scroller is not in the dragged state", () => {
                 mockScrollablePanel.on.mock.calls[0][1]();
                 expect(mockLabel.childrenMap.icon.setInteractive).toHaveBeenCalled();
+            });
+            test("adds a pointerup listener", () => {
+                expect(mockScene.input.on).toHaveBeenCalledWith("pointerup", expect.any(Function));
+            });
+            test("pointerup listener enables icons while panel scroller is in the dragged state", () => {
+                mockScrollablePanel.childrenMap.scroller.state = "DRAG";
+                mockScene.input.on.mock.calls[0][1]();
+                expect(mockLabel.childrenMap.icon.setInteractive).toHaveBeenCalled();
+            });
+            test("pointerup listener does not enable icons while panel scroller is not in the dragged state", () => {
+                mockScene.input.on.mock.calls[0][1]();
+                expect(mockLabel.childrenMap.icon.setInteractive).not.toHaveBeenCalled();
             });
         });
         describe("shutdown", () => {
