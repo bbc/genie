@@ -47,7 +47,8 @@ npm run test
 if [ "$GIT_BRANCH" = "master" ]
   then npm run build:theme2
 fi
-npm run build
+npm run jest
+npm run eslint
 cp -r themes output/themes
 cp -r debug output/debug
 
