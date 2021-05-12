@@ -6,7 +6,6 @@
 
 import { getUrl } from "../support/functions";
 
-
 describe(`The Genie Shop component ${Cypress.env("THEME")}`, () => {
     beforeEach(() => {
         cy.visit(getUrl());
