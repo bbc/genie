@@ -40,15 +40,15 @@
 #node -v
 npm install --force
 #python build-scripts/licensechecker/licensechecker.py
-npm run test
+npm run jest
+npm run eslint
 #npm run validate:themes -- default # Validates themes
 
 #Don't create theme 2 for PR builds to save time
 if [ "$GIT_BRANCH" = "master" ]
   then npm run build:theme2
 fi
-npm run jest
-npm run eslint
+npm run build
 cp -r themes output/themes
 cp -r debug output/debug
 
