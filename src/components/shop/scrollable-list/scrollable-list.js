@@ -81,6 +81,12 @@ const setupEvents = (scene, panel) => {
             ? getPanelItems(panel).forEach(item => item.childrenMap.icon.disableInteractive())
             : getPanelItems(panel).forEach(item => item.childrenMap.icon.setInteractive()),
     );
+    scene.input.on(
+        "pointerup",
+        () =>
+            panel.childrenMap.scroller.state === "DRAG" &&
+            getPanelItems(panel).forEach(item => item.childrenMap.icon.setInteractive()),
+    );
 
     const scaleEvent = onScaleChange.add(resizePanel(scene, panel));
     scene.events.once("shutdown", scaleEvent.unsubscribe);
