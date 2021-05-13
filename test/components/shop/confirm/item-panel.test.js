@@ -63,7 +63,7 @@ describe("Confirm item view", () => {
             setPosition: jest.fn(),
             setScale: jest.fn(),
             add: jest.fn(),
-            list: ["background", "iconBackground", "icon"],
+            list: [{ testTag: "background" }, { testTag: "iconBackground" }, { testTag: "icon" }],
         };
 
         mockBounds = new Phaser.Geom.Rectangle(0, 0, 300, 400);
@@ -96,8 +96,11 @@ describe("Confirm item view", () => {
 
             resizeItemPanel(mockScene, container)();
 
-            expect(Phaser.Display.Align.In.Center.mock.calls[0]).toEqual(["iconBackground", "background"]);
-            expect(Phaser.Display.Align.In.Center.mock.calls[1]).toEqual(["icon", "background"]);
+            expect(Phaser.Display.Align.In.Center.mock.calls[0].map(ob => ob.testTag)).toEqual([
+                "iconBackground",
+                "background",
+            ]);
+            expect(Phaser.Display.Align.In.Center.mock.calls[1].map(ob => ob.testTag)).toEqual(["icon", "background"]);
         });
     });
 

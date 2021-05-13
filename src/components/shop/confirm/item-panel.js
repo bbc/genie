@@ -7,7 +7,11 @@ import { addText } from "../../../core/layout/text.js";
 
 const images = (scene, item) => {
     const basicView = !scene.config.confirm.detailView;
-    const background = scene.add.image(0, 0, `${scene.assetPrefix}.${scene.config.confirm?.background}`);
+    const background = scene.add.image(
+        basicView ? 150 : 0,
+        0,
+        `${scene.assetPrefix}.${scene.config.confirm?.background}`,
+    );
     const iconBackground = scene.add
         .image(0, 0, `${scene.assetPrefix}.${scene.config.confirm.itemBackground}`)
         .setOrigin(0.5, basicView ? 0.5 : 0);
@@ -51,18 +55,24 @@ export const createItemPanel = (scene, item) => {
 
     Object.keys(view).forEach(x => panel.add(view[x]));
 
+    //view.background.setPosition(scene.config.confirm.detailView? 0 : 150, 0);
+
     return panel;
 };
 
 export const resizeItemPanel = (scene, container) => () => {
+    const basicView = !scene.config.confirm.detailView;
     const bounds = scene.layout.getSafeArea({}, false);
     const onLeft = scene.config.confirm.buttons.buttonsRight;
     onLeft ? (bounds.width /= 2) : (bounds.left = 0);
     const newScale = Math.min(bounds.width / container.width, bounds.height / container.height);
 
-    if (!scene.config.confirm.detailView) {
+    if (basicView) {
         Phaser.Display.Align.In.Center(container.list[1], container.list[0]);
         Phaser.Display.Align.In.Center(container.list[2], container.list[0]);
+
+        container.list[1].x -= 150;
+        container.list[2].x -= 150;
     }
 
     container.setPosition(bounds.centerX, bounds.centerY);
