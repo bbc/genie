@@ -47,7 +47,6 @@ const createItem = (scene, item, mode, parent, scrollablePanel) => {
         return (
             (scrollablePanel.isInTouching() || !pointer || prevType === "keydown") &&
             !isLocked(item) &&
-            scrollablePanel.childrenMap.scroller.state !== "DRAG" &&
             showConfirmation(scene, mode, item)
         );
     };
@@ -76,6 +75,19 @@ const resizePanel = (scene, panel) => () => {
 const getFirstElement = item => item.children[0]?.accessibleElement?.el;
 
 const setupEvents = (scene, panel) => {
+    const items = getPanelItems(panel);
+    panel.on("scroll", () =>
+        panel.childrenMap.scroller.state === "DRAG"
+            ? getPanelItems(panel).forEach(item => item.childrenMap.icon.disableInteractive())
+            : getPanelItems(panel).forEach(item => item.childrenMap.icon.setInteractive()),
+    );
+    scene.input.on(
+        "pointerup",
+        () =>
+            panel.childrenMap.scroller.state === "DRAG" &&
+            getPanelItems(panel).forEach(item => item.childrenMap.icon.setInteractive()),
+    );
+
     const scaleEvent = onScaleChange.add(resizePanel(scene, panel));
     scene.events.once("shutdown", scaleEvent.unsubscribe);
 
@@ -91,7 +103,6 @@ const setupEvents = (scene, panel) => {
     });
 
     panel.updateOnFocus = updatePanelOnFocus(panel);
-    const items = getPanelItems(panel);
     items.forEach(item => getFirstElement(item).addEventListener("focus", () => panel.updateOnFocus(item)));
 };
 

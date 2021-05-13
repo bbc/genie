@@ -158,10 +158,7 @@ describe("User Action stats for Genie", () => {
         cy.wait("@shopBuy").then(interception => {
             cy.log(interception)
                 .its("response.url")
-                .should(
-                    "include",
-                    formatStatConfig(userActions.shopBuy, { screenName: "shopmenu" }).stat,
-                );
+                .should("include", formatStatConfig(userActions.shopBuy, { screenName: "shopmenu" }).stat);
         });
     });
 
@@ -173,10 +170,7 @@ describe("User Action stats for Genie", () => {
         cy.wait("@shopManage").then(interception => {
             cy.log(interception)
                 .its("response.url")
-                .should(
-                    "include",
-                    formatStatConfig(userActions.shopManage, { screenName: "shopmenu" }).stat,
-                );
+                .should("include", formatStatConfig(userActions.shopManage, { screenName: "shopmenu" }).stat);
         });
     });
 
