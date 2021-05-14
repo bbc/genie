@@ -63,7 +63,11 @@ describe("Confirm item view", () => {
             setPosition: jest.fn(),
             setScale: jest.fn(),
             add: jest.fn(),
-            list: [{ testTag: "background" }, { testTag: "iconBackground" }, { testTag: "icon" }],
+            list: [
+                { testTag: "background", x: 0 },
+                { testTag: "iconBackground", x: 0 },
+                { testTag: "icon", x: 0 },
+            ],
         };
 
         mockBounds = new Phaser.Geom.Rectangle(0, 0, 300, 400);
@@ -91,7 +95,7 @@ describe("Confirm item view", () => {
             expect(container.setScale).toHaveBeenCalledWith(0.5, 0.5);
         });
 
-        test("Centers icon images on background if basic view", () => {
+        test("Centers icon images on left section of background if basic view", () => {
             mockScene.config.confirm.detailView = false;
 
             resizeItemPanel(mockScene, container)();
@@ -101,6 +105,8 @@ describe("Confirm item view", () => {
                 "background",
             ]);
             expect(Phaser.Display.Align.In.Center.mock.calls[1].map(ob => ob.testTag)).toEqual(["icon", "background"]);
+            expect(container.list[1].x).toEqual(-150);
+            expect(container.list[2].x).toEqual(-150);
         });
     });
 
@@ -125,6 +131,12 @@ describe("Confirm item view", () => {
         test("adds a background image", () => {
             createItemPanel(mockScene, {});
             expect(mockScene.add.image).toHaveBeenCalledWith(0, 0, "prefix.backgroundKey");
+        });
+
+        test("adds an offset background image when basic View", () => {
+            mockScene.config.confirm.detailView = false;
+            createItemPanel(mockScene, {});
+            expect(mockScene.add.image).toHaveBeenCalledWith(150, 0, "prefix.backgroundKey");
         });
 
         test("adds an icon background image", () => {
