@@ -52,6 +52,7 @@ export const createListButton = (scene, item, title, action, parent) => {
     const properties = item.state && scene.config.states[item.state] ? scene.config.states[item.state].properties : {};
     const disabled = item.state && scene.config.states[item.state] ? scene.config.states[item.state].disabled : false;
     disabled && gelButton.off(Phaser.Input.Events.POINTER_UP);
+    disabled && gelButton.off(Phaser.Input.Events.POINTER_OVER);
     Object.assign(gelButton.sprite, properties);
 
     scaleButton(gelButton, scene.layout, scene.config.listPadding);
