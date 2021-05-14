@@ -61,6 +61,18 @@
             },
             {
                 "type": "spritesheet",
+                "key": "itemBackgroundLocked",
+                "url": "shop-list/assets/item-block.png",
+                "frameConfig": {
+                    "frameWidth": 378,
+                    "frameHeight": 64,
+                    "frameMax": 1,
+                    "margin": 0,
+                    "spacing": 378
+                }
+            },
+            {
+                "type": "spritesheet",
                 "key": "currency",
                 "url": "shop-list/assets/currency-small.png",
                 "frameConfig": {

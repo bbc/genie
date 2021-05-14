@@ -118,6 +118,13 @@ describe("Scrollable List Buttons", () => {
             expect(createButton.createButton).toHaveBeenCalledWith(mockScene, expectedConfig);
         });
 
+        test("Gives locked buttons a different key", () => {
+            mockItem.state = "locked";
+            jest.clearAllMocks();
+            createListButton(mockScene, mockItem, "shop");
+            expect(createButton.createButton.mock.calls[0][1].key).toBe("itemBackgroundLocked");
+        });
+
         test("Adds state to beginning of Aria Label", () => {
             mockItem.state = "locked";
             jest.clearAllMocks();
