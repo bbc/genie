@@ -55,8 +55,6 @@ export const createItemPanel = (scene, item) => {
 
     Object.keys(view).forEach(x => panel.add(view[x]));
 
-    //view.background.setPosition(scene.config.confirm.detailView? 0 : 150, 0);
-
     return panel;
 };
 
