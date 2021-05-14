@@ -13,15 +13,16 @@ let mockScene;
 let mockGelButton;
 let mockItem;
 let mockImage;
+let mockText;
 let mockOverlay;
 let mockConfig;
-
-text.addText = jest.fn(() => "mockText");
 
 describe("Button overlays", () => {
     afterEach(() => jest.clearAllMocks());
 
     beforeEach(() => {
+        mockText = { setOrigin: jest.fn() };
+        text.addText.mockImplementation(() => mockText);
         mockConfig = {
             overlay: {
                 items: [],
@@ -33,7 +34,7 @@ describe("Button overlays", () => {
             assetKey: "test.someImageAssetKey",
             inheritProperties: true,
         };
-        mockImage = { setScale: jest.fn(), width: 100 };
+        mockImage = { setScale: jest.fn(), width: 100, setOrigin: jest.fn(() => mockImage) };
         mockScene = {
             add: {
                 image: jest.fn(() => mockImage),
@@ -55,6 +56,7 @@ describe("Button overlays", () => {
                 set: jest.fn(),
             },
             width: 200,
+            height: 100,
             scene: mockScene,
             item: mockItem,
         };
@@ -102,6 +104,62 @@ describe("Button overlays", () => {
             });
         });
 
+        describe("setOrigin", () => {
+            test("sets originX to 0 when alignX is left", () => {
+                mockOverlay.position = { alignX: "left" };
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                expect(mockImage.setOrigin).toHaveBeenCalledWith(0, 0.5);
+            });
+
+            test("sets originX to 0.5 when alignX is center", () => {
+                mockOverlay.position = { alignX: "center" };
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                expect(mockImage.setOrigin).toHaveBeenCalledWith(0.5, 0.5);
+            });
+
+            test("sets originX to 1 when alignX is right", () => {
+                mockOverlay.position = { alignX: "right" };
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                expect(mockImage.setOrigin).toHaveBeenCalledWith(1, 0.5);
+            });
+
+            test("sets originY to 0 when alignY is top", () => {
+                mockOverlay.position = { alignY: "top" };
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                expect(mockImage.setOrigin).toHaveBeenCalledWith(0.5, 0);
+            });
+
+            test("sets originY to 0.5 when alignY is center", () => {
+                mockOverlay.position = { alignY: "center" };
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                expect(mockImage.setOrigin).toHaveBeenCalledWith(0.5, 0.5);
+            });
+
+            test("sets originY to 1 when alignY is bottom", () => {
+                mockOverlay.position = { alignY: "bottom" };
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                expect(mockImage.setOrigin).toHaveBeenCalledWith(0.5, 1);
+            });
+
+            test("also sets origin on text overlays", () => {
+                mockOverlay = {
+                    ...mockOverlay,
+                    type: "text",
+                    value: "someText",
+                    position: { alignX: "right", alignY: "top" },
+                };
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                expect(mockText.setOrigin).toHaveBeenCalledWith(1, 0);
+            });
+        });
+
         describe("offsets", () => {
             test("no offset is applied if there is no offset object", () => {
                 mockConfig.overlay.items.push(mockOverlay);
@@ -113,8 +171,8 @@ describe("Button overlays", () => {
                     "test.someImageAssetKey",
                 );
             });
-            test("align left sets a negative x offset plus the offset x", () => {
-                mockOverlay.position = { align: "left", offsetX: 1, offsetY: 0 };
+            test("alignX left sets a negative x offset plus the offsetX", () => {
+                mockOverlay.position = { alignX: "left", offsetX: 1, offsetY: 0 };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 const expectedOffset = { x: -99, y: 0 };
@@ -125,8 +183,8 @@ describe("Button overlays", () => {
                 );
             });
 
-            test("align right sets a positive x offset plus the offset x", () => {
-                mockOverlay.position = { align: "right", offsetX: -1, offsetY: 0 };
+            test("alignX right sets a positive x offset plus the offsetX", () => {
+                mockOverlay.position = { alignX: "right", offsetX: -1, offsetY: 0 };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
                 const expectedOffset = { x: 99, y: 0 };
@@ -136,11 +194,48 @@ describe("Button overlays", () => {
                     "test.someImageAssetKey",
                 );
             });
-            test("the y offset is applied unconditionally", () => {
-                mockOverlay.position = { align: "left", offsetX: 0, offsetY: 10 };
+
+            test("alignX center sets the offset to offsetX", () => {
+                mockOverlay.position = { alignX: "center", offsetX: -1, offsetY: 0 };
                 mockConfig.overlay.items.push(mockOverlay);
                 overlays1Wide(mockGelButton, mockConfig.overlay.items);
-                const expectedOffset = { x: -100, y: 10 };
+                const expectedOffset = { x: -1, y: 0 };
+                expect(mockScene.add.image).toHaveBeenCalledWith(
+                    expectedOffset.x,
+                    expectedOffset.y,
+                    "test.someImageAssetKey",
+                );
+            });
+
+            test("alignY center sets the offset to offsetY", () => {
+                mockOverlay.position = { alignY: "center", offsetX: 0, offsetY: 10 };
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                const expectedOffset = { x: 0, y: 10 };
+                expect(mockScene.add.image).toHaveBeenCalledWith(
+                    expectedOffset.x,
+                    expectedOffset.y,
+                    "test.someImageAssetKey",
+                );
+            });
+
+            test("alignY top sets a negative y offset plus offsetY", () => {
+                mockOverlay.position = { alignY: "top", offsetX: 0, offsetY: 10 };
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                const expectedOffset = { x: 0, y: -40 };
+                expect(mockScene.add.image).toHaveBeenCalledWith(
+                    expectedOffset.x,
+                    expectedOffset.y,
+                    "test.someImageAssetKey",
+                );
+            });
+
+            test("alignY bottom sets a positive y offset plus offsetY", () => {
+                mockOverlay.position = { alignY: "bottom", offsetX: 0, offsetY: 10 };
+                mockConfig.overlay.items.push(mockOverlay);
+                overlays1Wide(mockGelButton, mockConfig.overlay.items);
+                const expectedOffset = { x: 0, y: 60 };
                 expect(mockScene.add.image).toHaveBeenCalledWith(
                     expectedOffset.x,
                     expectedOffset.y,
