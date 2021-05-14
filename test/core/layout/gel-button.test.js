@@ -254,11 +254,19 @@ describe("Gel Button", () => {
     });
 
     describe("setHitArea function", () => {
-        test("sets the correct hitarea on the button", () => {
+        test("sets the hitarea on the button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
             gelButton.input = { hitArea: {} };
             gelButton.setHitArea(mockMetrics);
             expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(0, 0, 120, 70));
+        });
+
+        test("sets the hitarea without padding for in-game buttons", () => {
+            mockConfig.gameButton = true;
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            gelButton.input = { hitArea: {} };
+            gelButton.setHitArea(mockMetrics);
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(0, 0, 100, 50));
         });
     });
 
