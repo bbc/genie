@@ -12,6 +12,7 @@ import { getButtonState } from "./get-button-state.js";
 
 const defaults = {
     gameButton: true,
+    key: "itemBackground",
     scrollable: true,
     accessible: true,
 };
@@ -42,7 +43,6 @@ export const createListButton = (scene, item, title, action, parent) => {
     const channel = buttonsChannel(scene);
     const group = scene.scene.key;
     const disabled = item.state && scene.config.states[item.state] ? scene.config.states[item.state].disabled : false;
-    defaults.key = disabled ? "itemBackgroundLocked" : "itemBackground";
     const config = { ...defaults, title, id, ariaLabel, scene: scene.assetPrefix, group, channel, action };
     const gelButton = createButton(scene, config);
 
@@ -52,6 +52,7 @@ export const createListButton = (scene, item, title, action, parent) => {
 
     const properties = item.state && scene.config.states[item.state] ? scene.config.states[item.state].properties : {};
     disabled && gelButton.off(Phaser.Input.Events.POINTER_UP);
+    disabled && gelButton.off(Phaser.Input.Events.POINTER_OVER);
     Object.assign(gelButton.sprite, properties);
 
     scaleButton(gelButton, scene.layout, scene.config.listPadding);

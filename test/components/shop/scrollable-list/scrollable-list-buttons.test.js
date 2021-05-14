@@ -118,13 +118,6 @@ describe("Scrollable List Buttons", () => {
             expect(createButton.createButton).toHaveBeenCalledWith(mockScene, expectedConfig);
         });
 
-        test("Gives locked buttons a different key", () => {
-            mockItem.state = "locked";
-            jest.clearAllMocks();
-            createListButton(mockScene, mockItem, "shop");
-            expect(createButton.createButton.mock.calls[0][1].key).toBe("itemBackgroundLocked");
-        });
-
         test("Adds state to beginning of Aria Label", () => {
             mockItem.state = "locked";
             jest.clearAllMocks();
@@ -152,6 +145,12 @@ describe("Scrollable List Buttons", () => {
             mockItem.state = "locked";
             createListButton(mockScene, mockItem, "shop");
             expect(mockGelButton.off).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP);
+        });
+
+        test("turns off the pointer over event on the button if the button is not enabled", () => {
+            mockItem.state = "locked";
+            createListButton(mockScene, mockItem, "shop");
+            expect(mockGelButton.off).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_OVER);
         });
 
         test("does not turn off the pointer up event on the button if the button is enabled", () => {
