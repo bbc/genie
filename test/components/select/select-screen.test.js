@@ -452,6 +452,34 @@ describe("Select Screen", () => {
             expect(selectScreen._cells[0].button.off).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP);
         });
 
+        test("turns off the pointer over event on the button if the button is not enabled", () => {
+            const mockCell = {
+                button: {
+                    config: { id: "id_one" },
+                    overlays: { set: jest.fn() },
+                    setImage: jest.fn(),
+                    input: {},
+                    off: jest.fn(),
+                    accessibleElement: {
+                        update: jest.fn(),
+                    },
+                },
+            };
+
+            selectScreen.create();
+
+            selectScreen._cells = [mockCell];
+            selectScreen.collection = { getAll: () => [{ id: "id_one", state: "locked" }] };
+
+            selectScreen.context.states = {
+                locked: { x: 10, y: 20, asset: "test_asset", enabled: false },
+            };
+
+            selectScreen.updateStates();
+
+            expect(selectScreen._cells[0].button.off).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_OVER);
+        });
+
         test("does not turn off the pointer up event on the button if the button is enabled", () => {
             const mockCell = {
                 button: {

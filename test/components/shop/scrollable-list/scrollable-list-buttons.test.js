@@ -147,6 +147,12 @@ describe("Scrollable List Buttons", () => {
             expect(mockGelButton.off).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_UP);
         });
 
+        test("turns off the pointer over event on the button if the button is not enabled", () => {
+            mockItem.state = "locked";
+            createListButton(mockScene, mockItem, "shop");
+            expect(mockGelButton.off).toHaveBeenCalledWith(Phaser.Input.Events.POINTER_OVER);
+        });
+
         test("does not turn off the pointer up event on the button if the button is enabled", () => {
             createListButton(mockScene, mockItem, "shop");
             expect(mockGelButton.off).not.toHaveBeenCalled();
