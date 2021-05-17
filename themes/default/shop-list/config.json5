@@ -3,8 +3,9 @@
     background: {
         items: [{ key: "shop-menu.magicShop", x: 0, y: 0 }], // The shop background image.
     },
-    styleDefaults: { // Default font style for text.
-        fontFamily: "ReithSans",
+    styleDefaults: {
+        // Default font style for text.
+        fontFamily: "ReithSerif",
         fontSize: "24px",
         resolution: 2,
         align: "center",
@@ -15,7 +16,7 @@
             fontFamily: "ReithSerif",
             fontStyle: "bold",
             fontSize: "32px",
-            color: "#4A381F"
+            color: "#4A381F",
         },
         backgroundKey: "shop-list.titleBackground",
     },
@@ -26,7 +27,7 @@
             fontSize: "26px",
         },
         backgroundKey: "shop-menu.balanceBackground",
-        icon : {
+        icon: {
             key: "shop-menu.balanceIcon",
         },
     },
@@ -43,7 +44,7 @@
         manage: {
             top: { key: "shop-list.listCoverTop" },
             bottom: { key: "shop-list.listCoverBottom" },
-        },      
+        },
     },
     backgrounds: {
         shop: { key: "background", columns: [20, null, 20], rows: [20, null, 20] },
@@ -171,6 +172,6 @@
             value: "No items",
             position: { offsetX: 0, offsetY: 0 },
             styles: { fontSize: "24px" },
-        }
-    }
+        },
+    },
 }
