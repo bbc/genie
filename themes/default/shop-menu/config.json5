@@ -50,7 +50,7 @@
         buttonsRight: true,
         buttons: {
             key: "shop-menu.button",
-            styles: { fontStyle: "bold", fontSize: "16px" },
+            styles: { fontStyle: "bold", fontSize: "22px" },
         },
     },
 }

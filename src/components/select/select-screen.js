@@ -76,6 +76,7 @@ export class Select extends Screen {
 
             config.suffix && (button.config.ariaLabel = [button.config.ariaLabel, config.suffix].join(" "));
             config.enabled === false && button.off(Phaser.Input.Events.POINTER_UP);
+            config.enabled === false && button.off(Phaser.Input.Events.POINTER_OVER);
             button.accessibleElement.update();
         }, this);
     }

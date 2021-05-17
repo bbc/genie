@@ -84,7 +84,9 @@ export class GelButton extends Phaser.GameObjects.Container {
     }
 
     setHitArea(metrics) {
-        const hitPad = Math.max(metrics.hitMin - this.sprite.width, metrics.hitMin - this.sprite.height, 0);
+        const hitPad = this.config.gameButton
+            ? 0
+            : Math.max(metrics.hitMin - this.sprite.width, metrics.hitMin - this.sprite.height, 0);
         const width = this.sprite.width + hitPad;
         const height = this.sprite.height + hitPad;
 
