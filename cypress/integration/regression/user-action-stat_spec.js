@@ -28,7 +28,9 @@ describe("User Action stats for Genie", () => {
         cy.intercept(userActions.clickPlay.creationId).as("playClick");
         cy.genieClick("#home__play");
         cy.wait("@playClick").then(interception => {
-            cy.log(interception).its("response.url").should("include", statHelper.formatStatConfig(userActions.clickPlay).stat);
+            cy.log(interception)
+                .its("response.url")
+                .should("include", statHelper.formatStatConfig(userActions.clickPlay).stat);
         });
     });
 
@@ -135,7 +137,10 @@ describe("User Action stats for Genie", () => {
         cy.wait("@narrativeContinue").then(interception => {
             cy.log(interception)
                 .its("response.url")
-                .should("include", statHelper.formatStatConfig(userActions.narrativeContinue, { format: "PAG=0" }).stat);
+                .should(
+                    "include",
+                    statHelper.formatStatConfig(userActions.narrativeContinue, { format: "PAG=0" }).stat,
+                );
         });
     });
 
@@ -170,7 +175,10 @@ describe("User Action stats for Genie", () => {
         cy.wait("@shopManage").then(interception => {
             cy.log(interception)
                 .its("response.url")
-                .should("include", statHelper.formatStatConfig(userActions.shopManage, { screenName: "shopmenu" }).stat);
+                .should(
+                    "include",
+                    statHelper.formatStatConfig(userActions.shopManage, { screenName: "shopmenu" }).stat,
+                );
         });
     });
 
