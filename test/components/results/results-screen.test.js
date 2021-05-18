@@ -179,6 +179,29 @@ describe("Results Screen", () => {
             expect(titles.createTitles.mock.calls[0][0].config.title.text).toBe("New title");
         });
 
+        test("results screen area has the same height as the backdrop when no title set", () => {
+            mockConfig.results.title = undefined;
+            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
+            resultsScreen.backdrop = { height: 600 };
+            expect(resultsScreen.resultsArea().height).toBe(resultsScreen.backdrop.height);
+        });
+
+        test("results screen area is centered in the safe area when no title set", () => {
+            mockConfig.results.title = undefined;
+            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
+            resultsScreen.backdrop = { height: 600 };
+            expect(resultsScreen.resultsArea().centerX).toBe(mockResultsArea.centerX);
+            expect(resultsScreen.resultsArea().centerY).toBe(mockResultsArea.centerY);
+        });
+
+        test("results screen area is the safe area when no backdrop is provided and no title set", () => {
+            mockConfig.results.title = undefined;
+            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
+            delete resultsScreen.backdrop;
+            expect(resultsScreen.resultsArea()).toBe(mockResultsArea);
+            expect(resultsScreen.resultsArea()).toBe(mockResultsArea);
+        });
+
         test("adds particles to the rows", () => {
             resultsScreen.create();
             expect(addParticlesToRows).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
