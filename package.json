@@ -26,7 +26,8 @@
         "json5": "^2.1.3",
         "notp": "^2.0.3",
         "phaser": "3.54.0",
-        "webfontloader": "^1.6.28"
+        "webfontloader": "^1.6.28",
+        "games-automation-stathelper": "git+ssh://git@github.com/bbc/games-automation-stathelper.git#main"
     },
     "devDependencies": {
         "cross-env": "^7.0.2",
@@ -56,8 +57,7 @@
         "webpack": "^5.31.2",
         "webpack-cli": "^4.6.0",
         "webpack-dev-server": "^3.11.2",
-        "@webpack-cli/serve": "^1.3.1",
-        "games-stat-helper": "git@github.com:bbc/games-automation-stathelper.git"
+        "@webpack-cli/serve": "^1.3.1"
     },
     "scripts": {
         "start": "cross-env genieCore=true ws --config-file dev/scripts/web-config.js",
