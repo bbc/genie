@@ -6,28 +6,22 @@
             background: {
                 items: [{ key: "home.background", x: 0, y: 0 }],
             },
-            rows: [ // An array of rows which will be displayed on the screen.
-                {
-                    format: [ // Each object in this array generates a visible object in the row.
-                        {
-                            type: 'text', // 'Text' shows static text which can contain template tags for transient data.
-                            content: 'Results Screen',
-                            offsetX: 0, // Offset the x position of this text object.
-                            offsetY: -18, // Offset the y position of this text object.
-                            textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px', // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
-                                color: '#FFFFFF', // This should meet the colour contrast requirement as per GEL guidelines.
-                            },
-                        },
-                    ],
+            title: {
+                text: "Results Screen",
+                style: {
+                    fontFamily: "ReithSans",
+                    fontSize: "24px", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
+                    color: "#FFFFFF", // This should meet the colour contrast requirement as per GEL guidelines.
                 },
+                backgroundKey: "results.title-backdrop", // asset key
+            },
+            rows: [ // An array of rows which will be displayed on the screen.
                 {
                     format: [
                         {
                             type: 'text',
                             content: 'You collected: ',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -38,7 +32,7 @@
                             type: 'spine',
                             key: 'examples_spine_powerup',
                             animationName: "bounce",
-                            offsetY: 10,
+                            offsetY: 30,
                             loop: true,
                             offsetX: 60,
                             props: {
@@ -49,7 +43,7 @@
                             type: "text",
                             content: '<%= powerups %> powerup<% powerups !== 1 && print("s") %>', // Functional template tags will be evaluated.
                             offsetX: -35,
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: "ReithSans",
                                 fontSize: "24px",
@@ -59,7 +53,7 @@
                         {
                             type: 'text',
                             content: '!',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: 'ReithSans',
                                 fontSize: '24px',
@@ -69,7 +63,7 @@
                     ],
                     backdrop: { // Optional row backdrop
                         key: 'results.row-backdrop-1', // asset key
-                        offsetY: -20,
+                        offsetY: 0,
                     },
                     transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 }, // Phaser tweendata config.
                     audio: { key: 'results.woosh', delay: 0 }, // Asset key and delay for audio to be played.
@@ -79,7 +73,7 @@
                         {
                             type: "text",
                             content: "You collected: ",
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: "ReithSans",
                                 fontSize: "24px",
@@ -91,7 +85,7 @@
                             key: "game.diamond", // Asset key of spritesheet.
                             frame: 0, // The initial frame of the sprite to display.
                             offsetX: 20,
-                            offsetY: -20,
+                            offsetY: 0,
                             anim: {
                                 // A phaser animation configuration object.
                                 frames: {
@@ -114,7 +108,7 @@
                                 ticksPerSecond: 6,
                             },
                             offsetX: 15,
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: "ReithSans",
                                 fontSize: "24px",
@@ -125,7 +119,7 @@
                         {
                             type: "text",
                             content: ' gem<% gems !== 1 && print("s") %>',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: "ReithSans",
                                 fontSize: "24px",
@@ -135,7 +129,7 @@
                         {
                             type: "text",
                             content: "!",
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: "ReithSans",
                                 fontSize: "24px",
@@ -145,7 +139,7 @@
                     ],
                     backdrop: {
                         key: "results.row-backdrop-2",
-                        offsetY: -20,
+                        offsetY: 0,
                     },
                     alpha: 0,
                     transition: {
@@ -167,14 +161,14 @@
                         {
                             type: "text",
                             content: "You collected: ",
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: "ReithSans",
                                 fontSize: "24px",
                                 color: "#FFFFFF",
                             },
                         },
-                        { type: "sprite", key: "game.key", offsetX: 0, offsetY: -20 },
+                        { type: "sprite", key: "game.key", offsetX: 0, offsetY: 0 },
                         {
                             type: "countup",
                             startCount: 0,
@@ -187,7 +181,7 @@
                                 ticksPerSecond: 6,
                             },
                             offsetX: 15,
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: "ReithSans",
                                 fontSize: "24px",
@@ -198,7 +192,7 @@
                         {
                             type: "text",
                             content: ' key<% keys !== 1 && print("s") %>',
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: "ReithSans",
                                 fontSize: "24px",
@@ -208,7 +202,7 @@
                         {
                             type: "text",
                             content: "!",
-                            offsetY: -20,
+                            offsetY: 0,
                             textStyle: {
                                 fontFamily: "ReithSans",
                                 fontSize: "24px",
@@ -218,7 +212,7 @@
                     ],
                     backdrop: {
                         key: "results.row-backdrop-3",
-                        offsetY: -20,
+                        offsetY: 0,
                     },
                     alpha: 0,
                     transition: {
