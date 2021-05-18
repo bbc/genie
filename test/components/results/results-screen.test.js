@@ -7,6 +7,7 @@ import { createMockGmi } from "../../mock/gmi.js";
 import * as Scaler from "../../../src/core/scaler.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as Rows from "../../../src/core/layout/rows.js";
+import * as titles from "../../../src/core/titles.js";
 import { playRowAudio } from "../../../src/components/results/results-row-audio.js";
 import { tweenRows } from "../../../src/components/results/results-row-tween.js";
 import { addParticlesToRows } from "../../../src/components/results/results-particles.js";
@@ -14,6 +15,7 @@ import * as MetricsModule from "../../../src/core/layout/metrics.js";
 
 import { Results } from "../../../src/components/results/results-screen.js";
 
+jest.mock("../../../src/core/titles.js");
 jest.mock("../../../src/core/layout/rows.js");
 jest.mock("../../../src/core/screen.js");
 jest.mock("../../../src/components/results/results-row-tween.js");
@@ -30,6 +32,7 @@ describe("Results Screen", () => {
     let mockResultsArea;
     let mockImage;
     let mockRows;
+    let mockTitles;
     let unsubscribe = jest.fn();
 
     beforeEach(() => {
@@ -38,6 +41,8 @@ describe("Results Screen", () => {
             add: jest.fn(() => ({ unsubscribe })),
         };
         MetricsModule.getMetrics = jest.fn();
+        mockTitles = { title: { resize: jest.fn() }, subtitle: { resize: jest.fn() } };
+        titles.createTitles = jest.fn().mockReturnValue(mockTitles);
         mockRows = { containers: "mockcontainer" };
         Rows.create = jest.fn(() => mockRows);
         mockImage = {
@@ -48,6 +53,7 @@ describe("Results Screen", () => {
         mockConfig = {
             results: {
                 backdrop: { key: "mockKey", alpha: 1 },
+                title: { text: "Default title" },
                 resultText: {
                     style: { font: "36px ReithSans" },
                 },
@@ -108,6 +114,9 @@ describe("Results Screen", () => {
         };
         resultsScreen.scene = {
             key: "results",
+            scene: {
+                key: "results",
+            },
         };
         resultsScreen.navigation = {
             continue: jest.fn(),
@@ -152,6 +161,24 @@ describe("Results Screen", () => {
             );
         });
 
+        test("creates title", () => {
+            resultsScreen.create();
+            expect(titles.createTitles).toHaveBeenCalledTimes(1);
+        });
+
+        test("does not create title if not set in config", () => {
+            mockConfig.results.title = undefined;
+            resultsScreen.create();
+            expect(titles.createTitles).not.toHaveBeenCalled();
+        });
+
+        test("sets text on the gameobject using transient data and the string template", () => {
+            mockConfig.results.title = { text: "<%= title %>", size: 10, bitmapFont: "test" };
+            mockTransientData.results.title = "New title";
+            resultsScreen.create();
+            expect(titles.createTitles.mock.calls[0][0].config.title.text).toBe("New title");
+        });
+
         test("adds particles to the rows", () => {
             resultsScreen.create();
             expect(addParticlesToRows).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
@@ -167,24 +194,18 @@ describe("Results Screen", () => {
             expect(playRowAudio).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
         });
 
-        test("results screen area has the same height as the backdrop when one is provided", () => {
-            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
-            resultsScreen.backdrop = { height: 600 };
-            expect(resultsScreen.resultsArea().height).toBe(resultsScreen.backdrop.height);
+        test("Creates a row with a callback that calls getSafeArea", () => {
+            resultsScreen.create();
+            const safeAreaCallback = Rows.create.mock.calls[0][1];
+            safeAreaCallback();
+
+            expect(resultsScreen.layout.getSafeArea).toHaveBeenCalled();
         });
 
-        test("results screen area is centered in the safe area when a backdrop is provided", () => {
-            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
-            resultsScreen.backdrop = { height: 600 };
+        test("results screen area uses the safe area", () => {
+            Scaler.getMetrics = jest.fn(() => ({ width: 200, height: 100, centerX: 0, centerY: 10 }));
             expect(resultsScreen.resultsArea().centerX).toBe(mockResultsArea.centerX);
             expect(resultsScreen.resultsArea().centerY).toBe(mockResultsArea.centerY);
-        });
-
-        test("results screen area is the safe area when no backdrop is provided", () => {
-            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
-            delete resultsScreen.backdrop;
-            expect(resultsScreen.resultsArea()).toBe(mockResultsArea);
-            expect(resultsScreen.resultsArea()).toBe(mockResultsArea);
         });
 
         test("adds a backdrop image with specified properties when one is specified in config", () => {
@@ -251,14 +272,6 @@ describe("Results Screen", () => {
             mockConfig.results.backdrop.key = undefined;
             resultsScreen.create();
             expect(resultsScreen.add.image).not.toHaveBeenCalledWith(0, 0, "mockKey");
-        });
-
-        test("Creates a callback that calls getSafeArea with top: false group overrides ", () => {
-            resultsScreen.create();
-            const safeAreaCallback = Rows.create.mock.calls[0][1];
-            safeAreaCallback();
-
-            expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ top: false });
         });
 
         test("adds the achievement button when there are achievements", () => {

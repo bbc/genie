@@ -6,12 +6,46 @@ The results section of the results screen is split up into rows, defined in the 
 
 Each row is given equal height, and objects inserted into rows are centered within each row by default.  
 
-The content in the rows can be offset, for example, in the screenshot below, each text object has a y offset applied - which moves the text just above the center of each row.
+The content in the rows can be offset, for example, in the screenshot below, each text object has a `y` offset applied - which moves the text closer to the top or bottom of the row and the centre of the safe area.
 
 !["screenshot of results screen"](./images/results-rows.png)
 
-You should keep to the recommended maximum of 4 rows, this is to ensure content is clearly visible on all devices. If you wish, you may have less than 4 rows - be aware that the title counts as a row.
+You should keep to the recommended maximum of 3 rows, this is to ensure content is clearly visible on all devices. If you wish, you may have less than 3 rows.
 
+The title for the screen is defined in config as per other screens, e.g: 
+
+```json5
+{
+    theme: {
+        results: {
+            title: {
+                text: "Results Screen",
+                style: {
+                    fontSize: "24px", 
+                    color: "#FFFFFF",
+                },
+                backgroundKey: "results.title-backdrop",
+            }
+        }
+    }
+}
+```
+
+Title can be a Phaser BitmapText object by setting `type` to "bitmaptext" and supplying a `bitmapFont` asset key along with a `size`, e.g: 
+
+```json5
+{
+...
+    title: {
+        text: "Results Screen",
+        type: "bitmaptext",
+        size: 30,
+        bitmapFont: "examples_uiFont",
+        backgroundKey: "results.title-backdrop",
+    }
+...
+}
+```
 
 ## Examples
 
@@ -110,8 +144,8 @@ You can set all of the delays on the Phaser Tween configuration object to be the
 #### How do I create Pass and Fail states for my Results Screen?  
 Create two results screens and add these to the game flow in `main.js`. Then all you need to do is have your game navigate the user to either the pass or the fail screen.
 
-#### Can I use more than 4 rows for my Results Screen?
-It is not recommended to use more than 4 rows in the results screen, due to the fact text sizes would need to be made smaller and this may have an impact on readibility on smaller sized devices.
+#### Can I use more than 3 rows for my Results Screen?
+It is not recommended to use more than 3 rows in the results screen, due to the fact text sizes would need to be made smaller and this may have an impact on readibility on smaller sized devices.
 
 #### Do I need to change the offsets on each Results row object to position them?
 Nope, by default, each object will be put alongside the previous object. If you require more space between objects, or wish to position them a bit differently, set x and y offsets on each of the objects appropriately.

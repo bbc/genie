@@ -7,24 +7,17 @@
                 key: 'results.backdrop', // Asset key.
                 alpha: 1,
             },
+            title: {
+                text: "Results Screen",
+                style: {
+                    fontFamily: "ReithSans",
+                    fontSize: "24px", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
+                    color: "#FFFFFF", // This should meet the colour contrast requirement as per GEL guidelines.
+                },
+                backgroundKey: "results.title-backdrop", // asset key
+            },
             rows: [
                 // An array of rows which will be displayed on the screen.
-                {
-                    format: [
-                        // Each object in this array generates a visible object in the row.
-                        {
-                            type: 'text', // 'Text' shows static text which can contain template tags for transient data.
-                            content: 'Results Screen',
-                            offsetX: 0, // Offset the x position of this text object.
-                            offsetY: -15, // Offset the y position of this text object.
-                            textStyle: {
-                                fontFamily: 'ReithSans',
-                                fontSize: '24px', // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
-                                color: '#FFFFFF', // This should meet the colour contrast requirement as per GEL guidelines.
-                            },
-                        },
-                    ],
-                },
                 {
                     format: [
                         {
