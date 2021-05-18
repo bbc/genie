@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 
-import { formatStatConfig } from "../../support/functions";
+import { statHelper } from "games-automation-stathelper";
 import { getUrl } from "../../support/functions";
 import { userActions } from "../../support/statConfig";
 
@@ -28,7 +28,7 @@ describe("User Action stats for Genie", () => {
         cy.intercept(userActions.clickPlay.creationId).as("playClick");
         cy.genieClick("#home__play");
         cy.wait("@playClick").then(interception => {
-            cy.log(interception).its("response.url").should("include", formatStatConfig(userActions.clickPlay).stat);
+            cy.log(interception).its("response.url").should("include", statHelper.formatStatConfig(userActions.clickPlay).stat);
         });
     });
 
@@ -38,7 +38,7 @@ describe("User Action stats for Genie", () => {
         cy.wait("@htpClick").then(interception => {
             cy.log(interception)
                 .its("response.url")
-                .should("include", formatStatConfig(userActions.clickHowtoplay).stat);
+                .should("include", statHelper.formatStatConfig(userActions.clickHowtoplay).stat);
         });
     });
 
@@ -49,13 +49,13 @@ describe("User Action stats for Genie", () => {
         cy.wait("@achievementsOpen").then(interception => {
             cy.log(interception)
                 .its("response.url")
-                .should("include", formatStatConfig(userActions.achievementsOpen).stat);
+                .should("include", statHelper.formatStatConfig(userActions.achievementsOpen).stat);
         });
         cy.genieClick(".cage-overlay__close-button");
         cy.wait("@achievementsClose").then(interception => {
             cy.log(interception)
                 .its("response.url")
-                .should("include", formatStatConfig(userActions.achievementsClose).stat);
+                .should("include", statHelper.formatStatConfig(userActions.achievementsClose).stat);
         });
     });
 
@@ -70,7 +70,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.selectItem, {
+                    statHelper.formatStatConfig(userActions.selectItem, {
                         creationId: "character~select",
                         format: "ELE=Mary",
                         screenName: "character_select",
@@ -83,7 +83,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.selectItem, {
+                    statHelper.formatStatConfig(userActions.selectItem, {
                         creationId: "level~select",
                         format: "ELE=Test%20Level%201",
                         screenName: "level_select",
@@ -105,7 +105,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.levelContinue, { advertiserId: "Test%20Level%201" }).stat,
+                    statHelper.formatStatConfig(userActions.levelContinue, { advertiserId: "Test%20Level%201" }).stat,
                 );
         });
     });
@@ -123,7 +123,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.levelPlayagain, { advertiserId: "Test%20Level%201" }).stat,
+                    statHelper.formatStatConfig(userActions.levelPlayagain, { advertiserId: "Test%20Level%201" }).stat,
                 );
         });
     });
@@ -135,7 +135,7 @@ describe("User Action stats for Genie", () => {
         cy.wait("@narrativeContinue").then(interception => {
             cy.log(interception)
                 .its("response.url")
-                .should("include", formatStatConfig(userActions.narrativeContinue, { format: "PAG=0" }).stat);
+                .should("include", statHelper.formatStatConfig(userActions.narrativeContinue, { format: "PAG=0" }).stat);
         });
     });
 
@@ -146,7 +146,7 @@ describe("User Action stats for Genie", () => {
         cy.wait("@narrativeSkip").then(interception => {
             cy.log(interception)
                 .its("response.url")
-                .should("include", formatStatConfig(userActions.narrativeSkip, { format: "PAG=0" }).stat);
+                .should("include", statHelper.formatStatConfig(userActions.narrativeSkip, { format: "PAG=0" }).stat);
         });
     });
 
@@ -158,7 +158,7 @@ describe("User Action stats for Genie", () => {
         cy.wait("@shopBuy").then(interception => {
             cy.log(interception)
                 .its("response.url")
-                .should("include", formatStatConfig(userActions.shopBuy, { screenName: "shopmenu" }).stat);
+                .should("include", statHelper.formatStatConfig(userActions.shopBuy, { screenName: "shopmenu" }).stat);
         });
     });
 
@@ -170,7 +170,7 @@ describe("User Action stats for Genie", () => {
         cy.wait("@shopManage").then(interception => {
             cy.log(interception)
                 .its("response.url")
-                .should("include", formatStatConfig(userActions.shopManage, { screenName: "shopmenu" }).stat);
+                .should("include", statHelper.formatStatConfig(userActions.shopManage, { screenName: "shopmenu" }).stat);
         });
     });
 
@@ -186,7 +186,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.shopPurchase, {
+                    statHelper.formatStatConfig(userActions.shopPurchase, {
                         screenName: "shopbuyconfirm",
                         format: "KEY=ironHat~STATE=purchased~QTY=0",
                         advertiserId: "Iron%20Helm",
@@ -211,7 +211,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.shopEquip, {
+                    statHelper.formatStatConfig(userActions.shopEquip, {
                         screenName: "shopmanageconfirm",
                         format: "KEY=ironHat~STATE=equipped~QTY=1",
                         advertiserId: "Iron%20Helm",
@@ -232,7 +232,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.shopUse, {
+                    statHelper.formatStatConfig(userActions.shopUse, {
                         screenName: "shopmanageconfirm",
                         format: "KEY=box~STATE=used~QTY=0",
                         advertiserId: "Mystery%20Box",
@@ -253,7 +253,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.achievementComplete, {
+                    statHelper.formatStatConfig(userActions.achievementComplete, {
                         format: "ACH=1/10",
                         advertiserId: "just_started",
                         screenName: "game",
@@ -273,7 +273,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.levelSelect, {
+                    statHelper.formatStatConfig(userActions.levelSelect, {
                         format: "ELE=Test%20Level%201",
                         screenName: "level_select",
                     }).stat,
@@ -293,7 +293,7 @@ describe("User Action stats for Genie", () => {
                 .its("response.url")
                 .should(
                     "include",
-                    formatStatConfig(userActions.displayScore, {
+                    statHelper.formatStatConfig(userActions.displayScore, {
                         format: "SCO=keys-0::gems-0::stars-0",
                         screenName: "results",
                     }).stat,
