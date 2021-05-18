@@ -161,24 +161,6 @@ describe("Results Screen", () => {
             );
         });
 
-        test("creates title", () => {
-            resultsScreen.create();
-            expect(titles.createTitles).toHaveBeenCalledTimes(1);
-        });
-
-        test("does not create title if not set in config", () => {
-            mockConfig.results.title = undefined;
-            resultsScreen.create();
-            expect(titles.createTitles).not.toHaveBeenCalled();
-        });
-
-        test("sets text on the gameobject using transient data and the string template", () => {
-            mockConfig.results.title = { text: "<%= title %>", size: 10, bitmapFont: "test" };
-            mockTransientData.results.title = "New title";
-            resultsScreen.create();
-            expect(titles.createTitles.mock.calls[0][0].config.title.text).toBe("New title");
-        });
-
         test("results screen area has the same height as the backdrop when no title set", () => {
             mockConfig.results.title = undefined;
             Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
