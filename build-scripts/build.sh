@@ -34,9 +34,9 @@
 #         fi
 # }
 
-set -e
-source /etc/profile
-nvm install 12.19.0
+# set -e
+# source /etc/profile
+# nvm install 12.19.0
 node -v
 npm install --force
 #python build-scripts/licensechecker/licensechecker.py
