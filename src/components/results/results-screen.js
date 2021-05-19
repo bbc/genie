@@ -28,7 +28,15 @@ export class Results extends Screen {
     }
 
     resultsArea() {
-        if (this.config.title) return this.layout.getSafeArea();
+        if (this.config.title) {
+            // 3 rows with screen title
+            const safeArea = this.layout.getSafeArea();
+            if (this.backdrop && this.backdrop.height > safeArea.height)
+                safeArea.y -= this.backdrop.height - safeArea.height;
+            this.backdrop && (safeArea.height = this.backdrop.height);
+            return safeArea;
+        }
+        // 4 rows (legacy)
         const safeArea = this.layout.getSafeArea({ top: false });
         const center = Phaser.Geom.Rectangle.GetCenter(safeArea);
         this.backdrop && (safeArea.height = this.backdrop.height);
