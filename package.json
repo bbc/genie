@@ -27,7 +27,7 @@
         "notp": "^2.0.3",
         "phaser": "3.54.0",
         "webfontloader": "^1.6.28",
-        "games-automation-stathelper": "git@github.com:bbc/games-automation-stathelper.git"
+        "games-automation-stathelper": "github:bbc/games-automation-stathelper.git"
     },
     "devDependencies": {
         "cross-env": "^7.0.2",
