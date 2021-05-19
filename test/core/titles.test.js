@@ -96,7 +96,6 @@ describe("Titles", () => {
         });
 
         test("adds title bitmaptext", () => {
-            mockScene.config.title.type = "bitmaptext";
             mockScene.config.title.bitmapFont = "font";
             mockScene.config.title.size = 10;
             createTitles(mockScene);
