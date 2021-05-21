@@ -39,3 +39,5 @@ The title and subtitle can be a Phaser BitmapText object by supplying a `bitmapF
 ...
 }
 ```
+
+Both title texts accept string [templates](https://lodash.com/docs/4.17.15#template) that can be used to pass data present in the transientData object.

@@ -24,19 +24,11 @@ export class Results extends Screen {
         this.createRows();
         this.subscribeToEventBus();
         fireGameCompleteStat(this.transientData[this.scene.key]);
+
         this.children.bringToTop(this.layout.root);
     }
 
     resultsArea() {
-        if (this.config.title) {
-            // 3 rows with screen title
-            const safeArea = this.layout.getSafeArea();
-            if (this.backdrop && this.backdrop.height > safeArea.height)
-                safeArea.y -= this.backdrop.height - safeArea.height;
-            this.backdrop && (safeArea.height = this.backdrop.height);
-            return safeArea;
-        }
-        // 4 rows (legacy)
         const safeArea = this.layout.getSafeArea({ top: false });
         const center = Phaser.Geom.Rectangle.GetCenter(safeArea);
         this.backdrop && (safeArea.height = this.backdrop.height);
