@@ -44,7 +44,7 @@
             cancelKey: "debug-shop.buttonCancel",
             styles: { fontStyle: "bold", fontSize: "16px" },
         },
-        background: "halfViewBackgroundPlain",
+        background: "basicBackground",
         itemBackground: "itemBackgroundLarge",
         detailView: false,
         prompt: {

@@ -359,8 +359,8 @@
             },
             {
                 "type": "image",
-                "key": "halfViewBackgroundPlain",
-                "url": "../../debug/assets/shop/half-panel-plain.png"
+                "key": "basicBackground",
+                "url": "../../debug/assets/shop/panel-basic.png"
             },
             {
                 "type": "image",
