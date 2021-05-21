@@ -10,7 +10,7 @@
             fontFamily: "ReithSerif",
             fontStyle: "bold",
             fontSize: "32px",
-            color: "#4A381F"
+            color: "#4A381F",
         },
         backgroundKey: "debug-shop-confirm.titleBackground",
     },
@@ -21,12 +21,12 @@
             fontSize: "26px",
         },
         backgroundKey: "debug-shop.balanceBackground",
-        icon : {
+        icon: {
             key: "debug-shop.balanceIcon",
         },
     },
     styleDefaults: {
-        fontFamily: "ReithSans",
+        fontFamily: "ReithSerif",
         fontSize: "24px",
         resolution: 2,
         align: "center",
@@ -36,7 +36,7 @@
             buy: "buy",
             equip: "equip",
             unequip: "unequip",
-            use: "use"
+            use: "use",
         },
         buttons: {
             buttonsRight: true,
@@ -56,10 +56,10 @@
             equip: { legal: "Equip this item?", illegal: "Cannot equip this." },
             unequip: "Unequip this item?",
             use: "Use this item?",
-            styles: { fontStyle: "bold" },
+            styles: { fontStyle: "bold", fontSize: "20px" },
         },
         title: { styles: { fontStyle: "bold" } },
-        subtitle: { styles: { color: "#bd6", fontSize: "22px", fontStyle: "bold" } },
-        description: { styles: { fontStyle: "italic", lineSpacing: 5, fontSize: "20px" }, padding: 30 }
+        subtitle: { styles: { color: "#bd6", fontSize: "19px", fontStyle: "bold" } },
+        description: { styles: { fontStyle: "italic", lineSpacing: 5, fontSize: "19px" }, padding: 30 },
     },
 }

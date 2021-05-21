@@ -63,11 +63,11 @@ describe("button panel", () => {
             expect(mockContainer.setPosition).toHaveBeenCalledWith(-150, 0);
             expect(mockContainer.setScale).toHaveBeenCalledWith(2, 2);
 
-            expect(mockButton.setScale.mock.calls[0][0]).toBe(1.4625);
+            expect(mockButton.setScale.mock.calls[0][0]).toBe(1.17);
             expect(mockButton.setX.mock.calls[0][0]).toBe(925);
             expect(mockButton.setY.mock.calls[0][0]).toBe(600);
 
-            expect(mockButton.setScale.mock.calls[1][0]).toBe(1.4625);
+            expect(mockButton.setScale.mock.calls[1][0]).toBe(1.17);
             expect(mockButton.setX.mock.calls[1][0]).toBe(925);
             expect(mockButton.setY.mock.calls[1][0]).toBe(700);
         });
@@ -78,11 +78,11 @@ describe("button panel", () => {
             expect(mockContainer.setPosition).toHaveBeenCalledWith(-150, 0);
             expect(mockContainer.setScale).toHaveBeenCalledWith(1.5, 1.5);
 
-            expect(mockButton.setScale.mock.calls[0][0]).toBe(0.73125);
+            expect(mockButton.setScale.mock.calls[0][0]).toBe(0.585);
             expect(mockButton.setX.mock.calls[0][0]).toBe(587.5);
             expect(mockButton.setY.mock.calls[0][0]).toBe(600);
 
-            expect(mockButton.setScale.mock.calls[1][0]).toBe(0.73125);
+            expect(mockButton.setScale.mock.calls[1][0]).toBe(0.585);
             expect(mockButton.setX.mock.calls[1][0]).toBe(587.5);
             expect(mockButton.setY.mock.calls[1][0]).toBe(700);
         });

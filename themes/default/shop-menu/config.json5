@@ -17,7 +17,7 @@
         ],
     },
     styleDefaults: {
-        fontFamily: "ReithSans",
+        fontFamily: "ReithSerif",
         fontSize: "24px",
         resolution: 2,
         align: "center",

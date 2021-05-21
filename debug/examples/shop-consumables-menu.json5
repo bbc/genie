@@ -18,7 +18,7 @@
         ],
     },
     styleDefaults: {
-        fontFamily: "ReithSans",
+        fontFamily: "ReithSerif",
         fontSize: "24px",
         resolution: 2,
         align: "center",
@@ -30,7 +30,7 @@
             fontSize: "26px",
         },
         backgroundKey: "debug-shop.balanceBackground",
-        icon : {
+        icon: {
             key: "debug-shop.balanceIcon",
         },
     },
