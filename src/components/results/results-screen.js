@@ -13,6 +13,7 @@ import { tweenRows, tweenRowBackdrops } from "./results-row-tween.js";
 import { playRowAudio } from "./results-row-audio.js";
 import { addParticlesToRows } from "./results-particles.js";
 import { fireGameCompleteStat } from "./results-stats.js";
+import { createTitles } from "../../core/titles.js";
 import { createRowBackdrops, scaleRowBackdrops } from "./results-row-backdrop.js";
 import { gmi } from "../../core/gmi/gmi.js";
 
@@ -24,6 +25,7 @@ export class Results extends Screen {
         this.createRows();
         this.subscribeToEventBus();
         fireGameCompleteStat(this.transientData[this.scene.key]);
+        this.createTitles();
         this.children.bringToTop(this.layout.root);
     }
 
@@ -40,6 +42,20 @@ export class Results extends Screen {
         const buttons = ["pause", "continueGame"];
         const onwardButton = fp.get(`${this.scene.key}.gameComplete`, this.transientData) ? "playAgain" : "restart";
         this.setLayout([...buttons, ...achievements, onwardButton]);
+    }
+
+    createTitles() {
+        if (this.config.title) {
+            const title = this.config.title;
+            const template = fp.template(title.text);
+            const titleText = template(this.transientData[this.scene.scene.key]);
+            this.config.title = {
+                ...title,
+                text: titleText,
+            };
+            return createTitles(this);
+        }
+        return false;
     }
 
     createRows() {
