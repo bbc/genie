@@ -86,6 +86,13 @@ describe("button panel", () => {
             expect(mockButton.setX.mock.calls[1][0]).toBe(587.5);
             expect(mockButton.setY.mock.calls[1][0]).toBe(700);
         });
+
+        test("adds correct spacing between the buttons", () => {
+            mockPanel.buttons[1].y = 0;
+            mockScene.config.confirm.buttons.buttonsRight = false;
+            resizeButtonPanel(mockScene, mockPanel)();
+            expect(mockPanel.buttons[1].y).toBe(15);
+        });
     });
 
     describe("createButtonPanel", () => {
