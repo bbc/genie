@@ -12,8 +12,40 @@ The content in the rows can be offset, for example, in the screenshot below, eac
 
 You should keep to the recommended maximum of 3 rows, this is to ensure content is clearly visible on all devices. If you wish, you may have less than 3 rows.
 
-The title for the screen is defined in config as per other screens. Check the [screen titles](../screen-titles.md) docs for more information.
+The title for the screen is defined in config as per other screens, e.g: 
 
+```json5
+{
+    theme: {
+        results: {
+            title: {
+                text: "Results Screen",
+                style: {
+                    fontSize: "24px", 
+                    color: "#FFFFFF",
+                },
+                backgroundKey: "results.title-backdrop",
+            }
+        }
+    }
+}
+```
+
+Title can be a Phaser BitmapText object by setting `type` to "bitmaptext" and supplying a `bitmapFont` asset key along with a `size`, e.g: 
+
+```json5
+{
+...
+    title: {
+        text: "Results Screen",
+        type: "bitmaptext",
+        size: 30,
+        bitmapFont: "examples_uiFont",
+        backgroundKey: "results.title-backdrop",
+    }
+...
+}
+```
 
 ## Examples
 

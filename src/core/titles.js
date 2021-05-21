@@ -17,22 +17,30 @@ const getSafeArea = scene => scene.layout.getTitleArea();
 
 const positionTitle = (title, area) => (title.y = area.centerY);
 
-const createText = (scene, config, textString) => scene.add.text(0, 0, textString, textStyle(config?.style));
+const createText = (scene, config, textString) => {
+    const text = scene.add.text(0, 0, textString, textStyle(config?.style));
+    return text;
+};
 
 const createBitmapText = (scene, config, textString) => {
-    const bitmapText = new Phaser.GameObjects.BitmapText(scene, 0, 0, config.bitmapFont, textString, config.size);
+    const font = config.bitmapFont;
+    const bitmapText = new Phaser.GameObjects.BitmapText(scene, 0, 0, font, textString, config.size);
     scene.add.existing(bitmapText);
     return bitmapText;
 };
 
 const createTextAndBackdrop = (scene, config) => {
+    const textType = {
+        bitmaptext: createBitmapText,
+        text: createText,
+    };
+    const backdrop = scene.add.image(0, 0, config?.backgroundKey);
     const template = fp.template(config?.text);
     const textString = fp.startCase(template(scene.transientData?.[scene.scene.key]));
 
-    return {
-        backdrop: scene.add.image(0, 0, config?.backgroundKey),
-        text: config?.bitmapFont ? createBitmapText(scene, config, textString) : createText(scene, config, textString),
-    };
+    const text = textType[config?.type || "text"](scene, config, textString);
+
+    return { backdrop, text };
 };
 
 const createTitle = scene => {

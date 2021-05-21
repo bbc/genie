@@ -16,6 +16,7 @@
                 alpha: 1,
             },
             title: {
+                type: "bitmaptext",
                 text: "Results Screen",
                 bitmapFont: "examples_uiFont", // Key of bitmapFont
                 size: 50, // Used for bitmaptext only
@@ -91,11 +92,14 @@
                 {
                     format: [
                         {
-                            type: "bitmaptext",
+                            type: "text",
                             content: "You collected: ",
                             offsetY: 0,
-                            bitmapFont: "examples_uiFont",
-                            size: 50,
+                            textStyle: {
+                                fontFamily: "ReithSans",
+                                fontSize: "24px",
+                                color: "#FFFFFF",
+                            },
                         },
                         {
                             type: "sprite",
