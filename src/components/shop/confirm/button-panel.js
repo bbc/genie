@@ -47,6 +47,8 @@ export const resizeButtonPanel = (scene, panel) => () => {
     panel.container.setScale(newScale, newScale);
 
     sizeButtons(scene, panel.buttons, bounds);
+
+    panel.buttons[1].y += 15;
 };
 
 export const createButtonPanel = (scene, item) => {
