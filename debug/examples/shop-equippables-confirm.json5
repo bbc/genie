@@ -59,7 +59,7 @@
             styles: { fontStyle: "bold", fontSize: "20px" },
         },
         title: { styles: { fontStyle: "bold" } },
-        subtitle: { styles: { color: "#bd6", fontSize: "19px", fontStyle: "bold" } },
-        description: { styles: { fontStyle: "italic", lineSpacing: 5, fontSize: "19px" }, padding: 30 },
+        subtitle: { styles: { color: "#bd6", fontSize: "20px", fontStyle: "bold" } },
+        description: { styles: { fontStyle: "italic", lineSpacing: 5, fontSize: "20px" }, padding: 30 },
     },
 }
