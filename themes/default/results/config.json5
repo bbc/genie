@@ -7,30 +7,37 @@
         key: "results.backdrop", // Asset key.
         alpha: 1,
     },
-    title: {
-        text: "Results Screen",
-        style: {
-            fontFamily: "ReithSans",
-            fontSize: "24px", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
-            color: "#FFFFFF", // This should meet the colour contrast requirement as per GEL guidelines.
-        },
-        backgroundKey: "results.title-backdrop", // asset key
-    },
     rows: [
         // An array of rows which will be displayed on the screen.
+        {
+            format: [
+                // Each object in this array generates a visible object in the row.
+                {
+                    type: "text", // 'Text' shows static text which can contain template tags for transient data.
+                    content: "Results Screen",
+                    offsetX: 0, // Offset the x position of this text object.
+                    offsetY: -15, // Offset the y position of this text object.
+                    textStyle: {
+                        fontFamily: "ReithSans",
+                        fontSize: "24px", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
+                        color: "#FFFFFF", // This should meet the colour contrast requirement as per GEL guidelines.
+                    },
+                },
+            ],
+        },
         {
             format: [
                 {
                     type: "text",
                     content: "You collected: ",
-                    offsetY: 15,
+                    offsetY: -15,
                     textStyle: {
                         fontFamily: "ReithSans",
                         fontSize: "24px",
                         color: "#FFFFFF",
                     },
                 },
-                { type: "sprite", key: "game.star", offsetX: 20, offsetY: 15 },
+                { type: "sprite", key: "game.star", offsetX: 20, offsetY: -15 },
                 {
                     type: "countup", // Check the documentation for more detailed information on count ups. https://github.com/bbc/genie-starter-pack/tree/master/docs/development/results-screen/results-countup.md
                     startCount: 0, // The number to start counting from. This can be passed in by transient data.
@@ -45,7 +52,7 @@
                         endPlayRate: 1.2, // Final play rate - used for pitch shifting.
                     },
                     offsetX: 15,
-                    offsetY: 15,
+                    offsetY: -15,
                     textStyle: {
                         fontFamily: "ReithSans",
                         fontSize: "24px",
@@ -56,7 +63,7 @@
                 {
                     type: "text",
                     content: ' star<% stars !== 1 && print("s") %>', // Functional template tags will be evaluated.
-                    offsetY: 15,
+                    offsetY: -15,
                     textStyle: {
                         fontFamily: "ReithSans",
                         fontSize: "24px",
@@ -66,7 +73,7 @@
                 {
                     type: "text",
                     content: "!",
-                    offsetY: 15,
+                    offsetY: -15,
                     textStyle: {
                         fontFamily: "ReithSans",
                         fontSize: "24px",
@@ -77,7 +84,7 @@
             backdrop: {
                 // Optional row backdrop
                 key: "results.row-backdrop-1", // asset key
-                offsetY: 15,
+                offsetY: -15,
             },
             alpha: 1, // Set the alpha on the whole row
             transition: { rotation: { from: -4, to: 0 }, alpha: { from: 0, to: 1 }, duration: 1000 }, // Phaser tweendata config.
@@ -88,7 +95,7 @@
                     emitterConfigKey: "results.row-emitter",
                     // Optional settings
                     offsetX: 40,
-                    offsetY: 15,
+                    offsetY: -15,
                     delay: 1000,
                     duration: 1000,
                     onTop: false,
@@ -100,7 +107,7 @@
                 {
                     type: "text",
                     content: "You collected: ",
-                    offsetY: 0,
+                    offsetY: -15,
                     textStyle: {
                         fontFamily: "ReithSans",
                         fontSize: "24px",
@@ -112,7 +119,7 @@
                     key: "game.diamond", // Asset key of spritesheet.
                     frame: 0, // The initial frame of the sprite to display.
                     offsetX: 20,
-                    offsetY: 0,
+                    offsetY: -15,
                     anim: {
                         // A phaser animation configuration object.
                         frames: {
@@ -135,7 +142,7 @@
                         ticksPerSecond: 6,
                     },
                     offsetX: 15,
-                    offsetY: 0,
+                    offsetY: -15,
                     textStyle: {
                         fontFamily: "ReithSans",
                         fontSize: "24px",
@@ -146,7 +153,7 @@
                 {
                     type: "text",
                     content: ' gem<% gems !== 1 && print("s") %>',
-                    offsetY: 0,
+                    offsetY: -15,
                     textStyle: {
                         fontFamily: "ReithSans",
                         fontSize: "24px",
@@ -156,7 +163,7 @@
                 {
                     type: "text",
                     content: "!",
-                    offsetY: 0,
+                    offsetY: -15,
                     textStyle: {
                         fontFamily: "ReithSans",
                         fontSize: "24px",
@@ -166,7 +173,7 @@
             ],
             backdrop: {
                 key: "results.row-backdrop-2",
-                offsetY: 0,
+                offsetY: -15,
             },
             alpha: 0,
             transition: {
@@ -187,7 +194,7 @@
                     assetKey: "game.diamond",
                     emitterConfigKey: "results.row-emitter",
                     offsetX: 40,
-                    offsetY: 0,
+                    offsetY: -15,
                     delay: 4000,
                     duration: 1000,
                     onTop: false,

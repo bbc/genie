@@ -19,11 +19,6 @@
             },
             {
                 "type": "image",
-                "key": "title-backdrop",
-                "url": "results/title-backdrop.png"
-            },
-            {
-                "type": "image",
                 "key": "row-backdrop-1",
                 "url": "results/row-backdrop-1.png"
             },
