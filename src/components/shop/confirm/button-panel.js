@@ -30,7 +30,8 @@ const sizeButton = (scene, button, idx, bounds) => {
     const innerBounds = getOffsetBounds(bounds, getInnerRectBounds(scene));
     button.setX(CAMERA_X + getButtonX(innerBounds.x, scene.config));
     button.setY(CAMERA_Y + (idx * 200) / 2 + bounds.height / 2 + bounds.y);
-    button.setScale(innerBounds.width / button.width);
+    const buttonScaleToEnsureSpacingIsCorrect = 0.8;
+    button.setScale((innerBounds.width / button.width) * buttonScaleToEnsureSpacingIsCorrect);
 };
 
 const sizeButtons = (scene, buttons, bounds) =>
