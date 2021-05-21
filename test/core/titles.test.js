@@ -18,7 +18,6 @@ describe("Titles", () => {
     let mockText;
     let mockTitleArea;
     let mockScaleEvent;
-    let mockBitmapText;
 
     beforeEach(() => {
         mockButtonPad = 10;
@@ -30,11 +29,6 @@ describe("Titles", () => {
         mockSubtitleBackdrop = { setOrigin: jest.fn(), destroy: jest.fn() };
         mockSubtitleIcon = { setOrigin: jest.fn(), destroy: jest.fn(), width: 20 };
         mockText = { setOrigin: jest.fn(), destroy: jest.fn(), width: 50, x: 0 };
-        mockBitmapText = jest.fn(() => {
-            return {
-                setOrigin: jest.fn(),
-            };
-        });
         mockScene = {
             events: { once: jest.fn() },
             layout: { getTitleArea: jest.fn().mockReturnValue(mockTitleArea) },
@@ -46,7 +40,6 @@ describe("Titles", () => {
                     .mockReturnValueOnce(mockSubtitleBackdrop)
                     .mockReturnValueOnce(mockSubtitleIcon),
                 text: jest.fn(() => mockText),
-                existing: jest.fn(),
             },
             config: {
                 title: {
@@ -60,12 +53,8 @@ describe("Titles", () => {
                     style: { fontSize: "24px", fontFamily: "ReithSans", align: "center" },
                 },
             },
-            sys: {
-                queueDepthSort: jest.fn(),
-            },
             transientData: {},
         };
-        global.Phaser.GameObjects.BitmapText = mockBitmapText;
     });
 
     afterEach(jest.clearAllMocks);
@@ -93,14 +82,6 @@ describe("Titles", () => {
             createTitles(mockScene);
             expect(mockScene.add.text).toHaveBeenCalledWith(0, 0, "Title", mockScene.config.title.style);
             expect(mockText.setOrigin).toHaveBeenCalledWith(0.5, 0.5);
-        });
-
-        test("adds title bitmaptext", () => {
-            mockScene.config.title.bitmapFont = "font";
-            mockScene.config.title.size = 10;
-            createTitles(mockScene);
-            expect(mockBitmapText).toHaveBeenCalled();
-            expect(mockScene.add.existing).toHaveBeenCalled();
         });
 
         test("adds title text when string template is provided", () => {
