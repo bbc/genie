@@ -24,11 +24,11 @@ export class Results extends Screen {
         this.createRows();
         this.subscribeToEventBus();
         fireGameCompleteStat(this.transientData[this.scene.key]);
+
         this.children.bringToTop(this.layout.root);
     }
 
     resultsArea() {
-        if (this.config.title) return this.layout.getSafeArea();
         const safeArea = this.layout.getSafeArea({ top: false });
         const center = Phaser.Geom.Rectangle.GetCenter(safeArea);
         this.backdrop && (safeArea.height = this.backdrop.height);

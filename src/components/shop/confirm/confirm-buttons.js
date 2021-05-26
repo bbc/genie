@@ -42,6 +42,7 @@ export const addConfirmButtons = (scene, title, action, item) => {
         cancelButtonCallback,
         item,
     );
+
     ((action === "buy" && !canBuyItem(scene, item)) || (action === "equip" && !isEquippable(item))) &&
         disableActionButton(confirmButtons[0]);
     return confirmButtons;

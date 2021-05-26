@@ -17,7 +17,7 @@
         ],
     },
     styleDefaults: {
-        fontFamily: "ReithSans",
+        fontFamily: "ReithSerif",
         fontSize: "24px",
         resolution: 2,
         align: "center",
@@ -50,7 +50,7 @@
         buttonsRight: true,
         buttons: {
             key: "shop-menu.button",
-            styles: { fontStyle: "bold", fontSize: "22px" },
+            styles: { fontStyle: "bold", fontSize: "24px" },
         },
     },
 }

@@ -2,11 +2,13 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.9.11 | |
+| | Ensures shop confirm buttons have spacing that coheres with GELie. |
 | | Fixes macOS voiceover control + option + space click not working on accessible elements. |
 | | Loads other variations of the Reith font upfront. |
 | | Add ability to change button click sounds per button. |
 | | Prevents scrollable list buttons from being clicked while dragging the list. |
-| | Updated Phaser to 3.54.0 |
+| | Updated Phaser to 3.55.0 |
 | | Reposition shop-list accessible elements on scroll and tab events. |
 | 3.9.0 | |
 | | Fix showing shop confirm on key press. |
