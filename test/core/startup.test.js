@@ -107,7 +107,7 @@ describe("Startup", () => {
             });
 
             test("appends an error message to the container when an error event is thrown", () => {
-                expect(mockContainer.appendChild.mock.calls[0][0].name).toBe("pre");
+                expect(mockContainer.appendChild.mock.calls[1][0].name).toBe("pre");
             });
 
             test("sets the correct styling on the error message", () => {

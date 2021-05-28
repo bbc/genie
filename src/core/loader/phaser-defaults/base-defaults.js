@@ -19,6 +19,6 @@ export const getBaseDefaults = () => {
         version: `${version}${build ? " /" + jobCleaned + "uild: " + build : ""}`,
         clearBeforeRender: false,
         scale: { mode: Phaser.Scale.NONE },
-        input: { windowEvents: false, activePointers: 4 }
+        input: { windowEvents: false, activePointers: 4 },
     };
 };

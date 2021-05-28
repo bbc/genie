@@ -40,14 +40,6 @@ export const init = (stageHeight, game) => {
         game.canvas.style.marginTop = px(marginTop);
         game.scale.refresh();
 
-
-            //NEW CODE
-
-            metrics.marginLeft = marginLeft
-            metrics.marginTop = marginTop
-            metrics.viewHeight = viewHeight
-
-
         _onSizeChange.dispatch(metrics);
     };
 
@@ -55,4 +47,4 @@ export const init = (stageHeight, game) => {
 
     resize();
     window.onresize = fp.debounce(750, resize);
-}
+};

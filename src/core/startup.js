@@ -14,7 +14,7 @@ import { hookErrors } from "./loader/hook-errors.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addGelButton } from "./layout/gel-game-objects.js";
 import { getPhaserDefaults } from "./loader/phaser-defaults/get-phaser-defaults.js";
-import { addGelContainer } from "./layout/gel-text.js";
+import { addGelContainer } from "./layout/gel-container.js";
 import { addGelText } from "./layout/gel-text.js";
 
 export const startup = config => {
@@ -26,6 +26,6 @@ export const startup = config => {
     const game = new Phaser.Game(getPhaserDefaults(config));
     game.device.audio.mp4 = true;
     debugMode.create(window, game);
-    addGelContainer();
+    addGelContainer(game);
     a11y.create();
 };

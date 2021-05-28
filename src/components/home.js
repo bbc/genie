@@ -20,15 +20,14 @@ export class Home extends Screen {
         const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
         this.setLayout(buttons.concat(achievements, debug));
 
-        const style = {
-            "background-color": "white",
-            font: "32px Arial",
-            "font-weight": "bold",
-
-        };
-
-        this.add.gelText("some text", style)
-
+        //const style = {
+        //    "background-color": "white",
+        //    font: "32px Arial",
+        //    color: "red",
+        //    "font-weight": "bold",
+        //};
+        //
+        //this.add.gelText("some text\nmore...", { style, position: { x: 700, y: 200 }, align: "center" });
 
         eventBus.subscribe({
             channel: buttonsChannel(this),
