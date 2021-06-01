@@ -35,10 +35,10 @@
 # }
 
 # set -e
-# source /etc/profile
-# nvm install 12.19.0
+source /etc/profile
+nvm install 10.24.1
 node -v
-npm install --force
+npm install
 #python build-scripts/licensechecker/licensechecker.py
 npm run jest
 npm run eslint
