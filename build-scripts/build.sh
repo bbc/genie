@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 # postTheme2Actions()
 # {
 #      if [ $? -eq 0 ]
@@ -35,6 +37,11 @@
 # }
 
 #python build-scripts/licensechecker/licensechecker.py
+
+nvm install 10.0.0
+npm install --force
+nvm install 13.14.0
+
 npm run jest
 npm run eslint
 #npm run validate:themes -- default # Validates themes
