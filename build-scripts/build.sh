@@ -34,7 +34,7 @@
 #         fi
 # }
 
-# set -e
+set -e
 source /etc/profile
 nvm install 10.24.1
 # node -v
