@@ -40,7 +40,7 @@ export const initGel = game => {
         const scene = scenes.pop();
         scene.innerHTML = "";
         scene.remove();
-        scenes.length && (scenes[scenes.length - 1].style.display = "block");
+        scenes.length && (scenes[scenes.length - 1].style.display = "");
     };
 
     let scenes = [];

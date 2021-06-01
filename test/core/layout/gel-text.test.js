@@ -9,7 +9,7 @@ import * as gelContainerModule from "../../../src/core/layout/gel.js";
 describe("", () => {
     beforeEach(() => {
         gelContainerModule.gel = {
-            current: () => ({appendChild: jest.fn(),})
+            current: () => ({ appendChild: jest.fn() }),
         };
     });
 
