@@ -8,6 +8,7 @@ import { Results } from "../../components/results/results-screen.js";
 import { Home } from "../../components/home.js";
 import { Narrative } from "../../components/narrative.js";
 import { Shop } from "../../components/shop/shop.js";
+import { GelText } from "./gel-text.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 
 const prependDebug = key => `debug-${key}`;
@@ -153,6 +154,15 @@ const exampleScreens = {
     narrative: {
         scene: Narrative,
         title: "Narrative",
+        routes: {
+            back: "debug",
+            next: "debug",
+        },
+    },
+
+    "gel-text": {
+        scene: GelText,
+        title: "Gel Text",
         routes: {
             back: "debug",
             next: "debug",

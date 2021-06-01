@@ -12,7 +12,6 @@ const gelDomStyle = {
     "transform-origin": "top left",
     left: 0,
     top: 0,
-    "background-color": "rgba(255,0,0,0.2)",
     width: "1400px",
     height: "600px",
     "pointer-events": "none",
