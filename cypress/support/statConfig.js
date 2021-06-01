@@ -328,49 +328,49 @@ export const userActions = {
 
 export const pageViews = {
     homePage: {
-        counterName: "keepalive.games.genie",
+        countername: "keepalive.games.genie",
         screenName: "home",
         bucket: "",
         event: "page",
     },
     selectScreenPage: {
-        counterName: "keepalive.games.genie",
+        countername: "keepalive.games.genie",
         screenName: "character_select",
         bucket: "",
         event: "page",
     },
     resultsScreenPage: {
-        counterName: "keepalive.games.genie",
+        countername: "keepalive.games.genie",
         screenName: "results",
         bucket: "",
         event: "page",
     },
     narrativePage: {
-        counterName: "keepalive.games.genie",
+        countername: "keepalive.games.genie",
         screenName: "narrative",
         bucket: "",
         event: "page",
     },
     shopPage: {
-        counterName: "keepalive.games.genie",
+        countername: "keepalive.games.genie",
         screenName: "shopmenu",
         bucket: "",
         event: "page",
     },
     shopStore: {
-        counterName: "keepalive.games.genie",
+        countername: "keepalive.games.genie",
         screenName: "shopbuy",
         bucket: "",
         event: "page",
     },
     shopManagement: {
-        counterName: "keepalive.games.genie",
+        countername: "keepalive.games.genie",
         screenName: "shopmanage",
         bucket: "",
         event: "page",
     },
     levelSelectPage: {
-        counterName: "keepalive.games.genie",
+        countername: "keepalive.games.genie",
         screenName: "level_select",
         bucket: "",
         event: "page",
