@@ -9,7 +9,7 @@ import * as gelContainerModule from "../../../src/core/layout/gel.js";
 describe("", () => {
     beforeEach(() => {
         gelContainerModule.gel = {
-            appendChild: jest.fn(),
+            current: () => ({appendChild: jest.fn(),})
         };
     });
 
@@ -47,12 +47,12 @@ describe("", () => {
             expect(gelText.el.remove).toHaveBeenCalled();
         });
 
-        test("Set position method changes the CSS", () => {
+        test("Set position method changes the CSS with camera offset", () => {
             const gelText = addGelText("test", {});
             gelText.setPosition(100, 200);
 
-            expect(gelText.el.style.left).toBe("100px");
-            expect(gelText.el.style.top).toBe("200px");
+            expect(gelText.el.style.left).toBe("800px");
+            expect(gelText.el.style.top).toBe("500px");
         });
 
         test("Set Text method clears existing nodes", () => {

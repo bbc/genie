@@ -20,9 +20,9 @@ describe("Gel Container", () => {
 
     afterEach(jest.clearAllMocks);
 
-    describe("addGelContainer", () => {
+    describe("initGel", () => {
         test("Adds a Gel container", () => {
-            gelContainerModule.addGelContainer();
+            gelContainerModule.initGel();
             expect(mockDiv.appendChild).toHaveBeenCalledTimes(1);
         });
     });
@@ -38,15 +38,17 @@ describe("Gel Container", () => {
                 },
             };
 
-            gelContainerModule.addGelContainer(mockGame);
+            gelContainerModule.initGel(mockGame);
 
             const resize = scaler.onScaleChange.add.mock.calls[0][0];
 
             resize({ scale: 5 });
 
-            expect(gelContainerModule.gel.style.top).toEqual("100px");
-            expect(gelContainerModule.gel.style.left).toEqual("200px");
-            expect(gelContainerModule.gel.style.transform).toEqual("scale(5)");
+            const root = mockDiv.appendChild.mock.calls[0][0];
+
+            expect(root.style.top).toEqual("100px");
+            expect(root.style.left).toEqual("200px");
+            expect(root.style.transform).toEqual("scale(5)");
         });
     });
 });
