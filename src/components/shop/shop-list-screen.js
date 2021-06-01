@@ -12,6 +12,7 @@ import RexUIPlugin from "../../../lib/rexuiplugin.min.js";
 import { onScaleChange } from "../../core/scaler.js";
 import { setBalance } from "./balance.js";
 import { initResizers } from "./backgrounds.js";
+import { gmi} from "../../core/gmi/gmi.js";
 
 export class ShopList extends Screen {
     preload() {
@@ -20,7 +21,7 @@ export class ShopList extends Screen {
     }
 
     create() {
-        this.setStatsScreen(
+        gmi.setStatsScreen(
             this.transientData.shopTitle + (this.transientData.shop.mode === "shop" ? "buy" : "manage"),
         );
         this.addBackgroundItems();

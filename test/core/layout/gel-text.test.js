@@ -4,11 +4,11 @@
  * @license Apache-2.0
  */
 import { addGelText } from "../../../src/core/layout/gel-text.js";
-import * as gelContainerModule from "../../../src/core/layout/gel-container.js";
+import * as gelContainerModule from "../../../src/core/layout/gel.js";
 
 describe("", () => {
     beforeEach(() => {
-        gelContainerModule.gelDom = {
+        gelContainerModule.gel = {
             appendChild: jest.fn(),
         };
     });

@@ -11,6 +11,7 @@ import { createTitles } from "../../core/titles.js";
 import { createMenu } from "./menu.js";
 import { setBalance } from "./balance.js";
 import { initResizers } from "./backgrounds.js";
+import { gmi } from "../../core/gmi/gmi.js";
 
 export class ShopMenu extends Screen {
     preload() {
@@ -25,7 +26,7 @@ export class ShopMenu extends Screen {
         } else {
             this.transientData.shopTitle = "shop";
         }
-        this.setStatsScreen(this.transientData.shopTitle + "menu");
+        gmi.setStatsScreen(this.transientData.shopTitle + "menu");
         this.addBackgroundItems();
         const backNav = this._data.addedBy ? "overlayBack" : "back";
         this.setLayout([backNav, "pause"]);

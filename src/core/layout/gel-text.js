@@ -3,7 +3,8 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { gelDom } from "./gel-container.js";
+import { gel } from "./gel.js";
+import { CAMERA_X, CAMERA_Y } from "./metrics.js";
 
 const px = val => Math.floor(val) + "px";
 const alignments = { left: "0", center: "-50%", right: "-100%" };
@@ -24,7 +25,7 @@ const defaultStyle = {
 };
 
 const getTextNodes = text => text.split("\n").map(line => document.createTextNode(line));
-const addBreaks = (el, i, arr) => [el].concat(i != arr.length - 1 ? [document.createElement("br")] : []);
+const addBreaks = (el, i, arr) => [el].concat(i !== arr.length - 1 ? [document.createElement("br")] : []);
 
 class GelText {
     constructor(text, newConfig) {
@@ -46,8 +47,8 @@ class GelText {
     }
 
     setPosition(x, y) {
-        x && (this.el.style.left = px(x));
-        y && (this.el.style.top = px(y));
+        x !== undefined && (this.el.style.left = px(x + CAMERA_X));
+        x !== undefined && (this.el.style.top = px(y + CAMERA_Y));
     }
 
     alignText(align) {
@@ -69,6 +70,6 @@ const defaultConfig = {
 
 export const addGelText = (text, config) => {
     const gelText = new GelText(text, config);
-    gelDom.appendChild(gelText.el);
+    gel.current().appendChild(gelText.el);
     return gelText;
 };
