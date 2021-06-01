@@ -85,6 +85,7 @@ describe("Gel Button", () => {
             },
             sound: {
                 add: jest.fn(() => GameSound.Assets.buttonClick),
+                get: jest.fn(),
             },
             anims: {
                 once: jest.fn(),
@@ -275,6 +276,15 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
             const mockSound = { testProp: "testValue" };
             (mockScene.sound.add = jest.fn(() => mockSound)), gelButton.setClickSound("test-key");
+
+            expect(gelButton.config.clickSound).toBe("test-key");
+            expect(gelButton._click).toBe(mockSound);
+        });
+
+        test("gets the sound from sound manager when it already exists", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            const mockSound = { testProp: "testValue" };
+            (mockScene.sound.get = jest.fn(() => mockSound)), gelButton.setClickSound("test-key");
 
             expect(gelButton.config.clickSound).toBe("test-key");
             expect(gelButton._click).toBe(mockSound);

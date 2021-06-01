@@ -2,7 +2,10 @@
 
 | Version | Description |
 |---------|-------------|
-| 3.9.11 | |
+| 3.9.2 | |
+| | Updated Phaser to 3.55.2 |
+| | Fixed distorted audio in the shop screens on some iOS devices. |
+| 3.9.1 | |
 | | Ensures shop confirm buttons have spacing that coheres with GELie. |
 | | Fixes macOS voiceover control + option + space click not working on accessible elements. |
 | | Loads other variations of the Reith font upfront. |

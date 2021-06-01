@@ -113,7 +113,7 @@ export class GelButton extends Phaser.GameObjects.Container {
 
     setClickSound(key) {
         this.config.clickSound = key;
-        this._click = this.scene.sound.add(key);
+        this._click = this.scene.sound.get(key) ? this.scene.sound.get(key) : this.scene.sound.add(key);
     }
 
     setImage(key) {
