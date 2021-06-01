@@ -20,7 +20,9 @@ describe("User Action stats for Genie", () => {
 
     it("Fires a stat when the game is loaded", () => {
         cy.wait("@gameStat").then(interception => {
-            cy.log(interception).its("response.url").should("include", statHelper.formatStatConfig(userActions.gameloaded).stat);
+            cy.log(interception)
+                .its("response.url")
+                .should("include", statHelper.formatStatConfig(userActions.gameloaded).stat);
         });
     });
 
