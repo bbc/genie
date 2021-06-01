@@ -38,6 +38,7 @@ set -e
 
 #python build-scripts/licensechecker/licensechecker.py
 
+source /etc/profile
 nvm install 10.0.0
 npm install --force
 nvm install 13.14.0
