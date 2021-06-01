@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Add gelText (DOM text layer). |
 | | Fixes macOS voiceover control + option + space click not working on accessible elements. |
 | | Loads other variations of the Reith font upfront. |
 | | Add ability to change button click sounds per button. |
