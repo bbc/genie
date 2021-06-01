@@ -15,7 +15,7 @@ let music;
 const isPlaying = audioKey => audioKey && audioKey === music?.key;
 
 const startNext = scene => {
-    music?.destroy();
+    scene.sound.remove(music);
     music = start(scene, scene.config.music);
 };
 
