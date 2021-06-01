@@ -30,3 +30,6 @@ const style = {
 
 const gelText = this.add.gelText("some text\nmore text...", { style, position: { x: 0, y: -200 }, align: "center" });
 ```
+
+## Limitations
+As Gel Text sits in its own `div` above the game canvas it always appears above all game elements.
