@@ -6,7 +6,7 @@
 import { addGelText } from "../../../src/core/layout/gel-text.js";
 import * as gelContainerModule from "../../../src/core/layout/gel.js";
 
-describe("", () => {
+describe("Gel Text", () => {
     beforeEach(() => {
         gelContainerModule.gel = {
             current: () => ({ appendChild: jest.fn() }),
@@ -16,10 +16,6 @@ describe("", () => {
     afterEach(jest.clearAllMocks);
 
     describe("addGelText", () => {
-        test("x", () => {
-            addGelText("test", {});
-        });
-
         test("throws a warning if incorrect align value is used", () => {
             jest.spyOn(global.console, "warn");
             addGelText("test", { align: "wrong value" });
@@ -37,7 +33,7 @@ describe("", () => {
         });
     });
 
-    describe("GelText", () => {
+    describe("GelText Class Methods", () => {
         test("destroy method removes element from DOM", () => {
             const gelText = addGelText("test", {});
             gelText.el.remove = jest.fn();

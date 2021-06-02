@@ -5,7 +5,7 @@
  */
 import { GelText } from "../../../src/core/debug/gel-text.js";
 
-describe("", () => {
+describe("Gel Text Debug Screen", () => {
     let GelTextScreen;
     beforeEach(() => {
         GelTextScreen = new GelText();

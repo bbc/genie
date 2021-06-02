@@ -48,7 +48,7 @@ class GelText {
 
     setPosition(x, y) {
         x !== undefined && (this.el.style.left = px(x + CAMERA_X));
-        x !== undefined && (this.el.style.top = px(y + CAMERA_Y));
+        y !== undefined && (this.el.style.top = px(y + CAMERA_Y));
     }
 
     alignText(align) {
