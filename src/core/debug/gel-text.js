@@ -20,7 +20,7 @@ export class GelText extends Screen {
             font: "32px Arial",
             color: "red",
             "font-weight": "bold",
-            padding: "6px 0",
+            padding: "5px 10px",
         };
 
         this.add.gelText("Multiline text\nCentered\nMultiline text", {
