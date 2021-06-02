@@ -48,7 +48,8 @@ const resizeButton = pane => (button, idx) => {
     button.setY(CAMERA_Y + bounds.y + bounds.height / 4 + (idx * bounds.height) / 2);
     const xPos = bounds.x + bounds.width / 2;
     button.setX(CAMERA_X + (right ? xPos : -xPos));
-    button.setScale(bounds.width / button.width);
+    const buttonScaleToEnsureSpacingIsCorrect = 0.8;
+    button.setScale((bounds.width / button.width) * buttonScaleToEnsureSpacingIsCorrect);
 };
 
 export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback, item) =>

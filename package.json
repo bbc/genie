@@ -1,6 +1,6 @@
 {
     "name": "genie",
-    "version": "3.9.0",
+    "version": "3.9.2",
     "description": "BBC Games Genie - A Modular Game Engine",
     "license": "Apache-2.0",
     "private": true,
@@ -23,9 +23,10 @@
         "core-js": "^3.9.1",
         "event-target-polyfill": "0.0.2",
         "expose-loader": "^0.7.5",
+        "games-automation-stathelper": "git+ssh://git@github.com/bbc/games-automation-stathelper.git",
         "json5": "^2.1.3",
         "notp": "^2.0.3",
-        "phaser": "3.54.0",
+        "phaser": "3.55.2",
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {

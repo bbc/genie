@@ -90,13 +90,13 @@ describe("Game Sound", () => {
             });
 
             test("does not stop current music playing", () => {
-                expect(mockMusic.destroy).not.toHaveBeenCalled();
+                expect(mockScene.sound.remove).not.toHaveBeenCalled();
             });
 
             test("does not stop current music playing if screen is an overlay", () => {
                 mockScene._data.addedBy = "screen";
                 setMusic(mockScene);
-                expect(mockMusic.destroy).not.toHaveBeenCalled();
+                expect(mockScene.sound.remove).not.toHaveBeenCalled();
             });
         });
 
@@ -120,7 +120,7 @@ describe("Game Sound", () => {
             test("fades and stops current music playing if not going to the Home screen", () => {
                 setMusic(mockScene);
                 expect(mockScene.tweens.add).toHaveBeenCalledWith(expect.objectContaining(fadeTween));
-                expect(mockMusic.destroy).toHaveBeenCalled();
+                expect(mockScene.sound.remove).toHaveBeenCalled();
             });
 
             test("stops but doesn't fade current music playing if going to the Home screen", () => {
@@ -128,7 +128,7 @@ describe("Game Sound", () => {
                 // the game music does not fade out before playing the Home screen music.
                 mockScene.scene.key = "home";
                 setMusic(mockScene);
-                expect(mockMusic.destroy).toHaveBeenCalled();
+                expect(mockScene.sound.remove).toHaveBeenCalled();
                 expect(mockScene.tweens.add).not.toHaveBeenCalledWith(expect.objectContaining(fadeTween));
             });
 

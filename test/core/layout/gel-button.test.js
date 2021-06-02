@@ -85,6 +85,7 @@ describe("Gel Button", () => {
             },
             sound: {
                 add: jest.fn(() => GameSound.Assets.buttonClick),
+                get: jest.fn(),
             },
             anims: {
                 once: jest.fn(),
@@ -254,11 +255,19 @@ describe("Gel Button", () => {
     });
 
     describe("setHitArea function", () => {
-        test("sets the correct hitarea on the button", () => {
+        test("sets the hitarea on the button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
             gelButton.input = { hitArea: {} };
             gelButton.setHitArea(mockMetrics);
             expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(0, 0, 120, 70));
+        });
+
+        test("sets the hitarea without padding for in-game buttons", () => {
+            mockConfig.gameButton = true;
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            gelButton.input = { hitArea: {} };
+            gelButton.setHitArea(mockMetrics);
+            expect(gelButton.input.hitArea).toEqual(new Phaser.Geom.Rectangle(0, 0, 100, 50));
         });
     });
 
@@ -267,6 +276,15 @@ describe("Gel Button", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
             const mockSound = { testProp: "testValue" };
             (mockScene.sound.add = jest.fn(() => mockSound)), gelButton.setClickSound("test-key");
+
+            expect(gelButton.config.clickSound).toBe("test-key");
+            expect(gelButton._click).toBe(mockSound);
+        });
+
+        test("gets the sound from sound manager when it already exists", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            const mockSound = { testProp: "testValue" };
+            (mockScene.sound.get = jest.fn(() => mockSound)), gelButton.setClickSound("test-key");
 
             expect(gelButton.config.clickSound).toBe("test-key");
             expect(gelButton._click).toBe(mockSound);

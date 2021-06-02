@@ -248,7 +248,7 @@ describe("resizeGelButtons()", () => {
     });
     test("sets the scale of each button", () => {
         expect(mockButton.setScale).toHaveBeenCalledTimes(1);
-        expect(mockButton.setScale).toHaveBeenCalledWith(4);
+        expect(mockButton.setScale).toHaveBeenCalledWith(3.2);
     });
     describe("when buttonsRight is false", () => {
         test("the x position is mirrored", () => {
