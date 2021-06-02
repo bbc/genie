@@ -55,6 +55,7 @@ describe("Gel Button", () => {
             },
         };
         mockScene = {
+            emit: jest.fn(),
             add: {
                 existing: jest.fn(),
                 tween: jest.fn(),
@@ -225,6 +226,12 @@ describe("Gel Button", () => {
                 "",
                 mockScene.sys.game.input.pointers,
             );
+        });
+
+        test("pointerup emits a pointerover event", () => {
+            const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+            gelButton.onPointerUp(mockConfig, mockScene);
+            expect(mockScene.emit).toHaveBeenCalledWith("pointerout");
         });
 
         test("pointerup calls play on button click sound", () => {

@@ -74,6 +74,7 @@ export class GelButton extends Phaser.GameObjects.Container {
         this._click.once(Phaser.Sound.Events.PAUSE, this._click.resume).play();
         const inputManager = this.scene.sys.game.input;
         inputManager.updateInputPlugins("", inputManager.pointers);
+        this.emit("pointerout");
         publish(config, { screen })();
     }
 
