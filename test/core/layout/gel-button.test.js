@@ -21,6 +21,7 @@ describe("Gel Button", () => {
 
     beforeEach(() => {
         gmi.achievements = { unseen: false };
+        GelButton.prototype.emit = jest.fn();
         GelButton.prototype.width = 64;
         GelButton.prototype.height = 64;
         GelButton.prototype.setFrame = jest.fn();
@@ -55,7 +56,6 @@ describe("Gel Button", () => {
             },
         };
         mockScene = {
-            emit: jest.fn(),
             add: {
                 existing: jest.fn(),
                 tween: jest.fn(),
@@ -231,7 +231,7 @@ describe("Gel Button", () => {
         test("pointerup emits a pointerover event", () => {
             const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
             gelButton.onPointerUp(mockConfig, mockScene);
-            expect(mockScene.emit).toHaveBeenCalledWith("pointerout");
+            expect(gelButton.emit).toHaveBeenCalledWith("pointerout");
         });
 
         test("pointerup calls play on button click sound", () => {
