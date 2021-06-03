@@ -94,8 +94,8 @@
             },
             {
                 "type": "json5",
-                "key": "debug-gel-text",
-                "url": "../../debug/examples/gel-text.json5"
+                "key": "debug-dom-text",
+                "url": "../../debug/examples/dom-text.json5"
             }
         ]
     },

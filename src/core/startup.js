@@ -14,18 +14,18 @@ import { hookErrors } from "./loader/hook-errors.js";
 import * as a11y from "./accessibility/accessibility-layer.js";
 import { addGelButton } from "./layout/gel-game-objects.js";
 import { getPhaserDefaults } from "./loader/phaser-defaults/get-phaser-defaults.js";
-import { initGel } from "./layout/gel.js";
-import { addGelText } from "./layout/gel-text.js";
+import { initGelDom } from "./layout/gel-dom.js";
+import { addDomText } from "./layout/dom-text.js";
 
 export const startup = config => {
     setGmi(config.settings || {}, window);
     hookErrors(gmi.gameContainerId);
     Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
-    Phaser.GameObjects.GameObjectFactory.register("gelText", addGelText);
+    Phaser.GameObjects.GameObjectFactory.register("domText", addDomText);
     addCustomStyles();
     const game = new Phaser.Game(getPhaserDefaults(config));
     game.device.audio.mp4 = true;
     debugMode.create(window, game);
-    initGel(game);
+    initGelDom(game);
     a11y.create();
 };

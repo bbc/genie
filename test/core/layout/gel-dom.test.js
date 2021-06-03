@@ -3,13 +3,13 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import * as gelModule from "../../../src/core/layout/gel.js";
+import * as gelDomModule from "../../../src/core/layout/gel-dom.js";
 import { getContainerDiv } from "../../../src/core/loader/container.js";
 import * as scaler from "../../../src/core/scaler.js";
 
 jest.mock("../../../src/core/loader/container.js");
 
-describe("Gel Container", () => {
+describe("Gel Dom", () => {
     let mockDiv;
 
     beforeEach(() => {
@@ -20,9 +20,9 @@ describe("Gel Container", () => {
 
     afterEach(jest.clearAllMocks);
 
-    describe("initGel", () => {
+    describe("initGelDom", () => {
         test("Adds a Gel container", () => {
-            gelModule.initGel();
+            gelDomModule.initGelDom();
             expect(mockDiv.appendChild).toHaveBeenCalledTimes(1);
         });
     });
@@ -38,7 +38,7 @@ describe("Gel Container", () => {
                 },
             };
 
-            gelModule.initGel(mockGame);
+            gelDomModule.initGelDom(mockGame);
 
             const resize = scaler.onScaleChange.add.mock.calls[0][0];
 
@@ -52,13 +52,13 @@ describe("Gel Container", () => {
         });
     });
 
-    describe("Gel methods", () => {
+    describe("Gel Dom methods", () => {
         describe("Start", () => {
             test("Adds scene div", () => {
-                const gel = gelModule.initGel();
+                const gelDom = gelDomModule.initGelDom();
                 const root = mockDiv.appendChild.mock.calls[0][0];
                 root.appendChild = jest.fn();
-                gel.start();
+                gelDom.start();
 
                 expect(root.appendChild).toHaveBeenCalledTimes(1);
             });
@@ -66,15 +66,15 @@ describe("Gel Container", () => {
 
         describe("Hide", () => {
             test("Sets top level scene div display to none", () => {
-                const gel = gelModule.initGel();
+                const gelDom = gelDomModule.initGelDom();
                 const root = mockDiv.appendChild.mock.calls[0][0];
                 root.appendChild = jest.fn();
-                gel.start();
-                gel.start();
+                gelDom.start();
+                gelDom.start();
                 const layer1 = root.appendChild.mock.calls[0][0];
                 const layer2 = root.appendChild.mock.calls[1][0];
 
-                gel.hide();
+                gelDom.hide();
 
                 expect(layer1.style.display).toBe("");
                 expect(layer2.style.display).toBe("none");
@@ -83,35 +83,35 @@ describe("Gel Container", () => {
 
         describe("Current", () => {
             test("Returns the top level scene div", () => {
-                const gel = gelModule.initGel();
+                const gelDom = gelDomModule.initGelDom();
                 const root = mockDiv.appendChild.mock.calls[0][0];
                 root.appendChild = jest.fn();
-                gel.start();
-                gel.start();
+                gelDom.start();
+                gelDom.start();
                 const layer2 = root.appendChild.mock.calls[1][0];
-                expect(gel.current()).toBe(layer2);
+                expect(gelDom.current()).toBe(layer2);
             });
         });
 
         describe("Clear", () => {
             test("Removes the top level scene", () => {
-                const gel = gelModule.initGel();
+                const gelDom = gelDomModule.initGelDom();
                 const root = mockDiv.appendChild.mock.calls[0][0];
-                gel.start();
-                gel.start();
+                gelDom.start();
+                gelDom.start();
 
-                gel.clear();
+                gelDom.clear();
                 expect(root.children.length).toBe(1);
             });
 
             test("sets underlying scene div's display style to default", () => {
-                const gel = gelModule.initGel();
+                const gelDom = gelDomModule.initGelDom();
                 const root = mockDiv.appendChild.mock.calls[0][0];
                 root.appendChild = jest.fn();
-                gel.start();
-                gel.hide();
-                gel.start();
-                gel.clear();
+                gelDom.start();
+                gelDom.hide();
+                gelDom.start();
+                gelDom.clear();
 
                 const layer1 = root.appendChild.mock.calls[0][0];
 

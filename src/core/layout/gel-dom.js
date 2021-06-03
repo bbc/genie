@@ -21,9 +21,9 @@ const toInlineStyle = (acc, cur) => `${acc}${cur}:${gelDomStyle[cur]}; `;
 const style = Object.keys(gelDomStyle).reduce(toInlineStyle, "");
 const createGelDom = () => crel("div", { id: "gel", role: "application", style });
 
-export let gel;
+export let gelDom;
 
-export const initGel = game => {
+export const initGelDom = game => {
     const root = createGelDom();
     getContainerDiv().appendChild(root);
 
@@ -52,7 +52,7 @@ export const initGel = game => {
     const hide = () => (scenes[scenes.length - 1].style.display = "none");
     const current = () => scenes[scenes.length - 1];
 
-    gel = { current, clear, start, hide };
+    gelDom = { current, clear, start, hide };
 
-    return gel;
+    return gelDom;
 };

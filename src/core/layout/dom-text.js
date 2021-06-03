@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import { gel } from "./gel.js";
+import { gelDom } from "./gel-dom.js";
 import { CAMERA_X, CAMERA_Y } from "./metrics.js";
 
 const px = val => Math.floor(val) + "px";
@@ -27,16 +27,16 @@ const defaultStyle = {
 const getTextNodes = text => text.split("\n").map(line => document.createTextNode(line));
 const addBreaks = (el, i, arr) => [el].concat(i !== arr.length - 1 ? [document.createElement("br")] : []);
 
-class GelText {
+class DomText {
     constructor(text, newConfig) {
         const config = { ...defaultConfig, ...newConfig };
         this.el = document.createElement("div");
-        Object.assign(this.el.style, defaultStyle, config.style);
+        this.setStyle({ ...defaultStyle, ...config.style });
 
         this._textNodes = [];
         this.setText(text);
 
-        this.alignText(config.align);
+        this.setAlignment(config.align);
         this.setPosition(config.position.x, config.position.y);
     }
 
@@ -51,10 +51,14 @@ class GelText {
         y !== undefined && (this.el.style.top = px(y + CAMERA_Y));
     }
 
-    alignText(align) {
-        if (invalidAlign(align)) return;
-        this.el.style.transform = `translate(${alignments[align]})`;
-        this.el.style.textAlign = align;
+    setAlignment(alignment) {
+        if (invalidAlign(alignment)) return;
+        this.el.style.transform = `translate(${alignments[alignment]})`;
+        this.el.style.textAlign = alignment;
+    }
+
+    setStyle(newStyle) {
+        Object.assign(this.el.style, newStyle);
     }
 
     destroy() {
@@ -68,8 +72,8 @@ const defaultConfig = {
     align: "left",
 };
 
-export const addGelText = (text, config) => {
-    const gelText = new GelText(text, config);
-    gel.current().appendChild(gelText.el);
-    return gelText;
+export const addDomText = (text, config) => {
+    const domText = new DomText(text, config);
+    gelDom.current().appendChild(domText.el);
+    return domText;
 };

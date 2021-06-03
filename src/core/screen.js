@@ -19,7 +19,7 @@ import * as debug from "./debug/debug.js";
 import { CAMERA_X, CAMERA_Y } from "./layout/metrics.js";
 import { nextPage } from "./background/pages.js";
 import { createTitles } from "./titles.js";
-import { gel } from "./layout/gel.js";
+import { gelDom } from "./layout/gel-dom.js";
 
 const getRoutingFn = scene => route => {
     const routeTypes = {
@@ -96,7 +96,7 @@ export class Screen extends Phaser.Scene {
         a11y.destroy();
 
         this._makeNavigation();
-        gel?.start();
+        gelDom?.start();
     }
 
     setData(newData) {
@@ -117,7 +117,7 @@ export class Screen extends Phaser.Scene {
     addOverlay(key) {
         this.scene.run(key, { ...this._data, addedBy: this });
         this.scene.bringToTop(key);
-        gel?.hide();
+        gelDom?.hide();
     }
 
     removeOverlay = () => {
@@ -149,7 +149,7 @@ export class Screen extends Phaser.Scene {
         eventBus.removeChannel(buttonsChannel(this));
         this._layout && this._layout.destroy();
         delete this._layout;
-        gel?.clear();
+        gelDom?.clear();
     };
 
     navigate = route => {
