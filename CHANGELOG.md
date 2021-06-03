@@ -2,8 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
-| | Add gelText (DOM text layer). |
-| 3.9.2 | |
+| | Add DOM text layer. |
 | | Updated Phaser to 3.55.2 |
 | | Fixed distorted audio in the shop screens on some iOS devices. |
 | 3.9.1 | |
