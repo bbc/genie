@@ -33,7 +33,7 @@ describe("Gel Text", () => {
         });
     });
 
-    describe("GelText Class Methods", () => {
+    describe("GelDom Class Methods", () => {
         test("destroy method removes element from DOM", () => {
             const domText = addDomText("test", {});
             domText.el.remove = jest.fn();
@@ -43,7 +43,7 @@ describe("Gel Text", () => {
             expect(domText.el.remove).toHaveBeenCalled();
         });
 
-        test("Set position method changes the CSS with camera offset", () => {
+        test("setPosition method changes the CSS with camera offset", () => {
             const domText = addDomText("test", {});
             domText.setPosition(100, 200);
 
@@ -51,11 +51,18 @@ describe("Gel Text", () => {
             expect(domText.el.style.top).toBe("500px");
         });
 
-        test("Set Text method clears existing nodes", () => {
+        test("setText method clears existing nodes", () => {
             const domText = addDomText("test1\ntest2\n", {});
             domText.setText("test1");
 
             expect(domText._textNodes.length).toBe(1);
+        });
+
+        test("setStyle Method merges new style props to the element style", () => {
+            const domText = addDomText("test", {});
+            domText.setStyle({ test: "prop" });
+
+            expect(domText.el.style.test).toBe("prop");
         });
     });
 });
