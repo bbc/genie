@@ -16,7 +16,7 @@ let defaultValues = {
 
 const getMetrics = newValues => {
     const values = fp.merge(defaultValues, newValues, {});
-    return calculateMetrics(values.stageHeight, { width: values.width, height: values.height });
+    return calculateMetrics(values.stageHeight)({ width: values.width, height: values.height });
 };
 
 describe("Layout - Calculate Metrics", () => {

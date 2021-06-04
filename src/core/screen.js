@@ -19,6 +19,7 @@ import * as debug from "./debug/debug.js";
 import { CAMERA_X, CAMERA_Y } from "./layout/metrics.js";
 import { nextPage } from "./background/pages.js";
 import { createTitles } from "./titles.js";
+import { gelDom } from "./layout/gel-dom.js";
 
 const getRoutingFn = scene => route => {
     const routeTypes = {
@@ -82,7 +83,7 @@ export class Screen extends Phaser.Scene {
 
         if (this.scene.key !== "loader" && this.scene.key !== "boot") {
             if (!this.scene.key.includes("shop")) {
-                this.setStatsScreen(this.scene.key);
+                gmi.setStatsScreen(this.scene.key);
             }
             setMusic(this);
 
@@ -95,10 +96,7 @@ export class Screen extends Phaser.Scene {
         a11y.destroy();
 
         this._makeNavigation();
-    }
-
-    setStatsScreen(screen) {
-        gmi.setStatsScreen(screen);
+        gelDom?.start();
     }
 
     setData(newData) {
@@ -119,6 +117,7 @@ export class Screen extends Phaser.Scene {
     addOverlay(key) {
         this.scene.run(key, { ...this._data, addedBy: this });
         this.scene.bringToTop(key);
+        gelDom?.hide();
     }
 
     removeOverlay = () => {
@@ -134,9 +133,9 @@ export class Screen extends Phaser.Scene {
         this.sys.accessibleButtons.forEach(button => a11y.addButton(button));
         a11y.reset();
         if (this.scene.key.includes("shop")) {
-            this.setStatsScreen(this.transientData.shopTitle + "menu");
+            gmi.setStatsScreen(this.transientData.shopTitle + "menu");
         } else {
-            this.setStatsScreen(this.scene.key);
+            gmi.setStatsScreen(this.scene.key);
         }
 
         eventBus.publish({
@@ -150,6 +149,7 @@ export class Screen extends Phaser.Scene {
         eventBus.removeChannel(buttonsChannel(this));
         this._layout && this._layout.destroy();
         delete this._layout;
+        gelDom?.clear();
     };
 
     navigate = route => {
@@ -163,17 +163,6 @@ export class Screen extends Phaser.Scene {
         this.scene.start(route, this._data);
     };
 
-    /**
-     * Create a new GEL layout for a given set of Gel Buttons
-     * Called in the create method of a given screen
-     *
-     * @example
-     * this.setLayout(["home", "restart", "continue", "pause"]);
-     * @param {Array} buttons - Array of standard button names to include. See {@link layout/gel-defaults.js} for available names
-     * @param {Array} accessibleButtons - Array of standard button names to make accessible. By default, all are accessible.
-     * @memberof module:screen
-     * @returns {Object}
-     */
     setLayout(buttons, accessibleButtons) {
         this._layout = Layout.create(this, Scaler.getMetrics(), buttons, accessibleButtons);
         this.add.existing(this._layout.root);

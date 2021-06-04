@@ -12,6 +12,7 @@ import { Screen } from "../../core/screen.js";
 import { setBalance } from "./balance.js";
 import { createConfirm } from "./confirm/confirm.js";
 import { initResizers } from "./backgrounds.js";
+import { gmi } from "../../core/gmi/gmi.js";
 
 export class ShopConfirm extends Screen {
     preload() {
@@ -20,11 +21,8 @@ export class ShopConfirm extends Screen {
     }
 
     create() {
-        if (this.transientData.shop.mode === "shop") {
-            this.setStatsScreen(this.transientData.shopTitle + "buyconfirm");
-        } else {
-            this.setStatsScreen(this.transientData.shopTitle + "manageconfirm");
-        }
+        const screen = this.transientData.shop.mode === "shop" ? "buyconfirm" : "manageconfirm";
+        gmi.setStatsScreen(this.transientData.shopTitle + screen);
 
         this.addBackgroundItems();
         this.setLayout(["overlayBack", "pause"]);

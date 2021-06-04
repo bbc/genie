@@ -22,7 +22,7 @@ export const onScaleChange = { add: _onSizeChange.add };
 
 export let getMetrics;
 
-export function init(stageHeight, game) {
+export const init = (stageHeight, game) => {
     getMetrics = fp.flow(getBounds(game), fp.pick(["width", "height"]), calculateMetrics(stageHeight));
 
     const setSize = metrics => {
@@ -39,6 +39,7 @@ export function init(stageHeight, game) {
         game.canvas.style.marginLeft = px(marginLeft);
         game.canvas.style.marginTop = px(marginTop);
         game.scale.refresh();
+
         _onSizeChange.dispatch(metrics);
     };
 
@@ -46,4 +47,4 @@ export function init(stageHeight, game) {
 
     resize();
     window.onresize = fp.debounce(750, resize);
-}
+};

@@ -91,6 +91,11 @@
                 "type": "json5",
                 "key": "debug-shop-equippables-confirm",
                 "url": "../../debug/examples/shop-equippables-confirm.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-dom-text",
+                "url": "../../debug/examples/dom-text.json5"
             }
         ]
     },

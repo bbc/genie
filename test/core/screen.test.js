@@ -16,6 +16,7 @@ import { settingsChannel } from "../../src/core/settings.js";
 import * as debugModeModule from "../../src/core/debug/debug-mode.js";
 import * as debugModule from "../../src/core/debug/debug.js";
 import * as titles from "../../src/core/titles";
+import * as GelModule from "../../src/core/layout/gel-dom.js";
 
 describe("Screen", () => {
     let screen;
@@ -464,6 +465,33 @@ describe("Screen", () => {
             createAndInitScreen();
 
             expect(debugModule.addEvents).toHaveBeenCalled();
+        });
+    });
+
+    describe("Gel Layer", () => {
+        test("Creates a new Gel layer for each screen on init", () => {
+            GelModule.gelDom = { start: jest.fn() };
+            createAndInitScreen();
+
+            expect(GelModule.gelDom.start).toHaveBeenCalledTimes(1);
+        });
+
+        test("Clears gel layer on removeAll", () => {
+            GelModule.gelDom = { start: jest.fn(), clear: jest.fn() };
+            createAndInitScreen();
+
+            screen.removeAll();
+
+            expect(GelModule.gelDom.clear).toHaveBeenCalledTimes(1);
+        });
+
+        test("Hides current layer when overlay added", () => {
+            GelModule.gelDom = { start: jest.fn(), hide: jest.fn() };
+            createAndInitScreen();
+
+            screen.addOverlay();
+
+            expect(GelModule.gelDom.hide).toHaveBeenCalledTimes(1);
         });
     });
 });
