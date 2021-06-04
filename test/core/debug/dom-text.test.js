@@ -5,10 +5,22 @@
  */
 import { DomText } from "../../../src/core/debug/dom-text.js";
 
+import { getContainerDiv } from "../../../src/core/loader/container.js";
+jest.mock("../../../src/core/loader/container.js");
+
 describe("Dom Text Debug Screen", () => {
     let domTextScreen;
+    let mockDomText;
     beforeEach(() => {
         domTextScreen = new DomText();
+        domTextScreen.events = {
+            once: jest.fn(),
+        };
+
+        mockDomText = {
+            remove: jest.fn(),
+            setPosition: jest.fn(0),
+        };
 
         const mockData = { config: { "debug-dom-text": {} } };
 
@@ -16,9 +28,12 @@ describe("Dom Text Debug Screen", () => {
         domTextScreen.scene = { key: "debug-dom-text" };
         domTextScreen.setLayout = jest.fn();
         domTextScreen.add = {
-            domText: jest.fn(),
+            domText: jest.fn(() => mockDomText),
         };
         domTextScreen.navigation = { next: jest.fn() };
+
+        const mockDiv = { appendChild: jest.fn() };
+        getContainerDiv.mockImplementation(() => mockDiv);
     });
 
     afterEach(jest.clearAllMocks);
