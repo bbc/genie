@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.10.0 | |
 | | Add DOM text layer. |
 | | Updated Phaser to 3.55.2 |
 | | Fixed distorted audio in the shop screens on some iOS devices. |
