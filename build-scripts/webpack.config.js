@@ -34,8 +34,8 @@ module.exports = env => {
             symlinks: false,
             preferRelative: true, //required for webfontloader which uses outdated paths
             alias: {
-              phaser: "phaser-bbc-childrens-apps",
-            }
+                phaser: "phaser-bbc-childrens-apps",
+            },
         },
         module: {
             rules: [

@@ -21,7 +21,7 @@ module.exports = {
     transform: { "^.+\\.m?js$": "babel-jest" },
     transformIgnorePatterns: ["node_modules/(?!(bowser|json5|crel)/)"],
     moduleNameMapper: {
-      "^\.*/node_modules/phaser": "phaser-bbc-childrens-apps",
-      "^phaser": "phaser-bbc-childrens-apps",
-    }
+        "^.*/node_modules/phaser": "phaser-bbc-childrens-apps",
+        "^phaser": "phaser-bbc-childrens-apps",
+    },
 };
