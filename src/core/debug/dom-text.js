@@ -32,23 +32,23 @@ const debugUI = scene => {
 
     setPosition(0, 0);
 
-    const upBtn = crel("button", { onclick: () => setPosition(0, -1) }, "↑");
-    const downBtn = crel("button", { onclick: () => setPosition(0, 1) }, "↓");
-    const leftBtn = crel("button", { onclick: () => setPosition(-1, 0) }, "←");
-    const rightBtn = crel("button", { onclick: () => setPosition(1, 0) }, "→");
+    const upBtn = crel("button", { onclick: () => setPosition(0, -1), tabIndex: -1 }, "↑");
+    const downBtn = crel("button", { onclick: () => setPosition(0, 1), tabIndex: -1 }, "↓");
+    const leftBtn = crel("button", { onclick: () => setPosition(-1, 0), tabIndex: -1 }, "←");
+    const rightBtn = crel("button", { onclick: () => setPosition(1, 0), tabIndex: -1 }, "→");
 
-    const style = crel("textarea", { style: "width: 150px; height: 80px" }, '{\n  "color": "blue"\n}');
+    const style = crel("textarea", { style: "width: 150px; height: 80px", tabIndex: -1 }, '{\n  "color": "blue"\n}');
 
-    const setStyleBtn = crel("button", { onclick: () => scene.domText.setStyle(JSON.parse(style.value)) }, "setStyle");
-    const text = crel("textarea", { style: "width: 150px; height: 80px" }, "Multiline\nText\nTest");
+    const setStyleBtn = crel("button", { onclick: () => scene.domText.setStyle(JSON.parse(style.value)), tabIndex: -1 }, "setStyle");
+    const text = crel("textarea", { style: "width: 150px; height: 80px", tabIndex: -1 }, "Multiline\nText\nTest");
 
-    const setTextBtn = crel("button", { onclick: () => scene.domText.setText(text.value) }, "setText");
+    const setTextBtn = crel("button", { onclick: () => scene.domText.setText(text.value), tabIndex: -1 }, "setText");
 
     const onchange = () => scene.domText.setAlignment(setAlign.value);
 
     const setAlign = crel(
         "select",
-        { onchange },
+        { onchange, tabIndex: -1 },
         crel("option", { value: "center" }, "center"),
         crel("option", { value: "left" }, "left"),
         crel("option", { value: "right" }, "right"),

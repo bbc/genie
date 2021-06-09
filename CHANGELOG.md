@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.10.1 | |
+| | Removes private dependency |
 | 3.10.0 | |
 | | Add DOM text layer. |
 | | Updated Phaser to 3.55.2 |
