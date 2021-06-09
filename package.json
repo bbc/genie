@@ -25,7 +25,7 @@
         "expose-loader": "^0.7.5",
         "json5": "^2.1.3",
         "notp": "^2.0.3",
-        "phaser-bbc-childrens-apps": "3.56.1",
+        "phaser-bbc-childrens-apps": "3.56.2",
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {
