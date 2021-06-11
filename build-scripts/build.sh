@@ -38,11 +38,7 @@ set -e
 
 #python build-scripts/licensechecker/licensechecker.py
 
-source /etc/profile
-nvm install 10.0.0
 npm install --force
-nvm install 13.14.0
-
 npm run jest
 npm run eslint
 #npm run validate:themes -- default # Validates themes
