@@ -39,7 +39,11 @@ const debugUI = scene => {
 
     const style = crel("textarea", { style: "width: 150px; height: 80px", tabIndex: -1 }, '{\n  "color": "blue"\n}');
 
-    const setStyleBtn = crel("button", { onclick: () => scene.domText.setStyle(JSON.parse(style.value)), tabIndex: -1 }, "setStyle");
+    const setStyleBtn = crel(
+        "button",
+        { onclick: () => scene.domText.setStyle(JSON.parse(style.value)), tabIndex: -1 },
+        "setStyle",
+    );
     const text = crel("textarea", { style: "width: 150px; height: 80px", tabIndex: -1 }, "Multiline\nText\nTest");
 
     const setTextBtn = crel("button", { onclick: () => scene.domText.setText(text.value), tabIndex: -1 }, "setText");
