@@ -7,6 +7,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import "../../lib/polyfills/element-remove-polyfil.js";
 import { gmi, setGmi } from "./gmi/gmi.js";
 import { addCustomStyles } from "./custom-styles.js";
 import * as debugMode from "./debug/debug-mode.js";
