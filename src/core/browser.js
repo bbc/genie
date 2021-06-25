@@ -15,7 +15,10 @@ export const getBrowser = () => {
 
     const name = browserInfo.getBrowserName();
     const version = browserInfo.getBrowserVersion();
-    const isSilk = name === "Amazon Silk";
+    const isKindleWebView = new RegExp(
+        /KFOT|KFTT|KFJWI|KFJWA|KFOTE|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|WFJWAE|KFSAWA|KFSAWI|KFASWI|KFARWI|KFFOWI|KFGIWI|KFMEWI/g,
+    ).test(browserInfo.getUA());
+    const isSilk = name === "Amazon Silk" || isKindleWebView;
 
     //Ipad 2 faster in Canvas. Force bool as Bowser returns undefined if browser doesn't match
     const forceCanvas = isSilk || Boolean(browserInfo.satisfies({ safari: "<10" }));

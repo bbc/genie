@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.11.1 | |
+| | Sets isSilk property when inside an App and using Kindle web View |
 | 3.10.1 | |
 | | Removes private dependency |
 | 3.10.0 | |
