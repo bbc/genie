@@ -45,7 +45,8 @@ describe("Browser", () => {
     });
 
     it("sets isSilk property when inside an App and using Kindle web View", () => {
-        mockUA = "Mozilla/5.0 (Linux; Android 5.1.1; KFFOWI Build/LVY48F; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/59.0.3071.125 Safari/537.36"
+        mockUA =
+            "Mozilla/5.0 (Linux; Android 5.1.1; KFFOWI Build/LVY48F; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/59.0.3071.125 Safari/537.36";
 
         const browser = getBrowser();
         expect(browser.isSilk).toBe(true);
