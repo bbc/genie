@@ -7,13 +7,16 @@ import Bowser from "../../node_modules/bowser/src/bowser.js";
 import { getBrowser } from "../../src/core/browser.js";
 
 describe("Browser", () => {
+    let mockUA;
     let mockParser;
 
     beforeEach(() => {
+        mockUA = global.window.navigator.userAgent;
         mockParser = {
             getBrowserName: jest.fn(() => "test-browser-name"),
             getBrowserVersion: jest.fn(() => "test-browser-version"),
             satisfies: jest.fn(() => true),
+            getUA: jest.fn(() => mockUA),
         };
         jest.spyOn(Bowser, "getParser").mockImplementation(() => mockParser);
     });
@@ -37,6 +40,13 @@ describe("Browser", () => {
 
     it("sets isSilk property when Amazon Browser", () => {
         mockParser.getBrowserName.mockImplementation(() => "Amazon Silk");
+        const browser = getBrowser();
+        expect(browser.isSilk).toBe(true);
+    });
+
+    it("sets isSilk property when inside an App and using Kindle web View", () => {
+        mockUA = "Mozilla/5.0 (Linux; Android 5.1.1; KFFOWI Build/LVY48F; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/59.0.3071.125 Safari/537.36"
+
         const browser = getBrowser();
         expect(browser.isSilk).toBe(true);
     });
