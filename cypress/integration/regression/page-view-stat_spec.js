@@ -10,7 +10,6 @@ import { pageViews } from "../../support/statConfig";
 
 describe("Page view stats for Genie Screens", () => {
     beforeEach(() => {
-        cy.log(statHelper.formatStatConfig(pageViews.homePage).counterName);
         cy.intercept({
             query: {
                 p: `${statHelper.formatStatConfig(pageViews.homePage).counterName}`,
