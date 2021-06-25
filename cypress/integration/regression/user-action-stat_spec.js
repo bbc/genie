@@ -4,13 +4,21 @@
  * @license Apache-2.0
  */
 
-import { statHelper } from "games-automation-stathelper";
+import { statHelper } from "games-stat-helper";
 import { getUrl } from "../../support/functions";
 import { userActions } from "../../support/statConfig";
 
+// x5: { formatStatConfig().stat}
+//
+//
 describe("User Action stats for Genie", () => {
     beforeEach(() => {
-        cy.intercept("gameloaded").as("gameStat");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${statHelper.formatStatConfig(userActions.gameloaded).stat}`,
+            },
+        }).as("gameStat");
         cy.visit(getUrl());
         cy.get("#home__play", { timeout: 60000 }).should("exist");
         if (!Cypress.env("DEV_LOCAL") == "true") {
@@ -27,7 +35,12 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a click event when the play button is clicked", () => {
-        cy.intercept(userActions.clickPlay.creationId).as("playClick");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${statHelper.formatStatConfig(userActions.clickPlay).stat}`,
+            },
+        }).as("playClick");
         cy.genieClick("#home__play");
         cy.wait("@playClick").then(interception => {
             cy.log(interception)
@@ -37,7 +50,12 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a click event when the how to play button is clicked", () => {
-        cy.intercept(userActions.clickHowtoplay.creationId).as("htpClick");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${statHelper.formatStatConfig(userActions.clickHowtoplay).stat}`,
+            },
+        }).as("htpClick");
         cy.genieClick("#home__how-to-play");
         cy.wait("@htpClick").then(interception => {
             cy.log(interception)
@@ -47,8 +65,18 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a click event when the achievements page is opened and closed", () => {
-        cy.intercept(userActions.achievementsOpen.creationId).as("achievementsOpen");
-        cy.intercept(userActions.achievementsClose.creationId).as("achievementsClose");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${statHelper.formatStatConfig(userActions.achievementsOpen).stat}`,
+            },
+        }).as("achievementsOpen");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${statHelper.formatStatConfig(userActions.achievementsClose).stat}`,
+            },
+        }).as("achievementsClose");
         cy.genieClick("#home__achievements");
         cy.wait("@achievementsOpen").then(interception => {
             cy.log(interception)
@@ -64,8 +92,30 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when a character is selected", () => {
-        cy.intercept("character~select").as("characterSelect");
-        cy.intercept("level~select").as("levelSelect");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.levelSelect, {
+                        creationId: "character~select",
+                        screenName: "character_select",
+                        format: "ELE=Mary",
+                    }).stat
+                }`,
+            },
+        }).as("characterSelect");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.levelSelect, {
+                        creationId: "level~select",
+                        format: "ELE=Test Level 1",
+                        screenName: "level_select",
+                    }).stat
+                }`,
+            },
+        }).as("levelSelect");
         cy.genieClick("#home__play");
         cy.genieClick("#narrative__skip");
         cy.genieClick("#character-select__mary");
@@ -97,7 +147,17 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when the next level is selected", () => {
-        cy.intercept(userActions.levelContinue.creationId).as("levelContinue");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.levelContinue, {
+                        advertiserId: "Test Level 1",
+                        screenName: "results",
+                    }).stat
+                }`,
+            },
+        }).as("levelContinue");
         cy.genieClick("#home__play");
         cy.genieClick("#narrative__skip");
         cy.genieClick("#character-select__mary");
@@ -115,7 +175,17 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when the level is replayed", () => {
-        cy.intercept(userActions.levelPlayagain.creationId).as("levelPlayagain");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.levelPlayagain, {
+                        advertiserId: "Test Level 1",
+                        screenName: "results",
+                    }).stat
+                }`,
+            },
+        }).as("levelPlayagain");
         cy.genieClick("#home__play");
         cy.genieClick("#narrative__skip");
         cy.genieClick("#character-select__mary");
@@ -133,7 +203,16 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when the continue button is selected on the narrative screen", () => {
-        cy.intercept(userActions.narrativeContinue.creationId).as("narrativeContinue");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.narrativeContinue, {
+                        format: "PAG=0",
+                    }).stat
+                }`,
+            },
+        }).as("narrativeContinue");
         cy.genieClick("#home__play");
         cy.genieClick("#narrative__continue");
         cy.wait("@narrativeContinue").then(interception => {
@@ -147,7 +226,16 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when the skip button is selected on the narrative screen", () => {
-        cy.intercept(userActions.narrativeSkip.creationId).as("narrativeSkip");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.narrativeSkip, {
+                        format: "PAG=0",
+                    }).stat
+                }`,
+            },
+        }).as("narrativeSkip");
         cy.genieClick("#home__play");
         cy.genieClick("#narrative__skip");
         cy.wait("@narrativeSkip").then(interception => {
@@ -158,7 +246,16 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when the shop store is opened.", () => {
-        cy.intercept(userActions.shopBuy.creationId).as("shopBuy");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.shopBuy, {
+                        screenName: "shopmenu",
+                    }).stat
+                }`,
+            },
+        }).as("shopBuy");
         cy.genieClick("#home__debug");
         cy.genieClick("#debug__debug-shop-equippables-menu");
         cy.genieClick("#debug-shop-equippables-menu__shop_menu_button");
@@ -170,7 +267,16 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when the shop manage menu is opened.", () => {
-        cy.intercept(userActions.shopManage.creationId).as("shopManage");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.shopManage, {
+                        screenName: "shopmenu",
+                    }).stat
+                }`,
+            },
+        }).as("shopManage");
         cy.genieClick("#home__debug");
         cy.genieClick("#debug__debug-shop-equippables-menu");
         cy.genieClick("#debug-shop-equippables-menu__manage_menu_button");
@@ -185,7 +291,18 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when an item is purchased in the shop.", () => {
-        cy.intercept(`[${userActions.shopPurchase.creationId}]`).as("buyItem");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.shopPurchase, {
+                        format: "KEY=ironHat~STATE=purchased~QTY=0",
+                        screenName: "shopbuyconfirm",
+                        advertiserId: "Iron Helm",
+                    }).stat
+                }`,
+            },
+        }).as("buyItem");
         cy.genieClick("#home__debug");
         cy.genieClick("#debug__debug-shop-equippables-menu");
         cy.genieClick("#debug-shop-equippables-menu__shop_menu_button");
@@ -206,7 +323,18 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when an item is equipped.", () => {
-        cy.intercept(userActions.shopEquip.creationId).as("equipItem");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.shopEquip, {
+                        format: "KEY=ironHat~STATE=equipped~QTY=1",
+                        screenName: "shopmanageconfirm",
+                        advertiserId: "Iron Helm",
+                    }).stat
+                }`,
+            },
+        }).as("equipItem");
         cy.genieClick("#home__debug");
         cy.genieClick("#debug__debug-shop-equippables-menu");
         cy.genieClick("#debug-shop-equippables-menu__shop_menu_button");
@@ -231,7 +359,19 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when an item is used.", () => {
-        cy.intercept(userActions.shopUse.creationId).as("useItem");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.shopUse, {
+                        format: "KEY=box~STATE=used~QTY=0",
+                        screenName: "shopmanageconfirm",
+                        advertiserId: "Mystery Box",
+                    }).stat
+                }`,
+            },
+        }).as("useItem");
+
         cy.genieClick("#home__debug");
         cy.genieClick("#debug__debug-shop-equippables-menu");
         cy.genieClick("#debug-shop-equippables-menu__manage_menu_button");
@@ -252,7 +392,18 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when the achievement is completed.", () => {
-        cy.intercept(userActions.achievementComplete.creationId).as("achievementComplete");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.achievementComplete, {
+                        format: "ACH=1/10",
+                        screenName: "game",
+                        advertiserId: "just_started",
+                    }).stat
+                }`,
+            },
+        }).as("achievementComplete");
         cy.genieClick("#home__play");
         cy.genieClick("#narrative__skip");
         cy.genieClick("#character-select__mary");
@@ -273,7 +424,17 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a user action event when a level is selected", () => {
-        cy.intercept(userActions.levelSelect.creationId).as("levelSelect");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.levelSelect, {
+                        format: "ELE=Test Level 1",
+                        screenName: "level_select",
+                    }).stat
+                }`,
+            },
+        }).as("levelSelect");
         cy.genieClick("#home__play");
         cy.genieClick("#narrative__skip");
         cy.genieClick("#character-select__mary");
@@ -292,7 +453,18 @@ describe("User Action stats for Genie", () => {
     });
 
     it("Fires a score displayed stat when the results screen is displayed", () => {
-        cy.intercept(userActions.displayScore.creationId).as("displayScore");
+        cy.intercept({
+            method: "GET",
+            query: {
+                atc: `PUB-${
+                    statHelper.formatStatConfig(userActions.displayScore, {
+                        format: "SCO=keys-0::gems-0::stars-0",
+                        screenName: "results",
+                        advertiserId: "Test Level 1",
+                    }).stat
+                }`,
+            },
+        }).as("displayScore");
         cy.genieClick("#home__play");
         cy.genieClick("#narrative__skip");
         cy.genieClick("#character-select__mary");
@@ -306,6 +478,7 @@ describe("User Action stats for Genie", () => {
                     statHelper.formatStatConfig(userActions.displayScore, {
                         format: "SCO=keys-0::gems-0::stars-0",
                         screenName: "results",
+                        advertiserId: "Test%20Level%201",
                     }).stat,
                 );
         });
