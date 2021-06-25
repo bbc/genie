@@ -2,6 +2,8 @@
 
 | Version | Description |
 |---------|-------------|
+| 3.11.2 | |
+| | Updated Kindle webview user agents list |
 | 3.11.1 | |
 | | Sets isSilk property when inside an App and using Kindle web View |
 | 3.10.1 | |
