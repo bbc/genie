@@ -10,16 +10,14 @@
  */
 import Bowser from "/node_modules/bowser/src/bowser.js";
 
-const kindleWebView = new RegExp(
-    /KFDOWI|KFONWI|KFMAWI|KFMUWI|KFKAWI|KFSUWI|KFAUWI|KFTBWI|KFOT|KFTT|KFJWI|KFJWA|KFOTE|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|WFJWAE|KFSAWA|KFSAWI|KFASWI|KFARWI|KFFOWI|KFGIWI|KFMEWI/g,
-);
-
 export const getBrowser = () => {
     const browserInfo = Bowser.getParser(window.navigator.userAgent);
 
     const name = browserInfo.getBrowserName();
     const version = browserInfo.getBrowserVersion();
-    const isKindleWebView = kindleWebView.test(browserInfo.getUA());
+    const isKindleWebView = new RegExp(
+        /KFDOWI|KFONWI|KFMAWI|KFMUWI|KFKAWI|KFSUWI|KFAUWI|KFTBWI|KFOT|KFTT|KFJWI|KFJWA|KFOTE|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|WFJWAE|KFSAWA|KFSAWI|KFASWI|KFARWI|KFFOWI|KFGIWI|KFMEWI/g,
+    ).test(browserInfo.getUA());
 
     const isSilk = name === "Amazon Silk" || isKindleWebView;
 
