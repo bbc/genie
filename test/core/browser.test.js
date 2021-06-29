@@ -38,18 +38,25 @@ describe("Browser", () => {
         expect(browser.version).toBe("test-browser-version");
     });
 
-    it("sets isSilk property when Amazon Browser", () => {
+    it("sets isSilk to true when Amazon Browser", () => {
         mockParser.getBrowserName.mockImplementation(() => "Amazon Silk");
         const browser = getBrowser();
         expect(browser.isSilk).toBe(true);
     });
 
-    it("sets isSilk property when inside an App and using Kindle web View", () => {
+    it("sets isSilk to true when inside an App and using Kindle web View", () => {
         mockUA =
             "Mozilla/5.0 (Linux; Android 5.1.1; KFFOWI Build/LVY48F; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/59.0.3071.125 Safari/537.36";
 
         const browser = getBrowser();
         expect(browser.isSilk).toBe(true);
+    });
+
+    it("sets isSilk to false when not using a Silk browser or Kindle web view", () => {
+        mockUA =
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Safari/605.1.15";
+
+        expect(getBrowser().isSilk).toBe(false);
     });
 
     it("sets forceCanvas to false when not Safari < 10 ", () => {
