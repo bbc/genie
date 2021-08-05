@@ -9,18 +9,18 @@
 import FontFile from "./font-file.js";
 
 class FontLoaderPlugin extends Phaser.Plugins.BasePlugin {
-    constructor(pluginManager) {
-        super(pluginManager);
-        pluginManager.registerFileType("webfont", this.fontLoaderCallback);
-    }
+	constructor(pluginManager) {
+		super(pluginManager);
+		pluginManager.registerFileType("webfont", this.fontLoaderCallback);
+	}
 
-    addToScene(scene) {
-        scene.sys.load["webfont"] = this.fontLoaderCallback;
-    }
+	addToScene(scene) {
+		scene.sys.load["webfont"] = this.fontLoaderCallback;
+	}
 
-    fontLoaderCallback(fileConfig) {
-        this.addFile(new FontFile(this, fileConfig));
-    }
+	fontLoaderCallback(fileConfig) {
+		this.addFile(new FontFile(this, fileConfig));
+	}
 }
 
 export default FontLoaderPlugin;

@@ -13,17 +13,17 @@ import { isDebug } from "../core/debug/debug-mode.js";
 import { gmi } from "../core/gmi/gmi.js";
 
 export class Home extends Screen {
-    create() {
-        const achievements = gmi.achievements.get().length ? ["achievements"] : [];
-        const debug = isDebug() ? ["debug"] : [];
-        this.addBackgroundItems();
-        const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
-        this.setLayout(buttons.concat(achievements, debug));
+	create() {
+		const achievements = gmi.achievements.get().length ? ["achievements"] : [];
+		const debug = isDebug() ? ["debug"] : [];
+		this.addBackgroundItems();
+		const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
+		this.setLayout(buttons.concat(achievements, debug));
 
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "play",
-            callback: this.navigation.next,
-        });
-    }
+		eventBus.subscribe({
+			channel: buttonsChannel(this),
+			name: "play",
+			callback: this.navigation.next,
+		});
+	}
 }

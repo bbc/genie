@@ -11,23 +11,23 @@
 import Bowser from "/node_modules/bowser/src/bowser.js";
 
 export const getBrowser = () => {
-    const browserInfo = Bowser.getParser(window.navigator.userAgent);
+	const browserInfo = Bowser.getParser(window.navigator.userAgent);
 
-    const name = browserInfo.getBrowserName();
-    const version = browserInfo.getBrowserVersion();
-    const isKindleWebView = new RegExp(
-        /KFDOWI|KFONWI|KFMAWI|KFMUWI|KFKAWI|KFSUWI|KFAUWI|KFTBWI|KFOT|KFTT|KFJWI|KFJWA|KFOTE|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|WFJWAE|KFSAWA|KFSAWI|KFASWI|KFARWI|KFFOWI|KFGIWI|KFMEWI/g,
-    ).test(browserInfo.getUA());
+	const name = browserInfo.getBrowserName();
+	const version = browserInfo.getBrowserVersion();
+	const isKindleWebView = new RegExp(
+		/KFDOWI|KFONWI|KFMAWI|KFMUWI|KFKAWI|KFSUWI|KFAUWI|KFTBWI|KFOT|KFTT|KFJWI|KFJWA|KFOTE|KFSOWI|KFTHWI|KFTHWA|KFAPWI|KFAPWA|WFJWAE|KFSAWA|KFSAWI|KFASWI|KFARWI|KFFOWI|KFGIWI|KFMEWI/g,
+	).test(browserInfo.getUA());
 
-    const isSilk = name === "Amazon Silk" || isKindleWebView;
+	const isSilk = name === "Amazon Silk" || isKindleWebView;
 
-    //Ipad 2 faster in Canvas. Force bool as Bowser returns undefined if browser doesn't match
-    const forceCanvas = isSilk || Boolean(browserInfo.satisfies({ safari: "<10" }));
+	//Ipad 2 faster in Canvas. Force bool as Bowser returns undefined if browser doesn't match
+	const forceCanvas = isSilk || Boolean(browserInfo.satisfies({ safari: "<10" }));
 
-    return {
-        name,
-        version,
-        forceCanvas,
-        isSilk,
-    };
+	return {
+		name,
+		version,
+		forceCanvas,
+		isSilk,
+	};
 };

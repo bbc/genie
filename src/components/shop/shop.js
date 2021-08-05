@@ -11,25 +11,25 @@ import { ShopList } from "./shop-list-screen.js";
 import { ShopConfirm } from "./shop-confirm-screen.js";
 
 export const Shop = ({ key, routes, title }) => ({
-    [`${key}-menu`]: {
-        scene: ShopMenu,
-        routes,
-        title,
-    },
-    [`${key}-list`]: {
-        scene: ShopList,
-        routes: {},
-        hidden: true,
-    },
-    [`${key}-confirm`]: {
-        scene: ShopConfirm,
-        routes: {},
-        hidden: true,
-    },
+	[`${key}-menu`]: {
+		scene: ShopMenu,
+		routes,
+		title,
+	},
+	[`${key}-list`]: {
+		scene: ShopList,
+		routes: {},
+		hidden: true,
+	},
+	[`${key}-confirm`]: {
+		scene: ShopConfirm,
+		routes: {},
+		hidden: true,
+	},
 });
 
 export const launchShopOverlay = (screen, shopKey) => {
-    screen.scene.pause();
-    gmi.sendStatsEvent("shop", "click");
-    screen.addOverlay(`${shopKey}-menu`);
+	screen.scene.pause();
+	gmi.sendStatsEvent("shop", "click");
+	screen.addOverlay(`${shopKey}-menu`);
 };

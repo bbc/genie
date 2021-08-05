@@ -6,7 +6,7 @@
 const nothingConfigured = (scene, item, key) => !Boolean(item.audio?.[key] ?? scene.config.confirm?.audio?.[key]);
 
 export const getSoundKey = (scene, item, title) => {
-    const key = title.toLowerCase();
-    if (nothingConfigured(scene, item, key)) return;
-    return item.audio?.[key] ?? [scene.assetPrefix, scene.config.confirm.audio[key]].join(".");
+	const key = title.toLowerCase();
+	if (nothingConfigured(scene, item, key)) return;
+	return item.audio?.[key] ?? [scene.assetPrefix, scene.config.confirm.audio[key]].join(".");
 };

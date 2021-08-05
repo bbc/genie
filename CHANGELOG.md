@@ -2,6 +2,9 @@
 
 | Version | Description |
 |---------|-------------|
+| | Switch to tabs to make code more accessible. Update Prettier to 2.3.2 |
+| 3.11.3 | |
+| | Fixes isKindleWebView detection |
 | 3.11.2 | |
 | | Updated Kindle webview user agents list |
 | 3.11.1 | |

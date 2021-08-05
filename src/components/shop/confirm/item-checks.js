@@ -9,6 +9,6 @@ import { collections } from "../../../core/collections.js";
 export const getShopConfig = scene => scene.transientData.shop.config;
 export const canAffordItem = (scene, item) => item && getBalanceItem(getShopConfig(scene)).qty >= item.price;
 export const itemIsInStock = (scene, item) =>
-    item && collections.get(getShopConfig(scene).shopCollections.shop).get(item.id).qty > 0;
+	item && collections.get(getShopConfig(scene).shopCollections.shop).get(item.id).qty > 0;
 
 export const isEquippable = item => Boolean(item.slot);

@@ -19,14 +19,14 @@ import { initGelDom } from "./layout/gel-dom.js";
 import { addDomText } from "./layout/dom-text.js";
 
 export const startup = config => {
-    setGmi(config.settings || {}, window);
-    hookErrors(gmi.gameContainerId);
-    Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
-    Phaser.GameObjects.GameObjectFactory.register("domText", addDomText);
-    addCustomStyles();
-    const game = new Phaser.Game(getPhaserDefaults(config));
-    game.device.audio.mp4 = true;
-    debugMode.create(window, game);
-    initGelDom(game);
-    a11y.create();
+	setGmi(config.settings || {}, window);
+	hookErrors(gmi.gameContainerId);
+	Phaser.GameObjects.GameObjectFactory.register("gelButton", addGelButton);
+	Phaser.GameObjects.GameObjectFactory.register("domText", addDomText);
+	addCustomStyles();
+	const game = new Phaser.Game(getPhaserDefaults(config));
+	game.device.audio.mp4 = true;
+	debugMode.create(window, game);
+	initGelDom(game);
+	a11y.create();
 };

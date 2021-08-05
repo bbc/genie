@@ -22,12 +22,12 @@ import { createTitles } from "./titles.js";
 import { gelDom } from "./layout/gel-dom.js";
 
 const getRoutingFn = scene => route => {
-    const routeTypes = {
-        function: () => route(scene),
-        string: () => scene.navigate(route),
-    };
+	const routeTypes = {
+		function: () => route(scene),
+		string: () => scene.navigate(route),
+	};
 
-    return routeTypes[typeof route];
+	return routeTypes[typeof route];
 };
 
 let activeScreens = [];
@@ -37,136 +37,136 @@ let activeScreens = [];
  * All the game screens will extend from this class.
  */
 export class Screen extends Phaser.Scene {
-    constructor(sceneConfig) {
-        super(sceneConfig);
-    }
+	constructor(sceneConfig) {
+		super(sceneConfig);
+	}
 
-    get context() {
-        return {
-            config: this._data.config,
-            activeScreens,
-            navigation: this._data.navigation,
-            transientData: this._data.transient || {},
-        };
-    }
+	get context() {
+		return {
+			config: this._data.config,
+			activeScreens,
+			navigation: this._data.navigation,
+			transientData: this._data.transient || {},
+		};
+	}
 
-    get layout() {
-        return this._layout;
-    }
+	get layout() {
+		return this._layout;
+	}
 
-    //TODO P3 the only context parts we want them to set is transient data
-    //TODO P3 maybe it should be separate? [NT]
-    set transientData(newData) {
-        this._data.transient = fp.merge(this._data.transient, newData, {});
-    }
+	//TODO P3 the only context parts we want them to set is transient data
+	//TODO P3 maybe it should be separate? [NT]
+	set transientData(newData) {
+		this._data.transient = fp.merge(this._data.transient, newData, {});
+	}
 
-    get config() {
-        return this._data.config[this.scene.key];
-    }
+	get config() {
+		return this._data.config[this.scene.key];
+	}
 
-    get transientData() {
-        return this._data.transient;
-    }
+	get transientData() {
+		return this._data.transient;
+	}
 
-    get assetPrefix() {
-        return this.config.assetPrefix || this.scene.key;
-    }
+	get assetPrefix() {
+		return this.config.assetPrefix || this.scene.key;
+	}
 
-    init(data) {
-        this._data = data;
-        activeScreens.push({ screen: this, addedBy: data.addedBy });
-        this.cameras.main.scrollX = -CAMERA_X;
-        this.cameras.main.scrollY = -CAMERA_Y;
-        this.pageIdx = -1;
-        this.timedItems = [];
-        data.config && this.events.once("create", nextPage(this));
+	init(data) {
+		this._data = data;
+		activeScreens.push({ screen: this, addedBy: data.addedBy });
+		this.cameras.main.scrollX = -CAMERA_X;
+		this.cameras.main.scrollY = -CAMERA_Y;
+		this.pageIdx = -1;
+		this.timedItems = [];
+		data.config && this.events.once("create", nextPage(this));
 
-        if (this.scene.key !== "loader" && this.scene.key !== "boot") {
-            if (!this.scene.key.includes("shop")) {
-                gmi.setStatsScreen(this.scene.key);
-            }
-            setMusic(this);
+		if (this.scene.key !== "loader" && this.scene.key !== "boot") {
+			if (!this.scene.key.includes("shop")) {
+				gmi.setStatsScreen(this.scene.key);
+			}
+			setMusic(this);
 
-            isDebug() && debug.addEvents(this);
-            this.events.once(Phaser.Scenes.Events.CREATE, () => (this.titles = createTitles(this)));
-        }
+			isDebug() && debug.addEvents(this);
+			this.events.once(Phaser.Scenes.Events.CREATE, () => (this.titles = createTitles(this)));
+		}
 
-        this.sys.accessibleButtons = [];
-        this.sys.accessibleGroups = [];
-        a11y.destroy();
+		this.sys.accessibleButtons = [];
+		this.sys.accessibleGroups = [];
+		a11y.destroy();
 
-        this._makeNavigation();
-        gelDom?.start();
-    }
+		this._makeNavigation();
+		gelDom?.start();
+	}
 
-    setData(newData) {
-        this._data = newData;
-    }
+	setData(newData) {
+		this._data = newData;
+	}
 
-    setConfig(newConfig) {
-        this._data.config = newConfig;
-    }
+	setConfig(newConfig) {
+		this._data.config = newConfig;
+	}
 
-    _makeNavigation = () => {
-        const routes = this.scene.key === "boot" ? { next: "loader" } : this._data.navigation[this.scene.key].routes;
-        this.navigation = fp.mapValues(getRoutingFn(this), routes);
-    };
+	_makeNavigation = () => {
+		const routes = this.scene.key === "boot" ? { next: "loader" } : this._data.navigation[this.scene.key].routes;
+		this.navigation = fp.mapValues(getRoutingFn(this), routes);
+	};
 
-    addBackgroundItems = furnish(this);
+	addBackgroundItems = furnish(this);
 
-    addOverlay(key) {
-        this.scene.run(key, { ...this._data, addedBy: this });
-        this.scene.bringToTop(key);
-        gelDom?.hide();
-    }
+	addOverlay(key) {
+		this.scene.run(key, { ...this._data, addedBy: this });
+		this.scene.bringToTop(key);
+		gelDom?.hide();
+	}
 
-    removeOverlay = () => {
-        activeScreens = activeScreens.filter(active => active.screen !== this);
-        this._data.addedBy._onOverlayRemoved(this);
-    };
+	removeOverlay = () => {
+		activeScreens = activeScreens.filter(active => active.screen !== this);
+		this._data.addedBy._onOverlayRemoved(this);
+	};
 
-    _onOverlayRemoved = overlay => {
-        a11y.destroy();
-        overlay.removeAll();
-        overlay.scene.stop();
-        this._layout.makeAccessible();
-        this.sys.accessibleButtons.forEach(button => a11y.addButton(button));
-        a11y.reset();
-        if (this.scene.key.includes("shop")) {
-            gmi.setStatsScreen(this.transientData.shopTitle + "menu");
-        } else {
-            gmi.setStatsScreen(this.scene.key);
-        }
+	_onOverlayRemoved = overlay => {
+		a11y.destroy();
+		overlay.removeAll();
+		overlay.scene.stop();
+		this._layout.makeAccessible();
+		this.sys.accessibleButtons.forEach(button => a11y.addButton(button));
+		a11y.reset();
+		if (this.scene.key.includes("shop")) {
+			gmi.setStatsScreen(this.transientData.shopTitle + "menu");
+		} else {
+			gmi.setStatsScreen(this.scene.key);
+		}
 
-        eventBus.publish({
-            channel: settingsChannel,
-            name: "audio",
-            data: gmi.getAllSettings().audio,
-        });
-    };
+		eventBus.publish({
+			channel: settingsChannel,
+			name: "audio",
+			data: gmi.getAllSettings().audio,
+		});
+	};
 
-    removeAll = () => {
-        eventBus.removeChannel(buttonsChannel(this));
-        this._layout && this._layout.destroy();
-        delete this._layout;
-        gelDom?.clear();
-    };
+	removeAll = () => {
+		eventBus.removeChannel(buttonsChannel(this));
+		this._layout && this._layout.destroy();
+		delete this._layout;
+		gelDom?.clear();
+	};
 
-    navigate = route => {
-        this.scene.bringToTop(route);
-        activeScreens.forEach(active => {
-            active.screen.removeAll();
-            active.screen.scene.stop();
-        });
-        activeScreens = [];
-        delete this._data.addedBy;
-        this.scene.start(route, this._data);
-    };
+	navigate = route => {
+		this.scene.bringToTop(route);
+		activeScreens.forEach(active => {
+			active.screen.removeAll();
+			active.screen.scene.stop();
+		});
+		activeScreens = [];
+		delete this._data.addedBy;
+		this.scene.start(route, this._data);
+	};
 
-    setLayout(buttons, accessibleButtons) {
-        this._layout = Layout.create(this, Scaler.getMetrics(), buttons, accessibleButtons);
-        this.add.existing(this._layout.root);
+	setLayout(buttons, accessibleButtons) {
+		this._layout = Layout.create(this, Scaler.getMetrics(), buttons, accessibleButtons);
+		this.add.existing(this._layout.root);
 
-        return this._layout;
-    }
+		return this._layout;
+	}
 }

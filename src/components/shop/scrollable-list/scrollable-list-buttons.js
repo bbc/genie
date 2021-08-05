@@ -11,26 +11,26 @@ import { buttonsChannel } from "../../../core/layout/gel-defaults.js";
 import { getButtonState } from "./get-button-state.js";
 
 const defaults = {
-    gameButton: true,
-    key: "itemBackground",
-    scrollable: true,
-    accessible: true,
+	gameButton: true,
+	key: "itemBackground",
+	scrollable: true,
+	accessible: true,
 };
 
 const getOverlayConfigs = (scene, title) => ({
-    items: scene.config.overlay.items,
-    options: scene.config.overlay.options[title],
+	items: scene.config.overlay.items,
+	options: scene.config.overlay.options[title],
 });
 
 const getConfigs = button =>
-    getOverlayConfigs(button.scene, button.config.title).items.concat(filterOptionalConfigs(button));
+	getOverlayConfigs(button.scene, button.config.title).items.concat(filterOptionalConfigs(button));
 
 const filterOptionalConfigs = button => {
-    const overlayStates = getButtonState(button.scene, button.item, getPaneTitle(button));
-    const overlayStateIsInItemState = state => overlayStates.includes(state);
-    const overlayConfigs = getOverlayConfigs(button.scene, button.config.title);
+	const overlayStates = getButtonState(button.scene, button.item, getPaneTitle(button));
+	const overlayStateIsInItemState = state => overlayStates.includes(state);
+	const overlayConfigs = getOverlayConfigs(button.scene, button.config.title);
 
-    return overlayConfigs.options.filter(overlay => fp.every(overlayStateIsInItemState, overlay.showWhen));
+	return overlayConfigs.options.filter(overlay => fp.every(overlayStateIsInItemState, overlay.showWhen));
 };
 
 const getItemKeyAndTitle = button => button.config.id.split("_").slice(-2);
@@ -38,31 +38,31 @@ const getPaneTitle = button => getItemKeyAndTitle(button).pop();
 const setOverlays = button => overlays1Wide(button, getConfigs(button));
 
 export const createListButton = (scene, item, title, action, parent) => {
-    const id = `scroll_button_${item.id}_${title}`;
-    const ariaLabel = `${item.state ? item.state + " " : ""}${item.title} - ${item.subtitle}`;
-    const channel = buttonsChannel(scene);
-    const group = scene.scene.key;
-    const config = { ...defaults, title, id, ariaLabel, scene: scene.assetPrefix, group, channel, action };
-    const gelButton = createButton(scene, config);
+	const id = `scroll_button_${item.id}_${title}`;
+	const ariaLabel = `${item.state ? item.state + " " : ""}${item.title} - ${item.subtitle}`;
+	const channel = buttonsChannel(scene);
+	const group = scene.scene.key;
+	const config = { ...defaults, title, id, ariaLabel, scene: scene.assetPrefix, group, channel, action };
+	const gelButton = createButton(scene, config);
 
-    gelButton.item = item; //TODO item should not be assigned to button. In addition it is not pulling the rest of its config from the collection.
+	gelButton.item = item; //TODO item should not be assigned to button. In addition it is not pulling the rest of its config from the collection.
 
-    gelButton.parentContainer = parent; //TODO NT hack makes gel buttons calculate correct bounds. Could it be fixed in gel button?...
+	gelButton.parentContainer = parent; //TODO NT hack makes gel buttons calculate correct bounds. Could it be fixed in gel button?...
 
-    const properties = item.state && scene.config.states[item.state] ? scene.config.states[item.state].properties : {};
-    const disabled = item.state && scene.config.states[item.state] ? scene.config.states[item.state].disabled : false;
-    disabled && gelButton.off(Phaser.Input.Events.POINTER_UP);
-    disabled && gelButton.off(Phaser.Input.Events.POINTER_OVER);
-    Object.assign(gelButton.sprite, properties);
+	const properties = item.state && scene.config.states[item.state] ? scene.config.states[item.state].properties : {};
+	const disabled = item.state && scene.config.states[item.state] ? scene.config.states[item.state].disabled : false;
+	disabled && gelButton.off(Phaser.Input.Events.POINTER_UP);
+	disabled && gelButton.off(Phaser.Input.Events.POINTER_OVER);
+	Object.assign(gelButton.sprite, properties);
 
-    scaleButton(gelButton, scene.layout, scene.config.listPadding);
-    setOverlays(gelButton);
-    return gelButton;
+	scaleButton(gelButton, scene.layout, scene.config.listPadding);
+	setOverlays(gelButton);
+	return gelButton;
 };
 
 export const scaleButton = (gelButton, layout, padding) => {
-    const safeArea = layout.getSafeArea({}, false);
-    const horizontalPadding = padding.x * 2 + padding.outerPadFactor * padding.x * 2;
-    const scaleFactor = (safeArea.width - horizontalPadding) / gelButton.width;
-    gelButton.setScale(scaleFactor);
+	const safeArea = layout.getSafeArea({}, false);
+	const horizontalPadding = padding.x * 2 + padding.outerPadFactor * padding.x * 2;
+	const scaleFactor = (safeArea.width - horizontalPadding) / gelButton.width;
+	gelButton.setScale(scaleFactor);
 };

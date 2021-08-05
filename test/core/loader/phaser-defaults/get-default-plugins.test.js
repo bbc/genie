@@ -7,43 +7,43 @@ import { getDefaultPlugins } from "../../../../src/core/loader/phaser-defaults/g
 const getPluginKeys = plugins => plugins.map(i => i.key);
 
 describe("Default Plugins", () => {
-    beforeEach(() => {});
+	beforeEach(() => {});
 
-    afterEach(jest.clearAllMocks);
+	afterEach(jest.clearAllMocks);
 
-    test("Returns required plugins by default (no passed in options)", () => {
-        const options = {};
-        const defaults = getDefaultPlugins(options);
+	test("Returns required plugins by default (no passed in options)", () => {
+		const options = {};
+		const defaults = getDefaultPlugins(options);
 
-        expect(Object.keys(defaults)).toEqual(["global", "scene"]);
-        expect(getPluginKeys(defaults.global)).toEqual([
-            "FontLoader",
-            "JSON5Loader",
-            "ParticlesLoader",
-            "rexBBCodeTextPlugin",
-            "rexNinePatchPlugin",
-        ]);
-        expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin"]);
-    });
+		expect(Object.keys(defaults)).toEqual(["global", "scene"]);
+		expect(getPluginKeys(defaults.global)).toEqual([
+			"FontLoader",
+			"JSON5Loader",
+			"ParticlesLoader",
+			"rexBBCodeTextPlugin",
+			"rexNinePatchPlugin",
+		]);
+		expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin"]);
+	});
 
-    test("Returns additional merged plugins if passed in as options", () => {
-        const options = {
-            plugins: {
-                global: [{ key: "testGlobalPlugin" }],
-                scene: [{ key: "testScenePlugin" }],
-            },
-        };
-        const defaults = getDefaultPlugins(options);
+	test("Returns additional merged plugins if passed in as options", () => {
+		const options = {
+			plugins: {
+				global: [{ key: "testGlobalPlugin" }],
+				scene: [{ key: "testScenePlugin" }],
+			},
+		};
+		const defaults = getDefaultPlugins(options);
 
-        expect(Object.keys(defaults)).toEqual(["global", "scene"]);
-        expect(getPluginKeys(defaults.global)).toEqual([
-            "FontLoader",
-            "JSON5Loader",
-            "ParticlesLoader",
-            "rexBBCodeTextPlugin",
-            "rexNinePatchPlugin",
-            "testGlobalPlugin",
-        ]);
-        expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin", "testScenePlugin"]);
-    });
+		expect(Object.keys(defaults)).toEqual(["global", "scene"]);
+		expect(getPluginKeys(defaults.global)).toEqual([
+			"FontLoader",
+			"JSON5Loader",
+			"ParticlesLoader",
+			"rexBBCodeTextPlugin",
+			"rexNinePatchPlugin",
+			"testGlobalPlugin",
+		]);
+		expect(getPluginKeys(defaults.scene)).toEqual(["SpinePlugin", "testScenePlugin"]);
+	});
 });

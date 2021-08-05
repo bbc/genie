@@ -10,63 +10,63 @@ import { ResultsSpine } from "./results-spine.js";
 import { ResultsTextCountup, ResultsBitmapTextCountup } from "./results-countup.js";
 
 export class ResultsRow extends Phaser.GameObjects.Container {
-    constructor(scene, rowConfig, getDrawArea) {
-        super(scene);
-        this.rowConfig = rowConfig;
-        this.getDrawArea = getDrawArea;
-        this.drawRow();
-        this.setContainerPosition();
-        this.align();
-        this.setAlpha(rowConfig.alpha);
-    }
+	constructor(scene, rowConfig, getDrawArea) {
+		super(scene);
+		this.rowConfig = rowConfig;
+		this.getDrawArea = getDrawArea;
+		this.drawRow();
+		this.setContainerPosition();
+		this.align();
+		this.setAlpha(rowConfig.alpha);
+	}
 
-    align() {
-        const lastGameObject = this.list.slice(-1)[0];
-        const rowWidth = lastGameObject ? lastGameObject.x + lastGameObject.width : 0;
-        this.list.forEach(gameObject => (gameObject.x -= rowWidth / 2));
-    }
+	align() {
+		const lastGameObject = this.list.slice(-1)[0];
+		const rowWidth = lastGameObject ? lastGameObject.x + lastGameObject.width : 0;
+		this.list.forEach(gameObject => (gameObject.x -= rowWidth / 2));
+	}
 
-    addSection(gameObject, offsetX = 0, offsetY = 0) {
-        const lastGameObject = this.list.slice(-1)[0];
-        gameObject.x = lastGameObject ? lastGameObject.x + lastGameObject.width : 0;
-        gameObject.y -= gameObject.height / 2;
-        gameObject.x += offsetX;
-        gameObject.y += offsetY;
-        this.add(gameObject);
-    }
+	addSection(gameObject, offsetX = 0, offsetY = 0) {
+		const lastGameObject = this.list.slice(-1)[0];
+		gameObject.x = lastGameObject ? lastGameObject.x + lastGameObject.width : 0;
+		gameObject.y -= gameObject.height / 2;
+		gameObject.x += offsetX;
+		gameObject.y += offsetY;
+		this.add(gameObject);
+	}
 
-    drawRow() {
-        const objectType = {
-            bitmaptext: () => ResultsBitmapText,
-            text: () => ResultsText,
-            sprite: () => ResultsSprite,
-            spine: () => ResultsSpine,
-            countup: object => (object.bitmapFont ? ResultsBitmapTextCountup : ResultsTextCountup),
-        };
+	drawRow() {
+		const objectType = {
+			bitmaptext: () => ResultsBitmapText,
+			text: () => ResultsText,
+			sprite: () => ResultsSprite,
+			spine: () => ResultsSpine,
+			countup: object => (object.bitmapFont ? ResultsBitmapTextCountup : ResultsTextCountup),
+		};
 
-        this.rowConfig.format &&
-            this.rowConfig.format.forEach(object =>
-                this.addSection(
-                    new (objectType[object.type](object))(this.scene, object),
-                    object.offsetX,
-                    object.offsetY,
-                ),
-            );
-    }
+		this.rowConfig.format &&
+			this.rowConfig.format.forEach(object =>
+				this.addSection(
+					new (objectType[object.type](object))(this.scene, object),
+					object.offsetX,
+					object.offsetY,
+				),
+			);
+	}
 
-    getBoundingRect() {
-        return this.getDrawArea();
-    }
+	getBoundingRect() {
+		return this.getDrawArea();
+	}
 
-    setContainerPosition() {
-        const { centerX, centerY } = this.getDrawArea();
-        this.x = centerX;
-        this.y = centerY;
-    }
+	setContainerPosition() {
+		const { centerX, centerY } = this.getDrawArea();
+		this.x = centerX;
+		this.y = centerY;
+	}
 
-    reset() {
-        this.setContainerPosition();
-    }
+	reset() {
+		this.setContainerPosition();
+	}
 
-    makeAccessible() {}
+	makeAccessible() {}
 }

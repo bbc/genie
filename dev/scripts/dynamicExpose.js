@@ -6,10 +6,10 @@
 const fs = require("fs");
 
 const getKeyNameMap = script => {
-    let global = {};
-    global[script.moduleVar] = script.npmName;
+	let global = {};
+	global[script.moduleVar] = script.npmName;
 
-    return global;
+	return global;
 };
 
 module.exports = path => JSON.parse(fs.readFileSync(path)).map(getKeyNameMap);

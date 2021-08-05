@@ -9,29 +9,29 @@ import { accessibilify } from "../accessibility/accessibilify.js";
 import { settings } from "../settings.js";
 
 const defaultAction = config => {
-    if (config.action) {
-        eventBus.subscribe({
-            channel: config.channel,
-            name: config.id,
-            callback: config.action,
-        });
-    }
+	if (config.action) {
+		eventBus.subscribe({
+			channel: config.channel,
+			name: config.id,
+			callback: config.action,
+		});
+	}
 };
 
 export const createButton = (scene, config, x = 0, y = 0) => {
-    if (config.id === "audio") {
-        config.key = settings.getAllSettings().audio ? "audio-on" : "audio-off";
-    }
+	if (config.id === "audio") {
+		config.key = settings.getAllSettings().audio ? "audio-on" : "audio-off";
+	}
 
-    const btn = scene.add.gelButton(x, y, config);
+	const btn = scene.add.gelButton(x, y, config);
 
-    if (config.icon) {
-        btn.disableInteractive();
-        btn.input.hitArea = null;
-        return btn;
-    }
+	if (config.icon) {
+		btn.disableInteractive();
+		btn.input.hitArea = null;
+		return btn;
+	}
 
-    defaultAction(config);
+	defaultAction(config);
 
-    return config.accessible ? accessibilify(btn, config.gameButton ?? false) : btn;
+	return config.accessible ? accessibilify(btn, config.gameButton ?? false) : btn;
 };

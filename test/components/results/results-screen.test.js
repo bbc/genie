@@ -22,296 +22,296 @@ jest.mock("../../../src/components/results/results-particles.js");
 jest.mock("../../../src/components/results/results-row-backdrop.js");
 
 describe("Results Screen", () => {
-    let resultsScreen;
-    let mockConfig;
-    let mockTransientData;
-    let mockGmi;
-    let mockTextAdd;
-    let mockResultsArea;
-    let mockImage;
-    let mockRows;
-    let unsubscribe = jest.fn();
+	let resultsScreen;
+	let mockConfig;
+	let mockTransientData;
+	let mockGmi;
+	let mockTextAdd;
+	let mockResultsArea;
+	let mockImage;
+	let mockRows;
+	let unsubscribe = jest.fn();
 
-    beforeEach(() => {
-        Scaler.getMetrics = jest.fn(() => ({ width: 0 }));
-        Scaler.onScaleChange = {
-            add: jest.fn(() => ({ unsubscribe })),
-        };
-        MetricsModule.getMetrics = jest.fn();
-        mockRows = { containers: "mockcontainer" };
-        Rows.create = jest.fn(() => mockRows);
-        mockImage = {
-            height: 5,
-            width: 5,
-            setDepth: jest.fn(),
-        };
-        mockConfig = {
-            results: {
-                backdrop: { key: "mockKey", alpha: 1 },
-                resultText: {
-                    style: { font: "36px ReithSans" },
-                },
-                rows: [],
-            },
-            game: {},
-        };
-        mockTransientData = {
-            results: {},
-            characterSelected: 1,
-        };
-        mockResultsArea = {
-            centerX: 0,
-            centerY: 0,
-            width: 0,
-            height: 0,
-        };
+	beforeEach(() => {
+		Scaler.getMetrics = jest.fn(() => ({ width: 0 }));
+		Scaler.onScaleChange = {
+			add: jest.fn(() => ({ unsubscribe })),
+		};
+		MetricsModule.getMetrics = jest.fn();
+		mockRows = { containers: "mockcontainer" };
+		Rows.create = jest.fn(() => mockRows);
+		mockImage = {
+			height: 5,
+			width: 5,
+			setDepth: jest.fn(),
+		};
+		mockConfig = {
+			results: {
+				backdrop: { key: "mockKey", alpha: 1 },
+				resultText: {
+					style: { font: "36px ReithSans" },
+				},
+				rows: [],
+			},
+			game: {},
+		};
+		mockTransientData = {
+			results: {},
+			characterSelected: 1,
+		};
+		mockResultsArea = {
+			centerX: 0,
+			centerY: 0,
+			width: 0,
+			height: 0,
+		};
 
-        mockGmi = { sendStatsEvent: jest.fn(), achievements: { get: () => [] } };
-        createMockGmi(mockGmi);
+		mockGmi = { sendStatsEvent: jest.fn(), achievements: { get: () => [] } };
+		createMockGmi(mockGmi);
 
-        mockTextAdd = {
-            setOrigin: jest.fn(() => ({
-                setInteractive: jest.fn(() => ({
-                    on: jest.fn(),
-                })),
-            })),
-        };
-        resultsScreen = new Results();
-        resultsScreen.layout = {
-            addCustomGroup: jest.fn(),
-            buttons: {
-                next: {},
-                previous: {},
-                continueGame: {
-                    parentContainer: {
-                        y: 121,
-                    },
-                },
-            },
-            root: "layout root",
-            getSafeArea: jest.fn(() => mockResultsArea),
-        };
-        resultsScreen.context = {
-            config: mockConfig,
-            transientData: mockTransientData,
-        };
-        resultsScreen.config = mockConfig.results;
-        resultsScreen.transientData = mockTransientData;
-        resultsScreen.addBackgroundItems = jest.fn(() => () => {});
-        resultsScreen.setLayout = jest.fn();
-        resultsScreen.add = {
-            image: jest.fn().mockImplementation((x, y, imageName) => {
-                mockImage.imageName = imageName;
-                return mockImage;
-            }),
-            text: jest.fn(() => mockTextAdd),
-        };
-        resultsScreen.scene = {
-            key: "results",
-        };
-        resultsScreen.navigation = {
-            continue: jest.fn(),
-            restart: jest.fn(),
-        };
-        resultsScreen.events = {
-            once: jest.fn(),
-        };
-        resultsScreen.children = {
-            bringToTop: jest.fn(),
-        };
-    });
+		mockTextAdd = {
+			setOrigin: jest.fn(() => ({
+				setInteractive: jest.fn(() => ({
+					on: jest.fn(),
+				})),
+			})),
+		};
+		resultsScreen = new Results();
+		resultsScreen.layout = {
+			addCustomGroup: jest.fn(),
+			buttons: {
+				next: {},
+				previous: {},
+				continueGame: {
+					parentContainer: {
+						y: 121,
+					},
+				},
+			},
+			root: "layout root",
+			getSafeArea: jest.fn(() => mockResultsArea),
+		};
+		resultsScreen.context = {
+			config: mockConfig,
+			transientData: mockTransientData,
+		};
+		resultsScreen.config = mockConfig.results;
+		resultsScreen.transientData = mockTransientData;
+		resultsScreen.addBackgroundItems = jest.fn(() => () => {});
+		resultsScreen.setLayout = jest.fn();
+		resultsScreen.add = {
+			image: jest.fn().mockImplementation((x, y, imageName) => {
+				mockImage.imageName = imageName;
+				return mockImage;
+			}),
+			text: jest.fn(() => mockTextAdd),
+		};
+		resultsScreen.scene = {
+			key: "results",
+		};
+		resultsScreen.navigation = {
+			continue: jest.fn(),
+			restart: jest.fn(),
+		};
+		resultsScreen.events = {
+			once: jest.fn(),
+		};
+		resultsScreen.children = {
+			bringToTop: jest.fn(),
+		};
+	});
 
-    afterEach(() => jest.clearAllMocks());
+	afterEach(() => jest.clearAllMocks());
 
-    describe("Create Method", () => {
-        test("adds background furniture", () => {
-            resultsScreen.create();
-            expect(resultsScreen.addBackgroundItems).toHaveBeenCalled();
-        });
+	describe("Create Method", () => {
+		test("adds background furniture", () => {
+			resultsScreen.create();
+			expect(resultsScreen.addBackgroundItems).toHaveBeenCalled();
+		});
 
-        test("adds GEL buttons to layout", () => {
-            resultsScreen.create();
-            const expectedButtons = ["pause", "continueGame", "restart"];
-            expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
+		test("adds GEL buttons to layout", () => {
+			resultsScreen.create();
+			const expectedButtons = ["pause", "continueGame", "restart"];
+			expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+		});
 
-        test("adds 'Play again' button when game complete is sent in transient data", () => {
-            mockTransientData.results.gameComplete = true;
-            resultsScreen.create();
-            const expectedButtons = ["pause", "continueGame", "playAgain"];
-            expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
+		test("adds 'Play again' button when game complete is sent in transient data", () => {
+			mockTransientData.results.gameComplete = true;
+			resultsScreen.create();
+			const expectedButtons = ["pause", "continueGame", "playAgain"];
+			expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+		});
 
-        test("creates rows for the results screen", () => {
-            resultsScreen.create();
-            expect(Rows.create).toHaveBeenCalledWith(
-                resultsScreen,
-                expect.any(Function),
-                resultsScreen.config.rows,
-                Rows.RowType.Results,
-            );
-        });
+		test("creates rows for the results screen", () => {
+			resultsScreen.create();
+			expect(Rows.create).toHaveBeenCalledWith(
+				resultsScreen,
+				expect.any(Function),
+				resultsScreen.config.rows,
+				Rows.RowType.Results,
+			);
+		});
 
-        test("adds particles to the rows", () => {
-            resultsScreen.create();
-            expect(addParticlesToRows).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
-        });
+		test("adds particles to the rows", () => {
+			resultsScreen.create();
+			expect(addParticlesToRows).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
+		});
 
-        test("adds tweens to the rows", () => {
-            resultsScreen.create();
-            expect(tweenRows).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
-        });
+		test("adds tweens to the rows", () => {
+			resultsScreen.create();
+			expect(tweenRows).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
+		});
 
-        test("plays row audio", () => {
-            resultsScreen.create();
-            expect(playRowAudio).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
-        });
+		test("plays row audio", () => {
+			resultsScreen.create();
+			expect(playRowAudio).toHaveBeenCalledWith(resultsScreen, resultsScreen.rows.containers);
+		});
 
-        test("results screen area has the same height as the backdrop when one is provided", () => {
-            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
-            resultsScreen.backdrop = { height: 600 };
-            expect(resultsScreen.resultsArea().height).toBe(resultsScreen.backdrop.height);
-        });
+		test("results screen area has the same height as the backdrop when one is provided", () => {
+			Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
+			resultsScreen.backdrop = { height: 600 };
+			expect(resultsScreen.resultsArea().height).toBe(resultsScreen.backdrop.height);
+		});
 
-        test("results screen area is centered in the safe area when a backdrop is provided", () => {
-            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
-            resultsScreen.backdrop = { height: 600 };
-            expect(resultsScreen.resultsArea().centerX).toBe(mockResultsArea.centerX);
-            expect(resultsScreen.resultsArea().centerY).toBe(mockResultsArea.centerY);
-        });
+		test("results screen area is centered in the safe area when a backdrop is provided", () => {
+			Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
+			resultsScreen.backdrop = { height: 600 };
+			expect(resultsScreen.resultsArea().centerX).toBe(mockResultsArea.centerX);
+			expect(resultsScreen.resultsArea().centerY).toBe(mockResultsArea.centerY);
+		});
 
-        test("results screen area is the safe area when no backdrop is provided", () => {
-            Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
-            delete resultsScreen.backdrop;
-            expect(resultsScreen.resultsArea()).toBe(mockResultsArea);
-            expect(resultsScreen.resultsArea()).toBe(mockResultsArea);
-        });
+		test("results screen area is the safe area when no backdrop is provided", () => {
+			Scaler.getMetrics = jest.fn(() => ({ width: 200 }));
+			delete resultsScreen.backdrop;
+			expect(resultsScreen.resultsArea()).toBe(mockResultsArea);
+			expect(resultsScreen.resultsArea()).toBe(mockResultsArea);
+		});
 
-        test("adds a backdrop image with specified properties when one is specified in config", () => {
-            mockConfig.results.backdrop.alpha = 0.5;
-            resultsScreen.create();
-            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
-            expect(mockImage.alpha).toEqual(0.5);
-        });
+		test("adds a backdrop image with specified properties when one is specified in config", () => {
+			mockConfig.results.backdrop.alpha = 0.5;
+			resultsScreen.create();
+			expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+			expect(mockImage.alpha).toEqual(0.5);
+		});
 
-        test("adds an image with a default alpha of 1 when no alpha is specified", () => {
-            mockConfig.results.backdrop.alpha = undefined;
+		test("adds an image with a default alpha of 1 when no alpha is specified", () => {
+			mockConfig.results.backdrop.alpha = undefined;
 
-            resultsScreen.create();
-            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
-            expect(mockImage.alpha).toEqual(1);
-        });
+			resultsScreen.create();
+			expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+			expect(mockImage.alpha).toEqual(1);
+		});
 
-        test("adds an image with an alpha of 0 when specified in config", () => {
-            mockConfig.results.backdrop.alpha = 0;
+		test("adds an image with an alpha of 0 when specified in config", () => {
+			mockConfig.results.backdrop.alpha = 0;
 
-            resultsScreen.create();
-            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
-            expect(mockImage.alpha).toEqual(0);
-        });
+			resultsScreen.create();
+			expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+			expect(mockImage.alpha).toEqual(0);
+		});
 
-        test("adds a backdrop image centred within the results area", () => {
-            mockResultsArea = {
-                centerX: 15,
-                centerY: 15,
-                width: 10,
-                height: 10,
-            };
-            resultsScreen.create();
-            expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
-            expect(mockImage.x).toBe(15);
-            expect(mockImage.y).toEqual(15);
-        });
+		test("adds a backdrop image centred within the results area", () => {
+			mockResultsArea = {
+				centerX: 15,
+				centerY: 15,
+				width: 10,
+				height: 10,
+			};
+			resultsScreen.create();
+			expect(resultsScreen.add.image).toHaveBeenCalledWith(0, 0, "mockKey");
+			expect(mockImage.x).toBe(15);
+			expect(mockImage.y).toEqual(15);
+		});
 
-        test("backdrop image resizes on a scale event", () => {
-            mockImage = {
-                height: 5,
-                width: 5,
-                setDepth: () => {},
-            };
-            mockResultsArea = {
-                centerX: 0,
-                centerY: 0,
-                height: 10,
-                width: 10,
-            };
+		test("backdrop image resizes on a scale event", () => {
+			mockImage = {
+				height: 5,
+				width: 5,
+				setDepth: () => {},
+			};
+			mockResultsArea = {
+				centerX: 0,
+				centerY: 0,
+				height: 10,
+				width: 10,
+			};
 
-            resultsScreen.create();
+			resultsScreen.create();
 
-            mockResultsArea.centerX = 10;
-            mockResultsArea.centerY = 20;
-            Scaler.onScaleChange.add.mock.calls[0][0]();
+			mockResultsArea.centerX = 10;
+			mockResultsArea.centerY = 20;
+			Scaler.onScaleChange.add.mock.calls[0][0]();
 
-            expect(Scaler.onScaleChange.add).toHaveBeenCalled();
-            expect(mockImage.x).toEqual(mockResultsArea.centerX);
-            expect(mockImage.y).toEqual(mockResultsArea.centerY);
-        });
+			expect(Scaler.onScaleChange.add).toHaveBeenCalled();
+			expect(mockImage.x).toEqual(mockResultsArea.centerX);
+			expect(mockImage.y).toEqual(mockResultsArea.centerY);
+		});
 
-        test("does not render image when no key is provided on the backdrop object", () => {
-            mockConfig.results.backdrop.key = undefined;
-            resultsScreen.create();
-            expect(resultsScreen.add.image).not.toHaveBeenCalledWith(0, 0, "mockKey");
-        });
+		test("does not render image when no key is provided on the backdrop object", () => {
+			mockConfig.results.backdrop.key = undefined;
+			resultsScreen.create();
+			expect(resultsScreen.add.image).not.toHaveBeenCalledWith(0, 0, "mockKey");
+		});
 
-        test("Creates a callback that calls getSafeArea with top: false group overrides ", () => {
-            resultsScreen.create();
-            const safeAreaCallback = Rows.create.mock.calls[0][1];
-            safeAreaCallback();
+		test("Creates a callback that calls getSafeArea with top: false group overrides ", () => {
+			resultsScreen.create();
+			const safeAreaCallback = Rows.create.mock.calls[0][1];
+			safeAreaCallback();
 
-            expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ top: false });
-        });
+			expect(resultsScreen.layout.getSafeArea).toHaveBeenCalledWith({ top: false });
+		});
 
-        test("adds the achievement button when there are achievements", () => {
-            mockGmi.achievements = { get: () => [""] };
-            resultsScreen.create();
-            const expectedButtons = ["pause", "continueGame", "achievementsSmall", "restart"];
-            expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
-        });
+		test("adds the achievement button when there are achievements", () => {
+			mockGmi.achievements = { get: () => [""] };
+			resultsScreen.create();
+			const expectedButtons = ["pause", "continueGame", "achievementsSmall", "restart"];
+			expect(resultsScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+		});
 
-        test("adds a callback to unsubscribe from scale events on shutdown", () => {
-            resultsScreen.create();
-            expect(resultsScreen.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
-        });
+		test("adds a callback to unsubscribe from scale events on shutdown", () => {
+			resultsScreen.create();
+			expect(resultsScreen.events.once).toHaveBeenCalledWith("shutdown", expect.any(Function));
+		});
 
-        test("unsubscribes from scale events on shutdown", () => {
-            resultsScreen.create();
+		test("unsubscribes from scale events on shutdown", () => {
+			resultsScreen.create();
 
-            resultsScreen.events.once.mock.calls[0][1]();
-            expect(unsubscribe).toHaveBeenCalled();
-        });
+			resultsScreen.events.once.mock.calls[0][1]();
+			expect(unsubscribe).toHaveBeenCalled();
+		});
 
-        test("put layout on top (layout has to becreated first so safe area is available)", () => {
-            resultsScreen.create();
-            expect(resultsScreen.children.bringToTop).toHaveBeenCalledWith("layout root");
-        });
-    });
+		test("put layout on top (layout has to becreated first so safe area is available)", () => {
+			resultsScreen.create();
+			expect(resultsScreen.children.bringToTop).toHaveBeenCalledWith("layout root");
+		});
+	});
 
-    describe("events", () => {
-        beforeEach(() => {
-            jest.spyOn(eventBus, "subscribe");
-            resultsScreen.create();
-        });
+	describe("events", () => {
+		beforeEach(() => {
+			jest.spyOn(eventBus, "subscribe");
+			resultsScreen.create();
+		});
 
-        describe("the continue button", () => {
-            test("adds a event subscription", () => {
-                expect(eventBus.subscribe.mock.calls[0][0].name).toBe("continue");
-            });
+		describe("the continue button", () => {
+			test("adds a event subscription", () => {
+				expect(eventBus.subscribe.mock.calls[0][0].name).toBe("continue");
+			});
 
-            test("navigates to the next screen when clicked", () => {
-                eventBus.subscribe.mock.calls[0][0].callback();
-                expect(resultsScreen.navigation.continue).toHaveBeenCalled();
-            });
-        });
+			test("navigates to the next screen when clicked", () => {
+				eventBus.subscribe.mock.calls[0][0].callback();
+				expect(resultsScreen.navigation.continue).toHaveBeenCalled();
+			});
+		});
 
-        describe("the restart button", () => {
-            test("adds a event subscription", () => {
-                expect(eventBus.subscribe.mock.calls[1][0].name).toBe("restart");
-            });
+		describe("the restart button", () => {
+			test("adds a event subscription", () => {
+				expect(eventBus.subscribe.mock.calls[1][0].name).toBe("restart");
+			});
 
-            test("restarts the game and passes saved data through", () => {
-                eventBus.subscribe.mock.calls[1][0].callback();
-                expect(resultsScreen.navigation.restart).toHaveBeenCalled();
-            });
-        });
-    });
+			test("restarts the game and passes saved data through", () => {
+				eventBus.subscribe.mock.calls[1][0].callback();
+				expect(resultsScreen.navigation.restart).toHaveBeenCalled();
+			});
+		});
+	});
 });

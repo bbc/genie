@@ -13,34 +13,34 @@ import { nextPage, skip } from "../core/background/pages.js";
 import { gmi } from "../core/gmi/gmi.js";
 
 const fireStatsEvent = (eventName, eventType, screen) => {
-    const params = {
-        metadata: `PAG=[${screen.pageIdx}]`,
-        source: `narrative-${screen.scene.key}`,
-    };
-    gmi.sendStatsEvent(eventName, eventType, params);
+	const params = {
+		metadata: `PAG=[${screen.pageIdx}]`,
+		source: `narrative-${screen.scene.key}`,
+	};
+	gmi.sendStatsEvent(eventName, eventType, params);
 };
 
 export class Narrative extends Screen {
-    create() {
-        this.addBackgroundItems();
-        this.setLayout(["continue", "skip", "pause"]);
-        this.events.once("shutdown", () => skip(this.timedItems));
+	create() {
+		this.addBackgroundItems();
+		this.setLayout(["continue", "skip", "pause"]);
+		this.events.once("shutdown", () => skip(this.timedItems));
 
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "continue",
-            callback: ({ screen }) => {
-                fireStatsEvent("narrative", "continue", screen);
-                nextPage(screen)();
-            },
-        });
+		eventBus.subscribe({
+			channel: buttonsChannel(this),
+			name: "continue",
+			callback: ({ screen }) => {
+				fireStatsEvent("narrative", "continue", screen);
+				nextPage(screen)();
+			},
+		});
 
-        eventBus.subscribe({
-            channel: buttonsChannel(this),
-            name: "skip",
-            callback: ({ screen }) => {
-                fireStatsEvent("narrative", "skip", screen);
-            },
-        });
-    }
+		eventBus.subscribe({
+			channel: buttonsChannel(this),
+			name: "skip",
+			callback: ({ screen }) => {
+				fireStatsEvent("narrative", "skip", screen);
+			},
+		});
+	}
 }

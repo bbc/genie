@@ -8,17 +8,17 @@ import fp from "../../../lib/lodash/fp/fp.js";
 const getKey = key => (key === "../../debug" ? "debug" : key);
 
 export const loadConfig = (screen, keys) => {
-    keys.forEach(key =>
-        screen.load.json5({
-            key: `config-${getKey(key)}`,
-            url: `${key}/config.json5`,
-        }),
-    );
+	keys.forEach(key =>
+		screen.load.json5({
+			key: `config-${getKey(key)}`,
+			url: `${key}/config.json5`,
+		}),
+	);
 };
 
 export const getConfig = (screen, keys) => {
-    const entries = keys.map(key => ({
-        [getKey(key)]: screen.cache.json.get(`config-${getKey(key)}`),
-    }));
-    return entries.reduce((acc, entry) => fp.merge(acc, entry), {});
+	const entries = keys.map(key => ({
+		[getKey(key)]: screen.cache.json.get(`config-${getKey(key)}`),
+	}));
+	return entries.reduce((acc, entry) => fp.merge(acc, entry), {});
 };

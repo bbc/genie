@@ -20,42 +20,42 @@ const path = require("path");
 const getNewPath = ({ dir, ext, name }) => ({ dir, ext, name: name + "_new" });
 const isP3Format = json => Object.keys(json).some(key => Boolean(json[key].prefix) || Boolean(json[key].files));
 const exitWithMessage = (color, text, code) => {
-    console.log(color, text);
-    console.log(resetCli);
-    process.exit(code);
+	console.log(color, text);
+	console.log(resetCli);
+	process.exit(code);
 };
 
 const audio = entry => {
-    entry.url = entry.urls.find(value => /\.(mp3|mp4)$/i.test(value));
-    delete entry.urls;
-    delete entry.autoDecode;
-    return entry;
+	entry.url = entry.urls.find(value => /\.(mp3|mp4)$/i.test(value));
+	delete entry.urls;
+	delete entry.autoDecode;
+	return entry;
 };
 
 const isDefined = value => value !== undefined;
 const spriteParams = ["frameWidth", "frameHeight", "margin", "spacing", "startFrame", "endFrame"];
 
 const spritesheet = entry => {
-    const entries = spriteParams.map(param => [param, entry[param]]).filter(a => isDefined(a[1]));
-    entry.frameConfig = Object.fromEntries(entries);
-    [...spriteParams, "frameMax"].forEach(param => delete entry[param]);
-    return entry;
+	const entries = spriteParams.map(param => [param, entry[param]]).filter(a => isDefined(a[1]));
+	entry.frameConfig = Object.fromEntries(entries);
+	[...spriteParams, "frameMax"].forEach(param => delete entry[param]);
+	return entry;
 };
 
 const bitmapFont = entry => {
-    entry.fontDataURL = entry.atlasURL;
-    delete entry.atlasURL;
+	entry.fontDataURL = entry.atlasURL;
+	delete entry.atlasURL;
 
-    return entry;
+	return entry;
 };
 
 const defaultFile = entry => entry;
 
 const dispatcher = {
-    audio,
-    spritesheet,
-    bitmapFont,
-    defaultFile,
+	audio,
+	spritesheet,
+	bitmapFont,
+	defaultFile,
 };
 
 const updateFiles = entry => dispatcher?.[entry.type]?.(entry) || dispatcher.defaultFile(entry);

@@ -9,25 +9,25 @@ import { gmi } from "./gmi/gmi.js";
 export const settingsChannel = "genie-settings";
 
 export const create = () => {
-    const onSettingChanged = (key, value) => {
-        eventBus.publish({
-            channel: settingsChannel,
-            name: key,
-            data: value,
-        });
-    };
+	const onSettingChanged = (key, value) => {
+		eventBus.publish({
+			channel: settingsChannel,
+			name: key,
+			data: value,
+		});
+	};
 
-    const onSettingsClosed = () => {
-        eventBus.publish({
-            channel: settingsChannel,
-            name: "settings-closed",
-        });
-    };
+	const onSettingsClosed = () => {
+		eventBus.publish({
+			channel: settingsChannel,
+			name: "settings-closed",
+		});
+	};
 
-    return {
-        show: () => gmi.showSettings(onSettingChanged, onSettingsClosed),
-        getAllSettings: () => gmi.getAllSettings(),
-    };
+	return {
+		show: () => gmi.showSettings(onSettingChanged, onSettingsClosed),
+		getAllSettings: () => gmi.getAllSettings(),
+	};
 };
 
 // Singleton used by games

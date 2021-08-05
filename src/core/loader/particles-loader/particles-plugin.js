@@ -9,16 +9,16 @@
 import { ParticlesFile } from "./particles-file.js";
 
 export class ParticlesPlugin extends Phaser.Plugins.BasePlugin {
-    constructor(pluginManager) {
-        super(pluginManager);
-        pluginManager.registerFileType("particles", this.loaderCallback);
-    }
+	constructor(pluginManager) {
+		super(pluginManager);
+		pluginManager.registerFileType("particles", this.loaderCallback);
+	}
 
-    addToScene(scene) {
-        scene.sys.load["particles"] = this.loaderCallback;
-    }
+	addToScene(scene) {
+		scene.sys.load["particles"] = this.loaderCallback;
+	}
 
-    loaderCallback(fileConfig, xhrSettings, dataKey) {
-        this.addFile(new ParticlesFile(this, fileConfig, xhrSettings, dataKey));
-    }
+	loaderCallback(fileConfig, xhrSettings, dataKey) {
+		this.addFile(new ParticlesFile(this, fileConfig, xhrSettings, dataKey));
+	}
 }

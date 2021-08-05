@@ -21,8 +21,8 @@ const { renameSync } = require("fs");
  * @type {Cypress.PluginConfig}
  */
 module.exports = (on, config) => {
-    on("after:screenshot", ({ path }) => {
-        renameSync(path, path.replace(/ \(\d*\)/i, ""));
-    });
-    return config;
+	on("after:screenshot", ({ path }) => {
+		renameSync(path, path.replace(/ \(\d*\)/i, ""));
+	});
+	return config;
 };
