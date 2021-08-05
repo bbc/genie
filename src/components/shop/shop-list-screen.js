@@ -15,41 +15,41 @@ import { initResizers } from "./backgrounds.js";
 import { gmi } from "../../core/gmi/gmi.js";
 
 export class ShopList extends Screen {
-    preload() {
-        this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
-        initResizers();
-    }
+	preload() {
+		this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
+		initResizers();
+	}
 
-    create() {
-        gmi.setStatsScreen(this.transientData.shopTitle + (this.transientData.shop.mode === "shop" ? "buy" : "manage"));
-        this.addBackgroundItems();
-        this.setLayout(["overlayBack", "pause"]);
+	create() {
+		gmi.setStatsScreen(this.transientData.shopTitle + (this.transientData.shop.mode === "shop" ? "buy" : "manage"));
+		this.addBackgroundItems();
+		this.setLayout(["overlayBack", "pause"]);
 
-        this.transientData[this.scene.key] = { title: this.transientData.shop.mode };
-        setBalance(this);
+		this.transientData[this.scene.key] = { title: this.transientData.shop.mode };
+		setBalance(this);
 
-        this.inventoryFilter = item => item.id !== this.transientData.shop.config.balance;
-        this.scrollableList = new ScrollableList(this, this.transientData.shop.mode, this.inventoryFilter);
+		this.inventoryFilter = item => item.id !== this.transientData.shop.config.balance;
+		this.scrollableList = new ScrollableList(this, this.transientData.shop.mode, this.inventoryFilter);
 
-        this.setupEvents();
-        this.resize();
-    }
+		this.setupEvents();
+		this.resize();
+	}
 
-    setupEvents() {
-        const resize = this.resize.bind(this);
-        const scaleEvent = onScaleChange.add(resize);
-        this.events.once("shutdown", scaleEvent.unsubscribe);
-        const onResume = this.onResume.bind(this);
-        this.events.on("resume", onResume);
-        this.events.once("shutdown", () => this.events.off("resume", onResume));
-    }
+	setupEvents() {
+		const resize = this.resize.bind(this);
+		const scaleEvent = onScaleChange.add(resize);
+		this.events.once("shutdown", scaleEvent.unsubscribe);
+		const onResume = this.onResume.bind(this);
+		this.events.on("resume", onResume);
+		this.events.once("shutdown", () => this.events.off("resume", onResume));
+	}
 
-    resize() {
-        this.scrollableList.reset();
-    }
+	resize() {
+		this.scrollableList.reset();
+	}
 
-    onResume() {
-        this.removeOverlay();
-        this._data.addedBy.addOverlay(this.scene.key);
-    }
+	onResume() {
+		this.removeOverlay();
+		this._data.addedBy.addOverlay(this.scene.key);
+	}
 }

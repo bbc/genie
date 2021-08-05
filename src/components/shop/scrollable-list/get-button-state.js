@@ -11,13 +11,13 @@ const locked = (item, config) => item.state && config.states[item.state] && conf
 const equipped = item => item?.state === "equipped";
 
 export const getButtonState = (scene, item, title) => {
-    const states = [];
-    const inventoryItem = collections.get(scene.transientData.shop.config.shopCollections.manage).get(item.id);
-    const isButtonCta = title === "shop" ? qtyOneOrMore(inventoryItem) : equipped(inventoryItem);
+	const states = [];
+	const inventoryItem = collections.get(scene.transientData.shop.config.shopCollections.manage).get(item.id);
+	const isButtonCta = title === "shop" ? qtyOneOrMore(inventoryItem) : equipped(inventoryItem);
 
-    states.push(isButtonCta ? "actioned" : "cta");
-    states.push(equippable(item) ? "equippable" : "consumable");
-    states.push(qtyOneOrMore(item) ? "available" : "unavailable");
-    states.push(locked(item, scene.config) ? "locked" : "unlocked");
-    return states;
+	states.push(isButtonCta ? "actioned" : "cta");
+	states.push(equippable(item) ? "equippable" : "consumable");
+	states.push(qtyOneOrMore(item) ? "available" : "unavailable");
+	states.push(locked(item, scene.config) ? "locked" : "unlocked");
+	return states;
 };

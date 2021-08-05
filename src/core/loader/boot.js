@@ -19,62 +19,62 @@ const setImage = button => button.setImage(settings.getAllSettings().audio ? "au
 const getAudioButtons = fp.map(fp.get("layout.buttons.audio"));
 
 export class Boot extends Screen {
-    constructor(navigationConfig) {
-        super({ key: "boot" });
-        this._navigationConfig = navigationConfig;
-        this._navigationConfig.boot = { routes: { next: "loader" } };
-        this._navigationConfig.loader = { routes: { next: "home" } };
-    }
+	constructor(navigationConfig) {
+		super({ key: "boot" });
+		this._navigationConfig = navigationConfig;
+		this._navigationConfig.boot = { routes: { next: "loader" } };
+		this._navigationConfig.loader = { routes: { next: "home" } };
+	}
 
-    preload() {
-        this.load.setBaseURL(gmi.gameDir);
-        this.load.setPath(getTheme());
-        this.load.setCORS("anonymous");
+	preload() {
+		this.load.setBaseURL(gmi.gameDir);
+		this.load.setPath(getTheme());
+		this.load.setCORS("anonymous");
 
-        //TODO P3 this is loaded now so we can check its keys for missing files. It is also loaded again later so perhaps could be done then? NT
-        this.load.json("asset-master-pack", "asset-master-pack.json");
-        this.load.json("font-pack", "fonts.json");
+		//TODO P3 this is loaded now so we can check its keys for missing files. It is also loaded again later so perhaps could be done then? NT
+		this.load.json("asset-master-pack", "asset-master-pack.json");
+		this.load.json("font-pack", "fonts.json");
 
-        this.setData({
-            parentScreens: [],
-            transient: {},
-            navigation: this._navigationConfig,
-        });
-        //TODO P3 - if the above could be changed this could potentially be part of loadscreen.js and we could delete boot
+		this.setData({
+			parentScreens: [],
+			transient: {},
+			navigation: this._navigationConfig,
+		});
+		//TODO P3 - if the above could be changed this could potentially be part of loadscreen.js and we could delete boot
 
-        eventBus.subscribe({
-            channel: settingsChannel,
-            name: "settings-closed",
-            callback: () => {
-                this.game.canvas.focus();
-            },
-        });
+		eventBus.subscribe({
+			channel: settingsChannel,
+			name: "settings-closed",
+			callback: () => {
+				this.game.canvas.focus();
+			},
+		});
 
-        this.configureAudioSetting();
-    }
+		this.configureAudioSetting();
+	}
 
-    configureAudioSetting() {
-        eventBus.subscribe({
-            channel: settingsChannel,
-            name: "audio",
-            callback: () => {
-                const audioEnabled = settings.getAllSettings().audio;
-                this.sound.mute = !audioEnabled;
-                const activeScenes = this.scene.manager.getScenes(false);
+	configureAudioSetting() {
+		eventBus.subscribe({
+			channel: settingsChannel,
+			name: "audio",
+			callback: () => {
+				const audioEnabled = settings.getAllSettings().audio;
+				this.sound.mute = !audioEnabled;
+				const activeScenes = this.scene.manager.getScenes(false);
 
-                fp.map(setImage, getAudioButtons(activeScenes).filter(Boolean));
-            },
-        });
-    }
+				fp.map(setImage, getAudioButtons(activeScenes).filter(Boolean));
+			},
+		});
+	}
 
-    create() {
-        //TODO P3 these could be set using this.game on loadscreen?
-        this.game.canvas.setAttribute("tabindex", "-1");
-        this.game.canvas.setAttribute("aria-hidden", "true");
+	create() {
+		//TODO P3 these could be set using this.game on loadscreen?
+		this.game.canvas.setAttribute("tabindex", "-1");
+		this.game.canvas.setAttribute("aria-hidden", "true");
 
-        //TODO P3 where should this now live? [NT]
-        //TODO P3 mainly just initialises scaler now?
-        Scaler.init(600, this.game);
-        this.navigation.next();
-    }
+		//TODO P3 where should this now live? [NT]
+		//TODO P3 mainly just initialises scaler now?
+		Scaler.init(600, this.game);
+		this.navigation.next();
+	}
 }

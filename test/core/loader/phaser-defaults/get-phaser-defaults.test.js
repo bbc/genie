@@ -20,116 +20,116 @@ jest.mock("../../../../src/core/loader/boot.js");
 jest.mock("../../../../src/core/browser.js");
 
 describe("Phaser Defaults", () => {
-    let mockGmi;
-    let containerDiv;
+	let mockGmi;
+	let containerDiv;
 
-    beforeEach(() => {
-        mockGmi = { setGmi: jest.fn(), gameContainerId: "some-id" };
-        getBrowser.mockImplementation(() => ({ forceCanvas: false, isSilk: false }));
-        createMockGmi(mockGmi);
+	beforeEach(() => {
+		mockGmi = { setGmi: jest.fn(), gameContainerId: "some-id" };
+		getBrowser.mockImplementation(() => ({ forceCanvas: false, isSilk: false }));
+		createMockGmi(mockGmi);
 
-        containerDiv = domElement();
+		containerDiv = domElement();
 
-        global.__BUILD_INFO__ = { version: "test version" };
+		global.__BUILD_INFO__ = { version: "test version" };
 
-        getContainerDiv.mockImplementation(() => containerDiv);
-    });
+		getContainerDiv.mockImplementation(() => containerDiv);
+	});
 
-    afterEach(jest.clearAllMocks);
+	afterEach(jest.clearAllMocks);
 
-    describe("getPhaserDefaults Method", () => {
-        describe("Returned Config", () => {
-            test("Returns additional config over base defaults", () => {
-                const expectedConfig = {
-                    type: 0,
-                    parent: containerDiv,
-                    transparent: false,
-                };
+	describe("getPhaserDefaults Method", () => {
+		describe("Returned Config", () => {
+			test("Returns additional config over base defaults", () => {
+				const expectedConfig = {
+					type: 0,
+					parent: containerDiv,
+					transparent: false,
+				};
 
-                const actualConfig = getPhaserDefaults({ screens: {} });
-                expect(actualConfig.type).toBe(expectedConfig.type);
-                expect(actualConfig.parent).toEqual(expectedConfig.parent);
-                expect(actualConfig.transparent).toBe(expectedConfig.transparent);
-            });
+				const actualConfig = getPhaserDefaults({ screens: {} });
+				expect(actualConfig.type).toBe(expectedConfig.type);
+				expect(actualConfig.parent).toEqual(expectedConfig.parent);
+				expect(actualConfig.transparent).toBe(expectedConfig.transparent);
+			});
 
-            test("sets transparent config flag to false when Amazon Silk Browser", () => {
-                const mockSilkBrowser = { name: "Amazon Silk", isSilk: true, version: "1.1.1" };
-                getBrowser.mockImplementation(() => mockSilkBrowser);
+			test("sets transparent config flag to false when Amazon Silk Browser", () => {
+				const mockSilkBrowser = { name: "Amazon Silk", isSilk: true, version: "1.1.1" };
+				getBrowser.mockImplementation(() => mockSilkBrowser);
 
-                const actualConfig = getPhaserDefaults({ screens: {} });
-                expect(actualConfig.transparent).toBe(true);
-            });
+				const actualConfig = getPhaserDefaults({ screens: {} });
+				expect(actualConfig.transparent).toBe(true);
+			});
 
-            test("sets type to canvas when browser returns forceCanvas", () => {
-                const mockSafari9 = { name: "Safari", forceCanvas: true };
-                getBrowser.mockImplementation(() => mockSafari9);
-                const actualConfig = getPhaserDefaults({ screens: {} });
-                expect(actualConfig.type).toBe(1);
-            });
+			test("sets type to canvas when browser returns forceCanvas", () => {
+				const mockSafari9 = { name: "Safari", forceCanvas: true };
+				getBrowser.mockImplementation(() => mockSafari9);
+				const actualConfig = getPhaserDefaults({ screens: {} });
+				expect(actualConfig.type).toBe(1);
+			});
 
-            test("disable's phaser's global window events (prevents clickthrough from achievements)", () => {
-                const actualConfig = getPhaserDefaults({ screens: {} });
-                expect(actualConfig.input.windowEvents).toBe(false);
-            });
+			test("disable's phaser's global window events (prevents clickthrough from achievements)", () => {
+				const actualConfig = getPhaserDefaults({ screens: {} });
+				expect(actualConfig.input.windowEvents).toBe(false);
+			});
 
-            test("merges gameOptions if present in config", () => {
-                const actualConfig = getPhaserDefaults({ screens: {}, gameOptions: { testKey: "test-key" } });
+			test("merges gameOptions if present in config", () => {
+				const actualConfig = getPhaserDefaults({ screens: {}, gameOptions: { testKey: "test-key" } });
 
-                expect(actualConfig.testKey).toBe("test-key");
-            });
-        });
+				expect(actualConfig.testKey).toBe("test-key");
+			});
+		});
 
-        describe("Scenes", () => {
-            let screens;
+		describe("Scenes", () => {
+			let screens;
 
-            beforeEach(() => {
-                Loader.mockImplementation(() => ({ loader: "loader" }));
-                Boot.mockImplementation(() => ({ boot: "boot" }));
-                screens = {
-                    settings: { scene: jest.fn().mockImplementation(() => ({ settings: "settings" })) },
-                    game: { scene: jest.fn().mockImplementation(() => ({ game: "game" })) },
-                };
-            });
+			beforeEach(() => {
+				Loader.mockImplementation(() => ({ loader: "loader" }));
+				Boot.mockImplementation(() => ({ boot: "boot" }));
+				screens = {
+					settings: { scene: jest.fn().mockImplementation(() => ({ settings: "settings" })) },
+					game: { scene: jest.fn().mockImplementation(() => ({ game: "game" })) },
+				};
+			});
 
-            test("creates an array of scenes from the screen config", () => {
-                getPhaserDefaults({ screens });
-                expect(screens.settings.scene).toHaveBeenCalledWith({ key: "settings" });
-                expect(screens.game.scene).toHaveBeenCalledWith({ key: "game" });
-            });
+			test("creates an array of scenes from the screen config", () => {
+				getPhaserDefaults({ screens });
+				expect(screens.settings.scene).toHaveBeenCalledWith({ key: "settings" });
+				expect(screens.game.scene).toHaveBeenCalledWith({ key: "game" });
+			});
 
-            test("instantiates a new loader", () => {
-                getPhaserDefaults({ screens });
-                expect(Loader).toHaveBeenCalled();
-            });
+			test("instantiates a new loader", () => {
+				getPhaserDefaults({ screens });
+				expect(Loader).toHaveBeenCalled();
+			});
 
-            test("instantiates a new boot with correct config", () => {
-                getPhaserDefaults({ screens });
-                expect(Boot).toHaveBeenCalledWith(screens);
-            });
+			test("instantiates a new boot with correct config", () => {
+				getPhaserDefaults({ screens });
+				expect(Boot).toHaveBeenCalledWith(screens);
+			});
 
-            test("returns scenes list + boot and loader debug", () => {
-                debugScreensModule.getLauncherScreen = () => ({
-                    debug: { scene: jest.fn().mockImplementation(() => ({ debug: "debug" })) },
-                });
-                const defaults = getPhaserDefaults({ screens });
+			test("returns scenes list + boot and loader debug", () => {
+				debugScreensModule.getLauncherScreen = () => ({
+					debug: { scene: jest.fn().mockImplementation(() => ({ debug: "debug" })) },
+				});
+				const defaults = getPhaserDefaults({ screens });
 
-                expect(defaults.scene).toEqual([
-                    { boot: "boot" },
-                    { loader: "loader" },
-                    { settings: "settings" },
-                    { game: "game" },
-                    { debug: "debug" },
-                ]);
-            });
+				expect(defaults.scene).toEqual([
+					{ boot: "boot" },
+					{ loader: "loader" },
+					{ settings: "settings" },
+					{ game: "game" },
+					{ debug: "debug" },
+				]);
+			});
 
-            test("creates scene with settings from config", () => {
-                screens.game.settings = { physics: { default: "arcade", arcade: {} } };
-                getPhaserDefaults({ screens });
-                expect(screens.game.scene).toHaveBeenCalledWith({
-                    key: "game",
-                    physics: { default: "arcade", arcade: {} },
-                });
-            });
-        });
-    });
+			test("creates scene with settings from config", () => {
+				screens.game.settings = { physics: { default: "arcade", arcade: {} } };
+				getPhaserDefaults({ screens });
+				expect(screens.game.scene).toHaveBeenCalledWith({
+					key: "game",
+					physics: { default: "arcade", arcade: {} },
+				});
+			});
+		});
+	});
 });

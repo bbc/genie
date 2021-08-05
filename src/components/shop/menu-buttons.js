@@ -12,58 +12,58 @@ import { buttonsChannel } from "../../core/layout/gel-defaults.js";
 import { getSoundKey } from "./shop-sound.js";
 
 const defaults = {
-    gameButton: true,
-    accessible: true,
+	gameButton: true,
+	accessible: true,
 };
 
 const createMenuButton = scene => buttonText => {
-    const id = `${buttonText.toLowerCase()}_menu_button`;
-    const ariaLabel = buttonText;
-    const action = () => {
-        scene.transientData.shop.mode = buttonText.toLowerCase();
-        scene.scene.pause();
-        scene.addOverlay(scene.scene.key.replace("-menu", "-list"));
-        gmi.sendStatsEvent(buttonText === "Shop" ? "shopbuy" : "shopmanage", "click", {});
-    };
+	const id = `${buttonText.toLowerCase()}_menu_button`;
+	const ariaLabel = buttonText;
+	const action = () => {
+		scene.transientData.shop.mode = buttonText.toLowerCase();
+		scene.scene.pause();
+		scene.addOverlay(scene.scene.key.replace("-menu", "-list"));
+		gmi.sendStatsEvent(buttonText === "Shop" ? "shopbuy" : "shopmanage", "click", {});
+	};
 
-    const config = { ...defaults, title: buttonText, id, ariaLabel, action };
+	const config = { ...defaults, title: buttonText, id, ariaLabel, action };
 
-    return makeButton(scene, "menu", config);
+	return makeButton(scene, "menu", config);
 };
 
 const makeButton = (scene, buttonType, config) => {
-    const channel = buttonsChannel(scene);
-    const key = config.title === "Cancel" ? "cancelKey" : "key";
-    const button = createButton(scene, { ...config, channel, key: scene.config[buttonType].buttons[key] });
-    setButtonOverlays(scene, button, scene.config[buttonType].buttons, config.title);
-    return button;
+	const channel = buttonsChannel(scene);
+	const key = config.title === "Cancel" ? "cancelKey" : "key";
+	const button = createButton(scene, { ...config, channel, key: scene.config[buttonType].buttons[key] });
+	setButtonOverlays(scene, button, scene.config[buttonType].buttons, config.title);
+	return button;
 };
 
 const setButtonOverlays = (scene, button, style, title) =>
-    button.overlays.set("caption", addText(scene, 0, 0, title, style).setOrigin(0.5));
+	button.overlays.set("caption", addText(scene, 0, 0, title, style).setOrigin(0.5));
 
 const resizeButton = pane => (button, idx) => {
-    const right = Boolean(button.scene.config.menu.buttonsRight);
-    const bounds = pane.rect.getBounds();
-    button.setY(CAMERA_Y + bounds.y + bounds.height / 4 + (idx * bounds.height) / 2);
-    const xPos = bounds.x + bounds.width / 2;
-    button.setX(CAMERA_X + (right ? xPos : -xPos));
-    const buttonScaleToEnsureSpacingIsCorrect = 0.8;
-    button.setScale((bounds.width / button.width) * buttonScaleToEnsureSpacingIsCorrect);
+	const right = Boolean(button.scene.config.menu.buttonsRight);
+	const bounds = pane.rect.getBounds();
+	button.setY(CAMERA_Y + bounds.y + bounds.height / 4 + (idx * bounds.height) / 2);
+	const xPos = bounds.x + bounds.width / 2;
+	button.setX(CAMERA_X + (right ? xPos : -xPos));
+	const buttonScaleToEnsureSpacingIsCorrect = 0.8;
+	button.setScale((bounds.width / button.width) * buttonScaleToEnsureSpacingIsCorrect);
 };
 
 export const createConfirmButtons = (scene, actionText, confirmCallback, cancelCallback, item) =>
-    [actionText, "Cancel"].map(title => {
-        const id = `tx_${title.toLowerCase()}_button`;
-        const ariaLabel = title;
-        const action = title === "Cancel" ? cancelCallback : confirmCallback;
-        const actionKey = title === "Cancel" ? "cancel" : actionText.toLowerCase();
-        const clickSound = getSoundKey(scene, item, actionKey);
-        const soundConfig = clickSound ? { clickSound } : {};
+	[actionText, "Cancel"].map(title => {
+		const id = `tx_${title.toLowerCase()}_button`;
+		const ariaLabel = title;
+		const action = title === "Cancel" ? cancelCallback : confirmCallback;
+		const actionKey = title === "Cancel" ? "cancel" : actionText.toLowerCase();
+		const clickSound = getSoundKey(scene, item, actionKey);
+		const soundConfig = clickSound ? { clickSound } : {};
 
-        const config = { ...defaults, ...soundConfig, title, id, ariaLabel, action };
-        return makeButton(scene, "confirm", config);
-    });
+		const config = { ...defaults, ...soundConfig, title, id, ariaLabel, action };
+		return makeButton(scene, "confirm", config);
+	});
 
 export const createMenuButtons = scene => ["Shop", "Manage"].map(createMenuButton(scene));
 

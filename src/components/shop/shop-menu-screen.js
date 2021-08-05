@@ -14,41 +14,41 @@ import { initResizers } from "./backgrounds.js";
 import { gmi } from "../../core/gmi/gmi.js";
 
 export class ShopMenu extends Screen {
-    preload() {
-        this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
-        initResizers();
-    }
+	preload() {
+		this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
+		initResizers();
+	}
 
-    create() {
-        const shopName = this.scene.key.slice(0, this.scene.key.indexOf("-"));
-        if (shopName.includes("shop")) {
-            this.transientData.shopTitle = shopName;
-        } else {
-            this.transientData.shopTitle = "shop";
-        }
-        gmi.setStatsScreen(this.transientData.shopTitle + "menu");
-        this.addBackgroundItems();
-        const backNav = this._data.addedBy ? "overlayBack" : "back";
-        this.setLayout([backNav, "pause"]);
+	create() {
+		const shopName = this.scene.key.slice(0, this.scene.key.indexOf("-"));
+		if (shopName.includes("shop")) {
+			this.transientData.shopTitle = shopName;
+		} else {
+			this.transientData.shopTitle = "shop";
+		}
+		gmi.setStatsScreen(this.transientData.shopTitle + "menu");
+		this.addBackgroundItems();
+		const backNav = this._data.addedBy ? "overlayBack" : "back";
+		this.setLayout([backNav, "pause"]);
 
-        this.transientData.shop = { config: this.config.shopConfig };
-        setBalance(this);
+		this.transientData.shop = { config: this.config.shopConfig };
+		setBalance(this);
 
-        const resize = createMenu(this);
-        const scaleEvent = onScaleChange.add(resize);
+		const resize = createMenu(this);
+		const scaleEvent = onScaleChange.add(resize);
 
-        const resume = () => {
-            setBalance(this);
-            Object.values(this.titles).forEach(title => title.destroy());
-            this.titles = createTitles(this);
-        };
+		const resume = () => {
+			setBalance(this);
+			Object.values(this.titles).forEach(title => title.destroy());
+			this.titles = createTitles(this);
+		};
 
-        this.events.on("resume", resume);
-        this.events.once("shutdown", () => {
-            this.events.off(Phaser.Scenes.Events.RESUME, resume);
-            scaleEvent.unsubscribe();
-        });
+		this.events.on("resume", resume);
+		this.events.once("shutdown", () => {
+			this.events.off(Phaser.Scenes.Events.RESUME, resume);
+			scaleEvent.unsubscribe();
+		});
 
-        resize();
-    }
+		resize();
+	}
 }

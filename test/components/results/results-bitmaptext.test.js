@@ -7,28 +7,28 @@ import { ResultsBitmapText } from "../../../src/components/results/results-bitma
 import { mockBaseScene } from "../../mock/mock-scene.js";
 
 describe("ResultsBitmapText", () => {
-    let mockScene;
-    let mockConfig;
+	let mockScene;
+	let mockConfig;
 
-    beforeEach(() => {
-        mockScene = mockBaseScene();
-        mockScene.scene = { key: "results" };
-        mockScene.transientData = {
-            results: {
-                name: "darkness",
-            },
-        };
-        mockConfig = {
-            content: "Hello <%= name %>",
-            font: "somefont",
-        };
-        ResultsBitmapText.prototype.updateDisplayOrigin = () => {};
-    });
+	beforeEach(() => {
+		mockScene = mockBaseScene();
+		mockScene.scene = { key: "results" };
+		mockScene.transientData = {
+			results: {
+				name: "darkness",
+			},
+		};
+		mockConfig = {
+			content: "Hello <%= name %>",
+			font: "somefont",
+		};
+		ResultsBitmapText.prototype.updateDisplayOrigin = () => {};
+	});
 
-    afterEach(() => jest.clearAllMocks());
+	afterEach(() => jest.clearAllMocks());
 
-    test("sets text on the gameobject using transient data and the string template", () => {
-        const resultsText = new ResultsBitmapText(mockScene, mockConfig);
-        expect(resultsText.text).toBe("Hello darkness");
-    });
+	test("sets text on the gameobject using transient data and the string template", () => {
+		const resultsText = new ResultsBitmapText(mockScene, mockConfig);
+		expect(resultsText.text).toBe("Hello darkness");
+	});
 });

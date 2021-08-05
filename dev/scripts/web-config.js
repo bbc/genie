@@ -10,11 +10,11 @@ const rewrite = [];
 genieCore && rewrite.push({ from: "/node_modules/genie/(.*)", to: "/$1" });
 
 module.exports = {
-    compress: true,
-    staticIndex: `${geniePath}dev/index.dev.html`,
-    port: "9000",
-    mime: {
-        "application/wasm": ["wasm"],
-    },
-    rewrite,
+	compress: true,
+	staticIndex: `${geniePath}dev/index.dev.html`,
+	port: "9000",
+	mime: {
+		"application/wasm": ["wasm"],
+	},
+	rewrite,
 };

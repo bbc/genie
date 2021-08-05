@@ -20,97 +20,97 @@ jest.mock("../../../src/core/gmi/gmi.js");
 jest.mock("../../../src/components/shop/backgrounds.js");
 
 describe("Shop Confirm Screen", () => {
-    let shopConfirm;
-    let mockConfirm;
-    let mockScalerEvent;
-    let mockShopConfig;
-    beforeEach(() => {
-        gmi.gmi = { setStatsScreen: jest.fn(), sendStatsEvent: jest.fn() };
-        mockConfirm = jest.fn();
-        confirmModule.createConfirm = jest.fn(() => mockConfirm);
-        mockScalerEvent = { unsubscribe: jest.fn() };
-        scaler.onScaleChange = { add: jest.fn(() => mockScalerEvent) };
-        mockShopConfig = { mock: "config" };
-        ShopConfirm.prototype.plugins = {
-            installScenePlugin: jest.fn(),
-        };
-        ShopConfirm.prototype.events = {
-            once: jest.fn(),
-            on: jest.fn(),
-            off: jest.fn(),
-        };
-        shopConfirm = new ShopConfirm();
-        shopConfirm.addBackgroundItems = jest.fn();
-        shopConfirm.setLayout = jest.fn();
-        shopConfirm.scene = { key: "shop-confirm" };
-        shopConfirm.plugins = { installScenePlugin: jest.fn() };
-        shopConfirm._data = {
-            addedBy: undefined,
-            transient: { shop: { title: "shop", item: "item", mode: "shop" } },
-            config: { "shop-confirm": { shopConfig: mockShopConfig } },
-        };
+	let shopConfirm;
+	let mockConfirm;
+	let mockScalerEvent;
+	let mockShopConfig;
+	beforeEach(() => {
+		gmi.gmi = { setStatsScreen: jest.fn(), sendStatsEvent: jest.fn() };
+		mockConfirm = jest.fn();
+		confirmModule.createConfirm = jest.fn(() => mockConfirm);
+		mockScalerEvent = { unsubscribe: jest.fn() };
+		scaler.onScaleChange = { add: jest.fn(() => mockScalerEvent) };
+		mockShopConfig = { mock: "config" };
+		ShopConfirm.prototype.plugins = {
+			installScenePlugin: jest.fn(),
+		};
+		ShopConfirm.prototype.events = {
+			once: jest.fn(),
+			on: jest.fn(),
+			off: jest.fn(),
+		};
+		shopConfirm = new ShopConfirm();
+		shopConfirm.addBackgroundItems = jest.fn();
+		shopConfirm.setLayout = jest.fn();
+		shopConfirm.scene = { key: "shop-confirm" };
+		shopConfirm.plugins = { installScenePlugin: jest.fn() };
+		shopConfirm._data = {
+			addedBy: undefined,
+			transient: { shop: { title: "shop", item: "item", mode: "shop" } },
+			config: { "shop-confirm": { shopConfig: mockShopConfig } },
+		};
 
-        global.RexPlugins = {
-            GameObjects: {
-                NinePatch: jest.fn(),
-            },
-        };
-    });
-    afterEach(() => jest.clearAllMocks());
+		global.RexPlugins = {
+			GameObjects: {
+				NinePatch: jest.fn(),
+			},
+		};
+	});
+	afterEach(() => jest.clearAllMocks());
 
-    test("installs rexUI plugin on preload", () => {
-        shopConfirm.preload();
-        expect(shopConfirm.plugins.installScenePlugin).toHaveBeenCalledWith(
-            "rexUI",
-            RexUIPlugin,
-            "rexUI",
-            shopConfirm,
-            true,
-        );
-    });
+	test("installs rexUI plugin on preload", () => {
+		shopConfirm.preload();
+		expect(shopConfirm.plugins.installScenePlugin).toHaveBeenCalledWith(
+			"rexUI",
+			RexUIPlugin,
+			"rexUI",
+			shopConfirm,
+			true,
+		);
+	});
 
-    test("inits resizers", () => {
-        shopConfirm.preload();
-        expect(initResizers).toHaveBeenCalled();
-    });
+	test("inits resizers", () => {
+		shopConfirm.preload();
+		expect(initResizers).toHaveBeenCalled();
+	});
 
-    test("calls addBackgroundItems on create", () => {
-        shopConfirm.create();
-        expect(shopConfirm.addBackgroundItems).toHaveBeenCalled();
-    });
+	test("calls addBackgroundItems on create", () => {
+		shopConfirm.create();
+		expect(shopConfirm.addBackgroundItems).toHaveBeenCalled();
+	});
 
-    test("calls setLayout on create", () => {
-        shopConfirm.create();
-        expect(shopConfirm.setLayout).toHaveBeenCalledWith(["overlayBack", "pause"]);
-    });
+	test("calls setLayout on create", () => {
+		shopConfirm.create();
+		expect(shopConfirm.setLayout).toHaveBeenCalledWith(["overlayBack", "pause"]);
+	});
 
-    test("calls setBalance", () => {
-        shopConfirm.create();
-        expect(balance.setBalance).toHaveBeenCalledWith(shopConfirm);
-    });
+	test("calls setBalance", () => {
+		shopConfirm.create();
+		expect(balance.setBalance).toHaveBeenCalledWith(shopConfirm);
+	});
 
-    test("creates confirm for buy", () => {
-        shopConfirm.create();
-        expect(confirmModule.createConfirm).toHaveBeenCalledWith(shopConfirm);
-    });
+	test("creates confirm for buy", () => {
+		shopConfirm.create();
+		expect(confirmModule.createConfirm).toHaveBeenCalledWith(shopConfirm);
+	});
 
-    test("creates confirm for manage", () => {
-        shopConfirm._data = {
-            addedBy: undefined,
-            transient: { shop: { title: "shop", item: "item", mode: "manage" } },
-            config: { "shop-confirm": { shopConfig: mockShopConfig } },
-        };
-        shopConfirm.create();
-        expect(confirmModule.createConfirm).toHaveBeenCalledWith(shopConfirm);
-    });
+	test("creates confirm for manage", () => {
+		shopConfirm._data = {
+			addedBy: undefined,
+			transient: { shop: { title: "shop", item: "item", mode: "manage" } },
+			config: { "shop-confirm": { shopConfig: mockShopConfig } },
+		};
+		shopConfirm.create();
+		expect(confirmModule.createConfirm).toHaveBeenCalledWith(shopConfirm);
+	});
 
-    test("adds a onScaleChange event on create", () => {
-        shopConfirm.create();
-        expect(scaler.onScaleChange.add).toHaveBeenCalledWith(expect.any(Function));
-    });
+	test("adds a onScaleChange event on create", () => {
+		shopConfirm.create();
+		expect(scaler.onScaleChange.add).toHaveBeenCalledWith(expect.any(Function));
+	});
 
-    test("onScaleChange callback is removed on scene shutdown", () => {
-        shopConfirm.create();
-        expect(shopConfirm.events.once).toHaveBeenCalledWith("shutdown", mockScalerEvent.unsubscribe);
-    });
+	test("onScaleChange callback is removed on scene shutdown", () => {
+		shopConfirm.create();
+		expect(shopConfirm.events.once).toHaveBeenCalledWith("shutdown", mockScalerEvent.unsubscribe);
+	});
 });

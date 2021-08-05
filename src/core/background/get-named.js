@@ -11,8 +11,8 @@ const getChild = (found, child) => child;
 const getEmitter = name => (found, child) => child.emitters.getByName(name) || found;
 
 export const getNamed = name =>
-    fp.cond([
-        [matchesName(name), getChild],
-        [isParticleManager, getEmitter(name)],
-        [fp.stubTrue, found => found],
-    ]);
+	fp.cond([
+		[matchesName(name), getChild],
+		[isParticleManager, getEmitter(name)],
+		[fp.stubTrue, found => found],
+	]);

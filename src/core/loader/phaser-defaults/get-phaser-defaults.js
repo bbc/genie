@@ -15,23 +15,23 @@ import { getContainerDiv } from "../container.js";
 const getScenes = conf => Object.keys(conf).map(key => new conf[key].scene({ key, ...conf[key].settings }));
 
 export const getPhaserDefaults = config => {
-    const browser = getBrowser();
-    const scene = getScenes(Object.assign(config.screens, getLauncherScreen(debugMode.isDebug())));
-    scene.unshift(new Loader());
-    scene.unshift(new Boot(config.screens));
+	const browser = getBrowser();
+	const scene = getScenes(Object.assign(config.screens, getLauncherScreen(debugMode.isDebug())));
+	scene.unshift(new Loader());
+	scene.unshift(new Boot(config.screens));
 
-    const plugins = getDefaultPlugins(config.gameOptions);
-    delete config?.gameOptions?.plugins;
+	const plugins = getDefaultPlugins(config.gameOptions);
+	delete config?.gameOptions?.plugins;
 
-    return {
-        ...getBaseDefaults(),
-        ...{
-            type: browser.forceCanvas ? Phaser.CANVAS : Phaser.AUTO,
-            transparent: browser.isSilk, // Fixes silk browser flickering
-            parent: getContainerDiv(),
-            scene,
-            plugins,
-        },
-        ...config.gameOptions,
-    };
+	return {
+		...getBaseDefaults(),
+		...{
+			type: browser.forceCanvas ? Phaser.CANVAS : Phaser.AUTO,
+			transparent: browser.isSilk, // Fixes silk browser flickering
+			parent: getContainerDiv(),
+			scene,
+			plugins,
+		},
+		...config.gameOptions,
+	};
 };

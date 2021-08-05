@@ -13,56 +13,56 @@ jest.mock("../../../src/core/debug/examples.js");
 jest.mock("../../../src/core/loader/load-collections.js");
 
 describe("getDebugScreens", () => {
-    describe("getLauncherScreen", () => {
-        test("Returns empty object if not debug mode", () => {
-            expect(getLauncherScreen(false)).toEqual({});
-        });
+	describe("getLauncherScreen", () => {
+		test("Returns empty object if not debug mode", () => {
+			expect(getLauncherScreen(false)).toEqual({});
+		});
 
-        test("Returns debug screen if debug mode", () => {
-            expect(Object.keys(getLauncherScreen(true))).toEqual(["debug"]);
-        });
-    });
+		test("Returns debug screen if debug mode", () => {
+			expect(Object.keys(getLauncherScreen(true))).toEqual(["debug"]);
+		});
+	});
 
-    describe("addExampleScreens", () => {
-        let mockScreen;
+	describe("addExampleScreens", () => {
+		let mockScreen;
 
-        beforeEach(() => {
-            Config.getConfig = jest.fn(() => ({ screen: "mockConfig" }));
-            Examples.examples = { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" };
+		beforeEach(() => {
+			Config.getConfig = jest.fn(() => ({ screen: "mockConfig" }));
+			Examples.examples = { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" };
 
-            mockScreen = {
-                setConfig: jest.fn(),
-                context: {
-                    config: {},
-                    navigation: {},
-                },
-                load: {
-                    setBaseURL: jest.fn(),
-                    setPath: jest.fn(),
-                },
-                scene: {
-                    add: jest.fn(),
-                },
-            };
-        });
+			mockScreen = {
+				setConfig: jest.fn(),
+				context: {
+					config: {},
+					navigation: {},
+				},
+				load: {
+					setBaseURL: jest.fn(),
+					setPath: jest.fn(),
+				},
+				scene: {
+					add: jest.fn(),
+				},
+			};
+		});
 
-        afterEach(jest.clearAllMocks);
+		afterEach(jest.clearAllMocks);
 
-        test("gets and sets config for all example screens", () => {
-            addExampleScreens(mockScreen);
-            expect(mockScreen.scene.add).toHaveBeenCalled();
-            expect(Config.getConfig).toHaveBeenCalledWith(mockScreen, Object.keys(Examples.examples));
-            expect(mockScreen.setConfig.mock.calls[0][0]).toEqual({
-                navigation: { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" },
-                screen: "mockConfig",
-            });
+		test("gets and sets config for all example screens", () => {
+			addExampleScreens(mockScreen);
+			expect(mockScreen.scene.add).toHaveBeenCalled();
+			expect(Config.getConfig).toHaveBeenCalledWith(mockScreen, Object.keys(Examples.examples));
+			expect(mockScreen.setConfig.mock.calls[0][0]).toEqual({
+				navigation: { "debug-mockKey1": "", "debug-mockKey2": "", "debug-mockKey3": "" },
+				screen: "mockConfig",
+			});
 
-            expect(Load.loadCollections).toHaveBeenCalledWith(mockScreen, { screen: "mockConfig" }, "debug/");
-        });
+			expect(Load.loadCollections).toHaveBeenCalledWith(mockScreen, { screen: "mockConfig" }, "debug/");
+		});
 
-        test("Does not call a second time (fp.once)", () => {
-            addExampleScreens(mockScreen);
-            expect(mockScreen.setConfig).not.toHaveBeenCalled();
-        });
-    });
+		test("Does not call a second time (fp.once)", () => {
+			addExampleScreens(mockScreen);
+			expect(mockScreen.setConfig).not.toHaveBeenCalled();
+		});
+	});
 });

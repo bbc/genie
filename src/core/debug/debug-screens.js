@@ -11,36 +11,36 @@ import { loadCollections } from "../loader/load-collections.js";
 import { gmi } from "../gmi/gmi.js";
 
 const launcherScreen = {
-    debug: {
-        scene: Launcher,
-        routes: {
-            home: "home",
-        },
-    },
+	debug: {
+		scene: Launcher,
+		routes: {
+			home: "home",
+		},
+	},
 };
 
 const getDebugScreenWithRoutes = () => {
-    Object.keys(examples).map(key => (launcherScreen.debug.routes[key] = key));
-    return launcherScreen;
+	Object.keys(examples).map(key => (launcherScreen.debug.routes[key] = key));
+	return launcherScreen;
 };
 
 const addScene = (scene, examples) => key => scene.scene.add(key, examples[key].scene);
 
 const addScreens = scene => {
-    Object.keys(examples).map(addScene(scene, examples));
-    const debugTheme = getConfig(scene, Object.keys(examples));
-    const config = scene.context.config;
-    config.navigation = scene.context.navigation;
+	Object.keys(examples).map(addScene(scene, examples));
+	const debugTheme = getConfig(scene, Object.keys(examples));
+	const config = scene.context.config;
+	config.navigation = scene.context.navigation;
 
-    Object.assign(config, debugTheme);
-    Object.assign(config.navigation, examples);
+	Object.assign(config, debugTheme);
+	Object.assign(config.navigation, examples);
 
-    scene.setConfig(config);
+	scene.setConfig(config);
 
-    scene.load.setBaseURL(gmi.gameDir);
-    scene.load.setPath("debug/");
+	scene.load.setBaseURL(gmi.gameDir);
+	scene.load.setPath("debug/");
 
-    return loadCollections(scene, debugTheme, "debug/");
+	return loadCollections(scene, debugTheme, "debug/");
 };
 
 export const addExampleScreens = fp.once(addScreens);

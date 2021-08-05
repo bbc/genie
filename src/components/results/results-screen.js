@@ -17,68 +17,68 @@ import { createRowBackdrops, scaleRowBackdrops } from "./results-row-backdrop.js
 import { gmi } from "../../core/gmi/gmi.js";
 
 export class Results extends Screen {
-    create() {
-        this.addBackgroundItems();
-        this.createLayout();
-        this.createCentralBackdrop();
-        this.createRows();
-        this.subscribeToEventBus();
-        fireGameCompleteStat(this.transientData[this.scene.key]);
+	create() {
+		this.addBackgroundItems();
+		this.createLayout();
+		this.createCentralBackdrop();
+		this.createRows();
+		this.subscribeToEventBus();
+		fireGameCompleteStat(this.transientData[this.scene.key]);
 
-        this.children.bringToTop(this.layout.root);
-    }
+		this.children.bringToTop(this.layout.root);
+	}
 
-    resultsArea() {
-        const safeArea = this.layout.getSafeArea({ top: false });
-        const center = Phaser.Geom.Rectangle.GetCenter(safeArea);
-        this.backdrop && (safeArea.height = this.backdrop.height);
-        return Phaser.Geom.Rectangle.CenterOn(safeArea, center.x, center.y);
-    }
+	resultsArea() {
+		const safeArea = this.layout.getSafeArea({ top: false });
+		const center = Phaser.Geom.Rectangle.GetCenter(safeArea);
+		this.backdrop && (safeArea.height = this.backdrop.height);
+		return Phaser.Geom.Rectangle.CenterOn(safeArea, center.x, center.y);
+	}
 
-    createLayout() {
-        const achievements = gmi.achievements.get().length ? ["achievementsSmall"] : [];
-        const buttons = ["pause", "continueGame"];
-        const onwardButton = fp.get(`${this.scene.key}.gameComplete`, this.transientData) ? "playAgain" : "restart";
-        this.setLayout([...buttons, ...achievements, onwardButton]);
-    }
+	createLayout() {
+		const achievements = gmi.achievements.get().length ? ["achievementsSmall"] : [];
+		const buttons = ["pause", "continueGame"];
+		const onwardButton = fp.get(`${this.scene.key}.gameComplete`, this.transientData) ? "playAgain" : "restart";
+		this.setLayout([...buttons, ...achievements, onwardButton]);
+	}
 
-    createRows() {
-        this.rows = Rows.create(this, () => this.resultsArea(), this.config.rows, Rows.RowType.Results);
-        this.rowBackdrops = createRowBackdrops(this, this.rows.containers);
-        tweenRows(this, this.rows.containers);
-        tweenRowBackdrops(this, this.rowBackdrops, this.rows.containers);
-        playRowAudio(this, this.rows.containers);
-        addParticlesToRows(this, this.rows.containers);
-    }
+	createRows() {
+		this.rows = Rows.create(this, () => this.resultsArea(), this.config.rows, Rows.RowType.Results);
+		this.rowBackdrops = createRowBackdrops(this, this.rows.containers);
+		tweenRows(this, this.rows.containers);
+		tweenRowBackdrops(this, this.rowBackdrops, this.rows.containers);
+		playRowAudio(this, this.rows.containers);
+		addParticlesToRows(this, this.rows.containers);
+	}
 
-    createCentralBackdrop() {
-        fp.get("backdrop.key", this.config) && this.centralBackdropFill();
-        this.resizeCentralBackdrop();
-    }
+	createCentralBackdrop() {
+		fp.get("backdrop.key", this.config) && this.centralBackdropFill();
+		this.resizeCentralBackdrop();
+	}
 
-    centralBackdropFill() {
-        this.backdrop = this.add.image(0, 0, this.config.backdrop.key);
-        this.backdrop.alpha = this.config.backdrop.alpha === undefined ? 1 : this.config.backdrop.alpha;
-    }
+	centralBackdropFill() {
+		this.backdrop = this.add.image(0, 0, this.config.backdrop.key);
+		this.backdrop.alpha = this.config.backdrop.alpha === undefined ? 1 : this.config.backdrop.alpha;
+	}
 
-    resizeCentralBackdrop() {
-        const safeArea = this.resultsArea();
-        if (fp.get("backdrop.key", this.config) && safeArea) {
-            this.backdrop.x = safeArea.centerX;
-            this.backdrop.y = safeArea.centerY;
-        }
-    }
+	resizeCentralBackdrop() {
+		const safeArea = this.resultsArea();
+		if (fp.get("backdrop.key", this.config) && safeArea) {
+			this.backdrop.x = safeArea.centerX;
+			this.backdrop.y = safeArea.centerY;
+		}
+	}
 
-    subscribeToEventBus() {
-        const scaleEvent = onScaleChange.add(() => {
-            this.resizeCentralBackdrop();
-            scaleRowBackdrops(this.rowBackdrops, this.rows.containers);
-        });
-        this.events.once("shutdown", scaleEvent.unsubscribe);
-        const fpMap = fp.map.convert({ cap: false });
-        fpMap((callback, name) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }), {
-            continue: this.navigation.continue,
-            restart: this.navigation.restart,
-        });
-    }
+	subscribeToEventBus() {
+		const scaleEvent = onScaleChange.add(() => {
+			this.resizeCentralBackdrop();
+			scaleRowBackdrops(this.rowBackdrops, this.rows.containers);
+		});
+		this.events.once("shutdown", scaleEvent.unsubscribe);
+		const fpMap = fp.map.convert({ cap: false });
+		fpMap((callback, name) => eventBus.subscribe({ name, callback, channel: buttonsChannel(this) }), {
+			continue: this.navigation.continue,
+			restart: this.navigation.restart,
+		});
+	}
 }

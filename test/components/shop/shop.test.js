@@ -16,43 +16,43 @@ jest.mock("../../../src/components/shop/shop-list-screen.js");
 jest.mock("../../../src/components/shop/shop-confirm-screen.js");
 
 describe("Shop scene config", () => {
-    test("returns the correct config object", () => {
-        const expectedConfig = {
-            "shop-menu": {
-                scene: ShopMenu,
-                routes: { test: "this" },
-                title: "yes",
-            },
-            "shop-list": {
-                scene: ShopList,
-                routes: {},
-                hidden: true,
-            },
-            "shop-confirm": {
-                scene: ShopConfirm,
-                routes: {},
-                hidden: true,
-            },
-        };
-        expect(Shop({ key: "shop", routes: { test: "this" }, title: "yes" })).toEqual(expectedConfig);
-    });
+	test("returns the correct config object", () => {
+		const expectedConfig = {
+			"shop-menu": {
+				scene: ShopMenu,
+				routes: { test: "this" },
+				title: "yes",
+			},
+			"shop-list": {
+				scene: ShopList,
+				routes: {},
+				hidden: true,
+			},
+			"shop-confirm": {
+				scene: ShopConfirm,
+				routes: {},
+				hidden: true,
+			},
+		};
+		expect(Shop({ key: "shop", routes: { test: "this" }, title: "yes" })).toEqual(expectedConfig);
+	});
 });
 
 describe("launchShopOverlay()", () => {
-    const mockScene = { scene: { pause: jest.fn() }, addOverlay: jest.fn() };
-    gmi.sendStatsEvent = jest.fn();
+	const mockScene = { scene: { pause: jest.fn() }, addOverlay: jest.fn() };
+	gmi.sendStatsEvent = jest.fn();
 
-    beforeEach(() => launchShopOverlay(mockScene, "shopNavKey"));
+	beforeEach(() => launchShopOverlay(mockScene, "shopNavKey"));
 
-    test("pauses the scene it's called on", () => {
-        expect(mockScene.scene.pause).toHaveBeenCalled();
-    });
+	test("pauses the scene it's called on", () => {
+		expect(mockScene.scene.pause).toHaveBeenCalled();
+	});
 
-    test("sends a stats event via gmi", () => {
-        expect(gmi.sendStatsEvent).toHaveBeenCalledWith("shop", "click");
-    });
+	test("sends a stats event via gmi", () => {
+		expect(gmi.sendStatsEvent).toHaveBeenCalledWith("shop", "click");
+	});
 
-    test("adds an overlay", () => {
-        expect(mockScene.addOverlay).toHaveBeenCalledWith("shopNavKey-menu");
-    });
+	test("adds an overlay", () => {
+		expect(mockScene.addOverlay).toHaveBeenCalledWith("shopNavKey-menu");
+	});
 });
