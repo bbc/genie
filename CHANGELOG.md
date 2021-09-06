@@ -2,6 +2,7 @@
 
 | Version | Description |
 |---------|-------------|
+| | Bump webpack tool versions to fix dependabot alert |
 | | Switch to tabs to make code more accessible. Update Prettier to 2.3.2 |
 | 3.11.3 | |
 | | Fixes isKindleWebView detection |
