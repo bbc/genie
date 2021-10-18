@@ -48,11 +48,11 @@ eventBus.publish({channel: "channelName", name: "eventName", data: [1,2,3] });
 
 ### gel-buttons
 Genie both uses and exposes some built in events.  
-The channel ***gel-buttons*** is used by all elements to publish messages when any button is clicked.
+The channel ***gel-buttons*** is used by all elements to publish messages when any button is clicked. The channel name is suffixed with the name of the screen - for example, gel-buttons-narrative.
 
 **Example of subscribing to a GEL UI continue button:**
 ```javascript
-eventBus.subscribe({channel: "gel-buttons", name: "continue", callback: () => {/*function to call*/}})
+eventBus.subscribe({channel: "gel-buttons-(scenekey)", name: "continue", callback: () => {/*function to call*/}})
 ```
 
 ### genie-settings
