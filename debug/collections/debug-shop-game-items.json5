@@ -77,7 +77,7 @@
         description: "Whilst it is valuable, mirthril is most prized as the funniest metal.",
         price: 15,
         icon: "debug-shop.purpleHatIcon",
-        tags: ["armour"],
+        tags: ["starter-armour"],
         slot: "helmet",
     },
     {

@@ -14,7 +14,7 @@ const getInventoryAction = (scene, item) => {
 const getActionName = fp.cond([
 	[i => Boolean(!i.slot), () => "use"],
 	[i => i.state === "equipped", () => "unequip"],
-	[i => i.state === "purchased", () => "equip"],
+	[fp.stubTrue, () => "equip"],
 ]);
 
 export const actions = {

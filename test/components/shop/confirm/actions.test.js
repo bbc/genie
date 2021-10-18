@@ -40,8 +40,7 @@ describe("Confirm actions", () => {
 		expect(actions["shop"]()).toBe("buy");
 	});
 
-	test("action is 'equip' when in manage and item is in inventory and has purchased state and slot", () => {
-		mockInventoryItem.state = "purchased";
+	test("action is 'equip' when in manage and item is in inventory and has slot", () => {
 		mockInventoryItem.slot = "legs";
 		expect(actions["manage"](mockScene, mockItem)).toBe("equip");
 	});
