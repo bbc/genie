@@ -8,7 +8,6 @@ import { addText } from "../../../core/layout/text.js";
 import { addConfirmButtons } from "./confirm-buttons.js";
 import { actions } from "./actions.js";
 import { CAMERA_X, CAMERA_Y } from "../../../core/layout/metrics.js";
-import { itemIsInStock } from "./item-checks.js";
 
 const getInnerRectBounds = scene => {
 	const outerBounds = scene.layout.getSafeArea({}, false);
