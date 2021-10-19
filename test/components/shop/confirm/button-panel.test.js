@@ -8,12 +8,14 @@ import * as text from "../../../../src/core/layout/text.js";
 import * as promptText from "../../../../src/components/shop/confirm/prompt-text.js";
 import * as action from "../../../../src/components/shop/confirm/actions.js";
 import * as confirmButtons from "../../../../src/components/shop/confirm/confirm-buttons.js";
+import { itemIsInStock } from "../../../../src/components/shop/confirm/item-checks.js";
 
 jest.mock("../../../../src/components/shop/confirm/prompt-text.js");
 jest.mock("../../../../src/core/layout/text.js");
 jest.mock("../../../../src/components/shop/confirm/confirm-buttons.js");
 jest.mock("../../../../src/components/shop/confirm/actions.js");
 jest.mock("../../../../src/core/layout/metrics.js");
+jest.mock("../../../../src/components/shop/confirm/item-checks.js");
 
 describe("button panel", () => {
 	let mockScene;
@@ -26,6 +28,7 @@ describe("button panel", () => {
 	let mockConfirmButtons;
 
 	beforeEach(() => {
+		itemIsInStock.mockImplementation(() => true);
 		mockConfirmButtons = "mockConfirmButtons";
 		confirmButtons.addConfirmButtons = jest.fn(() => mockConfirmButtons);
 		action.actions = {
@@ -35,7 +38,8 @@ describe("button panel", () => {
 		mockText = { setOrigin: jest.fn(() => mockText) };
 		text.addText = jest.fn(() => mockText);
 		promptText.titleText = {
-			mockAction: () => "mockPromptText",
+			buy: () => "mockPromptText",
+			equip: () => "mockEquipText",
 		};
 		const mockSafeArea = { width: 900, height: 600, centerX: -150, centerY: 0, y: 0 };
 		mockScene = {
@@ -46,9 +50,16 @@ describe("button panel", () => {
 				getSafeArea: jest.fn(() => mockSafeArea),
 			},
 			scene: { key: "sceneKey" },
-			transientData: { sceneKey: { action: "mockAction" }, shop: { mode: "mockMode" } },
+			transientData: { sceneKey: { action: "buy" }, shop: { mode: "mockMode" } },
 		};
-		mockContainer = { width: 300, height: 300, setPosition: jest.fn(), setScale: jest.fn(), add: jest.fn() };
+		mockContainer = {
+			width: 300,
+			height: 300,
+			setPosition: jest.fn(),
+			setScale: jest.fn(),
+			add: jest.fn(),
+			scene: mockScene,
+		};
 		mockButton = { setX: jest.fn(), setY: jest.fn(), setScale: jest.fn(), width: 200 };
 		const buttons = [mockButton, mockButton];
 		mockPanel = { container: mockContainer, buttons };
@@ -114,10 +125,22 @@ describe("button panel", () => {
 			expect(mockText.setOrigin).toHaveBeenCalledWith(0, 0.5);
 		});
 
+		test("does not add panel currency text when action is not buy", () => {
+			mockScene.transientData.sceneKey.action = "equip";
+			createButtonPanel(mockScene, mockItem);
+			expect(text.addText).not.toHaveBeenCalledWith(mockScene, 5, -70, mockItem.price, mockScene.config);
+		});
+
 		test("adds panel currency icon", () => {
 			createButtonPanel(mockScene, mockItem);
 			expect(mockScene.add.image).toHaveBeenCalledWith(-5, -70, "prefix.currencyIcon");
 			expect(mockImage.setOrigin).toHaveBeenCalledWith(1, 0.5);
+		});
+
+		test("does not add panel currency icon when action is not buy", () => {
+			mockScene.transientData.sceneKey.action = "equip";
+			createButtonPanel(mockScene, mockItem);
+			expect(mockScene.add.image).not.toHaveBeenCalledWith(-5, -70, "prefix.currencyIcon");
 		});
 
 		test("adds panel confirm buttons", () => {
