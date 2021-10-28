@@ -2,6 +2,10 @@
 
 | Version | Description |
 |---------|-------------|
+| | Documentation updates |
+| | Bump Eslint version |
+| | Update shop item equip code |
+| 3.11.4 | |
 | | Bump webpack tool versions to fix dependabot alert |
 | | Switch to tabs to make code more accessible. Update Prettier to 2.3.2 |
 | 3.11.3 | |
