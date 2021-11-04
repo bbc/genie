@@ -2,20 +2,22 @@
 
 | Version | Description |
 |---------|-------------|
-| | Documentation updates |
-| | Bump Eslint version |
-| | Update shop item equip code |
+|| Update Eslint / expose loader configs for newer versions. |
+| | Bump versions to fix numerous dependabot alerts. |
+| | Documentation updates. |
+| | Bump Eslint version. |
+| | Update shop item equip code. |
 | 3.12.0 | |
-| | Bump webpack tool versions to fix dependabot alert |
+| | Bump webpack tool versions to fix dependabot alert. |
 | | Switch to tabs to make code more accessible. Update Prettier to 2.3.2 |
 | 3.11.3 | |
-| | Fixes isKindleWebView detection |
+| | Fixes isKindleWebView detection. |
 | 3.11.2 | |
-| | Updated Kindle webview user agents list |
+| | Updated Kindle webview user agents list. |
 | 3.11.1 | |
-| | Sets isSilk property when inside an App and using Kindle web View |
+| | Sets isSilk property when inside an App and using Kindle web View. |
 | 3.10.1 | |
-| | Removes private dependency |
+| | Removes private dependency. |
 | 3.10.0 | |
 | | Add DOM text layer. |
 | | Updated Phaser to 3.55.2 |
