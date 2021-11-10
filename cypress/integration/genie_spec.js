@@ -4,6 +4,7 @@
  * @license Apache-2.0
  */
 import { getUrl } from "../support/functions";
+import { appendToken } from "../support/functions";
 
 describe(`Tests the core flow of Genie ${Cypress.env("THEME")}`, () => {
 	const checkHomeScreen = () => {
@@ -64,11 +65,8 @@ describe(`Tests the core flow of Genie ${Cypress.env("THEME")}`, () => {
 	};
 	beforeEach(() => {
 		cy.viewport(1106, 800);
-		cy.visit(getUrl());
+		cy.visit(appendToken(`${Cypress.env("url")}${getUrl()}`));
 		cy.get("#home__play", { timeout: 60000 }).should("exist");
-		if (!Cypress.env("LOCAL_DEV")) {
-			cy.get(".data-notice").click();
-		}
 	});
 
 	it("Navigates through the core flow and loads the next level select after completion", () => {

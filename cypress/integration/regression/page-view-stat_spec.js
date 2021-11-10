@@ -6,6 +6,7 @@
 
 import { statHelper } from "games-stat-helper";
 import { getUrl } from "../../support/functions";
+import { appendToken } from "../../support/appendToken";
 import { pageViews } from "../../support/statConfig";
 
 describe("Page view stats for Genie Screens", () => {
@@ -15,11 +16,8 @@ describe("Page view stats for Genie Screens", () => {
 				p: `${statHelper.formatStatConfig(pageViews.homePage).counterName}`,
 			},
 		}).as("homePageView");
-		cy.visit(getUrl());
+		cy.visit(appendToken(`${Cypress.env("url")}${getUrl()}`));
 		cy.get("#home__play", { timeout: 60000 }).should("exist");
-		if (!Cypress.env("DEV_LOCAL") == "true") {
-			cy.get(".data-notice").click();
-		}
 	});
 
 	it("Fires a page view stat for the home screen.", () => {
