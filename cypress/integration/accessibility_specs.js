@@ -8,7 +8,6 @@ import { appendToken } from "../support/appendToken";
 
 describe(`Tests the accessibility of Genie screens for ${Cypress.env("THEME")}`, () => {
 	beforeEach(() => {
-		cy.log(getUrl());
 		cy.visit(appendToken(`${Cypress.env("url")}${getUrl()}`));
 		cy.get("#home__play", { timeout: 60000 }).should("exist");
 	});
