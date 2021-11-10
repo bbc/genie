@@ -14,3 +14,11 @@ Cypress.Commands.add("safeArea", selector => {
 Cypress.Commands.add("ariaHidden", (selector, isHidden) => {
 	return cy.get(selector).should("have.attr", "aria-hidden", `${isHidden}`);
 });
+
+Cypress.Commands.add("ariaLabel", labelText => {
+	return cy.focused().should("have.attr", "aria-label", labelText);
+});
+
+Cypress.Commands.add("tabFocused", (selector, selectorStyle = "id") => {
+	return cy.focused().should("have.attr", selectorStyle, selector).tab();
+});

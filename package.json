@@ -71,11 +71,11 @@
         "jest:no-coverage": "jest",
         "validate": "node build-scripts/schemavalidator/validator.js achievement",
         "roll-lodash": "rollup -c lib/lodash/rollup.config.js",
-        "cy:terminal": "cypress open --env THEME=theme_1",
-        "cy:terminal:local": "cypress open --env THEME=theme_1,LOCAL_DEV=true",
-        "cy:headless": "cypress run --headless --config video=false --env THEME=theme_1 --spec '**/*spec.js'",
-        "cy:headless-theme2": "cypress run --headless --config video=false --env THEME=theme_2 --spec '**/*spec.js'",
-        "cy:local": "cypress run --headless --config video=false --env THEME=theme_1,LOCAL_DEV=true --spec '**/integration/*spec.js'",
-        "cy:local-theme2": "cypress run --headless --config video=false --env THEME=theme_2,LOCAL_DEV=true --spec '**/integration/*spec.js'"
+        "cy:terminal": "cypress open --env theme=theme_1,url=https://www.bbc.co.uk/childrens/assets/games/games-atlas/test/index.html",
+        "cy:terminal:local": "cypress open --env theme=theme_1,url=http://localhost:9001/",
+        "cy:headless": "cypress run --headless --config video=false --env theme=theme_1 url=https://www.bbc.co.uk/childrens/assets/games/games-atlas/test/index.html --spec '**/*spec.js'",
+        "cy:headless-theme2": "cypress run --headless --config video=false --env theme=theme_2,url=https://www.bbc.co.uk/childrens/assets/games/games-atlas/test/index.html --spec '**/*spec.js'",
+        "cy:local": "cypress run --headless --config video=false --env theme=theme_1,url=http://localhost:9001/ --spec '**/integration/*spec.js'",
+        "cy:local-theme2": "cypress run --headless --config video=false --env theme=theme_2,url=http://localhost:9001/ --spec '**/integration/*spec.js'"
     }
 }
