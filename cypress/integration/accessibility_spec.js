@@ -215,4 +215,21 @@ describe(`Tests the accessibility of Genie screens for ${Cypress.env("THEME")}`,
 		cy.focused().should("have.attr", "data-testid", "close-achievements").type("{enter}", { force: true });
 		cy.get("[data-testid=achievements-modal]").should("not.exist");
 	});
+
+	it("Tests the full end to end flow through genie using tab & enter", () => {
+		const tabLoop = (element, tabs) => {
+			cy.get("body").tab();
+			for (let index = 0; index < tabs; index++) {
+				cy.focused().tab();
+			}
+			cy.focused().should("have.attr", "id", element).type("{enter}", { force: true });
+		};
+		tabLoop("home__play", 3);
+		tabLoop("narrative__skip", 2);
+		tabLoop("character-select__mary", 3);
+		tabLoop("level-select__1", 3);
+		tabLoop("game__4", 4);
+		tabLoop("results__continue", 3);
+		cy.get("#level-select__1").should("exist");
+	});
 });
