@@ -35,6 +35,7 @@ module.exports = function (api) {
 				},
 			},
 		],
+		["@babel/plugin-proposal-private-property-in-object", { loose: false }],
 	];
 
 	return {

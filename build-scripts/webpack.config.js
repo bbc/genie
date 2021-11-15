@@ -46,7 +46,18 @@ module.exports = env => {
 						},
 					},
 				},
-				{ test: /webfontloader\.js/, use: ["expose-loader?WebFont"] },
+				{
+					test: /webfontloader\.js/,
+					loader: "expose-loader",
+					options: {
+						exposes: [
+							"WebFont",
+							{
+								globalName: "WebFont",
+							},
+						],
+					},
+				},
 			],
 		},
 		optimization: {
