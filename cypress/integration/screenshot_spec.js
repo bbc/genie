@@ -5,6 +5,7 @@
  */
 
 import { getUrl } from "../support/functions";
+import { appendToken } from "../support/appendToken";
 
 const sizes = ["iphone-5", "iphone-7", [1400, 600]];
 const theme = Cypress.env("THEME");
@@ -20,7 +21,7 @@ describe(`Takes screenshots on multiple viewports ${Cypress.env("THEME")}`, () =
 			} else {
 				cy.viewport(size, "landscape");
 			}
-			cy.visit(getUrl());
+			cy.visit(appendToken(`${Cypress.env("url")}${getUrl()}`));
 			cy.get("#home__play", { timeout: 40000 }).should("exist");
 			if (!Cypress.env("LOCAL_DEV")) {
 				cy.get(".data-notice").click();
@@ -71,7 +72,7 @@ describe(`Takes screenshots on multiple viewports ${Cypress.env("THEME")}`, () =
 			} else {
 				cy.viewport(size, "landscape");
 			}
-			cy.visit(getUrl());
+			cy.visit(appendToken(`${Cypress.env("url")}${getUrl()}`));
 			cy.get("#home__play", { timeout: 40000 }).should("exist");
 			cy.genieClick("#home__debug");
 			cy.genieClick("#debug__debug-select-1");

@@ -6,11 +6,9 @@
 
 import { statHelper } from "games-stat-helper";
 import { getUrl } from "../../support/functions";
+import { appendToken } from "../../support/appendToken";
 import { userActions } from "../../support/statConfig";
 
-// x5: { formatStatConfig().stat}
-//
-//
 describe("User Action stats for Genie", () => {
 	beforeEach(() => {
 		cy.intercept({
@@ -19,11 +17,8 @@ describe("User Action stats for Genie", () => {
 				atc: `PUB-${statHelper.formatStatConfig(userActions.gameloaded).stat}`,
 			},
 		}).as("gameStat");
-		cy.visit(getUrl());
+		cy.visit(appendToken(`${Cypress.env("url")}${getUrl()}`));
 		cy.get("#home__play", { timeout: 60000 }).should("exist");
-		if (!Cypress.env("DEV_LOCAL") == "true") {
-			cy.get(".data-notice").click();
-		}
 	});
 
 	it("Fires a stat when the game is loaded", () => {

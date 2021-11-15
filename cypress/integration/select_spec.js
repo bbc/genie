@@ -5,14 +5,12 @@
  */
 
 import { getUrl } from "../support/functions";
+import { appendToken } from "../support/appendToken";
 
 describe(`The Select screens ${Cypress.env("THEME")}`, () => {
 	beforeEach(() => {
-		cy.visit(getUrl());
+		cy.visit(appendToken(`${Cypress.env("url")}${getUrl()}`));
 		cy.get("#home__play", { timeout: 60000 }).should("exist");
-		if (!Cypress.env("DEV_LOCAL") == "true") {
-			cy.get(".data-notice").click();
-		}
 	});
 
 	it("Continuously scrolls through the character select on single item", () => {
