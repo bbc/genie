@@ -231,65 +231,61 @@ describe(`Tests the accessibility of Genie screens for ${Cypress.env("THEME")}`,
 		tabLoop("game__4", 4);
 		tabLoop("results__continue", 3);
 		cy.get("#level-select__1").should("exist");
-	
-
 	});
+
 	it("Tests the navigation on debug screen for single select item with Tab & Enter", () => {
-        cy.genieClick("#home__debug");
-        cy.genieClick("#debug__debug-select-1");
-        cy.tab("#debug-select-1__home");
-        cy.tab("#debug-select-1__pause");
-        cy.tab("#debug-select-1__mary");
-        cy.ariaLabel("Mary completed").type("{enter}", { force: true });
-        cy.get("#debug-select-1__mary").should("not.exist");
-        
-    });
-    it("Tests the navigation on debug screen for Select Grid with Tab & Enter", () => {
-        cy.genieClick("#home__debug");
-        cy.genieClick("#debug__debug-select-grid");
-        cy.genieClick("#debug-select-grid__mary");
-        cy.tab("#debug-select-grid__home");
-        cy.tab("#debug-select-grid__pause");
-        cy.tab("#debug-select-grid__previous");
-        cy.tab("#debug-select-grid__mary");
-        cy.focused().should("have.attr", "tabindex", "0").type("{enter}", { force: true });
-        cy.get("#debug-select-grid__mary").should("not.exist"); 
-    });
-    it("Tests the navigation on debug screen for Result-bitmaptext with Tab & Enter", () => {
-        cy.genieClick("#home__debug");
-        cy.genieClick("#debug__debug-results-bitmaptext");
-        cy.genieClick("#debug-results-bitmaptext__restart");
-        cy.tab("#debug-results-bitmaptext__achievements-small");
-        cy.tab("#debug-results-bitmaptext__pause");
-        cy.tab("#debug-results-bitmaptext__restart");
-        cy.focused().should("have.attr", "tabindex", "0").type("{enter}", { force: true });
-        //cy.ariaLabel("Restart Game").type("{enter}", { force: true });
-        cy.get("#debug-results-bitmaptext__restart").should("not.exist");   
-    });
-    
-    it("Tests the navigation on debug screen for Background Animations with Tab & Enter", () => {
-        cy.genieClick("#home__debug");
-        cy.genieClick("#debug__debug-background-animations");
-        cy.genieClick("#debug-background-animations__debug");
-        cy.tab("#debug-background-animations__exit");
-        cy.tab("#debug-background-animations__audio");
-        cy.tab("#debug-background-animations__settings");
-        cy.tab("#debug-background-animations__play");
-        cy.focused().should("have.attr", "tabindex", "0").type("{enter}", { force: true });
-        //cy.ariaLabel("Play Game").type("{enter}", { force: true });
-        cy.get("#debug-background-animations__debug").should("not.exist");
-        
-    });
-    it("Tests the navigation on debug screen for Debug DOM Text with Tab & Enter", () => {
-        cy.genieClick("#home__debug");
-        cy.genieClick("#debug__debug-dom-text");
-        cy.genieClick("#debug-dom-text__play");
-        cy.tab("#debug-dom-text__exit");
-        cy.tab("#debug-dom-text__pause");
-        cy.tab("#debug-dom-text__play");
-        cy.focused().should("have.attr", "tabindex", "0").type("{enter}", { force: true });
-        //cy.ariaLabel("Play Game").type("{enter}", { force: true });
-        cy.get("#debug-dom-text__play").should("not.exist");
-        
-    });
+		cy.genieClick("#home__debug");
+		cy.genieClick("#debug__debug-select-1");
+		cy.tab("#debug-select-1__home");
+		cy.tab("#debug-select-1__pause");
+		cy.tab("#debug-select-1__mary");
+		cy.ariaLabel("Mary completed").type("{enter}", { force: true });
+		cy.get("#debug-select-1__mary").should("not.exist");
+	});
+	it("Tests the navigation on debug screen for Select Grid with Tab & Enter", () => {
+		cy.genieClick("#home__debug");
+		cy.genieClick("#debug__debug-select-grid");
+		cy.genieClick("#debug-select-grid__mary");
+		cy.tab("#debug-select-grid__home");
+		cy.tab("#debug-select-grid__pause");
+		cy.tab("#debug-select-grid__previous");
+		cy.tab("#debug-select-grid__mary");
+		cy.focused().should("have.attr", "tabindex", "0").type("{enter}", { force: true });
+		cy.get("#debug-select-grid__mary").should("not.exist");
+	});
+	it("Tests the navigation on debug screen for Result-bitmaptext with Tab & Enter", () => {
+		cy.genieClick("#home__debug");
+		cy.genieClick("#debug__debug-results-bitmaptext");
+		cy.genieClick("#debug-results-bitmaptext__restart");
+		cy.tab("#debug-results-bitmaptext__achievements-small");
+		cy.tab("#debug-results-bitmaptext__pause");
+		cy.tab("#debug-results-bitmaptext__restart");
+		cy.focused().should("have.attr", "tabindex", "0").type("{enter}", { force: true });
+		//cy.ariaLabel("Restart Game").type("{enter}", { force: true });
+		cy.get("#debug-results-bitmaptext__restart").should("not.exist");
+	});
+
+	it("Tests the navigation on debug screen for Background Animations with Tab & Enter", () => {
+		cy.genieClick("#home__debug");
+		cy.genieClick("#debug__debug-background-animations");
+		cy.genieClick("#debug-background-animations__debug");
+		cy.tab("#debug-background-animations__exit");
+		cy.tab("#debug-background-animations__audio");
+		cy.tab("#debug-background-animations__settings");
+		cy.tab("#debug-background-animations__play");
+		cy.focused().should("have.attr", "tabindex", "0").type("{enter}", { force: true });
+		//cy.ariaLabel("Play Game").type("{enter}", { force: true });
+		cy.get("#debug-background-animations__debug").should("not.exist");
+	});
+	it("Tests the navigation on debug screen for Debug DOM Text with Tab & Enter", () => {
+		cy.genieClick("#home__debug");
+		cy.genieClick("#debug__debug-dom-text");
+		cy.genieClick("#debug-dom-text__play");
+		cy.tab("#debug-dom-text__exit");
+		cy.tab("#debug-dom-text__pause");
+		cy.tab("#debug-dom-text__play");
+		cy.focused().should("have.attr", "tabindex", "0").type("{enter}", { force: true });
+		//cy.ariaLabel("Play Game").type("{enter}", { force: true });
+		cy.get("#debug-dom-text__play").should("not.exist");
+	});
 });
