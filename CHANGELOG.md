@@ -2,12 +2,14 @@
 
 | Version | Description |
 |---------|-------------|
-|| Update Eslint / expose loader configs for newer versions. |
+| 3.12.1 | |  
+| | Update rexui version. |
+| | Update Eslint / expose loader configs for newer versions. |
 | | Bump versions to fix numerous dependabot alerts. |
+| 3.12.0 | |
 | | Documentation updates. |
 | | Bump Eslint version. |
 | | Update shop item equip code. |
-| 3.12.0 | |
 | | Bump webpack tool versions to fix dependabot alert. |
 | | Switch to tabs to make code more accessible. Update Prettier to 2.3.2 |
 | 3.11.3 | |
