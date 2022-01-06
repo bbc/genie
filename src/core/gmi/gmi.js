@@ -20,12 +20,12 @@ const globalSettings = [
 	},
 ];
 
-export let gmi = {};
-
 const getGlobalPage = (page = { title: "Global Settings", settings: [] }) => ({
 	...page,
 	...{ settings: fp.unionBy("key", globalSettings, page.settings) },
 });
+
+export let gmi = {};
 
 export const setGmi = (customSettings = {}, windowObj) => {
 	const customGlobalPage = customSettings.pages?.find(page => page.title === "Global Settings");
