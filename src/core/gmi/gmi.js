@@ -22,17 +22,15 @@ const globalSettings = [
 
 export let gmi = {};
 
-const parsePage = page =>
-	page.title === "Global Settings"
-		? { ...page, ...{ settings: fp.unionBy("key", globalSettings, page.settings) } }
-		: page;
+const getGlobalPage = (page = { title: "Global Settings", settings: [] }) => ({
+	...page,
+	...{ settings: fp.unionBy("key", globalSettings, page.settings) },
+});
 
 export const setGmi = (customSettings = {}, windowObj) => {
-
-	const customGlobalPage = customSettings.pages?.find(page => page.title === "Global Settings")
-
-	//map isn't needed as we only merge
-	const pages = customSettings.pages?.map(parsePage);
+	const customGlobalPage = customSettings.pages?.find(page => page.title === "Global Settings");
+	const globalPage = getGlobalPage(customGlobalPage);
+	const pages = fp.unionBy("title", [globalPage], customSettings.pages);
 
 	const settingsConfig = { pages };
 
