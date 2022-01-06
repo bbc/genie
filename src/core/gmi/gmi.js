@@ -3,56 +3,36 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+import fp from "../../../lib/lodash/fp/fp.js";
 
-const dedupeGlobalSettings = customSettings => {
-	return customSettings.filter(customSettings => {
-		return !(customSettings.key === "audio" || customSettings.key === "motion");
-	});
-};
+const globalSettings = [
+	{
+		key: "audio",
+		type: "toggle",
+		title: "Audio",
+		description: "Turn off/on sound and music",
+	},
+	{
+		key: "motion",
+		type: "toggle",
+		title: "Motion FX",
+		description: "Turn off/on motion effects",
+	},
+];
 
-const addExtraGlobalSettings = (customSettingsObject, settingsConfig) => {
-	const extraGlobalSettings = dedupeGlobalSettings(customSettingsObject.settings);
-	return settingsConfig.pages[0].settings.concat(extraGlobalSettings);
-};
-
-const getDefaultGlobals = () => {
-	return {
-		pages: [
-			{
-				title: "Global Settings",
-				settings: [
-					{
-						key: "audio",
-						type: "toggle",
-						title: "Audio",
-						description: "Turn off/on sound and music",
-					},
-					{
-						key: "motion",
-						type: "toggle",
-						title: "Motion FX",
-						description: "Turn off/on motion effects",
-					},
-				],
-			},
-		],
-	};
-};
+const getGlobalPage = (page = { title: "Global Settings", settings: [] }) => ({
+	...page,
+	...{ settings: fp.unionBy("key", globalSettings, page.settings) },
+});
 
 export let gmi = {};
 
-export const setGmi = (customSettings, windowObj) => {
-	const settingsConfig = getDefaultGlobals();
+export const setGmi = (customSettings = {}, windowObj) => {
+	const customGlobalPage = customSettings.pages?.find(page => page.title === "Global Settings");
+	const globalPage = getGlobalPage(customGlobalPage);
+	const pages = fp.unionBy("title", [globalPage], customSettings.pages);
 
-	if (customSettings && customSettings.pages) {
-		customSettings.pages.forEach(customSettingsObject => {
-			if (customSettingsObject.title === "Global Settings") {
-				settingsConfig.pages[0].settings = addExtraGlobalSettings(customSettingsObject, settingsConfig);
-			} else {
-				settingsConfig.pages = settingsConfig.pages.concat([customSettingsObject]);
-			}
-		});
-	}
+	const settingsConfig = { pages };
 
 	gmi = windowObj.getGMI({ settingsConfig });
 };
