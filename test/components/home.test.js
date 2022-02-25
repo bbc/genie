@@ -17,6 +17,7 @@ describe("Home Screen", () => {
 
 	beforeEach(() => {
 		gmi.achievements = { get: () => [] };
+		gmi.shouldShowExitButton = true;
 		homeScreen = new Home();
 
 		mockData = {
@@ -38,7 +39,7 @@ describe("Home Screen", () => {
 		});
 
 		test("adds GEL buttons to layout", () => {
-			const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings"];
+			const expectedButtons = ["howToPlay", "play", "audio", "settings", "exit"];
 			expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
 		});
 	});
@@ -47,7 +48,16 @@ describe("Home Screen", () => {
 		test("shows an achievement button when there are achievements", () => {
 			gmi.achievements = { get: () => [""] };
 			homeScreen.create();
-			const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "achievements"];
+			const expectedButtons = ["howToPlay", "play", "audio", "settings", "exit", "achievements"];
+			expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
+		});
+	});
+
+	describe("Exit button", () => {
+		test("Does not shows an exit button when gmi.shouldShowExitButton is false", () => {
+			gmi.shouldShowExitButton = false;
+			homeScreen.create();
+			const expectedButtons = ["howToPlay", "play", "audio", "settings"];
 			expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
 		});
 	});
@@ -56,7 +66,7 @@ describe("Home Screen", () => {
 		test("adds the debug button when debugMode is set", () => {
 			debugModeModule.isDebug = () => true;
 			homeScreen.create();
-			const expectedButtons = ["exit", "howToPlay", "play", "audio", "settings", "debug"];
+			const expectedButtons = ["howToPlay", "play", "audio", "settings", "exit", "debug"];
 			expect(homeScreen.setLayout).toHaveBeenCalledWith(expectedButtons);
 		});
 	});
