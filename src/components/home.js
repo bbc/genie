@@ -15,10 +15,11 @@ import { gmi } from "../core/gmi/gmi.js";
 export class Home extends Screen {
 	create() {
 		const achievements = gmi.achievements.get().length ? ["achievements"] : [];
+		const exit = gmi.shouldShowExitButton ? ["exit"] : [];
 		const debug = isDebug() ? ["debug"] : [];
 		this.addBackgroundItems();
-		const buttons = ["exit", "howToPlay", "play", "audio", "settings"];
-		this.setLayout(buttons.concat(achievements, debug));
+		const buttons = ["howToPlay", "play", "audio", "settings"];
+		this.setLayout(buttons.concat(exit, achievements, debug));
 
 		eventBus.subscribe({
 			channel: buttonsChannel(this),
