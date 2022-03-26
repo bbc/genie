@@ -47,7 +47,7 @@
         "jest-canvas-mock": "^2.3.1",
         "jsdom": "^16.4.0",
         "local-web-server": "^4.2.1",
-        "minimist": "^1.2.5",
+        "minimist": "^1.2.6",
         "mocha": "^9.1.3",
         "mochawesome": "^7.0.0",
         "mochawesome-merge": "^4.2.0",
