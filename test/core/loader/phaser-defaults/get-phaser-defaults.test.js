@@ -39,7 +39,6 @@ describe("Phaser Defaults", () => {
 
 	describe("getPhaserDefaults Method", () => {
 		describe("Returned Config", () => {
-
 			test("sets transparent config flag to false when Amazon Silk Browser", () => {
 				const mockSilkBrowser = { name: "Amazon Silk", isSilk: true, version: "1.1.1" };
 				getBrowser.mockImplementation(() => mockSilkBrowser);
