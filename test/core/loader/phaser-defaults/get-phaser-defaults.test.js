@@ -39,12 +39,32 @@ describe("Phaser Defaults", () => {
 
 	describe("getPhaserDefaults Method", () => {
 		describe("Returned Config", () => {
+			test("Returns additional config over base defaults", () => {
+				const expectedConfig = {
+					type: 0,
+					parent: containerDiv,
+					transparent: false,
+				};
+
+				const actualConfig = getPhaserDefaults({ screens: {} });
+				expect(actualConfig.type).toBe(expectedConfig.type);
+				expect(actualConfig.parent).toEqual(expectedConfig.parent);
+				expect(actualConfig.transparent).toBe(expectedConfig.transparent);
+			});
+
 			test("sets transparent config flag to false when Amazon Silk Browser", () => {
 				const mockSilkBrowser = { name: "Amazon Silk", isSilk: true, version: "1.1.1" };
 				getBrowser.mockImplementation(() => mockSilkBrowser);
 
 				const actualConfig = getPhaserDefaults({ screens: {} });
 				expect(actualConfig.transparent).toBe(true);
+			});
+
+			test("sets type to canvas when browser returns forceCanvas", () => {
+				const mockSafari9 = { name: "Safari", forceCanvas: true };
+				getBrowser.mockImplementation(() => mockSafari9);
+				const actualConfig = getPhaserDefaults({ screens: {} });
+				expect(actualConfig.type).toBe(1);
 			});
 
 			test("disable's phaser's global window events (prevents clickthrough from achievements)", () => {

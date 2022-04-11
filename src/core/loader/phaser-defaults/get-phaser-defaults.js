@@ -26,7 +26,7 @@ export const getPhaserDefaults = config => {
 	return {
 		...getBaseDefaults(),
 		...{
-			type: Phaser.CANVAS,
+			type: browser.forceCanvas ? Phaser.CANVAS : Phaser.AUTO,
 			transparent: browser.isSilk, // Fixes silk browser flickering
 			parent: getContainerDiv(),
 			scene,
