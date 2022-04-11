@@ -64,7 +64,7 @@ describe("Phaser Defaults", () => {
 				const mockSafari9 = { name: "Safari", forceCanvas: true };
 				getBrowser.mockImplementation(() => mockSafari9);
 				const actualConfig = getPhaserDefaults({ screens: {} });
-				expect(actualConfig.type).toBe(1);
+				expect(actualConfig.type).toBe(0);
 			});
 
 			test("disable's phaser's global window events (prevents clickthrough from achievements)", () => {
