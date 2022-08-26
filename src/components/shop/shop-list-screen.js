@@ -14,6 +14,13 @@ import { setBalance } from "./balance.js";
 import { initResizers } from "./backgrounds.js";
 import { gmi } from "../../core/gmi/gmi.js";
 
+const getFilter = (scene, filterTags) => item => {
+	const notTagFiltered = !(item?.tags ?? []).some(tag => filterTags.includes(tag));
+	const notCurrency = item.id !== scene.transientData.shop.config.balance;
+
+	return notCurrency && notTagFiltered;
+};
+
 export class ShopList extends Screen {
 	preload() {
 		this.plugins.installScenePlugin("rexUI", RexUIPlugin, "rexUI", this, true);
@@ -21,15 +28,19 @@ export class ShopList extends Screen {
 	}
 
 	create() {
-		gmi.setStatsScreen(this.transientData.shopTitle + (this.transientData.shop.mode === "shop" ? "buy" : "manage"));
+		const listType = this.transientData.shop.mode === "shop" ? "buy" : "manage";
+		gmi.setStatsScreen(this.transientData.shopTitle + listType);
 		this.addBackgroundItems();
 		this.setLayout(["overlayBack", "pause"]);
 
 		this.transientData[this.scene.key] = { title: this.transientData.shop.mode };
 		setBalance(this);
 
-		this.inventoryFilter = item => item.id !== this.transientData.shop.config.balance;
-		this.scrollableList = new ScrollableList(this, this.transientData.shop.mode, this.inventoryFilter);
+		//TODO why is config undefined? - ah. We haven't created it yet.
+
+		const filterTags = this.config.filterTags?.[listType] ?? [];
+
+		this.scrollableList = new ScrollableList(this, this.transientData.shop.mode, getFilter(this, filterTags));
 
 		this.setupEvents();
 		this.resize();
