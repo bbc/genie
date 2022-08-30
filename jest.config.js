@@ -14,7 +14,7 @@ module.exports = {
 		},
 	},
 	//coverageProvider: "v8",
-	testEnvironment: "jsdom",
+	testEnvironment: "jest-environment-jsdom",
 	modulePathIgnorePatterns: ["/.node_modules.+/"],
 	testPathIgnorePatterns: ["/node_modules/", "/.node_modules.+/", ".node_modules_production"],
 	setupFilesAfterEnv: ["./test/set-up-jest.js"],
