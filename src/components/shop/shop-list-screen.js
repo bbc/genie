@@ -36,10 +36,7 @@ export class ShopList extends Screen {
 		this.transientData[this.scene.key] = { title: this.transientData.shop.mode };
 		setBalance(this);
 
-		//TODO why is config undefined? - ah. We haven't created it yet.
-
 		const filterTags = this.config.filterTags?.[listType] ?? [];
-
 		this.scrollableList = new ScrollableList(this, this.transientData.shop.mode, getFilter(this, filterTags));
 
 		this.setupEvents();
