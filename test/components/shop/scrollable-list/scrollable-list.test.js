@@ -237,11 +237,11 @@ describe("Scrollable List", () => {
 					expect(collectionGetAll.length).toBe(1);
 					expect(buttons.createListButton).toHaveBeenCalledTimes(1);
 				});
-				test("with zero-quantity items filtered out", () => {
+				test("with zero-quantity items filtered out and qty undefined counted as 1", () => {
 					jest.clearAllMocks();
-					collectionGetAll = [mockItem, mockItem, { mock: "otherItem", qty: 0 }];
+					collectionGetAll = [mockItem, mockItem, { mock: "otherItem", qty: 0 }, { mock: "noQtySet" }];
 					new ScrollableList(mockScene, title);
-					expect(buttons.createListButton).toHaveBeenCalledTimes(2);
+					expect(buttons.createListButton).toHaveBeenCalledTimes(3);
 				});
 				test("no items table added if the catalogue collection is empty", () => {
 					jest.clearAllMocks();

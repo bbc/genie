@@ -107,8 +107,8 @@ const setupEvents = (scene, panel) => {
 };
 
 const getPanelItems = panel => panel.getByName("grid", true)?.getElement("items");
-const removeZeroQty = item => item.slot || item.qty > 0;
-const getFilteredCollection = (collection, filter = fp.stubTrue) => collection.filter(filter).filter(removeZeroQty);
+const nonZeroQty = item => (item.qty ?? 1) > 0;
+const getFilteredCollection = (collection, filter = fp.stubTrue) => collection.filter(filter).filter(nonZeroQty);
 
 const getTextOffset = position => {
 	if (!position) return { x: 0, y: 0 };
