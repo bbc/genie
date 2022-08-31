@@ -57,3 +57,4 @@ unequip(scene, "helmet");     //sets the helmet's state to "purchased" instead o
 use(scene, "apple");    //decrements apple item `qty` in inventory 
 getBalanceItem(shopConfig)  //gets the name of the currency item in inventory e.g: "coin"
 ```
+
