@@ -4,6 +4,7 @@
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 3.13.0        | Add tag filters for shop item lists                                                                                                                   |
 |               | Improve shop and collection docs                                                                                                                      |
+|               | Items with qty prop undefined are treated as qty=1                                                                                                    |
 | 3.12.1        |                                                                                                                                                       |
 |               | Update rexui version.                                                                                                                                 |
 |               | Update Eslint / expose loader configs for newer versions.                                                                                             |
