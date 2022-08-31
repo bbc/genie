@@ -162,6 +162,10 @@
             ],
         },
     },
+	filterTags: {	//any tags listed here are hidden in the list
+		manage: [],	//e.g: ["food"]
+		buy: []
+	},
     emptyList: {
         shop: {
             value: "No items",

@@ -12,14 +12,13 @@ convention and games can have multiple collections _(e.g: for levels and for unl
 Differences to the default config are stored in local storage.
 
 ## creating a collection
-
-To create a state pass the storage key and a config array to initState.
-This will both return and add the new state to the states map so you can access it from anywhere using `states.get(###)`.
+To create a collection pass the storage key and a config array to initCollection.
+This will both return and add the new collection to the collections map so you can access it from anywhere using `collections.get(###)`.
 
 ```javascript
-import { initState } from "../core/states.js";
+import { initCollection } from "../core/collections.js";
 
-const levelStates = initState("levels", [
+const levelCollection = initCollection(this)("levels", [
     { id: "donutPlains", state: "complete" },
     { id: "ghostValley", state: undefined },
     { id: "mooMooFarm" },
@@ -30,30 +29,30 @@ const levelStates = initState("levels", [
 ## Using Collections
 
 ```javascript
-import { states } from "../core/states.js";
+import { collections } from "../core/collections.js";
 
-const levelStates = states.get("levels");
+const levels = collections.get("levels");
 
 // Set rainbowRoad level to the default and save to local storage:
-levelStates.set("rainbowRoad")
+levels.set("rainbowRoad")
 
 // Set ghostValley level to complete and save to local storage:
-levelStates.set("ghostValley", "complete")
+levels.set({id: "ghostValley", state: "complete"})
 ```
 
-## State Methods
+## Collection Methods
 
-* **state.config()** returns the initial config
-* **state.get(`id_string`) returns the current state of `id_string`, e.g: `{id: "id_string", state: "locked"}`
-* **state.getAll()** returns the all items and their current state
-* **state.set(`id`, `state`) sets the item with `id` to `state`
+* **collection.config()** returns the initial config
+* **collection.get(`id_string`) returns the current state of `id_string`, e.g: `{id: "id_string", state: "locked"}`
+* **collection.getAll()** returns the all items and their current state
+* **collection.set(`id`, `state`) sets the item with `id` to `state`
 
 ## Usage with Select Screen
-The Genie [Select](select-screen.md) screen provides automatic integration with states when setting the `storageKey` property to the state required.
-The look of individual states can be configured in the `states` block of the select screen's config.
+The Genie [Select](select-screen.md) screen provides automatic integration with collections when setting the `storageKey` property to the collection required.
+The look of individual item states can be configured in the `states` block of the select screen's config.
 See the [select docs](select-screen.md) for more info or visit the debug page for some working examples. 
 
 
 ## Debug
 
-In debug mode _(`?debug=true` on the url)_ the states map is exposed under the debug global as `__debug.states`
+In debug mode _(`?debug=true` on the url)_ the collections map is exposed under the debug global as `__debug.collections`

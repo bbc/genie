@@ -48,7 +48,7 @@ describe("Shop List Screen", () => {
 		shopList._data = {
 			addedBy: { addOverlay: jest.fn() },
 			transient: { shop: { mode: "shop", config: { balance: "balance" } } },
-			config: { "shop-menu": { shopConfig: mockShopConfig } },
+			config: { "shop-menu": { shopConfig: mockShopConfig }, "shop-list": {} },
 		};
 
 		global.RexPlugins = {
@@ -88,7 +88,7 @@ describe("Shop List Screen", () => {
 		shopList._data = {
 			addedBy: { addOverlay: jest.fn() },
 			transient: { shop: { mode: "manage", config: { balance: "balance" } } },
-			config: { "shop-menu": { shopConfig: mockShopConfig } },
+			config: { "shop-menu": { shopConfig: mockShopConfig }, "shop-list": {} },
 		};
 
 		shopList.create();
@@ -100,24 +100,38 @@ describe("Shop List Screen", () => {
 		expect(balance.setBalance).toHaveBeenCalledWith(shopList);
 	});
 
-	test("attaches an inventory filter function that returns true when item id is not the balance key", () => {
+	test("uses an inventory filter function that returns true when item id is not the balance key", () => {
 		shopList.create();
-		expect(shopList.inventoryFilter({ id: "helmet" })).toBe(true);
+		const filter = list.ScrollableList.mock.calls[0][2];
+
+		expect(filter({ id: "helmet" })).toBe(true);
 	});
 
-	test("attaches an inventory filter function that returns false when item id is the balance key", () => {
+	test("uses an inventory filter function that returns false when item id is the balance key", () => {
 		shopList.create();
-		expect(shopList.inventoryFilter({ id: shopList._data.transient.shop.config.balance })).toBe(false);
+		const filter = list.ScrollableList.mock.calls[0][2];
+
+		expect(filter({ id: shopList._data.transient.shop.config.balance })).toBe(false);
+	});
+
+	test("uses an inventory filter that returns false when when filterTags are configured and an item has the same tag", () => {
+		shopList._data.config["shop-list"].filterTags = {
+			manage: ["noshow"],
+		};
+
+		shopList._data.transient.shop.mode = "not shop";
+
+		shopList.create();
+		const filter = list.ScrollableList.mock.calls[0][2];
+
+		expect(filter({ id: "thing", tags: ["noshow"] })).toBe(false);
 	});
 
 	test("creates list and adds reference to screen on create", () => {
 		shopList.create();
+		const filter = list.ScrollableList.mock.calls[0][2];
 
-		expect(list.ScrollableList).toHaveBeenCalledWith(
-			shopList,
-			shopList._data.transient.shop.mode,
-			shopList.inventoryFilter,
-		);
+		expect(list.ScrollableList).toHaveBeenCalledWith(shopList, shopList._data.transient.shop.mode, filter);
 		expect(shopList.scrollableList).toBe(mockList);
 	});
 
