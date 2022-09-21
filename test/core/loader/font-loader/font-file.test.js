@@ -46,10 +46,11 @@ describe("FontFile", () => {
 			}),
 		);
 		const args = global.WebFont.load.mock.calls[0][0];
-		expect(Object.create(fontFile.onLoad.prototype) instanceof args.active).toBeTruthy();
-		expect(Object.create(fontFile.onError.prototype) instanceof args.inactive).toBeTruthy();
-		expect(Object.create(fontFile.onFontActive.prototype) instanceof args.fontactive).toBeTruthy();
-		expect(Object.create(fontFile.onFontInactive.prototype) instanceof args.fontinactive).toBeTruthy();
+
+		expect(args.active.name).toEqual("bound onLoad");
+		expect(args.inactive.name).toEqual("bound onError");
+		expect(args.fontactive.name).toEqual("bound onFontActive");
+		expect(args.fontinactive.name).toEqual("bound onFontInactive");
 	});
 
 	test("calls webfontloader with the correct url when the url provided is relative to the theme directory", () => {
