@@ -14,8 +14,7 @@ module.exports = function (api) {
 				corejs: { version: 3, proposals: true },
 				debug: false,
 				targets: {
-					ie: "11",
-					safari: "9",
+					safari: "10",
 				},
 				loose: true,
 			},

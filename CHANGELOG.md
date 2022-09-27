@@ -2,6 +2,7 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+|               | Update Babel targets                                                                                                                                  |
 | 3.13.0        | Add tag filters for shop item lists                                                                                                                   |
 |               | Improve shop and collection docs                                                                                                                      |
 |               | Items with qty prop undefined are treated as qty=1                                                                                                    |
