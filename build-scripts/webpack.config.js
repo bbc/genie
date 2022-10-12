@@ -70,8 +70,9 @@ module.exports = env => {
 			],
 		},
 		devServer: {
-			writeToDisk: true,
-			useLocalIp: true,
+			static: {
+				directory: path.resolve(__dirname, "../"),
+			},
 			host: "0.0.0.0",
 			port: 9001,
 			historyApiFallback: {
