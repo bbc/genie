@@ -56,7 +56,7 @@ const screens = {
 				scene.navigate("narrative");
 			},
 		},
-		default: true
+		default: true,
 	},
 	narrative: {
 		scene: Narrative,

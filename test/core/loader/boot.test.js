@@ -13,31 +13,28 @@ import { eventBus } from "../../../src/core/event-bus.js";
 import * as getThemeString from "../../../src/core/get-theme.js";
 
 const createBootScreen = (config, mockGame, mockAudioButton) => {
-
 	const bootScreen = new Boot(config);
 
-		bootScreen.game = mockGame;
-		bootScreen.load = {
-			setCORS: jest.fn(),
-			setBaseURL: jest.fn(),
-			setPath: jest.fn(),
-			json: jest.fn(),
-			pack: jest.fn(),
-		};
-		bootScreen.scene = {
-			key: "boot",
-			start: jest.fn(),
-			manager: { getScenes: jest.fn(() => [{ layout: { buttons: { audio: mockAudioButton } } }]) },
-		};
+	bootScreen.game = mockGame;
+	bootScreen.load = {
+		setCORS: jest.fn(),
+		setBaseURL: jest.fn(),
+		setPath: jest.fn(),
+		json: jest.fn(),
+		pack: jest.fn(),
+	};
+	bootScreen.scene = {
+		key: "boot",
+		start: jest.fn(),
+		manager: { getScenes: jest.fn(() => [{ layout: { buttons: { audio: mockAudioButton } } }]) },
+	};
 
-		bootScreen.navigation = { next: jest.fn() };
+	bootScreen.navigation = { next: jest.fn() };
 
-		bootScreen.sound = { mute: false };
+	bootScreen.sound = { mute: false };
 
-		return bootScreen
-}
-
-
+	return bootScreen;
+};
 
 describe("Boot", () => {
 	let bootScreen;
@@ -77,7 +74,6 @@ describe("Boot", () => {
 		mockNavigationConfig = {};
 		bootScreen = createBootScreen(mockNavigationConfig, mockGame, mockAudioButton);
 
-
 		Scaler.init = jest.fn();
 		a11y.create = jest.fn();
 	});
@@ -112,11 +108,9 @@ describe("Boot", () => {
 			bootScreen.preload();
 
 			const expectedData = {
-
 				parentScreens: [],
 				transient: {},
 				navigation: {
-
 					boot: { routes: { next: "loader" } },
 					loader: { routes: { next: "home" } },
 				},
@@ -125,7 +119,7 @@ describe("Boot", () => {
 		});
 
 		test("Calls this.SetData with correct start screen when a default is provided", () => {
-			mockNavigationConfig.testScreen = {default: true}
+			mockNavigationConfig.testScreen = { default: true };
 			bootScreen = createBootScreen(mockNavigationConfig, mockGame);
 			bootScreen.setData = jest.fn();
 			bootScreen.preload();
@@ -134,14 +128,13 @@ describe("Boot", () => {
 				parentScreens: [],
 				transient: {},
 				navigation: {
-					testScreen: {default: true},
+					testScreen: { default: true },
 					boot: { routes: { next: "loader" } },
 					loader: { routes: { next: "testScreen" } },
 				},
 			};
 			expect(bootScreen.setData).toHaveBeenCalledWith(expectedData);
 		});
-
 
 		test("focuses the canvas when settings are closed", () => {
 			bootScreen.preload();
