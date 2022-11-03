@@ -19,8 +19,7 @@ const setImage = button => button.setImage(settings.getAllSettings().audio ? "au
 const getAudioButtons = fp.map(fp.get("layout.buttons.audio"));
 
 const isDefault = screen => screen.default === true;
-const getDefaultStartScreen = config =>
-	Object.keys(config)[Object.values(config).findIndex(isDefault)] || "home";
+const getDefaultStartScreen = config => Object.keys(config)[Object.values(config).findIndex(isDefault)] || "home";
 
 export class Boot extends Screen {
 	constructor(navigationConfig) {
