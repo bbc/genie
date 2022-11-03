@@ -18,17 +18,19 @@ import { getTheme } from "../get-theme.js";
 const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
 const getAudioButtons = fp.map(fp.get("layout.buttons.audio"));
 
-
 // testScreen: {default: true},
 // boot: { routes: { next: "loader" } },
 // loader: { routes: { next: "testScreen" } },
 
-const getDefaultStartScreen = (config) => {
-console.log(config)
-	return Object.keys(config)[Object.values(config).findIndex(screen => screen.default === true)];
-	
-}
+const getDefaultStartScreen = config => {
+	console.log(config);
 
+	let defaultScreen = Object.keys(config)[Object.values(config).findIndex(screen => screen.default === true)];
+	if (defaultScreen === undefined) {
+		defaultScreen = "home";
+	}
+	return defaultScreen;
+};
 
 export class Boot extends Screen {
 	constructor(navigationConfig) {
@@ -36,11 +38,9 @@ export class Boot extends Screen {
 		this._navigationConfig = navigationConfig;
 
 		this._navigationConfig.boot = { routes: { next: "loader" } };
-		this._navigationConfig.loader = { routes: { next: getDefaultStartScreen(navigationConfig) } };
+		const defaultStartScreen = getDefaultStartScreen(navigationConfig);
+		this._navigationConfig.loader = { routes: { next: defaultStartScreen } };
 	}
-
-
-
 
 	preload() {
 		this.load.setBaseURL(gmi.gameDir);
