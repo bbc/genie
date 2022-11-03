@@ -24,6 +24,17 @@ The above code creates a Home screen with a 'next' button that points to Shop Me
 
 The three Shop screens will be created from here, with config and assets in `themes/default/shop-*` provided as a starting point. 
 
+### Setting a default narrative screen
+
+To make this the default screen then set default: true in the config. Please see the example below:
+
+```javascript
+{
+    ...Shop({ key: "shop", routes: { back: "home" }, 
+    default: true})
+}
+```
+
 
 ## Launching the Shop from in-game (overlay)
 
