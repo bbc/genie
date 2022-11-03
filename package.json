@@ -32,7 +32,7 @@
         "@webpack-cli/serve": "^1.7.0",
         "bufferutil": "^4.0.5",
         "cross-env": "^7.0.2",
-        "cypress": "^7.5.0",
+        "cypress": "^7.7.0",
         "cypress-plugin-tab": "^1.0.5",
         "eslint": "^8.1.0",
         "eslint-config-prettier": "^8.3.0",

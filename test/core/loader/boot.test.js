@@ -18,6 +18,7 @@ describe("Boot", () => {
 	let mockGame;
 	let mockAudioButton;
 	let mockSettings;
+	let mockNavigationConfig;
 
 	beforeEach(() => {
 		jest.spyOn(getThemeString, "getTheme").mockImplementation(() => "theme-name");
@@ -46,7 +47,8 @@ describe("Boot", () => {
 			setImage: jest.fn(),
 		};
 
-		bootScreen = new Boot({});
+		mockNavigationConfig = {};
+		bootScreen = new Boot(mockNavigationConfig);
 
 		bootScreen.game = mockGame;
 		bootScreen.load = {
@@ -100,15 +102,36 @@ describe("Boot", () => {
 			bootScreen.preload();
 
 			const expectedData = {
+
 				parentScreens: [],
 				transient: {},
 				navigation: {
+
 					boot: { routes: { next: "loader" } },
 					loader: { routes: { next: "home" } },
 				},
 			};
 			expect(bootScreen.setData).toHaveBeenCalledWith(expectedData);
 		});
+
+		test("Calls this.SetData with correct start screen when a default is provided", () => {
+			mockNavigationConfig.testScreen = {default: true}
+			console.log(bootScreen);
+			bootScreen.setData = jest.fn();
+			bootScreen.preload();
+
+			const expectedData = {
+				parentScreens: [],
+				transient: {},
+				navigation: {
+					testScreen: {default: true},
+					boot: { routes: { next: "loader" } },
+					loader: { routes: { next: "testScreen" } },
+				},
+			};
+			expect(bootScreen.setData).toHaveBeenCalledWith(expectedData);
+		});
+
 
 		test("focuses the canvas when settings are closed", () => {
 			bootScreen.preload();
