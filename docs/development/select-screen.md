@@ -37,6 +37,23 @@ Please note that the select screen should be given a descriptive name (here it i
 
 - When running the game, progressing from the home screen should now take the player to the character select screen.
 
+### Setting a default narrative screen
+
+To make this the default screen then set default: true in the config. Please see the example below:
+
+```javascript
+{
+    "character-select": {
+        scene: Select,
+        routes: {
+            next: "level-select",
+            home: "home",
+        },
+        default: true,
+    },
+}
+```
+
 ## How do I add items to the select screen carousel?
 - Create a config file `config.json5` inside `themes/your-theme/character-select` (where `your-theme` is the name of your theme and `character-select` is the name of your select screen).
 - Add a `"choices"` array and fill it with objects containing the keys `id` and `key`. The `key` must be named the same as the key in your `asset-pack-master.json` file (see [below](#how-does-it-find-the-location-of-my-sprite-assets)).

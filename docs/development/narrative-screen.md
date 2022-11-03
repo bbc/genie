@@ -28,6 +28,23 @@ const screens = {
 
 Please note that the screen should be given a descriptive name (here it is called `level1Intro`), as it will be used for stats purposes.
 
+### Setting a default narrative screen
+
+To make this the default screen then set default: true in the config. Please see the example below:
+
+```javascript
+{
+    level1Intro: {
+        scene: Narrative,
+        routes: { 
+            next: "characterSelect",
+        },
+        default: true,
+    }
+}
+```
+
+
 ## Configuring a narrative screen
 
 The config file for any page (e.g: `themes/default/config/cutScene1.json5`) can have background items, audio and tweens.

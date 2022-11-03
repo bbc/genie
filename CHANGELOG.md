@@ -2,7 +2,8 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-|               | Fix `npm run start:pack` _(v4 webpack config changes)_                                                                                                  |
+|               | Added config option for default home screen                                                                                                           |
+|               | Fix `npm run start:pack` _(v4 webpack config changes)_                                                                                                |
 |               | Update Babel targets                                                                                                                                  |
 | 3.13.0        | Add tag filters for shop item lists                                                                                                                   |
 |               | Improve shop and collection docs                                                                                                                      |

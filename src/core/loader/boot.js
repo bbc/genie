@@ -18,12 +18,17 @@ import { getTheme } from "../get-theme.js";
 const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
 const getAudioButtons = fp.map(fp.get("layout.buttons.audio"));
 
+const isDefault = screen => screen.default === true;
+const getDefaultStartScreen = config => Object.keys(config)[Object.values(config).findIndex(isDefault)] || "home";
+
 export class Boot extends Screen {
 	constructor(navigationConfig) {
 		super({ key: "boot" });
 		this._navigationConfig = navigationConfig;
+
 		this._navigationConfig.boot = { routes: { next: "loader" } };
-		this._navigationConfig.loader = { routes: { next: "home" } };
+		const defaultStartScreen = getDefaultStartScreen(navigationConfig);
+		this._navigationConfig.loader = { routes: { next: defaultStartScreen } };
 	}
 
 	preload() {
