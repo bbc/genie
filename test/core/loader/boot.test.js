@@ -12,7 +12,7 @@ import * as a11y from "../../../src/core/accessibility/accessibility-layer.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as getThemeString from "../../../src/core/get-theme.js";
 
-const createBootScreen = (config, mockGame) => {
+const createBootScreen = (config, mockGame, mockAudioButton) => {
 
 	const bootScreen = new Boot(config);
 
@@ -75,7 +75,7 @@ describe("Boot", () => {
 		};
 
 		mockNavigationConfig = {};
-		bootScreen = createBootScreen(mockNavigationConfig, mockGame);
+		bootScreen = createBootScreen(mockNavigationConfig, mockGame, mockAudioButton);
 
 
 		Scaler.init = jest.fn();

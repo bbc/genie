@@ -18,18 +18,9 @@ import { getTheme } from "../get-theme.js";
 const setImage = button => button.setImage(settings.getAllSettings().audio ? "audio-on" : "audio-off");
 const getAudioButtons = fp.map(fp.get("layout.buttons.audio"));
 
-// testScreen: {default: true},
-// boot: { routes: { next: "loader" } },
-// loader: { routes: { next: "testScreen" } },
 
 const getDefaultStartScreen = config => {
-	console.log(config);
-
-	let defaultScreen = Object.keys(config)[Object.values(config).findIndex(screen => screen.default === true)];
-	if (defaultScreen === undefined) {
-		defaultScreen = "home";
-	}
-	return defaultScreen;
+	return Object.keys(config)[Object.values(config).findIndex(screen => screen.default === true)] || "home";
 };
 
 export class Boot extends Screen {
