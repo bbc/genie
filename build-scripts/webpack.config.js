@@ -14,7 +14,7 @@ module.exports = env => {
 	const genieCore = env && env.genieCore;
 	let webPackConfig = {
 		mode: development ? "development" : "production",
-		devtool: development ? "eval-cheap-module-source-map" : false,
+		devtool: development ? "eval-cheap-module-source-map" : "hidden-source-map",
 		performance: { hints: false },
 		entry: [
 			"core-js/stable",
