@@ -2,6 +2,7 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 3.14.0        | Added source maps to production builds                                                                                                                |
 |               | Added config option for default home screen                                                                                                           |
 |               | Fix `npm run start:pack` _(v4 webpack config changes)_                                                                                                |
 |               | Update Babel targets                                                                                                                                  |
