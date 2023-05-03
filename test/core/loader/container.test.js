@@ -25,6 +25,8 @@ describe("getParentContainer Method", () => {
 		});
 	});
 
+	afterEach(jest.clearAllMocks);
+
 	test("returns the gameContainer for gmi.gameContainerId", () => {
 		gmi.gameContainerId = "correct-id";
 		expect(getContainerDiv()).toBe(containerDiv);

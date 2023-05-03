@@ -31,7 +31,7 @@ describe("Accessible Carousel Elements", () => {
 		mockSprites = [firstMockSprite, mockSprite, mockSprite];
 	});
 
-	afterEach(() => jest.clearAllMocks());
+	afterEach(jest.clearAllMocks);
 
 	test("creates a carousel DOM element", () => {
 		accessibleCarouselElements.create("select-screen", mockSprites, mockParentElement);

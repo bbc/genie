@@ -106,7 +106,7 @@ describe("Accessibilify", () => {
 		accessibleDomElement.mockImplementation(() => mockAccessibleDomElement);
 	});
 
-	afterEach(() => jest.clearAllMocks());
+	afterEach(jest.clearAllMocks);
 
 	describe("Initialization", () => {
 		test("creates an accessibleDomElement with correct params", () => {
