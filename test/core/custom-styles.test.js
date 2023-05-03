@@ -15,6 +15,8 @@ describe("Custom styles", () => {
 		addCustomStyles();
 	});
 
+	afterEach(jest.clearAllMocks);
+
 	describe("addCustomStyles method", () => {
 		test("creates a new style element", () => {
 			expect(global.document.createElement).toHaveBeenCalledWith("style");

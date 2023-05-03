@@ -87,7 +87,7 @@ describe("How To Play Screen", () => {
 		};
 	});
 
-	afterEach(() => jest.clearAllMocks());
+	afterEach(jest.clearAllMocks);
 
 	describe("create method", () => {
 		beforeEach(() => howToPlayScreen.create());

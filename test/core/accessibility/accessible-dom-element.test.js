@@ -26,7 +26,7 @@ describe("Accessible DOM Element", () => {
 		global.document.createElement = jest.fn().mockImplementation(() => mockElement);
 	});
 
-	afterEach(() => jest.clearAllMocks());
+	afterEach(jest.clearAllMocks);
 
 	describe("Initialize", () => {
 		test("creates new div mockElement", () => {

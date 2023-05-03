@@ -17,7 +17,7 @@ describe("Accessibility Layer", () => {
 		jest.spyOn(global.document, "getElementById").mockImplementation(() => gameParentElement);
 		a11y.destroy();
 	});
-	afterEach(() => jest.clearAllMocks());
+	afterEach(jest.clearAllMocks);
 
 	describe("create Method", () => {
 		beforeEach(() => {

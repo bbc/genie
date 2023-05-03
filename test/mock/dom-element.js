@@ -3,14 +3,17 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
 const domElement = () => {
-	const element = {
-		attributes: {},
-		setAttribute: jest.fn().mockImplementation((attribute, value) => {
-			element.attributes[attribute] = value;
+	const attributes = {};
+
+	return {
+		get attributes() {
+			return attributes;
+		},
+		setAttribute: jest.fn((attribute, value) => {
+			attributes[attribute] = value;
 		}),
-		getAttribute: attribute => element.attributes[attribute],
+		getAttribute: attribute => attributes[attribute],
 		style: {},
 		classList: {
 			add: jest.fn(),
@@ -30,7 +33,6 @@ const domElement = () => {
 		removeEventListener: jest.fn(),
 		childNodes: [],
 	};
-	return element;
 };
 
 export { domElement };

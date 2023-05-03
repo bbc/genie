@@ -89,12 +89,14 @@ describe("Startup", () => {
 		describe("Throwing an error", () => {
 			let mockContainer;
 			let mockPreTag;
+			let realCrel;
 
 			beforeEach(() => {
 				mockContainer = domElement();
 				mockPreTag = domElement();
 				mockContainer.appendChild.mockImplementation(() => mockPreTag);
 				global.document.getElementById.mockImplementation(() => mockContainer);
+				realCrel = global.document.createElement;
 				global.document.createElement = jest.fn(tagName => {
 					const domEle = domElement();
 					domEle.name = tagName;
@@ -104,6 +106,11 @@ describe("Startup", () => {
 				const errorEvent = { error: { message: "There has been an error" } };
 				const errorThrown = global.window.addEventListener.mock.calls[0][1];
 				errorThrown(errorEvent);
+			});
+
+			afterEach(() => {
+				jest.clearAllMocks();
+				global.document.createElement = realCrel;
 			});
 
 			test("appends an error message to the container when an error event is thrown", () => {
