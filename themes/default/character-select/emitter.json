@@ -1,6 +1,6 @@
 {
-    "x": 400,
-    "y": 300,
+    "x": 0,
+    "y": 0,
     "blendMode": "SCREEN",
     "scale": { "start": 0.2, "end": 0 },
     "speed": { "min": -100, "max": 100 },

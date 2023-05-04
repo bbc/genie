@@ -11,10 +11,10 @@ const isButtonEnabled = button => button.listeners(Phaser.Input.Events.POINTER_U
 
 const createEmitter = (scene, button, config) => {
 	if (isButtonEnabled(button)) return;
-	const emitter = scene.add
-		.particles(config.assetKey)
-		.createEmitter(scene.cache.json.get(config.emitterConfigKey))
-		.setPosition(button.x, button.y);
+
+	const emitterConfig = scene.cache.json.get(config.emitterConfigKey);
+
+	const emitter = scene.add.particles(0, 0, config.assetKey, emitterConfig).setPosition(button.x, button.y);
 	onPointerOut(emitter, button);
 };
 

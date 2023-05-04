@@ -20,19 +20,18 @@ const startEmitter = (scene, config, emitter) => {
 
 const addParticlesToRow = (scene, container) => {
 	gmi.getAllSettings().motion &&
-		container.rowConfig.particles &&
-		container.rowConfig.particles.forEach(config =>
+		container.rowConfig.particles?.forEach(config => {
+			const emitterConfig = scene.cache.json.get(config.emitterConfigKey);
 			startEmitter(
 				scene,
 				config,
 				scene.add
-					.particles(config.assetKey)
+					.particles(0, 0, config.assetKey, emitterConfig)
 					.setDepth(config.onTop ? 1 : 0)
-					.createEmitter(scene.cache.json.get(config.emitterConfigKey))
 					.setPosition(container.x + (config.offsetX || 0), container.y + (config.offsetY || 0))
 					.stop(),
-			),
-		);
+			);
+		});
 };
 
 export const addParticlesToRows = (scene, containers) =>
