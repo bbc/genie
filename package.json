@@ -25,7 +25,7 @@
         "expose-loader": "^3.1.0",
         "json5": "^2.2.3",
         "notp": "^2.0.3",
-        "phaser": "3.55.2",
+        "phaser": "3.60.0",
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {
