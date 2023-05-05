@@ -16,6 +16,6 @@
             "height": 400
         }
     },
-    "on": 0,
+    "emitting": 0,
     "scale": { "start": 0.15, "end": 0.6 }
 }
