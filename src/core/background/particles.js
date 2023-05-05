@@ -13,5 +13,5 @@ export const addParticles = scene => config => {
 	const props = config.props || {};
 	const emitterConfig = { ...scene.cache.json.get(config.key), ...props };
 
-	return scene.add.particles(0,0, config.assetKey, emitterConfig);
+	return scene.add.particles(0, 0, config.assetKey, emitterConfig);
 };

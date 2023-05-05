@@ -13,7 +13,6 @@ describe("Select Screen - Particles", () => {
 	let mockCells;
 	let mockEmitter;
 	let mockEmitterConfig;
-	let mockParticles;
 	let mockSettings;
 	let mockButton;
 	let mockConfig;
@@ -30,15 +29,12 @@ describe("Select Screen - Particles", () => {
 		mockEmitterConfig = {
 			lifespan: 800,
 		};
-		mockParticles = {
-			createEmitter: jest.fn(() => mockEmitter),
-		};
 		mockEmitter = {
 			setPosition: jest.fn(() => mockEmitter),
 			stop: jest.fn(() => mockEmitter),
 		};
 		mockScene = {
-			add: { particles: jest.fn(() => mockParticles) },
+			add: { particles: jest.fn(() => mockEmitter) },
 			cache: { json: { get: jest.fn(() => mockEmitterConfig) } },
 		};
 		mockSettings = { motion: true };
@@ -51,7 +47,7 @@ describe("Select Screen - Particles", () => {
 		addHoverParticlesToCells(mockScene, mockCells, mockConfig, mockLayoutRoot);
 		mockButton.on.mock.calls[0][1]();
 		expect(mockButton.on.mock.calls[0][0]).toBe(Phaser.Input.Events.POINTER_OVER);
-		expect(mockScene.add.particles).toHaveBeenCalledWith(mockConfig.assetKey);
+		expect(mockScene.add.particles).toHaveBeenCalledWith(0, 0, mockConfig.assetKey, mockEmitterConfig);
 	});
 
 	test("does not setup pointer listeners on buttons when no config is provided", () => {
@@ -76,7 +72,8 @@ describe("Select Screen - Particles", () => {
 		addHoverParticlesToCells(mockScene, mockCells, mockConfig, mockLayoutRoot);
 		mockButton.on.mock.calls[0][1]();
 		expect(mockButton.on.mock.calls[0][0]).toBe(Phaser.Input.Events.POINTER_OVER);
-		expect(mockParticles.createEmitter).toHaveBeenCalledWith(mockEmitterConfig);
+
+		expect(mockScene.add.particles).toHaveBeenCalledWith(0, 0, mockConfig.assetKey, mockEmitterConfig);
 	});
 
 	test("does not create an emitter when pointer over event is fired and button is disabled", () => {
@@ -84,7 +81,7 @@ describe("Select Screen - Particles", () => {
 		addHoverParticlesToCells(mockScene, mockCells, mockConfig, mockLayoutRoot);
 		mockButton.on.mock.calls[0][1]();
 		expect(mockButton.on.mock.calls[0][0]).toBe(Phaser.Input.Events.POINTER_OVER);
-		expect(mockParticles.createEmitter).not.toHaveBeenCalledWith(mockEmitterConfig);
+		expect(mockScene.add.particles).not.toHaveBeenCalledWith(mockEmitterConfig);
 	});
 
 	test("sets the position of the emitter to the position of the button when pointer over event is fired", () => {

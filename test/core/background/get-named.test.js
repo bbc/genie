@@ -12,11 +12,10 @@ describe("getNamed", () => {
 		expect(getNamed("test_name")(found, child)).toBe(child);
 	});
 
-	test("returns emitter matching name if Particle Manager", () => {
-		const found = { name: "test_found" };
-		const mockEmitter = { name: "test_emitter" };
-		const child = { emitters: { getByName: jest.fn(() => mockEmitter) } };
-		expect(getNamed("test_emitter")(found, child)).toBe(mockEmitter);
+	test("returns child if name is a Particle Emitter", () => {
+		const child = Object.create(Phaser.GameObjects.Particles.ParticleEmitter.prototype);
+
+		expect(getNamed("test_emitter")({}, child)).toBe(child);
 	});
 
 	test("returns current emitter matching name if Particle Manager", () => {
