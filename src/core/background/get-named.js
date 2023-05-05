@@ -5,14 +5,13 @@
  */
 import fp from "../../../lib/lodash/fp/fp.js";
 
-const isParticleManager = (found, child) => Boolean(child.emitters);
+const isParticleEmitter = (found, child) => child instanceof Phaser.GameObjects.Particles.ParticleEmitter;
 const matchesName = name => (found, child) => child.name === name;
 const getChild = (found, child) => child;
-const getEmitter = name => (found, child) => child.emitters.getByName(name) || found;
 
 export const getNamed = name =>
 	fp.cond([
 		[matchesName(name), getChild],
-		[isParticleManager, getEmitter(name)],
+		[isParticleEmitter, getChild],
 		[fp.stubTrue, found => found],
 	]);
