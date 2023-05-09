@@ -63,8 +63,7 @@ describe("Background Spine", () => {
 
 			addParticles(mockScene)(mockConfig);
 
-			expect(mockScene.add.particles).toHaveBeenCalledWith("example_sprite");
-			expect(mockParticles.createEmitter).toHaveBeenCalledWith({ key: "example_emitter" });
+			expect(mockScene.add.particles).toHaveBeenCalledWith(0, 0, "example_sprite", { key: "example_emitter" });
 		});
 
 		test("Adds a particle system with custom props if configured", () => {
@@ -78,7 +77,10 @@ describe("Background Spine", () => {
 
 			addParticles(mockScene)(mockConfig);
 
-			expect(mockParticles.createEmitter).toHaveBeenCalledWith({ key: "example_emitter", x: 250 });
+			expect(mockScene.add.particles).toHaveBeenCalledWith(0, 0, "example_sprite", {
+				key: "example_emitter",
+				x: 250,
+			});
 		});
 
 		test("Does not add particles if motion is disabled", () => {

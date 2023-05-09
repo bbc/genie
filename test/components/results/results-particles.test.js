@@ -10,7 +10,6 @@ jest.mock("../../../src/core/gmi/gmi.js");
 
 describe("ResultsRow - Particles", () => {
 	let mockScene;
-	let mockParticles;
 	let mockEmitter;
 	let mockEmitterConfig;
 	let mockParticlesConfig;
@@ -21,17 +20,15 @@ describe("ResultsRow - Particles", () => {
 		mockEmitterConfig = {
 			lifespan: 800,
 		};
-		mockParticles = {
-			createEmitter: jest.fn(() => mockEmitter),
-			setDepth: jest.fn(() => mockParticles),
-		};
+
 		mockEmitter = {
 			setPosition: jest.fn(() => mockEmitter),
 			stop: jest.fn(() => mockEmitter),
+			setDepth: jest.fn(() => mockEmitter),
 			start: jest.fn(),
 		};
 		mockScene = {
-			add: { particles: jest.fn(() => mockParticles) },
+			add: { particles: jest.fn(() => mockEmitter) },
 			cache: { json: { get: jest.fn(() => mockEmitterConfig) } },
 			time: { addEvent: jest.fn() },
 		};
@@ -45,24 +42,24 @@ describe("ResultsRow - Particles", () => {
 
 	test("sets up particles as specified in config", () => {
 		addParticlesToRows(mockScene, mockContainers);
-		expect(mockScene.add.particles).toHaveBeenCalledWith(mockParticlesConfig[0].assetKey);
+		expect(mockScene.add.particles).toHaveBeenCalledWith(0, 0, mockParticlesConfig[0].assetKey, mockEmitterConfig);
 	});
 
 	test("sets up particles with a depth of 0 by default", () => {
 		addParticlesToRows(mockScene, mockContainers);
-		expect(mockParticles.setDepth).toHaveBeenCalledWith(0);
+		expect(mockEmitter.setDepth).toHaveBeenCalledWith(0);
 	});
 
 	test("sets up particles with a depth of 1 when onTop is true", () => {
 		mockParticlesConfig[0].onTop = true;
 		addParticlesToRows(mockScene, mockContainers);
-		expect(mockParticles.setDepth).toHaveBeenCalledWith(1);
+		expect(mockEmitter.setDepth).toHaveBeenCalledWith(1);
 	});
 
 	test("sets up particles with a depth of 0 when onTop is false", () => {
 		mockParticlesConfig[0].onTop = false;
 		addParticlesToRows(mockScene, mockContainers);
-		expect(mockParticles.setDepth).toHaveBeenCalledWith(0);
+		expect(mockEmitter.setDepth).toHaveBeenCalledWith(0);
 	});
 
 	test("gets the emitter config using the emitterConfigKey", () => {
@@ -72,7 +69,7 @@ describe("ResultsRow - Particles", () => {
 
 	test("creates an emitter using the emitter config", () => {
 		addParticlesToRows(mockScene, mockContainers);
-		expect(mockParticles.createEmitter).toHaveBeenCalledWith(mockEmitterConfig);
+		expect(mockScene.add.particles).toHaveBeenCalledWith(0, 0, "test", mockEmitterConfig);
 	});
 
 	test("sets position of emitter to the containers position when no offset is provided", () => {

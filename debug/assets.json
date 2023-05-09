@@ -515,8 +515,8 @@
                 "key": "currency",
                 "url": "../../debug/assets/shop/currency-small.png",
                 "frameConfig": {
-                    "frameWidth": 31,
-                    "frameHeight": 24,
+                    "frameWidth": 30,
+                    "frameHeight": 23,
                     "frameMax": 1,
                     "margin": 0,
                     "spacing": 4

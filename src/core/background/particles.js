@@ -10,9 +10,8 @@ export const isParticles = scene => config => scene.cache.json.exists(config.key
 export const addParticles = scene => config => {
 	if (!gmi.getAllSettings().motion) return;
 
-	const particles = scene.add.particles(config.assetKey);
 	const props = config.props || {};
 	const emitterConfig = { ...scene.cache.json.get(config.key), ...props };
 
-	return particles.createEmitter(emitterConfig);
+	return scene.add.particles(0, 0, config.assetKey, emitterConfig);
 };
