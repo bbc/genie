@@ -5,6 +5,7 @@
     "license": "Apache-2.0",
     "private": true,
     "author": "BBC",
+    "type": "module",
     "repository": {
         "type": "git",
         "url": "https://github.com/bbc/genie"
@@ -52,8 +53,9 @@
         "mochawesome": "^7.1.3",
         "mochawesome-merge": "^4.2.1",
         "mochawesome-report-generator": "^6.2.0",
+        "phaser3-rex-plugins": "github:/rexrainbow/phaser3-rex-notes.git",
         "prettier": "^2.8.8",
-        "rollup": "^3.21.3",
+        "rollup": "^3.21.6",
         "@rollup/plugin-terser": "^0.4.1",
         "utf-8-validate": "^6.0.3",
         "webpack": "^5.81.0",
