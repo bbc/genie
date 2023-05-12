@@ -2,12 +2,15 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 3.14.0        | Added source maps to production builds                                                                                                                |
-|               | Added config option for default home screen                                                                                                           |
+|               | Added rollup build for ninepatch plugin and updated.                                                                                                  |
+|               | Added docs for building libraries to ES6 with rollup.                                                                                                 |
+|               | Updated Phaser to 3.60.                                                                                                                               |
+| 3.14.0        | Added source maps to production builds.                                                                                                               |
+|               | Added config option for default home screen.                                                                                                          |
 |               | Fix `npm run start:pack` _(v4 webpack config changes)_                                                                                                |
-|               | Update Babel targets                                                                                                                                  |
-| 3.13.0        | Add tag filters for shop item lists                                                                                                                   |
-|               | Improve shop and collection docs                                                                                                                      |
+|               | Update Babel targets.                                                                                                                                 |
+| 3.13.0        | Add tag filters for shop item lists.                                                                                                                  |
+|               | Improve shop and collection docs.                                                                                                                     |
 |               | Items with qty prop undefined are treated as qty=1                                                                                                    |
 | 3.12.1        |                                                                                                                                                       |
 |               | Update rexui version.                                                                                                                                 |
