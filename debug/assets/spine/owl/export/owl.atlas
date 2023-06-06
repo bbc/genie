@@ -1,195 +1,73 @@
-
 owl.png
-size:512,256
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
+	size: 1024, 512
+	filter: Linear, Linear
+	scale: 0.5
 L_eye-closed
-  rotate: false
-  xy:254,57.5
-  size:45,43
-  orig:45,43
-  offset: 0, 0
-  index: -1
+	bounds: 512, 5, 90, 86
+	rotate: 90
 L_eye-iris
-  rotate: false
-  xy:413,91.5
-  size:45,43
-  orig:45,43
-  offset: 0, 0
-  index: -1
+	bounds: 600, 10, 90, 86
+	rotate: 90
 L_eye-light
-  rotate: false
-  xy:500.5,244
-  size:10.5,10
-  orig:10.5,10
-  offset: 0, 0
-  index: -1
+	bounds: 688, 4, 21, 20
+	rotate: 90
 L_eye-pupil
-  rotate: false
-  xy:376,77
-  size:31.5,30
-  orig:31.5,30
-  offset: 0, 0
-  index: -1
+	bounds: 856, 13, 63, 60
+	rotate: 90
 L_foot
-  rotate: false
-  xy:408.5,66.5
-  size:32,24
-  orig:32,24
-  offset: 0, 0
-  index: -1
+	bounds: 834, 78, 64, 48
+	rotate: 90
 L_wing
-  rotate: false
-  xy:171,45.5
-  size:40.5,55
-  orig:40.5,55
-  offset: 0, 0
-  index: -1
+	bounds: 349, 4, 81, 110
+	rotate: 90
 R_eye-closed
-  rotate: false
-  xy:254,13.5
-  size:45,43
-  orig:45,43
-  offset: 0, 0
-  index: -1
+	bounds: 637, 119, 90, 86
+	rotate: 90
 R_eye-iris
-  rotate: true
-  xy:300,55.5
-  size:45,43
-  orig:45,43
-  offset: 0, 0
-  index: -1
+	bounds: 688, 27, 90, 86
+	rotate: 90
 R_eye-light
-  rotate: false
-  xy:500.5,233
-  size:10.5,10
-  orig:10.5,10
-  offset: 0, 0
-  index: -1
+	bounds: 710, 4, 21, 20
+	rotate: 90
 R_eye-pupil
-  rotate: true
-  xy:345.5,36
-  size:31.5,30
-  orig:31.5,30
-  offset: 0, 0
-  index: -1
+	bounds: 884, 80, 63, 60
+	rotate: 90
 R_foot
-  rotate: false
-  xy:407,41.5
-  size:32,24
-  orig:32,24
-  offset: 0, 0
-  index: -1
+	bounds: 845, 145, 64, 48
+	rotate: 90
 R_wing
-  rotate: false
-  xy:212.5,45.5
-  size:40.5,55
-  orig:40.5,55
-  offset: 0, 0
-  index: -1
+	bounds: 421, 93, 81, 110
 beak
-  rotate: false
-  xy:441.5,70
-  size:19.5,20.5
-  orig:19.5,20.5
-  offset: 0, 0
-  index: -1
+	bounds: 776, 2, 39, 41
 beak-down
-  rotate: true
-  xy:376.5,26.5
-  size:18.5,20
-  orig:18.5,20
-  offset: 0, 0
-  index: -1
+	bounds: 817, 3, 37, 40
 body
-  rotate: false
-  xy:1,2.5
-  size:124,98
-  orig:124,98
-  offset: 0, 0
-  index: -1
+	bounds: 2, 7, 248, 196
 feather-1
-  rotate: false
-  xy:376.5,46
-  size:29.5,30
-  orig:29.5,30
-  offset: 0, 0
-  index: -1
+	bounds: 918, 18, 59, 60
 feather-2
-  rotate: false
-  xy:344,68.5
-  size:31,32.5
-  orig:31,32.5
-  offset: 0, 0
-  index: -1
+	bounds: 781, 144, 62, 65
 feather-3
-  rotate: true
-  xy:300,1
-  size:28,38
-  orig:28,38
-  offset: 0, 0
-  index: -1
+	bounds: 776, 45, 56, 76
 head-base
-  rotate: false
-  xy:310.5,135.5
-  size:149.5,118.5
-  orig:149.5,118.5
-  offset: 0, 0
-  index: -1
+	bounds: 621, 211, 299, 237
+	rotate: 90
 leaf-1
-  rotate: false
-  xy:461,136.5
-  size:38,50.5
-  orig:38,50.5
-  offset: 0, 0
-  index: -1
+	bounds: 559, 102, 76, 101
 leaf-2
-  rotate: true
-  xy:310.5,102
-  size:32.5,47.5
-  orig:32.5,47.5
-  offset: 0, 0
-  index: -1
+	bounds: 252, 4, 65, 95
+	rotate: 90
 leaf-3
-  rotate: true
-  xy:461,188
-  size:66,38.5
-  orig:66,38.5
-  offset: 0, 0
-  index: -1
+	bounds: 252, 71, 132, 77
+	rotate: 90
 leaf-4
-  rotate: false
-  xy:300,30
-  size:44.5,24.5
-  orig:44.5,24.5
-  offset: 0, 0
-  index: -1
+	bounds: 461, 2, 89, 49
+	rotate: 90
 leaf-5
-  rotate: true
-  xy:359,108
-  size:26.5,53
-  orig:26.5,53
-  offset: 0, 0
-  index: -1
+	bounds: 504, 97, 53, 106
 leaf-6
-  rotate: false
-  xy:126,42.5
-  size:44,58
-  orig:44,58
-  offset: 0, 0
-  index: -1
+	bounds: 331, 87, 88, 116
 leaf-7
-  rotate: true
-  xy:126,14.5
-  size:27,43
-  orig:27,43
-  offset: 0, 0
-  index: -1
+	bounds: 725, 123, 54, 86
 wood
-  rotate: false
-  xy:1,101.5
-  size:308.5,152.5
-  orig:308.5,152.5
-  offset: 0, 0
-  index: -1
+	bounds: 2, 205, 617, 305
