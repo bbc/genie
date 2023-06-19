@@ -2,7 +2,7 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-|               | Updated Spine Plugin and example files to Spine 4.1.                                                                                                  |
+| 3.15.0        | Updated Spine Plugin and example files to Spine 4.1.                                                                                                  |
 |               | Added rollup build for ninepatch plugin and updated.                                                                                                  |
 |               | Added docs for building libraries to ES6 with rollup.                                                                                                 |
 |               | Updated Phaser to 3.60.                                                                                                                               |
