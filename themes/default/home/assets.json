@@ -7,6 +7,11 @@
                 "key": "title",
                 "url": "shared/title.png"
             },
+			{
+				"type": "basisu",
+				"key": "title",
+				"url": "home/0001.basis"
+			},
             {
                 "type": "image",
                 "key": "background",
