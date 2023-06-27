@@ -55,8 +55,14 @@ export const initCollection = screen => key => {
 
 	const set = config => {
 		if (!valid(config)) return;
+		console.log(">>", config);
 
 		gmi.setGameData("genie", fp.setWith(Object, storagePath, mergeToList(getStored(), [config]), getGenieStore()));
+	};
+
+	const setUnique = ({ id, key, value }) => {
+		const uniqueIndex = catalogue.findIndex(item => item.id === id);
+		catalogue[uniqueIndex][key] = value;
 	};
 
 	const collection = {
@@ -64,6 +70,7 @@ export const initCollection = screen => key => {
 		get,
 		getAll,
 		set,
+		setUnique,
 	};
 
 	collections.set(key, collection);

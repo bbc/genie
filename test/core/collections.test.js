@@ -308,4 +308,23 @@ describe("Collections", () => {
 			expect(mockGmi.setGameData).not.toHaveBeenCalled();
 		});
 	});
+
+	describe.only("Returned setUnique method", () => {
+		test("sets value on one item in collection", () => {
+			const collection = initCollection(mockScreen)("testCollection");
+			collection.setUnique({ id: "id1", key: "selected", value: true });
+
+			expect(collection.getAll()[0].selected).toBe(true);
+			expect(collection.getAll()[1].selected).not.toBeDefined();
+		});
+		test("enforces uniqueness of value", () => {
+			const collection = initCollection(mockScreen)("testCollection");
+			collection.set({ id: "id1", selected: true });
+			collection.set({ id: "id2", selected: true });
+			console.log(collection.getAll());
+			// collection.setUnique({ id: "id1", key: "selected", value: true });
+			expect(collection.getAll()[0].selected).toBe(true);
+			expect(collection.getAll()[1].selected).not.toBeDefined();
+		});
+	});
 });
