@@ -6,6 +6,7 @@
 import { createCell } from "./cell.js";
 import * as a11y from "../../accessibility/accessibility-layer.js";
 import { getMetrics } from "../../scaler.js";
+import { collections } from "../../collections.js";
 
 const defaults = {
 	rows: 1,
@@ -33,7 +34,9 @@ export class GelGrid extends Phaser.GameObjects.Container {
 	}
 
 	addGridCells(choices) {
-		this.page = this.getCellPage(choices, this._config.choice);
+		this.collection = collections.get(this._config.collection).getAll();
+		const currentId = this.collection.find(item => item.current === true)?.id;
+		this.page = this.getCellPage(choices, currentId ?? this._config.choice);
 		this._cells = choices.map((cell, idx) => createCell(this, cell, idx, this._config));
 		this._cells.forEach(cell => this.add(cell.button));
 		this.makeAccessible();

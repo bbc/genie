@@ -309,8 +309,8 @@ describe("Collections", () => {
 		});
 	});
 
-	describe.only("Returned setUnique method", () => {
-		test("sets value on one item in collection", () => {
+	describe("Returned setUnique method", () => {
+		test("Sets value on one item in collection", () => {
 			const collection = initCollection(mockScreen)("testCollection");
 			collection.setUnique({ id: "id1", key: "selected", value: true });
 
@@ -319,7 +319,7 @@ describe("Collections", () => {
 				selected: true,
 			});
 		});
-		test.only("enforces uniqueness of value in collection", () => {
+		test("Enforces uniqueness of value in collection", () => {
 			testCatalogue[0].selected = true;
 			testCatalogue[1].selected = true;
 			const collection = initCollection(mockScreen)("testCollection");
