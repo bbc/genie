@@ -61,9 +61,13 @@ export const initCollection = screen => key => {
 
 	const setUnique = ({ id, key, value }) => {
 		catalogue.forEach(item => {
-			if (item.id === id) {
+			console.log(item);
+			if (item.id === id && item[key] !== value) {
+				console.log("setUnique1");
 				set({ id, [key]: value });
-			} else {
+			} else if (item.hasOwnProperty(key) && item[key] === value) {
+				console.log(">", item.hasOwnProperty(key), item[key] === value);
+				// console.log("setUnique2", item.id);
 				set({ id, [key]: null });
 			}
 		});
