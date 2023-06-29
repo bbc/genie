@@ -66,8 +66,10 @@ export const initCollection = screen => key => {
 
 			if (isNewlyUnique) {
 				set({ id, [key]: value });
+				item[key] = value;
 			} else if (doesItNeedToBeReset) {
 				set({ id: item.id, [key]: null });
+				item[key] = null;
 			}
 		});
 	};

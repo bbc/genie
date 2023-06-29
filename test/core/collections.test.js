@@ -318,6 +318,7 @@ describe("Collections", () => {
 				id: "id1",
 				selected: true,
 			});
+			expect(collection.getAll()[0].selected).toBe(true);
 		});
 		test("Enforces uniqueness of value in collection", () => {
 			testCatalogue[0].selected = true;
@@ -329,6 +330,8 @@ describe("Collections", () => {
 				id: "id2",
 				selected: null,
 			});
+			expect(collection.getAll()[0].selected).toBe(true);
+			expect(collection.getAll()[1].selected).toBe(null);
 		});
 	});
 });
