@@ -62,12 +62,12 @@ export const initCollection = screen => key => {
 	const setUnique = ({ id, key, value }) => {
 		catalogue.forEach(item => {
 			const isNewlyUnique = item.id === id && item[key] !== value;
-			const doesItNeedToBeReset = item.id !== id && item.hasOwnProperty(key) && item[key] === value;
+			const shouldBeReset = item.id !== id && item.hasOwnProperty(key) && item[key] === value;
 
 			if (isNewlyUnique) {
 				set({ id, [key]: value });
 				item[key] = value;
-			} else if (doesItNeedToBeReset) {
+			} else if (shouldBeReset) {
 				set({ id: item.id, [key]: null });
 				item[key] = null;
 			}
