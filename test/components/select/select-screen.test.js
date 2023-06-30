@@ -338,7 +338,7 @@ describe("Select Screen", () => {
 			eventBus.subscribe.mock.calls[0][0].callback();
 			expect(selectScreen.transientData["test-select"].choice.title).toBe("Title 1");
 		});
-		test("saves choice to local storage", () => {
+		test("saves choice to collection", () => {
 			mockChoices = [{ id: "id1", title: "Title 1" }];
 			selectScreen.create();
 
