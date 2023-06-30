@@ -319,6 +319,7 @@ describe("Collections", () => {
 				selected: true,
 			});
 			expect(collection.getAll()[0].selected).toBe(true);
+			expect(collection.getAll()[1].selected).not.toBe(true);
 		});
 		test("Enforces uniqueness of value in collection", () => {
 			testCatalogue[0].selected = true;
