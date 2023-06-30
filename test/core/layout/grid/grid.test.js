@@ -4,12 +4,14 @@
  * @license Apache-2.0
  */
 import { accessibilify } from "../../../../src/core/accessibility/accessibilify.js";
+import { collections } from "../../../../src/core/collections.js";
 import { GelGrid } from "../../../../src/core/layout/grid/grid.js";
 import * as Cell from "../../../../src/core/layout/grid/cell.js";
 import * as gmiModule from "../../../../src/core/gmi/gmi.js";
 import * as ScalerModule from "../../../../src/core/scaler.js";
 
 jest.mock("../../../../src/core/accessibility/accessibilify.js");
+jest.mock("../../../../src/core/collections.js");
 
 describe("Grid", () => {
 	let mockScene;
@@ -21,6 +23,9 @@ describe("Grid", () => {
 	let mockSafeArea;
 	let desktopCellPadding;
 	let transitionCallback;
+	let collectionGetAll;
+	let mockCollection;
+	let mockItem;
 
 	beforeEach(() => {
 		mockSprite = {
@@ -121,6 +126,16 @@ describe("Grid", () => {
 		gmiModule.gmi = {
 			getAllSettings: jest.fn(() => ({})),
 		};
+
+		mockItem = {
+			id: "id",
+			key: "key",
+			title: "title",
+			ariaLabel: "description",
+		};
+		collectionGetAll = [mockItem];
+		mockCollection = { getAll: jest.fn(() => collectionGetAll), get: () => mockCollection };
+		collections.get = jest.fn(() => mockCollection);
 	});
 
 	afterEach(() => jest.clearAllMocks());

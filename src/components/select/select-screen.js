@@ -100,6 +100,7 @@ export class Select extends Screen {
 		gmi.sendStatsEvent(screenType, "select", metaData);
 
 		this.transientData[this.scene.key] = { choice: selection };
+		this.collection.setUnique({ id: selection.id, key: "selected", value: true });
 		this.navigation.next();
 	};
 }

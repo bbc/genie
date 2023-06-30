@@ -59,11 +59,27 @@ export const initCollection = screen => key => {
 		gmi.setGameData("genie", fp.setWith(Object, storagePath, mergeToList(getStored(), [config]), getGenieStore()));
 	};
 
+	const setUnique = ({ id, key, value }) => {
+		catalogue.forEach(item => {
+			const isNewlyUnique = item.id === id && item[key] !== value;
+			const shouldBeReset = item.id !== id && item.hasOwnProperty(key) && item[key] === value;
+
+			if (isNewlyUnique) {
+				set({ id, [key]: value });
+				item[key] = value;
+			} else if (shouldBeReset) {
+				set({ id: item.id, [key]: null });
+				item[key] = null;
+			}
+		});
+	};
+
 	const collection = {
 		config,
 		get,
 		getAll,
 		set,
+		setUnique,
 	};
 
 	collections.set(key, collection);
