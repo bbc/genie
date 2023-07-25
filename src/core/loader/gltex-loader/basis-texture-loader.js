@@ -24,7 +24,7 @@ import {
  * of web workers, before transferring the transcoded compressed texture back
  * to the main thread.
  */
-var BasisTextureLoader = function ( manager ) {
+export const BasisTextureLoader = function ( manager ) {
 
 	Loader.call( this, manager );
 
@@ -70,7 +70,6 @@ BasisTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ),
 	},
 
 	detectSupport: function ( renderer ) {
-
 		var config = this.workerConfig;
 
 		config.astcSupported = renderer.extensions.has( 'WEBGL_compressed_texture_astc' );
@@ -81,29 +80,17 @@ BasisTextureLoader.prototype = Object.assign( Object.create( Loader.prototype ),
 			|| renderer.extensions.has( 'WEBKIT_WEBGL_compressed_texture_pvrtc' );
 
 		if ( config.astcSupported ) {
-
 			config.format = BasisTextureLoader.BASIS_FORMAT.cTFASTC_4x4;
-
 		} else if ( config.bptcSupported ) {
-
 			config.format = BasisTextureLoader.BASIS_FORMAT.cTFBC7_M5;
-
 		} else if ( config.dxtSupported ) {
-
 			config.format = BasisTextureLoader.BASIS_FORMAT.cTFBC3;
-
 		} else if ( config.pvrtcSupported ) {
-
 			config.format = BasisTextureLoader.BASIS_FORMAT.cTFPVRTC1_4_RGBA;
-
 		} else if ( config.etcSupported ) {
-
 			config.format = BasisTextureLoader.BASIS_FORMAT.cTFETC1;
-
 		} else {
-
 			throw new Error( 'THREE.BasisTextureLoader: No suitable compressed texture format found.' );
-
 		}
 
 		return this;
@@ -543,5 +530,3 @@ BasisTextureLoader.BasisWorker = function () {
 	}
 
 };
-
-export { BasisTextureLoader };

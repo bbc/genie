@@ -7,6 +7,9 @@
  * the web-worker will respond by sending another {@link ITranscodeResponse} message with `success: true`.
  * @ignore
  */
+import { Runner } from "./runner.js";
+
+
 function TranscoderWorkerWrapper() {
 	var basisBinding;
 	var messageHandlers = {
@@ -121,7 +124,7 @@ function TranscoderWorkerWrapper() {
  * library.
  * @memberof PIXI.BasisLoader
  */
-var TranscoderWorker = /** @class */ (function () {
+export const TranscoderWorker = /** @class */ (function () {
 	function TranscoderWorker() {
 		var _this = this;
 		this.requests = {};
@@ -225,7 +228,7 @@ var TranscoderWorker = /** @class */ (function () {
 	 */
 	TranscoderWorker.loadTranscoder = function (jsURL, wasmURL) {
 		var jsPromise = fetch(jsURL)
-			.then(function (res) { return res.text(); })
+			.then(res => res.text())
 			.then(function (text) { TranscoderWorker.jsSource = text; });
 		var wasmPromise = fetch(wasmURL)
 			.then(function (res) { return res.arrayBuffer(); })

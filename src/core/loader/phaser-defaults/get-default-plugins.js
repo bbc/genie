@@ -5,7 +5,7 @@
  */
 import FontLoaderPlugin from "../font-loader/font-plugin.js";
 import { JSON5Plugin } from "../json5-loader/json5-plugin.js";
-import { BasisUPlugin } from "../gltex-loader/basisu-plugin.js";
+import { BasisUPlugin } from "../basisu-loader/basisu-plugin.js";
 import { ParticlesPlugin } from "../particles-loader/particles-plugin.js";
 import BBCodeTextPlugin from "../../../../lib/rexbbcodetextplugin.min.js";
 import "/node_modules/phaser/plugins/spine4.1/dist/SpinePlugin.min.js";
