@@ -10,6 +10,7 @@ import "./basis_loader.js";
 
 const transcoderPath = "http://127.0.0.1:9000/src/core/loader/basis-loader/";
 
+
 export class BasisUFile extends Phaser.Loader.File {
 	constructor(loader, fileConfig, xhrSettings, dataKey) {
 		super(loader, Object.assign(fileConfig, { type: "basisu" }));
@@ -38,16 +39,17 @@ export class BasisUFile extends Phaser.Loader.File {
 		const data = this.data;
 
 		const basisLoader = new BasisLoader();	//TODO NT initialising this causes a missed file load url.
-		// let gl = this.loader.scene.renderer.gl;
-		// basisLoader.setWebGLContext(gl);
+		let gl = this.loader.scene.renderer.gl;
+		basisLoader.setWebGLContext(gl);
 
 		const doIt = () => {
 			console.log(basisLoader);
 			debugger;
 		};
 
+		const file = this
+
 		basisLoader.loadFromUrl(this.src).then(result => {
-			debugger;
 			// WebGL color+alpha texture;
 			result.texture;
 
@@ -64,10 +66,17 @@ export class BasisUFile extends Phaser.Loader.File {
 			// Dimensions of the base mip level.
 			result.width;
 			result.height;
+
+			// debugger
+			// var image = new Phaser.Loader.FileTypes.BinaryFile(file.loader, file.key, file.src., file.xhrSettings);
+			// file.loader.addFile(image);
+
+			file.loader.textureManager.addCompressedTexture(file.key, result.texture, null);
+			this.onProcessComplete();
 		});
 
-		console.log(this.data);
+		//console.log(this.data);
 
-		this.onProcessComplete();
+
 	}
 }
