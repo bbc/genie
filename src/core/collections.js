@@ -74,12 +74,15 @@ export const initCollection = screen => key => {
 		});
 	};
 
+	const getUnique = ({ key, value }) => catalogue.find(item => item[key] === value);
+
 	const collection = {
 		config,
 		get,
 		getAll,
 		set,
 		setUnique,
+		getUnique,
 	};
 
 	collections.set(key, collection);
