@@ -267,7 +267,7 @@ if (!IN_WORKER) {
 		const COMPRESSED_RGB_S3TC_DXT1_EXT = 0x83f0;
 		const COMPRESSED_RGBA_S3TC_DXT1_EXT = 0x83f1;
 		const COMPRESSED_RGBA_S3TC_DXT3_EXT = 0x83f2;
-		const COMPRESSED_RGBA_S3TC_DXT5_EXT = 0x83f3;
+		const COMPRESSED_RGBA_S3TC_DXT5_EXT = 0x83f3;	//TODO Note this is the desktop format for chrome
 
 		// https://www.khronos.org/registry/webgl/extensions/WEBGL_compressed_texture_etc1/
 		const COMPRESSED_RGB_ETC1_WEBGL = 0x8d64;
@@ -417,6 +417,8 @@ if (!IN_WORKER) {
 				return;
 			}
 
+			debugger
+
 			let webglFormat = BASIS_WEBGL_FORMAT_MAP[basisFormat];
 
 			// If we're not using compressed textures it'll be cheaper to generate
@@ -490,8 +492,9 @@ if (!IN_WORKER) {
 			let supportedFormats = msg.data.supportedFormats; // The formats this device supports
 			let id = msg.data.id; // A unique ID for the texture
 
+			//received from main thread- a url to be fetched and processed?
 			if (url) {
-				// Make the call to fetch the basis texture data
+				// Make the call to fetch the basis texture data then transcode
 				//TODO stop this being hardcoded
 				fetch("http://localhost:9000/" + url).then(function (response) {
 					if (response.ok) {
@@ -508,7 +511,10 @@ if (!IN_WORKER) {
 						fail(id, `Fetch failed: ${response.status}, ${response.statusText}`);
 					}
 				});
-			} else if (buffer) {
+			}
+			//transcode received buffer
+			//TODO Tidy this first initialisation
+			else if (buffer) {
 				if (BasisFile) {
 					transcode(id, buffer, supportedFormats, allowSeparateAlpha);
 				} else {
