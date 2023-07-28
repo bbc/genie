@@ -121,7 +121,7 @@ export class Game extends Screen {
 		const charactersCollection = collections.get("characters");
 
 		const onLevelComplete = () => {
-			const { id, title } = levelsCollection.getSelected();
+			const { id, title } = levelsCollection.getUnique({ key: "selected", value: true });
 			markLevelAsComplete(id);
 			this.transientData.results = {
 				keys,
@@ -181,14 +181,19 @@ export class Game extends Screen {
 			}
 		};
 		this.add
-			.text(150, 200, `Character Selected: ${charactersCollection.getSelected().title}`, {
-				font: "32px ReithSans",
-				fill: "#f6931e",
-				align: "center",
-			})
+			.text(
+				150,
+				200,
+				`Character Selected: ${charactersCollection.getUnique({ key: "selected", value: true }).title}`,
+				{
+					font: "32px ReithSans",
+					fill: "#f6931e",
+					align: "center",
+				},
+			)
 			.setOrigin(0.5);
 		this.add
-			.text(150, 250, `Level Selected: ${levelsCollection.getSelected().title}`, {
+			.text(150, 250, `Level Selected: ${getUnique({ key: "selected", value: true }).title}`, {
 				font: "32px ReithSans",
 				fill: "#f6931e",
 				align: "center",

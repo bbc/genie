@@ -10,7 +10,7 @@ import { collections } from "../../core/collections.js";
 
 const pushLevelId = (screen, params) => {
 	const collection = collections.get("levels");
-	const levelId = collection.getSelected().id;
+	const levelId = collection.getUnique({ key: "selected", value: true }).id;
 	return levelId ? [...params, { source: levelId }] : params;
 };
 

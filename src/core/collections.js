@@ -76,8 +76,6 @@ export const initCollection = screen => key => {
 
 	const getUnique = ({ key, value }) => catalogue.find(item => item[key] === value);
 
-	const getSelected = () => getUnique({ key: "selected", value: true });
-
 	const collection = {
 		config,
 		get,
@@ -85,7 +83,6 @@ export const initCollection = screen => key => {
 		set,
 		setUnique,
 		getUnique,
-		getSelected,
 	};
 
 	collections.set(key, collection);
