@@ -6,10 +6,11 @@
 import { settings, settingsChannel } from "../settings.js";
 import { gmi } from "../gmi/gmi.js";
 import { eventBus } from "../event-bus.js";
-import fp from "../../../lib/lodash/fp/fp.js";
+import { collections } from "../../core/collections.js";
 
 const pushLevelId = (screen, params) => {
-	const levelId = fp.get("transientData.level-select.choice.title", screen.context);
+	const collection = collections.get("levels");
+	const levelId = collection.getSelected().id;
 	return levelId ? [...params, { source: levelId }] : params;
 };
 
