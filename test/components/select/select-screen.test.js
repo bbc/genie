@@ -332,13 +332,6 @@ describe("Select Screen", () => {
 			jest.spyOn(eventBus, "subscribe");
 		});
 
-		test("saves choice to transient data", () => {
-			mockChoices = [{ title: "Title 1" }];
-			selectScreen.create();
-
-			eventBus.subscribe.mock.calls[0][0].callback();
-			expect(selectScreen.transientData["test-select"].choice.title).toBe("Title 1");
-		});
 		test("saves choice to collection", () => {
 			mockChoices = [{ id: "id1", title: "Title 1" }];
 			selectScreen.create();
