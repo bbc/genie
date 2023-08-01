@@ -339,6 +339,14 @@ describe("Select Screen", () => {
 			eventBus.subscribe.mock.calls[0][0].callback();
 			expect(mockCollection.setUnique).toHaveBeenCalledWith({ id: "id1", key: "selected", value: true });
 		});
+
+		test("saves choice to transient data", () => {
+			mockChoices = [{ title: "Title 1" }];
+			selectScreen.create();
+
+			eventBus.subscribe.mock.calls[0][0].callback();
+			expect(selectScreen.transientData["test-select"].choice.title).toBe("Title 1");
+		});
 	});
 
 	describe("updateStates method", () => {

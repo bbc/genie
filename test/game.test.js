@@ -157,7 +157,7 @@ describe("Game", () => {
 		test("displays the character selected", () => {
 			const characterTitle = "Kawabashi";
 			const expected = `Character Selected: ${characterTitle}`;
-			let mockGetUnique = jest.fn().mockImplementation(() => ({ title: characterTitle }));
+			let mockGetUnique = jest.fn(() => ({ title: characterTitle }));
 			collectionsModule.collections = {
 				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
 			};
@@ -173,7 +173,7 @@ describe("Game", () => {
 		test("displays the level selected", () => {
 			const levelTitle = "Hard level";
 			const expected = `Level Selected: ${levelTitle}`;
-			let mockGetUnique = jest.fn().mockImplementation(() => ({ title: levelTitle }));
+			let mockGetUnique = jest.fn(() => ({ title: levelTitle }));
 			collectionsModule.collections = {
 				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
 			};
@@ -490,7 +490,7 @@ describe("Game", () => {
 					return mockImage;
 				});
 
-				let mockGetUnique = jest.fn().mockImplementation(() => ({ title: "Hard Level", id: 1 }));
+				let mockGetUnique = jest.fn(() => ({ title: "Hard Level", id: 1 }));
 				collectionsModule.collections = {
 					get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
 				};

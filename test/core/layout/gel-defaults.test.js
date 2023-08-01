@@ -228,7 +228,7 @@ describe("Layout - Gel Defaults", () => {
 
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
-			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			let mockGetUnique = jest.fn(() => ({ id: testLevelId }));
 			collectionsModule.collections = {
 				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
 			};
@@ -246,7 +246,7 @@ describe("Layout - Gel Defaults", () => {
 
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
-			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			let mockGetUnique = jest.fn(() => ({ id: testLevelId }));
 			collectionsModule.collections = {
 				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
 			};
@@ -263,7 +263,7 @@ describe("Layout - Gel Defaults", () => {
 		});
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
-			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			let mockGetUnique = jest.fn(() => ({ id: testLevelId }));
 			collectionsModule.collections = {
 				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
 			};
@@ -367,7 +367,7 @@ describe("Layout - Gel Defaults", () => {
 
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
-			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			let mockGetUnique = jest.fn(() => ({ id: testLevelId }));
 			collectionsModule.collections = {
 				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
 			};
@@ -385,7 +385,7 @@ describe("Layout - Gel Defaults", () => {
 
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
-			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			let mockGetUnique = jest.fn(() => ({ id: testLevelId }));
 			collectionsModule.collections = {
 				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
 			};
@@ -403,7 +403,7 @@ describe("Layout - Gel Defaults", () => {
 
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
-			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			let mockGetUnique = jest.fn(() => ({ id: testLevelId }));
 			collectionsModule.collections = {
 				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
 			};
