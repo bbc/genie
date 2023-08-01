@@ -34,7 +34,7 @@ describe("Collections", () => {
 		testCatalogue = [
 			{
 				id: "id1",
-				title: "Title 1 ",
+				title: "Title 1",
 				description: "Catalogue Item 1.",
 				tags: ["tag1"],
 			},
@@ -89,7 +89,7 @@ describe("Collections", () => {
 			testCollection.catalogue = [
 				{
 					id: "Xid1",
-					title: "XTitle 1 ",
+					title: "XTitle 1",
 					description: "XCatalogue Item 1.",
 					tags: ["Xtag1"],
 				},
@@ -146,7 +146,7 @@ describe("Collections", () => {
 					qty: 5,
 					state: "testState",
 					tags: ["tag1"],
-					title: "Title 1 ",
+					title: "Title 1",
 				},
 				{
 					description: "Catalogue Item 2.",
@@ -178,7 +178,7 @@ describe("Collections", () => {
 					qty: 5,
 					state: "testState",
 					tags: ["tag1"],
-					title: "Title 1 ",
+					title: "Title 1",
 				},
 				{
 					description: "Catalogue Item 2.",
@@ -218,7 +218,7 @@ describe("Collections", () => {
 					qty: 5,
 					state: "testState",
 					tags: ["tag1"],
-					title: "Title 1 ",
+					title: "Title 1",
 				},
 				{
 					description: "Catalogue Item 2.",
@@ -250,7 +250,7 @@ describe("Collections", () => {
 				id: "id1",
 				qty: 5,
 				tags: ["tag1"],
-				title: "Title 1 ",
+				title: "Title 1",
 			};
 
 			testCollection.include = ["tag1", "tag2"];
@@ -333,6 +333,20 @@ describe("Collections", () => {
 			});
 			expect(collection.getAll()[0].selected).toBe(true);
 			expect(collection.getAll()[1].selected).toBe(null);
+		});
+	});
+
+	describe("Returned getUnique method", () => {
+		test("Returns unique element by key from collection if exists", () => {
+			const collection = initCollection(mockScreen)("testCollection");
+			collection.setUnique({ id: "id1", key: "selected", value: true });
+			expect(collection.getUnique({ key: "selected", value: true })).toEqual({
+				description: "Catalogue Item 1.",
+				id: "id1",
+				selected: true,
+				tags: ["tag1"],
+				title: "Title 1",
+			});
 		});
 	});
 });
