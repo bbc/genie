@@ -180,11 +180,12 @@ export class Game extends Screen {
 				this.calculateAchievements(item, keys, achievementNames[item]);
 			}
 		};
+
 		this.add
 			.text(
 				150,
 				200,
-				`Character Selected: ${charactersCollection.getUnique({ key: "selected", value: true }).title}`,
+				`Character Selected: ${charactersCollection.getUnique({ key: "selected", value: true })?.title}`,
 				{
 					font: "32px ReithSans",
 					fill: "#f6931e",
@@ -193,7 +194,7 @@ export class Game extends Screen {
 			)
 			.setOrigin(0.5);
 		this.add
-			.text(150, 250, `Level Selected: ${getUnique({ key: "selected", value: true }).title}`, {
+			.text(150, 250, `Level Selected: ${levelsCollection.getUnique({ key: "selected", value: true })?.title}`, {
 				font: "32px ReithSans",
 				fill: "#f6931e",
 				align: "center",
