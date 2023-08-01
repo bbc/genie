@@ -8,6 +8,7 @@ import * as gel from "../../../src/core/layout/gel-defaults.js";
 import { settings, settingsChannel } from "../../../src/core/settings.js";
 import { eventBus } from "../../../src/core/event-bus.js";
 import * as pagesModule from "../../../src/core/background/pages.js";
+import * as collectionsModule from "../../../src/core/collections.js";
 
 describe("Layout - Gel Defaults", () => {
 	let mockPausedScreen;
@@ -88,6 +89,10 @@ describe("Layout - Gel Defaults", () => {
 		jest.spyOn(settings, "show").mockImplementation(() => {});
 
 		pagesModule.skip = jest.fn();
+
+		collectionsModule.collections = {
+			get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: jest.fn() })),
+		};
 	});
 
 	afterEach(() => jest.clearAllMocks());
@@ -223,6 +228,10 @@ describe("Layout - Gel Defaults", () => {
 
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
+			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			collectionsModule.collections = {
+				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
+			};
 			mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
 			gel.config(mockCurrentScreen).replay.action({ screen: mockCurrentScreen });
 			expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
@@ -237,6 +246,10 @@ describe("Layout - Gel Defaults", () => {
 
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
+			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			collectionsModule.collections = {
+				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
+			};
 			mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
 			gel.config(mockCurrentScreen).pauseReplay.action({ screen: mockCurrentScreen });
 			expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
@@ -250,6 +263,10 @@ describe("Layout - Gel Defaults", () => {
 		});
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
+			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			collectionsModule.collections = {
+				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
+			};
 			mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
 			gel.config(mockCurrentScreen).levelSelect.action({ screen: mockCurrentScreen });
 			expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("levelselect", "click", { source: testLevelId });
@@ -350,6 +367,10 @@ describe("Layout - Gel Defaults", () => {
 
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
+			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			collectionsModule.collections = {
+				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
+			};
 			mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
 			gel.config(mockCurrentScreen).restart.action({ screen: mockCurrentScreen });
 			expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
@@ -364,6 +385,10 @@ describe("Layout - Gel Defaults", () => {
 
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
+			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			collectionsModule.collections = {
+				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
+			};
 			mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
 			gel.config(mockCurrentScreen).playAgain.action({ screen: mockCurrentScreen });
 			expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "playagain", { source: testLevelId });
@@ -378,6 +403,10 @@ describe("Layout - Gel Defaults", () => {
 
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
+			let mockGetUnique = jest.fn().mockImplementation(() => ({ id: testLevelId }));
+			collectionsModule.collections = {
+				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
+			};
 			mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
 			gel.config(mockCurrentScreen).continueGame.action({ screen: mockCurrentScreen });
 			expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "continue", { source: testLevelId });
