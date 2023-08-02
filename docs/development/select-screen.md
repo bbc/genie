@@ -120,10 +120,10 @@ The select screen will paginate the choices based on the `rows` and `cols` param
 }
 ```
 
-The page displayed when first loaded can be changed by setting a unique key on the element in the collection, e.g:
+The page displayed when first loaded can be changed by setting a `selected` key to `true` on the element in the collection, e.g:
 
 ```javascript
-this.collection.setUnique({ id: "1", key: "default", value: true });
+this.collection.setUnique({ id: "1", key: "selected", value: true });
 ```
 
 The select screen will then display the appropriate page for this choice when navigated.
