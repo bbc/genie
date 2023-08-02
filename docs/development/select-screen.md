@@ -94,7 +94,7 @@ Configured choices may have text labels drawn with them. These are populated by 
 
 ### Choice states
 
-Choices can have states, see [states](docs/development/collections.md). 
+Choices can have states, see [states](collections.md). 
 
 ```json5
 {
@@ -120,10 +120,10 @@ The select screen will paginate the choices based on the `rows` and `cols` param
 }
 ```
 
-The page displayed when first loaded can be changed by setting `choice` in transient data, under the key for the screen, e.g:
+The page displayed when first loaded can be changed by setting a unique key on the element in the collection, e.g:
 
 ```javascript
-this.transientData["level-select"].choice = { id: "dennis" }
+this.collection.setUnique({ id: "1", key: "default", value: true });
 ```
 
 The select screen will then display the appropriate page for this choice when navigated.
