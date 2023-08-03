@@ -116,8 +116,12 @@ export class Game extends Screen {
 		accessibilify(shopButton);
 		this.add.text(-200, 220, "Shop", buttonTextStyle).setOrigin(0.5);
 
+		const levelsCollection = collections.get("levels");
+		const shopCollection = collections.get("shop-items");
+		const charactersCollection = collections.get("characters");
+
 		const onLevelComplete = () => {
-			const { id, title } = this.transientData["level-select"].choice;
+			const { id, title } = levelsCollection.getUnique({ key: "selected", value: true });
 			markLevelAsComplete(id);
 			this.transientData.results = {
 				keys,
@@ -129,8 +133,7 @@ export class Game extends Screen {
 		};
 
 		const markLevelAsComplete = id => {
-			const collection = collections.get(this.config.collection);
-			collection.set({ id, state: "completed" });
+			levelsCollection.set({ id, state: "completed" });
 		};
 
 		const tweenItem = target => {
@@ -149,7 +152,6 @@ export class Game extends Screen {
 		};
 
 		const unlockShopItem = () => {
-			const shopCollection = collections.get("shop-items");
 			const shieldItem = shopCollection.get("shield");
 			shopCollection.set({ ...shieldItem, state: "" });
 		};
@@ -180,14 +182,19 @@ export class Game extends Screen {
 		};
 
 		this.add
-			.text(150, 200, `Character Selected: ${this.transientData["character-select"].choice.title}`, {
-				font: "32px ReithSans",
-				fill: "#f6931e",
-				align: "center",
-			})
+			.text(
+				150,
+				200,
+				`Character Selected: ${charactersCollection.getUnique({ key: "selected", value: true })?.title}`,
+				{
+					font: "32px ReithSans",
+					fill: "#f6931e",
+					align: "center",
+				},
+			)
 			.setOrigin(0.5);
 		this.add
-			.text(150, 250, `Level Selected: ${this.transientData["level-select"].choice.title}`, {
+			.text(150, 250, `Level Selected: ${levelsCollection.getUnique({ key: "selected", value: true })?.title}`, {
 				font: "32px ReithSans",
 				fill: "#f6931e",
 				align: "center",

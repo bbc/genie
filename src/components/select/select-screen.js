@@ -42,7 +42,7 @@ export class Select extends Screen {
 
 		this.titles = createTitles(this);
 		const onTransitionStart = getOnTransitionStartFn(this);
-		const choice = this.transientData[this.scene.key]?.choice?.id;
+		const choice = this.collection.getUnique({ key: "selected", value: true })?.id;
 
 		this.grid = new GelGrid(this, Object.assign(this.config, gridDefaults, { onTransitionStart }, { choice }));
 		this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
