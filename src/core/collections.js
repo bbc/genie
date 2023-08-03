@@ -60,7 +60,7 @@ export const initCollection = screen => key => {
 	};
 
 	const setUnique = ({ id, key, value }) => {
-		catalogue.forEach(item => {
+		getAll().forEach(item => {
 			const isNewlyUnique = item.id === id && item[key] !== value;
 			const shouldBeReset = item.id !== id && item.hasOwnProperty(key) && item[key] === value;
 
@@ -74,7 +74,7 @@ export const initCollection = screen => key => {
 		});
 	};
 
-	const getUnique = ({ key, value }) => catalogue.find(item => item[key] === value);
+	const getUnique = ({ key, value }) => getAll().find(item => item[key] === value);
 
 	const collection = {
 		config,
