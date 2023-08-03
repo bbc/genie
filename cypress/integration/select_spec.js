@@ -111,6 +111,8 @@ describe(`The Select screens ${Cypress.env("THEME")}`, () => {
 	it("Scrolls to the page where the last selected item is after a page-refresh", () => {
 		cy.genieClick("#home__debug");
 		cy.genieClick("#debug__debug-select-grid");
+		cy.genieClick("#debug-select-grid__kyle").wait(2000);
+		cy.genieClick("#debug__debug-select-grid").wait(2000);
 		cy.genieClick("#debug-select-grid__next").wait(2000);
 		cy.genieClick("#debug-select-grid__mike").wait(2000);
 		cy.visit(appendToken(`${Cypress.env("url")}${getUrl()}`));
