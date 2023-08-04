@@ -1,60 +1,11 @@
-/*
- * Basis Loader
- *
- * Usage:
- * // basis_loader.js should be loaded from the same directory as
- * // basis_transcoder.js and basis_transcoder.wasm
- *
- * // Create the texture loader and set the WebGL context it should use. Spawns
- * // a worker which handles all of the transcoding.
- * let basisLoader = new BasisLoader();
- * basisLoader.setWebGLContext(gl);
- *
- * // To allow separate color and alpha textures to be returned in cases where
- * // it would provide higher quality:
- * basisLoader.allowSeparateAlpha = true;
- *
- * // loadFromUrl() returns a promise which resolves to a completed WebGL
- * // texture or rejects if there's an error loading.
- * basisLoader.loadFromUrl(fullPathToTexture).then((result) => {
- *   // WebGL color+alpha texture;
- *   result.texture;
- *
- *   // WebGL alpha texture, only if basisLoader.allowSeparateAlpha is true.
- *   // null if alpha is encoded in result.texture or result.alpha is false.
- *   result.alphaTexture;
- *
- *   // True if the texture contained an alpha channel.
- *   result.alpha;
- *
- *   // Number of mip levels in texture/alphaTexture
- *   result.mipLevels;
- *
- *   // Dimensions of the base mip level.
- *   result.width;
- *   result.height;
- * });
- */
-
-//TODO this is incorrect due to ES6 import rather than being added as a script tag
-const SCRIPT_PATH =
-	typeof document !== "undefined" && document.currentScript ? document.currentScript.src : import.meta.url;
-//console.log(import.meta.url)
-
-const SCRIPT_PATH_PARTS = SCRIPT_PATH.split("/");
-SCRIPT_PATH_PARTS.pop();
-
-const SCRIPT_FOLDER = SCRIPT_PATH_PARTS.join("/");
-
-console.log("SCRIPT_FOLDER", SCRIPT_FOLDER);
-
 import { PendingTextureRequest } from "./pending-texture-request.js";
 
-//
-// Main Thread
-//
+const SCRIPT_PATH =
+	typeof document !== "undefined" && document.currentScript ? document.currentScript.src : import.meta.url;
 
-class BasisLoader {
+//TODO this isn't used yet...
+
+export class BasisLoader {
 	constructor() {
 		this.gl = null;
 		this.supportedFormats = {};
@@ -63,9 +14,8 @@ class BasisLoader {
 		this.allowSeparateAlpha = false;
 
 		// Reload the current script as a worker
-		this.worker = new Worker(`${SCRIPT_FOLDER}/worker.js`, { type: "module" });
+		this.worker = new Worker(SCRIPT_PATH, { type: "module" });
 		this.worker.onmessage = msg => {
-			console.log("IN WORKER MESSAGE RECEIVED");
 			// Find the pending texture associated with the data we just received
 			// from the worker.
 			let pendingTexture = this.pendingTextures[msg.data.id];
@@ -148,5 +98,3 @@ class BasisLoader {
 		return pendingTexture.promise;
 	}
 }
-
-window.BasisLoader = BasisLoader;

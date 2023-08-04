@@ -7,6 +7,7 @@
  * @license Apache-2.0
  */
 import "./basis_loader.js";
+//import { BasisLoader } from "./basis-loader.js";
 
 const transcoderPath = "http://127.0.0.1:9000/src/core/loader/basis-loader/";
 
@@ -38,14 +39,9 @@ export class BasisUFile extends Phaser.Loader.File {
 	onProcess() {
 		const data = this.data;
 
-		const basisLoader = new BasisLoader();	//TODO NT initialising this causes a missed file load url.
+		const basisLoader = new BasisLoader();
 		let gl = this.loader.scene.renderer.gl;
 		basisLoader.setWebGLContext(gl);
-
-		const doIt = () => {
-			console.log(basisLoader);
-			debugger;
-		};
 
 		const file = this
 
@@ -114,8 +110,9 @@ export class BasisUFile extends Phaser.Loader.File {
 			//file.loader.textureManager.addCompressedTexture(file.key, compressedTexture, null);
 			//file.loader.textureManager.addImage(file.key, result.texture)
 
-			//file.loader.scene.textures.addGLTexture(file.key, result.texture, result.width, result.height);
-			file.loader.textureManager.addGLTexture(file.key, result.texture, result.width, result.height);
+
+			file.loader.scene.textures.addGLTexture(file.key, result.texture, result.width, result.height);
+
 
 			window.tm = file.loader.textureManager;
 			this.onProcessComplete();

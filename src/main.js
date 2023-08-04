@@ -53,7 +53,8 @@ const screens = {
 			debug: "debug",
 			//Example of custom routing function
 			next: scene => {
-				scene.navigate("narrative");
+				const nextScreen = scene.config.nextScreen ?? "narrative";
+				scene.navigate(nextScreen);
 			},
 		},
 		default: true,

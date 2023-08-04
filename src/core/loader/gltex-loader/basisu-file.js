@@ -81,13 +81,11 @@ export class BasisUFile extends Phaser.Loader.File {
 
 		basisLoader.TranscoderWorker.loadTranscoder(`${transcoderPath}basis_transcoder.js`, `${transcoderPath}basis_transcoder.wasm`).then(() => {
 			console.log("%c BasisLoader, promise solved");
-			debugger
 			//initPixi();
 			//eruda.init();
 		});
 
 		// THIS >>> loader.DOSOMETHING!
-				debugger
 
 		console.log(this.data)
 
