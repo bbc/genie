@@ -78,7 +78,7 @@ export class BasisLoader {
 	}
 
 	transcodeBuffer(buffer) {
-		let pendingTexture = new PendingTextureRequest(this.gl, 1000);	//TODO what is url for? Might need to pass it in
+		let pendingTexture = new PendingTextureRequest(this.gl);
 		this.pendingTextures[this.nextPendingTextureId] = pendingTexture;
 
 		this.worker.postMessage({

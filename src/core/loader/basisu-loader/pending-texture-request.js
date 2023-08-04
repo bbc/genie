@@ -1,7 +1,6 @@
 export class PendingTextureRequest {
-	constructor(gl, url) {
+	constructor(gl) {
 		this.gl = gl;
-		this.url = url;
 		this.texture = null;
 		this.alphaTexture = null;
 		this.promise = new Promise((resolve, reject) => {
@@ -24,7 +23,6 @@ export class PendingTextureRequest {
 		let levelData = null;
 
 		for (let mipLevel of mipLevels) {
-			console.log(`MIP: ${mipLevel}`);
 			if (!webglFormat.uncompressed) {
 				levelData = new Uint8Array(buffer, mipLevel.offset, mipLevel.size);
 				gl.compressedTexImage2D(
