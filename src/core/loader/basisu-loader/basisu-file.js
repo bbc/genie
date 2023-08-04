@@ -8,15 +8,20 @@
  */
 import { BasisLoader } from "./basis-loader.js";
 
+const onComplete = file => result => {
+	file.loader.scene.textures.addGLTexture(file.key, result.texture, result.width, result.height);
+	file.onProcessComplete();
+}
+
 export class BasisUFile extends Phaser.Loader.File {
-	constructor(loader, fileConfig, xhrSettings, dataKey) {
+	constructor(loader, fileConfig, xhrSettings, config) {
 		super(loader, Object.assign(fileConfig, { type: "basisu" }));
 
 		const basisuDefaults = {
 			extension: "basis",
 			responseType: "blob",
 			xhrSettings,
-			config: dataKey,
+			config,
 		};
 
 		Object.assign(fileConfig, basisuDefaults);
@@ -32,17 +37,11 @@ export class BasisUFile extends Phaser.Loader.File {
 	 * @since 3.7.0
 	 */
 	onProcess() {
-		const basisLoader = new BasisLoader();
-		let gl = this.loader.scene.renderer.gl;
-		basisLoader.setWebGLContext(gl);
+		const basisLoader = new BasisLoader(this.loader.scene.renderer.gl);
 
-		const textures = this.loader.scene.textures
+		//TODO wouldn't have to do this if this wasn't a class
+		const transcodeBuffer = basisLoader.transcodeBuffer.bind(basisLoader);
 
-		this.xhrLoader.response.arrayBuffer().then(buffer => {
-			basisLoader.transcodeBuffer(buffer).then(result => {
-				textures.addGLTexture(this.key, result.texture, result.width, result.height);
-				this.onProcessComplete();
-			});
-		})
+		this.xhrLoader.response.arrayBuffer().then(transcodeBuffer).then(onComplete(this))
 	}
 }

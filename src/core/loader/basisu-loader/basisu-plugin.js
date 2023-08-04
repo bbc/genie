@@ -1,8 +1,8 @@
 /**
  * JSON5LoaderPlugin loads JSON5 files using the Phaser.Loader
  *
- * @module components/loader/font-loader/font-plugin
- * @copyright BBC 2019
+ * @module components/loader/basisu-loader/basisu-plugin
+ * @copyright BBC 2023
  * @author BBC Children's D+E
  * @license Apache-2.0
  */

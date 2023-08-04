@@ -2,9 +2,8 @@ import { PendingTextureRequest } from "./pending-texture-request.js";
 import { SCRIPT_PATH } from "./script-path.js";
 
 export class BasisLoader {
-	constructor() {
-		this.gl = null;
-		this.supportedFormats = {};
+	constructor(gl) {
+		this.setWebGLContext(gl);
 		this.pendingTextures = {};
 		this.nextPendingTextureId = 1;
 		this.allowSeparateAlpha = false;
@@ -76,23 +75,6 @@ export class BasisLoader {
 				this.supportedFormats = {};
 			}
 		}
-	}
-
-	// This method changes the active texture unit's TEXTURE_2D binding
-	// immediately prior to resolving the returned promise.
-	loadFromUrl(url) {
-		let pendingTexture = new PendingTextureRequest(this.gl, url);
-		this.pendingTextures[this.nextPendingTextureId] = pendingTexture;
-
-		this.worker.postMessage({
-			id: this.nextPendingTextureId,
-			url: url,
-			allowSeparateAlpha: this.allowSeparateAlpha,
-			supportedFormats: this.supportedFormats,
-		});
-
-		this.nextPendingTextureId++;
-		return pendingTexture.promise;
 	}
 
 	transcodeBuffer(buffer) {
