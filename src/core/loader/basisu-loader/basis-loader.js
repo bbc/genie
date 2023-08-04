@@ -1,9 +1,5 @@
 import { PendingTextureRequest } from "./pending-texture-request.js";
-
-const SCRIPT_PATH =
-	typeof document !== "undefined" && document.currentScript ? document.currentScript.src : import.meta.url;
-
-//TODO this isn't used yet...
+import { SCRIPT_PATH } from "./script-path.js";
 
 export class BasisLoader {
 	constructor() {
@@ -13,9 +9,10 @@ export class BasisLoader {
 		this.nextPendingTextureId = 1;
 		this.allowSeparateAlpha = false;
 
-		// Reload the current script as a worker
-		this.worker = new Worker(SCRIPT_PATH, { type: "module" });
+		// Load worker script
+		this.worker = new Worker(`${SCRIPT_PATH}/worker.js`, { type: "module" });
 		this.worker.onmessage = msg => {
+			console.log("IN WORKER MESSAGE RECEIVED"); //TODO or is this FROM worker?
 			// Find the pending texture associated with the data we just received
 			// from the worker.
 			let pendingTexture = this.pendingTextures[msg.data.id];
@@ -90,6 +87,21 @@ export class BasisLoader {
 		this.worker.postMessage({
 			id: this.nextPendingTextureId,
 			url: url,
+			allowSeparateAlpha: this.allowSeparateAlpha,
+			supportedFormats: this.supportedFormats,
+		});
+
+		this.nextPendingTextureId++;
+		return pendingTexture.promise;
+	}
+
+	transcodeBuffer(buffer) {
+		let pendingTexture = new PendingTextureRequest(this.gl, 1000);	//TODO what is url for? Might need to pass it in
+		this.pendingTextures[this.nextPendingTextureId] = pendingTexture;
+
+		this.worker.postMessage({
+			id: this.nextPendingTextureId,
+			buffer,
 			allowSeparateAlpha: this.allowSeparateAlpha,
 			supportedFormats: this.supportedFormats,
 		});

@@ -1,6 +1,5 @@
 // Worker
-//TODO remove hardcoding
-import { BASIS } from "http://localhost:9000/src/core/loader/basisu-loader/basis_transcoder.js";
+import { BASIS } from "./basis_transcoder.js";
 import { BASIS_FORMAT } from "./basis-format.js";
 import { BASIS_WEBGL_FORMAT_MAP } from "./basis-webgl-format-map.js";
 
