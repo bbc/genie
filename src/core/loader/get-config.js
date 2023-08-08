@@ -8,6 +8,7 @@ import fp from "../../../lib/lodash/fp/fp.js";
 const getKey = key => (key === "../../debug" ? "debug" : key);
 
 export const loadConfig = (screen, keys) => {
+	debugger
 	keys.forEach(key =>
 		screen.load.json5({
 			key: `config-${getKey(key)}`,
@@ -17,6 +18,7 @@ export const loadConfig = (screen, keys) => {
 };
 
 export const getConfig = (screen, keys) => {
+	debugger
 	const entries = keys.map(key => ({
 		[getKey(key)]: screen.cache.json.get(`config-${getKey(key)}`),
 	}));
