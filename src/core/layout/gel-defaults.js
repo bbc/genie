@@ -7,6 +7,9 @@ import { settings, settingsChannel } from "../settings.js";
 import { gmi } from "../gmi/gmi.js";
 import { eventBus } from "../event-bus.js";
 import { collections } from "../../core/collections.js";
+// \---> TODO: find the right place to load game-config
+import gameConfig from "../../../themes/default/game-config.json" assert { type: "json" };
+// <---|
 
 const pushLevelId = (screen, params) => {
 	const collection = collections.get("levels");
@@ -70,7 +73,7 @@ export const config = screen => {
 			},
 		},
 		audio: {
-			group: "topRight",
+			group: gameConfig.vertical ? "topRightV" : "topRight",
 			title: "Sound Off",
 			key: "audio-on",
 			ariaLabel: "Toggle Sound",
@@ -89,7 +92,7 @@ export const config = screen => {
 			},
 		},
 		settings: {
-			group: "topRight",
+			group: gameConfig.vertical ? "topRightV" : "topRight",
 			title: "Settings",
 			key: "settings",
 			ariaLabel: "Game Settings",
@@ -100,7 +103,7 @@ export const config = screen => {
 			},
 		},
 		pause: {
-			group: "topRight",
+			group: gameConfig.vertical ? "topRightV" : "topRight",
 			title: "Pause",
 			key: "pause",
 			ariaLabel: "Pause Game",
