@@ -26,6 +26,7 @@ describe("Loader", () => {
 	let mockMasterPack;
 	let loadComplete;
 	let mockFontConfig;
+	let mockLoaderConfig;
 
 	beforeEach(() => {
 		global.window.__debug = undefined;
@@ -67,6 +68,10 @@ describe("Loader", () => {
 			},
 		};
 
+		mockLoaderConfig = {
+			barYpos: 130
+		};
+
 		const mockConfigFiles = {
 			files: [{ key: "testOne" }],
 			prefix: "testPrefix.",
@@ -105,6 +110,8 @@ describe("Loader", () => {
 						return mockConfig;
 					} else if (packName === "font-pack") {
 						return mockFontConfig;
+					} else if (packName === "loader-config") {
+						return mockLoaderConfig;
 					}
 				}),
 			},
