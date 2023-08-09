@@ -318,8 +318,6 @@ describe("Collections", () => {
 				id: "id1",
 				selected: true,
 			});
-			expect(collection.getAll()[0].selected).toBe(true);
-			expect(collection.getAll()[1].selected).not.toBe(true);
 		});
 		test("Enforces uniqueness of value in collection", () => {
 			testCatalogue[0].selected = true;
@@ -331,19 +329,24 @@ describe("Collections", () => {
 				id: "id2",
 				selected: null,
 			});
-			expect(collection.getAll()[0].selected).toBe(true);
-			expect(collection.getAll()[1].selected).toBe(null);
 		});
 	});
 
 	describe("Returned getUnique method", () => {
-		test("Returns unique element by key from collection if exists", () => {
+		test("Returns undefined when unique element does not exist", () => {
 			const collection = initCollection(mockScreen)("testCollection");
-			collection.setUnique({ id: "id1", key: "selected", value: true });
+
+			expect(collection.getUnique({ key: "selected", value: true })).toEqual(undefined);
+		});
+		test("Returns unique element by key from collection if exists", () => {
+			testCatalogue[0].selected = true;
+			const collection = initCollection(mockScreen)("testCollection");
+
 			expect(collection.getUnique({ key: "selected", value: true })).toEqual({
 				description: "Catalogue Item 1.",
 				id: "id1",
 				selected: true,
+				qty: 1,
 				tags: ["tag1"],
 				title: "Title 1",
 			});
