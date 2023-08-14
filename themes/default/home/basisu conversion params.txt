@@ -1,0 +1,4 @@
+basisu -comp_level 5 -max_endpoints 16128 -max_selectors 16128 -no_selector_rdo -no_endpoint_rdo 12title.png
+
+
+basisu -uastc -y_flip -uastc_level 3 -uastc_rdo_l .2 audio-off.png

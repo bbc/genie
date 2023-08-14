@@ -11,7 +11,7 @@ import { BasisLoader } from "./basis-loader.js";
 const onComplete = file => result => {
 	file.loader.scene.textures.addGLTexture(file.key, result.texture, result.width, result.height);
 	file.onProcessComplete();
-}
+};
 
 export class BasisUFile extends Phaser.Loader.File {
 	constructor(loader, fileConfig, xhrSettings, config) {
@@ -42,6 +42,6 @@ export class BasisUFile extends Phaser.Loader.File {
 		//TODO wouldn't have to do this if this wasn't a class
 		const transcodeBuffer = basisLoader.transcodeBuffer.bind(basisLoader);
 
-		this.xhrLoader.response.arrayBuffer().then(transcodeBuffer).then(onComplete(this))
+		return this.xhrLoader.response.arrayBuffer().then(transcodeBuffer).then(onComplete(this));
 	}
 }

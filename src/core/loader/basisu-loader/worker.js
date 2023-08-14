@@ -171,35 +171,14 @@ function transcode(id, arrayBuffer, supportedFormats, allowSeparateAlpha) {
 
 onmessage = msg => {
 	// Each call to the worker must contain:
-	let url = msg.data.url; // The URL of the basis image OR
 	let buffer = msg.data.buffer; // An array buffer with the basis image data
 	let allowSeparateAlpha = msg.data.allowSeparateAlpha;
 	let supportedFormats = msg.data.supportedFormats; // The formats this device supports
 	let id = msg.data.id; // A unique ID for the texture
 
-	//received from main thread- a url to be fetched and processed?
-	if (url) {
-		// Make the call to fetch the basis texture data then transcode
-		//TODO stop this being hardcoded
-		fetch("http://localhost:9000/" + url).then(function (response) {
-			if (response.ok) {
-				response.arrayBuffer().then(arrayBuffer => {
-					if (BasisFile) {
-						transcode(id, arrayBuffer, supportedFormats, allowSeparateAlpha);
-					} else {
-						BASIS_INITIALIZED.then(() => {
-							transcode(id, arrayBuffer, supportedFormats, allowSeparateAlpha);
-						});
-					}
-				});
-			} else {
-				fail(id, `Fetch failed: ${response.status}, ${response.statusText}`);
-			}
-		});
-	}
 	//transcode received buffer
 	//TODO Tidy this first initialisation
-	else if (buffer) {
+	if (buffer) {
 		if (BasisFile) {
 			transcode(id, buffer, supportedFormats, allowSeparateAlpha);
 		} else {

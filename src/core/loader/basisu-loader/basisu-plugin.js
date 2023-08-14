@@ -1,5 +1,5 @@
 /**
- * JSON5LoaderPlugin loads JSON5 files using the Phaser.Loader
+ * Basis U plugin loads .basiu files and transcoded them to the correct webgl texture format
  *
  * @module components/loader/basisu-loader/basisu-plugin
  * @copyright BBC 2023

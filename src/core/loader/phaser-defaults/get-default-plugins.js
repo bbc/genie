@@ -40,7 +40,7 @@ export const getDefaultPlugins = options => {
 				start: true,
 			},
 			{
-				key: "BasisuLoader",
+				key: "BasisULoader",
 				plugin: BasisUPlugin,
 				start: true,
 			},
