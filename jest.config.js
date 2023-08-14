@@ -5,6 +5,9 @@
  */
 module.exports = {
 	collectCoverageFrom: ["src/components/**/*.js", "src/core/**/*.js", "!src/output/**/*.js"],
+	coveragePathIgnorePatterns: [
+		"basis_transcoder.js",
+	],
 	coverageThreshold: {
 		global: {
 			statements: 100,
