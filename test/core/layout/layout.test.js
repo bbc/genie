@@ -15,6 +15,7 @@ jest.mock("../../../src/core/layout/gel-group.js");
 
 describe("Layout", () => {
 	const sixGelButtons = ["achievements", "exit", "howToPlay", "play", "audio", "settings"];
+	const expectedNumberOfGroupLayouts = 12;
 
 	let mockGmi;
 	let mockRoot;
@@ -196,7 +197,7 @@ describe("Layout", () => {
 
 		test("resets the groups after they have been added to the layout", () => {
 			Layout.create(mockScene, mockMetrics, []);
-			expect(mockGelGroup.reset).toHaveBeenCalledTimes(11);
+			expect(mockGelGroup.reset).toHaveBeenCalledTimes(expectedNumberOfGroupLayouts);
 			expect(mockGelGroup.reset).toHaveBeenCalledWith(mockMetrics);
 		});
 
@@ -350,7 +351,7 @@ describe("Layout", () => {
 
 			expect(mockGfx.lineStyle).toHaveBeenCalledWith(2, 0x33ff33, 1);
 			expect(mockGfx.strokeRectShape).toHaveBeenCalledWith(mockHitAreaBounds);
-			expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(11);
+			expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(expectedNumberOfGroupLayouts);
 		});
 
 		test("draws buttons", () => {
@@ -361,7 +362,7 @@ describe("Layout", () => {
 
 			expect(mockGfx.lineStyle).toHaveBeenCalledWith(1, 0x3333ff, 1);
 			expect(mockGfx.strokeRectShape).toHaveBeenCalledWith(mockHitAreaBounds);
-			expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(11);
+			expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(expectedNumberOfGroupLayouts);
 		});
 	});
 });

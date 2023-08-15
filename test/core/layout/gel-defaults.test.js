@@ -36,6 +36,11 @@ describe("Layout - Gel Defaults", () => {
 			_data: {
 				addedBy: mockPausedScreen,
 			},
+			cache: {
+				json: {
+					get: () => ({ verticalTopRight: true }),
+				},
+			},
 			context: {
 				navigation: {
 					belowScreenKey: {
