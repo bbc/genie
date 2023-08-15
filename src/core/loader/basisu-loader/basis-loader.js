@@ -1,4 +1,9 @@
-import { PendingTextureRequest } from "./pending-texture-request.js";
+/**
+ * @copyright BBC 2023
+ * @author BBC Children's D+E
+ * @license Apache-2.0
+ */
+import { PendingTextureRequest } from "../../../../lib/basisu/pending-texture-request.js";
 import { SCRIPT_PATH } from "./script-path.js";
 
 export class BasisLoader {
@@ -11,15 +16,14 @@ export class BasisLoader {
 		// Load worker script
 		this.worker = new Worker(`${SCRIPT_PATH}/worker.js`, { type: "module" });
 		this.worker.onmessage = msg => {
-			console.log("IN WORKER MESSAGE RECEIVED"); //TODO or is this FROM worker?
 			// Find the pending texture associated with the data we just received
 			// from the worker.
 			let pendingTexture = this.pendingTextures[msg.data.id];
 			if (!pendingTexture) {
 				if (msg.data.error) {
-					console.error(`Basis transcode failed: ${msg.data.error}`);
+					console.error(`Basis transcode failed: ${msg.data.error}`); // eslint-disable-line
 				}
-				console.error(`Invalid pending texture ID: ${msg.data.id}`);
+				console.error(`Invalid pending texture ID: ${msg.data.id}`); // eslint-disable-line
 				return;
 			}
 
@@ -28,7 +32,7 @@ export class BasisLoader {
 
 			// If the worker indicated an error has occured handle it now.
 			if (msg.data.error) {
-				console.error(`Basis transcode failed: ${msg.data.error}`);
+				console.error(`Basis transcode failed: ${msg.data.error}`); // eslint-disable-line
 				pendingTexture.reject(`${msg.data.error}`);
 				return;
 			}

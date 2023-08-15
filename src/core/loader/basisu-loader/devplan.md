@@ -5,10 +5,12 @@
   * Convert the Genie repo to basisu - should this be the case going forward?
   * UASTC seems better for alpha
 * Investigate split alpha
-* Unit Tests
+
 * Will this work when built? Does babel transform import meta need to be set differently outside jest?
 
 ## Completed Tasks
+* Should untested files be moved to lib folder? Remove eslint and jest config?
+* Unit Tests
 * Fix url part
 * Remove multiple load callbacks
 * Use Phaser data instead of basis loader xhr loader

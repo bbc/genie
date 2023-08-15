@@ -21,7 +21,7 @@ export class Home extends Screen {
 		const buttons = ["howToPlay", "play", "audio", "settings"];
 		this.setLayout(buttons.concat(exit, achievements, debug));
 
-		window.qqq = this.add.image(0, 0, "home.basisoo")
+		window.qqq = this.add.image(0, 0, "home.basisoo");
 
 		eventBus.subscribe({
 			channel: buttonsChannel(this),

@@ -1,5 +1,6 @@
 {
 	"env": { "es6": true },
+	"ignorePatterns": ["lib/"],
 	"extends": ["plugin:prettier/recommended"],
 	"parser": "@babel/eslint-parser",
 	"parserOptions": {

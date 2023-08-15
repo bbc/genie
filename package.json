@@ -69,7 +69,7 @@
         "build:theme2": "bash build-scripts/theme2creator/create.sh",
         "clean": "rm -rf .cache",
         "test": "npm run jest && npm run eslint",
-        "eslint": "eslint . --ignore-pattern lib/ --ignore-path .gitignore",
+        "eslint": "eslint . --ignore-path .gitignore",
         "jest": "jest --coverage",
         "jest:no-coverage": "jest",
         "validate": "node build-scripts/schemavalidator/validator.js achievement",

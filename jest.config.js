@@ -5,9 +5,6 @@
  */
 module.exports = {
 	collectCoverageFrom: ["src/components/**/*.js", "src/core/**/*.js", "!src/output/**/*.js"],
-	coveragePathIgnorePatterns: [
-		"basis_transcoder.js",
-	],
 	coverageThreshold: {
 		global: {
 			statements: 100,
@@ -24,6 +21,6 @@ module.exports = {
 	transform: { "^.+\\.m?js$": "babel-jest" },
 	transformIgnorePatterns: ["node_modules/(?!(bowser|json5|crel)/)"],
 	globals: {
-		WebGLRenderingContext: {}
-	}
+		WebGLRenderingContext: {},
+	},
 };
