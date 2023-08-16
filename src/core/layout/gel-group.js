@@ -63,6 +63,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
 	}
 
 	addButton(config, position = this._buttons.length) {
+		position = this._isVertical ? 0 : position;
 		const newButton = createButton(this.scene, config, this.width / 2, this.height / 2);
 
 		this.addAt(newButton, position);
@@ -116,7 +117,6 @@ export class GelGroup extends Phaser.GameObjects.Container {
 	}
 
 	alignChildren() {
-		this._isVertical && this.list.reverse();
 		const pos = { x: 0, y: 0 };
 		const groupHeight = Math.max(...this.list.map(i => i.height));
 		const pads = this.list.map(child => Math.max(0, this._metrics.buttonPad - child.width + child.sprite.width));
