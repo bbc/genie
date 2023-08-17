@@ -26,6 +26,21 @@
 				"type": "audio",
 				"key": "pauseSound",
 				"url": "shared/pause.mp4"
+			},
+			{
+				"type": "audio",
+				"key": "settingsSound",
+				"url": "shared/settings.mp4"
+			},
+			{
+				"type": "audio",
+				"key": "howPlaySound",
+				"url": "shared/how_play.mp4"
+			},
+			{
+				"type": "audio",
+				"key": "exitSound",
+				"url": "shared/exit.mp4"
 			}
 		]
 	}

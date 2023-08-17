@@ -1,17 +1,17 @@
 {
-    "pause": {
-        "prefix": "pause.",
-        "files": [
-            {
-                "type": "image",
-                "key": "background",
-                "url": "pause/pause-background.png"
-            },
-            {
-                "type": "image",
-                "key": "title",
-                "url": "pause/title.png"
-            }
-        ]
-    }
+	"pause": {
+		"prefix": "pause.",
+		"files": [
+			{
+				"type": "image",
+				"key": "background",
+				"url": "pause/pause-background.png"
+			},
+			{
+				"type": "image",
+				"key": "title",
+				"url": "pause/title.png"
+			}
+		]
+	}
 }
