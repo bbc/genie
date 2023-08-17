@@ -21,6 +21,11 @@
 				"type": "audio",
 				"key": "playSound",
 				"url": "shared/play.mp4"
+			},
+			{
+				"type": "audio",
+				"key": "pauseSound",
+				"url": "shared/pause.mp4"
 			}
 		]
 	}
