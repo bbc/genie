@@ -19,8 +19,8 @@
 			},
 			{
 				"type": "audio",
-				"key": "pump",
-				"url": "shared/pump.mp4"
+				"key": "playSound",
+				"url": "shared/play.mp4"
 			}
 		]
 	}
