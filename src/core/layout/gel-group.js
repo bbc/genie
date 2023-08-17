@@ -63,7 +63,8 @@ export class GelGroup extends Phaser.GameObjects.Container {
 	}
 
 	addButton(config, position = this._buttons.length) {
-		position = this._isVertical ? 0 : position;
+		// position = this._isVertical && config.icon ? this._buttons.length : position;
+		// console.log(">>", config.key, config.icon, position);
 		const newButton = createButton(this.scene, config, this.width / 2, this.height / 2);
 
 		this.addAt(newButton, position);
