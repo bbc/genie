@@ -41,6 +41,16 @@
 				"type": "audio",
 				"key": "exitSound",
 				"url": "shared/exit.mp4"
+			},
+			{
+				"type": "audio",
+				"key": "continueSound",
+				"url": "shared/continue.mp4"
+			},
+			{
+				"type": "audio",
+				"key": "nextSound",
+				"url": "shared/next.mp4"
 			}
 		]
 	}

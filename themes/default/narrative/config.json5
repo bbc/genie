@@ -1,6 +1,10 @@
 {
 	//Add, background images / animations / particle systems. More examples in /debug/examples
-	"button-overrides": { pause: { clickSound: "home.pauseSound", hoverSound: "home.pauseSound" } },
+	"button-overrides": {
+		pause: { clickSound: "home.pauseSound", hoverSound: "home.pauseSound" },
+		skip: { clickSound: "home.nextSound", hoverSound: "home.nextSound" },
+		continue: { clickSound: "home.continueSound", hoverSound: "home.continueSound" },
+	},
 	background: {
 		items: [
 			{ key: "home.background", x: 0, y: 0 },
