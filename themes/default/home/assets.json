@@ -49,8 +49,23 @@
 			},
 			{
 				"type": "audio",
+				"key": "skipSound",
+				"url": "shared/skip.mp4"
+			},
+			{
+				"type": "audio",
+				"key": "homeSound",
+				"url": "shared/home.mp4"
+			},
+			{
+				"type": "audio",
 				"key": "nextSound",
 				"url": "shared/next.mp4"
+			},
+			{
+				"type": "audio",
+				"key": "backSound",
+				"url": "shared/back.mp4"
 			}
 		]
 	}
