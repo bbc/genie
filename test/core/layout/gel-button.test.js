@@ -309,6 +309,26 @@ describe("Gel Button", () => {
 		});
 	});
 
+	describe("setHoverSound function", () => {
+		test("sets the correct sound key in button config", () => {
+			const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+			const mockSound = { testProp: "testValue" };
+			(mockScene.sound.add = jest.fn(() => mockSound)), gelButton.setHoverSound("test-key");
+
+			expect(gelButton.config.hoverSound).toBe("test-key");
+			expect(gelButton._hover).toBe(mockSound);
+		});
+
+		test("gets the sound from sound manager when it already exists", () => {
+			const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+			const mockSound = { testProp: "testValue" };
+			(mockScene.sound.get = jest.fn(() => mockSound)), gelButton.setHoverSound("test-key");
+
+			expect(gelButton.config.hoverSound).toBe("test-key");
+			expect(gelButton._hover).toBe(mockSound);
+		});
+	});
+
 	describe("Set Image function", () => {
 		test("sets the correct key", () => {
 			const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
