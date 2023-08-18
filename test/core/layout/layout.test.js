@@ -44,6 +44,7 @@ describe("Layout", () => {
 		};
 
 		mockJson = {
+			verticalTopRight: false,
 			theme: {
 				mockSceneKey: { "button-overrides": {} },
 			},
@@ -210,6 +211,29 @@ describe("Layout", () => {
 			mockScene.config.subtitle = undefined;
 			Layout.create(mockScene, mockMetrics, ["play"]);
 			expect(settingsIcons.create).toHaveBeenCalledWith(mockGelGroup, ["play"]);
+		});
+
+		test("adds settings icons in the topRight group layout when verticalTopRight config is set false", () => {
+			mockScene.config.subtitle = undefined;
+			const layout = Layout.create(mockScene, mockMetrics, ["settings"]);
+
+			expect(layout.buttons.settings.buttonName.group).toBe("topRight");
+		});
+
+		test("adds settings icons in the topRightV group layout when verticalTopRight config is set true", () => {
+			mockScene.config.subtitle = undefined;
+			mockJson.verticalTopRight = true;
+			const layout = Layout.create(mockScene, mockMetrics, ["settings"]);
+
+			expect(layout.buttons.settings.buttonName.group).toBe("topRightV");
+		});
+
+		test("adds settings icons in the topRightV group layout when verticalTopRight config is not provided", () => {
+			mockScene.config.subtitle = undefined;
+			mockScene.cache.json.get = () => {};
+			const layout = Layout.create(mockScene, mockMetrics, ["settings"]);
+
+			expect(layout.buttons.settings.buttonName.group).toBe("topRight");
 		});
 
 		test("doesn't create the settings icon if there is a subtitle", () => {
