@@ -251,6 +251,17 @@ describe("Gel Button", () => {
 			expect(mockSound.play).toHaveBeenCalled();
 		});
 
+		test("pointerover calls play on button hover sound after it has been changed", () => {
+			const mockSound = { play: jest.fn(), once: jest.fn(() => mockSound) };
+			mockScene.sound.add = jest.fn(() => mockSound);
+
+			const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+			gelButton.setHoverSound("test-key");
+
+			gelButton.onPointerOver(mockConfig, mockScene);
+			expect(mockSound.play).toHaveBeenCalled();
+		});
+
 		test("pointerup function calls once on button click to prevent pausing", () => {
 			const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
 			gelButton.onPointerUp(mockConfig, mockScene);
