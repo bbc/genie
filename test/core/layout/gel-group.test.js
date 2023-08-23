@@ -254,6 +254,21 @@ describe("Group", () => {
 			});
 		});
 
+		describe("when vPos is top and hPos is right and isVertical is true", () => {
+			test("new buttons are added to position 0", () => {
+				vPos = "top";
+				hPos = "right";
+				group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false, true);
+
+				group.addButton(config);
+				const newButton = mockCreateButton(mockScene);
+				jest.spyOn(CreateButton, "createButton").mockImplementation(() => newButton);
+				group.addButton(config);
+
+				expect(group.addAt).toHaveBeenCalledWith(newButton, 0);
+			});
+		});
+
 		describe("when vPos is bottom and hPos is left", () => {
 			test("sets group position correctly", () => {
 				vPos = "bottom";
