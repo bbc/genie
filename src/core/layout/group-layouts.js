@@ -6,6 +6,7 @@
 export const groupLayouts = [
 	{ vPos: "top", hPos: "left" },
 	{ vPos: "top", hPos: "right" },
+	{ vPos: "top", hPos: "right", arrangeV: true },
 	{ vPos: "middle", hPos: "left" },
 	{ vPos: "middle", hPos: "left", safe: true },
 	{ vPos: "middle", hPos: "center" },

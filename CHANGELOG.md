@@ -2,7 +2,8 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-|               | Breaking change: selections are now saved in collections/local storage.
+|               | Added option for vertical layout for top right layout group.                                                                                          |
+|               | Breaking change: selections are now saved in collections/local storage.                                                                               |
 | 3.15.0        | Updated Spine Plugin and example files to Spine 4.1.                                                                                                  |
 |               | Added rollup build for ninepatch plugin and updated.                                                                                                  |
 |               | Added docs for building libraries to ES6 with rollup.                                                                                                 |
