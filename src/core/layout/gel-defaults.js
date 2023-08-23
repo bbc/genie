@@ -20,7 +20,7 @@ const addChannelToAll = (defaults, channel) => Object.fromEntries(Object.entries
 
 export const buttonsChannel = screen => (screen ? `gel-buttons-${screen.scene.key}` : "gel-buttons");
 export const config = screen => {
-	const { verticalTopRight } = screen?.cache.json.get("game-config") || {};
+	const { topRightVertical } = screen?.cache.json.get("config") || {};
 
 	const gelDefaults = {
 		exit: {
@@ -72,7 +72,7 @@ export const config = screen => {
 			},
 		},
 		audio: {
-			group: verticalTopRight ? "topRightV" : "topRight",
+			group: topRightVertical ? "topRightV" : "topRight",
 			title: "Sound Off",
 			key: "audio-on",
 			ariaLabel: "Toggle Sound",
@@ -91,7 +91,7 @@ export const config = screen => {
 			},
 		},
 		settings: {
-			group: verticalTopRight ? "topRightV" : "topRight",
+			group: topRightVertical ? "topRightV" : "topRight",
 			title: "Settings",
 			key: "settings",
 			ariaLabel: "Game Settings",
@@ -102,7 +102,7 @@ export const config = screen => {
 			},
 		},
 		pause: {
-			group: verticalTopRight ? "topRightV" : "topRight",
+			group: topRightVertical ? "topRightV" : "topRight",
 			title: "Pause",
 			key: "pause",
 			ariaLabel: "Pause Game",

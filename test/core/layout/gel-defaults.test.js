@@ -38,7 +38,7 @@ describe("Layout - Gel Defaults", () => {
 			},
 			cache: {
 				json: {
-					get: () => ({ verticalTopRight: true }),
+					get: () => ({ topRightVertical: true }),
 				},
 			},
 			context: {

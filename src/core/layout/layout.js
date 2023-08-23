@@ -43,7 +43,7 @@ const shallowMergeOverrides = (config, overrides) => assignProperties(copyFirstC
  * @param {Array.<string>} accessibleButtonIds
  */
 export function create(scene, metrics, buttonIds, accessibleButtonIds) {
-	const { verticalTopRight } = scene?.cache.json.get("game-config") || {};
+	const { topRightVertical } = scene?.cache.json.get("config") || {};
 
 	buttonIds = buttonIds.filter(checkGMIFlags);
 	accessibleButtonIds = accessibleButtonIds ? accessibleButtonIds.filter(id => buttonIds.includes(id)) : buttonIds;
@@ -85,7 +85,7 @@ export function create(scene, metrics, buttonIds, accessibleButtonIds) {
 	let iconEvents = {};
 
 	if (scene.config.subtitle == undefined) {
-		iconEvents = settingsIcons.create(verticalTopRight ? groups.topRightV : groups.topRight, buttonIds);
+		iconEvents = settingsIcons.create(topRightVertical ? groups.topRightV : groups.topRight, buttonIds);
 	}
 
 	/**
