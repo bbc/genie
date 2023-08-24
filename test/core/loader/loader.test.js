@@ -76,9 +76,9 @@ describe("Loader", () => {
 		};
 
 		mockConfig = {};
-		const mockContext = { 
+		const mockContext = {
 			config: mockConfig,
-		 };
+		};
 
 		loader = new Loader();
 		Object.defineProperty(loader, "context", {
