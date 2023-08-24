@@ -143,13 +143,13 @@ export class GelButton extends Phaser.GameObjects.Container {
 			.map(overlay => overlay.resize());
 	}
 
-	setIndicator() {
-		this.overlays.remove("indicator");
-		if (!gmi.achievements.unseen) {
-			return;
-		}
+	// setIndicator() {
+	// 	this.overlays.remove("indicator");
+	// 	if (!gmi.achievements.unseen) {
+	// 		return;
+	// 	}
 
-		this.overlays.set("indicator", new Indicator(this));
-		this.overlays.list.indicator.resize();
-	}
+	// 	this.overlays.set("indicator", new Indicator(this));
+	// 	this.overlays.list.indicator.resize();
+	// }
 }
