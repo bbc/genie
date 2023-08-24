@@ -50,6 +50,7 @@ fi
 npm run build
 cp -r themes output/themes
 cp -r debug output/debug
+cp -r lib/basisu output/lib/basisu
 
 #set +e
 #npm run start:pack & npm run cy:local
