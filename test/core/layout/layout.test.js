@@ -14,7 +14,8 @@ import * as settingsIcons from "../../../src/core/layout/settings-icons.js";
 jest.mock("../../../src/core/layout/gel-group.js");
 
 describe("Layout", () => {
-	const sixGelButtons = ["achievements", "exit", "howToPlay", "play", "audio", "settings"];
+	const gelButtons = ["achievements", "exit", "howToPlay", "play", "audio", "settings"];
+	const expectedLayouts = 12;
 
 	let mockGmi;
 	let mockRoot;
@@ -43,6 +44,7 @@ describe("Layout", () => {
 		};
 
 		mockJson = {
+			topRightVertical: false,
 			theme: {
 				mockSceneKey: { "button-overrides": {} },
 			},
@@ -125,19 +127,19 @@ describe("Layout", () => {
 			const layout2 = Layout.create(mockScene, mockMetrics, ["play", "audio", "settings"]);
 			expect(Object.keys(layout2.buttons).length).toBe(3);
 
-			const layout3 = Layout.create(mockScene, mockMetrics, sixGelButtons);
+			const layout3 = Layout.create(mockScene, mockMetrics, gelButtons);
 			expect(Object.keys(layout3.buttons).length).toBe(6);
 		});
 
 		test("skips the creation of the mute button when gmi.shouldDisplayMuteButton is false", () => {
 			mockGmi.shouldDisplayMuteButton = false;
-			const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
+			const layout = Layout.create(mockScene, mockMetrics, gelButtons);
 			expect(layout.buttons.audio).not.toBeDefined();
 		});
 
 		test("skips the creation of the exit button when gmi.shouldShowExitButton is false", () => {
 			mockGmi.shouldShowExitButton = false;
-			const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
+			const layout = Layout.create(mockScene, mockMetrics, gelButtons);
 			expect(layout.buttons.exit).not.toBeDefined();
 		});
 
@@ -151,7 +153,7 @@ describe("Layout", () => {
 				groupLayouts[callNumber].safe,
 				groupLayouts[callNumber].arrangeV,
 			];
-			Layout.create(mockScene, mockMetrics, sixGelButtons);
+			Layout.create(mockScene, mockMetrics, gelButtons);
 			expect(GelGroup).toHaveBeenCalledTimes(groupLayouts.length);
 			GelGroup.mock.calls.forEach((call, index) => {
 				expect(GelGroup.mock.calls[index]).toEqual(getExpectedParams(index));
@@ -196,7 +198,7 @@ describe("Layout", () => {
 
 		test("resets the groups after they have been added to the layout", () => {
 			Layout.create(mockScene, mockMetrics, []);
-			expect(mockGelGroup.reset).toHaveBeenCalledTimes(11);
+			expect(mockGelGroup.reset).toHaveBeenCalledTimes(expectedLayouts);
 			expect(mockGelGroup.reset).toHaveBeenCalledWith(mockMetrics);
 		});
 
@@ -211,6 +213,29 @@ describe("Layout", () => {
 			expect(settingsIcons.create).toHaveBeenCalledWith(mockGelGroup, ["play"]);
 		});
 
+		test("adds settings icons in the topRight group layout when topRightVertical config is set false", () => {
+			mockScene.config.subtitle = undefined;
+			const layout = Layout.create(mockScene, mockMetrics, ["settings"]);
+
+			expect(layout.buttons.settings.buttonName.group).toBe("topRight");
+		});
+
+		test("adds settings icons in the topRightV group layout when topRightVertical config is set true", () => {
+			mockScene.config.subtitle = undefined;
+			mockJson.topRightVertical = true;
+			const layout = Layout.create(mockScene, mockMetrics, ["settings"]);
+
+			expect(layout.buttons.settings.buttonName.group).toBe("topRightV");
+		});
+
+		test("adds settings icons in the topRight group layout when topRightVertical config is not provided", () => {
+			mockScene.config.subtitle = undefined;
+			mockScene.cache.json.get = () => {};
+			const layout = Layout.create(mockScene, mockMetrics, ["settings"]);
+
+			expect(layout.buttons.settings.buttonName.group).toBe("topRight");
+		});
+
 		test("doesn't create the settings icon if there is a subtitle", () => {
 			mockScene.config.subtitle = "subtitle";
 			Layout.create(mockScene, mockMetrics, ["play"]);
@@ -220,7 +245,7 @@ describe("Layout", () => {
 
 	describe("addCustomGroup Method", () => {
 		test("returns group", () => {
-			const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
+			const layout = Layout.create(mockScene, mockMetrics, gelButtons);
 			const key = "test_key";
 			const customGroup = { test_key: "test_value" };
 
@@ -228,7 +253,7 @@ describe("Layout", () => {
 		});
 
 		test("adds custom group to layout", () => {
-			const layout = Layout.create(mockScene, mockMetrics, sixGelButtons);
+			const layout = Layout.create(mockScene, mockMetrics, gelButtons);
 			const key = "test_key";
 			const customGroup = { test_key: "test_value" };
 			layout.addCustomGroup(key, customGroup);
@@ -350,7 +375,7 @@ describe("Layout", () => {
 
 			expect(mockGfx.lineStyle).toHaveBeenCalledWith(2, 0x33ff33, 1);
 			expect(mockGfx.strokeRectShape).toHaveBeenCalledWith(mockHitAreaBounds);
-			expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(11);
+			expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(expectedLayouts);
 		});
 
 		test("draws buttons", () => {
@@ -361,7 +386,7 @@ describe("Layout", () => {
 
 			expect(mockGfx.lineStyle).toHaveBeenCalledWith(1, 0x3333ff, 1);
 			expect(mockGfx.strokeRectShape).toHaveBeenCalledWith(mockHitAreaBounds);
-			expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(11);
+			expect(mockGfx.strokeRectShape).toHaveBeenCalledTimes(expectedLayouts);
 		});
 	});
 });
