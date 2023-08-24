@@ -1,113 +1,113 @@
 {
-	"button-overrides": {
-		home: { clickSound: "home.homeSound", hoverSound: "home.homeSound" },
-		pause: { clickSound: "home.pauseSound", hoverSound: "home.pauseSound" },
-		next: { clickSound: "home.nextSound", hoverSound: "home.nextSound" },
-		back: { clickSound: "home.backSound", hoverSound: "home.backSound" },
-	},
+    "button-overrides": {
+        home: { clickSound: "home.homeSound", hoverSound: "home.homeSound" },
+        pause: { clickSound: "home.pauseSound", hoverSound: "home.pauseSound" },
+        next: { clickSound: "home.nextSound", hoverSound: "home.nextSound" },
+        back: { clickSound: "home.backSound", hoverSound: "home.backSound" },
+    },
 
-	columns: 3, // Number of choices to show horizontally per page. Can be 1 - 4.
-	rows: 2, // Number of choice rows to show per page. Can be either 1 or 2. When columns is 4 this is fixed to 1 row.
-	ease: "Cubic.easeInOut", // Pagination transition type
-	duration: 500, // Pagination transition duration
-	align: "center", // Alignment for any remaining choices in the last row
-	music: "home.backgroundMusic",
-	onHoverParticles: {
-		assetKey: "game.star",
-		emitterConfigKey: "character-select.hover-emitter",
-		onTop: false,
-	},
-	background: {
-		items: [{ key: "character-select.background", x: 0, y: 0 }],
-	},
-	title: {
-		text: "Select",
-		style: {
-			fontFamily: "ReithSans", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
-		},
-		backgroundKey: "character-select.title",
-	},
-	subtitle: {
-		text: "Team A",
-		style: {
-			fontFamily: "ReithSans",
-			fontSize: "26px",
-		},
-		backgroundKey: "character-select.subtitle",
-		icon: {
-			key: "character-select.subtitle-icon",
-		},
-	},
-	states: {
-		locked: {
-			// asset: "debby", // Key of sprite to set for. Renders same scale as base sprite so should be the same size.
-			overlayAsset: "character-select.lock", // Render this over the top of the choice asset for this state.
-			suffix: "locked", // Appended to aria label of accessibility div.
-			x: 65, // 0 is centre of the asset.
-			y: 35, // These values scale with and are positioned with the asset so should be calculated based off the asset pixels.
-			properties: {
-				// Phaser properties assigned to the base sprite
-				alpha: 0.25,
-				tint: 0xff0000,
-			},
-			enabled: false, // Enable or disable touch input on this state - default true
-		},
-		complete: { overlayAsset: "character-select.complete", x: 65, y: 35, suffix: "completed" },
-	},
-	// Optional - provide if you want title/subtitle text to appear over each choice
-	choicesStyling: {
-		default: {
-			title: {
-				// Styling for choice title, required to show title on choices.
-				style: {
-					fontFamily: "ReithSans",
-					fontSize: "19px",
-					color: "#424242",
-					backgroundColor: "#fff",
-					fixedWidth: 75, // Text will be clipped inside this width.
-					align: "center", // Aligns the text within the fixed width.
-					padding: {
-						// Padding around the text will show a 'block' when combined with background colour.
-						left: 6,
-						right: 6,
-						top: 2,
-						bottom: 2,
-					},
-				},
-				position: {
-					// Required if title is being shown.
-					x: 0, // 0 is centre of asset. These values scale with and are positioned with the asset so should be calculated based off the asset pixels.
-					y: 53,
-				},
-			},
-			subtitle: {
-				style: {
-					fontFamily: "ReithSans",
-					fontSize: "16px",
-					color: "#fff",
-					backgroundColor: "rgba(0,0,0,0.15)",
-					padding: {
-						left: 4,
-						right: 4,
-						top: 2,
-						bottom: 2,
-					},
-				},
-				position: {
-					x: 0,
-					y: 80,
-				},
-			},
-		},
-		// optional styling for extra button states (will override default styles above)
-		locked: {
-			title: {
-				style: {
-					color: "#fff",
-					backgroundColor: "#7d4b4b",
-				},
-			},
-		},
-	},
-	collection: "characters",
+    columns: 3, // Number of choices to show horizontally per page. Can be 1 - 4.
+    rows: 2, // Number of choice rows to show per page. Can be either 1 or 2. When columns is 4 this is fixed to 1 row.
+    ease: "Cubic.easeInOut", // Pagination transition type
+    duration: 500, // Pagination transition duration
+    align: "center", // Alignment for any remaining choices in the last row
+    music: "home.backgroundMusic",
+    onHoverParticles: {
+        assetKey: "game.star",
+        emitterConfigKey: "character-select.hover-emitter",
+        onTop: false,
+    },
+    background: {
+        items: [{ key: "character-select.background", x: 0, y: 0 }],
+    },
+    title: {
+        text: "Select",
+        style: {
+            fontFamily: "ReithSans", // Please refer to GEL specifications for font sizing guidance. https://www.bbc.co.uk/gel/guidelines/games-framework
+        },
+        backgroundKey: "character-select.title",
+    },
+    subtitle: {
+        text: "Team A",
+        style: {
+            fontFamily: "ReithSans",
+            fontSize: "26px",
+        },
+        backgroundKey: "character-select.subtitle",
+        icon: {
+            key: "character-select.subtitle-icon",
+        },
+    },
+    states: {
+        locked: {
+            // asset: "debby", // Key of sprite to set for. Renders same scale as base sprite so should be the same size.
+            overlayAsset: "character-select.lock", // Render this over the top of the choice asset for this state.
+            suffix: "locked", // Appended to aria label of accessibility div.
+            x: 65, // 0 is centre of the asset.
+            y: 35, // These values scale with and are positioned with the asset so should be calculated based off the asset pixels.
+            properties: {
+                // Phaser properties assigned to the base sprite
+                alpha: 0.25,
+                tint: 0xff0000,
+            },
+            enabled: false, // Enable or disable touch input on this state - default true
+        },
+        complete: { overlayAsset: "character-select.complete", x: 65, y: 35, suffix: "completed" },
+    },
+    // Optional - provide if you want title/subtitle text to appear over each choice
+    choicesStyling: {
+        default: {
+            title: {
+                // Styling for choice title, required to show title on choices.
+                style: {
+                    fontFamily: "ReithSans",
+                    fontSize: "19px",
+                    color: "#424242",
+                    backgroundColor: "#fff",
+                    fixedWidth: 75, // Text will be clipped inside this width.
+                    align: "center", // Aligns the text within the fixed width.
+                    padding: {
+                        // Padding around the text will show a 'block' when combined with background colour.
+                        left: 6,
+                        right: 6,
+                        top: 2,
+                        bottom: 2,
+                    },
+                },
+                position: {
+                    // Required if title is being shown.
+                    x: 0, // 0 is centre of asset. These values scale with and are positioned with the asset so should be calculated based off the asset pixels.
+                    y: 53,
+                },
+            },
+            subtitle: {
+                style: {
+                    fontFamily: "ReithSans",
+                    fontSize: "16px",
+                    color: "#fff",
+                    backgroundColor: "rgba(0,0,0,0.15)",
+                    padding: {
+                        left: 4,
+                        right: 4,
+                        top: 2,
+                        bottom: 2,
+                    },
+                },
+                position: {
+                    x: 0,
+                    y: 80,
+                },
+            },
+        },
+        // optional styling for extra button states (will override default styles above)
+        locked: {
+            title: {
+                style: {
+                    color: "#fff",
+                    backgroundColor: "#7d4b4b",
+                },
+            },
+        },
+    },
+    collection: "characters",
 }
