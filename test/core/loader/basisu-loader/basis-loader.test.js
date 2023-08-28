@@ -3,6 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
+jest.mock("../../../../src/core/gmi/gmi.js", () => ({ gmi: { info: { gameDir: "testDir" } } }));
 import { BasisLoader } from "../../../../src/core/loader/basisu-loader/basis-loader.js";
 
 describe("Basis Loader", () => {

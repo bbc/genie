@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import { PendingTextureRequest } from "../../../../lib/basisu/pending-texture-request.js";
-import { SCRIPT_PATH } from "./script-path.js";
+import { gmi } from "../../gmi/gmi.js";
 
 export class BasisLoader {
 	constructor(gl) {
@@ -14,7 +14,7 @@ export class BasisLoader {
 		this.allowSeparateAlpha = false;
 
 		// Load worker script
-		this.worker = new Worker(`${SCRIPT_PATH}/worker.js`, { type: "module" });
+		this.worker = new Worker(`${gmi.info.gameDir}lib/basisu/worker.js`, { type: "module" });
 		this.worker.onmessage = msg => {
 			// Find the pending texture associated with the data we just received
 			// from the worker.
