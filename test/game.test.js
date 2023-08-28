@@ -87,14 +87,11 @@ describe("Game", () => {
 		};
 		game.setLayout = jest.fn();
 		game.navigation = { next: jest.fn() };
-		game.transientData = {
-			"character-select": { choice: { title: "Kawabashi" } },
-			"level-select": { choice: { title: "Hard level" }, choices: [1, 2, 3] },
-		};
+		game.transientData = {};
 		game.cache = { json: { get: jest.fn(() => mockAchievements) } };
 
 		collectionsModule.collections = {
-			get: jest.fn(() => ({ get: jest.fn(), set: jest.fn() })),
+			get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: jest.fn() })),
 		};
 	});
 
@@ -158,8 +155,15 @@ describe("Game", () => {
 		});
 
 		test("displays the character selected", () => {
-			const expectedCharacter = `Character Selected: ${game.transientData["character-select"].choice.title}`;
-			expect(game.add.text).toHaveBeenCalledWith(150, 200, expectedCharacter, {
+			const characterTitle = "Kawabashi";
+			const expected = `Character Selected: ${characterTitle}`;
+			let mockGetUnique = jest.fn(() => ({ title: characterTitle }));
+			collectionsModule.collections = {
+				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
+			};
+			game.create();
+
+			expect(game.add.text).toHaveBeenCalledWith(150, 200, expected, {
 				font: "32px ReithSans",
 				fill: "#f6931e",
 				align: "center",
@@ -167,8 +171,15 @@ describe("Game", () => {
 		});
 
 		test("displays the level selected", () => {
-			const expectedLevel = `Level Selected: ${game.transientData["level-select"].choice.title}`;
-			expect(game.add.text).toHaveBeenCalledWith(150, 250, expectedLevel, {
+			const levelTitle = "Hard level";
+			const expected = `Level Selected: ${levelTitle}`;
+			let mockGetUnique = jest.fn(() => ({ title: levelTitle }));
+			collectionsModule.collections = {
+				get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
+			};
+			game.create();
+
+			expect(game.add.text).toHaveBeenCalledWith(150, 250, expected, {
 				font: "32px ReithSans",
 				fill: "#f6931e",
 				align: "center",
@@ -478,17 +489,22 @@ describe("Game", () => {
 					}
 					return mockImage;
 				});
+
+				let mockGetUnique = jest.fn(() => ({ title: "Hard Level", id: 1 }));
+				collectionsModule.collections = {
+					get: jest.fn(() => ({ get: jest.fn(), set: jest.fn(), getUnique: mockGetUnique })),
+				};
 				game.create();
 			});
 
 			test("saves data from the game when the continue button image is clicked", () => {
 				continueButtonClickedOn.mock.calls[0][1]();
-				expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0, levelId: "Hard level" });
+				expect(game.transientData.results).toEqual({ gems: 0, keys: 0, stars: 0, levelId: "Hard Level" });
 			});
 
 			test("saves levelId from the game when the continue button is clicked", () => {
 				continueButtonClickedOn.mock.calls[0][1]();
-				expect(game.transientData.results.levelId).toEqual("Hard level");
+				expect(game.transientData.results.levelId).toEqual("Hard Level");
 			});
 
 			test("navigates to the next screen when the continue button image is clicked", () => {

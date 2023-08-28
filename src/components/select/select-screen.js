@@ -42,7 +42,7 @@ export class Select extends Screen {
 
 		this.titles = createTitles(this);
 		const onTransitionStart = getOnTransitionStartFn(this);
-		const choice = this.transientData[this.scene.key]?.choice?.id;
+		const choice = this.collection.getUnique({ key: "selected", value: true })?.id;
 
 		this.grid = new GelGrid(this, Object.assign(this.config, gridDefaults, { onTransitionStart }, { choice }));
 		this.layout.addCustomGroup("grid", this.grid, gridDefaults.tabIndex);
@@ -100,6 +100,7 @@ export class Select extends Screen {
 		gmi.sendStatsEvent(screenType, "select", metaData);
 
 		this.transientData[this.scene.key] = { choice: selection };
+		this.collection.setUnique({ id: selection.id, key: "selected", value: true });
 		this.navigation.next();
 	};
 }

@@ -89,4 +89,45 @@ describe(`The Select screens ${Cypress.env("THEME")}`, () => {
 		cy.ariaHidden("#debug-select-grid__mary", "true");
 		cy.ariaHidden("#debug-select-grid__mike", "false");
 	});
+
+	it("Scrolls to the page where the last selected item is within the same session", () => {
+		cy.genieClick("#home__debug");
+		cy.genieClick("#debug__debug-select-grid");
+		cy.genieClick("#debug-select-grid__next").wait(2000);
+		cy.genieClick("#debug-select-grid__mike").wait(2000);
+		cy.genieClick("#debug__debug-select-grid").wait(2000);
+		cy.ariaHidden("#debug-select-grid__mary", "true");
+		cy.ariaHidden("#debug-select-grid__kyle", "true");
+		cy.ariaHidden("#debug-select-grid__suzy", "true");
+		cy.ariaHidden("#debug-select-grid__greg", "true");
+		cy.ariaHidden("#debug-select-grid__ezinma", "true");
+		cy.ariaHidden("#debug-select-grid__phil", "true");
+		cy.ariaHidden("#debug-select-grid__mike", "false");
+		cy.ariaHidden("#debug-select-grid__debby", "false");
+		cy.ariaHidden("#debug-select-grid__timmy", "false");
+		cy.ariaHidden("#debug-select-grid__elliot", "false");
+	});
+
+	it("Scrolls to the page where the last selected item is after a page-refresh", () => {
+		cy.genieClick("#home__debug");
+		cy.genieClick("#debug__debug-select-grid");
+		cy.genieClick("#debug-select-grid__kyle").wait(2000);
+		cy.genieClick("#debug__debug-select-grid").wait(2000);
+		cy.genieClick("#debug-select-grid__next").wait(2000);
+		cy.genieClick("#debug-select-grid__mike").wait(2000);
+		cy.visit(appendToken(`${Cypress.env("url")}${getUrl()}`));
+		cy.get("#home__play", { timeout: 60000 }).should("exist");
+		cy.genieClick("#home__debug");
+		cy.genieClick("#debug__debug-select-grid").wait(2000);
+		cy.ariaHidden("#debug-select-grid__mary", "true");
+		cy.ariaHidden("#debug-select-grid__kyle", "true");
+		cy.ariaHidden("#debug-select-grid__suzy", "true");
+		cy.ariaHidden("#debug-select-grid__greg", "true");
+		cy.ariaHidden("#debug-select-grid__ezinma", "true");
+		cy.ariaHidden("#debug-select-grid__phil", "true");
+		cy.ariaHidden("#debug-select-grid__mike", "false");
+		cy.ariaHidden("#debug-select-grid__debby", "false");
+		cy.ariaHidden("#debug-select-grid__timmy", "false");
+		cy.ariaHidden("#debug-select-grid__elliot", "false");
+	});
 });

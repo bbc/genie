@@ -34,7 +34,7 @@ describe("Collections", () => {
 		testCatalogue = [
 			{
 				id: "id1",
-				title: "Title 1 ",
+				title: "Title 1",
 				description: "Catalogue Item 1.",
 				tags: ["tag1"],
 			},
@@ -89,7 +89,7 @@ describe("Collections", () => {
 			testCollection.catalogue = [
 				{
 					id: "Xid1",
-					title: "XTitle 1 ",
+					title: "XTitle 1",
 					description: "XCatalogue Item 1.",
 					tags: ["Xtag1"],
 				},
@@ -146,7 +146,7 @@ describe("Collections", () => {
 					qty: 5,
 					state: "testState",
 					tags: ["tag1"],
-					title: "Title 1 ",
+					title: "Title 1",
 				},
 				{
 					description: "Catalogue Item 2.",
@@ -178,7 +178,7 @@ describe("Collections", () => {
 					qty: 5,
 					state: "testState",
 					tags: ["tag1"],
-					title: "Title 1 ",
+					title: "Title 1",
 				},
 				{
 					description: "Catalogue Item 2.",
@@ -218,7 +218,7 @@ describe("Collections", () => {
 					qty: 5,
 					state: "testState",
 					tags: ["tag1"],
-					title: "Title 1 ",
+					title: "Title 1",
 				},
 				{
 					description: "Catalogue Item 2.",
@@ -250,7 +250,7 @@ describe("Collections", () => {
 				id: "id1",
 				qty: 5,
 				tags: ["tag1"],
-				title: "Title 1 ",
+				title: "Title 1",
 			};
 
 			testCollection.include = ["tag1", "tag2"];
@@ -306,6 +306,50 @@ describe("Collections", () => {
 
 			expect(spy).toHaveBeenCalledTimes(2);
 			expect(mockGmi.setGameData).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("Returned setUnique method", () => {
+		test("Sets value on one item in collection", () => {
+			const collection = initCollection(mockScreen)("testCollection");
+			collection.setUnique({ id: "id1", key: "selected", value: true });
+
+			expect(mockGmi.setGameData.mock.calls[0][1].collections.testCollection[0]).toEqual({
+				id: "id1",
+				selected: true,
+			});
+		});
+		test("Enforces uniqueness of value in collection", () => {
+			testCatalogue[0].selected = true;
+			testCatalogue[1].selected = true;
+			const collection = initCollection(mockScreen)("testCollection");
+			collection.setUnique({ id: "id1", key: "selected", value: true });
+
+			expect(mockGmi.setGameData.mock.calls[0][1].collections.testCollection[0]).toEqual({
+				id: "id2",
+				selected: null,
+			});
+		});
+	});
+
+	describe("Returned getUnique method", () => {
+		test("Returns undefined when unique element does not exist", () => {
+			const collection = initCollection(mockScreen)("testCollection");
+
+			expect(collection.getUnique({ key: "selected", value: true })).toEqual(undefined);
+		});
+		test("Returns unique element by key from collection if exists", () => {
+			testCatalogue[0].selected = true;
+			const collection = initCollection(mockScreen)("testCollection");
+
+			expect(collection.getUnique({ key: "selected", value: true })).toEqual({
+				description: "Catalogue Item 1.",
+				id: "id1",
+				selected: true,
+				qty: 1,
+				tags: ["tag1"],
+				title: "Title 1",
+			});
 		});
 	});
 });

@@ -205,6 +205,8 @@ describe("Select Screen", () => {
 		mockCollection = {
 			getAll: jest.fn(() => mockCatalogue),
 			get: jest.fn(() => ({ state: "locked" })),
+			setUnique: jest.fn(),
+			getUnique: jest.fn(),
 		};
 
 		collectionsModule.collections = {
@@ -289,8 +291,8 @@ describe("Select Screen", () => {
 			expect(mockGelGrid.addGridCells).toHaveBeenCalledWith(mockCatalogue);
 		});
 
-		test("passes selection id from transient data to grid", () => {
-			mockTransientData["test-select"] = { choice: { id: "char2" } };
+		test("passes selection id from collection to grid", () => {
+			mockCollection.getUnique.mockImplementationOnce(() => ({ id: "char2" }));
 			const expectedGridConfig = {
 				choice: "char2",
 			};
@@ -328,6 +330,14 @@ describe("Select Screen", () => {
 	describe("events", () => {
 		beforeEach(() => {
 			jest.spyOn(eventBus, "subscribe");
+		});
+
+		test("saves choice to collection", () => {
+			mockChoices = [{ id: "id1", title: "Title 1" }];
+			selectScreen.create();
+
+			eventBus.subscribe.mock.calls[0][0].callback();
+			expect(mockCollection.setUnique).toHaveBeenCalledWith({ id: "id1", key: "selected", value: true });
 		});
 
 		test("saves choice to transient data", () => {

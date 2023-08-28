@@ -6,10 +6,11 @@
 import { settings, settingsChannel } from "../settings.js";
 import { gmi } from "../gmi/gmi.js";
 import { eventBus } from "../event-bus.js";
-import fp from "../../../lib/lodash/fp/fp.js";
+import { collections } from "../../core/collections.js";
 
 const pushLevelId = (screen, params) => {
-	const levelId = fp.get("transientData.level-select.choice.title", screen.context);
+	const collection = collections.get("levels");
+	const levelId = collection.getUnique({ key: "selected", value: true })?.id;
 	return levelId ? [...params, { source: levelId }] : params;
 };
 
@@ -19,6 +20,8 @@ const addChannelToAll = (defaults, channel) => Object.fromEntries(Object.entries
 
 export const buttonsChannel = screen => (screen ? `gel-buttons-${screen.scene.key}` : "gel-buttons");
 export const config = screen => {
+	const { topRightVertical } = screen?.cache.json.get("config") || {};
+
 	const gelDefaults = {
 		exit: {
 			group: "topLeft",
@@ -69,7 +72,7 @@ export const config = screen => {
 			},
 		},
 		audio: {
-			group: "topRight",
+			group: topRightVertical ? "topRightV" : "topRight",
 			title: "Sound Off",
 			key: "audio-on",
 			ariaLabel: "Toggle Sound",
@@ -88,7 +91,7 @@ export const config = screen => {
 			},
 		},
 		settings: {
-			group: "topRight",
+			group: topRightVertical ? "topRightV" : "topRight",
 			title: "Settings",
 			key: "settings",
 			ariaLabel: "Game Settings",
@@ -99,7 +102,7 @@ export const config = screen => {
 			},
 		},
 		pause: {
-			group: "topRight",
+			group: topRightVertical ? "topRightV" : "topRight",
 			title: "Pause",
 			key: "pause",
 			ariaLabel: "Pause Game",

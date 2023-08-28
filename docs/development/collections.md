@@ -11,7 +11,7 @@ convention and games can have multiple collections _(e.g: for levels and for unl
 
 Differences to the default config are stored in local storage.
 
-## creating a collection
+## Creating a collection
 To create a collection pass the storage key and a config array to initCollection.
 This will both return and add the new collection to the collections map so you can access it from anywhere using `collections.get(###)`.
 
@@ -43,9 +43,11 @@ levels.set({id: "ghostValley", state: "complete"})
 ## Collection Methods
 
 * **collection.config()** returns the initial config
-* **collection.get(`id_string`) returns the current state of `id_string`, e.g: `{id: "id_string", state: "locked"}`
-* **collection.getAll()** returns the all items and their current state
-* **collection.set(`id`, `state`) sets the item with `id` to `state`
+* **collection.get(`id_string`)** returns the current state of `id_string`, e.g: `{id: "id_string", state: "locked"}`
+* **collection.getAll()** returns all items and their current state
+* **collection.set(`id`, `state`)** sets the item with `id` to `state`
+* **collection.setUnique(`{ id, key, value }`)** adds a new `key`-`value` pair to the item with `id`
+* **collection.getUnique(`{ key, value }`)** returns the unique item with `key`-`value` pair
 
 ## Usage with Select Screen
 The Genie [Select](select-screen.md) screen provides automatic integration with collections when setting the `storageKey` property to the collection required.
