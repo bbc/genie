@@ -34,6 +34,11 @@ var GMI = function (options, embedVars, gameDir) {
 			return gameDir;
 		},
 	});
+	Object.defineProperty(GMI.prototype, "info", {
+		get: function () {
+			return { gameDir };
+		},
+	});
 	Object.defineProperty(GMI.prototype, "environment", {
 		get: function () {
 			return env;
