@@ -13,7 +13,7 @@ module.exports = env => {
 	const development = env && env.development;
 	const genieCore = env && env.genieCore;
 	let webPackConfig = {
-		mode: development ? "development" : "development",
+		mode: development ? "development" : "production",
 		devtool: development ? "eval-cheap-module-source-map" : "hidden-source-map",
 		performance: { hints: false },
 		entry: [
