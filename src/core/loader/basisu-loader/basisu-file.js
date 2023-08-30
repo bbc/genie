@@ -1,8 +1,5 @@
 /**
- * JSON5 File loader plugin.
- *
- * @module components/loader/JSON5File.js
- * @copyright BBC 2019
+ * @copyright BBC 2023
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
