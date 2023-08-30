@@ -35,7 +35,7 @@ export class Select extends Screen {
 		this.collection = collections.get(this.config.collection);
 		const paginate = this.collection.getAll().length > this.config.columns * this.config.rows;
 		const pagingButtons = paginate ? ["previous", "next"] : [];
-		const buttons = ["home", "pause", ...pagingButtons];
+		const buttons = ["home", "pause", "previous", "next"];
 		singleItemMode.isEnabled(this)
 			? this.setLayout([...buttons, "continue"], ["home", "pause"])
 			: this.setLayout(buttons, buttons);

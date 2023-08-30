@@ -158,12 +158,19 @@ const exampleScreens = {
 			next: "debug",
 		},
 	},
-
 	"dom-text": {
 		scene: DomText,
 		title: "DOM Text",
 		routes: {
 			back: "debug",
+			next: "debug",
+		},
+	},
+	"basisu": {
+		scene: Home,
+		title: "Basis Universal",
+		routes: {
+			debug: "debug",
 			next: "debug",
 		},
 	},

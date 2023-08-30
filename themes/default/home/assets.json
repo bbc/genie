@@ -7,11 +7,6 @@
                 "key": "title",
                 "url": "shared/title.png"
             },
-			{
-				"type": "basisu",
-				"key": "basisoo",
-				"url": "home/audio-off.basis"
-			},
             {
                 "type": "image",
                 "key": "background",

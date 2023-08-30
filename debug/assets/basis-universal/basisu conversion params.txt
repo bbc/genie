@@ -1,0 +1,1 @@
+basisu -uastc -y_flip -uastc_level 3 -uastc_rdo_l .2 basis-universal.png
