@@ -26,13 +26,6 @@ export class BasisUFile extends Phaser.Loader.File {
 		Phaser.Loader.File.call(this, loader, fileConfig);
 	}
 
-	/**
-	 * Called automatically by Loader.nextFile.
-	 * This method controls what extra work this File does with its loaded data.
-	 *
-	 * @method Phaser.Loader.FileTypes.JSONFile#onProcess
-	 * @since 3.7.0
-	 */
 	onProcess() {
 		const basisLoader = new BasisLoader(this.loader.scene.renderer.gl);
 
