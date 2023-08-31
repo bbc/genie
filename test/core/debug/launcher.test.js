@@ -114,5 +114,24 @@ describe("Examples Launcher", () => {
 			expect(launcher._data.transient.example3).toStrictEqual({});
 		});
 
+		test("next callback shows current page", () => {
+			launcher.showCurrentPage = jest.fn();
+			eventBus.subscribe.mock.calls[0][0].callback();
+			expect(launcher.showCurrentPage).toHaveBeenCalled();
+		});
+
+		test("previous callback shows current page", () => {
+			launcher.showCurrentPage = jest.fn();
+			eventBus.subscribe.mock.calls[1][0].callback();
+			expect(launcher.showCurrentPage).toHaveBeenCalled();
+		});
+
+		test("showCurrentPage sets current button visibility", () => {
+			const mockPages = [[{ visible: false }], [{ visible: false }], [{ visible: false }]];
+			launcher.pages = mockPages;
+			launcher.pageIndex = 2;
+			launcher.showCurrentPage();
+			expect(mockPages[2][0].visible).toBe(true);
+		});
 	});
 });
