@@ -24,14 +24,14 @@ const getAlignX = (gelButton, alignment) =>
 		left: -gelButton.width / 2,
 		center: 0,
 		right: gelButton.width / 2,
-	}[alignment]);
+	})[alignment];
 
 const getAlignY = (gelButton, alignment) =>
 	({
 		top: -gelButton.height / 2,
 		center: 0,
 		bottom: gelButton.height / 2,
-	}[alignment]);
+	})[alignment];
 
 const setOverlayOrigin = (overlay, config) =>
 	overlay.setOrigin(originX[config.position.alignX], originY[config.position.alignY]);

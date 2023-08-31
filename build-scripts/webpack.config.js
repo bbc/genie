@@ -54,6 +54,7 @@ module.exports = env => {
 							"WebFont",
 							{
 								globalName: "WebFont",
+								override: true,
 							},
 						],
 					},
