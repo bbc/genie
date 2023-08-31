@@ -88,30 +88,31 @@ describe("Examples Launcher", () => {
 		test("Intentionally loose test as page not included in final output", () => {
 			expect(launcher.add.image).toHaveBeenCalled();
 			expect(launcher.add.gelButton).toHaveBeenCalled();
-			expect(launcher.setLayout).toHaveBeenCalledWith(["home"]);
+			expect(launcher.setLayout).toHaveBeenCalledWith(["home", "previous", "next"]);
 			expect(eventBus.subscribe).toHaveBeenCalled();
 		});
 
 		test("Sets transientData if present in example config", () => {
-			eventBus.subscribe.mock.calls[1][0].callback();
+			eventBus.subscribe.mock.calls[3][0].callback();
 			expect(launcher._data.transient.example1.testKey).toBe("testValue");
 		});
 
 		test("Does not set transientData if absent from example config", () => {
-			eventBus.subscribe.mock.calls[3][0].callback();
+			eventBus.subscribe.mock.calls[5][0].callback();
 			expect(launcher._data.transient.testKey).not.toBeDefined();
 		});
 
 		test("sets transientData from a prompt if present in example config", () => {
 			window.prompt = () => '{ "testKey": "testValue" }';
-			eventBus.subscribe.mock.calls[5][0].callback();
+			eventBus.subscribe.mock.calls[7][0].callback();
 			expect(launcher._data.transient.example3.testKey).toBe("testValue");
 		});
 
 		test("defaults transientData to an empty object if no value is returned from the prompt and no transientData was provided", () => {
 			window.prompt = () => null;
-			eventBus.subscribe.mock.calls[5][0].callback();
+			eventBus.subscribe.mock.calls[7][0].callback();
 			expect(launcher._data.transient.example3).toStrictEqual({});
 		});
+
 	});
 });
