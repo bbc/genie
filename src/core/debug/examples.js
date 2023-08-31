@@ -166,7 +166,7 @@ const exampleScreens = {
 			next: "debug",
 		},
 	},
-	"basisu": {
+	basisu: {
 		scene: Home,
 		title: "Basis Universal",
 		routes: {
