@@ -35,7 +35,7 @@
         "babel-plugin-transform-import-meta": "^2.2.1",
         "bufferutil": "^4.0.7",
         "cross-env": "^7.0.3",
-        "cypress": "^7.7.0",
+        "cypress": "^13.1.0",
         "cypress-plugin-tab": "^1.0.5",
         "eslint": "^8.47.0",
         "eslint-config-prettier": "^9.0.0",
