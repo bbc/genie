@@ -174,6 +174,14 @@ const exampleScreens = {
 			next: "debug",
 		},
 	},
+	"basisu-quality": {
+		scene: Home,
+		title: "Basis Universal Quality",
+		routes: {
+			debug: "debug",
+			next: "debug",
+		},
+	},
 };
 
 export const examples = fp.mapKeys(prependDebug, exampleScreens);
