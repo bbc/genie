@@ -1,7 +1,7 @@
 {
     music: "home.backgroundMusic",
     "button-overrides": {
-        play: { shiftY: 80, clickSound: "home.playSound", hoverSound: "home.playSound" }, //Use to shift buttons out of the way of logos etc.
+        play: { shiftY: 80, clickSound: "home.playSound", hoverSound: "home.playSound" }, //Use to shift buttons out of the way of logos etc and give buttons audio.
         settings: { clickSound: "home.settingsSound" },
         howToPlay: { clickSound: "home.howPlaySound" },
         exit: { clickSound: "home.exitSound" },
