@@ -3,8 +3,12 @@
         "prefix": "mem-test-1.",
         "files": [
             {
-                "type": "image",
-                "key": "basicSprite7",
+                "type": "spritesheet",
+                "frameConfig": {
+                    "frameWidth": 111,
+                    "frameHeight": 111
+                },
+                 "key": "basicSprite7",
                 "url": "game/1MB-image.png"
             }
         ]

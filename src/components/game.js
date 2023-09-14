@@ -94,14 +94,22 @@ export class Game extends Screen {
 
 		let params = new URLSearchParams(document.location.search);
 		let x = 0;
+		let z;
 		while (x < params.get("testSize")) {
-			this.testImages.push(
-				this.add.image(
-					-700 + Math.floor(x % 14) * 100,
-					-300 + Math.floor(x / 6) * 100,
-					`mem-test-1.basicSprite${x}`,
-				),
-			);
+			let y = 0;
+			while (y < 64) {
+				z = x * 64 + y;
+				this.testImages.push(
+					this.add.image(
+						-700 + Math.floor(z % 28) * 50,
+						-300 + Math.floor(z / 12) * 50,
+						`mem-test-1.basicSprite${x}`,
+						y,
+					),
+				);
+				y++;
+			}
+
 			this.testImages[x].setScale(0.5).setOrigin(0.5);
 			x++;
 		}
