@@ -21,6 +21,11 @@ const getAudioButtons = fp.map(fp.get("layout.buttons.audio"));
 const isDefault = screen => screen.default === true;
 const getDefaultStartScreen = config => Object.keys(config)[Object.values(config).findIndex(isDefault)] || "home";
 
+const testPackAvailable = x => {
+	let params = new URLSearchParams(document.location.search);
+	return x < params.get("testSize");
+};
+
 export class Boot extends Screen {
 	constructor(navigationConfig) {
 		super({ key: "boot" });
@@ -40,6 +45,12 @@ export class Boot extends Screen {
 		this.load.json("asset-master-pack", "asset-master-pack.json");
 		this.load.json("font-pack", "fonts.json");
 		this.load.json("config", "config.json");
+
+		let x = 0;
+		while (testPackAvailable(x)) {
+			this.load.json(`mem-test-${x}`, `mem-test-${x}.json`);
+			x++;
+		}
 
 		this.setData({
 			parentScreens: [],

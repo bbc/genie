@@ -1,0 +1,43 @@
+{
+    "game": {
+        "prefix": "game2.",
+        "files": [
+            {
+                "type": "image",
+                "key": "basicButton",
+                "url": "game/basic-button.png"
+            },
+            {
+                "type": "image",
+                "key": "key",
+                "url": "game/key.png"
+            },
+            {
+                "type": "image",
+                "key": "gem",
+                "url": "game/gem.png"
+            },
+            {
+                "type": "spritesheet",
+                "key": "diamond",
+                "url": "game/diamond.png",
+                "frameConfig": {
+                    "frameWidth": 64,
+                    "frameHeight": 64,
+                    "margin": 2,
+                    "spacing": 2
+                }
+            },
+            {
+                "type": "image",
+                "key": "star",
+                "url": "game/star.png"
+            },
+            {
+                "type": "audio",
+                "key": "backgroundMusicTwo",
+                "url": "shared/background-music-2.mp4"
+            }
+        ]
+    }
+}

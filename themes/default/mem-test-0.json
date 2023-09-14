@@ -1,0 +1,12 @@
+{
+    "memTest0": {
+        "prefix": "mem-test-1.",
+        "files": [
+            {
+                "type": "image",
+                "key": "basicSprite0",
+                "url": "game/1MB-image.png"
+            }
+        ]
+    }
+}

@@ -11,6 +11,7 @@ import { launchShopOverlay } from "../components/shop/shop.js";
 import { eventBus } from "../core/event-bus.js";
 
 export class Game extends Screen {
+	testImages = [];
 	itemUsed(data = { duration: 0 }) {
 		console.log("Item used:", data); // eslint-disable-line no-console
 		console.log("Item timer duration in seconds: ", data.duration || "No duration"); // eslint-disable-line no-console
@@ -40,6 +41,12 @@ export class Game extends Screen {
 	getAchievements() {
 		const achievements = this.cache.json.get("achievements-data").map(achievement => achievement.key);
 		return { star: achievements.slice(0, 3), gem: achievements.slice(3, 7), key: achievements.slice(7, 10) };
+	}
+
+	update() {
+		this.testImages?.forEach(image => {
+			image.rotation += 0.01;
+		});
 	}
 
 	create() {
@@ -84,6 +91,20 @@ export class Game extends Screen {
 		const starScore = this.add.text(-50, -70, "0", buttonTextStyle).setOrigin(0.5);
 		const gemScore = this.add.text(-50, 20, "0", buttonTextStyle).setOrigin(0.5);
 		const keyScore = this.add.text(-50, 110, "0", buttonTextStyle).setOrigin(0.5);
+
+		let params = new URLSearchParams(document.location.search);
+		let x = 0;
+		while (x < params.get("testSize")) {
+			this.testImages.push(
+				this.add.image(
+					-700 + Math.floor(x % 14) * 100,
+					-300 + Math.floor(x / 6) * 100,
+					`mem-test-1.basicSprite${x}`,
+				),
+			);
+			this.testImages[x].setScale(0.5).setOrigin(0.5);
+			x++;
+		}
 
 		[-70, 20, 110].forEach((buttonYPosition, index) => {
 			const buttonNumber = index + 1;

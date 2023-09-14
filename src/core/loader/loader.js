@@ -24,6 +24,11 @@ const loaderComplete = scene => () => {
 	gmi.gameLoaded();
 };
 
+const testPackAvailable = x => {
+	let params = new URLSearchParams(document.location.search);
+	return x < params.get("testSize");
+};
+
 export class Loader extends Screen {
 	constructor() {
 		loadPack.path = gmi.gameDir + getTheme();
@@ -55,6 +60,13 @@ export class Loader extends Screen {
 
 		gamePacksToLoad.forEach(pack => this.load.pack(`${pack}/assets`));
 		this.load.addPack(masterPack);
+
+		let x = 0;
+		while (testPackAvailable(x)) {
+			const testPack = this.cache.json.get(`mem-test-${x}`);
+			this.load.addPack(testPack);
+			x++;
+		}
 
 		this.add.image(0, 0, "loader.background");
 		this.add.image(0, -120, "loader.title");
