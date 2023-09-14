@@ -5,7 +5,7 @@
             {
                 "key": "basicSprite0",
                 "type": "spritesheet",
-                "url": "game/1MB-image.png",
+                "url": "game/1MB-image-0.png",
                 "frameConfig": {
                     "frameWidth": 111,
                     "frameHeight": 111
