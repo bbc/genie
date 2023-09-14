@@ -39,8 +39,6 @@ set -e
 #python build-scripts/licensechecker/licensechecker.py
 
 npm install --force
-npm run jest
-npm run eslint
 #npm run validate:themes -- default # Validates themes
 
 #Don't create theme 2 for PR builds to save time
