@@ -32,6 +32,10 @@ export class BasisUFile extends Phaser.Loader.File {
 		//TODO wouldn't have to do this if this wasn't a class
 		const transcodeBuffer = basisLoader.transcodeBuffer.bind(basisLoader);
 
-		return this.xhrLoader.response.arrayBuffer().then(transcodeBuffer).then(onComplete(this));
+		return this.xhrLoader.response
+			.arrayBuffer()
+			.then(transcodeBuffer)
+			.then(onComplete(this))
+			.catch(error => console.warn(error));
 	}
 }
