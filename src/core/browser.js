@@ -20,12 +20,10 @@ export const getBrowser = () => {
 	).test(browserInfo.getUA());
 
 	const isSilk = name === "Amazon Silk" || isKindleWebView;
-	const forceCanvas = Boolean(browserInfo.satisfies({ safari: "<10" }));
 
 	return {
 		name,
 		version,
-		forceCanvas,
 		isSilk,
 	};
 };

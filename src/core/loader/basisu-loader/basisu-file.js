@@ -36,6 +36,6 @@ export class BasisUFile extends Phaser.Loader.File {
 			.arrayBuffer()
 			.then(transcodeBuffer)
 			.then(onComplete(this))
-			.catch(error => console.warn(error));
+			.catch(error => console.warn(error)); // eslint-disable-line no-console
 	}
 }

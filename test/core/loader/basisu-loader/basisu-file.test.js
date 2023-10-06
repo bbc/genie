@@ -75,5 +75,23 @@ describe("BASISUFile", () => {
 			await file.onProcess();
 			expect(file.onProcessComplete).toHaveBeenCalled();
 		});
+
+		test("console warns error on failure", async () => {
+			const error = new Error("blah");
+			const file = new BasisUFile(mockLoader, mockFileConfig);
+
+			const warnSpy = jest.fn();
+			global.console.warn = warnSpy;
+
+			file.xhrLoader = {
+				response: {
+					arrayBuffer: jest.fn(() => Promise.reject(error)),
+				},
+			};
+
+			file.onProcessComplete = jest.fn();
+			await file.onProcess();
+			expect(warnSpy).toHaveBeenCalledWith(error);
+		});
 	});
 });
