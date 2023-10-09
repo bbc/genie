@@ -60,13 +60,6 @@ describe("Phaser Defaults", () => {
 				expect(actualConfig.transparent).toBe(true);
 			});
 
-			test("sets type to canvas when browser returns forceCanvas", () => {
-				const mockSafari9 = { name: "Safari", forceCanvas: true };
-				getBrowser.mockImplementation(() => mockSafari9);
-				const actualConfig = getPhaserDefaults({ screens: {} });
-				expect(actualConfig.type).toBe(1);
-			});
-
 			test("disable's phaser's global window events (prevents clickthrough from achievements)", () => {
 				const actualConfig = getPhaserDefaults({ screens: {} });
 				expect(actualConfig.input.windowEvents).toBe(false);

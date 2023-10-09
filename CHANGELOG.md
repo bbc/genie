@@ -2,6 +2,7 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+|               | Default to GL Mode for Kindles.                                                                                                                       |
 |               | Add Basis Universal Loader plugin for Phaser.                                                                                                         |
 |               | Added option for vertical layout for top right layout group.                                                                                          |
 |               | Breaking change: selections are now saved in collections/local storage.                                                                               |

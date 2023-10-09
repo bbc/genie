@@ -58,16 +58,4 @@ describe("Browser", () => {
 
 		expect(getBrowser().isSilk).toBe(false);
 	});
-
-	it("sets forceCanvas to false when not Safari < 10 ", () => {
-		mockParser.satisfies = search => !(search.safari && search.safari === "<10");
-		const browser = getBrowser();
-		expect(browser.forceCanvas).toBe(false);
-	});
-
-	it("sets forceCanvas when browser is Safari < 10", () => {
-		mockParser.satisfies = jest.fn();
-		getBrowser();
-		expect(mockParser.satisfies).toHaveBeenCalledWith({ safari: "<10" });
-	});
 });
