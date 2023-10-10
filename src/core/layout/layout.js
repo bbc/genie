@@ -127,11 +127,14 @@ export function create(scene, metrics, buttonIds, accessibleButtonIds) {
 
 	const drawButtons = graphics => {
 		graphics.lineStyle(1, 0x3333ff, 1);
-		fp.mapValues(group => {
-			group.list
-				.filter(gameObject => Boolean(gameObject.getHitAreaBounds))
-				.map(button => graphics.strokeRectShape(button.getHitAreaBounds()));
-		}, fp.pickBy(groupHasChildren, groups));
+		fp.mapValues(
+			group => {
+				group.list
+					.filter(gameObject => Boolean(gameObject.getHitAreaBounds))
+					.map(button => graphics.strokeRectShape(button.getHitAreaBounds()));
+			},
+			fp.pickBy(groupHasChildren, groups),
+		);
 	};
 
 	const debug = {

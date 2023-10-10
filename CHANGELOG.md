@@ -2,6 +2,8 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+|               | Default to GL Mode for Kindles.                                                                                                                       |
+|               | Add Basis Universal Loader plugin for Phaser.                                                                                                         |
 |               | Added option for vertical layout for top right layout group.                                                                                          |
 |               | Breaking change: selections are now saved in collections/local storage.                                                                               |
 | 3.15.0        | Updated Spine Plugin and example files to Spine 4.1.                                                                                                  |

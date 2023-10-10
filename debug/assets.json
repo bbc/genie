@@ -96,6 +96,16 @@
                 "type": "json5",
                 "key": "debug-dom-text",
                 "url": "../../debug/examples/dom-text.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-basisu",
+                "url": "../../debug/examples/basisu.json5"
+            },
+            {
+                "type": "json5",
+                "key": "debug-basisu-quality",
+                "url": "../../debug/examples/basisu-quality.json5"
             }
         ]
     },
@@ -272,8 +282,23 @@
                 "type": "bitmapFont",
                 "textureURL": "../../debug/assets/bitmaptext/uifont.png",
                 "fontDataURL": "../../debug/assets/bitmaptext/uifont.fnt"
-            }
-        ]
+            },
+			{
+				"type": "basisu",
+				"key": "basis_universal",
+				"url": "../../debug/assets/basis-universal/basis-universal.basis"
+			},
+			{
+				"type": "basisu",
+				"key": "basis_universal-q1",
+				"url": "../../debug/assets/basis-universal/etc1s.basis"
+			},
+			{
+				"type": "basisu",
+				"key": "basis_universal-q2",
+				"url": "../../debug/assets/basis-universal/uastc.basis"
+			}
+		]
     },
     "gelDesktop": {
         "prefix": "gelDesktop.",

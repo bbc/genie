@@ -1,0 +1,28 @@
+{
+	debugLabels: [
+		{
+			x: -390,
+			y: -190,
+			text: 'Loads and displays Basis Universal compressed texture',
+		},
+	],
+	assetPrefix: "home",
+	music: "home.backgroundMusic",
+	background: {
+		items: [
+			{ key: "home.background", x: 0, y: 0 },
+			{
+				key: "examples_basis_universal",
+				x: 0,
+				y: -80,
+			},
+		],
+	},
+
+	//Use to shift buttons out of the way of logos etc.
+	"button-overrides": {
+		play: {
+			shiftY: 80,
+		},
+	},
+}
