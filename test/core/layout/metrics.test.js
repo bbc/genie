@@ -129,15 +129,6 @@ describe("Layout - Calculate Metrics", () => {
 		});
 	});
 
-	/*
-	export const setResolution = multiplier => {
-	CANVAS_WIDTH = 1400 * multiplier; //2520 for 1.8
-	CANVAS_HEIGHT = 600 * multiplier; //1.8 for 1080
-	CAMERA_X = CANVAS_WIDTH / 2;
-	CAMERA_Y = CANVAS_HEIGHT / 2;
-};
-	 */
-
 	describe("setResolution method", () => {
 		test("multiplies canvas width and height by supplied value", () => {
 			setResolution(2);
@@ -152,6 +143,12 @@ describe("Layout - Calculate Metrics", () => {
 			setResolution(2);
 			expect(CAMERA_X).toBe(1400);
 			expect(CAMERA_Y).toBe(600);
+		});
+
+		test("Aspect ratio sets width", () => {
+			setResolution(1.8, 16 / 9);
+			expect(CAMERA_X).toBe(960);
+			expect(CAMERA_Y).toBe(540);
 		});
 	});
 });

@@ -15,9 +15,9 @@ const getScale = fp.cond([
 	[isMinAspect, scaleMinAspect],
 ]);
 
-let MOBILE_BREAK_WIDTH = 770;
-export let BORDER_PAD_RATIO = 0.02;
-export let GEL_MIN_ASPECT_RATIO = 4 / 3;
+const MOBILE_BREAK_WIDTH = 770;
+export const BORDER_PAD_RATIO = 0.02;
+export const GEL_MIN_ASPECT_RATIO = 4 / 3;
 export let GEL_MAX_ASPECT_RATIO = 7 / 3;
 export let CANVAS_WIDTH = 1400;
 export let CANVAS_HEIGHT = 600;
@@ -66,9 +66,11 @@ export const calculateMetrics = ({ width, height }) => {
 	};
 };
 
-export const setResolution = multiplier => {
-	CANVAS_WIDTH = 1400 * multiplier; //2520 for 1.8
+// Test function for future high resolution support and should not be used directly
+export const setResolution = (multiplier, aspect = 7 / 3) => {
+	GEL_MAX_ASPECT_RATIO = aspect;
 	CANVAS_HEIGHT = 600 * multiplier; //1.8 for 1080
+	CANVAS_WIDTH = CANVAS_HEIGHT * GEL_MAX_ASPECT_RATIO; //2520 for 1.8
 	CAMERA_X = CANVAS_WIDTH / 2;
 	CAMERA_Y = CANVAS_HEIGHT / 2;
 };
