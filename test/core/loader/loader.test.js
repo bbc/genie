@@ -26,6 +26,7 @@ describe("Loader", () => {
 	let mockMasterPack;
 	let loadComplete;
 	let mockFontConfig;
+	let mockLoaderConfig;
 
 	beforeEach(() => {
 		global.window.__debug = undefined;
@@ -67,13 +68,17 @@ describe("Loader", () => {
 			},
 		};
 
+		mockLoaderConfig = { loadingBarYpos: 130 };
+
 		const mockConfigFiles = {
 			files: [{ key: "testOne" }],
 			prefix: "testPrefix.",
 		};
 
 		mockConfig = {};
-		const mockContext = { config: mockConfig };
+		const mockContext = {
+			config: mockConfig,
+		};
 
 		loader = new Loader();
 		Object.defineProperty(loader, "context", {
@@ -105,6 +110,8 @@ describe("Loader", () => {
 						return mockConfig;
 					} else if (packName === "font-pack") {
 						return mockFontConfig;
+					} else if (packName === "config") {
+						return mockLoaderConfig;
 					}
 				}),
 			},
@@ -194,7 +201,9 @@ describe("Loader", () => {
 	describe("createLoadBar method", () => {
 		test("adds loadbar images and sets progress to zero", () => {
 			loader.updateLoadBar = jest.fn();
+			loader.preload();
 			loader.createLoadBar();
+			loader.loaderConfig = mockLoaderConfig;
 
 			expect(loader.add.image).toHaveBeenCalledWith(0, 130, "loader.loadbarBackground");
 			expect(loader.add.image).toHaveBeenCalledWith(0, 130, "loader.loadbar");
