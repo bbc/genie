@@ -68,7 +68,7 @@ describe("Loader", () => {
 			},
 		};
 
-		mockLoaderConfig = { loadingBarYpos: 130 };
+		mockLoaderConfig = {};
 
 		const mockConfigFiles = {
 			files: [{ key: "testOne" }],
@@ -203,10 +203,21 @@ describe("Loader", () => {
 			loader.updateLoadBar = jest.fn();
 			loader.preload();
 			loader.createLoadBar();
-			loader.loaderConfig = mockLoaderConfig;
 
 			expect(loader.add.image).toHaveBeenCalledWith(0, 130, "loader.loadbarBackground");
 			expect(loader.add.image).toHaveBeenCalledWith(0, 130, "loader.loadbar");
+			expect(loader.updateLoadBar).toHaveBeenCalledWith(0);
+		});
+
+		test("adds loadbar images at y position specified in config", () => {
+			mockLoaderConfig = { loadingBarPosY: 200 };
+			loader.updateLoadBar = jest.fn();
+
+			loader.preload();
+			loader.createLoadBar();
+
+			expect(loader.add.image).toHaveBeenCalledWith(0, 200, "loader.loadbarBackground");
+			expect(loader.add.image).toHaveBeenCalledWith(0, 200, "loader.loadbar");
 			expect(loader.updateLoadBar).toHaveBeenCalledWith(0);
 		});
 	});

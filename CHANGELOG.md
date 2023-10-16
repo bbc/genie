@@ -2,6 +2,7 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+|               | Make loadbarPosY optional.                                                                                                                            |
 |               | Default to GL Mode for Kindles.                                                                                                                       |
 |               | Add Basis Universal Loader plugin for Phaser.                                                                                                         |
 |               | Added option for vertical layout for top right layout group.                                                                                          |
