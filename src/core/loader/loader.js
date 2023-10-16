@@ -35,6 +35,7 @@ export class Loader extends Screen {
 	preload() {
 		this.load.setBaseURL(gmi.gameDir);
 		this.load.setPath(getTheme());
+		this.loaderConfig = this.cache.json.get("config");
 
 		const webFontConfig = {
 			key: "font-pack",
@@ -66,8 +67,8 @@ export class Loader extends Screen {
 	}
 
 	createLoadBar() {
-		this.add.image(0, 130, "loader.loadbarBackground");
-		this._loadbar = this.add.image(0, 130, "loader.loadbar");
+		this.add.image(0, this.loaderConfig.loadingBarYpos, "loader.loadbarBackground");
+		this._loadbar = this.add.image(0, this.loaderConfig.loadingBarYpos, "loader.loadbar");
 		this.updateLoadBar(0);
 	}
 
