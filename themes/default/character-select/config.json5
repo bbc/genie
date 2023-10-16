@@ -1,4 +1,4 @@
-{
+{ 
     columns: 3, // Number of choices to show horizontally per page. Can be 1 - 4.
     rows: 2, // Number of choice rows to show per page. Can be either 1 or 2. When columns is 4 this is fixed to 1 row.
     ease: "Cubic.easeInOut", // Pagination transition type
@@ -27,7 +27,7 @@
             fontSize: "26px",
         },
         backgroundKey: "character-select.subtitle",
-        icon : {
+        icon: {
             key: "character-select.subtitle-icon",
         },
     },
