@@ -3,20 +3,16 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-
-import fp from "../../../lib/lodash/fp/fp.js";
-
-import { calculateMetrics } from "../../../src/core/layout/metrics.js";
+import { calculateMetrics, setResolution, CAMERA_X, CAMERA_Y } from "../../../src/core/layout/metrics.js";
 
 let defaultValues = {
 	width: 800,
 	height: 600,
-	stageHeight: 600,
 };
 
 const getMetrics = newValues => {
-	const values = fp.merge(defaultValues, newValues, {});
-	return calculateMetrics(values.stageHeight)({ width: values.width, height: values.height });
+	const values = { ...defaultValues, ...newValues };
+	return calculateMetrics({ width: values.width, height: values.height });
 };
 
 describe("Layout - Calculate Metrics", () => {
@@ -103,41 +99,56 @@ describe("Layout - Calculate Metrics", () => {
 		test("returns horizontals in relation to the width and scale", () => {
 			const expectedFor600 = { left: -400, center: 0, right: 400 };
 			const expectedFor800 = { left: -400, center: 0, right: 400 };
-			const expectedFor1000 = { left: -250, center: 0, right: 250 };
+			const expectedFor1000 = { left: -500, center: 0, right: 500 };
 			expect(getMetrics({ width: 600 }).horizontals).toEqual(expectedFor600);
 			expect(getMetrics({ width: 800 }).horizontals).toEqual(expectedFor800);
-			expect(getMetrics({ width: 1000, stageHeight: 300 }).horizontals).toEqual(expectedFor1000);
+			expect(getMetrics({ width: 1000 }).horizontals).toEqual(expectedFor1000);
 		});
 	});
 
 	describe("safeHorizontals metric", () => {
-		test("returns safe horizontals in relation to the stage height", () => {
-			const expectedFor600 = { left: -400, center: 0, right: 400 };
-			const expectedFor768 = { left: -512, center: 0, right: 512 };
-			const expectedFor1080 = { left: -720, center: 0, right: 720 };
-			expect(getMetrics({ stageHeight: 600 }).safeHorizontals).toEqual(expectedFor600);
-			expect(getMetrics({ stageHeight: 768 }).safeHorizontals).toEqual(expectedFor768);
-			expect(getMetrics({ stageHeight: 1080 }).safeHorizontals).toEqual(expectedFor1080);
+		test("returns safe horizontals in relation to the height", () => {
+			const expected = { left: -400, center: 0, right: 400 };
+			expect(getMetrics({ height: 600 }).safeHorizontals).toEqual(expected);
 		});
 	});
 
 	describe("verticals metric", () => {
-		test("returns verticals in relation to the stage height", () => {
-			const expectedFor600 = { top: -300, middle: 0, bottom: 300 };
-			const expectedFor800 = { top: -400, middle: 0, bottom: 400 };
-			const expectedFor1000 = { top: -500, middle: 0, bottom: 500 };
-			expect(getMetrics({ stageHeight: 600 }).verticals).toEqual(expectedFor600);
-			expect(getMetrics({ stageHeight: 800 }).verticals).toEqual(expectedFor800);
-			expect(getMetrics({ stageHeight: 1000 }).verticals).toEqual(expectedFor1000);
+		test("returns verticals in relation to the height", () => {
+			const expected = { top: -300, middle: 0, bottom: 300 };
+			expect(getMetrics({ height: 600 }).verticals).toEqual(expected);
 		});
 	});
 
 	describe("screenToCanvas method", () => {
 		test("converts screen pixels to canvas pixels", () => {
-			expect(getMetrics({ stageHeight: 150 }).screenToCanvas(20)).toEqual(5);
-			expect(getMetrics({ stageHeight: 300 }).screenToCanvas(20)).toEqual(10);
-			expect(getMetrics({ stageHeight: 600 }).screenToCanvas(20)).toEqual(20);
-			expect(getMetrics({ stageHeight: 900 }).screenToCanvas(20)).toEqual(30);
+			expect(getMetrics({ height: 150 }).screenToCanvas(20)).toEqual(80);
+			expect(getMetrics({ height: 300 }).screenToCanvas(20)).toEqual(40);
+			expect(getMetrics({ height: 600 }).screenToCanvas(20)).toEqual(20);
+			expect(getMetrics({ height: 900 }).screenToCanvas(20)).toEqual(20);
+		});
+	});
+
+	describe("setResolution method", () => {
+		test("multiplies canvas width and height by supplied value", () => {
+			setResolution(2);
+			const metrics = calculateMetrics({ width: 1400, height: 600 });
+			expect(metrics.stageWidth).toBe(2800);
+			expect(metrics.stageHeight).toBe(1200);
+			expect(metrics.horizontals.left).toBe(-1400);
+			expect(metrics.horizontals.right).toBe(1400);
+		});
+
+		test("Recalculates camera centre", () => {
+			setResolution(2);
+			expect(CAMERA_X).toBe(1400);
+			expect(CAMERA_Y).toBe(600);
+		});
+
+		test("Aspect ratio sets width", () => {
+			setResolution(1.8, 16 / 9);
+			expect(CAMERA_X).toBe(960);
+			expect(CAMERA_Y).toBe(540);
 		});
 	});
 });

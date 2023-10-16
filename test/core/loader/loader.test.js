@@ -153,7 +153,7 @@ describe("Loader", () => {
 				refresh: () => {},
 			},
 		};
-		Scaler.init(600, mockGame);
+		Scaler.init(mockGame);
 	});
 
 	afterEach(() => jest.clearAllMocks());
