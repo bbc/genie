@@ -67,8 +67,8 @@ export class Loader extends Screen {
 	}
 
 	createLoadBar() {
-		this.add.image(0, this.loaderConfig?.loadingBarYPos ?? 130, "loader.loadbarBackground");
-		this._loadbar = this.add.image(0, this.loaderConfig?.loadingBarYPos ?? 130, "loader.loadbar");
+		this.add.image(0, this.loaderConfig?.loadingBarPosY ?? 130, "loader.loadbarBackground");
+		this._loadbar = this.add.image(0, this.loaderConfig?.loadingBarPosY ?? 130, "loader.loadbar");
 		this.updateLoadBar(0);
 	}
 

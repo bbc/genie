@@ -210,7 +210,7 @@ describe("Loader", () => {
 		});
 
 		test("adds loadbar images at y position specified in config", () => {
-			mockLoaderConfig = { loadingBarYPos: 200 };
+			mockLoaderConfig = { loadingBarPosY: 200 };
 			loader.updateLoadBar = jest.fn();
 
 			loader.preload();
