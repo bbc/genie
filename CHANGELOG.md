@@ -2,6 +2,7 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+|               | Fix slow start with `npm run start`.                                                                                                                  |
 |               | Fix crash if no levels collection has been defined.                                                                                                   |
 |               | Make loadbarPosY optional.                                                                                                                            |
 |               | Default to GL Mode for Kindles.                                                                                                                       |
