@@ -9,7 +9,7 @@
 import { buttonsChannel } from "../layout/gel-defaults.js";
 import { Screen } from "../screen.js";
 import { eventBus } from "../event-bus.js";
-import crel from "../../../lib/crel.es.js";
+import crel from "/node_modules/crel/crel.es.js";
 import { getContainerDiv } from "../loader/container.js";
 
 const debugUiStyle =
