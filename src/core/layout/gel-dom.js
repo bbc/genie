@@ -3,7 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import crel from "../../../lib/crel.es.js";
+import crel from "/node_modules/crel/crel.es.js";
 import { getContainerDiv } from "../loader/container.js";
 import { onScaleChange } from "../scaler.js";
 
