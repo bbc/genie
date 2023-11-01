@@ -34,6 +34,12 @@ describe("Gel Text", () => {
 			expect(domText._textNodes[3]).toEqual(document.createElement("br"));
 			expect(domText._textNodes[4]).toEqual(document.createTextNode("line3"));
 		});
+
+		test("Trims lines: Safari miscalculates width of ::after pseudo elements when trailing spaces are present", () => {
+			const domText = addDomText("line1\n  line2  \nline3", {});
+
+			expect(domText._textNodes[2]).toEqual(document.createTextNode("line2"));
+		});
 	});
 
 	describe("GelDom Class Methods", () => {

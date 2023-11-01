@@ -24,7 +24,7 @@ const defaultStyle = {
 	position: "absolute",
 };
 
-const getTextNodes = text => text.split("\n").map(line => document.createTextNode(line));
+const getTextNodes = text => text.split("\n").map(line => document.createTextNode(line.trim()));
 const addBreaks = (el, i, arr) => [el].concat(i !== arr.length - 1 ? [document.createElement("br")] : []);
 
 let uid = 0;
