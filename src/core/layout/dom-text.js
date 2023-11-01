@@ -50,6 +50,7 @@ class DomText {
 		  content: attr(data-text);
 		  position: absolute;
 		  left: 0;
+		  top:0;
 		  -webkit-text-stroke: ${size * 2}px ${color};
 		  width: ${this.el.style.width};
 		  z-index:-1;
