@@ -2,7 +2,8 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-|               | Update Crel lib and move to npm dependency now it is available as an ES6 module                                                                       |
+|               | Added `addOuterStroke` method to dom text - automatically adds pseudo element hacks to simulate outer stroke.                                         |
+|               | Update Crel lib and move to npm dependency now it is available as an ES6 module.                                                                      |
 |               | Fix slow start with `npm run start`.                                                                                                                  |
 |               | Fix crash if no levels collection has been defined.                                                                                                   |
 |               | Make loadbarPosY optional.                                                                                                                            |

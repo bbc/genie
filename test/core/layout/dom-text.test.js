@@ -7,9 +7,12 @@ import { addDomText } from "../../../src/core/layout/dom-text.js";
 import * as gelDomModule from "../../../src/core/layout/gel-dom.js";
 
 describe("Gel Text", () => {
+	let appendChildSpy;
+
 	beforeEach(() => {
+		appendChildSpy = jest.fn();
 		gelDomModule.gelDom = {
-			current: () => ({ appendChild: jest.fn() }),
+			current: () => ({ appendChild: appendChildSpy }),
 		};
 	});
 
@@ -30,6 +33,12 @@ describe("Gel Text", () => {
 			expect(domText._textNodes[2]).toEqual(document.createTextNode("line2"));
 			expect(domText._textNodes[3]).toEqual(document.createElement("br"));
 			expect(domText._textNodes[4]).toEqual(document.createTextNode("line3"));
+		});
+
+		test("Trims lines: Safari miscalculates width of ::after pseudo elements when trailing spaces are present", () => {
+			const domText = addDomText("line1\n  line2  \nline3", {});
+
+			expect(domText._textNodes[2]).toEqual(document.createTextNode("line2"));
 		});
 	});
 
@@ -63,6 +72,40 @@ describe("Gel Text", () => {
 			domText.setStyle({ test: "prop" });
 
 			expect(domText.el.style.test).toBe("prop");
+		});
+
+		test("constructor adds a data-text attribute to be used by inline styles later", () => {
+			const domText = addDomText("test", {});
+			expect(domText.el.dataset.text).toBe("test");
+		});
+
+		test("constructor adds a unique incrementing id", () => {
+			const domText1 = addDomText("test", {});
+			const domText2 = addDomText("test", {});
+
+			expect(domText1.el.id).not.toBe(domText2.el.id);
+		});
+
+		test("destroy method removes stylesheet if present", () => {
+			const domText = addDomText("test", {});
+			domText.addOuterStroke(4, "red");
+			domText.inlineStyleSheet.remove = jest.fn();
+
+			domText.destroy();
+
+			expect(domText.inlineStyleSheet.remove).toHaveBeenCalled();
+		});
+
+		test("addOuterStroke method creates an inline stylesheet and adds it to the parent", () => {
+			const domText = addDomText("test", {});
+			domText.addOuterStroke(4, "red");
+			expect(appendChildSpy.mock.calls[1][0].nodeName).toBe("STYLE");
+		});
+
+		test("addOuterStroke method doubles stroke size as only half is visible", () => {
+			const domText = addDomText("test", {});
+			domText.addOuterStroke(4, "red");
+			expect(domText.inlineStyleSheet.innerHTML).toContain("-webkit-text-stroke: 8px red");
 		});
 	});
 });
