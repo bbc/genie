@@ -36,7 +36,7 @@
         "@webpack-cli/serve": "^2.0.5",
         "bufferutil": "^4.0.8",
         "cross-env": "^7.0.3",
-        "cypress": "^7.7.0",
+        "cypress": "^13.5.0",
         "cypress-plugin-tab": "^1.0.5",
         "eslint": "^8.52.0",
         "eslint-config-prettier": "^9.0.0",
@@ -78,7 +78,7 @@
         "cy:terminal:local": "cypress open --env theme=theme_1,url=http://localhost:9001/",
         "cy:headless": "cypress run --headless --config video=false --env theme=theme_1 url=https://www.bbc.co.uk/childrens/assets/games/games-atlas/test/index.html --spec '**/*spec.js'",
         "cy:headless-theme2": "cypress run --headless --config video=false --env theme=theme_2,url=https://www.bbc.co.uk/childrens/assets/games/games-atlas/test/index.html --spec '**/*spec.js'",
-        "cy:local": "cypress run --headless --config video=false --env theme=theme_1,url=http://localhost:9001/ --spec '**/integration/*spec.js'",
+        "cy:local": "cypress run --headless --config video=false --env theme=theme_1,url=http://localhost:9001/ --spec '**/e2e/*'",
         "cy:local-theme2": "cypress run --headless --config video=false --env theme=theme_2,url=http://localhost:9001/ --spec '**/integration/*spec.js'"
     }
 }

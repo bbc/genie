@@ -4,8 +4,8 @@
  * @license Apache-2.0
  */
 
-import { getUrl } from "../support/functions";
-import { appendToken } from "../support/appendToken";
+import { getUrl } from "../../../support/functions";
+import { appendToken } from "../../../support/appendToken";
 
 describe(`The Genie narration page ${Cypress.env("THEME")}`, () => {
 	beforeEach(() => {
