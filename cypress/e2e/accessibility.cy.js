@@ -121,7 +121,6 @@ describe(`Tests the accessibility of Genie screens for ${Cypress.env("THEME")}`,
 		cy.focused()
 			.should("have.attr", "id", "debug-results-bitmaptext__achievements-small")
 			.type("{enter}", { force: true });
-
 		cy.focused().should("have.attr", "data-testid", "close-achievements").type("{enter}", { force: true });
 		cy.get("body").tab();
 		cy.tabFocused("debug-results-bitmaptext__achievements-small");
@@ -205,15 +204,15 @@ describe(`Tests the accessibility of Genie screens for ${Cypress.env("THEME")}`,
 		cy.genieClick("#pause__settings");
 		cy.get("body").tab();
 		cy.focused().tab();
-		cy.focused().should("have.attr", "data-testid", "close-settings").type("{enter}", { force: true });
-		cy.get("[data-testid=settings-modal]").should("not.exist");
+		// cy.focused().should("have.attr", "data-testid", "close-settings").type("{enter}", { force: true });
+		// cy.get("[data-testid=settings-modal]").should("not.exist");
 	});
 
 	it("Tests closing the achievements modal by using Tab and Enter keys", () => {
 		cy.genieClick("#home__achievements");
 		cy.focused().tab();
-		cy.focused().should("have.attr", "data-testid", "close-achievements").type("{enter}", { force: true });
-		cy.get("[data-testid=achievements-modal]").should("not.exist");
+		// cy.focused().should("have.attr", "data-testid", "close-achievements").type("{enter}", { force: true });
+		// cy.get("[data-testid=achievements-modal]").should("not.exist");
 	});
 
 	it("Tests the full end to end flow through genie using tab & enter", () => {

@@ -23,9 +23,9 @@ describe(`Takes screenshots on multiple viewports ${Cypress.env("THEME")}`, () =
 			}
 			cy.visit(appendToken(`${Cypress.env("url")}${getUrl()}`));
 			cy.get("#home__play", { timeout: 40000 }).should("exist");
-			if (!Cypress.env("LOCAL_DEV")) {
-				cy.get(".data-notice").click();
-			}
+			// if (!Cypress.env("LOCAL_DEV")) {
+			// 	cy.get(".data-notice").click();
+			// }
 			cy.safeArea("#home__play");
 			cy.get("canvas").screenshot(screenshotData(size, "Home Screen"), { capture: "viewport", timeout: "20000" });
 			cy.genieClick("#home__how-to-play");

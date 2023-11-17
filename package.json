@@ -78,7 +78,7 @@
         "cy:terminal:local": "cypress open --env theme=theme_1,url=http://localhost:9001/",
         "cy:headless": "cypress run --headless --config video=false --env theme=theme_1 url=https://www.bbc.co.uk/childrens/assets/games/games-atlas/test/index.html --spec '**/*'",
         "cy:headless-theme2": "cypress run --headless --config video=false --env theme=theme_2,url=https://www.bbc.co.uk/childrens/assets/games/games-atlas/test/index.html --spec '**/*'",
-        "cy:local": "cypress run --headed --config video=false --env theme=theme_1,url=http://localhost:9001/ --spec '**/e2e/*'",
+        "cy:local": "cypress run --headless --config video=false --env theme=theme_1,url=http://localhost:9001/ --spec '**/e2e/*'",
         "cy:local-theme2": "cypress run --headless --config video=false --env theme=theme_2,url=http://localhost:9001/ --spec '**/e2e/*'"
     }
 }

@@ -149,6 +149,8 @@ var GMI = function (options, embedVars, gameDir) {
 			var settingsCloseButton = document.createElement("input");
 			settingsCloseButton.type = "button";
 			settingsCloseButton.value = "Click here to close settings.";
+			// var settingData = settingsCloseButton.dataset
+			// settingData.testid= "close-settings";
 
 			var settingsForm = document.createElement("form");
 			settingsForm.appendChild(settingsCheckbox);
@@ -166,6 +168,7 @@ var GMI = function (options, embedVars, gameDir) {
 				document.body.removeChild(settings);
 			});
 			document.body.appendChild(settings);
+			// settingsCloseButton.focus();
 		}
 		return true;
 	};
@@ -241,13 +244,15 @@ var GMI = function (options, embedVars, gameDir) {
 			var achievementsCloseButton = document.createElement("input");
 			achievementsCloseButton.type = "button";
 			achievementsCloseButton.value = "Click here to close.";
+			var achievementsData = achievementsCloseButton.dataset
+			achievementsData.testid= "close-achievements";
 
 			achievementsDiv.appendChild(achievementsCloseButton);
-
 			achievementsCloseButton.addEventListener("click", function () {
 				document.body.removeChild(achievementsDiv);
 			});
 			document.body.appendChild(achievementsDiv);
+			achievementsCloseButton.focus();
 			return true;
 		}
 		return false;
