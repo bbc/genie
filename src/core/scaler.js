@@ -5,9 +5,9 @@
  * @license Apache-2.0
  */
 import { calculateMetrics } from "./layout/metrics.js";
-
-import fp from "../../lib/lodash/fp/fp.js";
 import { eventBus } from "./event-bus.js";
+import fp from "../../lib/lodash/fp/fp.js";
+import { GEL_MIN_ASPECT_RATIO } from "./layout/metrics.js";
 
 const getBounds = game => () => game.scale.parentSize;
 
@@ -26,9 +26,10 @@ export const init = game => {
 	getMetrics = fp.flow(getBounds(game), fp.pick(["width", "height"]), calculateMetrics);
 
 	const setSize = metrics => {
-		const under4by3 = game.scale.parent.offsetWidth / game.scale.parent.offsetHeight < 4 / 3;
-
-		const viewHeight = under4by3 ? game.scale.parent.offsetWidth * (3 / 4) : game.scale.parent.offsetHeight;
+		const underAspectRatio = game.scale.parent.offsetWidth / game.scale.parent.offsetHeight < GEL_MIN_ASPECT_RATIO;
+		const viewHeight = underAspectRatio
+			? game.scale.parent.offsetWidth / GEL_MIN_ASPECT_RATIO
+			: game.scale.parent.offsetHeight;
 
 		game.canvas.style.height = px(viewHeight);
 
