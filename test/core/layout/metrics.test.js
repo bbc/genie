@@ -145,10 +145,18 @@ describe("Layout - Calculate Metrics", () => {
 			expect(CAMERA_Y).toBe(600);
 		});
 
-		test("Aspect ratio sets width", () => {
-			setResolution(1.8, 16 / 9);
+		test("Max Aspect ratio sets width", () => {
+			setResolution(1.8, 4 / 3, 16 / 9);
 			expect(CAMERA_X).toBe(960);
 			expect(CAMERA_Y).toBe(540);
+		});
+
+		test("Min Aspect ratio sets safeArea to be height * aspect ratio / 2", () => {
+			setResolution(1.0, 3 / 4, 16 / 9);
+			const metrics = calculateMetrics({ width: 1400, height: 600 });
+
+			expect(metrics.safeHorizontals.left).toBe(-225);
+			expect(metrics.safeHorizontals.right).toBe(225);
 		});
 	});
 });
