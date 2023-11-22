@@ -67,7 +67,7 @@ export const calculateMetrics = ({ width, height }) => {
 };
 
 // Test function for future high resolution support and should not be used directly
-export const setResolution = (multiplier, minAspect = 4/3, maxAspect = 7 / 3) => {
+export const setResolution = (multiplier, minAspect = 4 / 3, maxAspect = 7 / 3) => {
 	GEL_MIN_ASPECT_RATIO = minAspect;
 	GEL_MAX_ASPECT_RATIO = maxAspect;
 	CANVAS_HEIGHT = 600 * multiplier; //1.8 for 1080

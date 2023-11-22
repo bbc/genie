@@ -3,14 +3,7 @@
  * @author BBC Children's D+E
  * @license Apache-2.0
  */
-import {
-	calculateMetrics,
-	setResolution,
-	CAMERA_X,
-	CAMERA_Y,
-	CANVAS_HEIGHT,
-	GEL_MIN_ASPECT_RATIO,
-} from "../../../src/core/layout/metrics.js";
+import { calculateMetrics, setResolution, CAMERA_X, CAMERA_Y } from "../../../src/core/layout/metrics.js";
 
 let defaultValues = {
 	width: 800,
