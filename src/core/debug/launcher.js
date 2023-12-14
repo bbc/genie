@@ -93,6 +93,7 @@ export class Launcher extends Screen {
 			const buttonConfigs = visibleTitles.map(getButtonConfig(this));
 			const buttons = buttonConfigs.map(addButton);
 			this.pages = fp.chunk(15, buttons);
+			this.showCurrentPage();
 		});
 	}
 
