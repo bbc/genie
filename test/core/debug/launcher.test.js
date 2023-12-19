@@ -14,7 +14,7 @@ jest.mock("../../../src/core/event-bus.js");
 
 describe("Examples Launcher", () => {
 	let launcher;
-	const createLauncher = examples => {
+	const createLauncher = () => {
 		launcher = new Launcher();
 
 		const mockButton = {
@@ -57,7 +57,7 @@ describe("Examples Launcher", () => {
 			pack: jest.fn(),
 		};
 		debugScreens.addExampleScreens = jest.fn(() => new Promise(resolve => resolve()));
-		examplesModule.examples = examples ?? {
+		examplesModule.examples = {
 			example1: {
 				scene: function () {},
 				title: "test title",
