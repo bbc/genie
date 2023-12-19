@@ -83,17 +83,15 @@ describe("Examples Launcher", () => {
 
 	describe("create method", () => {
 		beforeEach(() => {
-			// createLauncher();
-			// launcher.create();
+			createLauncher();
+			launcher.create();
 		});
 
 		afterEach(() => {
 			jest.resetAllMocks();
 		});
 
-		test.only("Intentionally loose test as page not included in final output", () => {
-			createLauncher();
-			launcher.create();
+		test("Intentionally loose test as page not included in final output", () => {
 			expect(launcher.add.image).toHaveBeenCalled();
 			expect(launcher.add.gelButton).toHaveBeenCalled();
 			expect(launcher.add.text).toHaveBeenCalled();
@@ -136,11 +134,19 @@ describe("Examples Launcher", () => {
 		});
 
 		test("showCurrentPage sets current button visibility", () => {
-			const mockPages = [[{ visible: false }], [{ visible: false }], [{ visible: false }]];
+			const mockPages = [[{ visible: false }], [{ visible: true }], [{ visible: false }]];
 			launcher.pages = mockPages;
 			launcher.pageIndex = 2;
 			launcher.showCurrentPage();
+			expect(mockPages[0][0].visible).toBe(false);
+			expect(mockPages[1][0].visible).toBe(false);
 			expect(mockPages[2][0].visible).toBe(true);
+		});
+
+		test("showCurrentPage gets called when a page is added so correct buttons shown", async () => {
+			launcher.showCurrentPage = jest.fn();
+			await launcher.create();
+			expect(launcher.showCurrentPage).toHaveBeenCalled();
 		});
 	});
 });
