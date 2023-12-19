@@ -9,11 +9,12 @@ import * as debugScreens from "../../../src/core/debug/debug-screens.js";
 import * as examplesModule from "../../../src/core/debug/examples.js";
 
 jest.mock("../../../src/core/debug/debug-screens.js");
+jest.mock("../../../src/core/debug/examples.js");
+jest.mock("../../../src/core/event-bus.js");
 
 describe("Examples Launcher", () => {
 	let launcher;
-
-	beforeEach(() => {
+	const createLauncher = examples => {
 		launcher = new Launcher();
 
 		const mockButton = {
@@ -56,7 +57,7 @@ describe("Examples Launcher", () => {
 			pack: jest.fn(),
 		};
 		debugScreens.addExampleScreens = jest.fn(() => new Promise(resolve => resolve()));
-		examplesModule.examples = {
+		examplesModule.examples = examples ?? {
 			example1: {
 				scene: function () {},
 				title: "test title",
@@ -78,16 +79,24 @@ describe("Examples Launcher", () => {
 		};
 
 		eventBus.subscribe = jest.fn();
-	});
+	};
 
 	describe("create method", () => {
 		beforeEach(() => {
-			launcher.create();
+			// createLauncher();
+			// launcher.create();
 		});
 
-		test("Intentionally loose test as page not included in final output", () => {
+		afterEach(() => {
+			jest.resetAllMocks();
+		});
+
+		test.only("Intentionally loose test as page not included in final output", () => {
+			createLauncher();
+			launcher.create();
 			expect(launcher.add.image).toHaveBeenCalled();
 			expect(launcher.add.gelButton).toHaveBeenCalled();
+			expect(launcher.add.text).toHaveBeenCalled();
 			expect(launcher.setLayout).toHaveBeenCalledWith(["home", "previous", "next"]);
 			expect(eventBus.subscribe).toHaveBeenCalled();
 		});
