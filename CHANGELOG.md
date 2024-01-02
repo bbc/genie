@@ -2,7 +2,8 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-|               | Fixes bug where buttons show on top of each other instead of on separate pages (in debug mode).                                                       |
+|               | Fix overlapping pagination buttons on debug screen                                                                                                    |
+|               | Fix bug where buttons show on top of each other instead of on separate pages (in debug mode).                                                         |
 |               | Added `addOuterStroke` method to dom text - automatically adds pseudo element hacks to simulate outer stroke.                                         |
 |               | Updated Phaser to 3.70.                                                                                                                               |
 |               | Update Crel lib and move to npm dependency now it is available as an ES6 module.                                                                      |

@@ -127,7 +127,7 @@
                 "key": "button",
                 "url": "../../debug/button.png",
                 "frameConfig": {
-                    "frameWidth": 224,
+                    "frameWidth": 194,
                     "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
