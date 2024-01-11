@@ -23,7 +23,7 @@ const addButton = config => {
 		gameButton: true,
 		ariaLabel: config.title,
 	});
-	const text = config.scene.add.text(0, 0, config.title).setOrigin(0.5, 0.5);
+	const text = config.scene.add.text(0, 0, config.title, buttonStyle).setOrigin(0.5, 0.5);
 	button.overlays.set("text", text);
 	accessibilify(button, true);
 
@@ -36,15 +36,15 @@ const addButton = config => {
 	return button;
 };
 
-const getButtonConfig = launcher => (id, idx) => ({
-	scene: launcher,
-	x: -240 + (Math.floor(idx / 5) % 3) * 240,
+const getButtonConfig = scene => (id, idx) => ({
+	scene,
+	x: -200 + (Math.floor(idx / 5) % 3) * 200,
 	y: -140 + (idx % 5) * 80,
 	id,
 	title: examples[id].title,
 	callback: () => {
-		launcher.transientData[id] = getTransientData(examples[id]);
-		launcher.navigation[id]();
+		scene.transientData[id] = getTransientData(examples[id]);
+		scene.navigation[id]();
 	},
 });
 
@@ -61,6 +61,12 @@ const titleStyle = {
 	align: "center",
 };
 
+const buttonStyle = {
+	font: "16px ReithSans",
+	fill: "#ffffff",
+	align: "center",
+};
+
 const excludeHidden = key => !examples[key].hidden;
 
 export class Launcher extends Screen {
@@ -70,8 +76,10 @@ export class Launcher extends Screen {
 		this.setLayout(["home", "previous", "next"]);
 		this.pageIndex = 0;
 
+		const channel = buttonsChannel(this);
+
 		eventBus.subscribe({
-			channel: buttonsChannel(this),
+			channel,
 			name: "next",
 			callback: () => {
 				this.pageIndex = getCurrentPage(++this.pageIndex, this.pages.length);
@@ -79,7 +87,7 @@ export class Launcher extends Screen {
 			},
 		});
 		eventBus.subscribe({
-			channel: buttonsChannel(this),
+			channel,
 			name: "previous",
 			callback: () => {
 				this.pageIndex = getCurrentPage(--this.pageIndex, this.pages.length);
@@ -93,6 +101,7 @@ export class Launcher extends Screen {
 			const buttonConfigs = visibleTitles.map(getButtonConfig(this));
 			const buttons = buttonConfigs.map(addButton);
 			this.pages = fp.chunk(15, buttons);
+			this.showCurrentPage();
 		});
 	}
 
