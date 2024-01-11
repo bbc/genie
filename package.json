@@ -1,6 +1,6 @@
 {
     "name": "genie",
-    "version": "3.16.0-pre8",
+    "version": "3.16.0",
     "description": "BBC Games Genie - A Modular Game Engine",
     "license": "Apache-2.0",
     "private": true,
@@ -28,7 +28,7 @@
         "expose-loader": "^4.1.0",
         "json5": "^2.2.3",
         "notp": "^2.0.3",
-        "phaser": "3.60.0",
+        "phaser": "3.70.0",
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {
