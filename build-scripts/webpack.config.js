@@ -120,7 +120,5 @@ module.exports = env => {
 		];
 	}
 
-	console.log(webPackConfig)
-
 	return webPackConfig;
 };
