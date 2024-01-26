@@ -13,12 +13,12 @@ const getCoverPositions = (scene, covers, padding) => {
 		top: covers.top
 			? {
 					y: safeArea.y - safeArea.height / 2 + padding.y,
-			  }
+				}
 			: null,
 		bottom: covers.bottom
 			? {
 					y: safeArea.y + safeArea.height / 2 - padding.y,
-			  }
+				}
 			: null,
 	};
 };

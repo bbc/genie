@@ -1,6 +1,6 @@
 {
     "name": "genie",
-    "version": "3.16.0",
+    "version": "3.16.1",
     "description": "BBC Games Genie - A Modular Game Engine",
     "license": "Apache-2.0",
     "private": true,
@@ -33,7 +33,6 @@
     },
     "devDependencies": {
         "@rollup/plugin-terser": "^0.4.4",
-        "@webpack-cli/serve": "^2.0.5",
         "bufferutil": "^4.0.8",
         "cross-env": "^7.0.3",
         "cypress": "^13.6.2",
@@ -55,7 +54,7 @@
         "mochawesome-merge": "^4.2.1",
         "mochawesome-report-generator": "^6.2.0",
         "phaser3-rex-plugins": "github:/rexrainbow/phaser3-rex-notes.git",
-        "prettier": "^3.0.3",
+        "prettier": "3.2.4",
         "rollup": "^4.2.0",
         "utf-8-validate": "^6.0.3",
         "webpack": "^5.89.0",
@@ -64,7 +63,7 @@
     },
     "scripts": {
         "start": "cross-env genieCore=true ws --config-file dev/scripts/web-config.js",
-        "start:pack": "webpack-cli serve --config build-scripts/webpack.config.js --env genieCore",
+        "start:pack": "webpack serve --config build-scripts/webpack.config.js --env genieCore",
         "build": "webpack --config build-scripts/webpack.config.js --env genieCore",
         "build:theme2": "bash build-scripts/theme2creator/create.sh",
         "test": "npm run jest && npm run eslint",

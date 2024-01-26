@@ -128,7 +128,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
 			child.x = this._isVertical
 				? child.width / 2
 				: widths.slice(0, idx).reduce(sum, widths[idx] / 2) +
-				  pads.slice(0, idx).reduce(sum, pads[idx] / 2 - pads[0] / 2);
+					pads.slice(0, idx).reduce(sum, pads[idx] / 2 - pads[0] / 2);
 		}, this);
 	}
 

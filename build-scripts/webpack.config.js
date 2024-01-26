@@ -71,13 +71,14 @@ module.exports = env => {
 			],
 		},
 		devServer: {
-			static: {
-				directory: path.resolve(__dirname, "../"),
-			},
+			static: [path.resolve(__dirname, "../")],
 			host: "0.0.0.0",
 			port: 9001,
 			historyApiFallback: {
 				index: "node_modules/genie/dev/index.main.html",
+			},
+			devMiddleware: {
+				publicPath: "/output",
 			},
 		},
 		plugins: [],
