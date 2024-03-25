@@ -117,7 +117,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
 	}
 
 	alignChildren() {
-		const hasHorizonatalBtns = this.list.find(child => !child.config.icon);
+		const hasHorizontalBtns = this.list.find(child => !child.config.icon);
 		const noIcons = child => !(this._isVertical && child.config.icon);
 		const horizontalPos = { x: 0, y: 0, i: 1 };
 		const verticalPos = { x: 0, y: 0 };
@@ -134,7 +134,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
 				const widths = this.list.filter(noIcons).map(child => child.width);
 				if (child.config.icon) {
 					child.y = verticalPos.y + groupHeight / 2;
-					child.y += hasHorizonatalBtns ? groupHeight : 0;
+					child.y += hasHorizontalBtns ? groupHeight : 0;
 					verticalPos.y +=
 						child.height + Math.max(0, this._metrics.buttonPad - child.height + child.sprite.height);
 					child.x = widths.reduce(sum, child.width / 2) + pads.reduce(sum, pad / 2);

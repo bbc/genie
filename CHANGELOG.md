@@ -2,8 +2,9 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+|               | Fix button arrangement in vertical gel groups.        				                                        					                    |
 | 3.16.1        | Fix `npm run start:pack` serving from wrong directory.        				                                        					            |
-| 3.16.0        | Fix overlapping pagination buttons on debug screen.                                                                                                    |
+| 3.16.0        | Fix overlapping pagination buttons on debug screen.                                                                                                   |
 |               | Fix bug where buttons show on top of each other instead of on separate pages (in debug mode).                                                         |
 |               | Added `addOuterStroke` method to dom text - automatically adds pseudo element hacks to simulate outer stroke.                                         |
 |               | Updated Phaser to 3.70.                                                                                                                               |
@@ -21,7 +22,7 @@
 |               | Updated Phaser to 3.60.                                                                                                                               |
 | 3.14.0        | Added source maps to production builds.                                                                                                               |
 |               | Added config option for default home screen.                                                                                                          |
-|               | Fix `npm run start:pack` _(v4 webpack config changes)_                                                                                                |
+|               | Fix `npm run start:pack` _(v4 webpack config changes)_                                                                                                 |
 |               | Update Babel targets.                                                                                                                                 |
 | 3.13.0        | Add tag filters for shop item lists.                                                                                                                  |
 |               | Improve shop and collection docs.                                                                                                                     |
@@ -273,7 +274,7 @@
 |               | Enables dynamic scripts to work in IE11 for local dev.                                                                                                |
 |               | Fixed bug where game crashes on startup on iOS 9 safari.                                                                                              |
 |               | Fixed issue where button focus outline was hidden on the results screen.                                                                              |
-|               | Added bbc header doc tags to file headers.                                                                                                            |     |
+|               | Added bbc header doc tags to file headers.                                                                                                            |
 | 1.0.1         |                                                                                                                                                       |
 |               | Accessibility cleardown fix (moves lingering buttons to the back).                                                                                    |
 |               | Use fullscreen api on android.                                                                                                                        |
