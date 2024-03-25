@@ -67,6 +67,8 @@ describe("Group", () => {
 			config: {
 				shiftX: 0,
 				shiftY: 0,
+				icon: config.icon || false,
+				key: config.key,
 			},
 			getHitAreaBounds: mockGetHitAreaBounds,
 			sprite: {
@@ -255,7 +257,7 @@ describe("Group", () => {
 		});
 
 		describe("when vPos is top and hPos is right and isVertical is true", () => {
-			test("new buttons are added to position 0", () => {
+			test("new buttons are added to position 1", () => {
 				vPos = "top";
 				hPos = "right";
 				group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false, true);
@@ -265,7 +267,21 @@ describe("Group", () => {
 				jest.spyOn(CreateButton, "createButton").mockImplementation(() => newButton);
 				group.addButton(config);
 
-				expect(group.addAt).toHaveBeenCalledWith(newButton, 0);
+				expect(group.addAt).toHaveBeenCalledWith(newButton, 1);
+			});
+
+			test("new indicator icons are added to position 0", () => {
+				vPos = "top";
+				hPos = "right";
+				group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false, true);
+
+				group.addButton(config);
+				config.icon = true;
+				const newIcon = mockCreateButton(mockScene);
+				jest.spyOn(CreateButton, "createButton").mockImplementation(() => newIcon);
+				group.addButton(config);
+
+				expect(group.addAt).toHaveBeenCalledWith(newIcon, 0);
 			});
 		});
 
@@ -403,6 +419,7 @@ describe("Group", () => {
 		test("adds item to this group", () => {
 			const mockButton = {
 				button: "mock",
+				config: {},
 				getHitAreaBounds: mockGetHitAreaBounds,
 				sprite: { width: 200, height: 100 },
 			};
@@ -414,12 +431,45 @@ describe("Group", () => {
 		test("adds item to this group at position 0 when no position provided", () => {
 			const mockButton = {
 				button: "mock",
+				config: {},
 				getHitAreaBounds: mockGetHitAreaBounds,
 				sprite: { width: 200, height: 100 },
 			};
 			const expectedPosition = 0;
 			group.addToGroup(mockButton);
 			expect(group.addAt).toHaveBeenCalledWith(mockButton, expectedPosition);
+		});
+	});
+
+	describe("alignChildren method", () => {
+		test("vertical group displays indicator icons underneath buttons", () => {
+			vPos = "top";
+			hPos = "right";
+			group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false, true);
+			let mockButtons = [];
+			mockButtons[0] = group.addButton({ ...config, key: "test-btn" }, 1);
+			mockButtons[1] = group.addButton({ ...config, key: "test-indicator", icon: true }, 0);
+			group.reset(metrics);
+
+			expect(mockButtons[0].y).toBe(50);
+			expect(mockButtons[0].x).toBe(350);
+			expect(mockButtons[1].y).toBe(150);
+			expect(mockButtons[1].x).toBe(375);
+		});
+
+		test("vertical group with no buttons displays indicator icons in the correct position", () => {
+			vPos = "top";
+			hPos = "right";
+			group = new GelGroup(mockScene, parentGroup, vPos, hPos, metrics, false, true);
+			let mockButtons = [];
+			mockButtons[0] = group.addButton({ ...config, key: "test-indicator", icon: true }, 0);
+			mockButtons[1] = group.addButton({ ...config, key: "test-indicator-2", icon: true }, 1);
+			group.reset(metrics);
+
+			expect(mockButtons[0].y).toBe(50);
+			expect(mockButtons[0].x).toBe(125);
+			expect(mockButtons[1].y).toBe(200);
+			expect(mockButtons[1].x).toBe(125);
 		});
 	});
 

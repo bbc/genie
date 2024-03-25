@@ -64,7 +64,7 @@ export class GelGroup extends Phaser.GameObjects.Container {
 
 	addButton(config, position = this._buttons.length) {
 		const newButton = createButton(this.scene, config, this.width / 2, this.height / 2);
-		position = this._isVertical ? this._buttons.length - position : position;
+		position = this._isVertical && config.icon ? this._buttons.length - position : position;
 
 		this.addAt(newButton, position);
 		this._buttons.push(newButton);
@@ -117,18 +117,41 @@ export class GelGroup extends Phaser.GameObjects.Container {
 	}
 
 	alignChildren() {
-		const pos = { x: 0, y: 0 };
+		const hasHorizonatalBtns = this.list.find(child => !child.config.icon);
+		const noIcons = child => !(this._isVertical && child.config.icon);
+		const horizontalPos = { x: 0, y: 0, i: 1 };
+		const verticalPos = { x: 0, y: 0 };
 		const groupHeight = Math.max(...this.list.map(i => i.height));
-		const pads = this.list.map(child => Math.max(0, this._metrics.buttonPad - child.width + child.sprite.width));
-		const widths = this.list.map(child => child.width);
+
+		const pads = this.list
+			.filter(noIcons)
+			.map(child => Math.max(0, this._metrics.buttonPad - child.width + child.sprite.width));
+
 		this.list.forEach((child, idx) => {
-			child.y = pos.y + groupHeight / 2;
-			this._isVertical &&
-				(pos.y += child.height + Math.max(0, this._metrics.buttonPad - child.height + child.sprite.height));
-			child.x = this._isVertical
-				? child.width / 2
-				: widths.slice(0, idx).reduce(sum, widths[idx] / 2) +
-					pads.slice(0, idx).reduce(sum, pads[idx] / 2 - pads[0] / 2);
+			const pad = Math.max(0, this._metrics.buttonPad - child.width + child.sprite.width);
+
+			if (this._isVertical) {
+				const widths = this.list.filter(noIcons).map(child => child.width);
+				if (child.config.icon) {
+					child.y = verticalPos.y + groupHeight / 2;
+					child.y += hasHorizonatalBtns ? groupHeight : 0;
+					verticalPos.y +=
+						child.height + Math.max(0, this._metrics.buttonPad - child.height + child.sprite.height);
+					child.x = widths.reduce(sum, child.width / 2) + pads.reduce(sum, pad / 2);
+				} else {
+					child.x =
+						widths.slice(0, horizontalPos.i).reduce(sum, child.width / 2) +
+						pads.slice(0, horizontalPos.i).reduce(sum, pad / 2 - pads[0] / 2);
+					child.y = horizontalPos.y + groupHeight / 2;
+					horizontalPos.i++;
+				}
+			} else {
+				const widths = this.list.map(child => child.width);
+				child.y = horizontalPos.y + groupHeight / 2;
+				child.x =
+					widths.slice(0, idx).reduce(sum, child.width / 2) +
+					pads.slice(0, idx).reduce(sum, pad / 2 - pads[0] / 2);
+			}
 		}, this);
 	}
 
