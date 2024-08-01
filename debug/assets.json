@@ -96,16 +96,6 @@
                 "type": "json5",
                 "key": "debug-dom-text",
                 "url": "../../debug/examples/dom-text.json5"
-            },
-            {
-                "type": "json5",
-                "key": "debug-basisu",
-                "url": "../../debug/examples/basisu.json5"
-            },
-            {
-                "type": "json5",
-                "key": "debug-basisu-quality",
-                "url": "../../debug/examples/basisu-quality.json5"
             }
         ]
     },
