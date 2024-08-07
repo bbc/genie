@@ -2,6 +2,7 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 3.16.3        | Remove basisu debug examples           		                                        					                                            |
 | 3.16.2        |                                                                                                                                                       |
 |               | Fix button arrangement in vertical gel groups.        				                                        					                    |
 | 3.16.1        | Fix `npm run start:pack` serving from wrong directory.        				                                        					            |
