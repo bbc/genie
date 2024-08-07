@@ -272,22 +272,7 @@
                 "type": "bitmapFont",
                 "textureURL": "../../debug/assets/bitmaptext/uifont.png",
                 "fontDataURL": "../../debug/assets/bitmaptext/uifont.fnt"
-            },
-			{
-				"type": "basisu",
-				"key": "basis_universal",
-				"url": "../../debug/assets/basis-universal/basis-universal.basis"
-			},
-			{
-				"type": "basisu",
-				"key": "basis_universal-q1",
-				"url": "../../debug/assets/basis-universal/etc1s.basis"
-			},
-			{
-				"type": "basisu",
-				"key": "basis_universal-q2",
-				"url": "../../debug/assets/basis-universal/uastc.basis"
-			}
+            }
 		]
     },
     "gelDesktop": {
