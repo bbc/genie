@@ -16,6 +16,56 @@
                 "type": "audio",
                 "key": "backgroundMusic",
                 "url": "shared/background-music.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "playSound",
+                "url": "shared/play.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "pauseSound",
+                "url": "shared/pause.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "settingsSound",
+                "url": "shared/settings.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "howPlaySound",
+                "url": "shared/how_play.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "exitSound",
+                "url": "shared/exit.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "continueSound",
+                "url": "shared/continue.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "skipSound",
+                "url": "shared/skip.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "homeSound",
+                "url": "shared/home.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "nextSound",
+                "url": "shared/next.mp4"
+            },
+            {
+                "type": "audio",
+                "key": "backSound",
+                "url": "shared/back.mp4"
             }
         ]
     }

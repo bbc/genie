@@ -51,6 +51,7 @@ export class GelButton extends Phaser.GameObjects.Container {
 
 		this.setHitArea(metrics);
 		this.setClickSound(this.config.clickSound);
+		this.setHoverSound(this.config.hoverSound);
 		this.setupMouseEvents(config, scene);
 	}
 
@@ -78,10 +79,15 @@ export class GelButton extends Phaser.GameObjects.Container {
 		publish(config, { screen })();
 	}
 
+	onPointerOver() {
+		this.sprite.texture.frames["1"] && this.sprite.setFrame(1);
+		this._click.once(Phaser.Sound.Events.PAUSE, this._click.resume).play();
+	}
+
 	setupMouseEvents(config, screen) {
 		this.on("pointerup", () => this.onPointerUp(config, screen));
 		this.on("pointerout", () => this.sprite.setFrame(0));
-		this.on("pointerover", () => this.sprite.texture.frames["1"] && this.sprite.setFrame(1));
+		this.on("pointerover", () => this.onPointerOver());
 	}
 
 	setHitArea(metrics) {
@@ -115,6 +121,11 @@ export class GelButton extends Phaser.GameObjects.Container {
 	setClickSound(key) {
 		this.config.clickSound = key;
 		this._click = this.scene.sound.get(key) ? this.scene.sound.get(key) : this.scene.sound.add(key);
+	}
+
+	setHoverSound(key) {
+		this.config.hoverSound = key;
+		this._hover = this.scene.sound.get(key) ? this.scene.sound.get(key) : this.scene.sound.add(key);
 	}
 
 	setImage(key) {

@@ -251,6 +251,17 @@ describe("Gel Button", () => {
 			expect(mockSound.play).toHaveBeenCalled();
 		});
 
+		test("pointerover calls play on button hover sound after it has been changed", () => {
+			const mockSound = { play: jest.fn(), once: jest.fn(() => mockSound) };
+			mockScene.sound.add = jest.fn(() => mockSound);
+
+			const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+			gelButton.setHoverSound("test-key");
+
+			gelButton.onPointerOver(mockConfig, mockScene);
+			expect(mockSound.play).toHaveBeenCalled();
+		});
+
 		test("pointerup function calls once on button click to prevent pausing", () => {
 			const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
 			gelButton.onPointerUp(mockConfig, mockScene);
@@ -295,6 +306,26 @@ describe("Gel Button", () => {
 
 			expect(gelButton.config.clickSound).toBe("test-key");
 			expect(gelButton._click).toBe(mockSound);
+		});
+	});
+
+	describe("setHoverSound function", () => {
+		test("sets the correct sound key in button config", () => {
+			const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+			const mockSound = { testProp: "testValue" };
+			(mockScene.sound.add = jest.fn(() => mockSound)), gelButton.setHoverSound("test-key");
+
+			expect(gelButton.config.hoverSound).toBe("test-key");
+			expect(gelButton._hover).toBe(mockSound);
+		});
+
+		test("gets the sound from sound manager when it already exists", () => {
+			const gelButton = new GelButton(mockScene, mockX, mockY, mockConfig);
+			const mockSound = { testProp: "testValue" };
+			(mockScene.sound.get = jest.fn(() => mockSound)), gelButton.setHoverSound("test-key");
+
+			expect(gelButton.config.hoverSound).toBe("test-key");
+			expect(gelButton._hover).toBe(mockSound);
 		});
 	});
 
