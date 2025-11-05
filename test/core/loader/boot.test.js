@@ -188,7 +188,7 @@ describe("Boot", () => {
 			bootScreen.preload();
 			bootScreen.create();
 
-			expect(Scaler.init).toHaveBeenCalledWith(600, mockGame);
+			expect(Scaler.init).toHaveBeenCalledWith(mockGame);
 			expect(bootScreen.navigation.next).toHaveBeenCalled();
 		});
 	});

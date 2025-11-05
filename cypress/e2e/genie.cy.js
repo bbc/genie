@@ -4,7 +4,8 @@
  * @license Apache-2.0
  */
 import { getUrl } from "../support/functions";
-import { appendToken } from "../support/functions";
+//import { appendToken } from "../support/functions";
+import { appendToken } from "../support/appendToken";
 
 describe(`Tests the core flow of Genie ${Cypress.env("THEME")}`, () => {
 	const checkHomeScreen = () => {

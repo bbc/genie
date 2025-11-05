@@ -10,6 +10,9 @@ import { accessibilify } from "../accessibility/accessibilify.js";
 import { examples } from "./examples.js";
 import { addExampleScreens } from "./debug-screens.js";
 import { CAMERA_X, CAMERA_Y } from "../layout/metrics.js";
+import fp from "../../../lib/lodash/fp/fp.js";
+
+const getCurrentPage = (n, pageCount) => ((n % pageCount) + pageCount) % pageCount;
 
 const addButton = config => {
 	const button = config.scene.add.gelButton(config.x + CAMERA_X, config.y + CAMERA_Y, {
@@ -20,7 +23,7 @@ const addButton = config => {
 		gameButton: true,
 		ariaLabel: config.title,
 	});
-	const text = config.scene.add.text(0, 0, config.title).setOrigin(0.5, 0.5);
+	const text = config.scene.add.text(0, 0, config.title, buttonStyle).setOrigin(0.5, 0.5);
 	button.overlays.set("text", text);
 	accessibilify(button, true);
 
@@ -29,17 +32,19 @@ const addButton = config => {
 		name: config.id,
 		callback: config.callback,
 	});
+
+	return button;
 };
 
-const getButtonConfig = launcher => (id, idx) => ({
-	scene: launcher,
-	x: -240 + Math.floor(idx / 5) * 240,
+const getButtonConfig = scene => (id, idx) => ({
+	scene,
+	x: -200 + (Math.floor(idx / 5) % 3) * 200,
 	y: -140 + (idx % 5) * 80,
 	id,
 	title: examples[id].title,
 	callback: () => {
-		launcher.transientData[id] = getTransientData(examples[id]);
-		launcher.navigation[id]();
+		scene.transientData[id] = getTransientData(examples[id]);
+		scene.navigation[id]();
 	},
 });
 
@@ -56,15 +61,55 @@ const titleStyle = {
 	align: "center",
 };
 
+const buttonStyle = {
+	font: "16px ReithSans",
+	fill: "#ffffff",
+	align: "center",
+};
+
 const excludeHidden = key => !examples[key].hidden;
 
 export class Launcher extends Screen {
 	create() {
 		this.add.image(0, 0, "home.background");
 		this.add.text(0, -250, "EXAMPLES", titleStyle).setOrigin(0.5);
-		this.setLayout(["home"]);
-		addExampleScreens(this).then(() =>
-			Object.keys(examples).filter(excludeHidden).map(getButtonConfig(this)).map(addButton),
-		);
+		this.setLayout(["home", "previous", "next"]);
+		this.pageIndex = 0;
+
+		const channel = buttonsChannel(this);
+
+		eventBus.subscribe({
+			channel,
+			name: "next",
+			callback: () => {
+				this.pageIndex = getCurrentPage(++this.pageIndex, this.pages.length);
+				this.showCurrentPage();
+			},
+		});
+		eventBus.subscribe({
+			channel,
+			name: "previous",
+			callback: () => {
+				this.pageIndex = getCurrentPage(--this.pageIndex, this.pages.length);
+				this.showCurrentPage();
+			},
+		});
+
+		addExampleScreens(this).then(() => {
+			const titles = Object.keys(examples);
+			const visibleTitles = titles.filter(excludeHidden);
+			const buttonConfigs = visibleTitles.map(getButtonConfig(this));
+			const buttons = buttonConfigs.map(addButton);
+			this.pages = fp.chunk(15, buttons);
+			this.showCurrentPage();
+		});
+	}
+
+	showCurrentPage() {
+		this.pages.forEach((page, index) => {
+			page.forEach(button => {
+				button.visible = index === this.pageIndex;
+			});
+		});
 	}
 }

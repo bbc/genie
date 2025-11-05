@@ -117,7 +117,7 @@
                 "key": "button",
                 "url": "../../debug/button.png",
                 "frameConfig": {
-                    "frameWidth": 224,
+                    "frameWidth": 194,
                     "frameHeight": 64,
                     "frameMax": 2,
                     "margin": 0,
@@ -273,7 +273,7 @@
                 "textureURL": "../../debug/assets/bitmaptext/uifont.png",
                 "fontDataURL": "../../debug/assets/bitmaptext/uifont.fnt"
             }
-        ]
+		]
     },
     "gelDesktop": {
         "prefix": "gelDesktop.",

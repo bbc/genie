@@ -6,11 +6,11 @@
 import { settings, settingsChannel } from "../settings.js";
 import { gmi } from "../gmi/gmi.js";
 import { eventBus } from "../event-bus.js";
-import { collections } from "../../core/collections.js";
+import { collections } from "../collections.js";
 
 const pushLevelId = (screen, params) => {
 	const collection = collections.get("levels");
-	const levelId = collection.getUnique({ key: "selected", value: true })?.id;
+	const levelId = collection?.getUnique({ key: "selected", value: true })?.id;
 	return levelId ? [...params, { source: levelId }] : params;
 };
 

@@ -26,6 +26,8 @@ Theming is currently undertaken mainly by performing a straight swap on assets, 
 
 Additional configuration not related to assets (for things like font size and colour) is done by modifying the file in `themes/[name of theme]/config/files.json`. In this folder is a standard Phaser asset pack. `.json` or `.json5` files can be loaded and all config files will be merged and made available from `this.config` for a scene.
 
+The loading screen has config in themes/config.json that allows for the vertical position of the loading bar on the screen to be customized.
+
 ## How do I test my theme?
 
 To quickly view a specific theme, you can launch it using the query string 'theme': http://localhost:9000/?theme=themeName, replacing themeName with the name of your theme. If none is specified, it will load the `default` theme.

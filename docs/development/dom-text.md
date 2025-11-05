@@ -37,21 +37,29 @@ const domText = this.add.domText("some text\nmore text...", { style, position: {
 Updates the text used e.g:
 ```Javascript
 const domText = this.add.domText("some\n text...");
-getText.setText("Some\nNew\nText");
+domText.setText("Some\nNew\nText");
 ```
 
 ### setPosition
 Updates the text position based as pixel offsets from center fo the screen
 ```Javascript
 const domText = this.add.domText("some\n text...");
-getText.setPosition(100, 200);
+domText.setPosition(100, 200);
 ```
 
 ### setAlignment
 Set the text alignment to either "left", "right" or "center"
 ```Javascript
 const domText = this.add.domText("some\n text...");
-getText.setAlignment("center");
+domText.setAlignment("center");
+```
+
+### addOuterStroke
+Due to the limitations of CSS `stroke` overlapping the edge of text it is not possible to add an outer (usually more pleasing) stroke style. 
+This method creates data elements and attached inline style sheets to apply pseudo `::before` text beneath the existing text and applies the stroke there.
+```Javascript
+const domText = this.add.domText("some\n text...");
+domText.addOuterStroke(2, "black");
 ```
 
 ### setStyle
@@ -59,7 +67,7 @@ Set the CSS style of the text block. Any styles supplied are merged over the exi
 
 ```Javascript
 const domText = this.add.domText("some\n text...");
-getText.setAlignment("center");
+domText.setAlignment("center");
 
 const newStyle = {
             "background-color": "white",
@@ -76,7 +84,7 @@ domText.setStyle(newStyle)
 Removes the text from DOM
 ```Javascript
 const domText = this.add.domText("some\n text...");
-getText.destroy();
+domText.destroy();
 ```
 
 

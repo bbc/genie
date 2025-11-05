@@ -266,6 +266,7 @@ describe("Layout - Gel Defaults", () => {
 			gel.config(mockCurrentScreen).levelSelect.action({ screen: mockCurrentScreen });
 			expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("levelselect", "click");
 		});
+
 		test("appends level id to stats if it exists", () => {
 			const testLevelId = "test level id";
 			let mockGetUnique = jest.fn(() => ({ id: testLevelId }));
@@ -415,6 +416,14 @@ describe("Layout - Gel Defaults", () => {
 			mockCurrentScreen.context.transientData = { "level-select": { choice: { title: testLevelId } } };
 			gel.config(mockCurrentScreen).continueGame.action({ screen: mockCurrentScreen });
 			expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "continue", { source: testLevelId });
+		});
+
+		test("Does not send level id to stats if no collection called 'levels' ", () => {
+			collectionsModule.collections = {
+				get: jest.fn(() => undefined),
+			};
+			gel.config(mockCurrentScreen).continueGame.action({ screen: mockCurrentScreen });
+			expect(mockGmi.sendStatsEvent).toHaveBeenCalledWith("level", "continue");
 		});
 	});
 

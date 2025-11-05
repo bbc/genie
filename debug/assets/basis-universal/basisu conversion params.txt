@@ -1,0 +1,5 @@
+basisu -uastc -y_flip -uastc_level 3 -uastc_rdo_l .2 basis-universal.png
+
+quality:
+basisu -uastc -y_flip -uastc_level 4 x.png
+basisu x.png -comp_level 5 -max_endpoints 16128 -max_selectors 16128 -no_selector_rdo -no_endpoint_rdo -y_flip

@@ -4,7 +4,7 @@
  * @license Apache-2.0
  */
 import fp from "../../../lib/lodash/fp/fp.js";
-import crel from "../../../lib/crel.es.js";
+import crel from "/node_modules/crel/crel.es.js";
 import { getContainerDiv } from "../loader/container.js";
 
 let domButtons = [];

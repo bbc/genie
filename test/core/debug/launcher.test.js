@@ -9,11 +9,12 @@ import * as debugScreens from "../../../src/core/debug/debug-screens.js";
 import * as examplesModule from "../../../src/core/debug/examples.js";
 
 jest.mock("../../../src/core/debug/debug-screens.js");
+jest.mock("../../../src/core/debug/examples.js");
+jest.mock("../../../src/core/event-bus.js");
 
 describe("Examples Launcher", () => {
 	let launcher;
-
-	beforeEach(() => {
+	const createLauncher = () => {
 		launcher = new Launcher();
 
 		const mockButton = {
@@ -78,40 +79,74 @@ describe("Examples Launcher", () => {
 		};
 
 		eventBus.subscribe = jest.fn();
-	});
+	};
 
 	describe("create method", () => {
 		beforeEach(() => {
+			createLauncher();
 			launcher.create();
+		});
+
+		afterEach(() => {
+			jest.resetAllMocks();
 		});
 
 		test("Intentionally loose test as page not included in final output", () => {
 			expect(launcher.add.image).toHaveBeenCalled();
 			expect(launcher.add.gelButton).toHaveBeenCalled();
-			expect(launcher.setLayout).toHaveBeenCalledWith(["home"]);
+			expect(launcher.add.text).toHaveBeenCalled();
+			expect(launcher.setLayout).toHaveBeenCalledWith(["home", "previous", "next"]);
 			expect(eventBus.subscribe).toHaveBeenCalled();
 		});
 
 		test("Sets transientData if present in example config", () => {
-			eventBus.subscribe.mock.calls[1][0].callback();
+			eventBus.subscribe.mock.calls[3][0].callback();
 			expect(launcher._data.transient.example1.testKey).toBe("testValue");
 		});
 
 		test("Does not set transientData if absent from example config", () => {
-			eventBus.subscribe.mock.calls[3][0].callback();
+			eventBus.subscribe.mock.calls[5][0].callback();
 			expect(launcher._data.transient.testKey).not.toBeDefined();
 		});
 
 		test("sets transientData from a prompt if present in example config", () => {
 			window.prompt = () => '{ "testKey": "testValue" }';
-			eventBus.subscribe.mock.calls[5][0].callback();
+			eventBus.subscribe.mock.calls[7][0].callback();
 			expect(launcher._data.transient.example3.testKey).toBe("testValue");
 		});
 
 		test("defaults transientData to an empty object if no value is returned from the prompt and no transientData was provided", () => {
 			window.prompt = () => null;
-			eventBus.subscribe.mock.calls[5][0].callback();
+			eventBus.subscribe.mock.calls[7][0].callback();
 			expect(launcher._data.transient.example3).toStrictEqual({});
+		});
+
+		test("next callback shows current page", () => {
+			launcher.showCurrentPage = jest.fn();
+			eventBus.subscribe.mock.calls[0][0].callback();
+			expect(launcher.showCurrentPage).toHaveBeenCalled();
+		});
+
+		test("previous callback shows current page", () => {
+			launcher.showCurrentPage = jest.fn();
+			eventBus.subscribe.mock.calls[1][0].callback();
+			expect(launcher.showCurrentPage).toHaveBeenCalled();
+		});
+
+		test("showCurrentPage sets current button visibility", () => {
+			const mockPages = [[{ visible: false }], [{ visible: true }], [{ visible: false }]];
+			launcher.pages = mockPages;
+			launcher.pageIndex = 2;
+			launcher.showCurrentPage();
+			expect(mockPages[0][0].visible).toBe(false);
+			expect(mockPages[1][0].visible).toBe(false);
+			expect(mockPages[2][0].visible).toBe(true);
+		});
+
+		test("showCurrentPage gets called when a page is added so correct buttons shown", async () => {
+			launcher.showCurrentPage = jest.fn();
+			await launcher.create();
+			expect(launcher.showCurrentPage).toHaveBeenCalled();
 		});
 	});
 });

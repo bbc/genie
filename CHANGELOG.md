@@ -2,6 +2,20 @@
 
 | Version       | Description                                                                                                                                           |
 |---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 3.16.3        | Remove basisu debug examples           		                                        					                                            |
+| 3.16.2        |                                                                                                                                                       |
+|               | Fix button arrangement in vertical gel groups.        				                                        					                    |
+| 3.16.1        | Fix `npm run start:pack` serving from wrong directory.        				                                        					            |
+| 3.16.0        | Fix overlapping pagination buttons on debug screen.                                                                                                   |
+|               | Fix bug where buttons show on top of each other instead of on separate pages (in debug mode).                                                         |
+|               | Added `addOuterStroke` method to dom text - automatically adds pseudo element hacks to simulate outer stroke.                                         |
+|               | Updated Phaser to 3.70.                                                                                                                               |
+|               | Update Crel lib and move to npm dependency now it is available as an ES6 module.                                                                      |
+|               | Fix slow start with `npm run start`.                                                                                                                  |
+|               | Fix crash if no levels collection has been defined.                                                                                                   |
+|               | Make loadbarPosY optional.                                                                                                                            |
+|               | Default to GL Mode for Kindles.                                                                                                                       |
+|               | Add Basis Universal Loader plugin for Phaser.                                                                                                         |
 |               | Added option for vertical layout for top right layout group.                                                                                          |
 |               | Breaking change: selections are now saved in collections/local storage.                                                                               |
 | 3.15.0        | Updated Spine Plugin and example files to Spine 4.1.                                                                                                  |
@@ -10,7 +24,7 @@
 |               | Updated Phaser to 3.60.                                                                                                                               |
 | 3.14.0        | Added source maps to production builds.                                                                                                               |
 |               | Added config option for default home screen.                                                                                                          |
-|               | Fix `npm run start:pack` _(v4 webpack config changes)_                                                                                                |
+|               | Fix `npm run start:pack` _(v4 webpack config changes)_                                                                                                 |
 |               | Update Babel targets.                                                                                                                                 |
 | 3.13.0        | Add tag filters for shop item lists.                                                                                                                  |
 |               | Improve shop and collection docs.                                                                                                                     |
@@ -262,7 +276,7 @@
 |               | Enables dynamic scripts to work in IE11 for local dev.                                                                                                |
 |               | Fixed bug where game crashes on startup on iOS 9 safari.                                                                                              |
 |               | Fixed issue where button focus outline was hidden on the results screen.                                                                              |
-|               | Added bbc header doc tags to file headers.                                                                                                            |     |
+|               | Added bbc header doc tags to file headers.                                                                                                            |
 | 1.0.1         |                                                                                                                                                       |
 |               | Accessibility cleardown fix (moves lingering buttons to the back).                                                                                    |
 |               | Use fullscreen api on android.                                                                                                                        |

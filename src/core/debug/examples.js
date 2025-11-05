@@ -158,7 +158,6 @@ const exampleScreens = {
 			next: "debug",
 		},
 	},
-
 	"dom-text": {
 		scene: DomText,
 		title: "DOM Text",

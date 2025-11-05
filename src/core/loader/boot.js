@@ -8,8 +8,8 @@
  */
 import { Screen } from "../screen.js";
 import { gmi } from "../gmi/gmi.js";
-import { settings, settingsChannel } from "../../core/settings.js";
-import { eventBus } from "../../core/event-bus.js";
+import { settings, settingsChannel } from "../settings.js";
+import { eventBus } from "../event-bus.js";
 import fp from "../../../lib/lodash/fp/fp.js";
 import * as Scaler from "../scaler.js";
 import { getTheme } from "../get-theme.js";
@@ -80,7 +80,7 @@ export class Boot extends Screen {
 
 		//TODO P3 where should this now live? [NT]
 		//TODO P3 mainly just initialises scaler now?
-		Scaler.init(600, this.game);
+		Scaler.init(this.game);
 		this.navigation.next();
 	}
 }

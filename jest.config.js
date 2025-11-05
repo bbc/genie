@@ -20,4 +20,7 @@ module.exports = {
 	setupFilesAfterEnv: ["./test/set-up-jest.js"],
 	transform: { "^.+\\.m?js$": "babel-jest" },
 	transformIgnorePatterns: ["node_modules/(?!(bowser|json5|crel)/)"],
+	globals: {
+		WebGLRenderingContext: {},
+	},
 };
