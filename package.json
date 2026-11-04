@@ -35,7 +35,7 @@
         "@rollup/plugin-terser": "^0.4.4",
         "bufferutil": "^4.0.8",
         "cross-env": "^7.0.3",
-        "cypress": "^13.6.2",
+        "cypress": "^16.2.1",
         "cypress-plugin-tab": "^1.0.5",
         "eslint": "^8.52.0",
         "eslint-config-prettier": "^9.0.0",
