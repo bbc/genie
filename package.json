@@ -32,7 +32,7 @@
         "webfontloader": "^1.6.28"
     },
     "devDependencies": {
-        "@rollup/plugin-terser": "^0.4.4",
+        "@rollup/plugin-terser": "^1.0.2",
         "bufferutil": "^4.0.8",
         "cross-env": "^7.0.3",
         "cypress": "^13.6.2",
@@ -49,7 +49,7 @@
         "jest-environment-jsdom": "^29.7.0",
         "local-web-server": "^5.3.1",
         "minimist": "^1.2.8",
-        "mocha": "^10.2.0",
+        "mocha": "^12.0.3",
         "mochawesome": "^7.1.3",
         "mochawesome-merge": "^4.2.1",
         "mochawesome-report-generator": "^6.2.0",
